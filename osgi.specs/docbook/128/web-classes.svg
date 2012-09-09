@@ -1,133 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="325.979px" height="199.308px" viewBox="0 0 325.979 199.308" style="enable-background:new 0 0 325.979 199.308;"
+	 width="325.979px" height="199.309px" viewBox="0 0 325.979 199.309" enable-background="new 0 0 325.979 199.309"
 	 xml:space="preserve">
-<rect y="28.307" style="fill:#E6E6E6;" width="141.72" height="43.2"/>
-<rect y="113.387" style="fill:#E6E6E6;" width="325.979" height="43.2"/>
+<rect y="28.307" fill="#E6E6E6" width="141.72" height="43.199"/>
+<rect y="113.387" fill="#E6E6E6" width="325.979" height="43.199"/>
 <rect x="151.2" y="122.507" width="54.3" height="27"/>
-<rect x="151.2" y="122.267" width="54.54" height="0.48"/>
+<rect x="151.2" y="122.267" width="54.54" height="0.479"/>
 <rect x="205.26" y="122.507" width="0.48" height="27.24"/>
 <rect x="150.96" y="149.268" width="54.54" height="0.479"/>
-<rect x="150.96" y="122.267" width="0.48" height="27.24"/>
-<rect x="148.86" y="120.707" style="fill:#FFFFFF;" width="54.3" height="27"/>
+<rect x="150.96" y="122.267" width="0.48" height="27.239"/>
+<rect x="148.86" y="120.707" fill="#FFFFFF" width="54.3" height="27"/>
 <rect x="148.86" y="120.467" width="54.54" height="0.48"/>
-<rect x="202.92" y="120.707" width="0.48" height="27.24"/>
+<rect x="202.92" y="120.707" width="0.479" height="27.24"/>
 <rect x="148.62" y="147.467" width="54.54" height="0.48"/>
 <rect x="148.62" y="120.467" width="0.479" height="27.24"/>
-<text transform="matrix(1 0 0 1 151.2002 127.8472)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">W</tspan><tspan x="5.522" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">e</tspan><tspan x="9.001" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">b</tspan><tspan x="12.664" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;"> </tspan><tspan x="13.686" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">U</tspan><tspan x="18.298" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">R</tspan><tspan x="21.833" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">L</tspan><tspan x="24.833" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;"> </tspan><tspan x="25.854" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">H</tspan><tspan x="30.706" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">a</tspan><tspan x="34.002" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">n</tspan><tspan x="37.657" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">d</tspan><tspan x="41.319" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">l</tspan><tspan x="42.828" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">e</tspan><tspan x="46.307" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">r </tspan></text>
-<text transform="matrix(1 0 0 1 151.2002 136.3066)" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">Impl</text>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="184.26,184.907 177.18,170.747 170.1,184.907 "/>
-<polyline points="184.08,185.027 177,170.867 177,170.627 177.42,170.867 170.34,185.027 170.1,185.147 169.74,185.147 177,170.627 
-	177.24,170.207 177.42,170.627 184.5,184.787 "/>
-<polyline points="170.1,184.667 184.26,184.667 184.5,184.787 184.68,185.147 170.1,185.147 "/>
-<rect x="176.94" y="149.268" width="0.479" height="0.239"/>
+<text transform="matrix(1 0 0 1 151.2002 127.8474)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">Web URL Handler</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Impl</tspan></text>
+<polyline fill="#FFFFFF" points="184.26,184.907 177.181,170.747 170.101,184.907 "/>
+<polyline points="184.08,185.027 177,170.867 177,170.627 177.42,170.867 170.34,185.027 170.101,185.147 169.74,185.147 
+	177,170.627 177.24,170.207 177.42,170.627 184.5,184.787 "/>
+<polyline points="170.101,184.667 184.26,184.667 184.5,184.787 184.681,185.147 170.101,185.147 "/>
+<rect x="176.94" y="149.268" width="0.479" height="0.238"/>
 <rect x="176.94" y="149.507" width="0.479" height="21.48"/>
 <rect x="9.48" y="37.907" width="54.3" height="27"/>
 <rect x="9.48" y="37.667" width="54.54" height="0.48"/>
 <rect x="63.54" y="37.907" width="0.48" height="27.24"/>
 <rect x="9.24" y="64.667" width="54.54" height="0.48"/>
 <rect x="9.24" y="37.667" width="0.48" height="27.24"/>
-<rect x="7.08" y="36.107" style="fill:#FFFFFF;" width="54.36" height="27"/>
+<rect x="7.08" y="36.107" fill="#FFFFFF" width="54.36" height="27"/>
 <rect x="7.08" y="35.867" width="54.6" height="0.48"/>
 <rect x="61.2" y="36.107" width="0.48" height="27.24"/>
 <rect x="6.84" y="62.867" width="54.6" height="0.48"/>
 <rect x="6.84" y="35.867" width="0.48" height="27.24"/>
-<text transform="matrix(1 0 0 1 9.48 43.2471)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">W</tspan><tspan x="5.522" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">e</tspan><tspan x="9.001" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">b</tspan><tspan x="12.72" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;"> </tspan><tspan x="14.284" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">A</tspan><tspan x="18.362" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">ppli</tspan><tspan x="28.751" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">c</tspan><tspan x="31.872" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">ation</tspan></text>
-<text transform="matrix(1 0 0 1 188.5801 171.0469)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">U</tspan><tspan x="4.66" y="0" style="font-family:'ProductusBook'; font-size:7.98;">R</tspan><tspan x="8.259" y="0" style="font-family:'ProductusBook'; font-size:7.98;">L</tspan><tspan x="11.315" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="12.88" y="0" style="font-family:'ProductusBook'; font-size:7.98;">Str</tspan><tspan x="21.322" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="24.81" y="0" style="font-family:'ProductusBook'; font-size:7.98;">a</tspan><tspan x="28.153" y="0" style="font-family:'ProductusBook'; font-size:7.98;">m </tspan></text>
-<text transform="matrix(1 0 0 1 188.5801 180.7666)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">Handler</tspan><tspan x="22.87" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="24.49" y="0" style="font-family:'ProductusBook'; font-size:7.98;">Servi</tspan><tspan x="38.742" y="0" style="font-family:'ProductusBook'; font-size:7.98;">c</tspan><tspan x="41.743" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan></text>
-<text transform="matrix(1 0 0 1 188.5801 190.5469)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">ur</tspan><tspan x="6.009" y="0" style="font-family:'ProductusBook'; font-size:7.98;">l</tspan><tspan x="7.573" y="0" style="font-family:'ProductusBook'; font-size:7.98;">.</tspan><tspan x="9.137" y="0" style="font-family:'ProductusBook'; font-size:7.98;">h</tspan><tspan x="12.848" y="0" style="font-family:'ProductusBook'; font-size:7.98;">a</tspan><tspan x="16.151" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="19.862" y="0" style="font-family:'ProductusBook'; font-size:7.98;">d</tspan><tspan x="23.524" y="0" style="font-family:'ProductusBook'; font-size:7.98;">l</tspan><tspan x="25.089" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="28.624" y="0" style="font-family:'ProductusBook'; font-size:7.98;">r</tspan><tspan x="30.547" y="0" style="font-family:'ProductusBook'; font-size:7.98;">.</tspan><tspan x="32.159" y="0" style="font-family:'ProductusBook'; font-size:7.98;">pr</tspan><tspan x="38.184" y="0" style="font-family:'ProductusBook'; font-size:7.98;">o</tspan><tspan x="41.967" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="44.36" y="0" style="font-family:'ProductusBook'; font-size:7.98;">o</tspan><tspan x="48.143" y="0" style="font-family:'ProductusBook'; font-size:7.98;">c</tspan><tspan x="51.144" y="0" style="font-family:'ProductusBook'; font-size:7.98;">ol=</tspan></text>
-<text transform="matrix(1 0 0 1 248.8203 190.5469)"><tspan x="0" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">w</tspan><tspan x="6.24" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">e</tspan><tspan x="10.374" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">bbun</tspan><tspan x="27.482" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">d</tspan><tspan x="31.855" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">l</tspan><tspan x="34.019" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">e</tspan></text>
+<text transform="matrix(1 0 0 1 9.48 43.2468)" font-family="'ProductusOSGiBookc'" font-size="7.98">Web Application</text>
+<text transform="matrix(1 0 0 1 188.5801 171.0466)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">URL Stream</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">Handler Service</tspan><tspan x="0" y="19.152" font-family="'ProductusBook'" font-size="7.98">url.handler.protocol=</tspan><tspan x="60.527" y="19.152" font-family="'ProductusSemibold'" font-size="7.98">webbundle</tspan></text>
 <rect x="80.34" y="122.507" width="54.3" height="27"/>
-<rect x="80.34" y="122.267" width="54.54" height="0.48"/>
+<rect x="80.34" y="122.267" width="54.54" height="0.479"/>
 <rect x="134.4" y="122.507" width="0.479" height="27.24"/>
 <rect x="80.1" y="149.268" width="54.54" height="0.479"/>
-<rect x="80.1" y="122.267" width="0.48" height="27.24"/>
-<rect x="77.94" y="120.707" style="fill:#FFFFFF;" width="54.36" height="27"/>
+<rect x="80.1" y="122.267" width="0.48" height="27.239"/>
+<rect x="77.94" y="120.707" fill="#FFFFFF" width="54.36" height="27"/>
 <rect x="77.94" y="120.467" width="54.6" height="0.48"/>
 <rect x="132.06" y="120.707" width="0.48" height="27.24"/>
 <rect x="77.7" y="147.467" width="54.6" height="0.48"/>
 <rect x="77.7" y="120.467" width="0.48" height="27.24"/>
-<text transform="matrix(1 0 0 1 80.3398 127.8472)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">W</tspan><tspan x="5.522" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">e</tspan><tspan x="8.945" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">b</tspan><tspan x="12.664" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;"> </tspan><tspan x="14.228" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">E</tspan><tspan x="17.644" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">x</tspan><tspan x="20.588" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">ten</tspan><tspan x="30.06" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">d</tspan><tspan x="33.723" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">e</tspan><tspan x="37.202" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">r </tspan></text>
-<text transform="matrix(1 0 0 1 80.3398 136.3066)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">I</tspan><tspan x="1.508" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">m</tspan><tspan x="7.262" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">pl</tspan></text>
+<text transform="matrix(1 0 0 1 80.3398 127.8474)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">Web Extender</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Impl</tspan></text>
 <rect x="9.48" y="122.507" width="54.3" height="27"/>
-<rect x="9.48" y="122.267" width="54.54" height="0.48"/>
+<rect x="9.48" y="122.267" width="54.54" height="0.479"/>
 <rect x="63.54" y="122.507" width="0.48" height="27.24"/>
 <rect x="9.24" y="149.268" width="54.54" height="0.479"/>
-<rect x="9.24" y="122.267" width="0.48" height="27.24"/>
-<rect x="7.08" y="120.707" style="fill:#FFFFFF;" width="54.36" height="27"/>
+<rect x="9.24" y="122.267" width="0.48" height="27.239"/>
+<rect x="7.08" y="120.707" fill="#FFFFFF" width="54.36" height="27"/>
 <rect x="7.08" y="120.467" width="54.6" height="0.48"/>
 <rect x="61.2" y="120.707" width="0.48" height="27.24"/>
 <rect x="6.84" y="147.467" width="54.6" height="0.48"/>
 <rect x="6.84" y="120.467" width="0.48" height="27.24"/>
-<text transform="matrix(1 0 0 1 9.48 127.8472)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">W</tspan><tspan x="5.522" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">e</tspan><tspan x="9.001" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">b</tspan><tspan x="12.72" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;"> </tspan><tspan x="14.284" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">R</tspan><tspan x="17.883" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">u</tspan><tspan x="21.538" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">n</tspan><tspan x="25.145" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">t</tspan><tspan x="27.482" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">i</tspan><tspan x="29.039" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">m</tspan><tspan x="34.744" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">e</tspan><tspan x="38.223" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;"> </tspan></text>
-<text transform="matrix(1 0 0 1 9.48 136.3066)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">Imp</tspan><tspan x="10.957" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">l</tspan></text>
+<text transform="matrix(1 0 0 1 9.48 127.8474)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">Web Runtime</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Impl</tspan></text>
 <rect x="35.22" y="148.547" width="0.48" height="28.86"/>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="21.24,199.067 25.98,177.167 49.62,177.167 
-	44.88,199.067 "/>
+<polyline fill="#FFFFFF" points="21.24,199.067 25.98,177.167 49.62,177.167 44.88,199.067 "/>
 <polyline points="21,199.007 25.74,177.107 25.8,176.927 49.92,176.927 49.86,177.228 45.12,199.127 45.06,199.308 44.88,199.308 
 	44.64,199.007 49.38,177.107 49.86,177.228 49.62,177.407 25.98,177.407 25.98,176.927 26.22,177.228 21.48,199.127 "/>
 <polyline points="44.88,199.308 20.94,199.308 21,199.007 21.24,198.827 44.88,198.827 "/>
 <rect x="106.08" y="50.027" width="0.48" height="71.34"/>
 <rect x="176.94" y="120.167" width="0.479" height="1.2"/>
-<rect x="176.94" y="114.227" width="0.479" height="1.98"/>
+<rect x="176.94" y="114.227" width="0.479" height="1.979"/>
 <rect x="176.94" y="108.347" width="0.479" height="1.92"/>
-<rect x="176.94" y="102.467" width="0.479" height="1.92"/>
-<rect x="176.94" y="96.527" width="0.479" height="1.98"/>
+<rect x="176.94" y="102.467" width="0.479" height="1.921"/>
+<rect x="176.94" y="96.527" width="0.479" height="1.979"/>
 <rect x="176.94" y="90.647" width="0.479" height="1.92"/>
 <rect x="176.94" y="84.707" width="0.479" height="1.98"/>
 <rect x="176.94" y="78.827" width="0.479" height="1.98"/>
 <rect x="176.94" y="72.947" width="0.479" height="1.92"/>
 <rect x="176.94" y="67.007" width="0.479" height="1.98"/>
 <rect x="176.94" y="61.127" width="0.479" height="1.92"/>
-<rect x="176.94" y="55.187" width="0.479" height="1.98"/>
+<rect x="176.94" y="55.187" width="0.479" height="1.979"/>
 <rect x="176.94" y="50.027" width="0.479" height="1.26"/>
-<rect x="176.22" y="50.027" width="0.96" height="0.48"/>
-<rect x="170.28" y="50.027" width="1.979" height="0.48"/>
-<rect x="164.4" y="50.027" width="1.92" height="0.48"/>
-<rect x="158.46" y="50.027" width="1.98" height="0.48"/>
-<rect x="152.58" y="50.027" width="1.979" height="0.48"/>
-<rect x="146.7" y="50.027" width="1.92" height="0.48"/>
-<rect x="141.479" y="50.027" width="1.261" height="0.48"/>
-<rect x="255.12" y="28.307" style="fill:#E6E6E6;" width="70.859" height="43.2"/>
-<text transform="matrix(1 0 0 1 268.1396 49.9072)"><tspan x="0" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">W</tspan><tspan x="6.967" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">e</tspan><tspan x="11.1" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">b</tspan><tspan x="15.417" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;"> </tspan><tspan x="17.396" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">A</tspan><tspan x="22.432" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">R</tspan><tspan x="26.685" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">c</tspan><tspan x="30.34" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">h</tspan><tspan x="34.593" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">i</tspan><tspan x="36.747" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">v</tspan><tspan x="40.705" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">e</tspan></text>
-<rect x="254.16" y="50.027" width="1.2" height="0.48"/>
-<rect x="248.16" y="50.027" width="1.979" height="0.48"/>
-<rect x="242.22" y="50.027" width="1.98" height="0.48"/>
-<rect x="236.22" y="50.027" width="1.98" height="0.48"/>
-<rect x="230.28" y="50.027" width="1.979" height="0.48"/>
-<rect x="224.28" y="50.027" width="1.979" height="0.48"/>
-<rect x="218.34" y="50.027" width="1.98" height="0.48"/>
-<rect x="212.4" y="50.027" width="1.92" height="0.48"/>
-<rect x="206.4" y="50.027" width="1.979" height="0.48"/>
-<rect x="200.46" y="50.027" width="1.98" height="0.48"/>
-<rect x="194.46" y="50.027" width="1.98" height="0.48"/>
-<rect x="188.52" y="50.027" width="1.98" height="0.48"/>
-<rect x="182.52" y="50.027" width="1.98" height="0.48"/>
-<rect x="176.58" y="50.027" width="1.979" height="0.48"/>
-<rect x="170.58" y="50.027" width="1.979" height="0.48"/>
-<rect x="164.64" y="50.027" width="1.98" height="0.48"/>
-<rect x="158.64" y="50.027" width="1.98" height="0.48"/>
-<rect x="152.7" y="50.027" width="1.979" height="0.48"/>
-<rect x="146.76" y="50.027" width="1.92" height="0.48"/>
-<rect x="141.479" y="50.027" width="1.261" height="0.48"/>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="170.1,46.727 170.1,53.807 184.26,57.347 
-	184.26,43.187 "/>
-<polyline points="170.34,46.727 170.34,53.807 170.04,54.047 170.16,53.567 184.32,57.107 184.5,57.347 184.02,57.347 
-	184.02,43.187 184.2,42.947 184.5,42.887 184.5,57.647 184.2,57.587 170.04,54.047 169.86,53.987 169.86,46.727 "/>
-<polyline points="184.32,43.427 170.16,46.967 169.86,46.727 169.86,46.547 170.04,46.487 184.2,42.947 "/>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="113.4,170.747 106.32,184.907 99.24,170.747 "/>
+<rect x="176.22" y="50.027" width="0.961" height="0.479"/>
+<rect x="170.28" y="50.027" width="1.979" height="0.479"/>
+<rect x="164.399" y="50.027" width="1.92" height="0.479"/>
+<rect x="158.46" y="50.027" width="1.98" height="0.479"/>
+<rect x="152.58" y="50.027" width="1.979" height="0.479"/>
+<rect x="146.7" y="50.027" width="1.92" height="0.479"/>
+<rect x="141.479" y="50.027" width="1.261" height="0.479"/>
+<rect x="255.12" y="28.307" fill="#E6E6E6" width="70.858" height="43.199"/>
+<text transform="matrix(1 0 0 1 268.1396 49.907)" font-family="'ProductusSemibold'" font-size="7.98">Web ARchive</text>
+<rect x="254.16" y="50.027" width="1.2" height="0.479"/>
+<rect x="248.16" y="50.027" width="1.979" height="0.479"/>
+<rect x="242.22" y="50.027" width="1.98" height="0.479"/>
+<rect x="236.22" y="50.027" width="1.98" height="0.479"/>
+<rect x="230.28" y="50.027" width="1.979" height="0.479"/>
+<rect x="224.28" y="50.027" width="1.979" height="0.479"/>
+<rect x="218.34" y="50.027" width="1.979" height="0.479"/>
+<rect x="212.399" y="50.027" width="1.92" height="0.479"/>
+<rect x="206.399" y="50.027" width="1.979" height="0.479"/>
+<rect x="200.46" y="50.027" width="1.98" height="0.479"/>
+<rect x="194.46" y="50.027" width="1.98" height="0.479"/>
+<rect x="188.521" y="50.027" width="1.979" height="0.479"/>
+<rect x="182.521" y="50.027" width="1.979" height="0.479"/>
+<rect x="176.58" y="50.027" width="1.979" height="0.479"/>
+<rect x="170.58" y="50.027" width="1.979" height="0.479"/>
+<rect x="164.64" y="50.027" width="1.98" height="0.479"/>
+<rect x="158.64" y="50.027" width="1.98" height="0.479"/>
+<rect x="152.7" y="50.027" width="1.979" height="0.479"/>
+<rect x="146.76" y="50.027" width="1.92" height="0.479"/>
+<rect x="141.479" y="50.027" width="1.261" height="0.479"/>
+<polyline fill="#FFFFFF" points="170.101,46.727 170.101,53.807 184.26,57.347 184.26,43.187 "/>
+<polyline points="170.34,46.727 170.34,53.807 170.04,54.047 170.16,53.567 184.319,57.107 184.5,57.347 184.021,57.347 
+	184.021,43.187 184.2,42.947 184.5,42.887 184.5,57.647 184.2,57.587 170.04,54.047 169.86,53.987 169.86,46.727 "/>
+<polyline points="184.319,43.427 170.16,46.967 169.86,46.727 169.86,46.547 170.04,46.487 184.2,42.947 "/>
+<polyline fill="#FFFFFF" points="113.4,170.747 106.32,184.907 99.24,170.747 "/>
 <polyline points="113.64,170.867 106.56,185.027 106.38,185.447 106.14,185.027 98.88,170.507 99.24,170.507 99.48,170.627 
 	106.56,184.787 106.14,185.027 106.14,184.787 113.22,170.627 "/>
 <polyline points="99.24,170.507 113.82,170.507 113.64,170.867 113.4,170.987 99.24,170.987 "/>
-<rect x="106.08" y="149.268" width="0.48" height="0.239"/>
+<rect x="106.08" y="149.268" width="0.48" height="0.238"/>
 <rect x="106.08" y="149.507" width="0.48" height="21.48"/>
-<text transform="matrix(1 0 0 1 68.52 163.9668)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">Ev</tspan><tspan x="6.312" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="9.847" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="13.51" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t </tspan><tspan x="17.516" y="0" style="font-family:'ProductusBook'; font-size:7.98;">A</tspan><tspan x="21.474" y="0" style="font-family:'ProductusBook'; font-size:7.98;">d</tspan><tspan x="25.137" y="0" style="font-family:'ProductusBook'; font-size:7.98;">m</tspan><tspan x="30.89" y="0" style="font-family:'ProductusBook'; font-size:7.98;">i</tspan><tspan x="32.502" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="36.165" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan></text>
+<text transform="matrix(1 0 0 1 68.52 163.9666)" font-family="'ProductusBook'" font-size="7.98">Event Admin </text>
 <rect x="106.08" y="184.667" width="0.48" height="0.24"/>
 <rect x="106.08" y="184.907" width="0.48" height="1.02"/>
 <rect x="106.08" y="188.867" width="0.48" height="0.24"/>
-<rect x="106.08" y="189.107" width="0.48" height="1.439"/>
+<rect x="106.08" y="189.107" width="0.48" height="1.438"/>
 <rect x="106.08" y="193.487" width="0.48" height="0.24"/>
 <rect x="106.08" y="193.728" width="0.48" height="1.38"/>
 <rect x="106.08" y="198.107" width="0.48" height="0.24"/>
@@ -135,46 +127,41 @@
 <rect x="176.94" y="184.667" width="0.479" height="0.24"/>
 <rect x="176.94" y="184.907" width="0.479" height="1.02"/>
 <rect x="176.94" y="188.867" width="0.479" height="0.24"/>
-<rect x="176.94" y="189.107" width="0.479" height="1.439"/>
+<rect x="176.94" y="189.107" width="0.479" height="1.438"/>
 <rect x="176.94" y="193.487" width="0.479" height="0.24"/>
 <rect x="176.94" y="193.728" width="0.479" height="1.38"/>
 <rect x="176.94" y="198.107" width="0.479" height="0.24"/>
 <rect x="176.94" y="198.348" width="0.479" height="0.96"/>
-<text transform="matrix(1 0 0 1 275.8799 147.1074)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">W</tspan><tspan x="5.825" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="9.312" y="0" style="font-family:'ProductusBook'; font-size:7.98;">b </tspan><tspan x="14.644" y="0" style="font-family:'ProductusBook'; font-size:7.98;">C</tspan><tspan x="18.849" y="0" style="font-family:'ProductusBook'; font-size:7.98;">o</tspan><tspan x="22.631" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="26.294" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="28.688" y="0" style="font-family:'ProductusBook'; font-size:7.98;">a</tspan><tspan x="31.991" y="0" style="font-family:'ProductusBook'; font-size:7.98;">i</tspan><tspan x="33.556" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="37.274" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="40.762" y="0" style="font-family:'ProductusBook'; font-size:7.98;">r</tspan></text>
+<text transform="matrix(1 0 0 1 275.8799 147.1072)" font-family="'ProductusBook'" font-size="7.98">Web Container</text>
 <rect x="77.94" y="135.047" width="0.24" height="0.48"/>
 <rect x="63.54" y="135.047" width="14.4" height="0.48"/>
-<text transform="matrix(-6.123234e-17 -1 1 -6.123234e-17 103.98 112.9673)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">c</tspan><tspan x="3" y="0" style="font-family:'ProductusBook'; font-size:7.98;">o</tspan><tspan x="6.839" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="10.501" y="0" style="font-family:'ProductusBook'; font-size:7.98;">f</tspan><tspan x="12.425" y="0" style="font-family:'ProductusBook'; font-size:7.98;">ig</tspan><tspan x="17.468" y="0" style="font-family:'ProductusBook'; font-size:7.98;">u</tspan><tspan x="21.187" y="0" style="font-family:'ProductusBook'; font-size:7.98;">r</tspan><tspan x="23.46" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="26.948" y="0" style="font-family:'ProductusBook'; font-size:7.98;">d</tspan><tspan x="30.667" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="32.231" y="0" style="font-family:'ProductusBook'; font-size:7.98;">b</tspan><tspan x="35.845" y="0" style="font-family:'ProductusBook'; font-size:7.98;">y</tspan></text>
-<text transform="matrix(1 0 0 1 38.9399 90.4072)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">i</tspan><tspan x="1.564" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="5.283" y="0" style="font-family:'ProductusBook'; font-size:7.98;">v</tspan><tspan x="8.347" y="0" style="font-family:'ProductusBook'; font-size:7.98;">o</tspan><tspan x="12.186" y="0" style="font-family:'ProductusBook'; font-size:7.98;">k</tspan><tspan x="15.306" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan></text>
-<text transform="matrix(-6.123234e-17 -1 1 -6.123234e-17 174.8398 100.1279)" style="font-family:'ProductusBook'; font-size:7.98;">rewrites</text>
-<text transform="matrix(-6.123234e-17 -1 1 -6.123234e-17 184.5596 100.127)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">mani</tspan><tspan x="14.308" y="0" style="font-family:'ProductusBook'; font-size:7.98;">f</tspan><tspan x="16.231" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="19.767" y="0" style="font-family:'ProductusBook'; font-size:7.98;">st</tspan></text>
-<text transform="matrix(1 0 0 1 160.6201 40.7271)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">i</tspan><tspan x="1.556" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="5.274" y="0" style="font-family:'ProductusBook'; font-size:7.98;">st</tspan><tspan x="10.454" y="0" style="font-family:'ProductusBook'; font-size:7.98;">a</tspan><tspan x="13.813" y="0" style="font-family:'ProductusBook'; font-size:7.98;">ll</tspan><tspan x="16.926" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="18.545" y="0" style="font-family:'ProductusBook'; font-size:7.98;">b</tspan><tspan x="22.24" y="0" style="font-family:'ProductusBook'; font-size:7.98;">u</tspan><tspan x="25.959" y="0" style="font-family:'ProductusBook'; font-size:7.98;">ndl</tspan><tspan x="34.872" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan></text>
-<text transform="matrix(1 0 0 1 47.3999 8.0269)"><tspan x="0" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">Se</tspan><tspan x="8.379" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">r</tspan><tspan x="11.315" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">v</tspan><tspan x="15.393" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">let</tspan><tspan x="24.809" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;"> </tspan><tspan x="26.788" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">C</tspan><tspan x="31.528" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">o</tspan><tspan x="35.845" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">n</tspan><tspan x="40.163" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">tex</tspan><tspan x="51.334" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">t</tspan></text>
+<text transform="matrix(1 0 0 1 38.9399 90.407)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">invoke</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">servlets</tspan></text>
+<text transform="matrix(1 0 0 1 160.6201 40.7273)" font-family="'ProductusBook'" font-size="7.98">install bundle</text>
+<text transform="matrix(1 0 0 1 47.3999 8.0271)" font-family="'ProductusSemibold'" font-size="7.98">Servlet Context</text>
 <rect x="35.22" y="121.127" width="0.48" height="0.24"/>
-<rect x="35.22" y="64.187" width="0.48" height="56.94"/>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="85.08,57.347 85.08,36.107 120.479,36.107 
-	120.479,50.267 "/>
+<rect x="35.22" y="64.187" width="0.48" height="56.939"/>
+<polyline fill="#FFFFFF" points="85.08,57.347 85.08,36.107 120.479,36.107 120.479,50.267 "/>
 <rect x="84.84" y="35.867" width="0.48" height="21.48"/>
 <rect x="85.08" y="35.867" width="35.64" height="0.48"/>
 <polyline points="120.72,36.107 120.72,50.447 120.54,50.507 84.84,57.647 84.84,57.347 85.02,57.107 120.42,50.027 120.54,50.507 
 	120.24,50.267 120.24,36.107 "/>
-<text transform="matrix(1 0 0 1 88.9199 43.4873)"><tspan x="0" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">w</tspan><tspan x="6.24" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">e</tspan><tspan x="10.374" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">b</tspan><tspan x="14.571" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">.</tspan><tspan x="16.79" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">x</tspan><tspan x="20.748" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">m</tspan><tspan x="27.1" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">l</tspan></text>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="42.54,0.647 35.46,14.807 28.38,0.647 "/>
+<text transform="matrix(1 0 0 1 88.9199 43.4871)" font-family="'ProductusSemibold'" font-size="7.98">web.xml</text>
+<polyline fill="#FFFFFF" points="42.54,0.647 35.46,14.807 28.38,0.647 "/>
 <polyline points="42.78,0.767 35.7,14.927 35.52,15.347 35.28,14.927 28.02,0.407 28.38,0.407 28.62,0.527 35.7,14.687 
 	35.28,14.927 35.28,14.687 42.36,0.527 "/>
 <polyline points="28.38,0.407 42.96,0.407 42.78,0.767 42.54,0.887 28.38,0.887 "/>
 <rect x="35.22" y="36.107" width="0.48" height="0.24"/>
 <rect x="35.22" y="14.567" width="0.48" height="21.54"/>
-<text transform="matrix(1 0 0 1 38.9399 100.127)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">se</tspan><tspan x="6.352" y="0" style="font-family:'ProductusBook'; font-size:7.98;">r</tspan><tspan x="8.579" y="0" style="font-family:'ProductusBook'; font-size:7.98;">v</tspan><tspan x="11.818" y="0" style="font-family:'ProductusBook'; font-size:7.98;">let</tspan><tspan x="19.312" y="0" style="font-family:'ProductusBook'; font-size:7.98;">s</tspan></text>
 <rect x="21" y="121.127" width="0.48" height="0.24"/>
-<rect x="21" y="71.267" width="0.48" height="49.86"/>
-<text transform="matrix(-6.123234e-17 -1 1 -6.123234e-17 18.8999 109.7271)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="1.564" y="0" style="font-family:'ProductusBook'; font-size:7.98;">g</tspan><tspan x="4.932" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="8.419" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="10.812" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="12.376" y="0" style="font-family:'ProductusBook'; font-size:7.98;">c</tspan><tspan x="15.441" y="0" style="font-family:'ProductusBook'; font-size:7.98;">o</tspan><tspan x="19.224" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="22.886" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="25.28" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="28.815" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="32.478" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan></text>
-<text transform="matrix(1 0 0 1 28.3799 185.207)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">W</tspan><tspan x="5.825" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="9.36" y="0" style="font-family:'ProductusBook'; font-size:7.98;">b</tspan></text>
-<text transform="matrix(1 0 0 1 25.5 194.9873)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">S</tspan><tspan x="3.719" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="7.206" y="0" style="font-family:'ProductusBook'; font-size:7.98;">r</tspan><tspan x="9.48" y="0" style="font-family:'ProductusBook'; font-size:7.98;">v</tspan><tspan x="12.608" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="16.095" y="0" style="font-family:'ProductusBook'; font-size:7.98;">r</tspan></text>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="269.34,2.447 269.34,5.987 276.42,7.727 276.42,0.647 
-	"/>
-<polyline points="269.58,2.447 269.58,5.987 269.28,6.227 269.4,5.747 276.479,7.487 276.66,7.727 276.18,7.727 276.18,0.647 
-	276.36,0.407 276.66,0.347 276.66,8.027 276.36,7.967 269.28,6.227 269.1,6.167 269.1,2.447 "/>
-<polyline points="276.479,0.887 269.4,2.687 269.1,2.447 269.1,2.267 269.28,2.207 276.36,0.407 "/>
-<text transform="matrix(1 0 0 1 280.5596 6.6475)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="2.362" y="0" style="font-family:'ProductusBook'; font-size:7.98;">r</tspan><tspan x="4.637" y="0" style="font-family:'ProductusBook'; font-size:7.98;">a</tspan><tspan x="7.932" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="11.65" y="0" style="font-family:'ProductusBook'; font-size:7.98;">s</tspan><tspan x="14.468" y="0" style="font-family:'ProductusBook'; font-size:7.98;">f</tspan><tspan x="16.454" y="0" style="font-family:'ProductusBook'; font-size:7.98;">o</tspan><tspan x="20.221" y="0" style="font-family:'ProductusBook'; font-size:7.98;">r</tspan><tspan x="22.495" y="0" style="font-family:'ProductusBook'; font-size:7.98;">m</tspan><tspan x="28.249" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="31.736" y="0" style="font-family:'ProductusBook'; font-size:7.98;">r</tspan></text>
-<text transform="matrix(1 0 0 1 109.1401 57.6475)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">0</tspan><tspan x="3.958" y="0" style="font-family:'ProductusBook'; font-size:7.98;">,</tspan><tspan x="5.522" y="0" style="font-family:'ProductusBook'; font-size:7.98;">1</tspan></text>
+<rect x="21" y="71.267" width="0.48" height="49.859"/>
+<text transform="matrix(1 0 0 1 28.7231 185.447)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">Web</tspan><tspan x="-2.521" y="9.576" font-family="'ProductusBook'" font-size="7.98">Server</tspan></text>
+<polyline fill="#FFFFFF" points="269.34,2.447 269.34,5.987 276.42,7.727 276.42,0.647 "/>
+<polyline points="269.58,2.447 269.58,5.987 269.28,6.227 269.399,5.747 276.479,7.487 276.66,7.727 276.181,7.727 276.181,0.647 
+	276.36,0.407 276.66,0.347 276.66,8.027 276.36,7.967 269.28,6.227 269.101,6.167 269.101,2.447 "/>
+<polyline points="276.479,0.887 269.399,2.687 269.101,2.447 269.101,2.267 269.28,2.207 276.36,0.407 "/>
+<text transform="matrix(1 0 0 1 280.5596 6.6472)" font-family="'ProductusBook'" font-size="7.98">transformer</text>
+<text transform="matrix(1 0 0 1 109.1401 57.6472)" font-family="'ProductusBook'" font-size="7.98">0,1</text>
+<text transform="matrix(-6.123234e-17 -1 1 -6.123234e-17 18.8994 109.7263)" font-family="'ProductusBook'" font-size="7.98"> get content</text>
+<text transform="matrix(-6.123234e-17 -1 1 -6.123234e-17 103.9805 111.9666)" font-family="'ProductusBook'" font-size="7.98">configured by</text>
+<text transform="matrix(-6.123234e-17 -1 1 -6.123234e-17 174.8398 100.1277)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">rewrites</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">manifest</tspan></text>
 </svg>
