@@ -291,13 +291,13 @@
       <title>osgi.ee Namespace definition</title>
 
       <tgroup cols="6">
-        <colspec colnum="1" colwidth="4*"/>
+        <colspec colnum="1" colwidth="2*"/>
 
         <colspec colnum="2" colwidth="1*"/>
 
         <colspec colnum="3" colwidth="1*"/>
 
-        <colspec colnum="4" colwidth="1.5*"/>
+        <colspec colnum="4" colwidth="2*"/>
 
         <colspec colnum="5" colwidth="4*"/>
 
@@ -437,7 +437,7 @@ Bundle B:
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="0.934in"
+          <imagedata align="center" contentdepth="0.840in"
                      contentwidth="6.199in"
                      fileref="package-namespace-example.svg"/>
         </imageobject>

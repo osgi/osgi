@@ -412,13 +412,13 @@
         collection of)</title>
 
         <tgroup cols="4">
-          <colspec colnum="1" colwidth="2*"/>
+          <colspec colnum="1" colwidth="1.8*"/>
 
-          <colspec colnum="2" colwidth="1*"/>
+          <colspec colnum="2" colwidth="0.8*"/>
 
           <colspec colnum="3" colwidth="2*"/>
 
-          <colspec colnum="4" colwidth="3*"/>
+          <colspec colnum="4" colwidth="3.4*"/>
 
           <thead>
             <row>

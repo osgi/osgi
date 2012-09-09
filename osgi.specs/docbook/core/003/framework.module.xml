@@ -3699,6 +3699,14 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         <tgroup cols="6">
           <colspec colnum="1" colwidth="3.2*"/>
 
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="0.8*"/>
+
+          <colspec colnum="4" colwidth="0.8*"/>
+
+          <colspec colnum="5" colwidth="0.8*"/>
+
           <colspec colnum="6" colwidth="3*"/>
 
           <thead>
@@ -4513,7 +4521,11 @@ bundle-description  ::= symbolic-name
         <title>Effect of fragments on searching</title>
 
         <tgroup cols="3">
-          <colspec colnum="3" colwidth="2*"/>
+          <colspec colnum="1" colwidth="1*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="2.5*"/>
 
           <thead>
             <row>
