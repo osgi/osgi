@@ -188,9 +188,9 @@
         <tgroup cols="5">
           <colspec colnum="1" colwidth="1*"/>
 
-          <colspec colnum="2" colwidth="2*"/>
+          <colspec colnum="2" colwidth="2.2*"/>
 
-          <colspec colnum="3" colwidth="2*"/>
+          <colspec colnum="3" colwidth="1.8*"/>
 
           <colspec colnum="4" colwidth="2*"/>
 
@@ -318,12 +318,12 @@
     columns under the full control of the application. The core classes
     involved are depicted in <xref linkend="i3105110"/>.</para>
 
-    <figure xml:id="i3105110">
+    <figure pgwide="1" xml:id="i3105110">
       <title>JPA Client View</title>
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="2.427in"
+          <imagedata align="center" contentdepth="1.800in"
                      contentwidth="6.246in" fileref="client-view.svg"/>
         </imageobject>
       </mediaobject>
@@ -413,7 +413,7 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="1.942in"
+            <imagedata align="center" contentdepth="1.800in"
                        contentwidth="6.264in" fileref="configuration.svg"/>
           </imageobject>
         </mediaobject>
@@ -492,7 +492,7 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd</programlisting>
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="2.336in"
+            <imagedata align="center" contentdepth="2.200in"
                        contentwidth="6.264in" fileref="dynamic-model.svg"/>
           </imageobject>
         </mediaobject>
@@ -736,12 +736,13 @@ Bundle-Version: 3.2.4.200912231004</programlisting>
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.jpa.EntityManagerFactoryBuilder.createEntityManagerFactory-Map-" xrefstyle="hyperlink"/>
-          - Returns a custom configured <code>EntityManagerFactory</code>
-          instance for the Persistence Unit associated with the service.
-          Accepts a map with the configuration properties to be applied during
-          Entity Manager Factory creation. The method must return a proper
-          Entity Manager Factory or throw an Exception.</para>
+          linkend="org.osgi.service.jpa.EntityManagerFactoryBuilder.createEntityManagerFactory-Map-"
+          xrefstyle="hyperlink"/> - Returns a custom configured
+          <code>EntityManagerFactory</code> instance for the Persistence Unit
+          associated with the service. Accepts a map with the configuration
+          properties to be applied during Entity Manager Factory creation. The
+          method must return a proper Entity Manager Factory or throw an
+          Exception.</para>
         </listitem>
       </itemizedlist>
 
