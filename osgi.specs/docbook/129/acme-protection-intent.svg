@@ -1,34 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="234.36px" height="29.7px" viewBox="0 0 234.36 29.7" style="enable-background:new 0 0 234.36 29.7;" xml:space="preserve"
-	>
+	 width="234.359px" height="29.7px" viewBox="0 0 234.359 29.7" enable-background="new 0 0 234.359 29.7" xml:space="preserve">
 <rect x="179.76" y="2.46" width="54.36" height="27"/>
 <rect x="179.76" y="2.221" width="54.6" height="0.479"/>
 <rect x="233.88" y="2.46" width="0.479" height="27.24"/>
-<rect x="179.52" y="29.221" width="54.601" height="0.479"/>
-<rect x="179.52" y="2.221" width="0.48" height="27.239"/>
-<rect x="177.42" y="0.66" style="fill:#FFFFFF;" width="54.3" height="27"/>
+<rect x="179.52" y="29.221" width="54.602" height="0.479"/>
+<rect x="179.52" y="2.221" width="0.48" height="27.238"/>
+<rect x="177.42" y="0.66" fill="#FFFFFF" width="54.3" height="27"/>
 <rect x="177.42" y="0.421" width="54.54" height="0.479"/>
 <rect x="231.48" y="0.66" width="0.48" height="27.24"/>
-<rect x="177.18" y="27.421" width="54.54" height="0.479"/>
-<rect x="177.18" y="0.421" width="0.48" height="27.239"/>
-<text transform="matrix(1 0 0 1 179.7603 7.8008)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">&lt;&lt;bind</tspan><tspan x="18.417" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">i</tspan><tspan x="19.926" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">ng-</tspan><tspan x="29.725" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">t</tspan><tspan x="32.007" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">ype&gt;</tspan><tspan x="45.253" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">&gt;</tspan></text>
-<text transform="matrix(1 0 0 1.0522 179.7603 16.3203)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">sca:bindin</tspan><tspan x="26.991" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">g</tspan><tspan x="30.177" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">.</tspan><tspan x="31.2" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">ws</tspan></text>
-<rect x="2.58" y="2.04" width="54.36" height="27"/>
+<rect x="177.18" y="27.42" width="54.54" height="0.479"/>
+<rect x="177.18" y="0.421" width="0.48" height="27.24"/>
+<text transform="matrix(1 0 0 1 179.76 7.8013)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;binding-type&gt;&gt;</text>
+<text transform="matrix(0.9504 0 0 1 179.76 17.3774)" font-family="'ProductusOSGiBookc'" font-size="7.98">sca:binding.ws</text>
+<rect x="2.58" y="2.04" width="54.359" height="27"/>
 <rect x="2.58" y="1.801" width="54.6" height="0.479"/>
-<rect x="56.7" y="2.04" width="0.48" height="27.24"/>
+<rect x="56.7" y="2.04" width="0.479" height="27.24"/>
 <rect x="2.34" y="28.801" width="54.6" height="0.479"/>
-<rect x="2.34" y="1.801" width="0.48" height="27.239"/>
-<rect x="0.24" y="0.24" style="fill:#FFFFFF;" width="54.3" height="27"/>
-<rect x="0.24" width="54.54" height="0.48"/>
-<rect x="54.3" y="0.24" width="0.48" height="27.24"/>
-<rect y="27" width="54.54" height="0.48"/>
-<rect width="0.48" height="27.24"/>
-<text transform="matrix(1 0 0 1 2.5801 7.3203)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">&lt;&lt;</tspan><tspan x="5.873" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">i</tspan><tspan x="7.381" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">ntent&gt;</tspan><tspan x="25.783" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">&gt;</tspan></text>
-<text transform="matrix(1 0 0 1.0522 2.5801 15.8408)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">ac</tspan><tspan x="6.029" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">m</tspan><tspan x="11.437" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">e:p</tspan><tspan x="19.703" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">r</tspan><tspan x="21.629" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">o</tspan><tspan x="25.225" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">tection</tspan></text>
-<rect x="56.7" y="14.58" width="0.24" height="0.48"/>
-<rect x="56.94" y="14.58" width="120.72" height="0.48"/>
-<text transform="matrix(1 0 0 1 99.4204 7.7402)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:9;">c</tspan><tspan x="4.194" y="0" style="font-family:'ProductusOSGiBookc'; font-size:9;">o</tspan><tspan x="9.107" y="0" style="font-family:'ProductusOSGiBookc'; font-size:9;">n</tspan><tspan x="13.959" y="0" style="font-family:'ProductusOSGiBookc'; font-size:9;">s</tspan><tspan x="17.793" y="0" style="font-family:'ProductusOSGiBookc'; font-size:9;">tr</tspan><tspan x="24.398" y="0" style="font-family:'ProductusOSGiBookc'; font-size:9;">a</tspan><tspan x="28.772" y="0" style="font-family:'ProductusOSGiBookc'; font-size:9;">i</tspan><tspan x="31.229" y="0" style="font-family:'ProductusOSGiBookc'; font-size:9;">n</tspan><tspan x="36.08" y="0" style="font-family:'ProductusOSGiBookc'; font-size:9;">s</tspan></text>
+<rect x="2.34" y="1.801" width="0.479" height="27.239"/>
+<rect x="0.24" y="0.24" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="0.24" width="54.539" height="0.48"/>
+<rect x="54.3" y="0.24" width="0.479" height="27.24"/>
+<rect x="0" y="27" width="54.54" height="0.479"/>
+<rect x="0" width="0.479" height="27.241"/>
+<text transform="matrix(1 0 0 1 2.5803 7.3208)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;intent&gt;&gt;</text>
+<text transform="matrix(0.9504 0 0 1 2.5803 16.897)" font-family="'ProductusOSGiBookc'" font-size="7.98">acme:protection</text>
+<rect x="56.7" y="14.58" width="0.239" height="0.48"/>
+<rect x="56.94" y="14.58" width="120.721" height="0.48"/>
+<text transform="matrix(1 0 0 1 99.4207 7.7407)" font-family="'ProductusOSGiBookc'" font-size="9">constrains</text>
 </svg>

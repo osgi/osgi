@@ -1,132 +1,121 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Generator: Adobe Illustrator 16.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
 <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 width="320.015px" height="234.12px" viewBox="0 0 320.015 234.12" style="enable-background:new 0 0 320.015 234.12;"
+	 width="320.015px" height="234.121px" viewBox="0 0 320.015 234.121" enable-background="new 0 0 320.015 234.121"
 	 xml:space="preserve">
-<rect x="127.44" y="163.02" style="fill:#E6E6E6;" width="70.86" height="43.2"/>
-<rect x="219.3" y="134.459" width="1.261" height="0.48"/>
-<rect x="224.58" y="134.459" width="1.98" height="0.48"/>
-<rect x="230.58" y="134.459" width="1.98" height="0.48"/>
-<rect x="236.58" y="134.459" width="1.98" height="0.48"/>
-<rect x="242.58" y="134.459" width="1.98" height="0.48"/>
-<rect x="248.521" y="134.459" width="1.979" height="0.48"/>
-<rect x="254.521" y="134.459" width="1.979" height="0.48"/>
-<rect x="260.521" y="134.459" width="1.979" height="0.48"/>
-<rect x="266.521" y="134.459" width="1.979" height="0.48"/>
-<rect x="272.521" y="134.459" width="1.979" height="0.48"/>
-<rect x="278.521" y="134.459" width="1.979" height="0.48"/>
-<rect x="284.521" y="134.459" width="1.979" height="0.48"/>
-<rect x="290.521" y="134.459" width="1.979" height="0.48"/>
-<rect x="296.521" y="134.459" width="1.26" height="0.48"/>
-<rect x="35.04" y="134.459" width="1.26" height="0.48"/>
-<rect x="40.32" y="134.459" width="1.98" height="0.48"/>
-<rect x="46.32" y="134.459" width="1.98" height="0.48"/>
-<rect x="52.32" y="134.459" width="1.98" height="0.48"/>
-<rect x="58.32" y="134.459" width="1.98" height="0.48"/>
-<rect x="64.26" y="134.459" width="1.98" height="0.48"/>
-<rect x="70.26" y="134.459" width="1.98" height="0.48"/>
-<rect x="76.26" y="134.459" width="1.98" height="0.48"/>
-<rect x="82.26" y="134.459" width="1.98" height="0.48"/>
-<rect x="88.26" y="134.459" width="1.98" height="0.48"/>
-<rect x="94.26" y="134.459" width="1.98" height="0.48"/>
-<rect x="100.26" y="134.459" width="0.24" height="0.48"/>
-<rect x="100.5" y="134.459" width="1.74" height="0.48"/>
-<rect x="106.26" y="134.459" width="0.24" height="0.48"/>
-<rect x="106.5" y="134.459" width="1.74" height="0.48"/>
-<rect x="112.26" y="134.459" width="0.24" height="0.48"/>
-<rect x="112.5" y="134.459" width="1.02" height="0.48"/>
-<rect x="76.98" y="63.78" style="fill:#E6E6E6;" width="71.7" height="43.2"/>
+<rect x="127.44" y="163.02" fill="#E6E6E6" width="70.86" height="43.2"/>
+<rect x="219.3" y="134.458" width="1.261" height="0.48"/>
+<rect x="224.58" y="134.458" width="1.98" height="0.48"/>
+<rect x="230.58" y="134.458" width="1.98" height="0.48"/>
+<rect x="236.58" y="134.458" width="1.98" height="0.48"/>
+<rect x="242.58" y="134.458" width="1.98" height="0.48"/>
+<rect x="248.521" y="134.458" width="1.979" height="0.48"/>
+<rect x="254.521" y="134.458" width="1.979" height="0.48"/>
+<rect x="260.521" y="134.458" width="1.979" height="0.48"/>
+<rect x="266.521" y="134.458" width="1.979" height="0.48"/>
+<rect x="272.521" y="134.458" width="1.979" height="0.48"/>
+<rect x="278.521" y="134.458" width="1.979" height="0.48"/>
+<rect x="284.521" y="134.458" width="1.979" height="0.48"/>
+<rect x="290.521" y="134.458" width="1.979" height="0.48"/>
+<rect x="296.521" y="134.458" width="1.26" height="0.48"/>
+<rect x="35.04" y="134.458" width="1.26" height="0.48"/>
+<rect x="40.32" y="134.458" width="1.98" height="0.48"/>
+<rect x="46.32" y="134.458" width="1.98" height="0.48"/>
+<rect x="52.32" y="134.458" width="1.98" height="0.48"/>
+<rect x="58.32" y="134.458" width="1.98" height="0.48"/>
+<rect x="64.26" y="134.458" width="1.98" height="0.48"/>
+<rect x="70.26" y="134.458" width="1.98" height="0.48"/>
+<rect x="76.26" y="134.458" width="1.98" height="0.48"/>
+<rect x="82.26" y="134.458" width="1.98" height="0.48"/>
+<rect x="88.26" y="134.458" width="1.98" height="0.48"/>
+<rect x="94.26" y="134.458" width="1.98" height="0.48"/>
+<rect x="100.26" y="134.458" width="0.24" height="0.48"/>
+<rect x="100.5" y="134.458" width="1.74" height="0.48"/>
+<rect x="106.26" y="134.458" width="0.24" height="0.48"/>
+<rect x="106.5" y="134.458" width="1.74" height="0.48"/>
+<rect x="112.26" y="134.458" width="0.24" height="0.48"/>
+<rect x="112.5" y="134.458" width="1.02" height="0.48"/>
+<rect x="76.98" y="63.78" fill="#E6E6E6" width="71.7" height="43.2"/>
 <rect x="87.24" y="72.72" width="54.36" height="27"/>
 <rect x="87.24" y="72.48" width="54.6" height="0.48"/>
 <rect x="141.36" y="72.72" width="0.48" height="27.24"/>
 <rect x="87" y="99.48" width="54.6" height="0.48"/>
 <rect x="87" y="72.48" width="0.48" height="27.24"/>
-<rect x="84.9" y="70.92" style="fill:#FFFFFF;" width="54.36" height="27"/>
+<rect x="84.9" y="70.92" fill="#FFFFFF" width="54.36" height="27"/>
 <rect x="84.9" y="70.68" width="54.6" height="0.48"/>
 <rect x="139.02" y="70.92" width="0.48" height="27.24"/>
 <rect x="84.66" y="97.68" width="54.6" height="0.48"/>
 <rect x="84.66" y="70.68" width="0.48" height="27.24"/>
-<text transform="matrix(1 0 0 1.0522 87.2402 78.0601)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">Se</tspan><tspan x="6.795" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">r</tspan><tspan x="8.949" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">vice</tspan><tspan x="19.612" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;"> </tspan><tspan x="20.697" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">C</tspan><tspan x="24.663" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">o</tspan><tspan x="28.205" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">nsumer </tspan></text>
-<text transform="matrix(1 0 0 1.0522 87.2402 86.52)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">I</tspan><tspan x="1.479" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">m</tspan><tspan x="6.886" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">p</tspan><tspan x="10.375" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">l</tspan></text>
-<rect x="177.061" y="63.78" style="fill:#E6E6E6;" width="71.64" height="43.2"/>
-<rect x="187.32" y="72.72" width="54.3" height="27"/>
+<text transform="matrix(0.9504 0 0 1 87.2402 78.0601)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">Service Consumer</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Impl</tspan></text>
+<rect x="177.061" y="63.78" fill="#E6E6E6" width="71.64" height="43.2"/>
+<rect x="187.32" y="72.72" width="54.301" height="27"/>
 <rect x="187.32" y="72.48" width="54.54" height="0.48"/>
-<rect x="241.38" y="72.72" width="0.48" height="27.24"/>
-<rect x="187.08" y="99.48" width="54.54" height="0.48"/>
+<rect x="241.38" y="72.72" width="0.479" height="27.24"/>
+<rect x="187.08" y="99.48" width="54.541" height="0.48"/>
 <rect x="187.08" y="72.48" width="0.48" height="27.24"/>
-<rect x="184.92" y="70.92" style="fill:#FFFFFF;" width="54.36" height="27"/>
-<rect x="184.92" y="70.68" width="54.601" height="0.48"/>
-<rect x="239.04" y="70.92" width="0.48" height="27.24"/>
+<rect x="184.919" y="70.92" fill="#FFFFFF" width="54.36" height="27"/>
+<rect x="184.919" y="70.68" width="54.602" height="0.48"/>
+<rect x="239.041" y="70.92" width="0.479" height="27.24"/>
 <rect x="184.68" y="97.68" width="54.601" height="0.48"/>
-<rect x="184.68" y="70.68" width="0.48" height="27.24"/>
-<text transform="matrix(1 0 0 1.0522 187.3203 78.0601)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">Servi</tspan><tspan x="13.355" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">c</tspan><tspan x="16.29" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">e</tspan><tspan x="19.59" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;"> </tspan><tspan x="21.091" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">P</tspan><tspan x="24.17" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">r</tspan><tspan x="26.157" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">odu</tspan><tspan x="36.676" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">c</tspan><tspan x="39.611" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">er </tspan></text>
-<text transform="matrix(1 0 0 1.0522 187.3203 86.52)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">I</tspan><tspan x="1.456" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">m</tspan><tspan x="6.909" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">p</tspan><tspan x="10.375" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">l</tspan></text>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="12.6,127.62 6.96,141.78 29.64,141.78 35.28,127.62 
-	"/>
-<polyline points="12.84,127.74 7.2,141.9 6.96,142.02 6.96,141.54 29.64,141.54 29.88,141.9 29.46,141.72 35.1,127.56 35.28,127.38 
-	35.64,127.38 35.52,127.74 29.88,141.9 29.82,142.02 6.66,142.02 6.78,141.72 12.42,127.56 "/>
+<rect x="184.68" y="70.68" width="0.479" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 187.3198 78.0601)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">Service Producer</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Impl</tspan></text>
+<polyline fill="#FFFFFF" points="12.6,127.621 6.96,141.781 29.64,141.781 35.28,127.621 "/>
+<polyline points="12.84,127.74 7.2,141.9 6.96,142.02 6.96,141.541 29.64,141.541 29.88,141.9 29.46,141.72 35.1,127.56 
+	35.28,127.38 35.64,127.38 35.52,127.74 29.88,141.9 29.82,142.02 6.66,142.02 6.78,141.72 12.42,127.56 "/>
 <polyline points="35.28,127.86 12.6,127.86 12.42,127.56 12.48,127.38 35.28,127.38 "/>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="296.101,127.62 290.4,141.78 313.08,141.78 
-	318.78,127.62 "/>
-<polyline points="296.34,127.74 290.641,141.9 290.4,142.02 290.4,141.54 313.08,141.54 313.32,141.9 312.9,141.72 318.601,127.56 
-	318.78,127.38 319.141,127.38 319.021,127.74 313.32,141.9 313.26,142.02 290.101,142.02 290.22,141.72 295.92,127.56 "/>
-<polyline points="318.78,127.86 296.101,127.86 295.92,127.56 295.98,127.38 318.78,127.38 "/>
+<polyline fill="#FFFFFF" points="296.101,127.621 290.4,141.781 313.08,141.781 318.781,127.621 "/>
+<polyline points="296.339,127.74 290.641,141.9 290.4,142.02 290.4,141.541 313.08,141.541 313.32,141.9 312.9,141.72 
+	318.601,127.56 318.781,127.38 319.14,127.38 319.021,127.74 313.32,141.9 313.259,142.02 290.101,142.02 290.22,141.72 
+	295.919,127.56 "/>
+<polyline points="318.781,127.86 296.101,127.86 295.919,127.56 295.98,127.38 318.781,127.38 "/>
 <rect x="190.98" y="191.16" width="113.88" height="0.48"/>
-<rect x="304.38" y="141.54" width="0.48" height="49.86"/>
+<rect x="304.38" y="141.541" width="0.479" height="49.859"/>
 <rect x="20.88" y="191.16" width="113.88" height="0.48"/>
-<rect x="20.88" y="141.54" width="0.48" height="49.86"/>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="106.14,127.62 113.28,141.78 120.36,127.62 "/>
+<rect x="20.88" y="141.541" width="0.48" height="49.859"/>
+<polyline fill="#FFFFFF" points="106.14,127.621 113.28,141.781 120.36,127.621 "/>
 <polyline points="106.38,127.5 113.52,141.66 113.52,141.9 113.1,141.66 120.18,127.5 120.36,127.38 120.78,127.38 113.52,141.9 
 	113.28,142.32 113.1,141.9 105.96,127.74 "/>
 <polyline points="120.36,127.86 106.14,127.86 105.96,127.74 105.78,127.38 120.36,127.38 "/>
-<rect x="136.86" y="171.9" width="54.359" height="27"/>
-<rect x="136.86" y="171.66" width="54.6" height="0.48"/>
+<rect x="136.86" y="171.9" width="54.358" height="27"/>
+<rect x="136.86" y="171.66" width="54.601" height="0.48"/>
 <rect x="190.98" y="171.9" width="0.479" height="27.24"/>
 <rect x="136.62" y="198.66" width="54.6" height="0.48"/>
 <rect x="136.62" y="171.66" width="0.48" height="27.24"/>
-<rect x="134.52" y="170.1" style="fill:#FFFFFF;" width="54.3" height="27"/>
+<rect x="134.52" y="170.1" fill="#FFFFFF" width="54.3" height="27"/>
 <rect x="134.52" y="169.86" width="54.541" height="0.479"/>
 <rect x="188.58" y="170.1" width="0.48" height="27.239"/>
 <rect x="134.28" y="196.86" width="54.54" height="0.479"/>
 <rect x="134.28" y="169.86" width="0.48" height="27.24"/>
-<text transform="matrix(1 0 0 1.0522 136.8604 177.2397)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">Distr</tspan><tspan x="13.098" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">i</tspan><tspan x="14.592" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">bu</tspan><tspan x="21.546" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">t</tspan><tspan x="23.707" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">i</tspan><tspan x="25.201" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">on </tspan></text>
-<text transform="matrix(1 0 0 1.0522 136.8604 185.7603)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">P</tspan><tspan x="3.071" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">r</tspan><tspan x="5.059" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">o</tspan><tspan x="8.479" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">v</tspan><tspan x="11.475" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">ider</tspan><tspan x="21.789" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;"> </tspan><tspan x="23.29" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">I</tspan><tspan x="24.784" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">m</tspan><tspan x="30.191" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">p</tspan><tspan x="33.665" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.5841;">l</tspan></text>
-<text transform="matrix(1 0 0 1 0 123.8398)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">to</tspan><tspan x="6.192" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="7.812" y="0" style="font-family:'ProductusBook'; font-size:7.98;">an</tspan><tspan x="14.834" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="16.398" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="19.918" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="23.581" y="0" style="font-family:'ProductusBook'; font-size:7.98;">dp</tspan><tspan x="31.002" y="0" style="font-family:'ProductusBook'; font-size:7.98;">o</tspan><tspan x="34.792" y="0" style="font-family:'ProductusBook'; font-size:7.98;">i</tspan><tspan x="36.373" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="40.035" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan></text>
-<text transform="matrix(1 0 0 1 294 123.6597)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="3.487" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="7.206" y="0" style="font-family:'ProductusBook'; font-size:7.98;">d</tspan><tspan x="10.885" y="0" style="font-family:'ProductusBook'; font-size:7.98;">p</tspan><tspan x="14.604" y="0" style="font-family:'ProductusBook'; font-size:7.98;">oi</tspan><tspan x="19.918" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="23.637" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan></text>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="155.76,233.879 162.84,219.72 169.92,233.879 "/>
-<polyline points="155.58,233.76 162.66,219.6 162.84,219.18 163.08,219.6 170.34,234.12 169.92,234.12 169.74,234 162.66,219.839 
-	163.08,219.6 163.08,219.839 156,234 "/>
-<polyline points="169.92,234.12 155.4,234.12 155.58,233.76 155.76,233.64 169.92,233.64 "/>
-<text transform="matrix(1 0 0 1 164.5801 218.6997)"><tspan x="0" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">r</tspan><tspan x="2.043" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">em</tspan><tspan x="11.252" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">o</tspan><tspan x="14.979" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">te.con</tspan><tspan x="32.861" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">f</tspan><tspan x="34.784" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">i</tspan><tspan x="36.292" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">g</tspan><tspan x="39.771" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">s.s</tspan><tspan x="46.962" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">u</tspan><tspan x="50.568" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">pporte</tspan><tspan x="69.72" y="0" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">d</tspan></text>
-<text transform="matrix(1 0 0 1 180.7803 228.7798)" style="font-family:'ProductusOSGiBookc'; font-size:7.98;">=</text>
-<text transform="matrix(1 0 0 1 184.5605 228.7798)"><tspan x="0" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;"> </tspan><tspan x="1.979" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">or</tspan><tspan x="9.288" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">g</tspan><tspan x="13.303" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">.</tspan><tspan x="15.401" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">os</tspan><tspan x="23.069" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">g</tspan><tspan x="27.084" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">i</tspan><tspan x="29.302" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">.sca,</tspan><tspan x="44.703" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;"> </tspan><tspan x="46.682" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">.</tspan><tspan x="48.908" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">.</tspan><tspan x="51.183" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">.</tspan></text>
-<rect x="127.44" style="fill:#E6E6E6;" width="70.86" height="43.2"/>
+<text transform="matrix(0.9504 0 0 1 136.8604 177.2388)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">Distribution</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Provider Impl</tspan></text>
+<text transform="matrix(1 0 0 1 0 123.8394)" font-family="'ProductusBook'" font-size="7.98">to an endpoint</text>
+<text transform="matrix(1 0 0 1 293.9995 123.6597)" font-family="'ProductusBook'" font-size="7.98">endpoint</text>
+<polyline fill="#FFFFFF" points="155.76,233.878 162.839,219.72 169.919,233.878 "/>
+<polyline points="155.58,233.759 162.66,219.6 162.839,219.18 163.08,219.6 170.339,234.121 169.919,234.121 169.74,234 
+	162.66,219.839 163.08,219.6 163.08,219.839 156,234 "/>
+<polyline points="169.919,234.121 155.4,234.121 155.58,233.759 155.76,233.64 169.919,233.64 "/>
+<text transform="matrix(1 0 0 1 164.9556 218.6987)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">remote.configs.supported</tspan><tspan x="23.47" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">=</tspan><tspan x="27.261" y="9.576" font-family="'ProductusSemibold'" font-size="7.98"> org.osgi.sca, ...</tspan></text>
+<rect x="127.44" fill="#E6E6E6" width="70.86" height="43.2"/>
 <rect x="162.601" y="42.3" width="0.479" height="128.04"/>
-<text transform="matrix(-6.123234e-17 -1 1 -6.123234e-17 167.5801 155.939)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="3.527" y="0" style="font-family:'ProductusBook'; font-size:7.98;">x</tspan><tspan x="6.527" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="8.93" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="12.417" y="0" style="font-family:'ProductusBook'; font-size:7.98;">nd</tspan><tspan x="19.838" y="0" style="font-family:'ProductusBook'; font-size:7.98;">s</tspan></text>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="134.52,35.46 134.52,7.14 191.22,7.14 191.22,28.38 
-	"/>
+<polyline fill="#FFFFFF" points="134.52,35.46 134.52,7.14 191.22,7.14 191.22,28.38 "/>
 <rect x="134.28" y="6.9" width="0.48" height="28.56"/>
 <rect x="134.52" y="6.9" width="56.94" height="0.48"/>
 <polyline points="191.46,7.14 191.46,28.62 191.28,28.62 134.58,35.7 134.28,35.76 134.28,35.46 134.52,35.22 191.22,28.14 
 	191.28,28.62 190.98,28.38 190.98,7.14 "/>
-<text transform="matrix(1 0 0 1 141.6001 14.52)"><tspan x="0" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">SC</tspan><tspan x="9.168" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">A</tspan></text>
-<text transform="matrix(1 0 0 1 141.6001 24.2393)"><tspan x="0" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">C</tspan><tspan x="4.676" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">o</tspan><tspan x="9.049" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">n</tspan><tspan x="13.31" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">f</tspan><tspan x="15.944" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">ig</tspan><tspan x="22.12" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">u</tspan><tspan x="26.437" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">r</tspan><tspan x="29.374" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">a</tspan><tspan x="33.316" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">t</tspan><tspan x="36.492" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">io</tspan><tspan x="42.971" y="0" style="font-family:'ProductusSemibold'; font-size:7.98;">n</tspan></text>
-<text transform="matrix(1 0 0 1 89.04 18.0596)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">bi</tspan><tspan x="5.235" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="8.954" y="0" style="font-family:'ProductusBook'; font-size:7.98;">d</tspan><tspan x="12.672" y="0" style="font-family:'ProductusBook'; font-size:7.98;">in</tspan><tspan x="17.883" y="0" style="font-family:'ProductusBook'; font-size:7.98;">gs</tspan></text>
-<text transform="matrix(1 0 0 1 89.04 27.8398)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">inte</tspan><tspan x="11.124" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="14.843" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="17.188" y="0" style="font-family:'ProductusBook'; font-size:7.98;">s</tspan></text>
-<text transform="matrix(1 0 0 1 219.54 18.7803)" style="font-family:'ProductusBook'; font-size:7.98;">bindings</text>
-<text transform="matrix(1 0 0 1 219.54 28.5)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">i</tspan><tspan x="1.556" y="0" style="font-family:'ProductusBook'; font-size:7.98;">n</tspan><tspan x="5.274" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="7.645" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="11.18" y="0" style="font-family:'ProductusBook'; font-size:7.98;">nt</tspan><tspan x="17.221" y="0" style="font-family:'ProductusBook'; font-size:7.98;">s</tspan></text>
+<text transform="matrix(1 0 0 1 141.6001 14.519)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">SCA</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Configuration</tspan></text>
+<text transform="matrix(1 0 0 1 89.04 18.0591)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">bindings</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">intents</tspan><tspan x="0" y="19.152" font-family="'ProductusBook'" font-size="7.98">policy sets</tspan></text>
+<text transform="matrix(1 0 0 1 219.5405 18.7798)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">bindings</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">intents</tspan><tspan x="0" y="19.152" font-family="'ProductusBook'" font-size="7.98">policy sets</tspan></text>
 <rect x="113.04" y="184.02" width="21.72" height="0.479"/>
-<rect x="113.04" y="141.54" width="0.48" height="42.721"/>
+<rect x="113.04" y="141.541" width="0.48" height="42.721"/>
 <rect x="113.04" y="99" width="0.48" height="0.24"/>
 <rect x="113.04" y="99.24" width="0.48" height="28.62"/>
-<rect x="190.98" y="184.02" width="21.72" height="0.479"/>
-<rect x="212.22" y="141.54" width="0.48" height="42.721"/>
+<rect x="190.98" y="184.02" width="21.721" height="0.479"/>
+<rect x="212.22" y="141.541" width="0.48" height="42.721"/>
 <rect x="212.22" y="99" width="0.48" height="28.86"/>
-<polyline style="fill-rule:evenodd;clip-rule:evenodd;fill:#FFFFFF;" points="205.38,141.78 212.46,127.62 219.54,141.78 "/>
-<polyline points="205.2,141.66 212.28,127.5 212.46,127.08 212.7,127.5 219.96,142.02 219.54,142.02 219.36,141.9 212.28,127.74 
-	212.7,127.5 212.7,127.74 205.62,141.9 "/>
-<polyline points="219.54,142.02 205.021,142.02 205.2,141.66 205.38,141.54 219.54,141.54 "/>
+<polyline fill="#FFFFFF" points="205.38,141.781 212.46,127.621 219.541,141.781 "/>
+<polyline points="205.201,141.66 212.28,127.5 212.46,127.08 212.701,127.5 219.96,142.02 219.541,142.02 219.36,141.9 
+	212.28,127.74 212.701,127.5 212.701,127.74 205.621,141.9 "/>
+<polyline points="219.541,142.02 205.021,142.02 205.201,141.66 205.38,141.541 219.541,141.541 "/>
 <rect x="130.5" y="21.06" width="4.26" height="0.48"/>
 <rect x="116.34" y="21.06" width="8.1" height="0.48"/>
 <rect x="102.12" y="21.06" width="8.1" height="0.48"/>
@@ -148,20 +137,19 @@
 <rect x="229.68" y="21.06" width="8.101" height="0.48"/>
 <rect x="243.9" y="21.06" width="8.1" height="0.48"/>
 <rect x="258.061" y="21.06" width="4.26" height="0.48"/>
-<rect x="261.84" y="21.3" width="0.48" height="3.96"/>
-<rect x="261.84" y="31.38" width="0.48" height="8.1"/>
-<rect x="261.84" y="45.6" width="0.48" height="8.04"/>
-<rect x="261.84" y="59.76" width="0.48" height="8.1"/>
-<rect x="261.84" y="73.92" width="0.48" height="8.1"/>
-<rect x="261.84" y="88.14" width="0.48" height="8.04"/>
-<rect x="261.84" y="102.3" width="0.48" height="0.24"/>
-<rect x="261.84" y="102.54" width="0.48" height="7.86"/>
-<rect x="261.84" y="116.52" width="0.48" height="0.24"/>
-<rect x="261.84" y="116.76" width="0.48" height="7.8"/>
-<rect x="261.84" y="130.68" width="0.48" height="0.239"/>
-<rect x="261.84" y="130.919" width="0.48" height="4.021"/>
+<rect x="261.839" y="21.3" width="0.48" height="3.96"/>
+<rect x="261.839" y="31.38" width="0.48" height="8.1"/>
+<rect x="261.839" y="45.6" width="0.48" height="8.04"/>
+<rect x="261.839" y="59.76" width="0.48" height="8.1"/>
+<rect x="261.839" y="73.92" width="0.48" height="8.1"/>
+<rect x="261.839" y="88.14" width="0.48" height="8.04"/>
+<rect x="261.839" y="102.3" width="0.48" height="0.24"/>
+<rect x="261.839" y="102.54" width="0.48" height="7.86"/>
+<rect x="261.839" y="116.52" width="0.48" height="0.24"/>
+<rect x="261.839" y="116.76" width="0.48" height="7.8"/>
+<rect x="261.839" y="130.68" width="0.48" height="0.239"/>
+<rect x="261.839" y="130.919" width="0.48" height="4.021"/>
 <rect x="162.601" y="198.24" width="0.479" height="0.24"/>
 <rect x="162.601" y="198.48" width="0.479" height="21.479"/>
-<text transform="matrix(1 0 0 1 89.04 37.5601)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">po</tspan><tspan x="7.445" y="0" style="font-family:'ProductusBook'; font-size:7.98;">l</tspan><tspan x="9.065" y="0" style="font-family:'ProductusBook'; font-size:7.98;">i</tspan><tspan x="10.629" y="0" style="font-family:'ProductusBook'; font-size:7.98;">c</tspan><tspan x="13.702" y="0" style="font-family:'ProductusBook'; font-size:7.98;">y</tspan><tspan x="16.941" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="18.553" y="0" style="font-family:'ProductusBook'; font-size:7.98;">se</tspan><tspan x="24.841" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="27.235" y="0" style="font-family:'ProductusBook'; font-size:7.98;">s</tspan></text>
-<text transform="matrix(1 0 0 1 219.54 38.2798)"><tspan x="0" y="0" style="font-family:'ProductusBook'; font-size:7.98;">policy</tspan><tspan x="16.861" y="0" style="font-family:'ProductusBook'; font-size:7.98;"> </tspan><tspan x="18.481" y="0" style="font-family:'ProductusBook'; font-size:7.98;">s</tspan><tspan x="21.29" y="0" style="font-family:'ProductusBook'; font-size:7.98;">e</tspan><tspan x="24.825" y="0" style="font-family:'ProductusBook'; font-size:7.98;">t</tspan><tspan x="27.195" y="0" style="font-family:'ProductusBook'; font-size:7.98;">s</tspan></text>
+<text transform="matrix(-6.123234e-17 -1 1 -6.123234e-17 169.5796 155.939)" font-family="'ProductusBook'" font-size="7.98">extends</text>
 </svg>
