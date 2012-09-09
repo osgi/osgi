@@ -183,7 +183,7 @@
         <tgroup cols="3">
           <colspec colnum="1" colwidth="3*"/>
 
-          <colspec colnum="2" colwidth="1*"/>
+          <colspec colnum="2" colwidth="1.5*"/>
 
           <colspec colnum="3" colwidth="3*"/>
 
@@ -582,7 +582,7 @@
         <title>Servlet Context Service Properties</title>
 
         <tgroup cols="3">
-          <colspec colnum="1" colwidth="3*"/>
+          <colspec colnum="1" colwidth="2*"/>
 
           <colspec colnum="2" colwidth="1*"/>
 
@@ -947,7 +947,7 @@ web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
         <tgroup cols="2">
           <colspec colnum="1" colwidth="1*"/>
 
-          <colspec colnum="2" colwidth="2*"/>
+          <colspec colnum="2" colwidth="2.5*"/>
 
           <thead>
             <row>
