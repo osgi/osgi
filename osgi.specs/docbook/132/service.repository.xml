@@ -203,14 +203,14 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     attributes.</para>
 
     <para>The <xref
-    linkend="org.osgi.service.repository.Repository.findProviders-Collection-" xrefstyle="hyperlink"/>
-    method takes a Collection of requirements. The reason for this collection
-    is that it allows the caller to specify multiple requirements
-    simultaneously so that Repositories can batch requests, the requirements
-    in this collection are further unrelated. That is, they do not form an
-    expression in any way. Multiple requirements as the parameter means that
-    the result must be a map so that the caller can find out what requirement
-    matched what capabilities. For example:</para>
+    linkend="org.osgi.service.repository.Repository.findProviders-Collection-"
+    xrefstyle="hyperlink"/> method takes a Collection of requirements. The
+    reason for this collection is that it allows the caller to specify
+    multiple requirements simultaneously so that Repositories can batch
+    requests, the requirements in this collection are further unrelated. That
+    is, they do not form an expression in any way. Multiple requirements as
+    the parameter means that the result must be a map so that the caller can
+    find out what requirement matched what capabilities. For example:</para>
 
     <programlisting>List&lt;Capability&gt; find( Requirement r ){
   List&lt;Capability&gt; result = new ArrayList&lt;Capability&gt;();
@@ -251,9 +251,10 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     convenience class to construct <code>Requirement</code> instances.</para>
 
     <para>Resources that originate from Repository services must implement the
-    <xref linkend="org.osgi.service.repository.RepositoryContent" xrefstyle="hyperlink"/> interface,
-    this interface provides stream access to the default storage format. It is
-    therefore possible to get the content with the following code.</para>
+    <xref linkend="org.osgi.service.repository.RepositoryContent"
+    xrefstyle="hyperlink"/> interface, this interface provides stream access
+    to the default storage format. It is therefore possible to get the content
+    with the following code.</para>
 
     <programlisting>InputStream getContent( String type, Stringname, Version version ) {
   Resource r = getResource( type, name, version );
@@ -263,13 +264,13 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
 }</programlisting>
 
     <para>The <xref
-    linkend="org.osgi.service.repository.RepositoryContent.getContent--" xrefstyle="hyperlink"/>
-    method returns an Input Stream in the default format for that resource
-    type. Resources from a Repository should also have one or more
-    <code>osgi.content</code> capabilities that advertise the same resource in
-    the same or different formats. The <code>osgi.content</code> capability
-    has a number of attributes that provide information about the resource’s
-    download format:</para>
+    linkend="org.osgi.service.repository.RepositoryContent.getContent--"
+    xrefstyle="hyperlink"/> method returns an Input Stream in the default
+    format for that resource type. Resources from a Repository should also
+    have one or more <code>osgi.content</code> capabilities that advertise the
+    same resource in the same or different formats. The
+    <code>osgi.content</code> capability has a number of attributes that
+    provide information about the resource’s download format:</para>
 
     <itemizedlist>
       <listitem>
@@ -418,9 +419,9 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.repository.Repository.findProviders-Collection-" xrefstyle="hyperlink"/>
-        – For each requirement find all the capabilities that match that
-        requirement and return them as a
+        linkend="org.osgi.service.repository.Repository.findProviders-Collection-"
+        xrefstyle="hyperlink"/> – For each requirement find all the
+        capabilities that match that requirement and return them as a
         <code>Map&lt;Requirement,Collection&lt;Capability&gt;&gt;</code>.</para>
       </listitem>
     </itemizedlist>
@@ -446,8 +447,9 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     <itemizedlist>
       <listitem>
         <para>Implement the <xref
-        linkend="org.osgi.service.repository.RepositoryContent" xrefstyle="hyperlink"/> interfaces,
-        see <xref linkend="i3224355"/>.</para>
+        linkend="org.osgi.service.repository.RepositoryContent"
+        xrefstyle="hyperlink"/> interfaces, see <xref
+        linkend="i3224355"/>.</para>
       </listitem>
 
       <listitem>
@@ -460,23 +462,22 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
       <title>Repository Content</title>
 
       <para>Resources originating from a Repository must implement the <xref
-      linkend="org.osgi.service.repository.RepositoryContent" xrefstyle="hyperlink"/> interface. The
-      purpose of this interface is to allow users of the Repositories access
-      to an Input Stream that provides access to the resource in a format
-      specified by the resource type, see the <code>osgi.identity</code>
-      namespace. If the resource type does not specify a format then it must
-      be an Input Stream to a JAR.</para>
+      linkend="org.osgi.service.repository.RepositoryContent"
+      xrefstyle="hyperlink"/> interface. The purpose of this interface is to
+      allow users of the Repositories access to an Input Stream that provides
+      access to the resource in a format specified by the resource type, see
+      the <code>osgi.identity</code> namespace. If the resource type does not
+      specify a format then it must be an Input Stream to a JAR.</para>
 
-      <para>The <xref
-      linkend="org.osgi.service.repository.RepositoryContent" xrefstyle="hyperlink"/> interface
-      provides a single method:</para>
+      <para>The <xref linkend="org.osgi.service.repository.RepositoryContent"
+      xrefstyle="hyperlink"/> interface provides a single method:</para>
 
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.repository.RepositoryContent.getContent--" xrefstyle="hyperlink"/>
-          – Return an Input Stream for the resource, default a JAR stream
-          unless otherwise specified for the type in the
+          linkend="org.osgi.service.repository.RepositoryContent.getContent--"
+          xrefstyle="hyperlink"/> – Return an Input Stream for the resource,
+          default a JAR stream unless otherwise specified for the type in the
           <code>osgi.identity</code> namespace.</para>
         </listitem>
       </itemizedlist>
@@ -491,9 +492,9 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
     <emphasis>contents</emphasis>. A resource can be formatted in different
     ways. It is possible to deliver a bundle as a JAR file, a Pack200 file, or
     some other format. In general, the <xref
-    linkend="org.osgi.service.repository.RepositoryContent" xrefstyle="hyperlink"/> interface
-    provides access to the default format, which is the JAR format in most
-    cases.</para>
+    linkend="org.osgi.service.repository.RepositoryContent"
+    xrefstyle="hyperlink"/> interface provides access to the default format,
+    which is the JAR format in most cases.</para>
 
     <para>The Repository can advertise the different formats with
     <code>osgi.content</code> capabilities. Each of those capabilities is
@@ -504,9 +505,10 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
 
     <para>The <code>osgi.content</code> Namespace supports the attributes
     defined in the following table and <xref
-    linkend="org.osgi.service.repository.ContentNamespace" xrefstyle="hyperlink"/>.</para>
+    linkend="org.osgi.service.repository.ContentNamespace"
+    xrefstyle="hyperlink"/>.</para>
 
-    <table>
+    <table pgwide="1">
       <title>osgi.content definition</title>
 
       <tgroup cols="6">
@@ -666,7 +668,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
         <title>repository element attributes</title>
 
         <tgroup cols="3">
-          <colspec colnum="1" colwidth="2*"/>
+          <colspec colnum="1" colwidth="1.5*"/>
 
           <colspec colnum="2" colwidth="1*"/>
 
@@ -733,7 +735,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
         <title>referral element attributes</title>
 
         <tgroup cols="3">
-          <colspec colnum="1" colwidth="2*"/>
+          <colspec colnum="1" colwidth="1.5*"/>
 
           <colspec colnum="2" colwidth="1*"/>
 
@@ -819,7 +821,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
         <title>capability element attributes</title>
 
         <tgroup cols="3">
-          <colspec colnum="1" colwidth="2*"/>
+          <colspec colnum="1" colwidth="1.5*"/>
 
           <colspec colnum="2" colwidth="1*"/>
 
@@ -874,7 +876,7 @@ void removeRepository( Repository repo )    { repos.remove(repo);}</programlisti
         <title>requirement element attributes</title>
 
         <tgroup cols="3">
-          <colspec colnum="1" colwidth="2*"/>
+          <colspec colnum="1" colwidth="1.5*"/>
 
           <colspec colnum="2" colwidth="1*"/>
 
@@ -964,7 +966,7 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
         <title>attribute element attributes</title>
 
         <tgroup cols="3">
-          <colspec colnum="1" colwidth="2*"/>
+          <colspec colnum="1" colwidth="1.5*"/>
 
           <colspec colnum="2" colwidth="1*"/>
 
@@ -1025,7 +1027,7 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
         <title>directive element attributes</title>
 
         <tgroup cols="3">
-          <colspec colnum="1" colwidth="2*"/>
+          <colspec colnum="1" colwidth="1.5*"/>
 
           <colspec colnum="2" colwidth="1*"/>
 
@@ -1242,9 +1244,9 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
       in a <code>doPrivileged</code> block. Implementations must ensure that
       callers cannot influence/modify the metadata in such a way that the
       <xref
-      linkend="org.osgi.service.repository.RepositoryContent.getContent--" xrefstyle="hyperlink"/>
-      method could provide access to arbitrary Internet resources. This could
-      for example happen if:</para>
+      linkend="org.osgi.service.repository.RepositoryContent.getContent--"
+      xrefstyle="hyperlink"/> method could provide access to arbitrary
+      Internet resources. This could for example happen if:</para>
 
       <itemizedlist>
         <listitem>
