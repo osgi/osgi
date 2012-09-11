@@ -21,7 +21,7 @@ import org.osgi.dto.DTO;
 /**
  * Data Transfer Object for a Resource.
  * 
- * @version $Id$
+ * @author $Id$
  * @NotThreadSafe
  */
 public class ResourceDTO implements DTO {

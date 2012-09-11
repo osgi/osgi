@@ -22,7 +22,7 @@ import org.osgi.dto.MapDTO;
 /**
  * Data Transfer Object for a Framework.
  * 
- * @version $Id$
+ * @author $Id$
  * @NotThreadSafe
  */
 public class FrameworkDTO implements DTO {

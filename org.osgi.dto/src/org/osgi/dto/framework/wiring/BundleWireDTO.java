@@ -21,7 +21,7 @@ import org.osgi.dto.resource.WireDTO;
 /**
  * Data Transfer Object for a BundleWire.
  * 
- * @version $Id$
+ * @author $Id$
  * @NotThreadSafe
  */
 public class BundleWireDTO extends WireDTO {

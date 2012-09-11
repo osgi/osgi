@@ -32,7 +32,8 @@
  * <p>
  * {@code  Import-Package: org.osgi.dto.framework.wiring; version="[1.1,1.2)"}
  * 
- * @version $Id$
+ * @version 1.1
+ * @author $Id$
  */
 
 package org.osgi.dto.framework.wiring;

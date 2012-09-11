@@ -21,7 +21,7 @@ import org.osgi.dto.DTO;
 /**
  * Data Transfer Object for a Wiring.
  * 
- * @version $Id$
+ * @author $Id$
  * @NotThreadSafe
  */
 public class WiringDTO implements DTO {

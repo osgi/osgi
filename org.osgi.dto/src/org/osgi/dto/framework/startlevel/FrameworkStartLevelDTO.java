@@ -21,7 +21,7 @@ import org.osgi.dto.DTO;
 /**
  * Data Transfer Object for a FrameworkStartLevel.
  * 
- * @version $Id$
+ * @author $Id$
  * @NotThreadSafe
  */
 public class FrameworkStartLevelDTO implements DTO {

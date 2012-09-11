@@ -24,7 +24,7 @@ import java.io.Serializable;
  * All data transfer objects are trivially serializable and only use basic Java
  * numerical types, String and other DTOs.
  * 
- * @version $Id$
+ * @author $Id$
  * @NotThreadSafe
  */
 public interface DTO extends Serializable {

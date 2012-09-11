@@ -22,7 +22,7 @@ import org.osgi.dto.MapDTO;
 /**
  * Data Transfer Object for a ServiceReference.
  * 
- * @version $Id$
+ * @author $Id$
  * @NotThreadSafe
  */
 public class ServiceReferenceDTO implements DTO {

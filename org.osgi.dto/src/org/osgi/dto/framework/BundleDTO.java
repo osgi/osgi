@@ -22,7 +22,7 @@ import org.osgi.dto.MapDTO;
 /**
  * Data Transfer Object for a Bundle.
  * 
- * @version $Id$
+ * @author $Id$
  * @NotThreadSafe
  */
 public class BundleDTO implements DTO {

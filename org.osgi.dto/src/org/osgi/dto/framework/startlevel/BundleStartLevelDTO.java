@@ -21,7 +21,7 @@ import org.osgi.dto.DTO;
 /**
  * Data Transfer Object for a BundleStartLevel.
  * 
- * @version $Id$
+ * @author $Id$
  * @NotThreadSafe
  */
 public class BundleStartLevelDTO implements DTO {

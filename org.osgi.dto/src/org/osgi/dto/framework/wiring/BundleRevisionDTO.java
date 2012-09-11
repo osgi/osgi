@@ -22,7 +22,7 @@ import org.osgi.dto.resource.ResourceDTO;
 /**
  * Data Transfer Object for a BundleWiring.
  * 
- * @version $Id$
+ * @author $Id$
  * @NotThreadSafe
  */
 public class BundleRevisionDTO extends ResourceDTO {

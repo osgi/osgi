@@ -21,7 +21,7 @@ package org.osgi.dto;
  * 
  * @param <K> Key type
  * @param <V> Value Type
- * @version $Id$
+ * @author $Id$
  * @NotThreadSafe
  */
 public class MapDTO<K, V> implements DTO {

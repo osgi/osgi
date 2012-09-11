@@ -22,7 +22,7 @@ import org.osgi.dto.MapDTO;
 /**
  * Data Transfer Object for a Requirement.
  * 
- * @version $Id$
+ * @author $Id$
  * @NotThreadSafe
  */
 public class RequirementDTO implements DTO {
