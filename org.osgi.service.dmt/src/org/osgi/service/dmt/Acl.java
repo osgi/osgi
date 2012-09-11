@@ -33,8 +33,7 @@ import java.util.Vector;
  * <p>
  * The syntax for valid remote server IDs:<br>
  * &lt;<i>server-identifier</i>&gt; ::= All printable characters except
- * {@code '='}, {@code '&amp;'}, {@code '*'}, {@code '+'} or white-space
- * characters.
+ * {@code '='}, {@code '&'}, {@code '*'}, {@code '+'} or white-space characters.
  * 
  * @version $Id$
  */

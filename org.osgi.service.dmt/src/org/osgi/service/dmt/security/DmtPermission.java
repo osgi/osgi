@@ -23,7 +23,8 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.StringTokenizer;
-import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.Uri;
 
 /**
  * Controls access to management objects in the Device Management Tree (DMT). It
@@ -47,7 +48,7 @@ import org.osgi.service.dmt.*;
  * 
  * This means that owner of this permission has Get access on every child node
  * of ./OSGi/bundles. The asterix does not necessarily have to follow a '/'
- * character. For example the {@code &quot;./OSGi/a*&quot;} target matches the
+ * character. For example the {@code "./OSGi/a*"} target matches the
  * {@code ./OSGi/applications} subtree.
  * <p>
  * If wildcard is present in the actions field, all legal OMA DM commands are

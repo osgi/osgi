@@ -134,8 +134,7 @@ public class ApplicationAdminPermission extends Permission {
 	 * This method can be used in the {@link java.security.ProtectionDomain}
 	 * implementation in the {@code implies} method to insert the application ID
 	 * of the current application into the permission being checked. This
-	 * enables the evaluation of the {@code &lt;&lt;SELF&gt;&gt;} pseudo
-	 * targets.
+	 * enables the evaluation of the {@code <<SELF>>} pseudo targets.
 	 * 
 	 * @param applicationId the ID of the current application.
 	 * @return the permission updated with the ID of the current application
@@ -168,9 +167,9 @@ public class ApplicationAdminPermission extends Permission {
 	 * {@link #ApplicationAdminPermission(ApplicationDescriptor, String)})</li>
 	 * <li>The {@code filter} of this permission mathes the
 	 * {@code ApplicationDescriptor} specified in the {@code otherPermission}.
-	 * If the filter in this permission is the {@code &lt;&lt;SELF&gt;&gt;}
-	 * pseudo target, then the currentApplicationId set in the
-	 * {@code otherPermission} is compared to the application Id of the target
+	 * If the filter in this permission is the {@code <<SELF>>} pseudo target,
+	 * then the currentApplicationId set in the {@code otherPermission} is
+	 * compared to the application Id of the target
 	 * {@code ApplicationDescriptor}.</li>
 	 * <li>The list of permitted actions in this permission contains all actions
 	 * required in the {@code otherPermission}</li>
@@ -321,7 +320,7 @@ public class ApplicationAdminPermission extends Permission {
 			if (!(o instanceof SignerWrapper))
 				return false;
 			SignerWrapper other = (SignerWrapper) o;
-			ApplicationDescriptor matchAppDesc = (ApplicationDescriptor) (appDesc != null ? appDesc : other.appDesc);
+			ApplicationDescriptor matchAppDesc = appDesc != null ? appDesc : other.appDesc;
 			String matchPattern = appDesc != null ? other.pattern : pattern;
 			return matchAppDesc.matchDNChain(matchPattern);
 		}

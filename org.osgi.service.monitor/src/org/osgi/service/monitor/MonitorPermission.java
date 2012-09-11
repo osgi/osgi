@@ -118,8 +118,8 @@ public class MonitorPermission extends Permission {
 	 * <p>
 	 * For example, the following targets are valid:
 	 * {@code com.mycomp.myapp/queue_length}, {@code com.mycomp.myapp/*},
-	 * {@code com.mycomp.&#42;/*}, {@code &#42;/*}, {@code &#42;/queue_length},
-	 * {@code &#42;/queue*}.
+	 * <code>com.mycomp.&#42;/*</code>, <code>&#42;/*</code>,
+	 * <code>&#42;/queue_length</code>, <code>&#42;/queue*</code>.
 	 * <p>
 	 * The following targets are invalid: {@code *.myapp/queue_length},
 	 * {@code com.*.myapp/*}, {@code *}.
@@ -128,8 +128,7 @@ public class MonitorPermission extends Permission {
 	 * {@code read}, {@code publish}, {@code startjob}, {@code reset},
 	 * {@code switchevents}, or the combination of these separated by commas.
 	 * String constants are defined in this class for each valid action. Passing
-	 * {@code &quot;*&quot;} as the action string is equivalent to listing all
-	 * actions.
+	 * {@code "*"} as the action string is equivalent to listing all actions.
 	 * 
 	 * @param statusVariable the identifier of the {@code StatusVariable} in
 	 *        [Monitorable_id]/[StatusVariable_id] format
