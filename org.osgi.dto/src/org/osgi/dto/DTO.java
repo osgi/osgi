@@ -22,7 +22,7 @@ import java.io.Serializable;
  * Marker interface for Data Transfer Objects.
  * 
  * All data transfer objects are trivially serializable and only use basic Java
- * numerical types, String and other DTOs.
+ * numerical types, Booleans, Strings, DTOs or arrays of any of the former.
  * 
  * @author $Id$
  * @NotThreadSafe
