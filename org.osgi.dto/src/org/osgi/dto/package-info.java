@@ -30,7 +30,7 @@
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.dto; version="[1.0,1.2)"}
+ * {@code  Import-Package: org.osgi.dto; version="[1.0,1.1)"}
  *
  * @version $Id$
  */
