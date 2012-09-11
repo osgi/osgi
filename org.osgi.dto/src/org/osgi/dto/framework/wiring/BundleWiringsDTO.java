@@ -21,6 +21,10 @@ import org.osgi.dto.DTO;
 /**
  * Data Transfer Object for the BundleWirings of a bundle.
  * 
+ * <p>
+ * A Bundle can be adapted to provide a {@code BundleWiringsDTO} for the in use
+ * wirings of the Bundle.
+ * 
  * @author $Id$
  * @NotThreadSafe
  */

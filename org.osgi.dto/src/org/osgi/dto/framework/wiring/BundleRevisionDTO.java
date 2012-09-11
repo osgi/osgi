@@ -22,6 +22,12 @@ import org.osgi.dto.resource.ResourceDTO;
 /**
  * Data Transfer Object for a BundleWiring.
  * 
+ * <p>
+ * A Bundle can be adapted to provide a {@code BundleRevisionDTO} for the
+ * current revision of the Bundle. {@code BundleRevisionDTO} objects for all in
+ * use revisions of the Bundle can be obtained from a {@link BundleRevisionsDTO}
+ * of the Bundle.
+ * 
  * @author $Id$
  * @NotThreadSafe
  */

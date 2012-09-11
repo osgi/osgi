@@ -21,6 +21,10 @@ import org.osgi.dto.DTO;
 /**
  * Data Transfer Object for a FrameworkStartLevel.
  * 
+ * <p>
+ * A Bundle can be adapted to provide a {@code FrameworkStartLevelDTO} for the
+ * framework of the Bundle.
+ * 
  * @author $Id$
  * @NotThreadSafe
  */

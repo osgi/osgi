@@ -22,6 +22,9 @@ import org.osgi.dto.MapDTO;
 /**
  * Data Transfer Object for a ServiceReference.
  * 
+ * <p>
+ * {@code ServiceReferenceDTO}s can be obtained from a {@link FrameworkDTO}.
+ * 
  * @author $Id$
  * @NotThreadSafe
  */

@@ -21,6 +21,10 @@ import org.osgi.dto.DTO;
 /**
  * Data Transfer Object for a BundleRevisions.
  * 
+ * <p>
+ * A Bundle can be adapted to provide a {@code BundleRevisionsDTO} for the in
+ * use revisions of the Bundle.
+ * 
  * @author $Id$
  * @NotThreadSafe
  */

@@ -21,6 +21,9 @@ import org.osgi.dto.resource.WireDTO;
 /**
  * Data Transfer Object for a BundleWire.
  * 
+ * <p>
+ * {@code BundleWireDTO}s can be obtained from a {@link BundleWiringDTO}.
+ * 
  * @author $Id$
  * @NotThreadSafe
  */

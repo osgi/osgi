@@ -22,6 +22,10 @@ import org.osgi.dto.MapDTO;
 /**
  * Data Transfer Object for a Framework.
  * 
+ * <p>
+ * A Bundle can be adapted to provide a {@code FrameworkDTO} for the framework
+ * of the Bundle.
+ * 
  * @author $Id$
  * @NotThreadSafe
  */
