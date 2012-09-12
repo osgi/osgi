@@ -172,7 +172,7 @@
       </itemizedlist>
 
       <figure>
-        <title>, org.osgi.util.measurement</title>
+        <title>Class Diagram, org.osgi.util.measurement</title>
 
         <mediaobject>
           <imageobject>
@@ -398,22 +398,26 @@
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.util.measurement.Measurement.Measurement-double-double-Unit-long-" xrefstyle="hyperlink"/></para>
+          linkend="org.osgi.util.measurement.Measurement.Measurement-double-double-Unit-long-"
+          xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.util.measurement.Measurement.Measurement-double-double-Unit-" xrefstyle="hyperlink"/></para>
+          linkend="org.osgi.util.measurement.Measurement.Measurement-double-double-Unit-"
+          xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.util.measurement.Measurement.Measurement-double-Unit-" xrefstyle="hyperlink"/></para>
+          linkend="org.osgi.util.measurement.Measurement.Measurement-double-Unit-"
+          xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.util.measurement.Measurement.Measurement-double-" xrefstyle="hyperlink"/></para>
+          linkend="org.osgi.util.measurement.Measurement.Measurement-double-"
+          xrefstyle="hyperlink"/></para>
         </listitem>
       </itemizedlist>
     </section>
@@ -422,11 +426,13 @@
       <title>Identity and Equality</title>
 
       <para>Both <xref
-      linkend="org.osgi.util.measurement.Measurement.equals-Object-" xrefstyle="hyperlink"/> and
-      <xref linkend="org.osgi.util.measurement.Measurement.hashCode--" xrefstyle="hyperlink"/>
-      methods are overridden to provide value-based equality. Two Measurement
-      objects are equal when the unit, error, and value are the same. The
-      time-stamp is not relevant for equality or the hash code.</para>
+      linkend="org.osgi.util.measurement.Measurement.equals-Object-"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.util.measurement.Measurement.hashCode--"
+      xrefstyle="hyperlink"/> methods are overridden to provide value-based
+      equality. Two Measurement objects are equal when the unit, error, and
+      value are the same. The time-stamp is not relevant for equality or the
+      hash code.</para>
     </section>
 
     <section>
@@ -434,12 +440,11 @@
 
       <para>The <code>Measurement</code> class implements the
       <code>java.lang.Comparable</code> interface and thus implements the
-      <xref
-      linkend="org.osgi.util.measurement.Measurement.compareTo-Object-" xrefstyle="hyperlink"/>
-      method. Comparing two <code>Measurement</code> objects is not
-      straightforward, however, due to the associated error. The error
-      effectively creates a range, so comparing two <code>Measurement</code>
-      objects is actually comparing intervals.</para>
+      <xref linkend="org.osgi.util.measurement.Measurement.compareTo-Object-"
+      xrefstyle="hyperlink"/> method. Comparing two <code>Measurement</code>
+      objects is not straightforward, however, due to the associated error.
+      The error effectively creates a range, so comparing two
+      <code>Measurement</code> objects is actually comparing intervals.</para>
 
       <para xml:id="i1345281">Two <code>Measurement</code> objects are
       considered to be equal when their intervals overlap. In all other cases,
@@ -457,10 +462,11 @@
       </figure>
 
       <para>This comparison implies that the <xref
-      linkend="org.osgi.util.measurement.Measurement.equals-Object-" xrefstyle="hyperlink"/> method
-      may return <code>false</code> while the <xref
-      linkend="org.osgi.util.measurement.Measurement.compareTo-Object-" xrefstyle="hyperlink"/>
-      method returns 0 for the same <code>Measurement</code> object.</para>
+      linkend="org.osgi.util.measurement.Measurement.equals-Object-"
+      xrefstyle="hyperlink"/> method may return <code>false</code> while the
+      <xref linkend="org.osgi.util.measurement.Measurement.compareTo-Object-"
+      xrefstyle="hyperlink"/> method returns 0 for the same
+      <code>Measurement</code> object.</para>
     </section>
   </section>
 
