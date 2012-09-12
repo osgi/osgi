@@ -541,8 +541,9 @@
           distinguish Subsystems installed in a framework. Subsystem
           identifiers are assigned in ascending order to Subsystems when they
           are installed. The <xref
-          linkend="org.osgi.service.subsystem.Subsystem.getSubsystemId--" xrefstyle="hyperlink"/>
-          method returns a Subsystem's identifier.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.getSubsystemId--"
+          xrefstyle="hyperlink"/> method returns a Subsystem's
+          identifier.</para>
         </listitem>
 
         <listitem>
@@ -552,8 +553,9 @@
           is not mandatory. Within a particular framework, a Subsystem
           location must be unique. A location string uniquely identifies a
           Subsystem. The <xref
-          linkend="org.osgi.service.subsystem.Subsystem.getLocation--" xrefstyle="hyperlink"/>
-          method returns a Subsystem's location.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.getLocation--"
+          xrefstyle="hyperlink"/> method returns a Subsystem's
+          location.</para>
         </listitem>
 
         <listitem>
@@ -562,15 +564,17 @@
           The combination of a Subsystem symbolic name and Subsystem version
           is intended to provide a globally unique identifier for a Subsystem
           Archive or Subsystem definition. The <xref
-          linkend="org.osgi.service.subsystem.Subsystem.getSymbolicName--" xrefstyle="hyperlink"/>
-          method returns the assigned Subsystem name. The <xref
-          linkend="org.osgi.service.subsystem.Subsystem.getVersion--" xrefstyle="hyperlink"/> method
-          returns the assigned version. Though this pair is intended to be
-          unique, it is developer assigned and there is no verification at
-          runtime that the pair uniquely identifies a Subsystem Archive. It is
-          possible to install a Subsystem multiple times as long as the
-          multiple Subsystem symbolic name and version pairs are isolated from
-          each other by Subsystem sharing policies.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.getSymbolicName--"
+          xrefstyle="hyperlink"/> method returns the assigned Subsystem name.
+          The <xref
+          linkend="org.osgi.service.subsystem.Subsystem.getVersion--"
+          xrefstyle="hyperlink"/> method returns the assigned version. Though
+          this pair is intended to be unique, it is developer assigned and
+          there is no verification at runtime that the pair uniquely
+          identifies a Subsystem Archive. It is possible to install a
+          Subsystem multiple times as long as the multiple Subsystem symbolic
+          name and version pairs are isolated from each other by Subsystem
+          sharing policies.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -669,10 +673,10 @@
       <para>When installing a Subsystem, the following URI syntax must be used
       as the location string in order to specify default values.</para>
 
-      <programlisting>subsystem-uri ::= 'subsystem://' url?’?’ params?
+      <programlisting>subsystem-uri ::= 'subsystem://' url? ’?’ params?
 params        ::= param ( ’&amp;’ param )*
 param         ::= key '=' value
-key           ::= unreserved | &lt;escaped <xref linkend="i3323132"/>&gt;
+key           ::= unreserved | escaped
 value         ::= unreserved | escaped
 url           ::= &lt;see <xref linkend="i3323132"/>&gt; 
 escaped       ::= &lt;see <xref linkend="i3323360"/>&gt;
@@ -787,7 +791,7 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
 
       <mediaobject>
         <imageobject>
-          <imagedata align="center" contentdepth="1.752in"
+          <imagedata align="center" contentdepth="1.700in"
                      contentwidth="6.209in"
                      fileref="regions-import-export.svg"/>
         </imageobject>
@@ -948,17 +952,19 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
     </itemizedlist>
 
     <para>When a Subsystem is installed using a Subsystem service <xref
-    linkend="org.osgi.service.subsystem.Subsystem.install-String-" xrefstyle="hyperlink"/> or <xref
-    linkend="org.osgi.service.subsystem.Subsystem.install-String-InputStream-" xrefstyle="hyperlink"/>
-    method the <emphasis>Subsystem resource </emphasis>becomes a constituent
-    of the Subsystem which the <code>install</code> method was called on. The
-    <emphasis>Subsystem resource </emphasis>is the Subsystem Archive and may
-    be retrieved by calling the Subsystem service <xref
-    linkend="org.osgi.service.subsystem.Subsystem.getConstituents--" xrefstyle="hyperlink"/> method.
-    <xref linkend="i3298109"/> illustrates the Root Subsystem with initial
-    bundles <code>A</code>, <code>B</code>, <code>SI</code> (Subsystems
-    implementation, may be multiple bundles), and the system bundle
-    (identifier 0).</para>
+    linkend="org.osgi.service.subsystem.Subsystem.install-String-"
+    xrefstyle="hyperlink"/> or <xref
+    linkend="org.osgi.service.subsystem.Subsystem.install-String-InputStream-"
+    xrefstyle="hyperlink"/> method the <emphasis>Subsystem resource
+    </emphasis>becomes a constituent of the Subsystem which the
+    <code>install</code> method was called on. The <emphasis>Subsystem
+    resource </emphasis>is the Subsystem Archive and may be retrieved by
+    calling the Subsystem service <xref
+    linkend="org.osgi.service.subsystem.Subsystem.getConstituents--"
+    xrefstyle="hyperlink"/> method. <xref linkend="i3298109"/> illustrates the
+    Root Subsystem with initial bundles <code>A</code>, <code>B</code>,
+    <code>SI</code> (Subsystems implementation, may be multiple bundles), and
+    the system bundle (identifier 0).</para>
 
     <figure xml:id="i3298464">
       <title>Subsystem resources</title>
@@ -2038,9 +2044,9 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
     <para>Typically the Region's context bundle would be used to obtain a
     bundle context with the <xref
-    linkend="org.osgi.service.subsystem.Subsystem.getBundleContext--" xrefstyle="hyperlink"/>
-    method, which has a perspective as a constituent of the Region. This is
-    useful in the following ways:</para>
+    linkend="org.osgi.service.subsystem.Subsystem.getBundleContext--"
+    xrefstyle="hyperlink"/> method, which has a perspective as a constituent
+    of the Region. This is useful in the following ways:</para>
 
     <itemizedlist>
       <listitem>
@@ -2298,7 +2304,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       resource becomes a shared constituent of both Unscoped Subsystems U1 and
       U2. The following illustrates this:</para>
 
-      <figure>
+      <figure pgwide="1">
         <title>Subsystems and Resources</title>
 
         <mediaobject>
@@ -2750,7 +2756,7 @@ Subsystem-Content:
         <tgroup cols="3">
           <colspec colnum="1" colwidth="2*"/>
 
-          <colspec colnum="2" colwidth="1*"/>
+          <colspec colnum="2" colwidth="1.5*"/>
 
           <colspec colnum="3" colwidth="3*"/>
 
@@ -2801,7 +2807,8 @@ Subsystem-Content:
               <entry><code>subsystem.state</code></entry>
 
               <entry><code><xref
-              linkend="org.osgi.service.subsystem.Subsystem.State" xrefstyle="hyperlink"/></code></entry>
+              linkend="org.osgi.service.subsystem.Subsystem.State"
+              xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Contains the current state of the
               Subsystem</para></entry>
@@ -2821,7 +2828,7 @@ Subsystem-Content:
       <code>INSTALLED</code>. The possible values of a
       <code>subsystem.state</code> are shown in the table below:</para>
 
-      <table>
+      <table pgwide="1">
         <title>Subsystem States</title>
 
         <tgroup cols="2">
@@ -2840,31 +2847,36 @@ Subsystem-Content:
           <tbody>
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLING" xrefstyle="hyperlink"/></code></entry>
+              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLING"
+              xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>When a Subsystem is first installed the Subsystems
               implementation must register a Subsystem service with the
               initial <code>subsystem.state</code> of <xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLING" xrefstyle="hyperlink"/>.
-              The <code>subsystem.state</code> must remain in the <xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLING" xrefstyle="hyperlink"/>
-              state until all of the Subsystem constituents are installed
-              successfully.</para></entry>
+              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLING"
+              xrefstyle="hyperlink"/>. The <code>subsystem.state</code> must
+              remain in the <xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLING"
+              xrefstyle="hyperlink"/> state until all of the Subsystem
+              constituents are installed successfully.</para></entry>
             </row>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/></code></entry>
+              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED"
+              xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>When all contents of a Subsystem has been
               successfully provisioned then the <code>subsystem.state</code>
               is set to <xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/>.</para></entry>
+              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED"
+              xrefstyle="hyperlink"/>.</para></entry>
             </row>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED" xrefstyle="hyperlink"/></code></entry>
+              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED"
+              xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Indicates that some failure occurred while
               attempting to install the Subsystem's contents.</para></entry>
@@ -2872,21 +2884,23 @@ Subsystem-Content:
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVING" xrefstyle="hyperlink"/></code></entry>
+              linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVING"
+              xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Starting a Subsystem triggers the resolution of a
               Subsystem if the <code>subsystem.state</code> is <xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/>.
-              A <xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVING" xrefstyle="hyperlink"/>
-              state indicates that a resolve process is occurring in an
-              attempt to resolve all of the subsystem's content
-              resources.</para></entry>
+              linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED"
+              xrefstyle="hyperlink"/>. A <xref
+              linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVING"
+              xrefstyle="hyperlink"/> state indicates that a resolve process
+              is occurring in an attempt to resolve all of the subsystem's
+              content resources.</para></entry>
             </row>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED" xrefstyle="hyperlink"/></code></entry>
+              linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED"
+              xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Indicates that the Subsystem is resolved. A
               Subsystem is resolved if all of its content resources are
@@ -2895,7 +2909,8 @@ Subsystem-Content:
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.STARTING" xrefstyle="hyperlink"/></code></entry>
+              linkend="org.osgi.service.subsystem.Subsystem.State.STARTING"
+              xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Indicates that the Subsystem is in the process of
               being started. During this state the resources the Subsystem
@@ -2903,23 +2918,26 @@ Subsystem-Content:
               <xref linkend="i3339345"/>. Once all the eligible resources are
               successfully started then the <code>subsystem.state</code> is
               set to <xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE" xrefstyle="hyperlink"/>.</para></entry>
+              linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE"
+              xrefstyle="hyperlink"/>.</para></entry>
             </row>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE" xrefstyle="hyperlink"/></code></entry>
+              linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE"
+              xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>The <xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE" xrefstyle="hyperlink"/>
-              state indicates that all eligible resources referenced by the
-              Subsystem were successfully started during the starting
-              process.</para></entry>
+              linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE"
+              xrefstyle="hyperlink"/> state indicates that all eligible
+              resources referenced by the Subsystem were successfully started
+              during the starting process.</para></entry>
             </row>
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING" xrefstyle="hyperlink"/></code></entry>
+              linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING"
+              xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Indicates that the Subsystem is in the process of
               being stopped. During this state the resources referenced by the
@@ -2928,7 +2946,8 @@ Subsystem-Content:
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING" xrefstyle="hyperlink"/></code></entry>
+              linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING"
+              xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>Indicates that the Subsystem is in the process of
               being uninstalled. During this state the resources referenced by
@@ -2938,13 +2957,15 @@ Subsystem-Content:
 
             <row>
               <entry><code><xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED" xrefstyle="hyperlink"/></code></entry>
+              linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED"
+              xrefstyle="hyperlink"/></code></entry>
 
               <entry><para>When all of the resources referenced by the
               Subsystem which are eligible for garbage collection have been
               uninstalled then the <code>subsystem.state</code> is set to
               <xref
-              linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED" xrefstyle="hyperlink"/>.</para></entry>
+              linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED"
+              xrefstyle="hyperlink"/>.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -3008,7 +3029,7 @@ Subsystem-Content:
       <para><xref linkend="i3344569"/> defines a more complicated scenario
       where Subsystems and multiple children are involved.</para>
 
-      <figure xml:id="i3344569">
+      <figure pgwide="1" xml:id="i3344569">
         <title>Complex example Subsystem scoping</title>
 
         <mediaobject>
@@ -3045,18 +3066,18 @@ Subsystem-Content:
       <title>Subsystem Manifest Headers</title>
 
       <para>The Subsystem service interface has the <xref
-      linkend="org.osgi.service.subsystem.Subsystem.getSubsystemHeaders-Locale-" xrefstyle="hyperlink"/>
-      method which returns the values of the Subsystem's manifest headers. The
-      headers returned by this method includes the values specified in the
-      Subsystem manifest file and the values derived by the Subsystems
-      implementation. Certain manifest headers may be derived at install time
-      by the Subsystems implementation if they were not specified in the
-      Subsystem manifest file. When a Subsystem manifest value is derived then
-      the derived value must be included in the headers returned by the method
-      <xref
-      linkend="org.osgi.service.subsystem.Subsystem.getSubsystemHeaders-Locale-" xrefstyle="hyperlink"/>.
-      The following Subsystem manifest headers may be derived by the
-      Subsystems implementation:</para>
+      linkend="org.osgi.service.subsystem.Subsystem.getSubsystemHeaders-Locale-"
+      xrefstyle="hyperlink"/> method which returns the values of the
+      Subsystem's manifest headers. The headers returned by this method
+      includes the values specified in the Subsystem manifest file and the
+      values derived by the Subsystems implementation. Certain manifest
+      headers may be derived at install time by the Subsystems implementation
+      if they were not specified in the Subsystem manifest file. When a
+      Subsystem manifest value is derived then the derived value must be
+      included in the headers returned by the method <xref
+      linkend="org.osgi.service.subsystem.Subsystem.getSubsystemHeaders-Locale-"
+      xrefstyle="hyperlink"/>. The following Subsystem manifest headers may be
+      derived by the Subsystems implementation:</para>
 
       <itemizedlist>
         <listitem>
@@ -3194,10 +3215,10 @@ Subsystem-Content:
         <listitem>
           <para>Register a Subsystem service with the initial
           <code>subsystem.state</code> service property set to <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLING" xrefstyle="hyperlink"/>.
-          This Subsystem service represents the Subsystem resource. See <xref
-          linkend="i3346175"/> and <xref linkend="i3346431"/> for more
-          details.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLING"
+          xrefstyle="hyperlink"/>. This Subsystem service represents the
+          Subsystem resource. See <xref linkend="i3346175"/> and <xref
+          linkend="i3346431"/> for more details.</para>
         </listitem>
 
         <listitem>
@@ -3222,22 +3243,21 @@ Subsystem-Content:
           prevent resolution of dependency wires to the capabilities provided
           by the installed dependencies until the Subsystem has successfully
           entered <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/>
-          state. See <xref linkend="i3346786"/> for details on where
-          dependencies are installed and see <xref linkend="i3339635"/> for
-          how they are tracked. If any dependency fails to install then an
-          installation failure occurs and a Subsystem Exception is thrown.
-          Otherwise continue to the next step.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED"
+          xrefstyle="hyperlink"/> state. See <xref linkend="i3346786"/> for
+          details on where dependencies are installed and see <xref
+          linkend="i3339635"/> for how they are tracked. If any dependency
+          fails to install then an installation failure occurs and a Subsystem
+          Exception is thrown. Otherwise continue to the next step.</para>
         </listitem>
 
         <listitem>
           <para>Install content resources. The content resources must be
           disabled from resolving until the Subsystem has successfully entered
-          <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/>
-          state. If any content resource fails to install then and
-          installation failure occurs and a Subsystem Exception is thrown.
-          Otherwise continue to the next step.</para>
+          <xref linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED"
+          xrefstyle="hyperlink"/> state. If any content resource fails to
+          install then and installation failure occurs and a Subsystem
+          Exception is thrown. Otherwise continue to the next step.</para>
         </listitem>
 
         <listitem>
@@ -3248,28 +3268,28 @@ Subsystem-Content:
         <listitem>
           <para>Enable resolution for all of the Subsystem content and any
           dependencies installed. Set the <code>subsystem.state</code> to
-          <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/> and
-          return the installed <code>Subsystem</code> object.</para>
+          <xref linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED"
+          xrefstyle="hyperlink"/> and return the installed
+          <code>Subsystem</code> object.</para>
         </listitem>
       </orderedlist>
 
       <para>The state <xref
-      linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED" xrefstyle="hyperlink"/> is
-      used to inform about an installation failure. All installation failures
-      use the following steps:</para>
+      linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED"
+      xrefstyle="hyperlink"/> is used to inform about an installation failure.
+      All installation failures use the following steps:</para>
 
       <orderedlist>
         <listitem>
           <para>When a Subsystem fails to install it enters the <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED" xrefstyle="hyperlink"/>
-          state.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED"
+          xrefstyle="hyperlink"/> state.</para>
         </listitem>
 
         <listitem>
           <para>Immediately transition the Subsystem to the <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING" xrefstyle="hyperlink"/>
-          state.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING"
+          xrefstyle="hyperlink"/> state.</para>
         </listitem>
 
         <listitem>
@@ -3279,8 +3299,8 @@ Subsystem-Content:
 
         <listitem>
           <para>Transition the Subsystem to the <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED" xrefstyle="hyperlink"/>
-          state.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED"
+          xrefstyle="hyperlink"/> state.</para>
         </listitem>
 
         <listitem>
@@ -3305,33 +3325,35 @@ Subsystem-Content:
       <para>A Subsystem's resolve process is initiated by performing a start
       operation on a Subsystem whose <code>subsystem.state</code> is currently
       set to <xref
-      linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/>. There
-      is no explicit operation for initiating the resolve process of a
-      Subsystem.</para>
+      linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED"
+      xrefstyle="hyperlink"/>. There is no explicit operation for initiating
+      the resolve process of a Subsystem.</para>
     </section>
 
     <section xml:id="i3365470">
       <title>Starting</title>
 
       <para>A Subsystem can be started by calling the Subsystem <xref
-      linkend="org.osgi.service.subsystem.Subsystem.start--" xrefstyle="hyperlink"/> method or the
-      Subsystems implementation can automatically start the Subsystem if the
-      Subsystem is <emphasis>ready </emphasis>and the <emphasis>autostart
-      setting </emphasis>of the Subsystem indicates that it must be started.
-      When a Subsystem is being started the Subsystems implementation must
-      perform the following operations synchronously before returning from the
-      <xref linkend="org.osgi.service.subsystem.Subsystem.start--" xrefstyle="hyperlink"/>
-      method:</para>
+      linkend="org.osgi.service.subsystem.Subsystem.start--"
+      xrefstyle="hyperlink"/> method or the Subsystems implementation can
+      automatically start the Subsystem if the Subsystem is <emphasis>ready
+      </emphasis>and the <emphasis>autostart setting </emphasis>of the
+      Subsystem indicates that it must be started. When a Subsystem is being
+      started the Subsystems implementation must perform the following
+      operations synchronously before returning from the <xref
+      linkend="org.osgi.service.subsystem.Subsystem.start--"
+      xrefstyle="hyperlink"/> method:</para>
 
       <orderedlist>
         <listitem>
           <para>If the <code>subsystem.state</code> is <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED" xrefstyle="hyperlink"/>,
-          <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED" xrefstyle="hyperlink"/>,
-          or <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING" xrefstyle="hyperlink"/>,
-          then an Illegal State Exception is thrown.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED"
+          xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED"
+          xrefstyle="hyperlink"/>, or <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING"
+          xrefstyle="hyperlink"/>, then an Illegal State Exception is
+          thrown.</para>
         </listitem>
 
         <listitem>
@@ -3341,8 +3363,9 @@ Subsystem-Content:
 
         <listitem>
           <para>If the <code>subsystem.state</code> is <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE" xrefstyle="hyperlink"/> then
-          the start method returns immediately.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE"
+          xrefstyle="hyperlink"/> then the start method returns
+          immediately.</para>
         </listitem>
 
         <listitem>
@@ -3352,37 +3375,39 @@ Subsystem-Content:
 
         <listitem>
           <para>If this <code>subsystem.state</code> is <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVING" xrefstyle="hyperlink"/>,
-          <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.STARTING" xrefstyle="hyperlink"/> or
-          <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING" xrefstyle="hyperlink"/>,
-          then the start method must wait for starting or stopping to complete
-          before continuing. If this does not occur in a reasonable time, a
-          Subsystem Exception is thrown to indicate the Subsystem was unable
-          to be started.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVING"
+          xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.STARTING"
+          xrefstyle="hyperlink"/> or <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING"
+          xrefstyle="hyperlink"/>, then the start method must wait for
+          starting or stopping to complete before continuing. If this does not
+          occur in a reasonable time, a Subsystem Exception is thrown to
+          indicate the Subsystem was unable to be started.</para>
         </listitem>
 
         <listitem>
           <para>If the <code>subsystem.state</code> is <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED" xrefstyle="hyperlink"/> then
-          continue to the next step; otherwise if the
-          <code>subsystem.state</code> is <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/>
-          then the <code>subsystem.state</code> is set to <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVING" xrefstyle="hyperlink"/> and
-          an attempt is made to resolve all of the Subsystem's content
-          resources. If all contents are resolved then set the
-          <code>subsystem.state</code> to <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED" xrefstyle="hyperlink"/>,
-          enable the export sharing policy and continue to the next step;
-          otherwise a starting failure occurs and a Subsystem Exception is
-          thrown.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED"
+          xrefstyle="hyperlink"/> then continue to the next step; otherwise if
+          the <code>subsystem.state</code> is <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED"
+          xrefstyle="hyperlink"/> then the <code>subsystem.state</code> is set
+          to <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVING"
+          xrefstyle="hyperlink"/> and an attempt is made to resolve all of the
+          Subsystem's content resources. If all contents are resolved then set
+          the <code>subsystem.state</code> to <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED"
+          xrefstyle="hyperlink"/>, enable the export sharing policy and
+          continue to the next step; otherwise a starting failure occurs and a
+          Subsystem Exception is thrown.</para>
         </listitem>
 
         <listitem>
           <para>Set the <code>subsystem.state</code> to <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.STARTING" xrefstyle="hyperlink"/>.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.STARTING"
+          xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>
@@ -3394,8 +3419,8 @@ Subsystem-Content:
 
         <listitem>
           <para>Set the <code>subsystem.state</code> to <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE" xrefstyle="hyperlink"/> and
-          return.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE"
+          xrefstyle="hyperlink"/> and return.</para>
         </listitem>
       </orderedlist>
 
@@ -3404,9 +3429,10 @@ Subsystem-Content:
       <orderedlist>
         <listitem>
           <para>If the subsystem state is <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.STARTING" xrefstyle="hyperlink"/> then
-          change the state to <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING" xrefstyle="hyperlink"/>.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.STARTING"
+          xrefstyle="hyperlink"/> then change the state to <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING"
+          xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>
@@ -3416,10 +3442,11 @@ Subsystem-Content:
 
         <listitem>
           <para>Change the state to <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/> or
-          <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED" xrefstyle="hyperlink"/>
-          depending on if the Subsystem was resolved.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED"
+          xrefstyle="hyperlink"/> or <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED"
+          xrefstyle="hyperlink"/> depending on if the Subsystem was
+          resolved.</para>
         </listitem>
 
         <listitem>
@@ -3433,21 +3460,23 @@ Subsystem-Content:
       <title>Stopping</title>
 
       <para>A Subsystem's stop process is initiated using the Subsystem
-      service's <xref linkend="org.osgi.service.subsystem.Subsystem.stop--" xrefstyle="hyperlink"/>
-      method. When a Subsystem is being stopped the Subsystems implementation
-      must perform the following operations synchronously before returning
-      from the <xref linkend="org.osgi.service.subsystem.Subsystem.stop--" xrefstyle="hyperlink"/>
-      method:</para>
+      service's <xref linkend="org.osgi.service.subsystem.Subsystem.stop--"
+      xrefstyle="hyperlink"/> method. When a Subsystem is being stopped the
+      Subsystems implementation must perform the following operations
+      synchronously before returning from the <xref
+      linkend="org.osgi.service.subsystem.Subsystem.stop--"
+      xrefstyle="hyperlink"/> method:</para>
 
       <orderedlist>
         <listitem>
           <para>If the <code>subsystem.state</code> is <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED" xrefstyle="hyperlink"/>,
-          <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED" xrefstyle="hyperlink"/>,
-          or <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING" xrefstyle="hyperlink"/>,
-          then an Illegal State Exception is thrown.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED"
+          xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED"
+          xrefstyle="hyperlink"/>, or <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING"
+          xrefstyle="hyperlink"/>, then an Illegal State Exception is
+          thrown.</para>
         </listitem>
 
         <listitem>
@@ -3457,28 +3486,29 @@ Subsystem-Content:
 
         <listitem>
           <para>If the <code>subsystem.state</code> is <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED" xrefstyle="hyperlink"/> or
-          <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/>
-          then the <xref
-          linkend="org.osgi.service.subsystem.Subsystem.stop--" xrefstyle="hyperlink"/> method
-          returns immediately.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED"
+          xrefstyle="hyperlink"/> or <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED"
+          xrefstyle="hyperlink"/> then the <xref
+          linkend="org.osgi.service.subsystem.Subsystem.stop--"
+          xrefstyle="hyperlink"/> method returns immediately.</para>
         </listitem>
 
         <listitem>
           <para>If this <code>subsystem.state</code> is <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.STARTING" xrefstyle="hyperlink"/> or
-          <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING" xrefstyle="hyperlink"/>,
-          then the stop method must wait for starting or stopping to complete
-          before continuing. If this does not occur in a reasonable time, a
-          Subsystem Exception is thrown to indicate the Subsystem was unable
-          to be stopped.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.STARTING"
+          xrefstyle="hyperlink"/> or <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING"
+          xrefstyle="hyperlink"/>, then the stop method must wait for starting
+          or stopping to complete before continuing. If this does not occur in
+          a reasonable time, a Subsystem Exception is thrown to indicate the
+          Subsystem was unable to be stopped.</para>
         </listitem>
 
         <listitem>
           <para>Set the <code>subsystem.state</code> to <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING" xrefstyle="hyperlink"/>.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING"
+          xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>
@@ -3490,7 +3520,8 @@ Subsystem-Content:
 
         <listitem>
           <para>Set the <code>subsystem.state</code> to <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED" xrefstyle="hyperlink"/>.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED"
+          xrefstyle="hyperlink"/>.</para>
         </listitem>
       </orderedlist>
 
@@ -3505,12 +3536,12 @@ Subsystem-Content:
 
       <para>A Subsystem's uninstall process is initiated using the Subsystem
       service's <xref
-      linkend="org.osgi.service.subsystem.Subsystem.uninstall--" xrefstyle="hyperlink"/> method. To
-      whatever extent possible, the Subsystems implementation must determine
-      the resources referenced by the Subsystem which are eligible for garbage
-      collection, <xref linkend="i3365854"/>. This method must always
-      uninstall the Subsystem from the persistent storage of the Subsystems
-      implementation.</para>
+      linkend="org.osgi.service.subsystem.Subsystem.uninstall--"
+      xrefstyle="hyperlink"/> method. To whatever extent possible, the
+      Subsystems implementation must determine the resources referenced by the
+      Subsystem which are eligible for garbage collection, <xref
+      linkend="i3365854"/>. This method must always uninstall the Subsystem
+      from the persistent storage of the Subsystems implementation.</para>
 
       <para>Once this method returns, the state of the platform must be the
       same as if the Subsystem had never been installed, unless some bundle
@@ -3522,48 +3553,53 @@ Subsystem-Content:
       <para>When a Subsystem is being uninstalled the Subsystems
       implementation must perform the following operations before returning
       from the <xref
-      linkend="org.osgi.service.subsystem.Subsystem.uninstall--" xrefstyle="hyperlink"/>
-      method:</para>
+      linkend="org.osgi.service.subsystem.Subsystem.uninstall--"
+      xrefstyle="hyperlink"/> method:</para>
 
       <orderedlist>
         <listitem>
           <para>If the <code>subsystem.state</code> is <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED" xrefstyle="hyperlink"/>
-          then this method returns immediately.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED"
+          xrefstyle="hyperlink"/> then this method returns immediately.</para>
         </listitem>
 
         <listitem>
           <para>If the <code>subsystem.state</code> is <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.STARTING" xrefstyle="hyperlink"/>,
-          <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING" xrefstyle="hyperlink"/> or
-          <xref linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE" xrefstyle="hyperlink"/>
-          then the Subsystem is stopped according to <xref
-          linkend="i3348344"/>. Otherwise continue to the next step.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.STARTING"
+          xrefstyle="hyperlink"/>, <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING"
+          xrefstyle="hyperlink"/> or <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE"
+          xrefstyle="hyperlink"/> then the Subsystem is stopped according to
+          <xref linkend="i3348344"/>. Otherwise continue to the next
+          step.</para>
         </listitem>
 
         <listitem>
           <para>If the <code>subsystem.state</code> is <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLING" xrefstyle="hyperlink"/>
-          and the installing process is interruptible, fail the install
-          process; otherwise, wait until the installation is complete.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLING"
+          xrefstyle="hyperlink"/> and the installing process is interruptible,
+          fail the install process; otherwise, wait until the installation is
+          complete.</para>
         </listitem>
 
         <listitem>
           <para>If the <code>subsystem.state</code> is in the <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED" xrefstyle="hyperlink"/>
-          state then skip to step <xref
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED"
+          xrefstyle="hyperlink"/> state then skip to step <xref
           linkend="service.subsystem-subsystemuninstalling6"/>.</para>
         </listitem>
 
         <listitem>
           <para>Set the <code>subsystem.state</code> to <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED" xrefstyle="hyperlink"/>.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED"
+          xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem xml:id="service.subsystem-subsystemuninstalling6">
           <para>Set the <code>subsystem.state</code> to <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING" xrefstyle="hyperlink"/>.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING"
+          xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>
@@ -3577,7 +3613,8 @@ Subsystem-Content:
 
         <listitem>
           <para>Set the <code>subsystem.state</code> to <xref
-          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED" xrefstyle="hyperlink"/>.</para>
+          linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED"
+          xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>
@@ -4521,25 +4558,25 @@ service                 ::= qname ( ';' parameter )*</programlisting>
             <row>
               <entry><code>CONTEXT</code></entry>
 
-              <entry><code>Subsystem.getBundleContext</code></entry>
+              <entry><para><code>Subsystem.getBundleContext</code></para></entry>
             </row>
 
             <row>
               <entry><code>METADATA</code></entry>
 
-              <entry><code>Subsystem.getSubsystemHeaders</code><code>Subsystem.getLocation</code></entry>
+              <entry><para><code>Subsystem.getSubsystemHeaders</code></para><para><code>Subsystem.getLocation</code></para></entry>
             </row>
 
             <row>
               <entry><code>LIFECYCLE</code></entry>
 
-              <entry><code>Subsystem.install</code><code>Subsystem.uninstall</code></entry>
+              <entry><para><code>Subsystem.install</code></para><para><code>Subsystem.uninstall</code></para></entry>
             </row>
 
             <row>
               <entry><code>EXECUTE</code></entry>
 
-              <entry><code>Subsystem.start</code><code>Subsystem.stop</code></entry>
+              <entry><para><code>Subsystem.start</code></para><para><code>Subsystem.stop</code></para></entry>
             </row>
           </tbody>
         </tgroup>
