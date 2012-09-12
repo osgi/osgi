@@ -109,7 +109,7 @@
         </listitem>
       </itemizedlist>
 
-      <figure>
+      <figure pgwide="1">
         <title>XML Parsing diagram</title>
 
         <mediaobject>
@@ -229,25 +229,26 @@
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.util.xml.XMLParserActivator.PARSER_NAMESPACEAWARE" xrefstyle="hyperlink"/>
-        – The registered parser is aware of name-spaces. Name-spaces allow an
-        XML document to consist of independently developed DTDs. In an XML
-        document, they are recognized by the <code>xmlns</code> attribute and
-        names prefixed with an abbreviated name-space identifier, like:
-        <code>&lt;xsl:if ...&gt;</code>. The type is a <code>Boolean</code>
-        object that must be <code>true</code> when the parser supports
-        name-spaces. All other values, or the absence of the property,
-        indicate that the parser does not implement name-spaces.</para>
+        linkend="org.osgi.util.xml.XMLParserActivator.PARSER_NAMESPACEAWARE"
+        xrefstyle="hyperlink"/> – The registered parser is aware of
+        name-spaces. Name-spaces allow an XML document to consist of
+        independently developed DTDs. In an XML document, they are recognized
+        by the <code>xmlns</code> attribute and names prefixed with an
+        abbreviated name-space identifier, like: <code>&lt;xsl:if
+        ...&gt;</code>. The type is a <code>Boolean</code> object that must be
+        <code>true</code> when the parser supports name-spaces. All other
+        values, or the absence of the property, indicate that the parser does
+        not implement name-spaces.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.util.xml.XMLParserActivator.PARSER_VALIDATING" xrefstyle="hyperlink"/> –
-        The registered parser can read the DTD and can validate the XML
-        accordingly. The type is a <code>Boolean</code> object that must
-        <code>true</code> when the parser is validating. All other values, or
-        the absence of the property, indicate that the parser does not
-        validate.</para>
+        linkend="org.osgi.util.xml.XMLParserActivator.PARSER_VALIDATING"
+        xrefstyle="hyperlink"/> – The registered parser can read the DTD and
+        can validate the XML accordingly. The type is a <code>Boolean</code>
+        object that must <code>true</code> when the parser is validating. All
+        other values, or the absence of the property, indicate that the parser
+        does not validate.</para>
       </listitem>
     </itemizedlist>
   </section>
@@ -330,13 +331,16 @@
       <code>BundleActivator</code> class will look in the
       <code>META-INF/services</code> service provider directory for the files
       <code>javax.xml.parsers.SAXParserFactory (</code> <xref
-      linkend="org.osgi.util.xml.XMLParserActivator.SAXFACTORYNAME" xrefstyle="hyperlink"/> ) or
+      linkend="org.osgi.util.xml.XMLParserActivator.SAXFACTORYNAME"
+      xrefstyle="hyperlink"/> ) or
       <code>javax.xml.parsers.DocumentBuilderFactory (</code> <xref
-      linkend="org.osgi.util.xml.XMLParserActivator.DOMFACTORYNAME" xrefstyle="hyperlink"/> ). The
-      full path name is specified in the constants <xref
-      linkend="org.osgi.util.xml.XMLParserActivator.SAXCLASSFILE" xrefstyle="hyperlink"/> and <xref
-      linkend="org.osgi.util.xml.XMLParserActivator.DOMCLASSFILE" xrefstyle="hyperlink"/>
-      respectively.</para>
+      linkend="org.osgi.util.xml.XMLParserActivator.DOMFACTORYNAME"
+      xrefstyle="hyperlink"/> ). The full path name is specified in the
+      constants <xref
+      linkend="org.osgi.util.xml.XMLParserActivator.SAXCLASSFILE"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.util.xml.XMLParserActivator.DOMCLASSFILE"
+      xrefstyle="hyperlink"/> respectively.</para>
 
       <para>If either of these files exist, the utility
       <code>BundleActivator</code> class will parse the contents according to
@@ -393,9 +397,10 @@ com.acme.saxparser.SAXParserValidating                                          
           <para>If the parsers support attributes, properties, or features
           that should be registered as properties so they can be searched,
           extend the <code>XMLParserActivator</code> class and override <xref
-          linkend="org.osgi.util.xml.XMLParserActivator.setSAXProperties-javax.xml.parsers.SAXParserFactory-Hashtable-" xrefstyle="hyperlink"/>
-          and <xref
-          linkend="org.osgi.util.xml.XMLParserActivator.setDOMProperties-javax.xml.parsers.DocumentBuilderFactory-Hashtable-" xrefstyle="hyperlink"/>.</para>
+          linkend="org.osgi.util.xml.XMLParserActivator.setSAXProperties-javax.xml.parsers.SAXParserFactory-Hashtable-"
+          xrefstyle="hyperlink"/> and <xref
+          linkend="org.osgi.util.xml.XMLParserActivator.setDOMProperties-javax.xml.parsers.DocumentBuilderFactory-Hashtable-"
+          xrefstyle="hyperlink"/>.</para>
         </listitem>
 
         <listitem>
