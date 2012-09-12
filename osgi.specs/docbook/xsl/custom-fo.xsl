@@ -2045,7 +2045,10 @@ should be discarded -->
         </xsl:otherwise>
       </xsl:choose>
       <fo:inline font-style="italic">
+        <!-- Need to normalize space in title since xref is used in programlisting
         <xsl:apply-templates select="d:title" mode="bibliography.mode"/>
+        -->
+        <xsl:value-of select="normalize-space(d:title)"/>
       </fo:inline>
     </xsl:otherwise>
   </xsl:choose>
