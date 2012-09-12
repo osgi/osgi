@@ -94,7 +94,7 @@
       <title>osgi.extender Namespace</title>
 
       <tgroup cols="6">
-        <colspec colnum="1" colwidth="5*"/>
+        <colspec colnum="1" colwidth="3*"/>
 
         <colspec colnum="2" colwidth="1*"/>
 
@@ -102,7 +102,7 @@
 
         <colspec colnum="4" colwidth="1.5*"/>
 
-        <colspec colnum="5" colwidth="4*"/>
+        <colspec colnum="5" colwidth="3*"/>
 
         <colspec colnum="6" colwidth="7*"/>
 
@@ -279,7 +279,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
       <title>osgi.contract Namespace</title>
 
       <tgroup cols="6">
-        <colspec colnum="1" colwidth="4*"/>
+        <colspec colnum="1" colwidth="2,5*"/>
 
         <colspec colnum="2" colwidth="1*"/>
 
@@ -287,7 +287,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
 
         <colspec colnum="4" colwidth="1.5*"/>
 
-        <colspec colnum="5" colwidth="4*"/>
+        <colspec colnum="5" colwidth="3.5*"/>
 
         <colspec colnum="6" colwidth="7*"/>
 
@@ -397,7 +397,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
       <title>osgi.service Namespace</title>
 
       <tgroup cols="6">
-        <colspec colnum="1" colwidth="4*"/>
+        <colspec colnum="1" colwidth="3*"/>
 
         <colspec colnum="2" colwidth="1*"/>
 
@@ -405,7 +405,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
 
         <colspec colnum="4" colwidth="1.5*"/>
 
-        <colspec colnum="5" colwidth="4*"/>
+        <colspec colnum="5" colwidth="3*"/>
 
         <colspec colnum="6" colwidth="7*"/>
 
@@ -433,7 +433,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
 
             <entry><code>M</code></entry>
 
-            <entry><code>LIst&lt;String&gt;</code></entry>
+            <entry><para><code>List</code></para><para><code>&lt;String&gt;</code></para></entry>
 
             <entry><para><code>qname</code></para><para><code>(’,’
             qname)*</code></para></entry>
