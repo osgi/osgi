@@ -776,7 +776,7 @@ Bundle-Version: 3.2.4.200912231004</programlisting>
 if ( refs != null ) {
     EntityManagerFactoryBuilder emfBuilder = 
         (EntityManagerFactoryBuilder) context.getService(refs[0]);
-   if ( emfBuilder != null ) {
+    if ( emfBuilder != null ) {
       Map&lt;String,Object&gt; props = new HashMap&lt;String,Object&gt;();
       props.put("<code>javax.persistence.jdbc.user</code>", userString);
       props.put("<code>javax.persistence.jdbc.</code>password",passwordString);

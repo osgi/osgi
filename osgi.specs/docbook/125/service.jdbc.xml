@@ -195,7 +195,7 @@ java.sql</programlisting>
 
       <para>What happens to the objects created by the Data Source Factory
       service, and the objects they created, is undefined in this
-      specifications. Database Drivers are not mandated to track the proper
+      specification. Database Drivers are not mandated to track the proper
       life cycle of these objects.</para>
     </section>
 
@@ -236,7 +236,7 @@ java.sql</programlisting>
     ")(" + 
         DataSourceFactory.OSGI_JDBC_DRIVER_CLASS + "=com.acme.db.Driver))");
 
-ServiceTracker tracker = new ServiceTracker(context, filter,null);
+ServiceTracker tracker = new ServiceTracker(context, filter, null);
 tracker.open();
 
 DataSourceFactory dsf = (DataSourceFactory) tracker.getService();</programlisting>
@@ -286,7 +286,7 @@ DataSourceFactory dsf = (DataSourceFactory) tracker.getService();</programlistin
       could be created.</para>
 
       <programlisting>Properties props = new Properties(); 
-props.put(DataSourceFactory.JDBC_URL,      "jdbc:acme:ACME DB"); 
+props.put(DataSourceFactory.JDBC_URL,      "jdbc:acme:ACMEDB"); 
 props.put(DataSourceFactory.JDBC_USER,     "foo"); 
 props.put(DataSourceFactory.JDBC_PASSWORD, "secret"); 
 DataSource dataSource = dsf.createDataSource(props);</programlisting>

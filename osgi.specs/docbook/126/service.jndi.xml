@@ -962,8 +962,8 @@ javax.naming.directory</programlisting>
       application. To make the next code example work, an instance must be
       registered as an Initial Context Factory Builder service.</para>
 
-      <programlisting>public class Container implements InitialContextFactoryBuilder{
-    ThreadLocal&lt;Application&gt;  apps;
+      <programlisting>public class Container implements InitialContextFactoryBuilder {
+    ThreadLocal&lt;Application&gt; apps;
 
     void startApp(final Application app) {
         Thread appThread = new Thread(app.getName()) {
@@ -972,14 +972,14 @@ javax.naming.directory</programlisting>
                     app.run();
     }}}
 
-   public InitialContextFactory 
-        createInitialContextFactory( Hashtable&lt;?,?&gt; ht ){
+    public InitialContextFactory 
+        createInitialContextFactory( Hashtable&lt;?,?&gt; ht ) {
         final Application app = apps.get();
         if ( app == null )
           return null;
 
         return new InitialContextFactory() {
-         public Context getInitialContext( Hashtable&lt;?,?&gt;env) {
+            public Context getInitialContext( Hashtable&lt;?,?&gt;env) {
                 return app.getContext(env);
             }
         };
@@ -1146,11 +1146,11 @@ javax.naming.directory</programlisting>
     <section xml:id="i3104232">
       <title>JRE Context Providers</title>
 
-      <para>The Java Runtime Environment (JRE) defines a number default naming
-      providers., see <xref linkend="i3094617"/>. These naming providers are
-      not OSGi aware, but are commonly used and are provided by the JRE. These
-      naming providers rely on the <code>NamingManager</code> class for object
-      conversion and finding URL Contexts.</para>
+      <para>The Java Runtime Environment (JRE) defines a number of default
+      naming providers., see <xref linkend="i3094617"/>. These naming
+      providers are not OSGi aware, but are commonly used and are provided by
+      the JRE. These naming providers rely on the <code>NamingManager</code>
+      class for object conversion and finding URL Contexts.</para>
 
       <para>The JRE default providers are made available by the JNDI
       Implementation. This JNDI Implementation must register a
@@ -1558,7 +1558,7 @@ ServicePermission ..JNDIProviderAdmin            REGISTER,GET</programlisting>
       <title>OSGi URL namespace</title>
 
       <para>A JNDI client must not be able to obtain services or a Bundle
-      Contexts that the client bundle would not be able to get via the core
+      Context that the client bundle would not be able to get via the core
       OSGi API. To allow a client to use the <code>osgi</code> namespace to
       get a service the bundle must have the corresponding Service Permission.
       When using the <code>osgi</code> namespace to obtain the Bundle Context
