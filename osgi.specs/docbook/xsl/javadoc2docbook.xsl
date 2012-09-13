@@ -644,7 +644,7 @@ version="1.1">
               </xsl:element>
               <!-- may contain <p> after first text  -->
               <xsl:element name="para" namespace="{$ns}">
-                <xsl:apply-templates select="node()[not(self::p)]"/>
+                <xsl:apply-templates select="node()[not(self::p)]" mode="html"/>
               </xsl:element>
             </xsl:element>
             <xsl:apply-templates select="p" mode="html"/>
@@ -881,7 +881,7 @@ version="1.1">
         </xsl:element>
         <!-- may contain <p> after first text  -->
         <xsl:element name="para" namespace="{$ns}">
-          <xsl:apply-templates select="node()[not(self::p)]"/>
+          <xsl:apply-templates select="node()[not(self::p)]" mode="html"/>
         </xsl:element>
       </xsl:element>
       <xsl:apply-templates select="p" mode="html"/>
