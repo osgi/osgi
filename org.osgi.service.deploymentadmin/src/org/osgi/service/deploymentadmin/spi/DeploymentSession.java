@@ -37,9 +37,11 @@ import org.osgi.service.deploymentadmin.DeploymentPackage;
  * <li>it is stale</li>
  * <li>it has no bundles (see {@link DeploymentPackage#getBundle(String)})</li>
  * <li>it has no resources (see {@link DeploymentPackage#getResources()})</li>
- * <li>it has no headers except <br/>
- * {@code DeploymentPackage-SymbolicName} and <br/>
- * {@code DeploymentPackage-Version} <br/>
+ * <li>it has no headers except
+ * <ul>
+ * <li>{@code DeploymentPackage-SymbolicName} and</li>
+ * <li>{@code DeploymentPackage-Version}</li>
+ * </ul>
  * (see {@link DeploymentPackage#getHeader(String)})</li>
  * <li>it has no resource headers (see
  * {@link DeploymentPackage#getResourceHeader(String, String)})</li>

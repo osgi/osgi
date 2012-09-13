@@ -223,16 +223,16 @@ public class FrameworkEvent extends EventObject {
 	 * <p>
 	 * The type values are:
 	 * <ul>
-	 * <li>{@link #STARTED}
-	 * <li>{@link #ERROR}
-	 * <li>{@link #WARNING}
-	 * <li>{@link #INFO}
-	 * <li>{@link #PACKAGES_REFRESHED}
-	 * <li>{@link #STARTLEVEL_CHANGED}
-	 * <li>{@link #STOPPED}
-	 * <li>{@link #STOPPED_BOOTCLASSPATH_MODIFIED}
-	 * <li>{@link #STOPPED_UPDATE}
-	 * <li>{@link #WAIT_TIMEDOUT}
+	 * <li>{@link #STARTED}</li>
+	 * <li>{@link #ERROR}</li>
+	 * <li>{@link #WARNING}</li>
+	 * <li>{@link #INFO}</li>
+	 * <li>{@link #PACKAGES_REFRESHED}</li>
+	 * <li>{@link #STARTLEVEL_CHANGED}</li>
+	 * <li>{@link #STOPPED}</li>
+	 * <li>{@link #STOPPED_BOOTCLASSPATH_MODIFIED}</li>
+	 * <li>{@link #STOPPED_UPDATE}</li>
+	 * <li>{@link #WAIT_TIMEDOUT}</li>
 	 * </ul>
 	 * 
 	 * @return The type of state change.

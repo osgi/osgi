@@ -131,13 +131,13 @@ public interface ComponentContext {
 	 * This method will return {@code null} if:
 	 * <ul>
 	 * <li>The component instance is not a service, then no bundle can be using
-	 * it as a service.
+	 * it as a service.</li>
 	 * <li>The component instance is a service but did not specify the
 	 * {@code servicefactory="true"} attribute, then all bundles using the
 	 * service provided by the component instance will share the same component
-	 * instance.
+	 * instance.</li>
 	 * <li>The service provided by the component instance is not currently being
-	 * used by any bundle.
+	 * used by any bundle.</li>
 	 * </ul>
 	 * 
 	 * @return The bundle using the component instance as a service or

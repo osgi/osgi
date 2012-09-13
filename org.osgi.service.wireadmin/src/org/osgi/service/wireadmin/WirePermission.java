@@ -179,10 +179,10 @@ final public class WirePermission extends BasicPermission {
 	 * More specifically, this method returns {@code true} if:
 	 * <p>
 	 * <ul>
-	 * <li><i>p </i> is an instanceof the {@code WirePermission} class,
-	 * <li><i>p </i>'s actions are a proper subset of this object's actions, and
-	 * <li><i>p </i>'s name is implied by this object's name. For example,
-	 * {@code java.*} implies {@code java.home}.
+	 * <li><i>p</i> is an instanceof the {@code WirePermission} class,</li>
+	 * <li><i>p</i>'s actions are a proper subset of this object's actions, and</li>
+	 * <li><i>p</i>'s name is implied by this object's name. For example,
+	 * {@code java.*} implies {@code java.home}.</li>
 	 * </ul>
 	 * 
 	 * @param p The permission to check against.

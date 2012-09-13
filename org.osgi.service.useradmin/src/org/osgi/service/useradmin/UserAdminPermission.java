@@ -310,10 +310,10 @@ public final class UserAdminPermission extends BasicPermission {
 	 * More specifically, this method returns {@code true} if:
 	 * <p>
 	 * <ul>
-	 * <li><i>p </i> is an instanceof {@code UserAdminPermission},
-	 * <li><i>p </i>'s actions are a proper subset of this object's actions, and
-	 * <li><i>p </i>'s name is implied by this object's name. For example,
-	 * &quot;java.*&quot; implies &quot;java.home&quot;.
+	 * <li><i>p</i> is an instanceof {@code UserAdminPermission},</li>
+	 * <li><i>p</i>'s actions are a proper subset of this object's actions, and</li>
+	 * <li><i>p</i>'s name is implied by this object's name. For example,
+	 * &quot;java.*&quot; implies &quot;java.home&quot;.</li>
 	 * </ul>
 	 * 
 	 * @param p the permission to check against.

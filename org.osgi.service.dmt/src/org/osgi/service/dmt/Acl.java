@@ -31,7 +31,8 @@ import java.util.Vector;
  * DmtAdmin.getSession}), as well as &quot; {@code *} &quot; indicating any
  * principal.
  * <p>
- * The syntax for valid remote server IDs:<br>
+ * The syntax for valid remote server IDs:
+ * <p>
  * &lt;<i>server-identifier</i>&gt; ::= All printable characters except
  * {@code '='}, {@code '&'}, {@code '*'}, {@code '+'} or white-space characters.
  * 

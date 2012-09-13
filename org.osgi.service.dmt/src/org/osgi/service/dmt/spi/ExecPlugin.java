@@ -16,7 +16,8 @@
 
 package org.osgi.service.dmt.spi;
 
-import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
 
 /**
  * An implementation of this interface takes the responsibility of handling node
@@ -69,12 +70,12 @@ public interface ExecPlugin {
 	 * @param data the parameter of the execute operation, can be {@code null}
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
-	 *         <li>{@code NODE_NOT_FOUND} if the node does not exist <li>
+	 *         <li>{@code NODE_NOT_FOUND} if the node does not exist</li><li>
 	 *         {@code  METADATA_MISMATCH} if the command failed because of
-	 *         meta-data restrictions <li>{@code DATA_STORE_FAILURE} if an error
-	 *         occurred while accessing the data store <li>
+	 *         meta-data restrictions</li><li>{@code DATA_STORE_FAILURE} if an
+	 *         error occurred while accessing the data store</li><li>
 	 *         {@code  COMMAND_FAILED} if some unspecified error is encountered
-	 *         while attempting to complete the command
+	 *         while attempting to complete the command</li>
 	 *         </ul>
 	 * @see DmtSession#execute(String, String)
 	 * @see DmtSession#execute(String, String, String)

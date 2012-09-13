@@ -46,13 +46,11 @@ public interface MountPoint {
 	 * @param topic the topic of the event to send. Valid values are:
 	 *        <ul>
 	 *        <li>{@code org/osgi/service/dmt/DmtEvent/ADDED} if the change was
-	 *        caused by a rename action
-	 *        <p>
-	 *        <li>{@code org/osgi/service/dmt/DmtEvent/DELETED} if the change
-	 *        was caused by a copy action
-	 *        <p>
-	 *        <li>{@code org/osgi/service/dmt/DmtEvent/REPLACED} if the change
-	 *        was caused by a copy action
+	 *        caused by a rename action</li><li>
+	 *        {@code org/osgi/service/dmt/DmtEvent/DELETED} if the change was
+	 *        caused by a copy action</li><li>
+	 *        {@code org/osgi/service/dmt/DmtEvent/REPLACED} if the change was
+	 *        caused by a copy action</li>
 	 *        </ul>
 	 *        Must not be {@code null}.
 	 * @param relativeURIs an array of affected node {@code URI}'s. All
@@ -85,10 +83,9 @@ public interface MountPoint {
 	 * @param topic the topic of the event to send. Valid values are:
 	 *        <ul>
 	 *        <li>{@code org/osgi/service/dmt/DmtEvent/RENAMED} if the change
-	 *        was caused by a rename action
-	 *        <p>
-	 *        <li>{@code org/osgi/service/dmt/DmtEvent/COPIED} if the change was
-	 *        caused by a copy action
+	 *        was caused by a rename action</li><li>
+	 *        {@code org/osgi/service/dmt/DmtEvent/COPIED} if the change was
+	 *        caused by a copy action</li>
 	 *        </ul>
 	 *        Must not be {@code null}.
 	 * @param relativeURIs an array of affected node {@code URI}'s.

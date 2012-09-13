@@ -299,14 +299,14 @@ public class MonitorPermission extends Permission {
 	 * This method returns {@code false} if and only if at least one of the
 	 * following conditions are fulfilled for the specified permission:
 	 * <ul>
-	 * <li>it is not a {@code MonitorPermission}
-	 * <li>it has a broader set of actions allowed than this one
+	 * <li>it is not a {@code MonitorPermission}</li>
+	 * <li>it has a broader set of actions allowed than this one</li>
 	 * <li>it allows initiating time based monitoring jobs with a lower minimal
-	 * sampling interval
+	 * sampling interval</li>
 	 * <li>the target set of {@code Monitorable}s is not the same nor a subset
-	 * of the target set of {@code Monitorable}s of this permission
+	 * of the target set of {@code Monitorable}s of this permission</li>
 	 * <li>the target set of {@code StatusVariable}s is not the same nor a
-	 * subset of the target set of {@code StatusVariable}s of this permission
+	 * subset of the target set of {@code StatusVariable}s of this permission</li>
 	 * </ul>
 	 * 
 	 * @param p the permission to be checked

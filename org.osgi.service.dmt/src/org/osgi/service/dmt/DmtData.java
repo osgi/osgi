@@ -349,8 +349,8 @@ public final class DmtData {
 	 * {@code byte[]} based formats can be created using this constructor:
 	 * 
 	 * <ul>
-	 * <li>{@link #FORMAT_BINARY}
-	 * <li>{@link #FORMAT_BASE64}
+	 * <li>{@link #FORMAT_BINARY}</li>
+	 * <li>{@link #FORMAT_BASE64}</li>
 	 * </ul>
 	 * 
 	 * 
@@ -742,14 +742,14 @@ public final class DmtData {
 	 * <li>{@link #FORMAT_STRING}, {@link #FORMAT_XML}, {@link #FORMAT_BINARY},
 	 * {@link #FORMAT_BASE64}, {@link #FORMAT_RAW_STRING}, and
 	 * {@link #FORMAT_RAW_BINARY}: the length of the stored data, or 0 if the
-	 * data is {@code null}
-	 * <li>{@link #FORMAT_INTEGER} and {@link #FORMAT_FLOAT}: 4
-	 * <li>{@link #FORMAT_LONG} and {@link #FORMAT_DATE_TIME}: 8
+	 * data is {@code null}</li>
+	 * <li>{@link #FORMAT_INTEGER} and {@link #FORMAT_FLOAT}: 4</li>
+	 * <li>{@link #FORMAT_LONG} and {@link #FORMAT_DATE_TIME}: 8</li>
 	 * <li>{@link #FORMAT_DATE} and {@link #FORMAT_TIME}: the length of the date
-	 * or time in its string representation
-	 * <li>{@link #FORMAT_BOOLEAN}: 1
-	 * <li>{@link #FORMAT_NODE}: -1 (unknown)
-	 * <li>{@link #FORMAT_NULL}: 0
+	 * or time in its string representation</li>
+	 * <li>{@link #FORMAT_BOOLEAN}: 1</li>
+	 * <li>{@link #FORMAT_NODE}: -1 (unknown)</li>
+	 * <li>{@link #FORMAT_NULL}: 0</li>
 	 * </ul>
 	 * 
 	 * @return the size of the data stored by this object

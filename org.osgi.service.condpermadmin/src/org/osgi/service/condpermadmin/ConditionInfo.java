@@ -41,7 +41,7 @@ import java.util.List;
  * </li>
  * <li>Implement the {@code Condition} interface and define a public constructor
  * that takes a {@code Bundle} object and a {@code ConditionInfo} object as
- * arguments.
+ * arguments.</li>
  * </ul>
  * 
  * @Immutable
