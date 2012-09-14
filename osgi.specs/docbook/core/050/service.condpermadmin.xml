@@ -615,15 +615,17 @@ name        ::= quoted-string</programlisting>
 
           <thead>
             <row>
-              <entry/>
+              <?dbfo rotated-width="0.5in"?>
 
               <entry/>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.5in"?>Unsigned</entry>
+              <entry/>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.5in"?>ACME</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>Unsigned</entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.5in"?>Operator</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>ACME</entry>
+
+              <entry rotate="1"><?dbfo orientation="90"?>Operator</entry>
             </row>
           </thead>
 

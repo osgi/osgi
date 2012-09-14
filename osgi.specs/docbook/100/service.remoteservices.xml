@@ -721,7 +721,7 @@ tracker.open();</programlisting>
       is assumed in this table that hypothetical configuration types
       <code>net.rmi</code> and <code>com.rmix</code> map to an identical
       endpoint, just like <code>net.soap</code> and
-      <code>net.soapx.</code>.</para>
+      <code>net.soapx</code>.</para>
 
       <table xml:id="service.remoteservices-synonyms">
         <title>Synonyms and Alternatives in Exported Configurations</title>
@@ -758,52 +758,24 @@ tracker.open();</programlisting>
 
           <tbody>
             <row>
-              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><?dbfo rotated-width="0.9in"?><para><code>net.rmi</code></para></entry>
+              <?dbfo rotated-width="0.8in"?>
 
-              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><?dbfo rotated-width="0.9in"?><para><code>com.rmix</code></para></entry>
+              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><code>net.rmi</code></entry>
 
-              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><?dbfo rotated-width="0.9in"?><para><code>net.soap</code></para></entry>
+              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><code>com.rmix</code></entry>
 
-              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><?dbfo rotated-width="0.9in"?><para><code>com.soapx</code></para></entry>
+              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><code>net.soap</code></entry>
 
-              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><?dbfo rotated-width="0.9in"?><para>&lt;&lt;no
-              default&gt;&gt;</para></entry>
+              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><code>com.soapx</code></entry>
 
-              <entry><para>Supports:</para> <para>
-                   
+              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?>&lt;&lt;no
+              default&gt;&gt;</entry>
 
-                  <code>net.rmi</code>
+              <entry><para>Supports:</para><para><code>net.rmi</code></para><para><code>com.rmix</code></para><para><code>com.soapx</code></para></entry>
 
-                   
-                </para> <para>
-                   
+              <entry><para>Supports:</para><para><code>net.rmi</code></para><para><code>net.soap</code></para></entry>
 
-                  <code>com.rmix</code>
-
-                   
-                </para> <para>
-                   
-
-                  <code>com.soapx</code>
-
-                   
-                </para></entry>
-
-              <entry><para>Supports</para> <para>
-                   
-
-                  <code>net.rmi</code>
-
-                   
-                </para> <para>
-                   
-
-                  <code>net.soap</code>
-
-                   
-                </para></entry>
-
-              <entry><para/></entry>
+              <entry/>
             </row>
 
             <row>

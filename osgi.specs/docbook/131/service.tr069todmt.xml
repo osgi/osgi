@@ -1663,25 +1663,27 @@ SetParameterValue   ..Properties.3421.Alias = MyKey</programlisting>
 
           <thead>
             <row>
+              <?dbfo rotated-width="0.7in"?>
+
               <entry/>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.7in"?>base64</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>base64</entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.7in"?>boolean</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>boolean</entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.7in"?>dateTime</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>dateTime</entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.7in"?>hexBinary</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>hexBinary</entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.7in"?>int</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>int</entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.7in"?>long</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>long</entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.7in"?>string</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>string</entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.7in"?>unsignedInt</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>unsignedInt</entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.7in"?>unsignedLong</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>unsignedLong</entry>
             </row>
           </thead>
 
@@ -2315,61 +2317,63 @@ unsignedLong  <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG"
 
           <thead>
             <row>
+              <?dbfo rotated-width="1.2in"?>
+
               <entry/>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="1.2in"?><xref
+              <entry rotate="1"><?dbfo orientation="90"?><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_BASE64"
               xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="1.2in"?><xref
+              <entry rotate="1"><?dbfo orientation="90"?><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_BINARY"
               xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="1.2in"?><xref
+              <entry rotate="1"><?dbfo orientation="90"?><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN"
               xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="1.2in"?><xref
+              <entry rotate="1"><?dbfo orientation="90"?><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE"
               xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="1.2in"?><xref
+              <entry rotate="1"><?dbfo orientation="90"?><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME"
               xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="1.2in"?><xref
+              <entry rotate="1"><?dbfo orientation="90"?><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT"
               xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="1.2in"?><xref
+              <entry rotate="1"><?dbfo orientation="90"?><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER"
               xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="1.2in"?><xref
+              <entry rotate="1"><?dbfo orientation="90"?><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG"
               xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="1.2in"?><xref
+              <entry rotate="1"><?dbfo orientation="90"?><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_BINARY"
               xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="1.2in"?><xref
+              <entry rotate="1"><?dbfo orientation="90"?><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_STRING"
               xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="1.2in"?><xref
+              <entry rotate="1"><?dbfo orientation="90"?><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING"
               xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="1.2in"?><xref
+              <entry rotate="1"><?dbfo orientation="90"?><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_TIME"
               xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="1.2in"?><xref
+              <entry rotate="1"><?dbfo orientation="90"?><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_XML"
               xrefstyle="hyperlink"/></entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="1.2in"?>LIST</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>LIST</entry>
             </row>
           </thead>
 

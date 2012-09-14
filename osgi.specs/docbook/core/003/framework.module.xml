@@ -3711,17 +3711,19 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
 
           <thead>
             <row>
+              <?dbfo rotated-width="0.5in"?>
+
               <entry valign="bottom">Libraries</entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.5in"?>osname</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>osname</entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.5in"?>osversion</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>osversion</entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.5in"?>processor</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>processor</entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?><?dbfo rotated-width="0.5in"?>language</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>language</entry>
 
-              <entry rotate="1"><?dbfo orientation="90"?> <?dbfo rotated-width="0.5in"?>filter</entry>
+              <entry rotate="1"><?dbfo orientation="90"?>filter</entry>
             </row>
           </thead>
 
