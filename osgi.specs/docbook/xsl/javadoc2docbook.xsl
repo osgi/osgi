@@ -385,7 +385,7 @@ version="1.1">
 </xsl:template>
 
 <xsl:template match="pre/br" mode="html">
-  <!-- line break in prograpmlisting -->
+  <!-- line break in programlisting -->
   <xsl:text>&#x0A;</xsl:text>
 </xsl:template>
 
@@ -393,8 +393,33 @@ version="1.1">
   <xsl:value-of select="translate(., '&#x2002;', ' ')"/>
 </xsl:template>
 
-<xsl:template match="code" mode="html">
+<xsl:template match="tt|code" mode="html">
   <xsl:element name="code" namespace="{$ns}">
+    <xsl:apply-templates mode="html"/>
+  </xsl:element>
+</xsl:template>
+
+<xsl:template match="i|em" mode="html">
+  <xsl:element name="emphasis" namespace="{$ns}">
+    <xsl:apply-templates mode="html"/>
+  </xsl:element>
+</xsl:template>
+
+<xsl:template match="b|strong" mode="html">
+  <xsl:element name="emphasis" namespace="{$ns}">
+    <xsl:attribute name="role">strong</xsl:attribute>
+    <xsl:apply-templates mode="html"/>
+  </xsl:element>
+</xsl:template>
+
+<xsl:template match="sup" mode="html">
+  <xsl:element name="superscript" namespace="{$ns}">
+    <xsl:apply-templates mode="html"/>
+  </xsl:element>
+</xsl:template>
+
+<xsl:template match="sub" mode="html">
+  <xsl:element name="subscript" namespace="{$ns}">
     <xsl:apply-templates mode="html"/>
   </xsl:element>
 </xsl:template>
