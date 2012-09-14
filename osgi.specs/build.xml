@@ -1,256 +1,256 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="publish">
-	<target name="deploy" depends="master.deploy,core,cmpn,enterprise,residential">
-	</target>
+    <target name="deploy" depends="master.deploy,core,cmpn,enterprise,residential">
+    </target>
 
-	<target name="init" depends="master.init">
+    <target name="init" depends="master.init">
         <taskdef resource="net/sf/antcontrib/antcontrib.properties" classpath="${licensed}/ant/lib/ant-contrib-0.6.jar" />
-		<property name="fop.home" value="${licensed}/fop"/>
-		<path id="fop.classpath">
-			<fileset dir="${fop.home}/lib">
-				<include name="*.jar"/>
-			</fileset>
-			<fileset dir="${fop.home}/build">
-				<include name="fop.jar"/>
-				<include name="fop-hyph.jar" />
-			</fileset>
-		</path>
-		<property name="fop.classpath" refid="fop.classpath" />
-	</target>
+        <property name="fop.home" value="${licensed}/fop"/>
+        <path id="fop.classpath">
+            <fileset dir="${fop.home}/lib">
+                <include name="*.jar"/>
+            </fileset>
+            <fileset dir="${fop.home}/build">
+                <include name="fop.jar"/>
+                <include name="fop-hyph.jar" />
+            </fileset>
+        </path>
+        <property name="fop.classpath" refid="fop.classpath" />
+    </target>
 
-	<target name="javadoc" depends="compile" unless="-javadoc">
-		<delete dir="${target}/javadoc"/>
-		<mkdir dir="${target}/javadoc"/>
-		<echo>
-			Project output: ${project.output}
-			Sourcepath    : ${project.allsourcepath}
-			Destdir       : ${target}/javadoc
-			Packages      : org.osgi.dmt.*,${javadoc.packages}
-			Bootcp        : ${repo.javase}, ${repo.foundation}
-			Classpath     : ${repo.servlet}, ${repo.jpa}, ${repo.jaxp}
-		</echo>
-		<javadoc
-			access="protected"
-			encoding="UTF-8"
-			packagenames="org.osgi.dmt.*,${javadoc.packages}"
-			sourcepath="${project.allsourcepath}"
-			destdir="${target}/javadoc">
-		    <bootclasspath>
-      			<pathelement location="${repo.javase}"/>
-      			<pathelement location="${repo.foundation}"/>
-    		</bootclasspath>
-		    <classpath>
-				<pathelement location="${repo.servlet}" />
-				<pathelement location="${repo.jpa}" />
-				<pathelement location="${repo.jaxp}" />
-    		</classpath>
+    <target name="javadoc" depends="compile" unless="-javadoc">
+        <delete dir="${target}/javadoc"/>
+        <mkdir dir="${target}/javadoc"/>
+        <echo>
+            Project output: ${project.output}
+            Sourcepath    : ${project.allsourcepath}
+            Destdir       : ${target}/javadoc
+            Packages      : org.osgi.dmt.*,${javadoc.packages}
+            Bootcp        : ${repo.javase}, ${repo.foundation}
+            Classpath     : ${repo.servlet}, ${repo.jpa}, ${repo.jaxp}
+        </echo>
+        <javadoc
+            access="protected"
+            encoding="UTF-8"
+            packagenames="org.osgi.dmt.*,${javadoc.packages}"
+            sourcepath="${project.allsourcepath}"
+            destdir="${target}/javadoc">
+            <bootclasspath>
+                <pathelement location="${repo.javase}"/>
+                <pathelement location="${repo.foundation}"/>
+            </bootclasspath>
+            <classpath>
+                <pathelement location="${repo.servlet}" />
+                <pathelement location="${repo.jpa}" />
+                <pathelement location="${repo.jaxp}" />
+            </classpath>
             <doclet name="org.osgi.tools.xmldoclet.XmlDoclet"
-                    path="${bin}">
-			</doclet>
-		</javadoc>
-		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
-			<arg value="${target}/javadoc/javadoc.xml" />
-			<arg value="docbook/xsl/javadoc2docbook.xsl" />
-			<arg value="destdir=${target}/javadoc/docbook" />
-			<arg value="ddf.only=0" />
-		</java>
-		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
-			<arg value="${target}/javadoc/javadoc.xml" />
-			<arg value="docbook/xsl/javadoc2docbook.xsl" />
-			<arg value="destdir=${target}/javadoc/docbook" />
-			<arg value="ddf.only=1" />
-		</java>
-		<property name="-javadoc" value="true"/>
-	</target>
+                path="${bin}">
+            </doclet>
+        </javadoc>
+        <java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
+            <arg value="${target}/javadoc/javadoc.xml" />
+            <arg value="docbook/xsl/javadoc2docbook.xsl" />
+            <arg value="destdir=${target}/javadoc/docbook" />
+            <arg value="ddf.only=0" />
+        </java>
+        <java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
+            <arg value="${target}/javadoc/javadoc.xml" />
+            <arg value="docbook/xsl/javadoc2docbook.xsl" />
+            <arg value="destdir=${target}/javadoc/docbook" />
+            <arg value="ddf.only=1" />
+        </java>
+        <property name="-javadoc" value="true"/>
+    </target>
 
-	<target name="ees" depends="compile">
-		<echo>${minimum-latest.jar}</echo>
-		<echo>${foundation-latest.jar}</echo>
-		<delete dir="${target}/ee"/>
-		<mkdir dir="${target}/ee"/>
-		<java classname="org.osgi.tools.jar2xml.JAR2XML" classpath="${project.buildpath}" fork="true" output="${target}/ee/ee.xml">
-			<arg line="-tagged minimum ${minimum-latest.jar}" />
-			<arg line="-tagged foundation ${foundation-latest.jar}" />
-		</java>
-		<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
-			<arg value="-o" />
-			<arg value="${target}/ee/docbook/ee.xml" />
-			<arg value="${target}/ee/ee.xml" />
-			<arg value="docbook/xsl/ee2docbook.xsl" />
-		</java>
-	</target>
+    <target name="ees" depends="compile">
+        <echo>${minimum-latest.jar}</echo>
+        <echo>${foundation-latest.jar}</echo>
+        <delete dir="${target}/ee"/>
+        <mkdir dir="${target}/ee"/>
+        <java classname="org.osgi.tools.jar2xml.JAR2XML" classpath="${project.buildpath}" fork="true" output="${target}/ee/ee.xml">
+            <arg line="-tagged minimum ${minimum-latest.jar}" />
+            <arg line="-tagged foundation ${foundation-latest.jar}" />
+        </java>
+        <java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
+            <arg value="-o" />
+            <arg value="${target}/ee/docbook/ee.xml" />
+            <arg value="${target}/ee/ee.xml" />
+            <arg value="docbook/xsl/ee2docbook.xsl" />
+        </java>
+    </target>
 
-	<macrodef name="docbook2fo">
-		<attribute name="name"/>
-		<sequential>
-			<mkdir dir="${target}/fo"/>
-			<java classname="com.icl.saxon.StyleSheet" fork="true">
-				<!-- CatalogManager.properties -->
-				<sysproperty key="catalogs" value="${licensed}/docbook-xsl-ns/catalog.xml"/>
-				<sysproperty key="relative-catalogs" value="yes"/>
-				<sysproperty key="verbosity" value="0"/>
-				<sysproperty key="prefer" value="system"/>
-				<sysproperty key="static-catalog" value="yes"/>
-				<sysproperty key="allow-oasis-xml-catalog-pi" value="yes"/>
-				<!-- Xerces properties -->
-				<sysproperty key="javax.xml.parsers.DocumentBuilderFactory" value="org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
-				<sysproperty key="javax.xml.parsers.SAXParserFactory" value="org.apache.xerces.jaxp.SAXParserFactoryImpl"/>
-				<sysproperty key="org.apache.xerces.xni.parser.XMLParserConfiguration" value="org.apache.xerces.parsers.XIncludeParserConfiguration"/>
-				<classpath>
-					<fileset dir="${fop.home}/lib">
-						<include name="xercesImpl*.jar" />
-						<include name="xml-apis*.jar" />
-					</fileset>
-					<pathelement location="${saxon}" />
-				</classpath>
-				<jvmarg value="-Xmx256m"/>
-				<arg value="-o" />
-				<arg value="${target}/fo/@{name}.fo" />
-				<arg value="docbook/@{name}/book.xml" />
-				<arg value="docbook/xsl/custom-fo.xsl" />
-			</java>
-			<echo>Generated ${target}/fo/@{name}.fo</echo>
-		</sequential>
-	</macrodef>
+    <macrodef name="docbook2fo">
+        <attribute name="name"/>
+        <sequential>
+            <mkdir dir="${target}/fo"/>
+            <java classname="com.icl.saxon.StyleSheet" fork="true">
+                <!-- CatalogManager.properties -->
+                <sysproperty key="catalogs" value="${licensed}/docbook-xsl-ns/catalog.xml"/>
+                <sysproperty key="relative-catalogs" value="yes"/>
+                <sysproperty key="verbosity" value="0"/>
+                <sysproperty key="prefer" value="system"/>
+                <sysproperty key="static-catalog" value="yes"/>
+                <sysproperty key="allow-oasis-xml-catalog-pi" value="yes"/>
+                <!-- Xerces properties -->
+                <sysproperty key="javax.xml.parsers.DocumentBuilderFactory" value="org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
+                <sysproperty key="javax.xml.parsers.SAXParserFactory" value="org.apache.xerces.jaxp.SAXParserFactoryImpl"/>
+                <sysproperty key="org.apache.xerces.xni.parser.XMLParserConfiguration" value="org.apache.xerces.parsers.XIncludeParserConfiguration"/>
+                <classpath>
+                    <fileset dir="${fop.home}/lib">
+                        <include name="xercesImpl*.jar" />
+                        <include name="xml-apis*.jar" />
+                    </fileset>
+                    <pathelement location="${saxon}" />
+                </classpath>
+                <jvmarg value="-Xmx256m"/>
+                <arg value="-o" />
+                <arg value="${target}/fo/@{name}.fo" />
+                <arg value="docbook/@{name}/book.xml" />
+                <arg value="docbook/xsl/custom-fo.xsl" />
+            </java>
+            <echo>Generated ${target}/fo/@{name}.fo</echo>
+        </sequential>
+    </macrodef>
 
-	<target name="core.fo" depends="javadoc">
-		<docbook2fo name="core" />
-	</target>
+    <target name="core.fo" depends="javadoc">
+        <docbook2fo name="core" />
+    </target>
 
-	<target name="cmpn.fo" depends="javadoc,ees">
-		<docbook2fo name="cmpn" />
-	</target>
+    <target name="cmpn.fo" depends="javadoc,ees">
+        <docbook2fo name="cmpn" />
+    </target>
 
-	<target name="enterprise.fo" depends="javadoc">
-		<docbook2fo name="enterprise" />
-	</target>
+    <target name="enterprise.fo" depends="javadoc">
+        <docbook2fo name="enterprise" />
+    </target>
 
-	<target name="residential.fo" depends="javadoc">
-		<docbook2fo name="residential" />
-	</target>
+    <target name="residential.fo" depends="javadoc">
+        <docbook2fo name="residential" />
+    </target>
 
-	<macrodef name="fo2pdf">
-		<attribute name="name" />
-		<sequential>
-			<!-- Customize fop config for the book -->
-			<copy file="docbook/fop/fop-osgi.xconf" toFile="${target}/fop/fop-@{name}.xconf" overwrite="true">
-			  <filterset begintoken="${" endtoken="}">
-			    <filter token="base" value="${project.dir}/docbook/@{name}" />
-			    <filter token="font.base" value="${project.dir}/fonts" />
-			  </filterset>
-			</copy>
-			<java classname="org.osgi.tools.fop.FOPMain" fork="true">
-				<sysproperty key="java.awt.headless" value="true" />
-				<sysproperty key="JAVA_FONTS" value="${project.dir}/fonts" />
-				<classpath>
-					<pathelement location="${bin}" />
-					<pathelement path="${fop.classpath}" />
-				</classpath>
-				<jvmarg value="-Xms64m" />
-				<jvmarg value="-Xmx256m" />
-				<arg value="-c" />
-				<arg value="${target}/fop/fop-@{name}.xconf" />
-				<arg value="-fo" />
-				<arg value="${target}/fo/@{name}.fo" />
-				<arg value="-pdf" />
-				<arg value="${target}/osgi.@{name}.pdf" />
-			</java>
-			<echo>Generated ${target}/osgi.@{name}.pdf</echo>
-		</sequential>
-	</macrodef>
+    <macrodef name="fo2pdf">
+        <attribute name="name" />
+        <sequential>
+            <!-- Customize fop config for the book -->
+            <copy file="docbook/fop/fop-osgi.xconf" toFile="${target}/fop/fop-@{name}.xconf" overwrite="true">
+                <filterset begintoken="${" endtoken="}">
+                    <filter token="base" value="${project.dir}/docbook/@{name}" />
+                    <filter token="font.base" value="${project.dir}/fonts" />
+                </filterset>
+            </copy>
+            <java classname="org.osgi.tools.fop.FOPMain" fork="true">
+                <sysproperty key="java.awt.headless" value="true" />
+                <sysproperty key="JAVA_FONTS" value="${project.dir}/fonts" />
+                <classpath>
+                    <pathelement location="${bin}" />
+                    <pathelement path="${fop.classpath}" />
+                </classpath>
+                <jvmarg value="-Xms64m" />
+                <jvmarg value="-Xmx256m" />
+                <arg value="-c" />
+                <arg value="${target}/fop/fop-@{name}.xconf" />
+                <arg value="-fo" />
+                <arg value="${target}/fo/@{name}.fo" />
+                <arg value="-pdf" />
+                <arg value="${target}/osgi.@{name}.pdf" />
+            </java>
+            <echo>Generated ${target}/osgi.@{name}.pdf</echo>
+        </sequential>
+    </macrodef>
 
-	<target name="core" depends="core.fo">
-		<fo2pdf name="core" />
-	</target>
-	<target name="core.pdf" depends="core" />
+    <target name="core" depends="core.fo">
+        <fo2pdf name="core" />
+    </target>
+    <target name="core.pdf" depends="core" />
 
-	<target name="cmpn" depends="cmpn.fo">
-		<fo2pdf name="cmpn" />
-	</target>
-	<target name="cmpn.pdf" depends="cmpn" />
+    <target name="cmpn" depends="cmpn.fo">
+        <fo2pdf name="cmpn" />
+    </target>
+    <target name="cmpn.pdf" depends="cmpn" />
 
-	<target name="enterprise" depends="enterprise.fo">
-		<fo2pdf name="enterprise" />
-	</target>
-	<target name="enterprise.pdf" depends="enterprise" />
+    <target name="enterprise" depends="enterprise.fo">
+        <fo2pdf name="enterprise" />
+    </target>
+    <target name="enterprise.pdf" depends="enterprise" />
 
-	<target name="residential" depends="residential.fo">
-		<fo2pdf name="residential" />
-	</target>
-	<target name="residential.pdf" depends="residential" />
+    <target name="residential" depends="residential.fo">
+        <fo2pdf name="residential" />
+    </target>
+    <target name="residential.pdf" depends="residential" />
 
-	<target name="fontmetrics" depends="init" description="Only used to rebuild font metrics">
-		<foreach delimiter=" ," target="-fontmetrics" param="item" inheritAll="true">
-			<fileset dir="fonts" includes="*.ttf" />
-		</foreach>
-	</target>
+    <target name="fontmetrics" depends="init" description="Only used to rebuild font metrics">
+        <foreach delimiter=" ," target="-fontmetrics" param="item" inheritAll="true">
+            <fileset dir="fonts" includes="*.ttf" />
+        </foreach>
+    </target>
 
-	<target name="-fontmetrics">
-		<pathconvert property="font">
-		      <globmapper from="*.ttf" to="*"/>
-		      <path location="${item}"/>
-		</pathconvert>
-		<java classname="org.apache.fop.fonts.apps.TTFReader" fork="true">
-		    <classpath path="${fop.classpath}" />
-			<arg value="${font}.ttf" />
-			<arg value="${font}.xml" />
-		</java>
-	</target>
+    <target name="-fontmetrics">
+        <pathconvert property="font">
+            <globmapper from="*.ttf" to="*"/>
+            <path location="${item}"/>
+        </pathconvert>
+        <java classname="org.apache.fop.fonts.apps.TTFReader" fork="true">
+            <classpath path="${fop.classpath}" />
+            <arg value="${font}.ttf" />
+            <arg value="${font}.xml" />
+        </java>
+    </target>
 
-	<target name="echo" depends="master.echo">
-		<echo>core.specs:             ${core.specs}</echo>
-		<echo>cmpn.specs:             ${cmpn.specs}</echo>
-		<echo>residential.specs:      ${residential.specs}</echo>
-		<echo>enterprise.specs:       ${enterprise.specs}</echo>
-		<echo>proposed.specs:         ${proposed.specs}</echo>
-	</target>
+    <target name="echo" depends="master.echo">
+        <echo>core.specs:             ${core.specs}</echo>
+        <echo>cmpn.specs:             ${cmpn.specs}</echo>
+        <echo>residential.specs:      ${residential.specs}</echo>
+        <echo>enterprise.specs:       ${enterprise.specs}</echo>
+        <echo>proposed.specs:         ${proposed.specs}</echo>
+    </target>
 
-	<import file="../cnf/master.xml" />
+    <import file="../cnf/master.xml" />
 
-	<!--
-		<target name="eediff" depends="init">
-			<taskdef resource="dependencyfindertasks.properties" classpath="${dependencyfinder}" />
+    <!--
+        <target name="eediff" depends="init">
+            <taskdef resource="dependencyfindertasks.properties" classpath="${dependencyfinder}" />
 
-			<antcall target="-eediff">
-				<param name="ee" value="minimum"/>
-				<param name="ee.previous.jar" value="${minimum-previous.jar}"/>
-				<param name="ee.latest.jar" value="${minimum-latest.jar}"/>
-				<param name="ee.previous" value="${minimum-previous}"/>
-				<param name="ee.latest" value="${minimum-latest}"/>
-			</antcall>
+            <antcall target="-eediff">
+                <param name="ee" value="minimum"/>
+                <param name="ee.previous.jar" value="${minimum-previous.jar}"/>
+                <param name="ee.latest.jar" value="${minimum-latest.jar}"/>
+                <param name="ee.previous" value="${minimum-previous}"/>
+                <param name="ee.latest" value="${minimum-latest}"/>
+            </antcall>
 
-			<antcall target="-eediff">
-				<param name="ee" value="foundation"/>
-				<param name="ee.latest.jar" value="${foundation-latest.jar}"/>
-				<param name="ee.previous.jar" value="${foundation-previous.jar}"/>
-				<param name="ee.latest" value="${foundation-latest}"/>
-				<param name="ee.previous" value="${foundation-previous}"/>
-			</antcall>
-		</target>
+            <antcall target="-eediff">
+                <param name="ee" value="foundation"/>
+                <param name="ee.latest.jar" value="${foundation-latest.jar}"/>
+                <param name="ee.previous.jar" value="${foundation-previous.jar}"/>
+                <param name="ee.latest" value="${foundation-latest}"/>
+                <param name="ee.previous" value="${foundation-previous}"/>
+            </antcall>
+        </target>
 
-		<target name="-eediff">
-			<echo>Reading ${ee} ${ee.latest.jar} ${ee.previous.jar} ${ee.latest} ${ee.previous}</echo>
-			<jarjardiff destfile="${target}/ee.diff.xml"
-			              name="ee.${ee}"
-			              oldlabel="${ee.previous}"
-			              newlabel="${ee.latest}">
-			    <old>
-			      <pathelement location="${ee.previous.jar}"/>
-			    </old>
-			    <new>
-				  <pathelement location="${ee.latest.jar}"/>
-			    </new>
-			  </jarjardiff>
+        <target name="-eediff">
+            <echo>Reading ${ee} ${ee.latest.jar} ${ee.previous.jar} ${ee.latest} ${ee.previous}</echo>
+            <jarjardiff destfile="${target}/ee.diff.xml"
+                          name="ee.${ee}"
+                          oldlabel="${ee.previous}"
+                          newlabel="${ee.latest}">
+                <old>
+                  <pathelement location="${ee.previous.jar}"/>
+                </old>
+                <new>
+                  <pathelement location="${ee.latest.jar}"/>
+                </new>
+              </jarjardiff>
 
-			<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true" output="${target}/ee.diff.html">
-				<arg line="${target}/ee.diff.xml xsl/eediff.xsl" />
-			</java>
+            <java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true" output="${target}/ee.diff.html">
+                <arg line="${target}/ee.diff.xml xsl/eediff.xsl" />
+            </java>
 
-			<echo>Generated HTML file</echo>
-			<java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true" output="${target}/ee.diff.tmp">
-				<arg line="${target}/ee.diff.html xsl/html2mif.xsl" />
-			</java>
-			<java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${xml2mif}" input="${target}/ee.diff.tmp" output="mif/ee.${ee}.diff.mif"/>
-		</target>
-	-->
+            <echo>Generated HTML file</echo>
+            <java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true" output="${target}/ee.diff.tmp">
+                <arg line="${target}/ee.diff.html xsl/html2mif.xsl" />
+            </java>
+            <java classname="org.osgi.tools.xml2mif.XML2MIF" fork="true" classpath="${xml2mif}" input="${target}/ee.diff.tmp" output="mif/ee.${ee}.diff.mif"/>
+        </target>
+    -->
 </project>
