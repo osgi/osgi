@@ -486,9 +486,8 @@ public final class CapabilityPermission extends BasicPermission {
 	}
 
 	/**
-	 * Called by {@code <@link CapabilityPermission#implies(Permission)>}. This
-	 * method is only called on a requested permission which cannot have a
-	 * filter set.
+	 * Called by {@link CapabilityPermission#implies(Permission)}. This method
+	 * is only called on a requested permission which cannot have a filter set.
 	 * 
 	 * @return a map of properties for this permission.
 	 */

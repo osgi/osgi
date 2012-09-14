@@ -538,9 +538,8 @@ public final class ServicePermission extends BasicPermission {
 	}
 
 	/**
-	 * Called by {@code <@link ServicePermission#implies(Permission)>}. This
-	 * method is only called on a requested permission which cannot have a
-	 * filter set.
+	 * Called by {@link ServicePermission#implies(Permission)}. This method is
+	 * only called on a requested permission which cannot have a filter set.
 	 * 
 	 * @return a map of properties for this permission.
 	 */

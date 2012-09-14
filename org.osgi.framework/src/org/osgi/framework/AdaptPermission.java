@@ -424,9 +424,8 @@ public final class AdaptPermission extends BasicPermission {
 	}
 
 	/**
-	 * Called by {@code <@link AdaptPermission#implies(Permission)>}. This
-	 * method is only called on a requested permission which cannot have a
-	 * filter set.
+	 * Called by {@link AdaptPermission#implies(Permission)}. This method is
+	 * only called on a requested permission which cannot have a filter set.
 	 * 
 	 * @return a map of properties for this permission.
 	 */

@@ -483,7 +483,7 @@ public final class EndpointPermission extends Permission {
 	}
 
 	/**
-	 * Called by {@code <@link EndpointPermission#implies(Permission)>}.
+	 * Called by {@link EndpointPermission#implies(Permission)}.
 	 * 
 	 * @return a dictionary of properties for this permission.
 	 */
