@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.osgi.tools.xmldoclet;
 
 import java.io.File;
@@ -35,6 +51,7 @@ import com.sun.javadoc.Type;
 import com.sun.javadoc.TypeVariable;
 import com.sun.javadoc.WildcardType;
 
+@SuppressWarnings("javadoc")
 public class XmlDoclet extends Doclet {
 	Pattern		SECURITY_PATTERN	= Pattern
 											.compile("(\\w+)\\[(.+),(\\w+)\\](.*)");
@@ -100,11 +117,13 @@ public class XmlDoclet extends Doclet {
 		for (int i = 0; i < all.length; i++) {
 			ClassDoc c = all[i];
 			currentClass = c.name();
+			@SuppressWarnings("deprecation")
 			PackageDoc imports[] = c.importedPackages();
 			for (int j = 0; j < imports.length; j++) {
 				PackageDoc p = imports[j];
 				if (!p.name().equals("java.lang") && ht.get(p) == null) {
 					Tag version[] = p.tags("@version");
+					@SuppressWarnings("unused")
 					String v = toString(version).trim();
 					ht.put(p.name(), "");
 				}
@@ -112,6 +131,7 @@ public class XmlDoclet extends Doclet {
 		}
 		for (Enumeration<String> e = ht.keys(); e.hasMoreElements();) {
 			String key = e.nextElement();
+			@SuppressWarnings("unused")
 			String version = ht.get(key);
 			pw.println("<import name='" + key + "'/>");
 		}
@@ -123,7 +143,7 @@ public class XmlDoclet extends Doclet {
 
 	enum CType {
 		CLASS, INTERFACE, ENUM, ANNOTATION
-	};
+	}
 
 	void print(ClassDoc clazz) {
 		String name = simplify(clazz.name());

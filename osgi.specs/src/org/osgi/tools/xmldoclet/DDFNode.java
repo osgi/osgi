@@ -1,12 +1,34 @@
+/*
+ * Copyright (c) OSGi Alliance (2011, 2012). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.osgi.tools.xmldoclet;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import java.util.regex.*;
+import java.io.PrintWriter;
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import com.sun.javadoc.AnnotationDesc;
+import com.sun.javadoc.ClassDoc;
 
-import com.sun.javadoc.*;
-
+@SuppressWarnings("javadoc")
 public class DDFNode {
 	static Map<String, String> DMT_TYPES = new HashMap<String, String>();
 	static {
@@ -121,6 +143,7 @@ public class DDFNode {
 	/**
 	 * @param pw
 	 */
+	@SuppressWarnings("boxing")
 	public void print(PrintWriter pw, String indent) {
 		pw.printf(
 				"            <ddf name='%s' indent='%s' add='%s' get='%s' replace='%s' delete='%s' longTypeName='%s' shortTypeName='%s' cardinality='%s' scope='%s' interior='%s' mime='%s'/>\n",

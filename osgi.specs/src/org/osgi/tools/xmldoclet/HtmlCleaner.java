@@ -1,10 +1,30 @@
+/*
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.osgi.tools.xmldoclet;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Stack;
+import java.util.StringTokenizer;
 
+@SuppressWarnings("javadoc")
 public class HtmlCleaner {
 	StringTokenizer		in;
-	Stack				pushed		= new Stack();
+	Stack<String>				pushed		= new Stack<String>();
 	int					pushedType	= 0;
 	String				pushedTag	= null;
 	String				source;
@@ -30,7 +50,7 @@ public class HtmlCleaner {
 	final static int	CLOSE		= 256;
 	final static int	SINGLE		= 512;
 
-	static Hashtable	descr		= new Hashtable();
+	static Map<String, Integer>	descr		= new HashMap<String, Integer>();
 
 	static {
 		descr.put("h1", new Integer(PARA));
@@ -196,12 +216,12 @@ public class HtmlCleaner {
 		}
 	}
 
-	void element(String tag, int allowed) {
+	void element(String t, int allowed) {
 		// System.out.print( "<" + tag + ">" );
-		String current = tag;
+		String current = t;
 		result.append("<" + getTag(current) + getRemainder(current) + ">");
 		next();
-		if (tag.equalsIgnoreCase("pre")) {
+		if (t.equalsIgnoreCase("pre")) {
 			StringBuffer previous = result;
 			result = new StringBuffer();
 			element(allowed);
@@ -217,7 +237,7 @@ public class HtmlCleaner {
 	void next() {
 		tokens[rover++ % tokens.length] = token;
 		if (!pushed.empty()) {
-			token = (String) pushed.pop();
+			token = pushed.pop();
 			// System.out.println( "pushed " + token );
 			return;
 		}
@@ -283,7 +303,7 @@ public class HtmlCleaner {
 			else {
 				token = tidy(content);
 				tag = getTag(token);
-				Integer t = (Integer) descr.get(tag);
+				Integer t = descr.get(tag);
 				if (t != null)
 					type = t.intValue();
 				else {

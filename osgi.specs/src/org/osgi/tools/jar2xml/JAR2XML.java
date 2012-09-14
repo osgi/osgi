@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.osgi.tools.jar2xml;
 
 import java.io.File;
@@ -25,6 +41,7 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.classfile.Method;
 import org.osgi.tools.tag.Tag;
 
+@SuppressWarnings("javadoc")
 public class JAR2XML {
 	Tag					top;
 	File				file;
@@ -64,8 +81,8 @@ public class JAR2XML {
 		Manifest manifest = jar.getManifest();
 		if ( manifest != null )
 			top.addContent( doManifest( manifest ) );
-		for ( Enumeration e= jar.entries(); e.hasMoreElements(); ) {
-			ZipEntry 		zentry = (ZipEntry) e.nextElement();
+		for (Enumeration<JarEntry> e = jar.entries(); e.hasMoreElements();) {
+			ZipEntry 		zentry = e.nextElement();
 			JarEntry		entry = jar.getJarEntry( zentry.getName() );
 			Tag te = doEntry( entry );
 			if ( entry.getName().endsWith(".class") ) {
@@ -83,7 +100,7 @@ public class JAR2XML {
 	Tag doManifest( Manifest manifest ) {
 		Tag			m = new Tag( "manifest" );
 		Attributes attributes = manifest.getMainAttributes();
-		for ( Iterator i = attributes.keySet().iterator(); i.hasNext();  ) {
+		for (Iterator<Object> i = attributes.keySet().iterator(); i.hasNext();) {
 			Attributes.Name name = (Attributes.Name)i.next();
 			m.addContent( doAttribute( name, attributes.getValue( name ) ) );
 		}
@@ -101,7 +118,7 @@ public class JAR2XML {
 		e.addAttribute( "name", entry.getName() );
 		Attributes attributes = entry.getAttributes();
 		if ( attributes != null )
-			for ( Iterator i = attributes.keySet().iterator(); i.hasNext();  ) {
+			for (Iterator<Object> i = attributes.keySet().iterator(); i.hasNext();) {
 				Attributes.Name name = (Attributes.Name)i.next();
 				e.addContent( doAttribute( name, attributes.getValue( name ) ) );
 			}

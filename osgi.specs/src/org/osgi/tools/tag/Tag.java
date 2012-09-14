@@ -1,17 +1,29 @@
-/** 
- * OSGi Test Suite Implementation. OSGi Confidential.
- * (C) OSGi 2001 
+/*
+ * Copyright (c) OSGi Alliance (2001, 2012). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.osgi.tools.tag;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Dictionary;
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Vector;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * The Tag class represents a minimal XML tree. It consist of a named element
@@ -19,6 +31,7 @@ import java.util.Vector;
  * and get its constituents. The content of a Tag is a list that contains String
  * objects or other Tag objects.
  */
+@SuppressWarnings("javadoc")
 public class Tag {
 	Tag						parent;									// Parent
 	// element
@@ -26,11 +39,11 @@ public class Tag {
 	// of
 	// the
 	// tag
-	Hashtable				attributes	= new Hashtable();				// Attributes
+	Map<String, String>		attributes	= new HashMap<String, String>();	// Attributes
 	// name
 	// ->
 	// value
-	Vector					content		= new Vector();				// Content
+	List<Object>			content		= new ArrayList<Object>();			// Content
 	// elements
 	static SimpleDateFormat	format		= new SimpleDateFormat(
 												"yyyyMMddhhmmss.SSS");
@@ -79,14 +92,14 @@ public class Tag {
 	 * Add a new content string.
 	 */
 	public void addContent(String string) {
-		content.addElement(string);
+		content.add(string);
 	}
 
 	/**
 	 * Add a new content tag.
 	 */
 	public void addContent(Tag tag) {
-		content.addElement(tag);
+		content.add(tag);
 	}
 
 	/**
@@ -100,7 +113,7 @@ public class Tag {
 	 * Return the attribute value.
 	 */
 	public String getAttribute(String key) {
-		return (String) attributes.get(key);
+		return attributes.get(key);
 	}
 
 	/**
@@ -114,14 +127,14 @@ public class Tag {
 	/**
 	 * Answer the attributes as a Dictionary object.
 	 */
-	public Dictionary getAttributes() {
+	public Map<String, String> getAttributes() {
 		return attributes;
 	}
 
 	/**
 	 * Return the contents.
 	 */
-	public Vector getContents() {
+	public List<Object> getContents() {
 		return content;
 	}
 
@@ -139,12 +152,11 @@ public class Tag {
 	 * Return only the tags of the first level of descendants that match the
 	 * name.
 	 */
-	public Vector getContents(String tag) {
-		Vector out = new Vector();
-		for (Enumeration e = content.elements(); e.hasMoreElements();) {
-			Object o = e.nextElement();
+	public List<Object> getContents(String tag) {
+		List<Object> out = new ArrayList<Object>();
+		for (Object o : content) {
 			if (o instanceof Tag && ((Tag) o).getName().equals(tag))
-				out.addElement(o);
+				out.add(o);
 		}
 		return out;
 	}
@@ -162,8 +174,7 @@ public class Tag {
 	 * convenient method to get the contents in a StringBuffer.
 	 */
 	public void getContentsAsString(StringBuffer sb) {
-		for (Enumeration e = content.elements(); e.hasMoreElements();) {
-			Object o = e.nextElement();
+		for (Object o : content) {
 			if (o instanceof Tag)
 				((Tag) o).getContentsAsString(sb);
 			else
@@ -179,9 +190,9 @@ public class Tag {
 		spaces(pw, indent);
 		pw.print('<');
 		pw.print(name);
-		for (Enumeration e = attributes.keys(); e.hasMoreElements();) {
-			String key = (String) e.nextElement();
-			String value = escape((String) attributes.get(key));
+		for (Map.Entry<String, String> entry : attributes.entrySet()) {
+			String key = entry.getKey();
+			String value = escape(entry.getValue());
 			pw.print(' ');
 			pw.print(key);
 			pw.print("=\"");
@@ -192,14 +203,13 @@ public class Tag {
 			pw.print('/');
 		else {
 			pw.print('>');
-			for (Enumeration e = content.elements(); e.hasMoreElements();) {
-				Object content = e.nextElement();
-				if (content instanceof String) {
-					formatted(pw, indent + 2, 60, escape((String) content));
+			for (Object o : content) {
+				if (o instanceof String) {
+					formatted(pw, indent + 2, 60, escape((String) o));
 				}
 				else
-					if (content instanceof Tag) {
-						Tag tag = (Tag) content;
+					if (o instanceof Tag) {
+						Tag tag = (Tag) o;
 						tag.print(indent + 2, pw);
 					}
 			}
