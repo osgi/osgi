@@ -332,7 +332,7 @@ public final class DeploymentAdminPermission extends Permission {
      *  2. DeploymentAdminPermission("(name=org.osgi.ExampleApp)", "list, install")
      *  3. DeploymentAdminPermission("(name=org.osgi.*)", "list")
      *  4. DeploymentAdminPermission("(signer=*, o=ACME, c=US)", "list")
-     *  5. DeploymentAdminPermission("(signer=cn = Bugs Bunny, o = ACME, c = US)", "list")
+     *  5. DeploymentAdminPermission("(signer=cn=Bugs Bunny, o=ACME, c=US)", "list")
      * </pre>
 	 * <p>
 	 * 

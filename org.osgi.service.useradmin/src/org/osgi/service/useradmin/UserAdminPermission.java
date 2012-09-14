@@ -77,8 +77,10 @@ import java.util.Hashtable;
  * <pre>
  *
  *  (org.osgi.service.useradmin.UserAdminPermission &quot;admin&quot;)
- *  (org.osgi.service.useradmin.UserAdminPermission &quot;com.foo.*&quot; &quot;changeProperty,getCredential,changeCredential&quot;)
- *  (org.osgi.service.useradmin.UserAdminPermission &quot;user.*&quot;, &quot;changeProperty,changeCredential&quot;)
+ *  (org.osgi.service.useradmin.UserAdminPermission &quot;com.foo.*&quot;
+ *                &quot;changeProperty,getCredential,changeCredential&quot;)
+ *  (org.osgi.service.useradmin.UserAdminPermission &quot;user.*&quot;
+ *                              &quot;changeProperty,changeCredential&quot;)
  *
  * </pre>
  * 
