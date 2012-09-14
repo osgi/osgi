@@ -1638,6 +1638,8 @@ SetParameterValue   ..Properties.3421.Alias = MyKey</programlisting>
       subsequent sections.</para>
 
       <table pgwide="1" xml:id="service.tr069todmt-dmt2tr069">
+        <?dbfo keep-together="always"?>
+
         <title>Dmt Data Format to TR-069 Data</title>
 
         <tgroup cols="10">
@@ -2282,6 +2284,8 @@ unsignedLong  <xref linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG"
       that the source type corresponds to a MIME type in the meta node.</para>
 
       <table pgwide="1">
+        <?dbfo keep-together="always"?>
+
         <title>TR-069 Value to Dmt Data</title>
 
         <tgroup cols="15">
