@@ -1026,13 +1026,14 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
       therefore are assumed to be contained in the following XML
       fragment:</para>
 
-      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&lt;scact:sca-config 
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;scact:sca-config
     targetNamespace="http://acme.com/defs"
     xmlns:scact    ="http://www.osgi.org/xmlns/scact/v1.0.0" 
     xmlns:sca      ="http://docs.oasis-open.org/ns/opencsa/sca/200912"
     xmlns:acme     ="http://acme.com/defs"&gt;
   &lt;!-- example goes here --&gt;
- &lt;/scact:sca-config&gt;</programlisting>
+&lt;/scact:sca-config&gt;</programlisting>
 
       <para>There are many types used in this specification that are defined
       in the XML Schema specification. These types are prefixes with the
@@ -1462,7 +1463,9 @@ service.intents          = {http://acme.com/defs}protection</programlisting>
         &lt;wsp:ExactlyOne&gt;
             &lt;sp:Basic256Rsa15 /&gt;
             &lt;sp:TripleDesRsa15 /&gt;
-        &lt;/wsp:ExactlyOne&gt; &lt;/wsp:Policy&gt;&lt;/sca:policySet&gt;</programlisting>
+        &lt;/wsp:ExactlyOne&gt;
+    &lt;/wsp:Policy&gt;
+&lt;/sca:policySet&gt;</programlisting>
 
       <para>These relationships are illustrated in figure <xref
       linkend="i3097701"/>.</para>
@@ -2091,8 +2094,8 @@ qualifier ::= policy ( policy ) *</programlisting>
     &lt;complexType name="Tsca-config"&gt;
       &lt;choice minOccurs="0" maxOccurs="unbounded"&gt;
         &lt;element ref="sca:binding" /&gt;
-       &lt;element ref="sca:intent" /&gt;
-       &lt;element ref="sca:policySet" /&gt;
+        &lt;element ref="sca:intent" /&gt;
+        &lt;element ref="sca:policySet" /&gt;
      &lt;/choice&gt;
      &lt;attribute name="targetNamespace" type="anyURI" use="required"/&gt;
     &lt;/complexType&gt;
