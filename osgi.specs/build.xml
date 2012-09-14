@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="publish">
-	<target name="deploy" depends="master.deploy,core.pdf,cmpn.pdf,enterprise.pdf,residential.pdf">
+	<target name="deploy" depends="master.deploy,core,cmpn,enterprise,residential">
 	</target>
 
 	<target name="init" depends="master.init">
@@ -206,21 +206,25 @@
 		</sequential>
 	</macrodef>
 
-	<target name="core.pdf" depends="core.fo">
+	<target name="core" depends="core.fo">
 		<fo2pdf name="core" />
 	</target>
+	<target name="core.pdf" depends="core" />
 
-	<target name="cmpn.pdf" depends="cmpn.fo">
+	<target name="cmpn" depends="cmpn.fo">
 		<fo2pdf name="cmpn" />
 	</target>
+	<target name="cmpn.pdf" depends="cmpn" />
 
-	<target name="enterprise.pdf" depends="enterprise.fo">
+	<target name="enterprise" depends="enterprise.fo">
 		<fo2pdf name="enterprise" />
 	</target>
+	<target name="enterprise.pdf" depends="enterprise" />
 
-	<target name="residential.pdf" depends="residential.fo">
+	<target name="residential" depends="residential.fo">
 		<fo2pdf name="residential" />
 	</target>
+	<target name="residential.pdf" depends="residential" />
 
 	<target name="fontmetrics" depends="init" description="Only used to rebuild font metrics">
 		<foreach delimiter=" ," target="-fontmetrics" param="item" inheritAll="true">
