@@ -4346,7 +4346,7 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
 
           <colspec colnum="2" colwidth="2*"/>
 
-          <colspec colnum="3" colwidth="1*"/>
+          <colspec colnum="3" colwidth="1.1*"/>
 
           <colspec colnum="4" colwidth="2*"/>
 
@@ -5388,7 +5388,7 @@ SESSION_CLOSED {
 
         <mediaobject>
           <imageobject>
-            <imagedata align="center" contentdepth="2.064in"
+            <imagedata align="center" contentdepth="1.900in"
                        contentwidth="6.260in"
                        fileref="type-inheritance-structure.svg"/>
           </imageobject>

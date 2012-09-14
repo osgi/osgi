@@ -3003,8 +3003,8 @@ registration-listener ::= target</programlisting>
               be registered. Each interface name must be listed as a child
               <code>value</code> element. This value element has no
               attributes. For example:</para><programlisting>&lt;interfaces&gt;
- &lt;value&gt;com.acme.Foo&lt;/value&gt;
- &lt;value&gt;com.acme.Bar&lt;/value&gt;
+ &lt;value&gt;com.a.Foo&lt;/value&gt;
+ &lt;value&gt;com.a.Bar&lt;/value&gt;
 &lt;/interfaces&gt;</programlisting><para>The value element must only hold a
               string value. See <xref linkend="i2392232"/></para></entry>
             </row>

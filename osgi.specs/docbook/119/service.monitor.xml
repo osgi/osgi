@@ -128,7 +128,7 @@
     service with the service property <code>service.pid</code> set to a PID.
     This PID must have the following format:</para>
 
-    <programlisting>monitorable-pid ::= symbolic-name        // See General Syntax Definitions in Core</programlisting>
+    <programlisting>monitorable-pid ::= symbolic-name    // See General Syntax Definitions in Core</programlisting>
 
     <para>The length of this PID must fit in 32 bytes when UTF-8
     encoded.</para>
@@ -313,7 +313,7 @@
       xrefstyle="hyperlink"/> method. A Status Variable identity must have the
       following syntax:</para>
 
-      <programlisting>status-variable-name ::= symbolic-name    // See General Syntax Definitions in Core</programlisting>
+      <programlisting>status-variable-name ::= symbolic-name // See General Syntax Definitions in Core</programlisting>
 
       <para>The name should be descriptive and concise. Additionally, it has
       the following limitations:</para>

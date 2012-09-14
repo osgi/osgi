@@ -2372,7 +2372,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
 
           <colspec colnum="2" colwidth="4*"/>
 
-          <colspec colnum="3" colwidth="3.2*"/>
+          <colspec colnum="3" colwidth="3.1*"/>
 
           <thead>
             <row>

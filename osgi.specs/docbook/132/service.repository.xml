@@ -191,8 +191,8 @@
 @Reference(
 cardinality = ReferenceCardinality.MULTIPLE, 
 policy = ReferencePolicy.DYNAMIC)
-void addRepository( Repository repo )                                                           { repos.add(repo);}
-void removeRepository( Repository repo )    { repos.remove(repo);}</programlisting>
+void addRepository( Repository repo )    { repos.add(repo); }
+void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting>
 
     <para>To access a resource in a Repository service it is necessary to
     construct a requirement, pass this to the Repository service, and then use

@@ -1641,7 +1641,7 @@ SetParameterValue   ..Properties.3421.Alias = MyKey</programlisting>
         <title>Dmt Data Format to TR-069 Data</title>
 
         <tgroup cols="10">
-          <colspec colnum="1" colwidth="2.2*"/>
+          <colspec colnum="1" colwidth="2.3*"/>
 
           <colspec colnum="2" colwidth="1*"/>
 

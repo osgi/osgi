@@ -349,8 +349,8 @@
       example shows the possible content of such a file:</para>
 
       <programlisting># ACME example SAXParserFactory file
-com.acme.saxparser.SAXParserFast                                                            # Fast
-com.acme.saxparser.SAXParserValidating                                                          # Validates</programlisting>
+com.acme.saxparser.SAXParserFast            # Fast
+com.acme.saxparser.SAXParserValidating      # Validates</programlisting>
 
       <para>Both the <code>javax.xml.parsers.SAXParserFactory</code> and the
       <code>javax.xml.parsers.DocumentBuilderFactory</code> provide methods

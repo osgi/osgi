@@ -80,7 +80,7 @@
       summarizes the packages and specification versions for the different
       subjects.</para>
 
-      <table>
+      <table pgwide="1">
         <title>Packages and versions</title>
 
         <tgroup cols="3">

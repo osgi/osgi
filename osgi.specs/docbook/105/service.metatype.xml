@@ -149,7 +149,7 @@
         </listitem>
       </itemizedlist>
 
-      <figure>
+      <figure pgwide="1">
         <title>Class Diagram Meta Type Service,
         org.osgi.service.metatype</title>
 
@@ -396,7 +396,7 @@
       </listitem>
     </itemizedlist>
 
-    <figure xml:id="i1386202">
+    <figure pgwide="1" xml:id="i1386202">
       <title>Sources for Meta Types</title>
 
       <mediaobject>

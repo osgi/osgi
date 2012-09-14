@@ -430,9 +430,9 @@ nl_NL       sv</programlisting>
         <title>Descriptor localized properties</title>
 
         <tgroup cols="4">
-          <colspec colnum="1" colwidth="2*"/>
+          <colspec colnum="1" colwidth="2.1*"/>
 
-          <colspec colnum="2" colwidth="1*"/>
+          <colspec colnum="2" colwidth="0.9*"/>
 
           <colspec colnum="3" colwidth="1*"/>
 

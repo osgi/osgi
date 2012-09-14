@@ -845,17 +845,19 @@ javax.naming.directory</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><xref
+        <para><link
         linkend="org.osgi.service.jndi.JNDIProviderAdmin.getObjectInstance-Object-javax.naming.Name-javax.naming.Context-Map-"
-        xrefstyle="hyperlink"/> – Used by Context implementations to convert a
-        description object to another object.</para>
+        xrefstyle="hyperlink">getObjectInstance(Object,Name,Context,Map)</link>
+        – Used by Context implementations to convert a description object to
+        another object.</para>
       </listitem>
 
       <listitem>
-        <para><xref
+        <para><link
         linkend="org.osgi.service.jndi.JNDIProviderAdmin.getObjectInstance-Object-javax.naming.Name-javax.naming.Context-Map-javax.naming.directory.Attributes-"
-        xrefstyle="hyperlink"/> – Used by a Dir Context implementations to
-        convert a description object to another object.</para>
+        xrefstyle="hyperlink">getObjectInstance(Object,Name,Context,Map,Attributes)</link>
+        – Used by a Dir Context implementations to convert a description
+        object to another object.</para>
       </listitem>
     </itemizedlist>
 
