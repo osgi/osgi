@@ -727,15 +727,15 @@ tracker.open();</programlisting>
         <title>Synonyms and Alternatives in Exported Configurations</title>
 
         <tgroup cols="8">
-          <colspec colname="col1" colnum="1" colwidth="1*"/>
+          <colspec colname="col1" colnum="1" colwidth="1.25*"/>
 
-          <colspec colname="col2" colnum="2" colwidth="1*"/>
+          <colspec colname="col2" colnum="2" colwidth="1.25*"/>
 
-          <colspec colname="col3" colnum="3" colwidth="1*"/>
+          <colspec colname="col3" colnum="3" colwidth="1.25*"/>
 
-          <colspec colname="col4" colnum="4" colwidth="1*"/>
+          <colspec colname="col4" colnum="4" colwidth="1.25*"/>
 
-          <colspec colname="col5" colnum="5" colwidth="1*"/>
+          <colspec colname="col5" colnum="5" colwidth="1.25*"/>
 
           <colspec colname="col6" colnum="6" colwidth="4*"/>
 
