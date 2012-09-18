@@ -760,15 +760,15 @@ tracker.open();</programlisting>
             <row>
               <?dbfo rotated-width="0.8in"?>
 
-              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><code>net.rmi</code></entry>
+              <entry rotate="1"><?dbfo orientation="90"?><code>net.rmi</code></entry>
 
-              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><code>com.rmix</code></entry>
+              <entry rotate="1"><?dbfo orientation="90"?><code>com.rmix</code></entry>
 
-              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><code>net.soap</code></entry>
+              <entry rotate="1"><?dbfo orientation="90"?><code>net.soap</code></entry>
 
-              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?><code>com.soapx</code></entry>
+              <entry rotate="1"><?dbfo orientation="90"?><code>com.soapx</code></entry>
 
-              <entry align="left" rotate="1" valign="top"><?dbfo orientation="90"?>&lt;&lt;no
+              <entry rotate="1"><?dbfo orientation="90"?>&lt;&lt;no
               default&gt;&gt;</entry>
 
               <entry><para>Supports:</para><para><code>net.rmi</code></para><para><code>com.rmix</code></para><para><code>com.soapx</code></para></entry>
@@ -779,11 +779,11 @@ tracker.open();</programlisting>
             </row>
 
             <row>
-              <entry><para><code>x</code></para></entry>
+              <entry align="center"><para><code>x</code></para></entry>
 
               <entry><para/></entry>
 
-              <entry><para><code>x</code></para></entry>
+              <entry align="center"><para><code>x</code></para></entry>
 
               <entry><para/></entry>
 
@@ -798,7 +798,7 @@ tracker.open();</programlisting>
             </row>
 
             <row>
-              <entry><para><code>x</code></para></entry>
+              <entry align="center"><para><code>x</code></para></entry>
 
               <entry><para/></entry>
 
@@ -823,9 +823,9 @@ tracker.open();</programlisting>
 
               <entry><para/></entry>
 
-              <entry><para><code>x</code></para></entry>
+              <entry align="center"><para><code>x</code></para></entry>
 
-              <entry><para><code>x</code></para></entry>
+              <entry align="center"><para><code>x</code></para></entry>
 
               <entry><para/></entry>
 
@@ -842,9 +842,9 @@ tracker.open();</programlisting>
 
               <entry><para/></entry>
 
-              <entry><para><code>x</code></para></entry>
+              <entry align="center"><para><code>x</code></para></entry>
 
-              <entry><para><code>x</code></para></entry>
+              <entry align="center"><para><code>x</code></para></entry>
 
               <entry><para/></entry>
 
@@ -860,9 +860,9 @@ tracker.open();</programlisting>
             <row>
               <entry><para/></entry>
 
-              <entry><para><code>x</code></para></entry>
+              <entry align="center"><para><code>x</code></para></entry>
 
-              <entry><para><code>x</code></para></entry>
+              <entry align="center"><para><code>x</code></para></entry>
 
               <entry><para/></entry>
 
@@ -882,9 +882,9 @@ tracker.open();</programlisting>
 
               <entry><para/></entry>
 
-              <entry><para><code>x</code></para></entry>
+              <entry align="center"><para><code>x</code></para></entry>
 
-              <entry><para><code>x</code></para></entry>
+              <entry align="center"><para><code>x</code></para></entry>
 
               <entry><para/></entry>
 
@@ -902,9 +902,9 @@ tracker.open();</programlisting>
 
               <entry><para/></entry>
 
-              <entry><para><code>x</code></para></entry>
+              <entry align="center"><para><code>x</code></para></entry>
 
-              <entry><para><code>x</code></para></entry>
+              <entry align="center"><para><code>x</code></para></entry>
 
               <entry><para/></entry>
 
@@ -965,7 +965,7 @@ tracker.open();</programlisting>
 
               <entry><para/></entry>
 
-              <entry><para><code>x</code></para></entry>
+              <entry align="center"><para><code>x</code></para></entry>
 
               <entry><para><code>x</code></para></entry>
 
@@ -978,11 +978,11 @@ tracker.open();</programlisting>
             <row>
               <entry><para/></entry>
 
-              <entry><para>x</para></entry>
+              <entry align="center"><para>x</para></entry>
 
               <entry><para/></entry>
 
-              <entry><para>x</para></entry>
+              <entry align="center"><para>x</para></entry>
 
               <entry><para/></entry>
 
