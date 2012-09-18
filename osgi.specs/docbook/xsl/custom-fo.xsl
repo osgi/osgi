@@ -1453,6 +1453,9 @@ should be discarded -->
 <xsl:template match="d:section[@role = 'ee.container']" mode="fop1.outline">
   <xsl:apply-templates mode="fop1.outline"/>
 </xsl:template>
+<xsl:template match="d:section[@role = 'ee.container']" mode="fop1.foxdest">
+  <xsl:apply-templates mode="fop1.foxdest"/>
+</xsl:template>
 
 <xsl:template name="section.level">
   <xsl:param name="node" select="."/>
