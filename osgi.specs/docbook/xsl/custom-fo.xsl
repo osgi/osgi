@@ -48,7 +48,8 @@ book toc,title
 
 <xsl:param name="page.height.portrait">24.587cm</xsl:param>
 <xsl:param name="page.width.portrait">18.898cm</xsl:param>
-<xsl:param name="draft.mode">no</xsl:param>
+<xsl:param name="draft.mode">maybe</xsl:param>
+<xsl:param name="draft.watermark.image">../graphics/draft.svg</xsl:param>
 <xsl:param name="fop1.extensions" select="1"/>
 <xsl:param name="xep.extensions" select="0"/>
 <xsl:param name="front.logo.image">../graphics/OSGi_Alliance.svg</xsl:param>
