@@ -32,7 +32,8 @@
  * <p>
  * {@code  Import-Package: org.osgi.service.serviceloader; version="[1.0,1.1)"}
  * 
- * @version $Id$
+ * @version 1.0
+ * @author $Id$
  */
 
 package org.osgi.service.serviceloader;

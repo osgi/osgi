@@ -75,14 +75,15 @@ public interface DmtAdmin {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code INVALID_URI} if {@code subtreeUri} is syntactically
-	 *         invalid <li>{@code URI_TOO_LONG} if {@code subtreeUri} is longer
-	 *         than accepted by the {@code DmtAdmin} implementation (especially
-	 *         on systems with limited resources) <li>{@code NODE_NOT_FOUND} if
-	 *         {@code subtreeUri} specifies a non-existing node <li>
-	 *         {@code SESSION_CREATION_TIMEOUT} if the operation timed out
-	 *         because of another ongoing session <li>{@code COMMAND_FAILED} if
-	 *         {@code subtreeUri} specifies a relative URI, or some unspecified
-	 *         error is encountered while attempting to complete the command
+	 *         invalid</li><li>{@code URI_TOO_LONG} if {@code subtreeUri} is
+	 *         longer than accepted by the {@code DmtAdmin} implementation
+	 *         (especially on systems with limited resources)</li><li>
+	 *         {@code NODE_NOT_FOUND} if {@code subtreeUri} specifies a
+	 *         non-existing node</li><li> {@code SESSION_CREATION_TIMEOUT} if
+	 *         the operation timed out because of another ongoing session</li>
+	 *         <li>{@code COMMAND_FAILED} if {@code subtreeUri} specifies a
+	 *         relative URI, or some unspecified error is encountered while
+	 *         attempting to complete the command</li>
 	 *         </ul>
 	 * @throws SecurityException if the caller does not have
 	 *         {@code DmtPermission} for the given root node with the Get action
@@ -109,17 +110,18 @@ public interface DmtAdmin {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code INVALID_URI} if {@code subtreeUri} is syntactically
-	 *         invalid <li>{@code URI_TOO_LONG} if {@code subtreeUri} is longer
-	 *         than accepted by the {@code DmtAdmin} implementation (especially
-	 *         on systems with limited resources) <li>{@code NODE_NOT_FOUND} if
-	 *         {@code subtreeUri} specifies a non-existing node <li>
-	 *         {@code FEATURE_NOT_SUPPORTED} if atomic sessions are not
-	 *         supported by the implementation and {@code lockMode} requests an
-	 *         atomic session <li>{@code SESSION_CREATION_TIMEOUT} if the
-	 *         operation timed out because of another ongoing session <li>
+	 *         invalid</li><li>{@code URI_TOO_LONG} if {@code subtreeUri} is
+	 *         longer than accepted by the {@code DmtAdmin} implementation
+	 *         (especially on systems with limited resources)</li><li>
+	 *         {@code NODE_NOT_FOUND} if {@code subtreeUri} specifies a
+	 *         non-existing node</li><li> {@code FEATURE_NOT_SUPPORTED} if
+	 *         atomic sessions are not supported by the implementation and
+	 *         {@code lockMode} requests an atomic session</li><li>
+	 *         {@code SESSION_CREATION_TIMEOUT} if the operation timed out
+	 *         because of another ongoing session</li><li>
 	 *         {@code COMMAND_FAILED} if {@code subtreeUri} specifies a relative
 	 *         URI, if {@code lockMode} is unknown, or some unspecified error is
-	 *         encountered while attempting to complete the command
+	 *         encountered while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws SecurityException if the caller does not have
 	 *         {@code DmtPermission} for the given root node with the Get action
@@ -152,20 +154,21 @@ public interface DmtAdmin {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code INVALID_URI} if {@code subtreeUri} is syntactically
-	 *         invalid <li>{@code URI_TOO_LONG} if {@code subtreeUri} is longer
-	 *         than accepted by the {@code DmtAdmin} implementation (especially
-	 *         on systems with limited resources) <li>{@code NODE_NOT_FOUND} if
-	 *         {@code subtreeUri} specifies a non-existing node <li>
-	 *         {@code PERMISSION_DENIED} if {@code principal} is not
-	 *         {@code null} and the ACL of the node does not allow the
-	 *         {@code Get} operation for the principal on the given root node
-	 *         <li>{@code FEATURE_NOT_SUPPORTED} if atomic sessions are not
-	 *         supported by the implementation and {@code lockMode} requests an
-	 *         atomic session <li>{@code SESSION_CREATION_TIMEOUT} if the
-	 *         operation timed out because of another ongoing session <li>
+	 *         invalid</li><li>{@code URI_TOO_LONG} if {@code subtreeUri} is
+	 *         longer than accepted by the {@code DmtAdmin} implementation
+	 *         (especially on systems with limited resources)</li><li>
+	 *         {@code NODE_NOT_FOUND} if {@code subtreeUri} specifies a
+	 *         non-existing node</li><li> {@code PERMISSION_DENIED} if
+	 *         {@code principal} is not {@code null} and the ACL of the node
+	 *         does not allow the {@code Get} operation for the principal on the
+	 *         given root node </li><li>{@code FEATURE_NOT_SUPPORTED} if atomic
+	 *         sessions are not supported by the implementation and
+	 *         {@code lockMode} requests an atomic session</li><li>
+	 *         {@code SESSION_CREATION_TIMEOUT} if the operation timed out
+	 *         because of another ongoing session</li><li>
 	 *         {@code COMMAND_FAILED} if {@code subtreeUri} specifies a relative
 	 *         URI, if {@code lockMode} is unknown, or some unspecified error is
-	 *         encountered while attempting to complete the command
+	 *         encountered while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws SecurityException in case of remote sessions, if the caller does
 	 *         not have the required {@code DmtPrincipalPermission} with a

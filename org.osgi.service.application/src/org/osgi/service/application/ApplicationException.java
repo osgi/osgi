@@ -22,7 +22,7 @@ package org.osgi.service.application;
  * 
  * {@code ApplicationException} object is created by the Application Admin to
  * denote an exception condition in the lifecycle of an application.
- * {@code ApplicationException}s should not be created by developers. <br/>
+ * {@code ApplicationException}s should not be created by developers.
  * {@code ApplicationException}s are associated with an error code. This code
  * describes the type of problem reported in this exception. The possible codes
  * are:
@@ -34,14 +34,14 @@ package org.osgi.service.application;
  * <li> {@link #APPLICATION_INTERNAL_ERROR} - An exception was thrown by the
  * application or its container during launch.</li>
  * <li> {@link #APPLICATION_SCHEDULING_FAILED} - The scheduling of an application
- * failed.
+ * failed.</li>
  * <li> {@link #APPLICATION_DUPLICATE_SCHEDULE_ID} - The application scheduling
- * failed because the specified identifier is already in use.
+ * failed because the specified identifier is already in use.</li>
  * <li> {@link #APPLICATION_EXITVALUE_NOT_AVAILABLE} - The exit value is not
  * available for an application instance because the instance has not
- * terminated.
+ * terminated.</li>
  * <li> {@link #APPLICATION_INVALID_STARTUP_ARGUMENT} - One of the specified
- * startup arguments is invalid, for example its type is not permitted.
+ * startup arguments is invalid, for example its type is not permitted.</li>
  * </ul>
  * 
  * @version $Id$

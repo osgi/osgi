@@ -26,7 +26,8 @@
  * <p>
  * {@code  Import-Package: org.osgi.service.url; version="[1.0,2.0)"}
  * 
- * @version $Id$
+ * @version 1.0
+ * @author $Id$
  */
 
 package org.osgi.service.url;

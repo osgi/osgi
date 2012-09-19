@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="149.04px" height="163.68px" viewBox="0 0 149.04 163.68" enable-background="new 0 0 149.04 163.68" xml:space="preserve">
+<rect x="87.6" y="136.44" width="54.359" height="27"/>
+<rect x="87.6" y="136.2" width="54.602" height="0.479"/>
+<rect x="141.72" y="136.44" width="0.479" height="27.239"/>
+<rect x="87.36" y="163.2" width="54.6" height="0.479"/>
+<rect x="87.36" y="136.2" width="0.48" height="27.239"/>
+<rect x="85.26" y="134.64" fill="#FFFFFF" width="54.359" height="27"/>
+<rect x="85.26" y="134.4" width="54.6" height="0.479"/>
+<rect x="139.379" y="134.64" width="0.479" height="27.24"/>
+<rect x="85.02" y="161.4" width="54.6" height="0.479"/>
+<rect x="85.02" y="134.4" width="0.48" height="27.239"/>
+<text transform="matrix(0.9504 0 0 1 87.6001 141.7805)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">Framework</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Impl</tspan></text>
+<rect x="113.399" y="98.94" width="0.48" height="0.239"/>
+<rect x="113.399" y="99.18" width="0.48" height="35.7"/>
+<rect x="87.661" y="72.66" width="54.299" height="27"/>
+<rect x="87.661" y="72.42" width="54.541" height="0.479"/>
+<rect x="141.72" y="72.66" width="0.479" height="27.239"/>
+<rect x="87.42" y="99.42" width="54.539" height="0.479"/>
+<rect x="87.42" y="72.42" width="0.479" height="27.24"/>
+<rect x="85.26" y="70.86" fill="#FFFFFF" width="54.359" height="27"/>
+<rect x="85.26" y="70.62" width="54.6" height="0.479"/>
+<rect x="139.379" y="70.86" width="0.479" height="27.239"/>
+<rect x="85.02" y="97.62" width="54.6" height="0.479"/>
+<rect x="85.02" y="70.62" width="0.48" height="27.239"/>
+<text transform="matrix(1 0 0 1 87.6597 78.0002)" font-family="'ProductusSemibold'" font-size="7.98">Weaving Hook</text>
+<polyline points="141.959,85.02 127.799,99.18 141.959,99.18 "/>
+<polyline points="142.14,85.2 127.979,99.36 127.799,99.42 127.2,99.42 141.78,84.84 "/>
+<rect x="127.799" y="98.94" width="14.4" height="0.479"/>
+<polyline points="141.72,99.18 141.72,85.02 141.78,84.84 142.2,84.42 142.2,99.18 "/>
+<text transform="matrix(1 0 0 1 115.7407 106.6204)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<text transform="matrix(1 0 0 1 109.2603 131.6399)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<rect x="78.18" y="0" fill="#E6E6E6" width="70.859" height="43.2"/>
+<rect x="87.6" y="9.54" width="54.359" height="27"/>
+<rect x="87.6" y="9.3" width="54.602" height="0.48"/>
+<rect x="141.72" y="9.54" width="0.479" height="27.24"/>
+<rect x="87.36" y="36.3" width="54.6" height="0.48"/>
+<rect x="87.36" y="9.3" width="0.48" height="27.24"/>
+<rect x="85.26" y="7.74" fill="#FFFFFF" width="54.359" height="27"/>
+<rect x="85.26" y="7.5" width="54.6" height="0.479"/>
+<rect x="139.379" y="7.74" width="0.479" height="27.239"/>
+<rect x="85.02" y="34.5" width="54.6" height="0.479"/>
+<rect x="85.02" y="7.5" width="0.48" height="27.24"/>
+<text transform="matrix(1 0 0 1 87.6001 14.8801)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">Weaving Hook</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">handler</tspan></text>
+<polyline points="113.64,59.34 116.939,59.34 116.76,60 113.64,70.92 110.52,60 110.34,59.34 111,59.34 111.479,59.7 114.12,68.94 
+	113.161,69.24 113.161,68.94 115.799,59.7 116.76,60 116.28,60.36 113.64,60.36 "/>
+<rect x="111" y="59.34" width="2.64" height="1.021"/>
+<polyline points="113.64,59.82 116.28,59.82 113.64,69.06 111,59.82 "/>
+<rect x="113.399" y="35.16" width="0.48" height="0.239"/>
+<rect x="113.399" y="35.4" width="0.48" height="14.221"/>
+<rect x="113.399" y="49.62" width="0.48" height="9.96"/>
+<rect x="2.58" y="72.66" width="54.36" height="27"/>
+<rect x="2.58" y="72.42" width="54.6" height="0.479"/>
+<rect x="56.7" y="72.66" width="0.48" height="27.239"/>
+<rect x="2.34" y="99.42" width="54.6" height="0.479"/>
+<rect x="2.34" y="72.42" width="0.48" height="27.24"/>
+<rect x="0.24" y="70.86" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="0.24" y="70.62" width="54.54" height="0.479"/>
+<rect x="54.3" y="70.86" width="0.48" height="27.239"/>
+<rect y="97.62" width="54.54" height="0.479"/>
+<rect y="70.62" width="0.48" height="27.239"/>
+<text transform="matrix(1 0 0 1 2.5796 78.0002)" font-family="'ProductusSemibold'" font-size="7.98">Woven Class</text>
+<rect x="81.241" y="84.781" width="4.02" height="0.479"/>
+<rect x="67.02" y="84.781" width="8.16" height="0.479"/>
+<rect x="56.94" y="84.781" width="3.96" height="0.479"/>
+</svg>

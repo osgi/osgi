@@ -152,7 +152,7 @@ public abstract class ApplicationDescriptor {
 	 * This method verifies whether the specified {@code pattern} matches the
 	 * Distinguished Names of any of the certificate chains used to authenticate
 	 * this application.
-	 * <P>
+	 * <p>
 	 * The {@code pattern} must adhere to the syntax defined in
 	 * {@link org.osgi.service.application.ApplicationAdminPermission} for
 	 * signer attributes.
@@ -180,7 +180,7 @@ public abstract class ApplicationDescriptor {
 	 * This method will call the {@code getPropertiesSpecific} method to enable
 	 * the container implementation to insert application model and/or container
 	 * implementation specific properties.
-	 * <P>
+	 * <p>
 	 * The returned {@link java.util.Map} will contain the standard OSGi service
 	 * properties as well (e.g. service.id, service.vendor etc.) and specialized
 	 * application descriptors may offer further service properties. The
@@ -261,19 +261,19 @@ public abstract class ApplicationDescriptor {
 	 * be null.
 	 * <p>
 	 * The following steps are made:
-	 * <UL>
-	 * <LI>Check for the appropriate permission.
-	 * <LI>Check the locking state of the application. If locked then throw an
+	 * <ul>
+	 * <li>Check for the appropriate permission.</li>
+	 * <li>Check the locking state of the application. If locked then throw an
 	 * {@link ApplicationException} with the reason code
-	 * {@link ApplicationException#APPLICATION_LOCKED}.
-	 * <LI>Calls the {@code launchSpecific()} method to create and start an
-	 * application instance.
-	 * <LI>Returns the {@code ApplicationHandle} returned by the
-	 * launchSpecific()
-	 * </UL>
+	 * {@link ApplicationException#APPLICATION_LOCKED}.</li>
+	 * <li>Calls the {@code launchSpecific()} method to create and start an
+	 * application instance.</li>
+	 * <li>Returns the {@code ApplicationHandle} returned by the
+	 * launchSpecific()</li>
+	 * </ul>
 	 * The caller has to have ApplicationAdminPermission(applicationPID,
 	 * "launch") in order to be able to perform this operation.
-	 * <P>
+	 * <p>
 	 * The {@code Map} argument of the launch method contains startup arguments
 	 * for the application. The keys used in the Map must be non-null, non-empty
 	 * {@code String} objects. They can be standard or application specific.
@@ -288,10 +288,10 @@ public abstract class ApplicationDescriptor {
 	 * In particular, the keys standardized in OSGi should start with
 	 * {@code org.osgi.}.</li>
 	 * </ul>
-	 * <P>
+	 * <p>
 	 * The method is synchronous, it return only when the application instance
 	 * was successfully started or the attempt to start it failed.
-	 * <P>
+	 * <p>
 	 * This method never returns {@code null}. If launching an application
 	 * fails, the appropriate exception is thrown.
 	 * 
@@ -339,7 +339,7 @@ public abstract class ApplicationDescriptor {
 	 * to represent the newly created and started instance and registeres it.
 	 * The method is synchronous, it return only when the application instance
 	 * was successfully started or the attempt to start it failed.
-	 * <P>
+	 * <p>
 	 * This method must not return {@code null}. If launching the application
 	 * failed, and exception must be thrown.
 	 * 
@@ -411,13 +411,13 @@ public abstract class ApplicationDescriptor {
 	 *         <li>
 	 *         {@link ApplicationException#APPLICATION_DUPLICATE_SCHEDULE_ID} if
 	 *         the specified {@code scheduleId} is already used for this
-	 *         {@code ApplicationDescriptor} <li>
+	 *         {@code ApplicationDescriptor}</li><li>
 	 *         {@link ApplicationException#APPLICATION_SCHEDULING_FAILED} if the
 	 *         scheduling failed due to some internal reason (e.g. persistent
-	 *         storage error). <li>
+	 *         storage error).</li> <li>
 	 *         {@link ApplicationException#APPLICATION_INVALID_STARTUP_ARGUMENT}
 	 *         if the specified startup argument doesn't satisfy the type or
-	 *         value constraints of startup arguments.
+	 *         value constraints of startup arguments.</li>
 	 *         </ul>
 	 * @throws SecurityException if the caller doesn't have "schedule"
 	 *         ApplicationAdminPermission for the application.

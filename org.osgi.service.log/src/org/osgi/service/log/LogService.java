@@ -29,10 +29,10 @@ import org.osgi.framework.ServiceReference;
  * Bundles must log messages in the OSGi environment with a severity level
  * according to the following hierarchy:
  * <ol>
- * <li>{@link #LOG_ERROR}
- * <li>{@link #LOG_WARNING}
- * <li>{@link #LOG_INFO}
- * <li>{@link #LOG_DEBUG}
+ * <li>{@link #LOG_ERROR}</li>
+ * <li>{@link #LOG_WARNING}</li>
+ * <li>{@link #LOG_INFO}</li>
+ * <li>{@link #LOG_DEBUG}</li>
  * </ol>
  * 
  * @ThreadSafe

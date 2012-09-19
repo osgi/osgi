@@ -35,7 +35,7 @@ import java.io.InputStream;
  * <li>{@link #begin(DeploymentSession)}</li>
  * <li>{@link #process(String, InputStream)} calls till there are resources to
  * process or {@link #rollback()} and the further steps are ignored</li>
- * <li>{@link #dropped(String)} calls till there are resources to drop
+ * <li>{@link #dropped(String)} calls till there are resources to drop</li>
  * <li>{@link #prepare()}</li>
  * <li>{@link #commit()} or {@link #rollback()}</li>
  * </ol>

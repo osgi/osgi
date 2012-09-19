@@ -1,0 +1,795 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="123"
+         revision="$Id$"
+         version="5" xml:id="service.jta"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>JTA Transaction Services Specification</title>
+
+  <info>
+    <releaseinfo xml:id="service.jta-version">Version 1.0</releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>Transactions are the key abstraction to provide reliability with
+    large scale distributed systems and are a primary component of enterprise
+    systems. This specification provides an OSGi service based design for the
+    Java Transaction Architecture (JTA) Specification, which describes the
+    standard transaction model for Java applications. Providing the JTA
+    specification as a service based model enables the use of independent
+    implementations. This JTA Transaction Services Specification provides a
+    managed model, where an Application Container (such as the Java EE EJB
+    container) manages the transaction and the enlistment of resources, and an
+    unmanaged model, where each application is responsible for these tasks
+    itself.</para>
+
+    <para>This specification provides a brief overview of JTA and then the use
+    of it through 3 transaction services: User Transaction, Transaction
+    Manager, and Transaction Synchronization.</para>
+
+    <para>This specification is based on <xref linkend="i3068796"/>.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Portability</emphasis> – It is important that
+          applications are easy to port from other environments that support
+          JTA.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Pluggability</emphasis> – Allow different vendors to
+          provide implementations of this specification.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>JTA Compatible</emphasis> – Support full JTA 1.1
+          Specification</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>JTA Provider</emphasis> – Implementation of this
+          specification. It is responsible, on request from a Transaction
+          Originator, for starting and ending transactions and coordinating
+          the work of Resource Managers that become involved in each
+          Transaction. This entity provides the User Transaction service,
+          Transaction Manager service, and the Transaction Synchronization
+          Registry service.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Transaction</emphasis> – An atomic unit of work that
+          is associated with a thread of execution.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Transaction Originator</emphasis> – An Application
+          or its Container, that directs the JTA Provider to begin and end
+          Transactions.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>User Transaction</emphasis> – A service used by a
+          Transaction Originator for beginning and ending transactions.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Transaction Manager</emphasis> – A service used by a
+          Transaction Originator for managing both transaction demarcation and
+          enlistment of Durable Resources or Volatile Resources.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Transaction Synchronization Registry</emphasis> – A
+          service for enlistment of Volatile Resources for getting
+          notifications before and after ending Transactions.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Application</emphasis> <emphasis>Bundle</emphasis> –
+          An entity that initiates work that executes under a
+          Transaction.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Container</emphasis> – An entity that is distinct
+          from the Application and which provides a managed environment for
+          Applications. Unmanaged environments do not distinguish between the
+          Application and Container entities.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Resource Manager</emphasis> – Provides the
+          transactional resources whose work is externally coordinated by a
+          JTA Provider. Examples of Resource Managers include databases, Java
+          Message Service providers and enterprise information systems.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Durable Resource</emphasis> – A resource whose work
+          is made durable when the Transaction is successfully committed.
+          Durable Resources can be enlisted with a Transaction to ensure that
+          work is performed within the scope of the Transaction and to
+          participate in the outcome of a Transaction. Durable Resource
+          enlistment is the responsibility of the Application Bundle or its
+          Container. Durable Resources implement the
+          <code>javax.transaction.xa.XAResource</code> interface</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Volatile Resource</emphasis> – Resources that are
+          associated with a Transaction but are no longer needed after the
+          Transaction, for example transaction-scoped caches. Volatile
+          Resources are registered with the JTA Provider to receive
+          notifications before and after the outcome of the Transaction.
+          Volatile Resources implement the
+          <code>javax.transaction.Synchronization</code> interface</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Transaction Services</emphasis> – The triplet of the
+          User Transaction, Transaction Manager, and Transaction
+          Synchronization Registry services registered by the JTA
+          Provider.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure pgwide="1">
+        <title>Transaction Service Specification Entities</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.570in"
+                       contentwidth="6.251in" fileref="jta-classes.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Dependencies</title>
+
+      <para>This specification is based on the following packages:</para>
+
+      <programlisting>javax.transaction
+javax.transaction.xa</programlisting>
+
+      <para>These packages must be exported as version 1.1.</para>
+    </section>
+
+    <section>
+      <title>Synopsis</title>
+
+      <para>The JTA Provider register the Transaction Services:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>User Transaction</emphasis> – Offers transaction
+          demarcation capabilities to an Application bundle.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Transaction Manager</emphasis> – Offers transaction
+          demarcation and further transaction management capabilities to an
+          Application Bundle or an Application Container.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Transaction Synchronization Registry</emphasis> –
+          Offers a callback registration service for volatile transactional
+          participants wishing to be notified of the completion of the
+          transaction.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>A JTA Provider must register these services when it is started. A
+      JTA Provider may put restrictions on which bundles can use these
+      services. For example, in a Java EE environment, the JTA Provider does
+      not expose the <code>TransactionManager</code> interface to
+      applications. An OSGi environment which supports the Java EE
+      specifications will typically provide access to the Transaction Manager
+      service only to Java EE Containers.</para>
+
+      <para>A typical example of the use of a transaction is for transferring
+      money from one bank account to another. Two Durable Resources are
+      involved, one provided by the database from which the money is to be
+      withdrawn and another provided by the database to which the money will
+      be deposited. An Application Bundle acting as the Transaction Originator
+      gets the User Transaction service and uses it to begin a transaction.
+      This transaction is associated with the current thread (implicitly) by
+      the JTA Provider. On the same thread of execution, the Application
+      Bundle connects to the database from which the money is to be withdrawn
+      and updates the balance in the source account by the amount to be
+      debited.</para>
+
+      <para>The database is a resource manager whose connections have
+      associated XA Resources; the first time a connection is used within the
+      scope of a new transaction the Application Bundle, or a Container,
+      obtains the XA Resource associated with the connection and enlists it
+      with the JTA Provider through the Transaction Manager service. On the
+      same thread of execution, the Application Bundle connects to the second
+      database and updates the balance in the target account by the amount to
+      be credited. An XA Resource for the second connection is enlisted with
+      the Transaction Manager service as well by the Application Bundle or a
+      Container.</para>
+
+      <para>Now that the money has been transferred the Transaction Originator
+      requests a commit of the Transaction (on the same thread of execution)
+      via the User Transaction Service, causing the JTA Provider to initiate
+      the two-phase commit process with the two Resource Managers through the
+      enlisted XA Resources. The transaction is then atomically committed or
+      rolled back.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>JTA Overview</title>
+
+    <para>A transaction is a unit of work in which interactions with multiple
+    participants can be coordinated by a third party such that the final
+    outcome of these interactions has well-defined transactional semantics. A
+    variety of well-known transaction models exist with specific
+    characteristics; the transactions described in this specification provide
+    <emphasis>Atomic Consistent Isolated and Durable</emphasis> (ACID)
+    semantics as defined in <xref linkend="i3068810"/> whereby all the
+    participants in a transaction are coordinated to an
+    <emphasis>atomic</emphasis> outcome in which the work of all the
+    participants is either completely committed or completely rolled
+    back.</para>
+
+    <para>The <xref linkend="i3068810"/> defines a <emphasis>Distributed
+    Transaction Processing</emphasis> (DTP) software architecture for
+    transactional work that is distributed across multiple Resource Managers
+    and coordinated externally by a Transaction Manager using the two-phase
+    commit XA protocol. The DTP architecture defines the roles of the
+    <emphasis>Transaction Manager</emphasis> and <emphasis>Resource
+    Manager</emphasis>; this specification uses the term <emphasis>JTA
+    Provider</emphasis> rather than <emphasis>Transaction Manager</emphasis>
+    to distinguish it from the <emphasis>Transaction Manager
+    service</emphasis>. Note that Distributed Transaction Processing does not
+    imply distribution of transactions across multiple frameworks or
+    JVMs.</para>
+
+    <para>The <xref linkend="i3068796"/> defines the Java interfaces required
+    for the management of transactions on the enterprise Java platform.</para>
+
+    <section xml:id="i3096101">
+      <title>Global and Local Transactions</title>
+
+      <para>A transaction may be a <emphasis>local transaction</emphasis> or a
+      <emphasis>global transaction. </emphasis>A local transaction is a unit
+      of work that is local to a single Resource Manager and may succeed or
+      fail independently of the work of other Resource Managers. A global
+      transaction, sometimes referred to as a distributed transaction, is a
+      unit of work that may encompass multiple Resource Managers and is
+      coordinated by a JTA Provider external to the Resource Manager(s) as
+      described in the DTP architecture. The term
+      <emphasis>transaction</emphasis> in this specification always refers to
+      a global transaction.</para>
+
+      <para>The JTA Provider is responsible for servicing requests from a
+      Transaction Originator to create and complete transactions, it manages
+      the state of each transaction it creates, the association of each
+      transaction with the thread of execution, and the coordination of any
+      Resource Managers that become involved in the global transaction. The
+      JTA Provider ensures that each transaction is associated with, at most,
+      one application thread at a time and provides the means to move that
+      association from one thread to another as needed.</para>
+
+      <para>The model for resource commit coordination is the <emphasis>two
+      phase commit</emphasis> XA protocol, with Resource Managers being
+      directed by the JTA Provider. The first time an Application accesses a
+      Resource Manager within the scope of a new global transaction, the
+      Application, or its Container, obtains an XA Resource from the Resource
+      Manager and <emphasis>enlists</emphasis> this XA Resource with the JTA
+      Provider.</para>
+
+      <para>At the end of a transaction, the Transaction Originator must
+      decide whether to initiate a <emphasis>commit</emphasis> or
+      <emphasis>rollback</emphasis> request for all the changes made within
+      the scope of the Transaction. The Transaction Originator requests that
+      the JTA Provider completes the transaction. The JTA Provider then
+      negotiates with each enlisted Resource Manager to reach a coordinated
+      outcome. A failure in the transaction at any point before the second
+      phase of two-phase commit results in the transaction being rolled
+      back.</para>
+
+      <para>XA is a <emphasis>presumed abort</emphasis> protocol and
+      implementations of XA-compliant JTA Providers and Resource Managers can
+      be highly optimized to perform no logging of transactional state until a
+      commit decision is required. A Resource Manager durably records its
+      prepare decision, and a JTA Provider durably records any commit decision
+      it makes. Failures between a decision on the outcome of a transaction
+      and the enactment of that outcome are handled during
+      <emphasis>transaction recovery</emphasis> to ensure the atomic outcome
+      of the transaction.</para>
+    </section>
+
+    <section>
+      <title>Durable Resource</title>
+
+      <para>Durable Resources are provided by Resource Managers and must
+      implement the <code>XAResource</code> interface described in the <xref
+      linkend="i3068796"/>. An <code>XAResource</code> object is enlisted with
+      a transaction to ensure that the work of the Resource Manager is
+      associated with the correct transaction and to participate in the
+      two-phase commit process. The <code>XAResource</code> interface is
+      driven by the JTA Provider during the completion of the transaction and
+      is used to direct the Resource Manager to commit or rollback any changes
+      made under the corresponding transaction.</para>
+    </section>
+
+    <section>
+      <title>Volatile Resource</title>
+
+      <para>Volatile resources are components that do not participate in the
+      two phase commit but are called immediately prior to and after the two
+      phase commit. They implement the <xref linkend="i3068796"/>
+      <code>Synchronization</code> interface. If a request is made to commit a
+      transaction then the volatile participants have the opportunity to
+      perform some <emphasis>before completion</emphasis> processing such as
+      flushing cached updates to persistent storage. Failures during the
+      <emphasis>before completion</emphasis> processing must cause the
+      transaction to rollback. In both the commit and rollback cases the
+      volatile resources are called after two phase commit to perform
+      <emphasis>after completion</emphasis> processing. <emphasis>After
+      completion</emphasis> procession cannot affect the outcome of the
+      transaction.</para>
+    </section>
+
+    <section>
+      <title>Threading</title>
+
+      <para>As noted above in <xref linkend="i3096101"/>, a global transaction
+      must not be associated with more than one application thread at a time
+      but can be moved over time from one application thread to another. In
+      some environments Applications run in containers which restrict the
+      ability of the Application component to explicitly manage the
+      transaction-thread association by restricting access to the Transaction
+      Manager. For example, Java EE application servers provide web and EJB
+      Containers for application components and, while the Containers
+      themselves can explicitly manage transaction-thread associations, these
+      containers do not allow the Applications to do so. Applications running
+      in these containers are required to complete any transactions they start
+      on that same application thread. In general, Applications that run
+      inside a Container must follow the rules defined by that Container. For
+      further details of the considerations specific to Java EE containers,
+      see the section <emphasis>Transactions and Threads</emphasis> in <xref
+      linkend="i3073418"/>.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Application</title>
+
+    <para>An <emphasis>Application</emphasis> is a bundle that may use
+    transactions, either as a Transaction Originator or as a bundle that is
+    called as part of an existing transaction. A Transaction Originator
+    Application bundle starts a transaction and end it with a commit or
+    rollback using the User Transaction or Transaction Manager service.</para>
+
+    <para>A Transaction Originator Application bundle may not make use of
+    Resource Managers itself but may simply provide transaction demarcation
+    and then call other bundles which do use Resource Managers. In such a case
+    the Transaction Originator Application bundle requires only the use of the
+    User Transaction service for transaction demarcation. The called bundles
+    may use the Transaction Manager service if they use Resource
+    Managers.</para>
+
+    <para>Application Bundles that use Resource Managers have to know the
+    enlistment strategy for the Resource Managers they use. There are two
+    possibilities:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Application Bundle Enlistment </emphasis>– The
+        Application Bundle must enlist the Resource Managers itself. For each
+        Resource Manager it uses it must enlist that Resource Manager with the
+        Transaction Manager.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Container-Managed Enlistment</emphasis> – An
+        Application runs in a container, such as a Java EE Container, which
+        manages the Resource Manager enlistment on behalf of the
+        Application.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>These scenarios are explained in the following sections.</para>
+
+    <section>
+      <title>No Enlistment</title>
+
+      <para>A Transaction Originator Application bundle that uses no Resource
+      Managers itself but starts a Transaction before calling another bundle
+      may use the <emphasis>User Transaction</emphasis> service to control the
+      Transaction demarcation.</para>
+
+      <para>For example, an Application can use the User Transaction service
+      to begin a global transaction:</para>
+
+      <programlisting>UserTransaction ut = getUserTransaction();
+ut.begin();</programlisting>
+
+      <para>The User Transaction service associates a transaction with the
+      current thread until that transaction is completed via:</para>
+
+      <programlisting>UserTransaction ut = getUserTransaction();
+ut.commit();</programlisting>
+
+      <para>Or the equivalent <code>rollback</code> method. The
+      <code>getUserTransaction</code> method implementation (not shown) can
+      get the User Transaction service directly from the service registry or
+      from an injected field.</para>
+    </section>
+
+    <section>
+      <title>Application Bundle Enlistment</title>
+
+      <para>An Application Bundle is responsible for enlisting Resource
+      Managers itself. That is, it must enlist Resource Manager it uses with
+      the <emphasis>Transaction Manager</emphasis> service. The Transaction
+      Manager service is an implementation of the JTA
+      <code>TransactionManager</code> interface, registered by the JTA
+      Provider.</para>
+
+      <para>For example, an Application Bundle can get an
+      <code>XADataSource</code> object from a Data Source Factory service.
+      Such a Data Source object can provide an <code>XAConnection</code>
+      object that then can provide an <code>XAResource</code> object.
+      <code>XAResource</code> objects can then be enlisted with the
+      Transaction Manager service.</para>
+
+      <para>For example:</para>
+
+      <programlisting>TransactionManager tm;
+XADataSource       left;
+XADataSource       right;
+
+void acid() throws Exception {
+   tm.begin();
+    Transaction transaction = <code>tm.getTransaction();</code>
+   try {
+        XAConnection left = this.left.getXAConnection();
+        XAConnection right = this.right.getXAConnection();
+        transaction.enlistResource( <code>left</code>.getXAResource());
+        transaction.enlistResource( <code>right</code>.getXAResource());
+        doWork(left.getConnection(), right.getConnection());
+        tm.commit();
+    } catch( Throwable t ) {
+        tm.rollback();
+        throw t; } }
+// ...
+void setTransactionManager( TransactionManager tm ) { this.tm= tm; }
+void setDataSourceFactory( DataSourceFactory dsf ) {
+    left = dsf.createXADataSource( getLeftProperties() );
+    right = dsf.createXADataSource( getRightProperties() );
+}</programlisting>
+
+      <para>In the previous example, the Transaction Manager service could
+      have been injected with a component model like Declarative
+      Services:</para>
+
+      <programlisting>&lt;reference interface="javax.transaction.TransactionManager"
+    bind="setTransactionManager"/&gt;
+&lt;reference name="dsf" interface="org.osgi.service.jdbc.DataSourceFactory"
+    bind="setDataSourceFactory"/&gt;</programlisting>
+
+      <para>For example, it is possible to provide a Data Source service that
+      provides automatic enlistment of the Connection as an XA Resource when
+      one of its <code>getConnection</code> methods is called inside a
+      transaction. The following code contains a Declarative Service component
+      that implement this design. The component references a Transaction
+      Manager service and a Data Source Factory service and provides a Data
+      Source service that proxies an XA Data Source. Applications depend on
+      the Data Source service, assuming that the Data Source service
+      automatically enlists the connections it uses inside a transaction. See
+      for an overview <xref linkend="i3115044"
+      xrefstyle="template:Figure %n on page %p"/>.</para>
+
+      <figure xml:id="i3115044">
+        <title>Data Source Proxy</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="1.008in"
+                       contentwidth="6.248in" fileref="data-source-proxy.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>This general purpose Data Source Proxy component can be fully
+      configured by the Configuration Admin service to instantiate this
+      component for each needed database connection. The Declarative Services
+      service properties can be used to select a Data Source Factory for the
+      required database driver (using the <code>target</code>), as well as
+      provide the configuration properties for the creation of an XA Data
+      Source. That is, such a component could be part of a support
+      library.</para>
+
+      <para>The code for such an Application component could start
+      like:</para>
+
+      <programlisting>public class DataSourceProxy implements DataSource{
+    Properties         properties  = new Properties();
+    TransactionManager tm;
+    XADataSource       xads;</programlisting>
+
+      <para>The <code>activate</code> method is called when the component’s
+      dependencies are met, that is, there is a Transaction Manager service as
+      well as a matching Data Source Factory service. In this method, the
+      properties of the component are copied to a <code>Properties</code>
+      object to be compatible with the Data Source Factory factory
+      methods.</para>
+
+      <programlisting>void activate(ComponentContext c) {
+    // copy the properties set by the Config Admin into properties
+    ...
+}</programlisting>
+
+      <para>The relevant methods in the Data Source Proxy component are the
+      <code>getConnection</code> methods. The contract for this proxy
+      component is that it enlists the XA Data Connection’s XA Resource when
+      it is called inside a transaction. This enlistment is done in the
+      private <code>enlist</code> method.</para>
+
+      <programlisting>public Connection getConnection() throws SQLException{
+    XAConnection connection = xads.getXAConnection();
+    return enlist(connection); }
+
+public Connection getConnection(String username, String password)
+        throws SQLException {
+    XAConnection connection = xads.getXAConnection(username,password);
+    return enlist(connection); }</programlisting>
+
+      <para>The <code>enlist</code> method checks if there currently is a
+      transaction active. If not, it ignores the enlistment, the connection
+      will then not be connection to the transaction. If there is a current
+      transaction, it enlists the corresponding XA Resource.</para>
+
+      <programlisting>private Connection enlist(XAConnection connection)throws SQLException {
+    try {
+        Transaction transaction = tm.getTransaction();
+        if (transaction != null)
+            transaction.enlistResource( connection.getXAResource());
+    } catch (Exception e) {
+        SQLException sqle=
+            new SQLException("Failed to enlist");
+        sqle.initCause(e);
+        throw sqle;
+    }
+    return connection.getConnection();
+}</programlisting>
+
+      <para>What remains are a number of boilerplate methods that forward to
+      the XA Data Source or set the dependencies.</para>
+
+      <programlisting>void setTransactionManager(TransactionManagertm) { this.tm = tm;}
+void setDataSourceFactory(DataSourceFactory dsf) throws Exception{
+    xads = dsf.createXADataSource(properties);}
+public PrintWriter getLogWriter() 
+    throws SQLException { return xads.getLogWriter(); }
+
+public int getLoginTimeout() 
+    throws SQLException { return xads.getLoginTimeout();}
+
+public void setLogWriter(PrintWriter out) 
+    throws SQLException { xads.setLogWriter(out); }
+
+public void setLoginTimeout(int seconds) 
+    throws SQLException { xads.setLoginTimeout(seconds);}</programlisting>
+
+      <para>This is a fully coded example, it only lacks the configuration
+      definitions for the Configuration Admin service.</para>
+
+      <para>This example Data Source proxy component makes it possible for an
+      Application to depend on a Data Source service. The connections the
+      Application uses from this Data Source are automatically transactional
+      as long as there is a current transaction when the service is called.
+      However, this approach only works when all bundles in the OSGi framework
+      follow the same enlistment strategy because this specification does not
+      provide a common enlistment strategy.</para>
+    </section>
+
+    <section>
+      <title>Container Managed Enlistment</title>
+
+      <para>The Application Container is responsible for enlisting Resource
+      Managers used by the Application. For example, the Java EE Web and EJB
+      Containers have a well defined model for managing resources within a
+      transaction. If an Application runs inside a Java EE Container then it
+      is the responsibility of the Java EE Container to handle the resource
+      enlistment, the actual rules are beyond this specification.</para>
+
+      <para>A Transaction Originator Application bundle running inside a
+      Container which manages any Resource Managers enlistment may use the
+      User Transaction service for transaction demarcation, assuming this
+      service is made available by the Container.</para>
+
+      <para>When a Java EE Container runs inside an OSGi framework then it
+      must ensure that any services seen by its contained Applications are the
+      same Transaction services as other bundles on that OSGi
+      framework.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Resource Managers</title>
+
+    <para>Resource Managers perform work that needs to be committed or rolled
+    back in a transaction. To participate in a transaction, a Resource Manager
+    must have an XA Resource enlisted with the current transaction. This
+    specification does not define how OSGi service implementations should be
+    enlisted. This can be done by a Java EE Container, the Applications
+    themselves, or through some other unspecified means.</para>
+  </section>
+
+  <section>
+    <title>The JTA Provider</title>
+
+    <para>The JTA Provider is the entity that provides the transaction
+    services:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>User Transaction – A service that implements the JTA
+        </emphasis><code>UserTransaction</code> <emphasis> interface.
+        </emphasis></para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Transaction Manager – A service that implements the
+        JTA </emphasis><code>TransactionManager</code><emphasis> interface.
+        </emphasis></para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Transaction Synchronization Registry</emphasis> –
+        <emphasis>A service that implements the JTA
+        </emphasis><code>TransactionSynchronizationRegistry</code> <emphasis>
+        interface. </emphasis></para>
+      </listitem>
+    </itemizedlist>
+
+    <para>There can be at most one JTA Provider in an OSGi framework and this
+    JTA Provider must ensure that at most one transaction is associated with
+    an application thread at any moment in time. All JTA Provider’s
+    transaction services must map to the same underlying JTA implementation.
+    All JTA services should only be registered once.</para>
+
+    <section>
+      <title>User Transaction</title>
+
+      <para>The User Transaction service may be used by an Application bundle,
+      acting as the Transaction Originator, to demarcate transaction
+      boundaries when the bundle has no need to perform resource
+      enlistement.</para>
+    </section>
+
+    <section>
+      <title>Transaction Manager</title>
+
+      <para>The Transaction Manager service offers transaction demarcation and
+      further transaction management capabilities, such as Durable and
+      Volatile resource enlistment, to an Application bundle or Application
+      Container.</para>
+    </section>
+
+    <section>
+      <title>Transaction Synchronization Service</title>
+
+      <para>The Transaction Synchronization Registry service may be used by an
+      Application bundle or a Container. The service provides for the
+      registration of Volatile Resources that implement the JTA
+      <code>Synchronization</code> interface.</para>
+
+      <para>For example:</para>
+
+      <programlisting>private class MyVolatile implements Synchronization{...}
+<code>TransactionSynchronizationRegistry tsr = ...;</code> <phrase role="body">// may be injected</phrase>
+tsr.registerInterposedSynchronization(new MyVolatile());</programlisting>
+    </section>
+  </section>
+
+  <section>
+    <title>Life Cycle</title>
+
+    <section>
+      <title>JTA Provider</title>
+
+      <para>The life cycle of the transaction services and bundles that make
+      up the JTA Provider must be dealt with appropriately such that
+      implementations always ensure the atomic nature of transactions. When
+      the JTA Provider is stopped and its services are unregistered, the JTA
+      Provider must make sure that all active transactions are dealt with
+      appropriately. A JTA Provider can decide to rollback all active
+      transactions or it can decide to keep track of existing active
+      transactions and allow them to continue to their normal conclusion but
+      not allow any new transactions to be created. Any failures caused by
+      executing code outside their life cycle can be dealt with as general
+      failures. From a transactional consistency point of view, stopping the
+      bundle(s) that implement the JTA Provider while transactional work is
+      in-flight, is no different from a failure of the framework hosting the
+      JTA Provider. In either case transaction recovery is initiated by the
+      JTA Provider after it has re-started.</para>
+
+      <para>There are well-defined XA semantics between a JTA Provider and
+      Resource Managers in the event of a failure of either at any point in a
+      transaction. If a Resource Manager bundle is stopped while it is
+      involved in-flight transactions then the JTA Provider should exhibit the
+      same external behavior it does in the event of a communication failure
+      with the Resource Manager. For example a JTA Provider will respond to an
+      <code>XAER_RMFAIL</code> response resulting from calling the
+      <code>XAResource commit</code> method by retrying the
+      <code>commit</code>. The mechanism used by the JTA Provider to determine
+      when to retry the <code>commit</code> is a detail of the
+      implementation.</para>
+    </section>
+
+    <section>
+      <title>Application Bundles</title>
+
+      <para>Applications can act in the role of the Transaction Originator.
+      There is no guarantee that an Application that starts a transaction will
+      always be available to complete the transaction since the client can
+      fail independently of the JTA Provider. A failure of the Application
+      Bundle to complete, in a timely fashion, a transaction it originated
+      must finally result in the JTA Provider rolling back the
+      transaction.</para>
+    </section>
+
+    <section>
+      <title>Error Handling</title>
+
+      <para>This specification does not define a specific error handling
+      strategy. Exceptions and errors that occur during transaction processing
+      can result in the transaction being marked
+      <emphasis>rollback-only</emphasis> by the container or framework in
+      which an Application runs or may be left for the Application to handle.
+      An Application which receives an error or an exception while running
+      under a transaction can choose to mark the transaction
+      rollback-only.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <para>This specification relies on the security model of JTA.</para>
+  </section>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed xml:id="i3068796"><title>Java Transaction API Specification
+      1.1</title>http://www.oracle.com/technetwork/java/javaee/jta/index.html</bibliomixed>
+
+      <bibliomixed xml:id="i3068810"><title>XA+ Specification</title>Version
+      2, The Open Group, ISBN: 1-85912-046-6</bibliomixed>
+
+      <bibliomixed><title>Transaction Processing</title>J. Gray and A. Reuter.
+      Morgan Kaufmann Publishers, ISBN 1.55860-190-2</bibliomixed>
+
+      <bibliomixed xml:id="i3073418"><title>Java Platform, Enterprise Edition
+      (Java EE) Specification,
+      v5</title>http://jcp.org/en/jsr/detail?id=244</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>

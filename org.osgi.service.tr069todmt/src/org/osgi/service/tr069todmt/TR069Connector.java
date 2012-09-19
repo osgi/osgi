@@ -16,7 +16,7 @@
 
 package org.osgi.service.tr069todmt;
 
-import java.util.*;
+import java.util.Collection;
 
 /**
  * A TR-069 Connector is an assistant to a TR-069 Protocol Adapter developer.
@@ -230,11 +230,11 @@ public interface TR069Connector {
 	 * @throws TR069Exception The following fault codes are defined for this
 	 *         method: 9001, 9002, 9003, 9004, 9005.
 	 *         <ul>
-	 *         <li> 9001 {@link TR069Exception#REQUEST_DENIED} <li> 9002
-	 *         {@link TR069Exception#INTERNAL_ERROR} <li> 9003
-	 *         {@link TR069Exception#INVALID_ARGUMENTS} <li> 9004
-	 *         {@link TR069Exception#RESOURCES_EXCEEDED} <li> 9005
-	 *         {@link TR069Exception#INVALID_PARAMETER_NAME}
+	 *         <li> 9001 {@link TR069Exception#REQUEST_DENIED}</li><li> 9002
+	 *         {@link TR069Exception#INTERNAL_ERROR}</li><li> 9003
+	 *         {@link TR069Exception#INVALID_ARGUMENTS}</li><li> 9004
+	 *         {@link TR069Exception#RESOURCES_EXCEEDED}</li><li> 9005
+	 *         {@link TR069Exception#INVALID_PARAMETER_NAME}</li>
 	 *         </ul>
 	 */
 	ParameterValue getParameterValue(String parameterPath) throws TR069Exception;

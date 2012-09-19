@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="292.902px" height="194.867px" viewBox="0 0 292.902 194.867" enable-background="new 0 0 292.902 194.867"
+	 xml:space="preserve">
+<rect x="133.98" y="9.227" fill="#E6E6E6" width="53.819" height="107.7"/>
+<rect x="133.98" y="8.987" width="54.061" height="0.48"/>
+<rect x="187.56" y="9.227" width="0.479" height="107.94"/>
+<rect x="133.74" y="116.688" width="54.061" height="0.479"/>
+<rect x="133.74" y="8.987" width="0.48" height="107.94"/>
+<rect x="38.64" y="11.027" width="55.199" height="27"/>
+<rect x="38.64" y="10.787" width="55.439" height="0.479"/>
+<rect x="93.6" y="11.027" width="0.479" height="27.24"/>
+<rect x="38.4" y="37.787" width="55.439" height="0.48"/>
+<rect x="38.4" y="10.787" width="0.479" height="27.24"/>
+<rect x="36.24" y="9.227" fill="#FFFFFF" width="55.2" height="27"/>
+<rect x="36.24" y="8.987" width="55.44" height="0.48"/>
+<rect x="91.2" y="9.227" width="0.48" height="27.24"/>
+<rect x="36" y="35.987" width="55.44" height="0.48"/>
+<rect x="36" y="8.987" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 38.6399 16.3672)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">Configuration</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Admin</tspan></text>
+<rect x="225.96" y="11.027" width="58.561" height="27"/>
+<rect x="225.96" y="10.787" width="58.8" height="0.479"/>
+<rect x="284.28" y="11.027" width="0.479" height="27.24"/>
+<rect x="225.72" y="37.787" width="58.8" height="0.48"/>
+<rect x="225.72" y="10.787" width="0.479" height="27.24"/>
+<rect x="223.44" y="9.227" fill="#FFFFFF" width="58.5" height="27"/>
+<rect x="223.44" y="8.987" width="58.74" height="0.48"/>
+<rect x="281.7" y="9.227" width="0.48" height="27.24"/>
+<rect x="223.2" y="35.987" width="58.74" height="0.48"/>
+<rect x="223.2" y="8.987" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 224.9607 19.9668)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">MailFetchFactory</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">pid=com.acme.email</tspan></text>
+<rect x="225.66" y="89.747" width="51.66" height="20.28"/>
+<rect x="225.66" y="89.507" width="51.9" height="0.48"/>
+<rect x="277.08" y="89.747" width="0.48" height="20.521"/>
+<rect x="225.42" y="109.787" width="51.899" height="0.48"/>
+<rect x="225.42" y="89.507" width="0.479" height="20.521"/>
+<rect x="223.44" y="88.427" fill="#FFFFFF" width="51.601" height="20.22"/>
+<rect x="223.44" y="88.187" width="51.84" height="0.48"/>
+<rect x="274.8" y="88.427" width="0.479" height="20.46"/>
+<rect x="223.2" y="108.407" width="51.841" height="0.479"/>
+<rect x="223.2" y="88.187" width="0.48" height="20.459"/>
+<text transform="matrix(0.9504 0 0 1 225.6599 96.0869)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">pid=16.1</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">name=erica</tspan></text>
+<rect x="201.9" y="23.387" width="21.54" height="0.48"/>
+<polyline fill="#FFFFFF" points="180.24,88.427 180.24,102.947 201.84,95.687 "/>
+<polyline points="180.48,88.427 180.48,102.947 180.36,103.188 180.18,102.707 201.78,95.447 201.96,95.447 202.68,95.687 
+	201.96,95.927 180.36,103.188 180,103.307 180,88.427 "/>
+<polyline points="201.78,95.927 180.18,88.667 180,88.427 180,88.067 180.36,88.187 201.96,95.447 "/>
+<rect x="201.9" y="95.387" width="21.54" height="0.48"/>
+<text transform="matrix(1 0 0 1 144.5403 66.2275)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">OSGi Service</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">Registry</tspan></text>
+<text transform="matrix(1 0 0 1 86.6399 59.0264)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">registration</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">events</tspan></text>
+<text transform="matrix(1 0 0 1 54.1199 90.2461)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">pid=16.1</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">name=erica</tspan></text>
+<text transform="matrix(1 0 0 1 54.1199 110.5664)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">pid=16.2</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">name=elmer</tspan></text>
+<rect x="64.8" y="37.787" width="0.48" height="43.68"/>
+<text transform="matrix(1 0 0 1 20.8796 67.7871)" font-family="'ProductusBook'" font-size="7.98">Associations</text>
+<text transform="matrix(1 0 0 1 54.5393 132.1074)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">pid=16.3</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">name=anna</tspan></text>
+<rect x="7.74" y="80.987" width="86.34" height="0.48"/>
+<rect x="93.6" y="81.227" width="0.479" height="108.24"/>
+<rect x="7.5" y="188.986" width="86.34" height="0.479"/>
+<rect x="7.5" y="80.987" width="0.48" height="108.24"/>
+<rect x="50.4" y="81.407" fill="#808080" width="0.479" height="64.62"/>
+<rect x="50.64" y="102.527" fill="#808080" width="43.199" height="0.479"/>
+<rect x="225.66" y="125.747" width="51.66" height="20.22"/>
+<rect x="225.66" y="125.507" width="51.9" height="0.479"/>
+<rect x="277.08" y="125.747" width="0.48" height="20.46"/>
+<rect x="225.42" y="145.727" width="51.899" height="0.48"/>
+<rect x="225.42" y="125.507" width="0.479" height="20.46"/>
+<rect x="223.44" y="124.427" fill="#FFFFFF" width="51.601" height="20.16"/>
+<rect x="223.44" y="124.188" width="51.84" height="0.479"/>
+<rect x="274.8" y="124.427" width="0.479" height="20.4"/>
+<rect x="223.2" y="144.348" width="51.841" height="0.479"/>
+<rect x="223.2" y="124.188" width="0.48" height="20.399"/>
+<text transform="matrix(0.9504 0 0 1 225.6599 132.0869)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">pid=16.2</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">name=peter</tspan></text>
+<rect x="225.66" y="161.747" width="51.66" height="20.22"/>
+<rect x="225.66" y="161.507" width="51.9" height="0.479"/>
+<rect x="277.08" y="161.747" width="0.48" height="20.46"/>
+<rect x="225.42" y="181.727" width="51.899" height="0.48"/>
+<rect x="225.42" y="161.507" width="0.479" height="20.46"/>
+<rect x="223.44" y="160.427" fill="#FFFFFF" width="51.601" height="20.16"/>
+<rect x="223.44" y="160.188" width="51.84" height="0.479"/>
+<rect x="274.8" y="160.427" width="0.479" height="20.4"/>
+<rect x="223.2" y="180.348" width="51.841" height="0.479"/>
+<rect x="223.2" y="160.188" width="0.48" height="20.399"/>
+<text transform="matrix(0.9504 0 0 1 225.6599 168.0869)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">pid=16.3</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">name=anna</tspan></text>
+<rect x="50.64" y="124.066" fill="#808080" width="43.199" height="0.48"/>
+<rect x="50.4" y="146.087" width="0.479" height="43.14"/>
+<rect x="7.74" y="145.605" width="86.1" height="0.48"/>
+<rect x="0.24" y="161.986" fill="#FFFFFF" width="129.6" height="5.399"/>
+<rect x="0.24" y="161.747" fill="#FFFFFF" width="129.84" height="0.479"/>
+<rect x="129.6" y="161.986" fill="#FFFFFF" width="0.479" height="5.641"/>
+<rect x="0" y="167.146" fill="#FFFFFF" width="129.84" height="0.479"/>
+<rect x="0" y="161.747" fill="#FFFFFF" width="0.48" height="5.64"/>
+<rect x="237.6" y="37.787" width="0.479" height="50.88"/>
+<text transform="matrix(1 0 0 1 241.199 56.7471)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">creates instances</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">at the request of</tspan><tspan x="0" y="19.152" font-family="'ProductusBook'" font-size="7.98">the Config. Admin</tspan></text>
+<text transform="matrix(1 0 0 1 190.2595 87.8271)" font-family="'ProductusBook'" font-size="7.98">Topic</text>
+<text transform="matrix(1 0 0 1 159.9724 6.6475)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">Managed Service</tspan><tspan x="28.153" y="9.576" font-family="'ProductusBook'" font-size="7.98">Factory</tspan></text>
+<text transform="matrix(1 0 0 1 12.4792 91.4277)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">factory pid</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">= com.acme</tspan><tspan x="0" y="19.152" font-family="'ProductusBook'" font-size="7.98">.email</tspan></text>
+<rect x="79.2" y="37.787" width="0.48" height="4.2"/>
+<rect x="79.2" y="48.407" width="0.48" height="4.26"/>
+<rect x="79.44" y="52.187" width="3.96" height="0.48"/>
+<rect x="89.64" y="52.187" width="8.22" height="0.48"/>
+<rect x="104.1" y="52.187" width="8.159" height="0.48"/>
+<rect x="118.5" y="52.187" width="8.221" height="0.48"/>
+<rect x="132.96" y="52.187" width="8.159" height="0.48"/>
+<rect x="147.36" y="52.187" width="8.22" height="0.48"/>
+<rect x="161.82" y="52.187" width="8.16" height="0.48"/>
+<rect x="176.22" y="52.187" width="8.22" height="0.48"/>
+<rect x="190.62" y="52.187" width="4.261" height="0.48"/>
+<rect x="194.4" y="48.407" width="0.479" height="4.02"/>
+<rect x="194.4" y="33.887" width="0.479" height="8.28"/>
+<rect x="194.4" y="23.387" width="0.479" height="4.2"/>
+<polyline fill="#FFFFFF" points="180.3,16.427 180.3,30.827 201.84,23.627 "/>
+<polyline points="180.541,16.427 180.541,30.827 180.42,31.067 180.24,30.587 201.78,23.387 201.96,23.387 202.68,23.627 
+	201.96,23.867 180.42,31.067 180.06,31.187 180.06,16.427 "/>
+<polyline points="201.78,23.867 180.24,16.667 180.06,16.427 180.06,16.067 180.42,16.187 201.96,23.387 "/>
+<rect x="0.24" y="176.627" fill="#FFFFFF" width="129.6" height="5.4"/>
+<rect x="0.24" y="176.387" fill="#FFFFFF" width="129.84" height="0.48"/>
+<rect x="129.6" y="176.627" fill="#FFFFFF" width="0.479" height="5.641"/>
+<rect x="0" y="181.787" fill="#FFFFFF" width="129.84" height="0.479"/>
+<rect x="0" y="176.387" fill="#FFFFFF" width="0.48" height="5.641"/>
+<rect x="6.66" y="189.227" fill="#FFFFFF" width="129.6" height="5.4"/>
+<rect x="6.66" y="188.986" fill="#FFFFFF" width="129.84" height="0.479"/>
+<rect x="136.02" y="189.227" fill="#FFFFFF" width="0.479" height="5.642"/>
+<rect x="6.42" y="188.986" fill="#FFFFFF" width="0.48" height="5.641"/>
+<text transform="matrix(1 0 0 1 14.6399 157.6064)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">factory pid</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">= eric.mf</tspan></text>
+<rect x="93.6" y="95.387" width="4.26" height="0.48"/>
+<rect x="104.1" y="95.387" width="8.279" height="0.48"/>
+<rect x="118.62" y="95.387" width="4.26" height="0.48"/>
+<rect x="122.4" y="95.627" width="0.479" height="3.96"/>
+<rect x="122.4" y="105.887" width="0.479" height="8.28"/>
+<rect x="122.4" y="120.407" width="0.479" height="4.26"/>
+<rect x="122.64" y="124.188" width="4.02" height="0.479"/>
+<rect x="132.84" y="124.188" width="8.221" height="0.479"/>
+<rect x="147.3" y="124.188" width="8.221" height="0.479"/>
+<rect x="161.76" y="124.188" width="8.16" height="0.479"/>
+<rect x="176.16" y="124.188" width="8.221" height="0.479"/>
+<rect x="190.62" y="124.188" width="8.221" height="0.479"/>
+<rect x="205.02" y="124.188" width="4.26" height="0.479"/>
+<rect x="208.8" y="120.407" width="0.479" height="4.02"/>
+<rect x="208.8" y="110.807" width="0.479" height="5.641"/>
+<rect x="208.8" y="102.587" width="0.479" height="4.2"/>
+<rect x="209.041" y="102.587" width="4.021" height="0.479"/>
+<rect x="219.48" y="102.587" width="4.2" height="0.479"/>
+<rect x="93.6" y="116.986" width="4.26" height="0.48"/>
+<rect x="101.82" y="116.986" width="5.64" height="0.48"/>
+<rect x="111.42" y="116.986" width="4.261" height="0.48"/>
+<rect x="115.2" y="117.227" width="0.48" height="3.961"/>
+<rect x="115.2" y="127.607" width="0.48" height="4.26"/>
+<rect x="115.44" y="131.387" width="4.02" height="0.48"/>
+<rect x="125.22" y="131.387" width="7.68" height="0.48"/>
+<rect x="138.66" y="131.387" width="7.681" height="0.48"/>
+<rect x="152.1" y="131.387" width="7.739" height="0.48"/>
+<rect x="165.6" y="131.387" width="7.68" height="0.48"/>
+<rect x="179.041" y="131.387" width="0.239" height="0.48"/>
+<rect x="179.28" y="131.387" width="7.44" height="0.48"/>
+<rect x="192.541" y="131.387" width="0.239" height="0.48"/>
+<rect x="192.78" y="131.387" width="7.44" height="0.48"/>
+<rect x="205.98" y="131.387" width="0.24" height="0.48"/>
+<rect x="206.22" y="131.387" width="7.438" height="0.48"/>
+<rect x="219.42" y="131.387" width="0.239" height="0.48"/>
+<rect x="219.66" y="131.387" width="4.021" height="0.48"/>
+<rect x="93.6" y="131.387" width="0.239" height="0.48"/>
+<rect x="93.84" y="131.387" width="4.021" height="0.48"/>
+<rect x="104.22" y="131.387" width="4.26" height="0.48"/>
+<rect x="108" y="131.627" width="0.48" height="3.96"/>
+<rect x="108" y="140.507" width="0.48" height="0.24"/>
+<rect x="108" y="140.747" width="0.48" height="6.42"/>
+<rect x="108" y="152.027" width="0.48" height="0.238"/>
+<rect x="108" y="152.268" width="0.48" height="6.479"/>
+<rect x="108" y="163.605" width="0.48" height="4.262"/>
+<rect x="108.24" y="167.387" width="4.02" height="0.48"/>
+<rect x="118.44" y="167.387" width="0.24" height="0.48"/>
+<rect x="118.68" y="167.387" width="7.979" height="0.48"/>
+<rect x="132.9" y="167.387" width="0.24" height="0.48"/>
+<rect x="133.14" y="167.387" width="7.92" height="0.48"/>
+<rect x="147.3" y="167.387" width="0.24" height="0.48"/>
+<rect x="147.541" y="167.387" width="7.979" height="0.48"/>
+<rect x="161.76" y="167.387" width="0.24" height="0.48"/>
+<rect x="162" y="167.387" width="7.92" height="0.48"/>
+<rect x="176.16" y="167.387" width="0.24" height="0.48"/>
+<rect x="176.4" y="167.387" width="7.979" height="0.48"/>
+<rect x="190.62" y="167.387" width="0.24" height="0.48"/>
+<rect x="190.86" y="167.387" width="7.92" height="0.48"/>
+<rect x="205.02" y="167.387" width="0.239" height="0.48"/>
+<rect x="205.26" y="167.387" width="7.979" height="0.48"/>
+<rect x="219.42" y="167.387" width="0.239" height="0.48"/>
+<rect x="219.66" y="167.387" width="4.021" height="0.48"/>
+</svg>

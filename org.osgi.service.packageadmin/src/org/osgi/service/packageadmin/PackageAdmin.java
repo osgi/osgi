@@ -104,30 +104,28 @@ public interface PackageAdmin {
 	 * graph any bundle that is wired to a package that is currently exported by
 	 * a bundle in the graph. The graph is fully constructed when there is no
 	 * bundle outside the graph that is wired to a bundle in the graph. The
-	 * graph may contain {@code UNINSTALLED} bundles that are currently
-	 * still exporting packages.
+	 * graph may contain {@code UNINSTALLED} bundles that are currently still
+	 * exporting packages.</li>
 	 * 
-	 * <li>Each bundle in the graph that is in the {@code ACTIVE} state
-	 * will be stopped as described in the {@code Bundle.stop} method.
+	 * <li>Each bundle in the graph that is in the {@code ACTIVE} state will be
+	 * stopped as described in the {@code Bundle.stop} method.</li>
 	 * 
-	 * <li>Each bundle in the graph that is in the {@code RESOLVED} state
-	 * is unresolved and thus moved to the {@code INSTALLED} state. The
-	 * effect of this step is that bundles in the graph are no longer
-	 * {@code RESOLVED}.
+	 * <li>Each bundle in the graph that is in the {@code RESOLVED} state is
+	 * unresolved and thus moved to the {@code INSTALLED} state. The effect of
+	 * this step is that bundles in the graph are no longer {@code RESOLVED}.</li>
 	 * 
-	 * <li>Each bundle in the graph that is in the {@code UNINSTALLED}
-	 * state is removed from the graph and is now completely removed from the
-	 * Framework.
+	 * <li>Each bundle in the graph that is in the {@code UNINSTALLED} state is
+	 * removed from the graph and is now completely removed from the Framework.</li>
 	 * 
-	 * <li>Each bundle in the graph that was in the {@code ACTIVE} state
-	 * prior to Step 2 is started as described in the {@code Bundle.start}
-	 * method, causing all bundles required for the restart to be resolved. It
-	 * is possible that, as a result of the previous steps, packages that were
+	 * <li>Each bundle in the graph that was in the {@code ACTIVE} state prior
+	 * to Step 2 is started as described in the {@code Bundle.start} method,
+	 * causing all bundles required for the restart to be resolved. It is
+	 * possible that, as a result of the previous steps, packages that were
 	 * previously exported no longer are. Therefore, some bundles may be
 	 * unresolvable until another bundle offering a compatible package for
-	 * export has been installed in the Framework.
-	 * <li>A framework event of type
-	 * {@code FrameworkEvent.PACKAGES_REFRESHED} is fired.
+	 * export has been installed in the Framework.</li>
+	 * <li>A framework event of type {@code FrameworkEvent.PACKAGES_REFRESHED}
+	 * is fired.</li>
 	 * </ol>
 	 * 
 	 * <p>
@@ -277,7 +275,7 @@ public interface PackageAdmin {
 	 * Returns the special type of the specified bundle. The bundle type values
 	 * are:
 	 * <ul>
-	 * <li>{@link #BUNDLE_TYPE_FRAGMENT}
+	 * <li>{@link #BUNDLE_TYPE_FRAGMENT}</li>
 	 * </ul>
 	 * 
 	 * A bundle may be more than one type at a time. A type code is used to

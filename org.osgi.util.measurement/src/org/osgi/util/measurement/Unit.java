@@ -96,13 +96,13 @@ public class Unit {
 	/** The speed unit meter per second (m/s) */
 	public final static Unit	m_s			= new Unit("m/s", createType(0, 0, 0, 0, 0, 0, 0, -1, 1));																		// Speed
 	// m/s
-	/** The acceleration unit meter per second squared (m/s <sup>2 </sup>) */
+	/** The acceleration unit meter per second squared (m/s<sup>2</sup>) */
 	public final static Unit	m_s2		= new Unit("m/s2", createType(0, 0, 0, 0, 0, 0, 0, -2, 1));																	// Acceleration
 	// m/s^2
-	/** The area unit square meter(m <sup>2 </sup>) */
+	/** The area unit square meter (m<sup>2</sup>) */
 	public final static Unit	m2			= new Unit("m2", createType(0, 0, 0, 0, 0, 0, 0, 0, 2));																		// Surface
 	// m^2
-	/** The volume unit cubic meter (m <sup>3 </sup>) */
+	/** The volume unit cubic meter (m<sup>3</sup>) */
 	public final static Unit	m3			= new Unit("m3", createType(0, 0, 0, 0, 0, 0, 0, 0, 3));																		// Volume
 	// m^3
 	/**
@@ -115,7 +115,7 @@ public class Unit {
 	/**
 	 * The force unit newton (N).
 	 * <p>
-	 * N is expressed in SI units as m&#183;kg/s <sup>2 </sup>
+	 * N is expressed in SI units as m&#183;kg/s<sup>2</sup>
 	 */
 	public final static Unit	N			= new Unit("N", createType(0, 0, 0, 0, 0, 0, 1, -2, 1));																		// Force
 	// newton
@@ -123,8 +123,8 @@ public class Unit {
 	/**
 	 * The pressure unit pascal (Pa).
 	 * <p>
-	 * Pa is equal to N/m <sup>2 </sup> or is expressed in SI units as
-	 * kg/m&#183;s <sup>2 </sup>
+	 * Pa is equal to N/m<sup>2</sup> or is expressed in SI units as
+	 * kg/m&#183;s<sup>2</sup>
 	 */
 	public final static Unit	Pa			= new Unit("Pa", createType(0, 0, 0, 0, 0, 0, 1, -2, -1));																		// Pressure
 	// pascal
@@ -132,8 +132,8 @@ public class Unit {
 	/**
 	 * The energy unit joule (J).
 	 * <p>
-	 * joule is equal to N&#183;m or is expressed in SI units as m <sup>2
-	 * </sup>&#183;kg/s <sup>2
+	 * joule is equal to N&#183;m or is expressed in SI units as
+	 * m<sup>2</sup>&#183;kg/s<sup>2</sup>
 	 */
 	public final static Unit	J			= new Unit("J", createType(0, 0, 0, 0, 0, 0, 1, -2, 2));																		// Energy
 	// joule
@@ -141,8 +141,8 @@ public class Unit {
 	/**
 	 * The power unit watt (W).
 	 * <p>
-	 * watt is equal to J/s or is expressed in SI units as m <sup>2
-	 * </sup>&#183;kg/s <sup>3 </sup>
+	 * watt is equal to J/s or is expressed in SI units as
+	 * m<sup>2</sup>&#183;kg/s<sup>3</sup>
 	 */
 	public final static Unit	W			= new Unit("W", createType(0, 0, 0, 0, 0, 0, 1, -3, 2));																		// Power
 	// watt
@@ -158,8 +158,8 @@ public class Unit {
 	/**
 	 * The electric potential difference unit volt (V).
 	 * <p>
-	 * volt is equal to W/A or is expressed in SI units as m <sup>2
-	 * </sup>&#183;kg/s <sup>3 </sup>&#183;A
+	 * volt is equal to W/A or is expressed in SI units as
+	 * m<sup>2</sup>&#183;kg/s<sup>3</sup>&#183;A
 	 */
 	public final static Unit	V			= new Unit("V", createType(0, 0, 0, 0, -1, 0, 1, -3, 2));																		// El.
 	// Potent.
@@ -168,8 +168,8 @@ public class Unit {
 	/**
 	 * The capacitance unit farad (F).
 	 * <p>
-	 * farad is equal to C/V or is expressed in SI units as s <sup>4
-	 * </sup>&#183;A <sup>2 </sup>/m <sup>2 </sup>&#183;kg
+	 * farad is equal to C/V or is expressed in SI units as
+	 * s<sup>4</sup>&#183;A<sup>2</sup>/m<sup>2</sup>&#183;kg
 	 */
 	public final static Unit	F			= new Unit("F", createType(0, 0, 0, 0, 2, 0, -1, 4, -2));																		// Capacitance
 	// farad
@@ -177,8 +177,8 @@ public class Unit {
 	/**
 	 * The electric resistance unit ohm.
 	 * <p>
-	 * ohm is equal to V/A or is expressed in SI units as m <sup>2
-	 * </sup>&#183;kg/s <sup>3 </sup>&#183;A <sup>2 </sup>
+	 * ohm is equal to V/A or is expressed in SI units as
+	 * m<sup>2</sup>&#183;kg/s<sup>3</sup>&#183;A<sup>2</sup>
 	 */
 	public final static Unit	Ohm			= new Unit("Ohm", createType(0, 0, 0, 0, -2, 0, 1, -3, 2));																	// Resistance
 	// ohm
@@ -186,8 +186,8 @@ public class Unit {
 	/**
 	 * The electric conductance unit siemens (S).
 	 * <p>
-	 * siemens is equal to A/V or is expressed in SI units as s <sup>3
-	 * </sup>&#183;A <sup>2 </sup>/m <sup>2 </sup>&#183;kg
+	 * siemens is equal to A/V or is expressed in SI units as
+	 * s<sup>3</sup>&#183;A<sup>2</sup>/m<sup>2</sup>&#183;kg
 	 */
 	public final static Unit	S			= new Unit("S", createType(0, 0, 0, 0, 2, 0, -1, 3, -2));																		// Conductance
 	// siemens
@@ -195,8 +195,8 @@ public class Unit {
 	/**
 	 * The magnetic flux unit weber (Wb).
 	 * <p>
-	 * weber is equal to V&#183;s or is expressed in SI units as m <sup>2
-	 * </sup>&#183;kg/s <sup>2 </sup>&#183;A
+	 * weber is equal to V&#183;s or is expressed in SI units as
+	 * m<sup>2</sup>&#183;kg/s<sup>2</sup>&#183;A
 	 */
 	public final static Unit	Wb			= new Unit("Wb", createType(0, 0, 0, 0, -1, 0, 1, -2, 2));																		// Magn.
 	// Flux
@@ -205,8 +205,8 @@ public class Unit {
 	/**
 	 * The magnetic flux density unit tesla (T).
 	 * <p>
-	 * tesla is equal to Wb/m <sup>2 </sup> or is expressed in SI units as kg/s
-	 * <sup>2 </sup>&#183;A
+	 * tesla is equal to Wb/m<sup>2</sup> or is expressed in SI units as
+	 * kg/s<sup>2</sup>&#183;A
 	 */
 	public final static Unit	T			= new Unit("T", createType(0, 0, 0, 0, -1, 0, 1, -2, 0));																		// Magn.
 	// Flux
@@ -216,7 +216,7 @@ public class Unit {
 	/**
 	 * The illuminance unit lux (lx).
 	 * <p>
-	 * lux is expressed in SI units as cd/m <sup>2 </sup>
+	 * lux is expressed in SI units as cd/m<sup>2</sup>
 	 */
 	public final static Unit	lx			= new Unit("lx", createType(0, 0, 1, 0, 0, 0, 0, 0, -2));																		// Illuminace
 	// lux
@@ -224,8 +224,8 @@ public class Unit {
 	/**
 	 * The absorbed dose unit gray (Gy).
 	 * <p>
-	 * Gy is equal to J/kg or is expressed in SI units as m <sup>2 </sup>/s
-	 * <sup>2 </sup>
+	 * Gy is equal to J/kg or is expressed in SI units as
+	 * m<sup>2</sup>/s<sup>2</sup>
 	 */
 	public final static Unit	Gy			= new Unit("Gy", createType(0, 0, 0, 0, 0, 0, 0, -2, 2));																		// Absorbed
 	// dose

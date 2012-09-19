@@ -132,11 +132,10 @@ public interface ConditionalPermissionInfo {
 	 * 
 	 * <p>
 	 * <i>name</i> is optional. If <i>name</i> is present in the encoded string,
-	 * it must quoted, beginning and ending with {@code &quot;}. The <i>name</i>
-	 * value must be encoded for proper parsing. Specifically, the
-	 * {@code &quot;}, {@code \}, carriage return, and line feed characters must
-	 * be escaped using {@code \&quot;}, {@code \\}, {@code \r}, and {@code \n},
-	 * respectively.
+	 * it must quoted, beginning and ending with {@code "}. The <i>name</i>
+	 * value must be encoded for proper parsing. Specifically, the {@code "},
+	 * {@code \}, carriage return, and line feed characters must be escaped
+	 * using {@code \"}, {@code \\}, {@code \r}, and {@code \n}, respectively.
 	 * 
 	 * <p>
 	 * The encoded string contains no leading or trailing whitespace characters.

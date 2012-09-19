@@ -1,0 +1,922 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="2" revision="$Id$"
+         version="5" xml:id="dmtree.residential"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Residential Device Management Tree Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.dmt.residential-version"
+    linkend="org.osgi.dmt.residential"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The chapter defines the Device Management Tree (DMT) for residential
+    applications called the <emphasis>Residential Management Tree</emphasis>
+    (RMT). This RMT is based on the <xref linkend="service.dmt"/>. The RMT
+    allows remote managers to manage the residential device through an
+    abstract tree. As this tree is an abstract representation, different
+    management protocols can use the same underlying management components,
+    the Dmt Admin Plugins, in the OSGi framework.</para>
+
+    <para>This chapter requires full understanding of the concepts in the
+    <xref linkend="service.dmt"/> and uses its terminology.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <para>The following essentials are associated with the Residential
+      Management Tree specification:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Complete</emphasis> – The RMT must cover all
+          functionality to completely manage an OSGi Framework as defined by
+          <xref linkend="intro.core.release" xrefstyle="template:%t"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Performance</emphasis> – The RMT runs on devices
+          with limited resources.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Searchable</emphasis> – Provide an efficient way to
+          search the RMT remotely.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Services</emphasis> – Provide efficient access to
+          standardized services like the Log Service.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Remote Manager</emphasis> – The entity that remotely
+          controls an OSGi Framework.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Management Agent</emphasis> – An entity running on
+          the device that is responsible for the management of the local OSGi
+          Framework. It usually acts as a proxy for a Remote Manager.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Protocol Adapter</emphasis> – Communicates with a
+          Remote Manager and translates the protocol instructions to
+          instructions to a local Management Agent.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>DMT</emphasis> – The Device Management Tree. This is
+          the general structure available through the Dmt Admin
+          service.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>RMT</emphasis> – The Residential Management Tree.
+          This is the part of the DMT that is involved with residential
+          management.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure xml:id="i758771">
+        <title>Device Management Architecture</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.926in"
+                       contentwidth="5.236in"
+                       fileref="device-management-architecture.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+  </section>
+
+  <section>
+    <title>The Residential Management Tree</title>
+
+    <para>The <emphasis>OSGi</emphasis> node is the root node for OSGi
+    specific information. This OSGi node can be placed anywhere in the Device
+    Management Tree and acts as parent to all the top level nodes in this
+    specification. Therefore, in this specification the parent node of, for
+    example, the <xref linkend="org.osgi.dmt.residential.Framework"
+    xrefstyle="hyperlink"/> node is referred to as <xref
+    linkend="org.osgi.dmt.residential.-" xrefstyle="hyperlink"/>, which
+    effectively represents the OSGi node. The description of the nodes are
+    using the types defined in <xref
+    linkend="service.dmt.osgiobjectmodeling"/>.</para>
+
+    <para>The value of <code>$</code> for a specific system can be defined
+    with the following Framework property:</para>
+
+    <programlisting>org.osgi.dmt.residential</programlisting>
+
+    <para>For this specifications, the RMT Consists of the following top level
+    nodes:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref linkend="org.osgi.dmt.residential.Framework"
+        xrefstyle="hyperlink"/> – Managing the local Framework</para>
+      </listitem>
+
+      <listitem>
+        <para><xref linkend="org.osgi.dmt.residential.Filter"
+        xrefstyle="hyperlink"/> – Searching nodes in the DMT</para>
+      </listitem>
+
+      <listitem>
+        <para><xref linkend="org.osgi.dmt.service.log.Log"
+        xrefstyle="hyperlink"/> – Access to the log</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Managing Bundles</title>
+
+    <para>The <xref linkend="org.osgi.dmt.residential.Framework"
+    xrefstyle="hyperlink"/> node provides a remote management model for
+    managing the life cycle of bundles and inspecting the Framework’s
+    state.</para>
+
+    <para>To change the state, for example install a new bundle, requires an
+    atomic session on at least the Framework node. The model is constructed to
+    reflect the requested state. When the session is committed, the underlying
+    Plugin must effectuate these requested states into the real state.</para>
+
+    <para>For example, to install a bundle it is first necessary to create a
+    new <xref linkend="org.osgi.dmt.residential.Bundle"
+    xrefstyle="hyperlink"/> child node. The <xref
+    linkend="org.osgi.dmt.residential.Bundle" xrefstyle="hyperlink"/> node is
+    a <code>MAP</code> node, the name of the child node is the
+    <code>location</code> of the bundle as given in the
+    <code>installBundle(location,input stream)</code> method and returned from
+    the <code>getLocation()</code> method.</para>
+
+    <para>This location should not be treated as the actual URL of the bundle,
+    the location is better intended to be used a management name for the
+    bundle as the remote manager can choose it. It is normally best to make
+    this name a reverse domain name, for example <code>com.acme.admin</code>.
+    The name " <code>System Bundle</code>" is a reserved name for the system
+    bundle. The Framework management plugin must therefore not treat the
+    location as a URL.</para>
+
+    <para>Creating the child node has no effect as long as the session is not
+    committed. This new <code>Bundle</code> node automatically gets the
+    members defined in the <xref linkend="org.osgi.dmt.residential.Bundle"
+    xrefstyle="hyperlink"/> type.</para>
+
+    <para>The <xref linkend="org.osgi.dmt.residential.Bundle.URL--"
+    xrefstyle="hyperlink"/> node should be set to the download URL, the URL
+    used to download the JAR file from. The <xref
+    linkend="org.osgi.dmt.residential.Bundle.URL--" xrefstyle="hyperlink"/>
+    node is used as the download URL for an install operation (after the node
+    is created newly) or the update location when the node is changed after
+    the bundle had been installed in a previous session. Creating a new <xref
+    linkend="org.osgi.dmt.residential.Bundle" xrefstyle="hyperlink"/> node
+    without setting the URL must generate an error when the session is
+    committed.</para>
+
+    <para>To start this newly installed bundle, the manager can set the <xref
+    linkend="org.osgi.dmt.residential.Bundle.RequestedState--"
+    xrefstyle="hyperlink"/> to <xref
+    linkend="org.osgi.dmt.residential.Bundle.ACTIVE" xrefstyle="hyperlink"/>.
+    If this bundle needs to be started when the framework is restarted, then
+    the <xref linkend="org.osgi.dmt.residential.Bundle.AutoStart--"
+    xrefstyle="hyperlink"/> node can be set to <code>true</code>. If there
+    bundles to be uninstalled then their <xref
+    linkend="org.osgi.dmt.residential.Bundle.RequestedState--"
+    xrefstyle="hyperlink"/> node must be set to <xref
+    linkend="org.osgi.dmt.residential.Bundle.UNINSTALLED"
+    xrefstyle="hyperlink"/> as it is not possible to delete a <xref
+    linkend="org.osgi.dmt.residential.Bundle" xrefstyle="hyperlink"/> node.
+    The <xref linkend="org.osgi.dmt.residential.Bundle.RequestedState--"
+    xrefstyle="hyperlink"/> must be applied after the bundle has been
+    installed or updated. An uninstalled bundle will be automatically removed
+    from the RMT.</para>
+
+    <para>The <xref linkend="org.osgi.dmt.residential.Bundle.RequestedState--"
+    xrefstyle="hyperlink"/> node is really the requested state, depending on
+    start levels and other existing conditions the bundle can either follow
+    the requested state or have another state if, for example, its start level
+    is not met. The <code>RequestedState</code> must be stored persistently
+    between invocations, its initial value is <xref
+    linkend="org.osgi.dmt.residential.Bundle.INSTALLED"
+    xrefstyle="hyperlink"/>.</para>
+
+    <para>The manager can create any number of new <xref
+    linkend="org.osgi.dmt.residential.Bundle" xrefstyle="hyperlink"/> nodes to
+    install a number of bundles at the same time during commit. It can also
+    change the life cycle of existing bundles. None of these changes must have
+    any effect until the session is committed.</para>
+
+    <para>If the session is finally committed, the Plugin must compare the
+    state in the Dmt Admin tree with the actual state and update the framework
+    accordingly. The order in which the operations occur is up to the
+    implementation except for framework operations, they must always occur
+    last. After bundles have been installed, uninstalled, or updated, the
+    Plugin must refresh all the packages to ensure that the remote management
+    system sees a consistent state.</para>
+
+    <para>Downloading the bundles from a remote system can take substantial
+    time. As the commit is used synchronously, it is sometimes advisable to
+    download the bundles to the device before they are installed.</para>
+
+    <para>If any error occurs, any changes that were made since the beginning
+    of the last transaction point must be rolled back. An error should be
+    reported. The remote manager therefore gets an atomic behavior, either all
+    changes succeed or all fail. A manager should also be aware that if its
+    own bundle, or any of its dependencies, is updated it will be stopped and
+    will not be able to properly report the outcome to the management system,
+    either a failure or success.</para>
+
+    <section>
+      <title>Bundle Life Cycle Example</title>
+
+      <para>For example, the following code installs <code>my_bundle</code>,
+      updates <code>up_bundle</code>, and uninstalls
+      <code>old_bundle</code>:</para>
+
+      <programlisting>String $ = ... // get the OSGi node
+DmtSession session = admin.getSession($ + "/Framework",
+                DmtSession.LOCK_TYPE_ATOMIC);
+try {
+  session.createInteriorNode("Bundle/my_bundle");
+  session.setNodeValue("Bundle/my_bundle/URL", new DmtData(
+    "http://www.example.com/bundles/my_bundle.jar"));
+  session.setNodeValue("Bundle/my_bundle/AutoStart",
+    DmtData.TRUE_VALUE);
+  session.setNodeValue("Bundle/my_bundle/RequestedState",
+    new DmtData("ACTIVE"));
+
+  session.setNodeValue("Bundle/up_bundle/URL", new DmtData(
+    "http://www.example.com/bundles/up_bundle-2.jar"));
+
+  session.setNodeValue("Bundle/old_bundle/RequestedState",
+    new DmtData("UNINSTALLED"));
+  try {
+    session.commit();
+  } catch (Exception e) {
+     // failure ...
+     log....
+  }
+} catch (Exception e) {
+  session.rollback();
+  log...
+}</programlisting>
+    </section>
+
+    <section>
+      <title>Framework Restart</title>
+
+      <para>There are no special operations for managing the life cycle of the
+      Framework, these operations are done on the System Bundle, or bundle 0.
+      The framework can be stopped or restarted:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Restart</emphasis> – Restarting is an update,
+          requiring the <xref linkend="org.osgi.dmt.residential.Bundle.URL--"
+          xrefstyle="hyperlink"/> to be set to a new URL. This must shutdown
+          the framework after the commit has succeeded.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Stopping</emphasis> – Stopping is setting the <xref
+          linkend="org.osgi.dmt.residential.Bundle.RequestedState--"
+          xrefstyle="hyperlink"/> to <xref
+          linkend="org.osgi.dmt.residential.Bundle.INSTALLED"
+          xrefstyle="hyperlink"/></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If the <xref linkend="org.osgi.dmt.residential.Bundle.URL--"
+      xrefstyle="hyperlink"/> node has changed, the <xref
+      linkend="org.osgi.dmt.residential.Bundle.RequestedState--"
+      xrefstyle="hyperlink"/> will be ignored and the framework must only be
+      restarted.</para>
+
+      <para>Sessions that modify nodes inside the <xref
+      linkend="org.osgi.dmt.residential.Framework" xrefstyle="hyperlink"/>
+      sub-tree must always be atomic and opened on the <xref
+      linkend="org.osgi.dmt.residential.Framework" xrefstyle="hyperlink"/>
+      node. The Data Plugin managing the <xref
+      linkend="org.osgi.dmt.residential.Framework" xrefstyle="hyperlink"/>
+      node is only required to handle a single simultaneous atomic session for
+      its whole sub-tree.</para>
+
+      <para>For example, the following code restarts the framework after the
+      commit has succeeded.</para>
+
+      <programlisting>DmtSession session = admin.getSession($ +"/Framework",
+                DmtSession.LOCK_TYPE_ATOMIC);
+session.setNodeValue("Bundle/System Bundle/URL", 
+  new DmtData(""));
+session.commit();</programlisting>
+    </section>
+
+    <section>
+      <title>Access to Wiring</title>
+
+      <para>During runtime a bundle is wired to several different entities,
+      other bundles, fragments, packages, and services. The framework defines
+      a general Requirement-Capability model and this model is reflected in
+      the Wiring API in <xref linkend="dmtree.residential.extref.1"/>. The
+      Requirement-Capability model maps to a very generic way of describing
+      wires between requirers and providers that is applicable to all of the
+      OSGi constructs.</para>
+
+      <para>The Core defines namespaces for:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>osgi.wiring.bundle</code> – The namespace for the
+          Require-Bundle header. It wires the bundle with the Require-Bundle
+          header to the bundle with the required Bundle-SymbolicName and
+          Bundle-Version header.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>osgi.wiring.host</code> – The namespace for the
+          Fragment-Host header. It wires from bundle with the Fragment-Host
+          header to the bundle with the required Bundle-SymbolicName and
+          Bundle-Version header.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>osgi.wiring.package</code> – The namespace for the
+          Import/Export-Package header. It wires from bundle with the
+          Import-Package header to the bundle with the Export-Package
+          header.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>In the Core API, the wiring is based on the Bundle revisions.
+      However, this specification requires that all bundles are refreshed
+      after a management operation to ensure a consistent wiring state. The
+      management model therefore ignores the Bundle Revision and instead
+      provides wiring only for bundles since the manager is unable to see
+      different revision of a bundle anyway. The general
+      Requirement-Capability model is depicted in <xref
+      linkend="i730417"/>.</para>
+
+      <figure pgwide="1" xml:id="i730417">
+        <title>Requirements and Capabilities and their Wiring</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="1.800in"
+                       contentwidth="6.199in" fileref="req-cap-wiring.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>The core does not specify a namespace for services. However,
+      services can also be modeled with requirements capabilities. The
+      registrar is the provider and the service properties are the capability.
+      The getter is the requirer, its filter is the requirement. This
+      specification therefore also defines a namespaces for services:</para>
+
+      <programlisting>osgi.wiring.rmt.service</programlisting>
+
+      <para>This namespace is defined in <xref linkend="i738135"/>.</para>
+
+      <para>To access the wiring, each <xref
+      linkend="org.osgi.dmt.residential.Bundle" xrefstyle="hyperlink"/> node
+      has a <xref linkend="org.osgi.dmt.residential.Bundle.Wires--"
+      xrefstyle="hyperlink"/> node. This is a <code>MAP</code> of
+      <code>LIST</code> of <xref linkend="org.osgi.dmt.residential.Wire"
+      xrefstyle="hyperlink"/>. The key of the <code>MAP</code> node is the
+      name of the namespace, that is, the wires are organized by namespace.
+      This provides convenient access to all wires of a given namespace. The
+      value of the <code>MAP</code> node is a <code>LIST</code> node,
+      providing sequential access to the actual wires.</para>
+
+      <para>A <xref linkend="org.osgi.dmt.residential.Wire"
+      xrefstyle="hyperlink"/> node provides the following information:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><xref linkend="org.osgi.dmt.residential.Wire.Namespace--"
+          xrefstyle="hyperlink"/> – The namespace of the wire</para>
+        </listitem>
+
+        <listitem>
+          <para><xref linkend="org.osgi.dmt.residential.Wire.Requirement--"
+          xrefstyle="hyperlink"/> – The requirement that cause the wire</para>
+        </listitem>
+
+        <listitem>
+          <para><xref linkend="org.osgi.dmt.residential.Wire.Capability--"
+          xrefstyle="hyperlink"/> – The capability that satisfied the
+          wire</para>
+        </listitem>
+
+        <listitem>
+          <para><xref linkend="org.osgi.dmt.residential.Wire.Requirer--"
+          xrefstyle="hyperlink"/> – The location of the bundle that required
+          the wire</para>
+        </listitem>
+
+        <listitem>
+          <para><xref linkend="org.osgi.dmt.residential.Wire.Provider--"
+          xrefstyle="hyperlink"/> – The location of the bundle that satisfied
+          the requirement</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Wiring Example</title>
+
+      <para>The following example code demonstrates how the wires can be
+      printed out:</para>
+
+      <programlisting>String prefix ="Bundle/my_bundle/Wires/osgi.wiring.package";
+String [] wires = session.getChildNodeNames(prefix);
+for ( String wire : wires ) {
+  String name = session.getNodeValue(prefix + "/" 
+     + wire + "/Capability/Attribute/osgi.wiring.package").getString();
+  String provider = session.getNodeValue(prefix + "/" 
+     + wire + "/Provider" ).getString();
+  String requirer = session.getNodeValue(prefix + "/" 
+     + wire + "/Requirer" ).getString();
+  System.out.printf("%-20s %-30s %s\n", name, provider, requirer);
+}</programlisting>
+    </section>
+  </section>
+
+  <section>
+    <title>Filtering</title>
+
+    <para>Frequently it is necessary to search through the tree of nodes for
+    nodes matching specific criteria. Having to use Java to do this filtering
+    can become cumbersome and impossible if the searching has to happen
+    remotely. For that reason, the RMT contains a <xref
+    linkend="org.osgi.dmt.residential.Filter" xrefstyle="hyperlink"/> node.
+    This node allows a manager to specify a <xref
+    linkend="org.osgi.dmt.residential.Filter.Target--" xrefstyle="hyperlink"/>
+    and a <xref linkend="org.osgi.dmt.residential.Filter.Filter--"
+    xrefstyle="hyperlink"/>. The <xref
+    linkend="org.osgi.dmt.residential.Filter.Target--" xrefstyle="hyperlink"/>
+    is an absolute URI that defines a set of nodes that the Filter Plugin must
+    search. This set is defined by allowing wildcards in the target. A single
+    asterisk <code>(’*’ \u002A)</code> matches a single level, the minus sign
+    (<code>’-’ \u002C</code>) specifies any number of levels and must not be
+    used at the end of the URI. This implies that there is always a
+    <emphasis>final node</emphasis>. The reason that a minus sign must not be
+    last is that the final node’s type would be undefined, any node on any
+    sub-level would match.</para>
+
+    <para>The <xref linkend="org.osgi.dmt.residential.Filter.Target--"
+    xrefstyle="hyperlink"/> node must be specified as an absolute URI that
+    must always end in a slash to signify that it represents a path to an
+    interior node. The URI is absolute because the Filter is specified in a
+    persistent node. It is possible to open a session, create the filter
+    specification, close the session, and then open a new session, and use the
+    earlier specified <xref linkend="org.osgi.dmt.residential.Filter.Target--"
+    xrefstyle="hyperlink"/>. As the two involved session do not have to have
+    the same session, the base could differ, making it hard to use relative
+    addressing. However, the result is always unique to a session. It is
+    therefore possible to use relative URIs in the read out of the
+    result.</para>
+
+    <para>For example, the tree in <xref linkend="i734027"/> defines a
+    sub-tree.</para>
+
+    <figure xml:id="i734027">
+      <title>Example Sub-Tree</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="1.958in"
+                     contentwidth="6.255in" fileref="subtree-example.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>The following table shows a number of example targets on the
+    previous sub-tree and their resulting final nodes, assuming the result is
+    read in a session open on <code>./A</code>.</para>
+
+    <table>
+      <title>Example Target and results on a session opened on ./A</title>
+
+      <tgroup cols="2">
+        <colspec colnum="1" colwidth="1*"/>
+
+        <colspec colnum="2" colwidth="4*"/>
+
+        <thead>
+          <row>
+            <entry>Target</entry>
+
+            <entry>Final nodes</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>./A/*/</code></entry>
+
+            <entry><code>B, C</code></entry>
+          </row>
+
+          <row>
+            <entry><code>./A/*/E/*/</code></entry>
+
+            <entry><code>C/E/F, C/E/G</code></entry>
+          </row>
+
+          <row>
+            <entry><code>./A/-/G/</code></entry>
+
+            <entry><code>C/D/G, C/E/G</code></entry>
+          </row>
+
+          <row>
+            <entry><code>./A/*/*/*/</code></entry>
+
+            <entry><code>C/D/G, C/E/F, C/E/G</code></entry>
+          </row>
+
+          <row>
+            <entry><code>./A/-/*/</code></entry>
+
+            <entry><para>This is an error,<code>./A/-/*/</code> is the same as
+            <code>./A/-/</code>, which is not allowed. </para></entry>
+          </row>
+
+          <row>
+            <entry><code>./A/*/*/</code></entry>
+
+            <entry><code>C/D, C/E</code></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>The <xref linkend="org.osgi.dmt.residential.Filter.Filter--"
+    xrefstyle="hyperlink"/> specifies a standard OSGi Filter expression that
+    is applied to the final nodes. If no filter is specified then all final
+    nodes match. However, when there is a filter specified it is applied
+    against the final node and only the final nodes that are matching the
+    filter as included in the result.</para>
+
+    <para>A node is matched against a filter by using some of its children as
+    properties. The properties of a node are defined by:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Primitive child nodes, or</para>
+      </listitem>
+
+      <listitem>
+        <para><code>LIST</code> nodes that have primitive as child nodes. Such
+        nodes must be treated as multi-valued properties.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The matching rules in the filter must follow the standard OSGi
+    Filter rules. If the filter matches such a node then it must be available
+    as a session relative URI in the <xref
+    linkend="org.osgi.dmt.residential.Filter.ResultUriList--"
+    xrefstyle="hyperlink"/> node. The relative URIs are listed in the <xref
+    linkend="org.osgi.dmt.residential.Filter.ResultUriList--"
+    xrefstyle="hyperlink"/>.</para>
+
+    <para>The result nodes must only include nodes that satisfy the following
+    conditions:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The node must match the <xref
+        linkend="org.osgi.dmt.residential.Filter.Target--"
+        xrefstyle="hyperlink"/> node’s URI specification</para>
+      </listitem>
+
+      <listitem>
+        <para>The node must be visible in the current session</para>
+      </listitem>
+
+      <listitem>
+        <para>The node must not reside in the Filter sub-tree</para>
+      </listitem>
+
+      <listitem>
+        <para>The node must be an interior node</para>
+      </listitem>
+
+      <listitem>
+        <para>The caller must have access to the node</para>
+      </listitem>
+
+      <listitem>
+        <para>It must be possible to get all the values of the child nodes
+        that are necessary for filter matching</para>
+      </listitem>
+
+      <listitem>
+        <para>The node must match the filter if a filter is specified</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The result is also available as a sub-tree under the <xref
+    linkend="org.osgi.dmt.residential.Filter.Result--" xrefstyle="hyperlink"/>
+    node and can be traversed as sub-tree in <xref
+    linkend="org.osgi.dmt.residential.Filter.Result--"
+    xrefstyle="hyperlink"/>. This tree contains all the result nodes and their
+    sub-tree. The results under the <code>Result</code> node are a snapshot
+    and cannot be modified, they are read only. This result can be removed
+    after the session is closed.</para>
+
+    <section>
+      <title>Example</title>
+
+      <para>For example, the following code prints out the location of active
+      bundles:</para>
+
+      <programlisting>session.createInteriorNode("Filter/mq-1");
+session.setNodeValue("Filter/mq-1/Target", 
+  new DmtData($+"/Framework/Bundle/*/"));
+session.setNodeValue("Filter/mq-1/Filter", new DmtData("(AutoStart=true)"));
+
+String[] autostarted = session.getChildNodeNames(
+   "Filter/mq-1/Result/Framework/Bundle");
+System.out.println("Auto started bundles");
+for ( String location : autostarted)
+  System.out.println(location);
+
+session.deleteNode("Filter/mq-1");</programlisting>
+    </section>
+  </section>
+
+  <section>
+    <title>Log Access</title>
+
+    <para>The <code>Log</code> node provides access to the Log Service, the
+    node contains a <code>LIST</code> of <code>LogEntry</code> nodes. The
+    length of this list is implementation dependent. The list is sorted in
+    most recent first order. This allows a manager to retrieve the latest
+    logs. For example, the following code print out the latest 100 log
+    entries:</para>
+
+    <programlisting>DataSession session = admin.getSession($+"/Log/LogEntries");
+try {
+  for ( int i =0; i&lt;100; i++ ) {
+    Date date = session.getNodeValue( i+"/Time").getDateTime();
+    String message = session.getNodeValue( i+"/Message").getString();
+    System.out.println( date + " " + message );
+  }
+} finally {
+  session.close();
+}</programlisting>
+  </section>
+
+  <section xml:id="i738135">
+    <title>osgi.wiring.rmt.service Namespace</title>
+
+    <para><phrase role="body">This section defines a namespace for the
+    Requirement-Capability model to maintain services through the standard
+    wiring API. A service is a capability, the Capability attributes are the
+    service properties. The bundle that gets the service has a requirement on
+    that service.</phrase></para>
+
+    <para><phrase role="body">The filter of the service requirement is not the
+    original filter since this is not possible to obtain reliably. Instead the
+    filter must assert of the </phrase> <code>service.id</code> <phrase
+    role="body">, for example: </phrase> <code>(service.id=123)</code> <phrase
+    role="body">.</phrase></para>
+
+    <para><phrase role="body">The resulting filter is specified as the
+    </phrase> <code>filter:</code> <phrase role="body"> directive on the
+    Requirement. This is depicted in <xref
+    linkend="i738141"/>.</phrase></para>
+
+    <figure xml:id="i738141">
+      <title>Requirements and Capabilities and their Wiring</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="0.839in"
+                     contentwidth="6.199in"
+                     fileref="service-req-cap-wiring.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>The <code>osgi.wiring.rmt.service</code> attributes are defined in
+    the following table.</para>
+
+    <table pgwide="1">
+      <title>osgi.wiring.rmt.service namespace</title>
+
+      <tgroup cols="4">
+        <colspec colnum="1" colwidth="3*"/>
+
+        <colspec colnum="2" colwidth="1.5*"/>
+
+        <colspec colnum="3" colwidth="3*"/>
+
+        <colspec colnum="4" colwidth="6*"/>
+
+        <thead>
+          <row>
+            <entry>Attribute Name</entry>
+
+            <entry>Type</entry>
+
+            <entry>Syntax</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>osgi.wiring.rmt.service</code></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><code>service.id</code></entry>
+
+            <entry><para>The service id.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>objectClass</code></entry>
+
+            <entry><code>String[]</code></entry>
+
+            <entry><code>fqn</code></entry>
+
+            <entry><para>Fully qualified name of the types under which this
+            service is listed</para></entry>
+          </row>
+
+          <row>
+            <entry><code>*</code></entry>
+
+            <entry><code>*</code></entry>
+
+            <entry><code>*</code></entry>
+
+            <entry><para>Any service property</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </section>
+
+  <section>
+    <title>Tree Summary</title>
+
+    <section>
+      <title>Framework</title>
+
+      <programlisting>$                                          _G__  NODE                     1   P
+
+  Framework                                _G__  NODE                     1   P
+    StartLevel                             _GR_  integer                  1   A
+    InitialBundleStartLevel                _GR_  integer                  1   A
+
+                                                               org.osgi/1.0/MAP
+    Bundle                                 _G__  MAP                      1   A
+      [string]                             AG__  NODE                  0..*   D
+        State                              _G__  string                 0,1   A
+        StartLevel                         _GR_  integer                  1   A
+        InstanceId                         _G__  integer                  1   A
+        URL                                _GR_  string                   1   A
+        AutoStart                          _GR_  boolean                  1   A
+        FaultType                          _G__  integer                  1   A
+        FaultMessage                       _G__  string                   1   A
+        BundleId                           _G__  long                   0,1   A
+        SymbolicName                       _G__  string                 0,1   A
+        Version                            _G__  string                 0,1   A
+
+                                                              org.osgi/1.0/LIST
+        BundleType                         _G__  LIST                   0,1   A
+          [list]                           _G__  string                0..*   D
+
+                                                               org.osgi/1.0/MAP
+        Headers                            _G__  MAP                    0,1   A
+          [string]                         _G__  string                0..*   D
+        Location                           _G__  string                   1   A
+        RequestedState                     _GR_  string                   1   A
+        LastModified                       _G__  dateTime               0,1   A
+
+                                                               org.osgi/1.0/MAP
+        Wires                              _G__  MAP                    0,1   A
+
+                                                              org.osgi/1.0/LIST
+          [string]                         _G__  LIST                  0..*   D
+            [list]                         _G__  NODE                  0..*   D
+              Provider                     _G__  string                   1   A
+              InstanceId                   _G__  integer                  1   A
+              Namespace                    _G__  string                   1   A
+              Requirement                  _G__  NODE                     1   A
+                Filter                     _G__  string                   1   A
+
+                                                               org.osgi/1.0/MAP
+                Directive                  _G__  MAP                      1   A
+                  [string]                 _G__  string                0..*   D
+
+                                                               org.osgi/1.0/MAP
+                Attribute                  _G__  MAP                      1   A
+                  [string]                 _G__  string                0..*   D
+              Capability                   _G__  NODE                     1   A
+
+                                                               org.osgi/1.0/MAP
+                Directive                  _G__  MAP                      1   A
+                  [string]                 _G__  string                0..*   D
+
+                                                               org.osgi/1.0/MAP
+                Attribute                  _G__  MAP                      1   A
+                  [string]                 _G__  string                0..*   D
+              Requirer                     _G__  string                   1   A
+
+                                                              org.osgi/1.0/LIST
+        Signers                            _G__  LIST                   0,1   A
+          [list]                           _G__  NODE                  0..*   D
+            InstanceId                     _G__  integer                  1   A
+            IsTrusted                      _G__  boolean                  1   A
+
+                                                              org.osgi/1.0/LIST
+            CertificateChain               _G__  LIST                     1   A
+              [list]                       _G__  string                0..*   D
+
+                                                              org.osgi/1.0/LIST
+        Entries                            _G__  LIST                   0,1   A
+          [list]                           _G__  NODE                  0..*   D
+            InstanceId                     _G__  integer                  1   A
+            Path                           _G__  string                   1   A
+            Content                        _G__  binary                   1   A
+
+                                                               org.osgi/1.0/MAP
+    Property                               _G__  MAP                      1   A
+      [string]                             _G__  string                0..*   D</programlisting>
+    </section>
+
+    <section>
+      <title>Filters</title>
+
+      <programlisting>                                                               org.osgi/1.0/MAP
+  Filter                                   _G__  MAP                    0,1   P
+    [string]                               AG_D  NODE                  0..*   D
+      Filter                               _GR_  string                   1   A
+      Target                               _GR_  string                   1   A
+      Limit                                _GR_  integer                  1   A
+      Result                               _G__  Node                     1   A
+
+                                                              org.osgi/1.0/LIST
+      ResultUriList                        _G__  LIST                     1   A
+        [list]                             _G__  node_uri              0..*   D
+      InstanceId                           _G__  integer                  1   A</programlisting>
+    </section>
+
+    <section>
+      <title>Log</title>
+
+      <programlisting>  Log                                     _G__  NODE                    0,1   P
+
+                                                              org.osgi/1.0/LIST
+    LogEntries                             _G__  LIST                     1   A
+      [list]                               _G__  NODE                  0..*   D
+        Bundle                             _G__  string                   1   A
+        Time                               _G__  dateTime                 1   A
+        Level                              _G__  integer                  1   A
+        Message                            _G__  string                   1   A
+        Exception                          _G__  string                 0,1   A</programlisting>
+    </section>
+  </section>
+
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.dmt.residential-ddf.xml"/>
+
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.dmt.service.log-ddf.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed xml:id="dmtree.residential.extref.1"><title><xref
+      linkend="intro.core.release"
+      xrefstyle="template:%t"/></title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>

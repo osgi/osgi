@@ -1,0 +1,2457 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="122"
+         revision="$Id$"
+         version="5" xml:id="service.remoteserviceadmin"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Remote Service Admin Service Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.remoteserviceadmin-version"
+    linkend="org.osgi.service.remoteserviceadmin"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The <xref linkend="intro.core.release" xrefstyle="template:%t"/>
+    framework specifies a model where bundles can use distributed services.
+    The basic model for OSGi remote services is that a bundle can register
+    services that are <emphasis>exported</emphasis> to a communication
+    <emphasis>Endpoint</emphasis> and use services that are
+    <emphasis>imported</emphasis> from a communication Endpoint. However, the
+    remote services chapter does not explain <emphasis>what</emphasis>
+    services are exported and/or imported; it leaves such decisions to the
+    distribution provider. The distribution provider therefore performs
+    multiple roles and cannot be leveraged by other bundles in scenarios that
+    the distribution provider had not foreseen.</para>
+
+    <para>The primary role of the distribution provider is purely mechanical;
+    it creates Endpoints and registers service proxies and enables their
+    communication. The second role is about the policies around the desired
+    topology. The third role is discovery. To establish a specific topology it
+    is necessary to find out about exported services in other
+    frameworks.</para>
+
+    <para>This specification therefore defines an API for the distribution
+    provider and discovery of services in a network. A management agent can
+    use this API to provide an actual distribution policy. This management
+    agent, called the Topology Manager, can control the export and import of
+    services delegating the intrinsic knowledge of the low level details of
+    communication protocols, proxying of services, and discovering services in
+    the network to services defined in this specification.</para>
+
+    <para>This specification is an extension of the Remote Service chapter,
+    see chapter <xref linkend="service.remoteservices"/>. Though some aspects
+    are repeated in this specification, a full understanding of the Remote
+    Services chapter is required for full understanding of this
+    document.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Simple</emphasis> – Make it as simple as possible
+          for a Topology Manager to implement distribution policies.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Dynamic</emphasis> – Discover available Endpoints
+          dynamically, for example through a discovery protocol like <xref
+          linkend="i1788834"/> or <xref linkend="i1789952"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Inform</emphasis> – Provide a mechanism to inform
+          other parties about created and removed Endpoints.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Configuration</emphasis> – Allow bundles to describe
+          Endpoints as a bundle resource that are provided to the Distribution
+          Provider.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Selective</emphasis> – Not all parties are
+          interested in all services. Endpoint registries must be able to
+          express the scope of services they are interested in.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Multiple</emphasis> – Allow the collaboration of
+          multiple Topology Managers, Remote Service Admin services, and
+          Discovery Providers.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Dynamic</emphasis> – Allow the dynamic discovery of
+          Endpoints.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Federated</emphasis> –Enable a global view of all
+          available services in a distributed environment.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Remote Service Admin</emphasis> – An implementation
+          of this specification provides the mechanisms to import and export
+          services through a set of configuration types. The Remote Service
+          Admin service is a passive Distribution Provider, not taking any
+          action to export or import itself.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Topology Manager</emphasis> – The Topology Manager
+          provides the policy for importing and exporting services through the
+          Remote Service Admin service.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Endpoint</emphasis> – An Endpoint is a
+          communications access mechanism to a service in another framework, a
+          (web) service, another process, or a queue or topic destination,
+          etc., requiring some protocol for communications.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Endpoint Description</emphasis> – A properties based
+          description of an Endpoint. Endpoint Descriptions can be exchanged
+          between different frameworks to create connections to each other’s
+          services. Endpoint Descriptions can also be created to Endpoints not
+          originating in an OSGi Framework.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Endpoint Description Provider</emphasis> – A party
+          that can inform others about the existence of Endpoints.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Endpoint Listener</emphasis> – A listener service
+          that receives updates of Endpoints that match its scope. This
+          Endpoint Listener is used symmetrically to implement a federated
+          registry. The Topology Manager can use it to notify interested
+          parties about created and removed Endpoints, as well as to receive
+          notifications from other parties, potentially remote, about their
+          available Endpoints.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Remote Service Admin Listener</emphasis> – A
+          listener service that is informed of all the primitive actions that
+          the Remote Service Admin performs like importing and exporting as
+          well as errors.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Endpoint Configuration Extender</emphasis> – A
+          bundle that can detect configuration data describing an Endpoint
+          Description in a bundle resource, using the extender pattern.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Discovery</emphasis> – An Endpoint Listener that
+          detects the Endpoint Descriptions through some discovery
+          protocol.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Cluster</emphasis> – A group of computing systems
+          that closely work together, usually in a fast network.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure pgwide="1" xml:id="i1706087">
+        <title>Remote Service Admin Entities</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.570in"
+                       contentwidth="7.000in" fileref="rsa-classes.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Synopsis</title>
+
+      <para>Topology Managers are responsible for the distribution policies of
+      a OSGi framework. To implement a policy, a Topology Manager must be
+      aware of the environment, for this reason, it can register:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Service listeners to detect services that can be exported
+          according to the Remote Services chapter.</para>
+        </listitem>
+
+        <listitem>
+          <para>Listener and Find Hook services to detect bundles that have an
+          interest in specific services that potentially could be
+          imported.</para>
+        </listitem>
+
+        <listitem>
+          <para>A Remote Service Admin Listener service to detect the activity
+          of other Topology Managers.</para>
+        </listitem>
+
+        <listitem>
+          <para>An Endpoint Listener service to detect Endpoints that are made
+          available through discovery protocols, configuration data, or other
+          means.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Using this information, the manager implements a topology using
+      the Remote Service Admin service. A Topology Manager that wants to
+      export a service can create an <emphasis>Export Registration</emphasis>
+      by providing one or more Remote Service Admin services a Service
+      Reference plus a Map with the required properties. A Remote Service
+      Admin service then creates a number of Endpoints based on the available
+      configuration types and returns a collection of
+      <code>ExportRegistration</code> objects. A collection is returned
+      because a single service can be exported to multiple Endpoints depending
+      on the available configuration type properties.</para>
+
+      <para>Each Export Registration is specific for the caller and represents
+      an existing or newly created Endpoint. The Export Registration
+      associates the exported Service Reference with an <emphasis>Endpoint
+      Description</emphasis>. If there are problems with the export operation,
+      the Remote Service Admin service reports these on the Export
+      Registration objects. That is, not all the returned Export Registrations
+      have to be valid.</para>
+
+      <para>An Endpoint Description is a property based description of an
+      Endpoint. Some of these properties are defined in this specification,
+      other properties are defined by configuration types. These configuration
+      types must follow the same rules as the configuration types defined in
+      the Remote Services chapter. Remote Service Admin services that support
+      the configuration types in the Endpoint Description can import a service
+      from that Endpoint solely based on that Endpoint Description.</para>
+
+      <para>In similar vein, the Topology Manager can import a service from a
+      remote system by creating an Import Registration out of an Endpoint
+      Description. The Remote Service Admin service then registers a service
+      that is a proxy for the remote Endpoint and returns an
+      <code>ImportRegistration</code> object. If there are problems with the
+      import, the Remote Service Admin service that cannot be detected early,
+      then the Remote Service Admin service reports these on the returned
+      <code>ImportRegistration</code> object.</para>
+
+      <para>For introspection, the Remote Service Admin can list its current
+      set of Import and Export References so that a Topology Manager can get
+      the current state. The Remote Service Admin service also informs all
+      Topology Managers and observers of the creation, deletion, and errors of
+      Import and Export Registrations through the Remote Service Admin
+      Listener service. Interested parties like the Topology Manager can
+      register such a service and will be called back with the initial state
+      as well as any subsequent changes.</para>
+
+      <para>An important aspect of the Topology Manager is the distributed
+      nature of the scenarios it plays an orchestrating role in. A Topology
+      Manager needs to be aware of Endpoints in the network, not just the ones
+      provided by Remote Service Admin services in its local framework. The
+      Endpoint Listener service is specified for this purpose. This service is
+      provided for both directions, symmetrically. That is, it is used by the
+      Topology Manager to inform any observers about the existence of
+      Endpoints that are locally available, as well as for parties that
+      represent a discovery mechanism. For example Endpoints available on
+      other systems, Endpoint Descriptions embedded in resources in bundles,
+      or Endpoint Descriptions that are available in some other form.</para>
+
+      <para>Endpoint Listener services are not always interested in the
+      complete set of available Endpoints because this set can potentially be
+      very large. For example, if a remote registry like <xref
+      linkend="i1789020"/> is used then the number of Endpoints can run into
+      the thousands or more. An Endpoint Listener service can therefore scope
+      the set of Endpoints with an OSGi LDAP style filter. Parties that can
+      provide information about Endpoints must only notify Endpoint Listener
+      services when the Endpoint Description falls within the scope of the
+      Endpoint Listener service. Parties that use some discovery mechanism can
+      use the scope to trigger directed searches across the network.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Actors</title>
+
+    <para>The OSGi Remote Services specification is about the distribution of
+    services. <xref linkend="intro.core.release" xrefstyle="template:%t"/>
+    does not outline the details of how the distribution provider knows the
+    desired topology, this policy aspect is left up to implementations. In
+    many situations, this is a desirable architecture because it provides
+    freedom of implementation to the distribution provider. However, such an
+    architecture does not enable a separation of the mechanisms and
+    <emphasis>policy</emphasis>. Therefore, this Remote Service Admin
+    specification provides an architecture that enables a separate bundle from
+    the distribution provider to define the topology. It splits the
+    responsibility of the Remote Service specification in a number of
+    <emphasis>roles</emphasis>. These roles can all have different
+    implementations but they can collaborate through the services defined in
+    this specification. These roles are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Topology Manager</emphasis>s – Topology Managers are
+        the (anonymous) players that implement the policies for distributing
+        services; they are closely aligned with the concept of an OSGi
+        <emphasis>management agent</emphasis>. It is expected that Topology
+        Managers will be developed for scenarios like import/export all
+        applicable services, configuration based imports- and exports, and
+        scenarios like fail-over, load-balancing, as well as standards like
+        domain managers for the <xref linkend="i1789031"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Remote Service Admin</emphasis> – The Remote Service
+        Admin service provides the basic mechanism to import and export
+        services. This service is policy free; it will not distribute services
+        without explicitly being told so. A OSGi framework can host multiple
+        Remote Service Admin services that, for example, support different
+        configuration types.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Discovery</emphasis> – To implement a distribution
+        policy, a Topology Manager must be aware of what Endpoints are
+        available. This specification provides an abstraction of a
+        <emphasis>federated Endpoint registry</emphasis>. This registry can be
+        used to both publish as well as consume Endpoints from many different
+        sources. The federated registry is defined for local services but is
+        intended to be used with standard and proprietary service discovery
+        protocols. The federated registry is implemented with the Endpoint
+        Listener service.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>These roles are depicted in <xref linkend="i1817848"
+    xrefstyle="template:Figure %n on page %p"/>.</para>
+
+    <figure xml:id="i1817848">
+      <title>Roles</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="1.194in"
+                     contentwidth="6.240in" fileref="roles.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </section>
+
+  <section>
+    <title>Topology Managers</title>
+
+    <para>Distributed processing has become mainstream because of the massive
+    scale required for Internet applications. Only with distributed
+    architectures is it possible to scale systems to <emphasis>Internet
+    size</emphasis> with hundreds of millions of users. To allow a system to
+    scale, servers are grouped in clusters where they can work in unison or
+    geographically dispersed in even larger configurations. The distribution
+    of the work-load is crucial for the amount of scalability provided by an
+    architecture and often has domain specific dispatching techniques. For
+    example, the hash of a user id can be used to select the correct profile
+    database server. In this fast moving world it is very unlikely that a
+    single architecture or distribution policy would be sufficient to satisfy
+    many users. It is therefore that this specification separates the
+    <emphasis>how</emphasis> from the <emphasis>what</emphasis>. The complex
+    mechanics of importing and exporting services are managed by a Remote
+    Service Admin service (the how) while the different policies are
+    implemented by Topology Managers (the what). This separation of concerns
+    enables the development of Topology Managers that can run on many
+    different systems, providing high user functionality. For example, a
+    Topology Manager could implement a fail-over policy where some strategic
+    services are redirected when their connections fail. Other Topology
+    Managers could use a discovery protocol like SLP to find out about other
+    systems in a cluster and automatically configure the cluster.</para>
+
+    <para>The key value of this architecture is demonstrated by the example of
+    an <emphasis>SCA domain controller</emphasis>. An SCA domain controller
+    receives a description of a domain (a set of systems and modules) and must
+    ensure that the proper connections are made between the participating SCA
+    modules. By splitting the roles, an SCA domain manager can be developed
+    that can run on any compatible Remote Service Admin service
+    implementation.</para>
+
+    <section xml:id="i1812921">
+      <title>Multiple Topology Managers</title>
+
+      <para>There is no restriction on the number of Topology Managers, nor is
+      there a restriction on the number of Remote Service Admin service
+      implementations. It is up to the deployer of the OSGi framework to
+      select the appropriate set of these service implementations. It is the
+      responsibility of the Topology Managers to listen to the Remote Service
+      Admin Listener and track Endpoints created and deleted by other Topology
+      Managers and act appropriately.</para>
+    </section>
+
+    <section>
+      <title>Example Use Cases</title>
+
+      <section>
+        <title>Promiscuous Policy</title>
+
+        <para>A <emphasis>cluster</emphasis> is a set of machines that are
+        connected in a network. The simplest policy for a Topology Manager is
+        to share exported services in such a cluster. Such a policy is very
+        easy to implement with the Remote Services Admin service. In the most
+        basic form, this Topology Manager would use some multicast protocol to
+        communicate with its peers. These peers would exchange
+        <code>EndpointDescription</code> objects of exported services. Each
+        Topology Manager would then import any exported service.</para>
+
+        <para>This scenario can be improved by separating the promiscuous
+        policy from the discovery. Instead of embedding the multicast
+        protocol, a Topology manager could use the Endpoint Listener service.
+        This service allows the discovery of remote services. At the same
+        time, the Topology Manager could tell all other Endpoint Listener
+        services about the services it has created, allowing them to be used
+        by others in the network.</para>
+
+        <para>Splitting the Topology Manager and discovery in two bundles
+        allows different implementations of the discovery bundle, for example,
+        to use different protocols.</para>
+      </section>
+
+      <section>
+        <title>Fail Over</title>
+
+        <para>A more elaborate scheme is a <emphasis>fail-over
+        policy</emphasis>. In such a policy a service can be replaced by a
+        service from another machine. There are many ways to implement such a
+        policy, an simple example strategy is provided here for
+        illustration.</para>
+
+        <para>A Fail-Over Topology Manager is given a list of stateless
+        services that require fail-over, for example through the <xref
+        linkend="service.cm"/>. The Fail-Over Manager tracks the systems in
+        the its cluster that provide such services. This tracking can use an
+        embedded protocol or it can be based on the Endpoint Listener service
+        model.</para>
+
+        <para>In the Fail-Over policy, the fail-over manager only imports a
+        single service and then tracks the error status of the imported
+        service through the Remote Service Admin Listener service. If it
+        detects the service is becoming unavailable, it closes the
+        corresponding Import Registration and imports a service from an
+        alternative system instead. In <xref linkend="i1819899"/>, there are 4
+        systems in a cluster. The topology/fail-over manager ensures that
+        there is always one of the services in system <code>A</code>, <code>
+        B</code>, or <code>C</code> available in <code>D</code>.</para>
+
+        <figure xml:id="i1819899">
+          <title>Fail Over Scenario in a cluster</title>
+
+          <mediaobject>
+            <imageobject>
+              <imagedata align="center" contentdepth="1.852in"
+                         contentwidth="4.901in" fileref="fail-over.svg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+
+        <para>There are many possible variations on this scenario. The
+        managers could exchange load information, allowing the service switch
+        to be influenced by the load of the target systems. The important
+        aspect is that the Topology Manager can ignore the complex details of
+        discovery protocols, communication protocols, and service proxying and
+        instead focus on the topology.</para>
+      </section>
+    </section>
+  </section>
+
+  <section xml:id="service.remoteserviceadmin.endpointdescription">
+    <title>Endpoint Description</title>
+
+    <para>An <emphasis>Endpoint</emphasis> is a point of rendezvous of
+    distribution providers. It is created by an exporting distribution
+    provider or some other party, and is used by importing distribution
+    providers to create a connection. An <emphasis>Endpoint
+    Description</emphasis> describes an Endpoint in such a way that an
+    importing Remote Service Admin service can create this connection if it
+    recognizes the <emphasis>configuration type</emphasis> that is used for
+    that Endpoint. The configuration type consists of a name and a set of
+    properties associated with that name.</para>
+
+    <para>The core concept of the Endpoint Description is a Map of properties.
+    The structure of this map is the same as service properties, and the
+    defined properties are closely aligned with the properties of an imported
+    service. An <code>EndpointDescription</code> object must only consist of
+    the data types that are supported for service properties. This makes the
+    property map serializable with many different mechanisms. The
+    <code>EndpointDescription</code> class provides a convenient way to access
+    the properties in a type safe way.</para>
+
+    <para>An Endpoint Description has case insensitive keys, just like the
+    Service Reference’s properties.</para>
+
+    <para>The properties map must contain all the prescribed service
+    properties of the exported service after intents have been processed, as
+    if the service was registered as an imported service. That is, the map
+    must not contain any properties that start with
+    <code>service.exported.*</code> but it must contain the
+    <code>service.imported</code>.* variation of these properties. The
+    Endpoint Description must reflect the imported service properties because
+    this simplifies the use of filters from the service hooks. Filters applied
+    to the Endpoint Description can then be the same filters as applied by a
+    bundle to select an imported service from the service registry.</para>
+
+    <para>The properties that can be used in an Endpoint Description are
+    listed in <xref
+    linkend="service.remoteserviceadmin-endpoint.properties"/>. The
+    <code>RemoteConstants</code> class contains the constants for all of these
+    property names.</para>
+
+    <table xml:id="service.remoteserviceadmin-endpoint.properties">
+      <title>Endpoint Properties</title>
+
+      <tgroup cols="3">
+        <colspec colnum="1" colwidth="2.5*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="4.5*"/>
+
+        <thead>
+          <row>
+            <entry>Endpoint Property Name</entry>
+
+            <entry>Type</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>service.exported.*</code></entry>
+
+            <entry><para/></entry>
+
+            <entry><para>Must not be set</para></entry>
+          </row>
+
+          <row>
+            <entry><code>service.imported</code></entry>
+
+            <entry><code>*</code></entry>
+
+            <entry><para>Must always be set to some value. See <xref
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_IMPORTED"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>objectClass</code></entry>
+
+            <entry><code>String[]</code></entry>
+
+            <entry><para>Must be set to the value of
+            <code>service.exported.interfaces</code>, of the exported service
+            after expanding any wildcards. Though this property will be
+            overridden by the framework for the corresponding service
+            registration, it must be set in the Endpoint Description to
+            simplify the filter matching. These interface names are available
+            with the <xref
+            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getInterfaces--"
+            xrefstyle="hyperlink"/> method.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>service.intents</code></entry>
+
+            <entry><code>String+</code></entry>
+
+            <entry><para>Intents implemented by the exporting distribution
+            provider and, if applicable, the exported service itself. Any
+            qualified intents must have their expanded form present. These
+            expanded intents are available with the <xref
+            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getIntents--"
+            xrefstyle="hyperlink"/> method. See <xref
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_INTENTS"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>endpoint.service.id</code></entry>
+
+            <entry><code>Long</code></entry>
+
+            <entry><para>The service id of the exported service. Can be absent
+            or 0 if the corresponding Endpoint is not for an OSGi service. The
+            remote service id is available as <xref
+            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getServiceId--"
+            xrefstyle="hyperlink"/>. See also <xref
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_SERVICE_ID"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>endpoint.framework.uuid</code></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><para>A universally unique id identifying the instance of
+            the exporting framework. Can be absent if the corresponding
+            Endpoint is not for an OSGi service. See <xref
+            linkend="i1887500"/>. The remote framework UUID is available with
+            the <xref
+            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getFrameworkUUID--"
+            xrefstyle="hyperlink"/> method. See also <xref
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_FRAMEWORK_UUID"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>endpoint.id</code></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><para>The Id for this Endpoint, can never be
+            <code>null</code>. This information is available with the <xref
+            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getId--"
+            xrefstyle="hyperlink"/>. See <xref linkend="i1887496"/> and also
+            <xref
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_ID"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><code>endpoint.package.</code></para><para><code> version.&lt;package-name&gt;</code></para></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><para>The Java package version for the embedded
+            &lt;package&gt;. For example, the property
+            <code>endpoint.package.version.com.acme=1.3</code> describes the
+            version for the <code>com.acme</code> package. The version for a
+            package can be obtained with the <xref
+            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getPackageVersion-String-"
+            xrefstyle="hyperlink"/>.</para> <para>The version does not have to
+            be set, if not set, the value must be assumed to be
+            0.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>service.imported.configs</code></entry>
+
+            <entry><code>String+</code></entry>
+
+            <entry><para>The configuration types that can be used to implement
+            the corresponding Endpoint. This property maps to the
+            corresponding property in the Remote Services chapter. This
+            property can be obtained with the <xref
+            linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getConfigurationTypes--"
+            xrefstyle="hyperlink"/> method.</para> <para>The Export
+            Registration has all the possible configuration types, where the
+            Import Registration reports the configuration type actually used.
+            <xref
+            linkend="org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_IMPORTED_CONFIGS"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>&lt;config&gt;.*</code></entry>
+
+            <entry><code>*</code></entry>
+
+            <entry><para>Where <code>&lt;config&gt;</code> is one of the
+            configuration type names listed in
+            <code>service.imported.configs</code>. The content of these
+            properties must be valid for creating a connection to the Endpoint
+            in another framework. That is, any locally readable URLs from
+            bundles must be converted in such a form that they can be read by
+            the importing framework. How this is done is configuration type
+            specific.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>*</code></entry>
+
+            <entry><code>*</code></entry>
+
+            <entry><para>All remaining public service properties must be
+            present (that is, not starting with full stop (<code>’.’
+            \u002E</code>)). If the values can not be marshalled by the
+            Distribution Provider then they must be ignored.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>The <code>EndpointDescription</code> class has a number of
+    constructors that make it convenient to instantiate it for different
+    purposes:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.EndpointDescription-Map-"
+        xrefstyle="hyperlink"/> – Instantiate the Endpoint Description from a
+        <code>Map</code> object.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.EndpointDescription-ServiceReference-Map-"
+        xrefstyle="hyperlink"/> – Instantiate an Endpoint Description based on
+        a Service Reference and a Map. The base properties of this Endpoint
+        Description are the Service Reference properties but the properties in
+        the given Map must override any of their case variants in the Service
+        Reference. This allows the construction of an Endpoint Description
+        from an exportable service while still allowing overrides of specific
+        properties by the Topology Manager.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The Endpoint Description must use the allowed properties as given in
+    <xref linkend="service.remoteserviceadmin-endpoint.properties"
+    xrefstyle="template:Table %n on page %p"/>. The Endpoint Description must
+    automatically skip any <code>service.exported.*</code> properties.</para>
+
+    <para>The Endpoint Description provides the following methods to access
+    the properties in a more convenient way:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getInterfaces--"
+        xrefstyle="hyperlink"/> – Answers a list of Java interface names.
+        These are the interfaces under which the services must be registered.
+        These interface names can also be found at the
+        <code>objectClass</code> property. A service can only be imported when
+        there is at least one Java interface name available.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getConfigurationTypes--"
+        xrefstyle="hyperlink"/> – Answer the configuration types that are used
+        for exporting this Endpoint. The configuration types are associated
+        with a number of properties.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getId--"
+        xrefstyle="hyperlink"/> – Returns an Id uniquely identifying an
+        Endpoint. The syntax of this Id should be defined in the specification
+        for the associated configuration type. Two Endpoint Descriptions with
+        the same Id describe the same Endpoint.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getFrameworkUUID--"
+        xrefstyle="hyperlink"/> – Get a Universally Unique Identifier (UUID)
+        for the framework instance that has created the Endpoint, <xref
+        linkend="i1887500"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getServiceId--"
+        xrefstyle="hyperlink"/> – Get the service id for the framework
+        instance that has created the Endpoint. If there is no service on the
+        remote side the value must be 0.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getPackageVersion-String-"
+        xrefstyle="hyperlink"/> – Get the version for the given
+        package.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getIntents--"
+        xrefstyle="hyperlink"/> – Get the list of specified intents.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getProperties--"
+        xrefstyle="hyperlink"/> – Get all the properties.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Two Endpoint Descriptions are deemed equal when their Endpoint Id is
+    equal. The Endpoint Id is a mandatory property of an Endpoint Description,
+    it is further described at <xref linkend="i1887496"/>. The hash code is
+    therefore also based on the Endpoint Id.</para>
+
+    <section>
+      <title>Validity</title>
+
+      <para>A valid Endpoint Description must at least satisfy the following
+      assertions:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>It must have a non-<code>null</code> Id that uniquely
+          identifies the Endpoint</para>
+        </listitem>
+
+        <listitem>
+          <para>It must at least have one Java interface name</para>
+        </listitem>
+
+        <listitem>
+          <para>It must at least have one configuration type set</para>
+        </listitem>
+
+        <listitem>
+          <para>Any version for the packages must have a valid version
+          syntax.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Mutability</title>
+
+      <para>An <code>EndpointDescription</code> object is immutable and with
+      all final fields. It can be freely used between different
+      threads.</para>
+    </section>
+
+    <section xml:id="i1887496">
+      <title>Endpoint Id</title>
+
+      <para>An Endpoint Id is an opaque unique identifier for an Endpoint.
+      There is no syntax defined for this string except that white space at
+      the beginning and ending must be ignored. The actual syntax for this
+      Endpoint Id must be defined by the actual configuration type.</para>
+
+      <para>Two Endpoint Descriptions are deemed identical when their Endpoint
+      Id is equal. The Endpoint Ids must be compared as string compares with
+      leading and trailing spaces removed. The Endpoint Description class must
+      use the <code>String</code> class’ hash Code from the Endpoint Id as its
+      own <code>hashCode</code>.</para>
+    </section>
+
+    <section xml:id="i1887500">
+      <title>Framework UUID</title>
+
+      <para>Each framework registers its services with a service id that is
+      only unique for that specific framework. The OSGi framework is not a
+      singleton, making it possible that a single VM process holds multiple
+      OSGi frameworks. Therefore, to identify an OSGi service uniquely it is
+      necessary to identify the framework that has registered it. This
+      identifier is a <emphasis>Universally Unique IDentifier</emphasis>
+      (UUID) that is set for each framework. This UUID is contained in the
+      following framework property:</para>
+
+      <programlisting>org.osgi.framework.uuid</programlisting>
+
+      <para>If an Endpoint Description has no associated OSGi service then the
+      UUID of that Endpoint Description must not be set and its service id
+      must be 0.</para>
+
+      <para>The deployer should ensure that this property is set properly
+      before the framework is started as either a framework property in the
+      launch, a system property, or the use of a framework implementation that
+      automatically sets this property. If no such property is set, a Remote
+      Service Admin must:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Start a synchronized block on the class literal
+          <code>String</code> object <code>org.osgi.framework.uuid</code>.
+          This can be done like:</para>
+
+          <para><programlisting>synchronized("org.osgi.framework.uuid") { ... }</programlisting></para>
+        </listitem>
+
+        <listitem>
+          <para>Check if the framework UUID is set in the Framework
+          properties, if so, use this one and exit the synchronized
+          block.</para>
+        </listitem>
+
+        <listitem>
+          <para>Create a new UUID.</para>
+        </listitem>
+
+        <listitem>
+          <para>Set the UUID property in the System properties.</para>
+        </listitem>
+
+        <listitem>
+          <para>Leave the synchronized block.</para>
+        </listitem>
+      </orderedlist>
+
+      <para>These steps ensure that the same UUID is consistently used for all
+      exported services. The Remote Service Admin implementation must have the
+      proper permissions to read and write the System properties if the UUID
+      is not set.</para>
+
+      <para>The framework UUID must be constructed according to the
+      <code>java.util.UUID</code> class in the form returned from its
+      <code>toString</code> method.</para>
+
+      <para>A local Endpoint Description will have its framework UUID set to
+      the local framework. This makes it straightforward to filter for
+      Endpoint Descriptions that are describing local Endpoints or that
+      describe remote Endpoints. For example, a manager can take the filter
+      from a listener and ensure that it is only getting remote Endpoint
+      Descriptions:</para>
+
+      <programlisting>(&amp;
+  (!
+    (service.remote.framework.uuid
+       =72dc5fd9-5f8f-4f8f-9821-9ebb433a5b72)
+  )
+  (objectClass=org.osgi.service.log.LogService)
+)</programlisting>
+
+      <para>Where <code>72dc5fd9-5f8f-4f8f-9821-9ebb433a5b72</code> is the
+      UUID of the local framework. A discovery bundle can register the
+      following filter in its scope to receive all locally generated
+      Endpoints:</para>
+
+      <programlisting>(service.remote.framework.uuid
+       =72dc5fd9-5f8f-4f8f-9821-9ebb433a5b72)</programlisting>
+    </section>
+
+    <section xml:id="i1887526">
+      <title>Resource Containment</title>
+
+      <para>Configuration types can, and usually do, use URLs to point to
+      local resources describing in detail the Endpoint parameters for
+      specific protocols. However, the purpose of an Endpoint Description is
+      to describe an Endpoint to a remote system. This implies that there is
+      some marshalling process that will transfer the Endpoint Description to
+      another process. This other process is unlikely to be able to access
+      resource URLs. Local bundle resource URLs are only usable in the
+      framework that originates them but even HTTP based URLs can easily run
+      into problems due to firewalls or lack of routing.</para>
+
+      <para>Therefore, the properties for a configuration type should be
+      stored in such a way that the receiving process can access them. One way
+      to achieve this is to contain the configuration properties completely in
+      the Endpoint Description and ensure they only use the basic data types
+      that the remote services chapter in the core requires every Distribution
+      Provider to support.</para>
+
+      <para>The Endpoint Description XML format provides an <code>xml</code>
+      element that is specifically added to make it easy to embed XML based
+      configuration documents. The XML Schema is defined in <xref
+      linkend="i1889341"/>.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Remote Service Admin</title>
+
+    <para>The Remote Service Admin service abstracts the core functionality of
+    a distribution provider: exporting a service to an Endpoint and importing
+    services from an Endpoint. However, in contrast with the distribution
+    provider of the Remote Services specification, the Remote Service Admin
+    service must be told explicitly what services to import and export.</para>
+
+    <section>
+      <title>Exporting</title>
+
+      <para>An exportable service can be exported with the <xref
+      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.exportService-ServiceReference-Map-"
+      xrefstyle="hyperlink"/> method. This method creates a number of
+      Endpoints by inspecting the merged properties from the Service Reference
+      and the given Map. Any property in the Map overrides the Service
+      Reference properties, regardless of case. That is, if the map contains a
+      key then it will override any case variant of this key in the Service
+      Reference. However, if the Map contains the <code>objectClass</code> or
+      <code>service.id</code> property key in any case variant, then these
+      properties must not override the Service Reference’s value.</para>
+
+      <para>The Remote Service Admin service must interpret the merged
+      properties according to the Remote Services chapter. This means that it
+      must look at the following properties (as defined in chapter <xref
+      linkend="service.remoteservices"/> ):</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>service.exported.configs</code> – <code>(String+
+          )</code> A list of configuration types that should be used to export
+          this service. Each configuration type represents the configuration
+          parameters for an Endpoint. A Remote Service Admin service should
+          create an Endpoint for each configuration type that it supports and
+          ignore the types it does not recognize. If this property is not set,
+          then the Remote Service Admin implementation must choose a
+          convenient configuration type that then must be reported on the
+          Endpoint Description with the <code>service.imported.configs</code>
+          associated with the returned Export Registration.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.exported.intents</code> – (
+          <code>String+)</code> A list of intents that the Remote Service
+          Admin service must implement to distribute the given service.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.exported.intents.extra</code> –
+          <code>(String+)</code> This property is merged with the
+          <code>service.exported.intents</code> property.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.exported.interfaces</code> –
+          <code>(String+)</code> This property must be set; it marks this
+          service for export and defines the interfaces. The list members must
+          all be contained in the types listed in the <code>objectClass</code>
+          service property from the Service Reference. The single value of an
+          asterisk (<code>’*’, \u002A</code>) indicates all interfaces in the
+          registration’s <code>objectClass</code> property and ignore the
+          classes. Being able to set this property outside the Service
+          Reference implies that the Topology Manager can export any
+          registered service, also services not specifically marked to be
+          exported.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.intents</code> – <code>(String+)</code> A list
+          of intents that this service has implemented.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>A Topology Manager cannot remove properties, <code>null</code> is
+      invalid as a property value.</para>
+
+      <para>The Remote Service Admin returns a collection of
+      <code>ExportRegistration</code> objects. This collection must contain an
+      entry for each configuration type the Remote Service Admin has
+      recognized. Unrecognized configuration types must be ignored. However,
+      it is possible that this list contains <emphasis>invalid
+      registrations</emphasis>, see <xref linkend="i1791501"/>.</para>
+
+      <para>If a Service was already exported then the Remote Service Admin
+      must still return a new <code>ExportRegistration</code> object that is
+      linked with the earlier registrations. That is, an Endpoint can be
+      shared between multiple Export Registrations. The Remote Service Admin
+      service must ensure that the corresponding Endpoint remains available as
+      long as there is at least one open Export Registration for that
+      Endpoint.</para>
+
+      <para>For each successful creation of an export registration, the Remote
+      Service Admin service must publish an <xref
+      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_REGISTRATION"
+      xrefstyle="hyperlink"/> event, see <xref linkend="i1736220"/>. This
+      event must be emitted, even if the Endpoint already existed and is thus
+      shared with another Export Registration. If the creation of an Endpoint
+      runs into an error, an <xref
+      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_ERROR"
+      xrefstyle="hyperlink"/> event must be emitted.</para>
+
+      <para>Each valid Export Registration corresponds to an Endpoint for the
+      given service. This Endpoint must remain active until all of the Export
+      Registrations are closed that share this Endpoint.</para>
+
+      <para>The Endpoint can now be published so that other processes or
+      systems can import this Endpoint. To aid with this import, the Export
+      Registration has a <xref
+      linkend="org.osgi.service.remoteserviceadmin.ExportRegistration.getExportReference--"
+      xrefstyle="hyperlink"/> method that returns an <xref
+      linkend="org.osgi.service.remoteserviceadmin.ExportReference"
+      xrefstyle="hyperlink"/> object. This reference provides the following
+      information:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.remoteserviceadmin.ExportReference.getExportedEndpoint--"
+          xrefstyle="hyperlink"/> – This is the associated Endpoint
+          Description. This Endpoint Description is a properties based
+          description of an Endpoint. The property keys and their semantics
+          are outlined in <xref
+          linkend="service.remoteserviceadmin.endpointdescription"/>. It can
+          be used to inform other systems of the availability of an
+          Endpoint.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.remoteserviceadmin.ExportReference.getExportedService--"
+          xrefstyle="hyperlink"/> – The Service Reference to the exported
+          service.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Both methods must return <code>null</code> when the associated
+      Export Registration is closed.</para>
+
+      <para>A Distribution Provider that recognizes the configuration type in
+      an Endpoint can create a connection to an Endpoint on other systems as
+      long as firewalls and networks permit. The Endpoint Description can
+      therefore be communicated to other systems to announce the availability
+      of an Endpoint. The Topology Manager can optionally announce the
+      availability of an Endpoint to the Endpoint Listener services, see <xref
+      linkend="i1751493"/>. The decision to announce the availability of an
+      Endpoint is one of the policies that is provided by a specific Topology
+      Manager.</para>
+
+      <para>The Export Registrations remain open until:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Explicitly closed by the Topology Manager, or</para>
+        </listitem>
+
+        <listitem>
+          <para>The Remote Service Admin service is no longer used by the
+          Topology Manager that created the Export Registration.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If the Remote Service Admin service can no longer maintain the
+      corresponding Endpoint due to failures than these should be reported
+      through the events. However, the registrations should remain open until
+      explicitly closed by the Topology Manager.</para>
+
+      <para>See <xref linkend="i1736585"/> for more information.</para>
+
+      <para>The Export Registrations are not permanent; persistence is in the
+      realm of the Topology Manager.</para>
+    </section>
+
+    <section>
+      <title>Importing</title>
+
+      <para>To import a service, a Topology Manager must have an Endpoint
+      Description that describes the Endpoint the imported service should
+      connect to. With this Endpoint Description, a Remote Service Admin
+      service can then import the corresponding Endpoint. A Topology Manager
+      can obtain these Endpoint Descriptions through internal configuration;
+      it can use the discovery model enabled by the Endpoint Listener service,
+      see <xref linkend="i1751493"/>, or some alternate means.</para>
+
+      <para>A service can be imported with the Remote Service Admin <xref
+      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.importService-EndpointDescription-"
+      xrefstyle="hyperlink"/> method. This method takes an Endpoint
+      Description and picks one of the embedded configuration types to
+      establish a connection with the corresponding Endpoint to create a local
+      service proxy. This proxy can then be mapped to either a remote OSGi
+      service or an alternative, for example a web service. In certain cases
+      the service proxy can be lazy, only verifying the reachability of the
+      Endpoint when it is actually invoked for the first time. This implies
+      that a service proxy can block when invoked until the proper
+      communication setup has taken place.</para>
+
+      <para>If the Remote Service Admin service does not recognize any of the
+      configuration types then it must return <code>null</code>. If there are
+      multiple configuration types recognized then the Remote Service Admin is
+      free to select any one of the recognized types.</para>
+
+      <para>If an Endpoint was already imported as a service proxy, then the
+      Remote Service Admin service must return a new Import Registration that
+      is associated with the existing service proxy/Endpoint combination. The
+      Remote Service Admin service must ensure that the imported service proxy
+      remains available as long as there is at least one open Import
+      Registration that refers to it and the corresponding remote Endpoint is
+      still valid.</para>
+
+      <para>The Remote Service Admin service must ensure that service
+      properties are according to the Remote Services chapter for an imported
+      service. This means that it must register the following
+      properties:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>service.imported</code> – <code>(*)</code> Must be set
+          to any value.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.imported.configs</code> – <code>(String+)</code>
+          The configuration information used to import this service. Any
+          associated properties for this configuration types must be properly
+          mapped to the importing system. For example, a URL in these
+          properties must point to a valid resource when used in the importing
+          framework, see <xref linkend="i1887526"/>. Multiple configuration
+          types can be listed if they are synonyms for exactly the same
+          Endpoint that is used to export this service.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.intents</code> – <code>(String+)</code> The
+          Remote Service Admin must set this property to convey the combined
+          intents of:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>The exporting service, and</para>
+            </listitem>
+
+            <listitem>
+              <para>The intents that the exporting distribution provider adds,
+              and</para>
+            </listitem>
+
+            <listitem>
+              <para>The intents that the importing distribution provider
+              adds.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para>Any additional properties listed in the Endpoint Description
+          that should not be excluded. See <xref
+          linkend="service.remoteserviceadmin.endpointdescription"/> for more
+          details about the properties in the Endpoint Description.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>A Remote Service Admin service must strictly follow the rules for
+      importing a service as outlined in the Remote Services chapter.</para>
+
+      <para>The Remote Service Admin must return an
+      <code>ImportRegistration</code> object or <code>null</code>. Even if an
+      Import Registration is returned, it can still be an <emphasis>invalid
+      registration</emphasis>, see <xref linkend="i1791501"/> if the setup of
+      the connection failed asynchronously. The Import Registration must
+      always be a new object. Each valid Import Registration corresponds to a
+      proxy service, potentially shared, that was created for the given
+      Endpoint. The issues around proxying are described in <xref
+      linkend="i1742961"/>.</para>
+
+      <para>For each successful creation of an import registration, the Remote
+      Service Admin service must publish an <xref
+      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_REGISTRATION"
+      xrefstyle="hyperlink"/> event, if there is an error it must publish an
+      <xref
+      linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_ERROR"
+      xrefstyle="hyperlink"/>, see <xref linkend="i1736220"/>.</para>
+
+      <para>For more information see <xref linkend="i1736585"/>.</para>
+
+      <para>The Import Registration provides access to an <xref
+      linkend="org.osgi.service.remoteserviceadmin.ImportReference"
+      xrefstyle="hyperlink"/> object with the <xref
+      linkend="org.osgi.service.remoteserviceadmin.ImportRegistration.getImportReference--"
+      xrefstyle="hyperlink"/>. This object has the following methods:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.remoteserviceadmin.ImportReference.getImportedEndpoint--"
+          xrefstyle="hyperlink"/> – Provides the Endpoint Description for this
+          imported service.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.remoteserviceadmin.ImportReference.getImportedService--"
+          xrefstyle="hyperlink"/> – Provides the Service Reference for the
+          service proxy.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The Import Registration will remain open as long as:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The corresponding remote Endpoint remains available,
+          and</para>
+        </listitem>
+
+        <listitem>
+          <para>The Remote Service Admin service is still in use by the
+          Topology Manager that created the Import Registration.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>That is, the Import Registrations are not permanent, any
+      persistence is in the realm of the Topology Manager. See <xref
+      linkend="i1736585"/> for more details.</para>
+    </section>
+
+    <section>
+      <title>Reflection</title>
+
+      <para>The Remote Service Admin service provides the following methods to
+      get the list of the current exported and imported services:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.getExportedServices--"
+          xrefstyle="hyperlink"/> – List the Export References for services
+          that are exported by this Remote Service Admin service as directed
+          by any of the Topology Managers.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.getImportedEndpoints--"
+          xrefstyle="hyperlink"/> – List the Import References for services
+          that have been imported by this Remote Service Admin service as
+          directed by any of the Topology Managers.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="i1736585">
+      <title>Registration Life Cycle</title>
+
+      <para>The registration life cycle of imported and exported services is
+      non-trivial because:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Multiple Export Registrations can use to the same
+          Endpoint.</para>
+        </listitem>
+
+        <listitem>
+          <para>Multiple Import Registrations can use to the same service
+          proxy</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For example, Topology Manager <code>A</code> could create an
+      Export Registration for service <code>S</code> to Endpoint
+      <code>E</code>. Topology Manager <code>B</code> could attempt to create
+      exactly the same Endpoint <code>E</code> for service <code>S</code>.
+      However, an Endpoint occupies a unique address and it is often not
+      possible to create multiple Endpoints for the same address. A Remote
+      Service Admin service must therefore detect the case that multiple
+      registrations share the same Endpoint between Topology Manager
+      <code>A</code>’s registration and <code>B</code>’s registration.
+      However, if Topology Manager <code>B</code> now closes its Export
+      Registration then Topology Manager <code>A</code> still assumes the
+      availability of the Endpoint. This scenario is depicted in <xref
+      linkend="i1817652" xrefstyle="template:Figure %n on page %p"/>. A
+      similar example can be made for an Import Registration. In that case the
+      same service proxy can be shared between multiple Import
+      Registrations.</para>
+
+      <figure xml:id="i1817652">
+        <title>Sharing Endpoints and proxies</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="1.494in"
+                       contentwidth="4.936in"
+                       fileref="sharing-endpoints-proxies.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>To simplify the implementation of Topology Managers, the Remote
+      Service Admin must make this sharing of Endpoints and proxies between
+      different registrations transparent. Both the Import and Export
+      Registrations must be unique objects for every registration call. That
+      is, even if the same Topology Manager creates a registration for the
+      same Endpoint/proxy then it must still receive a new registration.
+      Though reference counting of the close operations could be used to
+      detect when an Endpoint or proxy can be cleared, it would require that
+      the Topology Manager exactly matches the close calls with the creation
+      of the registrations. However, it is very hard to ensure that the
+      <code>close</code> method is only called once in certain error and
+      cleanup scenarios. The Remote Service Admin must therefore return unique
+      objects for all registrations and manage the cleanup of proxies and
+      Endpoints internally, even if the <code>close</code> method is called
+      multiple times on a registration.</para>
+
+      <para>A Remote Service Admin service must use a Service Factory for its
+      service object to maintain separation between Topology Managers. All
+      registrations obtained through a Remote Service Admin service are life
+      cycle bound to the Topology Manager that created it. That is, if a
+      Topology Manager ungets its Remote Service Admin service, all
+      registrations obtained through this service must automatically be
+      closed. This model ensures that all registrations are properly closed if
+      either the Remote Service Admin or the Topology Manager stops because in
+      both cases the framework performs the unget automatically.</para>
+    </section>
+
+    <section xml:id="i1791501">
+      <title>Invalid Registrations</title>
+
+      <para>The Remote Service Admin service is explicitly allowed to return
+      <emphasis>invalid</emphasis> Import and Export Registrations. First, in
+      a communications stack it can take time to discover that there are
+      issues, allowing the registration to return before it has completed can
+      potentially save time. Second, it allows the Topology Manager to
+      discover problems with the configuration information. Without the
+      invalid Export Registrations, the Topology Manager would have to scan
+      the log or associate the Remote Service Admin Events with a specific
+      import/export method call, something that can be difficult to do.</para>
+
+      <para>If the registration is invalid, the <xref
+      linkend="org.osgi.service.remoteserviceadmin.ExportRegistration.getException--"
+      xrefstyle="hyperlink"/> method must return a <code>Throwable</code>
+      object. If the registration has initialized correctly, this method will
+      return <code>null</code>. The <xref
+      linkend="org.osgi.service.remoteserviceadmin.ExportRegistration.getExportReference--"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.service.remoteserviceadmin.ImportRegistration.getImportReference--"
+      xrefstyle="hyperlink"/> methods must throw an Illegal State Exception
+      when the registration is invalid. A Remote Service Admin service is
+      allowed to block for a reasonable amount of time when any of these
+      methods is called, including the <code>getException</code> method, to
+      finish initialization.</para>
+
+      <para>An invalid registration can be considered as never having been
+      opened, it is therefore not necessary to close it; however, closing an
+      invalid or closed registration must be a dummy operation and never throw
+      an Exception. However, a failed registration must generate a
+      corresponding error event.</para>
+    </section>
+
+    <section xml:id="i1742961">
+      <title>Proxying</title>
+
+      <para>It is the responsibility of the Remote Service Admin service to
+      properly proxy an imported service. This specification does not mandate
+      the technique used to proxy an Endpoint as a service in the OSGi
+      framework. The OSGi Remote Services specification allows a distribution
+      provider to limit what it can proxy.</para>
+
+      <para>One of the primary aspects of a proxy is to ensure class space
+      consistency between the exporting bundle and importing bundles. This can
+      require the generation of a proxy-per-bundle to match the proper class
+      spaces. It is the responsibility of the Remote Service Admin to ensure
+      that no Class Cast Exceptions occur.</para>
+
+      <para>A common technique to achieve maximum class space compatibility is
+      to use a Service Factory. A Service Factory provides the calling bundle
+      when it first gets the service, making it straightforward to verify the
+      package version of the interface that the calling bundle uses. Knowing
+      the bundle that requests the service allows the creation of specialized
+      proxies for each bundle. The interface class(es) for the proxy can then
+      be loaded directly from the bundle, ensuring class compatibility.
+      Interfaces should be loadable by the bundle otherwise that bundle can
+      not use the interface in its code. If an interface cannot be loaded then
+      it can be skipped. A dedicated class loader can then be created that has
+      visibility to all these interfaces and is used to define the proxy
+      class. This design ensures proper visibility and consistency.
+      Implementations can optimize this model by sharing compatible class
+      loaders between bundles.</para>
+
+      <para>The proxy will have to call arbitrary methods on arbitrary
+      services. This has a large number of security implications, see <xref
+      linkend="i1789427"/>.</para>
+    </section>
+  </section>
+
+  <section xml:id="i1751493">
+    <title>Discovery</title>
+
+    <para>The topology of the distributed system is decided by the Topology
+    Manager. However, in a distributed environment, the Topology Manager needs
+    to <emphasis>discover</emphasis> Endpoints in other frameworks. There is a
+    very large number of ways how a Topology Manager could learn about other
+    Endpoints, ranging from static configuration, a centralized
+    administration, all the way to fully dynamic discovery protocols like the
+    Service Location Protocol (SLP) or JGroups. To support the required
+    flexibility, this specification defines an <emphasis>Endpoint
+    Listener</emphasis> service that allows the dissemination of Endpoint
+    information. This service provides a symmetric solution because the
+    problem is symmetric: it is used by a Topology Manager to announce changes
+    in its local topology as well as find out about other Endpoint
+    Descriptions. Where those other Endpoint Descriptions come from can vary
+    widely. This design is depicted in <xref linkend="i1753219"
+    xrefstyle="template:Figure %n on page %p"/>.</para>
+
+    <figure xml:id="i1753219">
+      <title>Examples</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="2.532in"
+                     contentwidth="7.000in" fileref="topology-example.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>The design of the Endpoint Listener allows a federated registry of
+    Endpoint Descriptions. Any party that is interested in Endpoint
+    Descriptions should register an Endpoint Listener service. This will
+    signal that it is interested in topology information to any
+    <emphasis>Endpoint Description Providers</emphasis>. Each Endpoint
+    Listener service must be registered with a service property that holds a
+    set of filter strings to indicate the <emphasis>scope</emphasis> of its
+    interest. These filters must match an Endpoint Description before the
+    corresponding Endpoint Listener service is notified of the availability of
+    an Endpoint Description. Scoping is intended to limit the delivery of
+    unnecessary Endpoint Descriptions as well as signal the need for specific
+    Endpoints.</para>
+
+    <para>A Topology Manager has knowledge of its local Endpoints and is
+    likely to be only interested in remote Endpoints. It can therefore set the
+    scope to only match remote Endpoint Descriptions. See <xref
+    linkend="i1887500"/> for how to limit the scope to local or remote
+    Endpoints. At the same time, a Topology manager should inform any locally
+    registered Endpoint Listener services with Endpoints that it has created
+    or deleted.</para>
+
+    <para>This architecture allows many different use cases. For example, a
+    bundle could display a map of the topology by registering an Endpoint
+    Listener with a scope for local Endpoints. Another example is the use of
+    SLP to announce local Endpoints to a network and to discover remote
+    Endpoints from other parties on this network.</para>
+
+    <para>An instance of this design is shown in <xref linkend="i1751511"
+    xrefstyle="template:Figure %n on page %p"/>. In this figure, there are 3
+    frameworks that collaborate through some discovery bundle. The
+    <code>Top</code> framework has created an Endpoint and decides to notify
+    all Endpoint Listeners registered in this framework that are scoped to
+    this new Endpoint. Local bundle <code>D</code> has set its scope to all
+    Endpoint Descriptions that originate from its local framework, it
+    therefore receives the Endpoint Description from <code>T</code>. Bundle
+    <code>D</code> then sends the Endpoint Description to all its peers on the
+    network.</para>
+
+    <para>In the <code>Quark</code> framework, the manager bundle
+    <code>T</code> has expressed an interest by setting its scope to a filter
+    that matches the Endpoint Description from the <code>Top</code> framework.
+    When the bundle <code>D</code> on the <code>Quark</code> framework
+    receives the Endpoint Description from bundle <code>D</code> on the
+    <code>Top</code> framework, it matches it against all local Endpoint
+    Listener’s scope. In this case, the local manager bundle <code>T</code>
+    matches and is given the Endpoint Description. The manager then uses the
+    Remote Service Admin service to import the exported service described by
+    the given Endpoint Description.</para>
+
+    <figure pgwide="1" xml:id="i1751511">
+      <title>Endpoint Discovery Architecture. T=Topology Manager,
+      D=Discovery</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="2.692in"
+                     contentwidth="4.924in"
+                     fileref="endpoint-discovery-architecture.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>The previous description is just one of the possible usages of the
+    Endpoint Listener. For example, the discovery bundles could communicate
+    the scopes to their peers. These peers could then register an Endpoint
+    Listener per peer, minimizing the network traffic because Endpoint
+    Descriptions do not have to be broadcast to all peers.</para>
+
+    <para>Another alternative usage is described in <xref
+    linkend="i1889341"/>. In this chapter the extender pattern is used to
+    retrieve Endpoint Descriptions from resources in locally active
+    bundles.</para>
+
+    <section>
+      <title>Scope and Filters</title>
+
+      <para>An Endpoint Listener service is registered with the <xref
+      linkend="org.osgi.service.remoteserviceadmin.EndpointListener.ENDPOINT_LISTENER_SCOPE"
+      xrefstyle="hyperlink"/> service property. This property, which is
+      <code>String+</code>, must be set and must contain at least one filter.
+      If there is not at least one filter, then that Endpoint Listener must
+      not receive any Endpoint Descriptions.</para>
+
+      <para>Each filter in the scope is applied against the properties of the
+      Endpoint Description until one succeeds. Only if one succeeds is the
+      Endpoint informed about the existence of an Endpoint.</para>
+
+      <para>The Endpoint Description is designed to reflect the properties of
+      the imported service, there is therefore a correspondence with the
+      filters that are used by bundles that are listening for service
+      registrations. The purpose of this design is to match the filter
+      available through Listener Hook services, see <xref
+      linkend="i1755239"/>.</para>
+
+      <para>However, the purpose of the filters is more generic than just this
+      use case. It can also be used to specify the interest in local Endpoints
+      or remote Endpoints. For example, Topology Managers are only interested
+      in remote Endpoints while discoverers are only interested in local
+      Endpoints. It is easy to discriminate between local and remote by
+      filtering on the <code>endpoint.framework.uuid</code> property. Endpoint
+      Descriptions contain the Universally Unique ID (UUID) of the originating
+      framework.This UUID must be available from the local framework as well.
+      See <xref linkend="i1887500"/>.</para>
+    </section>
+
+    <section>
+      <title>Endpoint Listener Interface</title>
+
+      <para>The <code>EndpointListener</code> interface has the following
+      methods:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointAdded-EndpointDescription-String-"
+          xrefstyle="hyperlink"/> – Notify the Endpoint Listener of a new
+          Endpoint Description. The second parameter is the filter that
+          matched the Endpoint Description. Registering the same Endpoint
+          multiple times counts as a single registration.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointRemoved-EndpointDescription-String-"
+          xrefstyle="hyperlink"/> – Notify the Endpoint Listener that the
+          provided Endpoint Description is no longer available.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>These methods must only be called if the Endpoint Listener service
+      has a filter in its scope that matches the Endpoint Description
+      properties. The reason for the filter string in the methods is to
+      simplify and speed up matching an Endpoint Description to the cause of
+      interest. For example, if the Listener Hook is used to do on demand
+      import of services, then the filter can be associated with the Listener
+      Info of the hook, see <xref linkend="i1755239"/>. If multiple filters in
+      the scope match the Endpoint Description than the first filter in the
+      scope must be passed.</para>
+
+      <para>The Endpoint Listener interface is
+      <emphasis>idempotent</emphasis>. Endpoint Description Providers must
+      inform an Endpoint Listener service that is registered of all their
+      matching Endpoints. The only way to find out about all available
+      Endpoints is to register an Endpoint Listener that is then informed by
+      all available Endpoint Description Providers of their known Endpoint
+      Descriptions that match their scope.</para>
+    </section>
+
+    <section>
+      <title>Endpoint Listener Implementations</title>
+
+      <para>An Endpoint Listener service tracks the known Endpoints in its
+      given scope. There are potentially a large number of bundles involved in
+      creating this federated registry of Endpoints. To ensure that no
+      Endpoint Descriptions are orphaned or unnecessarily missed, an Endpoint
+      Listener implementation must follow the following rules:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Registration</emphasis> – An Endpoint Listener
+          service is called with an <xref
+          linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointAdded-EndpointDescription-String-"
+          xrefstyle="hyperlink"/> method for all known Endpoint Descriptions
+          that the bundles in the local framework are aware of.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Tracking providers</emphasis> – An Endpoint Listener
+          must track the bundles that provide it with Endpoint Descriptions.
+          If a bundle that provided Endpoint Descriptions is stopped, all
+          Endpoint Descriptions that were provided by that bundle must be
+          removed. This can be implemented straightforwardly with a Service
+          Factory.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Scope modification</emphasis> – An Endpoint Listener
+          is allowed to modify the set of filters in its scope through a
+          service property modification. This modification must result in new
+          and/or existing Endpoint Descriptions to be added, however, existing
+          Endpoints that are no longer in scope are not required to be
+          explicitly removed by the their sources. It is the responsibility
+          for the Endpoint Listener to remove these orphaned Endpoint
+          Description from its view.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Endpoint Descriptions can be added from different sources and
+      providers of Endpoint Descriptions often use asynchronous and
+      potentially unreliable communications. An implementation must therefore
+      handle the addition of multiple equal Endpoint Descriptions from
+      different sources as well as from the same source. Implementations must
+      not count the number of registrations, a remove operation of an Endpoint
+      Description is final for each source. That is, if source <code>A</code>
+      added Endpoint Description <code>e</code>, then it can only be removed
+      by source <code>A</code>. However, if source <code>A</code> added
+      <code>e</code> multiple times, then it only needs to be removed once.
+      Removals of Endpoint Descriptions that have not been added (or were
+      removed before) should be ignored.</para>
+
+      <para>The discovery of Endpoints is a fundamentally indeterministic
+      process and implementations of Endpoint Listener services should realize
+      that there are no guarantees that an added Endpoint Description is
+      always describing a valid Endpoint.</para>
+    </section>
+
+    <section>
+      <title>Endpoint Description Providers</title>
+
+      <para>The Endpoint Listener service is based on an asynchronous,
+      unreliable, best effort model because there are few guarantees in a
+      distributed world. It is the task of an Endpoint Description Provider,
+      for example a discovery bundle, to keep the Endpoint Listener services
+      up to date of any Endpoint Descriptions the provider is aware of and
+      that match the tracked service’s scope.</para>
+
+      <para>If an Endpoint Listener service is registered, a provider must add
+      all matching Endpoint Descriptions that it is aware of and match the
+      tracked Endpoint Listener’s scope. This can be done during registration
+      or asynchronously later. For example, it is possible to use the filters
+      in the scope to request remote systems for any Endpoint Descriptions
+      that match those filters. For expediency reasons, the service
+      registration event should not be delayed until those results return; it
+      is therefore applicable to add these Endpoint Descriptions later when
+      the returns from the remote systems finally arrive.</para>
+
+      <para>A tracked Endpoint Listener is allowed to modify its scope by
+      setting new properties on its Service Registration. An Endpoint
+      Description provider must process the new scope and add any newly
+      matching Endpoint Descriptions. It is not necessary to remove any
+      Endpoint Descriptions that were added before but no longer match the new
+      scope. Removing those orphaned descriptions is the responsibility of the
+      Endpoint Listener implementation.</para>
+
+      <para>It is not necessary to remove any registered Endpoint Descriptions
+      when the Endpoint Listener is unregistered; also here it is the
+      responsibility of the Endpoint Listener to do the proper cleanup.</para>
+    </section>
+
+    <section xml:id="i1755239">
+      <title>On Demand</title>
+
+      <para>A common distribution policy is to import services that are being
+      listened for by local bundles. For example, when a bundle opens a
+      Service Tracker on the Log Service, a Topology Manager could be notified
+      and attempt to find a Log Service in the local cluster and then import
+      this service in the local Service Registry.</para>
+
+      <para>The OSGi framework provides service hooks for exactly this
+      purpose. A Topology Manager can register a Listener Hook service and
+      receive the information about bundles that have specified an interests
+      in specific services.</para>
+
+      <para>For example, a bundle creates the following Service
+      Tracker:</para>
+
+      <programlisting>ServiceTracker st = new ServiceTracker(context, 
+        LogService.class.getName() );
+st.open();</programlisting>
+
+      <para>This Service Tracker will register a Service Listener with the
+      OSGi framework. This will cause the framework to add a
+      <code>ListenerInfo</code> to any Listener Hook services. The
+      <code>getFilter</code> method on a <code>ListenerInfo</code> object
+      provides a filter that is directly applicable for the Endpoint
+      Listener’s scope. In the previous example, this would be the
+      filter:</para>
+
+      <programlisting>(objectClass=org.osgi.service.log.LogService)</programlisting>
+
+      <para>A Topology Manager could verify if this listener is satisfied.
+      That is, if it has at least one service. If no such service could be
+      found, it could then add this filter to its Endpoint Listener’s scope to
+      detect remote implementations of this service. If such an Endpoint is
+      detected, it could then request the import of this service through the
+      Remote Service Admin service.</para>
+    </section>
+  </section>
+
+  <section xml:id="i1736220">
+    <title>Events</title>
+
+    <para>The Remote Service Admin service must synchronously inform any
+    Remote Service Admin Listener services of events as they happen. Client of
+    the events should return quickly and not perform any but trivial
+    processing in the same thread.</para>
+
+    <para>The following event types are defined:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_ERROR"
+        xrefstyle="hyperlink"/> – An exported service has run into an
+        unrecoverable error, although the Export Registration has not been
+        closed yet. The event carries the Export Registration as well as the
+        Exception that caused the problem, if present.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_REGISTRATION"
+        xrefstyle="hyperlink"/> – The Remote Service Admin has registered a
+        new Export Registration.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_UNREGISTRATION"
+        xrefstyle="hyperlink"/> – An Export Registration has been closed, the
+        service is no longer exported and the Endpoint is no longer active
+        when this was the last registration for that service/Endpoint
+        combination.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_WARNING"
+        xrefstyle="hyperlink"/> – An exported service is experiencing problems
+        but the Endpoint is still available.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_ERROR"
+        xrefstyle="hyperlink"/> – An imported service has run into a fatal
+        error and has been shut down. The Import Registration should be closed
+        by the Topology Manager that created them.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_REGISTRATION"
+        xrefstyle="hyperlink"/> – A new Import Registration was created for a
+        potentially existing service/Endpoint combination.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_UNREGISTRATION"
+        xrefstyle="hyperlink"/> – An Import Registration was closed, removing
+        the proxy if this was the last registration.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_WARNING"
+        xrefstyle="hyperlink"/> – An imported service is experiencing problems
+        but can continue to function.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The following properties are available on the event:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getType--"
+        xrefstyle="hyperlink"/> – The type of the event.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getException--"
+        xrefstyle="hyperlink"/> – Any exception, if present.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getExportReference--"
+        xrefstyle="hyperlink"/> – An export reference, if applicable.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getImportReference--"
+        xrefstyle="hyperlink"/> – An import reference, if applicable.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getSource--"
+        xrefstyle="hyperlink"/> – The source of the event, the Remote Service
+        Admin service.</para>
+      </listitem>
+    </itemizedlist>
+
+    <section>
+      <title>Event Admin Mapping</title>
+
+      <para>All Remote Service Admin events must be posted, which is
+      asynchronously, to the Event Admin service, if present, under the
+      following topic:</para>
+
+      <programlisting>org/osgi/service/remoteserviceadmin/&lt;type&gt;</programlisting>
+
+      <para>Where <code>&lt;type&gt;</code> represents the type of the event,
+      for example <code>IMPORT_ERROR</code>.</para>
+
+      <para>The Event Admin event must have the following properties:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>bundle</code> – <code>(Bundle)</code> The Remote Service
+          Admin bundle</para>
+        </listitem>
+
+        <listitem>
+          <para><code>bundle.id</code> – (<code>Long</code>) The id of the
+          Remote Service Admin bundle.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>bundle.symbolicname</code> – (<code>String</code>) The
+          Bundle Symbolic Name of the Remote Service Admin
+          <code>bundle.version</code> – (<code>Version</code>) The version of
+          the Remote Service Admin bundle.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>bundle.signer</code> – (<code>String[]</code>) Signer of
+          the Remote Service Admin bundle</para>
+        </listitem>
+
+        <listitem>
+          <para><code>cause</code> – The exception, if present.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>endpoint.service.id</code> – (<code>Long</code>) Remote
+          service id, if present</para>
+        </listitem>
+
+        <listitem>
+          <para><code>endpoint.framework.uuid</code> – (<code>String</code>)
+          Remote service’s Framework UUID, if present</para>
+        </listitem>
+
+        <listitem>
+          <para><code>endpoint.id</code> – (<code>String</code>) The id of the
+          Endpoint, if present</para>
+        </listitem>
+
+        <listitem>
+          <para><code>objectClass</code> – <code>(String[])</code> The
+          interface names, if present</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.imported.configs</code> – (<code>String+</code>)
+          The configuration types of the imported services, if present</para>
+        </listitem>
+
+        <listitem>
+          <para><code>timestamp</code> – (<code>Long</code>) The time when the
+          event occurred</para>
+        </listitem>
+
+        <listitem>
+          <para><code>event</code> – (<code>RemoteServiceAdminEvent</code>)
+          The <code>RemoteServiceAdminEvent</code> object that caused this
+          event.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section xml:id="i1889341">
+    <title>Endpoint Description Extender Format</title>
+
+    <para>The Endpoint Description Extender format is a possibility to deliver
+    Endpoint Descriptions in bundles. This section defines an XML schema and
+    how to locate XML definition resources that use this schema to define
+    Endpoint Descriptions. The definition resource is a simple property based
+    model that can define the same information as the properties on an
+    imported service. If a bundle with the description is
+    <emphasis>ready</emphasis> (<code>ACTIVE</code> or lazy activation and in
+    the <code>STARTING</code> state), then this static description can be
+    disseminated through the Endpoint Listeners that have specified an
+    interest in this description. If the bundle is stopped, the corresponding
+    Endpoints must be removed.</para>
+
+    <para>XML documents containing remote service descriptions must be
+    specified by the Remote-Service header in the manifest. The structure of
+    the Remote Service header is:</para>
+
+    <programlisting>Remote-Service ::= header // See Common Header Syntax in Core</programlisting>
+
+    <para>The value of the header is a comma separated list of paths. A path
+    is:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>A directory if it ends with a solidus (slash <code>’/’
+        \u002F</code>). A directory is scanned for <code>*.xml</code>
+        files.</para>
+      </listitem>
+
+      <listitem>
+        <para>A path with wildcards. Such a path can use the wildcards in its
+        last component, as defined in the <code>findEntries</code>
+        method.</para>
+      </listitem>
+
+      <listitem>
+        <para>A complete path, not having wildcards not ending in a solidus
+        (slash <code>’/’ \u002F</code>).</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The Remote-Service header has no architected directives or
+    attributes, unrecognized attributes and directives must be ignored.</para>
+
+    <para>A Remote-Service manifest header specified in a fragment must be
+    ignored. However, XML documents referenced by a bundle’s Remote-Service
+    manifest header can be contained in attached fragments. The required
+    behavior for this is implemented in the <code>findEntries</code>
+    method.</para>
+
+    <para>The extender must process each XML document specified in this
+    header. If an XML document specified by the header cannot be located in
+    the bundle and its attached fragments, the extender must log an error
+    message with the Log Service, if present, and continue.</para>
+
+    <para>For example:</para>
+
+    <programlisting>Remote-Service: lib/, remote/osgi/*.dsc, cnf/google.xml</programlisting>
+
+    <para>This matches all resources in the lib directory matching
+    <code>*.xml</code>, all resources in the <code>/remote/osgi</code>
+    directory that end with <code>.dsc</code>, as well as the
+    <code>google.xml</code> resource in the <code>cnf</code> directory.</para>
+
+    <para>The namespace of these XML resources must be:</para>
+
+    <programlisting> <code>http://www.osgi.org/xmlns/rsa/v1.0.0</code></programlisting>
+
+    <para>This namespace describes a set of Endpoint Descriptions, where each
+    Endpoint Description can provide a set of properties. The structure of
+    this schema is:</para>
+
+    <programlisting>endpoint-descriptions  ::= &lt;endpoint-description&gt;*
+endpoint-description   ::= &lt;property&gt;*
+property               ::= ( &lt;array&gt; | &lt;list&gt; | &lt;set&gt;| &lt;xml&gt; )?
+array                  ::= &lt;value&gt; *
+list                   ::= &lt;value&gt; *
+set                    ::= &lt;value&gt; *
+xml                    ::= &lt;*&gt; *</programlisting>
+
+    <para>This structure is depicted in <xref linkend="i1889373"
+    xrefstyle="template:Figure %n on page %p"/>.</para>
+
+    <figure xml:id="i1889373">
+      <title>Endpoint Description XML Structure</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="3.427in"
+                     contentwidth="6.262in"
+                     fileref="endpoint-xml-structure.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>The <code>property</code> element has the attributes listed in table
+    <xref linkend="service.remoteserviceadmin-property.attributes"/>.</para>
+
+    <table xml:id="service.remoteserviceadmin-property.attributes">
+      <title>Property Attributes</title>
+
+      <tgroup cols="3">
+        <colspec colnum="1" colwidth="1*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="3*"/>
+
+        <thead>
+          <row>
+            <entry>Attribute</entry>
+
+            <entry>Type</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>name</code></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><para>The required name of the property. The type maps to
+            the XML Schema <code>xsd:string</code> type.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>value-type</code></entry>
+
+            <entry><para><code>  String</code></para><para><code>|
+            long</code></para><para><code>| Long</code></para><para><code>|
+            double</code></para><para><code>|
+            Double</code></para><para><code>| float</code></para><para><code>|
+            Float</code></para><para><code>| int</code></para><para><code>|
+            Integer</code></para><para><code>| byte</code></para><para><code>|
+            Byte</code></para><para><code>| char</code></para><para><code>|
+            Character</code></para><para><code>|
+            boolean</code></para><para><code>|
+            Boolean</code></para><para><code>|
+            short</code></para><para><code>| Short</code></para></entry>
+
+            <entry><para>The optional type name of the property, the default
+            is <code>String</code>. Any value in the value attribute or the
+            value element when collections are used must be converted to the
+            corresponding Java types. If the primitive form, for example
+            <code>byte</code>, is specified for non-array types, then the
+            value must be silently converted to the corresponding wrapper
+            type.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>value</code></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><para>The value. Must be converted to the specified type if
+            this is not the <code>String</code> type. The <code>value</code>
+            attribute must not be used when the <code>property</code> element
+            has a child element.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>A property can have an <code>array</code>, <code>list</code>,
+    <code>set</code>, or <code>xml</code> child element. If a child element is
+    present then it is an error if the <code>value</code> attribute is
+    defined. It is also an error of there is no child element and no
+    <code>value</code> attribute.</para>
+
+    <para>The <code>array</code>, <code>list</code>, or <code>set</code> are
+    <emphasis>multi-valued</emphasis>. That is, they contain 0 or more
+    <code>value</code> elements. A value element contains text (a string) that
+    must be converted to the given value-type or if not specified, left as is.
+    Conversion must <emphasis>trim</emphasis> the leading and trailing white
+    space characters as defined in the <code>Character.isWhitespace</code>
+    method. No trimming must be done for strings. An array of primitive
+    integers like <code>int[] {1,42,97}</code> can be encoded as
+    follows:</para>
+
+    <programlisting>&lt;property name="integers" value-type="int"&gt;
+    &lt;array&gt;
+        &lt;value&gt; 1&lt;/value&gt;
+        &lt;value&gt;42&lt;/value&gt;
+        &lt;value&gt;97&lt;/value&gt;
+    &lt;/array&gt;
+&lt;/property&gt;</programlisting>
+
+    <para>The <code>xml</code> element is used to convey XML from other
+    namespaces, it is allowed to contain one foreign Xml root element, with
+    any number of children, that will act as the root element of an XML
+    document. This root element will be included in the corresponding property
+    as a string. The XML element must be a valid XML document but not contain
+    the XML processing instructions, the part between the <code>&lt;?</code>
+    and <code>?&gt;</code>. The <code>value-type</code> of the property must
+    be <code>String</code> or not set when an <code>xml</code> element is
+    used, using another type is invalid.</para>
+
+    <para>The <code>xml</code> element can be used to embed configuration
+    information, making the Endpoint Description self contained. For example,
+    the <xref linkend="service.sca"/> uses this <code>xml</code> element to
+    provide an embedded SCA Configuration Document in a <code>String</code>
+    object.</para>
+
+    <para>The following is an example of an <code>endpoint-descriptions</code>
+    resource.</para>
+
+    <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;endpoint-descriptions 
+    xmlns="http://www.osgi.org/xmlns/rsa/v1.0.0"&gt;
+  &lt;endpoint-description&gt;
+            &lt;property name="service.intents"&gt;
+            &lt;list&gt;
+                &lt;value&gt;SOAP&lt;/value&gt;
+                &lt;value&gt;HTTP&lt;/value&gt;
+            &lt;/list&gt;
+        &lt;/property&gt;
+            &lt;property name="endpoint.id" value="http://ws.acme.com:9000/hello"/&gt; 
+        &lt;property name="objectClass" value="com.acme.Foo"/&gt; 
+        &lt;property name="endpoint.package.version.com.acme"value="4.2"/&gt;
+        &lt;property name="service.imported.configs" value="com.acme"/&gt;
+        &lt;property name="com.acme.ws.xml"&gt;
+        &lt;xml&gt;
+           &lt;config xmlns="http://acme.com/defs"&gt;
+              &lt;port&gt;1029&lt;/port&gt;
+              &lt;host&gt;www.acme.com&lt;/host&gt;
+           &lt;/config&gt;
+        &lt;/xml&gt;
+     &lt;/property&gt;
+    &lt;/endpoint-description&gt;
+&lt;/endpoint-descriptions&gt;</programlisting>
+
+    <para>Besides being in a separate resource, the static configuration as
+    described here could also be part of a larger XML file. In that case the
+    parser must ignore elements not part of the
+    <code>http://www.osgi.org/xmlns/rsa/v1.0.0</code> namespace schema.</para>
+
+    <section>
+      <title>XML Schema</title>
+
+      <para>This namespace of the schema is:</para>
+
+      <programlisting>http://www.osgi.org/xmlns/rsa/v1.0.0</programlisting>
+
+      <programlisting role="pgwide">&lt;schema 
+    xmlns="http://www.w3.org/2001/XMLSchema" 
+    xmlns:rsa="http://www.osgi.org/xmlns/rsa/v1.0.0" 
+    targetNamespace="http://www.osgi.org/xmlns/rsa/v1.0.0" 
+    elementFormDefault="qualified" version="1.0.0"&gt;
+
+  &lt;element name="endpoint-descriptions" type="rsa:Tendpoint-descriptions"/&gt;
+  &lt;complexType name="Tendpoint-descriptions"&gt;
+    &lt;sequence&gt;
+      &lt;element name="endpoint-description" type="rsa:Tendpoint-description"minOccurs="1" maxOccurs="unbounded"/&gt;
+      &lt;any namespace="##other" minOccurs="0" maxOccurs="unbounded"processContents="lax"/&gt;
+    &lt;/sequence&gt;
+    &lt;anyAttribute/&gt;
+  &lt;/complexType&gt;
+
+  &lt;complexType name="Tendpoint-description"&gt;
+    &lt;sequence&gt;
+      &lt;element name="property" type="rsa:Tproperty" minOccurs="1"maxOccurs="unbounded"/&gt;
+      &lt;any namespace="##other" minOccurs="0" maxOccurs="unbounded"processContents="lax"/&gt;
+    &lt;/sequence&gt;
+    &lt;anyAttribute/&gt;
+  &lt;/complexType&gt;
+
+  &lt;complexType name="Tproperty" mixed="true"&gt;
+    &lt;sequence&gt;
+      &lt;choice minOccurs="0" maxOccurs="1"&gt;
+        &lt;element name="array" type="rsa:Tmulti-value"/&gt;
+        &lt;element name="list" type="rsa:Tmulti-value"/&gt;
+        &lt;element name="set" type="rsa:Tmulti-value"/&gt;
+        &lt;element name="xml" type="rsa:Txml"/&gt;
+      &lt;/choice&gt;
+      &lt;any namespace="##other" minOccurs="0" maxOccurs="unbounded"processContents="lax"/&gt;
+    &lt;/sequence&gt;
+    &lt;attribute name="name" type="string" use="required"/&gt;
+    &lt;attribute name="value" type="string" use="optional"/&gt;
+    &lt;attribute name="value-type" type="rsa:Tvalue-types"default="String" use="optional"/&gt;
+    &lt;anyAttribute/&gt;
+  &lt;/complexType&gt;
+  
+  &lt;complexType name="Tmulti-value"&gt;
+    &lt;sequence&gt;
+      &lt;element name="value" minOccurs="0" maxOccurs="unbounded"type="rsa:Tvalue"/&gt;
+      &lt;any namespace="##other" minOccurs="0" maxOccurs="unbounded"processContents="lax"/&gt;      
+    &lt;/sequence&gt;
+    &lt;anyAttribute/&gt;
+  &lt;/complexType&gt;
+  
+  &lt;complexType name="Tvalue" mixed="true"&gt;
+    &lt;sequence&gt;
+      &lt;element name="xml" minOccurs="0" maxOccurs="1" type="rsa:Txml"/&gt;
+      &lt;any namespace="##other" minOccurs="0" maxOccurs="unbounded"processContents="lax"/&gt;      
+    &lt;/sequence&gt;
+    &lt;anyAttribute/&gt;
+  &lt;/complexType&gt;
+  
+  &lt;simpleType name="Tvalue-types"&gt;
+    &lt;restriction base="string"&gt;
+      &lt;enumeration value="String"/&gt;
+      &lt;enumeration value="long"/&gt;
+      &lt;enumeration value="Long"/&gt;
+      &lt;enumeration value="double"/&gt;
+      &lt;enumeration value="Double"/&gt;
+      &lt;enumeration value="float"/&gt;
+      &lt;enumeration value="Float"/&gt;
+      &lt;enumeration value="int"/&gt;
+      &lt;enumeration value="Integer"/&gt;
+      &lt;enumeration value="byte"/&gt;
+      &lt;enumeration value="Byte"/&gt;
+      &lt;enumeration value="char"/&gt;
+      &lt;enumeration value="Character"/&gt;
+      &lt;enumeration value="boolean"/&gt;
+      &lt;enumeration value="Boolean"/&gt;
+      &lt;enumeration value="short"/&gt;
+      &lt;enumeration value="Short"/&gt;
+    &lt;/restriction&gt;
+  &lt;/simpleType&gt;
+  
+  &lt;complexType name="Txml"&gt;
+    &lt;sequence&gt;
+      &lt;any namespace="##other" minOccurs="1" maxOccurs="1"processContents="lax"/&gt;
+    &lt;/sequence&gt;
+    &lt;anyAttribute/&gt;
+  &lt;/complexType&gt;
+
+  &lt;attribute name="must-understand" type="boolean" default="false"/&gt;
+&lt;/schema&gt;</programlisting>
+    </section>
+  </section>
+
+  <section xml:id="i1789427">
+    <title>Security</title>
+
+    <para>From a security point of view distribution is a significant threat.
+    A Distribution Provider requires very significant capabilities to be able
+    to proxy services. In many situations it will be required to grant the
+    distribution provider All Permission. It is therefore highly recommended
+    that Distribution Providers use trusted links and ensure that it is not
+    possible to attack a system through the Remote Services Admin service and
+    used discovery protocols.</para>
+
+    <section>
+      <title>Import and Export Registrations</title>
+
+      <para>Import and Export Registrations are
+      <emphasis>capabilities</emphasis>. That is, they can only be obtained
+      when the caller has the proper permissions but once obtained they are no
+      longer checked. The caller should therefore be careful to share those
+      objects with other bundles. Export and Import References are free to
+      share.</para>
+    </section>
+
+    <section>
+      <title>Framework UUID Runtime Permission</title>
+
+      <para>The Remote Service Admin bundle can have the need for reading and
+      writing the System property or the Framework UUID when this is not set
+      by the deployer, the launcher, or the framework. This requires the
+      following permission:</para>
+
+      <programlisting>PropertyPermission[
+    "org.osgi.framework.uuid","read,write"]</programlisting>
+    </section>
+
+    <section>
+      <title>Endpoint Permission</title>
+
+      <para>The Remote Service Admin implementation requires a large set of
+      permissions because it must be able to distribute potentially any
+      service. Giving these extensive capabilities to all Topology Managers
+      would make it harder to developer general Topology Managers that
+      implements specific scenarios. For this reason, this specification
+      provides an Endpoint Permission.</para>
+
+      <para>When an Endpoint Permission must be verified, it must be created
+      with an Endpoint Description as argument, like:</para>
+
+      <programlisting>sm.checkPermission( new EndpointPermission(anEndpoint,localUUID,READ));</programlisting>
+
+      <para>The standard name and action constructor is used to define a
+      permission. The name argument is a filter expression. The filter for an
+      Endpoint Permission is applied to the properties of an Endpoint
+      Description. The <code>localUUID</code> must map to the UUID of the
+      framework of the caller of this constructor, see <xref
+      linkend="i1887500"/>. This <code>localUUID</code> is used to allow a the
+      permissions to use the <code>&lt;&lt;LOCAL&gt;&gt;</code> magic name in
+      the permission filter to refer to the local framework.</para>
+
+      <para>The filter expression can use the following magic value:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>&lt;&lt;LOCAL&gt;&gt;</code> – This value represents the
+          framework UUID of the framework that this bundle belongs to. The
+          following example restricts the visibility to descriptions of local
+          Endpoints:</para>
+
+          <programlisting>  ALLOW { 
+    ...EndpointPermission
+         "(endpoint.framework.uuid=&lt;&lt;LOCAL&gt;&gt;)" 
+         "READ" }</programlisting>
+        </listitem>
+      </itemizedlist>
+
+      <para>An Endpoint Permission that has the actions listed in the
+      following table.</para>
+
+      <table>
+        <title>Endpoint Permission Actions</title>
+
+        <tgroup cols="3">
+          <colspec colnum="1" colwidth="0.8*"/>
+
+          <colspec colnum="2" colwidth="4*"/>
+
+          <colspec colnum="3" colwidth="3.1*"/>
+
+          <thead>
+            <row>
+              <entry>Action</entry>
+
+              <entry>Methods</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>IMPORT</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.importService-EndpointDescription-"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>Import an Endpoint</para></entry>
+            </row>
+
+            <row>
+              <entry><code>EXPORT</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.exportService-ServiceReference-Map-"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>Export a service</para></entry>
+            </row>
+
+            <row>
+              <entry><code>READ</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.getExportedServices--"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.getImportedEndpoints--"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener.remoteAdminEvent-RemoteServiceAdminEvent-"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>See the presence of distributed services. The
+              <code>IMPORT</code> and <code>EXPORT</code> action imply
+              <code>READ</code>. Distribution of events to the Remote Service
+              Admin Listener. The Remote Service Admin must verify that the
+              listener’s bundle has the proper permission. No events should be
+              delivered that are not implied.</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.remoteserviceadmin.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed xml:id="i1693238"><title>OSGi Service Property
+      Namespace</title>http://www.osgi.org/Specifications/ServicePropertyNamespace</bibliomixed>
+
+      <bibliomixed
+      xml:id="i1709441"><title>UUIDs</title>http://en.wikipedia.org/wiki/Universally_Unique_Identifier</bibliomixed>
+
+      <bibliomixed xml:id="i1788834"><title>Service Location Protocol
+      (SLP)</title>http://en.wikipedia.org/wiki/Service_Location_Protocol</bibliomixed>
+
+      <bibliomixed
+      xml:id="i1789952"><title>JGroups</title>http://www.jgroups.org/</bibliomixed>
+
+      <bibliomixed
+      xml:id="i1789020"><title>UDDI</title>http://en.wikipedia.org/wiki/Universal_Description_Discovery_and_Integration</bibliomixed>
+
+      <bibliomixed xml:id="i1789031"><title>Service Component Architecture
+      (SCA)</title>http://www.osoa.org/display/Main/Home</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>

@@ -1,0 +1,1070 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="107"
+         revision="$Id$"
+         version="5" xml:id="service.useradmin"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>User Admin Service Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.useradmin-version"
+    linkend="org.osgi.service.useradmin"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>OSGi frameworks are often used in places where end users or devices
+    initiate actions. These kinds of actions inevitably create a need for
+    authenticating the initiator. Authenticating can be done in many different
+    ways, including with passwords, one-time token cards, bio-metrics, and
+    certificates.</para>
+
+    <para>Once the initiator is authenticated, it is necessary to verify that
+    this principal is authorized to perform the requested action. This
+    authorization can only be decided by the operator of the OSGi environment,
+    and thus requires administration.</para>
+
+    <para>The User Admin service provides this type of functionality. Bundles
+    can use the User Admin service to authenticate an initiator and represent
+    this authentication as an <code>Authorization</code> object. Bundles that
+    execute actions on behalf of this user can use the
+    <code>Authorization</code> object to verify if that user is
+    authorized.</para>
+
+    <para>The User Admin service provides authorization based on who runs the
+    code, instead of using the Java code-based permission model. See <xref
+    linkend="i1307817"/>. It performs a role similar to <xref
+    linkend="i1307810"/>.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Authentication</emphasis> – A large number of
+          authentication schemes already exist, and more will be developed.
+          The User Admin service must be flexible enough to adapt to the many
+          different authentication schemes that can be run on a computer
+          system.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Authorization</emphasis> – All bundles should use
+          the User Admin service to authenticate users and to find out if
+          those users are authorized. It is therefore paramount that a bundle
+          can find out authorization information with little effort.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Security</emphasis> – Detailed security, based on
+          the Framework security model, is needed to provide safe access to
+          the User Admin service. It should allow limited access to the
+          credentials and other properties.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Extensibility</emphasis> – Other bundles should be
+          able to build on the User Admin service. It should be possible to
+          examine the information from this service and get real-time
+          notifications of changes.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Properties</emphasis> – The User Admin service must
+          maintain a persistent database of users. It must be possible to use
+          this database to hold more information about this user.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Administration</emphasis> – Administering
+          authorizations for each possible action and initiator is
+          time-consuming and error-prone. It is therefore necessary to have
+          mechanisms to group end users and make it simple to assign
+          authorizations to all members of a group at one time.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <para>This Specification defines the following User Admin service
+      entities:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>User Admin</emphasis> – This interface manages a
+          database of named roles which can be used for authorization and
+          authentication purposes.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Role</emphasis> – This interface exposes the
+          characteristics shared by all roles: a name, a type, and a set of
+          properties.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>User</emphasis> – This interface (which extends
+          <code>Role</code>) is used to represent any entity which may have
+          credentials associated with it. These credentials can be used to
+          authenticate an initiator.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Group</emphasis> – This interface (which extends
+          <code>User</code>) is used to contain an aggregation of named
+          <code>Role</code> objects (<code>Group</code> or <code>User</code>
+          objects).</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Authorization</emphasis> – This interface
+          encapsulates an authorization context on which bundles can base
+          authorization decisions.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>User Admin Event</emphasis> – This class is used to
+          represent a role change event.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>User Admin Listener</emphasis> – This interface
+          provides a listener for events of type <code>UserAdminEvent</code>
+          that can be registered as a service.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>User Admin Permission</emphasis> – This permission
+          is needed to configure and access the roles managed by a User Admin
+          service.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Role.USER_ANYONE</emphasis> – This is a special User
+          object that represents <emphasis>any</emphasis> user, it implies all
+          other User objects. It is also used when a Group is used with only
+          basic members. The <code>Role.USER_ANYONE</code> is then the only
+          required member.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure pgwide="1">
+        <title>User Admin Service, org.osgi.service.useradmin</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="4.681in"
+                       contentwidth="6.500in" fileref="useradmin-classes.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Operation</title>
+
+      <para>An Operator uses the User Admin service to define OSGi framework
+      users and configure them with properties, credentials, and
+      <emphasis>roles</emphasis>.</para>
+
+      <para>A <code>Role</code> object represents the initiator of a request
+      (human or otherwise). This specification defines two types of
+      roles:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>User</emphasis> – A <code>User</code> object can be
+          configured with credentials, such as a password, and properties,
+          such as address, telephone number, and so on.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Group</emphasis> – A <code>Group</code> object is an
+          aggregation of <emphasis>basic</emphasis> and
+          <emphasis>required</emphasis> roles. Basic and required roles are
+          used in the authorization phase.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>An OSGi framework can have several entry points, each of which
+      will be responsible for authenticating incoming requests. An example of
+      an entry point is the Http Service, which delegates authentication of
+      incoming requests to the <code>handleSecurity</code> method of the
+      <code>HttpContext</code> object that was specified when the target
+      servlet or resource of the request was registered.</para>
+
+      <para>The OSGi framework entry points should use the information in the
+      User Admin service to authenticate incoming requests, such as a password
+      stored in the private credentials or the use of a certificate.</para>
+
+      <para>A bundle can determine if a request for an action is authorized by
+      looking for a <code>Role</code> object that has the name of the
+      requested action.</para>
+
+      <para>The bundle may execute the action if the <code>Role</code> object
+      representing the initiator <emphasis>implies</emphasis> the
+      <code>Role</code> object representing the requested action.</para>
+
+      <para>For example, an initiator <code>Role</code> object
+      <emphasis>X</emphasis> implies an action <code>Group</code> object
+      <emphasis>A</emphasis> if:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>X </emphasis>implies at least one of
+          <emphasis>A</emphasis>’s basic members, and</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>X</emphasis> implies all of <emphasis>A</emphasis>’s
+          required members.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>An initiator <code>Role</code> object <emphasis>X</emphasis>
+      implies an action <code>User</code> object <emphasis>A</emphasis>
+      if:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>A</emphasis> and<emphasis> X</emphasis> are
+          equal.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The <code>Authorization</code> class handles this non-trivial
+      logic. The User Admin service can capture the privileges of an
+      authenticated <code>User</code> object into an
+      <code>Authorization</code> object. The
+      <code>Authorization.hasRole</code> method checks if the authenticate
+      <code>User</code> object has (or implies) a specified action
+      <code>Role</code> object.</para>
+
+      <para>For example, in the case of the Http Service, the
+      <code>HttpContext</code> object can authenticate the initiator and place
+      an <code>Authorization</code> object in the request header. The servlet
+      calls the <code>hasRole</code> method on this <code>Authorization</code>
+      object to verify that the initiator has the authority to perform a
+      certain action. See <xref
+      linkend="service.http.authentication"/>.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Authentication</title>
+
+    <para>The authentication phase determines if the initiator is actually the
+    one it says it is. Mechanisms to authenticate always need some information
+    related to the user or the OSGi framework to authenticate an external
+    user. This information can consist of the following:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>A secret known only to the initiator.</para>
+      </listitem>
+
+      <listitem>
+        <para>Knowledge about cards that can generate a unique token.</para>
+      </listitem>
+
+      <listitem>
+        <para>Public information like certificates of trusted signers.</para>
+      </listitem>
+
+      <listitem>
+        <para>Information about the user that can be measured in a trusted
+        way.</para>
+      </listitem>
+
+      <listitem>
+        <para>Other specific information.</para>
+      </listitem>
+    </itemizedlist>
+
+    <section>
+      <title>Repository</title>
+
+      <para>The User Admin service offers a repository of <code>Role</code>
+      objects. Each <code>Role</code> object has a unique name and a set of
+      properties that are readable by anyone, and are changeable when the
+      changer has the <code>UserAdminPermission</code>. Additionally,
+      <code>User</code> objects, a sub-interface of <code>Role</code>, also
+      have a set of private protected properties called credentials.
+      Credentials are an extra set of properties that are used to authenticate
+      users and that are protected by <code>UserAdminPermission</code>.</para>
+
+      <para>Properties are accessed with the <code>Role.getProperties()</code>
+      method and credentials with the
+      <code>User.getCredentials()</code>method. Both methods return a
+      <code>Dictionary</code> object containing key/value pairs. The keys are
+      <code>String</code> objects and the values of the
+      <code>Dictionary</code> object are limited to <code>String</code> or
+      <code>byte[ ]</code> objects.</para>
+
+      <para>This specification does not define any standard keys for the
+      properties or credentials. The keys depend on the implementation of the
+      authentication mechanism and are not formally defined by OSGi
+      specifications.</para>
+
+      <para>The repository can be searched for objects that have a unique
+      property (key/value pair) with the method
+      <code>UserAdmin.getUser(String,String)</code>. This makes it easy to
+      find a specific user related to a specific authentication mechanism. For
+      example, a secure card mechanism that generates unique tokens could have
+      a serial number identifying the user. The owner of the card could be
+      found with the method</para>
+
+      <programlisting>User owner = useradmin.getUser(
+    "secure-card-serial", "132456712-1212" );</programlisting>
+
+      <para>If multiple <code>User</code> objects have the same property (key
+      <emphasis>and</emphasis> value), a <code>null</code> is returned.</para>
+
+      <para>There is a convenience method to verify that a user has a
+      credential without actually getting the credential. This is the
+      <code>User.hasCredential(String,Object)</code> method.</para>
+
+      <para>Access to credentials is protected on a name basis by
+      <code>UserAdminPermission</code>. Because properties can be read by
+      anyone with access to a <code>User</code> object,
+      <code>UserAdminPermission</code> only protects change access to
+      properties.</para>
+    </section>
+
+    <section>
+      <title>Basic Authentication</title>
+
+      <para>The following example shows a very simple authentication algorithm
+      based on passwords.</para>
+
+      <para>The vendor of the authentication bundle uses the property
+      <code>"com.acme.basic-id"</code> to contain the name of a user as it
+      logs in. This property is used to locate the <code>User</code> object in
+      the repository. Next, the credential <code>"com.acme.password"</code>
+      contains the password and is compared to the entered password. If the
+      password is correct, the <code>User</code> object is returned. In all
+      other cases a <code>SecurityException</code> is thrown.</para>
+
+      <programlisting>public User authenticate(
+        UserAdmin ua, String name, String pwd )
+    throws SecurityException {
+    User user = ua.getUser("com.acme.basicid",
+        username);
+    if (user == null)
+        throw new SecurityException( "No such user" );
+
+    if (!user.hasCredential(“com.acme.password”, pwd))
+        throw new SecurityException( 
+            "Invalid password" );
+    return user;
+}</programlisting>
+    </section>
+
+    <section>
+      <title>Certificates</title>
+
+      <para>Authentication based on certificates does not require a shared
+      secret. Instead, a certificate contains a name, a public key, and the
+      signature of one or more signers.</para>
+
+      <para>The name in the certificate can be used to locate a
+      <code>User</code> object in the repository. Locating a <code>User</code>
+      object, however, only identifies the initiator and does not authenticate
+      it.</para>
+
+      <orderedlist>
+        <listitem>
+          <para>The first step to authenticate the initiator is to verify that
+          it has the private key of the certificate.</para>
+        </listitem>
+
+        <listitem>
+          <para>Next, the User Admin service must verify that it has a
+          <code>User</code> object with the right property, for example
+          <code>"com.acme.certificate"="Fudd"</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para>The next step is to see if the certificate is signed by a
+          trusted source. The bundle could use a central list of trusted
+          signers and only accept certificates signed by those sources.
+          Alternatively, it could require that the certificate itself is
+          already stored in the repository under a unique key as a
+          <code>byte[]</code> in the credentials.</para>
+        </listitem>
+
+        <listitem>
+          <para>In any case, once the certificate is verified, the associated
+          <code>User</code> object is authenticated.</para>
+        </listitem>
+      </orderedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Authorization</title>
+
+    <para>The User Admin service authorization architecture is a
+    <emphasis>role-based model</emphasis>. In this model, every action that
+    can be performed by a bundle is associated with a
+    <emphasis>role</emphasis>. Such a role is a <code>Group</code> object
+    (called group from now on) from the User Admin service repository. For
+    example, if a servlet could be used to activate the alarm system, there
+    should be a group named <code>AlarmSystemActivation</code>.</para>
+
+    <para>The operator can administrate authorizations by populating the group
+    with <code>User</code> objects (users) and other groups. Groups are used
+    to minimize the amount of administration required. For example, it is
+    easier to create one <code>Administrators</code> group and add
+    administrative roles to it rather than individually administer all users
+    for each role. Such a group requires only one action to remove or add a
+    user as an administrator.</para>
+
+    <para>The authorization decision can now be made in two fundamentally
+    different ways:</para>
+
+    <para>An initiator could be allowed to carry out an action (represented by
+    a <code>Group</code> object) if it implied any of the <code>Group</code>
+    object’s members. For example, the <code>AlarmSystemActivation</code>
+    <code>Group</code> object contains an <code>Administrators</code> and a
+    <code>Family</code> <code>Group</code> object:</para>
+
+    <programlisting>    Administrators        = { Elmer, Pepe,Bugs }
+    Family                = { Elmer, Pepe, Daffy }
+
+    AlarmSystemActivation = { Administrators, Family}</programlisting>
+
+    <para>Any of the four members <code>Elmer</code>, <code>Pepe</code>,
+    <code>Daffy</code>, or <code>Bugs</code> can activate the alarm
+    system.</para>
+
+    <para>Alternatively, an initiator could be allowed to perform an action
+    (represented by a <code>Group</code> object) if it implied
+    <emphasis>all</emphasis> the <code>Group</code> object’s members. In this
+    case, using the same <code>AlarmSystemActivation</code> group, only
+    <code>Elmer</code> and <code>Pepe</code> would be authorized to activate
+    the alarm system, since <code>Daffy</code> and <code>Bugs</code> are
+    <emphasis>not</emphasis> members of <emphasis>both</emphasis> the
+    <code>Administrators</code> and <code>Family</code> <code>Group</code>
+    objects.</para>
+
+    <para>The User Admin service supports a combination of both strategies by
+    defining both a set of <emphasis>basic members</emphasis> (any) and a set
+    of <emphasis>required members</emphasis> (all).</para>
+
+    <programlisting>Administrators            = { Elmer, Pepe, Bugs}
+Family                    = { Elmer, Pepe, Daffy }
+
+AlarmSystemActivation 
+    required              = { Administrators }
+    basic                 = { Family }</programlisting>
+
+    <para>The difference is made when <code>Role</code> objects are added to
+    the <code>Group</code> object. To add a basic member, use the
+    <code>Group.addMember(Role)</code> method. To add a required member, use
+    the <code>Group.addRequiredMember(Role)</code> method.</para>
+
+    <para>Basic members define the set of members that can get access and
+    required members reduce this set by requiring the initiator to
+    <emphasis>imply</emphasis> each required member.</para>
+
+    <para>A <code>User</code> object implies a <code>Group</code> object if it
+    implies the following:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>All</emphasis> of the Group’s required members,
+        and</para>
+      </listitem>
+
+      <listitem>
+        <para>At<emphasis> least </emphasis>one of the Group’s basic
+        members</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>A <code>User</code> object always implies itself.</para>
+
+    <para>If only required members are used to qualify the implication, then
+    the standard user <code>Role.</code><xref
+    linkend="org.osgi.service.useradmin.Role.USER_ANYONE"
+    xrefstyle="hyperlink"/> can be obtained from the User Admin service and
+    added to the <code>Group</code> object. This <code>Role</code> object is
+    implied by anybody and therefore does not affect the required
+    members.</para>
+
+    <section>
+      <title>The Authorization Object</title>
+
+      <para>The complexity of authorization is hidden in an
+      <code>Authorization</code> class. Normally, the authenticator should
+      retrieve an <code>Authorization</code> object from the User Admin
+      service by passing the authenticated <code>User</code> object as an
+      argument. This <code>Authorization</code> object is then passed to the
+      bundle that performs the action. This bundle checks the authorization
+      with the <code>Authorization.hasRole(String)</code> method. The
+      performing bundle must pass the name of the action as an argument. The
+      <code>Authorization</code> object checks whether the authenticated user
+      implies the <code>Role</code> object, specifically a <code>Group</code>
+      object, with the given name. This is shown in the following
+      example.</para>
+
+      <programlisting>public void activateAlarm(Authorization auth) {
+    if ( auth.hasRole( "AlarmSystemActivation" ) ) {
+        // activate the alarm
+        ...
+    }
+    else throw new SecurityException( 
+        "Not authorized to activate alarm" );
+}</programlisting>
+    </section>
+
+    <section>
+      <title>Authorization Example</title>
+
+      <para>This section demonstrates a possible use of the User Admin
+      service. The service has a flexible model and many other schemes are
+      possible.</para>
+
+      <para>Assume an Operator installs an OSGi framework. Bundles in this
+      environment have defined the following action groups:</para>
+
+      <programlisting>AlarmSystemControl
+InternetAccess
+TemperatureControl
+PhotoAlbumEdit
+PhotoAlbumView
+PortForwarding</programlisting>
+
+      <para>Installing and uninstalling bundles could potentially extend this
+      set. Therefore, the Operator also defines a number of groups that can be
+      used to contain the different types of system users.</para>
+
+      <programlisting>Administrators
+Buddies
+Children
+Adults
+Residents</programlisting>
+
+      <para>In a particular instance, the Operator installs it in a household
+      with the following residents and buddies:</para>
+
+      <programlisting>Residents:      Elmer, Fudd, Marvin, Pepe
+Buddies:        Daffy, Foghorn</programlisting>
+
+      <para>First, the residents and buddies are assigned to the system user
+      groups. Second, the user groups need to be assigned to the action
+      groups.</para>
+
+      <para>The following tables show how the groups could be assigned.</para>
+
+      <table>
+        <title>Example Groups with Basic and Required Members</title>
+
+        <tgroup cols="7">
+          <colspec colnum="1" colwidth="1.5*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="1*"/>
+
+          <colspec colnum="4" colwidth="1*"/>
+
+          <colspec colnum="5" colwidth="1*"/>
+
+          <colspec colnum="6" colwidth="1*"/>
+
+          <colspec colnum="7" colwidth="1*"/>
+
+          <thead>
+            <row>
+              <entry>Groups</entry>
+
+              <entry>Elmer</entry>
+
+              <entry>Fudd</entry>
+
+              <entry>Marvin</entry>
+
+              <entry>Pepe</entry>
+
+              <entry>Daffy</entry>
+
+              <entry>Foghorn</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>Residents</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+            </row>
+
+            <row>
+              <entry><code>Buddies</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>Basic</code></entry>
+            </row>
+
+            <row>
+              <entry><code>Children</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+            </row>
+
+            <row>
+              <entry><code>Adults</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+            </row>
+
+            <row>
+              <entry><code>Administrators</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <table>
+        <title>Example Action Groups with their Basic and Required
+        Members</title>
+
+        <tgroup cols="6">
+          <colspec colnum="1" colwidth="2*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="1*"/>
+
+          <colspec colnum="4" colwidth="1*"/>
+
+          <colspec colnum="5" colwidth="1*"/>
+
+          <colspec colnum="6" colwidth="1*"/>
+
+          <thead>
+            <row>
+              <entry>Groups</entry>
+
+              <entry>Residents</entry>
+
+              <entry>Buddies</entry>
+
+              <entry>Children</entry>
+
+              <entry>Adults</entry>
+
+              <entry>Admin</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>AlarmSystemControl</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>Required</code></entry>
+            </row>
+
+            <row>
+              <entry><code>InternetAccess</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>Required</code></entry>
+
+              <entry><code>-</code></entry>
+            </row>
+
+            <row>
+              <entry><code>TemperatureControl</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>Required</code></entry>
+
+              <entry><code>-</code></entry>
+            </row>
+
+            <row>
+              <entry><code>PhotoAlbumEdit</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>-</code></entry>
+            </row>
+
+            <row>
+              <entry><code>PhotoAlbumView</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+            </row>
+
+            <row>
+              <entry><code>PortForwarding</code></entry>
+
+              <entry><code>Basic</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code>Required</code></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </section>
+
+  <section>
+    <title>Repository Maintenance</title>
+
+    <para>The <code>UserAdmin</code> interface is a straightforward API to
+    maintain a repository of <code>User</code> and <code>Group</code> objects.
+    It contains methods to create new <code>Group</code> and <code>User</code>
+    objects with the <code>createRole(String,int)</code> method. The method is
+    prepared so that the same signature can be used to create new types of
+    roles in the future. The interface also contains a method to remove a
+    <code>Role</code> object.</para>
+
+    <para>The existing configuration can be obtained with methods that list
+    all <code>Role</code> objects using a filter argument. This filter, which
+    has the same syntax as the Framework filter, must only return the
+    <code>Role</code> objects for which the filter matches the
+    properties.</para>
+
+    <para>Several utility methods simplify getting <code>User</code> objects
+    depending on their properties.</para>
+  </section>
+
+  <section xml:id="i1529238">
+    <title>User Admin Events</title>
+
+    <para>Changes in the User Admin service can be determined in real time.
+    Each User Admin service implementation must send a
+    <code>UserAdminEvent</code> object to any service in the Framework service
+    registry that is registered under the <code>UserAdminListener</code>
+    interface. This event must be send asynchronously from the cause of the
+    event. The way events must be delivered is the same as described in
+    <emphasis>Delivering Events</emphasis> of <xref
+    linkend="intro.core.release" xrefstyle="template:%t"/>.</para>
+
+    <para>This procedure is demonstrated in the following code sample.</para>
+
+    <programlisting>class Listener implements UserAdminListener{
+    public void roleChanged( UserAdminEvent event ) {
+        ...
+    }
+}
+public class MyActivator 
+    implements BundleActivator {
+    public void start( BundleContext context ) {
+        context.registerService( 
+            UserAdminListener.class.getName(),
+            new Listener(), null );
+    }
+    public void stop( BundleContext context ) {}
+}</programlisting>
+
+    <para>It is not necessary to unregister the listener object when the
+    bundle is stopped because the Framework automatically unregisters it. Once
+    registered, the <code>UserAdminListener</code> object must be notified of
+    all changes to the role repository.</para>
+
+    <section>
+      <title>Event Admin and User Admin Change Events</title>
+
+      <para>User admin events must be delivered asynchronously to the Event
+      Admin service by the implementation, if present. The topic of a User
+      Admin Event is:</para>
+
+      <programlisting>org/osgi/service/useradmin/UserAdmin/&lt;eventtype&gt;</programlisting>
+
+      <para>The following event types are supported:</para>
+
+      <programlisting>ROLE_CREATED
+ROLE_CHANGED
+ROLE_REMOVED</programlisting>
+
+      <para>All User Admin Events must have the following properties:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>event</code> – (<code>UserAdminEvent</code>) The event
+          that was broadcast by the User Admin service.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>role</code> – (<code>Role</code>) The <code>Role</code>
+          object that was created, modified or removed.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>role.name</code> – (<code>String</code>) The name of the
+          role.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>role.type</code> – (<code>Integer</code>) One of
+          <code>ROLE, USER</code> or <code>GROUP</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service</code> – (<code>ServiceReference</code>) The
+          Service Reference of the User Admin service.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.id</code> – (<code>Long</code>) The User Admin
+          service's ID.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.objectClass</code> – (<code>String[]</code>) The
+          User Admin service's object class (which must include
+          <code>org.osgi.service.useradmin.UserAdmin</code>)</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.pid</code> – (<code>String)</code> The User
+          Admin service's persistent identity</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <para>The User Admin service is related to the security model of the OSGi
+    framework, but is complementary to the <xref linkend="i1307817"/>. The
+    final permission of most code should be the intersection of the Java 2
+    Permissions, which are based on the code that is executing, and the User
+    Admin service authorization, which is based on the user for whom the code
+    runs.</para>
+
+    <section>
+      <title>User Admin Permission</title>
+
+      <para>The User Admin service defines the
+      <code>UserAdminPermission</code> class that can be used to restrict
+      bundles in accessing credentials. This permission class has the
+      following actions:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>changeProperty</code> – This permission is required to
+          modify properties. The name of the permission is the prefix of the
+          property name.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>changeCredential</code> – This action permits changing
+          credentials. The name of the permission is the prefix of the name of
+          the credential.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>getCredential</code> – This action permits getting
+          credentials. The name of the permission is the prefix of the
+          credential.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If the name of the permission is <code>"admin"</code>, it allows
+      the owner to administer the repository. No action is associated with the
+      permission in that case.</para>
+
+      <para>Otherwise, the permission name is used to match the property name.
+      This name may end with a <code>".*"</code> string to indicate a
+      wildcard. For example, <code>com.acme.*</code> matches
+      <code>com.acme.fudd.elmer</code> and <code>com.acme.bugs</code>.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Relation to JAAS</title>
+
+    <para>At a glance, the Java Authorization and Authentication Service
+    (JAAS) seems to be a very suitable model for user administration. The OSGi
+    organization, however, decided to develop an independent User Admin
+    service because JAAS was not deemed applicable. The reasons for this
+    include dependency on Java SE version 1.3 ("JDK 1.3") and existing
+    mechanisms in the previous OSGi Service Gateway 1.0 specification.</para>
+
+    <section>
+      <title>JDK 1.3 Dependencies</title>
+
+      <para>The authorization component of JAAS relies on the
+      <code>java.security.DomainCombiner</code> interface, which provides a
+      means to dynamically update the <code>ProtectionDomain</code> objects
+      affiliated with an <code>AccessControlContext</code> object.</para>
+
+      <para>This interface was added in JDK 1.3. In the context of JAAS, the
+      <code>SubjectDomainCombiner</code> object, which implements the
+      <code>DomainCombiner</code> interface, is used to update
+      <code>ProtectionDomain</code> objects. The permissions of
+      <code>ProtectionDomain</code> objects depend on where code came from and
+      who signed it, with permissions based on who is running the code.</para>
+
+      <para>Leveraging JAAS would have resulted in user-based access control
+      on the OSGi framework being available only with JDK 1.3, which was not
+      deemed acceptable.</para>
+    </section>
+
+    <section>
+      <title>Existing OSGi Mechanism</title>
+
+      <para>JAAS provides a pluggable authentication architecture, which
+      enables applications and their underlying authentication services to
+      remain independent from each other.</para>
+
+      <para>The Http Service already provides a similar feature by allowing
+      servlet and resource registrations to be supported by an
+      <code>HttpContext</code> object, which uses a callback mechanism to
+      perform any required authentication checks before granting access to the
+      servlet or resource. This way, the registering bundle has complete
+      control on a per-servlet and per-resource basis over which
+      authentication protocol to use, how the credentials presented by the
+      remote requestor are to be validated, and who should be granted access
+      to the servlet or resource.</para>
+    </section>
+
+    <section>
+      <title>Future Road Map</title>
+
+      <para>In the future, the main barrier of 1.3 compatibility will be
+      removed. JAAS could then be implemented in an OSGi environment. At that
+      time, the User Admin service will still be needed and will provide
+      complementary services in the following ways:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The authorization component relies on group membership
+          information to be stored and managed outside JAAS. JAAS does not
+          manage persistent information, so the User Admin service can be a
+          provider of group information when principals are assigned to a
+          <code>Subject</code> object.</para>
+        </listitem>
+
+        <listitem>
+          <para>The authorization component allows for credentials to be
+          collected and verified, but a repository is needed to actually
+          validate the credentials.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>In the future, the User Admin service can act as the back-end
+      database to JAAS. The only aspect JAAS will remove from the User Admin
+      service is the need for the <code>Authorization</code> interface.</para>
+    </section>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.useradmin.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed xml:id="i1307817"><title>The Java Security Architecture for
+      JDK 1.2</title>Version 1.0, Sun Microsystems, October 1998</bibliomixed>
+
+      <bibliomixed xml:id="i1307810"><title>Java Authentication and
+      Authorization
+      Service</title>http://www.oracle.com/technetwork/java/javase/tech/index-jsp-136007.html</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>

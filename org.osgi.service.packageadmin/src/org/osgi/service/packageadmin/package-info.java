@@ -31,7 +31,8 @@
  * <p>
  * {@code  Import-Package: org.osgi.service.packageadmin; version="[1.2,2.0)"}
  * 
- * @version $Id$
+ * @version 1.2
+ * @author $Id$
  */
 
 package org.osgi.service.packageadmin;

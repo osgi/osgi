@@ -40,11 +40,11 @@ public interface Constants {
 	 * meet the following requirements:
 	 * 
 	 * <ul>
-	 * <li>It must be independent of the location from where it is obtained.
+	 * <li>It must be independent of the location from where it is obtained.</li>
 	 * <li>It must be independent of the {@link DriverLocator} service that
-	 * downloaded it.
-	 * <li>It must be unique.
-	 * <li>It must be different for different revisions of the same driver.
+	 * downloaded it.</li>
+	 * <li>It must be unique.</li>
+	 * <li>It must be different for different revisions of the same driver.</li>
 	 * </ul>
 	 * 
 	 * <p>

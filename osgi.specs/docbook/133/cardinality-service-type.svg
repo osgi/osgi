@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="292.295px" height="99.66px" viewBox="0 0 292.295 99.66" enable-background="new 0 0 292.295 99.66" xml:space="preserve">
+<rect x="2.64" y="1.98" width="54.3" height="26.58"/>
+<rect x="2.64" y="1.74" width="54.54" height="0.479"/>
+<rect x="56.7" y="1.98" width="0.48" height="26.82"/>
+<rect x="2.4" y="28.32" width="54.54" height="0.48"/>
+<rect x="2.4" y="1.74" width="0.48" height="26.82"/>
+<rect x="0.24" y="0.24" fill="#FFFFFF" width="54.36" height="26.58"/>
+<rect x="0.24" width="54.6" height="0.48"/>
+<rect x="54.36" y="0.24" width="0.48" height="26.82"/>
+<rect y="26.58" width="54.6" height="0.48"/>
+<rect width="0.48" height="26.82"/>
+<text transform="matrix(1 0 0 1 2.6401 7.3203)" font-family="'ProductusSemibold'" font-size="7.98">Service Type</text>
+<rect x="158.521" y="1.98" width="54.359" height="26.58"/>
+<rect x="158.521" y="1.74" width="54.601" height="0.479"/>
+<rect x="212.64" y="1.98" width="0.48" height="26.82"/>
+<rect x="158.28" y="28.32" width="54.601" height="0.48"/>
+<rect x="158.28" y="1.74" width="0.479" height="26.82"/>
+<rect x="156.181" y="0.24" fill="#FFFFFF" width="54.299" height="26.58"/>
+<rect x="156.181" width="54.539" height="0.48"/>
+<rect x="210.24" y="0.24" width="0.479" height="26.82"/>
+<rect x="155.94" y="26.58" width="54.539" height="0.48"/>
+<rect x="155.94" width="0.479" height="26.82"/>
+<text transform="matrix(1 0 0 1 158.5205 6.3203)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">osgi.</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">serviceloader</tspan><tspan x="0" y="19.152" font-family="'ProductusSemibold'" font-size="7.98">Capability</tspan></text>
+<rect x="80.58" y="72.84" width="54.3" height="26.58"/>
+<rect x="80.58" y="72.6" width="54.541" height="0.48"/>
+<rect x="134.64" y="72.84" width="0.48" height="26.82"/>
+<rect x="80.34" y="99.18" width="54.54" height="0.48"/>
+<rect x="80.34" y="72.6" width="0.48" height="26.82"/>
+<rect x="78.18" y="71.1" fill="#FFFFFF" width="54.36" height="26.58"/>
+<rect x="78.18" y="70.859" width="54.6" height="0.48"/>
+<rect x="132.3" y="71.1" width="0.479" height="26.82"/>
+<rect x="77.94" y="97.439" width="54.601" height="0.48"/>
+<rect x="77.94" y="70.859" width="0.48" height="26.82"/>
+<text transform="matrix(1 0 0 1 80.5801 78.1797)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Service</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Provider</tspan></text>
+<rect x="56.7" y="14.16" width="0.24" height="0.48"/>
+<rect x="56.94" y="14.16" width="99.48" height="0.48"/>
+<rect x="28.38" y="28.32" width="0.48" height="57.18"/>
+<rect x="28.62" y="85.02" width="49.8" height="0.48"/>
+<rect x="184.26" y="28.32" width="0.479" height="57.18"/>
+<rect x="134.64" y="85.02" width="49.86" height="0.48"/>
+<text transform="matrix(1 0 0 1 30.7202 49.8008)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">advertised</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">by</tspan></text>
+<text transform="matrix(1 0 0 1 185.8193 49.8008)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">decorated</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">by (qualified by the register directive)</tspan></text>
+<text transform="matrix(1 0 0 1 97.9204 12.0605)" font-family="'ProductusBook'" font-size="7.98">published by</text>
+<text transform="matrix(1 0 0 1 30.0005 33.3008)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 138.3022 82.9199)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<text transform="matrix(1 0 0 1 173.7002 35.9404)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<text transform="matrix(1 0 0 1 145.3804 12.0605)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<text transform="matrix(1 0 0 1 58.7402 12.6006)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 64.0522 82.9199)" font-family="'ProductusBook'" font-size="7.98">1..n</text>
+</svg>

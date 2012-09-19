@@ -45,7 +45,8 @@ public interface Condition {
 	 * is immutable), then this Condition must be able to directly answer the
 	 * {@link #isSatisfied()} method. In other words, isSatisfied() will return
 	 * very quickly since no external sources, such as for example users or
-	 * networks, need to be consulted. <br/>
+	 * networks, need to be consulted.
+	 * <p>
 	 * This method must always return the same value whenever it is called so
 	 * that the Conditional Permission Admin can cache its result.
 	 * 

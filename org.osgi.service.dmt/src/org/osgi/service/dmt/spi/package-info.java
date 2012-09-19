@@ -37,7 +37,8 @@
  * <p>
  * {@code  Import-Package: org.osgi.service.dmt.spi; version="[2.0,2.1)"}
  * 
- * @version $Id$
+ * @version 2.0
+ * @author $Id$
  */
 
 package org.osgi.service.dmt.spi;

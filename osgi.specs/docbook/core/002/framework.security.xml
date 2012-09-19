@@ -1,0 +1,1055 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="2" revision="$Id$"
+         version="5" xml:id="framework.security"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Security Layer</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.framework-version"
+    linkend="org.osgi.framework"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The OSGi Security Layer is an optional layer that underlies the OSGi
+    framework. The layer is based on the Java 2 security architecture. It
+    provides the infrastructure to deploy and manage applications that must
+    run in fine-grained controlled environments.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Fine-grained</emphasis> – The control of
+          applications running in an OSGi Framework must allow for detailed
+          control of those applications.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Manageable</emphasis> – The security layer itself
+          does not define an API to control the applications. The management
+          of the security layer is left to the life cycle layer.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Optional</emphasis> – The security layer is
+          optional.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section xml:id="framework.security.securityoverview">
+    <title>Security Overview</title>
+
+    <para>The Framework security model is based on the Java 2 specification.
+    If security checks are performed, they must be done according to <xref
+    linkend="i1488926"/>. It is assumed that the reader is familiar with this
+    specification. The security layer is optional, see <xref
+    linkend="i1526852"/>.</para>
+
+    <section>
+      <title>Code Authentication</title>
+
+      <para>The OSGi framework can authenticate code in the following
+      ways:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>By location</para>
+        </listitem>
+
+        <listitem>
+          <para>By signer</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>At higher layers there are defined services that can manage the
+      permissions that are associated with the authenticated unit of code.
+      These services are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Permission Admin service</emphasis> – Manages the
+          permission based on full location strings.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Conditional Permission Admin service</emphasis> –
+          Manages the permissions based on a comprehensive conditional model,
+          where the conditions can test for location or signer.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For signing, this requires the JAR files to be signed; this is
+      described in <xref
+      linkend="framework.security.digitallysignedjar"/>.</para>
+    </section>
+
+    <section xml:id="i1526852">
+      <title>Optional Security</title>
+
+      <para>The Java platform on which the Framework runs must provide the
+      Java Security APIs necessary for Java 2 permissions. On
+      resource-constrained platforms, these Java Security APIs may be stubs
+      that allow the bundle classes to be loaded and executed, but the stubs
+      never actually perform the security checks. The behavior of these stubs
+      must be as follows:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>checkPermission</code> – Return without throwing a
+          <code>SecurityException</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>checkGuard</code> – Return without throwing a
+          <code>SecurityException</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>implies</code> – Return <code>true</code>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>This behavior allows code to run as if all bundles have
+      <code>AllPermission</code>.</para>
+    </section>
+  </section>
+
+  <section xml:id="framework.security.digitallysignedjar">
+    <title>Digitally Signed JAR Files</title>
+
+    <para>This section defines in detail how JAR files must be signed. This
+    section therefore overlaps with the different JAR file specifications that
+    are part of the different versions of Java. The reason for this
+    duplication is that there are many aspects left as optional or not
+    well-defined in these specifications. A reference was therefore
+    insufficient.</para>
+
+    <para>Digitally signing is a security feature that verifies the
+    following:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Authenticates the signer</para>
+      </listitem>
+
+      <listitem>
+        <para>Ensures that the content has not been modified after it was
+        signed by the principal.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>In an OSGi Framework, the principals that signed a JAR become
+    associated with that JAR. This association is then used to:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Grant permissions to a JAR based on the authenticated
+        principal</para>
+      </listitem>
+
+      <listitem>
+        <para>Target a set of bundles by principal for a permission to operate
+        on or with those bundles</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>For example, an Operator can grant the ACME company the right to use
+    networking on their devices. The ACME company can then use networking in
+    every bundle they digitally sign and deploy on the Operator’s device.
+    Also, a specific bundle can be granted permission to only manage the life
+    cycle of bundles that are signed by the ACME company.</para>
+
+    <para>Signing provides a powerful delegation model. It allows an Operator
+    to grant a restricted set of permissions to a company, after which the
+    company can create JARs that can use those permissions, without requiring
+    any intervention of, or communication with, the Operator for each
+    particular JAR. This delegation model is shown graphically in <xref
+    linkend="i1505881"/>.</para>
+
+    <figure xml:id="i1505881">
+      <title>Delegation model</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="1.694in"
+                     contentwidth="4.694in" fileref="delegation-model.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>Digital signing is based on <emphasis>public key
+    cryptography</emphasis>. Public key cryptography uses a system where there
+    are two mathematically related keys: a public and a private key. The
+    public key is shared with the world and can be dispersed freely, usually
+    in the form of a certificate. The private key must be kept a
+    secret.</para>
+
+    <para>Messages signed with the private key can only be verified correctly
+    with the public key. This can be used to authenticate the signer of a
+    message (assuming the public key is trusted, this is discussed in <xref
+    linkend="i1485854"/>).</para>
+
+    <para>The digital signing process used is based on Java 2 JAR signing. The
+    process of signing is repeated, restricted and augmented here to improve
+    the inter-operability of OSGi bundles.</para>
+
+    <section xml:id="i1517861">
+      <title>JAR Structure and Manifest</title>
+
+      <para>A JAR can be signed by multiple signers. Each signer must store
+      two resources in the JAR file. These resources are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>A signature instruction resource that has a similar format
+          like the Manifest. It must have a <code>.SF</code> extension. This
+          file provides digests for the complete manifest file.</para>
+        </listitem>
+
+        <listitem>
+          <para>A PKCS#7 resource that contains the digital signature of the
+          signature instruction resource. See <xref linkend="i1485209"/> for
+          information about its format.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>These JAR file signing resources must be placed in the META-INF
+      directory. For signing, the META-INF directory is special because files
+      in there are not signed in the normal way. These signing resources must
+      come directly after the <code>MANIFEST.MF</code> file, and before
+      <emphasis>any</emphasis> other resources in a JAR stream. If this is not
+      the case, then a Framework should not accept the signatures and must
+      treat the bundle as unsigned. This ordering is important because it
+      allows the receiver of the JAR file to stream the contents without
+      buffering. All the security information is available before any
+      resources are loaded. This model is shown in <xref
+      linkend="i1502291"/>.</para>
+
+      <figure xml:id="i1502291">
+        <title>Signer files in JAR</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="1.162in"
+                       contentwidth="4.918in" fileref="signer-files.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>The signature instruction resource contains digests of the
+      Manifest resource, not the actual resource data itself. A digest is a
+      one way function that computes a value from the bytes of a resource in
+      such a way that it is very difficult to create a set of bytes that
+      matches that digest value.</para>
+
+      <para>The JAR Manifest must therefore contain one or more digests of the
+      actual resources. These digests must be placed in their name section of
+      the manifest. The name of the digest header is constructed with its
+      algorithm followed by <code>-Digest</code>. An example is the
+      <code>SHA1-Digest</code>. It is recommended that OSGi Framework
+      implementations support the following digest algorithms.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>MD5</emphasis> – Message Digest 5, an improved
+          version of MD4. It generates a 128-bit hash. It is described at page
+          436 in <xref linkend="i1483029"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>SHA1</emphasis> – An improved version of SHA,
+          delivers a 160 bit hash. It is defined in <xref
+          linkend="i1483030"/>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The hash must be encoded with a Base 64 encoding. Base 64 encoding
+      is defined in <xref linkend="i1483385"/>.</para>
+
+      <para>For example, a manifest could look like:</para>
+
+      <programlisting>Manifest-Version: 1.0
+Bundle-Name: DisplayManifest
+<phrase role="symbol">↵</phrase>
+Name: x/A.class
+SHA1-Digest: RJpDp+igoJ1kxs8CSFeDtMbMq78=
+<phrase role="symbol">↵</phrase>
+Name: x/B.class
+SHA1-Digest: 3EuIPcx414w2QfFSXSZEBfLgKYA=
+<phrase role="symbol">↵</phrase></programlisting>
+
+      <para>Graphically this looks like <xref linkend="i1506821"/>.</para>
+
+      <figure xml:id="i1506821">
+        <title>Signer files in JAR</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="1.389in"
+                       contentwidth="4.918in"
+                       fileref="signer-files-manifest.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>OSGi JARs must be signed by one or more signers that sign all
+      resources except the ones in the <code>META-INF</code> directory; the
+      default behavior of the jarsigner tool. This is a restriction with
+      respect to standard Java JAR signing; there is no partial signing for an
+      OSGi JAR. The OSGi specification only supports fully signed bundles. The
+      reason for this restriction is because partially signing can break the
+      protection of private packages. It also simplifies the security API
+      because all code of a bundle is using the same protection domain.</para>
+
+      <para>Signature files in nested JAR files (For example JARs on the
+      <code>Bundle-ClassPath</code>) must be ignored. These nested JAR files
+      must share the same protection domain as their containing bundle. They
+      must be treated as if their resources were stored directly in the outer
+      JAR.</para>
+
+      <para>Each signature is based on two resources. The first file is the
+      signature instruction file; this file must have a file name with an
+      extension <code>.SF</code>. A signature file has the same syntax as the
+      manifest, except that it starts with <code>Signature-Version: 1.0</code>
+      instead of <code>Manifest-Version: 1.0</code>.</para>
+
+      <para>The only relevant part of the signature resource is the digest of
+      the Manifest resource. The name of the header must be the name algorithm
+      (e.g. <code>SHA1</code>) followed by <code>-Digest-Manifest</code>. For
+      example:</para>
+
+      <programlisting><code>Signature-Version: 1.0</code>
+SHA1-Digest-Manifest: RJpDp+igoJ1kxs8CSFeDtMbMq78=
+MD5-Digest-Manifest: IIsI6HranRNHMY27SK8M5qMunR4=</programlisting>
+
+      <para>The signature resource can contain name sections as well. However,
+      these name sections should be ignored.</para>
+
+      <para>If there are multiple signers, then their signature instruction
+      resources can be identical if they use the same digest algorithms.
+      However, each signer must still have its own signature instruction file.
+      That is, it is not allowed to share the signature resource between
+      signers.</para>
+
+      <para>The indirection of the signature instruction files digests is
+      depicted in <xref linkend="i1484701"/> for two signers:
+      <code>ACME</code> and <code>DAFFY</code>.</para>
+
+      <figure pgwide="1" xml:id="i1484701">
+        <title>Manifest, signature instruction files and digests in
+        JAR</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.188in"
+                       contentwidth="4.918in"
+                       fileref="signature-instruction-files.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Java JAR File Restrictions</title>
+
+      <para>OSGi bundles are always valid JAR files. However, there are a few
+      restrictions that apply to bundles that do not apply to JAR
+      files.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Bundles do not support partially signed bundles. The manifest
+          must contain name sections for all resources but should not have
+          entries for resources in the META-INF directory. Signed entries in
+          the META-INF directory must be verified. Sub directories of META-INF
+          must be treated like any other JAR directory.</para>
+        </listitem>
+
+        <listitem>
+          <para>The name sections in the signature files are ignored. Only the
+          Manifest digest is used.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Valid Signature</title>
+
+      <para>A bundle can be signed with a <emphasis>signature</emphasis> by
+      multiple signers. A signature contains a pair of a signature file, with
+      a SF extension and a PKCS#7 resource that has the same name as the
+      signature file but with either an RSA or DSA extension.</para>
+
+      <para>Such a signature is valid when:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The signature file has an entry for the META-INF/MANIFEST.MF
+          resource.</para>
+        </listitem>
+
+        <listitem>
+          <para>The manifest entry must contain an SHA1 and/or MD5 digest for
+          the complete manifest.</para>
+        </listitem>
+
+        <listitem>
+          <para>All listed digests match the manifest.</para>
+        </listitem>
+
+        <listitem>
+          <para>The PCKS#7 resource is a valid signature (either signed using
+          RSA or DSA as indicated by the extension) for the signature
+          resource.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For a complete bundle to be validly signed it is necessary that
+      all signatures are valid. That is, if one of the signatures is invalid,
+      the whole bundle must be treated as unsigned.</para>
+    </section>
+
+    <section>
+      <title>Signing Algorithms</title>
+
+      <para>Several different available algorithms can perform digital
+      signing. OSGi Framework implementations should support the following
+      algorithms:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>DSA</emphasis> – The Digital Signature Algorithm.
+          This standard is defined in <xref linkend="i1484747"/>. This is a
+          USA government standard for Digital Signature Standard. The
+          signature resource name must have an extension of
+          <code>.DSA</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>RSA</emphasis> – Rivest, Shamir and Adleman. A
+          public key algorithm that is very popular. It is defined in <xref
+          linkend="i1484864"/>. The extension of the signature resource name
+          must be <code>.RSA</code>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The signature files for RSA and DSA are stored in a PCKS#7 format.
+      This is a format that has a structure as defined in <xref
+      linkend="i1485209"/>. The PKCS#7 standard provides access to the
+      algorithm specific signing information as well as the certificate with
+      the public key of the signer. The verification algorithm uses the public
+      key to verify that:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The digital signature matches the signature instruction
+          resource.</para>
+        </listitem>
+
+        <listitem>
+          <para>The signature was created with the private key associated with
+          the certificate.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The complete signing structure is shown in <xref
+      linkend="i1484701"/>.</para>
+    </section>
+
+    <section xml:id="i1485854">
+      <title>Certificates</title>
+
+      <para>A certificate is a general term for a signed document containing a
+      name and public key information. Such a certificate can take many forms
+      but the OSGi JAR signing is based on the X.509 certificate format. It
+      has been around for many years and is part of the OSI group of
+      standards. X.509 is defined in <xref linkend="i1485767"/>.</para>
+
+      <para>An X.509 certificate contains the following elements:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Subject Name</emphasis> – The subject name is a
+          unique identifier for the object being certified. In the case of a
+          person this might include the name, nationality and e-mail address,
+          the organization, and the department within that organization. This
+          identifier is a Distinguished Name, which is defined in <xref
+          linkend="i1501834"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Issuer Name</emphasis> – The Issuer name is a
+          Distinguished Name for the principal that signed this
+          certificate.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Certificate Extensions</emphasis> – A certificate
+          can also include pictures, codification of fingerprints, passport
+          number, and other extensions.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Public Key Information</emphasis> – A public key can
+          be used with an encryption technique that requires its private
+          counterpart to decrypt, and vice versa. The public key can be shared
+          freely, the private key must be kept secret. The public key
+          information specifies an algorithm identifier (such as DSA or RSA)
+          and the subject's public key.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Validity</emphasis> – A Certificate can be valid for
+          only a limited time.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Certifying Authority Signature</emphasis> – The
+          Certificate Authority signs the first elements and thereby adds
+          credibility to the certificate. The receiver of a certificate can
+          check the signature against a set of trusted certifying authorities.
+          If the receiver trusts that certifying authority, it can trust the
+          statement that the certificate makes.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The structure of a certificate is depicted in <xref
+      linkend="i1504099"/>.</para>
+
+      <figure xml:id="i1504099">
+        <title>Structure of a certificate</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="1.295in"
+                       contentwidth="4.947in"
+                       fileref="certificate-structure.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>Certificates can be freely dispersed; they do not contain any
+      secret information. Therefore, the PKCS#7 resource contains the signing
+      certificate. It cannot be trusted at face value because the certificate
+      is carried in the bundle itself. A perpetrator can easily create its own
+      certificate with any content. The receiver can only verify that the
+      certificate was signed by the owner of the public key (the issuer) and
+      that it has not been tampered with. However, before the statement in the
+      certificate can be trusted, it is necessary to authenticate the
+      certificate itself. It is therefore necessary to establish a
+      <emphasis>trust model</emphasis>.</para>
+
+      <para>One trust model, supported but not required by the OSGi
+      specifications, is placing the signing certificate in a repository. Any
+      certificate in this repository is treated as trusted by default.
+      However, placing all possible certificates in this repository does not
+      scale well. In an open model, a device would have to contain hundreds of
+      thousands of certificates. The management of the certificates could
+      easily become overwhelming.</para>
+
+      <para>The solution is to sign a certificate by another certificate, and
+      this process can be repeated several times. This delegation process
+      forms a<emphasis> chain of certificates</emphasis>. All certificates for
+      this chain are carried in the PKCS#7 file: if one of those certificates
+      can be found in the trusted repository, the other dependent ones can be
+      trusted, on the condition that all the certificates are valid. This
+      model scales very well because only a few certificates of trusted
+      signers need to be maintained. This is the model used in web browsers,
+      as depicted in <xref linkend="i1507711"/>.</para>
+
+      <figure xml:id="i1507711">
+        <title>Certificate authorities fan out</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="1.716in"
+                       contentwidth="4.947in" fileref="ca-fan-out.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>This specification does not specify access to the trusted
+      repository. It is implementation specific how this repository is
+      populated and maintained.</para>
+    </section>
+
+    <section xml:id="i1501834">
+      <title>Distinguished Names</title>
+
+      <para>An X.509 name is a <emphasis>Distinguished Name</emphasis> (DN). A
+      DN is a highly structured name, officially identifying a node in an
+      hierarchical namespace. The DN concept was developed for the X.500
+      directory service which envisioned a world wide namespace managed by
+      PTTs. Today, the DN is used as an identifier in a local namespace, as in
+      a namespace designed by an Operator. For example, given a namespace that
+      looks like <xref linkend="i1497511"/>, the DN identifying Bugs looks
+      like:</para>
+
+      <programlisting>cn=Bug,o=ACME,c=US</programlisting>
+
+      <figure xml:id="i1497511">
+        <title>Country, Company, Person based namespace.</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.381in"
+                       contentwidth="4.973in" fileref="dn-namespace.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>The traversal of the namespace is <emphasis>reversed</emphasis>
+      from the order in the DN, the first part specifies the least significant
+      but most specific part. That is, the order of the attribute assertions
+      is significant. Two DNs with the same attributes but different order are
+      different DNs.</para>
+
+      <para>In the example, a node is searched in the root that has an
+      attribute <code>c</code> (<code>countryName</code>) with a value that is
+      <code>US</code>. This node is searched for a child that has an attribute
+      <code>o</code> (<code>organizationName</code>) with a value of
+      <code>ACME</code>. And the ACME node is searched for a child node with
+      an attribute <code>cn</code> (<code>commonName</code>) that has a value
+      <code>"Bugs Bunny"</code>.</para>
+
+      <para>The tree based model is the official definition of a DN from the
+      X.500 standards. However, in practice today, many DNs contain attributes
+      that have no relation to a tree. For example, many DNs contain comments
+      and copyrights in the <code>ou</code> (<code>organizationalUnit</code>)
+      attribute.</para>
+
+      <para>The DN from an X.509 certificate is expressed in a binary
+      structure defined by ASN.1 (a type language defined by ISO). However,
+      the Distinguished Name is often used in interaction with humans.
+      Sometimes, users of a system have to acknowledge the use of a
+      certificate or an employee of an Operator must grant permissions based
+      on a Distinguished Name of a customer. It is therefore paramount that
+      the Distinguished Name has a good human readable string representation.
+      The expressiveness of the ASN.1 type language makes this non-trivial.
+      This specification only uses DN strings as defined in <xref
+      linkend="i1457637"/> with a number of extensions that are specified by
+      the <code>javax.security.auth.x500.X500Principal</code> class in
+      <code>CANONICAL</code> form.</para>
+
+      <para>However, the complexity of the encoding/decoding is caused by the
+      use of rarely used types and features (binary data, multi-valued RDNs,
+      foreign alphabets, and attributes that have special matching rules).
+      These features must be supported by a compliant implementation but
+      should be avoided by users. In practice, these features are rarely used
+      today.</para>
+
+      <para>The format of a string DN is as follows:</para>
+
+      <programlisting>dn          ::= rdn ( ’,’ rdn ) *
+rdn         ::= attribute ( ’+’ attribute ) *
+attribute   ::= name ’=’ value
+name        ::= readable | oid
+oid         ::= number ( ’.’ number ) *   // See <xref
+          linkend="framework.general.syntax" xrefstyle="template:%n"/>
+readable    ::= &lt;see attribute table&gt;
+value       ::= &lt;escaped string&gt;</programlisting>
+
+      <para>Spaces before and after the separators are ignored, spaces inside
+      a value are significant but multiple embedded spaces are collapsed into
+      a single space. Wildcard asterisks (<code>’*’ \u002A</code>) are not
+      allowed in a value part. The following characters must be escaped with a
+      reverse solidus (backslash <code>’\’ \u005C</code>):</para>
+
+      <programlisting>    comma               ’,’     \u002C
+    plus                ’+’     \u002B
+    double quote        ’"’     \u0022
+    reverse solidus     ’\’     \u005C
+    less then           ’&lt;’     \u003C
+    greater then        ’&gt;’     \u003E
+    semicolon           ’;’     \u003B</programlisting>
+
+      <para>Reverse solidi (backslash <code>’\’ \u005C</code>) must already be
+      escaped in Java strings, requiring 2 reverse solidi in Java source code.
+      For example:</para>
+
+      <programlisting>    DN:             cn = Bugs Bunny, o = ACME++, C=US
+    Canonical form: cn=bugs bunny,o=acme\+\+,c=us
+    Java String:    "cn=Bugs Bunny,o=ACME\\+\\+,c=US"</programlisting>
+
+      <para>The full unicode character set is available and can be used in
+      DNs. String objects must be normalized and put in canonical form before
+      being compared.</para>
+
+      <programlisting>    DN:             cn = Bugs Bunny, o = Ð Þ, C=US
+    Canonical form: cn=bugs bunny,o=ð þ,c=us
+    Java String:    "cn = Bugs Bunny, o = Ð Þ, C=US"</programlisting>
+
+      <para>The names of attributes (attributes types as they are also called)
+      are actually translated into an Object IDentifier (OID). An OID is a
+      dotted decimal number, like <code>2.5.4.3</code> for the <code>cn</code>
+      (<code>commonName</code>) attribute name. It is therefore not possible
+      to use any attribute name because the implementation must know the
+      aliasing as well as the comparison rules. Therefore only the attributes
+      that are listed in the following table are allowed (in short or long
+      form):</para>
+
+      <programlisting>commonName              cn          2.5.4.3     ITU X.520
+surName                 sn          2.5.4.4 
+countryName             c           2.5.4.6
+localityName            l           2.5.4.7 
+stateOrProvinceName     st          2.5.4.8
+organizationName        o           2.5.4.10 
+organizationalUnitName  ou          2.5.4.11
+title                               2.5.4.12 
+givenName                           2.5.4.42 
+initials                            2.5.4.43 
+generationQualifier                 2.5.4.44 
+dnQualifier                         2.5.4.46 
+
+streetAddress           street                  RFC 2256
+domainComponent         dc                      RFC 1274
+userid                  uid                     RFC 1274/2798?
+emailAddress                                    RFC 2985
+serialNumber                                    RFC 2985</programlisting>
+
+      <para>The following DN:</para>
+
+      <programlisting>2.5.4.3=Bugs Bunny,organizationName=ACME,2.5.4.6=US</programlisting>
+
+      <para>Is therefore identical to:</para>
+
+      <programlisting>cn=Bugs Bunny,o=ACME,c=US</programlisting>
+
+      <para>The attribute types officially define a matching rule, potentially
+      allowing cases sensitive and case insensitive. The attributes in the
+      previous list all match case insensitive. Therefore, an OSGi DN must not
+      depend on case sensitivity.</para>
+
+      <para>The X.500 standard supports multi-valued RDNs, however, their use
+      is not recommended. See <xref linkend="i1499281"/> for the rationale of
+      this recommendation. Multi-valued RDNs separate their constituents with
+      a plus sign (<code>’+’ \u002B</code>). Their order is not significant.
+      For example:</para>
+
+      <programlisting>cn=Bugs Bunny+dc=x.com+title=Manager,o=ACME,c=US</programlisting>
+
+      <para>Which is the same as</para>
+
+      <programlisting>dc=x.com+cn=Bugs Bunny+title=Manager, o=ACME,c=US</programlisting>
+    </section>
+
+    <section xml:id="framework.security.certificate.matching">
+      <title>Certificate Matching</title>
+
+      <para>Certificates are matched by their Subject DN. Before matching,
+      DNs, they must first be put in canonical form according to the algorithm
+      specified in <code>javax.security.auth.x500.X500Principal</code>.</para>
+
+      <para>DNs can also be compared using wildcards. A wildcard asterisk (’*’
+      \u002A) replaces all possible values. Due to the structure of the DN,
+      the comparison is more complicated than string-based wildcard
+      matching.</para>
+
+      <para>A wildcard can stand for a number of RDNs, or the value of a
+      single RDN. DNs with a wildcard must be canonicalized before they are
+      compared. This means, among other things, that spaces must be ignored,
+      except in values.</para>
+
+      <para>The format of a wildcard DN match is:</para>
+
+      <programlisting>CertificateMatch    ::= dn-match ( ’;’ dn-match) *
+dn-match            ::= ( ’*’ | rdn-match ) 
+                            ( ’,’ rdn-match ) * | ’-’ 
+rdn-match           ::= name ’=’ value-match
+value-match         ::= ’*’ | value-star
+value-star          ::= &lt; value, requires escaped ’*’ and’-’ &gt;</programlisting>
+
+      <para>The most simple case is a single wildcard; it must match any DN. A
+      wildcard can also replace the first list of RDNs of a DN. The first RDNs
+      are the least significant. Such lists of matched RDNs can be
+      empty.</para>
+
+      <para>For example, a DN with a wildcard that matches all nodes
+      descendant from the <code>ACME</code> node in <xref linkend="i1497511"
+      xrefstyle="template:Figure %n on page %p"/>, looks like:</para>
+
+      <programlisting>*, o=ACME, c=US</programlisting>
+
+      <para>This wildcard DN matches the following DNs:</para>
+
+      <programlisting>cn = Bugs Bunny, o = ACME, c = US
+ou = Carots, cn=Daffy Duck, o=ACME, c=US
+street = 9C\, Avenue St. Drézéry, o=ACME, c=US
+dc=www, dc=acme, dc=com, o=ACME, c=US
+o=ACME, c=US</programlisting>
+
+      <para>The following DNs must not match:</para>
+
+      <programlisting>street = 9C\, Avenue St. Drézéry, o=ACME,c=FR
+dc=www, dc=acme, dc=com, c=US</programlisting>
+
+      <para>If a wildcard is used for a <code>value</code> of an RDN, the
+      value must be exactly <code>*</code>. The wildcard must match any value,
+      and no substring matching must be done. For example:</para>
+
+      <programlisting>cn=*,o=ACME,c=*</programlisting>
+
+      <para>This DN with wildcard must match the following DNs:</para>
+
+      <programlisting>cn=Bugs Bunny,o=ACME,c=US
+cn = Daffy Duck , o = ACME , c = US
+cn=Road Runner, o=ACME, c=NL</programlisting>
+
+      <para>But not:</para>
+
+      <programlisting>o=ACME, c=NL
+dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
+
+      <para>Both forms of wildcard usage can be combined in a single matching
+      DN. For example, to match any DN that is from the ACME company
+      worldwide, use:</para>
+
+      <programlisting>*, o=ACME, c=*</programlisting>
+
+      <para>Matching of a DN takes place in the context of a certificate. This
+      certificate is part of a <emphasis>certificate chain</emphasis>, see
+      <xref linkend="i1485854"/>. Each certificate has a Subject DN and an
+      Issuer DN. The Issuer DN is the Subject DN used to sign the first
+      certificate of the chain. DN matching can therefore be extended to match
+      the signer. The semicolon (<code>’;’ \u003B</code>) must be used to
+      separate DNs in a chain.</para>
+
+      <para>The following example matches a certificate signed by <code>Tweety
+      Inc.</code> in the US.</para>
+
+      <programlisting>* ; ou=S &amp; V, o=Tweety Inc., c=US</programlisting>
+
+      <para>The wildcard matches zero or one certificates, however, sometimes
+      it is necessary to match a longer chain. The minus sign (<code>’-’
+      \u002D</code>) represents zero or more certificates, whereas the
+      asterisk only represents a single certificate. For example, to match a
+      certificate where the <code>Tweety Inc.</code> is in the certificate
+      chain, use the following expression:</para>
+
+      <programlisting>- ; *, o=Tweety Inc., c=US</programlisting>
+
+      <para>The previous example matched if the <code>Tweety Inc.</code>
+      certificate was trusted, or was signed by a trusted certificate. Certain
+      certificates are trusted because they are known by the Framework, how
+      they are known is implementation-defined.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Permissions</title>
+
+    <para>The OSGi Framework uses Java 2 permissions for securing bundles.
+    Each bundle is associated with a set of permissions. During runtime, the
+    permissions are queried when a permission is requested through the
+    Security Manager. If a Framework uses postponed conditions, then it must
+    install its own security manager, otherwise it can use any Security
+    Manager.</para>
+
+    <para>The management of the bundle’s permissions is handled through
+    Conditional Permission Admin, Permission Admin, or another security
+    agent.</para>
+
+    <section xml:id="framework.security.impliedpermissions">
+      <title>Implied Permissions</title>
+
+      <para>Implied permissions are permissions that the framework grants a
+      bundle without any specific action. These permissions are necessary for
+      normal operation. For example, each bundle gets permissions to read,
+      write, and delete the bundle persistent storage area. The complete list
+      of implied permissions is as follows:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>File Permission for the bundle persistent storage area, for
+          the <code>READ</code>, <code>WRITE</code>, and <code>DELETE</code>
+          actions</para>
+        </listitem>
+
+        <listitem>
+          <para>Property Permission with the <code>READ</code> action for
+          <code>org.osgi.framework.*</code></para>
+        </listitem>
+
+        <listitem>
+          <para>Admin Permission with the <code>RESOURCE</code>,
+          <code>METADATA</code>, <code>CLASS</code>, and <code>CONTEXT</code>
+          actions for the bundle itself.</para>
+        </listitem>
+
+        <listitem>
+          <para>Capability Permission <code>REQUIRE</code> for the
+          <code>osgi.ee</code> capability.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="framework.security.filterbasedpermissions">
+      <title>Filter Based Permissions</title>
+
+      <para>OSGi supports a number of permissions that are granted when the
+      target of the permissions is related to a bundle. For example, Admin
+      Permission can grant a bundle the permission to manage other bundles.
+      This is expressed by using a <emphasis>filter expression</emphasis> for
+      the <emphasis>name</emphasis> of the permission. When the permission is
+      checked, the filter is evaluated with specific permission attributes as
+      well as attributes that describe the bundle’s identity. For example, a
+      bundle can get permission to get all services registered by bundles
+      coming from a specific location:</para>
+
+      <programlisting>ServicePermission("(location=https://www.acme.com/*)",GET )</programlisting>
+
+      <para>This provides a very powerful model because it allows operators to
+      let a group of bundles closely collaborate without requiring ad hoc
+      namespaces for services, packages, and bundles. Using the signer or
+      location as the target for a permission, will allow the maintenance of
+      the permission management to be significantly reduced. It is not
+      necessary to configure for individual bundles: the signer or location is
+      effectively used as a grouping mechanism.</para>
+
+      <para>The filter can contain the following keys:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>id</emphasis> – The bundle ID of a bundle. For
+          example:</para>
+        </listitem>
+      </itemizedlist>
+
+      <programlisting>    (id=256)</programlisting>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>location</emphasis> – The location of a bundle.
+          Filter wildcards for Strings are supported, allowing the value to
+          specify a set of bundles. For example:</para>
+        </listitem>
+      </itemizedlist>
+
+      <programlisting>    (location=https://www.acme.com/download/*)</programlisting>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>signer</emphasis> – A Distinguished Name chain. See
+          <xref linkend="framework.security.certificate.matching"/> for more
+          information how Distinguished Names are matched. Wildcards in a DN
+          are not matched according to the filter string rules, but according
+          to the rules defined for a DN chain. The wildcard asterisk
+          (<code>’*’ \u002A</code>) must be escaped with a reverse solidus
+          (backslash <code>’\’ \u005C</code>) to avoid being interpreted as a
+          filter wildcard. For example:</para>
+        </listitem>
+      </itemizedlist>
+
+      <programlisting>    (signer=\*,o=ACME,c=NL)</programlisting>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>name</emphasis> – The symbolic name of a bundle.
+          Filter wildcards for Strings are supported allowing the value to
+          specify a set of bundles. A single symbolic name may also map to a
+          set of bundles. For example:</para>
+        </listitem>
+      </itemizedlist>
+
+      <programlisting>    (name=com.acme.*)</programlisting>
+
+      <para>The name parameter of the permission can also be a single wildcard
+      asterisk (<code>’*’ \u002A</code>). In that case all bundles must
+      match.</para>
+
+      <section>
+        <title>Multiple Signers</title>
+
+        <para>A bundle can be signed by multiple signers, in that case the
+        signer will match against any of the signers’ DN. Using multiple
+        signers is both a feature as well as it is a possible threat. From a
+        management perspective it is beneficial to be able to use signatures
+        to handle the grouping. However, it could also be used to maliciously
+        manage a trusted bundle.</para>
+
+        <para>For example a trusted bundle signed by <code>T</code>, could
+        later have a signature added by an untrusted party <code>U</code>.
+        This will grant the bundle the permissions of both T and U, which
+        ordinarily is a desirable feature. However, If the permissions
+        associated with signer <code>U</code> also allow the management of
+        bundles signed by <code>U</code>, then <code>U</code> could
+        unexpectedly gain the permission to manage this trusted bundle. For
+        example, it could now <code>start</code> and <code>stop</code> this
+        trusted bundle. This unexpected effect of becoming eligible to be
+        managed should be carefully considered when multiple signers are used.
+        The deny policies in Conditional Permission Admin can be used to
+        prevent this case from causing harm.</para>
+      </section>
+    </section>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>New implied Capability Permission</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed xml:id="i1457637"><title>RFC 2253Lightweight Directory
+      Access Protocol (v3): UTF-8 String Representation of Distinguished
+      Names</title>http://www.ietf.org/rfc/rfc2253.txt</bibliomixed>
+
+      <bibliomixed xml:id="i1485767"><title>X.509
+      Certificates</title>http://www.ietf.org/rfc/rfc2459.txt</bibliomixed>
+
+      <bibliomixed xml:id="i1488926"><title>Java 2 Security
+      Architecture</title>Version 1.2, Sun Microsystems, March
+      2002</bibliomixed>
+
+      <bibliomixed xml:id="i1509711"><title>The Java 2 Package Versioning
+      Specification</title>http://docs.oracle.com/javase/1.4.2/docs/guide/versioning/index.html</bibliomixed>
+
+      <bibliomixed xml:id="i1488938"><title>Manifest
+      Format</title>http://docs.oracle.com/javase/1.4.2/docs/guide/jar/jar.html#JAR%20Manifest</bibliomixed>
+
+      <bibliomixed xml:id="i1483030"><title>Secure Hash Algorithm
+      1</title>http://csrc.nist.gov/publications/fips/fips180-2/fips180-2withchangenotice.pdf</bibliomixed>
+
+      <bibliomixed xml:id="i1483029"><title>RFC 1321 The MD5 Message-Digest
+      Algorithm</title>http://www.ietf.org/rfc/rfc1321.txt</bibliomixed>
+
+      <bibliomixed xml:id="i1483385"><title>RFC 1421 Privacy Enhancement for
+      Internet Electronic
+      Mail</title>http://www.ietf.org/rfc/rfc1421.txt</bibliomixed>
+
+      <bibliomixed
+      xml:id="i1484747"><title>DSA</title>http://www.itl.nist.gov/fipspubs/fip186.htm</bibliomixed>
+
+      <bibliomixed
+      xml:id="i1484864"><title>RSA</title>http://www.ietf.org/rfc/rfc2313.txt
+      which is superseded by http://www.ietf.org/rfc/rfc2437.txt</bibliomixed>
+
+      <bibliomixed xml:id="i1485209"><title>Public Key Cryptography Standard
+      #7</title>http://www.rsasecurity.com/rsalabs/node.asp?id=2129</bibliomixed>
+
+      <bibliomixed xml:id="i1488889"><title>Unicode Normalization UAX #
+      15</title>http://www.unicode.org/reports/tr15/</bibliomixed>
+
+      <bibliomixed xml:id="i1499281"><title>Understanding and Deploying LDAP
+      Directory Services</title>ISBN 1-57870-070-1</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>

@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="376.98px" height="149.34px" viewBox="0 0 376.98 149.34" enable-background="new 0 0 376.98 149.34" xml:space="preserve">
+<rect x="115.98" y="115.439" width="54.3" height="27"/>
+<rect x="115.98" y="115.2" width="54.54" height="0.479"/>
+<rect x="170.04" y="115.439" width="0.48" height="27.24"/>
+<rect x="115.74" y="142.2" width="54.54" height="0.479"/>
+<rect x="115.74" y="115.2" width="0.48" height="27.239"/>
+<rect x="113.64" y="113.641" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="113.64" y="113.398" width="54.541" height="0.48"/>
+<rect x="167.7" y="113.641" width="0.48" height="27.239"/>
+<rect x="113.4" y="140.398" width="54.54" height="0.48"/>
+<rect x="113.4" y="113.398" width="0.48" height="27.24"/>
+<text transform="matrix(1 0 0 1 115.9805 120.7793)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">TR-157a3</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Software</tspan><tspan x="0" y="19.152" font-family="'ProductusOSGiBookc'" font-size="7.98">Module Impl</tspan></text>
+<rect x="201" y="115.439" width="54.359" height="27"/>
+<rect x="201" y="115.2" width="54.602" height="0.479"/>
+<rect x="255.12" y="115.439" width="0.479" height="27.24"/>
+<rect x="200.76" y="142.2" width="54.602" height="0.479"/>
+<rect x="200.76" y="115.2" width="0.48" height="27.239"/>
+<rect x="198.66" y="113.641" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="198.66" y="113.398" width="54.54" height="0.48"/>
+<rect x="252.721" y="113.641" width="0.479" height="27.239"/>
+<rect x="198.42" y="140.398" width="54.54" height="0.48"/>
+<rect x="198.42" y="113.398" width="0.48" height="27.24"/>
+<text transform="matrix(1 0 0 1 201 120.7793)" font-family="'ProductusOSGiBookc'" font-size="7.98">OSGi RMT Impl</text>
+<rect x="158.521" y="59.22" width="54.299" height="27"/>
+<rect x="158.521" y="58.979" width="54.54" height="0.48"/>
+<rect x="212.58" y="59.22" width="0.48" height="27.24"/>
+<rect x="158.28" y="85.979" width="54.541" height="0.48"/>
+<rect x="158.28" y="58.979" width="0.479" height="27.24"/>
+<rect x="156.12" y="57.42" fill="#FFFFFF" width="54.36" height="27"/>
+<rect x="156.12" y="57.18" width="54.601" height="0.48"/>
+<rect x="210.24" y="57.42" width="0.48" height="27.24"/>
+<rect x="155.88" y="84.18" width="54.601" height="0.48"/>
+<rect x="155.88" y="57.18" width="0.48" height="27.24"/>
+<text transform="matrix(1 0 0 1 158.5205 64.5596)" font-family="'ProductusSemibold'" font-size="7.98">Dmt Admin</text>
+<rect x="162.96" y="85.5" width="0.48" height="0.24"/>
+<rect x="162.96" y="85.74" width="0.48" height="28.619"/>
+<rect x="205.5" y="85.5" width="0.48" height="0.24"/>
+<rect x="205.5" y="85.74" width="0.48" height="28.619"/>
+<rect x="115.98" y="2.04" width="54.3" height="27"/>
+<rect x="115.98" y="1.8" width="54.54" height="0.48"/>
+<rect x="170.04" y="2.04" width="0.48" height="27.24"/>
+<rect x="115.74" y="28.8" width="54.54" height="0.48"/>
+<rect x="115.74" y="1.8" width="0.48" height="27.24"/>
+<rect x="113.58" y="0.24" fill="#FFFFFF" width="54.36" height="27"/>
+<rect x="113.58" width="54.601" height="0.479"/>
+<rect x="167.7" y="0.24" width="0.48" height="27.239"/>
+<rect x="113.34" y="27" width="54.6" height="0.479"/>
+<rect x="113.34" width="0.48" height="27.24"/>
+<text transform="matrix(1 0 0 1 115.9805 7.3799)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">TR-069</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">Protocol Adapter</tspan></text>
+<rect x="201" y="2.04" width="54.359" height="27"/>
+<rect x="201" y="1.8" width="54.602" height="0.48"/>
+<rect x="255.12" y="2.04" width="0.479" height="27.24"/>
+<rect x="200.76" y="28.8" width="54.602" height="0.48"/>
+<rect x="200.76" y="1.8" width="0.48" height="27.24"/>
+<rect x="198.66" y="0.24" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="198.66" width="54.54" height="0.479"/>
+<rect x="252.721" y="0.24" width="0.479" height="27.239"/>
+<rect x="198.42" y="27" width="54.54" height="0.479"/>
+<rect x="198.42" width="0.48" height="27.24"/>
+<text transform="matrix(1 0 0 1 201 7.3799)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">OMA DM </tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">Protocol Adapter</tspan></text>
+<rect x="162.96" y="57.42" width="0.48" height="0.24"/>
+<rect x="162.96" y="28.8" width="0.48" height="28.62"/>
+<rect x="205.5" y="57.42" width="0.48" height="0.24"/>
+<rect x="205.5" y="28.8" width="0.48" height="28.62"/>
+<rect x="226.74" y="28.8" width="0.48" height="0.24"/>
+<rect x="226.74" y="29.04" width="0.48" height="4.02"/>
+<rect x="226.74" y="39.18" width="0.48" height="0.24"/>
+<rect x="226.74" y="39.42" width="0.48" height="7.8"/>
+<rect x="226.74" y="53.34" width="0.48" height="0.24"/>
+<rect x="226.74" y="53.58" width="0.48" height="7.859"/>
+<rect x="226.74" y="67.56" width="0.48" height="0.24"/>
+<rect x="226.74" y="67.8" width="0.48" height="7.8"/>
+<rect x="226.74" y="81.72" width="0.48" height="0.24"/>
+<rect x="226.74" y="81.96" width="0.48" height="7.858"/>
+<rect x="226.74" y="95.939" width="0.48" height="0.24"/>
+<rect x="226.74" y="96.18" width="0.48" height="7.801"/>
+<rect x="226.74" y="110.1" width="0.48" height="0.24"/>
+<rect x="226.74" y="110.34" width="0.48" height="4.02"/>
+<rect x="141.72" y="28.8" width="0.48" height="0.24"/>
+<rect x="141.72" y="29.04" width="0.48" height="4.02"/>
+<rect x="141.72" y="39.18" width="0.48" height="0.24"/>
+<rect x="141.72" y="39.42" width="0.48" height="7.8"/>
+<rect x="141.72" y="53.34" width="0.48" height="0.24"/>
+<rect x="141.72" y="53.58" width="0.48" height="7.859"/>
+<rect x="141.72" y="67.56" width="0.48" height="0.24"/>
+<rect x="141.72" y="67.8" width="0.48" height="7.8"/>
+<rect x="141.72" y="81.72" width="0.48" height="0.24"/>
+<rect x="141.72" y="81.96" width="0.48" height="7.858"/>
+<rect x="141.72" y="95.939" width="0.48" height="0.24"/>
+<rect x="141.72" y="96.18" width="0.48" height="7.801"/>
+<rect x="141.72" y="110.1" width="0.48" height="0.24"/>
+<rect x="141.72" y="110.34" width="0.48" height="4.02"/>
+<rect x="2.58" y="2.04" width="54.36" height="27"/>
+<rect x="2.58" y="1.8" width="54.6" height="0.48"/>
+<rect x="56.7" y="2.04" width="0.48" height="27.24"/>
+<rect x="2.34" y="28.8" width="54.6" height="0.48"/>
+<rect x="2.34" y="1.8" width="0.48" height="27.24"/>
+<rect x="0.24" y="0.24" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="0.24" width="54.54" height="0.479"/>
+<rect x="54.3" y="0.24" width="0.48" height="27.239"/>
+<rect y="27" width="54.54" height="0.479"/>
+<rect width="0.48" height="27.24"/>
+<text transform="matrix(1 0 0 1 2.5801 7.3799)" font-family="'ProductusBook'" font-size="7.98">ACS</text>
+<rect x="56.7" y="14.22" width="0.24" height="0.48"/>
+<rect x="56.94" y="14.22" width="56.88" height="0.48"/>
+<rect x="314.4" y="2.04" width="54.358" height="27"/>
+<rect x="314.4" y="1.8" width="54.6" height="0.48"/>
+<rect x="368.521" y="2.04" width="0.479" height="27.24"/>
+<rect x="314.16" y="28.8" width="54.6" height="0.48"/>
+<rect x="314.16" y="1.8" width="0.479" height="27.24"/>
+<rect x="312.061" y="0.24" fill="#FFFFFF" width="54.301" height="27"/>
+<rect x="312.061" width="54.54" height="0.479"/>
+<rect x="366.12" y="0.24" width="0.479" height="27.239"/>
+<rect x="311.82" y="27" width="54.54" height="0.479"/>
+<rect x="311.82" width="0.479" height="27.24"/>
+<text transform="matrix(1 0 0 1 314.4004 7.3799)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">OMA DM</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">Manager</tspan></text>
+<rect x="255.12" y="14.22" width="0.239" height="0.48"/>
+<rect x="255.359" y="14.22" width="56.939" height="0.48"/>
+<rect x="322.38" y="10.08" width="54.36" height="27"/>
+<rect x="322.38" y="9.84" width="54.602" height="0.479"/>
+<rect x="376.5" y="10.08" width="0.48" height="27.239"/>
+<rect x="322.141" y="36.84" width="54.601" height="0.479"/>
+<rect x="322.141" y="9.84" width="0.479" height="27.24"/>
+<rect x="320.04" y="8.28" fill="#FFFFFF" width="54.36" height="27"/>
+<rect x="320.04" y="8.04" width="54.601" height="0.479"/>
+<rect x="374.16" y="8.28" width="0.479" height="27.239"/>
+<rect x="319.8" y="35.04" width="54.602" height="0.479"/>
+<rect x="319.8" y="8.04" width="0.48" height="27.24"/>
+<text transform="matrix(1 0 0 1 322.3799 15.4199)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">OMA DM</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">Manager</tspan></text>
+<text transform="matrix(1 0 0 1 228.4209 71.1602)" font-family="'ProductusOSGiBookc'" font-size="7.98">native</text>
+<text transform="matrix(1 0 0 1 120.7207 71.4004)" font-family="'ProductusOSGiBookc'" font-size="7.98">native</text>
+<rect x="121.38" y="28.38" width="0.48" height="0.24"/>
+<rect x="121.38" y="28.62" width="0.48" height="3.96"/>
+<rect x="121.38" y="45.899" width="0.48" height="4.2"/>
+<rect x="117.6" y="49.62" width="4.02" height="0.479"/>
+<rect x="111.24" y="49.62" width="0.24" height="0.479"/>
+<rect x="103.38" y="49.62" width="7.86" height="0.479"/>
+<rect x="93" y="49.62" width="4.26" height="0.479"/>
+<rect x="93" y="49.859" width="0.48" height="4.021"/>
+<rect x="93" y="59.939" width="0.48" height="0.24"/>
+<rect x="93" y="60.18" width="0.48" height="7.86"/>
+<rect x="93" y="74.16" width="0.48" height="0.239"/>
+<rect x="93" y="74.399" width="0.48" height="7.86"/>
+<rect x="93" y="88.318" width="0.48" height="0.24"/>
+<rect x="93" y="88.561" width="0.48" height="7.859"/>
+<rect x="93" y="102.54" width="0.48" height="0.24"/>
+<rect x="93" y="102.78" width="0.48" height="7.858"/>
+<rect x="93" y="116.7" width="0.48" height="0.239"/>
+<rect x="93" y="116.939" width="0.48" height="7.859"/>
+<rect x="93" y="130.92" width="0.48" height="0.24"/>
+<rect x="93" y="131.16" width="0.48" height="7.859"/>
+<rect x="93" y="145.08" width="0.48" height="4.26"/>
+<rect x="93.24" y="148.859" width="4.02" height="0.479"/>
+<rect x="103.02" y="148.859" width="0.24" height="0.479"/>
+<rect x="103.26" y="148.859" width="7.44" height="0.479"/>
+<rect x="116.46" y="148.859" width="0.24" height="0.479"/>
+<rect x="116.7" y="148.859" width="7.44" height="0.479"/>
+<rect x="129.9" y="148.859" width="0.24" height="0.479"/>
+<rect x="130.14" y="148.859" width="7.44" height="0.479"/>
+<rect x="143.34" y="148.859" width="0.24" height="0.479"/>
+<rect x="143.58" y="148.859" width="7.44" height="0.479"/>
+<rect x="156.72" y="148.859" width="0.24" height="0.479"/>
+<rect x="156.96" y="148.859" width="7.44" height="0.479"/>
+<rect x="170.16" y="148.859" width="0.24" height="0.479"/>
+<rect x="170.4" y="148.859" width="7.439" height="0.479"/>
+<rect x="183.601" y="148.859" width="0.239" height="0.479"/>
+<rect x="183.84" y="148.859" width="7.439" height="0.479"/>
+<rect x="197.04" y="148.859" width="0.239" height="0.479"/>
+<rect x="197.279" y="148.859" width="7.441" height="0.479"/>
+<rect x="210.48" y="148.859" width="0.24" height="0.479"/>
+<rect x="210.721" y="148.859" width="7.439" height="0.479"/>
+<rect x="223.92" y="148.859" width="4.262" height="0.479"/>
+<rect x="227.7" y="141.78" width="0.479" height="7.319"/>
+<text transform="matrix(1 0 0 1 100.3203 47.5195)" font-family="'ProductusOSGiBookc'" font-size="7.98">foreign</text>
+</svg>

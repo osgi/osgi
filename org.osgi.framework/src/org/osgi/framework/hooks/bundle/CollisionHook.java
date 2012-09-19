@@ -54,17 +54,17 @@ public interface CollisionHook {
 	 * on the operation type the target bundle and the collision candidate
 	 * collection are the following:
 	 * <ul>
-	 * <li> {@link #INSTALLING installing} - The target is the bundle associated
+	 * <li>{@link #INSTALLING installing} - The target is the bundle associated
 	 * with the {@link BundleContext} used to call one of the
 	 * {@link BundleContext#installBundle(String) install} methods. The
 	 * collision candidate collection contains the existing bundles installed
 	 * which have the same symbolic name and version as the bundle being
-	 * installed.
-	 * <li> {@link #UPDATING updating} - The target is the bundle used to call
+	 * installed.</li>
+	 * <li>{@link #UPDATING updating} - The target is the bundle used to call
 	 * one of the {@link Bundle#update() update} methods. The collision
 	 * candidate collection contains the existing bundles installed which have
 	 * the same symbolic name and version as the content the target bundle is
-	 * being updated to.
+	 * being updated to.</li>
 	 * </ul>
 	 * This method can filter the collection of collision candidates by removing
 	 * potential collisions. For the specified operation to succeed, the

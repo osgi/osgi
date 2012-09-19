@@ -32,7 +32,8 @@
  * <p>
  * {@code  Import-Package: org.osgi.service.io; version="[1.0,1.1)", javax.microedition.io}
  * 
- * @version $Id$
+ * @version 1.0
+ * @author $Id$
  */
 
 package org.osgi.service.io;

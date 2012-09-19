@@ -53,27 +53,23 @@ public interface FrameworkWiring extends BundleReference {
 	 * <li>Compute the {@link #getDependencyClosure(Collection) dependency
 	 * closure} of the specified bundles. If no bundles are specified, compute
 	 * the dependency closure of the {@link #getRemovalPendingBundles() removal
-	 * pending} bundles.
-	 * 
+	 * pending} bundles.</li>
 	 * <li>Each bundle in the dependency closure that is in the {@code ACTIVE}
-	 * state will be stopped as described in the {@code Bundle.stop} method.
-	 * 
+	 * state will be stopped as described in the {@code Bundle.stop} method.</li>
 	 * <li>Each bundle in the dependency closure that is in the {@code RESOLVED}
 	 * state is unresolved and thus moved to the {@code INSTALLED} state. The
 	 * effect of this step is that bundles in the dependency closure are no
-	 * longer {@code RESOLVED}.
-	 * 
+	 * longer {@code RESOLVED}.</li>
 	 * <li>Each bundle in the dependency closure that is in the
 	 * {@code UNINSTALLED} state is removed from the dependency closure and is
-	 * now completely removed from the Framework.
-	 * 
+	 * now completely removed from the Framework.</li>
 	 * <li>Each bundle in the dependency closure that was in the {@code ACTIVE}
 	 * state prior to Step 2 is started as described in the {@code Bundle.start}
 	 * method, causing all bundles required for the restart to be resolved. It
 	 * is possible that, as a result of the previous steps, packages that were
 	 * previously exported no longer are. Therefore, some bundles may be
 	 * unresolvable until bundles satisfying the dependencies have been
-	 * installed in the Framework.
+	 * installed in the Framework.</li>
 	 * </ol>
 	 * 
 	 * <p>

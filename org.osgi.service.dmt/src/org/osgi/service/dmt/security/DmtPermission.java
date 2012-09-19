@@ -23,7 +23,8 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.StringTokenizer;
-import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.Acl;
+import org.osgi.service.dmt.Uri;
 
 /**
  * Controls access to management objects in the Device Management Tree (DMT). It
@@ -47,7 +48,7 @@ import org.osgi.service.dmt.*;
  * 
  * This means that owner of this permission has Get access on every child node
  * of ./OSGi/bundles. The asterix does not necessarily have to follow a '/'
- * character. For example the {@code &quot;./OSGi/a*&quot;} target matches the
+ * character. For example the {@code "./OSGi/a*"} target matches the
  * {@code ./OSGi/applications} subtree.
  * <p>
  * If wildcard is present in the actions field, all legal OMA DM commands are
@@ -122,11 +123,11 @@ public class DmtPermission extends Permission {
 	 * specified actions. The given URI can be:
 	 * <ul>
 	 * <li> {@code "*"}, which matches all valid (see
-	 * {@link Uri#isValidUri(String)}) absolute URIs;
+	 * {@link Uri#isValidUri(String)}) absolute URIs;</li>
 	 * <li>the prefix of an absolute URI followed by the {@code *} character
 	 * (for example {@code "./OSGi/L*"}), which matches all valid absolute URIs
-	 * beginning with the given prefix;
-	 * <li>a valid absolute URI, which matches itself.
+	 * beginning with the given prefix;</li>
+	 * <li>a valid absolute URI, which matches itself.</li>
 	 * </ul>
 	 * <p>
 	 * Since the {@code *} character is itself a valid URI character, it can
@@ -247,10 +248,10 @@ public class DmtPermission extends Permission {
 	 * permission. This method returns {@code false} if and only if at least one
 	 * of the following conditions are fulfilled for the specified permission:
 	 * <ul>
-	 * <li>it is not a DmtPermission
-	 * <li>its set of actions contains an action not allowed by this permission
+	 * <li>it is not a DmtPermission</li>
+	 * <li>its set of actions contains an action not allowed by this permission</li>
 	 * <li>the set of nodes defined by its path contains a node not defined by
-	 * the path of this permission
+	 * the path of this permission</li>
 	 * </ul>
 	 * 
 	 * @param p the permission to check for implication

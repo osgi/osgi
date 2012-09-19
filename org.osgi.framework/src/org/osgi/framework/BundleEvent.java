@@ -201,16 +201,16 @@ public class BundleEvent extends EventObject {
 	/**
 	 * Returns the type of lifecyle event. The type values are:
 	 * <ul>
-	 * <li>{@link #INSTALLED}
-	 * <li>{@link #RESOLVED}
-	 * <li>{@link #LAZY_ACTIVATION}
-	 * <li>{@link #STARTING}
-	 * <li>{@link #STARTED}
-	 * <li>{@link #STOPPING}
-	 * <li>{@link #STOPPED}
-	 * <li>{@link #UPDATED}
-	 * <li>{@link #UNRESOLVED}
-	 * <li>{@link #UNINSTALLED}
+	 * <li>{@link #INSTALLED}</li>
+	 * <li>{@link #RESOLVED}</li>
+	 * <li>{@link #LAZY_ACTIVATION}</li>
+	 * <li>{@link #STARTING}</li>
+	 * <li>{@link #STARTED}</li>
+	 * <li>{@link #STOPPING}</li>
+	 * <li>{@link #STOPPED}</li>
+	 * <li>{@link #UPDATED}</li>
+	 * <li>{@link #UNRESOLVED}</li>
+	 * <li>{@link #UNINSTALLED}</li>
 	 * </ul>
 	 * 
 	 * @return The type of lifecycle event.

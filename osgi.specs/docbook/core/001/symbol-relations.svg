@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="227.221px" height="28.859px" viewBox="0 0 227.221 28.859" enable-background="new 0 0 227.221 28.859"
+	 xml:space="preserve">
+<rect x="172.68" y="2.04" width="54.3" height="26.58"/>
+<rect x="172.68" y="1.8" width="54.54" height="0.48"/>
+<rect x="226.74" y="2.04" width="0.48" height="26.819"/>
+<rect x="172.44" y="28.38" width="54.54" height="0.479"/>
+<rect x="172.44" y="1.8" width="0.479" height="26.82"/>
+<rect x="170.34" y="0.24" fill="#FFFFFF" width="54.301" height="26.58"/>
+<rect x="170.34" y="0" width="54.54" height="0.479"/>
+<rect x="224.4" y="0.24" width="0.479" height="26.819"/>
+<rect x="170.1" y="26.58" width="54.54" height="0.479"/>
+<rect x="170.1" y="0" width="0.479" height="26.82"/>
+<text transform="matrix(0.9504 0 0 1 172.6804 7.3796)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 172.6804 15.8396)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Bundle</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Listener</tspan></text>
+<rect x="2.58" y="2.04" width="54.36" height="26.58"/>
+<rect x="2.58" y="1.8" width="54.601" height="0.48"/>
+<rect x="56.7" y="2.04" width="0.48" height="26.819"/>
+<rect x="2.34" y="28.38" width="54.601" height="0.479"/>
+<rect x="2.34" y="1.8" width="0.48" height="26.82"/>
+<rect x="0.24" y="0.24" fill="#FFFFFF" width="54.3" height="26.58"/>
+<rect x="0.24" y="0" width="54.54" height="0.479"/>
+<rect x="54.3" y="0.24" width="0.48" height="26.819"/>
+<rect x="0" y="26.58" width="54.54" height="0.479"/>
+<rect x="0" y="0" width="0.48" height="26.82"/>
+<text transform="matrix(0.9504 0 0 1 2.5798 7.3796)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 2.5798 15.8396)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Bundle</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Context</tspan></text>
+<rect x="56.94" y="14.219" width="113.399" height="0.48"/>
+<text transform="matrix(1 0 0 1 156.1199 11.7)" font-family="'ProductusBook'" font-size="7.98">0..*</text>
+<text transform="matrix(1 0 0 1 81.4797 11.7)" font-family="'ProductusBook'" font-size="7.98">delivers bundle events</text>
+<text transform="matrix(1 0 0 1 60.4797 11.7)" font-family="'ProductusBook'" font-size="7.98">1</text>
+</svg>

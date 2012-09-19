@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="325.98px" height="142.439px" viewBox="0 0 325.98 142.439" enable-background="new 0 0 325.98 142.439"
+	 xml:space="preserve">
+<rect x="127.56" y="99.9" fill="#E6E6E6" width="71.701" height="42.54"/>
+<rect x="254.279" y="0" fill="#E6E6E6" width="71.701" height="43.2"/>
+<rect x="264.54" y="9.6" width="54.36" height="27"/>
+<rect x="264.54" y="9.36" width="54.601" height="0.48"/>
+<rect x="318.66" y="9.6" width="0.479" height="27.24"/>
+<rect x="264.299" y="36.36" width="54.602" height="0.48"/>
+<rect x="264.299" y="9.36" width="0.48" height="27.24"/>
+<rect x="262.2" y="7.8" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="262.2" y="7.56" width="54.54" height="0.48"/>
+<rect x="316.26" y="7.8" width="0.479" height="27.24"/>
+<rect x="261.959" y="34.56" width="54.54" height="0.48"/>
+<rect x="261.959" y="7.56" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 264.5391 14.9397)" font-family="'ProductusOSGiBookc'" font-size="7.98">Participant Impl</text>
+<polyline fill="#FFFFFF" points="155.879,71.58 162.959,85.74 170.04,71.58 "/>
+<polyline points="156.12,71.46 163.2,85.62 163.2,85.86 162.78,85.62 169.859,71.46 170.04,71.34 170.459,71.34 163.2,85.86 
+	162.959,86.281 162.78,85.86 155.7,71.7 "/>
+<polyline points="170.04,71.82 155.879,71.82 155.7,71.7 155.52,71.34 170.04,71.34 "/>
+<rect y="0.72" fill="#E6E6E6" width="71.7" height="43.2"/>
+<rect x="10.26" y="9.12" width="54.3" height="27"/>
+<rect x="10.26" y="8.88" width="54.54" height="0.479"/>
+<rect x="64.32" y="9.12" width="0.48" height="27.239"/>
+<rect x="10.02" y="35.88" width="54.54" height="0.479"/>
+<rect x="10.02" y="8.88" width="0.48" height="27.24"/>
+<rect x="7.92" y="7.32" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="7.92" y="7.08" width="54.54" height="0.479"/>
+<rect x="61.98" y="7.32" width="0.48" height="27.24"/>
+<rect x="7.68" y="34.08" width="54.54" height="0.479"/>
+<rect x="7.68" y="7.08" width="0.48" height="27.239"/>
+<text transform="matrix(0.9504 0 0 1 10.2598 14.4602)" font-family="'ProductusOSGiBookc'" font-size="7.98">Initiator</text>
+<rect x="136.98" y="109.02" width="54.359" height="27"/>
+<rect x="136.98" y="108.781" width="54.6" height="0.479"/>
+<rect x="191.1" y="109.02" width="0.479" height="27.24"/>
+<rect x="136.74" y="135.781" width="54.6" height="0.479"/>
+<rect x="136.74" y="108.781" width="0.48" height="27.239"/>
+<rect x="134.64" y="107.22" fill="#FFFFFF" width="54.299" height="27"/>
+<rect x="134.64" y="106.98" width="54.542" height="0.48"/>
+<rect x="188.7" y="107.22" width="0.479" height="27.24"/>
+<rect x="134.4" y="133.98" width="54.54" height="0.48"/>
+<rect x="134.4" y="106.98" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 136.98 114.3606)" font-family="'ProductusOSGiBookc'" font-size="7.98">Coordinator Impl</text>
+<rect x="162.72" y="85.5" width="0.479" height="21.78"/>
+<rect x="35.16" y="35.88" width="0.48" height="21.78"/>
+<rect x="35.4" y="57.18" width="127.8" height="0.48"/>
+<rect x="162.72" y="57.42" width="0.479" height="14.399"/>
+<rect x="290.279" y="35.88" width="0.48" height="21.78"/>
+<rect x="162.72" y="57.18" width="127.799" height="0.48"/>
+<rect x="162.72" y="57.42" width="0.479" height="14.399"/>
+<text transform="matrix(0.9504 0 0 1 177.1797 76.3206)" font-family="'ProductusOSGiBookc'" font-size="7.98">Coordinator</text>
+<rect x="136.98" y="9.6" width="54.359" height="27"/>
+<rect x="136.98" y="9.36" width="54.6" height="0.48"/>
+<rect x="191.1" y="9.6" width="0.479" height="27.24"/>
+<rect x="136.74" y="36.36" width="54.6" height="0.48"/>
+<rect x="136.74" y="9.36" width="0.48" height="27.24"/>
+<rect x="134.64" y="7.8" fill="#FFFFFF" width="54.299" height="27"/>
+<rect x="134.64" y="7.56" width="54.542" height="0.48"/>
+<rect x="188.7" y="7.8" width="0.479" height="27.24"/>
+<rect x="134.4" y="34.56" width="54.54" height="0.48"/>
+<rect x="134.4" y="7.56" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 136.98 14.9397)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(0.9504 0 0 1 136.98 23.4006)" font-family="'ProductusOSGiBookc'" font-size="7.98">Coordination</text>
+<rect x="258.18" y="21.72" width="4.26" height="0.48"/>
+<rect x="244.02" y="21.72" width="8.101" height="0.48"/>
+<rect x="229.799" y="21.72" width="8.102" height="0.48"/>
+<rect x="215.641" y="21.72" width="8.039" height="0.48"/>
+<rect x="201.419" y="21.72" width="8.101" height="0.48"/>
+<rect x="191.1" y="21.72" width="4.199" height="0.48"/>
+<rect x="130.62" y="21.72" width="4.26" height="0.48"/>
+<rect x="124.32" y="21.72" width="0.24" height="0.48"/>
+<rect x="116.46" y="21.72" width="7.86" height="0.48"/>
+<rect x="110.1" y="21.72" width="0.24" height="0.48"/>
+<rect x="102.24" y="21.72" width="7.86" height="0.48"/>
+<rect x="95.88" y="21.72" width="0.24" height="0.48"/>
+<rect x="88.08" y="21.72" width="7.8" height="0.48"/>
+<rect x="81.72" y="21.72" width="0.24" height="0.48"/>
+<rect x="73.86" y="21.72" width="7.86" height="0.48"/>
+<rect x="67.5" y="21.72" width="0.24" height="0.48"/>
+<rect x="63.54" y="21.72" width="3.96" height="0.48"/>
+</svg>

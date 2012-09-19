@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="354.54px" height="120.289px" viewBox="0 0 354.54 120.289" enable-background="new 0 0 354.54 120.289"
+	 xml:space="preserve">
+<text transform="matrix(1 0 0 1 0 6.647)" font-family="'ProductusOSGiBookc'" font-size="7.98">initiator</text>
+<rect x="13.92" y="13.487" width="0.48" height="0.24"/>
+<rect x="13.92" y="13.728" width="0.48" height="106.561"/>
+<rect x="98.94" y="13.487" width="0.48" height="0.24"/>
+<rect x="98.94" y="13.728" width="0.48" height="106.561"/>
+<text transform="matrix(1 0 0 1 78.54 8.147)" font-family="'ProductusOSGiBookc'" font-size="7.98">Coordinator</text>
+<text transform="matrix(1 0 0 1 160.3179 8.147)" font-family="'ProductusOSGiBookc'" font-size="7.98">Coordination</text>
+<text transform="matrix(1 0 0 1 246.3423 8.147)" font-family="'ProductusOSGiBookc'" font-size="7.98">Collaborator</text>
+<rect x="354.059" y="56.027" width="0.48" height="0.24"/>
+<rect x="354.059" y="56.268" width="0.48" height="64.021"/>
+<rect x="184.02" y="27.647" width="0.48" height="0.24"/>
+<rect x="184.02" y="27.888" width="0.48" height="92.4"/>
+<rect x="269.04" y="13.487" width="0.479" height="0.24"/>
+<rect x="269.04" y="13.728" width="0.479" height="106.561"/>
+<text transform="matrix(1 0 0 1 322.7993 8.147)" font-family="'ProductusOSGiBookc'" font-size="7.98">Participant</text>
+<rect x="94.02" y="20.567" width="4.68" height="0.48"/>
+<polyline points="94.38,18.048 94.14,18.468 98.58,21.048 98.82,21.048 99.24,20.808 98.82,20.627 "/>
+<polyline points="98.82,21.048 98.58,20.627 94.14,23.208 94.38,23.627 "/>
+<rect x="13.92" y="20.567" width="0.24" height="0.48"/>
+<rect x="14.16" y="20.567" width="80.1" height="0.48"/>
+<text transform="matrix(1 0 0 1 21.2397 18.4673)" font-family="'ProductusOSGiBookc'" font-size="7.98">begin()</text>
+<text transform="matrix(1 0 0 1 106.2598 25.5474)" font-family="'ProductusOSGiBookc'" font-size="7.98">new()</text>
+<rect x="179.04" y="27.647" width="4.681" height="0.48"/>
+<polyline points="179.399,25.127 179.161,25.548 183.6,28.127 183.84,28.127 184.26,27.888 183.84,27.708 "/>
+<polyline points="183.84,28.127 183.6,27.708 179.161,30.288 179.399,30.708 "/>
+<rect x="98.94" y="27.647" width="0.24" height="0.48"/>
+<rect x="99.18" y="27.647" width="80.102" height="0.48"/>
+<rect x="264.06" y="48.948" width="4.739" height="0.479"/>
+<polyline points="264.479,46.428 264.241,46.848 268.68,49.428 268.92,49.428 269.22,49.248 268.92,49.008 "/>
+<polyline points="268.92,49.428 268.68,49.008 264.241,51.527 264.479,51.948 "/>
+<rect x="13.92" y="48.948" width="0.24" height="0.479"/>
+<rect x="14.16" y="48.948" width="250.139" height="0.479"/>
+<rect x="99.72" y="70.188" width="4.68" height="0.479"/>
+<polyline points="104.04,73.188 104.28,72.768 99.84,70.188 99.6,70.188 99.18,70.427 99.6,70.607 "/>
+<polyline points="99.6,70.188 99.84,70.607 104.28,68.027 104.04,67.607 "/>
+<rect x="269.28" y="70.188" width="0.239" height="0.479"/>
+<rect x="104.16" y="70.188" width="165.122" height="0.479"/>
+<text transform="matrix(1 0 0 1 21.2397 46.9077)" font-family="'ProductusOSGiBookc'" font-size="7.98">work()</text>
+<text transform="matrix(1 0 0 1 221.5806 68.0874)" font-family="'ProductusOSGiBookc'" font-size="7.98">addParticpant()</text>
+<rect x="349.139" y="56.027" width="4.682" height="0.48"/>
+<polyline points="349.5,53.508 349.26,53.928 353.7,56.508 353.94,56.508 354.36,56.268 353.94,56.087 "/>
+<polyline points="353.94,56.508 353.7,56.087 349.26,58.667 349.5,59.087 "/>
+<rect x="269.04" y="56.027" width="0.24" height="0.48"/>
+<rect x="269.28" y="56.027" width="80.1" height="0.48"/>
+<text transform="matrix(1 0 0 1 275.9399 53.9868)" font-family="'ProductusOSGiBookc'" font-size="7.98">new()</text>
+<rect x="179.04" y="98.507" width="4.681" height="0.479"/>
+<polyline points="179.399,96.048 179.161,96.468 183.6,98.987 183.84,98.987 184.26,98.748 183.84,98.567 "/>
+<polyline points="183.84,98.987 183.6,98.567 179.161,101.147 179.399,101.567 "/>
+<rect x="13.92" y="98.507" width="0.24" height="0.479"/>
+<rect x="14.16" y="98.507" width="165.122" height="0.479"/>
+<text transform="matrix(1 0 0 1 21.2397 96.5269)" font-family="'ProductusOSGiBookc'" font-size="7.98">end()</text>
+<rect x="349.139" y="105.647" width="4.682" height="0.479"/>
+<polyline points="349.5,103.126 349.26,103.548 353.7,106.126 353.94,106.126 354.241,105.949 353.94,105.708 "/>
+<polyline points="353.94,106.126 353.7,105.708 349.26,108.228 349.5,108.647 "/>
+<rect x="184.02" y="105.647" width="0.24" height="0.479"/>
+<rect x="184.26" y="105.647" width="165.119" height="0.479"/>
+<text transform="matrix(1 0 0 1 186.1802 103.6069)" font-family="'ProductusOSGiBookc'" font-size="7.98">ended()</text>
+<rect x="12.66" y="91.667" width="3" height="1.5"/>
+<rect x="12.66" y="47.688" width="3" height="43.979"/>
+<rect x="97.68" y="19.308" width="3" height="1.5"/>
+<rect x="97.68" y="20.808" width="3" height="15.66"/>
+<rect x="12.66" y="112.968" width="3" height="1.5"/>
+<rect x="12.66" y="97.248" width="3" height="15.721"/>
+<rect x="12.66" y="19.308" width="3" height="1.5"/>
+<rect x="12.66" y="20.808" width="3" height="15.66"/>
+<rect x="267.78" y="91.667" width="3" height="1.5"/>
+<rect x="267.78" y="47.688" width="3" height="43.979"/>
+<rect x="182.76" y="97.248" width="3" height="1.5"/>
+<rect x="182.76" y="98.748" width="3" height="8.641"/>
+<rect x="179.04" y="84.348" width="4.681" height="0.479"/>
+<polyline points="179.399,81.828 179.161,82.248 183.6,84.828 183.84,84.828 184.26,84.587 183.84,84.408 "/>
+<polyline points="183.84,84.828 183.6,84.408 179.161,86.987 179.399,87.408 "/>
+<rect x="98.94" y="84.348" width="0.24" height="0.479"/>
+<rect x="99.18" y="84.348" width="80.102" height="0.479"/>
+<text transform="matrix(1 0 0 1 127.5596 82.2476)" font-family="'ProductusOSGiBookc'" font-size="7.98">addParticpant()</text>
+<rect x="97.68" y="91.667" width="3" height="1.5"/>
+<rect x="97.68" y="68.927" width="3" height="22.74"/>
+</svg>

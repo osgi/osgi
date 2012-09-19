@@ -159,8 +159,8 @@ public class DeploymentException extends Exception {
 	 * 
 	 * This exception is thrown when the called resource processor throws a
 	 * {@code ResourceProcessorException} with the
-	 * {@link org.osgi.service.deploymentadmin.spi.ResourceProcessorException#CODE_RESOURCE_SHARING_VIOLATION}
-	 * error code.
+	 * {@link org.osgi.service.deploymentadmin.spi.ResourceProcessorException#CODE_RESOURCE_SHARING_VIOLATION
+	 * CODE_RESOURCE_SHARING_VIOLATION} error code.
 	 * <p>
 	 * 
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)} throws
@@ -172,8 +172,8 @@ public class DeploymentException extends Exception {
 	 * Exception with this error code is thrown when one of the Resource
 	 * Processors involved in the deployment session threw a
 	 * {@code ResourceProcessorException} with the
-	 * {@link org.osgi.service.deploymentadmin.spi.ResourceProcessorException#CODE_PREPARE}
-	 * error code.
+	 * {@link org.osgi.service.deploymentadmin.spi.ResourceProcessorException#CODE_PREPARE
+	 * CODE_PREPARE} error code.
 	 * <p>
 	 * 
 	 * {@link DeploymentAdmin#installDeploymentPackage(InputStream)} and

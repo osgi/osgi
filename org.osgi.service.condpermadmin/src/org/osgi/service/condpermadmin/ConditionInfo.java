@@ -41,7 +41,7 @@ import java.util.List;
  * </li>
  * <li>Implement the {@code Condition} interface and define a public constructor
  * that takes a {@code Bundle} object and a {@code ConditionInfo} object as
- * arguments.
+ * arguments.</li>
  * </ul>
  * 
  * @Immutable
@@ -171,9 +171,9 @@ public class ConditionInfo {
 	 * </pre>
 	 * 
 	 * where <i>argN</i> are strings that must be encoded for proper parsing.
-	 * Specifically, the {@code &quot;}, {@code \}, carriage return, and line
-	 * feed characters must be escaped using {@code \&quot;}, {@code \\},
-	 * {@code \r}, and {@code \n}, respectively.
+	 * Specifically, the {@code "}, {@code \}, carriage return, and line feed
+	 * characters must be escaped using {@code \"}, {@code \\}, {@code \r}, and
+	 * {@code \n}, respectively.
 	 * 
 	 * <p>
 	 * The encoded string contains no leading or trailing whitespace characters.

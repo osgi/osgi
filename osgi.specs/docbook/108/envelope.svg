@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="255.602px" height="85.5px" viewBox="0 0 255.602 85.5" enable-background="new 0 0 255.602 85.5" xml:space="preserve">
+<rect x="101.82" y="58.68" width="54.3" height="26.58"/>
+<rect x="101.82" y="58.439" width="54.54" height="0.48"/>
+<rect x="155.88" y="58.68" width="0.48" height="26.82"/>
+<rect x="101.58" y="85.02" width="54.54" height="0.48"/>
+<rect x="101.58" y="58.439" width="0.48" height="26.82"/>
+<rect x="99.42" y="56.939" fill="#FFFFFF" width="54.36" height="26.58"/>
+<rect x="99.42" y="56.7" width="54.602" height="0.479"/>
+<rect x="153.54" y="56.939" width="0.48" height="26.82"/>
+<rect x="99.18" y="83.28" width="54.6" height="0.479"/>
+<rect x="99.18" y="56.7" width="0.479" height="26.819"/>
+<text transform="matrix(0.9504 0 0 1 101.8201 64.0195)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 101.8201 72.54)" font-family="'ProductusSemibold'" font-size="7.98">Envelope</text>
+<rect x="101.82" y="1.98" width="54.3" height="26.58"/>
+<rect x="101.82" y="1.74" width="54.54" height="0.479"/>
+<rect x="155.88" y="1.98" width="0.48" height="26.82"/>
+<rect x="101.58" y="28.32" width="54.54" height="0.48"/>
+<rect x="101.58" y="1.74" width="0.48" height="26.82"/>
+<rect x="99.42" y="0.24" fill="#FFFFFF" width="54.36" height="26.58"/>
+<rect x="99.42" width="54.602" height="0.48"/>
+<rect x="153.54" y="0.24" width="0.48" height="26.82"/>
+<rect x="99.18" y="26.58" width="54.6" height="0.48"/>
+<rect x="99.18" width="0.479" height="26.82"/>
+<text transform="matrix(1 0 0 1 101.8201 7.3203)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Basic</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Envelope</tspan></text>
+<rect x="2.58" y="58.68" width="54.36" height="26.58"/>
+<rect x="2.58" y="58.439" width="54.601" height="0.48"/>
+<rect x="56.7" y="58.68" width="0.48" height="26.82"/>
+<rect x="2.34" y="85.02" width="54.601" height="0.48"/>
+<rect x="2.34" y="58.439" width="0.48" height="26.82"/>
+<rect x="0.24" y="56.939" fill="#FFFFFF" width="54.3" height="26.58"/>
+<rect x="0.24" y="56.7" width="54.54" height="0.479"/>
+<rect x="54.3" y="56.939" width="0.48" height="26.82"/>
+<rect x="0" y="83.28" width="54.54" height="0.479"/>
+<rect x="0" y="56.7" width="0.48" height="26.819"/>
+<text transform="matrix(0.9504 0 0 1 2.5798 64.0195)" font-family="'ProductusOSGiBookc'" font-size="7.98">Object</text>
+<rect x="201" y="58.68" width="54.36" height="26.58"/>
+<rect x="201" y="58.439" width="54.602" height="0.48"/>
+<rect x="255.12" y="58.68" width="0.48" height="26.82"/>
+<rect x="200.76" y="85.02" width="54.602" height="0.48"/>
+<rect x="200.76" y="58.439" width="0.48" height="26.82"/>
+<rect x="198.66" y="56.939" fill="#FFFFFF" width="54.36" height="26.58"/>
+<rect x="198.66" y="56.7" width="54.6" height="0.479"/>
+<rect x="252.78" y="56.939" width="0.479" height="26.82"/>
+<rect x="198.42" y="83.28" width="54.602" height="0.479"/>
+<rect x="198.42" y="56.7" width="0.48" height="26.819"/>
+<text transform="matrix(0.9504 0 0 1 200.9998 64.0195)" font-family="'ProductusOSGiBookc'" font-size="7.98">String</text>
+<rect x="155.88" y="70.859" width="0.24" height="0.48"/>
+<rect x="156.12" y="70.859" width="42.78" height="0.48"/>
+<rect x="56.7" y="70.859" width="0.24" height="0.48"/>
+<rect x="56.94" y="70.859" width="42.72" height="0.48"/>
+<polyline points="127.8,40.08 124.5,40.08 124.68,39.42 127.8,28.5 130.92,39.42 131.101,40.08 130.44,40.08 129.96,39.72 
+	127.32,30.48 128.28,30.18 128.28,30.48 125.64,39.72 124.68,39.42 125.16,39.06 127.8,39.06 "/>
+<rect x="127.8" y="39.06" width="2.642" height="1.02"/>
+<polyline points="127.8,39.6 125.16,39.6 127.8,30.36 130.44,39.6 "/>
+<rect x="127.561" y="56.939" width="0.479" height="0.24"/>
+<rect x="127.561" y="39.84" width="0.479" height="17.1"/>
+<text transform="matrix(1 0 0 1 167.5203 68.5195)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">scope</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">name</tspan></text>
+<text transform="matrix(1 0 0 1 58.9797 68.5195)" font-family="'ProductusBook'" font-size="7.98">identification</text>
+<rect x="2.58" y="1.98" width="54.36" height="26.58"/>
+<rect x="2.58" y="1.74" width="54.601" height="0.479"/>
+<rect x="56.7" y="1.98" width="0.48" height="26.82"/>
+<rect x="2.34" y="28.32" width="54.601" height="0.48"/>
+<rect x="2.34" y="1.74" width="0.48" height="26.82"/>
+<rect x="0.24" y="0.24" fill="#FFFFFF" width="54.3" height="26.58"/>
+<rect x="0.24" width="54.54" height="0.48"/>
+<rect x="54.3" y="0.24" width="0.48" height="26.82"/>
+<rect x="0" y="26.58" width="54.54" height="0.48"/>
+<rect x="0" width="0.48" height="26.82"/>
+<text transform="matrix(0.9504 0 0 1 2.3396 7.3203)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">Impl.</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">identification</tspan><tspan x="0" y="19.152" font-family="'ProductusOSGiBookc'" font-size="7.98">object</tspan></text>
+<polyline points="28.56,45.42 31.86,45.42 31.68,46.08 29.04,55.26 28.56,56.939 28.08,55.26 25.44,46.08 25.26,45.42 25.92,45.42 
+	26.4,45.78 29.04,54.96 28.08,55.26 28.08,54.96 30.72,45.78 31.68,46.08 31.2,46.439 28.56,46.439 "/>
+<rect x="25.92" y="45.42" width="2.641" height="1.02"/>
+<polyline points="28.56,45.9 31.2,45.9 28.56,55.08 25.92,45.9 "/>
+<rect x="28.32" y="28.32" width="0.479" height="0.24"/>
+<rect x="28.32" y="28.56" width="0.479" height="17.04"/>
+</svg>
