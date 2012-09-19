@@ -1133,12 +1133,20 @@ actual para elements -->
       <xsl:when test="($sequence='odd' or $sequence='first') and $position='left'">
         <xsl:if test="$pageclass != 'titlepage'">
           <xsl:apply-templates select="/*[1]" mode="title.markup"/>
+          <xsl:if test="/*[1]/d:info/d:releaseinfo">
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="/*[1]/d:info/d:releaseinfo/node()"/>
+          </xsl:if>
         </xsl:if>
       </xsl:when>
 
       <xsl:when test="($sequence='even' or $sequence='blank') and $position='right'">
         <xsl:if test="$pageclass != 'titlepage'">
           <xsl:apply-templates select="/*[1]" mode="title.markup"/>
+          <xsl:if test="/*[1]/d:info/d:releaseinfo">
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="/*[1]/d:info/d:releaseinfo/node()"/>
+          </xsl:if>
         </xsl:if>
       </xsl:when>
 
