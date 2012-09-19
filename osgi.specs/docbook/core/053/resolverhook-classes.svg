@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="233.879px" height="170.1px" viewBox="0 0 233.879 170.1" enable-background="new 0 0 233.879 170.1" xml:space="preserve">
+<rect y="126.9" fill="#E6E6E6" width="233.879" height="43.2"/>
+<rect x="9.48" y="8.88" width="54.3" height="27"/>
+<rect x="9.48" y="8.64" width="54.54" height="0.48"/>
+<rect x="63.54" y="8.88" width="0.48" height="27.24"/>
+<rect x="9.24" y="35.64" width="54.54" height="0.48"/>
+<rect x="9.24" y="8.64" width="0.48" height="27.24"/>
+<rect x="7.08" y="7.08" fill="#FFFFFF" width="54.36" height="27"/>
+<rect x="7.08" y="6.84" width="54.6" height="0.479"/>
+<rect x="61.2" y="7.08" width="0.48" height="27.239"/>
+<rect x="6.84" y="33.84" width="54.6" height="0.479"/>
+<rect x="6.84" y="6.84" width="0.48" height="27.24"/>
+<text transform="matrix(1 0 0 1 9.48 14.2209)" font-family="'ProductusBook'" font-size="7.98">Fin</text>
+<text transform="matrix(1 0 0 1 17.8589 14.2209)" font-family="'ProductusBook'" font-size="7.98">d</text>
+<text transform="matrix(1 0 0 1 21.522 14.2209)" font-family="'ProductusBook'" font-size="7.98"> </text>
+<text transform="matrix(1 0 0 1 23.1421 14.2209)" font-family="'ProductusBook'" font-size="7.98">Hook</text>
+<text transform="matrix(1 0 0 1 38.8701 14.2209)" font-family="'ProductusBook'" font-size="7.98"> </text>
+<text transform="matrix(1 0 0 1 40.4819 14.2209)" font-family="'ProductusBook'" font-size="7.98">Imp</text>
+<text transform="matrix(1 0 0 1 51.542 14.2209)" font-family="'ProductusBook'" font-size="7.98">l</text>
+<rect x="94.5" y="136.44" width="54.36" height="27"/>
+<rect x="94.5" y="136.2" width="54.6" height="0.479"/>
+<rect x="148.62" y="136.44" width="0.479" height="27.24"/>
+<rect x="94.26" y="163.2" width="54.601" height="0.479"/>
+<rect x="94.26" y="136.2" width="0.48" height="27.239"/>
+<rect x="92.16" y="134.64" fill="#FFFFFF" width="54.299" height="27"/>
+<rect x="92.16" y="134.4" width="54.54" height="0.48"/>
+<rect x="146.22" y="134.64" width="0.479" height="27.24"/>
+<rect x="91.92" y="161.4" width="54.54" height="0.48"/>
+<rect x="91.92" y="134.4" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 94.5 141.7805)" font-family="'ProductusOSGiBookc'" font-size="7.98">Resolver Impl</text>
+<rect x="120.241" y="99" width="0.479" height="35.88"/>
+<rect x="9.48" y="72.66" width="54.3" height="26.58"/>
+<rect x="9.48" y="72.42" width="54.54" height="0.479"/>
+<rect x="63.54" y="72.66" width="0.48" height="26.819"/>
+<rect x="9.24" y="99" width="54.54" height="0.479"/>
+<rect x="9.24" y="72.42" width="0.48" height="26.82"/>
+<rect x="7.08" y="70.86" fill="#FFFFFF" width="54.36" height="26.58"/>
+<rect x="7.08" y="70.62" width="54.6" height="0.479"/>
+<rect x="61.2" y="70.86" width="0.48" height="26.82"/>
+<rect x="6.84" y="97.2" width="54.6" height="0.479"/>
+<rect x="6.84" y="70.62" width="0.48" height="26.819"/>
+<text transform="matrix(1 0 0 1 9.48 78.0002)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 9.48 86.5208)" font-family="'ProductusSemibold'" font-size="7.98">Resolver Hook</text>
+<rect x="94.5" y="72.66" width="54.36" height="27"/>
+<rect x="94.5" y="72.42" width="54.6" height="0.479"/>
+<rect x="148.62" y="72.66" width="0.479" height="27.239"/>
+<rect x="94.26" y="99.42" width="54.601" height="0.479"/>
+<rect x="94.26" y="72.42" width="0.48" height="27.24"/>
+<rect x="92.16" y="70.86" fill="#FFFFFF" width="54.299" height="27"/>
+<rect x="92.16" y="70.62" width="54.54" height="0.479"/>
+<rect x="146.22" y="70.86" width="0.479" height="27.24"/>
+<rect x="91.92" y="97.62" width="54.54" height="0.479"/>
+<rect x="91.92" y="70.62" width="0.48" height="27.239"/>
+<text transform="matrix(1 0 0 1 94.5 78.0002)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;service&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 94.5 85.5208)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Resolver Hook</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Factory</tspan></text>
+<polyline points="148.86,85.08 134.64,99.24 148.86,99.24 "/>
+<polyline points="149.04,85.26 134.82,99.42 134.64,99.48 134.04,99.48 134.459,99.06 148.68,84.9 "/>
+<rect x="134.64" y="99" width="14.46" height="0.479"/>
+<polyline points="148.62,99.24 148.62,85.08 148.68,84.9 149.1,84.48 149.1,99.24 "/>
+<text transform="matrix(1 0 0 1 122.6392 106.6204)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<text transform="matrix(1 0 0 1 116.1602 131.7004)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<rect y="0" fill="#E6E6E6" width="155.94" height="43.2"/>
+<rect x="94.5" y="9.6" width="54.36" height="27"/>
+<rect x="94.5" y="9.36" width="54.6" height="0.48"/>
+<rect x="148.62" y="9.6" width="0.479" height="27.24"/>
+<rect x="94.26" y="36.36" width="54.601" height="0.48"/>
+<rect x="94.26" y="9.36" width="0.48" height="27.24"/>
+<rect x="92.16" y="7.8" fill="#FFFFFF" width="54.299" height="27"/>
+<rect x="92.16" y="7.56" width="54.54" height="0.48"/>
+<rect x="146.22" y="7.8" width="0.479" height="27.24"/>
+<rect x="91.92" y="34.56" width="54.54" height="0.48"/>
+<rect x="91.92" y="7.56" width="0.48" height="27.24"/>
+<text transform="matrix(1 0 0 1 94.5 14.9397)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">Resolver Hook</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">Factory Impl</tspan></text>
+<polyline points="120.48,59.4 123.78,59.4 123.6,60.06 120.959,69.24 120.48,70.92 120,69.24 117.36,60.06 117.18,59.4 117.84,59.4 
+	118.32,59.76 120.959,68.94 120,69.24 120,68.94 122.64,59.76 123.6,60.06 123.12,60.42 120.48,60.42 "/>
+<rect x="117.84" y="59.4" width="2.641" height="1.021"/>
+<polyline points="120.48,59.88 123.12,59.88 120.48,69.06 117.84,59.88 "/>
+<rect x="120.241" y="35.22" width="0.479" height="0.24"/>
+<rect x="120.241" y="35.46" width="0.479" height="14.16"/>
+<rect x="120.241" y="49.62" width="0.479" height="9.96"/>
+<rect x="9.48" y="8.88" width="54.3" height="27"/>
+<rect x="9.48" y="8.64" width="54.54" height="0.48"/>
+<rect x="63.54" y="8.88" width="0.48" height="27.24"/>
+<rect x="9.24" y="35.64" width="54.54" height="0.48"/>
+<rect x="9.24" y="8.64" width="0.48" height="27.24"/>
+<rect x="7.08" y="7.08" fill="#FFFFFF" width="54.36" height="27"/>
+<rect x="7.08" y="6.84" width="54.6" height="0.479"/>
+<rect x="61.2" y="7.08" width="0.48" height="27.239"/>
+<rect x="6.84" y="33.84" width="54.6" height="0.479"/>
+<rect x="6.84" y="6.84" width="0.48" height="27.24"/>
+<text transform="matrix(1 0 0 1 9.48 14.2209)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">Resolver Hook</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">Impl</tspan></text>
+<polyline points="35.46,59.4 38.76,59.4 38.58,60.06 35.94,69.24 35.46,70.92 34.98,69.24 32.34,60.06 32.16,59.4 32.82,59.4 
+	33.3,59.76 35.94,68.94 34.98,69.24 34.98,68.94 37.62,59.76 38.58,60.06 38.1,60.42 35.46,60.42 "/>
+<rect x="32.82" y="59.4" width="2.64" height="1.021"/>
+<polyline points="35.46,59.88 38.1,59.88 35.46,69.06 32.82,59.88 "/>
+<rect x="35.22" y="35.22" width="0.48" height="0.24"/>
+<rect x="35.22" y="35.46" width="0.48" height="14.16"/>
+<rect x="35.22" y="49.62" width="0.48" height="9.96"/>
+<rect x="92.16" y="84.84" width="0.24" height="0.479"/>
+<rect x="63.54" y="84.84" width="28.62" height="0.479"/>
+<text transform="matrix(1 0 0 1 88.7998 83.2209)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 65.9399 83.2209)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<rect x="35.22" y="99" width="0.48" height="50.1"/>
+<rect x="35.46" y="148.62" width="56.94" height="0.479"/>
+<text transform="matrix(1 0 0 1 85.0801 146.5198)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 37.6196 103.9807)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<rect x="63.78" y="21.06" width="28.38" height="0.48"/>
+</svg>

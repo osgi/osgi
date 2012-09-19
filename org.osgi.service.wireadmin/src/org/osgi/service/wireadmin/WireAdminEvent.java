@@ -33,14 +33,14 @@ import org.osgi.framework.ServiceReference;
  * A type code is used to identify the type of event. The following event types
  * are defined:
  * <ul>
- * <li>{@link #WIRE_CREATED}
- * <li>{@link #WIRE_CONNECTED}
- * <li>{@link #WIRE_UPDATED}
- * <li>{@link #WIRE_TRACE}
- * <li>{@link #WIRE_DISCONNECTED}
- * <li>{@link #WIRE_DELETED}
- * <li>{@link #PRODUCER_EXCEPTION}
- * <li>{@link #CONSUMER_EXCEPTION}
+ * <li>{@link #WIRE_CREATED}</li>
+ * <li>{@link #WIRE_CONNECTED}</li>
+ * <li>{@link #WIRE_UPDATED}</li>
+ * <li>{@link #WIRE_TRACE}</li>
+ * <li>{@link #WIRE_DISCONNECTED}</li>
+ * <li>{@link #WIRE_DELETED}</li>
+ * <li>{@link #PRODUCER_EXCEPTION}</li>
+ * <li>{@link #CONSUMER_EXCEPTION}</li>
  * </ul>
  * Additional event types may be defined in the future.
  * 
@@ -239,14 +239,14 @@ public class WireAdminEvent {
 	 * <p>
 	 * The type values are:
 	 * <ul>
-	 * <li>{@link #WIRE_CREATED}
-	 * <li>{@link #WIRE_CONNECTED}
-	 * <li>{@link #WIRE_UPDATED}
-	 * <li>{@link #WIRE_TRACE}
-	 * <li>{@link #WIRE_DISCONNECTED}
-	 * <li>{@link #WIRE_DELETED}
-	 * <li>{@link #PRODUCER_EXCEPTION}
-	 * <li>{@link #CONSUMER_EXCEPTION}
+	 * <li>{@link #WIRE_CREATED}</li>
+	 * <li>{@link #WIRE_CONNECTED}</li>
+	 * <li>{@link #WIRE_UPDATED}</li>
+	 * <li>{@link #WIRE_TRACE}</li>
+	 * <li>{@link #WIRE_DISCONNECTED}</li>
+	 * <li>{@link #WIRE_DELETED}</li>
+	 * <li>{@link #PRODUCER_EXCEPTION}</li>
+	 * <li>{@link #CONSUMER_EXCEPTION}</li>
 	 * </ul>
 	 * 
 	 * @return The type of this event.

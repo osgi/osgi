@@ -1,0 +1,1304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="132"
+         revision="$Id$"
+         version="5" xml:id="service.repository"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Repository Service Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.repository-version"
+    linkend="org.osgi.service.repository"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The guiding force behind the OSGi Specifications is a reusable
+    component model. The <xref linkend="intro.core.release"
+    xrefstyle="template:%t"/> provides a solid foundation for such a component
+    model by providing a component collaboration framework with a
+    comprehensive management model. The service specifications provide the
+    abstract APIs to allow many different collaborations between components.
+    This Repository Service Specification provides the capability to manage
+    the external access to components and other resources.</para>
+
+    <para>Though the Repository service can be used as a standalone service to
+    search and retrieve general binary artifacts, called resources, it is
+    intended to be used in conjunction with the <xref
+    linkend="service.resolver"/>.</para>
+
+    <para>The model of the Repository is based on the generic
+    Requirement-Capability model defined in <xref linkend="i3273380"/>, this
+    chapter relies on the definitions of the generic model.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>External</emphasis> – Provide access to external
+          components and resources.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Resolve</emphasis>– The Repository API must be
+          closely aligned with the Resolver API since they are intended to be
+          used in conjunction.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Searching</emphasis> <phrase role="body"> – Support
+          general queries.</phrase></para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Metadata</emphasis> – Allow resources to provide
+          content information.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Retrieval</emphasis> – Allow the retrieval of
+          Resources from remote locations.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Batching</emphasis> – Repositories must be able to
+          batch queries.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Distribution</emphasis> – Allow Repositories to be
+          defined with a simple storage scheme such that Repositories can be
+          distributed on a removable media like a CD/DVD.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Mirroring</emphasis> – Repositories must be able to
+          support selecting a remote site based on the local situation.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Repository</emphasis> – A facade to a (remote) set
+          of resources described by capabilities.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Resource</emphasis> – An artifact that has
+          requirements that must be satisfied before it is available but
+          provides capabilities when it becomes available.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Requirement</emphasis> – An expression that asserts
+          a capability.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Capability</emphasis> – Describes a feature of the
+          resource so that it can be required by a requirement.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Resource Content</emphasis> – Provides access to the
+          underlying bytes of the resource in the default format.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure>
+        <title>Class and Service overview</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.631in"
+                       contentwidth="7.000in" fileref="repository-classes.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Synopsis</title>
+
+      <para>There are many different repositories available on the Internet or
+      on fixed media. A repository can be made available to bundles by
+      providing a Repository service. If such a bundle, for example a
+      Management Agent performing a provisioning operation, finds that it has
+      an unmatched requirement then it can query the repository services to
+      find matching capabilities. The Repository service can implement the
+      query in many different ways. It can ship the requirement to a remote
+      side to be processed or it can process the query locally.</para>
+
+      <para>This specification also provides an XML schema that can be used to
+      describe a Repository. Instances of this schema can be downloaded from a
+      remote repository for local indexing or they can be stored for example
+      on a DVD together with the resources.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Using a Repository</title>
+
+    <para>The Repository service provides an abstraction to a, potentially
+    remote, set of resources. In the generic Capability-Requirement model,
+    resources are modeled to declare capabilities and requirements. The
+    primary purpose of a Repository is to enable a management agent that uses
+    the Resolver API to leverage a wide array of repositories. This Repository
+    service specification allows different Repository providers to be
+    installed as bundles, and each bundle can register multiple Repository
+    services. The Repository is sufficiently abstract to allow many different
+    implementations.</para>
+
+    <para>Repository services are identified by a number of service
+    properties:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>service.pid</code> – A mandatory unique identity for this
+        Repository service.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>service.description</code> – An optional human readable
+        name for this Repository.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>repository.url</code> – Optional URLs to landing pages of
+        the repository, if they exist.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>In general, the users of the Repository service should aggregate all
+    services in the service registry. This strategy allows the deployer to
+    control the available Repositories. The following example, using
+    Declarative Service annotations to show the dependencies on the service
+    registry, shows how to aggregate the different Repository services.</para>
+
+    <programlisting>List&lt;Repository&gt; repos = new CopyOnWriteArrayList&lt;Repository&gt;();
+
+@Reference(
+cardinality = ReferenceCardinality.MULTIPLE, 
+policy = ReferencePolicy.DYNAMIC)
+void addRepository( Repository repo )    { repos.add(repo); }
+void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting>
+
+    <para>To access a resource in a Repository service it is necessary to
+    construct a requirement, pass this to the Repository service, and then use
+    the returned capabilities to satisfy the resolver or to get the resource
+    from the capability. The Repository then returns all matching
+    capabilities. The requirement matches the capability if their namespaces
+    match and the requirement’s filter is absent or matches the
+    attributes.</para>
+
+    <para>The <xref
+    linkend="org.osgi.service.repository.Repository.findProviders-Collection-"
+    xrefstyle="hyperlink"/> method takes a Collection of requirements. The
+    reason for this collection is that it allows the caller to specify
+    multiple requirements simultaneously so that Repositories can batch
+    requests, the requirements in this collection are further unrelated. That
+    is, they do not form an expression in any way. Multiple requirements as
+    the parameter means that the result must be a map so that the caller can
+    find out what requirement matched what capabilities. For example:</para>
+
+    <programlisting>List&lt;Capability&gt; find( Requirement r ){
+  List&lt;Capability&gt; result = new ArrayList&lt;Capability&gt;();
+
+  for ( Repository repo : repos ) {
+    Map&lt;Requirement,Collection&lt;Capability&gt;&gt; answer = 
+        repo.findProviders( Collections.singleton( r ) );
+     result.addAll( answer.get( r ) );
+  }
+  return result;
+}</programlisting>
+
+    <para>Access to resources is indirect since the Repository returns
+    capabilities. Each capability is declared in a resource and the
+    <code>getResource()</code> method provides access to the underlying
+    resource. Since each resource declares an <code>osgi.identity</code>
+    capability it is possible to retrieve a resource from a repository if the
+    identity name, type, and version are known. For example, to get a bundle
+    resource:</para>
+
+    <programlisting>Resource getResource( String type, Stringname, Version version ) {
+  String filter = String.format(
+    "(&amp;(type=%s)(osgi.identity=%s)(version=%s))",
+    type,
+    name,
+    version );
+  
+  RCBuilder b = new RCBuilder("osgi.identity");
+  Requirement r = b.directive("filter", filter).toRequirement();
+
+  List&lt;Capability&gt; capabilities = find( r );
+  if ( capabilities.isEmpty() ) 
+    return null;
+  return capabilities.get( 0 ).getResource();
+}</programlisting>
+
+    <para>The <code>RCBuilder</code> class used in this example is a
+    convenience class to construct <code>Requirement</code> instances.</para>
+
+    <para>Resources that originate from Repository services must implement the
+    <xref linkend="org.osgi.service.repository.RepositoryContent"
+    xrefstyle="hyperlink"/> interface, this interface provides stream access
+    to the default storage format. It is therefore possible to get the content
+    with the following code.</para>
+
+    <programlisting>InputStream getContent( String type, Stringname, Version version ) {
+  Resource r = getResource( type, name, version );
+  if ( r == null )
+    return null;
+  return ((RepositoryContent)r).getContent();
+}</programlisting>
+
+    <para>The <xref
+    linkend="org.osgi.service.repository.RepositoryContent.getContent--"
+    xrefstyle="hyperlink"/> method returns an Input Stream in the default
+    format for that resource type. Resources from a Repository should also
+    have one or more <code>osgi.content</code> capabilities that advertise the
+    same resource in the same or different formats. The
+    <code>osgi.content</code> capability has a number of attributes that
+    provide information about the resource’s download format:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>osgi.content</code> – A unique SHA-256 for the content as
+        read from the URL.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>url</code> – A URL to the content.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>mime</code> – An IANA MIME type for the content.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>size</code> – Size in bytes of the content.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>It is therefore possible to search for a specific MIME type and
+    download that format. For example:</para>
+
+    <programlisting>String getURL( String type, String name, Versionversion, String mime ) 
+    throws Exception {
+    Resource r = getResource( type, name, version );
+    for ( Capability cap : r.getCapabilities( "osgi.content") ) {
+        Map&lt;String,Object&gt; attrs = cap.getAttributes();
+        String actual = (String) attrs.get("mime");
+        if ( actual!=null &amp;&amp; mime.equalsIgnoreCase( actual) ) {
+            String url = (String) attrs.get( "url" );
+            if ( url != null )
+                return url;
+        }
+   }
+   return null;
+}</programlisting>
+
+    <para>Since the <code>osgi.content</code> capability contains the SHA-256
+    digest as the <code>osgi.content</code> attribute it is possible to verify
+    the download that it was correct.</para>
+
+    <para>Every resource has an <code>osgi.identity</code> capability. This
+    namespace defines, in <xref linkend="i3272838"/>, the possibility to add
+    related resources, for example <emphasis>javadoc</emphasis> or
+    <emphasis>sources</emphasis>. A resource then has informational
+    requirements to <code>osgi.identity</code> capabilities; these
+    requirements are marked with a <code>classifier</code> directive that
+    holds the type of <emphasis>relation</emphasis>. The following example
+    shows how it would be possible to find such a related resource:</para>
+
+    <programlisting>InputStream getRelated(Resource resource,String classifier) 
+    throws Exception {
+    for ( Requirement r : resource.getRequirements( "osgi.identity") ) {
+        if ( classifier.equals( r.getDirectives().get( "classifier") ) ) {
+            Collection&lt;Capability&gt; capabilities =
+                 repository.findProviders( Collections.singleton( r )).get( r );
+
+             if ( capabilities.isEmpty())
+                continue;
+
+            Capability c = capabilities.iterator().next();
+            Resource related = c.getResource();
+            return ((RepositoryContent)related).getContent();
+        }
+    }
+    return null;
+}</programlisting>
+  </section>
+
+  <section xml:id="i3222899">
+    <title>Repository</title>
+
+    <para>A Repository service provides access to capabilities that satisfy a
+    given requirement. A Repository can be the facade of a remote server
+    containing a large amount of resources, a repository on removable media,
+    or even a collection of bundles inside a ZIP file. A Repository
+    communicates in terms of requirements and capabilities as defined in <xref
+    linkend="i3273380"/>. This model is closely aligned with the <xref
+    linkend="service.resolver"/>.</para>
+
+    <para>A Repository service must be registered with the service properties
+    given in the following table.</para>
+
+    <table>
+      <title>Repository Service Properties</title>
+
+      <tgroup cols="4">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
+        <colspec colnum="4" colwidth="4*"/>
+
+        <thead>
+          <row>
+            <entry>Attribute</entry>
+
+            <entry>Opt</entry>
+
+            <entry>Type</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>service.pid</code></entry>
+
+            <entry><code>mandatory</code></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><para>A globally unique identifier for this
+            Repository.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>service.description</code></entry>
+
+            <entry><code>optional</code></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><para>The Repository Name</para></entry>
+          </row>
+
+          <row>
+            <entry><code>repository.url</code></entry>
+
+            <entry><code>optional</code></entry>
+
+            <entry><code>String+</code></entry>
+
+            <entry><para>URLs related to this Repository.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>The Repository implements the following method:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.repository.Repository.findProviders-Collection-"
+        xrefstyle="hyperlink"/> – For each requirement find all the
+        capabilities that match that requirement and return them as a
+        <code>Map&lt;Requirement,Collection&lt;Capability&gt;&gt;</code>.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>A Repository must not perform any namespace specific actions or
+    matching. The Repository must therefore match a requirement to a
+    capability with the following rules:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The namespace must be identical, and</para>
+      </listitem>
+
+      <listitem>
+        <para>The requirement’s filter is absent or it must match the
+        capability’s attributes.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Resources originating from a Repository service must
+    additionally:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Implement the <xref
+        linkend="org.osgi.service.repository.RepositoryContent"
+        xrefstyle="hyperlink"/> interfaces, see <xref
+        linkend="i3224355"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Provide at least one <code>osgi.content</code> Capability, see
+        <xref linkend="i3224340"/>.</para>
+      </listitem>
+    </itemizedlist>
+
+    <section xml:id="i3224355">
+      <title>Repository Content</title>
+
+      <para>Resources originating from a Repository must implement the <xref
+      linkend="org.osgi.service.repository.RepositoryContent"
+      xrefstyle="hyperlink"/> interface. The purpose of this interface is to
+      allow users of the Repositories access to an Input Stream that provides
+      access to the resource in a format specified by the resource type, see
+      the <code>osgi.identity</code> namespace. If the resource type does not
+      specify a format then it must be an Input Stream to a JAR.</para>
+
+      <para>The <xref linkend="org.osgi.service.repository.RepositoryContent"
+      xrefstyle="hyperlink"/> interface provides a single method:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.repository.RepositoryContent.getContent--"
+          xrefstyle="hyperlink"/> – Return an Input Stream for the resource,
+          default a JAR stream unless otherwise specified for the type in the
+          <code>osgi.identity</code> namespace.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section xml:id="i3224340">
+    <title>osgi.content Namespace</title>
+
+    <para>A resource is a logical concept, to install a resource in an
+    environment it is necessary to get access to its
+    <emphasis>contents</emphasis>. A resource can be formatted in different
+    ways. It is possible to deliver a bundle as a JAR file, a Pack200 file, or
+    some other format. In general, the <xref
+    linkend="org.osgi.service.repository.RepositoryContent"
+    xrefstyle="hyperlink"/> interface provides access to the default format,
+    which is the JAR format in most cases.</para>
+
+    <para>The Repository can advertise the different formats with
+    <code>osgi.content</code> capabilities. Each of those capabilities is
+    identified with a unique SHA-256 checksum and has a URL for the resource
+    in the specified format. The <code>size</code> and <code>mime</code>
+    attributes provide information the download format, this can be used for
+    selection.</para>
+
+    <para>The <code>osgi.content</code> Namespace supports the attributes
+    defined in the following table and <xref
+    linkend="org.osgi.service.repository.ContentNamespace"
+    xrefstyle="hyperlink"/>.</para>
+
+    <table pgwide="1">
+      <title>osgi.content definition</title>
+
+      <tgroup cols="6">
+        <colspec colnum="1" colwidth="2*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
+        <colspec colnum="4" colwidth="1.5*"/>
+
+        <colspec colnum="5" colwidth="4*"/>
+
+        <colspec colnum="6" colwidth="6*"/>
+
+        <thead>
+          <row>
+            <entry>Name</entry>
+
+            <entry>Kind</entry>
+
+            <entry>M/O</entry>
+
+            <entry>Type</entry>
+
+            <entry>Syntax</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>osgi.content</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>M</code></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><code>[0-9a-fA-F]{64}</code></entry>
+
+            <entry><para>The SHA-256 hex encoded digest for this
+            resource</para></entry>
+          </row>
+
+          <row>
+            <entry><code>url</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>M</code></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><code>&lt;url&gt;</code></entry>
+
+            <entry><para>The URL to the bytes. This must be an absolute
+            URL.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>size</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>M</code></entry>
+
+            <entry><code>Long</code></entry>
+
+            <entry><code>[0-9]+</code></entry>
+
+            <entry><para>The size of the resource in bytes as it will be read
+            from the URL.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>mime</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>M</code></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><code>&lt;mime type&gt;</code></entry>
+
+            <entry><para>An IANA defined MIME type for the format of this
+            content.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </section>
+
+  <section xml:id="i3247820">
+    <title>XML Repository Format</title>
+
+    <para>This is an optional part of the specification since the Repository
+    interface does not provide access how the Repository obtains its
+    information. However, the purpose of this part of the specification is to
+    provide a commonly recognized format for interchanging Repository
+    metadata.</para>
+
+    <para>This section therefore describes an XML schema to represent
+    Repository content. It is expected that Internet based Repositories can
+    provide such an XML file to clients. A Repository XML file can be used as
+    a common interchange format between multiple Repository
+    implementations.</para>
+
+    <para>The Repository XML describes a number of resources with their
+    capabilities and requirements. Additionally the XML can refer to other
+    Repository XML files. The XML Schema can be found at its XML namespace,
+    see <xref linkend="i3247836"/>. The XML structure, which closely follows
+    the Requirement-Capability model, is depicted in <xref
+    linkend="i3227855"/>.</para>
+
+    <figure xml:id="i3227855">
+      <title>XML Structure</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="2.348in"
+                     contentwidth="6.253in" fileref="xml-structure.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>The different elements are discussed in the following sections. All
+    types are derived from the XML Schema types, see <xref
+    linkend="i3273347"/>.</para>
+
+    <section>
+      <title>Repository Element</title>
+
+      <para>The <code>repository</code> element is the root of the document.
+      The <code>requirement</code> element has the following child
+      elements:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>referral*</code> – Referrals to other repositories for a
+          federated model, see <xref linkend="i3236527"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>resource*</code> – Resource definitions, see <xref
+          linkend="i3236496"/>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The <code>repository</code> element has the attributes defined in
+      the following table.</para>
+
+      <table>
+        <title>repository element attributes</title>
+
+        <tgroup cols="3">
+          <colspec colnum="1" colwidth="1.5*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
+          <thead>
+            <row>
+              <entry>Attribute</entry>
+
+              <entry>Type</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>name</code></entry>
+
+              <entry><code>NCName</code></entry>
+
+              <entry><para>The name of this Repository. For informational
+              purposes.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>increment</code></entry>
+
+              <entry><code>long</code></entry>
+
+              <entry><para>Counter which increments every time the repository
+              is changed. Can be used by clients to check for changes. The
+              counter is not required to increase
+              monotonically.</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section xml:id="i3236527">
+      <title>Referral Element</title>
+
+      <para>The purpose of the <code>referral</code> element is to allow a
+      Repository to refer to other Repositories, allowing for federated
+      Repositories. Referrals are applied recursively. However, this is not
+      always desired. It is therefore possible to limit the depth of
+      referrals. If the <code>depth</code> attribute is &gt;= 1, the referred
+      repository must be included but it must not follow any referrals from
+      the referred repository. If the <code>depth</code> attribute is more
+      than one, referrals must be included up to the given depth. Depths of
+      referred repositories must also be obeyed, where referred repositories
+      may reduce the effective depth but not increase it. For example if a top
+      repository specifies a depth of 5 and a level 3 repository has a depth
+      of 1 then the repository on level 5 must not be used. If not specified
+      then there is no limit to the depth. Referrals that have cycles must be
+      ignored, a resource of a given Repository must only occur once in a
+      Repository.</para>
+
+      <para>The <code>referral</code> element has the attributes defined in
+      the following table.</para>
+
+      <table>
+        <title>referral element attributes</title>
+
+        <tgroup cols="3">
+          <colspec colnum="1" colwidth="1.5*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
+          <thead>
+            <row>
+              <entry>Attribute</entry>
+
+              <entry>Type</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>depth</code></entry>
+
+              <entry><code>int</code></entry>
+
+              <entry><para>The max depth of referrals</para></entry>
+            </row>
+
+            <row>
+              <entry><code>url</code></entry>
+
+              <entry><code>anyURI</code></entry>
+
+              <entry><para>A URL to where the referred repository XML can be
+              found. The URL can be absolute or relative to the URI of the
+              current XML resource.</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section xml:id="i3236496">
+      <title>Resource Element</title>
+
+      <para>The <code>resource</code> element defines a Resource. The
+      <code>resource</code> element has the following child elements:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>requirement*</code> – The requirements of this resource,
+          see <xref linkend="i3236553"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>capability</code>* – The capabilities of this resource,
+          see <xref linkend="i3236575"/>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The Resource element has no attributes.</para>
+    </section>
+
+    <section xml:id="i3236575">
+      <title>Capability Element</title>
+
+      <para>The <code>capability</code> element maps to a capability, it holds
+      the attributes and directives. The <code>capability</code> element has
+      the following child elements:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>directive*</code> – The directives for the capability,
+          see <xref linkend="i3236593"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>attribute*</code> – The attributes for the capability,
+          see <xref linkend="i3236601"/>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The <code>capability</code> element has the attributes defined in
+      the following table.</para>
+
+      <table>
+        <title>capability element attributes</title>
+
+        <tgroup cols="3">
+          <colspec colnum="1" colwidth="1.5*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
+          <thead>
+            <row>
+              <entry>Attribute</entry>
+
+              <entry>Type</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>namespace</code></entry>
+
+              <entry><code>token</code></entry>
+
+              <entry><para>The namespace of this capability</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section xml:id="i3236553">
+      <title>Requirement Element</title>
+
+      <para>The <code>requirement</code> element maps to a requirement, it
+      holds the attributes and directives. The <code>requirement</code>
+      element has the following child elements:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>directive*</code> – The directives for the requirement,
+          see <xref linkend="i3236593"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>attribute*</code> – The attributes for the requirement,
+          see <xref linkend="i3236601"/>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The <code>requirement</code> element has the attributes defined in
+      the following table.</para>
+
+      <table>
+        <title>requirement element attributes</title>
+
+        <tgroup cols="3">
+          <colspec colnum="1" colwidth="1.5*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
+          <thead>
+            <row>
+              <entry>Attribute</entry>
+
+              <entry>Type</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>namespace</code></entry>
+
+              <entry><code>token</code></entry>
+
+              <entry><para>The namespace of this requirement</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section xml:id="i3236601">
+      <title>Attribute Element</title>
+
+      <para>An <code>attribute</code> element describes an attribute of a
+      capability or requirement. Attributes are used to convey information
+      about the Capability-Requirement. Attributes for the capability are used
+      for matching the requirement’s filter. The meaning of attributes is
+      described with the documentation of the namespace in which they
+      reside.</para>
+
+      <para>Attributes are optionally typed according to the <xref
+      linkend="i3273289"/> specification. The default type is
+      <code>String</code>, the value of the <code>value</code> attribute.
+      However, if a <code>type</code> attribute is specified and it is not
+      <code>String</code> then the value attribute must be converted according
+      to the type attribute specifier. The syntax of the type attribute is as
+      follows:</para>
+
+      <programlisting>type    ::= list | scalar
+list    ::= ’List&lt;’ scalar ’&gt;’    // no spaces between terminals
+scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlisting>
+
+      <para>A list conversion requires the value to be broken in tokens
+      separated by comma (<code>’,’ \u002C</code>). Whitespace around the list
+      and around commas must be trimmed. Each token must then be converted to
+      the given type according to the <code>scalar</code> type specifier. The
+      exact rules for the comma separated lists are defined in <xref
+      linkend="i3273289"/>, see <emphasis>Bundle Capability
+      Attributes</emphasis>.</para>
+
+      <para>The conversion of value <code>s</code>, when <code>scalar</code>,
+      must take place with the following methods:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>String</code> – No conversion, use <code>s</code></para>
+        </listitem>
+
+        <listitem>
+          <para><code>Version</code> -
+          <code>Version.parseVersion(s)</code></para>
+        </listitem>
+
+        <listitem>
+          <para><code>Long</code> – After trimming whitespace,
+          <code>Long.parseLong(s)</code></para>
+        </listitem>
+
+        <listitem>
+          <para><code>Double</code> – After trimming whitespace,
+          <code>Double.parseDouble(s)</code></para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The <code>attribute</code> element has the attributes defined in
+      the following table.</para>
+
+      <table>
+        <title>attribute element attributes</title>
+
+        <tgroup cols="3">
+          <colspec colnum="1" colwidth="1.5*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
+          <thead>
+            <row>
+              <entry>Attribute</entry>
+
+              <entry>Type</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>name</code></entry>
+
+              <entry><code>token</code></entry>
+
+              <entry><para>The name of the attribute</para></entry>
+            </row>
+
+            <row>
+              <entry><code>value</code></entry>
+
+              <entry><code>string</code></entry>
+
+              <entry><para>The value of the attribute.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>type</code></entry>
+
+              <entry><para/></entry>
+
+              <entry><para>The type of the attribute, the syntax is outlined
+              in the previous paragraphs.</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section xml:id="i3236593">
+      <title>Directive Element</title>
+
+      <para>A <code>directive</code> element describes a directive of a
+      capability or a requirement. Directives are used to convey information
+      about the Capability-Requirement. The meaning of directives is described
+      with the documentation of the namespace in which they reside.</para>
+
+      <para>The <code>directive</code> element has the attributes defined in
+      the following table.</para>
+
+      <table>
+        <title>directive element attributes</title>
+
+        <tgroup cols="3">
+          <colspec colnum="1" colwidth="1.5*"/>
+
+          <colspec colnum="2" colwidth="1*"/>
+
+          <colspec colnum="3" colwidth="4*"/>
+
+          <thead>
+            <row>
+              <entry>Attribute</entry>
+
+              <entry>Type</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>name</code></entry>
+
+              <entry><code>token</code></entry>
+
+              <entry><para>The name of the attribute</para></entry>
+            </row>
+
+            <row>
+              <entry><code>value</code></entry>
+
+              <entry><code>string</code></entry>
+
+              <entry><para>The value of the attribute.</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
+      <title>Sample XML File</title>
+
+      <para>The following example shows a very small XML file. The file
+      contains one resource.</para>
+
+      <programlisting role="pgwide">&lt;repository name='OSGiRepository'
+            increment='13582741'
+            xmlns='http://www.osgi.org/xmlns/repository/v1.0.0'&gt;
+  &lt;resource&gt;
+    &lt;capability namespace='osgi.identity'&gt;
+      &lt;attribute name='osgi.identity' value='org.acme.pool'/&gt;
+      &lt;attribute name='version'type='Version' value='1.5.6’/&gt;
+      &lt;attribute name='type' value='osgi.bundle'/&gt;
+    &lt;/capability&gt;
+
+    &lt;capability namespace='osgi.content'&gt;
+      &lt;attribute name='osgi.content' value=’e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855’
+      &lt;attribute name=’url’ value=’http://www.acme.com/repository/org/acme/pool/org.acme.pool-1.5.6.jar’/&gt;
+      &lt;attribute name='size' type='Long' value='4405'/&gt;
+      &lt;attribute name=’mime’ value=’application/vnd.osgi.bundle’/&gt;
+    &lt;/capability&gt;
+
+    &lt;capability namespace='osgi.wiring.bundle'&gt;
+      &lt;attribute name='osgi.wiring.bundle' value='org.acme.pool'/&gt;
+      &lt;attribute name='bundle-version' type='Version' value='1.5.6'/&gt;
+    &lt;/capability&gt;
+
+    &lt;capability namespace='osgi.wiring.package'&gt;
+      &lt;attribute name='osgi.wiring.package' value='org.acme.pool'/&gt;
+      &lt;attribute name='version' type='Version' value='1.1.2'/&gt;
+      &lt;attribute name='bundle-version' type='Version' value='1.5.6'/&gt;
+      &lt;attribute name='bundle-symbolic-name' value='org.acme.pool'/&gt;
+      &lt;directive name=’uses’ value=’org.acme.pool,org.acme.util’/&gt;
+    &lt;/capability&gt;
+
+    &lt;requirement namespace='osgi.wiring.package'&gt;
+      &lt;directive name='filter' value=
+                           '(&amp;amp;(osgi.wiring.package=org.apache.commons.pool)(version&amp;gt;=1.5.6))'/&gt;
+    &lt;/requirement&gt;
+
+    &lt;requirement namespace=’osgi.identity’&gt;
+      &lt;directive name=’effective’ value=’meta’/&gt;
+      &lt;directive name=’resolution’ value=’optional’/&gt;
+      &lt;directive name='filter’ value=
+              ’(&amp;(version=1.5.6)(osgi.identity=org.acme.pool-src))’
+        &lt;directive name=’classifier’ value=’sources’/&gt;
+    &lt;/requirement&gt;
+
+  &lt;/resource&gt;
+&lt;/repository&gt;</programlisting>
+    </section>
+  </section>
+
+  <section xml:id="i3247836">
+    <title>XML Repository Schema</title>
+
+    <para>The namespace of this schema is:</para>
+
+    <programlisting>http://www.osgi.org/xmlns/repository/v1.0.0</programlisting>
+
+    <para>The schema for this namespace can be found at the location implied
+    in its name. The recommended prefix for this namespace is
+    <code>repo</code>.</para>
+
+    <programlisting role="pgwide">&lt;schema xmlns="http://www.w3.org/2001/XMLSchema" 
+    xmlns:repo="http://www.osgi.org/xmlns/repository/v1.0.0"
+    targetNamespace="http://www.osgi.org/xmlns/repository/v1.0.0"
+    elementFormDefault="unqualified" 
+    attributeFormDefault="unqualified"
+    version="1.0.0"&gt;
+    
+    &lt;element name="repository" type="repo:Trepository" /&gt;
+    &lt;complexType name="Trepository"&gt;
+        &lt;sequence&gt;
+            &lt;choice minOccurs="0" maxOccurs="unbounded"&gt;
+                &lt;element name="resource" type="repo:Tresource" /&gt;
+                &lt;element name="referral" type="repo:Treferral" /&gt;
+            &lt;/choice&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="name" type="string"/&gt;
+        &lt;attribute name="increment" type="long"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+
+    &lt;complexType name="Tresource"&gt;
+        &lt;sequence&gt;
+            &lt;element name="requirement" type="repo:Trequirement"minOccurs="0" maxOccurs="unbounded"/&gt;
+            &lt;element name="capability" type="repo:Tcapability" minOccurs="1"maxOccurs="unbounded"/&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+
+    &lt;complexType name="Treferral"&gt;
+        &lt;attribute name="depth" type="int" use="optional"/&gt;
+        &lt;attribute name="url" type="anyURI" use="required"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+
+    &lt;complexType name="Tcapability"&gt;
+        &lt;sequence&gt;
+            &lt;choice minOccurs="0" maxOccurs="unbounded"&gt;
+                &lt;element name="directive" type="repo:Tdirective" /&gt;
+                &lt;element name="attribute" type="repo:Tattribute" /&gt;
+            &lt;/choice&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="namespace" type="string"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+
+    &lt;complexType name="Trequirement"&gt;
+        &lt;sequence&gt;
+            &lt;choice minOccurs="0" maxOccurs="unbounded"&gt;
+                &lt;element name="directive" type="repo:Tdirective" /&gt;
+                &lt;element name="attribute" type="repo:Tattribute" /&gt;
+            &lt;/choice&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="namespace" type="string"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+
+    &lt;complexType name="Tattribute"&gt;
+        &lt;sequence&gt;
+            &lt;any namespace="##any" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="name" type="string"/&gt;
+        &lt;attribute name="value" type="string"/&gt;
+        &lt;attribute name="type" type="repo:TpropertyType" default="String"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+
+    &lt;complexType name="Tdirective"&gt;
+        &lt;sequence&gt;
+            &lt;any namespace="##any" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="name" type="string"/&gt;
+        &lt;attribute name="value" type="string"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+
+    &lt;simpleType name="TpropertyType"&gt;
+        &lt;restriction base="string"&gt;
+            &lt;enumeration value="String" /&gt;
+            &lt;enumeration value="Version" /&gt;
+            &lt;enumeration value="Long" /&gt;
+            &lt;enumeration value="Double" /&gt;
+            &lt;enumeration value="List&amp;lt;String&amp;gt;" /&gt;
+            &lt;enumeration value="List&amp;lt;Version&amp;gt;" /&gt;
+            &lt;enumeration value="List&amp;lt;Long&amp;gt;" /&gt;
+            &lt;enumeration value="List&amp;lt;Double&amp;gt;" /&gt;
+        &lt;/restriction&gt;
+    &lt;/simpleType&gt;
+    &lt;attribute name="must-understand" type="boolean" default="false"/&gt;
+&lt;/schema&gt;</programlisting>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <section>
+      <title>External Access</title>
+
+      <para>Repositories in general will get their metadata and artifacts from
+      an external source, which makes them an attack vector for a malevolent
+      Bundle that needs unauthorized external access. Since a Bundle using a
+      Repository has no knowledge of what sources the Repository will access
+      it will be necessary for the Repository to implement the external access
+      in a <code>doPrivileged</code> block. Implementations must ensure that
+      callers cannot influence/modify the metadata in such a way that the
+      <xref
+      linkend="org.osgi.service.repository.RepositoryContent.getContent--"
+      xrefstyle="hyperlink"/> method could provide access to arbitrary
+      Internet resources. This could for example happen if:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The implementation relies on the <code>osgi.content</code>
+          namespace to hold the URL</para>
+        </listitem>
+
+        <listitem>
+          <para>The attributes Map from the <code>osgi.content</code>
+          Capability is modifiable</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If the malevolent Bundle could change the osgi.content attribute
+      it could change it to arbitrary URLs. This example should make it clear
+      that Repository implementations must be very careful.</para>
+    </section>
+
+    <section>
+      <title>Minimum Implementation Permissions</title>
+
+      <programlisting>PackagePermission[org.osgi.service.repository,IMPORT]
+ServicePermission[...Repository, REGISTER ]
+SocketPermission[ ... carefully restrict external access...]</programlisting>
+    </section>
+
+    <section>
+      <title>Minimum Using Permissions</title>
+
+      <programlisting>PackagePermission[org.osgi.service.repository, IMPORT ]
+ServicePermission[...Repository, GET ]</programlisting>
+    </section>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.repository.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed xml:id="i3273289"><title>Framework Module Layer</title>OSGi
+      Core, Chapter 3 Module Layer</bibliomixed>
+
+      <bibliomixed xml:id="i3272838"><title>Framework Namespaces</title>OSGi
+      Core, Chapter 8, osgi.identity Namespace</bibliomixed>
+
+      <bibliomixed xml:id="i3273380"><title>Resource API
+      Specification</title>OSGi Core, Chapter 6 Resource API
+      Specification</bibliomixed>
+
+      <bibliomixed xml:id="i3273347"><title>XML Schema Part 2: Data types
+      Second Edition</title>http://www.w3.org/TR/xmlschema-2/</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>

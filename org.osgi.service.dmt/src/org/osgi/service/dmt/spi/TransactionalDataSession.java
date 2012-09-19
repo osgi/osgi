@@ -16,7 +16,7 @@
 
 package org.osgi.service.dmt.spi;
 
-import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.DmtException;
 
 /**
  * Provides atomic read-write access to the part of the tree handled by the
@@ -48,12 +48,13 @@ public interface TransactionalDataSession extends ReadWriteDataSession {
 	 * @throws DmtException with the following possible error codes
 	 *         <ul>
 	 *         <li>{@code METADATA_MISMATCH} if the operation failed because of
-	 *         meta-data restrictions <li>{@code CONCURRENT_ACCESS} if it is
+	 *         meta-data restrictions</li><li>{@code CONCURRENT_ACCESS} if it is
 	 *         detected that some modification has been made outside the scope
-	 *         of the DMT to the nodes affected in the session's operations <li>
-	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li>{@code COMMAND_FAILED} if some unspecified
-	 *         error is encountered while attempting to complete the command
+	 *         of the DMT to the nodes affected in the session's operations</li>
+	 *         <li> {@code DATA_STORE_FAILURE} if an error occurred while
+	 *         accessing the data store</li><li>{@code COMMAND_FAILED} if some
+	 *         unspecified error is encountered while attempting to complete the
+	 *         command</li>
 	 *         </ul>
 	 * @throws SecurityException if the caller does not have the necessary
 	 *         permissions to execute the underlying management operation

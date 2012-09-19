@@ -52,8 +52,10 @@ import java.util.Map;
  * lifecycle          BundleContext.installBundle
  *                    Bundle.update
  *                    Bundle.uninstall
- * listener           BundleContext.addBundleListener for SynchronousBundleListener
- *                    BundleContext.removeBundleListener for SynchronousBundleListener
+ * listener           BundleContext.addBundleListener for
+ *                      SynchronousBundleListener
+ *                    BundleContext.removeBundleListener for
+ *                      SynchronousBundleListener
  * metadata           Bundle.getHeaders
  *                    Bundle.getLocation
  * resolve            FrameworkWiring.refreshBundles
@@ -236,8 +238,9 @@ public final class AdminPermission extends BasicPermission {
 	 * Examples:
 	 * 
 	 * <pre>
-	 * (signer=\*,o=ACME,c=US)   
-	 * (&amp;(signer=\*,o=ACME,c=US)(name=com.acme.*)(location=http://www.acme.com/bundles/*))
+	 * (signer=\*,o=ACME,c=US)
+	 * (&amp;(signer=\*,o=ACME,c=US)(name=com.acme.*)
+	 *   (location=http://www.acme.com/bundles/*))
 	 * (id&gt;=1)
 	 * </pre>
 	 * 

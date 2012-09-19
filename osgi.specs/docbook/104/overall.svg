@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="237.727px" height="117.189px" viewBox="8.971 0 237.727 117.189" enable-background="new 8.971 0 237.727 117.189"
+	 xml:space="preserve">
+<rect x="99.24" y="46.907" width="54.36" height="27"/>
+<rect x="99.24" y="46.667" width="54.599" height="0.48"/>
+<rect x="153.36" y="46.907" width="0.479" height="27.24"/>
+<rect x="99" y="73.667" width="54.601" height="0.48"/>
+<rect x="99" y="46.667" width="0.48" height="27.24"/>
+<rect x="96.9" y="45.107" fill="#FFFFFF" width="54.359" height="27"/>
+<rect x="96.9" y="44.868" width="54.6" height="0.48"/>
+<rect x="151.02" y="45.107" width="0.479" height="27.24"/>
+<rect x="96.66" y="71.868" width="54.601" height="0.48"/>
+<rect x="96.66" y="44.868" width="0.48" height="27.24"/>
+<text transform="matrix(1 0 0 1 99.2397 53.2478)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">Configuration</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Admin Impl.</tspan></text>
+<polyline points="68.46,59.507 54.24,52.427 54.12,52.188 54.6,52.188 54.6,66.348 54.48,66.587 54.12,66.768 54.12,51.828 
+	54.48,52.007 68.7,59.087 "/>
+<polyline points="54.24,66.167 68.46,59.087 68.7,59.087 69.18,59.328 68.7,59.507 54.48,66.587 "/>
+<text transform="matrix(1 0 0 1 8.6353 56.0271)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Configuration</tspan><tspan x="22.231" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Admin</tspan></text>
+<text transform="matrix(1 0 0 1 134.4595 105.2273)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Configuration</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Listener</tspan></text>
+<polyline points="196.02,45.348 181.8,38.208 181.68,37.968 182.16,37.968 182.16,52.188 182.041,52.427 181.68,52.607 
+	181.68,37.607 182.041,37.788 196.259,44.927 "/>
+<polyline points="181.8,52.007 196.02,44.927 196.259,44.927 196.74,45.167 196.259,45.348 182.041,52.427 "/>
+<text transform="matrix(1 0 0 1 198.5396 40.6072)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Managed</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Service</tspan></text>
+<polyline points="125.1,116.087 117.959,101.927 117.78,101.567 132.78,101.567 132.6,101.927 132.36,102.047 118.14,102.047 
+	118.14,101.567 118.379,101.688 125.52,115.848 "/>
+<polyline points="132.6,101.927 125.52,116.087 125.339,116.507 125.1,116.087 125.1,115.848 132.18,101.688 "/>
+<rect x="125.04" y="73.188" width="0.48" height="0.239"/>
+<rect x="125.04" y="73.427" width="0.48" height="28.62"/>
+<rect x="68.34" y="59.027" width="0.24" height="0.479"/>
+<rect x="68.58" y="59.027" width="28.561" height="0.479"/>
+<rect x="153.36" y="51.947" width="14.64" height="0.479"/>
+<rect x="167.52" y="44.868" width="0.479" height="7.32"/>
+<rect x="167.759" y="44.868" width="14.4" height="0.48"/>
+<polyline points="196.02,73.667 181.8,66.587 181.68,66.348 182.16,66.348 182.16,80.507 182.041,80.748 181.68,80.927 
+	181.68,65.987 182.041,66.167 196.259,73.248 "/>
+<polyline points="181.8,80.328 196.02,73.248 196.259,73.248 196.74,73.487 196.259,73.667 182.041,80.748 "/>
+<rect x="153.36" y="66.107" width="14.64" height="0.479"/>
+<rect x="167.52" y="66.348" width="0.479" height="7.319"/>
+<rect x="167.759" y="73.188" width="14.4" height="0.479"/>
+<text transform="matrix(1 0 0 1 199.8003 70.4871)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Managed</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Service Factory</tspan></text>
+<polyline points="125.52,2.688 118.379,16.848 118.14,16.968 118.14,16.487 132.36,16.487 132.6,16.607 132.78,16.968 
+	117.78,16.968 117.959,16.607 125.1,2.447 "/>
+<polyline points="132.18,16.848 125.1,2.688 125.1,2.447 125.339,2.027 125.52,2.447 132.6,16.607 "/>
+<rect x="125.04" y="16.487" width="0.48" height="0.24"/>
+<rect x="125.04" y="16.728" width="0.48" height="28.62"/>
+<text transform="matrix(1 0 0 1 133.7397 6.6472)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Configuration</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Plugin</tspan></text>
+</svg>

@@ -161,14 +161,15 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code METADATA_MISMATCH} if the operation failed because of
-	 *         meta-data restrictions <li>{@code CONCURRENT_ACCESS} if it is
+	 *         meta-data restrictions</li><li>{@code CONCURRENT_ACCESS} if it is
 	 *         detected that some modification has been made outside the scope
-	 *         of the DMT to the nodes affected in the session's operations <li>
-	 *         {@code TRANSACTION_ERROR} if an error occurred during the commit
-	 *         of any of the underlying plugins <li>{@code DATA_STORE_FAILURE}
-	 *         if an error occurred while accessing the data store <li>
-	 *         {@code COMMAND_FAILED} if some unspecified error is encountered
-	 *         while attempting to complete the command
+	 *         of the DMT to the nodes affected in the session's operations</li>
+	 *         <li> {@code TRANSACTION_ERROR} if an error occurred during the
+	 *         commit of any of the underlying plugins</li><li>
+	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
+	 *         the data store</li><li> {@code COMMAND_FAILED} if some
+	 *         unspecified error is encountered while attempting to complete the
+	 *         command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session was not opened using the
 	 *         {@code LOCK_TYPE_ATOMIC} lock type, or if the session is already
@@ -208,16 +209,16 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code METADATA_MISMATCH} in case of atomic sessions, if the
-	 *         commit operation failed because of meta-data restrictions <li>
-	 *         {@code CONCURRENT_ACCESS} in case of atomic sessions, if the
+	 *         commit operation failed because of meta-data restrictions</li>
+	 *         <li> {@code CONCURRENT_ACCESS} in case of atomic sessions, if the
 	 *         commit operation failed because of some modification outside the
-	 *         scope of the DMT to the nodes affected in the session <li>
+	 *         scope of the DMT to the nodes affected in the session</li><li>
 	 *         {@code TRANSACTION_ERROR} in case of atomic sessions, if an
-	 *         underlying plugin failed to commit <li>
+	 *         underlying plugin failed to commit</li><li>
 	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li> {@code COMMAND_FAILED} if an underlying
+	 *         the data store</li><li>{@code COMMAND_FAILED} if an underlying
 	 *         plugin failed to close, or if some unspecified error is
-	 *         encountered while attempting to complete the command
+	 *         encountered while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session is already closed or
 	 *         invalidated
@@ -239,22 +240,22 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li> {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid <li>{@code URI_TOO_LONG} if {@code nodeUri}
-	 *         is longer than accepted by the {@code DmtAdmin} implementation
-	 *         (especially on systems with limited resources) <li>
-	 *         {@code NODE_NOT_FOUND} if the node does not exist <li>
-	 *         {@code PERMISSION_DENIED} if the session is associated with a
-	 *         principal and the ACL of the node does not allow the
-	 *         {@code Execute} operation for the associated principal <li>
+	 *         syntactically invalid</li><li>{@code URI_TOO_LONG} if
+	 *         {@code nodeUri} is longer than accepted by the {@code DmtAdmin}
+	 *         implementation (especially on systems with limited resources)
+	 *         </li><li> {@code NODE_NOT_FOUND} if the node does not exist</li>
+	 *         <li> {@code PERMISSION_DENIED} if the session is associated with
+	 *         a principal and the ACL of the node does not allow the
+	 *         {@code Execute} operation for the associated principal</li><li>
 	 *         {@code METADATA_MISMATCH} if the node cannot be executed
 	 *         according to the meta-data (does not have
-	 *         {@code MetaNode.CMD_EXECUTE} access type) <li>
+	 *         {@code MetaNode.CMD_EXECUTE} access type)</li><li>
 	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li>{@code COMMAND_FAILED} if the URI is not
+	 *         the data store</li><li>{@code COMMAND_FAILED} if the URI is not
 	 *         within the current session's subtree, if no DmtExecPlugin is
 	 *         associated with the node and the DmtAdmin can not execute the
 	 *         node, or if some unspecified error is encountered while
-	 *         attempting to complete the command
+	 *         attempting to complete the command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session was opened using the
 	 *         {@code LOCK_TYPE_SHARED} lock type, or if the session is already
@@ -286,22 +287,22 @@ public interface DmtSession {
 	 * @param data the parameter of the execute operation, can be {@code null}
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
-	 *         <li> {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid <li>{@code URI_TOO_LONG} if {@code nodeUri}
-	 *         is longer than accepted by the {@code DmtAdmin} implementation
-	 *         (especially on systems with limited resources) <li>
-	 *         {@code NODE_NOT_FOUND} if the node does not exist <li>
-	 *         {@code PERMISSION_DENIED} if the session is associated with a
+	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
+	 *         syntactically invalid</li><li>{@code URI_TOO_LONG} if
+	 *         {@code nodeUri} is longer than accepted by the {@code DmtAdmin}
+	 *         implementation (especially on systems with limited resources)
+	 *         </li><li> {@code NODE_NOT_FOUND} if the node does not exist</li>
+	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
 	 *         principal and the ACL of the node does not allow the
-	 *         {@code Execute} operation for the associated principal <li>
+	 *         {@code Execute} operation for the associated principal</li><li>
 	 *         {@code METADATA_MISMATCH} if the node cannot be executed
 	 *         according to the meta-data (does not have
-	 *         {@code MetaNode.CMD_EXECUTE} access type) <li>
+	 *         {@code MetaNode.CMD_EXECUTE} access type)</li><li>
 	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li>{@code COMMAND_FAILED} if the URI is not
+	 *         the data store</li><li>{@code COMMAND_FAILED} if the URI is not
 	 *         within the current session's subtree, if no DmtExecPlugin is
 	 *         associated with the node, or if some unspecified error is
-	 *         encountered while attempting to complete the command
+	 *         encountered while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session was opened using the
 	 *         {@code LOCK_TYPE_SHARED} lock type, or if the session is already
@@ -325,23 +326,23 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid
+	 *         syntactically invalid</li>
 	 *         <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer than
 	 *         accepted by the {@code DmtAdmin} implementation (especially on
-	 *         systems with limited resources)
+	 *         systems with limited resources)</li>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
 	 *         principal and the ACL of the node does not allow the {@code Get}
-	 *         operation for the associated principal
+	 *         operation for the associated principal</li>
 	 *         <li>{@code METADATA_MISMATCH} if node information cannot be
 	 *         retrieved according to the meta-data (the node does not have
-	 *         {@code MetaNode.CMD_GET} access type)
+	 *         {@code MetaNode.CMD_GET} access type)</li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if the URI is not within the current
 	 *         session's subtree, or if some unspecified error is encountered
-	 *         while attempting to complete the command
+	 *         while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session is already closed or
 	 *         invalidated
@@ -363,23 +364,23 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid
+	 *         syntactically invalid</li>
 	 *         <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer than
 	 *         accepted by the {@code DmtAdmin} implementation (especially on
-	 *         systems with limited resources)
+	 *         systems with limited resources)</li>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
 	 *         principal and the ACL of the node does not allow the {@code Get}
-	 *         operation for the associated principal
+	 *         operation for the associated principal</li>
 	 *         <li>{@code METADATA_MISMATCH} if node information cannot be
 	 *         retrieved according to the meta-data (the node does not have
-	 *         {@code MetaNode.CMD_GET} access type)
+	 *         {@code MetaNode.CMD_GET} access type)</li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if the URI is not within the current
 	 *         session's subtree, or if some unspecified error is encountered
-	 *         while attempting to complete the command
+	 *         while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session is already closed or
 	 *         invalidated
@@ -397,9 +398,9 @@ public interface DmtSession {
 	 * described below:
 	 * <ul>
 	 * <li>if {@code nodeUri} specifies a leaf node, replace rights are needed
-	 * on the parent of the node
+	 * on the parent of the node</li>
 	 * <li>if {@code nodeUri} specifies an interior node, replace rights on
-	 * either the node or its parent are sufficient
+	 * either the node or its parent are sufficient</li>
 	 * </ul>
 	 * <p>
 	 * If the given {@code acl} is {@code null} or an empty ACL (not specifying
@@ -412,20 +413,21 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li> {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid <li>{@code URI_TOO_LONG} if {@code nodeUri}
-	 *         is longer than accepted by the {@code DmtAdmin} implementation
-	 *         (especially on systems with limited resources) <li>
-	 *         {@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node <li> {@code PERMISSION_DENIED} if the session
-	 *         is associated with a principal and the ACL of the node or its
-	 *         parent (see above) does not allow the {@code Replace} operation
-	 *         for the associated principal <li>{@code COMMAND_NOT_ALLOWED} if
-	 *         the command attempts to set the ACL of the root node not to
-	 *         include Add rights for all principals <li>
-	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li>{@code COMMAND_FAILED} if the URI is not
-	 *         within the current session's subtree, or if some unspecified
-	 *         error is encountered while attempting to complete the command
+	 *         syntactically invalid</li><li>{@code URI_TOO_LONG} if
+	 *         {@code nodeUri} is longer than accepted by the {@code DmtAdmin}
+	 *         implementation (especially on systems with limited resources)
+	 *         </li><li> {@code NODE_NOT_FOUND} if {@code nodeUri} points to a
+	 *         non-existing node</li><li> {@code PERMISSION_DENIED} if the
+	 *         session is associated with a principal and the ACL of the node or
+	 *         its parent (see above) does not allow the {@code Replace}
+	 *         operation for the associated principal</li><li>
+	 *         {@code COMMAND_NOT_ALLOWED} if the command attempts to set the
+	 *         ACL of the root node not to include Add rights for all principals
+	 *         </li><li> {@code DATA_STORE_FAILURE} if an error occurred while
+	 *         accessing the data store</li><li>{@code COMMAND_FAILED} if the
+	 *         URI is not within the current session's subtree, or if some
+	 *         unspecified error is encountered while attempting to complete the
+	 *         command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session was opened using the
 	 *         {@code LOCK_TYPE_SHARED} lock type, or if the session is already
@@ -467,29 +469,31 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code INVALID_URI} if {@code nodeUri} or {@code newNodeUri}
-	 *         is {@code null} or syntactically invalid <li>{@code URI_TOO_LONG}
-	 *         if {@code nodeUri} is longer than accepted by the
-	 *         {@code DmtAdmin} implementation (especially on systems with
-	 *         limited resources) <li>{@code NODE_NOT_FOUND} if {@code nodeUri}
-	 *         points to a non-existing node, or if {@code newNodeUri} points to
-	 *         a node that cannot exist in the tree according to the meta-data
-	 *         (see {@link #getMetaNode(String)}) <li>{@code NODE_ALREADY_EXISTS}
-	 *         if {@code newNodeUri} points to a node that already exists <li>
-	 *         {@code PERMISSION_DENIED} if the session is associated with a
-	 *         principal and the ACL of the copied node(s) does not allow the
-	 *         {@code Get} operation, or the ACL of the parent of the target
-	 *         node does not allow the {@code Add} operation for the associated
-	 *         principal <li>{@code COMMAND_NOT_ALLOWED} if {@code nodeUri} is
-	 *         an ancestor of {@code newNodeUri}, or if any of the implied
-	 *         retrieval or update operations are not allowed <li>
-	 *         {@code METADATA_MISMATCH} if any of the meta-data constraints of
-	 *         the implied retrieval or update operations are violated <li>
-	 *         {@code TRANSACTION_ERROR} in an atomic session if the underlying
-	 *         plugin is read-only or does not support atomic writing <li>
+	 *         is {@code null} or syntactically invalid</li><li>
+	 *         {@code URI_TOO_LONG} if {@code nodeUri} is longer than accepted
+	 *         by the {@code DmtAdmin} implementation (especially on systems
+	 *         with limited resources)</li><li>{@code NODE_NOT_FOUND} if
+	 *         {@code nodeUri} points to a non-existing node, or if
+	 *         {@code newNodeUri} points to a node that cannot exist in the tree
+	 *         according to the meta-data (see {@link #getMetaNode(String)})
+	 *         </li><li>{@code NODE_ALREADY_EXISTS} if {@code newNodeUri} points
+	 *         to a node that already exists</li><li> {@code PERMISSION_DENIED}
+	 *         if the session is associated with a principal and the ACL of the
+	 *         copied node(s) does not allow the {@code Get} operation, or the
+	 *         ACL of the parent of the target node does not allow the
+	 *         {@code Add} operation for the associated principal</li><li>
+	 *         {@code COMMAND_NOT_ALLOWED} if {@code nodeUri} is an ancestor of
+	 *         {@code newNodeUri}, or if any of the implied retrieval or update
+	 *         operations are not allowed</li><li> {@code METADATA_MISMATCH} if
+	 *         any of the meta-data constraints of the implied retrieval or
+	 *         update operations are violated</li><li> {@code TRANSACTION_ERROR}
+	 *         in an atomic session if the underlying plugin is read-only or
+	 *         does not support atomic writing</li><li>
 	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li> {@code COMMAND_FAILED} if either URI is not
-	 *         within the current session's subtree, or if some unspecified
+	 *         the data store</li><li> {@code COMMAND_FAILED} if either URI is
+	 *         not within the current session's subtree, or if some unspecified
 	 *         error is encountered while attempting to complete the command
+	 *         </li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session was opened using the
 	 *         {@code LOCK_TYPE_SHARED} lock type, or if the session is already
@@ -525,26 +529,27 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li> {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid <li>{@code URI_TOO_LONG} if {@code nodeUri}
-	 *         is longer than accepted by the {@code DmtAdmin} implementation
-	 *         (especially on systems with limited resources) <li>
-	 *         {@code NODE_NOT_FOUND} if {@code nodeUri} points to a node that
-	 *         cannot exist in the tree (see above) <li>
+	 *         syntactically invalid</li><li>{@code URI_TOO_LONG} if
+	 *         {@code nodeUri} is longer than accepted by the {@code DmtAdmin}
+	 *         implementation (especially on systems with limited resources)
+	 *         </li><li> {@code NODE_NOT_FOUND} if {@code nodeUri} points to a
+	 *         node that cannot exist in the tree (see above)</li><li>
 	 *         {@code NODE_ALREADY_EXISTS} if {@code nodeUri} points to a node
-	 *         that already exists <li> {@code PERMISSION_DENIED} if the session
-	 *         is associated with a principal and the ACL of the parent node
-	 *         does not allow the {@code Add} operation for the associated
-	 *         principal <li> {@code COMMAND_NOT_ALLOWED} if the parent node is
-	 *         not an interior node, or in non-atomic sessions if the underlying
-	 *         plugin is read-only or does not support non-atomic writing <li>
-	 *         {@code METADATA_MISMATCH} if the node could not be created
-	 *         because of meta-data restrictions (see above) <li>
+	 *         that already exists</li><li> {@code PERMISSION_DENIED} if the
+	 *         session is associated with a principal and the ACL of the parent
+	 *         node does not allow the {@code Add} operation for the associated
+	 *         principal</li><li> {@code COMMAND_NOT_ALLOWED} if the parent node
+	 *         is not an interior node, or in non-atomic sessions if the
+	 *         underlying plugin is read-only or does not support non-atomic
+	 *         writing</li><li> {@code METADATA_MISMATCH} if the node could not
+	 *         be created because of meta-data restrictions (see above)</li><li>
 	 *         {@code TRANSACTION_ERROR} in an atomic session if the underlying
-	 *         plugin is read-only or does not support atomic writing <li>
+	 *         plugin is read-only or does not support atomic writing</li><li>
 	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li>{@code COMMAND_FAILED} if the URI is not
+	 *         the data store</li><li>{@code COMMAND_FAILED} if the URI is not
 	 *         within the current session's subtree, or if some unspecified
 	 *         error is encountered while attempting to complete the command
+	 *         </li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session was opened using the
 	 *         {@code LOCK_TYPE_SHARED} lock type, or if the session is already
@@ -590,27 +595,27 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li> {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid <li>{@code URI_TOO_LONG} if {@code nodeUri}
-	 *         is longer than accepted by the {@code DmtAdmin} implementation
-	 *         (especially on systems with limited resources) <li>
-	 *         {@code NODE_NOT_FOUND} if {@code nodeUri} points to a node that
-	 *         cannot exist in the tree (see above) <li>
+	 *         syntactically invalid</li><li>{@code URI_TOO_LONG} if
+	 *         {@code nodeUri} is longer than accepted by the {@code DmtAdmin}
+	 *         implementation (especially on systems with limited resources)
+	 *         </li><li> {@code NODE_NOT_FOUND} if {@code nodeUri} points to a
+	 *         node that cannot exist in the tree (see above)</li><li>
 	 *         {@code NODE_ALREADY_EXISTS} if {@code nodeUri} points to a node
-	 *         that already exists <li> {@code PERMISSION_DENIED} if the session
-	 *         is associated with a principal and the ACL of the parent node
-	 *         does not allow the {@code Add} operation for the associated
-	 *         principal <li> {@code COMMAND_NOT_ALLOWED} if the parent node is
-	 *         not an interior node, or in non-atomic sessions if the underlying
-	 *         plugin is read-only or does not support non-atomic writing <li>
-	 *         {@code METADATA_MISMATCH} if the node could not be created
-	 *         because of meta-data restrictions (see above) <li>
+	 *         that already exists</li><li> {@code PERMISSION_DENIED} if the
+	 *         session is associated with a principal and the ACL of the parent
+	 *         node does not allow the {@code Add} operation for the associated
+	 *         principal</li><li> {@code COMMAND_NOT_ALLOWED} if the parent node
+	 *         is not an interior node, or in non-atomic sessions if the
+	 *         underlying plugin is read-only or does not support non-atomic
+	 *         writing</li><li> {@code METADATA_MISMATCH} if the node could not
+	 *         be created because of meta-data restrictions (see above)</li><li>
 	 *         {@code TRANSACTION_ERROR} in an atomic session if the underlying
-	 *         plugin is read-only or does not support atomic writing <li>
+	 *         plugin is read-only or does not support atomic writing</li><li>
 	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li>{@code COMMAND_FAILED} if the URI is not
+	 *         the data store</li><li>{@code COMMAND_FAILED} if the URI is not
 	 *         within the current session's subtree, if the type string is
 	 *         invalid (see above), or if some unspecified error is encountered
-	 *         while attempting to complete the command
+	 *         while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session was opened using the
 	 *         {@code LOCK_TYPE_SHARED} lock type, or if the session is already
@@ -656,26 +661,27 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li> {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid <li>{@code URI_TOO_LONG} if {@code nodeUri}
-	 *         is longer than accepted by the {@code DmtAdmin} implementation
-	 *         (especially on systems with limited resources) <li>
-	 *         {@code NODE_NOT_FOUND} if {@code nodeUri} points to a node that
-	 *         cannot exist in the tree (see above) <li>
+	 *         syntactically invalid</li><li>{@code URI_TOO_LONG} if
+	 *         {@code nodeUri} is longer than accepted by the {@code DmtAdmin}
+	 *         implementation (especially on systems with limited resources)
+	 *         </li><li> {@code NODE_NOT_FOUND} if {@code nodeUri} points to a
+	 *         node that cannot exist in the tree (see above)</li><li>
 	 *         {@code NODE_ALREADY_EXISTS} if {@code nodeUri} points to a node
-	 *         that already exists <li> {@code PERMISSION_DENIED} if the session
-	 *         is associated with a principal and the ACL of the parent node
-	 *         does not allow the {@code Add} operation for the associated
-	 *         principal <li> {@code COMMAND_NOT_ALLOWED} if the parent node is
-	 *         not an interior node, or in non-atomic sessions if the underlying
-	 *         plugin is read-only or does not support non-atomic writing <li>
-	 *         {@code METADATA_MISMATCH} if the node could not be created
-	 *         because of meta-data restrictions (see above) <li>
+	 *         that already exists</li><li> {@code PERMISSION_DENIED} if the
+	 *         session is associated with a principal and the ACL of the parent
+	 *         node does not allow the {@code Add} operation for the associated
+	 *         principal</li><li> {@code COMMAND_NOT_ALLOWED} if the parent node
+	 *         is not an interior node, or in non-atomic sessions if the
+	 *         underlying plugin is read-only or does not support non-atomic
+	 *         writing</li><li> {@code METADATA_MISMATCH} if the node could not
+	 *         be created because of meta-data restrictions (see above)</li><li>
 	 *         {@code TRANSACTION_ERROR} in an atomic session if the underlying
-	 *         plugin is read-only or does not support atomic writing <li>
+	 *         plugin is read-only or does not support atomic writing</li><li>
 	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li>{@code COMMAND_FAILED} if the URI is not
+	 *         the data store</li><li>{@code COMMAND_FAILED} if the URI is not
 	 *         within the current session's subtree, or if some unspecified
 	 *         error is encountered while attempting to complete the command
+	 *         </li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session was opened using the
 	 *         {@code LOCK_TYPE_SHARED} lock type, or if the session is already
@@ -724,26 +730,27 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li> {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid <li>{@code URI_TOO_LONG} if {@code nodeUri}
-	 *         is longer than accepted by the {@code DmtAdmin} implementation
-	 *         (especially on systems with limited resources) <li>
-	 *         {@code NODE_NOT_FOUND} if {@code nodeUri} points to a node that
-	 *         cannot exist in the tree (see above) <li>
+	 *         syntactically invalid</li><li>{@code URI_TOO_LONG} if
+	 *         {@code nodeUri} is longer than accepted by the {@code DmtAdmin}
+	 *         implementation (especially on systems with limited resources)
+	 *         </li><li> {@code NODE_NOT_FOUND} if {@code nodeUri} points to a
+	 *         node that cannot exist in the tree (see above)</li><li>
 	 *         {@code NODE_ALREADY_EXISTS} if {@code nodeUri} points to a node
-	 *         that already exists <li> {@code PERMISSION_DENIED} if the session
-	 *         is associated with a principal and the ACL of the parent node
-	 *         does not allow the {@code Add} operation for the associated
-	 *         principal <li> {@code COMMAND_NOT_ALLOWED} if the parent node is
-	 *         not an interior node, or in non-atomic sessions if the underlying
-	 *         plugin is read-only or does not support non-atomic writing <li>
-	 *         {@code METADATA_MISMATCH} if the node could not be created
-	 *         because of meta-data restrictions (see above) <li>
+	 *         that already exists</li><li> {@code PERMISSION_DENIED} if the
+	 *         session is associated with a principal and the ACL of the parent
+	 *         node does not allow the {@code Add} operation for the associated
+	 *         principal</li><li> {@code COMMAND_NOT_ALLOWED} if the parent node
+	 *         is not an interior node, or in non-atomic sessions if the
+	 *         underlying plugin is read-only or does not support non-atomic
+	 *         writing</li><li> {@code METADATA_MISMATCH} if the node could not
+	 *         be created because of meta-data restrictions (see above)</li><li>
 	 *         {@code TRANSACTION_ERROR} in an atomic session if the underlying
-	 *         plugin is read-only or does not support atomic writing <li>
+	 *         plugin is read-only or does not support atomic writing</li><li>
 	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li>{@code COMMAND_FAILED} if the URI is not
+	 *         the data store</li><li>{@code COMMAND_FAILED} if the URI is not
 	 *         within the current session's subtree, or if some unspecified
 	 *         error is encountered while attempting to complete the command
+	 *         </li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session was opened using the
 	 *         {@code LOCK_TYPE_SHARED} lock type, or if the session is already
@@ -798,27 +805,28 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li> {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid <li>{@code URI_TOO_LONG} if {@code nodeUri}
-	 *         is longer than accepted by the {@code DmtAdmin} implementation
-	 *         (especially on systems with limited resources) <li>
-	 *         {@code NODE_NOT_FOUND} if {@code nodeUri} points to a node that
-	 *         cannot exist in the tree (see above) <li>
+	 *         syntactically invalid</li><li>{@code URI_TOO_LONG} if
+	 *         {@code nodeUri} is longer than accepted by the {@code DmtAdmin}
+	 *         implementation (especially on systems with limited resources)
+	 *         </li><li> {@code NODE_NOT_FOUND} if {@code nodeUri} points to a
+	 *         node that cannot exist in the tree (see above)</li><li>
 	 *         {@code NODE_ALREADY_EXISTS} if {@code nodeUri} points to a node
-	 *         that already exists <li> {@code PERMISSION_DENIED} if the session
-	 *         is associated with a principal and the ACL of the parent node
-	 *         does not allow the {@code Add} operation for the associated
-	 *         principal <li> {@code COMMAND_NOT_ALLOWED} if the parent node is
-	 *         not an interior node, or in non-atomic sessions if the underlying
-	 *         plugin is read-only or does not support non-atomic writing <li>
-	 *         {@code METADATA_MISMATCH} if the node could not be created
-	 *         because of meta-data restrictions (see above) <li>
+	 *         that already exists</li><li> {@code PERMISSION_DENIED} if the
+	 *         session is associated with a principal and the ACL of the parent
+	 *         node does not allow the {@code Add} operation for the associated
+	 *         principal</li><li> {@code COMMAND_NOT_ALLOWED} if the parent node
+	 *         is not an interior node, or in non-atomic sessions if the
+	 *         underlying plugin is read-only or does not support non-atomic
+	 *         writing</li><li> {@code METADATA_MISMATCH} if the node could not
+	 *         be created because of meta-data restrictions (see above)</li><li>
 	 *         {@code TRANSACTION_ERROR} in an atomic session if the underlying
-	 *         plugin is read-only or does not support atomic writing <li>
+	 *         plugin is read-only or does not support atomic writing</li><li>
 	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li>{@code COMMAND_FAILED} if the URI is not
+	 *         the data store</li><li>{@code COMMAND_FAILED} if the URI is not
 	 *         within the current session's subtree, if {@code mimeType} is not
 	 *         a proper MIME type string (see above), or if some unspecified
 	 *         error is encountered while attempting to complete the command
+	 *         </li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session was opened using the
 	 *         {@code LOCK_TYPE_SHARED} lock type, or if the session is already
@@ -847,24 +855,25 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li> {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid <li>{@code URI_TOO_LONG} if {@code nodeUri}
-	 *         is longer than accepted by the {@code DmtAdmin} implementation
-	 *         (especially on systems with limited resources) <li>
-	 *         {@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node <li> {@code PERMISSION_DENIED} if the session
-	 *         is associated with a principal and the ACL of the node does not
-	 *         allow the {@code Delete} operation for the associated principal
-	 *         <li> {@code COMMAND_NOT_ALLOWED} if the target node is the root
-	 *         of the session, or in non-atomic sessions if the underlying
-	 *         plugin is read-only or does not support non-atomic writing <li>
-	 *         {@code METADATA_MISMATCH} if the node could not be deleted
-	 *         because of meta-data restrictions (see above) <li>
+	 *         syntactically invalid</li><li>{@code URI_TOO_LONG} if
+	 *         {@code nodeUri} is longer than accepted by the {@code DmtAdmin}
+	 *         implementation (especially on systems with limited resources)
+	 *         </li><li> {@code NODE_NOT_FOUND} if {@code nodeUri} points to a
+	 *         non-existing node</li><li>{@code PERMISSION_DENIED} if the
+	 *         session is associated with a principal and the ACL of the node
+	 *         does not allow the {@code Delete} operation for the associated
+	 *         principal </li><li>{@code COMMAND_NOT_ALLOWED} if the target node
+	 *         is the root of the session, or in non-atomic sessions if the
+	 *         underlying plugin is read-only or does not support non-atomic
+	 *         writing</li><li> {@code METADATA_MISMATCH} if the node could not
+	 *         be deleted because of meta-data restrictions (see above)</li><li>
 	 *         {@code TRANSACTION_ERROR} in an atomic session if the underlying
-	 *         plugin is read-only or does not support atomic writing <li>
+	 *         plugin is read-only or does not support atomic writing</li><li>
 	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li>{@code COMMAND_FAILED} if the URI is not
+	 *         the data store</li><li>{@code COMMAND_FAILED} if the URI is not
 	 *         within the current session's subtree, or if some unspecified
 	 *         error is encountered while attempting to complete the command
+	 *         </li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session was opened using the
 	 *         {@code LOCK_TYPE_SHARED} lock type, or if the session is already
@@ -895,28 +904,29 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code INVALID_URI} if {@code nodeUri} or {@code newName} is
-	 *         {@code null} or syntactically invalid <li>{@code URI_TOO_LONG} if
-	 *         {@code nodeUri} is longer than accepted by the {@code DmtAdmin}
-	 *         implementation (especially on systems with limited resources) 
-	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node, or if the new node is not defined in the tree
-	 *         according to the meta-data (see {@link #getMetaNode(String)}) 
-	 *         <li> {@code NODE_ALREADY_EXISTS} if there already exists a
-	 *         sibling of {@code nodeUri} with the name {@code newName} <li>
-	 *         {@code PERMISSION_DENIED} if the session is associated with a
-	 *         principal and the ACL of the node does not allow the
-	 *         {@code Replace} operation for the associated principal <li>
-	 *         {@code COMMAND_NOT_ALLOWED} if the target node is the root of the
-	 *         session, or in non-atomic sessions if the underlying plugin is
-	 *         read-only or does not support non-atomic writing <li>
-	 *         {@code METADATA_MISMATCH} if the node could not be renamed
-	 *         because of meta-data restrictions (see above) <li>
+	 *         {@code null} or syntactically invalid</li><li>{@code URI_TOO_LONG}
+	 *         if {@code nodeUri} is longer than accepted by the
+	 *         {@code DmtAdmin} implementation (especially on systems with
+	 *         limited resources) </li><li>{@code NODE_NOT_FOUND} if
+	 *         {@code nodeUri} points to a non-existing node, or if the new node
+	 *         is not defined in the tree according to the meta-data (see
+	 *         {@link #getMetaNode(String)}) </li><li>{@code NODE_ALREADY_EXISTS}
+	 *         if there already exists a sibling of {@code nodeUri} with the
+	 *         name {@code newName}</li><li> {@code PERMISSION_DENIED} if the
+	 *         session is associated with a principal and the ACL of the node
+	 *         does not allow the {@code Replace} operation for the associated
+	 *         principal</li><li> {@code COMMAND_NOT_ALLOWED} if the target node
+	 *         is the root of the session, or in non-atomic sessions if the
+	 *         underlying plugin is read-only or does not support non-atomic
+	 *         writing</li><li>{@code METADATA_MISMATCH} if the node could not
+	 *         be renamed because of meta-data restrictions (see above)</li><li>
 	 *         {@code TRANSACTION_ERROR} in an atomic session if the underlying
-	 *         plugin is read-only or does not support atomic writing <li>
+	 *         plugin is read-only or does not support atomic writing</li><li>
 	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li>{@code COMMAND_FAILED} if the URI is not
+	 *         the data store</li><li>{@code COMMAND_FAILED} if the URI is not
 	 *         within the current session's subtree, or if some unspecified
 	 *         error is encountered while attempting to complete the command
+	 *         </li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session was opened using the
 	 *         {@code LOCK_TYPE_SHARED} lock type, or if the session is already
@@ -939,31 +949,32 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid
+	 *         syntactically invalid</li>
 	 *         <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer than
 	 *         accepted by the {@code DmtAdmin} implementation (especially on
-	 *         systems with limited resources)
+	 *         systems with limited resources)</li>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
 	 *         principal and the ACL of the node does not allow the
-	 *         {@code Replace} operation for the associated principal
+	 *         {@code Replace} operation for the associated principal</li>
 	 *         <li>{@code COMMAND_NOT_ALLOWED} in non-atomic sessions if the
 	 *         underlying plugin is read-only or does not support non-atomic
-	 *         writing
+	 *         writing</li>
 	 *         <li>{@code METADATA_MISMATCH} if the node is permanent or cannot
 	 *         be modified according to the meta-data (does not have the
 	 *         {@code MetaNode.CMD_REPLACE} access type), or if there is no
-	 *         default value defined for this node
+	 *         default value defined for this node</li>
 	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the specified node is an
-	 *         interior node and does not support Java object values
+	 *         interior node and does not support Java object values</li>
 	 *         <li>{@code TRANSACTION_ERROR} in an atomic session if the
 	 *         underlying plugin is read-only or does not support atomic writing
+	 *         </li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if the URI is not within the current
 	 *         session's subtree, or if some unspecified error is encountered
-	 *         while attempting to complete the command
+	 *         while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session was opened using the
 	 *         {@code LOCK_TYPE_SHARED} lock type, or if the session is already
@@ -999,30 +1010,31 @@ public interface DmtSession {
 	 * @param data the data to be set, can be {@code null}
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
-	 *         {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid <li>{@code URI_TOO_LONG} if {@code nodeUri}
-	 *         is longer than accepted by the {@code DmtAdmin} implementation
-	 *         (especially on systems with limited resources) <li>
-	 *         {@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node <li> {@code PERMISSION_DENIED} if the session
-	 *         is associated with a principal and the ACL of the node does not
-	 *         allow the {@code Replace} operation for the associated principal
-	 *         <li> {@code COMMAND_NOT_ALLOWED} if the given data has
-	 *         {@code FORMAT_NODE} format but the node is a leaf node (or vice
-	 *         versa), or in non-atomic sessions if the underlying plugin is
-	 *         read-only or does not support non-atomic writing <li>
+	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
+	 *         syntactically invalid</li> <li>{@code URI_TOO_LONG} if
+	 *         {@code nodeUri} is longer than accepted by the {@code DmtAdmin}
+	 *         implementation (especially on systems with limited resources)
+	 *         </li> <li> {@code NODE_NOT_FOUND} if {@code nodeUri} points to a
+	 *         non-existing node</li> <li>{@code PERMISSION_DENIED} if the
+	 *         session is associated with a principal and the ACL of the node
+	 *         does not allow the {@code Replace} operation for the associated
+	 *         principal</li> <li>{@code COMMAND_NOT_ALLOWED} if the given data
+	 *         has {@code FORMAT_NODE} format but the node is a leaf node (or
+	 *         vice versa), or in non-atomic sessions if the underlying plugin
+	 *         is read-only or does not support non-atomic writing</li> <li>
 	 *         {@code METADATA_MISMATCH} if the node is permanent or cannot be
 	 *         modified according to the meta-data (does not have the
 	 *         {@code MetaNode.CMD_REPLACE} access type), or if the given value
-	 *         does not conform to the meta-data value constraints <li>
+	 *         does not conform to the meta-data value constraints</li> <li>
 	 *         {@code FEATURE_NOT_SUPPORTED} if the specified node is an
-	 *         interior node and does not support Java object values <li>
+	 *         interior node and does not support Java object values</li> <li>
 	 *         {@code TRANSACTION_ERROR} in an atomic session if the underlying
-	 *         plugin is read-only or does not support atomic writing <li>
+	 *         plugin is read-only or does not support atomic writing</li> <li>
 	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li> {@code COMMAND_FAILED} if the URI is not
+	 *         the data store</li> <li>{@code COMMAND_FAILED} if the URI is not
 	 *         within the current session's subtree, or if some unspecified
 	 *         error is encountered while attempting to complete the command
+	 *         </li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session was opened using the
 	 *         {@code LOCK_TYPE_SHARED} lock type, or if the session is already
@@ -1044,31 +1056,33 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid
+	 *         syntactically invalid</li>
 	 *         <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer than
 	 *         accepted by the {@code DmtAdmin} implementation (especially on
-	 *         systems with limited resources)
+	 *         systems with limited resources)</li>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
 	 *         principal and the ACL of the node does not allow the
-	 *         {@code Replace} operation for the associated principal
+	 *         {@code Replace} operation for the associated principal</li>
 	 *         <li>{@code COMMAND_NOT_ALLOWED} in non-atomic sessions if the
 	 *         underlying plugin is read-only or does not support non-atomic
-	 *         writing
+	 *         writing</li>
 	 *         <li>{@code METADATA_MISMATCH} if the node cannot be modified
 	 *         according to the meta-data (does not have the
-	 *         {@code MetaNode.CMD_REPLACE} access type)
+	 *         {@code MetaNode.CMD_REPLACE} access type)</li>
 	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the Title property is not
 	 *         supported by the DmtAdmin implementation or the underlying plugin
+	 *         </li>
 	 *         <li>{@code TRANSACTION_ERROR} in an atomic session if the
 	 *         underlying plugin is read-only or does not support atomic writing
+	 *         </li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if the title string is too long, if
 	 *         the URI is not within the current session's subtree, or if some
 	 *         unspecified error is encountered while attempting to complete the
-	 *         command
+	 *         command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session was opened using the
 	 *         {@code LOCK_TYPE_SHARED} lock type, or if the session is already
@@ -1106,27 +1120,27 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li> {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid <li>{@code URI_TOO_LONG} if {@code nodeUri}
-	 *         is longer than accepted by the {@code DmtAdmin} implementation
-	 *         (especially on systems with limited resources) <li>
-	 *         {@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node <li> {@code PERMISSION_DENIED} if the session
-	 *         is associated with a principal and the ACL of the node does not
-	 *         allow the {@code Replace} operation for the associated principal
-	 *         <li> {@code COMMAND_NOT_ALLOWED} in non-atomic sessions if the
-	 *         underlying plugin is read-only or does not support non-atomic
-	 *         writing <li>{@code METADATA_MISMATCH} if the node is permanent or
-	 *         cannot be modified according to the meta-data (does not have the
-	 *         {@code MetaNode.CMD_REPLACE} access type), and in case of leaf
-	 *         nodes, if {@code null} is given and there is no default MIME
-	 *         type, or the given MIME type is not allowed <li>
-	 *         {@code TRANSACTION_ERROR} in an atomic session if the underlying
-	 *         plugin is read-only or does not support atomic writing <li>
-	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li>{@code COMMAND_FAILED} if the URI is not
-	 *         within the current session's subtree, if the type string is
-	 *         invalid (see above), or if some unspecified error is encountered
-	 *         while attempting to complete the command
+	 *         syntactically invalid</li><li>{@code URI_TOO_LONG} if
+	 *         {@code nodeUri} is longer than accepted by the {@code DmtAdmin}
+	 *         implementation (especially on systems with limited resources)
+	 *         </li><li> {@code NODE_NOT_FOUND} if {@code nodeUri} points to a
+	 *         non-existing node</li><li> {@code PERMISSION_DENIED} if the
+	 *         session is associated with a principal and the ACL of the node
+	 *         does not allow the {@code Replace} operation for the associated
+	 *         principal </li><li> {@code COMMAND_NOT_ALLOWED} in non-atomic
+	 *         sessions if the underlying plugin is read-only or does not
+	 *         support non-atomic writing</li><li>{@code METADATA_MISMATCH} if
+	 *         the node is permanent or cannot be modified according to the
+	 *         meta-data (does not have the {@code MetaNode.CMD_REPLACE} access
+	 *         type), and in case of leaf nodes, if {@code null} is given and
+	 *         there is no default MIME type, or the given MIME type is not
+	 *         allowed</li><li> {@code TRANSACTION_ERROR} in an atomic session
+	 *         if the underlying plugin is read-only or does not support atomic
+	 *         writing</li><li> {@code DATA_STORE_FAILURE} if an error occurred
+	 *         while accessing the data store</li><li>{@code COMMAND_FAILED} if
+	 *         the URI is not within the current session's subtree, if the type
+	 *         string is invalid (see above), or if some unspecified error is
+	 *         encountered while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session was opened using the
 	 *         {@code LOCK_TYPE_SHARED} lock type, or if the session is already
@@ -1155,25 +1169,25 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid
+	 *         syntactically invalid</li>
 	 *         <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer than
 	 *         accepted by the {@code DmtAdmin} implementation (especially on
-	 *         systems with limited resources)
+	 *         systems with limited resources)</li>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
 	 *         principal and the ACL of the node does not allow the {@code Get}
-	 *         operation for the associated principal
+	 *         operation for the associated principal</li>
 	 *         <li>{@code COMMAND_NOT_ALLOWED} if the specified node is not an
-	 *         interior node
+	 *         interior node</li>
 	 *         <li>{@code METADATA_MISMATCH} if node information cannot be
 	 *         retrieved according to the meta-data (it does not have
-	 *         {@code MetaNode.CMD_GET} access type)
+	 *         {@code MetaNode.CMD_GET} access type)</li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if the URI is not within the current
 	 *         session's subtree, or if some unspecified error is encountered
-	 *         while attempting to complete the command
+	 *         while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session is already closed or
 	 *         invalidated
@@ -1209,18 +1223,19 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li> {@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid <li>{@code URI_TOO_LONG} if {@code nodeUri}
-	 *         is longer than accepted by the {@code DmtAdmin} implementation
-	 *         (especially on systems with limited resources) <li>
-	 *         {@code NODE_NOT_FOUND} if {@code nodeUri} points to a node that
-	 *         is not defined in the tree (see above) <li>
+	 *         syntactically invalid</li><li>{@code URI_TOO_LONG} if
+	 *         {@code nodeUri} is longer than accepted by the {@code DmtAdmin}
+	 *         implementation (especially on systems with limited resources)
+	 *         </li><li> {@code NODE_NOT_FOUND} if {@code nodeUri} points to a
+	 *         node that is not defined in the tree (see above)</li><li>
 	 *         {@code PERMISSION_DENIED} if the session is associated with a
 	 *         principal and the ACL of the node does not allow the {@code Get}
-	 *         operation for the associated principal <li>
+	 *         operation for the associated principal</li><li>
 	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li>{@code COMMAND_FAILED} if the URI is not
+	 *         the data store</li><li>{@code COMMAND_FAILED} if the URI is not
 	 *         within the current session's subtree, or if some unspecified
 	 *         error is encountered while attempting to complete the command
+	 *         </li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session is already closed or
 	 *         invalidated
@@ -1242,27 +1257,28 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid
+	 *         syntactically invalid</li>
 	 *         <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer than
 	 *         accepted by the {@code DmtAdmin} implementation (especially on
-	 *         systems with limited resources)
+	 *         systems with limited resources)</li>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
 	 *         principal and the ACL of the node does not allow the {@code Get}
-	 *         operation for the associated principal
+	 *         operation for the associated principal</li>
 	 *         <li>{@code COMMAND_NOT_ALLOWED} if the specified node is not a
-	 *         leaf node
+	 *         leaf node</li>
 	 *         <li>{@code METADATA_MISMATCH} if node information cannot be
 	 *         retrieved according to the meta-data (it does not have
-	 *         {@code MetaNode.CMD_GET} access type)
+	 *         {@code MetaNode.CMD_GET} access type)</li>
 	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the Size property is not
 	 *         supported by the DmtAdmin implementation or the underlying plugin
+	 *         </li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if the URI is not within the current
 	 *         session's subtree, or if some unspecified error is encountered
-	 *         while attempting to complete the command
+	 *         while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session is already closed or
 	 *         invalidated
@@ -1282,26 +1298,26 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid
+	 *         syntactically invalid</li>
 	 *         <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer than
 	 *         accepted by the {@code DmtAdmin} implementation (especially on
-	 *         systems with limited resources)
+	 *         systems with limited resources)</li>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
 	 *         principal and the ACL of the node does not allow the {@code Get}
-	 *         operation for the associated principal
+	 *         operation for the associated principal</li>
 	 *         <li>{@code METADATA_MISMATCH} if node information cannot be
 	 *         retrieved according to the meta-data (it does not have
-	 *         {@code MetaNode.CMD_GET} access type)
+	 *         {@code MetaNode.CMD_GET} access type)</li>
 	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the Timestamp property is
 	 *         not supported by the DmtAdmin implementation or the underlying
-	 *         plugin
+	 *         plugin</li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if the URI is not within the current
 	 *         session's subtree, or if some unspecified error is encountered
-	 *         while attempting to complete the command
+	 *         while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session is already closed or
 	 *         invalidated
@@ -1320,25 +1336,26 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid
+	 *         syntactically invalid</li>
 	 *         <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer than
 	 *         accepted by the {@code DmtAdmin} implementation (especially on
-	 *         systems with limited resources)
+	 *         systems with limited resources)</li>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
 	 *         principal and the ACL of the node does not allow the {@code Get}
-	 *         operation for the associated principal
+	 *         operation for the associated principal</li>
 	 *         <li>{@code METADATA_MISMATCH} if node information cannot be
 	 *         retrieved according to the meta-data (it does not have
-	 *         {@code MetaNode.CMD_GET} access type)
+	 *         {@code MetaNode.CMD_GET} access type)</li>
 	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the Title property is not
 	 *         supported by the DmtAdmin implementation or the underlying plugin
+	 *         </li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if the URI is not within the current
 	 *         session's subtree, or if some unspecified error is encountered
-	 *         while attempting to complete the command
+	 *         while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session is already closed or
 	 *         invalidated
@@ -1360,23 +1377,23 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid
+	 *         syntactically invalid</li>
 	 *         <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer than
 	 *         accepted by the {@code DmtAdmin} implementation (especially on
-	 *         systems with limited resources)
+	 *         systems with limited resources)</li>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
 	 *         principal and the ACL of the node does not allow the {@code Get}
-	 *         operation for the associated principal
+	 *         operation for the associated principal</li>
 	 *         <li>{@code METADATA_MISMATCH} if node information cannot be
 	 *         retrieved according to the meta-data (it does not have
-	 *         {@code MetaNode.CMD_GET} access type)
+	 *         {@code MetaNode.CMD_GET} access type)</li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if the URI is not within the current
 	 *         session's subtree, or if some unspecified error is encountered
-	 *         while attempting to complete the command
+	 *         while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session is already closed or
 	 *         invalidated
@@ -1397,26 +1414,26 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid
+	 *         syntactically invalid</li>
 	 *         <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer than
 	 *         accepted by the {@code DmtAdmin} implementation (especially on
-	 *         systems with limited resources)
+	 *         systems with limited resources)</li>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
 	 *         principal and the ACL of the node (and the ACLs of all its
 	 *         descendants in case of interior nodes) do not allow the
-	 *         {@code Get} operation for the associated principal
+	 *         {@code Get} operation for the associated principal</li>
 	 *         <li>{@code METADATA_MISMATCH} if the node value cannot be
 	 *         retrieved according to the meta-data (it does not have
-	 *         {@code MetaNode.CMD_GET} access type)
+	 *         {@code MetaNode.CMD_GET} access type)</li>
 	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the specified node is an
-	 *         interior node and does not support Java object values
+	 *         interior node and does not support Java object values</li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if the URI is not within the current
 	 *         session's subtree, or if some unspecified error is encountered
-	 *         while attempting to complete the command
+	 *         while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session is already closed or
 	 *         invalidated
@@ -1439,25 +1456,26 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid
+	 *         syntactically invalid</li>
 	 *         <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer than
 	 *         accepted by the {@code DmtAdmin} implementation (especially on
-	 *         systems with limited resources)
+	 *         systems with limited resources)</li>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
 	 *         principal and the ACL of the node does not allow the {@code Get}
-	 *         operation for the associated principal
+	 *         operation for the associated principal</li>
 	 *         <li>{@code METADATA_MISMATCH} if node information cannot be
 	 *         retrieved according to the meta-data (it does not have
-	 *         {@code MetaNode.CMD_GET} access type)
+	 *         {@code MetaNode.CMD_GET} access type)</li>
 	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the Version property is not
 	 *         supported by the DmtAdmin implementation or the underlying plugin
+	 *         </li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if the URI is not within the current
 	 *         session's subtree, or if some unspecified error is encountered
-	 *         while attempting to complete the command
+	 *         while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session is already closed or
 	 *         invalidated
@@ -1476,23 +1494,23 @@ public interface DmtSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code INVALID_URI} if {@code nodeUri} is {@code null} or
-	 *         syntactically invalid
+	 *         syntactically invalid</li>
 	 *         <li>{@code URI_TOO_LONG} if {@code nodeUri} is longer than
 	 *         accepted by the {@code DmtAdmin} implementation (especially on
-	 *         systems with limited resources)
+	 *         systems with limited resources)</li>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
 	 *         principal and the ACL of the node does not allow the {@code Get}
-	 *         operation for the associated principal
+	 *         operation for the associated principal</li>
 	 *         <li>{@code METADATA_MISMATCH} if node information cannot be
 	 *         retrieved according to the meta-data (it does not have
-	 *         {@code MetaNode.CMD_GET} access type)
+	 *         {@code MetaNode.CMD_GET} access type)</li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if the URI is not within the current
 	 *         session's subtree, or if some unspecified error is encountered
-	 *         while attempting to complete the command
+	 *         while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws DmtIllegalStateException if the session is already closed or
 	 *         invalidated

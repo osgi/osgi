@@ -20,11 +20,4 @@ repo.servlet = ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}
 repo.jaxp = ${repo;com.icl.saxon}
 repo.jpa = ${repo;org.eclipse.persistence.jpa_spec}
 
-# The following causes bnd to barf, so we have to expand it manually 
-#-include:  ${replace;${companions};.+;${project.workspace}/$0/layout.bnd}
-
--include: ${project.workspace}/osgi.core/layout.bnd, \
-	${project.workspace}/osgi.cmpn/layout.bnd, \
-	${project.workspace}/osgi.enterprise/layout.bnd, \
-	${project.workspace}/osgi.residential/layout.bnd, \
-	${project.workspace}/osgi.proposed/layout.bnd
+-include: ${project.workspace}/osgi.companion/layout.bnd

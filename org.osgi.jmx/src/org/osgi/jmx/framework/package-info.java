@@ -32,7 +32,8 @@
  * <p>
  * {@code  Import-Package: org.osgi.jmx.framework; version="[1.7,1.8)"}
  * 
- * @version $Id$
+ * @version 1.7
+ * @author $Id$
  */
 
 package org.osgi.jmx.framework;

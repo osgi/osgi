@@ -130,11 +130,11 @@ public interface WireConstants {
 	 * object must perform basic filtering. Basic filtering includes supporting
 	 * the following standard wire filter attributes:
 	 * <ul>
-	 * <li>{@link #WIREVALUE_CURRENT}- Current value
-	 * <li>{@link #WIREVALUE_PREVIOUS}- Previous value
-	 * <li>{@link #WIREVALUE_DELTA_ABSOLUTE}- Absolute delta
-	 * <li>{@link #WIREVALUE_DELTA_RELATIVE}- Relative delta
-	 * <li>{@link #WIREVALUE_ELAPSED}- Elapsed time
+	 * <li>{@link #WIREVALUE_CURRENT} - Current value</li>
+	 * <li>{@link #WIREVALUE_PREVIOUS} - Previous value</li>
+	 * <li>{@link #WIREVALUE_DELTA_ABSOLUTE} - Absolute delta</li>
+	 * <li>{@link #WIREVALUE_DELTA_RELATIVE} - Relative delta</li>
+	 * <li>{@link #WIREVALUE_ELAPSED} - Elapsed time</li>
 	 * </ul>
 	 * 
 	 * @see org.osgi.framework.Filter

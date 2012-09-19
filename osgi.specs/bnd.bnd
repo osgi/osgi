@@ -1,22 +1,35 @@
--include : ../osgi.build/bnd.bnd
+-nobundles = true
+nodeploy   = true
 
-minimum-latest 			= 1.2.1
-minimum-previous		= 1.1.3
-foundation-latest 		= 1.1.0
-foundation-previous		= 1.0.0
+-dependson = osgi.companion, dmforest
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd, ${project.workspace}/osgi.companion/layout.bnd
 
-servlet 				= ${repo;org.osgi.impl.bundle.servlet}
-saxon 					= ${repo;com.icl.saxon}
-jar2xml					= ../org.osgi.tools/${bin}:${repo;org.apache.bcel}:../org.osgi.test.tool/${bin}
-xml2mif					= ../org.osgi.tools/${bin}
+-buildpath: \
+    ee.j2se;         version=${javac.source}, \
+    com.sun.tools;   version=1.5.0, \
+    org.apache.bcel; version=1.0
 
-dependencyfinder 		= ${repo;org.apache.jakarta.oro}:${repo;org.apache.log4j}:${repo;com.jeantessier.dependencyfinder}
-
-
-minimum-latest.jar  	= ${repo;ee.minimum;[${minimum-latest},${minimum-latest}]}
-minimum-previous.jar	= ${repo;ee.minimum;[${minimum-previous},${minimum-previous}]}
-foundation-latest.jar 	= ${repo;ee.foundation;[${foundation-latest},${foundation-latest}]}
-foundation-previous.jar = ${repo;ee.foundation;[${foundation-previous},${foundation-previous}]}
+repo.javase     = ${repo;ee.j2se}
+repo.foundation = ${repo;ee.foundation}
+repo.servlet    = ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}
+repo.jaxp       = ${repo;com.icl.saxon}
+repo.jpa        = ${repo;org.eclipse.persistence.jpa_spec}
 
 javadoc.packages = ${uniq; ${core.packages}, ${cmpn.packages}, ${enterprise.packages}, ${residential.packages}}
 
+minimum-latest      = 1.2.1
+minimum-previous    = 1.1.3
+foundation-latest   = 1.1.0
+foundation-previous = 1.0.0
+
+saxon    = ${repo;com.icl.saxon}
+resolver = ${repo;org.apache.xml.commons.resolver}
+xml2mif  = ../org.osgi.tools/${bin}
+
+dependencyfinder = ${repo;org.apache.jakarta.oro}:${repo;org.apache.log4j}:${repo;com.jeantessier.dependencyfinder}
+
+minimum-latest.jar      = ${repo;ee.minimum;[${minimum-latest},${minimum-latest}]}
+minimum-previous.jar    = ${repo;ee.minimum;[${minimum-previous},${minimum-previous}]}
+foundation-latest.jar   = ${repo;ee.foundation;[${foundation-latest},${foundation-latest}]}
+foundation-previous.jar = ${repo;ee.foundation;[${foundation-previous},${foundation-previous}]}

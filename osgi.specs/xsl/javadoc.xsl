@@ -4,9 +4,10 @@
 	version="1.1">
 	<xsl:strip-space elements="*" />
 	<xsl:output method="xml" indent="yes" encoding="UTF-8" />
+	<xsl:param name="destdir" />
 
 	<xsl:template match="package">
-		<xsl:document href="xml/{@name}.xml" method="xml" indent="yes"
+		<xsl:document href="{$destdir}/{@name}.xml" method="xml" indent="yes"
 			encoding="UTF-8">
 			<html>
 				<head>

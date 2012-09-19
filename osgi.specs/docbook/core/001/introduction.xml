@@ -1,0 +1,777 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="1" revision="$Id$"
+         version="5" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Introduction</title>
+
+  <para>The OSGi™ Alliance was founded in March 1999. Its mission is to create
+  open specifications for the network delivery of managed services to local
+  networks and devices. The OSGi organization is the leading standard for
+  next-generation Internet services to homes, cars, mobile phones, desktops,
+  small offices, and other environments.</para>
+
+  <para>The OSGi Core specification delivers an open, common architecture for
+  service providers, developers, software vendors, gateway operators and
+  equipment vendors to develop, deploy and manage services in a coordinated
+  fashion. It enables an entirely new category of smart devices due to its
+  flexible and managed deployment of services. OSGi specifications target
+  set-top boxes, service gateways, cable modems, consumer electronics, PCs,
+  industrial computers, cars, mobile phones, and more. Devices that implement
+  the OSGi specifications will enable service providers like telcos, cable
+  operators, utilities, and others to deliver differentiated and valuable
+  services over their networks.</para>
+
+  <para>This is the fifth release of the OSGi Core specification developed by
+  representatives from OSGi member companies. The OSGi Core Release 5 mostly
+  extends the existing APIs into new areas. The few modifications to existing
+  APIs are backward compatible so that applications for previous releases
+  should run unmodified on Release 5 Frameworks. The built-in version
+  management mechanisms allow bundles written for the new release to adapt to
+  the old Framework implementations, if necessary.</para>
+
+  <section>
+    <title>OSGi Framework Overview</title>
+
+    <para>The Framework forms the core of the OSGi Specifications. It provides
+    a general-purpose, secure, and managed Java framework that supports the
+    deployment of extensible and downloadable applications known as
+    <emphasis>bundles</emphasis>.</para>
+
+    <para>OSGi-compliant devices can download and install OSGi bundles, and
+    remove them when they are no longer required. The Framework manages the
+    installation and update of bundles in an OSGi environment in a dynamic and
+    scalable fashion. To achieve this, it manages the dependencies between
+    bundles and services in detail.</para>
+
+    <para>It provides the bundle developer with the resources necessary to
+    take advantage of Java’s platform independence and dynamic code-loading
+    capability in order to easily develop services for small-memory devices
+    that can be deployed on a large scale.</para>
+
+    <para>The functionality of the Framework is divided in the following
+    layers:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Security Layer</para>
+      </listitem>
+
+      <listitem>
+        <para>Module Layer</para>
+      </listitem>
+
+      <listitem>
+        <para>Life Cycle Layer</para>
+      </listitem>
+
+      <listitem>
+        <para>Service Layer</para>
+      </listitem>
+
+      <listitem>
+        <para>Actual Services</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>This layering is depicted in <xref linkend="i478414"/>.</para>
+
+    <figure xml:id="i478414">
+      <title>Layering</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="1.881in"
+                     contentwidth="4.816in" fileref="layering.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>The Security Layer is based on Java 2 security but adds a number of
+    constraints and fills in some of the blanks that standard Java leaves
+    open. It defines a secure packaging format as well as the runtime
+    interaction with the Java 2 security layer. The Security Layer is
+    described in <xref linkend="framework.security"/>.</para>
+
+    <para>The Module Layer defines a modularization model for Java. It
+    addresses some of the shortcomings of Java’s deployment model. The
+    modularization layer has strict rules for sharing Java packages between
+    bundles or hiding packages from other bundles. The Module Layer can be
+    used without the life cycle and Service Layer. The Life Cycle Layer
+    provides an API to manage the <emphasis>bundles</emphasis> in the Module
+    Layer, while the Service Layer provides a communication model for the
+    bundles. The Module Layer is described in <xref
+    linkend="framework.module"/>.</para>
+
+    <para>The Life Cycle Layer provides a life cycle API to bundles. This API
+    provides a runtime model for bundles. It defines how bundles are started
+    and stopped as well as how bundles are installed, updated and uninstalled.
+    Additionally, it provides a comprehensive event API to allow a management
+    bundle to control the operations of the OSGi framework. The Life Cycle
+    Layer requires the Module Layer but the Security Layer is optional. A more
+    extensive description of the Life Cycle layer can be found at <xref
+    linkend="framework.lifecycle"/>.</para>
+
+    <para>The Service Layer provides a dynamic, concise and consistent
+    programming model for Java bundle developers, simplifying the development
+    and deployment of service bundles by de-coupling the service’s
+    specification (Java interface) from its implementations. This model allows
+    bundle developers to bind to services only using their interface
+    specifications. The selection of a specific implementation, optimized for
+    a specific need or from a specific vendor, can thus be deferred to
+    run-time.</para>
+
+    <para>The framework uses the service layer to provide an extension
+    mechanism, called hooks. Hooks are services that are used by the framework
+    to provide additional functionality.</para>
+
+    <para>A consistent programming model helps bundle developers cope with
+    scalability issues in many different dimensions – critical because the
+    Framework is intended to run on a variety of devices whose differing
+    hardware characteristics may affect many aspects of a service
+    implementation. Consistent interfaces insure that the software components
+    can be mixed and matched and still result in stable systems.</para>
+
+    <para>The Framework allows bundles to select an available implementation
+    at run-time through the Framework service registry. Bundles register new
+    services, receive notifications about the state of services, or look up
+    existing services to adapt to the current capabilities of the device. This
+    aspect of the Framework makes an installed bundle extensible after
+    deployment: new bundles can be installed for added features or existing
+    bundles can be modified and updated without requiring the system to be
+    restarted.</para>
+
+    <para>The Service Layer is described in <xref
+    linkend="framework.service"/>.</para>
+
+    <para>The interactions between the layers is depicted in <xref
+    linkend="i478247"/>.</para>
+
+    <figure xml:id="i478247">
+      <title>Interactions between layers</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="2.549in"
+                     contentwidth="4.775in" fileref="layer-interactions.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </section>
+
+  <section xml:id="i476430">
+    <title>Reader Level</title>
+
+    <para>This specification is written for the following audiences:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Application developers</para>
+      </listitem>
+
+      <listitem>
+        <para>Framework and system service developers (system
+        developers)</para>
+      </listitem>
+
+      <listitem>
+        <para>Architects</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The OSGi Specifications assume that the reader has at least one year
+    of practical experience in writing Java programs. Experience with embedded
+    systems and server environments is a plus. Application developers must be
+    aware that the OSGi environment is significantly more dynamic than
+    traditional desktop or server environments.</para>
+
+    <para>System developers require a <emphasis>very</emphasis> deep
+    understanding of Java. At least three years of Java coding experience in a
+    system environment is recommended. A Framework implementation will use
+    areas of Java that are not normally encountered in traditional
+    applications. Detailed understanding is required of class loaders, garbage
+    collection, Java 2 security, and Java native library loading.</para>
+
+    <para>Architects should focus on the introduction of each subject. This
+    introduction contains a general overview of the subject, the requirements
+    that influenced its design, and a short description of its operation as
+    well as the entities that are used. The introductory sections require
+    knowledge of Java concepts like classes and interfaces, but should not
+    require coding experience.</para>
+
+    <para>Most of these specifications are equally applicable to application
+    developers and system developers.</para>
+  </section>
+
+  <section>
+    <title>Conventions and Terms</title>
+
+    <section>
+      <title>Typography</title>
+
+      <para>A fixed width, non-serif typeface (<code>sample</code>) indicates
+      the term is a Java package, class, interface, or member name. Text
+      written in this typeface is always related to coding.</para>
+
+      <para>Emphasis (<emphasis>sample</emphasis>) is used the first time an
+      important concept is introduced. Its explanation usually follows
+      directly after the introduction.</para>
+
+      <para>When an example contains a line that must be broken into multiple
+      lines, the <code>«</code> character is used. Spaces must be ignored in
+      this case. For example:</para>
+
+      <programlisting>http://www.acme.com/sp/ <code>«</code>
+file?abc=12</programlisting>
+
+      <para>is equivalent to:</para>
+
+      <programlisting>http://www.acme.com/sp/file?abc=12</programlisting>
+    </section>
+
+    <section xml:id="framework.general.syntax">
+      <title>General Syntax Definitions</title>
+
+      <para>In many cases in these specifications, a syntax must be described.
+      This syntax is based on the following symbols:</para>
+
+      <programlisting>*           Repetition of the previous element zero or
+            more times, e.g. ( ’,’ element ) *
++           Repetition one or more times
+?           Previous element is optional
+( ... )     Grouping
+’...’       Literal
+|           Or
+[...]       Set (one of)
+..          list, e.g. 1..5 is the list 1 2 3 4 5
+&lt;...&gt;       Externally defined token
+~           Not</programlisting>
+
+      <para>The following terminals are pre defined and used throughout the
+      specifications:</para>
+
+      <programlisting>ws              ::= &lt;see Character.isWhitespace&gt;
+digit           ::= [0..9]
+alpha           ::= [a..zA..Z]
+alphanum        ::= alpha | digit
+token           ::= ( alphanum | ’_’ | ’-’ )+
+number          ::= digit+
+jletter         ::= &lt;see <xref linkend="i487605"/>
+                     for JavaLetter&gt;
+jletterordigit  ::= &lt;see <xref linkend="i487605"/>
+                     for JavaLetterOrDigit&gt;
+
+qname           ::= &lt;see <xref linkend="i487605"/>
+                     for fully qualified class names&gt;
+identifier      ::= jletter jletterordigit *
+extended        ::= ( alphanum | ’_’ | ’-’ | ’.’ )+
+quoted-string   ::= ’"’ ( ~["\#x0D#x0A#x00] | ’\"’|’\\’)*’"’
+argument        ::= extended  | quoted-string
+parameter       ::= directive | attribute
+directive       ::= extended ’:=’ argument
+attribute       ::= extended ’=’ argument
+
+unique-name     ::= identifier ( ’.’ identifier )*
+symbolic-name   ::= token('.'token)*
+package-name    ::= unique-name
+
+path            ::= special-chars+ | quoted-string
+special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
+                                         for whitespace&gt;]</programlisting>
+
+      <para>Whitespaces between terminals are ignored unless specifically
+      noted. Any value that contains a space, a comma, colon, semi-colon,
+      equal sign or any other character that is part of a terminal in the
+      grammar must be quoted.</para>
+    </section>
+
+    <section>
+      <title>Object Oriented Terminology</title>
+
+      <para>Concepts like classes, interfaces, objects, and services are
+      distinct but subtly different. For example, “LogService” could mean an
+      instance of the class <code>LogService</code>, could refer to the class
+      <code>LogService</code>, or could indicate the functionality of the
+      overall Log Service. Experts usually understand the meaning from the
+      context, but this understanding requires mental effort. To highlight
+      these subtle differences, the following conventions are used.</para>
+
+      <para>When the class is intended, its name is spelled exactly as in the
+      Java source code and displayed in a fixed-width typeface: for example,
+      the “<code>HttpService</code> class”, “a method in the <code>HttpContext
+      class</code>” or “a <code>javax.servlet.Servlet</code> object”. A class
+      name is used in its fully qualified form, like
+      <code>javax.servlet.Servlet</code>, when the package is not obvious from
+      the context, nor is it in one of the well known java packages like
+      <code>java.lang</code>, <code>java.io</code>, <code>java.util</code> and
+      <code>java.net</code>. Otherwise, the package is omitted like in
+      <code>String</code>.</para>
+
+      <para>In many cases, a type can be used as a scalar but also a
+      collection of that type or an array of that type. In those cases, a
+      simple + will be suffixed to the type. For example <code>String+</code>,
+      indicates that a <code>String</code>, a <code>String[]</code>, and a
+      <code>Collection&lt;String&gt;</code> are all valid forms.</para>
+
+      <para>Exception and permission classes are not followed by the word
+      “object”. Readability is improved when the “object” suffix is avoided.
+      For example, “to throw a Security Exception” and to “to have File
+      Permission” is more readable then “to have a <code>FilePermission</code>
+      object”.</para>
+
+      <para>Permissions can further be qualified with their actions.
+      <code>ServicePermission[com.acme.*,GET|REGISTER]</code> means a
+      <code>ServicePermission</code> with the action <code>GET</code> and
+      <code>REGISTER</code> for all service names starting with
+      <code>com.acme</code>. A <code>ServicePermission[Producer|Consumer,
+      REGISTER]</code> means the <code>ServicePermission</code> for the
+      <code>Producer</code> or <code>Consumer</code> class with
+      <code>REGISTER</code> action.</para>
+
+      <para>When discussing functionality of a class rather than the
+      implementation details, the class name is written as normal text. This
+      convention is often used when discussing services. For example, “the
+      User Admin service” is more readable.</para>
+
+      <para>Some services have the word “Service” embedded in their class
+      name. In those cases, the word “service” is only used once but is
+      written with an upper case S. For example, “the Log Service
+      performs”.</para>
+
+      <para>Service objects are registered with the OSGi Framework.
+      Registration consists of the service object, a set of properties, and a
+      list of classes and interfaces implemented by this service object. The
+      classes and interfaces are used for type safety <emphasis>and</emphasis>
+      naming. Therefore, it is said that a service object is registered
+      <emphasis>under</emphasis> a class/interface. For example, “This service
+      object is registered under <code>PermissionAdmin</code>.”</para>
+    </section>
+
+    <section>
+      <title>Diagrams</title>
+
+      <para>The diagrams in this document illustrate the specification and are
+      not normative. Their purpose is to provide a high-level overview on a
+      single page. The following paragraphs describe the symbols and
+      conventions used in these diagrams.</para>
+
+      <para>Classes or interfaces are depicted as rectangles, as in <xref
+      linkend="i309274"/>. Interfaces are indicated with the qualifier
+      <code>&lt;&lt;interface&gt;&gt;</code> as the first line. The name of
+      the class/interface is indicated in bold when it is part of the
+      specification. Implementation classes are sometimes shown to demonstrate
+      a possible implementation. Implementation class names are shown in plain
+      text. In certain cases class names are abbreviated. This is indicated by
+      ending the abbreviation with a full stop.</para>
+
+      <figure xml:id="i309274">
+        <title>Class and interface symbol</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="0.697in"
+                       contentwidth="6.500in" fileref="type-symbols.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>If an interface or class is used as a service object, it will have
+      a black triangle in the bottom right corner.</para>
+
+      <figure>
+        <title>Service symbol</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="0.500in"
+                       contentwidth="6.500in" fileref="service-symbol.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>Service are crucial interaction elements and they can occur many
+      times in diagrams describing services. Therefore, an alternative service
+      symbol is the triangle. Triangles can be connected in different ways,
+      representing different meanings:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Point</emphasis> – Connections to the point of a
+          triangle indicate the registration. This makes the point of the
+          triangle point to the object that receives the method calls from the
+          service users.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Straight Side</emphasis> – Connections to the
+          straight side indicate service clients. Clients call the methods of
+          the service.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Angled Side</emphasis> – The angled side is reserved
+          for service listeners.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure>
+        <title>Alternative Service symbol</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="1.214in"
+                       contentwidth="6.500in"
+                       fileref="service-symbol-alternative.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>Inheritance (the <code>extends</code> or <code>implements</code>
+      keyword in Java class definitions) is indicated with an arrow. <xref
+      linkend="i313614"/> shows that the <code>AdminPermission</code> class
+      implements or extends the <code>Permission</code> class.</para>
+
+      <figure xml:id="i313614">
+        <title>Inheritance (implements or extends) symbol</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="0.500in"
+                       contentwidth="6.500in" fileref="symbol-inheritance.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>Relations are depicted with a line. The cardinality of the
+      relation is given explicitly when relevant. <xref linkend="i309856"/>
+      shows that each (1) <code>BundleContext</code> object is related to 0 or
+      more <code>BundleListener</code> objects, and that each
+      <code>BundleListener</code> object is related to a single
+      <code>BundleContext</code> object. Relations usually have some
+      description associated with them. This description should be read from
+      left to right and top to bottom, and includes the classes on both sides.
+      For example: “A <code>BundleContext</code> object delivers bundle events
+      to zero or more <code>BundleListener</code> objects.”</para>
+
+      <figure xml:id="i309856">
+        <title>Relations symbol</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="0.500in"
+                       contentwidth="6.500in" fileref="symbol-relations.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>Associations are depicted with a dashed line. Associations are
+      between classes, and an association can be placed on a relation. For
+      example, “every <code>ServiceRegistration</code> object has an
+      associated <code>ServiceReference</code> object.” This association does
+      not have to be a hard relationship, but could be derived in some
+      way.</para>
+
+      <para>When a relationship is qualified by a name or an object, it is
+      indicated by drawing a dotted line perpendicular to the relation and
+      connecting this line to a class box or a description. <xref
+      linkend="i313192"/> shows that the relationship between a
+      <code>UserAdmin</code> class and a <code>Role</code> class is qualified
+      by a name. Such an association is usually implemented with a
+      <code>Dictionary</code> or <code>Map</code> object.</para>
+
+      <figure xml:id="i313192">
+        <title>Associations symbol</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="0.819in"
+                       contentwidth="6.500in"
+                       fileref="symbol-associations.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>Bundles are entities that are visible in normal application
+      programming. For example, when a bundle is stopped, all its services
+      will be unregistered. Therefore, the classes/interfaces that are grouped
+      in bundles are shown on a grey rectangle as is shown in <xref
+      linkend="i429419"/>.</para>
+
+      <figure xml:id="i429419">
+        <title>Bundles</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="1.572in"
+                       contentwidth="7.000in" fileref="bundles.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Key Words</title>
+
+      <para>This specification consistently uses the words
+      <emphasis>can</emphasis>, <emphasis>should,</emphasis> and
+      <emphasis>must</emphasis>. Their meaning is well-defined in:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>must</emphasis> – An absolute requirement. Both the
+          Framework implementation and bundles have obligations that are
+          required to be fulfilled to conform to this specification.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>should</emphasis> – Recommended. It is strongly
+          recommended to follow the description, but reasons may exist to
+          deviate from this recommendation.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>may</emphasis> or <emphasis>can</emphasis> –
+          Optional. Implementations must still be interoperable when these
+          items are not implemented.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Version Information</title>
+
+    <para>This document specifies OSGi Core Release 5. This specification is
+    backward compatible to releases 1, 2, and 3, and 4.</para>
+
+    <para>All Security, Module, Life Cycle and Service Layers are part of the
+    Framework Specification</para>
+
+    <para>Components in this specification have their own specification
+    version, independent of the document release number. The following table
+    summarizes the packages and specification versions for the different
+    subjects.</para>
+
+    <para>When a component is represented in a bundle, a version is needed in
+    the declaration of the Import-Package or Export-Package manifest
+    headers.</para>
+
+    <table>
+      <title>Packages and versions OSGi Core</title>
+
+      <tgroup cols="3">
+        <colspec colnum="1" colwidth="3*"/>
+
+        <colspec colnum="2" colwidth="2.5*"/>
+
+        <colspec colnum="3" colwidth="0.8*"/>
+
+        <thead>
+          <row>
+            <entry>Item</entry>
+
+            <entry>Package</entry>
+
+            <entry>Version</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry>Framework Specification (all layers)</entry>
+
+            <entry><code><xref linkend="org.osgi.framework"/></code></entry>
+
+            <entry><code><xref endterm="org.osgi.framework-version"
+            linkend="framework.api"/></code></entry>
+          </row>
+
+          <row>
+            <entry><link linkend="framework.lifecycle-frameworks">Framework
+            Launching</link></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.framework.launch"/></code></entry>
+
+            <entry><code><xref endterm="org.osgi.framework.launch-version"
+            linkend="framework.lifecycle-frameworks"/></code></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="framework.resource"
+            xrefstyle="template:%n %t"/></entry>
+
+            <entry><code><xref linkend="org.osgi.resource"/></code></entry>
+
+            <entry><code><xref endterm="org.osgi.resource-version"
+            linkend="framework.resource"/></code></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="framework.wiring"
+            xrefstyle="template:%n %t"/></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.framework.wiring"/></code></entry>
+
+            <entry><code><xref endterm="org.osgi.framework.wiring-version"
+            linkend="framework.wiring"/></code></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="framework.namespaces"
+            xrefstyle="template:%n %t"/></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.framework.namespace"/></code></entry>
+
+            <entry><code><xref endterm="org.osgi.framework.namespace-version"
+            linkend="framework.namespaces"/></code></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="framework.startlevel"
+            xrefstyle="template:%n %t"/></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.framework.startlevel"/></code></entry>
+
+            <entry><code><xref endterm="org.osgi.framework.startlevel-version"
+            linkend="framework.startlevel"/></code></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="service.condpermadmin"
+            xrefstyle="template:%n %t"/></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.service.condpermadmin"/></code></entry>
+
+            <entry><code><xref
+            endterm="org.osgi.service.condpermadmin-version"
+            linkend="service.condpermadmin"/></code></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="service.permissionadmin"
+            xrefstyle="template:%n %t"/></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.service.permissionadmin"/></code></entry>
+
+            <entry><code><xref
+            endterm="org.osgi.service.permissionadmin-version"
+            linkend="service.permissionadmin"/></code></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="service.url"
+            xrefstyle="template:%n %t"/></entry>
+
+            <entry><code><xref linkend="org.osgi.service.url"/></code></entry>
+
+            <entry><code><xref endterm="org.osgi.service.url-version"
+            linkend="service.url"/></code></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="framework.resolverhooks"
+            xrefstyle="template:%n %t"/></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.framework.hooks.resolver"/></code></entry>
+
+            <entry><code><xref
+            endterm="org.osgi.framework.hooks.resolver-version"
+            linkend="framework.resolverhooks"/></code></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="framework.bundlehooks"
+            xrefstyle="template:%n %t"/></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.framework.hooks.bundle"/></code></entry>
+
+            <entry><code><xref
+            endterm="org.osgi.framework.hooks.bundle-version"
+            linkend="framework.bundlehooks"/></code></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="framework.servicehooks"
+            xrefstyle="template:%n %t"/></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.framework.hooks.service"/></code></entry>
+
+            <entry><code><xref
+            endterm="org.osgi.framework.hooks.service-version"
+            linkend="framework.servicehooks"/></code></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="framework.weavinghooks"
+            xrefstyle="template:%n %t"/></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.framework.hooks.weaving"/></code></entry>
+
+            <entry><code><xref
+            endterm="org.osgi.framework.hooks.weaving-version"
+            linkend="framework.weavinghooks"/></code></entry>
+          </row>
+
+          <row>
+            <entry><xref linkend="util.tracker"
+            xrefstyle="template:%n %t"/></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.util.tracker"/></code></entry>
+
+            <entry><code><xref endterm="org.osgi.util.tracker-version"
+            linkend="util.tracker"/></code></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Removed remote services chapter to the Compendium</para>
+      </listitem>
+
+      <listitem>
+        <para>Moved the Tracker to the Core</para>
+      </listitem>
+
+      <listitem>
+        <para>Added the <xref linkend="framework.resource"/>. This generified
+        the framework’s requirement-capability model. This affected the module
+        layer and the Wiring API.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added a number of namespaces, see <xref
+        linkend="framework.namespaces"/>.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed xml:id="i487605"><title>Java Language Specification Third
+      Edition</title>http://docs.oracle.com/javase/specs/</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>

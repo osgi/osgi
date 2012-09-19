@@ -1,0 +1,1185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="100"
+         revision="$Id$"
+         version="5" xml:id="service.remoteservices"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Remote Services</title>
+
+  <info>
+    <releaseinfo xml:id="service.remoteservices-version">Version
+    1.0</releaseinfo>
+  </info>
+
+  <para>The OSGi framework provides a <emphasis>local</emphasis> service
+  registry for bundles to communicate through service objects, where a service
+  is an object that one bundle registers and another bundle gets. A
+  <emphasis>distribution provider</emphasis> can use this loose coupling
+  between bundles to <emphasis>export</emphasis> a registered service by
+  creating an<emphasis> endpoint</emphasis>. Vice versa, the distribution
+  provider can create a <emphasis>proxy</emphasis> that accesses an endpoint
+  and then registers this proxy as an <emphasis>imported</emphasis> service. A
+  Framework can contain multiple distribution providers simultaneously, each
+  independently importing and exporting services.</para>
+
+  <para>An endpoint is a communications access mechanisms to a service in
+  another framework, a (web) service, another process, or a queue or topic
+  destination, etc., requiring some protocol for communications. The
+  constellation of the mapping between services and endpoints as well as their
+  communication characteristics is called the <emphasis>topology</emphasis>. A
+  common case for distribution providers is to be present on multiple
+  frameworks importing and exporting services; effectively distributing the
+  service registry.</para>
+
+  <para>The local architecture for remote services is depicted in <xref
+  linkend="i1691895" xrefstyle="template:Figure %n on page %p"/>.</para>
+
+  <figure pgwide="1" xml:id="i1691895">
+    <title>Architecture</title>
+
+    <mediaobject>
+      <imageobject>
+        <imagedata align="center" contentdepth="2.275in"
+                   contentwidth="7.000in" fileref="architecture.svg"/>
+      </imageobject>
+    </mediaobject>
+  </figure>
+
+  <para>Local services imply in-VM call semantics. Many of these semantics
+  cannot be supported over a communications connection, or require special
+  configuration of the communications connection. It is therefore necessary to
+  define a mechanism for bundles to convey their assumptions and requirements
+  to the distribution provider. This chapter defines a number of service
+  properties that a distribution provider can use to establish a topology
+  while adhering to the given constraints.</para>
+
+  <section>
+    <title>The Fallacies</title>
+
+    <para>General abstractions for distributed systems have been tried before
+    and often failed. Well known are the fallacies described in <xref
+    linkend="i1661227"/>:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The network is reliable</para>
+      </listitem>
+
+      <listitem>
+        <para>Latency is zero</para>
+      </listitem>
+
+      <listitem>
+        <para>Bandwidth is infinite</para>
+      </listitem>
+
+      <listitem>
+        <para>The network is secure</para>
+      </listitem>
+
+      <listitem>
+        <para>Topology doesn't change</para>
+      </listitem>
+
+      <listitem>
+        <para>There is one administrator</para>
+      </listitem>
+
+      <listitem>
+        <para>Transport cost is zero</para>
+      </listitem>
+
+      <listitem>
+        <para>The network is homogeneous</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Most fallacies represent non-functional trade-offs that should be
+    considered by administrators, their decisions can then be reflected in the
+    topology. For example, in certain cases limited bandwidth is acceptable
+    and the latency in a datacenter is near zero. However, the reliability
+    fallacy is the hardest because it intrudes into the application code. If a
+    communication channel is lost, the application code needs to take specific
+    actions to recover from this failure.</para>
+
+    <para>This reliability aspect is also addressed with OSGi services because
+    services are dynamic. Failures in the communications layer can be mapped
+    to the unregistration of the imported service. OSGi bundles are already
+    well aware of these dynamics, and a number of programming models have been
+    developed to minimize the complexity of writing these dynamic
+    applications.</para>
+  </section>
+
+  <section xml:id="i1710847">
+    <title>Remote Service Properties</title>
+
+    <para>This section introduces a number of properties that participating
+    bundles can use to convey information to the distribution provider
+    according to this Remote Service specification.</para>
+
+    <para>The following table lists the properties that must be listed by a
+    distribution provider.</para>
+
+    <table>
+      <title>Remote Service Properties registered by the Distribution
+      Provider</title>
+
+      <tgroup cols="3">
+        <colspec colnum="1" colwidth="2.2*"/>
+
+        <colspec colnum="2" colwidth="0.8*"/>
+
+        <colspec colnum="3" colwidth="3.5*"/>
+
+        <thead>
+          <row>
+            <entry>Service Property Name</entry>
+
+            <entry>Type</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>remote.configs.supported</code></entry>
+
+            <entry><code>String+</code></entry>
+
+            <entry><para>Registered by the distribution provider on one of its
+            services to indicate the supported configuration types. See <xref
+            linkend="i1698916"/> and <xref
+            linkend="i1708968"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>remote.intents.supported</code></entry>
+
+            <entry><code>String+</code></entry>
+
+            <entry><para>Registered by the distribution provider on one of its
+            services to indicate the vocabulary of implemented intents. See
+            <xref linkend="i1708968"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>service.imported</code></entry>
+
+            <entry><code>*</code></entry>
+
+            <entry><para>Must be set by a distribution provider to any value
+            when it registers the endpoint proxy as an imported service. A
+            bundle can use this property to filter out imported
+            services.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>service.imported.configs</code></entry>
+
+            <entry><code>String+</code></entry>
+
+            <entry><para>The configuration information used to import this
+            service, as described in <code>service.exported.configs</code>.
+            Any associated properties for this configuration types must be
+            properly mapped to the importing system. For example, a URL in
+            these properties must point to a valid resource when used in the
+            importing framework.</para><para>If multiple configuration types
+            are listed in this property, then they must be synonyms for
+            exactly the same remote endpoint that is used to export this
+            service.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>service.intents</code></entry>
+
+            <entry><code>String+</code></entry>
+
+            <entry><para>A distribution provider must use this property to
+            convey the combined intents of:</para><itemizedlist>
+                <listitem>
+                  <para>The exporting service, and</para>
+                </listitem>
+
+                <listitem>
+                  <para>The intents that the exporting distribution provider
+                  adds.</para>
+                </listitem>
+
+                <listitem>
+                  <para>The intents that the importing distribution provider
+                  adds.</para>
+                </listitem>
+              </itemizedlist></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>The properties for bundles providing services to be exported or
+    require services to be imported are listed alphabetically in the following
+    table. The scenarios that these properties are used in are discussed in
+    later sections.</para>
+
+    <table>
+      <title>Remote Service Properties registered by Exporting bundles</title>
+
+      <tgroup cols="3">
+        <colspec colnum="1" colwidth="2.2*"/>
+
+        <colspec colnum="2" colwidth="0.8*"/>
+
+        <colspec colnum="3" colwidth="3.5*"/>
+
+        <thead>
+          <row>
+            <entry>Service Property Name</entry>
+
+            <entry>Type</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>service.exported.configs</code></entry>
+
+            <entry><code>String+</code></entry>
+
+            <entry><para>A list of configuration types that should be used to
+            export the service. Each configuration type represents the
+            configuration parameters for one or more Endpoints. A distribution
+            provider should create endpoints for each configuration type that
+            it supports. See <xref linkend="i1698916"/> for more details. If
+            this property is not set or empty a distribution provider is free
+            to choose a default configuration type for the
+            service.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>service.exported.intents</code></entry>
+
+            <entry><code>String+</code></entry>
+
+            <entry><para>A list of <emphasis>intents</emphasis> that the
+            distribution provider must implement to distribute the service.
+            Intents listed in this property are reserved for intents that are
+            critical for the code to function correctly, for example, ordering
+            of messages. These intents should not be configurable. For more
+            information about intents, see <xref linkend="i1693415"/>. This
+            property is optional.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>service.exported.intents.extra</code></entry>
+
+            <entry><code>String+</code></entry>
+
+            <entry><para>This property is merged with the
+            <code>service.exported.intents</code> property before the
+            distribution provider interprets the listed intents; it has
+            therefore the same semantics but the property should be
+            configurable so the administrator can choose the intents based on
+            the topology. Bundles should therefore make this property
+            configurable, for example through the Configuration Admin service.
+            See <xref linkend="i1693415"/>. This property is optional. If
+            absent or empty no specific intents are required.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>service.exported.interfaces</code></entry>
+
+            <entry><code>String+</code></entry>
+
+            <entry><para>Setting this property marks this service for export.
+            It defines the interfaces under which this service can be
+            exported. This list must be a subset of the types listed in the
+            <code>objectClass</code> service property. The single value of an
+            asterisk ( <code>’*’, \u002A</code> ) indicates all interfaces in
+            the registration’s <code>objectClass</code> property and ignore
+            the classes. It is strongly recommended to only export interfaces
+            and not concrete classes due to the complexity of creating proxies
+            for some type of concrete classes. See <xref
+            linkend="i1709051"/>.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>service.intents</code></entry>
+
+            <entry><code>String+</code></entry>
+
+            <entry><para>A list of intents that this service implements. A
+            distribution provider must use this property to convey the
+            combined intents of:</para><itemizedlist>
+                <listitem>
+                  <para>The exporting service, and</para>
+                </listitem>
+
+                <listitem>
+                  <para>The intents that the exporting distribution provider
+                  adds.</para>
+                </listitem>
+
+                <listitem>
+                  <para>The intents that the importing distribution provider
+                  adds.</para>
+                </listitem>
+              </itemizedlist><para>To export a service, a distribution
+            provider must expand any qualified intents to include those
+            supported by the endpoint. This can be a subset of all known
+            qualified intents. See <xref linkend="i1693415"/>. this property
+            is optional for registering bundles.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>service.pid</code></entry>
+
+            <entry><code>String+</code></entry>
+
+            <entry><para>Services that are exported should have a
+            <code>service.pid</code> property. The <code>service.pid</code>
+            (PID) is a unique persistent identity for the service, the PID is
+            defined in <emphasis>Persistent Identifier (PID)</emphasis> of
+            <xref linkend="intro.core.release" xrefstyle="template:%t"/>. This
+            property enables a distribution provider to associate persistent
+            proprietary data with a service registration.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>The properties and their treatment by the distribution provider is
+    depicted in <xref linkend="i1698927"/>.</para>
+
+    <figure pgwide="1" xml:id="i1698927">
+      <title>Distribution Service Properties</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="2.668in"
+                     contentwidth="4.909in"
+                     fileref="distribution-properties.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <section xml:id="i1709051">
+      <title>Registering a Service for Export</title>
+
+      <para>A distribution provider should create one or more endpoints for an
+      exported service when the following conditions are met:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The service has the service property
+          <code>service.exported.interfaces</code> set.</para>
+        </listitem>
+
+        <listitem>
+          <para>All intents listed in <code>service.exported.intents</code>,
+          <code>service.exported.intents.extra</code> and
+          <code>service.intents</code> are part of the distributed provider’s
+          vocabulary</para>
+        </listitem>
+
+        <listitem>
+          <para>None of the intents are mutually exclusive.</para>
+        </listitem>
+
+        <listitem>
+          <para>The distribution provider can use the configuration types in
+          <code>service.exported.configs</code> to create one or more
+          endpoints.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The endpoint must at least implement all the intents that are
+      listed in the <code>service.exported.intents</code> and
+      <code>service.exported.intents.extra</code> properties.</para>
+
+      <para>The configuration types listed in the <code>
+      service.exported.configs</code> can contain
+      <emphasis>alternatives</emphasis> and/or <emphasis>synonyms</emphasis>.
+      Alternatives describe different endpoints for the same service while a
+      synonym describes a different configuration type for the same
+      endpoint.</para>
+
+      <para>A distribution provider should create endpoints for each of the
+      configuration types it supports; these configuration types should be
+      alternatives. Synonyms are allowed.</para>
+
+      <para>If no configuration types are recognized, the distribution
+      provider should create an endpoint with a default configuration type
+      except when one of the listed configuration types is
+      <code>&lt;&lt;nodefault&gt;&gt;</code>.</para>
+
+      <para>For more information about the configuration types, see further
+      <xref linkend="i1698916"/>.</para>
+    </section>
+
+    <section>
+      <title>Getting an Imported Service</title>
+
+      <para>An imported service must be a normal service, there are therefore
+      no special rules for getting it. An imported service has a number of
+      additional properties that must be set by the distribution
+      provider.</para>
+
+      <para>If the endpoint for an exported service is imported as an OSGi
+      service in another framework, then the following properties must be
+      treated as special.</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>service.imported</code> – Must be set to some
+          value.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.intents</code> – This must be the combination of
+          the following:</para>
+
+          <itemizedlist>
+            <listitem>
+              <para>The <code>service.intents</code> property on the exported
+              service</para>
+            </listitem>
+
+            <listitem>
+              <para>The <code>service.exported.intents</code> and
+              <code>service.exported.intents.extra</code> properties on the
+              exported service</para>
+            </listitem>
+
+            <listitem>
+              <para>Any additional intents implemented by the distribution
+              providers on both sides.</para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+
+        <listitem>
+          <para><code>service.imported.configs</code> – Contains the
+          configuration types that can be used to import this service. The
+          types listed in this property must be
+          <emphasis>synonymous</emphasis>, that is, they must refer to exactly
+          the same endpoint that is exporting the service. See <xref
+          linkend="i1698916"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.exported.*</code> – Properties starting with
+          <code>service.exported.</code> must not be set on the imported
+          service.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>service.exported.interfaces</code> – This property must
+          not be set, its content is reflected in the <code>objectClass</code>
+          property.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>All other <emphasis>public</emphasis> service properties (not
+      starting with a full stop ( <code>’.’ \u002E</code> )) must be listed on
+      the imported service if they use the basic service property types. If
+      the service property cannot be communicated because, for example, it
+      uses a type that can not be marshalled by the distribution provider then
+      the distribution provider must ignore this property.</para>
+
+      <para>The <code>service.imported</code> property indicates that a
+      service is an imported service. If this service property is set to any
+      value, then the imported service is a proxy for an endpoint. If a bundle
+      wants to filter out imported services, then it can add the following
+      filter:</para>
+
+      <programlisting>(&amp;(!(service.imported=*)) &lt;previousfilter&gt;)</programlisting>
+
+      <para>Distribution providers can also use the <emphasis>Service Hook
+      Service Specification</emphasis> of <xref linkend="intro.core.release"
+      xrefstyle="template:%t"/> to hide services from specific bundles.</para>
+    </section>
+
+    <section xml:id="i1699559">
+      <title>On Demand Import</title>
+
+      <para>The Service Hooks Service Specification of <xref
+      linkend="intro.core.release" xrefstyle="template:%t"/>, allows a
+      distribution provider to detect when a bundle is listening for specific
+      services. Bundles can request imported services with specific intents by
+      building an appropriate filter. The distribution provider can use this
+      information to import a service on demand.</para>
+
+      <para>The following example creates a Service Tracker that is interested
+      in an imported service.</para>
+
+      <programlisting>Filter f = context.createFilter(
+        "(&amp;(objectClasss=com.acme.Foo)"
+    +   "(service.intents=confidentiality))"
+);
+ServiceTracker tracker =
+    new ServiceTracker(context, f, null );
+tracker.open();</programlisting>
+
+      <para>Such a Service Tracker will inform the Listener Hook and will give
+      it the filter expression. If the distribution provider has registered
+      such a hook, it will be informed about the need for an imported
+      <code>com.acme.Foo</code> service that has <code>a</code>
+      <code>confidentiality</code> intent. It can then use some proprietary
+      means to find a service to import that matches the given object class
+      and intent.</para>
+
+      <para>How the distribution provider finds an appropriate endpoint is out
+      of scope for this specification.</para>
+    </section>
+  </section>
+
+  <section xml:id="i1693415">
+    <title>Intents</title>
+
+    <para>An intent is a name for an abstract distribution capability. An
+    intent can be <emphasis>implemented</emphasis> by a service; this can then
+    be reflected in the <code>service.intents</code> property. An intent can
+    also <emphasis>constrain</emphasis> the possible communication mechanisms
+    that a distribution provider can choose to distribute a service. This is
+    reflected in the <code>service.export.intents</code> and
+    <code>service.exported.intents.extra</code> properties.</para>
+
+    <para>The purpose of the intents is to have a
+    <emphasis>vocabulary</emphasis> that is shared between distribution aware
+    bundles and the distribution provider. This vocabulary allows the bundles
+    to express constraints on the export of their services as well as
+    providing information on what intents are implemented by a service.</para>
+
+    <para>Intents have the following syntax</para>
+
+    <programlisting>intent  ::= token ( ’.’ token )?</programlisting>
+
+    <para><emphasis>Qualified intents</emphasis> use a full stop ( <code>’.’
+    \u002E</code> ) to separate the intent from the qualifier. A qualifier
+    provides additional details, however, it implies its prefix. For
+    example:</para>
+
+    <programlisting>confidentiality.message</programlisting>
+
+    <para>This example, can be <emphasis>expanded</emphasis> into
+    <code>confidentiality</code> and <code>confidentiality.message</code>.
+    Qualified intents can be used to provide additional details how an intent
+    is achieved. However, a Distribution Provider must expand any qualified
+    intents to include those supported by the endpoint. This can be a subset
+    of all known qualified intents.</para>
+
+    <para>The concept of intents is derived from the <xref
+    linkend="i1674930"/>. When designing a vocabulary for a distribution
+    provider it is recommended to closely follow the vocabulary of intents
+    defined in the SCA Policy Framework.</para>
+  </section>
+
+  <section>
+    <title>General Usage</title>
+
+    <section>
+      <title>Call by Value</title>
+
+      <para>Normal service semantics are call-by-reference. An object passed
+      as an argument in a service call is a direct reference to that object.
+      Any changes to this object will be shared on both sides of the service
+      registry.</para>
+
+      <para>Distributed services are different. Arguments are normally passed
+      by value, which means that a copy is sent to the remote system, changes
+      to this value are not reflected in the originating framework. When using
+      distributed services, call-by-value should always be assumed by all
+      participants in the distribution chain.</para>
+    </section>
+
+    <section>
+      <title>Data Fencing</title>
+
+      <para>Services are syntactically defined by their Java interfaces. When
+      exposing a service over a remote protocol, typically such an interface
+      is mapped to a protocol-specific interface definition. For example, in
+      CORBA the Java interfaces would be converted to a corresponding IDL
+      definition. This mapping does not always result in a complete
+      solution.</para>
+
+      <para>Therefore, for many practical distributed applications it will be
+      necessary to constrain the possible usage of data types in service
+      interfaces. A distribution provider must at least support interfaces
+      (not classes) that only use the basic types as defined for the service
+      properties. These are the primitive types and their wrappers as well as
+      arrays and collections. See <emphasis>Filter Syntax</emphasis> of <xref
+      linkend="intro.core.release" xrefstyle="template:%t"/> for a list of
+      service property types.</para>
+
+      <para>Distribution providers will in general provide a richer set of
+      types that can be distributed.</para>
+    </section>
+
+    <section>
+      <title>Remote Services Life Cycle</title>
+
+      <para>If a distribution provider has distributed a service, it must
+      closely track any modifications on the exported service. If there is a
+      corresponding imported service, it must closely match any modified
+      service properties in the way that was specified for the registration.
+      If the exported service is unregistered, the endpoint must be withdrawn
+      as soon as possible. If there is a corresponding imported service, then
+      this imported service must also be unregistered expediently.</para>
+    </section>
+
+    <section>
+      <title>Runtime</title>
+
+      <para>An imported service is just like any other service and can be used
+      as such. However, certain non-functional characteristics of this service
+      can differ significantly from what is normal for an in-VM object call.
+      Many of these characteristics can be mapped to the normal service
+      operations. That is, if the connection fails in any way, the service can
+      be unregistered. According to the standard OSGi contract, this means
+      that the users of that service must perform the appropriate cleanup to
+      prevent stale references.</para>
+    </section>
+
+    <section>
+      <title>Exceptions</title>
+
+      <para>It is impossible to guarantee that a service is not used when it
+      is no longer valid. Even with the synchronous callbacks from the Service
+      Listeners, there is always a finite window where a service can be used
+      while the underlying implementation has failed. In a distributed
+      environment, this window can actually be quite large for an imported
+      service.</para>
+
+      <para>Such failure situations must be exposed to the application code
+      that uses a failing imported service. In these occasions, the
+      distribution provider must notify the application by throwing a Service
+      Exception, or subclass thereof, with the reason <code>REMOTE</code>. The
+      Service Exception is a Runtime Exception, it can be handled higher up in
+      the call chain. The cause of this Service Exception must be the
+      Exception that caused the problem.</para>
+
+      <para>A distribution provider should log any problems with the
+      communications layer to the Log Service, if available.</para>
+    </section>
+  </section>
+
+  <section xml:id="i1698916">
+    <title>Configuration Types</title>
+
+    <para>An exported service can have a <code>service.exported.configs</code>
+    service property. This property lists configuration types for endpoints
+    that are provided for this service. Each type provides a specification
+    that defines how the configuration data for one or more endpoints is
+    provided. For example, a hypothetical configuration type could use a
+    service property to hold a URL for the RMI naming registry.</para>
+
+    <para>Configuration types that are not defined by the OSGi Alliance should
+    use a name that follows the reverse <code>capabilities</code> domain name
+    scheme defined in <xref linkend="i1721171"/> for Java packages. For
+    example, <code>com.acme.wsdl</code> would be the proprietary way for the
+    ACME company to specify a WSDL configuration type.</para>
+
+    <section>
+      <title>Configuration Type Properties</title>
+
+      <para>The <code>service.exported.configs</code> and
+      <code>service.imported.configs</code> use the configuration types in
+      very different ways. That is, the <code>service.imported.configs</code>
+      property is not a copy of the <code>service.exported.configs</code> as
+      the name might seem to imply.</para>
+
+      <para xml:id="i1713887">An exporting service can list its desired
+      configuration types in the <code>service.exported.configs</code>
+      property. This property is potentially seen and interpreted by multiple
+      distribution providers. Each of these providers can independently create
+      endpoints from the configuration types. In principle, the
+      <code>service.exported.configs</code> lists
+      <emphasis>alternatives</emphasis> for a single distribution provider and
+      can list <emphasis>synonyms</emphasis> to support alternative
+      distribution providers. If only one of the synonyms is useful, there is
+      an implicit assumption that when the service is exported, only one of
+      the synonyms should be supported by the installed distribution
+      providers. If it is detected that this assumption is violated, then an
+      error should be logged and the conflicting configuration is further
+      ignored.</para>
+
+      <para>The interplay of synonyms and alternatives is depicted in <xref
+      linkend="service.remoteservices-synonyms"/>. In this table, the first
+      columns on the left list different combinations of the configuration
+      types in the <code>service.exported.configs</code> property. The next
+      two columns list two distribution providers that each support an
+      overlapping set of configuration types. The <code>x</code> ’s in this
+      table indicate if a configuration type or distribution provider is
+      active in a line. The description then outlines the issues, if any. It
+      is assumed in this table that hypothetical configuration types
+      <code>net.rmi</code> and <code>com.rmix</code> map to an identical
+      endpoint, just like <code>net.soap</code> and
+      <code>net.soapx</code>.</para>
+
+      <table xml:id="service.remoteservices-synonyms">
+        <title>Synonyms and Alternatives in Exported Configurations</title>
+
+        <tgroup cols="8">
+          <colspec colname="col1" colnum="1" colwidth="1.25*"/>
+
+          <colspec colname="col2" colnum="2" colwidth="1.25*"/>
+
+          <colspec colname="col3" colnum="3" colwidth="1.25*"/>
+
+          <colspec colname="col4" colnum="4" colwidth="1.25*"/>
+
+          <colspec colname="col5" colnum="5" colwidth="1.25*"/>
+
+          <colspec colname="col6" colnum="6" colwidth="4*"/>
+
+          <colspec colnum="7" colwidth="4*"/>
+
+          <colspec colnum="8" colwidth="16*"/>
+
+          <thead>
+            <row>
+              <entry nameend="col5" namest="col1">service.exported.
+              configs</entry>
+
+              <entry colname="col6">Distribution Provider A</entry>
+
+              <entry>Distribution Provider B</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <?dbfo rotated-width="0.8in"?>
+
+              <entry rotate="1"><?dbfo orientation="90"?><code>net.rmi</code></entry>
+
+              <entry rotate="1"><?dbfo orientation="90"?><code>com.rmix</code></entry>
+
+              <entry rotate="1"><?dbfo orientation="90"?><code>net.soap</code></entry>
+
+              <entry rotate="1"><?dbfo orientation="90"?><code>com.soapx</code></entry>
+
+              <entry rotate="1"><?dbfo orientation="90"?>&lt;&lt;no
+              default&gt;&gt;</entry>
+
+              <entry><para>Supports:</para><para><code>net.rmi</code></para><para><code>com.rmix</code></para><para><code>com.soapx</code></para></entry>
+
+              <entry><para>Supports:</para><para><code>net.rmi</code></para><para><code>net.soap</code></para></entry>
+
+              <entry/>
+            </row>
+
+            <row>
+              <entry align="center"><para><code>x</code></para></entry>
+
+              <entry><para/></entry>
+
+              <entry align="center"><para><code>x</code></para></entry>
+
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry><para><code>x</code></para></entry>
+
+              <entry><para/></entry>
+
+              <entry><para><emphasis>Ok</emphasis>, A will create an endpoint
+              for the RMI and SOAP alternatives.</para></entry>
+            </row>
+
+            <row>
+              <entry align="center"><para><code>x</code></para></entry>
+
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry><para><code>x</code></para></entry>
+
+              <entry><para><code>x</code></para></entry>
+
+              <entry><para><emphasis>Configuration error</emphasis>. There is
+              a clash for <code>net.rmi</code> because A and B can both create
+              an endpoint for the same configuration. It is likely that one
+              will fail.</para></entry>
+            </row>
+
+            <row>
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry align="center"><para><code>x</code></para></entry>
+
+              <entry align="center"><para><code>x</code></para></entry>
+
+              <entry><para/></entry>
+
+              <entry><para><code>x</code></para></entry>
+
+              <entry><para/></entry>
+
+              <entry><para><emphasis>Ok</emphasis>, exported on com.soapx by
+              A, the net.soap is ignored.</para></entry>
+            </row>
+
+            <row>
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry align="center"><para><code>x</code></para></entry>
+
+              <entry align="center"><para><code>x</code></para></entry>
+
+              <entry><para/></entry>
+
+              <entry><para><code>x</code></para></entry>
+
+              <entry><para><code>x</code></para></entry>
+
+              <entry><para><emphasis>Synonym error</emphasis> because A and B
+              export to same SOAP endpoint, it is likely that one will
+              fail.</para></entry>
+            </row>
+
+            <row>
+              <entry><para/></entry>
+
+              <entry align="center"><para><code>x</code></para></entry>
+
+              <entry align="center"><para><code>x</code></para></entry>
+
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry><para><code>x</code></para></entry>
+
+              <entry><para><code>x</code></para></entry>
+
+              <entry><para><emphasis>Ok</emphasis>, two alternative endpoints
+              over RMI (by A) and SOAP (by B) are created. This is a typical
+              use case.</para></entry>
+            </row>
+
+            <row>
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry align="center"><para><code>x</code></para></entry>
+
+              <entry align="center"><para><code>x</code></para></entry>
+
+              <entry><para/></entry>
+
+              <entry><para><code>x</code></para></entry>
+
+              <entry><para/></entry>
+
+              <entry><para><emphasis>Ok</emphasis>. Synonyms are used to allow
+              frameworks that have either A or B installed. In this case A
+              exports over SOAP.</para></entry>
+            </row>
+
+            <row>
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry align="center"><para><code>x</code></para></entry>
+
+              <entry align="center"><para><code>x</code></para></entry>
+
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry><para><code>x</code></para></entry>
+
+              <entry><para><emphasis>Ok</emphasis>. Synonyms are used to allow
+              frameworks that have either A or B installed. In this case B
+              exports.</para></entry>
+            </row>
+
+            <row>
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry><para><code>x</code></para></entry>
+
+              <entry><para/></entry>
+
+              <entry><para><emphasis>Ok</emphasis>. A creates an endpoint with
+              default configuration type.</para></entry>
+            </row>
+
+            <row>
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry><para><code>x</code></para></entry>
+
+              <entry><para><code>x</code></para></entry>
+
+              <entry><para><emphasis>Ok</emphasis>. Both A and B each create
+              an endpoint with their default configuration
+              type.</para></entry>
+            </row>
+
+            <row>
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry align="center"><para><code>x</code></para></entry>
+
+              <entry><para><code>x</code></para></entry>
+
+              <entry><para/></entry>
+
+              <entry><para><emphasis>Ok</emphasis>. No endpoint is
+              created.</para></entry>
+            </row>
+
+            <row>
+              <entry><para/></entry>
+
+              <entry align="center"><para>x</para></entry>
+
+              <entry><para/></entry>
+
+              <entry align="center"><para>x</para></entry>
+
+              <entry><para/></entry>
+
+              <entry><para/></entry>
+
+              <entry><para>x</para></entry>
+
+              <entry><para>Provider B does not recognize the configuration
+              types it should therefore use a default configuration
+              type.</para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>To summarize, the following rules apply for a single distribution
+      provider:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Only configuration types that are supported by this
+          distribution provider must be used. All other configuration types
+          must be ignored.</para>
+        </listitem>
+
+        <listitem>
+          <para>All of the supported configuration types must be
+          <emphasis>alternatives</emphasis>, that is, they must map to
+          different endpoints. Synonyms for the same distribution provider
+          should be logged as errors.</para>
+        </listitem>
+
+        <listitem>
+          <para>If a configuration type results in an endpoint that is already
+          in use, then an error should be logged. It is likely then that
+          another distribution provider already had created that
+          endpoint.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>An export of a service can therefore result in multiple endpoints
+      being created. For example, a service can be exported over RMI as well
+      as SOAP. Creating an endpoint can fail, in that case the distribution
+      provider must log this information in the Log Service, if available, and
+      not export the service to that endpoint. Such a failure can, for
+      example, occur when two configuration types are synonym and multiple
+      distribution providers are installed that supporting this type.</para>
+
+      <para>On the importing side, the <code>service.imported.configs</code>
+      property lists configuration types that must refer to the same endpoint.
+      That is, it can list alternative configuration types for this endpoint
+      but all configuration types must result in the same endpoint.</para>
+
+      <para>For example, there are two distribution providers installed at the
+      exporting and importing frameworks. Distribution provider A supports the
+      hypothetical configuration type <code>net.rmi</code> and
+      <code>net.soap</code>. Distribution provider B supports the hypothetical
+      configuration type <code>net.smart</code>. A service is registered that
+      list all three of those configuration types.</para>
+
+      <para>Distribution provider A will create two endpoints, one for RMI and
+      one for SOAP. Distribution provider B will create one endpoint for the
+      smart protocol. The distribution provider A knows how to create the
+      configuration data for the <code>com.acme.rmi</code> configuration type
+      as well and can therefore create a synonymous description of the
+      endpoint in that configuration type. It will therefore set the imported
+      configuration type for the RMI endpoint to:</para>
+
+      <programlisting>service.imported.configs = net.rmi, com.acme.rmi
+net.rmi.url = rmi://172.25.25.109:1099/service-id/24
+com.acme.rmi.address = 172.25.25.109
+com.acme.rmi.port = 1099
+com.acme.rmi.path = service-id/24</programlisting>
+
+      <figure>
+        <title>Relation between imported and exported configuration
+        types</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="3.062in"
+                       contentwidth="4.920in"
+                       fileref="impexp-config-types.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section xml:id="i1708968">
+      <title>Dependencies</title>
+
+      <para>A bundle that uses a configuration type has an implicit dependency
+      on the distribution provider. To make this dependency explicit, the
+      distribution provider must register a service with the following
+      properties:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>remote.intents.supported</code> – (<code>String+</code>)
+          The vocabulary of the given distribution provider.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>remote.configs.supported</code> – (<code>String+</code>)
+          The configuration types that are implemented by the distribution
+          provider.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>A bundle that depends on the availability of specific intents or
+      configuration types can create a service dependency on an anonymous
+      service with the given properties. The following filter is an example of
+      depending on a hypothetical <code>net.rmi</code> configuration
+      type:</para>
+
+      <programlisting>(<code>remote.configs.supported=net.rmi)</code></programlisting>
+    </section>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <para>The distribution provider will be required to invoke methods on any
+    exported service. This implies that it must have the combined set of
+    permissions of all methods it can call. It also implies that the
+    distribution provider is responsible for ensuring that a bundle that calls
+    an imported service is not granted additional permissions through the fact
+    that the distribution provider will call the exported service, not the
+    original invoker.</para>
+
+    <para>The actual mechanism to ensure that bundles can get additional
+    permissions through the distribution is out of scope for this
+    specification. However, distribution providers should provide mechanisms
+    to limit the set of available permissions for a remote invocation,
+    preferably on a small granularity basis.</para>
+
+    <para>One possible means is to use the
+    <code>getAccessControlContext</code> method on the Conditional Permission
+    Admin service to get an Access Control Context that is used in a
+    <code>doPrivileged</code> block where the invocation takes place. The
+    <code>getAccessControlContext</code> method takes a list of signers which
+    could represent the remote bundles that cause an invocation. How these are
+    authenticated is up to the distribution provider.</para>
+
+    <para>A distribution provider is a potential attack point for intruders.
+    Great care should be taken to properly setup the permissions or topology
+    in an environment that requires security.</para>
+
+    <section>
+      <title>Limiting Exports and Imports</title>
+
+      <para>Service registration and getting services is controlled through
+      the <code>ServicePermission</code> class. This permission supports a
+      filter based constructor that can assert service properties. This
+      facility can be used to limit bundles from being able to register
+      exported services or get imported services if they are combined with
+      Conditional Permission Admin’s <code>ALLOW</code> facility. The
+      following example shows how all bundles except from
+      <code>www.acme.com</code> are denied the registration and getting of
+      distributed services.</para>
+
+      <programlisting>DENY {
+   [...BundleLocationCondition("http://www.acme.com/*" "!")]
+   (...ServicePermission "(service.imported=*)" "GET" )
+   (...ServicePermission "(service.exported.interfaces=*)"
+                                "REGISTER" )
+}</programlisting>
+    </section>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Moved out of the core from chapter 13 and moved to this
+        chapter.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed xml:id="i1661227"><title>The Fallacies of Distributed
+      Computing
+      Explained</title>http://www.rgoarchitects.com/Files/fallacies.pdf</bibliomixed>
+
+      <bibliomixed xml:id="i1663801"><title>Service Component Architecture
+      (SCA)</title>http://www.oasis-opencsa.org/</bibliomixed>
+
+      <bibliomixed xml:id="i1674930"><title>SCA Policy Framework
+      specification</title>http://www.oasis-open.org/committees/sca-policy/</bibliomixed>
+
+      <bibliomixed xml:id="i1721171"><title>Java Language
+      Specification</title>http://docs.oracle.com/javase/specs/</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>

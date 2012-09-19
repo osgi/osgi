@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="227.221px" height="80.148px" viewBox="0 0 227.221 80.148" enable-background="new 0 0 227.221 80.148"
+	 xml:space="preserve">
+<rect x="172.68" y="3.708" width="54.3" height="26.58"/>
+<rect x="172.68" y="3.468" width="54.54" height="0.48"/>
+<rect x="226.74" y="3.708" width="0.48" height="26.82"/>
+<rect x="172.44" y="30.048" width="54.54" height="0.48"/>
+<rect x="172.44" y="3.468" width="0.479" height="26.82"/>
+<rect x="170.34" y="1.908" fill="#FFFFFF" width="54.301" height="26.58"/>
+<rect x="170.34" y="1.668" width="54.54" height="0.48"/>
+<rect x="224.4" y="1.908" width="0.479" height="26.82"/>
+<rect x="170.1" y="28.248" width="54.54" height="0.48"/>
+<rect x="170.1" y="1.668" width="0.479" height="26.82"/>
+<text transform="matrix(1 0 0 1 172.6804 9.0476)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">Service</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Provider</tspan></text>
+<rect x="2.58" y="3.708" width="54.36" height="26.58"/>
+<rect x="2.58" y="3.468" width="54.601" height="0.48"/>
+<rect x="56.7" y="3.708" width="0.48" height="26.82"/>
+<rect x="2.34" y="30.048" width="54.601" height="0.48"/>
+<rect x="2.34" y="3.468" width="0.48" height="26.82"/>
+<rect x="0.24" y="1.908" fill="#FFFFFF" width="54.3" height="26.58"/>
+<rect x="0.24" y="1.668" width="54.54" height="0.48"/>
+<rect x="54.3" y="1.908" width="0.48" height="26.82"/>
+<rect x="0" y="28.248" width="54.54" height="0.48"/>
+<rect x="0" y="1.668" width="0.48" height="26.82"/>
+<text transform="matrix(1 0 0 1 2.5798 9.0476)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">Service</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Client</tspan></text>
+<rect x="56.7" y="15.888" width="113.88" height="0.479"/>
+<text transform="matrix(1 0 0 1 115.3191 40.6873)" font-family="'ProductusOSGiBookc'" font-size="7.98">listen</text>
+<text transform="matrix(1 0 0 1 92.3401 6.6472)" font-family="'ProductusOSGiBookc'" font-size="7.98">Call Direction -&gt;</text>
+<text transform="matrix(1 0 0 1 120.7195 23.448)" font-family="'ProductusOSGiBookc'" font-size="7.98">register</text>
+<text transform="matrix(1 0 0 1 93.7195 23.448)" font-family="'ProductusOSGiBookc'" font-size="7.98">get</text>
+<rect x="87.66" y="53.328" width="54.3" height="26.58"/>
+<rect x="87.66" y="53.088" width="54.54" height="0.48"/>
+<rect x="141.72" y="53.328" width="0.479" height="26.82"/>
+<rect x="87.42" y="79.668" width="54.541" height="0.48"/>
+<rect x="87.42" y="53.088" width="0.48" height="26.82"/>
+<rect x="85.26" y="51.528" fill="#FFFFFF" width="54.359" height="26.58"/>
+<rect x="85.26" y="51.288" width="54.601" height="0.48"/>
+<rect x="139.38" y="51.528" width="0.479" height="26.82"/>
+<rect x="85.02" y="77.868" width="54.6" height="0.48"/>
+<rect x="85.02" y="51.288" width="0.479" height="26.82"/>
+<text transform="matrix(1 0 0 1 87.6599 58.6677)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">Service</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Listener</tspan></text>
+<rect x="113.4" y="15.888" width="0.479" height="35.88"/>
+<polyline fill="#FFFFFF" points="106.5,8.988 106.5,23.208 120.72,16.128 "/>
+<polyline points="106.74,8.988 106.74,23.208 106.62,23.448 106.38,23.028 120.6,15.948 120.84,15.948 121.32,16.188 120.84,16.368 
+	106.62,23.448 106.26,23.628 106.26,8.988 "/>
+<polyline points="120.6,16.368 106.38,9.228 106.26,8.988 106.26,8.628 106.62,8.808 120.84,15.948 "/>
+</svg>

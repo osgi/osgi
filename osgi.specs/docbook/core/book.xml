@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<book revision="$Id$" version="5"
+      xmlns="http://docbook.org/ns/docbook"
+      xmlns:xlink="http://www.w3.org/1999/xlink"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
+      xmlns:ns5="http://www.w3.org/2000/svg"
+      xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+      xmlns:ns3="http://www.w3.org/1999/xhtml"
+      xmlns:ns="http://docbook.org/ns/docbook">
+  <info>
+    <title>OSGi Core</title>
+
+    <author>
+      <orgname>The OSGi Alliance</orgname>
+    </author>
+
+    <releaseinfo>Release 5</releaseinfo>
+
+    <pubdate>March 2012</pubdate>
+
+    <copyright>
+      <year>2000, 2012</year>
+
+      <holder>OSGi Alliance</holder>
+    </copyright>
+  </info>
+
+  <xi:include href="../license/osgi.specification.license.2.0.xml"/>
+
+  <xi:include href="001/introduction.xml"/>
+
+  <xi:include href="002/framework.security.xml"/>
+
+  <xi:include href="003/framework.module.xml"/>
+
+  <xi:include href="004/framework.lifecycle.xml"/>
+
+  <xi:include href="005/framework.service.xml"/>
+
+  <xi:include href="006/framework.resource.xml"/>
+
+  <xi:include href="007/framework.wiring.xml"/>
+
+  <xi:include href="008/framework.namespaces.xml"/>
+
+  <xi:include href="009/framework.startlevel.xml"/>
+
+  <xi:include href="010/framework.api.xml"/>
+
+  <xi:include href="050/service.condpermadmin.xml"/>
+
+  <xi:include href="051/service.permissionadmin.xml"/>
+
+  <xi:include href="052/service.url.xml"/>
+
+  <xi:include href="053/framework.resolverhooks.xml"/>
+
+  <xi:include href="054/framework.bundlehooks.xml"/>
+
+  <xi:include href="055/framework.servicehooks.xml"/>
+
+  <xi:include href="056/framework.weavinghooks.xml"/>
+
+  <xi:include href="../701/util.tracker.xml"/>
+</book>

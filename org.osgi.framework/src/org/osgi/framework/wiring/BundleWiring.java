@@ -302,9 +302,9 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 * <li>Only the resource names for resources in bundle wirings will be
 	 * returned. The names of resources visible to a bundle wiring's parent
 	 * class loader, such as the bootstrap class loader, must not be included in
-	 * the result.
+	 * the result.</li>
 	 * <li>Only established wires will be examined for resources. This method
-	 * must not cause new wires for dynamic imports to be established.
+	 * must not cause new wires for dynamic imports to be established.</li>
 	 * </ul>
 	 * 
 	 * @param path The path name in which to look. The path is always relative

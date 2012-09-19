@@ -118,8 +118,8 @@ public class MonitorPermission extends Permission {
 	 * <p>
 	 * For example, the following targets are valid:
 	 * {@code com.mycomp.myapp/queue_length}, {@code com.mycomp.myapp/*},
-	 * {@code com.mycomp.&#42;/*}, {@code &#42;/*}, {@code &#42;/queue_length},
-	 * {@code &#42;/queue*}.
+	 * <code>com.mycomp.&#42;/*</code>, <code>&#42;/*</code>,
+	 * <code>&#42;/queue_length</code>, <code>&#42;/queue*</code>.
 	 * <p>
 	 * The following targets are invalid: {@code *.myapp/queue_length},
 	 * {@code com.*.myapp/*}, {@code *}.
@@ -128,8 +128,7 @@ public class MonitorPermission extends Permission {
 	 * {@code read}, {@code publish}, {@code startjob}, {@code reset},
 	 * {@code switchevents}, or the combination of these separated by commas.
 	 * String constants are defined in this class for each valid action. Passing
-	 * {@code &quot;*&quot;} as the action string is equivalent to listing all
-	 * actions.
+	 * {@code "*"} as the action string is equivalent to listing all actions.
 	 * 
 	 * @param statusVariable the identifier of the {@code StatusVariable} in
 	 *        [Monitorable_id]/[StatusVariable_id] format
@@ -300,14 +299,14 @@ public class MonitorPermission extends Permission {
 	 * This method returns {@code false} if and only if at least one of the
 	 * following conditions are fulfilled for the specified permission:
 	 * <ul>
-	 * <li>it is not a {@code MonitorPermission}
-	 * <li>it has a broader set of actions allowed than this one
+	 * <li>it is not a {@code MonitorPermission}</li>
+	 * <li>it has a broader set of actions allowed than this one</li>
 	 * <li>it allows initiating time based monitoring jobs with a lower minimal
-	 * sampling interval
+	 * sampling interval</li>
 	 * <li>the target set of {@code Monitorable}s is not the same nor a subset
-	 * of the target set of {@code Monitorable}s of this permission
+	 * of the target set of {@code Monitorable}s of this permission</li>
 	 * <li>the target set of {@code StatusVariable}s is not the same nor a
-	 * subset of the target set of {@code StatusVariable}s of this permission
+	 * subset of the target set of {@code StatusVariable}s of this permission</li>
 	 * </ul>
 	 * 
 	 * @param p the permission to be checked

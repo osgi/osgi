@@ -36,14 +36,14 @@ package org.osgi.service.monitor;
  * <p>
  * The events posted by {@code MonitorAdmin} contain the following properties:
  * <ul>
- * <li>{@code mon.monitorable.pid}: The identifier of the {@code Monitorable}
+ * <li>{@code mon.monitorable.pid}: The identifier of the {@code Monitorable}</li>
  * <li>{@code mon.statusvariable.name}: The identifier of the
- * {@code StatusVariable} within the given {@code Monitorable}
+ * {@code StatusVariable} within the given {@code Monitorable}</li>
  * <li>{@code mon.statusvariable.value}: The value of the {@code StatusVariable}
- * , represented as a {@code String}
+ * , represented as a {@code String}</li>
  * <li>{@code mon.listener.id}: The identifier of the initiator of the
  * monitoring job (only present if the event was generated due to a monitoring
- * job)
+ * job)</li>
  * </ul>
  * <p>
  * Most of the methods require either a Monitorable ID or a Status Variable path
@@ -97,9 +97,9 @@ public interface MonitorAdmin {
 	 * are returned where the following two conditions are met:
 	 * <ul>
 	 * <li>the specified {@code Monitorable} holds a {@code MonitorPermission}
-	 * for the status variable with the {@code publish} action present
+	 * for the status variable with the {@code publish} action present</li>
 	 * <li>the caller holds a {@code MonitorPermission} for the status variable
-	 * with the {@code read} action present
+	 * with the {@code read} action present</li>
 	 * </ul>
 	 * All other status variables are silently ignored, they are omitted from
 	 * the result.
@@ -124,9 +124,9 @@ public interface MonitorAdmin {
 	 * where the following two conditions are met:
 	 * <ul>
 	 * <li>the specified {@code Monitorable} holds a {@code MonitorPermission}
-	 * for the status variable with the {@code publish} action present
+	 * for the status variable with the {@code publish} action present</li>
 	 * <li>the caller holds a {@code MonitorPermission} for the status variable
-	 * with the {@code read} action present
+	 * with the {@code read} action present</li>
 	 * </ul>
 	 * All other status variables are silently ignored, their names are omitted
 	 * from the list.

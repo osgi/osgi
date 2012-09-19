@@ -59,21 +59,21 @@ package org.osgi.service.prefs;
  * form <i>n </i>'s absolute path name, with the initial slash character (if
  * present) removed. Note that:
  * <ul>
- * <li>No relative path names begin with the slash character.
- * <li>Every node's path name relative to itself is the empty string.
+ * <li>No relative path names begin with the slash character.</li>
+ * <li>Every node's path name relative to itself is the empty string.</li>
  * <li>Every node's path name relative to its parent is its node name (except
- * for the root node, which does not have a parent).
+ * for the root node, which does not have a parent).</li>
  * <li>Every node's path name relative to the root is its absolute path name
- * with the initial slash character removed.
+ * with the initial slash character removed.</li>
  * </ul>
  * 
  * <p>
  * Note finally that:
  * <ul>
- * <li>No path name contains multiple consecutive slash characters.
+ * <li>No path name contains multiple consecutive slash characters.</li>
  * <li>No path name with the exception of the root's absolute path name end in
- * the slash character.
- * <li>Any string that conforms to these two rules is a valid path name.
+ * the slash character.</li>
+ * <li>Any string that conforms to these two rules is a valid path name.</li>
  * </ul>
  * 
  * <p>
@@ -640,13 +640,13 @@ public interface Preferences {
 	/**
 	 * Returns this node's absolute path name. Note that:
 	 * <ul>
-	 * <li>Root node - The path name of the root node is {@code "/"}.
+	 * <li>Root node - The path name of the root node is {@code "/"}.</li>
 	 * <li>Slash at end - Path names other than that of the root node may not
-	 * end in slash ({@code '/'}).
-	 * <li>Unusual names -{@code "."} and {@code ".."} have <i>no </i> special
-	 * significance in path names.
+	 * end in slash ({@code '/'}).</li>
+	 * <li>Unusual names -{@code "."} and {@code ".."} have <i>no</i> special
+	 * significance in path names.</li>
 	 * <li>Illegal names - The only illegal path names are those that contain
-	 * multiple consecutive slashes, or that end in slash and are not the root.
+	 * multiple consecutive slashes, or that end in slash and are not the root.</li>
 	 * </ul>
 	 * 
 	 * @return this node's absolute path name.

@@ -387,7 +387,8 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *     Bundle-SymbolicName: com.acme.module.test; fragment-attachment:=&quot;resolve-time&quot;
+	 *     Bundle-SymbolicName: com.acme.module.test;
+	 *       fragment-attachment:=&quot;resolve-time&quot;
 	 * </pre>
 	 * 
 	 * @see #FRAGMENT_ATTACHMENT_DIRECTIVE
@@ -543,7 +544,8 @@ public interface Constants {
 	 * like:
 	 * 
 	 * <pre>
-	 *     Import-Package: org.osgi.framework; bundle-symbolic-name=&quot;com.acme.module.test&quot;
+	 *     Import-Package: org.osgi.framework;
+	 *       bundle-symbolic-name=&quot;com.acme.module.test&quot;
 	 * </pre>
 	 * 
 	 * @see #IMPORT_PACKAGE

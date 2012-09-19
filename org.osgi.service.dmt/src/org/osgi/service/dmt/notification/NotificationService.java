@@ -16,7 +16,8 @@
 
 package org.osgi.service.dmt.notification;
 
-import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
 
 /**
  * NotificationService enables sending aynchronous notifications to a management
@@ -79,14 +80,14 @@ public interface NotificationService {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code UNAUTHORIZED} when the remote server rejected the
-	 *         request due to insufficient authorization <li>
+	 *         request due to insufficient authorization</li><li>
 	 *         {@code ALERT_NOT_ROUTED} when the alert can not be routed to the
-	 *         given principal <li>{@code REMOTE_ERROR} in case of communication
-	 *         problems between the device and the destination <li>
-	 *         {@code COMMAND_FAILED} for unspecified errors encountered while
-	 *         attempting to complete the command <li>
+	 *         given principal</li><li>{@code REMOTE_ERROR} in case of
+	 *         communication problems between the device and the destination
+	 *         </li><li> {@code COMMAND_FAILED} for unspecified errors
+	 *         encountered while attempting to complete the command</li><li>
 	 *         {@code FEATURE_NOT_SUPPORTED} if the underlying management
-	 *         protocol doesn't support asynchronous notifications
+	 *         protocol doesn't support asynchronous notifications</li>
 	 *         </ul>
 	 * @throws SecurityException if the caller does not have the required
 	 *         {@code AlertPermission} with a target matching the

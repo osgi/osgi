@@ -82,16 +82,16 @@ public class DmtException extends Exception {
 	 * the following situations:
 	 * <ul>
 	 * <li>an interior node operation is requested for a leaf node, or vice
-	 * versa (e.g. trying to retrieve the children of a leaf node)
-	 * <li>an attempt is made to create a node where the parent is a leaf node
-	 * <li>an attempt is made to rename or delete the root node of the tree
-	 * <li>an attempt is made to rename or delete the root node of the session
+	 * versa (e.g. trying to retrieve the children of a leaf node)</li>
+	 * <li>an attempt is made to create a node where the parent is a leaf node</li>
+	 * <li>an attempt is made to rename or delete the root node of the tree</li>
+	 * <li>an attempt is made to rename or delete the root node of the session</li>
 	 * <li>a write operation (other than setting the ACL) is performed in a
 	 * non-atomic write session on a node provided by a plugin that is read-only
-	 * or does not support non-atomic writing
-	 * <li>a node is copied to its descendant
+	 * or does not support non-atomic writing</li>
+	 * <li>a node is copied to its descendant</li>
 	 * <li>the ACL of the root node is changed not to include Add rights for all
-	 * principals
+	 * principals</li>
 	 * </ul>
 	 * <p>
 	 * This error code corresponds to the OMA DM response status code 405
@@ -213,17 +213,17 @@ public class DmtException extends Exception {
 	 * objects of the affected nodes, for example in the following situations:
 	 * <ul>
 	 * <li>creating, deleting or renaming a permanent node, or modifying its
-	 * type
+	 * type</li>
 	 * <li>creating an interior node where the meta-node defines it as a leaf,
-	 * or vice versa
+	 * or vice versa</li>
 	 * <li>any operation on a node which does not have the required access type
 	 * (e.g. executing a node that lacks the {@code MetaNode.CMD_EXECUTE} access
-	 * type)
+	 * type)</li>
 	 * <li>any node creation or deletion that would violate the cardinality
-	 * constraints
+	 * constraints</li>
 	 * <li>any leaf node value setting that would violate the allowed formats,
-	 * values, mime types, etc.
-	 * <li>any node creation that would violate the allowed node names
+	 * values, mime types, etc.</li>
+	 * <li>any node creation that would violate the allowed node names</li>
 	 * </ul>
 	 * <p>
 	 * This error code can also be used to indicate any other meta data
@@ -241,14 +241,14 @@ public class DmtException extends Exception {
 	 * The requested command failed because the target URI or node name is
 	 * {@code null} or syntactically invalid. This covers the following cases:
 	 * <ul>
-	 * <li>the URI or node name ends with the '\' or '/' character
+	 * <li>the URI or node name ends with the '\' or '/' character</li>
 	 * <li>the URI is an empty string (only invalid if the method does not
-	 * accept relative URIs)
+	 * accept relative URIs)</li>
 	 * <li>the URI contains the segment &quot;{@code .}&quot; at a position
-	 * other than the beginning of the URI
+	 * other than the beginning of the URI</li>
 	 * <li>the node name is &quot;{@code ..}&quot; or the URI contains such a
-	 * segment
-	 * <li>the node name contains an unescaped '/' character
+	 * segment</li>
+	 * <li>the node name contains an unescaped '/' character</li>
 	 * </ul>
 	 * <p>
 	 * See the {@link Uri#encode(String)} method for support on escaping invalid

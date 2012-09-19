@@ -235,7 +235,7 @@ public interface BundleRevision extends BundleReference, Resource {
 	 * Returns the special types of this bundle revision. The bundle revision
 	 * type values are:
 	 * <ul>
-	 * <li>{@link #TYPE_FRAGMENT}
+	 * <li>{@link #TYPE_FRAGMENT}</li>
 	 * </ul>
 	 * 
 	 * A bundle revision may be more than one type at a time. A type code is

@@ -247,7 +247,7 @@ public interface ApplicationContext {
 	 * <ol>
 	 * <li>If {@code service} is not a {@code ServiceFactory}, an
 	 * {@code IllegalArgumentException} is thrown if {@code service} is not an
-	 * {@code instanceof} all the classes named.
+	 * {@code instanceof} all the classes named.</li>
 	 * <li>The Framework adds these service properties to the specified
 	 * {@code Dictionary} (which may be {@code null}): a property named
 	 * {@link org.osgi.framework.Constants#SERVICE_ID} identifying the
@@ -255,15 +255,15 @@ public interface ApplicationContext {
 	 * {@link org.osgi.framework.Constants#OBJECTCLASS} containing all the
 	 * specified classes. If any of these properties have already been specified
 	 * by the registering bundle, their values will be overwritten by the
-	 * Framework.
+	 * Framework.</li>
 	 * <li>The service is added to the Framework service registry and may now be
-	 * used by others.
+	 * used by others.</li>
 	 * <li>A service event of type
 	 * {@link org.osgi.framework.ServiceEvent#REGISTERED} is fired. This event
 	 * triggers the corresponding {@link ApplicationServiceEvent} to be
-	 * delivered to the applications that registered the appropriate listener.
+	 * delivered to the applications that registered the appropriate listener.</li>
 	 * <li>A {@code ServiceRegistration} object for this registration is
-	 * returned.
+	 * returned.</li>
 	 * </ol>
 	 * 
 	 * @param clazzes The class names under which the service can be located.
@@ -288,10 +288,10 @@ public interface ApplicationContext {
 	 * @throws java.lang.IllegalArgumentException If one of the following is
 	 *         true:
 	 *         <ul>
-	 *         <li>{@code service} is {@code null}. <li>{@code service} is not a
-	 *         {@code ServiceFactory} object and is not an instance of all the
-	 *         named classes in {@code clazzes}. <li>{@code properties} contains
-	 *         case variants of the same key name.
+	 *         <li>{@code service} is {@code null}.</li><li>{@code service} is
+	 *         not a {@code ServiceFactory} object and is not an instance of all
+	 *         the named classes in {@code clazzes}.</li><li>{@code properties}
+	 *         contains case variants of the same key name.</li>
 	 *         </ul>
 	 * @throws NullPointerException if {@code clazzes} is {@code null}
 	 * 
@@ -334,10 +334,10 @@ public interface ApplicationContext {
 	 * @throws java.lang.IllegalArgumentException If one of the following is
 	 *         true:
 	 *         <ul>
-	 *         <li>{@code service} is {@code null}. <li>{@code service} is not a
-	 *         {@code ServiceFactory} object and is not an instance of the named
-	 *         class in {@code clazz}. <li>{@code properties} contains case
-	 *         variants of the same key name.
+	 *         <li>{@code service} is {@code null}.</li><li>{@code service} is
+	 *         not a {@code ServiceFactory} object and is not an instance of the
+	 *         named class in {@code clazz}.</li><li>{@code properties} contains
+	 *         case variants of the same key name.</li>
 	 *         </ul>
 	 * @throws NullPointerException if {@code clazz} is {@code null}
 	 * 

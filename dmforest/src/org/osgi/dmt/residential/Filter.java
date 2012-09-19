@@ -60,9 +60,10 @@ import org.osgi.dmt.ddf.Scope;
  * <p>
  * The attribute name in the LDAP filter can only reference a direct leaf node
  * of the node in the set {@code N} or an interior node with the DDF type
- * {@link DmtConstants#DDF_LIST} with leaf nodes as children, i.e. a
- * <em>LIST</em>. A LIST of primitives must be treated in the filter as a multi
- * valued property, any of its values satisfy an assertion on that attribute.
+ * {@link org.osgi.service.dmt.DmtConstants#DDF_LIST} with leaf nodes as
+ * children, i.e. a <em>LIST</em>. A LIST of primitives must be treated in the
+ * filter as a multi valued property, any of its values satisfy an assertion on
+ * that attribute.
  * <p>
  * Attribute names must not contains a slash, that is, it is only possible to
  * assert values directly below the node selected by the {@code target}.

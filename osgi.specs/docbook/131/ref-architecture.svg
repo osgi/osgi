@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="163.439px" height="37.954px" viewBox="0 0 163.439 37.954" enable-background="new 0 0 163.439 37.954"
+	 xml:space="preserve">
+<rect x="2.58" y="8.448" width="54.36" height="27"/>
+<rect x="2.58" y="8.208" width="54.601" height="0.479"/>
+<rect x="56.7" y="8.448" width="0.48" height="27.239"/>
+<rect x="2.34" y="35.208" width="54.601" height="0.479"/>
+<rect x="2.34" y="8.208" width="0.48" height="27.24"/>
+<rect x="0.24" y="6.647" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="0.24" y="6.408" width="54.54" height="0.479"/>
+<rect x="54.3" y="6.647" width="0.48" height="27.24"/>
+<rect x="0" y="33.409" width="54.54" height="0.479"/>
+<rect x="0" y="6.408" width="0.48" height="27.239"/>
+<text transform="matrix(1 0 0 1 2.5798 13.7886)" font-family="'ProductusSemibold'" font-size="7.98">ACS</text>
+<polyline points="101.34,13.728 101.34,10.788 102.06,11.208 105.78,13.308 106.56,13.788 105.84,14.208 102.12,16.368 
+	101.34,16.848 101.34,15.888 101.58,15.468 105.3,13.308 105.84,14.208 105.3,14.208 101.58,12.107 102.06,11.208 102.36,11.628 
+	102.36,13.728 "/>
+<rect x="101.34" y="13.728" width="1.021" height="2.16"/>
+<polyline points="101.82,13.728 101.82,11.628 105.54,13.728 101.82,15.888 "/>
+<rect x="56.7" y="13.488" width="0.24" height="0.479"/>
+<rect x="56.94" y="13.488" width="3.96" height="0.479"/>
+<rect x="67.38" y="13.488" width="0.24" height="0.479"/>
+<rect x="67.62" y="13.488" width="8.28" height="0.479"/>
+<rect x="82.38" y="13.488" width="0.24" height="0.479"/>
+<rect x="82.62" y="13.488" width="8.28" height="0.479"/>
+<rect x="97.32" y="13.488" width="0.239" height="0.479"/>
+<rect x="97.56" y="13.488" width="4.021" height="0.479"/>
+<polyline points="108.899,8.027 163.2,8.027 163.2,35.027 108.899,35.027 "/>
+<rect x="108.899" y="7.788" width="54.54" height="0.479"/>
+<rect x="162.96" y="8.027" width="0.479" height="27.24"/>
+<rect x="108.66" y="34.788" width="54.54" height="0.479"/>
+<rect x="108.66" y="7.788" width="0.479" height="27.239"/>
+<rect x="106.56" y="6.228" fill="#FFFFFF" width="54.301" height="27"/>
+<rect x="106.56" y="5.988" width="54.54" height="0.479"/>
+<rect x="160.62" y="6.228" width="0.479" height="27.239"/>
+<rect x="106.32" y="32.988" width="54.54" height="0.479"/>
+<rect x="106.32" y="5.988" width="0.479" height="27.239"/>
+<text transform="matrix(1 0 0 1 108.8992 13.3081)" font-family="'ProductusSemibold'" font-size="7.98">CPE</text>
+<polyline points="62.1,27.888 62.1,30.948 61.32,30.467 57.6,28.308 56.82,27.888 57.66,27.409 61.38,25.308 62.1,24.888 
+	62.1,25.788 61.86,26.208 58.14,28.308 57.66,27.409 58.14,27.409 61.86,29.567 61.32,30.467 61.08,30.047 61.08,27.888 "/>
+<rect x="61.08" y="25.788" width="1.021" height="2.101"/>
+<polyline points="61.62,27.888 61.62,30.047 57.9,27.888 61.62,25.788 "/>
+<rect x="106.56" y="27.647" width="0.239" height="0.48"/>
+<rect x="102.54" y="27.647" width="4.021" height="0.48"/>
+<rect x="95.82" y="27.647" width="0.239" height="0.48"/>
+<rect x="87.54" y="27.647" width="8.28" height="0.48"/>
+<rect x="80.82" y="27.647" width="0.24" height="0.48"/>
+<rect x="72.6" y="27.647" width="8.22" height="0.48"/>
+<rect x="65.88" y="27.647" width="0.24" height="0.48"/>
+<rect x="61.86" y="27.647" width="4.02" height="0.48"/>
+<text transform="matrix(1 0 0 1 69.6594 6.6479)" font-family="'ProductusSemibold'" font-size="7.98">get/set/...</text>
+<text transform="matrix(1 0 0 1 71.8796 35.5688)" font-family="'ProductusSemibold'" font-size="7.98">Inform</text>
+<text transform="matrix(1 0 0 1 65.4001 22.8481)" font-family="'ProductusSemibold'" font-size="7.98">SOAP/HTTP</text>
+</svg>

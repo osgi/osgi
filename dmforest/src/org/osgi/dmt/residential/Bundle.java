@@ -1,9 +1,13 @@
 
 package org.osgi.dmt.residential;
 
-import static org.osgi.dmt.ddf.Scope.SCOPE.*;
-import java.util.*;
-import org.osgi.dmt.ddf.*;
+import static org.osgi.dmt.ddf.Scope.SCOPE.A;
+import java.util.Date;
+import org.osgi.dmt.ddf.LIST;
+import org.osgi.dmt.ddf.MAP;
+import org.osgi.dmt.ddf.Mutable;
+import org.osgi.dmt.ddf.Opt;
+import org.osgi.dmt.ddf.Scope;
 
 /**
  * The management node for a Bundle. It provides access to the life cycle
@@ -280,7 +284,7 @@ public interface Bundle {
 	 * <li>{@code osgi.wiring.bundle}</li>
 	 * <li>{@code osgi.wiring.package}</li>
 	 * <li>{@code osgi.wiring.host}</li>
-	 * <ul>
+	 * </ul>
 	 * <p>
 	 * As the Core specification allows custom name spaces this list can be more
 	 * extensive.

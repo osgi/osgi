@@ -93,8 +93,8 @@ public class Position {
 		 * hemisphere). This method first normalizes the latitude and longitude
 		 * between +/- 180. If the |latitude| > 90, then the longitude is added
 		 * 180 and the latitude is normalized to fit +/-90. (Example are with
-		 * degrees though radians are used) <br> No normalization takes place
-		 * when either lon or lat is null.
+		 * degrees though radians are used.) No normalization takes place when
+		 * either lon or lat is null.
 		 */
 		normalizeLatLon: {
 			if (lat == null || lon == null) {

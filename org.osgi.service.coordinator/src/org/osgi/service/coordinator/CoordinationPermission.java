@@ -499,9 +499,8 @@ public final class CoordinationPermission extends BasicPermission {
 	}
 
 	/**
-	 * Called by {@code <@link CoordinationPermission#implies(Permission)>}.
-	 * This method is only called on a requested permission which cannot have a
-	 * filter set.
+	 * Called by {@link CoordinationPermission#implies(Permission)}. This method
+	 * is only called on a requested permission which cannot have a filter set.
 	 * 
 	 * @return a map of properties for this permission.
 	 */

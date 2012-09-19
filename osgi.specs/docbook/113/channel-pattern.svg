@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="220.141px" height="64.506px" viewBox="0 0 220.141 64.506" enable-background="new 0 0 220.141 64.506"
+	 xml:space="preserve">
+<rect x="2.58" y="2.04" width="54.36" height="27"/>
+<rect x="2.58" y="1.8" width="54.601" height="0.479"/>
+<rect x="56.7" y="2.04" width="0.48" height="27.24"/>
+<rect x="2.34" y="28.8" width="54.601" height="0.479"/>
+<rect x="2.34" y="1.8" width="0.48" height="27.24"/>
+<rect x="0.24" y="0.24" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="0.24" width="54.54" height="0.48"/>
+<rect x="54.3" y="0.24" width="0.48" height="27.24"/>
+<rect x="0" y="27" width="54.54" height="0.48"/>
+<rect x="0" width="0.48" height="27.24"/>
+<text transform="matrix(1 0 0 1 2.5798 7.3799)" font-family="'ProductusOSGiBookc'" font-size="7.98">Publisher</text>
+<rect x="165.6" y="2.04" width="54.3" height="27"/>
+<rect x="165.6" y="1.8" width="54.54" height="0.479"/>
+<rect x="219.66" y="2.04" width="0.48" height="27.24"/>
+<rect x="165.36" y="28.8" width="54.54" height="0.479"/>
+<rect x="165.36" y="1.8" width="0.479" height="27.24"/>
+<rect x="163.2" y="0.24" fill="#FFFFFF" width="54.36" height="27"/>
+<rect x="163.2" width="54.601" height="0.48"/>
+<rect x="217.32" y="0.24" width="0.479" height="27.24"/>
+<rect x="162.96" y="27" width="54.601" height="0.48"/>
+<rect x="162.96" width="0.479" height="27.24"/>
+<text transform="matrix(1 0 0 1 165.5994 7.3799)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;service&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 165.5994 15.8398)" font-family="'ProductusSemibold'" font-size="7.98">Event Handler</text>
+<text transform="matrix(1 0 0 1 71.0999 40.3809)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 23.6394 34.0205)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<rect x="177.18" y="28.32" width="0.479" height="14.64"/>
+<rect x="35.4" y="42.479" width="142.021" height="0.48"/>
+<rect x="35.4" y="28.32" width="0.479" height="14.4"/>
+<rect x="80.52" y="37.021" width="54.359" height="27"/>
+<rect x="80.52" y="36.78" width="54.6" height="0.479"/>
+<rect x="134.64" y="37.021" width="0.479" height="27.239"/>
+<rect x="80.28" y="63.78" width="54.6" height="0.479"/>
+<rect x="80.28" y="36.78" width="0.479" height="27.24"/>
+<rect x="78.18" y="35.22" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="78.18" y="34.979" width="54.54" height="0.48"/>
+<rect x="132.24" y="35.22" width="0.48" height="27.24"/>
+<rect x="77.94" y="61.979" width="54.54" height="0.48"/>
+<rect x="77.94" y="34.979" width="0.479" height="27.24"/>
+<text transform="matrix(1 0 0 1 80.5198 42.3604)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;service&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 80.5198 50.8203)" font-family="'ProductusSemibold'" font-size="7.98">Event Admin</text>
+<text transform="matrix(1 0 0 1 138.781 40.3809)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 180.0603 34.0195)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<polyline points="219.9,14.4 205.74,28.56 219.9,28.56 "/>
+<polyline points="220.081,14.58 205.92,28.74 205.74,28.8 205.14,28.8 219.72,14.22 "/>
+<rect x="205.74" y="28.32" width="14.4" height="0.48"/>
+<polyline points="219.66,28.56 219.66,14.4 219.72,14.22 220.14,13.8 220.14,28.56 "/>
+<polyline points="134.88,49.8 120.72,64.021 134.88,64.021 "/>
+<polyline points="135.06,49.979 120.9,64.2 120.72,64.26 120.12,64.26 120.541,63.84 134.7,49.62 "/>
+<rect x="120.72" y="63.78" width="14.398" height="0.479"/>
+<polyline points="134.64,64.021 134.64,49.8 134.7,49.62 135.12,49.2 135.12,64.021 "/>
+<text transform="matrix(1 0 0 1 155.7869 52.4395)" font-family="'ProductusBook'" font-size="7.98">handleEvent</text>
+<text transform="matrix(1 0 0 1 37.8 52.4395)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">sendEvent</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">postEvent</tspan></text>
+</svg>

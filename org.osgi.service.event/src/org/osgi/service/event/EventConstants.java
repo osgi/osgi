@@ -48,7 +48,7 @@ public interface EventConstants {
 	 * 
 	 * <p>
 	 * The value of this property must be of type {@code String},
-	 * {@code String[]}, or {@code Collection&lt;String&gt;}.
+	 * {@code String[]}, or {@code Collection<String>}.
 	 * 
 	 * @see Event
 	 */
@@ -87,7 +87,7 @@ public interface EventConstants {
 	 * 
 	 * <p>
 	 * The value of this property must be of type {@code String},
-	 * {@code String[]}, or {@code Collection&lt;String&gt;}.
+	 * {@code String[]}, or {@code Collection<String>}.
 	 * 
 	 * @see #DELIVERY_ASYNC_ORDERED
 	 * @see #DELIVERY_ASYNC_UNORDERED

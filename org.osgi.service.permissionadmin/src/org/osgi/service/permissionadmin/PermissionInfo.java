@@ -217,9 +217,9 @@ public class PermissionInfo {
 	 * </pre>
 	 * 
 	 * where <i>name</i> and <i>actions</i> are strings that must be encoded for
-	 * proper parsing. Specifically, the {@code &quot;},{@code \}, carriage
-	 * return, and line feed characters must be escaped using {@code \&quot;},
-	 * {@code \\},{@code \r}, and {@code \n}, respectively.
+	 * proper parsing. Specifically, the {@code "},{@code \}, carriage return,
+	 * and line feed characters must be escaped using {@code \"}, {@code \\},
+	 * {@code \r}, and {@code \n}, respectively.
 	 * 
 	 * <p>
 	 * The encoded string contains no leading or trailing whitespace characters.

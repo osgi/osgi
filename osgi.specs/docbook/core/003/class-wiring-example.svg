@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="292.859px" height="95.328px" viewBox="0 0 292.859 95.328" enable-background="new 0 0 292.859 95.328"
+	 xml:space="preserve">
+<rect x="2.64" y="3.828" width="55.2" height="27"/>
+<rect x="2.64" y="3.588" width="55.44" height="0.479"/>
+<rect x="57.6" y="3.828" width="0.48" height="27.239"/>
+<rect x="2.4" y="30.588" width="55.44" height="0.479"/>
+<rect x="2.4" y="3.588" width="0.48" height="27.24"/>
+<rect x="0.24" y="2.027" fill="#FFFFFF" width="55.199" height="27"/>
+<rect x="0.24" y="1.788" width="55.439" height="0.479"/>
+<rect x="55.2" y="2.027" width="0.479" height="27.24"/>
+<rect x="0" y="28.788" width="55.439" height="0.479"/>
+<rect x="0" y="1.788" width="0.479" height="27.239"/>
+<text transform="matrix(0.9504 0 0 1 2.6404 9.168)" font-family="'ProductusOSGiBookc'" font-size="7.98">Bundle</text>
+<rect x="115.98" y="3.407" width="54.36" height="27"/>
+<rect x="115.98" y="3.168" width="54.601" height="0.479"/>
+<rect x="170.1" y="3.407" width="0.479" height="27.24"/>
+<rect x="115.74" y="30.168" width="54.601" height="0.479"/>
+<rect x="115.74" y="3.168" width="0.479" height="27.239"/>
+<rect x="113.64" y="1.607" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="113.64" y="1.368" width="54.54" height="0.479"/>
+<rect x="167.7" y="1.607" width="0.479" height="27.24"/>
+<rect x="113.4" y="28.368" width="54.54" height="0.479"/>
+<rect x="113.4" y="1.368" width="0.48" height="27.239"/>
+<text transform="matrix(0.9504 0 0 1 115.9802 8.748)" font-family="'ProductusOSGiBookc'" font-size="7.98">Wire</text>
+<rect x="229.38" y="3.828" width="54.3" height="26.579"/>
+<rect x="229.38" y="3.588" width="54.539" height="0.479"/>
+<rect x="283.44" y="3.828" width="0.479" height="26.819"/>
+<rect x="229.14" y="30.168" width="54.54" height="0.479"/>
+<rect x="229.14" y="3.588" width="0.479" height="26.819"/>
+<rect x="226.98" y="2.027" fill="#FFFFFF" width="54.36" height="26.58"/>
+<rect x="226.98" y="1.788" width="54.601" height="0.479"/>
+<rect x="281.1" y="2.027" width="0.479" height="26.82"/>
+<rect x="226.74" y="28.368" width="54.601" height="0.479"/>
+<rect x="226.74" y="1.788" width="0.479" height="26.819"/>
+<text transform="matrix(0.9504 0 0 1 229.3811 9.168)" font-family="'ProductusOSGiBookc'" font-size="7.98">Constraint</text>
+<rect x="115.98" y="60.107" width="54.36" height="27"/>
+<rect x="115.98" y="59.868" width="54.601" height="0.479"/>
+<rect x="170.1" y="60.107" width="0.479" height="27.24"/>
+<rect x="115.74" y="86.868" width="54.601" height="0.479"/>
+<rect x="115.74" y="59.868" width="0.479" height="27.239"/>
+<rect x="113.64" y="58.309" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="113.64" y="58.066" width="54.54" height="0.48"/>
+<rect x="167.7" y="58.309" width="0.479" height="27.239"/>
+<rect x="113.4" y="85.066" width="54.54" height="0.48"/>
+<rect x="113.4" y="58.066" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 115.9802 65.4482)" font-family="'ProductusOSGiBookc'" font-size="7.98">Package Instance</text>
+<rect x="56.7" y="23.088" width="57.18" height="0.479"/>
+<rect x="170.1" y="15.947" width="57.12" height="0.479"/>
+<rect x="56.7" y="8.868" width="57.18" height="0.479"/>
+<rect x="141.72" y="30.168" width="0.48" height="0.239"/>
+<rect x="141.72" y="30.407" width="0.48" height="28.561"/>
+<text transform="matrix(1 0 0 1 74.7 6.7676)" font-family="'ProductusBook'" font-size="7.98">imports</text>
+<text transform="matrix(1 0 0 1 74.1599 20.9277)" font-family="'ProductusBook'" font-size="7.98">exports</text>
+<text transform="matrix(1 0 0 1 59.76 6.6475)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 109.0198 7.3076)" font-family="'ProductusBook'" font-size="7.98">*</text>
+<text transform="matrix(1 0 0 1 59.76 20.9873)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 109.0198 21.6475)" font-family="'ProductusBook'" font-size="7.98">*</text>
+<text transform="matrix(1 0 0 1 177.4397 14.3867)" font-family="'ProductusBook'" font-size="7.98">constrained by</text>
+<text transform="matrix(1 0 0 1 172.26 14.3867)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 221.5198 14.3271)" font-family="'ProductusBook'" font-size="7.98">*</text>
+<text transform="matrix(1 0 0 1 145.9192 56.3877)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 145.0193 35.1475)" font-family="'ProductusBook'" font-size="7.98">*</text>
+<text transform="matrix(1 0 0 1 145.8591 45.7666)" font-family="'ProductusBook'" font-size="7.98">for</text>
+<rect x="229.38" y="60.107" width="54.3" height="27"/>
+<rect x="229.38" y="59.868" width="54.539" height="0.479"/>
+<rect x="283.44" y="60.107" width="0.479" height="27.24"/>
+<rect x="229.14" y="86.868" width="54.54" height="0.479"/>
+<rect x="229.14" y="59.868" width="0.479" height="27.239"/>
+<rect x="226.98" y="58.309" fill="#FFFFFF" width="54.36" height="27"/>
+<rect x="226.98" y="58.066" width="54.601" height="0.48"/>
+<rect x="281.1" y="58.309" width="0.479" height="27.239"/>
+<rect x="226.74" y="85.066" width="54.601" height="0.48"/>
+<rect x="226.74" y="58.066" width="0.479" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 229.3811 65.4482)" font-family="'ProductusOSGiBookc'" font-size="7.98">...</text>
+<rect x="237.419" y="68.088" width="55.2" height="27"/>
+<rect x="237.419" y="67.848" width="55.439" height="0.48"/>
+<rect x="292.38" y="68.088" width="0.479" height="27.24"/>
+<rect x="237.18" y="94.848" width="55.439" height="0.48"/>
+<rect x="237.18" y="67.848" width="0.479" height="27.24"/>
+<rect x="235.02" y="66.288" fill="#FFFFFF" width="55.2" height="27"/>
+<rect x="235.02" y="66.048" width="55.439" height="0.479"/>
+<rect x="289.98" y="66.288" width="0.479" height="27.239"/>
+<rect x="234.78" y="93.048" width="55.44" height="0.479"/>
+<rect x="234.78" y="66.048" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 237.4202 73.4277)" font-family="'ProductusOSGiBookc'" font-size="7.98">...</text>
+<polyline points="255.36,41.928 252.06,41.928 252.24,41.268 255.36,30.348 258.48,41.268 258.66,41.928 258,41.928 257.52,41.567 
+	254.88,32.328 255.84,32.027 255.84,32.328 253.2,41.567 252.24,41.268 252.72,40.907 255.36,40.907 "/>
+<rect x="255.36" y="40.907" width="2.641" height="1.021"/>
+<polyline points="255.36,41.447 252.72,41.447 255.36,32.208 258,41.447 "/>
+<rect x="255.12" y="41.928" width="0.479" height="16.801"/>
+</svg>

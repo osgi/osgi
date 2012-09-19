@@ -32,7 +32,8 @@
  * <p>
  * {@code  Import-Package: org.osgi.service.cm; version="[1.5,1.6)"}
  * 
- * @version $Id$
+ * @version 1.5
+ * @author $Id$
  */
 
 package org.osgi.service.cm;

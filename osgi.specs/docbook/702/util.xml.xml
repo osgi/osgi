@@ -1,0 +1,545 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="702"
+         revision="$Id$"
+         version="5" xml:id="util.xml" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>XML Parser Service Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.util.xml-version"
+    linkend="org.osgi.util.xml"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The Extensible Markup Language (XML) has become a popular method of
+    describing data. As more bundles use XML to describe their data, a common
+    XML Parser becomes necessary in an embedded environment in order to reduce
+    the need for space. Not all XML Parsers are equivalent in function,
+    however, and not all bundles have the same requirements on an XML
+    parser.</para>
+
+    <para>This problem was addressed in the Java API for XML Processing, see
+    <xref linkend="i1255594"/> for Java 2 Standard Edition and Enterprise
+    Edition. This specification addresses how the classes defined in JAXP can
+    be used in an OSGi framework. It defines how:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Implementations of XML parsers can become available to other
+        bundles</para>
+      </listitem>
+
+      <listitem>
+        <para>Bundles can find a suitable parser</para>
+      </listitem>
+
+      <listitem>
+        <para>A standard parser in a JAR can be transformed to a bundle</para>
+      </listitem>
+    </itemizedlist>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Standards</emphasis> – Leverage existing standards
+          in Java based XML parsing: JAXP, SAX and DOM</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Unmodified JAXP code</emphasis> – Run unmodified
+          JAXP code</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Simple</emphasis> – It should be easy to provide a
+          SAX or DOM parser as well as easy to find a matching parser</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Multiple</emphasis> – It should be possible to have
+          multiple implementations of parsers available</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Extendable</emphasis> – It is likely that parsers
+          will be extended in the future with more functionality</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>XMLParserActivator</emphasis> – A utility class that
+          registers a parser factory from declarative information in the
+          Manifest file.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>SAXParserFactory</emphasis> – A class that can
+          create an instance of a <code>SAXParser</code> class.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>DocumentBuilderFactory</emphasis> – A class that can
+          create an instance of a <code>DocumentBuilder</code> class.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>SAXParser</emphasis> – A parser, instantiated by a
+          <code>SaxParserFactory</code> object, that parses according to the
+          SAX specifications.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>DocumentBuilder</emphasis> – A parser, instantiated
+          by a <code>DocumentBuilderFactory</code>, that parses according to
+          the DOM specifications.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure pgwide="1">
+        <title>XML Parsing diagram</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="3.442in"
+                       contentwidth="4.958in" fileref="xml-classes.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Operations</title>
+
+      <para>A bundle containing a SAX or DOM parser is started. This bundle
+      registers a <code>SAXParserFactory</code> and/or a
+      <code>DocumentBuilderFactory</code> service object with the Framework.
+      Service registration properties describe the features of the parsers to
+      other bundles. A bundle that needs an XML parser will get a
+      <code>SAXParserFactory</code> or <code>DocumentBuilderFactory</code>
+      service object from the Framework service registry. This object is then
+      used to instantiate the requested parsers according to their
+      specifications.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>JAXP</title>
+
+    <para>XML has become very popular in the last few years because it allows
+    the interchange of complex information between different parties. Though
+    only a single XML standard exists, there are multiple APIs to XML parsers,
+    primarily of two types:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>The Simple API for XML (SAX1 and SAX2)</para>
+      </listitem>
+
+      <listitem>
+        <para>Based on the Document Object Model (DOM 1 and 2)</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Both standards, however, define an abstract API that can be
+    implemented by different vendors.</para>
+
+    <para>A given XML Parser implementation may support either or both of
+    these parser types by implementing the <code>org.w3c.dom</code> and/or
+    <code>org.xml.sax</code> packages. In addition, parsers have
+    characteristics such as whether they are validating or non-validating
+    parsers and whether or not they are name-space aware.</para>
+
+    <para>An application which uses a specific XML Parser must code to that
+    specific parser and become coupled to that specific implementation. If the
+    parser has implemented <xref linkend="i1255594"/>, however, the
+    application developer can code against SAX or DOM and let the runtime
+    environment decide which parser implementation is used.</para>
+
+    <para>JAXP uses the concept of a <emphasis>factory</emphasis>. A factory
+    object is an object that abstracts the creation of another object. JAXP
+    defines a <code>DocumentBuilderFactory</code> and a
+    <code>SAXParserFactory</code> class for this purpose.</para>
+
+    <para>JAXP is implemented in the <code>javax.xml.parsers</code> package
+    and provides an abstraction layer between an application and a specific
+    XML Parser implementation. Using JAXP, applications can choose to use any
+    JAXP compliant parser without changing any code, simply by changing a
+    System property which specifies the SAX- and DOM factory class
+    names.</para>
+
+    <para>In JAXP, the default factory is obtained with a static method in the
+    <code>SAXParserFactory</code> or <code>DocumentBuilderFactory</code>
+    class. This method will inspect the associated System property and create
+    a new instance of that class.</para>
+  </section>
+
+  <section>
+    <title>XML Parser service</title>
+
+    <para>The current specification of JAXP has the limitation that only one
+    of each type of parser factories can be registered. This specification
+    specifies how multiple <code>SAXParserFactory</code> objects and
+    <code>DocumentBuilderFactory</code> objects can be made available to
+    bundles simultaneously.</para>
+
+    <para>Providers of parsers should register a JAXP factory object with the
+    OSGi service registry under the factory class name. Service properties are
+    used to describe whether the parser:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Is validating</para>
+      </listitem>
+
+      <listitem>
+        <para>Is name-space aware</para>
+      </listitem>
+
+      <listitem>
+        <para>Has additional features</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>With this functionality, bundles can query the OSGi service registry
+    for parsers supporting the specific functionality that they
+    require.</para>
+  </section>
+
+  <section xml:id="i1259424">
+    <title>Properties</title>
+
+    <para>Parsers must be registered with a number of properties that qualify
+    the service. In this specification, the following properties are
+    specified:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.util.xml.XMLParserActivator.PARSER_NAMESPACEAWARE"
+        xrefstyle="hyperlink"/> – The registered parser is aware of
+        name-spaces. Name-spaces allow an XML document to consist of
+        independently developed DTDs. In an XML document, they are recognized
+        by the <code>xmlns</code> attribute and names prefixed with an
+        abbreviated name-space identifier, like: <code>&lt;xsl:if
+        ...&gt;</code>. The type is a <code>Boolean</code> object that must be
+        <code>true</code> when the parser supports name-spaces. All other
+        values, or the absence of the property, indicate that the parser does
+        not implement name-spaces.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.util.xml.XMLParserActivator.PARSER_VALIDATING"
+        xrefstyle="hyperlink"/> – The registered parser can read the DTD and
+        can validate the XML accordingly. The type is a <code>Boolean</code>
+        object that must <code>true</code> when the parser is validating. All
+        other values, or the absence of the property, indicate that the parser
+        does not validate.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Getting a Parser Factory</title>
+
+    <para>Getting a parser factory requires a bundle to get the appropriate
+    factory from the service registry. In a simple case in which a
+    non-validating, non-name-space aware parser would suffice, it is best to
+    use <code>getServiceReference(String)</code>.</para>
+
+    <programlisting>DocumentBuilder getParser(BundleContext context) 
+    throws Exception {
+    ServiceReference ref = context.getServiceReference(
+        DocumentBuilderFactory.class.getName() );
+    if ( ref == null )
+        return null;
+    DocumentBuilderFactory factory = 
+        (DocumentBuilderFactory) context.getService(ref);
+    return factory.newDocumentBuilder();
+}</programlisting>
+
+    <para>In a more demanding case, the filtered version allows the bundle to
+    select a parser that is validating and name-space aware:</para>
+
+    <programlisting>SAXParser getParser(BundleContext context) 
+    throws Exception {
+    ServiceReference refs[] = context.getServiceReferences(
+        SAXParserFactory.class.getName(),
+            "(&amp;(parser.namespaceAware=true)"
+        +   "(parser.validating=true))" );
+    if ( refs == null )
+        return null;
+    SAXParserFactory factory = 
+        (SAXParserFactory) context.getService(refs[O]);
+    return factory.newSAXParser();
+}</programlisting>
+  </section>
+
+  <section>
+    <title>Adapting a JAXP Parser to OSGi</title>
+
+    <para>If an XML Parser supports JAXP, then it can be converted to an OSGi
+    aware bundle by adding a <code>BundleActivator</code> class which
+    registers an XML Parser Service. The utility
+    <code>org.osgi.util.xml.XMLParserActivator</code> class provides this
+    function and can be added (copied, not referenced) to any XML Parser
+    bundle, or it can be extended and customized if desired.</para>
+
+    <section>
+      <title>JAR Based Services</title>
+
+      <para>Its functionality is based on the definition of the <xref
+      linkend="i1267674"/>. This specification defines a concept for service
+      providers. A JAR file can contain an implementation of an abstractly
+      defined service. The class (or classes) implementing the service are
+      designated from a file in the <code>META-INF/services</code> directory.
+      The name of this file is the same as the abstract service class.</para>
+
+      <para>The content of the UTF-8 encoded file is a list of class names
+      separated by new lines. White space is ignored and the number sign
+      (<code>’#’ or \u0023</code>) is the comment character.</para>
+
+      <para>JAXP uses this service provider mechanism. It is therefore likely
+      that vendors will place these service files in the
+      <code>META-INF/services</code> directory.</para>
+    </section>
+
+    <section>
+      <title>XMLParserActivator</title>
+
+      <para>To support this mechanism, the XML Parser service provides a
+      utility class that should be normally delivered with the OSGi framework
+      implementation. This class is a Bundle Activator and must start when the
+      bundle is started. This class is copied into the parser bundle, and
+      <emphasis>not</emphasis> imported.</para>
+
+      <para>The <code>start</code> method of the utility
+      <code>BundleActivator</code> class will look in the
+      <code>META-INF/services</code> service provider directory for the files
+      <code>javax.xml.parsers.SAXParserFactory (</code> <xref
+      linkend="org.osgi.util.xml.XMLParserActivator.SAXFACTORYNAME"
+      xrefstyle="hyperlink"/> ) or
+      <code>javax.xml.parsers.DocumentBuilderFactory (</code> <xref
+      linkend="org.osgi.util.xml.XMLParserActivator.DOMFACTORYNAME"
+      xrefstyle="hyperlink"/> ). The full path name is specified in the
+      constants <xref
+      linkend="org.osgi.util.xml.XMLParserActivator.SAXCLASSFILE"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.util.xml.XMLParserActivator.DOMCLASSFILE"
+      xrefstyle="hyperlink"/> respectively.</para>
+
+      <para>If either of these files exist, the utility
+      <code>BundleActivator</code> class will parse the contents according to
+      the specification. A service provider file can contain multiple class
+      names. Each name is read and a new instance is created. The following
+      example shows the possible content of such a file:</para>
+
+      <programlisting># ACME example SAXParserFactory file
+com.acme.saxparser.SAXParserFast            # Fast
+com.acme.saxparser.SAXParserValidating      # Validates</programlisting>
+
+      <para>Both the <code>javax.xml.parsers.SAXParserFactory</code> and the
+      <code>javax.xml.parsers.DocumentBuilderFactory</code> provide methods
+      that describe the features of the parsers they can create. The
+      <code>XMLParserActivator</code> activator will use these methods to set
+      the values of the properties, as defined in <xref linkend="i1259424"/>,
+      that describe the instances.</para>
+    </section>
+
+    <section>
+      <title>Adapting an Existing JAXP Compatible Parser</title>
+
+      <para>To incorporate this bundle activator into a XML Parser Bundle, do
+      the following:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>If SAX parsing is supported, create a
+          <code>/META-INF/services/javax.xml.parsers.SAXParserFactory</code>
+          resource file containing the class names of the
+          <code>SAXParserFactory</code> classes.</para>
+        </listitem>
+
+        <listitem>
+          <para>If DOM parsing is supported, create a
+          <code>/META-INF/services/javax.xml.parsers.DocumentBuilderFactory</code>
+          file containing the fully qualified class names of the
+          <code>DocumentBuilderFactory</code> classes.</para>
+        </listitem>
+
+        <listitem>
+          <para>Create manifest file which imports the packages
+          <code>org.w3c.dom</code>, <code>org.xml.sax</code>, and
+          <code>javax.xml.parsers</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Add a Bundle-Activator header to the manifest pointing to the
+          <code>XMLParserActivator</code>, the sub-class that was created, or
+          a fully custom one.</para>
+        </listitem>
+
+        <listitem>
+          <para>If the parsers support attributes, properties, or features
+          that should be registered as properties so they can be searched,
+          extend the <code>XMLParserActivator</code> class and override <xref
+          linkend="org.osgi.util.xml.XMLParserActivator.setSAXProperties-javax.xml.parsers.SAXParserFactory-Hashtable-"
+          xrefstyle="hyperlink"/> and <xref
+          linkend="org.osgi.util.xml.XMLParserActivator.setDOMProperties-javax.xml.parsers.DocumentBuilderFactory-Hashtable-"
+          xrefstyle="hyperlink"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para>Ensure that custom properties are put into the
+          <code>Hashtable</code> object. JAXP does not provide a way for
+          <code>XMLParserActivator</code> to query the parser to find out what
+          properties were added.</para>
+        </listitem>
+
+        <listitem>
+          <para>Bundles that extend the <code>XMLParserActivator</code> class
+          must call the original methods via super to correctly initialize the
+          XML Parser Service properties.</para>
+        </listitem>
+
+        <listitem>
+          <para>Compile this class into the bundle.</para>
+        </listitem>
+
+        <listitem>
+          <para>Install the new XML Parser Service bundle.</para>
+        </listitem>
+
+        <listitem>
+          <para>Ensure that the
+          <code>org.osgi.util.xml.XMLParserActivator</code> class is contained
+          in the bundle.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Usage of JAXP</title>
+
+    <para>A single bundle should export the JAXP, SAX, and DOM APIs. The
+    version of contained packages must be appropriately labeled. JAXP 1.1 or
+    later is required which references SAX 2 and DOM 2. See <xref
+    linkend="i1255594"/> for the exact version dependencies.</para>
+
+    <para>This specification is related to related packages as defined in the
+    JAXP 1.1 document. The following table contains the expected minimum
+    versions.</para>
+
+    <table>
+      <title>JAXP 1.1 minimum package versions</title>
+
+      <tgroup cols="2">
+        <thead>
+          <row>
+            <entry>Package</entry>
+
+            <entry>Minimum Version</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><para>javax.xml.parsers</para></entry>
+
+            <entry><para>1.1</para></entry>
+          </row>
+
+          <row>
+            <entry><para>org.xml.sax</para></entry>
+
+            <entry><para>2.0</para></entry>
+          </row>
+
+          <row>
+            <entry><para>org.xml.sax.helpers</para></entry>
+
+            <entry><para>2.0</para></entry>
+          </row>
+
+          <row>
+            <entry><para>org.xsml.sax.ext</para></entry>
+
+            <entry><para>1.0</para></entry>
+          </row>
+
+          <row>
+            <entry><para>org.w3c.dom</para></entry>
+
+            <entry><para>2.0</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>The Xerces project from the Apache group, <xref
+    linkend="i1286146"/>, contains a number libraries that implement the
+    necessary APIs. These libraries can be wrapped in a bundle to provide the
+    relevant packages.</para>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <para>A centralized XML parser is likely to see sensitive information from
+    other bundles. Provisioning an XML parser should therefore be limited to
+    trusted bundles. This security can be achieved by providing
+    <code>ServicePermission[javax.xml.parsers.DocumentBuilderFactory</code> |
+    <code>javax.xml.parsers.SAXFactory,REGISTER]</code> to only trusted
+    bundles.</para>
+
+    <para>Using an XML parser is a common function, and
+    <code>ServicePermission[javax.xml.parsers.DOMParserFactory</code> |
+    <code>javax.xml.parsers.SAXFactory, GET]</code> should not be
+    restricted.</para>
+
+    <para>The XML parser bundle will need <code>FilePermission[&lt;&lt;ALL
+    FILES&gt;&gt;,READ]</code> for parsing of files because it is not known
+    beforehand where those files will be located. This requirement further
+    implies that the XML parser is a system bundle that must be fully
+    trusted.</para>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.util.xml.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed><title>XML</title>http://www.w3.org/XML</bibliomixed>
+
+      <bibliomixed><title>SAX</title>http://www.saxproject.org/</bibliomixed>
+
+      <bibliomixed><title>DOM Java Language
+      Binding</title>http://www.w3.org/TR/REC-DOM-Level-1/java-language-binding.html</bibliomixed>
+
+      <bibliomixed
+      xml:id="i1255594"><title>JAXP</title>http://jaxp.java.net/</bibliomixed>
+
+      <bibliomixed xml:id="i1267674"><title>JAR File specification, services
+      directory</title>http://download.oracle.com/javase/1.4.2/docs/guide/jar/jar.html</bibliomixed>
+
+      <bibliomixed xml:id="i1286146"><title>Xerces 2 Java
+      Parser</title>http://xerces.apache.org/xerces2-j/</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>
