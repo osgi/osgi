@@ -925,7 +925,7 @@ actual para elements -->
     <xsl:choose>
 
       <xsl:when test="($sequence='odd' or $sequence='first') and $position='left'">
-        <xsl:if test="$pageclass != 'titlepage'">
+        <xsl:if test="$pageclass != 'titlepage' and $pageclass != 'lot'">
           <xsl:apply-templates select="." mode="titleabbrev.markup"/>
           <xsl:if test="d:info/d:releaseinfo">
             <xsl:text> </xsl:text>
@@ -939,7 +939,7 @@ actual para elements -->
       </xsl:when>
 
       <xsl:when test="($sequence='even' or $sequence='blank') and $position='right'">
-        <xsl:if test="$pageclass != 'titlepage'">
+        <xsl:if test="$pageclass != 'titlepage' and $pageclass != 'lot'">
           <fo:retrieve-marker retrieve-class-name="section.head.marker"
                               retrieve-position="first-including-carryover"
                               retrieve-boundary="page-sequence"/>
@@ -1133,12 +1133,20 @@ actual para elements -->
       <xsl:when test="($sequence='odd' or $sequence='first') and $position='left'">
         <xsl:if test="$pageclass != 'titlepage'">
           <xsl:apply-templates select="/*[1]" mode="title.markup"/>
+          <xsl:if test="/*[1]/d:info/d:releaseinfo">
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="/*[1]/d:info/d:releaseinfo/node()"/>
+          </xsl:if>
         </xsl:if>
       </xsl:when>
 
       <xsl:when test="($sequence='even' or $sequence='blank') and $position='right'">
         <xsl:if test="$pageclass != 'titlepage'">
           <xsl:apply-templates select="/*[1]" mode="title.markup"/>
+          <xsl:if test="/*[1]/d:info/d:releaseinfo">
+            <xsl:text> </xsl:text>
+            <xsl:apply-templates select="/*[1]/d:info/d:releaseinfo/node()"/>
+          </xsl:if>
         </xsl:if>
       </xsl:when>
 
