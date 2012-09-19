@@ -21,7 +21,8 @@
  * This package is not used at runtime. Annotated classes are processed by
  * tools to generate Component Descriptions which are used at runtime.
  *
- * @version $Id$
+ * @version 1.2
+ * @author $Id$
  */
 
 package org.osgi.service.component.annotations;

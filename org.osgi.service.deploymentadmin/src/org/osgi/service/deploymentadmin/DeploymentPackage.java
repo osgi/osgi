@@ -76,9 +76,9 @@ public interface DeploymentPackage {
 	 * is not present, if no version is installed:
 	 * <ul>
 	 * <li>in the INSTALL event, when an installDeploymentPackage was called and
-	 * no earlier version is present
+	 * no earlier version is present</li>
 	 * <li>in the COMPLETE event after the _successfully_ completing an
-	 * uninstallDeploymentPackage call
+	 * uninstallDeploymentPackage call</li>
 	 * </ul>
 	 * The value for this event must be a Version object.
 	 * 

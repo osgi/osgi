@@ -48,8 +48,8 @@ import org.osgi.framework.ServiceReference;
  * arbitrarily chooses the order in which they are called.
  * 
  * <p>
- * By convention, plugins with {@code service.cmRanking&lt; 0} or
- * {@code service.cmRanking &gt; 1000} should not make modifications to the
+ * By convention, plugins with {@code service.cmRanking < 0} or
+ * {@code service.cmRanking > 1000} should not make modifications to the
  * properties.
  * 
  * <p>
@@ -103,7 +103,7 @@ public interface ConfigurationPlugin {
 	 * <p>
 	 * This method should not modify the properties unless the
 	 * {@code service.cmRanking} of this plugin is in the range
-	 * {@code 0 &lt;= service.cmRanking &lt;= 1000}.
+	 * {@code 0 <= service.cmRanking <= 1000}.
 	 * <p>
 	 * If this method throws any {@code Exception}, the Configuration Admin
 	 * service must catch it and should log it.

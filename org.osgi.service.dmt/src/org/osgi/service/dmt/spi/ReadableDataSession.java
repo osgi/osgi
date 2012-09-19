@@ -17,7 +17,9 @@
 package org.osgi.service.dmt.spi;
 
 import java.util.Date;
-import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.MetaNode;
 
 /**
  * Provides read-only access to the part of the tree handled by the plugin that
@@ -78,11 +80,11 @@ public interface ReadableDataSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
-	 *         encountered while attempting to complete the command
+	 *         encountered while attempting to complete the command</li>
 	 *         </ul>
 	 */
 	void nodeChanged(String[] nodePath) throws DmtException;
@@ -121,13 +123,13 @@ public interface ReadableDataSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code METADATA_MISMATCH} if the information could not be
-	 *         retrieved because of meta-data restrictions
+	 *         retrieved because of meta-data restrictions</li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
-	 *         encountered while attempting to complete the command
+	 *         encountered while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws SecurityException if the caller does not have the necessary
 	 *         permissions to execute the underlying management operation
@@ -163,10 +165,11 @@ public interface ReadableDataSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodeUri} points to a node
-	 *         that is not defined in the tree (see above) <li>
+	 *         that is not defined in the tree (see above)</li><li>
 	 *         {@code DATA_STORE_FAILURE} if an error occurred while accessing
-	 *         the data store <li>{@code COMMAND_FAILED} if some unspecified
+	 *         the data store</li><li>{@code COMMAND_FAILED} if some unspecified
 	 *         error is encountered while attempting to complete the command
+	 *         </li>
 	 *         </ul>
 	 * @throws SecurityException if the caller does not have the necessary
 	 *         permissions to execute the underlying management operation
@@ -184,15 +187,15 @@ public interface ReadableDataSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code METADATA_MISMATCH} if the information could not be
-	 *         retrieved because of meta-data restrictions
+	 *         retrieved because of meta-data restrictions</li>
 	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the Size property is not
-	 *         supported by the plugin
+	 *         supported by the plugin</li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
-	 *         encountered while attempting to complete the command
+	 *         encountered while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws SecurityException if the caller does not have the necessary
 	 *         permissions to execute the underlying management operation
@@ -208,15 +211,15 @@ public interface ReadableDataSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code METADATA_MISMATCH} if the information could not be
-	 *         retrieved because of meta-data restrictions
+	 *         retrieved because of meta-data restrictions</li>
 	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the Timestamp property is
-	 *         not supported by the plugin
+	 *         not supported by the plugin</li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
-	 *         encountered while attempting to complete the command
+	 *         encountered while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws SecurityException if the caller does not have the necessary
 	 *         permissions to execute the underlying management operation
@@ -231,15 +234,15 @@ public interface ReadableDataSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code METADATA_MISMATCH} if the information could not be
-	 *         retrieved because of meta-data restrictions
+	 *         retrieved because of meta-data restrictions</li>
 	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the Title property is not
-	 *         supported by the plugin
+	 *         supported by the plugin</li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
-	 *         encountered while attempting to complete the command
+	 *         encountered while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws SecurityException if the caller does not have the necessary
 	 *         permissions to execute the underlying management operation
@@ -257,13 +260,13 @@ public interface ReadableDataSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code METADATA_MISMATCH} if the information could not be
-	 *         retrieved because of meta-data restrictions
+	 *         retrieved because of meta-data restrictions</li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
-	 *         encountered while attempting to complete the command
+	 *         encountered while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws SecurityException if the caller does not have the necessary
 	 *         permissions to execute the underlying management operation
@@ -286,13 +289,13 @@ public interface ReadableDataSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code METADATA_MISMATCH} if the information could not be
-	 *         retrieved because of meta-data restrictions
+	 *         retrieved because of meta-data restrictions</li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
-	 *         encountered while attempting to complete the command
+	 *         encountered while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws SecurityException if the caller does not have the necessary
 	 *         permissions to execute the underlying management operation
@@ -307,15 +310,15 @@ public interface ReadableDataSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code METADATA_MISMATCH} if the information could not be
-	 *         retrieved because of meta-data restrictions
+	 *         retrieved because of meta-data restrictions</li>
 	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the specified node is an
-	 *         interior node and does not support Java object values
+	 *         interior node and does not support Java object values</li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
-	 *         encountered while attempting to complete the command
+	 *         encountered while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws SecurityException if the caller does not have the necessary
 	 *         permissions to execute the underlying management operation
@@ -333,15 +336,15 @@ public interface ReadableDataSession {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code nodePath} points to a
-	 *         non-existing node
+	 *         non-existing node</li>
 	 *         <li>{@code METADATA_MISMATCH} if the information could not be
-	 *         retrieved because of meta-data restrictions
+	 *         retrieved because of meta-data restrictions</li>
 	 *         <li>{@code FEATURE_NOT_SUPPORTED} if the Version property is not
-	 *         supported by the plugin
+	 *         supported by the plugin</li>
 	 *         <li>{@code DATA_STORE_FAILURE} if an error occurred while
-	 *         accessing the data store
+	 *         accessing the data store</li>
 	 *         <li>{@code COMMAND_FAILED} if some unspecified error is
-	 *         encountered while attempting to complete the command
+	 *         encountered while attempting to complete the command</li>
 	 *         </ul>
 	 * @throws SecurityException if the caller does not have the necessary
 	 *         permissions to execute the underlying management operation

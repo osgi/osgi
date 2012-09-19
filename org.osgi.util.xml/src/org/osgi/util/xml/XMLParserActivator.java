@@ -49,8 +49,9 @@ import org.osgi.framework.ServiceRegistration;
  * <p>
  * The services that this bundle activator enables a bundle to provide are:
  * <ul>
- * <li>{@code javax.xml.parsers.SAXParserFactory}({@link #SAXFACTORYNAME})
- * <li>{@code javax.xml.parsers.DocumentBuilderFactory}( {@link #DOMFACTORYNAME})
+ * <li>{@code javax.xml.parsers.SAXParserFactory}({@link #SAXFACTORYNAME})</li>
+ * <li>{@code javax.xml.parsers.DocumentBuilderFactory}( {@link #DOMFACTORYNAME}
+ * )</li>
  * </ul>
  * 
  * <p>
@@ -62,10 +63,10 @@ import org.osgi.framework.ServiceRegistration;
  * <ul>
  * <li>{@code /META-INF/services/javax.xml.parsers.SAXParserFactory} is a file
  * contained in a jar available to the runtime which contains the implementation
- * class name(s) of the SAXParserFactory.
+ * class name(s) of the SAXParserFactory.</li>
  * <li>{@code /META-INF/services/javax.xml.parsers.DocumentBuilderFactory} is a
  * file contained in a jar available to the runtime which contains the
- * implementation class name(s) of the {@code DocumentBuilderFactory}
+ * implementation class name(s) of the {@code DocumentBuilderFactory}</li>
  * </ul>
  * <p>
  * If either of the files does not exist, {@code XMLParserActivator} assumes
@@ -77,9 +78,9 @@ import org.osgi.framework.ServiceRegistration;
  * each factory with the framework along with service properties:
  * <ul>
  * <li>{@link #PARSER_VALIDATING}- indicates if this factory supports validating
- * parsers. It's value is a {@code Boolean}.
+ * parsers. It's value is a {@code Boolean}.</li>
  * <li>{@link #PARSER_NAMESPACEAWARE}- indicates if this factory supports
- * namespace aware parsers It's value is a {@code Boolean}.
+ * namespace aware parsers It's value is a {@code Boolean}.</li>
  * </ul>
  * <p>
  * Individual parser implementations may have additional features, properties,
@@ -247,12 +248,12 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * Set the SAX Parser Service Properties. By default, the following
 	 * properties are set:
 	 * <ul>
-	 * <li>{@code SERVICE_DESCRIPTION}
-	 * <li>{@code SERVICE_PID}
+	 * <li>{@code SERVICE_DESCRIPTION}</li>
+	 * <li>{@code SERVICE_PID}</li>
 	 * <li>{@code PARSER_VALIDATING}- instantiates a parser and queries it to
-	 * find out whether it is validating or not
+	 * find out whether it is validating or not</li>
 	 * <li>{@code PARSER_NAMESPACEAWARE}- instantiates a parser and queries it
-	 * to find out whether it is namespace aware or not
+	 * to find out whether it is namespace aware or not</li>
 	 * <ul>
 	 * 
 	 * @param factory The {@code SAXParserFactory} object
@@ -346,10 +347,10 @@ public class XMLParserActivator implements BundleActivator, ServiceFactory {
 	 * 
 	 * By default, the following properties are set:
 	 * <ul>
-	 * <li>{@code SERVICE_DESCRIPTION}
-	 * <li>{@code SERVICE_PID}
-	 * <li>{@code PARSER_VALIDATING}
-	 * <li>{@code PARSER_NAMESPACEAWARE}
+	 * <li>{@code SERVICE_DESCRIPTION}</li>
+	 * <li>{@code SERVICE_PID}</li>
+	 * <li>{@code PARSER_VALIDATING}</li>
+	 * <li>{@code PARSER_NAMESPACEAWARE}</li>
 	 * <ul>
 	 * 
 	 * @param factory The {@code DocumentBuilderFactory} object

@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="297.898px" height="68.074px" viewBox="0 0 297.898 68.074" enable-background="new 0 0 297.898 68.074"
+	 xml:space="preserve">
+<rect x="108.66" y="11.268" width="54.3" height="27"/>
+<rect x="108.66" y="11.027" width="54.541" height="0.48"/>
+<rect x="162.72" y="11.268" width="0.48" height="27.239"/>
+<rect x="108.42" y="38.027" width="54.54" height="0.48"/>
+<rect x="108.42" y="11.027" width="0.479" height="27.24"/>
+<rect x="106.32" y="9.468" fill="#FFFFFF" width="54.301" height="27"/>
+<rect x="106.32" y="9.228" width="54.541" height="0.479"/>
+<rect x="160.38" y="9.468" width="0.479" height="27.239"/>
+<rect x="106.08" y="36.228" width="54.54" height="0.479"/>
+<rect x="106.08" y="9.228" width="0.479" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 108.6599 16.6069)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">Data Source Proxy</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Component</tspan></text>
+<polyline fill="#FFFFFF" points="205.5,31.188 191.34,24.107 205.5,16.968 "/>
+<polyline points="205.38,31.428 191.22,24.348 190.74,24.167 191.22,23.928 205.38,16.787 205.74,16.607 205.74,16.968 
+	205.62,17.207 191.46,24.348 191.22,23.928 191.46,23.928 205.62,31.008 "/>
+<polyline points="205.74,16.968 205.74,31.607 205.38,31.428 205.26,31.188 205.26,16.968 "/>
+<rect x="162.96" y="23.867" width="28.38" height="0.48"/>
+<text transform="matrix(0.9504 0 0 1 184.3206 38.0864)" font-family="'ProductusOSGiBookc'" font-size="7.98">Data Source</text>
+<polyline fill="#FFFFFF" points="49.62,16.968 35.4,9.888 49.62,2.808 "/>
+<polyline points="49.5,17.207 35.28,10.127 34.92,9.888 35.28,9.707 49.5,2.627 49.86,2.447 49.86,2.808 49.74,3.048 35.52,10.127 
+	35.28,9.707 35.52,9.707 49.74,16.787 "/>
+<polyline points="49.86,2.808 49.86,17.388 49.5,17.207 49.38,16.968 49.38,2.808 "/>
+<polyline fill="#FFFFFF" points="49.62,45.348 35.4,38.268 49.62,31.188 "/>
+<polyline points="49.5,45.587 35.28,38.507 34.92,38.268 35.28,38.087 49.5,31.008 49.86,30.827 49.86,31.188 49.74,31.428 
+	35.52,38.507 35.28,38.087 35.52,38.087 49.74,45.167 "/>
+<polyline points="49.86,31.188 49.86,45.768 49.5,45.587 49.38,45.348 49.38,31.188 "/>
+<rect x="49.62" y="9.647" width="28.56" height="0.479"/>
+<rect x="77.7" y="9.888" width="0.479" height="7.319"/>
+<rect x="77.94" y="16.728" width="28.38" height="0.479"/>
+<rect x="49.62" y="38.027" width="28.56" height="0.48"/>
+<rect x="77.7" y="30.947" width="0.479" height="7.32"/>
+<rect x="77.94" y="30.947" width="28.38" height="0.479"/>
+<rect x="0" y="9.647" width="0.96" height="0.479"/>
+<rect x="4.92" y="9.647" width="1.979" height="0.479"/>
+<rect x="10.8" y="9.647" width="1.979" height="0.479"/>
+<rect x="16.74" y="9.647" width="1.92" height="0.479"/>
+<rect x="22.62" y="9.647" width="1.979" height="0.479"/>
+<rect x="28.5" y="9.647" width="1.979" height="0.479"/>
+<rect x="34.44" y="9.647" width="0.96" height="0.479"/>
+<rect x="0" y="38.027" width="0.96" height="0.48"/>
+<rect x="4.92" y="38.027" width="1.979" height="0.48"/>
+<rect x="10.8" y="38.027" width="1.979" height="0.48"/>
+<rect x="16.74" y="38.027" width="1.92" height="0.48"/>
+<rect x="22.62" y="38.027" width="1.979" height="0.48"/>
+<rect x="28.5" y="38.027" width="1.979" height="0.48"/>
+<rect x="34.44" y="38.027" width="0.96" height="0.48"/>
+<text transform="matrix(1 0 0 1 5.6399 7.647)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Transaction</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Manager</tspan></text>
+<text transform="matrix(0.9504 0 0 1 45.6599 6.647)" font-family="'ProductusOSGiBookc'" font-size="7.98"> </text>
+<text transform="matrix(0.9504 0 0 1 5.6399 36.147)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">Data Source</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">Factory</tspan></text>
+<rect x="243.3" y="25.907" width="54.36" height="27"/>
+<rect x="243.3" y="25.667" width="54.6" height="0.48"/>
+<rect x="297.42" y="25.907" width="0.479" height="27.24"/>
+<rect x="243.06" y="52.667" width="54.602" height="0.479"/>
+<rect x="243.06" y="25.667" width="0.48" height="27.241"/>
+<rect x="240.96" y="24.107" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="240.96" y="23.867" width="54.54" height="0.48"/>
+<rect x="295.02" y="24.107" width="0.48" height="27.24"/>
+<rect x="240.72" y="50.867" width="54.54" height="0.48"/>
+<rect x="240.72" y="23.867" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 243.3 31.2466)" font-family="'ProductusOSGiBookc'" font-size="7.98">Application Code</text>
+<rect x="205.5" y="23.867" width="21.54" height="0.48"/>
+<rect x="226.56" y="24.107" width="0.48" height="7.32"/>
+<rect x="226.8" y="30.947" width="14.16" height="0.479"/>
+<polyline fill="#FFFFFF" points="205.5,59.507 191.34,52.427 205.5,45.348 "/>
+<polyline points="205.38,59.748 191.22,52.667 190.74,52.487 205.74,44.987 205.74,45.348 205.62,45.587 191.46,52.667 
+	191.22,52.248 191.46,52.248 205.62,59.328 "/>
+<polyline points="205.74,45.348 205.74,59.927 205.38,59.748 205.26,59.507 205.26,45.348 "/>
+<rect x="205.5" y="52.188" width="21.54" height="0.479"/>
+<rect x="226.56" y="45.107" width="0.48" height="7.32"/>
+<rect x="226.8" y="45.107" width="14.16" height="0.48"/>
+<rect x="155.88" y="52.188" width="1.02" height="0.479"/>
+<rect x="160.86" y="52.188" width="1.92" height="0.479"/>
+<rect x="166.74" y="52.188" width="1.979" height="0.479"/>
+<rect x="172.62" y="52.188" width="1.979" height="0.479"/>
+<rect x="178.56" y="52.188" width="1.92" height="0.479"/>
+<rect x="184.439" y="52.188" width="1.98" height="0.479"/>
+<rect x="190.32" y="52.188" width="1.021" height="0.479"/>
+<text transform="matrix(1 0 0 1 172.8 65.687)" font-family="'ProductusSemibold'" font-size="7.98">User Transaction</text>
+</svg>

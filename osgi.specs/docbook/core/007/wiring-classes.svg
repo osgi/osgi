@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="404.219px" height="361.918px" viewBox="0 0 404.219 361.918" enable-background="new 0 0 404.219 361.918"
+	 xml:space="preserve">
+<rect x="222.06" y="2.04" width="54.36" height="27"/>
+<rect x="222.06" y="1.8" width="54.601" height="0.48"/>
+<rect x="276.18" y="2.04" width="0.479" height="27.24"/>
+<rect x="221.82" y="28.8" width="54.601" height="0.48"/>
+<rect x="221.82" y="1.8" width="0.479" height="27.24"/>
+<rect x="219.72" y="0.24" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="219.72" width="54.54" height="0.48"/>
+<rect x="273.78" y="0.24" width="0.48" height="27.24"/>
+<rect x="219.48" y="27" width="54.54" height="0.48"/>
+<rect x="219.48" width="0.479" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 222.0601 7.3804)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 222.0601 15.9009)" font-family="'ProductusBook'" font-size="7.98">Bundle</text>
+<rect x="121.98" y="129.18" width="55.2" height="27"/>
+<rect x="121.98" y="128.94" width="55.44" height="0.48"/>
+<rect x="176.94" y="129.18" width="0.48" height="27.24"/>
+<rect x="121.74" y="155.94" width="55.44" height="0.48"/>
+<rect x="121.74" y="128.94" width="0.48" height="27.24"/>
+<rect x="119.58" y="127.38" fill="#FFFFFF" width="55.2" height="27"/>
+<rect x="119.58" y="127.14" width="55.44" height="0.48"/>
+<rect x="174.54" y="127.38" width="0.48" height="27.24"/>
+<rect x="119.34" y="154.14" width="55.44" height="0.48"/>
+<rect x="119.34" y="127.14" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 121.98 134.52)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 121.98 142.981)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Bundle</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Requirement</tspan></text>
+<rect x="222.12" y="129.18" width="55.2" height="27"/>
+<rect x="222.12" y="128.94" width="55.44" height="0.48"/>
+<rect x="277.081" y="129.18" width="0.479" height="27.24"/>
+<rect x="221.879" y="155.94" width="55.439" height="0.48"/>
+<rect x="221.879" y="128.94" width="0.479" height="27.24"/>
+<rect x="219.72" y="127.38" fill="#FFFFFF" width="55.2" height="27"/>
+<rect x="219.72" y="127.14" width="55.438" height="0.48"/>
+<rect x="274.68" y="127.38" width="0.479" height="27.24"/>
+<rect x="219.48" y="154.14" width="55.44" height="0.48"/>
+<rect x="219.48" y="127.14" width="0.479" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 222.1196 134.52)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 222.1196 142.981)" font-family="'ProductusSemibold'" font-size="7.98">Bundle Wiring</text>
+<rect x="222.06" y="271.32" width="54.36" height="26.58"/>
+<rect x="222.06" y="271.081" width="54.601" height="0.479"/>
+<rect x="276.18" y="271.32" width="0.479" height="26.82"/>
+<rect x="221.82" y="297.661" width="54.601" height="0.479"/>
+<rect x="221.82" y="271.081" width="0.479" height="26.819"/>
+<rect x="219.72" y="269.581" fill="#FFFFFF" width="54.3" height="26.521"/>
+<rect x="219.72" y="269.34" width="54.54" height="0.479"/>
+<rect x="273.78" y="269.581" width="0.48" height="26.76"/>
+<rect x="219.48" y="295.86" width="54.54" height="0.479"/>
+<rect x="219.48" y="269.34" width="0.479" height="26.76"/>
+<text transform="matrix(0.9504 0 0 1 222.0601 276.6606)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 222.0601 285.1812)" font-family="'ProductusSemibold'" font-size="7.98">Bundle Wire</text>
+<rect x="29.88" y="2.04" width="55.2" height="27"/>
+<rect x="29.88" y="1.8" width="55.44" height="0.48"/>
+<rect x="84.84" y="2.04" width="0.48" height="27.24"/>
+<rect x="29.64" y="28.8" width="55.44" height="0.48"/>
+<rect x="29.64" y="1.8" width="0.48" height="27.24"/>
+<rect x="27.48" y="0.24" fill="#FFFFFF" width="55.14" height="27"/>
+<rect x="27.48" width="55.38" height="0.48"/>
+<rect x="82.38" y="0.24" width="0.48" height="27.24"/>
+<rect x="27.24" y="27" width="55.38" height="0.48"/>
+<rect x="27.24" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 29.8799 7.3804)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 29.8799 15.9009)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Framework</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Wiring</tspan></text>
+<text transform="matrix(1 0 0 1 250.6802 125.4604)" font-family="'ProductusBook'" font-size="7.98">0..1 (when resolved)</text>
+<text transform="matrix(0.9504 0 0 1 0 7.6196)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;system</tspan><tspan x="0" y="9.576" font-family="'ProductusOSGiBookc'" font-size="7.98">bundle&gt;&gt;</tspan></text>
+<rect x="222.06" y="65.82" width="54.36" height="26.58"/>
+<rect x="222.06" y="65.58" width="54.601" height="0.48"/>
+<rect x="276.18" y="65.82" width="0.479" height="26.82"/>
+<rect x="221.82" y="92.16" width="54.601" height="0.48"/>
+<rect x="221.82" y="65.58" width="0.479" height="26.82"/>
+<rect x="219.72" y="64.02" fill="#FFFFFF" width="54.3" height="26.58"/>
+<rect x="219.72" y="63.78" width="54.54" height="0.479"/>
+<rect x="273.78" y="64.02" width="0.48" height="26.82"/>
+<rect x="219.48" y="90.36" width="54.54" height="0.48"/>
+<rect x="219.48" y="63.78" width="0.479" height="26.82"/>
+<text transform="matrix(0.9504 0 0 1 222.0601 71.1606)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 222.0601 79.6196)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Bundle</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Revision</tspan></text>
+<rect x="247.799" y="28.38" width="0.479" height="35.88"/>
+<text transform="matrix(1 0 0 1 214.0806 12.061)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<rect x="247.799" y="92.16" width="0.479" height="35.88"/>
+<rect x="320.401" y="129.18" width="55.199" height="27"/>
+<rect x="320.401" y="128.94" width="55.439" height="0.48"/>
+<rect x="375.36" y="129.18" width="0.48" height="27.24"/>
+<rect x="320.161" y="155.94" width="55.439" height="0.48"/>
+<rect x="320.161" y="128.94" width="0.479" height="27.24"/>
+<rect x="318" y="127.38" fill="#FFFFFF" width="55.199" height="27"/>
+<rect x="318" y="127.14" width="55.439" height="0.48"/>
+<rect x="372.959" y="127.38" width="0.48" height="27.24"/>
+<rect x="317.76" y="154.14" width="55.439" height="0.48"/>
+<rect x="317.76" y="127.14" width="0.479" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 320.4009 134.52)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 320.3999 142.981)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Bundle</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Capability</tspan></text>
+<polyline points="335.76,78.18 335.76,74.88 336.42,75.06 345.661,77.7 347.28,78.18 345.661,78.66 336.42,81.36 335.76,81.54 
+	335.76,80.88 336.12,80.4 345.36,77.7 345.661,78.66 345.36,78.66 336.12,76.02 336.42,75.06 336.78,75.54 336.78,78.18 "/>
+<rect x="335.76" y="78.18" width="1.02" height="2.7"/>
+<polyline points="336.241,78.18 336.241,75.54 345.481,78.18 336.241,80.88 "/>
+<rect x="335.76" y="77.94" width="0.24" height="0.48"/>
+<rect x="276.18" y="77.94" width="59.58" height="0.48"/>
+<rect x="276.18" y="290.581" width="57.18" height="0.479"/>
+<rect x="332.879" y="155.94" width="0.48" height="134.88"/>
+<rect x="162.78" y="290.581" width="57.18" height="0.479"/>
+<rect x="162.78" y="155.94" width="0.48" height="134.88"/>
+<text transform="matrix(1 0 0 1 250.9204 97.8608)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 250.6802 61.6802)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<text transform="matrix(1 0 0 1 250.9204 36.0005)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 320.3208 125.4595)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<text transform="matrix(1 0 0 1 272.1011 97.8599)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 222.6206 97.8599)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 164.4609 125.4595)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<text transform="matrix(1 0 0 1 144.6011 162.8999)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 340.2017 160.9204)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 278.521 288.481)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<text transform="matrix(1 0 0 1 205.5005 288.481)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<text transform="matrix(1 0 0 1 278.3413 274.2603)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<text transform="matrix(1 0 0 1 207.481 274.2603)" font-family="'ProductusBook'" font-size="7.98">0..n</text>
+<text transform="matrix(1 0 0 1 280.3208 147.2397)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 214.7407 147.2397)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 182.0415 12.0601)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">adapted</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">from</tspan></text>
+<rect x="226.56" y="28.38" width="0.479" height="35.88"/>
+<text transform="matrix(1 0 0 1 223.2603 35.4604)" font-family="'ProductusBook'" font-size="7.98">1</text>
+<text transform="matrix(1 0 0 1 215.5601 62.2212)" font-family="'ProductusBook'" font-size="7.98">0..1</text>
+<text transform="matrix(1 0 0 1 207.9595 47.8804)" font-family="'ProductusBook'" font-size="7.98">adapt</text>
+<text transform="matrix(1 0 0 1 250.9204 48.0005)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">adapt from </tspan><tspan x="33.42" y="0" font-family="'ProductusSemibold'" font-size="7.98">Bundle Revisions</tspan></text>
+<text transform="matrix(1 0 0 1 299.2202 210.48)" font-family="'ProductusBook'" font-size="7.98">provider</text>
+<text transform="matrix(1 0 0 1 174.7402 210.48)" font-family="'ProductusBook'" font-size="7.98">requirer</text>
+<rect x="94.5" y="200.459" width="54.36" height="26.58"/>
+<rect x="94.5" y="200.219" width="54.6" height="0.48"/>
+<rect x="148.62" y="200.459" width="0.48" height="26.82"/>
+<rect x="94.26" y="226.799" width="54.6" height="0.48"/>
+<rect x="94.26" y="200.219" width="0.48" height="26.82"/>
+<rect x="92.16" y="198.661" fill="#FFFFFF" width="54.3" height="26.58"/>
+<rect x="92.16" y="198.42" width="54.54" height="0.479"/>
+<rect x="146.22" y="198.661" width="0.48" height="26.819"/>
+<rect x="91.92" y="225" width="54.54" height="0.479"/>
+<rect x="91.92" y="198.42" width="0.48" height="26.82"/>
+<text transform="matrix(0.9504 0 0 1 94.5 205.8003)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 94.5 214.3208)" font-family="'ProductusBook'" font-size="7.98">Requirement</text>
+<rect x="349.62" y="200.459" width="54.361" height="26.58"/>
+<rect x="349.62" y="200.219" width="54.602" height="0.48"/>
+<rect x="403.741" y="200.459" width="0.479" height="26.82"/>
+<rect x="349.379" y="226.799" width="54.602" height="0.48"/>
+<rect x="349.379" y="200.219" width="0.48" height="26.82"/>
+<rect x="347.28" y="198.661" fill="#FFFFFF" width="54.301" height="26.58"/>
+<rect x="347.28" y="198.42" width="54.541" height="0.479"/>
+<rect x="401.34" y="198.661" width="0.479" height="26.819"/>
+<rect x="347.042" y="225" width="54.539" height="0.479"/>
+<rect x="347.042" y="198.42" width="0.479" height="26.82"/>
+<text transform="matrix(0.9504 0 0 1 349.6196 205.8003)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 349.6196 214.3208)" font-family="'ProductusBook'" font-size="7.98">Capability</text>
+<polyline points="361.44,187.14 364.741,187.14 364.559,187.799 361.44,198.719 358.321,187.799 358.139,187.14 358.799,187.14 
+	359.28,187.5 361.92,196.741 360.959,197.04 360.959,196.741 363.6,187.5 364.559,187.799 364.081,188.161 361.44,188.161 "/>
+<rect x="358.799" y="187.14" width="2.641" height="1.021"/>
+<polyline points="361.44,187.62 364.081,187.62 361.44,196.86 358.799,187.62 "/>
+<rect x="361.2" y="155.94" width="0.48" height="31.439"/>
+<polyline points="134.64,187.14 137.94,187.14 137.76,187.799 134.64,198.719 131.52,187.799 131.34,187.14 132,187.14 
+	132.48,187.5 135.12,196.741 134.16,197.04 134.16,196.741 136.8,187.5 137.76,187.799 137.28,188.161 134.64,188.161 "/>
+<rect x="132" y="187.14" width="2.64" height="1.021"/>
+<polyline points="134.64,187.62 137.28,187.62 134.64,196.86 132,187.62 "/>
+<rect x="134.4" y="155.94" width="0.48" height="31.439"/>
+<rect x="222.06" y="335.1" width="54.36" height="26.58"/>
+<rect x="222.06" y="334.86" width="54.601" height="0.479"/>
+<rect x="276.18" y="335.1" width="0.479" height="26.818"/>
+<rect x="221.82" y="361.44" width="54.601" height="0.479"/>
+<rect x="221.82" y="334.86" width="0.479" height="26.82"/>
+<rect x="219.72" y="333.36" fill="#FFFFFF" width="54.3" height="26.52"/>
+<rect x="219.72" y="333.12" width="54.54" height="0.48"/>
+<rect x="273.78" y="333.36" width="0.48" height="26.76"/>
+<rect x="219.48" y="359.64" width="54.54" height="0.479"/>
+<rect x="219.48" y="333.12" width="0.479" height="26.76"/>
+<text transform="matrix(0.9504 0 0 1 222.0601 340.4399)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 222.0601 348.9604)" font-family="'ProductusBook'" font-size="7.98">Wire</text>
+<polyline points="248.042,321.838 251.34,321.838 251.161,322.5 248.52,331.68 248.042,333.36 247.56,331.68 244.92,322.5 
+	244.741,321.838 245.4,321.838 245.879,322.2 248.52,331.379 247.56,331.68 247.56,331.379 250.2,322.2 251.161,322.5 
+	250.68,322.86 248.042,322.86 "/>
+<rect x="245.4" y="321.838" width="2.642" height="1.021"/>
+<polyline points="248.042,322.32 250.68,322.32 248.042,331.5 245.4,322.32 "/>
+<rect x="247.799" y="297.661" width="0.479" height="0.239"/>
+<rect x="247.799" y="297.9" width="0.479" height="24.12"/>
+<rect x="219.72" y="14.16" width="0.239" height="0.48"/>
+<rect x="84.84" y="14.16" width="134.88" height="0.48"/>
+<rect x="226.56" y="92.16" width="0.479" height="14.64"/>
+<rect x="162.78" y="106.32" width="64.02" height="0.48"/>
+<rect x="162.78" y="106.56" width="0.48" height="21.48"/>
+<rect x="269.1" y="92.16" width="0.48" height="14.64"/>
+<rect x="269.34" y="106.32" width="64.02" height="0.48"/>
+<rect x="332.879" y="106.56" width="0.48" height="21.48"/>
+<rect x="349.62" y="65.82" width="54.361" height="26.58"/>
+<rect x="349.62" y="65.58" width="54.602" height="0.48"/>
+<rect x="403.741" y="65.82" width="0.479" height="26.82"/>
+<rect x="349.379" y="92.16" width="54.602" height="0.48"/>
+<rect x="349.379" y="65.58" width="0.48" height="26.82"/>
+<rect x="347.28" y="64.02" fill="#FFFFFF" width="54.301" height="26.58"/>
+<rect x="347.28" y="63.78" width="54.541" height="0.479"/>
+<rect x="401.34" y="64.02" width="0.479" height="26.82"/>
+<rect x="347.042" y="90.36" width="54.539" height="0.48"/>
+<rect x="347.042" y="63.78" width="0.479" height="26.82"/>
+<text transform="matrix(0.9504 0 0 1 349.6196 71.1606)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 349.6196 79.6196)" font-family="'ProductusBook'" font-size="7.98">Resource</text>
+<rect x="222.06" y="200.459" width="54.36" height="26.58"/>
+<rect x="222.06" y="200.219" width="54.601" height="0.48"/>
+<rect x="276.18" y="200.459" width="0.479" height="26.82"/>
+<rect x="221.82" y="226.799" width="54.601" height="0.48"/>
+<rect x="221.82" y="200.219" width="0.479" height="26.82"/>
+<rect x="219.72" y="198.661" fill="#FFFFFF" width="54.3" height="26.58"/>
+<rect x="219.72" y="198.42" width="54.54" height="0.479"/>
+<rect x="273.78" y="198.661" width="0.48" height="26.819"/>
+<rect x="219.48" y="225" width="54.54" height="0.479"/>
+<rect x="219.48" y="198.42" width="0.479" height="26.82"/>
+<text transform="matrix(0.9504 0 0 1 222.0601 205.8003)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 222.0601 214.2603)" font-family="'ProductusBook'" font-size="7.98">Wiring</text>
+<polyline points="248.042,187.14 251.34,187.14 251.161,187.799 248.042,198.719 244.92,187.799 244.741,187.14 245.4,187.14 
+	245.879,187.5 248.52,196.741 247.56,197.04 247.56,196.741 250.2,187.5 251.161,187.799 250.68,188.161 248.042,188.161 "/>
+<rect x="245.4" y="187.14" width="2.642" height="1.021"/>
+<polyline points="248.042,187.62 250.68,187.62 248.042,196.86 245.4,187.62 "/>
+<rect x="247.799" y="155.94" width="0.479" height="0.24"/>
+<rect x="247.799" y="156.18" width="0.479" height="31.199"/>
+<rect x="276.18" y="141.72" width="21.72" height="0.48"/>
+<rect x="297.42" y="141.96" width="0.479" height="134.94"/>
+<rect x="276.18" y="276.42" width="21.479" height="0.479"/>
+<rect x="198.18" y="141.72" width="21.779" height="0.48"/>
+<rect x="198.18" y="141.96" width="0.48" height="134.94"/>
+<rect x="198.42" y="276.42" width="21.542" height="0.479"/>
+</svg>

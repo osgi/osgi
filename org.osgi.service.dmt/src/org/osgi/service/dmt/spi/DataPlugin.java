@@ -16,7 +16,8 @@
 
 package org.osgi.service.dmt.spi;
 
-import org.osgi.service.dmt.*;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
 
 /**
  * An implementation of this interface takes the responsibility of handling data
@@ -80,8 +81,9 @@ public interface DataPlugin {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code sessionRoot} points to a
-	 *         non-existing node <li>{@code COMMAND_FAILED} if some unspecified
-	 *         error is encountered while attempting to complete the command
+	 *         non-existing node</li><li>{@code COMMAND_FAILED} if some
+	 *         unspecified error is encountered while attempting to complete the
+	 *         command</li>
 	 *         </ul>
 	 * @throws SecurityException if some underlying operation failed because of
 	 *         lack of permissions
@@ -107,8 +109,9 @@ public interface DataPlugin {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code sessionRoot} points to a
-	 *         non-existing node <li>{@code COMMAND_FAILED} if some unspecified
-	 *         error is encountered while attempting to complete the command
+	 *         non-existing node</li><li>{@code COMMAND_FAILED} if some
+	 *         unspecified error is encountered while attempting to complete the
+	 *         command</li>
 	 *         </ul>
 	 * @throws SecurityException if some underlying operation failed because of
 	 *         lack of permissions
@@ -134,8 +137,9 @@ public interface DataPlugin {
 	 * @throws DmtException with the following possible error codes:
 	 *         <ul>
 	 *         <li>{@code NODE_NOT_FOUND} if {@code sessionRoot} points to a
-	 *         non-existing node <li>{@code COMMAND_FAILED} if some unspecified
-	 *         error is encountered while attempting to complete the command
+	 *         non-existing node</li><li>{@code COMMAND_FAILED} if some
+	 *         unspecified error is encountered while attempting to complete the
+	 *         command</li>
 	 *         </ul>
 	 * @throws SecurityException if some underlying operation failed because of
 	 *         lack of permissions

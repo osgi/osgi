@@ -34,10 +34,10 @@ package org.osgi.framework;
  * {@code BundleActivator}. The form of the Manifest header is:
  * 
  * <p>
- * {@code Bundle-Activator: <i>class-name</i>}
+ * {@code Bundle-Activator:} <i>class-name</i>
  * 
  * <p>
- * where {@code <i>class-name</i>} is a fully qualified Java classname.
+ * where <i>class-name</i> is a fully qualified Java classname.
  * <p>
  * The specified {@code BundleActivator} class must have a public constructor
  * that takes no parameters so that a {@code BundleActivator} object can be

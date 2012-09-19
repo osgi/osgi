@@ -148,7 +148,7 @@ public final class EndpointPermission extends Permission {
 	 *        to support matching the
 	 *        {@link RemoteConstants#ENDPOINT_FRAMEWORK_UUID
 	 *        endpoint.framework.uuid} endpoint property to the
-	 *        {@code &lt;&lt;LOCAL&gt;&gt;} value in the filter expression.
+	 *        {@code <<LOCAL>>} value in the filter expression.
 	 * @param actions The actions {@code read}, {@code import}, or
 	 *        {@code export}.
 	 * @throws IllegalArgumentException If the endpoint is {@code null} or the
@@ -483,7 +483,7 @@ public final class EndpointPermission extends Permission {
 	}
 
 	/**
-	 * Called by {@code <@link EndpointPermission#implies(Permission)>}.
+	 * Called by {@link EndpointPermission#implies(Permission)}.
 	 * 
 	 * @return a dictionary of properties for this permission.
 	 */

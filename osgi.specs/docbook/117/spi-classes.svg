@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="340.14px" height="269.281px" viewBox="0 0 340.14 269.281" enable-background="new 0 0 340.14 269.281"
+	 xml:space="preserve">
+<rect x="85.02" fill="#E6E6E6" width="255.12" height="42.48"/>
+<rect x="278.759" y="8.4" width="54.301" height="27"/>
+<rect x="278.759" y="8.16" width="54.539" height="0.48"/>
+<rect x="332.82" y="8.4" width="0.479" height="27.24"/>
+<rect x="278.52" y="35.16" width="54.54" height="0.48"/>
+<rect x="278.52" y="8.16" width="0.479" height="27.24"/>
+<rect x="276.36" y="6.6" fill="#FFFFFF" width="54.36" height="27"/>
+<rect x="276.36" y="6.36" width="54.601" height="0.48"/>
+<rect x="330.48" y="6.6" width="0.479" height="27.24"/>
+<rect x="276.121" y="33.36" width="54.6" height="0.48"/>
+<rect x="276.121" y="6.36" width="0.479" height="27.24"/>
+<text transform="matrix(1 0 0 1 278.7603 13.7397)" font-family="'ProductusOSGiBookc'" font-size="7.98">Dmt Admin Impl</text>
+<rect x="94.5" y="8.22" width="54.299" height="27"/>
+<rect x="94.5" y="7.98" width="54.54" height="0.479"/>
+<rect x="148.56" y="8.22" width="0.479" height="27.24"/>
+<rect x="94.26" y="34.98" width="54.54" height="0.48"/>
+<rect x="94.26" y="7.98" width="0.48" height="27.24"/>
+<rect x="92.1" y="6.42" fill="#FFFFFF" width="54.36" height="27"/>
+<rect x="92.1" y="6.18" width="54.6" height="0.48"/>
+<rect x="146.22" y="6.42" width="0.48" height="27.24"/>
+<rect x="91.86" y="33.18" width="54.6" height="0.48"/>
+<rect x="91.86" y="6.18" width="0.48" height="27.24"/>
+<text transform="matrix(1 0 0 1 94.5 13.4995)" font-family="'ProductusOSGiBookc'" font-size="7.98">Session Impl</text>
+<rect y="226.74" fill="#E6E6E6" width="155.879" height="42.541"/>
+<rect x="94.5" y="171.419" width="54.299" height="27"/>
+<rect x="94.5" y="171.18" width="54.54" height="0.479"/>
+<rect x="148.56" y="171.419" width="0.479" height="27.24"/>
+<rect x="94.26" y="198.18" width="54.54" height="0.479"/>
+<rect x="94.26" y="171.18" width="0.48" height="27.239"/>
+<rect x="92.1" y="169.621" fill="#FFFFFF" width="54.36" height="27"/>
+<rect x="92.1" y="169.38" width="54.6" height="0.479"/>
+<rect x="146.22" y="169.621" width="0.48" height="27.239"/>
+<rect x="91.86" y="196.38" width="54.6" height="0.479"/>
+<rect x="91.86" y="169.38" width="0.48" height="27.24"/>
+<text transform="matrix(0.9504 0 0 1 94.5 176.7603)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;service&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 94.5 185.2798)" font-family="'ProductusSemibold'" font-size="7.98">Data Plugin</text>
+<rect x="278.759" y="171.839" width="54.301" height="26.58"/>
+<rect x="278.759" y="171.6" width="54.539" height="0.479"/>
+<rect x="332.82" y="171.839" width="0.479" height="26.82"/>
+<rect x="278.52" y="198.18" width="54.54" height="0.479"/>
+<rect x="278.52" y="171.6" width="0.479" height="26.819"/>
+<rect x="276.36" y="170.1" fill="#FFFFFF" width="54.36" height="26.521"/>
+<rect x="276.36" y="169.86" width="54.601" height="0.479"/>
+<rect x="330.48" y="170.1" width="0.479" height="26.76"/>
+<rect x="276.121" y="196.38" width="54.6" height="0.479"/>
+<rect x="276.121" y="169.86" width="0.479" height="26.761"/>
+<text transform="matrix(0.9504 0 0 1 278.7603 177.1792)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;service&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 278.7603 185.6997)" font-family="'ProductusSemibold'" font-size="7.98">Exec Plugin</text>
+<polyline points="318.9,198.419 333.06,184.259 333.06,198.419 "/>
+<polyline points="318.72,198.24 333.298,183.66 333.298,184.259 333.24,184.44 319.08,198.6 "/>
+<rect x="332.82" y="184.259" width="0.479" height="14.4"/>
+<polyline points="333.06,198.66 318.298,198.66 318.72,198.24 318.9,198.18 333.06,198.18 "/>
+<polyline points="134.64,197.759 148.799,183.541 148.799,197.759 "/>
+<polyline points="134.46,197.58 148.62,183.36 149.04,182.94 149.04,183.541 148.98,183.72 134.82,197.94 "/>
+<rect x="148.56" y="183.541" width="0.479" height="14.459"/>
+<polyline points="148.799,198 134.04,198 134.46,197.58 134.64,197.52 148.799,197.52 "/>
+<rect x="9.42" y="51.36" width="54.36" height="26.58"/>
+<rect x="9.42" y="51.12" width="54.6" height="0.48"/>
+<rect x="63.54" y="51.36" width="0.48" height="26.82"/>
+<rect x="9.18" y="77.7" width="54.6" height="0.48"/>
+<rect x="9.18" y="51.12" width="0.48" height="26.82"/>
+<rect x="7.08" y="49.62" fill="#FFFFFF" width="54.3" height="26.58"/>
+<rect x="7.08" y="49.38" width="54.54" height="0.48"/>
+<rect x="61.14" y="49.62" width="0.48" height="26.82"/>
+<rect x="6.84" y="75.96" width="54.54" height="0.48"/>
+<rect x="6.84" y="49.38" width="0.48" height="26.82"/>
+<text transform="matrix(0.9504 0 0 1 9.4199 56.6997)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 9.4199 65.2202)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Readable Data</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Session</tspan></text>
+<rect x="94.5" y="235.201" width="54.299" height="27"/>
+<rect x="94.5" y="234.96" width="54.54" height="0.479"/>
+<rect x="148.56" y="235.201" width="0.479" height="27.239"/>
+<rect x="94.26" y="261.96" width="54.54" height="0.479"/>
+<rect x="94.26" y="234.96" width="0.48" height="27.24"/>
+<rect x="92.1" y="233.4" fill="#FFFFFF" width="54.36" height="27"/>
+<rect x="92.1" y="233.16" width="54.6" height="0.48"/>
+<rect x="146.22" y="233.4" width="0.48" height="27.24"/>
+<rect x="91.86" y="260.16" width="54.6" height="0.48"/>
+<rect x="91.86" y="233.16" width="0.48" height="27.24"/>
+<text transform="matrix(1 0 0 1 94.5 240.5396)" font-family="'ProductusOSGiBookc'" font-size="7.98">Data Plugin Impl</text>
+<rect x="113.16" y="170.1" width="0.48" height="0.239"/>
+<rect x="113.16" y="35.16" width="0.48" height="134.94"/>
+<polyline points="120.48,209.94 117.18,209.94 117.36,209.281 120.48,198.36 123.6,209.281 123.78,209.94 123.12,209.94 
+	122.64,209.58 120,200.339 120.96,200.041 120.96,200.339 118.32,209.58 117.36,209.281 117.84,208.919 120.48,208.919 "/>
+<rect x="120.48" y="208.919" width="2.64" height="1.021"/>
+<polyline points="120.48,209.46 117.84,209.46 120.48,200.22 123.12,209.46 "/>
+<rect x="120.24" y="233.88" width="0.48" height="0.24"/>
+<rect x="120.24" y="209.701" width="0.48" height="24.18"/>
+<polyline fill="#E6E6E6" points="269.28,226.74 340.14,226.74 340.14,269.281 269.28,269.281 "/>
+<rect x="278.759" y="235.68" width="54.301" height="27"/>
+<rect x="278.759" y="235.44" width="54.539" height="0.479"/>
+<rect x="332.82" y="235.68" width="0.479" height="27.239"/>
+<rect x="278.52" y="262.44" width="54.54" height="0.479"/>
+<rect x="278.52" y="235.44" width="0.479" height="27.24"/>
+<rect x="276.36" y="233.88" fill="#FFFFFF" width="54.36" height="27"/>
+<rect x="276.36" y="233.64" width="54.601" height="0.48"/>
+<rect x="330.48" y="233.88" width="0.479" height="27.24"/>
+<rect x="276.121" y="260.64" width="54.6" height="0.48"/>
+<rect x="276.121" y="233.64" width="0.479" height="27.24"/>
+<text transform="matrix(1 0 0 1 278.7603 240.9595)" font-family="'ProductusOSGiBookc'" font-size="7.98">Exec Plugin Impl</text>
+<polyline points="304.74,209.94 301.44,209.94 301.621,209.281 304.74,198.36 307.861,209.281 308.041,209.94 307.378,209.94 
+	306.9,209.58 304.259,200.339 305.22,200.041 305.22,200.339 302.58,209.58 301.621,209.281 302.1,208.919 304.74,208.919 "/>
+<rect x="304.74" y="208.919" width="2.641" height="1.021"/>
+<polyline points="304.74,209.46 302.1,209.46 304.74,200.22 307.378,209.46 "/>
+<rect x="304.5" y="233.88" width="0.48" height="0.24"/>
+<rect x="304.5" y="209.701" width="0.48" height="24.18"/>
+<rect x="9.42" y="100.98" width="54.36" height="26.58"/>
+<rect x="9.42" y="100.74" width="54.6" height="0.479"/>
+<rect x="63.54" y="100.98" width="0.48" height="26.82"/>
+<rect x="9.18" y="127.32" width="54.6" height="0.48"/>
+<rect x="9.18" y="100.74" width="0.48" height="26.82"/>
+<rect x="7.08" y="99.18" fill="#FFFFFF" width="54.3" height="26.58"/>
+<rect x="7.08" y="98.94" width="54.54" height="0.479"/>
+<rect x="61.14" y="99.18" width="0.48" height="26.82"/>
+<rect x="6.84" y="125.52" width="54.54" height="0.48"/>
+<rect x="6.84" y="98.94" width="0.48" height="26.82"/>
+<text transform="matrix(0.9504 0 0 1 9.4199 106.3198)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 9.4199 114.8394)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Read Write</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Data Session</tspan></text>
+<rect x="9.42" y="150.6" width="54.36" height="26.58"/>
+<rect x="9.42" y="150.36" width="54.6" height="0.479"/>
+<rect x="63.54" y="150.6" width="0.48" height="26.819"/>
+<rect x="9.18" y="176.94" width="54.6" height="0.479"/>
+<rect x="9.18" y="150.36" width="0.48" height="26.82"/>
+<rect x="7.08" y="148.8" fill="#FFFFFF" width="54.3" height="26.58"/>
+<rect x="7.08" y="148.56" width="54.54" height="0.48"/>
+<rect x="61.14" y="148.8" width="0.48" height="26.82"/>
+<rect x="6.84" y="175.14" width="54.54" height="0.48"/>
+<rect x="6.84" y="148.56" width="0.48" height="26.82"/>
+<text transform="matrix(0.9504 0 0 1 9.4199 155.9399)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 9.4199 164.3999)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusSemibold'" font-size="7.98">Transactional</tspan><tspan x="0" y="9.576" font-family="'ProductusSemibold'" font-size="7.98">Data Session</tspan></text>
+<polyline points="35.4,139.08 32.1,139.08 32.28,138.419 35.4,127.5 38.52,138.419 38.7,139.08 38.04,139.08 37.56,138.72 
+	34.92,129.48 35.88,129.18 35.88,129.48 33.24,138.72 32.28,138.419 32.76,138.06 35.4,138.06 "/>
+<rect x="35.4" y="138.06" width="2.64" height="1.02"/>
+<polyline points="35.4,138.6 32.76,138.6 35.4,129.36 38.04,138.6 "/>
+<rect x="35.16" y="148.8" width="0.48" height="0.24"/>
+<rect x="35.16" y="138.839" width="0.48" height="9.961"/>
+<polyline points="35.4,89.46 32.1,89.46 32.28,88.8 35.4,77.88 38.52,88.8 38.7,89.46 38.04,89.46 37.56,89.1 34.92,79.86 
+	35.88,79.56 35.88,79.86 33.24,89.1 32.28,88.8 32.76,88.44 35.4,88.44 "/>
+<rect x="35.4" y="88.44" width="2.64" height="1.02"/>
+<polyline points="35.4,88.98 32.76,88.98 35.4,79.74 38.04,88.98 "/>
+<rect x="35.16" y="99.18" width="0.48" height="0.24"/>
+<rect x="35.16" y="89.22" width="0.48" height="9.96"/>
+<rect x="63.54" y="63.54" width="0.24" height="0.48"/>
+<rect x="63.78" y="63.54" width="3.96" height="0.48"/>
+<rect x="72.9" y="63.54" width="0.24" height="0.48"/>
+<rect x="73.14" y="63.54" width="6.78" height="0.48"/>
+<rect x="85.08" y="63.54" width="0.24" height="0.48"/>
+<rect x="85.32" y="63.54" width="6.72" height="0.48"/>
+<rect x="97.2" y="63.54" width="0.24" height="0.48"/>
+<rect x="97.44" y="63.54" width="6.78" height="0.48"/>
+<rect x="109.38" y="63.54" width="0.24" height="0.48"/>
+<rect x="109.62" y="63.54" width="4.02" height="0.48"/>
+<rect x="9.42" y="235.68" width="54.36" height="27"/>
+<rect x="9.42" y="235.44" width="54.6" height="0.479"/>
+<rect x="63.54" y="235.68" width="0.48" height="27.239"/>
+<rect x="9.18" y="262.44" width="54.6" height="0.479"/>
+<rect x="9.18" y="235.44" width="0.48" height="27.24"/>
+<rect x="7.08" y="233.88" fill="#FFFFFF" width="54.3" height="27"/>
+<rect x="7.08" y="233.64" width="54.54" height="0.48"/>
+<rect x="61.14" y="233.88" width="0.48" height="27.24"/>
+<rect x="6.84" y="260.64" width="54.54" height="0.48"/>
+<rect x="6.84" y="233.64" width="0.48" height="27.24"/>
+<text transform="matrix(1 0 0 1 9.4199 240.9595)" font-family="'ProductusOSGiBookc'" font-size="7.98">Session Impl</text>
+<polyline points="35.4,188.701 32.1,188.701 32.28,188.041 35.4,177.121 38.52,188.041 38.7,188.701 38.04,188.701 37.56,188.339 
+	34.92,179.1 35.88,178.8 35.88,179.1 33.24,188.339 32.28,188.041 32.76,187.68 35.4,187.68 "/>
+<rect x="35.4" y="187.68" width="2.64" height="1.021"/>
+<polyline points="35.4,188.22 32.76,188.22 35.4,178.98 38.04,188.22 "/>
+<rect x="35.16" y="233.88" width="0.48" height="0.24"/>
+<rect x="35.16" y="188.46" width="0.48" height="45.42"/>
+<rect x="186.6" y="171.839" width="54.358" height="26.58"/>
+<rect x="186.6" y="171.6" width="54.601" height="0.479"/>
+<rect x="240.72" y="171.839" width="0.479" height="26.82"/>
+<rect x="186.36" y="198.18" width="54.601" height="0.479"/>
+<rect x="186.36" y="171.6" width="0.479" height="26.819"/>
+<rect x="184.259" y="170.1" fill="#FFFFFF" width="54.301" height="26.521"/>
+<rect x="184.259" y="169.86" width="54.539" height="0.479"/>
+<rect x="238.32" y="170.1" width="0.479" height="26.76"/>
+<rect x="184.02" y="196.38" width="54.54" height="0.479"/>
+<rect x="184.02" y="169.86" width="0.479" height="26.761"/>
+<text transform="matrix(0.9504 0 0 1 186.6001 177.1792)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 186.6001 185.6997)" font-family="'ProductusSemibold'" font-size="7.98">Mount Plugin</text>
+<polyline points="212.58,209.94 209.28,209.94 209.458,209.281 212.58,198.36 215.701,209.281 215.878,209.94 215.22,209.94 
+	214.74,209.58 212.1,200.339 213.06,200.041 213.06,200.339 210.419,209.58 209.458,209.281 209.94,208.919 212.58,208.919 "/>
+<rect x="212.58" y="208.919" width="2.642" height="1.021"/>
+<polyline points="212.58,209.46 209.94,209.46 212.58,200.22 215.22,209.46 "/>
+<rect x="212.339" y="219.66" width="0.479" height="0.24"/>
+<rect x="212.339" y="209.701" width="0.479" height="9.959"/>
+<rect x="186.6" y="8.88" width="54.358" height="27"/>
+<rect x="186.6" y="8.64" width="54.601" height="0.48"/>
+<rect x="240.72" y="8.88" width="0.479" height="27.24"/>
+<rect x="186.36" y="35.64" width="54.601" height="0.48"/>
+<rect x="186.36" y="8.64" width="0.479" height="27.24"/>
+<rect x="184.259" y="7.08" fill="#FFFFFF" width="54.301" height="27"/>
+<rect x="184.259" y="6.84" width="54.539" height="0.48"/>
+<rect x="238.32" y="7.08" width="0.479" height="27.24"/>
+<rect x="184.02" y="33.84" width="54.54" height="0.48"/>
+<rect x="184.02" y="6.84" width="0.479" height="27.24"/>
+<text transform="matrix(1 0 0 1 186.6001 14.2202)" font-family="'ProductusOSGiBookc'" font-size="7.98">Mount Point Impl</text>
+<rect x="186.6" y="72.18" width="54.358" height="27"/>
+<rect x="186.6" y="71.94" width="54.601" height="0.479"/>
+<rect x="240.72" y="72.18" width="0.479" height="27.24"/>
+<rect x="186.36" y="98.94" width="54.601" height="0.479"/>
+<rect x="186.36" y="71.94" width="0.479" height="27.24"/>
+<rect x="184.259" y="70.38" fill="#FFFFFF" width="54.301" height="27"/>
+<rect x="184.259" y="70.14" width="54.539" height="0.48"/>
+<rect x="238.32" y="70.38" width="0.479" height="27.24"/>
+<rect x="184.02" y="97.14" width="54.54" height="0.48"/>
+<rect x="184.02" y="70.14" width="0.479" height="27.24"/>
+<text transform="matrix(1 0 0 1 186.6001 77.519)" font-family="'ProductusOSGiBookc'" font-size="7.98">&lt;&lt;interface&gt;&gt;</text>
+<text transform="matrix(1 0 0 1 186.6001 86.0405)" font-family="'ProductusSemibold'" font-size="7.98">Mount Point</text>
+<polyline points="212.58,59.34 215.878,59.34 215.701,60 212.58,70.92 209.458,60 209.28,59.34 209.94,59.34 210.419,59.7 
+	213.06,68.94 212.1,69.24 212.1,68.94 214.74,59.7 215.701,60 215.22,60.36 212.58,60.36 "/>
+<rect x="209.94" y="59.34" width="2.64" height="1.02"/>
+<polyline points="212.58,59.82 215.22,59.82 212.58,69.06 209.94,59.82 "/>
+<rect x="212.339" y="35.16" width="0.479" height="0.24"/>
+<rect x="212.339" y="35.4" width="0.479" height="24.18"/>
+<rect x="212.339" y="98.94" width="0.479" height="0.24"/>
+<rect x="212.339" y="99.18" width="0.479" height="71.159"/>
+<rect x="134.4" y="219.419" width="0.48" height="14.701"/>
+<rect x="134.64" y="219.419" width="156.121" height="0.48"/>
+<rect x="290.28" y="219.66" width="0.479" height="14.461"/>
+</svg>

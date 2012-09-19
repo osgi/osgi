@@ -1,0 +1,1594 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="105"
+         revision="$Id$"
+         version="5" xml:id="service.metatype"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Metatype Service Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.metatype-version"
+    linkend="org.osgi.service.metatype"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The Metatype specification defines interfaces that allow bundle
+    developers to describe attribute types in a computer readable form using
+    so-called <emphasis>metadata</emphasis>.</para>
+
+    <para>The purpose of this specification is to allow services to specify
+    the type information of data that they can use as arguments. The data is
+    based on <emphasis>attributes</emphasis>, which are key/value pairs like
+    properties.</para>
+
+    <para>A designer in a type-safe language like Java is often confronted
+    with the choice of using the language constructs to exchange data or using
+    a technique based on attributes/properties that are based on key/value
+    pairs. Attributes provide an escape from the rigid type-safety
+    requirements of modern programming languages.</para>
+
+    <para>Type-safety works very well for software development environments in
+    which multiple programmers work together on large applications or systems,
+    but often lacks the flexibility needed to receive structured data from the
+    outside world.</para>
+
+    <para>The attribute paradigm has several characteristics that make this
+    approach suitable when data needs to be communicated between different
+    entities which “speak” different languages. Attributes are uncomplicated,
+    resilient to change, and allow the receiver to dynamically adapt to
+    different types of data.</para>
+
+    <para>As an example, the OSGi framework Specifications define several
+    attribute types which are used in a Framework implementation, but which
+    are also used and referenced by other OSGi specifications such as the
+    <xref linkend="service.cm"/>. A Configuration Admin service implementation
+    deploys attributes (key/value pairs) as configuration properties.</para>
+
+    <para>The Meta Type Service provides a unified access point to the Meta
+    Type information that is associated with bundles. This Meta Type
+    information can be defined by an XML resource in a bundle
+    (<code>OSGI-INF/metatype</code> directories must be scanned for any XML
+    resources), it can come from the Meta Type Provider service, or it can be
+    obtained from Managed Service or Managed Service Factory services.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Conceptual model</emphasis> – The specification must
+          have a conceptual model for how classes and attributes are
+          organized.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Standards</emphasis> – The specification should be
+          aligned with appropriate standards, and explained in situations
+          where the specification is not aligned with, or cannot be mapped to,
+          standards.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Remote Management</emphasis> – Remote management
+          should be taken into account.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Size</emphasis> – Minimal overhead in size for a
+          bundle using this specification is required.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Localization</emphasis> – It must be possible to use
+          this specification with different languages at the same time. This
+          ability allows servlets to serve information in the language
+          selected in the browser.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Type information</emphasis> – The definition of an
+          attribute should contain the name (if it is required), the
+          cardinality, a label, a description, labels for enumerated values,
+          and the Java class that should be used for the values.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Validation</emphasis> – It should be possible to
+          validate the values of the attributes.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section xml:id="i1504332">
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Meta Type Service</emphasis> – A service that
+          provides a unified access point for meta type information.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Attribute</emphasis> – A key/value pair.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>PID</emphasis> – A unique persistent ID, defined in
+          configuration management.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Attribute Definition</emphasis> – Defines a
+          description, name, help text, and type information of an
+          attribute.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Object Class Definition</emphasis> – Defines the
+          type of a datum. It contains a description and name of the type plus
+          a set of <code>AttributeDefinition</code> objects.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Meta Type Provider</emphasis> – Provides access to
+          the object classes that are available for this object. Access uses
+          the PID and a locale to find the best
+          <code>ObjectClassDefinition</code> object.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Meta Type Information</emphasis> – Provides meta
+          type information for a bundle.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure pgwide="1">
+        <title>Class Diagram Meta Type Service,
+        org.osgi.service.metatype</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="1.800in"
+                       contentwidth="6.500in" fileref="metatype-classes.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Operation</title>
+
+      <para>The Meta Type service defines a rich dynamic typing system for
+      properties. The purpose of the type system is to allow reasonable User
+      Interfaces to be constructed dynamically.</para>
+
+      <para>The type information is normally carried by the bundles
+      themselves. Either by implementing the <code>MetaTypeProvider</code>
+      interface on the Managed Service or Managed Service Factory, by carrying
+      one or more XML resources that define a number of Meta Types in the
+      <code>OSGI-INF/metatype</code> directories, or registering a Meta Type
+      Provider as a service. Additionally, a Meta Type service could have
+      other sources that are not defined in this specification.</para>
+
+      <para>The Meta Type Service provides unified access to Meta Types that
+      are carried by the resident bundles. The Meta Type Service collects this
+      information from the bundles and provides uniform access to it. A client
+      can requests the Meta Type Information associated with a particular
+      bundle. The <code>MetaTypeInformation</code> object provides a list of
+      <code>ObjectClassDefinition</code> objects for a bundle. These objects
+      define all the information for a specific <emphasis>object
+      class</emphasis>. An object class is a some descriptive information and
+      a set of named attributes (which are key/value pairs).</para>
+
+      <para>Access to Object Class Definitions is qualified by a locale and a
+      Persistent IDentity (PID). This specification does not specify what the
+      PID means. One application is OSGi Configuration Management where a PID
+      is used by the Managed Service and Managed Service Factory services. In
+      general, a PID should be regarded as the name of a variable where an
+      Object Class Definition defines its type.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Attributes Model</title>
+
+    <para xml:id="i1279629">The Framework uses the LDAP filter syntax for
+    searching the Framework registry. The usage of the attributes in this
+    specification and the Framework specification closely resemble the LDAP
+    attribute model. Therefore, the names used in this specification have been
+    aligned with LDAP. Consequently, the interfaces which are defined by this
+    Specification are:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>AttributeDefinition</code></para>
+      </listitem>
+
+      <listitem>
+        <para><code>ObjectClassDefinition</code></para>
+      </listitem>
+
+      <listitem>
+        <para><code>MetaTypeProvider</code></para>
+      </listitem>
+    </itemizedlist>
+
+    <para>These names correspond to the LDAP attribute model. For further
+    information on ASN.1-defined attributes and X.500 object classes and
+    attributes, see <xref linkend="i1215870"/>.</para>
+
+    <para>The LDAP attribute model assumes a global name-space for attributes,
+    and object classes consist of a number of attributes. So, if an object
+    class inherits the same attribute from different parents, only one copy of
+    the attribute must become part of the object class definition. This
+    name-space implies that a given attribute, for example <code>cn</code>,
+    should <emphasis>always</emphasis> be the common name and the type must
+    always be a <code>String</code>. An attribute <code>cn</code> cannot be an
+    <code>Integer</code> in another object class definition. In this respect,
+    the OSGi approach towards attribute definitions is comparable with the
+    LDAP attribute model.</para>
+  </section>
+
+  <section>
+    <title>Object Class Definition</title>
+
+    <para>The <code>ObjectClassDefinition</code> interface is used to group
+    the attributes which are defined in <code>AttributeDefinition</code>
+    objects.</para>
+
+    <para xml:id="i1279638">An <code>ObjectClassDefinition</code> object
+    contains the information about the overall set of attributes and has the
+    following elements:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>A name which can be returned in different locales.</para>
+      </listitem>
+
+      <listitem>
+        <para>A global name-space in the registry, which is the same condition
+        as LDAP/X.500 object classes. In these standards the OSI Object
+        Identifier (OID) is used to uniquely identify object classes. If such
+        an OID exists, (which can be requested at several standard
+        organizations, and many companies already have a node in the tree) it
+        can be returned here. Otherwise, a unique id should be returned. This
+        id can be a Java class name (reverse domain name) or can be generated
+        with a GUID algorithm. All LDAP-defined object classes already have an
+        associated OID. It is strongly advised to define the object classes
+        from existing LDAP schemes which provide many preexisting OIDs. Many
+        such schemes exist ranging from postal addresses to DHCP
+        parameters.</para>
+      </listitem>
+
+      <listitem>
+        <para>A human-readable description of the class.</para>
+      </listitem>
+
+      <listitem>
+        <para>A list of attribute definitions which can be filtered as
+        required, or optional. Note that in X.500 the mandatory or required
+        status of an attribute is part of the object class definition and not
+        of the attribute definition.</para>
+      </listitem>
+
+      <listitem>
+        <para>An icon, in different sizes.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section xml:id="i1504333">
+    <title>Attribute Definition</title>
+
+    <para>The <code>AttributeDefinition</code> interface provides the means to
+    describe the data type of attributes.</para>
+
+    <para>The <code>AttributeDefinition</code> interface defines the following
+    elements:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Defined names (final ints) for the data types as restricted in
+        the Framework for the attributes, called the syntax in OSI terms,
+        which can be obtained with the <code>getType()</code> method.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>AttributeDefinition</code> objects should use an ID that
+        is similar to the OID as described in the ID field for
+        <code>ObjectClassDefinition</code>.</para>
+      </listitem>
+
+      <listitem>
+        <para>A localized name intended to be used in user interfaces.</para>
+      </listitem>
+
+      <listitem>
+        <para>A localized description that defines the semantics of the
+        attribute and possible constraints, which should be usable for
+        tooltips.</para>
+      </listitem>
+
+      <listitem>
+        <para>An indication if this attribute should be stored as a unique
+        value, a <code>Vector</code>, or an array of values, as well as the
+        maximum cardinality of the type.</para>
+      </listitem>
+
+      <listitem>
+        <para>The data type, as limited by the Framework service registry
+        attribute types.</para>
+      </listitem>
+
+      <listitem>
+        <para>A validation function to verify if a possible value is
+        correct.</para>
+      </listitem>
+
+      <listitem>
+        <para>A list of values and a list of localized labels. Intended for
+        popup menus in GUIs, allowing the user to choose from a set.</para>
+      </listitem>
+
+      <listitem>
+        <para>A default value (String[]). The return depends on the following
+        cases:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><emphasis>not specified</emphasis> – Return
+            <code>null</code> if this attribute is not specified.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>cardinality = 0</emphasis> – Return an array with
+            one element.</para>
+          </listitem>
+
+          <listitem>
+            <para><emphasis>otherwise</emphasis> – Return an array with less
+            or equal than the absolute value of cardinality, possibly empty if
+            the value is an empty string.</para>
+          </listitem>
+        </itemizedlist>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section xml:id="i1450077">
+    <title>Meta Type Service</title>
+
+    <para>The Meta Type Service provides unified access to Meta Type
+    information that is associated with a Bundle. It can get this information
+    through the following means:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Meta Type Resource</emphasis> – A bundle can provide
+        one or more XML resources that are contained in its JAR file. These
+        resources contain an XML definition of meta types as well as to what
+        PIDs these Meta Types apply. These XML resources must reside in the
+        <code>OSGI-INF/metatype</code> directories of the bundle (including
+        any fragments).</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Managed Service [Factory] objects </emphasis>– As
+        defined in the configuration management specification,
+        <code>ManagedService</code> and <code>ManagedServiceFactory</code>
+        service objects can optionally implement the
+        <code>MetaTypeProvider</code> interface. The Meta Type Service will
+        only search for <code>MetaTypeProvider</code> objects if no meta type
+        resources are found in the bundle.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Meta Type Provider service</emphasis> – Bundles can
+        register Meta Type Provider services to dynamically provide meta types
+        for PIDs and factory PIDs.</para>
+      </listitem>
+    </itemizedlist>
+
+    <figure pgwide="1" xml:id="i1386202">
+      <title>Sources for Meta Types</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="1.619in"
+                     contentwidth="5.470in" fileref="metatype-sources.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>This model is depicted in <xref linkend="i1386202"/>.</para>
+
+    <para>The Meta Type Service can therefore be used to retrieve meta type
+    information for bundles which contain Meta Type resources or which provide
+    their own <code>MetaTypeProvider</code> objects. The
+    <code>MetaTypeService</code> interface has a single method:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.metatype.MetaTypeService.getMetaTypeInformation-Bundle-"
+        xrefstyle="hyperlink"/> – Given a bundle, it must return the Meta Type
+        Information for that bundle, even if there is no meta type information
+        available at the moment of the call.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The returned <code>MetaTypeInformation</code> object maintains a map
+    of PID to <code>ObjectClassDefinition</code> objects. The map is keyed by
+    locale and PID. The list of maintained PIDs is available from the
+    <code>MetaTypeInformation</code> object with the following methods:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.metatype.MetaTypeInformation.getPids--"
+        xrefstyle="hyperlink"/> – PIDs for which Meta Types are
+        available.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.metatype.MetaTypeInformation.getFactoryPids--"
+        xrefstyle="hyperlink"/> – PIDs associated with Managed Service Factory
+        services.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>These methods and their interaction with the Meta Type resource are
+    described in <xref linkend="i1492258"/>.</para>
+
+    <para>The <code>MetaTypeInformation</code> interface extends the
+    <code>MetaTypeProvider</code> interface. The <code>MetaTypeProvider</code>
+    interface is used to access meta type information. It supports locale
+    dependent information so that the text used in
+    <code>AttributeDefinition</code> and <code>ObjectClassDefinition</code>
+    objects can be adapted to different locales.</para>
+
+    <para>Which locales are supported by the <code>MetaTypeProvider</code>
+    object are defined by the implementer or the meta type resources.The list
+    of available locales can be obtained from the
+    <code>MetaTypeProvider</code> object.</para>
+
+    <para>The MetaTypeProvider interface provides the following
+    methods:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.metatype.MetaTypeProvider.getObjectClassDefinition-String-String-"
+        xrefstyle="hyperlink"/> – Get access to an ObjectClassDefinition
+        object for the given PID. The second parameter defines the
+        locale.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.metatype.MetaTypeProvider.getLocales--"
+        xrefstyle="hyperlink"/> – List the locales that are available.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Locale objects are represented in <code>String</code> objects
+    because not all profiles support Locale. The <code>String</code> holds the
+    standard Locale presentation of:</para>
+
+    <programlisting>locale = language ( ’_’ country ( ’_’ variation))
+language ::= &lt; defined by ISO 3166 &gt;
+country  ::= &lt; defined by ISO 639 &gt;</programlisting>
+
+    <para>For example, <code>en</code>, <code>nl_BE</code>,
+    <code>en_CA_posix</code> are valid locales. The use of <code>null</code>
+    for locale indicates that <code>java.util.Locale.getDefault()</code> must
+    be used.</para>
+
+    <para>The Meta Type Service implementation class is the main class. It
+    registers the <code>org.osgi.service.metatype.MetaTypeService</code>
+    service and has a method to get a <code>MetaTypeInformation</code> object
+    for a bundle.</para>
+
+    <para>Following is some sample code demonstrating how to print out all the
+    Object Class Definitions and Attribute Definitions contained in a
+    bundle:</para>
+
+    <programlisting>void printMetaTypes( MetaTypeService mts,Bundle b ) {
+    MetaTypeInformation mti = 
+        mts.getMetaTypeInformation(b);
+    String [] pids = mti.getPids();
+    String [] locales = mti.getLocales();
+
+    for ( int locale = 0; locale&lt;locales.length; locale++) {
+        System.out.println("Locale " + locales[locale] );
+        for (int i=0; i&lt; pids.length; i++) {
+            ObjectClassDefinition ocd = 
+                mti.getObjectClassDefinition(pids[i], null);
+            AttributeDefinition[] ads = 
+                ocd.getAttributeDefinitions(
+                    ObjectClassDefinition.ALL);
+            for (int j=0; j&lt; ads.length; j++) {
+                System.out.println("OCD="+ocd.getName()
+                    + "AD="+ads[j].getName());
+            }
+        }
+    }
+}</programlisting>
+  </section>
+
+  <section xml:id="i1550143">
+    <title>Meta Type Provider Service</title>
+
+    <para>A Meta Type Provider service allows third party contributions to the
+    internal Object Class Definition repository. A Meta Type Provider can
+    contribute multiple PIDs, both factory and singleton PIDs. A Meta Type
+    Provider service must register with both or one of the following service
+    properties:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.metatype.MetaTypeProvider.METATYPE_PID"
+        xrefstyle="hyperlink"/> – (<code>String+</code>) Provides a list of
+        PIDs that this Meta Type Provider can provide Object Class Definitions
+        for. The listed PIDs are intended to be used as normal singleton PIDs
+        used by Managed Services.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.metatype.MetaTypeProvider.METATYPE_FACTORY_PID"
+        xrefstyle="hyperlink"/> – (<code>String+</code>) Provides a list of
+        factory PIDs that this Meta Type Provider can provide Object Class
+        Definitions for. The listed PIDs are intended to be used as factory
+        PIDs used by Managed Service Factories.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The Object Class Definitions must originate from the bundle that
+    registered the Meta Type Provider service. Third party extenders should
+    therefore use the bundle of their extendee. A Meta Type Service must
+    report these Object Class Definitions on the Meta Type Information of the
+    registering bundle, merged with any other information from that
+    bundle.</para>
+
+    <para>The Meta Type Service must track these Meta Type Provider services
+    and make their Meta Types available as if they were provided on the
+    Managed Service (Factory) services. The Meta Types must become unavailable
+    when the Meta Type Provider service is unregistered.</para>
+  </section>
+
+  <section xml:id="i1504250">
+    <title>Using the Meta Type Resources</title>
+
+    <para>A bundle that wants to provide meta type resources must place these
+    resources in the <code>OSGI-INF/metatype</code> directory. The name of the
+    resource must be a valid JAR path. All resources in that directory must be
+    meta type documents. Fragments can contain additional meta type resources
+    in the same directory and they must be taken into account when the meta
+    type resources are searched. A meta type resource must be encoded in
+    UTF-8.</para>
+
+    <para>The MetaType Service must support localization of the</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>name</para>
+      </listitem>
+
+      <listitem>
+        <para>icon</para>
+      </listitem>
+
+      <listitem>
+        <para>description</para>
+      </listitem>
+
+      <listitem>
+        <para>label attributes</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>The localization mechanism must be identical using the same
+    mechanism as described in the Core module layer, see
+    <emphasis>Localization</emphasis>, using the same property resource.
+    However, it is possible to override the property resource in the meta type
+    definition resources with the <code>localization</code> attribute of the
+    <code>MetaData</code> element.</para>
+
+    <para>The Meta Type Service must examine the bundle and its fragments to
+    locate all localization resources for the localization base name. From
+    that list, the Meta Type Service derives the list of locales which are
+    available for the meta type information. This list can then be returned by
+    <code>MetaTypeInformation.getLocales</code> method. This list can change
+    at any time because the bundle could be refreshed. Clients should be
+    prepared that this list changes after they received it.</para>
+
+    <section>
+      <title>XML Schema of a Meta Type Resource</title>
+
+      <para>This section describes the schema of the meta type resource. This
+      schema is not intended to be used during runtime for validating meta
+      type resources. The schema is intended to be used by tools and external
+      management systems.</para>
+
+      <para>The XML namespace for meta type documents must be:</para>
+
+      <programlisting>http://www.osgi.org/xmlns/metatype/v1.2.0</programlisting>
+
+      <para>The namespace abbreviation should be <code>metatype</code>. I.e.
+      the following header should be:</para>
+
+      <programlisting>&lt;metatype:MetaData 
+    xmlns:metatype=
+        "http://www.osgi.org/xmlns/metatype/v1.2.0" 
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    &gt;</programlisting>
+
+      <para>The file can be found in the osgi.jar file that can be downloaded
+      from the www.osgi.org web site.</para>
+
+      <figure>
+        <title>XML Schema Instance Structure (Type name = Element
+        name)</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="3.357in"
+                       contentwidth="4.280in" fileref="schema-structure.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>The element structure of the XML file is:</para>
+
+      <programlisting>MetaData    ::= OCD* Designate*
+
+OCD         ::= AD+  Icon  
+AD          ::= Option*
+
+Designate   ::= Object  
+Object      ::= Attribute *
+
+Attribute   ::= Value *</programlisting>
+
+      <para>The different elements are described in <xref
+      linkend="service.metatype-xml.schema"/>.</para>
+
+      <table xml:id="service.metatype-xml.schema">
+        <title>XML Schema for Meta Type resources</title>
+
+        <tgroup cols="6">
+          <colspec colname="col1" colnum="1" colwidth="0.2*"/>
+
+          <colspec colname="col2" colnum="2" colwidth="1.5*"/>
+
+          <colspec colname="col3" colnum="3" colwidth="1*"/>
+
+          <colspec colname="col4" colnum="4" colwidth="1*"/>
+
+          <colspec colname="col5" colnum="5" colwidth="2*"/>
+
+          <colspec colname="col6" colnum="6" colwidth="4*"/>
+
+          <spanspec nameend="col5" namest="col1" spanname="element"/>
+
+          <thead>
+            <row>
+              <entry><para/></entry>
+
+              <entry><para>Attribute</para></entry>
+
+              <entry><para>Deflt</para></entry>
+
+              <entry><para>Type</para></entry>
+
+              <entry><para>Method</para></entry>
+
+              <entry><para>Description</para></entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry spanname="element"><code>MetaData</code></entry>
+
+              <entry colname="col6"><para>Top Element</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>localization</code></entry>
+
+              <entry/>
+
+              <entry><code>string</code></entry>
+
+              <entry><para/></entry>
+
+              <entry><para>Points to the Properties file that can localize
+              this XML. See <emphasis>Localization</emphasis> in <xref
+              linkend="intro.core.release"
+              xrefstyle="template:%t"/>.</para></entry>
+            </row>
+
+            <row>
+              <entry spanname="element"><code>OCD</code></entry>
+
+              <entry colname="col6"><para>Object Class
+              Definition</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>name</code></entry>
+
+              <entry><code>&lt;&gt;</code></entry>
+
+              <entry><code>string</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.metatype.ObjectClassDefinition.getName--"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para> A human readable name that can be
+              localized.</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>description</code></entry>
+
+              <entry/>
+
+              <entry/>
+
+              <entry><para><xref
+              linkend="org.osgi.service.metatype.ObjectClassDefinition.getDescription--"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>A human readable description of the Object Class
+              Definition that can be localized. </para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>id</code></entry>
+
+              <entry><code>&lt;&gt;</code></entry>
+
+              <entry/>
+
+              <entry><para><xref
+              linkend="org.osgi.service.metatype.ObjectClassDefinition.getID--"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>A unique id, cannot be localized.</para></entry>
+            </row>
+
+            <row>
+              <entry spanname="element"><code>Designate</code></entry>
+
+              <entry colname="col6"><para>An association between one PID and
+              an Object Class Definition. This element
+              <emphasis>designates</emphasis> a PID to be of a certain
+              <emphasis>type</emphasis>.</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>pid</code></entry>
+
+              <entry><code>&lt;&gt;</code></entry>
+
+              <entry><code>string</code></entry>
+
+              <entry><para/></entry>
+
+              <entry><para>The PID that is associated with an
+              <code>OCD</code>. This can be a reference to a factory or
+              singleton configuration object. Either <code>pid</code> or
+              <code>factoryPid</code> must be specified. See <xref
+              linkend="i1492258"/>.</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>factoryPid</code></entry>
+
+              <entry/>
+
+              <entry><code>string</code></entry>
+
+              <entry><para/></entry>
+
+              <entry><para>If the <code>factoryPid</code> attribute is set,
+              this Designate element defines a factory configuration for the
+              given factory, if it is not set or empty, it designates a
+              singleton configuration. Either <code>pid</code> or
+              <code>factoryPid</code> must be specified. See <xref
+              linkend="i1492258"/>.</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>bundle</code></entry>
+
+              <entry/>
+
+              <entry><code>string</code></entry>
+
+              <entry><para/></entry>
+
+              <entry><para>Location of the bundle that implements the PID.
+              This binds the PID to the bundle. I.e. no other bundle using the
+              same PID may use this designation. In a Meta Type resource this
+              field may be set to an wildcard (\u002A, <code>"*"</code>) to
+              indicate the bundle where the resource comes from. This is an
+              optional attribute but can be mandatory in certain usage
+              schemes, for example the Autoconf Resource
+              Processor.</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>optional</code></entry>
+
+              <entry><code>false</code></entry>
+
+              <entry><code>boolean</code></entry>
+
+              <entry><para/></entry>
+
+              <entry><para>If <code>true</code>, then this Designate element
+              is optional, errors during processing must be
+              ignored.</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>merge</code></entry>
+
+              <entry><code>false</code></entry>
+
+              <entry><code>boolean</code></entry>
+
+              <entry><para/></entry>
+
+              <entry><para>If the PID refers to an existing variable, then
+              merge the properties with the existing properties if this
+              attribute is <code>true</code>. Otherwise, replace the
+              properties.</para></entry>
+            </row>
+
+            <row>
+              <entry spanname="element"><code>AD</code></entry>
+
+              <entry colname="col6"><para>Attribute Definition</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>name</code></entry>
+
+              <entry/>
+
+              <entry><code>string</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.metatype.AttributeDefinition.getName--"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>A localizable name for the Attribute Definition.
+              <code>description</code></para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>description</code></entry>
+
+              <entry/>
+
+              <entry><code>string</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.metatype.AttributeDefinition.getDescription--"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>A localizable description for the Attribute
+              Definition. </para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>id</code></entry>
+
+              <entry/>
+
+              <entry/>
+
+              <entry><para><xref
+              linkend="org.osgi.service.metatype.AttributeDefinition.getID--"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para> The unique ID of the Attribute
+              Definition.</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>type</code></entry>
+
+              <entry/>
+
+              <entry><code>string</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.metatype.AttributeDefinition.getType--"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>The type of an attribute is an enumeration of the
+              different scalar types. The string is mapped to one of the
+              constants on the AttributeDefinition interface. Valid values,
+              which are defined in the <code>Scalar</code> type,
+              are:</para><programlisting>String   <phrase role="symbol">↔</phrase> <xref
+                    linkend="org.osgi.service.metatype.AttributeDefinition.STRING"
+                    xrefstyle="hyperlink"/>
+Long     <phrase role="symbol">↔</phrase> <xref
+                    linkend="org.osgi.service.metatype.AttributeDefinition.LONG"
+                    xrefstyle="hyperlink"/>
+Double   <phrase role="symbol">↔</phrase> <xref
+                    linkend="org.osgi.service.metatype.AttributeDefinition.DOUBLE"
+                    xrefstyle="hyperlink"/>
+Float    <phrase role="symbol">↔</phrase> <xref
+                    linkend="org.osgi.service.metatype.AttributeDefinition.FLOAT"
+                    xrefstyle="hyperlink"/>
+Integer  <phrase role="symbol">↔</phrase> <xref
+                    linkend="org.osgi.service.metatype.AttributeDefinition.INTEGER"
+                    xrefstyle="hyperlink"/>
+Byte     <phrase role="symbol">↔</phrase> <xref
+                    linkend="org.osgi.service.metatype.AttributeDefinition.BYTE"
+                    xrefstyle="hyperlink"/>
+Char     <phrase role="symbol">↔</phrase> <xref
+                    linkend="org.osgi.service.metatype.AttributeDefinition.CHARACTER"
+                    xrefstyle="hyperlink"/>
+Boolean  <phrase role="symbol">↔</phrase> <xref
+                    linkend="org.osgi.service.metatype.AttributeDefinition.BOOLEAN"
+                    xrefstyle="hyperlink"/>
+Short    <phrase role="symbol">↔</phrase> <xref
+                    linkend="org.osgi.service.metatype.AttributeDefinition.SHORT"
+                    xrefstyle="hyperlink"/>
+Password <phrase role="symbol">↔</phrase> <xref
+                    linkend="org.osgi.service.metatype.AttributeDefinition.PASSWORD"
+                    xrefstyle="hyperlink"/></programlisting></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>cardinality</code></entry>
+
+              <entry><code>0</code></entry>
+
+              <entry/>
+
+              <entry><para><xref
+              linkend="org.osgi.service.metatype.AttributeDefinition.getCardinality--"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>The number of elements an instance can take.
+              Positive numbers describe an array (<code>[]</code>) and
+              negative numbers describe a <code>Vector</code>
+              object.</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>min</code></entry>
+
+              <entry/>
+
+              <entry><code>string</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.metatype.AttributeDefinition.validate-String-"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para> A validation value. This value is not directly
+              available from the <code>AttributeDefinition</code> interface.
+              However, the <xref
+              linkend="org.osgi.service.metatype.AttributeDefinition.validate-String-"
+              xrefstyle="hyperlink"/> method must verify this. The semantics
+              of this field depend on the type of this Attribute
+              Definition.</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>max</code></entry>
+
+              <entry/>
+
+              <entry><code>string</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.metatype.AttributeDefinition.validate-String-"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>A validation value. Similar to the <code>min</code>
+              field.</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><para
+              xml:id="i1366390"><code>default</code></para></entry>
+
+              <entry/>
+
+              <entry><code>string</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.metatype.AttributeDefinition.getDefaultValue--"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>The default value. A default is an array of
+              <code>String</code> objects. The XML attribute must contain a
+              comma delimited list. The default value is trimmed and escaped
+              in the same way as described in the
+              <code>validate(String)</code> method. The empty string is a
+              valid value. If the empty string specifies the default for an
+              attribute with cardinality that is not equal to zero then it
+              must be seen as an empty Vector or array.</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>required</code></entry>
+
+              <entry><code>true</code></entry>
+
+              <entry><code>boolean</code></entry>
+
+              <entry><para/></entry>
+
+              <entry><para>Required attribute. The <code>required</code>
+              attribute indicates whether or not the attribute key must appear
+              within the configuration dictionary to be valid.</para></entry>
+            </row>
+
+            <row>
+              <entry spanname="element"><code>Option</code></entry>
+
+              <entry colname="col6"><para>One option label/value for the
+              options in an <code>AD</code>.</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>label</code></entry>
+
+              <entry><code>&lt;&gt;</code></entry>
+
+              <entry><code>string</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.metatype.AttributeDefinition.getOptionLabels--"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>The label</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>value</code></entry>
+
+              <entry><code>&lt;&gt;</code></entry>
+
+              <entry><code>string</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.metatype.AttributeDefinition.getOptionValues--"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>The value</para></entry>
+            </row>
+
+            <row>
+              <entry spanname="element"><code>Icon</code></entry>
+
+              <entry colname="col6"><para>An icon definition. </para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>resource</code></entry>
+
+              <entry><code>&lt;&gt;</code></entry>
+
+              <entry><code>string</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.metatype.ObjectClassDefinition.getIcon-int-"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>The resource is a URL. The base URL is assumed to
+              be the XML file with the definition. I.e. if the XML is a
+              resource in the JAR file, then this URL can reference another
+              resource in that JAR file using a relative URL.</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>size</code></entry>
+
+              <entry><code>&lt;&gt;</code></entry>
+
+              <entry><code>string</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.metatype.ObjectClassDefinition.getIcon-int-"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>The number of pixels of the icon, maps to the size
+              parameter of the <xref
+              linkend="org.osgi.service.metatype.ObjectClassDefinition.getIcon-int-"
+              xrefstyle="hyperlink"/> method.</para></entry>
+            </row>
+
+            <row>
+              <entry spanname="element"><code>Object</code></entry>
+
+              <entry colname="col6"><para>A definition of an
+              instance.</para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>ocdref</code></entry>
+
+              <entry><code>&lt;&gt;</code></entry>
+
+              <entry><code>string</code></entry>
+
+              <entry><para/></entry>
+
+              <entry><para>A reference to the id attribute of an OCD element.
+              I.e. this attribute defines the OCD type of this
+              object.</para></entry>
+            </row>
+
+            <row>
+              <entry spanname="element"><code>Attribute</code></entry>
+
+              <entry colname="col6"><para>A value for an attribute of an
+              object. </para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>adref</code></entry>
+
+              <entry><code>&lt;&gt;</code></entry>
+
+              <entry><code>string</code></entry>
+
+              <entry><para/></entry>
+
+              <entry><para>A reference to the id of the <code>AD</code> in the
+              <code>OCD</code> as referenced by the parent
+              <code>Object</code>. </para></entry>
+            </row>
+
+            <row>
+              <entry/>
+
+              <entry><code>content</code></entry>
+
+              <entry/>
+
+              <entry><code>string</code></entry>
+
+              <entry><para/></entry>
+
+              <entry><para>The content of the attributes. If this is an array,
+              the content must be separated by commas (<code>’,’
+              \u002C</code>). Commas must be escaped as described at the <link
+              endterm="i1366390" linkend="i1366390"/> attribute of the
+              <code>AD</code> element.</para></entry>
+            </row>
+
+            <row>
+              <entry spanname="element"><code>Value</code></entry>
+
+              <entry colname="col6"><para>Holds a single value. This element
+              can be repeated multiple times under an Attribute
+              </para></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section xml:id="i1492258">
+      <title>Use of the Designate Element</title>
+
+      <para>For the MetaType Service, the <code>Designate</code> definition is
+      used to declare the available PIDs and factory PIDs; the Attribute
+      elements are never used by the MetaType service.</para>
+
+      <para>The <xref
+      linkend="org.osgi.service.metatype.MetaTypeInformation.getPids--"
+      xrefstyle="hyperlink"/> method returns an array of PIDs that were
+      specified in the <code>pid</code> attribute of the Object elements. The
+      <xref
+      linkend="org.osgi.service.metatype.MetaTypeInformation.getFactoryPids--"
+      xrefstyle="hyperlink"/> method returns an array of the
+      <code>factoryPid</code> attributes. For factories, the related
+      <code>pid</code> attribute is ignored because all instances of a factory
+      must share the same meta type.</para>
+
+      <para>The following example shows a metatype reference to a singleton
+      configuration and a factory configuration.</para>
+
+      <programlisting>    &lt;Designate pid="com.acme.designate.1"&gt;
+        &lt;Object ocdref="com.acme.designate"./&gt;
+    &lt;/Designate&gt;
+    &lt;Designate factoryPid="com.acme.designate.factory"
+        bundle="*"&gt;
+        &lt;Object ocdref="com.acme.designate"/&gt;
+    &lt;/Designate&gt;</programlisting>
+
+      <para>Other schemes can embed the <code>Object</code> element in the
+      <code>Designate</code> element to define actual instances for the
+      Configuration Admin service. In that case the <code>pid</code> attribute
+      must be used together with the <code>factoryPid</code> attribute.
+      However, in that case an aliasing model is required because the
+      Configuration Admin service does not allow the creator to choose the
+      <code>Configuration</code> object’s PID.</para>
+    </section>
+
+    <section xml:id="i1504251">
+      <title>Example Metadata File</title>
+
+      <para>This example defines a meta type file for a Person record, based
+      on ISO attribute types. The ids that are used are derived from ISO
+      attributes.</para>
+
+      <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
+&lt;MetaData 
+    xmlns=
+        "http://www.osgi.org/xmlns/metatype/v1.2.0" 
+     localization="person"&gt;
+  &lt;OCD name="%person" id="2.5.6.6"
+        description="%Person Record"&gt;
+    &lt;AD name="%sex" id="2.5.4.12" type="Integer"&gt;
+       &lt;Option label="%male" value="1"/&gt;
+       &lt;Option label="%Female" value="0"/&gt;
+    &lt;/AD&gt;
+    &lt;AD name="%sn" id="2.5.4.4" type="String"/&gt;
+    &lt;AD name="%cn" id="2.5.4.3" type="String"/&gt;
+    &lt;AD name="%seeAlso" id="2.5.4.34" type="String"
+            cardinality="8" default="http://www.google.com,
+                    http://www.yahoo.com"/&gt;
+    &lt;AD name="%telNumber" id="2.5.4.20" type="String"/&gt;
+ &lt;/OCD&gt;
+
+ &lt;Designate pid="com.acme.addressbook"&gt;
+  &lt;Object ocdref="2.5.6.6"/&gt;
+ &lt;/Designate&gt;
+&lt;/MetaData&gt;</programlisting>
+
+      <para>Translations for this file, as indicated by the localization
+      attribute must be stored in the root directory (e.g.
+      <code>person_du_NL.properties</code>). The default localization base
+      name for the properties is <code>OSGI-INF/l10n/bundle</code>, but can be
+      overridden by the manifest Bundle-Localization header and the
+      <code>localization</code> attribute of the Meta Data element. The
+      property files have the base name of <code>person</code>. The Dutch,
+      French and English translations could look like:</para>
+
+      <programlisting>person_du_NL.properties:
+person=Persoon
+person\ record=Persoons beschrijving
+cn=Naam
+sn=Voornaam
+seeAlso=Zie ook
+telNumber=Tel. Nummer
+sex=Geslacht
+male=Mannelijk
+female=Vrouwelijk
+
+person_fr.properties
+person=Personne
+person\ record=Description de la personne
+cn=Nom
+sn=Surnom
+seeAlso=Reference
+telNumber=Tel.
+sex=Sexe
+male=Homme
+female=Femme
+
+person_en_US.properties
+person=Person
+person\ record=Person Record
+cn=Name
+sn=Sur Name
+seeAlso=See Also
+telNumber=Tel.
+sex=Sex
+male=Male
+female=Female</programlisting>
+    </section>
+  </section>
+
+  <section>
+    <title>Object</title>
+
+    <para>The <code>OCD</code> element can be used to describe the possible
+    contents of a <code>Dictionary</code> object. In this case, the attribute
+    name is the key. The <code>Object</code> element can be used to assign a
+    value to a Dictionary object.</para>
+
+    <para>For example:</para>
+
+    <programlisting>&lt;Designate pid="com.acme.b"&gt;
+    &lt;Object ocdref="b"&gt;
+        &lt;Attribute adref="foo" content="Zaphod Beeblebrox"/&gt;
+        &lt;Attribute adref="bar"&gt;
+            &lt;Value&gt;1&lt;/Value&gt;
+            &lt;Value&gt;2&lt;/Value&gt;
+            &lt;Value&gt;3&lt;/Value&gt;
+            &lt;Value&gt;4&lt;/Value&gt;
+            &lt;Value&gt;5&lt;/Value&gt;
+        &lt;/Attribute&gt;
+    &lt;/Object&gt;
+  &lt;/Designate&gt;</programlisting>
+  </section>
+
+  <section xml:id="i1502383">
+    <title>XML Schema</title>
+
+    <programlisting role="pgwide">&lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
+    xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.2.0"
+    targetNamespace="http://www.osgi.org/xmlns/metatype/v1.2.0"
+    version="1.2.0"&gt;
+
+    &lt;element name="MetaData" type="metatype:Tmetadata" /&gt;
+
+    &lt;complexType name="Tmetadata"&gt;
+        &lt;sequence&gt;
+            &lt;element name="OCD" type="metatype:Tocd" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+            &lt;element name="Designate" type="metatype:Tdesignate"
+                minOccurs="0" maxOccurs="unbounded" /&gt;
+            &lt;!-- It is non-deterministic, per W3C XML Schema 1.0:http://www.w3.org/TR/xmlschema-1/#cos-nonambig
+                to use namespace="##any" below. --&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="localization" type="string" use="optional"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+
+    &lt;complexType name="Tocd"&gt;
+        &lt;sequence&gt;
+            &lt;element name="AD" type="metatype:Tad" minOccurs="1"
+                maxOccurs="unbounded" /&gt;
+            &lt;element name="Icon" type="metatype:Ticon" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+            &lt;!-- It is non-deterministic, per W3C XML Schema 1.0:http://www.w3.org/TR/xmlschema-1/#cos-nonambig
+                to use namespace="##any" below. --&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="name" type="string" use="required" /&gt;
+        &lt;attribute name="description" type="string" use="optional"/&gt;
+        &lt;attribute name="id" type="string" use="required" /&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+
+    &lt;complexType name="Tad"&gt;
+        &lt;sequence&gt;
+            &lt;element name="Option" type="metatype:Toption" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+            &lt;!-- It is non-deterministic, per W3C XML Schema 1.0:http://www.w3.org/TR/xmlschema-1/#cos-nonambig
+                to use namespace="##any" below. --&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="name" type="string" use="optional" /&gt;
+        &lt;attribute name="description" type="string" use="optional"/&gt;
+        &lt;attribute name="id" type="string" use="required" /&gt;
+        &lt;attribute name="type" type="metatype:Tscalar" use="required"/&gt;
+        &lt;attribute name="cardinality" type="int" use="optional"
+            default="0" /&gt;
+        &lt;attribute name="min" type="string" use="optional" /&gt;
+        &lt;attribute name="max" type="string" use="optional" /&gt;
+        &lt;attribute name="default" type="string" use="optional"/&gt;
+        &lt;attribute name="required" type="boolean" use="optional"
+            default="true" /&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+
+    &lt;complexType name="Tobject"&gt;
+        &lt;sequence&gt;
+            &lt;element name="Attribute" type="metatype:Tattribute"
+                minOccurs="0" maxOccurs="unbounded" /&gt;
+            &lt;!-- It is non-deterministic, per W3C XML Schema 1.0:http://www.w3.org/TR/xmlschema-1/#cos-nonambig
+                to use namespace="##any" below. --&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="ocdref" type="string" use="required"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+
+    &lt;complexType name="Tattribute"&gt;
+        &lt;sequence&gt;
+            &lt;element name="Value" type="string" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+            &lt;!-- It is non-deterministic, per W3C XML Schema 1.0:http://www.w3.org/TR/xmlschema-1/#cos-nonambig
+                to use namespace="##any" below. --&gt;
+            &lt;any namespace="##other" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="adref" type="string" use="required"/&gt;
+        &lt;attribute name="content" type="string" use="optional"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+
+    &lt;complexType name="Tdesignate"&gt;
+        &lt;sequence&gt;
+            &lt;element name="Object" type="metatype:Tobject" minOccurs="1"
+                maxOccurs="1" /&gt;
+            &lt;any namespace="##any" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="pid" type="string" use="optional" /&gt;
+        &lt;attribute name="factoryPid" type="string" use="optional"/&gt;
+        &lt;attribute name="bundle" type="string" use="optional"/&gt;
+        &lt;attribute name="optional" type="boolean" default="false"
+            use="optional" /&gt;
+        &lt;attribute name="merge" type="boolean" default="false"
+            use="optional" /&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+
+    &lt;simpleType name="Tscalar"&gt;
+        &lt;restriction base="string"&gt;
+            &lt;enumeration value="String" /&gt;
+            &lt;enumeration value="Long" /&gt;
+            &lt;enumeration value="Double" /&gt;
+            &lt;enumeration value="Float" /&gt;
+            &lt;enumeration value="Integer" /&gt;
+            &lt;enumeration value="Byte" /&gt;
+            &lt;enumeration value="Char" /&gt;
+            &lt;enumeration value="Boolean" /&gt;
+            &lt;enumeration value="Short" /&gt;
+            &lt;enumeration value="Password" /&gt;
+        &lt;/restriction&gt;
+    &lt;/simpleType&gt;
+
+    &lt;complexType name="Toption"&gt;
+        &lt;sequence&gt;
+            &lt;any namespace="##any" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="label" type="string" use="required"/&gt;
+        &lt;attribute name="value" type="string" use="required"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+
+    &lt;complexType name="Ticon"&gt;
+        &lt;sequence&gt;
+            &lt;any namespace="##any" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" /&gt;
+        &lt;/sequence&gt;
+        &lt;attribute name="resource" type="string" use="required"/&gt;
+        &lt;attribute name="size" type="positiveInteger" use="required"/&gt;
+        &lt;anyAttribute /&gt;
+    &lt;/complexType&gt;
+
+    &lt;attribute name="must-understand" type="boolean"&gt;
+        &lt;annotation&gt;
+            &lt;documentation xml:lang="en"&gt;
+                This attribute should be used by extensions to documents
+                to require that the document consumer understand the
+                extension.
+            &lt;/documentation&gt;
+        &lt;/annotation&gt;
+    &lt;/attribute&gt;
+&lt;/schema&gt;</programlisting>
+  </section>
+
+  <section>
+    <title>Limitations</title>
+
+    <para>The OSGi MetaType specification is intended to be used for simple
+    applications. It does not, therefore, support recursive data types, mixed
+    types in arrays/vectors, or nested arrays/vectors.</para>
+  </section>
+
+  <section>
+    <title>Related Standards</title>
+
+    <para>One of the primary goals of this specification is to make metatype
+    information available at run-time with minimal overhead. Many related
+    standards are applicable to metatypes; except for Java beans, however, all
+    other metatype standards are based on document formats (e.g. XML). In the
+    OSGi framework, document format standards are deemed unsuitable due to the
+    overhead required in the execution environment (they require a parser
+    during run-time).</para>
+
+    <para>Another consideration is the applicability of these standards. Most
+    of these standards were developed for management systems on platforms
+    where resources are not necessarily a concern. In this case, a metatype
+    standard is normally used to describe the data structures needed to
+    control some other computer via a network. This other computer, however,
+    does not require the metatype information as it is
+    <emphasis>implementing</emphasis> this information.</para>
+
+    <para>In some traditional cases, a management system uses the metatype
+    information to control objects in an OSGi framework. Therefore, the
+    concepts and the syntax of the metatype information must be mappable to
+    these popular standards. Clearly, then, these standards must be able to
+    describe objects in an OSGi framework. This ability is usually not a
+    problem, because the metatype languages used by current management systems
+    are very powerful.</para>
+  </section>
+
+  <section>
+    <title>Security Considerations</title>
+
+    <para>Special security issues are not applicable for this
+    specification.</para>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.metatype.xml"/>
+
+  <section xml:id="i1215848">
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed
+      xml:id="i1215866"><title>LDAP.</title>http://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol</bibliomixed>
+
+      <bibliomixed xml:id="i1215870"><title>Understanding and Deploying LDAP
+      Directory services</title>Timothy Howes et. al. ISBN 1-57870-070-1,
+      MacMillan Technical publishing.</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>

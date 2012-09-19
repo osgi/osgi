@@ -25,10 +25,11 @@ import java.util.Enumeration;
  * <ul>
  * <li>The primary way to retrieve {@code LogEntry} objects is to register a
  * {@code LogListener} object whose {@code LogListener.logged} method will be
- * called for each entry added to the log.
+ * called for each entry added to the log.</li>
  * <li>To retrieve past {@code LogEntry} objects, the {@code getLog} method can
  * be called which will return an {@code Enumeration} of all {@code LogEntry}
- * objects in the log.
+ * objects in the log.</li>
+ * </ul>
  * 
  * @ThreadSafe
  * @version $Id$

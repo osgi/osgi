@@ -31,21 +31,21 @@ import java.util.List;
  * Slashes used in node name must therefore be escaped using a backslash slash (
  * {@code "\/"}). The backslash must be escaped with a double backslash
  * sequence. A backslash found must be ignored when it is not followed by a
- * slash or backslash.
+ * slash or backslash.</li>
  * <li>The node name can be constructed using full Unicode character set (except
  * the Supplementary code, not being supported by CLDC/CDC). However, using the
  * full Unicode character set for node names is discouraged because the encoding
  * in the underlying storage as well as the encoding needed in communications
  * can create significant performance and memory usage overhead. Names that are
- * restricted to the URI set {@code [-a-zA-Z0-9_.!~*'()]} are most efficient.
- * <li>URIs used in the DMT must be treated and interpreted as case sensitive.
+ * restricted to the URI set {@code [-a-zA-Z0-9_.!~*'()]} are most efficient.</li>
+ * <li>URIs used in the DMT must be treated and interpreted as case sensitive.</li>
  * <li>No End Slash: URI must not end with the delimiter slash ({@code '/'}
  * &#92;u002F). This implies that the root node must be denoted as {@code "."}
- * and not {@code "./"}.
+ * and not {@code "./"}.</li>
  * <li>No parent denotation: URI must not be constructed using the character
- * sequence {@code "../"} to traverse the tree upwards.
+ * sequence {@code "../"} to traverse the tree upwards.</li>
  * <li>Single Root: The character sequence {@code "./"} must not be used
- * anywhere else but in the beginning of a URI.
+ * anywhere else but in the beginning of a URI.</li>
  * </ul>
  * 
  * @version $Id$
@@ -107,7 +107,7 @@ public final class Uri {
 	 * <p>
 	 * Node name mangling is needed in the following cases:
 	 * <ul>
-	 * <li>if the name contains '/' or '\' characters
+	 * <li>if the name contains '/' or '\' characters</li>
 	 * </ul>
 	 * <p>
 	 * A node name that does not suffer from either of these problems is
@@ -122,10 +122,10 @@ public final class Uri {
 	 * length of the name does exceed the limit, the following mechanism is used
 	 * to normalize it:
 	 * <ul>
-	 * <li>the SHA 1 digest of the name is calculated
-	 * <li>the digest is encoded with the base 64 algorithm
-	 * <li>all '/' characters in the encoded digest are replaced with '_'
-	 * <li>trailing '=' signs are removed
+	 * <li>the SHA 1 digest of the name is calculated</li>
+	 * <li>the digest is encoded with the base 64 algorithm</li>
+	 * <li>all '/' characters in the encoded digest are replaced with '_'</li>
+	 * <li>trailing '=' signs are removed</li>
 	 * </ul>
 	 * 
 	 * @param nodeName the node name to be mangled (if necessary), must not be
@@ -347,8 +347,8 @@ public final class Uri {
 	 * Checks whether the specified URI is valid. A URI is considered valid if
 	 * it meets the following constraints:
 	 * <ul>
-	 * <li>the URI is not {@code null};
-	 * <li>the URI follows the syntax defined for valid DMT URIs;
+	 * <li>the URI is not {@code null};</li>
+	 * <li>the URI follows the syntax defined for valid DMT URIs;</li>
 	 * </ul>
 	 * The exact definition of the length of a URI and its segments is given in
 	 * the descriptions of the {@code getMaxUriLength()} and

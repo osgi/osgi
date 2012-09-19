@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="327.653px" height="132.77px" viewBox="0 0 327.653 132.77" enable-background="new 0 0 327.653 132.77"
+	 xml:space="preserve">
+<rect x="22.2" y="19.368" width="1.02" height="113.399"/>
+<text transform="matrix(1 0 0 1 0 16.6086)" font-family="'ProductusBook'" font-size="7.98">Client Bundle</text>
+<rect x="90.24" y="19.368" width="1.02" height="113.399"/>
+<text transform="matrix(1 0 0 1 67.0801 16.6086)" font-family="'ProductusBook'" font-size="7.98">Framework</text>
+<rect x="158.28" y="19.368" width="1.021" height="113.399"/>
+<rect x="237.661" y="19.368" width="1.021" height="113.399"/>
+<polyline points="144.36,30.708 144.36,26.568 145.02,26.748 157.14,30.229 158.82,30.708 157.14,31.188 145.02,34.668 
+	144.36,34.848 144.36,34.188 144.72,33.708 156.84,30.229 157.14,31.188 156.84,31.188 144.72,27.708 145.02,26.748 145.38,27.229 
+	145.38,30.708 "/>
+<rect x="144.36" y="30.708" width="1.02" height="3.479"/>
+<polyline points="144.84,30.708 144.84,27.229 156.96,30.708 144.84,34.188 "/>
+<rect x="22.68" y="30.229" width="121.68" height="1.021"/>
+<polyline points="76.32,53.388 76.32,49.248 76.98,49.427 89.1,52.908 90.78,53.388 89.1,53.868 76.98,57.348 76.32,57.528 
+	76.32,56.868 76.68,56.388 88.8,52.908 89.1,53.868 88.8,53.868 76.68,50.388 76.98,49.427 77.34,49.908 77.34,53.388 "/>
+<rect x="76.32" y="53.388" width="1.02" height="3.479"/>
+<polyline points="76.8,53.388 76.8,49.908 88.92,53.388 76.8,56.868 "/>
+<rect x="22.68" y="52.908" width="53.64" height="1.02"/>
+<text transform="matrix(1 0 0 1 34.02 36.4084)" font-family="'ProductusBook'" font-size="7.98">new</text>
+<polyline points="223.741,76.068 223.741,71.927 224.4,72.108 236.459,75.588 238.14,76.068 236.459,76.548 224.4,80.028 
+	223.741,80.208 223.741,79.548 224.1,79.068 236.161,75.588 236.459,76.548 236.161,76.548 224.1,73.068 224.4,72.108 
+	224.76,72.588 224.76,76.068 "/>
+<rect x="223.741" y="76.068" width="1.021" height="3.479"/>
+<polyline points="224.22,76.068 224.22,72.588 236.28,76.068 224.22,79.548 "/>
+<rect x="90.72" y="75.588" width="132.96" height="1.021"/>
+<text transform="matrix(1 0 0 1 34.02 62.6282)" font-family="'ProductusBook'" font-size="7.98">registerService()</text>
+<text transform="matrix(1 0 0 1 107.2803 73.969)" font-family="'ProductusBook'" font-size="7.98">send registered event</text>
+<polyline points="173.161,110.088 173.161,114.229 172.5,114.048 160.38,110.568 158.7,110.088 160.38,109.608 172.5,106.128 
+	173.161,105.948 173.161,106.608 172.799,107.088 160.68,110.568 160.38,109.608 160.68,109.608 172.799,113.088 172.5,114.048 
+	172.14,113.568 172.14,110.088 "/>
+<rect x="172.14" y="106.608" width="1.021" height="3.479"/>
+<polyline points="172.68,110.088 172.68,113.568 160.56,110.088 172.68,106.608 "/>
+<rect x="173.161" y="109.608" width="64.979" height="1.021"/>
+<polyline fill="#999999" points="43.3,110.118 43.3,113.598 31.18,110.118 43.3,106.638 "/>
+<rect x="42.78" y="109.608" fill="#999999" width="115.98" height="1.021"/>
+<text transform="matrix(1 0 0 1 169.8003 104.928)" font-family="'ProductusBook'" font-size="7.98">updated()</text>
+<rect x="20.7" y="30.708" width="4.02" height="96.359"/>
+<rect x="88.74" y="47.688" width="4.02" height="68.04"/>
+<rect x="305.7" y="19.368" width="1.021" height="113.399"/>
+<text transform="matrix(1 0 0 1 285.8345 16.6086)" font-family="'ProductusBook'" font-size="7.98">Configuration</text>
+<rect x="236.161" y="70.368" width="4.021" height="45.359"/>
+<polyline points="294.661,98.748 294.661,95.448 295.32,95.628 304.5,98.269 306.18,98.748 304.5,99.229 295.32,101.868 
+	294.661,102.048 294.661,101.388 295.02,100.908 304.2,98.269 304.5,99.229 304.2,99.229 295.02,96.588 295.32,95.628 
+	295.68,96.108 295.68,98.748 "/>
+<rect x="294.661" y="98.748" width="1.021" height="2.641"/>
+<polyline points="295.14,98.748 295.14,96.108 304.32,98.748 295.14,101.388 "/>
+<rect x="238.14" y="98.508" width="56.46" height="0.48"/>
+<text transform="matrix(1 0 0 1 249.48 97.1887)" font-family="'ProductusBook'" font-size="7.98">get for PID</text>
+<text transform="matrix(1 0 0 1 130.3799 6.6477)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">Implementor of</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">Managed Service</tspan></text>
+<text transform="matrix(1 0 0 1 46.3203 107.2483)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">set the</tspan><tspan x="0" y="9.576" font-family="'ProductusBook'" font-size="7.98">configuration</tspan></text>
+<text transform="matrix(1 0 0 1 179.4009 85.8479)" font-family="'ProductusBook'" font-size="7.98">get pid from props</text>
+<polyline points="170.28,87.408 170.28,90.708 169.62,90.528 158.7,87.408 169.62,84.288 170.28,84.108 170.28,84.769 
+	169.92,85.248 160.68,87.888 160.38,86.927 160.68,86.927 169.92,89.568 169.62,90.528 169.26,90.048 169.26,87.408 "/>
+<rect x="169.26" y="84.769" width="1.02" height="2.641"/>
+<polyline points="169.799,87.408 169.799,90.048 160.56,87.408 169.799,84.769 "/>
+<rect x="170.28" y="87.168" width="67.86" height="0.479"/>
+<rect x="26.4" y="104.388" width="4.02" height="17.039"/>
+<polyline fill="#FFFFFF" points="226.44,89.088 221.581,90.288 224.04,100.008 228.9,98.809 "/>
+<polyline fill="#FFFFFF" points="249.12,83.388 253.98,82.188 256.44,91.908 251.581,93.108 "/>
+<polyline fill="#FFFFFF" points="226.44,89.088 228.9,98.809 251.581,93.108 249.12,83.388 "/>
+<text transform="matrix(1 0 0 1 250.3198 81.1086)" font-family="'ProductusBook'" font-size="7.98">Must be on another thread</text>
+<polyline points="252.84,85.788 254.7,87.648 255.12,88.128 254.581,88.488 246.18,93.168 244.62,94.008 245.459,92.448 
+	250.14,84.048 250.5,83.508 250.98,83.927 251.04,84.528 246.36,92.927 245.459,92.448 245.7,92.269 254.1,87.588 254.581,88.488 
+	253.98,88.368 252.12,86.508 "/>
+<polyline points="250.98,83.927 252.84,85.788 252.12,86.508 250.26,84.648 "/>
+<polyline points="252.48,86.148 254.34,88.008 245.94,92.688 250.62,84.288 "/>
+<polyline points="256.2,82.788 256.379,82.608 256.02,82.248 255.84,82.427 "/>
+<polyline points="253.02,85.968 252.84,86.148 252.48,85.788 252.661,85.608 "/>
+<polyline points="256.2,82.788 255.84,82.427 252.661,85.608 253.02,85.968 "/>
+<text transform="matrix(1 0 0 1 218.3345 7.5481)" enable-background="new    "><tspan x="0" y="0" font-family="'ProductusBook'" font-size="7.98">Configuration</tspan><tspan x="10.405" y="9.576" font-family="'ProductusBook'" font-size="7.98">Admin</tspan></text>
+</svg>

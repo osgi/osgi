@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 16.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 width="192.42px" height="121.5px" viewBox="0 0 192.42 121.5" enable-background="new 0 0 192.42 121.5" xml:space="preserve">
+<polyline fill="#F7F7F7" points="170.58,0.48 170.58,14.64 106.8,14.64 106.8,35.94 78.48,35.94 78.48,57.18 50.1,57.18 50.1,78.42 
+	21.78,78.42 21.78,99.72 0.48,99.72 0.48,0.48 "/>
+<rect x="170.101" y="0.48" width="1.02" height="14.7"/>
+<rect x="106.319" y="14.16" width="64.261" height="1.02"/>
+<rect x="106.319" y="14.64" width="1.021" height="21.84"/>
+<rect x="78" y="35.46" width="28.8" height="1.02"/>
+<rect x="78" y="35.94" width="1.02" height="21.78"/>
+<rect x="49.62" y="56.7" width="28.86" height="1.02"/>
+<rect x="49.62" y="57.18" width="1.02" height="21.78"/>
+<rect x="21.3" y="77.939" width="28.8" height="1.021"/>
+<rect x="21.3" y="78.42" width="1.02" height="21.84"/>
+<rect y="99.24" width="21.78" height="1.02"/>
+<rect width="1.02" height="99.72"/>
+<rect x="0.48" width="170.64" height="1.02"/>
+<rect x="0.48" y="106.8" fill="#F7F7F7" width="191.4" height="14.16"/>
+<rect x="0.48" y="106.32" width="191.94" height="1.02"/>
+<rect x="191.399" y="106.8" width="1.021" height="14.7"/>
+<rect y="120.48" width="191.88" height="1.02"/>
+<rect y="106.32" width="1.02" height="14.64"/>
+<rect x="28.86" y="85.561" fill="#F7F7F7" width="141.72" height="14.159"/>
+<rect x="28.86" y="85.08" width="142.26" height="1.02"/>
+<rect x="170.101" y="85.561" width="1.02" height="14.699"/>
+<rect x="28.38" y="99.24" width="142.2" height="1.02"/>
+<rect x="28.38" y="85.08" width="1.02" height="14.64"/>
+<rect x="57.18" y="64.26" fill="#F7F7F7" width="113.399" height="14.16"/>
+<rect x="57.18" y="63.78" width="113.939" height="1.021"/>
+<rect x="170.101" y="64.26" width="1.02" height="14.7"/>
+<rect x="56.7" y="77.939" width="113.88" height="1.021"/>
+<rect x="56.7" y="63.78" width="1.02" height="14.64"/>
+<rect x="85.56" y="43.02" fill="#F7F7F7" width="85.02" height="14.16"/>
+<rect x="85.56" y="42.54" width="85.56" height="1.02"/>
+<rect x="170.101" y="43.02" width="1.02" height="14.7"/>
+<rect x="85.08" y="56.7" width="85.5" height="1.02"/>
+<rect x="85.08" y="42.54" width="1.02" height="14.64"/>
+<rect x="113.88" y="21.78" fill="#F7F7F7" width="56.699" height="14.16"/>
+<rect x="113.88" y="21.3" width="57.239" height="1.02"/>
+<rect x="170.101" y="21.78" width="1.02" height="14.7"/>
+<rect x="113.399" y="35.46" width="57.181" height="1.02"/>
+<rect x="113.399" y="21.3" width="1.021" height="14.64"/>
+<text transform="matrix(1 0 0 1 120.8994 114.8398)" font-family="'ProductusSemibold'" font-size="7.98">Hardware/OS</text>
+<text transform="matrix(1 0 0 1 91.5601 95.04)" font-family="'ProductusSemibold'" font-size="7.98">Execution Environment</text>
+<text transform="matrix(1 0 0 1 139.1396 73.7998)" font-family="'ProductusSemibold'" font-size="7.98">Module</text>
+<text transform="matrix(1 0 0 1 134.626 52.5596)" font-family="'ProductusSemibold'" font-size="7.98">Life cycle</text>
+<text transform="matrix(1 0 0 1 139.6807 30.3594)" font-family="'ProductusSemibold'" font-size="7.98">Service</text>
+<rect x="177.66" y="0.48" fill="#FFF7F7" width="14.221" height="99.24"/>
+<rect x="177.66" fill="#FF0000" width="14.761" height="1.02"/>
+<rect x="191.399" y="0.48" fill="#FF0000" width="1.021" height="99.78"/>
+<rect x="177.181" y="99.24" fill="#FF0000" width="14.699" height="1.02"/>
+<rect x="177.181" fill="#FF0000" width="1.02" height="99.72"/>
+<text transform="matrix(-6.123234e-17 -1 1 -6.123234e-17 187.1807 58.1816)" font-family="'ProductusSemibold'" font-size="7.98">Security</text>
+<text transform="matrix(1 0 0 1 10.3799 33.6602)" font-family="'ProductusSemibold'" font-size="7.98">Bundles</text>
+</svg>

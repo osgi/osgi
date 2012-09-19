@@ -2056,7 +2056,7 @@ public class FrameworkUtil {
 		 *        "cn=me,c=US;*;cn=you" will match
 		 *        "cn=me,c=US";cn=you" and "cn=me,c=US;cn=her;cn=you". The
 		 *        pattern "cn=me,c=US;-;cn=you" will match "cn=me,c=US";cn=you"
-		 *        and "cn=me,c=US;cn=her;cn=him;cn=you".
+		 *        and "cn=me,c=US;cn=her;cn=him;cn=you".</li>
 		 *        <li>As a DN prefix. In this case, the DN must start with "*,".
 		 *        The wild card will match zero or more RDNs at the start of a
 		 *        DN. For example, "*,cn=me,c=US;cn=you" will match

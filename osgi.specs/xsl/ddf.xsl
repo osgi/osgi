@@ -4,13 +4,14 @@
 	version="1.1">
 	<xsl:strip-space elements="*" />
 	<xsl:output method="xml" indent="yes" encoding="UTF-8" />
+	<xsl:param name="destdir" />
 
 	<xsl:template match="package">
 		<xsl:if test="org.osgi.dmt.ddf.DDF">
 			<xsl:message>
 				Processing DDF package
 			</xsl:message>
-			<xsl:document href="xml/{@name}-ddf.xml" method="xml"
+			<xsl:document href="{$destdir}/{@name}-ddf.xml" method="xml"
 				indent="yes" encoding="UTF-8">
 				<html>
 					<head>

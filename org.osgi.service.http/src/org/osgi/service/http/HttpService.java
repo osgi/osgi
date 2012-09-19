@@ -153,15 +153,16 @@ public interface HttpService {
 	 * The behavior of the methods on the default {@code HttpContext} is defined
 	 * as follows:
 	 * <ul>
-	 * <li>{@code getMimeType}- Does not define any customized MIME types for
+	 * <li>{@code getMimeType} - Does not define any customized MIME types for
 	 * the Content-Type header in the response, and always returns {@code null}.
-	 * <li>{@code handleSecurity}- Performs implementation-defined
-	 * authentication on the request.
-	 * <li>{@code getResource}- Assumes the named resource is in the context
+	 * </li>
+	 * <li>{@code handleSecurity} - Performs implementation-defined
+	 * authentication on the request.</li>
+	 * <li>{@code getResource} - Assumes the named resource is in the context
 	 * bundle; this method calls the context bundle's {@code Bundle.getResource}
 	 * method, and returns the appropriate URL to access the resource. On a Java
 	 * runtime environment that supports permissions, the Http Service needs to
-	 * be granted {@code org.osgi.framework.AdminPermission[*,RESOURCE]}.
+	 * be granted {@code org.osgi.framework.AdminPermission[*,RESOURCE]}.</li>
 	 * </ul>
 	 * 
 	 * @return a default {@code HttpContext} object.

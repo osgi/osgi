@@ -23,12 +23,13 @@
 *.py crlf=input
 *.schema crlf=input
 *.sh crlf=input
+*.svg crlf=input ident
 *.tcl crlf=input
 *.txt crlf=input
-*.xml crlf=input
+*.xml crlf=input ident
 *.xsd crlf=input ident
-*.xsl crlf=input
-*.xslt crlf=input
+*.xsl crlf=input ident
+*.xslt crlf=input ident
 .classpath crlf=input
 .project crlf=input
 packageinfo crlf=input

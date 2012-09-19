@@ -26,7 +26,8 @@
  * <p>
  * {@code  Import-Package: org.osgi.util.tracker; version="[1.5,2.0)"}
  * 
- * @version $Id$
+ * @version 1.5
+ * @author $Id$
  */
 
 package org.osgi.util.tracker;
