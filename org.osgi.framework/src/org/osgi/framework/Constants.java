@@ -48,6 +48,14 @@ public interface Constants {
 	String	SYSTEM_BUNDLE_SYMBOLICNAME				= "system.bundle";
 
 	/**
+	 * Identifier of the OSGi <i>system bundle </i>, which is defined to be
+	 * {@code 0}.
+	 * 
+	 * @since 1.8
+	 */
+	long	SYSTEM_BUNDLE_ID						= 0L;
+
+	/**
 	 * Manifest header identifying the bundle's category.
 	 * <p>
 	 * The header value may be retrieved from the {@code Dictionary} object

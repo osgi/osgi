@@ -15,7 +15,7 @@
  */
 
 /**
- * Framework Package Version 1.7.
+ * Framework Package Version 1.8.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the
@@ -24,9 +24,9 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.framework; version="[1.7,2.0)"}
+ * {@code  Import-Package: org.osgi.framework; version="[1.8,2.0)"}
  * 
- * @version 1.7
+ * @version 1.8
  * @author $Id$
  */
 
