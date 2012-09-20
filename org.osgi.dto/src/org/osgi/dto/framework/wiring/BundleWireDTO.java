@@ -24,6 +24,10 @@ import org.osgi.dto.resource.WireDTO;
  * <p>
  * {@code BundleWireDTO}s can be obtained from a {@link BundleWiringDTO}.
  * 
+ * <p>
+ * The {@link WireDTO#requirer requirer} and {@link WireDTO#provider provider}
+ * fields must contain {@link BundleRevisionDTO}s.
+ * 
  * @author $Id$
  * @NotThreadSafe
  */
