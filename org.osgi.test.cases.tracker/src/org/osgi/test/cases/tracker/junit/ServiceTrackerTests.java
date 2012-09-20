@@ -28,7 +28,6 @@ package org.osgi.test.cases.tracker.junit;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.SortedMap;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -1080,7 +1079,52 @@ public class ServiceTrackerTests extends DefaultTestBundleControl {
 			results[i] = false;
 	}
 
-	static class Service implements Runnable {
+	/**
+     * Similarly, a new type of SeviceTracker is added (AllServiceTracker). The
+     * AllServiceTracker allows a bundle to track all services regardless of
+     * what version of a package they are wired to. The AllServiceTracker is
+     * identical in function to the ServiceTracker API except it will register
+     * an AllServiceListener to track ServiceReference objects for a bundle.
+     *
+     * @spec ServiceTracker.open(boolean)
+     * @throws Exception if there is any problem or an assert fails
+     */
+    public void testAllServiceTracker01() throws Exception {
+    	Bundle tb1;
+        Bundle tb5;
+    	Object[] services;
+    	ServiceTracker serviceTracker;
+
+        tb1 = installBundle("tb1.jar");
+        tb5 = installBundle("tb5.jar");
+
+    	serviceTracker = new ServiceTracker(
+    			getContext(),
+                TestService1.NAME,
+    			null);
+    	serviceTracker.open(true);
+
+    	try {
+            assertEquals(
+    				"ServiceTracker must track services which are not class loader accessibile",
+                    2, serviceTracker.size());
+            serviceTracker.close();
+
+            serviceTracker.open(false);
+
+            assertEquals(
+                    "ServiceTracker must track services which are not class loader accessibile",
+                    1, serviceTracker.size());
+
+    	}
+    	finally {
+            serviceTracker.close();
+            tb5.uninstall();
+    		tb1.uninstall();
+    	}
+    }
+
+    static class Service implements Runnable {
 		public void run() {
 			// nothing
 		}

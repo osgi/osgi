@@ -30,7 +30,6 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.StringTokenizer;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -38,7 +37,6 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.sleep.Sleep;
 import org.osgi.test.support.wiring.Wiring;
-import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * This class contains tests related with the framework class loading policies.
@@ -691,44 +689,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 		}
 	}
 
-	/**
-	 * Similarly, a new type of SeviceTracker is added (AllServiceTracker). The
-	 * AllServiceTracker allows a bundle to track all services regardless of
-	 * what version of a package they are wired to. The AllServiceTracker is
-	 * identical in function to the ServiceTracker API except it will register
-	 * an AllServiceListener to track ServiceReference objects for a bundle.
-	 *
-	 * @spec ServiceTracker.open(boolean)
-	 * @throws Exception if there is any problem or an assert fails
-	 */
-	public void testServiceTracker001() throws Exception {
-		Bundle tb1;
-		Bundle tb1a;
-		Object[] services;
-		ServiceTracker serviceTracker;
-
-		tb1 = installBundle("classloading.tb1.jar");
-		tb1a = installBundle("classloading.tb1a.jar");
-
-		serviceTracker = new ServiceTracker(
-				getContext(),
-				"org.osgi.test.cases.framework.classloading.exports.service.SomeService",
-				null);
-		serviceTracker.open(true);
-
-		try {
-			services = serviceTracker.getServices();
-			assertNotNull(
-					"ServiceTracker must track services which are not class loader accessibile",
-					services);
-		}
-		finally {
-			tb1a.uninstall();
-			tb1.uninstall();
-
-			serviceTracker.close();
-		}
-	}
+	
 
 	// Permission Checking -----------------------
 
