@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -1268,6 +1268,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				1 << 3, (1 << 3) & getBaseConfigData(bs));
 
 		bs = getBaseService(CE_MAP_NS100);
+		assertNotNull("Component " + CE_MAP_NS100 + " should be activated", bs);
+		assertEquals("Bind method of " + CE_MAP_NS100 + " should not be called",
+			0, getBaseConfigData(bs));
+
+		enabler.enableComponent(CE_MAP_NS100, false);
+		Sleep.sleep(SLEEP * 3);
+		assertEquals("Unbind method of " + CE_MAP_NS100 + " should not be called",
+			0, getBaseConfigData(bs));
 		assertNull("Component " + CE_MAP_NS100 + " should not be activated", bs);
 
 		bs = getBaseService(CE_MAP_NS110);
