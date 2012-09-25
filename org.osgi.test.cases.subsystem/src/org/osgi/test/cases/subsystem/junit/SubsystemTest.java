@@ -288,10 +288,13 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		Filter rootFilter = getContext().createFilter("(&(objectClass=" + Subsystem.class.getName() + ")(" + SubsystemConstants.SUBSYSTEM_ID_PROPERTY + "=0))");
 		rootSubsystem = new ServiceTracker<Subsystem, Subsystem>(getContext(), rootFilter, null);
 		rootSubsystem.open();
-
+		// wait for the subsytems implementation to register the root subsystem
+		rootSubsystem.waitForService(10000);
+		// only get the initial bundles after we know the root subsystem impl is ready
+		initialRootConstituents = Arrays.asList(getContext().getBundles());
 		explicitlyInstalledBundles = new ArrayList<Bundle>();
 		explicitlyInstalledSubsystems = new ArrayList<Subsystem>();
-		initialRootConstituents = Arrays.asList(getContext().getBundles());
+
 		bundleListeners = new HashMap<BundleListener, BundleContext>();
 		serviceListeners = new HashMap<ServiceListener, BundleContext>();
 
@@ -300,9 +303,6 @@ public abstract class SubsystemTest extends OSGiTestCase {
 
 		// better make sure the implementation is active
 		startImplementation();
-
-		// wait for the subsytems implementation to register the root subsystem
-		rootSubsystem.waitForService(10000);
 	}
 
 	protected void tearDown() throws Exception {
