@@ -476,7 +476,13 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	}
 
 	protected Subsystem getRootSubsystem() {
-		Subsystem root = rootSubsystem.getService();
+		Subsystem root = null;
+		try {
+			root = rootSubsystem.waitForService(10000);
+		}
+		catch (InterruptedException e) {
+			// Ignore. Test will fail below if root is null.
+		}
 		assertNotNull("Can not locate the root subsystem.", root);
 		return root;
 	}
