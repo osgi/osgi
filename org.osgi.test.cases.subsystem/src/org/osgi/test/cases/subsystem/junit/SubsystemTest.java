@@ -300,6 +300,9 @@ public abstract class SubsystemTest extends OSGiTestCase {
 
 		// better make sure the implementation is active
 		startImplementation();
+
+		// wait for the subsytems implementation to register the root subsystem
+		rootSubsystem.waitForService(10000);
 	}
 
 	protected void tearDown() throws Exception {
