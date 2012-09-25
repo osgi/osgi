@@ -1276,7 +1276,6 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		Sleep.sleep(SLEEP * 3);
 		assertEquals("Unbind method of " + CE_MAP_NS100 + " should not be called",
 			0, getBaseConfigData(bs));
-		assertNull("Component " + CE_MAP_NS100 + " should not be activated", bs);
 
 		bs = getBaseService(CE_MAP_NS110);
 		assertNotNull("Component " + CE_MAP_NS110 + " should be activated", bs);
