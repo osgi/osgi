@@ -477,29 +477,65 @@ public class DependencySubsystemTests extends SubsystemTest{
 		Subsystem root = getRootSubsystem();
 		doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_4G1A_COMPOSITE, true);
 	}
+	
+	public void test4H1() {
+		Subsystem root = getRootSubsystem();
+		Subsystem subsystem = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_4H_APPLICATION, false);
+		doSubsystemOperation(getName(), subsystem, Operation.START, false);
+		Bundle i = getBundle(subsystem, BUNDLE_SHARE_I);
+		checkWiring(null, null, null, i, i, i);
+	}
+	
+	public void test4H2() {
+		registerRepository(REPOSITORY_2);
+		Subsystem root = getRootSubsystem();
+		Subsystem subsystem = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_4H_APPLICATION, false);
+		doSubsystemOperation(getName(), subsystem, Operation.START, false);
+		Bundle a = getBundle(root, BUNDLE_SHARE_A);
+		Bundle b = getBundle(root, BUNDLE_SHARE_B);
+		Bundle i = getBundle(subsystem, BUNDLE_SHARE_I);
+		Bundle j = getBundle(subsystem, BUNDLE_SHARE_J);
+		Bundle k = getBundle(subsystem, BUNDLE_SHARE_K);
+		checkWiring(a, a, b, i, j, k);
+	}
 
 	private void checkWiring(Bundle packageExporter, Bundle bundleProvider, Bundle capabilityProvider, Bundle packageImporter, Bundle bundleRequirer, Bundle capabilityRequirer) {
-		BundleWiring pExporterWiring = packageExporter.adapt(BundleRevision.class).getWiring();
-		BundleWiring bProviderWiring = bundleProvider.adapt(BundleRevision.class).getWiring();
-		BundleWiring cProviderWiring = capabilityProvider.adapt(BundleRevision.class).getWiring();
+		BundleWiring pExporterWiring = packageExporter == null ? null : packageExporter.adapt(BundleRevision.class).getWiring();
+		BundleWiring bProviderWiring = bundleProvider == null ? null : bundleProvider.adapt(BundleRevision.class).getWiring();
+		BundleWiring cProviderWiring = capabilityProvider == null ? null : capabilityProvider.adapt(BundleRevision.class).getWiring();
 
 		if (packageImporter != null) {
 			BundleWiring pImporterWiring = packageImporter.adapt(BundleRevision.class).getWiring();
 			List<BundleWire> pWires = pImporterWiring.getRequiredWires(PackageNamespace.PACKAGE_NAMESPACE);
-			assertEquals("Wring number of packages", 1, pWires.size());
-			assertEquals("Wrong package provider.", pExporterWiring, pWires.get(0).getProviderWiring());
+			if (pExporterWiring != null) {
+				assertEquals("Wrong number of packages", 1, pWires.size());
+				assertEquals("Wrong package provider.", pExporterWiring, pWires.get(0).getProviderWiring());
+			}
+			else {
+				assertEquals("Wrong number of packages", 0, pWires.size());
+			}
 		}
 		if (bundleRequirer != null)  {
 			BundleWiring bRequirerWiring = bundleRequirer.adapt(BundleRevision.class).getWiring();
 			List<BundleWire> bWires = bRequirerWiring.getRequiredWires(BundleNamespace.BUNDLE_NAMESPACE);
-			assertEquals("Wring number of bundles", 1, bWires.size());
-			assertEquals("Wrong bundle provider.", bProviderWiring, bWires.get(0).getProviderWiring());
+			if (bProviderWiring != null) {
+				assertEquals("Wrong number of bundles", 1, bWires.size());
+				assertEquals("Wrong bundle provider.", bProviderWiring, bWires.get(0).getProviderWiring());
+			}
+			else {
+				assertEquals("Wrong number of packages", 0, bWires.size());
+			}
 		}
 		if (capabilityRequirer != null) {
 			BundleWiring cRequirerWiring = capabilityRequirer.adapt(BundleRevision.class).getWiring();
 			List<BundleWire> cWires = cRequirerWiring.getRequiredWires(null);
-			assertEquals("Wring number of capabilities", 1, cWires.size());
-			assertEquals("Wrong capability provider.", cProviderWiring, cWires.get(0).getProviderWiring());
+			if (cProviderWiring != null) {
+				assertEquals("Wrong number of capabilities", 1, cWires.size());
+				assertEquals("Wrong capability provider.", cProviderWiring, cWires.get(0).getProviderWiring());
+			}
+			else {
+				assertEquals("Wrong number of packages", 0, cWires.size());
+			}
 		}
 	}
 }

@@ -203,6 +203,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String SUBSYSTEM_4F2_PREFER_FEAT_APPLICATION = "4F2.prefer.feat.application@1.0.0.esa";
 	public static String SUBSYSTEM_4F2_PREFER_FEAT_COMPOSITE = "4F2.prefer.feat.composite@1.0.0.esa";
 	public static String SUBSYSTEM_4G1A_COMPOSITE = "4G1a.composite@1.0.0.esa";
+	public static String SUBSYSTEM_4H_APPLICATION = "4H.application@1.0.0.esa";
 	public static String SUBSYSTEM_5A_APPLICATION_S1 = "5A.application.s1@1.0.0.esa";
 	public static String SUBSYSTEM_5A_COMPOSITE_S1 = "5A.composite.s1@1.0.0.esa";
 	public static String SUBSYSTEM_5A_FEATURE_S1 = "5A.feature.s1@1.0.0.esa";
@@ -272,6 +273,9 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String BUNDLE_SHARE_F = "share.f@1.0.0.jar";
 	public static String BUNDLE_SHARE_G = "share.g@1.0.0.jar";
 	public static String BUNDLE_SHARE_H = "share.h@1.0.0.jar";
+	public static String BUNDLE_SHARE_I = "share.i@1.0.0.jar";
+	public static String BUNDLE_SHARE_J = "share.j@1.0.0.jar";
+	public static String BUNDLE_SHARE_K = "share.k@1.0.0.jar";
 
 	public static String INVALID_TYPE = "invalid.type@1.0.0.abc";
 
@@ -1423,6 +1427,12 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		result.put(SUBSYSTEM_7G_COMPOSITE_S2, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_7G_COMPOSITE_S2), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_COMPOSITE, false, contentHeader, null, importPolicy));
 		result.put(SUBSYSTEM_7G_FEATURE_S2, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_7G_FEATURE_S2), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_FEATURE, false, contentHeader, null, null));
 
+		contentHeader = getSymbolicName(BUNDLE_SHARE_I) + "; version=\"[1.0,1.0]\", " +
+				getSymbolicName(BUNDLE_SHARE_J)  + "; version=\"[1.0,1.0]\", " +
+				getSymbolicName(BUNDLE_SHARE_K)  + "; version=\"[1.0,1.0]\"";
+		content = getBundleContents(null, BUNDLE_SHARE_I, BUNDLE_SHARE_J, BUNDLE_SHARE_K); 
+		result.put(SUBSYSTEM_4H_APPLICATION, new SubsystemInfo(new File(testSubsystemRoots, SUBSYSTEM_4H_APPLICATION), true, "1.0.0", SubsystemConstants.SUBSYSTEM_TYPE_APPLICATION, false, contentHeader, content, null));
+		
 		testSubsystems = result;
 	}
 
