@@ -271,7 +271,7 @@
     imports for the Woven Class is available from the <code>WovenClass</code>
     <xref
     linkend="org.osgi.framework.hooks.weaving.WovenClass.getDynamicImports--" xrefstyle="hyperlink"/>
-    method. This method returns a mutable list of <code>String</code>during
+    method. This method returns a mutable list of <code>String</code> during
     the <code>weave</code> method, the Weaving Hook service can add new
     dynamic import package clauses to this list while the <code>weave</code>
     method is active. The syntax of the strings is defined by the
