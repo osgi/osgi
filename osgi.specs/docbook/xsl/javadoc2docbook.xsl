@@ -13,7 +13,7 @@ version="1.1">
 
 
 <xsl:strip-space elements="*"/>
-<xsl:output method="xml" indent="yes" encoding="UTF-8"/>
+<xsl:output method="xml" omit-xml-declaration="yes"/>
 
 <xsl:key name="pqn" match="package|class|method|field" use="concat(@package, '#', @qn)"/>
 

@@ -56,18 +56,22 @@
                 path="${bin}">
             </doclet>
         </javadoc>
-        <java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
-            <arg value="${target}/javadoc/javadoc.xml" />
-            <arg value="docbook/xsl/javadoc2docbook.xsl" />
-            <arg value="destdir=${target}/javadoc/docbook" />
-            <arg value="ddf.only=0" />
-        </java>
-        <java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
-            <arg value="${target}/javadoc/javadoc.xml" />
-            <arg value="docbook/xsl/javadoc2docbook.xsl" />
-            <arg value="destdir=${target}/javadoc/docbook" />
-            <arg value="ddf.only=1" />
-        </java>
+        <xslt style="docbook/xsl/javadoc2docbook.xsl"
+            in="${target}/javadoc/javadoc.xml"
+            out="${target}/javadoc/docbook/javadoc.txt">
+            <classpath location="${saxon}" />
+            <factory name="com.icl.saxon.TransformerFactoryImpl" />
+            <param name="destdir" expression="${target}/javadoc/docbook"/>
+            <param name="ddf.only" expression="0"/>
+        </xslt>
+        <xslt style="docbook/xsl/javadoc2docbook.xsl"
+            in="${target}/javadoc/javadoc.xml"
+            out="${target}/javadoc/docbook/ddf.txt">
+            <classpath location="${saxon}" />
+            <factory name="com.icl.saxon.TransformerFactoryImpl" />
+            <param name="destdir" expression="${target}/javadoc/docbook"/>
+            <param name="ddf.only" expression="1"/>
+        </xslt>
         <property name="-javadoc" value="true"/>
     </target>
 
@@ -80,23 +84,24 @@
             <arg line="-tagged minimum ${minimum-latest.jar}" />
             <arg line="-tagged foundation ${foundation-latest.jar}" />
         </java>
-        <java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
-            <arg value="-o" />
-            <arg value="${target}/ee/docbook/ee.xml" />
-            <arg value="${target}/ee/ee.xml" />
-            <arg value="docbook/xsl/ee2docbook.xsl" />
-        </java>
+        <xslt style="docbook/xsl/ee2docbook.xsl"
+            in="${target}/ee/ee.xml"
+            out="${target}/ee/docbook/ee.xml">
+            <classpath location="${saxon}" />
+            <factory name="com.icl.saxon.TransformerFactoryImpl" />
+        </xslt>
     </target>
 
     <macrodef name="xinclude">
         <attribute name="name"/>
         <sequential>
             <mkdir dir="${target}/book"/>
-            <java classname="com.icl.saxon.StyleSheet" fork="true">
-                <!-- Xerces properties -->
-                <sysproperty key="javax.xml.parsers.DocumentBuilderFactory" value="org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
-                <sysproperty key="javax.xml.parsers.SAXParserFactory" value="org.apache.xerces.jaxp.SAXParserFactoryImpl"/>
-                <sysproperty key="org.apache.xerces.xni.parser.XMLParserConfiguration" value="org.apache.xerces.parsers.XIncludeParserConfiguration"/>
+            <xslt style="docbook/xsl/noop.xsl"
+                in="docbook/@{name}/book.xml"
+                out="${target}/book/@{name}.xml"
+                force="true">
+                <sysproperty key="org.apache.xerces.xni.parser.XMLParserConfiguration"
+                    value="org.apache.xerces.parsers.XIncludeParserConfiguration"/>
                 <classpath>
                     <fileset dir="${fop.home}/lib">
                         <include name="xercesImpl*.jar" />
@@ -104,13 +109,8 @@
                     </fileset>
                     <pathelement location="${saxon}" />
                 </classpath>
-                <jvmarg value="-Xmx256m"/>
-                <arg value="-o" />
-                <arg value="${target}/book/@{name}.xml" />
-                <arg value="docbook/@{name}/book.xml" />
-                <arg value="docbook/xsl/noop.xsl" />
-            </java>
-            <echo>Generated ${target}/book/@{name}.xml</echo>
+                <factory name="com.icl.saxon.TransformerFactoryImpl" />
+            </xslt>
         </sequential>
     </macrodef>
 
@@ -134,14 +134,12 @@
         <attribute name="name"/>
         <sequential>
             <mkdir dir="${target}/fo"/>
-            <java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
-                <jvmarg value="-Xmx256m"/>
-                <arg value="-o" />
-                <arg value="${target}/fo/@{name}.fo" />
-                <arg value="${target}/book/@{name}.xml" />
-                <arg value="docbook/xsl/custom-fo.xsl" />
-            </java>
-            <echo>Generated ${target}/fo/@{name}.fo</echo>
+            <xslt style="docbook/xsl/custom-fo.xsl"
+                in="${target}/book/@{name}.xml"
+                out="${target}/fo/@{name}.fo">
+                <classpath location="${saxon}" />
+                <factory name="com.icl.saxon.TransformerFactoryImpl" />
+            </xslt>
         </sequential>
     </macrodef>
 
