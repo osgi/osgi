@@ -329,7 +329,7 @@
       should be careful to avoid cycles when weaving.</para>
 
       <para>For example when a class is being woven the Weaving Hook may
-      implicitly load a class by having a reference to it or it can explicitly
+      implicitly load a class by having a reference to it or the Weaving Hook can explicitly
       load a class. This new class load will also pass through the Weaving
       Hook service, so care must be taken to avoid infinite looping.</para>
     </section>
