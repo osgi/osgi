@@ -258,7 +258,7 @@
     calculate new bytes for the provided Woven Class, these bytes can be set
     with the <xref
     linkend="org.osgi.framework.hooks.weaving.WovenClass.setBytes-byte---" xrefstyle="hyperlink"/>
-    method. This implies that ordering is relevant, Weaving Hook services that
+    method. This implies that ordering is relevant. Weaving Hook services that
     are lower in ranking (called later) will weave any of the changes of
     higher ranking Weaving Hook services. Not all combinations of Weaving Hook
     services will therefore work as expected.</para>
