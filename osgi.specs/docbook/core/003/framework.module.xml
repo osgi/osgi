@@ -2954,7 +2954,7 @@ B:fragment.jar</programlisting>
       wirings) during class loading, and therefore do not affect module
       resolution. Dynamic imports apply only to packages for which no wire has
       been established and no definition could be found in any other way.
-      Dynamic import is used as last resort.</para>
+      Dynamic import is used as a last resort.</para>
 
       <programlisting>DynamicImport-Package ::= dynamic-description 
            ( ',' dynamic-description )*
