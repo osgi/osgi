@@ -96,7 +96,7 @@
     <title>Usage</title>
 
     <para>For tracing purposes, a bundle can weave a trace entry and exit
-    message around each method. This is trivially to do with byte code weaving
+    message around each method. This is trivial to do with byte code weaving
     by inserting a call to a service at the begin and end of a method. In this
     example, a service is created that has two methods:</para>
 
