@@ -181,7 +181,7 @@
     }</programlisting>
 
     <para>The refresh method uses the Bundle Wiring API to refresh a bundle.
-    Refreshing a bundle will throw away its class loader and so that all used
+    Refreshing a bundle will throw away its class loader so that all used
     classes are reloaded when needed.</para>
 
     <programlisting>    private void refresh(Bundle b) {
