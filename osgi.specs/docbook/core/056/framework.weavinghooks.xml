@@ -369,7 +369,7 @@
         </listitem>
 
         <listitem>
-          <para>The bundle class loader must throw a Class Format Error with
+          <para>The bundle class loader must throw a <code>ClassFormatError</code> with
           the cause being the exception thrown by the Weaving Hook
           service.</para>
         </listitem>
