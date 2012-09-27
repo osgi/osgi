@@ -404,7 +404,7 @@
       </listitem>
     </itemizedlist>
 
-    <para>In addition, a Weave Hook must have Admin Permission with the
+    <para>In addition, a Weaving Hook must have Admin Permission with the
     <code>WEAVE</code> action to be able to use the methods on the
     <code>WovenClass</code> object that mutate the state like <xref
     linkend="org.osgi.framework.hooks.weaving.WovenClass.setBytes-byte---" xrefstyle="hyperlink"/>,
