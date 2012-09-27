@@ -483,7 +483,9 @@ public class DependencySubsystemTests extends SubsystemTest{
 		Subsystem subsystem = doSubsystemInstall(getName(), root, getName(), SUBSYSTEM_4H_APPLICATION, false);
 		doSubsystemOperation(getName(), subsystem, Operation.START, false);
 		Bundle i = getBundle(subsystem, BUNDLE_SHARE_I);
-		checkWiring(null, null, null, i, i, i);
+		Bundle j = getBundle(subsystem, BUNDLE_SHARE_J);
+		Bundle k = getBundle(subsystem, BUNDLE_SHARE_K);
+		checkWiring(null, null, null, i, j, k);
 	}
 	
 	public void test4H2() {
