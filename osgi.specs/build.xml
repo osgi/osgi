@@ -18,6 +18,14 @@
         <property name="fop.classpath" refid="fop.classpath" />
     </target>
 
+    <target name="core" depends="javadoc,core.xml,core.fo,core.pdf" />
+
+    <target name="cmpn" depends="javadoc,ee,cmpn.xml,cmpn.fo,cmpn.pdf" />
+
+    <target name="enterprise" depends="javadoc,enterprise.xml,enterprise.fo,enterprise.pdf" />
+
+    <target name="residential" depends="javadoc,residential.xml,residential.fo,residential.pdf" />
+
     <target name="javadoc" depends="compile" unless="-javadoc">
         <delete dir="${target}/javadoc"/>
         <mkdir dir="${target}/javadoc"/>
@@ -63,7 +71,7 @@
         <property name="-javadoc" value="true"/>
     </target>
 
-    <target name="ees" depends="compile">
+    <target name="ee" depends="compile">
         <echo>${minimum-latest.jar}</echo>
         <echo>${foundation-latest.jar}</echo>
         <delete dir="${target}/ee"/>
@@ -80,18 +88,11 @@
         </java>
     </target>
 
-    <macrodef name="docbook2fo">
+    <macrodef name="xinclude">
         <attribute name="name"/>
         <sequential>
-            <mkdir dir="${target}/fo"/>
+            <mkdir dir="${target}/book"/>
             <java classname="com.icl.saxon.StyleSheet" fork="true">
-                <!-- CatalogManager.properties -->
-                <sysproperty key="catalogs" value="${licensed}/docbook-xsl-ns/catalog.xml"/>
-                <sysproperty key="relative-catalogs" value="yes"/>
-                <sysproperty key="verbosity" value="0"/>
-                <sysproperty key="prefer" value="system"/>
-                <sysproperty key="static-catalog" value="yes"/>
-                <sysproperty key="allow-oasis-xml-catalog-pi" value="yes"/>
                 <!-- Xerces properties -->
                 <sysproperty key="javax.xml.parsers.DocumentBuilderFactory" value="org.apache.xerces.jaxp.DocumentBuilderFactoryImpl"/>
                 <sysproperty key="javax.xml.parsers.SAXParserFactory" value="org.apache.xerces.jaxp.SAXParserFactoryImpl"/>
@@ -105,27 +106,58 @@
                 </classpath>
                 <jvmarg value="-Xmx256m"/>
                 <arg value="-o" />
-                <arg value="${target}/fo/@{name}.fo" />
+                <arg value="${target}/book/@{name}.xml" />
                 <arg value="docbook/@{name}/book.xml" />
+                <arg value="docbook/xsl/noop.xsl" />
+            </java>
+            <echo>Generated ${target}/book/@{name}.xml</echo>
+        </sequential>
+    </macrodef>
+
+    <target name="core.xml" depends="init">
+        <xinclude name="core" />
+    </target>
+
+    <target name="cmpn.xml" depends="init">
+        <xinclude name="cmpn" />
+    </target>
+
+    <target name="enterprise.xml" depends="init">
+        <xinclude name="enterprise" />
+    </target>
+
+    <target name="residential.xml" depends="init">
+        <xinclude name="residential" />
+    </target>
+
+    <macrodef name="docbook2fo">
+        <attribute name="name"/>
+        <sequential>
+            <mkdir dir="${target}/fo"/>
+            <java classname="com.icl.saxon.StyleSheet" classpath="${saxon}" fork="true">
+                <jvmarg value="-Xmx256m"/>
+                <arg value="-o" />
+                <arg value="${target}/fo/@{name}.fo" />
+                <arg value="${target}/book/@{name}.xml" />
                 <arg value="docbook/xsl/custom-fo.xsl" />
             </java>
             <echo>Generated ${target}/fo/@{name}.fo</echo>
         </sequential>
     </macrodef>
 
-    <target name="core.fo" depends="javadoc">
+    <target name="core.fo" depends="init">
         <docbook2fo name="core" />
     </target>
 
-    <target name="cmpn.fo" depends="javadoc,ees">
+    <target name="cmpn.fo" depends="init">
         <docbook2fo name="cmpn" />
     </target>
 
-    <target name="enterprise.fo" depends="javadoc">
+    <target name="enterprise.fo" depends="init">
         <docbook2fo name="enterprise" />
     </target>
 
-    <target name="residential.fo" depends="javadoc">
+    <target name="residential.fo" depends="init">
         <docbook2fo name="residential" />
     </target>
 
@@ -159,25 +191,21 @@
         </sequential>
     </macrodef>
 
-    <target name="core" depends="core.fo">
+    <target name="core.pdf" depends="init">
         <fo2pdf name="core" />
     </target>
-    <target name="core.pdf" depends="core" />
 
-    <target name="cmpn" depends="cmpn.fo">
+    <target name="cmpn.pdf" depends="init">
         <fo2pdf name="cmpn" />
     </target>
-    <target name="cmpn.pdf" depends="cmpn" />
 
-    <target name="enterprise" depends="enterprise.fo">
+    <target name="enterprise.pdf" depends="init">
         <fo2pdf name="enterprise" />
     </target>
-    <target name="enterprise.pdf" depends="enterprise" />
 
-    <target name="residential" depends="residential.fo">
+    <target name="residential.pdf" depends="init">
         <fo2pdf name="residential" />
     </target>
-    <target name="residential.pdf" depends="residential" />
 
     <target name="fontmetrics" depends="init" description="Only used to rebuild font metrics">
         <foreach delimiter=" ," target="-fontmetrics" param="item" inheritAll="true">
