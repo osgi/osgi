@@ -2967,7 +2967,7 @@ wildcard-name       ::= package-name
 
       <para>No directives are architected by the Framework for
       DynamicImport-Package. Arbitrary matching attributes may be specified.
-      The following arbitrary matching attributes are architected by the
+      The following matching attributes are architected by the
       Framework:</para>
 
       <itemizedlist>
