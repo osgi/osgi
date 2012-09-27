@@ -210,7 +210,7 @@
     linkend="framework.service.servicerankingorder"/>.</para>
 
     <para>The Weaving Hook <code>weave</code> method is called with a
-    <code>WovenClass</code> object that represents the class to-be-woven. This
+    <code>WovenClass</code> object that represents the class to be woven. This
     class is similar to the Java <code>ClassFileTransformer</code> class but
     adds bundle wiring information and can be made available in environments
     prior to Java 5. The methods must all be called in privileged blocks, see
