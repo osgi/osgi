@@ -263,7 +263,7 @@
     higher ranking Weaving Hook services. Not all combinations of Weaving Hook
     services will therefore work as expected.</para>
 
-    <para>Weaving a class can create new dependencies that are unknown the
+    <para>Weaving a class can create new dependencies that are unknown to the
     woven class. In the trace example, the entry and exit traces require
     access to the tracing subsystem, a dependency the original class did not
     have. The <code>WovenClass</code> object allows these extra imports to be
