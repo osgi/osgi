@@ -20,8 +20,10 @@
   xmlns:scact="http://www.osgi.org/xmlns/scact/v1.0.0" targetNamespace="http://www.osgi.org/xmlns/scact/v1.0.0"
   version="1.0.0" elementFormDefault="qualified">
 
-  <import namespace="http://docs.oasis-open.org/ns/opencsa/sca/200903" schemaLocation="http://docs.oasis-open.org/opencsa/sca-assembly/sca-policy-1.1-cd02.xsd" />
-  <import namespace="http://docs.oasis-open.org/ns/opencsa/sca/200903" schemaLocation="http://docs.oasis-open.org/opencsa/sca-assembly/sca-core-1.1-cd03.xsd" />
+  <import namespace="http://docs.oasis-open.org/ns/opencsa/sca/200903"
+    schemaLocation="http://docs.oasis-open.org/opencsa/sca-assembly/sca-policy-1.1-cd02.xsd" />
+  <import namespace="http://docs.oasis-open.org/ns/opencsa/sca/200903"
+    schemaLocation="http://docs.oasis-open.org/opencsa/sca-assembly/sca-core-1.1-cd03.xsd" />
 
   <annotation>
     <documentation xml:lang="en">
