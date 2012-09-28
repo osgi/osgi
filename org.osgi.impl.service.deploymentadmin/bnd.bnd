@@ -19,6 +19,6 @@ Import-Package					= org.osgi.service.dmt; resolution:=optional, *
 -buildpath						= \
     org.osgi.service.deploymentadmin;				version= project, \
 	ee.j2se;										version= 1.4, \
-	osgi.core;										version= 4.0.1, \
+	osgi.core;										version= 4.3, \
 	osgi.cmpn;										version= 4.3, \
 	org.eclipse.osgi;								version= 3.5
