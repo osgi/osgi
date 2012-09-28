@@ -18,13 +18,13 @@
         <property name="fop.classpath" refid="fop.classpath" />
     </target>
 
-    <target name="core" depends="javadoc,core.xml,core.fo,core.pdf" />
+    <target name="core" depends="javadoc,xmlns,core.xml,core.fo,core.pdf" />
 
-    <target name="cmpn" depends="javadoc,ee,cmpn.xml,cmpn.fo,cmpn.pdf" />
+    <target name="cmpn" depends="javadoc,ee,xmlns,cmpn.xml,cmpn.fo,cmpn.pdf" />
 
-    <target name="enterprise" depends="javadoc,enterprise.xml,enterprise.fo,enterprise.pdf" />
+    <target name="enterprise" depends="javadoc,xmlns,enterprise.xml,enterprise.fo,enterprise.pdf" />
 
-    <target name="residential" depends="javadoc,residential.xml,residential.fo,residential.pdf" />
+    <target name="residential" depends="javadoc,xmlns,residential.xml,residential.fo,residential.pdf" />
 
     <target name="javadoc" depends="compile" unless="-javadoc">
         <delete dir="${target}/javadoc"/>
@@ -90,6 +90,21 @@
             <classpath location="${saxon}" />
             <factory name="com.icl.saxon.TransformerFactoryImpl" />
         </xslt>
+    </target>
+
+    <!-- Strip off leading comments on schema for inclusion in spec -->
+    <target name="xmlns" depends="init" unless="-xmlns">
+        <copy todir="${target}/xmlns">
+            <fileset dir="${project.workspace}/xmlns" includes="**/*.xsd" />
+        </copy>
+        <replaceregexp match=".*(&lt;(\w+:)?schema)"
+            replace="\1"
+            flags="s"
+            encoding="utf-8"
+            preserveLastModified="true">
+            <fileset dir="${target}/xmlns" includes="**/*.xsd" />
+        </replaceregexp>
+        <property name="-xmlns" value="true"/>
     </target>
 
     <macrodef name="xinclude">
