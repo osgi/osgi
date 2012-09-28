@@ -17,16 +17,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
--->		
+-->        
 <xsd:schema
-	targetNamespace="http://www.osgi.org/xmlns/dd/v1.0.0"
-	xmlns:md="http://www.osgi.org/xmlns/dd/v1.0.0"
-	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	elementFormDefault="qualified">
-		<xsd:element name="environment" >
-			<xsd:complexType>
-			<xsd:attribute name="envtype"
-				type="xsd:anyURI" use="required"/>
-			</xsd:complexType>
-		</xsd:element>
+    targetNamespace="http://www.osgi.org/xmlns/dd/v1.0.0"
+    xmlns:md="http://www.osgi.org/xmlns/dd/v1.0.0"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified">
+        <xsd:element name="environment" >
+            <xsd:complexType>
+            <xsd:attribute name="envtype"
+                type="xsd:anyURI" use="required"/>
+            </xsd:complexType>
+        </xsd:element>
 </xsd:schema>

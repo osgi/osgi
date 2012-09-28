@@ -2072,36 +2072,8 @@ qualifier ::= policy ( policy ) *</programlisting>
 
     <programlisting>http://www.osgi.org/xmlns/scact/v1.0.0</programlisting>
 
-    <programlisting role="pgwide">
-&lt;schema 
-    xmlns="http://www.w3.org/2001/XMLSchema" 
-    xmlns:sca="http://docs.oasis-open.org/ns/opencsa/sca/200912"
-    xmlns:scact="http://www.osgi.org/xmlns/scact/v1.0.0" 
-    targetNamespace="http://www.osgi.org/xmlns/scact/v1.0.0"
-    version="1.0.0" 
-    elementFormDefault="qualified"&gt;
-
-    &lt;import 
-        namespace="http://docs.oasis-open.org/ns/opencsa/sca/200912" 
-        schemaLocation="http://docs.oasis-open.org/opencsa/sca-assembly/sca-policy-1.1-cd02.xsd"/&gt;
-
-    &lt;import
-        namespace="http://docs.oasis-open.org/ns/opencsa/sca/200912" 
-        schemaLocation="http://docs.oasis-open.org/opencsa/sca-assembly/sca-core-1.1-cd03.xsd"/&gt;
-
-    &lt;element name="sca-config" type="scact:Tsca-config"/&gt;
-
-    &lt;complexType name="Tsca-config"&gt;
-      &lt;choice minOccurs="0" maxOccurs="unbounded"&gt;
-        &lt;element ref="sca:binding" /&gt;
-        &lt;element ref="sca:intent" /&gt;
-        &lt;element ref="sca:policySet" /&gt;
-     &lt;/choice&gt;
-     &lt;attribute name="targetNamespace" type="anyURI" use="required"/&gt;
-    &lt;/complexType&gt;
-
-    &lt;attribute name="must-understand" type="boolean" default="false"/&gt;
-&lt;/schema&gt;</programlisting>
+    <programlisting role="pgwide"><xi:include parse="text" encoding="utf-8"
+    href="../../generated/xmlns/scact/v1.0.0/scact.xsd"/></programlisting>
   </section>
 
   <section>
