@@ -88,10 +88,6 @@ the location of this file.
           <font-triplet name="ProductusSemibold" style="normal" weight="bold"/>
         </font>
 
-        <font metrics-url="WINGDING.xml" embed-url="WINGDING.ttf" kerning="yes">
-          <font-triplet name="Wingdings" style="normal" weight="normal"/>
-        </font>
-
         <font metrics-url="ARIALUNI.xml" embed-url="ARIALUNI.ttf" kerning="yes">
           <font-triplet name="ArialUnicodeMS" style="normal" weight="normal"/>
         </font>
