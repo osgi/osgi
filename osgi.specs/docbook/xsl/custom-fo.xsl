@@ -59,7 +59,7 @@ book toc,title
 <xsl:param name="monospace.font.family">ProductusOSGiMonoc</xsl:param>
 <xsl:param name="monospace.inline.font.family">ProductusOSGiBookc</xsl:param>
 <xsl:param name="header.font.family">ProductusBook</xsl:param>
-<xsl:param name="symbol.font.family">Symbol,ArialUnicodeMS</xsl:param>
+<xsl:param name="symbol.font.family">ArialUnicodeMS</xsl:param>
 <xsl:param name="header.fontset">
   <xsl:value-of select="$header.font.family"/>
   <xsl:if test="$header.font.family != ''
