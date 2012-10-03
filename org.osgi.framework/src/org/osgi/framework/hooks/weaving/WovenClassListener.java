@@ -16,34 +16,34 @@
 
 package org.osgi.framework.hooks.weaving;
 
-import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServicePermission;
 
 
 /**
  * OSGi Framework Woven Class Listener Service.
+ * 
  * <p>
  * Bundles registering this service will receive notifications whenever a
- * {@link WovenClass woven class} undergoes a state transition to an immutable
- * {@link WovenClass#getState() state}. Implementers will therefore be unable to
- * modify the woven class in contrast with {@link WeavingHook weaving hooks}.
+ * {@link WovenClass woven class} completes a {@link WovenClass#getState()
+ * state} transition. Implementers will therefore be unable to modify the woven
+ * class in contrast with {@link WeavingHook weaving hooks}.
+ * 
  * <p>
- * Note that a woven class in the {@link WovenClass#TRANSFORMED transformed}
+ * Receiving a woven class in the {@link WovenClass#TRANSFORMED TRANSFORMED}
  * state allows listeners to observe the modified {@link WovenClass#getBytes()
- * byte codes} before the class has been {@link WovenClass#DEFINED defined} as
+ * byte codes} before the class has been {@link WovenClass#DEFINED DEFINED} as
  * well as the additional {@link WovenClass#getDynamicImports() dynamic imports}
  * before the {@link WovenClass#getBundleWiring() bundle wiring} has been
  * updated.
+ * 
  * <p>
  * Woven class listeners are synchronously {@link #modified(WovenClass) called}
- * during woven class lifecycle processing. The woven class lifecycle processing
+ * when a woven class completes a state transition. The woven class processing
  * will not proceed until all woven class listeners are done.
+ * 
  * <p>
  * If the Java runtime environment supports permissions, the caller must have
- * {@link ServicePermission ServicePermission[WovenClassListener,REGISTER]} in
- * order to
- * {@link BundleContext#registerService(Class, Object, java.util.Dictionary)
- * register} a listener.
+ * {@code ServicePermission[WovenClassListener,REGISTER]} in order to register a
+ * listener.
  * 
  * @ThreadSafe
  * @since 1.1
@@ -52,14 +52,19 @@ import org.osgi.framework.ServicePermission;
 
 public interface WovenClassListener {
 	/**
-	 * Receives notification that a {@link WovenClass woven class} has undergone
-	 * a lifecycle change.
+	 * Receives notification that a {@link WovenClass woven class} has completed
+	 * a state transition.
+	 * 
+	 * <p>
+	 * The listener will be notified when a woven class has entered the
+	 * {@link WovenClass#TRANSFORMED TRANSFORMED} state and when a woven class
+	 * has entered the {@link WovenClass#DEFINED DEFINED} state.
+	 * 
 	 * <p>
 	 * If this method throws any exception, the Framework must log the exception
 	 * but otherwise ignore it.
 	 * 
-	 * @param wovenClass The immutable woven class that underwent a lifecycle
-	 *        change.
+	 * @param wovenClass The woven class that completed a state transition.
 	 */
 	public void modified(WovenClass wovenClass);
 }
