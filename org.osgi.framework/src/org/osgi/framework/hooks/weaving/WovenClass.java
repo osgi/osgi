@@ -115,8 +115,8 @@ public interface WovenClass {
 	 *        is retained by this object and the caller must not modify the
 	 *        specified array.
 	 * @throws NullPointerException If newBytes is {@code null}.
-	 * @throws IllegalStateException If state is in {{@link #TRANSFORMED},
-	 *         {@link #DEFINED} .
+	 * @throws IllegalStateException If state is {@link #TRANSFORMED} or
+	 *         {@link #DEFINED}.
 	 * @throws SecurityException If the caller does not have
 	 *         {@code AdminPermission[bundle,WEAVE]} and the Java runtime
 	 *         environment supports permissions.
