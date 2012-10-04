@@ -1,0 +1,14 @@
+# Lines beginning with '#' or '//' are comments
+#
+# This file contains the permissions to be granted. The permissions are listed 
+# one per line in PermissionInfo encoded format. See 
+# org.osgi.service.permissionadmin.PermissionInfo.
+
+(org.osgi.framework.AdminPermission "(name=org.osgi.test.cases.framework.secure.weaving.tb.woven)" "weave")
+
+(org.osgi.framework.PackagePermission "org.osgi.framework" "import")
+(org.osgi.framework.PackagePermission "org.osgi.framework.hooks.weaving" "import")
+(org.osgi.framework.PackagePermission "org.osgi.resolver" "import")
+(org.osgi.framework.PackagePermission "org.osgi.test.cases.framework.secure.weaving.tb.woven" "export")
+
+(org.osgi.framework.ServicePermission "org.osgi.framework.hooks.weaving.WeavingHook" "register")

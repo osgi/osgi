@@ -22,3 +22,4 @@
 (org.osgi.framework.ServicePermission "org.osgi.framework.hooks.weaving.WeavingHook" "register")
 
 # Permissions relevant to the test.
+(org.osgi.framework.AdminPermission "(name=org.osgi.test.cases.framework.secure.weaving.tb.woven)" "weave")

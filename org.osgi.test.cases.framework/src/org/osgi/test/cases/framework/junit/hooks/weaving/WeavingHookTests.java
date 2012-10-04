@@ -20,6 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
@@ -38,11 +39,14 @@ import org.osgi.framework.Version;
 import org.osgi.framework.hooks.weaving.WeavingException;
 import org.osgi.framework.hooks.weaving.WeavingHook;
 import org.osgi.framework.hooks.weaving.WovenClass;
+import org.osgi.framework.hooks.weaving.WovenClassListener;
+import org.osgi.framework.namespace.PackageNamespace;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.concurrent.AtomicInteger;
 import org.osgi.test.support.sleep.Sleep;
 
-public class WeavingHookTests extends DefaultTestBundleControl implements WeavingHook {
+public class WeavingHookTests extends DefaultTestBundleControl implements WeavingHook, WovenClassListener {
 
 	/* Test Constants */
 
@@ -285,6 +289,8 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 	protected void setUp() throws Exception {
 		super.setUp();
 		weavingClasses = installBundle(TESTCLASSES_JAR);
+		listenerWovenClass = null;
+		wovenClassStates.clear();
 	}
 
 	protected void tearDown() throws Exception {
@@ -984,6 +990,345 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 	 * Try messing up the Dynamic import list in any way possible
 	 */
 	private void assertImmutableList() {
+		assertImmutableList(wc);
+	}
+
+	private void registerThisHook() throws Exception {
+		reg1 = getContext().registerService(WeavingHook.class, this, null);
+		reg2 = getContext().registerService(WeavingHook.class, this, null);
+	}
+
+	private void unregisterThisHook() throws Exception {
+		wc = null;
+		reg1.unregister();
+		reg2.unregister();
+	}
+
+	/**
+	 * Test the various {@link WovenClass} methods inside a WeavingHook
+	 */
+	public void weave(WovenClass wovenClass) {
+		assertEquals("Wrong state", WovenClass.TRANSFORMING, wovenClass.getState());
+
+		if(wc == null) {
+			//First time through
+			wc = wovenClass;
+
+			assertWiring();
+
+			realBytes = wovenClass.getBytes();
+			assertSame("Should be the same byte array!", realBytes, wovenClass.getBytes());
+
+			assertEquals("Wrong class", TEST_CLASS_NAME, wc.getClassName());
+
+			assertNull("Should not be defined yet", wc.getDefinedClass());
+
+			List<String> dynamicImports = wc.getDynamicImports();
+			assertSame("Should be the same List!", dynamicImports, wovenClass.getDynamicImports());
+			assertTrue("No imports yet", dynamicImports.isEmpty());
+
+			dynamicImports.add("org.osgi.framework;version=1.5");
+
+			assertFalse("Weaving should not be complete", wc.isWeavingComplete());
+
+			wc.setBytes(fakeBytes);
+			assertSame("Should be the same byte array!", fakeBytes, wovenClass.getBytes());
+		} else {
+			//Second time through
+			assertSame("Should be the same byte array!", fakeBytes, wovenClass.getBytes());
+			wc.setBytes(realBytes);
+			List<String> dynamicImports = wc.getDynamicImports();
+			assertEquals("Should be one import", 1, dynamicImports.size());
+			dynamicImports.clear();
+			assertTrue("Should be no imports now", dynamicImports.isEmpty());
+			dynamicImports.add(ORG_OSGI_FRAMEWORK_VERSION_1_6);
+		}
+
+	}
+
+	/**
+	 * Check that the BundleWiring is usable
+	 */
+	private void assertWiring() {
+		BundleWiring bw = wc.getBundleWiring();
+
+		assertTrue("Should be the current bundle", bw.isCurrent());
+		assertEquals("Wrong bundle", TESTCLASSES_SYM_NAME,
+				bw.getBundle().getSymbolicName());
+		assertEquals("Wrong bundle", Version.parseVersion("1.0.0"),
+				bw.getBundle().getVersion());
+		assertNotNull("No Classloader", bw.getClassLoader());
+	}
+	
+	private WovenClass listenerWovenClass;
+	private final List<Integer> wovenClassStates = new ArrayList<Integer>(2);
+	
+	public void modified(WovenClass wovenClass) {
+		if (listenerWovenClass == null)
+			listenerWovenClass = wovenClass;
+		else
+			assertSame("Wrong woven class", wovenClass, listenerWovenClass);
+		wovenClassStates.add(wovenClass.getState());
+		switch(wovenClass.getState()) {
+			case WovenClass.TRANSFORMING:
+				fail("Woven class listeners must not be notified of the TRANSFORMING state");
+			case WovenClass.TRANSFORMED:
+				assertTransformed(wovenClass);
+				break;
+			case WovenClass.TRANSFORMING_FAILED:
+				assertTransformingFailed(wovenClass);
+				break;
+			case WovenClass.DEFINED:
+				assertDefined(wovenClass);
+				break;
+			case WovenClass.DEFINE_FAILED:
+				assertDefineFailed(wovenClass);
+				break;
+			default:
+				fail("Invalid state for woven class");
+		}
+	}
+	
+	private void assertTransformed(WovenClass wovenClass) {
+		assertState(wovenClass, WovenClass.TRANSFORMED);
+		assertImmutableBytes(wovenClass);
+		assertImmutableList(wovenClass);
+		assertClassNotDefined(wovenClass);
+		assertBundleWiringNotUpdated(wovenClass);
+		assertWeavingIncomplete(wovenClass);
+	}
+	
+	private void assertTransformingFailed(WovenClass wovenClass) {
+		assertState(wovenClass, WovenClass.TRANSFORMING_FAILED);
+		assertImmutableBytes(wovenClass);
+		assertImmutableList(wovenClass);
+		assertClassNotDefined(wovenClass);
+		assertBundleWiringNotUpdated(wovenClass);
+		assertWeavingComplete(wovenClass);
+	}
+	
+	private void assertDefined(WovenClass wovenClass) {
+		assertState(wovenClass, WovenClass.DEFINED);
+		assertImmutableBytes(wovenClass);
+		assertImmutableList(wovenClass);
+		assertClassDefined(wovenClass);
+		assertBundleWiringUpdated(wovenClass);
+		assertWeavingComplete(wovenClass);
+	}
+	
+	private void assertDefineFailed(WovenClass wovenClass) {
+		assertState(wovenClass, WovenClass.DEFINE_FAILED);
+		assertImmutableBytes(wovenClass);
+		assertImmutableList(wovenClass);
+		assertClassNotDefined(wovenClass);
+		assertBundleWiringNotUpdated(wovenClass);
+		assertWeavingComplete(wovenClass);
+	}
+	
+	private void assertClassDefined(WovenClass wovenClass) {
+		assertNotNull("Class was not defined", wovenClass.getDefinedClass());
+	}
+	
+	private void assertClassNotDefined(WovenClass wovenClass) {
+		assertNull("Class was defined", wovenClass.getDefinedClass());
+	}
+	
+	private void assertWeavingComplete(WovenClass wovenClass) {
+		assertTrue("Weaving was not complete", wovenClass.isWeavingComplete());
+	}
+	
+	private void assertWeavingIncomplete(WovenClass wovenClass) {
+		assertFalse("Weaving was complete", wovenClass.isWeavingComplete());
+	}
+	
+	private static void assertState(WovenClass wovenClass, int expected) {
+		assertEquals("Wrong state", expected, wovenClass.getState());
+	}
+
+	private static void assertImmutableBytes(WovenClass wovenClass) {
+		try {
+			wovenClass.setBytes(new byte[0]);
+			fail("Bytes were mutable");
+		} 
+		catch (IllegalStateException e) {
+			// Okay
+		}
+	}
+	
+	private ServiceRegistration<WovenClassListener> listenerReg;
+	
+	private void registerThisListener() throws Exception {
+		listenerReg = getContext().registerService(WovenClassListener.class, this, null);
+	}
+
+	private void unregisterThisListener() {
+		listenerReg.unregister();
+	}
+	
+	private void registerAll() throws Exception {
+		registerThisHook();
+		registerThisListener();
+	}
+	
+	private void unregisterAll() throws Exception {
+		unregisterThisListener();
+		unregisterThisHook();
+	}
+	
+	/**
+	 * Test the basic contract of WovenClassListener.
+	 * @throws Exception
+	 */
+	public void testWovenClassListener() throws Exception {
+		registerAll();
+		try {
+			Class<?> clazz = weavingClasses.loadClass(TEST_CLASS_NAME);
+			assertDefinedClass(listenerWovenClass, clazz);
+			assertStates(WovenClass.TRANSFORMED, WovenClass.DEFINED);
+		} 
+		finally {
+			unregisterAll();
+		}
+	}
+	
+	private void assertStates(Integer...states) {
+		assertEquals("Listener did not receive notification of all states", states.length, wovenClassStates.size());
+		int i = 0;
+		for (Integer state : states)
+			assertEquals("Wrong state", state, wovenClassStates.get(i++));
+	}
+	
+	/**
+	 * Test the class load does not fail if a listener throws an exception.
+	 * @throws Exception
+	 */
+	public void testWovenClassListenerExceptionDoesNotCauseClassLoadToFail() throws Exception {
+		final AtomicInteger integer = new AtomicInteger(0);
+		ServiceRegistration<WovenClassListener> reg = getContext().registerService(
+				WovenClassListener.class, 
+				new WovenClassListener() {
+					public void modified(WovenClass wovenClass) {
+						integer.set(1);
+						throw new RuntimeException();
+					}
+				}, 
+				null);
+		try {
+			registerAll();
+			try {
+				Class<?> clazz = weavingClasses.loadClass(TEST_CLASS_NAME);
+				assertEquals("Listener not called", 1, integer.get());
+				assertDefinedClass(listenerWovenClass, clazz);
+				assertStates(WovenClass.TRANSFORMED, WovenClass.DEFINED);
+			}
+			finally {
+				unregisterAll();
+			}
+		}
+		finally {
+			reg.unregister();
+		}
+	}
+	
+	/**
+	 * Test that listeners are still notified when weaving hook throws exception.
+	 * @throws Exception
+	 */
+	public void testWovenClassListenerCalledWhenWeavingHookException() throws Exception {
+		final AtomicInteger integer = new AtomicInteger(0);
+		Dictionary<String, Object> props = new Hashtable<String, Object>(1);
+		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MIN_VALUE));
+		ServiceRegistration<WeavingHook> reg = getContext().registerService(
+				WeavingHook.class, 
+				new WeavingHook() {
+					public void weave(WovenClass wovenClass) {
+						integer.set(1);
+						throw new RuntimeException();
+					}
+				}, 
+				props);
+		try {
+			registerAll();
+			try {
+				weavingClasses.loadClass(TEST_CLASS_NAME);
+				fail("Class should have failed to load");
+			}
+			catch (ClassFormatError e) {
+				assertEquals("Hook not called", 1, integer.get());
+				assertStates(WovenClass.TRANSFORMING_FAILED);
+			}
+			finally {
+				unregisterAll();
+			}
+		}
+		finally {
+			reg.unregister();
+		}
+	}
+	
+	/**
+	 * Test that listeners are still notified when class definition fails.
+	 * @throws Exception
+	 */
+	public void testWovenClassListenerCalledWhenClassDefinitionFails() throws Exception {
+		final AtomicInteger integer = new AtomicInteger(0);
+		ServiceRegistration<WeavingHook> reg = getContext().registerService(
+				WeavingHook.class, 
+				new WeavingHook() {
+					public void weave(WovenClass wovenClass) {
+						integer.set(1);
+						wovenClass.setBytes(new byte[0]);
+					}
+				}, 
+				null);
+		try {
+			registerThisListener();
+			try {
+				weavingClasses.loadClass(TEST_CLASS_NAME);
+				fail("Class should have failed to load");
+			}
+			catch (ClassFormatError e) {
+				assertEquals("Hook not called", 1, integer.get());
+				assertStates(WovenClass.TRANSFORMED, WovenClass.DEFINE_FAILED);
+			}
+			finally {
+				unregisterThisListener();
+			}
+		}
+		finally {
+			reg.unregister();
+		}
+	}
+	
+	/**
+	 * Test that listeners are not notified when no weaving hooks are registered.
+	 * @throws Exception
+	 */
+	public void testWovenClassListenerNotNotifiedWhenNoWeavingHooks() throws Exception {
+		registerThisListener();
+		try {
+			weavingClasses.loadClass(TEST_CLASS_NAME);
+			assertNull("Listener notified with no weaving hooks registered", listenerWovenClass);
+			assertStates();
+		}
+		finally {
+			unregisterThisListener();
+		}
+	}
+	
+	private static void assertBundleWiringUpdated(WovenClass wovenClass) {
+		assertFalse("Bundle wiring was not updated", wovenClass.getBundleWiring().getRequirements(PackageNamespace.PACKAGE_NAMESPACE).isEmpty());
+	}
+	
+	private static void assertBundleWiringNotUpdated(WovenClass wovenClass) {
+		assertTrue("Bundle wiring was updated", wovenClass.getBundleWiring().getRequirements(PackageNamespace.PACKAGE_NAMESPACE).isEmpty());
+	}
+	
+	private static void assertDefinedClass(WovenClass wovenClass, Class<?> clazz) {
+		assertEquals("Wrong defined class", clazz, wovenClass.getDefinedClass());
+	}
+	
+	private static void assertImmutableList(WovenClass wc) {
 		List<String> dynamicImports = wc.getDynamicImports();
 		try {
 			dynamicImports.clear();
@@ -1073,71 +1418,4 @@ public class WeavingHookTests extends DefaultTestBundleControl implements Weavin
 			//No action needed
 		}
 	}
-
-	private void registerThisHook() throws Exception {
-		reg1 = getContext().registerService(WeavingHook.class, this, null);
-		reg2 = getContext().registerService(WeavingHook.class, this, null);
-	}
-
-	private void unregisterThisHook() throws Exception {
-		wc = null;
-		reg1.unregister();
-		reg2.unregister();
-	}
-
-	/**
-	 * Test the various {@link WovenClass} methods inside a WeavingHook
-	 */
-	public void weave(WovenClass wovenClass) {
-
-		if(wc == null) {
-			//First time through
-			wc = wovenClass;
-
-			assertWiring();
-
-			realBytes = wovenClass.getBytes();
-			assertSame("Should be the same byte array!", realBytes, wovenClass.getBytes());
-
-			assertEquals("Wrong class", TEST_CLASS_NAME, wc.getClassName());
-
-			assertNull("Should not be defined yet", wc.getDefinedClass());
-
-			List<String> dynamicImports = wc.getDynamicImports();
-			assertSame("Should be the same List!", dynamicImports, wovenClass.getDynamicImports());
-			assertTrue("No imports yet", dynamicImports.isEmpty());
-
-			dynamicImports.add("org.osgi.framework;version=1.5");
-
-			assertFalse("Weaving should not be complete", wc.isWeavingComplete());
-
-			wc.setBytes(fakeBytes);
-			assertSame("Should be the same byte array!", fakeBytes, wovenClass.getBytes());
-		} else {
-			//Second time through
-			assertSame("Should be the same byte array!", fakeBytes, wovenClass.getBytes());
-			wc.setBytes(realBytes);
-			List<String> dynamicImports = wc.getDynamicImports();
-			assertEquals("Should be one import", 1, dynamicImports.size());
-			dynamicImports.clear();
-			assertTrue("Should be no imports now", dynamicImports.isEmpty());
-			dynamicImports.add(ORG_OSGI_FRAMEWORK_VERSION_1_6);
-		}
-
-	}
-
-	/**
-	 * Check that the BundleWiring is usable
-	 */
-	private void assertWiring() {
-		BundleWiring bw = wc.getBundleWiring();
-
-		assertTrue("Should be the current bundle", bw.isCurrent());
-		assertEquals("Wrong bundle", TESTCLASSES_SYM_NAME,
-				bw.getBundle().getSymbolicName());
-		assertEquals("Wrong bundle", Version.parseVersion("1.0.0"),
-				bw.getBundle().getVersion());
-		assertNotNull("No Classloader", bw.getClassLoader());
-	}
-
 }
