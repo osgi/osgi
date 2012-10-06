@@ -20,11 +20,19 @@
 
     <target name="core" depends="javadoc,xmlns,core.xml,core.fo,core.pdf" />
 
+    <target name="core-diff" depends="javadoc,xmlns,core.xml,core-diff.xml,core-diff.fo,core-diff.pdf" />
+
     <target name="cmpn" depends="javadoc,ee,xmlns,cmpn.xml,cmpn.fo,cmpn.pdf" />
+
+    <target name="cmpn-diff" depends="javadoc,ee,xmlns,cmpn.xml,cmpn-diff.xml,cmpn-diff.fo,cmpn-diff.pdf" />
 
     <target name="enterprise" depends="javadoc,xmlns,enterprise.xml,enterprise.fo,enterprise.pdf" />
 
+    <target name="enterprise-diff" depends="javadoc,xmlns,enterprise.xml,enterprise-diff.xml,enterprise-diff.fo,enterprise-diff.pdf" />
+
     <target name="residential" depends="javadoc,xmlns,residential.xml,residential.fo,residential.pdf" />
+
+    <target name="residential-diff" depends="javadoc,xmlns,residential.xml,residential-diff.xml,residential-diff.fo,residential-diff.pdf" />
 
     <target name="javadoc" depends="compile" unless="-javadoc">
         <delete dir="${target}/javadoc"/>
@@ -33,14 +41,14 @@
             Project output: ${project.output}
             Sourcepath    : ${project.allsourcepath}
             Destdir       : ${target}/javadoc
-            Packages      : org.osgi.dmt.*,${javadoc.packages}
+            Packages      : ${javadoc.packages}
             Bootcp        : ${repo.javase}, ${repo.foundation}
             Classpath     : ${repo.servlet}, ${repo.jpa}, ${repo.jaxp}
         </echo>
         <javadoc
             access="protected"
             encoding="UTF-8"
-            packagenames="org.osgi.dmt.*,${javadoc.packages}"
+            packagenames="${javadoc.packages}"
             sourcepath="${project.allsourcepath}"
             destdir="${target}/javadoc">
             <bootclasspath>
@@ -75,7 +83,7 @@
         <property name="-javadoc" value="true"/>
     </target>
 
-    <target name="ee" depends="compile">
+    <target name="ee" depends="compile" unless="-ee">
         <echo>${minimum-latest.jar}</echo>
         <echo>${foundation-latest.jar}</echo>
         <delete dir="${target}/ee"/>
@@ -90,6 +98,7 @@
             <classpath location="${saxon}" />
             <factory name="com.icl.saxon.TransformerFactoryImpl" />
         </xslt>
+        <property name="-ee" value="true"/>
     </target>
 
     <!-- Strip off leading comments on schema for inclusion in spec -->
@@ -111,7 +120,7 @@
         <attribute name="name"/>
         <sequential>
             <mkdir dir="${target}/book"/>
-            <xslt style="docbook/xsl/noop.xsl"
+            <xslt style="docbook/xsl/identity.xsl"
                 in="docbook/@{name}/book.xml"
                 out="${target}/book/@{name}.xml"
                 force="true">
@@ -145,6 +154,44 @@
         <xinclude name="residential" />
     </target>
 
+    <macrodef name="diff">
+        <attribute name="name"/>
+        <sequential>
+            <mkdir dir="${target}/diff"/>
+            <java classname="net.sf.diffmk.DiffMk" classpath="${licensed}/diffmk/bin/diffmk.jar" fork="true">
+                <jvmarg value="-Xmx256m" />
+                <arg value="--verbose" />
+                <arg value="1" />
+                <arg value="--words" />
+                <arg value="baseline/@{name}.xml" />
+                <arg value="${target}/book/@{name}.xml" />
+                <arg value="${target}/diff/@{name}.xml" />
+            </java>
+            <xslt style="${licensed}/diffmk/style/docbook.xsl"
+                in="${target}/diff/@{name}.xml"
+                out="${target}/book/@{name}-diff.xml">
+                <classpath location="${saxon}" />
+                <factory name="com.icl.saxon.TransformerFactoryImpl" />
+            </xslt>
+        </sequential>
+    </macrodef>
+
+    <target name="core-diff.xml" depends="init">
+        <diff name="core" />
+    </target>
+
+    <target name="cmpn-diff.xml" depends="init">
+        <diff name="cmpn" />
+    </target>
+
+    <target name="enterprise-diff.xml" depends="init">
+        <diff name="enterprise" />
+    </target>
+
+    <target name="residential-diff.xml" depends="init">
+        <diff name="residential" />
+    </target>
+
     <macrodef name="docbook2fo">
         <attribute name="name"/>
         <sequential>
@@ -174,13 +221,30 @@
         <docbook2fo name="residential" />
     </target>
 
+    <target name="core-diff.fo" depends="init">
+        <docbook2fo name="core-diff" />
+    </target>
+
+    <target name="cmpn-diff.fo" depends="init">
+        <docbook2fo name="cmpn-diff" />
+    </target>
+
+    <target name="enterprise-diff.fo" depends="init">
+        <docbook2fo name="enterprise-diff" />
+    </target>
+
+    <target name="residential-diff.fo" depends="init">
+        <docbook2fo name="residential-diff" />
+    </target>
+
     <macrodef name="fo2pdf">
         <attribute name="name" />
+        <attribute name="book" default="@{name}" />
         <sequential>
             <!-- Customize fop config for the book -->
             <copy file="docbook/fop/fop-osgi.xconf" toFile="${target}/fop/fop-@{name}.xconf" overwrite="true">
                 <filterset begintoken="${" endtoken="}">
-                    <filter token="base" value="${project.dir}/docbook/@{name}" />
+                    <filter token="base" value="${project.dir}/docbook/@{book}" />
                     <filter token="font.base" value="${project.dir}/fonts" />
                 </filterset>
             </copy>
@@ -218,6 +282,22 @@
 
     <target name="residential.pdf" depends="init">
         <fo2pdf name="residential" />
+    </target>
+
+    <target name="core-diff.pdf" depends="init">
+        <fo2pdf name="core-diff" book="core" />
+    </target>
+
+    <target name="cmpn-diff.pdf" depends="init">
+        <fo2pdf name="cmpn-diff" book="cmpn" />
+    </target>
+
+    <target name="enterprise-diff.pdf" depends="init">
+        <fo2pdf name="enterprise-diff" book="enterprise" />
+    </target>
+
+    <target name="residential-diff.pdf" depends="init">
+        <fo2pdf name="residential-diff" book="residential" />
     </target>
 
     <target name="fontmetrics" depends="init" description="Only used to rebuild font metrics">
