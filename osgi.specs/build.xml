@@ -33,14 +33,14 @@
             Project output: ${project.output}
             Sourcepath    : ${project.allsourcepath}
             Destdir       : ${target}/javadoc
-            Packages      : org.osgi.dmt.*,${javadoc.packages}
+            Packages      : ${javadoc.packages}
             Bootcp        : ${repo.javase}, ${repo.foundation}
             Classpath     : ${repo.servlet}, ${repo.jpa}, ${repo.jaxp}
         </echo>
         <javadoc
             access="protected"
             encoding="UTF-8"
-            packagenames="org.osgi.dmt.*,${javadoc.packages}"
+            packagenames="${javadoc.packages}"
             sourcepath="${project.allsourcepath}"
             destdir="${target}/javadoc">
             <bootclasspath>
