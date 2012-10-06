@@ -1,0 +1,251 @@
+<?xml version="1.0" encoding="utf-8"?><html xmlns="http://www.w3.org/1999/xhtml">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <title>diffmk</title>
+      <link rel="stylesheet" type="text/css"
+            href="/sourceforge/docbook/xsl2/html/default.css" />
+   </head>
+   <body>
+      <div class="refentry" id="R.1">
+         <div class="refnamediv">
+            <h2>Name</h2>
+            <p><span class="refname">diffmk</span> — Calculate the differences between two XML documents.
+            </p>
+         </div>
+         <div class="refsynopsisdiv">
+            <h2>Synopsis</h2>
+            <div class="cmdsynopsis"><tt class="command">diffmk</tt>  [--validating] [--diff
+               {[text] |  [element] |  [both]}
+               ]<br /> [[--words] |  [--ignorewhitespace]] [--verbose]<br /> [--debugout   <em class="replaceable"><tt class="replaceable">filename</tt></em> ] [--output   <em class="replaceable"><tt class="replaceable">filename</tt></em> ]<br />  file1.xml   file2.xml  [output.xml]
+            </div>
+         </div>
+         <div class="refsect1">
+            <div class="refsection-titlepage">
+               <h2>Description</h2>
+            </div>
+            <p>The <strong class="command">diffmk</strong> command loads two
+               <a href="#bib-xml">[XML]</a> documents,
+               compares them, and produces a third document. The third document is the
+               second document (including the document type declaration and internal
+               subset) augmented with additional markup to identify differences
+               between the first and second documents.
+            </p>
+            <p>The most common application of this command is to identify the
+               changes made between two different revisions of the same document.
+               In this case, the document produced by <strong class="command">diffmk</strong> identifies
+               the differences (additions, deletions, and changes) that have occurred
+               between the two revisions provided.
+            </p>
+            <div class="refsect2">
+               <div class="refsection-titlepage">
+                  <h2>Identifying Differences in XML</h2>
+               </div>
+               <p>After <strong class="command">diffmk</strong> has identified the differences
+                  between two XML documents, it must annotate the result to indicate where
+                  these differences occur.
+               </p>
+               <p>If an element has been changed, <strong class="command">diffmk</strong> adds
+                  a <tt class="tag-attribute">diffmk:change</tt> attribute to the element
+                  with the value “<tt class="literal">added</tt>”,
+                  “<tt class="literal">changed</tt>”, or
+                  “<tt class="literal">deleted</tt>”.
+               </p>
+               <p>The namespace name of the <tt class="literal">diffmk:</tt> namespace is
+                  <tt class="uri">http://diffmk.sf.net/ns/diff</tt>.
+               </p>
+               <p>A slightly more complicated case arises when <strong class="command">diffmk</strong>
+                  must insert a new element. This occurs when a text node must be identified
+                  as somehow different.
+               </p>
+               <p>In this case, <strong class="command">diffmk</strong> adds a 
+                  <tt class="tag-element">diffmk:wrapper</tt> element around the changed node(s) and
+                  hangs the <tt class="tag-attribute">diffmk:change</tt> attribute on
+                  that wrapper.
+               </p>
+               <p>It is up to a subsequent post-process, most often with XSLT, to
+                  merge these elements and attributes back into the original vocabulary.
+               </p>
+            </div>
+         </div>
+         <div class="refsect1">
+            <div class="refsection-titlepage">
+               <h2>Options</h2>
+            </div>
+            <p>Each of the following options may be abbreviated to the shortest
+               name that is unambiguous; for example, <tt class="option">--de</tt> is sufficient
+               for the <tt class="option">--debug</tt> option.
+            </p>
+            <div class="variablelist">
+               <dl>
+                  <dt>--diff <em class="replaceable"><tt class="replaceable">difftype</tt></em></dt>
+                  <dd>
+                     <p>Selects the type of difference to calculate. Possible values for
+                        <em class="replaceable"><tt class="replaceable">difftype</tt></em> are <tt class="literal">element</tt>,
+                        <tt class="literal">text</tt>, or <tt class="literal">both</tt>.
+                     </p>
+                     <p>If an element-only diff is performed, then the structure of the
+                        document is compared without concern for text content. If a text-only
+                        diff is performed, then only text nodes are compared. Specifying both,
+                        remarkably enough, considers both element and text nodes for the purposes
+                        of comparison.
+                        
+                     </p>
+                     <p>The default is “text”.</p>
+                  </dd>
+                  <dt>--words</dt>
+                  <dd>
+                     <p>If the <tt class="option">--words</tt> option is used, text nodes are broken
+                        into individual words.
+                     </p>
+                  </dd>
+                  <dt>--ignorewhitespace</dt>
+                  <dd>
+                     <p>If <tt class="option">--ignorewhitespace</tt> is specified, all text node
+                        content is normalized with respect to whitespace before comparison. Leading
+                        and trailing whitespace is removed and all internal sequences of whitespace
+                        are replaced by a single blank. This prevents changes in line breaks from
+                        appearing as significant changes.
+                     </p>
+                     <p>This option is ignored in elements identified with
+                        <tt class="tag-element">xml:space</tt>="<tt class="tag-attvalue">preserve</tt>".
+                     </p>
+                  </dd>
+                  <dt>--output <em class="replaceable"><tt class="replaceable">filename</tt></em></dt>
+                  <dd>
+                     <p>Write the resulting XML document to <em class="replaceable"><tt class="replaceable">filename</tt></em>.
+                        
+                     </p>
+                  </dd>
+                  <dt>--debugout <em class="replaceable"><tt class="replaceable">filename</tt></em></dt>
+                  <dd>
+                     <p>Enables debugging output.
+                        
+                     </p>
+                  </dd>
+                  <dt>--verbose</dt>
+                  <dd>
+                     <p>Provides more verbose, informative messages.
+                        
+                     </p>
+                  </dd>
+               </dl>
+            </div>
+         </div>
+         <div class="refsect1">
+            <div class="refsection-titlepage">
+               <h2>Examples</h2>
+            </div>
+            <p>Given the following two documents:</p>
+            <div class="example-wrapper">
+               <div class="title">Example 1. The document <tt class="filename">test1.xml</tt></div>
+               <div class="example">
+                  <div class="programlisting"><pre><span class="linenumber">  1</span><span class="linenumber-separator"> </span>&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+<span class="linenumber">  2</span><span class="linenumber-separator"> </span>&lt;head&gt;
+<span class="linenumber">   </span><span class="linenumber-separator"> </span>&lt;title&gt;Some Title&lt;/title&gt;
+<span class="linenumber">  4</span><span class="linenumber-separator"> </span>&lt;/head&gt;
+<span class="linenumber">   </span><span class="linenumber-separator"> </span>&lt;body&gt;
+<span class="linenumber">  6</span><span class="linenumber-separator"> </span>&lt;p&gt;Some paragraph&lt;/p&gt;
+<span class="linenumber">   </span><span class="linenumber-separator"> </span>&lt;p&gt;Some other paragraph&lt;/p&gt;
+<span class="linenumber">  8</span><span class="linenumber-separator"> </span>&lt;/body&gt;
+<span class="linenumber">   </span><span class="linenumber-separator"> </span>&lt;/html&gt;
+</pre></div>
+               </div>
+            </div>
+            <div class="example-wrapper">
+               <div class="title">Example 2. The document <tt class="filename">test2.xml</tt></div>
+               <div class="example">
+                  <div class="programlisting"><pre><span class="linenumber">  1</span><span class="linenumber-separator"> </span>&lt;html xmlns="http://www.w3.org/1999/xhtml"&gt;
+<span class="linenumber">  2</span><span class="linenumber-separator"> </span>&lt;head&gt;
+<span class="linenumber">   </span><span class="linenumber-separator"> </span>&lt;title&gt;Some Title&lt;/title&gt;
+<span class="linenumber">  4</span><span class="linenumber-separator"> </span>&lt;/head&gt;
+<span class="linenumber">   </span><span class="linenumber-separator"> </span>&lt;body&gt;
+<span class="linenumber">  6</span><span class="linenumber-separator"> </span>&lt;p&gt;Some paragraph&lt;/p&gt;
+<span class="linenumber">   </span><span class="linenumber-separator"> </span>&lt;p&gt;Some new paragraph&lt;/p&gt;
+<span class="linenumber">  8</span><span class="linenumber-separator"> </span>&lt;p&gt;Some other paragraph&lt;/p&gt;
+<span class="linenumber">   </span><span class="linenumber-separator"> </span>&lt;/body&gt;
+<span class="linenumber"> 10</span><span class="linenumber-separator"> </span>&lt;/html&gt;
+</pre></div>
+               </div>
+            </div>
+            <p>The command:</p>
+            <div class="screen"><pre>
+diffmk test1.xml test2.xml out.xml
+</pre></div>
+            <p>will produce the following result:</p>
+            <div class="example-wrapper">
+               <div class="title">Example 3. The document <tt class="filename">out.xml</tt></div>
+               <div class="example">
+                  <div class="programlisting"><pre><span class="linenumber">  1</span><span class="linenumber-separator"> </span>&lt;html xmlns="http://www.w3.org/1999/xhtml" xmlns:diffmk="http://diffmk.sf.net/ns/diff"&gt;
+<span class="linenumber">  2</span><span class="linenumber-separator"> </span>&lt;head&gt;
+<span class="linenumber">   </span><span class="linenumber-separator"> </span>&lt;title&gt;Some Title&lt;/title&gt;
+<span class="linenumber">  4</span><span class="linenumber-separator"> </span>&lt;/head&gt;
+<span class="linenumber">   </span><span class="linenumber-separator"> </span>&lt;body&gt;
+<span class="linenumber">  6</span><span class="linenumber-separator"> </span>&lt;p&gt;Some paragraph&lt;/p&gt;
+<span class="linenumber">   </span><span class="linenumber-separator"> </span>&lt;p&gt;&lt;diffmk:wrapper diffmk:change="added"&gt;Some new paragraph&lt;/diffmk:wrapper&gt;&lt;/p&gt;
+<span class="linenumber">  8</span><span class="linenumber-separator"> </span>&lt;p diffmk:change="added"&gt;Some other paragraph&lt;/p&gt;
+<span class="linenumber">   </span><span class="linenumber-separator"> </span>&lt;/body&gt;
+<span class="linenumber"> 10</span><span class="linenumber-separator"> </span>&lt;/html&gt;
+</pre></div>
+               </div>
+            </div>
+         </div>
+         <div class="refsect1">
+            <div class="refsection-titlepage">
+               <h2>Bugs</h2>
+            </div>
+            <p>There's no way to use <strong class="command">diffmk</strong> to maintain a
+               running history of differences. Comparing the differences between documents
+               that already contain “<span class="quote">diff</span>” markup is bound to lead to
+               confusing, perhaps misleading, results.
+            </p>
+         </div>
+         <div class="refsect1">
+            <div class="refsection-titlepage">
+               <h2>Author</h2>
+            </div>
+            <div class="address">Norman Walsh, <tt class="email">&lt;<a href="mailto:ndw@nwalsh.com">ndw@nwalsh.com</a>&gt;</tt><br /></div>
+            <p>This program is free software; you can redistribute it and/or modify
+               it under the terms of the GNU General Public License as published by
+               the Free Software Foundation; either version 2 of the License, or
+               (at your option) any later version.
+            </p>
+            <p>This program is distributed in the hope that it will be useful,
+               but WITHOUT ANY WARRANTY; without even the implied warranty of
+               MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+               GNU General Public License for more details.
+            </p>
+            <p>You should have received a copy of the
+               <a href="../COPYING">GNU General Public License</a>
+               along with this program; if not, write to the Free Software
+               Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+            </p>
+         </div>
+         <div class="refsect1">
+            <div class="refsection-titlepage">
+               <h2>References</h2>
+            </div>
+            <p id="bib-xml">[XML]
+               Bray, Tim, et. al., editors.
+               <em class="citetitle"><a href="http://www.w3.org/TR/REC-xml">Extensible
+                     Markup Language (XML) 1.0</a></em>.
+               World Wide Web Consortium, 1998.
+               
+            </p>
+            <p id="bib-hm76">[HM76]
+               Hunt, J. W. and M. D. McIlroy.
+               “<span class="quote">An algorithm for differential file comparison</span>”.
+               <em class="citetitle">Computing Science Technical Report 41</em>.
+               AT&amp;T Bell Laboratories, Murray Hill, N.J. 1976.
+               
+            </p>
+            <p id="bib-hs77">[HS77]
+               Hunt, J.W and T.G. Szymanski.
+               “<span class="quote">A fast algorithm for computing longest common subsequences</span>”.
+               <em class="citetitle">Communications of the ACM</em>.
+               vol. 20, no. 5, pp. 350-353, 1977.
+               
+            </p>
+         </div>
+      </div>
+   </body>
+</html>
