@@ -2083,4 +2083,20 @@ should be discarded -->
 <!-- Turn off page references to para elements -->
 <xsl:template match="d:para" mode="page.citation"/>
 
+<!-- revisionflag markup -->
+<xsl:template match="text()[ancestor::*[@revisionflag][1][@revisionflag ='added']]">
+<fo:inline background-color="aqua">
+  <xsl:copy/>
+</fo:inline>
+</xsl:template>
+<xsl:template match="text()[ancestor::*[@revisionflag][1][@revisionflag ='changed']]">
+<fo:inline background-color="lime">
+  <xsl:copy/>
+</fo:inline>
+</xsl:template>
+<xsl:template match="text()[ancestor::*[@revisionflag][1][@revisionflag ='deleted']]">
+<fo:inline background-color="red" text-decoration="line-through">
+  <xsl:copy/>
+</fo:inline>
+</xsl:template>
 </xsl:stylesheet>

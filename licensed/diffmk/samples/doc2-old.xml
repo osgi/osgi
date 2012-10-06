@@ -1,0 +1,16 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Some Title</title>
+</head>
+<body>
+<p>Some paragraph</p>
+
+<pre>This is a    verbatim
+  environment. It's important that spacing
+           be           preserved           
+in here</pre>
+
+<p>Some other paragraph</p>
+</body>
+</html>
+
