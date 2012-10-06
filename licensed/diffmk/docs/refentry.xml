@@ -1,0 +1,254 @@
+<refentry xmlns="http://docbook.org/ns/docbook"
+	  xmlns:xlink="http://www.w3.org/1999/xlink"
+	  xmlns:xi='http://www.w3.org/2001/XInclude'>
+<info>
+<releaseinfo role="cvs">$Id$
+</releaseinfo>
+
+<revhistory>
+<revision>
+<revnumber>3.0a1</revnumber>
+<date>2007-03-02</date>
+<authorinitials>ndw</authorinitials>
+<revremark>First draft.</revremark>
+</revision>
+</revhistory>
+
+<author><personname>
+<firstname>Norman</firstname><surname>Walsh</surname>
+</personname>
+</author>
+
+<copyright>
+  <year>2001</year>
+  <year>2002</year>
+  <year>2007</year>
+  <holder>Norman Walsh</holder>
+  <holder>Sun Microsystems, Inc.</holder>
+</copyright>
+</info>
+
+<refmeta>
+<refentrytitle>diffmk</refentrytitle>
+<manvolnum>1</manvolnum>
+</refmeta>
+
+<refnamediv>
+<refname>diffmk</refname>
+<refpurpose>Calculate the differences between two XML documents</refpurpose>
+</refnamediv>
+
+<refsynopsisdiv>
+<cmdsynopsis>
+<command>diffmk</command>
+<arg>--validating</arg>
+<arg>--diff
+  <group choice="req">
+    <arg>text</arg><arg>element</arg><arg>both</arg>
+  </group>
+</arg>
+<sbr/>
+<group><arg>--words</arg><arg>--ignorewhitespace</arg></group>
+<arg>--verbose</arg>
+<sbr/>
+<arg>--debugout <arg choice="plain"><replaceable>filename</replaceable></arg></arg>
+<arg>--output <arg choice="plain"><replaceable>filename</replaceable></arg></arg>
+<sbr/>
+<arg choice="plain">file1.xml</arg>
+<arg choice="plain">file2.xml</arg>
+<arg>output.xml</arg>
+</cmdsynopsis>
+</refsynopsisdiv>
+
+<refsect1><title>Description</title>
+
+<para>The <command>diffmk</command> command loads two
+<xref linkend="bib-xml"/> documents,
+compares them, and produces a third document. The third document is the
+second document (including the document type declaration and internal
+subset) augmented with additional markup to identify differences
+between the first and second documents.</para>
+
+<para>The most common application of this command is to identify the
+changes made between two different revisions of the same document.
+In this case, the document produced by <command>diffmk</command> identifies
+the differences (additions, deletions, and changes) that have occurred
+between the two revisions provided.</para>
+
+<refsect2><title>Identifying Differences in XML</title>
+
+<para>After <command>diffmk</command> has identified the differences
+between two XML documents, it must annotate the result to indicate where
+these differences occur.</para>
+
+<para>If an element has been changed, <command>diffmk</command> adds
+a <tag class="attribute">diffmk:change</tag> attribute to the element
+with the value “<literal>added</literal>”,
+“<literal>changed</literal>”, or
+“<literal>deleted</literal>”.</para>
+
+<para>The namespace name of the <literal>diffmk:</literal> namespace is
+<uri>http://diffmk.sf.net/ns/diff</uri>.</para>
+
+<para>A slightly more complicated case arises when <command>diffmk</command>
+must insert a new element. This occurs when a text node must be identified
+as somehow different.</para>
+
+<para>In this case, <command>diffmk</command> adds a 
+<tag>diffmk:wrapper</tag> element around the changed node(s) and
+hangs the <tag class="attribute">diffmk:change</tag> attribute on
+that wrapper.</para>
+
+<para>It is up to a subsequent post-process, most often with XSLT, to
+merge these elements and attributes back into the original vocabulary.</para>
+
+</refsect2>
+</refsect1>
+
+<refsect1><title>Options</title>
+
+<para>Each of the following options may be abbreviated to the shortest
+name that is unambiguous; for example, <option>--de</option> is sufficient
+for the <option>--debug</option> option.</para>
+
+<variablelist>
+
+<varlistentry><term>--diff <replaceable>difftype</replaceable></term>
+<listitem>
+<para>Selects the type of difference to calculate. Possible values for
+<replaceable>difftype</replaceable> are <literal>element</literal>,
+<literal>text</literal>, or <literal>both</literal>.</para>
+<para>If an element-only diff is performed, then the structure of the
+document is compared without concern for text content. If a text-only
+diff is performed, then only text nodes are compared. Specifying both,
+remarkably enough, considers both element and text nodes for the purposes
+of comparison.
+</para>
+<para>The default is “text”.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term>--words</term>
+<listitem>
+<para>If the <option>--words</option> option is used, text nodes are broken
+into individual words.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term>--ignorewhitespace</term>
+<listitem>
+<para>If <option>--ignorewhitespace</option> is specified, all text node
+content is normalized with respect to whitespace before comparison. Leading
+and trailing whitespace is removed and all internal sequences of whitespace
+are replaced by a single blank. This prevents changes in line breaks from
+appearing as significant changes.</para>
+<para>This option is ignored in elements identified with
+<tag>xml:space</tag>="<tag class="attvalue">preserve</tag>".</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term>--output <replaceable>filename</replaceable></term>
+<listitem>
+<para>Write the resulting XML document to <replaceable>filename</replaceable>.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term>--debugout <replaceable>filename</replaceable></term>
+<listitem>
+<para>Enables debugging output.
+</para>
+</listitem>
+</varlistentry>
+
+<varlistentry><term>--verbose</term>
+<listitem>
+<para>Provides more verbose, informative messages.
+</para>
+</listitem>
+</varlistentry>
+
+</variablelist>
+
+</refsect1>
+
+<refsect1><title>Examples</title>
+
+<para>Given the following two documents:</para>
+
+<example><title>The document <filename>test1.xml</filename></title>
+<programlisting><xi:include href="doc1-old.xml" parse="text"/></programlisting>
+</example>
+
+<example><title>The document <filename>test2.xml</filename></title>
+<programlisting><xi:include href="doc1-new.xml" parse="text"/></programlisting>
+</example>
+
+<para>The command:</para>
+
+<screen>
+diffmk test1.xml test2.xml out.xml
+</screen>
+
+<para>will produce the following result:</para>
+
+<example><title>The document <filename>out.xml</filename></title>
+<programlisting><xi:include href="doc1-diff.xml" parse="text"/></programlisting>
+</example>
+
+</refsect1>
+
+<refsect1><title>Bugs</title>
+
+<para>There's no way to use <command>diffmk</command> to maintain a
+running history of differences. Comparing the differences between documents
+that already contain <quote>diff</quote> markup is bound to lead to
+confusing, perhaps misleading, results.</para>
+
+</refsect1>
+
+<refsect1><title>Author</title>
+
+<address>Norman Walsh, <email>ndw@nwalsh.com</email></address>
+
+<para>This program is free software; you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation; either version 2 of the License, or
+(at your option) any later version.</para>
+
+<para>This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.</para>
+
+<para>You should have received a copy of the
+<link xlink:href="../COPYING">GNU General Public License</link>
+along with this program; if not, write to the Free Software
+Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA</para>
+
+</refsect1>
+<refsect1><title>References</title>
+
+<para xml:id="bib-xml" xreflabel="[XML]">[XML]
+Bray, Tim, et. al., editors.
+<citetitle><link xlink:href="http://www.w3.org/TR/REC-xml">Extensible
+Markup Language (XML) 1.0</link></citetitle>.
+World Wide Web Consortium, 1998.
+</para>
+
+<para xml:id="bib-hm76" xreflabel="[HM76]">[HM76]
+Hunt, J. W. and M. D. McIlroy.
+<quote>An algorithm for differential file comparison</quote>.
+<citetitle>Computing Science Technical Report 41</citetitle>.
+AT&amp;T Bell Laboratories, Murray Hill, N.J. 1976.
+</para>
+
+<para xml:id="bib-hs77" xreflabel="[HS77]">[HS77]
+Hunt, J.W and T.G. Szymanski.
+<quote>A fast algorithm for computing longest common subsequences</quote>.
+<citetitle>Communications of the ACM</citetitle>.
+vol. 20, no. 5, pp. 350-353, 1977.
+</para>
+
+</refsect1>
+</refentry>
