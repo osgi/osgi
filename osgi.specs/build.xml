@@ -20,11 +20,19 @@
 
     <target name="core" depends="javadoc,xmlns,core.xml,core.fo,core.pdf" />
 
+    <target name="core-diff" depends="javadoc,xmlns,core.xml,core-diff.xml,core-diff.fo,core-diff.pdf" />
+
     <target name="cmpn" depends="javadoc,ee,xmlns,cmpn.xml,cmpn.fo,cmpn.pdf" />
+
+    <target name="cmpn-diff" depends="javadoc,ee,xmlns,cmpn.xml,cmpn-diff.xml,cmpn-diff.fo,cmpn-diff.pdf" />
 
     <target name="enterprise" depends="javadoc,xmlns,enterprise.xml,enterprise.fo,enterprise.pdf" />
 
+    <target name="enterprise-diff" depends="javadoc,xmlns,enterprise.xml,enterprise-diff.xml,enterprise-diff.fo,enterprise-diff.pdf" />
+
     <target name="residential" depends="javadoc,xmlns,residential.xml,residential.fo,residential.pdf" />
+
+    <target name="residential-diff" depends="javadoc,xmlns,residential.xml,residential-diff.xml,residential-diff.fo,residential-diff.pdf" />
 
     <target name="javadoc" depends="compile" unless="-javadoc">
         <delete dir="${target}/javadoc"/>
@@ -146,6 +154,44 @@
         <xinclude name="residential" />
     </target>
 
+    <macrodef name="diff">
+        <attribute name="name"/>
+        <sequential>
+            <mkdir dir="${target}/diff"/>
+            <java classname="net.sf.diffmk.DiffMk" classpath="${licensed}/diffmk/bin/diffmk.jar" fork="true">
+                <jvmarg value="-Xmx256m" />
+                <arg value="--verbose" />
+                <arg value="1" />
+                <arg value="--words" />
+                <arg value="baseline/@{name}.xml" />
+                <arg value="${target}/book/@{name}.xml" />
+                <arg value="${target}/diff/@{name}.xml" />
+            </java>
+            <xslt style="${licensed}/diffmk/style/docbook.xsl"
+                in="${target}/diff/@{name}.xml"
+                out="${target}/book/@{name}-diff.xml">
+                <classpath location="${saxon}" />
+                <factory name="com.icl.saxon.TransformerFactoryImpl" />
+            </xslt>
+        </sequential>
+    </macrodef>
+
+    <target name="core-diff.xml" depends="init">
+        <diff name="core" />
+    </target>
+
+    <target name="cmpn-diff.xml" depends="init">
+        <diff name="cmpn" />
+    </target>
+
+    <target name="enterprise-diff.xml" depends="init">
+        <diff name="enterprise" />
+    </target>
+
+    <target name="residential-diff.xml" depends="init">
+        <diff name="residential" />
+    </target>
+
     <macrodef name="docbook2fo">
         <attribute name="name"/>
         <sequential>
@@ -173,6 +219,22 @@
 
     <target name="residential.fo" depends="init">
         <docbook2fo name="residential" />
+    </target>
+
+    <target name="core-diff.fo" depends="init">
+        <docbook2fo name="core-diff" />
+    </target>
+
+    <target name="cmpn-diff.fo" depends="init">
+        <docbook2fo name="cmpn-diff" />
+    </target>
+
+    <target name="enterprise-diff.fo" depends="init">
+        <docbook2fo name="enterprise-diff" />
+    </target>
+
+    <target name="residential-diff.fo" depends="init">
+        <docbook2fo name="residential-diff" />
     </target>
 
     <macrodef name="fo2pdf">
@@ -220,6 +282,22 @@
 
     <target name="residential.pdf" depends="init">
         <fo2pdf name="residential" />
+    </target>
+
+    <target name="core-diff.pdf" depends="init">
+        <fo2pdf name="core-diff" book="core" />
+    </target>
+
+    <target name="cmpn-diff.pdf" depends="init">
+        <fo2pdf name="cmpn-diff" book="cmpn" />
+    </target>
+
+    <target name="enterprise-diff.pdf" depends="init">
+        <fo2pdf name="enterprise-diff" book="enterprise" />
+    </target>
+
+    <target name="residential-diff.pdf" depends="init">
+        <fo2pdf name="residential-diff" book="residential" />
     </target>
 
     <target name="fontmetrics" depends="init" description="Only used to rebuild font metrics">
