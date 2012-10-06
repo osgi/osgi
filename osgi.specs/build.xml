@@ -111,7 +111,7 @@
         <attribute name="name"/>
         <sequential>
             <mkdir dir="${target}/book"/>
-            <xslt style="docbook/xsl/noop.xsl"
+            <xslt style="docbook/xsl/identity.xsl"
                 in="docbook/@{name}/book.xml"
                 out="${target}/book/@{name}.xml"
                 force="true">

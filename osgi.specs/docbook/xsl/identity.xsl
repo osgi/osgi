@@ -4,8 +4,8 @@
     version="1.1">
 
 <!-- $Id$ -->
-<!-- Noop stylesheet; used to process xincludes -->
-    <xsl:output method="xml" encoding="UTF-8"/>
+<!-- Identity transformation stylesheet -->
+    <xsl:output method="xml" encoding="utf-8"/>
     <xsl:template match="@*|node()">
         <xsl:copy>
             <xsl:apply-templates select="@*|node()"/>
