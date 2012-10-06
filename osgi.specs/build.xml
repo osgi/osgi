@@ -176,11 +176,12 @@
 
     <macrodef name="fo2pdf">
         <attribute name="name" />
+        <attribute name="book" default="@{name}" />
         <sequential>
             <!-- Customize fop config for the book -->
             <copy file="docbook/fop/fop-osgi.xconf" toFile="${target}/fop/fop-@{name}.xconf" overwrite="true">
                 <filterset begintoken="${" endtoken="}">
-                    <filter token="base" value="${project.dir}/docbook/@{name}" />
+                    <filter token="base" value="${project.dir}/docbook/@{book}" />
                     <filter token="font.base" value="${project.dir}/fonts" />
                 </filterset>
             </copy>
