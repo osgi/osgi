@@ -75,7 +75,7 @@
         <property name="-javadoc" value="true"/>
     </target>
 
-    <target name="ee" depends="compile">
+    <target name="ee" depends="compile" unless="-ee">
         <echo>${minimum-latest.jar}</echo>
         <echo>${foundation-latest.jar}</echo>
         <delete dir="${target}/ee"/>
@@ -90,6 +90,7 @@
             <classpath location="${saxon}" />
             <factory name="com.icl.saxon.TransformerFactoryImpl" />
         </xslt>
+        <property name="-ee" value="true"/>
     </target>
 
     <!-- Strip off leading comments on schema for inclusion in spec -->
