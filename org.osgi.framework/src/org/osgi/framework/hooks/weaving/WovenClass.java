@@ -29,7 +29,7 @@ import org.osgi.framework.wiring.BundleWiring;
  * should be added to the bundle as dynamic imports.
  * 
  * <p>
- * Upon entering the {@link #DEFINED} state, this object becomes effectively
+ * Upon entering one of the terminal states, this object becomes effectively
  * immutable.
  * 
  * @NotThreadSafe
@@ -44,10 +44,10 @@ public interface WovenClass {
 	 * The woven class is in this state while {@link WeavingHook weaving hooks}
 	 * are being called. The woven class is mutable so the {@link #getBytes()
 	 * class bytes} may be {@link #setBytes(byte[]) modified} and
-	 * {@link #getDynamicImports() dynamic imports} may be added. After the last
-	 * weaving hook has been called, the state transitions to
-	 * {@link #TRANSFORMED} if no exception was thrown, otherwise to
-	 * {@link #TRANSFORMING_FAILED}.
+	 * {@link #getDynamicImports() dynamic imports} may be added. If a weaving
+	 * hook throws an exception the state transitions to
+	 * {@link #TRANSFORMING_FAILED}. Otherwise, after the last weaving hook has
+	 * been successfully called, the state transitions to {@link #TRANSFORMED}.
 	 * 
 	 * @since 1.1
 	 */
@@ -59,9 +59,10 @@ public interface WovenClass {
 	 * <p>
 	 * The woven class is in this state after {@link WeavingHook weaving hooks}
 	 * have been called and before the class is defined. The woven class cannot
-	 * be further transformed. After the class has been defined, the state
-	 * transitions to {@link #DEFINED} if a class definition failure did not
-	 * occur, otherwise to {@link #DEFINE_FAILED}.
+	 * be further transformed. The woven class is in this state while defining
+	 * the class. If a failure occurs while defining the class, the state
+	 * transitions to {@link #DEFINE_FAILED}. Otherwise, after the class has
+	 * been defined, the state transitions to {@link #DEFINED}.
 	 * 
 	 * @since 1.1
 	 */
@@ -84,9 +85,10 @@ public interface WovenClass {
 	/**
 	 * The woven class failed to transform.
 	 * <p>
-	 * The woven class is in this state when a {@link WeavingHook weaving hook}
-	 * throws an exception while {@link #TRANSFORMING}. The woven class cannot
-	 * be further transformed. This is a terminal state.
+	 * The woven class is in this state if a {@link WeavingHook weaving hook}
+	 * threw an exception. The woven class cannot be further transformed or
+	 * defined. This is a terminal state. Upon entering this state, this object
+	 * is effectively immutable.
 	 * 
 	 * @since 1.1
 	 */
@@ -95,9 +97,10 @@ public interface WovenClass {
 	/**
 	 * The woven class failed to define.
 	 * <p>
-	 * The woven class is in this state when a class definition failure occurs
-	 * after being {@link #TRANSFORMED} but before being {@link #DEFINED}. The
-	 * woven class cannot be further transformed. This is a terminal state.
+	 * The woven class is in this state when a failure occurs while defining the
+	 * class. The woven class cannot be further transformed or defined. This is
+	 * a terminal state. Upon entering this state, this object is effectively
+	 * immutable.
 	 * 
 	 * @since 1.1
 	 */
@@ -109,7 +112,7 @@ public interface WovenClass {
 	 * 
 	 * <p>
 	 * While in the {@link #TRANSFORMING} state, this method returns a reference
-	 * to the class files byte array contained in this object. Upon leaving the
+	 * to the class files byte array contained in this object. After leaving the
 	 * {@link #TRANSFORMING} state, this woven class can no longer be
 	 * transformed and a copy of the class file byte array is returned.
 	 * 
@@ -140,7 +143,7 @@ public interface WovenClass {
 	 *        specified array.
 	 * @throws NullPointerException If newBytes is {@code null}.
 	 * @throws IllegalStateException If state is {@link #TRANSFORMED},
-	 *         {@link #DEFINED}, {@link #TRANSFORMING_FAILED}, or
+	 *         {@link #DEFINED}, {@link #TRANSFORMING_FAILED} or
 	 *         {@link #DEFINE_FAILED}.
 	 * @throws SecurityException If the caller does not have
 	 *         {@code AdminPermission[bundle,WEAVE]} and the Java runtime
@@ -177,7 +180,7 @@ public interface WovenClass {
 	 * complete after the class is defined.
 	 * 
 	 * @return {@code true} if {@link #getState() state} is {@link #DEFINED},
-	 *         {@link #TRANSFORMING_FAILED}, or {@link #DEFINE_FAILED};
+	 *         {@link #TRANSFORMING_FAILED} or {@link #DEFINE_FAILED};
 	 *         {@code false} otherwise.
 	 */
 	public boolean isWeavingComplete();
@@ -224,7 +227,7 @@ public interface WovenClass {
 	 * A woven class can be in only one state at any time.
 	 * 
 	 * @return Either {@link #TRANSFORMING}, {@link #TRANSFORMED},
-	 *         {@link #DEFINED}. {@link #TRANSFORMING_FAILED}, or
+	 *         {@link #DEFINED}, {@link #TRANSFORMING_FAILED} or
 	 *         {@link #DEFINE_FAILED}.
 	 * @since 1.1
 	 */

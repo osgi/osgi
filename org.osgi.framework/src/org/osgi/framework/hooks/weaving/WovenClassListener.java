@@ -58,8 +58,8 @@ public interface WovenClassListener {
 	 * <p>
 	 * The listener will be notified when a woven class has entered the
 	 * {@link WovenClass#TRANSFORMED TRANSFORMED}, {@link WovenClass#DEFINED
-	 * DEFINED}, {@link WovenClass#TRANSFORMING_FAILED TRANSFORMING FAILED}, and
-	 * {@link WovenClass#DEFINE_FAILED DEFINE FAILED} states.
+	 * DEFINED}, {@link WovenClass#TRANSFORMING_FAILED TRANSFORMING_FAILED} and
+	 * {@link WovenClass#DEFINE_FAILED DEFINE_FAILED} states.
 	 * 
 	 * <p>
 	 * If this method throws any exception, the Framework must log the exception
