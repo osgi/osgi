@@ -109,9 +109,9 @@ public interface WovenClass {
 	 * 
 	 * <p>
 	 * While in the {@link #TRANSFORMING} state, this method returns a reference
-	 * to the class files byte array contained in this object. Upon entering the
-	 * {@link #TRANSFORMED} state, this woven class can no longer be transformed
-	 * and a copy of the class file byte array is returned.
+	 * to the class files byte array contained in this object. Upon leaving the
+	 * {@link #TRANSFORMING} state, this woven class can no longer be
+	 * transformed and a copy of the class file byte array is returned.
 	 * 
 	 * @return The bytes to be used to define the
 	 *         {@link WovenClass#getClassName() named} class.
