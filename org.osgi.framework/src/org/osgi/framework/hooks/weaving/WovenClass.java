@@ -96,7 +96,7 @@ public interface WovenClass {
 	 * The woven class failed to define.
 	 * <p>
 	 * The woven class is in this state when a class definition failure occurs
-	 * after being {@link #TRANSFORMED} but before being (@link DEFINED}. The
+	 * after being {@link #TRANSFORMED} but before being {@link #DEFINED}. The
 	 * woven class cannot be further transformed. This is a terminal state.
 	 * 
 	 * @since 1.1
