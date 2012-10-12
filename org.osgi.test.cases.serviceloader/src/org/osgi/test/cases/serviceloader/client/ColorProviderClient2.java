@@ -41,10 +41,10 @@ public class ColorProviderClient2 implements BundleActivator, TestBridge {
 		for (ColorProvider cp : sl) {
 			count++;
 			String color = cp.getColor();
-			
-			TestCase.assertTrue("green".equals(color) || "red".equals(color));
+			System.out.println(color);
 		}
-		TestCase.assertEquals("expected exactly 2 providers", 2, count);
+		
+		TestCase.assertEquals("expected exactly " + result + " provider(s)", result, ""+count);
 		
 		System.out.println("client run - end");
 	}

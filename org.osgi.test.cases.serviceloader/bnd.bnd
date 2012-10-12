@@ -45,8 +45,4 @@ Include-Resource                    = \
 
 Test-Cases							= ${testcases}
 
-# if the framework implementation supports wiring multiple candidates to a requirement with the cardinality:=multiple,
-# then set this property in the -runproperties to enable the appropriate test case.
-# Note: The current framework RI (Equinox) does not support this and will fail the test
-#serviceloader.ct.framework.supports.multiple=true
 -runproperties: ${runproperties}

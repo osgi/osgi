@@ -167,58 +167,60 @@ public class ServiceLoaderServiceClientTest extends OSGiTestCase {
 
     /**
      * TestCase 2.2.2:
-     * Multiple providers are registered and cardinality:=multiple is set on requirement
+     * Multiple providers are registered and cardinality:=multiple is set on requirement.
+     * 
+     * Not all frameworks may support wiring to multiple or all possible providers.
+     * Therefore, the test case introspects the wiring between the client and the provider
+     * bundles and only tests for as many service providers as there are wires to the provider
+     * bundles. In order to increase the likelihood of getting wired to multiple providers,
+     * the providers are not setting the uses constraint on the capability.
      *  
      * @throws Exception
      */
     public void testServiceClientWithFilter() throws Exception {
-    	String property = getContext().getProperty("serviceloader.ct.framework.supports.multiple=true");
-    	
-    	if (Boolean.parseBoolean(property)) {
-    		Bundle implBundle = install("implfirstprovider.jar");
-    		implBundle.start();
+    	Bundle implBundle = install("implfirstprovider.jar");
+    	implBundle.start();
+    	try {
+    		Bundle implBundle2 = install("implsecondprovider.jar");
+    		implBundle2.start();
+
     		try {
-    			Bundle implBundle2 = install("implsecondprovider.jar");
-    			implBundle2.start();
+    			Bundle client = install("clientfilter.jar");
+    			assertNotNull(client);
 
     			try {
-    				Bundle client = install("clientfilter.jar");
-    				assertNotNull(client);
+    				client.start();
 
-    				try {
-    					client.start();
+    				BundleRevision rev = client.adapt(BundleRevision.class);
+    				List<BundleWire> wires = rev.getWiring().getRequiredWires("osgi.extender");
+    				assertNotNull(wires);
+    				assertEquals("expecting exactly one mediator wired", 1, wires.size());
 
-    					BundleRevision rev = client.adapt(BundleRevision.class);
-    					List<BundleWire> wires = rev.getWiring().getRequiredWires("osgi.extender");
-    					assertNotNull(wires);
-    					assertEquals("expecting exactly one mediator wired", 1, wires.size());
+    				wires = rev.getWiring().getRequiredWires("osgi.serviceloader");
+    				assertNotNull(wires);
+    				
+    				int numProviders = wires.size();
+    				assertTrue("expected at least 1 provider to be wired", numProviders > 0);
 
-    					wires = rev.getWiring().getRequiredWires("osgi.serviceloader");
-    					assertNotNull(wires);
-    					assertEquals("expecting 2 providers to be wired", 2, wires.size());
+    				Collection<ServiceReference<TestBridge>> refs = getContext().getServiceReferences(TestBridge.class, "(test=client)");
+    				assertNotNull(refs);
+    				assertEquals(1, refs.size());
 
-    					Collection<ServiceReference<TestBridge>> refs = getContext().getServiceReferences(TestBridge.class, "(test=client)");
-    					assertNotNull(refs);
-    					assertEquals(1, refs.size());
+    				TestBridge service = getContext().getService(refs.iterator().next());
+    				assertNotNull("client bundle did not register its service", service);
 
-    					TestBridge service = getContext().getService(refs.iterator().next());
-    					assertNotNull("client bundle did not register its service", service);
-
-    					service.run("anything");
-    				} finally {
-    					client.stop();
-    					client.uninstall();
-    				}
+    				service.run("" + numProviders);
     			} finally {
-    				implBundle2.stop();
-    				implBundle2.uninstall();
+    				client.stop();
+    				client.uninstall();
     			}
     		} finally {
-    			implBundle.stop();
-    			implBundle.uninstall();
+    			implBundle2.stop();
+    			implBundle2.uninstall();
     		}
-    	} else {
-    		System.out.println("Test case testServiceClientWithFilter for cardinality:=multiple is disabled. Set the property serviceloader.ct.framework.supports.multiple=true to enable the test.");
+    	} finally {
+    		implBundle.stop();
+    		implBundle.uninstall();
     	}
     }
 
