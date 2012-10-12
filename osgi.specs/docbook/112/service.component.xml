@@ -768,15 +768,15 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
       <programlisting>public class LogEventImpl {
     LogService log;
     Integer    level;
-    void setLog( LogService l, Map&lt;String,?&gt; ref ) { 
-        log = l; 
+    void setLog( LogService l, Map&lt;String,?&gt; ref ) {
+        log = l;
         updatedLog(ref);
     }
-    void updatedLog( Map&lt;String,?&gt; ref) { 
+    void updatedLog( LogService l, Map&lt;String,?&gt; ref) {
         level = (Integer) ref.get("level");
     }
     void unsetLog( LogService l ) { log = null; }
-   
+
     private void activate() {
         log.log(LogService.LOG_INFO, "Hello Components!"));
     }
@@ -2612,7 +2612,7 @@ void unsetLogService( LogService log ) {
       <para>If an active component is bound to a service that modifies it
       properties then the component can be notified with the update method
       specified on the <code>reference</code> element. This method can be
-      called with a Service Reference or a Map to obtain the service
+      called with a Service Reference or a Map to supply the updated service
       properties.</para>
     </section>
 
@@ -3467,8 +3467,8 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
 
     <para>This XML Schema defines the component description grammar.</para>
 
-    <programlisting role="pgwide"><xi:include parse="text" encoding="utf-8"
-    href="../../generated/xmlns/scr/v1.2.0/scr.xsd"/></programlisting>
+    <programlisting role="pgwide"><xi:include encoding="utf-8"
+        href="../../generated/xmlns/scr/v1.2.0/scr.xsd" parse="text"/></programlisting>
 
     <para>SCR must not require component descriptions to specify the elements
     in the order required by the schema. SCR must allow other orderings since
