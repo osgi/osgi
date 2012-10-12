@@ -1061,9 +1061,12 @@ osgi.serviceloader.registrar</programlisting>
       <para>Consumers must have:</para>
 
       <programlisting>ServicePermission[&lt;Service Type&gt;,GET] 
-PackagePermission[&lt;Service Type’s package&gt;,IMPORT]</programlisting>
+PackagePermission[&lt;Service Type’s package&gt;,IMPORT]
+CapabilityPermission["osgi.extender", REQUIRE]
+CapabilityPermission["osgi.serviceloader", REQUIRE]
+</programlisting>
 
-      <para>The Mediator must ensure that the Consumer has this permission
+      <para>The Mediator must ensure that the Consumer has the ServicePermission 
       before it provides the instance. It must use the Bundle Context
       <code>hasPermission</code> method or the bundle’s Access Control Context
       to verify this.</para>
@@ -1075,9 +1078,12 @@ PackagePermission[&lt;Service Type’s package&gt;,IMPORT]</programlisting>
       <para>Service Providers must have:</para>
 
       <programlisting>ServicePermission[&lt;Service Type&gt;,REGISTER] 
-PackagePermission[&lt;Service Type’s package&gt;,IMPORT]</programlisting>
+PackagePermission[&lt;Service Type’s package&gt;,IMPORT]
+CapabilityPermission["osgi.extender", REQUIRE]
+CapabilityPermission["osgi.serviceloader", PROVIDE]
+</programlisting>
 
-      <para>The Mediator must ensure that the Service Provider has this permission
+      <para>The Mediator must ensure that the Service Provider has the ServicePermission 
       before it provides the instance. It must use the Bundle Context
       <code>hasPermission</code> method or the bundle’s Access Control Context
       to verify this.</para>
