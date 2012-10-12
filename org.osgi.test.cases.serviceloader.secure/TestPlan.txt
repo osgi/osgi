@@ -1,0 +1,19 @@
+Service Loader Mediator (V 1.0.0) CT Security Test Plan:
+
+Setup:
+ * Full permissions on the mediator bundle 
+ 
+1. Service provider:
+1.1. ServicePermission REGISTER on the provider bundle
+ -> service is registered
+1.2. No permission for the provider bundle
+ -> service is not registered
+ 
+2. Service client:
+2.1. ServicePermission GET on client bundle
+ -> service is obtained
+2.2. no permission for client bundle
+ -> service is not obtained
+ -> legacy client does not gain access to provider via ServiceLoader
+
+ 

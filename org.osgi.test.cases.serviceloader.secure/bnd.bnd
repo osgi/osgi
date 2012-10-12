@@ -1,0 +1,38 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Bundle-Description: Secure Test Bundle for ServiceLoader
+
+Export-Package: ${p}.junit
+
+Bundle-Vendor: TIBCO Software Inc.
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+	${p}.junit.*
+
+Include-Resource                    = \
+    spi.jar,\
+    client_noperm.jar,\
+    clientosgi.jar,\
+    clientosgi_noperm.jar,\
+    implregister.jar,\
+    implregister_noperm.jar
+	
+-buildpath							= \
+	ee.j2se;						version=1.6,\
+	org.osgi.test.support;			version=project, \
+    org.osgi.service.serviceloader; version=project , \
+	osgi.core;						version=5.0,\
+	osgi.enterprise;				version=5.0,\
+	${junit}	
+
+-runbundles: osgi.enterprise;version=latest,\
+	org.osgi.impl.bundle.serviceloader;version=latest
+
+Test-Cases							= ${testcases}
+
+-runproperties: ${runsecureproperties}
