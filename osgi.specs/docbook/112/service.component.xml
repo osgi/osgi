@@ -1975,8 +1975,10 @@ public class Foo implements EventHandler { ... }</programlisting>
               duplicate reference names. In this case, this attribute must be
               specified with a unique name for the reference to avoid an
               error.</para><para>The <code>Reference</code> annotation will
-              use the full method name as the default reference
-              name.</para></entry>
+              use the name of the annotated method as the default reference
+              name. If the method name begins with <code>bind</code>,
+              <code>set</code> or <code>add</code>, that prefix is
+              removed.</para></entry>
             </row>
 
             <row>
