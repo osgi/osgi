@@ -26,11 +26,11 @@
   operators, utilities, and others to deliver differentiated and valuable
   services over their networks.</para>
 
-  <para>This is the fifth release of the OSGi Core specification developed by
-  representatives from OSGi member companies. The OSGi Core Release 5 mostly
+  <para>This is the sixth release of the OSGi Core specification developed by
+  representatives from OSGi member companies. The OSGi Core Release 6 mostly
   extends the existing APIs into new areas. The few modifications to existing
   APIs are backward compatible so that applications for previous releases
-  should run unmodified on Release 5 Frameworks. The built-in version
+  should run unmodified on Release 6 Frameworks. The built-in version
   management mechanisms allow bundles written for the new release to adapt to
   the old Framework implementations, if necessary.</para>
 
@@ -545,8 +545,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
   <section>
     <title>Version Information</title>
 
-    <para>This document specifies OSGi Core Release 5. This specification is
-    backward compatible to releases 1, 2, and 3, and 4.</para>
+    <para>This document specifies OSGi Core Release 6. This specification is
+    backward compatible to all prior releases.</para>
 
     <para>All Security, Module, Life Cycle and Service Layers are part of the
     Framework Specification</para>
@@ -739,6 +739,31 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
         </tbody>
       </tgroup>
     </table>
+
+    <para>A compliant framework implementation must implement all of the
+    specifications in this document except as outlined below.</para>
+
+    <para><itemizedlist>
+        <listitem>
+          <para><xref linkend="service.condpermadmin"
+          xrefstyle="template:%n %t"/> and <xref
+          linkend="service.permissionadmin" xrefstyle="template:%n %t"/> are
+          mandatory only if <xref linkend="framework.security"
+          xrefstyle="template:%n %t"/> is supported and a Security Manager is
+          installed.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref linkend="service.url" xrefstyle="template:%n %t"/> is
+          mandatory if the framework implementation system bundle exports the
+          <xref linkend="org.osgi.service.url"/> package.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref linkend="util.tracker" xrefstyle="template:%n %t"/> is
+          optional.</para>
+        </listitem>
+      </itemizedlist></para>
   </section>
 
   <section>
