@@ -328,6 +328,20 @@ public interface Framework extends Bundle {
 	URL getEntry(String path);
 
 	/**
+	 * Returns the time when the most recently modified bundle in this framework
+	 * was last modified. A bundle is considered to be modified when it is
+	 * installed, updated or uninstalled.
+	 * 
+	 * <p>
+	 * The time value is the number of milliseconds since January 1, 1970,
+	 * 00:00:00 UTC.
+	 * 
+	 * @return The time when the most recently modified bundle in this framework
+	 *         was last modified.
+	 */
+	long getLastModified();
+
+	/**
 	 * Returns {@code null} as a framework implementation does not have a proper
 	 * bundle from which to return entries.
 	 * 
