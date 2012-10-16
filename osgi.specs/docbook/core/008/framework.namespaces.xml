@@ -996,7 +996,8 @@ Bundle B:
 
             <entry><code>’true’ |’false’</code></entry>
 
-            <entry><para>If this resource is a singleton.</para></entry>
+            <entry><para>If this resource is a singleton. The default value is
+            <code>false</code>.</para></entry>
           </row>
 
           <row>
