@@ -3471,7 +3471,7 @@ optional            ::= ’*’</programlisting>
         <para><code>osname</code> – Name of the operating system. The value of
         this attribute must be the name of the operating system upon which the
         native libraries run. A number of canonical names are defined in <xref
-        linkend="i2068690"/>.</para>
+        linkend="framework.module.os-names"/>.</para>
       </listitem>
 
       <listitem>
@@ -3483,7 +3483,8 @@ optional            ::= ’*’</programlisting>
       <listitem>
         <para><code>processor</code> – The processor architecture. The value
         of this attribute must be the name of the processor architecture upon
-        which the native libraries run. See <xref linkend="i2068690"/>.</para>
+        which the native libraries run. A number of canonical names are
+        defined in <xref linkend="framework.module.processor-names"/>.</para>
       </listitem>
 
       <listitem>
@@ -3581,19 +3582,12 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
       <title>Native Code Algorithm</title>
 
       <para>In the description of this algorithm, [x] represents the value of
-      the Framework property x and ~= represents the match operation. The
-      match operation is a case insensitive comparison.</para>
-
-      <para>Certain properties can be aliased. In those cases, the manifest
-      header should contain the generic name for that property but the
-      Framework should attempt to include aliases when it matches. (See <xref
-      linkend="i2068690"/>). If a property is not an alias, or has the wrong
-      value, the Operator should set the appropriate system property to the
-      generic name or to a valid value because Java System properties with
-      this name override the Framework construction of these properties. For
-      example, if the operating system returns version <code>2.4.2-kwt</code>,
-      the Operator should set the system property
-      org.osgi.framework.os.version to 2.4.2.</para>
+      the launching property x (see <xref
+      linkend="framework.lifecycle.launchingproperties"/>) and ~= represents
+      the match operation. The match operation is a case insensitive
+      comparison. Certain properties can be aliased. In those cases, the
+      manifest header should contain the generic name for that property but
+      the Framework should attempt to include aliases when it matches.</para>
 
       <para>The Framework must select the native code clause using the
       following algorithm:</para>
@@ -3626,8 +3620,9 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
 
             <listitem>
               <para><code>selection-filter</code> evaluates to
-              <code>true</code> when using the values of the system properties
-              or <code>selection-filter</code> is not specified</para>
+              <code>true</code> when using the values of the launching
+              properties or <code>selection-filter</code> is not
+              specified</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -3975,7 +3970,7 @@ acme\ special\ header=user-defined Acme Data</programlisting>
     <para>If the Bundle-ManifestVersion is not specified, then the bundle
     manifest version defaults to 1, and certain Release 4 syntax, such as a
     new manifest header, is ignored rather than causing an error. Release 3
-    bundles must be treated according to the R3 specification.</para>
+    bundles must be treated according to the Release 3 specification.</para>
 
     <para>The following (non-exhaustive) list of errors causes a bundle to
     fail to install:</para>
