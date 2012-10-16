@@ -4827,12 +4827,12 @@ bundle-description  ::= symbolic-name
       <para>AllPermission must be granted to extension bundles because they
       will be loaded under the Protection Domain of either the boot class path
       or the Framework implementation. Both of these Protection Domains have
-      All Permissions granted to them. It must therefore not be allowed for an
-      extension bundle to be installed unless it already has been granted All
-      Permissions.</para>
+      All Permissions granted to them. Attempting to install an extension
+      bundle that has not already been granted All Permissions must result in
+      a Bundle Exception.</para>
 
       <para>The installer of an extension bundle must have
-      <code>AdminPermission[ &lt;extension
+      <code>AdminPermission[&lt;extension
       bundle&gt;,EXTENSIONLIFECYCLE]</code> to install an extension
       bundle.</para>
     </section>
