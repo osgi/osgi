@@ -16,6 +16,7 @@ Private-Package						=  \
 
 Include-Resource                    = \
     spi.jar,\
+    client.jar,\
     client_noperm.jar,\
     clientosgi.jar,\
     clientosgi_noperm.jar,\
