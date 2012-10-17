@@ -1,4 +1,4 @@
-Bundle-Name:                             ${p}.client
+Bundle-Name:                             ${p}.clientosgi
 Bundle-Version:                          1.0.0
 Private-Package:                          ${p}.client
 
