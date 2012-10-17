@@ -396,18 +396,6 @@ public class TransactionManagerTest extends TransactionTestBundleControl {
         }
     }
 
-    public void testTM019() throws Exception {
-        try
-        {
-            tm.resume(null);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            fail();
-        }
-    }
-
     public void testTM020() throws Exception {
         try
         {
