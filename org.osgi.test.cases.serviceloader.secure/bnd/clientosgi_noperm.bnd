@@ -10,4 +10,4 @@ Require-Capability: \
  osgi.serviceloader; filter:="(&(osgi.serviceloader=${p}.spi.ColorProvider)(provider=CT))"
 
 Include-Resource = \
- {OSGI-INF/permissions.perm=perms/clientosgi_noperm.perm}
+ {OSGI-INF/permissions.perm=perms/client_noperm.perm}
