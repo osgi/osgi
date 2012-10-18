@@ -11,5 +11,8 @@ ${permissions;packages}
 (org.osgi.framework.CapabilityPermission "osgi.extender" "require")
 (org.osgi.framework.CapabilityPermission "osgi.serviceloader" "require")
 
+# The service loader mediator may weave the client code to import some package
+(org.osgi.framework.PackagePermission "*" "import")
+
 # This is the permission the client needs to see the provider
 #(org.osgi.framework.ServicePermission "${p}.spi.ColorProvider" "get")
