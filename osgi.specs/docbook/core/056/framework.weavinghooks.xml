@@ -25,7 +25,9 @@
 
     <para>This specification provides a means for a handler bundle to
     intercept any bundle class loading calls in the framework, transform the
-    byte codes, and add new dynamic imports.</para>
+    byte codes, and add new dynamic imports. A means for observing the final
+    weaving results, both before and after they take effect, is also provided.
+    </para>
 
     <section>
       <title>Essentials</title>
@@ -60,6 +62,11 @@
           <para><emphasis>Multiple</emphasis> – Allow for multiple weavers per
           bundle in a defined order.</para>
         </listitem>
+        
+        <listitem>
+          <para><emphasis>Observation</emphasis> – Allow woven class state
+          transitions to be observed.</para>
+        </listitem>
       </itemizedlist>
     </section>
 
@@ -74,7 +81,13 @@
 
         <listitem>
           <para><emphasis>Woven Class</emphasis> – An object representing the
-          class to be woven</para>
+          class to be woven.</para>
+        </listitem>
+        
+        <listitem>
+          <para><emphasis>Woven Class Listener</emphasis> – A service registered
+          by a bundle that wants to observe woven class state transitions.
+          </para>
         </listitem>
       </itemizedlist>
 
@@ -94,11 +107,14 @@
 
   <section>
     <title>Usage</title>
+    
+    <section>
+    	<title>Tracing</title>
 
     <para>For tracing purposes, a bundle can weave a trace entry and exit
     message around each method. This is trivial to do with byte code weaving
-    by inserting a call to a service at the begin and end of a method. In this
-    example, a service is created that has two methods:</para>
+    by inserting a call to a service at the beginning and end of a method. In 
+    this example, a service is created that has two methods:</para>
 
     <itemizedlist>
       <listitem>
@@ -126,7 +142,7 @@
 
     <para>The <code>weave</code> method is the service method of the Weaving
     Hook service. It receives a <code>WovenClass</code> object that provides
-    the information about the to-be-woven class. In this case, the
+    the information about the class to be woven. In this case, the
     <code>bundles</code> field contains the bundles to be woven, so this is
     checked first. If the to be loaded class is in one of the traced bundles,
     the byte codes are changed to provide trace information. Otherwise the
@@ -197,6 +213,85 @@
         ..
     }       
 }</programlisting>
+	</section>
+	
+	<section>
+		<title>Isolation</title>
+		
+		<para>The Framework Hooks API allows bundles to be separated into 
+		various regions isolated by sharing policies. The dynamic imports added
+		in the tracing example will need to be taken into account by the sharing
+		policies of regions containing bundles whose classes were woven in order 
+		for the bundles to resolve. This can be accomplished using a Woven Class 
+		Listener. A Weaving Hook would not be acceptable since there is no
+		guarantee that the list of dynamic imports is final.</para>
+		
+		<para>The region registers a Woven Class Listener service so it receives
+		notifications of Woven Class state transitions. The sharing policy of 
+		the region containing the bundle whose class was woven is updated with 
+		the dynamic imports, if any. This action occurs while the Woven Class is
+		in the TRANSFORMED state to ensure the region is prepared to accept the
+		imports before the bundle wiring is updated upon entering the DEFINED
+		state. The region is initialized with the set of bundles composing it 
+		and a static sharing policy consisting of namespaces mapped to sets of
+		filters indicating the allowed capabilities.</para>
+		
+		<programlisting>public class Region implements WovenClassListener, ResolverHook {
+		  final Set&lt;Bundle&gt; bundles;
+		  final Map&lt;String, Set&lt;Filter&gt;&gt; policy;</programlisting>
+		
+		<para>The <code>modified</code> method is the service method of the
+		Woven Class Listener service. It receives a Woven Class object that 
+		provides the information about the woven class that underwent a state 
+		transition. If the current state is TRANSFORMED, and the associated 
+		bundle is part of the region, the sharing policy is updated with the 
+		additional dynamic imports, if any.</para>
+		
+		<programlisting>    public void modified(WovenClass wovenClass) {
+		      if (wovenClass.getState() == WovenClass.TRANSFORMED) {
+		          Bundle bundle = wovenClass.getBundleWiring().getBundle();
+		          if (!bundles.contains(bundle))
+		              return;
+		          Set&lt;Filter&gt; filters = policy.get(PackageNamespace.PACKAGE_NAMESPACE);
+		          synchronized (filters) {
+		              for (String dynamicImport : wovenClass.getDynamicImports())
+		                  filters.add(toFilter(dynamicImport));
+		          }
+		      }
+		  }</programlisting>
+		
+		<para>The region also implements <code>ResolverHook</code>. When the 
+		<code>filterMatches</code> method is called, the requirement is 
+		inspected to see if its matching capabilities are allowed into the 
+		region. If not, the list of candidates is cleared.</para>
+		
+		<programlisting>    public void filterMatches(BundleRequirement requirement, 
+		          Collection&lt;BundleCapability&gt; candidates) {
+		      Bundle bundle = requirement.getRevision().getBundle();
+		      if (!bundles.contains(bundle))
+		          return;
+		      String namespace = requirement.getNamespace();
+		      if (!policy.containsKey(namespace))
+		          return;
+		      Map&lt;String, String&gt; directives = requirement.getDirectives();
+		      String filter = directives.get(PackageNamespace.REQUIREMENT_FILTER_DIRECTIVE);
+		      Set&lt;Filter&gt; filters = policy.get(namespace);
+		      synchronized (filters) {
+		          if (!filters.contains(toFilter(filter)))
+		              candidates.clear();
+		      }
+		  }</programlisting>
+
+		<para>The toFilter method responsible for converting the requirement
+		filters and dynamic import package headers into a Filter is left as an 
+		exercise to the reader.</para>
+		
+		<programlisting>    private Filter toFilter(String s) {
+		      ...
+		}
+}</programlisting>
+		
+	</section>
   </section>
 
   <section>
@@ -376,9 +471,208 @@
       </orderedlist>
     </section>
   </section>
+  
+  <section>
+    <title>The Woven Class Listener Service</title>
+    
+    <para>The Woven Class Listener service is a white board service; any party 
+    that wants to receive notifications of woven class state transitions can 
+    register such a service. The framework picks up the Woven Class Listener 
+    services and calls their <code>modified</code> method whenever a woven class 
+    undergoes a state transition. The modified methods must be called in service 
+    ranking order, see <xref linkend="framework.service.servicerankingorder"/>.
+    </para>
+    
+    <remark>### Is calling liseners in service ranking order really important?
+    </remark>
+
+    <para>The Woven Class Listener <code>modified</code> method is called with a
+    <code>WovenClass</code> object that represents the woven class that 
+    underwent a state transition. The method must be called in a privileged 
+    block, see <xref linkend="framework.lifecycle.privilegedcallbacks"/>.</para>
+    
+    <remark>### Is a privileged block really necessary?</remark>
+    
+    <para>Woven class listeners are not notified of the TRANSFORMING state 
+    because the woven class is mutable and listeners are read-only. In all 
+    states received by woven class listeners, the woven class is immutable. The 
+    first notification received for a given woven class is either the 
+    TRANSFORMED or TRANSFORMING_FAILED state. TRANSFORMED occurs after all 
+    weaving hooks have been notified but before the class has been defined or
+    the bundle wiring updated as a result of additional dynamic imports. 
+    TRANSFORMING_FAILED occurs instead if a weaving hook threw an exception. 
+    After TRANSFORMED comes either DEFINED or DEFINE_FAILED. DEFINED is received
+    is the class was defined successfully and after the bundle wiring has been
+    updated. DEFINE_FAILED occurs instead if a class definition error occurred.
+    </para>
+    
+    <para>The following table lists the state transitions of a Woven Class.
+    </para>
+    
+    <table>
+        <title>Woven Class State Transitions</title>
+
+        <tgroup cols="3">
+          <colspec colnum="1" colwidth="1*"/>
+          <colspec colnum="2" colwidth="1*"/>
+          <colspec colnum="3" colwidth="2*"/>
+          <thead>
+            <row>
+              <entry>Source State</entry>
+              <entry>Target State</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><para>-</para></entry>
+              <entry><para>TRANSFORMING</para></entry>
+              <entry>
+                <para>A bundle class load request was made.</para>
+                <itemizedlist>
+                	<listitem>
+                	  <para>Weaving is incomplete.</para>
+                	</listitem>
+                	<listitem>
+                	  <para>The class is undefined.</para>
+                	</listitem>
+                	<listitem>
+                	  <para>The woven class is mutable.</para>
+                	</listitem>
+                	<listitem>
+                	  <para>Weaving hooks are notified but woven class listeners
+                	  are not.</para>
+                	</listitem>
+                </itemizedlist>
+              </entry>
+            </row>
+            <row>
+              <entry><para>TRANSFORMING</para></entry>
+              <entry><para>TRANSFORMED</para></entry>
+              <entry>
+                <para>All weaving hooks have been notified.</para>
+                <itemizedlist>
+                	<listitem>
+                	  <para>Weaving is incomplete.</para>
+                	</listitem>
+                	<listitem>
+                	  <para>The class is undefined.</para>
+                	</listitem>
+                	<listitem>
+                	  <para>The woven class is immutable.</para>
+                	</listitem>
+                	<listitem>
+                	  <para>Woven class listeners are notified.</para>
+                	</listitem>
+                </itemizedlist>
+              </entry>
+            </row>
+            <row>
+              <entry><para>TRANSFORMING</para></entry>
+              <entry><para>TRANSFORMING FAILED</para></entry>
+              <entry>
+                <para>A weaving hook threw an exception.</para>
+                <itemizedlist>
+                	<listitem>
+                	  <para>Weaving is incomplete.</para>
+                	</listitem>
+                	<listitem>
+                	  <para>The class is undefined.</para>
+                	</listitem>
+                	<listitem>
+                	  <para>The woven class is immutable.</para>
+                	</listitem>
+                	<listitem>
+                	  <para>Woven class listeners are notified.</para>
+                	</listitem>
+                </itemizedlist>
+              </entry>
+            </row>
+            <row>
+              <entry><para>TRANSFORMED</para></entry>
+              <entry><para>DEFINED</para></entry>
+              <entry>
+                <para>All woven class listeners have been notified. The class 
+                has been defined.</para>
+                <itemizedlist>
+                	<listitem>
+                	  <para>Weaving is incomplete.</para>
+                	</listitem>
+                	<listitem>
+                	  <para>The class is defined.</para>
+                	</listitem>
+                	<listitem>
+                	  <para>The woven class is immutable.</para>
+                	</listitem>
+                	<listitem>
+                	  <para>Woven class listeners are notified.</para>
+                	</listitem>
+                </itemizedlist>
+              </entry>
+            </row>
+            <row>
+              <entry><para>TRANSFORMED</para></entry>
+              <entry><para>DEFINE FAILED</para></entry>
+              <entry>
+                <para>All weaving hooks have been notified. A class definition 
+                failure occurred.</para>
+                <itemizedlist>
+                	<listitem>
+                	  <para>Weaving is incomplete.</para>
+                	</listitem>
+                	<listitem>
+                	  <para>The class is undefined.</para>
+                	</listitem>
+                	<listitem>
+                	  <para>The woven class is immutable.</para>
+                	</listitem>
+                	<listitem>
+                	  <para>Woven class listeners are notified.</para>
+                	</listitem>
+                </itemizedlist>
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+      
+      <section>
+        <title>Concurrency</title>
+        
+        <para>Class loads can occur at any time, and Woven Class Listener 
+        services must be able to handle concurrent calls to the <code>modified
+        </code> method. The framework should not hold any locks when calling
+        Woven Class Listener services, and Woven Class Listener service 
+        implementations must be thread-safe. Woven class listeners must be 
+        synchronously called by the framework when a woven class completes a 
+        state transition. The woven class processing will not proceed until all 
+        woven class listeners are done.</para>
+        
+        <remark>### Is it necessary to state the framework should not hold any
+        locks?</remark>
+        
+      </section>
+      
+      <section>
+        <title>Error Handling</title>
+
+        <para>Woven Class Listeners must not cause the weaving process to fail.
+        If a Woven Class Listener throws an exception, the framework should log
+        the exception but otherwise ignore it. Frameworks may blacklist a
+        misbehaving Woven Class Listener in the same manner as described for
+        Weaving Hooks.</para>
+        
+        <remark>### Is it necessary to mention blacklisting?</remark>
+        
+      </section>
+    
+  </section>
 
   <section>
     <title>Security</title>
+    
+    <section>
+      <title>Weaving Hooks</title>
 
     <para>All hooks described in this specification are highly complex
     facilities that require great care in their implementation to maintain the
@@ -391,7 +685,7 @@
 
     <itemizedlist>
       <listitem>
-        <para><code>ServicePermission[..WeavingHook,GET]</code>,</para>
+        <para><code>ServicePermission[..WeavingHook,GET]</code></para>
       </listitem>
     </itemizedlist>
 
@@ -411,7 +705,39 @@
     <xref linkend="org.osgi.framework.hooks.weaving.WovenClass.getBytes--" xrefstyle="hyperlink"/>,
     and <xref
     linkend="org.osgi.framework.hooks.weaving.WovenClass.getDynamicImports--" xrefstyle="hyperlink"/>
-    when used to modify the imports.</para>
+    when used to modify the imports. Moreover, a Weaving Hook must have Package 
+    Permission with the <code>IMPORT</code> action in order to add or replace 
+    dynamic imports.</para>
+    
+    </section>
+    
+    <section>
+      <title>Woven Bundles</title>
+      
+      <para>The Framework must grant implied <code>PackagePermission[somePkg,
+    IMPORT]</code> permissions to bundles whose classes are being woven with
+    additional dynamic imports, assuming the weaver has a matching package
+    import permission. The permission check for the weaver must occur during 
+    any call to the list that results in the addition or setting of a dynamic
+    import. If the check fails, a SecurityException must be thrown. If it 
+    succeeds, the implied permission must be granted to the woven bundle 
+    immediately before defining the class.</para>
+    
+    </section>
+    
+    <section>
+      <title>Woven Class Listeners</title>
+      
+      <para>Implementers of these listeners must have:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>ServicePermission[..WovenClassListener,REGISTER]</code> for
+        Woven Class Listener services.</para>
+      </listitem>
+    </itemizedlist>
+      
+    </section>
   </section>
 
   <xi:include href="../../../generated/javadoc/docbook/org.osgi.framework.hooks.weaving.xml"/>
