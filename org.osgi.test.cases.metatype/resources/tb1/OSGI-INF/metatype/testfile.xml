@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<md:MetaData xmlns:md="http://www.org.osgi/xmlns/metatype/v1.0.0/md" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.org.osgi/xmlns/metatype/v1.0.0/md
+<md:MetaData xmlns:md="http://www.osgi.org/xmlns/metatype/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.osgi.org/xmlns/metatype/v1.0.0
  metatype.xsd">
 	<OCD id="ocd1" name="%Person" description="%Description">
 		<AD  id="surName" name="%Surname" type="String" max="24" min="2" default="" required="true"/>
