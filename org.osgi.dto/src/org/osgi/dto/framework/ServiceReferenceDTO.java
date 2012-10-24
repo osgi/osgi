@@ -23,7 +23,10 @@ import org.osgi.dto.MapDTO;
  * Data Transfer Object for a ServiceReference.
  * 
  * <p>
- * {@code ServiceReferenceDTO}s can be obtained from a {@link FrameworkDTO}.
+ * {@code ServiceReferenceDTO}s can be obtained from a {@link FrameworkDTO}. A
+ * {@code ServiceReferenceDTO} obtained from a framework must convert service
+ * property values which are not valid value types for DTOs to type
+ * {@code String} using {@code String.valueOf(Object)}.
  * 
  * @author $Id$
  * @NotThreadSafe
@@ -50,5 +53,5 @@ public class ServiceReferenceDTO implements DTO {
     /**
      * The bundles that are using the service.
      */
-    public BundleDTO[]            using;
+    public BundleDTO[]            usingBundles;
 }

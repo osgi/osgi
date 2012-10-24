@@ -24,7 +24,9 @@ import org.osgi.dto.MapDTO;
  * 
  * <p>
  * A Bundle can be adapted to provide a {@code FrameworkDTO} for the framework
- * of the Bundle.
+ * of the Bundle. A {@code FrameworkDTO} obtained from a framework will contain
+ * only the launch properties of the framework. These properties will not
+ * include the System properties.
  * 
  * @author $Id$
  * @NotThreadSafe
@@ -41,7 +43,7 @@ public class FrameworkDTO implements DTO {
     public BundleDTO[]            bundles;
 
     /**
-     * The properties for the framework.
+     * The launch properties of the framework.
      * 
      * The value type must be a numerical type, Boolean, String, DTO or an array
      * of any of the former.
@@ -49,7 +51,7 @@ public class FrameworkDTO implements DTO {
     public MapDTO<String, Object> properties;
 
     /**
-     * The service that are registered in the framework.
+     * The services that are registered in the framework.
      */
     public ServiceReferenceDTO[]  services;
 }

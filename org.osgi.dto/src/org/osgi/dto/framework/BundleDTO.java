@@ -23,7 +23,9 @@ import org.osgi.dto.MapDTO;
  * Data Transfer Object for a Bundle.
  * 
  * <p>
- * A Bundle can be adapted to provide a {@code BundleDTO} for the Bundle.
+ * A Bundle can be adapted to provide a {@code BundleDTO} for the Bundle. A
+ * {@code BundleDTO} obtained from a framework will contain the raw
+ * (unlocalized) manifest headers for the bundle.
  * 
  * @author $Id$
  * @NotThreadSafe
