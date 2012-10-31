@@ -7,4 +7,4 @@ org.apache.aries.blueprint; version=1.0.0
 org.apache.aries.application.api; version=1.0.0
 org.apache.aries.application.utils; version=1.0.0
 org.apache.aries.application.modeller; version=1.0.0
-org.apache.aries.subsystem.core; version=1.0.0
+org.apache.aries.subsystem; version=1.0.0
