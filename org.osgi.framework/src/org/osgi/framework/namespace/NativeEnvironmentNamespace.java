@@ -75,13 +75,6 @@ public final class NativeEnvironmentNamespace extends Namespace {
 	 */
 	public final static String	CAPABILITY_LANGUAGE_ATTRIBUTE		= "osgi.native.environment.language";
 
-	/**
-	 * An optional attribute which frameworks may use to specify the native code
-	 * paths associated with a native environment requirement. If specified, the
-	 * value of this attribute must be of type {@code List<String>}
-	 */
-	public final static String	REQUIREMENT_NATIVE_PATHS_ATTRIBUTE	= "native.paths";
-
 	private NativeEnvironmentNamespace() {
 		// empty
 	}
