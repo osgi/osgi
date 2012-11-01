@@ -1,0 +1,11 @@
+-nouses=true
+Bundle-Name: ${p}.classloading.tb16a
+Bundle-SymbolicName: ${p}.classloading.tb16a
+Bundle-Version: 1
+Bundle-Activator: ${p}.classloading.tb16a.Activator
+Require-Bundle: ${p}.classloading.tb16c;visibility:="reexport", ${p}.classloading.tb16b;visibility:="reexport"
+Export-Package: test.package.resources;-noimport:=true
+Private-Package:                         ${p}.classloading.tb16a
+Include-Resource = 	test/package/resources/resource.txt=resources/classloading.tb16a/resource.txt, \
+					test/package/resources/tb16a-resource.txt=resources/classloading.tb16a/tb16a-resource.txt
+					

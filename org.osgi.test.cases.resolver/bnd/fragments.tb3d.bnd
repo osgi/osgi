@@ -1,0 +1,6 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.fragments.tb3d
+Bundle-SymbolicName: ${p}.fragments.tb3d
+Bundle-Version: 1.0
+Private-Package: ${p}.fragments.tb3d
+Fragment-Host: ${p}.fragments.tb3a

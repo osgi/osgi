@@ -1,0 +1,6 @@
+-nouses=true
+Bundle-Name:                             ${p}.dynpkgimport.tb0
+Bundle-SymbolicName:                     ${p}.dynpkgimport.tb0
+Bundle-Version: 1.0.0
+Bundle-Activator: ${p}.dynpkgimport.tb0.Activator
+Export-Package:                         ${p}.dynpkgimport.tb0;-noimport:=true

@@ -1,0 +1,48 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Bundle-Description: Test Bundle for ServiceLoader
+
+Export-Package: ${p}.junit
+
+Bundle-Category: osgi,test
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+	${p}.junit.*
+
+Include-Resource                    = \
+    spi.jar,\
+    client.jar,\
+    client1.jar,\
+    client2.jar,\
+    clientnotextended.jar,\
+    clientfilter.jar,\
+    clientfilterone.jar,\
+    clientosgi.jar,\
+    clientlifecycle.jar,\
+    legacyclient.jar,\
+    implnotextended.jar,\
+    implnocap.jar,\
+    implnoreq.jar,\
+    implwccap.jar,\
+    implautoregister.jar,\
+    implexplicitregister.jar,\
+    implfirstprovider.jar,\
+    implsecondprovider.jar,\
+    implmultiprovider.jar
+	
+-buildpath							= \
+	ee.j2se;						version=1.6,\
+	org.osgi.test.support;			version=project, \
+    org.osgi.service.serviceloader; version=project , \
+	osgi.core;						version=5.0,\
+	osgi.enterprise;				version=5.0,\
+	${junit}	
+
+-runbundles: osgi.enterprise;version=latest,\
+	org.osgi.impl.bundle.serviceloader;version=latest
+
+Test-Cases							= ${testcases}
+
+-runproperties: ${runproperties}

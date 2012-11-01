@@ -1,0 +1,10 @@
+Bundle-Name:                             ${p}.client
+Bundle-Version:                          1.0.0
+Private-Package:                          ${p}.client
+
+Bundle-Activator: ${p}.client.ColorProviderClient2
+
+# require the ServiceLoader Mediator to opt-in to processing
+Require-Capability: \
+ osgi.extender;filter:="(osgi.extender=osgi.serviceloader.processor)",\
+ osgi.serviceloader; filter:="(osgi.serviceloader=${p}.spi.ColorProvider)";cardinality:=multiple

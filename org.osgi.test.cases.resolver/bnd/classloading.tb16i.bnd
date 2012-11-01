@@ -1,0 +1,7 @@
+-nouses=true
+Bundle-Name: ${p}.classloading.tb16i
+Bundle-SymbolicName: ${p}.classloading.tb16i
+Bundle-Version: 1
+Bundle-Activator: ${p}.classloading.tb16i.Activator
+Require-Bundle: ${p}.classloading.tb16a
+Private-Package:                         ${p}.classloading.tb16i

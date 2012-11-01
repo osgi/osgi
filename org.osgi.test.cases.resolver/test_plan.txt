@@ -1,0 +1,255 @@
+I) Verify the resolver in an artificial namespace (ResolverTestCase.java)
+
+	1. verify that the resolver does not try to resolve with a <null> ResolveContext but throws an exception.
+
+	2. verify that the resolution of an empty set of resources
+		a. verify that no exception has been thrown during resolution
+		b. verify that the result is the empty map
+
+	3. verify that the result of a resolving process is modifiable by the caller
+		a. verify that the resolution of two resources where one requires a capability of the other succeeds without exceptions
+		b. verify that the resolution of two resources where one requires a capability of the other is a valid resolution
+		c. verify that the requiring resource can be removed from the result map
+		d. verify that the providing resource can be removed from the result map
+		e. verify that a new resource can be added to the result map
+		f. verify that the result map can be cleared
+
+	4. verify that the resources described by the result of a resolving process maintain the (symmetric) equals relationship with the original resources for which a resolution has been requested
+		a. verify that the resolution of two resources where one requires a capability of the other succeeds without exceptions
+		b. verify that the resolution of two resources where one requires a capability of the other is a valid resolution
+		c. verify that findProviders of the ResolveContext was called for the requirement and only for it
+		d. verify that the result map contains entries for exactly two resources
+		e. verify that the providing resource in the result map fulfills the (symmetric) equals relationship with the original providing resource
+		f. verify that the requiring resource in the result map fulfills the (symmetric) equals relationship with the original requring resource
+		g. verify that there is exactly one wire assigned to the requiring resource
+		h. verify that the provider of the wire fulfills the (symmetric) equals relationship with the original providing resource
+
+	5. verify that the resolution of a mandatory resource with no requirements
+		a. verify that the resolution of a mandatory resource with no requirements succeeds without exceptions
+		b. verify that the result of a resolution of a mandatory resource with no requirements contains only the resource
+
+	6. verify that the resolver does not do own matching but uses the information provided by the ResolveContext
+		i. verify this property by returning a forged resource in findProviders that does not actually match the requested requirement
+			a. verify that the resolution succeeds without exceptions
+			b. verify that the result contains the requiring resource and the forged providing resource and nothing else
+			c. verify that findProviders has been called for the requirement and only for it
+			d. verify that the result contains a wire from the requiring resource and the forged providing resource
+		ii. verify this property by returning a forged resource that would match the requirement but is in a different namespace
+			a. verify that the resolution succeeds without exceptions
+			b. verify that the result contains the requiring resource and the forged providing resource and nothing else
+			c. verify that findProviders has been called for the requirement and only for it
+			d. verify that the result contains a wire from the requiring resource and the forged providing resource
+		iii. verify this property by requesting a resolution for a pair of resources where the one satisfies a requirement of the other but not returning the providing resource as the result of a findResources call for the requirement
+			a. verify that the resolution fails with a resolution exception
+		iv. verify this property by requesting a resolution for a resource that has a requirment and providing a wiring state in which this requirement is satisfied by not returning the providing resource as the result of a findResources call for the requirement
+			a. verify that the resolution fails with a resolution exception
+
+	7. verify the correct resolution of mandatory resources
+		i. verify that a mandatory resource with a unresolvable requirement causes a resolution attempt to fail
+			a. verify that the resolution fails with a resolution exception
+		ii. verify that a pair of mandatory resources where one requires a capability of the other resolves correctly
+			a. verify that the resolution of two resources where one requires a capability of the other succeeds without exceptions
+			b. verify that the resolution of two resources where one requires a capability of the other is a valid resolution
+		iii. verify that a pair of mandatory resources where one has a unresolvable requirement causes a resolution attempt to fail
+			a. verify that the resolution fails with a resolution exception
+		iv. verify that the resolution respects namespaces
+			a. verify that the resolution of a pair of resources where one depends on a capability of the other but the provided capability is in a different namespace fails with a resolution exception
+		v. verify that a resolution attempt for three mandatory resources where one depends on the capability of the second but the third is not resolvable fails
+			a. verify that the resolution fails with a resolution exception
+		vi. verify that same scenario resolves correctly when the ResolveContext can provide a resource with a capability resolving the previously unresolvable requirement
+			a. verify that the resolution succeeds without exception
+			b. verify that the result is correct in that it contains the four resources and the expected two wires between the two pairs
+			c. verify that findResource for the two requirements and only them
+		vii. verify that a resolution attempt succeeds for a mandatory resource with a requirement when the first entry in the result set of findProviders is itself not resolvable but it contains other resolvable providers for the requirement
+			a. verify that the resolution succeeds without exception
+			b. verify that the result is correct in that it contains the mandatory resource as well as the resolvable provider and nothing else
+			c. verify that the result contains the wire between the requirement and the provider and nothing else
+			d. verify that findResource was called for the requirement of the mandatory resource as well as the unresolvable requirement of the first candidate but nothing else
+		viii. verify that the resolution process for mandatory resources is resilient to duplicates
+			a. verify that the resolution for a set of two times the same resource succeeds without exception
+			b. verify that the result is correct in that it contains the mandatory resource as well as the resource providing the requested capability
+			c. verify that the result contains the wire between the requirement and the provider and nothing else
+			d. verify that findResource was called exactly once for the requirement of the mandatory resource and for nothing else
+
+	8. verify the correct resolving of circular dependencies
+		i. verify this property with a circular dependency between two resources
+			a. verify that the resolution succeeds without exception
+			b. verify that the result is correct and contains exactly the two resources
+			c. verify that findProviders was called for exactly the two requirements forming the circular dependency
+			d. verify that the result contains the two wires forming the circle
+		ii. verify this property with a circular dependency between three resources
+			a. verify that the resolution succeeds without exception
+			b. verify that the result is correct and contains exactly the tree resources
+			c. verify that findProviders was called for exactly the three requirements forming the circular dependency
+			d. verify that the result contains the three wires forming the circle
+
+	9. verify that the resolver respects the order in which findResources returns candidates resolving a requested requirement for simple cases
+			a. verify that the resolution succeeds without exception for a mandatory resource with a requirement and two resources both satisfying the requirement returned by the ResolveContext
+			b. verify that the result is correct and contains the mandatory resource as well as the first returned provider
+			c. verify that the result contains a wire between the mandatory resource and the first returned provider
+
+	10. verify that the resolver respects existing wiring state and creates a consistent resolution that does not conflict with the existing wiring state
+		i. verify this property for a scenario where a mandatory resource has a requirement that is satisfied by another resource which itself has a requirement but is already wired to a provider for this requirement even when findResources proposes a different provider (conflicting with the existing wiring state) as the first candidate
+			a. verify that the resolution succeeds without throwing an exception 
+			b. verify that the result contains the expected resources which are consistent with the existing wiring and only them
+			c. verify that the result contains the expected wires which are consistent with the existing wiring and only them
+			d. verify that findProviders was only called for the expected requirements
+		ii. verify this property by requesting a resolution for two resources for which a resolution already exist in the wiring state
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result is empty since it is expected to be a delta to the existing wiring state
+
+	11. verify the correct handling of non-effective requirements
+		i. verify this property by adding a non-effective requirement to an otherwise resolvable pair of resources
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains the two resources
+			c. verify that the result contains only one wire between the effective requirement and the providing resource and nothing else
+			d. verify that findResources was only called for the effective requirement but not for the non-effective requirement
+		ii. verify this property by declaring the additional requirement of the previous scenario formally effective but then let the ResolveContext declare it non-effective and expecting the resolver to ignore this requirement
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains the two resources
+			c. verify that the result contains only one wire between the effective requirement and the providing resource and nothing else
+			d. verify that findResources was only called for the effective requirement but not for the non-effective resource
+
+	12. verify the correct handling of the mandatory directive
+		i. verify that the mandatory directive is ignored in this non osgi.wiring.* namespace by adding an unresolvable mandatory directive to a otherwise resolvable pair of resources
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains the two resources
+			c. verify that the result contains only one wire between the requirement and the providing resource and nothing else
+			d. verify that findResources was only called for the requirement and nothing else
+
+	13. verify the correct handling of the singleton directive
+		i. verify that the singleton directive is ignored in this non osgi.wiring.* namespace by adding a conflicting singleton directive to a otherwise resolveable pair of resources
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains the two resources
+			c. verify that the result contains only one wire between the requirement and the providing resource and nothing else
+			d. verify that findResources was only called for the requirement and nothing else
+
+	14. verify the correct handling of optional resources
+		i. verify this property by adding an unresolvable optional resource to a otherwise resolvable pair of mandatory resource with a requirement and a corresponding provider of the matching capability
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains the two resources and not the unresolvable optional resource
+			c. verify that the result contains only one wire between the requirement and the providing resource and nothing else
+			d. verify that findResources was only called for both requirements but nothing else
+		ii. verify that the resolver makes an effort to resolve optional resources by asking for a resolution of an optional resource with a requirement and providing a resource with a matching capability in findResources
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains the optional resource and the provider
+			c. verify that the result contains only the wire between the optional resource and the providing resource and nothing else
+			d. verify that findResources was only called for the requirement of the optional resource and nothing else
+
+	15. verify that getUnresolvedRequirements of the ResolutionException gives a correct reason for at least a very simple case where we ask for a resolution of a single mandatory resource with a single but unresolvable requirement
+		a. verify that the resolution fails with a ResolutionException
+		b. verify that the resolution exception returns exactly one requirement for getUnresolvedRequirements
+		c. verify that this requirement fulfills the (symmetric) equals relationship with the unresolvable requirement of the mandatory resource
+
+
+II) Verify the resolver in the osgi namespace by using framework test bundles and expecting the resolver to exhibit a behavior consistent with the framework resolver (ResolverFrameworkTestCase.java)
+
+	1. verify the correct resolving of dynamic imports
+		i. verify the correct resolution of a bundle that has a non-resolvable dynamic import (classloading.tb17a.jar)
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains the mandatory bundle resource
+		ii. verify the correct resolution of a pair of bundles where one (dynpkgimport.tb0.jar) imports a package exported by the other (dynpkgimport.tlx.jar)
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains both bundles
+			c. verify that the importing bundle is wired to the exporting bundle
+		iii. verify the correct resolution of a pair of bundles where one (dynpkgimport.tb1.jar) dynamically imports a package exported by the other ((dynpkgimport.tlx.jar)
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains both bundles
+			c. verify that the dynamically importing bundle is wired to the exporting bundle
+		iv. verify the correct resolution of three bundles where one bundle (classloading.tb17b.jar) dynamically imports two packages, one exported by the one bundle (classloading.tb1a.jar) and the other by the third (classloading.tb8a.jar)
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains all three bundles
+			c. verify that the dynamically importing bundle is wired to both exporting bundle
+		v. verify the correct resolution of dynamic imports qualified by bundle-symbolic-name directives for a bundle (classloading.tb17c.jar) dynamically importing a package from two other bundles (classloading.tb8a.jar and classloading.tb8b.jar)
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains all three bundles
+			c. verify that the dynamically importing bundle is wired to both exporting bundle
+		vi. verify the correct resolution of a bundle (classloading.tb17i.jar) that exports a package dynamically imported from another bundle (classloading.tb1.jar)
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains both bundles
+			c. verify that the dynamically importing bundle is wired to the exporting bundle
+		vi. verify that a third bundle ((classloading.tb17j.jar) gets correctly wired to the second bundle of the previous example when it imports the re-exported package and qualifies the import with a bundle-symbolic-name directive
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains all three bundles
+			c. verify that the additional bundle is wired to the second, dynamically importing and re-exporing bundle
+		vii. verify that a bundle (classloading.tb17d.jar) declaring both version and specification-version for a dynamic import can still be resolved against a provider of this package (classloading.tb1.jar) as long as the versions do not disagree
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains both bundles
+			c. verify that the dynamically importing bundle is wired to the exporting bundle
+		viii. verify that this is not the case when the two versions disagree (classloading.tb17e.jar)
+			a. verify that the resolution fails with a resolution exception
+		ix. verify that the resolver processes mandatory directives and attributes for dynamic imports ("classloading.tb13g.jar", "classloading.tb17g.jar")
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains both bundles
+			c. verify that the dynamically importing bundle is wired to the exporting bundle
+		
+	2. verify the correct resolution of bundles requiring other bundles
+		i. verify that a bundle (classloading.tb16a.jar) requiring two other bundles (classloading.tb16b.jar and classloading.tb16c.jar) can be resolved even when there is a circular dependency (classloading.tb16c.jar and classloading.tb16a.jar)
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains all three bundles
+			c. verify that the wires correctly mirror the require bundle dependencies including the circular dependency
+		ii. verify that the resolver can deal with visibility directives (classloading.tb16c.jar)
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains all three bundles
+			c. verify that the wires correctly mirror the require bundle dependencies
+
+	3. verify the correct resolution of fragments
+		i. verify that a the host bundle (fragments.tb1a.jar) can be resolved correctly
+			a. verify that the resolution succeeds without throwing an exception
+		ii. verify that a fragment (fragments.tb1b.jar) cannot be resolved without the host
+			a. verify that the resolution fails with a ResolveException
+		iii. verify that the fragment (fragments.tb1b.jar) and the host (fragments.tb1b.jar) together resolve
+			a. verify that the resolution succeeds without throwing an exception			 						
+			b. verify that the result contains both bundles
+			c. verify that the fragment is wired to the host
+		iv. verify that fragments cannot be resolved against fragments (fragments.tb1d.jar, fragments.tb1b.jar)
+			a. verify that the resolution fails with a ResolveException
+		v. verify that two fragments (fragments.tb1b.jar, fragments.tb1g.jar) can be resolved against a single host (fragments.tb1a.jar)						
+			a. verify that the resolution succeeds without throwing an exception			 						
+			b. verify that the result contains all three bundles
+			c. verify that the fragments are wired to the host
+		vi. verify that a fragment (fragments.tb3d.jar) can be resolved against a host (fragments.tb3a.jar) with attachment policy always
+			a. verify that the resolution succeeds without throwing an exception			 						
+			b. verify that the result contains both bundles
+			c. verify that the fragment is wired to the host
+		vii. verify that a fragment (fragments.tb3d.jar) cannot be resolved against a host (fragments.tb3e.jar) with attachment policy never
+			a. verify that the resolution fails with a ResolveException
+		viii. verify that a fragment (fragments.tb3d.jar) can be resolved against a host (fragments.tb3f.jar) with attachment policy resolve-time
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains both bundles
+			c. verify that the fragment is wired to the host
+		ix. verify that when a fragment (fragments.tb7e.jar) exports a package and another bundle (fragments.tb7h.jar) wants to import it, then the resolution of the two bundles together with the fragment host (fragments.tb7c.jar) succeeds and insertHostedCapability of the ResolveContext is called
+			a. verify that the resolution succeeds without throwing an exception
+			b. verify that the result contains the three bundles
+			c. verify that the fragment is wired to the host
+			d. verify that the importing bundle is wired to the host
+			f. verify that insertHostedCapability was called
+
+	4. verify the correct resolution of bundles with generic requirements and capabilities
+		i. verify that two bundles (resolver.tb1.v100.jar, resolver.tb5.jar) for which requirement and capabilities do not match because of one attribute or directive (version) do not resolve
+			a. verify that the resolution fails with a ResolveException			
+		ii. verify that two bundles (resolver.tb1.v110.jar, resolver.tb5.jar) for which requirement and capabilities match for all attributes and directives resolve
+			a. verify that the resolution succeeds without throwing an exception			 						
+			b. verify that the result contains both bundles
+			c. verify that the requiring bundle is wired to the capability provider
+		ii. verify that two bundles (resolver.tb1.v120.jar, resolver.tb5.jar) for which requirement and capabilities match for all attributes and directives resolve
+			a. verify that the resolution succeeds without throwing an exception			 						
+			b. verify that the result contains both bundles
+			c. verify that the requiring bundle is wired to the capability provider
+
+	5. verify that the resolver respects the uses constraint
+		i. verify that for a set of bundles where one (classloading.tb13c.jar) imports a package exported by the other (classloading.tb13b.jar) and an additional package for which two providers (classloading.tb8b.jar and classloading.tb9a.jar) exist, the resolver picks the provider that is mandated through the uses directive of the exported package.
+			a. verify that the resolution succeeds without throwing an exception			 						
+			b. verify that the result contains all bundles
+			c. verify that the importing bundle is wired to the exporting
+			d. verify that the exporting bundle is wired to the correct provider of the package for which two providers exist
+			e. verify that the importing bundle is wired to the same provider of the package and the uses constraint was respected
+		ii. verify that the resolver handles constraints correctly that are becoming transitive through uses constraints as in FELIX-3521
+			a. verify that the resolution succeeds without throwing an exception			 						
+			b. verify that the result contains all bundles
+			c. verify that the non-transitive dependency between D and C is resolved through a wire
+			d. verify that the non-transitive dependency between E and D is resolved through a wire
+			e. verify that the transitive dependency between E and C is resolved through a wire
+	
+III) SignatureTestCase.java
+	

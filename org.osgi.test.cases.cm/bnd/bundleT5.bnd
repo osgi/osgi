@@ -1,0 +1,12 @@
+Bundle-SymbolicName: ${p}.bundleT5
+Bundle-Name: ${p}.bundleT5
+Bundle-Description: Bundle T5 registering ManagedService for test
+Bundle-Activator: ${p}.bundleT5.BundleT5Activator
+Bundle-Vendor: NTT
+Bundle-DocURL: http://www.osgi.org/
+Bundle-ContactAddress: info@mail.osgi.org
+Bundle-Category: osgi,test
+
+Private-Package	= \
+	${p}.bundleT5
+

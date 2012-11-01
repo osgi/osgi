@@ -400,6 +400,9 @@
             - content bundles C
             - no import policy
           - Verify installation of S1 fails
+  H) Test optional requirements
+    1. Installation succeeds if optional requirements are unsatisfied
+    2. Optional requirements are wired to the correct capabilities when present
 
 5) Subsystem Deployment Manifest Tests
   A) Test Deployed-Content locks down content

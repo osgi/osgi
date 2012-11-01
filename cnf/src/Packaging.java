@@ -107,7 +107,7 @@ public class Packaging implements AnalyzerPlugin {
 		flatten(analyzer, null, jar, extra, true, filesToPath);
 
 		StringBuilder script = new StringBuilder();
-		script.append("java -jar jar/bnd.jar runtests -title ");
+		script.append("java -jar jar/bnd.jar runtests --title ");
 		script.append(pb.getProject());
 		script.append("\n");
 		jar.putResource("runtests", new EmbeddedResource(script.toString()

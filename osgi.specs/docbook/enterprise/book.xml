@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<book revision="$Id$" version="5"
-      xmlns="http://docbook.org/ns/docbook"
+<book revision="$Id$"
+      status="draft" version="5" xmlns="http://docbook.org/ns/docbook"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       xmlns:xi="http://www.w3.org/2001/XInclude"
       xmlns:ns5="http://www.w3.org/1999/xhtml"
@@ -14,9 +14,9 @@
       <orgname>The OSGi Alliance</orgname>
     </author>
 
-    <releaseinfo>Release 5</releaseinfo>
+    <releaseinfo>Release 6</releaseinfo>
 
-    <pubdate>March 2012</pubdate>
+    <pubdate>Date TBD</pubdate>
 
     <copyright>
       <year>2000, 2012</year>
@@ -25,7 +25,7 @@
     </copyright>
   </info>
 
-  <xi:include href="../license/osgi.specification.license.2.0.xml"/>
+  <xi:include href="../license/distribution.feedback.license.2.0.xml"/>
 
   <xi:include href="001/introduction.xml"/>
 

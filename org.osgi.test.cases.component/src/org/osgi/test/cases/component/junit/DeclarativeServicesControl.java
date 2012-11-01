@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -684,7 +684,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		Hashtable props;
 
 		// create a new configuration
-		config1 = cm.createFactoryConfiguration(EVENT_CLASS);
+		config1 = cm.createFactoryConfiguration(EVENT_CLASS, null);
 		props = new Hashtable(2);
 		props.put("instance", "1");
 		config1.update(props);
@@ -697,7 +697,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				service, trackerConsumerEvent.getService());
 
 		// create second configuration
-		config2 = cm.createFactoryConfiguration(EVENT_CLASS);
+		config2 = cm.createFactoryConfiguration(EVENT_CLASS, null);
 		props = new Hashtable(2);
 		props.put("instance", "2");
 		config2.update(props);
@@ -894,7 +894,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				0, getBaseConfigData(COMP_NOTSET_100));
 		// component notsetNS100 - property set by Configuration Admin; XML NS
 		// 1.0.0
-		Configuration config = cm.createFactoryConfiguration(COMP_NOTSET_100);
+		Configuration config = cm.createFactoryConfiguration(COMP_NOTSET_100, null);
 		config.update(props);
 		Sleep.sleep(SLEEP * 3);
 		assertEquals(
@@ -909,7 +909,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				0, getBaseConfigData(COMP_NOTSET_110));
 		// component notsetNS110 - property set by Configuration Admin; XML NS
 		// 1.1.0
-		config = cm.createFactoryConfiguration(COMP_NOTSET_110);
+		config = cm.createFactoryConfiguration(COMP_NOTSET_110, null);
 		config.update(props);
 		Sleep.sleep(SLEEP * 3);
 		assertEquals(
@@ -923,7 +923,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				getBaseConfigData(COMP_OPTIONAL_100));
 		// component optionalNS100 - property set by Configuration Admin; XML NS
 		// 1.0.0 - INVALID COMPONENT
-		config = cm.createFactoryConfiguration(COMP_OPTIONAL_100);
+		config = cm.createFactoryConfiguration(COMP_OPTIONAL_100, null);
 		config.update(props);
 		Sleep.sleep(SLEEP * 3);
 		assertEquals("Component optionalNS100 should not be activated", -1,
@@ -937,7 +937,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				0, getBaseConfigData(COMP_OPTIONAL_110));
 		// component optionalNS110 - property set by Configuration Admin; XML NS
 		// 1.1.0
-		config = cm.createFactoryConfiguration(COMP_OPTIONAL_110);
+		config = cm.createFactoryConfiguration(COMP_OPTIONAL_110, null);
 		config.update(props);
 		Sleep.sleep(SLEEP * 3);
 		assertEquals(
@@ -951,7 +951,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				getBaseConfigData(COMP_REQUIRE_100));
 		// component requireNS100 - property set by Configuration Admin; XML NS
 		// 1.0.0 - INVALID COMPONENT
-		config = cm.createFactoryConfiguration(COMP_REQUIRE_100);
+		config = cm.createFactoryConfiguration(COMP_REQUIRE_100, null);
 		config.update(props);
 		Sleep.sleep(SLEEP * 3);
 		assertEquals("Component requireNS100 should not be activated", -1,
@@ -965,7 +965,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				-1, getBaseConfigData(COMP_REQUIRE_110));
 		// component requireNS110 - property set by Configuration Admin; XML NS
 		// 1.1.0
-		config = cm.createFactoryConfiguration(COMP_REQUIRE_110);
+		config = cm.createFactoryConfiguration(COMP_REQUIRE_110, null);
 		config.update(props);
 		Sleep.sleep(SLEEP * 3);
 		assertEquals(
@@ -980,7 +980,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// component ignoreNS100 - property set by Configuration Admin; XML NS
 		// 1.0.0
 		// - INVALID COMPONENT
-		config = cm.createFactoryConfiguration(COMP_IGNORE_100);
+		config = cm.createFactoryConfiguration(COMP_IGNORE_100, null);
 		config.update(props);
 		Sleep.sleep(SLEEP * 3);
 		assertEquals("Component ignoreNS100 should not be activated", -1,
@@ -994,7 +994,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				0, getBaseConfigData(COMP_IGNORE_110));
 		// component ignoreNS110 - property set by Configuration Admin; XML NS
 		// 1.1.0
-		config = cm.createFactoryConfiguration(COMP_IGNORE_110);
+		config = cm.createFactoryConfiguration(COMP_IGNORE_110, null);
 		config.update(props);
 		Sleep.sleep(SLEEP * 3);
 		assertEquals(
@@ -1268,7 +1268,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				1 << 3, (1 << 3) & getBaseConfigData(bs));
 
 		bs = getBaseService(CE_MAP_NS100);
-		assertNull("Component " + CE_MAP_NS100 + " should not be activated", bs);
+		assertNotNull("Component " + CE_MAP_NS100 + " should be activated", bs);
+		assertEquals("Bind method of " + CE_MAP_NS100 + " should not be called",
+			0, getBaseConfigData(bs));
+
+		enabler.enableComponent(CE_MAP_NS100, false);
+		Sleep.sleep(SLEEP * 3);
+		assertEquals("Unbind method of " + CE_MAP_NS100 + " should not be called",
+			0, getBaseConfigData(bs));
 
 		bs = getBaseService(CE_MAP_NS110);
 		assertNotNull("Component " + CE_MAP_NS110 + " should be activated", bs);

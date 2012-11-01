@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MetaData 
-		xmlns="http://www.org.osgi/xmlns/metatype/v1.2.0" 
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-		xsi:schemaLocation="http://www.org.osgi/xmlns/metatype/v1.2.0 metatype.xsd">
+		xmlns="http://www.osgi.org/xmlns/metatype/v1.2.0">
 	<OCD id="1" name="1">
 		<AD id="string1" type="String"/>
 	</OCD>
