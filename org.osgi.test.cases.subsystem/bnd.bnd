@@ -26,7 +26,10 @@ Include-Resource					= \
 	share.e@1.0.0.jar, \
 	share.f@1.0.0.jar, \
 	share.g@1.0.0.jar, \
-	share.h@1.0.0.jar
+	share.h@1.0.0.jar, \
+	share.i@1.0.0.jar, \
+	share.j@1.0.0.jar, \
+	share.k@1.0.0.jar
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.subsystem

@@ -1,0 +1,64 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Bundle-Description: Tests the Resolver service
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+	${p}.junit.*
+Import-Package: ${-signaturetest}, *
+	
+Include-Resource = tb1.jar, \
+				   requirebundleB.jar, \
+				   requirebundleC.jar, \
+				   requirebundleD.jar, \
+				   requirebundleE.jar, \
+				   classloading.tb1.jar, \
+				   classloading.tb13b.jar, \
+				   classloading.tb13c.jar, \
+				   classloading.tb13g.jar, \
+				   classloading.tb16a.jar, \
+				   classloading.tb16b.jar, \
+				   classloading.tb16c.jar, \
+				   classloading.tb16i.jar, \
+				   classloading.tb16k.jar, \
+				   classloading.tb17a.jar, \
+				   classloading.tb17d.jar, \
+				   classloading.tb17e.jar, \
+				   classloading.tb17g.jar, \
+				   classloading.tb8b.jar, \
+				   classloading.tb9a.jar, \
+				   dynpkgimport.tlx.jar, \
+				   dynpkgimport.tb0.jar, \
+				   fragments.tb1a.jar, \
+				   fragments.tb1b.jar, \
+				   fragments.tb1d.jar, \
+				   fragments.tb1g.jar, \
+			 	   fragments.tb3a.jar, \
+				   fragments.tb3d.jar, \
+				   fragments.tb3e.jar, \
+				   fragments.tb3f.jar, \
+				   fragments.tb7c.jar, \
+				   fragments.tb7e.jar, \
+				   fragments.tb7h.jar, \
+				   resolver.tb1.v100.jar, \
+				   resolver.tb1.v110.jar, \
+				   resolver.tb1.v120.jar, \
+				   resolver.tb5.jar
+	
+Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.resolver
+
+-buildpath							= \
+    ee.j2se; version=1.5, \
+    org.osgi.test.support;                  version=project  , \
+    org.osgi.service.resolver;              version=project , \
+	osgi.core;								version=5.0		, \
+	osgi.enterprise;						version=5.0 , \
+	${junit}
+
+-runbundles							= \
+	osgi.enterprise; version=latest, \
+	org.osgi.impl.service.resolver; version=latest
+	
+-runproperties = ${runproperties}

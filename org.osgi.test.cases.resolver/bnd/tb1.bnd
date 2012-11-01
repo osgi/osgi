@@ -1,0 +1,6 @@
+Bundle-Version: 4.2.0
+Bundle-SymbolicName: ${p}.tb1
+Bundle-Activator: ${p}.tb1.A
+
+Private-Package: ${p}.tb1
+Export-Package: ${p}.dynpkgimport.exported

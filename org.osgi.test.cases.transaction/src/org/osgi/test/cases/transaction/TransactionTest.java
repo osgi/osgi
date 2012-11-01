@@ -408,38 +408,6 @@ public class TransactionTest extends TransactionTestBundleControl {
         }
     }
 
-    public void testTI022() throws Exception {
-        try
-        {
-            tm.begin();
-            tm.getTransaction().registerSynchronization(null);
-            fail();
-        }
-        catch (NullPointerException e)
-        {
-            // As expected
-        }
-        catch (IllegalArgumentException e)
-        {
-            // As expected
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            fail();
-        }
-
-        try
-        {
-            tm.commit();
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-            fail();
-        }
-    }
-
     public void testTI023() throws Exception {
         try
         {

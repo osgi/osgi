@@ -1,0 +1,6 @@
+Bundle-ManifestVersion: 2
+Bundle-Version: 1.0.0
+Bundle-SymbolicName: requirebundleD 
+Export-Package: ${p}.export;uses:=resources
+Import-Package: resources;bundle-symbolic-name=requirebundleC 
+

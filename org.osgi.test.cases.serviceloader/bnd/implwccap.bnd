@@ -1,0 +1,18 @@
+Bundle-Name:                             ${p}
+Bundle-Version:                          1.0.0
+
+Private-Package:                          ${p}.impl
+
+Require-Capability: osgi.extender;filter:="(osgi.extender=osgi.serviceloader.registrar)"
+        
+Provide-Capability: osgi.serviceloader; \
+ uses:="${p}.spi"; \
+ provider="CT"; \
+ .hint="by TIBCO"; \
+ osgi.serviceloader="${p}.spi.ColorProvider"; \
+ register:="*"
+
+Include-Resource = \
+ {META-INF/services/${p}.spi.ColorProvider=resources/spi/ColorProvider}
+
+-failok: true

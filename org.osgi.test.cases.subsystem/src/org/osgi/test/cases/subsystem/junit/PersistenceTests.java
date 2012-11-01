@@ -342,8 +342,9 @@ public class PersistenceTests extends SubsystemTest{
 		stopImplementation();
 		startImplementation();
 
+		root = getRootSubsystem();
 		children = root.getChildren();
-		assertEquals("Wrong number of children.", 2, children.size());
+		assertEquals("Wrong number of children.", 0, children.size());
 		s1 = s2 = null;
 		for (Subsystem subsystem : children) {
 			if (getSymbolicName(s1Name).equals(subsystem.getSymbolicName())) {

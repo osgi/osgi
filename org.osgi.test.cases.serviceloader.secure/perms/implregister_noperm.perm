@@ -1,0 +1,14 @@
+# Lines beginning with '#' or '//' are comments
+#
+# This file contains the permissions to be granted
+# to Filter test bundle.
+# The permissions are listed one per
+# line in PermissionInfo encoded format.
+# See org.osgi.service.permissionadmin.PermissionInfo
+
+${permissions;packages}
+(org.osgi.framework.CapabilityPermission "osgi.extender" "require")
+(org.osgi.framework.CapabilityPermission "osgi.serviceloader" "provide")
+
+# This is the permission the provider needs to provide
+#(org.osgi.framework.ServicePermission "${p}.spi.ColorProvider" "register")

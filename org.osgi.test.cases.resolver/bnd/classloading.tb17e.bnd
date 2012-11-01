@@ -1,0 +1,6 @@
+-nouses=true
+Bundle-Name: ${p}.classloading.tb17e
+Bundle-SymbolicName: ${p}.classloading.tb17e
+Bundle-Version: 1
+DynamicImport-Package: ${p}.classloading.exports.service;version="1.0.0";specification-version="2.0.0"
+Private-Package:                         ${p}.classloading.tb17e

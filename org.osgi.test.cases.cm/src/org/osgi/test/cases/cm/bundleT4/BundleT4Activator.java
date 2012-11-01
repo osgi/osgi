@@ -16,10 +16,10 @@ import org.osgi.test.cases.cm.shared.Util;
 
 /**
  * Register two ManagedServices with same PID.
- * 
+ *
  * @author Ikuo YAMASAKI, NTT Corporation
- * 
- * 
+ *
+ *
  */
 public class BundleT4Activator implements BundleActivator {
 
@@ -28,7 +28,7 @@ public class BundleT4Activator implements BundleActivator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext
 	 * )
@@ -81,9 +81,13 @@ public class BundleT4Activator implements BundleActivator {
 				// e.printStackTrace();
 				throw new RuntimeException(errmsg);
 			}
-			for (int i = 0; i < pids.length; i++)
-				tmp.add(pids[i]);
-			value = tmp;
+
+            if (tmp != null) {
+                for (int i = 0; i < pids.length; i++) {
+                    tmp.add(pids[i]);
+                }
+                value = tmp;
+            }
 		}
 
 		props.put(org.osgi.framework.Constants.SERVICE_PID, value);
@@ -116,7 +120,7 @@ public class BundleT4Activator implements BundleActivator {
 
 	/*
 	 * (non-Javadoc)
-	 * 
+	 *
 	 * @see
 	 * org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
