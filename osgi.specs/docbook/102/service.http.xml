@@ -125,7 +125,7 @@
     <code>Servlet</code> object’s <code>service</code> method is called when
     the following URL is used from a web browser:</para>
 
-    <programlisting>http://www.acme.com/servletname=bugs</programlisting>
+    <programlisting>http://www.acme.com/servlet?name=bugs</programlisting>
 
     <para>All <code>Servlet</code> objects and resource registrations share
     the same name-space. If an attempt is made to register a resource or
