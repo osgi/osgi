@@ -20,7 +20,7 @@ import org.osgi.framework.Constants;
 import org.osgi.resource.Namespace;
 
 /**
- * Native Environment Capability and Requirement Namespace.
+ * Native Capability and Requirement Namespace.
  * 
  * <p>
  * This class defines the names for the attributes and directives for this
@@ -32,12 +32,12 @@ import org.osgi.resource.Namespace;
  * @Immutable
  * @version $Id$
  */
-public final class NativeEnvironmentNamespace extends Namespace {
+public final class NativeNamespace extends Namespace {
 
 	/**
-	 * Namespace name for native environment capabilities and requirements.
+	 * Namespace name for native capabilities and requirements.
 	 */
-	public static final String	NATIVE_ENVIRONMENT_NAMESPACE		= "osgi.native.environment";
+	public static final String	NATIVE_NAMESPACE				= "osgi.native";
 
 	/**
 	 * The capability attribute contains alias values of the
@@ -47,7 +47,7 @@ public final class NativeEnvironmentNamespace extends Namespace {
 	 * References</a>. The value of this attribute must be of type
 	 * {@code List<String>}.
 	 */
-	public final static String	CAPABILITY_OSNAME_ATTRIBUTE			= "osgi.native.environment.osname";
+	public final static String	CAPABILITY_OSNAME_ATTRIBUTE		= NATIVE_NAMESPACE + ".osname";
 
 	/**
 	 * The capability attribute contains a {@code Version} parsed from the
@@ -55,7 +55,7 @@ public final class NativeEnvironmentNamespace extends Namespace {
 	 * launching property value. The value of this attribute must be of type
 	 * {@code Version}.
 	 */
-	public final static String	CAPABILITY_OSVERSION_ATTRIBUTE		= "osgi.native.environment.osversion";
+	public final static String	CAPABILITY_OSVERSION_ATTRIBUTE	= NATIVE_NAMESPACE + ".osversion";
 
 	/**
 	 * The capability attribute contains alias values of the
@@ -65,7 +65,7 @@ public final class NativeEnvironmentNamespace extends Namespace {
 	 * References</a>. The value of this attribute must be of type
 	 * {@code List<String>}.
 	 */
-	public final static String	CAPABILITY_PROCESSOR_ATTRIBUTE		= "osgi.native.environment.processor";
+	public final static String	CAPABILITY_PROCESSOR_ATTRIBUTE	= NATIVE_NAMESPACE + ".processor";
 
 	/**
 	 * The capability attribute contains the
@@ -73,9 +73,9 @@ public final class NativeEnvironmentNamespace extends Namespace {
 	 * launching property value. The value of this attribute must be of type
 	 * {@code String}.
 	 */
-	public final static String	CAPABILITY_LANGUAGE_ATTRIBUTE		= "osgi.native.environment.language";
+	public final static String	CAPABILITY_LANGUAGE_ATTRIBUTE	= NATIVE_NAMESPACE + ".language";
 
-	private NativeEnvironmentNamespace() {
+	private NativeNamespace() {
 		// empty
 	}
 }
