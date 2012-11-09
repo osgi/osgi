@@ -47,11 +47,6 @@ public class BundleDTO implements DTO {
     public long                   lastModified;
 
     /**
-     * The bundle's location identifier.
-     */
-    public String                 location;
-
-    /**
      * The bundle's state.
      */
     public int                    state;
