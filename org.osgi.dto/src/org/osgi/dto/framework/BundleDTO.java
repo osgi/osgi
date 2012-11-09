@@ -17,15 +17,12 @@
 package org.osgi.dto.framework;
 
 import org.osgi.dto.DTO;
-import org.osgi.dto.MapDTO;
 
 /**
  * Data Transfer Object for a Bundle.
  * 
  * <p>
- * A Bundle can be adapted to provide a {@code BundleDTO} for the Bundle. A
- * {@code BundleDTO} obtained from a framework will contain the raw
- * (unlocalized) manifest headers for the bundle.
+ * A Bundle can be adapted to provide a {@code BundleDTO} for the Bundle.
  * 
  * @author $Id$
  * @NotThreadSafe
@@ -60,9 +57,4 @@ public class BundleDTO implements DTO {
      * The bundle's version.
      */
     public String                 version;
-
-    /**
-     * The manifest headers of the bundle.
-     */
-    public MapDTO<String, String> headers;
 }
