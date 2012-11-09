@@ -23,7 +23,9 @@ import org.osgi.dto.MapDTO;
  * Data Transfer Object for a ServiceReference.
  * 
  * <p>
- * {@code ServiceReferenceDTO}s can be obtained from a {@link FrameworkDTO}. A
+ * {@code ServiceReferenceDTO}s for all registered services can be obtained from
+ * a {@link FrameworkDTO}. A Bundle can be adapted to provide a
+ * {@code ServiceReferenceDTO[]} of the services registered by the Bundle. A
  * {@code ServiceReferenceDTO} obtained from a framework must convert service
  * property values which are not valid value types for DTOs to type
  * {@code String} using {@code String.valueOf(Object)}.
