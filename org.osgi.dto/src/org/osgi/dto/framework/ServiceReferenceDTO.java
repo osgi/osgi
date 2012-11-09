@@ -38,9 +38,9 @@ public class ServiceReferenceDTO implements DTO {
     private static final long     serialVersionUID = 1L;
 
     /**
-     * The bundle that registered the service.
+     * The id of the bundle that registered the service.
      */
-    public BundleDTO              bundle;
+    public long                   bundle;
 
     /**
      * The properties for the service.
@@ -51,7 +51,7 @@ public class ServiceReferenceDTO implements DTO {
     public MapDTO<String, Object> properties;
 
     /**
-     * The bundles that are using the service.
+     * The ids of the bundles that are using the service.
      */
-    public BundleDTO[]            usingBundles;
+    public long[]                 usingBundles;
 }
