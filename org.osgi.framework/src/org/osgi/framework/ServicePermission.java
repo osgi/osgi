@@ -207,7 +207,7 @@ public final class ServicePermission extends BasicPermission {
 		if (reference == null) {
 			throw new IllegalArgumentException("reference must not be null");
 		}
-		StringBuffer sb = new StringBuffer("(service.id=");
+		StringBuffer sb = new StringBuffer("(" + Constants.SERVICE_ID + "=");
 		sb.append(reference.getProperty(Constants.SERVICE_ID));
 		sb.append(")");
 		return sb.toString();
