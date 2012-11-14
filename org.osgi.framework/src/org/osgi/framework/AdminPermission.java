@@ -69,7 +69,8 @@ import java.util.Map;
  * startlevel         FrameworkStartLevel.setStartLevel
  *                    FrameworkStartLevel.setInitialBundleStartLevel
  * context            Bundle.getBundleContext
- * weave              WovenClass.setBytes
+ * weave              WovenClass.getBytes
+ *                    WovenClass.setBytes
  *                    WovenClass.getDynamicImports for modification
  * </pre>
  * 

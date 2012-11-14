@@ -166,8 +166,10 @@ public interface WovenClass {
 	 * longer be transformed and the returned list will be unmodifiable.
 	 * 
 	 * <p>
-	 * If the Java runtime environment supports permissions, the caller must
-	 * have {@code AdminPermission[bundle,WEAVE]} to modify the returned list.
+	 * If the Java runtime environment supports permissions, any modification to
+	 * the returned list requires {@code AdminPermission[bundle,WEAVE]}.
+	 * Additionally, any add or set modification requires
+	 * {@code PackagePermission[package,IMPORT]}.
 	 * 
 	 * @return A list containing zero or more dynamic import package
 	 *         descriptions to add to the bundle wiring for this woven class.
