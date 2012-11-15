@@ -47,6 +47,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * @see BundleContext#getServiceReferences(Class, String)
  * @see BundleContext#getServiceReferences(String, String)
  * @see BundleContext#getService(ServiceReference)
+ * @see BundleContext#getServiceObjects(ServiceReference)
  * @ThreadSafe
  * @noimplement
  * @author $Id$

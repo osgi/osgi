@@ -761,8 +761,8 @@ public interface Bundle extends Comparable<Bundle> {
 	/**
 	 * Returns this bundle's {@code ServiceReference} list for all services it
 	 * is using or returns {@code null} if this bundle is not using any
-	 * services. A bundle is considered to be using a service if its use count
-	 * for that service is greater than zero.
+	 * services. A bundle is considered to be using a service if it has any
+	 * unreleased service objects.
 	 * 
 	 * <p>
 	 * If the Java Runtime Environment supports permissions, a

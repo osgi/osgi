@@ -391,7 +391,7 @@ public interface BundleContext extends BundleReference {
 	 * <p>
 	 * The following steps are required to register a service:
 	 * <ol>
-	 * <li>If {@code service} is not a {@code ServiceFactory}, an
+	 * <li>If {@code service} does not implement {@code ServiceFactory}, an
 	 * {@code IllegalArgumentException} is thrown if {@code service} is not an
 	 * {@code instanceof} all the specified class names.</li>
 	 * <li>The Framework adds the following service properties to the service
@@ -402,6 +402,8 @@ public interface BundleContext extends BundleReference {
 	 * registration number of the service</li>
 	 * <li>A property named {@link Constants#OBJECTCLASS} containing all the
 	 * specified classes.</li>
+	 * <li>A property named {@link Constants#SERVICE_SCOPE} identifying the
+	 * scope of the service.</li>
 	 * </ul>
 	 * Properties with these names in the specified {@code Dictionary} will be
 	 * ignored.</li>
@@ -415,7 +417,8 @@ public interface BundleContext extends BundleReference {
 	 * @param clazzes The class names under which the service can be located.
 	 *        The class names in this array will be stored in the service's
 	 *        properties under the key {@link Constants#OBJECTCLASS}.
-	 * @param service The service object or a {@code ServiceFactory} object.
+	 * @param service The service object or an object implementing
+	 *        {@code ServiceFactory}.
 	 * @param properties The properties for this service. The keys in the
 	 *        properties object must all be {@code String} objects. See
 	 *        {@link Constants} for a list of standard service property keys.
@@ -429,10 +432,10 @@ public interface BundleContext extends BundleReference {
 	 *         unregister the service.
 	 * @throws IllegalArgumentException If one of the following is true:
 	 *         <ul>
-	 *         <li>{@code service} is {@code null}.</li><li>{@code service} is
-	 *         not a {@code ServiceFactory} object and is not an instance of all
-	 *         the named classes in {@code clazzes}.</li><li> {@code properties}
-	 *         contains case variants of the same key name.</li>
+	 *         <li>{@code service} is {@code null}.</li><li>{@code service} does
+	 *         not implement {@code ServiceFactory} and is not an instance of
+	 *         all the specified classes.</li><li> {@code properties} contains
+	 *         case variants of the same key name.</li>
 	 *         </ul>
 	 * @throws SecurityException If the caller does not have the
 	 *         {@code ServicePermission} to register the service for all the
@@ -440,6 +443,7 @@ public interface BundleContext extends BundleReference {
 	 *         permissions.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @see ServiceRegistration
+	 * @see PrototypeServiceFactory
 	 * @see ServiceFactory
 	 */
 	ServiceRegistration<?> registerService(String[] clazzes, Object service, Dictionary<String, ?> properties);
@@ -457,7 +461,8 @@ public interface BundleContext extends BundleReference {
 	 * than just a single string.
 	 * 
 	 * @param clazz The class name under which the service can be located.
-	 * @param service The service object or a {@code ServiceFactory} object.
+	 * @param service The service object or an object implementing
+	 *        {@code ServiceFactory}.
 	 * @param properties The properties for this service.
 	 * @return A {@code ServiceRegistration} object for use by the bundle
 	 *         registering the service to update the service's properties or to
@@ -478,7 +483,8 @@ public interface BundleContext extends BundleReference {
 	 * 
 	 * @param <S> Type of Service.
 	 * @param clazz The class under whose name the service can be located.
-	 * @param service The service object or a {@code ServiceFactory} object.
+	 * @param service The service object or an object implementing
+	 *        {@code ServiceFactory}.
 	 * @param properties The properties for this service.
 	 * @return A {@code ServiceRegistration} object for use by the bundle
 	 *         registering the service to update the service's properties or to
@@ -737,44 +743,47 @@ public interface BundleContext extends BundleReference {
 	<S> Collection<ServiceReference<S>> getServiceReferences(Class<S> clazz, String filter) throws InvalidSyntaxException;
 
 	/**
-	 * Returns the service object referenced by the specified
+	 * Returns the service object for the service referenced by the specified
 	 * {@code ServiceReference} object.
+	 * 
 	 * <p>
-	 * A bundle's use of a service is tracked by the bundle's use count of that
-	 * service. Each time a service's service object is returned by
-	 * {@link #getService(ServiceReference)} the context bundle's use count for
-	 * that service is incremented by one. Each time the service is released by
+	 * A bundle's use of a service object obtained from this method is tracked
+	 * by the bundle's use count of that service object. Each time the service
+	 * object is returned by {@link #getService(ServiceReference)} the context
+	 * bundle's use count for the service object is incremented by one. Each
+	 * time the service object is released by
 	 * {@link #ungetService(ServiceReference)} the context bundle's use count
-	 * for that service is decremented by one.
+	 * for the service object is decremented by one.
+	 * 
 	 * <p>
-	 * When a bundle's use count for a service drops to zero, the bundle should
-	 * no longer use that service.
+	 * When a bundle's use count for the service object drops to zero, the
+	 * bundle should no longer use the service object.
 	 * 
 	 * <p>
 	 * This method will always return {@code null} when the service associated
-	 * with this {@code reference} has been unregistered.
+	 * with the specified {@code reference} has been unregistered.
 	 * 
 	 * <p>
 	 * The following steps are required to get the service object:
 	 * <ol>
 	 * <li>If the service has been unregistered, {@code null} is returned.</li>
-	 * <li>If the context bundle's use count for the service is currently zero
-	 * and the service was registered with an object implementing the
+	 * <li>If the context bundle's use count for the service object is currently
+	 * zero and the service was registered with an object implementing the
 	 * {@code ServiceFactory} interface, the
 	 * {@link ServiceFactory#getService(Bundle, ServiceRegistration)} method is
-	 * called to create a service object for the context bundle. If the service
-	 * object returned by the {@code ServiceFactory} object is {@code null}, not
-	 * an {@code instanceof} all the classes named when the service was
-	 * registered or the {@code ServiceFactory} object throws an exception or
-	 * will be recursively called for the context bundle, {@code null} is
-	 * returned and a Framework event of type {@link FrameworkEvent#ERROR}
-	 * containing a {@link ServiceException} describing the error is fired. This
-	 * service object is cached by the Framework. While the context bundle's use
-	 * count for the service is greater than zero, subsequent calls to get the
-	 * services's service object for the context bundle will return the cached
-	 * service object.</li>
-	 * <li>The context bundle's use count for this service is incremented by
-	 * one.</li>
+	 * called to create the service object for the context bundle. If the
+	 * service object returned by the {@code ServiceFactory} object is
+	 * {@code null}, not an {@code instanceof} all the classes named when the
+	 * service was registered or the {@code ServiceFactory} object throws an
+	 * exception or will be recursively called for the context bundle,
+	 * {@code null} is returned and a Framework event of type
+	 * {@link FrameworkEvent#ERROR} containing a {@link ServiceException}
+	 * describing the error is fired. This service object is cached by the
+	 * Framework. While the context bundle's use count for the service object is
+	 * greater than zero, subsequent calls to get the services's service object
+	 * for the context bundle will return the cached service object.</li>
+	 * <li>The context bundle's use count for the service object is incremented
+	 * by one.</li>
 	 * <li>The service object for the service is returned.</li>
 	 * </ol>
 	 * 
@@ -800,25 +809,27 @@ public interface BundleContext extends BundleReference {
 	<S> S getService(ServiceReference<S> reference);
 
 	/**
-	 * Releases the service object referenced by the specified
+	 * Releases the service object for the service referenced by the specified
 	 * {@code ServiceReference} object. If the context bundle's use count for
-	 * the service is zero, this method returns {@code false}. Otherwise, the
-	 * context bundle's use count for the service is decremented by one.
+	 * the service object is zero, this method returns {@code false}. Otherwise,
+	 * the context bundle's use count for the service object is decremented by
+	 * one.
 	 * 
 	 * <p>
-	 * The service's service object should no longer be used and all references
-	 * to it should be destroyed when a bundle's use count for the service drops
-	 * to zero.
+	 * The service object must no longer be used and all references to it should
+	 * be destroyed when a bundle's use count for the service object drops to
+	 * zero.
 	 * 
 	 * <p>
 	 * The following steps are required to unget the service object:
 	 * <ol>
-	 * <li>If the context bundle's use count for the service is zero or the
-	 * service has been unregistered, {@code false} is returned.</li>
-	 * <li>The context bundle's use count for this service is decremented by
-	 * one.</li>
-	 * <li>If the context bundle's use count for the service is currently zero
-	 * and the service was registered with a {@code ServiceFactory} object, the
+	 * <li>If the context bundle's use count for the service object is zero or
+	 * the service has been unregistered, {@code false} is returned.</li>
+	 * <li>The context bundle's use count for the service object is decremented
+	 * by one.</li>
+	 * <li>If the context bundle's use count for the service object is currently
+	 * zero and the service was registered with a {@code ServiceFactory} object,
+	 * the
 	 * {@link ServiceFactory#ungetService(Bundle, ServiceRegistration, Object)}
 	 * method is called to release the service object for the context bundle.</li>
 	 * <li>{@code true} is returned.</li>
@@ -826,8 +837,8 @@ public interface BundleContext extends BundleReference {
 	 * 
 	 * @param reference A reference to the service to be released.
 	 * @return {@code false} if the context bundle's use count for the service
-	 *         is zero or if the service has been unregistered; {@code true}
-	 *         otherwise.
+	 *         object is zero or if the service has been unregistered;
+	 *         {@code true} otherwise.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @throws IllegalArgumentException If the specified
 	 *         {@code ServiceReference} was not created by the same framework
@@ -836,6 +847,44 @@ public interface BundleContext extends BundleReference {
 	 * @see ServiceFactory
 	 */
 	boolean ungetService(ServiceReference<?> reference);
+
+	/**
+	 * Returns the {@link ServiceObjects} object for the service referenced by
+	 * the specified {@code ServiceReference} object.
+	 * 
+	 * <p>
+	 * The {@link ServiceObjects} object can be used to obtain multiple
+	 * service objects for services with {@link Constants#SCOPE_PROTOTYPE
+	 * prototype} scope. For services with {@link Constants#SCOPE_SINGLETON
+	 * singleton} or {@link Constants#SCOPE_BUNDLE bundle} scope, the
+	 * {@link ServiceObjects#getService()} method behaves the same as the
+	 * {@link #getService(ServiceReference)} method and the
+	 * {@link ServiceObjects#ungetService(Object)} method behaves the same as
+	 * the {@link #ungetService(ServiceReference)} method. That is, only one,
+	 * use-counted service object is available from the {@link ServiceObjects}
+	 * object.
+	 * 
+	 * <p>
+	 * This method will always return {@code null} when the service associated
+	 * with the specified {@code reference} has been unregistered.
+	 * 
+	 * @param <S> Type of Service.
+	 * @param reference A reference to the service.
+	 * @return A {@link ServiceObjects} object for the service associated with
+	 *         the specified {@code reference} or {@code null} if the service is
+	 *         not registered.
+	 * @throws SecurityException If the caller does not have the
+	 *         {@code ServicePermission} to get the service using at least one
+	 *         of the named classes the service was registered under and the
+	 *         Java Runtime Environment supports permissions.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @throws IllegalArgumentException If the specified
+	 *         {@code ServiceReference} was not created by the same framework
+	 *         instance as this {@code BundleContext}.
+	 * @see PrototypeServiceFactory
+	 * @since 1.8
+	 */
+	<S> ServiceObjects<S> getServiceObjects(ServiceReference<S> reference);
 
 	/**
 	 * Creates a {@code File} object for a file in the persistent storage area
