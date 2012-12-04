@@ -17,6 +17,11 @@
 package org.osgi.dto;
 
 import java.io.Serializable;
+import java.lang.reflect.Array;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.IdentityHashMap;
+import java.util.Map;
 
 /**
  * Super type for Data Transfer Objects.
@@ -30,4 +35,172 @@ import java.io.Serializable;
 public abstract class DTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    /**
+     * Return a string representation of this DTO suitable for use during
+     * debugging.
+     * 
+     * <p>
+     * The format of the string representation is not specified and subject to
+     * change.
+     * 
+     * @return A string representation of this DTO suitable for use during
+     *         debugging.
+     */
+    @Override
+    public String toString() {
+        return appendValue(new StringBuilder(), new IdentityHashMap<Object, String>(), "#", this).toString();
+    }
+
+    /**
+     * Append the specified DTO's string representation to the specified
+     * StringBuilder.
+     * 
+     * <p>
+     * This method handles circular DTO references.
+     * 
+     * @param result StringBuilder to which the string representation is
+     *        appended.
+     * @param objectRefs References to "seen" objects.
+     * @param refpath The reference path of the specified DTO.
+     * @param dto The DTO whose string representation is to be appended.
+     * @return The specified StringBuilder.
+     */
+    private static StringBuilder appendDTO(final StringBuilder result, final Map<Object, String> objectRefs, final String refpath, final DTO dto) {
+        result.append("{");
+        String delim = "";
+        for (Field field : dto.getClass().getFields()) {
+            if (Modifier.isStatic(field.getModifiers())) {
+                continue;
+            }
+            result.append(delim);
+            final String name = field.getName();
+            appendString(result, name);
+            result.append(":");
+            Object value = null;
+            try {
+                value = field.get(dto);
+            } catch (IllegalAccessException e) {
+                // use null value;
+            }
+            appendValue(result, objectRefs, refpath + "/" + name, value);
+            delim = ", ";
+        }
+        result.append("}");
+        return result;
+    }
+
+    /**
+     * Append the specified value's string representation to the specified
+     * StringBuilder.
+     * 
+     * @param result StringBuilder to which the string representation is
+     *        appended.
+     * @param objectRefs References to "seen" objects.
+     * @param refpath The reference path of the specified value.
+     * @param value The object whose string representation is to be appended.
+     * @return The specified StringBuilder.
+     */
+    private static StringBuilder appendValue(final StringBuilder result, final Map<Object, String> objectRefs, final String refpath, final Object value) {
+        if (value == null) {
+            return result.append("null");
+        }
+        // Simple Java types
+        if (value instanceof String || value instanceof Character) {
+            return appendString(result, compress(value.toString()));
+        }
+        if (value instanceof Number || value instanceof Boolean) {
+            return result.append(value.toString());
+        }
+
+        // Complex types
+        final String path = objectRefs.get(value);
+        if (path != null) {
+            result.append("{\"$ref\":");
+            appendString(result, path);
+            result.append("}");
+            return result;
+        }
+        objectRefs.put(value, refpath);
+
+        if (value instanceof DTO) {
+            return appendDTO(result, objectRefs, refpath, (DTO) value);
+        }
+        if (value.getClass().isArray()) {
+            return appendArray(result, objectRefs, refpath, value);
+        }
+        return appendString(result, compress(value.toString()));
+    }
+
+    /**
+     * Append the specified array's string representation to the specified
+     * StringBuilder.
+     * 
+     * @param result StringBuilder to which the string representation is
+     *        appended.
+     * @param objectRefs References to "seen" objects.
+     * @param refpath The reference path of the specified array.
+     * @param array The array whose string representation is to be appended.
+     * @return The specified StringBuilder.
+     */
+    private static StringBuilder appendArray(final StringBuilder result, final Map<Object, String> objectRefs, final String refpath, final Object array) {
+        result.append("[");
+        final int length = Array.getLength(array);
+        for (int i = 0; i < length; i++) {
+            if (i > 0) {
+                result.append(",");
+            }
+            appendValue(result, objectRefs, refpath + "/" + i, Array.get(array, i));
+        }
+        result.append("]");
+        return result;
+    }
+
+    /**
+     * Append the specified string to the specified StringBuilder.
+     * 
+     * @param result StringBuilder to which the string is appended.
+     * @param string The string to be appended.
+     * @return The specified StringBuilder.
+     */
+    private static StringBuilder appendString(final StringBuilder result, final CharSequence string) {
+        result.append("\"");
+        int i = result.length();
+        result.append(string);
+        while (i < result.length()) { // escape if necessary
+            char c = result.charAt(i);
+            if ((c == '"') || (c == '\\')) {
+                result.insert(i, '\\');
+                i = i + 2;
+                continue;
+            }
+            if (c < 0x20) {
+                result.insert(i + 1, Integer.toHexString(c | 0x10000));
+                result.replace(i, i + 2, "\\u");
+                i = i + 6;
+                continue;
+            }
+            i++;
+        }
+        result.append("\"");
+        return result;
+    }
+
+    /**
+     * Compress, in length, the specified string.
+     * 
+     * @param in The string to potentially compress.
+     * @return The string compressed, if necessary.
+     */
+    private static CharSequence compress(final CharSequence in) {
+        final int length = in.length();
+        if (length <= 21) {
+            return in;
+        }
+        StringBuilder result = new StringBuilder();
+        result.append(in, 0, 9);
+        result.append("...");
+        result.append(in, length - 9, length);
+        return result;
+    }
 }
