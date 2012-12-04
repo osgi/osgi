@@ -24,7 +24,7 @@ package org.osgi.dto;
  * @author $Id$
  * @NotThreadSafe
  */
-public class EntryDTO<K, V> implements DTO {
+public class EntryDTO<K, V> extends DTO {
     /**
      * DTOs are serializable.
      */

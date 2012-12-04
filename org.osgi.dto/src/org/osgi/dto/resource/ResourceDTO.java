@@ -24,7 +24,7 @@ import org.osgi.dto.DTO;
  * @author $Id$
  * @NotThreadSafe
  */
-public class ResourceDTO implements DTO {
+public class ResourceDTO extends DTO {
     /**
      * DTOs are serializable.
      */

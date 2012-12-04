@@ -33,7 +33,7 @@ import org.osgi.dto.MapDTO;
  * @author $Id$
  * @NotThreadSafe
  */
-public class ServiceReferenceDTO implements DTO {
+public class ServiceReferenceDTO extends DTO {
     /**
      * DTOs are serializable.
      */

@@ -31,7 +31,7 @@ import org.osgi.dto.MapDTO;
  * @author $Id$
  * @NotThreadSafe
  */
-public class FrameworkDTO implements DTO {
+public class FrameworkDTO extends DTO {
     /**
      * DTOs are serializable.
      */

@@ -19,7 +19,7 @@ package org.osgi.dto;
 import java.io.Serializable;
 
 /**
- * Marker interface for Data Transfer Objects.
+ * Super type for Data Transfer Objects.
  * 
  * All data transfer objects are trivially serializable and only use basic Java
  * numerical types, Booleans, Strings, DTOs or arrays of any of the former.
@@ -27,6 +27,7 @@ import java.io.Serializable;
  * @author $Id$
  * @NotThreadSafe
  */
-public interface DTO extends Serializable {
-    // marker interface
+public abstract class DTO implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 }

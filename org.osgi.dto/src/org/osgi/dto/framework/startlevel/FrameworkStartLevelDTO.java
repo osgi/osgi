@@ -28,7 +28,7 @@ import org.osgi.dto.DTO;
  * @author $Id$
  * @NotThreadSafe
  */
-public class FrameworkStartLevelDTO implements DTO {
+public class FrameworkStartLevelDTO extends DTO {
     /**
      * DTOs are serializable.
      */

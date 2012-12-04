@@ -25,7 +25,7 @@ import org.osgi.dto.MapDTO;
  * @author $Id$
  * @NotThreadSafe
  */
-public class CapabilityDTO implements DTO {
+public class CapabilityDTO extends DTO {
     /**
      * DTOs are serializable.
      */

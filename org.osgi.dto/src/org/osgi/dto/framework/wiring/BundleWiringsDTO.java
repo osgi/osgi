@@ -28,7 +28,7 @@ import org.osgi.dto.DTO;
  * @author $Id$
  * @NotThreadSafe
  */
-public class BundleWiringsDTO implements DTO {
+public class BundleWiringsDTO extends DTO {
     /**
      * DTOs are serializable.
      */

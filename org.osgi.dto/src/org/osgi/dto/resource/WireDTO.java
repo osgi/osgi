@@ -24,7 +24,7 @@ import org.osgi.dto.DTO;
  * @author $Id$
  * @NotThreadSafe
  */
-public class WireDTO implements DTO {
+public class WireDTO extends DTO {
     /**
      * DTOs are serializable.
      */

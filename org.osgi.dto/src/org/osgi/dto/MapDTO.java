@@ -24,7 +24,7 @@ package org.osgi.dto;
  * @author $Id$
  * @NotThreadSafe
  */
-public class MapDTO<K, V> implements DTO {
+public class MapDTO<K, V> extends DTO {
     /**
      * DTOs are serializable.
      */

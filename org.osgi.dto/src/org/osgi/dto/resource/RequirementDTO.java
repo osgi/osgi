@@ -25,7 +25,7 @@ import org.osgi.dto.MapDTO;
  * @author $Id$
  * @NotThreadSafe
  */
-public class RequirementDTO implements DTO {
+public class RequirementDTO extends DTO {
     /**
      * DTOs are serializable.
      */
