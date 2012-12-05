@@ -20,13 +20,17 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.IdentityHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Super type for Data Transfer Objects.
  * 
- * All data transfer objects are trivially serializable and only use basic Java
- * numerical types, Booleans, Strings, DTOs or arrays of any of the former.
+ * All data transfer objects are easily serializable having only public fields
+ * of primitive types and their wrapper classes, Strings, and DTOs. List, Set,
+ * Map and array aggregates may also be used. The aggregates must only hold
+ * objects of the listed types or aggregates.
  * 
  * @author $Id$
  * @NotThreadSafe
@@ -123,6 +127,12 @@ public abstract class DTO {
         if (value instanceof DTO) {
             return appendDTO(result, objectRefs, refpath, (DTO) value);
         }
+        if (value instanceof Map) {
+            return appendMap(result, objectRefs, refpath, (Map<?, ?>) value);
+        }
+        if (value instanceof List || value instanceof Set) {
+            return appendIterable(result, objectRefs, refpath, (Iterable<?>) value);
+        }
         if (value.getClass().isArray()) {
             return appendArray(result, objectRefs, refpath, value);
         }
@@ -150,6 +160,59 @@ public abstract class DTO {
             appendValue(result, objectRefs, refpath + "/" + i, Array.get(array, i));
         }
         result.append("]");
+        return result;
+    }
+
+    /**
+     * Append the specified iterable's string representation to the specified
+     * StringBuilder.
+     * 
+     * @param result StringBuilder to which the string representation is
+     *        appended.
+     * @param objectRefs References to "seen" objects.
+     * @param refpath The reference path of the specified list.
+     * @param iterable The iterable whose string representation is to be
+     *        appended.
+     * @return The specified StringBuilder.
+     */
+    private static StringBuilder appendIterable(final StringBuilder result, final Map<Object, String> objectRefs, final String refpath, final Iterable<?> iterable) {
+        result.append("[");
+        int i = 0;
+        for (Object item : iterable) {
+            if (i > 0) {
+                result.append(",");
+            }
+            appendValue(result, objectRefs, refpath + "/" + i, item);
+            i++;
+        }
+        result.append("]");
+        return result;
+    }
+
+    /**
+     * Append the specified map's string representation to the specified
+     * StringBuilder.
+     * 
+     * @param result StringBuilder to which the string representation is
+     *        appended.
+     * @param objectRefs References to "seen" objects.
+     * @param refpath The reference path of the specified map.
+     * @param map The map whose string representation is to be appended.
+     * @return The specified StringBuilder.
+     */
+    private static StringBuilder appendMap(final StringBuilder result, final Map<Object, String> objectRefs, final String refpath, final Map<?, ?> map) {
+        result.append("{");
+        String delim = "";
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+            result.append(delim);
+            final String name = String.valueOf(entry.getKey());
+            appendString(result, name);
+            result.append(":");
+            final Object value = entry.getValue();
+            appendValue(result, objectRefs, refpath + "/" + name, value);
+            delim = ", ";
+        }
+        result.append("}");
         return result;
     }
 
