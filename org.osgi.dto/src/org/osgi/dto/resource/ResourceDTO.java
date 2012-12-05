@@ -26,11 +26,6 @@ import org.osgi.dto.DTO;
  */
 public class ResourceDTO extends DTO {
     /**
-     * DTOs are serializable.
-     */
-    private static final long serialVersionUID = 1L;
-
-    /**
      * The capabilities for the resource.
      */
     public CapabilityDTO[]    capabilities;

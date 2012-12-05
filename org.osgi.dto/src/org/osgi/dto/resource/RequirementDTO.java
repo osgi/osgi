@@ -27,11 +27,6 @@ import org.osgi.dto.MapDTO;
  */
 public class RequirementDTO extends DTO {
     /**
-     * DTOs are serializable.
-     */
-    private static final long     serialVersionUID = 1L;
-
-    /**
      * The namespace for the requirement.
      */
     public String                 namespace;

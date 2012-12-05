@@ -33,11 +33,6 @@ import org.osgi.dto.resource.ResourceDTO;
  */
 public class BundleRevisionDTO extends ResourceDTO {
     /**
-     * DTOs are serializable.
-     */
-    private static final long serialVersionUID = 1L;
-
-    /**
      * The symbolic name of the bundle revision.
      */
     public String             symbolicName;

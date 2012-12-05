@@ -30,11 +30,6 @@ import org.osgi.dto.DTO;
  */
 public class BundleStartLevelDTO extends DTO {
     /**
-     * DTOs are serializable.
-     */
-    private static final long serialVersionUID = 1L;
-
-    /**
      * The assigned start level value for the bundle.
      */
     public int                startLevel;

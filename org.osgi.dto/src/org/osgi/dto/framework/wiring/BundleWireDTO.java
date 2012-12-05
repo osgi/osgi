@@ -33,11 +33,6 @@ import org.osgi.dto.resource.WireDTO;
  */
 public class BundleWireDTO extends WireDTO {
     /**
-     * DTOs are serializable.
-     */
-    private static final long serialVersionUID = 1L;
-
-    /**
      * Provider wiring for the bundle wire.
      */
     public BundleWiringDTO    providerWiring;

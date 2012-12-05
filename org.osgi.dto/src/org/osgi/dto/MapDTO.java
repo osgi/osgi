@@ -26,11 +26,6 @@ package org.osgi.dto;
  */
 public class MapDTO<K, V> extends DTO {
     /**
-     * DTOs are serializable.
-     */
-    private static final long serialVersionUID = 1L;
-
-    /**
      * The entries for the map.
      */
     public EntryDTO<K, V>[]   entries;

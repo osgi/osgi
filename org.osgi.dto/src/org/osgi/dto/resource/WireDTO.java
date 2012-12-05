@@ -26,11 +26,6 @@ import org.osgi.dto.DTO;
  */
 public class WireDTO extends DTO {
     /**
-     * DTOs are serializable.
-     */
-    private static final long serialVersionUID = 1L;
-
-    /**
      * Capability for the wire.
      */
     public CapabilityDTO      capability;

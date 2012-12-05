@@ -30,11 +30,6 @@ import org.osgi.dto.DTO;
  */
 public class BundleRevisionsDTO extends DTO {
     /**
-     * DTOs are serializable.
-     */
-    private static final long  serialVersionUID = 1L;
-
-    /**
      * Revisions for the bundle. The first revision is the current revision.
      */
     public BundleRevisionDTO[] revisions;

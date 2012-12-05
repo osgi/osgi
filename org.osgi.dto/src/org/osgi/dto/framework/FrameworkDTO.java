@@ -33,11 +33,6 @@ import org.osgi.dto.MapDTO;
  */
 public class FrameworkDTO extends DTO {
     /**
-     * DTOs are serializable.
-     */
-    private static final long     serialVersionUID = 1L;
-
-    /**
      * The bundles that are installed in the framework.
      */
     public BundleDTO[]            bundles;

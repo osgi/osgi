@@ -30,11 +30,6 @@ import org.osgi.dto.DTO;
  */
 public class FrameworkStartLevelDTO extends DTO {
     /**
-     * DTOs are serializable.
-     */
-    private static final long serialVersionUID = 1L;
-
-    /**
      * The active start level value for the framework.
      */
     public int                startLevel;

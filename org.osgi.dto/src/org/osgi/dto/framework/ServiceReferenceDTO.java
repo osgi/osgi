@@ -35,11 +35,6 @@ import org.osgi.dto.MapDTO;
  */
 public class ServiceReferenceDTO extends DTO {
     /**
-     * DTOs are serializable.
-     */
-    private static final long     serialVersionUID = 1L;
-
-    /**
      * The id of the bundle that registered the service.
      */
     public long                   bundle;

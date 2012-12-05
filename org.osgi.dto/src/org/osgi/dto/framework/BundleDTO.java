@@ -29,11 +29,6 @@ import org.osgi.dto.DTO;
  */
 public class BundleDTO extends DTO {
     /**
-     * DTOs are serializable.
-     */
-    private static final long     serialVersionUID = 1L;
-
-    /**
      * The bundle's unique identifier.
      */
     public long                   id;

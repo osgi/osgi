@@ -30,11 +30,6 @@ import org.osgi.dto.DTO;
  */
 public class BundleWiringsDTO extends DTO {
     /**
-     * DTOs are serializable.
-     */
-    private static final long serialVersionUID = 1L;
-
-    /**
      * Wirings for the bundle. The first wiring is the current wiring.
      */
     public BundleWiringDTO[]  wirings;
