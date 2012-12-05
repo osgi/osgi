@@ -16,6 +16,7 @@
 
 package org.osgi.dto.resource;
 
+import java.util.List;
 import org.osgi.dto.DTO;
 
 /**
@@ -28,25 +29,25 @@ public class WiringDTO extends DTO {
     /**
      * The capabilities for the wiring.
      */
-    public CapabilityDTO[]    capabilities;
+    public List<CapabilityDTO>  capabilities;
 
     /**
      * The requirements for the wiring.
      */
-    public RequirementDTO[]   requirements;
+    public List<RequirementDTO> requirements;
 
     /**
      * The provided wires for the wiring.
      */
-    public WireDTO[]          providedWires;
+    public List<WireDTO>        providedWires;
 
     /**
      * The required wires for the wiring.
      */
-    public WireDTO[]          requiredWires;
+    public List<WireDTO>        requiredWires;
 
     /**
      * Resource for the wiring.
      */
-    public ResourceDTO        resource;
+    public ResourceDTO          resource;
 }

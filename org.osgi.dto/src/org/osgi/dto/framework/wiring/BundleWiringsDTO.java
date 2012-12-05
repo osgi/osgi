@@ -16,6 +16,7 @@
 
 package org.osgi.dto.framework.wiring;
 
+import java.util.List;
 import org.osgi.dto.DTO;
 
 /**
@@ -32,5 +33,5 @@ public class BundleWiringsDTO extends DTO {
     /**
      * Wirings for the bundle. The first wiring is the current wiring.
      */
-    public BundleWiringDTO[]  wirings;
+    public List<BundleWiringDTO> wirings;
 }

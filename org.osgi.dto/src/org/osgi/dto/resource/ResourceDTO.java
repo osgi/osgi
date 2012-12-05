@@ -16,6 +16,7 @@
 
 package org.osgi.dto.resource;
 
+import java.util.List;
 import org.osgi.dto.DTO;
 
 /**
@@ -28,10 +29,10 @@ public class ResourceDTO extends DTO {
     /**
      * The capabilities for the resource.
      */
-    public CapabilityDTO[]    capabilities;
+    public List<CapabilityDTO>  capabilities;
 
     /**
      * The requirements for the resource.
      */
-    public RequirementDTO[]   requirements;
+    public List<RequirementDTO> requirements;
 }

@@ -16,6 +16,7 @@
 
 package org.osgi.dto.framework.wiring;
 
+import java.util.List;
 import org.osgi.dto.DTO;
 
 /**
@@ -32,5 +33,5 @@ public class BundleRevisionsDTO extends DTO {
     /**
      * Revisions for the bundle. The first revision is the current revision.
      */
-    public BundleRevisionDTO[] revisions;
+    public List<BundleRevisionDTO> revisions;
 }
