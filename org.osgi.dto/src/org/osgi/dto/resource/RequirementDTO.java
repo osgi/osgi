@@ -16,8 +16,8 @@
 
 package org.osgi.dto.resource;
 
+import java.util.Map;
 import org.osgi.dto.DTO;
-import org.osgi.dto.MapDTO;
 
 /**
  * Data Transfer Object for a Requirement.
@@ -29,12 +29,12 @@ public class RequirementDTO extends DTO {
     /**
      * The namespace for the requirement.
      */
-    public String                 namespace;
+    public String              namespace;
 
     /**
      * The directives for the requirement.
      */
-    public MapDTO<String, String> directives;
+    public Map<String, String> directives;
 
     /**
      * The attributes for the requirement.
@@ -42,10 +42,10 @@ public class RequirementDTO extends DTO {
      * The value type must be a numerical type, Boolean, String, DTO or an array
      * of any of the former.
      */
-    public MapDTO<String, Object> attributes;
+    public Map<String, Object> attributes;
 
     /**
      * The resource declaring this requirement.
      */
-    public ResourceDTO            resource;
+    public ResourceDTO         resource;
 }
