@@ -257,7 +257,7 @@ public abstract class DTO {
         if (length <= 21) {
             return in;
         }
-        StringBuilder result = new StringBuilder();
+        StringBuilder result = new StringBuilder(21);
         result.append(in, 0, 9);
         result.append("...");
         result.append(in, length - 9, length);
