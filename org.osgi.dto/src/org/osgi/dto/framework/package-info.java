@@ -15,7 +15,7 @@
  */
 
 /**
- * OSGi Data Transfer Object Framework  Package Version 1.7.
+ * OSGi Data Transfer Object Framework Package Version 1.8.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the
@@ -26,13 +26,13 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.dto.framework; version="[1.7,2.0)"}
+ * {@code  Import-Package: org.osgi.dto.framework; version="[1.8,2.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.dto.framework; version="[1.7,1.8)"}
+ * {@code  Import-Package: org.osgi.dto.framework; version="[1.8,1.9)"}
  * 
- * @version 1.7
+ * @version 1.8
  * @author $Id$
  */
 
