@@ -22,9 +22,10 @@ import org.osgi.dto.resource.WiringDTO;
  * Data Transfer Object for a BundleWiring.
  * 
  * <p>
- * A Bundle can be adapted to provide a {@code BundleWiringDTO} for the current
- * wiring Bundle. {@code BundleWiringDTO} objects for all in use wirings of the
- * Bundle can be obtained from a {@link BundleWiringsDTO} of the Bundle.
+ * An installed Bundle can be adapted to provide a {@code BundleWiringDTO} for
+ * the current wiring Bundle. {@code BundleWiringDTO} objects for all in use
+ * wirings of the Bundle can be obtained from a {@link BundleWiringsDTO} of the
+ * Bundle.
  * 
  * <p>
  * The {@link WiringDTO#providedWires providedWires} field must contain an array

@@ -22,8 +22,8 @@ import org.osgi.dto.DTO;
  * Data Transfer Object for a BundleStartLevel.
  * 
  * <p>
- * A Bundle can be adapted to provide a {@code BundleStartLevelDTO} for the
- * Bundle.
+ * An installed Bundle can be adapted to provide a {@code BundleStartLevelDTO}
+ * for the Bundle.
  * 
  * @author $Id$
  * @NotThreadSafe
