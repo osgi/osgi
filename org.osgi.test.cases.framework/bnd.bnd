@@ -155,6 +155,7 @@ Include-Resource = \
 	div.tb24c.jar, \
 	div.tb25.resolved.jar, \
 	div.tb25.unresolved.jar, \
+	dto.tb1.jar, \
 	dynpkgimport.tb0.jar, \
 	dynpkgimport.tb1.jar, \
 	dynpkgimport.tb2.jar, \
@@ -274,6 +275,7 @@ Include-Resource = \
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
+	org.osgi.dto;							version=project	, \
 	org.osgi.resource;						version=project	, \
 	org.osgi.framework;						version=project	, \
 	osgi.core;								version=4.2	, \
@@ -284,6 +286,11 @@ Include-Resource = \
 
 Test-Cases							= ${testcases}
 -signaturetest                      = \
+    org.osgi.dto, \
+    org.osgi.dto.framework, \
+    org.osgi.dto.framework.startlevel, \
+    org.osgi.dto.framework.wiring, \
+    org.osgi.dto.resource, \
     org.osgi.resource, \
     org.osgi.framework, \
     org.osgi.framework.hooks.bundle, \
