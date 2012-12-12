@@ -24,10 +24,10 @@ import org.osgi.dto.DTO;
  * Data Transfer Object for a Framework.
  * 
  * <p>
- * A Bundle can be adapted to provide a {@code FrameworkDTO} for the framework
- * of the Bundle. A {@code FrameworkDTO} obtained from a framework will contain
- * only the launch properties of the framework. These properties will not
- * include the System properties.
+ * The System Bundle can be adapted to provide a {@code FrameworkDTO} for the
+ * framework of the system bundle. A {@code FrameworkDTO} obtained from a
+ * framework will contain only the launch properties of the framework. These
+ * properties will not include the System properties.
  * 
  * @author $Id$
  * @NotThreadSafe
