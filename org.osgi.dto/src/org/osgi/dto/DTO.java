@@ -38,14 +38,14 @@ import java.util.Set;
 public abstract class DTO {
 
     /**
-     * Return a string representation of this DTO suitable for use during
+     * Return a string representation of this DTO suitable for use when
      * debugging.
      * 
      * <p>
      * The format of the string representation is not specified and subject to
      * change.
      * 
-     * @return A string representation of this DTO suitable for use during
+     * @return A string representation of this DTO suitable for use when
      *         debugging.
      */
     @Override
