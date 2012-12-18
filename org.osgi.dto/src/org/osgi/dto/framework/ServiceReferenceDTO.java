@@ -34,6 +34,8 @@ import org.osgi.dto.DTO;
  * @NotThreadSafe
  */
 public class ServiceReferenceDTO extends DTO {
+    private static final long  serialVersionUID = 1L;
+
     /**
      * The id of the bundle that registered the service.
      */

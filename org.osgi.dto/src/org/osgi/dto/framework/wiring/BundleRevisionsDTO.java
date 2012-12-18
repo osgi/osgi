@@ -30,6 +30,8 @@ import org.osgi.dto.DTO;
  * @NotThreadSafe
  */
 public class BundleRevisionsDTO extends DTO {
+    private static final long      serialVersionUID = 1L;
+
     /**
      * Revisions for the bundle. The first revision is the current revision.
      */

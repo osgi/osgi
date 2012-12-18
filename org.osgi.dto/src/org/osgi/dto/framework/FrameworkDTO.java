@@ -33,6 +33,8 @@ import org.osgi.dto.DTO;
  * @NotThreadSafe
  */
 public class FrameworkDTO extends DTO {
+    private static final long        serialVersionUID = 1L;
+
     /**
      * The bundles that are installed in the framework.
      */

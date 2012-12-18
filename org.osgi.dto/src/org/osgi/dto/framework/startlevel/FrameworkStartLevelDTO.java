@@ -29,6 +29,8 @@ import org.osgi.dto.DTO;
  * @NotThreadSafe
  */
 public class FrameworkStartLevelDTO extends DTO {
+    private static final long serialVersionUID = 1L;
+
     /**
      * The active start level value for the framework.
      */

@@ -16,6 +16,7 @@
 
 package org.osgi.dto;
 
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
@@ -35,7 +36,8 @@ import java.util.Set;
  * @author $Id$
  * @NotThreadSafe
  */
-public abstract class DTO {
+public abstract class DTO implements Serializable {
+    private static final long serialVersionUID = 1L;
 
     /**
      * Return a string representation of this DTO suitable for use when

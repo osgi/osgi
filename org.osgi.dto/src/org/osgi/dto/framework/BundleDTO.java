@@ -28,28 +28,30 @@ import org.osgi.dto.DTO;
  * @NotThreadSafe
  */
 public class BundleDTO extends DTO {
+    private static final long serialVersionUID = 1L;
+
     /**
      * The bundle's unique identifier.
      */
-    public long                   id;
+    public long               id;
 
     /**
      * The time when the bundle was last modified.
      */
-    public long                   lastModified;
+    public long               lastModified;
 
     /**
      * The bundle's state.
      */
-    public int                    state;
+    public int                state;
 
     /**
      * The bundle's symbolic name.
      */
-    public String                 symbolicName;
+    public String             symbolicName;
 
     /**
      * The bundle's version.
      */
-    public String                 version;
+    public String             version;
 }

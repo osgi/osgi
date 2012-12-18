@@ -32,6 +32,8 @@ import org.osgi.dto.resource.WireDTO;
  * @NotThreadSafe
  */
 public class BundleWireDTO extends WireDTO {
+    private static final long serialVersionUID = 1L;
+
     /**
      * Provider wiring for the bundle wire.
      */

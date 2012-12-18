@@ -26,6 +26,8 @@ import org.osgi.dto.DTO;
  * @NotThreadSafe
  */
 public class WiringDTO extends DTO {
+    private static final long   serialVersionUID = 1L;
+
     /**
      * The capabilities for the wiring.
      */

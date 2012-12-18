@@ -38,6 +38,8 @@ import org.osgi.dto.resource.WiringDTO;
  * @NotThreadSafe
  */
 public class BundleWiringDTO extends WiringDTO {
+    private static final long serialVersionUID = 1L;
+
     /**
      * The bundle wiring's in use setting indicates that the bundle wiring is in
      * use.

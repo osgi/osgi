@@ -32,6 +32,8 @@ import org.osgi.dto.resource.ResourceDTO;
  * @NotThreadSafe
  */
 public class BundleRevisionDTO extends ResourceDTO {
+    private static final long serialVersionUID = 1L;
+
     /**
      * The symbolic name of the bundle revision.
      */

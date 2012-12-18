@@ -26,6 +26,8 @@ import org.osgi.dto.DTO;
  * @NotThreadSafe
  */
 public class RequirementDTO extends DTO {
+    private static final long  serialVersionUID = 1L;
+
     /**
      * The namespace for the requirement.
      */
