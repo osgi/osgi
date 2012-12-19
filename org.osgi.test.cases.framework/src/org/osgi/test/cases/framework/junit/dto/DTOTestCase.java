@@ -16,6 +16,11 @@
 
 package org.osgi.test.cases.framework.junit.dto;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,6 +29,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.IdentityHashMap;
+import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -437,7 +444,178 @@ public class DTOTestCase extends OSGiTestCase {
         assertTrue("toString does not include field value", result.indexOf("testValue") >= 0);
     }
 
+    public void testDTOSerialization() throws Exception {
+        TestDTO2 testDTO2 = new TestDTO2().init();
+        TestDTO5 testDTO5 = new TestDTO5().init();
+        TestDTO6 testDTO6 = new TestDTO6().init();
+
+        TestDTO2 deser2 = serializeDeserialize(testDTO2);
+        assertNotNull("", deser2);
+        assertEquals("", testDTO2.toString(), deser2.toString());
+        assertSame("", deser2, deser2.testDTO);
+        assertSame("", deser2.testList, deser2.testMap.get("testMap.key1"));
+
+        TestDTO5 deser5 = serializeDeserialize(testDTO5);
+        assertNotNull("", deser5);
+        assertEquals("", testDTO5.toString(), deser5.toString());
+        assertSame("", deser5.dto1.list, deser5.dto2.list);
+
+        TestDTO6 deser6 = serializeDeserialize(testDTO6);
+        assertNotNull("", deser6);
+        assertEquals("", testDTO6.toString(), deser6.toString());
+    }
+
+    private static <S extends Serializable> S serializeDeserialize(S ser) throws Exception {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ObjectOutputStream out = new ObjectOutputStream(baos);
+
+        out.writeObject(ser);
+        out.flush();
+        out.close();
+
+        byte[] serdata = baos.toByteArray();
+
+        ByteArrayInputStream bais = new ByteArrayInputStream(serdata);
+        ObjectInputStream in = new ObjectInputStream(bais);
+
+        S deser = (S) in.readObject();
+        return deser;
+    }
+
     public static class TestDTO extends DTO {
+        private static final long serialVersionUID = 1L;
         public String field;
+    }
+
+    public static class TestDTO2 extends DTO {
+        private static final long            serialVersionUID = 1L;
+        public TestDTO2                      testDTO;
+        public DTO                           nullDTO;
+        public String                        nullstring;
+        public String                        astringTest1;
+        public String                        astringTest2;
+        public String                        astringTest3;
+        public String                        astringTest31;
+        public String                        astringTest4;
+        public String                        astringTest5;
+        public String                        longstringTest;
+        public int                           intTest;
+        public Integer                       integerTest;
+        public float                         floatTest;
+        public Float                         FloatTest;
+        public boolean                       booleanTest;
+        public Boolean                       BooleanTest;
+        public char                          charTest;
+        public Character                     characterTest;
+        public List<String>                  nullList;
+        public List<String>                  testList;
+        public HashSet<String>               testSet;
+        public LinkedHashMap<String, Object> testMap;
+
+        TestDTO2 init() {
+            testDTO = this;
+            astringTest1 = "q\"eq bs\\ebs\u001axyz";
+            astringTest2 = "\"";
+            astringTest3 = "\u001e";
+            astringTest31 = "\u001e\u0020\u001f";
+            astringTest4 = "\\";
+            astringTest5 = "";
+            longstringTest = "0123456789abcdefghijklmnopqrstuvwxyz0123456789";
+            integerTest = new Integer(3);
+            BooleanTest = Boolean.TRUE;
+            charTest = 'z';
+            characterTest = new Character('z');
+            testList = new ArrayList<String>();
+            testList.add("testList.1");
+            testList.add("testList.2");
+            testList.add("testList.3");
+            testSet = new LinkedHashSet<String>();
+            testSet.add("testSet.1");
+            testSet.add("testSet.2");
+            testSet.add("testSet.3");
+            testMap = new LinkedHashMap<String, Object>();
+            testMap.put("testMap.key1", testList);
+            testMap.put("testMap.key2", testSet);
+            testMap.put("testMap.key3", "testMap.value3");
+            return this;
+        }
+    }
+
+    public static class TestDTO4 extends DTO {
+        private static final long serialVersionUID = 1L;
+        public String             fieldName;
+        public List<String>       list;
+
+        TestDTO4 init(String name) {
+            fieldName = name;
+            return this;
+        }
+    }
+
+    public static class TestDTO5 extends DTO {
+        private static final long            serialVersionUID = 1L;
+        public TestDTO4                      dto1;
+        public TestDTO4                      dto2;
+        public LinkedHashMap<Object, Object> testMap1;
+        public LinkedHashMap<Object, Object> testMap2;
+
+        TestDTO5 init() {
+            List<String> list = new ArrayList<String>();
+            list.add("foo");
+            dto1 = new TestDTO4().init("field/Value");
+            dto1.list = list;
+            dto2 = new TestDTO4().init("field/Value");
+            dto2.list = list;
+            TestDTO4 dto3 = new TestDTO4().init("dto2");
+            testMap1 = new LinkedHashMap<Object, Object>();
+            testMap1.put("testMap1.1", dto1);
+            testMap1.put(dto1, null);
+            testMap1.put(null, dto1);
+            testMap1.put("testMap1.4", dto1);
+            testMap2 = new LinkedHashMap<Object, Object>();
+            testMap2.put("testMap2.1", dto2);
+            testMap2.put("testMap2.2", testMap1);
+            testMap2.put(dto1, dto3);
+            testMap2.put("testMap2.4", dto3);
+            testMap2.put("testMap2.5", dto1);
+            return this;
+        }
+    }
+
+    public static class TestDTO6 extends DTO {
+        private static final long     serialVersionUID = 1L;
+        public long[]                 bundles;
+        public String[]               strings;
+        public int[][]                array;
+        public TestDTO4[][]           dtoArray;
+        public List[][]               arrayOfList;
+        public List<List<Object>[][]> listOfArrayOfList;
+        public List<List<long[]>>     listOfList;
+        public List[]                 emptyListArray;
+
+        TestDTO6 init() {
+            TestDTO4 dto = new TestDTO4().init("one");
+            bundles = new long[] {1, 2, 3, 5, 7, 11};
+            strings = new String[] {"one", "two", "three"};
+            array = new int[][] { {1, 1}, {2, 2}, {3, 3}};
+            dtoArray = new TestDTO4[][] {{dto, dto}};
+            List<long[]> innerList1 = new ArrayList<long[]>();
+            innerList1.add(bundles);
+            List<long[]> innerList2 = new ArrayList<long[]>();
+            innerList2.add(bundles);
+            listOfArrayOfList = new ArrayList<List<Object>[][]>();
+            listOfArrayOfList.add(new List[][] { {innerList1}, {innerList2}});
+            listOfArrayOfList.add(new List[][] { {innerList2}, {innerList1}});
+            List<long[]> innerList3 = new ArrayList<long[]>();
+            innerList3.add(bundles);
+            List<long[]> innerList4 = new ArrayList<long[]>();
+            innerList4.add(bundles);
+            listOfList = new ArrayList<List<long[]>>();
+            listOfList.add(innerList3);
+            listOfList.add(innerList4);
+            arrayOfList = new List[][] {{listOfList}};
+            emptyListArray = new List[] {};
+            return this;
+        }
     }
 }
