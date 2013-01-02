@@ -769,7 +769,7 @@
 
             <entry>Example</entry>
 
-            <entry>Value (TZ=CEST= +0200)</entry>
+            <entry>Value (TZ=CEST=UTC+0200)</entry>
           </row>
         </thead>
 
@@ -819,7 +819,7 @@
 
             <entry><code>Long</code></entry>
 
-            <entry><code>23:20:50+0300</code></entry>
+            <entry><code>23:20:50+0100</code></entry>
 
             <entry><code>1.250.000 (ms)</code></entry>
           </row>
@@ -829,20 +829,20 @@
 
     <para>The UPnP specification points to <xref linkend="i1325817"/>. In this
     standard, <xref linkend="i1325829"/> are referenced. The mapping is not
-    completely defined which means that the this OSGi UPnP specification
-    defines a complete mapping to Java classes. The UPnP types
-    <code>date</code>, <code>dateTime</code> and <code>dateTime.tz</code> are
-    represented as a <code>Date</code> object. For the <code>date</code> type,
-    the hours, minutes and seconds must all be zero.</para>
+    completely defined which means that this OSGi UPnP specification defines a
+    complete mapping to Java classes. The UPnP types <code>date</code>,
+    <code>dateTime</code> and <code>dateTime.tz</code> are represented as a
+    <code>Date</code> object. For the <code>date</code> type, the hours,
+    minutes and seconds must all be zero.</para>
 
     <para>The UPnP types <code>time</code> and <code>time.tz</code> are
     represented as a <code>Long</code> object that represents the number of ms
     since midnight. If the time wraps to the next day due to a time zone
-    value, then the final value must be truncated to modulo 86.400.000.</para>
+    value, then the final value must be truncated modulo 86.400.000.</para>
 
     <para>See also <xref
     linkend="org.osgi.service.upnp.UPnPStateVariable.TYPE_DATE"
-    xrefstyle="hyperlink"/> and further.</para>
+    xrefstyle="hyperlink"/>.</para>
   </section>
 
   <section>
