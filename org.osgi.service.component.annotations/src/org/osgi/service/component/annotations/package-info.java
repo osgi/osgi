@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,13 +15,13 @@
  */
 
 /**
- * Service Component Annotations Package Version 1.2.
+ * Service Component Annotations Package Version 1.3.
  *
  * <p>
  * This package is not used at runtime. Annotated classes are processed by
  * tools to generate Component Descriptions which are used at runtime.
  *
- * @version 1.2
+ * @version 1.3
  * @author $Id$
  */
 
