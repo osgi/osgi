@@ -312,7 +312,8 @@ public class TestControl extends DefaultTestBundleControl {
 
 				// Test the method getDefaultValue()
 				assertTrue("AttributeDefinition.getDefaultValue()",
-						isArrayEquals(new String[] {""}, attributes[i]
+						isArrayEquals(new String[] { "female" },
+								attributes[i]
 								.getDefaultValue()));
 
 				found = true;
