@@ -367,7 +367,7 @@
       <para>For example, the bundle entry <code>/OSGI-INF/activator.xml</code>
       contains:</para>
 
-      <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.activator"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
     &lt;implementation class="com.acme.Activator"/&gt;
@@ -418,7 +418,7 @@
       therefore as simple as registering a Event Handler service. The example
       XML for the delayed component looks like:</para>
 
-      <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.handler"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
     &lt;implementation class="com.acme.HandlerImpl"/&gt;
@@ -491,7 +491,7 @@
       each time such a service is needed. The component description to
       implement this pattern looks like:</para>
 
-      <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.factory"
     factory="usb.connection"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
@@ -511,7 +511,7 @@
       example, the previous example could provide a USB Connection
       service.</para>
 
-      <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.factory"    
     factory="usb.connection"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
@@ -728,7 +728,7 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
       lookup strategy. The reference is declared without any bind, updated,
       and unbind methods:</para>
 
-      <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
     &lt;implementation class="com.acme.LogLookupImpl"/&gt;
@@ -751,7 +751,7 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
       to be notified with the Log Service by declaring bind, updated, and
       unbind methods.</para>
 
-      <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
     &lt;implementation class="com.acme.LogEventImpl"/&gt;
@@ -876,7 +876,7 @@ multiplicity ::= ’1’ | ’n’</programlisting>
       the code uses the <code>registerResources</code> method to register a
       directory for external access.</para>
 
-      <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
     &lt;implementation class="com.acme.HttpResourceImpl"/&gt;
@@ -963,7 +963,7 @@ public class HttpResourceImpl {
       Http Services that come and go. The component description can therefore
       be updated to:</para>
 
-      <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
     &lt;implementation class="com.acme.HttpResourceImpl"/&gt;
@@ -1106,7 +1106,7 @@ public class HttpResourceImpl {
       <code>acme.application</code>. The following component description shows
       how this can be done.</para>
 
-      <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
     &lt;implementation class="com.acme.FactoryTracker"/&gt;
@@ -2874,7 +2874,7 @@ void unsetLogService( LogService log ) {
       <para>A component could declare a dependency on the Http Service to
       register some resources.</para>
 
-      <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.binding"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
     &lt;implementation class="example.Binding"/&gt;

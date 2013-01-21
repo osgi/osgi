@@ -1286,7 +1286,7 @@ Password <phrase role="symbol">↔</phrase> <xref
       on ISO attribute types. The ids that are used are derived from ISO
       attributes.</para>
 
-      <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;MetaData 
     xmlns=
         "http://www.osgi.org/xmlns/metatype/v1.2.0" 
@@ -1381,8 +1381,8 @@ female=Female</programlisting>
   <section xml:id="i1502383">
     <title>XML Schema</title>
 
-    <programlisting role="pgwide"><xi:include parse="text" encoding="utf-8"
-    href="../../generated/xmlns/metatype/v1.2.0/metatype.xsd"/></programlisting>
+    <programlisting role="pgwide"><xi:include encoding="utf-8"
+        href="../../generated/xmlns/metatype/v1.2.0/metatype.xsd" parse="text"/></programlisting>
   </section>
 
   <section>
