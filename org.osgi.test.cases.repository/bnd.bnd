@@ -20,7 +20,7 @@ Include-Resource: \
     ${junit}    
 
 -runbundles                         = \
-    osgi.enterprise; version=latest, \
+    osgi.cmpn; version=latest, \
     org.osgi.impl.service.repository; version=latest
 
 Test-Cases                          = ${testcases}
@@ -29,6 +29,6 @@ Test-Cases                          = ${testcases}
             
 -runproperties = ${runproperties}, \
     ${p}.system.packages.extra="${junit.package}", \
-    ${p}.bundles="${uniq;${enterprise.companion.jar},${repo;org.osgi.impl.service.repository}}"
+    ${p}.bundles="${uniq;${cmpn.companion.jar},${repo;org.osgi.impl.service.repository}}"
 #   osgi.console=1111
 
