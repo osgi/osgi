@@ -555,6 +555,7 @@ if ( rev != null &amp;&amp; (rev.getTypes() &amp; TYPE_FRAGMENT)!= 0 ){
     <para>A fragment bundle will show all its declared capabilities and
     requirements on its Bundle Revision but during resolving the resolver only
     considers the <code>osgi.wiring.host</code> and <code>osgi.ee</code>
+    requirements and the <code>osgi.identity</code> capability and
     requirements.</para>
 
     <para>The <code>osgi.wiring.host</code> requirement represents the
@@ -563,7 +564,14 @@ if ( rev != null &amp;&amp; (rev.getTypes() &amp; TYPE_FRAGMENT)!= 0 ){
     host’s Bundle Wiring. The <code>osgi.ee</code> requirement is also never
     hosted.</para>
 
-    <para>The other requirements and capabilities in a fragment bundle never
+    <para>The <code>osgi.identity</code> capability of a fragment is part of
+    the fragment's Bundle Wiring and is not part of a host bundle's Bundle
+    Wiring. That is, each Bundle Wiring has exactly one
+    <code>osgi.identity</code> capability. However, <code>osgi.identity</code>
+    requirements declared by a fragment are not part of the fragment's Bundle
+    Wiring and are instead hosted by the host bundle's Bundle Wiring.</para>
+
+    <para>Any other requirements and capabilities in a fragment bundle never
     become part of the fragment’s Bundle Wiring; they are treated as part of
     the host’s requirements and capabilities when the fragment is attached to
     that host.</para>
@@ -605,17 +613,17 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
 
     <para>The <code>osgi.wiring.host</code> namespace mandates that the
     resolver moves the Bundle Requirements and Bundle Capabilities from the
-    fragment in all other namespaces than the <code>osgi.wiring.host</code>
-    and <code>osgi.ee</code> namespaces to the host bundle. For example, if
-    the fragment exports a package <code>p</code>, then this package is
-    exported by the host. In such a case, the <code>BundleRequirement</code>
-    and <code>BundleCapability</code> objects remain associated with the
-    Bundle Revision of the fragment. However, the Bundle Wire has the
-    appropriate Bundle Wiring of the host. This is depicted in <xref
-    linkend="i1743831" xrefstyle="template:Figure %n on page %p"/>. Package
-    <code>p</code> is declared a capability in fragment <code>B.0</code> but
-    when wired the Bundle Wiring of host <code>A.0</code> will be the
-    provider.</para>
+    fragment in all other namespaces than the <code>osgi.wiring.host</code>,
+    <code>osgi.identity</code> and <code>osgi.ee</code> namespaces to the host
+    bundle. For example, if the fragment exports a package <code>p</code>,
+    then this package is exported by the host. In such a case, the
+    <code>BundleRequirement</code> and <code>BundleCapability</code> objects
+    remain associated with the Bundle Revision of the fragment. However, the
+    Bundle Wire has the appropriate Bundle Wiring of the host. This is
+    depicted in <xref linkend="i1743831"
+    xrefstyle="template:Figure %n on page %p"/>. Package <code>p</code> is
+    declared a capability in fragment <code>B.0</code> but when wired the
+    Bundle Wiring of host <code>A.0</code> will be the provider.</para>
 
     <figure xml:id="i1743831">
       <title>Exporting a Package from a Fragment</title>
