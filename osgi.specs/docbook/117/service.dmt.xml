@@ -4721,7 +4721,7 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
               <entry><para/></entry>
 
               <entry><para>Must describe the exception if the session had a
-              fatal exception or timed out.</para></entry>
+              fatal exception.</para></entry>
             </row>
 
             <row>
@@ -4732,7 +4732,7 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
               <entry><para/></entry>
 
               <entry><para>The name of the actual exception class if the
-              session had a fatal exception or timed out.</para></entry>
+              session had a fatal exception.</para></entry>
             </row>
           </tbody>
         </tgroup>
