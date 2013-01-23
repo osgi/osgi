@@ -1504,7 +1504,7 @@ Vendor/RingTones/Bach</programlisting>
 
       <para>Trying to set or get a complex value on an interior node that does
       not support complex values must throw a Dmt Exception with the code
-      <xref linkend="org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED"
+      <xref linkend="org.osgi.service.dmt.DmtException.FEATURE_NOT_SUPPORTED"
       xrefstyle="hyperlink"/>.</para>
     </section>
 
