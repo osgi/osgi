@@ -4569,7 +4569,7 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
             </row>
 
             <row>
-              <entry><para>bundle.symbolicname</para></entry>
+              <entry><para>bundle.symbolicName</para></entry>
 
               <entry><para>String</para></entry>
 
