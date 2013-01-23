@@ -869,43 +869,6 @@ static CompositeType HEADER = Item.composite( "HEADER", "Thisis a header",
     manager.</para>
   </section>
 
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>The Object Names now contain framework name and UUID</para>
-      </listitem>
-
-      <listitem>
-        <para>Versions are updated</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <code>Version</code> to the scalar types</para>
-      </listitem>
-
-      <listitem>
-        <para>Added a <xref
-        linkend="org.osgi.jmx.framework.wiring.BundleWiringStateMBean"
-        xrefstyle="hyperlink"/> reflecting the Framework’s Wiring API</para>
-      </listitem>
-
-      <listitem>
-        <para>Changed <xref linkend="org.osgi.jmx.framework.BundleStateMBean"
-        xrefstyle="hyperlink"/>, <xref
-        linkend="org.osgi.jmx.framework.FrameworkMBean"
-        xrefstyle="hyperlink"/>, <xref
-        linkend="org.osgi.jmx.framework.ServiceStateMBean"
-        xrefstyle="hyperlink"/></para>
-      </listitem>
-
-      <listitem>
-        <para>Clarified how lists are encoded for properties</para>
-      </listitem>
-    </itemizedlist>
-  </section>
-
   <xi:include href="../../generated/javadoc/docbook/org.osgi.jmx.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.jmx.framework.xml"/>
