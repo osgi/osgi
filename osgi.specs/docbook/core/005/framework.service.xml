@@ -1405,15 +1405,4 @@
       not have permission to access.</para>
     </section>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added an <code>UnfilteredServiceListener</code>, see <xref
-        linkend="i3081215"/>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

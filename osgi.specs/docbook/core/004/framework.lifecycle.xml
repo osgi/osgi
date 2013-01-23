@@ -3760,28 +3760,6 @@ D: Export-Package: s</programlisting>
   </section>
 
   <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added a managed value to the
-        <code>org.osgi.framework.bsnversion</code> property and made it
-        default, see <xref
-        linkend="framework.lifecycle.launchingproperties"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Allow non-JKS key stores to be used.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <code>AccessControlContext</code> to the types a Bundle
-        can be adapted to.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
-
-  <section>
     <title>References</title>
 
     <bibliolist>

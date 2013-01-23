@@ -882,15 +882,4 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       </listitem>
     </itemizedlist>
   </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Elucidated the new relation to the
-        <code>org.osgi.resource</code> package.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>

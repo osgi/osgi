@@ -5156,36 +5156,6 @@ URL(String protocol, String host, String file)</programlisting>
   </section>
 
   <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Made changes to separate the generic Requirement/Capability
-        model from the Bundle Wiring model.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added support for static <code>valueOf</code> methods in the
-        Filter</para>
-      </listitem>
-
-      <listitem>
-        <para>Extended the description about the
-        Bundle-RequiredExecutionEnvironment and the osgi.ee Namespace.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added a <code>VersionRange</code> class</para>
-      </listitem>
-
-      <listitem>
-        <para>Added additional header to Illegal Manifest headers for
-        Extension bundles</para>
-      </listitem>
-    </itemizedlist>
-  </section>
-
-  <section>
     <title>References</title>
 
     <bibliolist>

@@ -995,16 +995,6 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
   </section>
 
   <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>New implied Capability Permission</para>
-      </listitem>
-    </itemizedlist>
-  </section>
-
-  <section>
     <title>References</title>
 
     <bibliolist>
