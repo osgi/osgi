@@ -3042,8 +3042,11 @@ connector.setParameterValue( "Starwars.CP.3.Obiwan." + id+ ".Name",
 
       <para>The <xref
       linkend="org.osgi.service.tr069todmt.TR069Connector.addObject-String-"
-      xrefstyle="hyperlink"/> method does not require an atomic
-      session.</para>
+      xrefstyle="hyperlink"/> method requires an atomic session. If a
+      non-atomic session is used then the <xref
+      linkend="org.osgi.service.tr069todmt.TR069Connector.addObject-String-"
+      xrefstyle="hyperlink"/> method must not attempt to create any objects
+      and an exception must be thrown.</para>
     </section>
 
     <section>
