@@ -254,7 +254,7 @@
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt; 
 &lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
-   xmlns:sca="http://www.osoa.org/xmlns/sca/1.0"
+   xmlns:sca="http://docs.oasis-open.org/ns/opencsa/sca/200912"
    xmlns:acme="http://acme.com/defs" &gt; 
    targetNamespace="http://acme.com/defs"&gt;  
 
@@ -2072,8 +2072,8 @@ qualifier ::= policy ( policy ) *</programlisting>
 
     <programlisting>http://www.osgi.org/xmlns/scact/v1.0.0</programlisting>
 
-    <programlisting role="pgwide"><xi:include parse="text" encoding="utf-8"
-    href="../../generated/xmlns/scact/v1.0.0/scact.xsd"/></programlisting>
+    <programlisting role="pgwide"><xi:include encoding="utf-8"
+        href="../../generated/xmlns/scact/v1.0.0/scact.xsd" parse="text"/></programlisting>
   </section>
 
   <section>
