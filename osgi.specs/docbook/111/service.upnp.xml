@@ -943,22 +943,6 @@
     be used sparingly and only for bundles that are trusted.</para>
   </section>
 
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added a new constructor for a UPnP Exception with a nested
-        cause</para>
-      </listitem>
-
-      <listitem>
-        <para>Renamed the <code>getUPnPError_Code</code> method to
-        <code>getUPnPErrorCode</code>, the old one is left deprecated.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
-
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.upnp.xml"/>
 
   <section>
