@@ -856,64 +856,6 @@
     </section>
   </section>
 
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>The Remote Services specification has been moved from <xref linkend="intro.core.release" xrefstyle="template:%t"/> to chapter 100,
-        see <xref linkend="service.remoteservices"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updated <xref linkend="service.cm"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updated <xref linkend="service.metatype"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updated <xref linkend="service.component"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updated <xref linkend="service.event"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Updated <xref linkend="service.jmx"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="service.coordinator"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="service.resolver"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="service.repository"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="service.loader"/></para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="service.subsystem"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="service.namespaces"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>The Tracker Specification has been moved to the Core.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
 </chapter>
 
   <chapter label="100" revision="$Id$" version="5" xml:id="service.remoteservices" xml:base="../100/service.remoteservices.xml">
@@ -2043,17 +1985,6 @@ com.acme.rmi.path = service-id/24</programlisting>
                                 "REGISTER" )
 }</programlisting>
     </section>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Moved out of the core from chapter 13 and moved to this
-        chapter.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 
   <section>
@@ -7148,26 +7079,6 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
       <para>This scenario would achieve atomicity from the point of view of
       the bundle.</para>
     </section>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added targeted PIDs, see <xref linkend="i1891430"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added a persistent change count method on Configurable to make
-        it easier to detect changes.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added a Synchronous Configuration Listener to be able to detect
-        thread based systems like the Coordinator, see <xref linkend="i1693263"/>.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 
   <section version="5" role="package" xreflabel="org.osgi.service.cm" xml:id="org.osgi.service.cm" xml:base="../../generated/javadoc/docbook/org.osgi.service.cm.xml">
@@ -38428,36 +38339,6 @@ static CompositeType HEADER = Item.composite( "HEADER", "Thisis a header",
     Permission Admin. It is strongly advised that implementations limit the
     set of available permissions based on authenticating the remote
     manager.</para>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>The Object Names now contain framework name and UUID</para>
-      </listitem>
-
-      <listitem>
-        <para>Versions are updated</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <code>Version</code> to the scalar types</para>
-      </listitem>
-
-      <listitem>
-        <para>Added a <xref linkend="org.osgi.jmx.framework.wiring.BundleWiringStateMBean" xrefstyle="hyperlink"/> reflecting the Framework’s Wiring API</para>
-      </listitem>
-
-      <listitem>
-        <para>Changed <xref linkend="org.osgi.jmx.framework.BundleStateMBean" xrefstyle="hyperlink"/>, <xref linkend="org.osgi.jmx.framework.FrameworkMBean" xrefstyle="hyperlink"/>, <xref linkend="org.osgi.jmx.framework.ServiceStateMBean" xrefstyle="hyperlink"/></para>
-      </listitem>
-
-      <listitem>
-        <para>Clarified how lists are encoded for properties</para>
-      </listitem>
-    </itemizedlist>
   </section>
 
   <section version="5" role="package" xreflabel="org.osgi.jmx" xml:id="org.osgi.jmx" xml:base="../../generated/javadoc/docbook/org.osgi.jmx.xml">
