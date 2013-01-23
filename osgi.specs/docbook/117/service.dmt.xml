@@ -2560,7 +2560,11 @@ Vendor/RingTones/Bach</programlisting>
               linkend="org.osgi.service.dmt.DmtSession.getNodeSize-String-"
               xrefstyle="hyperlink"/></para></entry>
 
-              <entry><para>Must always return <code>0</code>.</para></entry>
+              <entry><para>Must throw a <xref
+              linkend="org.osgi.service.dmt.DmtException"
+              xrefstyle="hyperlink"/> <xref
+              linkend="org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED"
+              xrefstyle="hyperlink"/></para></entry>
             </row>
 
             <row>
