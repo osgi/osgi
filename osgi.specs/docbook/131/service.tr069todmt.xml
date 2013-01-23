@@ -3017,7 +3017,7 @@ for ( ParameterInfo info : pinfos ) {
 
       <para>If the corresponding <code>MAP</code> or <code>LIST</code> node
       has a Meta Node with a MIME type of
-      <code>application/x-tr-68-eager</code> then the alias or instance id
+      <code>application/x-tr-69-eager</code> then the alias or instance id
       must be used to create the node. Otherwise the alias or instance id must
       be returned without creating the node. The purpose of this lazy creation
       is to allow a single Set Parameter Values RPC to atomically create a
