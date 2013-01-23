@@ -1841,7 +1841,7 @@ Vendor/RingTones/Bach</programlisting>
           <para><xref linkend="org.osgi.service.dmt.MetaNode.DYNAMIC"
           xrefstyle="hyperlink"/> – Dynamic nodes are intended to be created
           and deleted by a management system or an other controlling source.
-          This this not imply that it actually is possible to add new nodes
+          This does not imply that it actually is possible to add new nodes
           and delete nodes, the actions can still allow or deny this. However,
           in principle nodes that can be added or deleted have the <xref
           linkend="org.osgi.service.dmt.MetaNode.DYNAMIC"
