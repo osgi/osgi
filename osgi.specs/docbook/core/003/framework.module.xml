@@ -3599,12 +3599,13 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
 
           <itemizedlist>
             <listitem>
-              <para><code>osname ~= [org.osgi.framework.os.name]</code></para>
+              <para><code>osname ~= [org.osgi.framework.os.name]</code> or
+              <code>osname</code> is not specified</para>
             </listitem>
 
             <listitem>
-              <para><code>processor ~=
-              [org.osgi.framework.processor]</code></para>
+              <para><code>processor ~= [org.osgi.framework.processor]</code>
+              or <code>processor</code> is not specified</para>
             </listitem>
 
             <listitem>
@@ -3772,22 +3773,22 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
       table is then mapped to the Bundle-NativeCode header in the following
       code example.</para>
 
-      <programlisting>Bundle-NativeCode:  nativecodewin32.dll; v
-        delta.dll; <code>«</code>
-        osname=win32; <code>«</code>
-        processor=x86; <code>«</code>
-        language=en, <code>«</code>
-    nativecodegtk.so; <code>«</code>
-        osname=linux; <code>«</code>
-        processor=x86; <code>«</code>
-        language=en; <code>«</code>
-        selection-filter= <code>«</code>
-            "(com.acme.windowing=gtk)", <code>«</code>
-    nativecodeqt.so; <code>«</code>
-        osname=linux; <code>«</code>
-        processor=x86; <code>«</code>
-        language=en; <code>«</code>
-        selection-filter = <code>«</code> 
+      <programlisting>Bundle-NativeCode:  nativecodewin32.dll; «
+        delta.dll; «
+        osname=win32; «
+        processor=x86; «
+        language=en, «
+    nativecodegtk.so; «
+        osname=linux; «
+        processor=x86; «
+        language=en; «
+        selection-filter= «
+            "(com.acme.windowing=gtk)", «
+    nativecodeqt.so; «
+        osname=linux; «
+        processor=x86; «
+        language=en; «
+        selection-filter = «
             "(com.acme.windowing=qt)"</programlisting>
     </section>
 
