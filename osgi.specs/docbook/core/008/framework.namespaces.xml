@@ -246,10 +246,11 @@
     <title>osgi.ee Namespace</title>
 
     <para>An OSGi Framework must register capabilities for all the execution
-    environments it is known to be backward compatible with. For example, if
-    the Java VM provides Java SE 6, then it is backward compatible with 1.2,
-    1.3, 1.4, 1.5, and 1.6. The <code>osgi.ee</code> capability defines the
-    provided versions as a comma separated list. For example:</para>
+    environments the Java VM is known to be backward compatible with. For
+    example, if the Java VM provides Java SE 6, then it is backward compatible
+    with 1.2, 1.3, 1.4, 1.5, and 1.6. The <code>osgi.ee</code> capability
+    defines the provided versions as a comma separated list. For
+    example:</para>
 
     <programlisting>Provide-Capability:
     osgi.ee;
@@ -271,20 +272,16 @@
     should not resolve in the later version to ensure the latest version is
     used. The following code shows such an example:</para>
 
-    <programlisting>Require-Capability: <code>«</code>
-   osgi.ee;filter:="(&amp;(osgi.ee=JavaSE) <code>«</code>
-        (version=1.4)(!(version=1.5)))"</programlisting>
+    <programlisting>Require-Capability:
+   osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=1.4)(!(version=1.5)))"</programlisting>
 
     <para>The <code>osgi.ee</code> requirement is not hosted when it is part
     of a Fragment. That is, a requirement from this namespace must be treated
     as part of the Fragment Bundle and must not be hosted.</para>
 
-    <para>The names for the execution environments are not normatively defined
-    in this specification except the name for <code>JavaSE</code> and
-    <code>OSGi/Minimum</code>. A list of well known names are maintained at
-    <xref linkend="i1775657"/>. The <code>osgi.ee</code> capability is defined
-    in table <xref linkend="framework.namespaces-ee.namespace"/> and in the
-    <xref linkend="org.osgi.framework.namespace.ExecutionEnvironmentNamespace"
+    <para>The <code>osgi.ee</code> capability is defined in table <xref
+    linkend="framework.namespaces-ee.namespace"/> and in the <xref
+    linkend="org.osgi.framework.namespace.ExecutionEnvironmentNamespace"
     xrefstyle="hyperlink"/> class.</para>
 
     <table pgwide="1" xml:id="framework.namespaces-ee.namespace">
@@ -356,12 +353,16 @@
       </tgroup>
     </table>
 
-    <para>The <code>osgi.ee</code> namespace is an alternative to the
-    Bundle-RequiredExecutionEnvironment header in <xref
-    linkend="framework.module.bree"/>. <xref
-    linkend="framework.namespaces-ee.names"/> defines a number of names used
-    for common execution environments. Further (non-normative) names can be
-    found at <xref linkend="i1775657"/>.</para>
+    <para>Provide-Capability headers in the <code>osgi.ee</code> namespace
+    must not be used in a bundle's manifest; Require-Capability with this
+    namespace is allowed. An <code>osgi.ee</code> requirement is an
+    alternative to the Bundle-RequiredExecutionEnvironment header in <xref
+    linkend="framework.module.bree"/>.</para>
+
+    <para>The names for the execution environments are not normatively defined
+    in this specification except those defined in <xref
+    linkend="framework.namespaces-ee.names"/>. A list of well-known
+    (non-normative) names are maintained at <xref linkend="i1775657"/>.</para>
 
     <table xml:id="framework.namespaces-ee.names">
       <title>osgi.ee execution environment names</title>
