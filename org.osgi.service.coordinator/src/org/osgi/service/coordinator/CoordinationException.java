@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,6 +81,8 @@ public class CoordinationException extends RuntimeException {
 	 * @param coordination The Coordination associated with this exception.
 	 * @param cause The cause associated with this exception.
 	 * @param type The type of this exception.
+	 * @throws IllegalArgumentException If the specified type is {@link #FAILED}
+	 *         and the specified cause is {@code null}.
 	 */
 	public CoordinationException(String message, Coordination coordination, int type, Throwable cause) {
 		super(message, cause);
@@ -103,6 +105,8 @@ public class CoordinationException extends RuntimeException {
 	 * @param message The detail message for this exception.
 	 * @param coordination The Coordination associated with this exception.
 	 * @param type The type of this exception.
+	 * @throws IllegalArgumentException If the specified type is {@link #FAILED}
+	 *         .
 	 */
 	public CoordinationException(String message, Coordination coordination, int type) {
 		super(message);
