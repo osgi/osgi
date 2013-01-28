@@ -259,12 +259,12 @@ public class SimpleTest extends MultiFrameworkTestCase {
 				supportedConfigTypes.add(st.nextToken());
 			}
 		} else if (configProperty instanceof Collection) {
-			Collection col = supportedConfigTypes;
+			Collection col = (Collection) configProperty;
 			for (Iterator it=col.iterator(); it.hasNext(); ) {
 				supportedConfigTypes.add(it.next());
 			}
 		} else { // assume String[]
-			String[] arr = (String[])configProperty;
+			String[] arr = (String[]) configProperty;
 			for (int i=0; i<arr.length; i++) {
 				supportedConfigTypes.add(arr[i]);
 			}
