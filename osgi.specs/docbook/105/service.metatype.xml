@@ -571,11 +571,11 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
 
     <para>A bundle that wants to provide meta type resources must place these
     resources in the <code>OSGI-INF/metatype</code> directory. The name of the
-    resource must be a valid JAR path. All resources in that directory must be
-    meta type documents. Fragments can contain additional meta type resources
-    in the same directory and they must be taken into account when the meta
-    type resources are searched. A meta type resource must be encoded in
-    UTF-8.</para>
+    resource must be a valid bundle entry path. All resources in that
+    directory must be meta type documents. Fragments can contain additional
+    meta type resources in the same directory and they must be taken into
+    account when the meta type resources are searched. A meta type resource
+    must be encoded in UTF-8.</para>
 
     <para>The MetaType Service must support localization of the</para>
 
@@ -1141,9 +1141,9 @@ Password <phrase role="symbol">↔</phrase> <xref
               xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>The resource is a URL. The base URL is assumed to
-              be the XML file with the definition. I.e. if the XML is a
-              resource in the JAR file, then this URL can reference another
-              resource in that JAR file using a relative URL.</para></entry>
+              be the root of the bundle containing the XML file. That is, this
+              URL can reference another resource in the bundle using a
+              relative URL.</para></entry>
             </row>
 
             <row>
