@@ -11,20 +11,20 @@ import aQute.bnd.build.Container;
 import aQute.bnd.build.Project;
 import aQute.bnd.build.ProjectBuilder;
 import aQute.bnd.build.Workspace;
+import aQute.bnd.header.Attrs;
+import aQute.bnd.header.OSGiHeader;
+import aQute.bnd.header.Parameters;
+import aQute.bnd.osgi.Analyzer;
+import aQute.bnd.osgi.Constants;
+import aQute.bnd.osgi.EmbeddedResource;
+import aQute.bnd.osgi.FileResource;
+import aQute.bnd.osgi.Jar;
+import aQute.bnd.osgi.Processor;
+import aQute.bnd.osgi.Resource;
 import aQute.bnd.service.AnalyzerPlugin;
-import aQute.bnd.service.RepositoryPlugin.Strategy;
-import aQute.lib.osgi.Analyzer;
-import aQute.lib.osgi.Constants;
-import aQute.lib.osgi.EmbeddedResource;
-import aQute.lib.osgi.FileResource;
-import aQute.lib.osgi.Jar;
-import aQute.lib.osgi.Processor;
-import aQute.lib.osgi.Resource;
+import aQute.bnd.service.Strategy;
+import aQute.bnd.version.Version;
 import aQute.libg.generics.Create;
-import aQute.libg.header.Attrs;
-import aQute.libg.header.OSGiHeader;
-import aQute.libg.header.Parameters;
-import aQute.libg.version.Version;
 
 /**
  * This script runs after the bnd file stuff has been done, before analyzing any
@@ -148,7 +148,7 @@ public class Packaging implements AnalyzerPlugin {
 			return;
 		}
 		for ( File sub : files ) {
-			Container c = new Container(sub);
+			Container c = new Container(project, sub);
 			runbundles.add(c);
 		}
 
