@@ -2,14 +2,14 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import aQute.bnd.header.Parameters;
 import aQute.bnd.make.coverage.CoverageResource;
+import aQute.bnd.osgi.Analyzer;
+import aQute.bnd.osgi.Clazz;
+import aQute.bnd.osgi.Instruction;
+import aQute.bnd.osgi.Jar;
+import aQute.bnd.osgi.Resource;
 import aQute.bnd.service.AnalyzerPlugin;
-import aQute.lib.osgi.Analyzer;
-import aQute.lib.osgi.Clazz;
-import aQute.lib.osgi.Instruction;
-import aQute.lib.osgi.Jar;
-import aQute.lib.osgi.Resource;
-import aQute.libg.header.Parameters;
 
 public class SignatureTest implements AnalyzerPlugin {
 
