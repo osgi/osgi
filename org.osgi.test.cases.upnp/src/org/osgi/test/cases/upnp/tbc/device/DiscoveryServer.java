@@ -9,6 +9,7 @@ import java.util.List;
 
 import org.osgi.test.cases.upnp.tbc.UPnPConstants;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 
 /**
  * 
@@ -45,9 +46,14 @@ public class DiscoveryServer {
 	public void send(DatagramPacket p) {
 		if (msocket != null && p != null) {
 			try {
-				msocket.send(p);
+				for (int i = 0; i < UPnPConstants.UDP_SEND_COUNT; i++) {
+					msocket.send(p);
+					Sleep.sleep(100);
+				}
 			}
 			catch (IOException er) {
+				// ignored
+			} catch (InterruptedException e) {
 				// ignored
 			}
 		}

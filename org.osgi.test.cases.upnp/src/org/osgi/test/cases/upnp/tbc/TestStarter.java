@@ -39,7 +39,7 @@ public class TestStarter {
 		server.registerSender(sender);
 	}
 
-	public void stop() throws Exception {
+	public void stop(HttpService http) throws Exception {
 		server.unregisterSender(sender);
 		while (!sender.isDone()) {
 			Sleep.sleep(20);
@@ -51,5 +51,10 @@ public class TestStarter {
 			// ignored
 		}
 		server.finish();
+		http.unregister(UPnPConstants.SR_DESC);
+		http.unregister(UPnPConstants.SR_IM);
+		http.unregister(UPnPConstants.SR_CON);
+		http.unregister(UPnPConstants.SR_EV);
+		http.unregister(UPnPConstants.SR_PRES);
 	}
 }

@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
  */
 public final class UPnPConstants {
 	//test props
+	public static final int		UDP_SEND_COUNT		= 3;
 	public static final String	EV_TEST				= "upnp.test.event";
 	public static final String	DE_TEST				= "upnp.test.description";
 	public static final String	CO_TEST				= "upnp.test.control";
@@ -16,8 +17,8 @@ public final class UPnPConstants {
 	public static final String	LOCAL_HOST;
 	public static final String	DUPnPMCPort			= "upnp.mc.port";
 	public static final String	UPnPMCAddress		= "239.255.255.250";
-	public static final String	SEARCH_ADDRESS		= "239.255.255.250:1900";
 	public static final int		UPnPMCPort;
+	public static final String	SEARCH_ADDRESS;
 	public static final int		HTTP_PORT;
 	public static final String	QD					= "::";
 	public static final String	DD					= ":";
@@ -338,6 +339,7 @@ public final class UPnPConstants {
 		HTTP_PORT = Integer.getInteger("org.osgi.service.http.port", 80)
 				.intValue();
 		UPnPMCPort = Integer.getInteger(DUPnPMCPort, 1900).intValue();
+		SEARCH_ADDRESS = UPnPMCAddress + ':' + UPnPMCPort;
 		V_MC_HOST = ("239.255.255.250:" + UPnPMCPort).intern();
 		String localHost = System.getProperty("org.osgi.service.http.hostname");
 		try {
