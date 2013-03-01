@@ -18,9 +18,7 @@ package org.osgi.test.cases.framework.junit.frameworkutil;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import junit.framework.TestCase;
-
 import org.osgi.framework.FrameworkUtil;
 
 public class MatchDNChainTests extends TestCase {
@@ -39,16 +37,37 @@ public class MatchDNChainTests extends TestCase {
 		assertMatchDNChain("*", dn2);
 		assertMatchDNChain("*", dn3);
 		assertNotMatchDNChain("*", chain);
+        assertMatchDNChain("* ", dn1);
+        assertMatchDNChain("* ", dn2);
+        assertMatchDNChain("* ", dn3);
+        assertNotMatchDNChain("* ", chain);
+        assertMatchDNChain(" *", dn1);
+        assertMatchDNChain(" *", dn2);
+        assertMatchDNChain(" *", dn3);
+        assertNotMatchDNChain(" *", chain);
 
 		assertMatchDNChain("-", dn1);
 		assertMatchDNChain("-", dn2);
 		assertMatchDNChain("-", dn3);
 		assertMatchDNChain("-", chain);
+        assertMatchDNChain("- ", dn1);
+        assertMatchDNChain("- ", dn2);
+        assertMatchDNChain("- ", dn3);
+        assertMatchDNChain("- ", chain);
+        assertMatchDNChain(" -", dn1);
+        assertMatchDNChain(" -", dn2);
+        assertMatchDNChain(" -", dn3);
+        assertMatchDNChain(" -", chain);
+
 
 		assertMatchDNChain("*, c=US", dn1);
 		assertMatchDNChain("*, c=US", dn2);
 		assertNotMatchDNChain("*, c=US", dn3);
 		assertMatchDNChain("*, o=ACME, c=US; *, c=US", chain);
+        assertMatchDNChain("* , c=US ", dn1);
+        assertMatchDNChain(" * , c=US", dn2);
+        assertNotMatchDNChain(" * , c=US ", dn3);
+        assertMatchDNChain("* , o=ACME , c=US ; *, c=US ", chain);
 
 		assertMatchDNChain("*, o=ACME, c=US", dn1);
 		assertMatchDNChain("*, o=ACME, c=US", dn2);
@@ -56,6 +75,8 @@ public class MatchDNChainTests extends TestCase {
 		assertMatchDNChain("*, o=ACME, c=US; *, o=ACME, c=US", chain);
 		assertMatchDNChain("*; *, o=ACME, c=US", chain);
 		assertMatchDNChain("-; *, o=ACME, c=US", chain);
+        assertMatchDNChain("* ; * , o=ACME , c=US", chain);
+        assertMatchDNChain("- ; * , o=ACME , c=US ", chain);
 
 		assertMatchDNChain("*, o=*, c=US", dn1);
 		assertMatchDNChain("*, o=*, c=US", dn2);
@@ -79,6 +100,8 @@ public class MatchDNChainTests extends TestCase {
 
 		assertMatchDNChain("*, o=\"AC;ME\", c=US",
 				"cn=Bugs Bunny, o=AC\\;ME, c=US");
+        assertMatchDNChain("*, o=\"AC ME\"",
+                "cn=Bugs Bunny, o=AC ME");
 		assertMatchDNChain("*, o=AC\\;ME, c=US",
 				"cn=Bugs Bunny, o=AC\\;ME, c=US");
 		assertNotMatchDNChain("*, o=\"AC;ME\", c=US", dn);
@@ -89,10 +112,17 @@ public class MatchDNChainTests extends TestCase {
 
 		assertInvalidMatch(null, dn);
 		assertInvalidMatch("", dn);
+        assertInvalidMatch("  ", dn);
 		assertInvalidMatch("*bob", dn);
 		assertInvalidMatch(";`´$.,@", dn);
 		assertInvalidMatch("*, c=US\\", dn);
+        assertInvalidMatch(";*, c=US", dn);
+        assertInvalidMatch("*;;*, c=US", dn);
+        assertInvalidMatch("*; ;*, c=US", dn);
+        assertInvalidMatch("*, c=US;", dn);
+        assertInvalidMatch("*, c=US; ", dn);
 		assertInvalidMatch("*, c=\"US", dn);
+        assertInvalidMatch("-, c=US", dn);
 		assertInvalidMatch("*, cn=Bugs Bunny, o=ACME,", dn);
 	}
 
