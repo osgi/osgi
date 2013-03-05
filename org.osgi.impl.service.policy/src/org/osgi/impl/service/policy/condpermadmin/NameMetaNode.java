@@ -24,7 +24,7 @@ import org.osgi.service.dmt.MetaNode;
  *
  * Meta node for Name.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public final class NameMetaNode implements MetaNode {
 	public static final String NAME = "Name";

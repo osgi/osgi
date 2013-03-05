@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -31,7 +31,7 @@ import org.osgi.framework.*;
  * A bundle that registers a service with the marker interface
  * TBCService so it can be checked the exporter is correct.
  *
- * @version $Id$
+ * @author $Id$
  */
 public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {

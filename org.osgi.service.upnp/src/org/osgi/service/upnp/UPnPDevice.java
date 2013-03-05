@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import java.util.Dictionary;
  * If an application wants to query for a set of localized property values, it
  * has to use the method {@code UPnPDevice.getDescriptions(String locale)}.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public interface UPnPDevice {
 	/*

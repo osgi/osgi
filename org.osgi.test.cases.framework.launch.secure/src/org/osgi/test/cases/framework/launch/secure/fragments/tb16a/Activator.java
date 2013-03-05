@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -42,7 +42,7 @@ import org.osgi.framework.ServiceReference;
  * 
  * @author jorge.mascena@cesar.org.br
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class Activator implements BundleActivator{
 

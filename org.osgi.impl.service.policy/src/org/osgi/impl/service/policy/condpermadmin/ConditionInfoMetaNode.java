@@ -24,7 +24,7 @@ import org.osgi.service.dmt.MetaNode;
  *
  * Meta node for ConditionInfo.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public final class ConditionInfoMetaNode implements MetaNode {
 	public static final String CONDITIONINFO = "ConditionInfo";

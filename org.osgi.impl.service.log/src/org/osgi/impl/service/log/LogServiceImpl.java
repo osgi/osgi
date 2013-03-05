@@ -15,7 +15,7 @@ import org.osgi.service.log.*;
  * LogService class.
  * 
  * @author BJ Hargrave (hargrave@us.ibm.com)
- * @version $Id$
+ * @author $Id$
  */
 public class LogServiceImpl implements LogService {
 	protected Log		log;

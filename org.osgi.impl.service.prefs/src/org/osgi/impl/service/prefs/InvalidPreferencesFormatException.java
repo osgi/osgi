@@ -10,7 +10,7 @@ package org.osgi.impl.service.prefs;
  * Thrown to indicate that an operation could not complete because of a failure
  * in the backing store, or a failure to contact the backing store.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class InvalidPreferencesFormatException extends Exception {
 	/**

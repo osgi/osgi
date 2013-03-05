@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -31,7 +31,7 @@ package org.osgi.test.cases.framework.filter.tb1;
  * implements comparable. The overriden method compareTo
  * always returns 0 irrespective of the object passed to it.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class ObjectA implements Comparable {
 	String _value;

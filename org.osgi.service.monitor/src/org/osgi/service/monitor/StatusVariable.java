@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import java.util.Date;
  * core specification. This means that only the characters [-_.a-zA-Z0-9] may be
  * used. The length of the ID must not exceed 32 bytes when UTF-8 encoded.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public final class StatusVariable {
 	// ----- Public constants -----//

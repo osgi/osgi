@@ -24,7 +24,7 @@ import org.osgi.service.jndi.JNDIProviderAdmin;
  * used internally by the JNDI implementation.    
  *
  * 
- * @version $Id$
+ * @author $Id$
  */
 interface CloseableJNDIProviderAdmin extends JNDIProviderAdmin {
 	public void close();

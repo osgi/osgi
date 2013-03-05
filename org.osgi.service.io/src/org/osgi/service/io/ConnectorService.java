@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ import javax.microedition.io.Connector;
  * is called. This is the same algorithm used by
  * {@code BundleContext.getServiceReference}.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public interface ConnectorService {
 	/**

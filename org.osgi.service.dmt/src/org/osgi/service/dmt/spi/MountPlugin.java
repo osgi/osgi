@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ package org.osgi.service.dmt.spi;
  * to register this interface as a service, the Dmt Admin should use an
  * {@code instanceof} to detect that a Plugin is also a Mount Plugin.
  * 
- * @version $Id$
+ * @author $Id$
  * @since 2.0
  */
 public interface MountPlugin {

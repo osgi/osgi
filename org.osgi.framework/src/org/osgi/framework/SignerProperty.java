@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import java.util.Map;
  * during filter expression evaluation in the permission implies method.
  * 
  * @Immutable
- * @version $Id$
+ * @author $Id$
  */
 final class SignerProperty {
 	private final Bundle	bundle;

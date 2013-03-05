@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import org.osgi.framework.ServiceReference;
  * @see UserAdmin
  * @see UserAdminListener
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class UserAdminEvent {
 	private ServiceReference	ref;

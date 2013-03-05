@@ -24,7 +24,7 @@ import org.osgi.service.dmt.MetaNode;
  *
  * Meta node for  tree root.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public final class RootMetaNode implements MetaNode {
 	private final String description;

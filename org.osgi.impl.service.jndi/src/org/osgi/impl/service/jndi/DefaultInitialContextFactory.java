@@ -34,7 +34,7 @@ import javax.naming.spi.InitialContextFactory;
  * implementation of javax.naming.Context. 
  *
  * 
- * @version $Id$
+ * @author $Id$
  */
 class DefaultInitialContextFactory implements InitialContextFactory {
 
@@ -50,7 +50,7 @@ class DefaultInitialContextFactory implements InitialContextFactory {
 	 * all Context method invocations should throw a NoInitialContextFactory exception.  
 	 *
 	 * 
-	 * @version $Id$
+	 * @author $Id$
 	 */
 	private static class DefaultContextInvocationHandler implements InvocationHandler {
 

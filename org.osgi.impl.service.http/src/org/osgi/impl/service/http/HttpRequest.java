@@ -26,7 +26,7 @@ import org.osgi.service.http.HttpContext;
  * servlet. * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Id$ *
+ * @author $Id$ *
  * @see HttpResponse *
  * @see HttpTransaction
  */

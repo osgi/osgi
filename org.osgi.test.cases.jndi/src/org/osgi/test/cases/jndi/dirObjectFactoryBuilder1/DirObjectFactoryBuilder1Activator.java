@@ -26,7 +26,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.cases.jndi.provider.CTDirObjectFactoryBuilder;
 
 /**
- * @version $Id$
+ * @author $Id$
  */
 public class DirObjectFactoryBuilder1Activator implements BundleActivator {
 

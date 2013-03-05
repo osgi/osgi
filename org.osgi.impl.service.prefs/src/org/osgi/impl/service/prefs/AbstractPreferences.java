@@ -20,7 +20,7 @@ import org.osgi.service.prefs.*;
  * users of the <tt>Preferences</tt> facility should have no need to consult
  * this documentation. </strong>
  * 
- * @version $Id$
+ * @author $Id$
  */
 public abstract class AbstractPreferences implements Preferences {
 	/**

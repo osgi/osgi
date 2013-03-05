@@ -25,7 +25,7 @@ import org.osgi.service.dmt.MetaNode;
  *
  * Meta node for nodes right under root
  * 
- * @version $Id$
+ * @author $Id$
  */
 public final class LocationEntryMetaNode implements MetaNode {
 	public boolean can(int operation) { return (operation==CMD_DELETE)||(operation==CMD_ADD)||(operation==CMD_GET); }

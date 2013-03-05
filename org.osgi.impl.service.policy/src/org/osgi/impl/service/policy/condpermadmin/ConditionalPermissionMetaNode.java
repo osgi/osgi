@@ -24,7 +24,7 @@ import org.osgi.service.dmt.MetaNode;
  *
  * Meta node for nodes right under root
  * 
- * @version $Id$
+ * @author $Id$
  */
 public final class ConditionalPermissionMetaNode implements MetaNode {
 	public boolean can(int operation) { 

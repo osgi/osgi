@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import org.osgi.framework.ServiceException;
  * This exception is thrown when an invocation is made on a service reference
  * and a backing service is not available.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class ServiceUnavailableException extends ServiceException {
 	private static final long	serialVersionUID	= 1L;

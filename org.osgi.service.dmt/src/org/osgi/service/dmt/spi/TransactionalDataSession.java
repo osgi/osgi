@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ import org.osgi.service.dmt.DmtException;
  * Provides atomic read-write access to the part of the tree handled by the
  * plugin that created this session.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public interface TransactionalDataSession extends ReadWriteDataSession {
 

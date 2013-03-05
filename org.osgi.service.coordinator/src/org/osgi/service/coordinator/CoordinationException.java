@@ -19,7 +19,7 @@ package org.osgi.service.coordinator;
 /**
  * Unchecked exception which may be thrown by a Coordinator implementation.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class CoordinationException extends RuntimeException {
 	private static final long	serialVersionUID	= 1L;

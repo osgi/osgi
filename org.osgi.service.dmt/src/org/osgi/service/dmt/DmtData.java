@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
 
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,7 +40,7 @@ import java.util.TimeZone;
  * encoding of the data according to the specified format.
  * 
  * @Immutable
- * @version $Id$
+ * @author $Id$
  */
 public final class DmtData {
 

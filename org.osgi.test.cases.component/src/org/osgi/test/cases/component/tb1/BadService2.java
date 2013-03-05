@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -30,7 +30,7 @@ package org.osgi.test.cases.component.tb1;
  * because of the bad XML file, not the missing implementation
  *
  * @author Valentin Valchev
- * @version $Id$
+ * @author $Id$
  */
 public class BadService2 {
 	// empty

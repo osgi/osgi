@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@ import java.util.Dictionary;
  * It provides function to get the absolute mounted uri and a shortcut method to
  * post events via the DmtAdmin.
  * 
- * @version $Id$
+ * @author $Id$
  * @since 2.0
  */
 public interface MountPoint {

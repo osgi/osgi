@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,7 +44,7 @@ package org.osgi.service.application;
  * startup arguments is invalid, for example its type is not permitted.</li>
  * </ul>
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class ApplicationException extends Exception {
 	private static final long	serialVersionUID						= -7173190453622508207L;

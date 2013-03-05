@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,7 @@ import org.osgi.resource.Wiring;
  * return a consistent set of capabilities, wires and effective requirements.
  * 
  * @ThreadSafe
- * @version $Id$
+ * @author $Id$
  */
 public abstract class ResolveContext {
 	/**

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ import java.util.Map;
  * @see "Core Specification, Filters, for a description of the filter string syntax."
  * @ThreadSafe
  * @noimplement
- * @version $Id$
+ * @author $Id$
  */
 public interface Filter {
 	/**

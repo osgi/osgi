@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -32,7 +32,7 @@ import org.osgi.framework.BundleContext;
  * A bundle activator to execute some tests
  * 
  * @author left
- * @version $Id$
+ * @author $Id$
  */
 public class Activator implements BundleActivator {
 

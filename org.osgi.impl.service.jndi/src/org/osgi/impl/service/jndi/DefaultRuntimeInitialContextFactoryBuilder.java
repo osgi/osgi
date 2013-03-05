@@ -33,7 +33,7 @@ import javax.naming.spi.InitialContextFactoryBuilder;
  * This Builder interface must be registered as a service by the JNDI
  * implementation.
  * 
- * @version $Id$
+ * @author $Id$
  */
 class DefaultRuntimeInitialContextFactoryBuilder implements
 		InitialContextFactoryBuilder {

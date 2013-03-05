@@ -16,7 +16,7 @@ package org.osgi.impl.service.http;
  * * A base64 encode/decoder * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Id$
+ * @author $Id$
  */
 public final class Base64 {
 	private static final char	encodeTable[]	= {'A', 'B', 'C', 'D', 'E',

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import javax.sql.XADataSource;
  * OSGi service with the JDBC driver class name in the
  * {@link #OSGI_JDBC_DRIVER_CLASS} property.
  * 
- * @version $Id$
+ * @author $Id$
  * @ThreadSafe
  */
 public interface DataSourceFactory {

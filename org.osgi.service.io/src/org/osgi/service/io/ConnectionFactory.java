@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import javax.microedition.io.Connection;
  * selected Connection Factory will then be called to create the actual
  * {@code Connection} object.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public interface ConnectionFactory {
 	/**

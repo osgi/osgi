@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import java.util.Iterator;
  * with the given prefix. The &quot;*&quot; target means the adapter can create
  * a session in the name of any principal.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class DmtPrincipalPermission extends Permission {
 	private static final long	serialVersionUID	= 6388752177325038332L;
