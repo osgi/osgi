@@ -138,7 +138,7 @@ class OSGiServiceListContext extends NotSupportedContext {
 	 * from the Context.list() operation.  
 	 *
 	 * 
-	 * @version $Id$
+	 * @author $Id$
 	 */
 	private static class ListNamingEnumeration extends ServiceBasedNamingEnumeration {
 
@@ -176,7 +176,7 @@ class OSGiServiceListContext extends NotSupportedContext {
 	 * when the caller is finished with the services in the enumeration.  
 	 *
 	 * 
-	 * @version $Id$
+	 * @author $Id$
 	 */
 	private static class ListBindingsNamingEnumeration extends ServiceBasedNamingEnumeration {
 		

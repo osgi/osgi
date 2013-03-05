@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2008, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2008, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@ package org.osgi.service.blueprint.container;
  * This exception is thrown when a configuration-related error occurs during
  * creation of a Blueprint Container.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class ComponentDefinitionException extends RuntimeException {
 	private static final long	serialVersionUID	= 1L;

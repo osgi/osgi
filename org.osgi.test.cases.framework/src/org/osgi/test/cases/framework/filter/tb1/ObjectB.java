@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -32,7 +32,7 @@ package org.osgi.test.cases.framework.filter.tb1;
  * that receives a single <code>java.lang.String</code> argument. It
  * also overrides the <code>equals</code> method.  
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class ObjectB {
 	String _value;

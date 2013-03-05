@@ -25,7 +25,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.cases.jndi.provider.ct.ctURLContextFactory;
 
 /**
- * @version $Id$
+ * @author $Id$
  */
 public class URLContext1Activator implements BundleActivator {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi (OSGI)
  * Specification may be subject to third party intellectual property rights,
@@ -32,7 +32,7 @@ import org.osgi.service.io.ConnectionFactory;
  * scheme providers are stored.
  * 
  * @author OSGi Alliance
- * @version $Id$
+ * @author $Id$
  */
 class IOHolder {
 	ConnectionFactory	provider;

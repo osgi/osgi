@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ import org.osgi.jmx.JmxConstants;
  * emits events that clients can use to get notified of the changes in the
  * bundle state of the framework.
  * 
- * @version $Id$
+ * @author $Id$
  * @ThreadSafe
  */
 public interface BundleStateMBean {

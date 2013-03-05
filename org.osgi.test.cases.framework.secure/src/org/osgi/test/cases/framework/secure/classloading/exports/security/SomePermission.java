@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -30,7 +30,7 @@ import java.security.Permission;
 /**
  * A simple permission used in tests
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class SomePermission extends Permission {
 

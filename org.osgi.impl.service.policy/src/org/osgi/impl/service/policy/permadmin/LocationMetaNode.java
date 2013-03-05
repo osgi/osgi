@@ -25,7 +25,7 @@ import org.osgi.service.dmt.MetaNode;
  *
  * Meta node for Location.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public final class LocationMetaNode implements MetaNode {
 	public static final String LOCATION = "Location";

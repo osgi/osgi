@@ -27,7 +27,7 @@ import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
 
 /**
- * @version $Id$
+ * @author $Id$
  */
 public class CTBindingEnumeration implements NamingEnumeration {
 	

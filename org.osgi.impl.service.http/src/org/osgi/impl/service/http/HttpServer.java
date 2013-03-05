@@ -27,7 +27,7 @@ import org.osgi.service.http.NamespaceException;
  * to serverSock.accept() until the server is stoped. * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Id$ * *
+ * @author $Id$ * *
  * @see HttpTransaction *
  */
 public final class HttpServer extends Thread {

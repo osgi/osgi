@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2002, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2002, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import java.util.Hashtable;
  * to the implementations of the {@code BasicPermission} class.
  * 
  * @ThreadSafe
- * @version $Id$
+ * @author $Id$
  */
 final public class WirePermission extends BasicPermission {
 	static final long			serialVersionUID	= -5583709391516569321L;

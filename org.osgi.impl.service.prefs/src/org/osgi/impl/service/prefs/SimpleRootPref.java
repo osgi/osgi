@@ -15,7 +15,7 @@ import org.osgi.service.prefs.BackingStoreException;
  * Root node for a tree of SimplePreferences nodes. This implementation passes
  * all flush() commands to the root node which saves out the whole tree.
  * 
- * @version $Id$
+ * @author $Id$
  */
 class SimpleRootPref extends SimplePreferences {
 	private final File	preferencesFile;

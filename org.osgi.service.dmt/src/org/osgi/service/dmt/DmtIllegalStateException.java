@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2006, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2006, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ package org.osgi.service.dmt;
  * Unchecked illegal state exception. This class is used in DMT because
  * java.lang.IllegalStateException does not exist in CLDC.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class DmtIllegalStateException extends RuntimeException {
 	private static final long	serialVersionUID	= 2015244852018469700L;

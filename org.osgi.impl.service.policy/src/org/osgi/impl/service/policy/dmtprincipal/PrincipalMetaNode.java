@@ -24,7 +24,7 @@ import org.osgi.service.dmt.MetaNode;
  *
  * Meta node for Principal.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public final class PrincipalMetaNode implements MetaNode {
 	public static final String PRINCIPAL = "Principal";

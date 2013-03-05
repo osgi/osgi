@@ -24,7 +24,7 @@ import javax.naming.Name;
 import javax.naming.spi.ObjectFactory;
 
 /**
- * @version $Id$
+ * @author $Id$
  */
 public class ctURLContextFactory implements ObjectFactory {
 

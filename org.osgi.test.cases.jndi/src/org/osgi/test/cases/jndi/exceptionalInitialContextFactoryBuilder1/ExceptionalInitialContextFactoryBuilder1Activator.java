@@ -29,7 +29,7 @@ import org.osgi.test.cases.jndi.provider.CTExceptionalInitialContextFactoryBuild
 import org.osgi.test.cases.jndi.provider.CTInitialContextFactoryBuilder;
 
 /** 
- * @version $Id$
+ * @author $Id$
  */
 public class ExceptionalInitialContextFactoryBuilder1Activator implements
 		BundleActivator {

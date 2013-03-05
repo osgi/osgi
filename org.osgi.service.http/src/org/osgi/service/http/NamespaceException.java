@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ package org.osgi.service.http;
  * to register a servlet or resources into the URI namespace of the Http
  * Service. This exception indicates that the requested alias already is in use.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class NamespaceException extends Exception {
 	static final long	serialVersionUID	= 7235606031147877747L;

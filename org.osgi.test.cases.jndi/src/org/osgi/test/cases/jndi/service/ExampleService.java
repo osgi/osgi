@@ -18,7 +18,7 @@
 package org.osgi.test.cases.jndi.service;
 
 /**
- * @version $Id$
+ * @author $Id$
  */
 public interface ExampleService {
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import org.osgi.framework.ServiceReference;
  * method bids the highest for a particular {@code Device} object will be
  * instructed by the device manager to attach to the {@code Device} object.
  * 
- * @version $Id$
+ * @author $Id$
  * @see Device
  * @see DriverLocator
  * @ThreadSafe

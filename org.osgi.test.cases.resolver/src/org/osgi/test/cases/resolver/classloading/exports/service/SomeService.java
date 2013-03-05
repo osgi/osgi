@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -31,7 +31,7 @@ import org.osgi.framework.Bundle;
  * A simple service used in tests
  * 
  * @author left
- * @version $Id$
+ * @author $Id$
  */
 public interface SomeService {
 

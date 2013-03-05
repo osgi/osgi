@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ import org.osgi.framework.hooks.service.ListenerHook.ListenerInfo;
  * 
  * @ThreadSafe
  * @since 1.1
- * @version $Id$
+ * @author $Id$
  */
 
 public interface EventListenerHook {

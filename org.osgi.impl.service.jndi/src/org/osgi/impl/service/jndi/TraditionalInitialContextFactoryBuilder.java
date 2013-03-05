@@ -63,7 +63,7 @@ class TraditionalInitialContextFactoryBuilder implements InitialContextFactoryBu
 	 * cannot be located, a NoInitialContextException is thrown.  
 	 *
 	 * 
-	 * @version $Id$
+	 * @author $Id$
 	 */
 	private static class TraditionalInitialContextFactory implements InitialContextFactory {
 

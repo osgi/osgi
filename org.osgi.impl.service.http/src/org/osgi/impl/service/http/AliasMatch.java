@@ -20,7 +20,7 @@ import java.net.URL;
  * to getResource(). * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Id$ *
+ * @author $Id$ *
  * @see AliasRegistration
  */
 public final class AliasMatch {

@@ -15,7 +15,7 @@ import org.osgi.service.prefs.BackingStoreException;
  * achieves persistence by using a text-file-based offline backup facility,
  * storing the entire preference tree into a single file.
  * 
- * @version $Id$
+ * @author $Id$
  */
 class SimplePreferences extends AbstractPreferences {
 	private static final int	INIT_HASHTABLE_SIZE	= 3;

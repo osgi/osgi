@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ import org.osgi.framework.ServiceReference;
  * 
  * @see ConfigurationListener
  * @Immutable
- * @version $Id$
+ * @author $Id$
  * @since 1.2
  */
 public class ConfigurationEvent {

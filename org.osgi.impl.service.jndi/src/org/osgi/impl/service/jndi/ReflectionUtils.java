@@ -38,7 +38,7 @@ import org.osgi.framework.ServiceReference;
  * Utility class for reflection calls made by the JNDI implementation
  *
  * 
- * @version $Id$
+ * @author $Id$
  */
 class ReflectionUtils {
 

@@ -19,7 +19,7 @@ import javax.servlet.http.*;
  * * Implements session handling for servlets. * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Id$
+ * @author $Id$
  */
 public final class HttpSessionImpl implements HttpSession {
 	private String			sessionId;

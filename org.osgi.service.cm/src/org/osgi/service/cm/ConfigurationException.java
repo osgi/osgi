@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,7 @@ package org.osgi.service.cm;
  * An {@code Exception} class to inform the Configuration Admin service of
  * problems with configuration data.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class ConfigurationException extends Exception {
 	static final long		serialVersionUID	= -1690090413441769377L;

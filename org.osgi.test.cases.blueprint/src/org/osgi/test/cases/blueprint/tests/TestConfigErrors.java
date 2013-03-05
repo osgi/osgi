@@ -27,7 +27,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * This class contains tests related to ModuleContext creation errors.
  *
  * @author left
- * @version $Id$
+ * @author $Id$
  */
 public class TestConfigErrors extends DefaultTestBundleControl {
     /*

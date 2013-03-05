@@ -23,7 +23,7 @@ import org.osgi.service.http.*;
  * HttpService. * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Id$
+ * @author $Id$
  */
 public final class HttpServiceImpl implements HttpService {
 	private HttpServer		httpServer;

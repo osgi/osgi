@@ -26,7 +26,7 @@ import org.osgi.service.http.HttpContext;
  * ServletContext * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Id$ *
+ * @author $Id$ *
  * @see HttpContext
  */
 public final class ServletContextImpl implements ServletContext {

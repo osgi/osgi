@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -32,7 +32,7 @@ import org.osgi.test.cases.component.service.TestObject;
 import org.osgi.test.cases.component.tb3.ServiceConsumerEvent;
 
 /**
- * @version $Id$
+ * @author $Id$
  */
 public class ServiceConsumerEventImpl extends DefaultBindImpl implements
 		ServiceConsumerEvent {

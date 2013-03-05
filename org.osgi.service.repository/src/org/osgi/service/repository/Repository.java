@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2006, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2006, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,7 +39,7 @@ import org.osgi.resource.Resource;
  * 
  * @ThreadSafe
  * @noimplement
- * @version $Id$
+ * @author $Id$
  */
 public interface Repository {
 	/**
