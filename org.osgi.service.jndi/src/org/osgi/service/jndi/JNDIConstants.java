@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package org.osgi.service.jndi;
 /**
  * Constants for the JNDI implementation.
  * 
- * @version $Id$
+ * @author $Id$
  * @Immutable
  */
 public class JNDIConstants {

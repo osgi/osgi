@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -47,7 +47,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * TODO Add Javadoc comment for this type.
  *
  * @testcase org.osgi.service.provisioning
- * @version $Id$
+ * @author $Id$
  */
 public class Activator implements BundleActivator, HttpContext {
 	ServiceTracker	tracker;

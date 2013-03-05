@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,7 +29,7 @@ import org.osgi.service.dmt.security.DmtPermission;
  * for the nodes in the {@code nodes} and {@code newNodes} property in the Dmt
  * Event.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public interface DmtEventListener {
 

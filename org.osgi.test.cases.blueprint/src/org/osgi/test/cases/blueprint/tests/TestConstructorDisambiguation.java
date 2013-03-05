@@ -37,7 +37,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * This class contains tests specificcally for testing signature disambiguation
  * scenarios
  *
- * @version $Id$
+ * @author $Id$
  */
 public class TestConstructorDisambiguation extends DefaultTestBundleControl {
     /*

@@ -16,7 +16,7 @@ import java.util.*;
  * LogReaderService class.
  * 
  * @author BJ Hargrave (hargrave@us.ibm.com)
- * @version $Id$
+ * @author $Id$
  */
 public class LogReaderServiceImpl implements LogReaderService {
 	protected Log		log;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -34,7 +34,7 @@ import org.osgi.framework.Bundle;
  *
  * Test class used for running test related to URL permissions.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class TestClass {
 	/**

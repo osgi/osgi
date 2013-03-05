@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ package org.osgi.service.cm;
  * {@code ServicePermission[SynchronousConfigurationListener,REGISTER]} to
  * register a {@code SynchronousConfigurationListener} service.
  * 
- * @version $Id$
+ * @author $Id$
  * @since 1.5
  */
 public interface SynchronousConfigurationListener extends ConfigurationListener {

@@ -26,7 +26,7 @@ import org.osgi.framework.ServiceReference;
  * for the purpose of proxying OSGi services.  
  *
  * 
- * @version $Id$
+ * @author $Id$
  */
 interface InvocationHandlerFactory {
 	/**

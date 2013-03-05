@@ -25,7 +25,7 @@ import org.osgi.service.dmt.MetaNode;
  *
  * Meta node for the /Default node
  * 
- * @version $Id$
+ * @author $Id$
  */
 public final class DefaultMetaNode implements MetaNode {
 	public static final String DEFAULT = "Default";

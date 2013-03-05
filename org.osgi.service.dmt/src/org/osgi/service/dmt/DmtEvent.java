@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ package org.osgi.service.dmt;
  * nodes. In case of {@link #COPIED} or {@link #RENAMED} events, the event
  * carries the list of new nodes as well.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public interface DmtEvent {
 

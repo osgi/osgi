@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi (OSGI)
  * Specification may be subject to third party intellectual property rights,
@@ -44,7 +44,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * ConnectorService implementation.
  * 
  * @author OSGi Alliance
- * @version $Id$
+ * @author $Id$
  */
 class ConnectorServiceImpl implements ConnectorService {
 	private ServiceTracker	factoryTracker;

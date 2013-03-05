@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,7 +27,7 @@ import org.osgi.framework.ServiceReference;
  * service, or if it returns an invalid result, or throws an {@code Exception},
  * the device manager uses the default selection strategy.
  * 
- * @version $Id$
+ * @author $Id$
  * @since 1.1
  * @ThreadSafe
  */

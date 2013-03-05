@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,7 @@ import java.lang.reflect.Proxy;
  * object. The delegate object does NOT need to implement the interface and does
  * NOT need to implement all the methods on the interface.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class MockFactory {
 	private MockFactory() {

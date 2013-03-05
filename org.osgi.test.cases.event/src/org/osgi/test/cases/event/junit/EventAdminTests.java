@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -51,7 +51,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * started by the EventTestCase when it is started. It performs the various
  * generic event mechanism tests and reports back to the EventTestCase.
  *
- * @version $Id$
+ * @author $Id$
  */
 public class EventAdminTests extends DefaultTestBundleControl {
 

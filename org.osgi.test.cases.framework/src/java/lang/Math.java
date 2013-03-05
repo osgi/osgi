@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -29,7 +29,7 @@ package java.lang;
  * Class used to test class loading search order
  * 
  * @author left
- * @version $Id$
+ * @author $Id$
  */
 public class Math {
 

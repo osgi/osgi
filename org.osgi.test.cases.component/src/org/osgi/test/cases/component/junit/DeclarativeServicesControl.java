@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -57,7 +57,7 @@ import org.osgi.util.tracker.ServiceTracker;
  * This is the bundle initially installed and started by the TestCase. It
  * performs the test methods of the declarative services test case.
  *
- * @version $Id$
+ * @author $Id$
  */
 public class DeclarativeServicesControl extends DefaultTestBundleControl
 		implements LogListener {

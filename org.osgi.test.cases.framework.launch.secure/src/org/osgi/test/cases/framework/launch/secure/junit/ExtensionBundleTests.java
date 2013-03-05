@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -39,7 +39,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  * Test cases for testing fragment bundles and extension bundles.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class ExtensionBundleTests extends LaunchTest {
 	private Framework framework;

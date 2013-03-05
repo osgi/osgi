@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -30,7 +30,7 @@ import org.osgi.test.cases.component.tb4.NamedService;
 
 /**
  * @author Valentin Valchev
- * @version $Id$
+ * @author $Id$
  */
 public class NamedServiceFactory implements NamedService {
   private String name = "name not init";

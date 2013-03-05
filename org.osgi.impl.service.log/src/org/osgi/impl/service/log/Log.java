@@ -16,7 +16,7 @@ import java.util.*;
  * Main class for LogService and LogReaderService.
  * 
  * @author BJ Hargrave (hargrave@us.ibm.com)
- * @version $Id$
+ * @author $Id$
  */
 public class Log implements BundleActivator, BundleListener, ServiceListener,
 		FrameworkListener {

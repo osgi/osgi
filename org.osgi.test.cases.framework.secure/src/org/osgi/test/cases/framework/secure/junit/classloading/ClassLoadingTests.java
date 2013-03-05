@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -33,7 +33,7 @@ import org.osgi.test.support.wiring.Wiring;
  * This class contains tests related with the framework class loading policies.
  * 
  * @author left
- * @version $Id$
+ * @author $Id$
  */
 public class ClassLoadingTests extends DefaultTestBundleControl {
 	

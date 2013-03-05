@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,7 +45,7 @@ import java.util.Vector;
  * parameters, and the {@code printStackTrace(PrintWriter)} method is extended
  * to print the stack trace of all causing throwables as well.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class DmtException extends Exception {
 	private static final long	serialVersionUID			= -63006267148118655L;

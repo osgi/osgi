@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import java.util.StringTokenizer;
  * commands are allowed on the designated target(s) by the owner of the
  * permission.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class MonitorPermission extends Permission {
 

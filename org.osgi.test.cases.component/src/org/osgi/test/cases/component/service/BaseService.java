@@ -20,7 +20,7 @@ import java.util.Dictionary;
 /**
  * Dummy service to check exporter
  * 
- * @version $Id$
+ * @author $Id$
  */
 public interface BaseService {
 

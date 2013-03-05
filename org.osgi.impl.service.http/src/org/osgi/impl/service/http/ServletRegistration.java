@@ -25,7 +25,7 @@ import org.osgi.service.http.*;
  * supplying a ServletConfig and a ServletContext. * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Id$
+ * @author $Id$
  */
 public class ServletRegistration extends AliasRegistration implements
 		ServletConfig {

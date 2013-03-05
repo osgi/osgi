@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import javax.naming.directory.Attributes;
  * 
  * This service will typically be used by OSGi-aware JNDI Service Providers.
  * 
- * @version $Id$
+ * @author $Id$
  * @ThreadSafe
  */
 public interface JNDIProviderAdmin {

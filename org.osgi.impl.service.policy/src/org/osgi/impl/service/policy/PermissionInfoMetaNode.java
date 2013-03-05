@@ -25,7 +25,7 @@ import org.osgi.service.dmt.MetaNode;
  *
  * Meta node for PermissionInfo.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public final class PermissionInfoMetaNode implements MetaNode {
 	public static final String PERMISSIONINFO = "PermissionInfo";

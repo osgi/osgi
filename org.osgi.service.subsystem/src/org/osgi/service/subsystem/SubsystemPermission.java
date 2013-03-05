@@ -64,7 +64,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * Filter attribute names are processed in a case sensitive manner.
  * 
  * @ThreadSafe
- * @version $Id$
+ * @author $Id$
  */
 
 public final class SubsystemPermission extends BasicPermission {

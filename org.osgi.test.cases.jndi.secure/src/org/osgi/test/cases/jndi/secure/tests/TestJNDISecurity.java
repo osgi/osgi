@@ -37,7 +37,7 @@ import org.osgi.test.cases.jndi.secure.provider.CTTestObject;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /** 
- * @version $Id$
+ * @author $Id$
  */
 public class TestJNDISecurity extends DefaultTestBundleControl {
 	

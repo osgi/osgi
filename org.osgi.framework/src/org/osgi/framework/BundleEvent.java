@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ import java.util.EventObject;
  * @Immutable
  * @see BundleListener
  * @see SynchronousBundleListener
- * @version $Id$
+ * @author $Id$
  */
 
 public class BundleEvent extends EventObject {

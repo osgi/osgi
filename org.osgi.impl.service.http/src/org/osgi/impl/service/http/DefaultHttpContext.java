@@ -23,7 +23,7 @@ import org.osgi.service.http.HttpContext;
  * HttpService interface. * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Id$
+ * @author $Id$
  */
 public final class DefaultHttpContext implements HttpContext {
 	private Log		log	= new Log("DefaultHttpContext");

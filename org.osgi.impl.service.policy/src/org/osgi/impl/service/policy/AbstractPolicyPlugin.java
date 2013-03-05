@@ -33,7 +33,7 @@ import org.osgi.service.dmt.spi.TransactionalDataSession;
  *
  * dmt plugin base class for policy
  * 
- * @version $Id$
+ * @author $Id$
  */
 public abstract class AbstractPolicyPlugin implements TransactionalDataSession {
 	/**

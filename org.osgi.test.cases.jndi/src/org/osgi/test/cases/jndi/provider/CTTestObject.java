@@ -26,7 +26,7 @@ import javax.naming.directory.Attributes;
 /**
  * Test Object that can be returned by an ObjectFactory
  * 
- * @version $Id$
+ * @author $Id$
  */
 
 public class CTTestObject implements Referenceable {

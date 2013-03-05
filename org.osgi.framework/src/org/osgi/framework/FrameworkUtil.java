@@ -43,7 +43,7 @@ import javax.security.auth.x500.X500Principal;
  * 
  * @since 1.3
  * @ThreadSafe
- * @version $Id$
+ * @author $Id$
  */
 public class FrameworkUtil {
 	/**

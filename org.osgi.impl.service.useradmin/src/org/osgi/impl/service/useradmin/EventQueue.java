@@ -17,7 +17,7 @@ import org.osgi.service.useradmin.*;
  * 
  * @author BJ Hargrave (hargrave@us.ibm.com)
  * @author Benjamin Reed (breed@almaden.ibm.com)
- * @version $Id$
+ * @author $Id$
  */
 public class EventQueue extends Thread {
 	/** event queue */

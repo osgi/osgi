@@ -30,7 +30,7 @@ import org.osgi.test.cases.jndi.secure.provider.CTInitialContextFactoryBuilder;
 import org.osgi.test.cases.jndi.secure.provider.CTObjectFactoryBuilder;
 
 /**
- * @version $Id$
+ * @author $Id$
  */
 public class BuilderBundleActivator implements BundleActivator {
 

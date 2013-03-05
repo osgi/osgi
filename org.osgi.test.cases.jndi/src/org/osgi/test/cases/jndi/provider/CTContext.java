@@ -33,7 +33,7 @@ import javax.naming.Referenceable;
 import javax.naming.spi.NamingManager;
 
 /**
- * @version $Id$
+ * @author $Id$
  */
 public class CTContext implements Context {
 	

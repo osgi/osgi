@@ -38,7 +38,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  * A set of methods to test the functionality of the JNDIProviderAdmin interface
  * 
- * @version $Id$Date: 2009-12-14 16:08:27 -0500 (Mon, 14 Dec
+ * @author $Id$Date: 2009-12-14 16:08:27 -0500 (Mon, 14 Dec
  *          2009) $
  * 
  */

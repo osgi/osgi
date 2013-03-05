@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import java.util.Iterator;
  * the given prefix. The &quot;*&quot; target means that alerts can be sent to
  * any destination.
  * 
- * @version $Id$
+ * @author $Id$
  */
 public class AlertPermission extends Permission {
 	private static final long	serialVersionUID	= -3206463101788245739L;

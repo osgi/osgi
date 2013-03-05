@@ -22,7 +22,7 @@ import org.osgi.service.http.*;
  * * Base class for all registrations. * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
- * @version $Id$
+ * @author $Id$
  */
 public abstract class AliasRegistration {
 	String					alias;				// Alias as registered

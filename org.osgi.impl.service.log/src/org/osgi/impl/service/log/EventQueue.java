@@ -16,7 +16,7 @@ import org.osgi.service.log.*;
  * LogListeners.
  * 
  * @author BJ Hargrave (hargrave@us.ibm.com)
- * @version $Id$
+ * @author $Id$
  */
 public class EventQueue extends Thread {
 	/** event queue */

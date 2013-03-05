@@ -32,7 +32,7 @@ import org.osgi.framework.ServiceReference;
  * 
  *
  * 
- * @version $Id$
+ * @author $Id$
  */
 abstract class ServiceBasedNamingEnumeration implements NamingEnumeration {
 

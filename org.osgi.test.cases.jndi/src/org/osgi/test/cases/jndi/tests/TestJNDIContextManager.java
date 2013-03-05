@@ -38,7 +38,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  * A set of methods to test the functionality of the JNDIContextManager interface
  * 
- * @version $Id$
+ * @author $Id$
  * 
  */
 
