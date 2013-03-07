@@ -1,0 +1,9 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd	
+
+#-nobundles=true
+#nodeploy=true
+Private-Package: ${p}.*; -split-package:=first
+
+-buildpath = \
+	ee.j2se;					version=1.5
