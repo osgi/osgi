@@ -57,8 +57,17 @@ import java.util.Dictionary;
  * <p>
  * The {@code BundleContext} object is only valid during the execution of its
  * context bundle; that is, during the period from when the context bundle is in
- * the {@code STARTING}, {@code STOPPING}, and {@code ACTIVE} bundle states. If
- * the {@code BundleContext} object is used subsequently, an
+ * the {@code STARTING}, {@code STOPPING}, and {@code ACTIVE} bundle states.
+ * However, the {@code BundleContext} object become invalid after
+ * {@link BundleActivator#stop(BundleContext)} returns (if the bundle has a
+ * Bundle Activator). The {@code BundleContext} object becomes invalid before
+ * disposing of any remaining registered services and releasing any remaining
+ * services in use. Since those activities can result in other bundles being
+ * called (for example, {@link ServiceListener}s for
+ * {@link ServiceEvent#UNREGISTERING} events and {@link ServiceFactory}s for
+ * unget operations), those other bundles can observe the stopping bundle in the
+ * {@code STOPPING} state but with an invalid {@code BundleContext} object. If
+ * the {@code BundleContext} object is used after it has become invalid, an
  * {@code IllegalStateException} must be thrown. The {@code BundleContext}
  * object must never be reused after its context bundle is stopped.
  * 
