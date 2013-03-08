@@ -1225,7 +1225,8 @@ requirement         ::= name-space ( ';' parameter )* </programlisting>
           specifies both attributes at the required value, not two capabilties
           that each specify one of the attributes correctly. A filter is
           optional, if no filter directive is specified the requirement always
-          matches.</para>
+          matches. The attribute names in the filter expression are used to
+          locate capability attributes in a case sensitive manner.</para>
         </listitem>
 
         <listitem>
