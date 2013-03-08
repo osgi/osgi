@@ -318,9 +318,6 @@ public interface Bundle extends Comparable<Bundle> {
 	 * <li>A {@code BundleException} is then thrown.</li>
 	 * </ul>
 	 * </li>
-	 * <li>If this bundle's state is {@code UNINSTALLED}, because this bundle
-	 * was uninstalled while the {@code BundleActivator.start} method was
-	 * running, a {@code BundleException} is thrown.</li>
 	 * <li>This bundle's state is set to {@code ACTIVE}.</li>
 	 * <li>A bundle event of type {@link BundleEvent#STARTED} is fired.</li>
 	 * </ol>
