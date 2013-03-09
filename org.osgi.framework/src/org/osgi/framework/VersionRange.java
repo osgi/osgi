@@ -378,8 +378,9 @@ public class VersionRange {
 	 * @return The string representation of this version range.
 	 */
 	public String toString() {
-		if (versionRangeString != null) {
-			return versionRangeString;
+		String s = versionRangeString;
+		if (s != null) {
+			return s;
 		}
 		String leftVersion = left.toString();
 		if (right == null) {
@@ -403,13 +404,14 @@ public class VersionRange {
 	 * @return An integer which is a hash code value for this object.
 	 */
 	public int hashCode() {
-		if (hash != 0) {
-			return hash;
+		int h = hash;
+		if (h != 0) {
+			return h;
 		}
 		if (empty) {
 			return hash = 31;
 		}
-		int h = 31 + (leftClosed ? 7 : 5);
+		h = 31 + (leftClosed ? 7 : 5);
 		h = 31 * h + left.hashCode();
 		if (right != null) {
 			h = 31 * h + right.hashCode();

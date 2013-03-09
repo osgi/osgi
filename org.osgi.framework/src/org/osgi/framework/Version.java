@@ -289,8 +289,9 @@ public class Version implements Comparable<Version> {
 	 * @return The string representation of this version identifier.
 	 */
 	String toString0() {
-		if (versionString != null) {
-			return versionString;
+		String s = versionString;
+		if (s != null) {
+			return s;
 		}
 		int q = qualifier.length();
 		StringBuffer result = new StringBuffer(20 + q);
@@ -312,10 +313,11 @@ public class Version implements Comparable<Version> {
 	 * @return An integer which is a hash code value for this object.
 	 */
 	public int hashCode() {
-		if (hash != 0) {
-			return hash;
+		int h = hash;
+		if (h != 0) {
+			return h;
 		}
-		int h = 31 * 17;
+		h = 31 * 17;
 		h = 31 * h + major;
 		h = 31 * h + minor;
 		h = 31 * h + micro;
