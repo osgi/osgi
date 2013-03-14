@@ -1085,8 +1085,12 @@ Password <phrase role="symbol">↔</phrase> <xref
             <row>
               <entry spanname="element"><code>Option</code></entry>
 
-              <entry colname="col6"><para>One option label/value for the
-              options in an <code>AD</code>.</para></entry>
+              <entry colname="col6"><para>One option label/value for the 
+              options in an <code>AD</code>. Options are exclusive. The <xref
+              linkend="org.osgi.service.metatype.AttributeDefinition.validate-String-"
+              xrefstyle="hyperlink"/> method must verify that an attribute value
+              matches one of the option values when present.</para>
+              </entry>
             </row>
 
             <row>
