@@ -2684,36 +2684,6 @@ B: Bundle-SymbolicName: B
     resolving process is an iterative process that searches through the
     solution space.</para>
 
-    <para>If a module has both import and export definitions for the
-    <emphasis>same</emphasis> package, then the Framework needs to decide
-    which to choose.</para>
-
-    <para>It must first try to resolve the overlapping import definition. The
-    following outcomes are possible:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para><emphasis>External</emphasis> – If this resolves to an export
-        statement in another bundle, then the overlapping export definition in
-        this bundle is discarded.</para>
-      </listitem>
-
-      <listitem>
-        <para><emphasis>Internal</emphasis> – If it is resolved to an export
-        statement in this module, then the overlapping import definition in
-        this module is discarded.</para>
-      </listitem>
-
-      <listitem>
-        <para><emphasis>Unresolved</emphasis> – There is no matching export
-        definition. In this case the framework is free to discard either the
-        overlapping export definition or overlapping import definition in this
-        bundle. If the export definition is discarded and the import
-        definition is not optional then the bundle will fail to
-        resolve.</para>
-      </listitem>
-    </itemizedlist>
-
     <para>A bundle can be resolved if the following conditions are met:</para>
 
     <itemizedlist>
@@ -2778,6 +2748,45 @@ B: Bundle-SymbolicName: B
         with a higher ID.</para>
       </listitem>
     </itemizedlist>
+
+    <section>
+      <title>Importing and Exporting the Same Package</title>
+
+      <para>If a bundle has both import and export definitions for the
+      <emphasis>same</emphasis> package, then the Framework needs to decide
+      which to choose.</para>
+
+      <para>It must first try to resolve the overlapping import definition.
+      The following outcomes are possible:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>External</emphasis> – If this resolves to an export
+          statement in another bundle, then the overlapping export definition
+          in this bundle is discarded.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Internal</emphasis> – If it is resolved to an export
+          statement in this bundle, then the overlapping import definition in
+          this bundle is discarded.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Unresolved</emphasis> – There is no matching export
+          definition. In this case the framework is free to discard either the
+          overlapping export definition or overlapping import definition in
+          this bundle. If the export definition is discarded and the import
+          definition is not optional then the bundle will fail to
+          resolve.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The above only applies to the import and export package
+      definitions of a bundle. For namespaces other than
+      <code>osgi.wiring.package</code>, a requirement definition of a bundle
+      may be wired to a capability definition of that same bundle.</para>
+    </section>
   </section>
 
   <section xml:id="i2570775">
