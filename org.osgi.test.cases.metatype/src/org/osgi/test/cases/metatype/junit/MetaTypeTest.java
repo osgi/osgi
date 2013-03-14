@@ -16,14 +16,27 @@
 package org.osgi.test.cases.metatype.junit;
 
 import org.osgi.service.metatype.AttributeDefinition;
+import org.osgi.service.metatype.ObjectClassDefinition;
 import org.osgi.test.support.OSGiTestCase;
 
 public abstract class MetaTypeTest extends OSGiTestCase {
-	public void assertAttributeBad(AttributeDefinition ad, String value) {
+	protected void assertAttributeBad(AttributeDefinition ad, String value) {
 		assertTrue("Value '" + value + "' should not have been valid", ad.validate(value).length() > 0);
 	}
 	
-	public void assertAttributeGood(AttributeDefinition ad, String value) {
+	protected void assertAttributeGood(AttributeDefinition ad, String value) {
 		assertEquals("Value '" + value + "' should have been valid", 0, ad.validate(value).length());
+	}
+
+	protected AttributeDefinition findAttributeDefinitionById(String id,
+			ObjectClassDefinition ocd) {
+		AttributeDefinition[] ads = ocd
+				.getAttributeDefinitions(ObjectClassDefinition.ALL);
+		if (ads == null)
+			return null;
+		for (int i = 0; i < ads.length; i++)
+			if (ads[i].getID().equals(id))
+				return ads[i];
+		return null;
 	}
 }
