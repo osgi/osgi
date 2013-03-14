@@ -1059,11 +1059,13 @@ Password <phrase role="symbol">↔</phrase> <xref
               <entry><para>The default value. A default is an array of
               <code>String</code> objects. The XML attribute must contain a
               comma delimited list. The default value is trimmed and escaped
-              in the same way as described in the
-              <code>validate(String)</code> method. The empty string is a
-              valid value. If the empty string specifies the default for an
-              attribute with cardinality that is not equal to zero then it
-              must be seen as an empty Vector or array.</para></entry>
+              in the same way as described in the <xref
+              linkend="org.osgi.service.metatype.AttributeDefinition.validate-String-"
+              xrefstyle="hyperlink"/> method. The empty string is significant 
+              and must be seen as an empty Vector or array if specified as the 
+              default for an attribute with a cardinality that is not equal to 
+              zero. Default values must be valid or otherwise ignored.</para>
+              </entry>
             </row>
 
             <row>
