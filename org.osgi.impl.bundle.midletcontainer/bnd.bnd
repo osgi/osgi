@@ -6,7 +6,8 @@ Bundle-Description				= An OSGi Midlet Container
 Bundle-Vendor					= Nokia
 Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
-Export-Package 					= javax.microedition.midlet
+Export-Package 					= javax.microedition.midlet, \
+    org.osgi.application
 Private-Package					= ${p}
 Include-Resource				= TestIcon.gif
 
