@@ -323,7 +323,6 @@
         <echo>cmpn.specs:             ${cmpn.specs}</echo>
         <echo>residential.specs:      ${residential.specs}</echo>
         <echo>enterprise.specs:       ${enterprise.specs}</echo>
-        <echo>proposed.specs:         ${proposed.specs}</echo>
     </target>
 
     <import file="../cnf/master.xml" />

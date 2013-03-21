@@ -86,7 +86,6 @@ core.build.version			= ${build.version}
 cmpn.build.version			= ${build.version}
 enterprise.build.version	= ${build.version}
 residential.build.version	= ${build.version}
-proposed.build.version		= ${build.version}
 
 ee.j2se-15.jar = ${repo;ee.j2se;1.5;lowest}
 
