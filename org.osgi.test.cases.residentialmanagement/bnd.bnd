@@ -16,9 +16,9 @@ Private-Package						=  \
 -runbundles			= \
 	org.osgi.impl.service.log;						version=latest, \
     org.osgi.impl.service.cm;						version=latest, \
+    org.osgi.impl.service.event;					version=latest, \
 	org.osgi.impl.service.dmt;						version=latest, \
-	org.osgi.impl.service.residentialmanagement;	version=latest, \
-	osgi.residential;								version=latest
+	org.osgi.impl.service.residentialmanagement;	version=latest
 	
 -runproperties = ${runsecureproperties}, \
 	org.osgi.framework.system.packages.extra=${p}.syspkg;"version=1.0.0" ,\

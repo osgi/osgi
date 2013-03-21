@@ -58,7 +58,6 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.resolver; version=latest
 	
 -runproperties = ${runproperties}

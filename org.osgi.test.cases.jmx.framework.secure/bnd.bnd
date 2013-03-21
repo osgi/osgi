@@ -17,8 +17,8 @@ Include-Resource                    = \
     ${junit}    
 
 -runbundles                         = \
-    osgi.enterprise; version=latest, \
     org.osgi.impl.bundle.jmx; version=latest, \
+    org.osgi.impl.service.cm; version=latest, \
     org.osgi.impl.service.log; version=latest
 
 

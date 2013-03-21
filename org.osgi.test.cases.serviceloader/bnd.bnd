@@ -40,7 +40,7 @@ Include-Resource                    = \
 	osgi.cmpn      ;				version=5.0, \
 	${junit}	
 
--runbundles: osgi.cmpn;version=latest, \
+-runbundles = \
 	org.osgi.impl.bundle.serviceloader;version=latest
 
 Test-Cases							= ${testcases}

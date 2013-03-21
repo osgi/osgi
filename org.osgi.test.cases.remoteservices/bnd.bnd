@@ -19,17 +19,18 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	osgi.cmpn; version=latest	, \
+    org.osgi.impl.service.log;                version=latest, \
+    org.osgi.impl.service.cm;                 version=latest, \
+    org.osgi.impl.service.event;              version=latest, \
 	org.osgi.impl.service.remoteserviceadmin;  version=latest, \
 	org.osgi.impl.bundle.remoteserviceadmin.discovery;  version=latest, \
-	org.osgi.impl.bundle.remoteserviceadmin.discovery.config;  version=latest, \
-	org.osgi.impl.service.log;				version=latest
+	org.osgi.impl.bundle.remoteserviceadmin.discovery.config;  version=latest
 	
 
 -runproperties = ${runproperties}, \
 	rsa.ct.timeout=300000,\
 	rsa.ct.timeout.factor=3,\
-	${p}.bundles="${uniq;${repo;org.osgi.impl.service.remoteserviceadmin},${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config},${cmpn.companion.jar},${repo;org.osgi.impl.service.log}}", \
+    ${p}.bundles="${uniq;${repo;org.osgi.service.event},${repo;org.osgi.impl.service.log},${repo;org.osgi.impl.service.cm},${repo;org.osgi.impl.service.remoteserviceadmin},${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}}", \
 	${p}.serverconfig="service.exported.configs,org.apache.cxf.ws.port", \
 	service.exported.configs=org.apache.cxf.ws, \
 	org.apache.cxf.ws.port=@@FREE_PORT@@

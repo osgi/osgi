@@ -20,7 +20,6 @@ Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.coordinator
 
 -runbundles						= \
-	osgi.cmpn; version=latest, \
     org.osgi.impl.service.coordinator; version=latest, \
     org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest, \
