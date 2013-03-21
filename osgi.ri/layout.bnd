@@ -7,7 +7,6 @@ proposed.ri.version		= ${build.version}
 build.impls                 = ${uniq; ${build.cmpn.impls}, ${build.enterprise.impls}, ${build.residential.impls}}
 
 jar.core.impls = \
-	${core.companion.jar}, \
 	${repo;org.osgi.impl.framework}
 
 build.cmpn.impls = \
@@ -34,7 +33,6 @@ build.cmpn.impls = \
 	org.osgi.impl.service.useradmin 
 
 jar.cmpn.impls = \
-	${cmpn.companion.jar}, \
 	${repo;org.osgi.impl.bundle.derby}, \
 	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery}, \
 	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}, \
@@ -54,7 +52,10 @@ jar.cmpn.impls = \
     ${repo;org.osgi.impl.service.resolver}, \
     ${repo;org.osgi.impl.service.repository}, \
     ${repo;org.osgi.impl.service.subsystem}, \
-	${repo;org.osgi.impl.service.wireadmin}
+	${repo;org.osgi.impl.service.wireadmin}, \
+    ${repo;org.osgi.util.measurement}, \
+    ${repo;org.osgi.util.position}, \
+    ${repo;org.osgi.util.xml}
 
 build.enterprise.impls = \
 	org.osgi.impl.bundle.component.annotations, \
@@ -68,8 +69,6 @@ build.enterprise.impls = \
 	org.osgi.impl.service.useradmin
 	
 jar.enterprise.impls = \
-	${enterprise.companion.jar}, \
-	${cmpn.companion.jar}, \
 	${repo;org.osgi.impl.bundle.derby}, \
 	${repo;org.osgi.impl.bundle.jmx}, \
 	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery}, \
@@ -89,7 +88,8 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.service.remoteserviceadmin}, \
 	${repo;org.osgi.impl.service.resolver}, \
 	${repo;org.osgi.impl.service.repository}, \
-	${repo;org.osgi.impl.service.subsystem}
+	${repo;org.osgi.impl.service.subsystem}, \
+    ${repo;org.osgi.util.xml}
 	
 
 build.residential.impls = \
@@ -107,12 +107,11 @@ build.residential.impls = \
 	org.osgi.impl.service.useradmin
 
 jar.residential.impls = \
-	${residential.companion.jar}, \
-	${cmpn.companion.jar}, \
 	${repo;org.osgi.impl.bundle.servlet;2.1}, \
 	${repo;org.osgi.impl.service.cm}, \
 	${repo;org.osgi.impl.service.component}, \
 	${repo;org.osgi.impl.service.event}, \
 	${repo;org.osgi.impl.service.metatype}, \
-	${repo;org.osgi.impl.service.provisioning}
+	${repo;org.osgi.impl.service.provisioning}, \
+    ${repo;org.osgi.util.xml}
 
