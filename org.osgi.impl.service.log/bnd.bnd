@@ -7,7 +7,6 @@ Private-Package: 		${p}.*
 
 Bundle-Name: 			impl.service.log
 Bundle-Description: 	OSGi Log Service Reference Implementation by IBM Corporation.
-Bundle-Version: 		1.3.2.${project.build}
 Bundle-Category: 		osgi
 Export-Service: 		org.osgi.service.log.LogService
 

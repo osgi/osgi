@@ -3,7 +3,6 @@
 
 Bundle-Activator				= ${p}.RshHandler
 Bundle-Description				= OSGi rsh URL handler reference implementation by IBM Corporation.
-Bundle-Version					= 1.0.1.${project.build}
 Import-Service					= org.osgi.service.provisioning.ProvisioningService
 Export-Service					= org.osgi.service.url.URLStreamHandlerService
 

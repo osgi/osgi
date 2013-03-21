@@ -1,7 +1,6 @@
 # Set javac settings from JDT prefs
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
-Bundle-Version					= 1.1.1.${project.build}
 Bundle-Vendor					= Nokia
 Bundle-Activator				= $(p).Activator
 

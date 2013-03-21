@@ -2,7 +2,6 @@
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Bundle-Vendor					= Nokia
-Bundle-Version					= 1.1.0.${project.build}
 Bundle-Activator				= ${p}.Activator
 Export-Service					= \
 	org.osgi.service.dmt.DmtAdmin, \

@@ -2,7 +2,6 @@
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Bundle-Vendor					= Nokia
-Bundle-Version					= 1.0.0.${project.build}
 Service-Component				= \
 	OSGI-INF/permadmin_subtree.xml, \
 	OSGI-INF/dmtprincipal_subtree.xml, \

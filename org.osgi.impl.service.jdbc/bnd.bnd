@@ -7,7 +7,6 @@ Export-Package: 		org.osgi.service.jdbc;-split-package:=first
 Private-Package: 		${p}.*
 
 Bundle-Description: 	OSGi JDBC Service Reference Implementation by Oracle Corporation.
-Bundle-Version: 		4.2.0.${project.build}
 Bundle-Category: 		osgi
 
 -buildpath = \

@@ -2,7 +2,6 @@
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Bundle-Vendor				= Samsung
-Bundle-Version				= 0.2.1.${project.build}
 Bundle-Activator			= ${p}.UPnPController
 Bundle-Description			= Samsung UPnP CD stack
 Bundle-RequiredExecutionEnvironment = J2SE-1.4

@@ -2,7 +2,6 @@
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Bundle-Description				= OSGi Transaction reference implementation by ProSyst.
-Bundle-Version					= 4.2.0.${project.build}
 
 Private-Package = ${p}.*, \
 	org.apache.*, \
