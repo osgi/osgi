@@ -19,5 +19,3 @@ ${permissions;packages}
 
 (java.net.SocketPermission "*" "listen")
 (java.lang.RuntimePermission "*")    
-
-(org.osgi.service.event.TopicPermission "org/osgi/service/remoteserviceadmin/IMPORT_UNREGISTRATION" "publish")
