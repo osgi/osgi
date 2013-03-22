@@ -1,6 +1,4 @@
-Bundle-Description: OSGi Core Release ${version;=;${core.ri.version}} Reference Implementation
-
-Bundle-Version					: ${core.ri.version}
+Bundle-Description: OSGi Core Release ${version;=;${build.version}} Reference Implementation
 
 Include-Resource				: \
 	  	\

@@ -1,8 +1,3 @@
-core.ct.version			= ${build.version}
-cmpn.ct.version			= ${build.version}
-enterprise.ct.version	= ${build.version}
-residential.ct.version	= ${build.version}
-
 build.tests                 = ${uniq; ${build.core.tests}, ${build.cmpn.tests}, ${build.enterprise.tests}, ${build.residential.tests}}
 
 jar.core.tests = \

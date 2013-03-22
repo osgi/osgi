@@ -1,8 +1,3 @@
-core.ri.version			= ${build.version}
-cmpn.ri.version			= ${build.version}
-enterprise.ri.version	= ${build.version}
-residential.ri.version	= ${build.version}
-
 build.impls                 = ${uniq; ${build.cmpn.impls}, ${build.enterprise.impls}, ${build.residential.impls}}
 
 jar.core.impls = \

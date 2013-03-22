@@ -1,6 +1,5 @@
-Bundle-Description: OSGi Core Release ${version;=;${core.ct.version}} Compliance Tests
+Bundle-Description: OSGi Core Release ${version;=;${build.version}} Compliance Tests
 
-Bundle-Version				: ${core.ct.version}
 Include-Resource				: \
   	\
     ${replace;${uniq;\

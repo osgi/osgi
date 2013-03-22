@@ -1,6 +1,5 @@
-Bundle-Description: OSGi Compendium Release ${version;=;${cmpn.ct.version}}	Compliance Tests
+Bundle-Description: OSGi Compendium Release ${version;=;${build.version}} Compliance Tests
 
-Bundle-Version					: ${cmpn.ct.version}
 Include-Resource				: \
   	\
     ${replace;${uniq;\
