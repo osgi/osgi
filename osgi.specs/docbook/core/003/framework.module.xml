@@ -882,7 +882,8 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     organizations and individuals. To minimize name clashes it is recommended
     to use the reverse domain name rule used for packages and bundle symbolic
     names. It is also recommended to register these Namespaces with the OSGi
-    Alliance, see <xref linkend="i3215677"/> to prevent clashes.</para>
+    Alliance, see <xref linkend="framework.module.namespace-registry"/> to
+    prevent clashes.</para>
 
     <para>Given a Namespace, it is possible to declare a
     <emphasis>capability</emphasis> of that Namespace. A capability provides
@@ -5225,8 +5226,12 @@ URL(String protocol, String host, String file)</programlisting>
       <bibliomixed xml:id="i3211606"><title>OSGi IANA Mime
       Type</title>http://www.iana.org/assignments/media-types/application/vnd.osgi.bundle</bibliomixed>
 
-      <bibliomixed xml:id="i3215677"><title>OSGi Header Namespace
+      <bibliomixed xml:id="i3215677"><title>OSGi Header
       Registry</title>http://www.osgi.org/Specifications/ReferenceHeaders</bibliomixed>
+
+      <bibliomixed xml:id="framework.module.namespace-registry"><title>OSGi
+      Namespace
+      Registry</title>http://www.osgi.org/Specifications/ReferenceNamespaces</bibliomixed>
 
       <bibliomixed xml:id="i3219167"><title>Portable Network Graphics (PNG)
       Specification (Second
