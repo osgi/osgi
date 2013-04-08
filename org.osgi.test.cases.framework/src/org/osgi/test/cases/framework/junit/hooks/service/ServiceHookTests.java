@@ -72,19 +72,19 @@ public class ServiceHookTests extends OSGiTestCase {
 		};
 		final BundleContext testContext = getContext();
 		// register services
-		Hashtable props = new Hashtable();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put("name", getName());
 		props.put(Constants.SERVICE_DESCRIPTION, "service 1");
-		final ServiceRegistration reg1 = testContext.registerService(
-				Runnable.class.getName(), runIt, props);
+		final ServiceRegistration<Runnable> reg1 = testContext.registerService(
+				Runnable.class, runIt, props);
 
 		props.put(Constants.SERVICE_DESCRIPTION, "service 2");
-		final ServiceRegistration reg2 = testContext.registerService(
-				Runnable.class.getName(), runIt, props);
+		final ServiceRegistration<Runnable> reg2 = testContext.registerService(
+				Runnable.class, runIt, props);
 
 		props.put(Constants.SERVICE_DESCRIPTION, "service 3");
-		final ServiceRegistration reg3 = testContext.registerService(
-				Runnable.class.getName(), runIt, props);
+		final ServiceRegistration<Runnable> reg3 = testContext.registerService(
+				Runnable.class, runIt, props);
 
 		final int[] hookCalled = new int[] {0, 0, 0, 0, 0};
 		final AssertionFailedError[] hookError = new AssertionFailedError[] {
@@ -93,11 +93,11 @@ public class ServiceHookTests extends OSGiTestCase {
 		// register find hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "min value");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MIN_VALUE));
-		ServiceRegistration regHook1 = testContext.registerService(
-				FindHook.class.getName(), new FindHook() {
+		ServiceRegistration<FindHook> regHook1 = testContext.registerService(
+				FindHook.class, new FindHook() {
 					public void find(BundleContext context, String name,
 							String filter, boolean allServices,
-							Collection references) {
+							Collection<ServiceReference<?>> references) {
 						try {
 							synchronized (hookCalled) {
 								hookCalled[++hookCalled[0]] = 1;
@@ -112,10 +112,10 @@ public class ServiceHookTests extends OSGiTestCase {
 									allServices);
 							assertEquals("wrong number of services in hook", 1,
 									references.size());
-							for (Iterator iter = references.iterator(); iter
+							for (Iterator<ServiceReference<?>> iter = references
+									.iterator(); iter
 									.hasNext();) {
-								ServiceReference ref = (ServiceReference) iter
-										.next();
+								ServiceReference<?> ref = iter.next();
 								if (ref.equals(reg1.getReference())) {
 									fail("service 1 is present");
 								}
@@ -136,7 +136,7 @@ public class ServiceHookTests extends OSGiTestCase {
 							}
 							try {
 								references.addAll(Arrays
-										.asList(new ServiceReference[] {reg1
+										.asList(new ServiceReference<?>[] { reg1
 												.getReference()}));
 								fail("addAll to collection succeeded");
 							}
@@ -157,11 +157,11 @@ public class ServiceHookTests extends OSGiTestCase {
 		// register find hook 2
 		props.put(Constants.SERVICE_DESCRIPTION, "max value first");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
-		ServiceRegistration regHook2 = testContext.registerService(
-				FindHook.class.getName(), new FindHook() {
+		ServiceRegistration<FindHook> regHook2 = testContext.registerService(
+				FindHook.class, new FindHook() {
 					public void find(BundleContext context, String name,
 							String filter, boolean allServices,
-							Collection references) {
+							Collection<ServiceReference<?>> references) {
 						try {
 							synchronized (hookCalled) {
 								hookCalled[++hookCalled[0]] = 2;
@@ -176,10 +176,10 @@ public class ServiceHookTests extends OSGiTestCase {
 									allServices);
 							assertEquals("wrong number of services in hook", 3,
 									references.size());
-							for (Iterator iter = references.iterator(); iter
+							for (Iterator<ServiceReference<?>> iter = references
+									.iterator(); iter
 									.hasNext();) {
-								ServiceReference ref = (ServiceReference) iter
-										.next();
+								ServiceReference<?> ref = iter.next();
 								if (ref.equals(reg2.getReference())) {
 									iter.remove();
 								}
@@ -197,7 +197,7 @@ public class ServiceHookTests extends OSGiTestCase {
 							}
 							try {
 								references.addAll(Arrays
-										.asList(new ServiceReference[] {reg2
+										.asList(new ServiceReference<?>[] { reg2
 												.getReference()}));
 								fail("addAll to collection succeeded");
 							}
@@ -218,11 +218,11 @@ public class ServiceHookTests extends OSGiTestCase {
 		// register find hook 3
 		props.put(Constants.SERVICE_DESCRIPTION, "max value second");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
-		ServiceRegistration regHook3 = testContext.registerService(
-				FindHook.class.getName(), new FindHook() {
+		ServiceRegistration<FindHook> regHook3 = testContext.registerService(
+				FindHook.class, new FindHook() {
 					public void find(BundleContext context, String name,
 							String filter, boolean allServices,
-							Collection references) {
+							Collection<ServiceReference<?>> references) {
 						try {
 							synchronized (hookCalled) {
 								hookCalled[++hookCalled[0]] = 3;
@@ -237,10 +237,10 @@ public class ServiceHookTests extends OSGiTestCase {
 									allServices);
 							assertEquals("wrong number of services in hook", 2,
 									references.size());
-							for (Iterator iter = references.iterator(); iter
+							for (Iterator<ServiceReference<?>> iter = references
+									.iterator(); iter
 									.hasNext();) {
-								ServiceReference ref = (ServiceReference) iter
-										.next();
+								ServiceReference<?> ref = iter.next();
 								if (ref.equals(reg2.getReference())) {
 									fail("service 2 is present");
 								}
@@ -258,7 +258,7 @@ public class ServiceHookTests extends OSGiTestCase {
 							}
 							try {
 								references.addAll(Arrays
-										.asList(new ServiceReference[] {reg2
+										.asList(new ServiceReference<?>[] { reg2
 												.getReference()}));
 								fail("addAll to collection succeeded");
 							}
@@ -282,11 +282,11 @@ public class ServiceHookTests extends OSGiTestCase {
 		// register find hook 4
 		props.put(Constants.SERVICE_DESCRIPTION, "max value third");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
-		ServiceRegistration regHook4 = testContext.registerService(
-				FindHook.class.getName(), new FindHook() {
+		ServiceRegistration<FindHook> regHook4 = testContext.registerService(
+				FindHook.class, new FindHook() {
 					public void find(BundleContext context, String name,
 							String filter, boolean allServices,
-							Collection references) {
+							Collection<ServiceReference<?>> references) {
 						try {
 							synchronized (hookCalled) {
 								hookCalled[++hookCalled[0]] = 4;
@@ -301,10 +301,10 @@ public class ServiceHookTests extends OSGiTestCase {
 									allServices);
 							assertEquals("wrong number of services in hook", 2,
 									references.size());
-							for (Iterator iter = references.iterator(); iter
+							for (Iterator<ServiceReference<?>> iter = references
+									.iterator(); iter
 									.hasNext();) {
-								ServiceReference ref = (ServiceReference) iter
-										.next();
+								ServiceReference<?> ref = iter.next();
 								if (ref.equals(reg1.getReference())) {
 									iter.remove();
 								}
@@ -325,7 +325,7 @@ public class ServiceHookTests extends OSGiTestCase {
 							}
 							try {
 								references.addAll(Arrays
-										.asList(new ServiceReference[] {reg2
+										.asList(new ServiceReference<?>[] { reg2
 												.getReference()}));
 								fail("addAll to collection succeeded");
 							}
@@ -345,7 +345,7 @@ public class ServiceHookTests extends OSGiTestCase {
 
 		// get reference and hook removes some services
 		try {
-			ServiceReference[] refs = null;
+			ServiceReference<?>[] refs = null;
 			try {
 				refs = testContext.getServiceReferences(Runnable.class
 						.getName(), "(name=" + getName() + ")"); //$NON-NLS-2$
@@ -367,7 +367,7 @@ public class ServiceHookTests extends OSGiTestCase {
 			assertEquals("Wrong number of references", 1, refs.length);
 
 			// test removed services are not in the result
-			List refList = Arrays.asList(refs);
+			List<?> refList = Arrays.asList(refs);
 			assertFalse("contains service 1", refList.contains(reg1
 					.getReference()));
 			assertFalse("contains service 2", refList.contains(reg2
@@ -437,18 +437,18 @@ public class ServiceHookTests extends OSGiTestCase {
 		final BundleContext testContext = getContext();
 
 		// register services
-		Hashtable props = new Hashtable();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put("name", getName());
 		props.put(Constants.SERVICE_DESCRIPTION, "service 1");
-		final ServiceRegistration reg1 = testContext.registerService(
-				Runnable.class.getName(), runIt, props);
+		final ServiceRegistration<Runnable> reg1 = testContext.registerService(
+				Runnable.class, runIt, props);
 
 		final AssertionFailedError[] factoryError = new AssertionFailedError[] {null};
 		final boolean[] factoryCalled = new boolean[] {false, false};
 		final boolean[] hookCalled = new boolean[] {false};
 		final FindHook findHook1 = new FindHook() {
 			public void find(BundleContext arg0, String arg1, String arg2,
-					boolean arg3, Collection arg4) {
+					boolean arg3, Collection<ServiceReference<?>> arg4) {
 				synchronized (hookCalled) {
 					hookCalled[0] = true;
 				}
@@ -462,21 +462,21 @@ public class ServiceHookTests extends OSGiTestCase {
 		synchronized (factoryError) {
 			factoryError[0] = null;
 		}
-		ServiceRegistration regHook1 = testContext.registerService(
-				FindHook.class.getName(), new ServiceFactory() {
+		ServiceRegistration<?> regHook1 = testContext.registerService(
+				FindHook.class.getName(), new ServiceFactory<FindHook>() {
 
-					public Object getService(Bundle bundle,
-							ServiceRegistration registration) {
+					public FindHook getService(Bundle bundle,
+							ServiceRegistration<FindHook> registration) {
 						try {
 							synchronized (factoryCalled) {
 								factoryCalled[0] = true;
 							}
 							assertNotNull("using bundle null", bundle);
-							ServiceReference reference = registration
+							ServiceReference<FindHook> reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
 							assertNotNull("service not used by a bundle", users);
-							List userList = Arrays.asList(users);
+							List<Bundle> userList = Arrays.asList(users);
 							assertTrue("missing using bundle", userList
 									.contains(bundle));
 						}
@@ -489,18 +489,19 @@ public class ServiceHookTests extends OSGiTestCase {
 					}
 
 					public void ungetService(Bundle bundle,
-							ServiceRegistration registration, Object service) {
+							ServiceRegistration<FindHook> registration,
+							FindHook service) {
 						try {
 							synchronized (factoryCalled) {
 								factoryCalled[1] = true;
 							}
 							assertNotNull("using bundle null", bundle);
 							assertEquals("wrong service", findHook1, service);
-							ServiceReference reference = registration
+							ServiceReference<FindHook> reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
 							assertNotNull("service not used by a bundle", users);
-							List userList = Arrays.asList(users);
+							List<Bundle> userList = Arrays.asList(users);
 							assertTrue("missing using bundle", userList
 									.contains(bundle));
 						}
@@ -516,7 +517,7 @@ public class ServiceHookTests extends OSGiTestCase {
 			synchronized (hookCalled) {
 				hookCalled[0] = false;
 			}
-			ServiceReference[] refs = null;
+			ServiceReference<?>[] refs = null;
 			try {
 				refs = testContext.getServiceReferences(Runnable.class
 						.getName(), "(name=" + getName() + ")"); //$NON-NLS-2$
@@ -538,7 +539,7 @@ public class ServiceHookTests extends OSGiTestCase {
 			assertNotNull("service refs is null", refs);
 			assertEquals("Wrong number of references", 1, refs.length);
 
-			List refList = Arrays.asList(refs);
+			List<ServiceReference<?>> refList = Arrays.asList(refs);
 			assertTrue("missing service 1", refList.contains(reg1
 					.getReference()));
 
@@ -575,7 +576,7 @@ public class ServiceHookTests extends OSGiTestCase {
 
 		final int[] hookCalled = new int[] {0, 0};
 		final AssertionFailedError[] hookError = new AssertionFailedError[] {null};
-		final List events = new ArrayList();
+		final List<ServiceEvent> events = new ArrayList<ServiceEvent>();
 
 		final ServiceListener sl = new ServiceListener() {
 			public void serviceChanged(ServiceEvent event) {
@@ -597,7 +598,8 @@ public class ServiceHookTests extends OSGiTestCase {
 
 		final Filter filter = tmpFilter;
 		EventHook hook1 = new EventHook() {
-			public void event(ServiceEvent event, Collection contexts) {
+			public void event(ServiceEvent event,
+					Collection<BundleContext> contexts) {
 				try {
 					if (!filter.match(event.getServiceReference())) {
 						return;
@@ -639,7 +641,8 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 		};
 		EventHook hook2 = new EventHook() {
-			public void event(ServiceEvent event, Collection contexts) {
+			public void event(ServiceEvent event,
+					Collection<BundleContext> contexts) {
 				try {
 					if (!filter.match(event.getServiceReference())) {
 						return;
@@ -681,20 +684,20 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 		};
 
-		Hashtable props = new Hashtable();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put("name", getName());
 		// register event hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 1");
-		ServiceRegistration regHook = testContext.registerService(
-				EventHook.class.getName(), hook1, props);
+		ServiceRegistration<EventHook> regHook = testContext.registerService(
+				EventHook.class, hook1, props);
 
-		ServiceRegistration reg1 = null;
+		ServiceRegistration<Runnable> reg1 = null;
 		try {
 			props.put(Constants.SERVICE_DESCRIPTION, "service 1");
 			synchronized (events) {
 				events.clear();
 			}
-			reg1 = testContext.registerService(Runnable.class.getName(), runIt,
+			reg1 = testContext.registerService(Runnable.class, runIt,
 					props);
 			assertEquals("all hooks not called", 1, hookCalled[0]);
 			assertEquals("hook 1 not called first", 1, hookCalled[1]);
@@ -705,8 +708,9 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 			synchronized (events) {
 				assertEquals("listener not called once", 1, events.size());
-				for (Iterator iter = events.iterator(); iter.hasNext();) {
-					ServiceEvent event = (ServiceEvent) iter.next();
+				for (Iterator<ServiceEvent> iter = events.iterator(); iter
+						.hasNext();) {
+					ServiceEvent event = iter.next();
 					assertEquals("type not registered",
 							ServiceEvent.REGISTERED, event.getType());
 					assertEquals("wrong service", reg1.getReference(), event
@@ -725,8 +729,9 @@ public class ServiceHookTests extends OSGiTestCase {
 			reg1.setProperties(props);
 			synchronized (events) {
 				assertEquals("listener not called once", 1, events.size());
-				for (Iterator iter = events.iterator(); iter.hasNext();) {
-					ServiceEvent event = (ServiceEvent) iter.next();
+				for (Iterator<ServiceEvent> iter = events.iterator(); iter
+						.hasNext();) {
+					ServiceEvent event = iter.next();
 					assertEquals("type not registered", ServiceEvent.MODIFIED,
 							event.getType());
 					assertEquals("wrong service", reg1.getReference(), event
@@ -736,7 +741,8 @@ public class ServiceHookTests extends OSGiTestCase {
 			assertEquals("hooks called", 0, hookCalled[0]);
 
 			props.put(Constants.SERVICE_DESCRIPTION, "event hook 2");
-			regHook = testContext.registerService(EventHook.class.getName(),
+			regHook = testContext
+					.registerService(EventHook.class,
 					hook2, props);
 
 			synchronized (events) {
@@ -777,13 +783,13 @@ public class ServiceHookTests extends OSGiTestCase {
 		final BundleContext testContext = getContext();
 
 		// register services
-		Hashtable props = new Hashtable();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put("name", getName());
 		final AssertionFailedError[] factoryError = new AssertionFailedError[] {null};
 		final boolean[] factoryCalled = new boolean[] {false, false};
 		final boolean[] hookCalled = new boolean[] {false};
 		final EventHook eventHook1 = new EventHook() {
-			public void event(ServiceEvent arg0, Collection arg1) {
+			public void event(ServiceEvent arg0, Collection<BundleContext> arg1) {
 				synchronized (hookCalled) {
 					hookCalled[0] = true;
 				}
@@ -797,21 +803,21 @@ public class ServiceHookTests extends OSGiTestCase {
 		synchronized (factoryError) {
 			factoryError[0] = null;
 		}
-		ServiceRegistration regHook1 = testContext.registerService(
-				EventHook.class.getName(), new ServiceFactory() {
+		ServiceRegistration<?> regHook1 = testContext.registerService(
+				EventHook.class.getName(), new ServiceFactory<EventHook>() {
 
-					public Object getService(Bundle bundle,
-							ServiceRegistration registration) {
+					public EventHook getService(Bundle bundle,
+							ServiceRegistration<EventHook> registration) {
 						try {
 							synchronized (factoryCalled) {
 								factoryCalled[0] = true;
 							}
 							assertNotNull("using bundle null", bundle);
-							ServiceReference reference = registration
+							ServiceReference<EventHook> reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
 							assertNotNull("service not used by a bundle", users);
-							List userList = Arrays.asList(users);
+							List<Bundle> userList = Arrays.asList(users);
 							assertTrue("missing using bundle", userList
 									.contains(bundle));
 						}
@@ -824,18 +830,19 @@ public class ServiceHookTests extends OSGiTestCase {
 					}
 
 					public void ungetService(Bundle bundle,
-							ServiceRegistration registration, Object service) {
+							ServiceRegistration<EventHook> registration,
+							EventHook service) {
 						try {
 							synchronized (factoryCalled) {
 								factoryCalled[1] = true;
 							}
 							assertNotNull("using bundle null", bundle);
 							assertEquals("wrong service", eventHook1, service);
-							ServiceReference reference = registration
+							ServiceReference<EventHook> reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
 							assertNotNull("service not used by a bundle", users);
-							List userList = Arrays.asList(users);
+							List<Bundle> userList = Arrays.asList(users);
 							assertTrue("missing using bundle", userList
 									.contains(bundle));
 						}
@@ -851,8 +858,8 @@ public class ServiceHookTests extends OSGiTestCase {
 			hookCalled[0] = false;
 		}
 		props.put(Constants.SERVICE_DESCRIPTION, "service 1");
-		final ServiceRegistration reg1 = testContext.registerService(
-				Runnable.class.getName(), runIt, props);
+		final ServiceRegistration<Runnable> reg1 = testContext.registerService(
+				Runnable.class, runIt, props);
 		try {
 			synchronized (factoryError) {
 				if (factoryError[0] != null) {
@@ -899,8 +906,8 @@ public class ServiceHookTests extends OSGiTestCase {
 
 		final int[] hookCalled = new int[] {0, 0};
 		final AssertionFailedError[] hookError = new AssertionFailedError[] {null};
-		final List events1 = new ArrayList();
-		final List events2 = new ArrayList();
+		final List<ServiceEvent> events1 = new ArrayList<ServiceEvent>();
+		final List<ServiceEvent> events2 = new ArrayList<ServiceEvent>();
 
 		final ServiceListener sl1 = new ServiceListener() {
 			public void serviceChanged(ServiceEvent event) {
@@ -931,7 +938,8 @@ public class ServiceHookTests extends OSGiTestCase {
 
 		final Filter filter = tmpFilter;
 		EventListenerHook hook1 = new EventListenerHook() {
-			public void event(ServiceEvent event, Map listeners) {
+			public void event(ServiceEvent event,
+					Map<BundleContext, Collection<ListenerInfo>> listeners) {
 				try {
 					if (!filter.match(event.getServiceReference())) {
 						return;
@@ -941,10 +949,10 @@ public class ServiceHookTests extends OSGiTestCase {
 					}
 					assertTrue("does not contain test context",
 							listeners.containsKey(testContext));
-					Collection c = (Collection) listeners.get(testContext);
+					Collection<ListenerInfo> c = listeners.get(testContext);
 					assertNotNull("listener collection is null", c);
-					for (Iterator i = c.iterator(); i.hasNext();) {
-						ListenerInfo info = (ListenerInfo) i.next();
+					for (Iterator<ListenerInfo> i = c.iterator(); i.hasNext();) {
+						ListenerInfo info = i.next();
 						assertFalse("isRemoved true", info.isRemoved());
 						BundleContext context = info.getBundleContext();
 						assertNotNull("info context is null", context);
@@ -985,7 +993,8 @@ public class ServiceHookTests extends OSGiTestCase {
 					}
 					try {
 						listeners.put(testContext.getBundle(0)
-								.getBundleContext(), new ArrayList());
+								.getBundleContext(),
+								new ArrayList<ListenerInfo>());
 						fail("put to map succeeded");
 					}
 					catch (UnsupportedOperationException e) {
@@ -995,9 +1004,9 @@ public class ServiceHookTests extends OSGiTestCase {
 						fail("incorrect exception", e);
 					}
 					try {
-						Map toAdd = new HashMap();
+						Map<BundleContext, Collection<ListenerInfo>> toAdd = new HashMap<BundleContext, Collection<ListenerInfo>>();
 						toAdd.put(testContext.getBundle(0).getBundleContext(),
-								new ArrayList());
+								new ArrayList<ListenerInfo>());
 						listeners.putAll(toAdd);
 						fail("putAll to map succeeded");
 					}
@@ -1026,7 +1035,8 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 		};
 		EventListenerHook hook2 = new EventListenerHook() {
-			public void event(ServiceEvent event, Map listeners) {
+			public void event(ServiceEvent event,
+					Map<BundleContext, Collection<ListenerInfo>> listeners) {
 				try {
 					if (!filter.match(event.getServiceReference())) {
 						return;
@@ -1036,10 +1046,10 @@ public class ServiceHookTests extends OSGiTestCase {
 					}
 					assertTrue("does not contain test context",
 							listeners.containsKey(testContext));
-					Collection c = (Collection) listeners.get(testContext);
+					Collection<ListenerInfo> c = listeners.get(testContext);
 					assertNotNull("listener collection is null", c);
-					for (Iterator i = c.iterator(); i.hasNext();) {
-						ListenerInfo li = (ListenerInfo) i.next();
+					for (Iterator<ListenerInfo> i = c.iterator(); i.hasNext();) {
+						ListenerInfo li = i.next();
 						if (li.getFilter().indexOf(getName()) > 0) {
 							i.remove();
 							break;
@@ -1047,7 +1057,8 @@ public class ServiceHookTests extends OSGiTestCase {
 					}
 					try {
 						listeners.put(testContext.getBundle(0)
-								.getBundleContext(), new ArrayList());
+								.getBundleContext(),
+								new ArrayList<ListenerInfo>());
 						fail("put to map succeeded");
 					}
 					catch (UnsupportedOperationException e) {
@@ -1057,9 +1068,9 @@ public class ServiceHookTests extends OSGiTestCase {
 						fail("incorrect exception", e);
 					}
 					try {
-						Map toAdd = new HashMap();
+						Map<BundleContext, Collection<ListenerInfo>> toAdd = new HashMap<BundleContext, Collection<ListenerInfo>>();
 						toAdd.put(testContext.getBundle(0).getBundleContext(),
-								new ArrayList());
+								new ArrayList<ListenerHook.ListenerInfo>());
 						listeners.putAll(toAdd);
 						fail("putAll to map succeeded");
 					}
@@ -1088,7 +1099,8 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 		};
 		EventListenerHook hook3 = new EventListenerHook() {
-			public void event(ServiceEvent event, Map listeners) {
+			public void event(ServiceEvent event,
+					Map<BundleContext, Collection<ListenerInfo>> listeners) {
 				try {
 					if (!filter.match(event.getServiceReference())) {
 						return;
@@ -1098,12 +1110,13 @@ public class ServiceHookTests extends OSGiTestCase {
 					}
 					assertTrue("does not contain test context",
 							listeners.containsKey(testContext));
-					Collection c = (Collection) listeners.get(testContext);
+					Collection<ListenerInfo> c = listeners.get(testContext);
 					assertNotNull("listener collection is null", c);
 					c.clear();
 					try {
 						listeners.put(testContext.getBundle(0)
-								.getBundleContext(), new ArrayList());
+								.getBundleContext(),
+								new ArrayList<ListenerInfo>());
 						fail("put to map succeeded");
 					}
 					catch (UnsupportedOperationException e) {
@@ -1113,9 +1126,9 @@ public class ServiceHookTests extends OSGiTestCase {
 						fail("incorrect exception", e);
 					}
 					try {
-						Map toAdd = new HashMap();
+						Map<BundleContext, Collection<ListenerInfo>> toAdd = new HashMap<BundleContext, Collection<ListenerInfo>>();
 						toAdd.put(testContext.getBundle(0).getBundleContext(),
-								new ArrayList());
+								new ArrayList<ListenerHook.ListenerInfo>());
 						listeners.putAll(toAdd);
 						fail("putAll to map succeeded");
 					}
@@ -1144,7 +1157,8 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 		};
 		EventListenerHook hook4 = new EventListenerHook() {
-			public void event(ServiceEvent event, Map listeners) {
+			public void event(ServiceEvent event,
+					Map<BundleContext, Collection<ListenerInfo>> listeners) {
 				try {
 					if (!filter.match(event.getServiceReference())) {
 						return;
@@ -1157,7 +1171,8 @@ public class ServiceHookTests extends OSGiTestCase {
 					listeners.remove(testContext);
 					try {
 						listeners.put(testContext.getBundle(0)
-								.getBundleContext(), new ArrayList());
+								.getBundleContext(),
+								new ArrayList<ListenerHook.ListenerInfo>());
 						fail("put to map succeeded");
 					}
 					catch (UnsupportedOperationException e) {
@@ -1167,9 +1182,9 @@ public class ServiceHookTests extends OSGiTestCase {
 						fail("incorrect exception", e);
 					}
 					try {
-						Map toAdd = new HashMap();
+						Map<BundleContext, Collection<ListenerInfo>> toAdd = new HashMap<BundleContext, Collection<ListenerInfo>>();
 						toAdd.put(testContext.getBundle(0).getBundleContext(),
-								new ArrayList());
+								new ArrayList<ListenerHook.ListenerInfo>());
 						listeners.putAll(toAdd);
 						fail("putAll to map succeeded");
 					}
@@ -1198,14 +1213,14 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 		};
 
-		Hashtable props = new Hashtable();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put("name", getName());
 		// register event hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 1");
-		ServiceRegistration regHook = testContext.registerService(
-				EventListenerHook.class.getName(), hook1, props);
+		ServiceRegistration<EventListenerHook> regHook = testContext
+				.registerService(EventListenerHook.class, hook1, props);
 
-		ServiceRegistration reg1 = null;
+		ServiceRegistration<Runnable> reg1 = null;
 		try {
 			props.put(Constants.SERVICE_DESCRIPTION, "service 1");
 			synchronized (events1) {
@@ -1214,7 +1229,7 @@ public class ServiceHookTests extends OSGiTestCase {
 			synchronized (events2) {
 				events2.clear();
 			}
-			reg1 = testContext.registerService(Runnable.class.getName(), runIt,
+			reg1 = testContext.registerService(Runnable.class, runIt,
 					props);
 			synchronized (hookCalled) {
 				assertEquals("all hooks not called", 1, hookCalled[0]);
@@ -1229,8 +1244,9 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 			synchronized (events1) {
 				assertEquals("listener1 not called once", 1, events1.size());
-				for (Iterator iter = events1.iterator(); iter.hasNext();) {
-					ServiceEvent event = (ServiceEvent) iter.next();
+				for (Iterator<ServiceEvent> iter = events1.iterator(); iter
+						.hasNext();) {
+					ServiceEvent event = iter.next();
 					assertEquals("type not registered",
 							ServiceEvent.REGISTERED, event.getType());
 					assertEquals("wrong service", reg1.getReference(),
@@ -1239,8 +1255,9 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 			synchronized (events2) {
 				assertEquals("listener2 not called once", 1, events2.size());
-				for (Iterator iter = events2.iterator(); iter.hasNext();) {
-					ServiceEvent event = (ServiceEvent) iter.next();
+				for (Iterator<ServiceEvent> iter = events2.iterator(); iter
+						.hasNext();) {
+					ServiceEvent event = iter.next();
 					assertEquals("type not registered",
 							ServiceEvent.REGISTERED, event.getType());
 					assertEquals("wrong service", reg1.getReference(),
@@ -1251,7 +1268,8 @@ public class ServiceHookTests extends OSGiTestCase {
 			regHook.unregister();
 			props.put(Constants.SERVICE_DESCRIPTION, "event hook 2");
 			regHook = testContext.registerService(
-					EventListenerHook.class.getName(), hook2, props);
+EventListenerHook.class,
+					hook2, props);
 
 			synchronized (events1) {
 				events1.clear();
@@ -1279,12 +1297,14 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 			synchronized (events1) {
 				synchronized (events2) {
-					List events = new ArrayList(events1);
+					List<ServiceEvent> events = new ArrayList<ServiceEvent>(
+							events1);
 					events.addAll(events2);
 					assertEquals("more than one listener called", 1,
 							events.size());
-					for (Iterator iter = events.iterator(); iter.hasNext();) {
-						ServiceEvent event = (ServiceEvent) iter.next();
+					for (Iterator<ServiceEvent> iter = events.iterator(); iter
+							.hasNext();) {
+						ServiceEvent event = iter.next();
 						assertEquals("type not registered",
 								ServiceEvent.MODIFIED, event.getType());
 						assertEquals("wrong service", reg1.getReference(),
@@ -1296,7 +1316,8 @@ public class ServiceHookTests extends OSGiTestCase {
 			regHook.unregister();
 			props.put(Constants.SERVICE_DESCRIPTION, "event hook 3");
 			regHook = testContext.registerService(
-					EventListenerHook.class.getName(), hook3, props);
+EventListenerHook.class,
+					hook3, props);
 
 			synchronized (events1) {
 				events1.clear();
@@ -1345,8 +1366,9 @@ public class ServiceHookTests extends OSGiTestCase {
 			reg1.setProperties(props);
 			synchronized (events1) {
 				assertEquals("listener1 not called once", 1, events1.size());
-				for (Iterator iter = events1.iterator(); iter.hasNext();) {
-					ServiceEvent event = (ServiceEvent) iter.next();
+				for (Iterator<ServiceEvent> iter = events1.iterator(); iter
+						.hasNext();) {
+					ServiceEvent event = iter.next();
 					assertEquals("type not registered", ServiceEvent.MODIFIED,
 							event.getType());
 					assertEquals("wrong service", reg1.getReference(),
@@ -1355,8 +1377,9 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 			synchronized (events2) {
 				assertEquals("listener2 not called once", 1, events2.size());
-				for (Iterator iter = events2.iterator(); iter.hasNext();) {
-					ServiceEvent event = (ServiceEvent) iter.next();
+				for (Iterator<ServiceEvent> iter = events2.iterator(); iter
+						.hasNext();) {
+					ServiceEvent event = iter.next();
 					assertEquals("type not registered", ServiceEvent.MODIFIED,
 							event.getType());
 					assertEquals("wrong service", reg1.getReference(),
@@ -1369,7 +1392,7 @@ public class ServiceHookTests extends OSGiTestCase {
 
 			props.put(Constants.SERVICE_DESCRIPTION, "event hook 4");
 			regHook = testContext.registerService(
-					EventListenerHook.class.getName(),
+EventListenerHook.class,
 					hook4, props);
 
 			synchronized (events1) {
@@ -1425,13 +1448,14 @@ public class ServiceHookTests extends OSGiTestCase {
 		final BundleContext testContext = getContext();
 
 		// register services
-		Hashtable props = new Hashtable();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put("name", getName());
 		final AssertionFailedError[] factoryError = new AssertionFailedError[] {null};
 		final boolean[] factoryCalled = new boolean[] {false, false};
 		final boolean[] hookCalled = new boolean[] {false};
 		final EventListenerHook eventHook1 = new EventListenerHook() {
-			public void event(ServiceEvent arg0, Map arg1) {
+			public void event(ServiceEvent arg0,
+					Map<BundleContext, Collection<ListenerInfo>> arg1) {
 				synchronized (hookCalled) {
 					hookCalled[0] = true;
 				}
@@ -1445,21 +1469,22 @@ public class ServiceHookTests extends OSGiTestCase {
 		synchronized (factoryError) {
 			factoryError[0] = null;
 		}
-		ServiceRegistration regHook1 = testContext.registerService(
-				EventListenerHook.class.getName(), new ServiceFactory() {
+		ServiceRegistration<?> regHook1 = testContext.registerService(
+				EventListenerHook.class.getName(),
+				new ServiceFactory<EventListenerHook>() {
 
-					public Object getService(Bundle bundle,
-							ServiceRegistration registration) {
+					public EventListenerHook getService(Bundle bundle,
+							ServiceRegistration<EventListenerHook> registration) {
 						try {
 							synchronized (factoryCalled) {
 								factoryCalled[0] = true;
 							}
 							assertNotNull("using bundle null", bundle);
-							ServiceReference reference = registration
+							ServiceReference<EventListenerHook> reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
 							assertNotNull("service not used by a bundle", users);
-							List userList = Arrays.asList(users);
+							List<Bundle> userList = Arrays.asList(users);
 							assertTrue("missing using bundle",
 									userList.contains(bundle));
 						}
@@ -1472,18 +1497,19 @@ public class ServiceHookTests extends OSGiTestCase {
 					}
 
 					public void ungetService(Bundle bundle,
-							ServiceRegistration registration, Object service) {
+							ServiceRegistration<EventListenerHook> registration,
+							EventListenerHook service) {
 						try {
 							synchronized (factoryCalled) {
 								factoryCalled[1] = true;
 							}
 							assertNotNull("using bundle null", bundle);
 							assertEquals("wrong service", eventHook1, service);
-							ServiceReference reference = registration
+							ServiceReference<EventListenerHook> reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
 							assertNotNull("service not used by a bundle", users);
-							List userList = Arrays.asList(users);
+							List<Bundle> userList = Arrays.asList(users);
 							assertTrue("missing using bundle",
 									userList.contains(bundle));
 						}
@@ -1499,8 +1525,8 @@ public class ServiceHookTests extends OSGiTestCase {
 			hookCalled[0] = false;
 		}
 		props.put(Constants.SERVICE_DESCRIPTION, "service 1");
-		final ServiceRegistration reg1 = testContext.registerService(
-				Runnable.class.getName(), runIt, props);
+		final ServiceRegistration<Runnable> reg1 = testContext.registerService(
+				Runnable.class, runIt, props);
 		try {
 			synchronized (factoryError) {
 				if (factoryError[0] != null) {
@@ -1563,7 +1589,8 @@ public class ServiceHookTests extends OSGiTestCase {
 
 		final Filter filter = tmpFilter;
 		EventHook hook1 = new EventHook() {
-			public void event(ServiceEvent event, Collection contexts) {
+			public void event(ServiceEvent event,
+					Collection<BundleContext> contexts) {
 				if (!filter.match(event.getServiceReference())) {
 					return;
 				}
@@ -1573,7 +1600,8 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 		};
 		EventHook hook2 = new EventHook() {
-			public void event(ServiceEvent event, Collection contexts) {
+			public void event(ServiceEvent event,
+					Collection<BundleContext> contexts) {
 				if (!filter.match(event.getServiceReference())) {
 					return;
 				}
@@ -1583,7 +1611,8 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 		};
 		EventListenerHook hook3 = new EventListenerHook() {
-			public void event(ServiceEvent event, Map listeners) {
+			public void event(ServiceEvent event,
+					Map<BundleContext, Collection<ListenerInfo>> listeners) {
 				if (!filter.match(event.getServiceReference())) {
 					return;
 				}
@@ -1594,7 +1623,8 @@ public class ServiceHookTests extends OSGiTestCase {
 		};
 
 		EventListenerHook hook4 = new EventListenerHook() {
-			public void event(ServiceEvent event, Map listeners) {
+			public void event(ServiceEvent event,
+					Map<BundleContext, Collection<ListenerInfo>> listeners) {
 				if (!filter.match(event.getServiceReference())) {
 					return;
 				}
@@ -1604,36 +1634,36 @@ public class ServiceHookTests extends OSGiTestCase {
 			}
 		};
 
-		Hashtable props = new Hashtable();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put("name", getName());
 		// register event hook 4
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 4");
-		ServiceRegistration regHook4 = testContext.registerService(
-				EventListenerHook.class.getName(), hook4, props);
+		ServiceRegistration<EventListenerHook> regHook4 = testContext
+				.registerService(EventListenerHook.class, hook4, props);
 
 		// register event hook 2
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 2");
-		ServiceRegistration regHook2 = testContext.registerService(
-				EventHook.class.getName(), hook2, props);
+		ServiceRegistration<EventHook> regHook2 = testContext.registerService(
+				EventHook.class, hook2, props);
 
 		// register event hook 3
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 3");
 		props.put(Constants.SERVICE_RANKING, new Integer(20));
-		ServiceRegistration regHook3 = testContext.registerService(
-				EventListenerHook.class.getName(), hook3, props);
+		ServiceRegistration<EventListenerHook> regHook3 = testContext
+				.registerService(EventListenerHook.class, hook3, props);
 
 		// register event hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 1");
 		props.put(Constants.SERVICE_RANKING, new Integer(10));
-		ServiceRegistration regHook1 = testContext.registerService(
-				EventHook.class.getName(), hook1, props);
+		ServiceRegistration<EventHook> regHook1 = testContext.registerService(
+				EventHook.class, hook1, props);
 
 
-		ServiceRegistration reg1 = null;
+		ServiceRegistration<Runnable> reg1 = null;
 		try {
 			props.put(Constants.SERVICE_DESCRIPTION, "service 1");
 			props.remove(Constants.SERVICE_RANKING);
-			reg1 = testContext.registerService(Runnable.class.getName(), runIt,
+			reg1 = testContext.registerService(Runnable.class, runIt,
 					props);
 			synchronized (hookCalled) {
 				assertEquals("all hooks not called", 4, hookCalled[0]);
@@ -1663,29 +1693,29 @@ public class ServiceHookTests extends OSGiTestCase {
 	public void testListenerHook01() {
 		// test the ListenerHook is called
 		final BundleContext testContext = getContext();
-		final Collection added = new ArrayList();
-		final Collection removed = new ArrayList();
+		final Collection<ListenerInfo> added = new ArrayList<ListenerInfo>();
+		final Collection<ListenerInfo> removed = new ArrayList<ListenerInfo>();
 		final int[] hookCalled = new int[] {0, 0};
 
 		ListenerHook hook1 = new ListenerHook() {
-			public void added(Collection listeners) {
+			public void added(Collection<ListenerInfo> listeners) {
 				hookCalled[0]++;
 				added.addAll(listeners);
 			}
 
-			public void removed(Collection listeners) {
+			public void removed(Collection<ListenerInfo> listeners) {
 				hookCalled[1]++;
 				added.removeAll(listeners);
 				removed.addAll(listeners);
 			}
 		};
 
-		Hashtable props = new Hashtable();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put("name", getName());
 		// register listener hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "listener hook 1");
-		ServiceRegistration regHook = testContext.registerService(
-				ListenerHook.class.getName(), hook1, props);
+		ServiceRegistration<ListenerHook> regHook = testContext
+				.registerService(ListenerHook.class, hook1, props);
 
 		try {
 			assertFalse("no service listeners found", added.isEmpty());
@@ -1704,9 +1734,8 @@ public class ServiceHookTests extends OSGiTestCase {
 			assertEquals("removed called", 0, hookCalled[1]);
 			assertEquals("listener not added", size + 1, added.size());
 			boolean found = false;
-			for (Iterator iter = added.iterator(); iter.hasNext();) {
-				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
-						.next();
+			for (Iterator<ListenerInfo> iter = added.iterator(); iter.hasNext();) {
+				ListenerHook.ListenerInfo info = iter.next();
 				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
 				String f = info.getFilter();
@@ -1720,9 +1749,9 @@ public class ServiceHookTests extends OSGiTestCase {
 			if (!found) {
 				fail("listener not found");
 			}
-			for (Iterator iter = removed.iterator(); iter.hasNext();) {
-				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
-						.next();
+			for (Iterator<ListenerInfo> iter = removed.iterator(); iter
+					.hasNext();) {
+				ListenerHook.ListenerInfo info = iter.next();
 				assertTrue("isRemoved true", info.isRemoved());
 			}
 
@@ -1733,9 +1762,8 @@ public class ServiceHookTests extends OSGiTestCase {
 			assertEquals("listener not removed and added", size + 1, added
 					.size());
 			found = false;
-			for (Iterator iter = added.iterator(); iter.hasNext();) {
-				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
-						.next();
+			for (Iterator<ListenerInfo> iter = added.iterator(); iter.hasNext();) {
+				ListenerHook.ListenerInfo info = iter.next();
 				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
 				String f = info.getFilter();
@@ -1752,9 +1780,9 @@ public class ServiceHookTests extends OSGiTestCase {
 			if (!found) {
 				fail("listener not found");
 			}
-			for (Iterator iter = removed.iterator(); iter.hasNext();) {
-				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
-						.next();
+			for (Iterator<ListenerInfo> iter = removed.iterator(); iter
+					.hasNext();) {
+				ListenerHook.ListenerInfo info = iter.next();
 				assertTrue("isRemoved true", info.isRemoved());
 			}
 
@@ -1762,8 +1790,8 @@ public class ServiceHookTests extends OSGiTestCase {
 			assertEquals("added called", 3, hookCalled[0]);
 			assertEquals("removed not called", 2, hookCalled[1]);
 			assertEquals("listener not removed", size, added.size());
-			for (Iterator iter = added.iterator(); iter.hasNext();) {
-				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
+			for (Iterator<ListenerInfo> iter = added.iterator(); iter.hasNext();) {
+				ListenerHook.ListenerInfo info = iter
 						.next();
 				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
@@ -1772,8 +1800,9 @@ public class ServiceHookTests extends OSGiTestCase {
 					fail("second listener not removed");
 				}
 			}
-			for (Iterator iter = removed.iterator(); iter.hasNext();) {
-				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
+			for (Iterator<ListenerInfo> iter = removed.iterator(); iter
+					.hasNext();) {
+				ListenerHook.ListenerInfo info = iter
 						.next();
 				assertTrue("isRemoved true", info.isRemoved());
 			}
@@ -1798,29 +1827,29 @@ public class ServiceHookTests extends OSGiTestCase {
 		// test the ListenerHook works with the FilteredServiceListener
 		// optimization in equinox
 		final BundleContext testContext = getContext();
-		final Collection added = new ArrayList();
-		final Collection removed = new ArrayList();
+		final Collection<ListenerInfo> added = new ArrayList<ListenerHook.ListenerInfo>();
+		final Collection<ListenerInfo> removed = new ArrayList<ListenerHook.ListenerInfo>();
 		final int[] hookCalled = new int[] {0, 0};
 
 		ListenerHook hook1 = new ListenerHook() {
-			public void added(Collection listeners) {
+			public void added(Collection<ListenerInfo> listeners) {
 				hookCalled[0]++;
 				added.addAll(listeners);
 			}
 
-			public void removed(Collection listeners) {
+			public void removed(Collection<ListenerInfo> listeners) {
 				hookCalled[1]++;
 				added.removeAll(listeners);
 				removed.addAll(listeners);
 			}
 		};
 
-		Hashtable props = new Hashtable();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put("name", getName());
 		// register listener hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "listener hook 1");
-		ServiceRegistration regHook = testContext.registerService(
-				ListenerHook.class.getName(), hook1, props);
+		ServiceRegistration<ListenerHook> regHook = testContext
+				.registerService(ListenerHook.class, hook1, props);
 
 		try {
 			assertFalse("no service listeners found", added.isEmpty());
@@ -1839,9 +1868,8 @@ public class ServiceHookTests extends OSGiTestCase {
 			assertEquals("removed called", 0, hookCalled[1]);
 			assertEquals("listener not added", size + 1, added.size());
 			boolean found = false;
-			for (Iterator iter = added.iterator(); iter.hasNext();) {
-				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
-						.next();
+			for (Iterator<ListenerInfo> iter = added.iterator(); iter.hasNext();) {
+				ListenerHook.ListenerInfo info = iter.next();
 				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
 				String f = info.getFilter();
@@ -1855,9 +1883,9 @@ public class ServiceHookTests extends OSGiTestCase {
 			if (!found) {
 				fail("listener not found");
 			}
-			for (Iterator iter = removed.iterator(); iter.hasNext();) {
-				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
-						.next();
+			for (Iterator<ListenerInfo> iter = removed.iterator(); iter
+					.hasNext();) {
+				ListenerHook.ListenerInfo info = iter.next();
 				assertTrue("isRemoved true", info.isRemoved());
 			}
 
@@ -1868,9 +1896,8 @@ public class ServiceHookTests extends OSGiTestCase {
 			assertEquals("listener not removed and added", size + 1, added
 					.size());
 			found = false;
-			for (Iterator iter = added.iterator(); iter.hasNext();) {
-				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
-						.next();
+			for (Iterator<ListenerInfo> iter = added.iterator(); iter.hasNext();) {
+				ListenerHook.ListenerInfo info = iter.next();
 				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
 				String f = info.getFilter();
@@ -1887,9 +1914,9 @@ public class ServiceHookTests extends OSGiTestCase {
 			if (!found) {
 				fail("listener not found");
 			}
-			for (Iterator iter = removed.iterator(); iter.hasNext();) {
-				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
-						.next();
+			for (Iterator<ListenerInfo> iter = removed.iterator(); iter
+					.hasNext();) {
+				ListenerHook.ListenerInfo info = iter.next();
 				assertTrue("isRemoved true", info.isRemoved());
 			}
 
@@ -1897,9 +1924,8 @@ public class ServiceHookTests extends OSGiTestCase {
 			assertEquals("added called", 3, hookCalled[0]);
 			assertEquals("removed not called", 2, hookCalled[1]);
 			assertEquals("listener not removed", size, added.size());
-			for (Iterator iter = added.iterator(); iter.hasNext();) {
-				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
-						.next();
+			for (Iterator<ListenerInfo> iter = added.iterator(); iter.hasNext();) {
+				ListenerHook.ListenerInfo info = iter.next();
 				assertFalse("isRemoved true", info.isRemoved());
 				BundleContext c = info.getBundleContext();
 				String f = info.getFilter();
@@ -1907,9 +1933,9 @@ public class ServiceHookTests extends OSGiTestCase {
 					fail("second listener not removed");
 				}
 			}
-			for (Iterator iter = removed.iterator(); iter.hasNext();) {
-				ListenerHook.ListenerInfo info = (ListenerHook.ListenerInfo) iter
-						.next();
+			for (Iterator<ListenerInfo> iter = removed.iterator(); iter
+					.hasNext();) {
+				ListenerHook.ListenerInfo info = iter.next();
 				assertTrue("isRemoved true", info.isRemoved());
 			}
 
@@ -1933,19 +1959,19 @@ public class ServiceHookTests extends OSGiTestCase {
 		final BundleContext testContext = getContext();
 
 		// register services
-		Hashtable props = new Hashtable();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put("name", getName());
 		final AssertionFailedError[] factoryError = new AssertionFailedError[] {null};
 		final boolean[] factoryCalled = new boolean[] {false, false};
 		final boolean[] hookCalled = new boolean[] {false};
 		final ListenerHook listenerHook1 = new ListenerHook() {
-			public void added(Collection arg0) {
+			public void added(Collection<ListenerInfo> arg0) {
 				synchronized (hookCalled) {
 					hookCalled[0] = true;
 				}
 			}
 
-			public void removed(Collection arg0) {
+			public void removed(Collection<ListenerInfo> arg0) {
 				synchronized (hookCalled) {
 					hookCalled[0] = true;
 				}
@@ -1959,21 +1985,22 @@ public class ServiceHookTests extends OSGiTestCase {
 		synchronized (factoryError) {
 			factoryError[0] = null;
 		}
-		ServiceRegistration regHook1 = testContext.registerService(
-				ListenerHook.class.getName(), new ServiceFactory() {
+		ServiceRegistration<?> regHook1 = testContext.registerService(
+				ListenerHook.class.getName(),
+				new ServiceFactory<ListenerHook>() {
 
-					public Object getService(Bundle bundle,
-							ServiceRegistration registration) {
+					public ListenerHook getService(Bundle bundle,
+							ServiceRegistration<ListenerHook> registration) {
 						try {
 							synchronized (factoryCalled) {
 								factoryCalled[0] = true;
 							}
 							assertNotNull("using bundle null", bundle);
-							ServiceReference reference = registration
+							ServiceReference<ListenerHook> reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
 							assertNotNull("service not used by a bundle", users);
-							List userList = Arrays.asList(users);
+							List<Bundle> userList = Arrays.asList(users);
 							assertTrue("missing using bundle", userList
 									.contains(bundle));
 						}
@@ -1986,7 +2013,8 @@ public class ServiceHookTests extends OSGiTestCase {
 					}
 
 					public void ungetService(Bundle bundle,
-							ServiceRegistration registration, Object service) {
+							ServiceRegistration<ListenerHook> registration,
+							ListenerHook service) {
 						try {
 							synchronized (factoryCalled) {
 								factoryCalled[1] = true;
@@ -1994,11 +2022,11 @@ public class ServiceHookTests extends OSGiTestCase {
 							assertNotNull("using bundle null", bundle);
 							assertEquals("wrong service", listenerHook1,
 									service);
-							ServiceReference reference = registration
+							ServiceReference<ListenerHook> reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
 							assertNotNull("service not used by a bundle", users);
-							List userList = Arrays.asList(users);
+							List<Bundle> userList = Arrays.asList(users);
 							assertTrue("missing using bundle", userList
 									.contains(bundle));
 						}
