@@ -2080,4 +2080,765 @@ EventListenerHook.class,
 			testContext.removeServiceListener(testSL);
 		}
 	}
+
+	public void testSystemFindHook() {
+		// test the FindHook is called and can remove a reference from the
+		// results for system context
+		Runnable runIt = new Runnable() {
+			public void run() {
+				// nothing
+			}
+		};
+		final BundleContext testContext1 = getContext();
+		final BundleContext systemContext = testContext1.getBundle(Constants.SYSTEM_BUNDLE_LOCATION).getBundleContext();
+
+		// register services
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
+		props.put("name", getName());
+		props.put(Constants.SERVICE_DESCRIPTION, "service 1");
+		final ServiceRegistration<Runnable> reg1 = testContext1.registerService(
+				Runnable.class, runIt, props);
+	
+		props.put(Constants.SERVICE_DESCRIPTION, "service 2");
+		final ServiceRegistration<Runnable> reg2 = testContext1.registerService(
+				Runnable.class, runIt, props);
+	
+		props.put(Constants.SERVICE_DESCRIPTION, "service 3");
+		final ServiceRegistration<Runnable> reg3 = testContext1.registerService(
+				Runnable.class, runIt, props);
+	
+		final int[] hookCalled = new int[] {0, 0, 0, 0, 0};
+		final AssertionFailedError[] hookError = new AssertionFailedError[] {
+				null, null, null, null};
+	
+		// register find hook 1
+		props.put(Constants.SERVICE_DESCRIPTION, "min value");
+		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MIN_VALUE));
+		ServiceRegistration<FindHook> regHook1 = testContext1.registerService(
+				FindHook.class, new FindHook() {
+					public void find(BundleContext context, String name,
+							String filter, boolean allServices,
+							Collection<ServiceReference<?>> references) {
+						try {
+							synchronized (hookCalled) {
+								hookCalled[++hookCalled[0]] = 1;
+							}
+							assertEquals("wrong context in hook", systemContext,
+									context);
+							assertEquals("wrong name in hook", Runnable.class
+									.getName(), name);
+							assertEquals(
+									"wrong filter in hook", "(name=" + getName() + ")", filter); //$NON-NLS-2$ //$NON-NLS-3$
+							assertEquals("wrong allservices in hook", false,
+									allServices);
+							assertEquals("wrong number of services in hook", 1,
+									references.size());
+							for (Iterator<ServiceReference<?>> iter = references
+									.iterator(); iter
+									.hasNext();) {
+								ServiceReference<?> ref = iter.next();
+								if (ref.equals(reg1.getReference())) {
+									fail("service 1 is present");
+								}
+								if (ref.equals(reg2.getReference())) {
+									fail("service 2 is present");
+								}
+							}
+	
+							try {
+								references.add(reg1.getReference());
+								fail("add to collection succeeded");
+							}
+							catch (UnsupportedOperationException e) {
+								// should get an exception
+							}
+							catch (Exception e) {
+								fail("incorrect exception", e);
+							}
+							try {
+								references.addAll(Arrays
+										.asList(new ServiceReference<?>[] { reg1
+												.getReference()}));
+								fail("addAll to collection succeeded");
+							}
+							catch (UnsupportedOperationException e) {
+								// should get an exception
+							}
+							catch (Exception e) {
+								fail("incorrect exception", e);
+							}
+						}
+						catch (AssertionFailedError a) {
+							hookError[0] = a;
+							return;
+						}
+					}
+				}, props);
+	
+		// register find hook 2
+		props.put(Constants.SERVICE_DESCRIPTION, "max value first");
+		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		ServiceRegistration<FindHook> regHook2 = testContext1.registerService(
+				FindHook.class, new FindHook() {
+					public void find(BundleContext context, String name,
+							String filter, boolean allServices,
+							Collection<ServiceReference<?>> references) {
+						try {
+							synchronized (hookCalled) {
+								hookCalled[++hookCalled[0]] = 2;
+							}
+							assertEquals("wrong context in hook", systemContext,
+									context);
+							assertEquals("wrong name in hook", Runnable.class
+									.getName(), name);
+							assertEquals(
+									"wrong filter in hook", "(name=" + getName() + ")", filter); //$NON-NLS-2$ //$NON-NLS-3$
+							assertEquals("wrong allservices in hook", false,
+									allServices);
+							assertEquals("wrong number of services in hook", 3,
+									references.size());
+							for (Iterator<ServiceReference<?>> iter = references
+									.iterator(); iter
+									.hasNext();) {
+								ServiceReference<?> ref = iter.next();
+								if (ref.equals(reg2.getReference())) {
+									iter.remove();
+								}
+							}
+	
+							try {
+								references.add(reg2.getReference());
+								fail("add to collection succeeded");
+							}
+							catch (UnsupportedOperationException e) {
+								// should get an exception
+							}
+							catch (Exception e) {
+								fail("incorrect exception", e);
+							}
+							try {
+								references.addAll(Arrays
+										.asList(new ServiceReference<?>[] { reg2
+												.getReference()}));
+								fail("addAll to collection succeeded");
+							}
+							catch (UnsupportedOperationException e) {
+								// should get an exception
+							}
+							catch (Exception e) {
+								fail("incorrect exception", e);
+							}
+						}
+						catch (AssertionFailedError a) {
+							hookError[1] = a;
+							return;
+						}
+					}
+				}, props);
+	
+		// register find hook 3
+		props.put(Constants.SERVICE_DESCRIPTION, "max value second");
+		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		ServiceRegistration<FindHook> regHook3 = testContext1.registerService(
+				FindHook.class, new FindHook() {
+					public void find(BundleContext context, String name,
+							String filter, boolean allServices,
+							Collection<ServiceReference<?>> references) {
+						try {
+							synchronized (hookCalled) {
+								hookCalled[++hookCalled[0]] = 3;
+							}
+							assertEquals("wrong context in hook", systemContext,
+									context);
+							assertEquals("wrong name in hook", Runnable.class
+									.getName(), name);
+							assertEquals(
+									"wrong filter in hook", "(name=" + getName() + ")", filter); //$NON-NLS-2$ //$NON-NLS-3$
+							assertEquals("wrong allservices in hook", false,
+									allServices);
+							assertEquals("wrong number of services in hook", 2,
+									references.size());
+							for (Iterator<ServiceReference<?>> iter = references
+									.iterator(); iter
+									.hasNext();) {
+								ServiceReference<?> ref = iter.next();
+								if (ref.equals(reg2.getReference())) {
+									fail("service 2 is present");
+								}
+							}
+	
+							try {
+								references.add(reg2.getReference());
+								fail("add to collection succeeded");
+							}
+							catch (UnsupportedOperationException e) {
+								// should get an exception
+							}
+							catch (Exception e) {
+								fail("incorrect exception", e);
+							}
+							try {
+								references.addAll(Arrays
+										.asList(new ServiceReference<?>[] { reg2
+												.getReference()}));
+								fail("addAll to collection succeeded");
+							}
+							catch (UnsupportedOperationException e) {
+								// should get an exception
+							}
+							catch (Exception e) {
+								fail("incorrect exception", e);
+							}
+						}
+						catch (AssertionFailedError a) {
+							hookError[2] = a;
+							return;
+						}
+						// throw an exception from the hook to test that the
+						// next hooks are called.
+						throw new RuntimeException(getName());
+					}
+				}, props);
+	
+		// register find hook 4
+		props.put(Constants.SERVICE_DESCRIPTION, "max value third");
+		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		ServiceRegistration<FindHook> regHook4 = testContext1.registerService(
+				FindHook.class, new FindHook() {
+					public void find(BundleContext context, String name,
+							String filter, boolean allServices,
+							Collection<ServiceReference<?>> references) {
+						try {
+							synchronized (hookCalled) {
+								hookCalled[++hookCalled[0]] = 4;
+							}
+							assertEquals("wrong context in hook", systemContext,
+									context);
+							assertEquals("wrong name in hook", Runnable.class
+									.getName(), name);
+							assertEquals(
+									"wrong filter in hook", "(name=" + getName() + ")", filter); //$NON-NLS-2$ //$NON-NLS-3$
+							assertEquals("wrong allservices in hook", false,
+									allServices);
+							assertEquals("wrong number of services in hook", 2,
+									references.size());
+							for (Iterator<ServiceReference<?>> iter = references
+									.iterator(); iter
+									.hasNext();) {
+								ServiceReference<?> ref = iter.next();
+								if (ref.equals(reg1.getReference())) {
+									iter.remove();
+								}
+								if (ref.equals(reg2.getReference())) {
+									fail("service 2 is present");
+								}
+							}
+	
+							try {
+								references.add(reg2.getReference());
+								fail("add to collection succeeded");
+							}
+							catch (UnsupportedOperationException e) {
+								// should get an exception
+							}
+							catch (Exception e) {
+								fail("incorrect exception", e);
+							}
+							try {
+								references.addAll(Arrays
+										.asList(new ServiceReference<?>[] { reg2
+												.getReference()}));
+								fail("addAll to collection succeeded");
+							}
+							catch (UnsupportedOperationException e) {
+								// should get an exception
+							}
+							catch (Exception e) {
+								fail("incorrect exception", e);
+							}
+						}
+						catch (AssertionFailedError a) {
+							hookError[3] = a;
+							return;
+						}
+					}
+				}, props);
+	
+		// get reference and hook removes some services
+		try {
+			ServiceReference<?>[] refs = null;
+			try {
+				refs = systemContext.getServiceReferences(Runnable.class
+						.getName(), "(name=" + getName() + ")"); //$NON-NLS-2$
+			}
+			catch (InvalidSyntaxException e) {
+				fail("Unexpected syntax error", e);
+			}
+			assertEquals("all hooks not called", 4, hookCalled[0]);
+			assertEquals("hook 2 not called first", 2, hookCalled[1]);
+			assertEquals("hook 3 not called second", 3, hookCalled[2]);
+			assertEquals("hook 4 not called third", 4, hookCalled[3]);
+			assertEquals("hook 1 not called fourth ", 1, hookCalled[4]);
+			for (int i = 0; i < hookError.length; i++) {
+				if (hookError[i] != null) {
+					throw hookError[i];
+				}
+			}
+			assertNotNull("service refs is null", refs);
+			assertEquals("Wrong number of references", 3, refs.length);
+	
+			// test removed services ARE in the result; since removals are ignored
+			List<?> refList = Arrays.asList(refs);
+			assertTrue("missing service 1", refList.contains(reg1
+					.getReference()));
+			assertTrue("missing service 2", refList.contains(reg2
+					.getReference()));
+			assertTrue("missing service 3", refList.contains(reg3
+					.getReference()));
+		}
+		finally {
+			// unregister hook and services
+			if (regHook1 != null)
+				regHook1.unregister();
+			if (regHook2 != null)
+				regHook2.unregister();
+			if (regHook3 != null)
+				regHook3.unregister();
+			if (regHook4 != null)
+				regHook4.unregister();
+			if (reg1 != null)
+				reg1.unregister();
+			if (reg2 != null)
+				reg2.unregister();
+			if (reg3 != null)
+				reg3.unregister();
+		}
+	}
+
+	public void testSystemEventHook() {
+		// test the EventHook is called and can remove a reference from the
+		// results
+		Runnable runIt = new Runnable() {
+			public void run() {
+				// nothing
+			}
+		};
+
+		final BundleContext testContext = getContext();
+		final BundleContext systemContext = testContext.getBundle(
+				Constants.SYSTEM_BUNDLE_LOCATION).getBundleContext();
+
+		final int[] hookCalled = new int[] { 0, 0, 0 };
+		final AssertionFailedError[] hookError = new AssertionFailedError[] {
+				null, null };
+		final List<ServiceEvent> events = new ArrayList<ServiceEvent>();
+
+		final ServiceListener sl = new ServiceListener() {
+			public void serviceChanged(ServiceEvent event) {
+				synchronized (events) {
+					events.add(event);
+				}
+			}
+		};
+
+		final String filterString = "(&(name=" + getName() + ")(objectClass=java.lang.Runnable))"; //$NON-NLS-2$
+		Filter tmpFilter = null;
+		try {
+			tmpFilter = systemContext.createFilter(filterString);
+			systemContext.addServiceListener(sl, filterString);
+		} catch (InvalidSyntaxException e) {
+			fail("Unexpected syntax error", e);
+		}
+
+		final Filter filter = tmpFilter;
+		EventHook hook1 = new EventHook() {
+			public void event(ServiceEvent event,
+					Collection<BundleContext> contexts) {
+				try {
+					if (!filter.match(event.getServiceReference())) {
+						return;
+					}
+					synchronized (hookCalled) {
+						hookCalled[++hookCalled[0]] = 1;
+					}
+					assertTrue("does not contain system context",
+							contexts.contains(systemContext));
+					contexts.remove(systemContext);
+					try {
+						contexts.add(testContext);
+						fail("add to collection succeeded");
+					} catch (UnsupportedOperationException e) {
+						// should get an exception
+					} catch (Exception e) {
+						fail("incorrect exception", e);
+					}
+					try {
+						contexts.addAll(Arrays
+								.asList(new BundleContext[] { testContext }));
+						fail("addAll to collection succeeded");
+					} catch (UnsupportedOperationException e) {
+						// should get an exception
+					} catch (Exception e) {
+						fail("incorrect exception", e);
+					}
+				} catch (AssertionFailedError a) {
+					hookError[0] = a;
+					return;
+				}
+			}
+		};
+
+		EventHook hook2 = new EventHook() {
+			public void event(ServiceEvent event,
+					Collection<BundleContext> contexts) {
+				try {
+					if (!filter.match(event.getServiceReference())) {
+						return;
+					}
+					synchronized (hookCalled) {
+						hookCalled[++hookCalled[0]] = 2;
+					}
+					assertFalse("does contain system context",
+							contexts.contains(systemContext));
+
+					try {
+						contexts.add(testContext);
+						fail("add to collection succeeded");
+					} catch (UnsupportedOperationException e) {
+						// should get an exception
+					} catch (Exception e) {
+						fail("incorrect exception", e);
+					}
+					try {
+						contexts.addAll(Arrays
+								.asList(new BundleContext[] { testContext }));
+						fail("addAll to collection succeeded");
+					} catch (UnsupportedOperationException e) {
+						// should get an exception
+					} catch (Exception e) {
+						fail("incorrect exception", e);
+					}
+				} catch (AssertionFailedError a) {
+					hookError[0] = a;
+					return;
+				}
+			}
+		};
+
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
+		props.put("name", getName());
+
+		// register event hooks
+		props.put(Constants.SERVICE_DESCRIPTION, "event hook 1");
+		ServiceRegistration<EventHook> regHook1 = testContext.registerService(
+				EventHook.class, hook1, props);
+		props.put(Constants.SERVICE_DESCRIPTION, "event hook 2");
+		ServiceRegistration<EventHook> regHook2 = testContext.registerService(
+				EventHook.class, hook2, props);
+
+		ServiceRegistration<Runnable> reg1 = null;
+		try {
+			props.put(Constants.SERVICE_DESCRIPTION, "service 1");
+			synchronized (events) {
+				events.clear();
+			}
+			reg1 = testContext.registerService(Runnable.class, runIt, props);
+			assertEquals("all hooks not called", 2, hookCalled[0]);
+			assertEquals("hook 1 not called first", 1, hookCalled[1]);
+			assertEquals("hook 2 not called second", 2, hookCalled[2]);
+			for (int i = 0; i < hookError.length; i++) {
+				if (hookError[i] != null) {
+					throw hookError[i];
+				}
+			}
+			synchronized (events) {
+				assertEquals("listener not called once", 1, events.size());
+				for (Iterator<ServiceEvent> iter = events.iterator(); iter
+						.hasNext();) {
+					ServiceEvent event = iter.next();
+					assertEquals("type not registered",
+							ServiceEvent.REGISTERED, event.getType());
+					assertEquals("wrong service", reg1.getReference(),
+							event.getServiceReference());
+				}
+			}
+
+			synchronized (events) {
+				events.clear();
+			}
+			hookCalled[0] = 0;
+			hookCalled[1] = 0;
+			hookCalled[2] = 0;
+			props.put(Constants.SERVICE_DESCRIPTION, "service 2");
+			reg1.setProperties(props);
+			synchronized (events) {
+				assertEquals("listener not called once", 1, events.size());
+				for (Iterator<ServiceEvent> iter = events.iterator(); iter
+						.hasNext();) {
+					ServiceEvent event = iter.next();
+					assertEquals("type not registered", ServiceEvent.MODIFIED,
+							event.getType());
+					assertEquals("wrong service", reg1.getReference(),
+							event.getServiceReference());
+				}
+			}
+			assertEquals("all hooks not called", 2, hookCalled[0]);
+			assertEquals("hook 1 not called first", 1, hookCalled[1]);
+			assertEquals("hook 2 not called second", 2, hookCalled[2]);
+			for (int i = 0; i < hookError.length; i++) {
+				if (hookError[i] != null) {
+					throw hookError[i];
+				}
+			}
+
+			synchronized (events) {
+				events.clear();
+			}
+			hookCalled[0] = 0;
+			hookCalled[1] = 0;
+			hookCalled[2] = 0;
+
+			final ServiceReference<Runnable> reg1Ref = reg1.getReference();
+			reg1.unregister();
+			reg1 = null;
+			synchronized (events) {
+				assertEquals("listener not called once", 1, events.size());
+				for (Iterator<ServiceEvent> iter = events.iterator(); iter
+						.hasNext();) {
+					ServiceEvent event = iter.next();
+					assertEquals("type not registered",
+							ServiceEvent.UNREGISTERING, event.getType());
+					assertEquals("wrong service", reg1Ref,
+							event.getServiceReference());
+				}
+			}
+
+			assertEquals("all hooks not called", 2, hookCalled[0]);
+			assertEquals("hook 1 not called first", 1, hookCalled[1]);
+			assertEquals("hook 2 not called second", 2, hookCalled[2]);
+			for (int i = 0; i < hookError.length; i++) {
+				if (hookError[i] != null) {
+					throw hookError[i];
+				}
+			}
+
+		} finally {
+			// unregister hook and services
+			if (regHook1 != null)
+				regHook1.unregister();
+			if (regHook2 != null)
+				regHook2.unregister();
+			if (reg1 != null)
+				reg1.unregister();
+			if (sl != null)
+				systemContext.removeServiceListener(sl);
+		}
+	}
+
+	public void testSystemEventListenerHook() {
+		// test the EventHook is called before the EventListenerHook for system
+		// context
+		Runnable runIt = new Runnable() {
+			public void run() {
+				// nothing
+			}
+		};
+		final BundleContext testContext = getContext();
+		final BundleContext systemContext = testContext.getBundle(
+				Constants.SYSTEM_BUNDLE_LOCATION).getBundleContext();
+
+		final int[] hookCalled = new int[] { 0, 0, 0, 0, 0 };
+		final AssertionFailedError[] hookError = new AssertionFailedError[] {
+				null, null, null, null };
+		final boolean[] eventHookRemove = new boolean[] { false };
+
+		final List<ServiceEvent> events = new ArrayList<ServiceEvent>();
+
+		final ServiceListener sl = new ServiceListener() {
+			public void serviceChanged(ServiceEvent event) {
+				synchronized (events) {
+					events.add(event);
+				}
+			}
+		};
+
+		final String filterString = "(&(name=" + getName() + ")(objectClass=java.lang.Runnable))"; //$NON-NLS-2$
+		Filter tmpFilter = null;
+		try {
+			tmpFilter = systemContext.createFilter(filterString);
+			systemContext.addServiceListener(sl, filterString);
+		} catch (InvalidSyntaxException e) {
+			fail("Unexpected syntax error", e);
+		}
+
+		final Filter filter = tmpFilter;
+		EventHook hook1 = new EventHook() {
+			public void event(ServiceEvent event,
+					Collection<BundleContext> contexts) {
+				if (!filter.match(event.getServiceReference())) {
+					return;
+				}
+				try {
+					synchronized (hookCalled) {
+						hookCalled[++hookCalled[0]] = 1;
+						assertTrue("does not contain system context",
+								contexts.contains(systemContext));
+						if (eventHookRemove[0]) {
+							contexts.remove(systemContext);
+						}
+					}
+				} catch (AssertionFailedError a) {
+					hookError[0] = a;
+					return;
+				}
+			}
+		};
+		EventHook hook2 = new EventHook() {
+			public void event(ServiceEvent event,
+					Collection<BundleContext> contexts) {
+				if (!filter.match(event.getServiceReference())) {
+					return;
+				}
+				synchronized (hookCalled) {
+					hookCalled[++hookCalled[0]] = 2;
+					if (eventHookRemove[0]) {
+						assertFalse("does contain system context",
+								contexts.contains(systemContext));
+					} else {
+						assertTrue("does not contain system context",
+								contexts.contains(systemContext));
+					}
+				}
+			}
+		};
+		EventListenerHook hook3 = new EventListenerHook() {
+			public void event(ServiceEvent event,
+					Map<BundleContext, Collection<ListenerInfo>> listeners) {
+				if (!filter.match(event.getServiceReference())) {
+					return;
+				}
+				synchronized (hookCalled) {
+					hookCalled[++hookCalled[0]] = 3;
+					if (!eventHookRemove[0]) {
+						assertTrue("does not contain system context",
+								listeners.containsKey(systemContext));
+						Collection<ListenerInfo> systemListeners = listeners
+								.get(systemContext);
+						assertNotNull("no system listeiners", systemListeners);
+						boolean found = false;
+						for (Iterator<ListenerInfo> i = systemListeners
+								.iterator(); i.hasNext();) {
+							ListenerInfo li = i.next();
+							if (li.getFilter().indexOf(getName()) > 0) {
+								i.remove();
+								found = true;
+								break;
+							}
+						}
+						assertTrue("Did not find listener info", found);
+					} else {
+						assertFalse("does contain system context",
+								listeners.containsKey(systemContext));
+					}
+				}
+			}
+		};
+
+		EventListenerHook hook4 = new EventListenerHook() {
+			public void event(ServiceEvent event,
+					Map<BundleContext, Collection<ListenerInfo>> listeners) {
+				if (!filter.match(event.getServiceReference())) {
+					return;
+				}
+				synchronized (hookCalled) {
+					hookCalled[++hookCalled[0]] = 4;
+					if (!eventHookRemove[0]) {
+						assertTrue("does not contain system context",
+								listeners.containsKey(systemContext));
+						Collection<ListenerInfo> systemListeners = listeners
+								.get(systemContext);
+						assertNotNull("no system listeiners", systemListeners);
+						boolean found = false;
+						for (Iterator<ListenerInfo> i = systemListeners
+								.iterator(); i.hasNext();) {
+							ListenerInfo li = i.next();
+							if (li.getFilter().indexOf(getName()) > 0) {
+								found = true;
+								break;
+							}
+						}
+						assertFalse("Did find listener info", found);
+					} else {
+						assertFalse("does contain system context",
+								listeners.containsKey(systemContext));
+					}
+				}
+			}
+		};
+
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
+		props.put("name", getName());
+		// register event hook 4
+		props.put(Constants.SERVICE_DESCRIPTION, "event hook 4");
+		ServiceRegistration<EventListenerHook> regHook4 = testContext
+				.registerService(EventListenerHook.class, hook4, props);
+
+		// register event hook 2
+		props.put(Constants.SERVICE_DESCRIPTION, "event hook 2");
+		ServiceRegistration<EventHook> regHook2 = testContext.registerService(
+				EventHook.class, hook2, props);
+
+		// register event hook 3
+		props.put(Constants.SERVICE_DESCRIPTION, "event hook 3");
+		props.put(Constants.SERVICE_RANKING, new Integer(20));
+		ServiceRegistration<EventListenerHook> regHook3 = testContext
+				.registerService(EventListenerHook.class, hook3, props);
+
+		// register event hook 1
+		props.put(Constants.SERVICE_DESCRIPTION, "event hook 1");
+		props.put(Constants.SERVICE_RANKING, new Integer(10));
+		ServiceRegistration<EventHook> regHook1 = testContext.registerService(
+				EventHook.class, hook1, props);
+
+		ServiceRegistration<Runnable> reg1 = null;
+		try {
+			props.put(Constants.SERVICE_DESCRIPTION, "service 1");
+			props.remove(Constants.SERVICE_RANKING);
+			reg1 = testContext.registerService(Runnable.class, runIt, props);
+			synchronized (hookCalled) {
+				assertEquals("all hooks not called", 4, hookCalled[0]);
+				assertEquals("hook 1 not called first", 1, hookCalled[1]);
+				assertEquals("hook 2 not called second", 2, hookCalled[2]);
+				assertEquals("hook 3 not called third", 3, hookCalled[3]);
+				assertEquals("hook 4 not called fourth", 4, hookCalled[4]);
+				for (int i = 0; i < hookError.length; i++) {
+					if (hookError[i] != null) {
+						throw hookError[i];
+					}
+				}
+			}
+			synchronized (events) {
+				assertEquals("listener not called once", 1, events.size());
+				ServiceEvent event = events.get(0);
+				assertEquals("type not registered", ServiceEvent.REGISTERED,
+						event.getType());
+				assertEquals("wrong service", reg1.getReference(),
+						event.getServiceReference());
+			}
+		} finally {
+			// unregister hook and services
+			if (regHook1 != null)
+				regHook1.unregister();
+			if (regHook2 != null)
+				regHook2.unregister();
+			if (regHook3 != null)
+				regHook3.unregister();
+			if (regHook4 != null)
+				regHook4.unregister();
+			if (reg1 != null)
+				reg1.unregister();
+			if (sl != null)
+				systemContext.removeServiceListener(sl);
+		}
+	}
 }
