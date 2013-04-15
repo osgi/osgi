@@ -2,7 +2,7 @@
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Bundle-Activator: 		org.osgi.impl.service.log.Log
-Export-Package: 		org.osgi.service.log;-split-package:=first
+Export-Package: 		org.osgi.service.log; -split-package:=first; provide:=true
 Private-Package: 		${p}.*
 
 Bundle-Name: 			impl.service.log

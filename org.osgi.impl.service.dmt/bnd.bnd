@@ -11,7 +11,7 @@ Import-Service					= \
 	org.osgi.service.cm.ConfigurationAdmin
 
 Export-Package 					= \
-    org.osgi.service.dmt.*; -split-package:=first, \
+    org.osgi.service.dmt.*; -split-package:=first; provide:=true, \
     org.osgi.service.event; -split-package:=first
 Private-Package					= ${p}.*
 

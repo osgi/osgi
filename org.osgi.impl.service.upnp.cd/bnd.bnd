@@ -10,7 +10,7 @@ Import-Service				= org.osgi.service.upnp.UPnPDevice
 Export-Service				= org.osgi.service.upnp.UPnPListener
 
 Private-Package 			= ${p}.*
-Export-Package				= org.osgi.service.upnp;-split-package:=first
+Export-Package				= org.osgi.service.upnp; -split-package:=first; provide:=true
 
 -buildpath = \
 	org.osgi.service.upnp; 			version=project, \

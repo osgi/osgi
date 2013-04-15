@@ -6,7 +6,7 @@ Bundle-Activator				= ${p}.Activator
 Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
 Private-Package 					= ${p}.*
-Export-Package					= org.osgi.service.application;-split-package:=first
+Export-Package					= org.osgi.service.application; -split-package:=first; provide:=true
 
 -buildpath						= \
 	org.osgi.service.application;	version=project, \

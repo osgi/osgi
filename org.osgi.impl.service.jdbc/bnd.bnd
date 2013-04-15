@@ -2,7 +2,7 @@
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Bundle-Activator: 		${p}.Activator
-Export-Package: 		org.osgi.service.jdbc;-split-package:=first
+Export-Package: 		org.osgi.service.jdbc; -split-package:=first; provide:=true
 #Import-Package: 		org.apache.derby.jdbc, javax.sql, org.osgi.framework
 Private-Package: 		${p}.*
 
