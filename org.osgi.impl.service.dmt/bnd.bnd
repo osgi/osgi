@@ -10,7 +10,7 @@ Import-Service					= \
 	org.osgi.service.log.LogService, \
 	org.osgi.service.cm.ConfigurationAdmin
 
-Export-Package 					= ${p}.export; provide:=true, \
+Export-Package 					= \
     org.osgi.service.dmt.*; -split-package:=first, \
     org.osgi.service.event; -split-package:=first
 Private-Package					= ${p}.*
