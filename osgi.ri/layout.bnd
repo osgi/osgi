@@ -20,7 +20,6 @@ build.cmpn.impls = \
 	org.osgi.impl.service.jndi, \
 	org.osgi.impl.service.log , \
 	org.osgi.impl.service.monitor , \
-	org.osgi.impl.service.policy , \
 	org.osgi.impl.service.prefs , \
 	org.osgi.impl.service.upnp.cp , \
 	org.osgi.impl.service.upnp.cd , \
