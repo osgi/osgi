@@ -17,6 +17,7 @@
 package org.osgi.resource;
 
 import java.util.List;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * A wiring for a resource. A wiring is associated with a resource and
@@ -30,6 +31,7 @@ import java.util.List;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface Wiring {
 	/**
 	 * Returns the capabilities provided by this wiring.

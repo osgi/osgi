@@ -16,6 +16,8 @@
 
 package org.osgi.resource;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * A wire connecting a {@link Capability} to a {@link Requirement}.
  * 
@@ -27,6 +29,7 @@ package org.osgi.resource;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface Wire {
 	/**
 	 * Returns the {@link Capability} for this wire.
