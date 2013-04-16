@@ -17,6 +17,7 @@
 package org.osgi.framework;
 
 import java.util.Dictionary;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * A registered service.
@@ -36,7 +37,7 @@ import java.util.Dictionary;
  * @noimplement
  * @author $Id$
  */
-
+@ProviderType
 public interface ServiceRegistration<S> {
 	/**
 	 * Returns a {@code ServiceReference} object for a service being registered.

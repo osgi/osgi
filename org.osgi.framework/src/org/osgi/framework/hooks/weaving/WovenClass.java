@@ -18,6 +18,7 @@ package org.osgi.framework.hooks.weaving;
 
 import java.security.ProtectionDomain;
 import java.util.List;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.wiring.BundleWiring;
 
 /**
@@ -36,6 +37,7 @@ import org.osgi.framework.wiring.BundleWiring;
  * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface WovenClass {
 	/**
 	 * The woven class is being transformed.

@@ -19,6 +19,7 @@ package org.osgi.framework.launch;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -36,6 +37,7 @@ import org.osgi.framework.FrameworkEvent;
  * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface Framework extends Bundle {
 
 	/**

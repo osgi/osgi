@@ -25,6 +25,7 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.wiring.FrameworkWiring;
 
 /**
@@ -77,6 +78,7 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface Bundle extends Comparable<Bundle> {
 	/**
 	 * The bundle is uninstalled and may not be used.

@@ -16,6 +16,8 @@
 
 package org.osgi.framework;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * Customizes the starting and stopping of a bundle.
  * <p>
@@ -46,7 +48,7 @@ package org.osgi.framework;
  * @NotThreadSafe
  * @author $Id$
  */
-
+@ConsumerType
 public interface BundleActivator {
 	/**
 	 * Called when this bundle is started so the Framework can perform the

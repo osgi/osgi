@@ -16,6 +16,8 @@
 
 package org.osgi.framework;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * A {@code ServiceEvent} listener that does not filter based upon package
  * wiring. {@code AllServiceListener} is a listener interface that may be
@@ -54,7 +56,7 @@ package org.osgi.framework;
  * @since 1.3
  * @author $Id$
  */
-
+@ConsumerType
 public interface AllServiceListener extends ServiceListener {
 	// This is a marker interface
 }

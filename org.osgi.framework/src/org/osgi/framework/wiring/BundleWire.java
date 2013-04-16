@@ -16,6 +16,7 @@
 
 package org.osgi.framework.wiring;
 
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.resource.Wire;
 
 /**
@@ -25,6 +26,7 @@ import org.osgi.resource.Wire;
  * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface BundleWire extends Wire {
 	/**
 	 * Returns the {@link BundleCapability} for this wire.

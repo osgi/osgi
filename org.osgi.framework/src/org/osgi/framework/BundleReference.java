@@ -16,6 +16,8 @@
 
 package org.osgi.framework;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * A reference to a Bundle.
  * 
@@ -24,6 +26,7 @@ package org.osgi.framework;
  * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface BundleReference {
 	/**
 	 * Returns the {@code Bundle} object associated with this

@@ -18,6 +18,7 @@ package org.osgi.framework;
 
 import java.util.Dictionary;
 import java.util.Map;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * An <a href="http://www.ietf.org/rfc/rfc1960.txt">RFC 1960</a>-based Filter.
@@ -44,6 +45,7 @@ import java.util.Map;
  * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface Filter {
 	/**
 	 * Filter using a service's properties.

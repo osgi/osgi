@@ -17,6 +17,7 @@
 package org.osgi.framework.hooks.bundle;
 
 import java.util.Collection;
+import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 
@@ -30,6 +31,7 @@ import org.osgi.framework.BundleEvent;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface EventHook {
 
 	/**

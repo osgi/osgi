@@ -17,6 +17,7 @@
 package org.osgi.framework;
 
 import java.util.EventListener;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * A {@code ServiceEvent} listener. {@code ServiceListener} is a listener
@@ -51,7 +52,7 @@ import java.util.EventListener;
  * @ThreadSafe
  * @author $Id$
  */
-
+@ConsumerType
 public interface ServiceListener extends EventListener {
 	/**
 	 * Receives notification that a service has had a lifecycle change.

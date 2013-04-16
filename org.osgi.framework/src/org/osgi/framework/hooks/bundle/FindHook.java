@@ -17,6 +17,7 @@
 package org.osgi.framework.hooks.bundle;
 
 import java.util.Collection;
+import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -31,6 +32,7 @@ import org.osgi.framework.BundleException;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface FindHook {
 	/**
 	 * Find hook method. This method is called for the following:

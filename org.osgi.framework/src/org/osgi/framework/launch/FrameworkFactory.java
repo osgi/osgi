@@ -17,6 +17,7 @@
 package org.osgi.framework.launch;
 
 import java.util.Map;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 
 /**
@@ -47,6 +48,7 @@ import org.osgi.framework.Bundle;
  * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface FrameworkFactory {
 
 	/**

@@ -30,5 +30,8 @@
  * @author $Id$
  */
 
+@Version("1.8")
 package org.osgi.framework;
+
+import org.osgi.annotation.versioning.Version;
 

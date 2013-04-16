@@ -16,6 +16,7 @@
 
 package org.osgi.framework;
 
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.hooks.bundle.CollisionHook;
 import org.osgi.framework.launch.Framework;
 
@@ -31,7 +32,7 @@ import org.osgi.framework.launch.Framework;
  * @noimplement
  * @author $Id$
  */
-
+@ProviderType
 public interface Constants {
 	/**
 	 * Location identifier of the OSGi <i>system bundle </i>, which is defined

@@ -16,7 +16,7 @@
 
 package org.osgi.framework.hooks.weaving;
 
-
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * OSGi Framework Woven Class Listener Service.
@@ -49,7 +49,7 @@ package org.osgi.framework.hooks.weaving;
  * @since 1.1
  * @author $Id$
  */
-
+@ConsumerType
 public interface WovenClassListener {
 	/**
 	 * Receives notification that a {@link WovenClass woven class} has completed

@@ -17,6 +17,7 @@
 package org.osgi.framework.hooks.service;
 
 import java.util.Collection;
+import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 
@@ -30,7 +31,7 @@ import org.osgi.framework.ServiceReference;
  * @ThreadSafe
  * @author $Id$
  */
-
+@ConsumerType
 public interface FindHook {
 	/**
 	 * Find hook method. This method is called during the service find operation

@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.util.Collection;
 import java.util.Dictionary;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * A bundle's execution context within the Framework. The context is used to
@@ -87,7 +88,7 @@ import java.util.Dictionary;
  * @noimplement
  * @author $Id$
  */
-
+@ProviderType
 public interface BundleContext extends BundleReference {
 
 	/**

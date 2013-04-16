@@ -17,6 +17,7 @@
 package org.osgi.framework.wiring;
 
 import java.util.Collection;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.FrameworkListener;
@@ -35,6 +36,7 @@ import org.osgi.framework.FrameworkListener;
  * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface FrameworkWiring extends BundleReference {
 	/**
 	 * Refreshes the specified bundles. This forces the update (replacement) or

@@ -16,6 +16,7 @@
 
 package org.osgi.framework.startlevel;
 
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 
@@ -32,6 +33,7 @@ import org.osgi.framework.BundleReference;
  * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface BundleStartLevel extends BundleReference {
 	/**
 	 * Return the assigned start level value for the bundle.

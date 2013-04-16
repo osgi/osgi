@@ -16,6 +16,8 @@
 
 package org.osgi.framework;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * Allows services to provide customized service objects in the OSGi
  * environment.
@@ -47,7 +49,7 @@ package org.osgi.framework;
  * @ThreadSafe
  * @author $Id$
  */
-
+@ConsumerType
 public interface ServiceFactory<S> {
 	/**
 	 * Creates a new service object.
