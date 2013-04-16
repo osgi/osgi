@@ -6,4 +6,4 @@
 Private-Package: ${p}.*; -split-package:=first
 
 -buildpath = \
-	ee.j2se;					version=1.5
+    ee.minimum; version=1.3
