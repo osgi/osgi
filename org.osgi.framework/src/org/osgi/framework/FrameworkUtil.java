@@ -539,6 +539,7 @@ public class FrameworkUtil {
 		 * 
 		 * @return This {@code Filter}'s filter string.
 		 */
+		@Override
 		public String toString() {
 			String result = filterString;
 			if (result == null) {
@@ -661,6 +662,7 @@ public class FrameworkUtil {
 		 *         {@code this.toString().equals(obj.toString()}; {@code false}
 		 *         otherwise.
 		 */
+		@Override
 		public boolean equals(Object obj) {
 			if (obj == this) {
 				return true;
@@ -682,6 +684,7 @@ public class FrameworkUtil {
 		 * 
 		 * @return The hashCode of this {@code Filter}.
 		 */
+		@Override
 		public int hashCode() {
 			return this.toString().hashCode();
 		}
@@ -768,6 +771,7 @@ public class FrameworkUtil {
 				return compare_Boolean(operation, ((Boolean) value1).booleanValue(), value2);
 			}
 			if (value1 instanceof Comparable<?>) {
+				@SuppressWarnings("unchecked")
 				Comparable<Object> comparable = (Comparable<Object>) value1;
 				return compare_Comparable(operation, comparable, value2);
 			}
@@ -1615,6 +1619,7 @@ public class FrameworkUtil {
 			this.keys = keyList.toArray(new String[keyList.size()]);
 		}
 
+		@Override
 		public Object get(Object o) {
 			String k = (String) o;
 			for (String key : keys) {
@@ -1643,6 +1648,7 @@ public class FrameworkUtil {
 			this.reference = reference;
 		}
 
+		@Override
 		public Object get(Object key) {
 			if (reference == null) {
 				return null;

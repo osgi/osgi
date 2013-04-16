@@ -377,6 +377,7 @@ public class VersionRange {
 	 * 
 	 * @return The string representation of this version range.
 	 */
+	@Override
 	public String toString() {
 		String s = versionRangeString;
 		if (s != null) {
@@ -403,6 +404,7 @@ public class VersionRange {
 	 * 
 	 * @return An integer which is a hash code value for this object.
 	 */
+	@Override
 	public int hashCode() {
 		int h = hash;
 		if (h != 0) {
@@ -432,6 +434,7 @@ public class VersionRange {
 	 * @return {@code true} if {@code object} is a {@code VersionRange} and is
 	 *         equal to this object; {@code false} otherwise.
 	 */
+	@Override
 	public boolean equals(Object object) {
 		if (object == this) { // quicktest
 			return true;

@@ -364,6 +364,7 @@ public final class ServicePermission extends BasicPermission {
 	 * @return {@code true} if the specified permission is implied by this
 	 *         object; {@code false} otherwise.
 	 */
+	@Override
 	public boolean implies(Permission p) {
 		if (!(p instanceof ServicePermission)) {
 			return false;
@@ -438,6 +439,7 @@ public final class ServicePermission extends BasicPermission {
 	 * 
 	 * @return The canonical string representation of the actions.
 	 */
+	@Override
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
@@ -469,6 +471,7 @@ public final class ServicePermission extends BasicPermission {
 	 * @return A new {@code PermissionCollection} object suitable for storing
 	 *         {@code ServicePermission} objects.
 	 */
+	@Override
 	public PermissionCollection newPermissionCollection() {
 		return new ServicePermissionCollection();
 	}
@@ -484,6 +487,7 @@ public final class ServicePermission extends BasicPermission {
 	 *         class name and actions as this {@code ServicePermission} object;
 	 *         {@code false} otherwise.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -503,6 +507,7 @@ public final class ServicePermission extends BasicPermission {
 	 * 
 	 * @return Hash code value for this object.
 	 */
+	@Override
 	public int hashCode() {
 		int h = 31 * 17 + getName().hashCode();
 		h = 31 * h + getActions().hashCode();
@@ -586,6 +591,7 @@ public final class ServicePermission extends BasicPermission {
 			entries = null;
 		}
 
+		@Override
 		public Object get(Object k) {
 			if (!(k instanceof String)) {
 				return null;
@@ -638,14 +644,17 @@ public final class ServicePermission extends BasicPermission {
 				throw new UnsupportedOperationException();
 			}
 
+			@Override
 			public String toString() {
 				return k + "=" + v;
 			}
 
+			@Override
 			public int hashCode() {
 				return ((k == null) ? 0 : k.hashCode()) ^ ((v == null) ? 0 : v.hashCode());
 			}
 
+			@Override
 			public boolean equals(Object obj) {
 				if (obj == this) {
 					return true;
@@ -716,6 +725,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * @throws SecurityException If this {@code ServicePermissionCollection}
 	 *         object has been marked read-only.
 	 */
+	@Override
 	public void add(final Permission permission) {
 		if (!(permission instanceof ServicePermission)) {
 			throw new IllegalArgumentException("invalid permission: " + permission);
@@ -770,6 +780,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * @return {@code true} if {@code permission} is a proper subset of a
 	 *         permission in the set; {@code false} otherwise.
 	 */
+	@Override
 	public boolean implies(final Permission permission) {
 		if (!(permission instanceof ServicePermission)) {
 			return false;
@@ -876,6 +887,7 @@ final class ServicePermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all the ServicePermission objects.
 	 */
+	@Override
 	public synchronized Enumeration<Permission> elements() {
 		List<Permission> all = new ArrayList<Permission>(permissions.values());
 		Map<String, ServicePermission> pc = filterPermissions;
@@ -900,9 +912,11 @@ final class ServicePermissionCollection extends PermissionCollection {
 
 	private synchronized void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		ObjectInputStream.GetField gfields = in.readFields();
+		@SuppressWarnings("unchecked")
 		Hashtable<String, ServicePermission> hashtable = (Hashtable<String, ServicePermission>) gfields.get("permissions", null);
 		permissions = new HashMap<String, ServicePermission>(hashtable);
 		all_allowed = gfields.get("all_allowed", false);
+		@SuppressWarnings("unchecked")
 		HashMap<String, ServicePermission> fp = (HashMap<String, ServicePermission>) gfields.get("filterPermissions", null);
 		filterPermissions = fp;
 	}

@@ -279,6 +279,7 @@ public class Version implements Comparable<Version> {
 	 * 
 	 * @return The string representation of this version identifier.
 	 */
+	@Override
 	public String toString() {
 		return toString0();
 	}
@@ -312,6 +313,7 @@ public class Version implements Comparable<Version> {
 	 * 
 	 * @return An integer which is a hash code value for this object.
 	 */
+	@Override
 	public int hashCode() {
 		int h = hash;
 		if (h != 0) {
@@ -337,6 +339,7 @@ public class Version implements Comparable<Version> {
 	 * @return {@code true} if {@code object} is a {@code Version} and is equal
 	 *         to this object; {@code false} otherwise.
 	 */
+	@Override
 	public boolean equals(Object object) {
 		if (object == this) { // quicktest
 			return true;
