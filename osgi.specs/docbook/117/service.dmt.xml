@@ -273,8 +273,8 @@
       are depicted in <xref linkend="i2421961"/>.</para>
 
       <figure pgwide="1" xml:id="i2421961">
-        <title>Using Dmt Admin service, org.osgi.service.dmt, info,
-        dmt.notification.* package</title>
+        <title>Using Dmt Admin service, org.osgi.service.dmt and
+        org.osgi.service.dmt.notification.* packages</title>
 
         <mediaobject>
           <imageobject>
