@@ -434,7 +434,7 @@
       of an imported UPnP device, the UPnP driver gets the data and presents
       it to the application through an input stream.</para>
 
-      <para>A bundle that needs to export a UPnP Device service with one ore
+      <para>A bundle that needs to export a UPnP Device service with one or
       more icons must provide an implementation of the <code>UPnPIcon</code>
       interface. This implementation must provide an <code>InputStream</code>
       object to the actual icon data. The UPnP driver bundle must then
