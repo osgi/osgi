@@ -2245,7 +2245,7 @@ Vendor/RingTones/Bach</programlisting>
     <section>
       <title>Associating a sub-tree</title>
 
-      <para>Each plugin is associated with one ore more DMT sub-trees. The top
+      <para>Each plugin is associated with one or more DMT sub-trees. The top
       node of a sub-tree is called the <emphasis>plugin root</emphasis>. The
       plugin root is defined by a service registration property. This property
       is different for exec plugins and data plugins:</para>
