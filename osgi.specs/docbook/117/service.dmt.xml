@@ -3346,24 +3346,26 @@ mountPoints     [ C, E/F ]</programlisting>
 
             <listitem>
               <para>Any already mapped Child Plugins must be compatible with
-              its mount points</para>
+              its mount points.</para>
             </listitem>
           </itemizedlist>
         </listitem>
 
         <listitem>
           <para>If no mount points are specified then there must be no Child
-          Plugins already registered</para>
+          Plugins already registered.</para>
         </listitem>
 
         <listitem>
           <para>The plugin root must be compatible with the corresponding
-          parent’s mount point</para>
+          parent’s mount point. When a Parent Plugin is available, the plugin
+          root must match exactly to the absolute URI of the parent's mount
+          point.</para>
         </listitem>
 
         <listitem>
           <para>The plugin root must be compatible with any other plugins on
-          that mount point</para>
+          that mount point.</para>
         </listitem>
       </itemizedlist>
 
