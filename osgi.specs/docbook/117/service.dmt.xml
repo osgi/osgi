@@ -1855,7 +1855,7 @@ Vendor/RingTones/Bach</programlisting>
         <listitem>
           <para><xref linkend="org.osgi.service.dmt.MetaNode.PERMANENT"
           xrefstyle="hyperlink"/> – Permanent nodes represent an entity in the
-          system. This can be a network interface, de device description, etc.
+          system. This can be a network interface, a device description, etc.
           Permanent nodes in general map to an object in an object oriented
           language. Despite their name, <xref
           linkend="org.osgi.service.dmt.MetaNode.PERMANENT"
