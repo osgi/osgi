@@ -4614,7 +4614,7 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
       following table.</para>
 
       <table pgwide="1" xml:id="service.dmt-event.properties.session">
-        <title>Event Properties For Session Event</title>
+        <title>Event Properties For Session Events</title>
 
         <tgroup cols="4">
           <colspec colnum="1" colwidth="1.5*"/>
