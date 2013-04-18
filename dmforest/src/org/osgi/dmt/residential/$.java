@@ -1,9 +1,11 @@
 
 package org.osgi.dmt.residential;
 
-import org.osgi.dmt.ddf.*;
-import org.osgi.dmt.service.log.*;
-import static org.osgi.dmt.ddf.Scope.SCOPE.*;
+import static org.osgi.dmt.ddf.Scope.SCOPE.P;
+import org.osgi.dmt.ddf.MutableMAP;
+import org.osgi.dmt.ddf.Opt;
+import org.osgi.dmt.ddf.Scope;
+import org.osgi.dmt.service.log.Log;
 
 /**
  * The $ describes the root node for OSGi Residential Management. The path to

@@ -1,8 +1,9 @@
 
 package org.osgi.dmt.residential;
 
-import static org.osgi.dmt.ddf.Scope.SCOPE.*;
-import org.osgi.dmt.ddf.*;
+import static org.osgi.dmt.ddf.Scope.SCOPE.A;
+import org.osgi.dmt.ddf.MAP;
+import org.osgi.dmt.ddf.Scope;
 
 /**
  * A Wire is a link between two bundles where the semantics of this link is
