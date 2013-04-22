@@ -804,8 +804,8 @@ try {
         InstanceId                         _G__  integer                  1   A
         URL                                _GR_  string                   1   A
         AutoStart                          _GR_  boolean                  1   A
-        FaultType                          _G__  integer                  1   A
-        FaultMessage                       _G__  string                   1   A
+        FaultType                          _G__  integer                0,1   A
+        FaultMessage                       _G__  string                 0,1   A
         BundleId                           _G__  long                   0,1   A
         SymbolicName                       _G__  string                 0,1   A
         Version                            _G__  string                 0,1   A
