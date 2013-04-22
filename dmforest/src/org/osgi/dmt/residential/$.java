@@ -14,6 +14,14 @@ import org.osgi.dmt.service.log.Log;
  */
 public interface $ {
 	/**
+	 * The Framework node used to manage the local framework.
+	 * 
+	 * @return Framework node
+	 */
+	@Scope(P)
+	Framework Framework();
+
+	/**
 	 * The Filters node searches the nodes in a tree that correspond to a target
 	 * URI and an optional filter expression. A new {@link Filter} is created by
 	 * adding a node to the Filters node. The name of the node is chosen by the
@@ -31,14 +39,6 @@ public interface $ {
 	 */
 	@Scope(P)
 	Opt<MutableMAP<String, Filter>> Filter();
-
-	/**
-	 * The Framework node used to manage the local framework.
-	 * 
-	 * @return Framework node
-	 */
-	@Scope(P)
-	Framework Framework();
 
 	/**
 	 * Access to the optional Log.
