@@ -30,9 +30,9 @@
 
     <target name="enterprise-diff" depends="javadoc,xmlns,enterprise.xml,enterprise-diff.xml,enterprise-diff.fo,enterprise-diff.pdf" />
 
-    <target name="residential" depends="javadoc,xmlns,residential.xml,residential.fo,residential.pdf" />
+    <target name="residential" depends="javadoc,xmlns,rdmtsummary,residential.xml,residential.fo,residential.pdf" />
 
-    <target name="residential-diff" depends="javadoc,xmlns,residential.xml,residential-diff.xml,residential-diff.fo,residential-diff.pdf" />
+    <target name="residential-diff" depends="javadoc,xmlns,rdmtsummary,residential.xml,residential-diff.xml,residential-diff.fo,residential-diff.pdf" />
 
     <target name="javadoc" depends="compile" unless="-javadoc">
         <delete dir="${target}/javadoc"/>
@@ -99,6 +99,15 @@
             <factory name="com.icl.saxon.TransformerFactoryImpl" />
         </xslt>
         <property name="-ee" value="true"/>
+    </target>
+
+    <target name="rdmtsummary" depends="compile" unless="-rdmtsummary">
+        <delete dir="${target}/residentialdmt"/>
+        <mkdir dir="${target}/residentialdmt"/>
+        <java classname="org.osgi.tools.dmt.TreeSummary" classpath="${project.buildpath}" fork="true" output="${target}/residentialdmt/treesummary.xml">
+            <arg value="org.osgi.dmt.residential.$" />
+        </java>
+        <property name="-rdmtsummary" value="true"/>
     </target>
 
     <!-- Strip off leading comments on schema for inclusion in spec -->
