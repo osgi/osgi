@@ -886,7 +886,7 @@ try {
 
                                                               org.osgi/1.0/LIST
       ResultUriList                        _G__  LIST                     1   A
-        [list]                             _G__  node_uri              0..*   D
+        [list]                             _G__  string                0..*   D
       InstanceId                           _G__  integer                  1   A</programlisting>
     </section>
 
