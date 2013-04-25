@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
   <!--
     /*
-     * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+     * Copyright (c) OSGi Alliance (2008, 2013). All Rights Reserved.
      *
      * Licensed under the Apache License, Version 2.0 (the "License");
      * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
   xmlns:rsa="http://www.osgi.org/xmlns/rsa/v1.0.0"
   targetNamespace="http://www.osgi.org/xmlns/rsa/v1.0.0"
-  elementFormDefault="qualified" version="1.0.0">
+  elementFormDefault="qualified" version="1.0.1">
 
   <annotation>
     <documentation xml:lang="en">
@@ -49,7 +49,7 @@
       <any namespace="##other" minOccurs="0" maxOccurs="unbounded"
            processContents="lax" />
     </sequence>
-    <anyAttribute />
+    <anyAttribute processContents="lax" />
   </complexType>
 
   <complexType name="Tendpoint-description">
@@ -68,7 +68,7 @@
       <any namespace="##other" minOccurs="0" maxOccurs="unbounded"
            processContents="lax" />
     </sequence>
-    <anyAttribute />
+    <anyAttribute processContents="lax" />
   </complexType>
 
   <complexType name="Tproperty" mixed="true">
@@ -85,7 +85,7 @@
     <attribute name="name" type="string" use="required" />
     <attribute name="value" type="string" use="optional" />
     <attribute name="value-type" type="rsa:Tvalue-types" default="String" use="optional" />
-    <anyAttribute />
+    <anyAttribute processContents="lax" />
   </complexType>
   
   <complexType name="Tmulti-value">
@@ -94,7 +94,7 @@
       <any namespace="##other" minOccurs="0" maxOccurs="unbounded"
            processContents="lax" />      
     </sequence>
-    <anyAttribute />
+    <anyAttribute processContents="lax" />
   </complexType>
   
   <complexType name="Tvalue" mixed="true">
@@ -103,7 +103,7 @@
       <any namespace="##other" minOccurs="0" maxOccurs="unbounded"
            processContents="lax" />      
     </sequence>
-    <anyAttribute />
+    <anyAttribute processContents="lax" />
   </complexType>
   
   <!-- Specifies the data type of a property or of the elements in a multi-value  
@@ -145,7 +145,7 @@
       <any namespace="##other" minOccurs="1" maxOccurs="1"
            processContents="lax" />
     </sequence>
-    <anyAttribute />
+    <anyAttribute processContents="lax" />
   </complexType>
 
   <attribute name="must-understand" type="boolean" default="false">

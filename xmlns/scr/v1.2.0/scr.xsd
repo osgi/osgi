@@ -3,7 +3,7 @@
     /*
     * $Id$
     * 
-    * Copyright (c) OSGi Alliance (2005, 2011). All Rights Reserved.
+    * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
     * 
     * Licensed under the Apache License, Version 2.0 (the "License");
     * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
     targetNamespace="http://www.osgi.org/xmlns/scr/v1.2.0"
     elementFormDefault="unqualified"
     attributeFormDefault="unqualified"
-    version="1.2.0">
+    version="1.2.1">
 
     <annotation>
         <documentation xml:lang="en">
@@ -99,7 +99,7 @@
                 </documentation>
             </annotation>
         </attribute>
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
     <complexType name="Timplementation">
         <sequence>
@@ -107,7 +107,7 @@
                 maxOccurs="unbounded" />
         </sequence>
         <attribute name="class" type="token" use="required" />
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
     <complexType name="Tproperty">
         <simpleContent>
@@ -116,7 +116,7 @@
                 <attribute name="value" type="string" use="optional" />
                 <attribute name="type" type="scr:Tjava-types"
                     default="String" use="optional" />
-                <anyAttribute />
+                <anyAttribute processContents="lax" />
             </extension>
         </simpleContent>
     </complexType>
@@ -126,7 +126,7 @@
                 maxOccurs="unbounded" />
         </sequence>
         <attribute name="entry" type="string" use="required" />
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
     <complexType name="Tservice">
         <sequence>
@@ -140,7 +140,7 @@
         </sequence>
         <attribute name="servicefactory" type="boolean" default="false"
             use="optional" />
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
     <complexType name="Tprovide">
         <sequence>
@@ -148,7 +148,7 @@
                 maxOccurs="unbounded" />
         </sequence>
         <attribute name="interface" type="token" use="required" />
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
     <complexType name="Treference">
         <sequence>
@@ -179,7 +179,7 @@
         <attribute name="bind" type="token" use="optional" />
         <attribute name="unbind" type="token" use="optional" />
         <attribute name="updated" type="token" use="optional" />
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
     <simpleType name="Tjava-types">
         <restriction base="string">

@@ -3,7 +3,7 @@
     /*
     * $Id$
     * 
-    * Copyright (c) OSGi Alliance (2005, 2008). All Rights Reserved.
+    * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
     * 
     * Licensed under the Apache License, Version 2.0 (the "License");
     * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
     xmlns:app="http://www.osgi.org/xmlns/app/v1.1.0"
     targetNamespace="http://www.osgi.org/xmlns/app/v1.1.0"
-    version="1.1.0">
+    version="1.1.1">
 
     <element name="descriptor" type="app:Tdescriptor">
         <annotation>
@@ -41,7 +41,7 @@
             <any namespace="##other" processContents="lax" minOccurs="0"
                 maxOccurs="unbounded" />
         </sequence>
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <complexType name="Tapplication">
@@ -59,7 +59,7 @@
                 maxOccurs="unbounded" />
         </sequence>
         <attribute name="class" type="string" />
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <complexType name="Treference">
@@ -74,7 +74,7 @@
         <attribute name="policy" use="optional" default="static"
             type="app:Tpolicy" />
         <attribute name="target" type="string" use="optional" />
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <simpleType name="Tcardinality">

@@ -3,7 +3,7 @@
 /*
  * $Id$
  * 
- * Copyright (c) OSGi Alliance (2011, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@
     targetNamespace="http://www.osgi.org/xmlns/repository/v1.0.0"
     elementFormDefault="unqualified" 
     attributeFormDefault="unqualified"
-    version="1.0.0">
+    version="1.0.1">
     
     <element name="repository" type="repo:Trepository" />
     <complexType name="Trepository">
@@ -55,7 +55,7 @@
                 </documentation>
             </annotation>
         </attribute>
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <complexType name="Tresource">
@@ -74,7 +74,7 @@
             <any namespace="##other" processContents="lax" minOccurs="0"
                 maxOccurs="unbounded" />
         </sequence>
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <complexType name="Treferral">
@@ -102,7 +102,7 @@
                 </documentation>
             </annotation>
         </attribute>
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <complexType name="Tcapability">
@@ -131,7 +131,7 @@
                 </documentation>
             </annotation>
         </attribute>
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <complexType name="Trequirement">
@@ -159,7 +159,7 @@
                 </documentation>
             </annotation>
         </attribute>
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <complexType name="Tattribute">
@@ -194,7 +194,7 @@
                 </documentation>
             </annotation>
         </attribute>
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <complexType name="Tdirective">
@@ -222,7 +222,7 @@
                 </documentation>
             </annotation>
         </attribute>
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <simpleType name="TpropertyType">
