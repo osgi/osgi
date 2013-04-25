@@ -178,9 +178,10 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 * requirements} in use by this bundle wiring.
 	 * 
 	 * <p>
-	 * This method may return different results if this bundle wiring adds wires
-	 * to more requirements. For example, dynamically importing a package will
-	 * establish a new wire to the dynamically imported package.
+	 * This method may return different results if this bundle wiring
+	 * establishes additional wires to more requirements. For example,
+	 * dynamically importing a package will establish a new wire to the
+	 * dynamically imported package.
 	 * 
 	 * @param namespace The namespace of the requirements for which to return
 	 *        wires or {@code null} to return the wires for the requirements in
@@ -193,8 +194,9 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 *         given namespace, the list contains the wires in the order the
 	 *         requirements were specified in the manifests of the
 	 *         {@link #getRevision() bundle revision} and the attached fragments
-	 *         of this bundle wiring. There is no ordering defined between
-	 *         requirements in different namespaces.
+	 *         of this bundle wiring followed by dynamically established wires,
+	 *         if any, in the order they were established. There is no ordering
+	 *         defined between requirements in different namespaces.
 	 */
 	List<BundleWire> getRequiredWires(String namespace);
 
