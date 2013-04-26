@@ -490,6 +490,29 @@ public interface BundleContext extends BundleReference {
 	<S> ServiceRegistration<S> registerService(Class<S> clazz, S service, Dictionary<String, ?> properties);
 
 	/**
+	 * Registers the specified service factory object with the specified
+	 * properties under the name of the specified class with the Framework.
+	 * 
+	 * <p>
+	 * This method is otherwise identical to
+	 * {@link #registerService(Class, Object, Dictionary)} and is provided to
+	 * return a type safe {@code ServiceRegistration} when registering a
+	 * {@link ServiceFactory}.
+	 * 
+	 * @param <S> Type of Service.
+	 * @param clazz The class under whose name the service can be located.
+	 * @param factory The {@code ServiceFactory} object.
+	 * @param properties The properties for this service.
+	 * @return A {@code ServiceRegistration} object for use by the bundle
+	 *         registering the service to update the service's properties or to
+	 *         unregister the service.
+	 * @throws IllegalStateException If this BundleContext is no longer valid.
+	 * @see #registerService(Class, Object, Dictionary)
+	 * @since 1.8
+	 */
+	<S> ServiceRegistration<S> registerService(Class<S> clazz, ServiceFactory<S> factory, Dictionary<String, ?> properties);
+
+	/**
 	 * Returns an array of {@code ServiceReference} objects. The returned array
 	 * of {@code ServiceReference} objects contains services that were
 	 * registered under the specified class, match the specified filter
