@@ -24,7 +24,7 @@
     The basic model for OSGi remote services is that a bundle can register
     services that are <emphasis>exported</emphasis> to a communication
     <emphasis>Endpoint</emphasis> and use services that are
-    <emphasis>imported</emphasis> from a communication Endpoint. However, the
+    <emphasis>imported</emphasis> from a communication Endpoint. However, 
     chapter <xref linkend="service.remoteservices"/> does not explain <emphasis>what</emphasis>
     services are exported and/or imported; it leaves such decisions to the
     distribution provider. The distribution provider therefore performs
@@ -1546,68 +1546,60 @@
     </section>
 
     <section>
-      <title>Endpoint Listener Interface</title>
+      <title>Endpoint Event Listener Interface</title>
 
-      <para>The <code>EndpointListener</code> interface has the following
-      methods:</para>
+      <para>The <code>EndpointEventListener</code> interface has the following
+      method:</para>
 
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointAdded-EndpointDescription-String-"
-          xrefstyle="hyperlink"/> - Notify the Endpoint Listener of a new
-          Endpoint Description. The second parameter is the filter that
-          matched the Endpoint Description. Registering the same Endpoint
-          multiple times counts as a single registration.</para>
-        </listitem>
-
-        <listitem>
-          <para><xref
-          linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointRemoved-EndpointDescription-String-"
-          xrefstyle="hyperlink"/> - Notify the Endpoint Listener that the
-          provided Endpoint Description is no longer available.</para>
+          linkend="org.osgi.service.remoteserviceadmin.EndpointEventListener.endpointChanged-EndpointEvent-"
+          xrefstyle="hyperlink"/> – Notify the Endpoint Event Listener of changes to an Endpoint. 
+          The change could entail the addition or removal of an Endpoint or the 
+          modification of the properties of an existing Endpoint.
+          Multiple identical events should be counted as a single such event.</para>
         </listitem>
       </itemizedlist>
 
-      <para>These methods must only be called if the Endpoint Listener service
+      <para>These methods must only be called if the Endpoint Event Listener service
       has a filter in its scope that matches the Endpoint Description
-      properties. The reason for the filter string in the methods is to
-      simplify and speed up matching an Endpoint Description to the cause of
-      interest. For example, if the Listener Hook is used to do on demand
-      import of services, then the filter can be associated with the Listener
-      Info of the hook, see <xref linkend="i1755239"/>. If multiple filters in
-      the scope match the Endpoint Description than the first filter in the
-      scope must be passed.</para>
+      properties.</para>
 
-      <para>The Endpoint Listener interface is
+      <para>The Endpoint Event Listener interface is
       <emphasis>idempotent</emphasis>. Endpoint Description Providers must
-      inform an Endpoint Listener service that is registered of all their
+      inform an Endpoint Event Listener service (or it predecessor Endpoint Listener service) 
+      that is registered of all their
       matching Endpoints. The only way to find out about all available
-      Endpoints is to register an Endpoint Listener that is then informed by
+      Endpoints is to register an Endpoint Event Listener (or Endpoint Listener) that is then informed by
       all available Endpoint Description Providers of their known Endpoint
-      Descriptions that match their scope.</para>
+      Descriptions that match their scope. </para>
     </section>
 
     <section>
-      <title>Endpoint Listener Implementations</title>
+      <title>Endpoint Event Listener Implementations</title>
 
-      <para>An Endpoint Listener service tracks the known Endpoints in its
+      <para>An Endpoint Event Listener service tracks the known Endpoints in its
       given scope. There are potentially a large number of bundles involved in
       creating this federated registry of Endpoints. To ensure that no
       Endpoint Descriptions are orphaned or unnecessarily missed, an Endpoint
-      Listener implementation must follow the following rules:</para>
+      Event Listener implementation must follow the following rules:</para>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Registration</emphasis> - An Endpoint Listener
-          service is called with an <xref
+          <para><emphasis>Registration</emphasis> – 
+          The Endpoint Event Listener service is called with an event of type
+          <xref linkend="org.osgi.service.remoteserviceadmin.EndpointEvent.ADDED"
+          xrefstyle="hyperlink"/> for all known Endpoint Descriptions that the bundles
+          in the local framework are aware of. Similarly, Endpoint Listener services
+          are called with an <xref
           linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointAdded-EndpointDescription-String-"
-          xrefstyle="hyperlink"/> method for all known Endpoint Descriptions
-          that the bundles in the local framework are aware of.</para>
+          xrefstyle="hyperlink"/> method for all these.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Tracking providers</emphasis> - An Endpoint Listener
+          <para><emphasis>Tracking providers</emphasis> – An Endpoint Event 
+          Listener or Endpoint Listener
           must track the bundles that provide it with Endpoint Descriptions.
           If a bundle that provided Endpoint Descriptions is stopped, all
           Endpoint Descriptions that were provided by that bundle must be
@@ -1616,7 +1608,8 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Scope modification</emphasis> - An Endpoint Listener
+          <para><emphasis>Scope modification</emphasis> – An Endpoint 
+          Event Listener or Endpoint Listener
           is allowed to modify the set of filters in its scope through a
           service property modification. This modification must result in new
           and/or existing Endpoint Descriptions to be added, however, existing
@@ -1625,6 +1618,26 @@
           for the Endpoint Listener to remove these orphaned Endpoint
           Description from its view.</para>
         </listitem>
+
+        <listitem>
+          <para><emphasis>Endpoint mutability</emphasis> – An Endpoint Description
+          can change its Properties. The way this is handled is different for Endpoint Event Listeners
+          and Endpoint Listeners. 
+          An Endpoint Event Listener receives a change event of type 
+          <xref linkend="org.osgi.service.remoteserviceadmin.EndpointEvent.MODIFIED"
+            xrefstyle="hyperlink"/> when the Properties of an existing Endpoint are modified.
+          If the modification means that the Endpoint no longer matches the listener scope an event of type
+          <xref linkend="org.osgi.service.remoteserviceadmin.EndpointEvent.MODIFIED_ENDMATCH"
+            xrefstyle="hyperlink"/> is sent instead.
+          Endpoint Listener services receive a sequence of 
+          <xref linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointRemoved-EndpointDescription-String-"
+            xrefstyle="hyperlink"/> and 
+          <xref linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointAdded-EndpointDescription-String-"
+            xrefstyle="hyperlink"/>
+          callbacks when the Properties of an Endpoint are modified.
+          </para>
+        </listitem>
+
       </itemizedlist>
 
       <para>Endpoint Descriptions can be added from different sources and
@@ -1641,7 +1654,7 @@
       removed before) should be ignored.</para>
 
       <para>The discovery of Endpoints is a fundamentally indeterministic
-      process and implementations of Endpoint Listener services should realize
+      process and implementations of Endpoint Event Listener services should realize
       that there are no guarantees that an added Endpoint Description is
       always describing a valid Endpoint.</para>
     </section>
