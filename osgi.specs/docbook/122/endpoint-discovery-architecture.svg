@@ -399,7 +399,7 @@
 <text transform="matrix(1 0 0 1 48.1812 159.6472)" font-family="'ProductusBook'" font-size="7.98">T</text>
 <text transform="matrix(1 0 0 1 262.2017 6.6472)" font-family="'ProductusBook'" font-size="7.98">Framework</text>
 <text transform="matrix(1 0 0 1 262.2017 20.8669)" font-family="'ProductusBook'" font-size="7.98">Bundle</text>
-<text transform="matrix(1 0 0 1 262.2017 35.0271)" font-family="'ProductusBook'" font-size="7.98">Endpoint Listener Service</text>
+<text transform="matrix(1 0 0 1 262.2017 35.0271)" font-family="'ProductusBook'" font-size="7.98">EndpointEventListener Service</text>
 <text transform="matrix(1 0 0 1 262.2017 49.1873)" font-family="'ProductusBook'" font-size="7.98">Endpoint</text>
 <text transform="matrix(1 0 0 1 262.2017 63.3464)" font-family="'ProductusBook'" font-size="7.98">Endpoint connection</text>
 <text transform="matrix(1 0 0 1 262.2017 77.5662)" font-family="'ProductusBook'" font-size="7.98">Service connection</text>
