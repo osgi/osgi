@@ -26,8 +26,8 @@ Include-Resource					= \
 	
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
-	osgi.core;								version=4.3		, \
-	osgi.cmpn;						version=4.3	, \
+	osgi.core;								version=4.3.1	, \
+	osgi.cmpn;								version=4.3.1	, \
 	ee.j2se;								version=1.5	, \
 	${junit}
 
