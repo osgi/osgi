@@ -5,8 +5,8 @@ Bundle-Description: 			General Support for OSGi JUnit based testing
 Export-Package:  				org.osgi.test.*
 
 -buildpath:   \
-	osgi.core;						version=4.3	, \
-	osgi.cmpn;						version=4.3	, \
+	osgi.core;						version=4.3.1	, \
+	osgi.cmpn;						version=4.3.1	, \
 	ee.minimum;						version=1.2.1, \
  	${junit}
  	
