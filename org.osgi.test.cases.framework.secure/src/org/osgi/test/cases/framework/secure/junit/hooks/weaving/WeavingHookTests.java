@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@ package org.osgi.test.cases.framework.secure.junit.hooks.weaving;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
@@ -27,9 +25,7 @@ import junit.framework.TestCase;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
-import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.framework.hooks.weaving.WeavingHook;
 import org.osgi.framework.hooks.weaving.WovenClassListener;
 import org.osgi.test.support.OSGiTestCase;
 import org.osgi.test.support.wiring.Wiring;
@@ -83,7 +79,7 @@ public class WeavingHookTests extends OSGiTestCase {
 	
 	private void tearDownBundles() {
 		for (Iterator<Bundle> iBundles = bundles.iterator(); iBundles.hasNext();) {
-			Bundle bundle = (Bundle) iBundles.next();
+			Bundle bundle = iBundles.next();
 			try {
 				if (!(bundle.getState() == Bundle.UNINSTALLED))
 					bundle.uninstall();
