@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.services.functionaldevice.functions;
+package org.osgi.service.functionaldevice.functions;
 
 /**
  * Binary Switch device function has a property state and can move the state

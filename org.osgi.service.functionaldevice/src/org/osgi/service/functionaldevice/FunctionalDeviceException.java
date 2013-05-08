@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.services.functionaldevice;
+package org.osgi.service.functionaldevice;
 
 /**
  * Checked extension received when device operation fails.

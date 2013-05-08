@@ -14,16 +14,14 @@
  * limitations under the License.
  */
 
-package org.osgi.services.functionaldevice.functions;
-
-import org.osgi.services.functionaldevice.DeviceFunction;
+package org.osgi.service.functionaldevice.functions;
 
 /**
- * Multi Level Sensor device function reports its state when an important event
- * is available. The state is accessible with {@link #getState()} getter. There
- * are no operations.
+ * Binary Sensor device function reports its state when an important event is
+ * available. The state is accessible with {@link #getState()} getter. There are
+ * no operations.
  */
-public interface MultiLevelSensor extends DeviceFunction {
+public interface BinarySensor {
 
 	/**
 	 * Specifies the state property name. The property can be read with
@@ -32,11 +30,11 @@ public interface MultiLevelSensor extends DeviceFunction {
 	public static final String	PROPERTY_STATE	= "state";
 
 	/**
-	 * Returns the state of the Multi Level Sensor. It's a getter method for
+	 * Returns the state of the Binary Sensor. It's a getter method for
 	 * {@link #PROPERTY_STATE} property.
 	 * 
-	 * @return The state of the Multi Level Sensor.
+	 * @return The state of the Binary Sensor.
 	 */
-	public double getState();
+	public boolean getState();
 
 }

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.osgi.services.functionaldevice.functions;
+package org.osgi.service.functionaldevice.functions;
 
-import org.osgi.services.functionaldevice.DeviceFunction;
+import org.osgi.service.functionaldevice.DeviceFunction;
 
 /**
  * On/Off device function represents turn on and off functionality. The function

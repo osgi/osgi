@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.osgi.services.functionaldevice.functions;
+package org.osgi.service.functionaldevice.functions;
 
-import org.osgi.services.functionaldevice.DeviceFunction;
+import org.osgi.service.functionaldevice.DeviceFunction;
 
 /**
  * Open/Close device function represents open and close functionality. The
