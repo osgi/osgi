@@ -18,6 +18,8 @@ package org.osgi.test.cases.framework.secure.weaving.tb.weaver;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
+import junit.framework.TestCase;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -41,7 +43,7 @@ public class Activator extends OSGiTestCase implements BundleActivator {
 						!TestConstants.isInvalidSetBytes())
 					fail("Class should have loaded", t);
 			}
-			assertTrue("Failed to call weaving hook", hook.isCalled());
+			TestCase.assertTrue("Failed to call weaving hook", hook.isCalled());
 			if (hook.getError() != null)
 				throw hook.getError();
 		}

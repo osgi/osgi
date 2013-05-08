@@ -23,10 +23,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.hooks.weaving.WeavingHook;
-import org.osgi.test.cases.framework.secure.junit.hooks.weaving.TestConstants;
-import org.osgi.test.support.OSGiTestCase;
 
-public class Activator extends OSGiTestCase implements BundleActivator {
+public class Activator implements BundleActivator {
 	private ServiceRegistration<WeavingHook> reg;
 	
 	public void start(BundleContext context) throws Exception {
@@ -34,12 +32,6 @@ public class Activator extends OSGiTestCase implements BundleActivator {
 		Dictionary<String, Object> properties = new Hashtable<String, Object>();
 		properties.put(Constants.SERVICE_RANKING, Integer.MAX_VALUE);
 		reg = context.registerService(WeavingHook.class, hook, properties);
-		try {
-			Class.forName(TestConstants.WOVEN_CLASS);
-		} catch (Exception e) {
-			fail("Class should have loaded", e);
-		}
-		assertTrue("Failed to call weaving hook", hook.isCalled());
 	}
 
 	public void stop(BundleContext context) throws Exception {
