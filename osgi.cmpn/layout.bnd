@@ -44,5 +44,4 @@ cmpn.resources = {${cmpn.legal}/about.html}, \
   				xmlns/metatype=${project.workspace}/xmlns/metatype, \
   				xmlns/rsa=${project.workspace}/xmlns/rsa, \
                 xmlns/repository=${project.workspace}/xmlns/repository, \
-  				xmlns/scact=${project.workspace}/xmlns/scact, \
   				xmlns/scr=${project.workspace}/xmlns/scr

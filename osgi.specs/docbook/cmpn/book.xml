@@ -83,8 +83,6 @@
 
   <xi:include href="../128/service.war.xml"/>
 
-  <xi:include href="../129/service.sca.xml"/>
-
   <xi:include href="../130/service.coordinator.xml"/>
 
   <xi:include href="../132/service.repository.xml"/>

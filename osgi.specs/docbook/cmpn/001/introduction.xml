@@ -397,16 +397,6 @@
             </row>
 
             <row>
-              <entry><xref linkend="service.sca"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><code>-</code></entry>
-
-              <entry><code><xref endterm="service.sca-version"
-              linkend="service.sca"/></code></entry>
-            </row>
-
-            <row>
               <entry><xref linkend="service.coordinator"
               xrefstyle="template:%n %t"/></entry>
 
@@ -549,6 +539,10 @@
 
       <listitem>
         <para>Added <xref linkend="service.resolver"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Removed <emphasis>SCA Configuration Type Specification</emphasis>.</para>
       </listitem>
     </itemizedlist>
   </section>
