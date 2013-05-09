@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <book revision="$Id$"
-      status="draft" version="5" xmlns="http://docbook.org/ns/docbook"
+      status="final" version="5" xmlns="http://docbook.org/ns/docbook"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       xmlns:xi="http://www.w3.org/2001/XInclude"
       xmlns:ns5="http://www.w3.org/1999/xhtml"
@@ -16,7 +16,7 @@
 
     <releaseinfo>Release 5</releaseinfo>
 
-    <pubdate>April 2013</pubdate>
+    <pubdate>May 2013</pubdate>
 
     <copyright>
       <year>2000, 2013</year>
@@ -25,7 +25,7 @@
     </copyright>
   </info>
 
-  <xi:include href="../license/distribution.feedback.license.2.0.xml"/>
+  <xi:include href="../license/osgi.specification.license.2.0.xml"/>
 
   <xi:include href="001/introduction.xml"/>
 
