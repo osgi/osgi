@@ -4,7 +4,6 @@ Bundle-Version:                          1.0.0
 Private-Package:                         ${p}.weaving.tb.weaver
 Bundle-Activator:                        ${p}.weaving.tb.weaver.Activator
 
-Import-Package: org.osgi.test.cases.framework.secure.weaving.tb.woven,*
+Import-Package: ${p}.weaving.tb.woven,*
 
 Include-Resource =	{OSGI-INF/permissions.perm=perms/weaving.tb1.perm}
-
