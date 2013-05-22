@@ -442,8 +442,8 @@ public final class AdaptPermission extends BasicPermission {
 		final Map<String, Object> map = new HashMap<String, Object>(5);
 		map.put("adaptClass", getName());
 		if (bundle != null) {
-			AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
+			AccessController.doPrivileged(new PrivilegedAction<Void>() {
+				public Void run() {
 					map.put("id", new Long(bundle.getBundleId()));
 					map.put("location", bundle.getLocation());
 					String name = bundle.getSymbolicName();

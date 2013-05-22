@@ -506,8 +506,8 @@ public final class CapabilityPermission extends BasicPermission {
 		if (bundle == null) {
 			return properties = props;
 		}
-		AccessController.doPrivileged(new PrivilegedAction<Object>() {
-			public Object run() {
+		AccessController.doPrivileged(new PrivilegedAction<Void>() {
+			public Void run() {
 				props.put("id", new Long(bundle.getBundleId()));
 				props.put("location", bundle.getLocation());
 				String name = bundle.getSymbolicName();

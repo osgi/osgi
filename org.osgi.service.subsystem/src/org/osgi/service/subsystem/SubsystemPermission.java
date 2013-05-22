@@ -579,8 +579,8 @@ public final class SubsystemPermission extends BasicPermission {
 		recurse.set(subsystem);
 		try {
 			final Map<String, Object> map = new HashMap<String, Object>(4);
-			AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
+			AccessController.doPrivileged(new PrivilegedAction<Void>() {
+				public Void run() {
 					map.put("id", new Long(subsystem.getSubsystemId()));
 					map.put("location", subsystem.getLocation());
 					map.put("name", subsystem.getSymbolicName());

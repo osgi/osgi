@@ -842,8 +842,8 @@ public final class AdminPermission extends BasicPermission {
 		recurse.set(bundle);
 		try {
 			final Map<String, Object> map = new HashMap<String, Object>(4);
-			AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
+			AccessController.doPrivileged(new PrivilegedAction<Void>() {
+				public Void run() {
 					map.put("id", new Long(bundle.getBundleId()));
 					map.put("location", bundle.getLocation());
 					String name = bundle.getSymbolicName();

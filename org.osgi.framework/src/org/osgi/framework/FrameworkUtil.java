@@ -1661,14 +1661,14 @@ public class FrameworkUtil {
 		}
 	}
 
-	static private final class SetAccessibleAction implements PrivilegedAction<Object> {
+	static private final class SetAccessibleAction implements PrivilegedAction<Void> {
 		private final AccessibleObject	accessible;
 
 		SetAccessibleAction(AccessibleObject accessible) {
 			this.accessible = accessible;
 		}
 
-		public Object run() {
+		public Void run() {
 			accessible.setAccessible(true);
 			return null;
 		}

@@ -561,8 +561,8 @@ public final class ServicePermission extends BasicPermission {
 		final Map<String, Object> props = new HashMap<String, Object>(4);
 		final Bundle bundle = service.getBundle();
 		if (bundle != null) {
-			AccessController.doPrivileged(new PrivilegedAction<Object>() {
-				public Object run() {
+			AccessController.doPrivileged(new PrivilegedAction<Void>() {
+				public Void run() {
 					props.put("id", new Long(bundle.getBundleId()));
 					props.put("location", bundle.getLocation());
 					String name = bundle.getSymbolicName();
