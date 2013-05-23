@@ -20,7 +20,8 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles						= \
-	osgi.cmpn; version=latest
+	org.osgi.util.position; version=latest, \
+	org.osgi.util.measurement; version=latest
 
 
 -runproperties = ${runproperties}

@@ -3,7 +3,7 @@
     /*
     * $Id$
     * 
-    * Copyright (c) OSGi Alliance (2005, 2011). All Rights Reserved.
+    * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
     * 
     * Licensed under the Apache License, Version 2.0 (the "License");
     * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
     xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.2.0"
     targetNamespace="http://www.osgi.org/xmlns/metatype/v1.2.0"
-    version="1.2.0">
+    version="1.2.1">
 
     <element name="MetaData" type="metatype:Tmetadata" />
 
@@ -37,7 +37,7 @@
                 maxOccurs="unbounded" />
         </sequence>
         <attribute name="localization" type="string" use="optional" />
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <complexType name="Tocd">
@@ -54,7 +54,7 @@
         <attribute name="name" type="string" use="required" />
         <attribute name="description" type="string" use="optional" />
         <attribute name="id" type="string" use="required" />
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <complexType name="Tad">
@@ -77,7 +77,7 @@
         <attribute name="default" type="string" use="optional" />
         <attribute name="required" type="boolean" use="optional"
             default="true" />
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <complexType name="Tobject">
@@ -90,7 +90,7 @@
                 maxOccurs="unbounded" />
         </sequence>
         <attribute name="ocdref" type="string" use="required" />
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <complexType name="Tattribute">
@@ -104,7 +104,7 @@
         </sequence>
         <attribute name="adref" type="string" use="required" />
         <attribute name="content" type="string" use="optional" />
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <complexType name="Tdesignate">
@@ -121,7 +121,7 @@
             use="optional" />
         <attribute name="merge" type="boolean" default="false"
             use="optional" />
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <simpleType name="Tscalar">
@@ -146,7 +146,7 @@
         </sequence>
         <attribute name="label" type="string" use="required" />
         <attribute name="value" type="string" use="required" />
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <complexType name="Ticon">
@@ -156,7 +156,7 @@
         </sequence>
         <attribute name="resource" type="string" use="required" />
         <attribute name="size" type="positiveInteger" use="required" />
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <attribute name="must-understand" type="boolean">

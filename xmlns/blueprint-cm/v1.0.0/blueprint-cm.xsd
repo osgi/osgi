@@ -3,7 +3,7 @@
     /*
     * $Id$
     *
-    * Copyright (c) OSGi Alliance (2008, 2009). All Rights Reserved.
+    * Copyright (c) OSGi Alliance (2008, 2013). All Rights Reserved.
     *
     * Licensed under the Apache License, Version 2.0 (the "License");
     * you may not use this file except in compliance with the License.
@@ -94,7 +94,7 @@
                 <xsd:attribute name="auto-export" type="bp:TautoExportModes" default="disabled" />
                 <xsd:attribute name="ranking" type="xsd:int" default="0"/>
                 <xsd:attribute name="factory-pid" type="xsd:string" use="required"/>
-                <xsd:anyAttribute namespace="##other" processContents="strict"/>
+                <xsd:anyAttribute namespace="##other" processContents="lax"/>
             </xsd:extension>
         </xsd:complexContent>
     </xsd:complexType>
@@ -106,7 +106,7 @@
         <xsd:attribute name="destroy-method" type="bp:Tmethod"/>
         <xsd:attribute name="factory-method" type="bp:Tmethod"/>
         <xsd:attribute name="factory-component" type="bp:Tidref"/>
-        <xsd:anyAttribute namespace="##other" processContents="strict"/>
+        <xsd:anyAttribute namespace="##other" processContents="lax"/>
     </xsd:complexType>
 
 

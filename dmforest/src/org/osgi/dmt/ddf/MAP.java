@@ -1,7 +1,8 @@
 
 package org.osgi.dmt.ddf;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.Map;
 
 /**
  * A Multiple represents a base node with its direct children. The child's name

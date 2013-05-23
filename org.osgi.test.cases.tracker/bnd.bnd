@@ -14,13 +14,12 @@ Export-Package						= ${p}.service
 	org.osgi.test.support;					version=project, \
 	${junit}
 	
--runbundles							= \
-	osgi.core; version=latest
+-runbundles							= 
 
 -runproperties						= ${runproperties}
 
 # Uncomment the following to test the tracker code in the org.osgi.util.tracker 
-# project instead of the one in Equinox.
+# project instead of the one in the framework RI.
 #-runpath							= \
 #	org.osgi.util.tracker;	version=snapshot, \
 #	org.osgi.impl.framework; version=latest, \

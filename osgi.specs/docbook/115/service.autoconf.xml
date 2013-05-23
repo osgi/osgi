@@ -130,7 +130,7 @@
     <xref linkend="service.metatype"/>. An Autoconf resource could look
     like:</para>
 
-    <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
+    <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;metatype:MetaData 
     xmlns:metatype=
         "http://www.osgi.org/xmlns/metatype/v1.1.0"&gt;
@@ -382,7 +382,7 @@ bar             Short[]</programlisting>
       <para>The corresponding autoconf.xml resource associated with Deployment
       Package <code>P</code> would look like:</para>
 
-      <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;metatype:MetaData 
     xmlns:metatype=
         "http://www.osgi.org/xmlns/metatype/v1.1.0"&gt;

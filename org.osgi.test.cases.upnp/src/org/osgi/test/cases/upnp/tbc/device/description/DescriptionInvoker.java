@@ -140,7 +140,9 @@ public class DescriptionInvoker {
 					+ " " + UPnPConstants.N_IN_STRING);
 		}
 		cur = (String) params.get(UPnPConstants.N_IN_BOOLEAN);
-		if (!cur.equals(UPnPConstants.V_IN_BOOLEAN)) {
+		if (!cur.equals(UPnPConstants.V_IN_BOOLEAN) &&
+				!cur.equals(UPnPConstants.V_IN_BOOLEAN_0) &&
+				!cur.equals(UPnPConstants.V_IN_BOOLEAN_NO)) {
 			hash.put(UPnPConstants.N_OUT_OUT, UPnPConstants.V_OUT_OUT_FAILED
 					+ " " + UPnPConstants.N_IN_BOOLEAN);
 		}

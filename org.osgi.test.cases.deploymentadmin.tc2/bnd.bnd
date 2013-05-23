@@ -37,7 +37,6 @@ Include-Resource					= \
 Test-Cases							= ${testcases}
 
 -runbundles							= \
-	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; version=latest,\
 	org.osgi.impl.service.component; version=latest, \
 	org.osgi.impl.bundle.jaxp;  version=latest, \

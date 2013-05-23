@@ -3,7 +3,7 @@
     /*
     * $Id$
     * 
-    * Copyright (c) OSGi Alliance (2006, 2008). All Rights Reserved.
+    * Copyright (c) OSGi Alliance (2006, 2013). All Rights Reserved.
     * 
     * Licensed under the Apache License, Version 2.0 (the "License");
     * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
     xmlns:dd="http://www.osgi.org/xmlns/dd/v1.1.0"
     targetNamespace="http://www.osgi.org/xmlns/dd/v1.1.0"
-    version="1.1.0">
+    version="1.1.1">
 
     <element name="environment" type="dd:Tenvironment" />
 
@@ -33,7 +33,7 @@
 
         <attribute name="required-storage" type="int" use="optional" />
         <attribute name="envtype" type="anyURI" use="required" />
-        <anyAttribute />
+        <anyAttribute processContents="lax" />
     </complexType>
 
     <attribute name="must-understand" type="boolean">

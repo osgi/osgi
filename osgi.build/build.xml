@@ -91,7 +91,7 @@
 		<javadoc.macro name="residential" title="Residential" packages="${residential.packages}" />
 	</target>
 	
-	<target name="japitools" depends="japitools.core,japitools.cmpn,japitools.enterprise,japitools.residential,japitools.proposed,japitools.minimum,japitools.foundation">
+	<target name="japitools" depends="japitools.core,japitools.cmpn,japitools.enterprise,japitools.residential,japitools.minimum,japitools.foundation">
 	</target>
 
 	<macrodef name="japitools">
@@ -145,14 +145,6 @@
 			<arg value="${repo.foundation}" />
 			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
 			<arg value="${repo.servlet}" />
-			<arg value="${repo.jaxp}" />
-		</japitools>
-	</target>
-
-	<target name="japitools.proposed" depends="init">
-		<japitools name="osgi.proposed">
-			<arg value="${repo.javase}" />
-			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
 			<arg value="${repo.jaxp}" />
 		</japitools>
 	</target>
@@ -233,7 +225,6 @@
 		<echo>cmpn.specs:             ${cmpn.specs}</echo>
 		<echo>residential.specs:      ${residential.specs}</echo>
 		<echo>enterprise.specs:       ${enterprise.specs}</echo>
-		<echo>proposed.specs:         ${proposed.specs}</echo>
 	</target>
 
 	<import file="../cnf/master.xml" />

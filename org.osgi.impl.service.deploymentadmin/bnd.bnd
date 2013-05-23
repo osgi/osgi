@@ -1,7 +1,6 @@
 # Set javac settings from JDT prefs
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
-Bundle-Version					= 1.1.1.${project.build}
 Bundle-Vendor					= Nokia
 Bundle-Activator				= $(p).Activator
 
@@ -13,8 +12,9 @@ Private-Package				= \
  	org.osgi.impl.service.dwnl, \
  	org.osgi.impl.service.dwnlimpl
 
-Export-Package 					= ${p}.perm, org.osgi.service.deploymentadmin.*;-split-package:=first
-Import-Package					= org.osgi.service.dmt; resolution:=optional, *
+Export-Package 					= ${p}.perm, \
+    org.osgi.service.deploymentadmin.*; -split-package:=first; provide:=true, \
+    org.osgi.service.dmt.*; -split-package:=first
 
 -buildpath						= \
     org.osgi.service.deploymentadmin;				version= project, \

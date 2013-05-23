@@ -2,7 +2,6 @@
 package org.osgi.dmt.residential;
 
 import static org.osgi.dmt.ddf.Scope.SCOPE.A;
-import java.net.URI;
 import org.osgi.dmt.ddf.LIST;
 import org.osgi.dmt.ddf.Mutable;
 import org.osgi.dmt.ddf.NODE;
@@ -166,7 +165,7 @@ public interface Filter {
 	 * @return List of URIs
 	 */
 	@Scope(A)
-	LIST<URI> ResultUriList();
+	LIST<String> ResultUriList();
 
 	/**
 	 * Instance Id to allow addressing by Instance Id.

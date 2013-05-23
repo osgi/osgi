@@ -183,7 +183,7 @@ public interface TR069Connector {
 	 *        {@link #TR069_UNSIGNED_INT},{@link #TR069_LONG},
 	 *        {@link #TR069_UNSIGNED_LONG},{@link #TR069_STRING},
 	 *        {@link #TR069_DATETIME},{@link #TR069_BASE64},
-	 *        {@link #TR069_HEXBINARY})
+	 *        {@link #TR069_HEXBINARY}, {@link #TR069_BOOLEAN})
 	 * 
 	 * @throws TR069Exception The following fault codes are defined for this
 	 *         method: 9001, 9002, 9003, 9004, 9005, 9006, 9007, 9008.

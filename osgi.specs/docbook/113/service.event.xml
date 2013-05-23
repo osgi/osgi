@@ -354,13 +354,13 @@
     <para>Event handlers should be registered with a property (constant from
     the <code>EventConstants</code> class) <xref
     linkend="org.osgi.service.event.EventConstants.EVENT_TOPIC"
-    xrefstyle="hyperlink"/>. The value being a <code>String</code> or
-    <code>String[]</code> object that describes which
-    <emphasis>topics</emphasis> the handler is interested in. A wildcard
-    asterisk (’*’ \u002A) may be used as the last token of a topic name, for
-    <code>example com/action/*</code>. This matches any topic that shares the
-    same first tokens. For example, <code>com/action/*</code> matches
-    <code>com/action/listen</code>.</para>
+    xrefstyle="hyperlink"/>. The value being a <code>String</code>,
+    <code>String[]</code> or <code>Collection&lt;String&gt;</code> object that
+    describes which <emphasis>topics</emphasis> the handler is interested in.
+    A wildcard asterisk (’*’ \u002A) may be used as the last token of a topic
+    name, for example <code>com/action/*</code>. This matches any topic that
+    shares the same first tokens. For example, <code>com/action/*</code>
+    matches <code>com/action/listen</code>.</para>
 
     <para>Event Handlers which have not specified the <xref
     linkend="org.osgi.service.event.EventConstants.EVENT_TOPIC"

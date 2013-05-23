@@ -1,6 +1,5 @@
-Bundle-Description: OSGi Residential Release ${version;=;${residential.ct.version}} Compliance Tests
+Bundle-Description: OSGi Residential Release ${version;=;${build.version}} Compliance Tests
 
-Bundle-Version					: ${residential.ct.version}
 Include-Resource				: \
   	\
     ${replace;${uniq;\

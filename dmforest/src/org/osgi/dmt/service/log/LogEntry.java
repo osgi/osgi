@@ -1,9 +1,10 @@
 
 package org.osgi.dmt.service.log;
 
-import static org.osgi.dmt.ddf.Scope.SCOPE.*;
-import java.util.*;
-import org.osgi.dmt.ddf.*;
+import static org.osgi.dmt.ddf.Scope.SCOPE.A;
+import java.util.Date;
+import org.osgi.dmt.ddf.Opt;
+import org.osgi.dmt.ddf.Scope;
 
 /**
  * A Log Entry node is the representation of a LogEntry from the OSGi Log

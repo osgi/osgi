@@ -2427,26 +2427,5 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
     </section>
   </section>
 
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added targeted PIDs, see <xref linkend="i1891430"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added a persistent change count method on Configurable to make
-        it easier to detect changes.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added a Synchronous Configuration Listener to be able to detect
-        thread based systems like the Coordinator, see <xref
-        linkend="i1693263"/>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
-
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cm.xml"/>
 </chapter>

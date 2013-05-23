@@ -82,17 +82,6 @@ osgi.release				= 6
 osgi.version				= 6.0
 
 build.version				= ${osgi.version}.0.${project.build}
-core.build.version			= ${build.version}
-cmpn.build.version			= ${build.version}
-enterprise.build.version	= ${build.version}
-residential.build.version	= ${build.version}
-proposed.build.version		= ${build.version}
-
-core.companion.jar			= ${repo;osgi.core;${osgi.version};lowest}
-cmpn.companion.jar			= ${repo;osgi.cmpn;${osgi.version};lowest}
-enterprise.companion.jar	= ${repo;osgi.enterprise;${osgi.version};lowest}
-residential.companion.jar	= ${repo;osgi.residential;${osgi.version};lowest}
-proposed.companion.jar		= ${repo;osgi.proposed;${osgi.version};lowest}
 
 ee.j2se-15.jar = ${repo;ee.j2se;1.5;lowest}
 

@@ -2,7 +2,7 @@
 <md:MetaData xmlns:md="http://www.osgi.org/xmlns/metatype/v1.2.0">
 	<OCD id="ocd1" name="%Person" description="%Description">
 		<AD  id="surName" name="%Surname" type="String" max="24" min="2" default="" required="true"/>
-		<AD  id="sex" name="%Sex" type="String" default="" description="%SexDescription" required="false">
+		<AD  id="sex" name="%Sex" type="String" default="female" description="%SexDescription" required="false">
 			<Option label="%Male" value="male"/>
 			<Option label="%Female" value="female"/>
 			<Option label="%Yes" value="yes"/>

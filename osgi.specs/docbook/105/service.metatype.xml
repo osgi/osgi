@@ -571,11 +571,11 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
 
     <para>A bundle that wants to provide meta type resources must place these
     resources in the <code>OSGI-INF/metatype</code> directory. The name of the
-    resource must be a valid JAR path. All resources in that directory must be
-    meta type documents. Fragments can contain additional meta type resources
-    in the same directory and they must be taken into account when the meta
-    type resources are searched. A meta type resource must be encoded in
-    UTF-8.</para>
+    resource must be a valid bundle entry path. All resources in that
+    directory must be meta type documents. Fragments can contain additional
+    meta type resources in the same directory and they must be taken into
+    account when the meta type resources are searched. A meta type resource
+    must be encoded in UTF-8.</para>
 
     <para>The MetaType Service must support localization of the</para>
 
@@ -1059,11 +1059,13 @@ Password <phrase role="symbol">↔</phrase> <xref
               <entry><para>The default value. A default is an array of
               <code>String</code> objects. The XML attribute must contain a
               comma delimited list. The default value is trimmed and escaped
-              in the same way as described in the
-              <code>validate(String)</code> method. The empty string is a
-              valid value. If the empty string specifies the default for an
-              attribute with cardinality that is not equal to zero then it
-              must be seen as an empty Vector or array.</para></entry>
+              in the same way as described in the <xref
+              linkend="org.osgi.service.metatype.AttributeDefinition.validate-String-"
+              xrefstyle="hyperlink"/> method. The empty string is significant 
+              and must be seen as an empty Vector or array if specified as the 
+              default for an attribute with a cardinality that is not equal to 
+              zero. Default values must be valid or otherwise ignored.</para>
+              </entry>
             </row>
 
             <row>
@@ -1085,8 +1087,12 @@ Password <phrase role="symbol">↔</phrase> <xref
             <row>
               <entry spanname="element"><code>Option</code></entry>
 
-              <entry colname="col6"><para>One option label/value for the
-              options in an <code>AD</code>.</para></entry>
+              <entry colname="col6"><para>One option label/value for the 
+              options in an <code>AD</code>. Options are exclusive. The <xref
+              linkend="org.osgi.service.metatype.AttributeDefinition.validate-String-"
+              xrefstyle="hyperlink"/> method must verify that an attribute value
+              matches one of the option values when present.</para>
+              </entry>
             </row>
 
             <row>
@@ -1141,9 +1147,9 @@ Password <phrase role="symbol">↔</phrase> <xref
               xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>The resource is a URL. The base URL is assumed to
-              be the XML file with the definition. I.e. if the XML is a
-              resource in the JAR file, then this URL can reference another
-              resource in that JAR file using a relative URL.</para></entry>
+              be the root of the bundle containing the XML file. That is, this
+              URL can reference another resource in the bundle using a
+              relative URL.</para></entry>
             </row>
 
             <row>
@@ -1286,7 +1292,7 @@ Password <phrase role="symbol">↔</phrase> <xref
       on ISO attribute types. The ids that are used are derived from ISO
       attributes.</para>
 
-      <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;MetaData 
     xmlns=
         "http://www.osgi.org/xmlns/metatype/v1.2.0" 
@@ -1381,8 +1387,8 @@ female=Female</programlisting>
   <section xml:id="i1502383">
     <title>XML Schema</title>
 
-    <programlisting role="pgwide"><xi:include parse="text" encoding="utf-8"
-    href="../../generated/xmlns/metatype/v1.2.0/metatype.xsd"/></programlisting>
+    <programlisting role="pgwide"><xi:include encoding="utf-8"
+        href="../../generated/xmlns/metatype/v1.2.0/metatype.xsd" parse="text"/></programlisting>
   </section>
 
   <section>

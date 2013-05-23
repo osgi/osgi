@@ -7,10 +7,8 @@ Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*
 Import-Package: ${-signaturetest}, *
-	
-Export-Package						= \
-	org.osgi.util.xml;-split-package:=merge-first
 
+Bundle-Activator = org.osgi.util.xml.XMLParserActivator
 
 Include-Resource = \
 	tb1.jar, \
@@ -29,8 +27,6 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	osgi.cmpn; version=latest, \
-	org.osgi.impl.bundle.jaxp; version=latest
-	
+    org.osgi.util.xml
 
 -runproperties = ${runproperties}

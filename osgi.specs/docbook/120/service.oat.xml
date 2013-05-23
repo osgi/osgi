@@ -421,7 +421,7 @@ public class Example extends MIDlet {
       Service, should declare the following metadata in
       <code>OSGI-INF/app/apps.xml:</code></para>
 
-      <programlisting>&lt;xml version="1.0" &gt; 
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
     &lt;descriptor xmlns="http://www.osgi.org/xmlns/app/v1.1.0"&gt;
         &lt;application class="com.acme.app.SampleMidlet"&gt;
         &lt;reference name="log" 
@@ -814,7 +814,7 @@ public class Example extends MIDlet {
       application that depends on the OSGi Log Service and another
       service:</para>
 
-      <programlisting>&lt;xml version="1.0" &gt; 
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;descriptor xmlns="http://www.osgi.org/xmlns/app/v1.1.0"&gt;
   &lt;application class="com.acme.apps.SampleMidlet"&gt;
     &lt;reference name="log" interface="org.osgi.service.log"/&gt; 
@@ -828,7 +828,7 @@ public class Example extends MIDlet {
       <para>A similar example for an imaginary Xlet, with different
       dependencies:</para>
 
-      <programlisting>&lt;xml version="1.0" encoding="UTF-8" &gt; 
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;descriptor xmlns="http://www.osgi.org/xmlns/app/v1.1.0"&gt;
   &lt;application class="com.acme.apps.SampleXlet"&gt;
     &lt;reference name="log" interface="org.osgi.service.log"/&gt; 
@@ -845,8 +845,8 @@ public class Example extends MIDlet {
 
     <para>This XML Schema defines the component description grammar.</para>
 
-    <programlisting role="pgwide"><xi:include parse="text" encoding="utf-8"
-    href="../../generated/xmlns/app/v1.1.0/app.xsd"/></programlisting>
+    <programlisting role="pgwide"><xi:include encoding="utf-8"
+        href="../../generated/xmlns/app/v1.1.0/app.xsd" parse="text"/></programlisting>
   </section>
 
   <section>

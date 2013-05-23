@@ -737,11 +737,11 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
     List&lt;Resource&gt; resources = getSortedResources();
     int index = resources.indexOf( hc.getResource() );
 
-    for ( int i =0; i&lt;caps.size(); i++ ) {
+    for ( int i =0; i &lt; caps.size(); i++ ) {
         Capability c = caps.get( i );
         int otherIndex = resources.indexOf( c.getResource() );
         if ( otherIndex &gt; index ) {
-            caps.add( i, c );
+            caps.add( i, hc );
             return i;
         }
     }

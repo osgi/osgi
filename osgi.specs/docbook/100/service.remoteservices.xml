@@ -1154,17 +1154,6 @@ com.acme.rmi.path = service-id/24</programlisting>
   </section>
 
   <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Moved out of the core from chapter 13 and moved to this
-        chapter.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
-
-  <section>
     <title>References</title>
 
     <bibliolist>

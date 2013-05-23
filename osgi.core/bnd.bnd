@@ -3,10 +3,9 @@ Bundle-License	= http://opensource.org/licenses/apache2.0.php; \
 	link="http://www.apache.org/licenses/LICENSE-2.0"; \
 	description="Apache License, Version 2.0"
 Bundle-Description			: \
-	OSGi Core Release ${version;=;${core.build.version}}, \
+	OSGi Core Release ${version;=;${build.version}}, \
 	Interfaces and Classes for use in compiling bundles.
 
-Bundle-Version					: ${core.build.version}
 DynamicImport-Package			: *
 Import-Package					: *; resolution:=optional
 

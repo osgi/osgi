@@ -1152,7 +1152,7 @@ return a</programlisting>
       <code>extensions</code> attribute on the <code>blueprint</code>
       element:</para>
 
-      <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;blueprint
  xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"
  xmlns:ext="http://www.acme.com/extensions"
@@ -1557,7 +1557,7 @@ return a</programlisting>
     top the <code>blueprint</code> element. The following example shows the
     body of a Blueprint definition:</para>
 
-    <programlisting>&lt;xml version="1.0" encoding="UTF-8"&gt;
+    <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;blueprint
  xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0"&gt;
   ...
@@ -6713,8 +6713,9 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
     <para>The Blueprint schema included in this specification can be found in
     digital form at <xref linkend="i2930811"/>.</para>
 
-    <programlisting role="pgwide"><xi:include parse="text" encoding="utf-8"
-    href="../../generated/xmlns/blueprint/v1.0.0/blueprint.xsd"/></programlisting>
+    <programlisting role="pgwide"><xi:include encoding="utf-8"
+        href="../../generated/xmlns/blueprint/v1.0.0/blueprint.xsd"
+        parse="text"/></programlisting>
   </section>
 
   <section>
