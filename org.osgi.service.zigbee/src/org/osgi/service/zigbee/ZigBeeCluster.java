@@ -1,0 +1,97 @@
+package org.osgi.service.zigbee;
+
+import org.osgi.service.zigbee.description.ZigBeeClusterDescription;
+import org.osgi.service.zigbee.handler.ZigBeeAttributesHandler;
+
+/**
+ * This interface represents a ZigBee Cluster
+ * 
+ * @version 1.0
+ */
+public interface ZigBeeCluster {
+	
+	/**
+	 * Property key for the optional cluster id.
+	 * A ZigBee Event Listener service can announce for what ZigBee clusters 
+	 * it wants notifications.
+	 */
+	public final static String ID = "zigbee.listener.cluster.id";
+	
+	/**
+	 * Property key for the optional cluster domain.
+	 * A ZigBee Event Listener service can announce for what ZigBee clusters domains
+	 * it wants notifications.
+	 */
+	public final static String DOMAIN = "zigbee.listener.cluster.domain";
+	
+	/**
+	 * Property key for the optional cluster name.
+	 * A ZigBee Event Listener service can announce for what ZigBee clusters
+	 * it wants notifications.
+	 */
+	public final static String NAME = "zigbee.listener.cluster.name";
+	
+	/**
+	 * @return the cluster identifier
+	 */
+	public int getId();
+	
+	/**
+	 * @param id an Attribute identifier
+	 * @return the cluster attribute identified by id
+	 */
+	public ZigBeeAttribute getAttribute(int id);
+	
+	/**
+	 * @return an array of all the attributes of the cluster.
+	 */
+	public ZigBeeAttribute[] getAttributes();
+	
+	/**
+	 * @param id command identifier
+	 * @return the command identified by id
+	 */
+	public ZigBeeCommand getCommand(int id);
+	
+	/**
+	 * @return an array of all the commands of the cluster
+	 */
+	public ZigBeeCommand[] getCommands();
+	
+	/**
+	 * @return if exists, the cluster description - otherwise returns null.
+	 */
+	public ZigBeeClusterDescription getDescription();
+	
+	/**
+	 * Read a list of attributes
+	 * @param attributesIds An array of attributes ids
+	 * @param handler The response handler
+	 */
+	public void readAttributes(int[] attributesIds, ZigBeeAttributesHandler handler);
+	
+	/**
+	 * Read a list of attributes. Each readed attributes will be represented as a byte array
+	 * @param attibutesIds An array of attributes ids
+	 * @param handler The response handler
+	 */
+	public void readAttributesAsBytes(int[] attibutesIds, ZigBeeAttributesHandler handler);
+	
+	/**
+	 * Write a list of attributes
+	 * @param undivided The write command is undivided or not
+	 * @param attributes  An array of attributes records
+	 * @param handler The response handler
+	 */
+	public void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributes, ZigBeeAttributesHandler handler);
+	
+	/**
+	 * Write a list of attributes
+	 * @param undivided The write command is undivided or not
+	 * @param attributesIds An array of attributes ids
+	 * @param values A byte array representing attributes values
+	 * @param handler The response handler
+	 */
+	public void writeAttributes(boolean undivided, int[] attributesIds, byte[] values, ZigBeeAttributesHandler handler) throws ZigBeeNoDescriptionAvailableException;
+	
+}
