@@ -2153,10 +2153,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
     used, using another type is invalid.</para>
 
     <para>The <code>xml</code> element can be used to embed configuration
-    information, making the Endpoint Description self contained. For example,
-    the <xref linkend="service.sca"/> uses this <code>xml</code> element to
-    provide an embedded SCA Configuration Document in a <code>String</code>
-    object.</para>
+    information, making the Endpoint Description self contained.</para>
 
     <para>The following is an example of an <code>endpoint-descriptions</code>
     resource.</para>

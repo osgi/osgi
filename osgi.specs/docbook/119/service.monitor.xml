@@ -741,7 +741,7 @@ com.acme.sv.carots/*
 
     <para>The topic of the event must be:</para>
 
-    <programlisting>org/osgi/service/monitor</programlisting>
+    <programlisting>org/osgi/service/monitor/MonitorEvent</programlisting>
 
     <para>The properties of the event are:</para>
 

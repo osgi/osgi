@@ -45,6 +45,9 @@ public abstract class DiscoveryClient implements Runnable {
 				}
 				try {
 					synchronized (this) {
+						if (!running) {
+							break;
+						}
 						wait(getTimeout());
 					}
 				}

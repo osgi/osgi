@@ -23,7 +23,6 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.bundle.servlet;		version=2.1, \
 	org.osgi.impl.service.http; version=latest

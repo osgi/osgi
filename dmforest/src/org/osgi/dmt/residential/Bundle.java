@@ -290,12 +290,12 @@ public interface Bundle {
 	 * extensive.
 	 * <p>
 	 * This specification adds one additional name space to reflect the
-	 * services, this is the {@code osgi.wiring.service} name space. This name
-	 * space will have a wire for each time a registered service by this Bundle
-	 * was gotten for the first time by a bundle. A capability in the service
-	 * name space holds all the registered service properties. The requirement
-	 * has no attributes and a single {@code filter} directive that matches the
-	 * service id property.
+	 * services, this is the {@code osgi.wiring.rmt.service} name space. This
+	 * name space will have a wire for each time a registered service by this
+	 * Bundle was gotten for the first time by a bundle. A capability in the
+	 * service name space holds all the registered service properties. The
+	 * requirement has no attributes and a single {@code filter} directive that
+	 * matches the service id property.
 	 * <p>
 	 * If there is no installed Bundle yet then this node is not present.
 	 * 

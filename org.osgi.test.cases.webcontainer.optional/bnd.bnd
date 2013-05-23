@@ -42,9 +42,8 @@ Export-Package =\
 	${junit}
 
 -runbundles						= \
-	osgi.cmpn; version=latest, \
     org.osgi.test.cases.webcontainer; 		version = latest, \
-	org.osgi.impl.service.log; 			version=latest, \
+	org.osgi.impl.service.cm; 			version=latest, \
 	org.osgi.impl.service.event; 			version=latest, \
     org.osgi.impl.bundle.webcontainer; version=latest
 	

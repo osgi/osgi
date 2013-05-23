@@ -81,6 +81,8 @@ public class CoordinationException extends RuntimeException {
 	 * @param coordination The Coordination associated with this exception.
 	 * @param cause The cause associated with this exception.
 	 * @param type The type of this exception.
+	 * @throws IllegalArgumentException If the specified type is {@link #FAILED}
+	 *         and the specified cause is {@code null}.
 	 */
 	public CoordinationException(String message, Coordination coordination, int type, Throwable cause) {
 		super(message, cause);
@@ -103,6 +105,8 @@ public class CoordinationException extends RuntimeException {
 	 * @param message The detail message for this exception.
 	 * @param coordination The Coordination associated with this exception.
 	 * @param type The type of this exception.
+	 * @throws IllegalArgumentException If the specified type is {@link #FAILED}
+	 *         .
 	 */
 	public CoordinationException(String message, Coordination coordination, int type) {
 		super(message);

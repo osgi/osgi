@@ -1,7 +1,7 @@
 
 package org.osgi.dmt.ddf;
 
-import java.util.*;
+import java.util.Iterator;
 
 /**
  * The NODE represents a node in the Device Management Tree.

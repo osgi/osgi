@@ -19,9 +19,13 @@ import org.osgi.test.support.sleep.Sleep;
  *
  */
 public class ControlPoint extends Thread {
+
+	private static final long	UDP_SEND_DELAY	= 5000;
+
 	public volatile String			received;
 	private final DatagramSocket	msocket;
 	private final InetAddress		address;
+	private final Object lock = new Object();
 	private volatile boolean			running;
 	private final int		SEC_TO_DELAY	= 6;
 	private final String	NS_VALUE		= "01";
@@ -45,7 +49,25 @@ public class ControlPoint extends Thread {
 	}
 	public void send(DatagramPacket pack) {
 		try {
+			long startTime = System.currentTimeMillis();
+			long elapsedTime = 0;
+			int sendCount = 1;
 			msocket.send(pack);
+			synchronized (this.lock) {
+				while ((null == received) &&
+						(sendCount < UPnPConstants.UDP_SEND_COUNT)) {
+					if (elapsedTime < UDP_SEND_DELAY) {
+						this.lock.wait(UDP_SEND_DELAY - elapsedTime);
+						elapsedTime = System.currentTimeMillis() - startTime;
+					}
+					if (elapsedTime >= UDP_SEND_DELAY) {
+						msocket.send(pack);
+						sendCount++;
+						startTime = System.currentTimeMillis();
+						elapsedTime = 0;
+					}
+				}
+			}
 		}
 		catch (Exception er) {
 			er.printStackTrace();
@@ -61,6 +83,9 @@ public class ControlPoint extends Thread {
 					packet.getLength());
 			// System.out.println("RECEIVED DATA: " + data);
 			received = parse(data);
+			synchronized (lock) {
+				lock.notify();
+			}
 		}
 		catch (Exception er) {
 			er.printStackTrace();

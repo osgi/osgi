@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -289,7 +289,11 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String REPOSITORY_INVALID_TYPE = "repository.invalid.type";
 	
 	protected void setUp() throws Exception {
-		Filter rootFilter = getContext().createFilter("(&(objectClass=" + Subsystem.class.getName() + ")(" + SubsystemConstants.SUBSYSTEM_ID_PROPERTY + "=0))");
+		Filter rootFilter = getContext().createFilter(
+				"(&(objectClass=" + Subsystem.class.getName() + ")("
+						+ SubsystemConstants.SUBSYSTEM_ID_PROPERTY + "=0)("
+						+ SubsystemConstants.SUBSYSTEM_STATE_PROPERTY + "="
+						+ Subsystem.State.ACTIVE + "))");
 		rootSubsystem = new ServiceTracker<Subsystem, Subsystem>(getContext(), rootFilter, null);
 		rootSubsystem.open();
 		// wait for the subsytems implementation to register the root subsystem

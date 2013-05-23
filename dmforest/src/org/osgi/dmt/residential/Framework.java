@@ -1,8 +1,11 @@
 
 package org.osgi.dmt.residential;
 
-import static org.osgi.dmt.ddf.Scope.SCOPE.*;
-import org.osgi.dmt.ddf.*;
+import static org.osgi.dmt.ddf.Scope.SCOPE.A;
+import org.osgi.dmt.ddf.AddableMAP;
+import org.osgi.dmt.ddf.MAP;
+import org.osgi.dmt.ddf.Mutable;
+import org.osgi.dmt.ddf.Scope;
 
 /**
  * The Framework node represents the information about the Framework itself.
@@ -50,7 +53,7 @@ import org.osgi.dmt.ddf.*;
 public interface Framework {
 	/**
 	 * The StartLevel manages the Framework's current Start Level. Maps to the
-	 * Bundle Start Level {@code set/getStartLevel()} methods.
+	 * Framework Start Level {@code set/getStartLevel()} methods.
 	 * <p>
 	 * This node can set the requested Framework's StartLevel, however it
 	 * doesn't store the value. This node returns the Framework's StartLevel at

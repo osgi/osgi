@@ -2,12 +2,11 @@
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Bundle-Activator: 		${p}.Activator
-Export-Package: 		org.osgi.service.jdbc;-split-package:=first
+Export-Package: 		org.osgi.service.jdbc; -split-package:=first; provide:=true
 #Import-Package: 		org.apache.derby.jdbc, javax.sql, org.osgi.framework
 Private-Package: 		${p}.*
 
 Bundle-Description: 	OSGi JDBC Service Reference Implementation by Oracle Corporation.
-Bundle-Version: 		4.2.0.${project.build}
 Bundle-Category: 		osgi
 
 -buildpath = \

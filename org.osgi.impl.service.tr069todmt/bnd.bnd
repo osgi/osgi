@@ -2,7 +2,7 @@
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd	
 
 Bundle-Activator = ${p}.TR069ConnectorFactoryImpl
-Bundle-Version = 1.0.0.${project.build}
+Export-Package = org.osgi.service.tr069todmt; -split-package:=first; provide:=true
 Export-Service = org.osgi.service.tr069todmt.TR069ConnectorFactory
 Import-Service = org.osgi.service.log.LogService
 Bundle-RequiredExecutionEnvironment = J2SE-1.4

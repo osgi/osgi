@@ -7,10 +7,11 @@ nodeploy   = true
 
 -buildpath: \
     ee.j2se;         version=${javac.source}, \
+    dmforest;        version=project, \
     com.sun.tools;   version=1.5.0, \
     org.apache.bcel; version=1.0
 
-repo.javase     = ${repo;ee.j2se}
+repo.javase     = ${repo;ee.j2se;[${javac.source},${javac.source}]}
 repo.foundation = ${repo;ee.foundation}
 repo.servlet    = ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}
 repo.jaxp       = ${repo;com.icl.saxon}

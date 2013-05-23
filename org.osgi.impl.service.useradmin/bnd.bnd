@@ -3,10 +3,9 @@
 
 Bundle-Activator: org.osgi.impl.service.useradmin.Activator
 Bundle-Description: OSGi UserAdmin Service Reference Implementation by Gatespace AB.
-Bundle-Version: 1.0.0.${project.build}
 Export-Service: org.osgi.service.useradmin.UserAdmin
 
-Export-Package: org.osgi.service.useradmin;-split-package:=first
+Export-Package: org.osgi.service.useradmin; -split-package:=first; provide:=true
 Private-Package: ${p}.*
 
 

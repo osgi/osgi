@@ -22,6 +22,10 @@ cmpn.specs = \
 	 org.osgi.service.prefs, \
      org.osgi.service.provisioning, \
      org.osgi.service.remoteserviceadmin, \
+     org.osgi.service.repository, \
+     org.osgi.service.resolver, \
+     org.osgi.service.serviceloader, \
+     org.osgi.service.subsystem, \
 	 org.osgi.service.upnp, \
 	 org.osgi.service.useradmin, \
 	 org.osgi.service.wireadmin, \
@@ -39,5 +43,5 @@ cmpn.resources = {${cmpn.legal}/about.html}, \
   				xmlns/blueprint=${project.workspace}/xmlns/blueprint, \
   				xmlns/metatype=${project.workspace}/xmlns/metatype, \
   				xmlns/rsa=${project.workspace}/xmlns/rsa, \
-  				xmlns/scact=${project.workspace}/xmlns/scact, \
+                xmlns/repository=${project.workspace}/xmlns/repository, \
   				xmlns/scr=${project.workspace}/xmlns/scr

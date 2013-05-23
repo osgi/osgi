@@ -273,8 +273,8 @@
       are depicted in <xref linkend="i2421961"/>.</para>
 
       <figure pgwide="1" xml:id="i2421961">
-        <title>Using Dmt Admin service, org.osgi.service.dmt, info,
-        dmt.notification.* package</title>
+        <title>Using Dmt Admin service, org.osgi.service.dmt and
+        org.osgi.service.dmt.notification.* packages</title>
 
         <mediaobject>
           <imageobject>
@@ -1504,7 +1504,7 @@ Vendor/RingTones/Bach</programlisting>
 
       <para>Trying to set or get a complex value on an interior node that does
       not support complex values must throw a Dmt Exception with the code
-      <xref linkend="org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED"
+      <xref linkend="org.osgi.service.dmt.DmtException.FEATURE_NOT_SUPPORTED"
       xrefstyle="hyperlink"/>.</para>
     </section>
 
@@ -1841,7 +1841,7 @@ Vendor/RingTones/Bach</programlisting>
           <para><xref linkend="org.osgi.service.dmt.MetaNode.DYNAMIC"
           xrefstyle="hyperlink"/> – Dynamic nodes are intended to be created
           and deleted by a management system or an other controlling source.
-          This this not imply that it actually is possible to add new nodes
+          This does not imply that it actually is possible to add new nodes
           and delete nodes, the actions can still allow or deny this. However,
           in principle nodes that can be added or deleted have the <xref
           linkend="org.osgi.service.dmt.MetaNode.DYNAMIC"
@@ -1855,7 +1855,7 @@ Vendor/RingTones/Bach</programlisting>
         <listitem>
           <para><xref linkend="org.osgi.service.dmt.MetaNode.PERMANENT"
           xrefstyle="hyperlink"/> – Permanent nodes represent an entity in the
-          system. This can be a network interface, de device description, etc.
+          system. This can be a network interface, a device description, etc.
           Permanent nodes in general map to an object in an object oriented
           language. Despite their name, <xref
           linkend="org.osgi.service.dmt.MetaNode.PERMANENT"
@@ -2245,7 +2245,7 @@ Vendor/RingTones/Bach</programlisting>
     <section>
       <title>Associating a sub-tree</title>
 
-      <para>Each plugin is associated with one ore more DMT sub-trees. The top
+      <para>Each plugin is associated with one or more DMT sub-trees. The top
       node of a sub-tree is called the <emphasis>plugin root</emphasis>. The
       plugin root is defined by a service registration property. This property
       is different for exec plugins and data plugins:</para>
@@ -2560,7 +2560,11 @@ Vendor/RingTones/Bach</programlisting>
               linkend="org.osgi.service.dmt.DmtSession.getNodeSize-String-"
               xrefstyle="hyperlink"/></para></entry>
 
-              <entry><para>Must always return <code>0</code>.</para></entry>
+              <entry><para>Must throw a <xref
+              linkend="org.osgi.service.dmt.DmtException"
+              xrefstyle="hyperlink"/> <xref
+              linkend="org.osgi.service.dmt.DmtException.COMMAND_NOT_ALLOWED"
+              xrefstyle="hyperlink"/></para></entry>
             </row>
 
             <row>
@@ -3342,24 +3346,26 @@ mountPoints     [ C, E/F ]</programlisting>
 
             <listitem>
               <para>Any already mapped Child Plugins must be compatible with
-              its mount points</para>
+              its mount points.</para>
             </listitem>
           </itemizedlist>
         </listitem>
 
         <listitem>
           <para>If no mount points are specified then there must be no Child
-          Plugins already registered</para>
+          Plugins already registered.</para>
         </listitem>
 
         <listitem>
           <para>The plugin root must be compatible with the corresponding
-          parent’s mount point</para>
+          parent’s mount point. When a Parent Plugin is available, the plugin
+          root must match exactly to the absolute URI of the parent's mount
+          point.</para>
         </listitem>
 
         <listitem>
           <para>The plugin root must be compatible with any other plugins on
-          that mount point</para>
+          that mount point.</para>
         </listitem>
       </itemizedlist>
 
@@ -4565,7 +4571,7 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
             </row>
 
             <row>
-              <entry><para>bundle.symbolicname</para></entry>
+              <entry><para>bundle.symbolicName</para></entry>
 
               <entry><para>String</para></entry>
 
@@ -4608,7 +4614,7 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
       following table.</para>
 
       <table pgwide="1" xml:id="service.dmt-event.properties.session">
-        <title>Event Properties For Session Event</title>
+        <title>Event Properties For Session Events</title>
 
         <tgroup cols="4">
           <colspec colnum="1" colwidth="1.5*"/>
@@ -4721,7 +4727,7 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
               <entry><para/></entry>
 
               <entry><para>Must describe the exception if the session had a
-              fatal exception or timed out.</para></entry>
+              fatal exception.</para></entry>
             </row>
 
             <row>
@@ -4732,7 +4738,7 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
               <entry><para/></entry>
 
               <entry><para>The name of the actual exception class if the
-              session had a fatal exception or timed out.</para></entry>
+              session had a fatal exception.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -6493,71 +6499,6 @@ PackagePermission   org.osgi.service.dmt.notification     IMPORT
 DmtPrincipalPermission &lt;scope&gt;</programlisting>
       </section>
     </section>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <para>The changes to this document are quite large, even the package has
-    been renamed. Despite the rename, package version 2.0 is taken to indicate
-    that this is a major update. The following items provide a general
-    overview of the changes. However, this update is major and no backward
-    compatibility should be expected.</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>Renamed the <code>info.dmtree</code> package to
-        <code>org.osgi.service.dmt</code>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Removed the static factory methods needed to provide a service
-        registry in non-OSGi environments.</para>
-      </listitem>
-
-      <listitem>
-        <para>Overlapping sub-trees. It is now possible to create parent-child
-        relations between plugins. API was added to manage the sharing, see
-        <xref linkend="i2538366"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>A format <xref
-        linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME"
-        xrefstyle="hyperlink"/> was added to support actual time of day, see
-        <xref linkend="i2955405"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>A general assumption was added that the Dmt Admin nodes had not
-        artificial limits on their URI length nor their segment length.</para>
-      </listitem>
-
-      <listitem>
-        <para>Introduced so called scaffold nodes that provide intermediate
-        nodes to allow discovery of plugins, <xref
-        linkend="i2931854"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Allow Plugins to send events about internal changes, see <xref
-        linkend="i2955614"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Changed the event model of atomic session to allow accurately
-        track changes to the DMT, see <xref linkend="i2753759"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Introduced a section about modeling with the Dmt Admin service,
-        see <xref linkend="service.dmt.osgiobjectmodeling"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Clarifications throughout the specification.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.dmt.xml"/>

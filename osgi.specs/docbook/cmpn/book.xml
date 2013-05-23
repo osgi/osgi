@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<book revision="$Id$" version="5"
-      xmlns="http://docbook.org/ns/docbook"
+<book revision="$Id$"
+      status="final" version="5" xmlns="http://docbook.org/ns/docbook"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       xmlns:xi="http://www.w3.org/2001/XInclude"
       xmlns:ns5="http://www.w3.org/1999/xhtml"
@@ -16,16 +16,16 @@
 
     <releaseinfo>Release 5</releaseinfo>
 
-    <pubdate>March 2012</pubdate>
+    <pubdate>May 2013</pubdate>
 
     <copyright>
-      <year>2000, 2012</year>
+      <year>2000, 2013</year>
 
       <holder>OSGi Alliance</holder>
     </copyright>
   </info>
 
-  <xi:include href="../license/distribution.feedback.license.2.0.xml"/>
+  <xi:include href="../license/osgi.specification.license.2.0.xml"/>
 
   <xi:include href="001/introduction.xml"/>
 
@@ -83,9 +83,17 @@
 
   <xi:include href="../128/service.war.xml"/>
 
-  <xi:include href="../129/service.sca.xml"/>
-
   <xi:include href="../130/service.coordinator.xml"/>
+
+  <xi:include href="../132/service.repository.xml"/>
+
+  <xi:include href="../133/service.loader.xml"/>
+
+  <xi:include href="../134/service.subsystem.xml"/>
+
+  <xi:include href="../135/service.namespaces.xml"/>
+
+  <xi:include href="../136/service.resolver.xml"/>
 
   <xi:include href="../702/util.xml.xml"/>
 

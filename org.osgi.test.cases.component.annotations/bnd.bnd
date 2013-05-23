@@ -16,8 +16,7 @@ Include-Resource					= resources, \
 	${junit}
 
 -runbundles						= \
-	org.osgi.impl.bundle.component.annotations; version=latest, \
-	osgi.cmpn; version=4.3
+	org.osgi.impl.bundle.component.annotations; version=latest
 
 -runproperties = ${runproperties}, \
 	${p}.bundle.symbolic.name=org.osgi.impl.bundle.component.annotations

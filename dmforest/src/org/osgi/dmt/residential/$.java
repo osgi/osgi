@@ -1,9 +1,11 @@
 
 package org.osgi.dmt.residential;
 
-import org.osgi.dmt.ddf.*;
-import org.osgi.dmt.service.log.*;
-import static org.osgi.dmt.ddf.Scope.SCOPE.*;
+import static org.osgi.dmt.ddf.Scope.SCOPE.P;
+import org.osgi.dmt.ddf.MutableMAP;
+import org.osgi.dmt.ddf.Opt;
+import org.osgi.dmt.ddf.Scope;
+import org.osgi.dmt.service.log.Log;
 
 /**
  * The $ describes the root node for OSGi Residential Management. The path to
@@ -11,6 +13,14 @@ import static org.osgi.dmt.ddf.Scope.SCOPE.*;
  * .
  */
 public interface $ {
+	/**
+	 * The Framework node used to manage the local framework.
+	 * 
+	 * @return Framework node
+	 */
+	@Scope(P)
+	Framework Framework();
+
 	/**
 	 * The Filters node searches the nodes in a tree that correspond to a target
 	 * URI and an optional filter expression. A new {@link Filter} is created by
@@ -29,14 +39,6 @@ public interface $ {
 	 */
 	@Scope(P)
 	Opt<MutableMAP<String, Filter>> Filter();
-
-	/**
-	 * The Framework node used to manage the local framework.
-	 * 
-	 * @return Framework node
-	 */
-	@Scope(P)
-	Framework Framework();
 
 	/**
 	 * Access to the optional Log.

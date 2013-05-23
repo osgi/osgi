@@ -840,7 +840,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 				* OSGiTestCaseProperties.getScaling());
 		if (listener.size() < desiredCount) {
 			listener.close();
-			start.stop();
+			start.stop(http);
 			ungetService(http);
 			fail("timed out waiting for " + desiredCount + " UPnP devices");
 		}
@@ -848,7 +848,7 @@ public class UPnPControl extends DefaultTestBundleControl {
 
 	private void finalizeTestEnd() throws Exception {
 		listener.close();
-		start.stop();
+		start.stop(http);
 		ungetService(http);
 	}
 

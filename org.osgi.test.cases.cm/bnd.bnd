@@ -40,7 +40,6 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-	osgi.cmpn; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.cm; version=latest
 	

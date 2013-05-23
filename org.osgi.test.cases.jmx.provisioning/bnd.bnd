@@ -17,10 +17,12 @@ Include-Resource                    = \
     ${junit}    
 
 -runbundles                         = \
-    osgi.enterprise; version=latest, \
     org.osgi.impl.bundle.jmx; version=latest, \
+    org.osgi.impl.service.cm; version=latest, \
+    org.osgi.impl.service.http; version=latest, \
     org.osgi.impl.service.log; version=latest, \
     org.osgi.impl.service.provisioning; version=latest, \
+    org.osgi.impl.service.useradmin; version=latest, \
     org.osgi.impl.bundle.servlet; version=2.1
 
 Test-Cases                          = ${testcases}
@@ -28,6 +30,8 @@ Test-Cases                          = ${testcases}
             org.osgi.jmx, \
             org.osgi.jmx.service.provisioning
             
--runproperties = ${runproperties}
+-runproperties = ${runproperties}, \
+    org.osgi.service.http.hostname=127.0.0.1, \
+    org.osgi.service.http.port=8080
 #   osgi.console=1111
 

@@ -4,12 +4,11 @@
 Bundle-Activator			= ${p}.Activator
 Bundle-Description			= OSGi Preferences Service Reference Implementation by Sun Microsystems.
 Bundle-Vendor				= Sun Microsystems, Inc.
-Bundle-Version				= 1.1.0.${project.build}
 
 Export-Service				= org.osgi.service.prefs.PreferencesService
 
 Private-Package 			= ${p}.*
-Export-Package				= org.osgi.service.prefs;-split-package:=first
+Export-Package				= org.osgi.service.prefs; -split-package:=first; provide:=true
 
 -buildpath = \
 	org.osgi.service.prefs; 	version=project, \

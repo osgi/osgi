@@ -1958,20 +1958,6 @@ PackagePermission  org.osgi.service.application   IMPORT</programlisting>
     </section>
   </section>
 
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added an exit value for applications</para>
-      </listitem>
-
-      <listitem>
-        <para>Minor updates</para>
-      </listitem>
-    </itemizedlist>
-  </section>
-
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.application.xml"/>
 
   <section>

@@ -2,7 +2,6 @@
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Bundle-Vendor					= Nokia
-Bundle-Version					= 1.1.0.${project.build}
 Bundle-Activator				= ${p}.Activator
 Export-Service					= \
 	org.osgi.service.dmt.DmtAdmin, \
@@ -11,7 +10,9 @@ Import-Service					= \
 	org.osgi.service.log.LogService, \
 	org.osgi.service.cm.ConfigurationAdmin
 
-Export-Package 					= ${p}.export;provide:=true,org.osgi.service.dmt.*;-split-package:=first
+Export-Package 					= \
+    org.osgi.service.dmt.*; -split-package:=first; provide:=true, \
+    org.osgi.service.event; -split-package:=first
 Private-Package					= ${p}.*
 
 -buildpath						= \
