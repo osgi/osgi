@@ -82,16 +82,12 @@ public @interface Component {
 	 * component instance.
 	 * 
 	 * <p>
-	 * This element is ignored when the {@link #scope()} element does not have
-	 * the default value. If {@code true}, this Component uses
-	 * {@link ServiceScope#BUNDLE bundle} service scope. If {@code false} or not
-	 * specified, this Component uses {@link ServiceScope#SINGLETON singleton}
-	 * service scope.
+	 * If {@code true}, this Component uses the OSGi ServiceFactory concept. If
+	 * {@code false} or not specified, this Component does not use the OSGi
+	 * ServiceFactory concept.
 	 * 
 	 * @see "The servicefactory attribute of the service element of a Component Description."
-	 * @deprecated Since 1.3. Replaced by {@link #scope()}.
 	 */
-	@Deprecated
 	boolean servicefactory() default false;
 
 	/**
@@ -201,17 +197,4 @@ public @interface Component {
 	 * @since 1.2
 	 */
 	String configurationPid() default "";
-
-	/**
-	 * The service scope for the service of this Component.
-	 * 
-	 * <p>
-	 * If not specified and the deprecated {@link #servicefactory()} element is
-	 * not specified, the {@link ServiceScope#SINGLETON singleton} service scope
-	 * is used.
-	 * 
-	 * @see "The scope attribute of the service element of a Component Description."
-	 * @since 1.3
-	 */
-	ServiceScope scope() default ServiceScope.DEFAULT;
 }
