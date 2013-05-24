@@ -1,0 +1,37 @@
+/*
+ * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package org.osgi.framework.resource;
+
+/**
+ * A {@link ResourceMonitor} for the {@link ResourceManager#RES_TYPE_SOCKET}
+ * resource type. {@link SocketMonitor} instance are used to monitor and limit
+ * the number of existing socket per {@link ResourceContext} instance.
+ * {@link SocketMonitor} instance handle all types of sockets (TCP, UDP, ...).
+ */
+public interface SocketMonitor extends ResourceMonitor {
+
+	/**
+	 * Returns the number of existing socket created by a
+	 * {@link ResourceContext}.
+	 * <p>
+	 * The {@link #getUsage()} method returns the same value, wrapped in a
+	 * {@link Long}
+	 * 
+	 * @return the number of existing socket.
+	 */
+	public long getSocketUsage();
+
+}
