@@ -59,40 +59,34 @@ package org.osgi.framework.resource;
  */
 public interface ResourceThreshold {
 
-	/**
-	 * Indicates that the threshold is reached when the current resource
-	 * consumption exceeds the threshold value.
-	 */
-	public static final String DIRECTION_UP = "UP";
 
-	/**
-	 * Indicates that the threshold is reached when the current resource
-	 * consumption decreases under the threshold value.
-	 */
-	public static final String DIRECTION_DOWN = "DOWN";
 
 	/**
 	 * A ResourceThreshold instance is in the NORMAL state while the current
-	 * consumption of resource is either under ({@link #DIRECTION_UP}) or above
-	 * ({@link #DIRECTION_DOWN}) the warning threshold.
+	 * consumption of resource is either under or above the warning threshold
+	 * depending on the type of threshold (minimum or maximum).
 	 */
 	public static final String NORMAL_STATE = "NORMAL";
 
 	/**
-	 * A ResourceThreshold instance is in the WARNING state when the current consumption:
+	 * A ResourceThreshold instance is in the WARNING state when the current
+	 * consumption:
 	 * <ul>
-	 * <li>either exceeds the WARNING threshold value AND is under the ERROR threshold value (@link {@link #DIRECTION_UP})</li>
-	 * <li>or is under the WARNING threshold value AND exceeds the ERROR threshold value (@link {@link #DIRECTION_DOWN})</li>
-	 * </ul> 
+	 * <li>either exceeds the WARNING threshold value AND is under the ERROR
+	 * threshold value (maximum threshold)</li>
+	 * <li>or is under the WARNING threshold value AND exceeds the ERROR
+	 * threshold value (minimum threshold)</li>
+	 * </ul>
 	 */
 	public static final String WARNING_STATE = "WARNING";
 
 	/**
-	 * A ResourceThreshold instance is in the ERROR state when the current consumption:
+	 * A ResourceThreshold instance is in the ERROR state when the current
+	 * consumption:
 	 * <ul>
-	 * <li>either exceeds the ERROR threshold value (@link {@link #DIRECTION_UP})</li>
-	 * <li>or is under the ERROR threshold value (@link {@link #DIRECTION_DOWN})</li>
-	 * </ul> 
+	 * <li>either exceeds the ERROR threshold value (maximum threshold)</li>
+	 * <li>or is under the ERROR threshold value (minimum threshold)</li>
+	 * </ul>
 	 */
 	public static final String ERROR_STATE = "ERROR";
 
@@ -105,18 +99,11 @@ public interface ResourceThreshold {
 	public String getState();
 
 	/**
-	 * Return the direction of the threshold.
+	 * Return true if WARNING value is less than ERROR value.
 	 * 
-	 * @return either {@link #DIRECTION_UP} or {@link #DIRECTION_DOWN}
+	 * @return true if WARNING value is less than ERROR value.
 	 */
-	public String getDirection();
-
-	/**
-	 * Set the threshold direction.
-	 * 
-	 * @param d
-	 */
-	public void setDirection(String d);
+	public boolean isMaximum();
 
 	/**
 	 * Returns the value of the error threshold
@@ -146,15 +133,5 @@ public interface ResourceThreshold {
 	 */
 	public void setWarningThreshold(Object value);
 
-	/**
-	 * Notify the {@link ResourceThreshold} instance about the current resource
-	 * consumption. The {@link ResourceThreshold} instance MUST evaluate the
-	 * current consumption over the threshold value and the direction. Then it
-	 * updates the current state and if needed generates {@link ResourceEvent}
-	 * notifications.
-	 * 
-	 * @param value
-	 *            current resource consumption
-	 */
-	public void notifyCurrentConsumption(Object value);
+
 }

@@ -15,6 +15,8 @@
  */
 package org.osgi.framework.resource;
 
+import org.osgi.framework.resource.exception.ThresholdException;
+
 /**
  * Representation of the state of a resource for a resource context.
  * <p>
@@ -58,6 +60,11 @@ public interface ResourceMonitor {
 	public String getResourceType();
 
 	/**
+	 * Delete this instance of Resource Monitor.
+	 */
+	public void delete();
+
+	/**
 	 * Checks if the monitoring for this resource type is enabled for this
 	 * resource context
 	 * 
@@ -95,28 +102,36 @@ public interface ResourceMonitor {
 	public Object getUsage();
 
 	/**
-	 * Returns an array of existing {@link ResourceThreshold} instances.
+	 * Returns the minimum {@link ResourceThreshold} instance.
 	 * 
 	 * @return
 	 */
-	public ResourceThreshold[] getThresholds();
+	public ResourceThreshold getMinimumThreshold();
 
 	/**
-	 * Add a new Resource Threshold.
+	 * Returns the maximum {@link ResourceThreshold} instance.
 	 * 
-	 * @param resourceThreshold
-	 *            the new {@link ResourceThreshold} instance to be added to the
-	 *            array.
+	 * @return
 	 */
-	public void addResourceThreshold(ResourceThreshold resourceThreshold);
+	public ResourceThreshold getMaximumThreshold();
 
 	/**
-	 * Remove a Resource Threshold.
+	 * Set the minimum {@link ResourceThreshold} instance.
 	 * 
-	 * @param resourceThreshold
-	 *            to be removed.
+	 * @param minThreshold new minimun threshold. It can be null
+	 * @exception ThresholdException if minThreshold.isMaximumThreshold()
+	 *            returns true.
 	 */
-	public void removeResourceThreshold(ResourceThreshold resourceThreshold);
+	public void setMinimumThreshold(ResourceThreshold minThreshold) throws ThresholdException;
+
+	/**
+	 * Set the maximum {@link ResourceThreshold} instance.
+	 * 
+	 * @param maxThreshold new maximum threshold. It can be null
+	 * @exception ThresholdException if maxThreshold.isMaximumThreshold()
+	 *            returns false.
+	 */
+	public void setMaximumThreshold(ResourceThreshold maxThreshold) throws ThresholdException;
 
 
 	/**
