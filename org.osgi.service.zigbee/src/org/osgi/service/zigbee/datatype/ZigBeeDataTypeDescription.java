@@ -17,6 +17,11 @@ public interface ZigBeeDataTypeDescription {
 	public String getName();
 	
 	/**
+	 * @return The data type invalid number if exists, otherwise returns null
+	 */
+	public Object getInvalidNumber();
+	
+	/**
 	 * @return true, if the data type is analog.
 	 */
 	public boolean isAnalog();

@@ -2,6 +2,11 @@ package org.osgi.service.zigbee;
 
 import org.osgi.service.zigbee.datatype.ZigBeeDataTypeDescription;
 
+/**
+ * This class represents a ZigBee Attribute Record
+ * 
+ * @version 1.0
+ */
 public class ZigBeeAttributeRecord {
 	
 	private short id;
