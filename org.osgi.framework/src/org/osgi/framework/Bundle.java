@@ -75,7 +75,6 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * bundle id} and is greater if it has a higher bundle id.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
 @ProviderType

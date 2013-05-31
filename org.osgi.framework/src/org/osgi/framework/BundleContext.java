@@ -85,7 +85,6 @@ import org.osgi.annotation.versioning.ProviderType;
  * Environment supports permissions.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
 @ProviderType

@@ -34,7 +34,6 @@ import org.osgi.annotation.versioning.ProviderType;
  * @param <S> Type of Service.
  * @see BundleContext#registerService(String[],Object,Dictionary)
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
 @ProviderType

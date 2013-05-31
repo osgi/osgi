@@ -45,7 +45,6 @@ import org.osgi.framework.Bundle;
  * the resource.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
 @ProviderType

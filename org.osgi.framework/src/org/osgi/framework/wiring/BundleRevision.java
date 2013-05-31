@@ -52,7 +52,6 @@ import org.osgi.resource.Resource;
  * {@link Constants#REQUIRE_CAPABILITY Require-Capability} manifest headers.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
 @ProviderType

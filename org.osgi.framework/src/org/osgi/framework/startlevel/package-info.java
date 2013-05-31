@@ -73,7 +73,6 @@
  * Import-Package: org.osgi.framework.startlevel; version=&quot;[1.0,2.0)&quot;
  * </pre>
  * 
- * @version 1.0
  * @author $Id$
  */
 

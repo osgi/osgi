@@ -30,7 +30,6 @@ import org.osgi.framework.BundleReference;
  * calling {@link BundleReference#getBundle()}.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
 @ProviderType

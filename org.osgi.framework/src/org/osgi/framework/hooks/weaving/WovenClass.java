@@ -34,7 +34,6 @@ import org.osgi.framework.wiring.BundleWiring;
  * immutable.
  * 
  * @NotThreadSafe
- * @noimplement
  * @author $Id$
  */
 @ProviderType

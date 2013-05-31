@@ -26,7 +26,6 @@ import org.osgi.resource.Capability;
  * revision}.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
 @ProviderType

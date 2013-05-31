@@ -23,7 +23,6 @@ import org.osgi.resource.Wire;
  * A wire connecting a {@link BundleCapability} to a {@link BundleRequirement}.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
 @ProviderType

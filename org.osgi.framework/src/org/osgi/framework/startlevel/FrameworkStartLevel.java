@@ -33,7 +33,6 @@ import org.osgi.framework.FrameworkListener;
  * obtained by calling {@link BundleReference#getBundle()}.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
 @ProviderType

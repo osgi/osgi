@@ -34,7 +34,6 @@ import org.osgi.framework.FrameworkEvent;
  * instance.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
 @ProviderType

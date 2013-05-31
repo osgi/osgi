@@ -25,7 +25,6 @@
  * Import-Package: org.osgi.framework.wiring; version=&quot;[1.1,2.0)&quot;
  * </pre>
  * 
- * @version 1.1
  * @author $Id$
  */
 

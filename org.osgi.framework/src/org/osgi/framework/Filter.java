@@ -42,7 +42,6 @@ import org.osgi.annotation.versioning.ProviderType;
  * @since 1.1
  * @see "Core Specification, Filters, for a description of the filter string syntax."
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
 @ProviderType

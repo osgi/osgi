@@ -53,7 +53,6 @@ import org.osgi.resource.Wiring;
  * a bundle returns {@code null}.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
 @ProviderType

@@ -37,7 +37,6 @@ import org.osgi.annotation.versioning.ProviderType;
  * @see BundleContext#getServiceObjects(ServiceReference)
  * @see PrototypeServiceFactory
  * @ThreadSafe
- * @noimplement
  * @since 1.8
  * @author $Id$
  */

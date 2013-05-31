@@ -26,7 +26,6 @@
  * <p>
  * {@code  Import-Package: org.osgi.framework.hooks.resolver; version="[1.0,2.0)"}
  * 
- * @version 1.0
  * @author $Id$
  */
 

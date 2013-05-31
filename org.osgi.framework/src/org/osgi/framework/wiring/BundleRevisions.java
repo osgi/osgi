@@ -37,7 +37,6 @@ import org.osgi.framework.BundleReference;
  * {@link #getRevisions()} on the bundle.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
 @ProviderType

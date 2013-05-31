@@ -23,7 +23,6 @@ import org.osgi.annotation.versioning.ProviderType;
  * 
  * @since 1.5
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
 @ProviderType
