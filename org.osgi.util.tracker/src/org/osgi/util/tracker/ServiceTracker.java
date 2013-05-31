@@ -298,6 +298,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 					} else {
 						if (trackReference != null) {
 							if (trackReference.getBundle() != null) {
+								@SuppressWarnings("unchecked")
 								ServiceReference<S>[] single = new ServiceReference[] {trackReference};
 								references = single;
 							}
@@ -331,6 +332,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 *         invalid syntax.
 	 */
 	private ServiceReference<S>[] getInitialReferences(boolean trackAllServices, String className, String filterString) throws InvalidSyntaxException {
+		@SuppressWarnings("unchecked")
 		ServiceReference<S>[] result = (ServiceReference<S>[]) ((trackAllServices) ? context.getAllServiceReferences(className, filterString) : context.getServiceReferences(className, filterString));
 		return result;
 	}
@@ -408,6 +410,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * @see ServiceTrackerCustomizer#addingService(ServiceReference)
 	 */
 	public T addingService(ServiceReference<S> reference) {
+		@SuppressWarnings("unchecked")
 		T result = (T) context.getService(reference);
 		return result;
 	}
@@ -527,6 +530,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 			if (length == 0) {
 				return null;
 			}
+			@SuppressWarnings("unchecked")
 			ServiceReference<S>[] result = new ServiceReference[length];
 			return t.copyKeys(result);
 		}
@@ -843,7 +847,9 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 				return array;
 			}
 			if (length > array.length) {
-				array = (T[]) Array.newInstance(array.getClass().getComponentType(), length);
+				@SuppressWarnings("unchecked")
+				T[] newInstance = (T[]) Array.newInstance(array.getClass().getComponentType(), length);
+				array = newInstance;
 			}
 			for (int i = 0; i < length; i++) {
 				array[i] = getService(references[i]);
@@ -883,6 +889,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 			if (closed) {
 				return;
 			}
+			@SuppressWarnings("unchecked")
 			final ServiceReference<S> reference = (ServiceReference<S>) event.getServiceReference();
 			if (DEBUG) {
 				System.out.println("ServiceTracker.Tracked.serviceChanged[" + event.getType() + "]: " + reference);
@@ -914,6 +921,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		 * 
 		 * @GuardedBy this
 		 */
+		@Override
 		final void modified() {
 			super.modified(); /* increment the modification count */
 			ServiceTracker.this.modified();
@@ -928,6 +936,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		 * @return Customized object for the tracked item or {@code null} if the
 		 *         item is not to be tracked.
 		 */
+		@Override
 		final T customizerAdding(final ServiceReference<S> item, final ServiceEvent related) {
 			return customizer.addingService(item);
 		}
@@ -940,6 +949,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		 * @param related Action related object.
 		 * @param object Customized object for the tracked item.
 		 */
+		@Override
 		final void customizerModified(final ServiceReference<S> item, final ServiceEvent related, final T object) {
 			customizer.modifiedService(item, object);
 		}
@@ -952,6 +962,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 		 * @param related Action related object.
 		 * @param object Customized object for the tracked item.
 		 */
+		@Override
 		final void customizerRemoved(final ServiceReference<S> item, final ServiceEvent related, final T object) {
 			customizer.removedService(item, object);
 		}
