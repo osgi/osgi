@@ -483,7 +483,7 @@
     ranking order, see <xref linkend="framework.service.servicerankingorder"/>.
     </para>
     
-    <remark>### Is calling liseners in service ranking order really important?
+    <remark>Is calling liseners in service ranking order really important?
     </remark>
 
     <para>The Woven Class Listener <code>modified</code> method is called with a
@@ -491,7 +491,7 @@
     underwent a state transition. The method must be called in a privileged 
     block, see <xref linkend="framework.lifecycle.privilegedcallbacks"/>.</para>
     
-    <remark>### Is a privileged block really necessary?</remark>
+    <remark>Is a privileged block really necessary?</remark>
     
     <para>Woven class listeners are not notified of the TRANSFORMING state 
     because the woven class is mutable and listeners are read-only. In all 
@@ -648,7 +648,7 @@
         state transition. The woven class processing will not proceed until all 
         woven class listeners are done.</para>
         
-        <remark>### Is it necessary to state the framework should not hold any
+        <remark>Is it necessary to state the framework should not hold any
         locks?</remark>
         
       </section>
@@ -662,7 +662,7 @@
         misbehaving Woven Class Listener in the same manner as described for
         Weaving Hooks.</para>
         
-        <remark>### Is it necessary to mention blacklisting?</remark>
+        <remark>Is it necessary to mention blacklisting?</remark>
         
       </section>
     
