@@ -73,7 +73,7 @@ version="1.1">
           <xsl:value-of select="@name"/>
         </xsl:element>
 
-        <xsl:if test="version">
+        <xsl:if test="org.osgi.annotation.versioning.Version|version">
           <xsl:variable name="version.id">
             <xsl:call-template name="clean.id">
               <xsl:with-param name="string" select="@name"/>
@@ -87,7 +87,14 @@ version="1.1">
                 <xsl:value-of select="$version.id"/>
               </xsl:attribute>
               <xsl:text>Version </xsl:text>
-              <xsl:apply-templates select="version" mode="html"/>
+              <xsl:choose>
+                <xsl:when test="org.osgi.annotation.versioning.Version">
+                  <xsl:apply-templates select="org.osgi.annotation.versioning.Version//value[not(./value)]" mode="html"/>
+                </xsl:when>
+                <xsl:when test="version">
+                  <xsl:apply-templates select="version" mode="html"/>
+                </xsl:when>
+              </xsl:choose>
             </xsl:element>
           </xsl:element>
         </xsl:if>
