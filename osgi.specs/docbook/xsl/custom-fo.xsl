@@ -1279,6 +1279,11 @@ actual para elements -->
       <xsl:text>] ### </xsl:text>
       <xsl:value-of select="normalize-space(.)"/>
     </xsl:message>
+    <xsl:if test="ancestor-or-self::*[@status][1]/@status != 'draft'">
+      <xsl:message terminate="yes">
+        A non-draft book must not have any remark elements.
+      </xsl:message>
+    </xsl:if>
   </xsl:if>
 </xsl:template>
 
@@ -1294,6 +1299,11 @@ actual para elements -->
       <xsl:text>] ### </xsl:text>
       <xsl:value-of select="normalize-space(.)"/>
     </xsl:message>
+    <xsl:if test="ancestor-or-self::*[@status][1]/@status != 'draft'">
+      <xsl:message terminate="yes">
+        A non-draft book must not have any remark elements.
+      </xsl:message>
+    </xsl:if>
   </xsl:if>
 </xsl:template>
 
