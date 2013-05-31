@@ -785,7 +785,7 @@ public class XmlDoclet extends Doclet {
 										}
 										else
 											if (tag.kind().equals("@version")) {
-												sb.append("<version>Version ");
+												sb.append("<version>");
 												sb.append(html(toString(tag.inlineTags())));
 												sb.append("</version>");
 											}
