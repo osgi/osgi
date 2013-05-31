@@ -1273,6 +1273,12 @@ actual para elements -->
       <xsl:text>### </xsl:text>
       <xsl:apply-templates/>
     </fo:block>
+    <xsl:message>
+      <xsl:text>[</xsl:text>
+      <xsl:apply-templates select="ancestor::d:section[1]" mode="label.markup"/>
+      <xsl:text>] ### </xsl:text>
+      <xsl:value-of select="normalize-space(.)"/>
+    </xsl:message>
   </xsl:if>
 </xsl:template>
 
@@ -1282,6 +1288,12 @@ actual para elements -->
       <xsl:text>### </xsl:text>
       <xsl:apply-templates/>
     </fo:inline>
+   <xsl:message>
+      <xsl:text>[</xsl:text>
+      <xsl:apply-templates select="ancestor::d:section[1]" mode="label.markup"/>
+      <xsl:text>] ### </xsl:text>
+      <xsl:value-of select="normalize-space(.)"/>
+    </xsl:message>
   </xsl:if>
 </xsl:template>
 
