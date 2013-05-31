@@ -1270,6 +1270,7 @@ actual para elements -->
 <xsl:template match="d:remark[&comment.block.parents;]">
   <xsl:if test="$show.comments != 0">
     <fo:block xsl:use-attribute-sets="remark.properties">
+      <xsl:text>### </xsl:text>
       <xsl:apply-templates/>
     </fo:block>
   </xsl:if>
@@ -1278,6 +1279,7 @@ actual para elements -->
 <xsl:template match="d:remark">
   <xsl:if test="$show.comments != 0">
     <fo:inline xsl:use-attribute-sets="remark.properties">
+      <xsl:text>### </xsl:text>
       <xsl:apply-templates/>
     </fo:inline>
   </xsl:if>
