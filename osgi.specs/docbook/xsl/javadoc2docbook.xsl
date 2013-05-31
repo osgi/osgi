@@ -86,6 +86,7 @@ version="1.1">
               <xsl:attribute name="xml:id">
                 <xsl:value-of select="$version.id"/>
               </xsl:attribute>
+              <xsl:text>Version </xsl:text>
               <xsl:apply-templates select="version" mode="html"/>
             </xsl:element>
           </xsl:element>
