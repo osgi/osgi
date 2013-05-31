@@ -17,6 +17,7 @@
 package org.osgi.service.condpermadmin;
 
 import java.util.List;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Update the Conditional Permission Table. There may be many update objects in
@@ -25,10 +26,10 @@ import java.util.List;
  * commit will fail and this object should be discarded.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  * @since 1.1
  */
+@ProviderType
 public interface ConditionalPermissionUpdate {
 	/**
 	 * This method returns the list of {@link ConditionalPermissionInfo}s for

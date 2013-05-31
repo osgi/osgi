@@ -17,6 +17,7 @@
 package org.osgi.service.condpermadmin;
 
 import java.util.Dictionary;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * The interface implemented by a Condition. Conditions are bound to Permissions
@@ -26,6 +27,7 @@ import java.util.Dictionary;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface Condition {
 	/**
 	 * A Condition object that will always evaluate to true and that is never
