@@ -25,7 +25,6 @@
  * Import-Package: org.osgi.resource; version=&quot;[1.0,2.0)&quot;
  * </pre>
  * 
- * @version 1.0
  * @author $Id$
  */
 
