@@ -1313,15 +1313,29 @@ version="1.1">
     </xsl:element>
   </xsl:if>
 
-  <xsl:if test="not($ddf) and $target/noimplement">
+  <xsl:if test="not($ddf) and 
+               ($target/org.osgi.annotation.versioning.ProviderType|
+                $target/noimplement)">
     <xsl:element name="formalpara" namespace="{$ns}">
       <xsl:attribute name="role">parameter</xsl:attribute>
-      <xsl:element name="title" namespace="{$ns}">
-        <xsl:text>No Implement</xsl:text>
-      </xsl:element>
-      <xsl:element name="para" namespace="{$ns}">
-        <xsl:text>Consumers of this API must not implement this interface</xsl:text>
-      </xsl:element>
+      <xsl:choose>
+        <xsl:when test="$target/org.osgi.annotation.versioning.ProviderType">
+          <xsl:element name="title" namespace="{$ns}">
+            <xsl:text>Provider Type</xsl:text>
+          </xsl:element>
+          <xsl:element name="para" namespace="{$ns}">
+            <xsl:text>Consumers of this API must not implement this type</xsl:text>
+          </xsl:element>
+        </xsl:when>
+        <xsl:when test="$target/noimplement">
+          <xsl:element name="title" namespace="{$ns}">
+            <xsl:text>No Implement</xsl:text>
+          </xsl:element>
+          <xsl:element name="para" namespace="{$ns}">
+            <xsl:text>Consumers of this API must not implement this interface</xsl:text>
+          </xsl:element>
+        </xsl:when>
+      </xsl:choose>
     </xsl:element>
   </xsl:if>
 
