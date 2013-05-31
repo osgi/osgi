@@ -38,9 +38,8 @@ public interface ConditionalPermissionUpdate {
 	 * method will be replace the Conditional Permission Table if commit is
 	 * called and is successful.
 	 * <p>
-	 * The {@link ConditionalPermissionInfo#delete() delete} method of the
-	 * ConditionalPermissionInfos in the list must throw
-	 * UnsupportedOperationException.
+	 * The {@code delete()} method of the {@link ConditionalPermissionInfo}s in
+	 * the list must throw UnsupportedOperationException.
 	 * <p>
 	 * The list returned by this method is ordered and the most significant
 	 * table entry is the first entry in the list.
