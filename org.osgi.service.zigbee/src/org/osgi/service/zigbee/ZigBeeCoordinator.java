@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.osgi.service.zigbee;
 
 import org.osgi.service.zigbee.handler.ZigBeeHandler;
@@ -12,19 +28,19 @@ public interface ZigBeeCoordinator {
 	 * Starts the ZigBee network
 	 */
 	public void startNetwork() throws ZigBeeException;
-	
+
 	/**
-	 * Updates the list of devices in the network, by adding 
-	 * the new devices that joined the network and removing 
-	 * the devices that left the network since the last refresh.
+	 * Updates the list of devices in the network, by adding the new devices
+	 * that joined the network and removing the devices that left the network
+	 * since the last refresh.
 	 */
 	public void refreshNetwork() throws ZigBeeException;
-	
+
 	/**
 	 * Set the network channel
 	 */
 	public void setChannel(ZigBeeHandler handler, int channel) throws ZigBeeException;
-	
+
 	/**
 	 * @return The current Network key
 	 */
