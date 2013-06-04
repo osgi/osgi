@@ -16,6 +16,11 @@
 package org.osgi.framework.resource;
 
 import org.osgi.framework.Bundle;
+import org.osgi.framework.resource.resourcemonitor.CPUMonitor;
+import org.osgi.framework.resource.resourcemonitor.DiskStorageMonitor;
+import org.osgi.framework.resource.resourcemonitor.MemoryMonitor;
+import org.osgi.framework.resource.resourcemonitor.SocketMonitor;
+import org.osgi.framework.resource.resourcemonitor.ThreadMonitor;
 
 /**
  * Monitor and manage resource contexts.

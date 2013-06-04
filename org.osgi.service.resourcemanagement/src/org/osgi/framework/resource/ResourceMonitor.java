@@ -15,7 +15,6 @@
  */
 package org.osgi.framework.resource;
 
-import org.osgi.framework.resource.exception.ThresholdException;
 
 /**
  * Representation of the state of a resource for a resource context.
@@ -102,36 +101,34 @@ public interface ResourceMonitor {
 	public Object getUsage();
 
 	/**
-	 * Returns the minimum {@link ResourceThreshold} instance.
+	 * Returns the lower {@link ResourceThreshold} instance.
 	 * 
-	 * @return
+	 * @return the lower threshold if set
 	 */
-	public ResourceThreshold getMinimumThreshold();
+	public ResourceThreshold getLowerThreshold();
 
 	/**
-	 * Returns the maximum {@link ResourceThreshold} instance.
+	 * Returns the upper {@link ResourceThreshold} instance.
 	 * 
-	 * @return
+	 * @return the upper threshold if set
 	 */
-	public ResourceThreshold getMaximumThreshold();
+	public ResourceThreshold getUpperThreshold();
 
 	/**
-	 * Set the minimum {@link ResourceThreshold} instance.
+	 * Set the lower {@link ResourceThreshold} instance.
 	 * 
-	 * @param minThreshold new minimun threshold. It can be null
-	 * @exception ThresholdException if minThreshold.isMaximumThreshold()
-	 *            returns true.
+	 * @param lowerThreshold new lower threshold. It can be null.
+	 * @exception ThresholdException if lowerThreshold.ipUpper() returns true.
 	 */
-	public void setMinimumThreshold(ResourceThreshold minThreshold) throws ThresholdException;
+	public void setLowerThreshold(ResourceThreshold lowerThreshold) throws ThresholdException;
 
 	/**
-	 * Set the maximum {@link ResourceThreshold} instance.
+	 * Set the upper {@link ResourceThreshold} instance.
 	 * 
-	 * @param maxThreshold new maximum threshold. It can be null
-	 * @exception ThresholdException if maxThreshold.isMaximumThreshold()
-	 *            returns false.
+	 * @param upperThreshold new upper threshold. It can be null
+	 * @exception ThresholdException if upperThreshold.isUpper() returns false.
 	 */
-	public void setMaximumThreshold(ResourceThreshold maxThreshold) throws ThresholdException;
+	public void setUpperThreshold(ResourceThreshold upperThreshold) throws ThresholdException;
 
 
 	/**

@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.framework.resource;
 
 import org.osgi.framework.Bundle;
@@ -38,19 +39,19 @@ public class ResourceEvent {
 	 * Type of ResourceEvent indicating a {@link ResourceThreshold} instance
 	 * goes to the NORMAL state.
 	 */
-	public static final int NORMAL = 0;
+	public static final int		NORMAL						= 0;
 
 	/**
 	 * Type of ResourceEvent indicating a {@link ResourceThreshold} instance
 	 * goes to the WARNING state.
 	 */
-	public static final int WARNING = 0;
+	public static final int		WARNING						= 0;
 
 	/**
 	 * Type of ResourceEvent indicating a {@link ResourceThreshold} instance
 	 * goes to the ERROR state.
 	 */
-	public static final int ERROR = 1;
+	public static final int		ERROR						= 1;
 
 	/**
 	 * A new {@link ResourceContext} has been created.
@@ -58,7 +59,7 @@ public class ResourceEvent {
 	 * The {@link ResourceManager#createContext(String, ResourceContext)} method
 	 * has been invoked.
 	 */
-	public static final int RESOURCE_CONTEXT_CREATED = 2;
+	public static final int		RESOURCE_CONTEXT_CREATED	= 2;
 
 	/**
 	 * A {@link ResourceContext} has been removed
@@ -66,14 +67,14 @@ public class ResourceEvent {
 	 * The {@link ResourceContext#removeContext(ResourceContext)} method has
 	 * beem invoked
 	 */
-	public static final int RESOURCE_CONTEXT_REMOVED = 3;
+	public static final int		RESOURCE_CONTEXT_REMOVED	= 3;
 
 	/**
 	 * A bundle has been added to e {@link ResourceContext}
 	 * <p>
 	 * The {@link ResourceContext#addBundle(Bundle)} method has been invoked
 	 */
-	public static final int BUNDLE_ADDED = 4;
+	public static final int		BUNDLE_ADDED				= 4;
 
 	/**
 	 * A bundle has been removed from a {@link ResourceContext}
@@ -81,23 +82,21 @@ public class ResourceEvent {
 	 * The {@link ResourceContext#removeBundle(Bundle, ResourceContext)} method
 	 * has been invoked, or the bundle has been uninstalled
 	 */
-	public static final int BUNDLE_REMOVED = 5;
+	public static final int		BUNDLE_REMOVED				= 5;
 
-	private int type;
-	private ResourceMonitor monitor;
-	private ResourceContext context;
-	private ResourceThreshold threshold;
-	private String previousState;
-	private Bundle bundle;
+	private int					type;
+	private ResourceMonitor		monitor;
+	private ResourceContext		context;
+	private ResourceThreshold	threshold;
+	private String				previousState;
+	private Bundle				bundle;
 
 	/**
 	 * Creates a resource threshold event
 	 * 
-	 * @param type
-	 *            The type of the event. Can be {@link #WARNING} or
-	 *            {@link #ERROR}
-	 * @param monitor
-	 *            The monitor that caused the event
+	 * @param type The type of the event. Can be {@link #WARNING} or
+	 *        {@link #ERROR}
+	 * @param monitor The monitor that caused the event
 	 */
 	public ResourceEvent(int type, ResourceMonitor monitor) {
 		this.type = type;
@@ -107,12 +106,10 @@ public class ResourceEvent {
 	/**
 	 * Creates a resource context lifecycle event.
 	 * 
-	 * @param type
-	 *            The type fo the event. Can be
-	 *            {@link #RESOURCE_CONTEXT_CREATED} or
-	 *            {@link #RESOURCE_CONTEXT_REMOVED}
-	 * @param context
-	 *            The resource context which had a lifecycle change
+	 * @param type The type fo the event. Can be
+	 *        {@link #RESOURCE_CONTEXT_CREATED} or
+	 *        {@link #RESOURCE_CONTEXT_REMOVED}
+	 * @param context The resource context which had a lifecycle change
 	 */
 	public ResourceEvent(int type, ResourceContext context) {
 		this.type = type;
@@ -122,13 +119,10 @@ public class ResourceEvent {
 	/**
 	 * Creates a resource context management event
 	 * 
-	 * @param type
-	 *            The type of the event. Can be {@link #BUNDLE_ADDED} or
-	 *            {@link #BUNDLE_REMOVED}
-	 * @param context
-	 *            The context which had management operation
-	 * @param bundle
-	 *            The bundle that was added to or removed from the context
+	 * @param type The type of the event. Can be {@link #BUNDLE_ADDED} or
+	 *        {@link #BUNDLE_REMOVED}
+	 * @param context The context which had management operation
+	 * @param bundle The bundle that was added to or removed from the context
 	 */
 	public ResourceEvent(int type, ResourceContext context, Bundle bundle) {
 		this.type = type;
@@ -191,7 +185,7 @@ public class ResourceEvent {
 	 * returns either {@link #NORMAL}, or {@link #WARNING} or {@link #ERROR}.
 	 * 
 	 * @return previous state or null
-	 * @see getResourceThreshold
+	 * @see #getResourceThreshold()
 	 */
 	public String getPreviousState() {
 		return previousState;
@@ -200,9 +194,11 @@ public class ResourceEvent {
 	/**
 	 * Returns the {@link ResourceThreshold} instance which generates this
 	 * event.This method should be called on when {@link #getType()} returns
-	 * either {@link #NORMAL}, or {@link #WARNING} or {@link #ERROR}.
+	 * either {@link #NORMAL}, or {@link #WARNING} or {@link #ERROR}. The
+	 * returned value is a snapshot of the ResourceThreshold instance at the
+	 * moment where the event was generated.
 	 * 
-	 * @return a {@link ResourceThreshold} instance or null
+	 * @return a snapshot of the {@link ResourceThreshold} instance or null.
 	 * @see #getPreviousState()
 	 */
 	public ResourceThreshold getResourceThreshold() {

@@ -51,19 +51,20 @@ public interface ResourceContext {
    */
   public Bundle[] getBundles();
   
-  /**
-   * Adds a bundle to the resource context. The bundle will be a member of the 
-   * context until it is uninstalled, or explicitly removed from the context with
-   * the {@link #removeBundle(ResourceContext)} method.
-   * <p>
-   * Resources previously allocated by this bundle (in another resource context)
-   * will not be moved to this resource context. The change applies only for
-   * future allocations.
-   * <p>
-   * A {@link ResourceEvent} with type {@link ResourceEvent#BUNDLE_ADDED} will be sent.
-   * 
-   * @param b The bundle to add to this resource context
-   */
+  	/**
+	 * Adds a bundle to the resource context. The bundle will be a member of the
+	 * context until it is uninstalled, or explicitly removed from the context
+	 * with the {@link #removeBundle(Bundle, ResourceContext)} method.
+	 * <p>
+	 * Resources previously allocated by this bundle (in another resource
+	 * context) will not be moved to this resource context. The change applies
+	 * only for future allocations.
+	 * <p>
+	 * A {@link ResourceEvent} with type {@link ResourceEvent#BUNDLE_ADDED} will
+	 * be sent.
+	 * 
+	 * @param b The bundle to add to this resource context
+	 */
   public void addBundle(Bundle b);
   
   /**
@@ -92,16 +93,34 @@ public interface ResourceContext {
    */
   public ResourceMonitor getMonitor(String resourceType);
   
-  /**
-   * Removes a resource context. All resources allocated in this resource 
-   * context will be moved to the <code>destination</code> context. If 
-   * <code>destination</code> is <code>null</code>, these resources will
-   * no longer be monitored.
-   * <p>
-   * A {@link ResourceEvent} with type {@link ResourceEvent#RESOURCE_CONTEXT_REMOVED} will be sent.
-   * 
-   * @param destination The {@link ResourceContext} where the resources 
-   * currently allocated by this resource context will be moved.
-   */
+  	/**
+	 * Add a new ResourceMonitor instance monitoring resource for this resource
+	 * context. This method should be called only by ResourceMonitorFactory
+	 * instance.
+	 * 
+	 * @param resourceMonitor resourceMonitor instance to be added
+	 */
+	public void addResourceMonitor(ResourceMonitor resourceMonitor);
+
+	/**
+	 * Remove a ResourceMonitor instance from the context. Once removed, the
+	 * ResourceMonitor is disabled and released.
+	 * 
+	 * @param resourceMonitor resource monitor instance to be removed
+	 */
+	public void removeResourceMonitor(ResourceMonitor resourceMonitor);
+
+	/**
+	 * Removes a resource context. All resources allocated in this resource
+	 * context will be moved to the <code>destination</code> context. If
+	 * <code>destination</code> is <code>null</code>, these resources will no
+	 * longer be monitored.
+	 * <p>
+	 * A {@link ResourceEvent} with type
+	 * {@link ResourceEvent#RESOURCE_CONTEXT_REMOVED} will be sent.
+	 * 
+	 * @param destination The {@link ResourceContext} where the resources
+	 *        currently allocated by this resource context will be moved.
+	 */
   public void removeContext(ResourceContext destination);
 }
