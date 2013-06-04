@@ -13,7 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.framework.resource;
+package org.osgi.framework.resource.resourcemonitor;
+
+import org.osgi.framework.resource.ResourceContext;
+import org.osgi.framework.resource.ResourceManager;
+import org.osgi.framework.resource.ResourceMonitor;
 
 /**
  * A {@link ResourceMonitor} for the 
@@ -23,14 +27,22 @@ package org.osgi.framework.resource;
  */
 public interface ThreadMonitor extends ResourceMonitor {
   
-  /**
-   * Returns the number of alive threads created by the bundles
-   * in this resource context.
-   * <p>
-   * The {@link #getUsage()} method returns the same value,
-   * wrapped in a {@link Integer}
-   * @return the number of alive threads created by this resource context
-   */
+  	/**
+	 * Returns the number of alive threads created by the bundles in this
+	 * resource context. A Thread is considered to be alive when its java state
+	 * is one of the following:
+	 * <ul>
+	 * <li>RUNNABLE</li>
+	 * <li>BLOCKED</li>
+	 * <li>WAITING</li>
+	 * <li>TIMED_WAITING</li>
+	 * </ul>
+	 * <p>
+	 * The {@link #getUsage()} method returns the same value, wrapped in a
+	 * {@link Integer}
+	 * 
+	 * @return the number of alive threads created by this resource context
+	 */
   public int getAliveThreads();
   
   

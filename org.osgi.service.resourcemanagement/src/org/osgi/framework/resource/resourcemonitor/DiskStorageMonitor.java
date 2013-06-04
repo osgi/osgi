@@ -13,7 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.framework.resource;
+package org.osgi.framework.resource.resourcemonitor;
+
+import org.osgi.framework.resource.ResourceContext;
+import org.osgi.framework.resource.ResourceManager;
+import org.osgi.framework.resource.ResourceMonitor;
 
 /**
  * A {@link ResourceMonitor} for the 

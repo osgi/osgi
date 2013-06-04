@@ -1,22 +1,21 @@
 package org.osgi.framework.resource;
 
+
 /**
- * A ResourceThreshold specifies a threshold for a type of resource. They can be
- * retrieved through their related {@link ResourceMonitor} instance by calling
- * {@link ResourceMonitor#getThresholds()}. Each threshold is composed of :
+ * A ResourceThreshold specifies a threshold for a type of resource. Each
+ * threshold is composed of :
  * <ul>
- * <li>a value (see {@link #getValue()}).</li>
- * <li>a direction (see {@link #getDirection()}).</li>
+ * <li>a type which is either upper or lower threshold (see {@link #isUpper()})</li>
+ * <li>a WARNING threshold value (see {@link #getWarningThreshold()}).</li>
+ * <li>an ERROR threshold value (see {@link #getErrorThreshold()}).</li>
  * <li>a state (see {@link #getState()}).</li>
  * </ul>
  * <p>
- * The {@link #notifyCurrentConsumption(Object)} method will be called
- * periodically by the {@link ResourceMonitor} instance. The ResourceThreshold
- * instance then evaluates the new state (either {@link #NORMAL_STATE} or
- * {@link #WARNING_STATE} or {@link #ERROR_STATE}). In the case when the new
- * state is different of the previous state, a {@link ResourceEvent} is
- * generated. The next table summarizes the allowed transition and the type of
- * {@link ResourceEvent} instance to be generated:
+ * The ResourceThreshold instance evaluates the new state (either
+ * {@link #NORMAL_STATE} or {@link #WARNING_STATE} or {@link #ERROR_STATE}). In
+ * the case when the new state is different of the previous state, a
+ * {@link ResourceEvent} is generated. The next table summarizes the allowed
+ * transition and the type of {@link ResourceEvent} instance to be generated:
  * <table>
  * <tr>
  * <th>Initial state</th>
@@ -51,7 +50,7 @@ package org.osgi.framework.resource;
  * <tr>
  * <td>ERROR</td>
  * <td>NORMAL</td>
- * <td>ERROR ResourceEvent type</td>
+ * <td>NORMAL ResourceEvent type</td>
  * </tr>
  * </table>
  * </p>
@@ -66,7 +65,7 @@ public interface ResourceThreshold {
 	 * consumption of resource is either under or above the warning threshold
 	 * depending on the type of threshold (minimum or maximum).
 	 */
-	public static final String NORMAL_STATE = "NORMAL";
+	public static final int	NORMAL_STATE	= 0;
 
 	/**
 	 * A ResourceThreshold instance is in the WARNING state when the current
@@ -78,7 +77,7 @@ public interface ResourceThreshold {
 	 * threshold value (minimum threshold)</li>
 	 * </ul>
 	 */
-	public static final String WARNING_STATE = "WARNING";
+	public static final int	WARNING_STATE	= 1;
 
 	/**
 	 * A ResourceThreshold instance is in the ERROR state when the current
@@ -88,22 +87,24 @@ public interface ResourceThreshold {
 	 * <li>or is under the ERROR threshold value (minimum threshold)</li>
 	 * </ul>
 	 */
-	public static final String ERROR_STATE = "ERROR";
+	public static final int	ERROR_STATE		= 3;
 
 	/**
 	 * Returns the current state of the ResourceThreshold.
 	 * 
 	 * @return either {@link #NORMAL_STATE} or {@link #WARNING_STATE} or
-	 *         {@link ERROR_STATE}
+	 *         {@link #ERROR_STATE}
 	 */
-	public String getState();
+	public int getState();
 
 	/**
-	 * Return true if WARNING value is less than ERROR value.
+	 * Return true if the current ResourceThreshold instance defines an upper
+	 * threshold.
 	 * 
-	 * @return true if WARNING value is less than ERROR value.
+	 * @return true if the current ResourceThreshold instance is an upper
+	 *         threshold.
 	 */
-	public boolean isMaximum();
+	public boolean isUpper();
 
 	/**
 	 * Returns the value of the error threshold
