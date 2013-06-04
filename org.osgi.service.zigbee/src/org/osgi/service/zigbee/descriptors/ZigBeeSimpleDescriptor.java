@@ -47,16 +47,4 @@ public interface ZigBeeSimpleDescriptor {
 	 * @return list of output cluster identifiers.
 	 */
 	public int[] getOutputClusterList();
-	
-	/**
-	 * @param id
-	 * @return true if and only if the endPoint implements the given cluster id as input cluster
-	 */
-	public boolean providesInputCluster(int id);
-	
-	/**
-	 * @param id the Cluster identifier
-	 * @return true if and only if the endPoint implements the given cluster id as output cluster
-	 */
-	public boolean providesOutputCluster(int id);
 }

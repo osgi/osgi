@@ -1,7 +1,6 @@
 package org.osgi.service.zigbee;
 
 import org.osgi.service.zigbee.description.ZigBeeDeviceDescription;
-import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 
 /**
  * This interface represents a ZigBee EndPoint
@@ -74,6 +73,21 @@ public interface ZigBeeEndpoint {
 	public byte getId();
 	
 	/**
+	 * @return The profile identifier implemented by this endpoint.
+	 */
+	public int getProfileId();
+	
+	/**
+	 * @return the device identifier implemented by this EndPoint
+	 */
+	public int getDeviceId();
+	
+	/**
+	 * @return the device version implemented by this EndPoint
+	 */
+	public short getDeviceVersion();
+	
+	/**
 	 * @return the {@link ZigBeeNode} containing this EndPoint
 	 */
 	public ZigBeeDeviceNode getDeviceNode();
@@ -89,6 +103,18 @@ public interface ZigBeeEndpoint {
 	 * @return the Output {@link ZigBeeCluster} identified by id
 	 */
 	public ZigBeeCluster getOutputCluster(int id);
+	
+	/**
+	 * @param id
+	 * @return true if and only if the EndPoint implements the given Cluster id as Input Cluster
+	 */
+	public boolean providesInputCluster(int id);
+	
+	/**
+	 * @param id the Cluster identifier
+	 * @return true if and only if the EndPoint implements the given Cluster id as Output Cluster
+	 */
+	public boolean providesOutputCluster(int id);
 	
 	/**
 	 * Add the given Cluster as an Input Cluster
@@ -138,10 +164,5 @@ public interface ZigBeeEndpoint {
 	 * @return If exists, the device description implemented by this endpoint - otherwise returns null.
 	 */
 	public ZigBeeDeviceDescription getDeviceDescription();
-	
-	/**
-	 * @return the endpoint simple descriptor.
-	 */
-	public ZigBeeSimpleDescriptor getSimpleDescriptor(short endpoint) throws ZigBeeException;
 	
 }
