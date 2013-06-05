@@ -9,7 +9,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -47,6 +46,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	 * @throws Exception
 	 * @see junit.framework.TestCase#setUp()
 	 */
+	@Override
 	protected void setUp() throws Exception {
 		setState(); // call old version of setUp if it has been implemented.
 	}
@@ -57,6 +57,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	 * @throws Exception
 	 * @see junit.framework.TestCase#tearDown()
 	 */
+	@Override
 	protected void tearDown() throws Exception {
 		clearState(); // call old version of tearDown if it has been
 		// implemented.
@@ -177,6 +178,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
 	 * object types are arrays.
 	 * 
 	 */
+	@SuppressWarnings("unchecked")
 	private static <T> boolean objectEquals(Comparator<T> comparator,
 			T expected, T actual) {
 		if (expected == actual) {
@@ -375,6 +377,7 @@ public abstract class DefaultTestBundleControl extends OSGiTestCase {
      */
 	public <S> S getService(Class< S > clazz, String filter)
 			throws InvalidSyntaxException {
+		@SuppressWarnings("unchecked")
 		ServiceReference< S >[] refs = (ServiceReference<S>[]) getContext().getServiceReferences(
 				clazz.getName(), filter);
 

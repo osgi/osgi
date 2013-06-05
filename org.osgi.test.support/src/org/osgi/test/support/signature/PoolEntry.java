@@ -151,6 +151,7 @@ public class PoolEntry {
 		"INTERFACEMETHODREF<11> ",
 		"NAMEANDTYPE<12>        "
 	};
+	@Override
 	public String toString() {
 	
 		switch (tag) {

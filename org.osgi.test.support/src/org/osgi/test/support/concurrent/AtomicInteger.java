@@ -76,22 +76,27 @@ public class AtomicInteger extends Number {
 		return addAndGet(-1);
 	}
 
+	@Override
 	public int intValue() {
 		return get();
 	}
 
+	@Override
 	public double doubleValue() {
 		return get();
 	}
 
+	@Override
 	public float floatValue() {
 		return get();
 	}
 
+	@Override
 	public long longValue() {
 		return get();
 	}
 
+	@Override
 	public String toString() {
 		return Integer.toString(get());
 	}

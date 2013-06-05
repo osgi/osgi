@@ -42,6 +42,7 @@ public class BundleEventCollector extends EventCollector<BundleEvent> implements
 			addEvent(event);
 	}
 
+	@Override
 	public Comparator<BundleEvent> getComparator() {
 		return new Comparator<BundleEvent>() {
 			public int compare(BundleEvent event1, BundleEvent event2) {

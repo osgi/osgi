@@ -43,6 +43,7 @@ public class FrameworkEventCollector extends EventCollector<FrameworkEvent>
 			addEvent(event);
 	}
 
+	@Override
 	public Comparator<FrameworkEvent> getComparator() {
 		return new Comparator<FrameworkEvent>() {
 			public int compare(FrameworkEvent event1, FrameworkEvent event2) {

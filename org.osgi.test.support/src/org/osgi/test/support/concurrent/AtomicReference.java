@@ -51,6 +51,7 @@ public class AtomicReference<T> implements Serializable {
 		return old;
 	}
 
+	@Override
 	public String toString() {
 		return String.valueOf(get());
 	}

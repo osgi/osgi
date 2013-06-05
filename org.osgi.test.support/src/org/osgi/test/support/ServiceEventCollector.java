@@ -44,6 +44,7 @@ public class ServiceEventCollector extends EventCollector<ServiceEvent>
 			addEvent(event);
 	}
 
+	@Override
 	public Comparator<ServiceEvent> getComparator() {
 		return new Comparator<ServiceEvent>() {
 			public int compare(ServiceEvent event1, ServiceEvent event2) {
