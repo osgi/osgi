@@ -29,60 +29,60 @@ public interface ZigBeeEndpoint {
 	 * Key of the {@link String} containing the EndPoint Address of the device <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public final String	ENDPOINT				= "zigbee.device.endpoint";
+	public static final String	ENDPOINT				= "zigbee.device.endpoint";
 
 	/**
 	 * Key of the {@link String} profile id implemented by the device. <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public final String	PROFILE_ID				= "zigbee.device.profile.id";
+	public static final String	PROFILE_ID				= "zigbee.device.profile.id";
 
 	/**
 	 * Key of the {@link String} containing the DeviceId of the device <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public final String	DEVICE_ID				= "zigbee.device.id";
+	public static final String	DEVICE_ID				= "zigbee.device.id";
 
 	/**
 	 * Key of the {@link String} containing the DeviceVersion of the device <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public final String	DEVICE_VERSION			= "zigbee.device.version";
+	public static final String	DEVICE_VERSION			= "zigbee.device.version";
 
 	/**
 	 * Constant used by all ZigBee devices indicating the device category <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public final String	DEVICE_CATEGORY			= "ZigBee";
+	public static final String	DEVICE_CATEGORY			= "ZigBee";
 
 	/**
 	 * Key of the int array of containing the ids of each input cluster <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public final String	INPUT_CLUSTERS			= "zigbee.device.clusters.input";
+	public static final String	INPUT_CLUSTERS			= "zigbee.device.clusters.input";
 
 	/**
 	 * Key of the int array of containing the ids of each output cluster <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public final String	OUTPUT_CLUSTERS			= "zigbee.device.clusters.output";
+	public static final String	OUTPUT_CLUSTERS			= "zigbee.device.clusters.output";
 
 	/**
 	 * Key of {@link String} containing the targeted network PAN ID
 	 */
-	public final String	PAN_ID_TARGET			= "zigbee.device.target.pan.id";
+	public static final String	PAN_ID_TARGET			= "zigbee.device.target.pan.id";
 
 	/**
 	 * Key of {@link String} containing the targeted network extended PAN ID
 	 */
-	public final String	EXTENDED_PAN_ID_TARGET	= "zigbee.device.target.extended.pan.id";
+	public static final String	EXTENDED_PAN_ID_TARGET	= "zigbee.device.target.extended.pan.id";
 
 	/**
 	 * Key of the {@link String} mentioning that an endpoint an exported one or
 	 * not <br>
 	 * It is <b>optional</b> property for this service
 	 */
-	public final String	ZIGBEE_EXPORT			= "zigbee.export";
+	public static final String	ZIGBEE_EXPORT			= "zigbee.export";
 
 	/**
 	 * @return identifier of the endpoint represented by this object, value

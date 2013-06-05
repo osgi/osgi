@@ -20,7 +20,6 @@ import java.math.BigInteger;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
-import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeUserDescriptor;
 import org.osgi.service.zigbee.handler.ZigBeeHandler;
 
@@ -42,72 +41,72 @@ public interface ZigBeeDeviceNode {
 	 * Property key for the optional device node id. A ZigBee Event Listener
 	 * service can announce for what ZigBee device nodes it wants notifications.
 	 */
-	public final static String	ID								= "zigbee.listener.node.id";
+	public static final String	ID								= "zigbee.listener.node.id";
 
 	/**
 	 * Property key for the device node type
 	 */
-	public final static String	NODE_TYPE						= "zigbee.node.description.node.type";
+	public static final String	NODE_TYPE						= "zigbee.node.description.node.type";
 
 	/**
 	 * Property key for a manufacturer code that is allocated by the ZigBee
 	 * Alliance, relating the manufacturer to the device.
 	 */
-	public final static String	MANUFACTURER_CODE				= "zigbee.node.description.manufacturer.code";
+	public static final String	MANUFACTURER_CODE				= "zigbee.node.description.manufacturer.code";
 
 	/**
 	 * Property key of the {@link String} containing the name of the
 	 * manufacturer of the device.
 	 */
-	public final static String	MANUFACTURER_NAME				= "zigbee.node.description.manufacturer.name";
+	public static final String	MANUFACTURER_NAME				= "zigbee.node.description.manufacturer.name";
 
 	/**
 	 * Property key of the {@link String} containing the name of the
 	 * manufacturers model of the device. <br>
 	 * It is <b>optional</b> property for this service
 	 */
-	public final static String	MODEL_NAME						= "zigbee.node.description.model.name";
+	public static final String	MODEL_NAME						= "zigbee.node.description.model.name";
 
 	/**
 	 * Property key of the {@link String} containing the manufacturers serial
 	 * number of the device. <br>
 	 * It is <b>optional</b> property for this service
 	 */
-	public final static String	SERIAL_NAME						= "zigbee.node.description.serial.number";
+	public static final String	SERIAL_NAME						= "zigbee.node.description.serial.number";
 
 	/**
 	 * Property key of the {@link String} containing the URL through which more
 	 * information relating to the device can be obtained. <br>
 	 * It is <b>optional</b> property for this service
 	 */
-	public final static String	NODE_URL						= "zigbee.node.description.url";
+	public static final String	NODE_URL						= "zigbee.node.description.url";
 
 	/**
 	 * Property key of the {@link String} containing the URL through which the
 	 * icon for the device can be obtained. <br>
 	 * It is <b>optional</b> property for this service
 	 */
-	public final static String	ICON_URL						= "zigbee.node.description.icon.url";
+	public static final String	ICON_URL						= "zigbee.node.description.icon.url";
 
 	/**
 	 * Property key of the {@link String} containing information that allow the
 	 * user to identify the device using a user-friendly character string <br>
 	 * It is <b>optional</b> property for this service
 	 */
-	public final static String	USER_DESCRIPTION				= "zigbee.node.description.user.desc";
+	public static final String	USER_DESCRIPTION				= "zigbee.node.description.user.desc";
 
 	/**
 	 * Property key for the node capability as required by the IEEE802.15.4 MAC
 	 * sub-layer.
 	 */
-	public final static String	CAPABILITIES_MAC				= "zigbee.node.description.capabilities.mac";
+	public static final String	CAPABILITIES_MAC				= "zigbee.node.description.capabilities.mac";
 
 	/**
 	 * Property key for the maximum size, in octets, of the network sub-layer
 	 * data unit for this node. <br>
 	 * It is <b>optional</b> property for this service
 	 */
-	public final static String	MAXIMUM_BUFFER_SIZE				= "zigbee.node.description.maximum.buffer.size";
+	public static final String	MAXIMUM_BUFFER_SIZE				= "zigbee.node.description.maximum.buffer.size";
 
 	/**
 	 * Property key for the maximum size, in octets, of the application
@@ -115,37 +114,37 @@ public interface ZigBeeDeviceNode {
 	 * message transfer. <br>
 	 * It is <b>optional</b> property for this service
 	 */
-	public final static String	MAXIMUM_INCOMING_TRANSFERT_SIZE	= "zigbee.node.description.maximum.incoming.transfet.size";
+	public static final String	MAXIMUM_INCOMING_TRANSFERT_SIZE	= "zigbee.node.description.maximum.incoming.transfet.size";
 
 	/**
 	 * Property key for the current sleep/power-saving mode of the node.
 	 */
-	public final static String	CURRENT_POWER_MODE				= "zigbee.node.description.current.power.mode";
+	public static final String	CURRENT_POWER_MODE				= "zigbee.node.description.current.power.mode";
 
 	/**
 	 * Property key for the current power source being utilized by the node.
 	 */
-	public final static String	CURRENT_POWER_SOURCE			= "zigbee.node.description.current.power.source";
+	public static final String	CURRENT_POWER_SOURCE			= "zigbee.node.description.current.power.source";
 
 	/**
 	 * Property key for the power sources available on the node.
 	 */
-	public final static String	AVAILABLE_POWER_SOURCE			= "zigbee.node.description.available.power.source";
+	public static final String	AVAILABLE_POWER_SOURCE			= "zigbee.node.description.available.power.source";
 
 	/**
 	 * Property key for the level of charge of the power source.
 	 */
-	public final static String	CURRENT_POWER_SOURCE_LEVEL		= "zigbee.node.description.power.source.level";
+	public static final String	CURRENT_POWER_SOURCE_LEVEL		= "zigbee.node.description.power.source.level";
 
 	/**
 	 * Key of {@link String} containing the device node network PAN ID
 	 */
-	public final String			PAN_ID							= "zigbee.node.pan.id";
+	public static final String	PAN_ID							= "zigbee.node.pan.id";
 
 	/**
 	 * Key of {@link String} containing the device node network extended PAN ID
 	 */
-	public final String			EXTENDED_PAN_ID					= "zigbee.node.extended.pan.id";
+	public static final String	EXTENDED_PAN_ID					= "zigbee.node.extended.pan.id";
 
 	/**
 	 * ZigBee coordinator
