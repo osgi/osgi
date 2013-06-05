@@ -227,6 +227,7 @@ public class EventProperties implements Map<String, Object> {
 	 * @return {@code true} if {@code object} is a {@code EventProperties} and
 	 *         is equal to this object; {@code false} otherwise.
 	 */
+	@Override
 	public boolean equals(Object object) {
 		if (this == object) {
 			return true;
@@ -243,6 +244,7 @@ public class EventProperties implements Map<String, Object> {
 	 * 
 	 * @return An integer which is a hash code value for this object.
 	 */
+	@Override
 	public int hashCode() {
 		return properties.hashCode();
 	}
@@ -252,6 +254,7 @@ public class EventProperties implements Map<String, Object> {
 	 * 
 	 * @return The string representation of this object.
 	 */
+	@Override
 	public String toString() {
 		return properties.toString();
 	}
