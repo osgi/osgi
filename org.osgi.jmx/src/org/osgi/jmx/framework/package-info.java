@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,9 +32,11 @@
  * <p>
  * {@code  Import-Package: org.osgi.jmx.framework; version="[1.7,1.8)"}
  * 
- * @version 1.7
  * @author $Id$
  */
 
+@Version("1.7")
 package org.osgi.jmx.framework;
+
+import org.osgi.annotation.versioning.Version;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,9 +32,11 @@
  * <p>
  * {@code  Import-Package: org.osgi.jmx.service.useradmin; version="[1.1,1.2)"}
  * 
- * @version 1.1
  * @author $Id$
  */
 
+@Version("1.1")
 package org.osgi.jmx.service.useradmin;
+
+import org.osgi.annotation.versioning.Version;
 
