@@ -18,6 +18,7 @@ package org.osgi.service.cm;
 
 import java.io.IOException;
 import java.util.Dictionary;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Filter;
 
 /**
@@ -70,9 +71,9 @@ import org.osgi.framework.Filter;
  * Service Factory and a Managed Service. When it is important to differentiate
  * between these two the term "factory configuration" is used.
  * 
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface Configuration {
 	/**
 	 * Get the PID for this {@code Configuration} object.

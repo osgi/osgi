@@ -17,6 +17,7 @@
 package org.osgi.service.cm;
 
 import java.util.Dictionary;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * A service that can receive configuration data from a Configuration Admin
@@ -108,6 +109,7 @@ import java.util.Dictionary;
  * 
  * @author $Id$
  */
+@ConsumerType
 public interface ManagedService {
 	/**
 	 * Update the configuration for a Managed Service.

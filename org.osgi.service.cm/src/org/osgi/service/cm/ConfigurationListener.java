@@ -16,6 +16,8 @@
 
 package org.osgi.service.cm;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * Listener for Configuration Events. When a {@code ConfigurationEvent} is
  * fired, it is asynchronously delivered to a {@code ConfigurationListener}.
@@ -38,6 +40,7 @@ package org.osgi.service.cm;
  * @author $Id$
  * @since 1.2
  */
+@ConsumerType
 public interface ConfigurationListener {
 	/**
 	 * Receives notification of a Configuration that has changed.
