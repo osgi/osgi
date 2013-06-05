@@ -57,6 +57,7 @@ public class ComponentException extends RuntimeException {
 	 * 
 	 * @return The cause of this exception or {@code null} if no cause was set.
 	 */
+	@Override
 	public Throwable getCause() {
 		return super.getCause();
 	}
@@ -71,6 +72,7 @@ public class ComponentException extends RuntimeException {
 	 * @throws IllegalStateException If the cause of this exception has already
 	 *         been set.
 	 */
+	@Override
 	public Throwable initCause(Throwable cause) {
 		return super.initCause(cause);
 	}

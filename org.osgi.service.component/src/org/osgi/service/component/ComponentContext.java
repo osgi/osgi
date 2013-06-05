@@ -17,6 +17,7 @@
 package org.osgi.service.component;
 
 import java.util.Dictionary;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -49,9 +50,9 @@ import org.osgi.framework.ServiceReference;
  * will be passed the reason code for the component instance's deactivation.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface ComponentContext {
 	/**
 	 * Returns the component properties for this Component Context.
@@ -97,7 +98,7 @@ public interface ComponentContext {
 	 * @throws ComponentException If the Service Component Runtime catches an
 	 *         exception while activating the bound service.
 	 */
-	public Object locateService(String name, ServiceReference reference);
+	public Object locateService(String name, ServiceReference<?> reference);
 
 	/**
 	 * Returns the service objects for the specified reference name.
@@ -182,5 +183,5 @@ public interface ComponentContext {
 	 *         {@code null} if the component instance is not registered as a
 	 *         service.
 	 */
-	public ServiceReference getServiceReference();
+	public ServiceReference<?> getServiceReference();
 }
