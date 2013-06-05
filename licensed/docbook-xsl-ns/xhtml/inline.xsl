@@ -538,14 +538,14 @@ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:suwl="http://nwalsh.com/xslt/ex
 
 <xsl:template match="d:function/d:parameter" priority="2">
   <xsl:call-template name="inline.italicmonoseq"/>
-  <xsl:if test="following-sibling::*">
+  <xsl:if test="$function.parens != 0 and following-sibling::*">
     <xsl:text>, </xsl:text>
   </xsl:if>
 </xsl:template>
 
 <xsl:template match="d:function/d:replaceable" priority="2">
   <xsl:call-template name="inline.italicmonoseq"/>
-  <xsl:if test="following-sibling::*">
+  <xsl:if test="$function.parens != 0 and following-sibling::*">
     <xsl:text>, </xsl:text>
   </xsl:if>
 </xsl:template>
@@ -587,7 +587,21 @@ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:suwl="http://nwalsh.com/xslt/ex
 </xsl:template>
 
 <xsl:template match="d:keycap">
-  <xsl:call-template name="inline.boldseq"/>
+  <xsl:choose>
+    <xsl:when test="@function and normalize-space(.) = ''">
+      <xsl:call-template name="inline.boldseq">
+        <xsl:with-param name="content">
+          <xsl:call-template name="gentext.template">
+            <xsl:with-param name="context" select="'keycap'"/>
+            <xsl:with-param name="name" select="@function"/>
+          </xsl:call-template>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="inline.boldseq"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="d:keycode">

@@ -599,7 +599,7 @@ xmlns:exslt="http://exslt.org/common"
         <xsl:apply-templates select="." mode="class.attribute"/>
         <xsl:variable name="title">
           <xsl:choose>
-            <xsl:when test="&section;/d:titleabbrev and $index.prefer.titleabbrev != 0">
+            <xsl:when test="$index.prefer.titleabbrev != 0">
               <xsl:apply-templates select="&section;" mode="titleabbrev.markup"/>
             </xsl:when>
             <xsl:otherwise>

@@ -34,9 +34,6 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"
 <xsl:param name="graphic.notations">
   <!-- n.b. exactly one leading space, one trailing space, and one inter-word space -->
   <xsl:choose>
-    <xsl:when test="$passivetex.extensions != 0">
-      <xsl:text> PNG PDF JPG JPEG linespecific </xsl:text>
-    </xsl:when>
     <xsl:when test="$fop1.extensions != 0">
       <xsl:text> BMP GIF TIFF SVG PNG EPS JPG JPEG linespecific </xsl:text>
     </xsl:when>
@@ -63,9 +60,6 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"
 <xsl:param name="graphic.extensions">
   <!-- n.b. exactly one leading space, one trailing space, and one inter-word space -->
   <xsl:choose>
-    <xsl:when test="$passivetex.extensions != 0">
-      <xsl:text> png pdf jpg jpeg </xsl:text>
-    </xsl:when>
     <xsl:when test="$fop1.extensions != 0">
       <xsl:text> bmp gif tif tiff svg png pdf jpg jpeg eps </xsl:text>
     </xsl:when>
@@ -99,8 +93,15 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"
 
 <xsl:template match="d:screenshot">
   <fo:block>
+    <xsl:call-template name="anchor"/>
     <xsl:apply-templates/>
   </fo:block>
+</xsl:template>
+
+<xsl:template match="d:screenshot/d:title">
+  <xsl:call-template name="formal.object.heading">
+    <xsl:with-param name="object" select=".."/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="d:screeninfo">
@@ -474,6 +475,7 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"
     </xsl:when>
     <xsl:otherwise>
       <fo:block>
+        <xsl:call-template name="anchor"/>
         <xsl:if test="@align">
           <xsl:attribute name="text-align">
             <xsl:value-of select="@align"/>
@@ -764,7 +766,7 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"
 
 <!-- ==================================================================== -->
 
-<xsl:template match="d:mediaobject/d:caption">
+<xsl:template match="d:mediaobject/d:caption|d:figure/d:caption">
   <fo:block>
     <xsl:if test="@align = 'right' or @align = 'left' or @align='center'">
       <xsl:attribute name="text-align"><xsl:value-of
@@ -780,8 +782,7 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"
   <xsl:param name="filename"/>
 
   <xsl:choose>
-    <xsl:when test="$passivetex.extensions != 0
-                    or $fop.extensions != 0">
+    <xsl:when test="$fop.extensions != 0">
       <xsl:value-of select="$filename"/>
     </xsl:when>
     <xsl:otherwise>

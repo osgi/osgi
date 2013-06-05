@@ -5099,7 +5099,7 @@ xmlns:exsl="http://exslt.org/common" version="1.0" exclude-result-prefixes="exsl
 </xsl:template>
 
 <xsl:template name="table.of.contents.titlepage.recto">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="table.of.contents.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" start-indent="0pt" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="table.of.contents.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" start-indent="0pt" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template name="gentext">
 <xsl:with-param name="key" select="'TableofContents'"/>
 </xsl:call-template></fo:block>
@@ -5166,7 +5166,7 @@ xmlns:exsl="http://exslt.org/common" version="1.0" exclude-result-prefixes="exsl
 </xsl:template>
 
 <xsl:template name="list.of.tables.titlepage.recto">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.tables.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" start-indent="0pt" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.tables.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" start-indent="0pt" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template name="gentext">
 <xsl:with-param name="key" select="'ListofTables'"/>
 </xsl:call-template></fo:block>
@@ -5233,7 +5233,7 @@ xmlns:exsl="http://exslt.org/common" version="1.0" exclude-result-prefixes="exsl
 </xsl:template>
 
 <xsl:template name="list.of.figures.titlepage.recto">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.figures.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" start-indent="0pt" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.figures.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" start-indent="0pt" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template name="gentext">
 <xsl:with-param name="key" select="'ListofFigures'"/>
 </xsl:call-template></fo:block>
@@ -5300,7 +5300,7 @@ xmlns:exsl="http://exslt.org/common" version="1.0" exclude-result-prefixes="exsl
 </xsl:template>
 
 <xsl:template name="list.of.examples.titlepage.recto">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.examples.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" start-indent="0pt" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.examples.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" start-indent="0pt" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template name="gentext">
 <xsl:with-param name="key" select="'ListofExamples'"/>
 </xsl:call-template></fo:block>
@@ -5367,7 +5367,7 @@ xmlns:exsl="http://exslt.org/common" version="1.0" exclude-result-prefixes="exsl
 </xsl:template>
 
 <xsl:template name="list.of.equations.titlepage.recto">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.equations.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" start-indent="0pt" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.equations.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" start-indent="0pt" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template name="gentext">
 <xsl:with-param name="key" select="'ListofEquations'"/>
 </xsl:call-template></fo:block>
@@ -5434,7 +5434,7 @@ xmlns:exsl="http://exslt.org/common" version="1.0" exclude-result-prefixes="exsl
 </xsl:template>
 
 <xsl:template name="list.of.procedures.titlepage.recto">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.procedures.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" start-indent="0pt" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.procedures.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" start-indent="0pt" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template name="gentext">
 <xsl:with-param name="key" select="'ListofProcedures'"/>
 </xsl:call-template></fo:block>
@@ -5501,7 +5501,7 @@ xmlns:exsl="http://exslt.org/common" version="1.0" exclude-result-prefixes="exsl
 </xsl:template>
 
 <xsl:template name="list.of.unknowns.titlepage.recto">
-  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.unknowns.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" margin-left="{$title.margin.left}" start-indent="0pt" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
+  <fo:block xmlns:fo="http://www.w3.org/1999/XSL/Format" xsl:use-attribute-sets="list.of.unknowns.titlepage.recto.style" space-before.minimum="1em" space-before.optimum="1.5em" space-before.maximum="2em" space-after="0.5em" start-indent="0pt" font-size="17.28pt" font-weight="bold" font-family="{$title.fontset}">
 <xsl:call-template name="gentext">
 <xsl:with-param name="key" select="'ListofUnknown'"/>
 </xsl:call-template></fo:block>

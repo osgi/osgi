@@ -120,18 +120,69 @@ xmlns:ng="http://docbook.org/docbook-ng" xmlns:db="http://docbook.org/ns/docbook
   </xsl:if>
 </xsl:template>
 
+<xsl:template name="head.content.base">
+  <xsl:param name="node" select="."/>
+  <base href="{$html.base}"/>
+</xsl:template>
+
+<xsl:template name="head.content.abstract">
+  <xsl:param name="node" select="."/>
+  <xsl:variable name="info" select="(d:articleinfo     |d:bookinfo     |d:prefaceinfo     |d:chapterinfo     |d:appendixinfo     |d:sectioninfo     |d:sect1info     |d:sect2info     |d:sect3info     |d:sect4info     |d:sect5info     |d:referenceinfo     |d:refentryinfo     |d:partinfo     |d:info     |d:docinfo)[1]"/>
+  <xsl:if test="$info and $info/d:abstract">
+    <meta name="description">
+      <xsl:attribute name="content">
+        <xsl:for-each select="$info/d:abstract[1]/*">
+          <xsl:value-of select="normalize-space(.)"/>
+          <xsl:if test="position() &lt; last()">
+            <xsl:text> </xsl:text>
+          </xsl:if>
+        </xsl:for-each>
+      </xsl:attribute>
+    </meta>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="head.content.link.made">
+  <xsl:param name="node" select="."/>
+  
+  <link rev="made" href="{$link.mailto.url}"/>
+</xsl:template>
+
+<xsl:template name="head.content.generator">
+  <xsl:param name="node" select="."/>
+  <meta name="generator" content="DocBook {$DistroTitle} V{$VERSION}"/>
+</xsl:template>
+
+<xsl:template name="head.content.style">
+  <xsl:param name="node" select="."/>
+  <style type="text/css"><xsl:text>
+body { background-image: url('</xsl:text>
+<xsl:value-of select="$draft.watermark.image"/><xsl:text>');
+       background-repeat: no-repeat;
+       background-position: top left;
+       /* The following properties make the watermark "fixed" on the page. */
+       /* I think that's just a bit too distracting for the reader... */
+       /* background-attachment: fixed; */
+       /* background-position: center center; */
+     }</xsl:text>
+    </style>
+</xsl:template>
+
 <xsl:template name="head.content">
   <xsl:param name="node" select="."/>
   <xsl:param name="title">
     <xsl:apply-templates select="$node" mode="object.title.markup.textonly"/>
   </xsl:param>
 
-  <title>
-    <xsl:copy-of select="$title"/>
-  </title>
+  <xsl:call-template name="user.head.title">
+    <xsl:with-param name="title" select="$title"/>
+    <xsl:with-param name="node" select="$node"/>
+  </xsl:call-template>
 
   <xsl:if test="$html.base != ''">
-    <base href="{$html.base}"/>
+    <xsl:call-template name="head.content.base">
+      <xsl:with-param name="node" select="$node"/>
+    </xsl:call-template>
   </xsl:if>
 
   <!-- Insert links to CSS files or insert literal style elements -->
@@ -150,39 +201,25 @@ xmlns:ng="http://docbook.org/docbook-ng" xmlns:db="http://docbook.org/ns/docbook
   </xsl:if>
 
   <xsl:if test="$link.mailto.url != ''">
-    <link rev="made" href="{$link.mailto.url}"/>
+    <xsl:call-template name="head.content.link.made">
+      <xsl:with-param name="node" select="$node"/>
+    </xsl:call-template>
   </xsl:if>
 
-  <meta name="generator" content="DocBook {$DistroTitle} V{$VERSION}"/>
+  <xsl:call-template name="head.content.generator">
+    <xsl:with-param name="node" select="$node"/>
+  </xsl:call-template>
 
   <xsl:if test="$generate.meta.abstract != 0">
-    <xsl:variable name="info" select="(d:articleinfo                                       |d:bookinfo                                       |d:prefaceinfo                                       |d:chapterinfo                                       |d:appendixinfo                                       |d:sectioninfo                                       |d:sect1info                                       |d:sect2info                                       |d:sect3info                                       |d:sect4info                                       |d:sect5info                                       |d:referenceinfo                                       |d:refentryinfo                                       |d:partinfo                                       |d:info                                       |d:docinfo)[1]"/>
-    <xsl:if test="$info and $info/d:abstract">
-      <meta name="description">
-        <xsl:attribute name="content">
-          <xsl:for-each select="$info/d:abstract[1]/*">
-            <xsl:value-of select="normalize-space(.)"/>
-            <xsl:if test="position() &lt; last()">
-              <xsl:text> </xsl:text>
-            </xsl:if>
-          </xsl:for-each>
-        </xsl:attribute>
-      </meta>
-    </xsl:if>
+    <xsl:call-template name="head.content.abstract">
+      <xsl:with-param name="node" select="$node"/>
+    </xsl:call-template>
   </xsl:if>
 
   <xsl:if test="($draft.mode = 'yes' or                 ($draft.mode = 'maybe' and                 ancestor-or-self::*[@status][1]/@status = 'draft'))                 and $draft.watermark.image != ''">
-    <style type="text/css"><xsl:text>
-body { background-image: url('</xsl:text>
-<xsl:value-of select="$draft.watermark.image"/><xsl:text>');
-       background-repeat: no-repeat;
-       background-position: top left;
-       /* The following properties make the watermark "fixed" on the page. */
-       /* I think that's just a bit too distracting for the reader... */
-       /* background-attachment: fixed; */
-       /* background-position: center center; */
-     }</xsl:text>
-    </style>
+    <xsl:call-template name="head.content.style">
+      <xsl:with-param name="node" select="$node"/>
+    </xsl:call-template>
   </xsl:if>
   <xsl:apply-templates select="." mode="head.keywords.content"/>
 </xsl:template>
@@ -317,6 +354,15 @@ var popup_</xsl:text>
   <!-- This must not output any element content! -->
 </xsl:template>
 
+<xsl:template name="user.head.title">
+  <xsl:param name="node" select="."/>
+  <xsl:param name="title"/>
+
+  <title>
+    <xsl:copy-of select="$title"/>
+  </title>
+</xsl:template>
+
 <xsl:template name="user.head.content">
   <xsl:param name="node" select="."/>
 </xsl:template>
@@ -368,7 +414,7 @@ Used by docbook.xsl, chunk-code.xsl and chunkfast.xsl -->
       <xsl:choose>
         <xsl:when test="$rootid != ''">
           <xsl:choose>
-            <xsl:when test="count($profiled-nodes//*[@id=$rootid]) = 0">
+            <xsl:when test="count($profiled-nodes//*[@id=$rootid or @xml:id=$rootid]) = 0">
               <xsl:message terminate="yes">
                 <xsl:text>ID '</xsl:text>
                 <xsl:value-of select="$rootid"/>
@@ -380,9 +426,9 @@ Used by docbook.xsl, chunk-code.xsl and chunkfast.xsl -->
                 <xsl:apply-templates select="key('id', $rootid)" mode="collect.targets"/>
               </xsl:if>
               <xsl:if test="$collect.xref.targets != 'only'">
-                <xsl:apply-templates select="$profiled-nodes//*[@id=$rootid]" mode="process.root"/>
+                <xsl:apply-templates select="$profiled-nodes//*[@id=$rootid or @xml:id=$rootid]" mode="process.root"/>
                 <xsl:if test="$tex.math.in.alt != ''">
-                  <xsl:apply-templates select="$profiled-nodes//*[@id=$rootid]" mode="collect.tex.math"/>
+                  <xsl:apply-templates select="$profiled-nodes//*[@id=$rootid or @xml:id=$rootid]" mode="collect.tex.math"/>
                 </xsl:if>
               </xsl:if>
             </xsl:otherwise>

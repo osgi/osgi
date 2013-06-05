@@ -146,7 +146,35 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"
       <xsl:copy-of select="$content"/>
     </xsl:otherwise>
   </xsl:choose>
+</xsl:template>
 
+<xsl:template name="inline.sansseq">
+  <xsl:param name="content">
+    <xsl:call-template name="simple.xlink">
+        <xsl:with-param name="content">
+          <xsl:apply-templates/>
+        </xsl:with-param>
+    </xsl:call-template>
+  </xsl:param>
+
+  <fo:inline font-family="{$sans.font.family}">
+    <xsl:choose>
+      <xsl:when test="@dir">
+        <fo:inline>
+          <xsl:attribute name="direction">
+            <xsl:choose>
+              <xsl:when test="@dir = 'ltr' or @dir = 'lro'">ltr</xsl:when>
+              <xsl:otherwise>rtl</xsl:otherwise>
+            </xsl:choose>
+          </xsl:attribute>
+          <xsl:copy-of select="$content"/>
+        </fo:inline>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:copy-of select="$content"/>
+      </xsl:otherwise>
+    </xsl:choose>
+  </fo:inline>
 </xsl:template>
 
 <xsl:template name="inline.charseq">
@@ -484,14 +512,14 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"
 
 <xsl:template match="d:function/d:parameter" priority="2">
   <xsl:call-template name="inline.italicmonoseq"/>
-  <xsl:if test="following-sibling::*">
+  <xsl:if test="$function.parens != 0 and following-sibling::*">
     <xsl:text>, </xsl:text>
   </xsl:if>
 </xsl:template>
 
 <xsl:template match="d:function/d:replaceable" priority="2">
   <xsl:call-template name="inline.italicmonoseq"/>
-  <xsl:if test="following-sibling::*">
+  <xsl:if test="$function.parens != 0 and following-sibling::*">
     <xsl:text>, </xsl:text>
   </xsl:if>
 </xsl:template>
@@ -533,7 +561,21 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"
 </xsl:template>
 
 <xsl:template match="d:keycap">
-  <xsl:call-template name="inline.boldseq"/>
+  <xsl:choose>
+    <xsl:when test="@function and normalize-space(.) = ''">
+      <xsl:call-template name="inline.boldseq">
+        <xsl:with-param name="content">
+          <xsl:call-template name="gentext.template">
+            <xsl:with-param name="context" select="'keycap'"/>
+            <xsl:with-param name="name" select="@function"/>
+          </xsl:call-template>
+        </xsl:with-param>
+      </xsl:call-template>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:call-template name="inline.boldseq"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="d:keycode">
@@ -870,7 +912,7 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"
 
           <fo:basic-link internal-destination="{$termid}"
                          xsl:use-attribute-sets="xref.properties">
-            <xsl:call-template name="inline.charseq"/>
+            <xsl:call-template name="inline.italicseq"/>
           </fo:basic-link>
         </xsl:otherwise>
       </xsl:choose>

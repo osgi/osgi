@@ -359,7 +359,7 @@ xmlns:sverb="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.Verbatim" xmlns:xverb="
     </xsl:when>
     <xsl:when test="$listings[1]/@continuation='continues'">
       <xsl:call-template name="lastLineNumber">
-        <xsl:with-param name="listings" select="d:listings[position() &gt; 1]"/>
+        <xsl:with-param name="listings" select="$listings[position() &gt; 1]"/>
         <xsl:with-param name="number" select="$number + $lines"/>
       </xsl:call-template>
     </xsl:when>

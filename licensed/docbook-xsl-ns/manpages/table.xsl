@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:d="http://docbook.org/ns/docbook"
-xmlns:exsl="http://exslt.org/common"
-                exclude-result-prefixes="exsl d"
+                xmlns:exsl="http://exslt.org/common"
+                exclude-result-prefixes="exsl"
                 version='1.0'>
 
   <!-- ********************************************************************
@@ -94,7 +94,9 @@ xmlns:exsl="http://exslt.org/common"
           <xsl:for-each select="descendant-or-self::d:table|descendant-or-self::d:informaltable">
             <xsl:element name="{local-name(..)}">
               <table>
-                <xsl:copy-of select="*"/>
+                <!--  Must strip the docbook namespace because the templates
+                   operate on non-namespaced HTML tables -->
+                <xsl:apply-templates mode="stripNS"/>
               </table>
             </xsl:element>
           </xsl:for-each>
@@ -126,16 +128,16 @@ xmlns:exsl="http://exslt.org/common"
       <!-- *   Output table title                                           -->
       <!-- * ============================================================== -->
       <xsl:if test="$title != '' or parent::td">
-        <xsl:text>.PP&#10;</xsl:text>
+        <xsl:text>.sp&#10;</xsl:text>
+        <xsl:call-template name="pinch.together"/>
         <xsl:text>.</xsl:text>
         <xsl:value-of select="$tbl.font.title"/>
         <xsl:text> </xsl:text>
         <xsl:if test="parent::td">
-          <xsl:text>*[nested&#160;table]</xsl:text>
+          <xsl:text>*[nested&#x2580;table]</xsl:text>
         </xsl:if>
         <xsl:value-of select="normalize-space($title)"/>
         <xsl:text>&#10;</xsl:text>
-        <xsl:text>.sp -1n&#10;</xsl:text>
       </xsl:if>
       
       <!-- * mark the start of the table -->
@@ -255,7 +257,6 @@ xmlns:exsl="http://exslt.org/common"
     </xsl:for-each>
   </xsl:template>
 
-
   <!-- * ============================================================== -->
   <!-- *    Output the tbl(1)-formatted contents of each cell.            -->
   <!-- * ============================================================== -->
@@ -323,10 +324,12 @@ xmlns:exsl="http://exslt.org/common"
     </xsl:param>
     <xsl:param  name="cell-data-sorted">
       <!-- * Sort the cells so that the dummy cells get put where we -->
-      <!-- * need them in the structure. -->
+      <!-- * need them in the structure. Note that we need to specify -->
+      <!-- * data-type="number" here because the default sorting method -->
+      <!-- * for xsl:sort is "text" (alphabetical). -->
       <xsl:for-each select="exsl:node-set($cell-data-unsorted)/cell">
-        <xsl:sort select="@row"/>
-        <xsl:sort select="@slot"/>
+        <xsl:sort select="@row" data-type="number"/>
+        <xsl:sort select="@slot" data-type="number"/>
         <xsl:copy-of select="."/>
       </xsl:for-each>
     </xsl:param>
@@ -376,12 +379,12 @@ xmlns:exsl="http://exslt.org/common"
           <xsl:call-template name="log.message">
             <xsl:with-param name="level">Warn</xsl:with-param>
             <xsl:with-param name="source" select="$source"/>
+            <xsl:with-param name="context-desc">tbl convert</xsl:with-param>
             <xsl:with-param name="message">
-              <xsl:text
-              >tbl convert : Extracted a nested table</xsl:text>
+              <xsl:text>Extracted a nested table</xsl:text>
             </xsl:with-param>
           </xsl:call-template>
-          <xsl:text>[\fInested&#160;table\fR]*&#10;</xsl:text>
+          <xsl:text>[\fInested&#x2580;table\fR]*&#10;</xsl:text>
         </xsl:when>
         <xsl:otherwise>
           <!-- * Apply templates to the child contents of this cell, to -->
@@ -437,7 +440,7 @@ xmlns:exsl="http://exslt.org/common"
       <xsl:when test="$rowspan > 1">
         <!-- * Tail recurse until we have no more rowspans, creating -->
         <!-- * an empty dummy cell each time. The type value, '^' -->
-        <!-- * is the marker that tbl(1) uses for indicates a -->
+        <!-- * is the marker that tbl(1) uses to indicate a -->
         <!-- * "vertically spanned heading". -->
         <cell row="{$row}" slot="{$slot}" type="^" colspan="{@colspan}"/>
         <xsl:call-template name="create.dummy.cells">
@@ -600,7 +603,7 @@ xmlns:exsl="http://exslt.org/common"
       <xsl:apply-templates select="."/>
     </xsl:variable>
     <xsl:choose>
-      <xsl:when test="function-available('exsl:node-set')">
+      <xsl:when test="$exsl.node.set.available != 0">
         <xsl:variable name="html-nodes" select="exsl:node-set($html)"/>
         <xsl:choose>
           <xsl:when test="$html-nodes//p">
@@ -630,4 +633,44 @@ xmlns:exsl="http://exslt.org/common"
     <xsl:apply-templates/>
   </xsl:template>
 
+<xsl:template match="*" mode="stripNS">
+  <xsl:copy-of select="."/>
+</xsl:template>
+
+<xsl:template match="d:tr|
+                     d:td|
+                     d:th|
+                     d:col|
+                     d:group|
+                     d:tbody|
+                     d:tfoot|
+                     d:thead"
+              mode="stripNS">
+  <xsl:choose>
+    <xsl:when test="self::d:*">
+      <xsl:element name="{local-name(.)}">
+        <xsl:copy-of select="@*[not(name(.) = 'xml:id')
+                                and not(name(.) = 'version')]"/>
+        <xsl:if test="@xml:id">
+          <xsl:attribute name="id">
+            <xsl:value-of select="@xml:id"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates mode="stripNS"/>
+      </xsl:element>
+    </xsl:when>
+    <xsl:otherwise>
+      <xsl:copy>
+        <xsl:copy-of select="@*[not(name(.) = 'xml:id')
+                                and not(name(.) = 'version')]"/>
+        <xsl:if test="@xml:id">
+          <xsl:attribute name="id">
+            <xsl:value-of select="@xml:id"/>
+          </xsl:attribute>
+        </xsl:if>
+        <xsl:apply-templates mode="stripNS"/>
+      </xsl:copy>
+    </xsl:otherwise>
+  </xsl:choose>
+</xsl:template>
 </xsl:stylesheet>

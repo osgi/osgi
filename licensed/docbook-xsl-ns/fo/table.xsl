@@ -174,6 +174,11 @@ xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
     <xsl:otherwise>
       <fo:block id="{$id}"
                 xsl:use-attribute-sets="informaltable.properties">
+        <xsl:if test="$keep.together != ''">
+          <xsl:attribute name="keep-together.within-column">
+            <xsl:value-of select="$keep.together"/>
+          </xsl:attribute>
+        </xsl:if>
         <xsl:copy-of select="$table.layout"/>
         <xsl:call-template name="table.footnote.block"/>
       </fo:block>
@@ -198,8 +203,7 @@ xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
   <xsl:param name="table.block"/>
   <xsl:choose>
     <xsl:when test="@orient='land' and 
-                    $fop.extensions = 0 and 
-                    $passivetex.extensions = 0" >
+                    $fop.extensions = 0" >
       <fo:block-container reference-orientation="90"
             padding="6pt"
             xsl:use-attribute-sets="list.block.spacing">
@@ -509,8 +513,7 @@ xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
                 select=".//d:colspec[contains(@colwidth, '*')]"/>
   <xsl:if test="count($prop-columns) != 0 or
                 $fop.extensions != 0 or
-                $fop1.extensions != 0 or
-                $passivetex.extensions != 0">
+                $fop1.extensions != 0">
     <xsl:attribute name="table-layout">fixed</xsl:attribute>
   </xsl:if>
  
@@ -643,8 +646,7 @@ xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
         <xsl:choose>
           <!-- These processors don't support table-layout="auto" -->
           <xsl:when test="$fop.extensions != 0 or
-                          $fop1.extensions != 0 or
-                          $passivetex.extensions != 0">
+                          $fop1.extensions != 0">
             <xsl:text>100%</xsl:text>
           </xsl:when>
           <!-- Proportional columns imply 100% width -->
@@ -673,7 +675,7 @@ xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
   <fo:table-header start-indent="0pt" end-indent="0pt">
     <xsl:choose>
       <!-- Use recursion if @morerows is used -->
-      <xsl:when test="d:row/d:entry/@morerows|d:ro/d:entrytbl/@morerows">
+      <xsl:when test="d:row/d:entry/@morerows|d:row/d:entrytbl/@morerows">
         <xsl:apply-templates select="d:row[1]">
           <xsl:with-param name="spans">
             <xsl:call-template name="blank.spans">
@@ -703,7 +705,7 @@ xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
   <fo:table-footer start-indent="0pt" end-indent="0pt">
     <xsl:choose>
       <!-- Use recursion if @morerows is used -->
-      <xsl:when test="d:row/d:entry/@morerows|d:ro/d:entrytbl/@morerows">
+      <xsl:when test="d:row/d:entry/@morerows|d:row/d:entrytbl/@morerows">
         <xsl:apply-templates select="d:row[1]">
           <xsl:with-param name="spans">
             <xsl:call-template name="blank.spans">
@@ -733,7 +735,7 @@ xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
   <fo:table-body start-indent="0pt" end-indent="0pt">
     <xsl:choose>
       <!-- Use recursion if @morerows is used -->
-      <xsl:when test="d:row/d:entry/@morerows|d:ro/d:entrytbl/@morerows">
+      <xsl:when test="d:row/d:entry/@morerows|d:row/d:entrytbl/@morerows">
         <xsl:apply-templates select="d:row[1]">
           <xsl:with-param name="spans">
             <xsl:call-template name="blank.spans">
@@ -1133,7 +1135,7 @@ xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
 -->
 
         <xsl:choose>
-          <xsl:when test="$fop.extensions = 0 and $passivetex.extensions = 0
+          <xsl:when test="$fop.extensions = 0
                           and $orientation != ''">
             <fo:block-container reference-orientation="{$orientation}">
               <xsl:if test="$rotated-width != ''">

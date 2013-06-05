@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="ASCII"?>
-<!--This file was created automatically by html2xhtml-->
-<!--from the HTML stylesheets.-->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:d="http://docbook.org/ns/docbook"
+<?xml version="1.0" encoding="ASCII"?><!--This file was created automatically by html2xhtml--><!--from the HTML stylesheets.--><xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:d="http://docbook.org/ns/docbook"
 xmlns:doc="http://nwalsh.com/xsl/documentation/1.0" xmlns="http://www.w3.org/1999/xhtml" exclude-result-prefixes="doc d" version="1.0">
 
 <!-- ********************************************************************
@@ -107,7 +104,7 @@ to be incomplete. Don't forget to read the source, too :-)</para>
   <tr>
     <td align="{$direction.align.start}" valign="top">
       <xsl:text>[</xsl:text>
-      <xsl:number count="d:production" level="any"/>
+      <xsl:apply-templates select="." mode="label.markup"/>
       <xsl:text>]</xsl:text>
     </td>
     <td align="{$direction.align.end}" valign="top">
@@ -323,7 +320,7 @@ to be incomplete. Don't forget to read the source, too :-)</para>
 </xsl:template>
 
 <xsl:template match="d:constraintdef/d:title">
-  <p><strong xmlns:xslo="http://www.w3.org/1999/XSL/Transform"><xsl:apply-templates/></strong></p>
+  <p><strong><xsl:apply-templates/></strong></p>
 </xsl:template>
 
 <!-- ==================================================================== -->

@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="ASCII"?>
-<!--This file was created automatically by html2xhtml-->
-<!--from the HTML stylesheets.-->
-<xsl:stylesheet exclude-result-prefixes="d"
+<?xml version="1.0" encoding="ASCII"?><!--This file was created automatically by html2xhtml--><!--from the HTML stylesheets.--><xsl:stylesheet exclude-result-prefixes="d"
                  xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:d="http://docbook.org/ns/docbook"
 xmlns="http://www.w3.org/1999/xhtml" version="1.0">
 
@@ -147,7 +144,7 @@ xmlns="http://www.w3.org/1999/xhtml" version="1.0">
       </span>
     </xsl:when>
     <xsl:otherwise>
-      <strong xmlns:xslo="http://www.w3.org/1999/XSL/Transform">
+      <strong>
         <xsl:copy-of select="$titleStr"/>
         <xsl:if test="$lastChar != ''                       and not(contains($runinhead.title.end.punct, $lastChar))">
           <xsl:value-of select="$runinhead.default.title.end.punct"/>
@@ -217,7 +214,7 @@ xmlns="http://www.w3.org/1999/xhtml" version="1.0">
     <xsl:otherwise>
       <div class="blockquote-title">
         <p>
-          <strong xmlns:xslo="http://www.w3.org/1999/XSL/Transform">
+          <strong>
             <xsl:apply-templates/>
           </strong>
         </p>
@@ -250,7 +247,7 @@ xmlns="http://www.w3.org/1999/xhtml" version="1.0">
 
 <!-- ==================================================================== -->
 
-<xsl:template match="d:abstract|d:sidebar">
+<xsl:template match="d:sidebar">
   <div>
     <xsl:call-template name="common.html.attributes"/>
     <xsl:call-template name="id.attribute"/>
@@ -264,6 +261,21 @@ xmlns="http://www.w3.org/1999/xhtml" version="1.0">
 </xsl:template>
 
 <xsl:template match="d:sidebar/d:sidebarinfo|d:sidebar/d:info"/>
+
+<xsl:template match="d:abstract">
+  <div>
+    <xsl:call-template name="common.html.attributes"/>
+    <xsl:call-template name="anchor"/>
+    <xsl:call-template name="formal.object.heading">
+      <xsl:with-param name="title">
+        <xsl:apply-templates select="." mode="title.markup">
+          <xsl:with-param name="allow-anchors" select="'1'"/>
+        </xsl:apply-templates>
+      </xsl:with-param>
+    </xsl:call-template>
+    <xsl:apply-templates/>
+  </div>
+</xsl:template>
 
 <!-- ==================================================================== -->
 
@@ -295,7 +307,7 @@ xmlns="http://www.w3.org/1999/xhtml" version="1.0">
       </span>
     </xsl:when>
     <xsl:otherwise>
-      <strong xmlns:xslo="http://www.w3.org/1999/XSL/Transform"><xsl:apply-templates/></strong>
+      <strong><xsl:apply-templates/></strong>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -312,7 +324,7 @@ xmlns="http://www.w3.org/1999/xhtml" version="1.0">
       </span>
     </xsl:when>
     <xsl:otherwise>
-      <strong xmlns:xslo="http://www.w3.org/1999/XSL/Transform"><xsl:apply-templates/></strong>
+      <strong><xsl:apply-templates/></strong>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -329,7 +341,7 @@ xmlns="http://www.w3.org/1999/xhtml" version="1.0">
       </span>
     </xsl:when>
     <xsl:otherwise>
-      <strong xmlns:xslo="http://www.w3.org/1999/XSL/Transform"><xsl:apply-templates/></strong>
+      <strong><xsl:apply-templates/></strong>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -357,7 +369,7 @@ xmlns="http://www.w3.org/1999/xhtml" version="1.0">
     </xsl:when>
     <xsl:otherwise>
       <p>
-        <strong xmlns:xslo="http://www.w3.org/1999/XSL/Transform">
+        <strong>
           <xsl:call-template name="gentext.template">
             <xsl:with-param name="context" select="'msgset'"/>
             <xsl:with-param name="name" select="'MsgLevel'"/>
@@ -384,7 +396,7 @@ xmlns="http://www.w3.org/1999/xhtml" version="1.0">
     </xsl:when>
     <xsl:otherwise>
       <p>
-        <strong xmlns:xslo="http://www.w3.org/1999/XSL/Transform">
+        <strong>
           <xsl:call-template name="gentext.template">
             <xsl:with-param name="context" select="'msgset'"/>
             <xsl:with-param name="name" select="'MsgOrig'"/>
@@ -411,7 +423,7 @@ xmlns="http://www.w3.org/1999/xhtml" version="1.0">
     </xsl:when>
     <xsl:otherwise>
       <p>
-        <strong xmlns:xslo="http://www.w3.org/1999/XSL/Transform">
+        <strong>
           <xsl:call-template name="gentext.template">
             <xsl:with-param name="context" select="'msgset'"/>
             <xsl:with-param name="name" select="'MsgAud'"/>
@@ -438,7 +450,7 @@ xmlns="http://www.w3.org/1999/xhtml" version="1.0">
     </xsl:when>
     <xsl:otherwise>
       <p>
-        <strong xmlns:xslo="http://www.w3.org/1999/XSL/Transform">
+        <strong>
           <xsl:apply-templates/>
         </strong>
       </p>
@@ -468,7 +480,7 @@ xmlns="http://www.w3.org/1999/xhtml" version="1.0">
       </xsl:if>
       <tr>
         <th align="{$direction.align.start}" valign="top" colspan="3">
-          <strong xmlns:xslo="http://www.w3.org/1999/XSL/Transform">
+          <strong>
             <xsl:call-template name="gentext">
               <xsl:with-param name="key" select="'RevHistory'"/>
             </xsl:call-template>

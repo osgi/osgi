@@ -100,7 +100,7 @@ to be incomplete. Don't forget to read the source, too :-)</para>
     <fo:table-cell>
       <fo:block text-align="start">
         <xsl:text>[</xsl:text>
-        <xsl:number count="d:production" level="any"/>
+        <xsl:apply-templates select="." mode="label.markup"/>
         <xsl:text>]</xsl:text>
       </fo:block>
     </fo:table-cell>

@@ -65,7 +65,7 @@ version='1.0'>
   <div>
     <xsl:call-template name="common.html.attributes"/>
     <xsl:call-template name="id.attribute"/>
-    <xsl:if test="$admon.style != ''">
+    <xsl:if test="$admon.style != '' and $make.clean.html = 0">
       <xsl:attribute name="style">
         <xsl:value-of select="$admon.style"/>
       </xsl:attribute>
@@ -115,7 +115,7 @@ version='1.0'>
       <xsl:with-param name="inherit" select="1"/>
     </xsl:call-template>
     <xsl:call-template name="id.attribute"/>
-    <xsl:if test="$admon.style">
+    <xsl:if test="$admon.style != '' and $make.clean.html = 0">
       <xsl:attribute name="style">
         <xsl:value-of select="$admon.style"/>
       </xsl:attribute>

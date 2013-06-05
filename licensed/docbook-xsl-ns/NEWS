@@ -1,6 +1,6 @@
-Changes since the 1.77.0 release
+Changes since the 1.78.0 release
 
-Note: This document lists changes only since the 1.77.0 release. If you instead
+Note: This document lists changes only since the 1.78.0 release. If you instead
 want a record of the complete list of changes for the codebase over its entire
 history, you can obtain one by running the following commands:
 
@@ -11,141 +11,166 @@ history, you can obtain one by running the following commands:
 
 Table of Contents
 
-Release Notes: 1.77.1
+Release Notes: 1.78.1
 
+    Common
     FO
     HTML
-    Roundtrip
-    Slides
-    Website
+    Manpages
     Webhelp
-    Template
+    Params
+    Highlighting
 
-Release Notes: 1.77.1
+Release Notes: 1.78.1
 
-The following is a list of changes that have been made since the 1.77.0
+The following is a list of changes that have been made since the 1.78.0
 release.
+
+Common
+
+The following changes have been made to the common code since the 1.78.0
+release.
+
+  • Robert Stayton: titles.xsl
+
+    Make sure part and set titleabbrev are used in mode="titleabbrev.markup"
+
+  • Robert Stayton: titles.xsl
+
+    Add empty default template for titleabbrev since it is always processed in a mode.
+
+  • Robert Stayton: gentext.xsl
+
+    Make consistent handling of titleabbrev in xrefs.
+
+  • Robert Stayton: titles.xsl
+
+    for missing title in xref, provide parent information of target to help locate problem element.
+    Process bridgehead in mode="title.markup", not normal mode.
+
+  • Jirka Kosek: l10n.xsl
+
+    Fixed bug #3598963
+
+  • Robert Stayton: gentext.xsl; labels.xsl
+
+    Make sure bridgeheads are not numbered in all contexts, including html title attributes.
 
 FO
 
-The following changes have been made to the fo code since the 1.77.0 release.
+The following changes have been made to the fo code since the 1.78.0 release.
 
-  • Robert Stayton: docbook.xsl
+  • Robert Stayton: division.xsl
 
-    Import the VERSION.xsl file instead of VERSION so mimetype is interpreted correctly
-    from the filename.
+    Fix bug where part TOC not generated when partintro is present.
 
-  • Robert Stayton: block.xsl
+  • Jirka Kosek: xref.xsl
 
-    In sidebar, turn off space before first para if there is no title.
+    Footnotes can't be placed into fo:float
 
-  • Robert Stayton: math.xsl
+  • Robert Stayton: titlepage.templates.xml
 
-    Restored templates for mml:* elements that were accidentally deleted.
+    Remove margin-left when start-indent is used because they interfere
+    with each other.
+
+  • Robert Stayton: fo.xsl; pagesetup.xsl
+
+    Use dingbat.fontset rather than dingbat.font.family so it falls
+    back to symbol font if glyph not found, like other font properties.
+
+  • Robert Stayton: inline.xsl
+
+    Change last instance of inline.charseq in inline glossterm to
+    inline.italicseq so it is consistent with the others.
+
+  • Robert Stayton: xref.xsl
+
+    Make consistent handling of titleabbrev in xrefs.
 
 HTML
 
-The following changes have been made to the html code since the 1.77.0 release.
+The following changes have been made to the html code since the 1.78.0 release.
 
-  • Robert Stayton: docbook.xsl
+  • Robert Stayton: admon.xsl
 
-    Import the VERSION.xsl file instead of VERSION so mimetype is interpreted correctly
-    from the filename.
+    Turn off $admon.style if $make.clean.html is set to non-zero.
 
-  • Robert Stayton: sections.xsl
+  • Jirka Kosek: highlight.xsl
 
-    Use $div.element variable in place of div to support html5 section element.
-    output
+    Added new definitions for syntax highlighting
+
+  • Robert Stayton: chunk-common.xsl
+
+    Make active.olink.hrefs param work for chunked output too.
+
+  • Robert Stayton: xref.xsl
+
+    Make consistent handling of titleabbrev in xrefs.
+
+  • Robert Stayton: graphics.xsl
+
+    Add round() function when pixel counts are used for image width and height.
+
+  • Robert Stayton: glossary.xsl
+
+    fix missing class and id attributes on glossterm and glossdef.
 
   • Robert Stayton: autoidx.xsl
 
-    Fix bug 3528673, missing "separator" param on template with
-    match="indexterm" mode="reference".  That param is passed
-    for endofrange processing to output the range separator.
+    Fix bug where prefer.index.titleabbrev ignored info/titleabbrev.
 
-Roundtrip
+Manpages
 
-The following changes have been made to the roundtrip code since the 1.77.0
+The following changes have been made to the manpages code since the 1.78.0
 release.
 
-  • Robert Stayton: dbk2ooo.xsl; dbk2pages.xsl; dbk2wordml.xsl; dbk2wp.xsl
+  • Robert Stayton: utility.xsl
 
-    Import the VERSION.xsl file instead of VERSION so mimetype is interpreted correctly
-    from the filename.
-
-Slides
-
-The following changes have been made to the slides code since the 1.77.0
-release.
-
-  • Robert Stayton: html/slides-common.xsl
-
-    Import the VERSION.xsl file instead of VERSION so mimetype is interpreted correctly
-    from the filename.
-
-Website
-
-The following changes have been made to the website code since the 1.77.0
-release.
-
-  • Robert Stayton: website-common.xsl
-
-    Import the VERSION.xsl file instead of VERSION so mimetype is interpreted correctly
-    from the filename.
+    Fix bug 3599520: spurious newline in para when starts with
+    whitespace and inline element.
 
 Webhelp
 
-The following changes have been made to the webhelp code since the 1.77.0
+The following changes have been made to the webhelp code since the 1.78.0
 release.
 
   • David Cramer: xsl/webhelp-common.xsl
 
-    Webhelp: Increase default value for chunk.section.depth
+    Webhelp: Fix test for webhelp.include.search.tab param
 
-  • kasunbg: docsrc/readme.xml
+  • David Cramer: Makefile.sample
 
-    updated webhelp documentation
-
-  • kasunbg: template/content/search/nwSearchFnt.js; xsl/webhelp-common.xsl
-
-    Removed the script htmlFileList.js since it's content is in htmlFileInfoList.js
-
-  • Robert Stayton: xsl/webhelp-common.xsl
-
-    In the <h1> output, replace call to 'get.doc.title' with
-    mode="title.markup" because get.doc.title returns only
-    the string value of the title, losing any markup such
-    as <trademark> or <superscript>.
-
-  • kasunbg: template/common/css/positioning.css; template/content/search/
-    nwSearchFnt.js
-
-    Remove unnecessary bits of code from webhelp
+    Webhelp: Fix order of args to xsltproc
 
   • David Cramer: docsrc/readme.xml
 
-    Webhelp: Minor edits to the readme
+    Webhelp: Turn on xinclude-test.xml in readme to demo xinclude functionality
 
-  • David Cramer: xsl/webhelp.xsl; xsl/titlepage.templates.xsl; xsl/
-    titlepage.templates.xml
+  • David Cramer: Makefile; Makefile.sample
 
-    Webhelp: Suppress abstracts from titlepages. These are used to create the search result summary sentence and should not be shown
+    Webhelp: In Makefiles, do xinclude in first pass at document
 
-  • David Cramer: build.xml
+Params
 
-    Webhelp: calculate path to profile.xsl from main build.xml file
-
-Template
-
-The following changes have been made to the template code since the 1.77.0
+The following changes have been made to the params code since the 1.78.0
 release.
 
-  • Robert Stayton: titlepage.xsl
+  • David Cramer: webhelp.include.search.tab.xml
 
-    Undo last change because not implemented correctly.
+    Webhelp: Fix test for webhelp.include.search.tab param
 
-  • Robert Stayton: titlepage.xsl
+  • Robert Stayton: article.appendix.title.properties.xml
 
-    Fix xsl:element to not overwrite the incoming fo: namespace
-    if the $ns param is not set.
+    Remove unneeded margin-left property from article appendix title.
+    It interferes with the start-indent property.
+
+Highlighting
+
+The following changes have been made to the highlighting code since the 1.78.0
+release.
+
+  • Jirka Kosek: c-hl.xml; cpp-hl.xml; sql2003-hl.xml; php-hl.xml; upc-hl.xml;
+    bourne-hl.xml; ⋯
+
+    Added new definitions for syntax highlighting
 

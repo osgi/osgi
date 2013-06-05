@@ -337,12 +337,21 @@ xmlns:exsl="http://exslt.org/common"
 <!-- HTML5: converts obsolete HTML attributes to CSS styles -->
 <xsl:template match="*" mode="convert.to.style">
 
+  <xsl:variable name="element" select="local-name(.)"/>
+
   <xsl:variable name="style.from.atts">
     <xsl:for-each select="@*">
 
       <xsl:choose>
-        <xsl:when test="local-name() = 'width'">
+        <!-- width and height attributes are ok for img element -->
+        <xsl:when test="local-name() = 'width' and $element != 'img'">
           <xsl:text>width: </xsl:text>
+          <xsl:value-of select="."/>
+          <xsl:text>; </xsl:text>
+        </xsl:when>
+
+        <xsl:when test="local-name() = 'height' and $element != 'img'">
+          <xsl:text>height </xsl:text>
           <xsl:value-of select="."/>
           <xsl:text>; </xsl:text>
         </xsl:when>
@@ -396,15 +405,23 @@ xmlns:exsl="http://exslt.org/common"
         <xsl:value-of select="$style"/>
       </xsl:attribute>
     </xsl:if>
-    <!-- Also skip disallowed summary attributes -->
-    <xsl:copy-of select="@*[local-name(.) != 'width' and
-                            local-name(.) != 'summary' and
-                            local-name(.) != 'border' and
-                            local-name(.) != 'cellspacing' and
-                            local-name(.) != 'cellpadding' and
-                            local-name(.) != 'style' and
-                            local-name(.) != 'align' and
-                            local-name(.) != 'valign']"/>
+    <!-- skip converted atts, and also skip disallowed summary attribute -->
+    <xsl:for-each select="@*">
+      <xsl:choose>
+        <xsl:when test="local-name(.) = 'width' and $element != 'img'"/>
+        <xsl:when test="local-name(.) = 'height' and $element != 'img'"/>
+        <xsl:when test="local-name(.) = 'summary'"/>
+        <xsl:when test="local-name(.) = 'border'"/>
+        <xsl:when test="local-name(.) = 'cellspacing'"/>
+        <xsl:when test="local-name(.) = 'cellpadding'"/>
+        <xsl:when test="local-name(.) = 'style'"/>
+        <xsl:when test="local-name(.) = 'align'"/>
+        <xsl:when test="local-name(.) = 'valign'"/>
+        <xsl:otherwise>
+          <xsl:copy-of select="."/>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:for-each>
     <xsl:apply-templates mode="convert.to.style"/>
   </xsl:element>
 </xsl:template>
