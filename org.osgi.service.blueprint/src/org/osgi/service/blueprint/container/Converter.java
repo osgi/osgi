@@ -16,12 +16,15 @@
 
 package org.osgi.service.blueprint.container;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * Type converter to convert an object to a target type.
  * 
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface Converter {
 
 	/**

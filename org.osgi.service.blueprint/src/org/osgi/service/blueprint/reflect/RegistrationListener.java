@@ -16,6 +16,8 @@
 
 package org.osgi.service.blueprint.reflect;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * Metadata for a registration listener interested in service registration and
  * unregistration events for a service.
@@ -27,6 +29,7 @@ package org.osgi.service.blueprint.reflect;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface RegistrationListener {
 
 	/**

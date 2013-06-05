@@ -16,12 +16,15 @@
 
 package org.osgi.service.blueprint.reflect;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * Top level Metadata type. All Metdata types extends this base type.
  * 
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface Metadata {
 	// marker interface
 }

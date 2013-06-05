@@ -17,6 +17,7 @@
 package org.osgi.service.blueprint.reflect;
 
 import java.util.List;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Metadata for managed components. This is the base type for
@@ -26,6 +27,7 @@ import java.util.List;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface ComponentMetadata extends NonNullMetadata {
 
 	/**

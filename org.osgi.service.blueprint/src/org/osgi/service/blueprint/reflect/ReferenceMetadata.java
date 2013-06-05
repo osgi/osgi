@@ -16,6 +16,8 @@
 
 package org.osgi.service.blueprint.reflect;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * Metadata for a reference that will bind to a single matching service in the
  * service registry.
@@ -26,6 +28,7 @@ package org.osgi.service.blueprint.reflect;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface ReferenceMetadata extends Target, ServiceReferenceMetadata {
 
 	/**
