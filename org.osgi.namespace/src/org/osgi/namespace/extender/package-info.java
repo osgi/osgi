@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,9 +22,11 @@
  * the types in this package just contain constants for capability and 
  * requirement namespaces specified by the OSGi Alliance.
  * 
- * @version 1.0
  * @author $Id$
  */
 
+@Version("1.0")
 package org.osgi.namespace.extender;
+
+import org.osgi.annotation.versioning.Version;
 
