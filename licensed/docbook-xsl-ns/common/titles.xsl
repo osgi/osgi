@@ -62,6 +62,15 @@ title of the element. This does not include the label.
               <xsl:value-of select="@xml:id"/>
               <xsl:text>")</xsl:text>
             </xsl:when>
+            <xsl:otherwise>
+              <xsl:text> (contained in </xsl:text>
+              <xsl:value-of select="local-name(..)"/>
+              <xsl:if test="../@id or ../@xml:id">
+                <xsl:text> with id </xsl:text>
+                <xsl:value-of select="../@id | ../@xml:id"/>
+              </xsl:if>
+              <xsl:text>)</xsl:text>
+            </xsl:otherwise>
           </xsl:choose>
         </xsl:message>
       </xsl:if>
@@ -275,7 +284,7 @@ title of the element. This does not include the label.
 </xsl:template>
 
 <xsl:template match="d:bridgehead" mode="title.markup">
-  <xsl:apply-templates mode="title.markup"/>
+  <xsl:apply-templates/> 
 </xsl:template>
 
 <xsl:template match="d:refsynopsisdiv" mode="title.markup">
@@ -526,6 +535,9 @@ title of the element. This does not include the label.
 
 <!-- ============================================================ -->
 
+<!-- titleabbrev is always processed in a mode -->
+<xsl:template match="d:titleabbrev"/>
+
 <xsl:template match="*" mode="titleabbrev.markup">
   <xsl:param name="allow-anchors" select="0"/>
   <xsl:param name="verbose" select="1"/>
@@ -550,7 +562,7 @@ title of the element. This does not include the label.
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="d:book|d:preface|d:chapter|d:appendix" mode="titleabbrev.markup">
+<xsl:template match="d:book|d:part|d:set|d:preface|d:chapter|d:appendix" mode="titleabbrev.markup">
   <xsl:param name="allow-anchors" select="0"/>
   <xsl:param name="verbose" select="1"/>
 
@@ -558,6 +570,8 @@ title of the element. This does not include the label.
                                            |d:bookinfo/d:titleabbrev
                                            |d:info/d:titleabbrev
                                            |d:prefaceinfo/d:titleabbrev
+                                           |d:setinfo/d:titleabbrev
+                                           |d:partinfo/d:titleabbrev
                                            |d:chapterinfo/d:titleabbrev
                                            |d:appendixinfo/d:titleabbrev
                                            |d:titleabbrev)[1]"/>

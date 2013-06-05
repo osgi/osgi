@@ -48,12 +48,10 @@ xmlns:xslthl="http://xslthl.sf.net" exclude-result-prefixes="xslthl d" version="
       <xsl:apply-templates mode="xslthl"/>
     </span>
   </xsl:template>
-  <xsl:template match="xslthl:html" mode="xslthl">
-    <strong>
-      <em style="color: red">
-        <xsl:apply-templates mode="xslthl"/>
-      </em>
-    </strong>
+  <xsl:template match='xslthl:html' mode="xslthl">
+    <span class="hl-html" style="color: navy; font-weight: bold">
+      <xsl:apply-templates mode="xslthl"/>
+    </span>
   </xsl:template>
   <xsl:template match="xslthl:xslt" mode="xslthl">
     <strong style="color: #0066FF">
