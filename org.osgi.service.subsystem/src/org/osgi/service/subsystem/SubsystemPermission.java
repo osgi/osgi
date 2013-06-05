@@ -373,6 +373,7 @@ public final class SubsystemPermission extends BasicPermission {
 	 * @return {@code true} if the specified permission is implied by this
 	 *         object; {@code false} otherwise.
 	 */
+	@Override
 	public boolean implies(Permission p) {
 		if (!(p instanceof SubsystemPermission)) {
 			return false;
@@ -442,6 +443,7 @@ public final class SubsystemPermission extends BasicPermission {
 	 * @return Canonical string representation of the
 	 *         {@code SubsystemPermission} actions.
 	 */
+	@Override
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
@@ -485,6 +487,7 @@ public final class SubsystemPermission extends BasicPermission {
 	 * 
 	 * @return A new {@code PermissionCollection} object.
 	 */
+	@Override
 	public PermissionCollection newPermissionCollection() {
 		return new SubsystemPermissionCollection();
 	}
@@ -496,6 +499,7 @@ public final class SubsystemPermission extends BasicPermission {
 	 * @return {@code true} if {@code obj} is equivalent to this
 	 *         {@code SubsystemPermission}; {@code false} otherwise.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -516,6 +520,7 @@ public final class SubsystemPermission extends BasicPermission {
 	 * 
 	 * @return Hash code value for this object.
 	 */
+	@Override
 	public int hashCode() {
 		int h = 31 * 17 + getName().hashCode();
 		h = 31 * h + getActions().hashCode();
@@ -632,6 +637,7 @@ final class SubsystemPermissionCollection extends PermissionCollection {
 	 * @throws SecurityException If this {@code SubsystemPermissionCollection}
 	 *         object has been marked read-only.
 	 */
+	@Override
 	public void add(Permission permission) {
 		if (!(permission instanceof SubsystemPermission)) {
 			throw new IllegalArgumentException("invalid permission: " + permission);
@@ -675,6 +681,7 @@ final class SubsystemPermissionCollection extends PermissionCollection {
 	 *         {@code SubsystemPermission} in this collection, {@code false}
 	 *         otherwise.
 	 */
+	@Override
 	public boolean implies(Permission permission) {
 		if (!(permission instanceof SubsystemPermission)) {
 			return false;
@@ -718,6 +725,7 @@ final class SubsystemPermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all {@code SubsystemPermission} objects.
 	 */
+	@Override
 	public synchronized Enumeration<Permission> elements() {
 		List<Permission> all = new ArrayList<Permission>(permissions.values());
 		return Collections.enumeration(all);
@@ -735,6 +743,7 @@ final class SubsystemPermissionCollection extends PermissionCollection {
 
 	private synchronized void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		ObjectInputStream.GetField gfields = in.readFields();
+		@SuppressWarnings("unchecked")
 		HashMap<String, SubsystemPermission> p = (HashMap<String, SubsystemPermission>) gfields.get("permissions", null);
 		permissions = p;
 		all_allowed = gfields.get("all_allowed", false);
