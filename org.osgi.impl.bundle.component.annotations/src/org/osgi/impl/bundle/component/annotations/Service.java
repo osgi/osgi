@@ -16,7 +16,6 @@
 package org.osgi.impl.bundle.component.annotations;
 
 import java.util.EventListener;
-
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -48,6 +47,7 @@ public class Service implements EventListener {
 		System.out.println("Bind " + log);
 	}
 
+	@SuppressWarnings("unused")
 	private void unbindLog(LogService log) {
 		System.out.println("Unbind " + log);
 	}

@@ -16,7 +16,6 @@
 package org.osgi.impl.bundle.component.annotations;
 
 import java.util.EventListener;
-
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -47,6 +46,7 @@ public class ReferenceNames {
 		System.out.println("Bind " + l);
 	}
 
+	@SuppressWarnings("unused")
 	private void unbindNameBind(EventListener l) {
 		System.out.println("Unind " + l);
 	}
@@ -56,6 +56,7 @@ public class ReferenceNames {
 		System.out.println("Bind " + l);
 	}
 
+	@SuppressWarnings("unused")
 	private void removeNameAdd(EventListener l) {
 		System.out.println("Unind " + l);
 	}
@@ -65,6 +66,7 @@ public class ReferenceNames {
 		System.out.println("Bind " + l);
 	}
 
+	@SuppressWarnings("unused")
 	private void unsetNameSet(EventListener l) {
 		System.out.println("Unind " + l);
 	}
@@ -74,6 +76,7 @@ public class ReferenceNames {
 		System.out.println("Bind " + l);
 	}
 
+	@SuppressWarnings("unused")
 	private void unname(EventListener l) {
 		System.out.println("Unind " + l);
 	}

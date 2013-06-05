@@ -17,7 +17,6 @@ package org.osgi.impl.bundle.component.annotations;
 
 import java.util.EventListener;
 import java.util.Map;
-
 import org.osgi.service.component.annotations.Activate;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Deactivate;
@@ -51,6 +50,7 @@ public class References {
 		System.out.println("Bind " + l);
 	}
 
+	@SuppressWarnings("unused")
 	private void unbindStatic(EventListener l) {
 		System.out.println("Unbind " + l);
 	}
@@ -60,6 +60,7 @@ public class References {
 		System.out.println("Bind " + l);
 	}
 
+	@SuppressWarnings("unused")
 	private void unbindDynamic(EventListener l) {
 		System.out.println("Unbind " + l);
 	}
@@ -69,6 +70,7 @@ public class References {
 		System.out.println("Bind " + l);
 	}
 
+	@SuppressWarnings("unused")
 	private void unbindMandatory(EventListener l) {
 		System.out.println("Unbind " + l);
 	}
@@ -78,6 +80,7 @@ public class References {
 		System.out.println("Bind " + l);
 	}
 
+	@SuppressWarnings("unused")
 	private void unbindOptional(EventListener l) {
 		System.out.println("Unbind " + l);
 	}
@@ -87,6 +90,7 @@ public class References {
 		System.out.println("Bind " + l);
 	}
 
+	@SuppressWarnings("unused")
 	private void unbindMultiple(EventListener l) {
 		System.out.println("Unbind " + l);
 	}
@@ -96,6 +100,7 @@ public class References {
 		System.out.println("Bind " + l);
 	}
 
+	@SuppressWarnings("unused")
 	private void unbindAtLeastOne(EventListener l) {
 		System.out.println("Unbind " + l);
 	}
@@ -105,6 +110,7 @@ public class References {
 		System.out.println("Bind " + l);
 	}
 
+	@SuppressWarnings("unused")
 	private void unbindGreedy(EventListener l) {
 		System.out.println("Unbind " + l);
 	}
@@ -114,6 +120,7 @@ public class References {
 		System.out.println("Bind " + l);
 	}
 
+	@SuppressWarnings("unused")
 	private void unbindReluctant(EventListener l) {
 		System.out.println("Unbind " + l);
 	}
@@ -123,10 +130,12 @@ public class References {
 		System.out.println("Bind " + l);
 	}
 
+	@SuppressWarnings("unused")
 	private void updatedUpdated(EventListener l) {
 		System.out.println("Unbind " + l);
 	}
 
+	@SuppressWarnings("unused")
 	private void unbindUpdated(EventListener l) {
 		System.out.println("Unbind " + l);
 	}
@@ -136,6 +145,7 @@ public class References {
 		System.out.println("Bind " + l);
 	}
 
+	@SuppressWarnings("unused")
 	private void fooUnbind(EventListener l) {
 		System.out.println("Unbind " + l);
 	}
@@ -150,16 +160,18 @@ public class References {
 		System.out.println("Bind " + l);
 	}
 
+	@SuppressWarnings("unused")
 	private void unbindNoUnbind(EventListener l) {
 		System.out.println("Unbind " + l);
 	}
 
 	@Reference(name = "target", target = "(test.attr=foo)")
-	private void bindTarget(EventListener l, Map props) {
+	private void bindTarget(EventListener l, Map<?, ?> props) {
 		System.out.println("Bind " + l);
 	}
 
-	private void unbindTarget(EventListener l, Map props) {
+	@SuppressWarnings("unused")
+	private void unbindTarget(EventListener l, Map<?, ?> props) {
 		System.out.println("Unbind " + l);
 	}
 }
