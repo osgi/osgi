@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.resource.Capability;
 import org.osgi.resource.Requirement;
 import org.osgi.resource.Resource;
@@ -60,6 +61,7 @@ import org.osgi.resource.Wiring;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public abstract class ResolveContext {
 	/**
 	 * Return the resources that must be resolved for this resolve context.
@@ -90,6 +92,7 @@ public abstract class ResolveContext {
 		return emptyCollection();
 	}
 
+	@SuppressWarnings("unchecked")
 	private static <T> Collection<T> emptyCollection() {
 		return Collections.EMPTY_LIST;
 	}

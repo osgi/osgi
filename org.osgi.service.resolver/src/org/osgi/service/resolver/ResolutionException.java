@@ -81,6 +81,7 @@ public class ResolutionException extends Exception {
 		unresolvedRequirements = null;
 	}
 
+	@SuppressWarnings("unchecked")
 	private static Collection<Requirement> emptyCollection() {
 		return Collections.EMPTY_LIST;
 	}
