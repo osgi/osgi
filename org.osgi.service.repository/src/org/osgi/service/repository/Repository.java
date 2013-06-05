@@ -22,6 +22,7 @@ package org.osgi.service.repository;
 
 import java.util.Collection;
 import java.util.Map;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.resource.Capability;
 import org.osgi.resource.Requirement;
 import org.osgi.resource.Resource;
@@ -38,9 +39,9 @@ import org.osgi.resource.Resource;
  * properties.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface Repository {
 	/**
 	 * Service property to provide URLs related to this repository.

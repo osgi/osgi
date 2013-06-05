@@ -17,6 +17,7 @@
 package org.osgi.service.repository;
 
 import java.io.InputStream;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.resource.Resource;
 
 /**
@@ -28,9 +29,9 @@ import org.osgi.resource.Resource;
  * {@code InputStream} to the default content of the resource.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface RepositoryContent {
 
 	/**
