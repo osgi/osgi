@@ -224,11 +224,6 @@ public interface ZigBeeDeviceNode {
 	public ZigBeePowerDescriptor getPowerDescriptor() throws ZigBeeException;
 
 	/**
-	 * @return the node simple descriptor.
-	 */
-	public ZigBeeSimpleDescriptor getSimpleDescriptor(short endpoint) throws ZigBeeException;
-
-	/**
 	 * @return the node complex descriptor. Can be null if complex descriptor is
 	 *         not provided.
 	 */

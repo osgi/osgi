@@ -17,6 +17,7 @@
 package org.osgi.service.zigbee;
 
 import org.osgi.service.zigbee.description.ZigBeeDeviceDescription;
+import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 
 /**
  * This interface represents a ZigBee EndPoint
@@ -90,76 +91,31 @@ public interface ZigBeeEndpoint {
 	public byte getId();
 
 	/**
-	 * @return The profile identifier implemented by this endpoint.
-	 */
-	public int getProfileId();
-
-	/**
-	 * @return the device identifier implemented by this EndPoint
-	 */
-	public int getDeviceId();
-
-	/**
-	 * @return the device version implemented by this EndPoint
-	 */
-	public short getDeviceVersion();
-
-	/**
 	 * @return the {@link ZigBeeNode} containing this EndPoint
 	 */
 	public ZigBeeDeviceNode getDeviceNode();
 
 	/**
 	 * @param id
-	 * @return the Input {@link ZigBeeCluster} identified by id
+	 * @return the server(input) cluster identified by id
 	 */
-	public ZigBeeCluster getInputCluster(int id);
+	public ZigBeeCluster getServerCluster(int id);
 
 	/**
 	 * @param id
-	 * @return the Output {@link ZigBeeCluster} identified by id
+	 * @return the client(output) cluster identified by id
 	 */
-	public ZigBeeCluster getOutputCluster(int id);
+	public ZigBeeCluster getClientCluster(int id);
 
 	/**
-	 * @param id
-	 * @return true if and only if the EndPoint implements the given Cluster id
-	 *         as Input Cluster
+	 * @return the list of endpoint servers(inputs) clusters
 	 */
-	public boolean providesInputCluster(int id);
+	public ZigBeeCluster[] getServerClusters();
 
 	/**
-	 * @param id the Cluster identifier
-	 * @return true if and only if the EndPoint implements the given Cluster id
-	 *         as Output Cluster
+	 * @return the list of endpoint clients(outputs) clusters
 	 */
-	public boolean providesOutputCluster(int id);
-
-	/**
-	 * Add the given Cluster as an Input Cluster
-	 * 
-	 * @param cluster
-	 */
-	public void addInputCluster(ZigBeeCluster cluster);
-
-	/**
-	 * Add the given Cluster as an Output Cluster
-	 * 
-	 * @param cluster
-	 */
-	public void addOutputCluster(ZigBeeCluster cluster);
-
-	/**
-	 * @return the list of Input {@link ZigBeeCluster} containing the list of
-	 *         Input Clusters
-	 */
-	public ZigBeeCluster[] getInputClusters();
-
-	/**
-	 * @return the list of Output {@link ZigBeeCluster} containing the list of
-	 *         Input Clusters
-	 */
-	public ZigBeeCluster[] getOutputClusters();
+	public ZigBeeCluster[] getClientClusters();
 
 	/**
 	 * 
@@ -191,4 +147,8 @@ public interface ZigBeeEndpoint {
 	 */
 	public ZigBeeDeviceDescription getDeviceDescription();
 
+	/**
+	 * @return the node simple descriptor.
+	 */
+	public ZigBeeSimpleDescriptor getSimpleDescriptor(short endpoint) throws ZigBeeException;
 }
