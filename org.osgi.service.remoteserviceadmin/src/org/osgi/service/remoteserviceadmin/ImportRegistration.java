@@ -16,6 +16,8 @@
 
 package org.osgi.service.remoteserviceadmin;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * An Import Registration associates an active proxy service to a remote
  * endpoint.
@@ -28,9 +30,9 @@ package org.osgi.service.remoteserviceadmin;
  * {@code null}.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface ImportRegistration {
 	/**
 	 * Return the Import Reference for the imported service.
