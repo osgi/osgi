@@ -264,8 +264,8 @@
                     <pathelement location="${bin}" />
                     <pathelement path="${fop.classpath}" />
                 </classpath>
-                <jvmarg value="-Xms64m" />
-                <jvmarg value="-Xmx256m" />
+                <jvmarg value="-Xms256m" />
+                <jvmarg value="-Xmx512m" />
                 <arg value="-c" />
                 <arg value="${target}/fop/fop-@{name}.xconf" />
                 <arg value="-fo" />
