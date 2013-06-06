@@ -203,6 +203,7 @@
 
     <macrodef name="docbook2fo">
         <attribute name="name"/>
+        <attribute name="watermark" default="docbook/graphics/draft.svg" />
         <sequential>
             <mkdir dir="${target}/fo"/>
             <xslt style="docbook/xsl/custom-fo.xsl"
@@ -210,6 +211,7 @@
                 out="${target}/fo/@{name}.fo">
                 <classpath location="${saxon}" />
                 <factory name="com.icl.saxon.TransformerFactoryImpl" />
+                <param name="draft.watermark.image" expression="@{watermark}"/>
             </xslt>
         </sequential>
     </macrodef>
