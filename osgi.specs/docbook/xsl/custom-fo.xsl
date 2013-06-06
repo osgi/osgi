@@ -48,6 +48,9 @@ book toc,title
 
 <xsl:param name="page.height.portrait">24.587cm</xsl:param>
 <xsl:param name="page.width.portrait">18.898cm</xsl:param>
+<xsl:param name="book.status">
+  <xsl:value-of select="/d:book/@status"/>
+</xsl:param>
 <xsl:param name="draft.mode">maybe</xsl:param>
 <xsl:param name="draft.watermark.image">../graphics/draft.svg</xsl:param>
 <xsl:param name="fop1.extensions" select="1"/>
@@ -1279,7 +1282,7 @@ actual para elements -->
       <xsl:text>] ### </xsl:text>
       <xsl:value-of select="normalize-space(.)"/>
     </xsl:message>
-    <xsl:if test="ancestor-or-self::*[@status][1]/@status != 'draft'">
+    <xsl:if test="$book.status != 'draft' or $draft.mode = 'no'">
       <xsl:message terminate="yes">
         A non-draft book must not have any remark elements.
       </xsl:message>
@@ -1299,7 +1302,7 @@ actual para elements -->
       <xsl:text>] ### </xsl:text>
       <xsl:value-of select="normalize-space(.)"/>
     </xsl:message>
-    <xsl:if test="ancestor-or-self::*[@status][1]/@status != 'draft'">
+    <xsl:if test="$book.status != 'draft' or $draft.mode = 'no'">
       <xsl:message terminate="yes">
         A non-draft book must not have any remark elements.
       </xsl:message>
