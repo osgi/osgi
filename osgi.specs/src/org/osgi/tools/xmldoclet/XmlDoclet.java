@@ -277,7 +277,14 @@ public class XmlDoclet extends Doclet {
 			pw.print("<" + element.name() + ">");
 			AnnotationValue value = pair.value();
 			Object o = value.value();
-			printAnnotationValue(o);
+			if ("org.osgi.annotation.versioning.Version".equals(annotationType.qualifiedName())) {
+				// If the @Version annotation, check it is a valid version
+				// and only use the major and minor version number in the spec.
+				Version v = new Version((String) o);
+				pw.print(v.toSpecificationString());
+			} else {
+				printAnnotationValue(o);
+			}
 			pw.println("</" + element.name() + ">");
 		}
 		pw.println("</" + annotationType.qualifiedName() + ">");
@@ -786,7 +793,8 @@ public class XmlDoclet extends Doclet {
 										else
 											if (tag.kind().equals("@version")) {
 												sb.append("<version>");
-												sb.append(html(toString(tag.inlineTags())));
+												Version v = new Version(toString(tag.inlineTags()));
+												sb.append(v.toSpecificationString());
 												sb.append("</version>");
 											}
 										else {
