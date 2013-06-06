@@ -279,7 +279,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
       <title>osgi.contract Namespace</title>
 
       <tgroup cols="6">
-        <colspec colnum="1" colwidth="2,5*"/>
+        <colspec colnum="1" colwidth="2.5*"/>
 
         <colspec colnum="2" colwidth="1*"/>
 
