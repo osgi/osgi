@@ -28,7 +28,7 @@ import org.osgi.jmx.JmxConstants;
  * For many operations, it provides a batch mechanism to avoid excessive message
  * passing when interacting remotely.
  * 
- * @version $Revision: 1222291 $
+ * @author $Id$
  * @ThreadSafe
  */
 public interface FrameworkMBean {
