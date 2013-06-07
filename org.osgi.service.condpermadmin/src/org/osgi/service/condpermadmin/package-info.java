@@ -29,7 +29,7 @@
  * @author $Id$
  */
 
-@Version("1.1")
+@Version("1.1.1")
 package org.osgi.service.condpermadmin;
 
 import org.osgi.annotation.versioning.Version;

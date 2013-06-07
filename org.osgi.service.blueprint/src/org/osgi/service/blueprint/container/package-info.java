@@ -45,7 +45,7 @@
  * @author $Id$
  */
 
-@Version("1.0")
+@Version("1.0.2")
 package org.osgi.service.blueprint.container;
 
 import org.osgi.annotation.versioning.Version;

@@ -35,7 +35,7 @@
  * @author $Id$
  */
 
-@Version("1.2")
+@Version("1.2.2")
 package org.osgi.service.component;
 
 import org.osgi.annotation.versioning.Version;
