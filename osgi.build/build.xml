@@ -76,7 +76,7 @@
 	</target>
 	
 	<target name="javadoc.core" depends="init">
-		<javadoc.macro name="core" title="Core" packages="${core.packages}" />
+		<javadoc.macro name="core" title="Core" packages="${annotation.packages},${core.packages}" />
 	</target>
 	
 	<target name="javadoc.cmpn" depends="init">
