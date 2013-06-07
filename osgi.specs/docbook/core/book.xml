@@ -27,6 +27,8 @@
 
   <xi:include href="../license/distribution.feedback.license.2.0.xml"/>
 
+  <xi:include href="../license/osgi.specification.license.2.0.xml"/>
+
   <xi:include href="001/introduction.xml"/>
 
   <xi:include href="002/framework.security.xml"/>

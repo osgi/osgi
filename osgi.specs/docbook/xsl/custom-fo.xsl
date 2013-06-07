@@ -1879,8 +1879,16 @@ should be discarded -->
     </fo:block>
 
     <fo:block xsl:use-attribute-sets="verso.frontmatter.properties">
-      <xsl:apply-templates select="/d:book/d:preface[@role = 'frontmatter']"
-                           mode="frontmatter"/>
+      <xsl:choose>
+        <xsl:when test="$book.status = 'draft'">
+          <xsl:apply-templates select="/d:book/d:preface[@role = 'frontmatter' and @condition = 'draft']"
+                               mode="frontmatter"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="/d:book/d:preface[@role = 'frontmatter' and @condition = 'final']"
+                               mode="frontmatter"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </fo:block>
   </fo:block>
 </xsl:template>
