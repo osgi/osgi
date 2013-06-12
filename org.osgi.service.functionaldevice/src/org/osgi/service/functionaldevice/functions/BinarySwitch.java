@@ -16,13 +16,16 @@
 
 package org.osgi.service.functionaldevice.functions;
 
+import org.osgi.service.functionaldevice.FunctionalDeviceException;
+
 /**
- * Binary Switch device function has a property state and can move the state
- * from on to off and vice versa. The state is accessible with
- * {@link #getState()} getter. The switch state can be reversed with
+ * <code>BinarySwitch</code> Device Function provides a binary switch control.
+ * It extends {@link OnOff} Device Function with a property state. The state is
+ * accessible with {@link #getState()} getter. The state can be reversed with
  * {@link #toggle()} method. {@link #STATE_ON} state can be reached with the
  * inherited method {@link #turnOn()}. {@link #STATE_OFF} state can be reached
- * with the inherited method {@link #turnOff()}.
+ * with the inherited method {@link #turnOff()}. The Device Function name is
+ * <code>org.osgi.service.functionaldevice.functions.BinarySwitch</code>.
  */
 public interface BinarySwitch extends OnOff {
 
@@ -53,15 +56,25 @@ public interface BinarySwitch extends OnOff {
 	 * {@link #STATE_ON}, it'll be reversed to {@link #STATE_OFF}. If the
 	 * current state is {@link #STATE_OFF}, it'll be reversed to
 	 * {@link #STATE_ON}.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public void toggle();
+	public void toggle() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 	/**
 	 * Returns the state of the binary switch. It's a getter method for
 	 * {@link #PROPERTY_STATE} property.
 	 * 
 	 * @return The state of the binary switch.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public boolean getState();
+	public boolean getState() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 }

@@ -17,11 +17,14 @@
 package org.osgi.service.functionaldevice.functions;
 
 import org.osgi.service.functionaldevice.DeviceFunction;
+import org.osgi.service.functionaldevice.FunctionalDeviceException;
 
 /**
- * Multi Level Sensor device function reports its state when an important event
- * is available. The state is accessible with {@link #getState()} getter. There
- * are no operations.
+ * <code>MultiLevelSensor</code> Device Function provides multi-level sensor
+ * monitoring. It reports its state when an important event is available. The
+ * state is accessible with {@link #getState()} getter. There are no operations.
+ * The Device Function name is
+ * <code>org.osgi.service.functionaldevice.functions.MultiLevelSensor</code>.
  */
 public interface MultiLevelSensor extends DeviceFunction {
 
@@ -36,7 +39,12 @@ public interface MultiLevelSensor extends DeviceFunction {
 	 * {@link #PROPERTY_STATE} property.
 	 * 
 	 * @return The state of the Multi Level Sensor.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public double getState();
+	public double getState() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 }

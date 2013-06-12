@@ -21,7 +21,7 @@ import java.util.Map;
 import org.osgi.service.event.Event;
 
 /**
- * Asynchronous event, which marks a device function property value
+ * Asynchronous event, which marks a Device Function property value
  * modification. The event can be triggered when there is a new property value,
  * but it's possible to have events in series with no value change. The event
  * properties must contain all device properties and:
@@ -46,26 +46,26 @@ public final class DeviceFunctionEvent extends Event {
 	public static final String	EVENT_CLASS								= EVENT_PACKAGE + "DeviceFunctionEvent/";
 
 	/**
-	 * Represents the event topic for the device function property changed.
+	 * Represents the event topic for the Device Function property changed.
 	 */
 	public static final String	TOPIC_PROPERTY_CHANGED					= EVENT_CLASS + "PROPERTY_CHANGED";
 
 	/**
-	 * Represents an event property key for the device function. The property
-	 * value type is <code>java.lang.String</code>. The value represents the
-	 * property value change source function.
+	 * Represents an event property key for Device Function. The property value
+	 * type is <code>java.lang.String</code>. The value represents the property
+	 * value change source function.
 	 */
 	public static final String	PROPERTY_DEVICE_FUNCTION				= "device.function";
 
 	/**
-	 * Represents an event property key for the device function property name.
+	 * Represents an event property key for the Device Function property name.
 	 * The property value type is <code>java.lang.String</code>. The value
 	 * represents the property name.
 	 */
 	public static final String	PROPERTY_DEVICE_FUNCTION_PROPERTY_NAME	= "device.function.property.name";
 
 	/**
-	 * Represents an event property key for the device function property value.
+	 * Represents an event property key for the Device Function property value.
 	 * The property value type depends on the property type. The value
 	 * represents the property value.
 	 */

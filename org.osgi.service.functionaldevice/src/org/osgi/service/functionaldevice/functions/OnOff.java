@@ -17,10 +17,13 @@
 package org.osgi.service.functionaldevice.functions;
 
 import org.osgi.service.functionaldevice.DeviceFunction;
+import org.osgi.service.functionaldevice.FunctionalDeviceException;
 
 /**
- * On/Off device function represents turn on and off functionality. The function
- * doesn't provide an access to properties, there are only operations.
+ * <code>OnOff</code> Device Function represents turn on and off functionality.
+ * The function doesn't provide an access to properties, there are only
+ * operations. The Device Function name is
+ * <code>org.osgi.service.functionaldevice.functions.OnOff</code>.
  */
 public interface OnOff extends DeviceFunction {
 
@@ -37,15 +40,25 @@ public interface OnOff extends DeviceFunction {
 	public static final String	OPERATION_TURN_OFF	= "turnOff";
 
 	/**
-	 * Turn on device function operation. The operation name is
+	 * Turn on Device Function operation. The operation name is
 	 * {@link #OPERATION_TURN_ON}.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public void turnOn();
+	public void turnOn() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 	/**
-	 * Turn off device function operation. The operation name is
+	 * Turn off Device Function operation. The operation name is
 	 * {@link #OPERATION_TURN_OFF}.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public void turnOff();
+	public void turnOff() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 }
