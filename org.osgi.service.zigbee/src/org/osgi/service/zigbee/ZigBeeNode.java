@@ -24,8 +24,8 @@ import org.osgi.service.zigbee.descriptors.ZigBeeUserDescriptor;
 import org.osgi.service.zigbee.handler.ZigBeeHandler;
 
 /**
- * This interface represents a ZigBee Device node, means a physical device that
- * can communicate using the ZigBee protocol.<br>
+ * This interface represents a ZigBee node, means a physical device that can
+ * communicate using the ZigBee protocol.<br>
  * Each physical may contain up 240 logical devices which are represented by the
  * {@link ZigBeeEndpoint}<br>
  * class. Each logical device is identified by an <i>EndPoint</i> address, but
@@ -35,13 +35,13 @@ import org.osgi.service.zigbee.handler.ZigBeeHandler;
  * 
  * @version 1.0
  */
-public interface ZigBeeDeviceNode {
+public interface ZigBeeNode {
 
 	/**
-	 * Property key for the optional device node id. A ZigBee Event Listener
+	 * Property key for the mandatory node IEEE Address. A ZigBee Event Listener
 	 * service can announce for what ZigBee device nodes it wants notifications.
 	 */
-	public static final String	ID								= "zigbee.listener.node.id";
+	public static final String	IEEE_ADDRESS					= "zigbee.listener.node.ieee.address";
 
 	/**
 	 * Property key for the device node type

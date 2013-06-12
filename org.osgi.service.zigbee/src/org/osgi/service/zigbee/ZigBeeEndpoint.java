@@ -91,9 +91,10 @@ public interface ZigBeeEndpoint {
 	public byte getId();
 
 	/**
-	 * @return the {@link ZigBeeNode} containing this EndPoint
+	 * @return the {@link String} IEEE Address of the node containing this
+	 *         endPoint
 	 */
-	public ZigBeeDeviceNode getDeviceNode();
+	public String getNodeAddress();
 
 	/**
 	 * @param id
@@ -108,16 +109,24 @@ public interface ZigBeeEndpoint {
 	public ZigBeeCluster getClientCluster(int id);
 
 	/**
-	 * @return the list of endpoint servers(inputs) clusters
+	 * @return the list of endpoint servers(inputs) clusters, if empty returns a
+	 *         <i>new int[0]</i>
 	 */
 	public ZigBeeCluster[] getServerClusters();
 
 	/**
-	 * @return the list of endpoint clients(outputs) clusters
+	 * @return the list of endpoint clients(outputs) clusters, if empty returns
+	 *         a <i>new int[0]</i>
 	 */
 	public ZigBeeCluster[] getClientClusters();
 
 	/**
+	 * This method modify the <i>Binding Table</i> of physical device by adding
+	 * the following entry:
+	 * 
+	 * <pre>
+	 * this.getNodeAddress(), this.getId(), clusterId, device.getNodeAddress(), device.getId()
+	 * </pre>
 	 * 
 	 * @param endpoint device {@link ZigBeeEndpoint} the device that we want to
 	 *        bound to
@@ -127,11 +136,11 @@ public interface ZigBeeEndpoint {
 	public boolean bindTo(ZigBeeEndpoint endpoint, int clusterId);
 
 	/**
-	 * This method modify the <i>Binding Table</i> of physical device by adding
-	 * the following entry:
+	 * This method modify the <i>Binding Table</i> of physical device by
+	 * removing the entry if exists
 	 * 
 	 * <pre>
-	 * this.getPhysicalNode().getIEEEAddress(), this.getDeviceId(), clusterId, device.getPhysicalNode().getIEEEAddress(), device.getDeviceId()
+	 * this.getNodeAddress(), this.getId(), clusterId, device.getNodeAddress(), device.getId()
 	 * </pre>
 	 * 
 	 * @param endpoint a device {@link ZigBeeEndpoint} the device that we are
@@ -140,6 +149,14 @@ public interface ZigBeeEndpoint {
 	 * @return <code>true</code> if and only if the operation succeeded
 	 */
 	public boolean unbindFrom(ZigBeeEndpoint endpoint, int clusterId);
+
+	/**
+	 * This method is used to get details about problems when an error occurs
+	 * during exporting an endpoint
+	 * 
+	 * @param zbe a device {@link ZigBeeException} the occurred exception
+	 */
+	public void notExported(ZigBeeException zbe);
 
 	/**
 	 * @return If exists, the device description implemented by this endpoint -
