@@ -17,10 +17,13 @@
 package org.osgi.service.functionaldevice.functions;
 
 import org.osgi.service.functionaldevice.DeviceFunction;
+import org.osgi.service.functionaldevice.FunctionalDeviceException;
 
 /**
- * Open/Close device function represents open and close functionality. The
- * function doesn't provide an access to properties, there are only operations.
+ * <code>OpenClose</code> Device Function represents open and close
+ * functionality. The function doesn't provide an access to properties, there
+ * are only operations. The Device Function name is
+ * <code>org.osgi.service.functionaldevice.functions.OpenClose</code>.
  */
 public interface OpenClose extends DeviceFunction {
 
@@ -37,15 +40,25 @@ public interface OpenClose extends DeviceFunction {
 	public static final String	OPERATION_CLOSE	= "close";
 
 	/**
-	 * Open device function operation. The operation name is
+	 * Open Device Function operation. The operation name is
 	 * {@link #OPERATION_OPEN}.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public void open();
+	public void open() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 	/**
-	 * Close device function operation. The operation name is
+	 * Close Device Function operation. The operation name is
 	 * {@link #OPERATION_CLOSE}.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public void close();
+	public void close() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 }

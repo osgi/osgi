@@ -24,7 +24,7 @@ import org.osgi.service.zigbee.handler.ZigBeeHandler;
  * 
  * @version 1.0
  */
-public interface ZigBeeHost extends ZigBeeDeviceNode {
+public interface ZigBeeHost extends ZigBeeNode {
 	/**
 	 * Indicates if a ZigBee device can join the network.
 	 * 

@@ -17,14 +17,17 @@
 package org.osgi.service.functionaldevice.functions;
 
 import org.osgi.service.functionaldevice.DeviceFunction;
+import org.osgi.service.functionaldevice.FunctionalDeviceException;
 
 /**
- * Multi Level Switch device function has a level, can increase or decrease the
- * level with a given step and can set the level to a given value. The level is
- * accessible with {@link #getLevel()} getter and can be set with
- * {@link #setLevel(int)} setter. The step is accessible with {@link #getStep()}
- * getter. {@link #stepUp()} and {@link #stepDown()} can increase and decrease
- * the level with a given step.
+ * <code>MultiLevelSwitch</code> Device Function provides multi-level switch
+ * control. It has a level, can increase or decrease the level with a given step
+ * and can set the level to a specific value. The level is accessible with
+ * {@link #getLevel()} getter and can be set with {@link #setLevel(int)} setter.
+ * The step is accessible with {@link #getStep()} getter. {@link #stepUp()} and
+ * {@link #stepDown()} can increase and decrease the level with a given step.
+ * The Device Function name is
+ * <code>org.osgi.service.functionaldevice.functions.MultiLevelSwitch</code>.
  */
 public interface MultiLevelSwitch extends DeviceFunction {
 
@@ -58,16 +61,26 @@ public interface MultiLevelSwitch extends DeviceFunction {
 	 * {@link #PROPERTY_LEVEL} property.
 	 * 
 	 * @return The level of the Multi Level Switch.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public int getLevel();
+	public int getLevel() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 	/**
 	 * Sets the level of the Multi Level Switch. It's a setter method for
 	 * {@link #PROPERTY_LEVEL} property.
 	 * 
 	 * @param level The new level of the Multi Level Switch.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public void setLevel(int level);
+	public void setLevel(int level) throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 	/**
 	 * Returns the step of the Multi Level Switch. It's a getter method for
@@ -76,17 +89,32 @@ public interface MultiLevelSwitch extends DeviceFunction {
 	 * level.
 	 * 
 	 * @return The step of the Multi Level Switch.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public int getStep();
+	public int getStep() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 	/**
 	 * Moves the current level of the switch one step down.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public void stepDown();
+	public void stepDown() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 	/**
 	 * Moves the current level of the switch one step up.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public void stepUp();
+	public void stepUp() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 }

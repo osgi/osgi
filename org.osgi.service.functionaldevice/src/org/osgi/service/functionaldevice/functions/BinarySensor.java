@@ -16,12 +16,17 @@
 
 package org.osgi.service.functionaldevice.functions;
 
+import org.osgi.service.functionaldevice.DeviceFunction;
+import org.osgi.service.functionaldevice.FunctionalDeviceException;
+
 /**
- * Binary Sensor device function reports its state when an important event is
- * available. The state is accessible with {@link #getState()} getter. There are
- * no operations.
+ * <code>BinarySensor</code> Device Function provides binary sensor monitoring.
+ * It reports its state when an important event is available. The state is
+ * accessible with {@link #getState()} getter. There are no operations. The
+ * Device Function name is
+ * <code>org.osgi.service.functionaldevice.functions.BinarySensor</code>.
  */
-public interface BinarySensor {
+public interface BinarySensor extends DeviceFunction {
 
 	/**
 	 * Specifies the state property name. The property can be read with
@@ -34,7 +39,12 @@ public interface BinarySensor {
 	 * {@link #PROPERTY_STATE} property.
 	 * 
 	 * @return The state of the Binary Sensor.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public boolean getState();
+	public boolean getState() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 }

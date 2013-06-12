@@ -17,10 +17,11 @@
 package org.osgi.service.functionaldevice.functions;
 
 import org.osgi.service.functionaldevice.DeviceFunction;
+import org.osgi.service.functionaldevice.FunctionalDeviceException;
 
 /**
- * Meter device function can measure metering information. The function provides
- * two properties and one operation:
+ * <code>Meter</code> Device Function can measure metering information. The
+ * function provides two properties and one operation:
  * <ul>
  * <li>{@link #PROPERTY_CURRENT}</li> - property accessible with
  * {@link #getCurrent()} getter;
@@ -29,6 +30,8 @@ import org.osgi.service.functionaldevice.DeviceFunction;
  * <li>{@link #OPERATION_RESET_TOTAL}</li> - operation can be executed with
  * {@link #resetTotal()}.
  * </ul>
+ * The Device Function name is
+ * <code>org.osgi.service.functionaldevice.functions.Meter</code>.
  */
 public interface Meter extends DeviceFunction {
 
@@ -55,20 +58,35 @@ public interface Meter extends DeviceFunction {
 	 * {@link #PROPERTY_CURRENT} property.
 	 * 
 	 * @return The current metering info.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public double getCurrent();
+	public double getCurrent() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 	/**
 	 * Returns the total metering info. It's a getter method for
 	 * {@link #PROPERTY_TOTAL} property.
 	 * 
 	 * @return The total metering info.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public double getTotal();
+	public double getTotal() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 	/**
 	 * Resets the total metering info.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public void resetTotal();
+	public void resetTotal() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 }
