@@ -57,6 +57,8 @@ import java.security.PermissionCollection;
  */
 public final class FunctionalDevicePermission extends BasicPermission {
 
+	private static final long	serialVersionUID	= -3020753566295420906L;
+
 	/** A permission action to enable the device. */
 	public static final String	ACTION_ENABLE		= "enable";
 
@@ -68,8 +70,6 @@ public final class FunctionalDevicePermission extends BasicPermission {
 
 	/** A permission action to remove the device. */
 	public static final String	ACTION_REMOVE		= "remove";
-
-	private static final long	serialVersionUID	= -3020753566295420906L;
 
 	/**
 	 * Creates a new <code>FunctionalDevicePermission</code> with the given

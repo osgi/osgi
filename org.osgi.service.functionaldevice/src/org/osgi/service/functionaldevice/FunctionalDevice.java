@@ -171,10 +171,17 @@ public interface FunctionalDevice {
 	public static final String	PROPERTY_SERIAL_NUMBER						= "functional.device.serial.number";
 
 	/**
-	 * The service property value contains the supported device function names.
+	 * The service property value contains the supported Device Function names.
 	 * It's an optional property. The value type is <code>String+</code>.
 	 */
 	public static final String	PROPERTY_FUNCTIONS							= "functional.device.functions";
+
+	/**
+	 * The service property value contains the device description. It's an
+	 * optional property. The value type is <code>java.lang.String</code>. The
+	 * property value can be read and set.
+	 */
+	public static final String	PROPERTY_DESCRIPTION						= "functional.device.description";
 
 	/**
 	 * Device status indicates that the device is removed. It can be used as a
@@ -228,65 +235,69 @@ public interface FunctionalDevice {
 	/**
 	 * Device status detail indicates that the device is currently connecting to
 	 * the network. It can be used as a value of {@link #PROPERTY_STATUS_DETAIL}
-	 * service property.
+	 * service property. The device status must be {@link #STATUS_PROCESSING}.
 	 */
-	// TODO: da dobavim list koi status details s koi stauses mogat da se
-	// match-vat?
 	public static final int		STATUS_DETAIL_CONNECTING					= 1;
 
 	/**
 	 * Device status detail indicates that the device is currently in process of
 	 * initialization. It can be used as a value of
-	 * {@link #PROPERTY_STATUS_DETAIL} service property.
+	 * {@link #PROPERTY_STATUS_DETAIL} service property. The device status must
+	 * be {@link #STATUS_PROCESSING}.
 	 */
 	public static final int		STATUS_DETAIL_INITIALIZING					= 2;
 
 	/**
 	 * Device status detail indicates that the device configuration is not
 	 * applied. It can be used as a value of {@link #PROPERTY_STATUS_DETAIL}
-	 * service property.
+	 * service property. The device status must be
+	 * {@link #STATUS_NOT_CONFIGURED}.
 	 */
 	public static final int		STATUS_DETAIL_CONFIGURATION_NOT_APPLIED		= -1;
 
 	/**
 	 * Device status detail indicates that the device is broken. It can be used
-	 * as a value of {@link #PROPERTY_STATUS_DETAIL} service property.
+	 * as a value of {@link #PROPERTY_STATUS_DETAIL} service property. The
+	 * device status must be {@link #STATUS_OFFLINE}.
 	 */
 	public static final int		STATUS_DETAIL_DEVICE_BROKEN					= -2;
 
 	/**
 	 * Device status detail indicates that the device communication is
 	 * problematic. It can be used as a value of {@link #PROPERTY_STATUS_DETAIL}
-	 * service property.
+	 * service property. The device status must be {@link #STATUS_ONLINE} or
+	 * {@link #STATUS_NOT_INITIALIZED}.
 	 */
 	public static final int		STATUS_DETAIL_DEVICE_COMMUNICATION_ERROR	= -3;
 
 	/**
 	 * Device status detail indicates that the device doesn't provide enough
 	 * information and cannot be determined. It can be used as a value of
-	 * {@link #PROPERTY_STATUS_DETAIL} service property.
+	 * {@link #PROPERTY_STATUS_DETAIL} service property. The device status must
+	 * be {@link #STATUS_NOT_INITIALIZED}.
 	 */
 	public static final int		STATUS_DETAIL_DEVICE_DATA_INSUFFICIENT		= -4;
 
 	/**
 	 * Device status detail indicates that the device is not accessible and
 	 * further communication is not possible. It can be used as a value of
-	 * {@link #PROPERTY_STATUS_DETAIL} service property.
+	 * {@link #PROPERTY_STATUS_DETAIL} service property. The device status must
+	 * be {@link #STATUS_OFFLINE}.
 	 */
 	public static final int		STATUS_DETAIL_DEVICE_NOT_ACCESSIBLE			= -5;
 
 	/**
 	 * Device status detail indicates that the device cannot be configured. It
 	 * can be used as a value of {@link #PROPERTY_STATUS_DETAIL} service
-	 * property.
+	 * property. The device status must be {@link #STATUS_NOT_CONFIGURED}.
 	 */
 	public static final int		STATUS_DETAIL_ERROR_APPLYING_CONFIGURATION	= -6;
 
 	/**
 	 * Device status detail indicates that the device is in duty cycle. It can
 	 * be used as a value of {@link #PROPERTY_STATUS_DETAIL} service property.
+	 * The device status must be {@link #STATUS_OFFLINE}.
 	 */
-	// TODO: tova zasto e error?
 	public static final int		STATUS_DETAIL_IN_DUTY_CYCLE					= -7;
 
 	/**
@@ -297,43 +308,18 @@ public interface FunctionalDevice {
 	public static final String	TYPE_PERIPHERAL								= "type.peripheral";
 
 	/**
-	 * Returns the children of this device. If children are not available,
-	 * <code>null</code> will be returned. The property value of
-	 * {@link #PROPERTY_CHILD_UIDS} contains the children UIDs.
-	 * 
-	 * @return The children of this device or <code>null</code> if there are no
-	 *         children.
-	 */
-	public FunctionalDevice[] getChildren();
-
-	/**
-	 * Returns the parent of this device. If the parent is not available,
-	 * <code>null</code> will be returned. The property value of
-	 * {@link #PROPERTY_PARENT_UID} contains the parent device UID.
-	 * 
-	 * @return The parent of this device or <code>null</code> if there is no
-	 *         parent.
-	 */
-	public FunctionalDevice getParent();
-
-	/**
-	 * Returns the references of this device. If the references are not
-	 * available, <code>null</code> will be returned. The property value of
-	 * {@link #PROPERTY_REFERENCE_UIDS} contains the reference device UIDs.
-	 * 
-	 * @return The references of this device or <code>null</code> if there are
-	 *         no references.
-	 */
-	public FunctionalDevice[] getReferences();
-
-	/**
 	 * Returns the current value of the specified property. The method will
 	 * return the same value as
 	 * {@link org.osgi.framework.ServiceReference#getProperty(String)} for the
 	 * service reference of this device.
+	 * <p>
+	 * This method must continue to return property values after the device
+	 * service has been unregistered.
 	 * 
 	 * @param propName The property name.
+	 * 
 	 * @return The property value
+	 * 
 	 * @throws IllegalArgumentException If the property name cannot be mapped to
 	 *         value.
 	 */
@@ -352,15 +338,19 @@ public interface FunctionalDevice {
 	 * 
 	 * @param propName The property name.
 	 * @param propValue The property value.
+	 * 
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 * @throws IllegalArgumentException If the property name or value aren't
 	 *         correct.
 	 * @throws UnsupportedOperationException If the operation is not supported
 	 *         over this device.
-	 * @throws SecurityException - If the caller does not have the appropriate
+	 * @throws SecurityException If the caller does not have the appropriate
 	 *         <code>FunctionalDevicePermission[this device, {@link FunctionalDevicePermission#ACTION_PROPERTY}]</code>
 	 *         and the Java Runtime Environment supports permissions.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
 	 */
-	public void setProperty(String propName, Object propValue) throws IllegalArgumentException, UnsupportedOperationException, SecurityException;
+	public void setProperty(String propName, Object propValue) throws FunctionalDeviceException, IllegalArgumentException, UnsupportedOperationException, SecurityException, IllegalStateException;
 
 	/**
 	 * Sets the given property names to the given property values. The method is
@@ -369,15 +359,20 @@ public interface FunctionalDevice {
 	 * 
 	 * @param propNames The property names.
 	 * @param propValues The property values.
+	 * 
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 * @throws IllegalArgumentException If the property values or names aren't
 	 *         correct.
 	 * @throws UnsupportedOperationException If the operation is not supported
 	 *         over this device.
-	 * @throws SecurityException - If the caller does not have the appropriate
+	 * @throws SecurityException If the caller does not have the appropriate
 	 *         <code>FunctionalDevicePermission[this device, {@link FunctionalDevicePermission#ACTION_PROPERTY}]</code>
 	 *         and the Java Runtime Environment supports permissions.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
 	 */
-	public void setProperties(String[] propNames, Object[] propValues) throws IllegalArgumentException, UnsupportedOperationException, SecurityException;
+	public void setProperties(String[] propNames, Object[] propValues) throws FunctionalDeviceException, IllegalArgumentException, UnsupportedOperationException, SecurityException,
+			IllegalStateException;
 
 	/**
 	 * Removes this device. The method must synchronously remove the device from
@@ -386,11 +381,13 @@ public interface FunctionalDevice {
 	 * @throws FunctionalDeviceException If an operation error is available.
 	 * @throws UnsupportedOperationException If the operation is not supported
 	 *         over this device.
-	 * @throws SecurityException - If the caller does not have the appropriate
+	 * @throws SecurityException If the caller does not have the appropriate
 	 *         <code>FunctionalDevicePermission[this device, {@link FunctionalDevicePermission#ACTION_REMOVE}]</code>
 	 *         and the Java Runtime Environment supports permissions.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
 	 */
-	public void remove() throws FunctionalDeviceException, UnsupportedOperationException, SecurityException;
+	public void remove() throws FunctionalDeviceException, UnsupportedOperationException, SecurityException, IllegalStateException;
 
 	/**
 	 * Disables this device. The disabled device status is set to
@@ -399,11 +396,13 @@ public interface FunctionalDevice {
 	 * @throws FunctionalDeviceException If an operation error is available.
 	 * @throws UnsupportedOperationException If the operation is not supported
 	 *         over this device.
-	 * @throws SecurityException - If the caller does not have the appropriate
+	 * @throws SecurityException If the caller does not have the appropriate
 	 *         <code>FunctionalDevicePermission[this device, {@link FunctionalDevicePermission#ACTION_DISABLE}]</code>
 	 *         and the Java Runtime Environment supports permissions.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
 	 */
-	public void disable() throws FunctionalDeviceException, UnsupportedOperationException;
+	public void disable() throws FunctionalDeviceException, UnsupportedOperationException, IllegalStateException;
 
 	/**
 	 * Enables this this. The device is available for operations.
@@ -411,28 +410,30 @@ public interface FunctionalDevice {
 	 * @throws FunctionalDeviceException If an operation error is available.
 	 * @throws UnsupportedOperationException If the operation is not supported
 	 *         over this device.
-	 * @throws SecurityException - If the caller does not have the appropriate
+	 * @throws SecurityException If the caller does not have the appropriate
 	 *         <code>FunctionalDevicePermission[this device, {@link FunctionalDevicePermission#ACTION_ENABLE}]</code>
 	 *         and the Java Runtime Environment supports permissions.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
 	 */
-	public void enable() throws FunctionalDeviceException, UnsupportedOperationException, SecurityException;
-
+	public void enable() throws FunctionalDeviceException, UnsupportedOperationException, SecurityException, IllegalStateException;
+	
 	/**
-	 * Returns the device function instance according to the given function.
+	 * Returns the Device Function instance according to the given function.
 	 * <code>null</code> if the function is not supported.
 	 * 
-	 * @param function The function.
+	 * @param functionName The Device Function name.
 	 * @return The function instance or <code>null</code> if the function is not
 	 *         supported.
 	 */
-	public DeviceFunction getDeviceFunction(String function);
+	public DeviceFunction getDeviceFunction(String functionName);
 
 	/**
-	 * Returns all device functions or <code>null</code> if no functions are
-	 * supported.
+	 * Returns all Device Function instances or <code>null</code> if no
+	 * functions are supported.
 	 * 
-	 * @return The device functions or <code>null</code> if no functions are
-	 *         supported.
+	 * @return The Device Function instances or <code>null</code> if no
+	 *         functions are supported.
 	 */
 	public DeviceFunction[] getDeviceFunctions();
 

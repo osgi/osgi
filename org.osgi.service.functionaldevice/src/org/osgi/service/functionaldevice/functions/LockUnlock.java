@@ -17,10 +17,13 @@
 package org.osgi.service.functionaldevice.functions;
 
 import org.osgi.service.functionaldevice.DeviceFunction;
+import org.osgi.service.functionaldevice.FunctionalDeviceException;
 
 /**
- * Lock/Unlock device function represents lock and unlock functionality. The
- * function doesn't provide an access to properties, there are only operations.
+ * <code>LockUnlock</code> Device Function represents lock and unlock
+ * functionality. The function doesn't provide an access to properties, there
+ * are only operations. The Device Function name is
+ * <code>org.osgi.service.functionaldevice.functions.LockUnlock</code>.
  */
 public interface LockUnlock extends DeviceFunction {
 
@@ -37,15 +40,25 @@ public interface LockUnlock extends DeviceFunction {
 	public static final String	OPERATION_UNLOCK	= "unlock";
 
 	/**
-	 * Lock device function operation. The operation name is
+	 * Lock Device Function operation. The operation name is
 	 * {@link #OPERATION_LOCK}.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public void lock();
+	public void lock() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 	/**
-	 * Unlock device function operation. The operation name is
+	 * Unlock Device Function operation. The operation name is
 	 * {@link #OPERATION_UNLOCK}.
+	 * 
+	 * @throws UnsupportedOperationException If the operation is not supported.
+	 * @throws IllegalStateException If this device service object has already
+	 *         been unregistered.
+	 * @throws FunctionalDeviceException If an operation error is available.
 	 */
-	public void unlock();
+	public void unlock() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
 
 }
