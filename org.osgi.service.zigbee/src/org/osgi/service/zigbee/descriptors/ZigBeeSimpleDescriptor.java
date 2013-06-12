@@ -46,16 +46,6 @@ public interface ZigBeeSimpleDescriptor {
 	public short getApplicationDeviceVersion();
 
 	/**
-	 * @return the count of input clusters.
-	 */
-	public short getApplicationInputClusterCount();
-
-	/**
-	 * @return the count of output clusters.
-	 */
-	public short getApplicationOutputClusterCount();
-
-	/**
 	 * @return list of input cluster identifiers.
 	 */
 	public int[] getInputClusterList();
@@ -64,4 +54,18 @@ public interface ZigBeeSimpleDescriptor {
 	 * @return list of output cluster identifiers.
 	 */
 	public int[] getOutputClusterList();
+
+	/**
+	 * @param id the cluster identifier
+	 * @return true if and only if the endpoint implements the given cluster id
+	 *         as an input cluster
+	 */
+	public boolean providesInputCluster(int id);
+
+	/**
+	 * @param id the cluster identifier
+	 * @return true if and only if the endpoint implements the given cluster id
+	 *         as an output cluster
+	 */
+	public boolean providesOutputCluster(int id);
 }
