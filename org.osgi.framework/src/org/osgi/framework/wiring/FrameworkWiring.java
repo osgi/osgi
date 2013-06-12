@@ -21,6 +21,7 @@ import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.FrameworkListener;
+import org.osgi.resource.Requirement;
 
 /**
  * Query and modify wiring information for the framework. The framework wiring
@@ -168,4 +169,34 @@ public interface FrameworkWiring extends BundleReference {
 	 *         FrameworkWiring.
 	 */
 	Collection<Bundle> getDependencyClosure(Collection<Bundle> bundles);
+
+	/**
+	 * Find bundle capabilities that match the given requirement.
+	 * 
+	 * <p>
+	 * The returned collection contains {@link BundleCapability} objects where
+	 * the revision must be the {@link BundleCapability#getRevision() declaring
+	 * revision} of the capability and the revision must either be the current
+	 * bundle revision or an {@link BundleWiring#isInUse() in use} bundle
+	 * revision.
+	 * 
+	 * <p>
+	 * Each returned capability must match the given requirement. This means
+	 * that the filter in the requirement must match as well as any namespace
+	 * specific directives. For example, the mandatory attributes for the
+	 * osgi.wiring.package namespace.
+	 * 
+	 * <p>
+	 * The returned collection has not been filtered to remove capabilities that
+	 * are non-effective, substituted or for which the providing bundle does not
+	 * have permission to provide. No resolve hooks are called to filter
+	 * matching capabilities.
+	 * 
+	 * @param requirement The requirement to find matching bundle capabilities.
+	 *        Must not be {@code null}.
+	 * @return A collection of {@link BundleCapability} objects that match the
+	 *         specified requirement.
+	 * @since 1.2
+	 */
+	Collection<BundleCapability> findProviders(Requirement requirement);
 }
