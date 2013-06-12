@@ -118,7 +118,7 @@ public abstract class ResolveContext {
 	 * that must originate from an attached host.
 	 * 
 	 * <p>
-	 * Each returned Capability must match the given Requirement. This implies
+	 * Each returned Capability must match the given Requirement. This means
 	 * that the filter in the Requirement must match as well as any namespace
 	 * specific directives. For example, the mandatory attributes for the
 	 * {@code osgi.wiring.package} namespace.
