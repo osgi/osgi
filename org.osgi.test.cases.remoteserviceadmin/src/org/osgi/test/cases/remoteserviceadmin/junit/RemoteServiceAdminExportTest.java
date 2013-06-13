@@ -28,9 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
-
 import junit.framework.Assert;
-
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.event.Event;
@@ -256,7 +254,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put("mykey", "will be overridden");
 		dictionary.put("myprop", "myvalue");
-		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
 
 		TestService service = new TestService();
 
@@ -279,6 +276,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			properties.put("mykey", "has been overridden");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
+            properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
 
 			Collection<ExportRegistration> exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
 			assertNotNull(exportRegistrations);
@@ -292,9 +290,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 								// events.
 			RemoteServiceAdminEvent event = remoteServiceAdminListener.getNextEvent();
 			assertNotNull("no RemoteServiceAdminEvent received", event);
-			// David B: it's not guaranteed that there are no more events since there are 2 registrations, there will be 2 events, however they are delivered asynchronously
-            assertEquals(1, remoteServiceAdminListener.getEventCount());
-            assertEquals(RemoteServiceAdminEvent.EXPORT_REGISTRATION, remoteServiceAdminListener.getNextEvent().getType());
             assertEquals(0, remoteServiceAdminListener.getEventCount());
 			assertNotNull("122.10.11: source must not be null", event.getSource());
 
@@ -361,10 +356,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 				assertNull(exportReference.getExportedEndpoint());
 
-				// David B: as two remote service are unregistered, we are expecting 2 unregistration events
-				assertEquals(1, remoteServiceAdminListener.getEventCount());
-				event = remoteServiceAdminListener.getNextEvent();
-                assertEquals("122.10.11: event type is wrong", RemoteServiceAdminEvent.EXPORT_UNREGISTRATION, event.getType());
+                assertEquals(0, remoteServiceAdminListener.getEventCount());
 			}
 
 		} finally {
