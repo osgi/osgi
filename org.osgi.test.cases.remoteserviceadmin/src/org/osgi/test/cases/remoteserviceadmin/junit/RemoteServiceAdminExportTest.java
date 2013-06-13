@@ -28,7 +28,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.StringTokenizer;
+
 import junit.framework.Assert;
+
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.event.Event;
@@ -376,7 +378,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put("mykey", "will be overridden");
 		dictionary.put("myprop", "myvalue");
-		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
 
 		TestService service = new TestService();
 
@@ -412,6 +413,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			properties.put("mykey", "has been overridden");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
+			properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES,
+					A.class.getName());
 
 			Collection<ExportRegistration> exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
 			assertNotNull(exportRegistrations);
@@ -497,7 +500,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put("mykey", "will be overridden");
 		dictionary.put("myprop", "myvalue");
-		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
 
 		TestService service = new TestService();
 
@@ -520,6 +522,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 				properties.put("mykey", "has been overridden");
 				properties.put("objectClass", "can.not.be.changed.Class");
 				properties.put("service.id", "can.not.be.changed.Id");
+				properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
 
 				Collection<ExportRegistration> exportRegistrations = rsa.exportService(registration.getReference(), properties);
 				assertNotNull(exportRegistrations);
@@ -538,8 +541,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 				Collection<ExportReference> exportrefs = rsa.getExportedServices();
 
 				assertNotNull(exportrefs);
-				// David B: why 2? Didn't we export the service 3 times? Once in the registerService() call and twice in the exportService() call?
-				// assertEquals(exportRegistrations.size() + exportRegistrations2.size(), exportrefs.size());
+				assertEquals(exportRegistrations.size() + exportRegistrations2.size(), exportrefs.size());
 
 				for (Iterator<ExportRegistration> it = exportRegistrations.iterator(); it.hasNext();) {
 					ExportRegistration er = it.next();
@@ -587,8 +589,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
                     assertTrue("ExportReference does not show up in exported reference list of RSA service", exportrefs.contains(ref));
 				}
 
-
-				/* David B: commented out this piece as the initial ctx.registerService created an additional ExportRegistration, so the logic doesn't hold...
 				// now close one of the registrations and ensure that service is still
 				// exported until all registrations are closed
 				for (Iterator<ExportRegistration> it = exportRegistrations2.iterator(); it.hasNext();) {
@@ -624,7 +624,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 				}
 				assertNotNull(rsa.getExportedServices());
 				assertEquals(0, rsa.getExportedServices().size());
-                */
 			} finally {
 				getContext().ungetService(rsaRef);
 			}
@@ -655,7 +654,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		Hashtable<String, Object> dictionary = new Hashtable<String, Object>();
 		dictionary.put("mykey", "will be overridden");
 		dictionary.put("myprop", "myvalue");
-		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
 		dictionary.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, dpref.getProperty("remote.configs.supported"));
 
 		TestService service = new TestService();
@@ -679,6 +677,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			properties.put("mykey", "has been overridden");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
+            properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
 			properties.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, new String[]{supportedConfigTypes[0]});
 
 			Collection<ExportRegistration> exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
@@ -694,11 +693,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 								// events.
 			RemoteServiceAdminEvent event = remoteServiceAdminListener.getNextEvent();
 			assertNotNull("no RemoteServiceAdminEvent received", event);
-			// David B: there is the theoretical chance that there will be an additional event since two services got exported
-			// however it depends on whether the event was sent before or after the listener was registered.
-            if (remoteServiceAdminListener.getEventCount() > 0) {
-                assertEquals(RemoteServiceAdminEvent.EXPORT_REGISTRATION, remoteServiceAdminListener.getNextEvent().getType());
-            }
       		assertEquals(0, remoteServiceAdminListener.getEventCount());
 			assertNotNull("122.10.11: source must not be null", event.getSource());
 
@@ -766,8 +760,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 				assertNotNull("ExportReference expected in event", exportReference);
 
 				assertNull(exportReference.getExportedEndpoint());
-                // David B: as two remote service are unregistered, there may be another event
-                // assertEquals(0, remoteServiceAdminListener.getEventCount());
+                assertEquals(0, remoteServiceAdminListener.getEventCount());
 			}
 		} finally {
 			registration.unregister();
@@ -801,7 +794,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		Hashtable<String, Object> dictionary = new Hashtable<String, Object>();
 		dictionary.put("mykey", "will be overridden");
 		dictionary.put("myprop", "myvalue");
-		dictionary.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
 		dictionary.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, dpref.getProperty("remote.configs.supported"));
 
 		TestService service = new TestService();
@@ -825,6 +817,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			properties.put("mykey", "has been overridden");
 			properties.put("objectClass", "can.not.be.changed.Class");
 			properties.put("service.id", "can.not.be.changed.Id");
+            properties.put(RemoteServiceConstants.SERVICE_EXPORTED_INTERFACES, A.class.getName());
 			properties.put(RemoteConstants.SERVICE_EXPORTED_CONFIGS, new String[]{supportedConfigTypes[0]});
 
 			Collection<ExportRegistration> exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
@@ -837,11 +830,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			Sleep.sleep(2000); // give the system a chance to deliver all events
 			RemoteServiceAdminEvent event = remoteServiceAdminListener.getNextEvent();
 			assertNotNull("no RemoteServiceAdminEvent received", event);
-            // David B: there is the theoretical chance that there will be an additional event since two services got exported
-            // however it depends on whether the event was sent before or after the listener was registered.
-            if (remoteServiceAdminListener.getEventCount() > 0) {
-                assertEquals(RemoteServiceAdminEvent.EXPORT_REGISTRATION, remoteServiceAdminListener.getNextEvent().getType());
-            }
 			assertEquals(0, remoteServiceAdminListener.getEventCount());
 			assertNotNull("122.10.11: source must not be null", event.getSource());
 
@@ -904,11 +892,6 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			assertNotNull("ExportReference expected in event", exportReference);
 
 			assertNull(exportReference.getExportedEndpoint());
-			// David B: the service being unregistered had two export registrations, so we may get two events too,
-			// however when they arrive is unspecified
-            if (remoteServiceAdminListener.getEventCount() > 0) {
-                assertEquals(RemoteServiceAdminEvent.EXPORT_UNREGISTRATION, remoteServiceAdminListener.getNextEvent().getType());
-            }
 			assertEquals(0, remoteServiceAdminListener.getEventCount());
 
 			// register the service again
@@ -931,7 +914,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			event = remoteServiceAdminListener.getNextEvent();
 			assertNotNull("no RemoteServiceAdminEvent received", event);
 			// David B: There can be an additional event, as the registerService and the exportService both emit the event...
-			// assertEquals(0, remoteServiceAdminListener.getEventCount());
+            assertEquals(0, remoteServiceAdminListener.getEventCount());
 			assertNotNull("122.10.11: source must not be null", event.getSource());
 			assertEquals(RemoteServiceAdminEvent.EXPORT_ERROR, event.getType());
 			assertNotNull(event.getException());
