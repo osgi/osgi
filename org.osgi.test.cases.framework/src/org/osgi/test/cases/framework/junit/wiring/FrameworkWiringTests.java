@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,31 @@
 
 package org.osgi.test.cases.framework.junit.wiring;
 
-import static org.osgi.test.support.OSGiTestCaseProperties.getScaling;
-import static org.osgi.test.support.OSGiTestCaseProperties.getTimeout;
+import static org.osgi.test.support.OSGiTestCaseProperties.*;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
 import junit.framework.AssertionFailedError;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.namespace.HostNamespace;
+import org.osgi.framework.namespace.IdentityNamespace;
+import org.osgi.framework.namespace.PackageNamespace;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleRequirement;
+import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.resource.Namespace;
+import org.osgi.resource.Requirement;
+import org.osgi.resource.Resource;
 import org.osgi.test.support.wiring.Wiring;
 
 public class FrameworkWiringTests extends WiringTest {
@@ -180,5 +192,125 @@ public class FrameworkWiringTests extends WiringTest {
 		assertEquals("Wrong number in closure", 5, closure.size());
 		assertTrue("Wrong bundles in closure: " + closure, closure.containsAll(testBundles));
 		assertTrue("Wrong bundles in closure: " + closure, testBundles.containsAll(closure));
+	}
+
+	public void testFindResources() {
+		Bundle tb4 = install("resolver.tb4.jar");
+		Bundle tb1 = install("resolver.tb1.v110.jar");
+
+		BundleRevision systemRevision = getContext().getBundle(
+				Constants.SYSTEM_BUNDLE_LOCATION).adapt(BundleRevision.class);
+
+		// Get the system bundle identity, not that the alias system.bundle
+		// cannot
+		// be used here. The real symbolic name of the system bundle revision
+		// must be used
+		Collection<BundleCapability> systemIdentities = findProviders(
+				IdentityNamespace.IDENTITY_NAMESPACE,
+				systemRevision.getSymbolicName());
+		assertEquals("Wrong number of system identity capabilities.", 1,
+				systemIdentities.size());
+		BundleCapability systemIdentity = systemIdentities.iterator().next();
+		assertEquals("Wrong provider.", systemRevision,
+				systemIdentity.getRevision());
+
+		// Use a BundleRequirement to look up capabilities.
+		BundleRevision tb1Revision = tb1.adapt(BundleRevision.class);
+		BundleRevision tb4Revision = tb4.adapt(BundleRevision.class);
+		List<BundleRequirement> hostReqs = tb4Revision
+				.getDeclaredRequirements(HostNamespace.HOST_NAMESPACE);
+		assertEquals("Wrong number of host reqs.", 1, hostReqs.size());
+		Collection<BundleCapability> hostCaps = frameworkWiring
+				.findProviders(hostReqs.get(0));
+		assertEquals("Wrong number of host capabilities.", 1, hostCaps.size());
+		assertEquals("Wrong provider.", tb1Revision, hostCaps.iterator().next()
+				.getRevision());
+
+		// Make sure non effective capabilities are returned
+		Collection<BundleCapability> nonEffective = findProviders(
+				"test.effective", null);
+		assertEquals("Wrong number of capabilities.", 1, nonEffective.size());
+		assertEquals("Wrong provider.", tb1Revision, nonEffective.iterator()
+				.next().getRevision());
+
+		// Search for a package
+		Collection<BundleCapability> packageCaps = findProviders(
+				PackageNamespace.PACKAGE_NAMESPACE,
+				"org.osgi.test.cases.framework.resolver.tb1");
+		assertEquals("Wrong number of capabilities.", 1, packageCaps.size());
+		assertEquals("Wrong provider.", tb1Revision, packageCaps.iterator()
+				.next().getRevision());
+
+		// Search for a capability from a fragment
+		Collection<BundleCapability> fragmentCaps = findProviders(
+				"test.fragment", null);
+		assertEquals("Wrong number of capabilities.", 1, fragmentCaps.size());
+		assertEquals("Wrong provider.", tb4Revision, fragmentCaps.iterator()
+				.next().getRevision());
+
+		// Search for capabilities that have multiple matches
+		Collection<BundleCapability> multipleCaps = findProviders(
+				"test.multiple", null);
+		assertEquals("Wrong number of capabilities.", 2, multipleCaps.size());
+		for (BundleCapability multipleCap : multipleCaps) {
+			assertEquals("Wrong provider.", tb1Revision,
+					multipleCap.getRevision());
+		}
+
+		// Use wild card matching to search for identity
+		Collection<BundleCapability> multipleIdentities = findProviders(
+				IdentityNamespace.IDENTITY_NAMESPACE,
+				"org.osgi.test.cases.framework.resolver.*");
+		assertEquals("Wrong number of capabilities.", 2,
+				multipleIdentities.size());
+		boolean foundTb1 = false;
+		boolean foundTb4 = false;
+		for (BundleCapability identity : multipleIdentities) {
+			foundTb1 |= tb1Revision.equals(identity.getRevision());
+			foundTb4 |= tb4Revision.equals(identity.getRevision());
+		}
+		assertTrue("Did not find tb1 identity.", foundTb1);
+		assertTrue("Did not find tb4 identity.", foundTb4);
+	}
+
+	private Collection<BundleCapability> findProviders(String namespace,
+			String namespaceValue) {
+		String filter = namespaceValue == null ? null : "(" + namespace + "="
+				+ namespaceValue + ")";
+		return frameworkWiring.findProviders(new TestRequirement(namespace,
+				filter));
+	}
+	static class TestRequirement implements Requirement {
+		private final String namespace;
+		private final Map<String, String> directives;
+		private final Map<String, Object> attributes = Collections.EMPTY_MAP;
+
+		public TestRequirement(String namespace, String filter) {
+			this.namespace = namespace;
+			if (filter != null) {
+				this.directives = Collections.singletonMap(
+						Namespace.REQUIREMENT_FILTER_DIRECTIVE, filter);
+			} else {
+				this.directives = Collections.EMPTY_MAP;
+			}
+		}
+
+		public String getNamespace() {
+			return this.namespace;
+		}
+
+		public Map<String, String> getDirectives() {
+			return directives;
+		}
+
+		public Map<String, Object> getAttributes() {
+			return attributes;
+		}
+
+		public Resource getResource() {
+			// returning null because this is a synthetic requirement
+			return null;
+		}
+
 	}
 }
