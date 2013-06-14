@@ -39,19 +39,19 @@ public class ResourceEvent {
 	 * Type of ResourceEvent indicating a {@link ResourceThreshold} instance
 	 * goes to the NORMAL state.
 	 */
-	public static final int		NORMAL						= 0;
+	public static final int	NORMAL						= 0;
 
 	/**
 	 * Type of ResourceEvent indicating a {@link ResourceThreshold} instance
 	 * goes to the WARNING state.
 	 */
-	public static final int		WARNING						= 0;
+	public static final int	WARNING						= 0;
 
 	/**
 	 * Type of ResourceEvent indicating a {@link ResourceThreshold} instance
 	 * goes to the ERROR state.
 	 */
-	public static final int		ERROR						= 1;
+	public static final int	ERROR						= 1;
 
 	/**
 	 * A new {@link ResourceContext} has been created.
@@ -59,7 +59,7 @@ public class ResourceEvent {
 	 * The {@link ResourceManager#createContext(String, ResourceContext)} method
 	 * has been invoked.
 	 */
-	public static final int		RESOURCE_CONTEXT_CREATED	= 2;
+	public static final int	RESOURCE_CONTEXT_CREATED	= 2;
 
 	/**
 	 * A {@link ResourceContext} has been removed
@@ -67,14 +67,14 @@ public class ResourceEvent {
 	 * The {@link ResourceContext#removeContext(ResourceContext)} method has
 	 * beem invoked
 	 */
-	public static final int		RESOURCE_CONTEXT_REMOVED	= 3;
+	public static final int	RESOURCE_CONTEXT_REMOVED	= 3;
 
 	/**
 	 * A bundle has been added to e {@link ResourceContext}
 	 * <p>
 	 * The {@link ResourceContext#addBundle(Bundle)} method has been invoked
 	 */
-	public static final int		BUNDLE_ADDED				= 4;
+	public static final int	BUNDLE_ADDED				= 4;
 
 	/**
 	 * A bundle has been removed from a {@link ResourceContext}
@@ -82,25 +82,37 @@ public class ResourceEvent {
 	 * The {@link ResourceContext#removeBundle(Bundle, ResourceContext)} method
 	 * has been invoked, or the bundle has been uninstalled
 	 */
-	public static final int		BUNDLE_REMOVED				= 5;
+	public static final int	BUNDLE_REMOVED				= 5;
 
-	private int					type;
-	private ResourceMonitor		monitor;
-	private ResourceContext		context;
-	private ResourceThreshold	threshold;
-	private String				previousState;
-	private Bundle				bundle;
+	private int				type;
+	private ResourceContext	context;
+	private String			resourceType;
+	private Object			thresholdValue;
+	private boolean			isUpperThreshold;
+	private Object			value;
+	private String			previousState;
+	private Bundle			bundle;
 
 	/**
 	 * Creates a resource threshold event
 	 * 
-	 * @param type The type of the event. Can be {@link #WARNING} or
-	 *        {@link #ERROR}
-	 * @param monitor The monitor that caused the event
+	 * @param type The type of the event. Can be {@link #NORMAL},
+	 *        {@link #WARNING} or {@link #ERROR}
+	 * @param resourceType the type of the Resource Monitor triggering this
+	 *        event.
+	 * @param value the resource consumption value at the moment when the event
+	 *        was generated
+	 * @param thresholdValue the threshold value (given by the
+	 *        {@link ResourceThreshold} instance triggering this event)
+	 * @param isUpperThreshold true if the {@link ResourceThreshold} instance
+	 *        (triggering this event) is a upper threshold.
 	 */
-	public ResourceEvent(int type, ResourceMonitor monitor) {
+	public ResourceEvent(int type, String resourceType, Object value, Object thresholdValue, boolean isUpperThreshold) {
 		this.type = type;
-		this.monitor = monitor;
+		this.resourceType = resourceType;
+		this.value = value;
+		this.thresholdValue = thresholdValue;
+		this.isUpperThreshold = isUpperThreshold;
 	}
 
 	/**
@@ -155,8 +167,8 @@ public class ResourceEvent {
 	 * @return The monitor that cased the event, or null if a resource monitor
 	 *         is not relevant
 	 */
-	public ResourceMonitor getMonitor() {
-		return monitor;
+	public Object getValue() {
+		return value;
 	}
 
 	/**
@@ -192,16 +204,41 @@ public class ResourceEvent {
 	}
 
 	/**
-	 * Returns the {@link ResourceThreshold} instance which generates this
-	 * event.This method should be called on when {@link #getType()} returns
-	 * either {@link #NORMAL}, or {@link #WARNING} or {@link #ERROR}. The
-	 * returned value is a snapshot of the ResourceThreshold instance at the
-	 * moment where the event was generated.
+	 * Returns the threshold value. This threshold value is the same at the one
+	 * at the moment when this event was generated. This method is only used
+	 * when {@link #getType()} returns {@link #NORMAL}, {@link #WARNING} or
+	 * {@link #ERROR}.
 	 * 
 	 * @return a snapshot of the {@link ResourceThreshold} instance or null.
 	 * @see #getPreviousState()
 	 */
-	public ResourceThreshold getResourceThreshold() {
-		return threshold;
+	public Object getThresholdValue() {
+		return thresholdValue;
+	}
+
+	/**
+	 * Returns true if the {@link ResourceThreshold} triggering this event is an
+	 * upper threshold. This method is only used when {@link #getType()} returns
+	 * {@link #NORMAL}, {@link #WARNING} or {@link #ERROR}.
+	 * 
+	 * 
+	 * @return true if it is an upper threshold.
+	 */
+	public boolean isUpperThreshold() {
+		return isUpperThreshold;
+	}
+
+	/**
+	 * Get the type of resource (i.e the type of the {@link ResourceMonitor}
+	 * instance triggering this event).This method is only used when
+	 * {@link #getType()} returns {@link #NORMAL}, {@link #WARNING} or
+	 * {@link #ERROR}. The listener can use this value to retrieve the related
+	 * {@link ResourceMonitor} instance by calling {@link #getContext()}.
+	 * {@link ResourceContext#getMonitor(String) getMonitor(getResourceType())}
+	 * 
+	 * @return resource type
+	 */
+	public String getResourceType() {
+		return resourceType;
 	}
 }
