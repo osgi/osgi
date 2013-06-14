@@ -109,14 +109,14 @@ public interface ZigBeeEndpoint {
 	public ZigBeeCluster getClientCluster(int id);
 
 	/**
-	 * @return the list of endpoint servers(inputs) clusters, if empty returns a
-	 *         <i>new int[0]</i>
+	 * @return An array of servers(inputs) clusters, returns an empty array if
+	 *         does not provides any servers clusters.
 	 */
 	public ZigBeeCluster[] getServerClusters();
 
 	/**
-	 * @return the list of endpoint clients(outputs) clusters, if empty returns
-	 *         a <i>new int[0]</i>
+	 * @return An array of clients(outputs) clusters, returns an empty array if
+	 *         does not provides any clients clusters.
 	 */
 	public ZigBeeCluster[] getClientClusters();
 
@@ -167,5 +167,5 @@ public interface ZigBeeEndpoint {
 	/**
 	 * @return the node simple descriptor.
 	 */
-	public ZigBeeSimpleDescriptor getSimpleDescriptor(short endpoint) throws ZigBeeException;
+	public ZigBeeSimpleDescriptor getSimpleDescriptor() throws ZigBeeException;
 }

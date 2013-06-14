@@ -46,12 +46,14 @@ public interface ZigBeeSimpleDescriptor {
 	public short getApplicationDeviceVersion();
 
 	/**
-	 * @return list of input cluster identifiers.
+	 * @return An array of input(server) cluster identifiers, returns an empty
+	 *         array if does not provides any inputs(servers) clusters.
 	 */
 	public int[] getInputClusterList();
 
 	/**
-	 * @return list of output cluster identifiers.
+	 * @return An array of output(client) cluster identifiers, returns an empty
+	 *         array if does not provides any outputs(clients) clusters.
 	 */
 	public int[] getOutputClusterList();
 
