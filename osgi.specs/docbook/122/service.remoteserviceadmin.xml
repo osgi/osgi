@@ -1554,7 +1554,7 @@
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.service.remoteserviceadmin.EndpointEventListener.endpointChanged-EndpointEvent-"
+          linkend="org.osgi.service.remoteserviceadmin.EndpointEventListener.endpointChanged-EndpointEvent-String-"
           xrefstyle="hyperlink"/> – Notify the Endpoint Event Listener of changes to an Endpoint. 
           The change could entail the addition or removal of an Endpoint or the 
           modification of the properties of an existing Endpoint.
@@ -1568,7 +1568,7 @@
 
       <para>The Endpoint Event Listener interface is
       <emphasis>idempotent</emphasis>. Endpoint Description Providers must
-      inform an Endpoint Event Listener service (or it predecessor Endpoint Listener service) 
+      inform an Endpoint Event Listener service (and its deprecated predecessor Endpoint Listener service) 
       that is registered of all their
       matching Endpoints. The only way to find out about all available
       Endpoints is to register an Endpoint Event Listener (or Endpoint Listener) that is then informed by
@@ -2169,6 +2169,36 @@ xml                    ::= &lt;*&gt; *</programlisting>
     </section>
   </section>
 
+  <section>
+    <title>Use of the osgi.extender Namespace</title>
+
+    <para>
+        A bundle containing Endpoint Description Extender resources can 
+        indicate its dependency on the Remote Service Admin extender 
+        by declaring a requirement on the <code>osgi.extender</code>
+        namespace.
+    </para>
+
+    <programlisting>Require-Capability:
+    osgi.extender;
+        filter:="(osgi.extender=osgi.remoteserviceadmin)"</programlisting>
+
+    <para>
+        With this constraint declared a bundle that depends on the extender
+        will fail to resolve if no extender is present in the framework.
+    </para>
+
+    <para>    
+        Implementations of this specification must provide this extender
+        capability.
+    </para>
+
+    <para>The version for the <code>osgi.remoteserviceadmin</code> extender capability
+        is:</para>
+
+    <programlisting>1.1.0</programlisting>
+  </section>
+
   <section xml:id="i1789427">
     <title>Security</title>
 
@@ -2189,6 +2219,18 @@ xml                    ::= &lt;*&gt; *</programlisting>
       longer checked. The caller should therefore be careful to share those
       objects with other bundles. Export and Import References are free to
       share.</para>
+    </section>
+
+    <section>
+      <title>Framework UUID Runtime Permission</title>
+
+      <para>
+          The Remote Service Admin bundle can have the need for reading the Framework UUID property. This requires the
+          following permission:
+      </para>
+
+      <programlisting>PropertyPermission[
+    "org.osgi.framework.uuid","read"]</programlisting>
     </section>
 
     <section>
@@ -2297,6 +2339,28 @@ xml                    ::= &lt;*&gt; *</programlisting>
         </tgroup>
       </table>
     </section>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        Removed text around setting of Framework UUID property (not needed for Core Frameworks version 4.3 or newer).
+      </listitem>
+
+      <listitem>
+        Introduced Endpoint Event Listener.
+      </listitem>
+
+      <listitem>
+        Deprecated Endpoint Listener.
+      </listitem>
+
+      <listitem>
+        Added <code>osgi.extender</code> definition.
+      </listitem>
+    </itemizedlist>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.remoteserviceadmin.xml"/>

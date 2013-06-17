@@ -19,7 +19,7 @@ package org.osgi.service.remoteserviceadmin;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * A white board service that represents a listener for endpoints.
+ * Deprecated white board service that represents a listener for endpoints.
  * 
  * An Endpoint Listener represents a participant in the distributed model that
  * is interested in Endpoint Descriptions.
@@ -86,6 +86,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * discovery processes.
  * 
  * @ThreadSafe
+ * @deprecated As of 1.1. Replaced by EndpointEventListener.
  * @author $Id$
  */
 @ConsumerType

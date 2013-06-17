@@ -99,6 +99,8 @@ public interface EndpointEventListener {
 	 * could be that an endpoint was added, removed or modified.
 	 * 
 	 * @param event The event containing the details about the change.
+	 * @param matchedFilter The filter from the {@link #ENDPOINT_LISTENER_SCOPE}
+	 *        that matched the endpoint, must not be {@code null}.
 	 */
-	void endpointChanged(EndpointEvent event);
+	void endpointChanged(EndpointEvent event, String matchedFilter);
 }
