@@ -13,8 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.framework.resource;
 
+package org.osgi.framework.resource;
 
 /**
  * Representation of the state of a resource for a resource context.
@@ -59,7 +59,9 @@ public interface ResourceMonitor {
 	public String getResourceType();
 
 	/**
-	 * Delete this instance of Resource Monitor.
+	 * Disable and delete this instance of Resource Monitor. This method MUST
+	 * update the list of ResourceMonitor instances hold by the Resource Context
+	 * (getContext().removeMonitor(this)).
 	 */
 	public void delete();
 
@@ -70,35 +72,46 @@ public interface ResourceMonitor {
 	 * @return <code>true</code> if monitoring for this resource type is enabled
 	 *         for this context, <code>false</code> otherwise
 	 */
-	public boolean isMonitored();
+	public boolean isEnabled();
+
 
 	/**
-	 * Enable/Disable the monitoring of this resource type for this resource
-	 * context.
-	 * <p>
-	 * When monitoring of a resource type is enabled, the resources of this type
-	 * that were allocated by the bundles in this resource context while
-	 * monitoring was disabled, will not be added to the resource context. The
-	 * action applies only for future allocations.
-	 * <p>
-	 * When monitoring of a resource type is disabled, the resources of this
-	 * type that were previously allocated by the bundles in this resource
-	 * context while monitoring was enabled, will not be removed from the
-	 * resource context. The action applies only for future allocations.
+	 * Enable the monitoring of this resource type for the resource context
+	 * associated with this monitor instance. This method SHOULD also update the
+	 * current resource consumption value (to take into account all previous
+	 * resource allocations and releases occurred during the time the monitor
+	 * was disabled).
 	 * 
-	 * @param monitor
-	 *            <code>true</code> to enable monitoring, <code>false</code> to
-	 *            disable it.
+	 * @throws ResourceMonitorException if the ResourceMonitor instance can not
+	 *         be enabled (for example some MemoryMonitor implementations
+	 *         evaluate the memory consumption by tracking memory allocation
+	 *         operation at runtime. This kind of Monitor can not get
+	 *         instantaneous memory value. Such Monitor instances need to be
+	 *         enabled at starting time.)
+	 * @throws IllegalStateException if the ResourceMonitor instance has been
+	 *         previously deleted
 	 */
-	public void setMonitored(boolean monitor);
+	public void enable() throws ResourceMonitorException, IllegalStateException;
+
+	/**
+	 * Disable the monitoring of this resource type for the resource context
+	 * associated with this monitor instance. The resource usage is not
+	 * available until it is enabled again.
+	 * 
+	 * @throws IllegalStateException if the ResourceMonitor instance has been
+	 *         previously deleted
+	 */
+	public void disable() throws IllegalStateException;
 
 	/**
 	 * Returns an object representing the current usage of this resource type by
 	 * this resource context.
 	 * 
 	 * @return The current usage of this resource type.
+	 * @throws IllegalStateException if the ResourceMonitor instance is not
+	 *         enabled.
 	 */
-	public Object getUsage();
+	public Object getUsage() throws IllegalStateException;
 
 	/**
 	 * Returns the lower {@link ResourceThreshold} instance.
@@ -129,7 +142,6 @@ public interface ResourceMonitor {
 	 * @exception ThresholdException if upperThreshold.isUpper() returns false.
 	 */
 	public void setUpperThreshold(ResourceThreshold upperThreshold) throws ThresholdException;
-
 
 	/**
 	 * Returns the sampling period for this resource type.

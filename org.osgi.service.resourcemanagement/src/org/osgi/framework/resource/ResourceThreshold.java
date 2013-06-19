@@ -87,7 +87,7 @@ public interface ResourceThreshold {
 	 * <li>or is under the ERROR threshold value (minimum threshold)</li>
 	 * </ul>
 	 */
-	public static final int	ERROR_STATE		= 3;
+	public static final int	ERROR_STATE		= 2;
 
 	/**
 	 * Returns the current state of the ResourceThreshold.

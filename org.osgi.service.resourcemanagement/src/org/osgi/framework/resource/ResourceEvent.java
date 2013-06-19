@@ -45,13 +45,13 @@ public class ResourceEvent {
 	 * Type of ResourceEvent indicating a {@link ResourceThreshold} instance
 	 * goes to the WARNING state.
 	 */
-	public static final int	WARNING						= 0;
+	public static final int	WARNING						= 1;
 
 	/**
 	 * Type of ResourceEvent indicating a {@link ResourceThreshold} instance
 	 * goes to the ERROR state.
 	 */
-	public static final int	ERROR						= 1;
+	public static final int	ERROR						= 2;
 
 	/**
 	 * A new {@link ResourceContext} has been created.
@@ -59,7 +59,7 @@ public class ResourceEvent {
 	 * The {@link ResourceManager#createContext(String, ResourceContext)} method
 	 * has been invoked.
 	 */
-	public static final int	RESOURCE_CONTEXT_CREATED	= 2;
+	public static final int	RESOURCE_CONTEXT_CREATED	= 3;
 
 	/**
 	 * A {@link ResourceContext} has been removed
@@ -67,14 +67,14 @@ public class ResourceEvent {
 	 * The {@link ResourceContext#removeContext(ResourceContext)} method has
 	 * beem invoked
 	 */
-	public static final int	RESOURCE_CONTEXT_REMOVED	= 3;
+	public static final int	RESOURCE_CONTEXT_REMOVED	= 4;
 
 	/**
 	 * A bundle has been added to e {@link ResourceContext}
 	 * <p>
 	 * The {@link ResourceContext#addBundle(Bundle)} method has been invoked
 	 */
-	public static final int	BUNDLE_ADDED				= 4;
+	public static final int	BUNDLE_ADDED				= 5;
 
 	/**
 	 * A bundle has been removed from a {@link ResourceContext}
@@ -82,7 +82,7 @@ public class ResourceEvent {
 	 * The {@link ResourceContext#removeBundle(Bundle, ResourceContext)} method
 	 * has been invoked, or the bundle has been uninstalled
 	 */
-	public static final int	BUNDLE_REMOVED				= 5;
+	public static final int	BUNDLE_REMOVED				= 6;
 
 	private int				type;
 	private ResourceContext	context;
@@ -90,7 +90,7 @@ public class ResourceEvent {
 	private Object			thresholdValue;
 	private boolean			isUpperThreshold;
 	private Object			value;
-	private String			previousState;
+	private int				previousState;
 	private Bundle			bundle;
 
 	/**
@@ -161,11 +161,11 @@ public class ResourceEvent {
 	}
 
 	/**
-	 * Returns the monitor that caused the event. Relevant only for event types
-	 * {@link #WARNING} and {@link #ERROR}
+	 * Returns the resource consumption value. Relevant only for event types
+	 * {@link #NORMAL}, {@link #WARNING} and {@link #ERROR}.
 	 * 
-	 * @return The monitor that cased the event, or null if a resource monitor
-	 *         is not relevant
+	 * @return the resource consumption value, or null if a resource monitor is
+	 *         not relevant
 	 */
 	public Object getValue() {
 		return value;
@@ -199,7 +199,7 @@ public class ResourceEvent {
 	 * @return previous state or null
 	 * @see #getResourceThreshold()
 	 */
-	public String getPreviousState() {
+	public int getPreviousState() {
 		return previousState;
 	}
 
