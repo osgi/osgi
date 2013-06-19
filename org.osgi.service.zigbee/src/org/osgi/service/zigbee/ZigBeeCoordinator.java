@@ -25,21 +25,14 @@ import org.osgi.service.zigbee.handler.ZigBeeHandler;
  */
 public interface ZigBeeCoordinator {
 	/**
-	 * Starts the ZigBee network
+	 * Sets the network channel. 802.15.4 and ZigBee break the 2.4Ghz band into
+	 * 16 channels, numbered from 11 to 26.
+	 * 
+	 * @param handler The handler that manages the command response.
+	 * @param channel The network channel. Sets to 0, the channel is chose by
+	 *        the chip itself.
 	 */
-	public void startNetwork() throws ZigBeeException;
-
-	/**
-	 * Updates the list of devices in the network, by adding the new devices
-	 * that joined the network and removing the devices that left the network
-	 * since the last refresh.
-	 */
-	public void refreshNetwork() throws ZigBeeException;
-
-	/**
-	 * Set the network channel
-	 */
-	public void setChannel(ZigBeeHandler handler, int channel) throws ZigBeeException;
+	public void setChannel(ZigBeeHandler handler, byte channel) throws ZigBeeException;
 
 	/**
 	 * @return The current Network key
