@@ -25,8 +25,8 @@ import org.osgi.service.zigbee.handler.ZigBeeHandler;
  */
 public interface ZigBeeCoordinator {
 	/**
-	 * Set the network channel 802.15.4 and ZigBee break the 2.4Ghz band into 16
-	 * channels, numbered from 11 to 26.
+	 * Sets the network channel. 802.15.4 and ZigBee break the 2.4Ghz band into
+	 * 16 channels, numbered from 11 to 26.
 	 * 
 	 * @param handler The handler that manages the command response.
 	 * @param channel The network channel. Sets to 0, the channel is chose by
