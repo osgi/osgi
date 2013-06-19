@@ -482,20 +482,13 @@
     that wants to receive notifications of woven class state transitions can
     register such a service. The framework picks up the Woven Class Listener
     services and calls their <code>modified</code> method whenever a woven
-    class undergoes a state transition. The modified methods must be called in
-    service ranking order, see <xref
-    linkend="framework.service.servicerankingorder"/>.</para>
-
-    <remark>Is calling listeners in service ranking order really
-    important?</remark>
+    class undergoes a state transition.</para>
 
     <para>The Woven Class Listener <code>modified</code> method is called with
     a <code>WovenClass</code> object that represents the woven class that
     underwent a state transition. The method must be called in a privileged
     block, see <xref
     linkend="framework.lifecycle.privilegedcallbacks"/>.</para>
-
-    <remark>Is a privileged block really necessary?</remark>
 
     <para>Woven class listeners are not notified of the TRANSFORMING state
     because the woven class is mutable and listeners are read-only. In all
@@ -674,9 +667,6 @@
       synchronously called by the framework when a woven class completes a
       state transition. The woven class processing will not proceed until all
       woven class listeners are done.</para>
-
-      <remark>Is it necessary to state the framework should not hold any
-      locks?</remark>
     </section>
 
     <section>
@@ -684,11 +674,7 @@
 
       <para>Woven Class Listeners must not cause the weaving process to fail.
       If a Woven Class Listener throws an exception, the framework should log
-      the exception but otherwise ignore it. Frameworks may blacklist a
-      misbehaving Woven Class Listener in the same manner as described for
-      Weaving Hooks.</para>
-
-      <remark>Is it necessary to mention blacklisting?</remark>
+      the exception but otherwise ignore it.</para>
     </section>
   </section>
 
