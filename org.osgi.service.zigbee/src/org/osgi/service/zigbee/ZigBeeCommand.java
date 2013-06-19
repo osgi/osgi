@@ -43,7 +43,7 @@ public interface ZigBeeCommand {
 	 *        input arguments exist.
 	 * @param outputTypes An array of attributes data types. May be null if no
 	 *        outputs arguments for the command.
-	 * @param handler The handler
+	 * @param handler The handler that manages the command response.
 	 */
 	public void invoke(Object[] values, ZigBeeDataTypeDescription[] inputTypes, ZigBeeDataTypeDescription[] outputTypes, ZigBeeHandler handler) throws ZigBeeException;
 
@@ -52,7 +52,7 @@ public interface ZigBeeCommand {
 	 * provide the invocation response in an asynchronously way.
 	 * 
 	 * @param bytes An array of bytes containing a command frame sequence.
-	 * @param handler The handler
+	 * @param handler The handler that manages the command response.
 	 */
 	public void invoke(byte[] bytes, ZigBeeHandler handler) throws ZigBeeException;
 

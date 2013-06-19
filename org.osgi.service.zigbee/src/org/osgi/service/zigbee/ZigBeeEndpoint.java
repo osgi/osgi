@@ -92,18 +92,18 @@ public interface ZigBeeEndpoint {
 
 	/**
 	 * @return the {@link String} IEEE Address of the node containing this
-	 *         endPoint
+	 *         endpoint
 	 */
 	public String getNodeAddress();
 
 	/**
-	 * @param id
+	 * @param id The server(input) cluster identifier
 	 * @return the server(input) cluster identified by id
 	 */
 	public ZigBeeCluster getServerCluster(int id);
 
 	/**
-	 * @param id
+	 * @param id The client(output) cluster identifier
 	 * @return the client(output) cluster identified by id
 	 */
 	public ZigBeeCluster getClientCluster(int id);
@@ -128,8 +128,8 @@ public interface ZigBeeEndpoint {
 	 * this.getNodeAddress(), this.getId(), clusterId, device.getNodeAddress(), device.getId()
 	 * </pre>
 	 * 
-	 * @param endpoint device {@link ZigBeeEndpoint} the device that we want to
-	 *        bound to
+	 * @param endpoint The device {@link ZigBeeEndpoint} that we want to bound
+	 *        to
 	 * @param clusterId the cluster identifier that we want to bound to
 	 * @return <code>true</code> if and only if the operation succeeded
 	 */
@@ -143,9 +143,8 @@ public interface ZigBeeEndpoint {
 	 * this.getNodeAddress(), this.getId(), clusterId, device.getNodeAddress(), device.getId()
 	 * </pre>
 	 * 
-	 * @param endpoint a device {@link ZigBeeEndpoint} the device that we are
-	 *        bounded to
-	 * @param clusterId the cluster identifier that we want to unbound from
+	 * @param endpoint The device {@link ZigBeeEndpoint} that we are bounded to
+	 * @param clusterId The cluster identifier that we want to unbound from
 	 * @return <code>true</code> if and only if the operation succeeded
 	 */
 	public boolean unbindFrom(ZigBeeEndpoint endpoint, int clusterId);
@@ -154,7 +153,7 @@ public interface ZigBeeEndpoint {
 	 * This method is used to get details about problems when an error occurs
 	 * during exporting an endpoint
 	 * 
-	 * @param zbe a device {@link ZigBeeException} the occurred exception
+	 * @param zbe A device {@link ZigBeeException} the occurred exception
 	 */
 	public void notExported(ZigBeeException zbe);
 

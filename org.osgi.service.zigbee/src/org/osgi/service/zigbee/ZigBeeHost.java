@@ -26,6 +26,11 @@ import org.osgi.service.zigbee.handler.ZigBeeHandler;
  */
 public interface ZigBeeHost extends ZigBeeNode {
 	/**
+	 * Starts the host
+	 */
+	public void start() throws ZigBeeException;
+
+	/**
 	 * Indicates if a ZigBee device can join the network.
 	 * 
 	 * @param duration The time during which associations are permitted.
@@ -45,8 +50,18 @@ public interface ZigBeeHost extends ZigBeeNode {
 
 	/**
 	 * Set the network channel mask
+	 * 
+	 * @param handler The handler that manages the command response.
+	 * @param mask A value representing the channel mask.
 	 */
 	public void setChannelMask(ZigBeeHandler handler, int mask) throws ZigBeeException;
+
+	/**
+	 * Updates the list of devices in the network, by adding the new devices
+	 * that joined the network and removing the devices that left the network
+	 * since the last refresh.
+	 */
+	public void refreshNetwork() throws ZigBeeException;
 
 	/**
 	 * @return 0 if security is disabled, an int code if enabled

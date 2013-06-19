@@ -191,7 +191,7 @@ public interface ZigBeeNode {
 	public BigInteger getExtendedPanId();
 
 	/**
-	 * @param id endpoint identifier to be retrieved.
+	 * @param id The endpoint identifier to be retrieved.
 	 * @return The endpoint associated with id.
 	 */
 	public ZigBeeEndpoint getEndpoint(short id);
