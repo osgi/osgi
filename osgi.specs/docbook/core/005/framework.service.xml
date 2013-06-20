@@ -560,7 +560,7 @@
       <para>This ordering is complete because service ids are never reused and
       handed out in order of their registration time. That is, a service that
       is registered later will have a higher service id. Therefore, the
-      ranking order is in ascending <code>service.ranking</code> numeric order
+      ranking order is in descending <code>service.ranking</code> numeric order
       where ties give a preference to the earlier registrant.</para>
 
       <para>The ranking order is the reverse of the natural ordering of a
