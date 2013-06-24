@@ -6,50 +6,42 @@ import org.osgi.service.enocean.examples.telegrams.datafields.descriptions.enume
 
 public class LearnBitDatafield_4BS implements EnOceanDatafield {
 
-	private int value;
+	private Integer value;
 	private static BooleanDatafieldDescription description;
-	
-	@Override
+
 	public String getShortcut() {
 		return "LRNB";
 	}
 
-	@Override
 	public int getOffset() {
 		return 28;
 	}
 
-	@Override
 	public int getSize() {
 		return 1;
 	}
 
-	@Override
 	public String getName() {
 		return "LRN bit - 4BS";
 	}
 
-	@Override
 	public EnOceanDatafieldDescription getDescription() {
 		return description;
 	}
 
-	@Override
 	public Object getValue() {
 		return (Object)value;
 	}
 
 	public void setValue(Object obj) {
-		this.value = (int)obj ;
+		this.value = (Integer)obj ;
 	}
 
-	@Override
 	public byte[] getRawValue() {
 		// FIXME Auto-generated method stub
 		return null;
 	}
 
-	@Override
 	public void setRawValue(byte[] rawValue) {
 		
 	}

@@ -8,49 +8,43 @@ import org.osgi.service.enocean.examples.Helpers;
 
 public class TemperatureRangeDatafield_30_10 implements EnOceanScaledDatafieldDescription {
 
-	@Override
 	public String getType() {
 		return EnOceanDatafieldDescription.TYPE_SCALED;
 	}
 
-	@Override
 	public int getRangeStart() {
 		return 255;
 	}
 
-	@Override
 	public int getRangeStop() {
 		return 0;
 	}
 
-	@Override
+
 	public double getScaleStart() {
 		return (float) -30.0;
 	}
 
-	@Override
 	public double getScaleStop() {
 		return (float) 10.0;
 	}
 
-	@Override
 	public String getUnit() {
 		return "°C";
 	}
 
-	@Override
 	public Object deserialize(byte[] bytes) {
 		int rawValue = ByteBuffer.wrap(bytes).getShort();
 		double q = (rawValue - getRangeStart()) / (getRangeStop() - getRangeStart());
-		return (Object)(getScaleStart() + q * (getScaleStop() - getScaleStart()));
+		double r = (getScaleStart() + q * (getScaleStop() - getScaleStart()));
+		return new Double(r);
 	}
 
-	@Override
 	public byte[] serialize(Object obj) {
-		double value = (double)obj;
-		double q = (value - getScaleStart()) / (getScaleStop() - getScaleStart());
-		Double rawValue = (getRangeStart() + q * (getRangeStop() - getRangeStart()));
-		return Helpers.shortToByteArray(rawValue.intValue());
+		Double value = (Double)obj;
+		double q = (value.doubleValue() - getScaleStart()) / (getScaleStop() - getScaleStart());
+		double rawValue = (getRangeStart() + q * (getRangeStop() - getRangeStart()));
+		return Helpers.shortToByteArray(new Double(rawValue).intValue());
 	}
 
 }

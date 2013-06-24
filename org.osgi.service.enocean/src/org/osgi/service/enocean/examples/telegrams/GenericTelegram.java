@@ -1,16 +1,12 @@
 package org.osgi.service.enocean.examples.telegrams;
 
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanTelegram;
 import org.osgi.service.enocean.datafields.EnOceanDatafield;
-import org.osgi.service.enocean.datafields.EnOceanDatafieldDescription;
 import org.osgi.service.enocean.examples.Helpers;
-
-import com.sun.xml.internal.ws.message.source.PayloadSourceMessage;
 
 /**
  * This sample class shows how we could create a generic class that coud theoretically
@@ -32,29 +28,26 @@ public class GenericTelegram implements EnOceanTelegram {
 	public static final int TELEGRAM_TYPE_ADT = 0xA6; // Exception
 	public static final int TELEGRAM_TYPE_VLD = 0xD2;
 	
-	private Map<String, Object> properties;
+	private Map properties;
 	private int status = -1;
 	private EnOceanDatafield[] datafields;
 	
 	
 	public GenericTelegram() {
-		properties = new HashMap<String, Object>();
-		this.properties.put(EnOceanTelegram.RORG, -1);
-		this.properties.put(EnOceanTelegram.SENDER_ID, -1);
-		this.properties.put(EnOceanTelegram.DESTINATION_ID, -1);
+		properties = new HashMap();
+		this.properties.put((Object)EnOceanTelegram.RORG, ((Object)new Integer(-1)));
+		this.properties.put((Object)EnOceanTelegram.SENDER_ID, ((Object)new Integer(-1)));
+		this.properties.put((Object)EnOceanTelegram.DESTINATION_ID, ((Object)new Integer(-1)));
 	}
 
-	@Override
 	public int getStatus() {
 		return status;
 	}
 
-	@Override
 	public void setStatus(int status) {
 		this.status = status;
 	}
 
-	@Override
 	/**
 	 * A Generic Telegram is serialized as such: 
 	 * - RORG
@@ -69,11 +62,11 @@ public class GenericTelegram implements EnOceanTelegram {
 	 */
 	public byte[] serialize() throws EnOceanException {
 		// Place the RORG
-		int RORG = (int)properties.get(EnOceanTelegram.RORG);
-		byte[] bRORG = Helpers.shortToByteArray(RORG);
+		Integer RORG = (Integer)properties.get(EnOceanTelegram.RORG);
+		byte[] bRORG = Helpers.shortToByteArray(RORG.intValue());
 		
 		byte[] bData = null;
-		switch (RORG) {
+		switch (RORG.intValue()) {
 		case TELEGRAM_TYPE_1BS:
 		case TELEGRAM_TYPE_RPS:
 			bData = new byte[] { 0x0 };
@@ -93,8 +86,8 @@ public class GenericTelegram implements EnOceanTelegram {
 			// do nothing
 		}
 		// Place the senderID
-		int senderId = (int)properties.get(EnOceanTelegram.SENDER_ID);
-		byte[] bSenderId = Helpers.intToByteArray_BE(senderId);
+		Integer senderId = (Integer)properties.get(EnOceanTelegram.SENDER_ID);
+		byte[] bSenderId = Helpers.intToByteArray_BE(senderId.intValue());
 		// Place the status
 		byte[] bStatus = Helpers.shortToByteArray(status); 
 								
@@ -102,17 +95,14 @@ public class GenericTelegram implements EnOceanTelegram {
 		return Helpers.combine(bytes);
 	}
 
-	@Override
 	public Object deserialize(byte[] bytes) throws EnOceanException {
 		return null;
 	}
 
-	@Override
 	public EnOceanDatafield[] getDatafields() {
 		return datafields;
 	}
 
-	@Override
 	public int getSubtelegramCount() {
 		// FIXME Auto-generated method stub
 		return 0;

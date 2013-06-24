@@ -20,41 +20,35 @@ public class Telegram_A5_02_02 implements EnOceanTelegram {
 
 	private int status;
 	private EnOceanDatafield[] datafields = {new TemperatureEnOceanDatafield(), new LearnBitDatafield_4BS()};
-	private Map<String, Object> properties;
+	private Map properties;
 
 	public Telegram_A5_02_02() {
-		properties = new HashMap<String, Object>();
-		this.properties.put(EnOceanTelegram.RORG, 0xA5);
-		this.properties.put(EnOceanTelegram.SENDER_ID, -1);
-		this.properties.put(EnOceanTelegram.DESTINATION_ID, -1);
+		properties = new HashMap();
+		this.properties.put((Object)EnOceanTelegram.RORG, ((Object)new Integer(0xA5)));
+		this.properties.put((Object)EnOceanTelegram.SENDER_ID, ((Object)new Integer(-1)));
+		this.properties.put((Object)EnOceanTelegram.DESTINATION_ID, ((Object)new Integer(-1)));
 	}
 	
-	@Override
 	public byte[] serialize() throws EnOceanException {
 		return null;
 	}
 
-	@Override
 	public Object deserialize(byte[] bytes) throws EnOceanException {
 		return null;
 	}
 
-	@Override
 	public int getStatus() {
 		return status;
 	}
 
-	@Override
 	public void setStatus(int status) {
 		this.status = status;
 	}
 
-	@Override
 	public EnOceanDatafield[] getDatafields() {
 		return datafields;
 	}
 
-	@Override
 	public int getSubtelegramCount() {
 		return 1;
 	}
