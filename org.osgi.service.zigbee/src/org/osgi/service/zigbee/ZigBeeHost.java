@@ -39,11 +39,35 @@ public interface ZigBeeHost extends ZigBeeNode {
 	public void permitJoin(short duration) throws ZigBeeException;
 
 	/**
+	 * Sets the host operational mode. The mode will then be available
+	 * when the host will restart. ZigBee defines three different types of node,
+	 * coordinator({@link ZigBeeNode.COORDINATOR}), router(
+	 * {@link ZigBeeNode.ROUTER}) and end device({@link ZigBeeNode.END_DEVICE})
+	 * 
+	 * @param operationalMode The node operational mode.
+	 */
+	public void setOperationalMode(short operationalMode) throws ZigBeeException;
+
+	/**
+	 * Gets the current network channel
+	 * 
 	 * @return The current network channel
 	 */
 	public int getChannel() throws ZigBeeException;
 
 	/**
+	 * Sets the network channel. 802.15.4 and ZigBee break the 2.4Ghz band into
+	 * 16 channels, numbered from 11 to 26.
+	 * 
+	 * @param handler The handler that manages the command response.
+	 * @param channel The network channel. Sets to 0, the channel is chose by
+	 *        the chip itself.
+	 */
+	public void setChannel(ZigBeeHandler handler, byte channel) throws ZigBeeException;
+
+	/**
+	 * Gets the current network channel mask
+	 * 
 	 * @return The current network channel mask
 	 */
 	public int getChannelMask() throws ZigBeeException;
@@ -64,13 +88,16 @@ public interface ZigBeeHost extends ZigBeeNode {
 	public void refreshNetwork() throws ZigBeeException;
 
 	/**
+	 * Gets the network security level
+	 * 
 	 * @return 0 if security is disabled, an int code if enabled
 	 */
-	public int getSecurityLevel();
+	public int getSecurityLevel() throws ZigBeeException;
 
 	/**
-	 * @return A ZigBeeCoordinator object if the chip is the network
-	 *         coordinator, otherwise, returns null.
+	 * Gets the current network key
+	 * 
+	 * @return The current Network key.
 	 */
-	public ZigBeeCoordinator getCoordinator();
+	public String getNetworkKey() throws ZigBeeException;
 }
