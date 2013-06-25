@@ -46,4 +46,5 @@ public interface EnOceanRPC {
 	 * Invoke the RPC with the specified argument payload.
 	 */
 	public void invoke(EnOceanRPCHandler handler);
+	
 }

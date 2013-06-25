@@ -16,12 +16,6 @@ public interface EnOceanDevice {
 	public final static String CHIP_ID = "enocean.device.chip_id";
 	
 	/**
-	 * Property name for the BASE_ID of the device
-	 * The base ID can be left to 0 if not set.
-	 */
-	public final static String BASE_ID = "enocean.device.base_id";
-	
-	/**
 	 * Property name for the radiotelegram main type of the profile
 	 * associated with this device.
 	 */
