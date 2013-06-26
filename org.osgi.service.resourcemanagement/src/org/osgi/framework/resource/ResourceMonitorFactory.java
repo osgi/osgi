@@ -5,8 +5,9 @@ package org.osgi.framework.resource;
 
 
 /**
- * A ResourceMonitorFactory is used to create ResourceMonitor instance. These
- * factories should only be used by ResourceManager singleton or authorities.
+ * A ResourceMonitorFactory are OSGI services used to create ResourceMonitor
+ * instance. These factories should only be used by ResourceManager singleton or
+ * authorities.
  * 
  * @author mpcy8647
  * 

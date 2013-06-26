@@ -74,6 +74,14 @@ public interface ResourceMonitor {
 	 */
 	public boolean isEnabled();
 
+	/**
+	 * Returns true if the ResourceMonitor instance has been deleted, i.e. the
+	 * {@link #delete()} method has been called previously.
+	 * 
+	 * @return true if deleted.
+	 */
+	public boolean isDeleted();
+
 
 	/**
 	 * Enable the monitoring of this resource type for the resource context
