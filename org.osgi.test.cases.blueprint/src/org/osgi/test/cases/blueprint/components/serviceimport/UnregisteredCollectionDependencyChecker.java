@@ -18,13 +18,11 @@ package org.osgi.test.cases.blueprint.components.serviceimport;
 
 import java.util.Properties;
 
-import org.osgi.service.blueprint.container.ServiceUnavailableException;
-import org.osgi.test.cases.blueprint.framework.TestService;
-import org.osgi.test.cases.blueprint.services.AssertionService;
-import org.osgi.test.cases.blueprint.services.TestServiceOne;
-
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.service.blueprint.container.ServiceUnavailableException;
+import org.osgi.test.cases.blueprint.services.AssertionService;
+import org.osgi.test.cases.blueprint.services.TestServiceOne;
 
 
 /**
@@ -72,6 +70,8 @@ public class UnregisteredCollectionDependencyChecker extends DependencyDriver {
                 filterProps.put("osgi.service.blueprint.compname", "ServiceOneA");
                 // we also filter on the service name value
                 filterProps.put("test.service.name", "ServiceOneA");
+				// R6 frameworks apply a service.scope property to all services
+				filterProps.put("service.scope", "singleton");
                 AssertionService.assertTrue(this, "ServiceUnavailableException filter did not match expected properties: filter=" + filterString + ", properties=" + filterProps, filter.match(filterProps));
             } catch (InvalidSyntaxException ise) {
                 AssertionService.fail(this, "Invalid filter syntax for ServiceUnavailableException", ise);
@@ -96,6 +96,8 @@ public class UnregisteredCollectionDependencyChecker extends DependencyDriver {
                 filterProps.put("osgi.service.blueprint.compname", "ServiceOneA");
                 // we also filter on the service name value
                 filterProps.put("test.service.name", "ServiceOneA");
+				// R6 frameworks apply a service.scope property to all services
+				filterProps.put("service.scope", "singleton");
                 AssertionService.assertTrue(this, "ServiceUnavailableException filter did not match expected properties: filter=" + filterString + ", properties=" + filterProps, filter.match(filterProps));
             } catch (InvalidSyntaxException ise) {
                 AssertionService.fail(this, "Invalid filter syntax for ServiceUnavailableException", ise);
