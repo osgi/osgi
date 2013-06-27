@@ -490,12 +490,12 @@
     <title>Version Information</title>
 
     <para>This document is the Enterprise Specification for the OSGi
-    Enterprise Release 5.</para>
+    Enterprise Release 6.</para>
 
     <section xml:id="intro.core.release">
-      <title>OSGi Core Release 5</title>
+      <title>OSGi Core Release 6</title>
 
-      <para>This specification is based on the OSGi Core Release 5. This
+      <para>This specification is based on the OSGi Core Release 6. This
       specification can be downloaded from:</para>
 
       <programlisting>http://www.osgi.org/Specifications/HomePage</programlisting>
