@@ -73,7 +73,7 @@ version="1.1">
           <xsl:value-of select="@name"/>
         </xsl:element>
 
-        <xsl:if test="version">
+        <xsl:if test="org.osgi.annotation.versioning.Version|version">
           <xsl:variable name="version.id">
             <xsl:call-template name="clean.id">
               <xsl:with-param name="string" select="@name"/>
@@ -86,7 +86,15 @@ version="1.1">
               <xsl:attribute name="xml:id">
                 <xsl:value-of select="$version.id"/>
               </xsl:attribute>
-              <xsl:apply-templates select="version" mode="html"/>
+              <xsl:text>Version </xsl:text>
+              <xsl:choose>
+                <xsl:when test="org.osgi.annotation.versioning.Version">
+                  <xsl:apply-templates select="org.osgi.annotation.versioning.Version//value[not(./value)]" mode="html"/>
+                </xsl:when>
+                <xsl:when test="version">
+                  <xsl:apply-templates select="version" mode="html"/>
+                </xsl:when>
+              </xsl:choose>
             </xsl:element>
           </xsl:element>
         </xsl:if>
@@ -1305,15 +1313,29 @@ version="1.1">
     </xsl:element>
   </xsl:if>
 
-  <xsl:if test="not($ddf) and $target/noimplement">
+  <xsl:if test="not($ddf) and 
+               ($target/org.osgi.annotation.versioning.ProviderType|
+                $target/noimplement)">
     <xsl:element name="formalpara" namespace="{$ns}">
       <xsl:attribute name="role">parameter</xsl:attribute>
-      <xsl:element name="title" namespace="{$ns}">
-        <xsl:text>No Implement</xsl:text>
-      </xsl:element>
-      <xsl:element name="para" namespace="{$ns}">
-        <xsl:text>Consumers of this API must not implement this interface</xsl:text>
-      </xsl:element>
+      <xsl:choose>
+        <xsl:when test="$target/org.osgi.annotation.versioning.ProviderType">
+          <xsl:element name="title" namespace="{$ns}">
+            <xsl:text>Provider Type</xsl:text>
+          </xsl:element>
+          <xsl:element name="para" namespace="{$ns}">
+            <xsl:text>Consumers of this API must not implement this type</xsl:text>
+          </xsl:element>
+        </xsl:when>
+        <xsl:when test="$target/noimplement">
+          <xsl:element name="title" namespace="{$ns}">
+            <xsl:text>No Implement</xsl:text>
+          </xsl:element>
+          <xsl:element name="para" namespace="{$ns}">
+            <xsl:text>Consumers of this API must not implement this interface</xsl:text>
+          </xsl:element>
+        </xsl:when>
+      </xsl:choose>
     </xsl:element>
   </xsl:if>
 

@@ -48,6 +48,9 @@ book toc,title
 
 <xsl:param name="page.height.portrait">24.587cm</xsl:param>
 <xsl:param name="page.width.portrait">18.898cm</xsl:param>
+<xsl:param name="book.status">
+  <xsl:value-of select="/d:book/@status"/>
+</xsl:param>
 <xsl:param name="draft.mode">maybe</xsl:param>
 <xsl:param name="draft.watermark.image">../graphics/draft.svg</xsl:param>
 <xsl:param name="fop1.extensions" select="1"/>
@@ -1270,16 +1273,40 @@ actual para elements -->
 <xsl:template match="d:remark[&comment.block.parents;]">
   <xsl:if test="$show.comments != 0">
     <fo:block xsl:use-attribute-sets="remark.properties">
+      <xsl:text>### </xsl:text>
       <xsl:apply-templates/>
     </fo:block>
+    <xsl:message>
+      <xsl:text>[</xsl:text>
+      <xsl:apply-templates select="ancestor::d:section[1]" mode="label.markup"/>
+      <xsl:text>] ### </xsl:text>
+      <xsl:value-of select="normalize-space(.)"/>
+    </xsl:message>
+    <xsl:if test="$book.status != 'draft' or $draft.mode = 'no'">
+      <xsl:message terminate="yes">
+        A non-draft book must not have any remark elements.
+      </xsl:message>
+    </xsl:if>
   </xsl:if>
 </xsl:template>
 
 <xsl:template match="d:remark">
   <xsl:if test="$show.comments != 0">
     <fo:inline xsl:use-attribute-sets="remark.properties">
+      <xsl:text>### </xsl:text>
       <xsl:apply-templates/>
     </fo:inline>
+   <xsl:message>
+      <xsl:text>[</xsl:text>
+      <xsl:apply-templates select="ancestor::d:section[1]" mode="label.markup"/>
+      <xsl:text>] ### </xsl:text>
+      <xsl:value-of select="normalize-space(.)"/>
+    </xsl:message>
+    <xsl:if test="$book.status != 'draft' or $draft.mode = 'no'">
+      <xsl:message terminate="yes">
+        A non-draft book must not have any remark elements.
+      </xsl:message>
+    </xsl:if>
   </xsl:if>
 </xsl:template>
 
@@ -1852,8 +1879,16 @@ should be discarded -->
     </fo:block>
 
     <fo:block xsl:use-attribute-sets="verso.frontmatter.properties">
-      <xsl:apply-templates select="/d:book/d:preface[@role = 'frontmatter']"
-                           mode="frontmatter"/>
+      <xsl:choose>
+        <xsl:when test="$book.status = 'draft'">
+          <xsl:apply-templates select="/d:book/d:preface[@role = 'frontmatter' and @condition = 'draft']"
+                               mode="frontmatter"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="/d:book/d:preface[@role = 'frontmatter' and @condition = 'final']"
+                               mode="frontmatter"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </fo:block>
   </fo:block>
 </xsl:template>

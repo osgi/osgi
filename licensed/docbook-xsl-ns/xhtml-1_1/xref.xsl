@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="ASCII"?>
-<!--This file was created automatically by html2xhtml-->
-<!--from the HTML stylesheets.-->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:d="http://docbook.org/ns/docbook"
+<?xml version="1.0" encoding="ASCII"?><!--This file was created automatically by html2xhtml--><!--from the HTML stylesheets.--><xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:d="http://docbook.org/ns/docbook"
 xmlns:suwl="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.UnwrapLinks" xmlns:exsl="http://exslt.org/common" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns="http://www.w3.org/1999/xhtml" exclude-result-prefixes="suwl exsl xlink d" version="1.0">
 
 <!-- ********************************************************************
@@ -339,7 +336,7 @@ xmlns:suwl="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.UnwrapLinks" xmlns:exsl=
   </xsl:choose>
 </xsl:template>
 
-<xsl:template match="d:abstract|d:authorblurb|d:personblurb|d:bibliodiv|d:bibliomset                      |d:biblioset|d:blockquote|d:calloutlist|d:caution|d:colophon                      |d:constraintdef|d:formalpara|d:glossdiv|d:important|d:indexdiv                      |d:itemizedlist|d:legalnotice|d:lot|d:msg|d:msgexplan|d:msgmain                      |d:msgrel|d:msgset|d:msgsub|d:note|d:orderedlist|d:partintro                      |d:productionset|d:qandadiv|d:refsynopsisdiv|d:segmentedlist                      |d:set|d:setindex|d:sidebar|d:tip|d:toc|d:variablelist|d:warning" mode="xref-to">
+<xsl:template match="d:abstract|d:authorblurb|d:personblurb|d:bibliodiv|d:bibliomset                      |d:biblioset|d:blockquote|d:calloutlist|d:caution|d:colophon                      |d:constraintdef|d:formalpara|d:glossdiv|d:important|d:indexdiv                      |d:itemizedlist|d:legalnotice|d:lot|d:msg|d:msgexplan|d:msgmain                      |d:msgrel|d:msgset|d:msgsub|d:note|d:orderedlist|d:partintro                      |d:productionset|d:qandadiv|d:refsynopsisdiv|d:screenshot|d:segmentedlist                      |d:set|d:setindex|d:sidebar|d:tip|d:toc|d:variablelist|d:warning" mode="xref-to">
   <xsl:param name="referrer"/>
   <xsl:param name="xrefstyle"/>
   <xsl:param name="verbose" select="1"/>
@@ -997,8 +994,6 @@ xmlns:suwl="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.UnwrapLinks" xmlns:exsl=
 
   <xsl:call-template name="anchor"/>
 
-  <xsl:variable name="localinfo" select="@localinfo"/>
-
   <xsl:choose>
     <!-- olinks resolved by stylesheet and target database -->
     <xsl:when test="@targetdoc or @targetptr or                     (@xlink:role=$xolink.role and                      contains(@xlink:href, '#') )">
@@ -1131,54 +1126,20 @@ xmlns:suwl="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.UnwrapLinks" xmlns:exsl=
 
     </xsl:when>
 
-    <!-- Or use old olink mechanism -->
     <xsl:otherwise>
-      <xsl:variable name="href">
-        <xsl:choose>
-          <xsl:when test="@linkmode">
-            <!-- use the linkmode to get the base URI, use localinfo as fragid -->
-            <xsl:variable name="modespec" select="key('id',@linkmode)"/>
-            <xsl:if test="count($modespec) != 1                           or local-name($modespec) != 'modespec'">
-              <xsl:message>Warning: olink linkmode pointer is wrong.</xsl:message>
-            </xsl:if>
-            <xsl:value-of select="$modespec"/>
-            <xsl:if test="@localinfo">
-              <xsl:text>#</xsl:text>
-              <xsl:value-of select="@localinfo"/>
-            </xsl:if>
-          </xsl:when>
-          <xsl:when test="@type = 'href'">
-            <xsl:call-template name="olink.outline">
-              <xsl:with-param name="outline.base.uri" select="unparsed-entity-uri(@targetdocent)"/>
-              <xsl:with-param name="localinfo" select="@localinfo"/>
-              <xsl:with-param name="return" select="'href'"/>
-            </xsl:call-template>
-          </xsl:when>
-          <xsl:otherwise>
-            <xsl:value-of select="$olink.resolver"/>
-            <xsl:text>?</xsl:text>
-            <xsl:value-of select="$olink.sysid"/>
-            <xsl:value-of select="unparsed-entity-uri(@targetdocent)"/>
-            <!-- XSL gives no access to the public identifier (grumble...) -->
-            <xsl:if test="@localinfo">
-              <xsl:text>&amp;</xsl:text>
-              <xsl:value-of select="$olink.fragid"/>
-              <xsl:value-of select="@localinfo"/>
-            </xsl:if>
-          </xsl:otherwise>
-        </xsl:choose>
-      </xsl:variable>
-    
       <xsl:choose>
-        <xsl:when test="$href != ''">
-          <a href="{$href}">
-            <xsl:apply-templates select="." mode="common.html.attributes"/>
-            <xsl:call-template name="id.attribute"/>
-            <xsl:call-template name="olink.hottext"/>
-          </a>
+        <xsl:when test="@linkmode or @targetdocent or @localinfo">
+          <!-- old olink mechanism -->
+          <xsl:message>
+            <xsl:text>ERROR: olink using obsolete attributes </xsl:text>
+            <xsl:text>@linkmode, @targetdocent, @localinfo are </xsl:text>
+            <xsl:text>not supported.</xsl:text>
+          </xsl:message>
         </xsl:when>
         <xsl:otherwise>
-          <xsl:call-template name="olink.hottext"/>
+          <xsl:message>
+            <xsl:text>ERROR: olink is missing linking attributes.</xsl:text>
+          </xsl:message>
         </xsl:otherwise>
       </xsl:choose>
     </xsl:otherwise>
@@ -1187,53 +1148,6 @@ xmlns:suwl="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.UnwrapLinks" xmlns:exsl=
 
 <xsl:template match="*" mode="pagenumber.markup">
   <!-- no-op in HTML -->
-</xsl:template>
-
-
-<xsl:template name="olink.outline">
-  <xsl:param name="outline.base.uri"/>
-  <xsl:param name="localinfo"/>
-  <xsl:param name="return" select="d:href"/>
-
-  <xsl:variable name="outline-file" select="concat($outline.base.uri,                                $olink.outline.ext)"/>
-
-  <xsl:variable name="outline" select="document($outline-file,.)/div"/>
-
-  <xsl:variable name="node-href">
-    <xsl:choose>
-      <xsl:when test="$localinfo != ''">
-        <xsl:variable name="node" select="$outline//                                    *[@id=$localinfo or @xml:id=$localinfo]"/>
-        <xsl:value-of select="$node/@href"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$outline/@href"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <xsl:variable name="node-xref">
-    <xsl:choose>
-      <xsl:when test="$localinfo != ''">
-        <xsl:variable name="node" select="$outline//                                *[@id=$localinfo or @xml:id=$localinfo]"/>
-        <xsl:copy-of select="$node/d:xref"/>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$outline/d:xref"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:variable>
-
-  <xsl:choose>
-    <xsl:when test="$return = 'href'">
-      <xsl:value-of select="$node-href"/>
-    </xsl:when>
-    <xsl:when test="$return = 'xref'">
-      <xsl:value-of select="$node-xref"/>
-    </xsl:when>
-    <xsl:otherwise>
-      <xsl:copy-of select="$node-xref"/>
-    </xsl:otherwise>
-  </xsl:choose>
 </xsl:template>
 
 <!-- ==================================================================== -->
@@ -1268,9 +1182,8 @@ xmlns:suwl="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.UnwrapLinks" xmlns:exsl=
   <xsl:param name="title"/>
 
   <xsl:choose>
-    <!-- FIXME: what about the case where titleabbrev is inside the info? -->
-    <xsl:when test="$purpose = 'xref' and d:titleabbrev">
-      <xsl:apply-templates select="." mode="titleabbrev.markup"/>
+    <xsl:when test="$purpose = 'xref'">
+      <xsl:copy-of select="$title"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:copy-of select="$title"/>
@@ -1285,7 +1198,7 @@ xmlns:suwl="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.UnwrapLinks" xmlns:exsl=
 
   <xsl:choose>
     <xsl:when test="$purpose = 'xref'">
-      <em xmlns:xslo="http://www.w3.org/1999/XSL/Transform">
+      <em>
         <xsl:copy-of select="$title"/>
       </em>
     </xsl:when>

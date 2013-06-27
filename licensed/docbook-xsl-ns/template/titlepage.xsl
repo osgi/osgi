@@ -21,6 +21,15 @@
 
 <!-- ==================================================================== -->
 
+<!-- Namespace for wrapper elements. Please set it for XHTML. -->
+<xsl:param name="ns">
+  <!-- Guess correct setting for cases where parameter is not supplied -->
+  <xsl:choose>
+    <xsl:when test="//*[namespace-uri() = 'http://www.w3.org/1999/XSL/Format']">http://www.w3.org/1999/XSL/Format</xsl:when>
+    <xsl:when test="//*[namespace-uri() = 'http://www.w3.org/1999/xhtml']">http://www.w3.org/1999/xhtml</xsl:when>
+  </xsl:choose>
+</xsl:param>
+
 <xsl:template match="/">
   <xsl:text>&#x0a;</xsl:text>
   <xsl:apply-templates/>
@@ -196,7 +205,7 @@ and <quote>verso</quote> sides of the title page.</para>
       <xsl:text>.titlepage</xsl:text>
     </xsl:attribute>
     <xsl:text>&#xA;  </xsl:text>
-    <xsl:element name="{@t:wrapper}">
+    <xsl:element name="{@t:wrapper}" namespace="{$ns}">
       <xsl:apply-templates select="@*" mode="copy.literal.atts"/>
       <xsl:text>&#xA;    </xsl:text>
       <xsl:element name="xsl:variable">
@@ -250,7 +259,7 @@ and <quote>verso</quote> sides of the title page.</para>
       <xsl:element name="xsl:if">
         <xsl:attribute name="test">(normalize-space($recto.content) != '') or ($recto.elements.count > 0)</xsl:attribute>
         <xsl:text>&#xA;      </xsl:text>
-        <xsl:element name="{@t:wrapper}">
+        <xsl:element name="{@t:wrapper}" namespace="{$ns}">
           <xsl:apply-templates select="t:titlepage-content[@t:side='recto']/@*"
                                mode="copy.literal.atts"/>
           <xsl:element name="xsl:copy-of">
@@ -311,7 +320,7 @@ and <quote>verso</quote> sides of the title page.</para>
       <xsl:element name="xsl:if">
         <xsl:attribute name="test">(normalize-space($verso.content) != '') or ($verso.elements.count > 0)</xsl:attribute>
         <xsl:text>&#xA;      </xsl:text>
-        <xsl:element name="{@t:wrapper}">
+        <xsl:element name="{@t:wrapper}" namespace="{$ns}">
           <xsl:apply-templates select="t:titlepage-content[@t:side='verso']/@*"
                                mode="copy.literal.atts"/>
           <xsl:element name="xsl:copy-of">
@@ -400,7 +409,7 @@ and <quote>verso</quote> sides of the title page.</para>
           <xsl:text>.auto.mode</xsl:text>
         </xsl:attribute>
         <xsl:text>&#xA;</xsl:text>
-        <xsl:element name="{../../@t:wrapper}">
+        <xsl:element name="{../../@t:wrapper}" namespace="{$ns}">
           <xsl:attribute name="xsl:use-attribute-sets">
             <xsl:value-of select="../../@t:element"/>
             <xsl:text>.titlepage.</xsl:text>
@@ -912,7 +921,7 @@ names.</para>
     <xsl:when test="@t:force and @t:force != '0'">
       <xsl:choose>
         <xsl:when test="@t:named-template">
-          <xsl:element name="{../../@t:wrapper}">
+          <xsl:element name="{../../@t:wrapper}" namespace="{$ns}">
             <xsl:attribute name="xsl:use-attribute-sets">
               <xsl:value-of select="../../@t:element"/>
               <xsl:text>.titlepage.</xsl:text>

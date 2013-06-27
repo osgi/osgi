@@ -108,7 +108,7 @@ to be incomplete. Don't forget to read the source, too :-)</para>
   <tr>
     <td align="{$direction.align.start}" valign="top" width="3%">
       <xsl:text>[</xsl:text>
-      <xsl:number count="d:production" level="any"/>
+      <xsl:apply-templates select="." mode="label.markup"/>
       <xsl:text>]</xsl:text>
     </td>
     <td align="{$direction.align.end}" valign="top" width="10%">

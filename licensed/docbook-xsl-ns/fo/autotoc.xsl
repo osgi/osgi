@@ -752,7 +752,7 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"
   </xsl:variable>
 
   <xsl:choose>
-    <xsl:when test="$fop.extensions != 0 or $passivetex.extensions != 0">
+    <xsl:when test="$fop.extensions != 0">
        <xsl:value-of select="concat($depth*$toc.indent.width, 'pt')"/>
     </xsl:when>
     <xsl:otherwise>

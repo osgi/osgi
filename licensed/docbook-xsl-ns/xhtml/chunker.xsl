@@ -56,13 +56,13 @@ xmlns:saxon="http://icl.com/saxon" xmlns:lxslt="http://xml.apache.org/xslt" xmln
     <!-- put Saxon first to work around a bug in libxslt -->
     <xsl:when test="element-available('saxon:output')">
       <!-- Saxon doesn't make the chunks relative -->
-      <xsl:value-of select="concat($chunk.base.dir,$base.name)"/>
+      <xsl:value-of select="concat($base.dir,$base.name)"/>
     </xsl:when>
     <xsl:when test="element-available('exsl:document')">
       <!-- EXSL document does make the chunks relative, I think -->
       <xsl:choose>
         <xsl:when test="count(parent::*) = 0">
-          <xsl:value-of select="concat($chunk.base.dir,$base.name)"/>
+          <xsl:value-of select="concat($base.dir,$base.name)"/>
         </xsl:when>
         <xsl:otherwise>
           <xsl:value-of select="$base.name"/>
@@ -71,7 +71,7 @@ xmlns:saxon="http://icl.com/saxon" xmlns:lxslt="http://xml.apache.org/xslt" xmln
     </xsl:when>
     <xsl:when test="element-available('redirect:write')">
       <!-- Xalan doesn't make the chunks relative -->
-      <xsl:value-of select="concat($chunk.base.dir,$base.name)"/>
+      <xsl:value-of select="concat($base.dir,$base.name)"/>
     </xsl:when>
     <xsl:otherwise>
       <xsl:message terminate="yes">
@@ -302,7 +302,7 @@ xmlns:saxon="http://icl.com/saxon" xmlns:lxslt="http://xml.apache.org/xslt" xmln
     <xsl:with-param name="method" select="$method"/>
     <xsl:with-param name="encoding" select="$encoding"/>
     <xsl:with-param name="indent" select="'no'"/>
-    <xsl:with-param name="omit-xml-declaration" select="'no'"/>
+    <xsl:with-param name="omit-xml-declaration" select="'yes'"/>
     <xsl:with-param name="standalone" select="'no'"/>
     <xsl:with-param name="doctype-public"/>
     <xsl:with-param name="doctype-system"/>

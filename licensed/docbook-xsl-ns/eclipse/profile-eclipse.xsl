@@ -30,7 +30,7 @@ xmlns:ng="http://docbook.org/docbook-ng" xmlns:db="http://docbook.org/ns/docbook
   <xsl:choose>
     <xsl:when test="$rootid != ''">
       <xsl:choose>
-        <xsl:when test="count($profiled-nodes//*[@id=$rootid]) = 0">
+        <xsl:when test="count($profiled-nodes//*[@id=$rootid or @xml:id=$rootid]) = 0">
           <xsl:message terminate="yes">
             <xsl:text>ID '</xsl:text>
             <xsl:value-of select="$rootid"/>
@@ -43,7 +43,7 @@ xmlns:ng="http://docbook.org/docbook-ng" xmlns:db="http://docbook.org/ns/docbook
           </xsl:if>
           <xsl:if test="$collect.xref.targets != 'only'">
             <xsl:message>Formatting from <xsl:value-of select="$rootid"/></xsl:message>
-            <xsl:apply-templates select="$profiled-nodes//*[@id=$rootid]" mode="process.root"/>
+            <xsl:apply-templates select="$profiled-nodes//*[@id=$rootid or @xml:id=$rootid]" mode="process.root"/>
             <xsl:call-template name="etoc"/>
             <xsl:call-template name="plugin.xml"/>
 				<xsl:call-template name="helpidx"/>
@@ -86,13 +86,13 @@ xmlns:ng="http://docbook.org/docbook-ng" xmlns:db="http://docbook.org/ns/docbook
           <xsl:variable name="title">
             <xsl:if test="$eclipse.autolabel=1">
               <xsl:variable name="label.markup">
-                <xsl:apply-templates select="$profiled-nodes//*[@id=$rootid]" mode="label.markup"/>
+                <xsl:apply-templates select="$profiled-nodes//*[@id=$rootid or @xml:id=$rootid]" mode="label.markup"/>
               </xsl:variable>
               <xsl:if test="normalize-space($label.markup)">
                 <xsl:value-of select="concat($label.markup,$autotoc.label.separator)"/>
               </xsl:if>
             </xsl:if>
-            <xsl:apply-templates select="$profiled-nodes//*[@id=$rootid]" mode="title.markup"/>
+            <xsl:apply-templates select="$profiled-nodes//*[@id=$rootid or @xml:id=$rootid]" mode="title.markup"/>
           </xsl:variable>
           <xsl:variable name="href">
             <xsl:call-template name="href.target.with.base.dir">
@@ -101,7 +101,7 @@ xmlns:ng="http://docbook.org/docbook-ng" xmlns:db="http://docbook.org/ns/docbook
           </xsl:variable>
           
           <toc label="{normalize-space($title)}" topic="{$href}">
-            <xsl:apply-templates select="$profiled-nodes//*[@id=$rootid]/*" mode="etoc"/>
+            <xsl:apply-templates select="$profiled-nodes//*[@id=$rootid or @xml:id=$rootid]/*" mode="etoc"/>
           </toc>
         </xsl:when>
 

@@ -51,11 +51,9 @@ xmlns:xslthl="http://xslthl.sf.net" xmlns="http://www.w3.org/1999/xhtml" exclude
     </span>
   </xsl:template>
   <xsl:template match="xslthl:html" mode="xslthl">
-    <strong>
-      <em style="color: red">
-        <xsl:apply-templates mode="xslthl"/>
-      </em>
-    </strong>
+    <span class="hl-html" style="color: navy; font-weight: bold">
+      <xsl:apply-templates mode="xslthl"/>
+    </span>
   </xsl:template>
   <xsl:template match="xslthl:xslt" mode="xslthl">
     <strong style="color: #0066FF">

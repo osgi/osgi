@@ -1,7 +1,4 @@
-<?xml version="1.0" encoding="ASCII"?>
-<!--This file was created automatically by html2xhtml-->
-<!--from the HTML stylesheets.-->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:d="http://docbook.org/ns/docbook"
+<?xml version="1.0" encoding="ASCII"?><!--This file was created automatically by html2xhtml--><!--from the HTML stylesheets.--><xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:d="http://docbook.org/ns/docbook"
 xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:stext="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.TextFactory" xmlns:simg="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.ImageIntrinsics" xmlns:ximg="xalan://com.nwalsh.xalan.ImageIntrinsics" xmlns:xtext="xalan://com.nwalsh.xalan.Text" xmlns:lxslt="http://xml.apache.org/xslt" xmlns="http://www.w3.org/1999/xhtml" exclude-result-prefixes="xlink stext xtext lxslt simg ximg d" extension-element-prefixes="stext xtext" version="1.0">
 
 <!-- ********************************************************************
@@ -40,8 +37,15 @@ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:stext="http://nwalsh.com/xslt/e
   <div>
     <xsl:apply-templates select="." mode="common.html.attributes"/>
     <xsl:call-template name="id.attribute"/>
+    <xsl:call-template name="anchor"/>
     <xsl:apply-templates/>
   </div>
+</xsl:template>
+
+<xsl:template match="d:screenshot/d:title">
+  <xsl:call-template name="formal.object.heading">
+    <xsl:with-param name="object" select=".."/>
+  </xsl:call-template>
 </xsl:template>
 
 <xsl:template match="d:screeninfo">
@@ -340,7 +344,7 @@ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:stext="http://nwalsh.com/xslt/e
           <xsl:with-param name="em.size" select="$points.per.em"/>
         </xsl:call-template>
       </xsl:variable>
-      <xsl:value-of select="$cwidth.in.points div 72.0 * $pixels.per.inch * $scale"/>
+      <xsl:value-of select="round($cwidth.in.points div 72.0 * $pixels.per.inch * $scale)"/>
     </xsl:if>
   </xsl:variable>
 
@@ -407,7 +411,7 @@ xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:stext="http://nwalsh.com/xslt/e
           <xsl:with-param name="em.size" select="$points.per.em"/>
         </xsl:call-template>
       </xsl:variable>
-      <xsl:value-of select="$cdepth.in.points div 72.0 * $pixels.per.inch * $scale"/>
+      <xsl:value-of select="round($cdepth.in.points div 72.0 * $pixels.per.inch * $scale)"/>
     </xsl:if>
   </xsl:variable>
 
@@ -596,7 +600,10 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
                   <xsl:copy-of select="$alt"/>
                 </xsl:when>
                 <xsl:when test="ancestor::d:figure">
-                  <xsl:value-of select="normalize-space(ancestor::d:figure/d:title)"/>
+                  <xsl:variable name="fig.title">
+                    <xsl:apply-templates select="ancestor::d:figure/d:title/node()"/>
+                  </xsl:variable>
+                  <xsl:value-of select="normalize-space($fig.title)"/>
                 </xsl:when>
               </xsl:choose>
             </xsl:with-param>
@@ -980,7 +987,11 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
       </xsl:choose>
     </xsl:attribute>
   </xsl:if>
+
+  <xsl:call-template name="extension.process.image.attributes"/>
 </xsl:template>
+
+<xsl:template name="extension.process.image.attributes"/>
 
 <!-- ==================================================================== -->
 
@@ -1186,7 +1197,14 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
 
       <xsl:call-template name="process.image">
         <xsl:with-param name="alt">
-          <xsl:apply-templates select="$phrases[not(@role) or @role!='tex'][1]"/>
+          <xsl:choose>
+            <xsl:when test="ancestor::d:mediaobject/d:alt">
+              <xsl:apply-templates select="ancestor::d:mediaobject/d:alt"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:apply-templates select="$phrases[not(@role) or @role!='tex'][1]"/>
+            </xsl:otherwise>
+          </xsl:choose>
         </xsl:with-param>
         <xsl:with-param name="longdesc">
           <xsl:call-template name="write.longdesc">
@@ -1325,6 +1343,10 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
 
 <!-- ==================================================================== -->
 
+<xsl:template match="d:mediaobject/d:alt">
+  <xsl:apply-templates/>
+</xsl:template>
+
 <xsl:template match="d:videoobject">
   <xsl:apply-templates select="d:videodata"/>
 </xsl:template>
@@ -1333,7 +1355,14 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
   <xsl:call-template name="process.image">
     <xsl:with-param name="tag" select="'embed'"/>
     <xsl:with-param name="alt">
-      <xsl:apply-templates select="(../../d:textobject/d:phrase)[1]"/>
+      <xsl:choose>
+        <xsl:when test="ancestor::d:mediaobject/d:alt">
+          <xsl:apply-templates select="ancestor::d:mediaobject/d:alt"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="(ancestor::d:mediaobject/d:textobject/d:phrase)[1]"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
@@ -1348,7 +1377,14 @@ valign: <xsl:value-of select="@valign"/></xsl:message>
   <xsl:call-template name="process.image">
     <xsl:with-param name="tag" select="'embed'"/>
     <xsl:with-param name="alt">
-      <xsl:apply-templates select="(../../d:textobject/d:phrase)[1]"/>
+      <xsl:choose>
+        <xsl:when test="ancestor::d:mediaobject/d:alt">
+          <xsl:apply-templates select="ancestor::d:mediaobject/d:alt"/>
+        </xsl:when>
+        <xsl:otherwise>
+          <xsl:apply-templates select="(ancestor::d:mediaobject/d:textobject/d:phrase)[1]"/>
+        </xsl:otherwise>
+      </xsl:choose>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>

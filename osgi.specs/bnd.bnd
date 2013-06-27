@@ -25,10 +25,7 @@ foundation-latest   = 1.1.0
 foundation-previous = 1.0.0
 
 saxon    = ${repo;com.icl.saxon}
-resolver = ${repo;org.apache.xml.commons.resolver}
-xml2mif  = ../org.osgi.tools/${bin}
-
-dependencyfinder = ${repo;org.apache.jakarta.oro}:${repo;org.apache.log4j}:${repo;com.jeantessier.dependencyfinder}
+log4j    = ${repo;org.apache.log4j}
 
 minimum-latest.jar      = ${repo;ee.minimum;[${minimum-latest},${minimum-latest}]}
 minimum-previous.jar    = ${repo;ee.minimum;[${minimum-previous},${minimum-previous}]}

@@ -17,6 +17,7 @@ xmlns="http://www.w3.org/1999/xhtml" version="1.0">
      ******************************************************************** -->
 
 <xsl:param name="abstract.notitle.enabled" select="0"/>
+<xsl:param name="activate.external.olinks" select="1"/>
 <xsl:param name="admon.graphics.extension">.png</xsl:param>
 <xsl:param name="admon.graphics" select="0"/>
 <xsl:param name="admon.graphics.path">images/</xsl:param>
@@ -321,15 +322,10 @@ set       toc,title
 <xsl:param name="olink.base.uri"/>
 <xsl:param name="olink.debug" select="0"/>
 <xsl:param name="olink.doctitle">no</xsl:param> 
-<xsl:param name="olink.fragid">fragid=</xsl:param>
 <xsl:param name="olink.lang.fallback.sequence"/>
-<xsl:param name="olink.outline.ext">.olink</xsl:param>
 <xsl:attribute-set name="olink.properties">
   <xsl:attribute name="show-destination">replace</xsl:attribute>
 </xsl:attribute-set>
-<xsl:param name="olink.pubid">pubid</xsl:param>
-  <xsl:param name="olink.resolver">/cgi-bin/olink</xsl:param>
-<xsl:param name="olink.sysid">sysid</xsl:param>
 <xsl:param name="othercredit.like.author.enabled">0</xsl:param>
 <xsl:param name="para.propagates.style" select="1"/>
 <xsl:param name="part.autolabel">I</xsl:param>
@@ -428,7 +424,7 @@ set       toc,title
 <xsl:param name="webhelp.base.dir">docs</xsl:param>
 <xsl:param name="webhelp.common.dir">../common/</xsl:param>
 <xsl:param name="webhelp.default.topic">index.html</xsl:param>
-<xsl:param name="webhelp.include.search.tab">true</xsl:param>
+<xsl:param name="webhelp.include.search.tab">1</xsl:param>
 <xsl:param name="webhelp.indexer.language">en</xsl:param>
 <xsl:param name="webhelp.start.filename">index.html</xsl:param>
 <xsl:param name="webhelp.tree.cookie.id" select="concat( 'treeview-', count(//node()) )"/>

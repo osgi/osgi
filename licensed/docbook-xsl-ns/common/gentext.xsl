@@ -197,7 +197,8 @@ xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
 </xsl:template>
 
 <xsl:template match="d:bridgehead" mode="is.autonumber">
-  <xsl:value-of select="$section.autolabel"/>
+  <!-- bridgeheads are not numbered -->
+  <xsl:text>0</xsl:text>
 </xsl:template>
 
 <xsl:template match="d:procedure" mode="is.autonumber">
@@ -476,6 +477,12 @@ xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
               <xsl:choose>
                 <xsl:when test="$title != ''">
                   <xsl:copy-of select="$title"/>
+                </xsl:when>
+                <xsl:when test="$purpose = 'xref'">
+                  <xsl:apply-templates select="." mode="titleabbrev.markup">
+                    <xsl:with-param name="allow-anchors" select="$allow-anchors"/>
+                    <xsl:with-param name="verbose" select="$verbose"/>
+                  </xsl:apply-templates>
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:apply-templates select="." mode="title.markup">

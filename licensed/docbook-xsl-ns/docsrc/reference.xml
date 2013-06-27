@@ -134,7 +134,7 @@
             output.</para>
         </note>
       </partintro>
-      <xi:include href="../slides/html/param.xml" xpointer="xpointer(/book/reference)" />
+      <xi:include href="../slides/xhtml/param.xml" xpointer="xpointer(/book/reference)" />
       <xi:include href="../slides/fo/param.xml" xpointer="xpointer(/book/reference)" />
     </part>
     <part xml:id="website">

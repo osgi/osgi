@@ -205,13 +205,15 @@ xmlns="http://www.w3.org/1999/xhtml" version="1.0">
     </xsl:when>
     <xsl:otherwise>
       <!-- do not use xsl:copy because of XHTML's needs -->
-      <xsl:element name="table" namespace="http://www.w3.org/1999/xhtml">
-        <xsl:apply-templates select="@*" mode="htmlTableAtt"/>
-        <xsl:attribute name="id">
-          <xsl:call-template name="object.id"/>
-        </xsl:attribute>
-        <xsl:call-template name="htmlTable"/>
-      </xsl:element>
+      <div>
+        <xsl:call-template name="generate.class.attribute"/>
+        <xsl:call-template name="id.attribute"/>
+        <xsl:call-template name="anchor"/>
+        <xsl:element name="table" namespace="http://www.w3.org/1999/xhtml">
+          <xsl:apply-templates select="@*" mode="htmlTableAtt"/>
+          <xsl:call-template name="htmlTable"/>
+        </xsl:element>
+      </div>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>
@@ -416,13 +418,15 @@ xmlns="http://www.w3.org/1999/xhtml" version="1.0">
       <xsl:call-template name="informal.object"/>
     </xsl:when>
     <xsl:otherwise>
-      <xsl:element name="table" namespace="http://www.w3.org/1999/xhtml">
-        <xsl:apply-templates select="@*" mode="htmlTableAtt"/>
-        <xsl:attribute name="id">
-          <xsl:call-template name="object.id"/>
-        </xsl:attribute>
-        <xsl:call-template name="htmlTable"/>
-      </xsl:element>
+      <div>
+        <xsl:call-template name="generate.class.attribute"/>
+        <xsl:call-template name="id.attribute"/>
+        <xsl:call-template name="anchor"/>
+        <xsl:element name="table" namespace="http://www.w3.org/1999/xhtml">
+          <xsl:apply-templates select="@*" mode="htmlTableAtt"/>
+          <xsl:call-template name="htmlTable"/>
+        </xsl:element>
+      </div>
     </xsl:otherwise>
   </xsl:choose>
 </xsl:template>

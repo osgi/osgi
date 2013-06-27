@@ -37,8 +37,7 @@ xmlns:fo="http://www.w3.org/1999/XSL/Format"
   <fo:table xsl:use-attribute-sets="table.table.properties">
     <xsl:choose>
       <xsl:when test="$fop.extensions != 0 or
-                      $fop1.extensions != 0 or
-                      $passivetex.extensions != 0">
+                      $fop1.extensions != 0">
         <xsl:attribute name="table-layout">fixed</xsl:attribute>
       </xsl:when>
     </xsl:choose>
