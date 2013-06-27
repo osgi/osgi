@@ -157,14 +157,6 @@
           as discovering services in the network. See <xref
           linkend="service.remoteserviceadmin"/>.</para>
         </listitem>
-
-        <listitem>
-          <para><emphasis>SCA Configuration Type</emphasis> – Distribution
-          providers support a number of communication protocols configured by
-          specific configuration types. The SCA Remote Services Configuration
-          Specification defines such a configuration type. See <xref
-          linkend="service.sca"/>.</para>
-        </listitem>
       </itemizedlist>
     </section>
 
@@ -728,16 +720,6 @@
             </row>
 
             <row>
-              <entry><xref linkend="service.sca"
-              xrefstyle="template:%n %t"/></entry>
-
-              <entry><code>-</code></entry>
-
-              <entry><code><xref endterm="service.sca-version"
-              linkend="service.sca"/></code></entry>
-            </row>
-
-            <row>
               <entry><xref linkend="service.coordinator"
               xrefstyle="template:%n %t"/></entry>
 
@@ -835,5 +817,15 @@
         </listitem>
       </orderedlist>
     </section>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Removed <emphasis>SCA Configuration Type Specification</emphasis>.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

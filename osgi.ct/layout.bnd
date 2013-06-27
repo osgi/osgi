@@ -95,7 +95,6 @@ build.enterprise.tests = \
     org.osgi.test.cases.repository, \
     org.osgi.test.cases.serviceloader, \
     org.osgi.test.cases.serviceloader.secure, \
-    org.osgi.test.cases.scaconfigtype, \
     org.osgi.test.cases.subsystem, \
     org.osgi.test.cases.subsystem.secure, \
 	org.osgi.test.cases.transaction, \

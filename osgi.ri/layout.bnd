@@ -65,7 +65,6 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.bundle.jmx}, \
 	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery}, \
 	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}, \
-	${repo;org.osgi.impl.bundle.sca}, \
 	${repo;org.osgi.impl.bundle.serviceloader}, \
 	${repo;org.osgi.impl.bundle.servlet;2.1}, \
 	${repo;org.osgi.impl.bundle.webcontainer}, \
