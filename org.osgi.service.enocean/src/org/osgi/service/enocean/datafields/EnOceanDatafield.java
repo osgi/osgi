@@ -39,6 +39,11 @@ public interface EnOceanDatafield {
 	 * @return The value of this datafield.
 	 */
 	public Object getValue();
+	
+	/**
+	 * Sets the complex value of a datafield.
+	 * @param obj
+	 */
 	public void setValue(Object obj);
 
 	/**
@@ -46,6 +51,11 @@ public interface EnOceanDatafield {
 	 * @return
 	 */
 	byte[] getRawValue();
+	
+	/**
+	 * Sets the raw value of a datafield.
+	 * @param rawValue
+	 */
 	void setRawValue(byte[] rawValue);
 
 }

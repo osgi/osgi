@@ -3,8 +3,8 @@ package org.osgi.service.enocean;
 import java.util.Map;
 
 /**
- * This interface represents an EnOcean Device node, a physical device that can communicate
- * using the EnOcean protocol.
+ * This interface represents an EnOcean Device node, a physical device that communicates
+ * over the EnOcean protocol.
  *  
  * @version 1.0
  */
@@ -49,19 +49,23 @@ public interface EnOceanDevice {
 	public final static String SECURITY_LEVEL_FORMAT = "enocean.device.security_level_format";
 
 	/**
+	 * Sends a message onto the EnOcean network. Lightweight byte[] version.
+	 * 
 	 * @param the EnOceanTelegram, as raw bytes, to be issued.
 	 * @throws EnOceanException
 	 */
 	public void send(byte[] telegram) throws EnOceanException;
 	
 	/**
+	 * Sends a message onto the EnOcean network. Uses actual {@link EnOceanTelegram} objects.
+	 * 
 	 * @param the EnOceanTelegram to be issued.
 	 * @throws EnOceanException
 	 */
 	public void send(EnOceanTelegram telegram) throws EnOceanException;
 	
 	/**
-	 * @return Switches the device into learning mode or not.
+	 * Switches the device into learning mode.
 	 */
 	public void setLearningMode(boolean learnMode);
 	
@@ -69,12 +73,20 @@ public interface EnOceanDevice {
 	 * @return The current rolling code in use with this device's communications.
 	 */
 	public int getRollingCode();
+	
+	/**
+	 * @param rollingCode the rolling code to be set or initiated.
+	 */
 	public void setRollingCode(int rollingCode);
 	
 	/**
 	 * @return The current encryption key used in this device's communications.
 	 */
 	public byte[] getEncryptionKey();
+	
+	/**
+	 * @param key the encryption key to be set.
+	 */
 	public void setEncryptionKey(byte[] key);
 	
 	/**

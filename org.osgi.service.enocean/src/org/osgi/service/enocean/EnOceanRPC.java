@@ -1,5 +1,12 @@
 package org.osgi.service.enocean;
 
+/**
+ * 
+ *
+ * An interface to call RPCs on remote devices.
+ * 
+ * @author $Id$
+ */
 public interface EnOceanRPC {
 	
 	/**

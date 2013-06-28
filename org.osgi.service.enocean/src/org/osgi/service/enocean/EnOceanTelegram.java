@@ -26,7 +26,6 @@ public interface EnOceanTelegram {
 	public final static String DESTINATION_ID = "enocean.profile.destination_id";
 	
 	/**
-	 * 
 	 * @return the current EnOcean status of this telegram.
 	 */
 	public int getStatus();
@@ -45,7 +44,7 @@ public interface EnOceanTelegram {
 	
 	/**
 	 * @return The deserialized object from a sequence of bytes. The actual return type depends
-	 * 			on the implemantation.
+	 * 			on the implementation.
 	 * @throws EnOceanException
 	 */
 	public Object deserialize(byte[] bytes) throws EnOceanException;
@@ -56,6 +55,6 @@ public interface EnOceanTelegram {
 	public EnOceanDatafield[] getDatafields();
 	
 	/**
-	 * @return The number of subtelegrams.
+	 * @return The number of subtelegrams in the case of multifram messages.
 	 */
 	public int getSubtelegramCount();}
