@@ -28,6 +28,7 @@ package org.osgi.test.cases.framework.junit.startlevel;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
@@ -41,6 +42,8 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.sleep.Sleep;
 
 public class StartLevelControl extends DefaultTestBundleControl {
+	private static final int ZERO = 0;
+	private static final int NEGATIVE = -5;
 	private FrameworkStartLevel		fsl;
 	private int						ibsl;
 	private int						origSl;
@@ -627,6 +630,52 @@ public class StartLevelControl extends DefaultTestBundleControl {
 		}
 		finally {
 			tb4.uninstall();
+		}
+	}
+
+	public void testExceptions() throws Exception {
+		Bundle tb1 = getContext().installBundle(
+				getWebServer() + "startlevel.tb1.jar");
+		try {
+			try {
+				fsl.setInitialBundleStartLevel(ZERO);
+				fail("Expected IllegalArgumentException.");
+			} catch (IllegalArgumentException e) {
+				// expected
+			}
+			try {
+				fsl.setInitialBundleStartLevel(NEGATIVE);
+				fail("Expected IllegalArgumentException.");
+			} catch (IllegalArgumentException e) {
+				// expected
+			}
+			try {
+				fsl.setStartLevel(ZERO);
+				fail("Expected IllegalArgumentException.");
+			} catch (IllegalArgumentException e) {
+				// expected
+			}
+			try {
+				fsl.setStartLevel(NEGATIVE);
+				fail("Expected IllegalArgumentException.");
+			} catch (IllegalArgumentException e) {
+				// expected
+			}
+			BundleStartLevel bsl = tb1.adapt(BundleStartLevel.class);
+			try {
+				bsl.setStartLevel(ZERO);
+				fail("Expected IllegalArgumentException.");
+			} catch (IllegalArgumentException e) {
+				// expected
+			}
+			try {
+				bsl.setStartLevel(NEGATIVE);
+				fail("Expected IllegalArgumentException.");
+			} catch (IllegalArgumentException e) {
+				// expected
+			}
+		} finally {
+			tb1.uninstall();
 		}
 	}
 
