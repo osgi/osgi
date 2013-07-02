@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,8 @@ public class SwingUtilities implements javax.swing.SwingConstants {
 	public static javax.swing.JRootPane getRootPane(java.awt.Component var0) { return null; }
 	public static javax.swing.ActionMap getUIActionMap(javax.swing.JComponent var0) { return null; }
 	public static javax.swing.InputMap getUIInputMap(javax.swing.JComponent var0, int var1) { return null; }
+	public static java.awt.Container getUnwrappedParent(java.awt.Component var0) { return null; }
+	public static java.awt.Component getUnwrappedView(javax.swing.JViewport var0) { return null; }
 	public static java.awt.Window getWindowAncestor(java.awt.Component var0) { return null; }
 	public static void invokeAndWait(java.lang.Runnable var0) throws java.lang.InterruptedException, java.lang.reflect.InvocationTargetException { }
 	public static void invokeLater(java.lang.Runnable var0) { }

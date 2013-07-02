@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package javax.xml.ws;
 @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
 @java.lang.annotation.Target(value={java.lang.annotation.ElementType.METHOD})
 public @interface FaultAction {
-	java.lang.Class className();
+	java.lang.Class<? extends java.lang.Exception> className();
 	java.lang.String value() default "";
 }
 

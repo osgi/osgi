@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,9 @@ public class ShortMessage extends javax.sound.midi.MidiMessage {
 	public final static int TIMING_CLOCK = 248;
 	public final static int TUNE_REQUEST = 246;
 	public ShortMessage()  { super((byte[]) null); } 
+	public ShortMessage(int var0) throws javax.sound.midi.InvalidMidiDataException  { super((byte[]) null); } 
+	public ShortMessage(int var0, int var1, int var2) throws javax.sound.midi.InvalidMidiDataException  { super((byte[]) null); } 
+	public ShortMessage(int var0, int var1, int var2, int var3) throws javax.sound.midi.InvalidMidiDataException  { super((byte[]) null); } 
 	protected ShortMessage(byte[] var0)  { super((byte[]) null); } 
 	public java.lang.Object clone() { return null; }
 	public int getChannel() { return 0; }

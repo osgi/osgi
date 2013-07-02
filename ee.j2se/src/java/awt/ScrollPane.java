@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,13 @@ public class ScrollPane extends java.awt.Container implements javax.accessibilit
 	public final static int SCROLLBARS_AS_NEEDED = 0;
 	public final static int SCROLLBARS_NEVER = 2;
 	public ScrollPane() { } 
+	@java.beans.ConstructorProperties(value={"scrollbarDisplayPolicy"})
 	public ScrollPane(int var0) { } 
 	protected final void addImpl(java.awt.Component var0, java.lang.Object var1, int var2) { }
 	protected boolean eventTypeEnabled(int var0) { return false; }
 	public java.awt.Adjustable getHAdjustable() { return null; }
 	public int getHScrollbarHeight() { return 0; }
+	@java.beans.Transient
 	public java.awt.Point getScrollPosition() { return null; }
 	public int getScrollbarDisplayPolicy() { return 0; }
 	public java.awt.Adjustable getVAdjustable() { return null; }

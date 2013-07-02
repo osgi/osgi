@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,12 @@ public class Service {
 		PAYLOAD;
 	}
 	protected Service(java.net.URL var0, javax.xml.namespace.QName var1) { } 
+	protected Service(java.net.URL var0, javax.xml.namespace.QName var1, javax.xml.ws.WebServiceFeature... var2) { } 
 	public void addPort(javax.xml.namespace.QName var0, java.lang.String var1, java.lang.String var2) { }
 	public static javax.xml.ws.Service create(java.net.URL var0, javax.xml.namespace.QName var1) { return null; }
+	public static javax.xml.ws.Service create(java.net.URL var0, javax.xml.namespace.QName var1, javax.xml.ws.WebServiceFeature... var2) { return null; }
 	public static javax.xml.ws.Service create(javax.xml.namespace.QName var0) { return null; }
+	public static javax.xml.ws.Service create(javax.xml.namespace.QName var0, javax.xml.ws.WebServiceFeature... var1) { return null; }
 	public <T> javax.xml.ws.Dispatch<T> createDispatch(javax.xml.namespace.QName var0, java.lang.Class<T> var1, javax.xml.ws.Service.Mode var2) { return null; }
 	public <T> javax.xml.ws.Dispatch<T> createDispatch(javax.xml.namespace.QName var0, java.lang.Class<T> var1, javax.xml.ws.Service.Mode var2, javax.xml.ws.WebServiceFeature... var3) { return null; }
 	public javax.xml.ws.Dispatch<java.lang.Object> createDispatch(javax.xml.namespace.QName var0, javax.xml.bind.JAXBContext var1, javax.xml.ws.Service.Mode var2) { return null; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package java.awt;
 public abstract class GraphicsConfiguration {
 	protected GraphicsConfiguration() { } 
-	public abstract java.awt.image.BufferedImage createCompatibleImage(int var0, int var1);
+	public java.awt.image.BufferedImage createCompatibleImage(int var0, int var1) { return null; }
 	public java.awt.image.BufferedImage createCompatibleImage(int var0, int var1, int var2) { return null; }
 	public java.awt.image.VolatileImage createCompatibleVolatileImage(int var0, int var1) { return null; }
 	public java.awt.image.VolatileImage createCompatibleVolatileImage(int var0, int var1, int var2) { return null; }
@@ -31,5 +31,6 @@ public abstract class GraphicsConfiguration {
 	public abstract java.awt.GraphicsDevice getDevice();
 	public java.awt.ImageCapabilities getImageCapabilities() { return null; }
 	public abstract java.awt.geom.AffineTransform getNormalizingTransform();
+	public boolean isTranslucencyCapable() { return false; }
 }
 

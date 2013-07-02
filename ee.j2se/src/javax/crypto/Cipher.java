@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,6 +57,9 @@ public class Cipher {
 	public final byte[] update(byte[] var0, int var1, int var2) { return null; }
 	public final int update(byte[] var0, int var1, int var2, byte[] var3) throws javax.crypto.ShortBufferException { return 0; }
 	public final int update(byte[] var0, int var1, int var2, byte[] var3, int var4) throws javax.crypto.ShortBufferException { return 0; }
+	public final void updateAAD(java.nio.ByteBuffer var0) { }
+	public final void updateAAD(byte[] var0) { }
+	public final void updateAAD(byte[] var0, int var1, int var2) { }
 	public final byte[] wrap(java.security.Key var0) throws java.security.InvalidKeyException, javax.crypto.IllegalBlockSizeException { return null; }
 }
 

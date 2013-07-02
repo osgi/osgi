@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ public class AssertionError extends java.lang.Error {
 	public AssertionError(int var0) { } 
 	public AssertionError(long var0) { } 
 	public AssertionError(java.lang.Object var0) { } 
+	public AssertionError(java.lang.String var0, java.lang.Throwable var1) { } 
 	public AssertionError(boolean var0) { } 
 }
 

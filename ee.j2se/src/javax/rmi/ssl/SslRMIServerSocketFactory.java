@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package javax.rmi.ssl;
 public class SslRMIServerSocketFactory implements java.rmi.server.RMIServerSocketFactory {
 	public SslRMIServerSocketFactory() { } 
+	public SslRMIServerSocketFactory(javax.net.ssl.SSLContext var0, java.lang.String[] var1, java.lang.String[] var2, boolean var3) { } 
 	public SslRMIServerSocketFactory(java.lang.String[] var0, java.lang.String[] var1, boolean var2) { } 
 	public java.net.ServerSocket createServerSocket(int var0) throws java.io.IOException { return null; }
 	public final java.lang.String[] getEnabledCipherSuites() { return null; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,9 +15,9 @@
  */
 
 package javax.swing;
-public interface ListModel {
+public interface ListModel<E> {
 	void addListDataListener(javax.swing.event.ListDataListener var0);
-	java.lang.Object getElementAt(int var0);
+	E getElementAt(int var0);
 	int getSize();
 	void removeListDataListener(javax.swing.event.ListDataListener var0);
 }

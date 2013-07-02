@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@ public class JViewport extends javax.swing.JComponent implements javax.accessibi
 	protected javax.swing.JViewport.ViewListener createViewListener() { return null; }
 	protected void fireStateChanged() { }
 	public javax.swing.event.ChangeListener[] getChangeListeners() { return null; }
+	@java.beans.Transient
 	public java.awt.Dimension getExtentSize() { return null; }
 	public final java.awt.Insets getInsets() { return null; }
 	public final java.awt.Insets getInsets(java.awt.Insets var0) { return null; }

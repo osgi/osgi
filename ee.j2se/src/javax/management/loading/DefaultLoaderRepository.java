@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,7 @@ package javax.management.loading;
 @java.lang.Deprecated
 public class DefaultLoaderRepository {
 	public DefaultLoaderRepository() { } 
-	public static java.lang.Class loadClass(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
-	public static java.lang.Class loadClassWithout(java.lang.ClassLoader var0, java.lang.String var1) throws java.lang.ClassNotFoundException { return null; }
+	public static java.lang.Class<?> loadClass(java.lang.String var0) throws java.lang.ClassNotFoundException { return null; }
+	public static java.lang.Class<?> loadClassWithout(java.lang.ClassLoader var0, java.lang.String var1) throws java.lang.ClassNotFoundException { return null; }
 }
 

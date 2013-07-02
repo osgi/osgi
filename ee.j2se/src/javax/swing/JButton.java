@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ public class JButton extends javax.swing.AbstractButton implements javax.accessi
 		protected AccessibleJButton() { } 
 	}
 	public JButton() { } 
+	@java.beans.ConstructorProperties(value={"text"})
 	public JButton(java.lang.String var0) { } 
 	public JButton(java.lang.String var0, javax.swing.Icon var1) { } 
 	public JButton(javax.swing.Action var0) { } 

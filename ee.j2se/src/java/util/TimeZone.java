@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ public abstract class TimeZone implements java.io.Serializable, java.lang.Clonea
 	public static java.util.TimeZone getTimeZone(java.lang.String var0) { return null; }
 	public boolean hasSameRules(java.util.TimeZone var0) { return false; }
 	public abstract boolean inDaylightTime(java.util.Date var0);
+	public boolean observesDaylightTime() { return false; }
 	public static void setDefault(java.util.TimeZone var0) { }
 	public void setID(java.lang.String var0) { }
 	public abstract void setRawOffset(int var0);

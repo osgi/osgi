@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,11 +31,13 @@ public final class HttpCookie implements java.lang.Cloneable {
 	public java.lang.String getValue() { return null; }
 	public int getVersion() { return 0; }
 	public boolean hasExpired() { return false; }
+	public boolean isHttpOnly() { return false; }
 	public static java.util.List<java.net.HttpCookie> parse(java.lang.String var0) { return null; }
 	public void setComment(java.lang.String var0) { }
 	public void setCommentURL(java.lang.String var0) { }
 	public void setDiscard(boolean var0) { }
 	public void setDomain(java.lang.String var0) { }
+	public void setHttpOnly(boolean var0) { }
 	public void setMaxAge(long var0) { }
 	public void setPath(java.lang.String var0) { }
 	public void setPortlist(java.lang.String var0) { }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ public class ImageIcon implements java.io.Serializable, javax.accessibility.Acce
 	public ImageIcon() { } 
 	public ImageIcon(java.awt.Image var0) { } 
 	public ImageIcon(java.awt.Image var0, java.lang.String var1) { } 
+	@java.beans.ConstructorProperties(value={"description"})
 	public ImageIcon(java.lang.String var0) { } 
 	public ImageIcon(java.lang.String var0, java.lang.String var1) { } 
 	public ImageIcon(java.net.URL var0) { } 
@@ -44,8 +45,10 @@ public class ImageIcon implements java.io.Serializable, javax.accessibility.Acce
 	public java.lang.String getDescription() { return null; }
 	public int getIconHeight() { return 0; }
 	public int getIconWidth() { return 0; }
+	@java.beans.Transient
 	public java.awt.Image getImage() { return null; }
 	public int getImageLoadStatus() { return 0; }
+	@java.beans.Transient
 	public java.awt.image.ImageObserver getImageObserver() { return null; }
 	protected void loadImage(java.awt.Image var0) { }
 	public void paintIcon(java.awt.Component var0, java.awt.Graphics var1, int var2, int var3) { }

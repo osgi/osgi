@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ public class InetAddress implements java.io.Serializable {
 	public java.lang.String getHostAddress() { return null; }
 	public java.lang.String getHostName() { return null; }
 	public static java.net.InetAddress getLocalHost() throws java.net.UnknownHostException { return null; }
+	public static java.net.InetAddress getLoopbackAddress() { return null; }
 	public boolean isAnyLocalAddress() { return false; }
 	public boolean isLinkLocalAddress() { return false; }
 	public boolean isLoopbackAddress() { return false; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,7 @@
 
 package javax.sql.rowset;
 public interface WebRowSet extends javax.sql.rowset.CachedRowSet {
-	public final static java.lang.String PUBLIC_XML_SCHEMA = "--//Sun Microsystems, Inc.//XSD Schema//EN";
+	public final static java.lang.String PUBLIC_XML_SCHEMA = "--//Oracle Corporation//XSD Schema//EN";
 	public final static java.lang.String SCHEMA_SYSTEM_ID = "http://java.sun.com/xml/ns/jdbc/webrowset.xsd";
 	void readXml(java.io.InputStream var0) throws java.io.IOException, java.sql.SQLException;
 	void readXml(java.io.Reader var0) throws java.sql.SQLException;

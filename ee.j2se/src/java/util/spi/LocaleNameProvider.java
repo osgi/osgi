@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ public abstract class LocaleNameProvider extends java.util.spi.LocaleServiceProv
 	protected LocaleNameProvider() { } 
 	public abstract java.lang.String getDisplayCountry(java.lang.String var0, java.util.Locale var1);
 	public abstract java.lang.String getDisplayLanguage(java.lang.String var0, java.util.Locale var1);
+	public java.lang.String getDisplayScript(java.lang.String var0, java.util.Locale var1) { return null; }
 	public abstract java.lang.String getDisplayVariant(java.lang.String var0, java.util.Locale var1);
 }
 

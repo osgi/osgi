@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package javax.xml.ws.soap;
-@java.lang.annotation.Target(value={java.lang.annotation.ElementType.TYPE})
+@java.lang.annotation.Target(value={java.lang.annotation.ElementType.TYPE,java.lang.annotation.ElementType.METHOD,java.lang.annotation.ElementType.FIELD})
 @java.lang.annotation.Retention(value=java.lang.annotation.RetentionPolicy.RUNTIME)
 @java.lang.annotation.Documented
 @javax.xml.ws.spi.WebServiceFeatureAnnotation(id="http://www.w3.org/2004/08/soap/features/http-optimization",bean=javax.xml.ws.soap.MTOMFeature.class)

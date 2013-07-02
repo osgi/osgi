@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,11 +15,12 @@
  */
 
 package java.net;
-public class URLClassLoader extends java.security.SecureClassLoader {
+public class URLClassLoader extends java.security.SecureClassLoader implements java.io.Closeable {
 	public URLClassLoader(java.net.URL[] var0) { } 
 	public URLClassLoader(java.net.URL[] var0, java.lang.ClassLoader var1) { } 
 	public URLClassLoader(java.net.URL[] var0, java.lang.ClassLoader var1, java.net.URLStreamHandlerFactory var2) { } 
 	protected void addURL(java.net.URL var0) { }
+	public void close() throws java.io.IOException { }
 	protected java.lang.Package definePackage(java.lang.String var0, java.util.jar.Manifest var1, java.net.URL var2) { return null; }
 	public java.net.URL findResource(java.lang.String var0) { return null; }
 	public java.util.Enumeration<java.net.URL> findResources(java.lang.String var0) throws java.io.IOException { return null; }

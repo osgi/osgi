@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -131,6 +131,7 @@ public class BasicSliderUI extends javax.swing.plaf.SliderUI {
 	public void scrollByUnit(int var0) { }
 	protected void scrollDueToClickInTrack(int var0) { }
 	public void setThumbLocation(int var0, int var1) { }
+	protected void uninstallDefaults(javax.swing.JSlider var0) { }
 	protected void uninstallKeyboardActions(javax.swing.JSlider var0) { }
 	protected void uninstallListeners(javax.swing.JSlider var0) { }
 	public int valueForXPosition(int var0) { return 0; }

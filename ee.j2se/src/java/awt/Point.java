@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ public class Point extends java.awt.geom.Point2D implements java.io.Serializable
 	public Point() { } 
 	public Point(int var0, int var1) { } 
 	public Point(java.awt.Point var0) { } 
+	@java.beans.Transient
 	public java.awt.Point getLocation() { return null; }
 	public double getX() { return 0.0d; }
 	public double getY() { return 0.0d; }

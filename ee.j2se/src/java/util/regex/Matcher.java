@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ public final class Matcher implements java.util.regex.MatchResult {
 	public boolean find(int var0) { return false; }
 	public java.lang.String group() { return null; }
 	public java.lang.String group(int var0) { return null; }
+	public java.lang.String group(java.lang.String var0) { return null; }
 	public int groupCount() { return 0; }
 	public boolean hasAnchoringBounds() { return false; }
 	public boolean hasTransparentBounds() { return false; }

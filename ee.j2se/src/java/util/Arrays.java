@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package java.util;
 public class Arrays {
+	@java.lang.SafeVarargs
 	public static <T> java.util.List<T> asList(T... var0) { return null; }
 	public static int binarySearch(byte[] var0, byte var1) { return 0; }
 	public static int binarySearch(byte[] var0, int var1, int var2, byte var3) { return 0; }

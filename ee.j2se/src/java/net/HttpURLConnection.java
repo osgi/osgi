@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,6 +56,7 @@ public abstract class HttpURLConnection extends java.net.URLConnection {
 	public final static int HTTP_VERSION = 505;
 	protected int chunkLength;
 	protected int fixedContentLength;
+	protected long fixedContentLengthLong;
 	protected boolean instanceFollowRedirects;
 	protected java.lang.String method;
 	protected int responseCode;
@@ -70,6 +71,7 @@ public abstract class HttpURLConnection extends java.net.URLConnection {
 	public java.lang.String getResponseMessage() throws java.io.IOException { return null; }
 	public void setChunkedStreamingMode(int var0) { }
 	public void setFixedLengthStreamingMode(int var0) { }
+	public void setFixedLengthStreamingMode(long var0) { }
 	public static void setFollowRedirects(boolean var0) { }
 	public void setInstanceFollowRedirects(boolean var0) { }
 	public void setRequestMethod(java.lang.String var0) throws java.net.ProtocolException { }

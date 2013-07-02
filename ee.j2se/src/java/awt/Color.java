@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,6 +46,7 @@ public class Color implements java.awt.Paint, java.io.Serializable {
 	public Color(float var0, float var1, float var2, float var3) { } 
 	public Color(int var0) { } 
 	public Color(int var0, int var1, int var2) { } 
+	@java.beans.ConstructorProperties(value={"red","green","blue","alpha"})
 	public Color(int var0, int var1, int var2, int var3) { } 
 	public Color(int var0, boolean var1) { } 
 	public Color(java.awt.color.ColorSpace var0, float[] var1, float var2) { } 

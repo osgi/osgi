@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package javax.sound.sampled;
-public interface Line {
+public interface Line extends java.lang.AutoCloseable {
 	public static class Info {
 		public Info(java.lang.Class<?> var0) { } 
 		public java.lang.Class<?> getLineClass() { return null; }

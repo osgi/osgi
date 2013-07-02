@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,10 @@ public class Modifier {
 	public final static int TRANSIENT = 128;
 	public final static int VOLATILE = 64;
 	public Modifier() { } 
+	public static int classModifiers() { return 0; }
+	public static int constructorModifiers() { return 0; }
+	public static int fieldModifiers() { return 0; }
+	public static int interfaceModifiers() { return 0; }
 	public static boolean isAbstract(int var0) { return false; }
 	public static boolean isFinal(int var0) { return false; }
 	public static boolean isInterface(int var0) { return false; }
@@ -41,6 +45,7 @@ public class Modifier {
 	public static boolean isSynchronized(int var0) { return false; }
 	public static boolean isTransient(int var0) { return false; }
 	public static boolean isVolatile(int var0) { return false; }
+	public static int methodModifiers() { return 0; }
 	public static java.lang.String toString(int var0) { return null; }
 }
 

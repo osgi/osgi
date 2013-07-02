@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package java.beans;
-public class VetoableChangeListenerProxy extends java.util.EventListenerProxy implements java.beans.VetoableChangeListener {
-	public VetoableChangeListenerProxy(java.lang.String var0, java.beans.VetoableChangeListener var1)  { super((java.util.EventListener) null); } 
+public class VetoableChangeListenerProxy extends java.util.EventListenerProxy<java.beans.VetoableChangeListener> implements java.beans.VetoableChangeListener {
+	public VetoableChangeListenerProxy(java.lang.String var0, java.beans.VetoableChangeListener var1)  { super((java.beans.VetoableChangeListener) null); } 
 	public java.lang.String getPropertyName() { return null; }
 	public void vetoableChange(java.beans.PropertyChangeEvent var0) throws java.beans.PropertyVetoException { }
 }

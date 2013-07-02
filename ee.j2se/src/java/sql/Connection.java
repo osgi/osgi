@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,13 @@
  */
 
 package java.sql;
-public interface Connection extends java.sql.Wrapper {
+public interface Connection extends java.lang.AutoCloseable, java.sql.Wrapper {
 	public final static int TRANSACTION_NONE = 0;
 	public final static int TRANSACTION_READ_COMMITTED = 2;
 	public final static int TRANSACTION_READ_UNCOMMITTED = 1;
 	public final static int TRANSACTION_REPEATABLE_READ = 4;
 	public final static int TRANSACTION_SERIALIZABLE = 8;
+	void abort(java.util.concurrent.Executor var0) throws java.sql.SQLException;
 	void clearWarnings() throws java.sql.SQLException;
 	void close() throws java.sql.SQLException;
 	void commit() throws java.sql.SQLException;
@@ -39,6 +40,8 @@ public interface Connection extends java.sql.Wrapper {
 	java.lang.String getClientInfo(java.lang.String var0) throws java.sql.SQLException;
 	int getHoldability() throws java.sql.SQLException;
 	java.sql.DatabaseMetaData getMetaData() throws java.sql.SQLException;
+	int getNetworkTimeout() throws java.sql.SQLException;
+	java.lang.String getSchema() throws java.sql.SQLException;
 	int getTransactionIsolation() throws java.sql.SQLException;
 	java.util.Map<java.lang.String,java.lang.Class<?>> getTypeMap() throws java.sql.SQLException;
 	java.sql.SQLWarning getWarnings() throws java.sql.SQLException;
@@ -63,9 +66,11 @@ public interface Connection extends java.sql.Wrapper {
 	void setClientInfo(java.lang.String var0, java.lang.String var1) throws java.sql.SQLClientInfoException;
 	void setClientInfo(java.util.Properties var0) throws java.sql.SQLClientInfoException;
 	void setHoldability(int var0) throws java.sql.SQLException;
+	void setNetworkTimeout(java.util.concurrent.Executor var0, int var1) throws java.sql.SQLException;
 	void setReadOnly(boolean var0) throws java.sql.SQLException;
 	java.sql.Savepoint setSavepoint() throws java.sql.SQLException;
 	java.sql.Savepoint setSavepoint(java.lang.String var0) throws java.sql.SQLException;
+	void setSchema(java.lang.String var0) throws java.sql.SQLException;
 	void setTransactionIsolation(int var0) throws java.sql.SQLException;
 	void setTypeMap(java.util.Map<java.lang.String,java.lang.Class<?>> var0) throws java.sql.SQLException;
 }

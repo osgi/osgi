@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,9 @@ public abstract class Endpoint {
 	public final static java.lang.String WSDL_SERVICE = "javax.xml.ws.wsdl.service";
 	public Endpoint() { } 
 	public static javax.xml.ws.Endpoint create(java.lang.Object var0) { return null; }
+	public static javax.xml.ws.Endpoint create(java.lang.Object var0, javax.xml.ws.WebServiceFeature... var1) { return null; }
 	public static javax.xml.ws.Endpoint create(java.lang.String var0, java.lang.Object var1) { return null; }
+	public static javax.xml.ws.Endpoint create(java.lang.String var0, java.lang.Object var1, javax.xml.ws.WebServiceFeature... var2) { return null; }
 	public abstract javax.xml.ws.Binding getBinding();
 	public abstract <T extends javax.xml.ws.EndpointReference> T getEndpointReference(java.lang.Class<T> var0, org.w3c.dom.Element... var1);
 	public abstract javax.xml.ws.EndpointReference getEndpointReference(org.w3c.dom.Element... var0);
@@ -32,6 +34,9 @@ public abstract class Endpoint {
 	public abstract void publish(java.lang.Object var0);
 	public abstract void publish(java.lang.String var0);
 	public static javax.xml.ws.Endpoint publish(java.lang.String var0, java.lang.Object var1) { return null; }
+	public static javax.xml.ws.Endpoint publish(java.lang.String var0, java.lang.Object var1, javax.xml.ws.WebServiceFeature... var2) { return null; }
+	public void publish(javax.xml.ws.spi.http.HttpContext var0) { }
+	public void setEndpointContext(javax.xml.ws.EndpointContext var0) { }
 	public abstract void setExecutor(java.util.concurrent.Executor var0);
 	public abstract void setMetadata(java.util.List<javax.xml.transform.Source> var0);
 	public abstract void setProperties(java.util.Map<java.lang.String,java.lang.Object> var0);

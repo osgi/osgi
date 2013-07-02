@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,12 +16,19 @@
 
 package javax.xml.ws.soap;
 public final class AddressingFeature extends javax.xml.ws.WebServiceFeature {
+	public enum Responses {
+		ALL,
+		ANONYMOUS,
+		NON_ANONYMOUS;
+	}
 	public final static java.lang.String ID = "http://www.w3.org/2005/08/addressing/module";
 	protected boolean required;
 	public AddressingFeature() { } 
 	public AddressingFeature(boolean var0) { } 
 	public AddressingFeature(boolean var0, boolean var1) { } 
+	public AddressingFeature(boolean var0, boolean var1, javax.xml.ws.soap.AddressingFeature.Responses var2) { } 
 	public java.lang.String getID() { return null; }
+	public javax.xml.ws.soap.AddressingFeature.Responses getResponses() { return null; }
 	public boolean isRequired() { return false; }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ public class Dimension extends java.awt.geom.Dimension2D implements java.io.Seri
 	public Dimension(int var0, int var1) { } 
 	public Dimension(java.awt.Dimension var0) { } 
 	public double getHeight() { return 0.0d; }
+	@java.beans.Transient
 	public java.awt.Dimension getSize() { return null; }
 	public double getWidth() { return 0.0d; }
 	public void setSize(double var0, double var1) { }

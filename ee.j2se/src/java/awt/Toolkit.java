@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ public abstract class Toolkit {
 	public Toolkit() { } 
 	public void addAWTEventListener(java.awt.event.AWTEventListener var0, long var1) { }
 	public void addPropertyChangeListener(java.lang.String var0, java.beans.PropertyChangeListener var1) { }
+	public boolean areExtraMouseButtonsEnabled() { return false; }
 	public abstract void beep();
 	public abstract int checkImage(java.awt.Image var0, int var1, int var2, java.awt.image.ImageObserver var3);
 	protected abstract java.awt.peer.ButtonPeer createButton(java.awt.Button var0);

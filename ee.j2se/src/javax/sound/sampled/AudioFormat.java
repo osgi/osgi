@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package javax.sound.sampled;
 public class AudioFormat {
 	public static class Encoding {
 		public final static javax.sound.sampled.AudioFormat.Encoding ALAW; static { ALAW = null; }
+		public final static javax.sound.sampled.AudioFormat.Encoding PCM_FLOAT; static { PCM_FLOAT = null; }
 		public final static javax.sound.sampled.AudioFormat.Encoding PCM_SIGNED; static { PCM_SIGNED = null; }
 		public final static javax.sound.sampled.AudioFormat.Encoding PCM_UNSIGNED; static { PCM_UNSIGNED = null; }
 		public final static javax.sound.sampled.AudioFormat.Encoding ULAW; static { ULAW = null; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package java.awt.peer;
 public interface MenuItemPeer extends java.awt.peer.MenuComponentPeer {
-	void disable();
-	void enable();
 	void setEnabled(boolean var0);
 	void setLabel(java.lang.String var0);
 }

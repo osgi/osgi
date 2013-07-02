@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ public abstract class FileChooserUI extends javax.swing.plaf.ComponentUI {
 	public abstract void ensureFileIsVisible(javax.swing.JFileChooser var0, java.io.File var1);
 	public abstract javax.swing.filechooser.FileFilter getAcceptAllFileFilter(javax.swing.JFileChooser var0);
 	public abstract java.lang.String getApproveButtonText(javax.swing.JFileChooser var0);
+	public javax.swing.JButton getDefaultButton(javax.swing.JFileChooser var0) { return null; }
 	public abstract java.lang.String getDialogTitle(javax.swing.JFileChooser var0);
 	public abstract javax.swing.filechooser.FileView getFileView(javax.swing.JFileChooser var0);
 	public abstract void rescanCurrentDirectory(javax.swing.JFileChooser var0);

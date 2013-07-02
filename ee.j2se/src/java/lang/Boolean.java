@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ public final class Boolean implements java.io.Serializable, java.lang.Comparable
 	public Boolean(java.lang.String var0) { } 
 	public Boolean(boolean var0) { } 
 	public boolean booleanValue() { return false; }
+	public static int compare(boolean var0, boolean var1) { return 0; }
 	public int compareTo(java.lang.Boolean var0) { return 0; }
 	public static boolean getBoolean(java.lang.String var0) { return false; }
 	public static boolean parseBoolean(java.lang.String var0) { return false; }

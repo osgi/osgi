@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package java.util;
-public abstract class EventListenerProxy implements java.util.EventListener {
-	public EventListenerProxy(java.util.EventListener var0) { } 
-	public java.util.EventListener getListener() { return null; }
+public abstract class EventListenerProxy<T extends java.util.EventListener> implements java.util.EventListener {
+	public EventListenerProxy(T var0) { } 
+	public T getListener() { return null; }
 }
 

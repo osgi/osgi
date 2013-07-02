@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,9 @@ public class DeflaterOutputStream extends java.io.FilterOutputStream {
 	public DeflaterOutputStream(java.io.OutputStream var0)  { super((java.io.OutputStream) null); } 
 	public DeflaterOutputStream(java.io.OutputStream var0, java.util.zip.Deflater var1)  { super((java.io.OutputStream) null); } 
 	public DeflaterOutputStream(java.io.OutputStream var0, java.util.zip.Deflater var1, int var2)  { super((java.io.OutputStream) null); } 
+	public DeflaterOutputStream(java.io.OutputStream var0, java.util.zip.Deflater var1, int var2, boolean var3)  { super((java.io.OutputStream) null); } 
+	public DeflaterOutputStream(java.io.OutputStream var0, java.util.zip.Deflater var1, boolean var2)  { super((java.io.OutputStream) null); } 
+	public DeflaterOutputStream(java.io.OutputStream var0, boolean var1)  { super((java.io.OutputStream) null); } 
 	protected void deflate() throws java.io.IOException { }
 	public void finish() throws java.io.IOException { }
 }

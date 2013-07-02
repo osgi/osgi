@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,6 @@ public interface TextAreaPeer extends java.awt.peer.TextComponentPeer {
 	java.awt.Dimension getMinimumSize(int var0, int var1);
 	java.awt.Dimension getPreferredSize(int var0, int var1);
 	void insert(java.lang.String var0, int var1);
-	void insertText(java.lang.String var0, int var1);
-	java.awt.Dimension minimumSize(int var0, int var1);
-	java.awt.Dimension preferredSize(int var0, int var1);
 	void replaceRange(java.lang.String var0, int var1, int var2);
-	void replaceText(java.lang.String var0, int var1, int var2);
 }
 
