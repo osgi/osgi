@@ -19,13 +19,55 @@ package org.osgi.service.functionaldevice;
 import java.util.Map;
 
 /**
- * Device Function provides specific device operations and properties. Each
- * Device Function must implement this interface. In additional to this
- * interface, the implementation can provide own:
+ * Device Function service provides specific device operations and properties.
+ * Each Device Function service must implement this interface. In additional to
+ * this interface, the implementation can provide own:
  * <ul>
  * <li>properties;</li>
  * <li>operations.</li>
  * </ul>
+ * The Device Function service can be registered in the service registry with
+ * those service properties:
+ * <ul>
+ * <li>{@link #PROPERTY_DEVICE_UID} - optional service property. The property
+ * value is the Functional Device identifiers. The Device Function belongs to
+ * those devices.</li>
+ * <li>{@link #PROPERTY_DESCRIPTION} - optional service property. The property
+ * value is the device function description.</li>
+ * <li>{@link #PROPERTY_OPERATION_NAMES} - optional service property. The
+ * property value is the Device Function operation names.</li>
+ * <li>{@link #PROPERTY_PROPERTY_NAMES} - optional service property. The
+ * property value is the Device Function property names.</li>
+ * </ul>
+ * The <code>DeviceFunction</code> services are registered before the
+ * <code>FunctionalDevice</code> and <code>FunctionalGroup</code> services. It's
+ * possible that {@link #PROPERTY_DEVICE_UID} and {@link #PROPERTY_GROUP_UID}
+ * point to missing services at the moment of the registration. The reverse
+ * order is used when the services are unregistered. <code>DeviceFunction</code>
+ * services are unregistered last after <code>FunctionalDevice</code> and
+ * <code>FunctionalGroup</code> services.
+ * <p>
+ * Device Function service must be registred only under concrete Device Function
+ * classes. It's not allowed to register Device Function service under classes,
+ * which are not concrete Device Functions. For example, those registrations are
+ * not allowed:
+ * <ul>
+ * <li>
+ * <code>context.registerService(new String[] {ManagedService.class.getName(),
+ * OnOff.class.getName()}, this, regProps);</code> - <code>ManagedService</code>
+ * interface is not a Device Function interface;</li>
+ * <li>
+ * <code>context.registerService(new String[] {DeviceFunction.class.getName(),
+ * OnOff.class.getName()}, this, regProps);</code> - <code>DeviceFunction</code>
+ * interface is not concrete Device Function.</li>
+ * </ul>
+ * That one is valid <code>context.registerService(new String[]
+ * {Meter.class.getName(), OnOff.class.getName()}, this, regProps);</code>.
+ * <code>Meter</code> and <code>OnOff</code> are concrete Device Function
+ * interfaces. That rule helps to the applications to find all supported Device
+ * Function classes. Otherwise the Device Function services can be accesses, but
+ * it's not clear which are the Device Function classes.
+ * <p>
  * The Device Function properties must be integrated according to these rules:
  * <ul>
  * <li>getter methods must be available for all properties with
@@ -55,7 +97,8 @@ import java.util.Map;
  * rules.</li>
  * <li>Arrays of defined types.</li>
  * </ul>
- * Other common metadata properties are:
+ * The properties and the operation arguments have some common metadata. It's
+ * provided with:
  * <ul>
  * <li>{@link #META_INFO_VARIABLE_DESCRIPTION}</li>
  * <li>{@link #META_INFO_VARIABLE_UNIT}</li>
@@ -83,23 +126,29 @@ import java.util.Map;
  * property change.</li>
  * </ul>
  * 
- * In order to provide common abstraction all Device Functions must follow a set
+ * In order to provide common behavior, all Device Functions must follow a set
  * of common rules related to the implementation of their setters, getters,
  * operations and events:
  * <ul>
  * <li>
  * The setter method must be executed synchronously. If the underlying protocol
- * can return response to the setter call, it must be awaited.</li>
+ * can return response to the setter call, it must be awaited. It simplifies the
+ * property value modifications and doesn't require asynchronous call back.</li>
  * <li>
  * The operation method must be executed synchronously. If the underlying
  * protocol can return an operation confirmation or response, they must be
- * awaited.</li>
+ * awaited. It simplifies the operation execution and doesn't require
+ * asynchronous call back.</li>
  * <li>
- * The getter will must return the last know cached property value. The device
- * implementation is responsible to keep that value up to date.</li>
+ * The getter must return the last know cached property value. The device
+ * implementation is responsible to keep that value up to date. It'll speed up
+ * the applications when the Device Function property values are collected. The
+ * same cached value can be shared between a few requests instead of a few calls
+ * to the real device.</li>
  * <li>
  * If a given Device Function operation, getter or setter is not supported,
- * java.lang.UnsupportedOperationException must be thrown.</li>
+ * java.lang.UnsupportedOperationException must be thrown. It indicates that
+ * Device Function is partially supported.</li>
  * <li>The Device Function operations, getters and setters must not override
  * <code>java.lang.Object</code> and this interface methods.</li>
  * </ul>
@@ -152,7 +201,7 @@ public interface DeviceFunction {
 	 * 
 	 * @see #getPropertyMetaData(String)
 	 */
-	public static final String	META_INFO_VARIABLE_UNIT				= "evice.function.variable.unit";
+	public static final String	META_INFO_VARIABLE_UNIT				= "device.function.variable.unit";
 
 	/**
 	 * Meta data key, which value represents the access to the Device Function
@@ -232,10 +281,10 @@ public interface DeviceFunction {
 	 * </ul>
 	 * The prefix must be used in the form:
 	 * <p>
-	 * operation input argument name ::=
-	 * {@link #META_INFO_OPERATION_ARGS_IN_PREFIX} argument-index
+	 * operation input argument name ::= value of
+	 * {@link #META_INFO_OPERATION_ARGS_IN_PREFIX}argument-index
 	 * <p>
-	 * argument-index � argument index. For example,
+	 * argument-index - input argument index. For example,
 	 * device.function.operation.arguments.in.1 can be used for the first
 	 * operation input argument.
 	 * 
@@ -263,41 +312,58 @@ public interface DeviceFunction {
 	public static final String	META_INFO_OPERATION_ARG_OUT			= "device.function.operation.argument.out";
 
 	/**
-	 * Returns the Device Function name. The name cannot be <code>null</code>.
-	 * 
-	 * @return The Device Function name. The name cannot be <code>null</code>.
+	 * The service property value contains the device function unique
+	 * identifier. It's a mandatory property. The value type is
+	 * <code>java.lang.String</code>. To simplify the unique identifier
+	 * generation, the property value must follow the rule:
+	 * <p>
+	 * function UID ::= device-id ':' function-id
+	 * <p>
+	 * function UID - device function unique identifier
+	 * <p>
+	 * device-id - the value of the {@link FunctionalDevice#PROPERTY_UID}
+	 * Functional Device service property
+	 * <p>
+	 * function-id - device function identifier in the scope of the device
 	 */
-	public String getName();
+	public static final String	PROPERTY_UID						= "device.function.UID";
 
 	/**
-	 * Returns the Device Function description, if any. <code>null</code> means
-	 * that there is no description.
-	 * 
-	 * @return The Device Function description or <code>null</code> if not
-	 *         available.
+	 * The service property value contains the function device unique
+	 * identifier. The function belongs to this device. It's an optional
+	 * property. The value type is <code>java.lang.String</code>.
 	 */
-	public String getDescription();
+	public static final String	PROPERTY_DEVICE_UID					= "device.function.device.UID";
 
 	/**
-	 * Returns the names of the Device Function properties. <code>null</code>
-	 * will be returned in case of no properties. It's not possible to exist two
-	 * or more Device Function properties with the same name.
-	 * 
-	 * @return The Device Function property names or <code>null</code> if no
-	 *         properties are supported.
+	 * The service property value contains the function group unique identifier.
+	 * The function belongs to this functional group. It's an optional property.
+	 * The value type is <code>java.lang.String</code>.
 	 */
-	public String[] getPropertyNames();
+	public static final String	PROPERTY_GROUP_UID					= "device.function.group.UID";
 
 	/**
-	 * Returns the names of the Device Function operations. <code>null</code>
-	 * will be returned in case of no operations. It's not possible to exist two
-	 * or more operations with the same name. The operation overloading is not
-	 * allowed.
-	 * 
-	 * @return The Device Function operation names or <code>null</code> if no
-	 *         operation are supported.
+	 * The service property value contains the device function description. It's
+	 * an optional property. The value type is <code>java.lang.String</code>.
 	 */
-	public String[] getOperationNames();
+	public static final String	PROPERTY_DESCRIPTION				= "device.function.description";
+	
+	/**
+	 * The service property value contains the device function operation names.
+	 * It's an optional property. The value type is
+	 * <code>java.lang.String[]</code>. It's not possible to exist two or more
+	 * Device Function operations with the same name i.e. the operation
+	 * overloading is not allowed.
+	 */
+	public static final String	PROPERTY_OPERATION_NAMES			= "device.function.operation.names";
+
+	/**
+	 * The service property value contains the device function property names.
+	 * It's an optional property. The value type is
+	 * <code>java.lang.String[]</code>. It's not possible to exist two or more
+	 * Device Function properties with the same name.
+	 */
+	public static final String	PROPERTY_PROPERTY_NAMES				= "device.function.property.names";
 
 	/**
 	 * Provides meta data about the given function property. The keys of the

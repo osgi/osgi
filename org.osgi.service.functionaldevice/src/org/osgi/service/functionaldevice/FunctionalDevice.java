@@ -17,7 +17,13 @@
 package org.osgi.service.functionaldevice;
 
 /**
- * Represents the functional device in the service registry.
+ * Represents the functional device in the OSGi service registry. Note that
+ * <code>FunctionalDevice</code> services are registered last. Before their
+ * registration, there is <code>DeviceFunction</code> and
+ * <code>FunctionalGroup</code> registration. The reverse order is used when the
+ * services are unregistered. <code>FunctionalDevice</code> services are
+ * unregistered first before <code>FunctionalGroup</code> and
+ * <code>DeviceFunction</code> services.
  */
 public interface FunctionalDevice {
 
@@ -49,25 +55,27 @@ public interface FunctionalDevice {
 	public static final String	PROPERTY_UID								= "functional.device.UID";
 
 	/**
-	 * The service property value contains the parent device unique identifier.
-	 * It's an optional property. The value type is
-	 * <code>java.lang.String</code>. The property value cannot be set.
+	 * The service property value contains the function unique identifiers of
+	 * the supported
+	 * <code>DeviceFunction<code>s. It's an optional property. The value type is
+	 * <code>java.lang.String[]</code>.
 	 */
-	public static final String	PROPERTY_PARENT_UID							= "functional.device.parent.UID";
+	public static final String	PROPERTY_FUNCTION_UIDS						= "functional.device.function.UIDs";
 
 	/**
-	 * The service property value contains the child device unique identifiers.
-	 * It's an optional property. The value type is <code>String+</code>. The
-	 * property value cannot be set.
+	 * The service property value contains the functional group unique
+	 * identifiers of the supported
+	 * <code>FunctionalGroup</codes>s. It's an optional property. The value type is
+	 * <code>java.lang.String[]</code>.
 	 */
-	public static final String	PROPERTY_CHILD_UIDS							= "functional.device.child.UIDs";
+	public static final String	PROPERTY_GROUP_UIDS				= "functional.device.group.UIDs";
 
 	/**
 	 * The service property value contains the reference device unique
 	 * identifiers. It's an optional property. The value type is
-	 * <code>String+</code>. The property value cannot be set. It can be used to
-	 * represent different relationships between the devices. For example, the
-	 * ZigBee controller can have a reference to the USB dongle.
+	 * <code>java.lang.String[]</code>. The property value cannot be set. It can
+	 * be used to represent different relationships between the devices. For
+	 * example, the ZigBee controller can have a reference to the USB dongle.
 	 */
 	public static final String	PROPERTY_REFERENCE_UIDS						= "functional.device.reference.UIDs";
 
@@ -151,8 +159,8 @@ public interface FunctionalDevice {
 
 	/**
 	 * The service property value contains the device types like DVD, TV etc.
-	 * It's an optional property. The value type is <code>String+</code>. The
-	 * property value can be read and set.
+	 * It's an optional property. The value type is
+	 * <code>java.lang.String[]</code>. The property value can be read and set.
 	 */
 	public static final String	PROPERTY_TYPES								= "functional.device.types";
 
@@ -169,12 +177,6 @@ public interface FunctionalDevice {
 	 * property value can be read and set.
 	 */
 	public static final String	PROPERTY_SERIAL_NUMBER						= "functional.device.serial.number";
-
-	/**
-	 * The service property value contains the supported Device Function names.
-	 * It's an optional property. The value type is <code>String+</code>.
-	 */
-	public static final String	PROPERTY_FUNCTIONS							= "functional.device.functions";
 
 	/**
 	 * The service property value contains the device description. It's an
@@ -405,7 +407,7 @@ public interface FunctionalDevice {
 	public void disable() throws FunctionalDeviceException, UnsupportedOperationException, IllegalStateException;
 
 	/**
-	 * Enables this this. The device is available for operations.
+	 * Enables this device. The device is available for operations.
 	 * 
 	 * @throws FunctionalDeviceException If an operation error is available.
 	 * @throws UnsupportedOperationException If the operation is not supported
@@ -418,23 +420,4 @@ public interface FunctionalDevice {
 	 */
 	public void enable() throws FunctionalDeviceException, UnsupportedOperationException, SecurityException, IllegalStateException;
 	
-	/**
-	 * Returns the Device Function instance according to the given function.
-	 * <code>null</code> if the function is not supported.
-	 * 
-	 * @param functionName The Device Function name.
-	 * @return The function instance or <code>null</code> if the function is not
-	 *         supported.
-	 */
-	public DeviceFunction getDeviceFunction(String functionName);
-
-	/**
-	 * Returns all Device Function instances or <code>null</code> if no
-	 * functions are supported.
-	 * 
-	 * @return The Device Function instances or <code>null</code> if no
-	 *         functions are supported.
-	 */
-	public DeviceFunction[] getDeviceFunctions();
-
 }
