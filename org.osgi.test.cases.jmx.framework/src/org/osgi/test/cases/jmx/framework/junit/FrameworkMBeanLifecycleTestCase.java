@@ -547,14 +547,33 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 	}
 
 	private Future<FrameworkEvent> waitForStop() {
+		final boolean[] inCall = new boolean[] { false };
 		FutureTask<FrameworkEvent> future = new FutureTask<FrameworkEvent>(
 				new Callable<FrameworkEvent>() {
 
 					public FrameworkEvent call() throws Exception {
+						synchronized (inCall) {
+							inCall[0] = true;
+							inCall.notifyAll();
+						}
 						return framework.waitForStop(10000);
 					}
 				});
 		executor.execute(future);
+
+		try {
+			synchronized (inCall) {
+				if (!inCall[0]) {
+					inCall.wait(5000);
+				}
+			}
+			// need to make extra sure waitForStop is called before
+			// returning
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			fail("Unexpected interruption.", e);
+		}
+
 		return future;
 	}
 }
