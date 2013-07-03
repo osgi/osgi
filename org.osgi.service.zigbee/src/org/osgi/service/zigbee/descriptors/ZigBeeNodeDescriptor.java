@@ -76,8 +76,8 @@ public interface ZigBeeNodeDescriptor {
 	public static int			NETWORK_MANAGER_MASK				= 64;
 
 	/**
-	 * @return one of: ZigBeeDeviceNode.COORDINATOR, ZigBeeDeviceNode.ROUTER,
-	 *         ZigBeeDeviceNode.END_DEVICE.
+	 * @return one of: ZigBeeNode.COORDINATOR, ZigBeeNode.ROUTER,
+	 *         ZigBeeNode.END_DEVICE.
 	 */
 	public short getLogicalType();
 

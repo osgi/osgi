@@ -39,14 +39,14 @@ public interface ZigBeeHost extends ZigBeeNode {
 	public void permitJoin(short duration) throws ZigBeeException;
 
 	/**
-	 * Sets the host operational mode. The mode will then be available when the
-	 * host will restart. ZigBee defines three different types of node,
+	 * Sets the host logical node type. The logical type will then be available
+	 * when the host will restart. ZigBee defines three different types of node,
 	 * coordinator({@link ZigBeeNode.COORDINATOR}), router(
 	 * {@link ZigBeeNode.ROUTER}) and end device({@link ZigBeeNode.END_DEVICE})
 	 * 
-	 * @param operationalMode The node operational mode.
+	 * @param logicalNodeType The logical node type.
 	 */
-	public void setOperationalMode(short operationalMode) throws ZigBeeException;
+	public void setLogicalType(short logicalNodeType) throws ZigBeeException;
 
 	/**
 	 * Gets the current network channel
