@@ -25,7 +25,7 @@ public class FunctionalDeviceException extends Exception {
 	private static final long	serialVersionUID	= 1L;
 
 	/** An exception code indicates that the error is unknown. */
-	public static final int		CODE_UNKNOW					= 1;
+	public static final int		CODE_UNKNOWN					= 1;
 
 	/** An exception code indicates that there is an error in the communication. */
 	public static final int		CODE_COMMUNICATION_ERROR	= 2;
@@ -55,7 +55,18 @@ public class FunctionalDeviceException extends Exception {
 	 * @return An exception code.
 	 */
 	public int getCode() {
-		return CODE_UNKNOW; // TODO: impl
+		return CODE_UNKNOWN; // TODO: impl
+	}
+
+	/**
+	 * Returns the cause for this throwable or <code>null</code> if the cause is
+	 * missing. The cause can be protocol specific exception with an appropriate
+	 * message and error code.
+	 * 
+	 * @return An throwable cause.
+	 */
+	public Throwable getCause() {
+		return null; // TODO: impl
 	}
 
 }
