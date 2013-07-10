@@ -1,0 +1,19 @@
+Bundle-Name: ${p}.div.tb26
+Bundle-Description: TB26 is part of the DIV test case. This bundle will \
+ only resolve with a matching native requirement.
+Bundle-Version: 1.0
+Require-Capability: osgi.native; filter:="(|\
+ (&(osgi.native.osname~=Linux)(osgi.native.processor~=x86))\
+ (&(osgi.native.osname~=Linux)(osgi.native.processor~=x86-64))\
+ (&(osgi.native.osname~=QNX)(osgi.native.processor~=x86))\
+ (&(osgi.native.osname~=QNX)(osgi.native.processor~=PowerPC))\
+ (&(osgi.native.osname~=QNX)(osgi.native.processor~=arm_le))\
+ (&(osgi.native.osname~=Win32)(osgi.native.processor~=x86))\
+ (&(osgi.native.osname~=Solaris)(osgi.native.processor~=sparc))\
+ (&(osgi.native.osname~=SunOS)(osgi.native.processor~=sparc))\
+ (&(osgi.native.osname~=windows ce)(osgi.native.processor~=arm_le))\
+ (&(osgi.native.osname~=mac os x)(osgi.native.processor~=x86))\
+ (&(osgi.native.osname~=mac os x)(osgi.native.processor~=x86-64))\
+ (&(osgi.native.osname~=mac os x)(osgi.native.processor~=ppc))\
+ )"
+

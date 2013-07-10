@@ -155,6 +155,8 @@ Include-Resource = \
 	div.tb24c.jar, \
 	div.tb25.resolved.jar, \
 	div.tb25.unresolved.jar, \
+	div.tb26.jar, \
+	div.tb27.jar, \
 	dto.tb1.jar, \
 	dynpkgimport.tb0.jar, \
 	dynpkgimport.tb1.jar, \

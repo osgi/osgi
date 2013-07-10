@@ -15,17 +15,32 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.NoSuchElementException;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
+import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.Version;
+import org.osgi.framework.namespace.HostNamespace;
+import org.osgi.framework.namespace.NativeNamespace;
+import org.osgi.framework.wiring.BundleRequirement;
+import org.osgi.framework.wiring.BundleRevision;
+import org.osgi.framework.wiring.BundleWire;
+import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.resource.Namespace;
 import org.osgi.test.cases.framework.div.tb6.BundleClass;
 import org.osgi.test.support.FrameworkEventCollector;
 import org.osgi.test.support.OSGiTestCaseProperties;
@@ -41,6 +56,89 @@ import org.osgi.test.support.sleep.Sleep;
 public class DivTests extends DefaultTestBundleControl {
 	public static final String	basePath	= "/org/osgi/test/cases/framework/div/";
 	public static final String	basePkg		= "org.osgi.test.cases.framework.div.";
+
+	public static final Collection<Map<String, Object>> MATCH_NATIVE_ATTRIBUTES;
+	static {
+		Collection<Map<String, Object>> temp = new ArrayList<Map<String, Object>>();
+		Map<String, Object> commonAttrs = new HashMap<String, Object>();
+		commonAttrs.put("org.osgi.test.cases.framework.div.tb12", "abc");
+		commonAttrs.put("org.osgi.test.cases.framework.div.tb15", "abc");
+		commonAttrs.put("org.osgi.test.cases.framework.div.tb16", "xyz");
+		commonAttrs.put(NativeNamespace.CAPABILITY_LANGUAGE_ATTRIBUTE, "en");
+		commonAttrs.put(NativeNamespace.CAPABILITY_OSVERSION_ATTRIBUTE,
+				new Version(1, 0, 0));
+
+		Map<String, Object> linuxX86 = new HashMap<String, Object>(
+				commonAttrs);
+		linuxX86.put(NativeNamespace.CAPABILITY_OSNAME_ATTRIBUTE, "linux");
+		linuxX86.put(NativeNamespace.CAPABILITY_PROCESSOR_ATTRIBUTE, "X86");
+		temp.add(Collections.unmodifiableMap(linuxX86));
+
+		Map<String, Object> linuxX86_64 = new HashMap<String, Object>(
+				commonAttrs);
+		linuxX86_64.put(NativeNamespace.CAPABILITY_OSNAME_ATTRIBUTE, "linux");
+		linuxX86_64.put(NativeNamespace.CAPABILITY_PROCESSOR_ATTRIBUTE,
+				"X86-64");
+		temp.add(Collections.unmodifiableMap(linuxX86_64));
+
+		Map<String, Object> qnxX86 = new HashMap<String, Object>(commonAttrs);
+		qnxX86.put(NativeNamespace.CAPABILITY_OSNAME_ATTRIBUTE, "qnx");
+		qnxX86.put(NativeNamespace.CAPABILITY_PROCESSOR_ATTRIBUTE, "X86");
+		temp.add(Collections.unmodifiableMap(qnxX86));
+
+		Map<String, Object> qnxPPC = new HashMap<String, Object>(commonAttrs);
+		qnxPPC.put(NativeNamespace.CAPABILITY_OSNAME_ATTRIBUTE, "qnx");
+		qnxPPC.put(NativeNamespace.CAPABILITY_PROCESSOR_ATTRIBUTE, "powerPC");
+		temp.add(Collections.unmodifiableMap(qnxPPC));
+
+		Map<String, Object> qnxARMLE = new HashMap<String, Object>(
+				commonAttrs);
+		qnxARMLE.put(NativeNamespace.CAPABILITY_OSNAME_ATTRIBUTE, "qnx");
+		qnxARMLE.put(NativeNamespace.CAPABILITY_PROCESSOR_ATTRIBUTE, "ARM_le");
+		temp.add(Collections.unmodifiableMap(qnxARMLE));
+
+		Map<String, Object> winX86 = new HashMap<String, Object>(commonAttrs);
+		winX86.put(NativeNamespace.CAPABILITY_OSNAME_ATTRIBUTE, "win32");
+		winX86.put(NativeNamespace.CAPABILITY_PROCESSOR_ATTRIBUTE, "X86");
+		temp.add(Collections.unmodifiableMap(winX86));
+
+		Map<String, Object> solarisSparc = new HashMap<String, Object>(
+				commonAttrs);
+		solarisSparc
+				.put(NativeNamespace.CAPABILITY_OSNAME_ATTRIBUTE, "solaris");
+		solarisSparc.put(NativeNamespace.CAPABILITY_PROCESSOR_ATTRIBUTE,
+				"Sparc");
+		temp.add(Collections.unmodifiableMap(solarisSparc));
+
+		Map<String, Object> sunOSSparc = new HashMap<String, Object>(
+				commonAttrs);
+		sunOSSparc.put(NativeNamespace.CAPABILITY_OSNAME_ATTRIBUTE, "sunOS");
+		sunOSSparc.put(NativeNamespace.CAPABILITY_PROCESSOR_ATTRIBUTE, "Sparc");
+		temp.add(Collections.unmodifiableMap(sunOSSparc));
+
+		Map<String, Object> winCE = new HashMap<String, Object>(commonAttrs);
+		winCE.put(NativeNamespace.CAPABILITY_OSNAME_ATTRIBUTE, "windows CE");
+		winCE.put(NativeNamespace.CAPABILITY_PROCESSOR_ATTRIBUTE, "ARM_le");
+		temp.add(Collections.unmodifiableMap(winCE));
+
+		Map<String, Object> macX86 = new HashMap<String, Object>(commonAttrs);
+		macX86.put(NativeNamespace.CAPABILITY_OSNAME_ATTRIBUTE, "Mac OS X");
+		macX86.put(NativeNamespace.CAPABILITY_PROCESSOR_ATTRIBUTE, "X86");
+		temp.add(Collections.unmodifiableMap(macX86));
+
+		Map<String, Object> macX86_64 = new HashMap<String, Object>(
+				commonAttrs);
+		macX86_64.put(NativeNamespace.CAPABILITY_OSNAME_ATTRIBUTE, "Mac OS X");
+		macX86_64.put(NativeNamespace.CAPABILITY_PROCESSOR_ATTRIBUTE, "X86-64");
+		temp.add(Collections.unmodifiableMap(macX86_64));
+
+		Map<String, Object> macPPC = new HashMap<String, Object>(commonAttrs);
+		macPPC.put(NativeNamespace.CAPABILITY_OSNAME_ATTRIBUTE, "Mac OS X");
+		macPPC.put(NativeNamespace.CAPABILITY_PROCESSOR_ATTRIBUTE, "PPC");
+		temp.add(Collections.unmodifiableMap(macPPC));
+
+		MATCH_NATIVE_ATTRIBUTES = Collections.unmodifiableCollection(temp);
+	}
 
 	/**
 	 * Logs the manifest headers.
@@ -154,6 +252,81 @@ public class DivTests extends DefaultTestBundleControl {
 		}
 	}
 
+	private void assertNativeNamespace(Bundle b, boolean isOptional,
+			boolean isResolved) {
+		BundleRevision revision = b.adapt(BundleRevision.class);
+		assertNotNull("Bundle has no revision", revision);
+		List<BundleRequirement> nativeRequirements = revision
+				.getDeclaredRequirements(NativeNamespace.NATIVE_NAMESPACE);
+		assertEquals("Unexpected number of native requirements", 1,
+				nativeRequirements.size());
+		BundleRequirement nativeRequirement = nativeRequirements.get(0);
+
+		// check the optional directive
+		String optionalDirective = nativeRequirement.getDirectives().get(
+				Namespace.REQUIREMENT_RESOLUTION_DIRECTIVE);
+		if (optionalDirective == null) {
+			optionalDirective = Namespace.RESOLUTION_MANDATORY;
+		}
+		assertEquals("Wrong resolution type",
+				isOptional ? Namespace.RESOLUTION_OPTIONAL
+						: Namespace.RESOLUTION_MANDATORY, optionalDirective);
+		// check for a valid filter directive
+		String filterDirective = nativeRequirement.getDirectives().get(
+				Namespace.REQUIREMENT_FILTER_DIRECTIVE);
+		assertNotNull("Null filter directive: " + nativeRequirement,
+				filterDirective);
+		Filter filter = null;
+		try {
+			filter = getContext().createFilter(filterDirective);
+		} catch (InvalidSyntaxException e) {
+			fail("Bad filter: " + nativeRequirement, e);
+		}
+
+		// check that the filter matches as expected
+		for (Map<String, ?> matchingMap : MATCH_NATIVE_ATTRIBUTES) {
+			if (isResolved) {
+				assertTrue("filter does not match map: " + filter + ".matches("
+						+ matchingMap + ")", filter.matches(matchingMap));
+			} else {
+				assertFalse("filter does match map: " + filter + ".matches("
+						+ matchingMap + ")", filter.matches(matchingMap));
+			}
+		}
+
+		if (isResolved) {
+			BundleWiring wiring = b.adapt(BundleWiring.class);
+			assertNotNull("Bundle has no wiring: " + b, wiring);
+			if ((revision.getTypes() & BundleRevision.TYPE_FRAGMENT) != 0) {
+				List<BundleWire> hostWires = wiring
+						.getRequiredWires(HostNamespace.HOST_NAMESPACE);
+				assertEquals("Wrong number of hosts.", 1, hostWires.size());
+				wiring = hostWires.get(0).getProviderWiring();
+			}
+			List<BundleWire> nativeWires = wiring
+					.getRequiredWires(NativeNamespace.NATIVE_NAMESPACE);
+			assertEquals("Unexpected number of native wires: " + b,
+					isOptional ? 0 : 1,
+					nativeWires.size());
+			BundleWire nativeWire = nativeWires.get(0);
+			assertEquals("Found wrong requirement in native wire.",
+					nativeRequirement, nativeWire.getRequirement());
+
+			// make sure we are wired to a capability from the system bundle
+			assertEquals("Native provider is not the system bundle", 0,
+					nativeWire.getProvider().getBundle().getBundleId());
+
+			// this is a bit of a strange test, but it ensures the
+			// capability that is wired to has the arbitrary matching
+			// attributes configured into the framework
+			Map<String, ?> wiredCapAttrs = nativeWire.getCapability()
+					.getAttributes();
+			assertTrue("filter does not match the wired to capability attrs: "
+					+ filter + ".matches(" + wiredCapAttrs + ")",
+					filter.matches(wiredCapAttrs));
+		}
+	}
+
 	/**
 	 * Tests basic native code invocation.
 	 *
@@ -165,6 +338,7 @@ public class DivTests extends DefaultTestBundleControl {
 		Bundle tb = getContext().installBundle(getWebServer() + "div.tb2.jar");
 		try {
 			tb.start();
+			assertNativeNamespace(tb, false, true);
 		}
 		catch (BundleException be) {
 			fail("Native code not installed. " + reportProcessorOS(), be);
@@ -173,6 +347,7 @@ public class DivTests extends DefaultTestBundleControl {
 			tb.uninstall();
 		}
 	}
+
 
 	/**
 	 * Tests to add a FrameworkListener.
@@ -284,6 +459,7 @@ public class DivTests extends DefaultTestBundleControl {
 		Bundle tb = getContext().installBundle(getWebServer() + "div.tb12.jar");
 		try {
 			tb.start();
+			assertNativeNamespace(tb, true, false);
 		}
 		finally {
 			tb.uninstall();
@@ -308,6 +484,7 @@ public class DivTests extends DefaultTestBundleControl {
 		catch (BundleException be) {
             // expecting exception, but bundle should not have resolved
             assertEquals("Bundle should not be resolved!", Bundle.INSTALLED, tb.getState());
+			assertNativeNamespace(tb, false, false);
 		}
 		finally {
 			tb.uninstall();
@@ -328,6 +505,7 @@ public class DivTests extends DefaultTestBundleControl {
 		Bundle tb = getContext().installBundle(getWebServer() + "div.tb16.jar");
 		try {
 			tb.start();
+			assertNativeNamespace(tb, false, true);
 		}
 		finally {
 			tb.uninstall();
@@ -348,6 +526,7 @@ public class DivTests extends DefaultTestBundleControl {
 		Bundle tb = getContext().installBundle(getWebServer() + "div.tb17.jar");
 		try {
 			tb.start();
+			assertNativeNamespace(tbFragment, false, true);
 		}
 		finally {
 			tb.uninstall();
@@ -373,6 +552,7 @@ public class DivTests extends DefaultTestBundleControl {
 		catch (BundleException be) {
             // expecting exception, but bundle should not have resolved
             assertEquals("Bundle should not be resolved!", Bundle.INSTALLED, tb.getState());
+			assertNativeNamespace(tb, false, false);
 		}
 		finally {
 			tb.uninstall();
@@ -394,6 +574,7 @@ public class DivTests extends DefaultTestBundleControl {
 		Bundle tb = getContext().installBundle(getWebServer() + "div.tb20.jar");
 		try {
 			tb.start();
+			assertNativeNamespace(tb, false, true);
 		}
 		finally {
 			tb.uninstall();
@@ -418,6 +599,7 @@ public class DivTests extends DefaultTestBundleControl {
 		catch (BundleException be) {
             // expecting exception, but bundle should not have resolved
             assertEquals("Bundle should not be resolved!", Bundle.INSTALLED, tb.getState());
+			assertNativeNamespace(tb, false, false);
 		}
 		finally {
 			tb.uninstall();
@@ -436,9 +618,42 @@ public class DivTests extends DefaultTestBundleControl {
 		Bundle tb = getContext().installBundle(getWebServer() + "div.tb22.jar");
 		try {
 			tb.start();
+			assertNativeNamespace(tb, false, true);
 		}
 		finally {
 			tb.uninstall();
+		}
+	}
+
+	/**
+	 * Tests that a bundle can require the osgi.native namespace directly in a
+	 * Require-Capability header.
+	 * 
+	 * @throws BundleException
+	 */
+	public void testNativeCodeNamespaceRequirement() throws BundleException {
+		Bundle tb = getContext().installBundle(getWebServer() + "div.tb26.jar");
+		try {
+			tb.start();
+			assertNativeNamespace(tb, false, true);
+		} finally {
+			tb.uninstall();
+		}
+	}
+
+	public void testNativeCodeNamespaceCapability() throws BundleException {
+		Bundle tb = null;
+		try {
+			tb = getContext().installBundle(getWebServer() + "div.tb27.jar");
+			fail("Expected to fail installation of bundle that declares a native capability.");
+		} catch (BundleException e) {
+			// expected, check the error type
+			assertEquals("Wrong error code.", BundleException.MANIFEST_ERROR,
+					e.getType());
+		} finally {
+			if (tb != null) {
+				tb.uninstall();
+			}
 		}
 	}
 
