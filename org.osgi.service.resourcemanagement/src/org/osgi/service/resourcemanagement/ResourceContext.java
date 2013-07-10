@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.framework.resource;
+package org.osgi.service.resourcemanagement;
 
 import org.osgi.framework.Bundle;
 

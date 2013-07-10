@@ -13,17 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.framework.resource.resourcemonitor;
 
-import org.osgi.framework.resource.ResourceContext;
-import org.osgi.framework.resource.ResourceManager;
-import org.osgi.framework.resource.ResourceMonitor;
+package org.osgi.service.resourcemanagement.resourcemonitor;
+
+import java.net.DatagramSocket;
+import java.net.Socket;
+import org.osgi.service.resourcemanagement.ResourceContext;
+import org.osgi.service.resourcemanagement.ResourceManager;
+import org.osgi.service.resourcemanagement.ResourceMonitor;
 
 /**
  * A {@link ResourceMonitor} for the {@link ResourceManager#RES_TYPE_SOCKET}
  * resource type. {@link SocketMonitor} instance are used to monitor and limit
- * the number of existing socket per {@link ResourceContext} instance.
+ * the number of in-use sockets per {@link ResourceContext} instance.
  * {@link SocketMonitor} instance handle all types of sockets (TCP, UDP, ...).
+ * <p>
+ * A TCP socket is considered to be in-use when it is bound (
+ * {@link Socket#bind(java.net.SocketAddress)}) or when it is connected (
+ * {@link Socket#connect(java.net.SocketAddress)}). It leaves the in-use state
+ * when the socket is closed ({@link Socket#close()}).
+ * </p>
+ * <p>
+ * A UDP socket is in-use when it is bound (
+ * {@link DatagramSocket#bind(java.net.SocketAddress)}) or connected (
+ * {@link DatagramSocket#connect(java.net.SocketAddress)}). A UDP Socket leaves
+ * the in-use state when it is closed ({@link DatagramSocket#close()}).
+ * 
  */
 public interface SocketMonitor extends ResourceMonitor {
 

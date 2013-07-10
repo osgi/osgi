@@ -13,28 +13,30 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.framework.resource.resourcemonitor;
+package org.osgi.service.resourcemanagement.resourcemonitor;
 
-import org.osgi.framework.resource.ResourceContext;
-import org.osgi.framework.resource.ResourceManager;
-import org.osgi.framework.resource.ResourceMonitor;
+import org.osgi.service.resourcemanagement.ResourceContext;
+import org.osgi.service.resourcemanagement.ResourceManager;
+import org.osgi.service.resourcemanagement.ResourceMonitor;
 
 /**
  * A {@link ResourceMonitor} for the 
- * {@link ResourceManager#RES_TYPE_CPU} resource type.  
- * CPUMonitor instance monitors the CPU consumed by a
- * {@link ResourceContext} instance.
+ * {@link ResourceManager#RES_TYPE_MEMORY} resource type.
+ * A MemoryMonitor instance monitors and limits the memory used
+ * by a {@link ResourceContext} instance.
+ *   
  */
-public interface CPUMonitor extends ResourceMonitor {
+public interface MemoryMonitor extends ResourceMonitor {
   
   /**
-   * Returns the CPU usage as a cumulative number of nanoseconds
+   * Returns the size of the java heap used by the bundles in this 
+   * resource context.
    * <p>
    * The {@link #getUsage()} method returns the same value,
    * wrapped in a {@link Long}
-   * @return the CPU usage in nanoseconds
+   * @return the size of the used java heap in bytes
    */
-  public int getCPUUsage();
+  public long getUsedMemory();
   
   
 }

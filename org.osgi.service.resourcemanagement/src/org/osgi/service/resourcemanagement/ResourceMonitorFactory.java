@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.osgi.framework.resource;
+package org.osgi.service.resourcemanagement;
 
 
 /**
