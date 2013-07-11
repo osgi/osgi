@@ -17,7 +17,7 @@
 package org.osgi.service.zigbee;
 
 import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
-import org.osgi.service.zigbee.handler.ZigBeeAttributesHandler;
+import org.osgi.service.zigbee.handler.ZigBeeHandler;
 
 /**
  * This interface represents a ZigBee Cluster
@@ -83,7 +83,7 @@ public interface ZigBeeCluster {
 	 * @param attributesIds An array of attributes ids
 	 * @param handler The response handler
 	 */
-	public void readAttributes(int[] attributesIds, ZigBeeAttributesHandler handler);
+	public void readAttributes(int[] attributesIds, ZigBeeHandler handler);
 
 	/**
 	 * Read a list of attributes. Each readed attributes will be represented as
@@ -92,7 +92,7 @@ public interface ZigBeeCluster {
 	 * @param attibutesIds An array of attributes ids
 	 * @param handler The response handler
 	 */
-	public void readAttributesAsBytes(int[] attibutesIds, ZigBeeAttributesHandler handler);
+	public void readAttributesAsBytes(int[] attibutesIds, ZigBeeHandler handler);
 
 	/**
 	 * Write a list of attributes
@@ -101,7 +101,7 @@ public interface ZigBeeCluster {
 	 * @param attributes An array of attributes records
 	 * @param handler The response handler
 	 */
-	public void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributes, ZigBeeAttributesHandler handler);
+	public void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributes, ZigBeeHandler handler);
 
 	/**
 	 * Write a list of attributes
@@ -111,6 +111,6 @@ public interface ZigBeeCluster {
 	 * @param values A byte array representing attributes values
 	 * @param handler The response handler
 	 */
-	public void writeAttributes(boolean undivided, int[] attributesIds, byte[] values, ZigBeeAttributesHandler handler) throws ZigBeeNoDescriptionAvailableException;
+	public void writeAttributes(boolean undivided, int[] attributesIds, byte[] values, ZigBeeHandler handler) throws ZigBeeNoDescriptionAvailableException;
 
 }
