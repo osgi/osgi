@@ -16,7 +16,7 @@
 
 package org.osgi.service.zigbee;
 
-import org.osgi.service.zigbee.description.ZigBeeDeviceDescription;
+import org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescription;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 
 /**

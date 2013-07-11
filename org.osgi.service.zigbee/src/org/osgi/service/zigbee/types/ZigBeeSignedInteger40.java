@@ -14,46 +14,44 @@
  * limitations under the License.
  */
 
-package org.osgi.service.zigbee;
+package org.osgi.service.zigbee.types;
 
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
+public class ZigBeeSignedInteger40 implements
+		ZigBeeDataTypeDescription {
+	public byte[] serialize(Object param) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-/**
- * This class represents a ZigBee Attribute Record
- * 
- * @version 1.0
- */
-public class ZigBeeAttributeRecord {
+	public boolean isAnalog() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 
-	private short						id;
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-	private ZigBeeDataTypeDescription	dataType;
+	public Class getJavaDataType() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-	private Object						value;
+	public Object getInvalidNumber() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	public short getId() {
-		return id;
+		// TODO Auto-generated method stub
+		return 0x09;
 	}
 
-	public void setId(short id) {
-		this.id = id;
+	public Object deserialize(byte[] data) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-
-	public ZigBeeDataTypeDescription getDataType() {
-		return dataType;
-	}
-
-	public void setDataType(ZigBeeDataTypeDescription dataType) {
-		this.dataType = dataType;
-	}
-
-	public Object getValue() {
-		return value;
-	}
-
-	public void setValue(Object value) {
-		this.value = value;
-	}
-
 }

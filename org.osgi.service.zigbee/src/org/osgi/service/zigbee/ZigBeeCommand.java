@@ -16,8 +16,8 @@
 
 package org.osgi.service.zigbee;
 
-import org.osgi.service.zigbee.datatype.ZigBeeDataTypeDescription;
-import org.osgi.service.zigbee.description.ZigBeeCommandDescription;
+import org.osgi.service.zigbee.descriptions.ZigBeeCommandDescription;
+import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 import org.osgi.service.zigbee.handler.ZigBeeHandler;
 
 /**
