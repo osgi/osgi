@@ -18,7 +18,7 @@ package org.osgi.service.zigbee.types;
 
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
-public class ZigBeeBooleanType implements
+public class ZigBeeBoolean implements
 		ZigBeeDataTypeDescription {
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub

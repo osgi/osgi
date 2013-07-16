@@ -16,12 +16,10 @@
 
 package org.osgi.service.zigbee;
 
-import java.math.BigInteger;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeUserDescriptor;
-import org.osgi.service.zigbee.handler.ZigBeeHandler;
 
 /**
  * This interface represents a ZigBee node, means a physical device that can
@@ -29,14 +27,13 @@ import org.osgi.service.zigbee.handler.ZigBeeHandler;
  * Each physical may contain up 240 logical devices which are represented by the
  * {@link ZigBeeEndpoint}<br>
  * class. Each logical device is identified by an <i>EndPoint</i> address, but
- * shares iether the:<br>
+ * shares either the:<br>
  * - <i>64-bit 802.15.4 IEEE Address</i><br>
  * - <i>16-bit ZigBee Network Address</i><br>
  * 
  * @version 1.0
  */
 public interface ZigBeeNode {
-
 	/**
 	 * Property key for the mandatory node IEEE Address representing node MAC
 	 * address. MAC Address is a 12-digit(48-bit) or 16-digit(64-bit)
@@ -171,9 +168,9 @@ public interface ZigBeeNode {
 	public static final short	END_DEVICE						= 2;
 
 	/**
-	 * @return A String representing the ZigBee device node IEEE Address.
+	 * @return The ZigBee device node IEEE Address.
 	 */
-	public String getIEEEAddress();
+	public Long getIEEEAddress();
 
 	/**
 	 * @return The ZigBee device node current network address.
@@ -188,7 +185,7 @@ public interface ZigBeeNode {
 	/**
 	 * @return The network Extended PAN identifier(EPID)
 	 */
-	public BigInteger getExtendedPanId();
+	public Long getExtendedPanId();
 
 	/**
 	 * @param id The endpoint identifier to be retrieved.

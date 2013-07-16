@@ -68,6 +68,13 @@ public interface ZigBeeEndpoint {
 	public static final String	OUTPUT_CLUSTERS			= "zigbee.device.clusters.output";
 
 	/**
+	 * Key of {@link String} containing the targeted network host pid It is an
+	 * <b>optional</b> property for this service. If provided, HOST_PID property
+	 * must have the priority to identify the host that is targeted for export.
+	 */
+	public static final String	HOST_PID				= "zigbee.device.target.host.pid";
+
+	/**
 	 * Key of {@link String} containing the targeted network PAN ID
 	 */
 	public static final String	PAN_ID_TARGET			= "zigbee.device.target.pan.id";
@@ -91,10 +98,10 @@ public interface ZigBeeEndpoint {
 	public byte getId();
 
 	/**
-	 * @return the {@link String} IEEE Address of the node containing this
+	 * @return The IEEE Address of the node containing this
 	 *         endpoint
 	 */
-	public String getNodeAddress();
+	public Long getNodeAddress();
 
 	/**
 	 * @param id The server(input) cluster identifier

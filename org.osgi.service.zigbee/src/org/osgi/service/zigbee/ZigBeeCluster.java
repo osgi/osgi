@@ -17,7 +17,6 @@
 package org.osgi.service.zigbee;
 
 import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
-import org.osgi.service.zigbee.handler.ZigBeeHandler;
 
 /**
  * This interface represents a ZigBee Cluster
@@ -25,7 +24,6 @@ import org.osgi.service.zigbee.handler.ZigBeeHandler;
  * @version 1.0
  */
 public interface ZigBeeCluster {
-
 	/**
 	 * Property key for the optional cluster id. A ZigBee Event Listener service
 	 * can announce for what ZigBee clusters it wants notifications.

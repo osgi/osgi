@@ -102,7 +102,7 @@ public interface ZigBeePowerDescriptor {
 	public boolean isDisposableBatteryAvailable();
 
 	/**
-	 * @return true if rechargable battery is available or false otherwise.
+	 * @return true if rechargeable battery is available or false otherwise.
 	 */
 	public boolean isRechargableBatteryAvailable();
 }

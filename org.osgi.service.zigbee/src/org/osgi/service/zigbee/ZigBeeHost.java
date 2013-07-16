@@ -16,7 +16,6 @@
 
 package org.osgi.service.zigbee;
 
-import org.osgi.service.zigbee.handler.ZigBeeHandler;
 
 /**
  * This interface represents the machine that hosts the code to run a ZigBee

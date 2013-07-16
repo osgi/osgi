@@ -24,7 +24,6 @@ package org.osgi.service.zigbee.descriptions;
  * @version 1.0
  */
 public interface ZigBeeAttributeDescription {
-
 	/**
 	 * The attribute is read only
 	 */

@@ -18,7 +18,6 @@ package org.osgi.service.zigbee;
 
 import org.osgi.service.zigbee.descriptions.ZigBeeCommandDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
-import org.osgi.service.zigbee.handler.ZigBeeHandler;
 
 /**
  * This interface represents a ZigBee Command
@@ -26,7 +25,6 @@ import org.osgi.service.zigbee.handler.ZigBeeHandler;
  * @version 1.0
  */
 public interface ZigBeeCommand {
-
 	/**
 	 * @return The command identifier
 	 */

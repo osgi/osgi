@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.zigbee.handler;
+package org.osgi.service.zigbee;
 
 import java.util.Map;
 

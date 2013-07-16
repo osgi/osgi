@@ -29,7 +29,7 @@ import org.osgi.service.zigbee.types.ZigBeeBitmap48;
 import org.osgi.service.zigbee.types.ZigBeeBitmap56;
 import org.osgi.service.zigbee.types.ZigBeeBitmap64;
 import org.osgi.service.zigbee.types.ZigBeeBitmap8;
-import org.osgi.service.zigbee.types.ZigBeeBooleanType;
+import org.osgi.service.zigbee.types.ZigBeeBoolean;
 import org.osgi.service.zigbee.types.ZigBeeCharacterString;
 import org.osgi.service.zigbee.types.ZigBeeClusterID;
 import org.osgi.service.zigbee.types.ZigBeeDate;
@@ -77,7 +77,6 @@ import org.osgi.service.zigbee.types.ZigBeeUnsignedInteger8;
  * @version 1.0
  */
 public class ZigBeeDataTypes {
-
 	/**
 	 * Boolean The Boolean type represents a logical value, either TRUE (0x00)
 	 * or FALSE (0x01). The value 0xff represents an invalid value of this type.
@@ -97,7 +96,7 @@ public class ZigBeeDataTypes {
 	 * or FALSE (0x01). The value 0xff represents an invalid value of this type.
 	 * All other values of this type are forbidden.
 	 */
-	public static final ZigBeeDataTypeDescription	BOOLEAN					= new ZigBeeBooleanType();
+	public static final ZigBeeDataTypeDescription	BOOLEAN					= new ZigBeeBoolean();
 
 	/**
 	 * Bitmap (8-bit, 16-bit, 24-bit and 32-bit) The Bitmap type holds 8, 16, 24

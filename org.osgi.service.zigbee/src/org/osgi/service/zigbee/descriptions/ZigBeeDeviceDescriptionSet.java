@@ -20,7 +20,7 @@ package org.osgi.service.zigbee.descriptions;
 /**
  * This interface represents a ZigBee Device description Set
  * ZigBeeDeviceDescriptionSet is registered as an OSGi Service Provides method
- * to retrieve Endpoints descriptions
+ * to retrieve endpoint descriptions
  * 
  * @version 1.0
  */
