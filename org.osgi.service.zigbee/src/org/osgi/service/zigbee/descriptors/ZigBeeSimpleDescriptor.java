@@ -43,7 +43,7 @@ public interface ZigBeeSimpleDescriptor {
 	/**
 	 * @return the version of the application.
 	 */
-	public short getApplicationDeviceVersion();
+	public byte getApplicationDeviceVersion();
 
 	/**
 	 * @return An array of input(server) cluster identifiers, returns an empty

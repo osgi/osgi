@@ -95,7 +95,7 @@ public interface ZigBeeEndpoint {
 	 * @return identifier of the endpoint represented by this object, value
 	 *         ranges from 1 to 240.
 	 */
-	public byte getId();
+	public short getId();
 
 	/**
 	 * @return The IEEE Address of the node containing this
