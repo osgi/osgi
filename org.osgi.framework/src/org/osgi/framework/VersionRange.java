@@ -476,8 +476,15 @@ public class VersionRange {
 		}
 
 		StringBuffer result = new StringBuffer(128);
-		if (right != null) {
+		final boolean needPresence = !leftClosed && ((right == null) || !rightClosed);
+		final boolean multipleTerms = needPresence || (right != null);
+		if (multipleTerms) {
 			result.append("(&");
+		}
+		if (needPresence) {
+			result.append('(');
+			result.append(attributeName);
+			result.append("=*)");
 		}
 		if (leftClosed) {
 			result.append('(');
@@ -506,6 +513,8 @@ public class VersionRange {
 				result.append(right.toString0());
 				result.append("))");
 			}
+		}
+		if (multipleTerms) {
 			result.append(')');
 		}
 

@@ -817,6 +817,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange('[', version11, version22, ')');
 		assertTrue("not included", includesByFilter(range, version11));
@@ -825,6 +826,7 @@ public class VersionRangeTests extends TestCase {
 		assertFalse("included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange('(', version11, version22, ']');
 		assertFalse("included", includesByFilter(range, version11));
@@ -833,6 +835,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange('(', version11, version22, ')');
 		assertFalse("included", includesByFilter(range, version11));
@@ -841,6 +844,7 @@ public class VersionRangeTests extends TestCase {
 		assertFalse("included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange("[2.3.4,5.6.7)");
 		assertTrue("not included", includesByFilter(range, version11));
@@ -849,6 +853,7 @@ public class VersionRangeTests extends TestCase {
 		assertFalse("included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange("[2.3.4,5.6.7]");
 		assertTrue("not included", includesByFilter(range, version11));
@@ -857,6 +862,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange("(2.3.4,5.6.7]");
 		assertTrue("not included", includesByFilter(range, version11));
@@ -865,6 +871,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange("(2.3.4,5.6.7)");
 		assertTrue("not included", includesByFilter(range, version11));
@@ -873,6 +880,7 @@ public class VersionRangeTests extends TestCase {
 		assertFalse("included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange("[2.3.4.-,5.6.7.-)");
 		assertTrue("not included", includesByFilter(range, version11));
@@ -881,6 +889,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange("(2.3.4.-,5.6.7.-]");
 		assertFalse("included", includesByFilter(range, version11));
@@ -889,6 +898,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange('[', version11, null, ')');
 		assertTrue("not included", includesByFilter(range, version11));
@@ -897,6 +907,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertTrue("not included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange('(', version12, null, ')');
 		assertTrue("not included", includesByFilter(range, version11));
@@ -905,6 +916,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertTrue("not included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange('[', version12, null, ')');
 		assertTrue("not included", includesByFilter(range, version11));
@@ -913,6 +925,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertTrue("not included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange("2.3.4");
 		assertTrue("not included", includesByFilter(range, version11));
@@ -921,6 +934,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertTrue("not included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange("2.3.4.-");
 		assertTrue("not included", includesByFilter(range, version11));
@@ -929,6 +943,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertTrue("not included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange('[', Version.emptyVersion, null, ')');
 		assertTrue("not included", includesByFilter(range, version11));
@@ -939,6 +954,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version4));
 		assertTrue("not included",
 				includesByFilter(range, Version.emptyVersion));
+		assertFalse("included", includesByFilter(range, null));
 
 	}
 
@@ -949,7 +965,9 @@ public class VersionRangeTests extends TestCase {
 		// System.out.println(range + " => " + filterString);
 		Filter filter = FrameworkUtil.createFilter(filterString);
 		Map<String, Version> map = new HashMap<String, Version>();
-		map.put(attributeName, version);
+		if (version != null) {
+			map.put(attributeName, version);
+		}
 		return filter.matches(map);
 	}
 
