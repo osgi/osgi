@@ -72,7 +72,7 @@ public interface ZigBeeEndpoint {
 	 * <b>optional</b> property for this service. If provided, HOST_PID property
 	 * must have the priority to identify the host that is targeted for export.
 	 */
-	public static final String	HOST_PID				= "zigbee.device.target.host.pid";
+	public static final String	HOST_PID_TARGET			= "zigbee.device.target.host.pid";
 
 	/**
 	 * Key of {@link String} containing the targeted network PAN ID
@@ -98,8 +98,7 @@ public interface ZigBeeEndpoint {
 	public short getId();
 
 	/**
-	 * @return The IEEE Address of the node containing this
-	 *         endpoint
+	 * @return The IEEE Address of the node containing this endpoint
 	 */
 	public Long getNodeAddress();
 

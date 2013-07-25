@@ -143,6 +143,15 @@ public interface ZigBeeNode {
 	public static final String	CURRENT_POWER_SOURCE_LEVEL		= "zigbee.node.description.power.source.level";
 
 	/**
+	 * Key of {@link String} containing the {@link ZigBeeHost} pid.<br>
+	 * The host pid is intended to uniquely identify the ZigBee local host,
+	 * since there could be many hosts on the same platform. All the nodes that
+	 * belong to a specific network MUST specify the same value for this
+	 * property.
+	 */
+	public static final String	HOST_PID						= "zigbee.node.host.pid";
+
+	/**
 	 * Key of {@link String} containing the device node network PAN ID
 	 */
 	public static final String	PAN_ID							= "zigbee.node.pan.id";
@@ -176,6 +185,11 @@ public interface ZigBeeNode {
 	 * @return The ZigBee device node current network address.
 	 */
 	public short getNetworkAddress();
+
+	/**
+	 * @return The ZigBee local Host PID
+	 */
+	public String getHostPId();
 
 	/**
 	 * @return The network Personal Area Network identifier(PAND ID)
