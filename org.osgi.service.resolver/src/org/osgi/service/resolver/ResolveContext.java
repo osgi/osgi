@@ -69,8 +69,9 @@ public abstract class ResolveContext {
 	 * <p>
 	 * The default implementation returns an empty collection.
 	 * 
-	 * @return The resources that must be resolved for this resolve context. May
-	 *         be empty if there are no mandatory resources.
+	 * @return A collection of the resources that must be resolved for this
+	 *         resolve context. May be empty if there are no mandatory
+	 *         resources. The returned collection may be unmodifiable.
 	 */
 	public Collection<Resource> getMandatoryResources() {
 		return emptyCollection();
@@ -84,9 +85,9 @@ public abstract class ResolveContext {
 	 * <p>
 	 * The default implementation returns an empty collection.
 	 * 
-	 * @return The resources that the resolver should attempt to resolve for
-	 *         this resolve context. May be empty if there are no mandatory
-	 *         resources.
+	 * @return A collection of the resources that the resolver should attempt to
+	 *         resolve for this resolve context. May be empty if there are no
+	 *         optional resources. The returned collection may be unmodifiable.
 	 */
 	public Collection<Resource> getOptionalResources() {
 		return emptyCollection();
