@@ -119,7 +119,7 @@ public interface ResourceMonitor {
 	 * @throws IllegalStateException if the ResourceMonitor instance is not
 	 *         enabled.
 	 */
-	public Object getUsage() throws IllegalStateException;
+	public Comparable getUsage() throws IllegalStateException;
 
 	/**
 	 * Returns the lower {@link ResourceThreshold} instance.

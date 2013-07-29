@@ -112,28 +112,28 @@ public interface ResourceThreshold {
 	 * 
 	 * @return value
 	 */
-	public Object getErrorThreshold();
+	public Comparable getErrorThreshold();
 
 	/**
 	 * Returns the value of the warning threshold
 	 * 
 	 * @return value
 	 */
-	public Object getWarningThreshold();
+	public Comparable getWarningThreshold();
 
 	/**
 	 * Set the Error threshold value.
 	 * 
 	 * @param value
 	 */
-	public void setErrorThreshold(Object value);
+	public void setErrorThreshold(Comparable value);
 
 	/**
 	 * Set the Warning threshold value
 	 * 
 	 * @param value
 	 */
-	public void setWarningThreshold(Object value);
+	public void setWarningThreshold(Comparable value);
 
 
 }
