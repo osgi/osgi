@@ -1,4 +1,5 @@
-package org.osgi.service.resourcemanagement;
+
+package org.osgi.service.resource;
 
 
 /**

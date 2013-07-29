@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package org.osgi.service.resourcemanagement.resourcemonitor;
+package org.osgi.service.resource.resourcemonitor;
 
 import java.net.DatagramSocket;
 import java.net.Socket;
-import org.osgi.service.resourcemanagement.ResourceContext;
-import org.osgi.service.resourcemanagement.ResourceManager;
-import org.osgi.service.resourcemanagement.ResourceMonitor;
+import org.osgi.service.resource.ResourceContext;
+import org.osgi.service.resource.ResourceManager;
+import org.osgi.service.resource.ResourceMonitor;
 
 /**
  * A {@link ResourceMonitor} for the {@link ResourceManager#RES_TYPE_SOCKET}

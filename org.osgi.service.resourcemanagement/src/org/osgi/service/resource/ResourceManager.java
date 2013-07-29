@@ -13,14 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.service.resourcemanagement;
+
+package org.osgi.service.resource;
 
 import org.osgi.framework.Bundle;
-import org.osgi.service.resourcemanagement.resourcemonitor.CPUMonitor;
-import org.osgi.service.resourcemanagement.resourcemonitor.DiskStorageMonitor;
-import org.osgi.service.resourcemanagement.resourcemonitor.MemoryMonitor;
-import org.osgi.service.resourcemanagement.resourcemonitor.SocketMonitor;
-import org.osgi.service.resourcemanagement.resourcemonitor.ThreadMonitor;
+import org.osgi.service.resource.resourcemonitor.CPUMonitor;
+import org.osgi.service.resource.resourcemonitor.DiskStorageMonitor;
+import org.osgi.service.resource.resourcemonitor.MemoryMonitor;
+import org.osgi.service.resource.resourcemonitor.SocketMonitor;
+import org.osgi.service.resource.resourcemonitor.ThreadMonitor;
 
 /**
  * Monitor and manage resource contexts.
