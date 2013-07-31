@@ -117,5 +117,53 @@
             <attribute name='mime' value='application/vnd.osgi.test.tar.gz' />
         </capability>
     </resource>
+    <resource>
+        <capability namespace='osgi.identity'>
+            <attribute name='osgi.identity' value='org.osgi.test.cases.repository.tb3' />
+            <attribute name='version' type='Version' value='1.4' />
+            <attribute name='type' value='osgi.bundle' />
+            <attribute name='license' value='http://opensource.org/licenses/Apache-2.0' />
+        </capability>
+        <capability namespace='osgi.content'>
+            <attribute name='osgi.content' value='@@tb3SHA256@@' />
+            <attribute name='url' value='@@tb3URL@@' />
+            <attribute name='size' type='Long' value='@@tb3Size@@' />
+            <attribute name='mime' value='application/vnd.osgi.bundle' />
+        </capability>
+        <capability namespace='osgi.wiring.bundle'>
+            <attribute name='osgi.wiring.bundle' value='org.osgi.test.cases.repository.tb3' />
+            <attribute name='bundle-version' type='Version' value='1.4' />
+        </capability>
+        <capability namespace='osgi.wiring.package'>
+            <attribute name='osgi.wiring.package' value='org.osgi.test.cases.repository.tbX' />
+            <attribute name='version' type='Version' value='7.1' />
+            <attribute name='bundle-version' type='Version' value='1.4' />
+            <attribute name='bundle-symbolic-name' value='org.osgi.test.cases.repository.tb3' />
+        </capability>
+    </resource>    
+    <resource>
+        <capability namespace='osgi.identity'>
+            <attribute name='osgi.identity' value='org.osgi.test.cases.repository.tb4' />
+            <attribute name='version' type='Version' value='4' />
+            <attribute name='type' value='osgi.bundle' />
+            <attribute name='license' value='http://opensource.org/licenses/EPL-1.0' />
+        </capability>
+        <capability namespace='osgi.content'>
+            <attribute name='osgi.content' value='@@tb4SHA256@@' />
+            <attribute name='url' value='@@tb4URL@@' />
+            <attribute name='size' type='Long' value='@@tb4Size@@' />
+            <attribute name='mime' value='application/vnd.osgi.bundle' />
+        </capability>
+        <capability namespace='osgi.wiring.bundle'>
+            <attribute name='osgi.wiring.bundle' value='org.osgi.test.cases.repository.tb4' />
+            <attribute name='bundle-version' type='Version' value='4' />
+        </capability>
+        <capability namespace='osgi.wiring.package'>
+            <attribute name='osgi.wiring.package' value='org.osgi.test.cases.repository.tbX' />
+            <attribute name='version' type='Version' value='7.1' />
+            <attribute name='bundle-version' type='Version' value='4' />
+            <attribute name='bundle-symbolic-name' value='org.osgi.test.cases.repository.tb4' />
+        </capability>
+    </resource>    
 </repository>
 

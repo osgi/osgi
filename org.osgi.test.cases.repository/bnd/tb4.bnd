@@ -1,0 +1,6 @@
+Bundle-ManifestVersion: 2
+Bundle-Name: ${p}.tb4
+Bundle-SymbolicName: ${p}.tb4
+Bundle-Version: 4
+
+Export-Package: org.osgi.test.cases.repository.tbX;version="7.1"
