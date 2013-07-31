@@ -93,4 +93,11 @@ public interface EnOceanHost {
 	 * @return REPEATER_LEVEL_XXX depending on the repeater level.
 	 */
 	public int getRepeaterLevel() throws EnOceanException;
+	
+	/**
+	 * Retrieves the SENDER_ID associated with the given servicePID, if existing on this chip.
+	 * @param servicePID
+	 * @return
+	 */
+	public int getSenderId(String servicePID);
 }
