@@ -1,13 +1,13 @@
 package org.osgi.service.enocean;
 
-import org.osgi.service.enocean.datafields.EnOceanDatafield;
+import org.osgi.service.enocean.channels.EnOceanChannel;
 
 /**
  * Holds the necessary methods to interact with an EnOcean Telegram.
  *  
  * @version 1.0
  */
-public interface EnOceanTelegram {
+public interface EnOceanMessage {
 	
 	/**
 	 * Property name for the radiotelegram main type of the profile
@@ -52,7 +52,7 @@ public interface EnOceanTelegram {
 	/**
 	 * @return The list of associated datafields.
 	 */
-	public EnOceanDatafield[] getDatafields();
+	public EnOceanChannel[] getDatafields();
 	
 	/**
 	 * @return The number of subtelegrams in the case of multifram messages.

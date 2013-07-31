@@ -1,13 +1,15 @@
-package org.osgi.service.enocean.datafields;
+package org.osgi.service.enocean.channels;
+
+import org.osgi.service.enocean.channels.EnOceanChannelDescription;
 
 /**
  * 
  *
- * Subinterface of {@link EnOceanDatafieldDescription} that describes physical measuring datafields.
+ * Subinterface of {@link EnOceanChannelDescription} that describes physical measuring datafields.
  * 
  * @author $Id$
  */
-public interface EnOceanScaledDatafieldDescription extends EnOceanDatafieldDescription {
+public interface EnOceanDataChannelDescription extends EnOceanChannelDescription {
 	
 	/**
 	 * The start of the raw input range for this datafield.

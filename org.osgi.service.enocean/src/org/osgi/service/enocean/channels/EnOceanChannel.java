@@ -1,4 +1,6 @@
-package org.osgi.service.enocean.datafields;
+package org.osgi.service.enocean.channels;
+
+import org.osgi.service.enocean.channels.EnOceanChannelDescription;
 
 /**
  * Holds the metadata and means to retrieve the actual value of a Datafield.
@@ -8,7 +10,7 @@ package org.osgi.service.enocean.datafields;
  *  
  * @version 1.0
  */
-public interface EnOceanDatafield {
+public interface EnOceanChannel {
 	
 	/**
 	 * @return The shortcut name of this datafield, as described in the EEP specification.
@@ -33,7 +35,7 @@ public interface EnOceanDatafield {
 	/**
 	 * @return The description of this datafield, if any.
 	 */
-	public EnOceanDatafieldDescription getDescription();
+	public EnOceanChannelDescription getDescription();
 	
 	/**
 	 * @return The value of this datafield.

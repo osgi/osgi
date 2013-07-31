@@ -57,12 +57,12 @@ public interface EnOceanDevice {
 	public void send(byte[] telegram) throws EnOceanException;
 	
 	/**
-	 * Sends a message onto the EnOcean network. Uses actual {@link EnOceanTelegram} objects.
+	 * Sends a message onto the EnOcean network. Uses actual {@link EnOceanMessage} objects.
 	 * 
 	 * @param the EnOceanTelegram to be issued.
 	 * @throws EnOceanException
 	 */
-	public void send(EnOceanTelegram telegram) throws EnOceanException;
+	public void send(EnOceanMessage telegram) throws EnOceanException;
 	
 	/**
 	 * Switches the device into learning mode.
@@ -92,7 +92,7 @@ public interface EnOceanDevice {
 	/**
 	 * @return The latest telegram issued by this device.
 	 */
-	public EnOceanTelegram getLastTelegram();
+	public EnOceanMessage getLastTelegram();
 	
 	/**
 	 * @return The list of currently learned devices.

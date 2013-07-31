@@ -1,6 +1,8 @@
-package org.osgi.service.enocean.datafields;
+package org.osgi.service.enocean.channels;
 
 import org.osgi.service.enocean.EnOceanException;
+import org.osgi.service.enocean.channels.EnOceanChannelDescription;
+import org.osgi.service.enocean.channels.EnOceanChannelEnumValue;
 
 /**
  * 
@@ -10,7 +12,7 @@ import org.osgi.service.enocean.EnOceanException;
  * 
  * @author $Id$
  */
-public interface EnOceanDatafieldDescription {
+public interface EnOceanChannelDescription {
 	
 	/**
 	 * A RAW datafield is only made of bytes.
@@ -23,7 +25,7 @@ public interface EnOceanDatafieldDescription {
 	public final static String TYPE_SCALED = "enocean.datafield.description.scaled";
 	
 	/**
-	 * An ENUM datafield maps itself to one between a list of discrete {@link EnOceanDatafieldEnum} "value objects".
+	 * An ENUM datafield maps itself to one between a list of discrete {@link EnOceanChannelEnumValue} "value objects".
 	 */
 	public final static String TYPE_ENUM = "enocean.datafield.description.enum";
 	
@@ -43,8 +45,8 @@ public interface EnOceanDatafieldDescription {
 	
 	/**
 	 * Tries to deserialize a series of bytes into a documented value object 
-	 * (raw bytes, Double or {@link EnOceanDatafieldEnum}.
-	 * Of course this method will be specialized for each {@link EnOceanDatafieldDescription} subinterface,
+	 * (raw bytes, Double or {@link EnOceanChannelEnumValue}.
+	 * Of course this method will be specialized for each {@link EnOceanChannelDescription} subinterface,
 	 * depending on the type of this datafield.
 	 * @param bytes
 	 * @return an EnOceanDatafield object.

@@ -1,4 +1,4 @@
-package org.osgi.service.enocean.datafields;
+package org.osgi.service.enocean.channels;
 
 /**
  * 
@@ -7,7 +7,7 @@ package org.osgi.service.enocean.datafields;
  * 
  * @author $Id$
  */
-public interface EnOceanDatafieldEnum {
+public interface EnOceanChannelEnumValue {
 	
 	/**
 	 * The start value of the enumeration.
