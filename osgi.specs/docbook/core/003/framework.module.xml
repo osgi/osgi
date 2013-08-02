@@ -4628,7 +4628,7 @@ bundle-description  ::= symbolic-name
       </itemizedlist>
 
       <para>A Fragment bundle can become unresolved by calling the
-      <code>refreshPackages</code> method.</para>
+      <code>refreshBundles</code> method.</para>
     </section>
 
     <section>
