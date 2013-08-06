@@ -29,7 +29,9 @@ import org.osgi.service.resource.resourcemonitor.ThreadMonitor;
  * <p>
  * The ResourceManager object can be obtained by calling
  * {@link Bundle#adapt(Class) bundle.adapt(ResourceManager.class)} on the system
- * bundle. Only the system bundle can be adapted to a ResourceManager object.
+ * bundle. Only the system bundle can be adapted to a ResourceManager object.The
+ * ResourceManager object is also available as an OSGi service.
+ * </p>
  * 
  * @ThreadSafe
  * @noimplement

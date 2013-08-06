@@ -122,36 +122,6 @@ public interface ResourceMonitor {
 	public Comparable getUsage() throws IllegalStateException;
 
 	/**
-	 * Returns the lower {@link ResourceThreshold} instance.
-	 * 
-	 * @return the lower threshold if set
-	 */
-	public ResourceThreshold getLowerThreshold();
-
-	/**
-	 * Returns the upper {@link ResourceThreshold} instance.
-	 * 
-	 * @return the upper threshold if set
-	 */
-	public ResourceThreshold getUpperThreshold();
-
-	/**
-	 * Set the lower {@link ResourceThreshold} instance.
-	 * 
-	 * @param lowerThreshold new lower threshold. It can be null.
-	 * @exception ThresholdException if lowerThreshold.ipUpper() returns true.
-	 */
-	public void setLowerThreshold(ResourceThreshold lowerThreshold) throws ThresholdException;
-
-	/**
-	 * Set the upper {@link ResourceThreshold} instance.
-	 * 
-	 * @param upperThreshold new upper threshold. It can be null
-	 * @exception ThresholdException if upperThreshold.isUpper() returns false.
-	 */
-	public void setUpperThreshold(ResourceThreshold upperThreshold) throws ThresholdException;
-
-	/**
 	 * Returns the sampling period for this resource type.
 	 * 
 	 * @return The sampling period in milliseconds, or <code>-1</code> if a

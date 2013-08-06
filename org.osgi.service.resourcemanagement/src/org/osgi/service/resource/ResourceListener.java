@@ -17,42 +17,111 @@
 package org.osgi.service.resource;
 
 /**
- * OSGi Resource Listener Service.
- * 
  * <p>
- * Bundles registering this service will be called by the Resource Manager when 
- * a {@link ResourceEvent} is generated.
+ * A ResourceListener is an OSGi service which is notified when a Resource
+ * Context violates one of the threshold defined by the listener.
+ * </p>
  * <p>
- * The services can filter the events they are interested in using the
- * {@link #RESOURCE_CONTEXT} and {@link #RESOURCE_TYPE} registration properties.
+ * Every ResourceListener is associated to a specific Resource Context and a
+ * specific Resource type. It defines two types of thresholds: a lower and a
+ * upper. A lower threshold is reached when the resource usage decreases below
+ * the threshold. On the contrary, an upper threshold is reached when the
+ * resource usage exceeds the threshold.
+ * </p>
+ * <p>
+ * Both lower or upper threshold are two levels : a warning level and error
+ * level. The warning level indicates the resource usage becomes to be critical
+ * but are still acceptable. The error level indicates the resource usage is now
+ * critical for the overall system and actions should be taken.
+ * <p>
+ * <p>
+ * A Resource Listener is registered with two mandatory properties:
+ * <ul>
+ * <li>{@link #RESOURCE_CONTEXT} which defines the ResourceContext associated to
+ * this Listener</li>
+ * <li>{@link #RESOURCE_TYPE} which the type of resource</li>
+ * </ul>
+ * </p>
+ * <p>
+ * Resource Listeners are associated to a Resource Context and a Resource
+ * Monitor based on the {@link #RESOURCE_CONTEXT} property and the
+ * {@link #RESOURCE_TYPE} property (both of them are mandatory at registration
+ * time).
+ * </p>
+ * <p>
+ * Once associated, the ResourceMonitor gets the threshold values (by calling
+ * {@link #getLowerWarningThreshold()}, {@link #getLowerErrorThreshold()},
+ * {@link #getUpperWarningThreshold()} and {@link #getUpperErrorThreshold()})
+ * and store them. Once it detects a new resource consumption, it compares the
+ * new resource usage value with the thresholds provided by the Resource
+ * Listener. If the resource usage violates one of these thresholds, the
+ * Resource Monitor notifies the {@link ResourceListener} through a call to
+ * {@link #notify(ResourceEvent)}.
+ * </p>
+ * <p>
+ * ResourceMonitor gets the threshold values only at the registration time. If a
+ * Resource Listener wishes to change one of its threshold value, it has to be
+ * registered again.
+ * </p>
  */
 public interface ResourceListener {
   
-  /**
-   * ResourceListener services can use this registration property to filter
-   * resource events based on the associated {@link ResourceContext}.
-   * <p>
-   * The value of the property can be a String or a String[] - to indicate 
-   * interest in the events from a single context, or a list of contexts.
-   * <p>
-   * If the property is not specified, the listener will receive all events.
-   */
+  	/**
+	 * Mandatory property specifying the Resource Context associated with the
+	 * listener.
+	 */
   public final String RESOURCE_CONTEXT = "resource.context";
   
-  /**
-   * ResourceListener services can use this registration property to filter
-   * resource events based on the associated resource type.
-   * <p>
-   * The value of the property can be a String or a String[] - to indicate 
-   * interest in the events for a single context, or a list of resource types.
-   * <p>
-   * If the property is not specified, the listener will receive all events.
-   */
+  	/**
+	 * Mandatory property defining the type of Resource (i.e the
+	 * ResourceMonitor) associated to this Listener.
+	 */
   public final String RESOURCE_TYPE = "resource.type";
   
   /**
    * Receives a resource management notification
    * @param event The {@link ResourceEvent} oject
    */
-  public void resourceEvent(ResourceEvent event);
+  public void notify(ResourceEvent event);
+
+	/**
+	 * Retrieves the lower warning threshold value set by the listener. If the
+	 * resource usage decreases under this threshold value, the
+	 * {@link #notify(ResourceEvent)} will be called. The provided
+	 * ResourceEvent then indicates the WARNING state is reached.
+	 * 
+	 * @return a comparable object or null if no threshold is set.
+	 */
+	public Comparable getLowerWarningThreshold();
+
+	/**
+	 * Retrieves the lower error threshold value set by the listener. If the
+	 * resource usage decreases under this threshold, the
+	 * {@link #notify(ResourceEvent)} will be called. The provided
+	 * {@link ResourceEvent} then indicates the ERROR state is reached.
+	 * 
+	 * @return a comparable object or null if no threshold is set.
+	 */
+	public Comparable getLowerErrorThreshold();
+
+	/**
+	 * Retrieves the upper warning threshold value set by this listener. If the
+	 * resource usage exceeds this threshold, the
+	 * {@link #notify(ResourceEvent)} method will be called. The provided
+	 * {@link ResourceEvent} then indicates the WARNING state is reached.
+	 * 
+	 * @return a comparable object or null if no threshold is reached.
+	 */
+	public Comparable getUpperWarningThreshold();
+
+	/**
+	 * Retrieves the upper error threshold value set by this listener. If the
+	 * resource usage exceeds this threshold, the
+	 * {@link #notify(ResourceEvent)} will be called. The provided
+	 * {@link ResourceEvent} then indicates the ERROR state is reached.
+	 * 
+	 * @return a comparable object or null if no threshold is reached.
+	 */
+	public Comparable getUpperErrorThreshold();
+
 }

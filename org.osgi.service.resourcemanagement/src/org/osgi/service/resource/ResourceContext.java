@@ -127,7 +127,7 @@ public interface ResourceContext {
 	 * longer be monitored.
 	 * <p>
 	 * A {@link ResourceEvent} with type
-	 * {@link ResourceEvent#RESOURCE_CONTEXT_REMOVED} will be sent.
+	 * {@link ResourceEvent#RESOURCE_CONTEXT_DELETED} will be sent.
 	 * 
 	 * @param destination The {@link ResourceContext} where the resources
 	 *        currently allocated by this resource context will be moved.
