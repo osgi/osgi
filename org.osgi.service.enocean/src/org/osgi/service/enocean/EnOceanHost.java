@@ -28,30 +28,6 @@ public interface EnOceanHost {
 	public static int FLASH_TYPE_DATA = 2;
 	public static int FLASH_TYPE_IDATA = 3;
 	public static int FLASH_TYPE_XDATA = 4;
-
-	/**
-	 * A sub-interface that is used to access the chip's filter values.
-	 * 
-	 * @author $Id$
-	 */
-	public interface EnOceanHostFilter {
-		/**
-		 * The type of the filter (chip, rorg, dbm)
-		 * @return
-		 */
-		public int getType();
-		/**
-		 * The value of the filter (a chip id, a particular rorg, a power level)
-		 * @return
-		 */
-		public int getValue();
-		
-		/**
-		 * The status of this filter; is it enabled or disabled ?
-		 * @return
-		 */
-		public boolean isEnabled();
-	}
 	
 	/**
 	 * Reset the EnOcean Host (cf. ESP3 command 0x02: C0_WR_RESET)
