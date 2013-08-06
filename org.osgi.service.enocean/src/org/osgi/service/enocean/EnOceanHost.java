@@ -29,6 +29,9 @@ public interface EnOceanHost {
 	public static int FLASH_TYPE_IDATA = 3;
 	public static int FLASH_TYPE_XDATA = 4;
 	
+	public static Object	HOST_ID	= "enocean.host.id";
+	public static Object	HOST_TYPE	= "enocean.host.type";
+	
 	/**
 	 * Reset the EnOcean Host (cf. ESP3 command 0x02: C0_WR_RESET)
 	 */
@@ -76,4 +79,14 @@ public interface EnOceanHost {
 	 * @return
 	 */
 	public int getSenderId(String servicePID);
+
+	/**
+	 * Enables the host to set a recipient for the raw data received.
+	 * @param listener that implements the {@link EnOceanPacketListener} interface.
+	 */
+	public void addPacketListener(EnOceanPacketListener listener);
+
+	public void start();
+	public void stop();
+
 }
