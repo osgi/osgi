@@ -1251,6 +1251,12 @@ ServicePermission[...Repository, GET ]</programlisting>
     </section>
   </section>
 
+  <section>
+    <title>Changes</title>
+
+    <para><remark>Add changes text for the 1.1 changes.</remark></para>
+  </section>
+
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.repository.xml"/>
 
   <section>
