@@ -133,6 +133,7 @@ version="1.1">
             </xsl:element>
     
             <xsl:for-each select="$classes">
+              <xsl:sort select="translate(@name, $uppercase, $lowercase)"/>
               <xsl:if test="method/security">
                 <xsl:element name="section" namespace="{$ns}">
                   <xsl:element name="title" namespace="{$ns}">
