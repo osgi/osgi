@@ -14,7 +14,7 @@ package org.osgi.service.usb;
 public interface /* org.osgi.service.usb. */USBDevice {
 	
 	/**
-	 * MANDATORY property key. Value is ÅgUSBÅh.
+	 * MANDATORY property key. Value is "USB".
 	 * 
 	 * Constant for the value of the service property DEVICE_CATEGORY used for
 	 * all USB devices. A USB base driver bundle must set this property key.
@@ -24,7 +24,7 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	static final String DEVICE_CATEGORY = "USB";
 
 	/**
-	 * OPTIONAL Property key. The value is ÅgUSBSerialÅh.
+	 * OPTIONAL Property key. The value is "USBSerial".
 	 * 
 	 * Constant for the value of the service property DEVICE_CATEGORY used for a
 	 * USB device which has a serial communication function such as a USB
@@ -36,7 +36,7 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	static final String DEVICE_CATEGORY_USBSERIAL = "USBSerial";
 
 	/**
-	 * OPTIONAL Property key. The value is ÅgMassStorageÅh.
+	 * OPTIONAL Property key. The value is "MassStorage".
 	 * 
 	 * Constant for the value of the service property DEVICE_CATEGORY used for a
 	 * USB device which is a MassStorage Class in USB Specification such as a
@@ -51,7 +51,7 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	 * MANDATORY property key. Value is "USB.device.bcdUSB".
 	 * 
 	 * The value is string of decimal number, 4-digits, converted from the
-	 * 4-digit BCD format. Example: Åg0210Åh
+	 * 4-digit BCD format. Example: "0210"
 	 * 
 	 */
 	static final String USB_RELEASE_NUMBER = "USB.device.bcdUSB";
@@ -59,35 +59,35 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	/**
 	 * MANDATORY property key. Value is "USB.device.bDeviceClass".
 	 * 
-	 * The value is hexadecimal, 2-digits. Example: ÅgffÅh
+	 * The value is hexadecimal, 2-digits. Example: "ff"
 	 */
 	static final String DEVICE_CLASS = "USB.device.bDeviceClass";
 
 	/**
 	 * MANDATORY property key. Value is "USB.device.bDeviceSubClass".
 	 * 
-	 * The value is hexadecimal, 2-digits. Example: ÅgffÅh
+	 * The value is hexadecimal, 2-digits. Example: "ff"
 	 */
 	static final String DEVICE_SUBCLASS = "USB.device.bDeviceSubClass";
 
 	/**
 	 * MANDATORY property key. Value is "USB.device.bDeviceProtocol".
 	 * 
-	 * The value is hexadecimal, 2-digits. Example: ÅgffÅh
+	 * The value is hexadecimal, 2-digits. Example: "ff"
 	 */
 	static final String DEVICE_PROTOCOL = "USB.device.bDeviceProtocol";
 
 	/**
 	 * MANDATORY property key. Value is "USB.device.idVendor".
 	 * 
-	 * The value is hexadecimal, 4-digits. Example: Åg0403Åh
+	 * The value is hexadecimal, 4-digits. Example: "0403"
 	 */
 	static final String VID = "USB.device.idVendor";
 
 	/**
 	 * MANDATORY property key. Value is "USB.device.idProduct".
 	 * 
-	 * The value is hexadecimal, 4-digits. ExampleÅF Åg8372Åh
+	 * The value is hexadecimal, 4-digits. Example: "8372"
 	 */
 	static final String PID = "USB.device.idProduct";
 
@@ -95,7 +95,7 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	 * MANDATORY property key. Value is "USB.device.bcdDevice".
 	 * 
 	 * The value is string of decimal number, 4-digits, converted from the
-	 * 4-digit BCD format. ExampleÅF Åg0200Åh
+	 * 4-digit BCD format. Example: "0200"
 	 */
 	static final String RELEASE_NUMBER = "USB.device.bcdDevice";
 
@@ -103,7 +103,7 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	 * OPTIONAL Property key. Value is "iManufacturer".
 	 * 
 	 * The value is string of indicated in iManufacturer. (The value is not the
-	 * index.) Example: ÅgBuffalo Inc.Åh
+	 * index.) Example: "Buffalo Inc."
 	 */
 	static final String MANUFACTURER = "USB.device.iManufacturer";
 
@@ -111,7 +111,7 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	 * OPTIONAL Property key. Value is "iProduct".
 	 * 
 	 * The value is string of indicated in iProduct. (The value is not the
-	 * index.) ExampleÅF ÅgUSB2.0 PC CameraÅh
+	 * index.) Example: "USB2.0 PC Camera"
 	 */
 	static final String PRODUCT = "USB.device.iProduct";
 
@@ -119,7 +119,7 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	 * OPTIONAL Property key. Value is "USB.device.iSerialNumber".
 	 * 
 	 * The value is string of indicated in iSerialNumber. (The value is not the
-	 * index.) ExampleÅF Åg57B0002600000001Åh
+	 * index.) Example: "57B0002600000001"
 	 */
 	static final String SERIALNUMBER = "USB.device.iSerialNumber";
 
@@ -142,7 +142,7 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	 * code is CDC, subclass code is ACM(without protocol code). The second
 	 * class code is CDC-Data (no subclass code and protocol code).
 	 * 
-	 * Value: ÅgCDC_ACMÅh, ÅgCDC-DataÅh
+	 * Value: "CDC_ACM", "CDC-Data"
 	 * 
 	 */
 	static final String USB_CLASS = "USB.device.interfaceclassess";
