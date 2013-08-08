@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
@@ -417,6 +416,7 @@ public class DivTests extends DefaultTestBundleControl {
 	}
 
 	public void testEERequirement() throws Exception {
+		@SuppressWarnings("deprecation")
 		final String ee = getContext()
 				.getProperty(Constants.FRAMEWORK_EXECUTIONENVIRONMENT);
 		log("EE: " + ee);

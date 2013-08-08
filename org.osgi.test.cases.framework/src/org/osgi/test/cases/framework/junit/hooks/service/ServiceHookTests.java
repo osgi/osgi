@@ -24,9 +24,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import junit.framework.AssertionFailedError;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -44,10 +42,12 @@ import org.osgi.framework.hooks.service.ListenerHook;
 import org.osgi.framework.hooks.service.ListenerHook.ListenerInfo;
 import org.osgi.test.support.OSGiTestCase;
 
+@SuppressWarnings("deprecation")
 public class ServiceHookTests extends OSGiTestCase {
 	
 	private ServiceListener	dummysl;
 
+	@Override
 	protected void setUp() throws Exception {
 		dummysl = new ServiceListener() {
 			public void serviceChanged(ServiceEvent event) {
@@ -58,6 +58,7 @@ public class ServiceHookTests extends OSGiTestCase {
 				"(reason=force one registered ServiceListener)");
 	}
 
+	@Override
 	protected void tearDown() {
 		getContext().removeServiceListener(dummysl);
 	}
