@@ -7202,6 +7202,56 @@ Synchronous Listener for Configuration Events.
       <title>Permissions</title>
       <section>
          <title>
+            <link linkend="org.osgi.service.cm.Configuration">Configuration</link>
+         </title>
+         <itemizedlist>
+            <listitem>
+               <para>
+                  <code>
+                     <link linkend="org.osgi.service.cm.Configuration.setBundleLocation-String-">setBundleLocation(String)</link>
+                  </code>
+               </para>
+               <itemizedlist>
+                  <listitem>
+                     <para>
+                        <code>ConfigurationPermission[this.location,CONFIGURE]</code> -  if            this.location is not <code>null</code>
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <code>ConfigurationPermission[location,CONFIGURE]</code> -  if location is not            <code>null</code>
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <code>ConfigurationPermission["*",CONFIGURE]</code> -  if this.location is            <code>null</code> or if location is <code>null</code>
+                     </para>
+                  </listitem>
+               </itemizedlist>
+            </listitem>
+            <listitem>
+               <para>
+                  <code>
+                     <link linkend="org.osgi.service.cm.Configuration.getBundleLocation--">getBundleLocation()</link>
+                  </code>
+               </para>
+               <itemizedlist>
+                  <listitem>
+                     <para>
+                        <code>ConfigurationPermission[this.location,CONFIGURE]</code> -  if            this.location is not <code>null</code>
+                     </para>
+                  </listitem>
+                  <listitem>
+                     <para>
+                        <code>ConfigurationPermission["*",CONFIGURE]</code> -  if this.location is            <code>null</code>
+                     </para>
+                  </listitem>
+               </itemizedlist>
+            </listitem>
+         </itemizedlist>
+      </section>
+      <section>
+         <title>
             <link linkend="org.osgi.service.cm.ConfigurationAdmin">ConfigurationAdmin</link>
          </title>
          <itemizedlist>
@@ -7272,56 +7322,6 @@ Synchronous Listener for Configuration Events.
                   <listitem>
                      <para>
                         <code>ConfigurationPermission[c.location,CONFIGURE]</code> -  Only            configurations <code>c</code> are returned for which the caller has            this permission</para>
-                  </listitem>
-               </itemizedlist>
-            </listitem>
-         </itemizedlist>
-      </section>
-      <section>
-         <title>
-            <link linkend="org.osgi.service.cm.Configuration">Configuration</link>
-         </title>
-         <itemizedlist>
-            <listitem>
-               <para>
-                  <code>
-                     <link linkend="org.osgi.service.cm.Configuration.setBundleLocation-String-">setBundleLocation(String)</link>
-                  </code>
-               </para>
-               <itemizedlist>
-                  <listitem>
-                     <para>
-                        <code>ConfigurationPermission[this.location,CONFIGURE]</code> -  if            this.location is not <code>null</code>
-                     </para>
-                  </listitem>
-                  <listitem>
-                     <para>
-                        <code>ConfigurationPermission[location,CONFIGURE]</code> -  if location is not            <code>null</code>
-                     </para>
-                  </listitem>
-                  <listitem>
-                     <para>
-                        <code>ConfigurationPermission["*",CONFIGURE]</code> -  if this.location is            <code>null</code> or if location is <code>null</code>
-                     </para>
-                  </listitem>
-               </itemizedlist>
-            </listitem>
-            <listitem>
-               <para>
-                  <code>
-                     <link linkend="org.osgi.service.cm.Configuration.getBundleLocation--">getBundleLocation()</link>
-                  </code>
-               </para>
-               <itemizedlist>
-                  <listitem>
-                     <para>
-                        <code>ConfigurationPermission[this.location,CONFIGURE]</code> -  if            this.location is not <code>null</code>
-                     </para>
-                  </listitem>
-                  <listitem>
-                     <para>
-                        <code>ConfigurationPermission["*",CONFIGURE]</code> -  if this.location is            <code>null</code>
-                     </para>
                   </listitem>
                </itemizedlist>
             </listitem>
