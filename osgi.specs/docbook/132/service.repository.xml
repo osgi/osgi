@@ -337,38 +337,40 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
     }
     return null;
 }</programlisting>
-  <section>
-    <title>Combining Requirements</title>
-    <para>
-      In some cases it may be useful to find resources in the repository that satisfy criteria 
-      across multiple namespaces.
-    </para>
-    <para>
-      A simple Requirement object can contain a filter that makes assertions about capability attributes 
-      within a single namespace. So for example, a single requirement can state that a package 
-      <code>org.example.mypkg</code> must be exported in a version between <code>3.1</code> inclusive
-      and <code>4.0</code> exclusive:
-    </para>
-    <programlisting>
+
+    <section>
+      <title>Combining Requirements</title>
+
+      <para>In some cases it may be useful to find resources in the repository
+      that satisfy criteria across multiple namespaces.</para>
+
+      <para>A simple Requirement object can contain a filter that makes
+      assertions about capability attributes within a single namespace. So for
+      example, a single requirement can state that a package
+      <code>org.example.mypkg</code> must be exported in a version between
+      <code>3.1</code> inclusive and <code>4.0</code> exclusive:</para>
+
+      <programlisting>
   RequirementBuilder rb = repo.newRequirementBuilder("osgi.wiring.package");
-  String rf = "(&amp;(osgi.wiring.package=org.example.mypkg)(version>=3.1)(!(version>=4.0.0)))";
+  String rf = "(&amp;(osgi.wiring.package=org.example.mypkg)(version&gt;=3.1)(!(version&gt;=4.0.0)))";
   rb.addDirective("filter", rf);
   Requirement r = rb.build();
     </programlisting>
-    <para>
-      This requirement contains three conditions on the <code>osgi.wiring.package</code> capability. 
-    </para>
-    <para>
-      In some situations it may be needed to specify requirements that cover multiple namespaces. For 
-      example a bundle might be needed that exports the above package, but the bundle must also have
-      the ASL2 license. A resource's license is available as an attribute on the <code>osgi.identity</code>
-      namespace. Constructing a constraint that combines requirements from multiple namespaces can be 
-      done by using an Expression Combiner, which can be obtained from the Repository service. The 
-      Repository service provides a <xref
-        linkend="org.osgi.service.repository.Repository.findProviders-RequirementExpression-"
-        xrefstyle="hyperlink"/>
-      overload that can take a requirement expression and returns a collection of matching resources:
-      <programlisting>
+
+      <para>This requirement contains three conditions on the
+      <code>osgi.wiring.package</code> capability.</para>
+
+      <para>In some situations it may be needed to specify requirements that
+      cover multiple namespaces. For example a bundle might be needed that
+      exports the above package, but the bundle must also have the ASL2
+      license. A resource's license is available as an attribute on the
+      <code>osgi.identity</code> namespace. Constructing a constraint that
+      combines requirements from multiple namespaces can be done by using an
+      Expression Combiner, which can be obtained from the Repository service.
+      The Repository service provides a <xref
+      linkend="org.osgi.service.repository.Repository.findProviders-RequirementExpression-"
+      xrefstyle="hyperlink"/> overload that can take a requirement expression
+      and returns a collection of matching resources: <programlisting>
   RequirementBuilder lb = repo.newRequirementBuilder("osgi.identity");
   String lf = "(license=http://opensource.org/licenses/Apache-2.0)";
   lb.addDirective("filter", lf);
@@ -377,10 +379,8 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
     rb.buildExpression(), lb.buildExpression());
 
   Collection&lt;Resource&gt; matches = repo.findProviders(expr);
-      </programlisting>
-    </para>
-  </section>
-
+      </programlisting></para>
+    </section>
   </section>
 
   <section xml:id="i3222899">
@@ -466,27 +466,29 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
         capabilities that match that requirement and return them as a
         <code>Map&lt;Requirement,Collection&lt;Capability&gt;&gt;</code>.</para>
       </listitem>
+
       <listitem>
         <para><xref
         linkend="org.osgi.service.repository.Repository.findProviders-RequirementExpression-"
-        xrefstyle="hyperlink"/> – Find all resources that match the requirement
-        expression. The requirement expression is used to combine multiple requirements
-        using the <code>and</code>, <code>or</code> and <code>not</code> operators.
-        </para>
+        xrefstyle="hyperlink"/> – Find all resources that match the
+        requirement expression. The requirement expression is used to combine
+        multiple requirements using the <code>and</code>, <code>or</code> and
+        <code>not</code> operators.</para>
       </listitem>
+
       <listitem>
         <para><xref
         linkend="org.osgi.service.repository.Repository.getExpressionCombiner--"
-        xrefstyle="hyperlink"/> – Obtain an expression combiner. This expression combiner
-        is used to produce requirement expressions from simple requirements or other 
-        requirement expressions.
-        </para>
+        xrefstyle="hyperlink"/> – Obtain an expression combiner. This
+        expression combiner is used to produce requirement expressions from
+        simple requirements or other requirement expressions.</para>
       </listitem>
+
       <listitem>
         <para><xref
         linkend="org.osgi.service.repository.Repository.newRequirementBuilder-String-"
-        xrefstyle="hyperlink"/> – Obtain a convenience builder for Requirement objects.
-        </para>
+        xrefstyle="hyperlink"/> – Obtain a convenience builder for Requirement
+        objects.</para>
       </listitem>
     </itemizedlist>
 
@@ -1193,8 +1195,9 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
     in its name. The recommended prefix for this namespace is
     <code>repo</code>.</para>
 
-    <programlisting role="pgwide"><xi:include parse="text" encoding="utf-8"
-    href="../../generated/xmlns/repository/v1.0.0/repository.xsd"/></programlisting>
+    <programlisting role="pgwide"><xi:include encoding="utf-8"
+        href="../../generated/xmlns/repository/v1.0.0/repository.xsd"
+        parse="text"/></programlisting>
   </section>
 
   <section>
