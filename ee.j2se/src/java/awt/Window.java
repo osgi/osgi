@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,11 @@ package java.awt;
 public class Window extends java.awt.Container implements javax.accessibility.Accessible {
 	protected class AccessibleAWTWindow extends java.awt.Container.AccessibleAWTContainer {
 		protected AccessibleAWTWindow() { } 
+	}
+	public enum Type {
+		NORMAL,
+		POPUP,
+		UTILITY;
 	}
 	public Window(java.awt.Frame var0) { } 
 	public Window(java.awt.Window var0) { } 
@@ -41,9 +46,12 @@ public class Window extends java.awt.Container implements javax.accessibility.Ac
 	public java.util.List<java.awt.Image> getIconImages() { return null; }
 	public java.awt.Dialog.ModalExclusionType getModalExclusionType() { return null; }
 	public java.awt.Component getMostRecentFocusOwner() { return null; }
+	public float getOpacity() { return 0.0f; }
 	public java.awt.Window[] getOwnedWindows() { return null; }
 	public java.awt.Window getOwner() { return null; }
 	public static java.awt.Window[] getOwnerlessWindows() { return null; }
+	public java.awt.Shape getShape() { return null; }
+	public java.awt.Window.Type getType() { return null; }
 	public final java.lang.String getWarningString() { return null; }
 	public java.awt.event.WindowFocusListener[] getWindowFocusListeners() { return null; }
 	public java.awt.event.WindowListener[] getWindowListeners() { return null; }
@@ -52,6 +60,7 @@ public class Window extends java.awt.Container implements javax.accessibility.Ac
 	public boolean isActive() { return false; }
 	public final boolean isAlwaysOnTop() { return false; }
 	public boolean isAlwaysOnTopSupported() { return false; }
+	public boolean isAutoRequestFocus() { return false; }
 	public final boolean isFocusCycleRoot() { return false; }
 	public final boolean isFocusableWindow() { return false; }
 	public boolean isFocused() { return false; }
@@ -64,6 +73,7 @@ public class Window extends java.awt.Container implements javax.accessibility.Ac
 	public void removeWindowListener(java.awt.event.WindowListener var0) { }
 	public void removeWindowStateListener(java.awt.event.WindowStateListener var0) { }
 	public final void setAlwaysOnTop(boolean var0) { }
+	public void setAutoRequestFocus(boolean var0) { }
 	public final void setFocusCycleRoot(boolean var0) { }
 	public void setFocusableWindowState(boolean var0) { }
 	public void setIconImage(java.awt.Image var0) { }
@@ -71,6 +81,9 @@ public class Window extends java.awt.Container implements javax.accessibility.Ac
 	public void setLocationByPlatform(boolean var0) { }
 	public void setLocationRelativeTo(java.awt.Component var0) { }
 	public void setModalExclusionType(java.awt.Dialog.ModalExclusionType var0) { }
+	public void setOpacity(float var0) { }
+	public void setShape(java.awt.Shape var0) { }
+	public void setType(java.awt.Window.Type var0) { }
 	public void toBack() { }
 	public void toFront() { }
 }

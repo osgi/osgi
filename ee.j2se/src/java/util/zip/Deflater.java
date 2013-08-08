@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,17 @@ public class Deflater {
 	public final static int DEFAULT_STRATEGY = 0;
 	public final static int DEFLATED = 8;
 	public final static int FILTERED = 1;
+	public final static int FULL_FLUSH = 3;
 	public final static int HUFFMAN_ONLY = 2;
 	public final static int NO_COMPRESSION = 0;
+	public final static int NO_FLUSH = 0;
+	public final static int SYNC_FLUSH = 2;
 	public Deflater() { } 
 	public Deflater(int var0) { } 
 	public Deflater(int var0, boolean var1) { } 
 	public int deflate(byte[] var0) { return 0; }
 	public int deflate(byte[] var0, int var1, int var2) { return 0; }
+	public int deflate(byte[] var0, int var1, int var2, int var3) { return 0; }
 	public void end() { }
 	protected void finalize() { }
 	public void finish() { }

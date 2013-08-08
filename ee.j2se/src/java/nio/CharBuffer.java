@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ public abstract class CharBuffer extends java.nio.Buffer implements java.lang.Ap
 	public java.nio.CharBuffer put(char[] var0, int var1, int var2) { return null; }
 	public int read(java.nio.CharBuffer var0) throws java.io.IOException { return 0; }
 	public abstract java.nio.CharBuffer slice();
+	public abstract java.nio.CharBuffer subSequence(int var0, int var1);
 	public static java.nio.CharBuffer wrap(java.lang.CharSequence var0) { return null; }
 	public static java.nio.CharBuffer wrap(java.lang.CharSequence var0, int var1, int var2) { return null; }
 	public static java.nio.CharBuffer wrap(char[] var0) { return null; }

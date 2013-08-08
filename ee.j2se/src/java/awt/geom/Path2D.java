@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ public abstract class Path2D implements java.awt.Shape, java.lang.Cloneable {
 		public final java.lang.Object clone() { return null; }
 		public final void curveTo(double var0, double var1, double var2, double var3, double var4, double var5) { }
 		public final java.awt.geom.Rectangle2D getBounds2D() { return null; }
-		public java.awt.geom.PathIterator getPathIterator(java.awt.geom.AffineTransform var0) { return null; }
+		public final java.awt.geom.PathIterator getPathIterator(java.awt.geom.AffineTransform var0) { return null; }
 		public final void lineTo(double var0, double var1) { }
 		public final void moveTo(double var0, double var1) { }
 		public final void quadTo(double var0, double var1, double var2, double var3) { }
@@ -43,7 +43,7 @@ public abstract class Path2D implements java.awt.Shape, java.lang.Cloneable {
 		public final void curveTo(double var0, double var1, double var2, double var3, double var4, double var5) { }
 		public final void curveTo(float var0, float var1, float var2, float var3, float var4, float var5) { }
 		public final java.awt.geom.Rectangle2D getBounds2D() { return null; }
-		public java.awt.geom.PathIterator getPathIterator(java.awt.geom.AffineTransform var0) { return null; }
+		public final java.awt.geom.PathIterator getPathIterator(java.awt.geom.AffineTransform var0) { return null; }
 		public final void lineTo(double var0, double var1) { }
 		public final void lineTo(float var0, float var1) { }
 		public final void moveTo(double var0, double var1) { }
@@ -70,7 +70,7 @@ public abstract class Path2D implements java.awt.Shape, java.lang.Cloneable {
 	public abstract void curveTo(double var0, double var1, double var2, double var3, double var4, double var5);
 	public final java.awt.Rectangle getBounds() { return null; }
 	public final java.awt.geom.Point2D getCurrentPoint() { return null; }
-	public java.awt.geom.PathIterator getPathIterator(java.awt.geom.AffineTransform var0, double var1) { return null; }
+	public final java.awt.geom.PathIterator getPathIterator(java.awt.geom.AffineTransform var0, double var1) { return null; }
 	public final int getWindingRule() { return 0; }
 	public final boolean intersects(double var0, double var1, double var2, double var3) { return false; }
 	public static boolean intersects(java.awt.geom.PathIterator var0, double var1, double var2, double var3, double var4) { return false; }

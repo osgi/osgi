@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -171,11 +171,13 @@ public class BasicTreeUI extends javax.swing.plaf.TreeUI {
 	protected javax.swing.tree.TreeCellRenderer getCellRenderer() { return null; }
 	public javax.swing.tree.TreePath getClosestPathForLocation(javax.swing.JTree var0, int var1, int var2) { return null; }
 	public javax.swing.Icon getCollapsedIcon() { return null; }
+	protected java.awt.Rectangle getDropLineRect(javax.swing.JTree.DropLocation var0) { return null; }
 	public javax.swing.tree.TreePath getEditingPath(javax.swing.JTree var0) { return null; }
 	public javax.swing.Icon getExpandedIcon() { return null; }
 	protected java.awt.Color getHashColor() { return null; }
 	protected int getHorizontalLegBuffer() { return 0; }
 	protected javax.swing.tree.TreePath getLastChildPath(javax.swing.tree.TreePath var0) { return null; }
+	protected int getLeadSelectionRow() { return 0; }
 	public int getLeftChildIndent() { return 0; }
 	protected javax.swing.tree.TreeModel getModel() { return null; }
 	public java.awt.Rectangle getPathBounds(javax.swing.JTree var0, javax.swing.tree.TreePath var1) { return null; }
@@ -195,6 +197,7 @@ public class BasicTreeUI extends javax.swing.plaf.TreeUI {
 	protected void installDefaults() { }
 	protected void installKeyboardActions() { }
 	protected void installListeners() { }
+	protected boolean isDropLine(javax.swing.JTree.DropLocation var0) { return false; }
 	protected boolean isEditable() { return false; }
 	public boolean isEditing(javax.swing.JTree var0) { return false; }
 	protected boolean isLargeModel() { return false; }
@@ -204,6 +207,7 @@ public class BasicTreeUI extends javax.swing.plaf.TreeUI {
 	protected boolean isRootVisible() { return false; }
 	protected boolean isToggleEvent(java.awt.event.MouseEvent var0) { return false; }
 	protected boolean isToggleSelectionEvent(java.awt.event.MouseEvent var0) { return false; }
+	protected void paintDropLine(java.awt.Graphics var0) { }
 	protected void paintExpandControl(java.awt.Graphics var0, java.awt.Rectangle var1, java.awt.Insets var2, java.awt.Rectangle var3, javax.swing.tree.TreePath var4, int var5, boolean var6, boolean var7, boolean var8) { }
 	protected void paintHorizontalLine(java.awt.Graphics var0, javax.swing.JComponent var1, int var2, int var3, int var4) { }
 	protected void paintHorizontalPartOfLeg(java.awt.Graphics var0, java.awt.Rectangle var1, java.awt.Insets var2, java.awt.Rectangle var3, javax.swing.tree.TreePath var4, int var5, boolean var6, boolean var7, boolean var8) { }
@@ -244,6 +248,7 @@ public class BasicTreeUI extends javax.swing.plaf.TreeUI {
 	protected void updateDepthOffset() { }
 	protected void updateExpandedDescendants(javax.swing.tree.TreePath var0) { }
 	protected void updateLayoutCacheExpandedNodes() { }
+	protected void updateLeadSelectionRow() { }
 	protected void updateRenderer() { }
 	protected void updateSize() { }
 }

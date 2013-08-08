@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ public class InetSocketAddress extends java.net.SocketAddress {
 	public final boolean equals(java.lang.Object var0) { return false; }
 	public final java.net.InetAddress getAddress() { return null; }
 	public final java.lang.String getHostName() { return null; }
+	public final java.lang.String getHostString() { return null; }
 	public final int getPort() { return 0; }
 	public final int hashCode() { return 0; }
 	public final boolean isUnresolved() { return false; }

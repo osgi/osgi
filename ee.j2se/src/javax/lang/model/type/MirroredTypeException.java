@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package javax.lang.model.type;
-public class MirroredTypeException extends java.lang.RuntimeException {
-	public MirroredTypeException(javax.lang.model.type.TypeMirror var0) { } 
+public class MirroredTypeException extends javax.lang.model.type.MirroredTypesException {
+	public MirroredTypeException(javax.lang.model.type.TypeMirror var0)  { super((java.util.List<? extends javax.lang.model.type.TypeMirror>) null); } 
 	public javax.lang.model.type.TypeMirror getTypeMirror() { return null; }
 }
 

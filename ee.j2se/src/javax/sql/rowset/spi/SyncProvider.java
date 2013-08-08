@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +16,17 @@
 
 package javax.sql.rowset.spi;
 public abstract class SyncProvider {
-	public static int DATASOURCE_DB_LOCK;
-	public static int DATASOURCE_NO_LOCK;
-	public static int DATASOURCE_ROW_LOCK;
-	public static int DATASOURCE_TABLE_LOCK;
-	public static int GRADE_CHECK_ALL_AT_COMMIT;
-	public static int GRADE_CHECK_MODIFIED_AT_COMMIT;
-	public static int GRADE_LOCK_WHEN_LOADED;
-	public static int GRADE_LOCK_WHEN_MODIFIED;
-	public static int GRADE_NONE;
-	public static int NONUPDATABLE_VIEW_SYNC;
-	public static int UPDATABLE_VIEW_SYNC;
+	public final static int DATASOURCE_DB_LOCK = 4;
+	public final static int DATASOURCE_NO_LOCK = 1;
+	public final static int DATASOURCE_ROW_LOCK = 2;
+	public final static int DATASOURCE_TABLE_LOCK = 3;
+	public final static int GRADE_CHECK_ALL_AT_COMMIT = 3;
+	public final static int GRADE_CHECK_MODIFIED_AT_COMMIT = 2;
+	public final static int GRADE_LOCK_WHEN_LOADED = 5;
+	public final static int GRADE_LOCK_WHEN_MODIFIED = 4;
+	public final static int GRADE_NONE = 1;
+	public final static int NONUPDATABLE_VIEW_SYNC = 6;
+	public final static int UPDATABLE_VIEW_SYNC = 5;
 	public SyncProvider() { } 
 	public abstract int getDataSourceLock() throws javax.sql.rowset.spi.SyncProviderException;
 	public abstract int getProviderGrade();

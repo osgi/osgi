@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,6 +54,7 @@ public class Container extends java.awt.Component {
 	public boolean isFocusCycleRoot() { return false; }
 	public final boolean isFocusTraversalPolicyProvider() { return false; }
 	public boolean isFocusTraversalPolicySet() { return false; }
+	public boolean isValidateRoot() { return false; }
 	public void paintComponents(java.awt.Graphics var0) { }
 	public void printComponents(java.awt.Graphics var0) { }
 	protected void processContainerEvent(java.awt.event.ContainerEvent var0) { }

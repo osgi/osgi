@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -84,6 +84,7 @@ public interface DatabaseMetaData extends java.sql.Wrapper {
 	boolean dataDefinitionIgnoredInTransactions() throws java.sql.SQLException;
 	boolean deletesAreDetected(int var0) throws java.sql.SQLException;
 	boolean doesMaxRowSizeIncludeBlobs() throws java.sql.SQLException;
+	boolean generatedKeyAlwaysReturned() throws java.sql.SQLException;
 	java.sql.ResultSet getAttributes(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3) throws java.sql.SQLException;
 	java.sql.ResultSet getBestRowIdentifier(java.lang.String var0, java.lang.String var1, java.lang.String var2, int var3, boolean var4) throws java.sql.SQLException;
 	java.lang.String getCatalogSeparator() throws java.sql.SQLException;
@@ -137,6 +138,7 @@ public interface DatabaseMetaData extends java.sql.Wrapper {
 	java.sql.ResultSet getProcedureColumns(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3) throws java.sql.SQLException;
 	java.lang.String getProcedureTerm() throws java.sql.SQLException;
 	java.sql.ResultSet getProcedures(java.lang.String var0, java.lang.String var1, java.lang.String var2) throws java.sql.SQLException;
+	java.sql.ResultSet getPseudoColumns(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3) throws java.sql.SQLException;
 	int getResultSetHoldability() throws java.sql.SQLException;
 	java.sql.RowIdLifetime getRowIdLifetime() throws java.sql.SQLException;
 	java.lang.String getSQLKeywords() throws java.sql.SQLException;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package javax.sound.midi;
 public class MetaMessage extends javax.sound.midi.MidiMessage {
 	public final static int META = 255;
 	public MetaMessage()  { super((byte[]) null); } 
+	public MetaMessage(int var0, byte[] var1, int var2) throws javax.sound.midi.InvalidMidiDataException  { super((byte[]) null); } 
 	protected MetaMessage(byte[] var0)  { super((byte[]) null); } 
 	public java.lang.Object clone() { return null; }
 	public byte[] getData() { return null; }

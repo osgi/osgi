@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ package javax.xml.ws;
 @java.lang.annotation.Documented
 public @interface WebFault {
 	java.lang.String faultBean() default "";
+	java.lang.String messageName() default "";
 	java.lang.String name() default "";
 	java.lang.String targetNamespace() default "";
 }

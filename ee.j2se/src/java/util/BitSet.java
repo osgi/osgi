@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,11 +35,19 @@ public class BitSet implements java.io.Serializable, java.lang.Cloneable {
 	public int nextClearBit(int var0) { return 0; }
 	public int nextSetBit(int var0) { return 0; }
 	public void or(java.util.BitSet var0) { }
+	public int previousClearBit(int var0) { return 0; }
+	public int previousSetBit(int var0) { return 0; }
 	public void set(int var0) { }
 	public void set(int var0, int var1) { }
 	public void set(int var0, int var1, boolean var2) { }
 	public void set(int var0, boolean var1) { }
 	public int size() { return 0; }
+	public byte[] toByteArray() { return null; }
+	public long[] toLongArray() { return null; }
+	public static java.util.BitSet valueOf(java.nio.ByteBuffer var0) { return null; }
+	public static java.util.BitSet valueOf(java.nio.LongBuffer var0) { return null; }
+	public static java.util.BitSet valueOf(byte[] var0) { return null; }
+	public static java.util.BitSet valueOf(long[] var0) { return null; }
 	public void xor(java.util.BitSet var0) { }
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ public class BasicStroke implements java.awt.Stroke {
 	public BasicStroke(float var0) { } 
 	public BasicStroke(float var0, int var1, int var2) { } 
 	public BasicStroke(float var0, int var1, int var2, float var3) { } 
+	@java.beans.ConstructorProperties(value={"lineWidth","endCap","lineJoin","miterLimit","dashArray","dashPhase"})
 	public BasicStroke(float var0, int var1, int var2, float var3, float[] var4, float var5) { } 
 	public java.awt.Shape createStrokedShape(java.awt.Shape var0) { return null; }
 	public float[] getDashArray() { return null; }

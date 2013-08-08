@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,8 @@
 
 package javax.sql.rowset;
 public interface CachedRowSet extends javax.sql.RowSet, javax.sql.rowset.Joinable {
+	/** @deprecated */
+	@java.lang.Deprecated
 	public final static boolean COMMIT_ON_ACCEPT_CHANGES = true;
 	void acceptChanges() throws javax.sql.rowset.spi.SyncProviderException;
 	void acceptChanges(java.sql.Connection var0) throws javax.sql.rowset.spi.SyncProviderException;

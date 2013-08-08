@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,6 +68,7 @@ public class File implements java.io.Serializable, java.lang.Comparable<java.io.
 	public boolean setReadable(boolean var0, boolean var1) { return false; }
 	public boolean setWritable(boolean var0) { return false; }
 	public boolean setWritable(boolean var0, boolean var1) { return false; }
+	public java.nio.file.Path toPath() { return null; }
 	public java.net.URI toURI() { return null; }
 	/** @deprecated */
 	@java.lang.Deprecated

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package java.sql;
-public interface Statement extends java.sql.Wrapper {
+public interface Statement extends java.lang.AutoCloseable, java.sql.Wrapper {
 	public final static int CLOSE_ALL_RESULTS = 3;
 	public final static int CLOSE_CURRENT_RESULT = 1;
 	public final static int EXECUTE_FAILED = -3;
@@ -28,6 +28,7 @@ public interface Statement extends java.sql.Wrapper {
 	void clearBatch() throws java.sql.SQLException;
 	void clearWarnings() throws java.sql.SQLException;
 	void close() throws java.sql.SQLException;
+	void closeOnCompletion() throws java.sql.SQLException;
 	boolean execute(java.lang.String var0) throws java.sql.SQLException;
 	boolean execute(java.lang.String var0, int var1) throws java.sql.SQLException;
 	boolean execute(java.lang.String var0, int[] var1) throws java.sql.SQLException;
@@ -53,6 +54,7 @@ public interface Statement extends java.sql.Wrapper {
 	int getResultSetType() throws java.sql.SQLException;
 	int getUpdateCount() throws java.sql.SQLException;
 	java.sql.SQLWarning getWarnings() throws java.sql.SQLException;
+	boolean isCloseOnCompletion() throws java.sql.SQLException;
 	boolean isClosed() throws java.sql.SQLException;
 	boolean isPoolable() throws java.sql.SQLException;
 	void setCursorName(java.lang.String var0) throws java.sql.SQLException;

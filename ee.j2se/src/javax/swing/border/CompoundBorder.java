@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ public class CompoundBorder extends javax.swing.border.AbstractBorder {
 	protected javax.swing.border.Border insideBorder;
 	protected javax.swing.border.Border outsideBorder;
 	public CompoundBorder() { } 
+	@java.beans.ConstructorProperties(value={"outsideBorder","insideBorder"})
 	public CompoundBorder(javax.swing.border.Border var0, javax.swing.border.Border var1) { } 
 	public javax.swing.border.Border getInsideBorder() { return null; }
 	public javax.swing.border.Border getOutsideBorder() { return null; }

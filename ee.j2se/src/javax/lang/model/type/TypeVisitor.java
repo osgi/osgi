@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ public interface TypeVisitor<R,P> {
 	R visitNull(javax.lang.model.type.NullType var0, P var1);
 	R visitPrimitive(javax.lang.model.type.PrimitiveType var0, P var1);
 	R visitTypeVariable(javax.lang.model.type.TypeVariable var0, P var1);
+	R visitUnion(javax.lang.model.type.UnionType var0, P var1);
 	R visitUnknown(javax.lang.model.type.TypeMirror var0, P var1);
 	R visitWildcard(javax.lang.model.type.WildcardType var0, P var1);
 }

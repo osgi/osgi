@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ public class Introspector {
 	public static java.beans.BeanInfo getBeanInfo(java.lang.Class<?> var0) throws java.beans.IntrospectionException { return null; }
 	public static java.beans.BeanInfo getBeanInfo(java.lang.Class<?> var0, int var1) throws java.beans.IntrospectionException { return null; }
 	public static java.beans.BeanInfo getBeanInfo(java.lang.Class<?> var0, java.lang.Class<?> var1) throws java.beans.IntrospectionException { return null; }
+	public static java.beans.BeanInfo getBeanInfo(java.lang.Class<?> var0, java.lang.Class<?> var1, int var2) throws java.beans.IntrospectionException { return null; }
 	public static java.lang.String[] getBeanInfoSearchPath() { return null; }
 	public static void setBeanInfoSearchPath(java.lang.String[] var0) { }
 	private Introspector() { } /* generated constructor to prevent compiler adding default public constructor */

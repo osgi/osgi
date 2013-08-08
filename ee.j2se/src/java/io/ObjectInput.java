@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package java.io;
-public interface ObjectInput extends java.io.DataInput {
+public interface ObjectInput extends java.io.DataInput, java.lang.AutoCloseable {
 	int available() throws java.io.IOException;
 	void close() throws java.io.IOException;
 	int read() throws java.io.IOException;

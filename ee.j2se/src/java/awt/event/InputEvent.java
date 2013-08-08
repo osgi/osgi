@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ public abstract class InputEvent extends java.awt.event.ComponentEvent {
 	public final static int SHIFT_DOWN_MASK = 64;
 	public final static int SHIFT_MASK = 1;
 	public void consume() { }
+	public static int getMaskForButton(int var0) { return 0; }
 	public int getModifiers() { return 0; }
 	public int getModifiersEx() { return 0; }
 	public static java.lang.String getModifiersExText(int var0) { return null; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package java.sql;
-public interface ResultSet extends java.sql.Wrapper {
+public interface ResultSet extends java.lang.AutoCloseable, java.sql.Wrapper {
 	public final static int CLOSE_CURSORS_AT_COMMIT = 2;
 	public final static int CONCUR_READ_ONLY = 1007;
 	public final static int CONCUR_UPDATABLE = 1008;
@@ -84,8 +84,10 @@ public interface ResultSet extends java.sql.Wrapper {
 	java.lang.String getNString(int var0) throws java.sql.SQLException;
 	java.lang.String getNString(java.lang.String var0) throws java.sql.SQLException;
 	java.lang.Object getObject(int var0) throws java.sql.SQLException;
+	<T> T getObject(int var0, java.lang.Class<T> var1) throws java.sql.SQLException;
 	java.lang.Object getObject(int var0, java.util.Map<java.lang.String,java.lang.Class<?>> var1) throws java.sql.SQLException;
 	java.lang.Object getObject(java.lang.String var0) throws java.sql.SQLException;
+	<T> T getObject(java.lang.String var0, java.lang.Class<T> var1) throws java.sql.SQLException;
 	java.lang.Object getObject(java.lang.String var0, java.util.Map<java.lang.String,java.lang.Class<?>> var1) throws java.sql.SQLException;
 	java.sql.Ref getRef(int var0) throws java.sql.SQLException;
 	java.sql.Ref getRef(java.lang.String var0) throws java.sql.SQLException;

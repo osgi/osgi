@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,16 +15,21 @@
  */
 
 package java.nio.channels;
-public abstract class SocketChannel extends java.nio.channels.spi.AbstractSelectableChannel implements java.nio.channels.ByteChannel, java.nio.channels.GatheringByteChannel, java.nio.channels.ScatteringByteChannel {
+public abstract class SocketChannel extends java.nio.channels.spi.AbstractSelectableChannel implements java.nio.channels.ByteChannel, java.nio.channels.GatheringByteChannel, java.nio.channels.NetworkChannel, java.nio.channels.ScatteringByteChannel {
 	protected SocketChannel(java.nio.channels.spi.SelectorProvider var0)  { super((java.nio.channels.spi.SelectorProvider) null); } 
+	public abstract java.nio.channels.SocketChannel bind(java.net.SocketAddress var0) throws java.io.IOException;
 	public abstract boolean connect(java.net.SocketAddress var0) throws java.io.IOException;
 	public abstract boolean finishConnect() throws java.io.IOException;
+	public abstract java.net.SocketAddress getRemoteAddress() throws java.io.IOException;
 	public abstract boolean isConnected();
 	public abstract boolean isConnectionPending();
 	public static java.nio.channels.SocketChannel open() throws java.io.IOException { return null; }
 	public static java.nio.channels.SocketChannel open(java.net.SocketAddress var0) throws java.io.IOException { return null; }
 	public abstract int read(java.nio.ByteBuffer var0) throws java.io.IOException;
 	public final long read(java.nio.ByteBuffer[] var0) throws java.io.IOException { return 0l; }
+	public abstract <T> java.nio.channels.SocketChannel setOption(java.net.SocketOption<T> var0, T var1) throws java.io.IOException;
+	public abstract java.nio.channels.SocketChannel shutdownInput() throws java.io.IOException;
+	public abstract java.nio.channels.SocketChannel shutdownOutput() throws java.io.IOException;
 	public abstract java.net.Socket socket();
 	public final int validOps() { return 0; }
 	public abstract int write(java.nio.ByteBuffer var0) throws java.io.IOException;

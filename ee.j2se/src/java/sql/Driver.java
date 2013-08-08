@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ public interface Driver {
 	java.sql.Connection connect(java.lang.String var0, java.util.Properties var1) throws java.sql.SQLException;
 	int getMajorVersion();
 	int getMinorVersion();
+	java.util.logging.Logger getParentLogger() throws java.sql.SQLFeatureNotSupportedException;
 	java.sql.DriverPropertyInfo[] getPropertyInfo(java.lang.String var0, java.util.Properties var1) throws java.sql.SQLException;
 	boolean jdbcCompliant();
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package java.nio.channels;
-public abstract class FileChannel extends java.nio.channels.spi.AbstractInterruptibleChannel implements java.nio.channels.ByteChannel, java.nio.channels.GatheringByteChannel, java.nio.channels.ScatteringByteChannel {
+public abstract class FileChannel extends java.nio.channels.spi.AbstractInterruptibleChannel implements java.nio.channels.GatheringByteChannel, java.nio.channels.ScatteringByteChannel, java.nio.channels.SeekableByteChannel {
 	public static class MapMode {
 		public final static java.nio.channels.FileChannel.MapMode PRIVATE; static { PRIVATE = null; }
 		public final static java.nio.channels.FileChannel.MapMode READ_ONLY; static { READ_ONLY = null; }
@@ -27,18 +27,16 @@ public abstract class FileChannel extends java.nio.channels.spi.AbstractInterrup
 	public final java.nio.channels.FileLock lock() throws java.io.IOException { return null; }
 	public abstract java.nio.channels.FileLock lock(long var0, long var1, boolean var2) throws java.io.IOException;
 	public abstract java.nio.MappedByteBuffer map(java.nio.channels.FileChannel.MapMode var0, long var1, long var2) throws java.io.IOException;
-	public abstract long position() throws java.io.IOException;
+	public static java.nio.channels.FileChannel open(java.nio.file.Path var0, java.util.Set<? extends java.nio.file.OpenOption> var1, java.nio.file.attribute.FileAttribute<?>... var2) throws java.io.IOException { return null; }
+	public static java.nio.channels.FileChannel open(java.nio.file.Path var0, java.nio.file.OpenOption... var1) throws java.io.IOException { return null; }
 	public abstract java.nio.channels.FileChannel position(long var0) throws java.io.IOException;
-	public abstract int read(java.nio.ByteBuffer var0) throws java.io.IOException;
 	public abstract int read(java.nio.ByteBuffer var0, long var1) throws java.io.IOException;
 	public final long read(java.nio.ByteBuffer[] var0) throws java.io.IOException { return 0l; }
-	public abstract long size() throws java.io.IOException;
 	public abstract long transferFrom(java.nio.channels.ReadableByteChannel var0, long var1, long var2) throws java.io.IOException;
 	public abstract long transferTo(long var0, long var1, java.nio.channels.WritableByteChannel var2) throws java.io.IOException;
 	public abstract java.nio.channels.FileChannel truncate(long var0) throws java.io.IOException;
 	public final java.nio.channels.FileLock tryLock() throws java.io.IOException { return null; }
 	public abstract java.nio.channels.FileLock tryLock(long var0, long var1, boolean var2) throws java.io.IOException;
-	public abstract int write(java.nio.ByteBuffer var0) throws java.io.IOException;
 	public abstract int write(java.nio.ByteBuffer var0, long var1) throws java.io.IOException;
 	public final long write(java.nio.ByteBuffer[] var0) throws java.io.IOException { return 0l; }
 }

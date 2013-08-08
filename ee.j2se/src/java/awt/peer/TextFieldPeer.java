@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,6 @@ package java.awt.peer;
 public interface TextFieldPeer extends java.awt.peer.TextComponentPeer {
 	java.awt.Dimension getMinimumSize(int var0);
 	java.awt.Dimension getPreferredSize(int var0);
-	java.awt.Dimension minimumSize(int var0);
-	java.awt.Dimension preferredSize(int var0);
 	void setEchoChar(char var0);
-	void setEchoCharacter(char var0);
 }
 

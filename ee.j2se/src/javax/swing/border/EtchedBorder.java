@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ public class EtchedBorder extends javax.swing.border.AbstractBorder {
 	protected java.awt.Color shadow;
 	public EtchedBorder() { } 
 	public EtchedBorder(int var0) { } 
+	@java.beans.ConstructorProperties(value={"etchType","highlightColor","shadowColor"})
 	public EtchedBorder(int var0, java.awt.Color var1, java.awt.Color var2) { } 
 	public EtchedBorder(java.awt.Color var0, java.awt.Color var1) { } 
 	public int getEtchType() { return 0; }

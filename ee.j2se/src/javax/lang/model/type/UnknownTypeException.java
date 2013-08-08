@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package javax.lang.model.type;
-public class UnknownTypeException extends java.lang.RuntimeException {
-	public UnknownTypeException(javax.lang.model.type.TypeMirror var0, java.lang.Object var1) { } 
+public class UnknownTypeException extends javax.lang.model.UnknownEntityException {
+	public UnknownTypeException(javax.lang.model.type.TypeMirror var0, java.lang.Object var1)  { super((java.lang.String) null); } 
 	public java.lang.Object getArgument() { return null; }
 	public javax.lang.model.type.TypeMirror getUnknownType() { return null; }
 }

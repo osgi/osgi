@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,9 @@ public class BorderFactory {
 	public static javax.swing.border.Border createBevelBorder(int var0, java.awt.Color var1, java.awt.Color var2, java.awt.Color var3, java.awt.Color var4) { return null; }
 	public static javax.swing.border.CompoundBorder createCompoundBorder() { return null; }
 	public static javax.swing.border.CompoundBorder createCompoundBorder(javax.swing.border.Border var0, javax.swing.border.Border var1) { return null; }
+	public static javax.swing.border.Border createDashedBorder(java.awt.Paint var0) { return null; }
+	public static javax.swing.border.Border createDashedBorder(java.awt.Paint var0, float var1, float var2) { return null; }
+	public static javax.swing.border.Border createDashedBorder(java.awt.Paint var0, float var1, float var2, float var3, boolean var4) { return null; }
 	public static javax.swing.border.Border createEmptyBorder() { return null; }
 	public static javax.swing.border.Border createEmptyBorder(int var0, int var1, int var2, int var3) { return null; }
 	public static javax.swing.border.Border createEtchedBorder() { return null; }
@@ -29,10 +32,18 @@ public class BorderFactory {
 	public static javax.swing.border.Border createEtchedBorder(java.awt.Color var0, java.awt.Color var1) { return null; }
 	public static javax.swing.border.Border createLineBorder(java.awt.Color var0) { return null; }
 	public static javax.swing.border.Border createLineBorder(java.awt.Color var0, int var1) { return null; }
+	public static javax.swing.border.Border createLineBorder(java.awt.Color var0, int var1, boolean var2) { return null; }
 	public static javax.swing.border.Border createLoweredBevelBorder() { return null; }
+	public static javax.swing.border.Border createLoweredSoftBevelBorder() { return null; }
 	public static javax.swing.border.MatteBorder createMatteBorder(int var0, int var1, int var2, int var3, java.awt.Color var4) { return null; }
 	public static javax.swing.border.MatteBorder createMatteBorder(int var0, int var1, int var2, int var3, javax.swing.Icon var4) { return null; }
 	public static javax.swing.border.Border createRaisedBevelBorder() { return null; }
+	public static javax.swing.border.Border createRaisedSoftBevelBorder() { return null; }
+	public static javax.swing.border.Border createSoftBevelBorder(int var0) { return null; }
+	public static javax.swing.border.Border createSoftBevelBorder(int var0, java.awt.Color var1, java.awt.Color var2) { return null; }
+	public static javax.swing.border.Border createSoftBevelBorder(int var0, java.awt.Color var1, java.awt.Color var2, java.awt.Color var3, java.awt.Color var4) { return null; }
+	public static javax.swing.border.Border createStrokeBorder(java.awt.BasicStroke var0) { return null; }
+	public static javax.swing.border.Border createStrokeBorder(java.awt.BasicStroke var0, java.awt.Paint var1) { return null; }
 	public static javax.swing.border.TitledBorder createTitledBorder(java.lang.String var0) { return null; }
 	public static javax.swing.border.TitledBorder createTitledBorder(javax.swing.border.Border var0) { return null; }
 	public static javax.swing.border.TitledBorder createTitledBorder(javax.swing.border.Border var0, java.lang.String var1) { return null; }

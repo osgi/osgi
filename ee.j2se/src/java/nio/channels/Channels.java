@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,9 @@ package java.nio.channels;
 public final class Channels {
 	public static java.nio.channels.ReadableByteChannel newChannel(java.io.InputStream var0) { return null; }
 	public static java.nio.channels.WritableByteChannel newChannel(java.io.OutputStream var0) { return null; }
+	public static java.io.InputStream newInputStream(java.nio.channels.AsynchronousByteChannel var0) { return null; }
 	public static java.io.InputStream newInputStream(java.nio.channels.ReadableByteChannel var0) { return null; }
+	public static java.io.OutputStream newOutputStream(java.nio.channels.AsynchronousByteChannel var0) { return null; }
 	public static java.io.OutputStream newOutputStream(java.nio.channels.WritableByteChannel var0) { return null; }
 	public static java.io.Reader newReader(java.nio.channels.ReadableByteChannel var0, java.lang.String var1) { return null; }
 	public static java.io.Reader newReader(java.nio.channels.ReadableByteChannel var0, java.nio.charset.CharsetDecoder var1, int var2) { return null; }

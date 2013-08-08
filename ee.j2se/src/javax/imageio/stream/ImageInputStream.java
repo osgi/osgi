@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,7 @@
  */
 
 package javax.imageio.stream;
-public interface ImageInputStream extends java.io.DataInput {
-	void close() throws java.io.IOException;
+public interface ImageInputStream extends java.io.Closeable, java.io.DataInput {
 	void flush() throws java.io.IOException;
 	void flushBefore(long var0) throws java.io.IOException;
 	int getBitOffset() throws java.io.IOException;

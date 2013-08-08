@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ public class DefaultTreeModel implements java.io.Serializable, javax.swing.tree.
 	protected boolean asksAllowsChildren;
 	protected javax.swing.event.EventListenerList listenerList;
 	protected javax.swing.tree.TreeNode root;
+	@java.beans.ConstructorProperties(value={"root"})
 	public DefaultTreeModel(javax.swing.tree.TreeNode var0) { } 
 	public DefaultTreeModel(javax.swing.tree.TreeNode var0, boolean var1) { } 
 	public void addTreeModelListener(javax.swing.event.TreeModelListener var0) { }

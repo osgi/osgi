@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +15,8 @@
  */
 
 package javax.lang.model.element;
-public class UnknownElementException extends java.lang.RuntimeException {
-	public UnknownElementException(javax.lang.model.element.Element var0, java.lang.Object var1) { } 
+public class UnknownElementException extends javax.lang.model.UnknownEntityException {
+	public UnknownElementException(javax.lang.model.element.Element var0, java.lang.Object var1)  { super((java.lang.String) null); } 
 	public java.lang.Object getArgument() { return null; }
 	public javax.lang.model.element.Element getUnknownElement() { return null; }
 }

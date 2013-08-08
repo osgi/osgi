@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,10 @@ public class Cursor implements java.io.Serializable {
 	public final static int WAIT_CURSOR = 3;
 	public final static int W_RESIZE_CURSOR = 10;
 	protected java.lang.String name;
+	/** @deprecated */
+	@java.lang.Deprecated
 	protected static java.awt.Cursor[] predefined;
+	@java.beans.ConstructorProperties(value={"type"})
 	public Cursor(int var0) { } 
 	protected Cursor(java.lang.String var0) { } 
 	public static java.awt.Cursor getDefaultCursor() { return null; }

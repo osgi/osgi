@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,9 @@ public class DefaultListSelectionModel implements java.io.Serializable, java.lan
 	protected void fireValueChanged(int var0, int var1) { }
 	protected void fireValueChanged(int var0, int var1, boolean var2) { }
 	protected void fireValueChanged(boolean var0) { }
+	@java.beans.Transient
 	public int getAnchorSelectionIndex() { return 0; }
+	@java.beans.Transient
 	public int getLeadSelectionIndex() { return 0; }
 	public javax.swing.event.ListSelectionListener[] getListSelectionListeners() { return null; }
 	public <T extends java.util.EventListener> T[] getListeners(java.lang.Class<T> var0) { return null; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -86,6 +86,7 @@ public abstract class AbstractButton extends javax.swing.JComponent implements j
 	public java.lang.String getActionCommand() { return null; }
 	public java.awt.event.ActionListener[] getActionListeners() { return null; }
 	public javax.swing.event.ChangeListener[] getChangeListeners() { return null; }
+	@java.beans.Transient
 	public javax.swing.Icon getDisabledIcon() { return null; }
 	public javax.swing.Icon getDisabledSelectedIcon() { return null; }
 	public int getDisplayedMnemonicIndex() { return 0; }

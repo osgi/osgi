@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ public class BevelBorder extends javax.swing.border.AbstractBorder {
 	protected java.awt.Color shadowOuter;
 	public BevelBorder(int var0) { } 
 	public BevelBorder(int var0, java.awt.Color var1, java.awt.Color var2) { } 
+	@java.beans.ConstructorProperties(value={"bevelType","highlightOuterColor","highlightInnerColor","shadowOuterColor","shadowInnerColor"})
 	public BevelBorder(int var0, java.awt.Color var1, java.awt.Color var2, java.awt.Color var3, java.awt.Color var4) { } 
 	public int getBevelType() { return 0; }
 	public java.awt.Color getHighlightInnerColor() { return null; }

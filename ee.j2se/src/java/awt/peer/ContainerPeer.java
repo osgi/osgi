@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,5 @@ public interface ContainerPeer extends java.awt.peer.ComponentPeer {
 	void endLayout();
 	void endValidate();
 	java.awt.Insets getInsets();
-	java.awt.Insets insets();
-	boolean isPaintPending();
-	boolean isRestackSupported();
-	void restack();
 }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ public class BasicMenuItemUI extends javax.swing.plaf.MenuItemUI {
 		public void mousePressed(java.awt.event.MouseEvent var0) { }
 		public void mouseReleased(java.awt.event.MouseEvent var0) { }
 	}
+	protected java.lang.String acceleratorDelimiter;
 	protected java.awt.Font acceleratorFont;
 	protected java.awt.Color acceleratorForeground;
 	protected java.awt.Color acceleratorSelectionForeground;

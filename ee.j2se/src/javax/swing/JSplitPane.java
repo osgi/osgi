@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,7 @@ public class JSplitPane extends javax.swing.JComponent implements javax.accessib
 	protected int orientation;
 	protected java.awt.Component rightComponent;
 	public JSplitPane() { } 
+	@java.beans.ConstructorProperties(value={"orientation"})
 	public JSplitPane(int var0) { } 
 	public JSplitPane(int var0, java.awt.Component var1, java.awt.Component var2) { } 
 	public JSplitPane(int var0, boolean var1) { } 

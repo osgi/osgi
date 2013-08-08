@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,9 @@ public class JTabbedPane extends javax.swing.JComponent implements java.io.Seria
 	public javax.swing.Icon getIconAt(int var0) { return null; }
 	public int getMnemonicAt(int var0) { return 0; }
 	public javax.swing.SingleSelectionModel getModel() { return null; }
+	@java.beans.Transient
 	public java.awt.Component getSelectedComponent() { return null; }
+	@java.beans.Transient
 	public int getSelectedIndex() { return 0; }
 	public java.awt.Component getTabComponentAt(int var0) { return null; }
 	public int getTabCount() { return 0; }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,7 @@ public abstract class AbstractQueuedSynchronizer extends java.util.concurrent.lo
 	public final int getWaitQueueLength(java.util.concurrent.locks.AbstractQueuedSynchronizer.ConditionObject var0) { return 0; }
 	public final java.util.Collection<java.lang.Thread> getWaitingThreads(java.util.concurrent.locks.AbstractQueuedSynchronizer.ConditionObject var0) { return null; }
 	public final boolean hasContended() { return false; }
+	public final boolean hasQueuedPredecessors() { return false; }
 	public final boolean hasQueuedThreads() { return false; }
 	public final boolean hasWaiters(java.util.concurrent.locks.AbstractQueuedSynchronizer.ConditionObject var0) { return false; }
 	protected boolean isHeldExclusively() { return false; }

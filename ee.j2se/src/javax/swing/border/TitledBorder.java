@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -43,6 +43,7 @@ public class TitledBorder extends javax.swing.border.AbstractBorder {
 	public TitledBorder(javax.swing.border.Border var0, java.lang.String var1) { } 
 	public TitledBorder(javax.swing.border.Border var0, java.lang.String var1, int var2, int var3) { } 
 	public TitledBorder(javax.swing.border.Border var0, java.lang.String var1, int var2, int var3, java.awt.Font var4) { } 
+	@java.beans.ConstructorProperties(value={"border","title","titleJustification","titlePosition","titleFont","titleColor"})
 	public TitledBorder(javax.swing.border.Border var0, java.lang.String var1, int var2, int var3, java.awt.Font var4, java.awt.Color var5) { } 
 	public javax.swing.border.Border getBorder() { return null; }
 	protected java.awt.Font getFont(java.awt.Component var0) { return null; }

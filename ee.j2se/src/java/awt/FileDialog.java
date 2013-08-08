@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,10 +27,13 @@ public class FileDialog extends java.awt.Dialog {
 	public java.lang.String getDirectory() { return null; }
 	public java.lang.String getFile() { return null; }
 	public java.io.FilenameFilter getFilenameFilter() { return null; }
+	public java.io.File[] getFiles() { return null; }
 	public int getMode() { return 0; }
+	public boolean isMultipleMode() { return false; }
 	public void setDirectory(java.lang.String var0) { }
 	public void setFile(java.lang.String var0) { }
 	public void setFilenameFilter(java.io.FilenameFilter var0) { }
 	public void setMode(int var0) { }
+	public void setMultipleMode(boolean var0) { }
 }
 

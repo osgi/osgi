@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,10 @@ public abstract class XMLOutputFactory {
 	public abstract javax.xml.stream.XMLStreamWriter createXMLStreamWriter(javax.xml.transform.Result var0) throws javax.xml.stream.XMLStreamException;
 	public abstract java.lang.Object getProperty(java.lang.String var0);
 	public abstract boolean isPropertySupported(java.lang.String var0);
+	public static javax.xml.stream.XMLOutputFactory newFactory() throws javax.xml.stream.FactoryConfigurationError { return null; }
+	public static javax.xml.stream.XMLOutputFactory newFactory(java.lang.String var0, java.lang.ClassLoader var1) throws javax.xml.stream.FactoryConfigurationError { return null; }
 	public static javax.xml.stream.XMLOutputFactory newInstance() throws javax.xml.stream.FactoryConfigurationError { return null; }
+	/** @deprecated */
 	public static javax.xml.stream.XMLInputFactory newInstance(java.lang.String var0, java.lang.ClassLoader var1) throws javax.xml.stream.FactoryConfigurationError { return null; }
 	public abstract void setProperty(java.lang.String var0, java.lang.Object var1);
 }

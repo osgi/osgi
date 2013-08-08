@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ public abstract class Arc2D extends java.awt.geom.RectangularShape {
 		public double width;
 		public double x;
 		public double y;
-		public Double()  { super(0); } 
-		public Double(double var0, double var1, double var2, double var3, double var4, double var5, int var6)  { super(0); } 
-		public Double(int var0)  { super(0); } 
-		public Double(java.awt.geom.Rectangle2D var0, double var1, double var2, int var3)  { super(0); } 
+		public Double() { } 
+		public Double(double var0, double var1, double var2, double var3, double var4, double var5, int var6) { } 
+		public Double(int var0) { } 
+		public Double(java.awt.geom.Rectangle2D var0, double var1, double var2, int var3) { } 
 		public double getAngleExtent() { return 0.0d; }
 		public double getAngleStart() { return 0.0d; }
 		public double getHeight() { return 0.0d; }
@@ -46,10 +46,10 @@ public abstract class Arc2D extends java.awt.geom.RectangularShape {
 		public float width;
 		public float x;
 		public float y;
-		public Float()  { super(0); } 
-		public Float(float var0, float var1, float var2, float var3, float var4, float var5, int var6)  { super(0); } 
-		public Float(int var0)  { super(0); } 
-		public Float(java.awt.geom.Rectangle2D var0, float var1, float var2, int var3)  { super(0); } 
+		public Float() { } 
+		public Float(float var0, float var1, float var2, float var3, float var4, float var5, int var6) { } 
+		public Float(int var0) { } 
+		public Float(java.awt.geom.Rectangle2D var0, float var1, float var2, int var3) { } 
 		public double getAngleExtent() { return 0.0d; }
 		public double getAngleStart() { return 0.0d; }
 		public double getHeight() { return 0.0d; }
@@ -65,6 +65,7 @@ public abstract class Arc2D extends java.awt.geom.RectangularShape {
 	public final static int CHORD = 1;
 	public final static int OPEN = 0;
 	public final static int PIE = 2;
+	protected Arc2D() { } 
 	protected Arc2D(int var0) { } 
 	public boolean contains(double var0, double var1) { return false; }
 	public boolean contains(double var0, double var1, double var2, double var3) { return false; }

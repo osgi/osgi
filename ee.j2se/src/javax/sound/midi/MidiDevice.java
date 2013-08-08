@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 package javax.sound.midi;
-public interface MidiDevice {
+public interface MidiDevice extends java.lang.AutoCloseable {
 	public static class Info {
 		protected Info(java.lang.String var0, java.lang.String var1, java.lang.String var2, java.lang.String var3) { } 
 		public final boolean equals(java.lang.Object var0) { return false; }

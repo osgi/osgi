@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ public class AffineTransform implements java.io.Serializable, java.lang.Cloneabl
 	public final static int TYPE_UNIFORM_SCALE = 2;
 	public AffineTransform() { } 
 	public AffineTransform(double var0, double var1, double var2, double var3, double var4, double var5) { } 
+	@java.beans.ConstructorProperties(value={"scaleX","shearY","shearX","scaleY","translateX","translateY"})
 	public AffineTransform(float var0, float var1, float var2, float var3, float var4, float var5) { } 
 	public AffineTransform(java.awt.geom.AffineTransform var0) { } 
 	public AffineTransform(double[] var0) { } 

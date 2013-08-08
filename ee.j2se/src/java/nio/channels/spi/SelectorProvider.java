@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ public abstract class SelectorProvider {
 	protected SelectorProvider() { } 
 	public java.nio.channels.Channel inheritedChannel() throws java.io.IOException { return null; }
 	public abstract java.nio.channels.DatagramChannel openDatagramChannel() throws java.io.IOException;
+	public abstract java.nio.channels.DatagramChannel openDatagramChannel(java.net.ProtocolFamily var0) throws java.io.IOException;
 	public abstract java.nio.channels.Pipe openPipe() throws java.io.IOException;
 	public abstract java.nio.channels.spi.AbstractSelector openSelector() throws java.io.IOException;
 	public abstract java.nio.channels.ServerSocketChannel openServerSocketChannel() throws java.io.IOException;

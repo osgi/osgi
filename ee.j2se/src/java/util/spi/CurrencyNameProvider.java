@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2009). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package java.util.spi;
 public abstract class CurrencyNameProvider extends java.util.spi.LocaleServiceProvider {
 	protected CurrencyNameProvider() { } 
+	public java.lang.String getDisplayName(java.lang.String var0, java.util.Locale var1) { return null; }
 	public abstract java.lang.String getSymbol(java.lang.String var0, java.util.Locale var1);
 }
 
