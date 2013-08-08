@@ -352,7 +352,8 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
 
       <programlisting>
   RequirementBuilder rb = repo.newRequirementBuilder("osgi.wiring.package");
-  String rf = "(&amp;(osgi.wiring.package=org.example.mypkg)(version&gt;=3.1)(!(version&gt;=4.0.0)))";
+  String rf = "(&amp;(osgi.wiring.package=org.example.mypkg)"
+              + "(version&gt;=3.1)(!(version&gt;=4.0)))";
   rb.addDirective("filter", rf);
   Requirement r = rb.build();
     </programlisting>
