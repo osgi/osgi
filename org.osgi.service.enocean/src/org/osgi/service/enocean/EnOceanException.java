@@ -7,6 +7,9 @@ package org.osgi.service.enocean;
  */
 public class EnOceanException extends Exception {
 
+
+	private static final long	serialVersionUID	= -2401739486671107362L;
+
 	/**
 	 * SUCCESS status code.
 	 */
@@ -28,7 +31,7 @@ public class EnOceanException extends Exception {
 	public static final short ESP_RET_WRONG_PARAM = 3;
 	
 	/**
-	 * You do not have authority to execute this operation.
+	 * The operation was denied.
 	 */
 	public static final short ESP_RET_OPERATION_DENIED = 4;
 	
@@ -41,6 +44,8 @@ public class EnOceanException extends Exception {
 	
 	
 	/**
+	 * Constructor for EnOceanException
+	 * 
 	 * @param errordesc exception error description
 	 */
 	public EnOceanException(String errordesc) {
@@ -49,8 +54,9 @@ public class EnOceanException extends Exception {
 	}
 	
 	/**
+	 * Constructor for EnOceanException
+	 * 
 	 * @param errorCode An error code.
-	 * @param errordesc An error description which explain the type of problem.
 	 */
 	public EnOceanException(int errorCode, String errordesc) {
 		super(errordesc);
@@ -58,7 +64,9 @@ public class EnOceanException extends Exception {
 	}
 	
 	/**
-	 * @return A EnOcean error code defined a EnOcean Forum working committee or specified by a EnOcean vendor.
+	 * Constructor for EnOceanException
+	 * 
+	 * @return An EnOcean error code, defined by the EnOcean Forum working committee or an EnOcean vendor.
 	 */
 	public int getEnOceanError_Code() {
 		return errorCode;

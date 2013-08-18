@@ -10,6 +10,13 @@ package org.osgi.service.enocean;
  */
 public interface EnOceanHost {
 	
+	
+	/**
+	 * The unique ID for this Host: this matches the CHIP_ID of the 
+	 * EnOcean Gateway Chip it embodies.
+	 */
+	public static Object	HOST_ID	= "enocean.host.id";
+	
 	/**
 	 * repeater level to disable repeating; this is the default.
 	 */
@@ -22,15 +29,7 @@ public interface EnOceanHost {
 	 * repeater level to repeat every telegram at most twice.
 	 */
 	public static int REPEATER_LEVEL_TWO = 2;
-	
-	public static int FLASH_TYPE_FLASH = 0;
-	public static int FLASH_TYPE_RAM_0 = 1;
-	public static int FLASH_TYPE_DATA = 2;
-	public static int FLASH_TYPE_IDATA = 3;
-	public static int FLASH_TYPE_XDATA = 4;
-	
-	public static Object	HOST_ID	= "enocean.host.id";
-	public static Object	HOST_TYPE	= "enocean.host.type";
+
 	
 	/**
 	 * Reset the EnOcean Host (cf. ESP3 command 0x02: C0_WR_RESET)
@@ -63,30 +62,21 @@ public interface EnOceanHost {
 	
 	/**
 	 * Sets the repeater level on the host (cf. ESP3 command 0x09: C0_WR_REPEATER)
-	 * @param level one value in REPEATER_LEVEL_XXX
+	 * @param level one of the Repeater Level constants as defined above.
 	 */
 	public void setRepeaterLevel(int level) throws EnOceanException;
 	
 	/**
 	 * Gets the current repeater level of the host (cf. ESP3 command 0x0A: C0_RD_REPEATER)
-	 * @return REPEATER_LEVEL_XXX depending on the repeater level.
+	 * @return one of the Repeater Level constants as defined above.
 	 */
 	public int getRepeaterLevel() throws EnOceanException;
 	
 	/**
-	 * Retrieves the SENDER_ID associated with the given servicePID, if existing on this chip.
+	 * Retrieves the SENDER_ID associated with the given servicePID, if existing on this chip. 
 	 * @param servicePID
-	 * @return
+	 * @return the associated CHIP_ID of the exported device.
 	 */
-	public int getSenderId(String servicePID);
-
-	/**
-	 * Enables the host to set a recipient for the raw data received.
-	 * @param listener that implements the {@link EnOceanPacketListener} interface.
-	 */
-	public void addPacketListener(EnOceanPacketListener listener);
-
-	public void start();
-	public void stop();
+	public int getSenderId(String servicePID) throws IllegalArgumentException;
 
 }

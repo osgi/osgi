@@ -1,10 +1,8 @@
 package org.osgi.service.enocean;
 
-import java.util.Map;
 
 /**
- * This interface represents an EnOcean Device node, a physical device that communicates
- * over the EnOcean protocol.
+ * This interface represents a physical device that communicates over the EnOcean protocol.
  *  
  * @version 1.0
  */
@@ -44,64 +42,82 @@ public interface EnOceanDevice {
 	public final static String PROFILE_NAME = "enocean.device.profile_name";
 	
 	/**
-	 * Property name for the mandatory SLF of the device.
+	 * Property name for the mandatory Security Level Format of the device.
 	 */
 	public final static String SECURITY_LEVEL_FORMAT = "enocean.device.security_level_format";
 
 	/**
-	 * Sends a message onto the EnOcean network. Lightweight byte[] version.
+	 * Sends a message on the EnOcean network, uses lightweight byte[] argument type.
 	 * 
-	 * @param the EnOceanTelegram, as raw bytes, to be issued.
+	 * @param the {@link EnOceanMessage} as raw bytes, to be issued.
+	 * @param an optional {@link EnOceanResponseHandler} object.
 	 * @throws EnOceanException
 	 */
-	public void send(byte[] telegram) throws EnOceanException;
+	public void send(byte[] telegram, EnOceanResponseHandler handler) throws EnOceanException;
 	
 	/**
-	 * Sends a message onto the EnOcean network. Uses actual {@link EnOceanMessage} objects.
+	 * Sends a message on the EnOcean network, uses actual {@link EnOceanMessage} objects.
 	 * 
-	 * @param the EnOceanTelegram to be issued.
+	 * @param the {@link EnOceanMessage} to be issued.
+	 * @param an optional {@link EnOceanResponseHandler} object.
 	 * @throws EnOceanException
 	 */
-	public void send(EnOceanMessage telegram) throws EnOceanException;
+	public void send(EnOceanMessage telegram, EnOceanResponseHandler handler) throws EnOceanException;
 	
 	/**
 	 * Switches the device into learning mode.
+	 * 
+	 * @param learnMode the desired state: true for learning mode, false to disable it.
 	 */
 	public void setLearningMode(boolean learnMode);
 	
 	/**
+	 * Get the current rolling code of the device.
+	 * 
 	 * @return The current rolling code in use with this device's communications.
 	 */
 	public int getRollingCode();
 	
 	/**
+	 * Sets the rolling code of this device.
+	 * 
 	 * @param rollingCode the rolling code to be set or initiated.
 	 */
 	public void setRollingCode(int rollingCode);
 	
 	/**
-	 * @return The current encryption key used in this device's communications.
+	 * Returns the current encryption key used by this device.
+	 * 
+	 * @return The current encryption key, or null.
 	 */
 	public byte[] getEncryptionKey();
 	
 	/**
+	 * Sets the encryption key of the device.
+	 * 
 	 * @param key the encryption key to be set.
 	 */
 	public void setEncryptionKey(byte[] key);
 	
 	/**
-	 * @return The latest telegram issued by this device.
+	 * Retrieves the latest known received message of this device.
+	 * 
+	 * @return The latest {@link EnOceanMessage} issued by this device.
 	 */
-	public EnOceanMessage getLastTelegram();
+	public EnOceanMessage getLastMessage();
 	
 	/**
-	 * @return The list of currently learned devices.
+	 * Gets the list of devices the device already has learned. 
+	 * 
+	 * @return The list of currently learned device's CHIP_IDs.
 	 */
 	public int[] getLearnedDevices();
 	
 	/**
-	 * @return A { MANUFACTURER_ID: FUNCTION_ID } Map of the available RPCs.
+	 * Retrieves the currently available RPCs to this device.
+	 * 
+	 * @return A list of the available {@link EnOceanRPC }
 	 */
-	public Map getRPC();
+	public EnOceanRPC[] getRPCs();
 	
 }

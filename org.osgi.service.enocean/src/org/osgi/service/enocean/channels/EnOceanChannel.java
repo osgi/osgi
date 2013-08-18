@@ -1,6 +1,5 @@
 package org.osgi.service.enocean.channels;
 
-import org.osgi.service.enocean.channels.EnOceanChannelDescription;
 
 /**
  * Holds the metadata and means to retrieve the actual value of a Datafield.
@@ -11,12 +10,7 @@ import org.osgi.service.enocean.channels.EnOceanChannelDescription;
  * @version 1.0
  */
 public interface EnOceanChannel {
-	
-	/**
-	 * @return The shortcut name of this datafield, as described in the EEP specification.
-	 */
-	public String getShortcut();
-	
+		
 	/**
 	 * @return The offset, in bits, where this datafield is found in the telegram.
 	 */
@@ -26,11 +20,6 @@ public interface EnOceanChannel {
 	 * @return The size, in bits, of this datafield.
 	 */
 	public int getSize();
-	
-	/**
-	 * @return The human-friendly name of this datafield, if any.
-	 */
-	public String getName();
 	
 	/**
 	 * @return The description of this datafield, if any.

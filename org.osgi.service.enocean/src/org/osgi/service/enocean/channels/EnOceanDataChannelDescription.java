@@ -1,11 +1,10 @@
 package org.osgi.service.enocean.channels;
 
-import org.osgi.service.enocean.channels.EnOceanChannelDescription;
 
 /**
  * 
  *
- * Subinterface of {@link EnOceanChannelDescription} that describes physical measuring datafields.
+ * Subinterface of {@link EnOceanChannelDescription} that describes physical measuring channels.
  * 
  * @author $Id$
  */
@@ -40,4 +39,5 @@ public interface EnOceanDataChannelDescription extends EnOceanChannelDescription
 	 * @return
 	 */
 	public String getUnit();
+	
 }
