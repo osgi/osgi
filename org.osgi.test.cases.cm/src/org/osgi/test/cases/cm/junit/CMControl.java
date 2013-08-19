@@ -26,6 +26,7 @@ package org.osgi.test.cases.cm.junit;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -323,6 +324,12 @@ public class CMControl extends DefaultTestBundleControl {
 		this.printoutPermissions();
 	}
 
+    private List getBundlePermission(Bundle b) {
+        if (permAdmin == null) return null;
+        PermissionInfo[] pis = permAdmin.getPermissions(b.getLocation());
+        return Arrays.asList(pis);
+    }
+
 	private void add(List permissionsInfos, String clazz, String name,
 			String actions) {
 		permissionsInfos.add(new PermissionInfo(clazz, name, actions));
@@ -412,15 +419,22 @@ public class CMControl extends DefaultTestBundleControl {
 		/* must fail because of inappropriate Permission. */
 		String message = "try to get location without appropriate ConfigurationPermission.";
 		try {
-			String location = conf.getBundleLocation();
-			assertEquals("The location must be " + thisLocation, thisLocation,
-					location);
-		} catch (AssertionFailedError e) {
-			throw e;
-		} catch (Throwable e) {
-			fail("Throwable must not be thrown because the configuring bundle has implicit CP for thisLocation",
-					e);
-
+            conf.getBundleLocation();
+            /*
+             * A SecurityException should have been thrown if security is
+             * enabled
+             */
+            if (System.getSecurityManager() != null) failException(message, SecurityException.class);
+        } catch (AssertionFailedError e) {
+            throw e;
+        } catch (Throwable e) {
+            /* Check that we got the correct exception */
+            assertException(message, SecurityException.class, e);
+            /*
+             * A SecurityException should not have been thrown if security is
+             * not enabled
+             */
+            if (System.getSecurityManager() == null) fail("Security is not enabled", e);
 		}
 
 		/* Get the configuration again (should be exactly the same) */
@@ -3578,9 +3592,25 @@ public class CMControl extends DefaultTestBundleControl {
 	private String getBundleLocationForCompare(Configuration conf)
 			throws BundleException {
 		String location = null;
-		if (this.permissionFlag)
-			location = conf.getBundleLocation();
-		else {
+        if (this.permissionFlag) {
+            try {
+                location = conf.getBundleLocation();
+            } catch (SecurityException se) {
+                // Bug 2539: Need to be hard on granting appropriate permission
+                System.out.println("Temporarily grant CONFIGURE(" + thisLocation
+                    + ") to get location of configuration " + conf.getPid());
+                List perms = getBundlePermission(thisBundle);
+                try {
+                    setCPtoBundle("*", ConfigurationPermission.CONFIGURE, thisBundle);
+                    location = conf.getBundleLocation();
+                } catch (SecurityException se2) {
+                    throw se;
+                } finally {
+                    System.out.println("Resetting permissions for " + thisLocation + " to: " + perms);
+                    resetBundlePermission(thisBundle, perms);
+                }
+            }
+        } else {
 			this.setAppropriatePermission();
 			location = conf.getBundleLocation();
 			this.setInappropriatePermission();
@@ -4798,6 +4828,13 @@ public class CMControl extends DefaultTestBundleControl {
 		this.setBundlePermission(bundle, list);
 	}
 
+    private void resetBundlePermission(Bundle b, List list) throws BundleException {
+        this.resetPermissions();
+        if (list != null) {
+            this.setBundlePermission(b, list);
+        }
+    }
+
 	private String traceTestId(final String header, int micro) {
 		String testId = header + String.valueOf(micro);
 		trace(testId);
@@ -5408,7 +5445,7 @@ public class CMControl extends DefaultTestBundleControl {
 			testId = traceTestId(header, ++micro);
 			setCPtoBundle(locationA, ConfigurationPermission.CONFIGURE,
 					thisBundle);
-			if (minor == 2 || minor == 8) {
+            if (minor == 2) {
 				loc = conf.getBundleLocation();
 				assertEquals("Check conf location", locationOld, loc);
 			} else {
@@ -5418,17 +5455,12 @@ public class CMControl extends DefaultTestBundleControl {
 			// 3
 			testId = traceTestId(header, ++micro);
 			setCPtoBundle("?", ConfigurationPermission.CONFIGURE, thisBundle);
-			if (minor == 8) {
-				loc = conf.getBundleLocation();
-				assertEquals("Check conf location", locationOld, loc);
-			} else {
-				this.assertThrowsSEbyGetLocation(conf, testId);
-			}
+            this.assertThrowsSEbyGetLocation(conf, testId);
 
 			// 4
 			testId = traceTestId(header, ++micro);
 			setCPtoBundle("?*", ConfigurationPermission.CONFIGURE, thisBundle);
-			if (minor == 5 || minor == 6 || minor == 7 || minor == 8) {
+            if (minor == 5 || minor == 6 || minor == 7) {
 				loc = conf.getBundleLocation();
 				assertEquals("Check conf location", locationOld, loc);
 			} else {
@@ -5439,7 +5471,7 @@ public class CMControl extends DefaultTestBundleControl {
 			testId = traceTestId(header, ++micro);
 			setCPtoBundle(regionA, ConfigurationPermission.CONFIGURE,
 					thisBundle);
-			if (minor == 6 || minor == 8) {
+            if (minor == 6) {
 				loc = conf.getBundleLocation();
 				assertEquals("Check conf location", locationOld, loc);
 			} else {
@@ -5449,12 +5481,7 @@ public class CMControl extends DefaultTestBundleControl {
 			// 6
 			testId = traceTestId(header, ++micro);
 			setCPtoBundle("*", ConfigurationPermission.TARGET, thisBundle);
-			if (minor == 8) {
-				loc = conf.getBundleLocation();
-				assertEquals("Check conf location", locationOld, loc);
-			} else {
-				this.assertThrowsSEbyGetLocation(conf, testId);
-			}
+            this.assertThrowsSEbyGetLocation(conf, testId);
 
 			// 7
 			testId = traceTestId(header, ++micro);
@@ -5487,8 +5514,9 @@ public class CMControl extends DefaultTestBundleControl {
 			conf.delete();
 			resetPermissions();
 			conf = cm.getConfiguration(pid1, thisLocation);
-			setCPtoBundle(null, null, thisBundle);
-			loc = conf.getBundleLocation();
+            // Bug2539: need to have CONFIGURE(thisLocation)
+            setCPtoBundle(thisLocation, ConfigurationPermission.CONFIGURE, thisBundle);
+            loc = conf.getBundleLocation();
 			assertEquals("Check conf location", thisLocation, loc);
 		} finally {
 			this.resetPermissions();
