@@ -1969,6 +1969,112 @@ public class CMControl extends DefaultTestBundleControl {
 				conf.delete();
 		}
 
+        /*
+         * 9. Test dynamic bindings from getConfiguration(pid) and
+         * createConfiguration(pid) (Member Bug 2551)
+         */
+        trace("############ 9 testDynamicBinding()");
+        String dynamicPid1 = Util.createPid("dynamicPid1");
+        String dynamicPid2 = Util.createPid("dynamicPid2");
+        String dynamicFactoryPid = Util.createPid("dynamicFactoryPid");
+        String dynamicFactoryPidInstance = null;
+        try {
+            props = new Hashtable();
+            props.put("StringKey", "String Value");
+
+            // make sure this bundle has enough permissions
+            this.setAppropriatePermission();
+
+            // ensure unbound configuration
+            conf = this.cm.getConfiguration(dynamicPid1, null);
+            assertNotNull("Configuration must exist for " + dynamicPid1, conf);
+            assertNull("Configuration must be new for " + dynamicPid1, conf.getProperties());
+            assertNull("Configuration for " + dynamicPid1 + " must be unbound",
+                this.getBundleLocationForCompare(conf));
+            conf.update(props);
+
+            SynchronizerImpl sync = new SynchronizerImpl("ID1");
+            reg = getContext().registerService(Synchronizer.class.getName(), sync, propsForSync1);
+            bundle1 = getContext().installBundle(getWebServer() + "targetb1.jar");
+            this.startTargetBundle(bundle1);
+            trace("Wait for signal.");
+
+            ServiceReference caref = bundle1.getBundleContext().getServiceReference(ConfigurationAdmin.class);
+            ConfigurationAdmin ca = (ConfigurationAdmin) bundle1.getBundleContext().getService(caref);
+
+            // ensure configuration 1 is bound to bundle1
+            conf = ca.getConfiguration(dynamicPid1);
+            assertNotNull("Configuration must exist for " + dynamicPid1, conf);
+            assertNotNull("Configuration must not be new for " + dynamicPid1, conf.getProperties());
+            assertEquals("Configuration for " + dynamicPid1 + " must be bound to " + bundle1.getLocation(),
+                bundle1.getLocation(), this.getBundleLocationForCompare(conf));
+
+            // ensure configuration 2 is bound to bundle1
+            conf = ca.getConfiguration(dynamicPid2);
+            assertNotNull("Configuration must exist for " + dynamicPid2, conf);
+            assertNull("Configuration must be new for " + dynamicPid2, conf.getProperties());
+            assertEquals("Configuration for " + dynamicPid2 + " must be bound to " + bundle1.getLocation(),
+                bundle1.getLocation(), this.getBundleLocationForCompare(conf));
+            conf.update(props);
+
+            // ensure factory configuration bound to bundle1
+            conf = ca.createFactoryConfiguration(dynamicFactoryPid);
+            dynamicFactoryPidInstance = conf.getPid();
+            assertNotNull("Factory Configuration must exist for " + dynamicFactoryPid, conf);
+            assertNull("Factory Configuration must be new for " + dynamicFactoryPid, conf.getProperties());
+            assertEquals(
+                "Factory Configuration for " + dynamicFactoryPid + " must be bound to " + bundle1.getLocation(),
+                bundle1.getLocation(), this.getBundleLocationForCompare(conf));
+            conf.update(props);
+
+            SynchronizerImpl sync2 = new SynchronizerImpl("SyncListener");
+            reg2 = getContext().registerService(ConfigurationListener.class.getName(), new SyncEventListener(sync2),
+                null);
+
+            // unsinstall the bundle, make sure configurations are unbound
+            this.uninstallBundle(bundle1);
+
+            // wait for three (CM_LOCATION_CHANGED) events
+            boolean threeEvents = sync2.waitForSignal(500, 3);
+            assertTrue("Expecting three CM_LOCATION_CHANGED events after bundle uninstallation", threeEvents);
+
+            // ensure configuration 1 is unbound
+            conf = this.cm.getConfiguration(dynamicPid1, null);
+            assertNotNull("Configuration must exist for " + dynamicPid1, conf);
+            assertNotNull("Configuration must not be new for " + dynamicPid1, conf.getProperties());
+            assertNull("Configuration for " + dynamicPid1 + " must be unbound", this.getBundleLocationForCompare(conf));
+
+            // ensure configuration 2 is unbound
+            conf = this.cm.getConfiguration(dynamicPid2, null);
+            assertNotNull("Configuration must exist for " + dynamicPid2, conf);
+            assertNotNull("Configuration must not be new for " + dynamicPid2, conf.getProperties());
+            assertNull("Configuration for " + dynamicPid2 + " must be unbound", this.getBundleLocationForCompare(conf));
+
+            // ensure factory configuration is unbound
+            conf = this.cm.getConfiguration(dynamicFactoryPidInstance, null);
+            assertNotNull("Configuration must exist for " + dynamicFactoryPidInstance, conf);
+            assertEquals("Configuration " + dynamicFactoryPidInstance + " must be factory configuration for "
+                + dynamicFactoryPid, dynamicFactoryPid, conf.getFactoryPid());
+            assertNotNull("Configuration must not be new for " + dynamicFactoryPidInstance, conf.getProperties());
+            assertNull("Configuration for " + dynamicFactoryPidInstance + " must be unbound",
+                this.getBundleLocationForCompare(conf));
+
+        } finally {
+            if (reg != null) reg.unregister();
+            reg = null;
+            if (reg2 != null) reg2.unregister();
+            reg2 = null;
+            if (bundle1 != null && bundle1.getState() != Bundle.UNINSTALLED) bundle1.uninstall();
+            bundle1 = null;
+            conf = cm.getConfiguration(dynamicPid1);
+            if (conf != null) conf.delete();
+            conf = cm.getConfiguration(dynamicPid2);
+            if (conf != null) conf.delete();
+            if (dynamicFactoryPidInstance != null) {
+                conf = cm.getConfiguration(dynamicFactoryPidInstance);
+                if (conf != null) conf.delete();
+            }
+        }
 	}
 
 	private void startTargetBundle(Bundle bundle) throws BundleException {
@@ -4430,6 +4536,20 @@ public class CMControl extends DefaultTestBundleControl {
 			}
 		}
 	}
+
+    class SyncEventListener implements SynchronousConfigurationListener {
+
+        private final Synchronizer sync;
+
+        public SyncEventListener(final Synchronizer sync) {
+            this.sync = sync;
+        }
+
+        public void configurationEvent(ConfigurationEvent event) {
+            this.sync.signal();
+        }
+
+    }
 
 	/*
 	 * Shigekuni KONDO, Ikuo YAMASAKI, (Yushi Kuroda), NTT Corporation adds
