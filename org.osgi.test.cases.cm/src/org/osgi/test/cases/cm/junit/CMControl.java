@@ -1912,34 +1912,16 @@ public class CMControl extends DefaultTestBundleControl {
 			bundle1.stop();
 			assertEquals("Dynamic binding(STOPPED). Wait for a while.",
 					conf.getBundleLocation(), bundle1.getLocation());
-			calledback = sync2.waitForSignal(SIGNAL_WAITING_TIME, ++count2);
+            calledback = sync2.waitForSignal(SIGNAL_WAITING_TIME, count2 + 1);
 			assertFalse("ManagedService2 MUST NOT be called back.", calledback);
 			bundle1.uninstall();
 			trace("Dynamic binding(UNINSTALLED). Wait for a while.");
 			calledback2 = sync2
 					.waitForSignal(SIGNAL_WAITING_TIME * 2, ++count2);
-			/*
-			 * Open issue. Should the newly dynamically bound ManagedService be
-			 * called back ? Ikuo thinks yes while BJ thinks no. The
-			 * implementator of this CT (Ikuo) thinks CT should not be strict in
-			 * this point because it is not clear in the spec of version 1.3.
-			 */
-			// assertTrue("ManagedService MUST be called back.", calledback2);
-			if (!calledback2) {
-				count2--;
-			}
+            assertTrue("ManagedService2 MUST be called back.", calledback2);
 
-			/*
-			 * Open Issue: Ikuo thinks the Conf which got unbound from bundle1
-			 * should get bound to any of other target bundles if other target
-			 * bundle exists. However Felix thinks not (when Conf#update(props)
-			 * is called, it will be bound. The implementator of this CT (Ikuo)
-			 * thinks CT should not be strict in this point because it is not
-			 * clear in the spec of version 1.3.
-			 */
-
-			// assertEquals("Dynamic binding(UNINSTALLED). Wait for a while.",
-			// bundle2.getLocation(), conf.getBundleLocation());
+            assertEquals("Dynamic binding(UNINSTALLED). Wait for a while.", bundle2.getLocation(),
+                conf.getBundleLocation());
 			props.put("StringKey", "stringvalue2");
 			conf.update(props);
 			calledback2 = sync2.waitForSignal(SIGNAL_WAITING_TIME, ++count2);
