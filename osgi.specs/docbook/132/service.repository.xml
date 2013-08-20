@@ -994,7 +994,8 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
 
       <para>A list conversion requires the value to be broken in tokens
       separated by comma (<code>’,’ \u002C</code>). Whitespace around the list
-      and around commas must be trimmed. Each token must then be converted to
+      and around commas must be trimmed for non-String types.
+      Each token must then be converted to
       the given type according to the <code>scalar</code> type specifier. The
       exact rules for the comma separated lists are defined in <xref
       linkend="i3273289"/>, see <emphasis>Bundle Capability
@@ -1253,7 +1254,29 @@ ServicePermission[...Repository, GET ]</programlisting>
   <section>
     <title>Changes</title>
 
-    <para><remark>Add changes text for the 1.1 changes.</remark></para>
+    <para>
+      <itemizedlist>
+        <listitem>
+          <para>Introduction of <emphasis>Requirement Expressions</emphasis> to represent
+            combined requirements.</para>
+        </listitem>
+
+        <listitem>
+          <para>Introduction of <emphasis>Requirement Builder</emphasis> to facilitate the 
+            creation of Requirement objects.</para>
+        </listitem>
+
+        <listitem>
+          <para>Clarification of default content for the 
+            <emphasis>Repository Content</emphasis> API.
+          </para>
+        </listitem>
+
+        <listitem>
+          <para>Addition of <code>processContent="lax"</code> to XML schema.</para>
+        </listitem>
+      </itemizedlist>
+    </para>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.repository.xml"/>
