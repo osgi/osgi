@@ -27,10 +27,7 @@ import org.osgi.service.resource.resourcemonitor.ThreadMonitor;
  * Monitor and manage resource contexts.
  * 
  * <p>
- * The ResourceManager object can be obtained by calling
- * {@link Bundle#adapt(Class) bundle.adapt(ResourceManager.class)} on the system
- * bundle. Only the system bundle can be adapted to a ResourceManager object.The
- * ResourceManager object is also available as an OSGi service.
+ * The ResourceManager is a service OSGi.
  * </p>
  * 
  * @ThreadSafe
@@ -126,6 +123,15 @@ public interface ResourceManager {
 	 *         null if such a context doesn't exist
 	 */
 	public ResourceContext getContext(String name);
+
+	/**
+	 * Returns the {@link ResourceContext} associated to the provided bundle
+	 * 
+	 * @param b bundle
+	 * @return the {@link ResourceContext} associated to bundle b or null if the
+	 *         bundle b does not belong to a Resource Context.
+	 */
+	public ResourceContext getContext(Bundle b);
 
 	/**
 	 * Returns the resource context associated with the current thread.

@@ -26,15 +26,17 @@ import org.osgi.framework.Bundle;
  * Management agents can use the
  * {@link ResourceManager#createContext(String, ResourceContext)} method to
  * create ResourceContext instances.
+ * </p>
  * <p>
  * Management agents can use the {@link #getMonitor(String)} method to get
  * {@link ResourceMonitor} instances for the supported resource types. These
  * instances can then be used to monitor the usage of the resources, or the set
  * usage limits.
+ * </p>
  * <p>
- * The ResourceContext object associated with a bundle can be obtained by
- * calling {@link Bundle#adapt(Class) bundle.adapt(ResourceContext.class)} on
- * the bundle.
+ * ResourceContexts are retrieved through the {@link ResourceManager} OSGi
+ * service.
+ * </p>
  * 
  * @ThreadSafe
  * @noimplement
