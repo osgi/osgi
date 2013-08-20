@@ -377,7 +377,7 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
   lb.addDirective("filter", lf);
 
   RequirementExpression expr = repo.getExpressionCombiner().and(
-    rb.buildExpression(), lb.buildExpression());
+    lb.buildExpression(), rb.buildExpression());
 
   Collection&lt;Resource&gt; matches = repo.findProviders(expr);
       </programlisting></para>
