@@ -532,9 +532,7 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
       linkend="org.osgi.service.repository.RepositoryContent"
       xrefstyle="hyperlink"/> interface. The purpose of this interface is to
       allow users of the Repositories access to an Input Stream that provides
-      access to the resource in a format specified by the resource type, see
-      the <code>osgi.identity</code> namespace. If the resource type does not
-      specify a format then it must be an Input Stream to a JAR.</para>
+      access to the resource.</para>
 
       <para>The <xref linkend="org.osgi.service.repository.RepositoryContent"
       xrefstyle="hyperlink"/> interface provides a single method:</para>
@@ -544,8 +542,8 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
           <para><xref
           linkend="org.osgi.service.repository.RepositoryContent.getContent--"
           xrefstyle="hyperlink"/> – Return an Input Stream for the resource,
-          default a JAR stream unless otherwise specified for the type in the
-          <code>osgi.identity</code> namespace.</para>
+          if more than one <code>osgi.content</code> capability is present the
+          content associated with the first capability is returned.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -560,15 +558,15 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
     ways. It is possible to deliver a bundle as a JAR file, a Pack200 file, or
     some other format. In general, the <xref
     linkend="org.osgi.service.repository.RepositoryContent"
-    xrefstyle="hyperlink"/> interface provides access to the default format,
-    which is the JAR format in most cases.</para>
+    xrefstyle="hyperlink"/> interface provides access to the default format. </para>
 
     <para>The Repository can advertise the different formats with
     <code>osgi.content</code> capabilities. Each of those capabilities is
     identified with a unique SHA-256 checksum and has a URL for the resource
     in the specified format. The <code>size</code> and <code>mime</code>
     attributes provide information the download format, this can be used for
-    selection.</para>
+    selection. If more than one <code>osgi.content</code> capability is associated 
+    with a resource, the first capability must represent the default format.</para>
 
     <para>The <code>osgi.content</code> Namespace supports the attributes
     defined in the following table and <xref
