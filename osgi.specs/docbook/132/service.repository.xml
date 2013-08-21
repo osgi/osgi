@@ -566,7 +566,10 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
     in the specified format. The <code>size</code> and <code>mime</code>
     attributes provide information the download format, this can be used for
     selection. If more than one <code>osgi.content</code> capability is associated 
-    with a resource, the first capability must represent the default format.</para>
+    with a resource, the first capability must represent the default format.
+    If the resource has a standard or widely used format (e.g., JAR for bundles and 
+    ESA for subsystems), and that format is provided as part of the repository, then 
+    that format should be the default format.</para>
 
     <para>The <code>osgi.content</code> Namespace supports the attributes
     defined in the following table and <xref
@@ -1010,7 +1013,7 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
         </listitem>
 
         <listitem>
-          <para><code>Version</code> -
+          <para><code>Version</code> –
           <code>Version.parseVersion(s)</code></para>
         </listitem>
 
@@ -1140,6 +1143,20 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
             increment='13582741'
             xmlns='http://www.osgi.org/xmlns/repository/v1.0.0'&gt;
   &lt;resource&gt;
+
+    &lt;requirement namespace='osgi.wiring.package'&gt;
+      &lt;directive name='filter' value=
+                           '(&amp;amp;(osgi.wiring.package=org.apache.commons.pool)(version&amp;gt;=1.5.6))'/&gt;
+    &lt;/requirement&gt;
+
+    &lt;requirement namespace=’osgi.identity’&gt;
+      &lt;directive name=’effective’ value=’meta’/&gt;
+      &lt;directive name=’resolution’ value=’optional’/&gt;
+      &lt;directive name='filter’ value=
+              ’(&amp;(version=1.5.6)(osgi.identity=org.acme.pool-src))’
+        &lt;directive name=’classifier’ value=’sources’/&gt;
+    &lt;/requirement&gt;
+
     &lt;capability namespace='osgi.identity'&gt;
       &lt;attribute name='osgi.identity' value='org.acme.pool'/&gt;
       &lt;attribute name='version'type='Version' value='1.5.6’/&gt;
@@ -1165,19 +1182,6 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
       &lt;attribute name='bundle-symbolic-name' value='org.acme.pool'/&gt;
       &lt;directive name=’uses’ value=’org.acme.pool,org.acme.util’/&gt;
     &lt;/capability&gt;
-
-    &lt;requirement namespace='osgi.wiring.package'&gt;
-      &lt;directive name='filter' value=
-                           '(&amp;amp;(osgi.wiring.package=org.apache.commons.pool)(version&amp;gt;=1.5.6))'/&gt;
-    &lt;/requirement&gt;
-
-    &lt;requirement namespace=’osgi.identity’&gt;
-      &lt;directive name=’effective’ value=’meta’/&gt;
-      &lt;directive name=’resolution’ value=’optional’/&gt;
-      &lt;directive name='filter’ value=
-              ’(&amp;(version=1.5.6)(osgi.identity=org.acme.pool-src))’
-        &lt;directive name=’classifier’ value=’sources’/&gt;
-    &lt;/requirement&gt;
 
   &lt;/resource&gt;
 &lt;/repository&gt;</programlisting>
@@ -1267,8 +1271,9 @@ ServicePermission[...Repository, GET ]</programlisting>
         </listitem>
 
         <listitem>
-          <para>Clarification of default content for the 
-            <emphasis>Repository Content</emphasis> API.
+          <para>Changes to default content for the 
+            <emphasis>Repository Content</emphasis> API and <code>osgi.content</code> 
+            capability.
           </para>
         </listitem>
 
