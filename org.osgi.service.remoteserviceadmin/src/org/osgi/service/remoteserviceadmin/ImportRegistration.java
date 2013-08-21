@@ -44,6 +44,22 @@ public interface ImportRegistration {
 	ImportReference getImportReference();
 
 	/**
+	 * Update the local service represented by this {@link ImportRegistration}.
+	 * After this method returns the {@link EndpointDescription} returned via
+	 * {@link #getImportReference()} must have been updated.
+	 * 
+	 * @param endpoint The updated endpoint
+	 * 
+	 * @throws IllegalStateException When this registration was not properly
+	 *         initialized. See {@link #getException()}.
+	 * @throws IllegalArgumentException When the supplied
+	 *         {@link EndpointDescription} is not for the same endpoint as this
+	 *         {@link ImportRegistration}.
+	 * 
+	 */
+	void update(EndpointDescription endpoint);
+
+	/**
 	 * Close this Import Registration. This must close the connection to the
 	 * endpoint and unregister the proxy. After this method returns, all other
 	 * methods must return {@code null}.

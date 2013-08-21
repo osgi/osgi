@@ -45,6 +45,28 @@ public interface ExportRegistration {
 	ExportReference getExportReference();
 
 	/**
+	 * Update the endpoint represented by this {@link ExportRegistration} and
+	 * notify any relevant listeners of the change to the
+	 * {@link EndpointDescription}. After this method returns the
+	 * {@link EndpointDescription} returned via {@link #getExportReference()}
+	 * must have been updated.
+	 * 
+	 * When creating the updated {@link EndpointDescription} the same properties
+	 * passed to {@link RemoteServiceAdmin#exportService(ServiceReference, Map)}
+	 * must be used.
+	 * 
+	 * @param reference The updated ServiceReference
+	 * 
+	 * @throws IllegalStateException When this registration was not properly
+	 *         initialized. See {@link #getException()}.
+	 * @throws IllegalArgumentException When the supplied
+	 *         {@link ServiceReference} is not for the same service as this
+	 *         {@link ExportRegistration}.
+	 * 
+	 */
+	void update(ServiceReference reference);
+
+	/**
 	 * Delete the local endpoint and disconnect any remote distribution
 	 * providers. After this method returns, all methods must return
 	 * {@code null}.
