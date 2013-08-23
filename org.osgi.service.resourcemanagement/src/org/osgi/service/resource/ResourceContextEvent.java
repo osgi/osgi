@@ -39,6 +39,49 @@ public class ResourceContextEvent {
 	public static final int	BUNDLE_REMOVED				= 3;
 
 	/**
+	 * event type.
+	 */
+	private int				type;
+
+	/**
+	 * bundle.
+	 */
+	private Bundle			bundle;
+
+	/**
+	 * context.
+	 */
+	private ResourceContext	context;
+
+	/**
+	 * Create a new ResourceContextEvent. This constructor should be used when
+	 * the type of the event is either {@link #RESOURCE_CONTEXT_CREATED} or {
+	 * {@value #RESOURCE_CONTEXT_DELETED}.
+	 * 
+	 * @param pType event type
+	 * @param pResourceContext context
+	 */
+	public ResourceContextEvent(int pType, ResourceContext pResourceContext) {
+		type = pType;
+		context = pResourceContext;
+	}
+
+	/**
+	 * Create a new ResourceContextEvent. This constructor should be used when
+	 * the type of the event is either {@link #BUNDLE_ADDED} or
+	 * {@link #BUNDLE_REMOVED}.
+	 * 
+	 * @param pType event type
+	 * @param pResourceContext context
+	 * @param pBundle bundle
+	 */
+	public ResourceContextEvent(int pType, ResourceContext pResourceContext, Bundle pBundle) {
+		this(pType, pResourceContext);
+		bundle = pBundle;
+	}
+
+
+	/**
 	 * Retrieves the type of this Resource Context Event.
 	 * 
 	 * @return the type of the event. One of:

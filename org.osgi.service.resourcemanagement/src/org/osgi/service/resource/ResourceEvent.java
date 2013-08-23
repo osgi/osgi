@@ -51,6 +51,18 @@ public class ResourceEvent {
 	 */
 	public static final int	ERROR						= 2;
 
+	private int				type;
+	private boolean			isUpperThrehsold;
+	private ResourceContext	resourceContext;
+	private Object			value;
+
+	public ResourceEvent(int pType, ResourceContext pContext, boolean pIsUpperThreshold, Object pValue) {
+		type = pType;
+		resourceContext = pContext;
+		isUpperThrehsold = pIsUpperThreshold;
+		value = pValue;
+	}
+
 	/**
 	 * Returns the event type. The type values are:
 	 * <ul>
@@ -62,7 +74,7 @@ public class ResourceEvent {
 	 * @return The event type
 	 */
 	public int getType() {
-		return -1;
+		return type;
 	}
 
 	/**
@@ -73,7 +85,7 @@ public class ResourceEvent {
 	 *         not relevant
 	 */
 	public Object getValue() {
-		return null;
+		return value;
 	}
 
 	/**
@@ -82,7 +94,7 @@ public class ResourceEvent {
 	 * @return The resource context that cased the event.
 	 */
 	public ResourceContext getContext() {
-		return null;
+		return resourceContext;
 	}
 
 
@@ -96,7 +108,7 @@ public class ResourceEvent {
 	 * @return true if it is an upper threshold.
 	 */
 	public boolean isUpperThreshold() {
-		return false;
+		return isUpperThrehsold;
 	}
 
 	public int hashCode() {
