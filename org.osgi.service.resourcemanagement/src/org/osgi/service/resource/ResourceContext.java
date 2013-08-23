@@ -52,12 +52,12 @@ public interface ResourceContext {
 	public String getName();
 
 	/**
-	 * Returns the list of bundles that are members of this resource context.
+	 * Returns the bundle identfiers belonging to this Resource Context.
 	 * 
 	 * @return An array of {@link Bundle} objects, or an empty array if no
 	 *         bundles are currently members of this context
 	 */
-	public Bundle[] getBundles();
+	public long[] getBundleIds();
 
 	/**
 	 * Adds a bundle to the resource context. The bundle will be a member of the
@@ -76,6 +76,15 @@ public interface ResourceContext {
 	public void addBundle(Bundle b);
 
 	/**
+	 * Removes the bundle identified by bundleId from the Resource Context. The
+	 * bundle is no longer to this Resource Context.
+	 * 
+	 * 
+	 * @param bundleId bundle identifier
+	 */
+	public void removeBundle(long bundleId);
+
+	/**
 	 * Removes the bundle from this resource context. If a
 	 * <code>destination</code> context is specified, the bundle will be added
 	 * in it.
@@ -86,11 +95,14 @@ public interface ResourceContext {
 	 * A {@link ResourceEvent} with type {@link ResourceEvent#BUNDLE_REMOVED}
 	 * will be sent.
 	 * 
-	 * @param b The bundle to remove from this resource context
+	 * @param bundleId the identifier of the bundle to be removed from the
+	 *        Resource Context
 	 * @param destination A resource context in which to add the bundle, after
-	 *        removing it from this context.
+	 *        removing it from this context. If no destination is provided (i.e.
+	 *        null), the bundle is not associated to a new Resource Context.
 	 */
-	public void removeBundle(Bundle b, ResourceContext destination);
+	public void removeBundle(long bundleId, ResourceContext destination);
+
 
 	/**
 	 * Returns a ResourceMonitor instance for the specified resource type. If
@@ -103,6 +115,14 @@ public interface ResourceContext {
 	 *         supported
 	 */
 	public ResourceMonitor getMonitor(String resourceType);
+
+
+	/**
+	 * Retrieves all the existing ResourceMonitor belonging to this context.
+	 * 
+	 * @return an array of ResourceMonitor. May be empty if no ResourceMonitor
+	 */
+	public ResourceMonitor[] getMonitors();
 
 	/**
 	 * Add a new ResourceMonitor instance monitoring resource for this resource
