@@ -100,16 +100,14 @@ public interface ResourceManager {
 	/**
 	 * Creates a new {@link ResourceContext}.
 	 * <p>
-	 * A {@link ResourceEvent} with type
-	 * {@link ResourceEvent#RESOURCE_CONTEXT_CREATED} will be sent.
+	 * A {@link ResourceContextEvent} with type
+	 * {@link ResourceContextEvent#RESOURCE_CONTEXT_CREATED} will be sent.
 	 * 
-	 * @param name
-	 *            The name identifying the context. Names must be unique within
-	 *            the framework instance.
-	 * @param template
-	 *            If a template is provided, the new resource context will
-	 *            inherit all resource monitoring settings (enabled monitors,
-	 *            thresholds) from the template.
+	 * @param name The name identifying the context. Names must be unique within
+	 *        the framework instance.
+	 * @param template If a template is provided, the new resource context will
+	 *        inherit all resource monitoring settings (enabled monitors,
+	 *        thresholds) from the template.
 	 * @return A new {@link ResourceContext} instance.
 	 */
 	public ResourceContext createContext(String name, ResourceContext template);

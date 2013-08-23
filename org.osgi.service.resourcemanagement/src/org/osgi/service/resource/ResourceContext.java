@@ -62,14 +62,15 @@ public interface ResourceContext {
 	/**
 	 * Adds a bundle to the resource context. The bundle will be a member of the
 	 * context until it is uninstalled, or explicitly removed from the context
-	 * with the {@link #removeBundle(Bundle, ResourceContext)} method.
+	 * with {@link #removeBundle(long)} method or
+	 * {@link #removeBundle(long, ResourceContext)} method.
 	 * <p>
 	 * Resources previously allocated by this bundle (in another resource
 	 * context) will not be moved to this resource context. The change applies
 	 * only for future allocations.
 	 * <p>
-	 * A {@link ResourceEvent} with type {@link ResourceEvent#BUNDLE_ADDED} will
-	 * be sent.
+	 * A {@link ResourceContextEvent} with type
+	 * {@link ResourceContextEvent#BUNDLE_ADDED} will be sent.
 	 * 
 	 * @param b The bundle to add to this resource context
 	 */
@@ -92,8 +93,8 @@ public interface ResourceContext {
 	 * Resources previously allocated by this bundle will not be removed from
 	 * the resource context. The change applies only for future allocations.
 	 * <p>
-	 * A {@link ResourceEvent} with type {@link ResourceEvent#BUNDLE_REMOVED}
-	 * will be sent.
+	 * A {@link ResourceContextEvent} with type
+	 * {@link ResourceContextEvent#BUNDLE_REMOVED} will be sent.
 	 * 
 	 * @param bundleId the identifier of the bundle to be removed from the
 	 *        Resource Context
@@ -148,8 +149,8 @@ public interface ResourceContext {
 	 * <code>destination</code> is <code>null</code>, these resources will no
 	 * longer be monitored.
 	 * <p>
-	 * A {@link ResourceEvent} with type
-	 * {@link ResourceEvent#RESOURCE_CONTEXT_DELETED} will be sent.
+	 * A {@link ResourceContextEvent} with type
+	 * {@link ResourceContextEvent#RESOURCE_CONTEXT_DELETED} will be sent.
 	 * 
 	 * @param destination The {@link ResourceContext} where the resources
 	 *        currently allocated by this resource context will be moved.

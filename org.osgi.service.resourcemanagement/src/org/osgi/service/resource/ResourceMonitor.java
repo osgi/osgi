@@ -25,10 +25,8 @@ package org.osgi.service.resource;
  * The <code>ResourceMonitor</code> object may be used to:
  * <ul>
  * <li>Enable/Disable the monitoring of the corresponding resource type for the
- * corresponding resource context
- * <li>View/Edit/Create/Remove the thresholds for this resource for this
- * resource context (see {@link ResourceThreshold}).
- * <li>View the current usage of the resource by this resource context
+ * corresponding resource context</li>
+ * <li>View the current usage of the resource by this resource context</li>
  * </ul>
  * 
  * <p>

@@ -28,7 +28,7 @@ public interface ResourceMonitorFactory {
 	 * the ResourceContext instance provided as argument (
 	 * {@link ResourceContext#addResourceMonitor(ResourceMonitor)} is called by
 	 * the factory). The newly ResourceMonitor instance is disabled. It can be
-	 * enabled by calling {@link ResourceMonitor#setMonitored(boolean)}.
+	 * enabled by calling {@link ResourceMonitor#enable()}.
 	 * 
 	 * @param resourceContext ResourceContext instance associated with the newly
 	 *        created ResourceMonitor instance
