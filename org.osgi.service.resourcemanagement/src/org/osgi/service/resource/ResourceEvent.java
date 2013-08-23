@@ -34,29 +34,34 @@ package org.osgi.service.resource;
 public class ResourceEvent {
 
 	/**
-	 * Type of ResourceEvent indicating a {@link ResourceThreshold} instance
-	 * goes to the NORMAL state.
+	 * Type of ResourceEvent indicating a threshold goes to the NORMAL state.
 	 */
 	public static final int	NORMAL						= 0;
 
 	/**
-	 * Type of ResourceEvent indicating a {@link ResourceThreshold} instance
-	 * goes to the WARNING state.
+	 * Type of ResourceEvent indicating a threshold goes to the WARNING state.
 	 */
 	public static final int	WARNING						= 1;
 
 	/**
-	 * Type of ResourceEvent indicating a {@link ResourceThreshold} instance
-	 * goes to the ERROR state.
+	 * Type of ResourceEvent indicating a threshold goes to the ERROR state.
 	 */
 	public static final int	ERROR						= 2;
 
-	private int				type;
-	private boolean			isUpperThrehsold;
-	private ResourceContext	resourceContext;
-	private Object			value;
+	private final int		type;
+	private final boolean			isUpperThrehsold;
+	private final ResourceContext	resourceContext;
+	private final Object			value;
 
-	public ResourceEvent(int pType, ResourceContext pContext, boolean pIsUpperThreshold, Object pValue) {
+	/**
+	 * Create a new ResourceEvent.
+	 * 
+	 * @param pType
+	 * @param pContext
+	 * @param pIsUpperThreshold
+	 * @param pValue
+	 */
+	public ResourceEvent(final int pType, final ResourceContext pContext, final boolean pIsUpperThreshold, final Object pValue) {
 		type = pType;
 		resourceContext = pContext;
 		isUpperThrehsold = pIsUpperThreshold;
@@ -100,8 +105,8 @@ public class ResourceEvent {
 
 
 	/**
-	 * Returns true if the {@link ResourceThreshold} triggering this event is an
-	 * upper threshold. This method is only used when {@link #getType()} returns
+	 * Returns true if the threshold triggering this event is an upper
+	 * threshold. This method is only used when {@link #getType()} returns
 	 * {@link #NORMAL}, {@link #WARNING} or {@link #ERROR}.
 	 * 
 	 * 

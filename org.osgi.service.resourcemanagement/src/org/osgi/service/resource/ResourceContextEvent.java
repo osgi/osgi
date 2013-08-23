@@ -4,6 +4,7 @@ import org.osgi.framework.Bundle;
 
 /**
  * 
+ * @Immutable
  */
 public class ResourceContextEvent {
 
@@ -33,25 +34,26 @@ public class ResourceContextEvent {
 	/**
 	 * A bundle has been removed from a {@link ResourceContext}
 	 * <p>
-	 * The {@link ResourceContext#removeBundle(Bundle, ResourceContext)} method
-	 * has been invoked, or the bundle has been uninstalled
+	 * {@link ResourceContext#removeBundle(long)} method or
+	 * {@link ResourceContext#removeBundle(long, ResourceContext)} method have
+	 * been invoked, or the bundle has been uninstalled
 	 */
 	public static final int	BUNDLE_REMOVED				= 3;
 
 	/**
 	 * event type.
 	 */
-	private int				type;
+	private final int				type;
 
 	/**
 	 * bundle.
 	 */
-	private Bundle			bundle;
+	private final long		bundleId;
 
 	/**
 	 * context.
 	 */
-	private ResourceContext	context;
+	private final ResourceContext	context;
 
 	/**
 	 * Create a new ResourceContextEvent. This constructor should be used when
@@ -61,9 +63,10 @@ public class ResourceContextEvent {
 	 * @param pType event type
 	 * @param pResourceContext context
 	 */
-	public ResourceContextEvent(int pType, ResourceContext pResourceContext) {
+	public ResourceContextEvent(final int pType, final ResourceContext pResourceContext) {
 		type = pType;
 		context = pResourceContext;
+		bundleId = -1;
 	}
 
 	/**
@@ -73,11 +76,12 @@ public class ResourceContextEvent {
 	 * 
 	 * @param pType event type
 	 * @param pResourceContext context
-	 * @param pBundle bundle
+	 * @param pBundleId bundle
 	 */
-	public ResourceContextEvent(int pType, ResourceContext pResourceContext, Bundle pBundle) {
-		this(pType, pResourceContext);
-		bundle = pBundle;
+	public ResourceContextEvent(final int pType, final ResourceContext pResourceContext, final long pBundleId) {
+		type = pType;
+		context = pResourceContext;
+		bundleId = pBundleId;
 	}
 
 
@@ -94,7 +98,7 @@ public class ResourceContextEvent {
 	 * 
 	 */
 	public int getType() {
-		return 0;
+		return type;
 	}
 
 	/**
@@ -103,12 +107,13 @@ public class ResourceContextEvent {
 	 * @return Resource Context.
 	 */
 	public ResourceContext getContext() {
-		return null;
+		return context;
 	}
 
 	/**
 	 * <p>
-	 * Retrieves the Bundle added to or removed from the Resource Context.
+	 * Retrieves the identifier of the bundle being added to or removed from the
+	 * Resource Context.
 	 * </p>
 	 * <p>
 	 * This method returns a valid value only when {@link #getType()} returns:
@@ -118,10 +123,10 @@ public class ResourceContextEvent {
 	 * </ul>
 	 * </p>
 	 * 
-	 * @return the bundle or null.
+	 * @return the bundle id or -1 (invalid value) .
 	 */
-	public Bundle getBundle() {
-		return null;
+	public long getBundleId() {
+		return bundleId;
 	}
 
 	public String toString() {
