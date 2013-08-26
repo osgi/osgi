@@ -121,8 +121,8 @@ public interface Configuration {
 	 * callback is delayed until aforementioned registration occurs.
 	 * 
 	 * <p>
-	 * Also initiates an asynchronous call to all {@link ConfigurationListener}s
-	 * with a {@link ConfigurationEvent#CM_UPDATED} event.
+	 * Also notifies all Configuration Listeners with a
+	 * {@link ConfigurationEvent#CM_UPDATED} event.
 	 * 
 	 * @param properties the new set of properties for this configuration
 	 * @throws IOException if update cannot be made persistent
@@ -144,8 +144,8 @@ public interface Configuration {
 	 * {@code deleted} method.
 	 * 
 	 * <p>
-	 * Also initiates an asynchronous call to all {@link ConfigurationListener}s
-	 * with a {@link ConfigurationEvent#CM_DELETED} event.
+	 * Also notifies all Configuration Listeners with a
+	 * {@link ConfigurationEvent#CM_DELETED} event.
 	 * 
 	 * @throws IOException If delete fails.
 	 * @throws IllegalStateException If this configuration has been deleted.
@@ -201,8 +201,8 @@ public interface Configuration {
 	 * visible then they must be updated with this configuration.
 	 * 
 	 * <p>
-	 * Also initiates an asynchronous call to all {@link ConfigurationListener}s
-	 * with a {@link ConfigurationEvent#CM_LOCATION_CHANGED} event.
+	 * Also notifies all Configuration Listeners with a
+	 * {@link ConfigurationEvent#CM_LOCATION_CHANGED} event.
 	 * 
 	 * @param location a location, region, or {@code null}
 	 * @throws IllegalStateException If this configuration has been deleted.

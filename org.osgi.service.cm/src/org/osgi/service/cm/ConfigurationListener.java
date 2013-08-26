@@ -20,7 +20,7 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Listener for Configuration Events. When a {@code ConfigurationEvent} is
- * fired, it is asynchronously delivered to a {@code ConfigurationListener}.
+ * fired, it is asynchronously delivered to all {@code ConfigurationListener}s.
  * 
  * <p>
  * {@code ConfigurationListener} objects are registered with the Framework

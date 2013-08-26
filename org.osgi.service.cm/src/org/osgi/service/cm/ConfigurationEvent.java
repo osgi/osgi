@@ -25,8 +25,7 @@ import org.osgi.framework.ServiceReference;
  * <p>
  * {@code ConfigurationEvent} objects are delivered to all registered
  * {@code ConfigurationListener} service objects. ConfigurationEvents must be
- * asynchronously delivered in chronological order with respect to each
- * listener.
+ * delivered in chronological order with respect to each listener.
  * 
  * <p>
  * A type code is used to identify the type of event. The following event types
