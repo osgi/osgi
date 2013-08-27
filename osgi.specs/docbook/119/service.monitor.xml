@@ -37,7 +37,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Status Variable</emphasis> – Application specific
+          <para><emphasis>Status Variable</emphasis> - Application specific
           variables that a <emphasis>Status Variable Provider</emphasis>
           publishes with a Monitorable service to the Monitor Admin
           service.Status Variable values can be <code>long</code>,
@@ -46,47 +46,48 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Status Variable Provider</emphasis> – A bundle which
+          <para><emphasis>Status Variable Provider</emphasis> - A bundle which
           has a number of Status Variables that it publishes with one or more
           Monitorable services.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Monitor Admin</emphasis> – Provides unified and
+          <para><emphasis>Monitor Admin</emphasis> - Provides unified and
           secure access to available Status Variables as well as providing a
           function to create monitoring jobs to monitor the Status
           Variables.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Monitorable</emphasis> – A service that is
+          <para><emphasis>Monitorable</emphasis> - A service that is
           registered by a Status Variable Provider to publish its Status
           Variables.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Monitor Job</emphasis> – An event or time based
+          <para><emphasis>Monitor Job</emphasis> - An event or time based
           query of a given set of Status Variables. When a monitored Status
           Variable is updated, or the timer expires, the Monitor Admin must
           generate an event via the Event Admin service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Local Administrator</emphasis> – A management
+          <para><emphasis>Local Administrator</emphasis> - A management
           application which uses the Monitor Admin service to query Status
           Variables and to initiate monitoring jobs.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Status Variable Name</emphasis> – The unique name,
+          <para><emphasis>Status Variable Name</emphasis> - The unique name,
           within a Monitorable service, of a Status Variable.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Status Variable Path</emphasis> – A string that
+          <para><emphasis>Status Variable Path</emphasis> - A string that
           uniquely identifies the Status Variable in an OSGi environment. It
           consists of the PID of the Monitorable service and the Status
-          Variable name separated by a slash.</para>
+          Variable name separated by a solidus (<code>'/'
+          \u002F</code>).</para>
         </listitem>
       </itemizedlist>
 
@@ -161,7 +162,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.monitor.Monitorable.getStatusVariableNames--"
-        xrefstyle="hyperlink"/> – Provides a list of the Status Variable
+        xrefstyle="hyperlink"/> - Provides a list of the Status Variable
         names. The status variables can subsequently be acquired with the
         <xref
         linkend="org.osgi.service.monitor.Monitorable.getStatusVariable-String-"
@@ -171,14 +172,14 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.monitor.Monitorable.getStatusVariable-String-"
-        xrefstyle="hyperlink"/> – Given the name of a Status Variable, return
+        xrefstyle="hyperlink"/> - Given the name of a Status Variable, return
         the <code>StatusVariable</code> object, if exists.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.monitor.Monitorable.resetStatusVariable-String-"
-        xrefstyle="hyperlink"/> – Reset the given Status Variable if there is
+        xrefstyle="hyperlink"/> - Reset the given Status Variable if there is
         a reasonable reset value. If the Status Variable could not be reset,
         <code>false</code> is returned. Otherwise <code>true</code> is
         returned. Resetting a Status Variable triggers a Monitor Event, as
@@ -188,7 +189,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.monitor.Monitorable.notifiesOnChange-String-"
-        xrefstyle="hyperlink"/> – Tells whether the given Status Variable
+        xrefstyle="hyperlink"/> - Tells whether the given Status Variable
         sends a notification when its value changes or when it is reset. This
         is further discussed in <xref linkend="i1444498"/>.</para>
       </listitem>
@@ -196,7 +197,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.monitor.Monitorable.getDescription-String-"
-        xrefstyle="hyperlink"/> – Provide a non-localized description of the
+        xrefstyle="hyperlink"/> - Provide a non-localized description of the
         given Status Variable.</para>
       </listitem>
     </itemizedlist>
@@ -343,7 +344,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.monitor.StatusVariable.TYPE_BOOLEAN"
-          xrefstyle="hyperlink"/> – A <code>boolean</code> value. The
+          xrefstyle="hyperlink"/> - A <code>boolean</code> value. The
           associated method to retrieve the value is <xref
           linkend="org.osgi.service.monitor.StatusVariable.getBoolean--"
           xrefstyle="hyperlink"/>. The corresponding constructor is <xref
@@ -354,7 +355,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.monitor.StatusVariable.TYPE_INTEGER"
-          xrefstyle="hyperlink"/> – A signed numeric value that fits in a Java
+          xrefstyle="hyperlink"/> - A signed numeric value that fits in a Java
           <code>int</code> type. The associated method to retrieve the value
           is <xref
           linkend="org.osgi.service.monitor.StatusVariable.getInteger--"
@@ -366,7 +367,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.monitor.StatusVariable.TYPE_FLOAT"
-          xrefstyle="hyperlink"/> – A floating point value that fits in a Java
+          xrefstyle="hyperlink"/> - A floating point value that fits in a Java
           <code>float</code> type. The associated method to retrieve the value
           is <xref
           linkend="org.osgi.service.monitor.StatusVariable.getFloat--"
@@ -378,7 +379,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.monitor.StatusVariable.TYPE_STRING"
-          xrefstyle="hyperlink"/> – A <code>String</code> object. The
+          xrefstyle="hyperlink"/> - A <code>String</code> object. The
           associated method to retrieve the value is <xref
           linkend="org.osgi.service.monitor.StatusVariable.getString--"
           xrefstyle="hyperlink"/>.The corresponding constructor is <xref
@@ -422,7 +423,7 @@
       <itemizedlist>
         <listitem>
           <para><xref linkend="org.osgi.service.monitor.StatusVariable.CM_CC"
-          xrefstyle="hyperlink"/> – A numeric counter whose value can only
+          xrefstyle="hyperlink"/> - A numeric counter whose value can only
           increase, except when the Status Variable is reset. An example of a
           CC is a variable which stores the number of incoming SMSs handled by
           the protocol driver since it was started or reset.</para>
@@ -431,7 +432,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.monitor.StatusVariable.CM_GAUGE"
-          xrefstyle="hyperlink"/> <emphasis> – </emphasis>A numeric counter
+          xrefstyle="hyperlink"/> <emphasis> - </emphasis>A numeric counter
           whose value can vary up or down. An example of a <code>GAUGE</code>
           is a variable which stores the current battery level percentage. The
           value of the Status Variable must be the absolute value not a
@@ -440,7 +441,7 @@
 
         <listitem>
           <para><xref linkend="org.osgi.service.monitor.StatusVariable.CM_DER"
-          xrefstyle="hyperlink"/> – (Discrete Event Registration) A status
+          xrefstyle="hyperlink"/> - (Discrete Event Registration) A status
           variable (numeric or string) which can change when a certain event
           happens in the system one or more times. The event which fires the
           change of the Status Variable is typically some event like the
@@ -453,7 +454,7 @@
 
         <listitem>
           <para><xref linkend="org.osgi.service.monitor.StatusVariable.CM_SI"
-          xrefstyle="hyperlink"/> – (Status Inspect) The most general status
+          xrefstyle="hyperlink"/> - (Status Inspect) The most general status
           variable which can be a string or numeric. An example of an SI is a
           string variable which contains the name of the currently logged in
           user.</para>
@@ -493,30 +494,30 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.monitor.MonitorAdmin.getStatusVariable-String-"
-          xrefstyle="hyperlink"/> – Return a Status Variable given a Status
+          xrefstyle="hyperlink"/> - Return a Status Variable given a Status
           Variable path. A path must have the following syntax:</para>
 
-          <programlisting>status-variable-path ::= pid ’/’ status-variable-name</programlisting>
+          <programlisting>status-variable-path ::= pid '/' status-variable-name</programlisting>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.monitor.MonitorAdmin.getStatusVariableNames-String-"
-          xrefstyle="hyperlink"/> – Returns the Status Variable names given
+          xrefstyle="hyperlink"/> - Returns the Status Variable names given
           the PID of a Monitorable service.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.monitor.MonitorAdmin.getStatusVariables-String-"
-          xrefstyle="hyperlink"/> – Returns an array of Status Variable
+          xrefstyle="hyperlink"/> - Returns an array of Status Variable
           objects given the PID of a Monitorable service.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.monitor.MonitorAdmin.resetStatusVariable-String-"
-          xrefstyle="hyperlink"/> – Reset the value of a Status
+          xrefstyle="hyperlink"/> - Reset the value of a Status
           Variable.</para>
         </listitem>
       </itemizedlist>
@@ -596,7 +597,7 @@ com.acme.sv.carots/*
         <listitem>
           <para><xref
           linkend="org.osgi.service.monitor.MonitorAdmin.startScheduledJob-String-String---int-int-"
-          xrefstyle="hyperlink"/> – Start a job based on a periodic
+          xrefstyle="hyperlink"/> - Start a job based on a periodic
           measurement. Both the period of measurements as well as the number
           of measurements can be given.</para>
         </listitem>
@@ -604,7 +605,7 @@ com.acme.sv.carots/*
         <listitem>
           <para><xref
           linkend="org.osgi.service.monitor.MonitorAdmin.startJob-String-String---int-"
-          xrefstyle="hyperlink"/> – Start a job based on notifications. The
+          xrefstyle="hyperlink"/> - Start a job based on notifications. The
           load on the Event Admin service can be minimized by specifying that
           only every n-th measurement must be reported. Status Variables used
           with this monitoring job must support notifications, otherwise an
@@ -747,18 +748,18 @@ com.acme.sv.carots/*
 
     <itemizedlist>
       <listitem>
-        <para><code>mon.monitorable.pid</code> – (<code>String</code>) The
+        <para><code>mon.monitorable.pid</code> - (<code>String</code>) The
         unique identifier of the Monitorable service which the changed Status
         Variable.</para>
       </listitem>
 
       <listitem>
-        <para><code>mon.statusvariable.name</code> – (<code>String</code>) The
+        <para><code>mon.statusvariable.name</code> - (<code>String</code>) The
         name of the changed status variable.</para>
       </listitem>
 
       <listitem>
-        <para><code>mon.listener.id</code> – (<code>String|String[ ]</code>)
+        <para><code>mon.listener.id</code> - (<code>String|String[ ]</code>)
         Name or names representing the initiators of any monitoring jobs in
         which the Status Variable was included. Listeners can use this field
         for filtering, so that they receive only events related to their own
@@ -769,27 +770,27 @@ com.acme.sv.carots/*
       </listitem>
 
       <listitem>
-        <para><code>mon.statusvariable.value</code> – (String) The value of
+        <para><code>mon.statusvariable.value</code> - (String) The value of
         the status variable in string format. The following methods must be
         used to format the <code>String</code> object.</para>
 
         <itemizedlist>
           <listitem>
-            <para><code>long</code> – <code>Long.toString(long)</code>.</para>
+            <para><code>long</code> - <code>Long.toString(long)</code>.</para>
           </listitem>
 
           <listitem>
-            <para><code>double</code> –
+            <para><code>double</code> -
             <code>Double.toString(double)</code>.</para>
           </listitem>
 
           <listitem>
-            <para><code>boolean</code> –
+            <para><code>boolean</code> -
             <code>Boolean.toString(boolean)</code>.</para>
           </listitem>
 
           <listitem>
-            <para><code>String</code> – No conversion</para>
+            <para><code>String</code> - No conversion</para>
           </listitem>
         </itemizedlist>
       </listitem>
@@ -811,9 +812,9 @@ com.acme.sv.carots/*
       identifies the Status Variable paths. It has the following
       format:</para>
 
-      <programlisting>widldcard-path ::= wildcard-pid ’/’ wildcard-name
-wildcard-pid   ::= pid ’*’  | ’*’
-wildcard-name  ::= unique-id ’*’  | ’*’</programlisting>
+      <programlisting>widldcard-path ::= wildcard-pid '/' wildcard-name
+wildcard-pid   ::= pid '*'  | '*'
+wildcard-name  ::= unique-id '*'  | '*'</programlisting>
 
       <para>Example:</para>
 
@@ -828,21 +829,21 @@ com.acme.foo/memory.free</programlisting>
         <listitem>
           <para><xref
           linkend="org.osgi.service.monitor.MonitorPermission.READ"
-          xrefstyle="hyperlink"/> –Reading of the value of the given Status
+          xrefstyle="hyperlink"/> -Reading of the value of the given Status
           Variables.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.monitor.MonitorPermission.RESET"
-          xrefstyle="hyperlink"/> – Resetting the given Status
+          xrefstyle="hyperlink"/> - Resetting the given Status
           Variables.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.monitor.MonitorPermission.PUBLISH"
-          xrefstyle="hyperlink"/> – Publishing a Status Variable. This does
+          xrefstyle="hyperlink"/> - Publishing a Status Variable. This does
           not forbid the Status Variable Provider to register the Monitorable.
           However, the Monitor Admin must not show a Status Variables to any
           caller when the Status Variable Provider has no permission to
@@ -852,7 +853,7 @@ com.acme.foo/memory.free</programlisting>
         <listitem>
           <para><xref
           linkend="org.osgi.service.monitor.MonitorPermission.STARTJOB"
-          xrefstyle="hyperlink"/> – Initiating monitoring jobs involving the
+          xrefstyle="hyperlink"/> - Initiating monitoring jobs involving the
           given Status Variables A minimal sampling interval can be optionally
           defined in the following form:</para>
 
@@ -869,7 +870,7 @@ com.acme.foo/memory.free</programlisting>
         <listitem>
           <para><xref
           linkend="org.osgi.service.monitor.MonitorPermission.SWITCHEVENTS"
-          xrefstyle="hyperlink"/> – Switch event sending on or off for the
+          xrefstyle="hyperlink"/> - Switch event sending on or off for the
           notification of value changes for the given Status Variables.</para>
         </listitem>
       </itemizedlist>

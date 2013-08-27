@@ -39,44 +39,44 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Name</emphasis> – the name of an attribute or
+        <para><emphasis>Name</emphasis> - the name of an attribute or
         directive</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Kind</emphasis> – Defines where the attribute or
+        <para><emphasis>Kind</emphasis> - Defines where the attribute or
         directive can be used</para>
 
         <itemizedlist>
           <listitem>
-            <para><code>CA</code> – Capability Attribute</para>
+            <para><code>CA</code> - Capability Attribute</para>
           </listitem>
 
           <listitem>
-            <para><code>CD</code> – Capability Directive</para>
+            <para><code>CD</code> - Capability Directive</para>
           </listitem>
 
           <listitem>
-            <para><code>RA</code> – Requirement Attribute</para>
+            <para><code>RA</code> - Requirement Attribute</para>
           </listitem>
 
           <listitem>
-            <para><code>RD</code> – Requirement Directive</para>
+            <para><code>RD</code> - Requirement Directive</para>
           </listitem>
         </itemizedlist>
       </listitem>
 
       <listitem>
-        <para><emphasis>M/O</emphasis> – Mandatory (<code>M</code>) or
+        <para><emphasis>M/O</emphasis> - Mandatory (<code>M</code>) or
         Optional (<code>O</code>).</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Type</emphasis> – The data Type</para>
+        <para><emphasis>Type</emphasis> - The data Type</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Syntax</emphasis> – Any syntax rules. The syntax
+        <para><emphasis>Syntax</emphasis> - Any syntax rules. The syntax
         refers in general to the syntaxes defined in <xref
         linkend="framework.general.syntax"/> and <xref
         linkend="framework.common.header.syntax"/> and later sections.</para>
@@ -84,7 +84,7 @@
     </itemizedlist>
 
     <para>Attributes on manifest headers that define capabilities are used as
-    matching attributes in the requirement’s filter and are available as the
+    matching attributes in the requirement's filter and are available as the
     attributes of a <code>Capability</code> object. Attributes on manifest
     headers that define requirements are translated to a conjunction of
     assertions in the filter that correspond to the semantics of their header.
@@ -138,7 +138,7 @@
 
             <entry><code>String</code></entry>
 
-            <entry><para><code>package-name</code></para><para><code> ( ’,’
+            <entry><para><code>package-name</code></para><para><code> ( ','
             package-name )*</code></para></entry>
 
             <entry><para>A list of packages used in calculation class space
@@ -154,7 +154,7 @@
 
             <entry><code>String</code></entry>
 
-            <entry><code>’resolve’ | &lt;any name&gt;</code></entry>
+            <entry><code>'resolve' | &lt;any name&gt;</code></entry>
 
             <entry><para>A name indicating if a resolve operation applies to
             this requirement. Default and only defined value is
@@ -170,7 +170,7 @@
 
             <entry><code>String</code></entry>
 
-            <entry><code>’mandatory’ | ’optional’</code></entry>
+            <entry><code>'mandatory' | 'optional'</code></entry>
 
             <entry><para>If <code>mandatory</code>, then this requirement must
             be satisfied before the resource is resolved. The default is
@@ -188,7 +188,7 @@
 
             <entry><code>filter</code></entry>
 
-            <entry><para>The given filter is matched against the capability’s
+            <entry><para>The given filter is matched against the capability's
             attributes to satisfy the requirement. A filter is optional, if no
             filter directive is specified the requirement always
             matches.</para></entry>
@@ -203,7 +203,7 @@
 
             <entry><code>String</code></entry>
 
-            <entry><code>’multiple’ | ’single’</code></entry>
+            <entry><code>'multiple' | 'single'</code></entry>
 
             <entry><para>Allow the requirement to be satisfied by just one
             capability or provide wires to any capability that satisfies the
@@ -219,10 +219,10 @@
 
             <entry><code>String</code></entry>
 
-            <entry><code>extended ( ’,’ extended )*</code></entry>
+            <entry><code>extended ( ',' extended )*</code></entry>
 
-            <entry><para>List of attribute names that the requirement’s filter
-            must assert to be equal to the values in the capability’s
+            <entry><para>List of attribute names that the requirement's filter
+            must assert to be equal to the values in the capability's
             attributes. </para> <para>This directive must only be used for the
             <code>osgi.wiring.*</code> namespaces and is forbidden in any
             other namespace.</para></entry>
@@ -329,11 +329,11 @@
 
             <entry><code>String</code></entry>
 
-            <entry><code>~(ws|’,’)+</code></entry>
+            <entry><code>~(ws|',')+</code></entry>
 
             <entry><para>The name of the execution environment. The name can
             contain any character except white space (as defined by Java) or
-            the comma (<code>’,’ \u002C</code>) character. </para></entry>
+            the comma (<code>',' \u002C</code>) character. </para></entry>
           </row>
 
           <row>
@@ -345,7 +345,7 @@
 
             <entry><para><code>List</code></para><para><code>&lt;Version&gt;</code></para></entry>
 
-            <entry><code>version ( ’,’ version )*</code></entry>
+            <entry><code>version ( ',' version )*</code></entry>
 
             <entry><para>A comma separated list of versions, comparisons must
             be done with version ordering because the version attribute must
@@ -564,9 +564,9 @@ Bundle B:
 
             <entry><code>String</code></entry>
 
-            <entry><para><code>’dynamic’
-            |</code></para><para><code>’mandatory’
-            |</code></para><para><code>’optional’</code></para></entry>
+            <entry><para><code>'dynamic'
+            |</code></para><para><code>'mandatory'
+            |</code></para><para><code>'optional'</code></para></entry>
 
             <entry><para>This directive is inherited from the default
             namespace but this namespace adds an additional value
@@ -684,7 +684,7 @@ Bundle B:
 
             <entry><code>String</code></entry>
 
-            <entry><code>’true’ | ’false’</code></entry>
+            <entry><code>'true' | 'false'</code></entry>
 
             <entry><para>Indicates if this is a singleton bundle, see <xref
             linkend="framework.module.bsn"/>.</para></entry>
@@ -699,7 +699,7 @@ Bundle B:
 
             <entry><code>String</code></entry>
 
-            <entry><code>’private’ | ’reexport’</code></entry>
+            <entry><code>'private' | 'reexport'</code></entry>
 
             <entry><para>See <xref
             linkend="framework.module.requirebundle"/>.</para></entry>
@@ -714,7 +714,7 @@ Bundle B:
     linkend="framework.module.requiringbundles"/>. A Bundle Wire in the
     <code>osgi.wiring.bundle</code> namespace does not imply the availability
     of <code>osgi.wiring.package</code> Bundle Wires that correspond to the
-    required bundle’s exported packages. If there is a need to know what
+    required bundle's exported packages. If there is a need to know what
     packages will become available then this must be deduced from the
     <code>osgi.wiring.package</code> capabilities of the required
     bundle.</para>
@@ -829,9 +829,9 @@ Bundle B:
 
             <entry><code>String</code></entry>
 
-            <entry><para><code>’always’
-            |</code></para><para><code>’resolve-time’
-            |</code></para><para><code>’never’</code></para></entry>
+            <entry><para><code>'always'
+            |</code></para><para><code>'resolve-time'
+            |</code></para><para><code>'never'</code></para></entry>
 
             <entry><para>Indicates how, or if, a fragment can attach to this
             host. This capability is defined on the Bundle-SymbolicName header
@@ -848,8 +848,8 @@ Bundle B:
 
             <entry><code>String</code></entry>
 
-            <entry><para><code>’framework’
-            |</code></para><para><code>’bootclasspath’</code></para></entry>
+            <entry><para><code>'framework'
+            |</code></para><para><code>'bootclasspath'</code></para></entry>
 
             <entry><para>Indicates if the requiring fragment bundle is a
             framework or boot class path extension. See <xref
@@ -965,7 +965,7 @@ Bundle B:
 
             <entry><para><code>osgi.bundle
             |</code></para><para><code>osgi.fragment
-            |</code></para><para><code>’unknown’
+            |</code></para><para><code>'unknown'
             |</code></para><para><code>&lt;any&gt;</code></para></entry>
 
             <entry><para>The type of the resource</para></entry>
@@ -994,7 +994,7 @@ Bundle B:
 
             <entry><code>String</code></entry>
 
-            <entry><code>’true’ |’false’</code></entry>
+            <entry><code>'true' |'false'</code></entry>
 
             <entry><para>If this resource is a singleton.</para></entry>
           </row>
@@ -1101,15 +1101,15 @@ Bundle B:
 
       <itemizedlist>
         <listitem>
-          <para><code>osgi.identity</code> – The name of the resource.</para>
+          <para><code>osgi.identity</code> - The name of the resource.</para>
         </listitem>
 
         <listitem>
-          <para><code>type</code> – The type of the resource.</para>
+          <para><code>type</code> - The type of the resource.</para>
         </listitem>
 
         <listitem>
-          <para><code>version</code> – The version of the resource.</para>
+          <para><code>version</code> - The version of the resource.</para>
         </listitem>
       </itemizedlist>
 
@@ -1125,17 +1125,17 @@ Bundle B:
 
       <itemizedlist>
         <listitem>
-          <para><code>source</code>s – An archive containing the source code
+          <para><code>source</code>s - An archive containing the source code
           in the same directory layout as this resource.</para>
         </listitem>
 
         <listitem>
-          <para><code>javadoc</code> – An archive containing the Javadoc in
+          <para><code>javadoc</code> - An archive containing the Javadoc in
           the same directory layout as this resource</para>
         </listitem>
 
         <listitem>
-          <para>* – Any other names</para>
+          <para>* - Any other names</para>
         </listitem>
       </itemizedlist>
 

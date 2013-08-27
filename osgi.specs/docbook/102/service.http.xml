@@ -33,14 +33,14 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Registering servlets</emphasis> – A servlet is a Java
+        <para><emphasis>Registering servlets</emphasis> - A servlet is a Java
         object which implements the Java Servlet API. Registering a servlet in
         the Framework gives it control over some part of the Http Service URI
         name-space.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Registering resources</emphasis> – Registering a
+        <para><emphasis>Registering resources</emphasis> - Registering a
         resource allows HTML files, image files, and other static resources to
         be made visible in the Http Service URI name-space by the requesting
         bundle.</para>
@@ -76,13 +76,13 @@
       <itemizedlist>
         <listitem>
           <para><emphasis><xref linkend="org.osgi.service.http.HttpContext"
-          xrefstyle="hyperlink"/></emphasis> – Allows bundles to provide
+          xrefstyle="hyperlink"/></emphasis> - Allows bundles to provide
           information for a servlet or resource registration.</para>
         </listitem>
 
         <listitem>
           <para><emphasis><xref linkend="org.osgi.service.http.HttpService"
-          xrefstyle="hyperlink"/></emphasis> – Allows other bundles in the
+          xrefstyle="hyperlink"/></emphasis> - Allows other bundles in the
           Framework to dynamically register and unregister resources and
           servlets into the Http Service URI name-space.</para>
         </listitem>
@@ -90,7 +90,7 @@
         <listitem>
           <para><emphasis><xref
           linkend="org.osgi.service.http.NamespaceException"
-          xrefstyle="hyperlink"/></emphasis> – Is thrown to indicate an error
+          xrefstyle="hyperlink"/></emphasis> - Is thrown to indicate an error
           with the caller's request to register a servlet or resource into the
           Http Service URI name-space.</para>
         </listitem>
@@ -122,7 +122,7 @@
     <para>For example, if the Http Service implementation is listening to port
     80 on the machine <code>www.acme.com</code> and the <code>Servlet</code>
     object is registered with the name <code>"/servlet"</code>, then the
-    <code>Servlet</code> object’s <code>service</code> method is called when
+    <code>Servlet</code> object's <code>service</code> method is called when
     the following URL is used from a web browser:</para>
 
     <programlisting>http://www.acme.com/servlet?name=bugs</programlisting>
@@ -156,7 +156,7 @@
 
     <para><code>Servlet</code> objects are initialized by the Http Service
     when they are registered and bound to that specific Http Service. The
-    initialization is done by calling the <code>Servlet</code> object’s
+    initialization is done by calling the <code>Servlet</code> object's
     <code>Servlet.init(ServletConfig)</code> method. The
     <code>ServletConfig</code> parameter provides access to the initialization
     parameters specified when the <code>Servlet</code> object was
@@ -238,7 +238,7 @@ getHttpService().unregister("/servletAlias");
 
     <para>The first parameter is the external alias under which the resource
     is registered with the Http Service. The second parameter is an internal
-    prefix to map this resource to the bundle’s name-space. When a request is
+    prefix to map this resource to the bundle's name-space. When a request is
     received, the <code>HttpService</code> object must remove the external
     alias from the URI, replace it with the internal prefix, and call the
     <code>getResource(String)</code> method with this new name on the
@@ -253,7 +253,7 @@ getHttpService().unregister("/servletAlias");
     <para>This return type was chosen because it matches the return type of
     the <code>java.lang.Class.getResource(String resource)</code> method. This
     method can retrieve resources directly from the same place as the one from
-    which the class was loaded – often a package directory in the JAR file of
+    which the class was loaded - often a package directory in the JAR file of
     the bundle. This method makes it very convenient to retrieve resources
     from the bundle that are contained in the package.</para>
 
@@ -302,7 +302,7 @@ getHttpService().unregister("/files");
 
     <para>In the example, a request for
     <code>http://www.acme.com/files/myfile.html</code> must map to the name
-    "<code>com/acme/www/myfile.html"</code> which is in the bundle’s JAR
+    "<code>com/acme/www/myfile.html"</code> which is in the bundle's JAR
     file.</para>
 
     <para>More sophisticated implementations of the
@@ -326,7 +326,7 @@ getHttpService().unregister("/files");
     xrefstyle="hyperlink"/> method and use its return value as the
     <code>HttpContext</code> argument for the <code>registerResources</code>
     method. The default implementation must map the resource request to the
-    bundle’s resource, using <code>Bundle.getResource(String)</code>. In the
+    bundle's resource, using <code>Bundle.getResource(String)</code>. In the
     case of the previous example, however, the internal name must now specify
     the full path to the directory containing the resource files in the JAR
     file. No automatic prefixing of the package name is done.</para>
@@ -421,7 +421,7 @@ getHttpService().unregister("/files");
     register the exactly the same alias, the second caller must receive a
     <code>NamespaceException</code> and its resource or servlet must
     <emphasis>not</emphasis> be registered. It could, however, register a
-    similar alias – for example, "<code>/fudd/bugs"</code>, as long as no
+    similar alias - for example, "<code>/fudd/bugs"</code>, as long as no
     other registration for this alias already exists.</para>
 
     <para>The following table shows some examples of the usage of the
@@ -582,8 +582,9 @@ getHttpService().registerServlet(
     multipart, and message) followed by a "/" and a specific media type, as in
     the example, <code>"text/html"</code> for HTML formatted text files. A
     MIME type string can be followed by additional specifiers by separating
-    <code>key=value</code> pairs with a ’;’. These specifiers can be used, for
-    example, to define character sets as follows:</para>
+    <code>key=value</code> pairs with a semicolon (<code>';' \u003B</code>).
+    These specifiers can be used, for example, to define character sets as
+    follows:</para>
 
     <programlisting>text/plain ; charset=iso-8859-1</programlisting>
 
@@ -764,7 +765,7 @@ getHttpService().registerServlet(
         <code>ServletRequest.getScheme()</code> method. This method returns,
         for example, "<code>https</code>" for an SSL connection; the
         <code>handleSecurity</code> method can use this and other information
-        to decide if the connection’s security level is acceptable. If not,
+        to decide if the connection's security level is acceptable. If not,
         the <code>handleSecurity</code> method should set the status to
         <code>HttpServletResponse.SC_FORBIDDEN</code> (403) and return
         <code>false</code>.</para>
@@ -938,13 +939,13 @@ getHttpService().registerServlet(
 
     <itemizedlist>
       <listitem>
-        <para><code>org.osgi.service.http.port</code> – This property
+        <para><code>org.osgi.service.http.port</code> - This property
         specifies the port used for servlets and resources accessible via
         HTTP. The default value for this property is 80.</para>
       </listitem>
 
       <listitem>
-        <para><code>org.osgi.service.http.port.secure</code> – This property
+        <para><code>org.osgi.service.http.port.secure</code> - This property
         specifies the port used for servlets and resources accessible via
         HTTPS. The default value for this property is 443.</para>
       </listitem>

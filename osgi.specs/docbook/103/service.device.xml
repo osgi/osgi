@@ -55,32 +55,32 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Embedded Devices</emphasis> – OSGi bundles will
+          <para><emphasis>Embedded Devices</emphasis> - OSGi bundles will
           likely run in embedded devices. This environment implies limited
           possibility for user interaction, and low-end devices will probably
           have resource limitations.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Remote Administration</emphasis> – OSGi environments
+          <para><emphasis>Remote Administration</emphasis> - OSGi environments
           must support administration by a remote service provider.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Vendor Neutrality</emphasis> – OSGi-compliant driver
+          <para><emphasis>Vendor Neutrality</emphasis> - OSGi-compliant driver
           bundles will be supplied by different vendors; each driver bundle
           must be well-defined, documented, and replaceable.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Continuous Operation</emphasis> – OSGi environments
+          <para><emphasis>Continuous Operation</emphasis> - OSGi environments
           will be running for extended periods without being restarted,
           possibly continuously, requiring stable operation and stable
           resource consumption.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Dynamic Updates</emphasis> – As much as possible,
+          <para><emphasis>Dynamic Updates</emphasis> - As much as possible,
           driver bundles must be individually replaceable without affecting
           unrelated bundles. In particular, the process of updating a bundle
           should not require a restart of the whole OSGi Framework or disrupt
@@ -94,40 +94,40 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Hot-Plugging</emphasis> – Plugging and unplugging of
+          <para><emphasis>Hot-Plugging</emphasis> - Plugging and unplugging of
           devices at any time if the underlying hardware and drivers allow
           it.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Legacy Systems</emphasis> – Device technologies
+          <para><emphasis>Legacy Systems</emphasis> - Device technologies
           which do not implement the automatic detection of plugged and
           unplugged devices.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Dynamic Device Driver Loading</emphasis> – Loading
+          <para><emphasis>Dynamic Device Driver Loading</emphasis> - Loading
           new driver bundles on demand with no prior device-specific knowledge
           of the Device service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Multiple Device Representations</emphasis> – Devices
+          <para><emphasis>Multiple Device Representations</emphasis> - Devices
           to be accessed from multiple levels of abstraction.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Deep Trees</emphasis> – Connections of devices in a
+          <para><emphasis>Deep Trees</emphasis> - Connections of devices in a
           tree of mixed network technologies of arbitrary depth.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Topology Independence</emphasis> – Separation of the
+          <para><emphasis>Topology Independence</emphasis> - Separation of the
           interfaces of a device from where and how it is attached.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Complex Devices</emphasis> – Multifunction devices
+          <para><emphasis>Complex Devices</emphasis> - Multifunction devices
           and devices that have multiple configurations.</para>
         </listitem>
       </itemizedlist>
@@ -152,35 +152,35 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Device Manager</emphasis> – The bundle that controls
+          <para><emphasis>Device Manager</emphasis> - The bundle that controls
           the initiation of the attachment process behind the scenes.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Device Category</emphasis> – Defines how a Driver
+          <para><emphasis>Device Category</emphasis> - Defines how a Driver
           service and a Device service can cooperate.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Driver</emphasis> – Competes for attaching Device
+          <para><emphasis>Driver</emphasis> - Competes for attaching Device
           services of its recognized device category. See <xref
           linkend="i1282334"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Device</emphasis> – A representation of a physical
+          <para><emphasis>Device</emphasis> - A representation of a physical
           device or other entity that can be attached by a Driver service. See
           <xref linkend="i1292342"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>DriverLocator</emphasis> – Assists in locating
+          <para><emphasis>DriverLocator</emphasis> - Assists in locating
           bundles that provide a Driver service. See <xref
           linkend="i1292350"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>DriverSelector</emphasis> – Assists in selecting
+          <para><emphasis>DriverSelector</emphasis> - Assists in selecting
           which Driver service is best suited to a Device service. See <xref
           linkend="i1286950"/>.</para>
         </listitem>
@@ -332,7 +332,7 @@
         <listitem>
           <para><code><xref
           linkend="org.osgi.service.device.Constants.DEVICE_CATEGORY"
-          xrefstyle="hyperlink"/></code> – A marker property indicating that
+          xrefstyle="hyperlink"/></code> - A marker property indicating that
           this service must be regarded as a Device service by the device
           manager. Its value is of type <code>String[]</code>, and its meaning
           is defined in the associated device category specification.</para>
@@ -341,14 +341,14 @@
         <listitem>
           <para><code><xref
           linkend="org.osgi.service.device.Constants.DEVICE_DESCRIPTION"
-          xrefstyle="hyperlink"/></code> – Describes the device to an end
+          xrefstyle="hyperlink"/></code> - Describes the device to an end
           user. Its value is of type <code>String</code>.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.device.Constants.DEVICE_SERIAL"
-          xrefstyle="hyperlink"/> – A unique serial number for this device. If
+          xrefstyle="hyperlink"/> - A unique serial number for this device. If
           the device hardware contains a serial number, the driver bundle is
           encouraged to specify it as this property. Different Device services
           representing the same physical hardware at different abstraction
@@ -358,7 +358,7 @@
         </listitem>
 
         <listitem>
-          <para><code>service.pid</code> – Service Persistent ID (PID),
+          <para><code>service.pid</code> - Service Persistent ID (PID),
           defined in <code>org.osgi.framework.Constants</code>. Device
           services should set this property. It must be unique among all
           registered services. Even different abstraction levels of the same
@@ -449,7 +449,7 @@
 
     <para>This specification is limited to defining the guidelines for device
     category definitions only. Device categories may be defined by the OSGi
-    organization or by external specification bodies – for example, when these
+    organization or by external specification bodies - for example, when these
     bodies are associated with a specific device technology.</para>
 
     <section>
@@ -847,7 +847,7 @@
         port.</para>
 
         <para>Although each driver bundle should perform discovery on its own,
-        a driver for a non-discoverable serial port requires external help –
+        a driver for a non-discoverable serial port requires external help -
         either through a user interface or by allowing the Configuration Admin
         service to configure it.</para>
 
@@ -951,7 +951,7 @@
 
         <para>For example, a vendor ACME can implement one driver bundle that
         specializes in recognizing all of the devices the vendor produces. The
-        referring driver bundle does not contain code to control the device –
+        referring driver bundle does not contain code to control the device -
         it contains only sufficient logic to recognize the assortment of
         devices. This referring driver can be small, yet can still identify a
         large product line. This approach can drastically reduce the amount of
@@ -1152,7 +1152,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.device.Driver.match-ServiceReference-"
-          xrefstyle="hyperlink"/> – This method is called by the device
+          xrefstyle="hyperlink"/> - This method is called by the device
           manager to find out how well this Driver service matches the Device
           service as indicated by the <code>ServiceReference</code> argument.
           The value returned here is specific for a device category. If this
@@ -1169,7 +1169,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.device.Driver.attach-ServiceReference-"
-          xrefstyle="hyperlink"/> – If the device manager decides that a
+          xrefstyle="hyperlink"/> - If the device manager decides that a
           Driver service should be attached to a Device service, it must call
           this method on the Driver service object. Once this method is
           called, the Device service is regarded as attached to that Driver
@@ -1251,7 +1251,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.device.DriverLocator.findDrivers-Dictionary-"
-          xrefstyle="hyperlink"/> – This method returns an array of driver IDs
+          xrefstyle="hyperlink"/> - This method returns an array of driver IDs
           that potentially match a service described by the properties in the
           <code>Dictionary</code> object. A driver ID is the
           <code>String</code> object that is registered by a Driver service
@@ -1261,7 +1261,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.device.DriverLocator.loadDriver-String-"
-          xrefstyle="hyperlink"/> – This method returns an
+          xrefstyle="hyperlink"/> - This method returns an
           <code>InputStream</code> object that can be used to download the
           bundle containing the Driver service as specified by the driver ID
           argument. If the Driver Locator service cannot download such a
@@ -1542,9 +1542,9 @@ class SerialWidget extends ServiceTracker
               <entry><para>For each Driver service, except those on the
               exclusion list, call its <code>Driver.match</code> method,
               passing the <code>ServiceReference</code> object to the Device
-              service. </para><para>Collect all successful matches – that is,
+              service. </para><para>Collect all successful matches - that is,
               those whose return values are greater than
-              <code>Device.MATCH_NONE</code> – in a list of active matches. A
+              <code>Device.MATCH_NONE</code> - in a list of active matches. A
               match call that throws an exception is considered unsuccessful
               and is not added to the list.</para></entry>
             </row>
@@ -1587,7 +1587,7 @@ class SerialWidget extends ServiceTracker
             <row>
               <entry><para>F</para></entry>
 
-              <entry><para>The selected Driver service’s <code>attach</code>
+              <entry><para>The selected Driver service's <code>attach</code>
               method is called. If the <code>attach</code> method returns
               <code>null</code>, the Device service has been successfully
               attached. If the attach method returns a <code>String</code>
@@ -1674,7 +1674,7 @@ class SerialWidget extends ServiceTracker
         <listitem>
           <para>The device manager may delay loading a driver bundle until it
           is needed. For example, a delay could occur when that
-          <code>DRIVER_ID</code>’s match values are cached.</para>
+          <code>DRIVER_ID</code>'s match values are cached.</para>
         </listitem>
 
         <listitem>

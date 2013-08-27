@@ -42,18 +42,18 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>OSGi Service Model</emphasis> – How clients interact
+        <para><emphasis>OSGi Service Model</emphasis> - How clients interact
         with JNDI when running inside an OSGi Framework.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>JNDI Provider Model</emphasis> – How JNDI providers
+        <para><emphasis>JNDI Provider Model</emphasis> - How JNDI providers
         can advertise their existence so they are available to OSGi and
         traditional clients.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Traditional Model</emphasis> – How traditional JNDI
+        <para><emphasis>Traditional Model</emphasis> - How traditional JNDI
         applications and providers can continue to work in an OSGi Framework
         without needing to be rewritten when certain precautions are
         taken.</para>
@@ -65,28 +65,28 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Naming Service</emphasis> – Provide an integration
+          <para><emphasis>Naming Service</emphasis> - Provide an integration
           model for JNDI API clients and providers.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Flexible</emphasis> – Provide a standard mechanism
+          <para><emphasis>Flexible</emphasis> - Provide a standard mechanism
           for publishing and locating JNDI providers.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Compatibility</emphasis> – Support the traditional
+          <para><emphasis>Compatibility</emphasis> - Support the traditional
           JNDI programming model used by Java SE and Java EE clients.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Service Based</emphasis> – Provide a service model
+          <para><emphasis>Service Based</emphasis> - Provide a service model
           that clients and providers can use to leverage JNDI
           facilities.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Migration</emphasis> – Provide a mechanism to access
+          <para><emphasis>Migration</emphasis> - Provide a mechanism to access
           OSGi services from a JNDI context.</para>
         </listitem>
       </itemizedlist>
@@ -97,40 +97,40 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>JNDI Implementation</emphasis> – The Implementer of
+          <para><emphasis>JNDI Implementation</emphasis> - The Implementer of
           the JNDI Context Manager, JNDI Provider Admin, and setter of the
           JNDI static singletons.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>JNDI Client </emphasis>– Any code running within an
+          <para><emphasis>JNDI Client</emphasis> - Any code running within an
           OSGi bundle that needs to use JNDI.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>JNDI Context Manager </emphasis> – A service that
+          <para><emphasis>JNDI Context Manager </emphasis> - A service that
           allows clients to obtain Contexts via a service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>JNDI Provider Admin </emphasis>– A service that
+          <para><emphasis>JNDI Provider Admin</emphasis> - A service that
           allows the conversion of objects for providers.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>JNDI Provider </emphasis>– Provides a Context
+          <para><emphasis>JNDI Provider</emphasis> - Provides a Context
           implementation.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Context</emphasis> – A Context abstracts a
+          <para><emphasis>Context</emphasis> - A Context abstracts a
           namespace. Implementations are provided by JNDI providers and the
           Contexts are used by JNDI clients. The corresponding interface is
           <code>javax.naming.Context</code>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Dir Context</emphasis> – A sub-type of
+          <para><emphasis>Dir Context</emphasis> - A sub-type of
           <code>Context</code> that provides mechanisms for examining and
           updating the attributes of an object in a directory structure, and
           for performing searches in an hierarchical naming systems like LDAP.
@@ -139,7 +139,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Initial Context Factory</emphasis> – A factory for
+          <para><emphasis>Initial Context Factory</emphasis> - A factory for
           creating instances of <code>Context</code> objects. This factory is
           used to integrate new JNDI Providers. In general, a single Initial
           Context Factory constructs <code>Context</code> objects for a single
@@ -148,7 +148,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Initial Context Factory Builder</emphasis> – A
+          <para><emphasis>Initial Context Factory Builder</emphasis> - A
           factory for <code>InitialContextFactory</code> objects. A single
           Initial Context Factory Builder can construct
           <code>InitialContextFactory</code> objects for different types of
@@ -157,20 +157,20 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Object Factory</emphasis> – Used in conversion of
+          <para><emphasis>Object Factory</emphasis> - Used in conversion of
           objects. The corresponding interface is
           <code>javax.naming.spi.ObjectFactory</code>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Dir Object Factory</emphasis> – An Object Factory
+          <para><emphasis>Dir Object Factory</emphasis> - An Object Factory
           that takes attribute information for object conversion. The
           corresponding interface is
           <code>javax.naming.spi.DirObjectFactory</code>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Object Factory Builder</emphasis> – A factory for
+          <para><emphasis>Object Factory Builder</emphasis> - A factory for
           <code>ObjectFactory</code> objects. A single Object Factory Builder
           can construct <code>ObjectFactory</code> instances for different
           types of conversions. The corresponding interface is
@@ -178,7 +178,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Reference</emphasis> – A description of an object
+          <para><emphasis>Reference</emphasis> - A description of an object
           that can be turned into an object through an Object Factory. The
           associated <code>Referenceable</code> interface implemented on an
           object indicates that it can provide a <code>Reference</code>
@@ -222,7 +222,7 @@ javax.naming.directory</programlisting>
       can be asked for a Context based on environment properties. The
       environment properties are based on an optional argument in the
       <code>newInitialContext</code> method, the Java System properties, and
-      an optional resource in the caller’s bundle.</para>
+      an optional resource in the caller's bundle.</para>
 
       <para>These environment properties can specify an implementation class
       name for a factory that can create a <code>Context</code> object. If
@@ -255,8 +255,8 @@ javax.naming.directory</programlisting>
       in a Context implementation. Reference objects must be converted to
       their corresponding object when retrieved from a Context.</para>
 
-      <para>During the client’s use of a Context it is possible that its
-      provider’s service is unregistered. In this case the JNDI Context
+      <para>During the client's use of a Context it is possible that its
+      provider's service is unregistered. In this case the JNDI Context
       Manager must release the backing Context. If the initial Context is used
       and no backing Context is available, the JNDI Context Manager must
       re-create a new Context, if possible. Otherwise a Naming Exception is
@@ -362,7 +362,7 @@ javax.naming.directory</programlisting>
       <code>Context</code> interface methods to the backing
       <code>Context</code> object. However, it provides a special URL lookup
       behavior for names that are formed like URLs, that is, names that
-      contain a colon (<code>’:’ \u003A</code>) character. This behavior is
+      contain a colon (<code>':' \u003A</code>) character. This behavior is
       called a <emphasis>URL lookup</emphasis>.</para>
 
       <para>URL lookups are not delegated to the backing Context but are
@@ -463,13 +463,13 @@ javax.naming.directory</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>setObjectFactoryBuilder(ObjectFactoryBuilder)</code> – A
+          <para><code>setObjectFactoryBuilder(ObjectFactoryBuilder)</code> - A
           hook to provide <code>ObjectFactory</code> objects.</para>
         </listitem>
 
         <listitem>
           <para><code>setInitialContextFactoryBuilder(InitialContextFactoryBuilder)</code>
-          – A hook to provide <code>InitialContextFactory</code> objects. This
+          - A hook to provide <code>InitialContextFactory</code> objects. This
           hook is consulted to create a <code>Context</code> object that will
           be associated with an <code>InitialContext</code> object the client
           creates.</para>
@@ -496,22 +496,22 @@ javax.naming.directory</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>LDAP</emphasis> – Lightweight Directory Access
+          <para><emphasis>LDAP</emphasis> - Lightweight Directory Access
           Protocol (LDAP) service provider</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>COS</emphasis> – Corba Object Service (COS) naming
+          <para><emphasis>COS</emphasis> - Corba Object Service (COS) naming
           service provider</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>RMI</emphasis> – Remote Method Invocation (RMI)
+          <para><emphasis>RMI</emphasis> - Remote Method Invocation (RMI)
           Registry service provider</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>DNS</emphasis> – Domain Name System (DNS) service
+          <para><emphasis>DNS</emphasis> - Domain Name System (DNS) service
           provider</para>
         </listitem>
       </itemizedlist>
@@ -531,7 +531,7 @@ javax.naming.directory</programlisting>
     with the available JNDI Providers. This service replaces the approach
     where the creation of a new <code>InitialContext</code> object provided
     the client with access to an <code>InitialContext</code> object that was
-    backed by a JNDI Provider’s Context.</para>
+    backed by a JNDI Provider's Context.</para>
 
     <para>The <code>JNDIContextManager</code> interface defines the following
     methods for obtaining <code>Context</code> objects:</para>
@@ -540,14 +540,14 @@ javax.naming.directory</programlisting>
       <listitem>
         <para><xref
         linkend="org.osgi.service.jndi.JNDIContextManager.newInitialContext--"
-        xrefstyle="hyperlink"/> – Obtain a <code>Context</code> object using
+        xrefstyle="hyperlink"/> - Obtain a <code>Context</code> object using
         the default environment properties.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.jndi.JNDIContextManager.newInitialContext-Map-"
-        xrefstyle="hyperlink"/> – Get a <code>Context</code> object using the
+        xrefstyle="hyperlink"/> - Get a <code>Context</code> object using the
         default environment properties merged with the given
         properties.</para>
       </listitem>
@@ -555,14 +555,14 @@ javax.naming.directory</programlisting>
       <listitem>
         <para><xref
         linkend="org.osgi.service.jndi.JNDIContextManager.newInitialDirContext--"
-        xrefstyle="hyperlink"/> – Get a <code>DirContext</code> object using a
+        xrefstyle="hyperlink"/> - Get a <code>DirContext</code> object using a
         default environment properties.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.jndi.JNDIContextManager.newInitialDirContext-Map-"
-        xrefstyle="hyperlink"/> –Get a <code>DirContext</code> object using
+        xrefstyle="hyperlink"/> -Get a <code>DirContext</code> object using
         the default environment properties merged with the given
         properties.</para>
       </listitem>
@@ -575,7 +575,7 @@ javax.naming.directory</programlisting>
     is that it implements the <code>Context</code> interface.</para>
 
     <para>This <code>Context</code> object is a facade for the context that is
-    created by the JNDI Provider. This JNDI Provider’s Context is called the
+    created by the JNDI Provider. This JNDI Provider's Context is called the
     <emphasis>backing Context</emphasis>. This is similar to the behavior of
     the <code>InitialContext</code> class. However, in this specification, the
     facade can change or loose the backing Context due to the dynamics of the
@@ -848,7 +848,7 @@ javax.naming.directory</programlisting>
         <para><link
         linkend="org.osgi.service.jndi.JNDIProviderAdmin.getObjectInstance-Object-javax.naming.Name-javax.naming.Context-Map-"
         xrefstyle="hyperlink">getObjectInstance(Object,Name,Context,Map)</link>
-        – Used by Context implementations to convert a description object to
+        - Used by Context implementations to convert a description object to
         another object.</para>
       </listitem>
 
@@ -856,7 +856,7 @@ javax.naming.directory</programlisting>
         <para><link
         linkend="org.osgi.service.jndi.JNDIProviderAdmin.getObjectInstance-Object-javax.naming.Name-javax.naming.Context-Map-javax.naming.directory.Attributes-"
         xrefstyle="hyperlink">getObjectInstance(Object,Name,Context,Map,Attributes)</link>
-        – Used by a Dir Context implementations to convert a description
+        - Used by a Dir Context implementations to convert a description
         object to another object.</para>
       </listitem>
     </itemizedlist>
@@ -887,14 +887,14 @@ javax.naming.directory</programlisting>
       <listitem>
         <para>If a factory class name is specified, the JNDI Provider Admin
         service uses its own Bundle Context to search for a service registered
-        under the Reference’s factory class name. If a matching Object Factory
+        under the Reference's factory class name. If a matching Object Factory
         is found then it is used to create the object from the
         <code>Reference</code> object and the algorithm stops here.</para>
       </listitem>
 
       <listitem xml:id="i3112861">
         <para>If no factory class name is specified, iterate over all the
-        Reference object’s <code>StringRefAddrs</code> objects with the
+        Reference object's <code>StringRefAddrs</code> objects with the
         address type of <code>URL</code>. For each matching address type, use
         the value to find a matching URL Context, see <xref
         linkend="i3116133"/>, and use it to recreate the object. See the
@@ -998,14 +998,14 @@ javax.naming.directory</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Implementation Class</emphasis> – An Initial Context
+          <para><emphasis>Implementation Class</emphasis> - An Initial Context
           Factory provider must register a service under the name of the
           implementation class. This allows the JNDI Context Manager to find
           implementations specified in the environment properties.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Initial Context Factory</emphasis> – As a general
+          <para><emphasis>Initial Context Factory</emphasis> - As a general
           Initial Context Factory. If registered as such, it can be consulted
           for a default Initial Context. Implementations must be careful to
           only return a Context when the environment properties are
@@ -1057,7 +1057,7 @@ javax.naming.directory</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Implementation Class</emphasis> – A service
+          <para><emphasis>Implementation Class</emphasis> - A service
           registered under its implementation class can be leveraged by a
           description that is a <code>Reference</code> object. Such an object
           can contain the name of the factory class. The implementation class
@@ -1066,13 +1066,13 @@ javax.naming.directory</programlisting>
         </listitem>
 
         <listitem>
-          <para><emphasis>Object Factory</emphasis> – The
+          <para><emphasis>Object Factory</emphasis> - The
           <code>ObjectFactory</code> interface is necessary to ensure class
           space consistency.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Dir Object Factory</emphasis> – If the Object
+          <para><emphasis>Dir Object Factory</emphasis> - If the Object
           Factory provider can accept the additional Attributes argument in
           the <code>getObjectInstance</code> method of the JNDI Provider Admin
           service than it must also register as a Dir Object Factory
@@ -1090,9 +1090,9 @@ javax.naming.directory</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>osgi.jndi.url.scheme</code> – The URL scheme associated
+          <para><code>osgi.jndi.url.scheme</code> - The URL scheme associated
           with this URL Context, for example <code>acme</code>. The scheme
-          must not contain the colon (<code>’:’ \u003A</code>).</para>
+          must not contain the colon (<code>':' \u003A</code>).</para>
         </listitem>
       </itemizedlist>
 
@@ -1114,22 +1114,22 @@ javax.naming.directory</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Object</emphasis> – Should be either a
+          <para><emphasis>Object</emphasis> - Should be either a
           <code>String</code>, <code>String[]</code>, or
           <code>null</code>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Name</emphasis> – must be <code>null</code></para>
+          <para><emphasis>Name</emphasis> - must be <code>null</code></para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Context</emphasis> – must be
+          <para><emphasis>Context</emphasis> - must be
           <code>null</code></para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Hashtable</emphasis> – The environment
+          <para><emphasis>Hashtable</emphasis> - The environment
           properties.</para>
         </listitem>
       </itemizedlist>
@@ -1186,8 +1186,8 @@ javax.naming.directory</programlisting>
     about restrictions on these services. The URL scheme is specified as
     follows:</para>
 
-    <programlisting>service   ::= ’osgi:service/’ query
-query     ::= jndi-name |  qname ( ’/’ filter )?
+    <programlisting>service   ::= 'osgi:service/' query
+query     ::= jndi-name |  qname ( '/' filter )?
 jndi-name ::= &lt;any string&gt;</programlisting>
 
     <para>No spaces are allowed between the terms.</para>
@@ -1207,7 +1207,7 @@ jndi-name ::= &lt;any string&gt;</programlisting>
     obtained with the <code>osgi:</code> scheme and <code>servicelist</code>
     path:</para>
 
-    <programlisting>servicelist ::= ’osgi:servicelist/’ query?</programlisting>
+    <programlisting>servicelist ::= 'osgi:servicelist/' query?</programlisting>
 
     <para>If this <code>osgi:servicelist</code> scheme is used from a lookup
     method then a <code>Context</code> object is returned instead of a service
@@ -1246,7 +1246,7 @@ jndi-name ::= &lt;any string&gt;</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><code>osgi.jndi.service.name</code> – An alternative name that
+        <para><code>osgi.jndi.service.name</code> - An alternative name that
         the service can be looked up by when the <code>osgi:</code> URL scheme
         is used.</para>
       </listitem>
@@ -1282,7 +1282,7 @@ jndi-name ::= &lt;any string&gt;</programlisting>
       This proxy must implement the interface given in the URL. If the JNDI
       service name instead of a class name is used, then all interfaces under
       which the service is registered must be implemented. If an interface is
-      not compatible with the owning bundle’s class space then it must not be
+      not compatible with the owning bundle's class space then it must not be
       implemented on the proxy, it must then be ignored. If this results in no
       implemented interfaces then an Illegal Argument Exception must be
       thrown.</para>
@@ -1356,13 +1356,13 @@ jndi-name ::= &lt;any string&gt;</programlisting>
       code:</para>
 
       <programlisting>Hashtable env = new Hashtable();
-env.put(Context.INITIAL_CONTEXT_FACTORY, “com.sun.jndi.ldap.LdapCtxFactory”);
+env.put(Context.INITIAL_CONTEXT_FACTORY, "com.sun.jndi.ldap.LdapCtxFactory");
 InitialContext ctx = new InitialContext(env);</programlisting>
 
       <para>The created <code>InitialContext</code> object is a facade for the
       real Context that is requested by the caller. It provides the
       bootstrapping mechanism for JNDI Provider plugability. In order to
-      obtain the provider’s Context, the <code>InitialContext</code> class
+      obtain the provider's Context, the <code>InitialContext</code> class
       makes a call to the static <code>getContext</code> method on the
       <code>NamingManager</code> class. The JNDI code in the JRE then
       delegates any request for an initial Context object to the JNDI
@@ -1405,14 +1405,14 @@ InitialContext ctx = new InitialContext(env);</programlisting>
       linkend="org.osgi.service.jndi.JNDIProviderAdmin.getObjectInstance-Object-javax.naming.Name-javax.naming.Context-Map-"
       xrefstyle="hyperlink"/> method, see <xref linkend="i3093106"/>. The
       Bundle Context that must be used with respect to this service is the
-      caller’s Bundle Context, see <xref linkend="i3081937"/>. If the Bundle
+      caller's Bundle Context, see <xref linkend="i3081937"/>. If the Bundle
       Context is not found, the description object must be returned. The
       calling bundle must not be required to import the
       <code>org.osgi.service.jndi</code> package.</para>
     </section>
 
     <section xml:id="i3081937">
-      <title>Caller’s Bundle Context</title>
+      <title>Caller's Bundle Context</title>
 
       <para>The following mechanisms are used to determine the callers Bundle
       Context:</para>
@@ -1431,9 +1431,9 @@ InitialContext ctx = new InitialContext(env);</programlisting>
         <listitem>
           <para>Obtain the Thread Context Class Loader; if it, or an ancestor
           class loader, implements the <code>BundleReference</code> interface,
-          call its <code>getBundle</code> method to get the client’s Bundle;
+          call its <code>getBundle</code> method to get the client's Bundle;
           then call <code>getBundleContext</code> on the <code>Bundle</code>
-          object to get the client’s Bundle Context. If the Bundle Context has
+          object to get the client's Bundle Context. If the Bundle Context has
           been found stop.</para>
         </listitem>
 

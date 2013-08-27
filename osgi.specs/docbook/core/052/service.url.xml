@@ -39,25 +39,25 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Multiple Access</emphasis> – Multiple bundles should
+          <para><emphasis>Multiple Access</emphasis> - Multiple bundles should
           be allowed to register <code>ContentHandler</code> objects and
           <code>URLStreamHandler</code> objects.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Existing Schemes Availability</emphasis> – Existing
+          <para><emphasis>Existing Schemes Availability</emphasis> - Existing
           schemes in an OSGi framework should not be overridden.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>life cycle Monitored </emphasis>– The life cycle of
+          <para><emphasis>life cycle Monitored</emphasis> - The life cycle of
           bundles must be supported. Scheme handlers and content type handlers
           must become unavailable when the registering bundle is
           stopped.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Simplicity</emphasis> – Minimal effort should be
+          <para><emphasis>Simplicity</emphasis> - Minimal effort should be
           required for a bundle to provide a new URL scheme or content type
           handler.</para>
         </listitem>
@@ -69,62 +69,62 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Scheme – </emphasis>An identifier for a specific
+          <para><emphasis>Scheme - </emphasis>An identifier for a specific
           protocol. For example, <code>"http"</code> is a scheme for the Hyper
           Text Transfer Protocol. A scheme is implemented in a
           <code>java.net.URLStreamHandler</code> sub-class.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Content Type</emphasis> – An identifier for the type
+          <para><emphasis>Content Type</emphasis> - An identifier for the type
           of the content. Content types are usually referred to as MIME types.
           A content type handler is implemented as a
           <code>java.net.ContentHandler</code> sub-class.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Uniform Resource Locator (URL)</emphasis> – An
+          <para><emphasis>Uniform Resource Locator (URL)</emphasis> - An
           instance of the <code>java.net.URL</code> class that holds the name
           of a scheme with enough parameters to identify a resource for that
           scheme.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Factory</emphasis> – An object that creates other
+          <para><emphasis>Factory</emphasis> - An object that creates other
           objects. The purpose is to hide the implementation types (that may
           vary) from the caller. The created objects are a
           subclass/implementation of a specific type.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Proxy</emphasis> – The object that is registered
+          <para><emphasis>Proxy</emphasis> - The object that is registered
           with Java and that forwards all calls to the real implementation
           that is registered with the service registry.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>java.net.URLStreamHandler</emphasis> – An instance
+          <para><emphasis>java.net.URLStreamHandler</emphasis> - An instance
           of the <code>java.net.URLStreamHandler</code> class that can create
           <code>URLConnection</code> objects that represent a connection for a
           specific protocol.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Singleton Operation</emphasis> – An operation that
+          <para><emphasis>Singleton Operation</emphasis> - An operation that
           can only be executed once.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>URLStreamHandlerService</emphasis> – An OSGi service
+          <para><emphasis>URLStreamHandlerService</emphasis> - An OSGi service
           interface that contains the methods of the
           <code>URLStreamHandler</code> class with public visibility so they
           can be called from the Framework.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>AbstractURLStreamHandlerService</emphasis> – An
+          <para><emphasis>AbstractURLStreamHandlerService</emphasis> - An
           implementation of the <code>URLStreamHandlerService</code> interface
-          that implements the interface’s methods by calling the
+          that implements the interface's methods by calling the
           implementation of the super class
           (<code>java.net.url.URLStreamHandler</code>). This class also
           handles the setting of the <code>java.net.URL</code> object via the
@@ -133,14 +133,14 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>URLStreamHandlerSetter</emphasis> – An interface
+          <para><emphasis>URLStreamHandlerSetter</emphasis> - An interface
           needed to abstract the setting of the <code>java.net.URL</code>
           object. This interface is related to the use of a proxy and security
           checking.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>java.net.URLStreamHandlerFactory</emphasis> – A
+          <para><emphasis>java.net.URLStreamHandlerFactory</emphasis> - A
           factory, registered with the <code>java.net.URL</code> class, that
           is used to find <code>java.net.URLStreamHandler</code> objects
           implementing schemes that are not implemented by the Java
@@ -149,7 +149,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>java.net.URLConnection</emphasis> – A connection for
+          <para><emphasis>java.net.URLConnection</emphasis> - A connection for
           a specific, scheme-based protocol. A
           <code>java.net.URLConnection</code> object is created by a
           <code>java.net.URLStreamHandler</code> object when the
@@ -157,13 +157,13 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>java.net.ContentHandler</emphasis> – An object that
+          <para><emphasis>java.net.ContentHandler</emphasis> - An object that
           can convert a stream of bytes to a Java object. The class of this
           Java object depends on the MIME type of the byte stream.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>java.net.ContentHandlerFactory</emphasis> – A
+          <para><emphasis>java.net.ContentHandlerFactory</emphasis> - A
           factory that can extend the set of
           <code>java.net.ContentHandler</code> objects provided by the
           <code>java.net.URLConnection</code> class, by creating new ones on
@@ -173,7 +173,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>MIME Type</emphasis> – A namespace for byte stream
+          <para><emphasis>MIME Type</emphasis> - A namespace for byte stream
           formats. See <xref linkend="i1260753"/>.</para>
         </listitem>
       </itemizedlist>
@@ -251,7 +251,7 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Factories Are Singleton Operations</emphasis> – One
+        <para><emphasis>Factories Are Singleton Operations</emphasis> - One
         <code>java.net.URLStreamHandlerFactory</code> object can be registered
         <emphasis>once</emphasis> with the <code>java.net.URL</code> class.
         Similarly, one <code>java.net.ContentHandlerFactory</code> object can
@@ -261,7 +261,7 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>Caching Of Schemes</emphasis> – When a previously
+        <para><emphasis>Caching Of Schemes</emphasis> - When a previously
         unused scheme is first used by the <code>java.net.URL</code> class,
         the <code>java.net.URL</code> class requests a
         <code>java.net.URLStreamHandler</code> object for that specific scheme
@@ -421,9 +421,9 @@
       <para>If the system properties <code>java.protocol.handler.pkgs</code>
       or <code>java.content.handler.pkgs</code> are defined, they must be used
       to locate built-in handlers. Each property must be defined as a list of
-      package names that are separated by a vertical line (<code>’|’
+      package names that are separated by a vertical line (<code>'|'
       \u007C</code>) and that are searched in the left-to-right order (the
-      names must <emphasis>not</emphasis> end in a full stop (<code>’.’
+      names must <emphasis>not</emphasis> end in a full stop (<code>'.'
       \u002E</code>). For example:</para>
 
       <programlisting>org.osgi.impl.handlers | com.acme.url</programlisting>
@@ -440,17 +440,17 @@
       <programlisting>org.osgi.impl.handlers.rsh.Handler
 com.acme.url.rsh.Handler</programlisting>
 
-      <para xml:id="i1294084">MIME type names contain the solidus (slash
-      <code>’/’ \u002F</code>) character and can contain other characters that
-      must not be part of a Java class name. A MIME type name must be
-      processed as follows before it can be converted to a class name:</para>
+      <para xml:id="i1294084">MIME type names contain the solidus (<code>'/'
+      \u002F</code>) character and can contain other characters that must not
+      be part of a Java class name. A MIME type name must be processed as
+      follows before it can be converted to a class name:</para>
 
       <orderedlist>
         <listitem>
           <para>First, all solidi in the MIME name must be converted to a full
-          stop (<code>’.’ \u002E</code>). All other characters that are not
+          stop (<code>'.' \u002E</code>). All other characters that are not
           allowed in a Java class name must be converted to an underscore
-          (<code>’_’ \u005F</code>).</para>
+          (<code>'_' \u005F</code>).</para>
 
           <para><programlisting>application/zip   application.zip
 text/uri-list     text.uri_list

@@ -42,28 +42,28 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Abstract </emphasis>– Provide an intermediate layer
+          <para><emphasis>Abstract</emphasis> - Provide an intermediate layer
           that abstracts the actual protocol and devices from the bundle using
           it.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Extendable </emphasis>– Allow third-party bundles to
+          <para><emphasis>Extendable</emphasis> - Allow third-party bundles to
           extend the system with new protocols and devices.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Layered</emphasis> – Allow a protocol to be layered
+          <para><emphasis>Layered</emphasis> - Allow a protocol to be layered
           on top of lower layer protocols or devices.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Configurable</emphasis> – Allow the selection of an
+          <para><emphasis>Configurable</emphasis> - Allow the selection of an
           actual protocol/device by means of configuration data.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Compatibility</emphasis> – Be compatible with
+          <para><emphasis>Compatibility</emphasis> - Be compatible with
           existing standards.</para>
         </listitem>
       </itemizedlist>
@@ -74,19 +74,19 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Connector Service</emphasis> – The service that
-          performs the same function–-creating connections from different
-          providers–-as the static methods in the Connector framework of
+          <para><emphasis>Connector Service</emphasis> - The service that
+          performs the same function, creating connections from different
+          providers, as the static methods in the Connector framework of
           <code>javax.microediton.io</code>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Connection Factory</emphasis> – A service that
+          <para><emphasis>Connection Factory</emphasis> - A service that
           extends the Connector service with more schemes.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Scheme</emphasis> – A protocol or device that is
+          <para><emphasis>Scheme</emphasis> - A protocol or device that is
           supported in the Connector framework.</para>
         </listitem>
       </itemizedlist>
@@ -188,38 +188,38 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>HttpConnection</emphasis> – A
+        <para><emphasis>HttpConnection</emphasis> - A
         <code>javax.microedition.io.ContentConnection</code> with specific
         HTTP support.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>DatagramConnection</emphasis> – A connection that can
+        <para><emphasis>DatagramConnection</emphasis> - A connection that can
         be used to send and receive datagrams.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>OutputConnection</emphasis> – A connection that can be
+        <para><emphasis>OutputConnection</emphasis> - A connection that can be
         used for streaming output.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>InputConnection</emphasis> – A connection that can be
+        <para><emphasis>InputConnection</emphasis> - A connection that can be
         used for streaming input.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>StreamConnection</emphasis> – A connection that is
+        <para><emphasis>StreamConnection</emphasis> - A connection that is
         both input and output.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>StreamConnectionNotifier</emphasis> – Can be used to
+        <para><emphasis>StreamConnectionNotifier</emphasis> - Can be used to
         wait for incoming stream connection requests.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>ContentConnection</emphasis> – A
+        <para><emphasis>ContentConnection</emphasis> - A
         <code>javax.microedition.io.StreamConnection</code> that provides
         information about the type, encoding, and length of the
         information.</para>
@@ -229,7 +229,7 @@
     <para xml:id="i1304228">Bundles using this approach must indicate to the
     Operator what kind of interfaces they expect to receive. The operator must
     then configure the bundle with a URI that contains the scheme and
-    appropriate options that match the bundle’s expectations. Well-written
+    appropriate options that match the bundle's expectations. Well-written
     bundles are flexible enough to communicate with any of the types of
     <code>javax.microedition.io.Connection</code> interfaces they have
     specified. For example, a bundle should support <code>
@@ -321,7 +321,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.io.ConnectionFactory.createConnection-String-int-boolean-"
-        xrefstyle="hyperlink"/> – Creates a new connection object from the
+        xrefstyle="hyperlink"/> - Creates a new connection object from the
         given URI.</para>
       </listitem>
     </itemizedlist>

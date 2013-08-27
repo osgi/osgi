@@ -44,64 +44,64 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Simplifications</emphasis> – The model must
+          <para><emphasis>Simplifications</emphasis> - The model must
           significantly simplify the process of programming an event source
           and an event handler.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Dependencies</emphasis> – Handle the myriad of
+          <para><emphasis>Dependencies</emphasis> - Handle the myriad of
           dependencies between event sources and event handlers for proper
           cleanup.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Synchronicity</emphasis> – It must be possible to
+          <para><emphasis>Synchronicity</emphasis> - It must be possible to
           deliver events asynchronously or synchronously with the
           caller.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Event Window </emphasis>– Only event handlers that
+          <para><emphasis>Event Window</emphasis> - Only event handlers that
           are active when an event is published must receive this event,
           handlers that register later must not see the event.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Performance</emphasis> – The event mechanism must
+          <para><emphasis>Performance</emphasis> - The event mechanism must
           impose minimal overhead in delivering events.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Selectivity</emphasis> – Event listeners must only
+          <para><emphasis>Selectivity</emphasis> - Event listeners must only
           receive notifications for the event types for which they are
           interested</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Reliability</emphasis> – The Event Admin must ensure
+          <para><emphasis>Reliability</emphasis> - The Event Admin must ensure
           that events continue to be delivered regardless the quality of the
           event handlers.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Security</emphasis> – Publishing and receiving
+          <para><emphasis>Security</emphasis> - Publishing and receiving
           events are sensitive operations that must be protected per event
           type.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Extensibility</emphasis> – It must be possible to
+          <para><emphasis>Extensibility</emphasis> - It must be possible to
           define new event types with their own data types.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Native Code</emphasis> – Events must be able to be
+          <para><emphasis>Native Code</emphasis> - Events must be able to be
           passed to native code or come from native code.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>OSGi Events</emphasis> – The OSGi Framework, as well
+          <para><emphasis>OSGi Events</emphasis> - The OSGi Framework, as well
           as a number of OSGi services, already have number of its own events
           defined. For uniformity of processing, these have to be mapped into
           generic event types.</para>
@@ -114,38 +114,38 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Event</emphasis> – An <code>Event</code> object has
+          <para><emphasis>Event</emphasis> - An <code>Event</code> object has
           a topic and a <code>Dictionary</code> object that contains the event
           properties. It is an immutable object.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Event Admin </emphasis>– The service that provides
+          <para><emphasis>Event Admin</emphasis> - The service that provides
           the publish and subscribe model to Event Handlers and Event
           Publishers.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Event Handler</emphasis> – A service that receives
+          <para><emphasis>Event Handler</emphasis> - A service that receives
           and handles <code>Event</code> objects.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Event Publisher</emphasis> – A bundle that sends
+          <para><emphasis>Event Publisher</emphasis> - A bundle that sends
           event through the Event Admin service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Event Subscriber</emphasis> – Another name for an
+          <para><emphasis>Event Subscriber</emphasis> - Another name for an
           Event Handler.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Topic</emphasis> – The name of an Event type.</para>
+          <para><emphasis>Topic</emphasis> - The name of an Event type.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Event Properties</emphasis> – The set of properties
+          <para><emphasis>Event Properties</emphasis> - The set of properties
           that is associated with an Event.</para>
         </listitem>
       </itemizedlist>
@@ -179,20 +179,20 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Architects</emphasis> – The <xref
+          <para><emphasis>Architects</emphasis> - The <xref
           linkend="i1487590"/> provides an overview of the Event Admin
           service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Event Publishers</emphasis> – The <xref
+          <para><emphasis>Event Publishers</emphasis> - The <xref
           linkend="i1399436"/> provides an introduction of how to write an
           Event Publisher. The <xref linkend="i1487590"/> provides a good
           overview of the design.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Event Subscribers/Handlers</emphasis> – The <xref
+          <para><emphasis>Event Subscribers/Handlers</emphasis> - The <xref
           linkend="i1557230"/> provides the rules on how to subscribe and
           handle events.</para>
         </listitem>
@@ -237,13 +237,13 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Topic</emphasis> – A topic that defines what happened.
+        <para><emphasis>Topic</emphasis> - A topic that defines what happened.
         For example, when a bundle is started an event is published that has a
         topic of <code>org/osgi/framework/BundleEvent/STARTED</code>.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Properties</emphasis> – Zero or more properties that
+        <para><emphasis>Properties</emphasis> - Zero or more properties that
         contain additional information about the event. For example, the
         previous example event has a property of <code>bundle.id</code> which
         is set to a <code>Long</code> object, among other properties.</para>
@@ -266,11 +266,11 @@
       dispatching of the events to the handlers.</para>
 
       <para>Topics are arranged in a hierarchical namespace. Each level is
-      defined by a token and levels are separated by solidi (slash <code>’/’
+      defined by a token and levels are separated by solidi (<code>'/'
       \u002F</code>). More precisely, the topic must conform to the following
       grammar:</para>
 
-      <programlisting>  topic ::= token ( ’/’ token ) *    // See General Syntax Definitions in Core</programlisting>
+      <programlisting>  topic ::= token ( '/' token ) *    // See General Syntax Definitions in Core</programlisting>
 
       <para>Topics should be designed to become more specific when going from
       left to right. Handlers can provide a prefix that matches a topic, using
@@ -279,9 +279,8 @@
 
       <para>Topics are case-sensitive. As a convention, topics should follow
       the reverse domain name scheme used by Java packages to guarantee
-      uniqueness. The separator must be a solidus (slash <code>’/’
-      \u002F</code>) instead of the full stop (<code>’.’
-      \u002E</code>).</para>
+      uniqueness. The separator must be a solidus (<code>'/' \u002F</code>)
+      instead of the full stop (<code>'.' \u002E</code>).</para>
 
       <para>This specification uses the convention
       <code>fully/qualified/package/ClassName/ACTION</code>. If necessary, a
@@ -357,10 +356,10 @@
     xrefstyle="hyperlink"/>. The value being a <code>String</code>,
     <code>String[]</code> or <code>Collection&lt;String&gt;</code> object that
     describes which <emphasis>topics</emphasis> the handler is interested in.
-    A wildcard asterisk (’*’ \u002A) may be used as the last token of a topic
-    name, for example <code>com/action/*</code>. This matches any topic that
-    shares the same first tokens. For example, <code>com/action/*</code>
-    matches <code>com/action/listen</code>.</para>
+    A wildcard asterisk (<code>'*' \u002A</code>) may be used as the last
+    token of a topic name, for example <code>com/action/*</code>. This matches
+    any topic that shares the same first tokens. For example,
+    <code>com/action/*</code> matches <code>com/action/listen</code>.</para>
 
     <para>Event Handlers which have not specified the <xref
     linkend="org.osgi.service.event.EventConstants.EVENT_TOPIC"
@@ -371,7 +370,7 @@
     xrefstyle="hyperlink"/> service registration property must conform to the
     following grammar:</para>
 
-    <programlisting>topic-scope ::= ’*’ | ( topic ’/*’?  )</programlisting>
+    <programlisting>topic-scope ::= '*' | ( topic '/*'?  )</programlisting>
 
     <para>Event handlers can also be registered with a service property named
     <xref linkend="org.osgi.service.event.EventConstants.EVENT_FILTER"
@@ -438,20 +437,20 @@
 
       <itemizedlist>
         <listitem>
-          <para>Not set or set to both – The Event Admin must deliver the
+          <para>Not set or set to both - The Event Admin must deliver the
           events in the proper order.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.event.EventConstants.DELIVERY_ASYNC_ORDERED"
-          xrefstyle="hyperlink"/> – Events must be delivered in order.</para>
+          xrefstyle="hyperlink"/> - Events must be delivered in order.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.event.EventConstants.DELIVERY_ASYNC_UNORDERED"
-          xrefstyle="hyperlink"/> – Allow the events to be delivered in any
+          xrefstyle="hyperlink"/> - Allow the events to be delivered in any
           order.</para>
         </listitem>
       </itemizedlist>
@@ -565,10 +564,9 @@
               linkend="org.osgi.service.event.EventConstants.BUNDLE_SIGNER"
               xrefstyle="hyperlink"/></para></entry>
 
-              <entry><code>String | Collection</code><code>
-              &lt;String&gt;</code></entry>
+              <entry><code>String | Collection &lt;String&gt;</code></entry>
 
-              <entry><para>A bundle’s signers DN</para></entry>
+              <entry><para>A bundle's signers DN</para></entry>
             </row>
 
             <row>
@@ -578,7 +576,7 @@
 
               <entry><code>Version</code></entry>
 
-              <entry><para>A bundle’s version</para></entry>
+              <entry><para>A bundle's version</para></entry>
             </row>
 
             <row>
@@ -588,7 +586,7 @@
 
               <entry><code>String</code></entry>
 
-              <entry><para>A bundle’s symbolic name</para></entry>
+              <entry><para>A bundle's symbolic name</para></entry>
             </row>
 
             <row>
@@ -651,7 +649,7 @@
               linkend="org.osgi.service.event.EventConstants.SERVICE"
               xrefstyle="hyperlink"/></para></entry>
 
-              <entry><code>Service</code> <code>Reference</code></entry>
+              <entry><code>Service Reference</code></entry>
 
               <entry><para>A Service Reference</para></entry>
             </row>
@@ -663,7 +661,7 @@
 
               <entry><code>Long</code></entry>
 
-              <entry><para>A service’s id</para></entry>
+              <entry><para>A service's id</para></entry>
             </row>
 
             <row>
@@ -681,10 +679,9 @@
               linkend="org.osgi.service.event.EventConstants.SERVICE_PID"
               xrefstyle="hyperlink"/></para></entry>
 
-              <entry><code>String | Collection</code><code>
-              &lt;String&gt;</code></entry>
+              <entry><code>String | Collection &lt;String&gt;</code></entry>
 
-              <entry><para>A service’s persistent identity. A PID that is
+              <entry><para>A service's persistent identity. A PID that is
               specified with a <code>String[]</code> must be coerced into a
               <code>Collection&lt;String&gt;</code>.</para></entry>
             </row>
@@ -704,10 +701,10 @@
       </table>
 
       <para>The topic of an OSGi event is constructed by taking the fully
-      qualified name of the event class, substituting a solidus (slash<code>
-      ’/’ \u002F</code>)for every full stop, and appending a solidus followed
-      by the name of the constant that defines the event type. For example,
-      the topic of</para>
+      qualified name of the event class, substituting a solidus (<code>'/'
+      \u002F</code>)for every full stop, and appending a solidus followed by
+      the name of the constant that defines the event type. For example, the
+      topic of</para>
 
       <programlisting>BundleEvent.STARTED</programlisting>
 
@@ -724,7 +721,7 @@
 
       <para>In order to present a consistent view of all the events occurring
       in the system, the existing Framework-level events are mapped to the
-      Event Admin’s publish-subscribe model. This allows event subscribers to
+      Event Admin's publish-subscribe model. This allows event subscribers to
       treat framework events exactly the same as other events.</para>
 
       <para>It is the responsibility of the Event Admin service implementation
@@ -757,7 +754,7 @@ INFO</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>event</code> – (<code>FrameworkEvent</code>) The
+          <para><code>event</code> - (<code>FrameworkEvent</code>) The
           original event object.</para>
         </listitem>
       </itemizedlist>
@@ -767,49 +764,49 @@ INFO</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>bundle.id – (Long</code>) The source’s bundle id.</para>
+          <para><code>bundle.id - (Long</code>) The source's bundle id.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle.symbolicName</code> – (<code>String)</code> The
-          source bundle's symbolic name. Only set if the bundle’s symbolic
+          <para><code>bundle.symbolicName</code> - (<code>String)</code> The
+          source bundle's symbolic name. Only set if the bundle's symbolic
           name is not <code>null</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle.version</code> – <code>(Version)</code> The
+          <para><code>bundle.version</code> - <code>(Version)</code> The
           version of the bundle, if set.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle.signer</code> –
+          <para><code>bundle.signer</code> -
           <code>(String|Collection&lt;String&gt;)</code> The DNs of the
           signers.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle</code> – (<code>Bundle</code>) The source
+          <para><code>bundle</code> - (<code>Bundle</code>) The source
           bundle.</para>
         </listitem>
       </itemizedlist>
 
       <para>If the <code>FrameworkEvent</code> <code>getThrowable</code>
-      method returns a non- <code>null</code> value:</para>
+      method returns a non-<code>null</code> value:</para>
 
       <itemizedlist>
         <listitem>
-          <para><code>exception.class</code> – (<code>String</code>) The
+          <para><code>exception.class</code> - (<code>String</code>) The
           fully-qualified class name of the attached Exception.</para>
         </listitem>
 
         <listitem>
-          <para><code>exception.message</code> –( <code>String)</code> The
+          <para><code>exception.message</code> -( <code>String)</code> The
           message of the attached exception. Only set if the Exception message
           is not <code>null</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>exception</code> – (Throwable) The Exception returned by
+          <para><code>exception</code> - (Throwable) The Exception returned by
           the <code>getThrowable</code> method.</para>
         </listitem>
       </itemizedlist>
@@ -841,33 +838,33 @@ UNRESOLVED</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>event</code> – (<code>BundleEvent</code>) The original
+          <para><code>event</code> - (<code>BundleEvent</code>) The original
           event object.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle.id – (Long</code>) The source’s bundle id.</para>
+          <para><code>bundle.id - (Long</code>) The source's bundle id.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle.symbolicName</code> – (<code>String)</code> The
-          source bundle's symbolic name. Only set if the bundle’s symbolic
+          <para><code>bundle.symbolicName</code> - (<code>String)</code> The
+          source bundle's symbolic name. Only set if the bundle's symbolic
           name is not <code>null</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle.version</code> – <code>(Version)</code> The
+          <para><code>bundle.version</code> - <code>(Version)</code> The
           version of the bundle, if set.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle.signer</code> –
+          <para><code>bundle.signer</code> -
           <code>(String|Collection&lt;String&gt;)</code> The DNs of the
           signers.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle</code> – (<code>Bundle</code>) The source
+          <para><code>bundle</code> - (<code>Bundle</code>) The source
           bundle.</para>
         </listitem>
       </itemizedlist>
@@ -891,22 +888,22 @@ UNREGISTERING</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>event</code> – (<code>ServiceEvent</code>) The original
+          <para><code>event</code> - (<code>ServiceEvent</code>) The original
           Service Event object.</para>
         </listitem>
 
         <listitem>
-          <para><code>service</code> – (<code>ServiceReference</code>) The
+          <para><code>service</code> - (<code>ServiceReference</code>) The
           result of the <code>getServiceReference</code> method</para>
         </listitem>
 
         <listitem>
-          <para><code>service.id</code> – (<code>Long</code>) The service's
+          <para><code>service.id</code> - (<code>Long</code>) The service's
           ID.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.pid</code> – (<code>String or
+          <para><code>service.pid</code> - (<code>String or
           Collection&lt;String&gt;</code>) The service's persistent identity.
           Only set if not <code>null</code>. If the PID is specified as a
           <code>String[]</code> then it must be coerced into a
@@ -914,7 +911,7 @@ UNREGISTERING</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>service.objectClass</code> – (<code>String[]</code>) The
+          <para><code>service.objectClass</code> - (<code>String[]</code>) The
           service's object class.</para>
         </listitem>
       </itemizedlist>
@@ -1117,8 +1114,8 @@ UNREGISTERING</programlisting>
       <para>The target parameter for the permission is the topic name.
       <code>TopicPermission</code> classes uses a wildcard matching algorithm
       similar to the <code>BasicPermission</code> class, except that solidi
-      (slash <code>’/’ \u002F</code>) are used as separators instead of full
-      stop characters. For example, a name of <code>a/b/*</code> implies
+      (<code>'/' \u002F</code>) are used as separators instead of full stop
+      characters. For example, a name of <code>a/b/*</code> implies
       <code>a/b/c</code> but not <code>x/y/z</code> or
       <code>a/b</code>.</para>
 

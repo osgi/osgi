@@ -32,33 +32,33 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Inter-operatbility </emphasis>– Full
+          <para><emphasis>Inter-operatbility</emphasis> - Full
           inter-operability between foreign application models and OSGi
           services is required. This requires both getting services,
           registering services, and listening to Framework events.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>No Change </emphasis>– The inter-working
+          <para><emphasis>No Change</emphasis> - The inter-working
           specification cannot modify the life cycle model of the foreign
           application models. The foreign application model specifications
           cannot be changed.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Familiarity </emphasis>– Programmers familiar with a
+          <para><emphasis>Familiarity</emphasis> - Programmers familiar with a
           foreign application model should be able to leverage the services
           architecture without much effort.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Simplicity</emphasis> – The programming model for
+          <para><emphasis>Simplicity</emphasis> - The programming model for
           using services must be very simple and not require the programmer to
           learn many new concepts.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Management</emphasis> – Support managing the foreign
+          <para><emphasis>Management</emphasis> - Support managing the foreign
           applications; both through proper OSGi APIs and from a remote
           management server.</para>
         </listitem>
@@ -70,13 +70,13 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Foreign Application</emphasis> – Java Applications,
+          <para><emphasis>Foreign Application</emphasis> - Java Applications,
           which must be delivered in JAR files, which are not OSGi
           bundles.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Application Container</emphasis> – An Application
+          <para><emphasis>Application Container</emphasis> - An Application
           Container is responsible for controlling a foreign application and
           providing the appropriate environment. It must interact with the
           OSGi Framework to give the foreign application instances access to
@@ -84,33 +84,33 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Application Activator </emphasis>– A class in the
+          <para><emphasis>Application Activator</emphasis> - A class in the
           foreign application JAR file that is used to notify the application
           of life cycle changes. One JAR file can contain multiple application
           activators.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Framework</emphasis> – A class that provides access
-          to the application container’s <emphasis>application
+          <para><emphasis>Framework</emphasis> - A class that provides access
+          to the application container's <emphasis>application
           context</emphasis> for a given application activator.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Application Context </emphasis>– The interface to
-          the application container’s functions to inter-work with the OSGi
+          <para><emphasis>Application Context</emphasis> - The interface to
+          the application container's functions to inter-work with the OSGi
           Framework.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Application Declaration</emphasis> – An XML resource
-          that must be placed in the application’s JAR file at
+          <para><emphasis>Application Declaration</emphasis> - An XML resource
+          that must be placed in the application's JAR file at
           <code>OSGI-INF/app/apps.xml</code>. This is an optional
           declaration.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Application Instance</emphasis> – A launched
+          <para><emphasis>Application Instance</emphasis> - A launched
           application. Most foreign application models permit an application
           to be launched multiple times.</para>
         </listitem>
@@ -149,7 +149,7 @@
       Application Context provides access to getting services, registering
       services and registering listeners.</para>
 
-      <para>The foreign application instance’s life cycle can be influenced by
+      <para>The foreign application instance's life cycle can be influenced by
       the application declaration. If desired, an application can be prevented
       from launching or stopping when required services are, or become,
       unavailable.</para>
@@ -185,7 +185,7 @@
       <listitem>
         <para>One or more classes in the application must be available to
         start and stop the application. For example the Midlet in MIDP or the
-        Xlet in MHP. This object is called the <emphasis>application’s
+        Xlet in MHP. This object is called the <emphasis>application's
         activator</emphasis>. As the application container uses this object
         for life cycle control of the application, the lifetime of this object
         equals the lifetime of the application.</para>
@@ -231,17 +231,17 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Export-Package</emphasis> – Exporting packages is
+          <para><emphasis>Export-Package</emphasis> - Exporting packages is
           forbidden in foreign applications.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Bundle-Activator</emphasis> – Foreign applications
+          <para><emphasis>Bundle-Activator</emphasis> - Foreign applications
           have their own activator.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Service-Component</emphasis> – Service components
+          <para><emphasis>Service-Component</emphasis> - Service components
           should be bundles.</para>
         </listitem>
       </itemizedlist>
@@ -280,12 +280,12 @@ Import-Package: org.osgi.application;version=1.0,
 
       <para>The application container must maintain an application context for
       each started application, that is, the application instance. This
-      context is related to the application’s activator. The Application
+      context is related to the application's activator. The Application
       Context can be acquired using a static <xref
       linkend="org.osgi.application.Framework.getApplicationContext-Object-"
       xrefstyle="hyperlink"/> method on the <xref
       linkend="org.osgi.application.Framework" xrefstyle="hyperlink"/> class.
-      The parameter of this method is the application’s activator itself. The
+      The parameter of this method is the application's activator itself. The
       <code>getApplicationContext</code> method cannot check if the caller is
       really the given application; the application activator is therefore a
       <emphasis>capability</emphasis>, any application that has this object
@@ -295,7 +295,7 @@ Import-Package: org.osgi.application;version=1.0,
       object.</para>
 
       <para>The <code>getApplicationContext</code> method must not be called
-      from the application activator’s constructor; at that time it must not
+      from the application activator's constructor; at that time it must not
       be available yet.</para>
 
       <para>For example, a MIDlet could acquire the application context with
@@ -318,17 +318,17 @@ public class Example extends MIDlet {
 
       <para>The <code>getApplicationContext</code> method must throw an
       Illegal Argument Exception if it is called with an object that is not an
-      application’s activator.</para>
+      application's activator.</para>
 
       <para>The <code>ApplicationContext</code> object is singleton for the
-      corresponding application’s activator. Subsequent calls to the
-      <code>getApplicationContext</code> method with the same application’s
+      corresponding application's activator. Subsequent calls to the
+      <code>getApplicationContext</code> method with the same application's
       activator must return the same <code>ApplicationContext</code> object;
       therefore, applications are free to forget and get the object any number
       of times during their lifetime. However, it is an error to get the
       <code>ApplicationContext</code> object for an application that is
       already stopped. Existing <code>ApplicationContext</code> objects must
-      be invalidated once the application’s activator is stopped.</para>
+      be invalidated once the application's activator is stopped.</para>
     </section>
 
     <section>
@@ -341,14 +341,14 @@ public class Example extends MIDlet {
         <listitem>
           <para><xref
           linkend="org.osgi.application.ApplicationContext.getApplicationId--"
-          xrefstyle="hyperlink"/> – Return the Application Descriptor id for
+          xrefstyle="hyperlink"/> - Return the Application Descriptor id for
           this application.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.application.ApplicationContext.getInstanceId--"
-          xrefstyle="hyperlink"/> – Return the instance id for this
+          xrefstyle="hyperlink"/> - Return the instance id for this
           application.</para>
         </listitem>
       </itemizedlist>
@@ -397,18 +397,18 @@ public class Example extends MIDlet {
         <listitem>
           <para><xref
           linkend="org.osgi.application.ApplicationContext.locateService-String-"
-          xrefstyle="hyperlink"/> – Return one of the services that is
+          xrefstyle="hyperlink"/> - Return one of the services that is
           selected by the reference with the given name. If multiple services
           are selected by the reference, then the service with the highest
           ranking must be returned. This is compatible with the
-          <code>getServiceReference</code> method in the OSGi Framework’s
+          <code>getServiceReference</code> method in the OSGi Framework's
           <code>BundleContext</code> class.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.application.ApplicationContext.locateServices-String-"
-          xrefstyle="hyperlink"/> – Return all the services that are selected
+          xrefstyle="hyperlink"/> - Return all the services that are selected
           by the reference with the given name.</para>
         </listitem>
       </itemizedlist>
@@ -466,14 +466,14 @@ public class Example extends MIDlet {
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>static</emphasis> – The application assumes that
+          <para><emphasis>static</emphasis> - The application assumes that
           bound services will never go away. So if a bound service becomes
           unregistered, the Application Container must stop the application to
           prevent it from using a stale service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>dynamic</emphasis> – The application must never
+          <para><emphasis>dynamic</emphasis> - The application must never
           store service objects and will always get them on demand. Once a
           service is bound, it can become unregistered without any effect on
           the application.</para>
@@ -487,12 +487,12 @@ public class Example extends MIDlet {
 
       <itemizedlist>
         <listitem>
-          <para><code>0..1</code> or <code>0..n</code> – Optional
+          <para><code>0..1</code> or <code>0..n</code> - Optional
           reference</para>
         </listitem>
 
         <listitem>
-          <para><code>1..1</code> or <code>1..n</code> – Mandatory
+          <para><code>1..1</code> or <code>1..n</code> - Mandatory
           reference</para>
         </listitem>
       </itemizedlist>
@@ -533,14 +533,14 @@ public class Example extends MIDlet {
         <listitem>
           <para><xref
           linkend="org.osgi.application.ApplicationContext.registerService-String---Object-Dictionary-"
-          xrefstyle="hyperlink"/> – Register a service under a single
+          xrefstyle="hyperlink"/> - Register a service under a single
           interface.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.application.ApplicationContext.registerService-String-Object-Dictionary-"
-          xrefstyle="hyperlink"/> – Register a service under a number of
+          xrefstyle="hyperlink"/> - Register a service under a number of
           interfaces.</para>
         </listitem>
       </itemizedlist>
@@ -572,7 +572,7 @@ public class Example extends MIDlet {
         <listitem>
           <para><xref
           linkend="org.osgi.application.ApplicationContext.addServiceListener-ApplicationServiceListener-String-"
-          xrefstyle="hyperlink"/> – Add an Application Service Listener. The
+          xrefstyle="hyperlink"/> - Add an Application Service Listener. The
           listener will receive the service events for the given reference
           name.</para>
         </listitem>
@@ -580,7 +580,7 @@ public class Example extends MIDlet {
         <listitem>
           <para><xref
           linkend="org.osgi.application.ApplicationContext.addServiceListener-ApplicationServiceListener-String---"
-          xrefstyle="hyperlink"/> – Add an Application Service Listener that
+          xrefstyle="hyperlink"/> - Add an Application Service Listener that
           will receive the events for all the services identified with the
           given reference name.</para>
         </listitem>
@@ -725,9 +725,9 @@ public class Example extends MIDlet {
 
       <itemizedlist>
         <listitem>
-          <para><code>class</code> – The <code>class</code> attribute of the
+          <para><code>class</code> - The <code>class</code> attribute of the
           <code>application</code> element must contain the fully qualified
-          name of the application’s activator.</para>
+          name of the application's activator.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -743,7 +743,7 @@ public class Example extends MIDlet {
 
       <itemizedlist>
         <listitem>
-          <para><code>name</code> – A <code>reference</code> element is
+          <para><code>name</code> - A <code>reference</code> element is
           identified by a name. This name can be used in the
           <code>locateService</code> or <code>locateService</code>, see <xref
           linkend="i1608489"/>. This name must be unique within an application
@@ -751,24 +751,24 @@ public class Example extends MIDlet {
         </listitem>
 
         <listitem>
-          <para><code>interface</code> – The fully qualified name of the
+          <para><code>interface</code> - The fully qualified name of the
           interface or class that defines the selected service.</para>
         </listitem>
 
         <listitem>
-          <para><code>policy</code> – The choice of action when a bound
+          <para><code>policy</code> - The choice of action when a bound
           services becomes unregistered while an application instance is
           running. It can have the following values:</para>
 
           <itemizedlist>
             <listitem>
-              <para><code>static</code> – If a bound service becomes
+              <para><code>static</code> - If a bound service becomes
               unregistered, the application instance must be stopped but the
               corresponding Application Descriptor is still launchable.</para>
             </listitem>
 
             <listitem>
-              <para><code>dynamic</code> – If a bound service becomes
+              <para><code>dynamic</code> - If a bound service becomes
               unregistered, the application can continue to run if the
               mandatory reference can still be satisfied by another
               service.</para>
@@ -777,7 +777,7 @@ public class Example extends MIDlet {
         </listitem>
 
         <listitem>
-          <para><code>cardinality</code> – Defines the optionality of the
+          <para><code>cardinality</code> - Defines the optionality of the
           reference. If it starts with a 0, an application can handle that the
           reference selects no service. That is, <code>locateService</code>
           method can return a <code>null</code>. If it starts with 1, the
@@ -787,19 +787,19 @@ public class Example extends MIDlet {
 
           <itemizedlist>
             <listitem>
-              <para><code>0..1</code> or <code>0..n</code> – Optional
+              <para><code>0..1</code> or <code>0..n</code> - Optional
               reference</para>
             </listitem>
 
             <listitem>
-              <para><code>1..1</code> or <code>1..n</code> – Mandatory
+              <para><code>1..1</code> or <code>1..n</code> - Mandatory
               reference</para>
             </listitem>
           </itemizedlist>
         </listitem>
 
         <listitem>
-          <para><code>target</code> – The optional target attribute of the
+          <para><code>target</code> - The optional target attribute of the
           element can be used to further narrow which services are acceptable
           for the application by providing an OSGi filter on the properties of
           the services.</para>
@@ -924,8 +924,8 @@ public class Example extends MIDlet {
 
       <para>Applications can package permissions as described in the
       Conditional Permission Admin. These permissions will restrict the
-      foreign’s application permissions to maximally the permissions in this
-      file scoped by the signer’s permissions.</para>
+      foreign's application permissions to maximally the permissions in this
+      file scoped by the signer's permissions.</para>
     </section>
   </section>
 

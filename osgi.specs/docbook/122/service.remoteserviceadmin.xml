@@ -57,46 +57,46 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Simple</emphasis> – Make it as simple as possible
+          <para><emphasis>Simple</emphasis> - Make it as simple as possible
           for a Topology Manager to implement distribution policies.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Dynamic</emphasis> – Discover available Endpoints
+          <para><emphasis>Dynamic</emphasis> - Discover available Endpoints
           dynamically, for example through a discovery protocol like <xref
           linkend="i1788834"/> or <xref linkend="i1789952"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Inform</emphasis> – Provide a mechanism to inform
+          <para><emphasis>Inform</emphasis> - Provide a mechanism to inform
           other parties about created and removed Endpoints.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Configuration</emphasis> – Allow bundles to describe
+          <para><emphasis>Configuration</emphasis> - Allow bundles to describe
           Endpoints as a bundle resource that are provided to the Distribution
           Provider.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Selective</emphasis> – Not all parties are
+          <para><emphasis>Selective</emphasis> - Not all parties are
           interested in all services. Endpoint registries must be able to
           express the scope of services they are interested in.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Multiple</emphasis> – Allow the collaboration of
+          <para><emphasis>Multiple</emphasis> - Allow the collaboration of
           multiple Topology Managers, Remote Service Admin services, and
           Discovery Providers.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Dynamic</emphasis> – Allow the dynamic discovery of
+          <para><emphasis>Dynamic</emphasis> - Allow the dynamic discovery of
           Endpoints.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Federated</emphasis> –Enable a global view of all
+          <para><emphasis>Federated</emphasis> -Enable a global view of all
           available services in a distributed environment.</para>
         </listitem>
       </itemizedlist>
@@ -107,7 +107,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Remote Service Admin</emphasis> – An implementation
+          <para><emphasis>Remote Service Admin</emphasis> - An implementation
           of this specification provides the mechanisms to import and export
           services through a set of configuration types. The Remote Service
           Admin service is a passive Distribution Provider, not taking any
@@ -115,33 +115,33 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Topology Manager</emphasis> – The Topology Manager
+          <para><emphasis>Topology Manager</emphasis> - The Topology Manager
           provides the policy for importing and exporting services through the
           Remote Service Admin service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Endpoint</emphasis> – An Endpoint is a
+          <para><emphasis>Endpoint</emphasis> - An Endpoint is a
           communications access mechanism to a service in another framework, a
           (web) service, another process, or a queue or topic destination,
           etc., requiring some protocol for communications.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Endpoint Description</emphasis> – A properties based
+          <para><emphasis>Endpoint Description</emphasis> - A properties based
           description of an Endpoint. Endpoint Descriptions can be exchanged
-          between different frameworks to create connections to each other’s
+          between different frameworks to create connections to each other's
           services. Endpoint Descriptions can also be created to Endpoints not
           originating in an OSGi Framework.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Endpoint Description Provider</emphasis> – A party
+          <para><emphasis>Endpoint Description Provider</emphasis> - A party
           that can inform others about the existence of Endpoints.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Endpoint Listener</emphasis> – A listener service
+          <para><emphasis>Endpoint Listener</emphasis> - A listener service
           that receives updates of Endpoints that match its scope. This
           Endpoint Listener is used symmetrically to implement a federated
           registry. The Topology Manager can use it to notify interested
@@ -151,26 +151,26 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Remote Service Admin Listener</emphasis> – A
+          <para><emphasis>Remote Service Admin Listener</emphasis> - A
           listener service that is informed of all the primitive actions that
           the Remote Service Admin performs like importing and exporting as
           well as errors.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Endpoint Configuration Extender</emphasis> – A
+          <para><emphasis>Endpoint Configuration Extender</emphasis> - A
           bundle that can detect configuration data describing an Endpoint
           Description in a bundle resource, using the extender pattern.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Discovery</emphasis> – An Endpoint Listener that
+          <para><emphasis>Discovery</emphasis> - An Endpoint Listener that
           detects the Endpoint Descriptions through some discovery
           protocol.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Cluster</emphasis> – A group of computing systems
+          <para><emphasis>Cluster</emphasis> - A group of computing systems
           that closely work together, usually in a fast network.</para>
         </listitem>
       </itemizedlist>
@@ -308,7 +308,7 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Topology Manager</emphasis>s – Topology Managers are
+        <para><emphasis>Topology Manager</emphasis>s - Topology Managers are
         the (anonymous) players that implement the policies for distributing
         services; they are closely aligned with the concept of an OSGi
         <emphasis>management agent</emphasis>. It is expected that Topology
@@ -319,7 +319,7 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>Remote Service Admin</emphasis> – The Remote Service
+        <para><emphasis>Remote Service Admin</emphasis> - The Remote Service
         Admin service provides the basic mechanism to import and export
         services. This service is policy free; it will not distribute services
         without explicitly being told so. A OSGi framework can host multiple
@@ -328,7 +328,7 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>Discovery</emphasis> – To implement a distribution
+        <para><emphasis>Discovery</emphasis> - To implement a distribution
         policy, a Topology Manager must be aware of what Endpoints are
         available. This specification provides an abstraction of a
         <emphasis>federated Endpoint registry</emphasis>. This registry can be
@@ -499,7 +499,7 @@
     the properties in a type safe way.</para>
 
     <para>An Endpoint Description has case insensitive keys, just like the
-    Service Reference’s properties.</para>
+    Service Reference's properties.</para>
 
     <para>The properties map must contain all the prescribed service
     properties of the exported service after intents have been processed, as
@@ -687,7 +687,7 @@
             <entry><code>*</code></entry>
 
             <entry><para>All remaining public service properties must be
-            present (that is, not starting with full stop (<code>’.’
+            present (that is, not starting with full stop (<code>'.'
             \u002E</code>)). If the values can not be marshalled by the
             Distribution Provider then they must be ignored.</para></entry>
           </row>
@@ -703,14 +703,14 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.EndpointDescription-Map-"
-        xrefstyle="hyperlink"/> – Instantiate the Endpoint Description from a
+        xrefstyle="hyperlink"/> - Instantiate the Endpoint Description from a
         <code>Map</code> object.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.EndpointDescription-ServiceReference-Map-"
-        xrefstyle="hyperlink"/> – Instantiate an Endpoint Description based on
+        xrefstyle="hyperlink"/> - Instantiate an Endpoint Description based on
         a Service Reference and a Map. The base properties of this Endpoint
         Description are the Service Reference properties but the properties in
         the given Map must override any of their case variants in the Service
@@ -732,7 +732,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getInterfaces--"
-        xrefstyle="hyperlink"/> – Answers a list of Java interface names.
+        xrefstyle="hyperlink"/> - Answers a list of Java interface names.
         These are the interfaces under which the services must be registered.
         These interface names can also be found at the
         <code>objectClass</code> property. A service can only be imported when
@@ -742,7 +742,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getConfigurationTypes--"
-        xrefstyle="hyperlink"/> – Answer the configuration types that are used
+        xrefstyle="hyperlink"/> - Answer the configuration types that are used
         for exporting this Endpoint. The configuration types are associated
         with a number of properties.</para>
       </listitem>
@@ -750,7 +750,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getId--"
-        xrefstyle="hyperlink"/> – Returns an Id uniquely identifying an
+        xrefstyle="hyperlink"/> - Returns an Id uniquely identifying an
         Endpoint. The syntax of this Id should be defined in the specification
         for the associated configuration type. Two Endpoint Descriptions with
         the same Id describe the same Endpoint.</para>
@@ -759,7 +759,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getFrameworkUUID--"
-        xrefstyle="hyperlink"/> – Get a Universally Unique Identifier (UUID)
+        xrefstyle="hyperlink"/> - Get a Universally Unique Identifier (UUID)
         for the framework instance that has created the Endpoint, <xref
         linkend="i1887500"/>.</para>
       </listitem>
@@ -767,7 +767,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getServiceId--"
-        xrefstyle="hyperlink"/> – Get the service id for the framework
+        xrefstyle="hyperlink"/> - Get the service id for the framework
         instance that has created the Endpoint. If there is no service on the
         remote side the value must be 0.</para>
       </listitem>
@@ -775,20 +775,20 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getPackageVersion-String-"
-        xrefstyle="hyperlink"/> – Get the version for the given
+        xrefstyle="hyperlink"/> - Get the version for the given
         package.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getIntents--"
-        xrefstyle="hyperlink"/> – Get the list of specified intents.</para>
+        xrefstyle="hyperlink"/> - Get the list of specified intents.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.EndpointDescription.getProperties--"
-        xrefstyle="hyperlink"/> – Get all the properties.</para>
+        xrefstyle="hyperlink"/> - Get all the properties.</para>
       </listitem>
     </itemizedlist>
 
@@ -843,7 +843,7 @@
       <para>Two Endpoint Descriptions are deemed identical when their Endpoint
       Id is equal. The Endpoint Ids must be compared as string compares with
       leading and trailing spaces removed. The Endpoint Description class must
-      use the <code>String</code> class’ hash Code from the Endpoint Id as its
+      use the <code>String</code> class' hash Code from the Endpoint Id as its
       own <code>hashCode</code>.</para>
     </section>
 
@@ -980,7 +980,7 @@
       key then it will override any case variant of this key in the Service
       Reference. However, if the Map contains the <code>objectClass</code> or
       <code>service.id</code> property key in any case variant, then these
-      properties must not override the Service Reference’s value.</para>
+      properties must not override the Service Reference's value.</para>
 
       <para>The Remote Service Admin service must interpret the merged
       properties according to the Remote Services chapter. This means that it
@@ -989,7 +989,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><code>service.exported.configs</code> – <code>(String+
+          <para><code>service.exported.configs</code> - <code>(String+
           )</code> A list of configuration types that should be used to export
           this service. Each configuration type represents the configuration
           parameters for an Endpoint. A Remote Service Admin service should
@@ -1002,25 +1002,25 @@
         </listitem>
 
         <listitem>
-          <para><code>service.exported.intents</code> – (
+          <para><code>service.exported.intents</code> - (
           <code>String+)</code> A list of intents that the Remote Service
           Admin service must implement to distribute the given service.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.exported.intents.extra</code> –
+          <para><code>service.exported.intents.extra</code> -
           <code>(String+)</code> This property is merged with the
           <code>service.exported.intents</code> property.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.exported.interfaces</code> –
+          <para><code>service.exported.interfaces</code> -
           <code>(String+)</code> This property must be set; it marks this
           service for export and defines the interfaces. The list members must
           all be contained in the types listed in the <code>objectClass</code>
           service property from the Service Reference. The single value of an
-          asterisk (<code>’*’, \u002A</code>) indicates all interfaces in the
-          registration’s <code>objectClass</code> property and ignore the
+          asterisk (<code>'*' \u002A</code>) indicates all interfaces in the
+          registration's <code>objectClass</code> property and ignore the
           classes. Being able to set this property outside the Service
           Reference implies that the Topology Manager can export any
           registered service, also services not specifically marked to be
@@ -1028,7 +1028,7 @@
         </listitem>
 
         <listitem>
-          <para><code>service.intents</code> – <code>(String+)</code> A list
+          <para><code>service.intents</code> - <code>(String+)</code> A list
           of intents that this service has implemented.</para>
         </listitem>
       </itemizedlist>
@@ -1078,7 +1078,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.remoteserviceadmin.ExportReference.getExportedEndpoint--"
-          xrefstyle="hyperlink"/> – This is the associated Endpoint
+          xrefstyle="hyperlink"/> - This is the associated Endpoint
           Description. This Endpoint Description is a properties based
           description of an Endpoint. The property keys and their semantics
           are outlined in <xref
@@ -1090,7 +1090,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.remoteserviceadmin.ExportReference.getExportedService--"
-          xrefstyle="hyperlink"/> – The Service Reference to the exported
+          xrefstyle="hyperlink"/> - The Service Reference to the exported
           service.</para>
         </listitem>
       </itemizedlist>
@@ -1175,12 +1175,12 @@
 
       <itemizedlist>
         <listitem>
-          <para><code>service.imported</code> – <code>(*)</code> Must be set
+          <para><code>service.imported</code> - <code>(*)</code> Must be set
           to any value.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.imported.configs</code> – <code>(String+)</code>
+          <para><code>service.imported.configs</code> - <code>(String+)</code>
           The configuration information used to import this service. Any
           associated properties for this configuration types must be properly
           mapped to the importing system. For example, a URL in these
@@ -1191,7 +1191,7 @@
         </listitem>
 
         <listitem>
-          <para><code>service.intents</code> – <code>(String+)</code> The
+          <para><code>service.intents</code> - <code>(String+)</code> The
           Remote Service Admin must set this property to convey the combined
           intents of:</para>
 
@@ -1253,14 +1253,14 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.remoteserviceadmin.ImportReference.getImportedEndpoint--"
-          xrefstyle="hyperlink"/> – Provides the Endpoint Description for this
+          xrefstyle="hyperlink"/> - Provides the Endpoint Description for this
           imported service.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.remoteserviceadmin.ImportReference.getImportedService--"
-          xrefstyle="hyperlink"/> – Provides the Service Reference for the
+          xrefstyle="hyperlink"/> - Provides the Service Reference for the
           service proxy.</para>
         </listitem>
       </itemizedlist>
@@ -1294,7 +1294,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.getExportedServices--"
-          xrefstyle="hyperlink"/> – List the Export References for services
+          xrefstyle="hyperlink"/> - List the Export References for services
           that are exported by this Remote Service Admin service as directed
           by any of the Topology Managers.</para>
         </listitem>
@@ -1302,7 +1302,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin.getImportedEndpoints--"
-          xrefstyle="hyperlink"/> – List the Import References for services
+          xrefstyle="hyperlink"/> - List the Import References for services
           that have been imported by this Remote Service Admin service as
           directed by any of the Topology Managers.</para>
         </listitem>
@@ -1335,7 +1335,7 @@
       possible to create multiple Endpoints for the same address. A Remote
       Service Admin service must therefore detect the case that multiple
       registrations share the same Endpoint between Topology Manager
-      <code>A</code>’s registration and <code>B</code>’s registration.
+      <code>A</code>'s registration and <code>B</code>'s registration.
       However, if Topology Manager <code>B</code> now closes its Export
       Registration then Topology Manager <code>A</code> still assumes the
       availability of the Endpoint. This scenario is depicted in <xref
@@ -1527,7 +1527,7 @@
     When the bundle <code>D</code> on the <code>Quark</code> framework
     receives the Endpoint Description from bundle <code>D</code> on the
     <code>Top</code> framework, it matches it against all local Endpoint
-    Listener’s scope. In this case, the local manager bundle <code>T</code>
+    Listener's scope. In this case, the local manager bundle <code>T</code>
     matches and is given the Endpoint Description. The manager then uses the
     Remote Service Admin service to import the exported service described by
     the given Endpoint Description.</para>
@@ -1598,7 +1598,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointAdded-EndpointDescription-String-"
-          xrefstyle="hyperlink"/> – Notify the Endpoint Listener of a new
+          xrefstyle="hyperlink"/> - Notify the Endpoint Listener of a new
           Endpoint Description. The second parameter is the filter that
           matched the Endpoint Description. Registering the same Endpoint
           multiple times counts as a single registration.</para>
@@ -1607,7 +1607,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointRemoved-EndpointDescription-String-"
-          xrefstyle="hyperlink"/> – Notify the Endpoint Listener that the
+          xrefstyle="hyperlink"/> - Notify the Endpoint Listener that the
           provided Endpoint Description is no longer available.</para>
         </listitem>
       </itemizedlist>
@@ -1642,7 +1642,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Registration</emphasis> – An Endpoint Listener
+          <para><emphasis>Registration</emphasis> - An Endpoint Listener
           service is called with an <xref
           linkend="org.osgi.service.remoteserviceadmin.EndpointListener.endpointAdded-EndpointDescription-String-"
           xrefstyle="hyperlink"/> method for all known Endpoint Descriptions
@@ -1650,7 +1650,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Tracking providers</emphasis> – An Endpoint Listener
+          <para><emphasis>Tracking providers</emphasis> - An Endpoint Listener
           must track the bundles that provide it with Endpoint Descriptions.
           If a bundle that provided Endpoint Descriptions is stopped, all
           Endpoint Descriptions that were provided by that bundle must be
@@ -1659,7 +1659,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Scope modification</emphasis> – An Endpoint Listener
+          <para><emphasis>Scope modification</emphasis> - An Endpoint Listener
           is allowed to modify the set of filters in its scope through a
           service property modification. This modification must result in new
           and/or existing Endpoint Descriptions to be added, however, existing
@@ -1697,11 +1697,11 @@
       distributed world. It is the task of an Endpoint Description Provider,
       for example a discovery bundle, to keep the Endpoint Listener services
       up to date of any Endpoint Descriptions the provider is aware of and
-      that match the tracked service’s scope.</para>
+      that match the tracked service's scope.</para>
 
       <para>If an Endpoint Listener service is registered, a provider must add
       all matching Endpoint Descriptions that it is aware of and match the
-      tracked Endpoint Listener’s scope. This can be done during registration
+      tracked Endpoint Listener's scope. This can be done during registration
       or asynchronously later. For example, it is possible to use the filters
       in the scope to request remote systems for any Endpoint Descriptions
       that match those filters. For expediency reasons, the service
@@ -1748,14 +1748,14 @@ st.open();</programlisting>
       <code>ListenerInfo</code> to any Listener Hook services. The
       <code>getFilter</code> method on a <code>ListenerInfo</code> object
       provides a filter that is directly applicable for the Endpoint
-      Listener’s scope. In the previous example, this would be the
+      Listener's scope. In the previous example, this would be the
       filter:</para>
 
       <programlisting>(objectClass=org.osgi.service.log.LogService)</programlisting>
 
       <para>A Topology Manager could verify if this listener is satisfied.
       That is, if it has at least one service. If no such service could be
-      found, it could then add this filter to its Endpoint Listener’s scope to
+      found, it could then add this filter to its Endpoint Listener's scope to
       detect remote implementations of this service. If such an Endpoint is
       detected, it could then request the import of this service through the
       Remote Service Admin service.</para>
@@ -1776,7 +1776,7 @@ st.open();</programlisting>
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_ERROR"
-        xrefstyle="hyperlink"/> – An exported service has run into an
+        xrefstyle="hyperlink"/> - An exported service has run into an
         unrecoverable error, although the Export Registration has not been
         closed yet. The event carries the Export Registration as well as the
         Exception that caused the problem, if present.</para>
@@ -1785,14 +1785,14 @@ st.open();</programlisting>
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_REGISTRATION"
-        xrefstyle="hyperlink"/> – The Remote Service Admin has registered a
+        xrefstyle="hyperlink"/> - The Remote Service Admin has registered a
         new Export Registration.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_UNREGISTRATION"
-        xrefstyle="hyperlink"/> – An Export Registration has been closed, the
+        xrefstyle="hyperlink"/> - An Export Registration has been closed, the
         service is no longer exported and the Endpoint is no longer active
         when this was the last registration for that service/Endpoint
         combination.</para>
@@ -1801,14 +1801,14 @@ st.open();</programlisting>
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_WARNING"
-        xrefstyle="hyperlink"/> – An exported service is experiencing problems
+        xrefstyle="hyperlink"/> - An exported service is experiencing problems
         but the Endpoint is still available.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_ERROR"
-        xrefstyle="hyperlink"/> – An imported service has run into a fatal
+        xrefstyle="hyperlink"/> - An imported service has run into a fatal
         error and has been shut down. The Import Registration should be closed
         by the Topology Manager that created them.</para>
       </listitem>
@@ -1816,21 +1816,21 @@ st.open();</programlisting>
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_REGISTRATION"
-        xrefstyle="hyperlink"/> – A new Import Registration was created for a
+        xrefstyle="hyperlink"/> - A new Import Registration was created for a
         potentially existing service/Endpoint combination.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_UNREGISTRATION"
-        xrefstyle="hyperlink"/> – An Import Registration was closed, removing
+        xrefstyle="hyperlink"/> - An Import Registration was closed, removing
         the proxy if this was the last registration.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_WARNING"
-        xrefstyle="hyperlink"/> – An imported service is experiencing problems
+        xrefstyle="hyperlink"/> - An imported service is experiencing problems
         but can continue to function.</para>
       </listitem>
     </itemizedlist>
@@ -1841,31 +1841,31 @@ st.open();</programlisting>
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getType--"
-        xrefstyle="hyperlink"/> – The type of the event.</para>
+        xrefstyle="hyperlink"/> - The type of the event.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getException--"
-        xrefstyle="hyperlink"/> – Any exception, if present.</para>
+        xrefstyle="hyperlink"/> - Any exception, if present.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getExportReference--"
-        xrefstyle="hyperlink"/> – An export reference, if applicable.</para>
+        xrefstyle="hyperlink"/> - An export reference, if applicable.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getImportReference--"
-        xrefstyle="hyperlink"/> – An import reference, if applicable.</para>
+        xrefstyle="hyperlink"/> - An import reference, if applicable.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.getSource--"
-        xrefstyle="hyperlink"/> – The source of the event, the Remote Service
+        xrefstyle="hyperlink"/> - The source of the event, the Remote Service
         Admin service.</para>
       </listitem>
     </itemizedlist>
@@ -1886,63 +1886,63 @@ st.open();</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>bundle</code> – <code>(Bundle)</code> The Remote Service
+          <para><code>bundle</code> - <code>(Bundle)</code> The Remote Service
           Admin bundle</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle.id</code> – (<code>Long</code>) The id of the
+          <para><code>bundle.id</code> - (<code>Long</code>) The id of the
           Remote Service Admin bundle.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle.symbolicname</code> – (<code>String</code>) The
+          <para><code>bundle.symbolicname</code> - (<code>String</code>) The
           Bundle Symbolic Name of the Remote Service Admin
-          <code>bundle.version</code> – (<code>Version</code>) The version of
+          <code>bundle.version</code> - (<code>Version</code>) The version of
           the Remote Service Admin bundle.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle.signer</code> – (<code>String[]</code>) Signer of
+          <para><code>bundle.signer</code> - (<code>String[]</code>) Signer of
           the Remote Service Admin bundle</para>
         </listitem>
 
         <listitem>
-          <para><code>cause</code> – The exception, if present.</para>
+          <para><code>cause</code> - The exception, if present.</para>
         </listitem>
 
         <listitem>
-          <para><code>endpoint.service.id</code> – (<code>Long</code>) Remote
+          <para><code>endpoint.service.id</code> - (<code>Long</code>) Remote
           service id, if present</para>
         </listitem>
 
         <listitem>
-          <para><code>endpoint.framework.uuid</code> – (<code>String</code>)
-          Remote service’s Framework UUID, if present</para>
+          <para><code>endpoint.framework.uuid</code> - (<code>String</code>)
+          Remote service's Framework UUID, if present</para>
         </listitem>
 
         <listitem>
-          <para><code>endpoint.id</code> – (<code>String</code>) The id of the
+          <para><code>endpoint.id</code> - (<code>String</code>) The id of the
           Endpoint, if present</para>
         </listitem>
 
         <listitem>
-          <para><code>objectClass</code> – <code>(String[])</code> The
+          <para><code>objectClass</code> - <code>(String[])</code> The
           interface names, if present</para>
         </listitem>
 
         <listitem>
-          <para><code>service.imported.configs</code> – (<code>String+</code>)
+          <para><code>service.imported.configs</code> - (<code>String+</code>)
           The configuration types of the imported services, if present</para>
         </listitem>
 
         <listitem>
-          <para><code>timestamp</code> – (<code>Long</code>) The time when the
+          <para><code>timestamp</code> - (<code>Long</code>) The time when the
           event occurred</para>
         </listitem>
 
         <listitem>
-          <para><code>event</code> – (<code>RemoteServiceAdminEvent</code>)
+          <para><code>event</code> - (<code>RemoteServiceAdminEvent</code>)
           The <code>RemoteServiceAdminEvent</code> object that caused this
           event.</para>
         </listitem>
@@ -1976,9 +1976,8 @@ st.open();</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>A directory if it ends with a solidus (slash <code>’/’
-        \u002F</code>). A directory is scanned for <code>*.xml</code>
-        files.</para>
+        <para>A directory if it ends with a solidus (<code>'/' \u002F</code>).
+        A directory is scanned for <code>*.xml</code> files.</para>
       </listitem>
 
       <listitem>
@@ -1989,7 +1988,7 @@ st.open();</programlisting>
 
       <listitem>
         <para>A complete path, not having wildcards not ending in a solidus
-        (slash <code>’/’ \u002F</code>).</para>
+        (<code>'/' \u002F</code>).</para>
       </listitem>
     </itemizedlist>
 
@@ -1997,7 +1996,7 @@ st.open();</programlisting>
     attributes, unrecognized attributes and directives must be ignored.</para>
 
     <para>A Remote-Service manifest header specified in a fragment must be
-    ignored. However, XML documents referenced by a bundle’s Remote-Service
+    ignored. However, XML documents referenced by a bundle's Remote-Service
     manifest header can be contained in attached fragments. The required
     behavior for this is implemented in the <code>findEntries</code>
     method.</para>
@@ -2195,8 +2194,8 @@ xml                    ::= &lt;*&gt; *</programlisting>
 
       <programlisting>http://www.osgi.org/xmlns/rsa/v1.0.0</programlisting>
 
-      <programlisting role="pgwide"><xi:include parse="text" encoding="utf-8"
-    href="../../generated/xmlns/rsa/v1.0.0/rsa.xsd"/></programlisting>
+      <programlisting role="pgwide"><xi:include encoding="utf-8"
+          href="../../generated/xmlns/rsa/v1.0.0/rsa.xsd" parse="text"/></programlisting>
     </section>
   </section>
 
@@ -2262,7 +2261,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>&lt;&lt;LOCAL&gt;&gt;</code> – This value represents the
+          <para><code>&lt;&lt;LOCAL&gt;&gt;</code> - This value represents the
           framework UUID of the framework that this bundle belongs to. The
           following example restricts the visibility to descriptions of local
           Endpoints:</para>
@@ -2333,7 +2332,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
               <code>IMPORT</code> and <code>EXPORT</code> action imply
               <code>READ</code>. Distribution of events to the Remote Service
               Admin Listener. The Remote Service Admin must verify that the
-              listener’s bundle has the proper permission. No events should be
+              listener's bundle has the proper permission. No events should be
               delivered that are not implied.</para></entry>
             </row>
           </tbody>

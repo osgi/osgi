@@ -13,11 +13,11 @@
   <section>
     <title>License Grant</title>
 
-    <para>OSGi Alliance (“OSGi”) hereby grants you a fully-paid,
+    <para>OSGi Alliance ("OSGi") hereby grants you a fully-paid,
     non-exclusive, non-transferable, worldwide, limited license (without the
-    right to sublicense), under OSGi’s applicable intellectual property rights
-    to view, download, and reproduce this OSGi Specification (“Specification”)
-    which follows this License Agreement (“Agreement”). You are not authorized
+    right to sublicense), under OSGi's applicable intellectual property rights
+    to view, download, and reproduce this OSGi Specification ("Specification")
+    which follows this License Agreement ("Agreement"). You are not authorized
     to create any derivative work of the Specification. However, to the extent
     that an implementation of the Specification would necessarily be a
     derivative work of the Specification, OSGi also grants you a perpetual,
@@ -35,8 +35,8 @@
     of the Specification. An implementation of the Specification must not
     claim to be a compliant implementation of the Specification unless it
     passes the OSGi Compliance Tests for the Specification in accordance with
-    OSGi processes. “OSGi Name Space” shall mean the public class or interface
-    declarations whose names begin with “org.osgi" or any recognized
+    OSGi processes. "OSGi Name Space" shall mean the public class or interface
+    declarations whose names begin with "org.osgi" or any recognized
     successors or replacements thereof.</para>
 
     <para>OSGi Participants (as such term is defined in the OSGi Intellectual

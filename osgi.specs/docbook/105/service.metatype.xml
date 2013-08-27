@@ -41,7 +41,7 @@
 
     <para>The attribute paradigm has several characteristics that make this
     approach suitable when data needs to be communicated between different
-    entities which “speak” different languages. Attributes are uncomplicated,
+    entities which "speak" different languages. Attributes are uncomplicated,
     resilient to change, and allow the receiver to dynamically adapt to
     different types of data.</para>
 
@@ -63,44 +63,44 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Conceptual model</emphasis> – The specification must
+          <para><emphasis>Conceptual model</emphasis> - The specification must
           have a conceptual model for how classes and attributes are
           organized.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Standards</emphasis> – The specification should be
+          <para><emphasis>Standards</emphasis> - The specification should be
           aligned with appropriate standards, and explained in situations
           where the specification is not aligned with, or cannot be mapped to,
           standards.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Remote Management</emphasis> – Remote management
+          <para><emphasis>Remote Management</emphasis> - Remote management
           should be taken into account.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Size</emphasis> – Minimal overhead in size for a
+          <para><emphasis>Size</emphasis> - Minimal overhead in size for a
           bundle using this specification is required.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Localization</emphasis> – It must be possible to use
+          <para><emphasis>Localization</emphasis> - It must be possible to use
           this specification with different languages at the same time. This
           ability allows servlets to serve information in the language
           selected in the browser.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Type information</emphasis> – The definition of an
+          <para><emphasis>Type information</emphasis> - The definition of an
           attribute should contain the name (if it is required), the
           cardinality, a label, a description, labels for enumerated values,
           and the Java class that should be used for the values.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Validation</emphasis> – It should be possible to
+          <para><emphasis>Validation</emphasis> - It should be possible to
           validate the values of the attributes.</para>
         </listitem>
       </itemizedlist>
@@ -111,40 +111,40 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Meta Type Service</emphasis> – A service that
+          <para><emphasis>Meta Type Service</emphasis> - A service that
           provides a unified access point for meta type information.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Attribute</emphasis> – A key/value pair.</para>
+          <para><emphasis>Attribute</emphasis> - A key/value pair.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>PID</emphasis> – A unique persistent ID, defined in
+          <para><emphasis>PID</emphasis> - A unique persistent ID, defined in
           configuration management.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Attribute Definition</emphasis> – Defines a
+          <para><emphasis>Attribute Definition</emphasis> - Defines a
           description, name, help text, and type information of an
           attribute.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Object Class Definition</emphasis> – Defines the
+          <para><emphasis>Object Class Definition</emphasis> - Defines the
           type of a datum. It contains a description and name of the type plus
           a set of <code>AttributeDefinition</code> objects.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Meta Type Provider</emphasis> – Provides access to
+          <para><emphasis>Meta Type Provider</emphasis> - Provides access to
           the object classes that are available for this object. Access uses
           the PID and a locale to find the best
           <code>ObjectClassDefinition</code> object.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Meta Type Information</emphasis> – Provides meta
+          <para><emphasis>Meta Type Information</emphasis> - Provides meta
           type information for a bundle.</para>
         </listitem>
       </itemizedlist>
@@ -343,17 +343,17 @@
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>not specified</emphasis> – Return
+            <para><emphasis>not specified</emphasis> - Return
             <code>null</code> if this attribute is not specified.</para>
           </listitem>
 
           <listitem>
-            <para><emphasis>cardinality = 0</emphasis> – Return an array with
+            <para><emphasis>cardinality = 0</emphasis> - Return an array with
             one element.</para>
           </listitem>
 
           <listitem>
-            <para><emphasis>otherwise</emphasis> – Return an array with less
+            <para><emphasis>otherwise</emphasis> - Return an array with less
             or equal than the absolute value of cardinality, possibly empty if
             the value is an empty string.</para>
           </listitem>
@@ -371,7 +371,7 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Meta Type Resource</emphasis> – A bundle can provide
+        <para><emphasis>Meta Type Resource</emphasis> - A bundle can provide
         one or more XML resources that are contained in its JAR file. These
         resources contain an XML definition of meta types as well as to what
         PIDs these Meta Types apply. These XML resources must reside in the
@@ -380,7 +380,7 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>Managed Service [Factory] objects </emphasis>– As
+        <para><emphasis>Managed Service [Factory] objects</emphasis> - As
         defined in the configuration management specification,
         <code>ManagedService</code> and <code>ManagedServiceFactory</code>
         service objects can optionally implement the
@@ -390,7 +390,7 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>Meta Type Provider service</emphasis> – Bundles can
+        <para><emphasis>Meta Type Provider service</emphasis> - Bundles can
         register Meta Type Provider services to dynamically provide meta types
         for PIDs and factory PIDs.</para>
       </listitem>
@@ -418,7 +418,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.metatype.MetaTypeService.getMetaTypeInformation-Bundle-"
-        xrefstyle="hyperlink"/> – Given a bundle, it must return the Meta Type
+        xrefstyle="hyperlink"/> - Given a bundle, it must return the Meta Type
         Information for that bundle, even if there is no meta type information
         available at the moment of the call.</para>
       </listitem>
@@ -433,14 +433,14 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.metatype.MetaTypeInformation.getPids--"
-        xrefstyle="hyperlink"/> – PIDs for which Meta Types are
+        xrefstyle="hyperlink"/> - PIDs for which Meta Types are
         available.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.metatype.MetaTypeInformation.getFactoryPids--"
-        xrefstyle="hyperlink"/> – PIDs associated with Managed Service Factory
+        xrefstyle="hyperlink"/> - PIDs associated with Managed Service Factory
         services.</para>
       </listitem>
     </itemizedlist>
@@ -467,7 +467,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.metatype.MetaTypeProvider.getObjectClassDefinition-String-String-"
-        xrefstyle="hyperlink"/> – Get access to an ObjectClassDefinition
+        xrefstyle="hyperlink"/> - Get access to an ObjectClassDefinition
         object for the given PID. The second parameter defines the
         locale.</para>
       </listitem>
@@ -475,7 +475,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.metatype.MetaTypeProvider.getLocales--"
-        xrefstyle="hyperlink"/> – List the locales that are available.</para>
+        xrefstyle="hyperlink"/> - List the locales that are available.</para>
       </listitem>
     </itemizedlist>
 
@@ -483,7 +483,7 @@
     because not all profiles support Locale. The <code>String</code> holds the
     standard Locale presentation of:</para>
 
-    <programlisting>locale = language ( ’_’ country ( ’_’ variation))
+    <programlisting>locale = language ( '_' country ( '_' variation))
 language ::= &lt; defined by ISO 3166 &gt;
 country  ::= &lt; defined by ISO 639 &gt;</programlisting>
 
@@ -537,7 +537,7 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
       <listitem>
         <para><xref
         linkend="org.osgi.service.metatype.MetaTypeProvider.METATYPE_PID"
-        xrefstyle="hyperlink"/> – (<code>String+</code>) Provides a list of
+        xrefstyle="hyperlink"/> - (<code>String+</code>) Provides a list of
         PIDs that this Meta Type Provider can provide Object Class Definitions
         for. The listed PIDs are intended to be used as normal singleton PIDs
         used by Managed Services.</para>
@@ -546,7 +546,7 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
       <listitem>
         <para><xref
         linkend="org.osgi.service.metatype.MetaTypeProvider.METATYPE_FACTORY_PID"
-        xrefstyle="hyperlink"/> – (<code>String+</code>) Provides a list of
+        xrefstyle="hyperlink"/> - (<code>String+</code>) Provides a list of
         factory PIDs that this Meta Type Provider can provide Object Class
         Definitions for. The listed PIDs are intended to be used as factory
         PIDs used by Managed Service Factories.</para>
@@ -838,7 +838,7 @@ Attribute   ::= Value *</programlisting>
               <entry><para>Location of the bundle that implements the PID.
               This binds the PID to the bundle. I.e. no other bundle using the
               same PID may use this designation. In a Meta Type resource this
-              field may be set to an wildcard (\u002A, <code>"*"</code>) to
+              field may be set to an wildcard (<code>'*' \u002A</code>) to
               indicate the bundle where the resource comes from. This is an
               optional attribute but can be mandatory in certain usage
               schemes, for example the Autoconf Resource
@@ -1061,11 +1061,11 @@ Password <phrase role="symbol">↔</phrase> <xref
               comma delimited list. The default value is trimmed and escaped
               in the same way as described in the <xref
               linkend="org.osgi.service.metatype.AttributeDefinition.validate-String-"
-              xrefstyle="hyperlink"/> method. The empty string is significant 
-              and must be seen as an empty Vector or array if specified as the 
-              default for an attribute with a cardinality that is not equal to 
-              zero. Default values must be valid or otherwise ignored.</para>
-              </entry>
+              xrefstyle="hyperlink"/> method. The empty string is significant
+              and must be seen as an empty Vector or array if specified as the
+              default for an attribute with a cardinality that is not equal to
+              zero. Default values must be valid or otherwise
+              ignored.</para></entry>
             </row>
 
             <row>
@@ -1087,12 +1087,12 @@ Password <phrase role="symbol">↔</phrase> <xref
             <row>
               <entry spanname="element"><code>Option</code></entry>
 
-              <entry colname="col6"><para>One option label/value for the 
+              <entry colname="col6"><para>One option label/value for the
               options in an <code>AD</code>. Options are exclusive. The <xref
               linkend="org.osgi.service.metatype.AttributeDefinition.validate-String-"
-              xrefstyle="hyperlink"/> method must verify that an attribute value
-              matches one of the option values when present.</para>
-              </entry>
+              xrefstyle="hyperlink"/> method must verify that an attribute
+              value matches one of the option values when
+              present.</para></entry>
             </row>
 
             <row>
@@ -1229,7 +1229,7 @@ Password <phrase role="symbol">↔</phrase> <xref
               <entry><para/></entry>
 
               <entry><para>The content of the attributes. If this is an array,
-              the content must be separated by commas (<code>’,’
+              the content must be separated by commas (<code>','
               \u002C</code>). Commas must be escaped as described at the <link
               endterm="i1366390" linkend="i1366390"/> attribute of the
               <code>AD</code> element.</para></entry>
@@ -1282,7 +1282,7 @@ Password <phrase role="symbol">↔</phrase> <xref
       must be used together with the <code>factoryPid</code> attribute.
       However, in that case an aliasing model is required because the
       Configuration Admin service does not allow the creator to choose the
-      <code>Configuration</code> object’s PID.</para>
+      <code>Configuration</code> object's PID.</para>
     </section>
 
     <section xml:id="i1504251">

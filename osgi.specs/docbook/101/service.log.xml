@@ -39,7 +39,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>LogService</emphasis> – The service interface that
+          <para><emphasis>LogService</emphasis> - The service interface that
           allows a bundle to log information, including a message, a level, an
           exception, a <code>ServiceReference</code> object, and a
           <code>Bundle</code> object.</para>
@@ -118,22 +118,22 @@
 
     <itemizedlist>
       <listitem>
-        <para><code>log(int, String)</code> – This method logs a simple
+        <para><code>log(int, String)</code> - This method logs a simple
         message at a given log level.</para>
       </listitem>
 
       <listitem>
-        <para><code>log(int, String, Throwable)</code> – This method logs a
+        <para><code>log(int, String, Throwable)</code> - This method logs a
         message with an exception at a given log level.</para>
       </listitem>
 
       <listitem>
-        <para><code>log(ServiceReference, int, String)</code> – This method
+        <para><code>log(ServiceReference, int, String)</code> - This method
         logs a message associated with a specific service.</para>
       </listitem>
 
       <listitem>
-        <para><code>log(ServiceReference, int, String, Throwable)</code> –
+        <para><code>log(ServiceReference, int, String, Throwable)</code> -
         This method logs a message with an exception associated with a
         specific service.</para>
       </listitem>
@@ -270,12 +270,12 @@ catch ( IOException exception ) {
 
     <itemizedlist>
       <listitem>
-        <para><code>getLog()</code> – This method retrieves past log entries
+        <para><code>getLog()</code> - This method retrieves past log entries
         as an enumeration with the most recent entry first.</para>
       </listitem>
 
       <listitem>
-        <para><code>addLogListener(LogListener)</code> – This method is used
+        <para><code>addLogListener(LogListener)</code> - This method is used
         to subscribe to the Log Reader Service in order to receive log
         messages as they occur. Unlike the previously recorded log entries,
         all log messages must be sent to subscribers of the Log Reader Service
@@ -296,7 +296,7 @@ catch ( IOException exception ) {
 
     <itemizedlist>
       <listitem>
-        <para><code>logged(LogEntry)</code> – This method is called for each
+        <para><code>logged(LogEntry)</code> - This method is called for each
         <code>Log-Entry</code> object created. A Log Reader Service
         implementation must not filter entries to the <code>LogListener</code>
         interface as it is allowed to do for its log. A
@@ -321,12 +321,12 @@ catch ( IOException exception ) {
 
     <itemizedlist>
       <listitem>
-        <para><code>getBundle()</code> – This method returns the Bundle object
+        <para><code>getBundle()</code> - This method returns the Bundle object
         related to a <code>Log-Entry</code> object.</para>
       </listitem>
 
       <listitem>
-        <para><code>getException()</code> – This method returns the exception
+        <para><code>getException()</code> - This method returns the exception
         related to a <code>Log-Entry</code> object. In some implementations,
         the returned exception may not be the original exception. To avoid
         references to a bundle defined exception class, thus preventing an
@@ -338,23 +338,23 @@ catch ( IOException exception ) {
       </listitem>
 
       <listitem>
-        <para><code>getLevel()</code> – This method returns the severity level
+        <para><code>getLevel()</code> - This method returns the severity level
         related to a <code>Log-Entry</code> object.</para>
       </listitem>
 
       <listitem>
-        <para><code>getMessage()</code> – This method returns the message
+        <para><code>getMessage()</code> - This method returns the message
         related to a <code>Log-Entry</code> object.</para>
       </listitem>
 
       <listitem>
-        <para><code>getServiceReference()</code> –This method returns the
+        <para><code>getServiceReference()</code> - This method returns the
         <code>ServiceReference</code> object of the service related to a
         <code>Log-Entry</code> object.</para>
       </listitem>
 
       <listitem>
-        <para><code>getTime()</code> – This method returns the time that the
+        <para><code>getTime()</code> - This method returns the time that the
         log entry was created.</para>
       </listitem>
     </itemizedlist>
@@ -428,34 +428,34 @@ catch ( IOException exception ) {
               <entry><para>The message depends on the event
               type:</para><itemizedlist>
                   <listitem>
-                    <para><code>INSTALLED</code> – "BundleEvent
+                    <para><code>INSTALLED</code> - "BundleEvent
                     INSTALLED"</para>
                   </listitem>
 
                   <listitem>
-                    <para><code>STARTED</code> – "BundleEvent STARTED"</para>
+                    <para><code>STARTED</code> - "BundleEvent STARTED"</para>
                   </listitem>
 
                   <listitem>
-                    <para><code>STOPPED</code> – "BundleEvent STOPPED"</para>
+                    <para><code>STOPPED</code> - "BundleEvent STOPPED"</para>
                   </listitem>
 
                   <listitem>
-                    <para><code>UPDATED</code> – "BundleEvent UPDATED"</para>
+                    <para><code>UPDATED</code> - "BundleEvent UPDATED"</para>
                   </listitem>
 
                   <listitem>
-                    <para><code>UNINSTALLED</code> – "BundleEvent
+                    <para><code>UNINSTALLED</code> - "BundleEvent
                     UNINSTALLED"</para>
                   </listitem>
 
                   <listitem>
-                    <para><code>RESOLVED</code> – "BundleEvent
+                    <para><code>RESOLVED</code> - "BundleEvent
                     RESOLVED"</para>
                   </listitem>
 
                   <listitem>
-                    <para><code>UNRESOLVED</code> – "BundleEvent
+                    <para><code>UNRESOLVED</code> - "BundleEvent
                     UNRESOLVED"</para>
                   </listitem>
                 </itemizedlist></entry>
@@ -527,17 +527,17 @@ catch ( IOException exception ) {
               <entry><para>This message depends on the actual event type. The
               messages are mapped as follows:</para><itemizedlist>
                   <listitem>
-                    <para><code>REGISTERED</code> – "ServiceEvent
+                    <para><code>REGISTERED</code> - "ServiceEvent
                     REGISTERED"</para>
                   </listitem>
 
                   <listitem>
-                    <para><code>MODIFIED</code> – "ServiceEvent
+                    <para><code>MODIFIED</code> - "ServiceEvent
                     MODIFIED"</para>
                   </listitem>
 
                   <listitem>
-                    <para><code>UNREGISTERING</code> – "ServiceEvent
+                    <para><code>UNREGISTERING</code> - "ServiceEvent
                     UNREGISTERING"</para>
                   </listitem>
                 </itemizedlist></entry>
@@ -609,31 +609,31 @@ catch ( IOException exception ) {
               <entry><para>This message depends on the actual event type. The
               messages are mapped as follows:</para><itemizedlist>
                   <listitem>
-                    <para><code>STARTED</code> – "FrameworkEvent
+                    <para><code>STARTED</code> - "FrameworkEvent
                     STARTED"</para>
                   </listitem>
 
                   <listitem>
-                    <para><code>ERROR</code> – "FrameworkEvent ERROR"</para>
+                    <para><code>ERROR</code> - "FrameworkEvent ERROR"</para>
                   </listitem>
 
                   <listitem>
-                    <para><code>PACKAGES_REFRESHED</code> – "FrameworkEvent
+                    <para><code>PACKAGES_REFRESHED</code> - "FrameworkEvent
                     PACKAGES REFRESHED"</para>
                   </listitem>
 
                   <listitem>
-                    <para><code>STARTLEVEL_CHANGED</code> – "FrameworkEvent
+                    <para><code>STARTLEVEL_CHANGED</code> - "FrameworkEvent
                     STARTLEVEL CHANGED"</para>
                   </listitem>
 
                   <listitem>
-                    <para><code>WARNING</code> – "FrameworkEvent
+                    <para><code>WARNING</code> - "FrameworkEvent
                     WARNING"</para>
                   </listitem>
 
                   <listitem>
-                    <para><code>INFO</code> – "FrameworkEvent INFO"</para>
+                    <para><code>INFO</code> - "FrameworkEvent INFO"</para>
                   </listitem>
                 </itemizedlist></entry>
             </row>
@@ -663,37 +663,37 @@ LOG_OTHER  (when event is not recognized)</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>bundle.id</code> – (Long) The source bundle's id.</para>
+          <para><code>bundle.id</code> - (Long) The source bundle's id.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle.symbolicName</code> – (<code>String</code>) The
+          <para><code>bundle.symbolicName</code> - (<code>String</code>) The
           source bundle's symbolic name. Only set if not
           <code>null</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle</code> – (<code>Bundle</code>) The source
+          <para><code>bundle</code> - (<code>Bundle</code>) The source
           bundle.</para>
         </listitem>
 
         <listitem>
-          <para><code>log.level</code> – (<code>Integer</code>) The log
+          <para><code>log.level</code> - (<code>Integer</code>) The log
           level.</para>
         </listitem>
 
         <listitem>
-          <para><code>message</code> – (<code>String</code>) The log
+          <para><code>message</code> - (<code>String</code>) The log
           message.</para>
         </listitem>
 
         <listitem>
-          <para><code>timestamp</code> – (<code>Long</code>) The log entry's
+          <para><code>timestamp</code> - (<code>Long</code>) The log entry's
           timestamp.</para>
         </listitem>
 
         <listitem>
-          <para>log.entry – (<code>LogEntry</code>) The LogEntry
+          <para>log.entry - (<code>LogEntry</code>) The LogEntry
           object.</para>
         </listitem>
       </itemizedlist>
@@ -702,20 +702,20 @@ LOG_OTHER  (when event is not recognized)</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>exception.class</code> – (<code>String</code>) The
+          <para><code>exception.class</code> - (<code>String</code>) The
           fully-qualified class name of the attached exception. Only set if
           the <code>getException</code>method returns a non-<code>null</code>
           value.</para>
         </listitem>
 
         <listitem>
-          <para><code>exception.message</code> – (<code>String</code>) The
+          <para><code>exception.message</code> - (<code>String</code>) The
           message of the attached Exception. Only set if the Exception message
           is not <code>null</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>exception</code> – (<code>Throwable</code>) The
+          <para><code>exception</code> - (<code>Throwable</code>) The
           Exception returned by the <code>getException</code> method.</para>
         </listitem>
       </itemizedlist>
@@ -725,23 +725,23 @@ LOG_OTHER  (when event is not recognized)</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>service</code> – (<code>ServiceReference</code>) The
+          <para><code>service</code> - (<code>ServiceReference</code>) The
           result of the <code>getServiceReference</code> method.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.id</code> – (<code>Long</code>) The id of the
+          <para><code>service.id</code> - (<code>Long</code>) The id of the
           service.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.pid</code> – (<code>String</code>) The service's
+          <para><code>service.pid</code> - (<code>String</code>) The service's
           persistent identity. Only set if the <code>service.pid</code>
           service property is not <code>null</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.objectClass</code> – (<code>String[]</code>) The
+          <para><code>service.objectClass</code> - (<code>String[]</code>) The
           object class of the service object.</para>
         </listitem>
       </itemizedlist>
