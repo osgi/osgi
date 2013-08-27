@@ -239,15 +239,13 @@ public interface Configuration {
 	/**
 	 * Get the change count.
 	 * 
-	 * The Configuration must maintain a change counter that every time when
-	 * this configuration is updated and its properties are stored is
-	 * incremented with a positive value. The counter must be changed after the
-	 * properties are persisted but before the targets are updated and events
-	 * are sent out.
+	 * Each Configuration must maintain a change counter that is incremented
+	 * with a positive value every time the configuration is updated and its
+	 * properties are stored. The counter must be incremented before the targets
+	 * are updated and events are sent out.
 	 * 
-	 * @return A monotonously increasing value reflecting changes in this
-	 *         Configuration
-	 * 
+	 * @return A monotonically increasing value reflecting changes in this
+	 *         Configuration.
 	 * @throws IllegalStateException If this configuration has been deleted.
 	 * @since 1.5
 	 */
