@@ -248,6 +248,7 @@ public interface Configuration {
 	 * @return A monotonously increasing value reflecting changes in this
 	 *         Configuration
 	 * 
+	 * @throws IllegalStateException If this configuration has been deleted.
 	 * @since 1.5
 	 */
 	public long getChangeCount();
