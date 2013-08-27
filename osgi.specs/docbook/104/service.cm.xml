@@ -43,25 +43,25 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Local Configuration</emphasis> – The Configuration
+          <para><emphasis>Local Configuration</emphasis> - The Configuration
           Admin service must support bundles that have their own user
           interface to change their configurations.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Reflection</emphasis> – The Configuration Admin
+          <para><emphasis>Reflection</emphasis> - The Configuration Admin
           service must be able to deduce the names and types of the needed
           configuration data.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Legacy</emphasis> – The Configuration Admin service
+          <para><emphasis>Legacy</emphasis> - The Configuration Admin service
           must support configuration data of existing entities (such as
           devices).</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Object Oriented </emphasis>– The Configuration Admin
+          <para><emphasis>Object Oriented</emphasis> - The Configuration Admin
           service must support the creation and deletion of instances of
           configuration information so that a bundle can create the
           appropriate number of services under the control of the
@@ -69,7 +69,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Embedded Devices</emphasis> – The Configuration
+          <para><emphasis>Embedded Devices</emphasis> - The Configuration
           Admin service must be deployable on a wide range of platforms. This
           requirement means that the interface should not assume file storage
           on the platform. The choice to use file storage should be left to
@@ -77,7 +77,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Remote versus Local Management</emphasis> – The
+          <para><emphasis>Remote versus Local Management</emphasis> - The
           Configuration Admin service must allow for a remotely managed OSGi
           framework, and must not assume that con-figuration information is
           stored locally. Nor should it assume that the Configuration Admin
@@ -86,32 +86,32 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Availability</emphasis> – The OSGi environment is a
+          <para><emphasis>Availability</emphasis> - The OSGi environment is a
           dynamic environment that must run continuously (24/7/365).
           Configuration updates must happen dynamically and should not require
           restarting of the system or bundles.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Immediate Response</emphasis> – Changes in
+          <para><emphasis>Immediate Response</emphasis> - Changes in
           configuration should be reflected immediately.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Execution Environment </emphasis>– The Configuration
+          <para><emphasis>Execution Environment</emphasis> - The Configuration
           Admin service will not require more than an environment that
           fulfills the minimal execution requirements.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Communications</emphasis> – The Configuration Admin
-          service should not assume “always-on” connectivity, so the API is
+          <para><emphasis>Communications</emphasis> - The Configuration Admin
+          service should not assume "always-on" connectivity, so the API is
           also applicable for mobile applications in cars, phones, or
           boats.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Extendability</emphasis> – The Configuration Admin
+          <para><emphasis>Extendability</emphasis> - The Configuration Admin
           service should expose the process of configuration to other bundles.
           This exposure should at a minimum encompass initiating an update,
           removing certain configuration properties, adding properties, and
@@ -120,7 +120,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Complexity Trade-offs</emphasis> – Bundles in need
+          <para><emphasis>Complexity Trade-offs</emphasis> - Bundles in need
           of configuration data should have a simple way of obtaining it. Most
           bundles have this need and the code to accept this data.
           Additionally, updates should be simple from the perspective of the
@@ -134,13 +134,13 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Regions</emphasis> – It should be possible to create
+          <para><emphasis>Regions</emphasis> - It should be possible to create
           groups of bundles and a manager in a single system that share
           configuration data that is not accessible outside the region.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Shared Information</emphasis> – It should be
+          <para><emphasis>Shared Information</emphasis> - It should be
           possible to share configuration data between bundles.</para>
         </listitem>
       </itemizedlist>
@@ -151,34 +151,34 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Configuration information </emphasis>– <emphasis>
+          <para><emphasis>Configuration information</emphasis> - <emphasis>
           </emphasis>The information needed by a bundle before it can provide
           its intended functionality.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Configuration dictionary</emphasis> – The
+          <para><emphasis>Configuration dictionary</emphasis> - The
           configuration information when it is passed to the target service.
           It consists of a <code>Dictionary</code> object with a number of
           properties and identifiers.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Configuring Bundle</emphasis> – A bundle that
+          <para><emphasis>Configuring Bundle</emphasis> - A bundle that
           modifies the configuration information through the Configuration
           Admin service. This bundle is either a management bundle or the
           bundle for which the configuration information is intended.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Configuration Target</emphasis> – The target service
+          <para><emphasis>Configuration Target</emphasis> - The target service
           that will receive the configuration information. For services, there
           are two types of targets: <code>ManagedServiceFactory</code> or
           <code>ManagedService</code> objects.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Configuration Admin Service</emphasis> – This
+          <para><emphasis>Configuration Admin Service</emphasis> - This
           service is responsible for supplying configuration target bundles
           with their configuration information. It maintains a database with
           configuration information, keyed on the <code>service.pid</code> of
@@ -190,7 +190,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Managed Service </emphasis>– A Managed Service
+          <para><emphasis>Managed Service</emphasis> - A Managed Service
           represents a client of the Configuration Admin service, and is thus
           a configuration target. Bundles should register a Managed Service to
           receive the configuration data from the Configuration Admin service.
@@ -200,7 +200,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Managed Service Factory</emphasis> – A Managed
+          <para><emphasis>Managed Service Factory</emphasis> - A Managed
           Service Factory can receive a number of configuration dictionaries
           from the Configuration Admin service, and is thus also a
           configuration target service. It should register with one or more
@@ -210,7 +210,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Configuration Object</emphasis> – Implements the
+          <para><emphasis>Configuration Object</emphasis> - Implements the
           <code>Configuration</code> interface and contains the configuration
           dictionary for a Managed Service or one of the configuration
           dictionaries for a Managed Service Factory. These objects are
@@ -218,7 +218,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Configuration Plugin</emphasis> Services –
+          <para><emphasis>Configuration Plugin Services</emphasis> -
           Configuration Plugin services are called before the configuration
           dictionary is given to the configuration targets. The plug-in can
           modify the configuration dictionary, which is passed to the
@@ -251,14 +251,14 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Managed Service</emphasis> – A service registered
+          <para><emphasis>Managed Service</emphasis> - A service registered
           with this interface receives its <emphasis>configuration
           dictionary</emphasis> from the database or receives
           <code>null</code> when no such configuration exists.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Managed Service Factory</emphasis> – Services
+          <para><emphasis>Managed Service Factory</emphasis> - Services
           registered with this interface can receive several configuration
           dictionaries when registered. The database contains zero or more
           configuration dictionaries for this service. Each configuration
@@ -341,7 +341,7 @@
     <title>The Persistent Identity</title>
 
     <para>A crucial concept in the Configuration Admin service specification
-    is the Persistent IDentity (PID) as defined in the Framework’s service
+    is the Persistent IDentity (PID) as defined in the Framework's service
     layer. Its purpose is to act as a primary key for objects that need a
     configuration dictionary. The name of the service property for PID is
     defined in the Framework in
@@ -380,7 +380,7 @@
         <title>Local Bundle PIDs</title>
 
         <para>As a convention, descriptions starting with the bundle identity
-        and a full stop (<code>’.’ \u002E</code>) are reserved for a bundle.
+        and a full stop (<code>'.' \u002E</code>) are reserved for a bundle.
         As an example, a PID of <code>"65.536"</code> would belong to the
         bundle with a bundle identity of 65.</para>
       </section>
@@ -511,7 +511,7 @@
       set of target bundles. The syntax of a target pid is:</para>
 
       <programlisting>target-pid  ::=  PID 
-    ( ’|’ symbolic-name ( ’|’ version ( ’|’ location )? )? )?</programlisting>
+    ( '|' symbolic-name ( '|' version ( '|' location )? )? )?</programlisting>
 
       <para>Targets never register with a target PID, target PIDs should only
       be used when creating, getting, or deleting a Configuration through the
@@ -547,7 +547,7 @@
     com.example.web.WebConf</programlisting>
 
       <para>If a registered target service has a PID that contains a vertical
-      line (<code>’|’ \u007c</code>) | then the value must be taken as is and
+      line (<code>'|' \u007c</code>) | then the value must be taken as is and
       must not be interpreted as a targeted PID.</para>
 
       <para>The <code>service.pid</code> configuration property for a targeted
@@ -667,11 +667,11 @@
 
       <para>Locations can be specified for a specific Bundle or use
       <emphasis>multi-locations</emphasis>. For a specific location the
-      Configuration location must exactly match the location of the target’s
+      Configuration location must exactly match the location of the target's
       Bundle. A multi-location is any location that has the following
       syntax:</para>
 
-      <programlisting>multi-location ::= ’?’ symbolic-name?</programlisting>
+      <programlisting>multi-location ::= '?' symbolic-name?</programlisting>
 
       <para>For example</para>
 
@@ -686,31 +686,31 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Single-Location – </emphasis>If
+          <para><emphasis>Single-Location</emphasis> - If
           <code>c.location</code> is not a multi-location then a Bundle only
-          has visibility if the Bundle’s location exactly matches
+          has visibility if the Bundle's location exactly matches
           <code>c.location</code>. In this case there is never a security
           check.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Multi-Location</emphasis> – If
+          <para><emphasis>Multi-Location</emphasis> - If
           <code>c.location</code> is a multi-location (that is, starts with a
           question mark):</para>
 
           <itemizedlist>
             <listitem>
-              <para><emphasis>Security Off</emphasis> – The Bundle always has
+              <para><emphasis>Security Off</emphasis> - The Bundle always has
               visibility</para>
             </listitem>
 
             <listitem>
-              <para><emphasis>Security On</emphasis> – The target’s Bundle
+              <para><emphasis>Security On</emphasis> - The target's Bundle
               must have <code>ConfigurationPermission[ c.location,</code>
               <xref
               linkend="org.osgi.service.cm.ConfigurationPermission.TARGET"
               xrefstyle="hyperlink"/> <code> ]</code> as defined by the
-              Bundle’s <code>hasPermission</code> method. The resource name of
+              Bundle's <code>hasPermission</code> method. The resource name of
               the permission must include the question mark.</para>
             </listitem>
           </itemizedlist>
@@ -735,7 +735,7 @@
       <para>If multiple targets must be updated then the order of updating is
       the ranking order of their services.</para>
 
-      <para>If a target loses visibility because the Configuration’s location
+      <para>If a target loses visibility because the Configuration's location
       changes then it must immediately be deleted from the perspective of that
       target. That is, the target must see a deletion (Managed Service
       Factory) or an update with <code>null</code> (Managed Service). If a
@@ -777,7 +777,7 @@
       <para>A <code>null</code> location parameter can be used to create
       <code>Configuration</code> objects that are not yet bound. In this case,
       the Configuration becomes bound to a specific location the first time
-      that it is compared to a Bundle’s location. If a bundle becomes
+      that it is compared to a Bundle's location. If a bundle becomes
       dynamically bound to a Configuration then a <xref
       linkend="org.osgi.service.cm.ConfigurationEvent.CM_LOCATION_CHANGED"
       xrefstyle="hyperlink"/> event must be dispatched.</para>
@@ -785,7 +785,7 @@
       <para>When this <emphasis>dynamically bound</emphasis> Bundle is
       subsequently uninstalled, configurations that are bound to this bundle
       must be released. That means that for such <code>Configuration</code>
-      object’s the bundle location must be set to <code>null</code> again so
+      object's the bundle location must be set to <code>null</code> again so
       it can be bound again to another bundle.</para>
     </section>
 
@@ -804,7 +804,7 @@
 
       <programlisting>property-name ::= public | private
 public        ::= symbolic-name // See General Syntax in Core Framework
-private       ::= ’.’ symbolic-name</programlisting>
+private       ::= '.' symbolic-name</programlisting>
 
       <para>Properties can be used in other subsystems that have restrictions
       on the character set that can be used. The <code>symbolic-name</code>
@@ -820,7 +820,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       <title>Property Propagation</title>
 
       <para>A configuration target should copy the public configuration
-      properties (properties whose name does not start with a <code>’.’</code>
+      properties (properties whose name does not start with a <code>'.'</code>
       or <code>\u002E</code>) of the <code>Dictionary</code> object argument
       in <code>updated(Dictionary)</code> into the service properties on any
       resulting service registration.</para>
@@ -863,20 +863,20 @@ private       ::= ’.’ symbolic-name</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>service.pid</code> – Set to the PID of the associated
+          <para><code>service.pid</code> - Set to the PID of the associated
           <code>Configuration</code> object. This is the full the targeted PID
           if a targeted PID is used, see <xref linkend="i1891430"/>.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.factoryPid</code> – Only set for a Managed
+          <para><code>service.factoryPid</code> - Only set for a Managed
           Service Factory. It is then set to the PID of the associated Managed
           Service Factory. This is the full the targeted PID if a targeted PID
           is used.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.bundleLocation</code> – Set to the location of
+          <para><code>service.bundleLocation</code> - Set to the location of
           the <code>Configuration</code> object. This property can only be
           used for searching, it may not appear in the configuration
           dictionary returned from the <code>getProperties</code> method due
@@ -920,12 +920,12 @@ private       ::= ’.’ symbolic-name</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>A Singleton</emphasis> – A single entity in the bundle
+        <para><emphasis>A Singleton</emphasis> - A single entity in the bundle
         that needs to be configured.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Externally Detected Devices</emphasis> – Each device
+        <para><emphasis>Externally Detected Devices</emphasis> - Each device
         that is detected causes a registration of an associated
         <code>ManagedService</code> object. The PID of this object is related
         to the identity of the device, such as the address or serial
@@ -1210,7 +1210,7 @@ private       ::= ’.’ symbolic-name</programlisting>
         <title>Example Email Fetcher</title>
 
         <para>An email fetcher program displays the number of emails that a
-        user has – a function likely to be required for different users. This
+        user has - a function likely to be required for different users. This
         function could be viewed as a <emphasis>class</emphasis> that needs to
         be <emphasis>instantiated</emphasis> for each user. Each instance
         requires different parameters, including password, host, protocol,
@@ -1526,7 +1526,7 @@ private       ::= ’.’ symbolic-name</programlisting>
         <listitem>
           <para><xref
           linkend="org.osgi.service.cm.ConfigurationAdmin.getConfiguration-String-"
-          xrefstyle="hyperlink"/> – This method is used by a bundle with a
+          xrefstyle="hyperlink"/> - This method is used by a bundle with a
           given location to configure its <emphasis>own</emphasis>
           <code>ManagedService</code> objects. The argument specifies the PID
           of the targeted service.</para>
@@ -1535,7 +1535,7 @@ private       ::= ’.’ symbolic-name</programlisting>
         <listitem>
           <para><xref
           linkend="org.osgi.service.cm.ConfigurationAdmin.getConfiguration-String-String-"
-          xrefstyle="hyperlink"/> – This method is used by a management bundle
+          xrefstyle="hyperlink"/> - This method is used by a management bundle
           to configure <emphasis>another</emphasis> bundle. Therefore, this
           management bundle needs the right permission. The first argument is
           the PID and the second argument is the location identifier of the
@@ -1565,7 +1565,7 @@ private       ::= ’.’ symbolic-name</programlisting>
         <listitem>
           <para><xref
           linkend="org.osgi.service.cm.ConfigurationAdmin.createFactoryConfiguration-String-"
-          xrefstyle="hyperlink"/> – This method is used by a bundle with a
+          xrefstyle="hyperlink"/> - This method is used by a bundle with a
           given location to configure its own
           <code>ManagedServiceFactory</code> objects. The argument specifies
           the PID of the targeted <code>ManagedServiceFactory</code> object.
@@ -1577,8 +1577,8 @@ private       ::= ’.’ symbolic-name</programlisting>
         <listitem>
           <para><xref
           linkend="org.osgi.service.cm.ConfigurationAdmin.createFactoryConfiguration-String-String-"
-          xrefstyle="hyperlink"/> – This method is used by a management bundle
-          to configure another bundle’s <code>ManagedServiceFactory</code>
+          xrefstyle="hyperlink"/> - This method is used by a management bundle
+          to configure another bundle's <code>ManagedServiceFactory</code>
           object. The first argument is the PID and the second is the location
           identifier of the targeted <code>ManagedServiceFactory</code>
           object. The <emphasis>factory PID</emphasis> can be obtained from
@@ -1684,7 +1684,7 @@ private       ::= ’.’ symbolic-name</programlisting>
       achieves this. The part after the question mark has only use if the
       system runs with security, it allows the implementation of regions, see
       <xref linkend="i1848302"/>. In this example a single question mark is
-      used because any Bundle can receive this Configuration. The manager’s
+      used because any Bundle can receive this Configuration. The manager's
       code could look like:</para>
 
       <programlisting>Configuration c = admin.getConfiguration("com.acme.host", "?" );
@@ -1720,7 +1720,7 @@ public void updated( Dictionary d ) {
       region. Bundles can then only see configurations from their own region.
       Such a region based system can only be achieved with Java security as
       this is the only way to place bundles in a sandbox. This section
-      describes how the Configuration’s location binding can be used to
+      describes how the Configuration's location binding can be used to
       implement regions if Java security is active.</para>
 
       <para>Regions are groups of bundles that share location information
@@ -1830,7 +1830,7 @@ ConfigurationPermission[?application,<code><xref
       <para>A <code>Configuration</code> object that is no longer needed can
       be deleted with <code>Configuration.delete</code>, which removes the
       <code>Configuration</code> object from the database. The database must
-      be updated before the target service’s <code>updated</code> or
+      be updated before the target service's <code>updated</code> or
       <code>deleted</code> method is called. Only services that have received
       the configuration dictionary before must be called.</para>
 
@@ -1862,19 +1862,19 @@ ConfigurationPermission[?application,<code><xref
     </section>
 
     <section>
-      <title>Updating a Bundle’s Own Configuration</title>
+      <title>Updating a Bundle's Own Configuration</title>
 
       <para>The Configuration Admin service specification does not distinguish
       between updates via a Management Agent and a bundle updating its own
       configuration information (as defined by its location). Even if a bundle
       updates its own configuration information, the Configuration Admin
-      service must callback the associated target service’s
+      service must callback the associated target service's
       <code>updated</code> method.</para>
 
-      <para>As a rule, to update its own configuration, a bundle’s user
+      <para>As a rule, to update its own configuration, a bundle's user
       interface should <emphasis>only</emphasis> update the configuration
       information and never its internal structures directly. This rule has
-      the advantage that the events, from the bundle implementation’s
+      the advantage that the events, from the bundle implementation's
       perspective, appear similar for internal updates, remote management
       updates, and initialization.</para>
     </section>
@@ -1893,7 +1893,7 @@ ConfigurationPermission[?application,<code><xref
     <itemizedlist>
       <listitem>
         <para><xref linkend="org.osgi.service.cm.ConfigurationListener"
-        xrefstyle="hyperlink"/> – The default Configuration Listener receives
+        xrefstyle="hyperlink"/> - The default Configuration Listener receives
         events asynchronously from the method that initiated the event and on
         another thread.</para>
       </listitem>
@@ -1901,7 +1901,7 @@ ConfigurationPermission[?application,<code><xref
       <listitem>
         <para><xref
         linkend="org.osgi.service.cm.SynchronousConfigurationListener"
-        xrefstyle="hyperlink"/> – A Synchronous Configuration Listener is
+        xrefstyle="hyperlink"/> - A Synchronous Configuration Listener is
         guaranteed to be called on the same thread as the method call that
         initiated the event.</para>
       </listitem>
@@ -1924,8 +1924,8 @@ ConfigurationPermission[?application,<code><xref
     linkend="org.osgi.service.cm.ConfigurationEvent.getPid--"
     xrefstyle="hyperlink"/> ). If the factory PID is <code>null</code>, the
     event is related to a Managed Service <code>Configuration</code> object,
-    else the event is related to a Managed Service <code>Factory</code>
-    <code>Configuration</code> object.</para>
+    else the event is related to a Managed Service <code>Factory
+    Configuration</code> object.</para>
 
     <para>The <code>ConfigurationEvent</code> object can deliver the following
     events from the <xref
@@ -1936,21 +1936,21 @@ ConfigurationPermission[?application,<code><xref
       <listitem>
         <para><xref
         linkend="org.osgi.service.cm.ConfigurationEvent.CM_DELETED"
-        xrefstyle="hyperlink"/> – The <code>Configuration</code> object is
+        xrefstyle="hyperlink"/> - The <code>Configuration</code> object is
         deleted.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.cm.ConfigurationEvent.CM_UPDATED"
-        xrefstyle="hyperlink"/> – The <code>Configuration</code> object is
+        xrefstyle="hyperlink"/> - The <code>Configuration</code> object is
         updated.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.cm.ConfigurationEvent.CM_LOCATION_CHANGED"
-        xrefstyle="hyperlink"/> – The location of the
+        xrefstyle="hyperlink"/> - The location of the
         <code>Configuration</code> object changed.</para>
       </listitem>
     </itemizedlist>
@@ -1982,34 +1982,34 @@ ConfigurationPermission[?application,<code><xref
 
       <itemizedlist>
         <listitem>
-          <para><code>cm.factoryPid</code> – (<code>String</code>) The factory
+          <para><code>cm.factoryPid</code> - (<code>String</code>) The factory
           PID of the associated <code>Configuration</code> object, if the
           target is a Managed Service Factory. Otherwise not set.</para>
         </listitem>
 
         <listitem>
-          <para><code>cm.pid</code> – (<code>String</code>) The PID of the
+          <para><code>cm.pid</code> - (<code>String</code>) The PID of the
           associated <code>Configuration</code> object.</para>
         </listitem>
 
         <listitem>
-          <para><code>service</code> – (<code>ServiceReference</code>) The
+          <para><code>service</code> - (<code>ServiceReference</code>) The
           Service Reference of the Configuration Admin service.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.id</code> – (<code>Long</code>) The
+          <para><code>service.id</code> - (<code>Long</code>) The
           Configuration Admin service's ID.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.objectClass</code> – (<code>String[]</code>) The
+          <para><code>service.objectClass</code> - (<code>String[]</code>) The
           Configuration Admin service's object class (which must include
           <code>org.osgi.service.cm.ConfigurationAdmin</code>)</para>
         </listitem>
 
         <listitem>
-          <para><code>service.pid</code> – (<code>String</code>) The
+          <para><code>service.pid</code> - (<code>String</code>) The
           Configuration Admin service's persistent identity, if set.</para>
         </listitem>
       </itemizedlist>
@@ -2265,10 +2265,10 @@ ConfigurationPermission[?application,<code><xref
       <title>Configuration Permission</title>
 
       <para>Every bundle has the implicit right to receive and configure
-      configurations with a location that exactly matches the Bundle’s
+      configurations with a location that exactly matches the Bundle's
       location or that is <code>null</code>. For all other situations the
       Configuration Admin must verify that the configuring and to be updated
-      bundles have a Configuration Permission that matches the Configuration’s
+      bundles have a Configuration Permission that matches the Configuration's
       location.</para>
 
       <para>The resource name of this permission maps to the location of the
@@ -2282,13 +2282,13 @@ ConfigurationPermission[?application,<code><xref
         <listitem>
           <para><xref
           linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE"
-          xrefstyle="hyperlink"/> – Can manage matching configurations</para>
+          xrefstyle="hyperlink"/> - Can manage matching configurations</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.cm.ConfigurationPermission.TARGET"
-          xrefstyle="hyperlink"/> – Can be updated with a matching
+          xrefstyle="hyperlink"/> - Can be updated with a matching
           configuration</para>
         </listitem>
       </itemizedlist>
@@ -2299,7 +2299,7 @@ ConfigurationPermission[?application,<code><xref
       xrefstyle="hyperlink"/> <code>]</code>.</para>
 
       <para>It is possible to deny bundles the use of multi-locations by using
-      Conditional Permission Admin’s deny model.</para>
+      Conditional Permission Admin's deny model.</para>
     </section>
 
     <section>

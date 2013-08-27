@@ -50,27 +50,27 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Standards</emphasis> – Leverage existing standards
+          <para><emphasis>Standards</emphasis> - Leverage existing standards
           in Java based XML parsing: JAXP, SAX and DOM</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Unmodified JAXP code</emphasis> – Run unmodified
+          <para><emphasis>Unmodified JAXP code</emphasis> - Run unmodified
           JAXP code</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Simple</emphasis> – It should be easy to provide a
+          <para><emphasis>Simple</emphasis> - It should be easy to provide a
           SAX or DOM parser as well as easy to find a matching parser</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Multiple</emphasis> – It should be possible to have
+          <para><emphasis>Multiple</emphasis> - It should be possible to have
           multiple implementations of parsers available</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Extendable</emphasis> – It is likely that parsers
+          <para><emphasis>Extendable</emphasis> - It is likely that parsers
           will be extended in the future with more functionality</para>
         </listitem>
       </itemizedlist>
@@ -81,29 +81,29 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>XMLParserActivator</emphasis> – A utility class that
+          <para><emphasis>XMLParserActivator</emphasis> - A utility class that
           registers a parser factory from declarative information in the
           Manifest file.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>SAXParserFactory</emphasis> – A class that can
+          <para><emphasis>SAXParserFactory</emphasis> - A class that can
           create an instance of a <code>SAXParser</code> class.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>DocumentBuilderFactory</emphasis> – A class that can
+          <para><emphasis>DocumentBuilderFactory</emphasis> - A class that can
           create an instance of a <code>DocumentBuilder</code> class.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>SAXParser</emphasis> – A parser, instantiated by a
+          <para><emphasis>SAXParser</emphasis> - A parser, instantiated by a
           <code>SaxParserFactory</code> object, that parses according to the
           SAX specifications.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>DocumentBuilder</emphasis> – A parser, instantiated
+          <para><emphasis>DocumentBuilder</emphasis> - A parser, instantiated
           by a <code>DocumentBuilderFactory</code>, that parses according to
           the DOM specifications.</para>
         </listitem>
@@ -230,7 +230,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.util.xml.XMLParserActivator.PARSER_NAMESPACEAWARE"
-        xrefstyle="hyperlink"/> – The registered parser is aware of
+        xrefstyle="hyperlink"/> - The registered parser is aware of
         name-spaces. Name-spaces allow an XML document to consist of
         independently developed DTDs. In an XML document, they are recognized
         by the <code>xmlns</code> attribute and names prefixed with an
@@ -244,7 +244,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.util.xml.XMLParserActivator.PARSER_VALIDATING"
-        xrefstyle="hyperlink"/> – The registered parser can read the DTD and
+        xrefstyle="hyperlink"/> - The registered parser can read the DTD and
         can validate the XML accordingly. The type is a <code>Boolean</code>
         object that must <code>true</code> when the parser is validating. All
         other values, or the absence of the property, indicate that the parser
@@ -311,7 +311,7 @@
 
       <para>The content of the UTF-8 encoded file is a list of class names
       separated by new lines. White space is ignored and the number sign
-      (<code>’#’ or \u0023</code>) is the comment character.</para>
+      (<code>'#' \u0023</code>) is the comment character.</para>
 
       <para>JAXP uses this service provider mechanism. It is therefore likely
       that vendors will place these service files in the

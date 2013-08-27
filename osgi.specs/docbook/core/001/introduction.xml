@@ -49,7 +49,7 @@
     bundles and services in detail.</para>
 
     <para>It provides the bundle developer with the resources necessary to
-    take advantage of Java’s platform independence and dynamic code-loading
+    take advantage of Java's platform independence and dynamic code-loading
     capability in order to easily develop services for small-memory devices
     that can be deployed on a large scale.</para>
 
@@ -98,7 +98,7 @@
     described in <xref linkend="framework.security"/>.</para>
 
     <para>The Module Layer defines a modularization model for Java. It
-    addresses some of the shortcomings of Java’s deployment model. The
+    addresses some of the shortcomings of Java's deployment model. The
     modularization layer has strict rules for sharing Java packages between
     bundles or hiding packages from other bundles. The Module Layer can be
     used without the life cycle and Service Layer. The Life Cycle Layer
@@ -118,7 +118,7 @@
 
     <para>The Service Layer provides a dynamic, concise and consistent
     programming model for Java bundle developers, simplifying the development
-    and deployment of service bundles by de-coupling the service’s
+    and deployment of service bundles by de-coupling the service's
     specification (Java interface) from its implementations. This model allows
     bundle developers to bind to services only using their interface
     specifications. The selection of a specific implementation, optimized for
@@ -130,7 +130,7 @@
     to provide additional functionality.</para>
 
     <para>A consistent programming model helps bundle developers cope with
-    scalability issues in many different dimensions – critical because the
+    scalability issues in many different dimensions - critical because the
     Framework is intended to run on a variety of devices whose differing
     hardware characteristics may affect many aspects of a service
     implementation. Consistent interfaces insure that the software components
@@ -240,11 +240,11 @@ file?abc=12</programlisting>
       This syntax is based on the following symbols:</para>
 
       <programlisting>*           Repetition of the previous element zero or
-            more times, e.g. ( ’,’ element ) *
+            more times, e.g. ( ',' element ) *
 +           Repetition one or more times
 ?           Previous element is optional
 ( ... )     Grouping
-’...’       Literal
+'...'       Literal
 |           Or
 [...]       Set (one of)
 ..          list, e.g. 1..5 is the list 1 2 3 4 5
@@ -258,7 +258,7 @@ file?abc=12</programlisting>
 digit           ::= [0..9]
 alpha           ::= [a..zA..Z]
 alphanum        ::= alpha | digit
-token           ::= ( alphanum | ’_’ | ’-’ )+
+token           ::= ( alphanum | '_' | '-' )+
 number          ::= digit+
 jletter         ::= &lt;see <xref linkend="i487605"/>
                      for JavaLetter&gt;
@@ -268,14 +268,14 @@ jletterordigit  ::= &lt;see <xref linkend="i487605"/>
 qname           ::= &lt;see <xref linkend="i487605"/>
                      for fully qualified class names&gt;
 identifier      ::= jletter jletterordigit *
-extended        ::= ( alphanum | ’_’ | ’-’ | ’.’ )+
-quoted-string   ::= ’"’ ( ~["\#x0D#x0A#x00] | ’\"’|’\\’)*’"’
+extended        ::= ( alphanum | '_' | '-' | '.' )+
+quoted-string   ::= '"' ( ~["\#x0D#x0A#x00] | '\"'|'\\')*'"'
 argument        ::= extended  | quoted-string
 parameter       ::= directive | attribute
-directive       ::= extended ’:=’ argument
-attribute       ::= extended ’=’ argument
+directive       ::= extended ':=' argument
+attribute       ::= extended '=' argument
 
-unique-name     ::= identifier ( ’.’ identifier )*
+unique-name     ::= identifier ( '.' identifier )*
 symbolic-name   ::= token('.'token)*
 package-name    ::= unique-name
 
@@ -293,7 +293,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
       <title>Object Oriented Terminology</title>
 
       <para>Concepts like classes, interfaces, objects, and services are
-      distinct but subtly different. For example, “LogService” could mean an
+      distinct but subtly different. For example, "LogService" could mean an
       instance of the class <code>LogService</code>, could refer to the class
       <code>LogService</code>, or could indicate the functionality of the
       overall Log Service. Experts usually understand the meaning from the
@@ -302,8 +302,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
 
       <para>When the class is intended, its name is spelled exactly as in the
       Java source code and displayed in a fixed-width typeface: for example,
-      the “<code>HttpService</code> class”, “a method in the <code>HttpContext
-      class</code>” or “a <code>javax.servlet.Servlet</code> object”. A class
+      the "<code>HttpService</code> class", "a method in the <code>HttpContext
+      class</code>" or "a <code>javax.servlet.Servlet</code> object". A class
       name is used in its fully qualified form, like
       <code>javax.servlet.Servlet</code>, when the package is not obvious from
       the context, nor is it in one of the well known java packages like
@@ -318,10 +318,10 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
       <code>Collection&lt;String&gt;</code> are all valid forms.</para>
 
       <para>Exception and permission classes are not followed by the word
-      “object”. Readability is improved when the “object” suffix is avoided.
-      For example, “to throw a Security Exception” and to “to have File
-      Permission” is more readable then “to have a <code>FilePermission</code>
-      object”.</para>
+      "object". Readability is improved when the "object" suffix is avoided.
+      For example, "to throw a Security Exception" and to "to have File
+      Permission" is more readable then "to have a <code>FilePermission</code>
+      object".</para>
 
       <para>Permissions can further be qualified with their actions.
       <code>ServicePermission[com.acme.*,GET|REGISTER]</code> means a
@@ -334,21 +334,21 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
 
       <para>When discussing functionality of a class rather than the
       implementation details, the class name is written as normal text. This
-      convention is often used when discussing services. For example, “the
-      User Admin service” is more readable.</para>
+      convention is often used when discussing services. For example, "the
+      User Admin service" is more readable.</para>
 
-      <para>Some services have the word “Service” embedded in their class
-      name. In those cases, the word “service” is only used once but is
-      written with an upper case S. For example, “the Log Service
-      performs”.</para>
+      <para>Some services have the word "Service" embedded in their class
+      name. In those cases, the word "service" is only used once but is
+      written with an upper case S. For example, "the Log Service
+      performs".</para>
 
       <para>Service objects are registered with the OSGi Framework.
       Registration consists of the service object, a set of properties, and a
       list of classes and interfaces implemented by this service object. The
       classes and interfaces are used for type safety <emphasis>and</emphasis>
       naming. Therefore, it is said that a service object is registered
-      <emphasis>under</emphasis> a class/interface. For example, “This service
-      object is registered under <code>PermissionAdmin</code>.”</para>
+      <emphasis>under</emphasis> a class/interface. For example, "This service
+      object is registered under <code>PermissionAdmin</code>."</para>
     </section>
 
     <section>
@@ -400,20 +400,20 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Point</emphasis> – Connections to the point of a
+          <para><emphasis>Point</emphasis> - Connections to the point of a
           triangle indicate the registration. This makes the point of the
           triangle point to the object that receives the method calls from the
           service users.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Straight Side</emphasis> – Connections to the
+          <para><emphasis>Straight Side</emphasis> - Connections to the
           straight side indicate service clients. Clients call the methods of
           the service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Angled Side</emphasis> – The angled side is reserved
+          <para><emphasis>Angled Side</emphasis> - The angled side is reserved
           for service listeners.</para>
         </listitem>
       </itemizedlist>
@@ -454,8 +454,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
       <code>BundleContext</code> object. Relations usually have some
       description associated with them. This description should be read from
       left to right and top to bottom, and includes the classes on both sides.
-      For example: “A <code>BundleContext</code> object delivers bundle events
-      to zero or more <code>BundleListener</code> objects.”</para>
+      For example: "A <code>BundleContext</code> object delivers bundle events
+      to zero or more <code>BundleListener</code> objects."</para>
 
       <figure xml:id="i309856">
         <title>Relations symbol</title>
@@ -470,8 +470,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
 
       <para>Associations are depicted with a dashed line. Associations are
       between classes, and an association can be placed on a relation. For
-      example, “every <code>ServiceRegistration</code> object has an
-      associated <code>ServiceReference</code> object.” This association does
+      example, "every <code>ServiceRegistration</code> object has an
+      associated <code>ServiceReference</code> object." This association does
       not have to be a hard relationship, but could be derived in some
       way.</para>
 
@@ -522,19 +522,19 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>must</emphasis> – An absolute requirement. Both the
+          <para><emphasis>must</emphasis> - An absolute requirement. Both the
           Framework implementation and bundles have obligations that are
           required to be fulfilled to conform to this specification.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>should</emphasis> – Recommended. It is strongly
+          <para><emphasis>should</emphasis> - Recommended. It is strongly
           recommended to follow the description, but reasons may exist to
           deviate from this recommendation.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>may</emphasis> or <emphasis>can</emphasis> –
+          <para><emphasis>may</emphasis> or <emphasis>can</emphasis> -
           Optional. Implementations must still be interoperable when these
           items are not implemented.</para>
         </listitem>
@@ -755,7 +755,7 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
 
       <listitem>
         <para>Added the <xref linkend="framework.resource"/>. This generified
-        the framework’s requirement-capability model. This affected the module
+        the framework's requirement-capability model. This affected the module
         layer and the Wiring API.</para>
       </listitem>
 

@@ -48,44 +48,44 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Coordination</emphasis> – Provide a solution to
+          <para><emphasis>Coordination</emphasis> - Provide a solution to
           allow multiple collaborators to coordinate the outcome of a task
           initiated by an initiator.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Initiator – </emphasis>An initiator must be able to
+          <para><emphasis>Initiator - </emphasis>An initiator must be able to
           initiate a coordination and control the final outcome.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Participants</emphasis> – Participants in the task
+          <para><emphasis>Participants</emphasis> - Participants in the task
           must be informed when the coordination has ended or failed as well
           as being able to terminate the Coordination.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Time-out</emphasis> – A Coordination should fail
+          <para><emphasis>Time-out</emphasis> - A Coordination should fail
           after a given time-out.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Blocking</emphasis> – Provide support for blocking
+          <para><emphasis>Blocking</emphasis> - Provide support for blocking
           and serializing access to Participants.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Nesting</emphasis> – It must be possible to nest
+          <para><emphasis>Nesting</emphasis> - It must be possible to nest
           Coordinations.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Per Thread Model</emphasis> – Provide a per-thread
+          <para><emphasis>Per Thread Model</emphasis> - Provide a per-thread
           current Coordination model.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Variables</emphasis> – Provide a variable space per
+          <para><emphasis>Variables</emphasis> - Provide a variable space per
           Coordination</para>
         </listitem>
       </itemizedlist>
@@ -96,27 +96,27 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Coordinator</emphasis> – A service that can create
+          <para><emphasis>Coordinator</emphasis> - A service that can create
           and enumerate Coordinations.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Coordination</emphasis> – Represents the ongoing
+          <para><emphasis>Coordination</emphasis> - Represents the ongoing
           Coordination.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Initiator</emphasis> – The party that initiates a
+          <para><emphasis>Initiator</emphasis> - The party that initiates a
           Coordination.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Participant</emphasis> – A party that wants to be
+          <para><emphasis>Participant</emphasis> - A party that wants to be
           informed of the outcome of a Coordination.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Collaborator</emphasis> – Either a participant or
+          <para><emphasis>Collaborator</emphasis> - Either a participant or
           initiator.</para>
         </listitem>
       </itemizedlist>
@@ -331,12 +331,12 @@ public void failed(Coordination c) { doFailed(); }</programlisting>
       therefore be aware that the callbacks <code>ended</code> and
       <code>failed</code> can happen on any thread. The following example
       shows a typical case where a task is parallelized. If any thread fails
-      the Coordination, all other threads could be notified before they’re
+      the Coordination, all other threads could be notified before they're
       finished.</para>
 
-      <programlisting>Executor executor = …
+      <programlisting>Executor executor = ...
 final CountDownLatch latch = new CountdownLatch(10);
-final Coordination c = coordinator.create(“parallel”, 0); 
+final Coordination c = coordinator.create("parallel", 0); 
 for ( int i=0; i&lt;10; i++) {
   executor.execute(
     new Runnable() {
@@ -843,11 +843,11 @@ ALLOW {
       <programlisting>coordination-name ::= symbolic-name   // see <xref
           linkend="intro.core.release" xrefstyle="template:%t"/></programlisting>
 
-      <para><phrase role="body">Passing a name that does not conform to this
-      syntax must throw an Illegal Argument Exception. There are no
-      constraints on duplicates, multiple different Coordinations can use the
-      same name. The name of the Coordination is available with the </phrase>
-      <xref linkend="org.osgi.service.coordinator.Coordination.getName--"
+      <para>Passing a name that does not conform to this syntax must throw an
+      Illegal Argument Exception. There are no constraints on duplicates,
+      multiple different Coordinations can use the same name. The name of the
+      Coordination is available with the <xref
+      linkend="org.osgi.service.coordinator.Coordination.getName--"
       xrefstyle="hyperlink"/> method.</para>
     </section>
 
@@ -878,12 +878,12 @@ ALLOW {
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Not in any Coordination</emphasis> – Add it to the
+          <para><emphasis>Not in any Coordination</emphasis> - Add it to the
           given Coordination and return.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>In target Coordination</emphasis> – Ignore,
+          <para><emphasis>In target Coordination</emphasis> - Ignore,
           participant is already present. A Participant can participate in the
           same Coordination multiple times by calling <xref
           linkend="org.osgi.service.coordinator.Coordination.addParticipant-Participant-"
@@ -893,7 +893,7 @@ ALLOW {
         </listitem>
 
         <listitem>
-          <para><emphasis>In another Coordination</emphasis> – Lock until
+          <para><emphasis>In another Coordination</emphasis> - Lock until
           after the other Coordination has notified all the Participants.
           Implementations can detect deadlocks in certain cases and throw a
           Coordination Exception if a dead lock exist, otherwise the deadlock
@@ -917,7 +917,7 @@ ALLOW {
         <listitem>
           <para><xref
           linkend="org.osgi.service.coordinator.Coordination.end--"
-          xrefstyle="hyperlink"/> – A normal end. All participants that were
+          xrefstyle="hyperlink"/> - A normal end. All participants that were
           added before the end call are called back on their <xref
           linkend="org.osgi.service.coordinator.Participant.ended-Coordination-"
           xrefstyle="hyperlink"/> method.</para>
@@ -926,7 +926,7 @@ ALLOW {
         <listitem>
           <para><xref
           linkend="org.osgi.service.coordinator.Coordination.fail-Throwable-"
-          xrefstyle="hyperlink"/> – The Coordination has failed, this will
+          xrefstyle="hyperlink"/> - The Coordination has failed, this will
           call back the <xref
           linkend="org.osgi.service.coordinator.Participant.failed-Coordination-"
           xrefstyle="hyperlink"/> method on the participants. This method can
@@ -939,7 +939,7 @@ ALLOW {
             <listitem>
               <para><xref
               linkend="org.osgi.service.coordinator.Coordination.TIMEOUT"
-              xrefstyle="hyperlink"/> – If the Coordination times out the
+              xrefstyle="hyperlink"/> - If the Coordination times out the
               Coordination is failed with the <xref
               linkend="org.osgi.service.coordinator.Coordination.TIMEOUT"
               xrefstyle="hyperlink"/> exception instance in
@@ -949,7 +949,7 @@ ALLOW {
             <listitem>
               <para><xref
               linkend="org.osgi.service.coordinator.Coordination.RELEASED"
-              xrefstyle="hyperlink"/> – If the Coordinator that created the
+              xrefstyle="hyperlink"/> - If the Coordinator that created the
               Coordination was unget, all Coordinations created by it will
               fail with the <xref
               linkend="org.osgi.service.coordinator.Coordination.RELEASED"
@@ -1105,7 +1105,7 @@ ALLOW {
       been called back. This requires that the ending thread is the same as
       the thread of the Coordination. The end thread is the thread of the
       <xref linkend="org.osgi.service.coordinator.Coordination.end--"
-      xrefstyle="hyperlink"/> method call. If the Coordination’s thread is not
+      xrefstyle="hyperlink"/> method call. If the Coordination's thread is not
       the same as the ending thread then a <xref
       linkend="org.osgi.service.coordinator.CoordinationException.WRONG_THREAD"
       xrefstyle="hyperlink"/> Coordination Exception is thrown.</para>
@@ -1143,7 +1143,7 @@ ALLOW {
       linkend="org.osgi.service.coordinator.Participant.failed-Coordination-"
       xrefstyle="hyperlink"/> callback method. Exceptions thrown from this
       method should be logged and further ignored. The callback can occur on
-      any thread, including the caller’s.</para>
+      any thread, including the caller's.</para>
 
       <para>Implicit Coordinations must not be popped from its stack in a fail
       nor is it necessary to call the <code>fail</code> method from any
@@ -1258,8 +1258,8 @@ ALLOW {
     <section>
       <title>Released</title>
 
-      <para>The Coordination’s life cycle is bound to the Coordinator service
-      that created it. If the initiator’s bundle ungets this service then the
+      <para>The Coordination's life cycle is bound to the Coordinator service
+      that created it. If the initiator's bundle ungets this service then the
       Coordinator must fail all the Coordinations created by this Coordinator
       by calling the <code>fail(RELEASED)</code> method.</para>
 
@@ -1280,7 +1280,7 @@ ALLOW {
         <listitem>
           <para><xref
           linkend="org.osgi.service.coordinator.Coordinator.begin-String-long-"
-          xrefstyle="hyperlink"/> – Is logically the same as <xref
+          xrefstyle="hyperlink"/> - Is logically the same as <xref
           linkend="org.osgi.service.coordinator.Coordinator.create-String-long-"
           xrefstyle="hyperlink"/>. <xref
           linkend="org.osgi.service.coordinator.Coordination.push--"
@@ -1290,7 +1290,7 @@ ALLOW {
         <listitem>
           <para><xref
           linkend="org.osgi.service.coordinator.Coordinator.addParticipant-Participant-"
-          xrefstyle="hyperlink"/> – This method makes it easy to react
+          xrefstyle="hyperlink"/> - This method makes it easy to react
           differently to the presence of a current implicit Coordination. If a
           current Coordination exists, the participant is added and
           <code>true</code> is returned (or an exception thrown if the
@@ -1301,7 +1301,7 @@ ALLOW {
         <listitem>
           <para><xref
           linkend="org.osgi.service.coordinator.Coordinator.fail-Throwable-"
-          xrefstyle="hyperlink"/> – If there is no current Coordination, this
+          xrefstyle="hyperlink"/> - If there is no current Coordination, this
           method returns false. Otherwise it returns the result of calling
           <xref
           linkend="org.osgi.service.coordinator.Coordination.fail-Throwable-"
@@ -1323,7 +1323,7 @@ ALLOW {
         <listitem>
           <para><xref
           linkend="org.osgi.service.coordinator.Coordination.getBundle--"
-          xrefstyle="hyperlink"/> – Provide the bundle that created the
+          xrefstyle="hyperlink"/> - Provide the bundle that created the
           Coordination. This bundle is the bundle belonging to the Bundle
           Context used to get the Coordinator service.</para>
         </listitem>
@@ -1331,7 +1331,7 @@ ALLOW {
         <listitem>
           <para><xref
           linkend="org.osgi.service.coordinator.Coordination.getFailure--"
-          xrefstyle="hyperlink"/> – The Exception that caused this
+          xrefstyle="hyperlink"/> - The Exception that caused this
           Coordination to fail or <code>null</code>. There are two fixed
           exception instances for a time out ( <xref
           linkend="org.osgi.service.coordinator.Coordination.TIMEOUT"
@@ -1346,19 +1346,19 @@ ALLOW {
         <listitem>
           <para><xref
           linkend="org.osgi.service.coordinator.Coordination.getId--"
-          xrefstyle="hyperlink"/> – The Coordination’s id.</para>
+          xrefstyle="hyperlink"/> - The Coordination's id.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.coordinator.Coordination.getName--"
-          xrefstyle="hyperlink"/> – The name of the Coordination.</para>
+          xrefstyle="hyperlink"/> - The name of the Coordination.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.coordinator.Coordination.getParticipants--"
-          xrefstyle="hyperlink"/> – The current list of participants. This is
+          xrefstyle="hyperlink"/> - The current list of participants. This is
           a mutable snapshot of the added participants. Changing the snapshot
           has no effect on the Coordination.</para>
         </listitem>
@@ -1366,7 +1366,7 @@ ALLOW {
         <listitem>
           <para><xref
           linkend="org.osgi.service.coordinator.Coordination.getThread--"
-          xrefstyle="hyperlink"/> – Answer the thread associated with an
+          xrefstyle="hyperlink"/> - Answer the thread associated with an
           implicit Coordination. If the Coordination is not implicit then the
           answer is <code>null</code>.</para>
         </listitem>
@@ -1374,7 +1374,7 @@ ALLOW {
         <listitem>
           <para><xref
           linkend="org.osgi.service.coordinator.Coordination.getEnclosingCoordination--"
-          xrefstyle="hyperlink"/> – Return the enclosing Coordination.</para>
+          xrefstyle="hyperlink"/> - Return the enclosing Coordination.</para>
         </listitem>
       </itemizedlist>
 
@@ -1384,13 +1384,13 @@ ALLOW {
         <listitem>
           <para><xref
           linkend="org.osgi.service.coordinator.Coordinator.getCoordination-long-"
-          xrefstyle="hyperlink"/> – Retrieve a Coordination by its id.</para>
+          xrefstyle="hyperlink"/> - Retrieve a Coordination by its id.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.coordinator.Coordinator.getCoordinations--"
-          xrefstyle="hyperlink"/> – Get a list of active Coordinations</para>
+          xrefstyle="hyperlink"/> - Get a list of active Coordinations</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1517,26 +1517,26 @@ ALLOW {
       <listitem>
         <para><xref
         linkend="org.osgi.service.coordinator.CoordinationPermission.INITIATE"
-        xrefstyle="hyperlink"/> – Required to initiate and control a
+        xrefstyle="hyperlink"/> - Required to initiate and control a
         Coordination.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.coordinator.CoordinationPermission.PARTICIPATE"
-        xrefstyle="hyperlink"/> – Required to participate in a
+        xrefstyle="hyperlink"/> - Required to participate in a
         Coordination.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.coordinator.CoordinationPermission.ADMIN"
-        xrefstyle="hyperlink"/> – Required to administrate a
+        xrefstyle="hyperlink"/> - Required to administrate a
         Coordinator.</para>
       </listitem>
     </itemizedlist>
 
-    <para>The target bundle of the Coordination Permission is the initiator’s
+    <para>The target bundle of the Coordination Permission is the initiator's
     bundle. This is the bundle that got the Coordinator service to create the
     Coordination. An initiator must therefore have permission to create
     Coordinations for itself.</para>
@@ -1547,7 +1547,7 @@ ALLOW {
       <listitem>
         <para><xref
         linkend="org.osgi.service.coordinator.CoordinationPermission.CoordinationPermission-String-String-"
-        xrefstyle="hyperlink"/> – The constructor for the granted permission.
+        xrefstyle="hyperlink"/> - The constructor for the granted permission.
         It is given a filter expression and the actions that the permission
         applies to.</para>
       </listitem>
@@ -1555,7 +1555,7 @@ ALLOW {
       <listitem>
         <para><xref
         linkend="org.osgi.service.coordinator.CoordinationPermission.CoordinationPermission-String-Bundle-String-"
-        xrefstyle="hyperlink"/> – The constructor for the requested
+        xrefstyle="hyperlink"/> - The constructor for the requested
         permission. It is given the name of the permission, the bundle that
         created the corresponding coordination, and the requested
         actions.</para>

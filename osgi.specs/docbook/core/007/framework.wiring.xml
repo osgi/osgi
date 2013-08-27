@@ -36,7 +36,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Bundle Revision</emphasis> – Represents the
+          <para><emphasis>Bundle Revision</emphasis> - Represents the
           class/resource container of an install or update (i.e. the JAR,
           directory, or other form of archive). Each update creates a new
           Bundle Revision and an uninstall removes the Bundle Revisions. A
@@ -53,14 +53,14 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Bundle Requirement</emphasis> – Represents a
+          <para><emphasis>Bundle Requirement</emphasis> - Represents a
           requirement header, either the Require-Capability header or any of
           the manifest headers referred to in the <xref
           linkend="framework.namespaces"/> that map to a requirement.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Bundle Capability</emphasis> – A quality of a Bundle
+          <para><emphasis>Bundle Capability</emphasis> - A quality of a Bundle
           Revision that is provided when the revision is installed.
           Implemented as a set of attributes that are part of a namespace. A
           Bundle Capability represents either the Provide-Capability manifest
@@ -69,7 +69,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Bundle Wiring</emphasis> – Created each time when a
+          <para><emphasis>Bundle Wiring</emphasis> - Created each time when a
           Bundle Revision is resolved for holding the wires to other Bundle
           Wirings as well as maintaining the run time state. Used by the
           framework to control class loading depending on the semantics of the
@@ -77,13 +77,13 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Bundle Wire</emphasis> – Connects a Bundle
+          <para><emphasis>Bundle Wire</emphasis> - Connects a Bundle
           Requirement to a Bundle Capability as well as the requirer Bundle
           Wiring and provider Bundle Wiring.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Framework Wiring</emphasis> – Provides access to
+          <para><emphasis>Framework Wiring</emphasis> - Provides access to
           manage and initiate refresh and resolving.</para>
         </listitem>
       </itemizedlist>
@@ -151,11 +151,11 @@
       <emphasis>Bundle Wires</emphasis>. A Bundle Wire ties a single Bundle
       Requirement to a single Bundle Capability as well as tying the Bundle
       Wiring that holds the requirement to the Bundle Wiring that holds the
-      capability. The Bundle Wires that flow from a Bundle Wiring’s
+      capability. The Bundle Wires that flow from a Bundle Wiring's
       Requirement to a capability are the <emphasis>required wires</emphasis>,
       they can be obtained with <xref
       linkend="org.osgi.framework.wiring.BundleWiring.getRequiredWires-String-"
-      xrefstyle="hyperlink"/>. Bundle Wires that come from a Bundle Wiring’s
+      xrefstyle="hyperlink"/>. Bundle Wires that come from a Bundle Wiring's
       Capability to a requirement are the <emphasis>provided wires,
       </emphasis>they can be obtained with <xref
       linkend="org.osgi.framework.wiring.BundleWiring.getProvidedWires-String-"
@@ -167,11 +167,11 @@
       actually available from its hosts. In the case of exported packages that
       are also imported the resolver can choose to pick either. These examples
       demonstrate that the resolver must be able to differentiate between the
-      Bundle Revision’s declared requirements and capabilities and the run
+      Bundle Revision's declared requirements and capabilities and the run
       time state, the Bundle Wiring, of the corresponding Bundle Revision. A
-      Bundle Revision’s Bundle Wiring therefore provides the actual run time
+      Bundle Revision's Bundle Wiring therefore provides the actual run time
       requirements and capabilities as chosen by the resolver with the Bundle
-      Wiring’s <xref
+      Wiring's <xref
       linkend="org.osgi.framework.wiring.BundleWiring.getRequirements-String-"
       xrefstyle="hyperlink"/> and <xref
       linkend="org.osgi.framework.wiring.BundleWiring.getCapabilities-String-"
@@ -190,7 +190,7 @@
       <code>BundleWiring</code> object. It then uses solid lines for the
       connection to the declared requirement and capability in their Bundle
       Revisions. This technique makes it possible to depict fragments where a
-      capability in the fragment is actually available from the host’s Bundle
+      capability in the fragment is actually available from the host's Bundle
       Wiring.</para>
 
       <figure pgwide="1" xml:id="i1740286">
@@ -229,14 +229,14 @@ if ( current != null ) {
       <itemizedlist>
         <listitem>
           <para><xref linkend="org.osgi.framework.wiring.BundleRevision"
-          xrefstyle="hyperlink"/> – Provides access to the current revision at
+          xrefstyle="hyperlink"/> - Provides access to the current revision at
           the time of the <code>adapt</code> method call. A Bundle will always
           have a current Bundle Revision until it is uninstalled.</para>
         </listitem>
 
         <listitem>
           <para><xref linkend="org.osgi.framework.wiring.BundleWiring"
-          xrefstyle="hyperlink"/> – Provides access to the current Bundle
+          xrefstyle="hyperlink"/> - Provides access to the current Bundle
           Wiring at the time of the <code>adapt</code> method call. A current
           Bundle Wiring object only exists (the adapt method returns
           non-<code>null</code>) when the bundle is resolved.</para>
@@ -244,7 +244,7 @@ if ( current != null ) {
 
         <listitem>
           <para><xref linkend="org.osgi.framework.wiring.BundleRevisions"
-          xrefstyle="hyperlink"/> – Provides access to all the
+          xrefstyle="hyperlink"/> - Provides access to all the
           <code>BundleRevision</code> objects that are still in use. A Bundle
           always has a <code>BundleRevisions</code> object, the
           <code>adapt</code> method must never return
@@ -253,7 +253,7 @@ if ( current != null ) {
 
         <listitem>
           <para><xref linkend="org.osgi.framework.wiring.FrameworkWiring"
-          xrefstyle="hyperlink"/> – Can only be adapted from the system bundle
+          xrefstyle="hyperlink"/> - Can only be adapted from the system bundle
           with bundle id 0. Provides access to the management methods like
           refresh and resolve, and information about bundles that are pending
           removal, and the dependency closure of a set of bundles.</para>
@@ -326,7 +326,7 @@ Export-Package: com.acme.foo;version=1</programlisting>
       control their attachment. A fragment has a requirement for a host
       capability, this is a capability with the bundle symbolic name and
       version. If a fragment is attached then there is a wire from the
-      fragment’s Bundle Wiring to the host’s Bundle Wiring.</para>
+      fragment's Bundle Wiring to the host's Bundle Wiring.</para>
 
       <para>The following snippet finds the attached fragments of a
       bundle:</para>
@@ -537,7 +537,7 @@ Export-Package: com.acme.foo;version=1</programlisting>
       <listitem>
         <para><xref
         linkend="org.osgi.framework.wiring.BundleRevision.TYPE_FRAGMENT"
-        xrefstyle="hyperlink"/> – If this bit is set the Bundle Revision is a
+        xrefstyle="hyperlink"/> - If this bit is set the Bundle Revision is a
         fragment.</para>
       </listitem>
     </itemizedlist>
@@ -559,13 +559,13 @@ if ( rev != null &amp;&amp; (rev.getTypes() &amp; TYPE_FRAGMENT)!= 0 ){
 
     <para>The <code>osgi.wiring.host</code> requirement represents the
     Fragment-Host header. A fragment can be attached to different hosts and
-    each attachment creates a wire from the fragment’s Bundle Wiring to the
-    host’s Bundle Wiring. The <code>osgi.ee</code> requirement is also never
+    each attachment creates a wire from the fragment's Bundle Wiring to the
+    host's Bundle Wiring. The <code>osgi.ee</code> requirement is also never
     hosted.</para>
 
     <para>The other requirements and capabilities in a fragment bundle never
-    become part of the fragment’s Bundle Wiring; they are treated as part of
-    the host’s requirements and capabilities when the fragment is attached to
+    become part of the fragment's Bundle Wiring; they are treated as part of
+    the host's requirements and capabilities when the fragment is attached to
     that host.</para>
 
     <para>To find the attached fragment for a host bundle it is necessary to
@@ -663,7 +663,7 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       <listitem>
         <para><xref
         linkend="org.osgi.framework.wiring.FrameworkWiring.getDependencyClosure-Collection-"
-        xrefstyle="hyperlink"/> – The dependency closure method takes a seed
+        xrefstyle="hyperlink"/> - The dependency closure method takes a seed
         of bundles for a dependency closure and then add any bundles that
         depend a bundle in the dependency closure, recursively. The result can
         be used to calculate the impact of a refresh operation. If the
@@ -674,21 +674,21 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       <listitem>
         <para><xref
         linkend="org.osgi.framework.wiring.FrameworkWiring.getRemovalPendingBundles--"
-        xrefstyle="hyperlink"/> – Bundles that have a Bundle Wiring that is in
+        xrefstyle="hyperlink"/> - Bundles that have a Bundle Wiring that is in
         use but not current. Such bundles are pending removal.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.framework.wiring.FrameworkWiring.refreshBundles-Collection-FrameworkListener...-"
-        xrefstyle="hyperlink"/> – See <xref
+        xrefstyle="hyperlink"/> - See <xref
         linkend="framework.wiring.refreshing"/>.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.framework.wiring.FrameworkWiring.resolveBundles-Collection-"
-        xrefstyle="hyperlink"/> – Attempt to resolve all the bundles in the
+        xrefstyle="hyperlink"/> - Attempt to resolve all the bundles in the
         given collection. This action can also cause bundles to become
         resolved outside the given collections.</para>
       </listitem>
@@ -769,12 +769,12 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Class Path Order</emphasis> – Scan the bundle class
+        <para><emphasis>Class Path Order</emphasis> - Scan the bundle class
         path resources.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Entry Order</emphasis> – Scan all the entries that
+        <para><emphasis>Entry Order</emphasis> - Scan all the entries that
         constitute a bundle and its attached fragments.</para>
       </listitem>
     </itemizedlist>
@@ -812,16 +812,16 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       <title>Entry Order</title>
 
       <para>A Bundle Wiring reflects a resolved bundle. This bundle
-      constitutes of the bundle’s main container and any attached fragments.
+      constitutes of the bundle's main container and any attached fragments.
       The <xref
       linkend="org.osgi.framework.wiring.BundleWiring.findEntries-String-String-int-"
       xrefstyle="hyperlink"/> method is similar to the
       <code>Bundle.</code><xref
       linkend="org.osgi.framework.Bundle.findEntries-String-String-boolean-"
-      xrefstyle="hyperlink"/> method. The Bundle’s method will be identical
+      xrefstyle="hyperlink"/> method. The Bundle's method will be identical
       when the bundle can be resolved, if the bundle cannot resolve the
-      Bundle’s <code>findEntries</code> method has a fallback that allows
-      iteration without attached fragments. The Bundle Wiring’s <xref
+      Bundle's <code>findEntries</code> method has a fallback that allows
+      iteration without attached fragments. The Bundle Wiring's <xref
       linkend="org.osgi.framework.wiring.BundleWiring.findEntries-String-String-int-"
       xrefstyle="hyperlink"/> is always against a resolved bundle because it
       is on a Bundle Wiring.</para>
@@ -866,7 +866,7 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
 
     <itemizedlist>
       <listitem>
-        <para><code>RESOLVE</code> (for the system bundle) – For <xref
+        <para><code>RESOLVE</code> (for the system bundle) - For <xref
         linkend="org.osgi.framework.wiring.FrameworkWiring.refreshBundles-Collection-FrameworkListener...-"
         xrefstyle="hyperlink"/> and <xref
         linkend="org.osgi.framework.wiring.FrameworkWiring.resolveBundles-Collection-"

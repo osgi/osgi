@@ -33,7 +33,7 @@
     required.</para>
 
     <para>Policies are based on the very general concept of
-    <emphasis>conditions</emphasis>. Conditions guard access to the policy’s
+    <emphasis>conditions</emphasis>. Conditions guard access to the policy's
     permissions. If they are not satisfied, then the permissions are not
     applicable. Conditions can be based on the bundle signer, the bundle
     location, as well as on user-defined conditions. The advantage of this
@@ -54,58 +54,58 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Policies</emphasis> – Provide a security policy
+          <para><emphasis>Policies</emphasis> - Provide a security policy
           system where conditions control the actual permissions that bundles
           have at a certain moment in time to be allowed or denied
           access.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Java 2 Security</emphasis> – Provide full
+          <para><emphasis>Java 2 Security</emphasis> - Provide full
           compatibility with the existing Java 2 security model, existing
           applications must not require modifications.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Delegation</emphasis> – Support a management
+          <para><emphasis>Delegation</emphasis> - Support a management
           delegation model where an Operator can delegate part of the
           management of a device to another party in a secure way.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Digital Signatures</emphasis> – Support the use of
-          digital signatures in a bundle’s policy decisions.</para>
+          <para><emphasis>Digital Signatures</emphasis> - Support the use of
+          digital signatures in a bundle's policy decisions.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Real Time</emphasis> – Changes in the environment
-          must be reflected immediately in the bundle’s permissions.</para>
+          <para><emphasis>Real Time</emphasis> - Changes in the environment
+          must be reflected immediately in the bundle's permissions.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Operator Specific Conditions</emphasis> – It must be
+          <para><emphasis>Operator Specific Conditions</emphasis> - It must be
           possible for operators, manufacturers, selected developers, and
           others to provide custom conditions<emphasis>.</emphasis></para>
         </listitem>
 
         <listitem>
-          <para><emphasis>User Confirmation</emphasis> – The policy model must
+          <para><emphasis>User Confirmation</emphasis> - The policy model must
           support end user prompting and confirmations.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Allow/Deny Policies</emphasis> – It must be possible
+          <para><emphasis>Allow/Deny Policies</emphasis> - It must be possible
           to both allow access as well as specifically deny access.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Ordering</emphasis> – Policies must be ordered in a
+          <para><emphasis>Ordering</emphasis> - Policies must be ordered in a
           table and evaluated in the given order, which is from index 0
           upwards.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Backward Compatibility</emphasis> – The model must
+          <para><emphasis>Backward Compatibility</emphasis> - The model must
           be backward compatible with the Permission Admin of earlier
           releases.</para>
         </listitem>
@@ -117,13 +117,13 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Conditional Permission Admin</emphasis> – The
+          <para><emphasis>Conditional Permission Admin</emphasis> - The
           administrative service that provides the functions to manipulate the
           <emphasis>policy table</emphasis>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Policy</emphasis> – Provides the information to
+          <para><emphasis>Policy</emphasis> - Provides the information to
           allow or deny access to a resource. A policy contains a name, an
           access type, a set of conditions that must all be satisfied and a
           set of permissions of which at least one should be implied to
@@ -132,33 +132,33 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Policy Table</emphasis> – A conceptual table
+          <para><emphasis>Policy Table</emphasis> - A conceptual table
           containing all the Conditional Permission Infos.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Conditional Permission Info </emphasis>– The encoded
+          <para><emphasis>Conditional Permission Info</emphasis> - The encoded
           form of a Policy.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Conditional Permission Update</emphasis> – Holds a
+          <para><emphasis>Conditional Permission Update</emphasis> - Holds a
           temporary copy of the Policy Table so that a number of changes can
           be committed as a whole.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Permission Info</emphasis> – Holds a string based
+          <para><emphasis>Permission Info</emphasis> - Holds a string based
           encoding of a <code>Permission</code> object.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Condition Info</emphasis> – Holds a string based
+          <para><emphasis>Condition Info</emphasis> - Holds a string based
           encoding of a <code>Condition</code> object.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Condition</emphasis> – A <code>Condition</code>
+          <para><emphasis>Condition</emphasis> - A <code>Condition</code>
           object is associated with a single Bundle Protection Domain. It
           abstracts an external condition that can be evaluated. A condition
           can be mutable or immutable as well as immediate or
@@ -166,24 +166,24 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Bundle Location Condition </emphasis>– An immutable
+          <para><emphasis>Bundle Location Condition</emphasis> - An immutable
           <code>Condition</code> object that is satisfied when the associated
           bundle has the given location.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Bundle Signer Condition</emphasis> – An immutable
+          <para><emphasis>Bundle Signer Condition</emphasis> - An immutable
           <code>Condition</code> object that is satisfied when the associated
           bundle is signed by a certificate that matched the given DN.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Permission</emphasis> – An object that defines a
+          <para><emphasis>Permission</emphasis> - An object that defines a
           certain permission type. Same as the Java 2 Security model.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Bundle Protection Domain</emphasis> – The class that
+          <para><emphasis>Bundle Protection Domain</emphasis> - The class that
           implements the Protection Domain of a bundle, this specification
           does not define an interface for this class, but it plays an
           important role in this specification.</para>
@@ -222,7 +222,7 @@
 
       <para>A bundle can have local permissions defined in a Bundle Permission
       Resource. These are the actual detailed permissions needed by this
-      bundle to operate. A bundle’s effective permissions are the intersection
+      bundle to operate. A bundle's effective permissions are the intersection
       of the local permissions and the system permissions. During the
       permission check of the Java Security Manager, each Protection Domain is
       first checked for the local permissions, if this fails, the complete
@@ -232,8 +232,8 @@
       are consulted to see if they imply the requested permission. To imply
       the requested permission, the Bundle Protection Domain must find a
       policy in its policy table where all conditions are satisfied and where
-      one of the policy’s permissions imply the requested permission. If one
-      of the permissions is implied, then the policy’s access type decides
+      one of the policy's permissions imply the requested permission. If one
+      of the permissions is implied, then the policy's access type decides
       success or failure.</para>
 
       <para>Certain conditions must postpone their evaluation so that their
@@ -281,7 +281,7 @@
       services are needed, what packages the bundle requires, and what network
       hosts are accessed. Tools can be used that analyze bundles and provide
       the appropriate local permissions to simplify the task of the developer.
-      However, without detailed knowledge of the bundle’s intrinsics, it is
+      However, without detailed knowledge of the bundle's intrinsics, it is
       very difficult to create the local permissions due to their fine-grained
       granularity.</para>
 
@@ -291,8 +291,8 @@
       providing more permissions to the bundle is irrelevant because the
       Framework must not allow the bundle to use them. The purpose of the
       local permissions is therefore <emphasis>auditing</emphasis> by the
-      deployer. Analyzing a bundle’s byte codes for its security requirements
-      is cumbersome, if not impossible. Auditing a bundle’s permission
+      deployer. Analyzing a bundle's byte codes for its security requirements
+      is cumbersome, if not impossible. Auditing a bundle's permission
       resource is (relatively) straightforward. For example, if the local
       permissions request permission to access the Internet, it is clear that
       the bundle has the potential to access the network. By inspecting the
@@ -304,7 +304,7 @@
       permissions to run third party applications that are not trusted to run
       unchecked, thereby mitigating risks. The Framework guarantees that a
       bundle is never granted a permission that is not implied by its local
-      permissions. A simple audit of the application’s local permissions will
+      permissions. A simple audit of the application's local permissions will
       reveal any potential threats.</para>
 
       <para>This scenario is depicted in <xref linkend="i1404416"/>. A
@@ -329,20 +329,20 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Fine-grained</emphasis> – The developer has the
+          <para><emphasis>Fine-grained</emphasis> - The developer has the
           knowledge to provide the fine-grained permissions that are necessary
           to minimize the sandbox of the bundle without constraining
           it.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Auditable</emphasis> – The Operator has a relatively
+          <para><emphasis>Auditable</emphasis> - The Operator has a relatively
           small and readable file that shows the required sandbox. It can
           therefore assesses the risk of running a bundle.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Sandboxed</emphasis> – The Operator has the
+          <para><emphasis>Sandboxed</emphasis> - The Operator has the
           guarantee from the Framework that a bundle cannot escape its local
           permissions.</para>
         </listitem>
@@ -359,16 +359,15 @@
       is not sufficient because the Framework cannot verify that the local
       permissions have not been tampered with.</para>
 
-      <para>The de facto solution to tampering is to
-      <emphasis>digitally</emphasis> <emphasis>sign</emphasis> the bundles.
-      The rules for OSGi signing are defined in <xref
-      linkend="framework.security.digitallysignedjar"/>. A digital signing
-      algorithm detects modifications of the JAR as well as provide the means
-      for authenticating the signer. A Framework therefore must refuse to run
-      a bundle when a signature does not match the contents or it does not
-      recognize the signer. Signing makes it possible to use an untrusted
-      deployment channel and still rely on the enforcement of the local
-      permissions.</para>
+      <para>The de facto solution to tampering is to <emphasis>digitally
+      sign</emphasis> the bundles. The rules for OSGi signing are defined in
+      <xref linkend="framework.security.digitallysignedjar"/>. A digital
+      signing algorithm detects modifications of the JAR as well as provide
+      the means for authenticating the signer. A Framework therefore must
+      refuse to run a bundle when a signature does not match the contents or
+      it does not recognize the signer. Signing makes it possible to use an
+      untrusted deployment channel and still rely on the enforcement of the
+      local permissions.</para>
 
       <para>For example, an Operator can provision its applications via the
       Internet. When such an application is downloaded from an untrusted site,
@@ -432,7 +431,7 @@
       associated with the principal and thereby immediately deny access to all
       bundles of that principal, while they are running. Alternatively, the
       Operator can add additional system permissions to the principal if a new
-      service has become available to the signer’s applications. For example,
+      service has become available to the signer's applications. For example,
       if the Operator installs a <code>org.tourist.PointOfInterest</code>
       service, it can grant the
       <code>ServicePermission[org.tourist.PointOfInterest,GET]</code> and
@@ -482,7 +481,7 @@
       <code>AdminPermission[*,*]</code>, it is unlikely that the bundle will
       pass the security audit of the signer. However, in the unlikely case it
       did, it will not be granted this permission unless the Operator gave
-      such a permission to the signer’s principal on the device.</para>
+      such a permission to the signer's principal on the device.</para>
     </section>
 
     <section>
@@ -494,24 +493,24 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Untrusted</emphasis> – Applications that are not
+          <para><emphasis>Untrusted</emphasis> - Applications that are not
           trusted. These applications must run in a very limited security
           scope. They could be unsigned.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Trusted</emphasis> – Applications that are trusted
+          <para><emphasis>Trusted</emphasis> - Applications that are trusted
           but that are not allowed to manage the device or provide system
           services.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>System</emphasis> – Applications that provide system
+          <para><emphasis>System</emphasis> - Applications that provide system
           services.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Manage</emphasis> – Applications that manage the
+          <para><emphasis>Manage</emphasis> - Applications that manage the
           device.</para>
         </listitem>
       </itemizedlist>
@@ -531,11 +530,11 @@
       example is intended for readability, certain concepts will be explained
       later. The basic syntax for the policies is:</para>
 
-      <programlisting>policy      ::= access ’{’ conditions permissions’}’name?
-access      ::= ’ALLOW’ | ’DENY’       // case insensitive 
-conditions  ::= ( ’[’ qname quoted-string* ’]’ )*
-permissions ::= ( ’(’ qname (quoted-string 
-                         quoted-string?)? ’)’ )+
+      <programlisting>policy      ::= access '{' conditions permissions '}' name?
+access      ::= 'ALLOW' | 'DENY'       // case insensitive 
+conditions  ::= ( '[' qname quoted-string* ']' )*
+permissions ::= ( '(' qname (quoted-string 
+                         quoted-string?)? ')' )+
 name        ::= quoted-string</programlisting>
 
       <para>For readability, package prefixes that can be guessed are replaced
@@ -570,7 +569,7 @@ name        ::= quoted-string</programlisting>
       may use the <code>com.acme.secret.*</code> packages. Instead of
       explicitly specifying all allowed packages for bundles not signed by
       ACME, it is easier to deny them the protected packages. The exclamation
-      mark (<code>’!’ \u0021</code>) is a parameter for the Bundle Signer
+      mark (<code>'!' \u0021</code>) is a parameter for the Bundle Signer
       Condition to reverse its normal answer. This facility is also available
       in the Bundle Location Condition.</para>
 
@@ -766,7 +765,7 @@ name        ::= quoted-string</programlisting>
     permissions</emphasis>.</para>
 
     <para>The purpose of the local permissions is to mitigate the bundle
-    signer’s risk. The Framework guarantees that a bundle’s effective
+    signer's risk. The Framework guarantees that a bundle's effective
     permissions are always smaller or equal than the local permissions because
     the effective permissions are the intersection of the local permissions
     with the system permissions, except for the implied permissions that are
@@ -841,7 +840,7 @@ name        ::= quoted-string</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>All of the policy’s conditions are satisfied</para>
+        <para>All of the policy's conditions are satisfied</para>
       </listitem>
 
       <listitem>
@@ -894,7 +893,7 @@ ALLOW {
       instances with the associated bundle as their context.</para>
 
       <para>It is a dynamic template because a Bundle Protection Domain must
-      track the changes to the framework’s policy table immediately and update
+      track the changes to the framework's policy table immediately and update
       any instances from the new encoded forms. Once the atomic <xref
       linkend="org.osgi.service.condpermadmin.ConditionalPermissionUpdate.commit--"
       xrefstyle="hyperlink"/> method of the update object has successfully
@@ -1086,7 +1085,7 @@ ALLOW {
       are checked and none of them failed.</para>
 
       <para>Therefore, the following definitions begin the Bundle Protection
-      Domain implies method’s algorithm:</para>
+      Domain implies method's algorithm:</para>
 
       <programlisting>Ts = instantiated policy table + DENY {(AllPermission)}
 PL = {}</programlisting>
@@ -1165,7 +1164,7 @@ return true</programlisting>
         <title>Example Bundle Protection Domain Check</title>
 
         <para>This example demonstrated the per bundle evaluation aspect of
-        the Bundle Protection Domain’s <code>implies</code> method. Assume the
+        the Bundle Protection Domain's <code>implies</code> method. Assume the
         following policies are active:</para>
 
         <programlisting>DENY {
@@ -1349,7 +1348,7 @@ ALLOW { [PC2]           (P)     }  "C3"</programlisting>
       three policies. Policy <code>C1</code> has no conditions, only a
       permission that does not imply permission <code>P</code>, it is
       therefore ignored. The second policy has an immediate condition
-      <code>IC0</code>, which is not satisfied. Therefore, the policy’s
+      <code>IC0</code>, which is not satisfied. Therefore, the policy's
       permissions are not even considered. The last policy contains a mutable
       postponed condition <code>PC2</code>. The permission <code>P</code> is
       implied by the related permissions. However, it is not possible to make
@@ -1387,7 +1386,7 @@ ALLOW {                 (Q)     }  "B4"</programlisting>
       <code>B4</code>.</para>
 
       <para>There are 2 policies postponed, the bundle is potentially
-      permitted. Bundle’s B postponed list therefore looks like:</para>
+      permitted. Bundle's B postponed list therefore looks like:</para>
 
       <programlisting>ALLOW {[PC2][PC1]}    "B1"
 ALLOW {[PC2]}         "B2"
@@ -1402,9 +1401,9 @@ DENY  { } </programlisting>
       ALLOW {  [IC2]          (P) (R) }    "A2"
       ALLOW {                 (S)     }    "A3"</programlisting>
 
-      <para>Bundle <code>A</code>’s <code>IC1</code> is evaluated first and it
+      <para>Bundle <code>A</code>'s <code>IC1</code> is evaluated first and it
       is satisfied. Permission <code>P</code> is implied by the policy
-      <code>A1</code>’s permissions, therefore this policy is postponed for
+      <code>A1</code>'s permissions, therefore this policy is postponed for
       evaluation.</para>
 
       <para>Policy <code>A2</code> is also satisfied and it directly implies
@@ -1479,7 +1478,7 @@ ALLOW { }       "A2"</programlisting>
       evaluation cannot handle postponed conditions. Therefore, the postponed
       conditions must be treated as immediate conditions by the Bundle
       Protection Domain when the permissions check does not go through the
-      Framework’s security manager. The implication of this is that the result
+      Framework's security manager. The implication of this is that the result
       of checking a permission can depend on the way the check is
       initiated.</para>
 
@@ -1557,9 +1556,9 @@ ALLOW { }       "A2"</programlisting>
     <code>PermissionInfo</code> objects can be constructed from encoded
     strings. The syntax for these strings are:</para>
 
-    <programlisting>conditions  ::= ( ’[’ qname quoted-string*’]’ )*
-permissions ::= ( ’(’ qname (quoted-string 
-                         quoted-string?)? ’)’ )+</programlisting>
+    <programlisting>conditions  ::= ( '[' qname quoted-string* ']' )*
+permissions ::= ( '(' qname (quoted-string 
+                         quoted-string?)? ')' )+</programlisting>
 
     <para>The strings are converted by getting the class with the
     <code>qname</code>, and then creating an instance through a constructor
@@ -1576,8 +1575,8 @@ permissions ::= ( ’(’ qname (quoted-string
 
     <para>A policy is specified with the following syntax:</para>
 
-    <programlisting>policy      ::= access ’{’ conditions permissions’}’name?
-access      ::= ’ALLOW’ | ’DENY’  // case insensitive 
+    <programlisting>policy      ::= access '{' conditions permissions '}' name?
+access      ::= 'ALLOW' | 'DENY'  // case insensitive 
 name        ::= quoted-string</programlisting>
 
     <para>The Conditional Permission Admin provides a convenience method to
@@ -1635,7 +1634,7 @@ public  void manage(ConditionalPermissionAdmin admin,
     supports a variable number of arguments.</para>
 
     <para>The Conditional Permission Admin must use reflection to find a
-    <code>public static</code> <code>getCondition</code> method on the
+    <code>public static getCondition</code> method on the
     <code>Condition</code> implementation class that takes a
     <code>Bundle</code> object and a <xref
     linkend="org.osgi.service.condpermadmin.ConditionInfo"
@@ -1649,7 +1648,7 @@ public  void manage(ConditionalPermissionAdmin admin,
     example, a Bundle Location Condition is immutable, it therefore maintains
     only 2 instances: One for bundles that match the given location and one
     for the others. In the <code>getCondition</code> method it can verify the
-    bundle’s location with argument and return either instance.</para>
+    bundle's location with argument and return either instance.</para>
 
     <para>This is such a common pattern that the <code>Condition</code>
     interface provides two such immutable instances:</para>
@@ -1657,13 +1656,13 @@ public  void manage(ConditionalPermissionAdmin admin,
     <itemizedlist>
       <listitem>
         <para><xref linkend="org.osgi.service.condpermadmin.Condition.TRUE"
-        xrefstyle="hyperlink"/> – A condition object that will always evaluate
+        xrefstyle="hyperlink"/> - A condition object that will always evaluate
         to <code>true</code> and that is never postponed.</para>
       </listitem>
 
       <listitem>
         <para><xref linkend="org.osgi.service.condpermadmin.Condition.FALSE"
-        xrefstyle="hyperlink"/> – A condition object that will always evaluate
+        xrefstyle="hyperlink"/> - A condition object that will always evaluate
         to <code>false</code> and that is never postponed.</para>
       </listitem>
     </itemizedlist>
@@ -1809,7 +1808,7 @@ public com.acme.AcmeCondition( Bundle, <code>ConditionInfo</code> )</programlist
       <code>getCondition(Bundle,ConditionInfo)</code> method. The first string
       argument is a matching Distinguished Name as defined in <xref
       linkend="framework.security.certificate.matching"/>. The second argument
-      is optional, if used, it must be an exclamation mark (<code>’!’
+      is optional, if used, it must be an exclamation mark (<code>'!'
       \u0021</code>). The exclamation mark indicates that the result for this
       condition must be reversed. For example:</para>
 
@@ -1839,9 +1838,9 @@ https://www.operator.com/download/*  Operatorapps</programlisting>
       <para>The Bundle Location Condition must be created through its static
       <code>getCondition(Bundle,ConditionInfo)</code> method. The first string
       argument is a location string with possible wildcard asterisks
-      (<code>’*’ \u002A</code>). Wildcards are matched using Filter string
+      (<code>'*' \u002A</code>). Wildcards are matched using Filter string
       matching. The second argument is optional, if used, it must be an
-      exclamation mark (<code>’!’ \u0021</code>). The exclamation mark
+      exclamation mark (<code>'!' \u0021</code>). The exclamation mark
       indicates that the result for this condition must be reversed. For
       example:</para>
 
@@ -1866,11 +1865,11 @@ https://www.operator.com/download/*  Operatorapps</programlisting>
     method:</para>
 
     <programlisting>    permissions.perm ::= line *
-    line             ::= ( comment | pinfo ) (’\r\n’| ’\n’ )
-    comment          ::= ( ’#’ | ’//’ )
-    pinfo            ::= ’(’ qname ( quoted-string 
-                                    ( quoted-string )? )? ’)’
-  // See <xref linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
+    line             ::= ( comment | pinfo ) ( '\r\n'| '\n' )
+    comment          ::= ( '#' | '//' )
+    pinfo            ::= '(' qname ( quoted-string 
+                                    ( quoted-string )? )? ')'
+    // See <xref linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
     <para>Each permission must be listed on its own line using the encoded
     form of Permission Info. Comment lines are allowed. They consist of lines
@@ -2042,19 +2041,19 @@ https://www.operator.com/download/*  Operatorapps</programlisting>
       <code>BundleLocationCondition</code> and
       <code>BundleSignerCondition</code> classes. The Protection Domain will
       never have to consider conditional permissions that do not match the
-      protection domain’s bundle. However, a <code>Condition</code> object can
+      protection domain's bundle. However, a <code>Condition</code> object can
       also start as a mutable condition and later become immutable. For
       example, a user prompt could have the following states:</para>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Prompt</emphasis> – The user must be prompted to get
+          <para><emphasis>Prompt</emphasis> - The user must be prompted to get
           the answer, the Conditional Permission Admin will evaluate the
           answer to detect if it is satisfied.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Blanket </emphasis>– The user, during an earlier
+          <para><emphasis>Blanket</emphasis> - The user, during an earlier
           prompt, has indicated it approves or denies access for that
           remainder of the lifetime of the bundle. In this state, the
           <code>Condition</code> object has become immutable.</para>
@@ -2087,7 +2086,7 @@ https://www.operator.com/download/*  Operatorapps</programlisting>
       <code>Condition</code> object can be pruned if it is immutable.</para>
 
       <para>If an immutable <code>Condition</code> object is satisfied, it can
-      be removed from the policy’s <code>Condition</code> objects because it
+      be removed from the policy's <code>Condition</code> objects because it
       cannot influence the evaluation anymore. If it is not satisfied, the
       corresponding policy can be completely discarded because one of the
       <code>Condition</code> objects is not satisfied, making it impossible
@@ -2108,13 +2107,13 @@ ALLOW {
 }</programlisting>
 
       <para>Assume this table is instantiated for a bundle with a location of
-      http://<code>www.acme.com/bundle.jar</code>. The first policy’s
+      http://<code>www.acme.com/bundle.jar</code>. The first policy's
       permissions can be placed in a the special Permission Collection because
       the Bundle Location condition is immutable and in this case
       satisfied.</para>
 
       <para>The second policy can be discarded for this bundle because it is
-      immutable and not satisfied for the bundle’s location. Any condition
+      immutable and not satisfied for the bundle's location. Any condition
       that is not satisfied and immutable makes the policy ignorable.</para>
     </section>
 

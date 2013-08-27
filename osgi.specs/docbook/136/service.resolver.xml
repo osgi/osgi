@@ -36,7 +36,7 @@
     foundation for automating a significant part of this assembly process. The
     Requirement-Capability model defined in <xref linkend="i3333846"/>
     provides a dependency model that allows resources to express dependencies,
-    constraints, and capabilities. If a resource’s constraints are met it
+    constraints, and capabilities. If a resource's constraints are met it
     provides capabilities that can satisfy further requirements. The OSGi
     dependency model is fully generic and is not limited to bundles. Resources
     can be bundles but also certificates, plugged in devices, etc.</para>
@@ -79,53 +79,53 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Transitive</emphasis> – From a requirement, find a
+          <para><emphasis>Transitive</emphasis> - From a requirement, find a
           consistent set of resources that satisfy that requirement.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Diagnostics</emphasis> – Provide diagnostic
+          <para><emphasis>Diagnostics</emphasis> - Provide diagnostic
           information when no resolution can be found.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Scoped Repositories</emphasis> – Allow the
+          <para><emphasis>Scoped Repositories</emphasis> - Allow the
           environment to control the repositories to use.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Build Tools</emphasis> – Must be useful in
+          <para><emphasis>Build Tools</emphasis> - Must be useful in
           establishing build and run time class paths.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Provisioning</emphasis> – Must be useful to find a
+          <para><emphasis>Provisioning</emphasis> - Must be useful to find a
           set of bundles that can be installed in a system without running
           into unresolved dependencies.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>OSGi</emphasis> – Provide the semantics of all the
+          <para><emphasis>OSGi</emphasis> - Provide the semantics of all the
           OSGi namespaces, including the uses constraints.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>API</emphasis> – The API for the Resolver must
+          <para><emphasis>API</emphasis> - The API for the Resolver must
           provide the base for the Framework Bundle Wiring API.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Performant</emphasis> – Enable highly performant
+          <para><emphasis>Performant</emphasis> - Enable highly performant
           implementations.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Frameworks</emphasis> – Allow Frameworks to provide
+          <para><emphasis>Frameworks</emphasis> - Allow Frameworks to provide
           their resolver as a service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Scalable</emphasis> – Allow access to, and use of,
+          <para><emphasis>Scalable</emphasis> - Allow access to, and use of,
           very large repositories.</para>
         </listitem>
       </itemizedlist>
@@ -136,67 +136,67 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Environment</emphasis> – A container or framework
+          <para><emphasis>Environment</emphasis> - A container or framework
           that can install resources and uses a Resolver to wire these
           resources.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Resolve Context</emphasis> – An interface
+          <para><emphasis>Resolve Context</emphasis> - An interface
           implemented by the management agent to provide the context of the
           resolution.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Wiring</emphasis> – Represents the state of a
-          resource’s wires, requirements, and capabilities in an
+          <para><emphasis>Wiring</emphasis> - Represents the state of a
+          resource's wires, requirements, and capabilities in an
           environment.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Resolver</emphasis> – A service that can find a set
+          <para><emphasis>Resolver</emphasis> - A service that can find a set
           of wires that can be applied to an existing wiring state where a set
           of initial resources have all their mandatory requirements
           satisfied.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Wire</emphasis> – Links requirement to a
+          <para><emphasis>Wire</emphasis> - Links requirement to a
           capability.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Resource</emphasis> –An artifact with requirements
+          <para><emphasis>Resource</emphasis> -An artifact with requirements
           that need to be provisioned and resolved to provide its
           capabilities.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Requirement</emphasis> – A necessity for a given
+          <para><emphasis>Requirement</emphasis> - A necessity for a given
           resource before it can provide its capabilities; expressed as a
           filter expression on the attributes of a capability in a given
           namespace.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Capability</emphasis> – A set of attributes and
+          <para><emphasis>Capability</emphasis> - A set of attributes and
           directives defined by a namespace, describes what a resource
           provides when resolved.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Hosted Capability</emphasis> – Pairs a resource with
+          <para><emphasis>Hosted Capability</emphasis> - Pairs a resource with
           a capability to model hosting capabilities in another
           resource.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Namespace</emphasis> – The type for a capability and
+          <para><emphasis>Namespace</emphasis> - The type for a capability and
           requirement.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Resolution</emphasis> – The result of a resolve
+          <para><emphasis>Resolution</emphasis> - The result of a resolve
           operation.</para>
         </listitem>
       </itemizedlist>
@@ -371,7 +371,7 @@
     <section xml:id="i3344409">
       <title>Finding Capabilities</title>
 
-      <para>The Resolve Context’s <xref
+      <para>The Resolve Context's <xref
       linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-"
       xrefstyle="hyperlink"/> method must be implemented in such a way that it
       returns an ordered list of capabilities. The Resolver will treat the
@@ -481,7 +481,7 @@
         </listitem>
 
         <listitem>
-          <para>The requirement’s filter must match the capability’s
+          <para>The requirement's filter must match the capability's
           attributes.</para>
         </listitem>
 
@@ -546,7 +546,7 @@
 
       <para>Repositories do not implement any namespace specific semantics and
       therefore do not understand any directives. Repositories only verify the
-      requirement’s filter (if any) against the capability’s attributes. The
+      requirement's filter (if any) against the capability's attributes. The
       Resolver expects the Resolve Context to do the namespace specific
       matching. The <xref linkend="service.repository"/> provides the details
       for a service that abstracts a Requirement-Capability aware
@@ -723,7 +723,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       xrefstyle="hyperlink"/> has that same responsibility.</para>
 
       <para>The following example shows how the Hosted Capability is inserted
-      based on the index of the hosted resource’s index in the sorted list of
+      based on the index of the hosted resource's index in the sorted list of
       resources the management agent maintained. The example iterates through
       the capabilities and compares the index of sorted resources to indicate
       preference. If it finds a capability from a resource that was later in
@@ -1024,7 +1024,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       is a delta on the existing Wiring state <code>X</code>. It is up to the
       Resolve Context to ensure that the delta <code>D</code> is installed. In
       for example the OSGi framework the framework hooks can be used to guide
-      the framework’s resolving process.</para>
+      the framework's resolving process.</para>
     </section>
 
     <section>
@@ -1105,7 +1105,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
       linkend="org.osgi.service.resolver.HostedCapability"
       xrefstyle="hyperlink"/> objects to a previously returned list from <xref
       linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-"
-      xrefstyle="hyperlink"/> then it must call the Resolve Context’s <xref
+      xrefstyle="hyperlink"/> then it must call the Resolve Context's <xref
       linkend="org.osgi.service.resolver.ResolveContext.insertHostedCapability-List-HostedCapability-"
       xrefstyle="hyperlink"/> method.</para>
 
@@ -1123,7 +1123,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
 
       <itemizedlist>
         <listitem>
-          <para><code>mandatory</code> – Mandatory attributes on the
+          <para><code>mandatory</code> - Mandatory attributes on the
           <code>osgi.wiring.*</code> namespaces must be implemented by the
           Resolve Context. The Resolve Context should not return capabilities
           from <xref
@@ -1133,7 +1133,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
         </listitem>
 
         <listitem>
-          <para><code>singleton</code> – Singletons are not implemented by the
+          <para><code>singleton</code> - Singletons are not implemented by the
           Resolver, the Resolve Context must not return capabilities from
           <xref
           linkend="org.osgi.service.resolver.ResolveContext.findProviders-Requirement-"
@@ -1141,7 +1141,7 @@ public List&lt;Capability&gt; findProviders( Requirement requirement) {
         </listitem>
 
         <listitem>
-          <para><code>effective</code> – The Resolve Context decides what
+          <para><code>effective</code> - The Resolve Context decides what
           requirements are effective in the <xref
           linkend="org.osgi.service.resolver.ResolveContext.isEffective-Requirement-"
           xrefstyle="hyperlink"/> method.</para>

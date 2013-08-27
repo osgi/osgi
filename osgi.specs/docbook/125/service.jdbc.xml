@@ -39,22 +39,22 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Registration </emphasis>– Provide a mechanism for
+          <para><emphasis>Registration</emphasis> - Provide a mechanism for
           JDBC driver announcements.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Lookup</emphasis> – Inspect available database
+          <para><emphasis>Lookup</emphasis> - Inspect available database
           drivers and provide means for driver access.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Services</emphasis> – Uses a service model for
+          <para><emphasis>Services</emphasis> - Uses a service model for
           getting the driver objects.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Compatible</emphasis> – Minimize the amount of work
+          <para><emphasis>Compatible</emphasis> - Minimize the amount of work
           needed to support this specification for existing drivers.</para>
         </listitem>
       </itemizedlist>
@@ -65,23 +65,23 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Relational Database Management Systems</emphasis> –
+          <para><emphasis>Relational Database Management Systems</emphasis> -
           (RDBMS) An external database system.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Database Driver </emphasis>– JDBC-compliant database
+          <para><emphasis>Database Driver</emphasis> - JDBC-compliant database
           driver that is delivered in a bundle.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Data Source Factory</emphasis> – Provides one of the
+          <para><emphasis>Data Source Factory</emphasis> - Provides one of the
           different Data Sources that gives access to a database
           driver.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Application</emphasis> – The application that wants
+          <para><emphasis>Application</emphasis> - The application that wants
           to access a relational database system.</para>
         </listitem>
       </itemizedlist>
@@ -150,23 +150,23 @@ java.sql</programlisting>
       <listitem>
         <para><xref
         linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_DRIVER_CLASS"
-        xrefstyle="hyperlink"/> – (<code>String</code>) The required name of
+        xrefstyle="hyperlink"/> - (<code>String</code>) The required name of
         the driver implementation class. This property is the primary key to
-        find a driver’s Data Source Factory. It is not required that there is
+        find a driver's Data Source Factory. It is not required that there is
         an actual class with this name.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_DRIVER_NAME"
-        xrefstyle="hyperlink"/> – (<code>String</code>) The optional driver
+        xrefstyle="hyperlink"/> - (<code>String</code>) The optional driver
         name. This property is informational.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.jdbc.DataSourceFactory.OSGI_JDBC_DRIVER_VERSION"
-        xrefstyle="hyperlink"/> – (<code>String</code>) The driver version.
+        xrefstyle="hyperlink"/> - (<code>String</code>) The driver version.
         The version is not required to be an OSGi version, it should be
         treated as an opaque string. This version is likely not related to the
         package of the implementation class or its bundle.</para>

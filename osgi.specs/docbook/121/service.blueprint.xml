@@ -80,64 +80,64 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Dependency Injection Framework</emphasis> – Provide
+          <para><emphasis>Dependency Injection Framework</emphasis> - Provide
           an advanced dependency injection framework for bundles that can
           create and wire objects and services together into an
           application.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Inversion of Control</emphasis> – (IOC) A pattern in
+          <para><emphasis>Inversion of Control</emphasis> - (IOC) A pattern in
           which a framework/library provides the control over the component
           instances instead of the other way around. Dependency injection is a
           form of IOC.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Extender Model</emphasis> – Enable the configuration
+          <para><emphasis>Extender Model</emphasis> - Enable the configuration
           of components inside a bundle based on configuration data provided
           by the bundle developer. The life cycle of these components is
-          controlled by the extender based on the extended bundle’s
+          controlled by the extender based on the extended bundle's
           state.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Unencumbered</emphasis> – Do not require any special
+          <para><emphasis>Unencumbered</emphasis> - Do not require any special
           bundle activator or other code to be written inside the bundle in
           order to have components instantiated and configured.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Services</emphasis> – Enable the usage of OSGi
+          <para><emphasis>Services</emphasis> - Enable the usage of OSGi
           services as injected dependencies.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Dependencies</emphasis> – Allow components to depend
+          <para><emphasis>Dependencies</emphasis> - Allow components to depend
           on other components like services and beans as well as register as
           services, with the full breadth of the OSGi capabilities.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Dynamicity</emphasis> – Minimize the complexity of
+          <para><emphasis>Dynamicity</emphasis> - Minimize the complexity of
           using the dynamicity of services</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Business Logic</emphasis> – A focus on writing
+          <para><emphasis>Business Logic</emphasis> - A focus on writing
           business logic in regular Java classes that are not required to
           implement certain framework APIs or contracts in order to integrate
           with a container.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Declarative</emphasis> – This facilitates
+          <para><emphasis>Declarative</emphasis> - This facilitates
           independent testing of components and reduces environment
           dependencies.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Familiarity</emphasis> – Familiar to enterprise Java
+          <para><emphasis>Familiarity</emphasis> - Familiar to enterprise Java
           developers.</para>
         </listitem>
       </itemizedlist>
@@ -148,41 +148,41 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Blueprint Extender </emphasis>– The bundle that
+          <para><emphasis>Blueprint Extender</emphasis> - The bundle that
           creates and injects component instances for a Blueprint bundle as
-          configured in that Blueprint bundle’s XML definition
+          configured in that Blueprint bundle's XML definition
           resources.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Blueprint Container</emphasis> – Represents the
+          <para><emphasis>Blueprint Container</emphasis> - Represents the
           activities of the Blueprint Extender for a specific Blueprint
           Bundle.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Blueprint Bundle</emphasis> – A bundle that is being
+          <para><emphasis>Blueprint Bundle</emphasis> - A bundle that is being
           constructed by the Blueprint Container because it has a
           Bundle-Blueprint header or it contains XML resources in the
           <code>OSGI-INF/blueprint</code> directory.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Manager –</emphasis> A manager is responsible for
+          <para><emphasis>Manager</emphasis> - A manager is responsible for
           the life cycle of all <emphasis>component instances</emphasis> for
           one <emphasis>component definition</emphasis>. There are the
           following types of managers. A manager is a <emphasis>bean
-          manager</emphasis>, a <emphasis>service</emphasis>
-          <emphasis>reference manager</emphasis>, or a <emphasis>service
-          manager</emphasis>. A manager can have <emphasis>explicit</emphasis>
-          and <emphasis>implicit</emphasis> dependencies on other manager.
-          During instantiation and runtime, a manager can
+          manager</emphasis>, a <emphasis>service reference
+          manager</emphasis>, or a <emphasis>service manager</emphasis>. A
+          manager can have <emphasis>explicit</emphasis> and
+          <emphasis>implicit</emphasis> dependencies on other manager. During
+          instantiation and runtime, a manager can
           <emphasis>provide</emphasis> a component instance to be injected or
           used in other ways.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Component</emphasis> – A loosely defined term for
+          <para><emphasis>Component</emphasis> - A loosely defined term for
           the application building blocks and their infrastructure. Components
           are instantiated into <emphasis>component instances</emphasis> by a
           <emphasis>manager</emphasis> that is configured with a
@@ -191,13 +191,13 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Component Instance</emphasis> – An object that is
+          <para><emphasis>Component Instance</emphasis> - An object that is
           part of the application. Component Instances are created and managed
           by their component <emphasis>manager</emphasis>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Component Definition</emphasis> – Configuration data
+          <para><emphasis>Component Definition</emphasis> - Configuration data
           used by a manager to construct and manage component instances. This
           configuration data is represented in Metadata, an interface
           hierarchy starting with the <emphasis>Metadata</emphasis>
@@ -205,60 +205,60 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Bean Manager</emphasis> – A manager that has
+          <para><emphasis>Bean Manager</emphasis> - A manager that has
           metadata for creating Java objects and injecting them with objects
           and component instances that come from other managers it implicitly
           depends on.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Service Manager</emphasis> – A manager that handles
+          <para><emphasis>Service Manager</emphasis> - A manager that handles
           the registration of a service object that is provided by a component
           instance.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Service Reference Manager</emphasis> – The general
+          <para><emphasis>Service Reference Manager</emphasis> - The general
           name for the reference and reference-list managers.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Reference Manager</emphasis>– A manager that handles
-          the dependency on a single OSGi service.</para>
+          <para><emphasis>Reference Manager</emphasis> - A manager that
+          handles the dependency on a single OSGi service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Reference-list Manager </emphasis>– A manager that
+          <para><emphasis>Reference-list Manager</emphasis> - A manager that
           handles the dependency on a list of OSGi services.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Environment Manager</emphasis> – A manager that can
-          provide information from the Bundle’s environment. For example, the
+          <para><emphasis>Environment Manager</emphasis> - A manager that can
+          provide information from the Bundle's environment. For example, the
           <code>BlueprintContainer</code> object is made available through an
           environment manager.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Target </emphasis>– A manager type useful in a
+          <para><emphasis>Target</emphasis> - A manager type useful in a
           callback context. These are the ref (which is an indirection to), a
           reference, and a bean manager.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Property</emphasis> – A conceptual instance variable
+          <para><emphasis>Property</emphasis> - A conceptual instance variable
           of a component instance provided by a bean manager that is set on
           the component instance with a corresponding
           <code>set&lt;Name&gt;</code> method.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Argument</emphasis> – Metadata for an argument in a
+          <para><emphasis>Argument</emphasis> - Metadata for an argument in a
           constructor or method.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Type Converter</emphasis> – A component instance
+          <para><emphasis>Type Converter</emphasis> - A component instance
           defined, or referenced, in the type-converters section implementing
           the <code>Converter</code> interface.</para>
         </listitem>
@@ -298,23 +298,23 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Bean Managers</emphasis> – Can provide general
+          <para><emphasis>Bean Managers</emphasis> - Can provide general
           objects that are properly constructed and configured</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Service Managers</emphasis> – Can register
+          <para><emphasis>Service Managers</emphasis> - Can register
           services</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Service Reference Managers</emphasis> – Provide
+          <para><emphasis>Service Reference Managers</emphasis> - Provide
           proxies to one or more services. there are two sub-types:
           reference-list and reference.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Environment Managers</emphasis> – Holding
+          <para><emphasis>Environment Managers</emphasis> - Holding
           environment values like the Blueprint <code>Bundle</code>
           object</para>
         </listitem>
@@ -343,14 +343,14 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Service Request</emphasis> – All service managers
+          <para><emphasis>Service Request</emphasis> - All service managers
           must have a Service Factory registered with the OSGi service
           registry whenever that service manager is enabled, see <xref
           linkend="i2630717"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Eager Managers</emphasis> – To kick start the
+          <para><emphasis>Eager Managers</emphasis> - To kick start the
           application in the bundle, the Blueprint Container must ask all
           eager managers to provide a component instance, thereby activating
           these managers, see <xref linkend="i2081951"/>.</para>
@@ -405,7 +405,7 @@
     loosely called a <emphasis>component</emphasis>.</para>
 
     <para>A manager can have additional behavior associated with it. This
-    behavior is controlled by the manager’s <emphasis>type</emphasis>. This
+    behavior is controlled by the manager's <emphasis>type</emphasis>. This
     specification defines a number of manager types: bean, service,
     environment, reference, and reference-list. These types are further
     defined in the next section.</para>
@@ -462,13 +462,13 @@ public class EchoImpl implements Echo {
     explicit dependency. A manager must always be atomically activated before
     it provides its first component instance. During activation, listeners are
     actuated and notified, service objects are requested, etc. The details are
-    described in the appropriate manager’s type description.</para>
+    described in the appropriate manager's type description.</para>
 
-    <para>Each manager type has an associated <emphasis>component</emphasis>
-    <emphasis>metadata</emphasis> type. Component Metadata is used to
-    configure a manager. XML definition resources in the bundle define the
-    source for this Metadata. In the previous example, the
-    <code>service</code> and <code>bean</code> XML element are translated to a
+    <para>Each manager type has an associated <emphasis>component
+    metadata</emphasis> type. Component Metadata is used to configure a
+    manager. XML definition resources in the bundle define the source for this
+    Metadata. In the previous example, the <code>service</code> and
+    <code>bean</code> XML element are translated to a
     <code>ServiceMetadata</code> and <code>BeanMetadata</code> object
     respectively.</para>
 
@@ -525,7 +525,7 @@ public class EchoImpl implements Echo {
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Bean</emphasis> – A bean manager provides regular
+          <para><emphasis>Bean</emphasis> - A bean manager provides regular
           Java objects as component instances. It has the following
           features:</para>
 
@@ -563,7 +563,7 @@ public class EchoImpl implements Echo {
         </listitem>
 
         <listitem>
-          <para><emphasis>Reference</emphasis> – Reference managers track a
+          <para><emphasis>Reference</emphasis> - Reference managers track a
           service in the OSGi service registry. When activated, they provide a
           proxy to a service object. See <xref linkend="i2468749"/> for more
           details. A reference is satisfied when its selection matches a
@@ -571,14 +571,14 @@ public class EchoImpl implements Echo {
         </listitem>
 
         <listitem>
-          <para><emphasis>Reference-list</emphasis> – Reference-list managers
+          <para><emphasis>Reference-list</emphasis> - Reference-list managers
           track multiple services. A reference-list is satisfied when its
           selection matches one or more services in the registry. See <xref
           linkend="i2468749"/> for more details.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Service</emphasis> – Service managers maintain the
+          <para><emphasis>Service</emphasis> - Service managers maintain the
           registration of an OSGi service object. Service managers provide a
           proxied <code>ServiceRegistration</code> object so that the
           application code has a constant reference, even if the service is
@@ -589,7 +589,7 @@ public class EchoImpl implements Echo {
         </listitem>
 
         <listitem>
-          <para><emphasis>Environment</emphasis> – Environment managers
+          <para><emphasis>Environment</emphasis> - Environment managers
           provide access to the environment of the Blueprint bundle, for
           example its Bundle Context. See <xref linkend="i2088582"/> for more
           details.</para>
@@ -676,22 +676,22 @@ public class EchoImpl implements Echo {
       dependencies. The dependency graph is based on the managers, not the
       component instances. For example, the following definition:</para>
 
-      <programlisting>&lt;blueprint default-activation=’eager’&gt;
-  &lt;bean id=’A’...&gt;  &lt;argument ref=’B’&gt; &lt;/bean&gt;
-  &lt;bean id=’B’ depends-on=’C E’...&gt;  
-    &lt;argument ref=’C’&gt; 
+      <programlisting>&lt;blueprint default-activation='eager'&gt;
+  &lt;bean id='A'...&gt;  &lt;argument ref='B'&gt; &lt;/bean&gt;
+  &lt;bean id='B' depends-on='C E'...&gt;  
+    &lt;argument ref='C'&gt; 
   &lt;/bean&gt;
-  &lt;bean id=’C’ scope=’prototype’ ...&gt;  
-    &lt;argument ref=’D’&gt; 
+  &lt;bean id='C' scope='prototype' ...&gt;  
+    &lt;argument ref='D'&gt; 
   &lt;/bean&gt;
-  &lt;bean id=’D’ .../&gt;
-  &lt;bean id=’E’ ...&gt; &lt;argument ref=’C’/&gt; &lt;/bean&gt;
-  &lt;bean id=’F’ depends-on=’B’ activation="lazy"/&gt;
+  &lt;bean id='D' .../&gt;
+  &lt;bean id='E' ...&gt; &lt;argument ref='C'/&gt; &lt;/bean&gt;
+  &lt;bean id='F' depends-on='B' activation="lazy"/&gt;
 &lt;/blueprint&gt;</programlisting>
 
       <para>After initialization, there will be the following component
       instances: <code>a</code>, <code>b</code>, <code>d</code>,
-      <code>e</code>, and three <code>c</code>’s. Lower case names are used
+      <code>e</code>, and three <code>c</code>'s. Lower case names are used
       for instances, the corresponding upper case is its manager. The ordering
       guarantee is that manager <code>D</code> is activated before manager
       <code>C</code>, manager <code>C</code> is activated before manager
@@ -699,10 +699,10 @@ public class EchoImpl implements Echo {
       before manager <code>B</code>, and manager <code>B</code> is activated
       before manager <code>A</code>. There will be no component instance
       <code>f</code> created because <code>F</code> is a lazy manager. There
-      are three <code>c</code>’s because manager <code>E</code> and
+      are three <code>c</code>'s because manager <code>E</code> and
       <code>B</code> have an implicit dependency on <code>C</code> and manager
       <code>B</code> has an additional explicit dependency, totalling 3
-      dependencies. One of these <code>c</code>’s is an orphan and will be
+      dependencies. One of these <code>c</code>'s is an orphan and will be
       garbage collected over time because it is not referred to by any
       component instance.</para>
 
@@ -779,7 +779,7 @@ public class B { public void setA(A a); }
 
       <para>When a member of a cycle is requested to provide a component
       instance, the Blueprint Container must break the cycle by finding one
-      <emphasis>breaking member</emphasis> in the cycle’s members. A breaking
+      <emphasis>breaking member</emphasis> in the cycle's members. A breaking
       member must be a singleton bean and use property injection for the
       dependency that causes the cycle. The Blueprint Container can pick any
       suitable member of the cycle for breaking member, if no such member can
@@ -907,7 +907,7 @@ return a</programlisting>
       managers. An eager manager is a manager that has the
       <code>activation</code> set to <code>eager</code>. A bean manager can
       only be <code>eager</code> if it has <code>singleton</code>
-      <code>scope</code>.</para>
+      scope.</para>
 
       <para>Eager managers are explicitly activated by asking them to provide
       a component instance after all other initialization is done. A bundle
@@ -946,7 +946,7 @@ return a</programlisting>
       package. The Blueprint extender and the Blueprint bundle must then share
       the same class space for this package. Type compatibility can be
       verified by loading a class from the blueprint packages via the
-      Blueprint extender bundle and the Blueprint bundle’s
+      Blueprint extender bundle and the Blueprint bundle's
       <code>loadClass</code> methods. If the Blueprint bundle cannot load the
       class or the class is identical to the class loaded from the extender,
       then the two bundles are compatible for the given package. If the
@@ -971,7 +971,7 @@ return a</programlisting>
         </listitem>
 
         <listitem>
-          <para>The Blueprint extender’s bundle state</para>
+          <para>The Blueprint extender's bundle state</para>
         </listitem>
 
         <listitem>
@@ -981,7 +981,7 @@ return a</programlisting>
 
       <para>All activities on behalf of the Blueprint bundle must use the
       Bundle Context of the Blueprint bundle. All dynamic class loads must use
-      the Blueprint bundle’s <code>Bundle</code> <code>loadClass</code>
+      the Blueprint bundle's <code>Bundle</code> <code>loadClass</code>
       method.</para>
 
       <para>The following sections describe a linear process that handles one
@@ -1191,21 +1191,21 @@ return a</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>absolute path</emphasis> – The path to a resource in
+          <para><emphasis>absolute path</emphasis> - The path to a resource in
           the fragment or directory, this resource must exist. For example
           <code>cnf/start.xml</code>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>directory</emphasis> – The path to directory in a
-          fragment or main bundle, the path must end in a solidus (slash
-          <code>’/’ \u002F</code>). The pattern used in the
-          <code>findEntries</code> method must then be <code>*.xml</code>. The
-          directory is allowed to be empty.</para>
+          <para><emphasis>directory</emphasis> - The path to directory in a
+          fragment or main bundle, the path must end in a solidus (<code>'/'
+          \u002F</code>). The pattern used in the <code>findEntries</code>
+          method must then be <code>*.xml</code>. The directory is allowed to
+          be empty.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>pattern</emphasis> – The last component of the path
+          <para><emphasis>pattern</emphasis> - The last component of the path
           specifies a filename with optional wildcards. The part before is the
           path of directory in the bundle or one of its fragments. These two
           parts specify the parameter to <code>findEntries</code>. It is
@@ -1231,7 +1231,7 @@ return a</programlisting>
 
       <para>A Bundle-Blueprint manifest header specified in a fragment is
       ignored by the Blueprint Container. However, XML documents referenced by
-      a bundle’s Bundle-Blueprint manifest header, or its default, may be
+      a bundle's Bundle-Blueprint manifest header, or its default, may be
       contained in attached fragments, as defined by the
       <code>findEntries</code> method.</para>
 
@@ -1244,7 +1244,7 @@ return a</programlisting>
       <title>Parsing</title>
 
       <para>The Blueprint Container must parse the XML definitions into the
-      Blueprint Container’s metadata registry. Parsing fails if:</para>
+      Blueprint Container's metadata registry. Parsing fails if:</para>
 
       <itemizedlist>
         <listitem>
@@ -1291,7 +1291,7 @@ return a</programlisting>
       <itemizedlist>
         <listitem>
           <para><code>blueprint.graceperiod</code> (
-          <code>true</code>|<code>false</code>) – If set to <code>true</code>,
+          <code>true</code>|<code>false</code>) - If set to <code>true</code>,
           then the Blueprint Container must enter the grace period and wait
           for dependencies, this is the default. Otherwise, it must skip the
           grace period and progress to the next phase regardless if there are
@@ -1320,7 +1320,7 @@ return a</programlisting>
       <itemizedlist>
         <listitem>
           <para><code>blueprint.timeout</code> (<code>Integer &gt;= 0</code>)
-          – The time to wait in the grace period for dependencies to become
+          - The time to wait in the grace period for dependencies to become
           satisfied in milliseconds. The default is 300000, which is 5
           minutes. If the <code>timeout</code> is 0, an indefinite wait will
           take place.</para>
@@ -1381,12 +1381,12 @@ return a</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>osgi.blueprint.container.symbolicname</code> – The
+          <para><code>osgi.blueprint.container.symbolicname</code> - The
           bundle symbolic name of the Blueprint bundle</para>
         </listitem>
 
         <listitem>
-          <para><code>osgi.blueprint.container.version</code> – The version of
+          <para><code>osgi.blueprint.container.version</code> - The version of
           the Blueprint bundle</para>
         </listitem>
       </itemizedlist>
@@ -1529,7 +1529,7 @@ return a</programlisting>
       of a Blueprint bundle. It is therefore allowed to delay this kind of
       verification until the activation of a manager.</para>
 
-      <para>This lazy behavior is independent of the bundle’s lazy activation
+      <para>This lazy behavior is independent of the bundle's lazy activation
       policy. Though the Blueprint extender recognizes this policy to detect
       when the bundle is ready (for a lazy activated bundle the
       <code>STARTING</code> state is like the <code>ACTIVE</code> state), it
@@ -1610,37 +1610,37 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>qname</code> – A fully qualified Java class name in
+          <para><code>qname</code> - A fully qualified Java class name in
           dotted form, for example <code>java.lang.String</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>method</code> – A valid Java method name, for example
+          <para><code>method</code> - A valid Java method name, for example
           <code>setFoo</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>NCName</code> – A string syntax for names defined in
+          <para><code>NCName</code> - A string syntax for names defined in
           <xref linkend="i2584676"/>.</para>
         </listitem>
 
         <listitem>
-          <para><code>ID</code> – A string syntax for ids defined in <xref
+          <para><code>ID</code> - A string syntax for ids defined in <xref
           linkend="i2584676"/>.</para>
         </listitem>
 
         <listitem>
-          <para><code>type</code> – A name of a Java type including arrays,
+          <para><code>type</code> - A name of a Java type including arrays,
           see the next section <xref linkend="i2972566"/>.</para>
         </listitem>
 
         <listitem>
-          <para><code>target</code> – An inline bean, reference, or ref, see
+          <para><code>target</code> - An inline bean, reference, or ref, see
           <xref linkend="i2983382"/>.</para>
         </listitem>
 
         <listitem>
-          <para><code>object</code> – An object value, see <xref
+          <para><code>object</code> - An object value, see <xref
           linkend="i2352936"/></para>
         </listitem>
       </itemizedlist>
@@ -1661,7 +1661,7 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
       syntax for these types is as follows:</para>
 
       <programlisting>type    ::= qname array
-array   ::= ’[]’ *</programlisting>
+array   ::= '[]' *</programlisting>
 
       <para>Where <code>qname</code> is the fully qualified name of a Java
       class or interface, or the name of a primitive type.</para>
@@ -1715,8 +1715,8 @@ array   ::= ’[]’ *</programlisting>
       total of <code>default-activation</code> and <code>activation</code>
       attributes but does not reflect that a <code>prototype</code> scope
       always makes a bean lazy. That is, even if <code>activation</code> is
-      <code>eager</code>, the bean must still have <code>lazy</code>
-      <code>activation</code> when it has <code>prototype</code> scope.</para>
+      <code>eager</code>, the bean must still have <code>lazy
+      activation</code> when it has <code>prototype</code> scope.</para>
     </section>
 
     <section>
@@ -1764,20 +1764,20 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>default-activation</code> – Controls the default for the
+          <para><code>default-activation</code> - Controls the default for the
           <code>activation</code> attribute on a manager. See <xref
           linkend="i2707929"/>. The default for this attribute is
           <code>eager</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>default-availability</code> – The default availability
+          <para><code>default-availability</code> - The default availability
           of the service reference elements, see <xref linkend="i2468749"/>.
           The default for this attribute is <code>mandatory</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>default-timeout</code> – The default for the
+          <para><code>default-timeout</code> - The default for the
           <code>reference</code> element <code>timeout</code> attribute, see
           <xref linkend="i2468749"/>. The default for this attribute is is
           30000, or 5 minutes.</para>
@@ -1814,7 +1814,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
       <para>Type converters defined with the <code>ref</code> element can
       refer to bean managers or reference managers. Type converters must have
       ids distinct from any other manager and are available through the
-      Blueprint Container’s <code>getComponentInstance</code> method.</para>
+      Blueprint Container's <code>getComponentInstance</code> method.</para>
     </section>
 
     <section xml:id="i3005561">
@@ -1827,7 +1827,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>id</code> – The manager and its Metadata are identified
+          <para><code>id</code> - The manager and its Metadata are identified
           by its <code>id</code> as defined in its Component Definition. In
           general this id is therefore referred to as the <emphasis>component
           id</emphasis>. This is an optional attribute. If it is not defined,
@@ -1852,18 +1852,18 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
           <para>Ids are not required, if no component id is specified, the
           Blueprint Container must assign a unique id when it is a configured
           in a top level element. This calculated <code>id</code> must start
-          with a full stop (<code>’.’ \u002E</code>).</para>
+          with a full stop (<code>'.' \u002E</code>).</para>
         </listitem>
       </itemizedlist>
 
       <itemizedlist>
         <listitem>
-          <para><code>activation</code> – Defines the activation mode to be
+          <para><code>activation</code> - Defines the activation mode to be
           lazy or eager. See <xref linkend="i2081951"/>.</para>
         </listitem>
 
         <listitem>
-          <para><code>dependsOn</code> – The list of explicit dependencies
+          <para><code>dependsOn</code> - The list of explicit dependencies
           that must be activated. See <xref linkend="i2706015"/>.</para>
         </listitem>
       </itemizedlist>
@@ -1913,7 +1913,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
       functionality.</para>
 
       <para>Managers that are <emphasis>lazy</emphasis>, that is, not
-      <code>singleton</code> <code>scope</code>, <code>activation</code> is
+      <code>singleton</code> scope, <code>activation</code> is
       <code>lazy</code>, or inlined, are activated when they are first asked
       to provide a component instance. Therefore, even lazy managers can
       activate during initialization when they happen to be a dependency of
@@ -1941,16 +1941,16 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>ref</code> – Must reference one of the following
+          <para><code>ref</code> - Must reference one of the following
           managers</para>
         </listitem>
 
         <listitem>
-          <para><code>reference</code> – An inlined reference manager</para>
+          <para><code>reference</code> - An inlined reference manager</para>
         </listitem>
 
         <listitem>
-          <para><code>bean</code> – An inlined bean manager</para>
+          <para><code>bean</code> - An inlined bean manager</para>
         </listitem>
       </itemizedlist>
 
@@ -2057,7 +2057,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
 
               <entry><para>Defines if this bean is lazily or eagerly
               activated. If not explicitly set, the <code>blueprint</code>
-              element’s value for the <code>default-activation</code>
+              element's value for the <code>default-activation</code>
               attributes is used. If this is also not set, the value is
               <code>eager</code>. See <xref
               linkend="i2707929"/>.</para></entry>
@@ -2236,7 +2236,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
       <title>&lt;argument&gt;</title>
 
       <para>The <code>argument</code> element holds a value for a constructor
-      or factory method’s parameters.</para>
+      or factory method's parameters.</para>
 
       <table>
         <title>Bean Argument Features</title>
@@ -2398,7 +2398,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
             <row>
               <entry><code>name</code></entry>
 
-              <entry><para><code>method</code></para><para><code>( ’.’
+              <entry><para><code>method</code></para><para><code>( '.'
               method</code></para><para><code>)*</code></para></entry>
 
               <entry><para><code>name</code></para><para><code>:
@@ -2482,7 +2482,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>singleton</code> – The bean manager only holds a single
+          <para><code>singleton</code> - The bean manager only holds a single
           component instance. This object is created and set when the bean is
           activated. Subsequent requests must provide the same instance.
           Singleton is the default scope. It is usually used for core
@@ -2490,7 +2490,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>prototype</code> – The object is created and configured
+          <para><code>prototype</code> - The object is created and configured
           anew each time the bean is requested to provide a component
           instance, that is, every call to <code>getComponentInstance</code>
           must result in a new component instance. This is usually the only
@@ -2514,20 +2514,20 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>className</code> – Defines the fully qualified name of a
+          <para><code>className</code> - Defines the fully qualified name of a
           class to construct, or the name of a class with a static factory
           method. The class must be loadable from the Blueprint bundle
           <code>loadClass</code> method.</para>
         </listitem>
 
         <listitem>
-          <para><code>factoryMethod</code> – A static or instance factory
+          <para><code>factoryMethod</code> - A static or instance factory
           method name that corresponds to a publicly accessible method on the
           given class or factory manager.</para>
         </listitem>
 
         <listitem>
-          <para><code>factoryComponent</code> – The id of a top-level target
+          <para><code>factoryComponent</code> - The id of a top-level target
           manager in the Blueprint Container that is an instance
           factory.</para>
         </listitem>
@@ -2536,7 +2536,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
       <para>The Bean manager can have a number of <code>BeanArgument</code>
       objects that specify arguments for the constructor or for the factory
       class/object method. The matching constructor or method must be publicly
-      accessible. The argument’s <code>valueType</code> can be used to
+      accessible. The argument's <code>valueType</code> can be used to
       disambiguate between multiple signatures of constructors or methods. See
       <xref linkend="i1800540"/>.</para>
 
@@ -2695,7 +2695,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>name</code> – The name of the bean property. This name
+          <para><code>name</code> - The name of the bean property. This name
           refers to the <code>set</code> method on the constructed object as
           specified in the design pattern for beans getters and setters, see
           <xref linkend="i1704220"/>. For example, if the property name is
@@ -2708,7 +2708,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
           <para>Nested property names are allowed when setting bean
           properties, as long as all parts of the path, except the property
           that is set, result in a <code>non-null</code> value. The parts of
-          the path are separated with a full stop (<code>’.’ \u002E</code>).
+          the path are separated with a full stop (<code>'.' \u002E</code>).
           For example:</para>
 
           <programlisting>&lt;property name="foo.bar.baz" value="42"/&gt;</programlisting>
@@ -2722,7 +2722,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>value</code> – The value of the property is always a
+          <para><code>value</code> - The value of the property is always a
           Metadata object. This <code>Metadata</code> object can be converted
           to a value object, see <xref linkend="i2352936"/>.</para>
         </listitem>
@@ -2891,7 +2891,7 @@ registration-listener ::= target</programlisting>
 
               <entry><para>Defines if this service is lazily or eagerly
               initialized. If not explicitly set, the <code>blueprint</code>
-              element’s value for the <code>default-activation</code>
+              element's value for the <code>default-activation</code>
               attributes is used. If this is also not set, the value is
               <code>eager</code>. See also <xref
               linkend="i2707929"/>.</para></entry>
@@ -2967,7 +2967,7 @@ registration-listener ::= target</programlisting>
             </row>
 
             <row>
-              <entry><code>&lt;service-</code><code>properties&gt;</code></entry>
+              <entry><code>&lt;service-properties&gt;</code></entry>
 
               <entry>See <xref linkend="i1979502"/>.</entry>
 
@@ -2979,7 +2979,7 @@ registration-listener ::= target</programlisting>
             </row>
 
             <row>
-              <entry><code>&lt;registration-</code><code>listener&gt;</code></entry>
+              <entry><code>&lt;registration-listener&gt;</code></entry>
 
               <entry>See <xref
               linkend="service.blueprint-service.manager.registration.listener"/>.</entry>
@@ -3172,25 +3172,25 @@ registration-listener ::= target</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>disabled</code> – No auto-detection of service interface
+          <para><code>disabled</code> - No auto-detection of service interface
           names is undertaken, the interface names must be found in
           <code>interfaces</code>. This is the default mode.</para>
         </listitem>
 
         <listitem>
-          <para><code>interfaces</code> – The service object will be
+          <para><code>interfaces</code> - The service object will be
           registered using all of its implemented public Java interface types,
           including any interfaces implemented by super classes.</para>
         </listitem>
 
         <listitem>
-          <para><code>class-hierarchy</code> – The service object will be
+          <para><code>class-hierarchy</code> - The service object will be
           registered using its actual type and any public super-types up to
           the <code>Object</code> class (not included).</para>
         </listitem>
 
         <listitem>
-          <para><code>all-classes</code> – The service object will be
+          <para><code>all-classes</code> - The service object will be
           registered using its actual type, all public super-types up to the
           <code>Object</code> class (not including), as well as all public
           interfaces implemented by the service object and any of its super
@@ -3237,14 +3237,14 @@ public class FooImpl implements Foo { ... }</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>osgi.service.blueprint.compname</code> – This will
+          <para><code>osgi.service.blueprint.compname</code> - This will
           reflect the id of the manager that provides the service object,
           unless it is inlined. Inlined beans are always anonymous and must
           not have this property set.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.ranking</code> – If the ranking attribute is not
+          <para><code>service.ranking</code> - If the ranking attribute is not
           zero, this property will be set and hold an <code>Integer</code>
           object with the given value, see <xref linkend="i2392470"/>.</para>
         </listitem>
@@ -3274,22 +3274,22 @@ ServiceRegistration sr =
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Primitives Number </emphasis>– <code>int, long,
+          <para><emphasis>Primitives Number</emphasis> - <code>int, long,
           float, double, byte, short, char, boolean</code></para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Scalar</emphasis> – <code>String, Integer, Long,
+          <para><emphasis>Scalar</emphasis> - <code>String, Integer, Long,
           Float, Double, Byte, Short, Character, Boolean</code>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Array</emphasis> – An array of either the allowable
+          <para><emphasis>Array</emphasis> - An array of either the allowable
           primitive or scalar types.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Collection</emphasis> – An object implementing the
+          <para><emphasis>Collection</emphasis> - An object implementing the
           <code>Collection</code> interface that contains scalar types.</para>
         </listitem>
       </itemizedlist>
@@ -3370,12 +3370,12 @@ ServiceRegistration sr =
 
       <itemizedlist>
         <listitem>
-          <para><code>registrationMethod</code> – The name of the notification
+          <para><code>registrationMethod</code> - The name of the notification
           method that is called after this service has been registered.</para>
         </listitem>
 
         <listitem>
-          <para><code>unregistrationMethod</code> – This method is called when
+          <para><code>unregistrationMethod</code> - This method is called when
           this service will be unregistered.</para>
         </listitem>
       </itemizedlist>
@@ -3428,7 +3428,7 @@ ServiceRegistration sr =
               <entry><code>void( super T,Map)</code></entry>
 
               <entry><para><code>T</code> is assignable from the service
-              object’s type.</para></entry>
+              object's type.</para></entry>
             </row>
 
             <row>
@@ -3586,12 +3586,12 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>timeout</code> – A reference manager supports a
+          <para><code>timeout</code> - A reference manager supports a
           <code>timeout</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>memberType</code> – The reference-list can define its
+          <para><code>memberType</code> - The reference-list can define its
           member-type</para>
         </listitem>
       </itemizedlist>
@@ -3647,7 +3647,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
 
               <entry><para>Defines if this service reference is lazily of
               eagerly initialized. If not explicitly set, the
-              <code>blueprint</code> element’s value for the
+              <code>blueprint</code> element's value for the
               <code>default-activation</code> attributes is used. If this is
               also not set, the value is <code>eager</code>. See also <xref
               linkend="i2707929"/>.</para></entry>
@@ -3663,7 +3663,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
 
               <entry><para>Explicit list of component ids that are the
               dependencies. These managers must be activated before this
-              service reference’s activation. See <xref linkend="i2706015"/>.
+              service reference's activation. See <xref linkend="i2706015"/>.
               This is a whitespace separated List.</para></entry>
             </row>
 
@@ -4030,12 +4030,12 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>service-object</code> – Inject a List of service
+          <para><code>service-object</code> - Inject a List of service
           objects, this is the default.</para>
         </listitem>
 
         <listitem>
-          <para><code>service-reference</code> – Inject a list of
+          <para><code>service-reference</code> - Inject a list of
           <code>ServiceReference</code> objects</para>
         </listitem>
       </itemizedlist>
@@ -4122,12 +4122,12 @@ toArray(T[])</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>mandatory</code> – Mandatory indicates that the service
+          <para><code>mandatory</code> - Mandatory indicates that the service
           reference needs to be satisfied.</para>
         </listitem>
 
         <listitem>
-          <para><code>optional</code> – Optional indicates that the
+          <para><code>optional</code> - Optional indicates that the
           satisfaction of this reference is not relevant for any registered
           services, or for the grace period.</para>
         </listitem>
@@ -4162,7 +4162,7 @@ toArray(T[])</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>bindMethod</code> – Called after a service is selected
+          <para><code>bindMethod</code> - Called after a service is selected
           by the service reference manager. For a reference manager, this
           method can be called repeatedly without an intermediate unbind
           callback. This happens when a service is unregistered but a
@@ -4170,7 +4170,7 @@ toArray(T[])</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>unbindMethod</code> – Called when the service is no
+          <para><code>unbindMethod</code> - Called when the service is no
           longer used by the service reference manager but before it has been
           returned to the service registry with the <code>unget</code> method.
           For a reference manager, no unbind method is called when the service
@@ -4184,20 +4184,20 @@ toArray(T[])</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>public void(ServiceReference)</code> – Provide the
+          <para><code>public void(ServiceReference)</code> - Provide the
           <code>ServiceReference</code> object associated with this service
-          reference. This callback type provides access to the service’s
+          reference. This callback type provides access to the service's
           properties without actually getting the service.</para>
         </listitem>
 
         <listitem>
-          <para><code>public void( super T) –</code> Provide the proxy to the
+          <para><code>public void( super T)</code> - Provide the proxy to the
           service object, where T is on of the types implemented by the
           service object proxy.</para>
         </listitem>
 
         <listitem>
-          <para><code>public void ( super T,Map)</code> – Provide the proxy to
+          <para><code>public void ( super T,Map)</code> - Provide the proxy to
           the service object. <code>T</code> is a type that is assignable from
           the service object. The <code>Map</code> object provides the service
           properties of the corresponding <code>ServiceReference</code>
@@ -4274,7 +4274,7 @@ public class FooImpl {
       becomes unregistered, then the proxy must unget the reference to the
       backing service (if it had gotten it) and get another service object the
       next time a method on the proxy is called. If a replacement can be found
-      immediately, the reference listener’s bind method must be called without
+      immediately, the reference listener's bind method must be called without
       calling the unbind method. Other threads that need the same service
       object must block until the service object has become available or times
       out.</para>
@@ -4942,12 +4942,12 @@ m.put("3", new Version("3.14"));</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>key</code> – A string specifying the property key. This
+          <para><code>key</code> - A string specifying the property key. This
           attribute is required.</para>
         </listitem>
 
         <listitem>
-          <para><code>value</code> – A string specifying the property
+          <para><code>value</code> - A string specifying the property
           value.</para>
         </listitem>
       </itemizedlist>
@@ -5012,26 +5012,26 @@ p.setProperty( "2", "two");</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Constructor arguments</emphasis> – The
+        <para><emphasis>Constructor arguments</emphasis> - The
         <code>arguments</code> specify the parameters for a
         constructor.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Static Factory arguments </emphasis>– The
+        <para><emphasis>Static Factory arguments</emphasis> - The
         <code>arguments</code> specify the parameters for a static
         method.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Instance Factory arguments</emphasis> – The
+        <para><emphasis>Instance Factory arguments</emphasis> - The
         <code>arguments</code> specify the parameters for a method on an
         object provided by another manager.</para>
       </listitem>
 
       <listitem>
-        <para>P<emphasis>roperties</emphasis> – The <code>value</code> of the
-        Bean Property specifies the single parameter for the property’s set
+        <para>P<emphasis>roperties</emphasis> - The <code>value</code> of the
+        Bean Property specifies the single parameter for the property's set
         method.</para>
       </listitem>
     </itemizedlist>
@@ -5154,13 +5154,13 @@ public class Foo {}</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>(Bar,Foo)</code> – The arguments will be in the given
+          <para><code>(Bar,Foo)</code> - The arguments will be in the given
           order and the orderd match will succeed. This is the normal
           case.</para>
         </listitem>
 
         <listitem>
-          <para><code>(Foo,Bar)</code> – This will not match because in the
+          <para><code>(Foo,Bar)</code> - This will not match because in the
           re-ordered match, the Bar argument (which is a <code>Foo</code>
           sub-type) is matched against the first argument. The second
           <code>Foo</code> argument can then no longer find a compatible type
@@ -5168,7 +5168,7 @@ public class Foo {}</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>(Object,Object)</code> – This will be called with
+          <para><code>(Object,Object)</code> - This will be called with
           <code>(aBar,aFoo)</code>.</para>
         </listitem>
       </itemizedlist>
@@ -5190,8 +5190,8 @@ public class Foo {}</programlisting>
       correct constructor. Therefore, the <code>type</code> should be set to
       disambiguate this:</para>
 
-      <programlisting>&lt;bean class=”Multiple”&gt;
-  &lt;argument type="java.net.URL" value=”http://www.acme.us”/&gt;
+      <programlisting>&lt;bean class="Multiple"&gt;
+  &lt;argument type="java.net.URL" value="http://www.acme.us"/&gt;
 &lt;/bean&gt;</programlisting>
     </section>
 
@@ -5381,7 +5381,7 @@ public class Foo {}</programlisting>
 
           <itemizedlist>
             <listitem>
-              <para><code>boolean</code> or <code>Boolean</code> – Construct
+              <para><code>boolean</code> or <code>Boolean</code> - Construct
               the appropriate boolean type while accepting the following
               additional values for <code>true</code> and <code>false</code>
               respectively:</para>
@@ -5398,46 +5398,45 @@ public class Foo {}</programlisting>
             </listitem>
 
             <listitem>
-              <para><code>Character</code> – The string <code>s</code> must
+              <para><code>Character</code> - The string <code>s</code> must
               have a length of 1, this single character is then converted to a
               <code>Character</code> object.</para>
             </listitem>
 
             <listitem>
-              <para><code>Locale</code> – The string <code>s</code> is
+              <para><code>Locale</code> - The string <code>s</code> is
               converted to a <code>Locale</code> using the following syntax
               (no spaces are allowed between terms).</para>
 
-              <programlisting>locale  ::= &lt;java language-code&gt; ( ’_’ country)+
-country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</programlisting>
+              <programlisting>locale  ::= &lt;java language-code&gt; ( '_' country)+
+country ::= &lt;java country-code&gt; ('_' &lt;java variant-code&gt;)+</programlisting>
             </listitem>
           </itemizedlist>
 
           <itemizedlist>
             <listitem>
-              <para><code>Pattern</code> – Create the <code>Pattern</code>
+              <para><code>Pattern</code> - Create the <code>Pattern</code>
               object with <code>Pattern.compile(String)</code>.</para>
             </listitem>
 
             <listitem>
-              <para><code>Properties</code> – Create a new
+              <para><code>Properties</code> - Create a new
               <code>Properties</code> object and load the properties from the
               string. The string must follow the format described with the
               <code>Properties.load method</code>.</para>
             </listitem>
 
             <listitem>
-              <para><code>Enum</code> <code>subclass</code> – Convert the
-              string <code>s</code> to the appropriate member of the given
-              enum with the <code>Enum.valueOf</code> method. If the string is
-              not one of the enum values, then the conversion must
-              fail.</para>
+              <para><code>Enum subclass</code> - Convert the string
+              <code>s</code> to the appropriate member of the given enum with
+              the <code>Enum.valueOf</code> method. If the string is not one
+              of the enum values, then the conversion must fail.</para>
             </listitem>
 
             <listitem>
-              <para><code>Class</code> – The string <code>s</code> must
+              <para><code>Class</code> - The string <code>s</code> must
               conform to the syntax in <xref linkend="i2972566"/>. This type
-              must be loaded through the Bundle’s <code>loadClass</code>
+              must be loaded through the Bundle's <code>loadClass</code>
               method. The resulting class must match any generic constraints
               on <code>T</code>. If this fails, the conversion fails.</para>
             </listitem>
@@ -5470,7 +5469,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.Converter.canConvert-Object-ReifiedType-"
-          xrefstyle="hyperlink"/> – A light weight method that inspects the
+          xrefstyle="hyperlink"/> - A light weight method that inspects the
           object and returns <code>true</code> if it can convert it to the
           given Reified Type, <code>false</code> otherwise. Converters
           normally can convert a type <code>S</code> to a type
@@ -5483,7 +5482,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.Converter.convert-Object-ReifiedType-"
-          xrefstyle="hyperlink"/> – The actual conversion method. This method
+          xrefstyle="hyperlink"/> - The actual conversion method. This method
           should not fail if the <code>canConvert</code> method has returned
           <code>true</code>.</para>
         </listitem>
@@ -5811,14 +5810,14 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
 
       <itemizedlist>
         <listitem>
-          <para><code>Class</code> – A Class represents unparameterized raw
+          <para><code>Class</code> - A Class represents unparameterized raw
           type and is reified into T&lt;&gt;. For example:</para>
 
           <programlisting>String string;</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>ParameterizedType</code> – A Parameterized Type defines
+          <para><code>ParameterizedType</code> - A Parameterized Type defines
           a raw type and 1..n typed parameters. The raw type of the
           Parameterized Type is also reified and represents <code>T</code>.
           The arguments map directly to the arguments of the reified form. An
@@ -5828,7 +5827,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         </listitem>
 
         <listitem>
-          <para><code>TypeVariable</code> – Represents a Type Variable. A type
+          <para><code>TypeVariable</code> - Represents a Type Variable. A type
           variable is listed in a generics type declaration, for example in
           <code>Map&lt;K,V&gt;</code>, the <code>K</code> and <code>V</code>
           are the type variables. A type variable is bounded by a number of
@@ -5846,7 +5845,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         </listitem>
 
         <listitem>
-          <para><code>WildcardType</code> – A Wildcard Type constrains a type
+          <para><code>WildcardType</code> - A Wildcard Type constrains a type
           to a set of lower bounds and a set of upper bounds, at least in the
           reflective API. In the Java 5 and later syntax a Wildcard Type can
           only specify 0 or one lower and one upper bound, for example
@@ -5859,7 +5858,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         </listitem>
 
         <listitem>
-          <para><code>GenericArrayType</code> – A Generic Array Type
+          <para><code>GenericArrayType</code> - A Generic Array Type
           represents an array. Its component type is reified and then
           converted to an array. The Reified Type will have the array class as
           reified class and the type arguments reflect the type arguments of
@@ -5903,7 +5902,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Proxied references</emphasis> – Service reference
+        <para><emphasis>Proxied references</emphasis> - Service reference
         managers must provide a proxy implementing the specified interfaces,
         instead of the actual service object it refers to. The proxy must
         fetch the real service lazily. For reference managers, when a proxy is
@@ -5921,11 +5920,11 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
       </listitem>
 
       <listitem>
-        <para><emphasis>Conditional Service Registrations</emphasis> – The
+        <para><emphasis>Conditional Service Registrations</emphasis> - The
         service manager is responsible for registering a service with the OSGi
         service registry. A service manager is statically dependent on the
         transitive set of managers that it depends on. If these static
-        dependencies contain mandatory service references, then the manager’s
+        dependencies contain mandatory service references, then the manager's
         service must not be registered when any of these mandatory service
         references is unsatisfied, see <xref linkend="i2630717"/>.</para>
       </listitem>
@@ -6001,7 +6000,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Safe</emphasis> – All iterators of reference-list
+          <para><emphasis>Safe</emphasis> - All iterators of reference-list
           managers must be safe to traverse according to the
           <code>Iterator</code> interface contract, even while the underlying
           collection is being modified locally or in another thread. If the
@@ -6013,7 +6012,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         </listitem>
 
         <listitem>
-          <para><emphasis>Visibility</emphasis> – All the changes made to the
+          <para><emphasis>Visibility</emphasis> - All the changes made to the
           collection that affect member objects not yet returned by the
           iterator must be visible in the iteration. Proxies for new services
           must be added at the end of the List. Proxies already returned can
@@ -6080,7 +6079,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
     should not be required to get a component instance; the proper way to use
     Blueprint is to inject them. This declarative approach makes the Blueprint
     Container aware of any dependencies; one of the primary goals of a
-    dependency injection framework. The Blueprint Container’s introspective
+    dependency injection framework. The Blueprint Container's introspective
     features are commonly used for management and other non-application
     purposes.</para>
 
@@ -6107,22 +6106,22 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
 
       <itemizedlist>
         <listitem>
-          <para><code>blueprintContainer</code> – The Blueprint
+          <para><code>blueprintContainer</code> - The Blueprint
           Container.</para>
         </listitem>
 
         <listitem>
-          <para><code>blueprintBundle</code> – A manager that provides the
-          Blueprint bundle’s <code>Bundle</code> object.</para>
+          <para><code>blueprintBundle</code> - A manager that provides the
+          Blueprint bundle's <code>Bundle</code> object.</para>
         </listitem>
 
         <listitem>
-          <para><code>blueprintBundleContext –</code> A manager that provides
-          the Blueprint bundle’s <code>BundleContext</code> object.</para>
+          <para><code>blueprintBundleContext</code> - A manager that provides
+          the Blueprint bundle's <code>BundleContext</code> object.</para>
         </listitem>
 
         <listitem>
-          <para><code>blueprintConverter</code> – A manager that provides an
+          <para><code>blueprintConverter</code> - A manager that provides an
           object implementing the <code>Converter</code> interface. This
           represents the built-in conversion facility that the Blueprint
           Container uses to convert objects. See <xref
@@ -6143,7 +6142,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintContainer.getComponentInstance-String-"
-          xrefstyle="hyperlink"/> – This method will provide a component
+          xrefstyle="hyperlink"/> - This method will provide a component
           instance from the component id. If the manager has not been
           activated yet, it must atomically activate and ensure its explicit
           and implicit dependencies are activated transitively.</para>
@@ -6152,7 +6151,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintContainer.getComponentIds--"
-          xrefstyle="hyperlink"/> – Returns a set of component ids in this
+          xrefstyle="hyperlink"/> - Returns a set of component ids in this
           Blueprint Container. These ids must consist of all top level
           managers (including calculated ids) and environment managers.</para>
         </listitem>
@@ -6174,7 +6173,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintContainer.getComponentMetadata-String-"
-          xrefstyle="hyperlink"/> – Answer the Component Metadata sub-type for
+          xrefstyle="hyperlink"/> - Answer the Component Metadata sub-type for
           the given component id. Environment managers will return a
           <code>ComponentMetadata</code> object, the other managers each have
           their own specific Metadata type.</para>
@@ -6183,7 +6182,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintContainer.getMetadata-Class-"
-          xrefstyle="hyperlink"/> – Answer a collection with the Metadata of
+          xrefstyle="hyperlink"/> - Answer a collection with the Metadata of
           the given type, regardless if it is defined as/in a top-level or
           inlined manager. For example,
           <code>getMetadata(ServiceMetadata.class)</code> returns all Service
@@ -6226,7 +6225,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
       <listitem>
         <para><xref
         linkend="org.osgi.service.blueprint.container.BlueprintListener.blueprintEvent-BlueprintEvent-"
-        xrefstyle="hyperlink"/> – Notify the listener of a new Blueprint
+        xrefstyle="hyperlink"/> - Notify the listener of a new Blueprint
         Event. These events are send synchronously with their cause. That is,
         all listeners must be notified before the Blueprint Container
         continues to the next step.</para>
@@ -6254,14 +6253,14 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintEvent.CREATING"
-          xrefstyle="hyperlink"/> – The Blueprint extender has started
+          xrefstyle="hyperlink"/> - The Blueprint extender has started
           creating a Blueprint Container for the bundle.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintEvent.GRACE_PERIOD"
-          xrefstyle="hyperlink"/> – The Blueprint Container enters the grace
+          xrefstyle="hyperlink"/> - The Blueprint Container enters the grace
           period. This event can be repeated multiple times when the list of
           dependencies changes due to changes in the service registry.</para>
         </listitem>
@@ -6269,14 +6268,14 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintEvent.CREATED"
-          xrefstyle="hyperlink"/> – The Blueprint Container is ready. The
+          xrefstyle="hyperlink"/> - The Blueprint Container is ready. The
           application is now running.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintEvent.WAITING"
-          xrefstyle="hyperlink"/> – A service reference is blocking because of
+          xrefstyle="hyperlink"/> - A service reference is blocking because of
           unsatisfied mandatory dependencies. This event can happen multiple
           times in a row.</para>
         </listitem>
@@ -6284,7 +6283,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintEvent.DESTROYING"
-          xrefstyle="hyperlink"/> – The Blueprint Container is being destroyed
+          xrefstyle="hyperlink"/> - The Blueprint Container is being destroyed
           because the Blueprint bundle or Blueprint extender has
           stopped.</para>
         </listitem>
@@ -6292,14 +6291,14 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintEvent.DESTROYED"
-          xrefstyle="hyperlink"/> – The Blueprint Container is completely
+          xrefstyle="hyperlink"/> - The Blueprint Container is completely
           destroyed.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintEvent.FAILURE"
-          xrefstyle="hyperlink"/> – An error occurred during the creation of
+          xrefstyle="hyperlink"/> - An error occurred during the creation of
           the Blueprint Container.</para>
         </listitem>
       </itemizedlist>
@@ -6310,45 +6309,45 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintEvent.getBundle--"
-          xrefstyle="hyperlink"/> – The Blueprint bundle</para>
+          xrefstyle="hyperlink"/> - The Blueprint bundle</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintEvent.getCause--"
-          xrefstyle="hyperlink"/> – Any occurred exception or
+          xrefstyle="hyperlink"/> - Any occurred exception or
           <code>null</code></para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintEvent.getDependencies--"
-          xrefstyle="hyperlink"/> – A list of filters that specify the
+          xrefstyle="hyperlink"/> - A list of filters that specify the
           unsatisfied mandatory references.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintEvent.getExtenderBundle--"
-          xrefstyle="hyperlink"/> – The Blueprint extender bundle.</para>
+          xrefstyle="hyperlink"/> - The Blueprint extender bundle.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintEvent.getTimestamp--"
-          xrefstyle="hyperlink"/> – The time the event occurred</para>
+          xrefstyle="hyperlink"/> - The time the event occurred</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintEvent.getType--"
-          xrefstyle="hyperlink"/> – The type of the event.</para>
+          xrefstyle="hyperlink"/> - The type of the event.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.BlueprintEvent.isReplay--"
-          xrefstyle="hyperlink"/> – Indicates if the event is a replay
+          xrefstyle="hyperlink"/> - Indicates if the event is a replay
           (<code>true</code>) or if it is a new event (<code>false</code>),
           see <xref linkend="i2680219"/>.</para>
         </listitem>
@@ -6414,28 +6413,28 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.EventConstants.TYPE"
-          xrefstyle="hyperlink"/> – The type of the Event, see <xref
+          xrefstyle="hyperlink"/> - The type of the Event, see <xref
           linkend="i2951918"/>.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.EventConstants.BUNDLE"
-          xrefstyle="hyperlink"/> – (<code>Bundle</code>) The
+          xrefstyle="hyperlink"/> - (<code>Bundle</code>) The
           <code>Bundle</code> object of the Blueprint bundle</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.EventConstants.BUNDLE_ID"
-          xrefstyle="hyperlink"/> – (<code>Long</code>) The id of the
+          xrefstyle="hyperlink"/> - (<code>Long</code>) The id of the
           Blueprint bundle.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.EventConstants.BUNDLE_SYMBOLICNAME"
-          xrefstyle="hyperlink"/> – (<code>String</code>) The Bundle Symbolic
+          xrefstyle="hyperlink"/> - (<code>String</code>) The Bundle Symbolic
           Name of the Blueprint bundle.</para>
         </listitem>
 
@@ -6449,49 +6448,49 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.EventConstants.EXTENDER_BUNDLE"
-          xrefstyle="hyperlink"/> – (<code>Bundle</code>) the
+          xrefstyle="hyperlink"/> - (<code>Bundle</code>) the
           <code>Bundle</code> object of the Blueprint extender bundle.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.EventConstants.EXTENDER_BUNDLE_ID"
-          xrefstyle="hyperlink"/> – (<code>Long</code>) The id of the
+          xrefstyle="hyperlink"/> - (<code>Long</code>) The id of the
           Blueprint extender bundle</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.EventConstants.EXTENDER_BUNDLE_SYMBOLICNAME"
-          xrefstyle="hyperlink"/> – (<code>String</code>) The Bundle Symbolic
+          xrefstyle="hyperlink"/> - (<code>String</code>) The Bundle Symbolic
           Name of the Blueprint extender bundle.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.EventConstants.EXTENDER_BUNDLE_VERSION"
-          xrefstyle="hyperlink"/> – (<code>Version</code>) The version of the
+          xrefstyle="hyperlink"/> - (<code>Version</code>) The version of the
           Blueprint extender bundle</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.EventConstants.TIMESTAMP"
-          xrefstyle="hyperlink"/> – (<code>Long</code>) The time when the
+          xrefstyle="hyperlink"/> - (<code>Long</code>) The time when the
           event occurred</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.EventConstants.CAUSE"
-          xrefstyle="hyperlink"/> – (<code>Throwable</code>) The failure
+          xrefstyle="hyperlink"/> - (<code>Throwable</code>) The failure
           cause, only included for a <code>FAILURE</code> event.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.EventConstants.DEPENDENCIES"
-          xrefstyle="hyperlink"/> – (<code>String[]</code>) The filter of an
+          xrefstyle="hyperlink"/> - (<code>String[]</code>) The filter of an
           unsatisfied service reference. Can only appear in a
           <code>GRACE_PERIOD</code>, <code>WAITING</code> or
           <code>FAILURE</code> event caused by a time-out.</para>
@@ -6500,7 +6499,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
         <listitem>
           <para><xref
           linkend="org.osgi.service.blueprint.container.EventConstants.EVENT"
-          xrefstyle="hyperlink"/> – (<code>BlueprintEvent</code>) The
+          xrefstyle="hyperlink"/> - (<code>BlueprintEvent</code>) The
           <code>BlueprintEvent</code> object that caused this event.</para>
         </listitem>
       </itemizedlist>
@@ -6528,7 +6527,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
     the bundle class loader of the Blueprint bundle for all actions that are
     made on behalf of the Blueprint bundle. Especially, access to the OSGi
     service registry must use the Bundle Context of the Blueprint bundle. Any
-    dynamic class loading must use the Blueprint bundle’s
+    dynamic class loading must use the Blueprint bundle's
     <code>loadClass</code> method. The normal OSGi mechanics will then ensure
     class space consistency for resolved bundles.</para>
 
@@ -6643,7 +6642,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
       <title>Visibility and Accessibility</title>
 
       <para>The Blueprint Container must load any classes it needs through the
-      Blueprint bundle’s <code>loadClass</code> method. If a class can not be
+      Blueprint bundle's <code>loadClass</code> method. If a class can not be
       loaded, then the initialization fails. Class loading issues are further
       discussed in <xref linkend="i2304671"/>.</para>
 
@@ -6670,7 +6669,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
     attributes and/or sub-elements in the <code>Metadata</code> interfaces are
     merged when possible. For example, the <code>interface</code> attribute
     and <code>interfaces</code> element in the service element are merged in
-    the <code>ServiceMetadata</code> class’ <code>getInterfaces()</code>
+    the <code>ServiceMetadata</code> class' <code>getInterfaces()</code>
     method.</para>
 
     <para>The interfaces are arranged in a comprehensive hierarchy that
@@ -6680,7 +6679,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
     <para>The hierarchy can roughly be divided in two parts. The first part is
     the sub-interfaces of the <code>ComponentMetadata</code> interface. These
     interfaces are defining the configuration data of the top-level and
-    inlined managers. The manager’s component instance(s) are injected with
+    inlined managers. The manager's component instance(s) are injected with
     values during runtime. The configuration of how to create a specific value
     is also described with Metadata interfaces. For example, a
     <code>Map</code> object is described with configuration information in the
@@ -6728,7 +6727,7 @@ country ::= &lt;java country-code&gt; (’_’ &lt;java variant-code&gt;)+</prog
       bundle. This will ensure that much of the resources allocated will be
       used on behalf of the Blueprint bundle. However, most Java 2 permissions
       will also verify the stack and this will inevitably include the
-      Blueprint extender’s code. Therefore, the Blueprint extender will
+      Blueprint extender's code. Therefore, the Blueprint extender will
       require the combined set of permissions needed by all Blueprint bundles.
       It is therefore likely that in practical situations the Blueprint
       extender requires All Permission.</para>

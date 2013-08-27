@@ -106,15 +106,15 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Declarative Services Specification</emphasis> – The
+          <para><emphasis>Declarative Services Specification</emphasis> - The
           Declarative Services specification provides dependency injection for
           services. It handles the service life cycle dynamics by notifying
-          the component or managing the component’s life cycle. See chapter
+          the component or managing the component's life cycle. See chapter
           <xref linkend="service.component"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Blueprint Container Specification</emphasis> – The
+          <para><emphasis>Blueprint Container Specification</emphasis> - The
           Blueprint Container is derived from the Spring Dynamic Module
           project. It provides a general DI framework; services are supported
           by proxying them and damping their life cycle. See chapter <xref
@@ -159,7 +159,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>SCA Configuration Type</emphasis> – Distribution
+          <para><emphasis>SCA Configuration Type</emphasis> - Distribution
           providers support a number of communication protocols configured by
           specific configuration types. The SCA Remote Services Configuration
           Specification defines such a configuration type. See <xref
@@ -239,7 +239,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>User Admin Service Specification</emphasis> – The
+          <para><emphasis>User Admin Service Specification</emphasis> - The
           User Admin Service Specification provides authorization for OSGi
           framework actions based on authenticated users, instead of using the
           Java code-based permission model. See <xref
@@ -284,7 +284,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>JNDI Services Specification</emphasis> – The Java
+          <para><emphasis>JNDI Services Specification</emphasis> - The Java
           Naming and Directory Interface (JNDI) is a registry technology in
           Java applications, both in the Java SE and Java EE space. JNDI
           provides a vendor-neutral set of APIs that allow clients to interact
@@ -302,13 +302,13 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>JDBC™ Service Specification</emphasis> – provides an
+          <para><emphasis>JDBC™ Service Specification</emphasis> - provides an
           API for applications to interact with relational database systems
           from different vendors. See <xref linkend="service.jdbc"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>JPA Service Specification</emphasis> – The Java
+          <para><emphasis>JPA Service Specification</emphasis> - The Java
           Persistence API (JPA) is a specification that sets a standard for
           persistence in enterprise and non-enterprise JRE™-based
           environments. The JPA Service Specification defines how bundles may
@@ -328,7 +328,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>JTA Transaction Services Specification</emphasis> –
+          <para><emphasis>JTA Transaction Services Specification</emphasis> -
           This specification provides the User Transaction, Transaction
           Manager, and Synchronization Registry services, which are based on
           their counterparts in the Java EE™ JTA Specifications. These
@@ -349,19 +349,19 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Log Service Specification</emphasis> – Provides a
+          <para><emphasis>Log Service Specification</emphasis> - Provides a
           general purpose message logger for the OSGi framework. See <xref
           linkend="service.log"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>XML Parser Service Specification</emphasis> –
+          <para><emphasis>XML Parser Service Specification</emphasis> -
           Addresses how the classes defined in JAXP can be used in an OSGi
           framework. See <xref linkend="util.xml"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Service Loader Mediator Specification</emphasis> –
+          <para><emphasis>Service Loader Mediator Specification</emphasis> -
           Addresses common problems of bundles that rely on the JRE provided
           Service Loader API to load custom Service Provider Implementations.
           This specification describes how to use the service registry for
@@ -371,7 +371,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Coordinator Specification</emphasis> – The
+          <para><emphasis>Coordinator Specification</emphasis> - The
           Coordinator service provides a mechanism for multiple parties to
           collaborate on a common task without a priori knowledge of who will
           collaborate in that task. The service provides a rendezvous for an
@@ -387,7 +387,7 @@
     <title>Application and Provisioning Support</title>
 
     <para>The support for applications in OSGi environments has long been
-    missing. The term ‘application’ may mean different things to different
+    missing. The term 'application' may mean different things to different
     people, therefore, rather than defining what an application is, the OSGi
     specification provides a set of enabling services and specifications to
     aid in the definition, composition, deployment, and governance of a group
@@ -423,8 +423,8 @@
         specification provides a standard API to access (possibly remote)
         repositories. Resources can be obtained from the repository by
         specifying declarative requirements, which might include for example
-        ‘provide all resources that export a given package’ or ‘provide the
-        bundle with the given symbolic name and version’, but can also be used
+        'provide all resources that export a given package' or 'provide the
+        bundle with the given symbolic name and version', but can also be used
         with any other generic capabilities. While the Repository API can be
         used on its own, in conjunction with the Resolver Specification it
         provides the capability to manage retrieval of external resources

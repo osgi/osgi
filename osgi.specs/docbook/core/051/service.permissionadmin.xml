@@ -39,19 +39,19 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Status information</emphasis> – The Permission Admin
+          <para><emphasis>Status information</emphasis> - The Permission Admin
           Service must provide status information about the current
           permissions of a bundle.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Administrative</emphasis> – The Permission Admin
+          <para><emphasis>Administrative</emphasis> - The Permission Admin
           Service must allow a Management Agent to set the permissions before,
           during, or after a bundle is installed.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Defaults</emphasis> – The Permission Admin Service
+          <para><emphasis>Defaults</emphasis> - The Permission Admin Service
           must provide control over default permissions. These are the
           permissions for a bundle with no specific permissions set.</para>
         </listitem>
@@ -64,20 +64,21 @@
       <itemizedlist>
         <listitem>
           <para><emphasis><xref
-          linkend="org.osgi.service.permissionadmin.PermissionAdmin" xrefstyle="hyperlink"/></emphasis>
-          – The service that provides access to the permission repository of
-          the Framework.</para>
+          linkend="org.osgi.service.permissionadmin.PermissionAdmin"
+          xrefstyle="hyperlink"/></emphasis> - The service that provides
+          access to the permission repository of the Framework.</para>
         </listitem>
 
         <listitem>
           <para><emphasis><xref
-          linkend="org.osgi.service.permissionadmin.PermissionInfo" xrefstyle="hyperlink"/></emphasis>
-          – An object that holds the information needed to construct a
-          <code>Permission</code> object.</para>
+          linkend="org.osgi.service.permissionadmin.PermissionInfo"
+          xrefstyle="hyperlink"/></emphasis> - An object that holds the
+          information needed to construct a <code>Permission</code>
+          object.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Bundle location</emphasis> – The string that
+          <para><emphasis>Bundle location</emphasis> - The string that
           specifies the bundle location. This is described in <xref
           linkend="framework.lifecycle.bundleidentifiers"/>.</para>
         </listitem>
@@ -110,12 +111,13 @@
       changed, a bundle with no specific permissions must immediately start
       using the new default permissions.</para>
 
-      <para>The Permission Admin service is registered by the Framework’s
+      <para>The Permission Admin service is registered by the Framework's
       system bundle under the
       <code>org.osgi.service.permissionadmin.</code><xref
-      linkend="org.osgi.service.permissionadmin.PermissionAdmin" xrefstyle="hyperlink"/> interface.
-      This is an optional singleton service, so at most one Permission Admin
-      service is registered at any moment in time.</para>
+      linkend="org.osgi.service.permissionadmin.PermissionAdmin"
+      xrefstyle="hyperlink"/> interface. This is an optional singleton
+      service, so at most one Permission Admin service is registered at any
+      moment in time.</para>
 
       <para>The Permission Admin service provides access to the permission
       repository. A Management Agent can get, set, update, and delete
@@ -131,11 +133,11 @@
     <para>The Permission Admin service needs to manipulate the default
     permissions and the permissions associated with a specific bundle. The
     default permissions and the bundle-specific permissions are stored
-    persistently. It is possible to set a bundle’s permissions before the
-    bundle is installed in the Framework because the bundle’s location is used
-    to set the bundle’s permissions.</para>
+    persistently. It is possible to set a bundle's permissions before the
+    bundle is installed in the Framework because the bundle's location is used
+    to set the bundle's permissions.</para>
 
-    <para>The manipulation of a bundle’s permissions, however, may also be
+    <para>The manipulation of a bundle's permissions, however, may also be
     done in real time when a bundle is downloaded or just before the bundle is
     downloaded. To support this flexibility, a
     <code>SynchronousBundleListener</code> object may be used by a Management
@@ -157,9 +159,10 @@
     but the Management Agent would have to import all possible packages that
     contain permissions. This requirement would severely limit permission
     types. Therefore, the Permission Admin service uses the <xref
-    linkend="org.osgi.service.permissionadmin.PermissionInfo" xrefstyle="hyperlink"/> class to
-    specify permission information. Objects of this class are used by the
-    Framework to create <code>Permission</code> objects.</para>
+    linkend="org.osgi.service.permissionadmin.PermissionInfo"
+    xrefstyle="hyperlink"/> class to specify permission information. Objects
+    of this class are used by the Framework to create <code>Permission</code>
+    objects.</para>
 
     <para><code>PermissionInfo</code> objects restrict the possible
     <code>Permission</code> objects that can be used. A
@@ -203,37 +206,40 @@
     <itemizedlist>
       <listitem>
         <para><xref
-        linkend="org.osgi.service.permissionadmin.PermissionAdmin.getLocations--" xrefstyle="hyperlink"/>
-        – Returns a list of locations that have permissions assigned to them.
-        This method allows a Management Agent to examine the current set of
+        linkend="org.osgi.service.permissionadmin.PermissionAdmin.getLocations--"
+        xrefstyle="hyperlink"/> - Returns a list of locations that have
+        permissions assigned to them. This method allows a Management Agent to
+        examine the current set of permissions.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.permissionadmin.PermissionAdmin.getPermissions-String-"
+        xrefstyle="hyperlink"/> - Returns a list of
+        <code>PermissionInfo</code> objects that are set for that location, or
+        returns <code>null</code> if no permissions are set.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.permissionadmin.PermissionAdmin.setPermissions-String-PermissionInfo---"
+        xrefstyle="hyperlink"/> - Associates permissions with a specific
+        location, or returns <code>null</code> when the permissions should be
+        removed.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.permissionadmin.PermissionAdmin.getDefaultPermissions--"
+        xrefstyle="hyperlink"/> - This method returns the list of default
         permissions.</para>
       </listitem>
 
       <listitem>
         <para><xref
-        linkend="org.osgi.service.permissionadmin.PermissionAdmin.getPermissions-String-" xrefstyle="hyperlink"/>
-        – Returns a list of <code>PermissionInfo</code> objects that are set
-        for that location, or returns <code>null</code> if no permissions are
-        set.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.permissionadmin.PermissionAdmin.setPermissions-String-PermissionInfo---" xrefstyle="hyperlink"/>
-        – Associates permissions with a specific location, or returns
-        <code>null</code> when the permissions should be removed.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.permissionadmin.PermissionAdmin.getDefaultPermissions--" xrefstyle="hyperlink"/>
-        – This method returns the list of default permissions.</para>
-      </listitem>
-
-      <listitem>
-        <para><xref
-        linkend="org.osgi.service.permissionadmin.PermissionAdmin.setDefaultPermissions-PermissionInfo---" xrefstyle="hyperlink"/>
-        – This method sets the default permissions.</para>
+        linkend="org.osgi.service.permissionadmin.PermissionAdmin.setDefaultPermissions-PermissionInfo---"
+        xrefstyle="hyperlink"/> - This method sets the default
+        permissions.</para>
       </listitem>
     </itemizedlist>
 
@@ -249,13 +255,13 @@
 
       <para>When a bundle is assigned a <code>FilePermission</code> for a
       relative path name, the path name is taken to be relative to the
-      bundle’s persistent storage area. This allows additional permissions,
-      such as <code>execute</code>, to be assigned to files in the bundle’s
+      bundle's persistent storage area. This allows additional permissions,
+      such as <code>execute</code>, to be assigned to files in the bundle's
       persistent storage area. For example:</para>
 
       <programlisting>    java.io.FilePermission "-" "execute"</programlisting>
 
-      <para>can be used to allow a bundle to execute any file in the bundle’s
+      <para>can be used to allow a bundle to execute any file in the bundle's
       persistent storage area.</para>
 
       <para>This only applies to <code>FilePermission</code> objects assigned

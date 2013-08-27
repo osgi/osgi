@@ -23,7 +23,7 @@
     the data is required to survive the stopping and restarting of the bundle
     and OSGi Framework. In some cases, the data is specific to a particular
     user. For example, imagine a bundle that implements some kind of game.
-    User specific persistent data could include things like the user’s
+    User specific persistent data could include things like the user's
     preferred difficulty level for playing the game. Some data is not specific
     to a user, which we call <emphasis>system</emphasis> data. An example
     would be a table of high scores for the game.</para>
@@ -236,7 +236,7 @@
       <title>Naming</title>
 
       <para>Each node has a name relative to its parent. A name may consist of
-      Unicode characters except for the forward slash (<code>"/"</code>).
+      Unicode characters except for the solidus (<code>'/' \u002F</code>).
       There are no special names, like <code>".."</code> or
       <code>"."</code>.</para>
 
@@ -252,12 +252,12 @@
       absolute root for the Preferences Service. This concept is similar to
       the Windows Registry that also supports a number of roots.</para>
 
-      <para>A path consists of one or more node names, separated by a slash
-      (<code>"/"</code>). Paths beginning with a <code>"/"</code> are called
-      <emphasis>absolute paths</emphasis> while other paths are called
-      <emphasis>relative paths</emphasis>. Paths cannot end with a
-      <code>"/"</code> except for the special case of the root node which has
-      absolute path <code>"/"</code>.</para>
+      <para>A path consists of one or more node names, separated by a solidus
+      (<code>'/' \u002F</code>). Paths beginning with a solidus (<code>'/'
+      \u002F</code>) are called <emphasis>absolute paths</emphasis> while
+      other paths are called <emphasis>relative paths</emphasis>. Paths cannot
+      end with a solidus (<code>'/' \u002F</code>) except for the special case
+      of the root node which has absolute path <code>"/"</code>.</para>
 
       <para>Path names are always associated with a specific node; this node
       is called the current node in the following descriptions. Paths identify
@@ -265,14 +265,14 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Absolute path</emphasis> – The first
+          <para><emphasis>Absolute path</emphasis> - The first
           <code>"/"</code> is removed from the path, and the remainder of the
-          path is interpreted as a relative path from the tree’s root
+          path is interpreted as a relative path from the tree's root
           node.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Relative path</emphasis> –</para>
+          <para><emphasis>Relative path</emphasis> -</para>
 
           <itemizedlist>
             <listitem>
@@ -288,9 +288,10 @@
 
             <listitem>
               <para>Otherwise, the first name from the path identifies a child
-              of the current node. The name and slash are then removed from
-              the path, and the remainder of the path is interpreted as a
-              relative path from the child node.</para>
+              of the current node. The name and solidus (<code>'/'
+              \u002F</code>) are then removed from the path, and the remainder
+              of the path is interpreted as a relative path from the child
+              node.</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -307,26 +308,26 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.prefs.Preferences.childrenNames--"
-          xrefstyle="hyperlink"/> – Returns the names of the child
+          xrefstyle="hyperlink"/> - Returns the names of the child
           nodes.</para>
         </listitem>
 
         <listitem>
           <para><xref linkend="org.osgi.service.prefs.Preferences.parent--"
-          xrefstyle="hyperlink"/> – Returns the parent node.</para>
+          xrefstyle="hyperlink"/> - Returns the parent node.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.prefs.Preferences.removeNode--"
-          xrefstyle="hyperlink"/> – Removes this node and all its
+          xrefstyle="hyperlink"/> - Removes this node and all its
           descendants.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.service.prefs.Preferences.node-String-"
-          xrefstyle="hyperlink"/> – Returns a Preferences object, which is
+          xrefstyle="hyperlink"/> - Returns a Preferences object, which is
           created if it does not already exist. The parameter is an absolute
           or relative path.</para>
         </listitem>
@@ -334,7 +335,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.prefs.Preferences.nodeExists-String-"
-          xrefstyle="hyperlink"/> – Returns true if the Preferences object
+          xrefstyle="hyperlink"/> - Returns true if the Preferences object
           identified by the path parameter exists.</para>
         </listitem>
       </itemizedlist>
@@ -348,7 +349,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Key</emphasis> – A key is a <code>String</code>
+          <para><emphasis>Key</emphasis> - A key is a <code>String</code>
           object and <emphasis>case sensitive.</emphasis></para>
         </listitem>
 
@@ -359,7 +360,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Value</emphasis> – A value can always be stored and
+          <para><emphasis>Value</emphasis> - A value can always be stored and
           retrieved as a <code>String</code> object. Therefore, it must be
           possible to encode/decode all values into/from <code>String</code>
           objects (though it is not required to store them as such, an
@@ -563,7 +564,7 @@
   <section>
     <title>PreferencesService Interface</title>
 
-    <para>The <code>PreferencesService</code> is obtained from the Framework’s
+    <para>The <code>PreferencesService</code> is obtained from the Framework's
     service registry in the normal way. Its purpose is to provide access to
     Preferences root nodes.</para>
 
@@ -589,14 +590,14 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.prefs.PreferencesService.getSystemPreferences--"
-        xrefstyle="hyperlink"/> – Return a <code>Preferences</code> object
+        xrefstyle="hyperlink"/> - Return a <code>Preferences</code> object
         that is the root of the system preferences tree.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.prefs.PreferencesService.getUserPreferences-String-"
-        xrefstyle="hyperlink"/> – Return a <code>Preferences</code> object
+        xrefstyle="hyperlink"/> - Return a <code>Preferences</code> object
         associated with the user name that is given as argument. If the user
         does not exist, a new root is created atomically.</para>
       </listitem>
@@ -604,7 +605,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.service.prefs.PreferencesService.getUsers--"
-        xrefstyle="hyperlink"/> – Return an array of the names of all the
+        xrefstyle="hyperlink"/> - Return an array of the names of all the
         users for whom a Preferences tree exists.</para>
       </listitem>
     </itemizedlist>

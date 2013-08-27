@@ -29,13 +29,13 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Resource – </emphasis>An entity that can be
+          <para><emphasis>Resource - </emphasis>An entity that can be
           installed in an Environment where it will provide its Capabilities
           when all its Requirements are satisfied.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Environment</emphasis> – A framework or container
+          <para><emphasis>Environment</emphasis> - A framework or container
           that contains one or more Resources.</para>
         </listitem>
 
@@ -47,7 +47,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Requirement</emphasis> – An assertion on a
+          <para><emphasis>Requirement</emphasis> - An assertion on a
           Capability in a Namespace. The assertion uses the OSGi filter
           language to match the attributes of a Capability. The filter is
           specified as a directive; a Requirement can also have other
@@ -55,18 +55,18 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Capability</emphasis> – An attribute based
+          <para><emphasis>Capability</emphasis> - An attribute based
           description of a quality of a Resource when installed in an
           Environment.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Wiring</emphasis> – The wired state of a
+          <para><emphasis>Wiring</emphasis> - The wired state of a
           Resource.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Wire</emphasis> – Connects a Requirement to a
+          <para><emphasis>Wire</emphasis> - Connects a Requirement to a
           matching Capability.</para>
         </listitem>
       </itemizedlist>
@@ -115,27 +115,27 @@
 
     <itemizedlist>
       <listitem>
-        <para><code>getAttributes()</code> – Return a map with the
+        <para><code>getAttributes()</code> - Return a map with the
         attributes</para>
       </listitem>
 
       <listitem>
-        <para><code>getDirectives()</code> – Return a map with the
+        <para><code>getDirectives()</code> - Return a map with the
         directives</para>
       </listitem>
 
       <listitem>
-        <para><code>getNamespace()</code> – Return the Namespace</para>
+        <para><code>getNamespace()</code> - Return the Namespace</para>
       </listitem>
 
       <listitem>
-        <para><code>getResource()</code> – Return the Resource</para>
+        <para><code>getResource()</code> - Return the Resource</para>
       </listitem>
     </itemizedlist>
 
     <para>The key difference between a Requirement and a Capability is that a
     Capability provides attributes that are matched by an OSGi filter
-    specified in a Requirement’s <code>filter</code> directive.</para>
+    specified in a Requirement's <code>filter</code> directive.</para>
   </section>
 
   <section>
@@ -151,28 +151,28 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Requirement Attributes</emphasis> – Any attributes
+        <para><emphasis>Requirement Attributes</emphasis> - Any attributes
         that are allowed to be used on a Requirement declaration.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Requirement Directives</emphasis> – Any directives
+        <para><emphasis>Requirement Directives</emphasis> - Any directives
         that are allowed to be used on a Requirement declaration.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Capability Attributes</emphasis> – Any attributes that
+        <para><emphasis>Capability Attributes</emphasis> - Any attributes that
         are allowed to be used on a Capability, these attributes are available
         for matching.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Capability Directives</emphasis> – Any defined
+        <para><emphasis>Capability Directives</emphasis> - Any defined
         directives that are allowed to be used on the Capability</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Semantics</emphasis> – The Namespace definition
+        <para><emphasis>Semantics</emphasis> - The Namespace definition
         defines what the meaning is of a Capability. This can include actions
         in the Environment like for example being wired with certain
         rules.</para>
@@ -190,7 +190,7 @@
         </listitem>
 
         <listitem>
-          <para>The Requirement’s filter matches the Capability’s attributes,
+          <para>The Requirement's filter matches the Capability's attributes,
           and</para>
         </listitem>
 
@@ -277,23 +277,23 @@
       <itemizedlist>
         <listitem>
           <para><xref linkend="org.osgi.resource.Wire.getRequirement--"
-          xrefstyle="hyperlink"/> – The Requirement wired from.</para>
+          xrefstyle="hyperlink"/> - The Requirement wired from.</para>
         </listitem>
 
         <listitem>
           <para><xref linkend="org.osgi.resource.Wire.getRequirer--"
-          xrefstyle="hyperlink"/> – The Resource that hosts the
+          xrefstyle="hyperlink"/> - The Resource that hosts the
           Requirement.</para>
         </listitem>
 
         <listitem>
           <para><xref linkend="org.osgi.resource.Wire.getCapability--"
-          xrefstyle="hyperlink"/> – The Capability that is wired to.</para>
+          xrefstyle="hyperlink"/> - The Capability that is wired to.</para>
         </listitem>
 
         <listitem>
           <para><xref linkend="org.osgi.resource.Wire.getProvider--"
-          xrefstyle="hyperlink"/> – The Resource that hosts the
+          xrefstyle="hyperlink"/> - The Resource that hosts the
           Capability.</para>
         </listitem>
       </itemizedlist>
@@ -308,12 +308,12 @@
       Requirements do not have to be satisfied by the Resolver. Environments
       can be eager or relaxed in finding Resources to resolve optional
       Requirements. All mandatory Requirements of a Resource must be satisfied
-      before that Resource’s Capabilities can be provided to the
+      before that Resource's Capabilities can be provided to the
       Environment.</para>
 
       <para>The syntax of the resolution directive is therefore:</para>
 
-      <programlisting>resolution ::= ’optional’ | ’mandatory’</programlisting>
+      <programlisting>resolution ::= 'optional' | 'mandatory'</programlisting>
 
       <para>The default is <code>mandatory</code>.</para>
     </section>
@@ -341,7 +341,7 @@
       that the names listed directive are used in the filter and must match.
       The syntax for the mandatory attribute is:</para>
 
-      <programlisting>mandatory   ::= extended ( ’,’ extended )*</programlisting>
+      <programlisting>mandatory   ::= extended ( ',' extended )*</programlisting>
     </section>
 
     <section>
@@ -351,7 +351,7 @@
       multiple Capabilities or must be wired to at most one. The syntax for
       the directive is:</para>
 
-      <programlisting>cardinality ::= ’single’ | ’multiple’</programlisting>
+      <programlisting>cardinality ::= 'single' | 'multiple'</programlisting>
 
       <para>The default is <code>single</code>.</para>
     </section>
@@ -371,7 +371,7 @@
       Capability, not just Capabilities related to class loading, and are
       always about Java packages. The syntax of the directive is:</para>
 
-      <programlisting>uses ::= package-name ( ’,’ package-name )*</programlisting>
+      <programlisting>uses ::= package-name ( ',' package-name )*</programlisting>
     </section>
   </section>
 
@@ -390,34 +390,34 @@
     <itemizedlist>
       <listitem>
         <para><xref linkend="org.osgi.resource.Wiring.getResource--"
-        xrefstyle="hyperlink"/> – The related Resource.</para>
+        xrefstyle="hyperlink"/> - The related Resource.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.resource.Wiring.getProvidedResourceWires-String-"
-        xrefstyle="hyperlink"/> – Get any Wires, in the given Namespace, where
+        xrefstyle="hyperlink"/> - Get any Wires, in the given Namespace, where
         the related Resource is the provider.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.resource.Wiring.getRequiredResourceWires-String-"
-        xrefstyle="hyperlink"/> – Get any Wires, in the given Namespace, where
+        xrefstyle="hyperlink"/> - Get any Wires, in the given Namespace, where
         the related Resource is the requirer.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.resource.Wiring.getResourceCapabilities-String-"
-        xrefstyle="hyperlink"/> – Get the hosted Capabilities of the related
+        xrefstyle="hyperlink"/> - Get the hosted Capabilities of the related
         Resource.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.resource.Wiring.getResourceRequirements-String-"
-        xrefstyle="hyperlink"/> – Get the hosted Requirements of the Related
+        xrefstyle="hyperlink"/> - Get the hosted Requirements of the Related
         Resource.</para>
       </listitem>
     </itemizedlist>

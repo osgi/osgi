@@ -34,13 +34,13 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Autoconf Resource</emphasis> – One or more resources
+          <para><emphasis>Autoconf Resource</emphasis> - One or more resources
           in a Deployment Package that are processed by the Autoconf
           Processor.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Deployment Package</emphasis> – A named and
+          <para><emphasis>Deployment Package</emphasis> - A named and
           versioned file that groups resources into a single management unit.
           Deployment packages are the unit of deployment and uninstallation.
           Deployment packages can contain bundles and associated
@@ -49,14 +49,14 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Resource Processor</emphasis> – A deployment-time
+          <para><emphasis>Resource Processor</emphasis> - A deployment-time
           customizer that accepts a resource in a Deployment Package and turns
           it into a number of artifacts. A resource processor is a service
           that implements the <code>ResourceProcessor</code> interface.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Autoconf Resource Processor</emphasis> – The
+          <para><emphasis>Autoconf Resource Processor</emphasis> - The
           Resource Processor that processes the autoconf resources in a
           Deployment Package.</para>
         </listitem>
@@ -189,21 +189,21 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>pid</emphasis> – The PID of the Configuration object.
+        <para><emphasis>pid</emphasis> - The PID of the Configuration object.
         If the Configuration object is a factory configuration, the PID is
         actually an alias of the actual PID because a factory configuration
         PID is generated.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>factoryPid</emphasis> – (<code>String</code>) Defines
+        <para><emphasis>factoryPid</emphasis> - (<code>String</code>) Defines
         a factory PID when this Designate is a <emphasis>factory
         configuration</emphasis>; otherwise it is for a <emphasis>singleton
         configuration</emphasis>.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>bundle</emphasis> – The location of the bundle. It
+        <para><emphasis>bundle</emphasis> - The location of the bundle. It
         must be used to set the location of the <code>Configuration</code>
         object. This attribute is mandatory for autoconf though it is not
         mandatory for the schema because other applications might not need a
@@ -211,7 +211,7 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>merge</emphasis> – (<code>true|false</code>) Indicates
+        <para><emphasis>merge</emphasis> - (<code>true|false</code>) Indicates
         that the value of the contained Object definition replaces
         (<code>merge=false</code>) the configuration data, or only replaces
         properties (<code>merge=true</code>) that do not exist in the
@@ -219,7 +219,7 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>optional</emphasis> – (<code>true|false</code>) If
+        <para><emphasis>optional</emphasis> - (<code>true|false</code>) If
         <code>true</code>, then this Designate element is optional, and errors
         during processing must be ignored. Otherwise, errors during processing
         must abort the installation of the Deployment Package. This requires
@@ -288,7 +288,7 @@
       <itemizedlist>
         <listitem>
           <para><emphasis>Alias</emphasis> <phrase role="symbol">→</phrase>
-          <phrase role="symbol">∅</phrase> – This installation is a first-time
+          <phrase role="symbol">∅</phrase> - This installation is a first-time
           installation of the factory configuration. The Autoconf resource
           specifies a factory configuration that was not part of a previous
           installation. The Autoconf Processor must therefore create a new
@@ -300,7 +300,7 @@
 
         <listitem>
           <para><emphasis>Alias</emphasis> <phrase role="symbol">→</phrase>
-          <emphasis>Actual</emphasis> – The factory configuration already
+          <emphasis>Actual</emphasis> - The factory configuration already
           exists from a previous Autoconf resource installation. The Autoconf
           Processor must merge or override (depending on the
           <code>merge</code> attribute) the Configuration object designated by
@@ -310,7 +310,7 @@
 
         <listitem>
           <para><phrase role="symbol">∅</phrase> <phrase
-          role="symbol">→</phrase> <emphasis>Actual</emphasis> – The Autoconf
+          role="symbol">→</phrase> <emphasis>Actual</emphasis> - The Autoconf
           resource no longer contains an alias that it previously contained.
           The configuration identified by the actual PID must be
           deleted.</para>

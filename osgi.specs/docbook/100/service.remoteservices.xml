@@ -301,11 +301,11 @@
             It defines the interfaces under which this service can be
             exported. This list must be a subset of the types listed in the
             <code>objectClass</code> service property. The single value of an
-            asterisk ( <code>’*’, \u002A</code> ) indicates all interfaces in
-            the registration’s <code>objectClass</code> property and ignore
-            the classes. It is strongly recommended to only export interfaces
-            and not concrete classes due to the complexity of creating proxies
-            for some type of concrete classes. See <xref
+            asterisk (<code>'*' \u002A</code>) indicates all interfaces in the
+            registration's <code>objectClass</code> property and ignore the
+            classes. It is strongly recommended to only export interfaces and
+            not concrete classes due to the complexity of creating proxies for
+            some type of concrete classes. See <xref
             linkend="i1709051"/>.</para></entry>
           </row>
 
@@ -384,7 +384,7 @@
         <listitem>
           <para>All intents listed in <code>service.exported.intents</code>,
           <code>service.exported.intents.extra</code> and
-          <code>service.intents</code> are part of the distributed provider’s
+          <code>service.intents</code> are part of the distributed provider's
           vocabulary</para>
         </listitem>
 
@@ -437,12 +437,12 @@
 
       <itemizedlist>
         <listitem>
-          <para><code>service.imported</code> – Must be set to some
+          <para><code>service.imported</code> - Must be set to some
           value.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.intents</code> – This must be the combination of
+          <para><code>service.intents</code> - This must be the combination of
           the following:</para>
 
           <itemizedlist>
@@ -465,7 +465,7 @@
         </listitem>
 
         <listitem>
-          <para><code>service.imported.configs</code> – Contains the
+          <para><code>service.imported.configs</code> - Contains the
           configuration types that can be used to import this service. The
           types listed in this property must be
           <emphasis>synonymous</emphasis>, that is, they must refer to exactly
@@ -474,20 +474,20 @@
         </listitem>
 
         <listitem>
-          <para><code>service.exported.*</code> – Properties starting with
+          <para><code>service.exported.*</code> - Properties starting with
           <code>service.exported.</code> must not be set on the imported
           service.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.exported.interfaces</code> – This property must
+          <para><code>service.exported.interfaces</code> - This property must
           not be set, its content is reflected in the <code>objectClass</code>
           property.</para>
         </listitem>
       </itemizedlist>
 
       <para>All other <emphasis>public</emphasis> service properties (not
-      starting with a full stop ( <code>’.’ \u002E</code> )) must be listed on
+      starting with a full stop (<code>'.' \u002E</code>)) must be listed on
       the imported service if they use the basic service property types. If
       the service property cannot be communicated because, for example, it
       uses a type that can not be marshalled by the distribution provider then
@@ -530,7 +530,7 @@ tracker.open();</programlisting>
       <para>Such a Service Tracker will inform the Listener Hook and will give
       it the filter expression. If the distribution provider has registered
       such a hook, it will be informed about the need for an imported
-      <code>com.acme.Foo</code> service that has <code>a</code>
+      <code>com.acme.Foo</code> service that has a
       <code>confidentiality</code> intent. It can then use some proprietary
       means to find a service to import that matches the given object class
       and intent.</para>
@@ -559,10 +559,10 @@ tracker.open();</programlisting>
 
     <para>Intents have the following syntax</para>
 
-    <programlisting>intent  ::= token ( ’.’ token )?</programlisting>
+    <programlisting>intent  ::= token ( '.' token )?</programlisting>
 
-    <para><emphasis>Qualified intents</emphasis> use a full stop ( <code>’.’
-    \u002E</code> ) to separate the intent from the qualifier. A qualifier
+    <para><emphasis>Qualified intents</emphasis> use a full stop (<code>'.'
+    \u002E</code>) to separate the intent from the qualifier. A qualifier
     provides additional details, however, it implies its prefix. For
     example:</para>
 
@@ -715,7 +715,7 @@ tracker.open();</programlisting>
       columns on the left list different combinations of the configuration
       types in the <code>service.exported.configs</code> property. The next
       two columns list two distribution providers that each support an
-      overlapping set of configuration types. The <code>x</code> ’s in this
+      overlapping set of configuration types. The <code>x</code>'s in this
       table indicate if a configuration type or distribution provider is
       active in a line. The description then outlines the issues, if any. It
       is assumed in this table that hypothetical configuration types
@@ -1081,12 +1081,12 @@ com.acme.rmi.path = service-id/24</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>remote.intents.supported</code> – (<code>String+</code>)
+          <para><code>remote.intents.supported</code> - (<code>String+</code>)
           The vocabulary of the given distribution provider.</para>
         </listitem>
 
         <listitem>
-          <para><code>remote.configs.supported</code> – (<code>String+</code>)
+          <para><code>remote.configs.supported</code> - (<code>String+</code>)
           The configuration types that are implemented by the distribution
           provider.</para>
         </listitem>
@@ -1139,7 +1139,7 @@ com.acme.rmi.path = service-id/24</programlisting>
       filter based constructor that can assert service properties. This
       facility can be used to limit bundles from being able to register
       exported services or get imported services if they are combined with
-      Conditional Permission Admin’s <code>ALLOW</code> facility. The
+      Conditional Permission Admin's <code>ALLOW</code> facility. The
       following example shows how all bundles except from
       <code>www.acme.com</code> are denied the registration and getting of
       distributed services.</para>
