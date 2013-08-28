@@ -558,18 +558,20 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
     ways. It is possible to deliver a bundle as a JAR file, a Pack200 file, or
     some other format. In general, the <xref
     linkend="org.osgi.service.repository.RepositoryContent"
-    xrefstyle="hyperlink"/> interface provides access to the default format. </para>
+    xrefstyle="hyperlink"/> interface provides access to the default
+    format.</para>
 
     <para>The Repository can advertise the different formats with
     <code>osgi.content</code> capabilities. Each of those capabilities is
     identified with a unique SHA-256 checksum and has a URL for the resource
     in the specified format. The <code>size</code> and <code>mime</code>
     attributes provide information the download format, this can be used for
-    selection. If more than one <code>osgi.content</code> capability is associated 
-    with a resource, the first capability must represent the default format.
-    If the resource has a standard or widely used format (e.g., JAR for bundles and 
-    ESA for subsystems), and that format is provided as part of the repository, then 
-    that format should be the default format.</para>
+    selection. If more than one <code>osgi.content</code> capability is
+    associated with a resource, the first capability must represent the
+    default format. If the resource has a standard or widely used format
+    (e.g., JAR for bundles and ESA for subsystems), and that format is
+    provided as part of the repository, then that format should be the default
+    format.</para>
 
     <para>The <code>osgi.content</code> Namespace supports the attributes
     defined in the following table and <xref
@@ -997,11 +999,10 @@ scalar  ::= 'String' | 'Version' | 'Long' | 'Double'</programlisting>
 
       <para>A list conversion requires the value to be broken in tokens
       separated by comma (<code>',' \u002C</code>). Whitespace around the list
-      and around commas must be trimmed for non-String types.
-      Each token must then be converted to
-      the given type according to the <code>scalar</code> type specifier. The
-      exact rules for the comma separated lists are defined in <xref
-      linkend="i3273289"/>, see <emphasis>Bundle Capability
+      and around commas must be trimmed for non-String types. Each token must
+      then be converted to the given type according to the <code>scalar</code>
+      type specifier. The exact rules for the comma separated lists are
+      defined in <xref linkend="i3273289"/>, see <emphasis>Bundle Capability
       Attributes</emphasis>.</para>
 
       <para>The conversion of value <code>s</code>, when <code>scalar</code>,
@@ -1258,30 +1259,23 @@ ServicePermission[...Repository, GET ]</programlisting>
   <section>
     <title>Changes</title>
 
-    <para>
-      <itemizedlist>
+    <itemizedlist>
         <listitem>
-          <para>Introduction of <emphasis>Requirement Expressions</emphasis> to represent
-            combined requirements.</para>
+          <para>Introduction of <emphasis>Requirement Expressions</emphasis>
+          to represent combined requirements.</para>
         </listitem>
 
         <listitem>
-          <para>Introduction of <emphasis>Requirement Builder</emphasis> to facilitate the 
-            creation of Requirement objects.</para>
+          <para>Introduction of <emphasis>Requirement Builder</emphasis> to
+          facilitate the creation of Requirement objects.</para>
         </listitem>
 
         <listitem>
-          <para>Changes to default content for the 
-            <emphasis>Repository Content</emphasis> API and <code>osgi.content</code> 
-            capability.
-          </para>
-        </listitem>
-
-        <listitem>
-          <para>Addition of <code>processContent="lax"</code> to XML schema.</para>
+          <para>Changes to default content for the <emphasis>Repository
+          Content</emphasis> API and <code>osgi.content</code>
+          capability.</para>
         </listitem>
       </itemizedlist>
-    </para>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.repository.xml"/>

@@ -489,20 +489,20 @@
     underwent a state transition. The method must be called in a privileged
     block, see <xref
     linkend="framework.lifecycle.privilegedcallbacks"/>.</para>
-    
+
     <para>The following diagram depicts the state transitions of a Woven
     Class.</para>
-    
-    <figure>
-        <title>Woven Class State Diagram</title>
 
-        <mediaobject>
-          <imageobject>
-            <imagedata align="center" contentdepth="2.017in"
-                       contentwidth="7.125in" fileref="wovenClass-states.svg"/>
-          </imageobject>
-        </mediaobject>
-      </figure>
+    <figure>
+      <title>Woven Class State Diagram</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="2.017in"
+                     contentwidth="7.125in" fileref="wovenClass-states.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
 
     <para>Woven class listeners are not notified of the TRANSFORMING state
     because the woven class is mutable and listeners are read-only. In all
@@ -517,8 +517,8 @@
     has been updated. DEFINE_FAILED occurs instead if a class definition error
     occurred.</para>
 
-    <para>The following table describes the state transitions of a Woven
-    Class in more detail.</para>
+    <para>The following table describes the state transitions of a Woven Class
+    in more detail.</para>
 
     <table>
       <title>Woven Class State Table</title>
