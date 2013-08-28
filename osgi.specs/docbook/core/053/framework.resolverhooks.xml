@@ -22,7 +22,7 @@
     requirements (Import-Package, Require-Bundle etc.) to capabilities
     (Export-Package, Bundle-SymbolicName/Bundle-Version etc.). The resolve
     operation is designed to work stand-alone but in certain use cases it is
-    important to be able to influence the resolver’s decisions. This
+    important to be able to influence the resolver's decisions. This
     specification defines a Resolver Hook Factory service that allows third
     party bundles to influence the resolve operation. Primary use cases for
     this hook are scoping of groups of bundles. However, the hooks also allows
@@ -34,25 +34,25 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Reduction</emphasis> – Allow third party bundles to
+          <para><emphasis>Reduction</emphasis> - Allow third party bundles to
           remove capabilities from a set of capabilities that matches a
           requirement.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Complete</emphasis> – Support all built-in
+          <para><emphasis>Complete</emphasis> - Support all built-in
           namespaces as well as the generic capability and requirement
           headers.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Singletons</emphasis> – Allow third party bundles to
+          <para><emphasis>Singletons</emphasis> - Allow third party bundles to
           remove candidates from a set of singleton capabilities before the
           resolver selects one.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Secure</emphasis> – Support full security but allow
+          <para><emphasis>Secure</emphasis> - Support full security but allow
           operation without security present.</para>
         </listitem>
       </itemizedlist>
@@ -63,55 +63,55 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Resolver Hook Factory</emphasis> – The service
+          <para><emphasis>Resolver Hook Factory</emphasis> - The service
           registered by a bundle that wants to control the resolve operation.
           This service is used to create an instance of the Resolver Hook for
           each resolve operation.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Resolver Hook</emphasis> – Is created by the
+          <para><emphasis>Resolver Hook</emphasis> - Is created by the
           Resolver Hook Factory service for each resolver process. Is
           consulted to reduce candidate capabilities for resolving and
           selecting singletons.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Client</emphasis> – A bundle that is considered
+          <para><emphasis>Client</emphasis> - A bundle that is considered
           during the resolve operation.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Handler</emphasis> – A bundle that registers a
+          <para><emphasis>Handler</emphasis> - A bundle that registers a
           Resolver Hook Factory service for influencing the resolve
           operation.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Bundle Capability</emphasis> – A capability
+          <para><emphasis>Bundle Capability</emphasis> - A capability
           represents a feature of a bundle described with attributes and
           directives defined in a namespace. Some namespaces are built-in to
           the OSGi framework, others are generic.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Bundle Requirement</emphasis> – A requirement
+          <para><emphasis>Bundle Requirement</emphasis> - A requirement
           represents a need from a bundle described as a filter on the
           attributes of a Bundle Capability.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Provider</emphasis> – A bundle that provides a
+          <para><emphasis>Provider</emphasis> - A bundle that provides a
           Bundle Capability.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Consumer</emphasis> – A bundle that requires a
+          <para><emphasis>Consumer</emphasis> - A bundle that requires a
           Bundle Capability</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Resolver</emphasis> – The internal framework
+          <para><emphasis>Resolver</emphasis> - The internal framework
           machinery that resolves requirements to providers with matching
           capabilities.</para>
         </listitem>
@@ -161,7 +161,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Root Bundle</emphasis> – Calling certain methods on
+          <para><emphasis>Root Bundle</emphasis> - Calling certain methods on
           a bundle when a bundle is in the <code>INSTALLED</code> state will
           cause the framework to begin a <emphasis>resolve
           operation</emphasis> in order to resolve the bundle. In general, a
@@ -193,7 +193,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Resolve Bundles</emphasis> – The set of bundle
+          <para><emphasis>Resolve Bundles</emphasis> - The set of bundle
           revisions of the unresolved bundles given as argument, or their
           default when <code>null</code> is used, to the Framework Wiring
           <code>resolveBundles</code> method. See <xref
@@ -201,7 +201,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Refresh Bundles</emphasis> – A refresh operation
+          <para><emphasis>Refresh Bundles</emphasis> - A refresh operation
           will have to re-resolve the bundles that will be unresolved in the
           refresh. The trigger bundles are then the bundle revisions of the
           dependency closure, which is described in <xref
@@ -209,12 +209,12 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Dynamic Import</emphasis> – A Dynamic Import can
+          <para><emphasis>Dynamic Import</emphasis> - A Dynamic Import can
           require the framework to start a resolve operation.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Other</emphasis> – The Resolver Hook is a service so
+          <para><emphasis>Other</emphasis> - The Resolver Hook is a service so
           other parties can to start a resolver operation to run what-if
           scenarios or for other purposes.</para>
         </listitem>
@@ -228,7 +228,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Static</emphasis> – A static bundle resolve
+          <para><emphasis>Static</emphasis> - A static bundle resolve
           operation. This resolve operation is necessary any time one or more
           bundles transitions from the <code>INSTALLED</code> state to the
           <code>RESOLVED</code> state. During this resolve operation the
@@ -237,7 +237,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Dynamic</emphasis> – A dynamic import must be
+          <para><emphasis>Dynamic</emphasis> - A dynamic import must be
           resolved.</para>
         </listitem>
       </itemizedlist>
@@ -265,14 +265,14 @@
       <para>To prepare the Handlers, the Resolver must request a new Resolver
       Hook from each of the registered Resolver Hook Factory services with the
       <xref
-      linkend="org.osgi.framework.hooks.resolver.ResolverHookFactory.begin-Collection-" xrefstyle="hyperlink"/>
-      method. The parameter is the set of trigger bundles. The Handler is
-      expected to create a new <xref
-      linkend="org.osgi.framework.hooks.resolver.ResolverHook" xrefstyle="hyperlink"/> object for
-      each call. If <code>null</code> is returned then the Handler abstains
-      from participation. A Resolver Hook Factory must be thread-safe and
-      allow the creation of independent Resolver Hook objects that can be
-      active on multiple threads.</para>
+      linkend="org.osgi.framework.hooks.resolver.ResolverHookFactory.begin-Collection-"
+      xrefstyle="hyperlink"/> method. The parameter is the set of trigger
+      bundles. The Handler is expected to create a new <xref
+      linkend="org.osgi.framework.hooks.resolver.ResolverHook"
+      xrefstyle="hyperlink"/> object for each call. If <code>null</code> is
+      returned then the Handler abstains from participation. A Resolver Hook
+      Factory must be thread-safe and allow the creation of independent
+      Resolver Hook objects that can be active on multiple threads.</para>
 
       <para>A Resolver Hook is created for a single atomic resolve operation
       and does not have to be thread safe. The Resolver must ensure that
@@ -285,25 +285,26 @@
       <itemizedlist>
         <listitem>
           <para><xref
-          linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterResolvable-Collection-" xrefstyle="hyperlink"/>
-          – Removes bundles that are candidates for resolving so they do not
-          resolve in the current operation. Provides an easy way to exclude
-          bundles.</para>
+          linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterResolvable-Collection-"
+          xrefstyle="hyperlink"/> - Removes bundles that are candidates for
+          resolving so they do not resolve in the current operation. Provides
+          an easy way to exclude bundles.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterMatches-BundleRequirement-Collection-" xrefstyle="hyperlink"/>
-          – Remove matching capabilities from the candidate capabilities. This
-          effectively hides capabilities for certain requirers.</para>
+          linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterMatches-BundleRequirement-Collection-"
+          xrefstyle="hyperlink"/> - Remove matching capabilities from the
+          candidate capabilities. This effectively hides capabilities for
+          certain requirers.</para>
         </listitem>
 
         <listitem>
           <para><xref
-          linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterSingletonCollisions-BundleCapability-Collection-" xrefstyle="hyperlink"/>
-          – Remove potentially conflicting singletons from the collection.
-          This provides the possibility to resolve a singleton multiple times
-          in different groups.</para>
+          linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterSingletonCollisions-BundleCapability-Collection-"
+          xrefstyle="hyperlink"/> - Remove potentially conflicting singletons
+          from the collection. This provides the possibility to resolve a
+          singleton multiple times in different groups.</para>
         </listitem>
       </itemizedlist>
 
@@ -316,15 +317,16 @@
       API are shrinkable collections.</para>
 
       <para>The Resolver Hook Factory services <xref
-      linkend="org.osgi.framework.hooks.resolver.ResolverHookFactory.begin-Collection-" xrefstyle="hyperlink"/>
-      method is called in the ranking order, see <xref
+      linkend="org.osgi.framework.hooks.resolver.ResolverHookFactory.begin-Collection-"
+      xrefstyle="hyperlink"/> method is called in the ranking order, see <xref
       linkend="framework.service.servicerankingorder"/>. This is the same
       order used for calling the resulting Resolver Hooks. The Resolver Hook
-      <xref linkend="org.osgi.framework.hooks.resolver.ResolverHook.end--" xrefstyle="hyperlink"/>
-      method notifies the Handler that the resolve operation has finished. The
-      framework must not hold on to this Resolver Hook instance after the
-      <xref linkend="org.osgi.framework.hooks.resolver.ResolverHook.end--" xrefstyle="hyperlink"/>
-      method has been called.</para>
+      <xref linkend="org.osgi.framework.hooks.resolver.ResolverHook.end--"
+      xrefstyle="hyperlink"/> method notifies the Handler that the resolve
+      operation has finished. The framework must not hold on to this Resolver
+      Hook instance after the <xref
+      linkend="org.osgi.framework.hooks.resolver.ResolverHook.end--"
+      xrefstyle="hyperlink"/> method has been called.</para>
     </section>
 
     <section>
@@ -336,11 +338,12 @@
       weaving scenarios where a bundle is used as the source but a synthetic
       bundle with the woven code provides the actual classes. The source
       bundle should then not resolve. The <xref
-      linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterResolvable-Collection-" xrefstyle="hyperlink"/>
-      method can be used to ensure that certain bundles are never resolved.
-      All the given Bundle Revisions are unresolved. The Handler can look at
-      the given collection and remove any bundles it wants to prevent being
-      resolved in this resolve operation.</para>
+      linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterResolvable-Collection-"
+      xrefstyle="hyperlink"/> method can be used to ensure that certain
+      bundles are never resolved. All the given Bundle Revisions are
+      unresolved. The Handler can look at the given collection and remove any
+      bundles it wants to prevent being resolved in this resolve
+      operation.</para>
 
       <para>The set of bundles passed will contain the trigger bundles. If a
       Handler removes one of the trigger bundles the resolve of the removed
@@ -372,14 +375,14 @@
       <title>Hiding Capabilities</title>
 
       <para>The <xref
-      linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterMatches-BundleRequirement-Collection-" xrefstyle="hyperlink"/>
-      method is used to remove capabilities for consideration for a specific
-      requirer. The Handler receives the Bundle Requirement and the set of
-      candidates that already match the requirement. The Handler can now
-      remove any candidates that are not suitable. Removing the capability
-      will prevent the requirement from getting wired to the capability. If
-      the Bundle Requirement is declared in a fragment then the host is not
-      knowable.</para>
+      linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterMatches-BundleRequirement-Collection-"
+      xrefstyle="hyperlink"/> method is used to remove capabilities for
+      consideration for a specific requirer. The Handler receives the Bundle
+      Requirement and the set of candidates that already match the
+      requirement. The Handler can now remove any candidates that are not
+      suitable. Removing the capability will prevent the requirement from
+      getting wired to the capability. If the Bundle Requirement is declared
+      in a fragment then the host is not knowable.</para>
 
       <para>For example, a Handler wants to ensure that a set of bundles in a
       group are only wired to a limited set of infra-structure bundles and
@@ -428,8 +431,8 @@
       apply to the group, not the whole framework. For this purpose, the
       Resolver Hook API allows the Handler to influence which bundle revision
       is selected for the singleton with the <xref
-      linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterSingletonCollisions-BundleCapability-Collection-" xrefstyle="hyperlink"/>
-      method.</para>
+      linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterSingletonCollisions-BundleCapability-Collection-"
+      xrefstyle="hyperlink"/> method.</para>
 
       <para>The first parameter is the capability that is under consideration
       by the resolver, called the <emphasis>viewpoint</emphasis> capability.
@@ -445,8 +448,8 @@
       versa.</para>
 
       <para>The second parameters of the <xref
-      linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterSingletonCollisions-BundleCapability-Collection-" xrefstyle="hyperlink"/>
-      method is a set of capabilities called the
+      linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterSingletonCollisions-BundleCapability-Collection-"
+      xrefstyle="hyperlink"/> method is a set of capabilities called the
       <emphasis>candidates</emphasis>. The Handler can shrink this collection
       by removing capabilities. Removing a capability from the list of
       collision candidates will effectively hide the collision candidate from
@@ -513,18 +516,18 @@ S A     do not collide, remove from set</programlisting>
         Resolver Hook Factory contained in the snapshot unregisters then the
         resolve must fail, see <xref linkend="i1703638"/>. Each registered
         Resolver Hook Factory service in the snapshot will be obtained by the
-        framework through the system’s bundle context.</para>
+        framework through the system's bundle context.</para>
       </listitem>
 
       <listitem>
         <para>For each Resolver Hook Factory in the snapshot, in ranking
         order, call the <xref
-        linkend="org.osgi.framework.hooks.resolver.ResolverHookFactory.begin-Collection-" xrefstyle="hyperlink"/>
-        method to inform the Handler about the begin of a new resolve
-        operation. This method must return a Resolver Hook. If this hook is
-        not null, must be added to list <code>H</code>. If a corresponding
-        Resolver Hook Factory service is unregistered then the Resolver Hook
-        must be removed from <code>H</code>.</para>
+        linkend="org.osgi.framework.hooks.resolver.ResolverHookFactory.begin-Collection-"
+        xrefstyle="hyperlink"/> method to inform the Handler about the begin
+        of a new resolve operation. This method must return a Resolver Hook.
+        If this hook is not null, must be added to list <code>H</code>. If a
+        corresponding Resolver Hook Factory service is unregistered then the
+        Resolver Hook must be removed from <code>H</code>.</para>
       </listitem>
 
       <listitem>
@@ -537,9 +540,9 @@ S A     do not collide, remove from set</programlisting>
           <listitem>
             <para>For each active Resolver Hook in <code>H(ooks)</code>, call
             the <xref
-            linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterResolvable-Collection-" xrefstyle="hyperlink"/>
-            method with <code>U</code>. The Handler can remove any candidate
-            that should not be resolved.</para>
+            linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterResolvable-Collection-"
+            xrefstyle="hyperlink"/> method with <code>U</code>. The Handler
+            can remove any candidate that should not be resolved.</para>
           </listitem>
         </itemizedlist>
 
@@ -578,10 +581,10 @@ S A     do not collide, remove from set</programlisting>
 
           <listitem>
             <para>For each resolver hook call the <xref
-            linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterSingletonCollisions-BundleCapability-Collection-" xrefstyle="hyperlink"/>
-            method with the <code>osgi.wiring.bundle</code> capability
-            provided by bundle revision <code>B</code> and
-            <code>S</code>.</para>
+            linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterSingletonCollisions-BundleCapability-Collection-"
+            xrefstyle="hyperlink"/> method with the
+            <code>osgi.wiring.bundle</code> capability provided by bundle
+            revision <code>B</code> and <code>S</code>.</para>
           </listitem>
         </itemizedlist>
 
@@ -607,16 +610,17 @@ S A     do not collide, remove from set</programlisting>
             capabilities that satisfy the requirement <code>R</code> and place
             each matching capability into a shrinkable collection
             <code>C(apabilities)</code>. A capability is considered to satisfy
-            a particular requirement if its attributes match the requirement’s
+            a particular requirement if its attributes match the requirement's
             filter and the requirer bundle has permission to access the
             capability.</para>
           </listitem>
 
           <listitem>
             <para>For each Resolver Hook in <code>H</code>, call the <xref
-            linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterMatches-BundleRequirement-Collection-" xrefstyle="hyperlink"/>
-            method with the Bundle Requirement <code>R</code> and the
-            shrinkable collection <code>C</code>.</para>
+            linkend="org.osgi.framework.hooks.resolver.ResolverHook.filterMatches-BundleRequirement-Collection-"
+            xrefstyle="hyperlink"/> method with the Bundle Requirement
+            <code>R</code> and the shrinkable collection
+            <code>C</code>.</para>
           </listitem>
         </itemizedlist>
 
@@ -690,19 +694,23 @@ S A     do not collide, remove from set</programlisting>
       abort the resolve operation, clean up and report an error.</para>
 
       <para>If the <xref
-      linkend="org.osgi.framework.hooks.resolver.ResolverHookFactory.begin-Collection-" xrefstyle="hyperlink"/>
-      method successfully returns a <xref
-      linkend="org.osgi.framework.hooks.resolver.ResolverHook" xrefstyle="hyperlink"/>, then the
-      <xref linkend="org.osgi.framework.hooks.resolver.ResolverHook.end--" xrefstyle="hyperlink"/>
-      method must be called on that hook if it is still valid (its <xref
-      linkend="org.osgi.framework.hooks.resolver.ResolverHookFactory" xrefstyle="hyperlink"/> is
-      still registered) at the end of the Resolve. A <xref
-      linkend="org.osgi.framework.hooks.resolver.ResolverHook" xrefstyle="hyperlink"/> can therefore
-      safely allocate resources in the <xref
-      linkend="org.osgi.framework.hooks.resolver.ResolverHookFactory.begin-Collection-" xrefstyle="hyperlink"/>
-      method because it is guaranteed that it can deallocate them in the <xref
-      linkend="org.osgi.framework.hooks.resolver.ResolverHook.end--" xrefstyle="hyperlink"/>
-      method.</para>
+      linkend="org.osgi.framework.hooks.resolver.ResolverHookFactory.begin-Collection-"
+      xrefstyle="hyperlink"/> method successfully returns a <xref
+      linkend="org.osgi.framework.hooks.resolver.ResolverHook"
+      xrefstyle="hyperlink"/>, then the <xref
+      linkend="org.osgi.framework.hooks.resolver.ResolverHook.end--"
+      xrefstyle="hyperlink"/> method must be called on that hook if it is
+      still valid (its <xref
+      linkend="org.osgi.framework.hooks.resolver.ResolverHookFactory"
+      xrefstyle="hyperlink"/> is still registered) at the end of the Resolve.
+      A <xref linkend="org.osgi.framework.hooks.resolver.ResolverHook"
+      xrefstyle="hyperlink"/> can therefore safely allocate resources in the
+      <xref
+      linkend="org.osgi.framework.hooks.resolver.ResolverHookFactory.begin-Collection-"
+      xrefstyle="hyperlink"/> method because it is guaranteed that it can
+      deallocate them in the <xref
+      linkend="org.osgi.framework.hooks.resolver.ResolverHook.end--"
+      xrefstyle="hyperlink"/> method.</para>
 
       <para>The following are potential failures:</para>
 

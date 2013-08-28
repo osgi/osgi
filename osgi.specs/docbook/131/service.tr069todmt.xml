@@ -38,23 +38,23 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Connector </emphasis>– Provide a TR-069 view on top
+          <para><emphasis>Connector</emphasis> - Provide a TR-069 view on top
           of the Dmt Admin service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Simplify</emphasis> – Simplify the handling of data
+          <para><emphasis>Simplify</emphasis> - Simplify the handling of data
           models implemented through the DMT through the TR-069
           protocol.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Browse</emphasis> – Implement the constructs for
+          <para><emphasis>Browse</emphasis> - Implement the constructs for
           <code>MAP</code> and <code>LIST</code> handling.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Native</emphasis> – Provide a mechanism for Data
+          <para><emphasis>Native</emphasis> - Provide a mechanism for Data
           Plugins to convey conversion information to the Protocol Adapter so
           that native TR-069 object models can be implemented as Data
           Plugins.</para>
@@ -69,7 +69,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.service.tr069todmt.TR069ConnectorFactory"
-          xrefstyle="hyperlink"/> – Provides a way to create a <xref
+          xrefstyle="hyperlink"/> - Provides a way to create a <xref
           linkend="org.osgi.service.tr069todmt.TR069Connector"
           xrefstyle="hyperlink"/> that is bound to an active Dmt
           Session.</para>
@@ -77,7 +77,7 @@
 
         <listitem>
           <para><xref linkend="org.osgi.service.tr069todmt.TR069Connector"
-          xrefstyle="hyperlink"/> – Created by <xref
+          xrefstyle="hyperlink"/> - Created by <xref
           linkend="org.osgi.service.tr069todmt.TR069ConnectorFactory"
           xrefstyle="hyperlink"/> on a Dmt Session; provides methods that
           helps in using the TR-069 namespace and RPCs on a Dmt Admin
@@ -86,18 +86,18 @@
 
         <listitem>
           <para><xref linkend="org.osgi.service.tr069todmt.ParameterValue"
-          xrefstyle="hyperlink"/> – The value of a parameter, maps to the
+          xrefstyle="hyperlink"/> - The value of a parameter, maps to the
           TR-069 <code>ParameterValueStruct</code>.</para>
         </listitem>
 
         <listitem>
           <para><xref linkend="org.osgi.service.tr069todmt.ParameterInfo"
-          xrefstyle="hyperlink"/> – Information about the parameter, maps to
+          xrefstyle="hyperlink"/> - Information about the parameter, maps to
           the TR-069 <code>ParameterInfoStruct</code>.</para>
         </listitem>
 
         <listitem>
-          <para>DMT – The Device Management Tree as available through the Dmt
+          <para>DMT - The Device Management Tree as available through the Dmt
           Admin service.</para>
         </listitem>
       </itemizedlist>
@@ -179,7 +179,7 @@
     <section>
       <title>Architecture</title>
 
-      <para><xref linkend="i741499"/> is a technical report (Broadband Forum’s
+      <para><xref linkend="i741499"/> is a technical report (Broadband Forum's
       specification model) that specifies a management protocol based on <xref
       linkend="i741562"/> over HTTP. The TR-069 technical report defines a
       number of mandatory Remote Procedure Calls (RPCs) that allow a
@@ -223,16 +223,16 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Object</emphasis> – A named collection of parameters
+          <para><emphasis>Object</emphasis> - A named collection of parameters
           and/or other objects.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Parameter</emphasis> – A name-value pair.</para>
+          <para><emphasis>Parameter</emphasis> - A name-value pair.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Table</emphasis> – An enumeration of objects
+          <para><emphasis>Table</emphasis> - An enumeration of objects
           identified by an instance id.</para>
         </listitem>
       </itemizedlist>
@@ -269,89 +269,89 @@ instance    ::= INTEGER &gt; 0</programlisting>
       relative name used inside an object, also called the <emphasis>local
       name</emphasis>. The term <emphasis>path</emphasis> is reserved for the
       combination of object names, table names, and instance ids that are
-      separated by a full stop (<code>’.’\u022D</code>) and used to traverse
+      separated by a full stop (<code>'.' \u002E</code>) and used to traverse
       an instance model.</para>
 
       <programlisting>path           ::= parameter-path | object-path| table-path
-segment        ::= NAME ’.’ ( instance ’.’ )?
+segment        ::= NAME '.' ( instance '.' )?
 object-path    ::= segment+
-table-path     ::= segment* NAME ’.’   // expect INTEGER next
+table-path     ::= segment* NAME '.'   // expect INTEGER next
 parameter-path ::= object-path NAME
-instance-path  ::= table-path instance ’.’</programlisting>
+instance-path  ::= table-path instance '.'</programlisting>
 
       <para>In this specification the following terms are used
       consistently:</para>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Object</emphasis> – Refers to a named type defining
+          <para><emphasis>Object</emphasis> - Refers to a named type defining
           a certain set of parameters, objects, and tables.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Table</emphasis> – A list of instances for a given
+          <para><emphasis>Table</emphasis> - A list of instances for a given
           object.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Instance</emphasis> – An object element in a table
+          <para><emphasis>Instance</emphasis> - An object element in a table
           at a certain id.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Instance Id</emphasis> – The integer id used to
+          <para><emphasis>Instance Id</emphasis> - The integer id used to
           identify an instance in a table.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Alias</emphasis> – A name chosen by the ACS that
+          <para><emphasis>Alias</emphasis> - A name chosen by the ACS that
           uniquely identifies an instance.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Singleton</emphasis> – An object that is not in a
+          <para><emphasis>Singleton</emphasis> - An object that is not in a
           table.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Name</emphasis> – The name of an object, table, or
+          <para><emphasis>Name</emphasis> - The name of an object, table, or
           parameter refers to the local name only and not the path.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Segment</emphasis> – A component in a path that
+          <para><emphasis>Segment</emphasis> - A component in a path that
           always ends in a full stop. A segment can contain instance ids to
           identify an instance.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Path</emphasis> – A string uniquely identifying a
+          <para><emphasis>Path</emphasis> - A string uniquely identifying a
           path in the tree to either a parameter, an object, or a
           table.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Object Path</emphasis> – A path that uniquely
+          <para><emphasis>Object Path</emphasis> - A path that uniquely
           identifies an instance or a singleton. An object path must always
           ends in a full stop. This maps to the TR-069 concept of an
           <code>ObjectName</code>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Parameter Path</emphasis> – The name of the
+          <para><emphasis>Parameter Path</emphasis> - The name of the
           parameter preceded by the owning object. A path that does not end in
           a full stop is always a parameter path.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Table Path</emphasis> – An object path that lacks
+          <para><emphasis>Table Path</emphasis> - An object path that lacks
           the last instance id. In TR-069 this is also sometimes called a
           partial path. The last segment is an object path that must be
           followed by an instance id to address an instance.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Instance Path</emphasis> – A path to an instance in
+          <para><emphasis>Instance Path</emphasis> - A path to an instance in
           a table</para>
         </listitem>
       </itemizedlist>
@@ -378,8 +378,8 @@ instance-path  ::= table-path instance ’.’</programlisting>
       <para>The grammars for parameter names and object names are as
       follows:</para>
 
-      <programlisting>NAME ::= ( Letter | ’_’ )
-         ( Letter | Digit | ’-’ | ’_’ | CombiningChar| Extender )*</programlisting>
+      <programlisting>NAME ::= ( Letter | '_' )
+         ( Letter | Digit | '-' | '_' | CombiningChar| Extender )*</programlisting>
 
       <para>The productions <code>Letter</code>, <code>Digit</code>,
       <code>CombiningChar</code>, and <code>Extender</code> are defined in
@@ -472,17 +472,17 @@ _-_-_
               three cases are differentiated in the following
               way:</para><itemizedlist>
                   <listitem>
-                    <para><emphasis>Unknown time </emphasis>– If the time is
+                    <para><emphasis>Unknown time</emphasis> - If the time is
                     not known.</para>
                   </listitem>
 
                   <listitem>
-                    <para><emphasis>Relative time</emphasis> – Relative time
+                    <para><emphasis>Relative time</emphasis> - Relative time
                     is the time since boot time.</para>
                   </listitem>
 
                   <listitem>
-                    <para><emphasis>Absolute time</emphasis> – Normal date and
+                    <para><emphasis>Absolute time</emphasis> - Normal date and
                     time.</para>
                   </listitem>
                 </itemizedlist></entry>
@@ -951,25 +951,24 @@ _-_-_
 
       <para>Mapping a Dmt Admin node name to a parameter name, needed for
       browsing, is more complicated as Dmt Admin node names allow virtually
-      every Unicode character except the forward slash (<code>’/’
-      \u002F</code>). It is therefore necessary to escape Dmt Admin URIs into
-      a path that is acceptable for the TR-069 protocol. It is assumed that
-      escaping is only used in a browsing mode since native object models will
-      never require escaping. The TR069 Connector must return names from the
-      <xref
+      every Unicode character except the solidus (<code>'/' \u002F</code>). It
+      is therefore necessary to escape Dmt Admin URIs into a path that is
+      acceptable for the TR-069 protocol. It is assumed that escaping is only
+      used in a browsing mode since native object models will never require
+      escaping. The TR069 Connector must return names from the <xref
       linkend="org.osgi.service.tr069todmt.TR069Connector.getParameterNames-String-boolean-"
       xrefstyle="hyperlink"/> call that the ACS can handle, optionally show to
       the user, and then use to construct new paths for subsequent
       RPCs.</para>
 
       <para>There is no obvious escape character defined in TR-069, like for
-      example the backward slash that the Dmt Admin uses for escaping. The
-      character for escaping is the latin small letter thorn (<code>’þ’
-      \u00FE</code>) because his character is highly unlikely to ever be used
-      in a TR-069 path for a native object model, however, even if it is then
-      it would be no problem for the escaping algorithm. The thorn is a
-      letter, allowing it to be used as the first character in a parameter
-      name, this allows escaping the first character.</para>
+      example the reverse solidus (<code>'\' \u005C</code>) that the Dmt Admin
+      uses for escaping. The character for escaping is the latin small letter
+      thorn (<code>'þ' \u00FE</code>) because his character is highly unlikely
+      to ever be used in a TR-069 path for a native object model, however,
+      even if it is then it would be no problem for the escaping algorithm.
+      The thorn is a letter, allowing it to be used as the first character in
+      a parameter name, this allows escaping the first character.</para>
 
       <para>A character in a segment that is not allowed must be escaped into
       the following sequence:</para>
@@ -1053,7 +1052,7 @@ _-_-_
 
               <entry><code>þorn</code></entry>
 
-              <entry><code>þorn</code><code>þ00FEorn</code></entry>
+              <entry><code>þornþ00FEorn</code></entry>
 
               <entry><para>A single thorn does not require escaping as it is
               not followed by 4 hexadecimal digits. So both forms are valid
@@ -1166,8 +1165,8 @@ _-_-_
         </listitem>
 
         <listitem>
-          <para>If <code>S</code> is an alias (surrounded by <code>’[’</code>
-          and <code>’]’</code>), replace <code>S</code> with the alias inside
+          <para>If <code>S</code> is an alias (surrounded by <code>'['</code>
+          and <code>']'</code>), replace <code>S</code> with the alias inside
           the brackets. For Dmt Admin nodes aliases are identical to normal
           node names.</para>
         </listitem>
@@ -1254,13 +1253,13 @@ _-_-_
         <para>The <code>Alias</code> node is a read-write parameter that must
         map to the actual node name of its parent. For example,
         <code>./A/B/C/Alias</code> must map to <code>C</code>. Reading it must
-        provide the this parent’s node name and writing it must rename this
-        parent’s node name. The <code>Alias</code> must be automatically
+        provide the this parent's node name and writing it must rename this
+        parent's node name. The <code>Alias</code> must be automatically
         provided on any child of a <code>MAP</code> node. The
         <code>Alias</code> parameter must also be returned in the result of
         <xref
         linkend="org.osgi.service.tr069todmt.TR069Connector.getParameterNames-String-boolean-"
-        xrefstyle="hyperlink"/> if its parent’s children are included. It is
+        xrefstyle="hyperlink"/> if its parent's children are included. It is
         not possible to convert an Alias parameter name to a URI as the
         <code>Alias</code> node is synthetic and does not exist in the DMT.
         The model of aliases are depicted in <xref linkend="i775831"/>.</para>
@@ -2084,7 +2083,7 @@ SetParameterValue   ..Properties.3421.Alias = MyKey</programlisting>
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>Unknown</emphasis> – The <code>getTime()</code>
+            <para><emphasis>Unknown</emphasis> - The <code>getTime()</code>
             method must be 0</para>
           </listitem>
 
@@ -2094,7 +2093,7 @@ SetParameterValue   ..Properties.3421.Alias = MyKey</programlisting>
           </listitem>
 
           <listitem>
-            <para><emphasis>Absolute</emphasis> – The <code>getTime()</code>
+            <para><emphasis>Absolute</emphasis> - The <code>getTime()</code>
             method must return a positive number</para>
           </listitem>
         </itemizedlist>
@@ -2870,7 +2869,7 @@ int type = v.getType();</programlisting>
       are actually implemented by the CPE. If a parameter is listed then a
       <xref
       linkend="org.osgi.service.tr069todmt.TR069Connector.getParameterValue-String-"
-      xrefstyle="hyperlink"/> method called with this parameter’s path should
+      xrefstyle="hyperlink"/> method called with this parameter's path should
       succeed. As a convenience, the <xref
       linkend="org.osgi.service.tr069todmt.ParameterInfo"
       xrefstyle="hyperlink"/> class provides a <xref

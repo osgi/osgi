@@ -47,7 +47,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Authentication</emphasis> – A large number of
+          <para><emphasis>Authentication</emphasis> - A large number of
           authentication schemes already exist, and more will be developed.
           The User Admin service must be flexible enough to adapt to the many
           different authentication schemes that can be run on a computer
@@ -55,34 +55,34 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Authorization</emphasis> – All bundles should use
+          <para><emphasis>Authorization</emphasis> - All bundles should use
           the User Admin service to authenticate users and to find out if
           those users are authorized. It is therefore paramount that a bundle
           can find out authorization information with little effort.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Security</emphasis> – Detailed security, based on
+          <para><emphasis>Security</emphasis> - Detailed security, based on
           the Framework security model, is needed to provide safe access to
           the User Admin service. It should allow limited access to the
           credentials and other properties.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Extensibility</emphasis> – Other bundles should be
+          <para><emphasis>Extensibility</emphasis> - Other bundles should be
           able to build on the User Admin service. It should be possible to
           examine the information from this service and get real-time
           notifications of changes.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Properties</emphasis> – The User Admin service must
+          <para><emphasis>Properties</emphasis> - The User Admin service must
           maintain a persistent database of users. It must be possible to use
           this database to hold more information about this user.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Administration</emphasis> – Administering
+          <para><emphasis>Administration</emphasis> - Administering
           authorizations for each possible action and initiator is
           time-consuming and error-prone. It is therefore necessary to have
           mechanisms to group end users and make it simple to assign
@@ -99,56 +99,56 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>User Admin</emphasis> – This interface manages a
+          <para><emphasis>User Admin</emphasis> - This interface manages a
           database of named roles which can be used for authorization and
           authentication purposes.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Role</emphasis> – This interface exposes the
+          <para><emphasis>Role</emphasis> - This interface exposes the
           characteristics shared by all roles: a name, a type, and a set of
           properties.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>User</emphasis> – This interface (which extends
+          <para><emphasis>User</emphasis> - This interface (which extends
           <code>Role</code>) is used to represent any entity which may have
           credentials associated with it. These credentials can be used to
           authenticate an initiator.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Group</emphasis> – This interface (which extends
+          <para><emphasis>Group</emphasis> - This interface (which extends
           <code>User</code>) is used to contain an aggregation of named
           <code>Role</code> objects (<code>Group</code> or <code>User</code>
           objects).</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Authorization</emphasis> – This interface
+          <para><emphasis>Authorization</emphasis> - This interface
           encapsulates an authorization context on which bundles can base
           authorization decisions.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>User Admin Event</emphasis> – This class is used to
+          <para><emphasis>User Admin Event</emphasis> - This class is used to
           represent a role change event.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>User Admin Listener</emphasis> – This interface
+          <para><emphasis>User Admin Listener</emphasis> - This interface
           provides a listener for events of type <code>UserAdminEvent</code>
           that can be registered as a service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>User Admin Permission</emphasis> – This permission
+          <para><emphasis>User Admin Permission</emphasis> - This permission
           is needed to configure and access the roles managed by a User Admin
           service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Role.USER_ANYONE</emphasis> – This is a special User
+          <para><emphasis>Role.USER_ANYONE</emphasis> - This is a special User
           object that represents <emphasis>any</emphasis> user, it implies all
           other User objects. It is also used when a Group is used with only
           basic members. The <code>Role.USER_ANYONE</code> is then the only
@@ -181,13 +181,13 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>User</emphasis> – A <code>User</code> object can be
+          <para><emphasis>User</emphasis> - A <code>User</code> object can be
           configured with credentials, such as a password, and properties,
           such as address, telephone number, and so on.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Group</emphasis> – A <code>Group</code> object is an
+          <para><emphasis>Group</emphasis> - A <code>Group</code> object is an
           aggregation of <emphasis>basic</emphasis> and
           <emphasis>required</emphasis> roles. Basic and required roles are
           used in the authorization phase.</para>
@@ -219,12 +219,12 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>X </emphasis>implies at least one of
-          <emphasis>A</emphasis>’s basic members, and</para>
+          <para><emphasis>X</emphasis> implies at least one of
+          <emphasis>A</emphasis>'s basic members, and</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>X</emphasis> implies all of <emphasis>A</emphasis>’s
+          <para><emphasis>X</emphasis> implies all of <emphasis>A</emphasis>'s
           required members.</para>
         </listitem>
       </itemizedlist>
@@ -361,7 +361,7 @@
     if (user == null)
         throw new SecurityException( "No such user" );
 
-    if (!user.hasCredential(“com.acme.password”, pwd))
+    if (!user.hasCredential("com.acme.password", pwd))
         throw new SecurityException( 
             "Invalid password" );
     return user;
@@ -433,9 +433,9 @@
 
     <para>An initiator could be allowed to carry out an action (represented by
     a <code>Group</code> object) if it implied any of the <code>Group</code>
-    object’s members. For example, the <code>AlarmSystemActivation</code>
-    <code>Group</code> object contains an <code>Administrators</code> and a
-    <code>Family</code> <code>Group</code> object:</para>
+    object's members. For example, the <code>AlarmSystemActivation
+    Group</code> object contains an <code>Administrators</code> and a
+    <code>Family Group</code> object:</para>
 
     <programlisting>    Administrators        = { Elmer, Pepe,Bugs }
     Family                = { Elmer, Pepe, Daffy }
@@ -448,13 +448,12 @@
 
     <para>Alternatively, an initiator could be allowed to perform an action
     (represented by a <code>Group</code> object) if it implied
-    <emphasis>all</emphasis> the <code>Group</code> object’s members. In this
+    <emphasis>all</emphasis> the <code>Group</code> object's members. In this
     case, using the same <code>AlarmSystemActivation</code> group, only
     <code>Elmer</code> and <code>Pepe</code> would be authorized to activate
     the alarm system, since <code>Daffy</code> and <code>Bugs</code> are
     <emphasis>not</emphasis> members of <emphasis>both</emphasis> the
-    <code>Administrators</code> and <code>Family</code> <code>Group</code>
-    objects.</para>
+    <code>Administrators</code> and <code>Family Group</code> objects.</para>
 
     <para>The User Admin service supports a combination of both strategies by
     defining both a set of <emphasis>basic members</emphasis> (any) and a set
@@ -481,12 +480,12 @@ AlarmSystemActivation
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>All</emphasis> of the Group’s required members,
+        <para><emphasis>All</emphasis> of the Group's required members,
         and</para>
       </listitem>
 
       <listitem>
-        <para>At<emphasis> least </emphasis>one of the Group’s basic
+        <para>At <emphasis>least</emphasis> one of the Group's basic
         members</para>
       </listitem>
     </itemizedlist>
@@ -883,43 +882,43 @@ ROLE_REMOVED</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>event</code> – (<code>UserAdminEvent</code>) The event
+          <para><code>event</code> - (<code>UserAdminEvent</code>) The event
           that was broadcast by the User Admin service.</para>
         </listitem>
 
         <listitem>
-          <para><code>role</code> – (<code>Role</code>) The <code>Role</code>
+          <para><code>role</code> - (<code>Role</code>) The <code>Role</code>
           object that was created, modified or removed.</para>
         </listitem>
 
         <listitem>
-          <para><code>role.name</code> – (<code>String</code>) The name of the
+          <para><code>role.name</code> - (<code>String</code>) The name of the
           role.</para>
         </listitem>
 
         <listitem>
-          <para><code>role.type</code> – (<code>Integer</code>) One of
+          <para><code>role.type</code> - (<code>Integer</code>) One of
           <code>ROLE, USER</code> or <code>GROUP</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>service</code> – (<code>ServiceReference</code>) The
+          <para><code>service</code> - (<code>ServiceReference</code>) The
           Service Reference of the User Admin service.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.id</code> – (<code>Long</code>) The User Admin
+          <para><code>service.id</code> - (<code>Long</code>) The User Admin
           service's ID.</para>
         </listitem>
 
         <listitem>
-          <para><code>service.objectClass</code> – (<code>String[]</code>) The
+          <para><code>service.objectClass</code> - (<code>String[]</code>) The
           User Admin service's object class (which must include
           <code>org.osgi.service.useradmin.UserAdmin</code>)</para>
         </listitem>
 
         <listitem>
-          <para><code>service.pid</code> – (<code>String)</code> The User
+          <para><code>service.pid</code> - (<code>String)</code> The User
           Admin service's persistent identity</para>
         </listitem>
       </itemizedlist>
@@ -946,19 +945,19 @@ ROLE_REMOVED</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>changeProperty</code> – This permission is required to
+          <para><code>changeProperty</code> - This permission is required to
           modify properties. The name of the permission is the prefix of the
           property name.</para>
         </listitem>
 
         <listitem>
-          <para><code>changeCredential</code> – This action permits changing
+          <para><code>changeCredential</code> - This action permits changing
           credentials. The name of the permission is the prefix of the name of
           the credential.</para>
         </listitem>
 
         <listitem>
-          <para><code>getCredential</code> – This action permits getting
+          <para><code>getCredential</code> - This action permits getting
           credentials. The name of the permission is the prefix of the
           credential.</para>
         </listitem>

@@ -76,12 +76,12 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Collections</emphasis> – Allow the management of a
+          <para><emphasis>Collections</emphasis> - Allow the management of a
           collection of resources as a whole.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Scoping – </emphasis>Provide support for isolating
+          <para><emphasis>Scoping - </emphasis>Provide support for isolating
           resources in the collection such that a subset of their capabilities
           (for example packages and services) are available to satisfy
           requirements outside the Subsystem and a subset of their
@@ -90,48 +90,48 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Sharing –</emphasis> Allow Scoped Subsystems to
+          <para><emphasis>Sharing</emphasis> - Allow Scoped Subsystems to
           share their resources with others and share resources from
           others.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Dynamic</emphasis> – Provide life cycle information
+          <para><emphasis>Dynamic</emphasis> - Provide life cycle information
           to users of Subsystems and be able to react to changes in the state
           of the environment in which a Subsystem is deployed.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Flexible – </emphasis>Enable a flexible definition
+          <para><emphasis>Flexible</emphasis> - Enable a flexible definition
           with subsequent resolution to determine the resources to be
           used.</para>
         </listitem>
 
         <listitem>
-          <para>D<emphasis>eterministic </emphasis>– Enable the choice of
+          <para><emphasis>Deterministic</emphasis> - Enable the choice of
           resources deployed for a Subsystem to be determined ahead of
           deployment.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Life-cycle</emphasis> – Define a life cycle for a
+          <para><emphasis>Life-cycle</emphasis> - Define a life cycle for a
           Subsystem describing how it affects the Subsystem's resources and
           allow the life cycle to be observed.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Reflective</emphasis> – Allow discovery of runtime
+          <para><emphasis>Reflective</emphasis> - Allow discovery of runtime
           structural and state information.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Resolution</emphasis> – Allow the resolution of a
+          <para><emphasis>Resolution</emphasis> - Allow the resolution of a
           flexible definition during installation to determine the resources
           to be used.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Recursive</emphasis> – Allow Subsystems to be
+          <para><emphasis>Recursive</emphasis> - Allow Subsystems to be
           defined in terms of other Subsystems.</para>
         </listitem>
       </itemizedlist>
@@ -142,46 +142,45 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Subsystem</emphasis> – A collection of resources,
+          <para><emphasis>Subsystem</emphasis> - A collection of resources,
           such as bundles, or other Subsystems, administered as a whole
           through a Subsystem service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Subsystem Manifest</emphasis> – A manifest used to
+          <para><emphasis>Subsystem Manifest</emphasis> - A manifest used to
           provide a Subsystem definition.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Deployment Manifest</emphasis> – A manifest used to
+          <para><emphasis>Deployment Manifest</emphasis> - A manifest used to
           provide a deployment definition for a Subsystem. The definition
           identifies the exact resources to be deployed for the
           Subsystem.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Subsystem </emphasis><emphasis>Archive</emphasis> -
-          A zip file with an <code>.esa</code> extension that describes a
-          Subsystem definition. It may include the Subsystem Manifest,
-          Deployment Manifest, or resource files that constitute the
-          Subsystem.</para>
+          <para><emphasis>Subsystem Archive</emphasis> - A zip file with an
+          <code>.esa</code> extension that describes a Subsystem definition.
+          It may include the Subsystem Manifest, Deployment Manifest, or
+          resource files that constitute the Subsystem.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Resource </emphasis>– An element which may be used
+          <para><emphasis>Resource</emphasis> - An element which may be used
           in the composition of a Subsystem, such as a bundle or another
           Subsystem.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Repository</emphasis> – A service that is used to
+          <para><emphasis>Repository</emphasis> - A service that is used to
           discover a Subsystem's content and dependencies. The repository
           service is described in the <xref
           linkend="service.repository"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Resolver – </emphasis>A service used to resolve
+          <para><emphasis>Resolver</emphasis> - A service used to resolve
           requirements against capabilities to determine the resources
           required by a Subsystem. The resolver service is described in the
           <xref linkend="service.resolver"/>.</para>
@@ -534,10 +533,10 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Subsystem identifier</emphasis> – A long that is a
+          <para><emphasis>Subsystem identifier</emphasis> - A long that is a
           Subsystems implementation assigned unique identifier for the full
           lifetime of an installed Subsystem, even if the framework or the
-          Subsystem’s implementation is restarted. Its purpose is to
+          Subsystem's implementation is restarted. Its purpose is to
           distinguish Subsystems installed in a framework. Subsystem
           identifiers are assigned in ascending order to Subsystems when they
           are installed. The <xref
@@ -547,7 +546,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Subsystem location</emphasis> – A name assigned by a
+          <para><emphasis>Subsystem location</emphasis> - A name assigned by a
           management agent to a Subsystem during the installation. This string
           is normally interpreted as a URL to the Subsystem Archive but this
           is not mandatory. Within a particular framework, a Subsystem
@@ -560,7 +559,7 @@
 
         <listitem>
           <para><emphasis>Subsystem Symbolic Name and Subsystem
-          Version</emphasis> – A name and version assigned by the developer.
+          Version</emphasis> - A name and version assigned by the developer.
           The combination of a Subsystem symbolic name and Subsystem version
           is intended to provide a globally unique identifier for a Subsystem
           Archive or Subsystem definition. The <xref
@@ -640,7 +639,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><code>provision-policy</code> –
+          <para><code>provision-policy</code> -
           (<code>rejectDependencies|acceptDependencies</code>) Directive used
           to declare if the Subsystem is willing to accept dependencies as
           <emphasis>constituents</emphasis>. A
@@ -673,8 +672,8 @@
       <para>When installing a Subsystem, the following URI syntax must be used
       as the location string in order to specify default values.</para>
 
-      <programlisting>subsystem-uri ::= 'subsystem://' url? ’?’ params?
-params        ::= param ( ’&amp;’ param )*
+      <programlisting>subsystem-uri ::= 'subsystem://' url? '?' params?
+params        ::= param ( '&amp;' param )*
 param         ::= key '=' value
 key           ::= unreserved | escaped
 value         ::= unreserved | escaped
@@ -730,17 +729,17 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
       <code>org.acme.billing</code>, version of 1.0.0 and arbitrary matching
       attribute <code>category</code> of <code>banking</code>. This
       information will also be reflected in the <code>osgi.identity</code>
-      capability of the Subsystem’s Resource
+      capability of the Subsystem's Resource
       (<code>org.osgi.resource.Resource</code>). The following
       <code>osgi.identity</code> capability would be generated for a Subsystem
       resource from the above headers using the Provide-Capability header
       syntax. For example:</para>
 
       <programlisting>osgi.identity;
- <code>osgi.identity=org.acme.billing;</code>
- <code>version:Version=1.0.0;</code>
- <code>type=osgi.subsystem.composite;</code>
- <code>category=banking</code></programlisting>
+osgi.identity=org.acme.billing;
+ version:Version=1.0.0;
+ type=osgi.subsystem.composite;
+ category=banking</programlisting>
 
       <para>This allows for requirements to be used to search a repository for
       Subsystems. The following requirement could be used to search for all
@@ -770,13 +769,13 @@ Subsystem-Type:         osgi.subsystem.composite</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Export Policy</emphasis> – Defines the set of
+        <para><emphasis>Export Policy</emphasis> - Defines the set of
         capabilities provided by the constituents contained in the Region that
         are made available to the parent Region.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Import Policy</emphasis> – Defines the set of
+        <para><emphasis>Import Policy</emphasis> - Defines the set of
         capabilities which are available in the parent Region that are made
         available to the child Region.</para>
       </listitem>
@@ -1154,7 +1153,7 @@ resource          ::= symbolic-name ( ';' parameter )*</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>resolution</code> – (<code>mandatory</code>|
+          <para><code>resolution</code> - (<code>mandatory</code>|
           <code>optional</code>) A <code>mandatory</code> content resource
           prevents the Subsystem from successfully installing when the
           constituent cannot be found (or satisfied); an optional content
@@ -1164,7 +1163,7 @@ resource          ::= symbolic-name ( ';' parameter )*</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>start-order</code> – (<code>Integer &gt;= 1</code>)
+          <para><code>start-order</code> - (<code>Integer &gt;= 1</code>)
           Specifies the start order of the content resource in relation to
           other content resources of the Subsystem. See <xref
           linkend="i3329174"/>.</para>
@@ -1176,14 +1175,14 @@ resource          ::= symbolic-name ( ';' parameter )*</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>version</code> – (<code>Version</code>) A version range
+          <para><code>version</code> - (<code>Version</code>) A version range
           used to select the version of the resource to use. This follows the
           OSGi version range scheme, including the default value of
           0.0.0.</para>
         </listitem>
 
         <listitem>
-          <para><code>type</code> – Indicates the type of the content. It is
+          <para><code>type</code> - Indicates the type of the content. It is
           recommended that a reverse domain name convention is used unless
           those types and their processing is standardized by the OSGi
           Alliance, for example bundles. The default type is
@@ -1263,8 +1262,8 @@ resource          ::= symbolic-name ( ';' parameter )*</programlisting>
       single Subsystem-Content element:</para>
 
       <programlisting>org.acme.billing.impl; 
-    <code>type=osgi.bundle;</code>
-    <code>version=1.0</code></programlisting>
+    type=osgi.bundle;
+    version=1.0</programlisting>
 
       <para>This Subsystem-Content header can be converted into the following
       <code>osgi.identity</code> Requirement with the Require-Capability
@@ -1298,12 +1297,12 @@ resource          ::= symbolic-name ( ';' parameter )*</programlisting>
       <code>osgi.identity</code> Requirement:</para>
 
       <programlisting>osgi.identity; 
-    <code>filter:="(&amp;</code>
-        <code>(osgi.identity=org.acme.billing.impl)</code>
-        <code>(type=osgi.subsystem.composite)</code>
-        <code>(&amp;(version&gt;=1.0)(!(version&gt;=1.1))</code>
-            <code>(category=banking)</code>
-        <code>)"</code>
+    filter:="(&amp;
+        (osgi.identity=org.acme.billing.impl)
+        (type=osgi.subsystem.composite)
+        (&amp;(version&gt;=1.0)(!(version&gt;=1.1))
+            (category=banking)
+        )"
     resolution:=optional</programlisting>
     </section>
 
@@ -1324,14 +1323,14 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>version</code> – (<code>Version</code>) A version range
+          <para><code>version</code> - (<code>Version</code>) A version range
           used to select the version of the bundle or Subsystem to use. This
           follows the OSGi version range scheme, including the default value
           of 0.0.0.</para>
         </listitem>
 
         <listitem>
-          <para><code>type</code> – (String) Indicates the type of the
+          <para><code>type</code> - (String) Indicates the type of the
           provider. Valid types are:</para>
 
           <itemizedlist>
@@ -1385,7 +1384,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
       <para>When a Subsystem is installed the Subsystems implementation is
       responsible for provisioning resources that are associated with the
-      Subsystem. For example, the Subsystem’s content resources as well as any
+      Subsystem. For example, the Subsystem's content resources as well as any
       resources that are needed to satisfy dependencies of a Subsystem's
       content resources. During the Subsystem install process the Subsystems
       implementation uses a defined set of repositories to find the required
@@ -1394,30 +1393,30 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Local Repository</emphasis> – Contains the resources
+          <para><emphasis>Local Repository</emphasis> - Contains the resources
           included in the Subsystem Archive, see <xref
           linkend="i3329832"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>System Repository</emphasis> – Contains the
+          <para><emphasis>System Repository</emphasis> - Contains the
           resources currently installed, see <xref linkend="i3329893"/></para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Repository Services</emphasis> – The set of
+          <para><emphasis>Repository Services</emphasis> - The set of
           repositories registered as OSGi services, see <xref
           linkend="i3329894"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Content Repository</emphasis> – The set of resources
+          <para><emphasis>Content Repository</emphasis> - The set of resources
           that comprise the Subsystem content, see <xref
           linkend="i3329906"/></para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Preferred Repository</emphasis> – The set of
+          <para><emphasis>Preferred Repository</emphasis> - The set of
           resources that are considered preferred providers, see <xref
           linkend="i3329932"/>.</para>
         </listitem>
@@ -1475,14 +1474,14 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
         <itemizedlist>
           <listitem>
-            <para><emphasis>Installable Content</emphasis> – A content
+            <para><emphasis>Installable Content</emphasis> - A content
             resource which must be installed and result in a distinct resource
             at runtime. That is, a distinct bundle or Subsystem
             installation.</para>
           </listitem>
 
           <listitem>
-            <para><emphasis>Shared Content</emphasis> – A content resource
+            <para><emphasis>Shared Content</emphasis> - A content resource
             which is already installed and is a constituent of one or more
             already installed Subsystems that belong to the same Region as the
             Subsystem that the Subsystem content repository is for. This
@@ -1696,13 +1695,13 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Installable Dependency</emphasis> – A resource which
+        <para><emphasis>Installable Dependency</emphasis> - A resource which
         must be installed and result in a distinct resource at runtime. That
         is, a distinct bundle or Subsystem installation.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Preinstalled Dependency</emphasis> – A resource which
+        <para><emphasis>Preinstalled Dependency</emphasis> - A resource which
         is already installed and is a constituent of one or more already
         installed Subsystems and the required capabilities provided by the
         resource are accessible according to the sharing policies of the
@@ -1920,13 +1919,13 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Export Policy</emphasis> – Defines the set of
+        <para><emphasis>Export Policy</emphasis> - Defines the set of
         capabilities provided by the constituents contained in the Region that
         are made available to the parent Region.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Import Policy</emphasis> – Defines the set of
+        <para><emphasis>Import Policy</emphasis> - Defines the set of
         capabilities which are available in the parent Region that are made
         available to the child Region.</para>
       </listitem>
@@ -2097,7 +2096,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Subsystem resource</emphasis> – A Subsystem resource
+          <para><emphasis>Subsystem resource</emphasis> - A Subsystem resource
           may be installed explicitly by using the Subsystem service. Note
           that content and dependencies of an explicitly installed Subsystem
           are not considered to be explicit resources themselves since they
@@ -2105,7 +2104,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
         </listitem>
 
         <listitem>
-          <para><emphasis>Bundle resource</emphasis> – A bundle resource may
+          <para><emphasis>Bundle resource</emphasis> - A bundle resource may
           be installed explicitly by using a bundle context. This includes
           fragments.</para>
         </listitem>
@@ -2374,7 +2373,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Content Resources</emphasis> – These are the content
+        <para><emphasis>Content Resources</emphasis> - These are the content
         resources which were installed when the Subsystem was installed, that
         is the resources declared in the Subsystem-Content header or from the
         Local Repository when the Subsystem-Content header is not specified,
@@ -2383,13 +2382,13 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       </listitem>
 
       <listitem>
-        <para><emphasis>Explicit Resources</emphasis> – These are constituent
+        <para><emphasis>Explicit Resources</emphasis> - These are constituent
         resources which are installed explicitly, see <xref
         linkend="i3339411"/>.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Dependencies</emphasis> – These resources provide
+        <para><emphasis>Dependencies</emphasis> - These resources provide
         capabilities required to satisfy requirements for a Subsystem's
         content resources, see <xref linkend="i3330142"/>. Dependencies are
         considered to be implicit resources.</para>
@@ -2478,12 +2477,12 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Stopped –</emphasis> The Subsystem should not be
+        <para><emphasis>Stopped</emphasis> - The Subsystem should not be
         started.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Started –</emphasis> The Subsystem must be started
+        <para><emphasis>Started</emphasis> - The Subsystem must be started
         once it is ready.</para>
       </listitem>
     </itemizedlist>
@@ -2610,23 +2609,22 @@ Subsystem-Content:
 
       <itemizedlist>
         <listitem>
-          <para><code>osgi.bundle</code> – The bundle must be transiently
+          <para><code>osgi.bundle</code> - The bundle must be transiently
           started using the activation policy of the bundle, that is with the
           <code>Bundle.START_ACTIVATION_POLICY</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>osgi.fragment</code> – fragments cannot be started, this
+          <para><code>osgi.fragment</code> - fragments cannot be started, this
           is a no-op.</para>
         </listitem>
 
         <listitem>
-          <para><code>osgi.subsystem.application</code><emphasis>, </emphasis>
-          <code>osgi.subsystem.composite</code><emphasis>,
-          </emphasis><code>osgi.subsystem.feature</code> <emphasis>
-          –</emphasis> The Subsystem must be transiently started if its
-          <emphasis>autostart setting</emphasis> is set to
-          <emphasis>started</emphasis>.</para>
+          <para><code>osgi.subsystem.application</code>,
+          <code>osgi.subsystem.composite</code>,
+          <code>osgi.subsystem.feature</code> - The Subsystem must be
+          transiently started if its <emphasis>autostart setting</emphasis> is
+          set to <emphasis>started</emphasis>.</para>
         </listitem>
       </itemizedlist>
 
@@ -2635,19 +2633,19 @@ Subsystem-Content:
 
       <itemizedlist>
         <listitem>
-          <para><code>osgi.bundle</code> – The bundle must be persistently
+          <para><code>osgi.bundle</code> - The bundle must be persistently
           stopped.</para>
         </listitem>
 
         <listitem>
-          <para><code>osgi.fragment</code> – Fragments cannot be stopped, this
+          <para><code>osgi.fragment</code> - Fragments cannot be stopped, this
           is a no-op.</para>
         </listitem>
 
         <listitem>
           <para><code>osgi.subsystem.application</code>,
           <code>osgi.subsystem.composite</code>,
-          <code>osgi.subsystem.feature</code> – The Subsystem must be
+          <code>osgi.subsystem.feature</code> - The Subsystem must be
           transiently stopped. Its <emphasis>autostart setting</emphasis> must
           not be changed.</para>
         </listitem>
@@ -2684,13 +2682,13 @@ Subsystem-Content:
 
     <itemizedlist>
       <listitem>
-        <para><emphasis> Information</emphasis> – Access to information about
+        <para><emphasis> Information</emphasis> - Access to information about
         the Subsystem itself as well as other Subsystems that are
         installed.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis> Life Cycle</emphasis> – The possibility to install
+        <para><emphasis> Life Cycle</emphasis> - The possibility to install
         other Subsystems and start, stop, and uninstall Subsystems.</para>
       </listitem>
     </itemizedlist>
@@ -3177,13 +3175,13 @@ Subsystem-Content:
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Persistent</emphasis> – The Subsystem must remain
+          <para><emphasis>Persistent</emphasis> - The Subsystem must remain
           installed across framework and Java VM invocations until the
           Subsystem is explicitly uninstalled.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Atomic</emphasis> – The install method must
+          <para><emphasis>Atomic</emphasis> - The install method must
           completely install the Subsystem or, if installation fails, the
           Subsystems implementation must leave the framework in the same state
           as it was before the method was called.</para>
@@ -3688,7 +3686,7 @@ Subsystem-Content:
     implementation must first attempt to use the Deployment Manifest to deploy
     the Subsystem. If the Deployment Manifest is found not to work, for
     example, the chosen resources do not resolve for the target runtime, then
-    the Subsystem’s implementation must fail the installation of the
+    the Subsystem's implementation must fail the installation of the
     Subsystem.</para>
 
     <section>
@@ -3872,7 +3870,7 @@ Subsystem-Content:
 
       <itemizedlist>
         <listitem>
-          <para><code>deployed-version</code> – The exact version of the
+          <para><code>deployed-version</code> - The exact version of the
           resource to be deployed. Deployed version is a specific version, not
           a version range, hence the use of a new attribute name. There is no
           default value for this attribute.</para>
@@ -3882,7 +3880,7 @@ Subsystem-Content:
       <para>The following architected matching attribute as well as any
       arbitrary matching attributes can be applied to each entry:</para>
 
-      <para><code>type</code> – The type of the constituent. It is recommended
+      <para><code>type</code> - The type of the constituent. It is recommended
       that a reverse domain name convention is used unless those types and
       their processing is standardized by the OSGi Alliance (e.g. bundles).
       The default value is <code>osgi.bundle</code>. A Subsystems
@@ -3920,7 +3918,7 @@ Subsystem-Content:
 
       <itemizedlist>
         <listitem>
-          <para><code>start-order</code> – The precedence the constituent
+          <para><code>start-order</code> - The precedence the constituent
           should have during the start sequence. Resources with lower
           <code>start-order</code> values are started before resources with
           higher values. Resources with the same <code>start-order</code>
@@ -3951,7 +3949,7 @@ Subsystem-Content:
 
       <itemizedlist>
         <listitem>
-          <para><code>deployed-version</code> – The exact version of the
+          <para><code>deployed-version</code> - The exact version of the
           resource to be deployed. Deployed version is a specific version, not
           a version range, hence the use of a new attribute name. There is no
           default value for this attribute.</para>
@@ -3961,7 +3959,7 @@ Subsystem-Content:
       <para>The following architected matching attributes as well as any
       arbitrary matching attributes can be applied to each entry:</para>
 
-      <para><code>type</code>– The type of the resource. It is recommended
+      <para><code>type</code> - The type of the resource. It is recommended
       that a reverse domain name convention is used unless those types and
       their processing is standardized by the OSGi Alliance (e.g. bundles).
       The default type is <code>osgi.bundle</code>. A Subsystems
@@ -4083,9 +4081,9 @@ service                 ::= qname ( ';' parameter )*</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>filter</code> – A filter expression that is used to
+          <para><code>filter</code> - A filter expression that is used to
           match against the service properties of services registered using
-          the specified <code>qname</code> of the service’s object class. The
+          the specified <code>qname</code> of the service's object class. The
           <code>filter</code> directive is optional. If no <code>filter</code>
           directive is defined then all services registered using the
           specified <code>qname</code> match the service statement.</para>
@@ -4522,24 +4520,24 @@ service                 ::= qname ( ';' parameter )*</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para>id – The Subsystem ID of a Subsystem. For example
+          <para>id - The Subsystem ID of a Subsystem. For example
           <code>(id=23)</code></para>
         </listitem>
 
         <listitem>
-          <para><code>location –</code> The location of a Subsystem. For
+          <para><code>location</code> - The location of a Subsystem. For
           example<code>
           (location=https://www.acme.com/download/*)</code></para>
         </listitem>
 
         <listitem>
-          <para><code>name</code> – The symbolic name of a Subsystem. For
+          <para><code>name</code> - The symbolic name of a Subsystem. For
           example <code>(name=com.acme.*)</code></para>
         </listitem>
       </itemizedlist>
 
       <para>The name parameter of the permission can also be a single wildcard
-      character (<code>'*' or \u002a</code>). In that case all Subsystems must
+      character (<code>'*' \u002a</code>). In that case all Subsystems must
       match.</para>
     </section>
 

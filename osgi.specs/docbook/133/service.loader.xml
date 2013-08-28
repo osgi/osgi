@@ -21,7 +21,7 @@
 
     <para>Java SE 6 introduced the <emphasis>Service Loader</emphasis>, a
     simple service-provider loading facility, that attempted to unify the
-    different ad-hoc mechanisms used by Java’s many factories and builders.
+    different ad-hoc mechanisms used by Java's many factories and builders.
     The design allows a JAR to advertise the name of one or more embedded
     classes that implement a given interface and consumers to obtain instances
     of these implementation classes through the Service Loader API.</para>
@@ -30,16 +30,16 @@
     closed and therefore not extendable. It does not support a provider model
     that would allow different ways of finding interface implementations; its
     classes are final and its policy is fixed. Unfortunately, the Service
-    Loader’s fixed design uses a non-modular class loading policy; it defines
+    Loader's fixed design uses a non-modular class loading policy; it defines
     its visibility scope with a class loader, which in general requires full
-    visibility of the application’s class path. The Service Loader can
+    visibility of the application's class path. The Service Loader can
     therefore in OSGi not find implementations from other bundles.
     Additionally, the Service Loader also does not enforce a life cycle;
     objects are handed out forever.</para>
 
     <para>Since the Service Loader is the only standardized plugin mechanism
     in the JRE it is necessary that the mechanism is supported in OSGi with as
-    few changes as possible from the consumer’s authors. This specification
+    few changes as possible from the consumer's authors. This specification
     therefore defines a <emphasis>mediator</emphasis> that ensures that the
     Service Loader is useful in an OSGi Framework, allowing programs that
     leverage the Service Loader to be used in OSGi frameworks almost
@@ -50,24 +50,24 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Compatibility</emphasis> – Allow JARs that run in a
+          <para><emphasis>Compatibility</emphasis> - Allow JARs that run in a
           classic Java SE environment that leverage the Service Loader to run
           in OSGi with only manifest modifications.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Services</emphasis> – Register services for Service
+          <para><emphasis>Services</emphasis> - Register services for Service
           Provider bundles that opt-in.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Security</emphasis> – Enforce service permissions
+          <para><emphasis>Security</emphasis> - Enforce service permissions
           for the Service Loader objects.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Life Cycle – </emphasis>Manage the life cycle
-          mismatch between OSGi bundles and the Service Loader’s create only
+          <para><emphasis>Life Cycle - </emphasis>Manage the life cycle
+          mismatch between OSGi bundles and the Service Loader's create only
           model.</para>
         </listitem>
       </itemizedlist>
@@ -78,49 +78,49 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Service Loader </emphasis>– An API in Java SE that
+          <para><emphasis>Service Loader</emphasis> - An API in Java SE that
           allows a Consumer to find an implementation of a Service Type from a
           Service Provider by searching a class loader for Service
           Providers.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Service Type</emphasis> – The interface or class
+          <para><emphasis>Service Type</emphasis> - The interface or class
           that the Service Provider must implement/extend.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Provider Configuration File –</emphasis> A resource
+          <para><emphasis>Provider Configuration File</emphasis> - A resource
           in the <code>META-INF/services</code> directory that has the fully
           qualified name of the Service Type and contains one ore more fully
           qualified names of Service Providers.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Service Provider</emphasis> – An implementation
+          <para><emphasis>Service Provider</emphasis> - An implementation
           class that implements or extends the Service Type.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Consumer</emphasis> – A class that uses the Java SE
+          <para><emphasis>Consumer</emphasis> - A class that uses the Java SE
           Service Loader inside an OSGi framework.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Mediator</emphasis> – An extender that mediates
+          <para><emphasis>Mediator</emphasis> - An extender that mediates
           between Consumer bundles, the Service Loader API, and Service
           Provider bundles in an OSGi environment. It consists of a Processor
           and a Registrar.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Processor</emphasis> – Modifies a bundle that uses
+          <para><emphasis>Processor</emphasis> - Modifies a bundle that uses
           the Service Loader API so that it works in an OSGi
           environment.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Registrar</emphasis> – Registers services on behalf
+          <para><emphasis>Registrar</emphasis> - Registers services on behalf
           of a bundle that contains Service Providers.</para>
         </listitem>
       </itemizedlist>
@@ -167,7 +167,7 @@
       specific Service Provider, allowing different Service Providers to be
       registered with different service properties. The Mediator will then
       register an OSGi service factory for each selected capability. The
-      <code>osgi.serviceloader</code> capability’s attributes are used to
+      <code>osgi.serviceloader</code> capability's attributes are used to
       decorate the OSGi service registration with service properties. The
       service factory returns a new instance for each service get.</para>
 
@@ -179,7 +179,7 @@
       calls to the Service Loader API to ensures that the Service Loader has
       visibility to published Service Providers.</para>
 
-      <para>A Consumer’s bundle by default receives visibility to all
+      <para>A Consumer's bundle by default receives visibility to all
       published Service Providers. Service Providers are published when a
       bundle declares one or more <code>osgi.serviceloader</code> capabilities
       for a Service Type. If the Consumer has an
@@ -197,7 +197,7 @@
     <emphasis>specification</emphasis> and
     <emphasis>implementation</emphasis>. Virtually all Java Specification
     Requests (JSR) provide a specification that can be implemented
-    independently by different parties. Though this is one of the industry’s
+    independently by different parties. Though this is one of the industry's
     best practices it raises a new problem: how to find the implementation
     available in a Java environment from only the <emphasis>Service
     Type</emphasis>. A Service Type is usually an interface but a base class
@@ -327,7 +327,7 @@ if ( it.hasNext() ) {
       specification does not detail how the Mediator ensures that the Consumer
       has visibility to other Service Providers. However, a Mediator could for
       example set an appropriate Thread Context Class Loader during the call
-      to the Service Loader’s constructor by weaving the Consumer’s byte
+      to the Service Loader's constructor by weaving the Consumer's byte
       codes.</para>
     </section>
 
@@ -364,16 +364,16 @@ if ( it.hasNext() ) {
     <section>
       <title>Restricting Visibility</title>
 
-      <para>A Consumer’s bundle can restrict its visibility to certain bundles
+      <para>A Consumer's bundle can restrict its visibility to certain bundles
       by declaring an <code>osgi.serviceloader</code> requirement for each
       Service Type it wants to use. Only bundles wired from those requirement
       provide their advertised Service Providers. If no such requirements are
       declared then all bundles with the published Service Type become
       available.</para>
 
-      <para>The cardinality can be used to select a single Service Provider’s
+      <para>The cardinality can be used to select a single Service Provider's
       bundle or multiple bundles if it needs to see all Service Provider
-      bundles. The requirement can be made optional if the Consumer’s bundle
+      bundles. The requirement can be made optional if the Consumer's bundle
       can work also when no Service Provider bundle is available. See <xref
       linkend="i3280141"/> for more details.</para>
 
@@ -390,7 +390,7 @@ if ( it.hasNext() ) {
       Providers.</para>
 
       <para>Visibility can also be restricted to bundles that publish with
-      capability’s attributes. Any bundle that has at least one matching
+      capability's attributes. Any bundle that has at least one matching
       capability will then be able to contribute all its Service Providers.
       For example, the following example selects only bundles that have the
       <code>classified</code> property set:</para>
@@ -416,10 +416,10 @@ if ( it.hasNext() ) {
       impossible to enforce.</para>
 
       <para>The Service Loader API does not have a life cycle, objects are
-      assumed to stay alive during the duration of the VM’s process and due to
+      assumed to stay alive during the duration of the VM's process and due to
       the use of <code>Class.forName</code> in the Service Loader
       implementations. Therefore a Mediator should refresh a Consumer bundle
-      when it is using a Service Provider and that Service Provider’s bundle
+      when it is using a Service Provider and that Service Provider's bundle
       becomes stopped otherwise long running applications can run out of
       memory when bundles are regularly updated.</para>
     </section>
@@ -578,9 +578,9 @@ Bundle-ClassPath:       legacy.jar</programlisting>
         osgi.serviceloader=com.example.Foo</programlisting>
 
       <para>Selected Service Providers must be registered as defined in <xref
-      linkend="i3280881"/>, with the capability’s attributes as
+      linkend="i3280881"/>, with the capability's attributes as
       <emphasis>decorating</emphasis> service properties. Private service
-      properties (attributes that start with a full stop (<code>’.’
+      properties (attributes that start with a full stop (<code>'.'
       \u002E</code>) and the defined capability attributes in the
       <code>osgi.serviceloader</code> namespace are not registered as service
       properties.</para>
@@ -686,7 +686,7 @@ Import-Package:         com.example; version=3.45</programlisting>
       <itemizedlist>
         <listitem>
           <para>The advertised Service Type matches the corresponding
-          <code>osgi.serviceloader</code> capability’s Service Type,
+          <code>osgi.serviceloader</code> capability's Service Type,
           and</para>
         </listitem>
 
@@ -731,7 +731,7 @@ Import-Package:         com.example; version=3.45</programlisting>
       <title>OSGi Service Factory</title>
 
       <para>The Mediator must register an OSGi service factory with the bundle
-      context of the Service Provider’s bundle. The OSGi service factory must
+      context of the Service Provider's bundle. The OSGi service factory must
       be implemented such that it creates a new instance for each bundle that
       gets the service. This behavior is similar, though not quite identical,
       to the <code>ServiceLoader.load()</code> method that gives each consumer
@@ -745,8 +745,8 @@ Import-Package:         com.example; version=3.45</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Private</emphasis> – Private properties, property
-          names that start with a full stop (<code>’.’ \u002E</code>) must not
+          <para><emphasis>Private</emphasis> - Private properties, property
+          names that start with a full stop (<code>'.' \u002E</code>) must not
           be registered.</para>
         </listitem>
       </itemizedlist>
@@ -756,7 +756,7 @@ Import-Package:         com.example; version=3.45</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>serviceloader.mediator</code> – (<code>Long</code>) The
+          <para><code>serviceloader.mediator</code> - (<code>Long</code>) The
           bundle id of the mediator.</para>
         </listitem>
       </itemizedlist>
@@ -766,7 +766,7 @@ Import-Package:         com.example; version=3.45</programlisting>
       capability specifies the <code>uses</code> directive.</para>
 
       <para>Any services registered in the OSGi Service Registry must be
-      unregistered when the Service Provider’s bundle is stopped or the
+      unregistered when the Service Provider's bundle is stopped or the
       Mediator is stopped.</para>
     </section>
 
@@ -805,7 +805,7 @@ Import-Package:         com.example; version=3.45</programlisting>
           the name is not a package name. Even if it could, the OSGi framework
           can only bind a single exporter to an importer for a given package.
           The Service Loader API requires access to all these pseudo-packages
-          via the Class Loader’s <code>getResources</code> method, the
+          via the Class Loader's <code>getResources</code> method, the
           technique used to find Service Providers.</para>
         </listitem>
 
@@ -834,16 +834,16 @@ Import-Package:         com.example; version=3.45</programlisting>
       <title>Processing Consumers</title>
 
       <para>Consumers are not written for OSGi and require help to
-      successfully use the Service Loader API. It is the Mediator’s
+      successfully use the Service Loader API. It is the Mediator's
       responsibility to ensure that bundles that are wired to published
-      Service Types have access to these Service Provider’s instances through
+      Service Types have access to these Service Provider's instances through
       the Service Loader API.</para>
 
       <para>This specification does not define how this is done. There are a
       number of possibilities and it is up to the Mediator to provide the
       guarantee to the Consumer that it has been properly processed.</para>
 
-      <para>A Mediator must only process Consumer’s bundles that are wired to
+      <para>A Mediator must only process Consumer's bundles that are wired to
       the <code>osgi.extender</code> capability for the
       <code>osgi.serviceloader.processor</code> extender. Since Consumers must
       require this extender capability with the default cardinality of 1 there
@@ -880,7 +880,7 @@ Import-Package:         com.example; version=3.45</programlisting>
       Service Type as a service. This specification therefore reuses the
       Service Permission for this purpose. The check must be done with the
       <code>ServicePermission(String,String)</code> constructor using the
-      bundle’s Access Control Context or the bundle’s
+      bundle's Access Control Context or the bundle's
       <code>hasPermission</code> method.</para>
     </section>
 
@@ -903,7 +903,7 @@ Import-Package:         com.example; version=3.45</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>Allows the Consumer’s bundle to require the presence of a
+        <para>Allows the Consumer's bundle to require the presence of a
         Service Provider for the required Service Type.</para>
       </listitem>
 
@@ -967,7 +967,7 @@ Import-Package:         com.example; version=3.45</programlisting>
 
             <entry><code>qname</code></entry>
 
-            <entry><para>The Service Type’s fully qualified
+            <entry><para>The Service Type's fully qualified
             name.</para></entry>
           </row>
 
@@ -1001,7 +1001,7 @@ Import-Package:         com.example; version=3.45</programlisting>
             <entry><para>Use this capability to register a different Service
             Factory under the Service Type for each selected Service Provider.
             </para><para>A Service Provider is selected if the Service Type is
-            the advertising Service Type and the Service Provider’s fully
+            the advertising Service Type and the Service Provider's fully
             qualified name matches the given name. If no register directive is
             present all advertised Service Providers must be registered. To
             register no Service Providers, because the capability must only be
@@ -1065,15 +1065,15 @@ osgi.serviceloader.registrar</programlisting>
       <para>Consumers must have:</para>
 
       <programlisting>ServicePermission[&lt;Service Type&gt;,GET] 
-PackagePermission[&lt;Service Type’s package&gt;,IMPORT]
+PackagePermission[&lt;Service Type's package&gt;,IMPORT]
 CapabilityPermission["osgi.extender", REQUIRE]
 CapabilityPermission["osgi.serviceloader", REQUIRE]
 </programlisting>
 
-      <para>The Mediator must ensure that the Consumer has the ServicePermission 
-      before it provides the instance. It must use the Bundle Context
-      <code>hasPermission</code> method or the bundle’s Access Control Context
-      to verify this.</para>
+      <para>The Mediator must ensure that the Consumer has the
+      ServicePermission before it provides the instance. It must use the
+      Bundle Context <code>hasPermission</code> method or the bundle's Access
+      Control Context to verify this.</para>
     </section>
 
     <section>
@@ -1082,15 +1082,15 @@ CapabilityPermission["osgi.serviceloader", REQUIRE]
       <para>Service Providers must have:</para>
 
       <programlisting>ServicePermission[&lt;Service Type&gt;,REGISTER] 
-PackagePermission[&lt;Service Type’s package&gt;,IMPORT]
+PackagePermission[&lt;Service Type's package&gt;,IMPORT]
 CapabilityPermission["osgi.extender", REQUIRE]
 CapabilityPermission["osgi.serviceloader", PROVIDE]
 </programlisting>
 
-      <para>The Mediator must ensure that the Service Provider has the ServicePermission 
-      before it provides the instance. It must use the Bundle Context
-      <code>hasPermission</code> method or the bundle’s Access Control Context
-      to verify this.</para>
+      <para>The Mediator must ensure that the Service Provider has the
+      ServicePermission before it provides the instance. It must use the
+      Bundle Context <code>hasPermission</code> method or the bundle's Access
+      Control Context to verify this.</para>
     </section>
   </section>
 

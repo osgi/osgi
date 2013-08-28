@@ -55,24 +55,24 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Extender</emphasis> – Enable the configuration of
+          <para><emphasis>Extender</emphasis> - Enable the configuration of
           components inside a bundle based on configuration data provided by
           the bundle developer.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Services</emphasis> – Enable the use of OSGi
+          <para><emphasis>Services</emphasis> - Enable the use of OSGi
           services within a Web Application.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Deployment</emphasis> – Define a mechanism to deploy
+          <para><emphasis>Deployment</emphasis> - Define a mechanism to deploy
           Web Applications, both OSGi aware and non OSGi aware, in the OSGi
           environment.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>WAR File Support</emphasis> – Transparently enhance
+          <para><emphasis>WAR File Support</emphasis> - Transparently enhance
           the contents of a WAR's manifest during installation to add any
           headers necessary to deploy a WAR as an OSGi bundle.</para>
         </listitem>
@@ -84,77 +84,77 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Web Container</emphasis> – The implementation of
+          <para><emphasis>Web Container</emphasis> - The implementation of
           this specification. Consists of a Web Extender, a Web URL Handler
           and a Servlet and Java Server Pages Web Runtime environment.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Web Application – </emphasis>A program that has web
+          <para><emphasis>Web Application - </emphasis>A program that has web
           accessible content. A Web Application is defined by <xref
           linkend="i3076362"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Web Application Archive (WAR)</emphasis> – The Java
+          <para><emphasis>Web Application Archive (WAR)</emphasis> - The Java
           EE standard resource format layout of a JAR file that contains a
           deployable Web Application.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Web Application Bundle</emphasis> – A Web
+          <para><emphasis>Web Application Bundle</emphasis> - A Web
           Application deployed as an OSGi bundle, also called a WAB.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>WAB</emphasis> – The acronym for a Web Application
+          <para><emphasis>WAB</emphasis> - The acronym for a Web Application
           Bundle.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Web Extender</emphasis> – An extender bundle that
+          <para><emphasis>Web Extender</emphasis> - An extender bundle that
           deploys the Web Application Bundle to the Web Runtime based on the
           Web Application Bundle's state.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Web URL Handler</emphasis> – A URL handler which
+          <para><emphasis>Web URL Handler</emphasis> - A URL handler which
           transforms a Web Application Archive (WAR) to conform to the OSGi
           specifications during installation by installing the WAR through a
           special URL so that it becomes a Web Application Bundle.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Web Runtime</emphasis> – A Java Server Pages and
+          <para><emphasis>Web Runtime</emphasis> - A Java Server Pages and
           Servlet environment, receiving the web requests and translating them
           to servlet calls, either from Web Application servlets or other
           classes.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Web Component</emphasis> – A Servlet or Java Server
+          <para><emphasis>Web Component</emphasis> - A Servlet or Java Server
           Page (JSP).</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Servlet</emphasis> – An object implementing the
+          <para><emphasis>Servlet</emphasis> - An object implementing the
           Servlet interface; this is for the request handler model in the
           Servlet Specification.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Servlet Context</emphasis> – The model representing
+          <para><emphasis>Servlet Context</emphasis> - The model representing
           the Web Application in the Servlet Specification.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Java Server Page (JSP)</emphasis> – A declarative,
+          <para><emphasis>Java Server Page (JSP)</emphasis> - A declarative,
           template based model for generating content through Servlets that is
           optionally supported by the Web Runtime.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Context Path</emphasis> – The URI path prefix of any
+          <para><emphasis>Context Path</emphasis> - The URI path prefix of any
           content accessible in a Web Application.</para>
         </listitem>
       </itemizedlist>
@@ -293,17 +293,17 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Web Extender</emphasis> – Responsible for deploying
+          <para><emphasis>Web Extender</emphasis> - Responsible for deploying
           Web Application Bundles (WAB) to a Web Runtime,</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Web Runtime</emphasis> – Provides support for
+          <para><emphasis>Web Runtime</emphasis> - Provides support for
           Servlet and optionally for JSPs, and</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Web URL Handler</emphasis> – Provides on-the-fly
+          <para><emphasis>Web URL Handler</emphasis> - Provides on-the-fly
           enhancements of non-OSGi aware Web ARchives (WAR) so that they can
           be installed as a WAB.</para>
         </listitem>
@@ -349,13 +349,13 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Web Extender</emphasis> – Detects Web Application
+        <para><emphasis>Web Extender</emphasis> - Detects Web Application
         Bundles (WAB) and tracks their life cycle. Ready WABs are deployed to
         the Web Runtime.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Web Runtime</emphasis> – A runtime environment for a
+        <para><emphasis>Web Runtime</emphasis> - A runtime environment for a
         Web Application that supports the <xref linkend="i3076808"/> and <xref
         linkend="i3076835"/> or later. The Web Runtime receives web requests
         and calls the appropriate methods on servlets. Servlets can be
@@ -363,7 +363,7 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>Web URL Handler</emphasis> – A URL stream handler
+        <para><emphasis>Web URL Handler</emphasis> - A URL stream handler
         providing the <code>webbundle:</code> scheme. This scheme can be used
         to install WARs in an OSGi framework. The Web URL Handler will then
         automatically add the required OSGi manifest headers.</para>
@@ -400,7 +400,7 @@
     possible that a WAB can have dependencies on other bundles.</para>
 
     <para>A WAB may be installed into the framework using the
-    <code>BundleContext.installBundle</code> methods. Once installed, a WAB’s
+    <code>BundleContext.installBundle</code> methods. Once installed, a WAB's
     life cycle is managed just like any other bundle in the framework. This
     life cycle is tracked by the Web Extender who will then deploy the Web
     Application to the Web Runtime when the WAB is ready and will undeploy it
@@ -432,7 +432,7 @@
       relative to this Context Path. For example, if the context path is
       <code>/sales</code>, then the URL would be something like:
       <code>http://www.acme.com/sales</code>. The Context Path must always
-      begin with a solidus (slash <code>’/’ \u002F</code>).</para>
+      begin with a solidus (<code>'/' \u002F</code>).</para>
 
       <para>The Web Extender must not recognize a bundle as a Web Application
       unless the Web-ContextPath header is present in its manifest and the
@@ -455,7 +455,7 @@
     <section>
       <title>Starting the Web Application Bundle</title>
 
-      <para>A WAB’s Web Application must be <emphasis>deployed</emphasis>
+      <para>A WAB's Web Application must be <emphasis>deployed</emphasis>
       while the WAB is <emphasis>ready</emphasis>. Deployed means that the Web
       Application is available for web requests. Once deployed, a WAB can
       serve its web content on the given Context Path. Ready is when the
@@ -623,7 +623,7 @@
 
               <entry><code>String</code></entry>
 
-              <entry><para>The Context Path from which the WAB’s content will
+              <entry><para>The Context Path from which the WAB's content will
               be served.</para></entry>
             </row>
           </tbody>
@@ -666,7 +666,7 @@ OSGI-OPT/</programlisting>
       way that they do not accidentally expose code or confidential
       information. The simplest way to achieve this is to follow the WAR model
       where code is placed in the <code>WEB-INF/classes</code> directory and
-      this directory is placed on the Bundle’s class path as the first entry.
+      this directory is placed on the Bundle's class path as the first entry.
       For example:</para>
 
       <programlisting>Bundle-ClassPath: WEB-INF/classes, WEB-INF/lib/acme.jar</programlisting>
@@ -739,7 +739,7 @@ OSGI-OPT/</programlisting>
       response to a WAB <code>STOPPING</code> event, the Web Extender must
       <emphasis>undeploy</emphasis> the corresponding Web Application from the
       Servlet Container and clean up any resources. This undeploying must
-      occur synchronously with the WAB’s stopping event. This will involve the
+      occur synchronously with the WAB's stopping event. This will involve the
       following steps:</para>
 
       <orderedlist>
@@ -827,12 +827,12 @@ OSGI-OPT/</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>WAB</emphasis> – If the source is already a bundle
+        <para><emphasis>WAB</emphasis> - If the source is already a bundle
         then only the Web-ContextPath can be set or overwritten.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>WAR</emphasis> – If the source is a WAR (that is, it
+        <para><emphasis>WAR</emphasis> - If the source is a WAR (that is, it
         must not contain any OSGi defined headers) then convert the WAR into a
         WAB.</para>
       </listitem>
@@ -852,12 +852,12 @@ OSGI-OPT/</programlisting>
     <section>
       <title>URL Scheme</title>
 
-      <para>The Web URL Handler’s scheme is defined to be:</para>
+      <para>The Web URL Handler's scheme is defined to be:</para>
 
-      <programlisting>scheme     ::= ’webbundle:' embedded ’?’ web-params
+      <programlisting>scheme     ::= 'webbundle:' embedded '?' web-params
 embedded   ::= &lt;embedded URL according to RFC 1738&gt;
-web-params ::= ( web-param ( ’&amp;’ web-param )* )?
-web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
+web-params ::= ( web-param ( '&amp;' web-param )* )?
+web-param  ::= &lt;key&gt; '=' &lt;value&gt;</programlisting>
 
       <para>The <code>web-param</code> &lt;<code>key&gt;</code> and
       <code>&lt;value&gt;</code> as well as the <code>&lt;embedded
@@ -873,9 +873,9 @@ web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
       as an <code>http:</code>, or <code>file:</code> URL. Some forms of
       embedded URL also contain URL query parameters and this must be
       supported. The embedded URL most be encoded as a standard URL. That is,
-      the control characters like colon (<code>’:’ \u003A</code>), solidus
-      (slash <code>’/’ \u002F</code>), percent (<code>’%’ \u0025</code>), and
-      ampersand (<code>’&amp;’ \u0026</code>) must not be encoded. Thus the
+      the control characters like colon (<code>':' \u003A</code>), solidus
+      (<code>'/' \u002F</code>), percent (<code>'%' \u0025</code>), and
+      ampersand (<code>'&amp;' \u0026</code>) must not be encoded. Thus the
       value returned from the <code>getPath</code> method may contain a query
       part. Any implementation must take care to preserve both the query
       parameters for the embedded URL, and for the complete
@@ -895,15 +895,15 @@ web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>getProtocol</code> – <code>webbundle</code></para>
+          <para><code>getProtocol</code> - <code>webbundle</code></para>
         </listitem>
 
         <listitem>
-          <para><code>getPath</code> – The complete embedded URL</para>
+          <para><code>getPath</code> - The complete embedded URL</para>
         </listitem>
 
         <listitem>
-          <para><code>getQuery</code> – The parameters for processing of the
+          <para><code>getQuery</code> - The parameters for processing of the
           manifest.</para>
         </listitem>
       </itemizedlist>
@@ -916,16 +916,16 @@ web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>getProtocol</code> – <code>webbundle</code></para>
+          <para><code>getProtocol</code> - <code>webbundle</code></para>
         </listitem>
 
         <listitem>
-          <para><code>getPath</code> –
+          <para><code>getPath</code> -
           <code>http://acme.com/repo?war=example.war</code></para>
         </listitem>
 
         <listitem>
-          <para><code>getQuery</code> –
+          <para><code>getQuery</code> -
           <code>Web-ContextPath=/sales</code></para>
         </listitem>
       </itemizedlist>
@@ -1037,16 +1037,16 @@ web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>Bundle-ManifestVersion</code> – Must be set to 2.</para>
+          <para><code>Bundle-ManifestVersion</code> - Must be set to 2.</para>
         </listitem>
 
         <listitem>
-          <para><code>Bundle-SymbolicName</code> – Generated in an
+          <para><code>Bundle-SymbolicName</code> - Generated in an
           implementation specific way.</para>
         </listitem>
 
         <listitem>
-          <para><code>Bundle-ClassPath</code> – Must consist of:</para>
+          <para><code>Bundle-ClassPath</code> - Must consist of:</para>
 
           <itemizedlist>
             <listitem>
@@ -1069,10 +1069,10 @@ web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>Web-ContextPath</code> – The Web-ContextPath must be
+          <para><code>Web-ContextPath</code> - The Web-ContextPath must be
           specified as a parameter. This Context Path should start with a
-          leading solidus (slash <code>’/’ \u002F</code>). The Web URL handler
-          must add the preceding slash it if it is not present.</para>
+          leading solidus (<code>'/' \u002F</code>). The Web URL handler must
+          add the preceding solidus it if it is not present.</para>
         </listitem>
       </itemizedlist>
 
@@ -1100,7 +1100,7 @@ web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
       <para>If the use of the signing metadata is required, the WAR must be
       converted to a WAB during development and then signed. In this case, the
       Web URL Handler cannot be used. If the Web URL Handler is presented with
-      a signed WAR, the manifest name sections that contain the resource’s
+      a signed WAR, the manifest name sections that contain the resource's
       check sums must be stripped out by the URL stream handler. Any signer
       files ( <code>*.SF</code> and their corresponding <code>DSA/RSA</code>
       signature files) must also be removed.</para>
@@ -1117,31 +1117,31 @@ web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><code>org/osgi/service/web/DEPLOYING</code> – The Web Extender
+        <para><code>org/osgi/service/web/DEPLOYING</code> - The Web Extender
         has accepted a WAB and started the process of deploying a Web
         Application.</para>
       </listitem>
 
       <listitem>
-        <para><code>org/osgi/service/web/DEPLOYED</code> – The Web Extender
+        <para><code>org/osgi/service/web/DEPLOYED</code> - The Web Extender
         has finished deploying a Web Application, and the Web Application is
         now available for web requests on its Context Path.</para>
       </listitem>
 
       <listitem>
-        <para><code>org/osgi/service/web/UNDEPLOYING</code> – The web extender
+        <para><code>org/osgi/service/web/UNDEPLOYING</code> - The web extender
         started undeploying the Web Application in response to its
         corresponding WAB being stopped or the Web Extender is stopped.</para>
       </listitem>
 
       <listitem>
-        <para><code>org/osgi/service/web/UNDEPLOYED</code> – The Web Extender
+        <para><code>org/osgi/service/web/UNDEPLOYED</code> - The Web Extender
         has undeployed the Web Application. The application is no longer
         available for web requests.</para>
       </listitem>
 
       <listitem>
-        <para><code>org/osgi/service/web/FAILED</code> – The Web Extender has
+        <para><code>org/osgi/service/web/FAILED</code> - The Web Extender has
         failed to deploy the Web Application, this event can be fired after
         the <code>DEPLOYING</code> event has fired and indicates that no
         DEPLOYED event will be fired.</para>
@@ -1153,53 +1153,53 @@ web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><code>bundle.symbolicName</code> – (<code>String</code>) The
+        <para><code>bundle.symbolicName</code> - (<code>String</code>) The
         bundle symbolic name of the WAB.</para>
       </listitem>
 
       <listitem>
-        <para><code>bundle.id –</code> (<code>Long</code>) The bundle id of
+        <para><code>bundle.id</code> - (<code>Long</code>) The bundle id of
         the WAB.</para>
       </listitem>
 
       <listitem>
-        <para><code>bundle</code> – (<code>Bundle)</code> The Bundle object of
+        <para><code>bundle</code> - (<code>Bundle)</code> The Bundle object of
         the WAB.</para>
       </listitem>
 
       <listitem>
-        <para><code>bundle.version</code> – (<code>Version)</code> The version
+        <para><code>bundle.version</code> - (<code>Version)</code> The version
         of the WAB.</para>
       </listitem>
 
       <listitem>
-        <para><code>context.path</code> – (<code>String</code>) The Context
+        <para><code>context.path</code> - (<code>String</code>) The Context
         Path of the Web Application.</para>
       </listitem>
 
       <listitem>
-        <para><code>timestamp – (Long</code>) The time when the event
+        <para><code>timestamp - (Long</code>) The time when the event
         occurred</para>
       </listitem>
 
       <listitem>
-        <para><code>extender.bundle</code> – (<code>Bundle</code>) The
+        <para><code>extender.bundle</code> - (<code>Bundle</code>) The
         <code>Bundle</code> object of the Web Extender Bundle</para>
       </listitem>
 
       <listitem>
-        <para><code>extender.bundle.id</code> – (<code>Long</code>) The id of
+        <para><code>extender.bundle.id</code> - (<code>Long</code>) The id of
         the Web Extender Bundle.</para>
       </listitem>
 
       <listitem>
-        <para><code>extender.bundle.symbolicName</code> –
+        <para><code>extender.bundle.symbolicName</code> -
         (<code>String)</code> The symbolic name of the Web Extender
         Bundle.</para>
       </listitem>
 
       <listitem>
-        <para><code>extender.bundle.version</code> – (<code>Version</code>)
+        <para><code>extender.bundle.version</code> - (<code>Version</code>)
         The version of the Web Extender Bundle.</para>
       </listitem>
     </itemizedlist>
@@ -1209,18 +1209,18 @@ web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><code>exception</code> – (Throwable) If an exception caused the
+        <para><code>exception</code> - (Throwable) If an exception caused the
         failure, an exception detailing the error that occurred during the
         deployment of the WAB.</para>
       </listitem>
 
       <listitem>
-        <para><code>collision</code> – (<code>String</code>) If a name
+        <para><code>collision</code> - (<code>String</code>) If a name
         collision occurred, the Web-ContextPath that had a collision</para>
       </listitem>
 
       <listitem>
-        <para><code>collision.bundles</code> –
+        <para><code>collision.bundles</code> -
         (<code>Collection&lt;Long&gt;</code>) If a name collision occurred, a
         collection of bundle ids that all have the same value for the
         Web-ContextPath manifest header.</para>
@@ -1246,7 +1246,7 @@ web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
       Context as follows:</para>
 
       <programlisting>BundleContext ctxt = (BundleContext) 
-    servletContext.getAttribute(“osgi-bundlecontext”);</programlisting>
+    servletContext.getAttribute("osgi-bundlecontext");</programlisting>
     </section>
 
     <section>
@@ -1297,10 +1297,10 @@ web-param  ::= &lt;key&gt; ’=’ &lt;value&gt;</programlisting>
       <para>Since the <code>getResource</code> and
       <code>getResourceAsStream</code> methods do not support wildcards while
       the <code>findEntries</code> method does it is necessary to escape the
-      wildcard asterisk (<code>’*’ \u002A</code>) with prefixing it with a
-      reverse solidus (backslash <code>’\’ \u005C</code>). This implies that a
-      reverse solidus must be escaped with an extra reverse solidus. For
-      example, the path <code>foo\bar*</code> must be escaped to
+      wildcard asterisk (<code>'*' \u002A</code>) with prefixing it with a
+      reverse solidus (<code>'\' \u005C</code>). This implies that a reverse
+      solidus must be escaped with an extra reverse solidus. For example, the
+      path <code>foo\bar*</code> must be escaped to
       <code>foo\\bar\*</code>.</para>
 
       <para>The <code>getResourcePaths</code> method must map to the Bundle

@@ -51,38 +51,38 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Life Cycle</emphasis> – Must allow support of full
+          <para><emphasis>Life Cycle</emphasis> - Must allow support of full
           life cycle management of bundles.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Batch</emphasis> – Support batch oriented operations
+          <para><emphasis>Batch</emphasis> - Support batch oriented operations
           to minimize the influence of network capacity and latency.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Compatible</emphasis> – This specification must work
+          <para><emphasis>Compatible</emphasis> - This specification must work
           naturally with JMX.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Efficient</emphasis> – Minimize the number of
+          <para><emphasis>Efficient</emphasis> - Minimize the number of
           registered objects to not overload the MBean Server and
           communication channels.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Open MBean</emphasis> – Support the Open MBean layer
+          <para><emphasis>Open MBean</emphasis> - Support the Open MBean layer
           of JMX instead of using domain specific objects.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Core</emphasis> – Supports all the Framework’s
+          <para><emphasis>Core</emphasis> - Supports all the Framework's
           operations.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Core Services</emphasis> – Support the framework
+          <para><emphasis>Core Services</emphasis> - Support the framework
           services if registered, except for Conditional Permission
           Admin.</para>
         </listitem>
@@ -94,69 +94,69 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>MBean</emphasis> – A Managed Bean. The core concept
+          <para><emphasis>MBean</emphasis> - A Managed Bean. The core concept
           of JMX to manage an entity.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>MBean Server </emphasis>– The MBean Server is the
+          <para><emphasis>MBean Server</emphasis> - The MBean Server is the
           access point for registering MBeans.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Manager</emphasis> – The entity that implements the
+          <para><emphasis>Manager</emphasis> - The entity that implements the
           MBeans and registers them with the registered MBean servers.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Object Name</emphasis> – A name for an MBean
+          <para><emphasis>Object Name</emphasis> - A name for an MBean
           registered with an MBean Server.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Bundle State MBean</emphasis> – Provides central
+          <para><emphasis>Bundle State MBean</emphasis> - Provides central
           access to the state of a bundle in a framework.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Framework MBean</emphasis> – Represents the general
-          framework’s state and can be used to manage the life cycle of
+          <para><emphasis>Framework MBean</emphasis> - Represents the general
+          framework's state and can be used to manage the life cycle of
           bundles.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Bundle Wiring State MBean</emphasis> – Provides
+          <para><emphasis>Bundle Wiring State MBean</emphasis> - Provides
           access to the wiring state of the framework.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Service State MBean</emphasis> – Provides access to
+          <para><emphasis>Service State MBean</emphasis> - Provides access to
           the service information in the service registry. It provides both a
           general MBean interface as well as an Open Type description.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Configuration Admin MBean</emphasis> – Can be used
+          <para><emphasis>Configuration Admin MBean</emphasis> - Can be used
           to manipulate a Configuration Admin service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Permission Admin MBean</emphasis> – Provides access
+          <para><emphasis>Permission Admin MBean</emphasis> - Provides access
           to the Permission Admin service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Provisioning Service MBean</emphasis> – Provides
+          <para><emphasis>Provisioning Service MBean</emphasis> - Provides
           access to the Provisioning Service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>User Admin MBean</emphasis> – Provides access to the
+          <para><emphasis>User Admin MBean</emphasis> - Provides access to the
           User Admin service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Item</emphasis> – A helper class to create Open
+          <para><emphasis>Item</emphasis> - A helper class to create Open
           Types. This class is intended to make the Javadoc easier to navigate
           and keep definitions close together. This is otherwise hard to do
           with Open Type. This class has no utility for management
@@ -164,17 +164,17 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Open Type</emphasis> – A JMX metadata standard to
+          <para><emphasis>Open Type</emphasis> - A JMX metadata standard to
           describe MBeans.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Remote Manager</emphasis> – The entity accessing a
+          <para><emphasis>Remote Manager</emphasis> - The entity accessing a
           MBean Server remotely.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>JConsole</emphasis> – The default Java Remote
+          <para><emphasis>JConsole</emphasis> - The default Java Remote
           Manager.</para>
         </listitem>
       </itemizedlist>
@@ -223,14 +223,14 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Instrumentation</emphasis> – The managed resources of
+        <para><emphasis>Instrumentation</emphasis> - The managed resources of
         the system are instrumented using <emphasis>managed beans</emphasis>
         (a.k.a. MBeans) which expose their management interfaces through a JMX
         agent for remote management and monitoring.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Agent</emphasis> – The JMX agent layer is mainly
+        <para><emphasis>Agent</emphasis> - The JMX agent layer is mainly
         represented by the MBean server. This is the <emphasis>managed
         object</emphasis> server where the MBeans are registered. The JMX
         agent includes a set of functions for manipulating the registered
@@ -239,7 +239,7 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>Remote Manager</emphasis> – The remote management
+        <para><emphasis>Remote Manager</emphasis> - The remote management
         layer provides the specification for the actual remote communication
         protocol adapters and defines standard <emphasis>connectors</emphasis>
         which make the JMX agent accessible to remote managers outside of the
@@ -285,13 +285,13 @@
       the context of a JMX MBean Server in order. An Object Name consists of
       two parts:</para>
 
-      <programlisting>ObjectName  ::= domain ’:’ properties
-properties  ::= property ( ’,’ property )*</programlisting>
+      <programlisting>ObjectName  ::= domain ':' properties
+properties  ::= property ( ',' property )*</programlisting>
 
       <para>To avoid collisions between MBeans supplied by different vendors,
       a recommended convention is to begin the domain name with the reverse
       DNS name of the organization that specifies the MBeans, followed by a
-      full stop (<code>’.’ \u002E</code>) and a string whose interpretation is
+      full stop (<code>'.' \u002E</code>) and a string whose interpretation is
       determined by that organization.</para>
 
       <para>MBeans specified by the OSGi Alliance have domains that start with
@@ -318,7 +318,7 @@ properties  ::= property ( ’,’ property )*</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Design Pattern</emphasis> – Let the registered
+          <para><emphasis>Design Pattern</emphasis> - Let the registered
           object implement an <emphasis>MBean interface</emphasis> that has
           the fully qualified name of the implementation class suffixed with
           <code>MBean</code>. The MBean server will then limit access to
@@ -330,19 +330,19 @@ properties  ::= property ( ’,’ property )*</programlisting>
         </listitem>
 
         <listitem>
-          <para><emphasis>Dynamic MBean</emphasis> – Register a Dynamic MBean,
+          <para><emphasis>Dynamic MBean</emphasis> - Register a Dynamic MBean,
           which handles the access to the operations and attributes
           programmatically. The JMX specification provides the
           <code>DynamicMBean</code> interface for this purpose. If the MBean
           registered with an MBean Server implements this interface, then the
-          MBean Server must get the MBean’s metadata through the
+          MBean Server must get the MBean's metadata through the
           <code>DynamicMBean</code> interface instead of using reflection.
           Therefore, Dynamic MBeans can provide more rich metadata that
           describes their operations and attributes.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Standard MBean</emphasis> – Register a Standard
+          <para><emphasis>Standard MBean</emphasis> - Register a Standard
           MBean. A standard MBean works the same as the previous bullet but
           does not require the implementation class name to map to the MBean
           interface name.</para>
@@ -360,7 +360,7 @@ properties  ::= property ( ’,’ property )*</programlisting>
   int size = sizeI.intValue();
   if (size &gt; desiredSize) {
     mbs.invoke(objectName,"dropOldest",
-        new Integer[] {new Integer(size – desiredSize)},
+        new Integer[] {new Integer(size - desiredSize)},
         new String[] {"int"});
   }
 }</programlisting>
@@ -412,27 +412,27 @@ if (size &gt; desiredSize)
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Versioning</emphasis> – All participating parties
-          require access to the same version of the object’s class.</para>
+          <para><emphasis>Versioning</emphasis> - All participating parties
+          require access to the same version of the object's class.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Serialization</emphasis> – Not all objects are easy
+          <para><emphasis>Serialization</emphasis> - Not all objects are easy
           to serialize.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Size</emphasis> – Arbitrary objects can transitively
+          <para><emphasis>Size</emphasis> - Arbitrary objects can transitively
           link to large amounts of data.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Descriptive</emphasis> – Classes provide little or
+          <para><emphasis>Descriptive</emphasis> - Classes provide little or
           no support for editing.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Limited</emphasis> – Classes are Java specific,
+          <para><emphasis>Limited</emphasis> - Classes are Java specific,
           making it harder to interact with non-Java environments.</para>
         </listitem>
       </itemizedlist>
@@ -445,33 +445,33 @@ if (size &gt; desiredSize)
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Primitives</emphasis> – <code>boolean, byte, char,
+          <para><emphasis>Primitives</emphasis> - <code>boolean, byte, char,
           short, int, long, float, double</code>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Primitive Arrays</emphasis> – <code>boolean[],
+          <para><emphasis>Primitive Arrays</emphasis> - <code>boolean[],
           byte[], char[], short[], int[], long[], float[],
           double[]</code>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Wrappers</emphasis> – <code>Boolean, Byte,
+          <para><emphasis>Wrappers</emphasis> - <code>Boolean, Byte,
           Character, Short, Integer, Long, Float, Double</code>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Scalars</emphasis> – <code>String, BigDecimal,
+          <para><emphasis>Scalars</emphasis> - <code>String, BigDecimal,
           BigInteger, Date, ObjectName</code>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Complex</emphasis> – <code>CompositeData,
+          <para><emphasis>Complex</emphasis> - <code>CompositeData,
           TabularData</code>, and complex arrays.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Return</emphasis> – <code>Void,</code> operation
+          <para><emphasis>Return</emphasis> - <code>Void,</code> operation
           return only.</para>
         </listitem>
       </itemizedlist>
@@ -506,20 +506,20 @@ if (size &gt; desiredSize)
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Core Framework</emphasis> –
+        <para><emphasis>Core Framework</emphasis> -
         <code>FrameworkMBean</code>, <code>BundleStateMBean</code>,
         <code>ServiceStateMBean</code>, <code>BundleWiringStateMBean,</code>
         and <code>PackageStateMBean</code>.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Core Services</emphasis> –
+        <para><emphasis>Core Services</emphasis> -
         <code>PermissionAdminMBean</code>. The Conditional Permission Admin is
         not included in this specification.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Compendium Services</emphasis> –
+        <para><emphasis>Compendium Services</emphasis> -
         <code>ConfigurationAdminMBean</code>, <code>UserAdminMBean</code>,
         <code>ProvisioningServiceMBean</code></para>
       </listitem>
@@ -559,16 +559,16 @@ org.osgi.service.cm         org.osgi.jmx.service.cm</programlisting>
       structure:</para>
 
       <programlisting>object-name    ::= ( core | compendium ) 
-                    ’,version=’ version 
-                    ’,framework=’ framework
-                    ’,uuid=’ uuid
-                   (’,’ key ’=’ value )*
-core           ::= ’osgi.core:’ framework-type
-compendium     ::= ’osgi.compendium:’ service-type
-framework-type ::= ( ’type=’ token ) | service-type
-service-type   ::= ’service=’ token
+                    ',version=' version 
+                    ',framework=' framework
+                    ',uuid=' uuid
+                   (',' key '=' value )*
+core           ::= 'osgi.core:' framework-type
+compendium     ::= 'osgi.compendium:' service-type
+framework-type ::= ( 'type=' token ) | service-type
+service-type   ::= 'service=' token
 framework      ::= &lt;Bundle symbolic name of the system bundle&gt;
-uuid           ::= &lt;org.osgi.framework.uuid Framework property’svalue&gt;
+uuid           ::= &lt;org.osgi.framework.uuid Framework property'svalue&gt;
 key            ::= &lt;any jmx supported key&gt;
 value          ::= &lt;any jmx supported value&gt;</programlisting>
 
@@ -576,12 +576,12 @@ value          ::= &lt;any jmx supported value&gt;</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Spaces</emphasis> – Spaces between any of the
+          <para><emphasis>Spaces</emphasis> - Spaces between any of the
           terminals are not permitted.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Version</emphasis> – The <code>version</code> must
+          <para><emphasis>Version</emphasis> - The <code>version</code> must
           be limited to a major and minor version part. The given version must
           identify the package of the corresponding resource. For example, if
           the Configuration Admin service is on version
@@ -590,7 +590,7 @@ value          ::= &lt;any jmx supported value&gt;</programlisting>
         </listitem>
 
         <listitem>
-          <para><emphasis>Service</emphasis> – The <code>service-type</code>
+          <para><emphasis>Service</emphasis> - The <code>service-type</code>
           should use the package name of the corresponding service. For
           example, for Configuration Admin this would be
           <code>service=cm</code>.</para>
@@ -607,7 +607,7 @@ value          ::= &lt;any jmx supported value&gt;</programlisting>
       <para>The advantage of the framework property is that it can be used to
       simplify the querying for the MBeans using Object Name
       <emphasis>patterns</emphasis>. Patterns are names have an asterisk
-      <code>(’*’ \u002A)</code>. For instance, the following query allows a
+      (<code>'*' \u002A</code>). For instance, the following query allows a
       client to find all Framework MBeans for an Apache Felix implementation
       without having to rely on knowing the UUID:</para>
 
@@ -620,7 +620,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
       that only a single instance of the OSGi framework exists in the managed
       system, as in the following example:</para>
 
-      <programlisting>ObjectName on = new ObjectName(“osgi.core:type=framework,version=1.7,*”);
+      <programlisting>ObjectName on = new ObjectName("osgi.core:type=framework,version=1.7,*");
 Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlisting>
 
       <para>The <code>uuid</code> and <code>framework</code> property keys are
@@ -658,7 +658,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
       Servers services that it has access to. It should then register all
       MBeans with each server found in the service registry.</para>
 
-      <para>A compliant implementation must register all the framework’s
+      <para>A compliant implementation must register all the framework's
       MBeans: <code>FrameworkMBean, BundleStateMBean, ServiceStateMBean,
       BundleWiringStateMBean and PackageStateMBean</code>. The registration of
       the compendium services is optional. However, if they are registered
@@ -806,7 +806,7 @@ Set&lt;ObjectInstance&gt; instances = mserver.queryMBeans(on,null);</programlist
 
             <entry><para><code>osgi.core:</code></para><para><code>service=wiringState,</code></para><para><code>version=1.1</code></para></entry>
 
-            <entry><para>Reflects the Framework’s wiring state.</para></entry>
+            <entry><para>Reflects the Framework's wiring state.</para></entry>
           </row>
         </tbody>
       </tgroup>

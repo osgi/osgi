@@ -146,8 +146,8 @@
 
         <para>The Bundle-ClassPath header defines a comma-separated list of
         JAR file path names or directories (inside the bundle) containing
-        classes and resources. The full stop (<code>’.’ \u002E</code>)
-        specifies the root directory of the bundle’s JAR. The full stop is
+        classes and resources. The full stop (<code>'.' \u002E</code>)
+        specifies the root directory of the bundle's JAR. The full stop is
         also the default. See <xref
         linkend="framework.module.bundleclasspath"/>.</para>
       </section>
@@ -190,7 +190,7 @@
 
         <itemizedlist>
           <listitem>
-            <para><code>size</code> – (integer) Specifies the size of the icon
+            <para><code>size</code> - (integer) Specifies the size of the icon
             in pixels horizontal. It is recommended to always include a 64x64
             icon.</para>
           </listitem>
@@ -220,18 +220,18 @@
 
         <para>The syntax for this header is as follows:</para>
 
-        <programlisting>Bundle-License ::= ’&lt;&lt;EXTERNAL&gt;&gt;’ | 
-                      ( license ( ’,’ license ) * )
-license        ::= name ( ’;’ license-attr ) *
+        <programlisting>Bundle-License ::= '&lt;&lt;EXTERNAL&gt;&gt;' | 
+                      ( license ( ',' license ) * )
+license        ::= name ( ';' license-attr ) *
 license-attr   ::= description | link
-description    ::= ’description’ ’=’ string
-link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
+description    ::= 'description' '=' string
+link           ::= 'link' '=' &lt;url&gt;</programlisting>
 
         <para>This header has the following attributes:</para>
 
         <itemizedlist>
           <listitem>
-            <para><code>name</code> – Provides a globally unique name for this
+            <para><code>name</code> - Provides a globally unique name for this
             license, preferably world wide, but it should at least be unique
             with respect to the other clauses. The magic name
             <code>&lt;&lt;EXTERNAL&gt;&gt;</code> is used to indicate that
@@ -255,14 +255,14 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
 
         <itemizedlist>
           <listitem>
-            <para><code>description</code> – (optional) Provide the
+            <para><code>description</code> - (optional) Provide the
             description of the license. This is a short description that is
             usable in a list box on a UI to select more information about the
             license.</para>
           </listitem>
 
           <listitem>
-            <para><code>link</code> –(optional) Provide a URL to a page that
+            <para><code>link</code> -(optional) Provide a URL to a page that
             defines or explains the license. If this link is absent, the name
             field is used for this purpose. The URL is relative to the root of
             the bundle. That is, it is possible to refer to a file inside the
@@ -466,9 +466,9 @@ link           ::= ’link’ ’=’ &lt;url&gt;</programlisting>
       <para>Many Manifest header values share a common syntax. This syntax
       consists of:</para>
 
-      <programlisting>header ::= clause ( ’,’ clause ) *
-clause ::= path ( ’;’ path ) *  
-              ( ’;’ parameter ) *     // See <xref
+      <programlisting>header ::= clause ( ',' clause ) *
+clause ::= path ( ';' path ) *  
+              ( ';' parameter ) *     // See <xref
           linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>A parameter can be either a <emphasis>directive</emphasis> or an
@@ -490,7 +490,7 @@ major       ::= number                   // See <xref
           linkend="framework.general.syntax" xrefstyle="template:%n"/>
 minor       ::= number
 micro       ::= number
-qualifier   ::= ( alphanum | ’_’ | '-' )+</programlisting>
+qualifier   ::= ( alphanum | '_' | '-' )+</programlisting>
 
       <para>A version must not contain any white space. The default value for
       a version is <code>0.0.0</code>.</para>
@@ -602,24 +602,24 @@ ceiling       ::= version</programlisting>
       <para>The string representation of an LDAP search filter uses a prefix
       format and is defined by the following grammar:</para>
 
-      <programlisting>filter      ::= ’(’ filter-comp ’)’
+      <programlisting>filter      ::= '(' filter-comp ')'
 filter-comp ::= and | or | not | operation
-and         ::= ’&amp;’ filter-list
-or          ::= ’|’ filter-list
-not         ::= ’!’ filter
+and         ::= '&amp;' filter-list
+or          ::= '|' filter-list
+not         ::= '!' filter
 filter-list ::= filter | filter filter-list
 operation   ::= simple | present | substring
 simple      ::= attr filter-type value
 filter-type ::= equal | approx | greater-eq | less-eq
-equal       ::= ’=’
-approx      ::= ’~=’
-greater-eq  ::= ’&gt;=’
-less-eq     ::= ’&lt;=’
-present     ::= attr ’=*’
-substring   ::= attr ’=’ initial any final
+equal       ::= '='
+approx      ::= '~='
+greater-eq  ::= '&gt;='
+less-eq     ::= '&lt;='
+present     ::= attr '=*'
+substring   ::= attr '=' initial any final
 initial     ::= () | value
-any         ::= ’*’ star-value
-star-value  ::= () | value ’*’ star-value
+any         ::= '*' star-value
+star-value  ::= () | value '*' star-value
 final       ::= () | value
 value       ::= &lt;see text&gt;
 attr        ::= &lt;see text&gt;</programlisting>
@@ -636,12 +636,12 @@ attr        ::= &lt;see text&gt;</programlisting>
       properties.</para>
 
       <para>If <code>value</code> must contain one of the characters reverse
-      solidus (backslash <code>’\’ \u005C</code>), asterisk (<code>'*'
-      \u002A)</code>, parentheses open (<code>’(’ \u0028</code>) or
-      parentheses close (<code>')' \u0029</code>), then these characters
-      should be preceded with the reverse solidus (backslash’\’ \u005C)
-      character. Spaces are significant in <code>value</code>. Space
-      characters are defined by <code>Character.isWhiteSpace()</code>.</para>
+      solidus (<code>'\' \u005C</code>), asterisk (<code>'*' \u002A</code>),
+      parentheses open (<code>'(' \u0028</code>) or parentheses close
+      (<code>')' \u0029</code>), then these characters should be preceded with
+      the reverse solidus (<code>'\' \u005C</code>) character. Spaces are
+      significant in <code>value</code>. Space characters are defined by
+      <code>Character.isWhiteSpace()</code>.</para>
 
       <para>Although both the <code>substring</code> and <code>present</code>
       productions can produce the <code>attr=*</code> construct, this
@@ -652,7 +652,7 @@ attr        ::= &lt;see text&gt;</programlisting>
       <code>String</code> or <code>String[]</code>. In all other cases the
       result must be <code>false</code>.</para>
 
-      <para>The evaluation of the approximate match (’<code>~=’</code>) filter
+      <para>The evaluation of the approximate match (<code>'~='</code>) filter
       type is implementation specific but should at least ignore case and
       white space differences. Codes such as soundex or other smart
       <emphasis>closeness</emphasis> comparisons could be used.</para>
@@ -685,25 +685,25 @@ collection  ::= &lt;Collection of scalar&gt;</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>String</emphasis> – Use String comparison</para>
+          <para><emphasis>String</emphasis> - Use String comparison</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Integer, Long, Float, Double, Byte, Short, Character
-          objects and primitives</emphasis> – Use numerical comparison. The
+          objects and primitives</emphasis> - Use numerical comparison. The
           <code>value</code> should be trimmed of any extraneous white space
           before the comparison.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Boolean objects</emphasis> – Use comparison defined
+          <para><emphasis>Boolean objects</emphasis> - Use comparison defined
           by <code>Boolean.valueOf(value).booleanValue()</code>. The
           <code>value</code> should be trimmed of any extraneous white space
           before this conversion is applied.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Array or Collection elements</emphasis> – Comparison
+          <para><emphasis>Array or Collection elements</emphasis> - Comparison
           is determined by the object type of the element</para>
         </listitem>
       </itemizedlist>
@@ -738,12 +738,12 @@ collection  ::= &lt;Collection of scalar&gt;</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Comparable objects</emphasis> – Comparison through
+          <para><emphasis>Comparable objects</emphasis> - Comparison through
           the <code>Comparable</code> interface</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Other objects</emphasis> – Equality
+          <para><emphasis>Other objects</emphasis> - Equality
           comparison</para>
         </listitem>
       </itemizedlist>
@@ -787,31 +787,31 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Environment</emphasis> – A container or framework that
+        <para><emphasis>Environment</emphasis> - A container or framework that
         installs Resources.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Resource</emphasis> – An abstraction for an artifact
+        <para><emphasis>Resource</emphasis> - An abstraction for an artifact
         that needs to become installed in some way to provide its intended
         function. A Bundle is modeled by a Resource but for example a display
         or secure USB key store can also be Resources.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Namespace</emphasis> – Defines what it means for the
+        <para><emphasis>Namespace</emphasis> - Defines what it means for the
         Environment when a requirement and capability match in a given
         Namespace.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Capability</emphasis> – Describing a feature or
+        <para><emphasis>Capability</emphasis> - Describing a feature or
         function of the Resource when installed in the Environment. A
         capability has attributes and directives.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Requirement</emphasis> – An assertion on the
+        <para><emphasis>Requirement</emphasis> - An assertion on the
         availability of a capability in the Environment. A requirement has
         attributes and directives. The <code>filter</code> directive contains
         the filter to assert the attributes of the capability in the same
@@ -834,7 +834,7 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     </figure>
 
     <para>A Resource in general has dependencies on other Resources or can
-    satisfy other Resource’s dependencies. Dependency types can vary wildly, a
+    satisfy other Resource's dependencies. Dependency types can vary wildly, a
     Bundle can require packages from another Bundle (Import-Package), or a
     Fragment needs a host Bundle (Fragment-Host), or a Bundle requires access
     to a high resolution display. The OSGi Core specification demonstrates
@@ -850,22 +850,22 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     <emphasis>attributes</emphasis> and <emphasis>directives</emphasis>.
     Attributes are used for matching and directives provide information about
     the semantics of the Namespace. For example, in the case of the
-    <code>osgi.wiring.host</code> Namespace (Fragments) the capability’s
+    <code>osgi.wiring.host</code> Namespace (Fragments) the capability's
     attributes are:</para>
 
     <itemizedlist>
       <listitem>
-        <para><code>osgi.wiring.host</code> – (<code>String</code>) The host’s
+        <para><code>osgi.wiring.host</code> - (<code>String</code>) The host's
         name.</para>
       </listitem>
 
       <listitem>
-        <para><code>bundle-version</code> – (<code>Version</code>) The host’s
+        <para><code>bundle-version</code> - (<code>Version</code>) The host's
         version.</para>
       </listitem>
 
       <listitem>
-        <para><code>*</code> – Any other attributes are allowed.</para>
+        <para><code>*</code> - Any other attributes are allowed.</para>
       </listitem>
     </itemizedlist>
 
@@ -898,7 +898,7 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     given Namespace, like the capability, and can therefore only be
     <emphasis>satisfied</emphasis> by Capabilities in the same Namespace. A
     requirement is satisfied when its filter, as specified with the
-    <code>filter</code> directive, matches a capability’s attributes. The
+    <code>filter</code> directive, matches a capability's attributes. The
     filter language specification can be found in <xref
     linkend="framework.module.filtersyntax"/>. A requirement can be
     <emphasis>mandatory</emphasis> or <emphasis>optional</emphasis>, as set
@@ -954,7 +954,7 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     linkend="framework.resource"/>. The <xref linkend="framework.wiring"/>
     chapter describes the Wiring API that is based on this generic package.
     The generic API is intended for other specifications that want to be
-    compatible with the generic OSGi Core framework’s Capability /Requirement
+    compatible with the generic OSGi Core framework's Capability /Requirement
     model.</para>
 
     <section>
@@ -977,7 +977,7 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
       These namespaces influence the resolver and define the class loading
       process. For example, a Require-Bundle clause is a requirement that
       ensures that the exported packages of the required bundle are available
-      to the requirer’s class loader.</para>
+      to the requirer's class loader.</para>
 
       <para>The OSGi resolving process is described in <xref
       linkend="framework.module.resolvingprocess"/>. The diagramming technique
@@ -1043,19 +1043,19 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
 
       <programlisting>Provide-Capability  ::= capability (',' capability )*
 capability          ::= name-space 
-                            ( ’;’ directive | typed-attr )*
+                            ( ';' directive | typed-attr )*
 name-space          ::= symbolic-name
-typed-attr          ::=  extended ( ’:’ type )? ’=’ argument
+typed-attr          ::=  extended ( ':' type )? '=' argument
 type                ::= scalar | list
-scalar              ::= ’String’ | ’Version’ | ’Long’ 
-                            |   ’Double’ 
+scalar              ::= 'String' | 'Version' | 'Long' 
+                            |   'Double' 
 list                ::= 'List' ( '&lt;' scalar '&gt;' )?</programlisting>
 
       <para>The header has the following directives architected:</para>
 
       <itemizedlist>
         <listitem>
-          <para><code>effective</code> – <code>(resolve)</code> Specifies the
+          <para><code>effective</code> - <code>(resolve)</code> Specifies the
           time a capabiltity is available, either <code>resolve</code>
           (default) or another name. The OSGi framework resolver only
           considers Capabilities without an <code>effective</code> directive
@@ -1065,7 +1065,7 @@ list                ::= 'List' ( '&lt;' scalar '&gt;' )?</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>uses</code> – The uses directive lists package names
+          <para><code>uses</code> - The uses directive lists package names
           that are used by this capability. This information is intended to be
           used for uses constraints, see <xref linkend="i3127019"/>.</para>
         </listitem>
@@ -1084,7 +1084,7 @@ list                ::= 'List' ( '&lt;' scalar '&gt;' )?</programlisting>
       ordering.</para>
 
       <para>Types are specified between the attribute name and the equal sign
-      (<code>’=’ \u003D</code>), the separator is a colon (<code>’:’
+      (<code>'=' \u003D</code>), the separator is a colon (<code>':'
       \u003A</code>). For example:, for a <code>Long:</code></para>
 
       <programlisting>attr:Long=24</programlisting>
@@ -1092,9 +1092,9 @@ list                ::= 'List' ( '&lt;' scalar '&gt;' )?</programlisting>
       <para>If no type is specified, the <code>String</code> type is
       assumed.</para>
 
-      <para>The parsing rules of the corresponding type’s <code>String</code>
+      <para>The parsing rules of the corresponding type's <code>String</code>
       constructor are then used to create a new instance that is placed in the
-      capability’s map. Numeric types must trim white space around the value,
+      capability's map. Numeric types must trim white space around the value,
       for other types spaces around the argument are not ignored, however,
       white space is skipped by the manifest parsing rules. That is:</para>
 
@@ -1112,7 +1112,7 @@ attr:Long="       23      ",            // ok, because nummeric</programlisting>
       <itemizedlist>
         <listitem>
           <para>Element values in the list are separated by commas
-          (<code>’,’\u002C</code>).</para>
+          (<code>',' \u002C</code>).</para>
         </listitem>
 
         <listitem>
@@ -1121,7 +1121,7 @@ attr:Long="       23      ",            // ok, because nummeric</programlisting>
         </listitem>
 
         <listitem>
-          <para>Commas or reverse solidi (backslash <code>’\’\u005C</code>)
+          <para>Commas or reverse solidi (<code>'\' \u005C</code>)
           that are part of an element value must be escaped by prefixing them
           with a reverse solidus. In practice, this requires escaping with two
           reverse solidi because a reverse solidus must already be escaped in
@@ -1178,7 +1178,7 @@ org.osgi.framework.system.capabilities.extra</programlisting>
     <section>
       <title>Bundle Requirements</title>
 
-      <para>The Bundle’s Require-Capability header has the following
+      <para>The Bundle's Require-Capability header has the following
       grammar:</para>
 
       <programlisting>Require-Capability  ::= requirement (',' requirement )* 
@@ -1196,7 +1196,7 @@ requirement         ::= name-space ( ';' parameter )* </programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>effective</code> – <code>(resolve)</code> Specifies the
+          <para><code>effective</code> - <code>(resolve)</code> Specifies the
           time a requirement is considered, either <code>resolve</code>
           (default) or another name. The OSGi framework resolver only
           considers requirements without an <code>effective</code> directive
@@ -1207,7 +1207,7 @@ requirement         ::= name-space ( ';' parameter )* </programlisting>
         </listitem>
 
         <listitem>
-          <para><code>resolution</code> – (<code>mandatory|optional</code>) A
+          <para><code>resolution</code> - (<code>mandatory|optional</code>) A
           mandatory requirement forbids the bundle to resolve when the
           requirement is not satisfied; an optional requirement allows a
           bundle to resolve even if the requirement is not satisfied. No
@@ -1218,7 +1218,7 @@ requirement         ::= name-space ( ';' parameter )* </programlisting>
         </listitem>
 
         <listitem>
-          <para><code>filter</code> – (<code>Filter</code>) A filter
+          <para><code>filter</code> - (<code>Filter</code>) A filter
           expression that is asserted on the Capabilities belonging to the
           given namespace. The matching of the filter against the capability
           is done on one capability at a time. A filter like
@@ -1231,7 +1231,7 @@ requirement         ::= name-space ( ';' parameter )* </programlisting>
         </listitem>
 
         <listitem>
-          <para><code>cardinality</code> – (<code>single|multiple</code>)
+          <para><code>cardinality</code> - (<code>single|multiple</code>)
           Indicates if the requirement can be wired a single time or multiple
           times. The default is single.</para>
         </listitem>
@@ -1300,7 +1300,7 @@ requirement         ::= name-space ( ';' parameter )* </programlisting>
       execution environments.</para>
 
       <programlisting>Bundle-RequiredExecutionEnvironment ::= 
-    ee-name ( ’,’ ee-name )*
+    ee-name ( ',' ee-name )*
 
 ee-name  ::= bree | &lt;ee name&gt;
 bree     ::= token ('-' version)? ( '/' token ( '-' version)? )?</programlisting>
@@ -1348,7 +1348,7 @@ bree     ::= token ('-' version)? ( '/' token ( '-' version)? )?</programlisting
       <code>bree</code> term. The structure of the <code>bree</code> term for
       the existing recommendations is:</para>
 
-      <programlisting>bree’ ::= n1 ( ’-’ v )? ( ’/’ n2 ( ’-’ v )?)?</programlisting>
+      <programlisting>bree' ::= n1 ( '-' v )? ( '/' n2 ( '-' v )?)?</programlisting>
 
       <para>For example:</para>
 
@@ -1385,7 +1385,7 @@ V1-1.5/V2-1.6               (osgi.ee=V1-1.5/V2-1.6)
 MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
 
       <para>Each element of the Bundle-RequiredExecutionEnvironment is or'ed
-      together in the final <code>osgi.ee</code> requirement’s
+      together in the final <code>osgi.ee</code> requirement's
       <code>filter</code> directive. For example:</para>
 
       <programlisting>Bundle-RequiredExecutionEnvironment: 
@@ -1451,19 +1451,19 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Boot class path</emphasis> – The boot class path
+        <para><emphasis>Boot class path</emphasis> - The boot class path
         contains the <code>java.*</code> packages and its implementation
         packages.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Framework class path</emphasis> – The Framework
+        <para><emphasis>Framework class path</emphasis> - The Framework
         usually has a separate class loader for the Framework implementation
         classes as well as key service interface classes.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Bundle Space</emphasis> – The bundle space consists of
+        <para><emphasis>Bundle Space</emphasis> - The bundle space consists of
         the JAR file that is associated with the bundle, plus any additional
         JAR that are closely tied to the bundle, like
         <emphasis>fragments</emphasis>, see <xref
@@ -1472,7 +1472,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
     </itemizedlist>
 
     <para>A <emphasis>class space</emphasis> is then all classes reachable
-    from a given bundle’s class loader. Thus, a class space for a given bundle
+    from a given bundle's class loader. Thus, a class space for a given bundle
     can contain classes from:</para>
 
     <itemizedlist>
@@ -1544,7 +1544,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
       <para>A <emphasis>wire</emphasis> is an actual connection between an
       <emphasis>exporter</emphasis> and an <emphasis>importer</emphasis>,
       which are both bundles. A wire is associated with a number of
-      constraints that are defined by its importer’s and exporter’s manifest
+      constraints that are defined by its importer's and exporter's manifest
       headers. A <emphasis>valid</emphasis> wire is a wire that has satisfied
       all its constraints. <xref linkend="i2545604"/> depicts the class
       structure of the wiring model. Not all constraints result in a
@@ -1581,12 +1581,12 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
       <programlisting>  Bundle-ManifestVersion ::= number     //See <xref
           linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
-      <para>The Framework bundle manifest version must be’2’. Bundle manifests
-      written to previous specifications’ manifest syntax are taken to have a
-      bundle manifest version of '1', although there is no way to express this
-      in such manifests. Therefore, any other value than <code>2</code> for
-      this header is invalid unless the Framework explicitly supports such a
-      later version.</para>
+      <para>The Framework bundle manifest version must be '2'. Bundle
+      manifests written to previous specifications' manifest syntax are taken
+      to have a bundle manifest version of '1', although there is no way to
+      express this in such manifests. Therefore, any other value than
+      <code>2</code> for this header is invalid unless the Framework
+      explicitly supports such a later version.</para>
 
       <para>OSGi Framework implementations should support bundle manifests
       without a Bundle-ManifestVersion header and assume Framework 1.2
@@ -1623,7 +1623,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>singleton</code> – Indicates that the bundle can only
+          <para><code>singleton</code> - Indicates that the bundle can only
           have a single version resolved in an environment. A value of
           <code>true</code> indicates that the bundle is a <emphasis>singleton
           bundle</emphasis>. The default value is <code>false</code>. The
@@ -1634,31 +1634,31 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>fragment-attachment</code> – Defines how fragments are
+          <para><code>fragment-attachment</code> - Defines how fragments are
           allowed to be attached, see the fragments in <xref
           linkend="framework.module.fragmentbundles"/>. The following values
           are valid for this directive:</para>
 
           <itemizedlist>
             <listitem>
-              <para><code>always</code> – (Default) Fragments can attach at
+              <para><code>always</code> - (Default) Fragments can attach at
               any time while the host is resolved or during the process of
               resolving.</para>
             </listitem>
 
             <listitem>
-              <para><code>never</code> – No fragments are allowed.</para>
+              <para><code>never</code> - No fragments are allowed.</para>
             </listitem>
 
             <listitem>
-              <para><code>resolve-time</code> – Fragments must only be
+              <para><code>resolve-time</code> - Fragments must only be
               attached during resolving.</para>
             </listitem>
           </itemizedlist>
         </listitem>
 
         <listitem>
-          <para><code>mandatory</code> – Provide a list of mandatory
+          <para><code>mandatory</code> - Provide a list of mandatory
           attributes. If these attributes are not specifically used in the
           requirement (Require-Bundle, Fragment-Host) then this bundle must
           not match. See <xref linkend="i2515263"/>.</para>
@@ -1671,7 +1671,7 @@ MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>bundle-version</code> – The value of the Bundle-Version
+          <para><code>bundle-version</code> - The value of the Bundle-Version
           header or 0 if no such header is present. Explicitly setting this
           attribute is an error.</para>
         </listitem>
@@ -1731,7 +1731,7 @@ package-names ::= package-name
 
       <itemizedlist>
         <listitem>
-          <para><code>resolution</code> – Indicates that the packages must be
+          <para><code>resolution</code> - Indicates that the packages must be
           resolved if the value is mandatory, which is the default. If
           mandatory packages cannot be resolved, then the bundle must fail to
           resolve. A value of <code>optional</code> indicates that the
@@ -1745,7 +1745,7 @@ package-names ::= package-name
 
       <itemizedlist>
         <listitem>
-          <para><code>version</code> – A <code>version-range</code> to select
+          <para><code>version</code> - A <code>version-range</code> to select
           the exporter's package version. The syntax must follow <xref
           linkend="i3189032"/>. For more information on version selection, see
           <xref linkend="i2515150"/>. If this attribute is not specified, it
@@ -1754,20 +1754,20 @@ package-names ::= package-name
         </listitem>
 
         <listitem>
-          <para><code>specification-version</code> – This attribute is an
+          <para><code>specification-version</code> - This attribute is an
           alias of the version attribute only to ease migration from earlier
           versions. If the <code>version</code> attribute is present, the
           values must be equal.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle-symbolic-name –</code> The bundle symbolic name
+          <para><code>bundle-symbolic-name</code> - The bundle symbolic name
           of the exporting bundle. In the case of a fragment bundle, this will
-          be the host bundle’s symbolic name.</para>
+          be the host bundle's symbolic name.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle-version</code> – A <code>version-range</code> to
+          <para><code>bundle-version</code> - A <code>version-range</code> to
           select the bundle version of the exporting bundle. The default value
           is <code>[0.0.0,</code> <phrase
           role="symbol">∞</phrase><code>)</code>. See <xref
@@ -1831,7 +1831,7 @@ package-names   ::= package-name                // See <xref
 
       <itemizedlist>
         <listitem>
-          <para><code>uses</code> – A comma-separated list of package names
+          <para><code>uses</code> - A comma-separated list of package names
           that are used by the exported package. Note that the use of a comma
           in the value requires it to be enclosed in double quotes. If this
           exported package is chosen as an export, then the resolver must
@@ -1849,7 +1849,7 @@ package-names   ::= package-name                // See <xref
         </listitem>
 
         <listitem>
-          <para><code>include</code> – A comma-separated list of class names
+          <para><code>include</code> - A comma-separated list of class names
           that must be visible to an importer. Note that the use of a comma in
           the value requires it to be enclosed in double quotes. For class
           filtering, see <xref linkend="i3106983"/>.</para>
@@ -1867,14 +1867,14 @@ package-names   ::= package-name                // See <xref
 
       <itemizedlist>
         <listitem>
-          <para><code>version</code> – The version of the named packages with
+          <para><code>version</code> - The version of the named packages with
           syntax as defined in <xref linkend="i2655136"/>. It defines the
           version of the associated packages. The default value is
           <code>0.0.0</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>specification-version</code> – An alias for the version
+          <para><code>specification-version</code> - An alias for the version
           attribute only to ease migration from earlier versions. If the
           <code>version</code> attribute is present, the values must be
           equal.</para>
@@ -1889,15 +1889,15 @@ package-names   ::= package-name                // See <xref
 
       <itemizedlist>
         <listitem>
-          <para><code>bundle-symbolic-name</code> – The bundle symbolic name
+          <para><code>bundle-symbolic-name</code> - The bundle symbolic name
           of the exporting bundle. In the case of a fragment bundle, this is
-          the host bundle’s symbolic name.</para>
+          the host bundle's symbolic name.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle-version</code> – The bundle version of the
+          <para><code>bundle-version</code> - The bundle version of the
           exporting bundle. In the case of a fragment bundle, this is the host
-          bundle’s version.</para>
+          bundle's version.</para>
         </listitem>
       </itemizedlist>
 
@@ -1982,7 +1982,7 @@ package-names   ::= package-name                // See <xref
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Import-Package</emphasis> – An import definition
+          <para><emphasis>Import-Package</emphasis> - An import definition
           must change the <code>specification-version</code> attribute to the
           <code>version</code> attribute. An import definition without a
           specification version needs no replacement since the default version
@@ -1991,7 +1991,7 @@ package-names   ::= package-name                // See <xref
         </listitem>
 
         <listitem>
-          <para><emphasis>Export-Package</emphasis> – An export definition
+          <para><emphasis>Export-Package</emphasis> - An export definition
           must change the <code>specification-version</code> attribute to the
           <code>version</code> attribute. The export definition must be
           appended with the <code>uses</code> directive. The uses directive
@@ -2002,7 +2002,7 @@ package-names   ::= package-name                // See <xref
         </listitem>
 
         <listitem>
-          <para><emphasis>DynamicImport-Package</emphasis> – A dynamic import
+          <para><emphasis>DynamicImport-Package</emphasis> - A dynamic import
           definition is unmodified.</para>
         </listitem>
       </itemizedlist>
@@ -2158,17 +2158,17 @@ B: Export-Package: p; version=1.5.1</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>major</code> – Changes for an incompatible update for
+          <para><code>major</code> - Changes for an incompatible update for
           both a consumer and a provider of an API.</para>
         </listitem>
 
         <listitem>
-          <para><code>minor</code> – Changes for a backward compatible update
+          <para><code>minor</code> - Changes for a backward compatible update
           for a consumer but not for a provider.</para>
         </listitem>
 
         <listitem>
-          <para><code>micro</code> – A change that does not affect the API,
+          <para><code>micro</code> - A change that does not affect the API,
           for example, a typo in a comment.</para>
         </listitem>
       </itemizedlist>
@@ -2199,7 +2199,7 @@ B: Export-Package: p; version=1.5.1</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Dynamic Imports</emphasis> – The
+          <para><emphasis>Dynamic Imports</emphasis> - The
           DynamicImport-Package header is intended to look for an exported
           package when that package is needed. The key use case for dynamic
           import is the <code>Class forName</code> method when a bundle does
@@ -2208,7 +2208,7 @@ B: Export-Package: p; version=1.5.1</programlisting>
         </listitem>
 
         <listitem>
-          <para><emphasis>Resolution Directive</emphasis> – The resolution
+          <para><emphasis>Resolution Directive</emphasis> - The resolution
           directive on an import definition specifying the value
           <code>optional</code>. A bundle may successfully resolve if a
           suitable optional package is not present.</para>
@@ -2226,12 +2226,12 @@ B: Export-Package: p; version=1.5.1</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>mandatory</code> – (Default) Indicates that the package
+          <para><code>mandatory</code> - (Default) Indicates that the package
           must be wired for the bundle to resolve.</para>
         </listitem>
 
         <listitem>
-          <para><code>optional</code> – Indicates that the importing bundle
+          <para><code>optional</code> - Indicates that the importing bundle
           may resolve without the package being wired. If the package is not
           wired, the class loading will treat this package as if it is not
           imported.</para>
@@ -2265,10 +2265,10 @@ B: Export-Package: p; <code>«</code>
       prepared to handle the fact that the packages may not be available: that
       is, an exception can be thrown when there is a reference to a class from
       a missing package. This can be prevented by including a fallback package
-      on the bundle’s classpath. When an optional package cannot be resolved,
+      on the bundle's classpath. When an optional package cannot be resolved,
       any attempts by the bundle to load classes from it will follow normal
       bundle class loading search order as if the import never existed. It
-      will load it from the bundle’s class path or in the end through dynamic
+      will load it from the bundle's class path or in the end through dynamic
       class loading when set for that bundle and package.</para>
     </section>
 
@@ -2353,7 +2353,7 @@ B: Export-Package: p; <code>«</code>
       </figure>
 
       <para>To maintain class space consistency, the Framework must ensure
-      that none of its bundle imports conflicts with any of that bundle’s
+      that none of its bundle imports conflicts with any of that bundle's
       implied packages.</para>
 
       <para>For the example, this means that the Framework must ensure that
@@ -2362,7 +2362,7 @@ B: Export-Package: p; <code>«</code>
       <code>F.t</code> violates the class space consistency. This violation
       occurs because bundle A could be confronted with objects with the same
       class name but from the class loaders of bundle <code>D</code> and
-      <code>F</code>. This would potentially create
+      <code>F</code>. This would potentially create
       <code>ClassCastExceptions</code>. Alternatively, if all bundles are
       wired to <code>F.t</code>, then the problem also goes away.</para>
 
@@ -2484,11 +2484,11 @@ B: Export-Package: com.acme.foo; <code>«</code>
       <para>Class names must not include their package name and do not end
       with <code>.class</code>. That is, the class
       <code>com.acme.foo.Daffy</code> is named <code>Daffy</code> in either
-      list. The class name can include multiple wildcard asterisks (<code>’*’
+      list. The class name can include multiple wildcard asterisks (<code>'*'
       \u002A</code>).</para>
 
       <para>The default for the <code>include</code> directive is an asterisk
-      (<code>’*’ \u002A</code>) (wildcard matching all names), and for the
+      (<code>'*' \u002A</code>) (wildcard matching all names), and for the
       <code>exclude</code> directive, so that no classes are excluded, an
       empty list that matches no names. If <code>include</code> or
       <code>exclude</code> directive are specified, the corresponding default
@@ -2667,14 +2667,14 @@ B: Bundle-SymbolicName: B
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Execution Environment</emphasis> – The underlying VM
+        <para><emphasis>Execution Environment</emphasis> - The underlying VM
         implements at least one of the execution environments listed in the
         Bundle-RequiredExecutionEnvironment header. See <xref
         linkend="framework.namespaces.osgi.ee"/>.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Native code</emphasis> – The native code dependencies
+        <para><emphasis>Native code</emphasis> - The native code dependencies
         specified in the Bundle-NativeCode header must be resolved. See <xref
         linkend="i3235622"/>.</para>
       </listitem>
@@ -2706,7 +2706,7 @@ B: Bundle-SymbolicName: B
 
     <itemizedlist>
       <listitem>
-        <para>The importer’s version range matches the exporter’s version. See
+        <para>The importer's version range matches the exporter's version. See
         <xref linkend="i2515150"/>.</para>
       </listitem>
 
@@ -2716,7 +2716,7 @@ B: Bundle-SymbolicName: B
       </listitem>
 
       <listitem>
-        <para>All the importer’s attributes match the attributes of the
+        <para>All the importer's attributes match the attributes of the
         corresponding exporter. See <xref linkend="i2480178"/></para>
       </listitem>
 
@@ -2762,19 +2762,19 @@ B: Bundle-SymbolicName: B
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>External</emphasis> – If this resolves to an export
+          <para><emphasis>External</emphasis> - If this resolves to an export
           statement in another bundle, then the overlapping export definition
           in this bundle is discarded.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Internal</emphasis> – If it is resolved to an export
+          <para><emphasis>Internal</emphasis> - If it is resolved to an export
           statement in this bundle, then the overlapping import definition in
           this bundle is discarded.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Unresolved</emphasis> – There is no matching export
+          <para><emphasis>Unresolved</emphasis> - There is no matching export
           definition. In this case the framework is free to discard either the
           overlapping export definition or overlapping import definition in
           this bundle. If the export definition is discarded and the import
@@ -2844,32 +2844,32 @@ B: Bundle-SymbolicName: B
       <emphasis>container paths</emphasis>. Each container path can be found
       on the entry path.</para>
 
-      <para>The full stop (<code>’.’ \u002E</code>) container path is a
-      synonym for the solidus (slash <code>’/’ \u002F</code>) or the root of a
+      <para>The full stop (<code>'.' \u002E</code>) container path is a
+      synonym for the solidus (<code>'/' \u002F</code>) or the root of a
       container. The full stop is the default value for a bundle or fragment
       if no Bundle-ClassPath header is specified.</para>
 
       <para>The Bundle-ClassPath manifest header must conform to the following
       syntax:</para>
 
-      <programlisting>Bundle-ClassPath    ::=  entry ( ’,’ entry )*entry
-                    ::= target ( ’;’ target )* 
-                            ( ’;’ parameter ) *
-target              ::= path | ’.’           // See <xref
+      <programlisting>Bundle-ClassPath    ::=  entry ( ',' entry )*entry
+                    ::= target ( ';' target )* 
+                            ( ';' parameter ) *
+target              ::= path | '.'           // See <xref
           linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>The Framework must ignore any unrecognized parameters.</para>
 
       <para>The content of the <emphasis>effective</emphasis> bundle class
-      path is constructed from the bundle’s Bundle-Classpath header,
+      path is constructed from the bundle's Bundle-Classpath header,
       concatenated with the Bundle-Classpath headers of any fragments, in
       ascending bundle id order. The effective Bundle-Classpath is calculated
       during resolve time, however, a dynamically attached fragment can append
       elements at the end if the Framework supports dynamically attached
       fragments.</para>
 
-      <para>An element from the bundle’s Bundle-ClassPath header refers to the
-      first match when searched through the entry path, while a fragment’s
+      <para>An element from the bundle's Bundle-ClassPath header refers to the
+      first match when searched through the entry path, while a fragment's
       Bundle-ClassPath can refer only to an entry in its own container.</para>
 
       <para>An example can illustrate this:</para>
@@ -2884,7 +2884,7 @@ B: Fragment-Host: A</programlisting>
 
       <para>The first element / is the root of a container. The bundle always
       has a root and can therefore always be found in the (host) bundle. The
-      second element is first looked up in the host bundle’s container, and if
+      second element is first looked up in the host bundle's container, and if
       not found, the entry is looked up in the container of <code>B</code>.
       The Framework must use the first entry that matches. The last element in
       the effective bundle class path is the / from fragment <code>B</code>;
@@ -2908,7 +2908,7 @@ B:/</programlisting>
 
       <para>An entry on the Bundle-ClassPath can refer to a directory in the
       container. However, it is not always possible to establish the
-      directory’s existence. For example, directories can be omitted in
+      directory's existence. For example, directories can be omitted in
       JAR/ZIP files. In such a case, a Framework must probe the directory to
       see if any resources can be found in this directory. That is, even if
       the directory construct is absent in the container, if resources can be
@@ -2918,7 +2918,7 @@ B:/</programlisting>
       <para>A host bundle can allow a fragment to insert code ahead of its own
       code by naming a container in its Bundle-Classpath that will be provided
       by a fragment. Fragments can never unilaterally insert code ahead of
-      their host’s bundle class path. The following example illustrates the
+      their host's bundle class path. The following example illustrates the
       possibilities of the bundle class path in more detail:</para>
 
       <programlisting>A: Bundle-SymbolicName: A
@@ -2990,12 +2990,12 @@ wildcard-name       ::= package-name
         </listitem>
 
         <listitem>
-          <para><code>bundle-symbolic-name</code> – The bundle symbolic name
+          <para><code>bundle-symbolic-name</code> - The bundle symbolic name
           of the exporting bundle.</para>
         </listitem>
 
         <listitem>
-          <para><code>bundle-version</code> – a version range to select the
+          <para><code>bundle-version</code> - a version range to select the
           bundle version of the exporting bundle. The default value is
           <code>0.0.0</code>.</para>
         </listitem>
@@ -3028,7 +3028,7 @@ wildcard-name       ::= package-name
       names. Each matching package name is used in turn to attempt to wire to
       an export using the same rules as Import-Package. If a wiring attempt is
       successful (taking any <code>uses</code> constraints into account), the
-      search is forwarded to the exporter’s class loader where class loading
+      search is forwarded to the exporter's class loader where class loading
       continues. The wiring must not subsequently be modified, even if the
       class cannot be loaded. This implies that once a package is dynamically
       resolved, subsequent attempts to load classes or resources from that
@@ -3054,7 +3054,7 @@ wildcard-name       ::= package-name
       <para>The Framework must always delegate any package that starts with
       <code>java.</code> to the parent class loader.</para>
 
-      <para>Certain Java virtual machines, also Oracle’s VMs, appear to make
+      <para>Certain Java virtual machines, also Oracle's VMs, appear to make
       the erroneous assumption that the delegation to the parent class loader
       always occurs. This implicit assumption of strictly hierarchical class
       loader delegation can result in <code>NoClassDefFoundErrors</code>. This
@@ -3101,7 +3101,7 @@ boot-description    ::= package-name        // See <xref
       <title>Overall Search Order</title>
 
       <para>Frameworks must adhere to the following rules for class or
-      resource loading. When a bundle’s class loader is requested to load a
+      resource loading. When a bundle's class loader is requested to load a
       class or find a resource, the search must be performed in the following
       order:</para>
 
@@ -3125,7 +3125,7 @@ boot-description    ::= package-name        // See <xref
         <listitem xml:id="i3128823">
           <para>If the class or resource is in a package that is imported
           using Import-Package or was imported dynamically in a previous load,
-          then the request is delegated to the exporting bundle’s class
+          then the request is delegated to the exporting bundle's class
           loader; otherwise the search continues with the next step. If the
           request is delegated to an exporting class loader and the class or
           resource is not found, then the search terminates and the request
@@ -3136,14 +3136,14 @@ boot-description    ::= package-name        // See <xref
           <para>If the class or resource is in a package that is imported from
           one or more other bundles using Require-Bundle, the request is
           delegated to the class loaders of the other bundles, in the order in
-          which they are specified in this bundle’s manifest. This entails a
+          which they are specified in this bundle's manifest. This entails a
           depth-first strategy; all required bundles are searched before the
           bundle classpath is used. If the class or resource is not found,
           then the search continues with the next step.</para>
         </listitem>
 
         <listitem>
-          <para>Search the bundle’s embedded classpath, see <xref
+          <para>Search the bundle's embedded classpath, see <xref
           linkend="framework.module.bundleclasspath"/>. If the class or
           resource is not found, then continue with the next step.</para>
         </listitem>
@@ -3167,7 +3167,7 @@ boot-description    ::= package-name        // See <xref
 
         <listitem>
           <para>If the dynamic import of the package is established, the
-          request is delegated to the exporting bundle’s class loader. If the
+          request is delegated to the exporting bundle's class loader. If the
           request is delegated to an exporting class loader and the class or
           resource is not found, then the search terminates and the request
           fails.</para>
@@ -3385,7 +3385,7 @@ C: Require-Bundle: D</programlisting>
     </section>
 
     <section>
-      <title>Finding an Object’s Bundle</title>
+      <title>Finding an Object's Bundle</title>
 
       <para>There are scenarios where a bundle is required in code that has no
       access to a Bundle Context. For this reason, the framework provides the
@@ -3402,10 +3402,10 @@ C: Require-Bundle: D</programlisting>
         </listitem>
 
         <listitem>
-          <para><emphasis>Class Loader</emphasis> – An OSGi framework must
+          <para><emphasis>Class Loader</emphasis> - An OSGi framework must
           ensure that the class loader of a class that comes from a bundle
           implements the <code>BundleReference</code> interface. This allows
-          legacy code to find an object’s bundle by getting its class loader
+          legacy code to find an object's bundle by getting its class loader
           and casting it to a <code>BundleReference</code> object, which
           provides access to the Bundle. However, this requires the code to
           have the permission to access the class loader. The following code
@@ -3442,7 +3442,7 @@ if ( cl instanceof BundleReference ) {
     <para>A Java VM has a special way of handling native code. When a class
     loaded by a bundle's class loader attempts to load a native library, by
     calling <code>System.loadLibrary</code>, the <code>findLibrary</code>
-    method of the bundle’s class loader must be called to return the file path
+    method of the bundle's class loader must be called to return the file path
     in which the Framework has made the requested native library available.
     The parameter to the <code>findLibrary</code> method is the name of the
     library in operating system independent form, like <code>http</code>. The
@@ -3467,11 +3467,11 @@ if ( cl instanceof BundleReference ) {
     syntax:</para>
 
     <programlisting>Bundle-NativeCode   ::= nativecode 
-        ( ',' nativecode )* ( ’,’ optional) ?
+        ( ',' nativecode )* ( ',' optional) ?
 nativecode          ::= path ( ';' path )*    // See <xref
         linkend="framework.general.syntax" xrefstyle="template:%n"/>
                         ( ';' parameter )+
-optional            ::= ’*’</programlisting>
+optional            ::= '*'</programlisting>
 
     <para>When locating a path in a bundle the Framework must attempt to
     locate the path relative to the root of the bundle that contains the
@@ -3481,33 +3481,33 @@ optional            ::= ’*’</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><code>osname</code> – Name of the operating system. The value of
+        <para><code>osname</code> - Name of the operating system. The value of
         this attribute must be the name of the operating system upon which the
         native libraries run. A number of canonical names are defined in <xref
         linkend="framework.module.os-names"/>.</para>
       </listitem>
 
       <listitem>
-        <para><code>osversion</code> – The operating system version. The value
+        <para><code>osversion</code> - The operating system version. The value
         of this attribute must be a version range as defined in <xref
         linkend="i3189032"/>.</para>
       </listitem>
 
       <listitem>
-        <para><code>processor</code> – The processor architecture. The value
+        <para><code>processor</code> - The processor architecture. The value
         of this attribute must be the name of the processor architecture upon
         which the native libraries run. A number of canonical names are
         defined in <xref linkend="framework.module.processor-names"/>.</para>
       </listitem>
 
       <listitem>
-        <para><code>language</code> – The ISO code for a language. The value
+        <para><code>language</code> - The ISO code for a language. The value
         of this attribute must be the name of the language for which the
         native libraries have been localized.</para>
       </listitem>
 
       <listitem>
-        <para><code>selection-filter</code> – A selection filter. The value of
+        <para><code>selection-filter</code> - A selection filter. The value of
         this attribute must be a filter expression that indicates if the
         native code clause should be selected or not.</para>
       </listitem>
@@ -3572,7 +3572,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
     <code>NATIVECODE_ERROR</code> as error code when the bundle can not be
     resolved due to a native code problem.</para>
 
-    <para>If the optional’*’ is specified at the end of the Bundle-NativeCode
+    <para>If the optional '*' is specified at the end of the Bundle-NativeCode
     manifest header, the bundle will still resolve even if the
     Bundle-NativeCode header has no matching clauses.</para>
 
@@ -3852,7 +3852,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
     and other configuration resources depending on a locale.</para>
 
     <para>Bundle localization entries share a common base name. To find a
-    potential localization entry, an underscore (<code>’_’ \u005F</code>) is
+    potential localization entry, an underscore (<code>'_' \u005F</code>) is
     added plus a number of suffixes, separated by another underscore, and
     finally appended with the suffix <code>.properties</code> . The suffixes
     are defined in <code>java.util.Locale</code>. The order for the suffixes
@@ -3906,7 +3906,7 @@ OSGI-INF/l10n/bundle.properties</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>fragment bundle</code> – If the bundle is a
+          <para><code>fragment bundle</code> - If the bundle is a
           <emphasis>resolved</emphasis> fragment, then the search for
           localization data must delegate to the attached host bundle with the
           highest version. If the fragment is not resolved, then the framework
@@ -3914,8 +3914,8 @@ OSGI-INF/l10n/bundle.properties</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>other bundle</code> – The framework must first search in
-          the bundle’s JAR for the localization entry. If the entry is not
+          <para><code>other bundle</code> - The framework must first search in
+          the bundle's JAR for the localization entry. If the entry is not
           found and the bundle has fragments, then the attached fragment JARs
           must be searched for the localization entry.</para>
         </listitem>
@@ -3946,7 +3946,7 @@ OSGI-INF/l10n/bundle.properties</programlisting>
       <para>A localization key can be specified as the value of a bundle's
       manifest header using the following syntax:</para>
 
-      <programlisting>header-value ::= ’%’text
+      <programlisting>header-value ::= '%'text
 text ::= &lt; any value which is both a valid manifest headervalue
    and a valid property key name &gt;</programlisting>
 
@@ -4069,7 +4069,7 @@ acme\ special\ header=user-defined Acme Data</programlisting>
 
       <para>The Require-Bundle manifest header contains a list of required
       bundle symbolic names, with optional attribute assertions. These bundles
-      are searched after the imports are searched but before the bundle’s
+      are searched after the imports are searched but before the bundle's
       class path is searched. Fragment or extension bundles cannot be
       required.</para>
 
@@ -4091,20 +4091,20 @@ bundle-description  ::= symbolic-name       // See <xref
 
       <itemizedlist>
         <listitem>
-          <para><code>visibility</code> – If the value is <code>private</code>
+          <para><code>visibility</code> - If the value is <code>private</code>
           (Default), then all visible packages from the required bundles are
           not re-exported. If the value is <code>reexport</code> then bundles
           that require this bundle will transitively have access to these
-          required bundle’s exported packages. That is, if bundle
+          required bundle's exported packages. That is, if bundle
           <code>A</code> requires bundle <code>B</code>, and bundle
           <code>B</code> requires bundle <code>C</code> with
           <code>visibility:=reexport</code> then bundle <code>A</code> will
-          have access to all bundle <code>C</code>’s exported packages as if
+          have access to all bundle <code>C</code>'s exported packages as if
           bundle <code>A</code> had required bundle <code>C</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code>resolution</code> – If the value is
+          <para><code>resolution</code> - If the value is
           <code>mandatory</code> (default) then the required bundle must exist
           for this bundle to resolve. If the value is <code>optional</code>,
           the bundle will resolve even if the required bundle does not
@@ -4117,7 +4117,7 @@ bundle-description  ::= symbolic-name       // See <xref
 
       <itemizedlist>
         <listitem>
-          <para><code>bundle-version</code> – The value of this attribute is a
+          <para><code>bundle-version</code> - The value of this attribute is a
           version range to select the bundle version of the required bundle.
           See <xref linkend="i3189032"/>. The default value is
           <code>[0.0.0,</code><phrase
@@ -4176,7 +4176,7 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
       <para>If bundle <code>C</code> imports package <code>p</code>, it will
       be wired to package <code>A.p</code>, however the contents will come
       from <code>B.p</code> &gt; <code>A.p</code>. The mandatory attribute on
-      bundle <code>B</code>’s export definition ensures that bundle
+      bundle <code>B</code>'s export definition ensures that bundle
       <code>B</code> is not accidentally selected as exporter for package
       <code>p</code>. Split packages have a number drawbacks that are
       discussed in <xref linkend="i3198951"/>.</para>
@@ -4209,7 +4209,7 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
       bundle and must therefore have <code>BundlePermission[&lt;bundle
       symbolic name&gt;, PROVIDE]</code>, where the name designates the
       requiring bundle. In the case a fragment bundle requires another bundle,
-      the Bundle Permission must be checked against the fragment bundle’s
+      the Bundle Permission must be checked against the fragment bundle's
       Protection Domain.</para>
     </section>
 
@@ -4245,20 +4245,20 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Split Packages</emphasis> – Classes from the same
+          <para><emphasis>Split Packages</emphasis> - Classes from the same
           package can come from different bundles with Require bundle, such a
           package is called a split package. Split packages have the following
           drawbacks:</para>
 
           <itemizedlist>
             <listitem>
-              <para><emphasis>Completeness</emphasis> – Split packages are
+              <para><emphasis>Completeness</emphasis> - Split packages are
               open ended, it is difficult to guarantee that all the intended
               pieces of a split package have actually been included.</para>
             </listitem>
 
             <listitem>
-              <para><emphasis>Ordering</emphasis> – If the same classes are
+              <para><emphasis>Ordering</emphasis> - If the same classes are
               present in more than one required bundle, then the ordering of
               Require-Bundle is significant. A wrong ordering can cause hard
               to trace errors, similar to the traditional class path model of
@@ -4266,7 +4266,7 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
             </listitem>
 
             <listitem>
-              <para><emphasis>Performance</emphasis> – A class must be
+              <para><emphasis>Performance</emphasis> - A class must be
               searched in all providers when packages are split. This
               potentially increases the number of times that a
               <code>ClassNotFoundException</code> must be thrown which can
@@ -4274,7 +4274,7 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
             </listitem>
 
             <listitem>
-              <para><emphasis>Confusing</emphasis> – It is easy to find a
+              <para><emphasis>Confusing</emphasis> - It is easy to find a
               setup where there is lots of potential for confusion. For
               example, the following setup is non-intuitive.</para>
 
@@ -4312,14 +4312,14 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
         </listitem>
 
         <listitem>
-          <para><emphasis>Mutable</emphasis> <emphasis>Exports</emphasis> –
-          The feature of <code>visibility:=reexport</code> that the export
-          signature of the requiring bundle can unexpectedly change depending
-          on the export signature of the required bundle.</para>
+          <para><emphasis>Mutable Exports</emphasis> - The feature of
+          <code>visibility:=reexport</code> that the export signature of the
+          requiring bundle can unexpectedly change depending on the export
+          signature of the required bundle.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Shadowing</emphasis> – The classes in the requiring
+          <para><emphasis>Shadowing</emphasis> - The classes in the requiring
           bundle that are shadowed by those in a required bundle depend on the
           export signature of the required bundle and the classes the required
           bundle contains. (By contrast, Import-Package, except with
@@ -4334,13 +4334,12 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
     <title>Fragment Bundles</title>
 
     <para>Fragments are bundles that can be <emphasis>attached</emphasis> to
-    one or more <emphasis>host</emphasis> <emphasis>bundles</emphasis> by the
-    Framework. Attaching is done as part of resolving: the Framework appends
-    the relevant definitions of the fragment bundles to the host’s definitions
-    before the host is resolved. Fragments are therefore treated as part of
-    the host, including any permitted headers; they must not have their own
-    class loader though fragments must have their own Protection
-    Domain.</para>
+    one or more <emphasis>host bundles</emphasis> by the Framework. Attaching
+    is done as part of resolving: the Framework appends the relevant
+    definitions of the fragment bundles to the host's definitions before the
+    host is resolved. Fragments are therefore treated as part of the host,
+    including any permitted headers; they must not have their own class loader
+    though fragments must have their own Protection Domain.</para>
 
     <para>Fragments can be attached to multiple hosts with the same symbolic
     name but different versions. If multiple fragments with the same symbolic
@@ -4407,7 +4406,7 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
     <para>A Fragment bundle must enter the resolved state only if it has been
     successfully attached to at least one host bundle.</para>
 
-    <para>During runtime, the fragment’s JAR is searched after the host’s
+    <para>During runtime, the fragment's JAR is searched after the host's
     bundle class path as described in <xref linkend="i3076126"/>.</para>
 
     <para>A Fragment bundle can not be required by another bundle with the
@@ -4429,7 +4428,7 @@ bundle-description  ::= symbolic-name
 
       <itemizedlist>
         <listitem>
-          <para><code>extension</code> – Indicates this extension is a system
+          <para><code>extension</code> - Indicates this extension is a system
           or boot class path extension. It is only applicable when the
           Fragment-Host is the System Bundle. This is discussed in <xref
           linkend="framework.module.extensionbundles"/>. The following values
@@ -4460,7 +4459,7 @@ bundle-description  ::= symbolic-name
 
       <itemizedlist>
         <listitem>
-          <para><code>bundle-version</code> – The version range to select the
+          <para><code>bundle-version</code> - The version range to select the
           the host bundle. If a range is used, then the fragment can attach to
           multiple hosts. See <xref linkend="i2515150"/>. The default value is
           <code>[0.0.0,</code><phrase
@@ -4493,7 +4492,7 @@ bundle-description  ::= symbolic-name
       <title>Fragments During Runtime</title>
 
       <para>All class or resource loading of a fragment is handled through the
-      host’s class loader or <code>Bundle</code> object, a fragment must never
+      host's class loader or <code>Bundle</code> object, a fragment must never
       have its own class loader, it therefore fails the class and resource
       loading methods of the <code>Bundle</code> object. Fragment bundles are
       treated as if they are an intrinsic part of their hosts.</para>
@@ -4501,9 +4500,9 @@ bundle-description  ::= symbolic-name
       <para>Though a fragment bundle does not have its own class loader, it
       still must have a separate Protection Domain when it is not an extension
       fragment. Each fragment can have its own permissions linked to the
-      fragment bundle’s location and signer.</para>
+      fragment bundle's location and signer.</para>
 
-      <para>A host bundle’s class path is searched before a fragment’s class
+      <para>A host bundle's class path is searched before a fragment's class
       path. This implies that packages can be split over the host and any of
       its fragments. Searching the fragments must be done in ascending bundle
       ID order. This is the order that the fragment bundles were
@@ -4601,7 +4600,7 @@ bundle-description  ::= symbolic-name
       <para>In the example above, if package <code>p</code> had been imported
       from bundle <code>D</code>, the table would have looked quite different.
       Package p would have come from bundle <code>D</code>, and bundle
-      <code>A</code>’s own contents as well as the contents of bundle
+      <code>A</code>'s own contents as well as the contents of bundle
       <code>B</code> would have been ignored.</para>
 
       <para>If package <code>q</code> had bundle <code>D</code>, then the
@@ -4766,8 +4765,8 @@ bundle-description  ::= symbolic-name
     <section>
       <title>Class Path Treatment</title>
 
-      <para>A boot class path extension bundle’s JAR file must be appended to
-      the boot class path of the host VM. A framework extension bundle’s JAR
+      <para>A boot class path extension bundle's JAR file must be appended to
+      the boot class path of the host VM. A framework extension bundle's JAR
       is appended to the class path of the Framework.</para>
 
       <para>Extension bundles must be appended to their class path in the
@@ -4775,7 +4774,7 @@ bundle-description  ::= symbolic-name
       bundle ID order.</para>
 
       <para>How a framework configures itself or the boot class path to append
-      the extension bundle’s JAR is implementation specific. In some execution
+      the extension bundle's JAR is implementation specific. In some execution
       environments, it may be impossible to support extension bundles. In such
       environments, the Framework must throw a BundleException when such an
       extension bundle is installed. The resulting Bundle Exception must have
@@ -4861,7 +4860,7 @@ bundle-description  ::= symbolic-name
 
       <para>The name parameter of the Bundle Permission is a bundle symbolic
       name. The symbolic name is used as the identifier for the
-      <emphasis>target bundle</emphasis>. A wild card (<code>’.*’
+      <emphasis>target bundle</emphasis>. A wild card (<code>".*"
       \u002E,\u002A</code>) is permitted at the end of the name.</para>
 
       <para>For example, if fragment bundle A attaches to its host bundle
@@ -4886,22 +4885,22 @@ bundle-description  ::= symbolic-name
 
       <itemizedlist>
         <listitem>
-          <para><code>provide</code> – Permission to provide packages to the
+          <para><code>provide</code> - Permission to provide packages to the
           target bundle.</para>
         </listitem>
 
         <listitem>
-          <para><code>require</code> – Permission to require packages from the
+          <para><code>require</code> - Permission to require packages from the
           target bundle.</para>
         </listitem>
 
         <listitem>
-          <para><code>host</code> – Permission to attach to the target
+          <para><code>host</code> - Permission to attach to the target
           fragment bundle.</para>
         </listitem>
 
         <listitem>
-          <para><code>fragment</code> – Permission to attach as a fragment to
+          <para><code>fragment</code> - Permission to attach as a fragment to
           the target host bundle.</para>
         </listitem>
       </itemizedlist>
@@ -5040,7 +5039,7 @@ URL(String protocol, String host, String file)</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>capability.namespace</code> – The namespace of the
+          <para><code>capability.namespace</code> - The namespace of the
           requirement or provided capability.</para>
         </listitem>
       </itemizedlist>
@@ -5061,7 +5060,7 @@ URL(String protocol, String host, String file)</programlisting>
         <listitem>
           <para><xref
           linkend="org.osgi.framework.CapabilityPermission.REQUIRE"
-          xrefstyle="hyperlink"/> – Imply permission to require the given
+          xrefstyle="hyperlink"/> - Imply permission to require the given
           namespace. The target bundle that can be asserted in the filter is
           the bundle providing the capability.</para>
         </listitem>
@@ -5069,7 +5068,7 @@ URL(String protocol, String host, String file)</programlisting>
         <listitem>
           <para><xref
           linkend="org.osgi.framework.CapabilityPermission.PROVIDE"
-          xrefstyle="hyperlink"/> – Imply permission to provide a capability
+          xrefstyle="hyperlink"/> - Imply permission to provide a capability
           in the given namespace, the target bundle is the bundle that is
           checked for the permission.</para>
         </listitem>
@@ -5081,7 +5080,7 @@ URL(String protocol, String host, String file)</programlisting>
         <listitem>
           <para><xref
           linkend="org.osgi.framework.CapabilityPermission.CapabilityPermission-String-String-"
-          xrefstyle="hyperlink"/> – Constructor to set the filter and actions.
+          xrefstyle="hyperlink"/> - Constructor to set the filter and actions.
           This constructor is also used to verify the <code>provide</code>
           action.</para>
         </listitem>
@@ -5089,7 +5088,7 @@ URL(String protocol, String host, String file)</programlisting>
         <listitem>
           <para><xref
           linkend="org.osgi.framework.CapabilityPermission.CapabilityPermission-String-Map-Bundle-String-"
-          xrefstyle="hyperlink"/> – Special constructor to verify the
+          xrefstyle="hyperlink"/> - Special constructor to verify the
           permission against the namespace. The bundle is the bundle providing
           the capability.</para>
         </listitem>

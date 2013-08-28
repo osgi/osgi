@@ -185,17 +185,17 @@
             <entry><para>Indicates the status of the OSGi Framework.
             Enumeration of:</para><itemizedlist>
                 <listitem>
-                  <para><code>Up</code> – The OSGi Framework is up and
+                  <para><code>Up</code> - The OSGi Framework is up and
                   running.</para>
                 </listitem>
 
                 <listitem>
-                  <para><code>Error</code> – The OSGi Framework could not be
+                  <para><code>Error</code> - The OSGi Framework could not be
                   launched.</para>
                 </listitem>
 
                 <listitem>
-                  <para><code>Disabled</code> – The OSGi Framework is not
+                  <para><code>Disabled</code> - The OSGi Framework is not
                   enabled</para>
                 </listitem>
               </itemizedlist></entry>
@@ -206,9 +206,9 @@
 
             <entry><para>Setting this parameter to <code>true</code> causes
             this OSGi Framework to revert back to the state it was in when the
-            device last issued a <code>0 BOOTSTRAP</code> <code>Inform</code>
-            event (bootstrap). The following requirements dictate what must
-            happen for the reset to be complete:</para><itemizedlist>
+            device last issued a <code>0 BOOTSTRAP Inform</code> event
+            (bootstrap). The following requirements dictate what must happen
+            for the reset to be complete:</para><itemizedlist>
                 <listitem>
                   <para>The system must restore the set of bundles that were
                   present at the last bootstrap event. That means that
@@ -307,7 +307,7 @@
 
             <entry><para>The Version of this OSGi Framework as specified by
             its Vendor. This is not the version of its specification. Must be
-            the value of the System Bundle’s <code>getVersion()</code>
+            the value of the System Bundle's <code>getVersion()</code>
             method.</para></entry>
           </row>
 
@@ -426,35 +426,35 @@
             <entry><para>Indicates the status of this Bundle. Enumeration
             of:</para><itemizedlist>
                 <listitem>
-                  <para><code>Installing</code> – This bundle is in the
+                  <para><code>Installing</code> - This bundle is in the
                   process of being Installed and should transition to the
                   Installed state. This state will never be visible in an OSGi
                   Framework.</para>
                 </listitem>
 
                 <listitem>
-                  <para><code>Installed</code> – This bundle has been
+                  <para><code>Installed</code> - This bundle has been
                   successfully installed.This maps to the Bundle
                   <code>INSTALLED</code> or <code>RESOLVED</code>
                   state.</para>
                 </listitem>
 
                 <listitem>
-                  <para><code>Updating</code> – This bundle is in the process
+                  <para><code>Updating</code> - This bundle is in the process
                   of being updated and should transition to the Installed
                   state. This state will never be visible in an OSGi
                   Framework.</para>
                 </listitem>
 
                 <listitem>
-                  <para><code>Uninstalling</code> – This bundle is in the
+                  <para><code>Uninstalling</code> - This bundle is in the
                   process of being uninstalled and should transition to the
                   uninstalled state.This state will never be visible in an
                   OSGi Framework.</para>
                 </listitem>
 
                 <listitem>
-                  <para><code>Uninstalled</code> – This bundle has been
+                  <para><code>Uninstalled</code> - This bundle has been
                   successfully uninstalled. This state will never be visible
                   in an OSGi Framework.</para>
                 </listitem>
@@ -466,7 +466,7 @@
 
             <entry><para>Indicates whether or not this
             <code>DeploymentUnit</code> has resolved all of its dependencies.
-            Must be true if this Bundle’s state is <code>ACTIVE</code>,
+            Must be true if this Bundle's state is <code>ACTIVE</code>,
             <code>STARTING</code>, <code>STOPPING</code>, or
             <code>RESOLVED</code>. Otherwise it must be
             <code>false</code>.</para></entry>
@@ -586,7 +586,7 @@
 
             <entry><para>If <code>true</code> and the proper start level is
             met, then this Bundle will be automatically started by the device
-            after its OSGi Framework’s start level is met. If
+            after its OSGi Framework's start level is met. If
             <code>false</code> this Bundle must not be started after launch
             until it is explicitly commanded to do so.</para><para>An OSGi
             bundle is persistently started or transiently started. It is not
@@ -619,14 +619,14 @@
             <entry><para>Indicates the status of this
             <code>ExecutionUnit</code>. Enumeration of:</para><itemizedlist>
                 <listitem>
-                  <para><code>Idle</code> – This Bundle is in an Idle state
+                  <para><code>Idle</code> - This Bundle is in an Idle state
                   and not running. This maps to the Bundle
                   <code>INSTALLED</code> or Bundle <code>RESOLVED</code>
                   state.</para>
                 </listitem>
 
                 <listitem>
-                  <para><code>Starting</code> – This Bundle is in the process
+                  <para><code>Starting</code> - This Bundle is in the process
                   of starting and should transition to the Active state. This
                   maps to the <code>STARTING</code> state in OSGi. In an OSGi
                   Framework, lazily activated bundles can remain in the
@@ -634,13 +634,13 @@
                 </listitem>
 
                 <listitem>
-                  <para><code>Active</code> – This instance is currently
+                  <para><code>Active</code> - This instance is currently
                   running. This maps to the Bundle <code>ACTIVE</code>
                   state.</para>
                 </listitem>
 
                 <listitem>
-                  <para><code>Stopping</code> – This instance is in the
+                  <para><code>Stopping</code> - This instance is in the
                   process of stopping and should transition to the Idle
                   state.</para>
                 </listitem>
@@ -653,14 +653,14 @@
             <entry><para>Indicates the state transition that the ACS is
             requesting for this Bundle. Enumeration of:</para><itemizedlist>
                 <listitem>
-                  <para><code>Idle</code> – If this Bundle is currently in
+                  <para><code>Idle</code> - If this Bundle is currently in
                   <code>STARTING</code> or <code>ACTIVE</code> state then the
                   CPE must attempt to stop the Bundle; otherwise this
                   requested state is ignored.</para>
                 </listitem>
 
                 <listitem>
-                  <para><code>Active</code> – If this Bundle is currently in
+                  <para><code>Active</code> - If this Bundle is currently in
                   the <code>INSTALLED</code> or <code>RESOLVED</code> state
                   the management agent must attempt to start the Bundle. If
                   this ExecutionUnit is in the <code>STOPPING</code> state the
@@ -682,38 +682,38 @@
             Bundle raises an Exception then this parameter embodies the
             problem. Enumeration of:</para><itemizedlist>
                 <listitem>
-                  <para><code>NoFault</code> – No fault, default value.</para>
+                  <para><code>NoFault</code> - No fault, default value.</para>
                 </listitem>
 
                 <listitem>
-                  <para><code>FailureOnStart</code> – Threw an exception when
+                  <para><code>FailureOnStart</code> - Threw an exception when
                   started.</para>
                 </listitem>
 
                 <listitem>
-                  <para><code>FailureOnAutoStart</code> – Failed to be started
+                  <para><code>FailureOnAutoStart</code> - Failed to be started
                   by the framework, this must be intercepted by the management
                   agent because this is a Framework Error event.</para>
                 </listitem>
 
                 <listitem>
-                  <para><code>FailureOnStop</code> – Raised an exception while
+                  <para><code>FailureOnStop</code> - Raised an exception while
                   stopping</para>
                 </listitem>
 
                 <listitem>
-                  <para><code>FailureWhileActive</code> – Raised when a bundle
+                  <para><code>FailureWhileActive</code> - Raised when a bundle
                   cannot be restarted after a background operation of the
                   Framework, for example refreshing.</para>
                 </listitem>
 
                 <listitem>
-                  <para><code>DependencyFailure</code> – Failed to
+                  <para><code>DependencyFailure</code> - Failed to
                   resolve</para>
                 </listitem>
 
                 <listitem>
-                  <para><code>UnStartable</code> – Cannot be raised in OSGi
+                  <para><code>UnStartable</code> - Cannot be raised in OSGi
                   since this is the same error as
                   <code>FailureOnStart</code>.</para>
                 </listitem>

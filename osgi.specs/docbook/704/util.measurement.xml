@@ -30,7 +30,7 @@
     will exchange measurements when collaborating.</para>
 
     <para>Distributing a measurement such as a simple floating point number
-    requires the correct and equal understanding of the measurement’s semantic
+    requires the correct and equal understanding of the measurement's semantic
     by both the sender and the receiver. Numerous accidents have occurred due
     to misunderstandings between the sender and receiver because there are so
     many different ways to represent the same value. For example, on September
@@ -48,25 +48,25 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Numerical error </emphasis>– All floating point
+          <para><emphasis>Numerical error</emphasis> - All floating point
           measurements should be able to have a numerical error.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Numerical error calculations
-          simplification</emphasis> – Support should be provided to simplify
+          simplification</emphasis> - Support should be provided to simplify
           measurements calculations.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Unit conflict resolution </emphasis>– It must not be
+          <para><emphasis>Unit conflict resolution</emphasis> - It must not be
           possible to perform addition or subtraction with different units
           when they are not compatible. For example, it must not be possible
           to add meters to amperes or watts to pascals.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Unit coercion</emphasis> – Multiplication and
+          <para><emphasis>Unit coercion</emphasis> - Multiplication and
           division operations involving more than one type of measurement must
           result in a different unit. For example, if meters are divided by
           seconds, the result must be a new unit that represents
@@ -74,25 +74,25 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Time-stamp</emphasis> – Measurements should contain
+          <para><emphasis>Time-stamp</emphasis> - Measurements should contain
           a time-stamp so that bundles can determine the age of a particular
           measurement.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Support for floating and discrete values</emphasis>
-          – Both floating point values (64 bit Java <code>double</code>
+          - Both floating point values (64 bit Java <code>double</code>
           floats) and discrete measurements (32 bit Java <code>int</code>)
           should be supported.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Consistency</emphasis> – The method of error
+          <para><emphasis>Consistency</emphasis> - The method of error
           calculation and handling of unit types should be consistent.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Presentation</emphasis> – The format of measurements
+          <para><emphasis>Presentation</emphasis> - The format of measurements
           and specified units should be easy to read and understand.</para>
         </listitem>
       </itemizedlist>
@@ -103,7 +103,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Measurement object </emphasis>– A
+          <para><emphasis>Measurement object</emphasis> - A
           <code>Measurement</code> object contains a <code>double</code>
           value, a <code>double</code> error, and a long time-stamp. It is
           associated with a <code>Unit</code> object that represents its
@@ -111,27 +111,27 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>State</emphasis> <emphasis>object</emphasis> – A
-          State object contains a discrete measurement (<code>int</code>) with
-          a time-stamp and a name.</para>
+          <para><emphasis>State object</emphasis> - A State object contains a
+          discrete measurement (<code>int</code>) with a time-stamp and a
+          name.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Unit</emphasis> <emphasis>object</emphasis> – A
-          <code>Unit</code> object represents a unit such as meter, second,
-          mol, or Pascal. A number of <code>Unit</code> objects are predefined
-          and have common names. Other <code>Unit</code> objects are created
-          as needed from the 7 basic Système International d’Unité (SI) units.
-          Different units are <emphasis>not</emphasis> used when a conversion
-          is sufficient. For example, the unit of a <code>Measurement</code>
-          object for length is <emphasis>always</emphasis> meters. If the
-          length is needed in feet, then the number of feet is calculated by
-          multiplying the value of the <code>Measurement</code> object in
-          meters with the necessary conversion factor.</para>
+          <para><emphasis>Unit object</emphasis> - A <code>Unit</code> object
+          represents a unit such as meter, second, mol, or Pascal. A number of
+          <code>Unit</code> objects are predefined and have common names.
+          Other <code>Unit</code> objects are created as needed from the 7
+          basic Système International d'Unité (SI) units. Different units are
+          <emphasis>not</emphasis> used when a conversion is sufficient. For
+          example, the unit of a <code>Measurement</code> object for length is
+          <emphasis>always</emphasis> meters. If the length is needed in feet,
+          then the number of feet is calculated by multiplying the value of
+          the <code>Measurement</code> object in meters with the necessary
+          conversion factor.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Error</emphasis> – When a measurement is taken, it
+          <para><emphasis>Error</emphasis> - When a measurement is taken, it
           is <emphasis>never</emphasis> accurate. This specification defines
           the error as the value that is added and subtracted to the value to
           produce an interval, where the probability is 95% that the actual
@@ -139,18 +139,18 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Unit</emphasis> – A unit is the
+          <para><emphasis>Unit</emphasis> - A unit is the
           <emphasis>type</emphasis> of a measurement: meter, feet, liter,
           gallon etc.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Base Unit </emphasis>– One of the 7 base units
+          <para><emphasis>Base Unit</emphasis> - One of the 7 base units
           defined in the SI.</para>
         </listitem>
 
         <listitem xml:id="i1345246">
-          <para><emphasis>Derived SI unit</emphasis> – A unit is a derived SI
+          <para><emphasis>Derived SI unit</emphasis> - A unit is a derived SI
           unit when it is a combination of exponentiated base units. For
           example, a volt (<code>V</code>) is a derived unit because it can be
           expressed as ( <code>m</code><superscript>2</superscript> <phrase
@@ -162,7 +162,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Quantitative derivation </emphasis>– A unit is
+          <para><emphasis>Quantitative derivation</emphasis> - A unit is
           quantitatively derived when it is converted to one of the base units
           or derived units using a conversion formula. For example, kilometers
           (<code>km</code>) can be converted to meters (<code>m</code>),
@@ -287,80 +287,79 @@
 
         <tbody>
           <row>
-            <entry><para><emphasis>a </emphasis><phrase
-            role="symbol">×</phrase><emphasis> b</emphasis></para></entry>
+            <entry><para><emphasis>a</emphasis> <phrase
+            role="symbol">×</phrase> <emphasis>b</emphasis></para></entry>
 
             <entry><code>mul(Measurement)</code></entry>
 
             <entry><para>| <phrase
             role="symbol">Δ</phrase><emphasis>a</emphasis> <phrase
-            role="symbol">×</phrase> <emphasis> b </emphasis>| + |
-            <emphasis>a</emphasis> <phrase role="symbol">×</phrase> <emphasis>
-            </emphasis><phrase role="symbol">Δ</phrase><emphasis>b</emphasis>
-            |</para></entry>
+            role="symbol">×</phrase> <emphasis>b</emphasis> | + |
+            <emphasis>a</emphasis> <phrase role="symbol">×</phrase> <phrase
+            role="symbol">Δ</phrase><emphasis>b</emphasis> |</para></entry>
           </row>
 
           <row>
-            <entry><para><emphasis>a </emphasis>/<emphasis>
-            b</emphasis></para></entry>
+            <entry><para><emphasis>a</emphasis> /
+            <emphasis>b</emphasis></para></entry>
 
             <entry><code>div(Measurement)</code></entry>
 
             <entry><para>( | <phrase
             role="symbol">Δ</phrase><emphasis>a</emphasis> <phrase
-            role="symbol">×</phrase> <emphasis> b </emphasis>| + |
-            <emphasis>a</emphasis> <phrase role="symbol">×</phrase> <emphasis>
-            </emphasis><phrase role="symbol">Δ</phrase><emphasis>b</emphasis>
-            | ) /
+            role="symbol">×</phrase> <emphasis>b</emphasis> | + |
+            <emphasis>a</emphasis> <phrase role="symbol">×</phrase> <phrase
+            role="symbol">Δ</phrase><emphasis>b</emphasis> | ) /
             <emphasis>b</emphasis><superscript>2</superscript></para></entry>
           </row>
 
           <row>
-            <entry><para><emphasis>a</emphasis> +<emphasis>
-            b</emphasis></para></entry>
+            <entry><para><emphasis>a</emphasis> +
+            <emphasis>b</emphasis></para></entry>
 
             <entry><code>add(Measurement)</code></entry>
 
-            <entry><para><phrase role="symbol">Δ</phrase><emphasis>a +
-            </emphasis><phrase role="symbol">Δ</phrase>
-            <emphasis>b</emphasis></para></entry>
+            <entry><para><phrase
+            role="symbol">Δ</phrase><emphasis>a</emphasis> + <phrase
+            role="symbol">Δ</phrase><emphasis>b</emphasis></para></entry>
           </row>
 
           <row>
-            <entry><para><emphasis>a</emphasis> –<emphasis>
-            b</emphasis></para></entry>
+            <entry><para><emphasis>a</emphasis> -
+            <emphasis>b</emphasis></para></entry>
 
             <entry><code>sub(Measurement)</code></entry>
 
-            <entry><para><phrase role="symbol">Δ</phrase><emphasis>a +
-            </emphasis><phrase role="symbol">Δ</phrase>
-            <emphasis>b</emphasis></para></entry>
+            <entry><para><phrase
+            role="symbol">Δ</phrase><emphasis>a</emphasis> + <phrase
+            role="symbol">Δ</phrase><emphasis>b</emphasis></para></entry>
           </row>
 
           <row>
             <entry><para><emphasis>a</emphasis> <phrase
-            role="symbol">×</phrase><emphasis> c</emphasis></para></entry>
+            role="symbol">×</phrase> <emphasis>c</emphasis></para></entry>
 
             <entry><code>mul(double)</code></entry>
 
-            <entry><para>| <phrase role="symbol">Δ</phrase><emphasis>a
-            </emphasis><phrase role="symbol">×</phrase> <emphasis>
-            c</emphasis> |</para></entry>
+            <entry><para>| <phrase
+            role="symbol">Δ</phrase><emphasis>a</emphasis> <phrase
+            role="symbol">×</phrase> <emphasis>c</emphasis> |</para></entry>
           </row>
 
           <row>
-            <entry><para><emphasis>a </emphasis>/<emphasis>
-            c</emphasis></para></entry>
+            <entry><para><emphasis>a</emphasis> /
+            <emphasis>c</emphasis></para></entry>
 
             <entry><code>div(double)</code></entry>
 
-            <entry><para>| <phrase role="symbol">Δ</phrase><emphasis>a
-            </emphasis>/<emphasis> c</emphasis> |</para></entry>
+            <entry><para>| <phrase
+            role="symbol">Δ</phrase><emphasis>a</emphasis> /
+            <emphasis>c</emphasis> |</para></entry>
           </row>
 
           <row>
-            <entry><para><emphasis>a </emphasis>+<emphasis>
-            c</emphasis></para></entry>
+            <entry><para><emphasis>a</emphasis> +
+            <emphasis>c</emphasis></para></entry>
 
             <entry><code>add(double)</code></entry>
 
@@ -369,8 +368,8 @@
           </row>
 
           <row>
-            <entry><para><emphasis>a </emphasis>–<emphasis>
-            c</emphasis></para></entry>
+            <entry><para><emphasis>a</emphasis> -
+            <emphasis>c</emphasis></para></entry>
 
             <entry><code>sub(double)</code></entry>
 
@@ -485,7 +484,7 @@
 
     <programlisting>Measurement length = new Measurement( v, 0.01,Unit.m );</programlisting>
 
-    <para>Units are based on the Système International d’Unité (SI), developed
+    <para>Units are based on the Système International d'Unité (SI), developed
     after the French Revolution. The SI consists of 7 different units that can
     be combined in many ways to form a large series of derived units. The
     basic 7 units are listed in the following table. For more information, see
@@ -649,10 +648,10 @@ catch( ArithmeticException e ) {
       measurement <emphasis>system</emphasis> that has a consistent set of
       base units. The base units can be combined to create a large number of
       derived units without requiring a large number of complicated conversion
-      formulas. <phrase role="body"> For example, a watt is simply a
-      combination of meters, kilograms, and seconds (</phrase>
+      formulas. For example, a watt is simply a combination of meters,
+      kilograms, and seconds (
       <code>m</code><superscript>2</superscript><phrase
-      role="symbol">×</phrase><code>kg</code> <phrase role="body">/</phrase>
+      role="symbol">×</phrase><code>kg</code> /
       <code>s</code><superscript>3</superscript>). In contrast, horsepower is
       not easily related to inches, feet, fathoms, yards, furlongs, ounces,
       pounds, stones, or miles. This difficulty is the reason that science has

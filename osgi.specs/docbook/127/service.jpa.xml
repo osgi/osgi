@@ -46,27 +46,27 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Dependencies</emphasis> – There must be a way for
+          <para><emphasis>Dependencies</emphasis> - There must be a way for
           persistence clients, if they so require, to manage their
           dependencies on a compatible persistence unit.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Compatibility</emphasis> – The Persistence Unit
+          <para><emphasis>Compatibility</emphasis> - The Persistence Unit
           service must be able to function in non-managed mode according to
           existing standards and interfaces outlined in the JPA
           specification.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Modularity</emphasis> – Persistent classes and their
+          <para><emphasis>Modularity</emphasis> - Persistent classes and their
           accompanying configuration can exist in a separate bundle from the
           client that is operating on them using the Persistence Unit
           service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>JDBC</emphasis> – Leverage the OSGi JDBC
+          <para><emphasis>JDBC</emphasis> - Leverage the OSGi JDBC
           Specification for access to the database.</para>
         </listitem>
       </itemizedlist>
@@ -77,84 +77,84 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>JPA</emphasis> – The Java Persistence API, <xref
+          <para><emphasis>JPA</emphasis> - The Java Persistence API, <xref
           linkend="i3075794"/> and <xref linkend="i3075842"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>JPA Provider</emphasis> – An implementation of JPA,
+          <para><emphasis>JPA Provider</emphasis> - An implementation of JPA,
           providing the Persistence Provider and JPA Services to Java EE
           Containers and Client Bundles.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Interface Bundle</emphasis> – A bundle containing
+          <para><emphasis>Interface Bundle</emphasis> - A bundle containing
           the interfaces and classes in the <code>javax.persistence</code>
           namespace (and its sub-namespaces) that are defined by the JPA
           specification.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Persistence Bundle</emphasis> – A bundle that
+          <para><emphasis>Persistence Bundle</emphasis> - A bundle that
           includes, a Meta-Persistence header, one or more Persistence
           Descriptor resources, and the entity classes specified by the
           Persistence Units in those resources.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Client Bundle</emphasis> – The bundle that uses the
+          <para><emphasis>Client Bundle</emphasis> - The bundle that uses the
           Persistence Bundle to retrieve and store objects.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Persistence Descriptor</emphasis> – A resource
+          <para><emphasis>Persistence Descriptor</emphasis> - A resource
           describing one or more Persistence Units.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Persistence Unit</emphasis> – A named configuration
+          <para><emphasis>Persistence Unit</emphasis> - A named configuration
           for the object-relational mappings and database access as defined in
           a Persistence Descriptor.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Entity Manager</emphasis> – The interface that
+          <para><emphasis>Entity Manager</emphasis> - The interface that
           provides the control point of retrieving and persisting objects in a
           relational database based on a single Persistence Unit for a single
           session.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Entity Manager Factory</emphasis> – A service that
+          <para><emphasis>Entity Manager Factory</emphasis> - A service that
           can create Entity Managers based on a Persistence Unit for different
           sessions.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Entity Manager Factory Builder</emphasis> – A
+          <para><emphasis>Entity Manager Factory Builder</emphasis> - A
           service that can build an Entity Manager Factory for a specific
           Persistence Unit with extra configuration parameters.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Managed Client</emphasis> – A Client Bundle that is
+          <para><emphasis>Managed Client</emphasis> - A Client Bundle that is
           managed by a Container</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Static Client</emphasis> – A Client that uses the
+          <para><emphasis>Static Client</emphasis> - A Client that uses the
           static factory methods in the Persistence class instead of
           services.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Static Persistence</emphasis> – The actor that
+          <para><emphasis>Static Persistence</emphasis> - The actor that
           enables the use of the <code>Persistence</code> class static factory
           methods to obtain an Entity Manager Factory.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>JDBC Provider</emphasis> – The bundle providing a
+          <para><emphasis>JDBC Provider</emphasis> - The bundle providing a
           Data Source Factory service.</para>
         </listitem>
       </itemizedlist>
@@ -269,7 +269,7 @@
       <para>A JPA Provider tracks Persistence Bundles; a Persistence Bundle
       contains a Meta-Persistence manifest header. This manifest header
       enumerates the Persistence Descriptor resources in the Persistence
-      Bundle. Each resource’s XML schema is defined by the JPA 1.0 or JPA 2.0
+      Bundle. Each resource's XML schema is defined by the JPA 1.0 or JPA 2.0
       specification. The JPA Provider reads the resource accordingly and
       extracts the information for one or more Persistence Units. For each
       found Persistence Unit, the JPA Provider registers an Entity Manager
@@ -370,26 +370,26 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Name</emphasis> – Every Persistence Unit must have a
+          <para><emphasis>Name</emphasis> - Every Persistence Unit must have a
           name to identify it to clients. For example:
           <code>Accounting</code>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Provider Selection</emphasis> – Restriction to a
+          <para><emphasis>Provider Selection</emphasis> - Restriction to a
           specific JPA Provider, usually because there are dependencies in the
           application code on provider specific functionality.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>JDBC Driver Selection</emphasis> – Selects the JDBC
+          <para><emphasis>JDBC Driver Selection</emphasis> - Selects the JDBC
           driver, the principal and the credentials for selecting and
           accessing a relational database. See <xref
           linkend="i3112211"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Properties</emphasis> – Standard and JPA Provider
+          <para><emphasis>Properties</emphasis> - Standard and JPA Provider
           specific properties.</para>
         </listitem>
       </itemizedlist>
@@ -461,7 +461,7 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd</programlisting>
       <emphasis>provider dependency</emphasis>. The specified JPA Provider
       class must implement the <code>PersistenceProvider</code> interface.
       This <emphasis>implementation class name</emphasis> must be available
-      from the JPA Provider’s documentation. JPA Providers that do not own the
+      from the JPA Provider's documentation. JPA Providers that do not own the
       specified JPA Provider class must ignore such a Persistence Unit.</para>
 
       <para>Otherwise, if the Persistence Unit is not restricted, the JPA
@@ -540,22 +540,22 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>javax.persistence.jdbc.driver</code> – Fully-qualified
+          <para><code>javax.persistence.jdbc.driver</code> - Fully-qualified
           name of the driver class</para>
         </listitem>
 
         <listitem>
-          <para><code>javax.persistence.jdbc.url</code> – Driver-specific URL
+          <para><code>javax.persistence.jdbc.url</code> - Driver-specific URL
           to indicate database information</para>
         </listitem>
 
         <listitem>
-          <para><code>javax.persistence.jdbc.user</code> – User name to use
+          <para><code>javax.persistence.jdbc.user</code> - User name to use
           when obtaining connections</para>
         </listitem>
 
         <listitem>
-          <para><code>javax.persistence.jdbc.password</code> – Password to use
+          <para><code>javax.persistence.jdbc.password</code> - Password to use
           when obtaining connections</para>
         </listitem>
       </itemizedlist>
@@ -571,13 +571,13 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Persistence Bundle</emphasis> – A Persistence Bundle
+        <para><emphasis>Persistence Bundle</emphasis> - A Persistence Bundle
         contains the entity classes and one or more Persistence Descriptors,
         each providing one or more Persistence Units.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Client Bundle</emphasis> –A Client Bundle contains the
+        <para><emphasis>Client Bundle</emphasis> -A Client Bundle contains the
         code that manipulates the entity classes and uses an Entity Manager to
         store and retrieve these entity classes with a relational database.
         The Client Bundle obtains the required Entity Manager(s) via a service
@@ -597,14 +597,14 @@ http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Entity Manager Factory service</emphasis> – Provides
+          <para><emphasis>Entity Manager Factory service</emphasis> - Provides
           an <code>EntityManagerFactory</code> object that depends on a
           complete Persistence Unit. That is, it is associated with a
           registered Data Source Factory service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Entity Manager Factory Builder service</emphasis> –
+          <para><emphasis>Entity Manager Factory Builder service</emphasis> -
           The Entity Manager Factory Builder service provides the capability
           of creating an <code>EntityManagerFactory</code> object with
           additional configuration properties.</para>
@@ -647,7 +647,7 @@ Bundle-Version: 3.2.4.200912231004</programlisting>
       <para>A Persistence Bundle is a normal bundle; it must follow all the
       rules of OSGi and can use all OSGi constructs like Bundle-Classpath,
       fragment bundles, import packages, export packages, etc. However, there
-      is one limitation: any entity classes must originate in the bundle’s
+      is one limitation: any entity classes must originate in the bundle's
       JAR, it cannot come from a fragment. This requirement is necessary to
       simplify enhancing entity classes.</para>
     </section>
@@ -682,17 +682,17 @@ Bundle-Version: 3.2.4.200912231004</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>osgi.unit.name</code> – (<code>String</code>) The name
+          <para><code>osgi.unit.name</code> - (<code>String</code>) The name
           of the Persistence Unit</para>
         </listitem>
 
         <listitem>
-          <para><code>osgi.unit.version</code> – (<code>String</code>) The
+          <para><code>osgi.unit.version</code> - (<code>String</code>) The
           version of the associated Persistence Bundle</para>
         </listitem>
 
         <listitem>
-          <para><code>osgi.unit.provider</code> – (<code>String</code>) The
+          <para><code>osgi.unit.provider</code> - (<code>String</code>) The
           implementation class name of the JPA Provider</para>
         </listitem>
       </itemizedlist>
@@ -723,7 +723,7 @@ Bundle-Version: 3.2.4.200912231004</programlisting>
       the Persistence Unit is incomplete or if the database selection needs to
       be overridden.</para>
 
-      <para>The Entity Manager Factory Builder service’s life cycle must not
+      <para>The Entity Manager Factory Builder service's life cycle must not
       depend on the availability of any Data Source Factory, even if a JDBC
       driver class name is specified in the Persistence Descriptor. The Entity
       Manager Factory Builder service is registered with the same service
@@ -836,17 +836,17 @@ if ( refs != null ) {
       <para>The Meta-Persistence header has a syntax of:</para>
 
       <programlisting>Meta-Persistence ::= ( jar-path ( ',' jar-path)* )?
-jar-path         ::= path ( ’!/’ spath )? 
-spath            ::= path   // must not start with solidus(slash ’/’ \u002F)</programlisting>
+jar-path         ::= path ( '!/' spath )? 
+spath            ::= path   // must not start with solidus ('/' \u002F)</programlisting>
 
       <para>The header may include zero or more comma-separated
       <code>jar-paths</code>, each a path to a Persistence Descriptor resource
-      in the bundle. Paths may optionally be prefixed with the solidus (slash
-      <code>’/’ \u002F</code>) character. The JPA Provider must always include
-      the <code>META-INF/persistence.xml</code> first if it is not one of the
-      listed paths. Wildcards in directories are not supported. The<code>
-      META-INF/persistence.xml</code> is therefore the default location for an
-      empty header.</para>
+      in the bundle. Paths may optionally be prefixed with the solidus
+      (<code>'/' \u002F</code>) character. The JPA Provider must always
+      include the <code>META-INF/persistence.xml</code> first if it is not one
+      of the listed paths. Wildcards in directories are not supported.
+      The<code> META-INF/persistence.xml</code> is therefore the default
+      location for an empty header.</para>
 
       <para>For example:</para>
 
@@ -882,12 +882,12 @@ spath            ::= path   // must not start with solidus(slash ’/’ \u002F)
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Prefix</emphasis> – The prefix is a path to a JAR
+          <para><emphasis>Prefix</emphasis> - The prefix is a path to a JAR
           resource in the bundle.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Suffix</emphasis> – The suffix is a path to a
+          <para><emphasis>Suffix</emphasis> - The suffix is a path to a
           resource in the JAR identified by the prefix.</para>
         </listitem>
       </itemizedlist>
@@ -899,7 +899,7 @@ prefix:     embedded.jar
 suffix:     META-INF/persistence.xml</programlisting>
 
       <para>It is not required that all listed or implied resources are
-      present in the bundle’s JAR. For example, it is valid that the default
+      present in the bundle's JAR. For example, it is valid that the default
       <code>META-INF/persistence.xml</code> resource is absent. However, if no
       Persistence Units are found at all then the absence of any Persistence
       Unit is regarded as an error that should be logged. In this case, the
@@ -934,7 +934,7 @@ suffix:     META-INF/persistence.xml</programlisting>
 
         <listitem>
           <para>Have all entity classes mentioned in the assigned Persistence
-          Units on the Persistence Bundle’s JAR.</para>
+          Units on the Persistence Bundle's JAR.</para>
         </listitem>
       </itemizedlist>
 
@@ -992,7 +992,7 @@ suffix:     META-INF/persistence.xml</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>osgi.unit.name</code> – (<code>String</code>) The name
+          <para><code>osgi.unit.name</code> - (<code>String</code>) The name
           of the Persistence Unit. This property corresponds to the
           <code>name</code> attribute of the <code>persistence-unit</code>
           element in the Persistence Descriptor. It is used by Client Bundles
@@ -1003,7 +1003,7 @@ suffix:     META-INF/persistence.xml</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>osgi.unit.version</code> – (<code>String</code>) The
+          <para><code>osgi.unit.version</code> - (<code>String</code>) The
           version of the Persistence Bundle, as specified in Bundle-Version
           header, that provides the corresponding Persistence Unit. Client
           Bundles can filter their required JPA Services based on a particular
@@ -1011,7 +1011,7 @@ suffix:     META-INF/persistence.xml</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>osgi.unit.provider</code> – (<code>String</code>) The
+          <para><code>osgi.unit.provider</code> - (<code>String</code>) The
           JPA Provider implementation class name that registered the service.
           The <code>osgi.unit.provider</code> property allows Client Bundles
           to know the JPA Provider that is servicing the Persistence Unit.
@@ -1131,7 +1131,7 @@ suffix:     META-INF/persistence.xml</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>javax.persistence.provider</code> – The JPA Provider
+          <para><code>javax.persistence.provider</code> - The JPA Provider
           implementation class name, a documented name for all JPA
           Providers.</para>
         </listitem>
@@ -1160,22 +1160,22 @@ suffix:     META-INF/persistence.xml</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>javax.persistence.jdbc.driver</code> – Fully-qualified
+          <para><code>javax.persistence.jdbc.driver</code> - Fully-qualified
           name of the driver class.</para>
         </listitem>
 
         <listitem>
-          <para><code>javax.persistence.jdbc.url</code> – Driver-specific URL
+          <para><code>javax.persistence.jdbc.url</code> - Driver-specific URL
           to indicate database information</para>
         </listitem>
 
         <listitem>
-          <para><code>javax.persistence.jdbc.user</code> – User name to use
+          <para><code>javax.persistence.jdbc.user</code> - User name to use
           when obtaining connections</para>
         </listitem>
 
         <listitem>
-          <para><code>javax.persistence.jdbc.password</code> – Password to use
+          <para><code>javax.persistence.jdbc.password</code> - Password to use
           when obtaining connections</para>
         </listitem>
       </itemizedlist>
@@ -1285,9 +1285,9 @@ suffix:     META-INF/persistence.xml</programlisting>
       is servicing a Persistence Bundle, it must be able to load classes and
       resources from that Persistence Bundle according to the OSGi bundle
       rules. To do this class loading it must obtain a class loader that has
-      the same visibility as the Persistence Bundle’s bundle class loader.
+      the same visibility as the Persistence Bundle's bundle class loader.
       This will also allow it to load and manage metadata for the entity
-      classes and resources for that Persistence Bundle’s assigned Persistence
+      classes and resources for that Persistence Bundle's assigned Persistence
       Units. These resources and entity classes must reside directly in the
       Persistence Bundle, they must be accessed using the
       <code>getEntry</code> method. Entity classes and resources must not

@@ -47,26 +47,26 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Policy Free</emphasis> – The proposed solution must
+          <para><emphasis>Policy Free</emphasis> - The proposed solution must
           be business model agnostic; none of the affected parties (Operators,
           SPS Manufacturers, etc.) should be forced into any particular
           business model.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Inter-operability</emphasis> – The Initial
+          <para><emphasis>Inter-operability</emphasis> - The Initial
           Provisioning must permit arbitrary inter-operability between
           management systems and OSGi frameworks. Any compliant Remote Manager
           should be able to manage any compliant OSGi framework, even in the
           absence of a prior business relationship. Adhering to this
           requirement allows a particular Operator to manage a variety of
           makes and models of OSGi framework Servers using a single management
-          system of the Operator’s choice. This rule also gives the consumer
+          system of the Operator's choice. This rule also gives the consumer
           the greatest choice when selecting an Operator.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Flexible</emphasis> – The management process should
+          <para><emphasis>Flexible</emphasis> - The management process should
           be as open as possible, to allow innovation and specialization while
           still achieving interoperability.</para>
         </listitem>
@@ -78,24 +78,24 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Provisioning Service</emphasis> – A service
+          <para><emphasis>Provisioning Service</emphasis> - A service
           registered with the Framework that provides information about the
           initial provisioning to the Management Agent.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Provisioning Dictionary</emphasis> – A
+          <para><emphasis>Provisioning Dictionary</emphasis> - A
           <code>Dictionary</code> object that is filled with information from
           the ZIP files that are loaded during initial setup.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>RSH Protocol</emphasis> – An OSGi specific secure
+          <para><emphasis>RSH Protocol</emphasis> - An OSGi specific secure
           protocol based on HTTP.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Management Agent</emphasis> – A bundle that is
+          <para><emphasis>Management Agent</emphasis> - A bundle that is
           responsible for managing a OSGi framework under control of a Remote
           Manager.</para>
         </listitem>
@@ -161,21 +161,21 @@
     <code>Dictionary</code> object. This <code>Dictionary</code> object is
     called the <emphasis>Provisioning Dictionary</emphasis>. It must be made
     available from the Provisioning Service in the service registry. The names
-    of the entries in the ZIP file must not start with a solidus (slash
-    <code>’/’ \u002F</code>).</para>
+    of the entries in the ZIP file must not start with a solidus (<code>'/'
+    \u002F</code>).</para>
 
     <para>The ZIP file may contain only four types of dictionary entries:
     <code>text</code>, <code>binary</code>, <code>bundle</code>, or
     <code>bundle-url</code>. The type of an entry can be specified in
     different ways. An Initial Provisioning service must look in the following
-    places to find the information about an entry’s (MIME) type (in the given
+    places to find the information about an entry's (MIME) type (in the given
     order):</para>
 
     <orderedlist>
       <listitem>
         <para>The manifest header InitialProvisioning-Entries of the given ZIP
         file. This header is defined in <xref linkend="i1442770"/>. If this
-        header is present, but a given entry’s path is not named then try the
+        header is present, but a given entry's path is not named then try the
         next step.</para>
       </listitem>
 
@@ -254,23 +254,23 @@
 
             <entry><para><code><xref
             linkend="org.osgi.service.provisioning.ProvisioningService.MIME_BUNDLE"
-            xrefstyle="hyperlink"/></code></para><para><code>application/</code><code>vnd.osgi.bundle</code>
-            </para><para><code>MIME_BUNDLE_ALT</code></para><para><code>application/</code><code>x-osgi-bundle</code></para></entry>
+            xrefstyle="hyperlink"/></code></para><para><code>application/vnd.osgi.bundle</code>
+            </para><para><code>MIME_BUNDLE_ALT</code></para><para><code>application/x-osgi-bundle</code></para></entry>
 
             <entry><code>.jar</code></entry>
 
             <entry><para>Entries must be installed using
-            <code>BundleContext.installBundle(String,</code>
-            <code>InputStream)</code>, with the <code>InputStream</code>
-            object constructed from the contents of the ZIP entry. The
-            location must be the name of the ZIP entry without leading solidus
-            (slash <code>’/’ \u002F</code>). This entry must not be stored in
-            the Provisioning Dictionary.</para><para>If a bundle with this
-            location name is already installed in this system, then this
-            bundle must be updated instead of installed.</para><para>The
-            <code>MIME_BUNDLE_ALT</code> version is intended for backward
-            compatibility, it specifies the original MIME type for bundles
-            before there was an official IANA MIME type.</para></entry>
+            <code>BundleContext.installBundle(String, InputStream)</code>,
+            with the <code>InputStream</code> object constructed from the
+            contents of the ZIP entry. The location must be the name of the
+            ZIP entry without leading solidus (<code>'/' \u002F</code>). This
+            entry must not be stored in the Provisioning
+            Dictionary.</para><para>If a bundle with this location name is
+            already installed in this system, then this bundle must be updated
+            instead of installed.</para><para>The <code>MIME_BUNDLE_ALT</code>
+            version is intended for backward compatibility, it specifies the
+            original MIME type for bundles before there was an official IANA
+            MIME type.</para></entry>
           </row>
 
           <row>
@@ -278,21 +278,20 @@
 
             <entry><para><code><xref
             linkend="org.osgi.service.provisioning.ProvisioningService.MIME_BUNDLE_URL"
-            xrefstyle="hyperlink"/></code></para><para><code>text/</code><code>x-osgi-bundle-url;</code><code>
+            xrefstyle="hyperlink"/></code></para><para><code>text/x-osgi-bundle-url;
             charset=utf-8</code></para></entry>
 
             <entry><code>.url</code></entry>
 
             <entry><para>The content of this entry is a string coded in
             <code>utf-8</code>. Entries must be installed using
-            <code>BundleContext.installBundle(String,</code>
-            <code>InputStream)</code>, with the <code>InputStream</code>
-            object created from the given URL. The location must be the name
-            of the ZIP entry without leading solidus (slash <code>’/’
-            \u002F</code>). This entry must not be stored in the Provisioning
-            Dictionary.</para><para>If a bundle with this location URL is
-            already installed in this system, then this bundle must be updated
-            instead of installed.</para></entry>
+            <code>BundleContext.installBundle(String, InputStream)</code>,
+            with the <code>InputStream</code> object created from the given
+            URL. The location must be the name of the ZIP entry without
+            leading solidus (<code>'/' \u002F</code>). This entry must not be
+            stored in the Provisioning Dictionary.</para><para>If a bundle
+            with this location URL is already installed in this system, then
+            this bundle must be updated instead of installed.</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -346,7 +345,7 @@
     xrefstyle="hyperlink"/> URLs may replace previous key/values in the
     Provisioning Dictionary, but must not erase unrecognized key/values. For
     example, if an assignment has assigned the key <code>proprietary-x</code>,
-    with a value ’3’, then later assignments must not override this value,
+    with a value '3', then later assignments must not override this value,
     unless the later loaded ZIP file contains an entry with that name. All
     these updates to the Provisioning Dictionary must be stored persistently.
     At the same time, each entry of type <code>bundle</code> or
@@ -364,7 +363,7 @@
     transferred to another Remote Manager, the Management Agent should set the
     <xref
     linkend="org.osgi.service.provisioning.ProvisioningService.PROVISIONING_REFERENCE"
-    xrefstyle="hyperlink"/> to the location of this new Remote Manager’s
+    xrefstyle="hyperlink"/> to the location of this new Remote Manager's
     Initial Provisioning ZIP file.This process is called
     <emphasis>re-provisioning</emphasis>.</para>
 
@@ -408,8 +407,8 @@
       specifies the type of the entries in the ZIP file. The syntax for this
       header is:</para>
 
-      <programlisting>InitialProvisioning-Entries ::= ip-entry (’,’ ip-entry ) *
-ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
+      <programlisting>InitialProvisioning-Entries ::= ip-entry (',' ip-entry ) *
+ip-entry                    ::= path ( ';' parameter ) *</programlisting>
 
       <para>The entry is the path name of a resource in the ZIP file. This
       InitialProvisioning-Entries header recognizes the following
@@ -417,7 +416,7 @@ ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>type</code> – Gives the type of the dictionary entry.
+          <para><code>type</code> - Gives the type of the dictionary entry.
           The type can have one of the following values: <code>text</code>,
           <code>binary</code>, <code>bundle</code>, or
           <code>bundle-url</code></para>
@@ -453,7 +452,7 @@ ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
       <para>Up-to-date bundles and additional configuration data must be
       loaded from that location at activation time. The OSGi framework is
       probably equipped with necessary security entities, like certificates,
-      to enable secure downloads from the Operator’s URL over open networks,
+      to enable secure downloads from the Operator's URL over open networks,
       if necessary.</para>
     </section>
 
@@ -504,14 +503,14 @@ ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
       <listitem>
         <para><xref
         linkend="org.osgi.service.provisioning.ProvisioningService.addInformation-Dictionary-"
-        xrefstyle="hyperlink"/> – Add all key/value pairs in the given
+        xrefstyle="hyperlink"/> - Add all key/value pairs in the given
         <code>Dictionary</code> object to the Provisioning Dictionary.</para>
       </listitem>
 
       <listitem>
         <para><xref
         linkend="org.osgi.service.provisioning.ProvisioningService.addInformation-ZipInputStream-"
-        xrefstyle="hyperlink"/> – It is also possible to add a ZIP file to the
+        xrefstyle="hyperlink"/> - It is also possible to add a ZIP file to the
         Provisioning Service immediately. This will unpack the ZIP file and
         add the entries to the Provisioning Dictionary. This method must
         install the bundles contained in the ZIP file as described in <xref
@@ -521,7 +520,7 @@ ip-entry                    ::= path ( ’;’ parameter ) *</programlisting>
       <listitem>
         <para><xref
         linkend="org.osgi.service.provisioning.ProvisioningService.setInformation-Dictionary-"
-        xrefstyle="hyperlink"/> – Set a new Provisioning Dictionary. This will
+        xrefstyle="hyperlink"/> - Set a new Provisioning Dictionary. This will
         remove all existing entries.</para>
       </listitem>
     </itemizedlist>
@@ -617,14 +616,14 @@ agent                      bundle-url  http://acme.com/a.jar</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>HTTP – May be used when the data exchange takes place over
+        <para>HTTP - May be used when the data exchange takes place over
         networks that are secured by other means, such as a Virtual Private
         Network (VPN) or a physically isolated network. Otherwise, HTTP is not
         a valid scheme because no authentication takes place.</para>
       </listitem>
 
       <listitem>
-        <para>HTTPS – May be used if the OSGi framework is equipped with
+        <para>HTTPS - May be used if the OSGi framework is equipped with
         appropriate certificates.</para>
       </listitem>
     </itemizedlist>
@@ -675,7 +674,7 @@ agent                      bundle-url  http://acme.com/a.jar</programlisting>
       handle to a common base for establishing trust. The certificates are
       typically used when authenticating a Remote Manager to the OSGi
       framework. In this case, a Root X.509 certificate must be part of a
-      certificate chain for the Operator’s certificate. The format of the
+      certificate chain for the Operator's certificate. The format of the
       certificate is defined in <xref linkend="i1287116"/>.</para>
     </section>
 
@@ -714,10 +713,9 @@ agent                      bundle-url  http://acme.com/a.jar</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para xml:id="i1323445"><phrase role="body">The decoding of such a
-      certificate may be done with the </phrase> <code>
-      java.security.cert.CertificateFactory</code> <phrase role="body">
-      class:</phrase></para>
+      <para xml:id="i1323445">The decoding of such a certificate may be done
+      with the <code>java.security.cert.CertificateFactory</code>
+      class:</para>
 
       <programlisting>InputStream bis = new ByteArrayInputStream(x509);// byte[]
 CertificateFactory cf = 
@@ -739,18 +737,18 @@ while (i.hasNext()) {
       Provisioning Service must add the OSGi framework Identifier.</para>
 
       <para>If the request URL already contains HTTP parameters (if there is a
-      ’?’ in the request), the <code>service_platform_id</code> is appended to
+      '?' in the request), the <code>service_platform_id</code> is appended to
       this URL as an additional parameter. If, on the other hand, the request
       URL does not contain any HTTP parameters, the
       <code>service_platform_id</code> will be appended to the URL after a
-      ’?’, becoming the first HTTP parameter. The following two examples show
+      '?', becoming the first HTTP parameter. The following two examples show
       these two variants:</para>
 
       <programlisting>http://server.operator.com/service-x? <code>«</code>
-    foo=bar&amp;service_platform_id=<phrase role="body">VIN:123456789</phrase>
+    foo=bar&amp;service_platform_id=VIN:123456789
 
 http://server.operator.com/service-x? <code>«</code>
-    service_platform_id=<phrase role="body">VIN:123456789</phrase></programlisting>
+    service_platform_id=VIN:123456789</programlisting>
 
       <para>Proper URL encoding must be applied when the URL contains
       characters that are not allowed. See <xref linkend="i1297476"/>.</para>
@@ -796,60 +794,60 @@ http://server.operator.com/service-x? <code>«</code>
 
     <itemizedlist>
       <listitem>
-        <para><phrase role="symbol">δ</phrase> – Shared secret, 160 bits or
+        <para><phrase role="symbol">δ</phrase> - Shared secret, 160 bits or
         more</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>s</emphasis> – Server nonce, called
+        <para><emphasis>s</emphasis> - Server nonce, called
         <code>servercfg</code>, 128 bits</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>c</emphasis> – Client nonce, called
+        <para><emphasis>c</emphasis> - Client nonce, called
         <code>clientfg</code>, 128 bits</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>K</emphasis><subscript>a</subscript> – Authentication
+        <para><emphasis>K</emphasis><subscript>a</subscript> - Authentication
         key, 160 bits</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>K</emphasis><subscript>e</subscript> – Encryption key,
+        <para><emphasis>K</emphasis><subscript>e</subscript> - Encryption key,
         192 bits</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>r</emphasis> – Response data</para>
+        <para><emphasis>r</emphasis> - Response data</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>e</emphasis> – Encrypted data</para>
+        <para><emphasis>e</emphasis> - Encrypted data</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>E</emphasis> – Encryption constant, a
+        <para><emphasis>E</emphasis> - Encryption constant, a
         <code>byte[]</code> of 05, 36, 54, 70, 00 (hex)</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>A</emphasis> – Authentication constant, a
+        <para><emphasis>A</emphasis> - Authentication constant, a
         <code>byte[]</code> of 00, 4f, 53, 47, 49 (hex)</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>M</emphasis> – Message material, used for
+        <para><emphasis>M</emphasis> - Message material, used for
         K<subscript>e</subscript> calculation.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>m</emphasis> – The calculated message authentication
+        <para><emphasis>m</emphasis> - The calculated message authentication
         code.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>3DES</emphasis> – Triple DES, encryption function, see
+        <para><emphasis>3DES</emphasis> - Triple DES, encryption function, see
         <xref linkend="i1326320"/>. The bytes of the key must be set to odd
         parity. CBC mode must be used where the padding method is defined in
         <xref linkend="i1371344"/>. In <xref linkend="i1371440"/> this is
@@ -857,18 +855,18 @@ http://server.operator.com/service-x? <code>«</code>
       </listitem>
 
       <listitem>
-        <para><emphasis>IV</emphasis> – Initialization vector for 3DES.</para>
+        <para><emphasis>IV</emphasis> - Initialization vector for 3DES.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>SHA1</emphasis> – Secure Hash Algorithm to generate
+        <para><emphasis>SHA1</emphasis> - Secure Hash Algorithm to generate
         the Hashed Message Authentication Code, see <xref
         linkend="i1371220"/>. The function takes a single parameter, the block
         to be worked upon.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>HMAC</emphasis> – The function that calculates a
+        <para><emphasis>HMAC</emphasis> - The function that calculates a
         message authentication code, which must HMAC-SHA1. HMAC-SHA1 is
         defined in <xref linkend="i1327494"/>. The HMAC function takes a key
         and a block to be worked upon as arguments. Note that the lower 16
@@ -876,11 +874,11 @@ http://server.operator.com/service-x? <code>«</code>
       </listitem>
 
       <listitem>
-        <para><emphasis>{}</emphasis> – Concatenates its arguments</para>
+        <para><emphasis>{}</emphasis> - Concatenates its arguments</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>[]</emphasis> – Indicates access to a sub-part of a
+        <para><emphasis>[]</emphasis> - Indicates access to a sub-part of a
         variable, in bytes. Index starts at one, not zero.</para>
       </listitem>
     </itemizedlist>
@@ -1013,7 +1011,7 @@ http://server.operator.com/service-x? <code>«</code>
 
       <listitem>
         <para>The <emphasis>client</emphasis> performs the calculation of the
-        MAC <emphasis>m’</emphasis> in the same way the server did, and checks
+        MAC <emphasis>m'</emphasis> in the same way the server did, and checks
         that the results match the received MAC <emphasis>m</emphasis>. If
         they do not match, further processing is discarded. The
         <code>serverfg</code> value received in the response is used in the
@@ -1024,12 +1022,12 @@ http://server.operator.com/service-x? <code>«</code>
         role="symbol">δ</phrase>, <emphasis>c</emphasis>,
         <emphasis>s</emphasis>, <emphasis>A</emphasis>})</para>
 
-        <para><emphasis>m’</emphasis> <phrase role="symbol">←</phrase>
+        <para><emphasis>m'</emphasis> <phrase role="symbol">←</phrase>
         <emphasis>HMAC</emphasis>(
         <emphasis>K</emphasis><subscript>a</subscript>,
         <emphasis>e</emphasis>)</para>
 
-        <para><emphasis>m’ = m</emphasis></para>
+        <para><emphasis>m' = m</emphasis></para>
       </listitem>
     </orderedlist>
 
@@ -1094,7 +1092,7 @@ http://server.operator.com/service-x? <code>«</code>
     <section>
       <title>Response Coding</title>
 
-      <para>The server’s response to the client is composed of three
+      <para>The server's response to the client is composed of three
       parts:</para>
 
       <itemizedlist>
@@ -1253,7 +1251,7 @@ http://server.operator.com/service-x? <code>«</code>
       <para>Which, when mapped to HTTP, must become:</para>
 
       <programlisting>http://server.operator.com/service-x <code>«</code>
-    service_platform_id=<phrase role="body">VIN:123456789</phrase>&amp; <code>«</code>
+    service_platform_id=VIN:123456789&amp; <code>«</code>
     clientfg=AHPmWcw%2FsiWYC37xZNdKvQ%3D%3D</programlisting>
     </section>
   </section>
@@ -1309,23 +1307,23 @@ http://server.operator.com/service-x? <code>«</code>
 
     <itemizedlist>
       <listitem>
-        <para>0 – Unknown error</para>
+        <para>0 - Unknown error</para>
       </listitem>
 
       <listitem>
-        <para>1 – Couldn't load or save provisioning information</para>
+        <para>1 - Couldn't load or save provisioning information</para>
       </listitem>
 
       <listitem>
-        <para>2 – Malformed URL Exception</para>
+        <para>2 - Malformed URL Exception</para>
       </listitem>
 
       <listitem>
-        <para>3 – IO Exception when retrieving document of a URL</para>
+        <para>3 - IO Exception when retrieving document of a URL</para>
       </listitem>
 
       <listitem>
-        <para>4 – Corrupted Zip Input Stream</para>
+        <para>4 - Corrupted Zip Input Stream</para>
       </listitem>
     </itemizedlist>
 

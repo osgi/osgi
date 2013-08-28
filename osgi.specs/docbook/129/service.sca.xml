@@ -48,26 +48,26 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Portable</emphasis> – Allow an exported or imported
+          <para><emphasis>Portable</emphasis> - Allow an exported or imported
           service to be configured once for Distribution Providers from
           different origins.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Interoperable</emphasis> – Allow two Distribution
+          <para><emphasis>Interoperable</emphasis> - Allow two Distribution
           Providers to be configured such that they can communicate with each
           other. This is achieved through the use of an interoperable
           Binding.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Extensible</emphasis> – Allow the configuration to
+          <para><emphasis>Extensible</emphasis> - Allow the configuration to
           be extended in new ways, for example, adding new <emphasis>Bindings
           Intents</emphasis> and <emphasis>Policy Sets.</emphasis></para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Compatible</emphasis> – Compatible with the SCA
+          <para><emphasis>Compatible</emphasis> - Compatible with the SCA
           standards.</para>
         </listitem>
       </itemizedlist>
@@ -78,42 +78,42 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Distribution Provider</emphasis> – An implementation
+          <para><emphasis>Distribution Provider</emphasis> - An implementation
           of the communications stack that distributes services according to
           the chapter about <xref linkend="service.remoteservices"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>SCA Distribution Provider</emphasis> – A
+          <para><emphasis>SCA Distribution Provider</emphasis> - A
           Distribution Provider that supports the SCA configuration
           type.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Web Service</emphasis> – A communications stack to
+          <para><emphasis>Web Service</emphasis> - A communications stack to
           provide services available over HTTP, typically used to refer to a
           service using the <code>SOAP/HTTP</code> protocol.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Communications Stack</emphasis> – The software that
+          <para><emphasis>Communications Stack</emphasis> - The software that
           enables the communication between different systems.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Binding Type</emphasis> – An XML schema type that
+          <para><emphasis>Binding Type</emphasis> - An XML schema type that
           defines the configuration details of an Endpoint. Different Binding
           Types are needed for different protocols and require different
           configuration details.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Binding</emphasis> – An XML element of a particular
+          <para><emphasis>Binding</emphasis> - An XML element of a particular
           Binding Type detailing an actual Endpoint.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Intent</emphasis> – An abstract policy requirement
+          <para><emphasis>Intent</emphasis> - An abstract policy requirement
           on the interaction between a service provider and a service client.
           For example the <code>confidentiality</code> Intent could be
           implemented by encrypting the communications between the provider
@@ -121,7 +121,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Policy Set</emphasis> – An implementation of an
+          <para><emphasis>Policy Set</emphasis> - An implementation of an
           Intent, optionally restricted to a specific Binding Type. A Policy
           Set is expressed in a language such as <xref linkend="i3073536"/>.
           For example, a Policy Set might configure Triple-DES encryption as
@@ -131,31 +131,31 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>SCA Configuration Bundle</emphasis> – A bundle
+          <para><emphasis>SCA Configuration Bundle</emphasis> - A bundle
           containing Intents, Policy Sets, and Bindings in one or more of its
           resources.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>SCA Configuration Extender</emphasis> – A bundle
+          <para><emphasis>SCA Configuration Extender</emphasis> - A bundle
           that can detect SCA configuration data in an SCA Configuration
           Bundle using the extender pattern.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>SCA Configuration Document</emphasis> – An XML
+          <para><emphasis>SCA Configuration Document</emphasis> - An XML
           document containing SCA Configuration.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Endpoint</emphasis> – An Endpoint is a
+          <para><emphasis>Endpoint</emphasis> - An Endpoint is a
           communications access mechanism to a service in another framework, a
           (web) service, another process, a queue or topic destination, etc.,
           requiring some protocol for communications.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Endpoint Description</emphasis> – A description of
+          <para><emphasis>Endpoint Description</emphasis> - A description of
           an Endpoint, defined in <xref
           linkend="service.remoteserviceadmin.endpointdescription"/>.</para>
         </listitem>
@@ -197,13 +197,13 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Ready</emphasis> – A service is registered and
+          <para><emphasis>Ready</emphasis> - A service is registered and
           satisfies the rules necessary for it to be considered available for
           exporting.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Configured</emphasis> – The configuration the
+          <para><emphasis>Configured</emphasis> - The configuration the
           service refers to in its properties, both directly and indirectly,
           is available, correct, and complete.</para>
         </listitem>
@@ -307,7 +307,7 @@
       deployer by ensuring that the communications are encrypted with the
       <code>Blowfish</code> encryption algorithm, using a 442 bits key.</para>
 
-      <para>Intents can be suffixed with a full stop (<code>’.’ \u002E</code>)
+      <para>Intents can be suffixed with a full stop (<code>'.' \u002E</code>)
       and a <emphasis>qualifier</emphasis> to create a <emphasis>qualified
       Intent</emphasis>. For example, <code>integrity.message</code> qualifies
       the <code>integrity</code> Intent.</para>
@@ -551,7 +551,7 @@
     and Bindings are then available for bundles that want to export or import
     services. If the SCA Configuration Bundle is stopped, the internal
     registry must be purged from any of the information that was derived from
-    the bundle’s resources.</para>
+    the bundle's resources.</para>
 
     <para>For example, if an SCA Configuration Bundle defines the
     <code>acme:FooRMI</code> Binding together with the
@@ -575,7 +575,7 @@ service.exported.intents = protected</programlisting>
       <xref linkend="i3102308"/>. The structure for a <code>QName</code>
       is:</para>
 
-      <programlisting>QName ::= ’{’ &lt;namespace&gt; ’}’ NCName</programlisting>
+      <programlisting>QName ::= '{' &lt;namespace&gt; '}' NCName</programlisting>
 
       <para>Spaces are not allowed in a <code>name</code>.</para>
 
@@ -600,21 +600,21 @@ service.exported.intents = protected</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Intent Vocabulary</emphasis> – The vocabulary of the
+          <para><emphasis>Intent Vocabulary</emphasis> - The vocabulary of the
           Intents. These Intents must become available on the Distribution
-          Provider’s <code>remote.intents.supported</code> service property
+          Provider's <code>remote.intents.supported</code> service property
           once they are available in the internal registry and have an
           appropriate implementation.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Policy Set Dictionary</emphasis> – A dictionary of
+          <para><emphasis>Policy Set Dictionary</emphasis> - A dictionary of
           Policy Sets. These Policy Sets define the implementations of the
           Intents.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Binding Dictionary</emphasis> –Maps the defined
+          <para><emphasis>Binding Dictionary</emphasis> -Maps the defined
           Bindings. These Bindings must be of Binding Types that are supported
           by the Distribution Provider. Adding new Binding Types is out of
           scope for this specification.</para>
@@ -673,21 +673,21 @@ service.exported.intents = protected</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Absolute path</emphasis> – The path to a resource in
+          <para><emphasis>Absolute path</emphasis> - The path to a resource in
           the fragment or directory, this resource must exist. For example
           <code>cnf/start.xml</code>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Directory</emphasis> – The path to directory in a
-          fragment or the bundle’s JAR; the path must end in a solidus (slash
-          <code>’/’ \u002F</code>). The pattern used in the
+          <para><emphasis>Directory</emphasis> - The path to directory in a
+          fragment or the bundle's JAR; the path must end in a solidus
+          (<code>'/' \u002F</code>). The pattern used in the
           <code>findEntries</code> method must then be <code>*.xml</code>. The
           directory is allowed to be empty.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Pattern</emphasis> – The last component of the path
+          <para><emphasis>Pattern</emphasis> - The last component of the path
           specifies a resource name with optional wildcards. The part before
           is the path of a directory in the bundle or one of its fragments.
           These two parts specify the parameter to the
@@ -796,9 +796,9 @@ service.exported.intents = protected</programlisting>
         </listitem>
 
         <listitem>
-          <para>Add new Intents to the Distribution Providers’s vocabulary.
+          <para>Add new Intents to the Distribution Providers's vocabulary.
           See <xref linkend="i3093631"/> for the rules on when Intents should
-          be added to the Distribution Provider’s vocabulary.</para>
+          be added to the Distribution Provider's vocabulary.</para>
         </listitem>
 
         <listitem>
@@ -813,7 +813,7 @@ service.exported.intents = protected</programlisting>
 
         <listitem>
           <para>Perform any service export or import changes resulting from
-          the updates to the Distribution Provider’s internal registry. This
+          the updates to the Distribution Provider's internal registry. This
           can result in new Endpoints being created, existing Endpoints being
           modified, or new proxies to remote services being registered. See
           <xref linkend="i3092979"/> and <xref linkend="i3107236"/>.</para>
@@ -981,7 +981,7 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
       service bindings in the internal registry.</para>
 
       <para>The <code>@</code> sign is used to indicate an XML attribute. An
-      XML type for an attribute can be suffixed with a plus sign (<code>’+’
+      XML type for an attribute can be suffixed with a plus sign (<code>'+'
       \u002B</code>). This indicates a list of whitespace separated
       elements.</para>
     </section>
@@ -1022,7 +1022,7 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
       <para>In the following sections, the <code>sca-config</code> element and
       its namespace definitions are omitted for brevity. However, the use of
       the prefixes is consistent. Further, it is assumed that the target
-      namespace of the example is the ACME company’s namespace. All examples
+      namespace of the example is the ACME company's namespace. All examples
       therefore are assumed to be contained in the following XML
       fragment:</para>
 
@@ -1064,7 +1064,7 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
       other implementations of that Intent available, then it must be removed
       from the Distribution Provider's Intent vocabulary. Intents can apply to
       specific binding types only. It is therefore possible that an Intent is
-      part of a Distribution Provider’s vocabulary but is not available for a
+      part of a Distribution Provider's vocabulary but is not available for a
       specific Binding Instance.</para>
 
       <para>The details of how Intents are defined is described in the <xref
@@ -1192,7 +1192,7 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
               Distribution Provider that does not recognize Implementation
               Intents must fail if such an Implement Intent is specified.
               Implementation Intents must not become part of the Distribution
-              Provider’s vocabulary.</para></entry>
+              Provider's vocabulary.</para></entry>
             </row>
 
             <row>
@@ -1225,7 +1225,7 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
       omitting the <code>constrains</code> attribute or specifying
       <code>sca:binding</code> in the <code>constrains</code> attribute. <xref
       linkend="i3096496"/> shows an illustration of the
-      <code>acme:protection</code> Intent’s relationship with
+      <code>acme:protection</code> Intent's relationship with
       <code>sca:binding.ws</code>.</para>
 
       <figure xml:id="i3096496">
@@ -1536,7 +1536,7 @@ service.intents          = {http://acme.com/defs}protection</programlisting>
       <programlisting>intentMap ::= &lt;qualifier&gt;*
 qualifier ::= policy ( policy ) *</programlisting>
 
-      <para>See the following table for the <code>intentMap</code> element’s
+      <para>See the following table for the <code>intentMap</code> element's
       attribute.</para>
 
       <para>See <xref linkend="i3072399"/> for more details.</para>
@@ -1839,7 +1839,7 @@ qualifier ::= policy ( policy ) *</programlisting>
         </listitem>
 
         <listitem>
-          <para>The Distribution Provider’s internal registry, or a scoped
+          <para>The Distribution Provider's internal registry, or a scoped
           configuration, contains complete definitions for all of the Bindings
           referred to the service property <code>org.osgi.sca.bindings</code>.
           Bindings can be referred to by either their <code>NCName</code> or
@@ -1849,7 +1849,7 @@ qualifier ::= policy ( policy ) *</programlisting>
         <listitem>
           <para>All Intents and/or Policy Sets listed in a supported Binding's
           <code>requires</code> or <code>policySets</code> attributes are part
-          of the Distribution Provider’s internal registry or, if scoped, in
+          of the Distribution Provider's internal registry or, if scoped, in
           the optional scoped configuration.</para>
         </listitem>
 
@@ -1899,7 +1899,7 @@ qualifier ::= policy ( policy ) *</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>service.imported.configs</code> – Contains the
+          <para><code>service.imported.configs</code> - Contains the
           configuration types that can be used to import this service. This
           must include the <code>org.osgi.sca</code> value. Any other types
           included must be synonymous and therefore refer to exactly the same
@@ -1907,7 +1907,7 @@ qualifier ::= policy ( policy ) *</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>org.osgi.sca.bindings</code> – Names Bindings from the
+          <para><code>org.osgi.sca.bindings</code> - Names Bindings from the
           internal registry for a specific Endpoint. If multiple Bindings are
           listed in this property then they must be synonyms for the same
           Endpoint. The named bindings can refer to the internal registry or
@@ -1994,13 +1994,13 @@ qualifier ::= policy ( policy ) *</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>org.osgi.sca.configs.url</code> – A URL to an SCA
+          <para><code>org.osgi.sca.configs.url</code> - A URL to an SCA
           Configuration Document. This URL must be accessible by an importing
           framework.</para>
         </listitem>
 
         <listitem>
-          <para><code>org.osgi.sca.config.xml</code> – Embedded XML contained
+          <para><code>org.osgi.sca.config.xml</code> - Embedded XML contained
           in the property. The embedded XML is supported with the
           <code>String</code> data type for properties and using an
           <code>xml</code> element to define it.</para>

@@ -42,44 +42,44 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>External</emphasis> – Provide access to external
+          <para><emphasis>External</emphasis> - Provide access to external
           components and resources.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Resolve</emphasis>– The Repository API must be
+          <para><emphasis>Resolve</emphasis> - The Repository API must be
           closely aligned with the Resolver API since they are intended to be
           used in conjunction.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Searching</emphasis> <phrase role="body"> – Support
-          general queries.</phrase></para>
+          <para><emphasis>Searching</emphasis> - Support general
+          queries.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Metadata</emphasis> – Allow resources to provide
+          <para><emphasis>Metadata</emphasis> - Allow resources to provide
           content information.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Retrieval</emphasis> – Allow the retrieval of
+          <para><emphasis>Retrieval</emphasis> - Allow the retrieval of
           Resources from remote locations.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Batching</emphasis> – Repositories must be able to
+          <para><emphasis>Batching</emphasis> - Repositories must be able to
           batch queries.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Distribution</emphasis> – Allow Repositories to be
+          <para><emphasis>Distribution</emphasis> - Allow Repositories to be
           defined with a simple storage scheme such that Repositories can be
           distributed on a removable media like a CD/DVD.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Mirroring</emphasis> – Repositories must be able to
+          <para><emphasis>Mirroring</emphasis> - Repositories must be able to
           support selecting a remote site based on the local situation.</para>
         </listitem>
       </itemizedlist>
@@ -90,28 +90,28 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Repository</emphasis> – A facade to a (remote) set
+          <para><emphasis>Repository</emphasis> - A facade to a (remote) set
           of resources described by capabilities.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Resource</emphasis> – An artifact that has
+          <para><emphasis>Resource</emphasis> - An artifact that has
           requirements that must be satisfied before it is available but
           provides capabilities when it becomes available.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Requirement</emphasis> – An expression that asserts
+          <para><emphasis>Requirement</emphasis> - An expression that asserts
           a capability.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Capability</emphasis> – Describes a feature of the
+          <para><emphasis>Capability</emphasis> - Describes a feature of the
           resource so that it can be required by a requirement.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Resource Content</emphasis> – Provides access to the
+          <para><emphasis>Resource Content</emphasis> - Provides access to the
           underlying bytes of the resource in the default format.</para>
         </listitem>
       </itemizedlist>
@@ -165,17 +165,17 @@
 
     <itemizedlist>
       <listitem>
-        <para><code>service.pid</code> – A mandatory unique identity for this
+        <para><code>service.pid</code> - A mandatory unique identity for this
         Repository service.</para>
       </listitem>
 
       <listitem>
-        <para><code>service.description</code> – An optional human readable
+        <para><code>service.description</code> - An optional human readable
         name for this Repository.</para>
       </listitem>
 
       <listitem>
-        <para><code>repository.url</code> – Optional URLs to landing pages of
+        <para><code>repository.url</code> - Optional URLs to landing pages of
         the repository, if they exist.</para>
       </listitem>
     </itemizedlist>
@@ -199,7 +199,7 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
     the returned capabilities to satisfy the resolver or to get the resource
     from the capability. The Repository then returns all matching
     capabilities. The requirement matches the capability if their namespaces
-    match and the requirement’s filter is absent or matches the
+    match and the requirement's filter is absent or matches the
     attributes.</para>
 
     <para>The <xref
@@ -268,24 +268,24 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
     have one or more <code>osgi.content</code> capabilities that advertise the
     same resource in the same or different formats. The
     <code>osgi.content</code> capability has a number of attributes that
-    provide information about the resource’s download format:</para>
+    provide information about the resource's download format:</para>
 
     <itemizedlist>
       <listitem>
-        <para><code>osgi.content</code> – A unique SHA-256 for the content as
+        <para><code>osgi.content</code> - A unique SHA-256 for the content as
         read from the URL.</para>
       </listitem>
 
       <listitem>
-        <para><code>url</code> – A URL to the content.</para>
+        <para><code>url</code> - A URL to the content.</para>
       </listitem>
 
       <listitem>
-        <para><code>mime</code> – An IANA MIME type for the content.</para>
+        <para><code>mime</code> - An IANA MIME type for the content.</para>
       </listitem>
 
       <listitem>
-        <para><code>size</code> – Size in bytes of the content.</para>
+        <para><code>size</code> - Size in bytes of the content.</para>
       </listitem>
     </itemizedlist>
 
@@ -463,7 +463,7 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
       <listitem>
         <para><xref
         linkend="org.osgi.service.repository.Repository.findProviders-Collection-"
-        xrefstyle="hyperlink"/> – For each requirement find all the
+        xrefstyle="hyperlink"/> - For each requirement find all the
         capabilities that match that requirement and return them as a
         <code>Map&lt;Requirement,Collection&lt;Capability&gt;&gt;</code>.</para>
       </listitem>
@@ -471,7 +471,7 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
       <listitem>
         <para><xref
         linkend="org.osgi.service.repository.Repository.findProviders-RequirementExpression-"
-        xrefstyle="hyperlink"/> – Find all resources that match the
+        xrefstyle="hyperlink"/> - Find all resources that match the
         requirement expression. The requirement expression is used to combine
         multiple requirements using the <code>and</code>, <code>or</code> and
         <code>not</code> operators.</para>
@@ -480,7 +480,7 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
       <listitem>
         <para><xref
         linkend="org.osgi.service.repository.Repository.getExpressionCombiner--"
-        xrefstyle="hyperlink"/> – Obtain an expression combiner. This
+        xrefstyle="hyperlink"/> - Obtain an expression combiner. This
         expression combiner is used to produce requirement expressions from
         simple requirements or other requirement expressions.</para>
       </listitem>
@@ -488,7 +488,7 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
       <listitem>
         <para><xref
         linkend="org.osgi.service.repository.Repository.newRequirementBuilder-String-"
-        xrefstyle="hyperlink"/> – Obtain a convenience builder for Requirement
+        xrefstyle="hyperlink"/> - Obtain a convenience builder for Requirement
         objects.</para>
       </listitem>
     </itemizedlist>
@@ -503,8 +503,8 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
       </listitem>
 
       <listitem>
-        <para>The requirement’s filter is absent or it must match the
-        capability’s attributes.</para>
+        <para>The requirement's filter is absent or it must match the
+        capability's attributes.</para>
       </listitem>
     </itemizedlist>
 
@@ -541,7 +541,7 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
         <listitem>
           <para><xref
           linkend="org.osgi.service.repository.RepositoryContent.getContent--"
-          xrefstyle="hyperlink"/> – Return an Input Stream for the resource,
+          xrefstyle="hyperlink"/> - Return an Input Stream for the resource,
           if more than one <code>osgi.content</code> capability is present the
           content associated with the first capability is returned.</para>
         </listitem>
@@ -719,12 +719,12 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
 
       <itemizedlist>
         <listitem>
-          <para><code>referral*</code> – Referrals to other repositories for a
+          <para><code>referral*</code> - Referrals to other repositories for a
           federated model, see <xref linkend="i3236527"/>.</para>
         </listitem>
 
         <listitem>
-          <para><code>resource*</code> – Resource definitions, see <xref
+          <para><code>resource*</code> - Resource definitions, see <xref
           linkend="i3236496"/>.</para>
         </listitem>
       </itemizedlist>
@@ -850,12 +850,12 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
 
       <itemizedlist>
         <listitem>
-          <para><code>requirement*</code> – The requirements of this resource,
+          <para><code>requirement*</code> - The requirements of this resource,
           see <xref linkend="i3236553"/>.</para>
         </listitem>
 
         <listitem>
-          <para><code>capability</code>* – The capabilities of this resource,
+          <para><code>capability</code>* - The capabilities of this resource,
           see <xref linkend="i3236575"/>.</para>
         </listitem>
       </itemizedlist>
@@ -872,12 +872,12 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
 
       <itemizedlist>
         <listitem>
-          <para><code>directive*</code> – The directives for the capability,
+          <para><code>directive*</code> - The directives for the capability,
           see <xref linkend="i3236593"/>.</para>
         </listitem>
 
         <listitem>
-          <para><code>attribute*</code> – The attributes for the capability,
+          <para><code>attribute*</code> - The attributes for the capability,
           see <xref linkend="i3236601"/>.</para>
         </listitem>
       </itemizedlist>
@@ -927,12 +927,12 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
 
       <itemizedlist>
         <listitem>
-          <para><code>directive*</code> – The directives for the requirement,
+          <para><code>directive*</code> - The directives for the requirement,
           see <xref linkend="i3236593"/>.</para>
         </listitem>
 
         <listitem>
-          <para><code>attribute*</code> – The attributes for the requirement,
+          <para><code>attribute*</code> - The attributes for the requirement,
           see <xref linkend="i3236601"/>.</para>
         </listitem>
       </itemizedlist>
@@ -979,7 +979,7 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
       <para>An <code>attribute</code> element describes an attribute of a
       capability or requirement. Attributes are used to convey information
       about the Capability-Requirement. Attributes for the capability are used
-      for matching the requirement’s filter. The meaning of attributes is
+      for matching the requirement's filter. The meaning of attributes is
       described with the documentation of the namespace in which they
       reside.</para>
 
@@ -992,11 +992,11 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
       follows:</para>
 
       <programlisting>type    ::= list | scalar
-list    ::= ’List&lt;’ scalar ’&gt;’    // no spaces between terminals
-scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlisting>
+list    ::= 'List&lt;' scalar '&gt;'    // no spaces between terminals
+scalar  ::= 'String' | 'Version' | 'Long' | 'Double'</programlisting>
 
       <para>A list conversion requires the value to be broken in tokens
-      separated by comma (<code>’,’ \u002C</code>). Whitespace around the list
+      separated by comma (<code>',' \u002C</code>). Whitespace around the list
       and around commas must be trimmed for non-String types.
       Each token must then be converted to
       the given type according to the <code>scalar</code> type specifier. The
@@ -1009,21 +1009,21 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
 
       <itemizedlist>
         <listitem>
-          <para><code>String</code> – No conversion, use <code>s</code></para>
+          <para><code>String</code> - No conversion, use <code>s</code></para>
         </listitem>
 
         <listitem>
-          <para><code>Version</code> –
+          <para><code>Version</code> -
           <code>Version.parseVersion(s)</code></para>
         </listitem>
 
         <listitem>
-          <para><code>Long</code> – After trimming whitespace,
+          <para><code>Long</code> - After trimming whitespace,
           <code>Long.parseLong(s)</code></para>
         </listitem>
 
         <listitem>
-          <para><code>Double</code> – After trimming whitespace,
+          <para><code>Double</code> - After trimming whitespace,
           <code>Double.parseDouble(s)</code></para>
         </listitem>
       </itemizedlist>
@@ -1149,25 +1149,25 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
                            '(&amp;amp;(osgi.wiring.package=org.apache.commons.pool)(version&amp;gt;=1.5.6))'/&gt;
     &lt;/requirement&gt;
 
-    &lt;requirement namespace=’osgi.identity’&gt;
-      &lt;directive name=’effective’ value=’meta’/&gt;
-      &lt;directive name=’resolution’ value=’optional’/&gt;
-      &lt;directive name='filter’ value=
-              ’(&amp;(version=1.5.6)(osgi.identity=org.acme.pool-src))’
-        &lt;directive name=’classifier’ value=’sources’/&gt;
+    &lt;requirement namespace='osgi.identity'&gt;
+      &lt;directive name='effective' value='meta'/&gt;
+      &lt;directive name='resolution' value='optional'/&gt;
+      &lt;directive name='filter' value=
+              '(&amp;(version=1.5.6)(osgi.identity=org.acme.pool-src))'
+        &lt;directive name='classifier' value='sources'/&gt;
     &lt;/requirement&gt;
 
     &lt;capability namespace='osgi.identity'&gt;
       &lt;attribute name='osgi.identity' value='org.acme.pool'/&gt;
-      &lt;attribute name='version'type='Version' value='1.5.6’/&gt;
+      &lt;attribute name='version'type='Version' value='1.5.6'/&gt;
       &lt;attribute name='type' value='osgi.bundle'/&gt;
     &lt;/capability&gt;
 
     &lt;capability namespace='osgi.content'&gt;
-      &lt;attribute name='osgi.content' value=’e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855’
-      &lt;attribute name=’url’ value=’http://www.acme.com/repository/org/acme/pool/org.acme.pool-1.5.6.jar’/&gt;
+      &lt;attribute name='osgi.content' value='e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'
+      &lt;attribute name='url' value='http://www.acme.com/repository/org/acme/pool/org.acme.pool-1.5.6.jar'/&gt;
       &lt;attribute name='size' type='Long' value='4405'/&gt;
-      &lt;attribute name=’mime’ value=’application/vnd.osgi.bundle’/&gt;
+      &lt;attribute name='mime' value='application/vnd.osgi.bundle'/&gt;
     &lt;/capability&gt;
 
     &lt;capability namespace='osgi.wiring.bundle'&gt;
@@ -1180,7 +1180,7 @@ scalar  ::= ’String’ | ’Version’ | ’Long’ | ’Double’</programlis
       &lt;attribute name='version' type='Version' value='1.1.2'/&gt;
       &lt;attribute name='bundle-version' type='Version' value='1.5.6'/&gt;
       &lt;attribute name='bundle-symbolic-name' value='org.acme.pool'/&gt;
-      &lt;directive name=’uses’ value=’org.acme.pool,org.acme.util’/&gt;
+      &lt;directive name='uses' value='org.acme.pool,org.acme.util'/&gt;
     &lt;/capability&gt;
 
   &lt;/resource&gt;

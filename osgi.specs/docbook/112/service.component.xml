@@ -31,7 +31,7 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Startup Time</emphasis> – The procedural service model
+        <para><emphasis>Startup Time</emphasis> - The procedural service model
         requires a bundle to actively register and acquire its services. This
         is normally done at startup time, requiring all present bundles to be
         initialized with a Bundle Activator. In larger systems, this quickly
@@ -39,7 +39,7 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>Memory Footprint</emphasis> – A service registered
+        <para><emphasis>Memory Footprint</emphasis> - A service registered
         with the Framework implies that the implementation, and related
         classes and objects, are loaded in memory. If the service is never
         used, this memory is unnecessarily occupied. The creation of a class
@@ -47,7 +47,7 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>Complexity</emphasis> – Service can come and go at any
+        <para><emphasis>Complexity</emphasis> - Service can come and go at any
         time. This dynamic behavior makes the service programming model more
         complex than more traditional models. This complexity negatively
         influences the adoption of the OSGi service model as well as the
@@ -67,7 +67,7 @@
 
     <para>From a system perspective, the service component model means reduced
     startup time and potentially a reduction of the memory footprint. From a
-    programmer’s point of view the service component model provides a
+    programmer's point of view the service component model provides a
     simplified programming model.</para>
 
     <para>The Service Component model makes use of concepts described in <xref
@@ -78,20 +78,20 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Backward Compatibility</emphasis> – The service
+          <para><emphasis>Backward Compatibility</emphasis> - The service
           component model must operate seamlessly with the existing service
           model.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Size Constraints</emphasis> – The service component
+          <para><emphasis>Size Constraints</emphasis> - The service component
           model must not require memory and performance intensive subsystems.
           The model must also be applicable on resource constrained
           devices.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Delayed Activation</emphasis> – The service
+          <para><emphasis>Delayed Activation</emphasis> - The service
           component model must allow delayed activation of a service
           component. Delayed activation allows for delayed class loading and
           object creation until needed, thereby reducing the overall memory
@@ -99,19 +99,19 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Simplicity</emphasis> – The programming model for
+          <para><emphasis>Simplicity</emphasis> - The programming model for
           using declarative services must be very simple and not require the
           programmer to learn a complicated API or XML sub-language.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Reactive</emphasis> – It must be possible to react
+          <para><emphasis>Reactive</emphasis> - It must be possible to react
           to changes in the external dependencies with different
           policies.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Annotations</emphasis> – Annotations must be
+          <para><emphasis>Annotations</emphasis> - Annotations must be
           provided that can leverage the type information to create the XML
           descriptor.</para>
         </listitem>
@@ -123,7 +123,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Service Component</emphasis> – A service component
+          <para><emphasis>Service Component</emphasis> - A service component
           contains a description that is interpreted at run time to create and
           dispose objects depending on the availability of other services, the
           need for such an object, and available configuration data. Such
@@ -133,19 +133,19 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Component Description </emphasis>– The declaration
+          <para><emphasis>Component Description</emphasis> - The declaration
           of a service component. It is contained within an XML document in a
           bundle.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Component Properties </emphasis>– A set of
+          <para><emphasis>Component Properties</emphasis> - A set of
           properties which can be specified by the component description,
           Configuration Admin service and from the component factory.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Component Configuration </emphasis>– A component
+          <para><emphasis>Component Configuration</emphasis> - A component
           configuration represents a component description parameterized by
           component properties. It is the entity that tracks the component
           dependencies and manages a component instance. An activated
@@ -153,7 +153,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Component Instance </emphasis>– An instance of the
+          <para><emphasis>Component Instance</emphasis> - An instance of the
           component implementation class. A component instance is created when
           a component configuration is activated and discarded when the
           component configuration is deactivated. A component instance is
@@ -161,46 +161,46 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Delayed Component </emphasis>– A component whose
+          <para><emphasis>Delayed Component</emphasis> - A component whose
           component configurations are activated when their service is
           requested.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Immediate Component </emphasis>– A component whose
+          <para><emphasis>Immediate Component</emphasis> - A component whose
           component configurations are activated immediately upon becoming
           satisfied.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Factory Component </emphasis>– A component whose
+          <para><emphasis>Factory Component</emphasis> - A component whose
           component configurations are created and activated through the
-          component’s component factory.</para>
+          component's component factory.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Reference </emphasis>– A specified dependency of a
+          <para><emphasis>Reference</emphasis> - A specified dependency of a
           component on a set of target services.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Service Component Runtime (SCR) </emphasis>– The
+          <para><emphasis>Service Component Runtime (SCR)</emphasis> - The
           actor that manages the components and their life cycle.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Target Services</emphasis> – The set of services
+          <para><emphasis>Target Services</emphasis> - The set of services
           that is defined by the reference interface and target property
           filter.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Bound Services</emphasis> – The set of target
+          <para><emphasis>Bound Services</emphasis> - The set of target
           services that are bound to a component configuration.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Event methods</emphasis> – The bind, updated, and
+          <para><emphasis>Event methods</emphasis> - The bind, updated, and
           unbind methods associated with a Reference.</para>
         </listitem>
       </itemizedlist>
@@ -233,14 +233,14 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Immediate Component </emphasis>– The component
+          <para><emphasis>Immediate Component</emphasis> - The component
           configuration of an immediate component must be activated
           immediately after becoming satisfied. Immediate components may
           provide a service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Delayed Component</emphasis> – When a component
+          <para><emphasis>Delayed Component</emphasis> - When a component
           configuration of a delayed component becomes satisfied, SCR will
           register the service specified by the <code>service</code> element
           without activating the component configuration. If this service is
@@ -255,12 +255,12 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Factory Component</emphasis> – If a component’s
+          <para><emphasis>Factory Component</emphasis> - If a component's
           description specifies the <code>factory</code> attribute of the
           <code>component</code> element, SCR will register a Component
           Factory service. This service allows client bundles to create and
           activate multiple component configurations and dispose of them. If
-          the component’s description also specifies a <code>service</code>
+          the component's description also specifies a <code>service</code>
           element, then as each component configuration is activated, SCR will
           register it as a service.</para>
         </listitem>
@@ -272,7 +272,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Architects</emphasis> – The chapter, <xref
+          <para><emphasis>Architects</emphasis> - The chapter, <xref
           linkend="i1479629"/>, gives a comprehensive introduction to the
           capabilities of the component model. It explains the model with a
           number of examples. The section about <xref linkend="i1545305"/>
@@ -280,7 +280,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Service Programmers</emphasis> – Service programmers
+          <para><emphasis>Service Programmers</emphasis> - Service programmers
           should read <xref linkend="i1479629"/>. This chapter should suffice
           for the most common cases. For the more advanced possibilities, they
           should consult <xref linkend="i1524140"/> for the details of the XML
@@ -288,7 +288,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Deployers</emphasis> – Deployers should consult
+          <para><emphasis>Deployers</emphasis> - Deployers should consult
           <xref linkend="i1479915"/>.</para>
         </listitem>
       </itemizedlist>
@@ -302,7 +302,7 @@
     distinguishing aspect of a component is that it is
     <emphasis>declared</emphasis> in an XML document. Component configurations
     are activated and deactivated under the full control of SCR. SCR bases its
-    decisions on the information in the component’s description. This
+    decisions on the information in the component's description. This
     information consists of basic component information like the name and
     type, optional services that are implemented by the component, and
     <emphasis>references</emphasis>. References are dependencies that the
@@ -319,7 +319,7 @@
     configuration becomes unsatisfied, or the component configuration is no
     longer needed.</para>
 
-    <para>If an activated component configuration’s configuration properties
+    <para>If an activated component configuration's configuration properties
     change, SCR must deactivate the component configuration and then attempt
     to reactivate the component configuration using the new configuration
     information.</para>
@@ -346,7 +346,7 @@
         </listitem>
       </itemizedlist>
 
-      <para>The elements in the component’s description are defined in <xref
+      <para>The elements in the component's description are defined in <xref
       linkend="i1524140"/>. The XML grammar for the component declaration is
       defined by the XML Schema, see <xref linkend="i1523991"/>.</para>
     </section>
@@ -410,7 +410,7 @@
       is delayed until the registered service is requested. The registered
       service of a delayed component looks like a normal registered service
       but does not incur the overhead of an ordinarily registered service that
-      require a service’s bundle to be initialized to register the
+      require a service's bundle to be initialized to register the
       service.</para>
 
       <para>For example, a bundle needs to see events of a specific topic. The
@@ -462,12 +462,12 @@
 
       <itemizedlist>
         <listitem>
-          <para><code>component.name</code> – The name of the
+          <para><code>component.name</code> - The name of the
           component.</para>
         </listitem>
 
         <listitem>
-          <para><code>component.factory</code> – The factory
+          <para><code>component.factory</code> - The factory
           identifier.</para>
         </listitem>
       </itemizedlist>
@@ -550,8 +550,8 @@
     <para>The services that are selected by a reference are called the
     <emphasis>target services</emphasis>. These are the services selected by
     the <code>BundleContext.getServiceReferences</code> method where the first
-    argument is the reference’s interface and the second argument is the
-    reference’s target property, which must be a valid filter.</para>
+    argument is the reference's interface and the second argument is the
+    reference's target property, which must be a valid filter.</para>
 
     <para>A component configuration becomes <emphasis>satisfied</emphasis>
     when each specified reference is satisfied. A reference is
@@ -576,7 +576,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Event strategy</emphasis> – SCR calls a method on
+          <para><emphasis>Event strategy</emphasis> - SCR calls a method on
           the component instance when a service becomes bound, when a service
           becomes unbound, or when its properties are updated. These methods
           are the bind, updated, and unbind methods specified by the
@@ -586,7 +586,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Lookup strategy</emphasis> – A component instance
+          <para><emphasis>Lookup strategy</emphasis> - A component instance
           can use one of the <code>locateService</code> methods of <xref
           linkend="org.osgi.service.component.ComponentContext"
           xrefstyle="hyperlink"/> to locate a bound service. These methods
@@ -610,7 +610,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><code>bind</code> – The bind method is called to bind a new
+          <para><code>bind</code> - The bind method is called to bind a new
           service to the component that matches the selection criteria. If the
           <code>policy</code> is <code>dynamic</code> then the bind method of
           a replacement service can be called before its corresponding unbind
@@ -618,7 +618,7 @@
         </listitem>
 
         <listitem>
-          <para><code>updated</code> – The updated method is called when the
+          <para><code>updated</code> - The updated method is called when the
           service properties of a bound services are modified and the
           resulting properties do not cause the service to become unbound
           because it is no longer selected by the <code>target</code>
@@ -626,7 +626,7 @@
         </listitem>
 
         <listitem>
-          <para><code>unbind</code> – The unbind method is called when the SCR
+          <para><code>unbind</code> - The unbind method is called when the SCR
           needs to unbind the service.</para>
         </listitem>
       </itemizedlist>
@@ -649,19 +649,19 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
       activation of bound services when using the event strategy.</para>
 
       <para>If an event method has the second prototype, then the service
-      object of the bound service is passed to the method. The method’s
+      object of the bound service is passed to the method. The method's
       parameter type must be assignable from the type specified by the
-      reference’s <code>interface</code> attribute. That is, the service
-      object of the bound service must be castable to the method’s parameter
+      reference's <code>interface</code> attribute. That is, the service
+      object of the bound service must be castable to the method's parameter
       type.</para>
 
       <para>If an event method has the third prototype, then the service
       object of the bound service is passed to the method as the first
       argument and an unmodifiable Map containing the service properties of
-      the bound service is passed as the second argument. The method’s first
+      the bound service is passed as the second argument. The method's first
       parameter type must be assignable from the type specified by the
-      reference’s <code>interface</code> attribute. That is, the service
-      object of the bound service must be castable to the method’s first
+      reference's <code>interface</code> attribute. That is, the service
+      object of the bound service must be castable to the method's first
       parameter type.</para>
 
       <para>The bind and unbind methods must be called once for each bound
@@ -679,13 +679,13 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
 
         <listitem>
           <para>The method takes a single argument and the type of the
-          argument is the type specified by the reference’s
+          argument is the type specified by the reference's
           <code>interface</code> attribute.</para>
         </listitem>
 
         <listitem>
           <para>The method takes a single argument and the type of the
-          argument is assignable from the type specified by the reference’s
+          argument is assignable from the type specified by the reference's
           <code>interface</code> attribute. If multiple methods match this
           rule, this implies the method name is overloaded and SCR may choose
           any of the methods to call.</para>
@@ -693,14 +693,14 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
 
         <listitem>
           <para>The method takes two argument and the type of the first
-          argument is the type specified by the reference’s
+          argument is the type specified by the reference's
           <code>interface</code> attribute and the type of the second argument
           is <code>java.util.Map</code>.</para>
         </listitem>
 
         <listitem>
           <para>The method takes two argument and the type of the first
-          argument is assignable from the type specified by the reference’s
+          argument is assignable from the type specified by the reference's
           <code>interface</code> attribute and the type of the second argument
           is <code>java.util.Map</code>. If multiple methods match this rule,
           this implies the method name is overloaded and SCR may choose any of
@@ -717,11 +717,11 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
       <para>When the service object for a bound service is first provided to a
       component instance, that is passed to an event method or returned by a
       locate service method, SCR must get the service object from the OSGi
-      Framework’s service registry using the <code>getService</code> method on
-      the component’s Bundle Context. If the service object for a bound
+      Framework's service registry using the <code>getService</code> method on
+      the component's Bundle Context. If the service object for a bound
       service has been obtained and the service becomes unbound, SCR must
       unget the service object using the <code>ungetService</code> method on
-      the component’s Bundle Context and discard all references to the service
+      the component's Bundle Context and discard all references to the service
       object.</para>
 
       <para>For example, a component requires the Log Service and uses the
@@ -796,7 +796,7 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Multiplicity</emphasis> – Does the component
+          <para><emphasis>Multiplicity</emphasis> - Does the component
           implementation assume a single service or does it explicitly handle
           multiple occurrences For example, when a component uses the Log
           Service, it only needs to bind to one Log Service to function
@@ -807,7 +807,7 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
         </listitem>
 
         <listitem>
-          <para><emphasis>Optionality</emphasis> – Can the component function
+          <para><emphasis>Optionality</emphasis> - Can the component function
           without any bound service present Some components can still perform
           useful tasks even when no target service is available, other
           components must bind to at least one target service before they can
@@ -822,9 +822,9 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
 
       <para>The cardinality is expressed with the following syntax:</para>
 
-      <programlisting>cardinality  ::= optionality ’..’ multiplicity
-optionality  ::= ’0’ | ’1’
-multiplicity ::= ’1’ | ’n’</programlisting>
+      <programlisting>cardinality  ::= optionality '..' multiplicity
+optionality  ::= '0' | '1'
+multiplicity ::= '1' | 'n'</programlisting>
 
       <para>A reference is <emphasis>satisfied</emphasis> if the number of
       target services is equal to or more than the <code>optionality</code>.
@@ -839,19 +839,19 @@ multiplicity ::= ’1’ | ’n’</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code>0..1</code> – Optional and unary.</para>
+          <para><code>0..1</code> - Optional and unary.</para>
         </listitem>
 
         <listitem>
-          <para><code>1..1</code> – Mandatory and unary (Default) .</para>
+          <para><code>1..1</code> - Mandatory and unary (Default) .</para>
         </listitem>
 
         <listitem>
-          <para><code>0..n</code> – Optional and multiple.</para>
+          <para><code>0..n</code> - Optional and multiple.</para>
         </listitem>
 
         <listitem>
-          <para><code>1..n</code> – Mandatory and multiple.</para>
+          <para><code>1..n</code> - Mandatory and multiple.</para>
         </listitem>
       </itemizedlist>
 
@@ -938,14 +938,14 @@ public class HttpResourceImpl {
       usually also not applicable if the cardinality specifies multiple bound
       services.</para>
 
-      <para>The <emphasis>dynamic</emphasis> <emphasis>policy</emphasis> is
-      slightly more complex since the component implementation must properly
-      handle changes in the set of bound services that can occur on any
-      thread. With the dynamic policy, SCR can change the set of bound
-      services without deactivating a component configuration. If the
-      component uses the event strategy to access services, then the component
-      instance will be notified of changes in the set of bound services by
-      calls to the bind, and unbind methods.</para>
+      <para>The <emphasis>dynamic policy</emphasis> is slightly more complex
+      since the component implementation must properly handle changes in the
+      set of bound services that can occur on any thread. With the dynamic
+      policy, SCR can change the set of bound services without deactivating a
+      component configuration. If the component uses the event strategy to
+      access services, then the component instance will be notified of changes
+      in the set of bound services by calls to the bind, and unbind
+      methods.</para>
 
       <para>If the <code>policy-option</code> is <code>reluctant</code> then a
       bound reference is not rebound even if a more suitable service becomes
@@ -988,12 +988,12 @@ public class HttpResourceImpl {
 
       <itemizedlist>
         <listitem>
-          <para><code>reluctant</code> – Minimize rebinding and
+          <para><code>reluctant</code> - Minimize rebinding and
           reactivating.</para>
         </listitem>
 
         <listitem>
-          <para><code>greedy</code> – Maximize the use of the best service by
+          <para><code>greedy</code> - Maximize the use of the best service by
           deactivating static references or rebinding dynamic
           references.</para>
         </listitem>
@@ -1097,7 +1097,7 @@ public class HttpResourceImpl {
       <title>Selecting Target Services</title>
 
       <para>The target services for a reference are constrained by the
-      reference’s interface name and target property. By specifying a filter
+      reference's interface name and target property. By specifying a filter
       in the target property, the programmer and deployer can constrain the
       set of services that should be part of the target services.</para>
 
@@ -1174,15 +1174,15 @@ public class HttpResourceImpl {
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Elements</emphasis> – The annotation class that
+          <para><emphasis>Elements</emphasis> - The annotation class that
           corresponds to an element starts with an upper case. For example the
           <code>component</code> element is represented by the
           <code>@Component</code> annotation.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Attributes</emphasis> – Multi word attributes that
-          use a minus sign (<code>’-’ \u002D</code>) are changed to camel
+          <para><emphasis>Attributes</emphasis> - Multi word attributes that
+          use a minus sign (<code>'-' \u002D</code>) are changed to camel
           case. For example, the <code>component</code> element
           <code>configuration-pid</code> attribute is the
           <code>configurationPid</code> member in the <code>@Component</code>
@@ -1193,7 +1193,7 @@ public class HttpResourceImpl {
       <para>Some elements do not have a corresponding annotation since the
       annotations can be parameterized by the type information in the Java
       class. For example, the <code>@Component</code> annotation synthesizes
-      the <code>implement</code> element’s <code>class</code> attribute from
+      the <code>implement</code> element's <code>class</code> attribute from
       the type it is applied to.</para>
 
       <para>These annotations are intended to be used during build time to
@@ -1221,7 +1221,7 @@ public class HttpResourceImpl {
       <programlisting>Service-Component: OSGI-INF/*.xml</programlisting>
 
       <para>A Service-Component manifest header specified in a fragment is
-      ignored by SCR. However, XML documents referenced by a bundle’s
+      ignored by SCR. However, XML documents referenced by a bundle's
       Service-Component manifest header may be contained in attached
       fragments.</para>
 
@@ -1410,7 +1410,7 @@ public class HttpResourceImpl {
               <code>Configuration</code> object where the PID is the name of
               the component.</para><itemizedlist>
                   <listitem>
-                    <para><code>optional</code> – (default) Use the
+                    <para><code>optional</code> - (default) Use the
                     corresponding <code>Configuration</code> object if present
                     but allow the component to be satisfied even if the
                     corresponding <code>Configuration</code> object is not
@@ -1418,13 +1418,13 @@ public class HttpResourceImpl {
                   </listitem>
 
                   <listitem>
-                    <para><code>require</code> – There must be a corresponding
+                    <para><code>require</code> - There must be a corresponding
                     <code>Configuration</code> object for the component
                     configuration to become satisfied.</para>
                   </listitem>
 
                   <listitem>
-                    <para><code>ignore</code> – Always allow the component
+                    <para><code>ignore</code> - Always allow the component
                     configuration to be satisfied and do not use the
                     corresponding <code>Configuration</code> object even if it
                     is present.</para>
@@ -1547,7 +1547,7 @@ public class HttpResourceImpl {
       </table>
 
       <para>The class is retrieved with the <code>loadClass</code> method of
-      the component’s bundle. The class must be public and have a public
+      the component's bundle. The class must be public and have a public
       constructor without arguments (this is normally the default constructor)
       so component instances may be created by SCR with the
       <code>newInstance</code> method on <code>Class</code>.</para>
@@ -1567,7 +1567,7 @@ public class HttpResourceImpl {
       properties override earlier properties that have the same name.</para>
 
       <para>Properties can also be overridden by a Configuration Admin
-      service’s <code>Configuration</code> object before they are exposed to
+      service's <code>Configuration</code> object before they are exposed to
       the component or used as service properties. This is described in <xref
       linkend="i1407478"/> and <xref linkend="i1479915"/>.</para>
 
@@ -1711,7 +1711,7 @@ public class HttpResourceImpl {
       <code>Component</code>. This element is an array of strings that must
       follow the following syntax:</para>
 
-      <programlisting>property ::= name ( ’:’ type )? ’=’ value</programlisting>
+      <programlisting>property ::= name ( ':' type )? '=' value</programlisting>
 
       <para>In this case <code>name</code>, <code>type</code>, and
       <code>value</code> parts map to the attributes of the
@@ -1898,7 +1898,7 @@ public class FooImpl {
               class must implement all the specified service
               interfaces.</para><para>The Component annotation can specify the
               provided services, if this element is not specified all directly
-              implemented interfaces on the component’s type are defined as
+              implemented interfaces on the component's type are defined as
               service interfaces. Specifying an empty array indicates that no
               service should be registered.</para></entry>
             </row>
@@ -2142,7 +2142,7 @@ public class FooImpl implements Foo {
       <title>Enabled</title>
 
       <para>A component must first be <emphasis>enabled</emphasis> before it
-      can be used. A component cannot be enabled unless the component’s bundle
+      can be used. A component cannot be enabled unless the component's bundle
       is started. See <emphasis>Starting Bundles</emphasis> in <xref
       linkend="intro.core.release" xrefstyle="template:%t"/>. All components
       in a bundle become disabled when the bundle is stopped. So the life
@@ -2203,7 +2203,7 @@ public class FooImpl implements Foo {
 
         <listitem>
           <para>Using the component properties of the component configuration,
-          all the component’s references are satisfied. A reference is
+          all the component's references are satisfied. A reference is
           satisfied when the reference specifies optional cardinality or there
           is at least one target service for the reference.</para>
         </listitem>
@@ -2255,7 +2255,7 @@ public class FooImpl implements Foo {
 
       <para>SCR must register a service after the component configuration
       becomes satisfied. The registration of this service must look to
-      observers of the service registry as if the component’s bundle actually
+      observers of the service registry as if the component's bundle actually
       registered this service. This strategy makes it possible to register
       services without creating a class loader for the bundle and loading
       classes, thereby allowing reduction in initialization time and a delay
@@ -2321,7 +2321,7 @@ public class FooImpl implements Foo {
 
         <listitem>
           <para>Using the component properties specified by the component
-          description, all the component’s references are satisfied. A
+          description, all the component's references are satisfied. A
           reference is satisfied when the reference specifies optional
           cardinality or there is at least one target service for the
           reference</para>
@@ -2344,12 +2344,12 @@ public class FooImpl implements Foo {
 
       <itemizedlist>
         <listitem>
-          <para><code>component.name</code> – The name of the
+          <para><code>component.name</code> - The name of the
           component.</para>
         </listitem>
 
         <listitem>
-          <para><code>component.factory</code> – The value of the
+          <para><code>component.factory</code> - The value of the
           <code>factory</code> attribute.</para>
         </listitem>
       </itemizedlist>
@@ -2444,7 +2444,7 @@ public class FooImpl implements Foo {
       use with the activated component configuration. A component instance
       must complete activation before it can be deactivated. Once the
       component configuration is deactivated or fails to activate due to an
-      exception, SCR must unbind all the component’s bound services and
+      exception, SCR must unbind all the component's bound services and
       discard all references to the component instance associated with the
       activation.</para>
     </section>
@@ -2452,7 +2452,7 @@ public class FooImpl implements Foo {
     <section xml:id="i1536739">
       <title>Binding Services</title>
 
-      <para>When a component configuration’s reference is satisfied, there is
+      <para>When a component configuration's reference is satisfied, there is
       a set of zero or more target services for that reference. When the
       component configuration is activated, a subset of the target services
       for each reference are bound to the component configuration. The subset
@@ -2468,7 +2468,7 @@ public class FooImpl implements Foo {
       be called for each bound service of that reference. This may result in
       activating a component configuration of the bound service which could
       result in an exception. If the loss of the bound service due to the
-      exception causes the reference’s cardinality constraint to be violated,
+      exception causes the reference's cardinality constraint to be violated,
       then activation of this component configuration will fail. Otherwise the
       bound service which failed to activate will be considered unbound. If a
       bind method throws an exception, SCR must log an error message
@@ -2492,17 +2492,17 @@ public class FooImpl implements Foo {
 
       <itemizedlist>
         <listitem>
-          <para><code>ComponentContext</code> – The component instance will be
+          <para><code>ComponentContext</code> - The component instance will be
           passed the Component Context for the component configuration.</para>
         </listitem>
 
         <listitem>
-          <para><code>BundleContext</code> – The component instance will be
+          <para><code>BundleContext</code> - The component instance will be
           passed the Bundle Context of the component's bundle.</para>
         </listitem>
 
         <listitem>
-          <para><code>Map</code> – The component instance will be passed an
+          <para><code>Map</code> - The component instance will be passed an
           unmodifiable Map containing the component properties.</para>
         </listitem>
       </itemizedlist>
@@ -2720,31 +2720,31 @@ void unsetLogService( LogService log ) {
 
       <itemizedlist>
         <listitem>
-          <para>0 – Unspecified.</para>
+          <para>0 - Unspecified.</para>
         </listitem>
 
         <listitem>
-          <para>1 – The component was disabled.</para>
+          <para>1 - The component was disabled.</para>
         </listitem>
 
         <listitem>
-          <para>2 – A reference became unsatisfied.</para>
+          <para>2 - A reference became unsatisfied.</para>
         </listitem>
 
         <listitem>
-          <para>3 – A configuration was changed.</para>
+          <para>3 - A configuration was changed.</para>
         </listitem>
 
         <listitem>
-          <para>4 – A configuration was deleted.</para>
+          <para>4 - A configuration was deleted.</para>
         </listitem>
 
         <listitem>
-          <para>5 – The component was disposed.</para>
+          <para>5 - The component was disposed.</para>
         </listitem>
 
         <listitem>
-          <para>6 – The bundle was stopped.</para>
+          <para>6 - The bundle was stopped.</para>
         </listitem>
       </itemizedlist>
 
@@ -2770,22 +2770,22 @@ void unsetLogService( LogService log ) {
 
       <itemizedlist>
         <listitem>
-          <para><code>ComponentContext</code> – The component instance will be
+          <para><code>ComponentContext</code> - The component instance will be
           passed the Component Context for the component.</para>
         </listitem>
 
         <listitem>
-          <para><code>BundleContext</code> – The component instance will be
+          <para><code>BundleContext</code> - The component instance will be
           passed the Bundle Context of the component's bundle.</para>
         </listitem>
 
         <listitem>
-          <para><code>Map</code> – The component instance will be passed an
+          <para><code>Map</code> - The component instance will be passed an
           unmodifiable Map containing the component properties.</para>
         </listitem>
 
         <listitem>
-          <para><code>int</code> or <code>Integer</code> – The component
+          <para><code>int</code> or <code>Integer</code> - The component
           instance will be passed the reason the component configuration is
           being deactivated. See <xref linkend="i1649517"/>.</para>
         </listitem>
@@ -2979,7 +2979,7 @@ void unsetLogService( LogService log ) {
         <itemizedlist>
           <listitem>
             <para><code>target</code> attribute of <code>reference</code>
-            elements – Sets a component property called the <emphasis>target
+            elements - Sets a component property called the <emphasis>target
             property</emphasis> of the reference. The key of a target property
             is the name of the reference appended with <code>.target</code>.
             The value of a target property is the value of the
@@ -2993,7 +2993,7 @@ void unsetLogService( LogService log ) {
           </listitem>
 
           <listitem>
-            <para><code>property</code> and <code>properties</code> elements –
+            <para><code>property</code> and <code>properties</code> elements -
             See <xref linkend="i1544128"/>.</para>
           </listitem>
         </itemizedlist>
@@ -3020,11 +3020,11 @@ void unsetLogService( LogService log ) {
 
     <itemizedlist>
       <listitem>
-        <para><code>component.name</code> – The component name.</para>
+        <para><code>component.name</code> - The component name.</para>
       </listitem>
 
       <listitem>
-        <para><code>component.id</code> – A unique value ( <code>Long</code>)
+        <para><code>component.id</code> - A unique value ( <code>Long</code>)
         that is larger than all previously assigned values. These values are
         not persistent across restarts of SCR.</para>
       </listitem>
@@ -3039,7 +3039,7 @@ void unsetLogService( LogService log ) {
       private configuration properties. That is, the service properties of the
       registered service must be all the component properties of the component
       configuration whose property names do not start with full stop
-      (<code>’.’</code> <code>\u002E</code>).</para>
+      (<code>'.' \u002E</code>).</para>
 
       <para>Component properties whose names start with full stop are
       available to the component instance but are not available as service
@@ -3065,7 +3065,7 @@ void unsetLogService( LogService log ) {
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>No Configuration</emphasis> – If the component’s
+        <para><emphasis>No Configuration</emphasis> - If the component's
         <code>configuration-policy</code> is set to <code>ignore</code> or
         there is no Configuration with a PID or factory PID equal to the
         configuration PID, then component configurations will not obtain
@@ -3075,7 +3075,7 @@ void unsetLogService( LogService log ) {
       </listitem>
 
       <listitem>
-        <para><emphasis>Not Satisfied</emphasis> – If the component’s
+        <para><emphasis>Not Satisfied</emphasis> - If the component's
         <code>configuration-policy</code> is set to <code>require</code> and
         there is no Configuration with a PID or factory PID equal to the
         configuration PID, then the component configuration is not satisfied
@@ -3083,14 +3083,14 @@ void unsetLogService( LogService log ) {
       </listitem>
 
       <listitem>
-        <para><emphasis>Single Configuration</emphasis> – If there exists a
+        <para><emphasis>Single Configuration</emphasis> - If there exists a
         Configuration with a PID equal to the configuration PID, then
         component configurations will obtain additional component properties
         from Configuration Admin.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Factory Configuration</emphasis> – If a factory PID
+        <para><emphasis>Factory Configuration</emphasis> - If a factory PID
         exists, with zero or more Configurations, that is equal to the
         configuration PID, then for each Configuration, a component
         configuration must be created that will obtain additional component
@@ -3185,7 +3185,7 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
     <para>The primary annotation is the <xref
     linkend="org.osgi.service.component.annotations.Component"
     xrefstyle="hyperlink"/> annotation. It indicates that a class is a
-    component. It’s defaults create the easiest to use component:</para>
+    component. It's defaults create the easiest to use component:</para>
 
     <itemizedlist>
       <listitem>
@@ -3232,13 +3232,13 @@ public class MacSpeech implements Speech {
         new ScriptEngineManager().getEngineByName("AppleScript");
     
     public void say(String message) throws Exception {
-        engine.eval("say \"" + message.replace(’"’,’\’’ + "\"");
+        engine.eval("say \"" + message.replace('"','\'' + "\"");
     }
 }</programlisting>
 
     <para>The previous example must generate the following XML:</para>
 
-    <programlisting>&lt;scr:component name=’com.example.MacSpeech'&gt;
+    <programlisting>&lt;scr:component name='com.example.MacSpeech'&gt;
   &lt;implementation class='com.example.MacSpeech'/&gt;
   &lt;service&gt;
     &lt;provide interface='com.example.service.speech.Speech'/&gt;
@@ -3351,12 +3351,12 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       <title>Logging Error Messages</title>
 
       <para>When SCR must log an error message to the Log Service, it must use
-      a Log Service obtained using the component’s Bundle Context so that the
-      resulting Log Entry is associated with the component’s bundle.</para>
+      a Log Service obtained using the component's Bundle Context so that the
+      resulting Log Entry is associated with the component's bundle.</para>
 
       <para>If SCR is unable to obtain, or use, a Log Service using the
-      component’s Bundle Context, then SCR must log the error message to a Log
-      Service obtained using SCR’s bundle context to ensure the error message
+      component's Bundle Context, then SCR must log the error message to a Log
+      Service obtained using SCR's bundle context to ensure the error message
       is logged.</para>
     </section>
 
@@ -3403,11 +3403,11 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       Activator. Such a bundle may also be marked for lazy activation. Since
       components are activated by SCR and Bundle Activators are called by the
       OSGi Framework, a bundle using both components and a Bundle Activator
-      must take care. The Bundle Activator’s start method must not rely upon
-      SCR having activated any of the bundle’s components. However, the
-      components can rely upon the Bundle Activator’s start method having been
+      must take care. The Bundle Activator's start method must not rely upon
+      SCR having activated any of the bundle's components. However, the
+      components can rely upon the Bundle Activator's start method having been
       called. That is, there is a <emphasis>happens-before</emphasis>
-      relationship between the Bundle Activator’s start method being run and
+      relationship between the Bundle Activator's start method being run and
       the components being activated.</para>
     </section>
   </section>
@@ -3423,21 +3423,21 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       ability to publish, find or bind services.</para>
 
       <para>If a component specifies a service, then component configurations
-      for the component cannot be satisfied unless the component’s bundle has
+      for the component cannot be satisfied unless the component's bundle has
       <code>ServicePermission[&lt;provides&gt;, REGISTER]</code> for each
       provided interface specified for the service.</para>
 
-      <para>If a component’s reference does not specify optional cardinality,
-      the reference cannot be satisfied unless the component’s bundle has
+      <para>If a component's reference does not specify optional cardinality,
+      the reference cannot be satisfied unless the component's bundle has
       <code>ServicePermission[&lt;interface&gt;, GET]</code> for the specified
       interface in the reference. If the reference specifies optional
-      cardinality but the component’s bundle does not have
+      cardinality but the component's bundle does not have
       <code>ServicePermission[&lt;interface&gt;, GET]</code> for the specified
       interface in the reference, no service must be bound for this
       reference.</para>
 
       <para>If a component is a factory component, then the above Service
-      Permission checks still apply. But the component’s bundle is not
+      Permission checks still apply. But the component's bundle is not
       required to have <code>ServicePermission[ComponentFactory,
       REGISTER]</code> as the Component Factory service is registered by
       SCR.</para>
@@ -3447,7 +3447,7 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       <title>Required Admin Permission</title>
 
       <para>The SCR requires <code>AdminPermission[*,CONTEXT]</code> because
-      it needs access to the bundle’s Bundle Context object with the
+      it needs access to the bundle's Bundle Context object with the
       <code>Bundle.getBundleContext()</code> method.</para>
     </section>
 
@@ -3455,11 +3455,11 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       <title>Using hasPermission</title>
 
       <para>SCR does all publishing, finding and binding of services on behalf
-      of the component using the Bundle Context of the component’s bundle.
+      of the component using the Bundle Context of the component's bundle.
       This means that normal stack-based permission checks will check SCR and
-      not the component’s bundle. Since SCR is registering and getting
-      services on behalf of a component’s bundle, SCR must call the
-      <code>Bundle.hasPermission</code> method to validate that a component’s
+      not the component's bundle. Since SCR is registering and getting
+      services on behalf of a component's bundle, SCR must call the
+      <code>Bundle.hasPermission</code> method to validate that a component's
       bundle has the necessary permission to register or get a service.</para>
     </section>
   </section>

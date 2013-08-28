@@ -36,7 +36,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Filtering</emphasis> – Remove bundles from the view
+          <para><emphasis>Filtering</emphasis> - Remove bundles from the view
           of specific bundles.</para>
         </listitem>
       </itemizedlist>
@@ -47,40 +47,40 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Find Hook</emphasis> – A service used by the
+          <para><emphasis>Find Hook</emphasis> - A service used by the
           framework to filter methods that return bundles.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Event Hook</emphasis> – A service used by the
+          <para><emphasis>Event Hook</emphasis> - A service used by the
           framework to filter Bundle Events before they are delivered to their
           listeners.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Collision Hook</emphasis> – A service used by the
+          <para><emphasis>Collision Hook</emphasis> - A service used by the
           framework to filter colliding bundles during an install or update
           operation when the <code>org.osgi.framework.bsnversion</code> is set
           to <code>managed</code>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Collision</emphasis> – Two bundles collide when they
+          <para><emphasis>Collision</emphasis> - Two bundles collide when they
           have the same version and bundle symbolic name.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Client</emphasis> – The bundle that finds bundles or
+          <para><emphasis>Client</emphasis> - The bundle that finds bundles or
           receives events about bundles.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Handler</emphasis> – The bundle that registers a
+          <para><emphasis>Handler</emphasis> - The bundle that registers a
           hook service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Target</emphasis> – The bundle performing the
+          <para><emphasis>Target</emphasis> - The bundle performing the
           install or update operation.</para>
         </listitem>
       </itemizedlist>
@@ -191,7 +191,7 @@
     order to filter the events before they are delivered to any of the
     registered bundle listeners. The Handler can remove any
     <code>BundleContext</code> objects from the given shrinkable collection it
-    wants shield from the event’s Bundle.</para>
+    wants shield from the event's Bundle.</para>
 
     <para>The <code>event</code> method must be called once for each Bundle
     Event, this includes Bundle Events that are generated when there are no
@@ -283,7 +283,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.framework.BundleContext.getBundle-String-"
-        xrefstyle="hyperlink"/> – If the caller knows the name then it is not
+        xrefstyle="hyperlink"/> - If the caller knows the name then it is not
         necessary to hide the bundle.</para>
       </listitem>
     </itemizedlist>
@@ -313,20 +313,20 @@
 
     <itemizedlist>
       <listitem>
-        <para><code>single</code> – Collisions are not allowed, attempting to
+        <para><code>single</code> - Collisions are not allowed, attempting to
         install/update a bundle that will cause a collision is rejected and
         all bundles can assume there are no collisions between installed
         bundles.</para>
       </listitem>
 
       <listitem>
-        <para><code>multiple</code> – Collisions are allowed and bundles must
+        <para><code>multiple</code> - Collisions are allowed and bundles must
         assume that there are collisions in the set of installed
         bundles.</para>
       </listitem>
 
       <listitem>
-        <para><code>managed</code> – Collisions are
+        <para><code>managed</code> - Collisions are
         <emphasis>managed</emphasis> via a Collision Hook service, specified
         in the remainder of this section.</para>
       </listitem>
@@ -372,7 +372,7 @@
       <listitem>
         <para><xref
         linkend="org.osgi.framework.hooks.bundle.CollisionHook.filterCollisions-int-Bundle-Collection-"
-        xrefstyle="hyperlink"/> – An install or update operation is in
+        xrefstyle="hyperlink"/> - An install or update operation is in
         progress that will result in a possible bundle collision. The
         implementer of this method can optionally shrink the given collection
         of any collision candidates if it can decide that a collision cannot

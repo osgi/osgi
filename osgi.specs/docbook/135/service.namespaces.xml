@@ -33,44 +33,44 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Name</emphasis> – the name of an attribute or
+        <para><emphasis>Name</emphasis> - the name of an attribute or
         directive</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Kind</emphasis> – Defines where the attribute or
+        <para><emphasis>Kind</emphasis> - Defines where the attribute or
         directive can be used</para>
 
         <itemizedlist>
           <listitem>
-            <para><code>CA</code> – Capability Attribute</para>
+            <para><code>CA</code> - Capability Attribute</para>
           </listitem>
 
           <listitem>
-            <para><code>CD</code> – Capability Directive</para>
+            <para><code>CD</code> - Capability Directive</para>
           </listitem>
 
           <listitem>
-            <para><code>RA</code> – Requirement Attribute</para>
+            <para><code>RA</code> - Requirement Attribute</para>
           </listitem>
 
           <listitem>
-            <para><code>RD</code> – Requirement Directive</para>
+            <para><code>RD</code> - Requirement Directive</para>
           </listitem>
         </itemizedlist>
       </listitem>
 
       <listitem>
-        <para><emphasis>M/O</emphasis> – Mandatory (<code>M</code>) or
+        <para><emphasis>M/O</emphasis> - Mandatory (<code>M</code>) or
         Optional (<code>O</code>)</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Type</emphasis> – The data type</para>
+        <para><emphasis>Type</emphasis> - The data type</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Syntax</emphasis> – Any syntax rules. The syntax
+        <para><emphasis>Syntax</emphasis> - Any syntax rules. The syntax
         refers in general to the syntaxes defined in <xref
         linkend="i1777866"/> and <xref linkend="i1777884"/>.</para>
       </listitem>
@@ -82,7 +82,7 @@
 
     <para>An <emphasis>Extender</emphasis> is a bundle that uses the life
     cycle events from another bundle, the <emphasis>extendee</emphasis>, to
-    extend that bundle’s functionality when that bundle is active. It can use
+    extend that bundle's functionality when that bundle is active. It can use
     metadata (headers, or files inside the extendee) to control its
     functionality. Extendees therefore have a dependency on the Extender that
     can be modeled with the <code>osgi.extender</code> namespace. The
@@ -248,7 +248,7 @@ Import-Package:
 Import-Package:
     javax.servlet, javax.servlet.http</programlisting>
 
-    <para>The client bundle will be constrained by the contract’s uses
+    <para>The client bundle will be constrained by the contract's uses
     constraints and automatically gets the correct packages. In this example,
     no semantic versioning is used for the contract because the Servlets
     Specifications do not use semantic versioning (version 3.0 is backward
@@ -345,7 +345,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
 
             <entry><code>String</code></entry>
 
-            <entry><para><code>package-name</code></para><para><code>( ’,’
+            <entry><para><code>package-name</code></para><para><code>( ','
             package-name )</code></para></entry>
 
             <entry><para>For a contract, the standard uses clause is used to
@@ -435,7 +435,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
 
             <entry><para><code>List</code></para><para><code>&lt;String&gt;</code></para></entry>
 
-            <entry><para><code>qname</code></para><para><code>(’,’
+            <entry><para><code>qname</code></para><para><code>(','
             qname)*</code></para></entry>
 
             <entry><para>The fully qualified name of the object class of the
@@ -456,7 +456,7 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
             <entry><para>Custom attributes that will be provided as service
             properties if they do not conflict with the service properties
             rules and are not private service properties (start with a full
-            stop (<code>’.’ \u002E</code>).</para></entry>
+            stop (<code>'.' \u002E</code>).</para></entry>
           </row>
         </tbody>
       </tgroup>

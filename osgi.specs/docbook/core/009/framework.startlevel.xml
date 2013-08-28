@@ -34,12 +34,12 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Ordering</emphasis> – A management agent should be
+          <para><emphasis>Ordering</emphasis> - A management agent should be
           able to order the startup and shutdown sequences of bundles.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Levels</emphasis> – The management agent should
+          <para><emphasis>Levels</emphasis> - The management agent should
           support a virtually unlimited number of levels.</para>
         </listitem>
       </itemizedlist>
@@ -50,29 +50,29 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Bundle Start Level </emphasis>– The adapter on a
+          <para><emphasis>Bundle Start Level</emphasis> - The adapter on a
           bundle that is used by a management agent to order the startup and
           shutdown sequences of bundles.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Framework Start Level</emphasis> – The adapter that
+          <para><emphasis>Framework Start Level</emphasis> - The adapter that
           is used to set the framework start levels.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Management Agent</emphasis> – A bundle that is
+          <para><emphasis>Management Agent</emphasis> - A bundle that is
           provided by the Operator to implement an Operator specific
           policy.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Framework Event</emphasis> – See <xref
+          <para><emphasis>Framework Event</emphasis> - See <xref
           linkend="i3032483"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Framework Listener</emphasis> – See <xref
+          <para><emphasis>Framework Listener</emphasis> - See <xref
           linkend="i3032481"/>.</para>
         </listitem>
       </itemizedlist>
@@ -120,7 +120,7 @@
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Safe mode</emphasis> – The management agent can
+        <para><emphasis>Safe mode</emphasis> - The management agent can
         implement a <emphasis>safe mode</emphasis>. In this mode, only fully
         trusted bundles are started. Safe mode might be necessary when a
         bundle causes a failure at startup that disrupts normal operation and
@@ -128,22 +128,22 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>Splash screen</emphasis> – If the total startup time
+        <para><emphasis>Splash screen</emphasis> - If the total startup time
         is long, it might be desirable to show a splash screen during
-        initialization. This improves the user’s perception of the boot time
+        initialization. This improves the user's perception of the boot time
         of the device. The startup ordering can ensure that the right bundle
         is started first.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Handling erratic bundles</emphasis> – Problems can
+        <para><emphasis>Handling erratic bundles</emphasis> - Problems can
         occur because bundles require services to be available when they are
         activated (this is a programming error). By controlling the start
         order, the management agent can prevent these problems.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>High priority bundles</emphasis> – Certain tasks such
+        <para><emphasis>High priority bundles</emphasis> - Certain tasks such
         as metering need to run as quickly as possible and cannot have a long
         startup delay. These bundles can be started first.</para>
       </listitem>
@@ -163,14 +163,14 @@
       <itemizedlist>
         <listitem>
           <para><xref linkend="org.osgi.framework.startlevel.BundleStartLevel"
-          xrefstyle="hyperlink"/> – Used to get and set the start level on a
+          xrefstyle="hyperlink"/> - Used to get and set the start level on a
           specific bundle.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.framework.startlevel.FrameworkStartLevel"
-          xrefstyle="hyperlink"/> – Used to get and control the framework
+          xrefstyle="hyperlink"/> - Used to get and control the framework
           start level. This adaptation must return null for any other bundle
           than the system bundle (bundle 0).</para>
         </listitem>
@@ -186,28 +186,28 @@
         <listitem>
           <para><xref
           linkend="org.osgi.framework.startlevel.BundleStartLevel.setStartLevel-int-"
-          xrefstyle="hyperlink"/> – Sets the current start level for the
+          xrefstyle="hyperlink"/> - Sets the current start level for the
           adapted bundle.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.framework.startlevel.BundleStartLevel.getStartLevel--"
-          xrefstyle="hyperlink"/> – Gets the current start level for the
+          xrefstyle="hyperlink"/> - Gets the current start level for the
           adapted bundle.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.framework.startlevel.BundleStartLevel.isActivationPolicyUsed--"
-          xrefstyle="hyperlink"/> – Answer if the activation policy is
+          xrefstyle="hyperlink"/> - Answer if the activation policy is
           used.</para>
         </listitem>
 
         <listitem>
           <para><xref
           linkend="org.osgi.framework.startlevel.BundleStartLevel.isPersistentlyStarted--"
-          xrefstyle="hyperlink"/> – Answer if this bundle as persistently
+          xrefstyle="hyperlink"/> - Answer if this bundle as persistently
           started.</para>
         </listitem>
       </itemizedlist>
@@ -224,7 +224,7 @@
         <listitem>
           <para><xref
           linkend="org.osgi.framework.startlevel.FrameworkStartLevel.getInitialBundleStartLevel--"
-          xrefstyle="hyperlink"/> – Return the start level to assign for newly
+          xrefstyle="hyperlink"/> - Return the start level to assign for newly
           installed bundles.</para>
         </listitem>
 
@@ -282,7 +282,7 @@
     <para>In addition, a bundle can be persistently marked as
     <emphasis>started</emphasis> or <emphasis>stopped</emphasis> with the
     <code>Bundle</code> <code>start</code> and <code>stop</code> methods. A
-    bundle cannot run unless it is marked started, regardless of the bundle’s
+    bundle cannot run unless it is marked started, regardless of the bundle's
     start level.</para>
 
     <section xml:id="i1300852">
@@ -371,7 +371,7 @@
 
       <figure xml:id="i1300675">
         <title>Move to requested start level R, active level is A, B is a
-        bundle’s start level</title>
+        bundle's start level</title>
 
         <mediaobject>
           <imageobject>
@@ -421,7 +421,7 @@
     </section>
 
     <section>
-      <title>Changing a Bundle’s Start Level</title>
+      <title>Changing a Bundle's Start Level</title>
 
       <para>Bundles are assigned an initial start level when they are
       installed. The default value for the initial start level is set to one,
@@ -429,7 +429,7 @@
       linkend="org.osgi.framework.startlevel.FrameworkStartLevel.setInitialBundleStartLevel-int-"
       xrefstyle="hyperlink"/> method on the <xref
       linkend="org.osgi.framework.startlevel.FrameworkStartLevel"
-      xrefstyle="hyperlink"/> object. A bundle’s start level will not change
+      xrefstyle="hyperlink"/> object. A bundle's start level will not change
       when the <xref
       linkend="org.osgi.framework.startlevel.FrameworkStartLevel.setInitialBundleStartLevel-int-"
       xrefstyle="hyperlink"/> method later modifies the default initial start
@@ -438,11 +438,11 @@
       <para>Once installed, the start level of a bundle can be changed with
       <xref
       linkend="org.osgi.framework.startlevel.BundleStartLevel.setStartLevel-int-"
-      xrefstyle="hyperlink"/>. When a bundle’s start level is changed and the
+      xrefstyle="hyperlink"/>. When a bundle's start level is changed and the
       bundle is marked persistently to be started, then the OSGi Framework
       must compare the new bundle start level to the active start level. For
       example, assume that the active start level is 5 and a bundle with start
-      level 5 is started. If the bundle’s start level subsequently is changed
+      level 5 is started. If the bundle's start level subsequently is changed
       to 6 then this bundle must be stopped by the OSGi Framework but it must
       still be marked persistently to be started.</para>
     </section>
@@ -453,7 +453,7 @@
       <para>If a bundle is started by calling the
       <code>Bundle.start</code>method, then the OSGi Framework must mark the
       bundle as persistently started. The OSGi Framework must not actually
-      start a bundle when the active start level is less than the bundle’s
+      start a bundle when the active start level is less than the bundle's
       start level. In that case, the state must not change.</para>
     </section>
 
@@ -466,7 +466,7 @@
       <code>start</code> or <code>stop</code> method.</para>
 
       <para>If the bundle is started/stopped due to a change in the active
-      start level or the bundle’s start level, then the <code>Exception</code>
+      start level or the bundle's start level, then the <code>Exception</code>
       must be wrapped in a <code>BundleException</code> and broadcast as a
       <code>FrameworkEvent.ERROR</code> event. Otherwise, a new
       <code>BundleException</code> must be created containing the exception
@@ -569,11 +569,11 @@
     <itemizedlist>
       <listitem>
         <para><code>EXECUTE</code> - For bundles that must be able to modify a
-        bundle’s start level</para>
+        bundle's start level</para>
       </listitem>
 
       <listitem>
-        <para><code>STARTLEVEL</code> – For modifying the Framework’s active
+        <para><code>STARTLEVEL</code> - For modifying the Framework's active
         start level.</para>
       </listitem>
     </itemizedlist>

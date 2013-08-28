@@ -87,17 +87,17 @@
       <title>Remote Management</title>
 
       <para>Support for remotely managing the service and their applications
-      is essential to all systems that are installed on customer’s premises.
+      is essential to all systems that are installed on customer's premises.
       The specification therefore has special focus on large scale remote
       management of the OSGi Framework. The architecture provides a solution
       to allow management over different protocols although the primary focus
-      is to allow the use Broadband Forum’s suite of specifications on an OSGi
+      is to allow the use Broadband Forum's suite of specifications on an OSGi
       residential gateway. This section introduces the related
       specifications.</para>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Dmt Admin Service Specification – </emphasis>The Dmt
+          <para><emphasis>Dmt Admin Service Specification - </emphasis>The Dmt
           Admin Service Specification provides an API for a remote manager to
           manage the device and its diverse services running on it. The Dmt
           Admin provides a generic tree structure, the Device Management Tree
@@ -110,7 +110,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Residential Device Management</emphasis> – This
+          <para><emphasis>Residential Device Management</emphasis> - This
           specification defines a Residential Management Tree, the RMT. This
           tree provides a general Dmt Admin object model that allows browsing
           and managing the OSGi Framework remotely over different Protocol
@@ -120,7 +120,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>TR-157a3 Software Module</emphasis> – <xref
+          <para><emphasis>TR-157a3 Software Module</emphasis> - <xref
           linkend="i434640"/> has defined a generic model for mapping software
           modules in <xref linkend="i437933"/>. This specification provides a
           recommended mapping for the generic concepts to the OSGi Framework
@@ -128,7 +128,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>TR-069 Connector Service Specification</emphasis> –
+          <para><emphasis>TR-069 Connector Service Specification</emphasis> -
           The Dmt Admin service and the TR-069 protocol have different
           semantics and primitives. This specification contains the <xref
           linkend="service.tr069todmt"/>. This specification provides an API
@@ -151,14 +151,14 @@
       <itemizedlist>
         <listitem>
           <para><emphasis>Conditional Permission Admin Service
-          Specification</emphasis> – The Conditional Permission Admin service
+          Specification</emphasis> - The Conditional Permission Admin service
           allows an operator to control the Java Permissions to be granted to
           the bundles running on the OSGi Framework using a condition based
           model. See chapter 50 in <xref linkend="i432874"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Permission Admin Service Specification</emphasis> –
+          <para><emphasis>Permission Admin Service Specification</emphasis> -
           The Permission Admin service allows an operator to control the Java
           Permissions to be granted to the bundles running on the OSGi
           Framework based on the bundle location. The Permission Admin has
@@ -168,7 +168,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>URL Handlers Service Specification</emphasis> – This
+          <para><emphasis>URL Handlers Service Specification</emphasis> - This
           specification standardizes the mechanism to extend the Java run-time
           with new URL schemes and content handlers. Dynamically extending the
           URL schemes that are supported in an OSGi Framework is a very
@@ -177,7 +177,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>User Admin Service Specification</emphasis> – The
+          <para><emphasis>User Admin Service Specification</emphasis> - The
           User Admin Service Specification provides authorization for OSGi
           Framework actions based on authenticated users instead of using the
           Java code-based permission model. See the <xref
@@ -185,7 +185,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Initial Provisioning Specification</emphasis> – The
+          <para><emphasis>Initial Provisioning Specification</emphasis> - The
           Initial Provisioning specification defines how a Management Agent
           and other initial bundles can be deployed on an uninitialized OSGi
           Framework. It gives a structured view of the problems and their
@@ -198,13 +198,13 @@
 
         <listitem>
           <para><emphasis>Configuration Admin Service Specification</emphasis>
-          – The Configuration Admin service allows an operator or an
+          - The Configuration Admin service allows an operator or an
           application bundle developer to set the configuration information of
           bundles. See <xref linkend="service.cm"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Metatype Service Specification</emphasis> – The
+          <para><emphasis>Metatype Service Specification</emphasis> - The
           Metatype specification defines interfaces that allow bundle
           developers to describe attribute types in a computer readable form
           using metadata. It is mostly used in conjunction with the
@@ -223,7 +223,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Declarative Services Specification</emphasis> – The
+          <para><emphasis>Declarative Services Specification</emphasis> - The
           Declarative Services specification provides dependency injection for
           services. It handles the service life cycle dynamics by notifying
           the component or managing the components life cycle. See <xref
@@ -241,7 +241,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Http Service Specification</emphasis> – Developers
+          <para><emphasis>Http Service Specification</emphasis> - Developers
           typically need to develop communication and user interface solutions
           for standard technologies such as HTTP, HTML, XML, and servlets. See
           the <xref linkend="service.http"/>.</para>
@@ -261,7 +261,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Event Admin Service Specification</emphasis> – The
+          <para><emphasis>Event Admin Service Specification</emphasis> - The
           Event Admin service provides an inter-bundle communication
           mechanism. It is based on a event publish and subscribe model,
           popular in many message based systems. See <xref
@@ -280,7 +280,7 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Device Access Specification</emphasis> – The Device
+          <para><emphasis>Device Access Specification</emphasis> - The Device
           Access specification supports the coordination of automatic
           detection and attachment of existing devices on an OSGi Framework,
           facilitates hot-plugging and -unplugging of new devices, and
@@ -289,7 +289,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>UPnP™ Device Service Specification</emphasis> – The
+          <para><emphasis>UPnP™ Device Service Specification</emphasis> - The
           UPnP specification specifies how OSGi bundles can be developed that
           inter-operate with UPnP (Universal Plug and Play) devices and UPnP
           control points. The specification is based on <xref
@@ -306,13 +306,13 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Log Service Specification</emphasis> – Provides a
+          <para><emphasis>Log Service Specification</emphasis> - Provides a
           general purpose message logger for the OSGi Framework. See the <xref
           linkend="service.log"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>XML Parser Service Specification</emphasis> –
+          <para><emphasis>XML Parser Service Specification</emphasis> -
           Addresses how the classes defined in JAXP can be used in an OSGi
           Framework. See <xref linkend="util.xml"/>.</para>
         </listitem>
@@ -526,7 +526,7 @@
         </tgroup>
       </table>
 
-      <para><superscript>*</superscript> – This is not a Java package but
+      <para><superscript>*</superscript> - This is not a Java package but
       contains DMT Types.</para>
 
       <para>When a component is represented in a bundle, a

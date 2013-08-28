@@ -19,43 +19,41 @@
   <section>
     <title>Introduction</title>
 
-    <para><phrase role="body">The UPnP Device Architecture specification
-    provides the protocols for a peer-to-peer network. It specifies how to
-    join a network and how devices can be controlled using XML messages sent
-    over HTTP. The OSGi specifications address how code can be download and
-    managed in a remote system. Both standards are therefore fully
-    complimentary. Using an OSGi Framework to work with UPnP enabled devices
-    is therefore a very successful combination.</phrase></para>
+    <para>The UPnP Device Architecture specification provides the protocols
+    for a peer-to-peer network. It specifies how to join a network and how
+    devices can be controlled using XML messages sent over HTTP. The OSGi
+    specifications address how code can be download and managed in a remote
+    system. Both standards are therefore fully complimentary. Using an OSGi
+    Framework to work with UPnP enabled devices is therefore a very successful
+    combination.</para>
 
-    <para><phrase role="body">This specification specifies how OSGi bundles
-    can be developed that interoperate with UPnP™ (Universal Plug and Play)
-    devices and UPnP control points. The specification is based on the UPnP
-    Device Architecture and does not further explain the UPnP specifications.
-    The UPnP specifications are maintained by <xref
-    linkend="i1586441"/>.</phrase></para>
+    <para>This specification specifies how OSGi bundles can be developed that
+    interoperate with UPnP™ (Universal Plug and Play) devices and UPnP control
+    points. The specification is based on the UPnP Device Architecture and
+    does not further explain the UPnP specifications. The UPnP specifications
+    are maintained by <xref linkend="i1586441"/>.</para>
 
-    <para>UPnP™ is a trademark of the UPnP Implementers Corporation <phrase
-    role="body">.</phrase></para>
+    <para>UPnP™ is a trademark of the UPnP Implementers Corporation.</para>
 
     <section>
       <title>Essentials</title>
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Scope – </emphasis>This specification is limited to
+          <para><emphasis>Scope - </emphasis>This specification is limited to
           device control aspects of the UPnP specifications. Aspects
           concerning the TCP/IP layer, like DHCP and limited TTL, are not
           addressed.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Transparency </emphasis>– OSGi services should be
+          <para><emphasis>Transparency</emphasis> - OSGi services should be
           made available to networks with UPnP enabled devices in a
           transparent way.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Network Selection</emphasis> – It must be possible
+          <para><emphasis>Network Selection</emphasis> - It must be possible
           to restrict the use of the UPnP protocols to a selection of the
           connected networks. For example, in certain cases OSGi services that
           are UPnP enabled should not be published to the Wide Area Network
@@ -64,18 +62,18 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Event handling</emphasis> – Bundles must be able to
+          <para><emphasis>Event handling</emphasis> - Bundles must be able to
           listen to UPnP events.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Export OSGi services as UPnP devices</emphasis> –
+          <para><emphasis>Export OSGi services as UPnP devices</emphasis> -
           Enable bundles that make a service available to UPnP control
           points.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Implement UPnP Control Points</emphasis> – Enable
+          <para><emphasis>Implement UPnP Control Points</emphasis> - Enable
           bundles that control UPnP devices.</para>
         </listitem>
       </itemizedlist>
@@ -86,13 +84,13 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>UPnP Base Driver</emphasis> – The bundle that
+          <para><emphasis>UPnP Base Driver</emphasis> - The bundle that
           implements the bridge between OSGi and UPnP networks. This entity is
           not represented as a service.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>UPnP Root Device</emphasis> –A physical device can
+          <para><emphasis>UPnP Root Device</emphasis> -A physical device can
           contain one or more root devices. Root devices contain one ore more
           devices. A root device is modelled with a <code>UPnPDevice</code>
           object, there is no separate interface defined for root
@@ -100,7 +98,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>UPnP Device</emphasis> – The representation of a
+          <para><emphasis>UPnP Device</emphasis> - The representation of a
           UPnP device. A UPnP device may contain other UPnP devices and UPnP
           services. This entity is represented by a <code>UPnPDevice</code>
           object. A device can be local (implemented in the Framework) or
@@ -108,60 +106,60 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>UPnP Service</emphasis> –A UPnP device consists of a
+          <para><emphasis>UPnP Service</emphasis> -A UPnP device consists of a
           number of services. A UPnP service has a number of UPnP state
           variables that can be queried and modified with actions. This
           concept is represented by a <code>UPnPService</code> object.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>UPnP Action</emphasis> – A UPnP service is
+          <para><emphasis>UPnP Action</emphasis> - A UPnP service is
           associated with a number of actions that can be performed on that
           service and that may modify the UPnP state variables. This entity is
           represented by a <code>UPnPAction</code> object.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>UPnP State Variable</emphasis> – A variable
+          <para><emphasis>UPnP State Variable</emphasis> - A variable
           associated with a UPnP service, represented by a
           <code>UPnPStateVariable</code> object.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>UPnP Local State Variable</emphasis> – Extends the
+          <para><emphasis>UPnP Local State Variable</emphasis> - Extends the
           <code>UPnPStateVariable</code> interface when the state variable is
           implemented locally. This interface provides access to the actual
           value.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>UPnP Event Listener Service</emphasis> – A listener
+          <para><emphasis>UPnP Event Listener Service</emphasis> - A listener
           to events coming from UPnP devices.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>UPnP Host</emphasis> – The machine that hosts the
+          <para><emphasis>UPnP Host</emphasis> - The machine that hosts the
           code to run a UPnP device or control point.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>UPnP Control Point</emphasis> – A UPnP device that
+          <para><emphasis>UPnP Control Point</emphasis> - A UPnP device that
           is intended to control UPnP devices over a network. For example, a
           UPnP remote controller.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>UPnP Icon</emphasis> – A representation class for an
+          <para><emphasis>UPnP Icon</emphasis> - A representation class for an
           icon associated with a UPnP device.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>UPnP Exception</emphasis> – An exception that
+          <para><emphasis>UPnP Exception</emphasis> - An exception that
           delivers errors that were discovered in the UPnP layer.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>UDN</emphasis> – Unique Device Name, a name that
+          <para><emphasis>UDN</emphasis> - Unique Device Name, a name that
           uniquely identifies the a specific device.</para>
         </listitem>
       </itemizedlist>
@@ -356,7 +354,7 @@
         <listitem>
           <para><code><xref
           linkend="org.osgi.service.upnp.UPnPDevice.PARENT_UDN"
-          xrefstyle="hyperlink"/></code> – (<code>String</code>) The Universal
+          xrefstyle="hyperlink"/></code> - (<code>String</code>) The Universal
           Device Name (UDN) of the parent device. A root device most not have
           this property registered. Type is a <code>String</code>
           object.</para>
@@ -364,8 +362,8 @@
 
         <listitem>
           <para><xref linkend="org.osgi.service.upnp.UPnPDevice.CHILDREN_UDN"
-          xrefstyle="hyperlink"/> – <code>(String[])</code> An array of UDNs
-          of this device’s children.</para>
+          xrefstyle="hyperlink"/> - <code>(String[])</code> An array of UDNs
+          of this device's children.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -416,7 +414,7 @@
 
       <para>A UPnP device can optionally support an icon. The purpose of this
       icon is to identify the device on a UPnP control point. UPnP control
-      points can be implemented in large computers like PC’s or simple devices
+      points can be implemented in large computers like PC's or simple devices
       like a remote control. However, the graphic requirements for these UPnP
       devices differ tremendously. The device can, therefore, export a number
       of icons of different size and depth.</para>
@@ -623,7 +621,7 @@
       <listitem>
         <para><code>UPnPDevice.</code><xref
         linkend="org.osgi.service.upnp.UPnPDevice.UDN" xrefstyle="hyperlink"/>
-        – (<code>UPnP.device.UDN/String</code>) Only events generated by
+        - (<code>UPnP.device.UDN/String</code>) Only events generated by
         services contained in the specific device are delivered. For example:
         <code>(UPnP.device.UDN=uuid:Upnp-TVEmulator-1_0-1234567890001)</code></para>
       </listitem>
@@ -631,7 +629,7 @@
       <listitem>
         <para><code>UPnPDevice.</code><xref
         linkend="org.osgi.service.upnp.UPnPDevice.TYPE"
-        xrefstyle="hyperlink"/>– (<code>UPnP.device.type/String or
+        xrefstyle="hyperlink"/> - (<code>UPnP.device.type/String or
         String[]</code>) Only events generated by services contained in a
         device of the given type are delivered. For example:
         <code>(UPnP.device.type=urn:schemas-upnp-org:device:tvdevice:1)</code></para>
@@ -640,7 +638,7 @@
       <listitem>
         <para><code>UPnPService.</code><xref
         linkend="org.osgi.service.upnp.UPnPService.ID" xrefstyle="hyperlink"/>
-        – (<code>UPnP.service.id/String</code>) Service identity. Only events
+        - (<code>UPnP.service.id/String</code>) Service identity. Only events
         generated by services matching the given service ID are
         delivered.</para>
       </listitem>
@@ -648,7 +646,7 @@
       <listitem>
         <para><code>UPnPService.</code><xref
         linkend="org.osgi.service.upnp.UPnPService.TYPE"
-        xrefstyle="hyperlink"/> – (<code>UPnP.service.type/String or
+        xrefstyle="hyperlink"/> - (<code>UPnP.service.type/String or
         String[]</code>) Only events generated by services of of the given
         type are delivered.</para>
       </listitem>
@@ -711,19 +709,19 @@
 
     <itemizedlist>
       <listitem>
-        <para><code>upnp.deviceId</code> – (<code>String</code>) The identity
+        <para><code>upnp.deviceId</code> - (<code>String</code>) The identity
         as defined by <code>UPnPDevice.</code><xref
         linkend="org.osgi.service.upnp.UPnPDevice.UDN" xrefstyle="hyperlink"/>
         of the device sending the event.</para>
       </listitem>
 
       <listitem>
-        <para><code>upnp.serviceId</code> – (<code>String)</code> The identity
+        <para><code>upnp.serviceId</code> - (<code>String)</code> The identity
         of the service sending the events.</para>
       </listitem>
 
       <listitem>
-        <para><code>upnp.events – (Dictionary)</code> A
+        <para><code>upnp.events - (Dictionary)</code> A
         <code>Dictionary</code> object containing the new values for the state
         variables that have changed.</para>
       </listitem>
@@ -853,41 +851,41 @@
     layers. The following errors are defined:</para>
 
     <para><xref linkend="org.osgi.service.upnp.UPnPException.INVALID_ACTION"
-    xrefstyle="hyperlink"/> – (<code>401</code>) No such action could be
+    xrefstyle="hyperlink"/> - (<code>401</code>) No such action could be
     found.</para>
 
     <para><xref linkend="org.osgi.service.upnp.UPnPException.INVALID_ARGS"
-    xrefstyle="hyperlink"/> – (<code>402</code>) Invalid argument.</para>
+    xrefstyle="hyperlink"/> - (<code>402</code>) Invalid argument.</para>
 
     <para><xref
     linkend="org.osgi.service.upnp.UPnPException.INVALID_SEQUENCE_NUMBER"
-    xrefstyle="hyperlink"/> – (<code>403</code>) Out of
+    xrefstyle="hyperlink"/> - (<code>403</code>) Out of
     synchronization.</para>
 
     <para><xref linkend="org.osgi.service.upnp.UPnPException.INVALID_VARIABLE"
-    xrefstyle="hyperlink"/> – (<code>404</code>) State variable not
+    xrefstyle="hyperlink"/> - (<code>404</code>) State variable not
     found.</para>
 
     <para><xref
     linkend="org.osgi.service.upnp.UPnPException.DEVICE_INTERNAL_ERROR"
-    xrefstyle="hyperlink"/> – (<code>501</code>) Internal error.</para>
+    xrefstyle="hyperlink"/> - (<code>501</code>) Internal error.</para>
 
     <para>Further errors are categorized as follows:</para>
 
     <itemizedlist>
       <listitem>
-        <para><emphasis>Common Action Errors</emphasis> – In the range of
+        <para><emphasis>Common Action Errors</emphasis> - In the range of
         <code>600-69</code>, defined by the UPnP Forum Technical
         Committee.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Action Specific Errors</emphasis> – In the range of
+        <para><emphasis>Action Specific Errors</emphasis> - In the range of
         700-799, defined by the UPnP Forum Working Committee.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Non-Standard Action Specific Errors</emphasis> – In
+        <para><emphasis>Non-Standard Action Specific Errors</emphasis> - In
         the range of 800-899. Defined by vendors.</para>
       </listitem>
     </itemizedlist>
@@ -901,8 +899,8 @@
     defined.</para>
 
     <para>The value is a <code>String[]</code> with a list of IP addresses,
-    optionally followed with a colon (’:’, \u003A) and a port number. For
-    example:</para>
+    optionally followed with a colon (<code>':' \u003A</code>) and a port
+    number. For example:</para>
 
     <programlisting>239.255.255.250:1900</programlisting>
 

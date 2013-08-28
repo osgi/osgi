@@ -35,33 +35,33 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Position</emphasis> – Provide an information object
+          <para><emphasis>Position</emphasis> - Provide an information object
           that has well defined semantics for a position.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>WGS-84</emphasis> – Use the World Geodetic System 84
+          <para><emphasis>WGS-84</emphasis> - Use the World Geodetic System 84
           as the datum.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Speed</emphasis> – Provide speed and track
+          <para><emphasis>Speed</emphasis> - Provide speed and track
           information.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Errors</emphasis> – Position information always has
+          <para><emphasis>Errors</emphasis> - Position information always has
           certain errors or cannot be measured at all. This information must
           be available to the users of the information.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Units</emphasis> – Use SI units for all
+          <para><emphasis>Units</emphasis> - Use SI units for all
           measurements.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Wire Admin</emphasis> – This specification must work
+          <para><emphasis>Wire Admin</emphasis> - This specification must work
           within the Wire Admin service.</para>
         </listitem>
       </itemizedlist>
@@ -72,12 +72,12 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Position</emphasis> – An object containing the
+          <para><emphasis>Position</emphasis> - An object containing the
           different aspects of a position.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Measurement</emphasis> – Contains a typed
+          <para><emphasis>Measurement</emphasis> - Contains a typed
           measurement made at a certain time and with a specified
           error.</para>
         </listitem>
@@ -108,19 +108,19 @@
     <itemizedlist>
       <listitem>
         <para><xref linkend="org.osgi.util.position.Position.getLatitude--"
-        xrefstyle="hyperlink"/> – The WGS-84 latitude of the current position.
+        xrefstyle="hyperlink"/> - The WGS-84 latitude of the current position.
         The unit of a latitude must be rad (radians).</para>
       </listitem>
 
       <listitem>
         <para><xref linkend="org.osgi.util.position.Position.getLongitude--"
-        xrefstyle="hyperlink"/> – The WGS-84 longitude of the current
+        xrefstyle="hyperlink"/> - The WGS-84 longitude of the current
         position. The unit of a longitude must be rad (radians).</para>
       </listitem>
 
       <listitem xml:id="i1271218">
         <para><xref linkend="org.osgi.util.position.Position.getAltitude--"
-        xrefstyle="hyperlink"/> – Altitude is expressed as height in meters
+        xrefstyle="hyperlink"/> - Altitude is expressed as height in meters
         above the WGS-84 ellipsoid. This value can differ from the actual
         height above mean sea level depending on the place on earth where the
         measurement is taken place. This value is not corrected for the
@@ -129,13 +129,13 @@
 
       <listitem>
         <para><xref linkend="org.osgi.util.position.Position.getTrack--"
-        xrefstyle="hyperlink"/> – The true north course of the vehicle in
+        xrefstyle="hyperlink"/> - The true north course of the vehicle in
         radians.</para>
       </listitem>
 
       <listitem>
         <para><xref linkend="org.osgi.util.position.Position.getSpeed--"
-        xrefstyle="hyperlink"/> – The ground speed. This speed must not
+        xrefstyle="hyperlink"/> - The ground speed. This speed must not
         include vertical speed.</para>
       </listitem>
     </itemizedlist>
