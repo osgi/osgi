@@ -43,6 +43,12 @@ public interface ZigBeeGlobalClusterDescription {
 
 	/**
 	 * 
+	 * @return the cluster functional domain
+	 */
+	public String getClusterFunctionalDomain();
+
+	/**
+	 * 
 	 * @return a {@link ZigBeeClusterDescription} representing the client
 	 *         cluster description
 	 */

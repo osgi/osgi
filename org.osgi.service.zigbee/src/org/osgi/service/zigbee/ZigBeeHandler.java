@@ -26,10 +26,18 @@ import java.util.Map;
 
 public interface ZigBeeHandler {
 	/**
-	 * Notifies the request response
+	 * Notifies the success result of the call. This method is used when the
+	 * handler command result is a success.
 	 * 
-	 * @param status request response status : SUCCESS or FAILURE
-	 * @param response type is Map<int, Object>.
+	 * @param response contains the results of the call.
 	 */
-	public void notifyResponse(short status, Map response);
+	public void onSuccess(Map response);
+
+	/**
+	 * Notifies the failure result of the call. This method is used when the
+	 * handler command result is a failure.
+	 * 
+	 * @param response contains the results of the call.
+	 */
+	public void onFailure(Map response);
 }

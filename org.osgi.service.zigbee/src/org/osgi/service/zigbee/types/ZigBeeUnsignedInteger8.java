@@ -32,7 +32,7 @@ public class ZigBeeUnsignedInteger8 implements
 
 	public String getName() {
 		// TODO Auto-generated method stub
-		return null;
+		return "Unsigned Integer 8";
 	}
 
 	public Class getJavaDataType() {

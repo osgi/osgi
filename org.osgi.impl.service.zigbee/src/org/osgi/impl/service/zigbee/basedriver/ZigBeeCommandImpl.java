@@ -1,0 +1,63 @@
+
+package org.osgi.impl.service.zigbee.basedriver;
+
+import org.osgi.service.zigbee.ZigBeeCommand;
+import org.osgi.service.zigbee.ZigBeeException;
+import org.osgi.service.zigbee.ZigBeeHandler;
+import org.osgi.service.zigbee.descriptions.ZigBeeCommandDescription;
+import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
+
+public class ZigBeeCommandImpl implements ZigBeeCommand {
+	private int							id;
+	private ZigBeeCommandDescription	description;
+
+	public ZigBeeCommandImpl(ZigBeeCommandDescription description) {
+		id = description.getId();
+		this.description = description;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public ZigBeeCommandDescription getDescription() {
+		return description;
+	}
+
+	public void invoke(byte[] bytes, ZigBeeHandler handler)
+			throws ZigBeeException {
+		// TODO Auto-generated method stub
+	}
+
+	public void invoke(Object[] values, ZigBeeDataTypeDescription[] inputTypes,
+			ZigBeeDataTypeDescription[] outputTypes, ZigBeeHandler handler)
+			throws ZigBeeException {
+		// TODO Auto-generated method stub
+		// log.info("command " +name+" invoked...");
+		for (int i = 0; i < values.length; i++) {
+			// log.info(values[i]+" : "+inputTypes[i]);
+		}
+	}
+
+	public ZigBeeDataTypeDescription[] getInputParametersTypes() {
+		ZigBeeDataTypeDescription[] params = null;
+		if (description != null) {
+			if (description.getParameterDescriptions() != null && description.getParameterDescriptions().length > 0) {
+				params = new ZigBeeDataTypeDescription[description.getParameterDescriptions().length];
+				for (int i = 0; i < description.getParameterDescriptions().length; i++) {
+					params[i] = description.getParameterDescriptions()[i].getDataTypeDescription();
+				}
+			}
+		}
+		return params;
+	}
+
+	public ZigBeeDataTypeDescription[] getOutputParametersTypes() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public String toString() {
+		return description.getName();
+	}
+}
