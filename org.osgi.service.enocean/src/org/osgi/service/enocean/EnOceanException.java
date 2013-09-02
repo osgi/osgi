@@ -21,6 +21,7 @@ package org.osgi.service.enocean;
  * This class represents the root exception Object for all the code related to EnOcean. 
  *  
  * @version 1.0
+ * @author Victor Perron <victor.perron@orange.fr>
  */
 public class EnOceanException extends Exception {
 

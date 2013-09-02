@@ -23,6 +23,7 @@ import org.osgi.service.enocean.channels.EnOceanChannel;
  * Holds the necessary methods to interact with an EnOcean message.
  *  
  * @version 1.0
+ * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanMessage {
 	

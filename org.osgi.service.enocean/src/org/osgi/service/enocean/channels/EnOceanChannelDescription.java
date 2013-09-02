@@ -20,12 +20,11 @@ package org.osgi.service.enocean.channels;
 import org.osgi.service.enocean.EnOceanException;
 
 /**
- * 
- *
  * Public and registered description interface for a channel. Encompasses all the possible subtypes
  * for a channel.
  * 
- * @author $Id$
+ * @version 1.0
+ * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanChannelDescription {
 	

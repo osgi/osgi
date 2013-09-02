@@ -18,11 +18,10 @@
 package org.osgi.service.enocean.channels;
 
 /**
- * 
- *
  * This transitional interface is used to define all the possible values taken by an enumerated channel.
  * 
- * @author $Id$
+ * @version 1.0
+ * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanChannelEnumValue {
 	

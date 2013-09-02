@@ -19,11 +19,10 @@ package org.osgi.service.enocean.channels;
 
 
 /**
- * 
- *
  * Subinterface of {@link EnOceanChannelDescription} that describes boolean channels.
  * 
- * @author $Id$
+ * @version 1.0
+ * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanFlagChannelDescription extends EnOceanChannelDescription {
 	

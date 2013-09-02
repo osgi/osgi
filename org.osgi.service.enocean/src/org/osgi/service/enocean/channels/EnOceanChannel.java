@@ -25,6 +25,7 @@ package org.osgi.service.enocean.channels;
  * the {@link EnOceanEnumChannel} interface.
  *  
  * @version 1.0
+ * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanChannel {
 		

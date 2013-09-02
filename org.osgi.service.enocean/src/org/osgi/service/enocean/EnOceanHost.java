@@ -23,7 +23,7 @@ package org.osgi.service.enocean;
  * networking features.
  *  
  * @version 1.0
- * @author $Id$
+ * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanHost {
 	
