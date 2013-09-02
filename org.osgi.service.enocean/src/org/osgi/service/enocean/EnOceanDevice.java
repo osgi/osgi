@@ -51,21 +51,48 @@ public interface EnOceanDevice {
 	 * associated with this device.
 	 */
 	public final static String TYPE = "enocean.profile.type";
+
+	/**
+	 * Get the friendly name of this device.
+	 * 
+	 * @return The friendly name.
+	 */
+	public String getName();
 	
 	/**
-	 * Property name for friendly name of this device.
+	 * Sets the friendly name of this device.
+	 * 
+	 * @param name the name.
 	 */
-	public final static String NAME = "enocean.device.name";
+	public void setName(String name);	
 	
 	/**
-	 * Property name for friendly profile name of this device.
+	 * Get the eventual profile name of this device.
+	 * 
+	 * @return The profile name.
 	 */
-	public final static String PROFILE_NAME = "enocean.device.profile_name";
+	public String getProfileName();
 	
 	/**
-	 * Property name for the mandatory Security Level Format of the device.
+	 * Sets the eventual profile name of this device.
+	 * 
+	 * @param profileName the profile name.
 	 */
-	public final static String SECURITY_LEVEL_FORMAT = "enocean.device.security_level_format";
+	public void setProfileName(String profileName);
+	
+	/**
+	 * Get the security level format as defined in the EnOcean Network Security specification.
+	 * 
+	 * @return the security level format of this device (integer mask)
+	 */
+	public int getSecurityLevelFormat();
+	
+	/**
+	 * Sets the security level format as defined in the EnOcean Network Security specification.
+	 * 
+	 * @param securityLevel the security level format of this device (integer mask)
+	 */
+	public void getSecurityLevelFormat(int securityLevel);
 
 	/**
 	 * Sends a message on the EnOcean network, uses lightweight byte[] argument type.
