@@ -25,17 +25,7 @@ public interface EnOceanChannel {
 	 * @return The description of this datafield, if any.
 	 */
 	public EnOceanChannelDescription getDescription();
-	
-	/**
-	 * @return The value of this datafield.
-	 */
-	public Object getValue();
-	
-	/**
-	 * Sets the complex value of a datafield.
-	 * @param obj
-	 */
-	public void setValue(Object obj);
+
 
 	/**
 	 * Gets or sets the raw value of this datafield.

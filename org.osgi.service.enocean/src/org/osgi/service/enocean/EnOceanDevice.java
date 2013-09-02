@@ -1,5 +1,7 @@
 package org.osgi.service.enocean;
 
+import java.util.Map;
+
 
 /**
  * This interface represents a physical device that communicates over the EnOcean protocol.
@@ -114,10 +116,11 @@ public interface EnOceanDevice {
 	public int[] getLearnedDevices();
 	
 	/**
-	 * Retrieves the currently available RPCs to this device.
+	 * Retrieves the currently available RPCs to this device; those
+	 * are stored using their manfufacturerId:commandId identifiers.
 	 * 
-	 * @return A list of the available {@link EnOceanRPC }
+	 * @return A list of the available RPCs, in a Map<Integer, Integer[]> form.
 	 */
-	public EnOceanRPC[] getRPCs();
+	public Map getRPCs();
 	
 }
