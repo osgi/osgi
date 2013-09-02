@@ -10,10 +10,10 @@ import org.osgi.service.enocean.channels.EnOceanChannel;
 public interface EnOceanMessage {
 	
 	/**
-	 * Property name for the radiotelegram main type of the profile
-	 * associated with this device.
+	 * Property name for the radiotelegram main type.
 	 */
 	public final static String RORG = "enocean.profile.rorg";
+
 	
 	/**
 	 * Property name for the sender ID of this message (mandatory)
