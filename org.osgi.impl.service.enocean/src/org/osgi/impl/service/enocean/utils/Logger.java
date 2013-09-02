@@ -44,4 +44,34 @@ public final class Logger {
 			System.out.println("[" + tag + "] " + msg);
 	}
 
+	/**
+	 * Build a string representation of an int
+	 * 
+	 * @param value the uint32 wrapped value
+	 * @return the string representation
+	 */
+	public static String toHexString(int value) {
+		StringBuffer hexStr = new StringBuffer(Integer.toHexString(0xFFFFFFF & value));
+		hexStr.replace(0, 1, "");
+		return hexStr.toString();
+	}
+
+	/**
+	 * Build a string representation of a byte array
+	 * 
+	 * @param data the byte array to represent
+	 * @return the string representation
+	 */
+	public static String toHexString(byte[] data) {
+		if (null == data) {
+			return null;
+		}
+
+		StringBuffer result = new StringBuffer("");
+		for (short i = 0; i < data.length; i++) {
+			String byteStr = toHexString(data[data.length - i - 1]);
+			result.append(byteStr.substring(1));
+		}
+		return result.toString();
+	}
 }

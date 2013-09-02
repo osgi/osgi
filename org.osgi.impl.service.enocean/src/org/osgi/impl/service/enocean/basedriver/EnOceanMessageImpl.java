@@ -4,8 +4,7 @@ import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.channels.EnOceanChannel;
 
-public class EnOceanTelegramImpl implements EnOceanMessage {
-	private EnOceanBaseDriver	basedriver;
+public class EnOceanMessageImpl implements EnOceanMessage {
 
 	public int getStatus() {
 		// TODO Auto-generated method stub
@@ -33,6 +32,26 @@ public class EnOceanTelegramImpl implements EnOceanMessage {
 	}
 
 	public int getSubtelegramCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public EnOceanChannel[] getChannels() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getSubTelegramCount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getRedundancyInfo() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getRSSI() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

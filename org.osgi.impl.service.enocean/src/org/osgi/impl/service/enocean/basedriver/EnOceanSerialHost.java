@@ -17,21 +17,23 @@
 
 package org.osgi.impl.service.enocean.basedriver;
 
+import java.util.ArrayList;
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanHost;
-import org.osgi.service.enocean.EnOceanPacketListener;
 
-public class EnOceanPhysicalHost implements EnOceanHost {
+public class EnOceanSerialHost implements EnOceanHost {
 
-	private EnOceanPacketListener	listener;
+	private ArrayList	listeners;
 
-	public EnOceanPhysicalHost(String serialPort, int serialSpeed) {
+	public EnOceanSerialHost(String serialPort, int serialSpeed) {
+		listeners = new ArrayList();
 		/*
 		 * TODO: - try and open the serial port - register a handler for any new
 		 * char read (use a thread or some callback in rxtx) - for any new full
 		 * sequence of bytes, report them to the base driver who will interpret
 		 * it
 		 */
+
 	}
 
 	public void reset() throws EnOceanException {
@@ -74,10 +76,6 @@ public class EnOceanPhysicalHost implements EnOceanHost {
 		return 0;
 	}
 
-	public void addPacketListener(EnOceanPacketListener listener) {
-		this.listener = listener;
-	}
-
 	public void start() {
 		// TODO Auto-generated method stub
 
@@ -86,6 +84,18 @@ public class EnOceanPhysicalHost implements EnOceanHost {
 	public void stop() {
 		// TODO Auto-generated method stub
 
+	}
+
+	/**
+	 * Implementation-specific method to add a remote packet listener.
+	 * 
+	 * @param packetListener an object implementing the
+	 *        {@link EnOceanPacketListener} interface.
+	 */
+	public void addPacketListener(EnOceanPacketListener packetListener) {
+		if (!listeners.contains(packetListener)) {
+			listeners.add(packetListener);
+		}
 	}
 
 }
