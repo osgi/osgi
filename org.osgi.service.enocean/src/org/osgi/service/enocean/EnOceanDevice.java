@@ -38,62 +38,37 @@ public interface EnOceanDevice {
 	 * Property name for the radiotelegram main type of the profile
 	 * associated with this device.
 	 */
-	public final static String RORG = "enocean.profile.rorg";
+	public final static String RORG = "enocean.device.profile.rorg";
 	
 	/**
 	 * Property name for the radiotelegram functional type of the profile
 	 * associated with this device.
 	 */
-	public final static String FUNC = "enocean.profile.func";
+	public final static String FUNC = "enocean.device.profile.func";
 	
 	/**
 	 * Property name for the radiotelegram subtype of the profile
 	 * associated with this device.
 	 */
-	public final static String TYPE = "enocean.profile.type";
+	public final static String TYPE = "enocean.device.profile.type";
+	
+	/**
+	 * Property name for the 'profile name' for this device. This is nothing
+	 * EnOcean-standard, you shouldn't expect something unique.
+	 */
+	public final static String PROFILE_NAME = "enocean.device.profile.name";
 
 	/**
-	 * Get the friendly name of this device.
-	 * 
-	 * @return The friendly name.
+	 * Property name for the 'friendly name' of this device. Not unique.
 	 */
-	public String getName();
-	
-	/**
-	 * Sets the friendly name of this device.
-	 * 
-	 * @param name the name.
-	 */
-	public void setName(String name);	
-	
-	/**
-	 * Get the eventual profile name of this device.
-	 * 
-	 * @return The profile name.
-	 */
-	public String getProfileName();
-	
-	/**
-	 * Sets the eventual profile name of this device.
-	 * 
-	 * @param profileName the profile name.
-	 */
-	public void setProfileName(String profileName);
-	
-	/**
-	 * Get the security level format as defined in the EnOcean Network Security specification.
-	 * 
-	 * @return the security level format of this device (integer mask)
-	 */
-	public int getSecurityLevelFormat();
-	
-	/**
-	 * Sets the security level format as defined in the EnOcean Network Security specification.
-	 * 
-	 * @param securityLevel the security level format of this device (integer mask)
-	 */
-	public void getSecurityLevelFormat(int securityLevel);
+	public final static String NAME = "enocean.device.name";
 
+	/**
+	 * Property name for the security level mask for this device.
+	 * The format of that mask is specified in EnOcean Security Draft.
+	 */
+	public final static String SECURITY_LEVEL_FORMAT = "enocean.device.security_level_format";
+	
 	/**
 	 * Sends a message on the EnOcean network, uses lightweight byte[] argument type.
 	 * 

@@ -11,6 +11,7 @@ import org.osgi.service.enocean.EnOceanResponseHandler;
 
 public class EnOceanDeviceImpl implements EnOceanDevice {
 
+	private BundleContext		bc;
 	private ServiceRegistration	sReg;
 
 	/**
@@ -18,15 +19,22 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	 * registration within the framework.
 	 * Such a Device should only be registered after a proper teach-in procedure, so that the RORG, FIUNC and TYPE are already known.  
 	 */
-	public EnOceanDeviceImpl(BundleContext bc, int chipId, int rorg, int func, int type) {
+	public EnOceanDeviceImpl(BundleContext bc, int chipId) {
+		this.bc = bc;
 		Hashtable deviceProps = new Hashtable();
 		deviceProps.put(org.osgi.service.enocean.EnOceanDevice.CHIP_ID, new Integer(chipId));
-		deviceProps.put(org.osgi.service.enocean.EnOceanDevice.RORG, new Integer(rorg));
-		deviceProps.put(org.osgi.service.enocean.EnOceanDevice.FUNC, new Integer(func));
-		deviceProps.put(org.osgi.service.enocean.EnOceanDevice.TYPE, new Integer(type));
+
 		sReg = bc.registerService(new String[] {EnOceanDevice.class.getName()},
 				this,
 				deviceProps);
+	}
+
+	public void registerProfile(int rorg, int func, int type) {
+		Hashtable props = new Hashtable();
+		props.put(org.osgi.service.enocean.EnOceanDevice.RORG, new Integer(rorg));
+		props.put(org.osgi.service.enocean.EnOceanDevice.FUNC, new Integer(func));
+		props.put(org.osgi.service.enocean.EnOceanDevice.TYPE, new Integer(type));
+		sReg.setProperties(props);
 	}
 
 	public void send(byte[] telegram) throws EnOceanException {
