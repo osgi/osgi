@@ -22,7 +22,8 @@ Include-Resource:
 	org.osgi.impl.service.log; version=latest, \
 	org.osgi.impl.service.enocean; version=latest
 
--runproperties 						= ${runproperties}
+-runproperties = ${runproperties}, \
+	org.osgi.service.enocean.host.path=/tmp/testdriver
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.enocean

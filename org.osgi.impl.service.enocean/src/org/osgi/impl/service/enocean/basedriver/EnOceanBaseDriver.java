@@ -1,7 +1,9 @@
 package org.osgi.impl.service.enocean.basedriver;
 
+import java.io.FileNotFoundException;
 import java.util.Hashtable;
 import java.util.Properties;
+// import javax.comm.CommPortIdentifier;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
@@ -28,12 +30,13 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	private ServiceTracker		messageSetServiceRef;
 	private ServiceTracker		rpcSetServiceRef;
 	private ServiceTracker		channelDescriptionSetServiceRef;
+	private EnOceanFileHost		initialHost;
 
 	private static final String TAG = "EnOceanBaseDriver";
 
 	/**
 	 * The {@link EnOceanBaseDriver} constructor initiates the connection
-	 * towards an {@link EnOceanSerialHost} device. Then it registers itself as
+	 * towards an {@link EnOceanFileHost} device. Then it registers itself as
 	 * a service listener for any {@link EnOceanDevice},
 	 * {@link EnOceanMessageSet}, {@link EnOceanRPCSet},
 	 * {@link EnOceanChannelDescriptionSet} that would be registered in the
@@ -41,13 +44,26 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	 * 
 	 */
 	public EnOceanBaseDriver(BundleContext bc) {
+		/* Init driver internal state */
+		this.bc = bc;
+		devices = new Hashtable(10);
+		servicerefs = new Hashtable(10);
 
-		try {
-			registerEnOceanHost();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+		/* Register initial EnOceanHost */
+		String hostPath = System.getProperty("org.osgi.service.enocean.host.path");
+		if (hostPath != null && hostPath != "") {
+			try {
+				initialHost = new EnOceanFileHost(hostPath);
+				registerHost(hostPath, initialHost);
+				initialHost.addPacketListener(this);
+			} catch (EnOceanDriverException e) {
+				Logger.e(TAG, "initial enoceanhost registration failed : " + e.getMessage());
+			} catch (FileNotFoundException e) {
+				Logger.e(TAG, "initial enoceanhost path was incorrect : " + e.getMessage());
+			}
 		}
 
+		/* Track the EnOcean services */
 		try {
 			deviceServiceRef = registerDeviceListener(bc, this);
 			rpcSetServiceRef = registerRpcSetListener(bc, this);
@@ -57,13 +73,11 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 			Logger.e(TAG, e.getMessage());
 		}
 
-		this.bc = bc;
-		devices = new Hashtable(10);
-		servicerefs = new Hashtable(10);
 	}
 
 	public void packetReceived(byte[] packet) {
-		Logger.d(TAG, "received : " + Logger.toHexString(packet));
+		// TODO: test toHexString etc etc
+		System.out.println("basedriver : received '" + packet + "'");
 	}
 
 	public Object addingService(ServiceReference ref) {
@@ -102,33 +116,24 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	}
 
 	public void start() {
+		initialHost.start();
 	}
 
 	public void stop() {
 	}
 
-	private void registerEnOceanHost() throws EnOceanDriverException {
-		Integer hostId = new Integer(System.getProperty("org.osgi.service.enocean.host.id"));
-		String serialPort = System.getProperty("org.osgi.service.enocean.host.port");
-		int serialSpeed = Integer.parseInt(System.getProperty("org.osgi.service.enocean.host.speed"));
-		if (serialPort == null) {
-			throw new EnOceanDriverException("no physical host available");
+	public void registerHost(String hostId, EnOceanHost host) throws EnOceanDriverException {
+		if (host == null) {
+			throw new EnOceanDriverException("the specified host was null");
 		}
-
-		EnOceanSerialHost host = new EnOceanSerialHost(serialPort, serialSpeed);
-		Logger.i(TAG, "registering physical host on " + serialPort);
 		try {
 			Properties props = new Properties();
 			props.put(EnOceanHost.HOST_ID, hostId);
-			ServiceRegistration sr = bc.registerService("org.osgi.service.enocean.EnOceanHost", host, props);
+			ServiceRegistration sr = bc.registerService("org.osgi.service.enocean.EnOceanHost",
+					host, props);
 			servicerefs.put(hostId, sr);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
-		}
-
-		if (host != null) {
-			host.addPacketListener(this);
-			host.start();
 		}
 	}
 

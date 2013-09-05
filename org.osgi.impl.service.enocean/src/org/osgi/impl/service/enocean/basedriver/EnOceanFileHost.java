@@ -17,23 +17,41 @@
 
 package org.osgi.impl.service.enocean.basedriver;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanHost;
 
-public class EnOceanSerialHost implements EnOceanHost {
+public class EnOceanFileHost extends Thread implements EnOceanHost {
 
-	private ArrayList	listeners;
+	private static final String	TAG						= "EnOceanFileHost";
 
-	public EnOceanSerialHost(String serialPort, int serialSpeed) {
+	private static final byte	ENOCEAN_ESP_FRAME_START	= 0x55;
+	private Object				synchronizer;
+	private ArrayList			listeners;
+	private InputStream			inputStream;
+	private OutputStream		outputStream;
+	private File				file;
+	private boolean				isRunning;
+
+	private String				streamPath;
+
+	public EnOceanFileHost(String path) throws FileNotFoundException {
+		this.streamPath = path;
 		listeners = new ArrayList();
-		/*
-		 * TODO: - try and open the serial port - register a handler for any new
-		 * char read (use a thread or some callback in rxtx) - for any new full
-		 * sequence of bytes, report them to the base driver who will interpret
-		 * it
-		 */
+		isRunning = false;
+		synchronizer = new Object();
 
+		file = new File(path);
+		inputStream = new FileInputStream(file);
+		outputStream = new FileOutputStream(file);
 	}
 
 	public void reset() throws EnOceanException {
@@ -76,16 +94,6 @@ public class EnOceanSerialHost implements EnOceanHost {
 		return 0;
 	}
 
-	public void start() {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void stop() {
-		// TODO Auto-generated method stub
-
-	}
-
 	/**
 	 * Implementation-specific method to add a remote packet listener.
 	 * 
@@ -98,4 +106,40 @@ public class EnOceanSerialHost implements EnOceanHost {
 		}
 	}
 
+	public void run() {
+		isRunning = true;
+		while (isRunning) {
+			try {
+				/*
+				 * synchronized (this.synchronizer) { if
+				 * (inputStream.available() == 0) { synchronizer.wait(); } }
+				 */
+				int _byte = inputStream.read();
+				if (_byte == -1) {
+					throw new IOException("end of stream reached ?!");
+				}
+				byte c = (byte) _byte;
+				if (c == ENOCEAN_ESP_FRAME_START) {
+					byte[] packet = readPacket();
+					dispatchToListeners(packet);
+				}
+			} catch (IOException e) {
+				Logger.e(TAG, "an exception occured while reading stream '" + streamPath + "' : " + e.getMessage());
+			}
+		}
+
+	}
+
+	private void dispatchToListeners(byte[] data) {
+		for (int i = 0; i < listeners.size(); i++) {
+			EnOceanPacketListener listener = (EnOceanPacketListener) listeners.get(i);
+			listener.packetReceived(data);
+		}
+	}
+
+	private byte[] readPacket() throws IOException {
+		byte[] header = new byte[4];
+		inputStream.read(header);
+		return header;
+	}
 }
