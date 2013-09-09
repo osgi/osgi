@@ -16,35 +16,41 @@
 
 package org.osgi.service.functionaldevice.functions;
 
+import org.osgi.service.functionaldevice.DeviceException;
 import org.osgi.service.functionaldevice.DeviceFunction;
-import org.osgi.service.functionaldevice.FunctionalDeviceException;
 
 /**
  * <code>BinarySensor</code> Device Function provides binary sensor monitoring.
  * It reports its state when an important event is available. The state is
- * accessible with {@link #getState()} getter. There are no operations. The
- * Device Function name is
- * <code>org.osgi.service.functionaldevice.functions.BinarySensor</code>.
+ * accessible with {@link #getState()} getter. There are no operations.
+ * 
+ * @see BinaryData
  */
 public interface BinarySensor extends DeviceFunction {
 
 	/**
-	 * Specifies the state property name. The property can be read with
-	 * {@link #getState()} method.
+	 * Specifies the state property name. The property value is accessible with
+	 * {@link #getState()} getter.
 	 */
-	public static final String	PROPERTY_STATE	= "state";
+	public static final String PROPERTY_STATE = "state";
 
 	/**
-	 * Returns the state of the Binary Sensor. It's a getter method for
-	 * {@link #PROPERTY_STATE} property.
+	 * Returns the <code>BinarySensor</code>current state. It's a getter method
+	 * for {@link #PROPERTY_STATE} property.
 	 * 
-	 * @return The state of the Binary Sensor.
+	 * @return The <code>BinarySensor</code> current state.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
-	 * @throws IllegalStateException If this device service object has already
-	 *         been unregistered.
-	 * @throws FunctionalDeviceException If an operation error is available.
+	 * @throws UnsupportedOperationException
+	 *             If the operation is not supported.
+	 * @throws IllegalStateException
+	 *             If this device function service object has already been
+	 *             unregistered.
+	 * @throws DeviceException
+	 *             If an operation error is available.
+	 * 
+	 * @see BinaryData
 	 */
-	public boolean getState() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
+	public BinaryData getState() throws UnsupportedOperationException,
+			IllegalStateException, DeviceException;
 
 }

@@ -30,23 +30,23 @@ import java.security.PermissionCollection;
  * </tr>
  * <tr>
  * <td>{@link #ACTION_REMOVE}</td>
- * <td>{@link FunctionalDevice#remove()}</td>
+ * <td>{@link Device#remove()}</td>
  * </tr>
  * <tr>
  * <td>{@link #ACTION_ENABLE}</td>
- * <td>{@link FunctionalDevice#enable()}</td>
+ * <td>{@link Device#enable()}</td>
  * </tr>
  * <tr>
  * <td>{@link #ACTION_DISABLE}</td>
- * <td>{@link FunctionalDevice#disable()}</td>
+ * <td>{@link Device#disable()}</td>
  * </tr>
  * <tr>
  * <td>{@link #ACTION_PROPERTY}</td>
- * <td>{@link FunctionalDevice#setProperty(String, Object)}</td>
+ * <td>{@link Device#setProperty(String, Object)}</td>
  * </tr>
  * <tr>
  * <td></td>
- * <td>{@link FunctionalDevice#setProperties(String[], Object[])}</td>
+ * <td>{@link Device#setProperties(String[], Object[])}</td>
  * </tr>
  * </table>
  * 
@@ -55,21 +55,21 @@ import java.security.PermissionCollection;
  * properties. The service property names are case insensitive. The filter
  * attribute names are processed in a case insensitive manner.
  */
-public final class FunctionalDevicePermission extends BasicPermission {
+public final class DevicePermission extends BasicPermission {
 
-	private static final long	serialVersionUID	= -3020753566295420906L;
+	private static final long serialVersionUID = -3020753566295420906L;
 
 	/** A permission action to enable the device. */
-	public static final String	ACTION_ENABLE		= "enable";
+	public static final String ACTION_ENABLE = "enable";
 
 	/** A permission action to disable the device. */
-	public static final String	ACTION_DISABLE		= "disable";
+	public static final String ACTION_DISABLE = "disable";
 
 	/** A permission action to modify the device properties. */
-	public static final String	ACTION_PROPERTY		= "property";
+	public static final String ACTION_PROPERTY = "property";
 
 	/** A permission action to remove the device. */
-	public static final String	ACTION_REMOVE		= "remove";
+	public static final String ACTION_REMOVE = "remove";
 
 	/**
 	 * Creates a new <code>FunctionalDevicePermission</code> with the given
@@ -80,18 +80,21 @@ public final class FunctionalDevicePermission extends BasicPermission {
 	 * <p>
 	 * An action list example: property, remove
 	 * 
-	 * @param filter A filter expression that can use any device service
-	 *        property. The filter attribute names are processed in a case
-	 *        insensitive manner. A special value of "*" can be used to match
-	 *        akk devices.
-	 * @param actions A comma-separated list of {@link #ACTION_DISABLE},
-	 *        {@link #ACTION_ENABLE} {@link #ACTION_PROPERTY} and
-	 *        {@link #ACTION_REMOVE}. Any combinations are allowed.
+	 * @param filter
+	 *            A filter expression that can use any device service property.
+	 *            The filter attribute names are processed in a case insensitive
+	 *            manner. A special value of "*" can be used to match akk
+	 *            devices.
+	 * @param actions
+	 *            A comma-separated list of {@link #ACTION_DISABLE},
+	 *            {@link #ACTION_ENABLE} {@link #ACTION_PROPERTY} and
+	 *            {@link #ACTION_REMOVE}. Any combinations are allowed.
 	 * 
-	 * @throws IllegalArgumentException If the filter syntax is not correct or
-	 *         invalid actions are specified.
+	 * @throws IllegalArgumentException
+	 *             If the filter syntax is not correct or invalid actions are
+	 *             specified.
 	 */
-	public FunctionalDevicePermission(String filter, String actions) {
+	public DevicePermission(String filter, String actions) {
 		super(filter, actions);
 		// TODO: impl
 	}
@@ -105,12 +108,14 @@ public final class FunctionalDevicePermission extends BasicPermission {
 	 * . The permissions constructed by this constructor must not be added to
 	 * the <code>FunctionalDevicePermission</code> permission collections.
 	 * 
-	 * @param device The permission device.
-	 * @param actions A comma-separated list of {@link #ACTION_DISABLE},
-	 *        {@link #ACTION_ENABLE} {@link #ACTION_PROPERTY} and
-	 *        {@link #ACTION_REMOVE}. Any combinations are allowed.
+	 * @param device
+	 *            The permission device.
+	 * @param actions
+	 *            A comma-separated list of {@link #ACTION_DISABLE},
+	 *            {@link #ACTION_ENABLE} {@link #ACTION_PROPERTY} and
+	 *            {@link #ACTION_REMOVE}. Any combinations are allowed.
 	 */
-	public FunctionalDevicePermission(FunctionalDevice device, String actions) {
+	public DevicePermission(Device device, String actions) {
 		super(null);
 		// TODO: impl
 	}
@@ -122,7 +127,8 @@ public final class FunctionalDevicePermission extends BasicPermission {
 	 * <li>represents the same device and actions</li>
 	 * </ul>
 	 * 
-	 * @param obj The object being compared for equality with this object.
+	 * @param obj
+	 *            The object being compared for equality with this object.
 	 * 
 	 * @return <code>true</code> if two permissions are equal,
 	 *         <code>false</code> otherwise.
@@ -157,22 +163,22 @@ public final class FunctionalDevicePermission extends BasicPermission {
 	/**
 	 * Determines if the specified permission is implied by this object. The
 	 * method will throw an exception if the specified permission was not
-	 * constructed by
-	 * {@link #FunctionalDevicePermission(FunctionalDevice, String)}.
+	 * constructed by {@link #DevicePermission(Device, String)}.
 	 * 
 	 * Returns <code>true</code> if the specified permission is a
 	 * <code>FunctionalDevicePermission</code> and this permission filter
 	 * matches the specified permission device properties.
 	 * 
-	 * @param p The permission to be implied. It must be constructed by
-	 *        {@link #FunctionalDevicePermission(FunctionalDevice, String)}.
+	 * @param p
+	 *            The permission to be implied. It must be constructed by
+	 *            {@link #DevicePermission(Device, String)}.
 	 * 
 	 * @return <code>true</code> if the specified permission is implied by this
 	 *         permission, <code>false</code> otherwise.
 	 * 
-	 * @throws IllegalArgumentException If the specified permission is not
-	 *         constructed by
-	 *         {@link #FunctionalDevicePermission(FunctionalDevice, String)}.
+	 * @throws IllegalArgumentException
+	 *             If the specified permission is not constructed by
+	 *             {@link #DevicePermission(Device, String)}.
 	 */
 	public boolean implies(Permission p) {
 		return false;

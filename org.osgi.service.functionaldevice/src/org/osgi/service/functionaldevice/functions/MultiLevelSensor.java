@@ -16,35 +16,43 @@
 
 package org.osgi.service.functionaldevice.functions;
 
+import org.osgi.service.functionaldevice.DeviceException;
 import org.osgi.service.functionaldevice.DeviceFunction;
-import org.osgi.service.functionaldevice.FunctionalDeviceException;
 
 /**
  * <code>MultiLevelSensor</code> Device Function provides multi-level sensor
  * monitoring. It reports its state when an important event is available. The
  * state is accessible with {@link #getState()} getter. There are no operations.
- * The Device Function name is
- * <code>org.osgi.service.functionaldevice.functions.MultiLevelSensor</code>.
+ * 
+ * @see MultiLevelData
  */
 public interface MultiLevelSensor extends DeviceFunction {
 
 	/**
 	 * Specifies the state property name. The property can be read with
-	 * {@link #getState()} method.
+	 * {@link #getState()} getter.
+	 * 
+	 * @see MultiLevelData
 	 */
-	public static final String	PROPERTY_STATE	= "state";
+	public static final String PROPERTY_STATE = "state";
 
 	/**
-	 * Returns the state of the Multi Level Sensor. It's a getter method for
-	 * {@link #PROPERTY_STATE} property.
+	 * Returns the <code>MultiLevelSensor</code> current state. It's a getter
+	 * method for {@link #PROPERTY_STATE} property.
 	 * 
-	 * @return The state of the Multi Level Sensor.
+	 * @return The <code>MultiLevelSensor</code> current state.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
-	 * @throws IllegalStateException If this device service object has already
-	 *         been unregistered.
-	 * @throws FunctionalDeviceException If an operation error is available.
+	 * @throws UnsupportedOperationException
+	 *             If the operation is not supported.
+	 * @throws IllegalStateException
+	 *             If this device function service object has already been
+	 *             unregistered.
+	 * @throws DeviceException
+	 *             If an operation error is available.
+	 * 
+	 * @see MultiLevelData
 	 */
-	public double getState() throws UnsupportedOperationException, IllegalStateException, FunctionalDeviceException;
+	public MultiLevelData getState() throws UnsupportedOperationException,
+			IllegalStateException, DeviceException;
 
 }

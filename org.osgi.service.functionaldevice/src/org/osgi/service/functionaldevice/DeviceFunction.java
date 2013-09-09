@@ -40,33 +40,30 @@ import java.util.Map;
  * property value is the Device Function property names.</li>
  * </ul>
  * The <code>DeviceFunction</code> services are registered before the
- * <code>FunctionalDevice</code> and <code>FunctionalGroup</code> services. It's
- * possible that {@link #PROPERTY_DEVICE_UID} and {@link #PROPERTY_GROUP_UID}
+ * <code>Device</code> services. It's possible that {@link #PROPERTY_DEVICE_UID}
  * point to missing services at the moment of the registration. The reverse
  * order is used when the services are unregistered. <code>DeviceFunction</code>
- * services are unregistered last after <code>FunctionalDevice</code> and
- * <code>FunctionalGroup</code> services.
+ * services are unregistered last after <code>Device</code> services.
  * <p>
- * Device Function service must be registred only under concrete Device Function
- * classes. It's not allowed to register Device Function service under classes,
- * which are not concrete Device Functions. For example, those registrations are
- * not allowed:
+ * Device Function service must be registered only under concrete Device
+ * Function classes. It's not allowed to register Device Function service under
+ * classes, which are not concrete Device Functions. For example, those
+ * registrations are not allowed:
  * <ul>
  * <li>
  * <code>context.registerService(new String[] {ManagedService.class.getName(),
- * OnOff.class.getName()}, this, regProps);</code> - <code>ManagedService</code>
- * interface is not a Device Function interface;</li>
+ * BinaryControl.class.getName()}, this, regProps);</code> -
+ * <code>ManagedService</code> interface is not a Device Function interface;</li>
  * <li>
  * <code>context.registerService(new String[] {DeviceFunction.class.getName(),
- * OnOff.class.getName()}, this, regProps);</code> - <code>DeviceFunction</code>
- * interface is not concrete Device Function.</li>
+ * BinaryControl.class.getName()}, this, regProps);</code> -
+ * <code>DeviceFunction</code> interface is not concrete Device Function.</li>
  * </ul>
  * That one is valid <code>context.registerService(new String[]
- * {Meter.class.getName(), OnOff.class.getName()}, this, regProps);</code>.
- * <code>Meter</code> and <code>OnOff</code> are concrete Device Function
- * interfaces. That rule helps to the applications to find all supported Device
- * Function classes. Otherwise the Device Function services can be accesses, but
- * it's not clear which are the Device Function classes.
+ * {Meter.class.getName(), BinaryControl.class.getName()}, this, regProps);</code>. <code>Meter</code> and <code>BinaryControl</code> are concrete Device
+ * Function interfaces. That rule helps to the applications to find all
+ * supported Device Function classes. Otherwise the Device Function services can
+ * be accesses, but it's not clear which are the Device Function classes.
  * <p>
  * The Device Function properties must be integrated according to these rules:
  * <ul>
@@ -100,12 +97,12 @@ import java.util.Map;
  * The properties and the operation arguments have some common metadata. It's
  * provided with:
  * <ul>
- * <li>{@link #META_INFO_VARIABLE_DESCRIPTION}</li>
- * <li>{@link #META_INFO_VARIABLE_UNIT}</li>
- * <li>{@link #META_INFO_VARIABLE_MIN}</li>
- * <li>{@link #META_INFO_VARIABLE_MAX}</li>
- * <li>{@link #META_INFO_VARIABLE_RESOLUTION}</li>
- * <li>{@link #META_INFO_VARIABLE_VALUES}</li>
+ * <li>{@link #META_INFO_DESCRIPTION}</li>
+ * <li>{@link #META_INFO_UNIT}</li>
+ * <li>{@link #META_INFO_MIN_VALUE}</li>
+ * <li>{@link #META_INFO_MAX_VALUE}</li>
+ * <li>{@link #META_INFO_RESOLUTION}</li>
+ * <li>{@link #META_INFO_VALUES}</li>
  * </ul>
  * 
  * The access to the Device Function properties is a bitmap value of
@@ -160,29 +157,30 @@ public interface DeviceFunction {
 	 * part of bitmap value of {@link #META_INFO_PROPERTY_ACCESS}. The readable
 	 * access mandates Device Function to provide a property getter method.
 	 */
-	public static final int		META_INFO_PROPERTY_ACCESS_READABLE	= 1;
+	public static final int META_INFO_PROPERTY_ACCESS_READABLE = 1;
 
 	/**
 	 * Marks the writable Device Function properties. The flag can be used as a
 	 * part of bitmap value of {@link #META_INFO_PROPERTY_ACCESS}. The writable
 	 * access mandates Device Function to provide a property setter method.
 	 */
-	public static final int		META_INFO_PROPERTY_ACCESS_WRITABLE	= 2;
+	public static final int META_INFO_PROPERTY_ACCESS_WRITABLE = 2;
 
 	/**
 	 * Marks the eventable Device Function properties. The flag can be used as a
 	 * part of bitmap value of {@link #META_INFO_PROPERTY_ACCESS}.
 	 */
-	public static final int		META_INFO_PROPERTY_ACCESS_EVENTABLE	= 4;
+	public static final int META_INFO_PROPERTY_ACCESS_EVENTABLE = 4;
 
 	/**
-	 * Meta data key, which value represents the Device Function property or the
-	 * operation argument description. The property value type is
+	 * Meta data key, which value represents the Device Function property, the
+	 * operation argument or operation description. The property value type is
 	 * <code>java.lang.String</code>.
 	 * 
 	 * @see #getPropertyMetaData(String)
+	 * @see #getOperationMetaData(String)
 	 */
-	public static final String	META_INFO_VARIABLE_DESCRIPTION		= "device.function.variable.description";
+	public static final String META_INFO_DESCRIPTION = "description";
 
 	/**
 	 * Meta data key, which value represents the Device Function property or the
@@ -201,7 +199,7 @@ public interface DeviceFunction {
 	 * 
 	 * @see #getPropertyMetaData(String)
 	 */
-	public static final String	META_INFO_VARIABLE_UNIT				= "device.function.variable.unit";
+	public static final String META_INFO_UNIT = "unit";
 
 	/**
 	 * Meta data key, which value represents the access to the Device Function
@@ -217,7 +215,7 @@ public interface DeviceFunction {
 	 * 
 	 * @see #getPropertyMetaData(String)
 	 */
-	public static final String	META_INFO_PROPERTY_ACCESS			= "device.function.property.access";
+	public static final String META_INFO_PROPERTY_ACCESS = "property.access";
 
 	/**
 	 * Meta data key, which value represents the Device Function property or the
@@ -226,7 +224,7 @@ public interface DeviceFunction {
 	 * 
 	 * @see #getPropertyMetaData(String)
 	 */
-	public static final String	META_INFO_VARIABLE_MIN				= "device.function.variable.min";
+	public static final String META_INFO_MIN_VALUE = "min.value";
 
 	/**
 	 * Meta data key, which value represents the Device Function property or the
@@ -235,7 +233,7 @@ public interface DeviceFunction {
 	 * 
 	 * @see #getPropertyMetaData(String)
 	 */
-	public static final String	META_INFO_VARIABLE_MAX				= "device.function.variable.max";
+	public static final String META_INFO_MAX_VALUE = "max.value";
 
 	/**
 	 * Meta data key, which value represents the resolution value of specific
@@ -246,7 +244,7 @@ public interface DeviceFunction {
 	 * 
 	 * @see #getPropertyMetaData(String)
 	 */
-	public static final String	META_INFO_VARIABLE_RESOLUTION		= "device.function.variable.resolution";
+	public static final String META_INFO_RESOLUTION = "resolution";
 
 	/**
 	 * Meta data key, which value represents the Device Function property or the
@@ -256,27 +254,19 @@ public interface DeviceFunction {
 	 * 
 	 * @see #getPropertyMetaData(String)
 	 */
-	public static final String	META_INFO_VARIABLE_VALUES			= "device.function.variable.values";
-
-	/**
-	 * Meta data key, which value contains the function operation description.
-	 * The property value type is <code>java.lang.String</code>.
-	 * 
-	 * @see #getOperationMetaData(String)
-	 */
-	public static final String	META_INFO_OPERATION_DESCRIPTION		= "device.function.operation.description";
+	public static final String META_INFO_VALUES = "values";
 
 	/**
 	 * Meta data key prefix, which key value represents the operation input
 	 * argument metadata. The property value type is <code>java.util.Map</code>.
 	 * The value map key can be one of:
 	 * <ul>
-	 * <li>{@link #META_INFO_VARIABLE_DESCRIPTION}</li>
-	 * <li>{@link #META_INFO_VARIABLE_UNIT}</li>
-	 * <li>{@link #META_INFO_VARIABLE_MIN}</li>
-	 * <li>{@link #META_INFO_VARIABLE_MAX}</li>
-	 * <li>{@link #META_INFO_VARIABLE_RESOLUTION}</li>
-	 * <li>{@link #META_INFO_VARIABLE_VALUES}</li>
+	 * <li>{@link #META_INFO_DESCRIPTION}</li>
+	 * <li>{@link #META_INFO_UNIT}</li>
+	 * <li>{@link #META_INFO_MIN_VALUE}</li>
+	 * <li>{@link #META_INFO_MAX_VALUE}</li>
+	 * <li>{@link #META_INFO_RESOLUTION}</li>
+	 * <li>{@link #META_INFO_VALUES}</li>
 	 * <li>custom key</li>
 	 * </ul>
 	 * The prefix must be used in the form:
@@ -291,25 +281,25 @@ public interface DeviceFunction {
 	 * 
 	 * @see #getOperationMetaData(String)
 	 */
-	public static final String	META_INFO_OPERATION_ARGS_IN_PREFIX	= "device.function.operation.arguments.in.";
+	public static final String META_INFO_OPERATION_ARGS_IN_PREFIX = "operation.arguments.in.";
 
 	/**
 	 * Meta data key, which value represents the operation output argument
 	 * metadata. The property value type is <code>java.util.Map</code>. The
 	 * value map key can be one of:
 	 * <ul>
-	 * <li>{@link #META_INFO_VARIABLE_DESCRIPTION}</li>
-	 * <li>{@link #META_INFO_VARIABLE_UNIT}</li>
-	 * <li>{@link #META_INFO_VARIABLE_MIN}</li>
-	 * <li>{@link #META_INFO_VARIABLE_MAX}</li>
-	 * <li>{@link #META_INFO_VARIABLE_RESOLUTION}</li>
-	 * <li>{@link #META_INFO_VARIABLE_VALUES}</li>
+	 * <li>{@link #META_INFO_DESCRIPTION}</li>
+	 * <li>{@link #META_INFO_UNIT}</li>
+	 * <li>{@link #META_INFO_MIN_VALUE}</li>
+	 * <li>{@link #META_INFO_MAX_VALUE}</li>
+	 * <li>{@link #META_INFO_RESOLUTION}</li>
+	 * <li>{@link #META_INFO_VALUES}</li>
 	 * <li>custom key</li>
 	 * </ul>
 	 * 
 	 * @see #getOperationMetaData(String)
 	 */
-	public static final String	META_INFO_OPERATION_ARG_OUT			= "device.function.operation.argument.out";
+	public static final String META_INFO_OPERATION_ARG_OUT = "operation.argument.out";
 
 	/**
 	 * The service property value contains the device function unique
@@ -321,33 +311,35 @@ public interface DeviceFunction {
 	 * <p>
 	 * function UID - device function unique identifier
 	 * <p>
-	 * device-id - the value of the {@link FunctionalDevice#PROPERTY_UID}
-	 * Functional Device service property
+	 * device-id - the value of the {@link Device#PROPERTY_UID} Functional
+	 * Device service property
 	 * <p>
 	 * function-id - device function identifier in the scope of the device
 	 */
-	public static final String	PROPERTY_UID						= "device.function.UID";
+	public static final String PROPERTY_UID = "device.function.UID";
 
 	/**
 	 * The service property value contains the function device unique
 	 * identifier. The function belongs to this device. It's an optional
 	 * property. The value type is <code>java.lang.String</code>.
 	 */
-	public static final String	PROPERTY_DEVICE_UID					= "device.function.device.UID";
+	public static final String PROPERTY_DEVICE_UID = "device.function.device.UID";
 
 	/**
-	 * The service property value contains the function group unique identifier.
-	 * The function belongs to this functional group. It's an optional property.
-	 * The value type is <code>java.lang.String</code>.
+	 * The service property value contains the reference device function unique
+	 * identifiers. It's an optional property. The value type is
+	 * <code>java.lang.String[]</code>. The property value cannot be set. It can
+	 * be used to represent different relationships between the device
+	 * functions.
 	 */
-	public static final String	PROPERTY_GROUP_UID					= "device.function.group.UID";
+	public static final String PROPERTY_REFERENCE_UIDS = "functional.device.reference.UIDs";
 
 	/**
 	 * The service property value contains the device function description. It's
 	 * an optional property. The value type is <code>java.lang.String</code>.
 	 */
-	public static final String	PROPERTY_DESCRIPTION				= "device.function.description";
-	
+	public static final String PROPERTY_DESCRIPTION = "device.function.description";
+
 	/**
 	 * The service property value contains the device function operation names.
 	 * It's an optional property. The value type is
@@ -355,7 +347,7 @@ public interface DeviceFunction {
 	 * Device Function operations with the same name i.e. the operation
 	 * overloading is not allowed.
 	 */
-	public static final String	PROPERTY_OPERATION_NAMES			= "device.function.operation.names";
+	public static final String PROPERTY_OPERATION_NAMES = "device.function.operation.names";
 
 	/**
 	 * The service property value contains the device function property names.
@@ -363,20 +355,20 @@ public interface DeviceFunction {
 	 * <code>java.lang.String[]</code>. It's not possible to exist two or more
 	 * Device Function properties with the same name.
 	 */
-	public static final String	PROPERTY_PROPERTY_NAMES				= "device.function.property.names";
+	public static final String PROPERTY_PROPERTY_NAMES = "device.function.property.names";
 
 	/**
 	 * Provides meta data about the given function property. The keys of the
 	 * <code>java.util.Map</code> result must be of
 	 * <code>java.lang.String</code> type. Possible keys:
 	 * <ul>
-	 * <li>{@link #META_INFO_VARIABLE_DESCRIPTION}</li>
+	 * <li>{@link #META_INFO_DESCRIPTION}</li>
 	 * <li>{@link #META_INFO_PROPERTY_ACCESS}</li>
-	 * <li>{@link #META_INFO_VARIABLE_UNIT}</li>
-	 * <li>{@link #META_INFO_VARIABLE_MIN}</li>
-	 * <li>{@link #META_INFO_VARIABLE_MAX}</li>
-	 * <li>{@link #META_INFO_VARIABLE_RESOLUTION}</li>
-	 * <li>{@link #META_INFO_VARIABLE_VALUES}</li>
+	 * <li>{@link #META_INFO_UNIT}</li>
+	 * <li>{@link #META_INFO_MIN_VALUE}</li>
+	 * <li>{@link #META_INFO_MAX_VALUE}</li>
+	 * <li>{@link #META_INFO_RESOLUTION}</li>
+	 * <li>{@link #META_INFO_VALUES}</li>
 	 * <li>custom key</li>
 	 * </ul>
 	 * 
@@ -384,22 +376,24 @@ public interface DeviceFunction {
 	 * This method must continue to return the operation names after the device
 	 * service has been unregistered.
 	 * 
-	 * @param propertyName The function property name, which meta data is
-	 *        requested.
+	 * @param propertyName
+	 *            The function property name, which meta data is requested.
 	 * 
 	 * @return The property meta data for the given property name.
 	 *         <code>null</code> if the property meta data is not supported.
-	 * @throws IllegalArgumentException If the function property with the
-	 *         specified name is not supported.
+	 * @throws IllegalArgumentException
+	 *             If the function property with the specified name is not
+	 *             supported.
 	 */
-	public Map getPropertyMetaData(String propertyName) throws IllegalArgumentException;
+	public Map getPropertyMetaData(String propertyName)
+			throws IllegalArgumentException;
 
 	/**
 	 * Provides meta data about the given function operation. The keys of the
 	 * <code>java.util.Map</code> result must be of
 	 * <code>java.lang.String</code> type. Possible keys:
 	 * <ul>
-	 * <li>{@link #META_INFO_OPERATION_DESCRIPTION}</li>
+	 * <li>{@link #META_INFO_DESCRIPTION}</li>
 	 * <li>{@link #META_INFO_OPERATION_ARG_OUT}</li>
 	 * <li>Different input arguments with prefix
 	 * {@link #META_INFO_OPERATION_ARGS_IN_PREFIX}</li>
@@ -410,13 +404,16 @@ public interface DeviceFunction {
 	 * This method must continue to return the operation names after the device
 	 * service has been unregistered.
 	 * 
-	 * @param operationName The function operation name, which meta data is
-	 *        requested.
+	 * @param operationName
+	 *            The function operation name, which meta data is requested.
 	 * 
 	 * @return The operation meta data for the given operation name.
 	 *         <code>null</code> if the operation meta data is not supported.
-	 * @throws IllegalArgumentException If the function operation with the
-	 *         specified name is not supported.
+	 * @throws IllegalArgumentException
+	 *             If the function operation with the specified name is not
+	 *             supported.
 	 */
-	public Map getOperationMetaData(String operationName) throws IllegalArgumentException;
+	public Map getOperationMetaData(String operationName)
+			throws IllegalArgumentException;
+
 }

@@ -16,38 +16,41 @@
 
 package org.osgi.service.functionaldevice;
 
+import java.io.IOException;
+
 /**
- * Thrown to indicate that there is a device operation fail. The error reason
+ * <code>DeviceExcpetion</code> is a special <code>IOException</code>, which is
+ * thrown to indicate that there is a device operation fail. The error reason
  * can be located with {@link #getCode()} method.
  */
-public class FunctionalDeviceException extends Exception {
+public class DeviceException extends IOException {
 
-	private static final long	serialVersionUID	= 1L;
+	private static final long serialVersionUID = 1L;
 
 	/** An exception code indicates that the error is unknown. */
-	public static final int		CODE_UNKNOWN					= 1;
+	public static final int CODE_UNKNOWN = 1;
 
 	/** An exception code indicates that there is an error in the communication. */
-	public static final int		CODE_COMMUNICATION_ERROR	= 2;
+	public static final int CODE_COMMUNICATION_ERROR = 2;
 
 	/**
 	 * An exception code indicates that the response is not produced within a
 	 * given timeout.
 	 */
-	public static final int		CODE_TIMEOUT				= 3;
+	public static final int CODE_TIMEOUT = 3;
 
 	/**
 	 * An exception code indicates that the device is not initialized. It
-	 * indicates that the device status is
-	 * {@link FunctionalDevice#STATUS_NOT_INITIALIZED}.
+	 * indicates that the device status is {@link Device#STATUS_NOT_INITIALIZED}
+	 * .
 	 */
-	public static final int		CODE_DEVICE_NOT_INITIALIZED	= 4;
+	public static final int CODE_DEVICE_NOT_INITIALIZED = 4;
 
 	/**
 	 * An exception code indicates that the requested value is currently not
 	 * available.
 	 */
-	public static final int		CODE_NO_DATA				= 5;
+	public static final int CODE_NO_DATA = 5;
 
 	/**
 	 * Returns the exception error code. It indicates the reason for this error.
