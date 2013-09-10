@@ -11,6 +11,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.enocean.utils.EnOceanDriverException;
 import org.osgi.impl.service.enocean.utils.Logger;
+import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.service.enocean.sets.EnOceanChannelDescriptionSet;
@@ -76,8 +77,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	}
 
 	public void packetReceived(byte[] packet) {
-		// TODO: test toHexString etc etc
-		System.out.println("basedriver : received '" + packet + "'");
+		System.out.println("basedriver : received '" + Utils.bytesToHex(packet) + "'");
 	}
 
 	public Object addingService(ServiceReference ref) {

@@ -26,6 +26,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import org.osgi.impl.service.enocean.utils.Logger;
+import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanHost;
 
@@ -137,9 +138,40 @@ public class EnOceanFileHost extends Thread implements EnOceanHost {
 		}
 	}
 
+	/**
+	 * Low-level ESP3 reader implementation. Reads the header, deducts the
+	 * payload size, checks for errors, and sends back the read packet to the
+	 * caller.
+	 * 
+	 * @return the complete byte[] ESP packet
+	 * @throws IOException
+	 */
 	private byte[] readPacket() throws IOException {
 		byte[] header = new byte[4];
 		inputStream.read(header);
-		return header;
+		// Check the CRC
+		int headerCrc = inputStream.read();
+		if (headerCrc == -1) {
+			throw new IOException("could not read entire packet");
+		}
+		if ((byte) headerCrc != Utils.crc8(header)) {
+			throw new IOException("packet was malformed or corrupt");
+		}
+		// Read the payload using header info
+		int payloadLength = ((header[0] << 8) | header[1]) + header[2];
+		byte[] payload = new byte[payloadLength];
+		inputStream.read(payload);
+		// Check payload CRC
+		int payloadCrc = inputStream.read();
+		if (payloadCrc == -1) {
+			throw new IOException("could not read entire packet");
+		}
+		if ((byte) payloadCrc != Utils.crc8(payload)) {
+			throw new IOException("packet was malformed or corrupt");
+		}
+		payload = Utils.byteConcat(payload, (byte) payloadCrc);
+		// Add the sync byte to the header
+		header = Utils.byteConcat(ENOCEAN_ESP_FRAME_START, header);
+		return Utils.byteConcat(header, payload);
 	}
 }
