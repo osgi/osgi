@@ -64,6 +64,8 @@ public class AlarmData {
 	 *            The alarm type.
 	 * @param severity
 	 *            The alarm severity.
+	 * @param timestamp
+	 *            The value timestamp.
 	 * @param metadata
 	 *            The alarm metadata.
 	 */
