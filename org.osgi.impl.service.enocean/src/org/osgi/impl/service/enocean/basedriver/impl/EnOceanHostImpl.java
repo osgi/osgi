@@ -27,6 +27,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import org.osgi.impl.service.enocean.basedriver.EnOceanPacketListener;
 import org.osgi.impl.service.enocean.basedriver.esp.EspPacket;
+import org.osgi.impl.service.enocean.basedriver.radio.Message;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanException;
@@ -123,8 +124,10 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 				}
 				byte c = (byte) _byte;
 				if (c == ENOCEAN_ESP_FRAME_START) {
-					byte[] packet = readPacket();
-					dispatchToListeners(packet);
+					EspPacket packet = readPacket();
+					if (packet.getPacketType() == EspPacket.TYPE_RADIO) {
+						dispatchToListeners(new Message(packet.getData()));
+					}
 				}
 			} catch (IOException e) {
 				Logger.e(TAG, "an exception occured while reading stream '" + streamPath + "' : " + e.getMessage());
@@ -133,10 +136,10 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 
 	}
 
-	private void dispatchToListeners(byte[] data) {
+	private void dispatchToListeners(Message message) {
 		for (int i = 0; i < listeners.size(); i++) {
 			EnOceanPacketListener listener = (EnOceanPacketListener) listeners.get(i);
-			listener.radioPacketReceived(data);
+			listener.radioPacketReceived(message);
 		}
 	}
 
@@ -148,7 +151,7 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 	 * @return the complete byte[] ESP packet
 	 * @throws IOException
 	 */
-	private byte[] readPacket() throws IOException {
+	private EspPacket readPacket() throws IOException {
 		byte[] header = new byte[4];
 		inputStream.read(header);
 		// Check the CRC
@@ -174,8 +177,7 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 		payload = Utils.byteConcat(payload, (byte) payloadCrc);
 		// Add the sync byte to the header
 		header = Utils.byteConcat(EspPacket.SYNC_BYTE, header);
-		byte[] fullPacket = Utils.byteConcat(header, payload);
-		EspPacket packet = new EspPacket(header, payload);
-		return fullPacket;
+		header = Utils.byteConcat(header, (byte) headerCrc);
+		return new EspPacket(header, payload);
 	}
 }

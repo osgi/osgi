@@ -10,9 +10,9 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.enocean.basedriver.impl.EnOceanHostImpl;
+import org.osgi.impl.service.enocean.basedriver.radio.Message;
 import org.osgi.impl.service.enocean.utils.EnOceanDriverException;
 import org.osgi.impl.service.enocean.utils.Logger;
-import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.service.enocean.sets.EnOceanChannelDescriptionSet;
@@ -76,8 +76,8 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		}
 	}
 
-	public void radioPacketReceived(byte[] packet) {
-		System.out.println("basedriver : received '" + Utils.bytesToHex(packet) + "'");
+	public void radioPacketReceived(Message msg) {
+		System.out.println("basedriver : received '" + msg + "'");
 	}
 
 	public Object addingService(ServiceReference ref) {

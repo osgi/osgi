@@ -149,7 +149,7 @@ public class Utils {
 
 	final private static char[]	hexArray	= {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
-	public static String bytesToHex(byte[] bytes) {
+	public static String bytesToHexString(byte[] bytes) {
 		char[] hexChars = new char[bytes.length * 2];
 		int v;
 		for (int j = 0; j < bytes.length; j++) {
@@ -158,5 +158,21 @@ public class Utils {
 			hexChars[j * 2 + 1] = hexArray[v & 0x0F];
 		}
 		return new String(hexChars);
+	}
+
+	public static int bytes2intLE(byte[] bytes, int offset, int len) {
+		int sum = 0;
+		for (int i = 0; i < len; i++) {
+			sum += bytes[offset + i];
+		}
+		return sum;
+	}
+
+	public static byte[] byteRange(byte[] bytes, int offset, int len) {
+		byte[] out = new byte[len];
+		for (int i = 0; i < len; i++) {
+			out[i] = bytes[offset + i];
+		}
+		return out;
 	}
 }

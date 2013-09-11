@@ -17,7 +17,6 @@
 
 package org.osgi.impl.service.enocean.basedriver.esp;
 
-import org.osgi.impl.service.enocean.utils.ByteSerializable;
 import org.osgi.impl.service.enocean.utils.Utils;
 
 public class EspPacket {
@@ -35,16 +34,18 @@ public class EspPacket {
 	private int					optionalLength;				// 1 byte
 	private int					packetType;					// 1 byte
 
-	private ByteSerializable	data;
-	private ByteSerializable	optional;
+	private byte[]				data;
+	private byte[]				optional;
 
-	public byte[] serialize() {
-		byte[] dataBytes = data.serialize();
-		setDataLength(dataBytes.length);
-		dataBytes = Utils.byteConcat(dataBytes, optional.serialize());
-		byte[] crc = Utils.byteToBytes(Utils.crc8(dataBytes));
-		dataBytes = Utils.byteConcat(dataBytes, crc);
-		return Utils.byteConcat(serializeHeader(), dataBytes);
+	public EspPacket(byte[] header, byte[] payload) {
+		if ((header[0] != SYNC_BYTE) || (header.length != 6)) {
+			throw new IllegalArgumentException("wrong header");
+		}
+		setDataLength(Utils.bytes2intLE(header, 1, 2));
+		setOptionalLength(header[3]);
+		setPacketType(header[4]);
+		setData(Utils.byteRange(payload, 0, getDataLength()));
+		setOptional(Utils.byteRange(payload, getDataLength(), getOptionalLength()));
 	}
 
 	public int getDataLength() {
@@ -71,28 +72,19 @@ public class EspPacket {
 		this.packetType = packetType;
 	}
 
-	public ByteSerializable getData() {
+	public byte[] getData() {
 		return data;
 	}
 
-	public void setData(ByteSerializable embedded) {
-		this.data = embedded;
+	public void setData(byte[] data) {
+		this.data = data;
 	}
 
-	public ByteSerializable getOptional() {
+	public byte[] getOptional() {
 		return optional;
 	}
 
-	public void setOptional(ByteSerializable optional) {
+	public void setOptional(byte[] optional) {
 		this.optional = optional;
-	}
-
-	private byte[] serializeHeader() {
-		byte[] syncByte = Utils.intTo1Byte(SYNC_BYTE);
-		byte[] header = Utils.intTo2Bytes(getDataLength());
-		header = Utils.byteConcat(header, Utils.intTo1Byte(getOptionalLength()));
-		header = Utils.byteConcat(header, Utils.intTo1Byte(getPacketType()));
-		byte[] fullHeader = Utils.byteConcat(syncByte, header);
-		return Utils.byteConcat(fullHeader, Utils.crc8(header));
 	}
 }

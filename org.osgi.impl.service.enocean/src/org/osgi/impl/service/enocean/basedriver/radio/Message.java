@@ -15,13 +15,12 @@
  */
 
 
-package org.osgi.test.cases.enocean.radio;
+package org.osgi.impl.service.enocean.basedriver.radio;
 
-import org.osgi.test.cases.enocean.utils.ByteSerializable;
-import org.osgi.test.cases.enocean.utils.Utils;
+import org.osgi.impl.service.enocean.utils.Utils;
 
 
-public class Message implements ByteSerializable {
+public class Message {
 
 	public static final int	MESSAGE_4BS	= 0xA5;
 
@@ -31,21 +30,18 @@ public class Message implements ByteSerializable {
 	// bit7: crc8 if set, or else checksum; bits 0-4: repeater count
 	private byte	status;
 
-	/**
-	 * Sets senderId and status default values, see EnOcean Radio Protocol spec
-	 * for details
-	 */
-	public Message() {
-		setSenderId(0xffffffff);
-		// checksum used = CRC8 if STATUS bit 2^7 = 1, repeater status = 0
-		setStatus((byte) 0x80);
+	public Message(byte[] data) {
+		setRORG(data[0]);
+		setData(Utils.byteRange(data, 1, data.length - 7));
+		setSenderId(Utils.byteRange(data, data.length - 6, 4));
+		setStatus(data[data.length - 2]);
 	}
 
-	public byte[] serialize() {
-		byte[] pktBytes = Utils.byteConcat(RORG, getData());
-		pktBytes = Utils.byteConcat(pktBytes, getSenderId());
-		pktBytes = Utils.byteConcat(pktBytes, getStatus());
-		return Utils.byteConcat(pktBytes, Utils.crc8(pktBytes));
+	public String toString() {
+		byte[] out = Utils.byteConcat(RORG, data);
+		out = Utils.byteConcat(out, senderId);
+		out = Utils.byteConcat(out, status);
+		return Utils.bytesToHexString(out);
 	}
 
 	public byte getRORG() {
@@ -68,8 +64,8 @@ public class Message implements ByteSerializable {
 		return senderId;
 	}
 
-	public void setSenderId(int senderId) {
-		this.senderId = Utils.intTo4Bytes(senderId);
+	public void setSenderId(byte[] senderId) {
+		this.senderId = senderId;
 	}
 
 	public byte getStatus() {
