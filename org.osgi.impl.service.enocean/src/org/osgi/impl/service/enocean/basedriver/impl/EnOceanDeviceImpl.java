@@ -134,5 +134,25 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		// TODO Auto-generated method stub
 
 	}
+
+	public void setRorg(int rorg) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setFunc(int func) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setType(int type) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setManuf(int manuf) {
+		// TODO Auto-generated method stub
+
+	}
 	
 }

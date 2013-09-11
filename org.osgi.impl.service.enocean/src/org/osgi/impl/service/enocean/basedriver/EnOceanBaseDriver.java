@@ -9,10 +9,13 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.impl.service.enocean.basedriver.impl.EnOceanDeviceImpl;
 import org.osgi.impl.service.enocean.basedriver.impl.EnOceanHostImpl;
 import org.osgi.impl.service.enocean.basedriver.radio.Message;
+import org.osgi.impl.service.enocean.basedriver.radio.Message4BS;
 import org.osgi.impl.service.enocean.utils.EnOceanDriverException;
 import org.osgi.impl.service.enocean.utils.Logger;
+import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.service.enocean.sets.EnOceanChannelDescriptionSet;
@@ -76,8 +79,26 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		}
 	}
 
-	public void radioPacketReceived(Message msg) {
-		System.out.println("basedriver : received '" + msg + "'");
+	public void radioPacketReceived(Message rawMsg) {
+		System.out.println("basedriver : received '" + rawMsg + "'");
+		switch (rawMsg.getRORG()) {
+			case Message.MESSAGE_4BS :
+				Message4BS msg = new Message4BS(rawMsg) {};
+				if (msg.isTeachin()) {
+					int senderId = Utils.bytes2intLE(msg.getSenderId(), 0, 4);
+					EnOceanDeviceImpl device = new EnOceanDeviceImpl(bc, senderId);
+					if (msg.hasTeachInInfo()) {
+						device.setRorg(msg.getRORG());
+						device.setFunc(msg.getFunc());
+						device.setType(msg.getType());
+						device.setManuf(msg.getManuf());
+					}
+				}
+				break;
+			default :
+				// TODO: implement other message types
+				break;
+		}
 	}
 
 	public Object addingService(ServiceReference ref) {

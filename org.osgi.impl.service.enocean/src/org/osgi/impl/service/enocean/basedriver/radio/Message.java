@@ -37,6 +37,18 @@ public class Message {
 		setStatus(data[data.length - 2]);
 	}
 
+	/**
+	 * Copy constructor
+	 * 
+	 * @param msg
+	 */
+	protected Message(Message msg) {
+		setRORG(msg.getRORG());
+		setData(msg.getData());
+		setSenderId(msg.getSenderId());
+		setStatus(msg.getStatus());
+	}
+
 	public String toString() {
 		byte[] out = Utils.byteConcat(RORG, data);
 		out = Utils.byteConcat(out, senderId);
@@ -44,8 +56,8 @@ public class Message {
 		return Utils.bytesToHexString(out);
 	}
 
-	public byte getRORG() {
-		return RORG;
+	public int getRORG() {
+		return (RORG & 0xff);
 	}
 
 	public void setRORG(int rorg) {
@@ -68,12 +80,12 @@ public class Message {
 		this.senderId = senderId;
 	}
 
-	public byte getStatus() {
-		return status;
+	public int getStatus() {
+		return (status & 0xff);
 	}
 
-	public void setStatus(byte status) {
-		this.status = status;
+	public void setStatus(int status) {
+		this.status = (byte) (status & 0xff);
 	}
 
 }
