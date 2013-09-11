@@ -38,16 +38,22 @@ public class MessageA5_02_01 extends MessageType_4BS {
 	private final int		rangeStart	= 255;
 	private final int		rangeStop	= 0;
 
+	private MessageA5_02_01() {
+	}
+
 	/**
 	 * Default constructor, generates a teach-in message
 	 */
-	public MessageA5_02_01(int manufacturerId) {
+	public static MessageA5_02_01 teachIn(int senderId, int manufacturerId) {
+		MessageA5_02_01 msg = new MessageA5_02_01();
 		byte[] data = { 0x0, 0x0, 0x0, 0x0 };
 		data[0] = (byte) (((FUNC << 2) | (TYPE >> 5)));
 		data[1] = (byte) (((TYPE << 3) & 0x7c) | ((manufacturerId >> 8) & 0x07));
 		data[2] = (byte) (manufacturerId & 0xff);
-		data[3] = (byte) 0x80;
-		setData(data);
+		data[3] = (byte) 0x80; // teach-in with information
+		msg.setData(data);
+		msg.setSenderId(senderId);
+		return msg;
 	}
 
 	public MessageA5_02_01(float temperature) {

@@ -85,14 +85,15 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 			case Message.MESSAGE_4BS :
 				Message4BS msg = new Message4BS(rawMsg) {};
 				if (msg.isTeachin()) {
-					int senderId = Utils.bytes2intLE(msg.getSenderId(), 0, 4);
-					EnOceanDeviceImpl device = new EnOceanDeviceImpl(bc, senderId);
+					int uid = Utils.bytes2intLE(msg.getSenderId(), 0, 4);
+					EnOceanDeviceImpl device = new EnOceanDeviceImpl(uid);
 					if (msg.hasTeachInInfo()) {
 						device.setRorg(msg.getRORG());
 						device.setFunc(msg.getFunc());
 						device.setType(msg.getType());
 						device.setManuf(msg.getManuf());
 					}
+					registerDevice(device, new Integer(uid), device.getServiceProperties());
 				}
 				break;
 			default :
@@ -143,19 +144,34 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	public void stop() {
 	}
 
-	public void registerHost(String hostId, EnOceanHost host) throws EnOceanDriverException {
+	public ServiceRegistration registerHost(String hostPath, EnOceanHost host) throws EnOceanDriverException {
+		ServiceRegistration sr = null;
 		if (host == null) {
 			throw new EnOceanDriverException("the specified host was null");
 		}
 		try {
 			Properties props = new Properties();
-			props.put(EnOceanHost.HOST_ID, hostId);
-			ServiceRegistration sr = bc.registerService("org.osgi.service.enocean.EnOceanHost",
+			props.put(EnOceanHost.HOST_ID, hostPath);
+			sr = bc.registerService("org.osgi.service.enocean.EnOceanHost",
 					host, props);
-			servicerefs.put(hostId, sr);
+			servicerefs.put(hostPath, sr);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
+		return sr;
+	}
+
+	public ServiceRegistration registerDevice(EnOceanDevice device, Integer uid, Properties props) {
+		ServiceRegistration sr = null;
+		if (device != null) {
+			try {
+				sr = bc.registerService("org.osgi.service.enocean.EnOceanDevice", device, props);
+				servicerefs.put(uid, sr);
+			} catch (Exception e) {
+				System.out.println(e.getMessage());
+			}
+		}
+		return sr;
 	}
 
 	/* The functions that come below are used to register the necessary services */

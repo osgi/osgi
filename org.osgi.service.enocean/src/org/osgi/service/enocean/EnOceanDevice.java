@@ -53,6 +53,11 @@ public interface EnOceanDevice {
 	public final static String TYPE = "enocean.device.profile.type";
 	
 	/**
+	 * Property name for the manufacturer ID that may be specified by some teach-in messages.
+	 */
+	public static final String	MANUFACTURER	= "enocean.device.manufacturer";
+	
+	/**
 	 * Property name for the 'profile name' for this device. This is nothing
 	 * EnOcean-standard, you shouldn't expect something unique.
 	 */
@@ -68,6 +73,7 @@ public interface EnOceanDevice {
 	 * The format of that mask is specified in EnOcean Security Draft.
 	 */
 	public final static String SECURITY_LEVEL_FORMAT = "enocean.device.security_level_format";
+
 	
 	/**
 	 * Sends a message on the EnOcean network, uses lightweight byte[] argument type.

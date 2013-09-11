@@ -2,6 +2,7 @@ package org.osgi.impl.service.enocean.basedriver.impl;
 
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Properties;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.enocean.EnOceanDevice;
@@ -14,19 +15,20 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	private BundleContext		bc;
 	private ServiceRegistration	sReg;
 
+	private Properties			props;
+
 	/**
 	 * An {@link EnOceanDeviceImpl} creation is directly related to its
 	 * registration within the framework.
 	 * Such a Device should only be registered after a proper teach-in procedure, so that the RORG, FIUNC and TYPE are already known.  
 	 */
-	public EnOceanDeviceImpl(BundleContext bc, int chipId) {
-		this.bc = bc;
-		Hashtable deviceProps = new Hashtable();
-		deviceProps.put(org.osgi.service.enocean.EnOceanDevice.CHIP_ID, new Integer(chipId));
+	public EnOceanDeviceImpl(int uid) {
+		props = new Properties();
+		props.put(EnOceanDevice.CHIP_ID, new Integer(uid));
+	}
 
-		sReg = bc.registerService(new String[] {EnOceanDevice.class.getName()},
-				this,
-				deviceProps);
+	public Properties getServiceProperties() {
+		return props;
 	}
 
 	public void registerProfile(int rorg, int func, int type) {
@@ -136,23 +138,19 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	}
 
 	public void setRorg(int rorg) {
-		// TODO Auto-generated method stub
-
+		props.put(EnOceanDevice.RORG, new Integer(rorg));
 	}
 
 	public void setFunc(int func) {
-		// TODO Auto-generated method stub
-
+		props.put(EnOceanDevice.FUNC, new Integer(func));
 	}
 
 	public void setType(int type) {
-		// TODO Auto-generated method stub
-
+		props.put(EnOceanDevice.TYPE, new Integer(type));
 	}
 
 	public void setManuf(int manuf) {
-		// TODO Auto-generated method stub
-
+		props.put(EnOceanDevice.MANUFACTURER, new Integer(manuf));
 	}
 	
 }

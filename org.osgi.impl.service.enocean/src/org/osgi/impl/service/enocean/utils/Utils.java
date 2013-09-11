@@ -163,7 +163,8 @@ public class Utils {
 	public static int bytes2intLE(byte[] bytes, int offset, int len) {
 		int sum = 0;
 		for (int i = 0; i < len; i++) {
-			sum += bytes[offset + i];
+			byte b = bytes[offset + len - i - 1];
+			sum = sum + ((b & 0xff) << (i * 8));
 		}
 		return sum;
 	}
