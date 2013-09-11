@@ -23,9 +23,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
 import junit.framework.AssertionFailedError;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -1451,6 +1449,14 @@ public class BundleHookTests extends OSGiTestCase {
 	}
 
 	public void testCollisionHook() throws BundleException, IOException {
+		doTestCollisionHook(getContext());
+	}
+
+	public void testSystemCollisionHook() throws BundleException, IOException {
+		doTestCollisionHook(getContext().getBundle(Constants.SYSTEM_BUNDLE_LOCATION).getBundleContext());
+	}
+
+	private void doTestCollisionHook(BundleContext installContext) throws BundleException, IOException {
 		Bundle test1 = testBundles[0];
 		try {
 			test1.update(getContext().getBundle().getEntry("hooks.tb2.jar").openStream());
@@ -1460,7 +1466,7 @@ public class BundleHookTests extends OSGiTestCase {
 		}
 		Bundle junk = null;
 		try {
-			junk = getContext().installBundle("junk", getContext().getBundle().getEntry("hooks.tb2.jar").openStream());
+			junk = installContext.installBundle("junk", getContext().getBundle().getEntry("hooks.tb2.jar").openStream());
 			fail("Expected to fail to install duplication bsn/version that causes collision");
 		} catch (BundleException e) {
 			// expected;
@@ -1483,7 +1489,7 @@ public class BundleHookTests extends OSGiTestCase {
 				fail("Expected to succeed in updating to a duplicate bsn/version", e);
 			}
 			try {
-				junk = getContext().installBundle("junk", getContext().getBundle().getEntry("hooks.tb2.jar").openStream());
+				junk = installContext.installBundle("junk", getContext().getBundle().getEntry("hooks.tb2.jar").openStream());
 			} catch (BundleException e) {
 				fail("Expected to succeed to install duplication bsn/version that causes collision", e);
 			} finally {
@@ -1496,55 +1502,4 @@ public class BundleHookTests extends OSGiTestCase {
 		}
 	}
 
-	public void testSystemCollisionHook() throws BundleException, IOException {
-		final int[] hookCalled = new int[] { 0, 0 };
-		Bundle test1 = testBundles[0];
-		CollisionHook hook = new CollisionHook() {
-			public void filterCollisions(int operationType, Bundle target, Collection<Bundle> collisionCandidates) {
-				synchronized (hookCalled) {
-					hookCalled[++hookCalled[0]] = 1;
-				}
-				collisionCandidates.clear();
-			}
-		};
-		ServiceRegistration<CollisionHook> reg = getContext().registerService(CollisionHook.class, hook, null);
-		try {
-			try {
-				test1.update(getContext().getBundle().getEntry("hooks.tb2.jar").openStream());
-			} catch (BundleException e) {
-				fail("Expected to succeed in updating to a duplicate bsn/version", e);
-			}
-			assertEquals("all hooks not called", 1, hookCalled[0]);
-			assertEquals("hook 1 not called first ", 1, hookCalled[1]);
-			hookCalled[0] = 0;
-			hookCalled[1] = 0;
-
-			Bundle junk = null;
-			try {
-				// using the system bundle context; collsion hooks must be ignored
-				junk = getContext()
-						.getBundle(Constants.SYSTEM_BUNDLE_LOCATION)
-						.getBundleContext()
-						.installBundle(
-								"junk",
-								getContext().getBundle()
-										.getEntry("hooks.tb2.jar").openStream());
-				// expecting a collision to happen even if the collision hook says there is not
-				fail("Expected to fail to install duplication bsn/version that causes collision");
-			} catch (BundleException e) {
-				// expected; check for valid type
-				assertEquals("Wrong type of bundle exception.",
-						BundleException.DUPLICATE_BUNDLE_ERROR, e.getType());
-			} finally {
-				if (junk != null)
-					junk.uninstall();
-				junk = null;
-			}
-			assertEquals("all hooks not called", 1, hookCalled[0]);
-			assertEquals("hook 1 not called first ", 1, hookCalled[1]);
-		} finally {
-			reg.unregister();
-		}
-		
-	}
 }
