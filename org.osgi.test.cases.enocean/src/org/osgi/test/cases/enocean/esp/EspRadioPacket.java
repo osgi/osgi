@@ -15,16 +15,16 @@
  */
 
 
-package org.osgi.test.cases.enocean.packets.serial;
+package org.osgi.test.cases.enocean.esp;
 
-import org.osgi.test.cases.enocean.Utils;
-import org.osgi.test.cases.enocean.packets.ByteSerializable;
+import org.osgi.test.cases.enocean.utils.ByteSerializable;
+import org.osgi.test.cases.enocean.utils.Utils;
 
-public class SerialPacket_Radio extends SerialPacket {
+public class EspRadioPacket extends EspPacket {
 
-	public SerialPacket_Radio(ByteSerializable pkt) {
-		getHeader().setPacketType(Header.TYPE_RADIO);
-		getHeader().setOptionalLength(7);
+	public EspRadioPacket(ByteSerializable pkt) {
+		setPacketType(TYPE_RADIO);
+		setOptionalLength(7);
 		setOptional(new RadioOptions());
 		setData(pkt);
 	}

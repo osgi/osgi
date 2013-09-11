@@ -15,7 +15,7 @@
  */
 
 
-package org.osgi.test.cases.enocean.packets.radio;
+package org.osgi.test.cases.enocean.radio;
 
 /**
  * Prototype of a 4BS telegram

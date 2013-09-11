@@ -1,4 +1,4 @@
-package org.osgi.impl.service.enocean.basedriver;
+package org.osgi.impl.service.enocean.basedriver.impl;
 
 import java.util.Hashtable;
 import java.util.Map;

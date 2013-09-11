@@ -1,4 +1,4 @@
-package org.osgi.impl.service.enocean.basedriver;
+package org.osgi.impl.service.enocean.basedriver.impl;
 
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanMessage;

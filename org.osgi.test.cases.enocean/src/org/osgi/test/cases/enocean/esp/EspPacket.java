@@ -15,14 +15,14 @@
  */
 
 
-package org.osgi.test.cases.enocean.packets.serial;
+package org.osgi.test.cases.enocean.esp;
 
-import org.osgi.test.cases.enocean.Utils;
-import org.osgi.test.cases.enocean.packets.ByteSerializable;
+import org.osgi.test.cases.enocean.utils.ByteSerializable;
+import org.osgi.test.cases.enocean.utils.Utils;
 
-public final class Header implements ByteSerializable {
+public class EspPacket {
 
-	public static final int	SYNC_BYTE				= 0x55;
+	public static final byte	SYNC_BYTE				= 0x55;
 	public static final int		TYPE_RADIO				= 0x01;
 	public static final int		TYPE_RESPONSE			= 0x02;
 	public static final int		TYPE_RADIO_SUB_TEL		= 0x03;
@@ -31,18 +31,20 @@ public final class Header implements ByteSerializable {
 	public static final int		TYPE_SMART_ACK_RADIO	= 0x06;
 	public static final int		TYPE_REMOTE_MAN_COMMAND	= 0x07;
 
+	private int					dataLength;					// 2 bytes
+	private int					optionalLength;				// 1 byte
+	private int					packetType;					// 1 byte
 
-	private int				dataLength;					// 2 bytes
-	private int				optionalLength;				// 1 byte
-	private int				packetType;					// 1 byte
+	private ByteSerializable	data;
+	private ByteSerializable	optional;
 
 	public byte[] serialize() {
-		byte[] syncByte = Utils.intTo1Byte(SYNC_BYTE);
-		byte[] header = Utils.intTo2Bytes(getDataLength());
-		header = Utils.byteConcat(header, Utils.intTo1Byte(getOptionalLength()));
-		header = Utils.byteConcat(header, Utils.intTo1Byte(getPacketType()));
-		byte[] fullHeader = Utils.byteConcat(syncByte, header);
-		return Utils.byteConcat(fullHeader, Utils.crc8(header));
+		byte[] dataBytes = data.serialize();
+		setDataLength(dataBytes.length);
+		dataBytes = Utils.byteConcat(dataBytes, optional.serialize());
+		byte[] crc = Utils.byteToBytes(Utils.crc8(dataBytes));
+		dataBytes = Utils.byteConcat(dataBytes, crc);
+		return Utils.byteConcat(serializeHeader(), dataBytes);
 	}
 
 	public int getDataLength() {
@@ -67,5 +69,30 @@ public final class Header implements ByteSerializable {
 
 	public void setPacketType(int packetType) {
 		this.packetType = packetType;
+	}
+
+	public ByteSerializable getData() {
+		return data;
+	}
+
+	public void setData(ByteSerializable embedded) {
+		this.data = embedded;
+	}
+
+	public ByteSerializable getOptional() {
+		return optional;
+	}
+
+	public void setOptional(ByteSerializable optional) {
+		this.optional = optional;
+	}
+
+	private byte[] serializeHeader() {
+		byte[] syncByte = Utils.intTo1Byte(SYNC_BYTE);
+		byte[] header = Utils.intTo2Bytes(getDataLength());
+		header = Utils.byteConcat(header, Utils.intTo1Byte(getOptionalLength()));
+		header = Utils.byteConcat(header, Utils.intTo1Byte(getPacketType()));
+		byte[] fullHeader = Utils.byteConcat(syncByte, header);
+		return Utils.byteConcat(fullHeader, Utils.crc8(header));
 	}
 }

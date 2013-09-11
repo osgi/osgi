@@ -15,7 +15,7 @@
  */
 
 
-package org.osgi.impl.service.enocean.basedriver;
+package org.osgi.impl.service.enocean.basedriver.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -25,14 +25,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import org.osgi.impl.service.enocean.basedriver.EnOceanPacketListener;
+import org.osgi.impl.service.enocean.basedriver.esp.EspPacket;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanHost;
 
-public class EnOceanFileHost extends Thread implements EnOceanHost {
+public class EnOceanHostImpl extends Thread implements EnOceanHost {
 
-	private static final String	TAG						= "EnOceanFileHost";
+	private static final String	TAG						= "EnOceanHostImpl";
 
 	private static final byte	ENOCEAN_ESP_FRAME_START	= 0x55;
 	private Object				synchronizer;
@@ -44,7 +46,7 @@ public class EnOceanFileHost extends Thread implements EnOceanHost {
 
 	private String				streamPath;
 
-	public EnOceanFileHost(String path) throws FileNotFoundException {
+	public EnOceanHostImpl(String path) throws FileNotFoundException {
 		this.streamPath = path;
 		listeners = new ArrayList();
 		isRunning = false;
@@ -134,7 +136,7 @@ public class EnOceanFileHost extends Thread implements EnOceanHost {
 	private void dispatchToListeners(byte[] data) {
 		for (int i = 0; i < listeners.size(); i++) {
 			EnOceanPacketListener listener = (EnOceanPacketListener) listeners.get(i);
-			listener.packetReceived(data);
+			listener.radioPacketReceived(data);
 		}
 	}
 
@@ -171,7 +173,9 @@ public class EnOceanFileHost extends Thread implements EnOceanHost {
 		}
 		payload = Utils.byteConcat(payload, (byte) payloadCrc);
 		// Add the sync byte to the header
-		header = Utils.byteConcat(ENOCEAN_ESP_FRAME_START, header);
-		return Utils.byteConcat(header, payload);
+		header = Utils.byteConcat(EspPacket.SYNC_BYTE, header);
+		byte[] fullPacket = Utils.byteConcat(header, payload);
+		EspPacket packet = new EspPacket(header, payload);
+		return fullPacket;
 	}
 }

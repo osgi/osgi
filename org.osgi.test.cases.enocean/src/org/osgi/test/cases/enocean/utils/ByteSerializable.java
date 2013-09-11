@@ -15,16 +15,10 @@
  */
 
 
-package org.osgi.impl.service.enocean.basedriver;
+package org.osgi.test.cases.enocean.utils;
 
-public interface EnOceanPacketListener {
+public interface ByteSerializable {
 
-	/**
-	 * Callback interface method to send complete received packets towards a
-	 * listener
-	 * 
-	 * @param packet the full packet that has been received.
-	 */
-	public void radioPacketReceived(byte[] packet);
+	public byte[] serialize();
 
 }

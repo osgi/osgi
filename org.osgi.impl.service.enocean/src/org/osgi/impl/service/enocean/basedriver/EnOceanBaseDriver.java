@@ -9,6 +9,7 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.impl.service.enocean.basedriver.impl.EnOceanHostImpl;
 import org.osgi.impl.service.enocean.utils.EnOceanDriverException;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
@@ -31,13 +32,13 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	private ServiceTracker		messageSetServiceRef;
 	private ServiceTracker		rpcSetServiceRef;
 	private ServiceTracker		channelDescriptionSetServiceRef;
-	private EnOceanFileHost		initialHost;
+	private EnOceanHostImpl		initialHost;
 
 	private static final String TAG = "EnOceanBaseDriver";
 
 	/**
 	 * The {@link EnOceanBaseDriver} constructor initiates the connection
-	 * towards an {@link EnOceanFileHost} device. Then it registers itself as
+	 * towards an {@link EnOceanHostImpl} device. Then it registers itself as
 	 * a service listener for any {@link EnOceanDevice},
 	 * {@link EnOceanMessageSet}, {@link EnOceanRPCSet},
 	 * {@link EnOceanChannelDescriptionSet} that would be registered in the
@@ -54,7 +55,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		String hostPath = System.getProperty("org.osgi.service.enocean.host.path");
 		if (hostPath != null && hostPath != "") {
 			try {
-				initialHost = new EnOceanFileHost(hostPath);
+				initialHost = new EnOceanHostImpl(hostPath);
 				registerHost(hostPath, initialHost);
 				initialHost.addPacketListener(this);
 			} catch (EnOceanDriverException e) {
@@ -73,10 +74,9 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		} catch (InvalidSyntaxException e) {
 			Logger.e(TAG, e.getMessage());
 		}
-
 	}
 
-	public void packetReceived(byte[] packet) {
+	public void radioPacketReceived(byte[] packet) {
 		System.out.println("basedriver : received '" + Utils.bytesToHex(packet) + "'");
 	}
 

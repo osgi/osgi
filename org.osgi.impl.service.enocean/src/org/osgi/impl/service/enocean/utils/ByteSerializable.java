@@ -15,7 +15,7 @@
  */
 
 
-package org.osgi.test.cases.enocean.packets;
+package org.osgi.impl.service.enocean.utils;
 
 public interface ByteSerializable {
 

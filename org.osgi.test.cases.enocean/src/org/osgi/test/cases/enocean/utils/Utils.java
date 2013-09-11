@@ -15,7 +15,7 @@
  */
 
 
-package org.osgi.test.cases.enocean;
+package org.osgi.test.cases.enocean.utils;
 
 public class Utils {
 	private static byte[]	crc8_table	= new byte[] {
@@ -92,18 +92,6 @@ public class Utils {
 		return c;
 	}
 
-	/**
-	 * Concatenates a byte array and an int, up to max bytes from the right
-	 */
-	public static byte[] intConcat(byte[] a, int x, int max) {
-		byte[] c = new byte[a.length + max];
-		for (int i = 0; i < max; i++) {
-			byte b = (byte) ((x >> (8 * i)) & 0xff);
-			c[a.length + max - i - 1] = b;
-		}
-		return c;
-	}
-
 	public static byte[] byteConcat(byte[] a, byte b) {
 		byte[] c = new byte[a.length + 1];
 		for (int i = 0; i < a.length; i++) {
@@ -119,6 +107,18 @@ public class Utils {
 			c[1 + i] = b[i];
 		}
 		c[0] = a;
+		return c;
+	}
+
+	/**
+	 * Concatenates a byte array and an int, up to max bytes from the right
+	 */
+	public static byte[] intConcat(byte[] a, int x, int max) {
+		byte[] c = new byte[a.length + max];
+		for (int i = 0; i < max; i++) {
+			byte b = (byte) ((x >> (8 * i)) & 0xff);
+			c[a.length + max - i - 1] = b;
+		}
 		return c;
 	}
 

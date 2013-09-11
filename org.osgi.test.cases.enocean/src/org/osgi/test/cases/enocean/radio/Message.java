@@ -15,10 +15,10 @@
  */
 
 
-package org.osgi.test.cases.enocean.packets.radio;
+package org.osgi.test.cases.enocean.radio;
 
-import org.osgi.test.cases.enocean.Utils;
-import org.osgi.test.cases.enocean.packets.ByteSerializable;
+import org.osgi.test.cases.enocean.utils.ByteSerializable;
+import org.osgi.test.cases.enocean.utils.Utils;
 
 
 public class Message implements ByteSerializable {
