@@ -1,4 +1,4 @@
-package org.osgi.service.usb;
+﻿package org.osgi.service.usb;
 
 /**
  * Represents a USB device. For each USB device, an object is registered with
@@ -12,9 +12,9 @@ package org.osgi.service.usb;
  * 
  */
 public interface /* org.osgi.service.usb. */USBDevice {
-	
+
 	/**
-	 * MANDATORY property key. Value is "USB".
+	 * MANDATORY property. The value is “USB”.
 	 * 
 	 * Constant for the value of the service property DEVICE_CATEGORY used for
 	 * all USB devices. A USB base driver bundle must set this property key.
@@ -24,7 +24,7 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	static final String DEVICE_CATEGORY = "USB";
 
 	/**
-	 * OPTIONAL Property key. The value is "USBSerial".
+	 * OPTIONAL Property. The value is “Serial”.
 	 * 
 	 * Constant for the value of the service property DEVICE_CATEGORY used for a
 	 * USB device which has a serial communication function such as a USB
@@ -33,10 +33,10 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	 * 
 	 * See Also org.osgi.service.device.Constants.DEVICE_CATEGORY
 	 */
-	static final String DEVICE_CATEGORY_USBSERIAL = "USBSerial";
+	static final String DEVICE_CATEGORY_SERIAL = "Serial";
 
 	/**
-	 * OPTIONAL Property key. The value is "MassStorage".
+	 * OPTIONAL Property. The value is “MassStorage”.
 	 * 
 	 * Constant for the value of the service property DEVICE_CATEGORY used for a
 	 * USB device which is a MassStorage Class in USB Specification such as a
@@ -50,52 +50,49 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	/**
 	 * MANDATORY property key. Value is "USB.device.bcdUSB".
 	 * 
-	 * The value is string of decimal number, 4-digits, converted from the
-	 * 4-digit BCD format. Example: "0210"
-	 * 
+	 * The value is int data type, the 4-digit BCD format. Example: 0x0210 *
 	 */
 	static final String USB_RELEASE_NUMBER = "USB.device.bcdUSB";
 
 	/**
 	 * MANDATORY property key. Value is "USB.device.bDeviceClass".
 	 * 
-	 * The value is hexadecimal, 2-digits. Example: "ff"
+	 * The value is int data type, hexadecimal, 2-digits. Example: 0xff
 	 */
 	static final String DEVICE_CLASS = "USB.device.bDeviceClass";
 
 	/**
 	 * MANDATORY property key. Value is "USB.device.bDeviceSubClass".
 	 * 
-	 * The value is hexadecimal, 2-digits. Example: "ff"
+	 * The value is int data type, hexadecimal, 2-digits. Example: 0xff
 	 */
 	static final String DEVICE_SUBCLASS = "USB.device.bDeviceSubClass";
 
 	/**
 	 * MANDATORY property key. Value is "USB.device.bDeviceProtocol".
 	 * 
-	 * The value is hexadecimal, 2-digits. Example: "ff"
+	 * The value is int data type, hexadecimal, 2-digits. Example: 0xff
 	 */
 	static final String DEVICE_PROTOCOL = "USB.device.bDeviceProtocol";
 
 	/**
 	 * MANDATORY property key. Value is "USB.device.idVendor".
 	 * 
-	 * The value is hexadecimal, 4-digits. Example: "0403"
+	 * The value is int data type, hexadecimal, 4-digits. Example: 0x0403
 	 */
 	static final String VID = "USB.device.idVendor";
 
 	/**
 	 * MANDATORY property key. Value is "USB.device.idProduct".
 	 * 
-	 * The value is hexadecimal, 4-digits. Example: "8372"
+	 * The value is int data type, hexadecimal, 4-digits. Example： 0x8372
 	 */
 	static final String PID = "USB.device.idProduct";
 
 	/**
 	 * MANDATORY property key. Value is "USB.device.bcdDevice".
 	 * 
-	 * The value is string of decimal number, 4-digits, converted from the
-	 * 4-digit BCD format. Example: "0200"
+	 * The value is int data type, the 4-digit BCD format. Example： 0x0200
 	 */
 	static final String RELEASE_NUMBER = "USB.device.bcdDevice";
 
@@ -103,7 +100,7 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	 * OPTIONAL Property key. Value is "iManufacturer".
 	 * 
 	 * The value is string of indicated in iManufacturer. (The value is not the
-	 * index.) Example: "Buffalo Inc."
+	 * index.) Example: “Buffalo Inc.”
 	 */
 	static final String MANUFACTURER = "USB.device.iManufacturer";
 
@@ -111,7 +108,7 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	 * OPTIONAL Property key. Value is "iProduct".
 	 * 
 	 * The value is string of indicated in iProduct. (The value is not the
-	 * index.) Example: "USB2.0 PC Camera"
+	 * index.) Example： “USB2.0 PC Camera”
 	 */
 	static final String PRODUCT = "USB.device.iProduct";
 
@@ -119,31 +116,20 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	 * OPTIONAL Property key. Value is "USB.device.iSerialNumber".
 	 * 
 	 * The value is string of indicated in iSerialNumber. (The value is not the
-	 * index.) Example: "57B0002600000001"
+	 * index.) Example： “57B0002600000001”
 	 */
 	static final String SERIALNUMBER = "USB.device.iSerialNumber";
 
 	/**
 	 * MANDATORY property key. Value is "USB.device.interfaceclassess".
 	 * 
-	 * The property value is an array of String for each interfaces. Each String
-	 * value is connected with "_" interface descriptor's bInterfaceClass,
-	 * bInterfaceSubClass, and bInterface Protocol.
-	 * 
-	 * 
-	 * If there is no subclass code associated with the class code, does not
-	 * connect subclass code and protocol code. If there is no protocol code
-	 * associated with the class code, the protocol code is not connected.
-	 * 
-	 * In addition, if the class code is vendor-specific class, does not connect
-	 * subclass code and protocol code. Set only the class code.
-	 * 
-	 * Example: A example of a USB device that has 2 interfaces. The first class
-	 * code is CDC, subclass code is ACM(without protocol code). The second
-	 * class code is CDC-Data (no subclass code and protocol code).
-	 * 
-	 * Value: "CDC_ACM", "CDC-Data"
-	 * 
+	 * The property value is List. The List size equals to the USB interface
+	 * number. The List contains Lists that respond to each USB interface.
+	 * Interface descriptor's bInterfaceClass is must set index 0, the value is
+	 * int data type, hexadecimal, 2-digits. Interface descriptor's
+	 * bInterfaceSubClass is must set index 1, the value is int data type,
+	 * hexadecimal, 2-digits. Interface descriptor's bInterfaceProtocol is must
+	 * set index 2, the value is int data type, hexadecimal, 2-digits. *
 	 */
 	static final String USB_CLASS = "USB.device.interfaceclassess";
 
@@ -205,20 +191,32 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	static final String MOUNTPOINT = "USB.device.mountpoint";
 
 	/**
-	 * Constant for the USB device match scale, indicating a match with the VID
-	 * and the PID. Value is 10.
+	 * Constant for the USB device match scale, indicating a match with
+	 * USB.device.idVendor and USB.device.idProduct. Value is 10.
 	 */
 	int MATCH_MODEL = 10;
 
 	/**
-	 * Constant for the USB device match scale, indicating a match with the
-	 * DEVICE_CLASS and the DEVICE_SUBCLASS. Value is 5.
+	 * Constant for the USB device match scale, indicating a match with
+	 * USB.device.bDeviceClass, USB.device.bDeviceSubClass and
+	 * USB.device.bDeviceProtocol, or a match with bInterfaceClass,
+	 * bInterfaceSubClass and bInterfaceProtocol in one of
+	 * USB.device.interfaceclasses. Value is 7.
+	 */
+	int MATCH_PROTOCOL = 7;
+
+	/**
+	 * Constant for the USB device match scale, indicating a
+	 * matchUSB.device.bDeviceClass and USB.device.bDeviceSubClass, or a match
+	 * with bInterfaceClass and bInterfaceSubClass in one of
+	 * USB.device.interfaceclasses. Value is 5.
 	 */
 	int MATCH_SUBCLASS = 5;
 
 	/**
-	 * Constant for the USB device match scale, indicating a match with the
-	 * DEVICE_CLASS. Value is 3.
+	 * Constant for the USB device match scale, indicating a match with
+	 * USB.device.bDeviceClass, or a match with bInterfaceClass in one of
+	 * USB.device.interfaceclasses. Value is 3.
 	 */
 	int MATCH_CLASS = 3;
 
