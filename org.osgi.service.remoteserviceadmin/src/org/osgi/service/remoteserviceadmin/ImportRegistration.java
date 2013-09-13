@@ -53,8 +53,8 @@ public interface ImportRegistration {
 	 * @throws IllegalStateException When this registration was not properly
 	 *         initialized. See {@link #getException()}.
 	 * @throws IllegalArgumentException When the supplied
-	 *         {@link EndpointDescription} is not for the same endpoint as this
-	 *         {@link ImportRegistration}.
+	 *         {@link EndpointDescription} does not represent the same endpoint
+	 *         as this {@link ImportRegistration}.
 	 * 
 	 */
 	void update(EndpointDescription endpoint);

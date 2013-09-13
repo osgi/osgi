@@ -46,25 +46,36 @@ public interface ExportRegistration {
 
 	/**
 	 * Update the endpoint represented by this {@link ExportRegistration} and
-	 * notify any relevant listeners of the change to the
-	 * {@link EndpointDescription}. After this method returns the
-	 * {@link EndpointDescription} returned via {@link #getExportReference()}
-	 * must have been updated.
+	 * return an updated {@link EndpointDescription}. If this method returns an
+	 * updated {@link EndpointDescription}, then the object returned via
+	 * {@link #getExportReference()} must also have been updated to return this
+	 * new object. If this method does not return an updated
+	 * {@link EndpointDescription} then the object returned via
+	 * {@link #getExportReference()} should remain unchanged.
 	 * 
-	 * When creating the updated {@link EndpointDescription} the same properties
-	 * passed to {@link RemoteServiceAdmin#exportService(ServiceReference, Map)}
-	 * must be used.
+	 * When creating the updated {@link EndpointDescription} the
+	 * {@link ServiceReference} originally passed to
+	 * {@link RemoteServiceAdmin#exportService(ServiceReference, Map)} must be
+	 * queried to pick up any changes to its service properties.
 	 * 
-	 * @param reference The updated ServiceReference
+	 * If this argument is null then the original properties passed when
+	 * creating this ExportRegistration should be used when constructing the
+	 * updated {@link EndpointDescription}. Otherwise the new properties should
+	 * be used, and replace the original properties for subsequent calls to the
+	 * update method.
 	 * 
+	 * @param properties properties to be merged with the current service
+	 *        properties for the {@link ServiceReference} represented by this
+	 *        {@link ExportRegistration}. If null is passed then the original
+	 *        properties passed to
+	 *        {@link RemoteServiceAdmin#exportService(ServiceReference, Map)}
+	 *        will be used.
+	 * @return The updated {@link EndpointDescription} for this registration.
 	 * @throws IllegalStateException When this registration was not properly
 	 *         initialized. See {@link #getException()}.
-	 * @throws IllegalArgumentException When the supplied
-	 *         {@link ServiceReference} is not for the same service as this
-	 *         {@link ExportRegistration}.
 	 * 
 	 */
-	void update(ServiceReference reference);
+	EndpointDescription update(Map<String, ?> properties);
 
 	/**
 	 * Delete the local endpoint and disconnect any remote distribution
