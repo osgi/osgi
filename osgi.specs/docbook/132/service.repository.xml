@@ -716,7 +716,7 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
       <title>Repository Element</title>
 
       <para>The <code>repository</code> element is the root of the document.
-      The <code>requirement</code> element has the following child
+      The <code>repository</code> element has the following child
       elements:</para>
 
       <itemizedlist>
