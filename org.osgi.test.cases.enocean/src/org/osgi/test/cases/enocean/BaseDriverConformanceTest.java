@@ -22,7 +22,8 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 	private ServiceListener		services;
 
 	protected void setUp() throws Exception {
-		File file = new File("/tmp/testdriver");
+		String fakeDriverPath = System.getProperty("org.osgi.service.enocean.host.path");
+		File file = new File(fakeDriverPath);
 		if (!file.exists()) {
 			file.createNewFile();
 		}
