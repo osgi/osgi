@@ -41,6 +41,7 @@ import java.util.PropertyPermission;
 import java.util.Set;
 
 import junit.framework.AssertionFailedError;
+
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -2718,7 +2719,7 @@ public class CMControl extends DefaultTestBundleControl {
 			props.put("StringKey", "stringvalue2");
 			conf.update(props);
 			trace("Wait for signal.");
-			calledback = sync.waitForSignal(SIGNAL_WAITING_TIME, ++count);
+			calledback = sync.waitForSignal(SIGNAL_WAITING_TIME, count + 1);
 			this.printoutPropertiesForDebug(sync);
 			assertFalse("ManagedService must NOT be called back", calledback);
 
