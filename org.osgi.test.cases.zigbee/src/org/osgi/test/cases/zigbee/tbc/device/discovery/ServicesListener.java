@@ -22,13 +22,14 @@ public class ServicesListener extends ServiceTracker {
 	private ZigBeeNode		last;
 	private int				size;
 
+	/**
+	 * @param bc
+	 * @param count
+	 * @throws InvalidSyntaxException
+	 */
 	public ServicesListener(BundleContext bc, int count)
 			throws InvalidSyntaxException {
-		super(
-				bc,
-				bc
-						.createFilter("(&(objectclass=org.osgi.service.zigbee.ZigBeeNode))"),
-				null);
+		super(bc, bc.createFilter("(&(objectclass=org.osgi.service.zigbee.ZigBeeNode))"), null);
 		waiter = new Semaphore();
 		desiredCount = count;
 		size = 0;
@@ -84,10 +85,22 @@ public class ServicesListener extends ServiceTracker {
 		}
 	}
 
+	/**
+	 * @return the "last seen" ZigBeeNode.
+	 */
 	public synchronized ZigBeeNode getZigBeeNode() {
 		return last;
 	}
 
+	/**
+	 * Waits until a signal is (or has been) given (see
+	 * org.osgi.test.support.compatibility.Semaphore).
+	 * 
+	 * @param timeout The maximum number of milliseconds to wait for a signal or
+	 *        0 to wait indefinitely.
+	 * 
+	 * @throws InterruptedException
+	 */
 	public void waitFor(long timeout) throws InterruptedException {
 		DefaultTestBundleControl.log("waiting for ZigBee Nodes " + timeout);
 		waiter.waitForSignal(timeout);

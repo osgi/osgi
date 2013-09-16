@@ -16,7 +16,9 @@
 
 package org.osgi.test.cases.zigbee.tbc;
 
-public class SignatureTestCase extends
-		org.osgi.test.support.signature.SignatureTestCase {
+/**
+ *
+ */
+public class SignatureTestCase extends org.osgi.test.support.signature.SignatureTestCase {
 	// concrete subclass
 }

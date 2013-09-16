@@ -11,6 +11,9 @@ import org.osgi.test.cases.zigbee.tbc.device.discovery.ServicesListener;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
+/**
+ * Contain the ZigBee testcases.
+ */
 public class ZigBeeControl extends DefaultTestBundleControl {
 	private final int			desiredCount	= 2;
 	private ServicesListener	listener;
@@ -27,9 +30,35 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		log("Torn down ZigBee Test Case");
 	}
 
+	private void prepareTestStart() throws Exception {
+		log("Register Service Listener to listen for service changes");
+		listener = new ServicesListener(getContext(), desiredCount);
+		listener.open();
+		listener.waitFor(OSGiTestCaseProperties.getTimeout()
+				* OSGiTestCaseProperties.getScaling());
+		if (listener.size() < desiredCount) {
+			listener.close();
+			fail("timed out waiting for " + desiredCount + " ZigBee devices");
+		}
+	}
+
+	private void finalizeTestEnd() throws Exception {
+		listener.close();
+	}
+
+	// ====================================================================
 	// ===========================TEST=====================================
 	// ===========================METHODS==================================
+	// ====================================================================
 
+	// ====================================================================
+	// ===========================DISCOVERY TEST===========================
+	// ===========================METHODS==================================
+	// ====================================================================
+
+	/**
+	 * Tests related to Node Discovery.
+	 */
 	public void testNodeDiscovery() {
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
@@ -103,11 +132,14 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 						ZigBeeConstants.NODE_USER_DESCRIPTION,
 						dev.getUserDescriptor().getUserDescription());
 			}
-		} catch (ZigBeeException ze) {
-
+		} catch (ZigBeeException e) {
+			log(e.getMessage());
 		}
 	}
 
+	/**
+	 * Tests related to Endpoint Discovery.
+	 */
 	public void testEndpointDiscovery() {
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
@@ -175,11 +207,19 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			assertEquals("Output clusters list not matched",
 					ZigBeeConstants.ENDPOINT_OUTPUT_CLUSTERS, listOuput);
 
-		} catch (ZigBeeException ex) {
-
+		} catch (ZigBeeException e) {
+			log(e.getMessage());
 		}
 	}
 
+	// ====================================================================
+	// ===========================DESCRIPTION TEST=========================
+	// ===========================METHODS==================================
+	// ====================================================================
+
+	/**
+	 * Tests related to Cluster Description.
+	 */
 	public void testClusterDescription() {
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
@@ -211,6 +251,9 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 				ZigBeeConstants.CLUSTER_DOMAIN, cluster.getDescription().getGlobalClusterDescription().getClusterFunctionalDomain());
 	}
 
+	/**
+	 * Tests related to Command Description.
+	 */
 	public void testCommandDescription() {
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
@@ -244,6 +287,9 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 				ZigBeeConstants.COMMAND_MANDATORY, String.valueOf(command.getDescription().isMandatory()));
 	}
 
+	/**
+	 * Tests related to Attribute Description.
+	 */
 	public void testAttributeDescription() {
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
@@ -286,20 +332,46 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 				ZigBeeConstants.ATTRIBUTE_DATA_TYPE, attribute.getDescription().getDataTypeDescription().getName());
 	}
 
-	private void prepareTestStart() throws Exception {
-		log("Register Service Listener to listen for service changes");
-		listener = new ServicesListener(getContext(), desiredCount);
-		listener.open();
-		listener.waitFor(OSGiTestCaseProperties.getTimeout()
-				* OSGiTestCaseProperties.getScaling());
-		if (listener.size() < desiredCount) {
-			listener.close();
-			fail("timed out waiting for " + desiredCount + " ZigBee devices");
-		}
-	}
+	// ====================================================================
+	// ===========================CONTROL TEST=============================
+	// ===========================METHODS==================================
+	// ====================================================================
 
-	private void finalizeTestEnd() throws Exception {
-		listener.close();
-	}
+	// TODO: AAA: implement control test methods.
+
+	// ====================================================================
+	// ===========================EVENTING TEST============================
+	// ===========================METHODS==================================
+	// ====================================================================
+
+	// TODO: AAA: implement eventing test methods.
+
+	// ====================================================================
+	// ===========================EXPORT TEST==============================
+	// ===========================METHODS==================================
+	// ====================================================================
+
+	// TODO: AAA: implement export test methods.
+
+	// ====================================================================
+	// ===========================EXCEPTIONS TEST==========================
+	// ===========================METHODS==================================
+	// ====================================================================
+
+	// TODO: AAA: implement exceptions test methods.
+
+	// ====================================================================
+	// ===========================ZIGBEE DATA TYPES TEST===================
+	// ===========================METHODS==================================
+	// ====================================================================
+
+	// TODO: AAA: implement zigbee data types test methods.
+
+	// ====================================================================
+	// ===========================HOST/COORDINATOR GETTERS/SETTERS TEST====
+	// ===========================METHODS==================================
+	// ====================================================================
+
+	// TODO: AAA: implement host/coordinator getters/setters test methods.
 
 }
