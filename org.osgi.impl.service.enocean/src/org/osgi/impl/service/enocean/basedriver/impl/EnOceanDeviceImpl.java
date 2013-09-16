@@ -31,11 +31,12 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		return props;
 	}
 
-	public void registerProfile(int rorg, int func, int type) {
+	public void registerProfile(int rorg, int func, int type, int manuf) {
 		Hashtable props = new Hashtable();
-		props.put(org.osgi.service.enocean.EnOceanDevice.RORG, new Integer(rorg));
-		props.put(org.osgi.service.enocean.EnOceanDevice.FUNC, new Integer(func));
-		props.put(org.osgi.service.enocean.EnOceanDevice.TYPE, new Integer(type));
+		props.put(org.osgi.service.enocean.EnOceanDevice.RORG, String.valueOf(rorg));
+		props.put(org.osgi.service.enocean.EnOceanDevice.FUNC, String.valueOf(func));
+		props.put(org.osgi.service.enocean.EnOceanDevice.TYPE, String.valueOf(type));
+		props.put(org.osgi.service.enocean.EnOceanDevice.MANUFACTURER, String.valueOf(type));
 		sReg.setProperties(props);
 	}
 
@@ -138,19 +139,19 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	}
 
 	public void setRorg(int rorg) {
-		props.put(EnOceanDevice.RORG, new Integer(rorg));
+		props.put(EnOceanDevice.RORG, String.valueOf(rorg));
 	}
 
 	public void setFunc(int func) {
-		props.put(EnOceanDevice.FUNC, new Integer(func));
+		props.put(EnOceanDevice.FUNC, String.valueOf(func));
 	}
 
 	public void setType(int type) {
-		props.put(EnOceanDevice.TYPE, new Integer(type));
+		props.put(EnOceanDevice.TYPE, String.valueOf(type));
 	}
 
 	public void setManuf(int manuf) {
-		props.put(EnOceanDevice.MANUFACTURER, new Integer(manuf));
+		props.put(EnOceanDevice.MANUFACTURER, String.valueOf(manuf));
 	}
 	
 }

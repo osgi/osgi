@@ -88,10 +88,8 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 					int uid = Utils.bytes2intLE(msg.getSenderId(), 0, 4);
 					EnOceanDeviceImpl device = new EnOceanDeviceImpl(uid);
 					if (msg.hasTeachInInfo()) {
-						device.setRorg(msg.getRORG());
-						device.setFunc(msg.getFunc());
-						device.setType(msg.getType());
-						device.setManuf(msg.getManuf());
+						device.registerProfile(msg.getRORG(), msg.getFunc(), msg.getType(),
+								msg.getManuf());
 					}
 					registerDevice(device, new Integer(uid), device.getServiceProperties());
 				}
