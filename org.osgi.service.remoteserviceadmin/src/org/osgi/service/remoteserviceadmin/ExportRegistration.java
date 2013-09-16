@@ -74,6 +74,7 @@ public interface ExportRegistration {
 	 * @throws IllegalStateException When this registration was not properly
 	 *         initialized. See {@link #getException()}.
 	 * 
+	 * @since 1.1
 	 */
 	EndpointDescription update(Map<String, ?> properties);
 

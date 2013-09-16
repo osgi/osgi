@@ -56,6 +56,7 @@ public interface ImportRegistration {
 	 *         {@link EndpointDescription} does not represent the same endpoint
 	 *         as this {@link ImportRegistration}.
 	 * 
+	 * @since 1.1
 	 */
 	void update(EndpointDescription endpoint);
 
