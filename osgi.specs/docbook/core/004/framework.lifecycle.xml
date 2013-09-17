@@ -2176,14 +2176,14 @@ policy ::= 'lazy'</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>The update process supports migration from one version of a bundle
-      to a newer version of the same bundle. The exports of an updated bundle
-      must be immediately available to the Framework. If none of the old
-      exports are used, then the old exports must be removed. Otherwise, all
-      old exports must remain available for existing bundles and future
-      resolves until the bundle is refreshed, see <xref
-      linkend="framework.wiring.refreshing"/>, or the Framework is
-      restarted.</para>
+      <para>The update process supports migration from one revision of a bundle
+      to a newer revision of the same bundle. The capabilities provided by the new
+      revision must be immediately available to the Framework. If the old bundle revision has 
+      <xref linkend="org.osgi.framework.wiring.BundleWiring.isInUse--" xrefstyle="hyperlink"/>
+      bundle wiring then all capabilities provided by the old bundle wiring must remain
+      available for existing bundles and future resolves until the bundle is refreshed,
+      see <xref linkend="framework.wiring.refreshing"/>, or the Framework is
+      restarted.  Otherwise the capabilities provided by the old revision must be removed.</para>
 
       <para>After the update operation is complete, the framework must attempt
       to move the bundle to the same state as it was before the operation
@@ -2210,25 +2210,14 @@ policy ::= 'lazy'</programlisting>
       uninstall the bundle from the persistent storage of the
       Framework.</para>
 
-      <para>Once this method returns, the state of the OSGi framework must be
-      the same as if the bundle had never been installed, unless:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>The uninstalled bundle has exported any packages (via its
-          Export-Package manifest header)</para>
-        </listitem>
-
-        <listitem>
-          <para>The uninstalled bundle was selected by the Framework as the
-          exporter of these packages.</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>If none of the old exports are used, then the old exports must be
-      removed. Otherwise, all old exports must remain available for existing
-      bundles and future resolves until the bundle is refreshed or the
-      Framework is restarted.</para>
+      <para>If the uninstalled bundle has
+      one or more revisions with 
+      <xref linkend="org.osgi.framework.wiring.BundleWiring.isInUse--" xrefstyle="hyperlink"/>
+      bundle wirings then all capabilities provided by the old in use bundle wirings must remain
+      available for existing bundles and future resolves until the bundle is refreshed,
+      see <xref linkend="framework.wiring.refreshing"/>, or the Framework is
+      restarted.  Otherwise the capabilities provided by the old revision must be removed.
+      </para>
     </section>
 
     <section>
