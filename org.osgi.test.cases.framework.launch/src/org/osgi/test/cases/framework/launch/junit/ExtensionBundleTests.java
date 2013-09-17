@@ -24,6 +24,7 @@
  */
 package org.osgi.test.cases.framework.launch.junit;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +32,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.launch.Framework;
+import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -93,6 +95,8 @@ public class ExtensionBundleTests extends LaunchTest {
 		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			Bundle tb6 = installBundle(framework, "/fragments.tb6.jar");
+			framework.adapt(FrameworkWiring.class).resolveBundles(
+					Collections.singleton(tb6));
 			startFramework(framework);
 			assertTrue("expected framework extension bundle to be resolved",
 					(tb6.getState() & Bundle.RESOLVED) != 0);
@@ -132,6 +136,8 @@ public class ExtensionBundleTests extends LaunchTest {
 		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			Bundle tb6 = installBundle(framework, "/fragments.tb6.jar");
+			framework.adapt(FrameworkWiring.class).resolveBundles(
+					Collections.singleton(tb6));
 			startFramework(framework);
 			assertTrue("expected framework extension bundle to be resolved",
 					(tb6.getState() & Bundle.RESOLVED) != 0);
@@ -165,6 +171,8 @@ public class ExtensionBundleTests extends LaunchTest {
 		if ("true".equals(framework.getBundleContext().getProperty(
 				Constants.SUPPORTS_FRAMEWORK_EXTENSION))) {
 			Bundle tb21 = installBundle(framework, "/fragments.tb21.jar");
+			framework.adapt(FrameworkWiring.class).resolveBundles(
+					Collections.singleton(tb21));
 			startFramework(framework);
 			assertTrue("expected framework extension bundle to be resolved",
 					(tb21.getState() & Bundle.RESOLVED) != 0);
