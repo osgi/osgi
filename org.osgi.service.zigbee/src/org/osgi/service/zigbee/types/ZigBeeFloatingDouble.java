@@ -18,8 +18,12 @@ package org.osgi.service.zigbee.types;
 
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
-public class ZigBeeFloatingDouble implements
-		ZigBeeDataTypeDescription {
+/**
+ * This interface represents a ZigBeeFloatingDouble as described in the ZigBee
+ * Specification.
+ */
+public class ZigBeeFloatingDouble implements ZigBeeDataTypeDescription {
+
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub
 		return null;
@@ -54,4 +58,5 @@ public class ZigBeeFloatingDouble implements
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

@@ -18,8 +18,12 @@ package org.osgi.service.zigbee.types;
 
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
-public class ZigBeeUnsignedInteger16 implements
-		ZigBeeDataTypeDescription {
+/**
+ * This interface represents a ZigBeeUnsignedInteger16 as described in the
+ * ZigBee Specification.
+ */
+public class ZigBeeUnsignedInteger16 implements ZigBeeDataTypeDescription {
+
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub
 		return null;
@@ -54,4 +58,5 @@ public class ZigBeeUnsignedInteger16 implements
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

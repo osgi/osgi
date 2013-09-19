@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.zigbee.descriptions;
-
 
 /**
  * This interface represents a ZigBee Cluster description
@@ -48,7 +46,7 @@ public interface ZigBeeCommandDescription {
 	 * @return an array of command's parameters description
 	 */
 	public ZigBeeParameterDescription[] getParameterDescriptions();
-	
+
 	/**
 	 * Serialize javaValues to byte[]. This byte[] can them be used in
 	 * org.osgi.service.zigbee.ZigBeeCommand.invoke(byte[] bytes, ZigBeeHandler

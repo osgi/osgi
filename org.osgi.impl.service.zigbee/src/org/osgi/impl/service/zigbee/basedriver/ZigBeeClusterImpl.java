@@ -1,10 +1,12 @@
+
 package org.osgi.impl.service.zigbee.basedriver;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.osgi.service.zigbee.ZigBeeAttribute;
 import org.osgi.service.zigbee.ZigBeeAttributeRecord;
 import org.osgi.service.zigbee.ZigBeeCluster;
 import org.osgi.service.zigbee.ZigBeeCommand;
-import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.ZigBeeNoDescriptionAvailableException;
 import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
@@ -15,7 +17,7 @@ import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
 public class ZigBeeClusterImpl implements ZigBeeCluster {
 
 	private int							id;
-	private ZigBeeAttribute[]			attributes;
+	private ZigBeeAttributeImpl[]		attributes;
 	private ZigBeeCommand[]				commands;
 	private ZigBeeClusterDescription	description;
 
@@ -31,7 +33,7 @@ public class ZigBeeClusterImpl implements ZigBeeCluster {
 	 * @param attributes
 	 * @param desc
 	 */
-	public ZigBeeClusterImpl(ZigBeeCommand[] commands, ZigBeeAttribute[] attributes, ZigBeeClusterDescription desc) {
+	public ZigBeeClusterImpl(ZigBeeCommand[] commands, ZigBeeAttributeImpl[] attributes, ZigBeeClusterDescription desc) {
 		id = desc.getId();
 		this.commands = commands;
 		this.attributes = attributes;
@@ -67,27 +69,31 @@ public class ZigBeeClusterImpl implements ZigBeeCluster {
 	}
 
 	public void readAttributes(int[] attributesIds, ZigBeeHandler handler) {
-		ZigBeeAttribute attribute = attributes[attributesIds[0]];
-		try {
-			attribute.getValue(handler);
-		} catch (ZigBeeException e) {
-			e.printStackTrace();
+		Map response = new HashMap();
+		for (int i : attributesIds) {
+			ZigBeeAttributeImpl attribute = attributes[i];
+			response.put(attribute.getId(), attribute.getValue());
 		}
+		handler.onSuccess(response);
 	}
 
-	public void readAttributesAsBytes(int[] attibutesIds, ZigBeeHandler handler) {
-		// TODO: AAA: Auto-generated method stub
+	public void readAttributesAsBytes(int[] attributesIds, ZigBeeHandler handler) {
+		Map response = new HashMap();
+		for (int i : attributesIds) {
+			ZigBeeAttributeImpl attribute = attributes[i];
+			// attribute.getValue() should be moved from Object to byte[] in a
+			// real non-mocked impl.
+			response.put(attribute.getId(), attribute.getValue());
+		}
+		handler.onSuccess(response);
 	}
 
 	public void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributesRecords, ZigBeeHandler handler) {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void writeAttributes(boolean undivided, int[] attributesIds, byte[] values, ZigBeeHandler handler) throws ZigBeeNoDescriptionAvailableException {
 		// TODO Auto-generated method stub
-
 	}
-
 
 }

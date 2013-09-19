@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.zigbee.descriptions;
-
 
 /**
  * This interface represents a ZigBee parameter description
@@ -24,6 +22,7 @@ package org.osgi.service.zigbee.descriptions;
  * @version 1.0
  */
 public interface ZigBeeParameterDescription {
+
 	/**
 	 * @return the parameter data type
 	 */
@@ -37,4 +36,5 @@ public interface ZigBeeParameterDescription {
 	 * @return true if value is conform otherwise returns false
 	 */
 	public boolean checkValue(Object value);
+
 }

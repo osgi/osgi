@@ -25,6 +25,7 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
  * @version 1.0
  */
 public interface ZigBeeCommand {
+
 	/**
 	 * @return The command identifier
 	 */

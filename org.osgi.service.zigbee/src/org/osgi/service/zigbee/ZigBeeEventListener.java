@@ -22,6 +22,7 @@ package org.osgi.service.zigbee;
  * @version 1.0
  */
 public interface ZigBeeEventListener {
+
 	/**
 	 * key for a service property having a value that is an object of type
 	 * org.osgi.framework.Filter and that is used to limit received events.

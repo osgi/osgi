@@ -25,6 +25,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
  * @version 1.0
  */
 public interface ZigBeeEndpoint {
+
 	/**
 	 * Key of the {@link String} containing the EndPoint Address of the device <br>
 	 * It is <b>mandatory</b> property for this service

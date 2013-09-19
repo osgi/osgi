@@ -22,6 +22,7 @@ package org.osgi.service.zigbee.descriptions;
  * @version 1.0
  */
 public interface ZigBeeDataTypeDescription {
+
 	/**
 	 * @return The data type identifier
 	 */
@@ -58,4 +59,5 @@ public interface ZigBeeDataTypeDescription {
 	 * @return An object that represents the deserialized value of data
 	 */
 	public Object deserialize(byte[] data);
+
 }

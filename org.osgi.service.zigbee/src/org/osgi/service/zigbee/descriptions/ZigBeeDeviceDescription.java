@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.zigbee.descriptions;
 
 /**
@@ -53,4 +52,5 @@ public interface ZigBeeDeviceDescription {
 	 * @return an array of client cluster description.
 	 */
 	public ZigBeeClusterDescription[] getClientClustersDescriptions();
+
 }

@@ -24,8 +24,8 @@ package org.osgi.service.zigbee.descriptors;
  * 
  * @version 1.0
  */
-
 public interface ZigBeeComplexDescriptor {
+
 	/**
 	 * @return the language code used for character strings.
 	 */

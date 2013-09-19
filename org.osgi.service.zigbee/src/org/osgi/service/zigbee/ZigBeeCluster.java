@@ -24,6 +24,7 @@ import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
  * @version 1.0
  */
 public interface ZigBeeCluster {
+
 	/**
 	 * Property key for the optional cluster id. A ZigBee Event Listener service
 	 * can announce for what ZigBee clusters it wants notifications.
@@ -84,13 +85,13 @@ public interface ZigBeeCluster {
 	public void readAttributes(int[] attributesIds, ZigBeeHandler handler);
 
 	/**
-	 * Read a list of attributes. Each readed attributes will be represented as
-	 * a byte array
+	 * Read a list of attributes. Each read attributes will be represented as a
+	 * byte array
 	 * 
-	 * @param attibutesIds An array of attributes ids
+	 * @param attributesIds An array of attributes ids
 	 * @param handler The response handler
 	 */
-	public void readAttributesAsBytes(int[] attibutesIds, ZigBeeHandler handler);
+	public void readAttributesAsBytes(int[] attributesIds, ZigBeeHandler handler);
 
 	/**
 	 * Write a list of attributes

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.zigbee.descriptions;
 
 /**
@@ -23,39 +22,34 @@ package org.osgi.service.zigbee.descriptions;
  * @version 1.0
  */
 public interface ZigBeeGlobalClusterDescription {
+
 	/**
-	 * 
 	 * @return the cluster identifier
 	 */
 	public int getClusterId();
 
 	/**
-	 * 
 	 * @return the cluster name
 	 */
 	public String getClusterName();
 
 	/**
-	 * 
 	 * @return the cluster functional description
 	 */
 	public String getClusterDescription();
 
 	/**
-	 * 
 	 * @return the cluster functional domain
 	 */
 	public String getClusterFunctionalDomain();
 
 	/**
-	 * 
 	 * @return a {@link ZigBeeClusterDescription} representing the client
 	 *         cluster description
 	 */
 	public ZigBeeClusterDescription getClientClusterDescription();
 
 	/**
-	 * 
 	 * @return a {@link ZigBeeClusterDescription} representing the server
 	 *         cluster description
 	 */

@@ -18,8 +18,12 @@ package org.osgi.service.zigbee.types;
 
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
-public class ZigBeeCharacterString implements
-		ZigBeeDataTypeDescription {
+/**
+ * This interface represents a ZigBeeCharacterString as described in the ZigBee
+ * Specification.
+ */
+public class ZigBeeCharacterString implements ZigBeeDataTypeDescription {
+
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub
 		return null;
@@ -54,4 +58,5 @@ public class ZigBeeCharacterString implements
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

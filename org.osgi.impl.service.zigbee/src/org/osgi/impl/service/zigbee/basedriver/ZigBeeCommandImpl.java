@@ -1,6 +1,8 @@
 
 package org.osgi.impl.service.zigbee.basedriver;
 
+import java.util.HashMap;
+import java.util.Map;
 import org.osgi.service.zigbee.ZigBeeCommand;
 import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeHandler;
@@ -51,7 +53,12 @@ public class ZigBeeCommandImpl implements ZigBeeCommand {
 
 	public void invoke(byte[] bytes, ZigBeeHandler handler)
 			throws ZigBeeException {
-		// TODO Auto-generated method stub
+		// TODO: AAA: Auto-generated method stub
+		Map response = null;
+		response = new HashMap();
+		Object mockedValue = null;
+		response.put(id, mockedValue);
+		handler.onSuccess(response);
 	}
 
 	// public void invoke(Object[] values, ZigBeeDataTypeDescription[]

@@ -24,6 +24,7 @@ import java.util.Dictionary;
  * @version 1.0
  */
 public interface ZigBeeEvent {
+
 	/**
 	 * @return The cluster object concerned by the events
 	 */

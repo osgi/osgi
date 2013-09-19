@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.zigbee.descriptions;
-
 
 /**
  * This interface represents a ZigBee Attribute description

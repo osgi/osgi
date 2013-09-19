@@ -25,6 +25,7 @@ import java.util.Map;
  */
 
 public interface ZigBeeHandler {
+
 	/**
 	 * Notifies the success result of the call. This method is used when the
 	 * handler command result is a success.
@@ -40,4 +41,5 @@ public interface ZigBeeHandler {
 	 * @param response contains the results of the call.
 	 */
 	public void onFailure(Map response);
+
 }

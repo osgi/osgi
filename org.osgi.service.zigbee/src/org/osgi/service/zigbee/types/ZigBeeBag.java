@@ -18,8 +18,12 @@ package org.osgi.service.zigbee.types;
 
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
-public class ZigBeeBag implements
-		ZigBeeDataTypeDescription {
+/**
+ * This interface represents a ZigBeeBag as described in the ZigBee
+ * Specification.
+ */
+public class ZigBeeBag implements ZigBeeDataTypeDescription {
+
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub
 		return null;
@@ -54,4 +58,5 @@ public class ZigBeeBag implements
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

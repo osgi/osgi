@@ -1,4 +1,3 @@
-
 package org.osgi.test.cases.zigbee.tbc.device.discovery;
 
 import org.osgi.framework.BundleContext;
@@ -14,9 +13,9 @@ import org.osgi.util.tracker.ServiceTracker;
  * device. It was using a service listener with all dangers associated. It also
  * did not discriminate between the looked for devices and the existing or found
  * devices on the network.
- * 
  */
 public class ServicesListener extends ServiceTracker {
+
 	private final Semaphore	waiter;
 	private final int		desiredCount;
 	private ZigBeeNode		last;
@@ -63,7 +62,7 @@ public class ServicesListener extends ServiceTracker {
 	public Object addingService(ServiceReference ref) {
 		ZigBeeNode device = (ZigBeeNode) super.addingService(ref);
 
-		DefaultTestBundleControl.log("adding ZigBee Node" + device);
+		DefaultTestBundleControl.log("adding ZigBee Node " + device);
 		synchronized (this) {
 			size++;
 			last = device;
@@ -105,4 +104,5 @@ public class ServicesListener extends ServiceTracker {
 		DefaultTestBundleControl.log("waiting for ZigBee Nodes " + timeout);
 		waiter.waitForSignal(timeout);
 	}
+
 }

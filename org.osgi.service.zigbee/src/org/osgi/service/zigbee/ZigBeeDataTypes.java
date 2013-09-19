@@ -77,18 +77,26 @@ import org.osgi.service.zigbee.types.ZigBeeUnsignedInteger8;
  * @version 1.0
  */
 public class ZigBeeDataTypes {
+
 	/**
 	 * Boolean The Boolean type represents a logical value, either TRUE (0x00)
 	 * or FALSE (0x01). The value 0xff represents an invalid value of this type.
 	 * All other values of this type are forbidden
 	 */
 	public static final ZigBeeDataTypeDescription	GENERAL_DATA_8			= new ZigBeeGeneralData8();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	GENERAL_DATA_16			= new ZigBeeGeneralData16();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	GENERAL_DATA_24			= new ZigBeeGeneralData24();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	GENERAL_DATA_32			= new ZigBeeGeneralData32();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	GENERAL_DATA_40			= new ZigBeeGeneralData40();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	GENERAL_DATA_48			= new ZigBeeGeneralData48();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	GENERAL_DATA_56			= new ZigBeeGeneralData56();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	GENERAL_DATA_64			= new ZigBeeGeneralData64();
 
 	/**
@@ -104,12 +112,19 @@ public class ZigBeeDataTypes {
 	 * value to represent an invalid value of this type.
 	 */
 	public static final ZigBeeDataTypeDescription	BITMAP_8				= new ZigBeeBitmap8();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	BITMAP_16				= new ZigBeeBitmap16();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	BITMAP_24				= new ZigBeeBitmap24();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	BITMAP_32				= new ZigBeeBitmap32();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	BITMAP_40				= new ZigBeeBitmap40();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	BITMAP_48				= new ZigBeeBitmap48();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	BITMAP_56				= new ZigBeeBitmap56();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	BITMAP_64				= new ZigBeeBitmap64();
 
 	/**
@@ -120,12 +135,19 @@ public class ZigBeeDataTypes {
 	 * and 0xffffffff respectively.
 	 */
 	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_8		= new ZigBeeUnsignedInteger8();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_16		= new ZigBeeUnsignedInteger16();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_24		= new ZigBeeUnsignedInteger24();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_32		= new ZigBeeUnsignedInteger32();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_40		= new ZigBeeUnsignedInteger40();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_48		= new ZigBeeUnsignedInteger48();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_56		= new ZigBeeUnsignedInteger56();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_64		= new ZigBeeUnsignedInteger64();
 
 	/**
@@ -136,12 +158,19 @@ public class ZigBeeDataTypes {
 	 * 0x8000, 0x800000 and 0x80000000 respectively.
 	 */
 	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_8		= new ZigBeeSignedInteger8();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_16		= new ZigBeeSignedInteger16();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_24		= new ZigBeeSignedInteger24();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_32		= new ZigBeeSignedInteger32();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_40		= new ZigBeeSignedInteger40();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_48		= new ZigBeeSignedInteger48();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_56		= new ZigBeeSignedInteger56();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_64		= new ZigBeeSignedInteger64();
 
 	/**
@@ -150,6 +179,7 @@ public class ZigBeeDataTypes {
 	 * invalid value of this type
 	 */
 	public static final ZigBeeDataTypeDescription	ENUMERATION_8			= new ZigBeeEnumeration8();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	ENUMERATION_16			= new ZigBeeEnumeration16();
 
 	/**
@@ -225,11 +255,17 @@ public class ZigBeeDataTypes {
 	 * be referred to as an 'empty string'.
 	 */
 	public static final ZigBeeDataTypeDescription	CHARACTER_STRING		= new ZigBeeCharacterString();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	LONG_OCTET_STRING		= new ZigBeeLongOctetString();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	LONG_CHARACTER_STRING	= new ZigBeeLongCharacterString();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	ARRAY					= new ZigBeeArray();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	STRUCTURE				= new ZigBeeStructure();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	SET						= new ZigBeeSet();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	BAG						= new ZigBeeBag();
 
 	/**
@@ -263,8 +299,11 @@ public class ZigBeeDataTypes {
 	 * an invalid or 'don't care' value of the data type.
 	 */
 	public static final ZigBeeDataTypeDescription	DATE					= new ZigBeeDate();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	UTC_TIME				= new ZigBeeUTCTime();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	CLUSTER_ID				= new ZigBeeClusterID();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	ATTRIBUTE_ID			= new ZigBeeAttributeID();
 
 	/**
@@ -273,5 +312,6 @@ public class ZigBeeDataTypes {
 	 * the referenced standard.
 	 */
 	public static final ZigBeeDataTypeDescription	BACNET_OID				= new ZigBeeBacnetOID();
+	/** see above */
 	public static final ZigBeeDataTypeDescription	IEEE_ADDRESS			= new ZigBeeIEEEADDRESS();
 }

@@ -1,2 +1,0 @@
-deleteme.txt
-Test via Ubuntu 12.04 - OBS - sans .netrc

@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.zigbee.basedriver;
 
 import org.osgi.framework.BundleContext;
@@ -10,7 +11,6 @@ import org.osgi.impl.service.zigbee.descriptors.ZigBeeNodeDescriptorImpl;
 import org.osgi.impl.service.zigbee.descriptors.ZigBeePowerDescriptorImpl;
 import org.osgi.impl.service.zigbee.descriptors.ZigBeeSimpleDescriptorImpl;
 import org.osgi.impl.service.zigbee.util.ZigBeeDeviceNodeListener;
-import org.osgi.service.zigbee.ZigBeeAttribute;
 import org.osgi.service.zigbee.ZigBeeCluster;
 import org.osgi.service.zigbee.ZigBeeCommand;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
@@ -44,7 +44,7 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 	private ZigBeeGlobalClusterDescription	globalDescription;
 	private ZigBeeClusterDescription		serverClusterDescription;
 	private ZigBeeClusterDescription		clientClusterDescription;
-	private ZigBeeAttribute[]				attributesServer;
+	private ZigBeeAttributeImpl[]			attributesServer;
 	private ZigBeeAttributeDescription[]	attributesDescription;
 	private ZigBeeCommandDescription		commandDescription;
 	private ZigBeeParameterDescription[]	param;
@@ -95,7 +95,7 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		attributesDescription[8] = new ZigBeeAttributeDescriptionImpl(0x0008, ZigBeeAttributeDescription.READ_AND_WRITE_ACCESS, new Boolean(true), "DeviceEnabled", true, true, attributesType[3]);
 
 		// a server endpoint example
-		attributesServer = new ZigBeeAttribute[9];
+		attributesServer = new ZigBeeAttributeImpl[9];
 		attributesServer[0] = new ZigBeeAttributeImpl(attributesDescription[0]);
 		attributesServer[1] = new ZigBeeAttributeImpl(attributesDescription[1]);
 		attributesServer[2] = new ZigBeeAttributeImpl(attributesDescription[2]);

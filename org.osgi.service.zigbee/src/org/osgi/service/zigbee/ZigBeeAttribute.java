@@ -78,7 +78,7 @@ public interface ZigBeeAttribute {
 	 * Gets the current value of the attribute. This method is used when the
 	 * attribute data type is provided
 	 * 
-	 * @param outputType output data type expected.
+	 * @param outputType output data type
 	 * @param handler the handler
 	 * @throws ZigBeeException
 	 */

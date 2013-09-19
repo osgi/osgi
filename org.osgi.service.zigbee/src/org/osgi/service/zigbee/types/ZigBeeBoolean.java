@@ -18,8 +18,12 @@ package org.osgi.service.zigbee.types;
 
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
-public class ZigBeeBoolean implements
-		ZigBeeDataTypeDescription {
+/**
+ * This interface represents a ZigBeeBoolean as described in the ZigBee
+ * Specification.
+ */
+public class ZigBeeBoolean implements ZigBeeDataTypeDescription {
+
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub
 		return null;
@@ -54,4 +58,5 @@ public class ZigBeeBoolean implements
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

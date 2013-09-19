@@ -23,8 +23,8 @@ package org.osgi.service.zigbee.descriptors;
  * 
  * @version 1.0
  */
-
 public interface ZigBeePowerDescriptor {
+
 	/**
 	 * Receiver synchronized with the receiver on when idle subfield of the node
 	 * descriptor.
@@ -105,4 +105,5 @@ public interface ZigBeePowerDescriptor {
 	 * @return true if rechargeable battery is available or false otherwise.
 	 */
 	public boolean isRechargableBatteryAvailable();
+
 }

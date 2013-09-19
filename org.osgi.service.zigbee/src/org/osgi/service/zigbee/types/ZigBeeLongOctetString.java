@@ -18,8 +18,12 @@ package org.osgi.service.zigbee.types;
 
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
-public class ZigBeeLongOctetString implements
-		ZigBeeDataTypeDescription {
+/**
+ * This interface represents a ZigBeeLongOctetString as described in the ZigBee
+ * Specification.
+ */
+public class ZigBeeLongOctetString implements ZigBeeDataTypeDescription {
+
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub
 		return null;
@@ -54,4 +58,5 @@ public class ZigBeeLongOctetString implements
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

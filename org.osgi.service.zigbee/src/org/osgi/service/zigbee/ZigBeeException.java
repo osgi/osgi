@@ -23,42 +23,64 @@ package org.osgi.service.zigbee;
  */
 public class ZigBeeException extends Exception {
 
+	/** generated */
+	private static final long	serialVersionUID					= -7330626950388193679L;
+
+	/** SUCCESS */
 	public static final short	SUCCESS								= 0x00;
 
+	/** FAILURE */
 	public static final short	FAILURE								= 0x01;
 
+	/** MALFORMED_COMMAND */
 	public static final short	MALFORMED_COMMAND					= 0x80;
 
+	/** CLUSTER_COMMAND_NOT_SUPPORTED */
 	public static final short	CLUSTER_COMMAND_NOT_SUPPORTED		= 0x81;
 
+	/** GENERAL_COMMAND_NOT_SUPPORTED */
 	public static final short	GENERAL_COMMAND_NOT_SUPPORTED		= 0x82;
 
+	/** MANUF_CLUSTER_COMMAND_NOT_SUPPORTED */
 	public static final short	MANUF_CLUSTER_COMMAND_NOT_SUPPORTED	= 0x83;
 
+	/** MANUF_GENERAL_COMMAND_NOT_SUPPORTED */
 	public static final short	MANUF_GENERAL_COMMAND_NOT_SUPPORTED	= 0x84;
 
+	/** INVALID_FIELD */
 	public static final short	INVALID_FIELD						= 0x85;
 
+	/** ATTRIBUTE_NOT_SUPPORTED */
 	public static final short	ATTRIBUTE_NOT_SUPPORTED				= 0x86;
 
+	/** INVALID_VALUE */
 	public static final short	INVALID_VALUE						= 0x87;
 
+	/** READ_ONLY */
 	public static final short	READ_ONLY							= 0x88;
 
+	/** INSUFFICIENT_SPACE */
 	public static final short	INSUFFICIENT_SPACE					= 0x89;
 
+	/** DUPLICATE_EXISTS */
 	public static final short	DUPLICATE_EXISTS					= 0x8a;
 
+	/** NOT_FOUND */
 	public static final short	NOT_FOUND							= 0x8b;
 
+	/** UNREPORTABLE_TYPE */
 	public static final short	UNREPORTABLE_TYPE					= 0x8c;
 
+	/** INVALID_DATA_TYPE */
 	public static final short	INVALID_DATA_TYPE					= 0x8d;
 
+	/** HARDWARE_FAILURE */
 	public static final short	HARDWARE_FAILURE					= 0xc0;
 
+	/** SOFTWARE_FAILURE */
 	public static final short	SOFTWARE_FAILURE					= 0xc1;
 
+	/** CALIBRATION_ERROR */
 	public static final short	CALIBRATION_ERROR					= 0xc2;
 
 	private final int			errorCode;
@@ -73,10 +95,10 @@ public class ZigBeeException extends Exception {
 
 	/**
 	 * @param errorCode An error code.
-	 * @param errordesc An error description which explain the type of problem.
+	 * @param errorDesc An error description which explain the type of problem.
 	 */
-	public ZigBeeException(int errorCode, String errordesc) {
-		super(errordesc);
+	public ZigBeeException(int errorCode, String errorDesc) {
+		super(errorDesc);
 		this.errorCode = errorCode;
 	}
 
@@ -84,7 +106,7 @@ public class ZigBeeException extends Exception {
 	 * @return A ZigBee error code defined a ZigBee Forum working committee or
 	 *         specified by a ZigBee vendor.
 	 */
-	public int getZigBeeError_Code() {
+	public int getZigBeeErrorCode() {
 		return errorCode;
 	}
 }

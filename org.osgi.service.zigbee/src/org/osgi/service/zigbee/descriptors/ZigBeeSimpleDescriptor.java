@@ -23,8 +23,8 @@ package org.osgi.service.zigbee.descriptors;
  * 
  * @version 1.0
  */
-
 public interface ZigBeeSimpleDescriptor {
+
 	/**
 	 * @return the application profile id.
 	 */
@@ -70,4 +70,5 @@ public interface ZigBeeSimpleDescriptor {
 	 *         as an output cluster
 	 */
 	public boolean providesOutputCluster(int id);
+
 }

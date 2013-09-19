@@ -2,12 +2,17 @@
 package org.osgi.test.cases.zigbee.tbc;
 
 import org.osgi.service.zigbee.ZigBeeAttribute;
+import org.osgi.service.zigbee.ZigBeeAttributeRecord;
 import org.osgi.service.zigbee.ZigBeeCluster;
 import org.osgi.service.zigbee.ZigBeeCommand;
+import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeException;
+import org.osgi.service.zigbee.ZigBeeNoDescriptionAvailableException;
 import org.osgi.service.zigbee.ZigBeeNode;
+import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 import org.osgi.test.cases.zigbee.tbc.device.discovery.ServicesListener;
+import org.osgi.test.cases.zigbee.tbc.util.ZigBeeHandlerImpl;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
@@ -15,6 +20,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * Contain the ZigBee testcases.
  */
 public class ZigBeeControl extends DefaultTestBundleControl {
+
 	private final int			desiredCount	= 2;
 	private ServicesListener	listener;
 
@@ -133,7 +139,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 						dev.getUserDescriptor().getUserDescription());
 			}
 		} catch (ZigBeeException e) {
-			log(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -208,7 +214,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 					ZigBeeConstants.ENDPOINT_OUTPUT_CLUSTERS, listOuput);
 
 		} catch (ZigBeeException e) {
-			log(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 
@@ -337,8 +343,169 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 	// ===========================METHODS==================================
 	// ====================================================================
 
-	// TODO: AAA: implement control test methods.
+	/**
+	 * Tests related to control.
+	 */
+	public void testControl() {
+		// device
+		ZigBeeNode device = listener.getZigBeeNode();
+		assertNotNull("ZigBeeNode is NULL", device);
 
+		// endpoints
+		ZigBeeEndpoint[] endpoints = device.getEndpoints();
+		ZigBeeEndpoint endpoint = endpoints[0];
+		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
+
+		// clusters
+		ZigBeeCluster[] clusters = endpoint.getServerClusters();
+		ZigBeeCluster cluster = null;
+		if (clusters != null && clusters.length != 0) {
+			cluster = clusters[0];
+		}
+		assertNotNull("ZigBeeCluster is NULL", cluster);
+
+		// Test "control" methods of ZigBeeCluster.
+
+		// ZigBeeHandler handler = new ZigBeeHandlerImpl();
+		int[] attributesIds = {8};
+		ZigBeeHandlerImpl handlerCluster = new ZigBeeHandlerImpl();
+		Boolean isSuccess;
+
+		// cluster.readAttributes
+		cluster.readAttributes(attributesIds, handlerCluster);
+		isSuccess = handlerCluster.isSuccess();
+		if (isSuccess == null) {
+			fail("isSuccess is expected not to be null.");
+		} else
+			if (isSuccess) {
+				log("handlerCluster.getResponse(): " + handlerCluster.getResponse());
+			} else {
+				fail("isSuccess is expected not to be false.");
+			}
+
+		// cluster.readAttributesAsBytes
+		cluster.readAttributesAsBytes(attributesIds, handlerCluster);
+		isSuccess = handlerCluster.isSuccess();
+		if (isSuccess == null) {
+			fail("isSuccess is expected not to be null.");
+		} else
+			if (isSuccess) {
+				log("handlerCluster.getResponse(): " + handlerCluster.getResponse());
+			} else {
+				fail("isSuccess is expected not to be false.");
+			}
+
+		// cluster.writeAttributes(undivided, attributesRecords,
+		// handlerCluster);
+		Boolean undivided = true;
+		ZigBeeAttributeRecord[] attributesRecords = null;
+		cluster.writeAttributes(undivided, attributesRecords,
+				handlerCluster);
+		isSuccess = handlerCluster.isSuccess();
+		if (isSuccess == null) {
+			fail("isSuccess is expected not to be null.");
+		} else
+			if (isSuccess) {
+				log("handlerCluster.getResponse(): " + handlerCluster.getResponse());
+			} else {
+				fail("isSuccess is expected not to be false.");
+			}
+
+		// cluster.writeAttributes(undivided, attributesIds, values,
+		// handlerCluster);
+		byte[] values = null;
+		try {
+			cluster.writeAttributes(undivided, attributesIds, values,
+					handlerCluster);
+			isSuccess = handlerCluster.isSuccess();
+			if (isSuccess == null) {
+				fail("isSuccess is expected not to be null.");
+			} else
+				if (isSuccess) {
+					log("handlerCluster.getResponse(): " + handlerCluster.getResponse());
+				} else {
+					fail("isSuccess is expected not to be false.");
+				}
+		} catch (ZigBeeNoDescriptionAvailableException e) {
+			e.printStackTrace();
+			fail("No exception is expected.");
+		}
+
+		// Test "control" methods of ZigBeeAttribute.
+
+		// attributes
+		ZigBeeAttribute[] attributes = cluster.getAttributes();
+		log("attributes: " + attributes);
+
+		ZigBeeAttribute attribute = attributes[8];
+
+		try {
+			ZigBeeHandlerImpl handlerAttributeGetValue1 = new ZigBeeHandlerImpl();
+			attribute.getValue(handlerAttributeGetValue1);
+
+			isSuccess = handlerAttributeGetValue1.isSuccess();
+			if (isSuccess == null) {
+				fail("isSuccess is expected not to be null.");
+			} else
+				if (isSuccess) {
+					log("handlerAttributeGetValue1.getResponse(): " + handlerAttributeGetValue1.getResponse());
+				} else {
+					fail("isSuccess is expected not to be false.");
+				}
+		} catch (ZigBeeException e) {
+			e.printStackTrace();
+			fail("No exception is expected.");
+		}
+
+		try {
+			ZigBeeHandlerImpl handlerAttributeGetValue2 = new ZigBeeHandlerImpl();
+			ZigBeeDataTypeDescription outputType = ZigBeeDataTypes.BOOLEAN;
+			attribute.getValue(outputType, handlerAttributeGetValue2);
+
+			isSuccess = handlerAttributeGetValue2.isSuccess();
+			if (isSuccess == null) {
+				fail("isSuccess is expected not to be null.");
+			} else
+				if (isSuccess) {
+					log("handlerAttributeGetValue2.getResponse(): " + handlerAttributeGetValue2.getResponse());
+				} else {
+					fail("isSuccess is expected not to be false.");
+				}
+		} catch (ZigBeeException e) {
+			e.printStackTrace();
+			fail("No exception is expected.");
+		}
+
+		// Test "control" methods of ZigBeeCommand.
+
+		// commands
+		ZigBeeCommand[] commands = cluster.getCommands();
+		ZigBeeCommand command = null;
+		if (commands != null && commands.length != 0) {
+			command = commands[0];
+		}
+		assertNotNull("ZigBeeCommand is NULL", command);
+
+		byte[] bytes = null;
+		try {
+			ZigBeeHandlerImpl handlerCommandInvoke = new ZigBeeHandlerImpl();
+			command.invoke(bytes, handlerCommandInvoke);
+
+			isSuccess = handlerCommandInvoke.isSuccess();
+			if (isSuccess == null) {
+				fail("isSuccess is expected not to be null.");
+			} else
+				if (isSuccess) {
+					log("handlerCommandInvoke.getResponse(): " + handlerCommandInvoke.getResponse());
+				} else {
+					fail("isSuccess is expected not to be false.");
+				}
+		} catch (ZigBeeException e) {
+			e.printStackTrace();
+			fail("No exception is expected.");
+		}
+
+	}
 	// ====================================================================
 	// ===========================EVENTING TEST============================
 	// ===========================METHODS==================================

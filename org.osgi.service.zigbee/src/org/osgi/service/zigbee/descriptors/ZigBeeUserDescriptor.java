@@ -24,11 +24,12 @@ package org.osgi.service.zigbee.descriptors;
  * 
  * @version 1.0
  */
-
 public interface ZigBeeUserDescriptor {
+
 	/**
 	 * @return a user-friendly that identify the device, such as 'Bedroom TV' or
 	 *         'Stairs light'
 	 */
 	public String getUserDescription();
+
 }

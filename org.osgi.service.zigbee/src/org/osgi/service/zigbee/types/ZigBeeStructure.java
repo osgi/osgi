@@ -18,8 +18,12 @@ package org.osgi.service.zigbee.types;
 
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
-public class ZigBeeStructure implements
-		ZigBeeDataTypeDescription {
+/**
+ * This interface represents a ZigBeeStructure as described in the ZigBee
+ * Specification.
+ */
+public class ZigBeeStructure implements ZigBeeDataTypeDescription {
+
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub
 		return null;
@@ -54,4 +58,5 @@ public class ZigBeeStructure implements
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

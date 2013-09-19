@@ -18,6 +18,10 @@ package org.osgi.service.zigbee.types;
 
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
+/**
+ * This interface represents a ZigBeeGeneralData8 as described in the ZigBee
+ * Specification.
+ */
 public class ZigBeeGeneralData8 implements ZigBeeDataTypeDescription {
 
 	public byte[] serialize(Object param) {
@@ -54,4 +58,5 @@ public class ZigBeeGeneralData8 implements ZigBeeDataTypeDescription {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 }

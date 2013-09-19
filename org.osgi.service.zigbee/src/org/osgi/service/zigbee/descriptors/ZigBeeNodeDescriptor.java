@@ -23,8 +23,8 @@ package org.osgi.service.zigbee.descriptors;
  * 
  * @version 1.0
  */
-
 public interface ZigBeeNodeDescriptor {
+
 	/**
 	 * Frequency mask for the range 868 - 868.6 MHz.
 	 */

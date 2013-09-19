@@ -17,15 +17,19 @@
 package org.osgi.service.zigbee;
 
 /**
- * This class is thrown when a description is not available
+ * This class is thrown when a description is not available.
  * 
  * @version 1.0
  */
-
 public class ZigBeeNoDescriptionAvailableException extends ZigBeeException {
 
+	/** generated */
+	private static final long	serialVersionUID	= 2126510157932978734L;
+
+	/**
+	 * @param errordesc
+	 */
 	public ZigBeeNoDescriptionAvailableException(String errordesc) {
-		// TODO Auto-generated constructor stub
 		super(errordesc);
 	}
 

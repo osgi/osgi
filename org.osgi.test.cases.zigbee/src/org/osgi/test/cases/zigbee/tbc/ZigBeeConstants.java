@@ -1,10 +1,10 @@
-
 package org.osgi.test.cases.zigbee.tbc;
 
 /**
  * Define ZigBee Constants used in the testcases.
  */
 public final class ZigBeeConstants {
+
 	/** Node ieee address */
 	public static final String	NODE_IEEE_ADDRESS						= "6628417766";
 	/**  */

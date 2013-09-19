@@ -1,5 +1,7 @@
+
 package org.osgi.impl.service.zigbee.basedriver;
 
+import java.util.HashMap;
 import java.util.Map;
 import org.osgi.service.zigbee.ZigBeeAttribute;
 import org.osgi.service.zigbee.ZigBeeException;
@@ -30,10 +32,11 @@ public class ZigBeeAttributeImpl implements ZigBeeAttribute {
 	}
 
 	/**
+	 * FOR TESTCASES ONLY!
+	 * 
 	 * @return the attribute value.
-	 * @throws ZigBeeException
 	 */
-	public Object getValue() throws ZigBeeException {
+	public Object getValue() {
 		return value;
 	}
 
@@ -46,15 +49,20 @@ public class ZigBeeAttributeImpl implements ZigBeeAttribute {
 	}
 
 	public void getValue(ZigBeeHandler handler) {
+		// TODO: AAA: Auto-generated method stub
 		Map response = null;
-		// response = new HashMap();
-		// response.put(id, value);
+		response = new HashMap();
+		response.put(id, value);
 		handler.onSuccess(response);
 	}
 
 	public void getValue(ZigBeeDataTypeDescription outputType,
 			ZigBeeHandler handler) throws ZigBeeException {
 		// TODO: AAA: Auto-generated method stub
+		Map response = null;
+		response = new HashMap();
+		response.put(id, value);
+		handler.onSuccess(response);
 	}
 
 	public void setValue(Object value, ZigBeeHandler handler)
