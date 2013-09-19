@@ -225,6 +225,30 @@ public class Version implements Comparable<Version> {
 			return emptyVersion;
 		}
 
+		return valueOf(version);
+	}
+
+	/**
+	 * Returns a {@code Version} object holding the version identifier in the
+	 * specified {@code String}.
+	 * 
+	 * <p>
+	 * See {@link #Version(String)} for the format of the version string.
+	 * 
+	 * <p>
+	 * This method performs a similar function as {@link #parseVersion(String)}
+	 * but uses the static factory {@code valueOf(String)} method signature.
+	 * 
+	 * @param version String representation of the version identifier. Leading
+	 *        and trailing whitespace will be ignored. Must not be {@code null}.
+	 * @return A {@code Version} object representing the version identifier. If
+	 *         {@code version} is the empty string then {@link #emptyVersion}
+	 *         will be returned.
+	 * @throws IllegalArgumentException If {@code version} is improperly
+	 *         formatted.
+	 * @since 1.8
+	 */
+	public static Version valueOf(String version) {
 		version = version.trim();
 		if (version.length() == 0) {
 			return emptyVersion;

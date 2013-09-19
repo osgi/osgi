@@ -17,9 +17,7 @@ package org.osgi.test.cases.framework.junit.version;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import junit.framework.TestCase;
-
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.Version;
@@ -46,6 +44,13 @@ public class VersionRangeTests extends TestCase {
 		new VersionRange(" ( 1.2.3 , 2.0.0 ] ");
 		new VersionRange("1.2.3");
 		new VersionRange(" 1.2.3 ");
+		VersionRange.valueOf("[1,2)");
+		VersionRange.valueOf("[1.2.3,2.0.0)");
+		VersionRange.valueOf("(1.2.3,2.0.0]");
+		VersionRange.valueOf(" [ 1.2.3 , 2.0.0 ) ");
+		VersionRange.valueOf(" ( 1.2.3 , 2.0.0 ] ");
+		VersionRange.valueOf("1.2.3");
+		VersionRange.valueOf(" 1.2.3 ");
 	}
 
 	public void testConstructorsBadArguments() {
@@ -78,159 +83,47 @@ public class VersionRangeTests extends TestCase {
 		try {
 			new VersionRange(null);
 			fail("VersionRange created with illegal arguments");
-		}
-		catch (RuntimeException ex) {
+		} catch (RuntimeException ex) {
 			// This is an expected exception and may be ignored
 		}
+		try {
+			VersionRange.valueOf(null);
+			fail("VersionRange created with illegal arguments");
+		} catch (RuntimeException ex) {
+			// This is an expected exception and may be ignored
+		}
+		testConstructorsBadArguments("");
+		testConstructorsBadArguments("x");
+		testConstructorsBadArguments(" 1.2.3 x");
+		testConstructorsBadArguments(" 1.2.3 [");
+		testConstructorsBadArguments(" 1.2.3 ( ");
+		testConstructorsBadArguments(" x 1.2.3 ");
+		testConstructorsBadArguments("[");
+		testConstructorsBadArguments("(1");
+		testConstructorsBadArguments("[1,");
+		testConstructorsBadArguments("[1,2");
+		testConstructorsBadArguments("[1,2x");
+		testConstructorsBadArguments("	[1,2)	x");
+		testConstructorsBadArguments("x	[1,2)");
+		testConstructorsBadArguments("	[1,2)	)");
+		testConstructorsBadArguments("	[1,,2)	");
+		testConstructorsBadArguments("	[1,2))	");
+		testConstructorsBadArguments("[[1,2)");
+		testConstructorsBadArguments("	[,2)	");
+		testConstructorsBadArguments("[2)");
+	}
 
+	private void testConstructorsBadArguments(String arg) {
 		try {
-			new VersionRange("");
+			new VersionRange(arg);
 			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("x");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange(" 1.2.3 x");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange(" 1.2.3 [");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange(" 1.2.3 ( ");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange(" x 1.2.3 ");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("[");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("(1");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("[1,");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("[1,2");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("[1,2x");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("	[1,2)	x");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("x	[1,2)");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("	[1,2)	)");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("	[1,,2)	");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("	[1,2))	");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("[[1,2)");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("	[,2)	");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
+		} catch (IllegalArgumentException ex) {
 			// This is an expected exception and may be ignored
 		}
 		try {
-			new VersionRange("[2)");
+			VersionRange.valueOf(arg);
 			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
+		} catch (IllegalArgumentException ex) {
 			// This is an expected exception and may be ignored
 		}
 

@@ -123,7 +123,7 @@ public class VersionRange {
 	 * 
 	 * @param range String representation of the version range. The versions in
 	 *        the range must contain no whitespace. Other whitespace in the
-	 *        range string is ignored.
+	 *        range string is ignored. Must not be {@code null}.
 	 * @throws IllegalArgumentException If {@code range} is improperly
 	 *         formatted.
 	 */
@@ -191,7 +191,7 @@ public class VersionRange {
 	 */
 	private static Version parseVersion(String version, String range) {
 		try {
-			return Version.parseVersion(version);
+			return Version.valueOf(version);
 		} catch (IllegalArgumentException e) {
 			IllegalArgumentException iae = new IllegalArgumentException("invalid range \"" + range + "\": " + e.getMessage());
 			iae.initCause(e);
@@ -519,5 +519,25 @@ public class VersionRange {
 		}
 
 		return result.toString();
+	}
+
+	/**
+	 * Returns a {@code VersionRange} object holding the version range in the
+	 * specified {@code String}.
+	 * 
+	 * <p>
+	 * See {@link #VersionRange(String)} for the format of the version range
+	 * string.
+	 * 
+	 * @param range String representation of the version range. The versions in
+	 *        the range must contain no whitespace. Other whitespace in the
+	 *        range string is ignored. Must not be {@code null}.
+	 * @return A {@code VersionRange} object representing the version range.
+	 * @throws IllegalArgumentException If {@code range} is improperly
+	 *         formatted.
+	 * @since 1.8
+	 */
+	public static VersionRange valueOf(String range) {
+		return new VersionRange(range);
 	}
 }
