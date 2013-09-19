@@ -16,7 +16,6 @@
 
 package org.osgi.service.zigbee;
 
-
 /**
  * This interface represents the machine that hosts the code to run a ZigBee
  * device or client ZigBeeHost must be registered as a service
@@ -24,26 +23,39 @@ package org.osgi.service.zigbee;
  * @version 1.0
  */
 public interface ZigBeeHost extends ZigBeeNode {
+
 	/**
 	 * Starts the host
+	 * 
+	 * @throws ZigBeeException
 	 */
 	public void start() throws ZigBeeException;
+
+	/**
+	 * Stops the host
+	 * 
+	 * @throws ZigBeeException
+	 */
+	public void stop() throws ZigBeeException;
 
 	/**
 	 * Indicates if a ZigBee device can join the network.
 	 * 
 	 * @param duration The time during which associations are permitted.
 	 * @return true, false, or null(if the ZigBeeHost is an end device)
+	 * @throws ZigBeeException
 	 */
 	public void permitJoin(short duration) throws ZigBeeException;
 
 	/**
 	 * Sets the host logical node type. The logical type will then be available
 	 * when the host will restart. ZigBee defines three different types of node,
-	 * coordinator({@link ZigBeeNode.COORDINATOR}), router(
-	 * {@link ZigBeeNode.ROUTER}) and end device({@link ZigBeeNode.END_DEVICE})
+	 * coordinator({@link org.osgi.service.zigbee.ZigBeeNode -> COORDINATOR}),
+	 * router( {@link org.osgi.service.zigbee.ZigBeeNode ROUTER}) and end
+	 * device( {@link org.osgi.service.zigbee.ZigBeeNode -> END_DEVICE})
 	 * 
 	 * @param logicalNodeType The logical node type.
+	 * @throws ZigBeeException
 	 */
 	public void setLogicalType(short logicalNodeType) throws ZigBeeException;
 
@@ -51,6 +63,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * Gets the current network channel
 	 * 
 	 * @return The current network channel
+	 * @throws ZigBeeException
 	 */
 	public int getChannel() throws ZigBeeException;
 
@@ -60,6 +73,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * 
 	 * @param handler The handler that manages the command response.
 	 * @param channel The network channel.
+	 * @throws ZigBeeException
 	 */
 	public void setChannel(ZigBeeHandler handler, byte channel) throws ZigBeeException;
 
@@ -67,6 +81,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * Gets the current network channel mask
 	 * 
 	 * @return The current network channel mask
+	 * @throws ZigBeeException
 	 */
 	public int getChannelMask() throws ZigBeeException;
 
@@ -75,6 +90,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * 
 	 * @param handler The handler that manages the command response.
 	 * @param mask A value representing the channel mask.
+	 * @throws ZigBeeException
 	 */
 	public void setChannelMask(ZigBeeHandler handler, int mask) throws ZigBeeException;
 
@@ -82,6 +98,8 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * Updates the list of devices in the network, by adding the new devices
 	 * that joined the network and removing the devices that left the network
 	 * since the last refresh.
+	 * 
+	 * @throws ZigBeeException
 	 */
 	public void refreshNetwork() throws ZigBeeException;
 
@@ -89,6 +107,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * Gets the network security level
 	 * 
 	 * @return 0 if security is disabled, an int code if enabled
+	 * @throws ZigBeeException
 	 */
 	public int getSecurityLevel() throws ZigBeeException;
 
@@ -96,6 +115,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * Gets the current network key
 	 * 
 	 * @return The current Network key.
+	 * @throws ZigBeeException
 	 */
 	public String getNetworkKey() throws ZigBeeException;
 }

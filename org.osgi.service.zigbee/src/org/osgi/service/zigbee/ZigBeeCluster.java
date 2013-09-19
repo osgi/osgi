@@ -49,10 +49,10 @@ public interface ZigBeeCluster {
 	public int getId();
 
 	/**
-	 * @param id an Attribute identifier
+	 * @param attributeId an Attribute identifier
 	 * @return the cluster attribute identified by id
 	 */
-	public ZigBeeAttribute getAttribute(int id);
+	public ZigBeeAttribute getAttribute(int attributeId);
 
 	/**
 	 * @return an array of all the attributes of the cluster.
@@ -60,10 +60,10 @@ public interface ZigBeeCluster {
 	public ZigBeeAttribute[] getAttributes();
 
 	/**
-	 * @param id command identifier
+	 * @param commandId command identifier
 	 * @return the command identified by id
 	 */
-	public ZigBeeCommand getCommand(int id);
+	public ZigBeeCommand getCommand(int commandId);
 
 	/**
 	 * @return an array of all the commands of the cluster
@@ -96,10 +96,10 @@ public interface ZigBeeCluster {
 	 * Write a list of attributes
 	 * 
 	 * @param undivided The write command is undivided or not
-	 * @param attributes An array of attributes records
+	 * @param attributesRecords An array of attributes records
 	 * @param handler The response handler
 	 */
-	public void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributes, ZigBeeHandler handler);
+	public void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributesRecords, ZigBeeHandler handler);
 
 	/**
 	 * Write a list of attributes
@@ -108,6 +108,7 @@ public interface ZigBeeCluster {
 	 * @param attributesIds An array of attributes ids
 	 * @param values A byte array representing attributes values
 	 * @param handler The response handler
+	 * @throws ZigBeeNoDescriptionAvailableException
 	 */
 	public void writeAttributes(boolean undivided, int[] attributesIds, byte[] values, ZigBeeHandler handler) throws ZigBeeNoDescriptionAvailableException;
 

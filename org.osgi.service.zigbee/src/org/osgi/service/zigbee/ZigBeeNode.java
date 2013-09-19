@@ -34,6 +34,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeeUserDescriptor;
  * @version 1.0
  */
 public interface ZigBeeNode {
+
 	/**
 	 * Property key for the mandatory node IEEE Address representing node MAC
 	 * address. MAC Address is a 12-digit(48-bit) or 16-digit(64-bit)
@@ -202,19 +203,54 @@ public interface ZigBeeNode {
 	public Long getExtendedPanId();
 
 	/**
-	 * @param id The endpoint identifier to be retrieved.
-	 * @return The endpoint associated with id.
-	 */
-	public ZigBeeEndpoint getEndpoint(short id);
-
-	/**
 	 * @return an array of all the endpoints associated with the ZigBee device
 	 *         node.
 	 */
 	public ZigBeeEndpoint[] getEndpoints();
 
 	/**
-	 * Requests the device to leave the network.
+	 * @param id The endpoint identifier to be retrieved.
+	 * @return The endpoint associated with id.
+	 */
+	public ZigBeeEndpoint getEndpoint(short id);
+
+	/**
+	 * @return the node descriptor.
+	 * @throws ZigBeeException
+	 */
+	public ZigBeeNodeDescriptor getNodeDescriptor() throws ZigBeeException;
+
+	/**
+	 * @return the node power descriptor.
+	 * @throws ZigBeeException
+	 */
+	public ZigBeePowerDescriptor getPowerDescriptor() throws ZigBeeException;
+
+	/**
+	 * @return the node complex descriptor. Can be null if complex descriptor is
+	 *         not provided.
+	 * @throws ZigBeeException
+	 */
+	public ZigBeeComplexDescriptor getComplexDescriptor() throws ZigBeeException;
+
+	/**
+	 * @return the node user descriptor. Can be null if user descriptor is not
+	 *         provided.
+	 * @throws ZigBeeException
+	 */
+	public ZigBeeUserDescriptor getUserDescriptor() throws ZigBeeException;
+
+	/**
+	 * Request to leave the network.
+	 * 
+	 * @param handler
+	 * @throws ZigBeeException
+	 */
+	public void leave(ZigBeeHandler handler) throws ZigBeeException;
+
+	/**
+	 * Requests the device to leave the network. The ZigBeeHandler onSuccess
+	 * method is called if and only if the ZigBeeDeviceNode has been removed.
 	 * 
 	 * @param rejoin This field has a value of 1 if the device being asked to
 	 *        leave from the current parent is requested to rejoin the network.
@@ -223,35 +259,8 @@ public interface ZigBeeNode {
 	 *        asked to leave the network is also being asked to remove its child
 	 *        devices, if any. Otherwise, it has a value of 0.
 	 * @param handler The handler
-	 * @return true if and only if the ZigBeeDeviceNode has been removed
+	 * @throws ZigBeeException
 	 */
 	public void leave(boolean rejoin, boolean removeChildren, ZigBeeHandler handler) throws ZigBeeException;
-
-	/**
-	 * Request to leave the network.
-	 */
-	public void leave(ZigBeeHandler handler) throws ZigBeeException;
-
-	/**
-	 * @return the node descriptor.
-	 */
-	public ZigBeeNodeDescriptor getNodeDescriptor() throws ZigBeeException;
-
-	/**
-	 * @return the node power descriptor.
-	 */
-	public ZigBeePowerDescriptor getPowerDescriptor() throws ZigBeeException;
-
-	/**
-	 * @return the node complex descriptor. Can be null if complex descriptor is
-	 *         not provided.
-	 */
-	public ZigBeeComplexDescriptor getComplexDescriptor() throws ZigBeeException;
-
-	/**
-	 * @return the node user descriptor. Can be null if user descriptor is not
-	 *         provided.
-	 */
-	public ZigBeeUserDescriptor getUserDescriptor() throws ZigBeeException;
 
 }

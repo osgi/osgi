@@ -103,16 +103,16 @@ public interface ZigBeeEndpoint {
 	public Long getNodeAddress();
 
 	/**
-	 * @param id The server(input) cluster identifier
-	 * @return the server(input) cluster identified by id
+	 * @return If exists, the device description implemented by this endpoint -
+	 *         otherwise returns null.
 	 */
-	public ZigBeeCluster getServerCluster(int id);
+	public ZigBeeDeviceDescription getDeviceDescription();
 
 	/**
-	 * @param id The client(output) cluster identifier
-	 * @return the client(output) cluster identified by id
+	 * @return the node simple descriptor.
+	 * @throws ZigBeeException
 	 */
-	public ZigBeeCluster getClientCluster(int id);
+	public ZigBeeSimpleDescriptor getSimpleDescriptor() throws ZigBeeException;
 
 	/**
 	 * @return An array of servers(inputs) clusters, returns an empty array if
@@ -121,10 +121,22 @@ public interface ZigBeeEndpoint {
 	public ZigBeeCluster[] getServerClusters();
 
 	/**
+	 * @param serverClusterId The server(input) cluster identifier
+	 * @return the server(input) cluster identified by id
+	 */
+	public ZigBeeCluster getServerCluster(int serverClusterId);
+
+	/**
 	 * @return An array of clients(outputs) clusters, returns an empty array if
 	 *         does not provides any clients clusters.
 	 */
 	public ZigBeeCluster[] getClientClusters();
+
+	/**
+	 * @param clientClusterId The client(output) cluster identifier
+	 * @return the client(output) cluster identified by id
+	 */
+	public ZigBeeCluster getClientCluster(int clientClusterId);
 
 	/**
 	 * This method modify the <i>Binding Table</i> of physical device by adding
@@ -159,18 +171,8 @@ public interface ZigBeeEndpoint {
 	 * This method is used to get details about problems when an error occurs
 	 * during exporting an endpoint
 	 * 
-	 * @param zbe A device {@link ZigBeeException} the occurred exception
+	 * @param e A device {@link ZigBeeException} the occurred exception
 	 */
-	public void notExported(ZigBeeException zbe);
+	public void notExported(ZigBeeException e);
 
-	/**
-	 * @return If exists, the device description implemented by this endpoint -
-	 *         otherwise returns null.
-	 */
-	public ZigBeeDeviceDescription getDeviceDescription();
-
-	/**
-	 * @return the node simple descriptor.
-	 */
-	public ZigBeeSimpleDescriptor getSimpleDescriptor() throws ZigBeeException;
 }

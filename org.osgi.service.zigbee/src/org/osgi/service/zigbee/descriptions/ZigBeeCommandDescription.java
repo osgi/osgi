@@ -17,6 +17,7 @@
 
 package org.osgi.service.zigbee.descriptions;
 
+
 /**
  * This interface represents a ZigBee Cluster description
  * 
@@ -47,4 +48,24 @@ public interface ZigBeeCommandDescription {
 	 * @return an array of command's parameters description
 	 */
 	public ZigBeeParameterDescription[] getParameterDescriptions();
+	
+	/**
+	 * Serialize javaValues to byte[]. This byte[] can them be used in
+	 * org.osgi.service.zigbee.ZigBeeCommand.invoke(byte[] bytes, ZigBeeHandler
+	 * handler) throws ZigBeeException.
+	 * 
+	 * @param javaValues ordered java values
+	 * @return serialized javaValues as a byte[]
+	 */
+	public byte[] serialize(Object[] javaValues);
+
+	/**
+	 * Deserialize byte[] to javaValues. This byte[] is expected to be a result
+	 * of the invocation of org.osgi.service.zigbee.ZigBeeCommand.invoke(byte[]
+	 * bytes, ZigBeeHandler handler) throws ZigBeeException.
+	 * 
+	 * @param bytes ordered javaValues' as a byte[]
+	 * @return deserialized byte[] as javaValues
+	 */
+	public Object[] deserialize(byte[] bytes);
 }
