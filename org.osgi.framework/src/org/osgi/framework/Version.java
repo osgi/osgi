@@ -210,13 +210,13 @@ public class Version implements Comparable<Version> {
 	 * Parses a version identifier from the specified string.
 	 * 
 	 * <p>
-	 * See {@code Version(String)} for the format of the version string.
+	 * See {@link #Version(String)} for the format of the version string.
 	 * 
 	 * @param version String representation of the version identifier. Leading
 	 *        and trailing whitespace will be ignored.
 	 * @return A {@code Version} object representing the version identifier. If
 	 *         {@code version} is {@code null} or the empty string then
-	 *         {@code emptyVersion} will be returned.
+	 *         {@link #emptyVersion} will be returned.
 	 * @throws IllegalArgumentException If {@code version} is improperly
 	 *         formatted.
 	 */
