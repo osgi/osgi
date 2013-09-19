@@ -1,9 +1,12 @@
-
 package org.osgi.impl.service.zigbee.descriptors;
 
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
 
+/**
+ * Mocked impl of ZigBeeComplexDescriptor.
+ */
 public class ZigBeeComplexDescriptorImpl implements ZigBeeComplexDescriptor {
+
 	/**
 	 * @return the language code used for character strings.
 	 */

@@ -1,8 +1,10 @@
-
 package org.osgi.impl.service.zigbee.descriptors;
 
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 
+/**
+ * Mocked impl of ZigBeePowerDescriptor.
+ */
 public class ZigBeePowerDescriptorImpl implements ZigBeePowerDescriptor {
 
 	private short	currentPowerMode;
@@ -10,6 +12,12 @@ public class ZigBeePowerDescriptorImpl implements ZigBeePowerDescriptor {
 	private short	currentPowerSourceLevel;
 	private boolean	isConstantMainsPowerAvailable;
 
+	/**
+	 * @param powerMode
+	 * @param powerSource
+	 * @param powerSourceLevel
+	 * @param isconstant
+	 */
 	public ZigBeePowerDescriptorImpl(short powerMode, short powerSource, short powerSourceLevel, boolean isconstant) {
 		this.currentPowerMode = powerMode;
 		this.currentPowerSource = powerSourceLevel;
@@ -59,4 +67,5 @@ public class ZigBeePowerDescriptorImpl implements ZigBeePowerDescriptor {
 	public boolean isRechargableBatteryAvailable() {
 		return true;
 	}
+
 }

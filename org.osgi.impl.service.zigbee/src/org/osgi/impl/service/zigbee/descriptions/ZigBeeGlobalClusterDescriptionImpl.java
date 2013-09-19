@@ -1,9 +1,11 @@
-
 package org.osgi.impl.service.zigbee.descriptions;
 
 import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeGlobalClusterDescription;
 
+/**
+ * Mocked impl of ZigBeeGlobalClusterDescription.
+ */
 public class ZigBeeGlobalClusterDescriptionImpl implements ZigBeeGlobalClusterDescription {
 
 	private int							id;
@@ -13,6 +15,13 @@ public class ZigBeeGlobalClusterDescriptionImpl implements ZigBeeGlobalClusterDe
 	private ZigBeeClusterDescription	client	= null;
 	private ZigBeeClusterDescription	server	= null;
 
+	/**
+	 * @param id
+	 * @param name
+	 * @param domain
+	 * @param client
+	 * @param server
+	 */
 	public ZigBeeGlobalClusterDescriptionImpl(int id, String name, String domain, ZigBeeClusterDescription client, ZigBeeClusterDescription server) {
 		this.id = id;
 		this.name = name;

@@ -7,10 +7,17 @@ import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.descriptions.ZigBeeCommandDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
+/**
+ * Mocked impl of ZigBeeCommand.
+ */
 public class ZigBeeCommandImpl implements ZigBeeCommand {
+
 	private int							id;
 	private ZigBeeCommandDescription	description;
 
+	/**
+	 * @param description
+	 */
 	public ZigBeeCommandImpl(ZigBeeCommandDescription description) {
 		id = description.getId();
 		this.description = description;
@@ -22,21 +29,6 @@ public class ZigBeeCommandImpl implements ZigBeeCommand {
 
 	public ZigBeeCommandDescription getDescription() {
 		return description;
-	}
-
-	public void invoke(byte[] bytes, ZigBeeHandler handler)
-			throws ZigBeeException {
-		// TODO Auto-generated method stub
-	}
-
-	public void invoke(Object[] values, ZigBeeDataTypeDescription[] inputTypes,
-			ZigBeeDataTypeDescription[] outputTypes, ZigBeeHandler handler)
-			throws ZigBeeException {
-		// TODO Auto-generated method stub
-		// log.info("command " +name+" invoked...");
-		for (int i = 0; i < values.length; i++) {
-			// log.info(values[i]+" : "+inputTypes[i]);
-		}
 	}
 
 	public ZigBeeDataTypeDescription[] getInputParametersTypes() {
@@ -56,6 +48,22 @@ public class ZigBeeCommandImpl implements ZigBeeCommand {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public void invoke(byte[] bytes, ZigBeeHandler handler)
+			throws ZigBeeException {
+		// TODO Auto-generated method stub
+	}
+
+	// public void invoke(Object[] values, ZigBeeDataTypeDescription[]
+	// inputTypes,
+	// ZigBeeDataTypeDescription[] outputTypes, ZigBeeHandler handler)
+	// throws ZigBeeException {
+	// // TODO Auto-generated method stub
+	// // log.info("command " +name+" invoked...");
+	// for (int i = 0; i < values.length; i++) {
+	// // log.info(values[i]+" : "+inputTypes[i]);
+	// }
+	// }
 
 	public String toString() {
 		return description.getName();

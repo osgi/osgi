@@ -1,4 +1,3 @@
-
 package org.osgi.impl.service.zigbee.basedriver;
 
 import org.osgi.service.zigbee.ZigBeeEndpoint;
@@ -6,11 +5,23 @@ import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.ZigBeeHost;
 
+/**
+ * Mocked impl of ZigBeeNodeImpl -> ZigBeeHost -> ZigBeeNode.
+ */
 public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
 	private int	channel;
 	private int	securityLevel;
 
+	/**
+	 * @param panId
+	 * @param channel
+	 * @param baud
+	 * @param securityLevel
+	 * @param IEEEAddress
+	 * @param nwkAddress
+	 * @param endpoints
+	 */
 	public ZigBeeHostImpl(int panId, int channel, int baud, int securityLevel, Long IEEEAddress, short nwkAddress, ZigBeeEndpoint[] endpoints) {
 		super(IEEEAddress, nwkAddress, endpoints);
 		this.channel = channel;
@@ -23,6 +34,10 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	}
 
 	public void start() throws ZigBeeException {
+		// TODO Auto-generated method stub
+	}
+
+	public void stop() throws ZigBeeException {
 		// TODO Auto-generated method stub
 	}
 

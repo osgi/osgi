@@ -1,25 +1,30 @@
-
 package org.osgi.impl.service.zigbee.descriptions;
 
 import org.osgi.service.zigbee.descriptions.ZigBeeAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
+/**
+ * Mocked impl of ZigBeeAttributeDescription.
+ */
 public class ZigBeeAttributeDescriptionImpl implements ZigBeeAttributeDescription {
 
 	private int							id;
-
 	private short						accessType;
-
 	private Object						defaultValue;
-
 	private String						name;
-
 	private boolean						isMandatory;
-
 	private boolean						isReportable;
-
 	private ZigBeeDataTypeDescription	datatype;
 
+	/**
+	 * @param id
+	 * @param accessType
+	 * @param defaultvalue
+	 * @param name
+	 * @param isMandatory
+	 * @param isReportable
+	 * @param datatype
+	 */
 	public ZigBeeAttributeDescriptionImpl(int id, short accessType, Object defaultvalue, String name,
 			boolean isMandatory, boolean isReportable, ZigBeeDataTypeDescription datatype) {
 		// TODO Auto-generated constructor stub

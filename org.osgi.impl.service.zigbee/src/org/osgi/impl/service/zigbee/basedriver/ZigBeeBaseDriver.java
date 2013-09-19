@@ -1,8 +1,6 @@
-
 package org.osgi.impl.service.zigbee.basedriver;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.zigbee.descriptions.ZigBeeAttributeDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptions.ZigBeeClusterDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptions.ZigBeeCommandDescriptionImpl;
@@ -28,6 +26,9 @@ import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 
+/**
+ * Mocked impl of ZigBeeDeviceNodeListener.
+ */
 public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 
 	private BundleContext					context;
@@ -49,17 +50,24 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 	private ZigBeeParameterDescription[]	param;
 	private ZigBeeDataTypeDescription[]		attributesType;
 	private ZigBeeCommand[]					commandsServer;
-	private ServiceRegistration				registration_1;
-	private ServiceRegistration				registration_2;
 
-	// This constructor creates the ZigBeeBaseDriver object based on the
-	// controller and the BundleContext object.
+	// private ServiceRegistration registration_1;
+	// private ServiceRegistration registration_2;
+
+	/**
+	 * This constructor creates the ZigBeeBaseDriver object based on the
+	 * controller and the BundleContext object.
+	 * 
+	 * @param bc
+	 */
 	public ZigBeeBaseDriver(BundleContext bc) {
 		this.context = bc;
 	}
 
-	// This method starts the base driver. And registers with controller for
-	// getting notifications.
+	/**
+	 * This method starts the base driver. And registers with controller for
+	 * getting notifications.
+	 */
 	public void start() {
 
 		// types
@@ -84,7 +92,7 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		attributesDescription[5] = new ZigBeeAttributeDescriptionImpl(0x0005, ZigBeeAttributeDescription.READ_AND_WRITE_ACCESS, "", "ModelIdentifier", false, false, attributesType[1]);
 		attributesDescription[6] = new ZigBeeAttributeDescriptionImpl(0x0006, ZigBeeAttributeDescription.READ_AND_WRITE_ACCESS, "", "DateCode", false, false, attributesType[1]);
 		attributesDescription[7] = new ZigBeeAttributeDescriptionImpl(0x0007, ZigBeeAttributeDescription.READ_AND_WRITE_ACCESS, "", "PowerSource", false, false, attributesType[2]);
-		attributesDescription[8] = new ZigBeeAttributeDescriptionImpl(0x0007, ZigBeeAttributeDescription.READ_AND_WRITE_ACCESS, new Boolean(true), "DeviceEnabled", true, true, attributesType[3]);
+		attributesDescription[8] = new ZigBeeAttributeDescriptionImpl(0x0008, ZigBeeAttributeDescription.READ_AND_WRITE_ACCESS, new Boolean(true), "DeviceEnabled", true, true, attributesType[3]);
 
 		// a server endpoint example
 		attributesServer = new ZigBeeAttribute[9];
@@ -129,27 +137,31 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		ZigBeeEndpoint[] endpointsNode1 = new ZigBeeEndpoint[1];
 		endpointsNode1[0] = endpoint1;
 		node1 = new ZigBeeNodeImpl(Long.valueOf("812345689"), (short) 12345, endpointsNode1);
-		registration_1 = context.registerService(ZigBeeNode.class.getName(),
+		// registration_1 =
+		context.registerService(ZigBeeNode.class.getName(),
 				node1, null);
 
 		ZigBeeEndpoint[] endpointsNode2 = new ZigBeeEndpoint[1];
 		endpointsNode2[0] = endpoint2;
 		node2 = new ZigBeeNodeImpl(Long.valueOf("6628417766"), (short) 88507, endpointsNode2, nodeDesc, powerDesc);
-		registration_2 = context.registerService(ZigBeeNode.class.getName(),
+		// registration_2 =
+		context.registerService(ZigBeeNode.class.getName(),
 				node2, null);
 	}
 
-	// This method stops the base driver. And unregisters with controller for
-	// getting notifications.
+	/**
+	 * This method stops the base driver. And unregisters with controller for
+	 * getting notifications.
+	 */
 	public void stop() {
-
+		// TODO: AAA: Auto-generated method stub
 	}
 
 	synchronized public void addDevice(String uuid) {
-
+		// TODO: AAA: Auto-generated method stub
 	}
 
 	synchronized public void removeDevice(String uuid) {
-
+		// TODO: AAA: Auto-generated method stub
 	}
 }

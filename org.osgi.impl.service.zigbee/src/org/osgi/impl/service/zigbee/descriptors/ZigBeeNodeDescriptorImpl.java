@@ -1,8 +1,10 @@
-
 package org.osgi.impl.service.zigbee.descriptors;
 
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 
+/**
+ * Mocked impl of ZigBeeNodeDescriptor.
+ */
 public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 
 	private short	logicalType;
@@ -12,6 +14,14 @@ public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 	private boolean	isComplexDescriptorAvailable;
 	private boolean	isUserDescriptorAvailable;
 
+	/**
+	 * @param type
+	 * @param band
+	 * @param manufCode
+	 * @param maxBufSize
+	 * @param isComplexAv
+	 * @param isUserAv
+	 */
 	public ZigBeeNodeDescriptorImpl(short type, short band, int manufCode, int maxBufSize, boolean isComplexAv, boolean isUserAv) {
 		this.logicalType = type;
 		this.frequencyBand = band;

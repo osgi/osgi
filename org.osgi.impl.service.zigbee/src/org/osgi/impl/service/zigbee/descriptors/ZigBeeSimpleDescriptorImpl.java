@@ -1,14 +1,21 @@
-
 package org.osgi.impl.service.zigbee.descriptors;
 
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 
+/**
+ * Mocked impl of ZigBeeSimpleDescriptor.
+ */
 public class ZigBeeSimpleDescriptorImpl implements ZigBeeSimpleDescriptor {
 
 	private int		deviceId;
 	private byte	version;
 	private int		profileId;
 
+	/**
+	 * @param deviceId
+	 * @param version
+	 * @param profileId
+	 */
 	public ZigBeeSimpleDescriptorImpl(int deviceId, byte version, int profileId) {
 		// TODO Auto-generated constructor stub
 		this.deviceId = deviceId;
