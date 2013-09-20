@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="138"
+         revision="$Id$"
+         version="5" xml:id="service.cdi"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>CDI Service Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.cdi-version"
+    linkend="org.osgi.service.cdi"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>...The introduction goes here...</para>
+    
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Essential</emphasis> - Short definition.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Entity</emphasis> - Short definition.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Synopsis</title>
+
+      <para>...The synopsis goes here...</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Domain A</title>
+
+    <para>This is body text.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Bulleted</para>
+      </listitem>
+
+      <listitem>
+        <para>Bulleted</para>
+      </listitem>
+      
+      <listitem>
+        <para>Bulleted</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Numbered lists:</para>
+
+    <orderedlist>
+      <listitem>
+        <para>Numbered</para>
+      </listitem>
+      
+      <listitem>
+        <para>Numbered</para>
+      </listitem>
+      
+      <listitem>
+        <para>Numbered</para>
+      </listitem>
+    </orderedlist> 
+
+    <para>An <emphasis>emphasized</emphasis> term.</para>
+
+    <para>The following is a Program Listing style:</para>
+
+    <programlisting>Some s = (Some) context.getService(ref);</programlisting>
+
+    <para>A remark:</para>
+
+    <para>
+      <remark>This is a discussion remark</remark>
+    </para>
+
+    <section>
+      <title>Subsection</title>
+      <section>
+        <title>Sub-subsection</title>
+      </section>
+    </section>
+  </section>
+  
+  <section>
+    <title>Domain B</title>
+  </section>
+  
+  <section>
+    <title>Domain C</title>
+  </section>
+  
+  <section>
+    <title>Life Cycle</title>
+  </section>
+  
+  <section>
+    <title>Error Handling</title>
+  </section>
+  
+  <section>
+    <title>Events</title>
+    
+    <section>
+      <title>Domain Events</title>
+    </section>
+
+    <section>
+      <title>Event Admin Mapping</title>
+    </section>
+  </section>
+  
+  <section>
+    <title>Class Loading</title>
+  </section>
+  
+  <section>
+    <title>Data Transfer Objects</title>
+  </section>
+  
+  <section>
+    <title>XML Schema</title>
+
+    <para>A wide code example (for use with XML Schema). Note that the XML schema is typically included 
+        through <code>xi:include</code> tags rather than embedded directly.</para>
+
+    <programlisting role="pgwide">&lt;?xml version="1.0"?&gt;
+&lt;!-- XML Schema --&gt;
+&lt;top&gt; ... &lt;/top&gt;</programlisting>
+
+  </section>
+
+  <section>
+    <title>Security</title>
+  </section>
+  
+  <!-- Include javadoc here, once available
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cdi.xml"/>
+  -->
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed><title>Framework Module Layer</title>OSGi
+      Core, Chapter 3 Module Layer</bibliomixed>
+
+      <bibliomixed><title>XML Schema Part 2: Data types
+      Second Edition</title>http://www.w3.org/TR/xmlschema-2/</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>
