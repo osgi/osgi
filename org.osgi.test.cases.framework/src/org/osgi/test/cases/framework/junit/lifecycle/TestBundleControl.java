@@ -174,7 +174,7 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 			Version version = tb.getVersion();
 
 			URL url = getContext().getBundle().getEntry("lifecycle.tb6b.jar");
-			assertNotNull("lifecycle.tb4.jar is null", url);
+			assertNotNull("lifecycle.tb6b.jar is null", url);
 			InputStream in = url.openStream();
 
 			// Read 500 bytes of the file
