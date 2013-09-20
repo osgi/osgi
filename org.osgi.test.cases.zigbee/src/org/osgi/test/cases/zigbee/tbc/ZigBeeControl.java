@@ -476,6 +476,44 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			fail("No exception is expected.");
 		}
 
+		try {
+			Object value = new Object();
+			ZigBeeHandlerImpl handler = new ZigBeeHandlerImpl();
+			attribute.setValue(value, handler);
+
+			isSuccess = handler.isSuccess();
+			if (isSuccess == null) {
+				fail("isSuccess is expected not to be null.");
+			} else
+				if (isSuccess) {
+					log("handler.getResponse(): " + handler.getResponse());
+				} else {
+					fail("isSuccess is expected not to be false.");
+				}
+		} catch (ZigBeeException e) {
+			e.printStackTrace();
+			fail("No exception is expected.");
+		}
+
+		try {
+			byte[] value = {};
+			ZigBeeHandlerImpl handler = new ZigBeeHandlerImpl();
+			attribute.setValue(value, handler);
+
+			isSuccess = handler.isSuccess();
+			if (isSuccess == null) {
+				fail("isSuccess is expected not to be null.");
+			} else
+				if (isSuccess) {
+					log("handler.getResponse(): " + handler.getResponse());
+				} else {
+					fail("isSuccess is expected not to be false.");
+				}
+		} catch (ZigBeeException e) {
+			e.printStackTrace();
+			fail("No exception is expected.");
+		}
+
 		// Test "control" methods of ZigBeeCommand.
 
 		// commands

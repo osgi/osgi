@@ -53,10 +53,9 @@ public class ZigBeeCommandImpl implements ZigBeeCommand {
 
 	public void invoke(byte[] bytes, ZigBeeHandler handler)
 			throws ZigBeeException {
-		// TODO: AAA: Auto-generated method stub
 		Map response = null;
 		response = new HashMap();
-		Object mockedValue = null;
+		String mockedValue = ("mockedValue");
 		response.put(id, mockedValue);
 		handler.onSuccess(response);
 	}
@@ -65,7 +64,6 @@ public class ZigBeeCommandImpl implements ZigBeeCommand {
 	// inputTypes,
 	// ZigBeeDataTypeDescription[] outputTypes, ZigBeeHandler handler)
 	// throws ZigBeeException {
-	// // TODO Auto-generated method stub
 	// // log.info("command " +name+" invoked...");
 	// for (int i = 0; i < values.length; i++) {
 	// // log.info(values[i]+" : "+inputTypes[i]);

@@ -49,7 +49,6 @@ public class ZigBeeAttributeImpl implements ZigBeeAttribute {
 	}
 
 	public void getValue(ZigBeeHandler handler) {
-		// TODO: AAA: Auto-generated method stub
 		Map response = null;
 		response = new HashMap();
 		response.put(id, value);
@@ -58,7 +57,6 @@ public class ZigBeeAttributeImpl implements ZigBeeAttribute {
 
 	public void getValue(ZigBeeDataTypeDescription outputType,
 			ZigBeeHandler handler) throws ZigBeeException {
-		// TODO: AAA: Auto-generated method stub
 		Map response = null;
 		response = new HashMap();
 		response.put(id, value);
@@ -67,17 +65,24 @@ public class ZigBeeAttributeImpl implements ZigBeeAttribute {
 
 	public void setValue(Object value, ZigBeeHandler handler)
 			throws ZigBeeException {
-		// TODO: AAA: Auto-generated method stub
+		this.value = value;
+		Map response = null;
+		response = new HashMap();
+		response.put(id, this.value);
+		handler.onSuccess(response);
 	}
 
 	public void setValue(byte[] value, ZigBeeHandler handler)
 			throws ZigBeeException {
-		// TODO: AAA: Auto-generated method stub
+		this.value = value;
+		Map response = null;
+		response = new HashMap();
+		response.put(id, this.value);
+		handler.onSuccess(response);
 	}
 
 	public String toString() {
-		// TODO: AAA: Auto-generated method stub
-		return description.getName();
+		return ZigBeeAttributeImpl.class.getName() + ":[id:" + getId() + ",dataType:" + getDataType() + ",description:" + getDescription() + ",value:" + getValue() + "]";
 	}
 
 }
