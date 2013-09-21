@@ -1,6 +1,5 @@
 package org.osgi.impl.service.enocean.basedriver.impl;
 
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
 import org.osgi.framework.BundleContext;
@@ -22,9 +21,10 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	 * registration within the framework.
 	 * Such a Device should only be registered after a proper teach-in procedure, so that the RORG, FIUNC and TYPE are already known.  
 	 */
-	public EnOceanDeviceImpl(int uid) {
+	public EnOceanDeviceImpl(BundleContext bc, int uid) {
 		props = new Properties();
-		props.put(EnOceanDevice.CHIP_ID, new Integer(uid));
+		props.put(EnOceanDevice.CHIP_ID, String.valueOf(uid));
+		sReg = bc.registerService("org.osgi.service.enocean.EnOceanDevice", this, props);
 	}
 
 	public Properties getServiceProperties() {
@@ -32,11 +32,10 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	}
 
 	public void registerProfile(int rorg, int func, int type, int manuf) {
-		Hashtable props = new Hashtable();
 		props.put(org.osgi.service.enocean.EnOceanDevice.RORG, String.valueOf(rorg));
 		props.put(org.osgi.service.enocean.EnOceanDevice.FUNC, String.valueOf(func));
 		props.put(org.osgi.service.enocean.EnOceanDevice.TYPE, String.valueOf(type));
-		props.put(org.osgi.service.enocean.EnOceanDevice.MANUFACTURER, String.valueOf(type));
+		props.put(org.osgi.service.enocean.EnOceanDevice.MANUFACTURER, String.valueOf(manuf));
 		sReg.setProperties(props);
 	}
 

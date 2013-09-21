@@ -56,7 +56,7 @@ public class MessageA5_02_01 extends MessageType_4BS {
 		return msg;
 	}
 
-	public MessageA5_02_01(float temperature) {
+	public MessageA5_02_01(float temperature) throws IllegalArgumentException {
 		if ((temperature < domainStart) || (temperature > domainStop)) {
 			throw new IllegalArgumentException("incorrect supplied value");
 		}
