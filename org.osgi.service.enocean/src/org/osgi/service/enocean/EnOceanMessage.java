@@ -44,20 +44,6 @@ public interface EnOceanMessage {
 	public final static String DESTINATION_ID = "enocean.profile.destination_id";
 	
 	/**
-	 * Gets the current EnOcean status of the Message.
-	 * 
-	 * @return the current EnOcean status of this message.
-	 */
-	public int getStatus();
-	
-	/**
-	 * Sets the EnOcean status of this message.
-	 * 
-	 * @param status the status to be set.
-	 */
-	public void setStatus(int status);
-	
-	/**
 	 * Serializes the EnOceanMessage into an array of bytes, if possible.
 	 * 
 	 * @return The serialized byte list corresponding to the binary message.
@@ -80,6 +66,17 @@ public interface EnOceanMessage {
 	 * @return The list of associated channels.
 	 */
 	public EnOceanChannel[] getChannels();
+	
+	/**
+	 * Gets the current EnOcean status of the Message. 
+	 * The 'status' byte is actually a bitfield that mainly 
+	 * holds repeater information, teach-in status, and more
+	 * or less information depending on the radiotelegram type. 
+	 * 
+	 * 
+	 * @return the current EnOcean status of this message.
+	 */
+	public int getStatus();
 	
 	/**
 	 * Returns the number of subtelegrams (usually 1) this Message carries.
