@@ -15,6 +15,7 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	private ServiceRegistration	sReg;
 
 	private Properties			props;
+	private EnOceanMessage		lastMessage;
 
 	/**
 	 * An {@link EnOceanDeviceImpl} creation is directly related to its
@@ -25,6 +26,8 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		props = new Properties();
 		props.put(EnOceanDevice.CHIP_ID, String.valueOf(uid));
 		sReg = bc.registerService("org.osgi.service.enocean.EnOceanDevice", this, props);
+		/* Initializations */
+		lastMessage = null;
 	}
 
 	public Properties getServiceProperties() {
@@ -103,8 +106,7 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	}
 
 	public EnOceanMessage getLastMessage() {
-		// TODO Auto-generated method stub
-		return null;
+		return lastMessage;
 	}
 
 	public Map getRPCs() {
@@ -151,6 +153,41 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 
 	public void setManuf(int manuf) {
 		props.put(EnOceanDevice.MANUFACTURER, String.valueOf(manuf));
+	}
+
+	public int getRorg() {
+		return getIntProperty(EnOceanDevice.RORG);
+	}
+
+	public int getFunc() {
+		return getIntProperty(EnOceanDevice.FUNC);
+	}
+
+	public int getType() {
+		return getIntProperty(EnOceanDevice.TYPE);
+	}
+
+	public int getManuf() {
+		return getIntProperty(EnOceanDevice.MANUFACTURER);
+	}
+
+	public void setLastMessage(EnOceanMessage msg) {
+		lastMessage = msg;
+	}
+	
+	/**
+	 * Safe function to get an integer property
+	 * 
+	 * @param key
+	 * @return the int-converted property, or -1
+	 */
+	private int getIntProperty(String key) {
+		try {
+			String s = (String) props.get(key);
+			return Integer.parseInt(s);
+		} catch (Exception e) {
+			return -1;
+		}
 	}
 	
 }
