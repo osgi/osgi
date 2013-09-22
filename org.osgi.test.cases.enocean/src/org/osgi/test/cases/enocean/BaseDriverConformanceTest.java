@@ -5,24 +5,25 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Hashtable;
+import java.util.Map;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.event.Event;
-import org.osgi.service.event.EventHandler;
+import org.osgi.service.event.EventAdmin;
 import org.osgi.test.cases.enocean.esp.EspRadioPacket;
-import org.osgi.test.cases.enocean.radio.Message;
 import org.osgi.test.cases.enocean.radio.MessageA5_02_01;
+import org.osgi.test.cases.enocean.utils.EventListener;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
-import org.osgi.test.cases.enocean.utils.Utils;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 
 	private FileInputStream		inStream;
 	private FileOutputStream	outStream;
-	private ServiceListener		services;
-	private String				lastEvent;
+	private ServiceListener		devices;
+	private String				lastServiceEvent;
+	private EventListener		events;
+	private EventAdmin	eventAdmin;
 
 	protected void setUp() throws Exception {
 		String fakeDriverPath = System.getProperty("org.osgi.service.enocean.host.path");
@@ -33,37 +34,44 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		inStream = new FileInputStream(file);
 		outStream = new FileOutputStream(file);
 
-		/* Tacks device creation */
-		services = new ServiceListener(getContext(), EnOceanDevice.class);
+		/* Tracks device creation */
+		devices = new ServiceListener(getContext(), EnOceanDevice.class);
+
+		/* Tracks device events */
+		String[] topics = new String[] {"org/osgi/service/enocean/EnOceanEvent/*"};
+		events = new EventListener(getContext(), topics, null);
+
+		/* Get a global eventAdmin handle */
+		ServiceReference ref = getContext().getServiceReference(EventAdmin.class.getName());
+		eventAdmin = (EventAdmin) getContext().getService(ref);
+
 	}
 
 	protected void tearDown() throws Exception {
+		devices.close();
 	}
 
-	public void testMessageParsing() throws Exception {
-		Message msg = new MessageA5_02_01(-22.0f);
-		msg.setSenderId(0x12345678);
-		EspRadioPacket pkt = new EspRadioPacket(msg);
-		log("A5-02-01 RADIO msg: " + Utils.bytesToHex(msg.serialize()));
-		log("A5-02-01 ESP packet: " + Utils.bytesToHex(pkt.serialize()));
-	}
-
+	/**
+	 * Tests initial device registration from a raw Radio teach-in packet.
+	 * 
+	 * @throws Exception
+	 */
 	public void testDeviceRegistration() throws Exception {
 		/* Insert a device */
 		MessageA5_02_01 teachIn = MessageA5_02_01.teachIn(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
 		outStream.write(pkt.serialize());
-		
-		lastEvent = services.waitForEvent();
-		assertEquals("First event is not a device addition", ServiceListener.SERVICE_ADDED, lastEvent);
-		lastEvent = services.waitForEvent();
-		assertEquals("Second event is not a device modification", ServiceListener.SERVICE_MODIFIED, lastEvent);
-		
+
+		lastServiceEvent = devices.waitForService();
+		assertEquals("First event is not a device addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
+		lastServiceEvent = devices.waitForService();
+		assertEquals("Second event is not a device modification", ServiceListener.SERVICE_MODIFIED, lastServiceEvent);
+
 		/*
 		 * Verify that the device has been registered with the correct service
 		 * properties
 		 */
-		ServiceReference ref = services.getServiceReference();
+		ServiceReference ref = devices.getServiceReference();
 		assertEquals("CHIP_ID mismatch", Fixtures.HOST_ID, intProp(ref, EnOceanDevice.CHIP_ID));
 		assertEquals("RORG mismatch", Fixtures.RORG, intProp(ref, EnOceanDevice.RORG));
 		assertEquals("FUNC mismatch", Fixtures.FUNC, intProp(ref, EnOceanDevice.FUNC));
@@ -71,21 +79,31 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		assertEquals("MANUFACTURER mismatch", Fixtures.MANUFACTURER, intProp(ref, EnOceanDevice.MANUFACTURER));
 	}
 
+	/**
+	 * Checks that our test suite is able to locally send and receive messages.
+	 * Necessary for the rest of the code.
+	 * 
+	 * @throws Exception
+	 */
+	public void testSelfEventReception() throws Exception {
+		
+		Map properties = new Hashtable();
+		properties.put(Fixtures.SELF_TEST_EVENT_KEY, Fixtures.SELF_TEST_EVENT_VALUE);
+		Event sourceEvent = new Event(Fixtures.SELF_TEST_EVENT_TOPIC, properties);
+		eventAdmin.sendEvent(sourceEvent);
+
+		Event destinationEvent = events.waitForEvent();
+		assertEquals("event name mismatch", Fixtures.SELF_TEST_EVENT_TOPIC, destinationEvent.getTopic());
+		assertEquals("event property mismatch", Fixtures.SELF_TEST_EVENT_VALUE, destinationEvent.getProperty(Fixtures.SELF_TEST_EVENT_KEY));
+	}
+
+	/**
+	 * Test event notification in the context of an actual message passing to
+	 * the Base Driver.
+	 * 
+	 * @throws Exception
+	 */
 	public void testEventNotification() throws Exception {
-
-		EventHandler handler = new EventHandler() {
-			public void handleEvent(Event event) {
-				// TODO Auto-generated method stub
-
-			}
-		};
-		String[] topics = new String[] {"org/osgi/service/enocean/EnOceanEvent/*"};
-		String filter = "(uid=some_uid/*)";
-
-		Hashtable ht = new Hashtable();
-		ht.put(org.osgi.service.event.EventConstants.EVENT_TOPIC, topics);
-		ht.put(org.osgi.service.event.EventConstants.EVENT_FILTER, filter);
-		ServiceRegistration eventReg = getContext().registerService(EventHandler.class.getName(), handler, ht);
 
 		/* Insert a device */
 		MessageA5_02_01 teachIn = MessageA5_02_01.teachIn(Fixtures.HOST_ID, Fixtures.MANUFACTURER);

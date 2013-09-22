@@ -83,8 +83,12 @@ public class ServiceListener extends ServiceTracker {
 		return null;
 	}
 
-	public String waitForEvent() throws InterruptedException {
+	public String waitForService() throws InterruptedException {
 		return waitForEvent(OSGiTestCaseProperties.getTimeout());
+	}
+
+	public void close() {
+		super.close();
 	}
 
 }
