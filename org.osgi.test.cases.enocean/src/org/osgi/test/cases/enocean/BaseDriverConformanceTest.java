@@ -22,6 +22,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 	private FileInputStream		inStream;
 	private FileOutputStream	outStream;
 	private ServiceListener		services;
+	private String				lastEvent;
 
 	protected void setUp() throws Exception {
 		String fakeDriverPath = System.getProperty("org.osgi.service.enocean.host.path");
@@ -53,13 +54,16 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
 		outStream.write(pkt.serialize());
 		
-		services.waitForRegistration();
+		lastEvent = services.waitForEvent();
+		assertEquals("First event is not a device addition", ServiceListener.SERVICE_ADDED, lastEvent);
+		lastEvent = services.waitForEvent();
+		assertEquals("Second event is not a device modification", ServiceListener.SERVICE_MODIFIED, lastEvent);
 		
 		/*
 		 * Verify that the device has been registered with the correct service
 		 * properties
 		 */
-		ServiceReference ref = services.getDeviceReference();
+		ServiceReference ref = services.getServiceReference();
 		assertEquals("CHIP_ID mismatch", Fixtures.HOST_ID, intProp(ref, EnOceanDevice.CHIP_ID));
 		assertEquals("RORG mismatch", Fixtures.RORG, intProp(ref, EnOceanDevice.RORG));
 		assertEquals("FUNC mismatch", Fixtures.FUNC, intProp(ref, EnOceanDevice.FUNC));
