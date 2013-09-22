@@ -11,13 +11,17 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.enocean.basedriver.impl.EnOceanDeviceImpl;
 import org.osgi.impl.service.enocean.basedriver.impl.EnOceanHostImpl;
+import org.osgi.impl.service.enocean.basedriver.impl.EnOceanMessageSetImpl;
+import org.osgi.impl.service.enocean.basedriver.impl.EnOceanMessage_A5_02_01;
 import org.osgi.impl.service.enocean.basedriver.radio.Message;
 import org.osgi.impl.service.enocean.basedriver.radio.Message4BS;
 import org.osgi.impl.service.enocean.utils.EnOceanDriverException;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanDevice;
+import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanHost;
+import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.sets.EnOceanChannelDescriptionSet;
 import org.osgi.service.enocean.sets.EnOceanMessageSet;
 import org.osgi.service.enocean.sets.EnOceanRPCSet;
@@ -36,8 +40,9 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	private ServiceTracker		rpcSetServiceRef;
 	private ServiceTracker		channelDescriptionSetServiceRef;
 	private EnOceanHostImpl		initialHost;
+	private EnOceanMessageSetImpl	internalMessageSet;
 
-	private static final String TAG = "EnOceanBaseDriver";
+	public static final String		TAG	= "EnOceanBaseDriver";
 
 	/**
 	 * The {@link EnOceanBaseDriver} constructor initiates the connection
@@ -53,6 +58,10 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		this.bc = bc;
 		devices = new Hashtable(10);
 		servicerefs = new Hashtable(10);
+
+		/* Init internal messageSet */
+		internalMessageSet = new EnOceanMessageSetImpl();
+		internalMessageSet.putMessageClass(0xA5, 02, 01, EnOceanMessage_A5_02_01.class);
 
 		/* Register initial EnOceanHost */
 		String hostPath = System.getProperty("org.osgi.service.enocean.host.path");
@@ -83,26 +92,38 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	 * This callback gets called every time a message has been correctly parsed
 	 * by one of the hosts.
 	 * 
-	 * @param rawMsg
+	 * @param msg
 	 */
-	public void radioPacketReceived(Message rawMsg) {
-		// System.out.println("basedriver : received '" + rawMsg + "'");
-		switch (rawMsg.getRORG()) {
+	public void radioPacketReceived(Message msg) {
+
+		/* First, determine if teach-in and eventually create a device */
+		switch (msg.getRORG()) {
 			case Message.MESSAGE_4BS :
-				Message4BS msg = new Message4BS(rawMsg) {};
-				if (msg.isTeachin()) {
-					int uid = Utils.bytes2intLE(msg.getSenderId(), 0, 4);
-					EnOceanDeviceImpl device = new EnOceanDeviceImpl(bc, uid);
-					if (msg.hasTeachInInfo()) {
-						device.registerProfile(msg.getRORG(), msg.getFunc(), msg.getType(),
-								msg.getManuf());
-					}
+				Message4BS msg_4BS = new Message4BS(msg) {};
+				if (msg_4BS.isTeachin()) {
+					register4BSDeviceFromTeachIn(msg_4BS);
+					return; // No need to do more processing on the message
 				}
 				break;
 			default :
 				// TODO: implement other message types
 				break;
 		}
+
+		/* Try to associate the message with a device and send to EventAdmin */
+		EnOceanDevice dev = getAssociatedDevice(msg);
+		if (dev != null && dev instanceof EnOceanDeviceImpl) {
+			EnOceanDeviceImpl implDev = (EnOceanDeviceImpl) dev;
+			int rorg = implDev.getRorg();
+			int func = implDev.getFunc();
+			int type = implDev.getType();
+			/* If we have full profile information */
+			if (rorg != -1 && func != -1 && type != -1) {
+				EnOceanMessage eoMsg = radioToEnOceanMessage(msg, rorg, func, type);
+				implDev.setLastMessage(eoMsg);
+			}
+		}
+
 	}
 
 	public Object addingService(ServiceReference ref) {
@@ -162,6 +183,68 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 			System.out.println(e.getMessage());
 		}
 		return sr;
+	}
+
+	/**
+	 * Internal method to retrieve the service reference associated to a
+	 * message's SENDER_ID.
+	 * 
+	 * @param msg
+	 * @return the EnOceanDevice service, or null.
+	 */
+	private EnOceanDevice getAssociatedDevice(Message msg) {
+		int uid = Utils.bytes2intLE(msg.getSenderId(), 0, 4);
+		String strSenderId = String.valueOf(uid);
+		String filter = "(&(objectClass=" + EnOceanDevice.class.getName() + ")(" + EnOceanDevice.CHIP_ID + "=" + strSenderId + "))";
+		ServiceReference[] ref = null;
+		try {
+			ref = bc.getServiceReferences(null, filter);
+		} catch (InvalidSyntaxException e) {
+			Logger.e(TAG, "Invalid syntax in device search : " + e.getMessage());
+		}
+		if (ref != null && ref.length == 1) {
+			return (EnOceanDevice) bc.getService(ref[0]);
+		}
+		return null;
+	}
+
+	/**
+	 * Converts a radio message type (pure driver-specific implementation) into
+	 * a proper specification-based EnOcean Message.
+	 * 
+	 * @param msg the raw input Message.
+	 * @param rorg
+	 * @param func
+	 * @param type
+	 * @return
+	 */
+	private EnOceanMessage radioToEnOceanMessage(Message msg, int rorg, int func, int type) {
+		/* First check in the internal message class table */
+		Class msgClass = internalMessageSet.getMessage(rorg, func, type, -1);
+		if (msgClass != null) {
+			EnOceanMessage oeMsg;
+			try {
+				oeMsg = (EnOceanMessage) msgClass.newInstance();
+				oeMsg.deserialize(msg.getData());
+				return oeMsg;
+			} catch (IllegalAccessException e) {
+				Logger.e(TAG, "Illegal access : " + e.getMessage());
+			} catch (InstantiationException e) {
+				Logger.e(TAG, "Instanciation exception : " + e.getMessage());
+			} catch (EnOceanException e) {
+				Logger.e(TAG, "Deserialization exception : " + e.getMessage());
+			}
+		}
+		return null;
+	}
+
+	private void register4BSDeviceFromTeachIn(Message4BS msg) {
+		int uid = Utils.bytes2intLE(msg.getSenderId(), 0, 4);
+		EnOceanDeviceImpl device = new EnOceanDeviceImpl(bc, uid);
+		if (msg.hasTeachInInfo()) {
+			device.registerProfile(msg.getRORG(), msg.getFunc(), msg.getType(),
+					msg.getManuf());
+		}
 	}
 
 	/* The functions that come below are used to register the necessary services */

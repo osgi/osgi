@@ -63,9 +63,9 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		outStream.write(pkt.serialize());
 
 		lastServiceEvent = devices.waitForService();
-		assertEquals("First event is not a device addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
+		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
 		lastServiceEvent = devices.waitForService();
-		assertEquals("Second event is not a device modification", ServiceListener.SERVICE_MODIFIED, lastServiceEvent);
+		assertEquals("did not have service modifiaction", ServiceListener.SERVICE_MODIFIED, lastServiceEvent);
 
 		/*
 		 * Verify that the device has been registered with the correct service
@@ -110,10 +110,18 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		EspRadioPacket teachInPkt = new EspRadioPacket(teachIn);
 		outStream.write(teachInPkt.serialize());
 
-		/* Insert a message */
+		/* Send a message from that device */
 		MessageA5_02_01 measure = new MessageA5_02_01(-12.0f);
+		measure.setSenderId(Fixtures.HOST_ID);
 		EspRadioPacket measurePkt = new EspRadioPacket(measure);
 		outStream.write(measurePkt.serialize());
+		
+		/* First get a reference towards the device */
+		lastServiceEvent = devices.waitForService();
+		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
+
+		EnOceanDevice dev = getLatestRegisteredDevice();
+		
 
 		/* Wait for message notification */
 		// TODO: send a temperature report and check how the message is passed
@@ -141,7 +149,8 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		return p.intValue();
 	}
 
-	private EnOceanDevice serviceRef2Device(ServiceReference ref) {
+	private EnOceanDevice getLatestRegisteredDevice() {
+		ServiceReference ref = devices.getServiceReference();
 		Object service = getContext().getService(ref);
 		if (service instanceof EnOceanDevice) {
 			return (EnOceanDevice) service;

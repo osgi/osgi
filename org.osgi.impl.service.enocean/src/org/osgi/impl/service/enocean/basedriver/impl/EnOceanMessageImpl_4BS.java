@@ -17,47 +17,23 @@
 
 package org.osgi.impl.service.enocean.basedriver.impl;
 
-import org.osgi.service.enocean.EnOceanMessage;
+import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.channels.EnOceanChannel;
 
-public abstract class EnOceanMessageImpl implements EnOceanMessage {
+public abstract class EnOceanMessageImpl_4BS extends EnOceanMessageImpl {
 
-	private int	status;
-	protected EnOceanChannel[]	channels;
-
-	private int					subTelegramCount	= 0;
-	private int					redundancyInfo		= 0;
-	private int					rssi				= 0;
-	protected int				senderId;
-	protected int				destinationId;
-
-
-	public EnOceanChannel[] getChannels() {
-		return channels;
+	public int getRorg() {
+		return 0xA5;
 	}
 
-	public int getStatus() {
-		return status;
+	public byte[] serialize() throws EnOceanException {
+		byte[] out = new byte[4];
+		for (int i = 0; i < channels.length; i++) {
+			EnOceanChannel c = channels[i];
+			// TODO: Finish the serialization here
+		}
+		return null;
 	}
 
-	public int getSubTelegramCount() {
-		return subTelegramCount;
-	}
-
-	public int getRedundancyInfo() {
-		return redundancyInfo;
-	}
-
-	public int getRSSI() {
-		return rssi;
-	}
-
-	public int getSenderId() {
-		return senderId;
-	}
-
-	public int getDestinationId() {
-		return destinationId;
-	}
 
 }

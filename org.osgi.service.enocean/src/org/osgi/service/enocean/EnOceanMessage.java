@@ -28,20 +28,29 @@ import org.osgi.service.enocean.channels.EnOceanChannel;
 public interface EnOceanMessage {
 	
 	/**
-	 * Property name for the radiotelegram main type.
+	 * @return the message's RORG
 	 */
-	public final static String RORG = "enocean.profile.rorg";
+	public int getRorg();
+	
+	/**
+	 * @return the message's FUNC
+	 */
+	public int getFunc();
+	
+	/**
+	 * @return the message's TYPE
+	 */
+	public int getType();
+		
+	/**
+	 * @return the message's Sender ID
+	 */
+	public int getSenderId();
 
-	
 	/**
-	 * Property name for the sender ID of this message (mandatory)
+	 * @return the message's destination ID, or -1
 	 */
-	public final static String SENDER_ID = "enocean.profile.sender_id";
-	
-	/**
-	 * Property name for the optional destination ID of this message.
-	 */
-	public final static String DESTINATION_ID = "enocean.profile.destination_id";
+	public int getDestinationId();
 	
 	/**
 	 * Serializes the EnOceanMessage into an array of bytes, if possible.
@@ -52,13 +61,11 @@ public interface EnOceanMessage {
 	public byte[] serialize() throws EnOceanException;
 	
 	/**
-	 * Deserializes an array of bytes into an EnOceanMessage, if possible.
+	 * Deserializes an array of bytes into the inner datafields of the Message, if possible.
 	 * 
-	 * @return The deserialized object from a sequence of bytes. The actual return type depends
-	 * 			on the implementation.
 	 * @throws EnOceanException
 	 */
-	public Object deserialize(byte[] bytes) throws EnOceanException;
+	public void deserialize(byte[] bytes) throws EnOceanException, IllegalArgumentException;
 
 	/**
 	 * Get the list of associated channels.

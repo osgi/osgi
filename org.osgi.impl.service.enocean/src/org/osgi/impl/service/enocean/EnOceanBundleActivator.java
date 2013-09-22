@@ -14,7 +14,7 @@ public class EnOceanBundleActivator implements BundleActivator {
 			basedriver = new EnOceanBaseDriver(bc);
 			basedriver.start();
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.out.println("Exception loading basedriver : " + e.getMessage());
 		}
 	}
 
@@ -23,7 +23,7 @@ public class EnOceanBundleActivator implements BundleActivator {
 			basedriver.stop();
 		}
 		catch (Exception e) {
-			System.out.println(e.getMessage());
+			System.out.println("Exception stopping basedriver : " + e.getMessage());
 		}
 	}
 }
