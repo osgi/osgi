@@ -4,8 +4,12 @@ package org.osgi.test.cases.enocean;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.Hashtable;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.enocean.EnOceanDevice;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventHandler;
 import org.osgi.test.cases.enocean.esp.EspRadioPacket;
 import org.osgi.test.cases.enocean.radio.Message;
 import org.osgi.test.cases.enocean.radio.MessageA5_02_01;
@@ -65,6 +69,19 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 
 	public void testEventNotification() throws Exception {
 
+		EventHandler handler = new EventHandler() {
+			public void handleEvent(Event event) {
+				// TODO Auto-generated method stub
+
+			}
+		};
+		String[] topics = new String[] {"org/osgi/service/enocean/EnOceanEvent/*"};
+		String filter = "(uid=some_uid/*)";
+
+		Hashtable ht = new Hashtable();
+		ht.put(org.osgi.service.event.EventConstants.EVENT_TOPIC, topics);
+		ht.put(org.osgi.service.event.EventConstants.EVENT_FILTER, filter);
+		ServiceRegistration eventReg = getContext().registerService(EventHandler.class.getName(), handler, ht);
 
 		/* Insert a device */
 		MessageA5_02_01 teachIn = MessageA5_02_01.teachIn(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
