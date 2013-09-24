@@ -44,18 +44,10 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		/* Get a global eventAdmin handle */
 		ServiceReference ref = getContext().getServiceReference(EventAdmin.class.getName());
 		eventAdmin = (EventAdmin) getContext().getService(ref);
-
 	}
 
 	protected void tearDown() throws Exception {
-		ServiceReference[] references = devices.getServiceReferences();
-		if (references != null) {
-			for (int i = 0; i < references.length; i++) {
-				ServiceReference ref = references[i];
-				getContext().ungetService(ref);
-				devices.remove(ref);
-			}
-		}
+		cleanupServices();
 		devices.close();
 	}
 
@@ -72,8 +64,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 
 		lastServiceEvent = devices.waitForService();
 		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
-		lastServiceEvent = devices.waitForService();
-		assertEquals("did not have service modifiaction", ServiceListener.SERVICE_MODIFIED, lastServiceEvent);
+		log("Device service event happened : " + lastServiceEvent);
 
 		/*
 		 * Verify that the device has been registered with the correct service
@@ -148,6 +139,21 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 	public void testMessageDescriptionUse() {
 		// TODO: test how a MessageDescriptionSet, once registered, is used
 		// by the BaseDriver to build complex EnOceanMessage representations.
+	}
+
+	private void cleanupServices() throws InterruptedException {
+		ServiceReference[] references = devices.getServiceReferences();
+		if (references != null) {
+			for (int i = 0; i < references.length; i++) {
+				ServiceReference ref = references[i];
+				getContext().ungetService(ref);
+				devices.remove(ref);
+				String msg = devices.waitForService();
+				log("Unregistering device service got  : " + msg);
+				assertEquals("did not remove service", ServiceListener.SERVICE_REMOVED, msg);
+			}
+		}
+	
 	}
 
 	private int intProp(ServiceReference r, String key) {
