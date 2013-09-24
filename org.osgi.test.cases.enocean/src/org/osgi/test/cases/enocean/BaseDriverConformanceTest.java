@@ -48,6 +48,14 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 	}
 
 	protected void tearDown() throws Exception {
+		ServiceReference[] references = devices.getServiceReferences();
+		if (references != null) {
+			for (int i = 0; i < references.length; i++) {
+				ServiceReference ref = references[i];
+				getContext().ungetService(ref);
+				devices.remove(ref);
+			}
+		}
 		devices.close();
 	}
 
@@ -86,7 +94,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 	 * @throws Exception
 	 */
 	public void testSelfEventReception() throws Exception {
-		
+
 		Map properties = new Hashtable();
 		properties.put(Fixtures.SELF_TEST_EVENT_KEY, Fixtures.SELF_TEST_EVENT_VALUE);
 		Event sourceEvent = new Event(Fixtures.SELF_TEST_EVENT_TOPIC, properties);
@@ -115,13 +123,13 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		measure.setSenderId(Fixtures.HOST_ID);
 		EspRadioPacket measurePkt = new EspRadioPacket(measure);
 		outStream.write(measurePkt.serialize());
-		
+
 		/* First get a reference towards the device */
 		lastServiceEvent = devices.waitForService();
 		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
 
 		EnOceanDevice dev = getLatestRegisteredDevice();
-		
+
 
 		/* Wait for message notification */
 		// TODO: send a temperature report and check how the message is passed
