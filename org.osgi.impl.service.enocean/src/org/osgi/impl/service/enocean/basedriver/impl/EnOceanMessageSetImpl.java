@@ -21,13 +21,14 @@ import java.util.Hashtable;
 import java.util.Map;
 import org.osgi.impl.service.enocean.basedriver.EnOceanBaseDriver;
 import org.osgi.impl.service.enocean.utils.Logger;
+import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.sets.EnOceanMessageSet;
 
 public class EnOceanMessageSetImpl implements EnOceanMessageSet {
 
 	private Map	messageTable	= new Hashtable();
 
-	public Class getMessage(int rorg, int func, int type, int extra) {
+	public EnOceanMessage getMessage(int rorg, int func, int type, int extra) {
 		String key = null;
 		if (extra == -1) {
 			key = generateKey(rorg, func, type);
@@ -36,8 +37,8 @@ public class EnOceanMessageSetImpl implements EnOceanMessageSet {
 		}
 
 		try {
-			Class cls = (Class) messageTable.get(key);
-			return cls;
+			EnOceanMessage instance = (EnOceanMessage) messageTable.get(key);
+			return instance;
 		} catch (Exception e) {
 			Logger.i(EnOceanBaseDriver.TAG, "There was an error reading the messageSet : " + e.getMessage());
 		}

@@ -46,6 +46,6 @@ public interface EnOceanMessageSet {
 	 * objects need an additional specifier.
 	 * @return The {@link EnOceanMessage} object looked for, or null.
 	 */
-	public EnOceanMessage getMessage(short rorg, short func, short type, short extra);
+	public EnOceanMessage getMessage(int rorg, int func, int type, int extra);
 
 }

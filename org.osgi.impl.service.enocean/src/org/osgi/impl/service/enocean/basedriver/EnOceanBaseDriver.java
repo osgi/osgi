@@ -220,19 +220,15 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	 */
 	private EnOceanMessage radioToEnOceanMessage(Message msg, int rorg, int func, int type) {
 		/* First check in the internal message class table */
-		Class msgClass = internalMessageSet.getMessage(rorg, func, type, -1);
-		if (msgClass != null) {
-			EnOceanMessage oeMsg;
+		EnOceanMessage oeMsg = internalMessageSet.getMessage(rorg, func, type, -1);
+		if (oeMsg != null) {
 			try {
-				oeMsg = (EnOceanMessage) msgClass.newInstance();
 				oeMsg.deserialize(msg.getData());
 				return oeMsg;
-			} catch (IllegalAccessException e) {
-				Logger.e(TAG, "Illegal access : " + e.getMessage());
-			} catch (InstantiationException e) {
-				Logger.e(TAG, "Instanciation exception : " + e.getMessage());
+			} catch (IllegalArgumentException e) {
+				Logger.e(TAG, "Illegal Argument : " + e.getMessage());
 			} catch (EnOceanException e) {
-				Logger.e(TAG, "Deserialization exception : " + e.getMessage());
+				Logger.e(TAG, "EnOceanException : " + e.getMessage());
 			}
 		}
 		return null;
