@@ -58,12 +58,18 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 	 */
 	public void testDeviceRegistration() throws Exception {
 		/* Insert a device */
-		MessageA5_02_01 teachIn = MessageA5_02_01.teachIn(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
+		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
 		outStream.write(pkt.serialize());
 
 		lastServiceEvent = devices.waitForService();
 		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
+
+		/*
+		 * NOTE: The service should have been modified AFTER insertion, but it
+		 * seems that because this happens almost in the same time, OSGi
+		 * compresses that into a single SERVICE_ADDED event.
+		 */
 		log("Device service event happened : " + lastServiceEvent);
 
 		/*
@@ -105,7 +111,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 	public void testEventNotification() throws Exception {
 
 		/* Insert a device */
-		MessageA5_02_01 teachIn = MessageA5_02_01.teachIn(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
+		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket teachInPkt = new EspRadioPacket(teachIn);
 		outStream.write(teachInPkt.serialize());
 
@@ -120,20 +126,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
 
 		EnOceanDevice dev = getLatestRegisteredDevice();
-
-
-		/* Wait for message notification */
-		// TODO: send a temperature report and check how the message is passed
-		// along.
-		// Do we need to have a proper device registered to pass messages from
-		// the network ?
-		// MessageA5_02_01 teachIn = MessageA5_02_01.teachIn(Fixtures.HOST_ID,
-		// Fixtures.MANUFACTURER);
-		// EspRadioPacket pkt = new EspRadioPacket(teachIn);
-		// outStream.write(pkt.serialize());
-
-
-		// services.waitForRegistration();
+		// TODO: check for latestMessage identity
 	}
 
 	public void testMessageDescriptionUse() {

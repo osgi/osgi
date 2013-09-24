@@ -44,7 +44,7 @@ public class MessageA5_02_01 extends MessageType_4BS {
 	/**
 	 * Default constructor, generates a teach-in message
 	 */
-	public static MessageA5_02_01 teachIn(int senderId, int manufacturerId) {
+	public static MessageA5_02_01 generateTeachInMsg(int senderId, int manufacturerId) {
 		MessageA5_02_01 msg = new MessageA5_02_01();
 		byte[] data = { 0x0, 0x0, 0x0, 0x0 };
 		data[0] = (byte) (((FUNC << 2) | (TYPE >> 5)));
