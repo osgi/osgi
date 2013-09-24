@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.zigbee.event;
 
 import org.osgi.service.zigbee.ZigBeeEvent;

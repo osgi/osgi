@@ -1,0 +1,84 @@
+
+package org.osgi.test.cases.zigbee.tbc.util;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.service.zigbee.ZigBeeEvent;
+import org.osgi.service.zigbee.ZigBeeEventListener;
+import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.util.tracker.ServiceTracker;
+
+/**
+ * Mocked test event source.
+ */
+public class ZigBeeEventSourceImpl implements Runnable {
+
+	private BundleContext	bc;
+	private ZigBeeEvent		zigbeeEvent;
+	private Thread			thread;
+	private ServiceTracker	serviceTracker;
+
+	/**
+	 * @param bc
+	 * @param zigbeeEvent
+	 */
+	public ZigBeeEventSourceImpl(BundleContext bc, ZigBeeEvent zigbeeEvent) {
+		this.bc = bc;
+		this.zigbeeEvent = zigbeeEvent;
+	}
+
+	/**
+	 * Launch this testEventSource.
+	 */
+	public void start() {
+		serviceTracker = new ServiceTracker(bc, ZigBeeEventListener.class.getName(), null);
+		serviceTracker.open();
+		thread = new Thread(this, ZigBeeEventSourceImpl.class.getName() + " - Whiteboard");
+		thread.start();
+	}
+
+	/**
+	 * Terminate this testEventSource.
+	 */
+	public void stop() {
+		serviceTracker.close();
+		thread = null;
+	}
+
+	public synchronized void run() {
+		Thread current = Thread.currentThread();
+		int n = 0;
+		while (current == thread) {
+			Object[] listeners = serviceTracker.getServices();
+			// log("listeners: " + listeners);
+
+			// try {
+			// ServiceReference[] srs = bc.getAllServiceReferences(null,
+			// null);
+			// log("srs: " + srs);
+			// if (srs != null) {
+			// for (ServiceReference sr : srs) {
+			// log("sr: " + sr);
+			// }
+			// }
+			// } catch (InvalidSyntaxException e1) {
+			// e1.printStackTrace();
+			// }
+
+			if (listeners != null && listeners.length > 0) {
+				if (n >= listeners.length) {
+					n = 0;
+				}
+				ZigBeeEventListener aZigBeeEventListener = (ZigBeeEventListener) listeners[n++];
+
+				DefaultTestBundleControl.log(ZigBeeEventSourceImpl.class.getName() + " is      sending the following event: " + zigbeeEvent);
+
+				aZigBeeEventListener.notifyEvent(zigbeeEvent);
+			}
+			try {
+				wait(5000);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+}

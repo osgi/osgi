@@ -31,7 +31,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
  */
 public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 
-	private BundleContext					context;
+	private BundleContext					bc;
 	private ZigBeeNode						node1, node2;
 	private ZigBeeNodeDescriptor			nodeDesc;
 	private ZigBeePowerDescriptor			powerDesc;
@@ -61,7 +61,7 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 	 * @param bc
 	 */
 	public ZigBeeBaseDriver(BundleContext bc) {
-		this.context = bc;
+		this.bc = bc;
 	}
 
 	/**
@@ -69,7 +69,6 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 	 * getting notifications.
 	 */
 	public void start() {
-
 		// types
 		attributesType = new ZigBeeDataTypeDescription[4];
 		attributesType[0] = ZigBeeDataTypes.UNSIGNED_INTEGER_8;
@@ -138,15 +137,18 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		endpointsNode1[0] = endpoint1;
 		node1 = new ZigBeeNodeImpl(Long.valueOf("812345689"), (short) 12345, endpointsNode1);
 		// registration_1 =
-		context.registerService(ZigBeeNode.class.getName(),
+		bc.registerService(ZigBeeNode.class.getName(),
 				node1, null);
 
 		ZigBeeEndpoint[] endpointsNode2 = new ZigBeeEndpoint[1];
 		endpointsNode2[0] = endpoint2;
 		node2 = new ZigBeeNodeImpl(Long.valueOf("6628417766"), (short) 88507, endpointsNode2, nodeDesc, powerDesc);
 		// registration_2 =
-		context.registerService(ZigBeeNode.class.getName(),
+		bc.registerService(ZigBeeNode.class.getName(),
 				node2, null);
+
+		// // Launch a mocked events generator.
+		// eventsManager(bc);
 	}
 
 	/**
@@ -154,14 +156,15 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 	 * getting notifications.
 	 */
 	public void stop() {
-		// TODO: AAA: Auto-generated method stub
+		// TODO
 	}
 
 	synchronized public void addDevice(String uuid) {
-		// TODO: AAA: Auto-generated method stub
+		// TODO
 	}
 
 	synchronized public void removeDevice(String uuid) {
-		// TODO: AAA: Auto-generated method stub
+		// TODO
 	}
+
 }

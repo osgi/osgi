@@ -1,17 +1,23 @@
 
 package org.osgi.test.cases.zigbee.tbc;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
 import org.osgi.service.zigbee.ZigBeeAttribute;
 import org.osgi.service.zigbee.ZigBeeAttributeRecord;
 import org.osgi.service.zigbee.ZigBeeCluster;
 import org.osgi.service.zigbee.ZigBeeCommand;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
+import org.osgi.service.zigbee.ZigBeeEvent;
 import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeNoDescriptionAvailableException;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 import org.osgi.test.cases.zigbee.tbc.device.discovery.ServicesListener;
+import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventImpl;
+import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventListenerImpl;
+import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventSourceImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeHandlerImpl;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -542,14 +548,72 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			e.printStackTrace();
 			fail("No exception is expected.");
 		}
-
 	}
+
 	// ====================================================================
 	// ===========================EVENTING TEST============================
 	// ===========================METHODS==================================
 	// ====================================================================
 
-	// TODO: AAA: implement eventing test methods.
+	/**
+	 * Tests related to eventing.
+	 */
+	public void testEventing() {
+		// device
+		ZigBeeNode device = listener.getZigBeeNode();
+		assertNotNull("ZigBeeNode is NULL", device);
+
+		// endpoints
+		ZigBeeEndpoint[] endpoints = device.getEndpoints();
+		ZigBeeEndpoint endpoint = endpoints[0];
+		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
+
+		// clusters
+		ZigBeeCluster[] clusters = endpoint.getServerClusters();
+		ZigBeeCluster cluster = null;
+		if (clusters != null && clusters.length != 0) {
+			cluster = clusters[0];
+		}
+		assertNotNull("ZigBeeCluster is NULL", cluster);
+
+		// specify the event to be send by the event source to the event
+		// listener.
+		Dictionary<String, String> events = new Hashtable<String, String>();
+		events.put("eventKey", "eventValue");
+		ZigBeeEvent aZigbeeEvent = new ZigBeeEventImpl(cluster, events);
+
+		// create, and launch a test event source.
+		ZigBeeEventSourceImpl aZigBeeEventSourceImpl = new ZigBeeEventSourceImpl(getContext(), aZigbeeEvent);
+		aZigBeeEventSourceImpl.start();
+
+		// create, and launch a test event listener.
+		ZigBeeEventListenerImpl aZigBeeEventListenerImpl = new ZigBeeEventListenerImpl(getContext());
+		aZigBeeEventListenerImpl.start();
+
+		// assert that eventing works: the sent, and the received events must be
+		// equal.
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+			fail("No exception is expected.");
+		}
+
+		ZigBeeEvent lastReceivedZigBeeEvent = aZigBeeEventListenerImpl.getLastReceivedZigBeeEvent();
+
+		// log("aZigbeeEvent: " + aZigbeeEvent);
+		// log("lastReceivedZigBeeEvent: " + lastReceivedZigBeeEvent);
+
+		assertNotNull("aZigbeeEvent can not be null", aZigbeeEvent);
+		assertNotNull("lastReceivedZigBeeEvent can not be null", lastReceivedZigBeeEvent);
+		assertEquals("aZigbeeEvent, and lastReceivedZigBeeEvent must be equal.", aZigbeeEvent, lastReceivedZigBeeEvent);
+
+		// stop/destroy the test event listener.
+		aZigBeeEventListenerImpl.stop();
+
+		// stop/destroy the test event source.
+		aZigBeeEventSourceImpl.stop();
+	}
 
 	// ====================================================================
 	// ===========================EXPORT TEST==============================
