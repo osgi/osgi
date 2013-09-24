@@ -36,9 +36,7 @@ public interface EnOceanMessageSet {
 	public final static String	PROVIDER_ID			= "message.set.provider_id";
 
 	/**
-	 * Retrieves a {@link Class} object according to its identifiers.
-	 * You can then use this class reference to build new, dedicated
-	 * {@link EnOceanMessage} objects.
+	 * Retrieves a {@link EnOceanMessage} object according to its identifiers.
 	 * See EnOcean Equipment Profile Specification for more details.
 	 * 
 	 * @param rorg the radio telegram type of the message.
@@ -46,12 +44,8 @@ public interface EnOceanMessageSet {
 	 * @param type The type supselector.
 	 * @param extra Some extra information; some {@link EnOceanMessage} 
 	 * objects need an additional specifier.
-	 * 
-	 * If the specified profile does not need 'extra' info, this parameter
-	 * will be ignored.
-	 * 
-	 * @return The {@link Class} object looked for, or null.
+	 * @return The {@link EnOceanMessage} object looked for, or null.
 	 */
-	public Class getMessage(int rorg, int func, int type, int extra);
+	public EnOceanMessage getMessage(short rorg, short func, short type, short extra);
 
 }
