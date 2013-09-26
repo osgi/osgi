@@ -140,8 +140,23 @@ public class ResourceContextEvent {
 	}
 
 	public boolean equals(Object var0) {
-		// TODO
-		return super.equals(var0);
+		if (var0 == null) {
+			return false;
+		}
+		if (!(var0 instanceof ResourceContextEvent)) {
+			return false;
+		}
+		ResourceContextEvent event = (ResourceContextEvent) var0;
+		if (event.getBundleId() != getBundleId()) {
+			return false;
+		}
+		if (event.getContext() == null) {
+			return false;
+		}
+		if (!event.getContext().equals(getContext())) {
+			return false;
+		}
+		return true;
 	}
 
 }
