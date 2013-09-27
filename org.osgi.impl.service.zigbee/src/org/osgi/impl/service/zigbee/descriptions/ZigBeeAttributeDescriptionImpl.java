@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.zigbee.descriptions;
 
 import org.osgi.service.zigbee.descriptions.ZigBeeAttributeDescription;
@@ -69,6 +70,11 @@ public class ZigBeeAttributeDescriptionImpl implements ZigBeeAttributeDescriptio
 	public boolean isReportable() {
 		// TODO Auto-generated method stub
 		return isReportable;
+	}
+
+	public boolean checkValue(Object value) {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

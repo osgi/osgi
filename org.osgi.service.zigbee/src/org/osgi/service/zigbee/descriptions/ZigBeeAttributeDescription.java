@@ -22,6 +22,7 @@ package org.osgi.service.zigbee.descriptions;
  * @version 1.0
  */
 public interface ZigBeeAttributeDescription {
+
 	/**
 	 * The attribute is read only
 	 */
@@ -78,4 +79,14 @@ public interface ZigBeeAttributeDescription {
 	 *         data type
 	 */
 	public ZigBeeDataTypeDescription getDataTypeDescription();
+
+	/**
+	 * checks whether the value object is conform to the attribute data type
+	 * description
+	 * 
+	 * @param value The value to check
+	 * @return true if value is conform otherwise returns false
+	 */
+	public boolean checkValue(Object value);
+
 }
