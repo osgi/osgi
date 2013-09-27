@@ -74,10 +74,16 @@ public class ZigBeeException extends Exception {
 	/** INVALID_DATA_TYPE */
 	public static final short	INVALID_DATA_TYPE					= 0x8d;
 
-	/** HARDWARE_FAILURE */
+	/**
+	 * HARDWARE_FAILURE - in this case, an additional exception describing the
+	 * problem can be nested.
+	 */
 	public static final short	HARDWARE_FAILURE					= 0xc0;
 
-	/** SOFTWARE_FAILURE */
+	/**
+	 * SOFTWARE_FAILURE - in this case, an additional exception describing the
+	 * problem can be nested.
+	 */
 	public static final short	SOFTWARE_FAILURE					= 0xc1;
 
 	/** CALIBRATION_ERROR */
