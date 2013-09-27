@@ -16,9 +16,6 @@
 
 package org.osgi.service.zigbee;
 
-import org.osgi.service.zigbee.descriptions.ZigBeeCommandDescription;
-import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
-
 /**
  * This interface represents a ZigBee Command
  * 
@@ -30,21 +27,6 @@ public interface ZigBeeCommand {
 	 * @return The command identifier
 	 */
 	public int getId();
-
-	/**
-	 * @return If exists, the command description - otherwise returns null.
-	 */
-	public ZigBeeCommandDescription getDescription();
-
-	/**
-	 * @return An array containing command inputs parameters types.
-	 */
-	public ZigBeeDataTypeDescription[] getInputParametersTypes();
-
-	/**
-	 * @return An array containing command outputs parameters types.
-	 */
-	public ZigBeeDataTypeDescription[] getOutputParametersTypes();
 
 	/**
 	 * Invokes the action. Invokes an action using the frame. The handler will

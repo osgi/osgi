@@ -290,13 +290,6 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		assertEquals("Command identifier not matched",
 				ZigBeeConstants.COMMAND_ID, String.valueOf(command.getId()));
 
-		log("ZigBeeCommand NAME: " + command.getDescription().getName());
-		assertEquals("Command name not matched",
-				ZigBeeConstants.COMMAND_NAME, command.getDescription().getName());
-
-		log("ZigBeeCommand MANDATORY: " + command.getDescription().isMandatory());
-		assertEquals("Command mandatory state not matched",
-				ZigBeeConstants.COMMAND_MANDATORY, String.valueOf(command.getDescription().isMandatory()));
 	}
 
 	/**
