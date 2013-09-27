@@ -16,8 +16,8 @@ the location of this file.
 <fop version="1.0">
 
   <!-- Base URL for resolving relative URLs -->
-  <base>${base}</base>
-  <font-base>${font.base}</font-base>
+  <base>${base.url}</base>
+  <font-base>${font.base.url}</font-base>
   
   <!-- Source resolution in dpi (dots/pixels per inch) for determining the size of pixels in SVG and bitmap images, default: 72dpi -->
   <source-resolution>72</source-resolution>
@@ -46,7 +46,7 @@ the location of this file.
       </filterList>
 
       <fonts>
-        <directory>${font.base}</directory>
+        <directory>${font.base.dir}</directory>
 
         <!-- body font -->
         <font metrics-url="PROBK___.xml" embed-url="PROBK___.ttf" kerning="yes">
