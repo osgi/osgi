@@ -74,7 +74,7 @@ public interface ResourceContext {
 	 * 
 	 * @param b The bundle to add to this resource context
 	 */
-	public void addBundle(Bundle b);
+	public void addBundle(long bundleId);
 
 	/**
 	 * Removes the bundle identified by bundleId from the Resource Context. The

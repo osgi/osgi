@@ -16,7 +16,6 @@
 
 package org.osgi.service.resource;
 
-import org.osgi.framework.Bundle;
 import org.osgi.service.resource.resourcemonitor.CPUMonitor;
 import org.osgi.service.resource.resourcemonitor.DiskStorageMonitor;
 import org.osgi.service.resource.resourcemonitor.MemoryMonitor;
@@ -125,11 +124,11 @@ public interface ResourceManager {
 	/**
 	 * Returns the {@link ResourceContext} associated to the provided bundle
 	 * 
-	 * @param b bundle
+	 * @param bundleId bundle identifier
 	 * @return the {@link ResourceContext} associated to bundle b or null if the
 	 *         bundle b does not belong to a Resource Context.
 	 */
-	public ResourceContext getContext(Bundle b);
+	public ResourceContext getContext(long bundleId);
 
 	/**
 	 * Returns the resource context associated with the current thread.
