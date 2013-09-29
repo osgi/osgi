@@ -57,6 +57,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 	 * @throws Exception
 	 */
 	public void testDeviceRegistration() throws Exception {
+
 		/* Insert a device */
 		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
@@ -66,9 +67,10 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
 
 		/*
-		 * NOTE: The service should have been modified AFTER insertion, but it
-		 * seems that because this happens almost in the same time, OSGi
-		 * compresses that into a single SERVICE_ADDED event.
+		 * NOTE: The service should have been modified AFTER insertion,
+		 * nevertheless it seems that when registration and modification happen
+		 * almost in the same time, OSGi only generates a single SERVICE_ADDED
+		 * event.
 		 */
 		log("Device service event happened : " + lastServiceEvent);
 
@@ -77,11 +79,11 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		 * properties
 		 */
 		ServiceReference ref = devices.getServiceReference();
-		assertEquals("CHIP_ID mismatch", Fixtures.HOST_ID, intProp(ref, EnOceanDevice.CHIP_ID));
-		assertEquals("RORG mismatch", Fixtures.RORG, intProp(ref, EnOceanDevice.RORG));
-		assertEquals("FUNC mismatch", Fixtures.FUNC, intProp(ref, EnOceanDevice.FUNC));
-		assertEquals("TYPE mismatch", Fixtures.TYPE, intProp(ref, EnOceanDevice.TYPE));
-		assertEquals("MANUFACTURER mismatch", Fixtures.MANUFACTURER, intProp(ref, EnOceanDevice.MANUFACTURER));
+		assertEquals("CHIP_ID mismatch", Fixtures.STR_HOST_ID, ref.getProperty(EnOceanDevice.CHIP_ID));
+		assertEquals("RORG mismatch", Fixtures.STR_RORG, ref.getProperty(EnOceanDevice.RORG));
+		assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
+		assertEquals("TYPE mismatch", Fixtures.STR_TYPE, ref.getProperty(EnOceanDevice.TYPE));
+		assertEquals("MANUFACTURER mismatch", Fixtures.STR_MANUFACTURER, ref.getProperty(EnOceanDevice.MANUFACTURER));
 	}
 
 	/**
@@ -125,8 +127,15 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		lastServiceEvent = devices.waitForService();
 		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
 
-		EnOceanDevice dev = getLatestRegisteredDevice();
-		// TODO: check for latestMessage identity
+		Event event = events.waitForEvent();
+
+		assertEquals("topic mismatch", Fixtures.SELF_TEST_EVENT_TOPIC, event.getTopic());
+
+		assertEquals("senderId mismatch", Fixtures.STR_HOST_ID, event.getProperty("enocean.senderId"));
+		assertEquals("rorg mismatch", Fixtures.STR_RORG, event.getProperty("enocean.rorg"));
+		assertEquals("func mismatch", Fixtures.STR_FUNC, event.getProperty("enocean.func"));
+		assertEquals("type mismatch", Fixtures.STR_TYPE, event.getProperty("enocean.type"));
+		assertNotNull(event.getProperty("enocean.message"));
 	}
 
 	public void testMessageDescriptionUse() {
@@ -147,13 +156,6 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 			}
 		}
 	
-	}
-
-	private int intProp(ServiceReference r, String key) {
-		String property = (String) r.getProperty(key);
-		// log("key = '" + key + "', value='" + property + "'");
-		Integer p = Integer.valueOf(property);
-		return p.intValue();
 	}
 
 	private EnOceanDevice getLatestRegisteredDevice() {

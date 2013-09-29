@@ -2,10 +2,22 @@ package org.osgi.impl.service.enocean.basedriver.impl;
 
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanException;
+import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.channels.EnOceanChannel;
 import org.osgi.service.enocean.channels.EnOceanChannelDescription;
 
-public class EnOceanMessage_A5_02_01 extends EnOceanMessageImpl_4BS {
+public class EnOceanMessage_A5_02_01 implements EnOceanMessage {
+
+	private EnOceanChannel[]	channels;
+	private int					senderId;
+	private int					status;
+	private int					subTelegramCount;
+	private int					redundancyInfo;
+	private int					rssi;
+
+	public int getRorg() {
+		return 0xA5;
+	}
 
 	public int getFunc() {
 		return 0x02;
@@ -15,7 +27,32 @@ public class EnOceanMessage_A5_02_01 extends EnOceanMessageImpl_4BS {
 		return 0x01;
 	}
 
+	public byte[] serialize() throws EnOceanException {
+		byte[] out = new byte[4];
+		for (int i = 0; i < channels.length; i++) {
+			EnOceanChannel c = channels[i];
+			// TODO: Finish the serialization here
+		}
+		return null;
+	}
+
 	public void deserialize(byte[] bytes) throws EnOceanException, IllegalArgumentException {
+
+		System.out.println(Utils.bytesToHexString(bytes));
+
+		if (bytes[0] != (byte) 0xA5) {
+			throw new IllegalArgumentException("bytes could not be decoded into a " + this.getClass().getName() + " instance");
+		}
+		
+		byte[] data = Utils.byteRange(bytes, 1, 4);
+		System.out.println(Utils.bytesToHexString(data));
+
+		senderId = Utils.bytes2intLE(bytes, 5, 4);
+		System.out.println(senderId);
+
+		status = Utils.bytes2intLE(bytes, 9, 1);
+		System.out.println(status);
+		
 		EnOceanChannel temperature = new EnOceanChannel() {
 
 			private byte	b0;
@@ -70,8 +107,38 @@ public class EnOceanMessage_A5_02_01 extends EnOceanMessageImpl_4BS {
 			}
 		};
 
-		temperature.setRawValue(Utils.byteToBytes(bytes[2]));
-		byte lrnByte = (byte) ((bytes[3] >> 3) & 0x01);
+		temperature.setRawValue(Utils.byteToBytes(data[2]));
+		byte lrnByte = (byte) ((data[3] >> 3) & 0x01);
 		learn.setRawValue(new byte[] {lrnByte});
+
+		this.channels = new EnOceanChannel[] {temperature, learn};
+	}
+
+	public int getSenderId() {
+		return senderId;
+	}
+
+	public int getDestinationId() {
+		return -1;
+	}
+
+	public EnOceanChannel[] getChannels() {
+		return channels;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public int getSubTelegramCount() {
+		return subTelegramCount;
+	}
+
+	public int getRedundancyInfo() {
+		return redundancyInfo;
+	}
+
+	public int getRSSI() {
+		return rssi;
 	}
 }

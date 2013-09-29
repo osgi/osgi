@@ -2,6 +2,7 @@ package org.osgi.impl.service.enocean.basedriver;
 
 import java.io.FileNotFoundException;
 import java.util.Hashtable;
+import java.util.Map;
 import java.util.Properties;
 // import javax.comm.CommPortIdentifier;
 import org.osgi.framework.BundleContext;
@@ -25,6 +26,8 @@ import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.sets.EnOceanChannelDescriptionSet;
 import org.osgi.service.enocean.sets.EnOceanMessageSet;
 import org.osgi.service.enocean.sets.EnOceanRPCSet;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -41,6 +44,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	private ServiceTracker		channelDescriptionSetServiceRef;
 	private EnOceanHostImpl		initialHost;
 	private EnOceanMessageSetImpl	internalMessageSet;
+	private EventAdmin				eventAdmin;
 
 	public static final String		TAG	= "EnOceanBaseDriver";
 
@@ -61,7 +65,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 
 		/* Init internal messageSet */
 		internalMessageSet = new EnOceanMessageSetImpl();
-		internalMessageSet.putMessageClass(0xA5, 02, 01, EnOceanMessage_A5_02_01.class);
+		internalMessageSet.putMessage(0xA5, 02, 01, new EnOceanMessage_A5_02_01());
 
 		/* Register initial EnOceanHost */
 		String hostPath = System.getProperty("org.osgi.service.enocean.host.path");
@@ -75,6 +79,12 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 			} catch (FileNotFoundException e) {
 				Logger.e(TAG, "initial enoceanhost path was incorrect : " + e.getMessage());
 			}
+		}
+
+		/* Initialize EventAdmin */
+		ServiceReference ref = bc.getServiceReference(EventAdmin.class.getName());
+		if (ref != null) {
+			eventAdmin = (EventAdmin) bc.getService(ref);
 		}
 
 		/* Track the EnOcean services */
@@ -120,7 +130,10 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 			/* If we have full profile information */
 			if (rorg != -1 && func != -1 && type != -1) {
 				EnOceanMessage eoMsg = radioToEnOceanMessage(msg, rorg, func, type);
-				implDev.setLastMessage(eoMsg);
+				if (eoMsg != null) {
+					implDev.setLastMessage(eoMsg);
+					broadcastToEventAdmin(eoMsg);
+				}
 			}
 		}
 
@@ -180,9 +193,21 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 					host, props);
 			servicerefs.put(hostPath, sr);
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			Logger.e(TAG, e.getMessage());
 		}
 		return sr;
+	}
+
+	private void broadcastToEventAdmin(EnOceanMessage eoMsg) {
+		Map properties = new Hashtable();
+		properties.put("enocean.senderId", String.valueOf(eoMsg.getSenderId()));
+		properties.put("enocean.rorg", String.valueOf(eoMsg.getRorg()));
+		properties.put("enocean.func", String.valueOf(eoMsg.getFunc()));
+		properties.put("enocean.type", String.valueOf(eoMsg.getType()));
+		properties.put("enocean.message", eoMsg);
+
+		Event event = new Event("org/osgi/service/enocean/EnOceanEvent/MESSAGE_RECEIVED", properties);
+		eventAdmin.sendEvent(event);
 	}
 
 	/**
@@ -220,11 +245,11 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	 */
 	private EnOceanMessage radioToEnOceanMessage(Message msg, int rorg, int func, int type) {
 		/* First check in the internal message class table */
-		EnOceanMessage oeMsg = internalMessageSet.getMessage(rorg, func, type, -1);
-		if (oeMsg != null) {
+		EnOceanMessage eoMsg = internalMessageSet.getMessage(rorg, func, type, -1);
+		if (eoMsg != null) {
 			try {
-				oeMsg.deserialize(msg.getData());
-				return oeMsg;
+				eoMsg.deserialize(msg.serialize());
+				return eoMsg;
 			} catch (IllegalArgumentException e) {
 				Logger.e(TAG, "Illegal Argument : " + e.getMessage());
 			} catch (EnOceanException e) {

@@ -30,7 +30,10 @@ public class Message {
 	// bit7: crc8 if set, or else checksum; bits 0-4: repeater count
 	private byte	status;
 
+	private byte[]			messageBytes;
+
 	public Message(byte[] data) {
+		this.messageBytes = data;
 		setRORG(data[0]);
 		setData(Utils.byteRange(data, 1, data.length - 7));
 		setSenderId(Utils.byteRange(data, data.length - 6, 4));
@@ -70,6 +73,10 @@ public class Message {
 
 	public void setData(byte[] data) {
 		this.data = data;
+	}
+
+	public byte[] serialize() {
+		return messageBytes;
 	}
 
 	public byte[] getSenderId() {

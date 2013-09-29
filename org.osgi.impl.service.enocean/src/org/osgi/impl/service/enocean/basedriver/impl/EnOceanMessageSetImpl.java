@@ -50,9 +50,9 @@ public class EnOceanMessageSetImpl implements EnOceanMessageSet {
 		messageTable.put(key, msgImplClass);
 	}
 
-	public void putMessageClass(int rorg, int func, int type, Class msgImplClass) {
+	public void putMessage(int rorg, int func, int type, EnOceanMessage msg) {
 		String key = generateKey(rorg, func, type);
-		messageTable.put(key, msgImplClass);
+		messageTable.put(key, msg);
 	}
 
 	private String generateKey(int rorg, int func, int type) {

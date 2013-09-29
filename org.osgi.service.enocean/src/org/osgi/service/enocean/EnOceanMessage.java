@@ -61,7 +61,9 @@ public interface EnOceanMessage {
 	public byte[] serialize() throws EnOceanException;
 	
 	/**
-	 * Deserializes an array of bytes into the inner datafields of the Message, if possible.
+	 * Deserializes an array of bytes into the Message, if possible.
+	 * If the actual instance type of the message is not compatible with the bytes
+	 * it is fed with (RORG to begin with), throw an IllegalArgumentException.
 	 * 
 	 * @throws EnOceanException
 	 */
