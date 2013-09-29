@@ -15,12 +15,10 @@
  */
 
 
-package org.osgi.impl.service.enocean.basedriver.impl;
+package org.osgi.test.cases.enocean.descriptions;
 
 import java.util.Hashtable;
 import java.util.Map;
-import org.osgi.impl.service.enocean.basedriver.EnOceanBaseDriver;
-import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.sets.EnOceanMessageSet;
 
@@ -40,14 +38,9 @@ public class EnOceanMessageSetImpl implements EnOceanMessageSet {
 			EnOceanMessage instance = (EnOceanMessage) messageTable.get(key);
 			return instance;
 		} catch (Exception e) {
-			Logger.i(EnOceanBaseDriver.TAG, "There was an error reading the messageSet : " + e.getMessage());
+			System.out.println("There was an error reading the messageSet : " + e.getMessage());
 		}
 		return null;
-	}
-
-	public void putMessageClass(int rorg, int func, int type, int extra, Class msgImplClass) {
-		String key = generateKey(rorg, func, type, extra);
-		messageTable.put(key, msgImplClass);
 	}
 
 	public void putMessage(int rorg, int func, int type, EnOceanMessage msg) {

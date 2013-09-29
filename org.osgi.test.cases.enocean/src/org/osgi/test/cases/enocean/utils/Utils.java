@@ -159,4 +159,22 @@ public class Utils {
 		}
 		return new String(hexChars);
 	}
+
+	public static int bytes2intLE(byte[] bytes, int offset, int len) {
+		int sum = 0;
+		for (int i = 0; i < len; i++) {
+			byte b = bytes[offset + len - i - 1];
+			sum = sum + ((b & 0xff) << (i * 8));
+		}
+		return sum;
+	}
+
+	public static byte[] byteRange(byte[] bytes, int offset, int len) {
+		byte[] out = new byte[len];
+		for (int i = 0; i < len; i++) {
+			out[i] = bytes[offset + i];
+		}
+		return out;
+	}
+
 }

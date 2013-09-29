@@ -25,7 +25,7 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	public EnOceanDeviceImpl(BundleContext bc, int uid) {
 		props = new Properties();
 		props.put(EnOceanDevice.CHIP_ID, String.valueOf(uid));
-		sReg = bc.registerService("org.osgi.service.enocean.EnOceanDevice", this, props);
+		sReg = bc.registerService(EnOceanDevice.class.getName(), this, props);
 		/* Initializations */
 		lastMessage = null;
 	}

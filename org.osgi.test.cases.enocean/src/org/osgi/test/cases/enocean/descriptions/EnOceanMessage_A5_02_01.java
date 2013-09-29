@@ -1,10 +1,11 @@
-package org.osgi.impl.service.enocean.basedriver.impl;
+package org.osgi.test.cases.enocean.descriptions;
 
-import org.osgi.impl.service.enocean.utils.Utils;
+
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.channels.EnOceanChannel;
 import org.osgi.service.enocean.channels.EnOceanChannelDescription;
+import org.osgi.test.cases.enocean.utils.Utils;
 
 public class EnOceanMessage_A5_02_01 implements EnOceanMessage {
 
@@ -38,20 +39,13 @@ public class EnOceanMessage_A5_02_01 implements EnOceanMessage {
 
 	public void deserialize(byte[] bytes) throws EnOceanException, IllegalArgumentException {
 
-		System.out.println(Utils.bytesToHexString(bytes));
-
 		if (bytes[0] != (byte) 0xA5) {
 			throw new IllegalArgumentException("bytes could not be decoded into a " + this.getClass().getName() + " instance");
 		}
 		
 		byte[] data = Utils.byteRange(bytes, 1, 4);
-		System.out.println(Utils.bytesToHexString(data));
-
 		senderId = Utils.bytes2intLE(bytes, 5, 4);
-		System.out.println(senderId);
-
 		status = Utils.bytes2intLE(bytes, 9, 1);
-		System.out.println(status);
 		
 		EnOceanChannel temperature = new EnOceanChannel() {
 
