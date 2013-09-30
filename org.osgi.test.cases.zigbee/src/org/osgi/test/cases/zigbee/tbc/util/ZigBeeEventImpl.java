@@ -1,7 +1,6 @@
 
 package org.osgi.test.cases.zigbee.tbc.util;
 
-import java.util.Dictionary;
 import org.osgi.service.zigbee.ZigBeeCluster;
 import org.osgi.service.zigbee.ZigBeeEvent;
 
@@ -11,27 +10,27 @@ import org.osgi.service.zigbee.ZigBeeEvent;
 public class ZigBeeEventImpl implements ZigBeeEvent {
 
 	private ZigBeeCluster	cluster;
-	private Dictionary		events;
+	private Object			value;
 
 	/**
 	 * @param cluster
-	 * @param events
+	 * @param value
 	 */
-	public ZigBeeEventImpl(ZigBeeCluster cluster, Dictionary events) {
+	public ZigBeeEventImpl(ZigBeeCluster cluster, Object value) {
 		this.cluster = cluster;
-		this.events = events;
+		this.value = value;
 	}
 
 	public ZigBeeCluster getCluster() {
 		return cluster;
 	}
 
-	public Dictionary getAttributesEvents() {
-		return events;
+	public Object getValue() {
+		return value;
 	}
 
 	public String toString() {
-		return ZigBeeEventImpl.class.getName() + "[cluster: " + cluster + ", events:" + events + "]";
+		return ZigBeeEventImpl.class.getName() + "[cluster: " + cluster + ", value:" + value + "]";
 	}
 
 }
