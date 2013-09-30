@@ -17,7 +17,6 @@
         </path>
         <property name="fop.classpath" refid="fop.classpath" />
         <makeurl property="log4j.properties" file="${project.dir}/docbook/fop/log4j.properties" />
-        <makeurl property="base.url" file="${project.dir}/docbook" />
         <property name="font.base.dir" value="${project.dir}/fonts" />
         <makeurl property="font.base.url" file="${font.base.dir}" />
     </target>
@@ -257,16 +256,18 @@
         <attribute name="book" default="@{name}" />
         <sequential>
             <!-- Customize fop config for the book -->
+            <local name="book.base.url" />
+            <makeurl property="book.base.url" file="${project.dir}/docbook/@{book}" />
             <copy file="docbook/fop/fop-osgi.xconf" toFile="${target}/fop/fop-@{name}.xconf" overwrite="true">
                 <filterset begintoken="${" endtoken="}">
-                    <filter token="base.url" value="${base.url}@{book}" />
+                    <filter token="book.base.url" value="${book.base.url}" />
                     <filter token="font.base.url" value="${font.base.url}" />
                     <filter token="font.base.dir" value="${font.base.dir}" />
                 </filterset>
             </copy>
             <java classname="org.osgi.tools.fop.FOPMain" fork="true">
                 <sysproperty key="java.awt.headless" value="true" />
-                <sysproperty key="JAVA_FONTS" value="${project.dir}/fonts" />
+                <sysproperty key="JAVA_FONTS" value="${font.base.dir}" />
                 <sysproperty key="log4j.configuration" value="${log4j.properties}" />
                 <classpath>
                     <pathelement location="${bin}" />
