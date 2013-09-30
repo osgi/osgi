@@ -16,7 +16,6 @@
 
 package org.osgi.service.zigbee;
 
-import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
 
 /**
  * This interface represents a ZigBee Cluster
@@ -70,11 +69,6 @@ public interface ZigBeeCluster {
 	 * @return an array of all the commands of the cluster
 	 */
 	public ZigBeeCommand[] getCommands();
-
-	/**
-	 * @return if exists, the cluster description - otherwise returns null.
-	 */
-	public ZigBeeClusterDescription getDescription();
 
 	/**
 	 * Read a list of attributes

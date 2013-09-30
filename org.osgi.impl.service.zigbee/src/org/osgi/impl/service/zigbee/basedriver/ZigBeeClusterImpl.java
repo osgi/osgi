@@ -44,10 +44,6 @@ public class ZigBeeClusterImpl implements ZigBeeCluster {
 		return id;
 	}
 
-	public ZigBeeClusterDescription getDescription() {
-		return description;
-	}
-
 	public ZigBeeAttribute getAttribute(int attributeId) {
 		return attributes[attributeId];
 	}

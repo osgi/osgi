@@ -44,10 +44,6 @@ public class ZigBeeAttributeImpl implements ZigBeeAttribute {
 		return description.getDataTypeDescription();
 	}
 
-	public ZigBeeAttributeDescription getDescription() {
-		return description;
-	}
-
 	public void getValue(ZigBeeHandler handler) {
 		Map response = null;
 		response = new HashMap();
@@ -82,7 +78,7 @@ public class ZigBeeAttributeImpl implements ZigBeeAttribute {
 	}
 
 	public String toString() {
-		return ZigBeeAttributeImpl.class.getName() + ":[id:" + getId() + ",dataType:" + getDataType() + ",description:" + getDescription() + ",value:" + getValue() + "]";
+		return ZigBeeAttributeImpl.class.getName() + ":[id:" + getId() + ",dataType:" + getDataType() + ",description:" + description + ",value:" + getValue() + "]";
 	}
 
 }

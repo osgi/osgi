@@ -7,7 +7,6 @@ import org.osgi.service.zigbee.ZigBeeCommand;
 import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.descriptions.ZigBeeCommandDescription;
-import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
 /**
  * Mocked impl of ZigBeeCommand.
@@ -27,28 +26,6 @@ public class ZigBeeCommandImpl implements ZigBeeCommand {
 
 	public int getId() {
 		return id;
-	}
-
-	public ZigBeeCommandDescription getDescription() {
-		return description;
-	}
-
-	public ZigBeeDataTypeDescription[] getInputParametersTypes() {
-		ZigBeeDataTypeDescription[] params = null;
-		if (description != null) {
-			if (description.getParameterDescriptions() != null && description.getParameterDescriptions().length > 0) {
-				params = new ZigBeeDataTypeDescription[description.getParameterDescriptions().length];
-				for (int i = 0; i < description.getParameterDescriptions().length; i++) {
-					params[i] = description.getParameterDescriptions()[i].getDataTypeDescription();
-				}
-			}
-		}
-		return params;
-	}
-
-	public ZigBeeDataTypeDescription[] getOutputParametersTypes() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public void invoke(byte[] bytes, ZigBeeHandler handler)

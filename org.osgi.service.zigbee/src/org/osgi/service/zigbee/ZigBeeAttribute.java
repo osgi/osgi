@@ -16,7 +16,6 @@
 
 package org.osgi.service.zigbee;
 
-import org.osgi.service.zigbee.descriptions.ZigBeeAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
 /**
@@ -106,10 +105,5 @@ public interface ZigBeeAttribute {
 	 * @return the Attribute data type
 	 */
 	public ZigBeeDataTypeDescription getDataType();
-
-	/**
-	 * @return the Attribute description if provided or null if not provided
-	 */
-	public ZigBeeAttributeDescription getDescription();
 
 }
