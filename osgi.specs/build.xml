@@ -267,7 +267,7 @@
             </copy>
             <java classname="org.osgi.tools.fop.FOPMain" fork="true">
                 <sysproperty key="java.awt.headless" value="true" />
-                <sysproperty key="JAVA_FONTS" value="${project.dir}/fonts" />
+                <sysproperty key="JAVA_FONTS" value="${font.base.dir}" />
                 <sysproperty key="log4j.configuration" value="${log4j.properties}" />
                 <classpath>
                     <pathelement location="${bin}" />
