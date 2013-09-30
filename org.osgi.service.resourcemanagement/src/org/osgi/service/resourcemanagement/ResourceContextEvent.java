@@ -1,4 +1,4 @@
-package org.osgi.service.resource;
+package org.osgi.service.resourcemanagement;
 
 import org.osgi.framework.Bundle;
 

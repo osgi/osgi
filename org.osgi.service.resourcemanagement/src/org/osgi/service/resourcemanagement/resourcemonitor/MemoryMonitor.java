@@ -14,30 +14,30 @@
  * limitations under the License.
  */
 
-package org.osgi.service.resource.resourcemonitor;
+package org.osgi.service.resourcemanagement.resourcemonitor;
 
-import org.osgi.service.resource.ResourceContext;
-import org.osgi.service.resource.ResourceManager;
-import org.osgi.service.resource.ResourceMonitor;
+import org.osgi.service.resourcemanagement.ResourceContext;
+import org.osgi.service.resourcemanagement.ResourceManager;
+import org.osgi.service.resourcemanagement.ResourceMonitor;
 
 /**
  * A {@link ResourceMonitor} for the 
- * {@link ResourceManager#RES_TYPE_DISK_STORAGE} resource type.
- * A DiskStorageMonitor instance monitors and limits the persistent
- * storage of the bundle belonging to the {@link ResourceContext}
+ * {@link ResourceManager#RES_TYPE_MEMORY} resource type.
+ * A MemoryMonitor instance monitors and limits the memory used
+ * by a {@link ResourceContext} instance.
+ *   
  */
-public interface DiskStorageMonitor extends ResourceMonitor {
+public interface MemoryMonitor extends ResourceMonitor {
   
   /**
-   * Returns the sum of the size of the persistent storage areas of
-   * the bundles in this resource context.
+   * Returns the size of the java heap used by the bundles in this 
+   * resource context.
    * <p>
    * The {@link #getUsage()} method returns the same value,
    * wrapped in a {@link Long}
-   * @return the sum of the sizes of the persistent storage
-   * areas in bytes
+   * @return the size of the used java heap in bytes
    */
-  public long getUsedDiskStorage();
+  public long getUsedMemory();
   
- 
+  
 }

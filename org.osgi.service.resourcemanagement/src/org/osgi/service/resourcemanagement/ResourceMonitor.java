@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.resource;
+package org.osgi.service.resourcemanagement;
 
 /**
  * Representation of the state of a resource for a resource context.

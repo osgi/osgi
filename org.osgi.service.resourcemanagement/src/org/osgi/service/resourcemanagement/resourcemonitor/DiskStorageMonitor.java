@@ -14,28 +14,30 @@
  * limitations under the License.
  */
 
-package org.osgi.service.resource.resourcemonitor;
+package org.osgi.service.resourcemanagement.resourcemonitor;
 
-import org.osgi.service.resource.ResourceContext;
-import org.osgi.service.resource.ResourceManager;
-import org.osgi.service.resource.ResourceMonitor;
+import org.osgi.service.resourcemanagement.ResourceContext;
+import org.osgi.service.resourcemanagement.ResourceManager;
+import org.osgi.service.resourcemanagement.ResourceMonitor;
 
 /**
  * A {@link ResourceMonitor} for the 
- * {@link ResourceManager#RES_TYPE_CPU} resource type.  
- * CPUMonitor instance monitors the CPU consumed by a
- * {@link ResourceContext} instance.
+ * {@link ResourceManager#RES_TYPE_DISK_STORAGE} resource type.
+ * A DiskStorageMonitor instance monitors and limits the persistent
+ * storage of the bundle belonging to the {@link ResourceContext}
  */
-public interface CPUMonitor extends ResourceMonitor {
+public interface DiskStorageMonitor extends ResourceMonitor {
   
   /**
-   * Returns the CPU usage as a cumulative number of nanoseconds
+   * Returns the sum of the size of the persistent storage areas of
+   * the bundles in this resource context.
    * <p>
    * The {@link #getUsage()} method returns the same value,
    * wrapped in a {@link Long}
-   * @return the CPU usage in nanoseconds
+   * @return the sum of the sizes of the persistent storage
+   * areas in bytes
    */
-  public int getCPUUsage();
+  public long getUsedDiskStorage();
   
-  
+ 
 }

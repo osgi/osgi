@@ -1,7 +1,7 @@
 /**
  * 
  */
-package org.osgi.service.resource;
+package org.osgi.service.resourcemanagement;
 
 /**
  * This exception is used to report that a Resource Context has reached an ERROR
