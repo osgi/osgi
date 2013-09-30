@@ -8,7 +8,6 @@ import org.osgi.service.zigbee.ZigBeeAttributeRecord;
 import org.osgi.service.zigbee.ZigBeeCluster;
 import org.osgi.service.zigbee.ZigBeeCommand;
 import org.osgi.service.zigbee.ZigBeeHandler;
-import org.osgi.service.zigbee.ZigBeeNoDescriptionAvailableException;
 import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
 
 /**
@@ -73,22 +72,7 @@ public class ZigBeeClusterImpl implements ZigBeeCluster {
 		handler.onSuccess(response);
 	}
 
-	public void readAttributesAsBytes(int[] attributesIds, ZigBeeHandler handler) {
-		Map response = new HashMap();
-		for (int i : attributesIds) {
-			ZigBeeAttributeImpl attribute = attributes[i];
-			// attribute.getValue() should be moved from Object to byte[] in a
-			// real non-mocked impl.
-			response.put(attribute.getId(), attribute.getValue());
-		}
-		handler.onSuccess(response);
-	}
-
 	public void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributesRecords, ZigBeeHandler handler) {
-		// TODO Auto-generated method stub
-	}
-
-	public void writeAttributes(boolean undivided, int[] attributesIds, byte[] values, ZigBeeHandler handler) throws ZigBeeNoDescriptionAvailableException {
 		// TODO Auto-generated method stub
 	}
 

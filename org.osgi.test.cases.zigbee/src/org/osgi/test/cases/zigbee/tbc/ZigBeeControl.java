@@ -11,7 +11,6 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeEvent;
 import org.osgi.service.zigbee.ZigBeeException;
-import org.osgi.service.zigbee.ZigBeeNoDescriptionAvailableException;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 import org.osgi.test.cases.zigbee.tbc.device.discovery.ServicesListener;
@@ -401,18 +400,6 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 				fail("isSuccess is expected not to be false.");
 			}
 
-		// cluster.readAttributesAsBytes
-		cluster.readAttributesAsBytes(attributesIds, handlerCluster);
-		isSuccess = handlerCluster.isSuccess();
-		if (isSuccess == null) {
-			fail("isSuccess is expected not to be null.");
-		} else
-			if (isSuccess) {
-				log("handlerCluster.getResponse(): " + handlerCluster.getResponse());
-			} else {
-				fail("isSuccess is expected not to be false.");
-			}
-
 		// cluster.writeAttributes(undivided, attributesRecords,
 		// handlerCluster);
 		Boolean undivided = true;
@@ -428,26 +415,6 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			} else {
 				fail("isSuccess is expected not to be false.");
 			}
-
-		// cluster.writeAttributes(undivided, attributesIds, values,
-		// handlerCluster);
-		byte[] values = null;
-		try {
-			cluster.writeAttributes(undivided, attributesIds, values,
-					handlerCluster);
-			isSuccess = handlerCluster.isSuccess();
-			if (isSuccess == null) {
-				fail("isSuccess is expected not to be null.");
-			} else
-				if (isSuccess) {
-					log("handlerCluster.getResponse(): " + handlerCluster.getResponse());
-				} else {
-					fail("isSuccess is expected not to be false.");
-				}
-		} catch (ZigBeeNoDescriptionAvailableException e) {
-			e.printStackTrace();
-			fail("No exception is expected.");
-		}
 
 		// Test "control" methods of ZigBeeAttribute.
 

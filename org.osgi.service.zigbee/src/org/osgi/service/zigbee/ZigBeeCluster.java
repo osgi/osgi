@@ -16,7 +16,6 @@
 
 package org.osgi.service.zigbee;
 
-
 /**
  * This interface represents a ZigBee Cluster
  * 
@@ -79,15 +78,6 @@ public interface ZigBeeCluster {
 	public void readAttributes(int[] attributesIds, ZigBeeHandler handler);
 
 	/**
-	 * Read a list of attributes. Each read attributes will be represented as a
-	 * byte array
-	 * 
-	 * @param attributesIds An array of attributes ids
-	 * @param handler The response handler
-	 */
-	public void readAttributesAsBytes(int[] attributesIds, ZigBeeHandler handler);
-
-	/**
 	 * Write a list of attributes
 	 * 
 	 * @param undivided The write command is undivided or not
@@ -95,16 +85,5 @@ public interface ZigBeeCluster {
 	 * @param handler The response handler
 	 */
 	public void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributesRecords, ZigBeeHandler handler);
-
-	/**
-	 * Write a list of attributes
-	 * 
-	 * @param undivided The write command is undivided or not
-	 * @param attributesIds An array of attributes ids
-	 * @param values A byte array representing attributes values
-	 * @param handler The response handler
-	 * @throws ZigBeeNoDescriptionAvailableException
-	 */
-	public void writeAttributes(boolean undivided, int[] attributesIds, byte[] values, ZigBeeHandler handler) throws ZigBeeNoDescriptionAvailableException;
 
 }
