@@ -1039,7 +1039,11 @@ Password <phrase role="symbol">↔</phrase> <xref
               xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>A validation value. Similar to the <code>min</code>
-              field.</para></entry>
+              field. When <code>min</code> or <code>max</code> are numbers,
+              attribute values with a numeric data type are valid if <code>min 
+              &lt;= value &lt;= max</code>. Attribute values with a string (or 
+              equivalent) data type are valid if <code>min &lt;= value.length() 
+              &lt;= max</code>.</para></entry>
             </row>
 
             <row>
