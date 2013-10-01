@@ -50,8 +50,8 @@ public class ZigBeeException extends Exception {
 	/** INVALID_FIELD */
 	public static final short	INVALID_FIELD						= 0x85;
 
-	/** ATTRIBUTE_NOT_SUPPORTED */
-	public static final short	ATTRIBUTE_NOT_SUPPORTED				= 0x86;
+	/** UNSUPPORTED_ATTRIBUTE */
+	public static final short	UNSUPPORTED_ATTRIBUTE				= 0x86;
 
 	/** INVALID_VALUE */
 	public static final short	INVALID_VALUE						= 0x87;
