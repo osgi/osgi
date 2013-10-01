@@ -1,16 +1,16 @@
 
 package org.osgi.test.cases.zigbee.tbc.util;
 
-import java.util.Map;
 import org.osgi.service.zigbee.ZigBeeCommandHandler;
+import org.osgi.service.zigbee.ZigBeeException;
 
 /**
  * Mocked impl of ZigBeeCommandHandler.
  */
 public class ZigBeeCommandHandlerImpl implements ZigBeeCommandHandler {
 
-	private byte[]	responseSuccess;
-	private Map		responseFailure;
+	private byte[]			responseSuccess;
+	private ZigBeeException	responseFailure;
 
 	/**
 	 * Constructor.
@@ -26,11 +26,11 @@ public class ZigBeeCommandHandlerImpl implements ZigBeeCommandHandler {
 		this.responseSuccess = response;
 	}
 
-	public void onFailure(Map response) {
+	public void onFailure(ZigBeeException e) {
 		// System.out.println("ZigBeeCommandHandlerImpl.onFailure(" + response +
 		// ")");
 		this.isSuccess = false;
-		this.responseFailure = response;
+		this.responseFailure = e;
 	}
 
 	// Code below is for the testcases only.
@@ -63,10 +63,11 @@ public class ZigBeeCommandHandlerImpl implements ZigBeeCommandHandler {
 	/**
 	 * FOR TESTCASES ONLY!
 	 * 
-	 * @return ZigBeeCommandHandlerImpl.reponse. Can be null, if the handler
-	 *         hasn't receive a response yet, or if the response is null.
+	 * @return ZigBeeCommandHandlerImpl.responseFailure. Can be null, if the
+	 *         handler hasn't receive a response yet, or if the response is
+	 *         null.
 	 */
-	public Map getResponseFailure() {
+	public ZigBeeException getResponseFailure() {
 		return responseFailure;
 	}
 

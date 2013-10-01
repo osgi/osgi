@@ -5,9 +5,9 @@ import java.util.HashMap;
 import java.util.Map;
 import org.osgi.service.zigbee.ZigBeeAttribute;
 import org.osgi.service.zigbee.ZigBeeAttributeRecord;
+import org.osgi.service.zigbee.ZigBeeAttributesHandler;
 import org.osgi.service.zigbee.ZigBeeCluster;
 import org.osgi.service.zigbee.ZigBeeCommand;
-import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
 
 /**
@@ -63,7 +63,7 @@ public class ZigBeeClusterImpl implements ZigBeeCluster {
 		return description.getGlobalClusterDescription().getClusterName();
 	}
 
-	public void readAttributes(int[] attributesIds, ZigBeeHandler handler) {
+	public void readAttributes(int[] attributesIds, ZigBeeAttributesHandler handler) {
 		Map response = new HashMap();
 		for (int i : attributesIds) {
 			ZigBeeAttributeImpl attribute = attributes[i];
@@ -72,7 +72,7 @@ public class ZigBeeClusterImpl implements ZigBeeCluster {
 		handler.onSuccess(response);
 	}
 
-	public void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributesRecords, ZigBeeHandler handler) {
+	public void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributesRecords, ZigBeeAttributesHandler handler) {
 		// TODO Auto-generated method stub
 	}
 

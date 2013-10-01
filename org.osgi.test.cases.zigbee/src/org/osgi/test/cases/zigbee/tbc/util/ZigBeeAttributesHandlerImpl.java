@@ -3,13 +3,15 @@ package org.osgi.test.cases.zigbee.tbc.util;
 
 import java.util.Map;
 import org.osgi.service.zigbee.ZigBeeAttributesHandler;
+import org.osgi.service.zigbee.ZigBeeException;
 
 /**
  * Mocked impl of ZigBeeAttributesHandler.
  */
 public class ZigBeeAttributesHandlerImpl implements ZigBeeAttributesHandler {
 
-	private Map	response;
+	private Map				successResponse;
+	private ZigBeeException	failureResponse;
 
 	/**
 	 * Constructor.
@@ -22,14 +24,14 @@ public class ZigBeeAttributesHandlerImpl implements ZigBeeAttributesHandler {
 		// System.out.println("ZigBeeAttributesHandlerImpl.onSuccess(" +
 		// response + ")");
 		this.isSuccess = true;
-		this.response = response;
+		this.successResponse = response;
 	}
 
-	public void onFailure(Map response) {
+	public void onFailure(ZigBeeException e) {
 		// System.out.println("ZigBeeAttributesHandlerImpl.onFailure(" +
 		// response + ")");
 		this.isSuccess = false;
-		this.response = response;
+		this.failureResponse = e;
 	}
 
 	// Code below is for the testcases only.
@@ -52,11 +54,23 @@ public class ZigBeeAttributesHandlerImpl implements ZigBeeAttributesHandler {
 	/**
 	 * FOR TESTCASES ONLY!
 	 * 
-	 * @return ZigBeeHandlerImpl.reponse. Can be null, if the handler hasn't
-	 *         receive a response yet, or if the response is null.
+	 * @return ZigBeeAttributesHandlerImpl.successResponse. Can be null, if the
+	 *         handler hasn't receive a response yet, or if the response is
+	 *         null.
 	 */
-	public Map getResponse() {
-		return response;
+	public Map getSuccessResponse() {
+		return successResponse;
+	}
+
+	/**
+	 * FOR TESTCASES ONLY!
+	 * 
+	 * @return ZigBeeAttributesHandlerImpl.failureResponse. Can be null, if the
+	 *         handler hasn't receive a response yet, or if the response is
+	 *         null.
+	 */
+	public ZigBeeException getFailureResponse() {
+		return failureResponse;
 	}
 
 }

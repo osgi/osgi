@@ -2,6 +2,7 @@
 package org.osgi.test.cases.zigbee.tbc.util;
 
 import java.util.Map;
+import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeHandler;
 
 /**
@@ -24,7 +25,7 @@ public class ZigBeeHandlerImpl implements ZigBeeHandler {
 		this.response = response;
 	}
 
-	public void onFailure(Map response) {
+	public void onFailure(ZigBeeException e) {
 		// System.out.println("ZigBeeHandlerImpl.onFailure(" + response + ")");
 		this.isSuccess = false;
 		this.response = response;

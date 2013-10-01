@@ -19,7 +19,6 @@ import org.osgi.test.cases.zigbee.tbc.util.ZigBeeCommandHandlerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventListenerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventSourceImpl;
-import org.osgi.test.cases.zigbee.tbc.util.ZigBeeHandlerImpl;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
@@ -387,7 +386,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 		// ZigBeeHandler handler = new ZigBeeHandlerImpl();
 		int[] attributesIds = {8};
-		ZigBeeHandlerImpl handlerCluster = new ZigBeeHandlerImpl();
+		ZigBeeAttributesHandlerImpl handlerCluster = new ZigBeeAttributesHandlerImpl();
 		Boolean isSuccess;
 
 		// cluster.readAttributes
@@ -397,7 +396,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			fail("isSuccess is expected not to be null.");
 		} else
 			if (isSuccess) {
-				log("handlerCluster.getResponse(): " + handlerCluster.getResponse());
+				log("handlerCluster.getSuccessResponse(): " + handlerCluster.getSuccessResponse());
 			} else {
 				fail("isSuccess is expected not to be false.");
 			}
@@ -413,7 +412,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			fail("isSuccess is expected not to be null.");
 		} else
 			if (isSuccess) {
-				log("handlerCluster.getResponse(): " + handlerCluster.getResponse());
+				log("handlerCluster.getSuccessResponse(): " + handlerCluster.getSuccessResponse());
 			} else {
 				fail("isSuccess is expected not to be false.");
 			}
@@ -435,7 +434,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 				fail("isSuccess is expected not to be null.");
 			} else
 				if (isSuccess) {
-					log("handlerAttributeGetValue1.getResponse(): " + handlerAttributeGetValue1.getResponse());
+					log("handlerAttributeGetValue1.getSuccessResponse(): " + handlerAttributeGetValue1.getSuccessResponse());
 				} else {
 					fail("isSuccess is expected not to be false.");
 				}
@@ -454,7 +453,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 				fail("isSuccess is expected not to be null.");
 			} else
 				if (isSuccess) {
-					log("handlerAttributeGetValue2.getResponse(): " + handlerAttributeGetValue2.getResponse());
+					log("handlerAttributeGetValue2.getSuccessResponse(): " + handlerAttributeGetValue2.getSuccessResponse());
 				} else {
 					fail("isSuccess is expected not to be false.");
 				}
@@ -473,7 +472,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 				fail("isSuccess is expected not to be null.");
 			} else
 				if (isSuccess) {
-					log("handler.getResponse(): " + handler.getResponse());
+					log("handler.getSuccessResponse(): " + handler.getSuccessResponse());
 				} else {
 					fail("isSuccess is expected not to be false.");
 				}

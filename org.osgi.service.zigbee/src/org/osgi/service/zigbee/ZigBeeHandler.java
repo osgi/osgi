@@ -38,8 +38,8 @@ public interface ZigBeeHandler {
 	 * Notifies the failure result of the call. This method is used when the
 	 * handler command result is a failure.
 	 * 
-	 * @param response contains the results of the call.
+	 * @param e the ZigBeeException.
 	 */
-	public void onFailure(Map response);
+	public void onFailure(ZigBeeException e);
 
 }
