@@ -31,28 +31,11 @@ public class ZigBeeAttributeImpl implements ZigBeeAttribute {
 		return id;
 	}
 
-	/**
-	 * FOR TESTCASES ONLY!
-	 * 
-	 * @return the attribute value.
-	 */
-	public Object getValue() {
-		return value;
-	}
-
 	public ZigBeeDataTypeDescription getDataType() {
 		return description.getDataTypeDescription();
 	}
 
 	public void getValue(ZigBeeAttributesHandler handler) {
-		Map response = null;
-		response = new HashMap();
-		response.put(id, value);
-		handler.onSuccess(response);
-	}
-
-	public void getValue(ZigBeeDataTypeDescription outputType,
-			ZigBeeAttributesHandler handler) throws ZigBeeException {
 		Map response = null;
 		response = new HashMap();
 		response.put(id, value);
@@ -66,6 +49,15 @@ public class ZigBeeAttributeImpl implements ZigBeeAttribute {
 		response = new HashMap();
 		response.put(id, this.value);
 		handler.onSuccess(response);
+	}
+
+	/**
+	 * FOR TESTCASES ONLY!
+	 * 
+	 * @return the attribute value.
+	 */
+	public Object getValue() {
+		return value;
 	}
 
 	public String toString() {

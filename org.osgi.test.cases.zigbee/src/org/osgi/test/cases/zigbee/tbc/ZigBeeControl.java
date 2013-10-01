@@ -7,12 +7,10 @@ import org.osgi.service.zigbee.ZigBeeAttribute;
 import org.osgi.service.zigbee.ZigBeeAttributeRecord;
 import org.osgi.service.zigbee.ZigBeeCluster;
 import org.osgi.service.zigbee.ZigBeeCommand;
-import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeEvent;
 import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeNode;
-import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 import org.osgi.test.cases.zigbee.tbc.device.discovery.ServicesListener;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeAttributesHandlerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeCommandHandlerImpl;
@@ -435,25 +433,6 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			} else
 				if (isSuccess) {
 					log("handlerAttributeGetValue1.getSuccessResponse(): " + handlerAttributeGetValue1.getSuccessResponse());
-				} else {
-					fail("isSuccess is expected not to be false.");
-				}
-		} catch (ZigBeeException e) {
-			e.printStackTrace();
-			fail("No exception is expected.");
-		}
-
-		try {
-			ZigBeeAttributesHandlerImpl handlerAttributeGetValue2 = new ZigBeeAttributesHandlerImpl();
-			ZigBeeDataTypeDescription outputType = ZigBeeDataTypes.BOOLEAN;
-			attribute.getValue(outputType, handlerAttributeGetValue2);
-
-			isSuccess = handlerAttributeGetValue2.isSuccess();
-			if (isSuccess == null) {
-				fail("isSuccess is expected not to be null.");
-			} else
-				if (isSuccess) {
-					log("handlerAttributeGetValue2.getSuccessResponse(): " + handlerAttributeGetValue2.getSuccessResponse());
 				} else {
 					fail("isSuccess is expected not to be false.");
 				}

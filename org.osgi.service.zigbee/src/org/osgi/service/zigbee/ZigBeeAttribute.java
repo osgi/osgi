@@ -74,16 +74,6 @@ public interface ZigBeeAttribute {
 	public void getValue(ZigBeeAttributesHandler handler) throws ZigBeeException;
 
 	/**
-	 * Gets the current value of the attribute. This method is used when the
-	 * attribute data type is provided
-	 * 
-	 * @param outputType output data type
-	 * @param handler the handler
-	 * @throws ZigBeeException
-	 */
-	public void getValue(ZigBeeDataTypeDescription outputType, ZigBeeAttributesHandler handler) throws ZigBeeException;
-
-	/**
 	 * Sets the current value of the attribute.
 	 * 
 	 * @param value the value to set
