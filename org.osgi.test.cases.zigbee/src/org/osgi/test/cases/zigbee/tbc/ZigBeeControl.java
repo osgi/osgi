@@ -14,6 +14,7 @@ import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 import org.osgi.test.cases.zigbee.tbc.device.discovery.ServicesListener;
+import org.osgi.test.cases.zigbee.tbc.util.ZigBeeCommandHandlerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventListenerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventSourceImpl;
@@ -511,15 +512,15 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 		byte[] bytes = null;
 		try {
-			ZigBeeHandlerImpl handlerCommandInvoke = new ZigBeeHandlerImpl();
-			command.invoke(bytes, handlerCommandInvoke);
+			ZigBeeCommandHandlerImpl commandHandlerImpl = new ZigBeeCommandHandlerImpl();
+			command.invoke(bytes, commandHandlerImpl);
 
-			isSuccess = handlerCommandInvoke.isSuccess();
+			isSuccess = commandHandlerImpl.isSuccess();
 			if (isSuccess == null) {
 				fail("isSuccess is expected not to be null.");
 			} else
 				if (isSuccess) {
-					log("handlerCommandInvoke.getResponse(): " + handlerCommandInvoke.getResponse());
+					log("commandHandlerImpl.getResponse(): " + commandHandlerImpl.getResponseSuccess());
 				} else {
 					fail("isSuccess is expected not to be false.");
 				}

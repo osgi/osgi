@@ -1,11 +1,9 @@
 
 package org.osgi.impl.service.zigbee.basedriver;
 
-import java.util.HashMap;
-import java.util.Map;
 import org.osgi.service.zigbee.ZigBeeCommand;
+import org.osgi.service.zigbee.ZigBeeCommandHandler;
 import org.osgi.service.zigbee.ZigBeeException;
-import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.descriptions.ZigBeeCommandDescription;
 
 /**
@@ -28,26 +26,14 @@ public class ZigBeeCommandImpl implements ZigBeeCommand {
 		return id;
 	}
 
-	public void invoke(byte[] bytes, ZigBeeHandler handler)
+	public void invoke(byte[] bytes, ZigBeeCommandHandler handler)
 			throws ZigBeeException {
-		Map response = null;
-		response = new HashMap();
-		String mockedValue = ("mockedValue");
-		response.put(id, mockedValue);
+		byte[] response = {};
 		handler.onSuccess(response);
 	}
-
-	// public void invoke(Object[] values, ZigBeeDataTypeDescription[]
-	// inputTypes,
-	// ZigBeeDataTypeDescription[] outputTypes, ZigBeeHandler handler)
-	// throws ZigBeeException {
-	// // log.info("command " +name+" invoked...");
-	// for (int i = 0; i < values.length; i++) {
-	// // log.info(values[i]+" : "+inputTypes[i]);
-	// }
-	// }
 
 	public String toString() {
 		return description.getName();
 	}
+
 }

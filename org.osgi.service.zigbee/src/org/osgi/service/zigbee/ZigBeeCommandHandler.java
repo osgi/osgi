@@ -16,26 +16,30 @@
 
 package org.osgi.service.zigbee;
 
+import java.util.Map;
+
 /**
- * This interface represents a ZigBee Command
+ * ZigBeeCommandHandler manages response of a command request to the Base Driver
  * 
  * @version 1.0
  */
-public interface ZigBeeCommand {
+
+public interface ZigBeeCommandHandler {
 
 	/**
-	 * @return The command identifier
-	 */
-	public int getId();
-
-	/**
-	 * Invokes the action. Invokes an action using the frame. The handler will
-	 * provide the invocation response in an asynchronously way.
+	 * Notifies the success result of the call. This method is used when the
+	 * handler command result is a success.
 	 * 
-	 * @param bytes An array of bytes containing a command frame sequence.
-	 * @param handler The handler that manages the command response.
-	 * @throws ZigBeeException
+	 * @param response contains the results of the call.
 	 */
-	public void invoke(byte[] bytes, ZigBeeCommandHandler handler) throws ZigBeeException;
+	public void onSuccess(byte[] response);
+
+	/**
+	 * Notifies the failure result of the call. This method is used when the
+	 * handler command result is a failure.
+	 * 
+	 * @param response contains the results of the call.
+	 */
+	public void onFailure(Map response);
 
 }
