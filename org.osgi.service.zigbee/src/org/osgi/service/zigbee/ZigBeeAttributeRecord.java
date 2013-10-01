@@ -26,23 +26,25 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 public class ZigBeeAttributeRecord {
 
 	private short						id;
-
 	private ZigBeeDataTypeDescription	dataType;
-
 	private Object						value;
+
+	/**
+	 * @param id the ZigBeeAttributeRecord id
+	 * @param dataType the ZigBeeAttributeRecord dataType
+	 * @param value the ZigBeeAttributeRecord value
+	 */
+	public ZigBeeAttributeRecord(short id, ZigBeeDataTypeDescription dataType, Object value) {
+		this.id = id;
+		this.dataType = dataType;
+		this.value = value;
+	}
 
 	/**
 	 * @return the ZigBeeAttributeRecord id
 	 */
 	public short getId() {
 		return id;
-	}
-
-	/**
-	 * @param id the ZigBeeAttributeRecord id
-	 */
-	public void setId(short id) {
-		this.id = id;
 	}
 
 	/**
@@ -53,24 +55,10 @@ public class ZigBeeAttributeRecord {
 	}
 
 	/**
-	 * @param dataType the ZigBeeAttributeRecord dataType
-	 */
-	public void setDataType(ZigBeeDataTypeDescription dataType) {
-		this.dataType = dataType;
-	}
-
-	/**
 	 * @return the ZigBeeAttributeRecord value
 	 */
 	public Object getValue() {
 		return value;
-	}
-
-	/**
-	 * @param value the ZigBeeAttributeRecord value
-	 */
-	public void setValue(Object value) {
-		this.value = value;
 	}
 
 }
