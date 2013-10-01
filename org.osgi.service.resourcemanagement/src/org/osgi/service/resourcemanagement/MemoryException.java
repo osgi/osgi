@@ -9,7 +9,7 @@ package org.osgi.service.resourcemanagement;
  * 
  * @Immutable
  */
-public class MemoryException extends Exception {
+public class MemoryException extends RuntimeException {
 
 	private final long	memoryUsage;
 

@@ -135,4 +135,25 @@ public interface ResourceMonitor {
 	 *         monitored period is not relevant for this resource type.
 	 */
 	public long getMonitoredPeriod();
+
+	/**
+	 * Checks if resourceMonitor is equals to the current instance. A
+	 * ResourceMonitor rm1 is equals to a ResourceMonitor rm2 if
+	 * rm1.getContext().equals(rm2.getContext()) and
+	 * r1.getType().equals(rm2.getType()).
+	 * 
+	 * @param resourceMonitor
+	 * @return true if the current instance is equals to the provided
+	 *         resourceMonitor
+	 */
+	public boolean equals(Object resourceMonitor);
+
+	/**
+	 * Retrieves the hashCode value of this ResourceMonitor. The hashCode value
+	 * is based on the hashCode value of the associated ResourceContext and the
+	 * hashCode value of the type.
+	 * 
+	 * @return hashcode
+	 */
+	public int hashCode();
 }

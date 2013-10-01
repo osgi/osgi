@@ -16,11 +16,11 @@
 
 package org.osgi.service.resourcemanagement;
 
-import org.osgi.service.resourcemanagement.resourcemonitor.CPUMonitor;
-import org.osgi.service.resourcemanagement.resourcemonitor.DiskStorageMonitor;
-import org.osgi.service.resourcemanagement.resourcemonitor.MemoryMonitor;
-import org.osgi.service.resourcemanagement.resourcemonitor.SocketMonitor;
-import org.osgi.service.resourcemanagement.resourcemonitor.ThreadMonitor;
+import org.osgi.service.resourcemanagement.monitor.CPUMonitor;
+import org.osgi.service.resourcemanagement.monitor.DiskStorageMonitor;
+import org.osgi.service.resourcemanagement.monitor.MemoryMonitor;
+import org.osgi.service.resourcemanagement.monitor.SocketMonitor;
+import org.osgi.service.resourcemanagement.monitor.ThreadMonitor;
 
 /**
  * Monitor and manage resource contexts.

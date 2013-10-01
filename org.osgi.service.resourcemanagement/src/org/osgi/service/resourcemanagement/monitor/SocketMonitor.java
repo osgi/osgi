@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.resourcemanagement.resourcemonitor;
+package org.osgi.service.resourcemanagement.monitor;
 
 import java.net.DatagramSocket;
 import java.net.Socket;

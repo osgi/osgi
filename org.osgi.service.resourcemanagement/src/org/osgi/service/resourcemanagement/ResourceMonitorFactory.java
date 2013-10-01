@@ -15,6 +15,8 @@ package org.osgi.service.resourcemanagement;
  */
 public interface ResourceMonitorFactory {
 
+	public static final String	RESOURCE_TYPE_PROPERTY	= "org.osgi.resourcemanagement.ResourceType";
+
 	/**
 	 * Return the type of ResourceMonitor instance this factory is able to
 	 * create.
@@ -34,6 +36,6 @@ public interface ResourceMonitorFactory {
 	 *        created ResourceMonitor instance
 	 * @return a ResourceMonitor instance
 	 */
-	public ResourceMonitor createResourceMonitor(ResourceContext resourceContext);
+	public ResourceMonitor createResourceMonitor(ResourceContext resourceContext) throws ResourceMonitorException;
 
 }

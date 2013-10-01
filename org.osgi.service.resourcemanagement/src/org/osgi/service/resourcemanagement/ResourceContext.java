@@ -156,4 +156,22 @@ public interface ResourceContext {
 	 *        currently allocated by this resource context will be moved.
 	 */
 	public void removeContext(ResourceContext destination);
+
+	/**
+	 * A ResourceContext rc1 is equals to ResourceContext rc2 if rc1.getName()
+	 * is equals to rc2.getName().
+	 * 
+	 * @param resourceContext resource context
+	 * @return true if getName().equals(resourceContext.getName()
+	 */
+	public boolean equals(Object resourceContext);
+
+	/**
+	 * Retrieves the hashCode value of a ResourceContext. The hashCode value of
+	 * a ResourceContext is only based on the hashcode value of the name of the
+	 * context.
+	 * 
+	 * @return hashcode
+	 */
+	public int hashCode();
 }

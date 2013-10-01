@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.resourcemanagement.resourcemonitor;
+package org.osgi.service.resourcemanagement.monitor;
 
 import org.osgi.service.resourcemanagement.ResourceContext;
 import org.osgi.service.resourcemanagement.ResourceManager;
@@ -22,22 +22,29 @@ import org.osgi.service.resourcemanagement.ResourceMonitor;
 
 /**
  * A {@link ResourceMonitor} for the 
- * {@link ResourceManager#RES_TYPE_DISK_STORAGE} resource type.
- * A DiskStorageMonitor instance monitors and limits the persistent
- * storage of the bundle belonging to the {@link ResourceContext}
+ * {@link ResourceManager#RES_TYPE_THREADS} resource type.
+ * A ThreadMonitor instance monitors and limits the thread created by a 
+ * {@link ResourceContext} instance.  
  */
-public interface DiskStorageMonitor extends ResourceMonitor {
+public interface ThreadMonitor extends ResourceMonitor {
   
-  /**
-   * Returns the sum of the size of the persistent storage areas of
-   * the bundles in this resource context.
-   * <p>
-   * The {@link #getUsage()} method returns the same value,
-   * wrapped in a {@link Long}
-   * @return the sum of the sizes of the persistent storage
-   * areas in bytes
-   */
-  public long getUsedDiskStorage();
+  	/**
+	 * Returns the number of alive threads created by the bundles in this
+	 * resource context. A Thread is considered to be alive when its java state
+	 * is one of the following:
+	 * <ul>
+	 * <li>RUNNABLE</li>
+	 * <li>BLOCKED</li>
+	 * <li>WAITING</li>
+	 * <li>TIMED_WAITING</li>
+	 * </ul>
+	 * <p>
+	 * The {@link #getUsage()} method returns the same value, wrapped in a
+	 * {@link Integer}
+	 * 
+	 * @return the number of alive threads created by this resource context
+	 */
+  public int getAliveThreads();
   
- 
+  
 }
