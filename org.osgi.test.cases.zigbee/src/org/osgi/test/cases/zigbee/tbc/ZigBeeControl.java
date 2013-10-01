@@ -14,6 +14,7 @@ import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 import org.osgi.test.cases.zigbee.tbc.device.discovery.ServicesListener;
+import org.osgi.test.cases.zigbee.tbc.util.ZigBeeAttributesHandlerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeCommandHandlerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventListenerImpl;
@@ -426,7 +427,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		ZigBeeAttribute attribute = attributes[8];
 
 		try {
-			ZigBeeHandlerImpl handlerAttributeGetValue1 = new ZigBeeHandlerImpl();
+			ZigBeeAttributesHandlerImpl handlerAttributeGetValue1 = new ZigBeeAttributesHandlerImpl();
 			attribute.getValue(handlerAttributeGetValue1);
 
 			isSuccess = handlerAttributeGetValue1.isSuccess();
@@ -444,7 +445,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		}
 
 		try {
-			ZigBeeHandlerImpl handlerAttributeGetValue2 = new ZigBeeHandlerImpl();
+			ZigBeeAttributesHandlerImpl handlerAttributeGetValue2 = new ZigBeeAttributesHandlerImpl();
 			ZigBeeDataTypeDescription outputType = ZigBeeDataTypes.BOOLEAN;
 			attribute.getValue(outputType, handlerAttributeGetValue2);
 
@@ -464,26 +465,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 		try {
 			Object value = new Object();
-			ZigBeeHandlerImpl handler = new ZigBeeHandlerImpl();
-			attribute.setValue(value, handler);
-
-			isSuccess = handler.isSuccess();
-			if (isSuccess == null) {
-				fail("isSuccess is expected not to be null.");
-			} else
-				if (isSuccess) {
-					log("handler.getResponse(): " + handler.getResponse());
-				} else {
-					fail("isSuccess is expected not to be false.");
-				}
-		} catch (ZigBeeException e) {
-			e.printStackTrace();
-			fail("No exception is expected.");
-		}
-
-		try {
-			byte[] value = {};
-			ZigBeeHandlerImpl handler = new ZigBeeHandlerImpl();
+			ZigBeeAttributesHandlerImpl handler = new ZigBeeAttributesHandlerImpl();
 			attribute.setValue(value, handler);
 
 			isSuccess = handler.isSuccess();

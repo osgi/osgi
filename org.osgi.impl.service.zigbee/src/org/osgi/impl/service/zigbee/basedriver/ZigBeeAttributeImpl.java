@@ -4,8 +4,8 @@ package org.osgi.impl.service.zigbee.basedriver;
 import java.util.HashMap;
 import java.util.Map;
 import org.osgi.service.zigbee.ZigBeeAttribute;
+import org.osgi.service.zigbee.ZigBeeAttributesHandler;
 import org.osgi.service.zigbee.ZigBeeException;
-import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.descriptions.ZigBeeAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
@@ -44,7 +44,7 @@ public class ZigBeeAttributeImpl implements ZigBeeAttribute {
 		return description.getDataTypeDescription();
 	}
 
-	public void getValue(ZigBeeHandler handler) {
+	public void getValue(ZigBeeAttributesHandler handler) {
 		Map response = null;
 		response = new HashMap();
 		response.put(id, value);
@@ -52,23 +52,14 @@ public class ZigBeeAttributeImpl implements ZigBeeAttribute {
 	}
 
 	public void getValue(ZigBeeDataTypeDescription outputType,
-			ZigBeeHandler handler) throws ZigBeeException {
+			ZigBeeAttributesHandler handler) throws ZigBeeException {
 		Map response = null;
 		response = new HashMap();
 		response.put(id, value);
 		handler.onSuccess(response);
 	}
 
-	public void setValue(Object value, ZigBeeHandler handler)
-			throws ZigBeeException {
-		this.value = value;
-		Map response = null;
-		response = new HashMap();
-		response.put(id, this.value);
-		handler.onSuccess(response);
-	}
-
-	public void setValue(byte[] value, ZigBeeHandler handler)
+	public void setValue(Object value, ZigBeeAttributesHandler handler)
 			throws ZigBeeException {
 		this.value = value;
 		Map response = null;

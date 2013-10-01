@@ -71,7 +71,7 @@ public interface ZigBeeAttribute {
 	 * @param handler the handler
 	 * @throws ZigBeeException
 	 */
-	public void getValue(ZigBeeHandler handler) throws ZigBeeException;
+	public void getValue(ZigBeeAttributesHandler handler) throws ZigBeeException;
 
 	/**
 	 * Gets the current value of the attribute. This method is used when the
@@ -81,7 +81,7 @@ public interface ZigBeeAttribute {
 	 * @param handler the handler
 	 * @throws ZigBeeException
 	 */
-	public void getValue(ZigBeeDataTypeDescription outputType, ZigBeeHandler handler) throws ZigBeeException;
+	public void getValue(ZigBeeDataTypeDescription outputType, ZigBeeAttributesHandler handler) throws ZigBeeException;
 
 	/**
 	 * Sets the current value of the attribute.
@@ -90,16 +90,7 @@ public interface ZigBeeAttribute {
 	 * @param handler the handler
 	 * @throws ZigBeeException
 	 */
-	public void setValue(Object value, ZigBeeHandler handler) throws ZigBeeException;
-
-	/**
-	 * Sets the current value of the attribute.
-	 * 
-	 * @param value the value to set
-	 * @param handler the handler
-	 * @throws ZigBeeException
-	 */
-	public void setValue(byte[] value, ZigBeeHandler handler) throws ZigBeeException;
+	public void setValue(Object value, ZigBeeAttributesHandler handler) throws ZigBeeException;
 
 	/**
 	 * @return the Attribute data type

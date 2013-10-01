@@ -5,7 +5,7 @@ import java.util.Map;
 import org.osgi.service.zigbee.ZigBeeCommandHandler;
 
 /**
- * Mocked impl of ZigBeeHandler.
+ * Mocked impl of ZigBeeCommandHandler.
  */
 public class ZigBeeCommandHandlerImpl implements ZigBeeCommandHandler {
 
@@ -20,13 +20,15 @@ public class ZigBeeCommandHandlerImpl implements ZigBeeCommandHandler {
 	}
 
 	public void onSuccess(byte[] response) {
-		// System.out.println("ZigBeeHandlerImpl.onSuccess(" + response + ")");
+		// System.out.println("ZigBeeCommandHandlerImpl.onSuccess(" + response +
+		// ")");
 		this.isSuccess = true;
 		this.responseSuccess = response;
 	}
 
 	public void onFailure(Map response) {
-		// System.out.println("ZigBeeHandlerImpl.onFailure(" + response + ")");
+		// System.out.println("ZigBeeCommandHandlerImpl.onFailure(" + response +
+		// ")");
 		this.isSuccess = false;
 		this.responseFailure = response;
 	}
@@ -51,8 +53,8 @@ public class ZigBeeCommandHandlerImpl implements ZigBeeCommandHandler {
 	/**
 	 * FOR TESTCASES ONLY!
 	 * 
-	 * @return ZigBeeHandlerImpl.reponse. Can be null, if the handler hasn't
-	 *         receive a response yet, or if the response is null.
+	 * @return ZigBeeCommandHandlerImpl.reponse. Can be null, if the handler
+	 *         hasn't receive a response yet, or if the response is null.
 	 */
 	public byte[] getResponseSuccess() {
 		return responseSuccess;
@@ -61,8 +63,8 @@ public class ZigBeeCommandHandlerImpl implements ZigBeeCommandHandler {
 	/**
 	 * FOR TESTCASES ONLY!
 	 * 
-	 * @return ZigBeeHandlerImpl.reponse. Can be null, if the handler hasn't
-	 *         receive a response yet, or if the response is null.
+	 * @return ZigBeeCommandHandlerImpl.reponse. Can be null, if the handler
+	 *         hasn't receive a response yet, or if the response is null.
 	 */
 	public Map getResponseFailure() {
 		return responseFailure;
