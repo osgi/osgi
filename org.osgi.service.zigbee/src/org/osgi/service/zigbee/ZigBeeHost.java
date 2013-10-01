@@ -42,7 +42,6 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * Indicates if a ZigBee device can join the network.
 	 * 
 	 * @param duration The time during which associations are permitted.
-	 * @return true, false, or null(if the ZigBeeHost is an end device)
 	 * @throws ZigBeeException
 	 */
 	public void permitJoin(short duration) throws ZigBeeException;

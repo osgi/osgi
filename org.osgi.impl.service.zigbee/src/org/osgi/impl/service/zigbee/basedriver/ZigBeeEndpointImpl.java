@@ -4,7 +4,6 @@ package org.osgi.impl.service.zigbee.basedriver;
 import org.osgi.service.zigbee.ZigBeeCluster;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeException;
-import org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescription;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 
 /**
@@ -13,12 +12,9 @@ import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 
 	private short					id;
-	// private short address;
-	// private int profileId;
 	private ZigBeeSimpleDescriptor	desc;
 	private ZigBeeCluster[]			inputs;
 	private ZigBeeCluster[]			outputs;
-	// private ZigBeeNode deviceNode;
 
 	/**
 	 * @param id
@@ -38,20 +34,7 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return id;
 	}
 
-	// public short getAddress() {
-	// return address;
-	// }
-
 	public Long getNodeAddress() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	// public void setAddress(short address) {
-	// this.address = address;
-	// }
-
-	public ZigBeeDeviceDescription getDeviceDescription() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -80,18 +63,6 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		// TODO Auto-generated method stub
 		return outputs[clientClusterId];
 	}
-
-	// public int getProfileId() {
-	// return profileId;
-	// }
-
-	// public ZigBeeNode getDeviceNode() {
-	// return deviceNode;
-	// }
-
-	// public void setDeviceNode(ZigBeeNode deviceNode) {
-	// this.deviceNode = deviceNode;
-	// }
 
 	public boolean bindTo(ZigBeeEndpoint endpoint, int clusterId) {
 		// TODO Auto-generated method stub

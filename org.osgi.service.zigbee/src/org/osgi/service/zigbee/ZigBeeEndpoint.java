@@ -16,7 +16,6 @@
 
 package org.osgi.service.zigbee;
 
-import org.osgi.service.zigbee.descriptions.ZigBeeDeviceDescription;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 
 /**
@@ -102,12 +101,6 @@ public interface ZigBeeEndpoint {
 	 * @return The IEEE Address of the node containing this endpoint
 	 */
 	public Long getNodeAddress();
-
-	/**
-	 * @return If exists, the device description implemented by this endpoint -
-	 *         otherwise returns null.
-	 */
-	public ZigBeeDeviceDescription getDeviceDescription();
 
 	/**
 	 * @return the node simple descriptor.
