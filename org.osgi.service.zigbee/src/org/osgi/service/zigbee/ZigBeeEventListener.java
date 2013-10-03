@@ -24,12 +24,6 @@ package org.osgi.service.zigbee;
 public interface ZigBeeEventListener {
 
 	/**
-	 * key for a service property having a value that is an object of type
-	 * org.osgi.framework.Filter and that is used to limit received events.
-	 */
-	public static final String	ZIGBEE_FILTER			= "zigbee.filter";
-
-	/**
 	 * Key of {@link String} containing the listener targeted network PAN ID
 	 */
 	public static final String	PAN_ID_TARGET			= "zigbee.listener.target.pan.id";
@@ -47,4 +41,14 @@ public interface ZigBeeEventListener {
 	 * @param event a set of events
 	 */
 	public void notifyEvent(ZigBeeEvent event);
+
+	/**
+	 * Notifies a failure, i.e. when either a UNSUPPORTED_ATTRIBUTE, or a
+	 * UNREPORTABLE_ATTRIBUTE, or INVALID_VALUE, or INVALID_DATA_TYPE status
+	 * occurs.
+	 * 
+	 * @param e the ZigBeeException.
+	 */
+	public void onFailure(ZigBeeException e);
+
 }

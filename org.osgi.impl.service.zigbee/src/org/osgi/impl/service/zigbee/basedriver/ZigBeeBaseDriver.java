@@ -77,21 +77,15 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		attributesType[3] = ZigBeeDataTypes.BOOLEAN;
 
 		attributesDescription = new ZigBeeAttributeDescription[9];
-		attributesDescription[0] = new ZigBeeAttributeDescriptionImpl(0x0000, ZigBeeAttributeDescription.READ_AND_WRITE_ACCESS, new Integer(0x00), "ZCLVersion", false, false, attributesType[0]);
-		attributesDescription[1] = new ZigBeeAttributeDescriptionImpl(0x0001,
-				ZigBeeAttributeDescription.READ_AND_WRITE_ACCESS,
-				new Integer(0x00),
-				"ApplicationVersion",
-				false,
-				false,
-				attributesType[0]);
-		attributesDescription[2] = new ZigBeeAttributeDescriptionImpl(0x0002, ZigBeeAttributeDescription.READ_AND_WRITE_ACCESS, new Integer(0x00), "StackVersion", false, false, attributesType[0]);
-		attributesDescription[3] = new ZigBeeAttributeDescriptionImpl(0x0003, ZigBeeAttributeDescription.READ_AND_WRITE_ACCESS, new Integer(0x00), "HWVersion", false, false, attributesType[0]);
-		attributesDescription[4] = new ZigBeeAttributeDescriptionImpl(0x0004, ZigBeeAttributeDescription.READ_AND_WRITE_ACCESS, "", "ManufacturerName", false, false, attributesType[1]);
-		attributesDescription[5] = new ZigBeeAttributeDescriptionImpl(0x0005, ZigBeeAttributeDescription.READ_AND_WRITE_ACCESS, "", "ModelIdentifier", false, false, attributesType[1]);
-		attributesDescription[6] = new ZigBeeAttributeDescriptionImpl(0x0006, ZigBeeAttributeDescription.READ_AND_WRITE_ACCESS, "", "DateCode", false, false, attributesType[1]);
-		attributesDescription[7] = new ZigBeeAttributeDescriptionImpl(0x0007, ZigBeeAttributeDescription.READ_AND_WRITE_ACCESS, "", "PowerSource", false, false, attributesType[2]);
-		attributesDescription[8] = new ZigBeeAttributeDescriptionImpl(0x0008, ZigBeeAttributeDescription.READ_AND_WRITE_ACCESS, new Boolean(true), "DeviceEnabled", true, true, attributesType[3]);
+		attributesDescription[0] = new ZigBeeAttributeDescriptionImpl(0x0000, false, new Integer(0x00), "ZCLVersion", false, false, attributesType[0]);
+		attributesDescription[1] = new ZigBeeAttributeDescriptionImpl(0x0001, false, new Integer(0x00), "ApplicationVersion", false, false, attributesType[0]);
+		attributesDescription[2] = new ZigBeeAttributeDescriptionImpl(0x0002, false, new Integer(0x00), "StackVersion", false, false, attributesType[0]);
+		attributesDescription[3] = new ZigBeeAttributeDescriptionImpl(0x0003, false, new Integer(0x00), "HWVersion", false, false, attributesType[0]);
+		attributesDescription[4] = new ZigBeeAttributeDescriptionImpl(0x0004, false, "", "ManufacturerName", false, false, attributesType[1]);
+		attributesDescription[5] = new ZigBeeAttributeDescriptionImpl(0x0005, false, "", "ModelIdentifier", false, false, attributesType[1]);
+		attributesDescription[6] = new ZigBeeAttributeDescriptionImpl(0x0006, false, "", "DateCode", false, false, attributesType[1]);
+		attributesDescription[7] = new ZigBeeAttributeDescriptionImpl(0x0007, false, "", "PowerSource", false, false, attributesType[2]);
+		attributesDescription[8] = new ZigBeeAttributeDescriptionImpl(0x0008, false, new Boolean(true), "DeviceEnabled", true, true, attributesType[3]);
 
 		// a server endpoint example
 		attributesServer = new ZigBeeAttributeImpl[9];

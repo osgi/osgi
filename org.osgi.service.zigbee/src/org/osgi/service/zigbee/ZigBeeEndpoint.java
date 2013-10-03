@@ -29,7 +29,7 @@ public interface ZigBeeEndpoint {
 	 * Key of the {@link String} containing the EndPoint Address of the device <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public static final String	ENDPOINT				= "zigbee.device.endpoint";
+	public static final String	ID						= "zigbee.endpoint.id";
 
 	/**
 	 * Key of the {@link String} profile id implemented by the device. <br>
@@ -59,13 +59,13 @@ public interface ZigBeeEndpoint {
 	 * Key of the int array of containing the ids of each input cluster <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public static final String	INPUT_CLUSTERS			= "zigbee.device.clusters.input";
+	public static final String	INPUT_CLUSTERS			= "zigbee.endpoint.clusters.input";
 
 	/**
 	 * Key of the int array of containing the ids of each output cluster <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public static final String	OUTPUT_CLUSTERS			= "zigbee.device.clusters.output";
+	public static final String	OUTPUT_CLUSTERS			= "zigbee.endpoint.clusters.output";
 
 	/**
 	 * Key of {@link String} containing the targeted network host pid It is an

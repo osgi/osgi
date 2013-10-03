@@ -24,21 +24,6 @@ package org.osgi.service.zigbee.descriptions;
 public interface ZigBeeAttributeDescription {
 
 	/**
-	 * The attribute is read only
-	 */
-	public static final short	READ_ONLY_ACCESS		= 0;
-
-	/**
-	 * The attribute is write only
-	 */
-	public static final short	WRITE_ONLY_ACCESS		= 1;
-
-	/**
-	 * The attribute allows both read and write operation
-	 */
-	public static final short	READ_AND_WRITE_ACCESS	= 2;
-
-	/**
 	 * @return the attribute identifier
 	 */
 	public int getId();
@@ -69,10 +54,10 @@ public interface ZigBeeAttributeDescription {
 	public boolean isReportable();
 
 	/**
-	 * @return 0-if the attribute is read only, 1-if the attribute is write
-	 *         only, 2-if the attribute is read/write
+	 * @return true if the attribute is read only, false otherwise (i.e. if the
+	 *         attribute is read/write)
 	 */
-	public short getAccessType();
+	public boolean isReadOnly();
 
 	/**
 	 * @return A {@link ZigBeeDataTypeDescription} representing the attribute

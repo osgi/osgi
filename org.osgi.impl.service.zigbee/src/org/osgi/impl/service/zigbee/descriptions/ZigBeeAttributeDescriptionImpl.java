@@ -10,7 +10,7 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 public class ZigBeeAttributeDescriptionImpl implements ZigBeeAttributeDescription {
 
 	private int							id;
-	private short						accessType;
+	private boolean						isReadOnly;
 	private Object						defaultValue;
 	private String						name;
 	private boolean						isMandatory;
@@ -19,18 +19,18 @@ public class ZigBeeAttributeDescriptionImpl implements ZigBeeAttributeDescriptio
 
 	/**
 	 * @param id
-	 * @param accessType
+	 * @param isReadOnly
 	 * @param defaultvalue
 	 * @param name
 	 * @param isMandatory
 	 * @param isReportable
 	 * @param datatype
 	 */
-	public ZigBeeAttributeDescriptionImpl(int id, short accessType, Object defaultvalue, String name,
+	public ZigBeeAttributeDescriptionImpl(int id, boolean isReadOnly, Object defaultvalue, String name,
 			boolean isMandatory, boolean isReportable, ZigBeeDataTypeDescription datatype) {
 		// TODO Auto-generated constructor stub
 		this.id = id;
-		this.accessType = accessType;
+		this.isReadOnly = isReadOnly;
 		this.defaultValue = defaultvalue;
 		this.name = name;
 		this.isMandatory = isMandatory;
@@ -42,8 +42,8 @@ public class ZigBeeAttributeDescriptionImpl implements ZigBeeAttributeDescriptio
 		return id;
 	}
 
-	public short getAccessType() {
-		return accessType;
+	public boolean isReadOnly() {
+		return isReadOnly;
 	}
 
 	public ZigBeeDataTypeDescription getDataTypeDescription() {
@@ -68,12 +68,10 @@ public class ZigBeeAttributeDescriptionImpl implements ZigBeeAttributeDescriptio
 	}
 
 	public boolean isReportable() {
-		// TODO Auto-generated method stub
 		return isReportable;
 	}
 
 	public boolean checkValue(Object value) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

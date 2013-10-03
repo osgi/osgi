@@ -39,16 +39,14 @@ public interface ZigBeeNode {
 	 * Property key for the mandatory node IEEE Address representing node MAC
 	 * address. MAC Address is a 12-digit(48-bit) or 16-digit(64-bit)
 	 * hexadecimal numbers. There is no need to use 0x hexadecimal notation.
-	 * <i>i.e zigbee.listener.node.ieee.address="00:25:96:AB:37:56"</i> for a
-	 * 48-bit address and <i>i.e
-	 * zigbee.listener.node.ieee.address="00:25:96:FF:FE:AB:37:56"</i> for a
-	 * 64-bit address
+	 * <i>i.e zigbee.node.ieee.address="00:25:96:AB:37:56"</i> for a 48-bit
+	 * address and <i>i.e zigbee.node.ieee.address="00:25:96:FF:FE:AB:37:56"</i>
+	 * for a 64-bit address
 	 * 
 	 * A ZigBee Event Listener service can announce for what ZigBee device nodes
 	 * it wants notifications.
-	 * 
 	 */
-	public static final String	IEEE_ADDRESS					= "zigbee.listener.node.ieee.address";
+	public static final String	IEEE_ADDRESS					= "zigbee.node.ieee.address";
 
 	/**
 	 * Property key for the device node type
