@@ -21,8 +21,23 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 /**
  * This interface represents a ZigBeeEnumeration8 as described in the ZigBee
  * Specification.
+ * 
+ * @version 1.0
  */
 public class ZigBeeEnumeration8 implements ZigBeeDataTypeDescription {
+
+	private static ZigBeeEnumeration8	singletonInstance	= new ZigBeeEnumeration8();
+
+	private ZigBeeEnumeration8() {
+
+	}
+
+	/**
+	 * @return the singleton instance.
+	 */
+	public static ZigBeeEnumeration8 getInstance() {
+		return singletonInstance;
+	}
 
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub

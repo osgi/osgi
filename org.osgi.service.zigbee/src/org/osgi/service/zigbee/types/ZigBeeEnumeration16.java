@@ -21,8 +21,23 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 /**
  * This interface represents a ZigBeeEnumeration16 as described in the ZigBee
  * Specification.
+ * 
+ * @version 1.0
  */
 public class ZigBeeEnumeration16 implements ZigBeeDataTypeDescription {
+
+	private static ZigBeeEnumeration16	singletonInstance	= new ZigBeeEnumeration16();
+
+	private ZigBeeEnumeration16() {
+
+	}
+
+	/**
+	 * @return the singleton instance.
+	 */
+	public static ZigBeeEnumeration16 getInstance() {
+		return singletonInstance;
+	}
 
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub

@@ -21,8 +21,23 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 /**
  * This interface represents a ZigBeeBoolean as described in the ZigBee
  * Specification.
+ * 
+ * @version 1.0
  */
 public class ZigBeeBoolean implements ZigBeeDataTypeDescription {
+
+	private static ZigBeeBoolean	singletonInstance	= new ZigBeeBoolean();
+
+	private ZigBeeBoolean() {
+
+	}
+
+	/**
+	 * @return the singleton instance.
+	 */
+	public static ZigBeeBoolean getInstance() {
+		return singletonInstance;
+	}
 
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub

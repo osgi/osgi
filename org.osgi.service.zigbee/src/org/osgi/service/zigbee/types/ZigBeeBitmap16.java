@@ -21,8 +21,23 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 /**
  * This interface represents a ZigBeeBitmap16 as described in the ZigBee
  * Specification.
+ * 
+ * @version 1.0
  */
 public class ZigBeeBitmap16 implements ZigBeeDataTypeDescription {
+
+	private static ZigBeeBitmap16	singletonInstance	= new ZigBeeBitmap16();
+
+	private ZigBeeBitmap16() {
+
+	}
+
+	/**
+	 * @return the singleton instance.
+	 */
+	public static ZigBeeBitmap16 getInstance() {
+		return singletonInstance;
+	}
 
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub

@@ -21,8 +21,23 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 /**
  * This interface represents a ZigBeeOctetString as described in the ZigBee
  * Specification.
+ * 
+ * @version 1.0
  */
 public class ZigBeeOctetString implements ZigBeeDataTypeDescription {
+
+	private static ZigBeeOctetString	singletonInstance	= new ZigBeeOctetString();
+
+	private ZigBeeOctetString() {
+
+	}
+
+	/**
+	 * @return the singleton instance.
+	 */
+	public static ZigBeeOctetString getInstance() {
+		return singletonInstance;
+	}
 
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub

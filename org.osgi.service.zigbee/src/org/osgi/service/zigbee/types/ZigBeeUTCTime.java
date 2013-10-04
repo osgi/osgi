@@ -21,8 +21,23 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 /**
  * This interface represents a ZigBeeUTCTime as described in the ZigBee
  * Specification.
+ * 
+ * @version 1.0
  */
 public class ZigBeeUTCTime implements ZigBeeDataTypeDescription {
+
+	private static ZigBeeUTCTime	singletonInstance	= new ZigBeeUTCTime();
+
+	private ZigBeeUTCTime() {
+
+	}
+
+	/**
+	 * @return the singleton instance.
+	 */
+	public static ZigBeeUTCTime getInstance() {
+		return singletonInstance;
+	}
 
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub

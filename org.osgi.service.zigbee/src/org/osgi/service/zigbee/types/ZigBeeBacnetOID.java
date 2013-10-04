@@ -21,8 +21,23 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 /**
  * This interface represents a ZigBeeBacnetOID as described in the ZigBee
  * Specification.
+ * 
+ * @version 1.0
  */
 public class ZigBeeBacnetOID implements ZigBeeDataTypeDescription {
+
+	private static ZigBeeBacnetOID	singletonInstance	= new ZigBeeBacnetOID();
+
+	private ZigBeeBacnetOID() {
+
+	}
+
+	/**
+	 * @return the singleton instance.
+	 */
+	public static ZigBeeBacnetOID getInstance() {
+		return singletonInstance;
+	}
 
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub

@@ -21,8 +21,23 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 /**
  * This interface represents a ZigBeeGeneralData48 as described in the ZigBee
  * Specification.
+ * 
+ * @version 1.0
  */
 public class ZigBeeGeneralData48 implements ZigBeeDataTypeDescription {
+
+	private static ZigBeeGeneralData48	singletonInstance	= new ZigBeeGeneralData48();
+
+	private ZigBeeGeneralData48() {
+
+	}
+
+	/**
+	 * @return the singleton instance.
+	 */
+	public static ZigBeeGeneralData48 getInstance() {
+		return singletonInstance;
+	}
 
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub

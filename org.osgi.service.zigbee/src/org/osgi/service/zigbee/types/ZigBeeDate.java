@@ -21,8 +21,23 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 /**
  * This interface represents a ZigBeeDate as described in the ZigBee
  * Specification.
+ * 
+ * @version 1.0
  */
 public class ZigBeeDate implements ZigBeeDataTypeDescription {
+
+	private static ZigBeeDate	singletonInstance	= new ZigBeeDate();
+
+	private ZigBeeDate() {
+
+	}
+
+	/**
+	 * @return the singleton instance.
+	 */
+	public static ZigBeeDate getInstance() {
+		return singletonInstance;
+	}
 
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub

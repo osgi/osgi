@@ -21,8 +21,23 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 /**
  * This interface represents a ZigBeeSignedInteger40 as described in the ZigBee
  * Specification.
+ * 
+ * @version 1.0
  */
 public class ZigBeeSignedInteger40 implements ZigBeeDataTypeDescription {
+
+	private static ZigBeeSignedInteger40	singletonInstance	= new ZigBeeSignedInteger40();
+
+	private ZigBeeSignedInteger40() {
+
+	}
+
+	/**
+	 * @return the singleton instance.
+	 */
+	public static ZigBeeSignedInteger40 getInstance() {
+		return singletonInstance;
+	}
 
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub

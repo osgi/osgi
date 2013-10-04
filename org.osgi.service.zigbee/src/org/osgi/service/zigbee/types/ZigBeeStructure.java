@@ -21,8 +21,23 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 /**
  * This interface represents a ZigBeeStructure as described in the ZigBee
  * Specification.
+ * 
+ * @version 1.0
  */
 public class ZigBeeStructure implements ZigBeeDataTypeDescription {
+
+	private static ZigBeeStructure	singletonInstance	= new ZigBeeStructure();
+
+	private ZigBeeStructure() {
+
+	}
+
+	/**
+	 * @return the singleton instance.
+	 */
+	public static ZigBeeStructure getInstance() {
+		return singletonInstance;
+	}
 
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub

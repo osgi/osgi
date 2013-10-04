@@ -21,8 +21,23 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 /**
  * This interface represents a ZigBeeLongOctetString as described in the ZigBee
  * Specification.
+ * 
+ * @version 1.0
  */
 public class ZigBeeLongOctetString implements ZigBeeDataTypeDescription {
+
+	private static ZigBeeLongOctetString	singletonInstance	= new ZigBeeLongOctetString();
+
+	private ZigBeeLongOctetString() {
+
+	}
+
+	/**
+	 * @return the singleton instance.
+	 */
+	public static ZigBeeLongOctetString getInstance() {
+		return singletonInstance;
+	}
 
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub

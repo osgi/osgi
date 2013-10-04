@@ -21,8 +21,23 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 /**
  * This interface represents a ZigBeeFloatingDouble as described in the ZigBee
  * Specification.
+ * 
+ * @version 1.0
  */
 public class ZigBeeFloatingDouble implements ZigBeeDataTypeDescription {
+
+	private static ZigBeeFloatingDouble	singletonInstance	= new ZigBeeFloatingDouble();
+
+	private ZigBeeFloatingDouble() {
+
+	}
+
+	/**
+	 * @return the singleton instance.
+	 */
+	public static ZigBeeFloatingDouble getInstance() {
+		return singletonInstance;
+	}
 
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub

@@ -21,8 +21,23 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 /**
  * This interface represents a ZigBeeGeneralData16 as described in the ZigBee
  * Specification.
+ * 
+ * @version 1.0
  */
 public class ZigBeeGeneralData16 implements ZigBeeDataTypeDescription {
+
+	private static ZigBeeGeneralData16	singletonInstance	= new ZigBeeGeneralData16();
+
+	private ZigBeeGeneralData16() {
+
+	}
+
+	/**
+	 * @return the singleton instance.
+	 */
+	public static ZigBeeGeneralData16 getInstance() {
+		return singletonInstance;
+	}
 
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub

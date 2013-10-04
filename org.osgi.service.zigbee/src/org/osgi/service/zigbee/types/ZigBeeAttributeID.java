@@ -21,8 +21,23 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 /**
  * This interface represents a ZigBeeAttributeID as described in the ZigBee
  * Specification.
+ * 
+ * @version 1.0
  */
 public class ZigBeeAttributeID implements ZigBeeDataTypeDescription {
+
+	private static ZigBeeAttributeID	singletonInstance	= new ZigBeeAttributeID();
+
+	private ZigBeeAttributeID() {
+
+	}
+
+	/**
+	 * @return the singleton instance.
+	 */
+	public static ZigBeeAttributeID getInstance() {
+		return singletonInstance;
+	}
 
 	public byte[] serialize(Object param) {
 		// TODO Auto-generated method stub

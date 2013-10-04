@@ -72,7 +72,8 @@ import org.osgi.service.zigbee.types.ZigBeeUnsignedInteger64;
 import org.osgi.service.zigbee.types.ZigBeeUnsignedInteger8;
 
 /**
- * This interface represents all ZigBee data types
+ * This interface represents all ZigBee data types, and contains the common
+ * serialize/deserialize methods for the org.osgi.service.zigbee.types.*
  * 
  * @version 1.0
  */
@@ -83,49 +84,49 @@ public class ZigBeeDataTypes {
 	 * or FALSE (0x01). The value 0xff represents an invalid value of this type.
 	 * All other values of this type are forbidden
 	 */
-	public static final ZigBeeDataTypeDescription	GENERAL_DATA_8			= new ZigBeeGeneralData8();
+	public static final ZigBeeDataTypeDescription	GENERAL_DATA_8			= ZigBeeGeneralData8.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	GENERAL_DATA_16			= new ZigBeeGeneralData16();
+	public static final ZigBeeDataTypeDescription	GENERAL_DATA_16			= ZigBeeGeneralData16.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	GENERAL_DATA_24			= new ZigBeeGeneralData24();
+	public static final ZigBeeDataTypeDescription	GENERAL_DATA_24			= ZigBeeGeneralData24.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	GENERAL_DATA_32			= new ZigBeeGeneralData32();
+	public static final ZigBeeDataTypeDescription	GENERAL_DATA_32			= ZigBeeGeneralData32.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	GENERAL_DATA_40			= new ZigBeeGeneralData40();
+	public static final ZigBeeDataTypeDescription	GENERAL_DATA_40			= ZigBeeGeneralData40.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	GENERAL_DATA_48			= new ZigBeeGeneralData48();
+	public static final ZigBeeDataTypeDescription	GENERAL_DATA_48			= ZigBeeGeneralData48.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	GENERAL_DATA_56			= new ZigBeeGeneralData56();
+	public static final ZigBeeDataTypeDescription	GENERAL_DATA_56			= ZigBeeGeneralData56.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	GENERAL_DATA_64			= new ZigBeeGeneralData64();
+	public static final ZigBeeDataTypeDescription	GENERAL_DATA_64			= ZigBeeGeneralData64.getInstance();
 
 	/**
 	 * Boolean The Boolean type represents a logical value, either TRUE (0x00)
 	 * or FALSE (0x01). The value 0xff represents an invalid value of this type.
 	 * All other values of this type are forbidden.
 	 */
-	public static final ZigBeeDataTypeDescription	BOOLEAN					= new ZigBeeBoolean();
+	public static final ZigBeeDataTypeDescription	BOOLEAN					= ZigBeeBoolean.getInstance();
 
 	/**
 	 * Bitmap (8-bit, 16-bit, 24-bit and 32-bit) The Bitmap type holds 8, 16, 24
 	 * or 32 logical values, one per bit, depending on its length. There is no
 	 * value to represent an invalid value of this type.
 	 */
-	public static final ZigBeeDataTypeDescription	BITMAP_8				= new ZigBeeBitmap8();
+	public static final ZigBeeDataTypeDescription	BITMAP_8				= ZigBeeBitmap8.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	BITMAP_16				= new ZigBeeBitmap16();
+	public static final ZigBeeDataTypeDescription	BITMAP_16				= ZigBeeBitmap16.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	BITMAP_24				= new ZigBeeBitmap24();
+	public static final ZigBeeDataTypeDescription	BITMAP_24				= ZigBeeBitmap24.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	BITMAP_32				= new ZigBeeBitmap32();
+	public static final ZigBeeDataTypeDescription	BITMAP_32				= ZigBeeBitmap32.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	BITMAP_40				= new ZigBeeBitmap40();
+	public static final ZigBeeDataTypeDescription	BITMAP_40				= ZigBeeBitmap40.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	BITMAP_48				= new ZigBeeBitmap48();
+	public static final ZigBeeDataTypeDescription	BITMAP_48				= ZigBeeBitmap48.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	BITMAP_56				= new ZigBeeBitmap56();
+	public static final ZigBeeDataTypeDescription	BITMAP_56				= ZigBeeBitmap56.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	BITMAP_64				= new ZigBeeBitmap64();
+	public static final ZigBeeDataTypeDescription	BITMAP_64				= ZigBeeBitmap64.getInstance();
 
 	/**
 	 * Unsigned shorteger (8-bit, 16-bit, 24-bit and 32-bit) This type
@@ -134,21 +135,21 @@ public class ZigBeeDataTypes {
 	 * that represents an invalid value of this type are 0xff, 0xffff, 0xffffff
 	 * and 0xffffffff respectively.
 	 */
-	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_8		= new ZigBeeUnsignedInteger8();
+	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_8		= ZigBeeUnsignedInteger8.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_16		= new ZigBeeUnsignedInteger16();
+	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_16		= ZigBeeUnsignedInteger16.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_24		= new ZigBeeUnsignedInteger24();
+	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_24		= ZigBeeUnsignedInteger24.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_32		= new ZigBeeUnsignedInteger32();
+	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_32		= ZigBeeUnsignedInteger32.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_40		= new ZigBeeUnsignedInteger40();
+	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_40		= ZigBeeUnsignedInteger40.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_48		= new ZigBeeUnsignedInteger48();
+	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_48		= ZigBeeUnsignedInteger48.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_56		= new ZigBeeUnsignedInteger56();
+	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_56		= ZigBeeUnsignedInteger56.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_64		= new ZigBeeUnsignedInteger64();
+	public static final ZigBeeDataTypeDescription	UNSIGNED_INTEGER_64		= ZigBeeUnsignedInteger64.getInstance();
 
 	/**
 	 * Signed shorteger (8-bit, 16-bit, 24-bit and 32-bit). This type represents
@@ -157,30 +158,30 @@ public class ZigBeeDataTypes {
 	 * The values that represents an invalid value of this type are 0x80,
 	 * 0x8000, 0x800000 and 0x80000000 respectively.
 	 */
-	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_8		= new ZigBeeSignedInteger8();
+	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_8		= ZigBeeSignedInteger8.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_16		= new ZigBeeSignedInteger16();
+	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_16		= ZigBeeSignedInteger16.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_24		= new ZigBeeSignedInteger24();
+	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_24		= ZigBeeSignedInteger24.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_32		= new ZigBeeSignedInteger32();
+	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_32		= ZigBeeSignedInteger32.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_40		= new ZigBeeSignedInteger40();
+	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_40		= ZigBeeSignedInteger40.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_48		= new ZigBeeSignedInteger48();
+	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_48		= ZigBeeSignedInteger48.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_56		= new ZigBeeSignedInteger56();
+	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_56		= ZigBeeSignedInteger56.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_64		= new ZigBeeSignedInteger64();
+	public static final ZigBeeDataTypeDescription	SIGNED_INTEGER_64		= ZigBeeSignedInteger64.getInstance();
 
 	/**
 	 * Enumeration (8-bit) The Enumeration type represents an index shorto a
 	 * lookup table to determine the final value. The value 0xff represents an
 	 * invalid value of this type
 	 */
-	public static final ZigBeeDataTypeDescription	ENUMERATION_8			= new ZigBeeEnumeration8();
+	public static final ZigBeeDataTypeDescription	ENUMERATION_8			= ZigBeeEnumeration8.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	ENUMERATION_16			= new ZigBeeEnumeration16();
+	public static final ZigBeeDataTypeDescription	ENUMERATION_16			= ZigBeeEnumeration16.getInstance();
 
 	/**
 	 * Semi-precision The ZigBee semi-precision number format is based on the
@@ -190,7 +191,7 @@ public class ZigBeeDataTypes {
 	 * is calculated as: Value = -1Sign * (Hidden + Mantissa/1024) * 2
 	 * (Exponent-15)
 	 */
-	public static final ZigBeeDataTypeDescription	FLOATING_SEMI			= new ZigBeeFloatingSemi();
+	public static final ZigBeeDataTypeDescription	FLOATING_SEMI			= ZigBeeFloatingSemi.getInstance();
 
 	/**
 	 * Single precision The format of the single precision data type is based on
@@ -202,7 +203,7 @@ public class ZigBeeDataTypes {
 	 * sub-fields, as follows. Length of mantissa = 23 bits, length of exponent
 	 * = 8 bits For further details, see [R11]. = 0x43;
 	 */
-	public static final ZigBeeDataTypeDescription	FLOATING_SINGLE			= new ZigBeeFloatingSingle();
+	public static final ZigBeeDataTypeDescription	FLOATING_SINGLE			= ZigBeeFloatingSingle.getInstance();
 
 	/**
 	 * Double precision The format of the double precision data type is based on
@@ -214,7 +215,7 @@ public class ZigBeeDataTypes {
 	 * sub-fields, as follows. Length of mantissa = 52 bits, length of exponent
 	 * = 11 bits For further details, see [R11].
 	 */
-	public static final ZigBeeDataTypeDescription	FLOATING_DOUBLE			= new ZigBeeFloatingDouble();
+	public static final ZigBeeDataTypeDescription	FLOATING_DOUBLE			= ZigBeeFloatingDouble.getInstance();
 
 	/**
 	 * The octet string data type contains data in an application-defined
@@ -230,7 +231,7 @@ public class ZigBeeDataTypes {
 	 * the value of the octet count sub-field. This sub-field contains the
 	 * application-defined data.
 	 */
-	public static final ZigBeeDataTypeDescription	OCTET_STRING			= new ZigBeeOctetString();
+	public static final ZigBeeDataTypeDescription	OCTET_STRING			= ZigBeeOctetString.getInstance();
 
 	/**
 	 * Character string The character string data type contains data octets
@@ -254,19 +255,19 @@ public class ZigBeeDataTypes {
 	 * sub-field equal to 0x00 and a zero length character data sub-field, shall
 	 * be referred to as an 'empty string'.
 	 */
-	public static final ZigBeeDataTypeDescription	CHARACTER_STRING		= new ZigBeeCharacterString();
+	public static final ZigBeeDataTypeDescription	CHARACTER_STRING		= ZigBeeCharacterString.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	LONG_OCTET_STRING		= new ZigBeeLongOctetString();
+	public static final ZigBeeDataTypeDescription	LONG_OCTET_STRING		= ZigBeeLongOctetString.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	LONG_CHARACTER_STRING	= new ZigBeeLongCharacterString();
+	public static final ZigBeeDataTypeDescription	LONG_CHARACTER_STRING	= ZigBeeLongCharacterString.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	ARRAY					= new ZigBeeArray();
+	public static final ZigBeeDataTypeDescription	ARRAY					= ZigBeeArray.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	STRUCTURE				= new ZigBeeStructure();
+	public static final ZigBeeDataTypeDescription	STRUCTURE				= ZigBeeStructure.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	SET						= new ZigBeeSet();
+	public static final ZigBeeDataTypeDescription	SET						= ZigBeeSet.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	BAG						= new ZigBeeBag();
+	public static final ZigBeeDataTypeDescription	BAG						= ZigBeeBag.getInstance();
 
 	/**
 	 * Time of day The Time of day data type shall be formatted as illustrated
@@ -283,7 +284,7 @@ public class ZigBeeDataTypes {
 	 * subfields have the value 0xff, this indicates an invalid or 'don't care'
 	 * value of the data type.
 	 */
-	public static final ZigBeeDataTypeDescription	TIME_OF_DAY				= new ZigBeeTimeOfDay();
+	public static final ZigBeeDataTypeDescription	TIME_OF_DAY				= ZigBeeTimeOfDay.getInstance();
 
 	/**
 	 * Date The Time of day data type shall be formatted as illustrated in
@@ -298,20 +299,20 @@ public class ZigBeeDataTypes {
 	 * an unused subfield. If all subfields have the value 0xff, this indicates
 	 * an invalid or 'don't care' value of the data type.
 	 */
-	public static final ZigBeeDataTypeDescription	DATE					= new ZigBeeDate();
+	public static final ZigBeeDataTypeDescription	DATE					= ZigBeeDate.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	UTC_TIME				= new ZigBeeUTCTime();
+	public static final ZigBeeDataTypeDescription	UTC_TIME				= ZigBeeUTCTime.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	CLUSTER_ID				= new ZigBeeClusterID();
+	public static final ZigBeeDataTypeDescription	CLUSTER_ID				= ZigBeeClusterID.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	ATTRIBUTE_ID			= new ZigBeeAttributeID();
+	public static final ZigBeeDataTypeDescription	ATTRIBUTE_ID			= ZigBeeAttributeID.getInstance();
 
 	/**
 	 * BACnet OID (Object Identifier) The BACnet OID data type is included to
 	 * allow shorterworking with BACnet (see [R12]). The format is described in
 	 * the referenced standard.
 	 */
-	public static final ZigBeeDataTypeDescription	BACNET_OID				= new ZigBeeBacnetOID();
+	public static final ZigBeeDataTypeDescription	BACNET_OID				= ZigBeeBacnetOID.getInstance();
 	/** see above */
-	public static final ZigBeeDataTypeDescription	IEEE_ADDRESS			= new ZigBeeIEEEADDRESS();
+	public static final ZigBeeDataTypeDescription	IEEE_ADDRESS			= ZigBeeIEEEADDRESS.getInstance();
 }
