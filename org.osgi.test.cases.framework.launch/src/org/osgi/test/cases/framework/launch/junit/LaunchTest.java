@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -146,7 +147,8 @@ public abstract class LaunchTest extends OSGiTestCase {
 		// if the framework was not STARTING STOPPING or ACTIVE then we assume the waitForStop returned immediately with a FrameworkEvent.STOPPED
 		// and does not change the state of the framework
 		int expectedState = (previousState & (Bundle.STARTING | Bundle.ACTIVE | Bundle.STOPPING)) != 0 ? Bundle.RESOLVED : previousState;
-		assertEquals("Wrong framework state after init", expectedState, framework.getState());
+		assertEquals("Wrong framework state after stop", expectedState,
+				framework.getState());
 	}
 	
 	private FrameworkFactory getFrameworkFactory() {
@@ -258,5 +260,16 @@ public abstract class LaunchTest extends OSGiTestCase {
 			return file.delete();
 		}
 		return (true);
+	}
+
+	protected Map<String, String> getConfiguration(String testName) {
+		return getConfiguration(testName, true);
+	}
+
+	protected Map<String, String> getConfiguration(String testName, boolean delete) {
+		Map<String, String> configuration = new HashMap<String, String>();
+		if (testName != null)
+			configuration.put(Constants.FRAMEWORK_STORAGE, getStorageArea(testName, delete).getAbsolutePath());
+		return configuration;
 	}
 }
