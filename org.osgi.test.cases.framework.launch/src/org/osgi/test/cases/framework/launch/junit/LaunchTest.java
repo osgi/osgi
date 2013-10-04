@@ -32,6 +32,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
 import org.osgi.test.support.OSGiTestCase;
@@ -86,10 +87,15 @@ public abstract class LaunchTest extends OSGiTestCase {
 		return getClass().getResource(bundle);
 	}
 	
-	protected void initFramework(Framework framework) {
+	protected void initFramework(Framework framework,
+			FrameworkListener... listeners) {
 		boolean unintialized = (framework.getState() & (Framework.INSTALLED | Framework.RESOLVED)) != 0;
 		try {
-			framework.init();
+			if (listeners == null || listeners.length == 0) {
+				framework.init();
+			} else {
+				framework.init(listeners);
+			}
 			assertNotNull("BundleContext is null after init", framework.getBundleContext());
 		}
 		catch (BundleException e) {
