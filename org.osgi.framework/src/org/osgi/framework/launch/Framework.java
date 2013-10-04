@@ -24,6 +24,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
 
 /**
  * A Framework instance. A Framework is also known as a System Bundle.
@@ -38,6 +39,23 @@ import org.osgi.framework.FrameworkEvent;
  */
 @ProviderType
 public interface Framework extends Bundle {
+
+	/**
+	 * Initialize this Framework.
+	 * <p>
+	 * This method performs the same function as calling
+	 * {@link #init(FrameworkListener...)} with no framework listeners.
+	 * 
+	 * @throws BundleException If this Framework could not be initialized.
+	 * @throws SecurityException If the Java Runtime Environment supports
+	 *         permissions and the caller does not have the appropriate
+	 *         {@code AdminPermission[this,EXECUTE]} or if there is a security
+	 *         manager already installed and the
+	 *         {@link Constants#FRAMEWORK_SECURITY} configuration property is
+	 *         set.
+	 * @see #init(FrameworkListener...)
+	 */
+	void init() throws BundleException;
 
 	/**
 	 * Initialize this Framework. After calling this method, this Framework
@@ -64,6 +82,17 @@ public interface Framework extends Bundle {
 	 * This method does nothing if called when this Framework is in the
 	 * {@link #STARTING}, {@link #ACTIVE} or {@link #STOPPING} states.
 	 * 
+	 * <p>
+	 * All framework events fired by this method method are also delivered to
+	 * the specified FrameworkListeners in the order they are specified before
+	 * returning from this method. After returning from this method the
+	 * specified listeners are no longer notified of framework events.
+	 * 
+	 * @param listeners Zero or more listeners to be notified when framework
+	 *        events occur while initializing the framework. The specified
+	 *        listeners do not need to be otherwise registered with the
+	 *        framework. If a specified listener is registered with the
+	 *        framework, it will be notified twice for each framework event.
 	 * @throws BundleException If this Framework could not be initialized.
 	 * @throws SecurityException If the Java Runtime Environment supports
 	 *         permissions and the caller does not have the appropriate
@@ -71,9 +100,8 @@ public interface Framework extends Bundle {
 	 *         manager already installed and the
 	 *         {@link Constants#FRAMEWORK_SECURITY} configuration property is
 	 *         set.
-	 * 
 	 */
-	void init() throws BundleException;
+	void init(FrameworkListener... listeners) throws BundleException;
 
 	/**
 	 * Wait until this Framework has completely stopped. The {@code stop} and
