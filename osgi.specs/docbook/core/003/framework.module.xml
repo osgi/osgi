@@ -1182,7 +1182,8 @@ org.osgi.framework.system.capabilities.extra</programlisting>
       grammar:</para>
 
       <programlisting>Require-Capability  ::= requirement (',' requirement )* 
-requirement         ::= name-space ( ';' parameter )* </programlisting>
+requirement         ::= name-space 
+                            ( ';' directive | typed-attr )*</programlisting>
 
       <para>Requirements have attributes that can be set with the
       Require-Capability header. The purpose of these attributes are to
