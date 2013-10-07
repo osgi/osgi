@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.IdentityHashMap;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
 import org.osgi.dto.DTO;
@@ -159,9 +160,30 @@ public class DTOTestCase extends OSGiTestCase {
         }
         assertBundleRevisionDTO(cap.getResource(), (BundleRevisionDTO) dto.resource);
         assertEquals("BundleCapability namespace does not match", cap.getNamespace(), dto.namespace);
-        assertEquals("BundleCapability attributes does not match", cap.getAttributes(), dto.attributes);
+		assertAttributesDTO("BundleCapability attributes does not match", cap.getAttributes(), dto.attributes);
         assertEquals("BundleCapability directives does not match", cap.getDirectives(), dto.directives);
     }
+
+	private void assertAttributesDTO(String message, Map<String, Object> attributes, Map<String, Object> dto) throws Exception {
+		assertEquals(message, attributes.size(), dto.size());
+		for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+			Object value = entry.getValue();
+			if (value instanceof Version) {
+				value = String.valueOf(value);
+			} else
+				if (value instanceof List) {
+					List<Object> newList = new ArrayList<Object>((List<?>) value);
+					for (ListIterator<Object> iter = newList.listIterator(); iter.hasNext();) {
+						Object element = iter.next();
+						if (element instanceof Version) {
+							iter.set(String.valueOf(element));
+						}
+					}
+					value = newList;
+				}
+			assertEquals(message, value, dto.get(entry.getKey()));
+		}
+	}
 
     private void assertListRequirementDTO(List<BundleRequirement> reqs, List<RequirementDTO> dtos) throws Exception {
         assertEquals("BundleRequirements count does not match", reqs.size(), dtos.size());
@@ -178,7 +200,7 @@ public class DTOTestCase extends OSGiTestCase {
         }
         assertBundleRevisionDTO(req.getResource(), (BundleRevisionDTO) dto.resource);
         assertEquals("BundleRequirement namespace does not match", req.getNamespace(), dto.namespace);
-        assertEquals("BundleRequirement attributes does not match", req.getAttributes(), dto.attributes);
+		assertAttributesDTO("BundleRequirement attributes does not match", req.getAttributes(), dto.attributes);
         assertEquals("BundleRequirement directives does not match", req.getDirectives(), dto.directives);
     }
 
