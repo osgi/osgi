@@ -1,10 +1,9 @@
 -nobundles							=true
 nodeploy						=true
 
-# The following line builds all these files and publishes them to 
-# the repository (if they are deployable)
-
 -dependson 					=  osgi.ct
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd, ${project.workspace}/osgi.companion/layout.bnd
 
 japi.osgi.core 				= ${replace;$(core.specs);.+;+$0}
 japi.osgi.cmpn 				= ${replace;$(cmpn.specs);.+;+$0}
@@ -13,10 +12,8 @@ japi.osgi.residential		= ${replace;$(residential.specs);.+;+$0}
 japi.ee.minimum				= +java, +javax
 japi.ee.foundation			= +java, +javax
 
-repo.javase = ${repo;ee.j2se}
+repo.javase     = ${repo;ee.j2se;[${javac.source},${javac.source}]}
 repo.foundation = ${repo;ee.foundation}
 repo.servlet = ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}
 repo.jaxp = ${repo;com.icl.saxon}
 repo.jpa = ${repo;org.eclipse.persistence.jpa_spec}
-
--include: ${project.workspace}/osgi.companion/layout.bnd
