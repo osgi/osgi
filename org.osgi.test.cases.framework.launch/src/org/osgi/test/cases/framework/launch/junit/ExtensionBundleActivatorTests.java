@@ -35,6 +35,7 @@ import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
@@ -252,6 +253,13 @@ public class ExtensionBundleActivatorTests extends LaunchTest {
 				.hasNext();) {
 			ListenerEvent event = iEvents.next();
 			if (tb.equals(event.e.getBundle())) {
+				Throwable t = event.e.getThrowable();
+				assertTrue(
+						"Event throwable is not a BundleException: "
+								+ t.getClass(), t instanceof BundleException);
+				assertEquals("Wrong BundleException type.",
+						BundleException.ACTIVATOR_ERROR,
+						((BundleException) t).getType());
 				iEvents.remove();
 				return event.l;
 			}
