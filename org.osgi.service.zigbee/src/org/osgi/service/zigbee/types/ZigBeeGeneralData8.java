@@ -16,6 +16,7 @@
 
 package org.osgi.service.zigbee.types;
 
+import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
 /**
@@ -39,11 +40,6 @@ public class ZigBeeGeneralData8 implements ZigBeeDataTypeDescription {
 		return singletonInstance;
 	}
 
-	public byte[] serialize(Object param) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	public boolean isAnalog() {
 		// TODO Auto-generated method stub
 		return false;
@@ -65,13 +61,14 @@ public class ZigBeeGeneralData8 implements ZigBeeDataTypeDescription {
 	}
 
 	public short getId() {
-		// TODO Auto-generated method stub
-		return 0x08;
+		return ZigBeeDataTypes.GENERAL_DATA_8;
+	}
+
+	public byte[] serialize(Object param) {
+		return ZigBeeDataTypes.encode(ZigBeeDataTypes.GENERAL_DATA_8, param);
 	}
 
 	public Object deserialize(byte[] data) {
-		// TODO Auto-generated method stub
-		return null;
+		return ZigBeeDataTypes.decode(ZigBeeDataTypes.GENERAL_DATA_8, data);
 	}
-
 }

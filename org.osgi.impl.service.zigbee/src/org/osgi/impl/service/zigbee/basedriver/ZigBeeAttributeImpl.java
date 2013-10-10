@@ -51,17 +51,8 @@ public class ZigBeeAttributeImpl implements ZigBeeAttribute {
 		handler.onSuccess(response);
 	}
 
-	/**
-	 * FOR TESTCASES ONLY!
-	 * 
-	 * @return the attribute value.
-	 */
-	public Object getValue() {
-		return value;
-	}
-
 	public String toString() {
-		return ZigBeeAttributeImpl.class.getName() + ":[id:" + getId() + ",dataType:" + getDataType() + ",description:" + description + ",value:" + getValue() + "]";
+		return ZigBeeAttributeImpl.class.getName() + ":[id:" + getId() + ",dataType:" + getDataType() + ",description:" + description + ",value:" + value + "]";
 	}
 
 }

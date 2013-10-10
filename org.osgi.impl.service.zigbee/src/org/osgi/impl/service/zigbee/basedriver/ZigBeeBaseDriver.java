@@ -13,7 +13,6 @@ import org.osgi.impl.service.zigbee.descriptors.ZigBeeSimpleDescriptorImpl;
 import org.osgi.impl.service.zigbee.util.ZigBeeDeviceNodeListener;
 import org.osgi.service.zigbee.ZigBeeCluster;
 import org.osgi.service.zigbee.ZigBeeCommand;
-import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptions.ZigBeeAttributeDescription;
@@ -25,6 +24,10 @@ import org.osgi.service.zigbee.descriptions.ZigBeeParameterDescription;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
+import org.osgi.service.zigbee.types.ZigBeeBoolean;
+import org.osgi.service.zigbee.types.ZigBeeCharacterString;
+import org.osgi.service.zigbee.types.ZigBeeEnumeration8;
+import org.osgi.service.zigbee.types.ZigBeeUnsignedInteger8;
 
 /**
  * Mocked impl of ZigBeeDeviceNodeListener.
@@ -71,10 +74,10 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 	public void start() {
 		// types
 		attributesType = new ZigBeeDataTypeDescription[4];
-		attributesType[0] = ZigBeeDataTypes.UNSIGNED_INTEGER_8;
-		attributesType[1] = ZigBeeDataTypes.CHARACTER_STRING;
-		attributesType[2] = ZigBeeDataTypes.ENUMERATION_8;
-		attributesType[3] = ZigBeeDataTypes.BOOLEAN;
+		attributesType[0] = ZigBeeUnsignedInteger8.getInstance();
+		attributesType[1] = ZigBeeCharacterString.getInstance();
+		attributesType[2] = ZigBeeEnumeration8.getInstance();
+		attributesType[3] = ZigBeeBoolean.getInstance();
 
 		attributesDescription = new ZigBeeAttributeDescription[9];
 		attributesDescription[0] = new ZigBeeAttributeDescriptionImpl(0x0000, false, new Integer(0x00), "ZCLVersion", false, false, attributesType[0]);

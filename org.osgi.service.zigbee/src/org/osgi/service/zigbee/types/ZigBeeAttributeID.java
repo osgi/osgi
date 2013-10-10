@@ -16,6 +16,7 @@
 
 package org.osgi.service.zigbee.types;
 
+import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
 /**
@@ -25,6 +26,8 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
  * @version 1.0
  */
 public class ZigBeeAttributeID implements ZigBeeDataTypeDescription {
+
+	public static final short			ID					= 0x09;
 
 	private static ZigBeeAttributeID	singletonInstance	= new ZigBeeAttributeID();
 
@@ -37,11 +40,6 @@ public class ZigBeeAttributeID implements ZigBeeDataTypeDescription {
 	 */
 	public static ZigBeeAttributeID getInstance() {
 		return singletonInstance;
-	}
-
-	public byte[] serialize(Object param) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public boolean isAnalog() {
@@ -65,13 +63,15 @@ public class ZigBeeAttributeID implements ZigBeeDataTypeDescription {
 	}
 
 	public short getId() {
-		// TODO Auto-generated method stub
-		return 0x09;
+		return ZigBeeDataTypes.ATTRIBUTE_ID;
+	}
+
+	public byte[] serialize(Object param) {
+		return ZigBeeDataTypes.encode(ZigBeeDataTypes.ATTRIBUTE_ID, param);
 	}
 
 	public Object deserialize(byte[] data) {
-		// TODO Auto-generated method stub
-		return null;
+		return ZigBeeDataTypes.decode(ZigBeeDataTypes.ATTRIBUTE_ID, data);
 	}
 
 }

@@ -64,11 +64,14 @@ public class ZigBeeClusterImpl implements ZigBeeCluster {
 	}
 
 	public void readAttributes(int[] attributesIds, ZigBeeAttributesHandler handler) {
+		// TODO Auto-generated method stub
 		Map response = new HashMap();
-		for (int i : attributesIds) {
-			ZigBeeAttributeImpl attribute = attributes[i];
-			response.put(attribute.getId(), attribute.getValue());
-		}
+		int i = 0;
+		// for (int i : attributesIds) {
+		ZigBeeAttributeImpl attribute = attributes[i];
+		byte[] attributeValue = {0};
+		response.put(attribute.getId(), attributeValue);
+		// }
 		handler.onSuccess(response);
 	}
 
