@@ -382,7 +382,6 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 		// Test "control" methods of ZigBeeCluster.
 
-		// ZigBeeHandler handler = new ZigBeeHandlerImpl();
 		int[] attributesIds = {8};
 		ZigBeeAttributesHandlerImpl handlerCluster = new ZigBeeAttributesHandlerImpl();
 		Boolean isSuccess;
