@@ -74,4 +74,10 @@ public interface ZigBeeAttributeDescription {
 	 */
 	public boolean checkValue(Object value);
 
+	/**
+	 * @return true if the attribute is part of a scene (cluster), false
+	 *         otherwise
+	 */
+	public boolean isPartOfAScene();
+
 }

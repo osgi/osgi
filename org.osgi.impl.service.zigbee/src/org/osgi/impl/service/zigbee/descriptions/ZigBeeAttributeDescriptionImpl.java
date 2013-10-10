@@ -75,4 +75,9 @@ public class ZigBeeAttributeDescriptionImpl implements ZigBeeAttributeDescriptio
 		return false;
 	}
 
+	public boolean isPartOfAScene() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
