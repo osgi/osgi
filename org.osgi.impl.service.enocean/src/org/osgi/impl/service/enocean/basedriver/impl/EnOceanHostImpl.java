@@ -27,7 +27,6 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import org.osgi.impl.service.enocean.basedriver.EnOceanPacketListener;
 import org.osgi.impl.service.enocean.basedriver.esp.EspPacket;
-import org.osgi.impl.service.enocean.basedriver.radio.Message;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanException;
@@ -126,7 +125,7 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 				if (c == ENOCEAN_ESP_FRAME_START) {
 					EspPacket packet = readPacket();
 					if (packet.getPacketType() == EspPacket.TYPE_RADIO) {
-						dispatchToListeners(new Message(packet.getData()));
+						dispatchToListeners(packet.getFullData());
 					}
 				}
 			} catch (IOException e) {
@@ -136,10 +135,10 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 
 	}
 
-	private void dispatchToListeners(Message message) {
+	private void dispatchToListeners(byte[] data) {
 		for (int i = 0; i < listeners.size(); i++) {
 			EnOceanPacketListener listener = (EnOceanPacketListener) listeners.get(i);
-			listener.radioPacketReceived(message);
+			listener.radioPacketReceived(data);
 		}
 	}
 

@@ -18,7 +18,6 @@ import org.osgi.impl.service.enocean.basedriver.radio.Message;
 import org.osgi.impl.service.enocean.basedriver.radio.Message4BS;
 import org.osgi.impl.service.enocean.utils.EnOceanDriverException;
 import org.osgi.impl.service.enocean.utils.Logger;
-import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanHost;
@@ -105,20 +104,21 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	 * 
 	 * @param msg
 	 */
-	public void radioPacketReceived(Message msg) {
+	public void radioPacketReceived(byte[] data) {
+
+		Message msg;
 
 		/* First, determine if teach-in and eventually create a device */
-		switch (msg.getRORG()) {
+		switch (data[0]) {
 			case Message.MESSAGE_4BS :
-				Message4BS msg_4BS = new Message4BS(msg) {};
-				if (msg_4BS.isTeachin()) {
-					register4BSDeviceFromTeachIn(msg_4BS);
+				msg = new Message4BS(data);
+				if (msg.isTeachin() && msg.hasTeachInInfo()) {
+					registerDevice(msg.getSenderId(), msg.getRorg(), msg.teachInFunc(), msg.teachInType(), msg.teachInManuf());
 					return; // No need to do more processing on the message
 				}
 				break;
 			default :
-				// TODO: implement other message types
-				break;
+				return;
 		}
 
 		/* Try to associate the message with a device and send to EventAdmin */
@@ -130,14 +130,18 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 			int type = implDev.getType();
 			/* If we have full profile information */
 			if (rorg != -1 && func != -1 && type != -1) {
-				EnOceanMessage eoMsg = radioToEnOceanMessage(msg, rorg, func, type);
+				EnOceanMessage eoMsg = getEOMessageFromDescriptionSet(msg, rorg, func, type);
 				if (eoMsg != null) {
 					implDev.setLastMessage(eoMsg);
 					broadcastToEventAdmin(eoMsg);
+				} else {
+					msg.setFunc(func);
+					msg.setType(type);
+					implDev.setLastMessage(msg);
+					broadcastToEventAdmin(msg);
 				}
 			}
 		}
-
 	}
 
 	public Object addingService(ServiceReference ref) {
@@ -227,8 +231,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	 * @return the EnOceanDevice service, or null.
 	 */
 	private EnOceanDevice getAssociatedDevice(Message msg) {
-		int uid = Utils.bytes2intLE(msg.getSenderId(), 0, 4);
-		String strSenderId = String.valueOf(uid);
+		String strSenderId = String.valueOf(msg.getSenderId());
 		String filter = "(&(objectClass=" + EnOceanDevice.class.getName() + ")(" + EnOceanDevice.CHIP_ID + "=" + strSenderId + "))";
 		ServiceReference[] ref = null;
 		try {
@@ -253,7 +256,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	 * @param type
 	 * @return
 	 */
-	private EnOceanMessage radioToEnOceanMessage(Message msg, int rorg, int func, int type) {
+	private EnOceanMessage getEOMessageFromDescriptionSet(Message msg, int rorg, int func, int type) {
 
 		Iterator iter = eoMessageSetRefs.entrySet().iterator();
 		while (iter.hasNext()) {
@@ -275,13 +278,9 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		return null;
 	}
 
-	private void register4BSDeviceFromTeachIn(Message4BS msg) {
-		int uid = Utils.bytes2intLE(msg.getSenderId(), 0, 4);
-		EnOceanDeviceImpl device = new EnOceanDeviceImpl(bc, uid);
-		if (msg.hasTeachInInfo()) {
-			device.registerProfile(msg.getRORG(), msg.getFunc(), msg.getType(),
-					msg.getManuf());
-		}
+	private void registerDevice(int senderId, int rorg, int func, int type, int manuf) {
+		EnOceanDeviceImpl device = new EnOceanDeviceImpl(bc, senderId);
+		device.registerProfile(rorg, func, type, manuf);
 	}
 
 	/* The functions that come below are used to register the necessary services */

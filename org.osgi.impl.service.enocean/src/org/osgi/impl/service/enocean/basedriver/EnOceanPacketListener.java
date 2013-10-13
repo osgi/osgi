@@ -17,7 +17,6 @@
 
 package org.osgi.impl.service.enocean.basedriver;
 
-import org.osgi.impl.service.enocean.basedriver.radio.Message;
 
 public interface EnOceanPacketListener {
 
@@ -27,6 +26,6 @@ public interface EnOceanPacketListener {
 	 * 
 	 * @param packet the full packet that has been received.
 	 */
-	public void radioPacketReceived(Message packet);
+	public void radioPacketReceived(byte[] data);
 
 }

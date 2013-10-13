@@ -87,4 +87,8 @@ public class EspPacket {
 	public void setOptional(byte[] optional) {
 		this.optional = optional;
 	}
+
+	public byte[] getFullData() {
+		return Utils.byteConcat(data, optional);
+	}
 }

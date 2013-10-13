@@ -19,6 +19,7 @@ package org.osgi.test.cases.enocean.utils;
 
 import java.util.Hashtable;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventHandler;
 import org.osgi.test.support.OSGiTestCaseProperties;
@@ -29,6 +30,7 @@ public class EventListener implements EventHandler {
 	private Semaphore	waiter;
 	private Event		lastEvent;
 	private BundleContext	bc;
+	private ServiceRegistration	sReg;
 
 	public EventListener(BundleContext bc, String[] topics, String filter) {
 		this.bc = bc;
@@ -37,7 +39,7 @@ public class EventListener implements EventHandler {
 		if (filter != null) {
 			ht.put(org.osgi.service.event.EventConstants.EVENT_FILTER, filter);
 		}
-		bc.registerService(EventHandler.class.getName(), this, ht);
+		sReg = bc.registerService(EventHandler.class.getName(), this, ht);
 		waiter = new Semaphore();
 	}
 			
@@ -64,4 +66,8 @@ public class EventListener implements EventHandler {
 		return waitForEvent(OSGiTestCaseProperties.getTimeout());
 	}
 
+	public void close() {
+		sReg.unregister();
+		waiter.signal();
+	}
 }

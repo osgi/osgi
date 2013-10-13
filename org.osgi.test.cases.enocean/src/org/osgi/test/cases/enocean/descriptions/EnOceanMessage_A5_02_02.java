@@ -6,7 +6,7 @@ import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.channels.EnOceanChannel;
 import org.osgi.test.cases.enocean.utils.Utils;
 
-public class EnOceanMessage_A5_02_01 implements EnOceanMessage {
+public class EnOceanMessage_A5_02_02 implements EnOceanMessage {
 
 	private EnOceanChannel[]	channels;
 	private int					senderId;
@@ -25,7 +25,7 @@ public class EnOceanMessage_A5_02_01 implements EnOceanMessage {
 	}
 
 	public int getType() {
-		return 0x01;
+		return 0x02;
 	}
 
 	public byte[] serialize() throws EnOceanException {
@@ -56,7 +56,7 @@ public class EnOceanMessage_A5_02_01 implements EnOceanMessage {
 			private byte	b0;
 
 			public String getChannelId() {
-				return "TMP_00";
+				return "TMP_01";
 			}
 
 			public void setRawValue(byte[] rawValue) {

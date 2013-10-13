@@ -92,21 +92,21 @@ public interface EnOceanMessage {
 	 * 
 	 * @return The number of subtelegrams in the case of multiframe messages.
 	 */
-	public int getSubTelegramCount();
-	
-	/**
-	 * Returns the number of redundant Messages, out of 3, actually received.
-	 * 
-	 * @return The number of subtelegrams received.
-	 */
-	public int getRedundancyInfo();
-	
+	public int getSubTelNum();
+
 	/**
 	 * Returns the average RSSI on all the received subtelegrams, including redundant ones.
 	 * 
 	 * @return The average RSSI perceived.
 	 */
-	public int getRSSI();
+	public int getDbm();
+	
+	/**
+	 * Returns the security level of this message, as specified in the 'Security of EnOcean Radio Networks' draft, section 4.2.3.
+	 * 
+	 * @return The security level format.
+	 */
+	public int getSecurityLevelFormat();
 
 
 }

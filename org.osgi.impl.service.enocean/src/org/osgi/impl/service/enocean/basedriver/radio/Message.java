@@ -18,38 +18,41 @@
 package org.osgi.impl.service.enocean.basedriver.radio;
 
 import org.osgi.impl.service.enocean.utils.Utils;
+import org.osgi.service.enocean.EnOceanException;
+import org.osgi.service.enocean.EnOceanMessage;
+import org.osgi.service.enocean.channels.EnOceanChannel;
 
 
-public class Message {
+public abstract class Message implements EnOceanMessage {
 
-	public static final int	MESSAGE_4BS	= 0xA5;
+	public static final byte	MESSAGE_4BS	= (byte) 0xA5;
+	public static final byte	MESSAGE_RPS	= (byte) 0xF6;
+	public static final byte	MESSAGE_1BS	= (byte) 0xD5;
+	public static final byte	MESSAGE_VLD	= (byte) 0xD2;
 
 	private byte	RORG;
 	private byte[]	data;
 	private byte[]	senderId;
-	// bit7: crc8 if set, or else checksum; bits 0-4: repeater count
 	private byte	status;
+	private byte			subTelNum;
+	private byte[]			destinationId;
+	private byte			dbm;
+	private byte			securityLevel;
+	private byte			func;
+	private byte			type;
 
 	private byte[]			messageBytes;
 
 	public Message(byte[] data) {
 		this.messageBytes = data;
 		setRORG(data[0]);
-		setData(Utils.byteRange(data, 1, data.length - 7));
-		setSenderId(Utils.byteRange(data, data.length - 6, 4));
-		setStatus(data[data.length - 2]);
-	}
-
-	/**
-	 * Copy constructor
-	 * 
-	 * @param msg
-	 */
-	protected Message(Message msg) {
-		setRORG(msg.getRORG());
-		setData(msg.getData());
-		setSenderId(msg.getSenderId());
-		setStatus(msg.getStatus());
+		setData(Utils.byteRange(data, 1, data.length - 7 - 7));
+		setSenderId(Utils.byteRange(data, data.length - 6 - 7, 4));
+		setStatus(data[data.length - 2 - 7]);
+		setSubTelNum(data[data.length - 1 - 7]);
+		setDestinationId(Utils.byteRange(data, data.length - 7, 4));
+		setDbm(data[data.length - 3]);
+		setSecurityLevel(data[data.length - 2]);
 	}
 
 	public String toString() {
@@ -59,7 +62,10 @@ public class Message {
 		return Utils.bytesToHexString(out);
 	}
 
-	public int getRORG() {
+	/**
+	 * The message's RadioTelegram Type
+	 */
+	public int getRorg() {
 		return (RORG & 0xff);
 	}
 
@@ -67,6 +73,9 @@ public class Message {
 		RORG = (byte) (rorg & 0xff);
 	}
 
+	/**
+	 * Internal channel data
+	 */
 	public byte[] getData() {
 		return data;
 	}
@@ -79,14 +88,21 @@ public class Message {
 		return messageBytes;
 	}
 
-	public byte[] getSenderId() {
-		return senderId;
+	public int getSenderId() {
+		return Utils.bytes2intLE(senderId, 0, 4);
 	}
 
+	/**
+	 * Sender ID of the message
+	 */
 	public void setSenderId(byte[] senderId) {
 		this.senderId = senderId;
 	}
 
+	/**
+	 * EnOceanMessage status byte. bit 7 : if set, use crc8 else use checksum
+	 * bits 5-6 : reserved bits 0-4 : repeater count
+	 */
 	public int getStatus() {
 		return (status & 0xff);
 	}
@@ -95,4 +111,68 @@ public class Message {
 		this.status = (byte) (status & 0xff);
 	}
 
+	public int getSubTelNum() {
+		return subTelNum;
+	}
+
+	public void setSubTelNum(byte subTelNum) {
+		this.subTelNum = subTelNum;
+	}
+
+	public int getDestinationId() {
+		return Utils.bytes2intLE(destinationId, 0, 4);
+	}
+
+	public void setDestinationId(byte[] destinationId) {
+		this.destinationId = destinationId;
+	}
+
+	public int getDbm() {
+		return dbm;
+	}
+
+	public void setDbm(byte dbm) {
+		this.dbm = dbm;
+	}
+
+	public int getSecurityLevelFormat() {
+		return securityLevel;
+	}
+
+	public void setSecurityLevel(byte securityLevel) {
+		this.securityLevel = securityLevel;
+	}
+
+	public void setFunc(int func) {
+		this.func = (byte) func;
+	}
+
+	public int getFunc() {
+		return func;
+	}
+
+	public void setType(int type) {
+		this.type = (byte) type;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void deserialize(byte[] bytes) throws EnOceanException, IllegalArgumentException {
+	}
+
+	public EnOceanChannel[] getChannels() {
+		return null;
+	}
+
+	public abstract boolean isTeachin();
+
+	public abstract boolean hasTeachInInfo();
+
+	public abstract int teachInFunc();
+
+	public abstract int teachInType();
+
+	public abstract int teachInManuf();
 }

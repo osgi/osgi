@@ -28,18 +28,11 @@ package org.osgi.impl.service.enocean.basedriver.radio;
  * 
  * - if DB0.7 is 1, manufacturer info is present.
  * 
- * TODO Add Javadoc comment for this type.
- * 
- * @author $Id$
  */
-public abstract class Message4BS extends Message {
+public class Message4BS extends Message {
 
 	public Message4BS(byte[] data) {
 		super(data);
-	}
-
-	public Message4BS(Message msg) {
-		super(msg);
 	}
 
 	public boolean isTeachin() {
@@ -56,14 +49,14 @@ public abstract class Message4BS extends Message {
 	/**
 	 * @return the FUNC in the case of a teach-in message with information.
 	 */
-	public int getFunc() {
+	public int teachInFunc() {
 		return (getData()[0] >> 2) & 0xff;
 	}
 	
 	/**
 	 * @return the TYPE in the case of a teach-in message with information.
 	 */
-	public int getType() {
+	public int teachInType() {
 		byte b0 = getData()[0];
 		byte b1 = getData()[1];
 		return (((b0 & 0x03) << 5) & 0xff) | ((((b1 >> 3)) & 0xff));
@@ -72,7 +65,7 @@ public abstract class Message4BS extends Message {
 	/**
 	 * @return the MANUF in the case of a teach-in message with information.
 	 */
-	public int getManuf() {
+	public int teachInManuf() {
 		byte b0 = (byte) ((getData()[1]) & 0x07);
 		byte b1 = getData()[2];
 		return ((b0 & 0xff) << 8) + (b1 & 0xff);

@@ -57,7 +57,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 
 		/* Inserts some message documentation classes */
 		EnOceanMessageSetImpl msgSet = new EnOceanMessageSetImpl();
-		msgSet.putMessage(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE, new EnOceanMessage_A5_02_01());
+		msgSet.putMessage(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, new EnOceanMessage_A5_02_01());
 
 		Dictionary props = new Properties();
 		props.put(EnOceanMessageSet.PROVIDER_ID, Fixtures.MESSAGESET_PROVIDER);
@@ -66,8 +66,10 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 	}
 
 	protected void tearDown() throws Exception {
-		cleanupServices();
 		devices.close();
+		messageSets.close();
+		events.close();
+		cleanupServices();
 	}
 
 	/**
@@ -101,7 +103,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		assertEquals("CHIP_ID mismatch", Fixtures.STR_HOST_ID, ref.getProperty(EnOceanDevice.CHIP_ID));
 		assertEquals("RORG mismatch", Fixtures.STR_RORG, ref.getProperty(EnOceanDevice.RORG));
 		assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
-		assertEquals("TYPE mismatch", Fixtures.STR_TYPE, ref.getProperty(EnOceanDevice.TYPE));
+		assertEquals("TYPE mismatch", Fixtures.STR_TYPE_1, ref.getProperty(EnOceanDevice.TYPE));
 		assertEquals("MANUFACTURER mismatch", Fixtures.STR_MANUFACTURER, ref.getProperty(EnOceanDevice.MANUFACTURER));
 	}
 
@@ -156,7 +158,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		assertEquals("senderId mismatch", Fixtures.STR_HOST_ID, event.getProperty("enocean.senderId"));
 		assertEquals("rorg mismatch", Fixtures.STR_RORG, event.getProperty("enocean.rorg"));
 		assertEquals("func mismatch", Fixtures.STR_FUNC, event.getProperty("enocean.func"));
-		assertEquals("type mismatch", Fixtures.STR_TYPE, event.getProperty("enocean.type"));
+		assertEquals("type mismatch", Fixtures.STR_TYPE_1, event.getProperty("enocean.type"));
 
 		EnOceanMessage_A5_02_01 msg = (EnOceanMessage_A5_02_01) event.getProperty("enocean.message");
 		assertNotNull(msg);
