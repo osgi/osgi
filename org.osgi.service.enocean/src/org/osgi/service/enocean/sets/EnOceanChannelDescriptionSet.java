@@ -34,13 +34,13 @@ public interface EnOceanChannelDescriptionSet {
 	public final static String	VERSION				= "channel.description.set.version";
 
 	public final static String	PROVIDER_ID			= "channel.description.set.provider_id";
-
+	
 	/**
 	 * Retrieves a {@link EnOceanChannelDescription} object according to its identifier.
 	 * 
 	 * @param id the unique string identifier of the description object.
 	 * @return The corresponding {@link EnOceanChannelDescription} object, or null.
 	 */
-	public EnOceanChannelDescription getChannelDescription(short rorg, short func, short type, short extra);
+	public EnOceanChannelDescription getChannelDescription(String channelId);
 
 }

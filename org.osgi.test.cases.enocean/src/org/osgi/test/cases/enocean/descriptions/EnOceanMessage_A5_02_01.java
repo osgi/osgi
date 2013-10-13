@@ -4,7 +4,6 @@ package org.osgi.test.cases.enocean.descriptions;
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.channels.EnOceanChannel;
-import org.osgi.service.enocean.channels.EnOceanChannelDescription;
 import org.osgi.test.cases.enocean.utils.Utils;
 
 public class EnOceanMessage_A5_02_01 implements EnOceanMessage {
@@ -51,6 +50,10 @@ public class EnOceanMessage_A5_02_01 implements EnOceanMessage {
 
 			private byte	b0;
 
+			public String getChannelId() {
+				return "TMP_00";
+			}
+
 			public void setRawValue(byte[] rawValue) {
 				b0 = rawValue[0];
 			}
@@ -67,14 +70,15 @@ public class EnOceanMessage_A5_02_01 implements EnOceanMessage {
 				return 16;
 			}
 
-			public EnOceanChannelDescription getDescription() {
-				return null;
-			}
 		};
 
 		EnOceanChannel learn = new EnOceanChannel() {
 
 			private boolean	isLearn;
+
+			public String getChannelId() {
+				return "LRN";
+			}
 
 			public void setRawValue(byte[] rawValue) {
 				isLearn = rawValue[0] == 0;
@@ -94,10 +98,6 @@ public class EnOceanMessage_A5_02_01 implements EnOceanMessage {
 
 			public int getOffset() {
 				return 28;
-			}
-
-			public EnOceanChannelDescription getDescription() {
-				return null;
 			}
 		};
 

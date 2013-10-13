@@ -28,7 +28,14 @@ package org.osgi.service.enocean.channels;
  * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanChannel {
-		
+
+	
+	/**
+	 * @return The unique ID of this channel.
+	 */
+	public String getChannelId();
+
+	
 	/**
 	 * @return The offset, in bits, where this channel is found in the telegram.
 	 */
@@ -38,12 +45,6 @@ public interface EnOceanChannel {
 	 * @return The size, in bits, of this channel.
 	 */
 	public int getSize();
-	
-	/**
-	 * @return The description of this channel, if any.
-	 */
-	public EnOceanChannelDescription getDescription();
-
 
 	/**
 	 * Gets or sets the raw value of this channel.

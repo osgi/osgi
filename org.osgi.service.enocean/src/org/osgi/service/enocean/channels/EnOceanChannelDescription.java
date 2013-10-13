@@ -31,7 +31,7 @@ public interface EnOceanChannelDescription {
 	/**
 	 * The unique ID of this EnOceanChannelDescription object.
 	 */
-	public final static String DESCRIPTION_ID = "enocean.channel.description.id";
+	public final static String CHANNEL_ID = "enocean.channel.description.channel_id";
 	
 	/**
 	 * A RAW channel is only made of bytes.
