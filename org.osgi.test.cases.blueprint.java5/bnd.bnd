@@ -29,7 +29,7 @@ Include-Resource					= \
 testcases = ${sort;${classes;named;${p}.*;extends;junit.framework.TestCase;concrete}}
 Test-Cases							= ${testcases}
 
--buildpath							= ee.j2se; version=1.5, \
+-buildpath							= ee.j2se; version=${javac.compliance}, \
     org.osgi.test.support;                  version=project , \
     org.osgi.service.blueprint;             version=project , \
     org.osgi.test.cases.blueprint;          version=project , \

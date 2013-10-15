@@ -12,8 +12,10 @@ japi.osgi.residential		= ${replace;$(residential.specs);.+;+$0}
 japi.ee.minimum				= +java, +javax
 japi.ee.foundation			= +java, +javax
 
-repo.javase     = ${repo;ee.j2se;[${javac.source},${javac.source}]}
-repo.foundation = ${repo;ee.foundation}
-repo.servlet = ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}
-repo.jaxp = ${repo;com.icl.saxon}
-repo.jpa = ${repo;org.eclipse.persistence.jpa_spec}
+javadoc.bootclasspath = ${uniq; \
+                    ${repo;ee.j2se;[${javac.compliance},${javac.compliance}]}, \
+                    ${repo;ee.foundation}}
+javadoc.classpath = ${uniq; \
+                    ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}, \
+                    ${repo;org.eclipse.persistence.jpa_spec}, \
+                    ${repo;com.icl.saxon}}

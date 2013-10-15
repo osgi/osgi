@@ -8,7 +8,7 @@ Include-Resource				= OSGI-INF=src/OSGI-INF
 Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
 -buildpath						= \
-	ee.j2se;					version=1.4, \
+	ee.j2se;					version=${javac.compliance}, \
 	osgi.core;					version=4.1, \
 	osgi.cmpn;					version=4.1
 

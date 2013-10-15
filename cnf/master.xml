@@ -213,15 +213,13 @@
 		<echo>javac:                  ${javac}</echo>
 		<echo>javac.source:           ${javac.source}</echo>
 		<echo>javac.target:           ${javac.target}</echo>
+		<echo>javac.compliance:       ${javac.compliance}</echo>
 		<echo>base.modfied:           ${base.modified} (${base.modified.readable})</echo>
 		<echo>target:                 ${target}</echo>
 		<echo>repo:                   ${repo}</echo>
 		<echo>licensed repo:          ${licensed-repo}</echo>
 		<echo>released repo:          ${released-repo}</echo>
 		<echo>nodeploy:               ${nodeploy}</echo>
-		<echo>core.companion:         ${core.companion.jar}</echo>
-		<echo>cmpn.companion:         ${cmpn.companion.jar}</echo>
-		<echo>enterprise.companion:   ${enterprise.companion.jar}</echo>
 	</target>
 
 </project>

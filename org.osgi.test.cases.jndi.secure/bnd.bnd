@@ -21,7 +21,7 @@ Include-Resource 					= \
 	
 Test-Cases							= ${testcases}
 
--buildpath							= ee.j2se; version=1.5, \
+-buildpath							= ee.j2se; version=${javac.compliance}, \
 	org.osgi.service.jndi;					version=project, \
     org.osgi.test.support;                  version=project, \
 	osgi.core; 								version=4.2, \

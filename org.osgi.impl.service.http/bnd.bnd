@@ -12,7 +12,7 @@ Export-Package					= org.osgi.service.http; -split-package:=first; provide:=true
 
 -buildpath						= \
     org.osgi.service.http;				version=project, \
-	ee.j2se;							version=1.4, \
+	ee.j2se;							version=${javac.compliance}, \
 	osgi.core;							version=4.0, \
 	osgi.cmpn;							version=4.0, \
 	org.osgi.impl.bundle.servlet;		version=2.1

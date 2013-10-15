@@ -33,7 +33,7 @@ Include-Resource                    = \
     implmultiprovider.jar
 	
 -buildpath							= \
-	ee.j2se;						version=1.6,\
+	ee.j2se;						version=${javac.compliance},\
 	org.osgi.test.support;			version=project, \
     org.osgi.service.serviceloader; version=project , \
 	osgi.core;						version=5.0,\

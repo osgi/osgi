@@ -4,4 +4,4 @@
 Export-Package: ${p}.*; -split-package:=first
 
 -buildpath = \
-	ee.j2se;					version=1.5
+	ee.j2se;					version=${javac.compliance}
