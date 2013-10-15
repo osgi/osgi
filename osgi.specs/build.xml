@@ -44,8 +44,8 @@
             Sourcepath    : ${project.allsourcepath}
             Destdir       : ${target}/javadoc
             Packages      : ${javadoc.packages}
-            Bootcp        : ${repo.javase}, ${repo.foundation}
-            Classpath     : ${repo.servlet}, ${repo.jpa}, ${repo.jaxp}
+            Bootclasspath : ${javadoc.bootclasspath}
+            Classpath     : ${javadoc.classpath}
         </echo>
         <javadoc
             access="protected"
@@ -54,13 +54,10 @@
             sourcepath="${project.allsourcepath}"
             destdir="${target}/javadoc">
             <bootclasspath>
-                <pathelement location="${repo.javase}"/>
-                <pathelement location="${repo.foundation}"/>
+                <files includes="${javadoc.bootclasspath}"/>
             </bootclasspath>
             <classpath>
-                <pathelement location="${repo.servlet}" />
-                <pathelement location="${repo.jpa}" />
-                <pathelement location="${repo.jaxp}" />
+                <files includes="${javadoc.classpath}"/>
             </classpath>
             <doclet name="org.osgi.tools.xmldoclet.XmlDoclet"
                 path="${bin}">
