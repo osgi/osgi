@@ -15,7 +15,6 @@
                 <include name="fop-hyph.jar" />
             </fileset>
         </path>
-        <property name="fop.classpath" refid="fop.classpath" />
         <makeurl property="log4j.properties" file="${project.dir}/docbook/fop/log4j.properties" />
         <property name="font.base.dir" value="${project.dir}/fonts" />
         <makeurl property="font.base.url" file="${font.base.dir}" />
@@ -272,7 +271,7 @@
                 <classpath>
                     <pathelement location="${bin}" />
                     <pathelement location="${log4j}" />
-                    <pathelement path="${fop.classpath}" />
+                    <path refid="fop.classpath" />
                 </classpath>
                 <jvmarg value="-Xms256m" />
                 <jvmarg value="-Xmx512m" />
@@ -320,8 +319,10 @@
     </target>
 
     <target name="fontmetrics" depends="init" description="Only used to rebuild font metrics">
-        <foreach delimiter=" ," target="-fontmetrics" param="item" inheritAll="true">
-            <fileset dir="fonts" includes="*.ttf" />
+        <foreach target="-fontmetrics" param="item" inheritall="true" inheritrefs="true">
+            <path>
+                <fileset dir="fonts" includes="*.ttf" />
+            </path>
         </foreach>
     </target>
 
@@ -331,7 +332,7 @@
             <path location="${item}"/>
         </pathconvert>
         <java classname="org.apache.fop.fonts.apps.TTFReader" fork="true">
-            <classpath path="${fop.classpath}" />
+            <classpath refid="fop.classpath" />
             <arg value="${font}.ttf" />
             <arg value="${font}.xml" />
         </java>
