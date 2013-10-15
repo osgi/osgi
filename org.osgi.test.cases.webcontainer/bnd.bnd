@@ -38,7 +38,7 @@ Export-Package =\
 	${p}.util;version=1.0, \
 	${p}.util.validate;version=1.0
 	
--buildpath							= ee.j2se; version=1.5, \
+-buildpath							= ee.j2se; version=${javac.compliance}, \
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec;			version=latest, \
     org.apache.geronimo.specs.geronimo-annotation_1.0_spec; version=latest, \
 	osgi.core;									version=4.3.1, \

@@ -12,7 +12,7 @@
 	com.springsource.junit;				version="[3.8,4)", 	\
 	nanoxml,												\
 	org.objectweb.asm;					version="[2.2.2,3)",\
-	ee.j2se; 							version=1.5,		\
+	ee.j2se; 							version=${javac.compliance},		\
 	com.sun.tools;                      version=1.5.0
 
 

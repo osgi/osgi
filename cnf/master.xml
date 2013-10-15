@@ -213,6 +213,7 @@
 		<echo>javac:                  ${javac}</echo>
 		<echo>javac.source:           ${javac.source}</echo>
 		<echo>javac.target:           ${javac.target}</echo>
+		<echo>javac.compliance:       ${javac.compliance}</echo>
 		<echo>base.modfied:           ${base.modified} (${base.modified.readable})</echo>
 		<echo>target:                 ${target}</echo>
 		<echo>repo:                   ${repo}</echo>

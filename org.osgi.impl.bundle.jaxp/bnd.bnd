@@ -11,6 +11,6 @@ Export-Service	 				= \
 Export-Package 					= ${p}
 
 -buildpath						= \
-	ee.j2se;					version=1.4, \
+	ee.j2se;					version=${javac.compliance}, \
 	osgi.core;					version=4.0.1, \
 	osgi.cmpn;					version=4.0.1

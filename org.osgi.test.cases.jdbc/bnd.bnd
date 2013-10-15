@@ -10,7 +10,7 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.test.support; 	version=project, \
 	org.osgi.service.jdbc; 	version=project, \
 	osgi.core;									version=4.0		, \
-	ee.j2se;version=1.4												, \
+	ee.j2se;version=${javac.compliance}												, \
 	${junit}
 
 -runbundles						= \

@@ -14,4 +14,4 @@ Private-Package = ${p}.*
 	org.osgi.service.dmt;version=project, \
 	osgi.cmpn; version=4.1, \
 	osgi.core; version=4.1, \
-	ee.j2se; version=1.5
+	ee.j2se; version=${javac.compliance}

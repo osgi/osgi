@@ -12,6 +12,6 @@ Private-Package					= ${p}
 Include-Resource				= TestIcon.gif
 
 -buildpath						= \
-	ee.j2se;					version=1.4, \
+	ee.j2se;					version=${javac.compliance}, \
 	osgi.core;					version=4.2, \
 	osgi.cmpn;					version=4.1

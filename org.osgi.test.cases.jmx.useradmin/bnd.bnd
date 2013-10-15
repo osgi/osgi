@@ -6,7 +6,7 @@ Private-Package                     =  \
     ${p}.junit.*
 Import-Package: ${-signaturetest}, *
     
--buildpath                          = ee.j2se; version=1.5, \
+-buildpath                          = ee.j2se; version=${javac.compliance}, \
     org.osgi.test.support;          version=project, \
     org.osgi.jmx;                   version=project , \
     osgi.core;                      version=4.3.1   , \

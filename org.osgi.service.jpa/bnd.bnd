@@ -3,7 +3,7 @@
 
 Export-Package: ${p}.*; -split-package:=first
 
--buildpath 			= ee.j2se; version=1.5, \
+-buildpath 			= ee.j2se; version=${javac.compliance}, \
 	osgi.core;			version=4.2, \
 	org.eclipse.persistence.jpa_spec;	version=2.0
 	

@@ -48,7 +48,7 @@ Include-Resource: \
 	org.osgi.impl.bundle.servlet;		version=2.1, \
 	osgi.core;								version=4.0		, \
 	osgi.cmpn;								version=4.2		, \
-	ee.j2se; version=1.4												, \
+	ee.j2se; version=${javac.compliance}												, \
 	${junit}
 
 -runbundles						= \

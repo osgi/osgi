@@ -2,4 +2,4 @@
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd	
 
 -buildpath = biz.aQute.bnd; version=latest, \
-			ee.j2se; version=1.5 
+			ee.j2se; version=${javac.compliance}

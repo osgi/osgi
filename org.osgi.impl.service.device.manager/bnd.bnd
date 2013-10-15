@@ -10,5 +10,5 @@ Export-Package					= org.osgi.service.device; -split-package:=first; provide:=tr
 
 -buildpath						= \
     org.osgi.service.device;	version=project, \
-	ee.j2se;					version=1.4, \
+	ee.j2se;					version=${javac.compliance}, \
 	osgi;						version=3.0

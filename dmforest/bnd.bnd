@@ -4,4 +4,4 @@
 nodeploy=true
 
 -buildpath: org.osgi.service.dmt; version=project, \
-			ee.j2se; version=1.6
+			ee.j2se; version=${javac.compliance}
