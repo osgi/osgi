@@ -21,8 +21,8 @@
 				Sourcepath    : ${project.allsourcepath}
 				Destdir       : ${target}/javadoc/@{name}
 			    Packages      : @{packages}
-				Bootcp        : ${repo.javase}, ${repo.foundation}
-				Classpath     : ${repo.servlet}, ${repo.jpa}, ${repo.jaxp}
+	            Bootclasspath : ${javadoc.bootclasspath}
+	            Classpath     : ${javadoc.classpath}
 			</echo>
 	        <javadoc 
 				access="protected" 
@@ -48,15 +48,12 @@
 				<doctitle><![CDATA[OSGi${tm} @{title} Release ${osgi.release}]]></doctitle>
 				<header><![CDATA[<b>OSGi${tm} @{title}</b><br/><font size=-1>Release ${osgi.release}</font>]]></header>
 				<bottom><![CDATA[<font size=-1>${copyright.html} Licensed under the <a href="{@docRoot}/LICENSE.html">OSGi Specification License, Version 2.0</a></font>]]></bottom>
-			    <bootclasspath>
-	      			<pathelement location="${repo.javase}"/>
-	      			<pathelement location="${repo.foundation}"/>
-	    		</bootclasspath>
-			    <classpath>
-					<pathelement location="${repo.servlet}" />
-					<pathelement location="${repo.jpa}" />
-					<pathelement location="${repo.jaxp}" />
-	    		</classpath>
+	            <bootclasspath>
+	                <files includes="${javadoc.bootclasspath}"/>
+	            </bootclasspath>
+	            <classpath>
+	                <files includes="${javadoc.classpath}"/>
+	            </classpath>
 				<tag name="Immutable" scope="types" description="Immutable"/>
 				<tag name="ThreadSafe" scope="types" description="ThreadSafe"/>
 				<tag name="NotThreadSafe" scope="types" description="NotThreadSafe"/>
