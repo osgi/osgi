@@ -219,9 +219,6 @@
 		<echo>licensed repo:          ${licensed-repo}</echo>
 		<echo>released repo:          ${released-repo}</echo>
 		<echo>nodeploy:               ${nodeploy}</echo>
-		<echo>core.companion:         ${core.companion.jar}</echo>
-		<echo>cmpn.companion:         ${cmpn.companion.jar}</echo>
-		<echo>enterprise.companion:   ${enterprise.companion.jar}</echo>
 	</target>
 
 </project>
