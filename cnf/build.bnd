@@ -35,7 +35,7 @@ javac.target 			= 1.2
 
 #Bnd options
 -sources               	= true
--sourcepath             = ${project}/src 
+-sourcepath             = ${project}/${src}
 
 -plugin	            	= aQute.lib.deployer.FileRepo; \
                                 location=${repo}; \
