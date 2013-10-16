@@ -66,7 +66,7 @@ javac.target 			= 1.2
 
 # Time options
 # base.modified is used by bnd to not make when files are not changed
-base.modified			= ${fmodified;${build}/build.xml,${build}/build.bnd,${project}/bnd.bnd,${project}/build.xml}
+base.modified			= ${fmodified;${build}/master.xml,${build}/build.bnd,${project}/bnd.bnd,${project}/build.xml}
 base.modified.readable	= ${long2date;${base.modified}}
 project.build			= ${tstamp;yyyyMMddHHmm}
 
