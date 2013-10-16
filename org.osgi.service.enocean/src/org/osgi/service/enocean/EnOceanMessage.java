@@ -17,7 +17,6 @@
 
 package org.osgi.service.enocean;
 
-import org.osgi.service.enocean.channels.EnOceanChannel;
 
 /**
  * Holds the necessary methods to interact with an EnOcean message.
@@ -53,7 +52,7 @@ public interface EnOceanMessage {
 	public int getDestinationId();
 	
 	/**
-	 * Serializes the EnOceanMessage into an array of bytes, if possible.
+	 * Serializes the message into an array of bytes, if possible.
 	 * 
 	 * @return The serialized byte list corresponding to the binary message.
 	 * @throws EnOceanException
@@ -61,20 +60,10 @@ public interface EnOceanMessage {
 	public byte[] serialize() throws EnOceanException;
 	
 	/**
-	 * Deserializes an array of bytes into the Message, if possible.
-	 * If the actual instance type of the message is not compatible with the bytes
-	 * it is fed with (RORG to begin with), throw an IllegalArgumentException.
-	 * 
-	 * @throws EnOceanException
+	 * Returns the payload bytes of this message.
+	 * @return
 	 */
-	public void deserialize(byte[] bytes) throws EnOceanException, IllegalArgumentException;
-
-	/**
-	 * Get the list of associated channels.
-	 * 
-	 * @return The list of associated channels.
-	 */
-	public EnOceanChannel[] getChannels();
+	public byte[] getPayloadBytes();
 	
 	/**
 	 * Gets the current EnOcean status of the Message. 
