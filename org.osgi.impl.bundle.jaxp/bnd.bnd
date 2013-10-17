@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${project.workspace}/cnf/eclipse/jdt.bnd	
+-include: ${build}/eclipse/jdt.bnd
 
 Bundle-Activator				= org.osgi.impl.bundle.jaxp.JaxpActivator
 Bundle-Description				=  OSGi XML JAXP Implementation. Registers an 
