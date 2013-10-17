@@ -1,5 +1,5 @@
 # Set javac settings from JDT prefs
--include: ${project.workspace}/cnf/eclipse/jdt.bnd
+-include: ${build}/eclipse/jdt.bnd
 
 Bundle-Description: 			General Support for OSGi JUnit based testing
 Export-Package:  				org.osgi.test.*
