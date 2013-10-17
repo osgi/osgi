@@ -1,0 +1,51 @@
+/*
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+package org.osgi.service.enocean.sets;
+
+import org.osgi.service.enocean.EnOceanMessageDescription;
+
+
+/**
+ * This interface represents an EnOcean Message Description Set.
+ * {@link EnOceanMessageDescriptionSet} is registered as an OSGi Service.
+ * Provides method to retrieve the {@link EnOceanMessageDescription} objects
+ * it documents.
+ * 
+ * @version 1.0
+ * @author Victor Perron <victor.perron@orange.fr>
+ */
+public interface EnOceanMessageDescriptionSet {
+	
+	public final static String	VERSION				= "message.description.set.version";
+
+	public final static String	PROVIDER_ID			= "message.description.set.provider_id";
+
+	/**
+	 * Retrieves a {@link EnOceanMessageDescription} object according to its identifiers.
+	 * See EnOcean Equipment Profile Specification for more details.
+	 * 
+	 * @param rorg the radio telegram type of the message.
+	 * @param func The func subtype of this message.
+	 * @param type The type subselector.
+	 * @param extra Some extra information; some {@link EnOceanMessageDescription} 
+	 * objects need an additional specifier.
+	 * @return The {@link EnOceanMessageDescription} object looked for, or null.
+	 */
+	public EnOceanMessageDescription getMessageDescription(int rorg, int func, int type, int extra);
+
+}

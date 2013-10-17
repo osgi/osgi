@@ -36,29 +36,29 @@ public class Message4BS extends Message {
 	}
 
 	public boolean isTeachin() {
-		return (getData()[3] & 0x08) == 0;
+		return (getPayloadBytes()[3] & 0x08) == 0;
 	}
 
 	/**
 	 * @return  true if the message teach-in embeds profile & manufacturer info.
 	 */
 	public boolean hasTeachInInfo() {
-		return (getData()[3] & 0x80) != 0;
+		return (getPayloadBytes()[3] & 0x80) != 0;
 	}
 
 	/**
 	 * @return the FUNC in the case of a teach-in message with information.
 	 */
 	public int teachInFunc() {
-		return (getData()[0] >> 2) & 0xff;
+		return (getPayloadBytes()[0] >> 2) & 0xff;
 	}
 	
 	/**
 	 * @return the TYPE in the case of a teach-in message with information.
 	 */
 	public int teachInType() {
-		byte b0 = getData()[0];
-		byte b1 = getData()[1];
+		byte b0 = getPayloadBytes()[0];
+		byte b1 = getPayloadBytes()[1];
 		return (((b0 & 0x03) << 5) & 0xff) | ((((b1 >> 3)) & 0xff));
 	}
 	
@@ -66,9 +66,8 @@ public class Message4BS extends Message {
 	 * @return the MANUF in the case of a teach-in message with information.
 	 */
 	public int teachInManuf() {
-		byte b0 = (byte) ((getData()[1]) & 0x07);
-		byte b1 = getData()[2];
+		byte b0 = (byte) ((getPayloadBytes()[1]) & 0x07);
+		byte b1 = getPayloadBytes()[2];
 		return ((b0 & 0xff) << 8) + (b1 & 0xff);
 	}
-
 }

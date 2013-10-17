@@ -2,9 +2,7 @@ package org.osgi.impl.service.enocean.basedriver;
 
 import java.io.FileNotFoundException;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Properties;
 // import javax.comm.CommPortIdentifier;
 import org.osgi.framework.BundleContext;
@@ -19,11 +17,9 @@ import org.osgi.impl.service.enocean.basedriver.radio.Message4BS;
 import org.osgi.impl.service.enocean.utils.EnOceanDriverException;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.service.enocean.EnOceanDevice;
-import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.sets.EnOceanChannelDescriptionSet;
-import org.osgi.service.enocean.sets.EnOceanMessageSet;
 import org.osgi.service.enocean.sets.EnOceanRPCSet;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
@@ -35,15 +31,8 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	private BundleContext		bc;
 	private Hashtable			eoDevices;
 	private Hashtable			eoHostRefs;
-	private Hashtable			eoMessageSetRefs;
-	private Hashtable			eoRpcSetRefs;
-	private Hashtable			eoChannelDescriptionSetRefs;
 
-	// Close every service properly upon base driver stop.
 	private ServiceTracker		eoDevicesTracker;
-	private ServiceTracker		eoMessageSetTracker;
-	private ServiceTracker		eoRpcSetTracker;
-	private ServiceTracker		eoChannelDescriptionSetTracker;
 	private EnOceanHostImpl		initialHost;
 	private EventAdmin			eventAdmin;
 
@@ -63,9 +52,6 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		this.bc = bc;
 		eoDevices = new Hashtable(10);
 		eoHostRefs = new Hashtable(10);
-		eoRpcSetRefs = new Hashtable(10);
-		eoMessageSetRefs = new Hashtable(10);
-		eoChannelDescriptionSetRefs = new Hashtable(10);
 
 		/* Register initial EnOceanHost */
 		String hostPath = System.getProperty("org.osgi.service.enocean.host.path");
@@ -90,9 +76,6 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		/* Track the EnOcean services */
 		try {
 			eoDevicesTracker = registerDeviceListener(bc, this);
-			eoRpcSetTracker = registerRpcSetListener(bc, this);
-			eoMessageSetTracker = registerMessageSetListener(bc, this);
-			eoChannelDescriptionSetTracker = registerChannelDescriptionSetListener(bc, this);
 		} catch (InvalidSyntaxException e) {
 			Logger.e(TAG, e.getMessage());
 		}
@@ -130,16 +113,10 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 			int type = implDev.getType();
 			/* If we have full profile information */
 			if (rorg != -1 && func != -1 && type != -1) {
-				EnOceanMessage eoMsg = getEOMessageFromDescriptionSet(msg, rorg, func, type);
-				if (eoMsg != null) {
-					implDev.setLastMessage(eoMsg);
-					broadcastToEventAdmin(eoMsg);
-				} else {
-					msg.setFunc(func);
-					msg.setType(type);
-					implDev.setLastMessage(msg);
-					broadcastToEventAdmin(msg);
-				}
+				msg.setFunc(func);
+				msg.setType(type);
+				implDev.setLastMessage(msg);
+				broadcastToEventAdmin(msg);
 			}
 		}
 	}
@@ -154,24 +131,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 				eoDevices.put(chipId, ref);
 				Logger.d(TAG, "EnOceanDevice service registered : " + chipId);
 			}
-			if (service instanceof EnOceanMessageSet) {
-				String providerId = (String) ref.getProperty(EnOceanMessageSet.PROVIDER_ID);
-				String version = (String) ref.getProperty(EnOceanMessageSet.VERSION);;
-				eoMessageSetRefs.put(providerId + "-" + version, ref);
-				Logger.d(TAG, "EnOceanMessageSet service registered : " + providerId + "-" + version);
-			}
-			if (service instanceof EnOceanRPCSet) {
-				String providerId = (String) ref.getProperty(EnOceanRPCSet.PROVIDER_ID);
-				String version = (String) ref.getProperty(EnOceanRPCSet.VERSION);;
-				eoRpcSetRefs.put(providerId + "-" + version, ref);
-				Logger.d(TAG, "EnOceanRPCSet service registered : " + providerId + "-" + version);
-			}
-			if (service instanceof EnOceanChannelDescriptionSet) {
-				String providerId = (String) ref.getProperty(EnOceanChannelDescriptionSet.PROVIDER_ID);
-				String version = (String) ref.getProperty(EnOceanChannelDescriptionSet.VERSION);;
-				eoChannelDescriptionSetRefs.put(providerId + "-" + version, ref);
-				Logger.d(TAG, "EnOceanChannelDescriptionSet service registered : " + providerId + "-" + version);
-			}
+
 
 			return service;
 		}
@@ -245,39 +205,6 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		return null;
 	}
 
-	/**
-	 * Converts a radio message type (pure driver-specific implementation) into
-	 * a proper specification-based EnOcean Message. This implementation makes
-	 * the first match return the actual EnOceanMessage.
-	 * 
-	 * @param msg the raw input Message.
-	 * @param rorg
-	 * @param func
-	 * @param type
-	 * @return
-	 */
-	private EnOceanMessage getEOMessageFromDescriptionSet(Message msg, int rorg, int func, int type) {
-
-		Iterator iter = eoMessageSetRefs.entrySet().iterator();
-		while (iter.hasNext()) {
-			Entry entry = (Entry) iter.next();
-			ServiceReference ref = (ServiceReference) entry.getValue();
-			EnOceanMessageSet msgSet = (EnOceanMessageSet) bc.getService(ref);
-			EnOceanMessage eoMsg = msgSet.getMessage(rorg, func, type, -1);
-			if (eoMsg != null) {
-				try {
-					eoMsg.deserialize(msg.serialize());
-					return eoMsg;
-				} catch (IllegalArgumentException e) {
-					Logger.e(TAG, "Illegal Argument : " + e.getMessage());
-				} catch (EnOceanException e) {
-					Logger.e(TAG, "EnOceanException : " + e.getMessage());
-				}
-			}
-		}
-		return null;
-	}
-
 	private void registerDevice(int senderId, int rorg, int func, int type, int manuf) {
 		EnOceanDeviceImpl device = new EnOceanDeviceImpl(bc, senderId);
 		device.registerProfile(rorg, func, type, manuf);
@@ -300,18 +227,6 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 
 	private ServiceTracker registerDeviceListener(BundleContext bc, ServiceTrackerCustomizer listener) throws InvalidSyntaxException {
 		return registerServiceFrom(bc, org.osgi.service.enocean.EnOceanDevice.class, listener);
-	}
-
-	private ServiceTracker registerRpcSetListener(BundleContext bc, ServiceTrackerCustomizer listener) {
-		return registerServiceFrom(bc, org.osgi.service.enocean.sets.EnOceanRPCSet.class, listener);
-	}
-
-	private ServiceTracker registerMessageSetListener(BundleContext bc, ServiceTrackerCustomizer listener) throws InvalidSyntaxException {
-		return registerServiceFrom(bc, org.osgi.service.enocean.sets.EnOceanMessageSet.class, listener);
-	}
-
-	private ServiceTracker registerChannelDescriptionSetListener(BundleContext bc, ServiceTrackerCustomizer listener) throws InvalidSyntaxException {
-		return registerServiceFrom(bc, org.osgi.service.enocean.sets.EnOceanChannelDescriptionSet.class, listener);
 	}
 
 }

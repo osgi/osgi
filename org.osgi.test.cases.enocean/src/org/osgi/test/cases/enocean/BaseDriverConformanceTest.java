@@ -11,10 +11,12 @@ import java.util.Properties;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanMessage;
-import org.osgi.service.enocean.sets.EnOceanMessageSet;
+import org.osgi.service.enocean.EnOceanMessageDescription;
+import org.osgi.service.enocean.channels.EnOceanChannel;
+import org.osgi.service.enocean.sets.EnOceanMessageDescriptionSet;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
-import org.osgi.test.cases.enocean.descriptions.EnOceanMessageSetImpl;
+import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescriptionSetImpl;
 import org.osgi.test.cases.enocean.descriptions.EnOceanMessage_A5_02_01;
 import org.osgi.test.cases.enocean.esp.EspRadioPacket;
 import org.osgi.test.cases.enocean.radio.MessageA5_02_01;
@@ -44,11 +46,8 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		/* Tracks device creation */
 		devices = new ServiceListener(getContext(), EnOceanDevice.class);
 
-		/* Tracks EnOceanMessageSet creation */
-		messageSets = new ServiceListener(getContext(), EnOceanMessageSet.class);
-
 		/* Tracks device events */
-		String[] topics = new String[] {"org/osgi/service/enocean/EnOceanEvent/*"};
+		String[] topics = new String[] {Fixtures.SELF_TEST_EVENT_TOPIC};
 		events = new EventListener(getContext(), topics, null);
 
 		/* Get a global eventAdmin handle */
@@ -56,18 +55,16 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		eventAdmin = (EventAdmin) getContext().getService(ref);
 
 		/* Inserts some message documentation classes */
-		EnOceanMessageSetImpl msgSet = new EnOceanMessageSetImpl();
+		EnOceanMessageDescriptionSetImpl msgSet = new EnOceanMessageDescriptionSetImpl();
 		msgSet.putMessage(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, new EnOceanMessage_A5_02_01());
 
 		Dictionary props = new Properties();
-		props.put(EnOceanMessageSet.PROVIDER_ID, Fixtures.MESSAGESET_PROVIDER);
-		props.put(EnOceanMessageSet.VERSION, Fixtures.MESSAGESET_VERSION);
-		getContext().registerService(EnOceanMessageSet.class.getName(), msgSet, props);
+		props.put(EnOceanMessageDescriptionSet.PROVIDER_ID, Fixtures.MESSAGESET_PROVIDER);
+		props.put(EnOceanMessageDescriptionSet.VERSION, Fixtures.MESSAGESET_VERSION);
 	}
 
 	protected void tearDown() throws Exception {
 		devices.close();
-		messageSets.close();
 		events.close();
 		cleanupServices();
 	}
@@ -160,25 +157,11 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		assertEquals("func mismatch", Fixtures.STR_FUNC, event.getProperty("enocean.func"));
 		assertEquals("type mismatch", Fixtures.STR_TYPE_1, event.getProperty("enocean.type"));
 
-		EnOceanMessage_A5_02_01 msg = (EnOceanMessage_A5_02_01) event.getProperty("enocean.message");
+		EnOceanMessage msg = (EnOceanMessage) event.getProperty("enocean.message");
 		assertNotNull(msg);
-		assertEquals("temperature mismatch", Fixtures.RAW_TEMPERATURE, msg.getChannels()[0].getRawValue()[0]);
-	}
-
-	/**
-	 * Checks that the injected documentation (through service registration) has
-	 * been correctly registered into the BaseDriver.
-	 * 
-	 * @throws InterruptedException
-	 */
-	public void testMessageDescriptionRegistration() throws InterruptedException {
-		String type = messageSets.waitForService();
-		ServiceReference ref = messageSets.getServiceReference();
-		assertEquals("providerId mismatch", Fixtures.MESSAGESET_PROVIDER, ref.getProperty(EnOceanMessageSet.PROVIDER_ID));
-		assertEquals("version mismatch", Fixtures.MESSAGESET_VERSION, ref.getProperty(EnOceanMessageSet.VERSION));
-		EnOceanMessageSet set = (EnOceanMessageSet) getContext().getService(ref);
-		EnOceanMessage cls = set.getMessage(0xA5, 0x02, 0x01, -1);
-		assertEquals("class type mismatch", EnOceanMessage_A5_02_01.class, cls.getClass());
+		EnOceanMessageDescription description = new EnOceanMessage_A5_02_01();
+		EnOceanChannel[] channels = description.deserialize(msg.getPayloadBytes());
+		assertEquals("temperature mismatch", Fixtures.RAW_TEMPERATURE, channels[0].getRawValue()[0]);
 	}
 
 	private void cleanupServices() throws InterruptedException {

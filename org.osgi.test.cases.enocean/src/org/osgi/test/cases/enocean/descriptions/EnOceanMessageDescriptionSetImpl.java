@@ -19,31 +19,14 @@ package org.osgi.test.cases.enocean.descriptions;
 
 import java.util.Hashtable;
 import java.util.Map;
-import org.osgi.service.enocean.EnOceanMessage;
-import org.osgi.service.enocean.sets.EnOceanMessageSet;
+import org.osgi.service.enocean.EnOceanMessageDescription;
+import org.osgi.service.enocean.sets.EnOceanMessageDescriptionSet;
 
-public class EnOceanMessageSetImpl implements EnOceanMessageSet {
+public class EnOceanMessageDescriptionSetImpl implements EnOceanMessageDescriptionSet {
 
 	private Map	messageTable	= new Hashtable();
 
-	public EnOceanMessage getMessage(int rorg, int func, int type, int extra) {
-		String key = null;
-		if (extra == -1) {
-			key = generateKey(rorg, func, type);
-		} else {
-			key = generateKey(rorg, func, type, extra);
-		}
-
-		try {
-			EnOceanMessage instance = (EnOceanMessage) messageTable.get(key);
-			return instance;
-		} catch (Exception e) {
-			System.out.println("There was an error reading the messageSet : " + e.getMessage());
-		}
-		return null;
-	}
-
-	public void putMessage(int rorg, int func, int type, EnOceanMessage msg) {
+	public void putMessage(int rorg, int func, int type, EnOceanMessageDescription msg) {
 		String key = generateKey(rorg, func, type);
 		messageTable.put(key, msg);
 	}
@@ -54,6 +37,23 @@ public class EnOceanMessageSetImpl implements EnOceanMessageSet {
 
 	private String generateKey(int rorg, int func, int type, int extra) {
 		return "" + rorg + "-" + func + "-" + type + "-" + extra;
+	}
+
+	public EnOceanMessageDescription getMessageDescription(int rorg, int func, int type, int extra) {
+		String key = null;
+		if (extra == -1) {
+			key = generateKey(rorg, func, type);
+		} else {
+			key = generateKey(rorg, func, type, extra);
+		}
+
+		try {
+			EnOceanMessageDescription instance = (EnOceanMessageDescription) messageTable.get(key);
+			return instance;
+		} catch (Exception e) {
+			System.out.println("There was an error reading the messageSet : " + e.getMessage());
+		}
+		return null;
 	}
 
 }
