@@ -3,7 +3,7 @@ nodeploy   = true
 
 -dependson = osgi.companion, dmforest
 # Set javac settings from JDT prefs
--include: ${project.workspace}/cnf/eclipse/jdt.bnd, ${project.workspace}/osgi.companion/layout.bnd
+-include: ${build}/eclipse/jdt.bnd, ${project.workspace}/osgi.companion/layout.bnd
 
 -buildpath: \
     ee.j2se;         version=${javac.compliance}, \

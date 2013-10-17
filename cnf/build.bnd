@@ -35,7 +35,7 @@ javac.target 			= 1.2
 
 #Bnd options
 -sources               	= true
--sourcepath             = ${project}/src 
+-sourcepath             = ${project}/${src}
 
 -plugin	            	= aQute.lib.deployer.FileRepo; \
                                 location=${repo}; \
@@ -52,9 +52,6 @@ javac.target 			= 1.2
                           Packaging; \
                                 path:="${build}/${bin}";\
                                 command:=-pack, \
-                          Coverage; \
-                                path:="${build}/${bin},${workspace}/org.osgi.tools/${bin}"; \
-                                command:="-coverage", \
                           SignatureTest; \
                                 path:=${build}/${bin}; \
                                 command:="-signaturetest"
@@ -66,17 +63,12 @@ javac.target 			= 1.2
 
 # Time options
 # base.modified is used by bnd to not make when files are not changed
-base.modified			= ${fmodified;${build}/build.xml,${build}/build.bnd,${project}/bnd.bnd,${project}/build.xml}
+base.modified			= ${fmodified;${build}/master.xml,${build}/build.bnd,${project}/bnd.bnd,${project}/build.xml}
 base.modified.readable	= ${long2date;${base.modified}}
 project.build			= ${tstamp;yyyyMMddHHmm}
 
 copyright = Copyright (c) OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
 copyright.html = Copyright &copy; OSGi Alliance (2000, ${tstamp;yyyy}). All Rights Reserved.
-
-# deprecated -versionpolicy             = ${range;[==,+)}
-# default version policies
-#   -provider-policy =  ${range;[==,=+)}
-#   -consumer-policy =  ${range;[==,+)}
 
 osgi.release				= 5
 osgi.version				= 5.0
