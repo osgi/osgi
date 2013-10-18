@@ -43,9 +43,10 @@ public interface ZigBeeEventListener {
 	public void notifyEvent(ZigBeeEvent event);
 
 	/**
-	 * Notifies a failure, i.e. when either a UNSUPPORTED_ATTRIBUTE, or a
-	 * UNREPORTABLE_ATTRIBUTE, or INVALID_VALUE, or INVALID_DATA_TYPE status
-	 * occurs.
+	 * Notifies a failure, i.e. when either a
+	 * ZigBeeException.UNSUPPORTED_ATTRIBUTE, or a
+	 * ZigBeeException.UNREPORTABLE_ATTRIBUTE, or ZigBeeException.INVALID_VALUE,
+	 * or ZigBeeException.INVALID_DATA_TYPE status occurs.
 	 * 
 	 * @param e the ZigBeeException.
 	 */

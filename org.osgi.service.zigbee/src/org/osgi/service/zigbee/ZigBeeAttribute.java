@@ -76,7 +76,7 @@ public interface ZigBeeAttribute {
 	/**
 	 * Sets the current value of the attribute.
 	 * 
-	 * @param value the value to set
+	 * @param value the Java value to set
 	 * @param handler the handler
 	 * @throws ZigBeeException
 	 */
