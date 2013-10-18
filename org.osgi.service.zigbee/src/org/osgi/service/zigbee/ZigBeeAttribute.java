@@ -29,35 +29,7 @@ public interface ZigBeeAttribute {
 	 * Property key for the optional attribute id. A ZigBee Event Listener
 	 * service can announce for what ZigBee attributes it wants notifications.
 	 */
-	public final static String	ID					= "zigbee.attribute.id";
-
-	/**
-	 * Property key for the optional minimum interval, in seconds between
-	 * issuing reports of the attribute A ZigBee Event Listener service can
-	 * declare the minimum frequency at which events it wants notifications.
-	 */
-	public final static String	MIN_REPORT_INTERVAL	= "zigbee.attribute.min.report.interval";
-
-	/**
-	 * Property key for the optional maximum interval, in seconds between
-	 * issuing reports of the attribute A ZigBee Event Listener service can
-	 * declare the maximum frequency at which events it wants notifications.
-	 */
-	public final static String	MAX_REPORT_INTERVAL	= "zigbee.attribute.max.report.interval";
-
-	/**
-	 * Property key for the optional maximum change to the attribute that will
-	 * result in a report being issued. A ZigBee Event Listener service can
-	 * declare the maximum frequency at which events it wants notifications.
-	 */
-	public final static String	REPORTABLE_CHANGE	= "zigbee.attribute.reportable.change";
-
-	/**
-	 * Property key for the optional maximum expected time, in seconds, between
-	 * received reports for the attribute. A ZigBee Event Listener service can
-	 * declare the maximum frequency at which events it wants notifications.
-	 */
-	public final static String	TIMEOUT_PERIOD		= "zigbee.attribute.timeout.period";
+	public final static String	ID	= "zigbee.attribute.id";
 
 	/**
 	 * @return the attribute identifier
