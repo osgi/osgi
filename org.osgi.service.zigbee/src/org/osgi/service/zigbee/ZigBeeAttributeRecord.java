@@ -23,7 +23,7 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
  * 
  * @version 1.0
  */
-public class ZigBeeAttributeRecord {
+public final class ZigBeeAttributeRecord {
 
 	private short						id;
 	private ZigBeeDataTypeDescription	dataType;
