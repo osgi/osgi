@@ -24,17 +24,6 @@ package org.osgi.service.zigbee;
 public interface ZigBeeEventListener {
 
 	/**
-	 * Key of {@link String} containing the listener targeted network PAN ID
-	 */
-	public static final String	PAN_ID_TARGET			= "zigbee.listener.target.pan.id";
-
-	/**
-	 * Key of {@link String} containing the listener targeted network extended
-	 * PAN ID
-	 */
-	public static final String	EXTENDED_PAN_ID_TARGET	= "zigbee.listener.target.extended.pan.id";
-
-	/**
 	 * Callback method that is invoked for received events. This method must be
 	 * called asynchronously.
 	 * 
