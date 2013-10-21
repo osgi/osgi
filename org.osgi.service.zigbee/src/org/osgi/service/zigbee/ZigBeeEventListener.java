@@ -24,15 +24,22 @@ package org.osgi.service.zigbee;
 public interface ZigBeeEventListener {
 
 	/**
+	 * Property key for the optional attribute data type of an attribute
+	 * reporting configuration record, cf. ZCL Figure 2.16 Format of the
+	 * Attribute Reporting Configuration Record.
+	 */
+	public final static String	ATTRIBUTE_DATA_TYPE	= "zigbee.attribute.datatype";
+
+	/**
 	 * Property key for the optional minimum interval, in seconds between
-	 * issuing reports of the attribute A ZigBee Event Listener service can
+	 * issuing reports of the attribute. A ZigBee Event Listener service can
 	 * declare the minimum frequency at which events it wants notifications.
 	 */
 	public final static String	MIN_REPORT_INTERVAL	= "zigbee.attribute.min.report.interval";
 
 	/**
 	 * Property key for the optional maximum interval, in seconds between
-	 * issuing reports of the attribute A ZigBee Event Listener service can
+	 * issuing reports of the attribute. A ZigBee Event Listener service can
 	 * declare the maximum frequency at which events it wants notifications.
 	 */
 	public final static String	MAX_REPORT_INTERVAL	= "zigbee.attribute.max.report.interval";
