@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -527,8 +527,7 @@ public class BundleHookTests extends OSGiTestCase {
 							}
 							assertEquals("wrong context in hook", testContext,
 									context);
-							assertEquals("wrong number of bundles in hook", 1,
-									bundles.size());
+							assertTrue("wrong number of bundles in hook: " + bundles.size(), bundles.size() > 0);
 							bundles.clear();
 
 							try {
@@ -607,6 +606,23 @@ public class BundleHookTests extends OSGiTestCase {
 			}
 			assertNull("bundle is not null", bundle);
 
+			for (int i = 0; i < hookCalled.length; i++) {
+				hookCalled[i] = 0;
+			}
+
+			Bundle[] bundles = testContext.getBundles();
+			assertEquals("all hooks not called", 3, hookCalled[0]);
+			assertEquals("hook 2 not called first", 2, hookCalled[1]);
+			assertEquals("hook 3 not called second", 3, hookCalled[2]);
+			assertEquals("hook 1 not called third ", 1, hookCalled[3]);
+			for (int i = 0; i < hookError.length; i++) {
+				if (hookError[i] != null) {
+					throw hookError[i];
+				}
+			}
+			// Note that null is never returned from getBundles()
+			assertNotNull("Bundles is null.", bundles);
+			assertEquals("Wrong number of bundles.", 0, bundles.length);
 
 			// remove the hooks
 			regHook1.unregister();
@@ -635,6 +651,7 @@ public class BundleHookTests extends OSGiTestCase {
 
 	public void testSystemFindHook() {
 		final BundleContext systemContext = getContext().getBundle(Constants.SYSTEM_BUNDLE_LOCATION).getBundleContext();
+		final long originNumBundles = getContext().getBundles().length;
 
 		final int[] hookCalled = new int[] {0, 0, 0, 0};
 		final AssertionFailedError[] hookError = new AssertionFailedError[] {
@@ -703,8 +720,7 @@ public class BundleHookTests extends OSGiTestCase {
 							}
 							assertEquals("wrong context in hook", systemContext,
 									context);
-							assertEquals("wrong number of bundles in hook", 1,
-									bundles.size());
+							assertTrue("wrong number of bundles in hook: " + bundles.size(), bundles.size() > 0);
 							bundles.clear();
 
 							try {
@@ -783,6 +799,23 @@ public class BundleHookTests extends OSGiTestCase {
 			}
 			assertEquals("Wrong bundle found", testBundles[0], bundle);
 
+			for (int i = 0; i < hookCalled.length; i++) {
+				hookCalled[i] = 0;
+			}
+
+			Bundle[] bundles = systemContext.getBundles();
+			assertEquals("all hooks not called", 3, hookCalled[0]);
+			assertEquals("hook 2 not called first", 2, hookCalled[1]);
+			assertEquals("hook 3 not called second", 3, hookCalled[2]);
+			assertEquals("hook 1 not called third ", 1, hookCalled[3]);
+			for (int i = 0; i < hookError.length; i++) {
+				if (hookError[i] != null) {
+					throw hookError[i];
+				}
+			}
+			// Note that null is never returned from getBundles()
+			assertNotNull("Bundles is null.", bundles);
+			assertEquals("Wrong number of bundles.", originNumBundles, bundles.length);
 		}
 		finally {
 			// unregister hooks
