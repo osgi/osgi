@@ -15,7 +15,7 @@
  */
 
 /**
- * Service Component Annotations Package Version 1.2.
+ * Service Component Annotations Package Version 1.3.
  *
  * <p>
  * This package is not used at runtime. Annotated classes are processed by
@@ -24,7 +24,7 @@
  * @author $Id$
  */
 
-@Version("1.2")
+@Version("1.3")
 package org.osgi.service.component.annotations;
 
 import org.osgi.annotation.versioning.Version;

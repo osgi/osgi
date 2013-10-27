@@ -126,17 +126,18 @@ public interface ComponentContext {
 
 	/**
 	 * If the component instance is registered as a service using the
-	 * {@code servicefactory="true"} attribute, then this method returns the
-	 * bundle using the service provided by the component instance.
+	 * {@code servicescope="bundle"} or {@code servicescope="prototype"}
+	 * attribute, then this method returns the bundle using the service provided
+	 * by the component instance.
 	 * <p>
 	 * This method will return {@code null} if:
 	 * <ul>
 	 * <li>The component instance is not a service, then no bundle can be using
 	 * it as a service.</li>
 	 * <li>The component instance is a service but did not specify the
-	 * {@code servicefactory="true"} attribute, then all bundles using the
-	 * service provided by the component instance will share the same component
-	 * instance.</li>
+	 * {@code servicescope="bundle"} or {@code servicescope="prototype"}
+	 * attribute, then all bundles using the service provided by the component
+	 * instance will share the same component instance.</li>
 	 * <li>The service provided by the component instance is not currently being
 	 * used by any bundle.</li>
 	 * </ul>

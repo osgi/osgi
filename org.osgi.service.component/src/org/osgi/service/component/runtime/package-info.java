@@ -36,7 +36,7 @@
  */
 
 @Version("1.3")
-package org.osgi.service.component;
+package org.osgi.service.component.runtime;
 
 import org.osgi.annotation.versioning.Version;
 

@@ -149,4 +149,16 @@ public @interface Reference {
 	 * @since 1.2
 	 */
 	String updated() default "";
+
+	/**
+	 * The requested service scope for this Reference.
+	 * 
+	 * <p>
+	 * If not specified, the {@link ReferenceScope#BUNDLE bundle} service scope
+	 * is requested.
+	 * 
+	 * @see "The scope attribute of the reference element of a Component Description."
+	 * @since 1.3
+	 */
+	ReferenceScope scope() default ReferenceScope.BUNDLE;
 }
