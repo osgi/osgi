@@ -96,7 +96,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Federated</emphasis> -Enable a global view of all
+          <para><emphasis>Federated</emphasis> - Enable a global view of all
           available services in a distributed environment.</para>
         </listitem>
       </itemizedlist>
@@ -292,7 +292,7 @@
     <title>Actors</title>
 
     <para>The OSGi Remote Services specification is about the distribution of
-    services. <xref linkend="intro.core.release" xrefstyle="template:%t"/>
+    services. This specification
     does not outline the details of how the distribution provider knows the
     desired topology, this policy aspect is left up to implementations. In
     many situations, this is a desirable architecture because it provides
@@ -836,6 +836,7 @@
       <title>Endpoint Id</title>
 
       <para>An Endpoint Id is an opaque unique identifier for an Endpoint.
+      This uniqueness must at least hold for the entire network in which the Endpoint is used.
       There is no syntax defined for this string except that white space at
       the beginning and ending must be ignored. The actual syntax for this
       Endpoint Id must be defined by the actual configuration type.</para>
@@ -845,6 +846,24 @@
       leading and trailing spaces removed. The Endpoint Description class must
       use the <code>String</code> class' hash Code from the Endpoint Id as its
       own <code>hashCode</code>.</para>
+
+      <para>The simplest way to ensure that a growth in the number of EndpointDescriptions and/or the size of the connected group does not violate the required uniqueness of Endpoint Ids is for implementations to make their Endpoint Ids globally unique. This protects against clashes regardless of changes to the connected group.</para>
+
+      <para>Whilst globally unique identifiers (GUIDs) are a simple solution to the Endpoint Id uniqueness problem, they are not easy to implement in all environments. In some systems they can be prohibitively expensive to create, or of insufficient entropy to be genuinely unique. Some distribution providers may therefore choose not to use random GUIDs. </para>
+
+      <para>In the case where no globally unique value is used the following actions are recommended (although not required).</para>
+      <itemizedlist>
+        <listitem>
+          <para> Distribution Providers protect against intra-framework clashes using some known value unique to the service, for example the service id.</para>
+        </listitem>
+        <listitem>
+          <para>Distribution Providers protect against inter-provider collisions within a single framework by using some unique value, such as the distribution provider's bundle id. The distribution provider bundle's symbolic name is insufficient, as there may be multiple versions of the same distribution provider installed within a single framework.</para>
+        </listitem>
+        <listitem>
+          <para>Distribution Providers protect against inter-framework collisions using some value unique to the framework, such as the framework UUID.</para>
+        </listitem>
+      </itemizedlist>
+
     </section>
 
     <section xml:id="i1887500">
@@ -892,7 +911,7 @@
     <section xml:id="i1887526">
       <title>Resource Containment</title>
 
-      <para>Configuration types can, and usually do, use URLs to point to
+      <para>Configuration types can use URLs to point to
       local resources describing in detail the Endpoint parameters for
       specific protocols. However, the purpose of an Endpoint Description is
       to describe an Endpoint to a remote system. This implies that there is
@@ -2358,7 +2377,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
       </listitem>
 
       <listitem>
-        Added <code>osgi.extender</code> definition.
+        Added <code>osgi.extender </code>definition.
       </listitem>
     </itemizedlist>
   </section>
