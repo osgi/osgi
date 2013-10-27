@@ -15,21 +15,33 @@
  */
 
 
-package org.osgi.service.enocean;
+package org.osgi.test.cases.enocean.channels;
 
 import org.osgi.service.enocean.channels.EnOceanChannel;
+import org.osgi.test.cases.enocean.utils.Utils;
 
-public interface EnOceanMessageDescription {
+public class TemperatureChannel_01 implements EnOceanChannel {
 
-	
-	/**
-	 * Deserializes an array of bytes into the EnOceanChannels available to the payload, if possible.
-	 * If the actual instance type of the message is not compatible with the bytes
-	 * it is fed with (RORG to begin with), throw an IllegalArgumentException.
-	 * 
-	 * @throws EnOceanException
-	 */
-	public EnOceanChannel[] deserialize(byte[] bytes) throws EnOceanException, EnOceanException;
+	private byte	b0;
 
+	public String getChannelId() {
+		return "TMP_01";
+	}
+
+	public void setRawValue(byte[] rawValue) {
+		b0 = rawValue[0];
+	}
+
+	public int getSize() {
+		return 8;
+	}
+
+	public byte[] getRawValue() {
+		return Utils.byteToBytes(b0);
+	}
+
+	public int getOffset() {
+		return 16;
+	}
 
 }

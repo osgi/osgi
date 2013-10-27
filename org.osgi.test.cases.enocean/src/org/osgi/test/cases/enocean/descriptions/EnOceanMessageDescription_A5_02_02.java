@@ -1,9 +1,11 @@
 package org.osgi.test.cases.enocean.descriptions;
 
 
-import org.osgi.service.enocean.IllegalArgumentException;
+import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanMessageDescription;
 import org.osgi.service.enocean.channels.EnOceanChannel;
+import org.osgi.test.cases.enocean.channels.LearnChannel_4BS;
+import org.osgi.test.cases.enocean.channels.TemperatureChannel_01;
 import org.osgi.test.cases.enocean.utils.Utils;
 
 public class EnOceanMessageDescription_A5_02_02 implements EnOceanMessageDescription {
@@ -20,62 +22,9 @@ public class EnOceanMessageDescription_A5_02_02 implements EnOceanMessageDescrip
 		return 0x02;
 	}
 
-	EnOceanChannel	temperature	= new EnOceanChannel() {
-
-									private byte	b0;
-
-									public String getChannelId() {
-										return "TMP_01";
-		}
-
-									public void setRawValue(byte[] rawValue) {
-										b0 = rawValue[0];
-									}
-
-									public int getSize() {
-										return 8;
-		}
-
-									public byte[] getRawValue() {
-										return Utils.byteToBytes(b0);
-									}
-
-									public int getOffset() {
-										return 16;
-									}
-
-								};
-
-	EnOceanChannel	learn		= new EnOceanChannel() {
-
-									private boolean	isLearn;
-
-									public String getChannelId() {
-										return "LRN";
-									}
-
-									public void setRawValue(byte[] rawValue) {
-										isLearn = rawValue[0] == 0;
-									}
-
-									public int getSize() {
-										return 1;
-									}
-
-									public byte[] getRawValue() {
-										if (isLearn) {
-											return new byte[] {0x0};
-										} else {
-											return new byte[] {0x1};
-			}
-									}
-
-									public int getOffset() {
-										return 28;
-									}
-								};
-
-	public EnOceanChannel[] deserialize(byte[] data) throws IllegalArgumentException, IllegalArgumentException {
+	EnOceanChannel	temperature	= new TemperatureChannel_01();
+	EnOceanChannel	learn		= new LearnChannel_4BS();
+	public EnOceanChannel[] deserialize(byte[] data) throws EnOceanException, EnOceanException {
 		temperature.setRawValue(Utils.byteToBytes(data[2]));
 		byte lrnByte = (byte) ((data[3] >> 3) & 0x01);
 		learn.setRawValue(new byte[] {lrnByte});

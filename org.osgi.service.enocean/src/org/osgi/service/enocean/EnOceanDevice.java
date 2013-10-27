@@ -80,18 +80,18 @@ public interface EnOceanDevice {
 	 * 
 	 * @param the {@link EnOceanMessage} as raw bytes, to be issued.
 	 * @param an optional {@link EnOceanResponseHandler} object.
-	 * @throws IllegalArgumentException
+	 * @throws EnOceanException
 	 */
-	public void send(byte[] telegram, EnOceanResponseHandler handler) throws IllegalArgumentException;
+	public void send(byte[] telegram, EnOceanResponseHandler handler) throws EnOceanException, EnOceanException;
 	
 	/**
 	 * Sends a message on the EnOcean network, uses actual {@link EnOceanMessage} objects.
 	 * 
 	 * @param the {@link EnOceanMessage} to be issued.
 	 * @param an optional {@link EnOceanResponseHandler} object.
-	 * @throws IllegalArgumentException
+	 * @throws EnOceanException
 	 */
-	public void send(EnOceanMessage telegram, EnOceanResponseHandler handler) throws IllegalArgumentException;
+	public void send(EnOceanMessage telegram, EnOceanResponseHandler handler) throws EnOceanException, EnOceanException;
 	
 	/**
 	 * Switches the device into learning mode.

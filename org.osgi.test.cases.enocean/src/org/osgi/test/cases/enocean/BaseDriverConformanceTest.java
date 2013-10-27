@@ -104,6 +104,129 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 	}
 
 	/**
+	 * Test that a properly set profile ID in a raw EnOceanMessage is enough to
+	 * extract all the information we need, provided we have the necessary
+	 * descriptions.
+	 * 
+	 * Pay attention that almost all of those tests look more like a
+	 * "recommendation" to be ran on external description bundles, since the
+	 * description objects are not supposed to be part of the RI.
+	 * 
+	 * @throws Exception
+	 */
+	public void testInterfaceExceptions() throws Exception {
+		boolean exceptionCaught = false;
+
+		try { /*
+			 * Check that passing a NULL array of bytes results in an
+			 * IllegalArgumentException
+			 */
+			exceptionCaught = false;
+			EnOceanMessageDescription msgDescription = new EnOceanMessageDescription_A5_02_01();
+			msgDescription.deserialize(null);
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+
+		try { /*
+			 * Check that passing a wrongly sized byte array also results in an
+			 * exception
+			 */
+			exceptionCaught = false;
+			EnOceanMessageDescription msgDescription = new EnOceanMessageDescription_A5_02_01();
+			msgDescription.deserialize(new byte[] {0x55, 0x02, 0x34, 0x56, 0x67});
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+		
+		try { /*
+			 * Tests that serializing a NULL object in EnOceanChannelDescription
+			 * in an exception
+			 */
+			exceptionCaught = false;
+			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
+			channelDescription.serialize(null);
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+
+		try { /*
+			 * Tests that serializing a wrong object in
+			 * EnOceanChannelDescription in an exception
+			 */
+			exceptionCaught = false;
+			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
+			channelDescription.serialize(new String("foo"));
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+
+		try { /*
+			 * Tests that serializing a wrong value in EnOceanChannelDescription
+			 * in an exception
+			 */
+			exceptionCaught = false;
+			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
+			channelDescription.serialize(new Float(-2000.0f));
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+
+		try { /*
+			 * Tests that deserializing a NULL value in
+			 * EnOceanChannelDescription in an exception
+			 */
+			exceptionCaught = false;
+			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
+			channelDescription.deserialize(null);
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+
+		try { /*
+			 * Tests that deserializing a wrong object in
+			 * EnOceanChannelDescription in an exception
+			 */
+			exceptionCaught = false;
+			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
+			channelDescription.deserialize(new byte[] {0x45, 0x56});
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+
+		try { /*
+			 * Tests that getting a NULL index in an
+			 * EnOceanChannelDescriptionSet results in an
+			 * IllegalArgumentException
+			 */
+			exceptionCaught = false;
+			channelDescriptionSet.getChannelDescription(null);
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+
+		try { /*
+			 * Tests that sending a message EnOceanChannelDescriptionSet results
+			 * in an IllegalArgumentException
+			 */
+			exceptionCaught = false;
+			channelDescriptionSet.getChannelDescription(null);
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+
+	}
+
+	/**
 	 * Tests initial device registration from a raw Radio teach-in packet.
 	 * 
 	 * @throws Exception

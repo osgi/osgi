@@ -17,7 +17,6 @@
 
 package org.osgi.service.enocean.channels;
 
-import org.osgi.service.enocean.IllegalArgumentException;
 
 /**
  * Public and registered description interface for a channel. Encompasses all the possible subtypes

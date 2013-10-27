@@ -17,7 +17,6 @@
 
 package org.osgi.test.cases.enocean.descriptions;
 
-import org.osgi.service.enocean.IllegalArgumentException;
 import org.osgi.service.enocean.channels.EnOceanChannelDescription;
 import org.osgi.service.enocean.channels.EnOceanDataChannelDescription;
 
@@ -25,18 +24,6 @@ public class EnOceanChannelDescription_TMP_00 implements EnOceanDataChannelDescr
 
 	public String getType() {
 		return EnOceanChannelDescription.TYPE_DATA;
-	}
-
-	public byte[] serialize(Object obj) throws IllegalArgumentException {
-		float value;
-		try {
-			Float valueObj = (Float) obj;
-			value = valueObj.floatValue();
-		} catch (ClassCastException e) {
-			throw new IllegalArgumentException("Invalid input in channel description");
-		}
-		int input = unscale(value);
-		return new byte[] {(byte) input};
 	}
 
 	private float scale(int x) {
@@ -59,11 +46,35 @@ public class EnOceanChannelDescription_TMP_00 implements EnOceanDataChannelDescr
 		return Math.round(A*y+B);
 	}
 
+	public byte[] serialize(Object obj) throws IllegalArgumentException {
+		float value;
+		if (obj == null) {
+			throw new IllegalArgumentException("Supplied object was NULL");
+		}
+		try {
+			Float valueObj = (Float) obj;
+			value = valueObj.floatValue();
+		} catch (ClassCastException e) {
+			throw new IllegalArgumentException("Invalid input in channel description");
+		}
+		if (value < getRangeStart() || value > getRangeStop()) {
+			throw new IllegalArgumentException("Supplied value out of range");
+		}
+		int input = unscale(value);
+		return new byte[] {(byte) input};
+	}
+
 	public Object deserialize(byte[] bytes) throws IllegalArgumentException {
+		if (bytes == null) {
+			throw new IllegalArgumentException("Supplied array was NULL");
+		}
 		if (bytes.length != 1)
 			throw new IllegalArgumentException("Input was invalid, too many bytes");
 		byte b = bytes[0];
 		int input = b;
+		if (input < getDomainStart() && input > getDomainStop()) {
+			throw new IllegalArgumentException("Supplied value out of input domain");
+		}
 		Float output = new Float(scale(input));
 		return output;
 	}

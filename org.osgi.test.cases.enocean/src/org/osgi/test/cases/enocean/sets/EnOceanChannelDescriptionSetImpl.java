@@ -32,6 +32,9 @@ public class EnOceanChannelDescriptionSetImpl implements EnOceanChannelDescripti
 
 
 	public EnOceanChannelDescription getChannelDescription(String channelId) throws IllegalArgumentException {
+		if (channelId == null) {
+			throw new IllegalArgumentException("Input ID was NULL");
+		}
 		try {
 			EnOceanChannelDescription instance = (EnOceanChannelDescription) channelTable.get(channelId);
 			return instance;

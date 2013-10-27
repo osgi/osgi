@@ -18,7 +18,8 @@
 package org.osgi.service.enocean;
 
 /**
- * This class represents the root exception Object for all the code related to EnOcean. 
+ * This class contains code and definitions necessary to support common EnOcean exceptions.
+ * This class is mostly used with low-level, gateway-interacting code : EnOceanHost. 
  *  
  * @version 1.0
  * @author Victor Perron <victor.perron@orange.fr>
@@ -34,12 +35,12 @@ public class EnOceanException extends Exception {
 	public static final short SUCCESS = 0;
 
 	/**
-	 * FAILURE status code.
+	 * Unexpected failure.s
 	 */
-	public static final short FAILURE = 1;
+	public static final short ESP_UNEXPECTED_FAILURE = 1;
 
 	/**
-	 * Operation is not supported by EnOcean Serial Protocol.
+	 * Operation is not supported by the target device.
 	 */
 	public static final short ESP_RET_NOT_SUPPORTED = 2;
 
@@ -52,11 +53,7 @@ public class EnOceanException extends Exception {
 	 * The operation was denied.
 	 */
 	public static final short ESP_RET_OPERATION_DENIED = 4;
-	
-	/**
-	 * The provided telegram was invalid.
-	 */
-	public static final short INVALID_TELEGRAM = 240;
+
 	
 	private final int errorCode;
 	
@@ -76,9 +73,18 @@ public class EnOceanException extends Exception {
 	 * 
 	 * @param errorCode An error code.
 	 */
-	public EnOceanException(int errorCode, String errordesc) {
-		super(errordesc);
+	public EnOceanException(int errorCode, String errorDesc) {
+		super(errorDesc);
 		this.errorCode = errorCode;
+	}
+	
+	/**
+	 * Constructor for EnOceanException
+	 * 
+	 * @param errorCode An error code.
+	 */
+	public EnOceanException(int errorCode) {
+		this(errorCode, null);
 	}
 	
 	/**
@@ -86,7 +92,7 @@ public class EnOceanException extends Exception {
 	 * 
 	 * @return An EnOcean error code, defined by the EnOcean Forum working committee or an EnOcean vendor.
 	 */
-	public int getEnOceanError_Code() {
+	public int errorCode() {
 		return errorCode;
 	}
 		

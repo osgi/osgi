@@ -38,9 +38,6 @@ public class EnOceanMessageDescriptionSetImpl implements EnOceanMessageDescripti
 	public EnOceanMessageDescription getMessageDescription(int rorg, int func, int type, int extra) throws IllegalArgumentException {
 		String key = null;
 		key = generateKey(rorg, func, type, extra);
-
-		System.out.println(key);
-		System.out.flush();
 		try {
 			EnOceanMessageDescription instance = (EnOceanMessageDescription) messageTable.get(key);
 			return instance;
