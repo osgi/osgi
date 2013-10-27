@@ -28,7 +28,7 @@ import org.osgi.service.component.ComponentInstance;
  * 
  * @since 1.3
  * @NotThreadSafe
- * @version $Id$
+ * @author $Id$
  */
 public class ComponentConfiguration extends DTO {
     /**

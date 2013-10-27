@@ -26,7 +26,7 @@ import org.osgi.dto.framework.ServiceReferenceDTO;
  * 
  * @since 1.3
  * @NotThreadSafe
- * @version $Id$
+ * @author $Id$
  */
 public class BoundReference extends DTO {
     /**

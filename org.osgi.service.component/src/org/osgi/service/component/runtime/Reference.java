@@ -26,7 +26,7 @@ import org.osgi.service.component.annotations.ReferenceScope;
  *
  * @since 1.3
  * @NotThreadSafe
- * @version $Id$
+ * @author $Id$
  */
 public class Reference extends DTO {
     /**

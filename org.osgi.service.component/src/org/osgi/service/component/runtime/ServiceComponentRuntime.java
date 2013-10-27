@@ -44,7 +44,7 @@ import org.osgi.service.component.ComponentContext;
  * @ThreadSafe
  * @noimplement
  * @since 1.3
- * @version $Id$
+ * @author $Id$
  */
 @ProviderType
 public interface ServiceComponentRuntime {
