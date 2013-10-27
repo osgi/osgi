@@ -4,16 +4,13 @@ package org.osgi.test.cases.enocean;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Properties;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.EnOceanMessageDescription;
 import org.osgi.service.enocean.channels.EnOceanChannel;
-import org.osgi.service.enocean.sets.EnOceanMessageDescriptionSet;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescriptionSetImpl;
@@ -57,10 +54,6 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		/* Inserts some message documentation classes */
 		EnOceanMessageDescriptionSetImpl msgSet = new EnOceanMessageDescriptionSetImpl();
 		msgSet.putMessage(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, new EnOceanMessage_A5_02_01());
-
-		Dictionary props = new Properties();
-		props.put(EnOceanMessageDescriptionSet.PROVIDER_ID, Fixtures.MESSAGESET_PROVIDER);
-		props.put(EnOceanMessageDescriptionSet.VERSION, Fixtures.MESSAGESET_VERSION);
 	}
 
 	protected void tearDown() throws Exception {

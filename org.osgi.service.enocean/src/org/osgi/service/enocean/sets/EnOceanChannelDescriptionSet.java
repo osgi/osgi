@@ -30,11 +30,7 @@ import org.osgi.service.enocean.channels.EnOceanChannelDescription;
  * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanChannelDescriptionSet {
-	
-	public final static String	VERSION				= "channel.description.set.version";
 
-	public final static String	PROVIDER_ID			= "channel.description.set.provider_id";
-	
 	/**
 	 * Retrieves a {@link EnOceanChannelDescription} object according to its identifier.
 	 * 

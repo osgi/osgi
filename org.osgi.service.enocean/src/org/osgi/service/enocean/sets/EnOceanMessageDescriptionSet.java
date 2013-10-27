@@ -30,10 +30,6 @@ import org.osgi.service.enocean.EnOceanMessageDescription;
  * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanMessageDescriptionSet {
-	
-	public final static String	VERSION				= "message.description.set.version";
-
-	public final static String	PROVIDER_ID			= "message.description.set.provider_id";
 
 	/**
 	 * Retrieves a {@link EnOceanMessageDescription} object according to its identifiers.

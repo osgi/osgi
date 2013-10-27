@@ -31,10 +31,6 @@ import org.osgi.service.enocean.EnOceanRPC;
  * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanRPCSet {
-	
-	public final static String	VERSION				= "rpc.set.version";
-
-	public final static String	PROVIDER_ID			= "rpc.set.provider_id";
 
 	/**
 	 * Retrieves a {@link EnOceanRPC} object according to its identifier.

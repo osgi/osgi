@@ -21,8 +21,6 @@ public final class Fixtures {
 	public static final String	SELF_TEST_EVENT_KEY		= "degrees";
 	public static final String	SELF_TEST_EVENT_VALUE	= "33.04°F";
 
-	public static final Object	MESSAGESET_PROVIDER		= "DeviceCompanyLtd";
-	public static final Object	MESSAGESET_VERSION		= "2008-09-23";
 	public static final float	TEMPERATURE				= -20.0f;
 	public static final byte	RAW_TEMPERATURE			= 0x7f;
 }
