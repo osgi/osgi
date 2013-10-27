@@ -1,6 +1,8 @@
 
 package org.osgi.test.cases.enocean;
 
+import org.osgi.service.enocean.channels.EnOceanChannelDescription;
+
 public final class Fixtures {
 
 	public static final int	HOST_ID			= 0x12345678;
@@ -23,4 +25,6 @@ public final class Fixtures {
 
 	public static final float	TEMPERATURE				= -20.0f;
 	public static final byte	RAW_TEMPERATURE			= 0x7f;
+	public static final String	TMP_CHANNEL_ID			= "TMP_00";
+	public static final String	TMP_CHANNEL_TYPE		= EnOceanChannelDescription.TYPE_DATA;
 }

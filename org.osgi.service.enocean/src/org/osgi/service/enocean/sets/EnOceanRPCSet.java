@@ -38,6 +38,6 @@ public interface EnOceanRPCSet {
 	 * @param id the unique string identifier of the description object.
 	 * @return The corresponding {@link EnOceanRPC} object, or null.
 	 */
-	public EnOceanRPC getRPC(short manufacturerId, short commandID);
+	public EnOceanRPC getRPC(short manufacturerId, short commandID) throws IllegalArgumentException;
 
 }

@@ -15,16 +15,36 @@
  */
 
 
-package org.osgi.test.cases.enocean.utils;
+package org.osgi.test.cases.enocean.channels;
 
-/**
- * Helper class that enables better abstraction models when encapsulating
- * several layers of byte-backed packets of data.
- * 
- * @author Victor Perron
- */
-public interface ByteSerializable {
+import org.osgi.service.enocean.channels.EnOceanChannel;
 
-	public byte[] serialize();
+public class LearnChannel_4BS implements EnOceanChannel {
+
+	private boolean	isLearn;
+
+	public String getChannelId() {
+		return "LRN_4BS";
+	}
+
+	public void setRawValue(byte[] rawValue) {
+		isLearn = rawValue[0] == 0;
+	}
+
+	public int getSize() {
+		return 1;
+	}
+
+	public byte[] getRawValue() {
+		if (isLearn) {
+			return new byte[] {0x0};
+		} else {
+			return new byte[] {0x1};
+		}
+	}
+
+	public int getOffset() {
+		return 28;
+	}
 
 }

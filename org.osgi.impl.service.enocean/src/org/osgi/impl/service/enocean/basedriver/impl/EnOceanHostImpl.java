@@ -29,7 +29,7 @@ import org.osgi.impl.service.enocean.basedriver.EnOceanPacketListener;
 import org.osgi.impl.service.enocean.basedriver.esp.EspPacket;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
-import org.osgi.service.enocean.EnOceanException;
+import org.osgi.service.enocean.IllegalArgumentException;
 import org.osgi.service.enocean.EnOceanHost;
 
 public class EnOceanHostImpl extends Thread implements EnOceanHost {
@@ -57,37 +57,37 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 		outputStream = new FileOutputStream(file);
 	}
 
-	public void reset() throws EnOceanException {
+	public void reset() throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public String appVersion() throws EnOceanException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public String apiVersion() throws EnOceanException {
+	public String appVersion() throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public int getBaseID() throws EnOceanException {
+	public String apiVersion() throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public int getBaseID() throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
 
-	public void setBaseID(int baseID) throws EnOceanException {
+	public void setBaseID(int baseID) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void setRepeaterLevel(int level) throws EnOceanException {
+	public void setRepeaterLevel(int level) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public int getRepeaterLevel() throws EnOceanException {
+	public int getRepeaterLevel() throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 		return 0;
 	}

@@ -1,12 +1,12 @@
 package org.osgi.test.cases.enocean.descriptions;
 
 
-import org.osgi.service.enocean.EnOceanException;
+import org.osgi.service.enocean.IllegalArgumentException;
 import org.osgi.service.enocean.EnOceanMessageDescription;
 import org.osgi.service.enocean.channels.EnOceanChannel;
 import org.osgi.test.cases.enocean.utils.Utils;
 
-public class EnOceanMessage_A5_02_02 implements EnOceanMessageDescription {
+public class EnOceanMessageDescription_A5_02_02 implements EnOceanMessageDescription {
 
 	public int getRorg() {
 		return 0xA5;
@@ -75,7 +75,7 @@ public class EnOceanMessage_A5_02_02 implements EnOceanMessageDescription {
 									}
 								};
 
-	public EnOceanChannel[] deserialize(byte[] data) throws EnOceanException, IllegalArgumentException {
+	public EnOceanChannel[] deserialize(byte[] data) throws IllegalArgumentException, IllegalArgumentException {
 		temperature.setRawValue(Utils.byteToBytes(data[2]));
 		byte lrnByte = (byte) ((data[3] >> 3) & 0x01);
 		learn.setRawValue(new byte[] {lrnByte});

@@ -15,21 +15,31 @@
  */
 
 
-package org.osgi.test.cases.enocean.radio;
+package org.osgi.test.cases.enocean.messages;
 
+import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.test.cases.enocean.utils.ByteSerializable;
 import org.osgi.test.cases.enocean.utils.Utils;
 
 
-public class Message implements ByteSerializable {
+public class Message implements EnOceanMessage, ByteSerializable {
 
 	public static final int	MESSAGE_4BS	= 0xA5;
 
 	private byte	RORG;
 	private byte[]	data;
 	private byte[]	senderId;
-	// bit7: crc8 if set, or else checksum; bits 0-4: repeater count
-	private byte	status;
+	private byte			status;			// bit7: checksum type.
+												// 1=crc8,0=checksum
+												// bits 0-4: repeater count.
+
+	// Additional fields
+	private int				slf;
+	private int				dbm;
+	private int				subTelNum;
+	private int				destinationId;
+	private int				type;
+	private int				func;
 
 	/**
 	 * Sets senderId and status default values, see EnOcean Radio Protocol spec
@@ -42,42 +52,74 @@ public class Message implements ByteSerializable {
 	}
 
 	public byte[] serialize() {
-		byte[] pktBytes = Utils.byteConcat(RORG, getData());
-		pktBytes = Utils.byteConcat(pktBytes, getSenderId());
-		pktBytes = Utils.byteConcat(pktBytes, getStatus());
+		byte[] pktBytes = Utils.byteConcat(RORG, getPayloadBytes());
+		pktBytes = Utils.byteConcat(pktBytes, senderId);
+		pktBytes = Utils.byteConcat(pktBytes, status);
 		return Utils.byteConcat(pktBytes, Utils.crc8(pktBytes));
-	}
-
-	public byte getRORG() {
-		return RORG;
 	}
 
 	public void setRORG(int rorg) {
 		RORG = (byte) (rorg & 0xff);
 	}
 
-	public byte[] getData() {
-		return data;
-	}
-
 	public void setData(byte[] data) {
 		this.data = data;
 	}
 
-	public byte[] getSenderId() {
-		return senderId;
+	public int getSenderId() {
+		return Utils.bytes2intLE(senderId, 0, 4);
 	}
 
 	public void setSenderId(int senderId) {
 		this.senderId = Utils.intTo4Bytes(senderId);
 	}
 
-	public byte getStatus() {
+	public int getStatus() {
 		return status;
 	}
 
 	public void setStatus(byte status) {
 		this.status = status;
+	}
+
+	public int getRorg() {
+		return RORG;
+	}
+
+	public int getFunc() {
+		return func;
+	}
+
+	public void setFunc(int func) {
+		this.func = func;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public int getDestinationId() {
+		return destinationId;
+	}
+
+	public byte[] getPayloadBytes() {
+		return data;
+	}
+
+	public int getSubTelNum() {
+		return subTelNum;
+	}
+
+	public int getDbm() {
+		return dbm;
+	}
+
+	public int getSecurityLevelFormat() {
+		return slf;
 	}
 
 }

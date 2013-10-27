@@ -15,37 +15,33 @@
  */
 
 
-package org.osgi.test.cases.enocean.radio;
+package org.osgi.test.cases.enocean.channels;
 
-/**
- * Prototype of a 4BS telegram
- * 
- * Teach-in procedure:
- * 
- * - if DB0.3 is 0, then it's a teach-in telegram.
- * 
- * - if DB0.7 is also 0, no manufacturer info.
- * 
- * - if DB0.7 is 1, manufacturer info is present.
- * 
- * TODO Add Javadoc comment for this type.
- * 
- * @author $Id$
- */
-public abstract class MessageType_4BS extends Message {
+import org.osgi.service.enocean.channels.EnOceanChannel;
+import org.osgi.test.cases.enocean.utils.Utils;
 
-	private Boolean	isTeachin;
+public class TemperatureChannel_00 implements EnOceanChannel {
 
-	public MessageType_4BS() {
-		setRORG(Message.MESSAGE_4BS);
+	private byte	b0;
+
+	public String getChannelId() {
+		return "TMP_00";
 	}
 
-	public Boolean isTeachin() {
-		return isTeachin;
+	public void setRawValue(byte[] rawValue) {
+		b0 = rawValue[0];
 	}
 
-	public void setTeachin(Boolean isTeachin) {
-		this.isTeachin = isTeachin;
+	public int getSize() {
+		return 8;
+	}
+
+	public byte[] getRawValue() {
+		return Utils.byteToBytes(b0);
+	}
+
+	public int getOffset() {
+		return 16;
 	}
 
 }

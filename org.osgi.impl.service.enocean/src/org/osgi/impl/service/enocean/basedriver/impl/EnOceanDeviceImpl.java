@@ -5,7 +5,7 @@ import java.util.Properties;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.enocean.EnOceanDevice;
-import org.osgi.service.enocean.EnOceanException;
+import org.osgi.service.enocean.IllegalArgumentException;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.EnOceanResponseHandler;
 
@@ -42,12 +42,12 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		sReg.setProperties(props);
 	}
 
-	public void send(byte[] telegram) throws EnOceanException {
+	public void send(byte[] telegram) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 
 	}
 
-	public void send(EnOceanMessage telegram) throws EnOceanException {
+	public void send(EnOceanMessage telegram) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 
 	}
@@ -97,11 +97,11 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		return null;
 	}
 
-	public void send(byte[] telegram, EnOceanResponseHandler handler) throws EnOceanException {
+	public void send(byte[] telegram, EnOceanResponseHandler handler) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 	}
 
-	public void send(EnOceanMessage telegram, EnOceanResponseHandler handler) throws EnOceanException {
+	public void send(EnOceanMessage telegram, EnOceanResponseHandler handler) throws IllegalArgumentException {
 		// TODO Auto-generated method stub
 	}
 

@@ -27,9 +27,9 @@ public interface EnOceanMessageDescription {
 	 * If the actual instance type of the message is not compatible with the bytes
 	 * it is fed with (RORG to begin with), throw an IllegalArgumentException.
 	 * 
-	 * @throws EnOceanException
+	 * @throws IllegalArgumentException
 	 */
-	public EnOceanChannel[] deserialize(byte[] bytes) throws EnOceanException, IllegalArgumentException;
+	public EnOceanChannel[] deserialize(byte[] bytes) throws IllegalArgumentException, IllegalArgumentException;
 
 
 }

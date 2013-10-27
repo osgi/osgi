@@ -51,43 +51,43 @@ public interface EnOceanHost {
 	/**
 	 * Reset the EnOcean Host (cf. ESP3 command 0x02: C0_WR_RESET)
 	 */
-	public void reset() throws EnOceanException;
+	public void reset() throws IllegalArgumentException;
 	
 	/**
 	 * Returns the chip's application version info (cf. ESP3 command 0x03: C0_RD_VERSION)
 	 * @return a String object containing the application version info.
 	 */
-	public String appVersion() throws EnOceanException;
+	public String appVersion() throws IllegalArgumentException;
 	
 	/**
 	 * Returns the chip's API version info (cf. ESP3 command 0x03: C0_RD_VERSION)
 	 * @return a String object containing the API version info.
 	 */
-	public String apiVersion() throws EnOceanException;
+	public String apiVersion() throws IllegalArgumentException;
 
 	/**
 	 * Gets the BASE_ID of the chip, if set (cf. ESP3 command 0x08: C0_RD_IDBASE)
 	 * @return the BASE_ID of the device as defined in EnOcean specification 
 	 */
-	public int getBaseID() throws EnOceanException;
+	public int getBaseID() throws IllegalArgumentException;
 	
 	/**
 	 * Sets the base ID of the device, may be used up to 10 times (cf. ESP3 command 0x07: C0_WR_IDBASE)
 	 * @param baseID to be set.
 	 */
-	public void setBaseID(int baseID) throws EnOceanException;
+	public void setBaseID(int baseID) throws IllegalArgumentException;
 	
 	/**
 	 * Sets the repeater level on the host (cf. ESP3 command 0x09: C0_WR_REPEATER)
 	 * @param level one of the Repeater Level constants as defined above.
 	 */
-	public void setRepeaterLevel(int level) throws EnOceanException;
+	public void setRepeaterLevel(int level) throws IllegalArgumentException;
 	
 	/**
 	 * Gets the current repeater level of the host (cf. ESP3 command 0x0A: C0_RD_REPEATER)
 	 * @return one of the Repeater Level constants as defined above.
 	 */
-	public int getRepeaterLevel() throws EnOceanException;
+	public int getRepeaterLevel() throws IllegalArgumentException;
 	
 	/**
 	 * Retrieves the SENDER_ID associated with the given servicePID, if existing on this chip. 

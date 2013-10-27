@@ -15,16 +15,37 @@
  */
 
 
-package org.osgi.test.cases.enocean.utils;
+package org.osgi.test.cases.enocean.messages;
 
 /**
- * Helper class that enables better abstraction models when encapsulating
- * several layers of byte-backed packets of data.
+ * Prototype of a 4BS telegram
  * 
- * @author Victor Perron
+ * Teach-in procedure:
+ * 
+ * - if DB0.3 is 0, then it's a teach-in telegram.
+ * 
+ * - if DB0.7 is also 0, no manufacturer info.
+ * 
+ * - if DB0.7 is 1, manufacturer info is present.
+ * 
+ * TODO Add Javadoc comment for this type.
+ * 
+ * @author $Id$
  */
-public interface ByteSerializable {
+public abstract class MessageType_4BS extends Message {
 
-	public byte[] serialize();
+	private Boolean	isTeachin;
+
+	public MessageType_4BS() {
+		setRORG(Message.MESSAGE_4BS);
+	}
+
+	public Boolean isTeachin() {
+		return isTeachin;
+	}
+
+	public void setTeachin(Boolean isTeachin) {
+		this.isTeachin = isTeachin;
+	}
 
 }

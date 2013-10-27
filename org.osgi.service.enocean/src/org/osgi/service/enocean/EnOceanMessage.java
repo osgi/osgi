@@ -55,9 +55,9 @@ public interface EnOceanMessage {
 	 * Serializes the message into an array of bytes, if possible.
 	 * 
 	 * @return The serialized byte list corresponding to the binary message.
-	 * @throws EnOceanException
+	 * @throws IllegalArgumentException
 	 */
-	public byte[] serialize() throws EnOceanException;
+	public byte[] serialize() throws IllegalArgumentException;
 	
 	/**
 	 * Returns the payload bytes of this message.

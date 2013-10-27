@@ -17,7 +17,7 @@
 
 package org.osgi.service.enocean.channels;
 
-import org.osgi.service.enocean.EnOceanException;
+import org.osgi.service.enocean.IllegalArgumentException;
 
 /**
  * Public and registered description interface for a channel. Encompasses all the possible subtypes
@@ -64,9 +64,9 @@ public interface EnOceanChannelDescription {
 	 * Tries to serialize the channel into a series of bytes.
 	 * @param obj the value of the channel.
 	 * @return the right-aligned value, in raw bytes, of the channel.
-	 * @throws EnOceanException
+	 * @throws IllegalArgumentException
 	 */
-	public byte[] serialize(Object obj) throws EnOceanException;
+	public byte[] serialize(Object obj) throws IllegalArgumentException;
 	
 	/**
 	 * Tries to deserialize a series of bytes into a documented value object 
@@ -75,7 +75,7 @@ public interface EnOceanChannelDescription {
 	 * depending on the type of this channel.
 	 * @param bytes the right-aligned raw bytes. 
 	 * @return a value object.
-	 * @throws EnOceanException
+	 * @throws IllegalArgumentException
 	 */
-	public Object deserialize(byte[] bytes) throws EnOceanException;
+	public Object deserialize(byte[] bytes) throws IllegalArgumentException;
 }

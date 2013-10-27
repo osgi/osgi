@@ -42,7 +42,6 @@ public abstract class Message implements EnOceanMessage {
 	private byte[]			messageBytes;
 
 	public Message(byte[] data) {
-		System.out.println(Utils.bytesToHexString(data));
 		this.messageBytes = data;
 		setRORG(data[0]);
 		setPayloadBytes(Utils.byteRange(data, 1, data.length - 7 - 7));

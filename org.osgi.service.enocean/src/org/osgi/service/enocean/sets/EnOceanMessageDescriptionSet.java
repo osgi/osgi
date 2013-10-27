@@ -39,9 +39,9 @@ public interface EnOceanMessageDescriptionSet {
 	 * @param func The func subtype of this message.
 	 * @param type The type subselector.
 	 * @param extra Some extra information; some {@link EnOceanMessageDescription} 
-	 * objects need an additional specifier.
+	 * objects need an additional specifier. If not needed, has to be set to -1.
 	 * @return The {@link EnOceanMessageDescription} object looked for, or null.
 	 */
-	public EnOceanMessageDescription getMessageDescription(int rorg, int func, int type, int extra);
+	public EnOceanMessageDescription getMessageDescription(int rorg, int func, int type, int extra) throws IllegalArgumentException;
 
 }

@@ -11,12 +11,16 @@ import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.EnOceanMessageDescription;
 import org.osgi.service.enocean.channels.EnOceanChannel;
+import org.osgi.service.enocean.channels.EnOceanChannelDescription;
+import org.osgi.service.enocean.channels.EnOceanDataChannelDescription;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
-import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescriptionSetImpl;
-import org.osgi.test.cases.enocean.descriptions.EnOceanMessage_A5_02_01;
-import org.osgi.test.cases.enocean.esp.EspRadioPacket;
-import org.osgi.test.cases.enocean.radio.MessageA5_02_01;
+import org.osgi.test.cases.enocean.descriptions.EnOceanChannelDescription_TMP_00;
+import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescription_A5_02_01;
+import org.osgi.test.cases.enocean.messages.MessageA5_02_01;
+import org.osgi.test.cases.enocean.serial.EspRadioPacket;
+import org.osgi.test.cases.enocean.sets.EnOceanChannelDescriptionSetImpl;
+import org.osgi.test.cases.enocean.sets.EnOceanMessageDescriptionSetImpl;
 import org.osgi.test.cases.enocean.utils.EventListener;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -30,6 +34,8 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 	private String				lastServiceEvent;
 	private EventListener		events;
 	private EventAdmin	eventAdmin;
+	private EnOceanMessageDescriptionSetImpl	msgDescriptionSet;
+	private EnOceanChannelDescriptionSetImpl	channelDescriptionSet;
 
 	protected void setUp() throws Exception {
 		String fakeDriverPath = System.getProperty("org.osgi.service.enocean.host.path");
@@ -52,14 +58,49 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		eventAdmin = (EventAdmin) getContext().getService(ref);
 
 		/* Inserts some message documentation classes */
-		EnOceanMessageDescriptionSetImpl msgSet = new EnOceanMessageDescriptionSetImpl();
-		msgSet.putMessage(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, new EnOceanMessage_A5_02_01());
+		msgDescriptionSet = new EnOceanMessageDescriptionSetImpl();
+		msgDescriptionSet.putMessage(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, -1, new EnOceanMessageDescription_A5_02_01());
+
+		channelDescriptionSet = new EnOceanChannelDescriptionSetImpl();
+		channelDescriptionSet.putChannelDescription(Fixtures.TMP_CHANNEL_ID, new EnOceanChannelDescription_TMP_00());
 	}
 
 	protected void tearDown() throws Exception {
 		devices.close();
 		events.close();
 		cleanupServices();
+	}
+
+	/**
+	 * Test that a properly set profile ID in a raw EnOceanMessage is enough to
+	 * extract all the information we need, provided we have the necessary
+	 * descriptions.
+	 * 
+	 * @throws Exception
+	 */
+	public void testUseOfDescriptions() throws Exception {
+		
+		EnOceanMessage temperatureMsg = new MessageA5_02_01(Fixtures.TEMPERATURE);
+		
+		/*
+		 * Here, we _know_ the message profile (A5-02-01). In a real context,
+		 * the base driver would provide this information directly in the
+		 * broadcasted EnOceanMessage objects through the getFunc() / getType()
+		 * interface methods.
+		 */
+		EnOceanMessageDescription msgDescription = msgDescriptionSet.getMessageDescription(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, -1);
+		assertNotNull(msgDescription);
+		EnOceanChannel[] channels = msgDescription.deserialize(temperatureMsg.getPayloadBytes());
+		assertEquals(2, channels.length);
+		EnOceanChannel temperatureChannel = channels[0];
+		String tmpChannelId = temperatureChannel.getChannelId();
+		assertEquals(Fixtures.TMP_CHANNEL_ID, tmpChannelId);
+		EnOceanChannelDescription channelDescription = channelDescriptionSet.getChannelDescription(tmpChannelId);
+		assertEquals(Fixtures.TMP_CHANNEL_TYPE, channelDescription.getType());
+		EnOceanDataChannelDescription dataChannelDescription = (EnOceanDataChannelDescription) channelDescription;
+		// It's a float because it's a DATA channel
+		Float deserializedTemperature = (Float) dataChannelDescription.deserialize(temperatureChannel.getRawValue());
+		assertEquals(Fixtures.TEMPERATURE, deserializedTemperature.floatValue(), 0.1);
 	}
 
 	/**
@@ -152,7 +193,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 
 		EnOceanMessage msg = (EnOceanMessage) event.getProperty("enocean.message");
 		assertNotNull(msg);
-		EnOceanMessageDescription description = new EnOceanMessage_A5_02_01();
+		EnOceanMessageDescription description = new EnOceanMessageDescription_A5_02_01();
 		EnOceanChannel[] channels = description.deserialize(msg.getPayloadBytes());
 		assertEquals("temperature mismatch", Fixtures.RAW_TEMPERATURE, channels[0].getRawValue()[0]);
 	}

@@ -15,7 +15,7 @@
  */
 
 
-package org.osgi.test.cases.enocean.esp;
+package org.osgi.test.cases.enocean.serial;
 
 import org.osgi.test.cases.enocean.utils.ByteSerializable;
 import org.osgi.test.cases.enocean.utils.Utils;

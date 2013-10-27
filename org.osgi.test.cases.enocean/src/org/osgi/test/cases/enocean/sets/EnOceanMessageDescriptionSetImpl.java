@@ -15,7 +15,7 @@
  */
 
 
-package org.osgi.test.cases.enocean.descriptions;
+package org.osgi.test.cases.enocean.sets;
 
 import java.util.Hashtable;
 import java.util.Map;
@@ -26,34 +26,27 @@ public class EnOceanMessageDescriptionSetImpl implements EnOceanMessageDescripti
 
 	private Map	messageTable	= new Hashtable();
 
-	public void putMessage(int rorg, int func, int type, EnOceanMessageDescription msg) {
-		String key = generateKey(rorg, func, type);
+	public void putMessage(int rorg, int func, int type, int extra, EnOceanMessageDescription msg) {
+		String key = generateKey(rorg, func, type, extra);
 		messageTable.put(key, msg);
-	}
-
-	private String generateKey(int rorg, int func, int type) {
-		return "" + rorg + "-" + func + "-" + type;
 	}
 
 	private String generateKey(int rorg, int func, int type, int extra) {
 		return "" + rorg + "-" + func + "-" + type + "-" + extra;
 	}
 
-	public EnOceanMessageDescription getMessageDescription(int rorg, int func, int type, int extra) {
+	public EnOceanMessageDescription getMessageDescription(int rorg, int func, int type, int extra) throws IllegalArgumentException {
 		String key = null;
-		if (extra == -1) {
-			key = generateKey(rorg, func, type);
-		} else {
-			key = generateKey(rorg, func, type, extra);
-		}
+		key = generateKey(rorg, func, type, extra);
 
+		System.out.println(key);
+		System.out.flush();
 		try {
 			EnOceanMessageDescription instance = (EnOceanMessageDescription) messageTable.get(key);
 			return instance;
 		} catch (Exception e) {
-			System.out.println("There was an error reading the messageSet : " + e.getMessage());
+			throw new IllegalArgumentException("There was an error reading the messageSet : " + e.getMessage());
 		}
-		return null;
 	}
 
 }

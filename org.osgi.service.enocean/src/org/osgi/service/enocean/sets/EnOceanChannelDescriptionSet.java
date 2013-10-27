@@ -37,6 +37,6 @@ public interface EnOceanChannelDescriptionSet {
 	 * @param id the unique string identifier of the description object.
 	 * @return The corresponding {@link EnOceanChannelDescription} object, or null.
 	 */
-	public EnOceanChannelDescription getChannelDescription(String channelId);
+	public EnOceanChannelDescription getChannelDescription(String channelId) throws IllegalArgumentException;
 
 }

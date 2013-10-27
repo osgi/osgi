@@ -70,6 +70,6 @@ public interface EnOceanRPC {
 	 * @param payload the byte[] payload for this message;
 	 * @param an optional {@link EnOceanResponseHandler} object.
 	 */
-	public void invoke(int destinationId, byte[] payload, EnOceanResponseHandler handler) throws EnOceanException;
+	public void invoke(int destinationId, byte[] payload, EnOceanResponseHandler handler) throws IllegalArgumentException;
 	
 }

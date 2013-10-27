@@ -30,25 +30,25 @@ public interface EnOceanDataChannelDescription extends EnOceanChannelDescription
 	 * The start of the raw input range for this channel.
 	 * @return
 	 */
-	public int getRangeStart();
+	public int getDomainStart();
 	
 	/**
 	 * The end of the raw input range for this channel.
 	 * @return
 	 */
-	public int getRangeStop();
+	public int getDomainStop();
 	
 	/**
 	 * The scale start at which this channel will be mapped to (-20,0°C for instance) 
 	 * @return
 	 */
-	public double getScaleStart();
+	public double getRangeStart();
 	
 	/**
 	 * The scale stop at which this channel will be mapped to (+30,0°C for instance) 
 	 * @return
 	 */
-	public double getScaleStop();	
+	public double getRangeStop();	
 	
 	/**
 	 * The non-mandatory physical unit description of this channel.
