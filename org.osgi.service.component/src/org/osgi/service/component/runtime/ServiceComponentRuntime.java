@@ -42,7 +42,6 @@ import org.osgi.service.component.ComponentContext;
  * by this service.
  * 
  * @ThreadSafe
- * @noimplement
  * @since 1.3
  * @author $Id$
  */
