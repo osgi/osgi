@@ -23,96 +23,96 @@ import org.osgi.dto.framework.BundleDTO;
 /**
  * The {@code Component} interface represents the declaration of a component in
  * a Declarative Services descriptor.
- *
+ * 
  * @since 1.3
  * @NotThreadSafe
  * @author $Id$
  */
 public class ComponentDescription extends DTO {
-    /**
-     * The name of the component defined in the {@code component.name} attribute
-     * which may be {@code null}.
-     */
-    public String name;
+	/**
+	 * The name of the component defined in the {@code component.name} attribute
+	 * which may be {@code null}.
+	 */
+	public String				name;
 
-    /**
-     * The {@linkplain BundleDTO bundle} declaring this component.
-     */
-    public BundleDTO bundle;
+	/**
+	 * The {@linkplain BundleDTO bundle} declaring this component.
+	 */
+	public BundleDTO			bundle;
 
-    /**
-     * The component factory name from {@code component.factory} attribute or
-     * {@code null} if this component is not defined as a component factory.
-     */
-    public String factory;
+	/**
+	 * The component factory name from {@code component.factory} attribute or
+	 * {@code null} if this component is not defined as a component factory.
+	 */
+	public String				factory;
 
-    /**
+	/**
 	 * The service scope for the service of this Component as defined by the
 	 * {@code service/scope} attribute.
 	 */
 	public String				scope;
 
-    /**
-     * The fully qualified name of the class implementing this component from
-     * the {@code component/implementation.class} attribute.
-     */
-    public String implementationClass;
+	/**
+	 * The fully qualified name of the class implementing this component from
+	 * the {@code component/implementation.class} attribute.
+	 */
+	public String				implementationClass;
 
-    /**
-     * Whether the component is declared to be enabled by default ({@code true})
-     * as defined by the {@code component.enabled} attribute.
-     *
-     */
-    public boolean defaultEnabled;
+	/**
+	 * Whether the component is declared to be enabled by default ({@code true})
+	 * as defined by the {@code component.enabled} attribute.
+	 * 
+	 */
+	public boolean				defaultEnabled;
 
-    /**
-     * Whether the component is an immediate or a delayed component as defined
-     * by the {@code component.immediate} attribute.
-     */
-    public boolean immediate;
+	/**
+	 * Whether the component is an immediate or a delayed component as defined
+	 * by the {@code component.immediate} attribute.
+	 */
+	public boolean				immediate;
 
-    /**
-     * An array of service names provided by this component or {@code null} if
-     * the component is not registered as a service as defined by the
-     * {@code component/service/provide.interface} attributes.
-     */
-    public String[] serviceInterfaces;
+	/**
+	 * An array of service names provided by this component or {@code null} if
+	 * the component is not registered as a service as defined by the
+	 * {@code component/service/provide.interface} attributes.
+	 */
+	public String[]				serviceInterfaces;
 
-    /**
-     * The declared properties of the component as defined by the
-     * {@code component/property} and {@code component/properties} elements.
-     */
-	public Map<String, Object>		properties;
+	/**
+	 * The declared properties of the component as defined by the
+	 * {@code component/property} and {@code component/properties} elements.
+	 */
+	public Map<String, Object>	properties;
 
-    /**
-     * An array of {@link Reference} instances representing the service
-     * references (or dependencies) of this component as defined in the
-     * {@code component/reference} elements.
-     */
-    public Reference[] references;
+	/**
+	 * An array of {@link Reference} instances representing the service
+	 * references (or dependencies) of this component as defined in the
+	 * {@code component/reference} elements.
+	 */
+	public Reference[]			references;
 
-    /**
-     * The name of the method to be called when the component is being activated
-     * as defined in the {@code component.activate} attribute or {@code null} if
-     * not explicitly declared.
-     */
-    public String activate;
+	/**
+	 * The name of the method to be called when the component is being activated
+	 * as defined in the {@code component.activate} attribute or {@code null} if
+	 * not explicitly declared.
+	 */
+	public String				activate;
 
-    /**
-     * The name of the method to be called when the component is being
-     * deactivated as defined in the {@code component.deactivate} attribute or
-     * {@code null} if not explicitly declared.
-     */
-    public String deactivate;
+	/**
+	 * The name of the method to be called when the component is being
+	 * deactivated as defined in the {@code component.deactivate} attribute or
+	 * {@code null} if not explicitly declared.
+	 */
+	public String				deactivate;
 
-    /**
-     * The name of the method to be called when the component's configuration is
-     * being updated as defined in the {@code component.modified} attribute or
-     * {@code null} if not declared.
-     */
-    public String modified;
+	/**
+	 * The name of the method to be called when the component's configuration is
+	 * being updated as defined in the {@code component.modified} attribute or
+	 * {@code null} if not declared.
+	 */
+	public String				modified;
 
-    /**
+	/**
 	 * The configuration policy declared in the
 	 * {@code component.configuration-policy} attribute. If the component
 	 * descriptor is a Declarative Services 1.0 descriptor or not configuration

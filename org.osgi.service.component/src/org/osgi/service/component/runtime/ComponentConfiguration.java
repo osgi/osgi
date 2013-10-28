@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.service.component.runtime;
 
 import java.util.Map;
@@ -31,7 +32,7 @@ import org.osgi.service.component.ComponentInstance;
  * @author $Id$
  */
 public class ComponentConfiguration extends DTO {
-    /**
+	/**
 	 * The initial state of a component (value is 1).
 	 * <p>
 	 * When the component becomes satisfied it enters the
@@ -71,7 +72,7 @@ public class ComponentConfiguration extends DTO {
 	 */
 	public static final int		STATE_REGISTERED	= 2;
 
-    /**
+	/**
 	 * A registered component is being activated (value is 4). Depending on the
 	 * type of the component this may include the following steps:
 	 * <ol>
@@ -88,7 +89,7 @@ public class ComponentConfiguration extends DTO {
 	 */
 	public static final int		STATE_ACTIVATING	= 4;
 
-    /**
+	/**
 	 * A component is in the active state (value is 8). The activate state means
 	 * the following depending on the type of component:
 	 * <ul>
@@ -112,35 +113,36 @@ public class ComponentConfiguration extends DTO {
 	 * provided service, the component instance is destroyed and the component
 	 * enters the {@linkplain #STATE_REGISTERED registered state}.
 	 */
-    public static final int STATE_ACTIVE = 8;
+	public static final int		STATE_ACTIVE		= 8;
 
-    /**
-     * The Component is being deactivated either because it is being disabled or
-     * because a dependency is not satisfied any more (value is 16). After
-     * deactivation the Component enters the {@linkplain #STATE_UNSATISFIED unsatisfied state}.
-     */
-    public static final int STATE_DEACTIVATING = 16;
+	/**
+	 * The Component is being deactivated either because it is being disabled or
+	 * because a dependency is not satisfied any more (value is 16). After
+	 * deactivation the Component enters the {@linkplain #STATE_UNSATISFIED
+	 * unsatisfied state}.
+	 */
+	public static final int		STATE_DEACTIVATING	= 16;
 
-    /**
-     * The declaration of this component configuration.
-     */
-    public ComponentDescription component;
+	/**
+	 * The declaration of this component configuration.
+	 */
+	public ComponentDescription	component;
 
-    /**
-     * The current state of this component configuration, which is one of the
-     * {@code STATE_*} constants defined in this interface.
-     */
-    public int state;
+	/**
+	 * The current state of this component configuration, which is one of the
+	 * {@code STATE_*} constants defined in this interface.
+	 */
+	public int					state;
 
-    /**
-     * The {@code service.pid} property of the configuration properties provided
-     * by the Configuration Admin service for this component configuration or
-     * {@code null} if no configuration from the Configuration Admin is provided
-     * to this component configuration.
-     */
-    public String configurationPid;
+	/**
+	 * The {@code service.pid} property of the configuration properties provided
+	 * by the Configuration Admin service for this component configuration or
+	 * {@code null} if no configuration from the Configuration Admin is provided
+	 * to this component configuration.
+	 */
+	public String				configurationPid;
 
-    /**
+	/**
 	 * A map of the actual properties provided to the component configuration.
 	 * This map provides the same content as the
 	 * {@link org.osgi.service.component.ComponentContext#getProperties()}
@@ -148,10 +150,10 @@ public class ComponentConfiguration extends DTO {
 	 */
 	public Map<String, Object>	properties;
 
-    /**
-     * An array of {@link BoundReference} instances representing the service
-     * references bound to this component configuration. {@code null} is
-     * returned if the component configuration has no bound references.
-     */
-    public BoundReference[] boundReferences;
+	/**
+	 * An array of {@link BoundReference} instances representing the service
+	 * references bound to this component configuration. {@code null} is
+	 * returned if the component configuration has no bound references.
+	 */
+	public BoundReference[]		boundReferences;
 }

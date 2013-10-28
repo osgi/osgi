@@ -49,7 +49,7 @@ import org.osgi.service.component.ComponentContext;
 @ProviderType
 public interface ServiceComponentRuntime {
 
-    /**
+	/**
 	 * Returns the component descriptions declared by the given bundles or the
 	 * component descriptions declared by all active bundles if {@code bundles}
 	 * is {@code null}. If the bundles have no declared components or the
@@ -66,7 +66,7 @@ public interface ServiceComponentRuntime {
 	 */
 	Collection<ComponentDescription> getComponentDescriptions(Bundle... bundles);
 
-    /**
+	/**
 	 * Return the {@link ComponentDescription} declared with the given
 	 * {@code name} or {@code null} if no such component is declared by the
 	 * given {@code bundle} or the bundle is not active.
@@ -80,7 +80,7 @@ public interface ServiceComponentRuntime {
 	 */
 	ComponentDescription getComponentDescription(Bundle bundle, String name);
 
-    /**
+	/**
 	 * Return a collection of {@linkplain ComponentConfiguration component
 	 * configurations} created for the component description. If there are no
 	 * component configurations currently created, the collection is empty. This
@@ -93,7 +93,7 @@ public interface ServiceComponentRuntime {
 	 */
 	Collection<ComponentConfiguration> getComponentConfigurations(ComponentDescription description);
 
-    /**
+	/**
 	 * Whether this component is currently enabled ({@code true}) or not.
 	 * <p>
 	 * Initially this follows the {@code Component.enabled} attribute of the
@@ -120,7 +120,7 @@ public interface ServiceComponentRuntime {
 	 */
 	void enableComponent(ComponentDescription description);
 
-    /**
+	/**
 	 * Disables this ComponentDescription if it is enabled. If the
 	 * ComponentDescription is currently disabled this method has no effect.
 	 * 
