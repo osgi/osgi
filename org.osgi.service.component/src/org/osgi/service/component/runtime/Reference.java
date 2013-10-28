@@ -17,7 +17,6 @@
 package org.osgi.service.component.runtime;
 
 import org.osgi.dto.DTO;
-import org.osgi.service.component.annotations.ReferenceScope;
 
 /**
  * The {@code Reference} interface represents a single reference (or dependency)
@@ -98,5 +97,5 @@ public class Reference extends DTO {
 	 * The requested service scope for this Reference as defined by the
 	 * {@code reference.scope} attribute.
 	 */
-	public ReferenceScope			scope;
+	public String	scope;
 }
