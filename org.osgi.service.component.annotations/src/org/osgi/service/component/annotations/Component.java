@@ -91,7 +91,6 @@ public @interface Component {
 	 * @see "The servicefactory attribute of the service element of a Component Description."
 	 * @deprecated Since 1.3. Replaced by {@link #scope()}.
 	 */
-	@Deprecated
 	boolean servicefactory() default false;
 
 	/**
