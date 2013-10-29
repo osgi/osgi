@@ -21,8 +21,7 @@ import org.osgi.dto.DTO;
 import org.osgi.dto.framework.BundleDTO;
 
 /**
- * The {@code Component} interface represents the declaration of a component in
- * a Declarative Services descriptor.
+ * A representation of a declared component description.
  * 
  * @since 1.3
  * @NotThreadSafe
@@ -30,116 +29,151 @@ import org.osgi.dto.framework.BundleDTO;
  */
 public class ComponentDescription extends DTO {
 	/**
-	 * The name of the component defined in the {@code component.name} attribute
-	 * which may be {@code null}.
+	 * The name of the component.
+	 * 
+	 * <p>
+	 * This is declared in the {@code name} attribute of the {@code component}
+	 * element. This will be the default name if the component description does
+	 * not declare a name.
 	 */
 	public String				name;
 
 	/**
-	 * The {@linkplain BundleDTO bundle} declaring this component.
+	 * The bundle declaring the component description.
 	 */
 	public BundleDTO			bundle;
 
 	/**
-	 * The component factory name from {@code component.factory} attribute or
-	 * {@code null} if this component is not defined as a component factory.
+	 * The component factory name.
+	 * 
+	 * <p>
+	 * This is declared in the {@code factory} attribute of the
+	 * {@code component} element. This will be {@code null} if the component
+	 * description is not declared as a component factory.
 	 */
 	public String				factory;
 
 	/**
-	 * The service scope for the service of this Component as defined by the
-	 * {@code service/scope} attribute.
+	 * The service scope.
+	 * 
+	 * <p>
+	 * This is declared in the {@code scope} attribute of the {@code service}
+	 * element.
 	 */
 	public String				scope;
 
 	/**
-	 * The fully qualified name of the class implementing this component from
-	 * the {@code component/implementation.class} attribute.
+	 * The fully qualified name of the implementation class.
+	 * 
+	 * <p>
+	 * This is declared in the {@code class} attribute of the
+	 * {@code implementation} element.
 	 */
 	public String				implementationClass;
 
 	/**
-	 * Whether the component is declared to be enabled by default ({@code true})
-	 * as defined by the {@code component.enabled} attribute.
+	 * The initial enabled state.
 	 * 
+	 * <p>
+	 * This is declared in the {@code enabled} attribute of the
+	 * {@code component} element.
 	 */
 	public boolean				defaultEnabled;
 
 	/**
-	 * Whether the component is an immediate or a delayed component as defined
-	 * by the {@code component.immediate} attribute.
+	 * The immediate state.
+	 * 
+	 * <p>
+	 * This is declared in the {@code immediate} attribute of the
+	 * {@code component} element.
 	 */
 	public boolean				immediate;
 
 	/**
-	 * An array of service names provided by this component or {@code null} if
-	 * the component is not registered as a service as defined by the
-	 * {@code component/service/provide.interface} attributes.
+	 * The fully qualified names of the service interfaces.
+	 * 
+	 * <p>
+	 * These are declared in the {@code interface} attribute of the
+	 * {@code provide} elements. The array will be empty if the component
+	 * description does not declare any service interfaces.
 	 */
 	public String[]				serviceInterfaces;
 
 	/**
-	 * The declared properties of the component as defined by the
-	 * {@code component/property} and {@code component/properties} elements.
+	 * The declared component properties.
+	 * 
+	 * <p>
+	 * These are declared in the {@code property} and {@code properties}
+	 * elements.
 	 */
 	public Map<String, Object>	properties;
 
 	/**
-	 * An array of {@link Reference} instances representing the service
-	 * references (or dependencies) of this component as defined in the
-	 * {@code component/reference} elements.
+	 * The referenced services.
+	 * 
+	 * <p>
+	 * These are declared in the {@code reference} elements. The array will be
+	 * empty if the component description does not declare references to any
+	 * services.
 	 */
 	public Reference[]			references;
 
 	/**
-	 * The name of the method to be called when the component is being activated
-	 * as defined in the {@code component.activate} attribute or {@code null} if
-	 * not explicitly declared.
+	 * The name of the activate method.
+	 * 
+	 * <p>
+	 * This is declared in the {@code activate} attribute of the
+	 * {@code component} element. This will be {@code null} if the component
+	 * description does not declare an activate method name.
 	 */
 	public String				activate;
 
 	/**
-	 * The name of the method to be called when the component is being
-	 * deactivated as defined in the {@code component.deactivate} attribute or
-	 * {@code null} if not explicitly declared.
+	 * The name of the deactivate method.
+	 * 
+	 * <p>
+	 * This is declared in the {@code deactivate} attribute of the
+	 * {@code component} element. This will be {@code null} if the component
+	 * description does not declare a deactivate method name.
 	 */
 	public String				deactivate;
 
 	/**
-	 * The name of the method to be called when the component's configuration is
-	 * being updated as defined in the {@code component.modified} attribute or
-	 * {@code null} if not declared.
+	 * The name of the modified method.
+	 * 
+	 * <p>
+	 * This is declared in the {@code modified} attribute of the
+	 * {@code component} element. This will be {@code null} if the component
+	 * description does not declare a modified method name.
 	 */
 	public String				modified;
 
 	/**
-	 * The configuration policy declared in the
-	 * {@code component.configuration-policy} attribute. If the component
-	 * descriptor is a Declarative Services 1.0 descriptor or not configuration
-	 * policy has been declared, the default value <i>optional</i> is returned.
+	 * The configuration policy.
+	 * 
 	 * <p>
-	 * The returned string is one of the three policies defined in the
-	 * Declarative Services specification 1.1:
-	 * <dl>
-	 * <dt>optional</dt>
-	 * <dd>Configuration from the Configuration Admin service is supplied to the
-	 * component if available. Otherwise the component is activated without
-	 * Configuration Admin configuration. This is the default value reflecting
-	 * the behaviour of Declarative Services 1.0</dd>
-	 * <dt>require</dt>
-	 * <dd>Configuration is required. The component remains unsatisfied until
-	 * configuartion is available from the Configuration Admin service.</dd>
-	 * <dt>ignore</dt>
-	 * <dd>Configuration is ignored. No Configuration Admin service
-	 * configuration is supplied to the component.</dd>
-	 * </dl>
+	 * This is declared in the {@code configuration-policy} attribute of the
+	 * {@code component} element. This will be the default configuration policy
+	 * if the component description does not declare a configuration policy.
 	 */
 	public String				configurationPolicy;
 
 	/**
-	 * The unique ID of this component managed by the Service Component Runtime.
-	 * This value is also available as the {@code component.id} service
-	 * registration property of component configurations registered as services.
+	 * The configuration pid.
+	 * 
+	 * <p>
+	 * This is declared in the {@code configuration-pid} attribute of the
+	 * {@code component} element. This will be the default configuration pid if
+	 * the component description does not declare a configuration pid.
+	 */
+	public String				configurationPid;
+
+	/**
+	 * The id of the component description.
+	 * 
+	 * <p>
+	 * The id is a non-persistent, unique value assigned at runtime. The id is
+	 * also available as the {@code component.id} component property.
 	 */
 	public long					id;
 }

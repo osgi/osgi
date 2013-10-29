@@ -26,20 +26,20 @@ import org.osgi.service.component.ComponentContext;
  * Services main controller also known as the Service Component Runtime or SCR
  * for short. It provides access to the components managed by the Service
  * Component Runtime.
+ * 
  * <p>
- * This service differentiates between {@link ComponentDescription} and
- * {@link ComponentConfiguration}. A {@link ComponentDescription} is the
- * declaration of the component in the Declarative Services descriptor. A
- * {@link ComponentConfiguration} is an actual instance of a declared
- * {@link ComponentDescription} and is backed by an object instance of the
- * {@linkplain ComponentDescription#implementationClass implementation class
- * name declared in the component}.
+ * This service differentiates between a {@link ComponentDescription} and a
+ * {@link ComponentConfiguration}. A {@link ComponentDescription} is a
+ * representation of a declared component description. A
+ * {@link ComponentConfiguration} is a representation of an actual instance of a
+ * declared component description parameterized by component properties.
  * <p>
+ * 
  * Access to this service requires the
- * {@code ServicePermission[org.osgi.service.component.ServiceComponentRuntime, GET]}
- * permission. It is intended that only administrative bundles should be granted
- * this permission to limit access to the potentially intrusive methods provided
- * by this service.
+ * {@code ServicePermission[ServiceComponentRuntime, GET]} permission. It is
+ * intended that only administrative bundles should be granted this permission
+ * to limit access to the potentially intrusive methods provided by this
+ * service.
  * 
  * @ThreadSafe
  * @since 1.3
@@ -49,82 +49,95 @@ import org.osgi.service.component.ComponentContext;
 public interface ServiceComponentRuntime {
 
 	/**
-	 * Returns the component descriptions declared by the given bundles or the
-	 * component descriptions declared by all active bundles if {@code bundles}
-	 * is {@code null}. If the bundles have no declared components or the
-	 * bundles are not active an empty collection is returned.
+	 * Returns the component descriptions declared by the specified active
+	 * bundles.
 	 * 
-	 * @param bundles The bundles whose declared components are to be returned
-	 *        or {@code null} if the declared components from all active bundles
-	 *        are to be returned.
-	 * @return The declared component descriptions of the given (active)
-	 *         {@code bundles} or the declared component descriptions from all
-	 *         active bundles if {@code bundle} is <code>null</code>. An empty
-	 *         collection is returned if no components are declared by active
-	 *         bundles.
+	 * <p>
+	 * Only component descriptions from active bundles are returned. If the
+	 * specified bundles have no declared components or are not active, an empty
+	 * collection is returned.
+	 * 
+	 * @param bundles The bundles whose declared component descriptions are to
+	 *        be returned. Specifying no bundles, or the equivalent of an empty
+	 *        {@code Bundle} array, will return the declared component
+	 *        descriptions from all active bundles.
+	 * @return The declared component descriptions of the specified active
+	 *         {@code bundles}. An empty collection is returned if there are no
+	 *         component descriptions for the specified active bundles.
 	 */
 	Collection<ComponentDescription> getComponentDescriptions(Bundle... bundles);
 
 	/**
-	 * Return the {@link ComponentDescription} declared with the given
-	 * {@code name} or {@code null} if no such component is declared by the
-	 * given {@code bundle} or the bundle is not active.
+	 * Returns the {@link ComponentDescription} declared with the specified name
+	 * by the specified bundle.
 	 * 
-	 * @param bundle The bundle declaring the requested component
-	 * @param name The name of the {@link ComponentDescription} to return
-	 * @return The named component or {@code null} if none of the active bundles
-	 *         declare a component with that name.
-	 * @throws NullPointerException if {@code name} or {@code bundle} is
-	 *         {@code null}.
+	 * <p>
+	 * Only component descriptions from active bundles are returned.
+	 * {@code null} if no such component is declared by the given {@code bundle}
+	 * or the bundle is not active.
+	 * 
+	 * @param bundle The bundle declaring the component description. Must not be
+	 *        {@code null}.
+	 * @param name The name of the component description. Must not be
+	 *        {@code null}.
+	 * @return The declared component description or {@code null} if the
+	 *         specified bundle is not active or does not declare a component
+	 *         description with the specified name.
 	 */
 	ComponentDescription getComponentDescription(Bundle bundle, String name);
 
 	/**
-	 * Return a collection of {@linkplain ComponentConfiguration component
-	 * configurations} created for the component description. If there are no
-	 * component configurations currently created, the collection is empty. This
-	 * collection of configurations represents a snapshot of the current state.
+	 * Returns the component configurations for the specified component
+	 * description.
 	 * 
-	 * @param description The component description.
-	 * @return The component configurations created for the given component
-	 *         description. An empty collection is returned if there are non.
-	 * @throws NullPointerException if {@code description} or {@code null}.
+	 * @param description The component description. Must not be {@code null}.
+	 * @return A collection containing a snapshot of the current component
+	 *         configurations for the specified component description. An empty
+	 *         collection is returned if there are none.
 	 */
 	Collection<ComponentConfiguration> getComponentConfigurations(ComponentDescription description);
 
 	/**
-	 * Whether this component is currently enabled ({@code true}) or not.
-	 * <p>
-	 * Initially this follows the {@code Component.enabled} attribute of the
-	 * declaration and can be changed by the
-	 * {@link ServiceComponentRuntime#enableComponent(ComponentDescription)}
-	 * method,
-	 * {@link ServiceComponentRuntime#disableComponent(ComponentDescription)}
-	 * method, {@link ComponentContext#disableComponent(String)} or
-	 * {@link ComponentContext#enableComponent(String)}.
+	 * Returns whether the specified component description is currently enabled.
 	 * 
-	 * @param description The component description.
-	 * @return Whether this component is currently enabled or not.
-	 * @throws NullPointerException if {@code description} or {@code null}.
-	 * @see ComponentDescription#defaultEnabled
+	 * <p>
+	 * The enabled state of a component description is initially set by the
+	 * {@link ComponentDescription#defaultEnabled enabled} attribute of the
+	 * component description.
+	 * 
+	 * @param description The component description. Must not be {@code null}.
+	 * @return {@code true} if the specified component description is currently
+	 *         enabled. Otherwise, {@code false}.
+	 * @see #enableComponent(ComponentDescription)
+	 * @see #disableComponent(ComponentDescription)
+	 * @see ComponentContext#disableComponent(String)
+	 * @see ComponentContext#enableComponent(String)
 	 */
 	boolean isComponentEnabled(ComponentDescription description);
 
 	/**
-	 * Enables this ComponentDescription if it is disabled. If the
-	 * ComponentDescription is not currently disabled this method has no effect.
+	 * Enables the specified component description.
 	 * 
-	 * @param description The component description to enable.
-	 * @throws NullPointerException if {@code description} or is {@code null}.
+	 * <p>
+	 * If the specified component description is currently enabled, this method
+	 * has no effect.
+	 * 
+	 * @param description The component description to enable. Must not be
+	 *        {@code null}.
+	 * @see #isComponentEnabled(ComponentDescription)
 	 */
 	void enableComponent(ComponentDescription description);
 
 	/**
-	 * Disables this ComponentDescription if it is enabled. If the
-	 * ComponentDescription is currently disabled this method has no effect.
+	 * Disables the specified component description.
 	 * 
-	 * @param description The component description to disable.
-	 * @throws NullPointerException if {@code description} or is {@code null}.
+	 * <p>
+	 * If the specified component description is currently disabled, this method
+	 * has no effect.
+	 * 
+	 * @param description The component description to disable. Must not be
+	 *        {@code null}.
+	 * @see #isComponentEnabled(ComponentDescription)
 	 */
 	void disableComponent(ComponentDescription description);
 }

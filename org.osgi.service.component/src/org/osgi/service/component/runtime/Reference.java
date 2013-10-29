@@ -19,9 +19,7 @@ package org.osgi.service.component.runtime;
 import org.osgi.dto.DTO;
 
 /**
- * The {@code Reference} interface represents a single reference (or dependency)
- * to a service used by a Component as declared in the {@code reference}
- * elements of a Declarative Services descriptor.
+ * A representation of a declared reference to a service.
  * 
  * @since 1.3
  * @NotThreadSafe
@@ -29,73 +27,101 @@ import org.osgi.dto.DTO;
  */
 public class Reference extends DTO {
 	/**
-	 * The name of this Reference as defined by the {@code reference.name}
-	 * attribute or {@code null} if not declared.
+	 * The name of the reference.
+	 * 
+	 * <p>
+	 * This is declared in the {@code name} attribute of the {@code reference}
+	 * element. This will be the default name if the component description does
+	 * not declare a name for the reference.
 	 */
 	public String	name;
 
 	/**
-	 * The name of the service used by this reference as defined by the
-	 * {@code reference.interface} attribute.
+	 * The service interface of the reference.
+	 * 
+	 * <p>
+	 * This is declared in the {@code interface} attribute of the
+	 * {@code reference} element.
 	 */
 	public String	interfaceName;
 
 	/**
-	 * Whether this reference is optional as defined by the lower bound of the
-	 * {@code reference.cardinality}. In other words this field is set to
-	 * {@code true} if the cardinality is <em>0..1</em> or <em>0..n</em>.
+	 * The cardinality of the reference.
+	 * 
+	 * <p>
+	 * This is declared in the {@code cardinality} attribute of the
+	 * {@code reference} element. This will be the default cardinality if the
+	 * component description does not declare a cardinality for the reference.
 	 */
-	public boolean	optional;
+	public String	cardinality;
 
 	/**
-	 * Whether this reference is multiple as defined by the upper bound of the
-	 * {@code reference.cardinality}. In other words this field is set to
-	 * {@code true} if the cardinality is <em>0..n</em> or <em>1..n</em>.
-	 */
-	public boolean	multiple;
-
-	/**
-	 * Whether the reference is statically or dynamically bound as defined by
-	 * the {@code reference.policy} attribute.
+	 * The policy of the reference.
+	 * 
+	 * <p>
+	 * This is declared in the {@code policy} attribute of the {@code reference}
+	 * element. This will be the default policy if the component description
+	 * does not declare a policy for the reference.
 	 */
 	public String	policy;
 
 	/**
-	 * Policy of handling of availability of a better service as defined by the
-	 * {@code reference.policy-option} attribute.
+	 * The policy option of the reference.
+	 * 
+	 * <p>
+	 * This is declared in the {@code policy-option} attribute of the
+	 * {@code reference} element. This will be the default policy option if the
+	 * component description does not declare a policy option for the reference.
 	 */
 	public String	policyOption;
 
 	/**
-	 * The value of the target property of this reference as defined by the
-	 * {@code reference.target} attribute or {@code null} if not declared.
+	 * The target of the reference.
+	 * 
+	 * <p>
+	 * This is declared in the {@code target} attribute of the {@code reference}
+	 * element. This will be {@code null} if the component description does not
+	 * declare a target for the reference.
 	 */
 	public String	target;
 
 	/**
-	 * The name of the method called if a service is being bound to the
-	 * component as defined by the {@code reference.bind} attribute or
-	 * {@code null} if no such method is declared.
+	 * The name of the bind method of the reference.
+	 * 
+	 * <p>
+	 * This is declared in the {@code bind} attribute of the {@code reference}
+	 * element. This will be {@code null} if the component description does not
+	 * declare a bind method for the reference.
 	 */
 	public String	bind;
 
 	/**
-	 * The name of the method called if a service is being unbound from the
-	 * component as defined by the {@code reference.unbind} attribute or
-	 * {@code null} if no such method is declared.
+	 * The name of the unbind method of the reference.
+	 * 
+	 * <p>
+	 * This is declared in the {@code unbind} attribute of the {@code reference}
+	 * element. This will be {@code null} if the component description does not
+	 * declare an unbind method for the reference.
 	 */
 	public String	unbind;
 
 	/**
-	 * The name of the method called if the bound service service is updated as
-	 * defined by the {@code reference.updated} attribute or {@code null} if no
-	 * such method is declared.
+	 * The name of the updated method of the reference.
+	 * 
+	 * <p>
+	 * This is declared in the {@code updated} attribute of the
+	 * {@code reference} element. This will be {@code null} if the component
+	 * description does not declare an updated method for the reference.
 	 */
 	public String	updated;
 
 	/**
-	 * The requested service scope for this Reference as defined by the
-	 * {@code reference.scope} attribute.
+	 * The scope of the reference.
+	 * 
+	 * <p>
+	 * This is declared in the {@code scope} attribute of the {@code reference}
+	 * element. This will be the default scope if the component description does
+	 * not declare a scope for the reference.
 	 */
 	public String	scope;
 }

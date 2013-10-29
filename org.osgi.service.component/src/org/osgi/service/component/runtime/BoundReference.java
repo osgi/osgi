@@ -20,9 +20,7 @@ import org.osgi.dto.DTO;
 import org.osgi.dto.framework.ServiceReferenceDTO;
 
 /**
- * The {@code BoundReference} interface represents the actual service binding of
- * a service reference declared in the {@linkplain Reference reference element}
- * of the component declaration.
+ * A representation of a bound reference to a service.
  * 
  * @since 1.3
  * @NotThreadSafe
@@ -30,34 +28,31 @@ import org.osgi.dto.framework.ServiceReferenceDTO;
  */
 public class BoundReference extends DTO {
 	/**
-	 * Returns the {@code component/reference} element of the component
-	 * descriptor defining this bound reference.
+	 * The declared reference.
+	 * 
+	 * <p>
+	 * This is the representation of the declaration of the reference from the
+	 * {@code reference} element of the component description.
 	 */
 	public Reference				reference;
 
 	/**
-	 * Returns whether this reference is satisfied. An
-	 * {@linkplain Reference#optional optional} reference is always satisfied.
-	 * Otherwise {@code true} is only returned if at least one service is bound.
-	 */
-	public boolean					satisfied;
-
-	/**
-	 * The value of the actual target value used to select services to bind to.
-	 * Initially (without overwriting configuration) this method provides access
-	 * to the {@code component/reference.target} attribute of the reference
-	 * declaration. If configuration overwrites the target property, this method
-	 * returns the value of the component property whose name is derived from
-	 * the {@linkplain Reference#name reference name} plus the suffix
-	 * <em>.target</em>. If no target property exists this field is set to
-	 * {@code null}.
+	 * The target property of the bound reference.
+	 * 
+	 * <p>
+	 * This is the value of the {@link ComponentConfiguration#properties
+	 * component property} whose name is the concatenation of the
+	 * {@link Reference#name declared reference name} and &quot;.target&quot;.
+	 * This will be {@code null} if no target property is set for the reference.
 	 */
 	public String					target;
 
 	/**
-	 * An array of {@code ServiceReferenceDTO} instances representing the bound
-	 * services. If no services are actually bound, this field is set to
-	 * {@code null}.
+	 * The bound services.
+	 * 
+	 * <p>
+	 * Each {@link ServiceReferenceDTO} in the array represents a service bound
+	 * to the component configuration.
 	 */
 	public ServiceReferenceDTO[]	serviceReferences;
 }
