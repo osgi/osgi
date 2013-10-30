@@ -57,7 +57,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		String hostPath = System.getProperty("org.osgi.service.enocean.host.path");
 		if (hostPath != null && hostPath != "") {
 			try {
-				initialHost = new EnOceanHostImpl(hostPath);
+				initialHost = new EnOceanHostImpl(hostPath, bc);
 				registerHost(hostPath, initialHost);
 				initialHost.addPacketListener(this);
 			} catch (EnOceanDriverException e) {
@@ -128,11 +128,25 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		} else {
 			if (service instanceof EnOceanDevice) {
 				String chipId = (String) ref.getProperty(EnOceanDevice.CHIP_ID);
+				/*
+				 * TODO: Pay attention, seems that if some of those properties
+				 * are absent, it makes the driver silently crash ???
+				 * 
+				 * 
+				 * String servicePid = (String)
+				 * ref.getProperty(Constants.SERVICE_PID); String hasExport =
+				 * (String) ref.getProperty(EnOceanDevice.ENOCEAN_EXPORT); if
+				 * (chipId == null && hasExport != null) {
+				 * 
+				 * // TODO: Implement the logic behind to associate the thing //
+				 * with an EnOceanHost
+				 * 
+				 * } System.out.println("CHIPID ::: " + chipId);
+				 * eoDevices.put(servicePid, ref);
+				 */
 				eoDevices.put(chipId, ref);
 				Logger.d(TAG, "EnOceanDevice service registered : " + chipId);
 			}
-
-
 			return service;
 		}
 	}

@@ -42,16 +42,6 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		sReg.setProperties(props);
 	}
 
-	public void send(byte[] telegram) throws EnOceanException {
-		// TODO Auto-generated method stub
-
-	}
-
-	public void send(EnOceanMessage telegram) throws EnOceanException {
-		// TODO Auto-generated method stub
-
-	}
-
 	public void setLearningMode(boolean learnMode) {
 		// TODO Auto-generated method stub
 
@@ -97,11 +87,7 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		return null;
 	}
 
-	public void send(byte[] telegram, EnOceanResponseHandler handler) throws EnOceanException {
-		// TODO Auto-generated method stub
-	}
-
-	public void send(EnOceanMessage telegram, EnOceanResponseHandler handler) throws EnOceanException {
+	public void send(EnOceanMessage message, EnOceanResponseHandler handler) throws EnOceanException {
 		// TODO Auto-generated method stub
 	}
 

@@ -17,6 +17,8 @@
 
 package org.osgi.service.enocean;
 
+import java.io.IOException;
+
 
 /**
  * This interface represents an EnOcean Host, a device that offers EnOcean
@@ -90,10 +92,16 @@ public interface EnOceanHost {
 	public int getRepeaterLevel() throws EnOceanException;
 	
 	/**
-	 * Retrieves the SENDER_ID associated with the given servicePID, if existing on this chip. 
+	 * Retrieves the CHIP_ID associated with the given servicePID, if existing on this chip. 
 	 * @param servicePID
 	 * @return the associated CHIP_ID of the exported device.
 	 */
-	public int getSenderId(String servicePID) throws EnOceanException;
+	public int getChipId(String servicePID) throws EnOceanException;
+
+	/**
+	 * Broadcasts the given message on the EnOcean Network. 
+	 * @param the message to be sent.
+	 */
+	public void broadcast(EnOceanMessage message) throws EnOceanException, IllegalArgumentException, IOException;	
 
 }

@@ -4,8 +4,11 @@ package org.osgi.test.cases.enocean;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.Properties;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanMessage;
@@ -17,6 +20,7 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.test.cases.enocean.descriptions.EnOceanChannelDescription_TMP_00;
 import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescription_A5_02_01;
+import org.osgi.test.cases.enocean.devices.TemperatureSensingDevice;
 import org.osgi.test.cases.enocean.messages.MessageA5_02_01;
 import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.sets.EnOceanChannelDescriptionSetImpl;
@@ -225,6 +229,50 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		assertEquals(true, exceptionCaught);
 
 	}
+
+	/**
+	 * Tests device exportation.
+	 * 
+	 * @throws Exception
+	 */
+	public void testDeviceExport() throws Exception {
+		EnOceanDevice device = new TemperatureSensingDevice();
+		Dictionary props = new Properties();
+		props.put(EnOceanDevice.ENOCEAN_EXPORT, Boolean.TRUE);
+		props.put(Constants.SERVICE_PID, Fixtures.DEVICE_PID);
+		props.put(EnOceanDevice.RORG, Fixtures.STR_RORG);
+		props.put(EnOceanDevice.FUNC, Fixtures.STR_FUNC);
+		props.put(EnOceanDevice.TYPE, Fixtures.STR_TYPE_1);
+		props.put(EnOceanDevice.MANUFACTURER, Fixtures.STR_MANUFACTURER);
+		registerService(EnOceanDevice.class.getName(), device, props);
+
+		lastServiceEvent = devices.waitForService();
+		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
+
+		/*
+		 * NOTE: The service should have been modified AFTER insertion,
+		 * nevertheless it seems that when registration and modification happen
+		 * almost in the same time, OSGi only generates a single SERVICE_ADDED
+		 * event.
+		 */
+		log("Device service event happened : " + lastServiceEvent);
+		ServiceReference ref = devices.getServiceReference();
+
+		assertEquals("SERVICE_PID mismatch", Fixtures.DEVICE_PID, ref.getProperty(Constants.SERVICE_PID));
+		assertEquals("RORG mismatch", Fixtures.STR_RORG, ref.getProperty(EnOceanDevice.RORG));
+		assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
+		assertEquals("TYPE mismatch", Fixtures.STR_TYPE_1, ref.getProperty(EnOceanDevice.TYPE));
+		assertEquals("MANUFACTURER mismatch", Fixtures.STR_MANUFACTURER, ref.getProperty(EnOceanDevice.MANUFACTURER));
+		// TODO check that the BaseDriver correctly set some chip ID based on
+		// EnOceanHosts's BASE_ID
+
+		/*
+		 * Now that we have gotten the device registered and all, we are able to
+		 * try and make it send data.
+		 */
+
+	}
+
 
 	/**
 	 * Tests initial device registration from a raw Radio teach-in packet.

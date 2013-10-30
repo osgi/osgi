@@ -27,4 +27,5 @@ public final class Fixtures {
 	public static final byte	RAW_TEMPERATURE			= 0x7f;
 	public static final String	TMP_CHANNEL_ID			= "TMP_00";
 	public static final String	TMP_CHANNEL_TYPE		= EnOceanChannelDescription.TYPE_DATA;
+	public static final String	DEVICE_PID				= "my_exported_unique_device";
 }

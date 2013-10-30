@@ -56,17 +56,6 @@ public interface EnOceanDevice {
 	 * Property name for the manufacturer ID that may be specified by some teach-in messages.
 	 */
 	public static final String	MANUFACTURER	= "enocean.device.manufacturer";
-	
-	/**
-	 * Property name for the 'profile name' for this device. This is nothing
-	 * EnOcean-standard, you shouldn't expect something unique.
-	 */
-	public final static String PROFILE_NAME = "enocean.device.profile.name";
-
-	/**
-	 * Property name for the 'friendly name' of this device. Not unique.
-	 */
-	public final static String NAME = "enocean.device.name";
 
 	/**
 	 * Property name for the security level mask for this device.
@@ -74,25 +63,21 @@ public interface EnOceanDevice {
 	 */
 	public final static String SECURITY_LEVEL_FORMAT = "enocean.device.security_level_format";
 
+	/**
+	 * Property name that defines if the device is exported or not. If present, the device is exported.
+	 */
+	public static final String	ENOCEAN_EXPORT	= "enocean.device.export";
 	
 	/**
-	 * Sends a message on the EnOcean network, uses lightweight byte[] argument type.
+	 * Sends a message to the device. Supposes that the device is a receiver.
 	 * 
-	 * @param the {@link EnOceanMessage} as raw bytes, to be issued.
-	 * @param an optional {@link EnOceanResponseHandler} object.
+	 * @param the {@link EnOceanMessage} to be sent.
+	 * @param the {@EnOceanResponseHandler} object to get an eventual answer.
 	 * @throws EnOceanException
 	 */
-	public void send(byte[] telegram, EnOceanResponseHandler handler) throws EnOceanException, EnOceanException;
-	
-	/**
-	 * Sends a message on the EnOcean network, uses actual {@link EnOceanMessage} objects.
-	 * 
-	 * @param the {@link EnOceanMessage} to be issued.
-	 * @param an optional {@link EnOceanResponseHandler} object.
-	 * @throws EnOceanException
-	 */
-	public void send(EnOceanMessage telegram, EnOceanResponseHandler handler) throws EnOceanException, EnOceanException;
-	
+	public void send(EnOceanMessage message, EnOceanResponseHandler handler) throws EnOceanException, EnOceanException;
+
+
 	/**
 	 * Switches the device into learning mode.
 	 * 
