@@ -27,7 +27,7 @@ import org.osgi.dto.framework.BundleDTO;
  * @NotThreadSafe
  * @author $Id$
  */
-public class ComponentDescription extends DTO {
+public class ComponentDescriptionDTO extends DTO {
 	/**
 	 * The name of the component.
 	 * 
@@ -116,7 +116,7 @@ public class ComponentDescription extends DTO {
 	 * empty if the component description does not declare references to any
 	 * services.
 	 */
-	public Reference[]			references;
+	public ReferenceDTO[]			references;
 
 	/**
 	 * The name of the activate method.

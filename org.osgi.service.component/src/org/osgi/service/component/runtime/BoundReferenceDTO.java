@@ -26,7 +26,7 @@ import org.osgi.dto.framework.ServiceReferenceDTO;
  * @NotThreadSafe
  * @author $Id$
  */
-public class BoundReference extends DTO {
+public class BoundReferenceDTO extends DTO {
 	/**
 	 * The declared reference.
 	 * 
@@ -34,15 +34,15 @@ public class BoundReference extends DTO {
 	 * This is the representation of the declaration of the reference from the
 	 * {@code reference} element of the component description.
 	 */
-	public Reference				reference;
+	public ReferenceDTO				reference;
 
 	/**
 	 * The target property of the bound reference.
 	 * 
 	 * <p>
-	 * This is the value of the {@link ComponentConfiguration#properties
+	 * This is the value of the {@link ComponentConfigurationDTO#properties
 	 * component property} whose name is the concatenation of the
-	 * {@link Reference#name declared reference name} and &quot;.target&quot;.
+	 * {@link ReferenceDTO#name declared reference name} and &quot;.target&quot;.
 	 * This will be {@code null} if no target property is set for the reference.
 	 */
 	public String					target;

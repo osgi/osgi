@@ -28,7 +28,7 @@ import org.osgi.service.component.ComponentContext;
  * @NotThreadSafe
  * @author $Id$
  */
-public class ComponentConfiguration extends DTO {
+public class ComponentConfigurationDTO extends DTO {
 	/**
 	 * The component configuration is unsatisfied.
 	 * 
@@ -43,7 +43,7 @@ public class ComponentConfiguration extends DTO {
 	 * The component configuration is satisfied.
 	 * 
 	 * <p>
-	 * Any {@link ComponentDescription#serviceInterfaces services} declared by
+	 * Any {@link ComponentDescriptionDTO#serviceInterfaces services} declared by
 	 * the component description are registered.
 	 * 
 	 * If the component configuration becomes unsatisfied for any reason, any
@@ -85,7 +85,7 @@ public class ComponentConfiguration extends DTO {
 	 * The representation of the component configuration's component
 	 * description.
 	 */
-	public ComponentDescription	description;
+	public ComponentDescriptionDTO	description;
 
 	/**
 	 * The current state of the component configuration.
@@ -107,9 +107,9 @@ public class ComponentConfiguration extends DTO {
 	 * The currently bound references.
 	 * 
 	 * <p>
-	 * Each {@link BoundReference} in the array represents a service bound to a
+	 * Each {@link BoundReferenceDTO} in the array represents a service bound to a
 	 * reference of the component configuration. The array will be empty if the
 	 * component configuration has no bound references.
 	 */
-	public BoundReference[]		boundReferences;
+	public BoundReferenceDTO[]		boundReferences;
 }

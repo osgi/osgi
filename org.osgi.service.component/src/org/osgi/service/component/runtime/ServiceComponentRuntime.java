@@ -28,10 +28,10 @@ import org.osgi.service.component.ComponentContext;
  * Component Runtime.
  * 
  * <p>
- * This service differentiates between a {@link ComponentDescription} and a
- * {@link ComponentConfiguration}. A {@link ComponentDescription} is a
+ * This service differentiates between a {@link ComponentDescriptionDTO} and a
+ * {@link ComponentConfigurationDTO}. A {@link ComponentDescriptionDTO} is a
  * representation of a declared component description. A
- * {@link ComponentConfiguration} is a representation of an actual instance of a
+ * {@link ComponentConfigurationDTO} is a representation of an actual instance of a
  * declared component description parameterized by component properties.
  * <p>
  * 
@@ -65,10 +65,10 @@ public interface ServiceComponentRuntime {
 	 *         {@code bundles}. An empty collection is returned if there are no
 	 *         component descriptions for the specified active bundles.
 	 */
-	Collection<ComponentDescription> getComponentDescriptions(Bundle... bundles);
+	Collection<ComponentDescriptionDTO> getComponentDescriptions(Bundle... bundles);
 
 	/**
-	 * Returns the {@link ComponentDescription} declared with the specified name
+	 * Returns the {@link ComponentDescriptionDTO} declared with the specified name
 	 * by the specified bundle.
 	 * 
 	 * <p>
@@ -84,7 +84,7 @@ public interface ServiceComponentRuntime {
 	 *         specified bundle is not active or does not declare a component
 	 *         description with the specified name.
 	 */
-	ComponentDescription getComponentDescription(Bundle bundle, String name);
+	ComponentDescriptionDTO getComponentDescription(Bundle bundle, String name);
 
 	/**
 	 * Returns the component configurations for the specified component
@@ -95,25 +95,25 @@ public interface ServiceComponentRuntime {
 	 *         configurations for the specified component description. An empty
 	 *         collection is returned if there are none.
 	 */
-	Collection<ComponentConfiguration> getComponentConfigurations(ComponentDescription description);
+	Collection<ComponentConfigurationDTO> getComponentConfigurations(ComponentDescriptionDTO description);
 
 	/**
 	 * Returns whether the specified component description is currently enabled.
 	 * 
 	 * <p>
 	 * The enabled state of a component description is initially set by the
-	 * {@link ComponentDescription#defaultEnabled enabled} attribute of the
+	 * {@link ComponentDescriptionDTO#defaultEnabled enabled} attribute of the
 	 * component description.
 	 * 
 	 * @param description The component description. Must not be {@code null}.
 	 * @return {@code true} if the specified component description is currently
 	 *         enabled. Otherwise, {@code false}.
-	 * @see #enableComponent(ComponentDescription)
-	 * @see #disableComponent(ComponentDescription)
+	 * @see #enableComponent(ComponentDescriptionDTO)
+	 * @see #disableComponent(ComponentDescriptionDTO)
 	 * @see ComponentContext#disableComponent(String)
 	 * @see ComponentContext#enableComponent(String)
 	 */
-	boolean isComponentEnabled(ComponentDescription description);
+	boolean isComponentEnabled(ComponentDescriptionDTO description);
 
 	/**
 	 * Enables the specified component description.
@@ -124,9 +124,9 @@ public interface ServiceComponentRuntime {
 	 * 
 	 * @param description The component description to enable. Must not be
 	 *        {@code null}.
-	 * @see #isComponentEnabled(ComponentDescription)
+	 * @see #isComponentEnabled(ComponentDescriptionDTO)
 	 */
-	void enableComponent(ComponentDescription description);
+	void enableComponent(ComponentDescriptionDTO description);
 
 	/**
 	 * Disables the specified component description.
@@ -137,7 +137,7 @@ public interface ServiceComponentRuntime {
 	 * 
 	 * @param description The component description to disable. Must not be
 	 *        {@code null}.
-	 * @see #isComponentEnabled(ComponentDescription)
+	 * @see #isComponentEnabled(ComponentDescriptionDTO)
 	 */
-	void disableComponent(ComponentDescription description);
+	void disableComponent(ComponentDescriptionDTO description);
 }

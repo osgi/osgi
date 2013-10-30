@@ -25,7 +25,7 @@ import org.osgi.dto.DTO;
  * @NotThreadSafe
  * @author $Id$
  */
-public class Reference extends DTO {
+public class ReferenceDTO extends DTO {
 	/**
 	 * The name of the reference.
 	 * 
