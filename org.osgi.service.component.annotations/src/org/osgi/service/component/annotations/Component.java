@@ -113,13 +113,13 @@ public @interface Component {
 	 * If {@code true}, this Component must be immediately activated upon
 	 * becoming satisfied. If {@code false}, activation of this Component is
 	 * delayed. If this property is specified, its value must be {@code false}
-	 * if the {@link #factory} property is also specified or must be
-	 * {@code true} if the {@link #service} property is specified with an empty
-	 * value.
+	 * if the {@link #factory()} property is also specified or must be
+	 * {@code true} if the {@link #service()} property is specified with an
+	 * empty value.
 	 * 
 	 * <p>
-	 * If not specified, the default is {@code false} if the {@link #factory}
-	 * property is specified or the {@link #service} property is not specified
+	 * If not specified, the default is {@code false} if the {@link #factory()}
+	 * property is specified or the {@link #service()} property is not specified
 	 * or specified with a non-empty value and {@code true} otherwise.
 	 * 
 	 * @see "The immediate attribute of the component element of a Component Description."
