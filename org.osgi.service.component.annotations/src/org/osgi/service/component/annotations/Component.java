@@ -86,7 +86,9 @@ public @interface Component {
 	 * the default value. If {@code true}, this Component uses
 	 * {@link ServiceScope#BUNDLE bundle} service scope. If {@code false} or not
 	 * specified, this Component uses {@link ServiceScope#SINGLETON singleton}
-	 * service scope.
+	 * service scope. If the {@link #factory()} element is specified or the
+	 * {@link #immediate()} element is specified with {@code true}, this element
+	 * can only be specified with {@code false}.
 	 * 
 	 * @see "The servicefactory attribute of the service element of a Component Description."
 	 * @deprecated Since 1.3. Replaced by {@link #scope()}.
@@ -207,7 +209,10 @@ public @interface Component {
 	 * <p>
 	 * If not specified and the deprecated {@link #servicefactory()} element is
 	 * not specified, the {@link ServiceScope#SINGLETON singleton} service scope
-	 * is used.
+	 * is used. If the {@link #factory()} element is specified or the
+	 * {@link #immediate()} element is specified with {@code true}, this element
+	 * can only be specified with the {@link ServiceScope#SINGLETON singleton}
+	 * service scope.
 	 * 
 	 * @see "The scope attribute of the service element of a Component Description."
 	 * @since 1.3
