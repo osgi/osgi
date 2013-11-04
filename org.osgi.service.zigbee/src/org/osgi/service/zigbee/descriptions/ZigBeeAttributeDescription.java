@@ -55,7 +55,7 @@ public interface ZigBeeAttributeDescription {
 
 	/**
 	 * @return true if the attribute is read only, false otherwise (i.e. if the
-	 *         attribute is read/write)
+	 *         attribute is read/write or optionnaly writable (R*W))
 	 */
 	public boolean isReadOnly();
 
