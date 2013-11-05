@@ -100,7 +100,7 @@ public interface ZigBeeEndpoint {
 	/**
 	 * @return The IEEE Address of the node containing this endpoint
 	 */
-	public Long getNodeAddress();
+	public long getNodeAddress();
 
 	/**
 	 * @return the node simple descriptor.

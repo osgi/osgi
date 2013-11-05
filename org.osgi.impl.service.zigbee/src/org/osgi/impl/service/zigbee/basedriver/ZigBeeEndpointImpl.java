@@ -34,9 +34,9 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return id;
 	}
 
-	public Long getNodeAddress() {
+	public long getNodeAddress() {
 		// TODO Auto-generated method stub
-		return null;
+		return -1;
 	}
 
 	public ZigBeeSimpleDescriptor getSimpleDescriptor() throws ZigBeeException {
