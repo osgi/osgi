@@ -15,7 +15,7 @@
  */
 
 
-package org.osgi.service.enocean.channels;
+package org.osgi.service.enocean.descriptions;
 
 
 /**

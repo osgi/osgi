@@ -17,7 +17,7 @@
 
 package org.osgi.test.cases.enocean.channels;
 
-import org.osgi.service.enocean.channels.EnOceanChannel;
+import org.osgi.service.enocean.EnOceanChannel;
 import org.osgi.test.cases.enocean.utils.Utils;
 
 public class TemperatureChannel_00 implements EnOceanChannel {

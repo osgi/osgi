@@ -25,7 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Hashtable;
+import java.util.HashMap;
 import java.util.Map;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -33,11 +33,8 @@ import org.osgi.impl.service.enocean.basedriver.EnOceanPacketListener;
 import org.osgi.impl.service.enocean.basedriver.esp.EspPacket;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
-import org.osgi.service.enocean.EnOceanEventConstants;
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanHost;
-import org.osgi.service.enocean.EnOceanMessage;
-import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 
 public class EnOceanHostImpl extends Thread implements EnOceanHost {
@@ -45,6 +42,8 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 	private static final String	TAG						= "EnOceanHostImpl";
 
 	private static final byte	ENOCEAN_ESP_FRAME_START	= 0x55;
+
+	private static final int	MAX_ALLOCATED_CHIP_ID	= 127;
 	private Object				synchronizer;
 	private ArrayList			listeners;
 	private InputStream			inputStream;
@@ -52,17 +51,26 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 	private File				file;
 	private boolean				isRunning;
 	private EventAdmin			eventAdmin;
+	private int					chipId;
+	private int					baseId;
+	private Map					allocatedChipIds;
 
 	private String				streamPath;
 
 	private BundleContext		bc;
 
-	public EnOceanHostImpl(String path, BundleContext bc) throws FileNotFoundException {
+	public EnOceanHostImpl(int chipId, int baseId, String path, BundleContext bc) throws FileNotFoundException {
 		this.bc = bc;
 		this.streamPath = path;
 		listeners = new ArrayList();
 		isRunning = false;
 		synchronizer = new Object();
+		allocatedChipIds = new HashMap();
+
+		/* Init the allocated CHIP ID */
+		this.chipId = chipId;
+		this.baseId = baseId;
+
 
 		/* Get a global eventAdmin handle */
 		ServiceReference ref = bc.getServiceReference(EventAdmin.class.getName());
@@ -109,8 +117,25 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 	}
 
 	public int getChipId(String servicePID) {
-		// TODO Auto-generated method stub
-		return 0;
+		String str = (String) allocatedChipIds.get(servicePID);
+		if (str == null) {
+			return -1;
+		}
+		return Integer.parseInt(str);
+	}
+
+	public void generateChipID(String servicePID) throws ArrayIndexOutOfBoundsException {
+		int chipId = getChipId(servicePID);
+		if (chipId == -1) {
+			// Allocate one
+			if (allocatedChipIds.size() < MAX_ALLOCATED_CHIP_ID) {
+				// FIXME this is quite basic and should be improved
+				chipId = baseId + allocatedChipIds.size();
+				allocatedChipIds.put(servicePID, String.valueOf(chipId));
+			} else {
+				throw new ArrayIndexOutOfBoundsException("No more CHIP_ID can be allocated.");
+			}
+		}
 	}
 
 	/**
@@ -194,20 +219,5 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 		header = Utils.byteConcat(EspPacket.SYNC_BYTE, header);
 		header = Utils.byteConcat(header, (byte) headerCrc);
 		return new EspPacket(header, payload);
-	}
-
-	public void broadcast(EnOceanMessage message) throws EnOceanException, IllegalArgumentException, IOException {
-		outputStream.write(message.serialize());
-		// TODO check that the dongle sends an OK answer
-
-		/* Fire EventAdmin message */
-		Map properties = new Hashtable();
-		properties.put("enocean.senderId", String.valueOf(message.getSenderId()));
-		properties.put("enocean.rorg", String.valueOf(message.getRorg()));
-		properties.put("enocean.func", String.valueOf(message.getFunc()));
-		properties.put("enocean.func", String.valueOf(message.getType()));
-		properties.put("enocean.message", message);
-		Event evt = new Event(EnOceanEventConstants.TOPIC_MSG_RECEIVED, properties);
-		eventAdmin.sendEvent(evt);
 	}
 }

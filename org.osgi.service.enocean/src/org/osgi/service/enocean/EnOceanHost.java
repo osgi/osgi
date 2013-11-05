@@ -17,7 +17,6 @@
 
 package org.osgi.service.enocean;
 
-import java.io.IOException;
 
 
 /**
@@ -97,11 +96,4 @@ public interface EnOceanHost {
 	 * @return the associated CHIP_ID of the exported device.
 	 */
 	public int getChipId(String servicePID) throws EnOceanException;
-
-	/**
-	 * Broadcasts the given message on the EnOcean Network. 
-	 * @param the message to be sent.
-	 */
-	public void broadcast(EnOceanMessage message) throws EnOceanException, IllegalArgumentException, IOException;	
-
 }

@@ -19,5 +19,6 @@ package org.osgi.service.enocean;
 
 public final class EnOceanEventConstants {
 	public static final String TOPIC_MSG_RECEIVED = "org/osgi/service/enocean/EnOceanEvent/MESSAGE_RECEIVED";
+	public static final String TOPIC_MSG_EXPORTED = "org/osgi/service/enocean/EnOceanEvent/MESSAGE_EXPORTED";
 
 }

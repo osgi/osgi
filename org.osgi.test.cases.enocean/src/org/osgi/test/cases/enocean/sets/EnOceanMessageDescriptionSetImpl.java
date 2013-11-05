@@ -19,7 +19,7 @@ package org.osgi.test.cases.enocean.sets;
 
 import java.util.Hashtable;
 import java.util.Map;
-import org.osgi.service.enocean.EnOceanMessageDescription;
+import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
 import org.osgi.service.enocean.sets.EnOceanMessageDescriptionSet;
 
 public class EnOceanMessageDescriptionSetImpl implements EnOceanMessageDescriptionSet {

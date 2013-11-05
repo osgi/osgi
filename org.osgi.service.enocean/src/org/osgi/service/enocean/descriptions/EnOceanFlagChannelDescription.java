@@ -15,33 +15,16 @@
  */
 
 
-package org.osgi.test.cases.enocean.channels;
+package org.osgi.service.enocean.descriptions;
 
-import org.osgi.service.enocean.EnOceanChannel;
-import org.osgi.test.cases.enocean.utils.Utils;
 
-public class TemperatureChannel_01 implements EnOceanChannel {
-
-	private byte	b0;
-
-	public String getChannelId() {
-		return "TMP_01";
-	}
-
-	public void setRawValue(byte[] rawValue) {
-		b0 = rawValue[0];
-	}
-
-	public int getSize() {
-		return 8;
-	}
-
-	public byte[] getRawValue() {
-		return Utils.byteToBytes(b0);
-	}
-
-	public int getOffset() {
-		return 16;
-	}
+/**
+ * Subinterface of {@link EnOceanChannelDescription} that describes boolean channels.
+ * 
+ * @version 1.0
+ * @author Victor Perron <victor.perron@orange.fr>
+ */
+public interface EnOceanFlagChannelDescription extends EnOceanChannelDescription {
+	
 
 }

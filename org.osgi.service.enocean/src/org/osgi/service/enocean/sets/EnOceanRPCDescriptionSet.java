@@ -18,19 +18,20 @@
 package org.osgi.service.enocean.sets;
 
 import org.osgi.service.enocean.EnOceanRPC;
+import org.osgi.service.enocean.descriptions.EnOceanRPCDescription;
 
 
 
 /**
  * This interface represents an EnOcean RPC Set.
- * {@link EnOceanRPCSet} is registered as an OSGi Service.
+ * {@link EnOceanRPCDescriptionSet} is registered as an OSGi Service.
  * Provides a method to retrieve the {@link EnOceanRPC} objects
  * it documents.
  * 
  * @version 1.0
  * @author Victor Perron <victor.perron@orange.fr>
  */
-public interface EnOceanRPCSet {
+public interface EnOceanRPCDescriptionSet {
 
 	/**
 	 * Retrieves a {@link EnOceanRPC} object according to its identifier.
@@ -38,6 +39,6 @@ public interface EnOceanRPCSet {
 	 * @param id the unique string identifier of the description object.
 	 * @return The corresponding {@link EnOceanRPC} object, or null.
 	 */
-	public EnOceanRPC getRPC(short manufacturerId, short commandID) throws IllegalArgumentException;
+	public EnOceanRPCDescription getRPC(short manufacturerId, short commandID) throws IllegalArgumentException;
 
 }

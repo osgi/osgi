@@ -18,43 +18,26 @@
 package org.osgi.service.enocean;
 
 /**
- * An interface to call RPCs on remote devices.
+ * A very basic interface for RPCs. 
  * 
  * @version 1.0
  * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanRPC {
-	
+			
 	/**
-	 * Property name for the manufacturer code of the RPC, mandatory
-	 */
-	public final static String MANUFACTURER_CODE = "enocean.device.rpc.manufacturer_code";
-	
-	/**
-	 * Property name for the function code of the RPC, mandatory
-	 */
-	public final static String FUNCTION_CODE = "enocean.device.rpc.function_code";
-	
-	/**
-	 * Get the sender ID of this RPC.
+	 * Gets the manufacturerID for this RPC.
 	 * 
-	 * @return the sender ID of the RPC
+	 * @return
 	 */
-	public int getSenderId();
+	public int getManufacturerId();
 	
 	/**
-	 * Sets the sender ID of this RPC.
+	 * Gets the functionID for this RPC. 
 	 * 
-	 * @param senderId the sender ID to be set
+	 * @return
 	 */
-	public void setSenderId(int senderId);
-	
-	/**
-	 * Gets the current destination for this RPC.
-	 * 
-	 * @return the destination ID of the RPC
-	 */
-	public int getDestinationId();
+	public int getFunctionId();
 	
 	/**
 	 * Gets the current payload of the RPC.
@@ -64,12 +47,10 @@ public interface EnOceanRPC {
 	public byte[] getPayload();
 	
 	/**
-	 * Invoke the RPC with the specified argument payload.
+	 * Sets the current payload of the RPC.
 	 * 
-	 * @param destinationId the CHIP_ID of the destination device, of 0xFFFFFFFF (broadcast)
-	 * @param payload the byte[] payload for this message;
-	 * @param an optional {@link EnOceanResponseHandler} object.
+	 * @param the payload, in bytes, of this RPC.
 	 */
-	public void invoke(int destinationId, byte[] payload, EnOceanResponseHandler handler) throws EnOceanException;
+	public void setPayload(byte[] data);
 	
 }

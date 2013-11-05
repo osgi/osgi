@@ -1,7 +1,7 @@
 package org.osgi.test.cases.enocean.descriptions;
 
-import org.osgi.service.enocean.EnOceanMessageDescription;
-import org.osgi.service.enocean.channels.EnOceanChannel;
+import org.osgi.service.enocean.EnOceanChannel;
+import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
 import org.osgi.test.cases.enocean.channels.LearnChannel_4BS;
 import org.osgi.test.cases.enocean.channels.TemperatureChannel_00;
 import org.osgi.test.cases.enocean.utils.Utils;

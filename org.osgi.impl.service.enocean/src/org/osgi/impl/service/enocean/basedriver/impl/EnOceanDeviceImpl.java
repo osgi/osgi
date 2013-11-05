@@ -6,8 +6,9 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanException;
+import org.osgi.service.enocean.EnOceanHandler;
 import org.osgi.service.enocean.EnOceanMessage;
-import org.osgi.service.enocean.EnOceanResponseHandler;
+import org.osgi.service.enocean.EnOceanRPC;
 
 public class EnOceanDeviceImpl implements EnOceanDevice {
 
@@ -87,7 +88,7 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		return null;
 	}
 
-	public void send(EnOceanMessage message, EnOceanResponseHandler handler) throws EnOceanException {
+	public void send(EnOceanMessage message, EnOceanHandler handler) throws EnOceanException {
 		// TODO Auto-generated method stub
 	}
 
@@ -174,6 +175,11 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		} catch (Exception e) {
 			return -1;
 		}
+	}
+
+	public void invoke(EnOceanRPC rpc, EnOceanHandler handler) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+
 	}
 	
 }

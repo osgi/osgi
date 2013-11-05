@@ -17,19 +17,32 @@
 
 package org.osgi.service.enocean;
 
-import org.osgi.service.enocean.channels.EnOceanChannel;
-
-public interface EnOceanMessageDescription {
-
+/**
+ * This transitional interface is used to define all the possible values taken by an enumerated channel.
+ * 
+ * @version 1.0
+ * @author Victor Perron <victor.perron@orange.fr>
+ */
+public interface EnOceanChannelEnumValue {
 	
 	/**
-	 * Deserializes an array of bytes into the EnOceanChannels available to the payload, if possible.
-	 * If the actual instance type of the message is not compatible with the bytes
-	 * it is fed with (RORG to begin with), throw an IllegalArgumentException.
+	 * The start value of the enumeration.
 	 * 
-	 * @throws EnOceanException
+	 * @return the start value.
 	 */
-	public EnOceanChannel[] deserialize(byte[] bytes) throws EnOceanException, EnOceanException;
-
+	public int getStart();
+	
+	/**
+	 * The stop value of the enumeration.
+	 * 
+	 * @return the stop value.
+	 */
+	public int getStop();
+	
+	/**
+	 * A non-mandatory description of what this enumerated value is about.
+	 * @return the english description of this channel.
+	 */
+	public String getDescription();
 
 }

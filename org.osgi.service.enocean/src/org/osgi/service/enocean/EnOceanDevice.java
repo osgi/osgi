@@ -69,16 +69,6 @@ public interface EnOceanDevice {
 	public static final String	ENOCEAN_EXPORT	= "enocean.device.export";
 	
 	/**
-	 * Sends a message to the device. Supposes that the device is a receiver.
-	 * 
-	 * @param the {@link EnOceanMessage} to be sent.
-	 * @param the {@EnOceanResponseHandler} object to get an eventual answer.
-	 * @throws EnOceanException
-	 */
-	public void send(EnOceanMessage message, EnOceanResponseHandler handler) throws EnOceanException, EnOceanException;
-
-
-	/**
 	 * Switches the device into learning mode.
 	 * 
 	 * @param learnMode the desired state: true for learning mode, false to disable it.
@@ -134,5 +124,13 @@ public interface EnOceanDevice {
 	 * @return A list of the available RPCs, in a Map<Integer, Integer[]> form.
 	 */
 	public Map getRPCs();
+	
+	/**
+	 * Sends an RPC to the remote device. 
+	 * 
+	 * @param rpc
+	 * @param handler
+	 */
+	public void invoke(EnOceanRPC rpc, EnOceanHandler handler) throws IllegalArgumentException;
 	
 }

@@ -19,7 +19,8 @@ package org.osgi.test.cases.enocean.devices;
 
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanMessage;
-import org.osgi.service.enocean.EnOceanResponseHandler;
+import org.osgi.service.enocean.EnOceanRPC;
+import org.osgi.service.enocean.EnOceanHandler;
 
 
 public class TemperatureSensingDevice extends EnOceanDeviceImpl {
@@ -31,12 +32,17 @@ public class TemperatureSensingDevice extends EnOceanDeviceImpl {
 		learnMode = false;
 	}
 
-	public void send(byte[] message, EnOceanResponseHandler handler) throws EnOceanException, EnOceanException {
+	public void send(byte[] message, EnOceanHandler handler) throws EnOceanException, EnOceanException {
 		// TODO
 	}
 
-	public void send(EnOceanMessage message, EnOceanResponseHandler handler) throws EnOceanException, EnOceanException {
+	public void send(EnOceanMessage message, EnOceanHandler handler) throws EnOceanException, EnOceanException {
 		send(message.serialize(), handler);
+	}
+
+	public void invoke(EnOceanRPC rpc, EnOceanHandler handler) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+
 	}
 
 }

@@ -17,8 +17,8 @@
 
 package org.osgi.test.cases.enocean.descriptions;
 
-import org.osgi.service.enocean.channels.EnOceanChannelDescription;
-import org.osgi.service.enocean.channels.EnOceanDataChannelDescription;
+import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
+import org.osgi.service.enocean.descriptions.EnOceanDataChannelDescription;
 
 public class EnOceanChannelDescription_TMP_00 implements EnOceanDataChannelDescription {
 

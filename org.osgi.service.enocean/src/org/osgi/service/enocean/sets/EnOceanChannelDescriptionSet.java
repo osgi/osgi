@@ -17,7 +17,7 @@
 
 package org.osgi.service.enocean.sets;
 
-import org.osgi.service.enocean.channels.EnOceanChannelDescription;
+import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
 
 
 /**

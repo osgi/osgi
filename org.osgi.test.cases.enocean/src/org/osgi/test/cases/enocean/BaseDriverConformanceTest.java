@@ -10,12 +10,14 @@ import java.util.Map;
 import java.util.Properties;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.enocean.EnOceanChannel;
 import org.osgi.service.enocean.EnOceanDevice;
+import org.osgi.service.enocean.EnOceanEventConstants;
+import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.service.enocean.EnOceanMessage;
-import org.osgi.service.enocean.EnOceanMessageDescription;
-import org.osgi.service.enocean.channels.EnOceanChannel;
-import org.osgi.service.enocean.channels.EnOceanChannelDescription;
-import org.osgi.service.enocean.channels.EnOceanDataChannelDescription;
+import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
+import org.osgi.service.enocean.descriptions.EnOceanDataChannelDescription;
+import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.test.cases.enocean.descriptions.EnOceanChannelDescription_TMP_00;
@@ -246,30 +248,32 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		props.put(EnOceanDevice.MANUFACTURER, Fixtures.STR_MANUFACTURER);
 		registerService(EnOceanDevice.class.getName(), device, props);
 
+		/* Wait for the proper and full registration */
 		lastServiceEvent = devices.waitForService();
 		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
 
 		/*
-		 * NOTE: The service should have been modified AFTER insertion,
-		 * nevertheless it seems that when registration and modification happen
-		 * almost in the same time, OSGi only generates a single SERVICE_ADDED
-		 * event.
+		 *  Get CHIP_ID attributed by the driver from the given service PID.
 		 */
-		log("Device service event happened : " + lastServiceEvent);
-		ServiceReference ref = devices.getServiceReference();
-
-		assertEquals("SERVICE_PID mismatch", Fixtures.DEVICE_PID, ref.getProperty(Constants.SERVICE_PID));
-		assertEquals("RORG mismatch", Fixtures.STR_RORG, ref.getProperty(EnOceanDevice.RORG));
-		assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
-		assertEquals("TYPE mismatch", Fixtures.STR_TYPE_1, ref.getProperty(EnOceanDevice.TYPE));
-		assertEquals("MANUFACTURER mismatch", Fixtures.STR_MANUFACTURER, ref.getProperty(EnOceanDevice.MANUFACTURER));
-		// TODO check that the BaseDriver correctly set some chip ID based on
-		// EnOceanHosts's BASE_ID
-
+		ServiceReference hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
+		EnOceanHost defaultHost = (EnOceanHost) getContext().getService(hostRef);
+		int dynamicChipId = defaultHost.getChipId(Fixtures.DEVICE_PID);
+		log("CHIPID : " + dynamicChipId);
+		// TODO: check it somehow ?
+		
 		/*
 		 * Now that we have gotten the device registered and all, we are able to
-		 * try and make it send data.
+		 * try and make it send data, via EventAdmin broadcast.
 		 */
+		Map properties = new Hashtable();
+		EnOceanMessage msg = new MessageA5_02_01(Fixtures.TEMPERATURE);
+		properties.put("enocean.servicePid", Fixtures.DEVICE_PID);
+		properties.put("enocean.rorg", Fixtures.STR_RORG);
+		properties.put("enocean.func", Fixtures.STR_FUNC);
+		properties.put("enocean.func", Fixtures.STR_TYPE_1);
+		properties.put("enocean.message", msg);
+		Event evt = new Event(EnOceanEventConstants.TOPIC_MSG_EXPORTED, properties);
+		eventAdmin.sendEvent(evt);
 
 	}
 
@@ -287,7 +291,6 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		outStream.write(pkt.serialize());
 
 		lastServiceEvent = devices.waitForService();
-		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
 
 		/*
 		 * NOTE: The service should have been modified AFTER insertion,
@@ -302,6 +305,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		 * properties
 		 */
 		ServiceReference ref = devices.getServiceReference();
+
 		assertEquals("CHIP_ID mismatch", Fixtures.STR_HOST_ID, ref.getProperty(EnOceanDevice.CHIP_ID));
 		assertEquals("RORG mismatch", Fixtures.STR_RORG, ref.getProperty(EnOceanDevice.RORG));
 		assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
@@ -355,8 +359,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 
 		Event event = events.waitForEvent();
 
-		assertEquals("topic mismatch", Fixtures.SELF_TEST_EVENT_TOPIC, event.getTopic());
-
+		assertEquals("topic mismatch", EnOceanEventConstants.TOPIC_MSG_RECEIVED, event.getTopic());
 		assertEquals("senderId mismatch", Fixtures.STR_HOST_ID, event.getProperty("enocean.senderId"));
 		assertEquals("rorg mismatch", Fixtures.STR_RORG, event.getProperty("enocean.rorg"));
 		assertEquals("func mismatch", Fixtures.STR_FUNC, event.getProperty("enocean.func"));

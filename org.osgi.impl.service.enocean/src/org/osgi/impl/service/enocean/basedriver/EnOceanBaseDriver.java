@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Properties;
 // import javax.comm.CommPortIdentifier;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -20,7 +21,7 @@ import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.sets.EnOceanChannelDescriptionSet;
-import org.osgi.service.enocean.sets.EnOceanRPCSet;
+import org.osgi.service.enocean.sets.EnOceanRPCDescriptionSet;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
@@ -42,7 +43,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	 * The {@link EnOceanBaseDriver} constructor initiates the connection
 	 * towards an {@link EnOceanHostImpl} device. Then it registers itself as
 	 * a service listener for any {@link EnOceanDevice},
-	 * {@link EnOceanMessageSet}, {@link EnOceanRPCSet},
+	 * {@link EnOceanMessageSet}, {@link EnOceanRPCDescriptionSet},
 	 * {@link EnOceanChannelDescriptionSet} that would be registered in the
 	 * framework.
 	 * 
@@ -55,9 +56,11 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 
 		/* Register initial EnOceanHost */
 		String hostPath = System.getProperty("org.osgi.service.enocean.host.path");
+		int baseId = Integer.valueOf(System.getProperty("org.osgi.service.enocean.host.base_id")).intValue();
+		int chipId = Integer.valueOf(System.getProperty("org.osgi.service.enocean.host.chip_id")).intValue();
 		if (hostPath != null && hostPath != "") {
 			try {
-				initialHost = new EnOceanHostImpl(hostPath, bc);
+				initialHost = new EnOceanHostImpl(chipId, baseId, hostPath, bc);
 				registerHost(hostPath, initialHost);
 				initialHost.addPacketListener(this);
 			} catch (EnOceanDriverException e) {
@@ -127,25 +130,25 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 			return null;
 		} else {
 			if (service instanceof EnOceanDevice) {
+				String servicePid = (String) ref.getProperty(Constants.SERVICE_PID);
 				String chipId = (String) ref.getProperty(EnOceanDevice.CHIP_ID);
-				/*
-				 * TODO: Pay attention, seems that if some of those properties
-				 * are absent, it makes the driver silently crash ???
-				 * 
-				 * 
-				 * String servicePid = (String)
-				 * ref.getProperty(Constants.SERVICE_PID); String hasExport =
-				 * (String) ref.getProperty(EnOceanDevice.ENOCEAN_EXPORT); if
-				 * (chipId == null && hasExport != null) {
-				 * 
-				 * // TODO: Implement the logic behind to associate the thing //
-				 * with an EnOceanHost
-				 * 
-				 * } System.out.println("CHIPID ::: " + chipId);
-				 * eoDevices.put(servicePid, ref);
-				 */
-				eoDevices.put(chipId, ref);
-				Logger.d(TAG, "EnOceanDevice service registered : " + chipId);
+				Object hasExport = ref.getProperty(EnOceanDevice.ENOCEAN_EXPORT);
+				if (servicePid == null) {
+					if (chipId == null) {
+						throw new IllegalStateException();
+					}
+					servicePid = chipId;
+				}
+
+				try {
+					if (chipId == null && hasExport != null) {
+						initialHost.generateChipID(servicePid);
+					}					
+				} catch (Exception e) {
+					System.out.println("There has been an exception");
+				}
+				eoDevices.put(servicePid, ref);
+				Logger.d(TAG, "EnOceanDevice service registered : " + servicePid);
 			}
 			return service;
 		}

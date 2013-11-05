@@ -17,7 +17,7 @@
 
 package org.osgi.test.cases.enocean.channels;
 
-import org.osgi.service.enocean.channels.EnOceanChannel;
+import org.osgi.service.enocean.EnOceanChannel;
 
 public class LearnChannel_4BS implements EnOceanChannel {
 
