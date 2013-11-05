@@ -854,7 +854,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		return null;
 	}
 
-	private InputStream getBundleContent(String tag, String namedBundle) {
+	protected InputStream getBundleContent(String tag, String namedBundle) {
 		URL url = getContext().getBundle().getEntry(namedBundle);
 		if (url == null)
 			fail("Could not locate test bundle '" + namedBundle + "': " + tag);

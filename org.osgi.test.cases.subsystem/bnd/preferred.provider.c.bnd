@@ -1,0 +1,2 @@
+Bundle-SymbolicName: preferred.provider.c
+Import-Package: foo,bar

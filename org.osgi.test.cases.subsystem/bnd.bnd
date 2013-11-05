@@ -6,7 +6,8 @@ Bundle-Description: Test Bundle for subsystem tests
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
 	${p}.junit.*, \
-	${p}.resource
+	${p}.resource, \
+	${p}.util
 Import-Package: ${-signaturetest}, *
 
 Include-Resource					= \
@@ -29,7 +30,28 @@ Include-Resource					= \
 	share.h@1.0.0.jar, \
 	share.i@1.0.0.jar, \
 	share.j@1.0.0.jar, \
-	share.k@1.0.0.jar
+	share.k@1.0.0.jar, \
+	app.service.dep.a.jar, \
+	app.service.dep.b.jar, \
+	app.service.dep.c.jar, \
+	app.service.dep.d.jar, \
+	app.service.dep.e.jar, \
+	app.service.dep.f.jar, \
+	app.service.dep.g.jar, \
+	app.service.dep.h.jar, \
+	app.service.dep.i.jar, \
+	app.service.dep.j.jar, \
+	app.service.dep.k.jar, \
+	weaving.a.jar, \
+	weaving.aa.jar, \
+	weaving.b.jar, \
+	weaving.c.jar, \
+	deployment.manifest.a.jar, \
+	deployment.headers.a.jar, \
+	deployment.headers.b.jar, \
+	preferred.provider.a.jar, \
+	preferred.provider.b.jar, \
+	preferred.provider.c.jar
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.subsystem
