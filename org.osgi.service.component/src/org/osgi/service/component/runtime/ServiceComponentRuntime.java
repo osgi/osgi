@@ -65,7 +65,7 @@ public interface ServiceComponentRuntime {
 	 *         {@code bundles}. An empty collection is returned if there are no
 	 *         component descriptions for the specified active bundles.
 	 */
-	Collection<ComponentDescriptionDTO> getComponentDescriptions(Bundle... bundles);
+	Collection<ComponentDescriptionDTO> getComponentDescriptionDTOs(Bundle... bundles);
 
 	/**
 	 * Returns the {@link ComponentDescriptionDTO} declared with the specified name
@@ -84,7 +84,7 @@ public interface ServiceComponentRuntime {
 	 *         specified bundle is not active or does not declare a component
 	 *         description with the specified name.
 	 */
-	ComponentDescriptionDTO getComponentDescription(Bundle bundle, String name);
+	ComponentDescriptionDTO getComponentDescriptionDTO(Bundle bundle, String name);
 
 	/**
 	 * Returns the component configurations for the specified component
@@ -95,7 +95,7 @@ public interface ServiceComponentRuntime {
 	 *         configurations for the specified component description. An empty
 	 *         collection is returned if there are none.
 	 */
-	Collection<ComponentConfigurationDTO> getComponentConfigurations(ComponentDescriptionDTO description);
+	Collection<ComponentConfigurationDTO> getComponentConfigurationDTOs(ComponentDescriptionDTO description);
 
 	/**
 	 * Returns whether the specified component description is currently enabled.
