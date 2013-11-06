@@ -1,0 +1,16 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd	
+
+Bundle-Activator: org.osgi.impl.service.resourcemanagement.fakemonitors.Activator
+Bundle-Description: Fake Monitors
+
+
+Private-Package 			= ${p}.*
+
+-buildpath: osgi.core;version=4.3,\
+	osgi.cmpn;version=4.2,\
+	ee.j2se,\
+	org.osgi.service.resourcemanagement;version=latest,\
+	org.osgi.impl.service.resourcemanagement.jmxmemorymonitor;version=latest,\
+	org.osgi.impl.service.resourcemanagement.util;version=latest
+Bundle-Version: 1.0.0
