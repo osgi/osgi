@@ -7,4 +7,13 @@ package org.osgi.service.resourcemanagement;
  */
 public class ResourceMonitorException extends Exception {
 
+	/**
+	 * Create a new ResourceMonitorException
+	 * 
+	 * @param msg message
+	 */
+	public ResourceMonitorException(String msg) {
+		super(msg);
+	}
+
 }

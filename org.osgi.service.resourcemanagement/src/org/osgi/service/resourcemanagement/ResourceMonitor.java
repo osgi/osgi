@@ -80,7 +80,6 @@ public interface ResourceMonitor {
 	 */
 	public boolean isDeleted();
 
-
 	/**
 	 * Enable the monitoring of this resource type for the resource context
 	 * associated with this monitor instance. This method SHOULD also update the
@@ -135,6 +134,22 @@ public interface ResourceMonitor {
 	 *         monitored period is not relevant for this resource type.
 	 */
 	public long getMonitoredPeriod();
+
+	/**
+	 * Reports thread t is now attached to the {@link ResourceContext}
+	 * associated to this monitor.
+	 * 
+	 * @param t the newly attached thread
+	 */
+	public void notifyIncomingThread(Thread t);
+
+	/**
+	 * Reports thread t is leaving the {@link ResourceContext} associated with
+	 * this monitor.
+	 * 
+	 * @param t leaving thread
+	 */
+	public void notifyOutgoingThread(Thread t);
 
 	/**
 	 * Checks if resourceMonitor is equals to the current instance. A

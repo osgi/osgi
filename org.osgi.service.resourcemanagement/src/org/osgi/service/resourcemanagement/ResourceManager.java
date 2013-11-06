@@ -145,10 +145,14 @@ public interface ResourceManager {
 	 * <p>
 	 * To remove the explicit resource context association for the current, call
 	 * this method with a <code>null</code> parameter.
+	 * </p>
+	 * <p>
+	 * This method automatically notifies all {@link ResourceMonitor} of the
+	 * leaving {@link ResourceContext} as well as all {@link ResourceMonitor} of
+	 * the incoming {@link ResourceContext} about this swich context operation.
 	 * 
-	 * @param context
-	 *            The {@link ResourceContext} to associate the current threat
-	 *            with, or null to remove an explicit association.
+	 * @param context The {@link ResourceContext} to associate the current
+	 *        threat with, or null to remove an explicit association.
 	 * @return The {@link ResourceContext} that this thread was previously
 	 *         explicitly associated with, or <code>null</code> if there was no
 	 *         such association.
