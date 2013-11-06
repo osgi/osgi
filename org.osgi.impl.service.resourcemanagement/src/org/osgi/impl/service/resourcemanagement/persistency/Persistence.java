@@ -1,0 +1,45 @@
+package org.osgi.impl.service.resourcemanagement.persistency;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.service.resourcemanagement.ResourceContext;
+import org.osgi.service.resourcemanagement.ResourceManager;
+
+public interface Persistence {
+
+	/**
+	 * Store in the context file the provided resource contexts.
+	 * <p>
+	 * Persistence policies:
+	 * <ul>
+	 * <li>All contexts are persisted including the
+	 * {@link ResourceManager#SYSTEM_CONTEXT_NAME} Resource Context and the
+	 * {@link ResourceManager#FRAMEWORK_CONTEXT_NAME} Resource Context</li>
+	 * <li>For each context, the following fields are persisted:
+	 * <ul>
+	 * <li>the Resource Context name.</li>
+	 * <li>the bundle ids associated to the context</li>
+	 * </ul>
+	 * <li>this method should be called when the Resource Manager is stopping.</li>
+	 * </ul>
+	 * 
+	 * </p>
+	 * 
+	 * @param bundleContext
+	 *            bundle context to be used to get a file in the private storage
+	 *            area of the ResourceManager bundle.
+	 * 
+	 * @param resourceContexts
+	 *            resource contexts to be persisted.
+	 */
+	void persist(BundleContext bundleContext,
+ ResourceContext[] resourceContexts);
+
+	/**
+	 * Load from the context file the persisted resource context.
+	 * 
+	 * @param context
+	 *            the bundle context to be used to load the persisted file.
+	 * @return persisted resource context
+	 */
+	ResourceContextInfo[] load(BundleContext context);
+}

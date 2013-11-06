@@ -1,0 +1,15 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd	
+
+Bundle-Activator			= org.osgi.impl.service.resourcemanagement.Activator
+Bundle-Description			= Template for a Reference Implementation.
+
+Export-Service				= org.osgi.service.resourcemanagement.ResourceManager
+
+Private-Package 			= ${p}.*
+
+-buildpath: osgi.core;version=4.3,\
+	org.osgi.service.resourcemanagement;version=latest,\
+	ee.j2se;version=latest,\
+	osgi
+Bundle-Version: 1.0.0
