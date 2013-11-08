@@ -76,4 +76,12 @@ public interface ZigBeeEventListener {
 	 */
 	public void onFailure(ZigBeeException e);
 
+	/**
+	 * TIMEOUT_PERIOD is sent from the attribute owner to the listening client
+	 * to say that the interval between reports may exceed MAX_INTERVAL.
+	 * 
+	 * @param timeout in seconds
+	 */
+	public void notifyTimeOut(int timeout);
+
 }

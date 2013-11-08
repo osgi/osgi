@@ -16,7 +16,10 @@ public class ZigBeeEventListenerImpl implements ZigBeeEventListener {
 
 	public void onFailure(ZigBeeException e) {
 		// TODO Auto-generated method stub
+	}
 
+	public void notifyTimeOut(int timeout) {
+		// TODO Auto-generated method stub
 	}
 
 }

@@ -56,4 +56,8 @@ public class ZigBeeEventListenerImpl implements ZigBeeEventListener {
 		// TODO Auto-generated method stub
 	}
 
+	public void notifyTimeOut(int timeout) {
+		// TODO Auto-generated method stub
+	}
+
 }
