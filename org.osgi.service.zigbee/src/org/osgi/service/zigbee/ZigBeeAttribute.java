@@ -55,7 +55,9 @@ public interface ZigBeeAttribute {
 	public void setValue(Object value, ZigBeeAttributesHandler handler) throws ZigBeeException;
 
 	/**
-	 * @return the Attribute data type
+	 * @return the Attribute data type. It may be null if the data type is not
+	 *         retrievable (issue with read attribute and discover attributes
+	 *         commands).
 	 */
 	public ZigBeeDataTypeDescription getDataType();
 
