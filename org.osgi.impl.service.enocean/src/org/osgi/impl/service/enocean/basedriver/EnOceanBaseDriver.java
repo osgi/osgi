@@ -189,11 +189,11 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	private void broadcastToEventAdmin(EnOceanMessage eoMsg) {
 		if (eventAdmin != null) {
 			Map properties = new Hashtable();
-			properties.put("enocean.senderId", String.valueOf(eoMsg.getSenderId()));
-			properties.put("enocean.rorg", String.valueOf(eoMsg.getRorg()));
-			properties.put("enocean.func", String.valueOf(eoMsg.getFunc()));
-			properties.put("enocean.type", String.valueOf(eoMsg.getType()));
-			properties.put("enocean.message", eoMsg);
+			properties.put(EnOceanDevice.CHIP_ID, String.valueOf(eoMsg.getSenderId()));
+			properties.put(EnOceanDevice.RORG, String.valueOf(eoMsg.getRorg()));
+			properties.put(EnOceanDevice.FUNC, String.valueOf(eoMsg.getFunc()));
+			properties.put(EnOceanDevice.TYPE, String.valueOf(eoMsg.getType()));
+			properties.put(EnOceanEvent.PROPERTY_MESSAGE, eoMsg);
 
 			Event event = new Event("org/osgi/service/enocean/EnOceanEvent/MESSAGE_RECEIVED", properties);
 			eventAdmin.sendEvent(event);

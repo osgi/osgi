@@ -1,7 +1,7 @@
 
 package org.osgi.test.cases.enocean;
 
-import org.osgi.service.enocean.EnOceanEventConstants;
+import org.osgi.service.enocean.EnOceanEvent;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
 
 public final class Fixtures {
@@ -20,8 +20,7 @@ public final class Fixtures {
 	public static final String	STR_TYPE_1				= String.valueOf(TYPE_1);
 	public static final String	STR_TYPE_2				= String.valueOf(TYPE_2);
 
-	public static final String	SELF_TEST_EVENT_TOPIC	= EnOceanEventConstants.TOPIC_MSG_RECEIVED;
-	public static final String	SELF_TEST_EXPORT_TOPIC	= EnOceanEventConstants.TOPIC_MSG_EXPORTED;
+	public static final String	SELF_TEST_EVENT_TOPIC	= EnOceanEvent.TOPIC_MSG_RECEIVED;
 	public static final String	SELF_TEST_EVENT_KEY		= "degrees";
 	public static final String	SELF_TEST_EVENT_VALUE	= "33.04°F";
 

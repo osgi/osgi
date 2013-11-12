@@ -10,9 +10,10 @@ import java.util.Map;
 import java.util.Properties;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.enocean.EnOceanChannel;
 import org.osgi.service.enocean.EnOceanDevice;
-import org.osgi.service.enocean.EnOceanEventConstants;
+import org.osgi.service.enocean.EnOceanEvent;
 import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
@@ -246,7 +247,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		props.put(EnOceanDevice.FUNC, Fixtures.STR_FUNC);
 		props.put(EnOceanDevice.TYPE, Fixtures.STR_TYPE_1);
 		props.put(EnOceanDevice.MANUFACTURER, Fixtures.STR_MANUFACTURER);
-		registerService(EnOceanDevice.class.getName(), device, props);
+		ServiceRegistration sReg = getContext().registerService(EnOceanDevice.class.getName(), device, props);
 
 		/* Wait for the proper and full registration */
 		lastServiceEvent = devices.waitForService();
@@ -267,14 +268,17 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		 */
 		Map properties = new Hashtable();
 		EnOceanMessage msg = new MessageA5_02_01(Fixtures.TEMPERATURE);
-		properties.put("enocean.servicePid", Fixtures.DEVICE_PID);
-		properties.put("enocean.rorg", Fixtures.STR_RORG);
-		properties.put("enocean.func", Fixtures.STR_FUNC);
-		properties.put("enocean.func", Fixtures.STR_TYPE_1);
-		properties.put("enocean.message", msg);
-		Event evt = new Event(EnOceanEventConstants.TOPIC_MSG_EXPORTED, properties);
+		properties.put(Constants.SERVICE_PID, Fixtures.DEVICE_PID);
+		properties.put(EnOceanDevice.RORG, Fixtures.STR_RORG);
+		properties.put(EnOceanDevice.FUNC, Fixtures.STR_FUNC);
+		properties.put(EnOceanDevice.TYPE, Fixtures.STR_TYPE_1);
+		properties.put(EnOceanEvent.PROPERTY_EXPORTED, "1");
+		properties.put(EnOceanEvent.PROPERTY_MESSAGE, msg);
+		Event evt = new Event(EnOceanEvent.TOPIC_MSG_RECEIVED, properties);
 		eventAdmin.sendEvent(evt);
 
+		// Needed not to mess with further tests
+		sReg.unregister();
 	}
 
 
@@ -298,14 +302,14 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		 * almost in the same time, OSGi only generates a single SERVICE_ADDED
 		 * event.
 		 */
-		log("Device service event happened : " + lastServiceEvent);
+		ServiceReference ref = devices.getServiceReference();
+		String s = getContext().getService(ref).getClass().getName();
+		log("Device service event happened : " + lastServiceEvent + " : " + s);
 
 		/*
 		 * Verify that the device has been registered with the correct service
 		 * properties
 		 */
-		ServiceReference ref = devices.getServiceReference();
-
 		assertEquals("CHIP_ID mismatch", Fixtures.STR_HOST_ID, ref.getProperty(EnOceanDevice.CHIP_ID));
 		assertEquals("RORG mismatch", Fixtures.STR_RORG, ref.getProperty(EnOceanDevice.RORG));
 		assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
@@ -359,13 +363,13 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 
 		Event event = events.waitForEvent();
 
-		assertEquals("topic mismatch", EnOceanEventConstants.TOPIC_MSG_RECEIVED, event.getTopic());
-		assertEquals("senderId mismatch", Fixtures.STR_HOST_ID, event.getProperty("enocean.senderId"));
-		assertEquals("rorg mismatch", Fixtures.STR_RORG, event.getProperty("enocean.rorg"));
-		assertEquals("func mismatch", Fixtures.STR_FUNC, event.getProperty("enocean.func"));
-		assertEquals("type mismatch", Fixtures.STR_TYPE_1, event.getProperty("enocean.type"));
+		assertEquals("topic mismatch", EnOceanEvent.TOPIC_MSG_RECEIVED, event.getTopic());
+		assertEquals("senderId mismatch", Fixtures.STR_HOST_ID, event.getProperty(EnOceanDevice.CHIP_ID));
+		assertEquals("rorg mismatch", Fixtures.STR_RORG, event.getProperty(EnOceanDevice.RORG));
+		assertEquals("func mismatch", Fixtures.STR_FUNC, event.getProperty(EnOceanDevice.FUNC));
+		assertEquals("type mismatch", Fixtures.STR_TYPE_1, event.getProperty(EnOceanDevice.TYPE));
 
-		EnOceanMessage msg = (EnOceanMessage) event.getProperty("enocean.message");
+		EnOceanMessage msg = (EnOceanMessage) event.getProperty(EnOceanEvent.PROPERTY_MESSAGE);
 		assertNotNull(msg);
 		EnOceanMessageDescription description = new EnOceanMessageDescription_A5_02_01();
 		EnOceanChannel[] channels = description.deserialize(msg.getPayloadBytes());
