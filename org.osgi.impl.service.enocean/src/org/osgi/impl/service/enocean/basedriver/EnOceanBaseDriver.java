@@ -214,6 +214,10 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		return sr;
 	}
 
+	public void send(byte[] data) {
+		initialHost.send(data);
+	}
+
 	private void broadcastToEventAdmin(EnOceanMessage eoMsg) {
 		if (eventAdmin != null) {
 			Map properties = new Hashtable();
@@ -251,7 +255,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	}
 
 	private void registerDevice(int senderId, int rorg, int func, int type, int manuf) {
-		EnOceanDeviceImpl device = new EnOceanDeviceImpl(bc, senderId);
+		EnOceanDeviceImpl device = new EnOceanDeviceImpl(bc, this, senderId);
 		device.registerProfile(rorg, func, type, manuf);
 	}
 

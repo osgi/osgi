@@ -17,6 +17,8 @@
 
 package org.osgi.impl.service.enocean.basedriver.radio;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanMessage;
 
@@ -27,6 +29,7 @@ public abstract class Message implements EnOceanMessage {
 	public static final byte	MESSAGE_RPS	= (byte) 0xF6;
 	public static final byte	MESSAGE_1BS	= (byte) 0xD5;
 	public static final byte	MESSAGE_VLD	= (byte) 0xD2;
+	public static final byte	MESSAGE_SYS_EX	= (byte) 0xC5;
 
 	private byte	RORG;
 	private byte[]	data;
@@ -40,6 +43,9 @@ public abstract class Message implements EnOceanMessage {
 	private byte			type;
 
 	private byte[]			messageBytes;
+
+	public Message() {
+	}
 
 	public Message(byte[] data) {
 		this.messageBytes = data;
@@ -152,6 +158,12 @@ public abstract class Message implements EnOceanMessage {
 
 	public byte[] getPayloadBytes() {
 		return data;
+	}
+
+	public List getTelegrams() {
+		List list = new ArrayList();
+		list.add(serialize());
+		return list;
 	}
 
 	public abstract boolean isTeachin();

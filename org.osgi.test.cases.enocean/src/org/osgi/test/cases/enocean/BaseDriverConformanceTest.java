@@ -15,6 +15,7 @@ import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanEvent;
 import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.service.enocean.EnOceanMessage;
+import org.osgi.service.enocean.EnOceanRPC;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
 import org.osgi.service.enocean.descriptions.EnOceanDataChannelDescription;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
@@ -23,6 +24,7 @@ import org.osgi.service.event.EventAdmin;
 import org.osgi.test.cases.enocean.descriptions.EnOceanChannelDescription_TMP_00;
 import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescription_A5_02_01;
 import org.osgi.test.cases.enocean.messages.MessageA5_02_01;
+import org.osgi.test.cases.enocean.rpc.QueryFunction;
 import org.osgi.test.cases.enocean.serial.EspPacket;
 import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.sets.EnOceanChannelDescriptionSetImpl;
@@ -45,6 +47,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 	private EventAdmin	eventAdmin;
 	private EnOceanMessageDescriptionSetImpl	msgDescriptionSet;
 	private EnOceanChannelDescriptionSetImpl	channelDescriptionSet;
+	private ServiceReference					eventAdminRef;
 
 	protected void setUp() throws Exception {
 		String fakeDriverPath = System.getProperty("org.osgi.service.enocean.host.path");
@@ -63,8 +66,8 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		events = new EventListener(getContext(), topics, null);
 
 		/* Get a global eventAdmin handle */
-		ServiceReference ref = getContext().getServiceReference(EventAdmin.class.getName());
-		eventAdmin = (EventAdmin) getContext().getService(ref);
+		eventAdminRef = getContext().getServiceReference(EventAdmin.class.getName());
+		eventAdmin = (EventAdmin) getContext().getService(eventAdminRef);
 
 		/* Inserts some message documentation classes */
 		msgDescriptionSet = new EnOceanMessageDescriptionSetImpl();
@@ -77,6 +80,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 	protected void tearDown() throws Exception {
 		devices.close();
 		events.close();
+		getContext().ungetService(eventAdminRef);
 		cleanupServices();
 	}
 
@@ -276,6 +280,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 
 		// Needed not to mess with further tests
 		sReg.unregister();
+		getContext().ungetService(hostRef);
 	}
 	
 	/**
@@ -310,8 +315,30 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		assertEquals(originalChipId, newChipId);
 
 		sReg.unregister();
+		getContext().ungetService(hostRef);
 	}
 
+	/**
+	 * Tests RPC sending and receiving.
+	 * 
+	 * @throws Exception
+	 */
+	public void testRPC() throws Exception {
+
+		/* Insert a device */
+		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
+		EspRadioPacket pkt = new EspRadioPacket(teachIn);
+		outStream.write(pkt.serialize());
+		lastServiceEvent = devices.waitForService();
+
+		ServiceReference ref = devices.getServiceReference();
+		EnOceanDevice device = (EnOceanDevice) getContext().getService(ref);
+
+		EnOceanRPC rpc = new QueryFunction();
+		device.invoke(rpc, null);
+
+		getContext().ungetService(ref);
+	}
 
 	/**
 	 * Tests initial device registration from a raw Radio teach-in packet.
@@ -334,8 +361,6 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		 * event.
 		 */
 		ServiceReference ref = devices.getServiceReference();
-		String s = getContext().getService(ref).getClass().getName();
-		log("Device service event happened : " + lastServiceEvent + " : " + s);
 
 		/*
 		 * Verify that the device has been registered with the correct service
@@ -346,6 +371,8 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
 		assertEquals("TYPE mismatch", Fixtures.STR_TYPE_1, ref.getProperty(EnOceanDevice.TYPE));
 		assertEquals("MANUFACTURER mismatch", Fixtures.STR_MANUFACTURER, ref.getProperty(EnOceanDevice.MANUFACTURER));
+
+		getContext().ungetService(ref);
 	}
 
 	/**

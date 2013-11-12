@@ -110,6 +110,13 @@ public class Utils {
 		return c;
 	}
 
+	public static byte[] byteConcat(byte a, byte b) {
+		byte[] c = new byte[2];
+		c[0] = a;
+		c[1] = b;
+		return c;
+	}
+
 	/**
 	 * Concatenates a byte array and an int, up to max bytes from the right
 	 */
@@ -175,5 +182,15 @@ public class Utils {
 			out[i] = bytes[offset + i];
 		}
 		return out;
+	}
+
+	public static byte[] padUpTo(byte[] orig, int len) {
+		byte[] padded = new byte[len];
+		if (orig.length < len) {
+			for (int i = 0; i < orig.length; i++) {
+				padded[i] = orig[i];
+			}
+		}
+		return padded;
 	}
 }

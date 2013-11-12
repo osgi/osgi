@@ -4,6 +4,9 @@ import java.util.Map;
 import java.util.Properties;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.impl.service.enocean.basedriver.EnOceanBaseDriver;
+import org.osgi.impl.service.enocean.basedriver.radio.MessageSYS_EX;
+import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanHandler;
@@ -17,13 +20,16 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 
 	private Properties			props;
 	private EnOceanMessage		lastMessage;
+	private EnOceanBaseDriver	driver;
 
 	/**
 	 * An {@link EnOceanDeviceImpl} creation is directly related to its
 	 * registration within the framework.
 	 * Such a Device should only be registered after a proper teach-in procedure, so that the RORG, FIUNC and TYPE are already known.  
 	 */
-	public EnOceanDeviceImpl(BundleContext bc, int uid) {
+	public EnOceanDeviceImpl(BundleContext bc, EnOceanBaseDriver driver, int uid) {
+		this.bc = bc;
+		this.driver = driver;
 		props = new Properties();
 		props.put(EnOceanDevice.CHIP_ID, String.valueOf(uid));
 		sReg = bc.registerService(EnOceanDevice.class.getName(), this, props);
@@ -178,8 +184,13 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	}
 
 	public void invoke(EnOceanRPC rpc, EnOceanHandler handler) throws IllegalArgumentException {
-		// TODO Auto-generated method stub
-
+		// Generate the SYS_EX message relative to the RPC
+		MessageSYS_EX msg = new MessageSYS_EX(rpc);
+		for (int i = 0; i < msg.getSubTelNum(); i++) {
+			byte[] telegram = (byte[]) msg.getTelegrams().get(i);
+			System.out.println("TELEGRAM #" + i + " '" + Utils.bytesToHexString(telegram) + "'");
+			driver.send(telegram);
+		}
 	}
 	
 }

@@ -24,6 +24,16 @@ package org.osgi.service.enocean;
  * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanRPC {
+	
+	/**
+	 * The Manufacturer ID property string, used in EventAdmin RPC broadcasting.
+	 */
+	public static final String MANUFACTURER_ID = "enocean.rpc.manufacturer_id";
+
+	/**
+	 * The Function ID property string, used in EventAdmin RPC broadcasting.
+	 */
+	public static final String FUNCTION_ID = "enocean.rpc.function_id";
 			
 	/**
 	 * Gets the manufacturerID for this RPC.
@@ -52,5 +62,17 @@ public interface EnOceanRPC {
 	 * @param the payload, in bytes, of this RPC.
 	 */
 	public void setPayload(byte[] data);
+
+	/**
+	 * Sets the RPC's senderID.
+	 * @return
+	 */
+	public int getSenderId();
+	
+	/**
+	 * Sets the RPC's senderID.
+	 * @return
+	 */
+	public void setSenderId(int chipId);
 	
 }
