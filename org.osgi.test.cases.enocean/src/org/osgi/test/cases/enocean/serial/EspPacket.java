@@ -95,4 +95,25 @@ public class EspPacket {
 		byte[] fullHeader = Utils.byteConcat(syncByte, header);
 		return Utils.byteConcat(fullHeader, Utils.crc8(header));
 	}
+
+	public EspPacket() {
+	}
+
+	public EspPacket(byte[] data) {
+		byte[] header = Utils.byteRange(data, 0, 6);
+		byte[] payload = Utils.byteRange(data, 6, data.length - 7);
+		deserialize(header, payload);
+	}
+
+	private void deserialize(byte[] header, byte[] payload) {
+
+		if ((header[0] != SYNC_BYTE) || (header.length != 6)) {
+			throw new IllegalArgumentException("wrong header");
+		}
+		int dataLen = Utils.bytes2intLE(header, 1, 2);
+		int optionalLen = header[3];
+		setPacketType(header[4]);
+		setData(new TrivialByteSerializable(Utils.byteRange(payload, 0, dataLen)));
+		setOptional(new TrivialByteSerializable(Utils.byteRange(payload, dataLen, optionalLen)));
+	}
 }

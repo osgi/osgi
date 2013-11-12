@@ -18,6 +18,7 @@
 package org.osgi.impl.service.enocean.basedriver.esp;
 
 import org.osgi.impl.service.enocean.utils.Utils;
+import org.osgi.service.enocean.EnOceanMessage;
 
 public class EspPacket {
 
@@ -30,38 +31,44 @@ public class EspPacket {
 	public static final int		TYPE_SMART_ACK_RADIO	= 0x06;
 	public static final int		TYPE_REMOTE_MAN_COMMAND	= 0x07;
 
-	private int					dataLength;					// 2 bytes
-	private int					optionalLength;				// 1 byte
 	private int					packetType;					// 1 byte
-
 	private byte[]				data;
 	private byte[]				optional;
 
 	public EspPacket(byte[] header, byte[] payload) {
-		if ((header[0] != SYNC_BYTE) || (header.length != 6)) {
-			throw new IllegalArgumentException("wrong header");
-		}
-		setDataLength(Utils.bytes2intLE(header, 1, 2));
-		setOptionalLength(header[3]);
-		setPacketType(header[4]);
-		setData(Utils.byteRange(payload, 0, getDataLength()));
-		setOptional(Utils.byteRange(payload, getDataLength(), getOptionalLength()));
+		deserialize(header, payload);
 	}
 
-	public int getDataLength() {
-		return dataLength;
+	public EspPacket(byte[] data) {
+		byte[] header = Utils.byteRange(data, 0, 5);
+		byte[] payload = Utils.byteRange(data, 6, data.length - 6);
+		deserialize(header, payload);
 	}
 
-	public void setDataLength(int dataLength) {
-		this.dataLength = dataLength;
+	public EspPacket(EnOceanMessage msg) {
+		setPacketType(TYPE_RADIO);
+		byte[] data = msg.serialize();
+		setData(data);
+		byte[] optional = Utils.byteConcat((byte) msg.getSubTelNum(), Utils.intTo4Bytes(msg.getDestinationId()));
+		optional = Utils.byteConcat(optional, (byte) msg.getDbm());
+		optional = Utils.byteConcat(optional, (byte) msg.getSecurityLevelFormat());
+		setOptional(optional);
+
 	}
 
-	public int getOptionalLength() {
-		return optionalLength;
-	}
-
-	public void setOptionalLength(int optionalLength) {
-		this.optionalLength = optionalLength;
+	public byte[] serialize() {
+		byte[] header = Utils.byteConcat(SYNC_BYTE, Utils.intTo2Bytes(data.length));
+		header = Utils.byteConcat(header, (byte) 0x07); // 7 bytes optional data
+		header = Utils.byteConcat(header, (byte) TYPE_RADIO);
+		byte crcHeader = Utils.crc8(header);
+		// Append optional data to data
+		byte[] fullData = getFullData();
+		// Calc CRC of data
+		byte crcData = Utils.crc8(fullData);
+		byte[] packet = Utils.byteConcat(header, crcHeader);
+		packet = Utils.byteConcat(packet, fullData);
+		packet = Utils.byteConcat(packet, crcData);
+		return packet;
 	}
 
 	public int getPacketType() {
@@ -90,5 +97,16 @@ public class EspPacket {
 
 	public byte[] getFullData() {
 		return Utils.byteConcat(data, optional);
+	}
+
+	private void deserialize(byte[] header, byte[] payload) {
+		if ((header[0] != SYNC_BYTE) || (header.length != 6)) {
+			throw new IllegalArgumentException("wrong header");
+		}
+		int dataLen = Utils.bytes2intLE(header, 1, 2);
+		int optionalLen = header[3];
+		setPacketType(header[4]);
+		setData(Utils.byteRange(payload, 0, dataLen));
+		setOptional(Utils.byteRange(payload, dataLen, optionalLen));
 	}
 }

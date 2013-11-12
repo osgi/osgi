@@ -236,4 +236,14 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 		header = Utils.byteConcat(header, (byte) headerCrc);
 		return new EspPacket(header, payload);
 	}
+
+	public void send(byte[] data) {
+		try {
+			outputStream.write(data);
+			outputStream.flush();
+		} catch (IOException e) {
+			Logger.e(TAG, "an exception occured while writing to stream '" + streamPath + "' : " + e.getMessage());
+		}
+
+	}
 }

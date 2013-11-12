@@ -4,10 +4,9 @@ package org.osgi.test.cases.enocean;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Map;
-import java.util.Properties;
+import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -23,14 +22,17 @@ import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.test.cases.enocean.descriptions.EnOceanChannelDescription_TMP_00;
 import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescription_A5_02_01;
-import org.osgi.test.cases.enocean.devices.TemperatureSensingDevice;
 import org.osgi.test.cases.enocean.messages.MessageA5_02_01;
+import org.osgi.test.cases.enocean.serial.EspPacket;
 import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.sets.EnOceanChannelDescriptionSetImpl;
 import org.osgi.test.cases.enocean.sets.EnOceanMessageDescriptionSetImpl;
 import org.osgi.test.cases.enocean.utils.EventListener;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
+import org.osgi.test.cases.enocean.utils.Utils;
+import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.sleep.Sleep;
 
 public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 
@@ -239,28 +241,18 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 	 * @throws Exception
 	 */
 	public void testDeviceExport() throws Exception {
-		EnOceanDevice device = new TemperatureSensingDevice();
-		Dictionary props = new Properties();
-		props.put(EnOceanDevice.ENOCEAN_EXPORT, Boolean.TRUE);
-		props.put(Constants.SERVICE_PID, Fixtures.DEVICE_PID);
-		props.put(EnOceanDevice.RORG, Fixtures.STR_RORG);
-		props.put(EnOceanDevice.FUNC, Fixtures.STR_FUNC);
-		props.put(EnOceanDevice.TYPE, Fixtures.STR_TYPE_1);
-		props.put(EnOceanDevice.MANUFACTURER, Fixtures.STR_MANUFACTURER);
-		ServiceRegistration sReg = getContext().registerService(EnOceanDevice.class.getName(), device, props);
+		ServiceRegistration sReg = Fixtures.registerDevice(getContext());
 
 		/* Wait for the proper and full registration */
 		lastServiceEvent = devices.waitForService();
 		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
 
-		/*
-		 *  Get CHIP_ID attributed by the driver from the given service PID.
-		 */
+		/* Get CHIP_ID attributed by the driver from the given service PID. */
 		ServiceReference hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
 		EnOceanHost defaultHost = (EnOceanHost) getContext().getService(hostRef);
 		int dynamicChipId = defaultHost.getChipId(Fixtures.DEVICE_PID);
-		log("CHIPID : " + dynamicChipId);
-		// TODO: check it somehow ?
+		assertTrue("The created CHIP_ID for an exported device was not created", dynamicChipId != -1);
+		
 		
 		/*
 		 * Now that we have gotten the device registered and all, we are able to
@@ -277,7 +269,46 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		Event evt = new Event(EnOceanEvent.TOPIC_MSG_RECEIVED, properties);
 		eventAdmin.sendEvent(evt);
 
+		byte[] data = new byte[256];
+		int size = inStream.read(data);
+		EspPacket pkt = new EspPacket(Utils.byteRange(data, 0, size));
+		assertEquals("EnOcean radio message and forged message mismatch", Utils.bytesToHex(msg.serialize()), Utils.bytesToHex(pkt.getData().serialize()));
+
 		// Needed not to mess with further tests
+		sReg.unregister();
+	}
+	
+	/**
+	 * Tests device export persistency.
+	 * 
+	 * @throws Exception
+	 */
+	public void testDeviceExportPersistency() throws Exception {
+		ServiceRegistration sReg = Fixtures.registerDevice(getContext());
+
+		/* Get CHIP_ID attributed by the driver from the given service PID. */
+		ServiceReference hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
+		EnOceanHost defaultHost = (EnOceanHost) getContext().getService(hostRef);
+		int originalChipId = defaultHost.getChipId(Fixtures.DEVICE_PID);
+
+		Bundle baseDriver = getBaseDriverBundle();
+		assertNotNull(baseDriver);
+
+		baseDriver.stop();
+		Sleep.sleep(1000 * OSGiTestCaseProperties.getScaling());
+
+		hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
+		assertNull(hostRef);
+
+		baseDriver.start();
+		Sleep.sleep(1000 * OSGiTestCaseProperties.getScaling());
+
+		hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
+		defaultHost = (EnOceanHost) getContext().getService(hostRef);
+		int newChipId = defaultHost.getChipId(Fixtures.DEVICE_PID);
+
+		assertEquals(originalChipId, newChipId);
+
 		sReg.unregister();
 	}
 
@@ -396,6 +427,17 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		Object service = getContext().getService(ref);
 		if (service instanceof EnOceanDevice) {
 			return (EnOceanDevice) service;
+		}
+		return null;
+	}
+
+	private Bundle getBaseDriverBundle() {
+		Bundle[] bundles = getContext().getBundles();
+		for (int i = 0; i < bundles.length; i++) {
+			Bundle b = bundles[i];
+			if (b.getSymbolicName().equals("org.osgi.impl.service.enocean")) {
+				return b;
+			}
 		}
 		return null;
 	}

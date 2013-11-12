@@ -12,6 +12,7 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.impl.service.enocean.basedriver.esp.EspPacket;
 import org.osgi.impl.service.enocean.basedriver.impl.EnOceanDeviceImpl;
 import org.osgi.impl.service.enocean.basedriver.impl.EnOceanHostImpl;
 import org.osgi.impl.service.enocean.basedriver.radio.Message;
@@ -26,10 +27,11 @@ import org.osgi.service.enocean.sets.EnOceanChannelDescriptionSet;
 import org.osgi.service.enocean.sets.EnOceanRPCDescriptionSet;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
+import org.osgi.service.event.EventHandler;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
-public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerCustomizer {
+public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerCustomizer, EventHandler {
 
 	private BundleContext		bc;
 	private Hashtable			eoDevices;
@@ -38,6 +40,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	private ServiceTracker		eoDevicesTracker;
 	private EnOceanHostImpl		initialHost;
 	private EventAdmin			eventAdmin;
+	private ServiceRegistration	eventHandlerRegistration;
 
 	public static final String	TAG	= "EnOceanBaseDriver";
 
@@ -81,6 +84,13 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		if (ref != null) {
 			eventAdmin = (EventAdmin) bc.getService(ref);
 		}
+
+		/* Initializes self as EventHandler */
+		Hashtable ht = new Hashtable();
+		ht.put(org.osgi.service.event.EventConstants.EVENT_TOPIC, new String[] {
+				EnOceanEvent.TOPIC_MSG_RECEIVED
+		});
+		eventHandlerRegistration = bc.registerService(EventHandler.class.getName(), this, ht);
 
 		/* Track the EnOcean services */
 		try {
@@ -169,6 +179,18 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		// TODO
 	}
 
+	public void handleEvent(Event event) {
+		if (event.getTopic().equals(EnOceanEvent.TOPIC_MSG_RECEIVED)) {
+			if (event.getProperty(EnOceanEvent.PROPERTY_EXPORTED) != null) {
+				EnOceanMessage msg = (EnOceanMessage) event.getProperty(EnOceanEvent.PROPERTY_MESSAGE);
+				if(msg != null) {
+					EspPacket pkt = new EspPacket(msg);
+					initialHost.send(pkt.serialize());
+				}
+			}
+		}
+	}
+
 	public void start() {
 		initialHost.start();
 	}
@@ -201,7 +223,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 			properties.put(EnOceanDevice.TYPE, String.valueOf(eoMsg.getType()));
 			properties.put(EnOceanEvent.PROPERTY_MESSAGE, eoMsg);
 
-			Event event = new Event("org/osgi/service/enocean/EnOceanEvent/MESSAGE_RECEIVED", properties);
+			Event event = new Event(EnOceanEvent.TOPIC_MSG_RECEIVED, properties);
 			eventAdmin.sendEvent(event);
 		}
 	}

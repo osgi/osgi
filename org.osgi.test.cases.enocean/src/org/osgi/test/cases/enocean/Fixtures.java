@@ -1,8 +1,15 @@
 
 package org.osgi.test.cases.enocean;
 
+import java.util.Dictionary;
+import java.util.Properties;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanEvent;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
+import org.osgi.test.cases.enocean.devices.TemperatureSensingDevice;
 
 public final class Fixtures {
 
@@ -29,4 +36,17 @@ public final class Fixtures {
 	public static final String	TMP_CHANNEL_ID			= "TMP_00";
 	public static final String	TMP_CHANNEL_TYPE		= EnOceanChannelDescription.TYPE_DATA;
 	public static final String	DEVICE_PID				= "my_exported_unique_device";
+
+	public static ServiceRegistration registerDevice(BundleContext bc) {
+		EnOceanDevice device = new TemperatureSensingDevice();
+		Dictionary props = new Properties();
+		props.put(EnOceanDevice.ENOCEAN_EXPORT, Boolean.TRUE);
+		props.put(Constants.SERVICE_PID, Fixtures.DEVICE_PID);
+		props.put(EnOceanDevice.RORG, Fixtures.STR_RORG);
+		props.put(EnOceanDevice.FUNC, Fixtures.STR_FUNC);
+		props.put(EnOceanDevice.TYPE, Fixtures.STR_TYPE_1);
+		props.put(EnOceanDevice.MANUFACTURER, Fixtures.STR_MANUFACTURER);
+		return bc.registerService(EnOceanDevice.class.getName(), device, props);
+	}
+
 }
