@@ -52,13 +52,6 @@ public interface ZigBeeEventListener {
 	public final static String	REPORTABLE_CHANGE	= "zigbee.attribute.reportable.change";
 
 	/**
-	 * Property key for the optional maximum expected time, in seconds, between
-	 * received reports for the attribute. A ZigBee Event Listener service can
-	 * declare the maximum frequency at which events it wants notifications.
-	 */
-	public final static String	TIMEOUT_PERIOD		= "zigbee.attribute.timeout.period";
-
-	/**
 	 * Callback method that is invoked for received events. This method must be
 	 * called asynchronously.
 	 * 
