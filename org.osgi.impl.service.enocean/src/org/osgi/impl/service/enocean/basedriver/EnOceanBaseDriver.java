@@ -1,6 +1,7 @@
 package org.osgi.impl.service.enocean.basedriver;
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Map;
 import java.util.Properties;
@@ -18,6 +19,7 @@ import org.osgi.impl.service.enocean.basedriver.radio.Message4BS;
 import org.osgi.impl.service.enocean.utils.EnOceanDriverException;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.service.enocean.EnOceanDevice;
+import org.osgi.service.enocean.EnOceanEvent;
 import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.sets.EnOceanChannelDescriptionSet;
@@ -38,6 +40,8 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	private EventAdmin			eventAdmin;
 
 	public static final String	TAG	= "EnOceanBaseDriver";
+
+	public static final String	CONFIG_EXPORTED_PID_TABLE	= "org.enocean.ExportedDeviceTable";
 
 	/**
 	 * The {@link EnOceanBaseDriver} constructor initiates the connection
@@ -67,6 +71,8 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 				Logger.e(TAG, "initial enoceanhost registration failed : " + e.getMessage());
 			} catch (FileNotFoundException e) {
 				Logger.e(TAG, "initial enoceanhost path was incorrect : " + e.getMessage());
+			} catch (IOException e) {
+				Logger.e(TAG, "initial enoceanhost access to persisted data failed : " + e.getMessage());
 			}
 		}
 

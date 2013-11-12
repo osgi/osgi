@@ -19,20 +19,23 @@ package org.osgi.impl.service.enocean.basedriver.impl;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.UnknownServiceException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Dictionary;
+import java.util.Properties;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.enocean.basedriver.EnOceanBaseDriver;
 import org.osgi.impl.service.enocean.basedriver.EnOceanPacketListener;
 import org.osgi.impl.service.enocean.basedriver.esp.EspPacket;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
+import org.osgi.service.cm.Configuration;
+import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.service.event.EventAdmin;
@@ -53,24 +56,36 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 	private EventAdmin			eventAdmin;
 	private int					chipId;
 	private int					baseId;
-	private Map					allocatedChipIds;
+	private Configuration		chipIdConfig;
+	private Dictionary			allocatedChipIds;
 
 	private String				streamPath;
 
 	private BundleContext		bc;
 
-	public EnOceanHostImpl(int chipId, int baseId, String path, BundleContext bc) throws FileNotFoundException {
+	public EnOceanHostImpl(int chipId, int baseId, String path, BundleContext bc) throws IOException {
 		this.bc = bc;
 		this.streamPath = path;
 		listeners = new ArrayList();
 		isRunning = false;
 		synchronizer = new Object();
-		allocatedChipIds = new HashMap();
+
+		ServiceReference configRef = bc.getServiceReference(ConfigurationAdmin.class.getName());
+		if (configRef != null) {
+			ConfigurationAdmin confAdmin = (ConfigurationAdmin) bc.getService(configRef);
+			chipIdConfig = confAdmin.getConfiguration(EnOceanBaseDriver.CONFIG_EXPORTED_PID_TABLE);
+			allocatedChipIds = chipIdConfig.getProperties();
+			if (allocatedChipIds == null) {
+				allocatedChipIds = new Properties();
+				chipIdConfig.update(allocatedChipIds);
+			}
+		} else {
+			throw new UnknownServiceException("ConfigAdmin service was not found !");
+		}
 
 		/* Init the allocated CHIP ID */
 		this.chipId = chipId;
 		this.baseId = baseId;
-
 
 		/* Get a global eventAdmin handle */
 		ServiceReference ref = bc.getServiceReference(EventAdmin.class.getName());
@@ -124,7 +139,7 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 		return Integer.parseInt(str);
 	}
 
-	public void generateChipID(String servicePID) throws ArrayIndexOutOfBoundsException {
+	public void generateChipID(String servicePID) throws ArrayIndexOutOfBoundsException, IOException {
 		int chipId = getChipId(servicePID);
 		if (chipId == -1) {
 			// Allocate one
@@ -132,6 +147,7 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 				// FIXME this is quite basic and should be improved
 				chipId = baseId + allocatedChipIds.size();
 				allocatedChipIds.put(servicePID, String.valueOf(chipId));
+				chipIdConfig.update(allocatedChipIds);
 			} else {
 				throw new ArrayIndexOutOfBoundsException("No more CHIP_ID can be allocated.");
 			}
