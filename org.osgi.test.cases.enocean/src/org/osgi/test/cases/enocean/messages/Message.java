@@ -25,6 +25,7 @@ import org.osgi.test.cases.enocean.utils.Utils;
 public class Message implements EnOceanMessage, ByteSerializable {
 
 	public static final int	MESSAGE_4BS	= 0xA5;
+	public static final int	MESSAGE_RPS	= 0xF6;
 
 	private byte	RORG;
 	private byte[]	data;

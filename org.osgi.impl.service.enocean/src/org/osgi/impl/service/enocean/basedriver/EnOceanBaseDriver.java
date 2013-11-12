@@ -17,6 +17,7 @@ import org.osgi.impl.service.enocean.basedriver.impl.EnOceanDeviceImpl;
 import org.osgi.impl.service.enocean.basedriver.impl.EnOceanHostImpl;
 import org.osgi.impl.service.enocean.basedriver.radio.Message;
 import org.osgi.impl.service.enocean.basedriver.radio.Message4BS;
+import org.osgi.impl.service.enocean.basedriver.radio.MessageRPS;
 import org.osgi.impl.service.enocean.utils.EnOceanDriverException;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.service.enocean.EnOceanDevice;
@@ -117,6 +118,13 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 				if (msg.isTeachin() && msg.hasTeachInInfo()) {
 					registerDevice(msg.getSenderId(), msg.getRorg(), msg.teachInFunc(), msg.teachInType(), msg.teachInManuf());
 					return; // No need to do more processing on the message
+				}
+				break;
+			case Message.MESSAGE_RPS :
+				msg = new MessageRPS(data);
+				EnOceanDevice dev = getAssociatedDevice(msg);
+				if (dev == null) {
+					dev = new EnOceanDeviceImpl(bc, this, msg.getSenderId(), msg.getRorg());
 				}
 				break;
 			default :
@@ -255,8 +263,8 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	}
 
 	private void registerDevice(int senderId, int rorg, int func, int type, int manuf) {
-		EnOceanDeviceImpl device = new EnOceanDeviceImpl(bc, this, senderId);
-		device.registerProfile(rorg, func, type, manuf);
+		EnOceanDeviceImpl device = new EnOceanDeviceImpl(bc, this, senderId, rorg);
+		device.registerProfile(func, type, manuf);
 	}
 
 	/* The functions that come below are used to register the necessary services */

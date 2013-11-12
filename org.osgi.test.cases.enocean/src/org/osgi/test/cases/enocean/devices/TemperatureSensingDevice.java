@@ -18,9 +18,9 @@
 package org.osgi.test.cases.enocean.devices;
 
 import org.osgi.service.enocean.EnOceanException;
+import org.osgi.service.enocean.EnOceanHandler;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.EnOceanRPC;
-import org.osgi.service.enocean.EnOceanHandler;
 
 
 public class TemperatureSensingDevice extends EnOceanDeviceImpl {
@@ -41,6 +41,16 @@ public class TemperatureSensingDevice extends EnOceanDeviceImpl {
 	}
 
 	public void invoke(EnOceanRPC rpc, EnOceanHandler handler) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setFunc(int func) {
+		// TODO Auto-generated method stub
+
+	}
+
+	public void setType(int type) {
 		// TODO Auto-generated method stub
 
 	}

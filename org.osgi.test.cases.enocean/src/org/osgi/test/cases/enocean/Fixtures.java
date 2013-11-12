@@ -16,6 +16,7 @@ public final class Fixtures {
 	public static final int	HOST_ID			= 0x12345678;
 	public static final int	MANUFACTURER	= 0x6ea;
 	public static final int	RORG			= 0xA5;
+	public static final int		RORG_RPS				= 0xF6;
 	public static final int	FUNC			= 0x02;
 	public static final int		TYPE_1					= 0x01;
 	public static final int		TYPE_2					= 0x02;
@@ -36,6 +37,7 @@ public final class Fixtures {
 	public static final String	TMP_CHANNEL_ID			= "TMP_00";
 	public static final String	TMP_CHANNEL_TYPE		= EnOceanChannelDescription.TYPE_DATA;
 	public static final String	DEVICE_PID				= "my_exported_unique_device";
+	public static final Object	STR_RORG_RPS			= String.valueOf(RORG_RPS);
 
 	public static ServiceRegistration registerDevice(BundleContext bc) {
 		EnOceanDevice device = new TemperatureSensingDevice();

@@ -27,11 +27,12 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	 * registration within the framework.
 	 * Such a Device should only be registered after a proper teach-in procedure, so that the RORG, FIUNC and TYPE are already known.  
 	 */
-	public EnOceanDeviceImpl(BundleContext bc, EnOceanBaseDriver driver, int uid) {
+	public EnOceanDeviceImpl(BundleContext bc, EnOceanBaseDriver driver, int uid, int rorg) {
 		this.bc = bc;
 		this.driver = driver;
 		props = new Properties();
 		props.put(EnOceanDevice.CHIP_ID, String.valueOf(uid));
+		props.put(EnOceanDevice.RORG, String.valueOf(rorg));
 		sReg = bc.registerService(EnOceanDevice.class.getName(), this, props);
 		/* Initializations */
 		lastMessage = null;
@@ -41,11 +42,10 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		return props;
 	}
 
-	public void registerProfile(int rorg, int func, int type, int manuf) {
-		props.put(org.osgi.service.enocean.EnOceanDevice.RORG, String.valueOf(rorg));
-		props.put(org.osgi.service.enocean.EnOceanDevice.FUNC, String.valueOf(func));
-		props.put(org.osgi.service.enocean.EnOceanDevice.TYPE, String.valueOf(type));
-		props.put(org.osgi.service.enocean.EnOceanDevice.MANUFACTURER, String.valueOf(manuf));
+	public void registerProfile(int func, int type, int manuf) {
+		props.put(EnOceanDevice.FUNC, String.valueOf(func));
+		props.put(EnOceanDevice.TYPE, String.valueOf(type));
+		props.put(EnOceanDevice.MANUFACTURER, String.valueOf(manuf));
 		sReg.setProperties(props);
 	}
 
@@ -138,14 +138,17 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 
 	public void setFunc(int func) {
 		props.put(EnOceanDevice.FUNC, String.valueOf(func));
+		sReg.setProperties(props);
 	}
 
 	public void setType(int type) {
 		props.put(EnOceanDevice.TYPE, String.valueOf(type));
+		sReg.setProperties(props);
 	}
 
 	public void setManuf(int manuf) {
 		props.put(EnOceanDevice.MANUFACTURER, String.valueOf(manuf));
+		sReg.setProperties(props);
 	}
 
 	public int getRorg() {

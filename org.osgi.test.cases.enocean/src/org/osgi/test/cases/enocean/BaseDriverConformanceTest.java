@@ -24,6 +24,7 @@ import org.osgi.service.event.EventAdmin;
 import org.osgi.test.cases.enocean.descriptions.EnOceanChannelDescription_TMP_00;
 import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescription_A5_02_01;
 import org.osgi.test.cases.enocean.messages.MessageA5_02_01;
+import org.osgi.test.cases.enocean.messages.MessageF6_02_01;
 import org.osgi.test.cases.enocean.rpc.QueryFunction;
 import org.osgi.test.cases.enocean.serial.EspPacket;
 import org.osgi.test.cases.enocean.serial.EspRadioPacket;
@@ -89,6 +90,257 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 	 * extract all the information we need, provided we have the necessary
 	 * descriptions.
 	 * 
+	 * Pay attention that almost all of those tests look more like a
+	 * "recommendation" to be ran on external description bundles, since the
+	 * description objects are not supposed to be part of the RI.
+	 * 
+	 * @throws Exception
+	 */
+	public void testInterfaceExceptions() throws Exception {
+		boolean exceptionCaught = false;
+	
+		try { /*
+			 * Check that passing a NULL array of bytes results in an
+			 * IllegalArgumentException
+			 */
+			exceptionCaught = false;
+			EnOceanMessageDescription msgDescription = new EnOceanMessageDescription_A5_02_01();
+			msgDescription.deserialize(null);
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+	
+		try { /*
+			 * Check that passing a wrongly sized byte array also results in an
+			 * exception
+			 */
+			exceptionCaught = false;
+			EnOceanMessageDescription msgDescription = new EnOceanMessageDescription_A5_02_01();
+			msgDescription.deserialize(new byte[] {0x55, 0x02, 0x34, 0x56, 0x67});
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+		
+		try { /*
+			 * Tests that serializing a NULL object in EnOceanChannelDescription
+			 * in an exception
+			 */
+			exceptionCaught = false;
+			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
+			channelDescription.serialize(null);
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+	
+		try { /*
+			 * Tests that serializing a wrong object in
+			 * EnOceanChannelDescription in an exception
+			 */
+			exceptionCaught = false;
+			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
+			channelDescription.serialize(new String("foo"));
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+	
+		try { /*
+			 * Tests that serializing a wrong value in EnOceanChannelDescription
+			 * in an exception
+			 */
+			exceptionCaught = false;
+			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
+			channelDescription.serialize(new Float(-2000.0f));
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+	
+		try { /*
+			 * Tests that deserializing a NULL value in
+			 * EnOceanChannelDescription in an exception
+			 */
+			exceptionCaught = false;
+			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
+			channelDescription.deserialize(null);
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+	
+		try { /*
+			 * Tests that deserializing a wrong object in
+			 * EnOceanChannelDescription in an exception
+			 */
+			exceptionCaught = false;
+			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
+			channelDescription.deserialize(new byte[] {0x45, 0x56});
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+	
+		try { /*
+			 * Tests that getting a NULL index in an
+			 * EnOceanChannelDescriptionSet results in an
+			 * IllegalArgumentException
+			 */
+			exceptionCaught = false;
+			channelDescriptionSet.getChannelDescription(null);
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+	
+		try { /*
+			 * Tests that sending a message EnOceanChannelDescriptionSet results
+			 * in an IllegalArgumentException
+			 */
+			exceptionCaught = false;
+			channelDescriptionSet.getChannelDescription(null);
+		} catch (IllegalArgumentException e) {
+			exceptionCaught = true;
+		}
+		assertEquals(true, exceptionCaught);
+	
+	}
+
+	/**
+	 * Tests initial device registration from a raw Radio teach-in packet.
+	 * 
+	 * @throws Exception
+	 */
+	public void testAutoDeviceRegistration() throws Exception {
+	
+		/* Insert a device */
+		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
+		EspRadioPacket pkt = new EspRadioPacket(teachIn);
+		outStream.write(pkt.serialize());
+	
+		lastServiceEvent = devices.waitForService();
+	
+		/*
+		 * NOTE: The service should have been modified AFTER insertion,
+		 * nevertheless it seems that when registration and modification happen
+		 * almost in the same time, OSGi only generates a single SERVICE_ADDED
+		 * event.
+		 */
+		ServiceReference ref = devices.getServiceReference();
+	
+		/*
+		 * Verify that the device has been registered with the correct service
+		 * properties
+		 */
+		assertEquals("CHIP_ID mismatch", Fixtures.STR_HOST_ID, ref.getProperty(EnOceanDevice.CHIP_ID));
+		assertEquals("RORG mismatch", Fixtures.STR_RORG, ref.getProperty(EnOceanDevice.RORG));
+		assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
+		assertEquals("TYPE mismatch", Fixtures.STR_TYPE_1, ref.getProperty(EnOceanDevice.TYPE));
+		assertEquals("MANUFACTURER mismatch", Fixtures.STR_MANUFACTURER, ref.getProperty(EnOceanDevice.MANUFACTURER));
+	
+		getContext().ungetService(ref);
+	}
+
+	/**
+	 * Tests initial device registration from a raw Radio teach-in packet.
+	 * 
+	 * @throws Exception
+	 */
+	public void testManualDeviceRegistration() throws Exception {
+
+		/* Insert a device */
+		MessageF6_02_01 teachIn = new MessageF6_02_01(1, true, 1, true);
+		teachIn.setSenderId(Fixtures.HOST_ID);
+		EspRadioPacket pkt = new EspRadioPacket(teachIn);
+		outStream.write(pkt.serialize());
+
+		lastServiceEvent = devices.waitForService();
+		ServiceReference ref = devices.getServiceReference();
+		
+		assertEquals("CHIP_ID mismatch", Fixtures.STR_HOST_ID, ref.getProperty(EnOceanDevice.CHIP_ID));
+		assertEquals("RORG mismatch", Fixtures.STR_RORG_RPS, ref.getProperty(EnOceanDevice.RORG));
+		assertNull(ref.getProperty(EnOceanDevice.FUNC));
+
+		EnOceanDevice dev = (EnOceanDevice) getContext().getService(ref);
+		dev.setFunc(Fixtures.FUNC);
+		lastServiceEvent = devices.waitForService();
+		assertEquals(ServiceListener.SERVICE_MODIFIED, lastServiceEvent);
+		dev.setType(Fixtures.TYPE_1);
+		lastServiceEvent = devices.waitForService();
+		assertEquals(ServiceListener.SERVICE_MODIFIED, lastServiceEvent);
+
+		assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
+		assertEquals("TYPE mismatch", Fixtures.STR_TYPE_1, ref.getProperty(EnOceanDevice.TYPE));
+
+		getContext().ungetService(ref);
+	}
+
+	/**
+	 * Checks that our test suite is able to locally send and receive messages.
+	 * Necessary for the rest of the code.
+	 * 
+	 * @throws Exception
+	 */
+	public void testSelfEventReception() throws Exception {
+	
+		Map properties = new Hashtable();
+		properties.put(Fixtures.SELF_TEST_EVENT_KEY, Fixtures.SELF_TEST_EVENT_VALUE);
+		Event sourceEvent = new Event(Fixtures.SELF_TEST_EVENT_TOPIC, properties);
+		eventAdmin.sendEvent(sourceEvent);
+	
+		Event destinationEvent = events.waitForEvent();
+		assertEquals("event name mismatch", Fixtures.SELF_TEST_EVENT_TOPIC, destinationEvent.getTopic());
+		assertEquals("event property mismatch", Fixtures.SELF_TEST_EVENT_VALUE, destinationEvent.getProperty(Fixtures.SELF_TEST_EVENT_KEY));
+	}
+
+	/**
+	 * Test event notification in the context of an actual message passing to
+	 * the Base Driver.
+	 * 
+	 * This actually also tests the MessageSet registration since the Base
+	 * Driver needs to know about it before firing on EventAdmin.
+	 * 
+	 * @throws Exception
+	 */
+	public void testEventNotification() throws Exception {
+	
+		/* Insert a device */
+		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
+		EspRadioPacket teachInPkt = new EspRadioPacket(teachIn);
+		outStream.write(teachInPkt.serialize());
+	
+		/* Send a message from that device */
+		MessageA5_02_01 measure = new MessageA5_02_01(Fixtures.TEMPERATURE);
+		measure.setSenderId(Fixtures.HOST_ID);
+		EspRadioPacket measurePkt = new EspRadioPacket(measure);
+		outStream.write(measurePkt.serialize());
+	
+		/* First get a reference towards the device */
+		lastServiceEvent = devices.waitForService();
+		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
+	
+		Event event = events.waitForEvent();
+	
+		assertEquals("topic mismatch", EnOceanEvent.TOPIC_MSG_RECEIVED, event.getTopic());
+		assertEquals("senderId mismatch", Fixtures.STR_HOST_ID, event.getProperty(EnOceanDevice.CHIP_ID));
+		assertEquals("rorg mismatch", Fixtures.STR_RORG, event.getProperty(EnOceanDevice.RORG));
+		assertEquals("func mismatch", Fixtures.STR_FUNC, event.getProperty(EnOceanDevice.FUNC));
+		assertEquals("type mismatch", Fixtures.STR_TYPE_1, event.getProperty(EnOceanDevice.TYPE));
+	
+		EnOceanMessage msg = (EnOceanMessage) event.getProperty(EnOceanEvent.PROPERTY_MESSAGE);
+		assertNotNull(msg);
+		EnOceanMessageDescription description = new EnOceanMessageDescription_A5_02_01();
+		EnOceanChannel[] channels = description.deserialize(msg.getPayloadBytes());
+		assertEquals("temperature mismatch", Fixtures.RAW_TEMPERATURE, channels[0].getRawValue()[0]);
+	}
+
+	/**
+	 * Test that a properly set profile ID in a raw EnOceanMessage is enough to
+	 * extract all the information we need, provided we have the necessary
+	 * descriptions.
+	 * 
 	 * @throws Exception
 	 */
 	public void testUseOfDescriptions() throws Exception {
@@ -114,129 +366,6 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		// It's a float because it's a DATA channel
 		Float deserializedTemperature = (Float) dataChannelDescription.deserialize(temperatureChannel.getRawValue());
 		assertEquals(Fixtures.TEMPERATURE, deserializedTemperature.floatValue(), 0.1);
-	}
-
-	/**
-	 * Test that a properly set profile ID in a raw EnOceanMessage is enough to
-	 * extract all the information we need, provided we have the necessary
-	 * descriptions.
-	 * 
-	 * Pay attention that almost all of those tests look more like a
-	 * "recommendation" to be ran on external description bundles, since the
-	 * description objects are not supposed to be part of the RI.
-	 * 
-	 * @throws Exception
-	 */
-	public void testInterfaceExceptions() throws Exception {
-		boolean exceptionCaught = false;
-
-		try { /*
-			 * Check that passing a NULL array of bytes results in an
-			 * IllegalArgumentException
-			 */
-			exceptionCaught = false;
-			EnOceanMessageDescription msgDescription = new EnOceanMessageDescription_A5_02_01();
-			msgDescription.deserialize(null);
-		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
-		}
-		assertEquals(true, exceptionCaught);
-
-		try { /*
-			 * Check that passing a wrongly sized byte array also results in an
-			 * exception
-			 */
-			exceptionCaught = false;
-			EnOceanMessageDescription msgDescription = new EnOceanMessageDescription_A5_02_01();
-			msgDescription.deserialize(new byte[] {0x55, 0x02, 0x34, 0x56, 0x67});
-		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
-		}
-		assertEquals(true, exceptionCaught);
-		
-		try { /*
-			 * Tests that serializing a NULL object in EnOceanChannelDescription
-			 * in an exception
-			 */
-			exceptionCaught = false;
-			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
-			channelDescription.serialize(null);
-		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
-		}
-		assertEquals(true, exceptionCaught);
-
-		try { /*
-			 * Tests that serializing a wrong object in
-			 * EnOceanChannelDescription in an exception
-			 */
-			exceptionCaught = false;
-			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
-			channelDescription.serialize(new String("foo"));
-		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
-		}
-		assertEquals(true, exceptionCaught);
-
-		try { /*
-			 * Tests that serializing a wrong value in EnOceanChannelDescription
-			 * in an exception
-			 */
-			exceptionCaught = false;
-			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
-			channelDescription.serialize(new Float(-2000.0f));
-		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
-		}
-		assertEquals(true, exceptionCaught);
-
-		try { /*
-			 * Tests that deserializing a NULL value in
-			 * EnOceanChannelDescription in an exception
-			 */
-			exceptionCaught = false;
-			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
-			channelDescription.deserialize(null);
-		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
-		}
-		assertEquals(true, exceptionCaught);
-
-		try { /*
-			 * Tests that deserializing a wrong object in
-			 * EnOceanChannelDescription in an exception
-			 */
-			exceptionCaught = false;
-			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
-			channelDescription.deserialize(new byte[] {0x45, 0x56});
-		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
-		}
-		assertEquals(true, exceptionCaught);
-
-		try { /*
-			 * Tests that getting a NULL index in an
-			 * EnOceanChannelDescriptionSet results in an
-			 * IllegalArgumentException
-			 */
-			exceptionCaught = false;
-			channelDescriptionSet.getChannelDescription(null);
-		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
-		}
-		assertEquals(true, exceptionCaught);
-
-		try { /*
-			 * Tests that sending a message EnOceanChannelDescriptionSet results
-			 * in an IllegalArgumentException
-			 */
-			exceptionCaught = false;
-			channelDescriptionSet.getChannelDescription(null);
-		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
-		}
-		assertEquals(true, exceptionCaught);
-
 	}
 
 	/**
@@ -338,100 +467,6 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		device.invoke(rpc, null);
 
 		getContext().ungetService(ref);
-	}
-
-	/**
-	 * Tests initial device registration from a raw Radio teach-in packet.
-	 * 
-	 * @throws Exception
-	 */
-	public void testDeviceRegistration() throws Exception {
-
-		/* Insert a device */
-		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
-		EspRadioPacket pkt = new EspRadioPacket(teachIn);
-		outStream.write(pkt.serialize());
-
-		lastServiceEvent = devices.waitForService();
-
-		/*
-		 * NOTE: The service should have been modified AFTER insertion,
-		 * nevertheless it seems that when registration and modification happen
-		 * almost in the same time, OSGi only generates a single SERVICE_ADDED
-		 * event.
-		 */
-		ServiceReference ref = devices.getServiceReference();
-
-		/*
-		 * Verify that the device has been registered with the correct service
-		 * properties
-		 */
-		assertEquals("CHIP_ID mismatch", Fixtures.STR_HOST_ID, ref.getProperty(EnOceanDevice.CHIP_ID));
-		assertEquals("RORG mismatch", Fixtures.STR_RORG, ref.getProperty(EnOceanDevice.RORG));
-		assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
-		assertEquals("TYPE mismatch", Fixtures.STR_TYPE_1, ref.getProperty(EnOceanDevice.TYPE));
-		assertEquals("MANUFACTURER mismatch", Fixtures.STR_MANUFACTURER, ref.getProperty(EnOceanDevice.MANUFACTURER));
-
-		getContext().ungetService(ref);
-	}
-
-	/**
-	 * Checks that our test suite is able to locally send and receive messages.
-	 * Necessary for the rest of the code.
-	 * 
-	 * @throws Exception
-	 */
-	public void testSelfEventReception() throws Exception {
-
-		Map properties = new Hashtable();
-		properties.put(Fixtures.SELF_TEST_EVENT_KEY, Fixtures.SELF_TEST_EVENT_VALUE);
-		Event sourceEvent = new Event(Fixtures.SELF_TEST_EVENT_TOPIC, properties);
-		eventAdmin.sendEvent(sourceEvent);
-
-		Event destinationEvent = events.waitForEvent();
-		assertEquals("event name mismatch", Fixtures.SELF_TEST_EVENT_TOPIC, destinationEvent.getTopic());
-		assertEquals("event property mismatch", Fixtures.SELF_TEST_EVENT_VALUE, destinationEvent.getProperty(Fixtures.SELF_TEST_EVENT_KEY));
-	}
-
-	/**
-	 * Test event notification in the context of an actual message passing to
-	 * the Base Driver.
-	 * 
-	 * This actually also tests the MessageSet registration since the Base
-	 * Driver needs to know about it before firing on EventAdmin.
-	 * 
-	 * @throws Exception
-	 */
-	public void testEventNotification() throws Exception {
-
-		/* Insert a device */
-		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
-		EspRadioPacket teachInPkt = new EspRadioPacket(teachIn);
-		outStream.write(teachInPkt.serialize());
-
-		/* Send a message from that device */
-		MessageA5_02_01 measure = new MessageA5_02_01(Fixtures.TEMPERATURE);
-		measure.setSenderId(Fixtures.HOST_ID);
-		EspRadioPacket measurePkt = new EspRadioPacket(measure);
-		outStream.write(measurePkt.serialize());
-
-		/* First get a reference towards the device */
-		lastServiceEvent = devices.waitForService();
-		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
-
-		Event event = events.waitForEvent();
-
-		assertEquals("topic mismatch", EnOceanEvent.TOPIC_MSG_RECEIVED, event.getTopic());
-		assertEquals("senderId mismatch", Fixtures.STR_HOST_ID, event.getProperty(EnOceanDevice.CHIP_ID));
-		assertEquals("rorg mismatch", Fixtures.STR_RORG, event.getProperty(EnOceanDevice.RORG));
-		assertEquals("func mismatch", Fixtures.STR_FUNC, event.getProperty(EnOceanDevice.FUNC));
-		assertEquals("type mismatch", Fixtures.STR_TYPE_1, event.getProperty(EnOceanDevice.TYPE));
-
-		EnOceanMessage msg = (EnOceanMessage) event.getProperty(EnOceanEvent.PROPERTY_MESSAGE);
-		assertNotNull(msg);
-		EnOceanMessageDescription description = new EnOceanMessageDescription_A5_02_01();
-		EnOceanChannel[] channels = description.deserialize(msg.getPayloadBytes());
-		assertEquals("temperature mismatch", Fixtures.RAW_TEMPERATURE, channels[0].getRawValue()[0]);
 	}
 
 	private void cleanupServices() throws InterruptedException {

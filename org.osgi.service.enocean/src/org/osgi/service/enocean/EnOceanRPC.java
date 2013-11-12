@@ -65,6 +65,8 @@ public interface EnOceanRPC {
 
 	/**
 	 * Sets the RPC's senderID.
+	 * 
+	 * This member has to belong to {@link EnOceanRPC} interface, for the object may be sent as a standalone using EventAdmin for instance.
 	 * @return
 	 */
 	public int getSenderId();

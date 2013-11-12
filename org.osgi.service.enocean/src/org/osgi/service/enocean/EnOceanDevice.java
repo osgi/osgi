@@ -69,6 +69,20 @@ public interface EnOceanDevice {
 	public static final String	ENOCEAN_EXPORT	= "enocean.device.export";
 	
 	/**
+	 * Manually sets the EEP FUNC of the device.
+	 * 
+	 * @param func: the EEP func of the device;
+	 */
+	public void setFunc(int func);
+	
+	/**
+	 * Manually sets the EEP TYPE of the device.
+	 * 
+	 * @param type: the EEP type of the device;
+	 */
+	public void setType(int type);
+	
+	/**
 	 * Switches the device into learning mode.
 	 * 
 	 * @param learnMode the desired state: true for learning mode, false to disable it.
