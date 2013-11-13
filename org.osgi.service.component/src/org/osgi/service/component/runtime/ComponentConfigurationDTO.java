@@ -53,33 +53,14 @@ public class ComponentConfigurationDTO extends DTO {
 	public static final int		SATISFIED		= 2;
 
 	/**
-	 * The component configuration is activating.
-	 * 
-	 * <p>
-	 * If activation succeeds, the component configuration moves to the
-	 * {@link #ACTIVE active} state. If activation fails, the component
-	 * configuration returns to the {@link #SATISFIED} state.
-	 */
-	public static final int		ACTIVATING		= 4;
-
-	/**
 	 * The component configuration is active.
 	 * 
 	 * <p>
 	 * This is the normal operational state of a component configuration. The
-	 * component configuration will move to the {@link #DEACTIVATING} state when
-	 * it is deactivated.
+	 * component configuration will move to the {@link #SATISFIED} state when it
+	 * is deactivated.
 	 */
-	public static final int		ACTIVE			= 8;
-
-	/**
-	 * The component configuration is deactivating.
-	 * 
-	 * <p>
-	 * After deactivation, the component configuration moves to the
-	 * {@link #SATISFIED} state.
-	 */
-	public static final int		DEACTIVATING	= 16;
+	public static final int			ACTIVE		= 4;
 
 	/**
 	 * The representation of the component configuration's component
@@ -91,8 +72,8 @@ public class ComponentConfigurationDTO extends DTO {
 	 * The current state of the component configuration.
 	 * 
 	 * <p>
-	 * This is one of {@link #UNSATISFIED}, {@link #SATISFIED},
-	 * {@link #ACTIVATING}, {@link #ACTIVE} or {@link #DEACTIVATING}.
+	 * This is one of {@link #UNSATISFIED}, {@link #SATISFIED} or
+	 * {@link #ACTIVE}.
 	 */
 	public int					state;
 
