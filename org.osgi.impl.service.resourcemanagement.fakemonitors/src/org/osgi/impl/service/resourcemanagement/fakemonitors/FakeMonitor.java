@@ -165,6 +165,7 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 	}
 
 	public Comparable getUsage() throws IllegalStateException {
+		checkExistency("This monitor has been deleted");
 		return currentUsage;
 	}
 

@@ -219,5 +219,44 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 
 	}
 
+	/**
+	 * Test retrieving resource usage
+	 * 
+	 * @throws ResourceMonitorException
+	 */
+	public void testRetrieveUsage() throws ResourceMonitorException {
+		// create ResourceMonitor
+		ResourceMonitor resourceMonitor = cpuFactory
+				.createResourceMonitor(resourceContext);
+
+		// retrieves the resource usage
+		assertNotNull(resourceMonitor.getUsage());
+
+		// enable it
+		resourceMonitor.enable();
+
+		// retrieves the resource usage
+		assertNotNull(resourceMonitor.getUsage());
+
+		// disable it
+		resourceMonitor.disable();
+
+		// retrieves the resource usage
+		assertNotNull(resourceMonitor.getUsage());
+
+		// delete the monitor
+		resourceMonitor.delete();
+
+		// try to enable a deleted monitor ==> expect an IllegalStateException
+		boolean exception = false;
+		try {
+			resourceMonitor.getUsage();
+		} catch (IllegalStateException e) {
+			exception = true;
+		}
+		assertTrue(exception);
+
+
+	}
 
 }
