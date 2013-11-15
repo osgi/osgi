@@ -3059,9 +3059,9 @@ void unsetLogService( LogService log ) {
     through Configuration Admin, a deployer can configure component
     properties.</para>
 
-    <para>The name of the component is used as the key for obtaining
-    additional component properties from Configuration Admin. The following
-    situations can arise:</para>
+    <para>The configuration PID is used as the key for obtaining additional
+    component properties from Configuration Admin. The following situations
+    can arise:</para>
 
     <itemizedlist>
       <listitem>
@@ -3119,47 +3119,146 @@ void unsetLogService( LogService log ) {
 HTTP.target = (component.name=com.acme.httpserver)</programlisting>
 
     <section xml:id="i1649746">
-      <title>Modified Configurations</title>
+      <title>Configuration Changes</title>
 
       <para>SCR must track changes in the <code>Configuration</code> objects
-      used in the component properties of a component configuration. If a
-      <code>Configuration</code> object that is used by a component
-      configuration is deleted, then the component configuration will become
-      unsatisfied and SCR must deactivate that component configuration.</para>
+      <emphasis>matching</emphasis> the configuration PID of the component
+      description. Changes include the creating, updating and deleting of
+      matching <code>Configuration</code> objects. The actions SCR must take
+      when a configuration change for a component description occurs are based
+      upon how the <code>configuration-policy</code> and <code>modified</code>
+      attributes are specified in the component description, whether a
+      component configuration becomes satisfied, remains satisfied or becomes
+      unsatisfied and the type and number of matching
+      <code>Configuration</code> objects.</para>
 
-      <para>If a <code>Configuration</code> object that is used by a component
-      configuration changes, then SCR must take action based upon whether the
-      component configuration has been activated and whether the component
-      description specifies the <code>modified</code> attribute.</para>
+      <section>
+        <title>Ignore Configuration Policy</title>
 
-      <para>If a component configuration has not been activated and it has a
-      service registered, then a <code>Configuration</code> object change that
-      leaves the component configuration satisfied will only cause the service
-      properties of the service to be modified.</para>
+        <para>For <code>configuration-policy</code> of <code>ignore</code>,
+        component configurations are unaffected by configuration changes since
+        the component properties do not include properties from
+        <code>Configuration</code> objects.</para>
+      </section>
 
-      <para>If a component description specifies the <code>modified</code>
-      attribute and the changes to the target properties for the component
-      configuration do not cause any references of the component configuration
-      to become unsatisfied, SCR must modify the component properties for the
-      component configuration. See <xref linkend="i1652198"/>. A reference can
-      become unsatisfied by a target property change if either:</para>
+      <section>
+        <title>Require Configuration Policy</title>
 
-      <itemizedlist>
-        <listitem>
-          <para>A bound service of a static reference is no longer a target
-          service, or</para>
-        </listitem>
+        <para>For <code>configuration-policy</code> of <code>require</code>,
+        component configurations require a <code>Configuration</code> object.
+        With a factory configuration, there can be zero or more matching
+        <code>Configuration</code> objects which will result in a component
+        configuration for each <code>Configuration</code> object. With a
+        factory component, multiple component configurations can be created
+        all using a single matching <code>Configuration</code> object.</para>
 
-        <listitem>
-          <para>There are no target services for a mandatory dynamic
-          reference.</para>
-        </listitem>
-      </itemizedlist>
+        <para>Deleting a <code>Configuration</code> object will cause the
+        component configurations using it to become unsatisfied. Updating a
+        <code>Configuration</code> object can cause the component
+        configurations using it to become unsatisfied if any of the following
+        occur:</para>
 
-      <para>Otherwise, the component configuration will become unsatisfied and
-      SCR must deactivate that component configuration. SCR must attempt to
-      satisfy the component configuration with the updated component
-      properties.</para>
+        <itemizedlist>
+          <listitem>
+            <para>A target property change results in a bound service of a
+            static reference ceasing to be a target service.</para>
+          </listitem>
+
+          <listitem>
+            <para>A target property change results in unbound target services
+            for a static reference with the <code>greedy</code> policy
+            option.</para>
+          </listitem>
+
+          <listitem>
+            <para>A target property change results in there being zero target
+            services for a mandatory dynamic reference.</para>
+          </listitem>
+
+          <listitem>
+            <para>The component description does not specify the
+            <code>modified</code> attribute.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>If a component configuration becomes unsatisfied, SCR must
+        deactivate the component configuration. If the component configuration
+        was not created from a factory component, SCR must attempt to satisfy
+        the component configuration with the updated component
+        properties.</para>
+
+        <para>If a component configuration remains satisfied and had been
+        activated, the modified method is called. See <xref
+        linkend="i1652198"/> for more information. If a component
+        configuration remains satisfied but has not been activated, then, if
+        the component configuration is registered as a service, SCR must
+        modify the service properties.</para>
+      </section>
+
+      <section>
+        <title>Optional Configuration Policy</title>
+
+        <para>For <code>configuration-policy</code> of <code>optional</code>,
+        component configurations do not require a <code>Configuration</code>
+        object. Since a matching <code>Configuration</code> object is
+        optional, component configurations can be satisfied when there is no
+        matching <code>Configuration</code> object. If a matching
+        <code>Configuration</code> object is then created, this is a
+        configuration change for the component configurations that are not
+        using a <code>Configuration</code> object. When there is only a single
+        matching <code>Configuration</code> object which is then deleted, this
+        is a configuration change for the component configurations using the
+        deleted <code>Configuration</code> object.</para>
+
+        <para>With a factory configuration, there can be zero or more matching
+        <code>Configuration</code> objects which will result in a component
+        configuration for each <code>Configuration</code> object as well as a
+        single component configuration when there are zero matching
+        <code>Configuration</code> objects. With a factory component, multiple
+        component configurations can be created all using either a single
+        matching <code>Configuration</code> object or no
+        <code>Configuration</code> object when there is no matching
+        <code>Configuration</code> object.</para>
+
+        <para>A configuration change can cause a component configuration to
+        become unsatisfied if any of the following occur:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>A target property change results in a bound service of a
+            static reference ceasing to be a target service.</para>
+          </listitem>
+
+          <listitem>
+            <para>A target property change results in unbound target services
+            for a static reference with the <code>greedy</code> policy
+            option.</para>
+          </listitem>
+
+          <listitem>
+            <para>A target property change results in there being zero target
+            services for a mandatory dynamic reference.</para>
+          </listitem>
+
+          <listitem>
+            <para>The component description does not specify the
+            <code>modified</code> attribute.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>If a component configuration becomes unsatisfied, SCR must
+        deactivate the component configuration. If the component configuration
+        was not created from a factory component, SCR must attempt to satisfy
+        the component configuration with the updated component
+        properties.</para>
+
+        <para>If a component configuration remains satisfied and had been
+        activated, the modified method is called. See <xref
+        linkend="i1652198"/> for more information. If a component
+        configuration remains satisfied but has not been activated, then, if
+        the component configuration is registered as a service, SCR must
+        modify the service properties.</para>
+      </section>
     </section>
   </section>
 
@@ -3482,6 +3581,18 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
 
     <para>The schema is also available in digital form from <xref
     linkend="i1655737"/>.</para>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref linkend="i1649746"/> has been rewritten to more accurately
+        state the effects of configuration changes on component
+        configurations.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.component.xml"/>
