@@ -188,20 +188,19 @@ public @interface Component {
 	ConfigurationPolicy configurationPolicy() default ConfigurationPolicy.OPTIONAL;
 
 	/**
-	 * The configuration PID for the configuration of this Component.
+	 * The configuration PIDs for the configuration of this Component.
 	 * 
 	 * <p>
-	 * Allows the configuration PID for this Component to be different than the
-	 * name of this Component.
+	 * Each value specifies a configuration PID for this Component.
 	 * 
 	 * <p>
-	 * If not specified, the name of this Component is used as the configuration
-	 * PID of this Component.
+	 * If no value is specified, the name of this Component is used as the
+	 * configuration PID of this Component.
 	 * 
 	 * @see "The configuration-pid attribute of the component element of a Component Description."
 	 * @since 1.2
 	 */
-	String configurationPid() default "";
+	String[] configurationPid() default {};
 
 	/**
 	 * The service scope for the service of this Component.
