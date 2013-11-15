@@ -1757,4 +1757,26 @@ public interface Constants {
 	 * @see BundleException#DUPLICATE_BUNDLE_ERROR
 	 */
 	String	FRAMEWORK_BSNVERSION_MANAGED			= "managed";
+
+	/**
+	 * Manifest header identifying the bundle's icon URLs.
+	 * 
+	 * <p>
+	 * The header value may be retrieved from the {@code Dictionary} object
+	 * returned by the {@code Bundle.getHeaders} method.
+	 * 
+	 * @since 1.8
+	 */
+	String	BUNDLE_ICON								= "Bundle-Icon";
+
+	/**
+	 * Manifest header identifying the bundle's license information.
+	 * 
+	 * <p>
+	 * The header value may be retrieved from the {@code Dictionary} object
+	 * returned by the {@code Bundle.getHeaders} method.
+	 * 
+	 * @since 1.8
+	 */
+	String	BUNDLE_LICENSE							= "Bundle-License";
 }
