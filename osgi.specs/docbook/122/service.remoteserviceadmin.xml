@@ -2210,9 +2210,9 @@ xml                    ::= &lt;*&gt; *</programlisting>
         namespace.
     </para>
 
-    <programlisting>Require-Capability:
-    osgi.extender;
-        filter:="(osgi.extender=osgi.remoteserviceadmin)"</programlisting>
+    <programlisting>Require-Capability: osgi.extender;
+    filter:="(&amp;(osgi.extender=osgi.remoteserviceadmin)
+             (version&gt;=1.1)(!(version&gt;=2.0)))"</programlisting>
 
     <para>
         With this constraint declared a bundle that depends on the extender
@@ -2221,13 +2221,14 @@ xml                    ::= &lt;*&gt; *</programlisting>
 
     <para>    
         Implementations of this specification must provide this extender
-        capability.
+        capability as follows:
     </para>
 
-    <para>The version for the <code>osgi.remoteserviceadmin</code> extender capability
-        is:</para>
-
-    <programlisting>1.1.0</programlisting>
+    <programlisting>Provide-Capability: osgi.extender;
+    osgi.entender="osgi.remoteserviceadmin";
+    version:Version="1.1";
+    uses:="org.osgi.service.remoteserviceadmin"
+    </programlisting>
   </section>
 
   <section xml:id="i1789427">
