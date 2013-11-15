@@ -1897,7 +1897,19 @@ st.open();</programlisting>
         </listitem>
 
         <listitem>
-          <para><code>cause</code> - The exception, if present.</para>
+          <para><code>exception</code> - (Throwable) The Exception, if present.
+          Also reported on the <code>cause</code> property for backward compatibility.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>exception.class</code> - (<code>String</code>) The
+          fully-qualified class name of the attached Exception.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>exception.message</code> -( <code>String)</code> The
+          message of the attached exception. Only set if the Exception message
+          is not <code>null</code>.</para>
         </listitem>
 
         <listitem>
@@ -2238,18 +2250,6 @@ xml                    ::= &lt;*&gt; *</programlisting>
       longer checked. The caller should therefore be careful to share those
       objects with other bundles. Export and Import References are free to
       share.</para>
-    </section>
-
-    <section>
-      <title>Framework UUID Runtime Permission</title>
-
-      <para>
-          The Remote Service Admin bundle can have the need for reading the Framework UUID property. This requires the
-          following permission:
-      </para>
-
-      <programlisting>PropertyPermission[
-    "org.osgi.framework.uuid","read"]</programlisting>
     </section>
 
     <section>
