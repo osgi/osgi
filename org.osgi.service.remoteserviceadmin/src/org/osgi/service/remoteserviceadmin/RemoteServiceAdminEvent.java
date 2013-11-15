@@ -26,32 +26,32 @@ import org.osgi.framework.Bundle;
  */
 public class RemoteServiceAdminEvent {
 	/**
-	 * Add an import registration. The Remote Service Admin will call this
-	 * method when it imports a service. When this service is registered, the
-	 * Remote Service Admin must notify the listener of all existing Import
-	 * Registrations.
+	 * Add an import registration. The Remote Service Admin will send this event
+	 * when it imports a service. When the {@link RemoteServiceAdminListener}
+	 * service is registered, the Remote Service Admin must notify the listener
+	 * of all existing Import Registrations.
 	 * 
 	 */
 	public static final int			IMPORT_REGISTRATION		= 1;
 
 	/**
-	 * Add an export registration. The Remote Service Admin will call this
-	 * method when it exports a service. When this service is registered, the
-	 * Remote Service Admin must notify the listener of all existing Export
-	 * Registrations.
+	 * Add an export registration. The Remote Service Admin will send this event
+	 * when it exports a service. When the {@link RemoteServiceAdminListener}
+	 * service is registered, the Remote Service Admin must notify the listener
+	 * of all existing Export Registrations.
 	 */
 	public static final int			EXPORT_REGISTRATION		= 2;
 
 	/**
-	 * Remove an export registration. The Remote Service Admin will call this
-	 * method when it removes the export of a service.
+	 * Remove an export registration. The Remote Service Admin will send this
+	 * event when it removes the export of a service.
 	 * 
 	 */
 	public static final int			EXPORT_UNREGISTRATION	= 3;
 
 	/**
-	 * Remove an import registration. The Remote Service Admin will call this
-	 * method when it removes the import of a service.
+	 * Remove an import registration. The Remote Service Admin will send this
+	 * event when it removes the import of a service.
 	 * 
 	 */
 	public static final int			IMPORT_UNREGISTRATION	= 4;
