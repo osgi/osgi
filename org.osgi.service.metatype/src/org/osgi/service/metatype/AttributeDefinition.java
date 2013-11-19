@@ -16,6 +16,8 @@
 
 package org.osgi.service.metatype;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * An interface to describe an attribute.
  * 
@@ -26,6 +28,7 @@ package org.osgi.service.metatype;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface AttributeDefinition {
 	/**
 	 * The {@code STRING} (1) type.

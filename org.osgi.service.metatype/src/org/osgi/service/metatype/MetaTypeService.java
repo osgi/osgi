@@ -16,6 +16,7 @@
 
 package org.osgi.service.metatype;
 
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 
 /**
@@ -33,10 +34,10 @@ import org.osgi.framework.Bundle;
  * {@code MetaTypeProvider} objects.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  * @since 1.1
  */
+@ProviderType
 public interface MetaTypeService {
 	/**
 	 * Return the MetaType information for the specified bundle.

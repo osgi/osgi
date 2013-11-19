@@ -18,6 +18,7 @@ package org.osgi.service.metatype;
 
 import java.io.IOException;
 import java.io.InputStream;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Description for the data type information of an objectclass.
@@ -25,6 +26,7 @@ import java.io.InputStream;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface ObjectClassDefinition {
 	/**
 	 * Argument for {@code getAttributeDefinitions(int)}.
