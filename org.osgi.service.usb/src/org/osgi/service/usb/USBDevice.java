@@ -1,4 +1,4 @@
-﻿package org.osgi.service.usb;
+package org.osgi.service.usb;
 
 /**
  * Represents a USB device. For each USB device, an object is registered with
@@ -29,7 +29,9 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	 * Constant for the value of the service property DEVICE_CATEGORY used for a
 	 * USB device which has a serial communication function such as a USB
 	 * dongle. Such a USB base driver bundle must set this property key and
-	 * USB.device.comport property.
+	 * USB.device.comport property. This device category's value may be used
+	 * independently of USB. This value is defined because of some USB devices
+	 * have a serial communication function.
 	 * 
 	 * See Also org.osgi.service.device.Constants.DEVICE_CATEGORY
 	 */
@@ -123,48 +125,46 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	/**
 	 * MANDATORY property key. Value is "USB.device.interfaceclassess".
 	 * 
-	 * The property value is List. The List size equals to the USB interface
-	 * number. The List contains Lists that respond to each USB interface.
-	 * Interface descriptor's bInterfaceClass is must set index 0, the value is
-	 * int data type, hexadecimal, 2-digits. Interface descriptor's
-	 * bInterfaceSubClass is must set index 1, the value is int data type,
-	 * hexadecimal, 2-digits. Interface descriptor's bInterfaceProtocol is must
-	 * set index 2, the value is int data type, hexadecimal, 2-digits. *
+	 * The property value is int+, hexadecimal, 6-digits. Each int responds to
+	 * each USB interface and is combinated the interface's bInterfaceClass
+	 * (2-digits), bInterfaceSubClass (2-digits) and bInterfaceProtocol
+	 * (2-digits). Example: {0x080000, 0x0a00ff}
 	 */
 	static final String USB_CLASS = "USB.device.interfaceclassess";
 
 	/**
 	 * MANDATORY property key. Value is "USB.device.bus".
 	 * 
-	 * Used to identify USB devices with same VID / PID. The value is the string
-	 * ID of the USB bus assigned when connecting the USB device. USB bus ID is
-	 * Character digit 3 decimal (001-127).
+	 * Used to identify USB devices with same VID / PID. The value is the ID of
+	 * the USB bus assigned when connecting the USB device. USB bus ID is int
+	 * (001-127).
 	 * 
 	 * The USB bus ID does not change while connecting the USB device.
 	 * 
-	 * Example: "003" (In the case of the USB bus is "3")
+	 * Example: 3
 	 */
 	static final String USB_BUS = "USB.device.bus";
 
 	/**
 	 * MANDATORY property key. Value is "USB.device.address".
 	 * 
-	 * Used to identify USB devices with same VID / PID. The value is the string
-	 * ID of the USB address assigned when connecting the USB device. USB
-	 * address is Character digit 3 decimal (001-127).
+	 * Used to identify USB devices with same VID / PID. The value is the ID of
+	 * the USB address assigned when connecting the USB device. USB address is
+	 * int (001-127).
 	 * 
 	 * The USB address does not change while connecting the USB device.
 	 * 
-	 * Example: "002" (In the case of the USB address is "2")
+	 * Example: 2
 	 */
 	static final String USB_ADDR = "USB.device.address";
 
 	/**
 	 * OPTIONAL Property key. Value is "USB.device.comport".
 	 * 
-	 * The USB Device has a serial communication function, set the value that
-	 * represents the COM port. If the USB device does not have a serial
-	 * communication function, this key and value is not set.
+	 * The property value is String. The USB Device has a serial communication
+	 * function, set the value that represents the COM port. If the USB device
+	 * does not have a serial communication function, this key and value is not
+	 * set.
 	 * 
 	 * The driver can communicate through Java Communications API with this
 	 * value. Set this value "portName" of
@@ -179,16 +179,16 @@ public interface /* org.osgi.service.usb. */USBDevice {
 	/**
 	 * OPTIONAL Property key. Value is "USB.device.mountpoint".
 	 * 
-	 * If the USB device is Mass Storage Class, set the value that represents
-	 * the mount point (a path to the USB storage) in OS. If the USB device is
-	 * not Mass Storage Class, this key and value is not set. The driver can
-	 * read and write the USB storage through standard API such as File. If a
-	 * USB base driver set this property, USBDevice.DEVICE_CATEGORY_MASSSTORAGE
-	 * must be set to DEVICE_CATEGORY.
+	 * The property value is String+. If the USB device is Mass Storage Class,
+	 * set the value that represents the mount point (a path to the USB storage)
+	 * in OS. If the USB device is not Mass Storage Class, this key and value is
+	 * not set. The driver can read and write the USB storage through standard
+	 * API such as File. If a USB base driver set this property,
+	 * USBDevice.DEVICE_CATEGORY_MASSSTORAGE must be set to DEVICE_CATEGORY.
 	 * 
 	 * Example: "/mnt/media/usb-storage-01/"
 	 */
-	static final String MOUNTPOINT = "USB.device.mountpoint";
+	static final String MOUNTPOINTS = "USB.device.mountpoints";
 
 	/**
 	 * Constant for the USB device match scale, indicating a match with
