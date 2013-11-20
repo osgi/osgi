@@ -45,4 +45,19 @@ public @interface ObjectClassDefinition {
 	/**
 	 */
 	String description() default "";
+
+	/**
+	 * 
+	 */
+	String[] designate() default {};
+
+	/**
+	 * 
+	 */
+	String[] designateFactory() default {};
+
+	/**
+	 * 
+	 */
+	Icon[] icon() default {};
 }

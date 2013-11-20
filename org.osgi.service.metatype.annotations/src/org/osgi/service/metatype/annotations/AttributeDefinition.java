@@ -77,5 +77,4 @@ public @interface AttributeDefinition {
 	 * 
 	 */
 	Option[] options() default {};
-
 }

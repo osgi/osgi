@@ -16,7 +16,6 @@
 
 package org.osgi.service.metatype.annotations;
 
-import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -26,14 +25,14 @@ import java.lang.annotation.Target;
  * @author $Id$
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.ANNOTATION_TYPE)
-public @interface Designate {
+@Target({})
+public @interface Icon {
 
 	/**
 	 */
-	String value();
+	String resource();
 
 	/**
 	 */
-	boolean factory() default false;
+	int size();
 }
