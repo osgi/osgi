@@ -24,7 +24,7 @@ import java.lang.annotation.Target;
  * 
  * @author $Id$
  */
-@Retention(RetentionPolicy.RUNTIME)
+@Retention(RetentionPolicy.CLASS)
 @Target({})
 public @interface Icon {
 
