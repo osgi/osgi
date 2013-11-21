@@ -35,15 +35,15 @@ public interface AttributeDefinition {
 	 * 
 	 * <p>
 	 * Attributes of this type should be stored as {@code String},
-	 * {@code Vector} with {@code String} or {@code String[]} objects, depending
-	 * on the {@code getCardinality()} value.
+	 * {@code List<String>} or {@code String[]} objects, depending on the
+	 * {@code getCardinality()} value.
 	 */
 	int	STRING		= 1;
 	/**
 	 * The {@code LONG} (2) type.
 	 * 
-	 * Attributes of this type should be stored as {@code Long}, {@code Vector}
-	 * with {@code Long} or {@code long[]} objects, depending on the
+	 * Attributes of this type should be stored as {@code Long},
+	 * {@code List<Long>} or {@code long[]} objects, depending on the
 	 * {@code getCardinality()} value.
 	 */
 	int	LONG		= 2;
@@ -51,15 +51,15 @@ public interface AttributeDefinition {
 	 * The {@code INTEGER} (3) type.
 	 * 
 	 * Attributes of this type should be stored as {@code Integer},
-	 * {@code Vector} with {@code Integer} or {@code int[]} objects, depending
-	 * on the {@code getCardinality()} value.
+	 * {@code List<Integer>} or {@code int[]} objects, depending on the
+	 * {@code getCardinality()} value.
 	 */
 	int	INTEGER		= 3;
 	/**
 	 * The {@code SHORT} (4) type.
 	 * 
-	 * Attributes of this type should be stored as {@code Short}, {@code Vector}
-	 * with {@code Short} or {@code short[]} objects, depending on the
+	 * Attributes of this type should be stored as {@code Short},
+	 * {@code List<Short>} or {@code short[]} objects, depending on the
 	 * {@code getCardinality()} value.
 	 */
 	int	SHORT		= 4;
@@ -67,15 +67,15 @@ public interface AttributeDefinition {
 	 * The {@code CHARACTER} (5) type.
 	 * 
 	 * Attributes of this type should be stored as {@code Character},
-	 * {@code Vector} with {@code Character} or {@code char[]} objects,
-	 * depending on the {@code getCardinality()} value.
+	 * {@code List<Character>} or {@code char[]} objects, depending on the
+	 * {@code getCardinality()} value.
 	 */
 	int	CHARACTER	= 5;
 	/**
 	 * The {@code BYTE} (6) type.
 	 * 
-	 * Attributes of this type should be stored as {@code Byte}, {@code Vector}
-	 * with {@code Byte} or {@code byte[]} objects, depending on the
+	 * Attributes of this type should be stored as {@code Byte},
+	 * {@code List<Byte>} or {@code byte[]} objects, depending on the
 	 * {@code getCardinality()} value.
 	 */
 	int	BYTE		= 6;
@@ -83,15 +83,15 @@ public interface AttributeDefinition {
 	 * The {@code DOUBLE} (7) type.
 	 * 
 	 * Attributes of this type should be stored as {@code Double},
-	 * {@code Vector} with {@code Double} or {@code double[]} objects, depending
-	 * on the {@code getCardinality()} value.
+	 * {@code List<Double>} or {@code double[]} objects, depending on the
+	 * {@code getCardinality()} value.
 	 */
 	int	DOUBLE		= 7;
 	/**
 	 * The {@code FLOAT} (8) type.
 	 * 
-	 * Attributes of this type should be stored as {@code Float}, {@code Vector}
-	 * with {@code Float} or {@code float[]} objects, depending on the
+	 * Attributes of this type should be stored as {@code Float},
+	 * {@code List<Float>} or {@code float[]} objects, depending on the
 	 * {@code getCardinality()} value.
 	 */
 	int	FLOAT		= 8;
@@ -99,8 +99,8 @@ public interface AttributeDefinition {
 	 * The {@code BIGINTEGER} (9) type.
 	 * 
 	 * Attributes of this type should be stored as {@code BigInteger},
-	 * {@code Vector} with {@code BigInteger} or {@code BigInteger[]} objects,
-	 * depending on the {@code getCardinality()} value.
+	 * {@code List<BigInteger>} or {@code BigInteger[]} objects, depending on
+	 * the {@code getCardinality()} value.
 	 * 
 	 * @deprecated As of 1.1.
 	 */
@@ -109,8 +109,8 @@ public interface AttributeDefinition {
 	 * The {@code BIGDECIMAL} (10) type.
 	 * 
 	 * Attributes of this type should be stored as {@code BigDecimal},
-	 * {@code Vector} with {@code BigDecimal} or {@code BigDecimal[]} objects
-	 * depending on {@code getCardinality()}.
+	 * {@code List<BigDecimal>} or {@code BigDecimal[]} objects depending on
+	 * {@code getCardinality()}.
 	 * 
 	 * @deprecated As of 1.1.
 	 */
@@ -119,16 +119,16 @@ public interface AttributeDefinition {
 	 * The {@code BOOLEAN} (11) type.
 	 * 
 	 * Attributes of this type should be stored as {@code Boolean},
-	 * {@code Vector} with {@code Boolean} or {@code boolean[]} objects
-	 * depending on {@code getCardinality()}.
+	 * {@code List<Boolean>} or {@code boolean[]} objects depending on
+	 * {@code getCardinality()}.
 	 */
 	int	BOOLEAN		= 11;
 
 	/**
 	 * The {@code PASSWORD} (12) type.
 	 * 
-	 * Attributes of this type must be stored as {@code String}, {@code Vector}
-	 * with {@code String} or {@code String[]} objects depending on {link
+	 * Attributes of this type must be stored as {@code String},
+	 * {@code List<String>} or {@code String[]} objects depending on {link
 	 * getCardinality()}. A {@code PASSWORD} must be treated as a string but the
 	 * type can be used to disguise the information when displayed to a user to
 	 * prevent others from seeing it.
@@ -178,12 +178,12 @@ public interface AttributeDefinition {
 	 * Return the cardinality of this attribute.
 	 * 
 	 * The OSGi environment handles multi valued attributes in arrays ([]) or in
-	 * {@code Vector} objects. The return value is defined as follows:
+	 * {@code List} objects. The return value is defined as follows:
 	 * 
 	 * <pre>
 	 * 
-	 *    x = Integer.MIN_VALUE    no limit, but use Vector
-	 *    x &lt; 0                    -x = max occurrences, store in Vector
+	 *    x = Integer.MIN_VALUE    no limit, but use List
+	 *    x &lt; 0                    -x = max occurrences, store in List
 	 *    x &gt; 0                     x = max occurrences, store in array []
 	 *    x = Integer.MAX_VALUE    no limit, but use array []
 	 *    x = 0                     1 occurrence required
@@ -298,8 +298,8 @@ public interface AttributeDefinition {
 	 * if the cardinality = 0, the array must contain 1 element. If the
 	 * cardinality is 1, it must contain 0 or 1 elements. If it is -5, it must
 	 * contain from 0 to max 5 elements. Note that the special case of a 0
-	 * cardinality, meaning a single value, does not allow arrays or vectors of
-	 * 0 elements.
+	 * cardinality, meaning a single value, does not allow arrays or lists of 0
+	 * elements.
 	 * 
 	 * @return Return a default value or {@code null} if no default exists.
 	 */

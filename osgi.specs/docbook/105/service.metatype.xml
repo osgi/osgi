@@ -318,7 +318,7 @@
 
       <listitem>
         <para>An indication if this attribute should be stored as a unique
-        value, a <code>Vector</code>, or an array of values, as well as the
+        value, a <code>List</code>, or an array of values, as well as the
         maximum cardinality of the type.</para>
       </listitem>
 
@@ -1001,7 +1001,7 @@ Password <phrase role="symbol">↔</phrase> <xref
 
               <entry><para>The number of elements an instance can take.
               Positive numbers describe an array (<code>[]</code>) and
-              negative numbers describe a <code>Vector</code>
+              negative numbers describe a <code>List</code>
               object.</para></entry>
             </row>
 
@@ -1068,10 +1068,10 @@ Password <phrase role="symbol">↔</phrase> <xref
               in the same way as described in the <xref
               linkend="org.osgi.service.metatype.AttributeDefinition.validate-String-"
               xrefstyle="hyperlink"/> method. The empty string is significant
-              and must be seen as an empty Vector or array if specified as the
-              default for an attribute with a cardinality that is not equal to
-              zero. Default values must be valid or otherwise
-              ignored.</para></entry>
+              and must be seen as an empty <code>List</code> or array if
+              specified as the default for an attribute with a cardinality
+              that is not equal to zero. Default values must be valid or
+              otherwise ignored.</para></entry>
             </row>
 
             <row>
@@ -1402,7 +1402,7 @@ female=Female</programlisting>
 
     <para>The OSGi MetaType specification is intended to be used for simple
     applications. It does not, therefore, support recursive data types, mixed
-    types in arrays/vectors, or nested arrays/vectors.</para>
+    types in arrays/lists, or nested arrays/lists.</para>
   </section>
 
   <section>
@@ -1438,6 +1438,16 @@ female=Female</programlisting>
 
     <para>Special security issues are not applicable for this
     specification.</para>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Changed vector references to list.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.metatype.xml"/>

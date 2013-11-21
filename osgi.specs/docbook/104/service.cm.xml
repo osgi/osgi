@@ -810,7 +810,7 @@ private       ::= '.' symbolic-name</programlisting>
       on the character set that can be used. The <code>symbolic-name</code>
       production uses a very minimal character set.</para>
 
-      <para>Bundles must not use nested vectors or arrays, nor must they use
+      <para>Bundles must not use nested lists or arrays, nor must they use
       mixed types. Using mixed types or nesting makes it impossible to use the
       meta typing specification. See <xref
       linkend="service.metatype"/>.</para>
@@ -2261,7 +2261,7 @@ ConfigurationPermission[?application,<xref
     <itemizedlist>
       <listitem>
         <para>The metatype specification cannot describe nested arrays and
-        vectors or arrays/vectors of mixed type.</para>
+        lists or arrays/lists of mixed type.</para>
       </listitem>
     </itemizedlist>
 
@@ -2448,6 +2448,7 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
       <listitem>
         <para>Clarified that collection property values may have an ordering
         that must be preserved.</para>
+        <para>Changed vector references to list.</para>
       </listitem>
     </itemizedlist>
   </section>
