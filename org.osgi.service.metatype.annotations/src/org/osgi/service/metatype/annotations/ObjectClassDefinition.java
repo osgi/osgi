@@ -49,12 +49,12 @@ public @interface ObjectClassDefinition {
 	/**
 	 * 
 	 */
-	String[] designate() default {};
+	String[] pid() default {};
 
 	/**
 	 * 
 	 */
-	String[] designateFactory() default {};
+	String[] factoryPid() default {};
 
 	/**
 	 * 
