@@ -39,11 +39,6 @@ public @interface AttributeDefinition {
 	String description() default "";
 
 	/**
-	 * id
-	 */
-	String id() default "";
-
-	/**
 	 * 
 	 */
 	AttributeType type() default AttributeType.STRING;
