@@ -22,54 +22,153 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * {@code AttributeDefinition} information for the annotated method.
  * 
+ * <p>
+ * Each method of a type annotated by {@link ObjectClassDefinition} has an
+ * implied AttributeDefinition annotation. This annotation is only used to
+ * specify non-default AttributeDefinition information.
+ * 
+ * <p>
+ * The {@code id} of this AttributeDefinition is generated from the name of the
+ * annotated method. The annotated method name is processed from left to right
+ * changing each character as follows:
+ * <ul>
+ * <li>A dollar sign ({@code '$'} &#92;u0024) is removed unless it is followed
+ * by another dollar sign in which case the two consecutive dollar signs (
+ * {@code '$$'}) are changed to a single dollar sign.</li>
+ * <li>A low line ({@code '_'} &#92;u005F) is changed to a full stop (
+ * {@code '.'} &#92;u002E) unless is it followed by another low line in which
+ * case the two consecutive low lines ({@code '__'}) are changed to a single low
+ * line.</li>
+ * <li>All other characters are unchanged.</li>
+ * </ul>
+ * This id is the value of the id attribute of the generate AD element and is
+ * used as the name of the corresponding configuration property.
+ * 
+ * <p>
+ * This annotation is not processed at runtime. It must be processed by tools
+ * and used to generate a Meta Type Resource document for the bundle.
+ * 
+ * @see "The AD element of a Meta Type Resource."
  * @author $Id$
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.METHOD)
 public @interface AttributeDefinition {
 	/**
+	 * The human readable name of this AttributeDefinition.
 	 * 
+	 * <p>
+	 * If not specified, the name of this AttributeDefinition is derived from
+	 * the name of the annotated method. For example, low line ({@code '_'}
+	 * &#92;u005F) and dollar sign ({@code '$'} &#92;u0024) are replaced with
+	 * space ( {@code ' '} &#92;u0020) and space is inserted between camel case
+	 * words.
+	 * 
+	 * <p>
+	 * If the name begins with the percent sign ({@code '%'} &#92;u0025), the
+	 * name can be {@link ObjectClassDefinition#localization() localized}.
+	 * 
+	 * @see "The name attribute of the AD element of a Meta Type Resource."
 	 */
 	String name() default "";
 
 	/**
+	 * The human readable description of this AttributeDefinition.
 	 * 
+	 * <p>
+	 * If not specified, the description of this AttributeDefinition is the
+	 * empty string.
+	 * 
+	 * <p>
+	 * If the description begins with the percent sign ({@code '%'} &#92;u0025),
+	 * the description can be {@link ObjectClassDefinition#localization()
+	 * localized}.
+	 * 
+	 * @see "The description attribute of the AD element of a Meta Type Resource."
 	 */
 	String description() default "";
 
 	/**
+	 * The type of this AttributeDefinition.
 	 * 
+	 * <p>
+	 * This must be one of the defined {@link AttributeType attributes types}.
+	 * 
+	 * <p>
+	 * If not specified, the type is derived from the return type of the
+	 * annotated method. Return types of {@code Class} and {@code Enum} are
+	 * mapped to {@link AttributeType#STRING STRING}. A tool processing the
+	 * annotation should declare an error for unsupported return types.
+	 * 
+	 * @see "The type attribute of the AD element of a Meta Type Resource."
 	 */
 	AttributeType type() default AttributeType.STRING;
 
 	/**
+	 * The cardinality of this AttributeDefinition.
 	 * 
+	 * <p>
+	 * If not specified, the cardinality is derived from the return type of the
+	 * annotated method. For non-array and non-Collection return types, that is
+	 * a scalar type, the cardinality is 0. For array return types, the
+	 * cardinality is a large positive value. For Collection return types, the
+	 * cardinality is a large negative value.
+	 * 
+	 * @see "The cardinality attribute of the AD element of a Meta Type Resource."
 	 */
 	int cardinality() default 0;
 
 	/**
+	 * The minimum value for this AttributeDefinition.
 	 * 
+	 * <p>
+	 * If not specified, there is no minimum value.
+	 * 
+	 * @see "The min attribute of the AD element of a Meta Type Resource."
 	 */
 	String min() default "";
 
 	/**
+	 * The maximum value for this AttributeDefinition.
 	 * 
+	 * <p>
+	 * If not specified, there is no maximum value.
+	 * 
+	 * @see "The max attribute of the AD element of a Meta Type Resource."
 	 */
 	String max() default "";
 
 	/**
+	 * The default value for this AttributeDefinition.
 	 * 
+	 * <p>
+	 * If not specified, there is no default value.
+	 * 
+	 * @see "The default attribute of the AD element of a Meta Type Resource."
 	 */
 	String[] defaultValue() default {};
 
 	/**
+	 * The required value for this AttributeDefinition.
 	 * 
+	 * <p>
+	 * If not specified, the value is {@code true}.
+	 * 
+	 * @see "The required attribute of the AD element of a Meta Type Resource."
 	 */
 	boolean required() default true;
 
 	/**
+	 * The option information for this AttributeDefinition.
 	 * 
+	 * <p>
+	 * For each specified {@link Option}, an {@code Option} element is generated
+	 * for this AttributeDefinition. If not specified, no Option elements will
+	 * be generated.
+	 * 
+	 * @see "The Option element of a Meta Type Resource."
 	 */
 	Option[] options() default {};
 }

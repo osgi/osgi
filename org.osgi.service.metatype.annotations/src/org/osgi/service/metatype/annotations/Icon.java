@@ -21,7 +21,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * {@code Icon} information for an {@link ObjectClassDefinition}.
  * 
+ * @see ObjectClassDefinition#icon()
  * @author $Id$
  */
 @Retention(RetentionPolicy.CLASS)
@@ -29,10 +31,28 @@ import java.lang.annotation.Target;
 public @interface Icon {
 
 	/**
+	 * The resource name for this Icon.
+	 * 
+	 * <p>
+	 * The resource is a URL. The resource URL can be relative to the root of
+	 * the bundle containing the Meta Type Resource.
+	 * 
+	 * <p>
+	 * If the resource begins with the percent sign ({@code '%'} &#92;u0025),
+	 * the resource can be {@link ObjectClassDefinition#localization()
+	 * localized}.
+	 * 
+	 * @see "The resource attribute of the Icon element of a Meta Type Resource."
 	 */
 	String resource();
 
 	/**
+	 * The pixel size of this Icon.
+	 * 
+	 * <p>
+	 * For example, 32 represents a 32x32 icon.
+	 * 
+	 * @see "The size attribute of the Icon element of a Meta Type Resource."
 	 */
 	int size();
 }
