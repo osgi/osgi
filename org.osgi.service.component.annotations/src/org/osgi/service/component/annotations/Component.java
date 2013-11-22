@@ -197,10 +197,40 @@ public @interface Component {
 	 * If no value is specified, the name of this Component is used as the
 	 * configuration PID of this Component.
 	 * 
+	 * <p>
+	 * A special string (<code>{@value #NAME}</code>) can be used to specify the
+	 * name of the component as a configuration PID. The {@code NAME} constant
+	 * holds this special string. For example:
+	 * 
+	 * <pre>
+	 * &#64;Component(configurationPid={"com.acme.system", Component.NAME})
+	 * </pre>
+	 * 
+	 * Tools creating a Component Description from this annotation must replace
+	 * the special string with the actual name of this Component.
+	 * 
 	 * @see "The configuration-pid attribute of the component element of a Component Description."
 	 * @since 1.2
 	 */
-	String[] configurationPid() default {};
+	String[] configurationPid() default {NAME};
+
+	/**
+	 * Special string representing the name of this Component.
+	 * 
+	 * <p>
+	 * This string can be used in {@link #configurationPid()} to specify the
+	 * name of the component as a configuration PID. For example:
+	 * 
+	 * <pre>
+	 * &#64;Component(configurationPid={"com.acme.system", Component.NAME})
+	 * </pre>
+	 * 
+	 * Tools creating a Component Description from this annotation must replace
+	 * the special string with the actual name of this Component.
+	 * 
+	 * @since 1.3
+	 */
+	final String	NAME	= "$";
 
 	/**
 	 * The service scope for the service of this Component.
