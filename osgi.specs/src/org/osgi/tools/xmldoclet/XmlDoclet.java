@@ -716,10 +716,7 @@ public class XmlDoclet extends Doclet {
 								if (tag.kind().equals("@value")) {
 									FieldDoc field = getReferredField(tag);
 									if (field != null) {
-										sb.append("<code class='value'>");
-										sb.append(escape(field.constantValue()
-												+ ""));
-										sb.append("</code>");
+						sb.append(escape(field.constantValueExpression()));
 									}
 									else
 										root.printError("No value for "
