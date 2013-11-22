@@ -199,8 +199,9 @@ public interface AttributeDefinition {
 	 * 
 	 * <p>
 	 * Defined in the following constants which map to the appropriate Java
-	 * type. {@code STRING},{@code LONG},{@code INTEGER}, {@code CHAR},
-	 * {@code BYTE},{@code DOUBLE},{@code FLOAT}, {@code BOOLEAN}.
+	 * type. {@link #STRING},{@link #LONG},{@link #INTEGER}, {@link #SHORT},
+	 * {@link #CHARACTER}, {@link #BYTE},{@link #DOUBLE},{@link #FLOAT},
+	 * {@link #BOOLEAN}, {@link #PASSWORD}.
 	 * 
 	 * @return The type for this attribute.
 	 */
