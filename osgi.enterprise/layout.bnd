@@ -14,6 +14,7 @@ enterprise.specs = \
 	 org.osgi.service.jpa, \
 	 org.osgi.service.log, \
 	 org.osgi.service.metatype, \
+     org.osgi.service.metatype.annotations, \
      org.osgi.service.provisioning, \
      org.osgi.service.remoteserviceadmin, \
      org.osgi.service.repository, \

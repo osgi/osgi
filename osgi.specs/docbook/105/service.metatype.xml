@@ -1452,6 +1452,8 @@ female=Female</programlisting>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.metatype.xml"/>
 
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.metatype.annotations.xml"/>
+
   <section xml:id="i1215848">
     <title>References</title>
 
