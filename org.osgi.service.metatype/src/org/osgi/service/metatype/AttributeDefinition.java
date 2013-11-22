@@ -31,107 +31,107 @@ import org.osgi.annotation.versioning.ConsumerType;
 @ConsumerType
 public interface AttributeDefinition {
 	/**
-	 * The {@code STRING} (1) type.
+	 * The {@code STRING} type.
 	 * 
 	 * <p>
 	 * Attributes of this type should be stored as {@code String},
 	 * {@code List<String>} or {@code String[]} objects, depending on the
-	 * {@code getCardinality()} value.
+	 * {@link #getCardinality()} value.
 	 */
 	int	STRING		= 1;
 	/**
-	 * The {@code LONG} (2) type.
+	 * The {@code LONG} type.
 	 * 
 	 * Attributes of this type should be stored as {@code Long},
 	 * {@code List<Long>} or {@code long[]} objects, depending on the
-	 * {@code getCardinality()} value.
+	 * {@link #getCardinality()} value.
 	 */
 	int	LONG		= 2;
 	/**
-	 * The {@code INTEGER} (3) type.
+	 * The {@code INTEGER} type.
 	 * 
 	 * Attributes of this type should be stored as {@code Integer},
 	 * {@code List<Integer>} or {@code int[]} objects, depending on the
-	 * {@code getCardinality()} value.
+	 * {@link #getCardinality()} value.
 	 */
 	int	INTEGER		= 3;
 	/**
-	 * The {@code SHORT} (4) type.
+	 * The {@code SHORT} type.
 	 * 
 	 * Attributes of this type should be stored as {@code Short},
 	 * {@code List<Short>} or {@code short[]} objects, depending on the
-	 * {@code getCardinality()} value.
+	 * {@link #getCardinality()} value.
 	 */
 	int	SHORT		= 4;
 	/**
-	 * The {@code CHARACTER} (5) type.
+	 * The {@code CHARACTER} type.
 	 * 
 	 * Attributes of this type should be stored as {@code Character},
 	 * {@code List<Character>} or {@code char[]} objects, depending on the
-	 * {@code getCardinality()} value.
+	 * {@link #getCardinality()} value.
 	 */
 	int	CHARACTER	= 5;
 	/**
-	 * The {@code BYTE} (6) type.
+	 * The {@code BYTE} type.
 	 * 
 	 * Attributes of this type should be stored as {@code Byte},
 	 * {@code List<Byte>} or {@code byte[]} objects, depending on the
-	 * {@code getCardinality()} value.
+	 * {@link #getCardinality()} value.
 	 */
 	int	BYTE		= 6;
 	/**
-	 * The {@code DOUBLE} (7) type.
+	 * The {@code DOUBLE} type.
 	 * 
 	 * Attributes of this type should be stored as {@code Double},
 	 * {@code List<Double>} or {@code double[]} objects, depending on the
-	 * {@code getCardinality()} value.
+	 * {@link #getCardinality()} value.
 	 */
 	int	DOUBLE		= 7;
 	/**
-	 * The {@code FLOAT} (8) type.
+	 * The {@code FLOAT} type.
 	 * 
 	 * Attributes of this type should be stored as {@code Float},
 	 * {@code List<Float>} or {@code float[]} objects, depending on the
-	 * {@code getCardinality()} value.
+	 * {@link #getCardinality()} value.
 	 */
 	int	FLOAT		= 8;
 	/**
-	 * The {@code BIGINTEGER} (9) type.
+	 * The {@code BIGINTEGER} type.
 	 * 
 	 * Attributes of this type should be stored as {@code BigInteger},
 	 * {@code List<BigInteger>} or {@code BigInteger[]} objects, depending on
-	 * the {@code getCardinality()} value.
+	 * the {@link #getCardinality()} value.
 	 * 
 	 * @deprecated As of 1.1.
 	 */
 	int	BIGINTEGER	= 9;
 	/**
-	 * The {@code BIGDECIMAL} (10) type.
+	 * The {@code BIGDECIMAL} type.
 	 * 
 	 * Attributes of this type should be stored as {@code BigDecimal},
 	 * {@code List<BigDecimal>} or {@code BigDecimal[]} objects depending on
-	 * {@code getCardinality()}.
+	 * {@link #getCardinality()}.
 	 * 
 	 * @deprecated As of 1.1.
 	 */
 	int	BIGDECIMAL	= 10;
 	/**
-	 * The {@code BOOLEAN} (11) type.
+	 * The {@code BOOLEAN} type.
 	 * 
 	 * Attributes of this type should be stored as {@code Boolean},
 	 * {@code List<Boolean>} or {@code boolean[]} objects depending on
-	 * {@code getCardinality()}.
+	 * {@link #getCardinality()}.
 	 */
 	int	BOOLEAN		= 11;
 
 	/**
-	 * The {@code PASSWORD} (12) type.
+	 * The {@code PASSWORD} type.
 	 * 
 	 * Attributes of this type must be stored as {@code String},
-	 * {@code List<String>} or {@code String[]} objects depending on {link
-	 * getCardinality()}. A {@code PASSWORD} must be treated as a string but the
-	 * type can be used to disguise the information when displayed to a user to
-	 * prevent others from seeing it.
+	 * {@code List<String>} or {@code String[]} objects depending on
+	 * {@link #getCardinality()}. A {@code PASSWORD} must be treated as a string
+	 * but the type can be used to disguise the information when displayed to a
+	 * user to prevent others from seeing it.
 	 * 
 	 * @since 1.2
 	 */
