@@ -28,7 +28,7 @@ public interface ZigBeeSimpleDescriptor {
 	/**
 	 * @return the application profile id.
 	 */
-	public int getApplicationProfileId();
+	public Integer getApplicationProfileId();
 
 	/**
 	 * @return device id as defined per profile.

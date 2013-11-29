@@ -29,14 +29,14 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		this.desc = desc;
 	}
 
-	public short getId() {
+	public Short getId() {
 		// TODO Auto-generated method stub
 		return id;
 	}
 
-	public long getNodeAddress() {
+	public Long getNodeAddress() {
 		// TODO Auto-generated method stub
-		return -1;
+		return Long.valueOf("-1");
 	}
 
 	public ZigBeeSimpleDescriptor getSimpleDescriptor() throws ZigBeeException {

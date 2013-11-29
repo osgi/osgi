@@ -36,4 +36,9 @@ public class ZigBeeCommandImpl implements ZigBeeCommand {
 		return description.getName();
 	}
 
+	public void invoke(byte[] bytes, ZigBeeCommandHandler handler, String exportedServicePID) throws ZigBeeException {
+		byte[] response = {};
+		handler.onSuccess(response);
+	}
+
 }

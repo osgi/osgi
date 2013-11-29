@@ -193,7 +193,7 @@ public interface ZigBeeNode {
 	/**
 	 * @return The network Personal Area Network identifier(PAND ID)
 	 */
-	public int getPanId();
+	public Integer getPanId();
 
 	/**
 	 * @return The network Extended PAN identifier(EPID)

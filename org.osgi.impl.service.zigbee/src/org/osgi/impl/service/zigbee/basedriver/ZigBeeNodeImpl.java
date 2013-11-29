@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.zigbee.basedriver;
 
 import org.osgi.service.zigbee.ZigBeeEndpoint;
@@ -59,7 +60,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		return null;
 	}
 
-	public int getPanId() {
+	public Integer getPanId() {
 		// TODO Auto-generated method stub
 		return 0;
 	}

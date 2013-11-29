@@ -26,7 +26,7 @@ public interface ZigBeeAttributeDescription {
 	/**
 	 * @return the attribute identifier
 	 */
-	public int getId();
+	public Integer getId();
 
 	/**
 	 * @return The attribute name

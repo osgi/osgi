@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.zigbee.descriptors;
 
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
@@ -7,9 +8,9 @@ import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
  */
 public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 
-	private short	logicalType;
+	private Short	logicalType;
 	private short	frequencyBand;
-	private int		manufacturerCode;
+	private Integer	manufacturerCode;
 	private int		maxBufferSize;
 	private boolean	isComplexDescriptorAvailable;
 	private boolean	isUserDescriptorAvailable;
@@ -22,7 +23,7 @@ public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 	 * @param isComplexAv
 	 * @param isUserAv
 	 */
-	public ZigBeeNodeDescriptorImpl(short type, short band, int manufCode, int maxBufSize, boolean isComplexAv, boolean isUserAv) {
+	public ZigBeeNodeDescriptorImpl(Short type, short band, Integer manufCode, int maxBufSize, boolean isComplexAv, boolean isUserAv) {
 		this.logicalType = type;
 		this.frequencyBand = band;
 		this.manufacturerCode = manufCode;
@@ -35,7 +36,7 @@ public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 	 * @return one of: ZigBeeNode.COORDINATOR, ZigBeeNode.ROUTER,
 	 *         ZigBeeNode.END_DEVICE.
 	 */
-	public short getLogicalType() {
+	public Short getLogicalType() {
 		return logicalType;
 	}
 
@@ -51,7 +52,7 @@ public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 	/**
 	 * @return the manufacurer code field.
 	 */
-	public int getManufacturerCode() {
+	public Integer getManufacturerCode() {
 		return manufacturerCode;
 	}
 

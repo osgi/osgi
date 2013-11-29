@@ -45,7 +45,7 @@ public interface ZigBeeCluster {
 	/**
 	 * @return the cluster identifier
 	 */
-	public int getId();
+	public Integer getId();
 
 	/**
 	 * @param attributeId an Attribute identifier

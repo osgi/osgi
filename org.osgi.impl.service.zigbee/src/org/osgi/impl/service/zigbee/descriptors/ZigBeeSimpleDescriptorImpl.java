@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.zigbee.descriptors;
 
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
@@ -9,14 +10,14 @@ public class ZigBeeSimpleDescriptorImpl implements ZigBeeSimpleDescriptor {
 
 	private int		deviceId;
 	private byte	version;
-	private int		profileId;
+	private Integer	profileId;
 
 	/**
 	 * @param deviceId
 	 * @param version
 	 * @param profileId
 	 */
-	public ZigBeeSimpleDescriptorImpl(int deviceId, byte version, int profileId) {
+	public ZigBeeSimpleDescriptorImpl(int deviceId, byte version, Integer profileId) {
 		// TODO Auto-generated constructor stub
 		this.deviceId = deviceId;
 		this.version = version;
@@ -33,7 +34,7 @@ public class ZigBeeSimpleDescriptorImpl implements ZigBeeSimpleDescriptor {
 		return version;
 	}
 
-	public int getApplicationProfileId() {
+	public Integer getApplicationProfileId() {
 		// TODO Auto-generated method stub
 		return profileId;
 	}

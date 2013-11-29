@@ -79,7 +79,7 @@ public interface ZigBeeNodeDescriptor {
 	 * @return one of: ZigBeeNode.COORDINATOR, ZigBeeNode.ROUTER,
 	 *         ZigBeeNode.END_DEVICE.
 	 */
-	public short getLogicalType();
+	public Short getLogicalType();
 
 	/**
 	 * @return true if a complex descriptor is available or false otherwise.
@@ -101,7 +101,7 @@ public interface ZigBeeNodeDescriptor {
 	/**
 	 * @return the manufacurer code field.
 	 */
-	public int getManufacturerCode();
+	public Integer getManufacturerCode();
 
 	/**
 	 * @return the maximum buffer size field.

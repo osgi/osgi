@@ -15,7 +15,7 @@ import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
  */
 public class ZigBeeClusterImpl implements ZigBeeCluster {
 
-	private int							id;
+	private Integer						id;
 	private ZigBeeAttributeImpl[]		attributes;
 	private ZigBeeCommand[]				commands;
 	private ZigBeeClusterDescription	description;
@@ -23,7 +23,7 @@ public class ZigBeeClusterImpl implements ZigBeeCluster {
 	/**
 	 * @param id
 	 */
-	public ZigBeeClusterImpl(int id) {
+	public ZigBeeClusterImpl(Integer id) {
 		this.id = id;
 	}
 
@@ -39,7 +39,7 @@ public class ZigBeeClusterImpl implements ZigBeeCluster {
 		this.description = desc;
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 

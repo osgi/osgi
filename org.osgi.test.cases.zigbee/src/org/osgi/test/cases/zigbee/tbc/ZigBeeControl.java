@@ -487,6 +487,26 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			e.printStackTrace();
 			fail("No exception is expected.");
 		}
+
+		bytes = null;
+		String exportedServicePID = null;
+		try {
+			ZigBeeCommandHandlerImpl commandHandlerImpl = new ZigBeeCommandHandlerImpl();
+			command.invoke(bytes, commandHandlerImpl, exportedServicePID);
+
+			isSuccess = commandHandlerImpl.isSuccess();
+			if (isSuccess == null) {
+				fail("isSuccess is expected not to be null.");
+			} else
+				if (isSuccess) {
+					log("commandHandlerImpl.getResponse(): " + commandHandlerImpl.getResponseSuccess());
+				} else {
+					fail("isSuccess is expected not to be false.");
+				}
+		} catch (ZigBeeException e) {
+			e.printStackTrace();
+			fail("No exception is expected.");
+		}
 	}
 
 	// ====================================================================
