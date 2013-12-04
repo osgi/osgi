@@ -72,20 +72,20 @@ public interface Coordination {
 	 * A singleton exception that will be the failure cause when a Coordination
 	 * times out.
 	 */
-	Exception	TIMEOUT		= new Exception("TIMEOUT");
+	Exception	TIMEOUT		= new SingletonException("TIMEOUT");
 
 	/**
 	 * A singleton exception that will be the failure cause when the
 	 * Coordinations created by a bundle are terminated because the bundle
 	 * released the Coordinator service.
 	 */
-	Exception	RELEASED	= new Exception("RELEASED");
+	Exception	RELEASED	= new SingletonException("RELEASED");
 
 	/**
 	 * A singleton exception that will be the failure cause when a Coordination
 	 * has been orphaned.
 	 */
-	Exception	ORPHANED	= new Exception("ORPHANED");
+	Exception	ORPHANED	= new SingletonException("ORPHANED");
 
 	/**
 	 * Returns the id assigned to this Coordination.
