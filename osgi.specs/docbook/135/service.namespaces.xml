@@ -233,7 +233,7 @@
     the packages with their required version range. For example:</para>
 
     <programlisting>Provide-Capability: osgi.contract;
-    osgi.contract=Servlet;
+    osgi.contract=JavaServlet;
     version:Version=2.5;
     uses:="javax.servlet,javax.servlet.http"
 Import-Package:
@@ -244,13 +244,13 @@ Import-Package:
     the following manifest:</para>
 
     <programlisting>Require-Capability: osgi.contract;
-    filter:="(&amp;(osgi.contract=Servlet)(version&gt;=2.5))",
+    filter:="(&amp;(osgi.contract=JavaServlet)(version&gt;=2.5))",
 Import-Package:
     javax.servlet, javax.servlet.http</programlisting>
 
     <para>The client bundle will be constrained by the contract's uses
     constraints and automatically gets the correct packages. In this example,
-    no semantic versioning is used for the contract because the Servlets
+    no semantic versioning is used for the contract because the Servlet
     Specifications do not use semantic versioning (version 3.0 is backward
     compatible with 2.X).</para>
 
@@ -262,8 +262,9 @@ Import-Package:
     include an attribute on the exports. For example:</para>
 
     <programlisting>Require-Capability: osgi.contract;
-    filter:="(&amp;(osgi.contract=Servlet)(version&gt;=2.5))"
-DynamicImport-Package: *;Servlet=contract</programlisting>
+    filter:="(&amp;(osgi.contract=JavaServlet)(version&gt;=2.5))"
+DynamicImport-Package: 
+    *;JavaServlet=contract</programlisting>
 
     <para>However, this model requires the exporter to specify an agreed
     attribute. The contract bundle does not require such coordination; it also
@@ -274,6 +275,10 @@ DynamicImport-Package: *;Servlet=contract</programlisting>
     following table and in the <xref
     linkend="org.osgi.namespace.contract.ContractNamespace"
     xrefstyle="hyperlink"/> class.</para>
+
+    <para>
+        <remark>Provide a pointer to the RFC180-defined contracts on the website.</remark>    
+    </para>
 
     <table pgwide="1">
       <title>osgi.contract Namespace</title>
