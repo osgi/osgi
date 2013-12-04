@@ -8,8 +8,6 @@ public class EnOceanBundleActivator implements BundleActivator {
 	private EnOceanBaseDriver	basedriver;
 
 	public void start(BundleContext bc) {
-
-
 		try {
 			basedriver = new EnOceanBaseDriver(bc);
 			basedriver.start();

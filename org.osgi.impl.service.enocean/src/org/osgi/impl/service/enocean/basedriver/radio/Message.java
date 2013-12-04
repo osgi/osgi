@@ -81,7 +81,7 @@ public abstract class Message implements EnOceanMessage {
 		RORG = (byte) (rorg & 0xff);
 	}
 
-	public byte[] serialize() {
+	public byte[] getBytes() {
 		return messageBytes;
 	}
 
@@ -162,7 +162,7 @@ public abstract class Message implements EnOceanMessage {
 
 	public List getTelegrams() {
 		List list = new ArrayList();
-		list.add(serialize());
+		list.add(getBytes());
 		return list;
 	}
 

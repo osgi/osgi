@@ -25,6 +25,6 @@ package org.osgi.test.cases.enocean.utils;
  */
 public interface ByteSerializable {
 
-	public byte[] serialize();
+	public byte[] getBytes();
 
 }

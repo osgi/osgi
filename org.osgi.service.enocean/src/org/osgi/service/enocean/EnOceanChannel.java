@@ -19,10 +19,7 @@ package org.osgi.service.enocean;
 
 
 /**
- * Holds the metadata and means to retrieve the actual value of a channel.
- * It is only one of the interfaces that a channel should implement; to be complete,
- * a channel should also implement either the {@link EnOceanDataChannel} interface or
- * the {@link EnOceanEnumChannel} interface.
+ * Holds the raw value and channel identification info of an EnOceanChannel.
  *  
  * @version 1.0
  * @author Victor Perron <victor.perron@orange.fr>
@@ -47,8 +44,7 @@ public interface EnOceanChannel {
 	public int getSize();
 
 	/**
-	 * Gets or sets the raw value of this channel.
-	 * @return
+	 * Gets the raw value of this channel.
 	 */
 	byte[] getRawValue();
 	

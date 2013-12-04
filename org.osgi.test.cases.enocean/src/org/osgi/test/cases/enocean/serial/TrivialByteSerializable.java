@@ -27,7 +27,7 @@ public class TrivialByteSerializable implements ByteSerializable {
 		this.data = data;
 	}
 
-	public byte[] serialize() {
+	public byte[] getBytes() {
 		return data;
 	}
 

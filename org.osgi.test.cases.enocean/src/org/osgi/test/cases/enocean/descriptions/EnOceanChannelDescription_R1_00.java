@@ -17,8 +17,8 @@
 
 package org.osgi.test.cases.enocean.descriptions;
 
-import org.osgi.service.enocean.EnOceanChannelEnumValue;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
+import org.osgi.service.enocean.descriptions.EnOceanChannelEnumValue;
 import org.osgi.service.enocean.descriptions.EnOceanEnumChannelDescription;
 import org.osgi.test.cases.enocean.descriptions.enumvalues.EnOceanChannelEnumValue_R1_00_VALUE0;
 import org.osgi.test.cases.enocean.descriptions.enumvalues.EnOceanChannelEnumValue_R1_00_VALUE1;

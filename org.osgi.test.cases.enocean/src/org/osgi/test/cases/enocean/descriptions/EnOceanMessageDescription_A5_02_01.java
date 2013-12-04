@@ -1,6 +1,7 @@
 package org.osgi.test.cases.enocean.descriptions;
 
 import org.osgi.service.enocean.EnOceanChannel;
+import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
 import org.osgi.test.cases.enocean.channels.LearnChannel_4BS;
 import org.osgi.test.cases.enocean.channels.TemperatureChannel_00;
@@ -37,5 +38,10 @@ public class EnOceanMessageDescription_A5_02_01 implements EnOceanMessageDescrip
 		learn.setRawValue(new byte[] {lrnByte});
 
 		return new EnOceanChannel[] {temperature, learn};
+	}
+
+	public byte[] serialize(EnOceanChannel[] channels) throws EnOceanException, EnOceanException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

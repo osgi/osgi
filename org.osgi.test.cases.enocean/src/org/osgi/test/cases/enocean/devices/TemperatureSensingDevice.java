@@ -37,7 +37,7 @@ public class TemperatureSensingDevice extends EnOceanDeviceImpl {
 	}
 
 	public void send(EnOceanMessage message, EnOceanHandler handler) throws EnOceanException, EnOceanException {
-		send(message.serialize(), handler);
+		send(message.getBytes(), handler);
 	}
 
 	public void invoke(EnOceanRPC rpc, EnOceanHandler handler) throws IllegalArgumentException {

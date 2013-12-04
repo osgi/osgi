@@ -7,6 +7,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.enocean.basedriver.EnOceanBaseDriver;
 import org.osgi.impl.service.enocean.basedriver.radio.MessageSYS_EX;
 import org.osgi.impl.service.enocean.utils.Utils;
+import org.osgi.service.device.Constants;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanHandler;
@@ -31,6 +32,7 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		this.bc = bc;
 		this.driver = driver;
 		props = new Properties();
+		props.put(Constants.DEVICE_CATEGORY, EnOceanDevice.DEVICE_CATEGORY);
 		props.put(EnOceanDevice.CHIP_ID, String.valueOf(uid));
 		props.put(EnOceanDevice.RORG, String.valueOf(rorg));
 		sReg = bc.registerService(EnOceanDevice.class.getName(), this, props);

@@ -43,7 +43,7 @@ public class EspRadioPacket extends EspPacket {
 			setSecurityLevel(0);
 		}
 	
-		public byte[] serialize() {
+		public byte[] getBytes() {
 			byte[] data = Utils.intTo1Byte(getSubTelNum());
 			data = Utils.byteConcat(data, Utils.intTo4Bytes(getDestinationId()));
 			data = Utils.byteConcat(data, Utils.intTo1Byte(getdBm()));

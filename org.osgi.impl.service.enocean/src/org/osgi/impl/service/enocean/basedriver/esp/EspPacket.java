@@ -47,7 +47,7 @@ public class EspPacket {
 
 	public EspPacket(EnOceanMessage msg) {
 		setPacketType(TYPE_RADIO);
-		byte[] data = msg.serialize();
+		byte[] data = msg.getBytes();
 		setData(data);
 		byte[] optional = Utils.byteConcat((byte) msg.getSubTelNum(), Utils.intTo4Bytes(msg.getDestinationId()));
 		optional = Utils.byteConcat(optional, (byte) msg.getDbm());

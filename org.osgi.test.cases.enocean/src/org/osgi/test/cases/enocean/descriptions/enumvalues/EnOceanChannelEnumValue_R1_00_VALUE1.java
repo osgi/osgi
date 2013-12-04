@@ -17,7 +17,7 @@
 
 package org.osgi.test.cases.enocean.descriptions.enumvalues;
 
-import org.osgi.service.enocean.EnOceanChannelEnumValue;
+import org.osgi.service.enocean.descriptions.EnOceanChannelEnumValue;
 
 public class EnOceanChannelEnumValue_R1_00_VALUE1 implements EnOceanChannelEnumValue {
 

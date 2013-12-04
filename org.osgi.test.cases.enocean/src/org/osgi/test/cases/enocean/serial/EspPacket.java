@@ -39,9 +39,9 @@ public class EspPacket {
 	private ByteSerializable	optional;
 
 	public byte[] serialize() {
-		byte[] dataBytes = data.serialize();
+		byte[] dataBytes = data.getBytes();
 		setDataLength(dataBytes.length);
-		dataBytes = Utils.byteConcat(dataBytes, optional.serialize());
+		dataBytes = Utils.byteConcat(dataBytes, optional.getBytes());
 		byte[] crc = Utils.byteToBytes(Utils.crc8(dataBytes));
 		dataBytes = Utils.byteConcat(dataBytes, crc);
 		return Utils.byteConcat(serializeHeader(), dataBytes);

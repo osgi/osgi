@@ -24,7 +24,7 @@ package org.osgi.service.enocean;
  * @version 1.0
  * @author Victor Perron <victor.perron@orange.fr>
  */
-public class EnOceanException extends Exception {
+public class EnOceanException extends RuntimeException {
 
 
 	private static final long	serialVersionUID	= -2401739486671107362L;

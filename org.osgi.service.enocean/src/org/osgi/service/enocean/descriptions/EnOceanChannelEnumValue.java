@@ -15,30 +15,34 @@
  */
 
 
-package org.osgi.service.enocean.sets;
-
-import org.osgi.service.enocean.EnOceanRPC;
-import org.osgi.service.enocean.descriptions.EnOceanRPCDescription;
-
-
+package org.osgi.service.enocean.descriptions;
 
 /**
- * This interface represents an EnOcean RPC Set.
- * {@link EnOceanRPCDescriptionSet} is registered as an OSGi Service.
- * Provides a method to retrieve the {@link EnOceanRPC} objects
- * it documents.
+ * This transitional interface is used to define all the possible values taken by an enumerated channel.
  * 
  * @version 1.0
  * @author Victor Perron <victor.perron@orange.fr>
  */
-public interface EnOceanRPCDescriptionSet {
-
+public interface EnOceanChannelEnumValue {
+	
 	/**
-	 * Retrieves a {@link EnOceanRPC} object according to its identifier.
+	 * The start value of the enumeration.
 	 * 
-	 * @param id the unique string identifier of the description object.
-	 * @return The corresponding {@link EnOceanRPC} object, or null.
+	 * @return the start value.
 	 */
-	public EnOceanRPCDescription getRPC(short manufacturerId, short commandID) throws IllegalArgumentException;
+	public int getStart();
+	
+	/**
+	 * The stop value of the enumeration.
+	 * 
+	 * @return the stop value.
+	 */
+	public int getStop();
+	
+	/**
+	 * A non-mandatory description of what this enumerated value is about.
+	 * @return the english description of this channel.
+	 */
+	public String getDescription();
 
 }

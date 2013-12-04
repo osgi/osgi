@@ -52,7 +52,7 @@ public class Message implements EnOceanMessage, ByteSerializable {
 		setStatus((byte) 0x80);
 	}
 
-	public byte[] serialize() {
+	public byte[] getBytes() {
 		byte[] pktBytes = Utils.byteConcat(RORG, getPayloadBytes());
 		pktBytes = Utils.byteConcat(pktBytes, senderId);
 		pktBytes = Utils.byteConcat(pktBytes, status);

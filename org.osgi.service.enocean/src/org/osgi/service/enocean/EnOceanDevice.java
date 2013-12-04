@@ -30,6 +30,11 @@ import java.util.Map;
 public interface EnOceanDevice {
 	
 	/**
+	 * Property name for the mandatory DEVICE_CATEGORY of the device
+	 */
+	public final static String DEVICE_CATEGORY = "EnOcean";
+	
+	/**
 	 * Property name for the mandatory CHIP_ID of the device
 	 */
 	public final static String CHIP_ID = "enocean.device.chip_id";
@@ -71,14 +76,14 @@ public interface EnOceanDevice {
 	/**
 	 * Manually sets the EEP FUNC of the device.
 	 * 
-	 * @param func: the EEP func of the device;
+	 * @param func the EEP func of the device;
 	 */
 	public void setFunc(int func);
 	
 	/**
 	 * Manually sets the EEP TYPE of the device.
 	 * 
-	 * @param type: the EEP type of the device;
+	 * @param type the EEP type of the device;
 	 */
 	public void setType(int type);
 	
@@ -116,13 +121,6 @@ public interface EnOceanDevice {
 	 * @param key the encryption key to be set.
 	 */
 	public void setEncryptionKey(byte[] key);
-	
-	/**
-	 * Retrieves the latest known received message of this device.
-	 * 
-	 * @return The latest {@link EnOceanMessage} issued by this device.
-	 */
-	public EnOceanMessage getLastMessage();
 	
 	/**
 	 * Gets the list of devices the device already has learned. 

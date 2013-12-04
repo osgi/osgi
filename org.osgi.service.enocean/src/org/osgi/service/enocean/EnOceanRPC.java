@@ -37,15 +37,11 @@ public interface EnOceanRPC {
 			
 	/**
 	 * Gets the manufacturerID for this RPC.
-	 * 
-	 * @return
 	 */
 	public int getManufacturerId();
 	
 	/**
 	 * Gets the functionID for this RPC. 
-	 * 
-	 * @return
 	 */
 	public int getFunctionId();
 	
@@ -59,7 +55,7 @@ public interface EnOceanRPC {
 	/**
 	 * Sets the current payload of the RPC.
 	 * 
-	 * @param the payload, in bytes, of this RPC.
+	 * @param data the payload, in bytes, of this RPC.
 	 */
 	public void setPayload(byte[] data);
 
@@ -67,13 +63,11 @@ public interface EnOceanRPC {
 	 * Sets the RPC's senderID.
 	 * 
 	 * This member has to belong to {@link EnOceanRPC} interface, for the object may be sent as a standalone using EventAdmin for instance.
-	 * @return
 	 */
 	public int getSenderId();
 	
 	/**
 	 * Sets the RPC's senderID.
-	 * @return
 	 */
 	public void setSenderId(int chipId);
 	

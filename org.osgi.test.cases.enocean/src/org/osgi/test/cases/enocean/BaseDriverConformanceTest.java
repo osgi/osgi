@@ -234,6 +234,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		 * Verify that the device has been registered with the correct service
 		 * properties
 		 */
+		assertEquals("category mismatch", EnOceanDevice.DEVICE_CATEGORY, ref.getProperty(org.osgi.service.device.Constants.DEVICE_CATEGORY));
 		assertEquals("CHIP_ID mismatch", Fixtures.STR_HOST_ID, ref.getProperty(EnOceanDevice.CHIP_ID));
 		assertEquals("RORG mismatch", Fixtures.STR_RORG, ref.getProperty(EnOceanDevice.RORG));
 		assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
@@ -311,6 +312,10 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		EspRadioPacket teachInPkt = new EspRadioPacket(teachIn);
 		outStream.write(teachInPkt.serialize());
 	
+		/* First get a reference towards the device */
+		lastServiceEvent = devices.waitForService();
+		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
+
 		/* Send a message from that device */
 		MessageA5_02_01 measure = new MessageA5_02_01(Fixtures.TEMPERATURE);
 		measure.setSenderId(Fixtures.HOST_ID);
@@ -319,7 +324,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 	
 		/* First get a reference towards the device */
 		lastServiceEvent = devices.waitForService();
-		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
+		assertEquals("did not have service addition", ServiceListener.SERVICE_MODIFIED, lastServiceEvent);
 	
 		Event event = events.waitForEvent();
 	
@@ -405,7 +410,7 @@ public class BaseDriverConformanceTest extends DefaultTestBundleControl {
 		byte[] data = new byte[256];
 		int size = inStream.read(data);
 		EspPacket pkt = new EspPacket(Utils.byteRange(data, 0, size));
-		assertEquals("EnOcean radio message and forged message mismatch", Utils.bytesToHex(msg.serialize()), Utils.bytesToHex(pkt.getData().serialize()));
+		assertEquals("EnOcean radio message and forged message mismatch", Utils.bytesToHex(msg.getBytes()), Utils.bytesToHex(pkt.getData().getBytes()));
 
 		// Needed not to mess with further tests
 		sReg.unregister();

@@ -15,9 +15,8 @@
  */
 
 
-package org.osgi.service.enocean.sets;
+package org.osgi.service.enocean.descriptions;
 
-import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
 
 
 /**
