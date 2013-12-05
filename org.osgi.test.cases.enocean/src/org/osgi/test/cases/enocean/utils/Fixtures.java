@@ -1,5 +1,5 @@
 
-package org.osgi.test.cases.enocean;
+package org.osgi.test.cases.enocean.utils;
 
 import java.util.Dictionary;
 import java.util.Properties;

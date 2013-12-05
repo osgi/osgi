@@ -193,9 +193,12 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		MessageSYS_EX msg = new MessageSYS_EX(rpc);
 		for (int i = 0; i < msg.getSubTelNum(); i++) {
 			byte[] telegram = (byte[]) msg.getTelegrams().get(i);
-			System.out.println("TELEGRAM #" + i + " '" + Utils.bytesToHexString(telegram) + "'");
 			driver.send(telegram);
 		}
+	}
+
+	public void unregister() {
+		sReg.unregister();
 	}
 	
 }

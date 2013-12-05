@@ -91,7 +91,7 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 		ServiceReference ref = bc.getServiceReference(EventAdmin.class.getName());
 		eventAdmin = (EventAdmin) bc.getService(ref);
 
-		file = new File(path);
+		this.file = new File(path);
 		inputStream = new FileInputStream(file);
 		outputStream = new FileOutputStream(file);
 	}
@@ -174,9 +174,10 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 				 * synchronized (this.synchronizer) { if
 				 * (inputStream.available() == 0) { synchronizer.wait(); } }
 				 */
+
 				int _byte = inputStream.read();
 				if (_byte == -1) {
-					throw new IOException("end of stream reached ?!");
+					throw new IOException("buffer end was reached");
 				}
 				byte c = (byte) _byte;
 				if (c == ENOCEAN_ESP_FRAME_START) {
@@ -189,7 +190,6 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 				Logger.e(TAG, "an exception occured while reading stream '" + streamPath + "' : " + e.getMessage());
 			}
 		}
-
 	}
 
 	private void dispatchToListeners(byte[] data) {

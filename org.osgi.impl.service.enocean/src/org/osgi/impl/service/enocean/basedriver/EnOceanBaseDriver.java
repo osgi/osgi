@@ -3,6 +3,7 @@ package org.osgi.impl.service.enocean.basedriver;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 // import javax.comm.CommPortIdentifier;
@@ -46,6 +47,8 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	public static final String	TAG	= "EnOceanBaseDriver";
 
 	public static final String	CONFIG_EXPORTED_PID_TABLE	= "org.enocean.ExportedDeviceTable";
+	public static final String	TOPIC_REMOVE_DEVICE			= "org/osgi/impl/service/enocean/EnOceanBaseDriver/REMOVE_DEVICE";
+	public static final String	TOPIC_CLEAN_DEVICES			= "org/osgi/impl/service/enocean/EnOceanBaseDriver/CLEAN_DEVICES";
 
 	/**
 	 * The {@link EnOceanBaseDriver} constructor initiates the connection
@@ -89,7 +92,9 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		/* Initializes self as EventHandler */
 		Hashtable ht = new Hashtable();
 		ht.put(org.osgi.service.event.EventConstants.EVENT_TOPIC, new String[] {
-				EnOceanEvent.TOPIC_MSG_RECEIVED
+				EnOceanEvent.TOPIC_MSG_RECEIVED,
+				EnOceanBaseDriver.TOPIC_REMOVE_DEVICE,
+				EnOceanBaseDriver.TOPIC_CLEAN_DEVICES,
 		});
 		eventHandlerRegistration = bc.registerService(EventHandler.class.getName(), this, ht);
 
@@ -171,7 +176,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 				} catch (Exception e) {
 					System.out.println("There has been an exception");
 				}
-				eoDevices.put(servicePid, ref);
+				eoDevices.put(servicePid, bc.getService(ref));
 				Logger.d(TAG, "EnOceanDevice service registered : " + servicePid);
 			}
 			return service;
@@ -197,6 +202,12 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 				}
 			}
 		}
+		if (event.getTopic().equals(EnOceanBaseDriver.TOPIC_REMOVE_DEVICE)) {
+			// Implement
+		}
+		if (event.getTopic().equals(EnOceanBaseDriver.TOPIC_CLEAN_DEVICES)) {
+			unregisterDevices();
+		}
 	}
 
 	public void start() {
@@ -204,6 +215,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	}
 
 	public void stop() {
+		unregisterDevices();
 	}
 
 	public ServiceRegistration registerHost(String hostPath, EnOceanHost host) throws EnOceanDriverException {
@@ -224,6 +236,19 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 
 	public void send(byte[] data) {
 		initialHost.send(data);
+	}
+
+	private void unregisterDevices() {
+		Iterator it = eoDevices.entrySet().iterator();
+		while (it.hasNext()) {
+			Map.Entry entry = (Map.Entry) it.next();
+			if (entry.getValue() instanceof EnOceanDeviceImpl) {
+				EnOceanDeviceImpl dev = (EnOceanDeviceImpl) entry.getValue();
+				System.out.println("Unregistering device : " + dev.getRorg());
+				dev.unregister();
+			}
+			it.remove();
+		}
 	}
 
 	private void broadcastToEventAdmin(EnOceanMessage eoMsg) {

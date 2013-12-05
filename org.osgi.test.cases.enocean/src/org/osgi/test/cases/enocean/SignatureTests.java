@@ -16,6 +16,6 @@
 
 package org.osgi.test.cases.enocean;
 
-public class SignatureTestCase extends org.osgi.test.support.signature.SignatureTestCase {
+public class SignatureTests extends org.osgi.test.support.signature.SignatureTestCase {
 
 }
