@@ -36,7 +36,7 @@ public interface ZigBeeDeviceDescription {
 	/**
 	 * @return The device version.
 	 */
-	public short getVersion();
+	public Integer getVersion();
 
 	/**
 	 * @return The profile identifier.

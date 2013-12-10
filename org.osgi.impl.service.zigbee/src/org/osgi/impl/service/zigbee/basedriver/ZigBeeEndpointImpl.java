@@ -11,7 +11,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
  */
 public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 
-	private short					id;
+	private int						id;
 	private ZigBeeSimpleDescriptor	desc;
 	private ZigBeeCluster[]			inputs;
 	private ZigBeeCluster[]			outputs;
@@ -22,14 +22,14 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 	 * @param ouputs
 	 * @param desc
 	 */
-	public ZigBeeEndpointImpl(short id, ZigBeeCluster[] inputs, ZigBeeCluster[] ouputs, ZigBeeSimpleDescriptor desc) {
+	public ZigBeeEndpointImpl(int id, ZigBeeCluster[] inputs, ZigBeeCluster[] ouputs, ZigBeeSimpleDescriptor desc) {
 		this.id = id;
 		this.inputs = inputs;
 		this.outputs = ouputs;
 		this.desc = desc;
 	}
 
-	public Short getId() {
+	public Integer getId() {
 		// TODO Auto-generated method stub
 		return id;
 	}
