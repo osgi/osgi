@@ -46,6 +46,16 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 	private final long minValue;
 
 	/**
+	 * coeff
+	 */
+	private final long coeff;
+
+	/**
+	 * initial value
+	 */
+	private final long initialValue;
+
+	/**
 	 * max value.
 	 */
 	private final long maxValue;
@@ -84,13 +94,25 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 	 *            sampling period
 	 * @param pMonitoringPeriod
 	 *            monitoring period
+	 * @param pMinValue
+	 *            minimum random value. The random value will be multiplied by
+	 *            coeff and added to initial value
+	 * @param pMaxValue
+	 *            maximum random value. The random value will be multiplied by
+	 *            coeff and added to initial value
+	 * @param initialValue
+	 *            initial value. simulated resource consumption will fluctuate
+	 *            around this value.
+	 * @param coeff
+	 *            coeff to be used with random value.
 	 * @param pBundleContext
 	 *            bundle context
 	 */
 	public FakeMonitor(FakeMonitorFactory pFactory,
 			ResourceContext pResourceContext, String pResourceType,
 			long pSamplingPeriod, long pMonitoringPeriod, long pMinValue,
-			long pMaxValue, BundleContext pBundleContext) {
+			long pMaxValue, long pInitialValue, long pCoeff,
+			BundleContext pBundleContext) {
 		factory = pFactory;
 		resourceContext = pResourceContext;
 		resourceType = pResourceType;
@@ -98,6 +120,8 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 		monitoringPeriod = pMonitoringPeriod;
 		minValue = pMinValue;
 		maxValue = pMaxValue;
+		coeff = pCoeff;
+		initialValue = pInitialValue;
 
 		eventNotifier = new EventNotifier(resourceType, resourceContext,
 				pBundleContext);
@@ -184,12 +208,32 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 	}
 
 	public void run() {
+		
+		long usage = initialValue;
+		setUsage(initialValue);
+
 		while(isEnable) {
 			
 			// generate a new value of consumption
 			double random = Math.random();
 			// random is double between 0.0 and 1.0
-			long usage = (long) (random * maxValue);
+			random = random - 0.5;
+			long deltaUsage = 0;
+			if (random <0) {
+				deltaUsage = -coeff;
+			} else if(random > 0) {
+				deltaUsage = coeff;
+			}
+					
+
+			usage = usage + deltaUsage;
+			
+			if (usage < minValue) {
+				usage = minValue;
+			} else if (usage > maxValue) {
+				usage = maxValue;
+			}
+			
 			setUsage(usage);
 			
 			// wait for MONITORING period of time

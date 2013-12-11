@@ -2,12 +2,10 @@ package org.osgi.impl.service.resourcemanagement.fakemonitors;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
-import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
@@ -45,20 +43,22 @@ public class FakeMonitorFactory implements ResourceMonitorFactory,
 
 	private final long maxValue;
 
+	private final long coeff;
+
+	private final long initialValue;
 
 	/**
 	 * fake monitors
 	 */
-	private final Map<ResourceContext, FakeMonitor> fakeMonitors;
+	private final Map/* <ResourceContext, FakeMonitor> */fakeMonitors;
 
 	/**
 	 * register the factory as a ResourceContextListener to be informed when a
 	 * ResourceContext is deleted.
 	 */
-	private ServiceRegistration<ResourceContextListener> serviceRegistration;
+	private ServiceRegistration/* <ResourceContextListener> */serviceRegistration;
 
-	private final Semaphore semaphore;
-
+	private final Lock semaphore;
 
 	/**
 	 * 
@@ -67,24 +67,29 @@ public class FakeMonitorFactory implements ResourceMonitorFactory,
 	 */
 	public FakeMonitorFactory(BundleContext pBundleContext,
 			String pFactoryType, long pSamplingPeriod, long pMonitoringPeriod,
-			long pMinValue, long pMaxValue) {
+			long pMinValue, long pMaxValue, long pCoeff, long pInitialValue) {
 		bundleContext = pBundleContext;
 		factoryType = pFactoryType;
 		samplingPeriod = pSamplingPeriod;
 		monitoringPeriod = pMonitoringPeriod;
 		minValue = pMinValue;
 		maxValue = pMaxValue;
+		coeff = pCoeff;
+		initialValue = pInitialValue;
 
-		semaphore = new Semaphore(1);
-		fakeMonitors = new HashMap<ResourceContext, FakeMonitor>();
+		semaphore = new Lock();
+		fakeMonitors = new Hashtable/* <ResourceContext, FakeMonitor> */();
 
 		// register this factory as a ResourceContextListener
-		Dictionary<String, Object> properties = new Hashtable<String, Object>();
+		Dictionary/* <String, Object> */properties = new Hashtable/*
+																 * <String,
+																 * Object>
+																 */();
 		properties.put(ResourceContextListener.EVENT_TYPE,
 				ResourceContextEvent.RESOURCE_CONTEXT_DELETED);
 		properties.put(ResourceMonitorFactory.RESOURCE_TYPE_PROPERTY,
 				factoryType);
-		serviceRegistration = (ServiceRegistration<ResourceContextListener>) bundleContext
+		serviceRegistration = bundleContext
 				.registerService(
 						new String[] { ResourceContextListener.class.getName(),
 								ResourceMonitorFactory.class.getName() }, this,
@@ -99,7 +104,7 @@ public class FakeMonitorFactory implements ResourceMonitorFactory,
 		serviceRegistration.unregister();
 
 		// all existing monitors must be deleted
-		List<FakeMonitor> duplicatedMonitors = new ArrayList<FakeMonitor>();
+		List/* <FakeMonitor> */duplicatedMonitors = new ArrayList/* <FakeMonitor> */();
 
 		try {
 			semaphore.acquire();
@@ -110,9 +115,10 @@ public class FakeMonitorFactory implements ResourceMonitorFactory,
 		duplicatedMonitors.addAll(fakeMonitors.values());
 
 		semaphore.release();
-		
-		for(Iterator<FakeMonitor> it = duplicatedMonitors.iterator(); it.hasNext();) {
-			FakeMonitor tobeDeleted = it.next();
+
+		for (Iterator/* <FakeMonitor> */it = duplicatedMonitors.iterator(); it
+				.hasNext();) {
+			FakeMonitor tobeDeleted = (FakeMonitor) it.next();
 			tobeDeleted.delete();
 		}
 
@@ -140,8 +146,7 @@ public class FakeMonitorFactory implements ResourceMonitorFactory,
 		} else {
 			FakeMonitor fm = new FakeMonitor(this, resourceContext,
 					factoryType, samplingPeriod, monitoringPeriod, minValue,
-					maxValue,
-					bundleContext);
+					maxValue, initialValue, coeff, bundleContext);
 			fakeMonitors.put(resourceContext, fm);
 			resourceMonitor = fm;
 		}
@@ -167,7 +172,8 @@ public class FakeMonitorFactory implements ResourceMonitorFactory,
 				return;
 			}
 
-			ResourceMonitor resourceMonitor = fakeMonitors.get(resourceContext);
+			ResourceMonitor resourceMonitor = (ResourceMonitor) fakeMonitors
+					.get(resourceContext);
 
 			semaphore.release();
 
@@ -179,19 +185,43 @@ public class FakeMonitorFactory implements ResourceMonitorFactory,
 
 	}
 
-
 	public void removeResourceMonitor(ResourceMonitor resourceMonitor) {
 		try {
 			semaphore.acquire();
 		} catch (InterruptedException e) {
 			return;
 		}
-		
+
 		fakeMonitors.values().remove(resourceMonitor);
 
 		semaphore.release();
 	}
-	
 
+	private class Lock {
+
+		private int count = 0;
+
+		public void acquire() throws InterruptedException {
+			boolean got = false;
+			synchronized (this) {
+				while (!got) {
+					if (this.count != 0) {
+						this.wait();
+					}
+					if (this.count == 0) {
+						this.count++;
+						got = true;
+					}
+				}
+			}
+		}
+
+		public void release() {
+			synchronized (this) {
+				this.count--;
+				this.notify();
+			}
+		}
+	}
 
 }
