@@ -1,18 +1,18 @@
 package org.osgi.impl.service.resourcemanagement.persistency.json;
 
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 public class JSONList extends JSONObject {
 
-	private final Map<String, JSONObject> elements;
+	private final Map/* <String, JSONObject> */elements;
 
 
 	public JSONList() {
-		elements = new HashMap<String, JSONObject>();
+		elements = new Hashtable/* <String, JSONObject> */();
 	}
 
-	public Map<String, JSONObject> getElements() {
+	public Map/* <String, JSONObject> */getElements() {
 		return elements;
 	}
 

@@ -1,6 +1,6 @@
 package org.osgi.impl.service.resourcemanagement;
 
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -16,10 +16,16 @@ public class ResourceContextEventNotifierImpl implements
 
 	private BundleContext context;
 	private ServiceTracker serviceTracker;
-	private final Map<ResourceContextListener, ServiceReference<ResourceContextListener>> listeners;
+	private final Map/*
+					 * <ResourceContextListener,
+					 * ServiceReference<ResourceContextListener>>
+					 */listeners;
 	
 	public ResourceContextEventNotifierImpl() {
-		listeners = new HashMap<ResourceContextListener, ServiceReference<ResourceContextListener>>();
+		listeners = new Hashtable/*
+								 * <ResourceContextListener,
+								 * ServiceReference<ResourceContextListener>>
+								 */();
 	}
 
 	public void start(BundleContext context) {
@@ -38,10 +44,11 @@ public class ResourceContextEventNotifierImpl implements
 
 	public void notify(ResourceContextEvent event) {
 		synchronized (listeners) {
-			for (Iterator<ResourceContextListener> it = listeners.keySet()
+			for (Iterator/* <ResourceContextListener> */it = listeners.keySet()
 					.iterator(); it.hasNext();) {
-				ResourceContextListener currentRcl = it.next();
-				ServiceReference<ResourceContextListener> currentSr = listeners
+				ResourceContextListener currentRcl = (ResourceContextListener) it
+						.next();
+				ServiceReference/* <ResourceContextListener> */currentSr = (ServiceReference<ResourceContextListener>) listeners
 						.get(currentRcl);
 
 				int[] eventTypeFilter = getEventTypeFilter(currentSr);
@@ -78,7 +85,7 @@ public class ResourceContextEventNotifierImpl implements
 
 	public void modifiedService(ServiceReference reference, Object service) {
 		synchronized (listeners) {
-			listeners.put((ResourceContextListener) service, reference);
+			listeners.put(service, reference);
 		}
 	}
 

@@ -1,7 +1,6 @@
 package org.osgi.impl.service.resourcemanagement.persistency;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.service.resourcemanagement.ResourceContext;
 import org.osgi.service.resourcemanagement.ResourceManager;
 
 public interface Persistence {
@@ -32,7 +31,7 @@ public interface Persistence {
 	 *            resource contexts to be persisted.
 	 */
 	void persist(BundleContext bundleContext,
- ResourceContext[] resourceContexts);
+			ResourceContextInfo[] resourceContextInfos);
 
 	/**
 	 * Load from the context file the persisted resource context.

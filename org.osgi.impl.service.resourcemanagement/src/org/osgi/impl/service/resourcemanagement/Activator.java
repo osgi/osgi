@@ -17,21 +17,21 @@ package org.osgi.impl.service.resourcemanagement;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.resourcemanagement.bundlemanagement.BundleManager;
 import org.osgi.impl.service.resourcemanagement.bundlemanagement.BundleManagerImpl;
-import org.osgi.impl.service.resourcemanagement.persistency.Persistence;
-import org.osgi.impl.service.resourcemanagement.persistency.PersistenceImpl;
 import org.osgi.impl.service.resourcemanagement.threadmanager.ThreadManager;
-import org.osgi.impl.service.resourcemanagement.threadmanager.ThreadManagerImpl;
 import org.osgi.service.resourcemanagement.ResourceManager;
+import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * 
  * TODO Add Javadoc comment for this type.
  * 
  */
-public class Activator implements BundleActivator {
+public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 
 	/**
 	 * bundle manager.
@@ -53,15 +53,21 @@ public class Activator implements BundleActivator {
 	 */
 	private ResourceContextEventNotifier eventNotifier;
 
-	/**
-	 * persistence.
-	 */
-	private Persistence persistence;
 
 	/**
 	 * service registration for Resource Manager service.
 	 */
 	private ServiceRegistration<ResourceManager> resourceManagerServiceRegistration;
+
+	/**
+	 * bundle context.
+	 */
+	private BundleContext bundleContext;
+
+	/**
+	 * Service tracker for ThreadManager service.
+	 */
+	private ServiceTracker threadManagerServiceTracker;
 
 	/**
 	 * @param context
@@ -70,27 +76,20 @@ public class Activator implements BundleActivator {
 	 */
 	public void start(BundleContext context) throws Exception {
 
-		persistence = new PersistenceImpl();
+		System.out.println("start activator ");
 
-		bundleManager = new BundleManagerImpl();
-		bundleManager.start(context);
+		bundleContext = context;
+		
 
-		threadManager = new ThreadManagerImpl(bundleManager);
-		threadManager.start(context);
+		// threadManager = new ThreadManagerImpl(bundleManager);
+		// threadManager.start(context);
 
 		eventNotifier = new ResourceContextEventNotifierImpl();
 		eventNotifier.start(context);
 
-		resourceManager = new ResourceManagerImpl(bundleManager, eventNotifier,
-				threadManager);
-		// load persisted resource context configuration
-		resourceManager.restoreContext(persistence.load(context));
-		resourceManager.start(context);
-
-
-
-		resourceManagerServiceRegistration = context.registerService(
-				ResourceManager.class, resourceManager, null);
+		threadManagerServiceTracker = new ServiceTracker(bundleContext,
+				ThreadManager.class.getName(), this);
+		threadManagerServiceTracker.open();
 
 	}
 
@@ -101,22 +100,77 @@ public class Activator implements BundleActivator {
 	 */
 	public void stop(BundleContext context) throws Exception {
 
-		resourceManagerServiceRegistration.unregister();
-		resourceManagerServiceRegistration = null;
-		persistence.persist(context, resourceManager.listContext());
-		resourceManager.stop(context);
-		resourceManager = null;
+		threadManagerServiceTracker.close();
+		stopResourceManager();
 
 		eventNotifier.stop(context);
 		eventNotifier = null;
 
-		threadManager.stop(context);
 		threadManager = null;
 
-		bundleManager.stop();
-		bundleManager = null;
+
 
 	}
 
+	/**
+	 * This method is called by the ServiceTracker service when a new
+	 * ThreadManager is available.
+	 */
+	public Object addingService(ServiceReference reference) {
+		if (threadManager == null) {
+			threadManager = bundleContext.getService(reference);
+			startResourceManager();
+			return threadManager;
+		}
+
+		return null;
+	}
+
+	public void modifiedService(ServiceReference reference, Object service) {
+	}
+
+	/**
+	 * This method is called by ServiceTracker service when the ThreadManager
+	 * becomes unavailable.
+	 */
+	public void removedService(ServiceReference reference, Object service) {
+		threadManager = null;
+		stopResourceManager();
+	}
+
+	/**
+	 * Start the ResourceManager.
+	 */
+	private void startResourceManager() {
+		bundleManager = new BundleManagerImpl();
+		bundleManager.start(bundleContext);
+
+		resourceManager = new ResourceManagerImpl(bundleManager, eventNotifier,
+				threadManager);
+		resourceManager.start(bundleContext);
+
+		resourceManagerServiceRegistration = (ServiceRegistration<ResourceManager>) bundleContext
+				.registerService(ResourceManager.class.getName(),
+						resourceManager, null);
+
+	}
+
+	/**
+	 * Stop the ResourceManager service.
+	 */
+	private void stopResourceManager() {
+		if (resourceManagerServiceRegistration != null) {
+			resourceManagerServiceRegistration.unregister();
+			resourceManagerServiceRegistration = null;
+		}
+
+		if (resourceManager != null) {
+			resourceManager.stop(bundleContext);
+			resourceManager = null;
+
+			bundleManager.stop();
+			bundleManager = null;
+		}
+	}
 
 }

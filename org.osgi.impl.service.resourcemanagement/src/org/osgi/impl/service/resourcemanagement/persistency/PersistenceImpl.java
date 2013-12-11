@@ -5,10 +5,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.resourcemanagement.persistency.json.JSONArray;
@@ -16,7 +15,6 @@ import org.osgi.impl.service.resourcemanagement.persistency.json.JSONList;
 import org.osgi.impl.service.resourcemanagement.persistency.json.JSONLong;
 import org.osgi.impl.service.resourcemanagement.persistency.json.JSONObject;
 import org.osgi.impl.service.resourcemanagement.persistency.json.JSONString;
-import org.osgi.service.resourcemanagement.ResourceContext;
 
 public class PersistenceImpl implements Persistence {
 
@@ -34,14 +32,14 @@ public class PersistenceImpl implements Persistence {
 	 * Persist the provided list of resource context as a JSON file.
 	 */
 	public void persist(BundleContext context,
-			ResourceContext[] resourceContexts) {
+			ResourceContextInfo[] resourceContextInfos) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("[");
-		for (int i = 0; i < resourceContexts.length; i++) {
-			ResourceContext resourceContext = resourceContexts[i];
-			String resourceContextToJson = resourceContextToJson(resourceContext);
+		for (int i = 0; i < resourceContextInfos.length; i++) {
+			ResourceContextInfo resourceContextInfo = resourceContextInfos[i];
+			String resourceContextToJson = resourceContextToJson(resourceContextInfo);
 			sb.append(resourceContextToJson);
-			if (i != resourceContexts.length - 1) {
+			if (i != resourceContextInfos.length - 1) {
 				sb.append(",");
 			}
 		}
@@ -75,15 +73,16 @@ public class PersistenceImpl implements Persistence {
 		if (json != null) {
 
 			// remove carriage return character
-			json = json.replaceAll("\n", "");
+			// json = json.replaceAll("\n", "");
 
 			JSONObject jsonObject = JSONObject.parseJsonObject(json);
 			JSONArray array = (JSONArray) jsonObject;
-			List<JSONObject> resourceContextsAsJsonList = array.getElements();
+			List/* <JSONObject> */resourceContextsAsJsonList = array
+					.getElements();
 			resourceContexts = new ResourceContextInfo[resourceContextsAsJsonList
 					.size()];
 			int i = 0;
-			for (Iterator<JSONObject> it = resourceContextsAsJsonList
+			for (Iterator/* <JSONObject> */it = resourceContextsAsJsonList
 					.iterator(); it.hasNext();) {
 				// each element is a Resource Context as a JSON list
 				JSONList resourceContextJsonList = (JSONList) it.next();
@@ -94,12 +93,12 @@ public class PersistenceImpl implements Persistence {
 						.getValue();
 
 				// retrieve list of bundles associated to the context
-				Set<Long> bundles = new HashSet<Long>();
+				List/* <Long> */bundles = new ArrayList/* <Long> */();
 				JSONArray bundleIdsJsonArray = (JSONArray) resourceContextJsonList
 						.getElements().get(
 								RESOURCE_CONTEXT_BUNDLE_IDS_PARAMETER);
 				if (bundleIdsJsonArray != null) {
-					for (Iterator<JSONObject> bundleIdsIt = bundleIdsJsonArray
+					for (Iterator/* <JSONObject> */bundleIdsIt = bundleIdsJsonArray
 							.getElements().iterator(); bundleIdsIt.hasNext();) {
 						JSONLong bundleIdJsonLong = (JSONLong) bundleIdsIt
 								.next();
@@ -143,30 +142,34 @@ public class PersistenceImpl implements Persistence {
 	/**
 	 * Get a json string representing the provided resource context
 	 * 
-	 * @param resourceContext
+	 * @param resourceContextInfo
 	 *            resource context to be transformed into json string.
 	 * @return a json string {"name":"contextname","bundle.ids":[id1,id2]}
 	 */
-	private static String resourceContextToJson(ResourceContext resourceContext) {
+	private static String resourceContextToJson(
+			ResourceContextInfo resourceContextInfo) {
 		StringBuffer sb = new StringBuffer();
 		sb.append("{");
 		// name
 		sb.append("\"");
 		sb.append(RESOURCE_CONTEXT_NAME_PARAMETER);
 		sb.append("\":\"");
-		sb.append(resourceContext.getName());
+		sb.append(resourceContextInfo.getName());
 		sb.append("\",");
 
 		// bundle ids
 		sb.append("\"");
 		sb.append(RESOURCE_CONTEXT_BUNDLE_IDS_PARAMETER);
 		sb.append("\":[");
-		long[] bundleIds = resourceContext.getBundleIds();
-		for (int i = 0; i < bundleIds.length; i++) {
-			if (i != 0) {
+		List bundleIds = resourceContextInfo.getBundleIds();
+		boolean notFirst = false;
+		for (Iterator it = bundleIds.iterator(); it.hasNext();) {
+			if (notFirst) {
 				sb.append(",");
+			} else {
+				notFirst = true;
 			}
-			long bundleId = bundleIds[i];
+			Long bundleId = (Long) it.next();
 			sb.append(bundleId);
 		}
 		sb.append("]");

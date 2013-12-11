@@ -13,7 +13,7 @@ public class JSONBoolean extends JSONObject {
 	}
 
 	public static JSONBoolean parseJsonBoolean(JsonTokenizer tokenizer) {
-		boolean value = Boolean.parseBoolean(tokenizer.getCurrentToken());
+		boolean value = Boolean.getBoolean(tokenizer.getCurrentToken());
 		JSONBoolean jsonBoolean = new JSONBoolean(value);
 		tokenizer.nextToken();
 		return jsonBoolean;

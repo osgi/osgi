@@ -31,7 +31,6 @@ public class JSONString extends JSONObject {
 		return jsonString;
 	}
 
-	@Override
 	public boolean isJsonString() {
 		return true;
 	}

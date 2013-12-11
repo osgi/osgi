@@ -1,13 +1,13 @@
 package org.osgi.impl.service.resourcemanagement.persistency;
 
-import java.util.Set;
+import java.util.List;
 
 public class ResourceContextInfo {
 
 	private final String name;
-	private final Set<Long> bundleIds;
+	private final List/* <Long> */bundleIds;
 
-	public ResourceContextInfo(String pName, Set<Long> pBundleIds) {
+	public ResourceContextInfo(String pName, List/* <Long> */pBundleIds) {
 		name = pName;
 		bundleIds = pBundleIds;
 	}
@@ -16,7 +16,7 @@ public class ResourceContextInfo {
 		return name;
 	}
 
-	public Set<Long> getBundleIds() {
+	public List/* <Long> */getBundleIds() {
 		return bundleIds;
 	}
 

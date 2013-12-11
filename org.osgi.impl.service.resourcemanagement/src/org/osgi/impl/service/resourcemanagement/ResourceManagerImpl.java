@@ -1,7 +1,7 @@
 package org.osgi.impl.service.resourcemanagement;
 
 import java.util.Collection;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -30,12 +30,12 @@ public class ResourceManagerImpl implements ResourceManager,
 	 * Map containing Resource Context object. Keys are the name of the
 	 * ResourceContext.
 	 */
-	private final Map<String, ResourceContext> resourceContexts;
+	private final Map/* <String, ResourceContext> */resourceContexts;
 
 	/**
 	 * list of available factories
 	 */
-	private final Map<String, ResourceMonitorFactory> resourceMonitorFactories;
+	private final Map/* <String, ResourceMonitorFactory> */resourceMonitorFactories;
 
 	/**
 	 * Notifier for ResourceContext events
@@ -72,6 +72,11 @@ public class ResourceManagerImpl implements ResourceManager,
 	 */
 	private ResourceContext frameworkResourceContext;
 
+	/**
+	 * persistence manager
+	 */
+	private PersistenceManager persistenceManager;
+
 	public ResourceManagerImpl(BundleManager pBundleManager,
 			ResourceContextEventNotifier pEventNotifier,
 			ThreadManager pThreadManager) {
@@ -82,8 +87,11 @@ public class ResourceManagerImpl implements ResourceManager,
 		eventNotifier = pEventNotifier;
 		threadManager = pThreadManager;
 
-		resourceContexts = new HashMap<String, ResourceContext>();
-		resourceMonitorFactories = new HashMap<String, ResourceMonitorFactory>();
+		resourceContexts = new Hashtable/* <String, ResourceContext> */();
+		resourceMonitorFactories = new Hashtable/*
+												 * <String,
+												 * ResourceMonitorFactory>
+												 */();
 
 	}
 
@@ -93,9 +101,10 @@ public class ResourceManagerImpl implements ResourceManager,
 
 			ResourceContext newly = createContext(persistedResourceContext
 					.getName());
-			for (Iterator<Long> it = persistedResourceContext.getBundleIds()
+			for (Iterator/* <Long> */it = persistedResourceContext
+					.getBundleIds()
 					.iterator(); it.hasNext();) {
-				long bundleId = it.next();
+				long bundleId = (Long) it.next();
 				try {
 					newly.addBundle(bundleId);
 				} catch (RuntimeException e) {
@@ -111,6 +120,8 @@ public class ResourceManagerImpl implements ResourceManager,
 
 	public void start(BundleContext pContext) {
 		context = pContext;
+		persistenceManager = new PersistenceManager(pContext, this);
+		persistenceManager.restoreContexts();
 
 		resourceMonitorFactories.clear();
 		setDefaultResourceContexts();
@@ -123,12 +134,15 @@ public class ResourceManagerImpl implements ResourceManager,
 	public void stop(BundleContext pContext) {
 		serviceTracker.close();
 		serviceTracker = null;
+
+		persistenceManager.persist();
 	}
 
 	public ResourceContext[] listContext() {
 		ResourceContext[] rcArray = new ResourceContext[0];
 		synchronized (resourceContexts) {
-			rcArray = resourceContexts.values().toArray(rcArray);
+			rcArray = (ResourceContext[]) resourceContexts.values().toArray(
+					rcArray);
 		}
 		return rcArray;
 	}
@@ -205,7 +219,7 @@ public class ResourceManagerImpl implements ResourceManager,
 	public ResourceContext getContext(String name) {
 		ResourceContext resourceContext;
 		synchronized (resourceContexts) {
-			resourceContext = resourceContexts.get(name);
+			resourceContext = (ResourceContext) resourceContexts.get(name);
 		}
 		return resourceContext;
 	}
@@ -227,6 +241,23 @@ public class ResourceManagerImpl implements ResourceManager,
 		Thread currentThread = Thread.currentThread();
 		threadManager.switchContext(currentThread, context);
 
+		// notify all ResourceMonitors of the outgoing ResourceContent
+		if (previousResourceContext != null) {
+			ResourceMonitor[] outgoingMonitors = previousResourceContext
+					.getMonitors();
+			for (int i = 0; i < outgoingMonitors.length; i++) {
+				ResourceMonitor outgoingMonitor = outgoingMonitors[i];
+				outgoingMonitor.notifyOutgoingThread(currentThread);
+			}
+		}
+
+		// notify all ResourceMonitor of the incoming ResourceContext
+		ResourceMonitor[] incomingMonitors = context.getMonitors();
+		for (int i = 0; i < incomingMonitors.length; i++) {
+			ResourceMonitor incomingMonitor = incomingMonitors[i];
+			incomingMonitor.notifyIncomingThread(currentThread);
+		}
+
 		return previousResourceContext;
 	}
 
@@ -238,7 +269,8 @@ public class ResourceManagerImpl implements ResourceManager,
 	public String[] getSupportedTypes() {
 		String[] supportedTypes = new String[0];
 		synchronized (resourceMonitorFactories) {
-			supportedTypes = resourceMonitorFactories.keySet().toArray(
+			supportedTypes = (String[]) resourceMonitorFactories.keySet()
+					.toArray(
 					supportedTypes);
 		}
 		return supportedTypes;
@@ -254,8 +286,10 @@ public class ResourceManagerImpl implements ResourceManager,
 	 */
 	public Object addingService(ServiceReference reference) {
 		ResourceMonitorFactory factory = context.getService(reference);
-		synchronized (resourceMonitorFactories) {
-			resourceMonitorFactories.put(factory.getType(), factory);
+		if (factory != null) {
+			synchronized (resourceMonitorFactories) {
+				resourceMonitorFactories.put(factory.getType(), factory);
+			}
 		}
 		return factory;
 	}
@@ -288,7 +322,8 @@ public class ResourceManagerImpl implements ResourceManager,
 	public ResourceMonitorFactory getResourceMonitorFactory(String factoryType) {
 		ResourceMonitorFactory factory = null;
 		synchronized (resourceMonitorFactories) {
-			factory = resourceMonitorFactories.get(factoryType);
+			factory = (ResourceMonitorFactory) resourceMonitorFactories
+					.get(factoryType);
 		}
 		return factory;
 	}
@@ -357,12 +392,13 @@ public class ResourceManagerImpl implements ResourceManager,
 		filter.append(resourceType);
 		filter.append(")");
 		try {
-			Collection<ServiceReference<ResourceMonitorFactory>> srs = context
+			Collection/* <ServiceReference<ResourceMonitorFactory>> */srs = context
 					.getServiceReferences(ResourceMonitorFactory.class,
 							filter.toString());
 
 			if ((srs != null) && (!srs.isEmpty())) {
-				ServiceReference<ResourceMonitorFactory> sr = srs.iterator()
+				ServiceReference/* <ResourceMonitorFactory> */sr = (ServiceReference) srs
+						.iterator()
 						.next();
 				factory = context.getService(sr);
 			}

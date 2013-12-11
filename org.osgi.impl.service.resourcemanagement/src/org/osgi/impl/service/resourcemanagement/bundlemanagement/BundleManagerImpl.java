@@ -3,7 +3,7 @@
  */
 package org.osgi.impl.service.resourcemanagement.bundlemanagement;
 
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
@@ -38,14 +38,14 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 	 * currently lock, i.e. no other operation can be done until this bundle
 	 * lock is released.
 	 */
-	private Map<Long, BundleLock> bundleLocks;
+	private Map/* <Long, BundleLock> */bundleLocks;
 
 	/**
 	 * this map contains the association between bundle and resource contexts.
 	 * if a bundle id is in this map, the bundle is associated to a resource
 	 * contexts.
 	 */
-	private Map<Long, BundleHolder> resourceContexts;
+	private Map/* <Long, BundleHolder> */resourceContexts;
 
 
 	/**
@@ -58,8 +58,8 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 	private int state = NOT_INITIALIZED;
 
 	public BundleManagerImpl() {
-		bundleLocks = new HashMap<Long, BundleLock>();
-		resourceContexts = new HashMap<Long, BundleHolder>();
+		bundleLocks = new Hashtable/* <Long, BundleLock> */();
+		resourceContexts = new Hashtable/* <Long, BundleHolder> */();
 	}
 
 	/* (non-Javadoc)
@@ -112,7 +112,8 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 						+ " is not associated with a ResourceContext");
 			}
 
-			BundleHolder currentBH = resourceContexts.get(bundleId);
+			BundleHolder currentBH = (BundleHolder) resourceContexts
+					.get(bundleId);
 			if (!currentBH.equals(bundleHolder)) {
 				// release bundle lock
 				releaseBundleLock(bundleId);
@@ -146,7 +147,8 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 			// if the bundle was associated to a context
 			// remove it
 			synchronized (resourceContexts) {
-				BundleHolder holder = resourceContexts.get(bundleId);
+				BundleHolder holder = (BundleHolder) resourceContexts
+						.get(bundleId);
 				if (holder != null) {
 					holder.removeBundleToHolder(bundleId);
 				}
@@ -220,7 +222,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 
 	private void acquireBundleLock(long bundleId) throws RuntimeException {
 		synchronized (bundleLocks) {
-			BundleLock bl = bundleLocks.get(bundleId);
+			BundleLock bl = (BundleLock) bundleLocks.get(bundleId);
 			if (bl == null) {
 				throw new RuntimeException("Bundle " + bundleId
 						+ " does not exist");
@@ -233,7 +235,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 
 	private void releaseBundleLock(long bundleId) throws RuntimeException {
 		synchronized (bundleLocks) {
-			BundleLock bl = bundleLocks.get(bundleId);
+			BundleLock bl = (BundleLock) bundleLocks.get(bundleId);
 			if (bl == null) {
 				throw new RuntimeException();
 			} else {

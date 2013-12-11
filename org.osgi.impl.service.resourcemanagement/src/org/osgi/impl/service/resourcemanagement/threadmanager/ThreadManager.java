@@ -1,6 +1,5 @@
 package org.osgi.impl.service.resourcemanagement.threadmanager;
 
-import org.osgi.framework.BundleContext;
 import org.osgi.service.resourcemanagement.ResourceContext;
 
 public interface ThreadManager {
@@ -17,7 +16,7 @@ public interface ThreadManager {
 	 * @param context
 	 *            context of the bundle.
 	 */
-	void start(BundleContext context);
+	/* void start(BundleContext context); */
 	
 	/**
 	 * <p>
@@ -29,7 +28,7 @@ public interface ThreadManager {
 	 * 
 	 * @param context
 	 */
-	void stop(BundleContext context);
+	/* void stop(BundleContext context); */
 
 	/**
 	 * Return the ResourceContext associated to the provided thread.

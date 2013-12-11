@@ -1,10 +1,10 @@
 package org.osgi.impl.service.resourcemanagement;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.osgi.impl.service.resourcemanagement.bundlemanagement.BundleHolder;
 import org.osgi.impl.service.resourcemanagement.bundlemanagement.BundleManager;
@@ -34,12 +34,12 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 	/**
 	 * Bundles belonging to the Context
 	 */
-	private final HashSet<Long> bundles;
+	private final List/* <Long> */bundles;
 
 	/**
 	 * Resource Monitors associated to the context.
 	 */
-	private final HashMap<String, ResourceMonitor> monitors;
+	private final Map/* <String, ResourceMonitor> */monitors;
 
 	/**
 	 * notifier for ResourceContextEvent.
@@ -86,9 +86,9 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 
 		lock = new ResourceContextLock();
 
-		bundles = new HashSet<Long>();
+		bundles = new ArrayList/* <Long> */();
 
-		monitors = new HashMap<String, ResourceMonitor>();
+		monitors = new Hashtable/* <String, ResourceMonitor> */();
 
 	}
 
@@ -138,7 +138,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 		checkResourceContextExistency();
 		ResourceMonitor monitor = null;
 		synchronized (monitors) {
-			monitor = monitors.get(resourceType);
+			monitor = (ResourceMonitor) monitors.get(resourceType);
 		}
 		return monitor;
 	}
@@ -201,13 +201,14 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 		checkResourceContextExistency();
 
 		// delete all bundles
-		List<Long> bs = new ArrayList<Long>();
+		List/* <Long> */bs = new ArrayList/* <Long> */();
 		synchronized (bundles) {
 			bs.addAll(bundles);
 		}
-		for (Iterator<Long> it = bs.iterator(); it.hasNext();) {
+		for (Iterator/* <Long> */it = bs.iterator(); it.hasNext();) {
 			try {
-				removeBundle(it.next(), destination);
+				Long bundleId = (Long) it.next();
+				removeBundle(bundleId.longValue(), destination);
 			} catch (RuntimeException e) {
 				// this exception can be thrown if the destination context has
 				// been deleted
@@ -215,12 +216,12 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 		}
 
 		// delete all monitors
-		List<ResourceMonitor> rms = new ArrayList<ResourceMonitor>();
+		List/* <ResourceMonitor> */rms = new ArrayList/* <ResourceMonitor> */();
 		synchronized (monitors) {
 			rms.addAll(monitors.values());
 		}
-		for (Iterator<ResourceMonitor> it = rms.iterator(); it.hasNext();) {
-			ResourceMonitor rm = it.next();
+		for (Iterator/* <ResourceMonitor> */it = rms.iterator(); it.hasNext();) {
+			ResourceMonitor rm = (ResourceMonitor) it.next();
 			rm.delete();
 		}
 
@@ -261,7 +262,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 		checkResourceContextExistency();
 		ResourceMonitor[] array = new ResourceMonitor[0];
 		synchronized (monitors) {
-			array = monitors.values().toArray(array);
+			array = (ResourceMonitor[]) monitors.values().toArray(array);
 		}
 		return array;
 	}

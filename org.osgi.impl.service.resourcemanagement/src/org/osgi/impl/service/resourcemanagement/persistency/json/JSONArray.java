@@ -5,16 +5,16 @@ import java.util.List;
 
 public class JSONArray extends JSONObject {
 
-	private final List<JSONObject> elements;
+	private final List/* <JSONObject> */elements;
 
 	/**
 	 * Create a new JSONArray
 	 */
 	public JSONArray() {
-		elements = new ArrayList<JSONObject>();
+		elements = new ArrayList/* <JSONObject> */();
 	}
 
-	public List<JSONObject> getElements() {
+	public List/* <JSONObject> */getElements() {
 		return elements;
 	}
 
