@@ -1,0 +1,9 @@
+
+-buildpath: org.osgi.impl.service.resourcemanagement;version=latest,\
+	osgi.core
+	
+
+Private-Package: org.osgi.impl.service.resourcemanagement.threadmanager.impl
+Bundle-Activator: org.osgi.impl.service.resourcemanagement.threadmanager.impl.Activator
+
+Bundle-Version: 1.0.0
