@@ -1,6 +1,9 @@
 package org.osgi.impl.service.resourcemanagement.util;
 
-import org.osgi.service.resourcemanagement.monitor.MemoryMonitor;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.osgi.service.resourcemanagement.ResourceMonitor;
 
 public class ResourceMonitorInfo {
 
@@ -13,14 +16,14 @@ public class ResourceMonitorInfo {
 		enabled = pEnabled;
 	}
 
-	public ResourceMonitorInfo(final MemoryMonitor memoryMonitor) {
-		resourceContextName = memoryMonitor.getContext().getName();
-		enabled = memoryMonitor.isEnabled();
+	public ResourceMonitorInfo(final ResourceMonitor resourceMonitor) {
+		resourceContextName = resourceMonitor.getContext().getName();
+		enabled = resourceMonitor.isEnabled();
 	}
 	
 	public ResourceMonitorInfo(final String memoryMonitorInfoAsCsv) {
-		String[] splitted = memoryMonitorInfoAsCsv.split(";");
-		if (splitted != null) {
+		String[] splitted = split(memoryMonitorInfoAsCsv, ";");
+		if ((splitted != null) && (splitted.length == 2)) {
 			resourceContextName = splitted[0];
 			enabled = Boolean.valueOf(splitted[1]);
 		} else {
@@ -44,6 +47,25 @@ public class ResourceMonitorInfo {
 
 	public String toCsv() {
 		return resourceContextName + ";" + enabled;
+	}
+
+	private static String[] split(String inputString, String separatingCharacter) {
+		List parts = new ArrayList();
+		int length = inputString.length();
+		int fromIndex = 0;
+		int index = 0;
+		while ((index = inputString.indexOf(separatingCharacter, fromIndex)) != -1) {
+			// substringing the part between fromIndex and index
+			String part = inputString.substring(fromIndex, index);
+			parts.add(part);
+
+			// update fromIndex
+			fromIndex = index + 1;
+		}
+		parts.add(inputString.substring(fromIndex, length));
+		
+		return (String[]) parts.toArray(new String[parts.size()]);
+
 	}
 
 }

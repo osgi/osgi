@@ -12,45 +12,77 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.osgi.framework.BundleContext;
-import org.osgi.service.resourcemanagement.monitor.MemoryMonitor;
+import org.osgi.service.resourcemanagement.ResourceMonitor;
+import org.osgi.service.resourcemanagement.ResourceMonitorFactory;
 
 /**
- * This class persists and restores Memory Monitors into a csv file. The CSV
- * file contains the name of the context as well as the state of the monitor
+ * This class persists and restores Monitors into a csv file. The CSV file
+ * contains the name of the context as well as the state of the monitor. This
+ * class should be used by a {@link ResourceMonitorFactory} to persist and
+ * restore {@link ResourceMonitor}.
  * 
  * @author mpcy8647
  * 
  */
 public class Persistence {
 
-	private static final String FILE_NAME = "persist.csv";
+	public static final String FILE_NAME = "persist.csv";
 
-	public static void persistMemoryMonitors(Collection mms,
-			BundleContext bundleContext) {
 
-		File file = bundleContext.getDataFile(FILE_NAME);
+	/**
+	 * Persist a collection of monitors into the persistent data storage area of
+	 * provided bundle context. The name of ResourceContext and the state of
+	 * each {@link ResourceMonitor} is persisted into the fileName file using a
+	 * CSV format.
+	 * 
+	 * @param mms
+	 *            collection of {@link ResourceMonitor} to persist
+	 * @param bundleContext
+	 *            bundle context (to get access to a bundle persistent storage
+	 * @param pFileName
+	 *            name of the persist file. if null, use the default (
+	 *            {@link #FILE_NAME})
+	 * @throws PersistenceException
+	 *             if any exception occurs
+	 */
+	public static void persistMonitors(Collection mms,
+			BundleContext bundleContext, String pFileName)
+			throws PersistenceException {
+
+
+		// retrieve the fileName to be used or get default one.
+		String fileName = pFileName;
+		if (fileName == null) {
+			fileName = FILE_NAME;
+		}
+
+		// retrieves a File object and delete it if exists
+		File file = bundleContext.getDataFile(fileName);
 		if (file.exists()) {
 			file.delete();
 		}
+
+		// create new file
 		try {
 			file.createNewFile();
-
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			throw new PersistenceException("Unable to create file " + fileName
+					+ " used to persist ResourceMonitor", e1);
 		}
+
 		PrintStream ps = null;
 		FileOutputStream fos = null;
 		try {
 			fos = new FileOutputStream(file);
 			ps = new PrintStream(fos);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			throw new PersistenceException("Persist file " + fileName
+					+ "not found.", e);
 		}
 
+
 		for (Iterator it = mms.iterator(); it.hasNext();) {
-			MemoryMonitor mm = (MemoryMonitor) it.next();
+			ResourceMonitor mm = (ResourceMonitor) it.next();
 			ResourceMonitorInfo mmi = new ResourceMonitorInfo(mm);
 			ps.println(mmi.toCsv());
 		}
@@ -61,20 +93,44 @@ public class Persistence {
 
 	}
 
-	public static Collection loadMemoryMonitors(
-			BundleContext bundleContext) {
+
+	/**
+	 * Load persisted ResourceMonitor data from the fileName file. This file is
+	 * a CSV file containing the name of ResourceContext and the state of each
+	 * ResourceMonitor.
+	 * 
+	 * @param bundleContext
+	 *            used to load fileName file from the bundle storage area
+	 * @param fileName
+	 *            name of the file. if null, use default one ({@link #FILE_NAME}
+	 *            ).
+	 * @return Collection of {@link ResourceMonitorInfo}. This collection may be
+	 *         null.
+	 * @throws PersistenceException
+	 *             if any exception occurs
+	 */
+	public static Collection loadMonitors(BundleContext bundleContext,
+			String pFileName) throws PersistenceException {
 
 		Collection mmis = new ArrayList();
 
-		File file = bundleContext.getDataFile(FILE_NAME);
+		String fileName = pFileName;
+		if (fileName == null) {
+			fileName = FILE_NAME;
+		}
+
+		File file = bundleContext.getDataFile(fileName);
 		FileReader fr = null;
 
 
 		try {
 			fr = new FileReader(file);
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			System.out.println("catched FileNotFoundException");
+			fr = null;
+		} catch (Throwable t) {
+			System.out.println("catched throwable ");
+			fr = null;
 		}
 		if (fr != null) {
 			BufferedReader br = new BufferedReader(fr);
@@ -93,8 +149,8 @@ public class Persistence {
 				}
 
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				throw new PersistenceException("Unable to read the file "
+						+ fileName, e);
 			}
 
 			br = null;

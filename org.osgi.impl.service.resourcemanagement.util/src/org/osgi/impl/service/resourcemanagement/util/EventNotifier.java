@@ -1,7 +1,7 @@
 package org.osgi.impl.service.resourcemanagement.util;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -79,7 +79,7 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 		resourceContext = pResourceContext;
 
 		resourceListeners = new ArrayList/* <ResourceListener> */();
-		lastNotifications = new HashMap/* <ResourceListener, ResourceEvent> */();
+		lastNotifications = new Hashtable/* <ResourceListener, ResourceEvent> */();
 
 		// set filter for ServiceTracker
 		Filter serviceTrackerFilter = null;

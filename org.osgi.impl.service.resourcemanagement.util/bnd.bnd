@@ -6,11 +6,12 @@ Bundle-Description: Resource Management Utils provides classes common for Resour
 
 Private-Package 			= ${p}.*
 
--buildpath: ee.j2se,\
-    osgi.core;version=4.3,\
+-buildpath: osgi.core;version=4.3,\
 	osgi.cmpn;version=4.2,\
-	org.osgi.service.resourcemanagement;version=latest
+	org.osgi.service.resourcemanagement;version=latest,\
+	ee.minimum
 	
 Bundle-Name: Resource Management Utils
 Export-Package: org.osgi.impl.service.resourcemanagement.util
-Bundle-Version: 1.0.0
+Bundle-Version: 1.0.1
+Import-Package: org.osgi.framework;version=1.5,*
