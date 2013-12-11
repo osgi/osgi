@@ -5,3 +5,5 @@ Private-Package:                         ${p}.resolver.tb2
 Bundle-Activator:                        ${p}.resolver.tb2.Activator
 Require-Bundle:                          ${p}.resolver.tb1
 Import-Package:                          org.osgi.framework, !*
+
+-noee=true
