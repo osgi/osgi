@@ -3594,6 +3594,147 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         processor = x86 , <code>«</code>
         *</programlisting>
 
+    <para>Frameworks must convert a Bundle-NativeCode header to a requirement in the 
+    <code>osgi.native</code> namespace when used in the Wiring API, see 
+    <xref linkend="framework.wiring"/>.  Each native code clause specified in a
+    Bundle-NativeCode header is converted into a filter component for the 
+    <code>osgi.native</code> requirement filter directive using the following
+    architected matching attributes:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>osgi.native.osname</code> – Uses the approximate equals (~=) 
+        filter type to evaluate the value specified by the <code>osname</code>
+        Bundle-NativeCode attribute.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>osgi.native.osversion</code> – Create a <code>VersionRange</code> using 
+        the value specified by the osversion Bundle-NativeCode attribute and 
+        then create a filter string out of the <code>VersionRange</code>.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>osgi.native.processor</code> – Uses the approximate equals (~=) 
+        filter type to evaluate the value specified by the <code>processor</code> 
+        Bundle-NativeCode attribute.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>osgi.native.language</code> – Uses the approximate equals (~=) 
+        filter type to evaluate the value specified by the <code>language</code> 
+        Bundle-NativeCode attribute.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>In cases where the same Bundle-NativeCode attribute is specified multiple 
+    times within the same clause then the filter components for each value for that 
+    attribute are ORed together. For example, if osname attribute is specified
+    as both &quot;Windows95&quot; and &quot;Windows7&quot; then the resulting 
+    filter will contain:
+    </para>
+
+    <programlisting>(|
+        (osgi.native.osname~=Windows95)
+        (osgi.native.osname~=Windows7)
+)</programlisting>
+
+    <para>If the <code>selection-filter</code> Bundle-NativeCode attribute is 
+    specified then the specified filter is included as a component of the native code 
+    clauses AND filter type. Consider the following Bundle-NativeCode header 
+    which contains a single clause:</para>
+
+    <programlisting>Bundle-NativeCode: 
+      lib/http.dll; lib/zlib.dll;
+      osname=Windows95;
+      osname=Windows98; 
+      osname=WindowsNT;
+      processor=x86;
+      selection-filter="(com.acme.windowing=win32)"; 
+      language=en;
+      language=se</programlisting>
+
+    <para>This clause would get translated into the following AND filter type:</para>    
+
+    <programlisting>Require-Capability: 
+      osgi.native;
+      filter:=&quot;
+        (&amp;
+          (|
+            (osgi.native.osname~=Windows95)
+            (osgi.native.osname~=Windows98)
+            (osgi.native.osname~=WindowsNT)
+          )
+          (osgi.native.processor~=x86)
+          (|
+            (osgi.native.language~=en)
+            (osgi.native.language~=se)
+          )
+          (com.acme.windowing=win32)
+        )&quot;</programlisting>
+
+    <para>The Bundle-NativeCode header may specify multiple clauses, each having their own 
+    list of native code paths and set of matching attributes. Instead of using a separate 
+    <code>osgi.native</code> requirement for each Bundle-NativeCode clause, the complete 
+    Bundle-NativeCode header is specified as a single <code>osgi.native</code> requirement. 
+    This is done by using an OR filter type using all of the individual Bundle-NativeCode 
+    clause filter components (as specified above) as components of a single filter directive. 
+    Consider the following Bundle-NativeCode header which contains three clauses:</para>
+
+    <programlisting>Bundle-NativeCode: 
+      lib/http.dll; lib/zlib.dll;
+        osname=Windows95;
+        osname=Windows98; 
+        osname=WindowsNT;
+        processor=x86;
+        selection-filter = &quot;(com.acme.windowing=win32)&quot;; 
+        language=en;
+        language=se,
+      lib/solaris/libhttp.so;
+        osname=Solaris;
+        osname=SunOS;
+        processor=sparc,
+      lib/linux/libhttp.so;
+        osname=Linux;
+        processor=mips;
+        selection-filter=&quot;(com.acme.windowing=gtk)&quot;</programlisting>
+
+    <para>This Bundle-NativeCode header would get translated into the following osgi.native filter directive:</para>
+
+<programlisting>(|
+  (&amp;
+    (|
+      (osgi.native.osname~=Windows95)
+      (osgi.native.osname~=Windows98)
+      (osgi.native.osname~=WindowsNT)
+    )
+    (osgi.native.processor~=x86)
+    (|
+      (osgi.native.language~=en)
+      (osgi.native.language~=se)
+    )
+    (com.acme.windowing=win32)
+  )
+  (&amp;
+    (|
+      (osgi.native.osname~=Solaris)
+      (osgi.native.osname~=SunOs)
+    )
+    (osgi.native.processor~=sparc)
+  )
+  (&amp;
+    (osgi.native.osname~=Linux)
+    (osgi.native.processor~=mips)
+    (com.acme.windowing=gtk)
+  )
+)</programlisting>
+
+    <para>If the optional '*' is specified at the end of the Bundle-NativeCode manifest header,
+    then the native code for the bundle is considered to be optional.  When the Framework 
+    converts a Bundle-NativeCode header into an <code>osgi.native</code> requirement which is 
+    designated as optional then the requirement resolution directive must be set to
+    <code>optional</code></para>
+
     <section xml:id="framework.module.nativecodealgorithm">
       <title>Native Code Algorithm</title>
 
