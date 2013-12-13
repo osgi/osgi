@@ -448,6 +448,28 @@
         xrefstyle="hyperlink"/></para>
       </listitem>
     </itemizedlist>
+
+    <section>
+      <title>System Bundle Context</title>
+
+      <para>When the system bundle's <code>BundleContext</code> is used to
+      install a bundle then the Collision Hooks are called in the same way the
+      hooks are called when a normal <code>BundleContext</code> is used. The
+      system bundle along with the shrinkable candidate bundles collection is
+      passed to the <xref
+      linkend="org.osgi.framework.hooks.bundle.CollisionHook.filterCollisions-int-Bundle-Collection-"
+      xrefstyle="hyperlink"/> method. Bundle Collision Hooks may remove bundles
+      from the shrinkable collection. If a bundle is removed by a bundle
+      Collision Hook then the bundle will not be contained in the collection
+      for the remaining bundle Collision Hooks called. Unlike the other bundle
+      and service hooks, if the system bundle's <code>BundleContext</code> is
+      used to install a bundle then the Framework must not ignore the bundle
+      removals performed by the bundle Collision Hooks. This implies that the
+      system bundle's <code>BundleContext</code> can be used to install the
+      same bundle multiple times when the 
+      <code>org.osgi.framework.bsnversion</code> launching property is set to
+      <code>managed</code>.</para>
+    </section>
   </section>
 
   <section>
