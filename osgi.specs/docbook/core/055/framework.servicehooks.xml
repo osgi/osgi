@@ -581,6 +581,26 @@
     stopped, it will of course no longer be able to filter events and the
     target bundle might see an service events for services it was not aware
     of.</para>
+
+    <section>
+      <title>System Service Listeners</title>
+
+      <para>Service Listeners may be registered with the system bundle's 
+      <code>BundleContext</code>. If at least one Service Listener is
+      registered with the system bundle's <code>BundleContext</code> then 
+      the system bundle's <code>BundleContext</code> must be contained in
+      the keys of the shrinkable map passed to the <xref
+      linkend="org.osgi.framework.hooks.service.EventListenerHook.event-ServiceEvent-Map-"
+      xrefstyle="hyperlink"/> method. Just like other <code>BundleContext</code>
+      keys contained in the shrinkable map, the system bundle's 
+      <code>BundleContext</code> may be removed. If the system bundle's 
+      <code>BundleContext</code> is removed by a service Event Listener Hook then 
+      the <code>BundleContext</code> will not be contained in the map for the
+      remaining service Event Listener Hooks called. Unlike other 
+      <code>BundleContext</code> objects, if the system bundle's <code>BundleContext</code>
+      is removed from the shrinkable map then the service event is still delivered 
+      to the Service Listeners added to the system bundle's <code>BundleContext</code>.</para>
+    </section>
   </section>
 
   <section>
