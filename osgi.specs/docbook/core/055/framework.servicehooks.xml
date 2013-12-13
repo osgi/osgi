@@ -634,6 +634,27 @@
     <para>The purpose of the Find Hook is to limit the visibility of services
     to selected target bundles. For this reason, the hook implementation can
     remove selected service references from the result collection.</para>
+
+    <section>
+      <title>System Bundle Context</title>
+
+      <para>When one of the <code>getServiceReference</code> or 
+      <code>getServiceReferences</code> methods is called using the system bundle's
+      <code>BundleContext</code> then the service Find Hooks are called in the
+      same way the hooks are called when a normal <code>BundleContext</code> is
+      used. The system bundle's <code>BundleContext</code> along with the shrinkable
+      candidate service references collection is passed to the <xref
+      linkend="org.osgi.framework.hooks.service.FindHook.find-BundleContext-String-String-boolean-Collection-"
+      xrefstyle="hyperlink"/> method. Service Find Hooks may remove service
+      references from the shrinkable collection. If a service reference is removed
+      by a service Find Hook then the service reference will not be contained in the
+      collection for the remaining service find hooks called. Unlike other
+      <code>BundleContext</code> objects, if the system bundle's 
+      <code>BundleContext</code> is used to find services then the Framework ignores
+      the service reference removals performed by the service Find Hooks and allows the
+      service references removed to remain visible in the find results.</para>
+
+    </section>
   </section>
 
   <section>
