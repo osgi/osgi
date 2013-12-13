@@ -3514,7 +3514,9 @@ optional            ::= '*'</programlisting>
       </listitem>
     </itemizedlist>
 
-    <para>The following is a typical example of a native code declaration in a
+    <para>If a selection-filter attribute contains an invalid filter, then the bundle must 
+    fail to install with a Bundle Exception of type <code>NATIVECODE_ERROR</code>.
+    The following is a typical example of a native code declaration in a
     bundle's manifest:</para>
 
     <programlisting>Bundle-NativeCode: lib/http.dll ; lib/zlib.dll; <code>«</code>
@@ -3679,10 +3681,13 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         </listitem>
       </orderedlist>
 
-      <para>If a native code library in a selected native code clause cannot
-      be found within the bundle then the bundle must fail to resolve. This is
-      <code>true</code> even if the optional clause is specified. If the
-      selected clause contains multiple libraries with the same base file name
+     <para>If a native code library in a selected native code clause cannot 
+      be found within the bundle then the bundle is still allowed to resolve. 
+      A missing native code library will result in an error being thrown at 
+      runtime when the bundle attempts to load the native code 
+      (e.g. by invoking the method <code>System.loadLibrary</code>).</para>
+
+      <para>If the selected clause contains multiple libraries with the same base file name
       then only the lexically left most library with that base file name will
       be used. For example, if the selected clause contains the libraries
       <code>lib1/http.dll; lib2/http.dll; lib3/foo.dll; a/b/c/http.dll</code>
