@@ -317,6 +317,36 @@
     linkend="org.osgi.framework.hooks.bundle.FindHook.find-BundleContext-Collection-"
     xrefstyle="hyperlink"/> method determines that the Bundle Context has no
     visibility of the conflicting bundle.</para>
+
+    <section>
+      <title>System Bundle Context</title>
+
+      <para>When the <xref linkend="org.osgi.framework.BundleContext.getBundle-long-"
+      xrefstyle="hyperlink"/> or <xref linkend="org.osgi.framework.BundleContext.getBundles--"
+      xrefstyle="hyperlink"/> methods are called using the system bundle's 
+      <code>BundleContext</code> then the bundle Find Hooks are called in the same way
+      the hooks are called when a normal <code>BundleContext</code> is used. The
+      system bundle's <code>BundleContext</code> along with the shrinkable candidate
+      bundles collection is passed to the <xref
+      linkend="org.osgi.framework.hooks.bundle.FindHook.find-BundleContext-Collection-"
+      xrefstyle="hyperlink"/> method. Bundle Find Hooks may remove bundles from the
+      shrinkable collection. If a bundle is removed by a bundle Find Hook then the
+      bundle will not be contained in the collection for the remaining bundle Find
+      Hooks called. Unlike other <code>BundleContext</code> objects, if the system
+      bundle's <code>BundleContext</code> is used to find bundles then the Framework
+      ignores the bundle removals performed by the bundle Find Hooks and allows the
+      bundles removed to remain visible in the find results.</para>
+
+      <para>The bundle Find Hook is also used during an install operation. When the
+      system bundle's <code>BundleContext</code> is used to install a bundle then the
+      bundle Find Hooks are called in the same way the hooks are called when a normal
+      <code>BundleContext</code> is used. Unlike other <code>BundleContext</code>
+      objects, if the system bundle's <code>BundleContext</code> is used to install
+      bundles then the Framework ignores the bundle removals performed by the bundle
+      Find Hooks. This implies that if the system bundle's <code>BundleContext</code>
+      is used to install a bundle at a location where an existing bundle is installed
+      then the existing bundle is always returned.</para>
+    </section>
   </section>
 
   <section xml:id="framework.bundlehooks.collisionhook">
