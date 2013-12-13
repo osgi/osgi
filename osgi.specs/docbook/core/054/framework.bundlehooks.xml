@@ -247,6 +247,25 @@
         <para>Other if new events are defined in later versions</para>
       </listitem>
     </itemizedlist>
+
+    <section>
+      <title>System Bundle Listeners</title>
+
+      <para>Bundle Listeners may be registered with the system bundle's 
+      <code>BundleContext</code>. If at least one Bundle Listener is registered with the system 
+      bundle's <code>BundleContext</code> then the system bundle's <code>BundleContext</code> must be 
+      contained in the shrinkable collection passed to the <xref
+      linkend="org.osgi.framework.hooks.bundle.EventHook.event-BundleEvent-Collection-"
+      xrefstyle="hyperlink"/> bundle event hook method. Just like other
+      <code>BundleContext</code> objects contained in the shrinkable collection, the system 
+      bundle's <code>BundleContext</code> may be removed. If the system bundle's <code>BundleContext</code>
+      is removed by a bundle Event Hook then the <code>BundleContext</code> will not be 
+      contained in the collection for the remaining bundle Event Hooks called. Unlike
+      other <code>BundleContext</code> objects, if the system bundle's <code>BundleContext</code> is 
+      removed from the shrinkable collection then the bundle event is still
+      delivered to the Bundle Listeners added to the system bundle's <code>BundleContext</code>.</para>
+    </section>
+
   </section>
 
   <section>
