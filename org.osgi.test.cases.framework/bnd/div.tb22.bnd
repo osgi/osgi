@@ -13,6 +13,7 @@ Bundle-NativeCode: \
  qnx_ppc/libNative.so; osname=QNX; processor=PowerPC; osversion="[0,10000]", \
  qnx_armle/libNative.so; osname=QNX; processor=arm_le; osversion="[0,10000]", \
  windows_x86/Native.dll; osname=Win32; processor=x86; osversion="[0,10000]", \
+ windows_x86-64/Native.dll; osname=Win32; processor=x86-64; osversion="[0,10000]", \
  solaris_sparc/libNative.so; osname=Solaris; processor=sparc; osversion="[0,10000]", \
  solaris_sparc/libNative.so; osname=SunOS; processor=sparc; osversion="[0,10000]", \
  windows_arm/Native.dll; osname="windows ce"; processor=arm_le; osversion="[0,10000]", \
