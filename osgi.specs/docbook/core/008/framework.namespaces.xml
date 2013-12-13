@@ -1175,6 +1175,168 @@ Bundle B:
     </section>
   </section>
 
+  <section xml:id="framework.namespaces.osgi.native">
+    <title>osgi.native Namespace</title>
+
+    <para>The <code>osgi.native</code> namespace is used to describe the native environment
+    in which the Framework is executing.  An OSGi Framework must provide a 
+    capability in the <code>osgi.native</code> namespace that represents the native environment 
+    in which the Framework is executing.  For example, the following capability is provided
+    when running a 64-bit VM on a Windows 7 machine with the language set to en_US:</para>
+
+    <programlisting>Provide-Capability:
+    osgi.native; 
+        osgi.native.osname:List&lt;String&gt;="Windows7,Windows 7,Win7,Win32"; 
+        osgi.native.osversion:Version="7.0";
+        osgi.native.processor:List&lt;String&gt;="x86-64,amd64,em64t,x86_64";
+        osgi.native.language="en"</programlisting>
+
+    <para>Bundles can require an <code>osgi.native</code> capability which
+    matches the native environment required for the bundle to function properly, for example:</para>
+
+    <programlisting>Require-Capability:
+     osgi.native;
+       filter:="
+         (&amp;
+           (osgi.native.osname~=win32)
+           (osgi.native.processor~=x86-64)
+           (osgi.native.language~=en)
+         )"</programlisting>
+
+    <para>The <code>osgi.native</code> namespace is not used to specify native code
+    paths packaged within a bundle.  The <code>Bundle-NativeCode</code> header is used
+    to specify native code paths.  The OSGi Framework converts a <code>Bundle-NativeCode</code>
+    into an <code>osgi.native</code> requirement which describes the native environment 
+    required to execute native code packaged within a Bundle (see <xref linkend="i3235622"/>).
+    There is no need for a bundle to specify both a <code>Bundle-NativeCode</code> header
+    and an <code>osgi.native</code> requirement.</para>
+
+    <para>Native code included in a Fragment Bundle gets loaded by the class loaders
+    of the Host Bundles the Fragment is attached to,
+    therefore the <code>osgi.native</code> requirement is hosted when it is part of a Fragment.
+    That is, a requirement from this namespace must be treated as part of the Host Bundles
+    the Fragment is attached to.</para>
+
+    <para>The <code>osgi.native</code> capability is defined in table <xref
+    linkend="framework.namespaces-native.namespace"/> and in the <xref
+    linkend="org.osgi.framework.namespace.NativeNamespace"
+    xrefstyle="hyperlink"/> class.</para>
+
+    <table pgwide="1" xml:id="framework.namespaces-native.namespace">
+      <title>osgi.native Namespace definition</title>
+
+      <tgroup cols="6">
+        <colspec colnum="1" colwidth="4*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
+        <colspec colnum="4" colwidth="2*"/>
+
+        <colspec colnum="5" colwidth="3*"/>
+
+        <colspec colnum="6" colwidth="7*"/>
+
+        <thead>
+          <row>
+            <entry>Name</entry>
+
+            <entry>Kind</entry>
+
+            <entry>M/O</entry>
+
+            <entry>Type</entry>
+
+            <entry>Syntax</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>osgi.native.osname</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>M</code></entry>
+
+            <entry><para><code>List</code></para><para><code>&lt;String&gt;</code></para></entry>
+
+            <entry><para><code>osname</code></para><para><code>( ',' osname )*</code></para></entry>
+
+            <entry><para>A comma separated list of canonical os name aliases to the 
+            <code>org.osgi.framework.os.name</code> launching property value (See
+            <xref linkend="framework.module.os-names"/> and <xref linkend="i3287541"/>).
+            For example, an <code>org.osgi.framework.os.name</code> value of 
+            <code>Windows95</code> will get a <code>List&lt;String&gt;</code> value of 
+            <code>Windows95,Windows 95,Win95,Win32</code></para></entry>
+          </row>
+
+          <row>
+            <entry><code>osgi.native.osversion</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>M</code></entry>
+
+            <entry><para><code>Version</code></para></entry>
+
+            <entry><code>version</code></entry>
+
+            <entry><para>A <code>Version</code> as parsed from the value of the
+            <code>org.osgi.framework.os.version</code> launching property</para></entry>
+          </row>
+
+          <row>
+            <entry><code>osgi.native.processor</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>M</code></entry>
+
+            <entry><para><code>List</code></para><para><code>&lt;String&gt;</code></para></entry>
+
+            <entry><para><code>processor</code></para><para><code>( ',' processor )*</code></para></entry>
+
+            <entry><para>A comma separated list of canonical processor aliases to the 
+            <code>org.osgi.framework.processor</code> launching property value (See
+            <xref linkend="framework.module.processor-names"/> and <xref linkend="i3287541"/>).
+            For example, an <code>org.osgi.framework.processor</code> value of 
+            <code>x86</code> will get a <code>List&lt;String&gt;</code> value of 
+            <code>x86,pentium,i386,i486,i586,i686</code></para></entry>
+          </row>
+
+          <row>
+            <entry><code>osgi.native.language</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>M</code></entry>
+
+            <entry><para><code>String</code></para></entry>
+
+            <entry></entry>
+
+            <entry><para>The value of the <code>org.osgi.framework.language</code> 
+            launching property</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>In addition to the attributes defined in 
+    <xref linkend="framework.namespaces-native.namespace"/> an OSGi Framework must 
+    populate the <code>osgi.native</code> capability attributes with the values
+    included in the Framework launching properties (see <xref 
+    linkend="framework.lifecycle.launchingproperties"/>).  Launching property keys
+    that start with <code>osgi.native.</code> are excluded to prevent collisions with
+    the defined capability attribute keys.
+    </para>
+
+  </section>
+
   <section>
     <title>References</title>
 
