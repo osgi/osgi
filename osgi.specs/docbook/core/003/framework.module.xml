@@ -4928,6 +4928,73 @@ bundle-description  ::= symbolic-name
       a cause of type <code>UnsupportedOperationException</code>.</para>
     </section>
 
+    <section xml:id="framework.module.extensionActivator">
+      <title>Framework Extension Activator</title>
+
+      <para>A framework extension may hook into the Framework initialization
+      and shutdown process by specifying an Extension Bundle Activator.  The 
+      <code><xref linkend="org.osgi.framework.BundleActivator"
+      xrefstyle="hyperlink"/></code> interface defines methods that the
+      Framework invokes when the Framework is initialized and
+      shutdown.</para>
+
+      <para>To inform the OSGi environment of a fully qualified class name
+      serving as its Extension Bundle Activator, a framework extension
+      developer must declare an <code>ExtensionBundle-Activator</code> manifest
+      header in the framework extension bundle's manifest file.  The following
+      is an example of an ExtensionBundle-Activator:</para>
+
+      <programlisting>ExtensionBundle-Activator: com.acme.Activator</programlisting>
+
+      <para>The class acting as an Extension Bundle Activator must implement 
+      the <code>BundleActivator</code> interface, be declared public, and have
+      a public default constructor so an instance of it may be created with
+      <code>Class.newInstance</code>.</para>
+
+      <para>Supplying an Extension Bundle Activator is optional and only valid
+      for Extension Bundles of type <code>framework</code>.  For normal Bundles
+      and Fragments the <code>ExtensionBundle-Activator</code> is ignored.</para>
+
+      <section>
+        <title>Update and Uninstall</title>
+
+        <para>Unlike normal bundles, updating or uninstalling an extension 
+        bundle does not take effect at runtime until the Framework is shutdown
+        and restarted.  The old content of the extension bundle must remain
+        attached to the system bundle until the framework is shutdown.  This
+        extends to the Extension Bundle Activators that have had the start
+        method called.  All started Extension Bundle Activators must not have
+        the stop method called until the Framework is shutdown.</para>
+
+      </section>
+
+      <section>
+        <title>Installing</title>
+      
+        <para>When a framework extension is installed a Framework may allow the
+        extension to become resolved dynamically, without a Framework restart.
+        If a framework extension is allowed to be installed and resolve
+        dynamically after Framework initialization, then the Extension Bundle
+        Activator start method must be called as soon as the extension bundle
+        is resolved.  This must happen before the resolved bundle event is
+        fired for the extension bundle.</para>
+
+      </section>
+
+      <section>
+        <title>Framework Initialization and Shutdown</title>
+
+        <para>An Extension Bundle Activator allows a framework extension to
+        hook into the Framework initialization and shutdown process.
+        <xref linkend="framework.lifecycle.initializing"/> describes how the 
+        <code>start</code> method for Extension Bundle Activators are called
+        during Framework initialization.
+        <xref linkend="framework.lifecycle.stopping"/> describes how the
+        <code>stop</code> method for Extension Bundle Activators are called
+        during Framework shutdown.</para>
+      </section>
+    </section>
+
     <section>
       <title>Optionality Boot Class Path Extension</title>
 

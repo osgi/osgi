@@ -1197,7 +1197,7 @@
       </figure>
     </section>
 
-    <section>
+    <section xml:id="framework.lifecycle.initializing">
       <title>Initializing the Framework</title>
 
       <para>Before the framework can be used, it must be
@@ -1207,36 +1207,36 @@
       active. This is reflected in the <code>STARTING</code> state. As long as
       the framework is in this state, new bundles can be installed without any
       installed code interfering. Existing bundles must all be in the
-      <code>INSTALLED</code> state. In this state, the framework will run at
-      start level 0.</para>
+      <code>INSTALLED</code> or <code>RESOLVED</code> state. In this state,
+      the framework will run at start level 0.</para>
 
       <para>A framework object can be initialized multiple times. After
       initialization:</para>
 
       <itemizedlist>
         <listitem>
-          <para>Event handling is enabled,</para>
+          <para>Event handling is enabled</para>
         </listitem>
 
         <listitem>
-          <para>The security manager is configured,</para>
+          <para>The security manager is configured</para>
         </listitem>
 
         <listitem>
-          <para>Start level is set to 0,</para>
+          <para>Start level is set to 0</para>
         </listitem>
 
         <listitem>
-          <para>The framework object has a valid Bundle Context,</para>
+          <para>The framework object has a valid Bundle Context</para>
         </listitem>
 
         <listitem>
           <para>Any installed bundle is in the <code>INSTALLED</code>
-          state,</para>
+          or <code>RESOLVED</code> state</para>
         </listitem>
 
         <listitem>
-          <para>Framework services are available,</para>
+          <para>Framework services are available</para>
         </listitem>
 
         <listitem>
@@ -1250,7 +1250,54 @@
         <listitem>
           <para>The system bundle can adapt to any of its defined types</para>
         </listitem>
+
+        <listitem>
+          <para>All resovled extension bundle activators <code>start</code>
+          methods have been called</para>
+        </listitem>
       </itemizedlist>
+
+      <section>
+        <title>Start Extension Activators</title>
+
+        <para>The Extension Bundle Activator <code>start</code> method is called 
+        to inform the framework extension that the <code>Framework</code> is
+        initializing, see <xref
+        linkend="framework.module.extensionActivator"/>.</para>
+
+        <para>During the initialization process a framework must attempt to
+        resolve all installed Framework Extensions.  All resolve operations
+        that occur during initialization must be scoped to only include the
+        system bundle and the extension bundles.  This is necessary to avoid
+        resolution operations which change the wiring of normal bundles before
+        all of the Extension Bundle Activators have been called.</para>
+
+        <para>The last step during <code>Framework</code> initialization is to
+        call the <code>start</code> method of each Extension Bundle Activator
+        declared by resolved framework extensions. While calling Extension
+        Bundle Activator <code>start</code> methods the framework must be in
+        the <code>STARTING</code> state and have a valid bundle context. Any
+        exception thrown by an Extension Bundle Activator <code>start</code>
+        method must be wrapped in a <code>BundleException</code> and broadcast
+        as an <xref linkend="org.osgi.framework.FrameworkEvent.ERROR"
+        xrefstyle="hyperlink"/>.</para>
+      </section>
+
+      <section>
+        <title>Init Framework Listeners</title>
+
+        <para>The <code>Framework</code> <xref
+        linkend="org.osgi.framework.launch.Framework.init-FrameworkListener...-"
+        xrefstyle="hyperlink"/> method may be called with a list of framework
+        listeners.  Any framework events broadcast during the initialization
+        process must be delivered to the specified framework listeners in the
+        order they are specified before returning from the <code>init</code>
+        method.  After returning from <code>init</code> the specified listeners
+        are no longer notified of framework events.  This allows a launcher to
+        initialize a <code>Framework</code> with an init framework listener in
+        order to detect errors while calling framework extension
+        activators.</para>
+      </section>
     </section>
 
     <section>
@@ -1277,7 +1324,7 @@
       Framework <code>STARTED</code> event is broadcast.</para>
     </section>
 
-    <section>
+    <section xml:id="framework.lifecycle.stopping">
       <title>Stopping a Framework</title>
 
       <para>Shutdown can be initiated by stopping the system bundle, covered
@@ -1294,10 +1341,12 @@
       with a lazy policy must not be activated even when classes are loaded
       from them and they are not yet activated.</para>
 
-      <para>The framework then moves to start level 0, stops event handling
-      and releases any resources (like threads, class loaders, etc.) it held.
-      The framework then enters the <code>RESOLVED</code> state and destroys
-      the Bundle Context. The last action is to notify any threads that are
+      <para>The framework then moves to start level 0, calls <code>stop</code>
+      on the Extension Bundle Activators (see <xref
+      linkend="framework.lifecycle.stopExtension"/>), stops event handling and
+      releases any resources (like threads, class loaders, etc.) it held. The
+      framework then enters the <code>RESOLVED</code> state and destroys the
+      Bundle Context. The last action is to notify any threads that are
       waiting in the <code>waitForStop</code> method. The Framework must be
       re-initialized if it needs to be used again.</para>
 
@@ -1305,6 +1354,33 @@
       can be initialized and started again. Framework implementations must
       ensure that holding on to a framework object does not consume
       significant resources.</para>
+
+      <section xml:id="framework.lifecycle.stopExtension">
+        <title>Stop Extension Activators</title>
+
+        <para>The Extension Bundle Activator <code>stop</code> method is called 
+        to inform the framework extension that the <code>Framework</code> is
+        shutting down, see <xref 
+        linkend="framework.module.extensionActivator"/>. Before disabling event
+        handling during the <code>Framework</code> shutdown process the
+        framework must call the <code>stop</code> method for each Extension
+        Bundle Activator that was started successfully. While calling Extension
+        Bundle Activator <code>stop</code> methods the framework must be in the
+        <code>STOPPING</code> state and have a valid bundle context. Any
+        exception thrown by an Extension Bundle Activator <code>stop</code>
+        method must be wrapped in a <code>BundleException</code> and broadcast
+        as an <xref linkend="org.osgi.framework.FrameworkEvent.ERROR"
+        xrefstyle="hyperlink"/>.</para>
+
+        <para>The framework must guarantee that if the <code>start</code>
+        method has executed successfully for an Extension Bundle Activator,
+        that same <code>BundleActivator</code> object must be called with 
+        its <code>stop</code> method when the framework is shutdown. After
+        calling the <code>stop</code> method, that particular
+        <code>BundleActivator</code> object must never be used again. Extension
+        Bundle Activators that threw an exception during <code>start</code>
+        must not be called on shutdown.</para>
+      </section>
     </section>
 
     <section>
