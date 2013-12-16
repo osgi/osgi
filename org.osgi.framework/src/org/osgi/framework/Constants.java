@@ -204,7 +204,7 @@ public interface Constants {
 	String	BUNDLE_CONTACTADDRESS					= "Bundle-ContactAddress";
 
 	/**
-	 * Manifest header attribute identifying the bundle's activator class.
+	 * Manifest header identifying the bundle's activator class.
 	 * 
 	 * <p>
 	 * If present, this header specifies the name of the bundle resource class
@@ -217,6 +217,19 @@ public interface Constants {
 	 * returned by the {@code Bundle.getHeaders} method.
 	 */
 	String	BUNDLE_ACTIVATOR						= "Bundle-Activator";
+
+	/**
+	 * Manifest header identifying the extension bundle's activator class.
+	 * 
+	 * <p>
+	 * If present, this header specifies the name of the extension bundle
+	 * resource class that implements the {@code BundleActivator} interface and
+	 * whose {@code start} and {@code stop} methods are called by the Framework
+	 * when the Framework is initialized and shutdown, respectively.
+	 * 
+	 * @since 1.8
+	 */
+	String	EXTENSION_BUNDLE_ACTIVATOR				= "ExtensionBundle-Activator";
 
 	/**
 	 * Manifest header identifying the location from which a new bundle version
