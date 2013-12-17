@@ -151,9 +151,9 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Configuration information</emphasis> - <emphasis>
-          </emphasis>The information needed by a bundle before it can provide
-          its intended functionality.</para>
+          <para><emphasis>Configuration information</emphasis> - The
+          information needed by a bundle before it can provide its intended
+          functionality.</para>
         </listitem>
 
         <listitem>
@@ -433,8 +433,8 @@
 
                 <entry><code>USB.0123-0002-9909873</code></entry>
 
-                <entry><para>idVendor (hex 4)</para><para>idProduct (hex
-                4)</para><para>iSerialNumber (decimal)</para></entry>
+                <entry><para>idVendor (hex 4)</para> <para>idProduct (hex
+                4)</para> <para>iSerialNumber (decimal)</para></entry>
 
                 <entry><para>Universal Serial Bus. Use the standard device
                 descriptor.</para></entry>
