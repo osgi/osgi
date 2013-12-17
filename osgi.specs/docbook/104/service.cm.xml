@@ -814,6 +814,11 @@ private       ::= '.' symbolic-name</programlisting>
       mixed types. Using mixed types or nesting makes it impossible to use the
       meta typing specification. See <xref
       linkend="service.metatype"/>.</para>
+
+      <para>Property values that are collections may have an ordering that
+      must be preserved when persisting the configuration so that later access
+      to the property value will see the preserved ordering of the
+      collection.</para>
     </section>
 
     <section xml:id="service.cm.propertypropagation">
@@ -2431,6 +2436,17 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
       <para>This scenario would achieve atomicity from the point of view of
       the bundle.</para>
     </section>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Clarified that collection property values may have an ordering
+        that must be preserved.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cm.xml"/>
