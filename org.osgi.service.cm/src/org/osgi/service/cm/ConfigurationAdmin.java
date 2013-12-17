@@ -116,6 +116,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * {@link org.osgi.framework.ServiceFactory} to support this concept.
  * 
  * @author $Id$
+ * @ThreadSafe
  */
 @ProviderType
 public interface ConfigurationAdmin {

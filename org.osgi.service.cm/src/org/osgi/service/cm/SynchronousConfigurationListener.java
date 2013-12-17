@@ -41,6 +41,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * 
  * @author $Id$
  * @since 1.5
+ * @ThreadSafe
  */
 @ConsumerType
 public interface SynchronousConfigurationListener extends ConfigurationListener {

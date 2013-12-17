@@ -72,6 +72,7 @@ import org.osgi.framework.Filter;
  * between these two the term "factory configuration" is used.
  * 
  * @author $Id$
+ * @ThreadSafe
  */
 @ProviderType
 public interface Configuration {

@@ -69,6 +69,7 @@ import org.osgi.framework.ServiceReference;
  * for all configuration updates.
  * 
  * @author $Id$
+ * @ThreadSafe
  */
 @ConsumerType
 public interface ConfigurationPlugin {

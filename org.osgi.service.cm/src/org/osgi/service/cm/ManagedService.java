@@ -108,6 +108,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * Configuration Permission to also be updated for other locations.
  * 
  * @author $Id$
+ * @ThreadSafe
  */
 @ConsumerType
 public interface ManagedService {

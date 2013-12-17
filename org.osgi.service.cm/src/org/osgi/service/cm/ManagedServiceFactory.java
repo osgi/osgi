@@ -94,6 +94,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * </pre>
  * 
  * @author $Id$
+ * @ThreadSafe
  */
 @ConsumerType
 public interface ManagedServiceFactory {
