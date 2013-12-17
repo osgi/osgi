@@ -8,20 +8,11 @@ public class EnOceanBundleActivator implements BundleActivator {
 	private EnOceanBaseDriver	basedriver;
 
 	public void start(BundleContext bc) {
-		try {
-			basedriver = new EnOceanBaseDriver(bc);
-			basedriver.start();
-		} catch (Exception e) {
-			System.out.println("Exception loading basedriver : " + e.getMessage());
-		}
+		basedriver = new EnOceanBaseDriver(bc);
+		basedriver.start();
 	}
 
 	public void stop(BundleContext bc) {
-		try {
-			basedriver.stop();
-		}
-		catch (Exception e) {
-			System.out.println("Exception stopping basedriver : " + e.getMessage());
-		}
+		basedriver.stop();
 	}
 }

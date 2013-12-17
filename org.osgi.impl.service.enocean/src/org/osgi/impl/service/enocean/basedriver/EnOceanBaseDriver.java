@@ -66,9 +66,12 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		eoHostRefs = new Hashtable(10);
 
 		/* Register initial EnOceanHost */
-		String hostPath = System.getProperty("org.osgi.service.enocean.host.path");
-		int baseId = Integer.valueOf(System.getProperty("org.osgi.service.enocean.host.base_id")).intValue();
-		int chipId = Integer.valueOf(System.getProperty("org.osgi.service.enocean.host.chip_id")).intValue();
+		String hostPath = System.getProperty("org.osgi.service.enocean.host.path", "/dev/ttyUSB0");
+		String strBaseId = System.getProperty("org.osgi.service.enocean.host.base_id", "0x01234567");
+		String strChipId = System.getProperty("org.osgi.service.enocean.host.chip_id", "0x01234567");
+		int baseId = Integer.decode(strBaseId).intValue();
+		int chipId = Integer.decode(strChipId).intValue();
+		Logger.d(TAG, "initial host path : " + hostPath);
 		if (hostPath != null && hostPath != "") {
 			try {
 				initialHost = new EnOceanHostImpl(chipId, baseId, hostPath, bc);
