@@ -4,6 +4,7 @@ package org.osgi.impl.service.zigbee.basedriver;
 import org.osgi.service.zigbee.ZigBeeCluster;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeException;
+import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 
 /**
@@ -64,17 +65,22 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return outputs[clientClusterId];
 	}
 
-	public boolean bindTo(ZigBeeEndpoint endpoint, int clusterId) {
+	public void bind(String servicePid, int clusterId, ZigBeeHandler handler) {
 		// TODO Auto-generated method stub
-		return false;
+
 	}
 
-	public boolean unbindFrom(ZigBeeEndpoint endpoint, int clusterId) {
+	public void unbind(String servicePid, int clusterId, ZigBeeHandler handler) {
 		// TODO Auto-generated method stub
-		return false;
+
 	}
 
 	public void notExported(ZigBeeException e) {
 		// TODO Auto-generated method stub
+	}
+
+	public String[] getBoundEndPoints(int clusterId) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

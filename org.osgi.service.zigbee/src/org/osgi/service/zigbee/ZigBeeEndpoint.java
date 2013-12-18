@@ -140,26 +140,25 @@ public interface ZigBeeEndpoint {
 	 * this.getNodeAddress(), this.getId(), clusterId, device.getNodeAddress(), device.getId()
 	 * </pre>
 	 * 
-	 * @param endpoint The device {@link ZigBeeEndpoint} that we want to bound
-	 *        to
-	 * @param clusterId the cluster identifier that we want to bound to
-	 * @return <code>true</code> if and only if the operation succeeded
+	 * @param servicePid to bound to
+	 * @param clusterId the cluster identifier to bound to
+	 * @param handler
 	 */
-	public boolean bindTo(ZigBeeEndpoint endpoint, int clusterId);
+	public void bind(String servicePid, int clusterId, ZigBeeHandler handler);
 
 	/**
 	 * This method modify the <i>Binding Table</i> of physical device by
-	 * removing the entry if exists
+	 * removing the entry if exists:
 	 * 
 	 * <pre>
 	 * this.getNodeAddress(), this.getId(), clusterId, device.getNodeAddress(), device.getId()
 	 * </pre>
 	 * 
-	 * @param endpoint The device {@link ZigBeeEndpoint} that we are bounded to
-	 * @param clusterId The cluster identifier that we want to unbound from
-	 * @return <code>true</code> if and only if the operation succeeded
+	 * @param servicePid to unbound from
+	 * @param clusterId The cluster identifier to unbound from
+	 * @param handler
 	 */
-	public boolean unbindFrom(ZigBeeEndpoint endpoint, int clusterId);
+	public void unbind(String servicePid, int clusterId, ZigBeeHandler handler);
 
 	/**
 	 * This method is used to get details about problems when an error occurs
@@ -168,5 +167,14 @@ public interface ZigBeeEndpoint {
 	 * @param e A device {@link ZigBeeException} the occurred exception
 	 */
 	public void notExported(ZigBeeException e);
+
+	/**
+	 * This method is used to get bound endpoints.
+	 * 
+	 * @param clusterId
+	 * @return the table of bound ZigBeeEndpoints identified by their service
+	 *         PIDs.
+	 */
+	public String[] getBoundEndPoints(int clusterId);
 
 }
