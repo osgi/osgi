@@ -7,7 +7,7 @@
 	      name="org.osgi.test.cases.component.tb13.provider"
 	      immediate="true">
 	   <implementation
-	      class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	      class="org.osgi.test.cases.component.tb13a.ModifyRegistrator2"/>
 	   <service>
 			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
 		</service>
@@ -19,7 +19,7 @@
 	      name="org.osgi.test.cases.component.tb13.notsetNS110"
 	      immediate="true">
 	   <implementation
-	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator2"/>
 	   <service>
 			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
 		</service>	
@@ -36,7 +36,7 @@
 	      modified="mod"
 	      immediate="true">
 	   <implementation
-	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator2"/>
 	   <service>
 			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
 		</service>	
@@ -53,7 +53,7 @@
 	      modified="modCc"
 	      immediate="true">
 	   <implementation
-	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator2"/>
 	   <service>
 			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
 		</service>	
@@ -70,7 +70,7 @@
 	      modified="modBc"
 	      immediate="true">
 	   <implementation
-	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator2"/>
 	   <service>
 			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
 		</service>	
@@ -87,7 +87,7 @@
 	      modified="modMap"
 	      immediate="true">
 	   <implementation
-	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator2"/>
 	   <service>
 			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
 		</service>	
@@ -104,7 +104,7 @@
 	      modified="modCcBcMap"
 	      immediate="true">
 	   <implementation
-	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator2"/>
 	   <service>
 			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
 		</service>	
@@ -121,7 +121,7 @@
 	      modified="noSuchMethod"
 	      immediate="true">
 	   <implementation
-	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator2"/>
 	   <service>
 			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
 		</service>	
@@ -138,7 +138,7 @@
 	      modified="throwException"
 	      immediate="true">
 	   <implementation
-	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator"/>
+	         class="org.osgi.test.cases.component.tb13a.ModifyRegistrator2"/>
 	   <service>
 			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
 		</service>	

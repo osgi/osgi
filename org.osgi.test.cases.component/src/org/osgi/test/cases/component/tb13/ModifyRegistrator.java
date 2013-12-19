@@ -27,14 +27,14 @@ import org.osgi.test.cases.component.service.ComponentContextExposer;
 public class ModifyRegistrator implements ComponentContextExposer {
 	private Dictionary			properties		= new Properties();
 	private ComponentContext ctxt;
-	private static final int MODIFIED = 1 << 0;
-	private static final int MOD = 1 << 1;
-	private static final int MOD_CC = 1 << 2;
-	private static final int MOD_BC = 1 << 3;
-	private static final int MOD_MAP = 1 << 4;
-	private static final int MOD_CC_BC_MAP = 1 << 5;
-	private static final int ACTIVATE = 1 << 6;
-	private static final int DEACTIVATE = 1 << 7;
+	public static final int		MODIFIED		= 1 << 0;
+	public static final int		MOD				= 1 << 1;
+	public static final int		MOD_CC			= 1 << 2;
+	public static final int		MOD_BC			= 1 << 3;
+	public static final int		MOD_MAP			= 1 << 4;
+	public static final int		MOD_CC_BC_MAP	= 1 << 5;
+	public static final int		ACTIVATE		= 1 << 6;
+	public static final int		DEACTIVATE		= 1 << 7;
 
 	protected void activate(ComponentContext ctxt) {
 		this.ctxt = ctxt;
