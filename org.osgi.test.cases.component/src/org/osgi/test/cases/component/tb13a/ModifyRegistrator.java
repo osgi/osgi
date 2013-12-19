@@ -44,38 +44,47 @@ public class ModifyRegistrator implements ComponentContextExposer {
 			Object key = en.nextElement();
 			properties.put(key, props.get(key));
 		}
+		log(properties.get("component.name") + " activate");
 		setDataBits(ACTIVATE);
 	}
 
 	protected void deactivate(ComponentContext ctxt) {
+		log(properties.get("component.name") + " deactivate");
 		setDataBits(DEACTIVATE);
 	}
 
 	protected void modified() {
+		log(properties.get("component.name") + " modified");
 		setDataBits(MODIFIED);
 	}
 
 	protected void mod() {
+		log(properties.get("component.name") + " mod");
 		setDataBits(MOD);
 	}
 
 	protected void modCc(ComponentContext ctxt) {
+		log(properties.get("component.name") + " modCc");
 		setDataBits(MOD_CC);
 	}
 
 	protected void modBc(BundleContext bc) {
+		log(properties.get("component.name") + " modBc");
 		setDataBits(MOD_BC);
 	}
 
 	protected void modMap(Map props) {
+		log(properties.get("component.name") + " modMap");
 		setDataBits(MOD_MAP);
 	}
 
 	protected void modCcBcMap(ComponentContext ctxt, BundleContext bc, Map props) {
+		log(properties.get("component.name") + " modCcBcMap");
 		setDataBits(MOD_CC_BC_MAP);
 	}
 
 	protected void throwException(ComponentContext ctxt) {
+		log(properties.get("component.name") + " throwException");
     throw new RuntimeException("Test method throwException(ComponentContext) is called!");
   }
 
@@ -95,4 +104,9 @@ public class ModifyRegistrator implements ComponentContextExposer {
 	public ComponentContext getComponentContext() {
 		return ctxt;
 	}
+
+	private static void log(String message) {
+		System.out.println(message);
+	}
+
 }

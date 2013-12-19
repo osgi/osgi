@@ -1634,12 +1634,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		cm.getConfiguration(MOD_BC_NS110, null).update(props);
 		Sleep.sleep(SLEEP * 3);
 
+		log("\ntb13a starting");
 		tb13a.start();
 		waitBundleStart();
 
 		// Verifying correctness of updated component properties
 		BaseService bs = getBaseService(MOD_CC_NS110);
 		props.put("config.dummy.data", new Integer(2));
+		log("\n" + MOD_CC_NS110 + " config update");
 		cm.getConfiguration(MOD_CC_NS110, null).update(props);
 		Sleep.sleep(SLEEP * 3);
 		Object val = ((ComponentContextExposer) bs).getComponentContext()
@@ -1654,6 +1656,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// called
 		// instead of modified
 		bs = getBaseService(MOD_NOT_EXIST_NS110);
+		log("\n" + MOD_NOT_EXIST_NS110 + " config update");
 		cm.getConfiguration(MOD_NOT_EXIST_NS110, null).update(props);
 		Sleep.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + MOD_NOT_EXIST_NS110
@@ -1666,6 +1669,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// Specified modified method throws exception. Normal workflow should
 		// continue, deactivate() should not be called
 		bs = getBaseService(MOD_THROW_EX_NS110);
+		log("\n" + MOD_THROW_EX_NS110 + " config update");
 		cm.getConfiguration(MOD_THROW_EX_NS110, null).update(props);
 		Sleep.sleep(SLEEP * 3);
 		assertEquals("Deactivate method of " + MOD_THROW_EX_NS110
@@ -1673,6 +1677,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 		// Deleting component configuration
 		bs = getBaseService(MOD_BC_NS110);
+		log("\n" + MOD_BC_NS110 + " config delete");
 		cm.getConfiguration(MOD_BC_NS110, null).delete();
 		Sleep.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_BC_NS110
@@ -1685,6 +1690,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				"Activate method of " + MOD_BC_NS110 + " should be called",
 				1 << 6, (1 << 6) & getBaseConfigData(bs));
 
+		log("\ntb13a stopping");
 		uninstallBundle(tb13a);
 	}
 
