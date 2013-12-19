@@ -1676,7 +1676,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		cm.getConfiguration(MOD_BC_NS110, null).delete();
 		Sleep.sleep(SLEEP * 3);
 		assertEquals("Modified method of " + MOD_BC_NS110
-				+ " should not be called", 0, (1 << 5) & getBaseConfigData(bs));
+				+ " should not be called", 0, (1 << 3) & getBaseConfigData(bs));
 		assertEquals("Deactivate method of " + MOD_BC_NS110
 				+ " should be called", 1 << 7, (1 << 7) & getBaseConfigData(bs));
 		// Re-activating
