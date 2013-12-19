@@ -749,7 +749,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 
-		Bundle tb5 = installBundle("tb5.jar");
+		Bundle tb5 = installBundle("tb5.jar", false);
 		tb5.start();
 		waitBundleStart();
 
@@ -879,7 +879,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 
-		Bundle tb5 = installBundle("tb5.jar");
+		Bundle tb5 = installBundle("tb5.jar", false);
 		tb5.start();
 		waitBundleStart();
 
@@ -1005,7 +1005,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	public void testActivateDeactivate() throws Exception {
-		Bundle tb6 = installBundle("tb6.jar");
+		Bundle tb6 = installBundle("tb6.jar", false);
 		tb6.start();
 		Sleep.sleep(SLEEP * 3);
 
@@ -1212,7 +1212,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	public void testBindUnbindParams() throws Exception {
-		Bundle tb7 = installBundle("tb7.jar");
+		Bundle tb7 = installBundle("tb7.jar", false);
 		tb7.start();
 		Sleep.sleep(SLEEP * 3);
 
@@ -1291,7 +1291,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	public void testOptionalNames() throws Exception {
-		Bundle tb8 = installBundle("tb8.jar");
+		Bundle tb8 = installBundle("tb8.jar", false);
 		tb8.start();
 		Sleep.sleep(SLEEP * 3);
 		BaseService bs;
@@ -1325,7 +1325,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 
 	  // tests wildcard handling in mf (e.g. Service-Component: OSGI-INF/*.xml)
 	  public void testWildcardHandling() throws Exception {
-	    Bundle tb9 = installBundle("tb9.jar");
+		Bundle tb9 = installBundle("tb9.jar", false);
 	    tb9.start();
 	    waitBundleStart();
 
@@ -1339,7 +1339,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	  }
 
 	public void testDisposingMultipleDependencies() throws Exception {
-		Bundle tb10 = installBundle("tb10.jar");
+		Bundle tb10 = installBundle("tb10.jar", false);
 		tb10.start();
 		waitBundleStart();
 
@@ -1373,7 +1373,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	public void testReferenceTargetProperty() throws Exception {
-		Bundle tb11 = installBundle("tb11.jar");
+		Bundle tb11 = installBundle("tb11.jar", false);
 		tb11.start();
 		waitBundleStart();
 
@@ -1410,7 +1410,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	public void testLazyBundles() throws Exception {
-		Bundle tb12 = installBundle("tb12.jar");
+		Bundle tb12 = installBundle("tb12.jar", false);
 		// lazy bundle
 		tb12.start(Bundle.START_ACTIVATION_POLICY);
 		waitBundleStart();
@@ -1429,7 +1429,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 
-		Bundle tb13 = installBundle("tb13.jar");
+		Bundle tb13 = installBundle("tb13.jar", false);
 
 		Hashtable props = new Hashtable(10);
 		props.put("config.dummy.data", new Integer(1));
@@ -1491,7 +1491,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 
-		Bundle tb13a = installBundle("tb13a.jar");
+		Bundle tb13a = installBundle("tb13a.jar", false);
 
 		Hashtable props = new Hashtable(10);
 		props.put("config.dummy.data", new Integer(1));
@@ -1624,7 +1624,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		ConfigurationAdmin cm = (ConfigurationAdmin) trackerCM.getService();
 		assertNotNull("The ConfigurationAdmin should be available", cm);
 
-		Bundle tb13a = installBundle("tb13a.jar");
+		Bundle tb13a = installBundle("tb13a.jar", false);
 
 		Hashtable props = new Hashtable(10);
 		props.put("config.dummy.data", new Integer(1));
@@ -1689,7 +1689,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	public void testPrivateProperties() throws Exception {
-		Bundle tb14 = installBundle("tb14.jar");
+		Bundle tb14 = installBundle("tb14.jar", false);
 		tb14.start();
 		waitBundleStart();
 
@@ -1708,7 +1708,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	public void testUpdatedReference() throws Exception {
-		Bundle tb15 = installBundle("tb15.jar");
+		Bundle tb15 = installBundle("tb15.jar", false);
 		try {
 			tb15.start();
 			waitBundleStart();
@@ -1867,7 +1867,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		props.put(KEY, "bad2");
 		config.update(props);
 
-		Bundle tb16 = installBundle("tb16.jar");
+		Bundle tb16 = installBundle("tb16.jar", false);
 		try {
 			tb16.start();
 			waitBundleStart();
@@ -1917,7 +1917,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				TestObject.class.getName(), service, serviceProps);
 		ServiceRegistration regHigher = null;
 
-		Bundle tb17 = installBundle("tb17.jar");
+		Bundle tb17 = installBundle("tb17.jar", false);
 		try {
 			tb17.start();
 			waitBundleStart();
@@ -2005,7 +2005,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				TestObject.class.getName(), service, serviceProps);
 		ServiceRegistration regHigher = null;
 
-		Bundle tb17 = installBundle("tb17.jar");
+		Bundle tb17 = installBundle("tb17.jar", false);
 		try {
 			tb17.start();
 			waitBundleStart();
@@ -2093,7 +2093,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				TestObject.class.getName(), service, serviceProps);
 		ServiceRegistration regHigher = null;
 
-		Bundle tb17 = installBundle("tb17.jar");
+		Bundle tb17 = installBundle("tb17.jar", false);
 		try {
 			tb17.start();
 			waitBundleStart();
@@ -2181,7 +2181,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				TestObject.class.getName(), service, serviceProps);
 		ServiceRegistration regHigher = null;
 
-		Bundle tb17 = installBundle("tb17.jar");
+		Bundle tb17 = installBundle("tb17.jar", false);
 		try {
 			tb17.start();
 			waitBundleStart();
