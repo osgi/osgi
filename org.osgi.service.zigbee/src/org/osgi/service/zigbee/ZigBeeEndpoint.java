@@ -169,12 +169,18 @@ public interface ZigBeeEndpoint {
 	public void notExported(ZigBeeException e);
 
 	/**
-	 * This method is used to get bound endpoints.
+	 * This method is used to get bound endpoints (identified by their service
+	 * PIDs). It is implemented on the base driver with Mgmt_Bind_req command.
+	 * It is implemented without a command request in local endpoints. If the
+	 * local method or command request is not supported, then an exception with
+	 * the following reason is thrown: GENERAL_COMMAND_NOT_SUPPORTED. If the
+	 * method fails to retrieve the full binding table (that could require
+	 * several Mgmt_Bind_req command), then an exception with the error code
+	 * that was sent on the last response is thrown.
 	 * 
 	 * @param clusterId
-	 * @return the table of bound ZigBeeEndpoints identified by their service
-	 *         PIDs.
+	 * @param handler
 	 */
-	public String[] getBoundEndPoints(int clusterId);
+	public void getBoundEndPoints(int clusterId, ZigBeeHandler handler);
 
 }

@@ -79,8 +79,7 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		// TODO Auto-generated method stub
 	}
 
-	public String[] getBoundEndPoints(int clusterId) {
+	public void getBoundEndPoints(int clusterId, ZigBeeHandler handler) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 }
