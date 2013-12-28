@@ -53,7 +53,6 @@ public class EspPacket {
 		optional = Utils.byteConcat(optional, (byte) msg.getDbm());
 		optional = Utils.byteConcat(optional, (byte) msg.getSecurityLevelFormat());
 		setOptional(optional);
-
 	}
 
 	public byte[] serialize() {

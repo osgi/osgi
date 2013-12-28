@@ -50,13 +50,13 @@ public abstract class Message implements EnOceanMessage {
 	public Message(byte[] data) {
 		this.messageBytes = data;
 		setRORG(data[0]);
-		setPayloadBytes(Utils.byteRange(data, 1, data.length - 7 - 7));
-		setSenderId(Utils.byteRange(data, data.length - 6 - 7, 4));
-		setStatus(data[data.length - 2 - 7]);
-		setSubTelNum(data[data.length - 1 - 7]);
-		setDestinationId(Utils.byteRange(data, data.length - 7, 4));
-		setDbm(data[data.length - 3]);
-		setSecurityLevel(data[data.length - 2]);
+		setPayloadBytes(Utils.byteRange(data, 1, data.length - 6 - 7));
+		setSenderId(Utils.byteRange(data, data.length - 5 - 7, 4));
+		setStatus(data[data.length - 1 - 7]);
+		setSubTelNum(data[data.length - 7]);
+		setDestinationId(Utils.byteRange(data, data.length - 6, 4));
+		setDbm(data[data.length - 2]);
+		setSecurityLevel(data[data.length - 1]);
 	}
 
 	private void setPayloadBytes(byte[] byteRange) {

@@ -6,6 +6,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.enocean.basedriver.EnOceanBaseDriver;
 import org.osgi.impl.service.enocean.basedriver.radio.MessageSYS_EX;
+import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.device.Constants;
 import org.osgi.service.enocean.EnOceanDevice;
@@ -16,12 +17,14 @@ import org.osgi.service.enocean.EnOceanRPC;
 
 public class EnOceanDeviceImpl implements EnOceanDevice {
 
+	public static final String	TAG	= EnOceanDeviceImpl.class.getName();
 	private BundleContext		bc;
 	private ServiceRegistration	sReg;
 
 	private Properties			props;
 	private EnOceanMessage		lastMessage;
 	private EnOceanBaseDriver	driver;
+	private int					chip_id;
 
 	/**
 	 * An {@link EnOceanDeviceImpl} creation is directly related to its
@@ -31,11 +34,13 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	public EnOceanDeviceImpl(BundleContext bc, EnOceanBaseDriver driver, int uid, int rorg) {
 		this.bc = bc;
 		this.driver = driver;
+		this.chip_id = uid;
 		props = new Properties();
 		props.put(Constants.DEVICE_CATEGORY, EnOceanDevice.DEVICE_CATEGORY);
 		props.put(EnOceanDevice.CHIP_ID, String.valueOf(uid));
 		props.put(EnOceanDevice.RORG, String.valueOf(rorg));
 		sReg = bc.registerService(EnOceanDevice.class.getName(), this, props);
+		Logger.d(TAG, "registering EnOceanDevice : " + Utils.bytesToHexString(Utils.intTo4Bytes(uid)));
 		/* Initializations */
 		lastMessage = null;
 	}
@@ -148,9 +153,13 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		sReg.setProperties(props);
 	}
 
-	public void setManuf(int manuf) {
+	public void setManufacturer(int manuf) {
 		props.put(EnOceanDevice.MANUFACTURER, String.valueOf(manuf));
 		sReg.setProperties(props);
+	}
+
+	public int getChipId() {
+		return chip_id;
 	}
 
 	public int getRorg() {
@@ -165,7 +174,7 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		return getIntProperty(EnOceanDevice.TYPE);
 	}
 
-	public int getManuf() {
+	public int getManufacturer() {
 		return getIntProperty(EnOceanDevice.MANUFACTURER);
 	}
 
@@ -197,8 +206,12 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		}
 	}
 
-	public void unregister() {
-		sReg.unregister();
+	public void remove() {
+		try {
+			sReg.unregister();
+		} catch (IllegalStateException e) {
+			Logger.e(TAG, "attempt to unregister a device twice : " + e.getMessage());
+		}
 	}
 	
 }

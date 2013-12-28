@@ -74,6 +74,36 @@ public interface EnOceanDevice {
 	public static final String	ENOCEAN_EXPORT	= "enocean.device.export";
 	
 	/**
+	 * @return The EnOcean device chip ID.
+	 */
+	public int getChipId();
+	
+	/**
+	 * @return The EnOcean profile RORG.
+	 */
+	public int getRorg();
+	
+	/**
+	 * @return The EnOcean profile FUNC, or -1 if unknown.
+	 */
+	public int getFunc();
+	
+	/**
+	 * @return The EnOcean profile TYPE, or -1 if unknown.
+	 */
+	public int getType();
+	
+	/**
+	 * @return The EnOcean manufacturer code, -1 if unknown.
+	 */
+	public int getManufacturer();
+	
+	/**
+	 * @return The EnOcean security level format, or 0 as default (no security)
+	 */
+	public int getSecurityLevelFormat();
+	
+	/**
 	 * Manually sets the EEP FUNC of the device.
 	 * 
 	 * @param func the EEP func of the device;
@@ -144,5 +174,10 @@ public interface EnOceanDevice {
 	 * @param handler
 	 */
 	public void invoke(EnOceanRPC rpc, EnOceanHandler handler) throws IllegalArgumentException;
+	
+	/**
+	 * Removes the device from both EnOcean Network and OSGi service platform.
+	 */
+	public void remove();
 	
 }

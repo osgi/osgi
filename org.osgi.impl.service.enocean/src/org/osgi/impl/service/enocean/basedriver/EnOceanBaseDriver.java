@@ -1,7 +1,5 @@
 package org.osgi.impl.service.enocean.basedriver;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
@@ -16,11 +14,13 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.enocean.basedriver.esp.EspPacket;
 import org.osgi.impl.service.enocean.basedriver.impl.EnOceanDeviceImpl;
 import org.osgi.impl.service.enocean.basedriver.impl.EnOceanHostImpl;
+import org.osgi.impl.service.enocean.basedriver.impl.EnOceanHostTestImpl;
 import org.osgi.impl.service.enocean.basedriver.radio.Message;
 import org.osgi.impl.service.enocean.basedriver.radio.Message4BS;
 import org.osgi.impl.service.enocean.basedriver.radio.MessageRPS;
-import org.osgi.impl.service.enocean.utils.EnOceanDriverException;
+import org.osgi.impl.service.enocean.utils.EnOceanHostImplException;
 import org.osgi.impl.service.enocean.utils.Logger;
+import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanEvent;
 import org.osgi.service.enocean.EnOceanHost;
@@ -40,15 +40,13 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	private Hashtable			eoHostRefs;
 
 	private ServiceTracker		eoDevicesTracker;
-	private EnOceanHostImpl		initialHost;
 	private EventAdmin			eventAdmin;
 	private ServiceRegistration	eventHandlerRegistration;
+	private EnOceanHostImpl		host;
 
 	public static final String	TAG	= "EnOceanBaseDriver";
 
 	public static final String	CONFIG_EXPORTED_PID_TABLE	= "org.enocean.ExportedDeviceTable";
-	public static final String	TOPIC_REMOVE_DEVICE			= "org/osgi/impl/service/enocean/EnOceanBaseDriver/REMOVE_DEVICE";
-	public static final String	TOPIC_CLEAN_DEVICES			= "org/osgi/impl/service/enocean/EnOceanBaseDriver/CLEAN_DEVICES";
 
 	/**
 	 * The {@link EnOceanBaseDriver} constructor initiates the connection
@@ -67,23 +65,13 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 
 		/* Register initial EnOceanHost */
 		String hostPath = System.getProperty("org.osgi.service.enocean.host.path", "/dev/ttyUSB0");
-		String strBaseId = System.getProperty("org.osgi.service.enocean.host.base_id", "0x01234567");
-		String strChipId = System.getProperty("org.osgi.service.enocean.host.chip_id", "0x01234567");
-		int baseId = Integer.decode(strBaseId).intValue();
-		int chipId = Integer.decode(strChipId).intValue();
-		Logger.d(TAG, "initial host path : " + hostPath);
+		System.out.println("initial host path : " + hostPath);
 		if (hostPath != null && hostPath != "") {
-			try {
-				initialHost = new EnOceanHostImpl(chipId, baseId, hostPath, bc);
-				registerHost(hostPath, initialHost);
-				initialHost.addPacketListener(this);
-			} catch (EnOceanDriverException e) {
-				Logger.e(TAG, "initial enoceanhost registration failed : " + e.getMessage());
-			} catch (FileNotFoundException e) {
-				Logger.e(TAG, "initial enoceanhost path was incorrect : " + e.getMessage());
-			} catch (IOException e) {
-				Logger.e(TAG, "initial enoceanhost access to persisted data failed : " + e.getMessage());
+			if (hostPath.equals(":testcase:")) {
+				host = new EnOceanHostTestImpl(hostPath, bc);
 			}
+			registerHost(hostPath, host);
+			host.addPacketListener(this);
 		}
 
 		/* Initialize EventAdmin */
@@ -96,8 +84,6 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		Hashtable ht = new Hashtable();
 		ht.put(org.osgi.service.event.EventConstants.EVENT_TOPIC, new String[] {
 				EnOceanEvent.TOPIC_MSG_RECEIVED,
-				EnOceanBaseDriver.TOPIC_REMOVE_DEVICE,
-				EnOceanBaseDriver.TOPIC_CLEAN_DEVICES,
 		});
 		eventHandlerRegistration = bc.registerService(EventHandler.class.getName(), this, ht);
 
@@ -123,8 +109,18 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		switch (data[0]) {
 			case Message.MESSAGE_4BS :
 				msg = new Message4BS(data);
-				if (msg.isTeachin() && msg.hasTeachInInfo()) {
-					registerDevice(msg.getSenderId(), msg.getRorg(), msg.teachInFunc(), msg.teachInType(), msg.teachInManuf());
+				Logger.d(TAG, "4BS msg received, payload: " + Utils.bytesToHexString(msg.getPayloadBytes()));
+				if (msg.isTeachin()) {
+					EnOceanDevice dev = getAssociatedDevice(msg);
+					if (dev == null) {
+						if (msg.hasTeachInInfo()) {
+							registerDeviceAndProfile(msg.getSenderId(), msg.getRorg(), msg.teachInFunc(), msg.teachInType(), msg.teachInManuf());
+						} else {
+							new EnOceanDeviceImpl(bc, this, msg.getSenderId(), msg.getRorg());
+						}
+					} else {
+						Logger.d(TAG, "message was a teach-in, but device already exists.");
+					}
 					return; // No need to do more processing on the message
 				}
 				break;
@@ -146,13 +142,10 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 			int rorg = implDev.getRorg();
 			int func = implDev.getFunc();
 			int type = implDev.getType();
-			/* If we have full profile information */
-			if (rorg != -1 && func != -1 && type != -1) {
-				msg.setFunc(func);
-				msg.setType(type);
-				implDev.setLastMessage(msg);
-				broadcastToEventAdmin(msg);
-			}
+			msg.setFunc(func);
+			msg.setType(type);
+			implDev.setLastMessage(msg);
+			broadcastToEventAdmin(msg);
 		}
 	}
 
@@ -174,13 +167,13 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 
 				try {
 					if (chipId == null && hasExport != null) {
-						initialHost.generateChipID(servicePid);
+						host.allocChipID(servicePid);
 					}					
 				} catch (Exception e) {
-					System.out.println("There has been an exception");
+					System.out.println("exception: " + e.getMessage());
 				}
 				eoDevices.put(servicePid, bc.getService(ref));
-				Logger.d(TAG, "EnOceanDevice service registered : " + servicePid);
+				Logger.d(TAG, "servicetracker: EnOceanDevice service registered, PID: " + servicePid);
 			}
 			return service;
 		}
@@ -201,44 +194,40 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 				EnOceanMessage msg = (EnOceanMessage) event.getProperty(EnOceanEvent.PROPERTY_MESSAGE);
 				if(msg != null) {
 					EspPacket pkt = new EspPacket(msg);
-					initialHost.send(pkt.serialize());
+					System.out.println("Writing packet : " + Utils.bytesToHexString(pkt.serialize()));
+					host.send(pkt.serialize());
 				}
 			}
-		}
-		if (event.getTopic().equals(EnOceanBaseDriver.TOPIC_REMOVE_DEVICE)) {
-			// Implement
-		}
-		if (event.getTopic().equals(EnOceanBaseDriver.TOPIC_CLEAN_DEVICES)) {
-			unregisterDevices();
 		}
 	}
 
 	public void start() {
-		initialHost.start();
+		try {
+			host.startup();
+		} catch (EnOceanHostImplException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void stop() {
 		unregisterDevices();
 	}
 
-	public ServiceRegistration registerHost(String hostPath, EnOceanHost host) throws EnOceanDriverException {
+	public ServiceRegistration registerHost(String hostPath, EnOceanHost host) {
 		ServiceRegistration sr = null;
-		if (host == null) {
-			throw new EnOceanDriverException("the specified host was null");
-		}
 		try {
 			Properties props = new Properties();
 			props.put(EnOceanHost.HOST_ID, hostPath);
 			sr = bc.registerService(EnOceanHost.class.getName(), host, props);
 			eoHostRefs.put(hostPath, sr);
 		} catch (Exception e) {
-			Logger.e(TAG, e.getMessage());
+			Logger.e(TAG, "exception when registering host : " + e.getMessage());
 		}
 		return sr;
 	}
 
 	public void send(byte[] data) {
-		initialHost.send(data);
+		host.send(data);
 	}
 
 	private void unregisterDevices() {
@@ -247,8 +236,8 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 			Map.Entry entry = (Map.Entry) it.next();
 			if (entry.getValue() instanceof EnOceanDeviceImpl) {
 				EnOceanDeviceImpl dev = (EnOceanDeviceImpl) entry.getValue();
-				System.out.println("Unregistering device : " + dev.getRorg());
-				dev.unregister();
+				Logger.d(TAG, "unregistering device : " + Utils.bytesToHexString(Utils.intTo4Bytes(dev.getChipId())));
+				dev.remove();
 			}
 			it.remove();
 		}
@@ -290,7 +279,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		return null;
 	}
 
-	private void registerDevice(int senderId, int rorg, int func, int type, int manuf) {
+	private void registerDeviceAndProfile(int senderId, int rorg, int func, int type, int manuf) {
 		EnOceanDeviceImpl device = new EnOceanDeviceImpl(bc, this, senderId, rorg);
 		device.registerProfile(func, type, manuf);
 	}

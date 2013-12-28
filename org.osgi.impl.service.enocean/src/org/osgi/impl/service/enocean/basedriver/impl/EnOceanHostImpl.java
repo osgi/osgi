@@ -17,9 +17,6 @@
 
 package org.osgi.impl.service.enocean.basedriver.impl;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -32,69 +29,68 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.enocean.basedriver.EnOceanBaseDriver;
 import org.osgi.impl.service.enocean.basedriver.EnOceanPacketListener;
 import org.osgi.impl.service.enocean.basedriver.esp.EspPacket;
+import org.osgi.impl.service.enocean.utils.EnOceanHostImplException;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanHost;
-import org.osgi.service.event.EventAdmin;
 
 public class EnOceanHostImpl extends Thread implements EnOceanHost {
 
-	private static final String	TAG						= "EnOceanHostImpl";
+	protected static final String	TAG							= "EnOceanHostImpl";
+	protected static final byte		ENOCEAN_ESP_FRAME_START		= 0x55;
+	protected String				donglePath;
+	protected InputStream			inputStream;
+	protected OutputStream			outputStream;
 
-	private static final byte	ENOCEAN_ESP_FRAME_START	= 0x55;
-
-	private static final int	MAX_ALLOCATED_CHIP_ID	= 127;
-	private Object				synchronizer;
+	private static final int		MAX_ALLOCATED_CHIP_ID	= 127;
 	private ArrayList			listeners;
-	private InputStream			inputStream;
-	private OutputStream		outputStream;
-	private File				file;
-	private boolean				isRunning;
-	private EventAdmin			eventAdmin;
-	private int					chipId;
 	private int					baseId;
-	private Configuration		chipIdConfig;
-	private Dictionary			allocatedChipIds;
 
-	private String				streamPath;
+	protected boolean				isRunning;
+	private ChipPIDMapping			chipIdPidMap;
 
-	private BundleContext		bc;
-
-	public EnOceanHostImpl(int chipId, int baseId, String path, BundleContext bc) throws IOException {
-		this.bc = bc;
-		this.streamPath = path;
-		listeners = new ArrayList();
-		isRunning = false;
-		synchronizer = new Object();
-
-		ServiceReference configRef = bc.getServiceReference(ConfigurationAdmin.class.getName());
-		if (configRef != null) {
-			ConfigurationAdmin confAdmin = (ConfigurationAdmin) bc.getService(configRef);
-			chipIdConfig = confAdmin.getConfiguration(EnOceanBaseDriver.CONFIG_EXPORTED_PID_TABLE);
-			allocatedChipIds = chipIdConfig.getProperties();
-			if (allocatedChipIds == null) {
-				allocatedChipIds = new Properties();
-				chipIdConfig.update(allocatedChipIds);
-			}
-		} else {
-			throw new UnknownServiceException("ConfigAdmin service was not found !");
+	public EnOceanHostImpl(String path, BundleContext bc) {
+		this.isRunning = false;
+		this.listeners = new ArrayList();
+		this.donglePath = path;
+		try {
+			this.chipIdPidMap = new ChipPIDMapping(bc);
+		} catch (Exception e) {
+			Logger.w(TAG, "could not allocate Config Admin chipId/servicePID mapping : " + e.getMessage());
 		}
-
-		/* Init the allocated CHIP ID */
-		this.chipId = chipId;
-		this.baseId = baseId;
-
-		/* Get a global eventAdmin handle */
-		ServiceReference ref = bc.getServiceReference(EventAdmin.class.getName());
-		eventAdmin = (EventAdmin) bc.getService(ref);
-
-		this.file = new File(path);
-		inputStream = new FileInputStream(file);
-		outputStream = new FileOutputStream(file);
 	}
+
+	public void startup() throws EnOceanHostImplException {
+	}
+
+	public void allocChipID(String servicePID) throws ArrayIndexOutOfBoundsException, IOException {
+		int chipId = getChipId(servicePID);
+		if (chipId == -1) {
+			int size = chipIdPidMap.size();
+			if (size < MAX_ALLOCATED_CHIP_ID) {
+				int newChipId = baseId + size; // FIXME: VERY basic method
+				chipIdPidMap.put(servicePID, String.valueOf(newChipId));
+			} else {
+				throw new ArrayIndexOutOfBoundsException("No more CHIP_ID can be allocated.");
+			}
+		}
+	}
+
+	/**
+	 * Implementation-specific method to add a remote packet listener.
+	 * 
+	 * @param packetListener an object implementing the
+	 *        {@link EnOceanPacketListener} interface.
+	 */
+	public void addPacketListener(EnOceanPacketListener packetListener) {
+		if (!listeners.contains(packetListener)) {
+			listeners.add(packetListener);
+		}
+	}
+
 
 	public void reset() throws EnOceanException {
 		// TODO Auto-generated method stub
@@ -132,67 +128,15 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 	}
 
 	public int getChipId(String servicePID) {
-		String str = (String) allocatedChipIds.get(servicePID);
-		if (str == null) {
+		String chipId = chipIdPidMap.get(servicePID);
+		if (chipId == null) {
 			return -1;
-		}
-		return Integer.parseInt(str);
-	}
-
-	public void generateChipID(String servicePID) throws ArrayIndexOutOfBoundsException, IOException {
-		int chipId = getChipId(servicePID);
-		if (chipId == -1) {
-			// Allocate one
-			if (allocatedChipIds.size() < MAX_ALLOCATED_CHIP_ID) {
-				// FIXME this is quite basic and should be improved
-				chipId = baseId + allocatedChipIds.size();
-				allocatedChipIds.put(servicePID, String.valueOf(chipId));
-				chipIdConfig.update(allocatedChipIds);
-			} else {
-				throw new ArrayIndexOutOfBoundsException("No more CHIP_ID can be allocated.");
-			}
+		} else {
+			return Integer.parseInt(chipIdPidMap.get(servicePID));
 		}
 	}
 
-	/**
-	 * Implementation-specific method to add a remote packet listener.
-	 * 
-	 * @param packetListener an object implementing the
-	 *        {@link EnOceanPacketListener} interface.
-	 */
-	public void addPacketListener(EnOceanPacketListener packetListener) {
-		if (!listeners.contains(packetListener)) {
-			listeners.add(packetListener);
-		}
-	}
-
-	public void run() {
-		isRunning = true;
-		while (isRunning) {
-			try {
-				/*
-				 * synchronized (this.synchronizer) { if
-				 * (inputStream.available() == 0) { synchronizer.wait(); } }
-				 */
-
-				int _byte = inputStream.read();
-				if (_byte == -1) {
-					throw new IOException("buffer end was reached");
-				}
-				byte c = (byte) _byte;
-				if (c == ENOCEAN_ESP_FRAME_START) {
-					EspPacket packet = readPacket();
-					if (packet.getPacketType() == EspPacket.TYPE_RADIO) {
-						dispatchToListeners(packet.getFullData());
-					}
-				}
-			} catch (IOException e) {
-				Logger.e(TAG, "an exception occured while reading stream '" + streamPath + "' : " + e.getMessage());
-			}
-		}
-	}
-
-	private void dispatchToListeners(byte[] data) {
+	protected void dispatchToListeners(byte[] data) {
 		for (int i = 0; i < listeners.size(); i++) {
 			EnOceanPacketListener listener = (EnOceanPacketListener) listeners.get(i);
 			listener.radioPacketReceived(data);
@@ -201,49 +145,92 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 
 	/**
 	 * Low-level ESP3 reader implementation. Reads the header, deducts the
-	 * payload size, checks for errors, and sends back the read packet to the
+	 * paylsoad size, checks for errors, and sends back the read packet to the
 	 * caller.
 	 * 
 	 * @return the complete byte[] ESP packet
 	 * @throws IOException
 	 */
-	private EspPacket readPacket() throws IOException {
+	protected EspPacket readPacket() throws IOException {
 		byte[] header = new byte[4];
-		inputStream.read(header);
+		for (int i = 0; i < 4; i++) {
+			header[i] = (byte) inputStream.read();
+		}
+		Logger.d(TAG, "read header: " + Utils.bytesToHexString(header));
 		// Check the CRC
 		int headerCrc = inputStream.read();
 		if (headerCrc == -1) {
 			throw new IOException("could not read entire packet");
 		}
+		Logger.d(TAG, "header_crc = 0x" + Utils.bytesToHexString(new byte[] {(byte) headerCrc}));
+		Logger.d(TAG, "h_comp_crc = 0x" + Utils.bytesToHexString(new byte[] {Utils.crc8(header)}));
 		if ((byte) headerCrc != Utils.crc8(header)) {
-			throw new IOException("packet was malformed or corrupt");
+			throw new IOException("header was malformed or corrupt");
 		}
 		// Read the payload using header info
 		int payloadLength = ((header[0] << 8) | header[1]) + header[2];
 		byte[] payload = new byte[payloadLength];
-		inputStream.read(payload);
+		for (int i = 0; i < payloadLength; i++) {
+			payload[i] = (byte) inputStream.read();
+		}
+		Logger.d(TAG, "read payload: " + Utils.bytesToHexString(payload));
 		// Check payload CRC
 		int payloadCrc = inputStream.read();
 		if (payloadCrc == -1) {
 			throw new IOException("could not read entire packet");
 		}
+		Logger.d(TAG, "orig_crc     = 0x" + Utils.bytesToHexString(new byte[] {(byte) payloadCrc}));
+		Logger.d(TAG, "computed_crc = 0x" + Utils.bytesToHexString(new byte[] {Utils.crc8(payload)}));
 		if ((byte) payloadCrc != Utils.crc8(payload)) {
-			throw new IOException("packet was malformed or corrupt");
+			throw new IOException("payload was malformed or corrupt");
 		}
 		payload = Utils.byteConcat(payload, (byte) payloadCrc);
 		// Add the sync byte to the header
 		header = Utils.byteConcat(EspPacket.SYNC_BYTE, header);
 		header = Utils.byteConcat(header, (byte) headerCrc);
+		Logger.d(TAG, "Received EnOcean packet. Frame data: " + Utils.bytesToHexString(Utils.byteConcat(header, payload)));
 		return new EspPacket(header, payload);
 	}
 
 	public void send(byte[] data) {
-		try {
-			outputStream.write(data);
-			outputStream.flush();
-		} catch (IOException e) {
-			Logger.e(TAG, "an exception occured while writing to stream '" + streamPath + "' : " + e.getMessage());
+	}
+
+	class ChipPIDMapping {
+
+		private Configuration	config;
+		private Dictionary		mappings;
+
+		public ChipPIDMapping(BundleContext bc) throws UnknownServiceException, IOException {
+			ServiceReference ref = bc.getServiceReference(ConfigurationAdmin.class.getName());
+			if (ref != null) {
+				ConfigurationAdmin configAdmin = (ConfigurationAdmin) bc.getService(ref);
+				config = configAdmin.getConfiguration(EnOceanBaseDriver.CONFIG_EXPORTED_PID_TABLE);
+				mappings = config.getProperties();
+				if (mappings == null) {
+					mappings = new Properties();
+					config.update(mappings);
+				}
+			} else {
+				throw new UnknownServiceException("ConfigAdmin service was not found !");
+			}
+
 		}
 
+		public void put(String servicePID, String chipId) {
+			mappings.put(servicePID, chipId);
+			try {
+				config.update(mappings);
+			} catch (IOException e) {
+				Logger.w(TAG, "chip ID '" + chipId + "' could not be saved in ConfigAdmin with service PID '" + servicePID + "'");
+			}
+		}
+
+		public int size() {
+			return mappings.size();
+		}
+
+		public String get(String servicePID) {
+			return (String) mappings.get(servicePID);
+		}
 	}
 }

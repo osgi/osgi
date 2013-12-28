@@ -17,6 +17,7 @@
 
 package org.osgi.impl.service.enocean.basedriver.radio;
 
+
 /**
  * Prototype of a 4BS telegram
  * 
@@ -36,7 +37,7 @@ public class Message4BS extends Message {
 	}
 
 	public boolean isTeachin() {
-		return (getPayloadBytes()[3] & 0x08) == 0;
+		return (((getPayloadBytes()[3] & 0x08)) == 0);
 	}
 
 	/**

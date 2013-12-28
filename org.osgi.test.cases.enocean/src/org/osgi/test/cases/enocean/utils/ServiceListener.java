@@ -88,6 +88,9 @@ public class ServiceListener extends ServiceTracker {
 	}
 
 	public void close() {
+		if (serviceReference != null) {
+			serviceReference = null;
+		}
 		super.close();
 	}
 

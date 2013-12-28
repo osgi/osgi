@@ -4,47 +4,13 @@ package org.osgi.test.cases.enocean;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanHost;
-import org.osgi.test.cases.enocean.descriptions.EnOceanChannelDescription_TMP_00;
-import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescription_A5_02_01;
-import org.osgi.test.cases.enocean.sets.EnOceanChannelDescriptionSetImpl;
-import org.osgi.test.cases.enocean.sets.EnOceanMessageDescriptionSetImpl;
-import org.osgi.test.cases.enocean.utils.EventListener;
 import org.osgi.test.cases.enocean.utils.Fixtures;
-import org.osgi.test.cases.enocean.utils.ServiceListener;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.sleep.Sleep;
 
 public class PersistencyTests extends DefaultTestBundleControl {
-
-	private ServiceListener		devices;
-	private EventListener		events;
-	private EnOceanMessageDescriptionSetImpl	msgDescriptionSet;
-	private EnOceanChannelDescriptionSetImpl	channelDescriptionSet;
-	private ServiceReference					eventAdminRef;
-
-	protected void setUp() throws Exception {
-		/* Tracks device creation */
-		devices = new ServiceListener(getContext(), EnOceanDevice.class);
-
-		/* Tracks device events */
-		String[] topics = new String[] {Fixtures.SELF_TEST_EVENT_TOPIC};
-		events = new EventListener(getContext(), topics, null);
-
-		/* Inserts some message documentation classes */
-		msgDescriptionSet = new EnOceanMessageDescriptionSetImpl();
-		msgDescriptionSet.putMessage(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, -1, new EnOceanMessageDescription_A5_02_01());
-
-		channelDescriptionSet = new EnOceanChannelDescriptionSetImpl();
-		channelDescriptionSet.putChannelDescription(Fixtures.TMP_CHANNEL_ID, new EnOceanChannelDescription_TMP_00());
-	}
-
-	protected void tearDown() throws Exception {
-		devices.close();
-		events.close();
-	}
 
 	/**
 	 * Tests device export persistency.

@@ -17,14 +17,18 @@ Include-Resource:
 	ee.foundation;					version=1.1		, \
 	${junit}
 	
--runbundles						= \
-	org.osgi.impl.service.log; version=latest, \
-	org.osgi.impl.service.cm; version=latest, \
-	org.osgi.impl.service.event; version=latest, \
-	org.osgi.impl.service.enocean; version=latest
+-runbundles: org.osgi.impl.service.log;version=latest,\
+	org.osgi.impl.service.cm;version=latest,\
+	org.osgi.impl.service.event;version=latest,\
+	org.osgi.impl.service.enocean;version=latest,\
+	comm.rxtx;version=latest
 
--runproperties = ${runproperties}, \
-	org.osgi.service.enocean.host.path=test-enocean-driver, \
+-runproperties: comm.rxtx.disable=true, \
+	org.osgi.service.enocean.host.path=:testcase:, \
+	org.osgi.service.enocean.loglevel.debug=true, \
+	org.osgi.service.enocean.loglevel.warn=true, \
+	org.osgi.service.enocean.loglevel.info=true, \
+	org.osgi.service.enocean.loglevel.error=true, \
 	org.osgi.service.enocean.host.chip_id=12345678, \
 	org.osgi.service.enocean.host.base_id=9876543
 

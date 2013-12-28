@@ -13,7 +13,10 @@ import org.osgi.test.cases.enocean.devices.TemperatureSensingDevice;
 
 public final class Fixtures {
 
+	public static final String	TEST_CASE_FILE_NAME		= "test_case_file";
+
 	public static final int	HOST_ID			= 0x12345678;
+	public static final int		HOST_ID_2				= 0xdeadbabe;
 	public static final int	MANUFACTURER	= 0x6ea;
 	public static final int	RORG			= 0xA5;
 	public static final int		RORG_RPS				= 0xF6;
@@ -22,6 +25,7 @@ public final class Fixtures {
 	public static final int		TYPE_2					= 0x02;
 
 	public static final String	STR_HOST_ID				= String.valueOf(HOST_ID);
+	public static final String	STR_HOST_ID_2			= String.valueOf(HOST_ID_2);
 	public static final String	STR_MANUFACTURER		= String.valueOf(MANUFACTURER);
 	public static final String	STR_RORG				= String.valueOf(RORG);
 	public static final String	STR_FUNC				= String.valueOf(FUNC);

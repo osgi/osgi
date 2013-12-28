@@ -55,4 +55,39 @@ public class TemperatureSensingDevice extends EnOceanDeviceImpl {
 
 	}
 
+	public int getChipId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getRorg() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getFunc() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getType() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getManufacturer() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public int getSecurityLevelFormat() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public void remove() {
+		// TODO Auto-generated method stub
+
+	}
+
 }

@@ -55,8 +55,7 @@ public class Message implements EnOceanMessage, ByteSerializable {
 	public byte[] getBytes() {
 		byte[] pktBytes = Utils.byteConcat(RORG, getPayloadBytes());
 		pktBytes = Utils.byteConcat(pktBytes, senderId);
-		pktBytes = Utils.byteConcat(pktBytes, status);
-		return Utils.byteConcat(pktBytes, Utils.crc8(pktBytes));
+		return Utils.byteConcat(pktBytes, status);
 	}
 
 	public void setRORG(int rorg) {

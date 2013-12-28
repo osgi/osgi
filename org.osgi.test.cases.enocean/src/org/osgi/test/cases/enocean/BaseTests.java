@@ -1,8 +1,6 @@
 
 package org.osgi.test.cases.enocean;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanChannel;
 import org.osgi.service.enocean.EnOceanDevice;
@@ -16,52 +14,11 @@ import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescription_A5_02_
 import org.osgi.test.cases.enocean.messages.MessageA5_02_01;
 import org.osgi.test.cases.enocean.rpc.QueryFunction;
 import org.osgi.test.cases.enocean.serial.EspRadioPacket;
-import org.osgi.test.cases.enocean.sets.EnOceanChannelDescriptionSetImpl;
-import org.osgi.test.cases.enocean.sets.EnOceanMessageDescriptionSetImpl;
-import org.osgi.test.cases.enocean.utils.EventListener;
 import org.osgi.test.cases.enocean.utils.Fixtures;
-import org.osgi.test.cases.enocean.utils.ServiceListener;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-
-public class BaseTests extends DefaultTestBundleControl {
-
-	private FileOutputStream	outStream;
-	private ServiceListener		devices;
-	private EventListener		events;
-	private EnOceanMessageDescriptionSetImpl	msgDescriptionSet;
-	private EnOceanChannelDescriptionSetImpl	channelDescriptionSet;
-	private ServiceReference					eventAdminRef;
-
-	protected void setUp() throws Exception {
-		String fakeDriverPath = System.getProperty("org.osgi.service.enocean.host.path");
-		File file = new File(fakeDriverPath);
-		if (!file.exists()) {
-			file.createNewFile();
-		}
-		outStream = new FileOutputStream(file);
-
-		/* Tracks device creation */
-		devices = new ServiceListener(getContext(), EnOceanDevice.class);
-
-		/* Tracks device events */
-		String[] topics = new String[] {Fixtures.SELF_TEST_EVENT_TOPIC};
-		events = new EventListener(getContext(), topics, null);
 
 
-		/* Inserts some message documentation classes */
-		msgDescriptionSet = new EnOceanMessageDescriptionSetImpl();
-		msgDescriptionSet.putMessage(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, -1, new EnOceanMessageDescription_A5_02_01());
 
-		channelDescriptionSet = new EnOceanChannelDescriptionSetImpl();
-		channelDescriptionSet.putChannelDescription(Fixtures.TMP_CHANNEL_ID, new EnOceanChannelDescription_TMP_00());
-	}
-
-	protected void tearDown() throws Exception {
-		devices.close();
-		events.close();
-		getContext().ungetService(eventAdminRef);
-		cleanupServices();
-	}
+public class BaseTests extends EnOceanTestCase {
 
 	/**
 	 * Test that a properly set profile ID in a raw EnOceanMessage is enough to
@@ -228,8 +185,9 @@ public class BaseTests extends DefaultTestBundleControl {
 		/* Insert a device */
 		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
-		outStream.write(pkt.serialize());
-		String lastServiceEvent = devices.waitForService();
+		outputStream.write(pkt.serialize());
+
+		devices.waitForService();
 
 		ServiceReference ref = devices.getServiceReference();
 		EnOceanDevice device = (EnOceanDevice) getContext().getService(ref);
@@ -238,23 +196,6 @@ public class BaseTests extends DefaultTestBundleControl {
 		device.invoke(rpc, null);
 
 		getContext().ungetService(ref);
-	}
-
-	private void cleanupServices() throws InterruptedException {
-		ServiceReference[] references = devices.getServiceReferences();
-		if (references != null) {
-			for (int i = 0; i < references.length; i++) {
-				ServiceReference ref = references[i];
-				getContext().ungetService(ref);
-				devices.remove(ref);
-				String msg = devices.waitForService();
-				log("Unregistering device service got  : " + msg);
-				assertEquals("did not remove service", ServiceListener.SERVICE_REMOVED, msg);
-			}
-		} else {
-			log("There were no extra references to cleanup");
-		}
-	
 	}
 
 }
