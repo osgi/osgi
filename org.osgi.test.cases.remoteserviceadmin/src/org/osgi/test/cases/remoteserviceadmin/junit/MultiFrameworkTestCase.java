@@ -51,6 +51,13 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  *
  */
 public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*OSGiTestCase*/ {
+
+	/**
+	 * Project name. Used as a namespace for CT (child) framework specific run
+	 * properties.
+	 */
+	private static final String PROJECT_NAME = "org.osgi.test.cases.remoteserviceadmin";
+
 	/** 
 	 * Magic value. Properties with this value will be replaced by a socket port number that is currently free. 
 	 */
@@ -84,8 +91,10 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 		if (!rootFile.isDirectory())
 			assertTrue("Could not create root directory: " + rootFile.getPath(), rootFile.mkdirs());
 		
-		Map<String, String> configuration = getConfiguration();
+		Map<String, Object> configuration = getFrameworkConfiguration();
+		configuration.putAll(getConfiguration());
 		configuration.put(Constants.FRAMEWORK_STORAGE, rootFile.getAbsolutePath());
+		processFreePortProperties(configuration);
 		
 		framework = createFramework(configuration);
 		initFramework();
@@ -94,6 +103,28 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 		installFramework();
 	}
 
+	/**
+	 * Load the default framework properties
+	 * 
+	 * @return The map
+	 */
+	private Map<String, Object> getFrameworkConfiguration() {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		String fwproperties = System.getProperty(PROJECT_NAME
+				+ ".framework.properties");
+		if (fwproperties != null) {
+			for (StringTokenizer tok = new StringTokenizer(fwproperties, ","); tok
+					.hasMoreTokens();) {
+				String fwproperty = tok.nextToken();
+				StringTokenizer equaltok = new StringTokenizer(
+						fwproperty.trim(), "=");
+				String name = equaltok.nextToken().trim();
+				String value = equaltok.nextToken().trim();
+				properties.put(name, value);
+			}
+		}
+		return properties;
+	}
 
 	/**
 	 * @see junit.framework.TestCase#tearDown()

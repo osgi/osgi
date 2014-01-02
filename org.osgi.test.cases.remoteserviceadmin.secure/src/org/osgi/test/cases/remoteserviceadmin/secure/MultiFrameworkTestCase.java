@@ -20,8 +20,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.ServerSocket;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -45,6 +47,19 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  *
  */
 public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*OSGiTestCase*/ {
+
+	/**
+	 * Project name. Used as a namespace for CT (child) framework specific run
+	 * properties.
+	 */
+	private static final String PROJECT_NAME = "org.osgi.test.cases.remoteserviceadmin.secure";
+
+	/**
+	 * Magic value. Properties with this value will be replaced by a socket port
+	 * number that is currently free.
+	 */
+	private static final String FREE_PORT = "@@FREE_PORT@@";
+
 	private static final String STORAGEROOT = "org.osgi.test.cases.remoteserviceadmin.secure.storageroot";
 	private static final String DEFAULT_STORAGEROOT = "generated/testframeworkstorage";
 	private static final String FRAMEWORK_FACTORY = "/META-INF/services/org.osgi.framework.launch.FrameworkFactory";
@@ -70,8 +85,10 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 		if (!rootFile.isDirectory())
 			assertTrue("Could not create root directory: " + rootFile.getPath(), rootFile.mkdirs());
 		
-		Map<String, String> configuration = getConfiguration();
+		Map<String, Object> configuration = getFrameworkConfiguration();
+		configuration.putAll(getConfiguration());
 		configuration.put(Constants.FRAMEWORK_STORAGE, rootFile.getAbsolutePath());
+		processFreePortProperties(configuration);
 		
 		framework = createFramework(configuration);
 		initFramework();
@@ -80,6 +97,59 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 		installFramework();
 	}
 
+	/**
+	 * Load the default framework properties
+	 * 
+	 * @return The map
+	 */
+	private Map<String, Object> getFrameworkConfiguration() {
+		Map<String, Object> properties = new HashMap<String, Object>();
+		String fwproperties = System.getProperty(PROJECT_NAME
+				+ ".framework.properties");
+		if (fwproperties != null) {
+			for (StringTokenizer tok = new StringTokenizer(fwproperties, ","); tok
+					.hasMoreTokens();) {
+				String fwproperty = tok.nextToken();
+				StringTokenizer equaltok = new StringTokenizer(
+						fwproperty.trim(), "=");
+				String name = equaltok.nextToken().trim();
+				String value = equaltok.nextToken().trim();
+				properties.put(name, value);
+			}
+		}
+		return properties;
+	}
+
+	/**
+	 * Substitute the free port placeholder for a free port
+	 * 
+	 * @param properties
+	 */
+	private void processFreePortProperties(Map<String, Object> properties) {
+		String freePort = getFreePort();
+		for (Iterator it = properties.entrySet().iterator(); it.hasNext();) {
+			Map.Entry entry = (Map.Entry) it.next();
+			if (entry.getValue().toString().trim().equals(FREE_PORT)) {
+				entry.setValue(freePort);
+			}
+		}
+	}
+
+	/**
+	 * @return a free socket port
+	 */
+	private String getFreePort() {
+		try {
+			ServerSocket ss = new ServerSocket(0);
+			String port = "" + ss.getLocalPort();
+			ss.close();
+			System.out.println("Found free port " + port);
+			return port;
+		} catch (IOException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 
 	/**
 	 * @see junit.framework.TestCase#tearDown()
