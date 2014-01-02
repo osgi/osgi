@@ -900,7 +900,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			}
 
 			// unexport the service
-			registration.unregister();
+			exportRegistrations.iterator().next().close();
 
 			Sleep.sleep(2000); // give the system the chance to deliver all
 								// events.
