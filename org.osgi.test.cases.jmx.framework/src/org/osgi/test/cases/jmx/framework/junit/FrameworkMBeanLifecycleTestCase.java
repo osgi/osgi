@@ -38,6 +38,7 @@ import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.jmx.framework.FrameworkMBean;
+import org.osgi.test.support.OSGiTestCaseProperties;
 
 public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
@@ -306,7 +307,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 	private BundleContext getBundleContextWithoutFail() {
 		try {
-			if ("true".equals(System.getProperty("noframework")))
+			if ("true".equals(getProperty("noframework")))
 				return null;
 			return getContext();
 		} catch (Throwable t) {
@@ -357,7 +358,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 	private String getStorageAreaRoot() {
 		BundleContext context = getBundleContextWithoutFail();
 		if (context == null) {
-			String storageroot = System.getProperty(STORAGEROOT, DEFAULT_STORAGEROOT);
+			String storageroot = getProperty(STORAGEROOT, DEFAULT_STORAGEROOT);
 			assertNotNull("Must set property: " + STORAGEROOT, storageroot);
 			return storageroot;
 		}
@@ -423,7 +424,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 		List bundles = new LinkedList();
 
-		StringTokenizer st = new StringTokenizer(System.getProperty(
+		StringTokenizer st = new StringTokenizer(getProperty(
 				"org.osgi.test.cases.jmx.framework.bundles", ""), ",");
 		while (st.hasMoreTokens()) {
 			String bundle = st.nextToken();
@@ -489,7 +490,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
 
 		//make sure that the server framework System Bundle exports the interfaces
-		String systemPackagesXtra = System.getProperty(SYSTEM_PACKAGES_EXTRA);
+		String systemPackagesXtra = getProperty(SYSTEM_PACKAGES_EXTRA);
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
 		if (consoleId != 0) {
 			configuration.put("osgi.console", "" + consoleId++);
@@ -543,7 +544,8 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 	static int	consoleId;
 	{
-		consoleId = Integer.getInteger("osgi.console", 0).intValue();
+		consoleId = OSGiTestCaseProperties
+				.getIntegerProperty("osgi.console", 0);
 	}
 
 	private Future<FrameworkEvent> waitForStop() {

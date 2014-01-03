@@ -16,16 +16,10 @@
 package org.osgi.test.cases.remoteserviceadmin.secure.tb.importer;
 
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -36,15 +30,9 @@ import junit.framework.Assert;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.service.event.Event;
-import org.osgi.service.event.EventConstants;
-import org.osgi.service.event.EventHandler;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
-import org.osgi.service.remoteserviceadmin.ExportReference;
-import org.osgi.service.remoteserviceadmin.ExportRegistration;
 import org.osgi.service.remoteserviceadmin.ImportReference;
 import org.osgi.service.remoteserviceadmin.ImportRegistration;
 import org.osgi.service.remoteserviceadmin.RemoteConstants;
@@ -52,7 +40,7 @@ import org.osgi.service.remoteserviceadmin.RemoteServiceAdmin;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 import org.osgi.test.cases.remoteserviceadmin.secure.common.A;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.Semaphore;
 
 /**
@@ -67,17 +55,14 @@ public class Activator implements BundleActivator {
 	RemoteServiceAdmin             rsa;
 	TestRemoteServiceAdminListener remoteServiceAdminListener;
 	long timeout;
-	int  factor;
-
-	public Activator() {
-		timeout = Long.getLong("rsa.ct.timeout", 300000L);
-	}
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
+		timeout = OSGiTestCaseProperties.getLongProperty("rsa.ct.timeout",
+				300000L);
 		test();
 	}
 
@@ -231,7 +216,7 @@ public class Activator implements BundleActivator {
 	 * @throws IOException 
 	 */
 	private EndpointDescription reconstructEndpoint() throws IOException {
-		String propstr = System.getProperty("RSA_TCK.EndpointDescription_0");
+		String propstr = context.getProperty("RSA_TCK.EndpointDescription_0");
 		
 		// see org.osgi.test.cases.remoteserviceadmin.tb2.Activator#exportEndpointDescription()
 		// decode byte[] from hex

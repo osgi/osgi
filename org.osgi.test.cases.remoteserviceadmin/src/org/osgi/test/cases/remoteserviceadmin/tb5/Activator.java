@@ -20,6 +20,7 @@ import junit.framework.Assert;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
+import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -31,18 +32,14 @@ public class Activator implements BundleActivator {
 	BundleContext                  context;
 	ServiceTracker tracker;
 	long timeout;
-	int  factor;
-
-	public Activator() {
-		timeout = Long.getLong("rsa.ct.timeout", 300000L);
-		factor = Integer.getInteger("rsa.ct.timeout.factor", 3);
-	}
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
+		timeout = OSGiTestCaseProperties.getLongProperty("rsa.ct.timeout",
+				300000L);
 		test();
 	}
 

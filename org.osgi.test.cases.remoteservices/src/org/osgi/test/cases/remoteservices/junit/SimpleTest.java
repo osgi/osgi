@@ -66,7 +66,7 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		timeout = Long.getLong("rsa.ct.timeout", 300000L).longValue();
+		timeout = getLongProperty("rsa.ct.timeout", 300000L);
 	}
 
 	/**
@@ -217,8 +217,7 @@ public class SimpleTest extends MultiFrameworkTestCase {
 	 * @return
 	 */
 	private Hashtable loadServerTCKProperties() {
-		String serverconfig = System
-				.getProperty("org.osgi.test.cases.remoteservices.serverconfig");
+		String serverconfig = getProperty("org.osgi.test.cases.remoteservices.serverconfig");
 		assertNotNull(
 				"did not find org.osgi.test.cases.remoteservices.serverconfig system property",
 				serverconfig);
@@ -227,7 +226,7 @@ public class SimpleTest extends MultiFrameworkTestCase {
 		for (StringTokenizer tok = new StringTokenizer(serverconfig, ","); tok
 				.hasMoreTokens();) {
 			String propertyName = tok.nextToken();
-			String value = System.getProperty(propertyName);
+			String value = getProperty(propertyName);
 			assertNotNull("system property not found: " + propertyName, value);
 			properties.put(propertyName, value);
 		}

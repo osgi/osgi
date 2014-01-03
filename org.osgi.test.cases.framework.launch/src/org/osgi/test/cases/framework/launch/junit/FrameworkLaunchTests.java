@@ -439,7 +439,7 @@ public class FrameworkLaunchTests extends LaunchTest {
 	public void testExecPermission() throws BundleException, IOException {
 		File testOutputFile = new File(rootStorageArea, getName() + File.separator + "execPermissions.out");
 		Map<String, String> configuration = getConfiguration(getName());
-		String osName = System.getProperty("os.name");
+		String osName = getProperty("os.name");
 		if (osName.toLowerCase().indexOf("windows") >= 0)
 			configuration.put(Constants.FRAMEWORK_EXECPERMISSION, "cmd.exe /c copy ${abspath} " + testOutputFile.getAbsolutePath());
 		else

@@ -28,7 +28,6 @@ package org.osgi.test.cases.framework.junit.startlevel;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleException;
@@ -60,9 +59,8 @@ public class StartLevelControl extends DefaultTestBundleControl {
 	private FrameworkEventCollector	fec;
 	private BundleEventCollector	bec;
 
-	static {
-		String sleepTimeString = System
-				.getProperty("osgi.tc.startlevel.sleeptime");
+	protected void setUp() throws Exception {
+		String sleepTimeString = getProperty("osgi.tc.startlevel.sleeptime");
 		int sleepTime = SLEEP;
 		if (sleepTimeString != null) {
 			try {
@@ -70,33 +68,28 @@ public class StartLevelControl extends DefaultTestBundleControl {
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				System.out
-						.println("Error while parsing sleep value! The default one will be used : "
-								+ SLEEP);
+				log("Error while parsing sleep value! The default one will be used : "
+						+ SLEEP);
 			}
 			if (sleepTime < 200) {
-				System.out.println("The sleep value is too low : " + sleepTime
+				log("The sleep value is too low : " + sleepTime
 						+ " ! The default one will be used : " + SLEEP);
 			}
 			else {
 				SLEEP = sleepTime;
 			}
 		}
-		sleepTimeString = System.getProperty("osgi.tc.startlevel.timeout");
+		sleepTimeString = getProperty("osgi.tc.startlevel.timeout");
 		if (sleepTimeString != null) {
 			try {
 				TIMEOUT = Integer.parseInt(sleepTimeString);
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				System.out
-						.println("Error while parsing timeout value! The default one will be used : "
-								+ TIMEOUT);
+				log("Error while parsing timeout value! The default one will be used : "
+						+ TIMEOUT);
 			}
 		}
-	}
-
-	protected void setUp() throws Exception {
 		fsl = getContext().getBundle(0).adapt(FrameworkStartLevel.class);
 		ibsl = fsl.getInitialBundleStartLevel();
 		origSl = fsl.getStartLevel();

@@ -64,7 +64,7 @@ public abstract class WebContainerTestBundleControl extends
 
     public void setUp() throws Exception {
         // TODO if war file already exists, let's remove it first.
-        this.server = new Server();
+		this.server = new Server(getContext());
         this.debug = true;
 
         // capture a time before install

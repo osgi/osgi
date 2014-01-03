@@ -45,6 +45,7 @@ import junit.framework.Assert;
 import org.osgi.service.condpermadmin.BundleSignerCondition;
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.permissionadmin.PermissionInfo;
+import org.osgi.test.support.OSGiTestCaseProperties;
 
 
 
@@ -156,17 +157,10 @@ public class DeploymentConstants {
     public static final int SHORT_TIMEOUT;
     
     static {
-    	if (System.getProperty("org.osgi.test.cases.deploymentadmin.timeout")!=null) {
-    		TIMEOUT = Integer.parseInt(System.getProperty("org.osgi.test.cases.deploymentadmin.timeout"));
-    	} else {
-    		TIMEOUT = 180000;
-    	}
-    	
-    	if (System.getProperty("org.osgi.test.cases.deploymentadmin.short_timeout")!=null) {
-    		SHORT_TIMEOUT = Integer.parseInt(System.getProperty("org.osgi.test.cases.deploymentadmin.short_timeout"));
-    	} else {
-    		SHORT_TIMEOUT = 3500;
-    	}
+		TIMEOUT = OSGiTestCaseProperties.getIntegerProperty(
+				"org.osgi.test.cases.deploymentadmin.timeout", 180000);
+		SHORT_TIMEOUT = OSGiTestCaseProperties.getIntegerProperty(
+				"org.osgi.test.cases.deploymentadmin.short_timeout", 3500);
     }    
     
     public static final int FINISH=-1;
@@ -180,7 +174,7 @@ public class DeploymentConstants {
     public static final int CANCEL=7;
 	public static final File	DELIVERED_AREA;
 	static {
-		String prop = System
+		String prop = OSGiTestCaseProperties
 				.getProperty("org.osgi.impl.service.deploymentadmin.deliveredarea");
 		Assert
 				.assertNotNull(

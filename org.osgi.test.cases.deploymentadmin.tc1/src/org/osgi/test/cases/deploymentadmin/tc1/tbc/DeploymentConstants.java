@@ -38,6 +38,7 @@
 package org.osgi.test.cases.deploymentadmin.tc1.tbc;
 
 import org.osgi.service.deploymentadmin.DeploymentAdminPermission;
+import org.osgi.test.support.OSGiTestCaseProperties;
 
 
 /**
@@ -162,17 +163,10 @@ public class DeploymentConstants {
     public static final int SHORT_TIMEOUT;
     
     static {
-    	if (System.getProperty("org.osgi.test.cases.deploymentadmin.timeout")!=null) {
-    		TIMEOUT = Integer.parseInt(System.getProperty("org.osgi.test.cases.deploymentadmin.timeout"));
-    	} else {
-    		TIMEOUT = 180000;
-    	}
-    	
-    	if (System.getProperty("org.osgi.test.cases.deploymentadmin.short_timeout")!=null) {
-    		SHORT_TIMEOUT = Integer.parseInt(System.getProperty("org.osgi.test.cases.deploymentadmin.short_timeout"));
-    	} else {
-    		SHORT_TIMEOUT = 2000;
-    	}
+		TIMEOUT = OSGiTestCaseProperties.getIntegerProperty(
+				"org.osgi.test.cases.deploymentadmin.timeout", 180000);
+		SHORT_TIMEOUT = OSGiTestCaseProperties.getIntegerProperty(
+				"org.osgi.test.cases.deploymentadmin.short_timeout", 2000);
     }
     
     public static String getDPNameFilter(String dpName) {

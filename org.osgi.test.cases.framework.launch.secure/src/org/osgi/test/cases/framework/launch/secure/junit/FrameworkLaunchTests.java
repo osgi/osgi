@@ -28,7 +28,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.launch.Framework;
@@ -85,8 +84,7 @@ public class FrameworkLaunchTests extends LaunchTest {
 	}
 
 	public void testTrustRepositories() throws BundleException, IOException {
-		BundleContext context = getBundleContextWithoutFail();
-		String testRepo = context != null ? context.getProperty(TEST_TRUST_REPO) : System.getProperty(TEST_TRUST_REPO);
+		String testRepo = getProperty(TEST_TRUST_REPO);
 		if (testRepo == null)
 			fail("Must set property to test: \"" + TEST_TRUST_REPO + "\"");
 		Map<String, String> configuration = getConfiguration(getName());

@@ -60,7 +60,7 @@ public abstract class LaunchTest extends OSGiTestCase {
 		frameworkFactoryClassName = getFrameworkFactoryClassName();
 		assertNotNull("Could not find framework factory class", frameworkFactoryClassName);
 		frameworkFactory = getFrameworkFactory();
-		StringTokenizer st = new StringTokenizer(System.getProperty(
+		StringTokenizer st = new StringTokenizer(getProperty(
 				"org.osgi.test.cases.framework.launch.secure.bundles", ""), ",");
 		rootBundles.clear();
 		while (st.hasMoreTokens()) {
@@ -84,7 +84,7 @@ public abstract class LaunchTest extends OSGiTestCase {
 	
 	protected BundleContext getBundleContextWithoutFail() {
 		try {
-			if ("true".equals(System.getProperty("noframework")))
+			if ("true".equals(getProperty("noframework")))
 				return null;
 			return getContext();
 		} catch (Throwable t) {
@@ -244,7 +244,7 @@ public abstract class LaunchTest extends OSGiTestCase {
 	}
 
 	private String getStorageAreaRoot() {
-		String storageroot = System.getProperty(STORAGEROOT);
+		String storageroot = getProperty(STORAGEROOT);
 		assertNotNull("Must set property: " + STORAGEROOT, storageroot);
 		return storageroot;
 	}

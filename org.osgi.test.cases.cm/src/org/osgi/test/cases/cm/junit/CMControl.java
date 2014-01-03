@@ -78,7 +78,7 @@ import org.osgi.test.support.sleep.Sleep;
 public class CMControl extends DefaultTestBundleControl {
 	private ConfigurationAdmin cm;
 	private PermissionAdmin permAdmin;
-	private static final long SIGNAL_WAITING_TIME = Long.getLong("org.osgi.test.cases.cm.signal_waiting_time", 4000).longValue();
+	private long					SIGNAL_WAITING_TIME;
 	private List list;
 	private boolean permissionFlag;
 	private Bundle setAllPermissionBundle;
@@ -214,6 +214,8 @@ public class CMControl extends DefaultTestBundleControl {
 	private static final String neverlandLocation = "http://neverneverland/";
 
 	protected void setUp() throws Exception {
+		SIGNAL_WAITING_TIME = getLongProperty(
+				"org.osgi.test.cases.cm.signal_waiting_time", 4000);
 		// printoutBundleList();
 
 	    assignCm();

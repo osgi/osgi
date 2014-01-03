@@ -77,7 +77,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		timeout = Long.getLong("rsa.ct.timeout", 300000L);
+		timeout = getLongProperty("rsa.ct.timeout", 300000L);
 	}
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#tearDown()
@@ -96,9 +96,9 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
 
 		//make sure that the server framework System Bundle exports the interfaces
-		String systemPackagesXtra = System.getProperty(SYSTEM_PACKAGES_EXTRA);
+		String systemPackagesXtra = getProperty(SYSTEM_PACKAGES_EXTRA);
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
-		int console = Integer.getInteger("osgi.console", 0);
+		int console = getIntegerProperty("osgi.console", 0);
 		if (console != 0) {
 			configuration.put("osgi.console", "" + console + 1);
 		}

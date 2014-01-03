@@ -1313,10 +1313,7 @@ public class HttpTestBundle1 extends DefaultTestBundleControl {
 		String p;
 		int tBax = 0;
 		// First check if the user has a preference.
-		p = getContext().getProperty("org.osgi.service.http.port");
-		if (p == null) {
-			p = System.getProperty("org.osgi.service.http.port");
-		}
+		p = getProperty("org.osgi.service.http.port");
 		if (p != null) {
 			tBax = Integer.parseInt(p);
 		}

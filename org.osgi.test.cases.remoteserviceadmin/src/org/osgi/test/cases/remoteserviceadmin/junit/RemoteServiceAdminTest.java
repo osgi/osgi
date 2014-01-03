@@ -69,7 +69,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		timeout = Long.getLong("rsa.ct.timeout", 300000L);
+		timeout = getLongProperty("rsa.ct.timeout", 300000L);
 	}
 	
 	/**
@@ -80,9 +80,9 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
 		
 		//make sure that the server framework System Bundle exports the interfaces
-		String systemPackagesXtra = System.getProperty(SYSTEM_PACKAGES_EXTRA);
+		String systemPackagesXtra = getProperty(SYSTEM_PACKAGES_EXTRA);
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
-		int console = Integer.getInteger("osgi.console", 0);
+		int console = getIntegerProperty("osgi.console", 0);
 		if (console != 0) {
 			configuration.put("osgi.console", "" + console + 1);
 		}
@@ -292,7 +292,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			// invoke the service
 			//
 			// no version
-			serviceA = (A) getService(A.class);
+			serviceA = getService(A.class);
 			try {
 				assertNotNull(serviceA);
 				assertEquals("this is A", serviceA.getA());
@@ -320,7 +320,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			importReg2.close();
 			importReg2.close(); // calling this multiple times must not cause a problem
 
-			serviceA = (A) getService(A.class);
+			serviceA = getService(A.class);
 			try {
 				assertNotNull(serviceA);
 				assertEquals("this is A", serviceA.getA());
@@ -499,7 +499,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 	 * @throws IOException 
 	 */
 	private EndpointDescription reconstructEndpoint(String version) throws IOException {
-		String propstr = System.getProperty("RSA_TCK.EndpointDescription_" + version + "_0");
+		String propstr = getProperty("RSA_TCK.EndpointDescription_" + version
+				+ "_0");
 		
 		// see org.osgi.test.cases.remoteserviceadmin.tb2.Activator#exportEndpointDescription()
 		// decode byte[] from hex

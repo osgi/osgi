@@ -72,7 +72,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
     protected void setUp() throws Exception {
 		super.setUp();
 
-		timeout = Long.getLong("rsa.ct.timeout", 300000L);
+		timeout = getLongProperty("rsa.ct.timeout", 300000L);
 
 		remoteServiceAdmin = getService(RemoteServiceAdmin.class);
 	}
@@ -1111,8 +1111,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 *         in the runoptions in bnd.bnd
 	 */
 	private Map<String, Object> loadCTProperties() {
-		String serverconfig = System
-				.getProperty("org.osgi.test.cases.remoteserviceadmin.serverconfig");
+		String serverconfig = getProperty("org.osgi.test.cases.remoteserviceadmin.serverconfig");
 		Assert.assertNotNull(
 				"did not find org.osgi.test.cases.remoteserviceadmin.serverconfig system property",
 				serverconfig);
@@ -1121,7 +1120,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		for (StringTokenizer tok = new StringTokenizer(serverconfig, ","); tok
 				.hasMoreTokens();) {
 			String propertyName = tok.nextToken();
-			String value = System.getProperty(propertyName);
+			String value = getProperty(propertyName);
 			Assert.assertNotNull("system property not found: " + propertyName, value);
 			properties.put(propertyName, value);
 		}

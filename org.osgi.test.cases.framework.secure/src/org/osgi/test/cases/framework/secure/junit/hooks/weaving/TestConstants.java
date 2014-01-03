@@ -1,5 +1,7 @@
 package org.osgi.test.cases.framework.secure.junit.hooks.weaving;
 
+import org.osgi.test.support.OSGiTestCaseProperties;
+
 public class TestConstants {
 	public static final String DYNAMIC_IMPORT_PACKAGE = "org.osgi.resource";
 	public static final String DYNAMIC_IMPORT_CLASS = DYNAMIC_IMPORT_PACKAGE + ".Resource";
@@ -14,18 +16,22 @@ public class TestConstants {
 	public static final String WOVEN_CLASS = "org.osgi.test.cases.framework.secure.weaving.tb.woven.WeaveMe";
 	
 	public static boolean isExpectSecurityExceptionAll() {
-		return Boolean.getBoolean(PROP_EXPECT_SECURITYEXCEPTION_ALL);
+		return OSGiTestCaseProperties.getBooleanProperty(
+				PROP_EXPECT_SECURITYEXCEPTION_ALL, false);
 	}
 	
 	public static boolean isExpectSecurityExceptionAddDynamicImport() {
-		return Boolean.getBoolean(PROP_EXPECT_SECURITYEXCEPTION_ADDDYNAMICIMPORT);
+		return OSGiTestCaseProperties.getBooleanProperty(
+				PROP_EXPECT_SECURITYEXCEPTION_ADDDYNAMICIMPORT, false);
 	}
 	
 	public static boolean isInvalidSetBytes() {
-		return Boolean.getBoolean(PROP_INVALID_SETBYTES);
+		return OSGiTestCaseProperties.getBooleanProperty(PROP_INVALID_SETBYTES,
+				false);
 	}
 	
 	public static boolean isRethrowingSecurityException() {
-		return Boolean.getBoolean(PROP_RETHROW_SECURITYEXCEPTION);
+		return OSGiTestCaseProperties.getBooleanProperty(
+				PROP_RETHROW_SECURITYEXCEPTION, false);
 	}
 }

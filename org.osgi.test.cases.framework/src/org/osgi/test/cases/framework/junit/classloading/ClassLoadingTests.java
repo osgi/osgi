@@ -754,8 +754,7 @@ public class ClassLoadingTests extends DefaultTestBundleControl {
 				fail("A class required by this test cannot be loaded");
 			}
 
-			bootPackages = System.getProperty(
-					Constants.FRAMEWORK_BOOTDELEGATION, "");
+			bootPackages = getProperty(Constants.FRAMEWORK_BOOTDELEGATION, "");
 			if (bootPackages != null) {
 				StringTokenizer packages = new StringTokenizer(bootPackages, ",");
 				while(packages.hasMoreTokens()) {

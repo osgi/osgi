@@ -40,8 +40,6 @@
 
 package org.osgi.test.cases.deploymentadmin.mo.tbc;
 
-import org.osgi.service.dmt.security.DmtPermission;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.jar.JarFile;
@@ -49,7 +47,9 @@ import java.util.jar.Manifest;
 
 import junit.framework.Assert;
 
+import org.osgi.service.dmt.security.DmtPermission;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.OSGiTestCaseProperties;
 
 public class DeploymentmoConstants {
     public static String DLOTA_PATH;
@@ -72,7 +72,7 @@ public class DeploymentmoConstants {
 
     public static final File DELIVERED_AREA;
 	static {
-		String prop = System
+		String prop = OSGiTestCaseProperties
 				.getProperty("org.osgi.impl.service.deploymentadmin.deliveredarea");
 		Assert
 				.assertNotNull(
@@ -113,7 +113,8 @@ public class DeploymentmoConstants {
     public static final String ALERT_TYPE_DOWNLOADANDINSTALLANDACTIVATE = "org.osgi.deployment.downloadandinstallandactivate";
     
     //Deployment, Download and Deployed subtrees
-    public static final String OSGI_ROOT = System.getProperty("org.osgi.service.dmt.osgi.root");
+	public static final String		OSGI_ROOT											= OSGiTestCaseProperties
+				.getProperty("org.osgi.service.dmt.osgi.root");
     public static final String DEPLOYMENT = OSGI_ROOT + "/Deployment";
     public static final String DEPLOYMENT_DOWNLOAD = DEPLOYMENT + "/Download";
     public static final String DEPLOYMENT_INVENTORY = DEPLOYMENT + "/Inventory";
@@ -271,32 +272,17 @@ public class DeploymentmoConstants {
         }
     }
       	
-    static { 
-		//Properties files
-		if (System.getProperty("org.osgi.test.cases.deploymentadmin.mo.timeout")!=null) {
-			TIMEOUT = Integer.parseInt(System.getProperty("org.osgi.test.cases.deploymentadmin.mo.timeout"));  	
-		} else {
-			TIMEOUT = 2000;
-		}
-		if (System.getProperty("org.osgi.test.cases.deploymentadmin.mo.usercancel")!=null) {
-			USER_CANCEL_IMPLEMENTED = Boolean.getBoolean("org.osgi.test.cases.deploymentadmin.mo.usercancel");  	
-		} else {
-			USER_CANCEL_IMPLEMENTED = false;
-		}
-		if (System.getProperty("org.osgi.test.cases.deploymentadmin.mo.status_node_progress")!=null) {
-			STATUS_NODE_REPORTS_PROGRESS = Boolean.getBoolean("org.osgi.test.cases.deploymentadmin.mo.status_node_progress");  	
-		} else {
-			STATUS_NODE_REPORTS_PROGRESS = true;
-		}
-		if (System.getProperty("org.osgi.test.cases.deploymentadmin.mo.streaming")!=null) {
-			IS_STREAMING = Boolean.getBoolean("org.osgi.test.cases.deploymentadmin.mo.streaming");  	
-		} else {
-			IS_STREAMING = true;
-		}
-	
-		
-		
-
+	static {
+		TIMEOUT = OSGiTestCaseProperties.getIntegerProperty(
+				"org.osgi.test.cases.deploymentadmin.mo.timeout", 2000);
+		USER_CANCEL_IMPLEMENTED = OSGiTestCaseProperties.getBooleanProperty(
+				"org.osgi.test.cases.deploymentadmin.mo.usercancel", false);
+		STATUS_NODE_REPORTS_PROGRESS = OSGiTestCaseProperties
+				.getBooleanProperty(
+						"org.osgi.test.cases.deploymentadmin.mo.status_node_progress",
+						true);
+		IS_STREAMING = OSGiTestCaseProperties.getBooleanProperty(
+				"org.osgi.test.cases.deploymentadmin.mo.streaming", true);
     }
     //----------------------------------------------------------------------------------------------------
     // Path to Download Subtree

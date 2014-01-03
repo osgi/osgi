@@ -137,8 +137,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	private ServiceTracker    	trackerBaseService;
 
 	protected void setUp() throws Exception {
-		String sleepTimeString = System
-				.getProperty("osgi.tc.component.sleeptime");
+		String sleepTimeString = getProperty("osgi.tc.component.sleeptime");
 		int sleepTime = SLEEP;
 		if (sleepTimeString != null) {
 			try {
@@ -545,7 +544,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	}
 
 	private Bundle getSCRBundle() {
-		String bundleName = System.getProperty("scr.bundle.name");
+		String bundleName = getProperty("scr.bundle.name");
 		if (bundleName != null) {
 			Bundle[] bundles = getContext().getBundles();
 			for (int i = 0; i < bundles.length; i++) {
