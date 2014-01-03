@@ -11,7 +11,7 @@
  */
 package org.osgi.impl.service.http;
 
-import org.osgi.framework.*;
+import org.osgi.framework.BundleContext;
 import org.osgi.service.log.LogService;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -39,7 +39,10 @@ public final class Log {
 	static void init(BundleContext bc) {
 		logRef = new LogRef(bc);
 		logRef.open();
-		debug = Boolean.getBoolean("org.osgi.service.http.debug");
+		String debugProp = bc.getProperty("org.osgi.service.http.debug");
+		if (debugProp != null) {
+			debug = Boolean.valueOf(debugProp).booleanValue();
+		}
 	}
 
 	static void close() {

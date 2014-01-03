@@ -1,7 +1,11 @@
 package org.osgi.impl.service.upnp.cd.event;
 
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.GregorianCalendar;
+import java.util.Hashtable;
+import java.util.TimeZone;
+
+import org.osgi.impl.service.upnp.cd.control.SOAPConstants;
 
 // This class contains the implementation of Control interface defined in the api package.
 public class ErrorCheck {
@@ -75,8 +79,7 @@ public class ErrorCheck {
 			Subscription subscription) {
 		String message = GenaConstants.GENA_SERVER_VERSION
 				+ GenaConstants.GENA_OK_200 + "\r\n" + "DATE: " + getDate()
-				+ "\r\n" + "SERVER: " + System.getProperty("os.name") + "/"
-				+ System.getProperty("os.version")
+				+ "\r\n" + "SERVER: " + SOAPConstants.osNameVersion
 				+ " UPnP/1.0 SamsungUPnP/1.0\r\n" + "SID: "
 				+ subscription.getSubscriptionId() + "\r\n" + "TIMEOUT: "
 				+ subscription.getTimeout() + "\r\n\r\n";

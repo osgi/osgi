@@ -1,7 +1,11 @@
 package org.osgi.impl.service.upnp.cd.event;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.DataOutputStream;
 import java.net.Socket;
+
+import org.osgi.impl.service.upnp.cd.control.SOAPConstants;
 
 // Whenever a connection is established on the server port,
 // an processor object is created to do the processing for that request. This class parses the
@@ -59,8 +63,7 @@ public final class Processor implements Runnable {
 		try {
 			String errorResponse = "HTTP/1.1 " + i + " " + message + "\r\n"
 					+ "Connection: close\r\n" + "SERVER: "
-					+ System.getProperty("os.name") + "/"
-					+ System.getProperty("os.version")
+					+ SOAPConstants.osNameVersion
 					+ " UPnP/1.0 SamsungUPnP/1.0\r\n\r\n";
 			dos.writeBytes(errorResponse);
 			dos.flush();

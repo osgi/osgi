@@ -92,7 +92,7 @@ public class GenaServer extends Thread {
 	public void shutdown() throws IOException {
 		done = true;
 		if (done) {
-			String hostname = System
+			String hostname = context
 					.getProperty("org.osgi.service.http.hostname");
 			try {
 				if (hostname == null) {
@@ -142,7 +142,7 @@ public class GenaServer extends Thread {
 			return "-1";
 		}
 		try {
-			String hostname = System
+			String hostname = context
 					.getProperty("org.osgi.service.http.hostname");
 			try {
 				if (hostname == null) {

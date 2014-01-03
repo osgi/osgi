@@ -26,7 +26,7 @@ public class UPnPController implements BundleActivator {
 		//System.out.println("UPnP : starting CD exporter");
 		this.bc = bc;
 		devexp = "2100";
-		String IP = System.getProperty("org.osgi.service.http.hostname");
+		String IP = bc.getProperty("org.osgi.service.http.hostname");
 		try {
 			if (IP == null) {
 				IP = InetAddress.getLocalHost().getHostAddress();

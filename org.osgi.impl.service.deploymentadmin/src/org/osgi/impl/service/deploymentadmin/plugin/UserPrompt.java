@@ -27,7 +27,7 @@ public class UserPrompt {
     
     private static boolean enabled;
     static {
-        String s = System.getProperty(DAConstants.USER_PROMPT);
+		String s = DAConstants.getProperty(DAConstants.USER_PROMPT);
         if (null == s)
             enabled = false;
         enabled = Boolean.valueOf(s).booleanValue(); 

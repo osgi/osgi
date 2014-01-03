@@ -82,7 +82,7 @@ public class HttpServiceController implements BundleActivator, ServiceFactory {
 		try {
 			Log.init(bc);
 			log.info("Creating the HttpServer");
-			httpServer = new HttpServer(bc.getBundle());
+			httpServer = new HttpServer(bc);
 			log.info("Starting the HttpServer");
 			httpServer.start();
 			// Register HttpService

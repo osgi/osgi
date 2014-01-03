@@ -14,6 +14,7 @@ Export-Package				= org.osgi.service.upnp; -split-package:=first; provide:=true
 
 -buildpath = \
 	org.osgi.service.upnp; 			version=project, \
-	osgi;							version=3.0, \
+	osgi.core;						version=4.2, \
+	osgi.cmpn;						version=4.2, \
 	ee.j2se;						version=${javac.compliance}, \
 	org.osgi.impl.bundle.servlet; 	version=2.1

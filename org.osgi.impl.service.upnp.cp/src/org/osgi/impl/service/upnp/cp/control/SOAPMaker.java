@@ -1,8 +1,9 @@
 package org.osgi.impl.service.upnp.cp.control;
 
-import java.util.*;
+import java.util.Dictionary;
+import java.util.Enumeration;
 
-public class SOAPMaker implements SOAPConstants {
+public class SOAPMaker extends SOAPConstants {
 	private Object	controlLock	= new Object();
 
 	// This method will take the parameters and then create a SOAP message for
@@ -23,7 +24,7 @@ public class SOAPMaker implements SOAPConstants {
 			for (Enumeration e = arguments.keys(); e.hasMoreElements();) {
 				String argName = (String) e.nextElement();
 				soapBuf.append("<" + argName + ">"
-						+ (Object) arguments.get(argName) + "</" + argName
+						+ arguments.get(argName) + "</" + argName
 						+ ">");
 				soapBuf.append(rn);
 			}

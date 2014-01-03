@@ -1,11 +1,15 @@
 package org.osgi.impl.service.upnp.cp.control;
 
-import java.io.*;
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
 import java.net.Socket;
-import java.util.*;
-import org.osgi.impl.service.upnp.cp.util.*;
+import java.util.Dictionary;
+import java.util.Hashtable;
 
-public class ControlImpl implements Control, SOAPConstants {
+import org.osgi.impl.service.upnp.cp.util.Control;
+import org.osgi.impl.service.upnp.cp.util.UPnPController;
+
+public class ControlImpl implements Control {
 	private Hashtable		serviceObjects;
 	private SOAPMaker		maker;
 	private SOAPErrorCodes	errorCodes;
@@ -38,14 +42,14 @@ public class ControlImpl implements Control, SOAPConstants {
 		int i = response.indexOf("\r\n");
 		if (i != -1) {
 			String firstHeader = (response.substring(0, i)).trim();
-			if (firstHeader.endsWith(ERROR_405) && first) {
+			if (firstHeader.endsWith(SOAPConstants.ERROR_405) && first) {
 				return sendControlRequest(path, host, serviceType, actionName,
 						parameters, false);
 			}
 			else
-				if (firstHeader.endsWith(RES_OK)) {
+				if (firstHeader.endsWith(SOAPConstants.RES_OK)) {
 					ParsedRequest pr = parser.controlResOKParse(response);
-					return (Dictionary) pr.getArguments();
+					return pr.getArguments();
 				}
 				else
 					throw new Exception("Expected ok: " + path + " :: " + actionName + " :: "  + firstHeader);

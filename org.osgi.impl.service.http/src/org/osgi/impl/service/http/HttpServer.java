@@ -11,11 +11,22 @@
  */
 package org.osgi.impl.service.http;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-import javax.servlet.*;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
+import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Vector;
+
+import javax.servlet.Servlet;
+import javax.servlet.ServletException;
+
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.service.http.NamespaceException;
 
 //  ******************** HttpServer ********************
@@ -23,8 +34,9 @@ import org.osgi.service.http.NamespaceException;
  * * This is the actual HTTP server. The server listens to a * port, typically
  * 80 or 8080 for HTTP requests. When a request is * received an HttpTransaction
  * is created to deal with the request. *
- * <p>* The server extends Thread and the thread method run() hangs on a * call
- * to serverSock.accept() until the server is stoped. * *
+ * <p>
+ * * The server extends Thread and the thread method run() hangs on a * call to
+ * serverSock.accept() until the server is stoped. * *
  * 
  * @author Gatespace AB (osgiref@gatespace.com) *
  * @author $Id$ * *
@@ -48,11 +60,11 @@ public final class HttpServer extends Thread {
 																			   // AliasRegistration
 	private Vector			servlets;										// registered
 																			   // servlets
-	private Bundle			bundle;										// The
-																			 // HttpServers'
-																			 // own
-																			 // bundle
-																			 // object
+	private BundleContext	bundleContext;									// The
+																			// HttpServers'
+																			// own
+																			// bundleContext
+																			// object
 	private ThreadGroup		threadGroup	= new ThreadGroup(
 												"HttpTransactionManager");
 	private Log				log			= new Log("HttpServer");			;
@@ -61,13 +73,13 @@ public final class HttpServer extends Thread {
 	// Some statistics
 	private int				threadCount	= 0;
 
-	public HttpServer(Bundle bundle) {
+	public HttpServer(BundleContext bundleContext) {
 		super("HttpServer");
-		this.bundle = bundle;
+		this.bundleContext = bundleContext;
 		registrations = new Hashtable();
 		servlets = new Vector();
 		// Check and set hostname
-		String httpHostname = System
+		String httpHostname = bundleContext
 				.getProperty("org.osgi.service.http.hostname");
 		if (httpHostname == null) {
 			try {
@@ -79,7 +91,8 @@ public final class HttpServer extends Thread {
 		}
 		// Try binding the HttpServer to a port.
 		// First check if "org.osgi.service.http.port" is set
-		String userPort = System.getProperty("org.osgi.service.http.port");
+		String userPort = bundleContext
+				.getProperty("org.osgi.service.http.port");
 		if (userPort != null) {
 			log.info("Trying user supplied HTTP port: " + userPort);
 			if (!bindPort(Integer.parseInt(userPort))) {
@@ -239,7 +252,7 @@ public final class HttpServer extends Thread {
 	}
 
 	String getManifestValue(String key, String def) {
-		Dictionary d = bundle.getHeaders();
+		Dictionary d = bundleContext.getBundle().getHeaders();
 		Object o = d.get(key);
 		return (o != null && (o instanceof String)) ? ((String) o) : def;
 	}
