@@ -22,10 +22,8 @@ import java.lang.reflect.Modifier;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.List;
-
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -146,6 +144,91 @@ public abstract class OSGiTestCase extends TestCase {
 		catch (InterruptedException e) {
 			Thread.currentThread().interrupt();
 			fail("Unexpected interruption.", e);
+		}
+	}
+
+	/**
+	 * Return the property value from the bundle context properties.
+	 * 
+	 * @param key The property key name.
+	 * @return The property value or null if the property is not set.
+	 */
+	public String getProperty(String key) {
+		if (context != null) {
+			return context.getProperty(key);
+		}
+		return System.getProperty(key);
+	}
+
+	/**
+	 * Return the property value from the bundle context properties.
+	 * 
+	 * @param key The property key name.
+	 * @param defaultValue The default property value to return if the property
+	 *        is not set.
+	 * @return The property value or defaultValue if the property is not set.
+	 */
+	public String getProperty(String key, String defaultValue) {
+		String propValue = getProperty(key);
+		if (propValue == null) {
+			return defaultValue;
+		}
+		return propValue;
+	}
+
+	/**
+	 * Return the boolean property value from the bundle context properties.
+	 * 
+	 * @param key The property key name.
+	 * @param defaultValue The default property value to return if the property
+	 *        is not set.
+	 * @return The property value or defaultValue if the property is not set.
+	 */
+	public boolean getBooleanProperty(String key, boolean defaultValue) {
+		String propValue = getProperty(key);
+		if (propValue == null) {
+			return defaultValue;
+		}
+		return Boolean.valueOf(propValue).booleanValue();
+	}
+
+	/**
+	 * Return the integer property value from the bundle context properties.
+	 * 
+	 * @param key The property key name.
+	 * @param defaultValue The default property value to return if the property
+	 *        is not set.
+	 * @return The property value or defaultValue if the property is not set.
+	 */
+	public int getIntegerProperty(String key, int defaultValue) {
+		String propValue = getProperty(key);
+		if (propValue == null) {
+			return defaultValue;
+		}
+		try {
+			return Integer.parseInt(propValue);
+		} catch (NumberFormatException e) {
+			return defaultValue;
+		}
+	}
+
+	/**
+	 * Return the long property value from the bundle context properties.
+	 * 
+	 * @param key The property key name.
+	 * @param defaultValue The default property value to return if the property
+	 *        is not set.
+	 * @return The property value or defaultValue if the property is not set.
+	 */
+	public long getLongProperty(String key, long defaultValue) {
+		String propValue = getProperty(key);
+		if (propValue == null) {
+			return defaultValue;
+		}
+		try {
+			return Long.parseLong(propValue);
+		} catch (NumberFormatException e) {
+			return defaultValue;
 		}
 	}
 }
