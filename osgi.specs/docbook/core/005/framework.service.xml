@@ -1033,8 +1033,8 @@
         linkend="org.osgi.framework.BundleContext.ungetService-ServiceReference-"
         xrefstyle="hyperlink"/></code> method.  This method should be used if
         the bundle is using a single instance of the service object at a time and
-        needs to release the single instance (See <xref 
-        linkend="framework.service.gettingSingle"/>.</para>
+        needs to release the single instance (see <xref 
+        linkend="framework.service.gettingSingle"/>).</para>
       </listitem>
 
       <listitem>
@@ -1117,7 +1117,7 @@
           <para>The <code>PrototypeServiceFactory.<xref
           linkend="org.osgi.framework.PrototypeServiceFactory.ungetService-Bundle-ServiceRegistration-S-"
           xrefstyle="hyperlink"/></code> method is called to release the
-          specified service object instance (See <xref
+          specified service object instance (see <xref
           linkend="framework.service.prototypeServiceFactory"/>).</para>
         </listitem>
       </itemizedlist>
