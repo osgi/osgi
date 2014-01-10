@@ -841,7 +841,7 @@
           Factory.  A Prototype Service Factory lets the registering bundle
           customize the service object instance multiple times for each
           using bundle.  See <xref
-          linkend="framework.service.prototypeServiceFactory">.</xref></para>
+          linkend="framework.service.prototypeServiceFactory"/>.</para>
       </listitem>
     </itemizedlist>
 
