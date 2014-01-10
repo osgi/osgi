@@ -32,6 +32,8 @@ public interface ZigBeeAttribute {
 	public final static String	ID	= "zigbee.attribute.id";
 
 	/**
+	 * Gets the current value of the attribute.
+	 * 
 	 * @return the attribute identifier
 	 */
 	public int getId();
