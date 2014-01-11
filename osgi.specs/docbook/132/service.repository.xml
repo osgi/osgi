@@ -1256,28 +1256,6 @@ ServicePermission[...Repository, GET ]</programlisting>
     </section>
   </section>
 
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-        <listitem>
-          <para>Introduction of <emphasis>Requirement Expressions</emphasis>
-          to represent combined requirements.</para>
-        </listitem>
-
-        <listitem>
-          <para>Introduction of <emphasis>Requirement Builder</emphasis> to
-          facilitate the creation of Requirement objects.</para>
-        </listitem>
-
-        <listitem>
-          <para>Changes to default content for the <emphasis>Repository
-          Content</emphasis> API and <code>osgi.content</code>
-          capability.</para>
-        </listitem>
-      </itemizedlist>
-  </section>
-
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.repository.xml"/>
 
   <section>
@@ -1297,5 +1275,27 @@ ServicePermission[...Repository, GET ]</programlisting>
       <bibliomixed xml:id="i3273347"><title>XML Schema Part 2: Data types
       Second Edition</title>http://www.w3.org/TR/xmlschema-2/</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Introduction of <emphasis>Requirement Expressions</emphasis> to
+        represent combined requirements.</para>
+      </listitem>
+
+      <listitem>
+        <para>Introduction of <emphasis>Requirement Builder</emphasis> to
+        facilitate the creation of Requirement objects.</para>
+      </listitem>
+
+      <listitem>
+        <para>Changes to default content for the <emphasis>Repository
+        Content</emphasis> API and <code>osgi.content</code>
+        capability.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

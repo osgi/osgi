@@ -3583,18 +3583,6 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
     linkend="i1655737"/>.</para>
   </section>
 
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para><xref linkend="i1649746"/> has been rewritten to more accurately
-        state the effects of configuration changes on component
-        configurations.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
-
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.component.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.component.annotations.xml"/>
@@ -3620,5 +3608,17 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       <bibliomixed xml:id="i1655737"><title>OSGi XML
       Schemas</title>http://www.osgi.org/Specifications</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para><xref linkend="i1649746"/> has been rewritten to more accurately
+        state the effects of configuration changes on component
+        configurations.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

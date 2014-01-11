@@ -938,11 +938,12 @@ private       ::= '.' symbolic-name</programlisting>
       </listitem>
     </itemizedlist>
 
-    <para>A Managed Service may be registered with more than one PID and 
-    therefore be associated with multiple Configuration objects, one for each 
-    PID. Using multiple PIDs for a Managed Service is not recommended.
-    For example, when a configuration is deleted for a Managed Service there 
-    is no way to identify which PID is associated with the deleted configuration.</para>
+    <para>A Managed Service may be registered with more than one PID and
+    therefore be associated with multiple Configuration objects, one for each
+    PID. Using multiple PIDs for a Managed Service is not recommended. For
+    example, when a configuration is deleted for a Managed Service there is no
+    way to identify which PID is associated with the deleted
+    configuration.</para>
 
     <section>
       <title>Singletons</title>
@@ -2438,6 +2439,8 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
     </section>
   </section>
 
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cm.xml"/>
+
   <section>
     <title>Changes</title>
 
@@ -2448,6 +2451,4 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
       </listitem>
     </itemizedlist>
   </section>
-
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cm.xml"/>
 </chapter>
