@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,19 +20,19 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * A factory for {@link Constants#SCOPE_BUNDLE bundle scope} services. The
- * factory can provide service objects unique to each bundle in the OSGi
+ * factory can provide service objects customized for each bundle in the OSGi
  * environment.
  * 
  * <p>
  * When registering a service, a {@code ServiceFactory} object can be used
- * instead of a service object, so that the bundle developer can create a unique
- * service object for each bundle that is using the service.
+ * instead of a service object, so that the bundle developer can create a
+ * customized service object for each bundle that is using the service.
  * 
  * <p>
  * When a bundle {@link BundleContext#getService(ServiceReference) requests} the
  * service object, the framework calls the
- * {@link #getService(Bundle, ServiceRegistration) getService} method to create
- * a service object specifically for the requesting bundle. The returned service
+ * {@link #getService(Bundle, ServiceRegistration) getService} method to return
+ * a service object customized for the requesting bundle. The returned service
  * object is cached by the Framework for subsequent calls to
  * {@link BundleContext#getService(ServiceReference)} until the bundle releases
  * its use of the service.
@@ -64,7 +64,7 @@ public interface ServiceFactory<S> {
 	 * The Framework invokes this method the first time the specified
 	 * {@code bundle} requests a service object using the
 	 * {@link BundleContext#getService(ServiceReference)} method. The factory
-	 * can then return a specific service object for each bundle.
+	 * can then return a customized service object for each bundle.
 	 * 
 	 * <p>
 	 * The Framework must check that the returned service object is valid. If
@@ -99,7 +99,7 @@ public interface ServiceFactory<S> {
 	public S getService(Bundle bundle, ServiceRegistration<S> registration);
 
 	/**
-	 * Releases a service object created for a bundle.
+	 * Releases a service object customized for a bundle.
 	 * 
 	 * <p>
 	 * The Framework invokes this method when a service has been released by a

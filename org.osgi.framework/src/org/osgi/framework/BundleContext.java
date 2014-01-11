@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -747,16 +747,15 @@ public interface BundleContext extends BundleReference {
 	 * 
 	 * <p>
 	 * A bundle's use of a service object obtained from this method is tracked
-	 * by the bundle's use count of that service object. Each time the service
-	 * object is returned by {@link #getService(ServiceReference)} the context
-	 * bundle's use count for the service object is incremented by one. Each
-	 * time the service object is released by
-	 * {@link #ungetService(ServiceReference)} the context bundle's use count
-	 * for the service object is decremented by one.
+	 * by the bundle's use count of that service. Each time the service object
+	 * is returned by {@link #getService(ServiceReference)} the context bundle's
+	 * use count for the service is incremented by one. Each time the service
+	 * object is released by {@link #ungetService(ServiceReference)} the context
+	 * bundle's use count for the service is decremented by one.
 	 * 
 	 * <p>
-	 * When a bundle's use count for the service object drops to zero, the
-	 * bundle should no longer use the service object.
+	 * When a bundle's use count for the service drops to zero, the bundle
+	 * should no longer use the service object.
 	 * 
 	 * <p>
 	 * This method will always return {@code null} when the service associated
@@ -766,23 +765,23 @@ public interface BundleContext extends BundleReference {
 	 * The following steps are required to get the service object:
 	 * <ol>
 	 * <li>If the service has been unregistered, {@code null} is returned.</li>
-	 * <li>If the context bundle's use count for the service object is currently
-	 * zero and the service was registered with an object implementing the
-	 * {@code ServiceFactory} interface, the
+	 * <li>If the context bundle's use count for the service is currently zero
+	 * and the service has {@link Constants#SCOPE_BUNDLE bundle} or
+	 * {@link Constants#SCOPE_PROTOTYPE prototype} scope, the
 	 * {@link ServiceFactory#getService(Bundle, ServiceRegistration)} method is
-	 * called to create the service object for the context bundle. If the
+	 * called to supply the service object for the context bundle. If the
 	 * service object returned by the {@code ServiceFactory} object is
 	 * {@code null}, not an {@code instanceof} all the classes named when the
 	 * service was registered or the {@code ServiceFactory} object throws an
 	 * exception or will be recursively called for the context bundle,
 	 * {@code null} is returned and a Framework event of type
 	 * {@link FrameworkEvent#ERROR} containing a {@link ServiceException}
-	 * describing the error is fired. This service object is cached by the
-	 * Framework. While the context bundle's use count for the service object is
-	 * greater than zero, subsequent calls to get the services's service object
-	 * for the context bundle will return the cached service object.</li>
-	 * <li>The context bundle's use count for the service object is incremented
-	 * by one.</li>
+	 * describing the error is fired. The supplied service object is cached by
+	 * the Framework. While the context bundle's use count for the service is
+	 * greater than zero, subsequent calls to get the service object for the
+	 * context bundle will return the cached service object.</li>
+	 * <li>The context bundle's use count for the service is incremented by one.
+	 * </li>
 	 * <li>The service object for the service is returned.</li>
 	 * </ol>
 	 * 
@@ -810,25 +809,23 @@ public interface BundleContext extends BundleReference {
 	/**
 	 * Releases the service object for the service referenced by the specified
 	 * {@code ServiceReference} object. If the context bundle's use count for
-	 * the service object is zero, this method returns {@code false}. Otherwise,
-	 * the context bundle's use count for the service object is decremented by
-	 * one.
+	 * the service is zero, this method returns {@code false}. Otherwise, the
+	 * context bundle's use count for the service is decremented by one.
 	 * 
 	 * <p>
 	 * The service object must no longer be used and all references to it should
-	 * be destroyed when a bundle's use count for the service object drops to
-	 * zero.
+	 * be destroyed when a bundle's use count for the service drops to zero.
 	 * 
 	 * <p>
-	 * The following steps are required to unget the service object:
+	 * The following steps are required to release the service object:
 	 * <ol>
-	 * <li>If the context bundle's use count for the service object is zero or
-	 * the service has been unregistered, {@code false} is returned.</li>
-	 * <li>The context bundle's use count for the service object is decremented
-	 * by one.</li>
-	 * <li>If the context bundle's use count for the service object is currently
-	 * zero and the service was registered with a {@code ServiceFactory} object,
-	 * the
+	 * <li>If the context bundle's use count for the service is zero or the
+	 * service has been unregistered, {@code false} is returned.</li>
+	 * <li>The context bundle's use count for the service is decremented by one.
+	 * </li>
+	 * <li>If the context bundle's use count for the service is now zero and the
+	 * service has {@link Constants#SCOPE_BUNDLE bundle} or
+	 * {@link Constants#SCOPE_PROTOTYPE prototype} scope, the
 	 * {@link ServiceFactory#ungetService(Bundle, ServiceRegistration, Object)}
 	 * method is called to release the service object for the context bundle.</li>
 	 * <li>{@code true} is returned.</li>
@@ -836,8 +833,8 @@ public interface BundleContext extends BundleReference {
 	 * 
 	 * @param reference A reference to the service to be released.
 	 * @return {@code false} if the context bundle's use count for the service
-	 *         object is zero or if the service has been unregistered;
-	 *         {@code true} otherwise.
+	 *         is zero or if the service has been unregistered; {@code true}
+	 *         otherwise.
 	 * @throws IllegalStateException If this BundleContext is no longer valid.
 	 * @throws IllegalArgumentException If the specified
 	 *         {@code ServiceReference} was not created by the same framework

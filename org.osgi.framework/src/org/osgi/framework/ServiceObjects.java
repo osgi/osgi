@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,45 +44,45 @@ import org.osgi.annotation.versioning.ProviderType;
 public interface ServiceObjects<S> {
 	/**
 	 * Returns a service object for the {@link #getServiceReference()
-	 * referenced} service.
+	 * associated} service.
 	 * 
 	 * <p>
 	 * This {@code ServiceObjects} object can be used to obtain multiple service
-	 * objects for the referenced service if the service has
-	 * {@link Constants#SCOPE_PROTOTYPE prototype} scope. If the referenced
+	 * objects for the associated service if the service has
+	 * {@link Constants#SCOPE_PROTOTYPE prototype} scope. If the associated
 	 * service has {@link Constants#SCOPE_SINGLETON singleton} or
 	 * {@link Constants#SCOPE_BUNDLE bundle} scope, this method behaves the same
 	 * as calling the {@link BundleContext#getService(ServiceReference)} method
-	 * for the referenced service. That is, only one, use-counted service object
+	 * for the associated service. That is, only one, use-counted service object
 	 * is available from this {@link ServiceObjects} object.
 	 * 
 	 * <p>
-	 * This method will always return {@code null} when the referenced service
+	 * This method will always return {@code null} when the associated service
 	 * has been unregistered.
 	 * 
 	 * <p>
-	 * For a prototype scope service, the following steps are required to get
-	 * the service object:
+	 * For a prototype scope service, the following steps are required to obtain
+	 * a service object:
 	 * <ol>
-	 * <li>If the referenced service has been unregistered, {@code null} is
+	 * <li>If the associated service has been unregistered, {@code null} is
 	 * returned.</li>
 	 * <li>The
 	 * {@link PrototypeServiceFactory#getService(Bundle, ServiceRegistration)}
-	 * method is called to create a service object for the caller.</li>
+	 * method is called to supply a customized service object for the caller.</li>
 	 * <li>If the service object returned by the {@code PrototypeServiceFactory}
 	 * object is {@code null}, not an {@code instanceof} all the classes named
 	 * when the service was registered or the {@code PrototypeServiceFactory}
 	 * object throws an exception, {@code null} is returned and a Framework
 	 * event of type {@link FrameworkEvent#ERROR} containing a
 	 * {@link ServiceException} describing the error is fired.</li>
-	 * <li>The service object is returned.</li>
+	 * <li>The customized service object is returned.</li>
 	 * </ol>
 	 * 
-	 * @return A service object for the referenced service or {@code null} if
-	 *         the service is not registered, the service object returned by a
-	 *         {@code ServiceFactory} does not implement the classes under which
-	 *         it was registered or the {@code ServiceFactory} threw an
-	 *         exception.
+	 * @return A service object for the associated service or {@code null} if
+	 *         the service is not registered, the customized service object
+	 *         returned by a {@code ServiceFactory} does not implement the
+	 *         classes under which it was registered or the
+	 *         {@code ServiceFactory} threw an exception.
 	 * @throws IllegalStateException If the BundleContext used to create this
 	 *         {@code ServiceObjects} object is no longer valid.
 	 * @see #ungetService(Object)
@@ -91,23 +91,23 @@ public interface ServiceObjects<S> {
 
 	/**
 	 * Releases a service object for the {@link #getServiceReference()
-	 * referenced} service.
+	 * associated} service.
 	 * 
 	 * <p>
 	 * This {@code ServiceObjects} object can be used to obtain multiple service
-	 * objects for the referenced service if the service has
-	 * {@link Constants#SCOPE_PROTOTYPE prototype} scope. If the referenced
+	 * objects for the associated service if the service has
+	 * {@link Constants#SCOPE_PROTOTYPE prototype} scope. If the associated
 	 * service has {@link Constants#SCOPE_SINGLETON singleton} or
 	 * {@link Constants#SCOPE_BUNDLE bundle} scope, this method behaves the same
 	 * as calling the {@link BundleContext#ungetService(ServiceReference)}
-	 * method for the referenced service. That is, only one, use-counted service
+	 * method for the associated service. That is, only one, use-counted service
 	 * object is available from this {@link ServiceObjects} object.
 	 * 
 	 * <p>
 	 * For a prototype scope service, the following steps are required to
-	 * release the service object:
+	 * release a service object:
 	 * <ol>
-	 * <li>If the referenced service has been unregistered, this method returns
+	 * <li>If the associated service has been unregistered, this method returns
 	 * without doing anything.</li>
 	 * <li>The
 	 * {@link PrototypeServiceFactory#ungetService(Bundle, ServiceRegistration, Object)}
@@ -122,7 +122,7 @@ public interface ServiceObjects<S> {
 	 *        {@code ServiceObjects} object.
 	 * @throws IllegalStateException If the BundleContext used to create this
 	 *         {@code ServiceObjects} object is no longer valid.
-	 * @throws IllegalArgumentException If the specified service was not
+	 * @throws IllegalArgumentException If the specified service object was not
 	 *         provided by this {@code ServiceObjects} object.
 	 * @see #getService()
 	 */

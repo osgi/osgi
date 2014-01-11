@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,18 +20,19 @@ import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * A factory for {@link Constants#SCOPE_PROTOTYPE prototype scope} services. The
- * factory can provide multiple, unique service objects in the OSGi environment.
+ * factory can provide multiple, customized service objects in the OSGi
+ * environment.
  * 
  * <p>
  * When registering a service, a {@code PrototypeServiceFactory} object can be
  * used instead of a service object, so that the bundle developer can create a
- * unique service object for each caller that is using the service.
+ * customized service object for each caller that is using the service.
  * 
  * <p>
  * When a caller uses a {@link ServiceObjects} to
- * {@link ServiceObjects#getService() request} a service instance, the framework
+ * {@link ServiceObjects#getService() request} a service object, the framework
  * calls the {@link #getService(Bundle, ServiceRegistration) getService} method
- * to return a service object specifically for the requesting caller. The caller
+ * to return a service object customized for the requesting caller. The caller
  * can {@link ServiceObjects#ungetService(Object) release} the returned service
  * object and the framework will call the
  * {@link #ungetService(Bundle, ServiceRegistration, Object) ungetService}
@@ -42,17 +43,17 @@ import org.osgi.annotation.versioning.ConsumerType;
  * method to obtain a service object, the framework must act as if the service
  * has {@link Constants#SCOPE_BUNDLE bundle scope}. That is, the framework will
  * call the {@link #getService(Bundle, ServiceRegistration) getService} method
- * to obtain a bundle-scoped instance which will be cached and have a use count.
- * See {@link ServiceFactory}.
+ * to obtain a bundle-scoped service object which will be cached and have a use
+ * count. See {@link ServiceFactory}.
  * 
  * <p>
  * A bundle can use both {@link ServiceObjects} and
  * {@link BundleContext#getService(ServiceReference)} to obtain a service object
- * for a service. {@link ServiceObjects#getService()} will always return an
- * instance provided by a call to
+ * for a service. {@link ServiceObjects#getService()} will always return a
+ * service object provided by a call to
  * {@link #getService(Bundle, ServiceRegistration)} and
  * {@link BundleContext#getService(ServiceReference)} will always return the
- * bundle-scoped instance.
+ * bundle-scoped service object.
  * 
  * <p>
  * {@code PrototypeServiceFactory} objects are only used by the Framework and
@@ -74,7 +75,7 @@ public interface PrototypeServiceFactory<S> extends ServiceFactory<S> {
 	 * <p>
 	 * The Framework invokes this method for each caller requesting a service
 	 * object using {@link ServiceObjects#getService()}. The factory can then
-	 * return a specific service object for the caller.
+	 * return a customized service object for the caller.
 	 * 
 	 * <p>
 	 * The Framework must check that the returned service object is valid. If
@@ -88,7 +89,6 @@ public interface PrototypeServiceFactory<S> extends ServiceFactory<S> {
 	 * type {@link ServiceException#FACTORY_EXCEPTION} with the thrown exception
 	 * as the cause and {@code null} is returned to the caller.
 	 * 
-	 * 
 	 * @param bundle The bundle requesting the service.
 	 * @param registration The {@code ServiceRegistration} object for the
 	 *        requested service.
@@ -99,7 +99,7 @@ public interface PrototypeServiceFactory<S> extends ServiceFactory<S> {
 	public S getService(Bundle bundle, ServiceRegistration<S> registration);
 
 	/**
-	 * Releases a service object created for a caller.
+	 * Releases a service object customized for a caller.
 	 * 
 	 * <p>
 	 * The Framework invokes this method when a service has been released by a
