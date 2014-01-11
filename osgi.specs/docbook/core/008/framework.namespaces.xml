@@ -1355,4 +1355,19 @@ Bundle B:
       References</title>http://www.osgi.org/Specifications/Reference</bibliomixed>
     </bibliolist>
   </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Clarified that bundles may not specify an <code>osgi.ee</code>
+        capability.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <code>osgi.native</code> namespace.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
 </chapter>

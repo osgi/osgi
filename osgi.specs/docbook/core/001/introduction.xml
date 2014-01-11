@@ -774,4 +774,20 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
       Edition</title>http://docs.oracle.com/javase/specs/</bibliomixed>
     </bibliolist>
   </section>
+
+  <section>
+    <title>Changes</title>
+
+    <remark>BJH Need to update this list.</remark>
+
+    <itemizedlist>
+      <listitem>
+        <para>DTO</para>
+      </listitem>
+
+      <listitem>
+        <para>Package and Type annotations</para>
+      </listitem>
+    </itemizedlist>
+  </section>
 </chapter>

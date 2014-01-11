@@ -3875,4 +3875,31 @@ D: Export-Package: s</programlisting>
       Namespace</title>http://www.ietf.org/rfc/rfc4122.txt</bibliomixed>
     </bibliolist>
   </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Launching Properties is updated to include the Environment
+        Properties.</para>
+      </listitem>
+
+      <listitem>
+        <para>New Framework.init method to allow FrameworkListeners to be
+        specified to observe events during framework init.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added support for Extension Bundle Activators in framework
+        initialization.</para>
+      </listitem>
+
+      <listitem>
+        <para>Clarified that BundleContext may be observable as invalid during
+        delivery of UNREGISTERING event for services registered by the bundle
+        being stopped.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
 </chapter>

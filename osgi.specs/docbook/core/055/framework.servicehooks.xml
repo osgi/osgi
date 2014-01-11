@@ -964,4 +964,15 @@ public void removed( Collection lis ) {
   </section>
 
   <xi:include href="../../../generated/javadoc/docbook/org.osgi.framework.hooks.service.xml"/>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Clarified the relationship of service hooks to the system
+        bundle.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
 </chapter>

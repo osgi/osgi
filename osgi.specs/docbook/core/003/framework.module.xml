@@ -5472,4 +5472,23 @@ URL(String protocol, String host, String file)</programlisting>
       Toolkit</title>http://code.google.com/webtoolkit/</bibliomixed>
     </bibliolist>
   </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Clarified importing and exporting the same package.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added support for the new <code>osgi.native</code>
+        namespace.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added support for Extension Bundle Activators.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
 </chapter>

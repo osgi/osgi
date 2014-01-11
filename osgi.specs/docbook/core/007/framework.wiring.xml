@@ -892,4 +892,19 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       </listitem>
     </itemizedlist>
   </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Clarified <code>osgi.identity</code> capabilities and
+        requirements relationship to host bundle wirings.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added FrameworkWiring.findProviders method.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
 </chapter>
