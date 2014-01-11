@@ -1111,8 +1111,8 @@ attr:Long="       23      ",            // ok, because nummeric</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para>Element values in the list are separated by commas
-          (<code>',' \u002C</code>).</para>
+          <para>Element values in the list are separated by commas (<code>','
+          \u002C</code>).</para>
         </listitem>
 
         <listitem>
@@ -1121,9 +1121,9 @@ attr:Long="       23      ",            // ok, because nummeric</programlisting>
         </listitem>
 
         <listitem>
-          <para>Commas or reverse solidi (<code>'\' \u005C</code>)
-          that are part of an element value must be escaped by prefixing them
-          with a reverse solidus. In practice, this requires escaping with two
+          <para>Commas or reverse solidi (<code>'\' \u005C</code>) that are
+          part of an element value must be escaped by prefixing them with a
+          reverse solidus. In practice, this requires escaping with two
           reverse solidi because a reverse solidus must already be escaped in
           strings.</para>
         </listitem>
@@ -3514,10 +3514,10 @@ optional            ::= '*'</programlisting>
       </listitem>
     </itemizedlist>
 
-    <para>If a selection-filter attribute contains an invalid filter, then the bundle must 
-    fail to install with a Bundle Exception of type <code>NATIVECODE_ERROR</code>.
-    The following is a typical example of a native code declaration in a
-    bundle's manifest:</para>
+    <para>If a selection-filter attribute contains an invalid filter, then the
+    bundle must fail to install with a Bundle Exception of type
+    <code>NATIVECODE_ERROR</code>. The following is a typical example of a
+    native code declaration in a bundle's manifest:</para>
 
     <programlisting>Bundle-NativeCode: lib/http.dll ; lib/zlib.dll; <code>«</code>
         osname = Windows95 ; <code>«</code>
@@ -3594,55 +3594,55 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         processor = x86 , <code>«</code>
         *</programlisting>
 
-    <para>Frameworks must convert a Bundle-NativeCode header to a requirement in the 
-    <code>osgi.native</code> namespace when used in the Wiring API, see 
-    <xref linkend="framework.wiring"/>.  Each native code clause specified in a
-    Bundle-NativeCode header is converted into a filter component for the 
+    <para>Frameworks must convert a Bundle-NativeCode header to a requirement
+    in the <code>osgi.native</code> namespace when used in the Wiring API, see
+    <xref linkend="framework.wiring"/>. Each native code clause specified in a
+    Bundle-NativeCode header is converted into a filter component for the
     <code>osgi.native</code> requirement filter directive using the following
     architected matching attributes:</para>
 
     <itemizedlist>
       <listitem>
-        <para><code>osgi.native.osname</code> – Uses the approximate equals (~=) 
-        filter type to evaluate the value specified by the <code>osname</code>
-        Bundle-NativeCode attribute.</para>
+        <para><code>osgi.native.osname</code> – Uses the approximate equals
+        (~=) filter type to evaluate the value specified by the
+        <code>osname</code> Bundle-NativeCode attribute.</para>
       </listitem>
 
       <listitem>
-        <para><code>osgi.native.osversion</code> – Create a <code>VersionRange</code> using 
-        the value specified by the osversion Bundle-NativeCode attribute and 
-        then create a filter string out of the <code>VersionRange</code>.</para>
+        <para><code>osgi.native.osversion</code> – Create a
+        <code>VersionRange</code> using the value specified by the osversion
+        Bundle-NativeCode attribute and then create a filter string out of the
+        <code>VersionRange</code>.</para>
       </listitem>
 
       <listitem>
-        <para><code>osgi.native.processor</code> – Uses the approximate equals (~=) 
-        filter type to evaluate the value specified by the <code>processor</code> 
-        Bundle-NativeCode attribute.</para>
+        <para><code>osgi.native.processor</code> – Uses the approximate equals
+        (~=) filter type to evaluate the value specified by the
+        <code>processor</code> Bundle-NativeCode attribute.</para>
       </listitem>
 
       <listitem>
-        <para><code>osgi.native.language</code> – Uses the approximate equals (~=) 
-        filter type to evaluate the value specified by the <code>language</code> 
-        Bundle-NativeCode attribute.</para>
+        <para><code>osgi.native.language</code> – Uses the approximate equals
+        (~=) filter type to evaluate the value specified by the
+        <code>language</code> Bundle-NativeCode attribute.</para>
       </listitem>
     </itemizedlist>
 
-    <para>In cases where the same Bundle-NativeCode attribute is specified multiple 
-    times within the same clause then the filter components for each value for that 
-    attribute are ORed together. For example, if osname attribute is specified
-    as both &quot;Windows95&quot; and &quot;Windows7&quot; then the resulting 
-    filter will contain:
-    </para>
+    <para>In cases where the same Bundle-NativeCode attribute is specified
+    multiple times within the same clause then the filter components for each
+    value for that attribute are ORed together. For example, if osname
+    attribute is specified as both "Windows95" and "Windows7" then the
+    resulting filter will contain:</para>
 
     <programlisting>(|
         (osgi.native.osname~=Windows95)
         (osgi.native.osname~=Windows7)
 )</programlisting>
 
-    <para>If the <code>selection-filter</code> Bundle-NativeCode attribute is 
-    specified then the specified filter is included as a component of the native code 
-    clauses AND filter type. Consider the following Bundle-NativeCode header 
-    which contains a single clause:</para>
+    <para>If the <code>selection-filter</code> Bundle-NativeCode attribute is
+    specified then the specified filter is included as a component of the
+    native code clauses AND filter type. Consider the following
+    Bundle-NativeCode header which contains a single clause:</para>
 
     <programlisting>Bundle-NativeCode: 
       lib/http.dll; lib/zlib.dll;
@@ -3654,11 +3654,12 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
       language=en;
       language=se</programlisting>
 
-    <para>This clause would get translated into the following AND filter type:</para>    
+    <para>This clause would get translated into the following AND filter
+    type:</para>
 
     <programlisting>Require-Capability: 
       osgi.native;
-      filter:=&quot;
+      filter:="
         (&amp;
           (|
             (osgi.native.osname~=Windows95)
@@ -3671,15 +3672,17 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
             (osgi.native.language~=se)
           )
           (com.acme.windowing=win32)
-        )&quot;</programlisting>
+        )"</programlisting>
 
-    <para>The Bundle-NativeCode header may specify multiple clauses, each having their own 
-    list of native code paths and set of matching attributes. Instead of using a separate 
-    <code>osgi.native</code> requirement for each Bundle-NativeCode clause, the complete 
-    Bundle-NativeCode header is specified as a single <code>osgi.native</code> requirement. 
-    This is done by using an OR filter type using all of the individual Bundle-NativeCode 
-    clause filter components (as specified above) as components of a single filter directive. 
-    Consider the following Bundle-NativeCode header which contains three clauses:</para>
+    <para>The Bundle-NativeCode header may specify multiple clauses, each
+    having their own list of native code paths and set of matching attributes.
+    Instead of using a separate <code>osgi.native</code> requirement for each
+    Bundle-NativeCode clause, the complete Bundle-NativeCode header is
+    specified as a single <code>osgi.native</code> requirement. This is done
+    by using an OR filter type using all of the individual Bundle-NativeCode
+    clause filter components (as specified above) as components of a single
+    filter directive. Consider the following Bundle-NativeCode header which
+    contains three clauses:</para>
 
     <programlisting>Bundle-NativeCode: 
       lib/http.dll; lib/zlib.dll;
@@ -3687,7 +3690,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         osname=Windows98; 
         osname=WindowsNT;
         processor=x86;
-        selection-filter = &quot;(com.acme.windowing=win32)&quot;; 
+        selection-filter = "(com.acme.windowing=win32)"; 
         language=en;
         language=se,
       lib/solaris/libhttp.so;
@@ -3697,11 +3700,12 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
       lib/linux/libhttp.so;
         osname=Linux;
         processor=mips;
-        selection-filter=&quot;(com.acme.windowing=gtk)&quot;</programlisting>
+        selection-filter="(com.acme.windowing=gtk)"</programlisting>
 
-    <para>This Bundle-NativeCode header would get translated into the following osgi.native filter directive:</para>
+    <para>This Bundle-NativeCode header would get translated into the
+    following osgi.native filter directive:</para>
 
-<programlisting>(|
+    <programlisting>(|
   (&amp;
     (|
       (osgi.native.osname~=Windows95)
@@ -3729,10 +3733,11 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
   )
 )</programlisting>
 
-    <para>If the optional '*' is specified at the end of the Bundle-NativeCode manifest header,
-    then the native code for the bundle is considered to be optional.  When the Framework 
-    converts a Bundle-NativeCode header into an <code>osgi.native</code> requirement which is 
-    designated as optional then the requirement resolution directive must be set to
+    <para>If the optional '*' is specified at the end of the Bundle-NativeCode
+    manifest header, then the native code for the bundle is considered to be
+    optional. When the Framework converts a Bundle-NativeCode header into an
+    <code>osgi.native</code> requirement which is designated as optional then
+    the requirement resolution directive must be set to
     <code>optional</code></para>
 
     <section xml:id="framework.module.nativecodealgorithm">
@@ -3822,18 +3827,18 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         </listitem>
       </orderedlist>
 
-     <para>If a native code library in a selected native code clause cannot 
-      be found within the bundle then the bundle is still allowed to resolve. 
-      A missing native code library will result in an error being thrown at 
-      runtime when the bundle attempts to load the native code 
-      (e.g. by invoking the method <code>System.loadLibrary</code>).</para>
+      <para>If a native code library in a selected native code clause cannot
+      be found within the bundle then the bundle is still allowed to resolve.
+      A missing native code library will result in an error being thrown at
+      runtime when the bundle attempts to load the native code (e.g. by
+      invoking the method <code>System.loadLibrary</code>).</para>
 
-      <para>If the selected clause contains multiple libraries with the same base file name
-      then only the lexically left most library with that base file name will
-      be used. For example, if the selected clause contains the libraries
-      <code>lib1/http.dll; lib2/http.dll; lib3/foo.dll; a/b/c/http.dll</code>
-      then only <code>http.dll</code> in <code>lib1</code> and
-      <code>foo.dll</code> will be used.</para>
+      <para>If the selected clause contains multiple libraries with the same
+      base file name then only the lexically left most library with that base
+      file name will be used. For example, if the selected clause contains the
+      libraries <code>lib1/http.dll; lib2/http.dll; lib3/foo.dll;
+      a/b/c/http.dll</code> then only <code>http.dll</code> in
+      <code>lib1</code> and <code>foo.dll</code> will be used.</para>
 
       <para>If a selection filter is evaluated and its syntax is invalid, then
       the bundle must fail to resolve. If a selection filter is not evaluated
@@ -4932,64 +4937,62 @@ bundle-description  ::= symbolic-name
       <title>Framework Extension Activator</title>
 
       <para>A framework extension may hook into the Framework initialization
-      and shutdown process by specifying an Extension Bundle Activator.  The 
-      <code><xref linkend="org.osgi.framework.BundleActivator"
-      xrefstyle="hyperlink"/></code> interface defines methods that the
-      Framework invokes when the Framework is initialized and
-      shutdown.</para>
+      and shutdown process by specifying an Extension Bundle Activator. The
+      <xref linkend="org.osgi.framework.BundleActivator"
+      xrefstyle="hyperlink"/> interface defines methods that the Framework
+      invokes when the Framework is initialized and shutdown.</para>
 
       <para>To inform the OSGi environment of a fully qualified class name
       serving as its Extension Bundle Activator, a framework extension
-      developer must declare an <code>ExtensionBundle-Activator</code> manifest
-      header in the framework extension bundle's manifest file.  The following
-      is an example of an ExtensionBundle-Activator:</para>
+      developer must declare an <code>ExtensionBundle-Activator</code>
+      manifest header in the framework extension bundle's manifest file. The
+      following is an example of an ExtensionBundle-Activator:</para>
 
       <programlisting>ExtensionBundle-Activator: com.acme.Activator</programlisting>
 
-      <para>The class acting as an Extension Bundle Activator must implement 
+      <para>The class acting as an Extension Bundle Activator must implement
       the <code>BundleActivator</code> interface, be declared public, and have
       a public default constructor so an instance of it may be created with
       <code>Class.newInstance</code>.</para>
 
       <para>Supplying an Extension Bundle Activator is optional and only valid
-      for Extension Bundles of type <code>framework</code>.  For normal Bundles
-      and Fragments the <code>ExtensionBundle-Activator</code> is ignored.</para>
+      for Extension Bundles of type <code>framework</code>. For normal Bundles
+      and Fragments the <code>ExtensionBundle-Activator</code> is
+      ignored.</para>
 
       <section>
         <title>Update and Uninstall</title>
 
-        <para>Unlike normal bundles, updating or uninstalling an extension 
+        <para>Unlike normal bundles, updating or uninstalling an extension
         bundle does not take effect at runtime until the Framework is shutdown
-        and restarted.  The old content of the extension bundle must remain
-        attached to the system bundle until the framework is shutdown.  This
+        and restarted. The old content of the extension bundle must remain
+        attached to the system bundle until the framework is shutdown. This
         extends to the Extension Bundle Activators that have had the start
-        method called.  All started Extension Bundle Activators must not have
+        method called. All started Extension Bundle Activators must not have
         the stop method called until the Framework is shutdown.</para>
-
       </section>
 
       <section>
         <title>Installing</title>
-      
-        <para>When a framework extension is installed a Framework may allow the
-        extension to become resolved dynamically, without a Framework restart.
-        If a framework extension is allowed to be installed and resolve
-        dynamically after Framework initialization, then the Extension Bundle
-        Activator start method must be called as soon as the extension bundle
-        is resolved.  This must happen before the resolved bundle event is
-        fired for the extension bundle.</para>
 
+        <para>When a framework extension is installed a Framework may allow
+        the extension to become resolved dynamically, without a Framework
+        restart. If a framework extension is allowed to be installed and
+        resolve dynamically after Framework initialization, then the Extension
+        Bundle Activator start method must be called as soon as the extension
+        bundle is resolved. This must happen before the resolved bundle event
+        is fired for the extension bundle.</para>
       </section>
 
       <section>
         <title>Framework Initialization and Shutdown</title>
 
         <para>An Extension Bundle Activator allows a framework extension to
-        hook into the Framework initialization and shutdown process.
-        <xref linkend="framework.lifecycle.initializing"/> describes how the 
+        hook into the Framework initialization and shutdown process. <xref
+        linkend="framework.lifecycle.initializing"/> describes how the
         <code>start</code> method for Extension Bundle Activators are called
-        during Framework initialization.
-        <xref linkend="framework.lifecycle.stopping"/> describes how the
+        during Framework initialization. <xref
+        linkend="framework.lifecycle.stopping"/> describes how the
         <code>stop</code> method for Extension Bundle Activators are called
         during Framework shutdown.</para>
       </section>

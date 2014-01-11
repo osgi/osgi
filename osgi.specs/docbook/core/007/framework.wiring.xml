@@ -671,11 +671,13 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
       <listitem>
         <para><xref
         linkend="org.osgi.framework.wiring.FrameworkWiring.findProviders-Requirement-"
-        xrefstyle="hyperlink"/> - The find providers method returns capabilities
-        available in the framework that match the given requirement.  This method
-        can be used to search for capabilities provided by bundles in the framework.
-        For example, an exported package with a specific package name.</para>
+        xrefstyle="hyperlink"/> - The find providers method returns
+        capabilities available in the framework that match the given
+        requirement. This method can be used to search for capabilities
+        provided by bundles in the framework. For example, an exported package
+        with a specific package name.</para>
       </listitem>
+
       <listitem>
         <para><xref
         linkend="org.osgi.framework.wiring.FrameworkWiring.getDependencyClosure-Collection-"

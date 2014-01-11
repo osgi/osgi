@@ -1231,8 +1231,8 @@
         </listitem>
 
         <listitem>
-          <para>Any installed bundle is in the <code>INSTALLED</code>
-          or <code>RESOLVED</code> state</para>
+          <para>Any installed bundle is in the <code>INSTALLED</code> or
+          <code>RESOLVED</code> state</para>
         </listitem>
 
         <listitem>
@@ -1260,15 +1260,15 @@
       <section>
         <title>Start Extension Activators</title>
 
-        <para>The Extension Bundle Activator <code>start</code> method is called 
-        to inform the framework extension that the <code>Framework</code> is
-        initializing, see <xref
+        <para>The Extension Bundle Activator <code>start</code> method is
+        called to inform the framework extension that the
+        <code>Framework</code> is initializing, see <xref
         linkend="framework.module.extensionActivator"/>.</para>
 
         <para>During the initialization process a framework must attempt to
-        resolve all installed Framework Extensions.  All resolve operations
+        resolve all installed Framework Extensions. All resolve operations
         that occur during initialization must be scoped to only include the
-        system bundle and the extension bundles.  This is necessary to avoid
+        system bundle and the extension bundles. This is necessary to avoid
         resolution operations which change the wiring of normal bundles before
         all of the Extension Bundle Activators have been called.</para>
 
@@ -1289,11 +1289,11 @@
         <para>The <code>Framework</code> <xref
         linkend="org.osgi.framework.launch.Framework.init-FrameworkListener...-"
         xrefstyle="hyperlink"/> method may be called with a list of framework
-        listeners.  Any framework events broadcast during the initialization
+        listeners. Any framework events broadcast during the initialization
         process must be delivered to the specified framework listeners in the
         order they are specified before returning from the <code>init</code>
-        method.  After returning from <code>init</code> the specified listeners
-        are no longer notified of framework events.  This allows a launcher to
+        method. After returning from <code>init</code> the specified listeners
+        are no longer notified of framework events. This allows a launcher to
         initialize a <code>Framework</code> with an init framework listener in
         order to detect errors while calling framework extension
         activators.</para>
@@ -1358,28 +1358,29 @@
       <section xml:id="framework.lifecycle.stopExtension">
         <title>Stop Extension Activators</title>
 
-        <para>The Extension Bundle Activator <code>stop</code> method is called 
-        to inform the framework extension that the <code>Framework</code> is
-        shutting down, see <xref 
-        linkend="framework.module.extensionActivator"/>. Before disabling event
-        handling during the <code>Framework</code> shutdown process the
+        <para>The Extension Bundle Activator <code>stop</code> method is
+        called to inform the framework extension that the
+        <code>Framework</code> is shutting down, see <xref
+        linkend="framework.module.extensionActivator"/>. Before disabling
+        event handling during the <code>Framework</code> shutdown process the
         framework must call the <code>stop</code> method for each Extension
-        Bundle Activator that was started successfully. While calling Extension
-        Bundle Activator <code>stop</code> methods the framework must be in the
-        <code>STOPPING</code> state and have a valid bundle context. Any
-        exception thrown by an Extension Bundle Activator <code>stop</code>
-        method must be wrapped in a <code>BundleException</code> and broadcast
-        as an <xref linkend="org.osgi.framework.FrameworkEvent.ERROR"
+        Bundle Activator that was started successfully. While calling
+        Extension Bundle Activator <code>stop</code> methods the framework
+        must be in the <code>STOPPING</code> state and have a valid bundle
+        context. Any exception thrown by an Extension Bundle Activator
+        <code>stop</code> method must be wrapped in a
+        <code>BundleException</code> and broadcast as an <xref
+        linkend="org.osgi.framework.FrameworkEvent.ERROR"
         xrefstyle="hyperlink"/>.</para>
 
         <para>The framework must guarantee that if the <code>start</code>
         method has executed successfully for an Extension Bundle Activator,
-        that same <code>BundleActivator</code> object must be called with 
-        its <code>stop</code> method when the framework is shutdown. After
-        calling the <code>stop</code> method, that particular
-        <code>BundleActivator</code> object must never be used again. Extension
-        Bundle Activators that threw an exception during <code>start</code>
-        must not be called on shutdown.</para>
+        that same <code>BundleActivator</code> object must be called with its
+        <code>stop</code> method when the framework is shutdown. After calling
+        the <code>stop</code> method, that particular
+        <code>BundleActivator</code> object must never be used again.
+        Extension Bundle Activators that threw an exception during
+        <code>start</code> must not be called on shutdown.</para>
       </section>
     </section>
 
@@ -1730,17 +1731,17 @@ if ( it.hasNext() ) {
 
       <itemizedlist>
         <listitem>
-          <para><code><xref
+          <para><xref
           linkend="org.osgi.framework.BundleContext.installBundle-String-"
-          xrefstyle="hyperlink"/></code> - Installs a bundle from the
-          specified location string (which should be a URL).</para>
+          xrefstyle="hyperlink"/> - Installs a bundle from the specified
+          location string (which should be a URL).</para>
         </listitem>
 
         <listitem>
-          <para><code><xref
+          <para><xref
           linkend="org.osgi.framework.BundleContext.installBundle-String-InputStream-"
-          xrefstyle="hyperlink"/></code> - Installs a bundle from the
-          specified <code>InputStream</code> object.</para>
+          xrefstyle="hyperlink"/> - Installs a bundle from the specified
+          <code>InputStream</code> object.</para>
         </listitem>
       </itemizedlist>
 
@@ -1866,21 +1867,20 @@ if ( it.hasNext() ) {
         </listitem>
 
         <listitem>
-          <para><code><xref
-          linkend="org.osgi.framework.Bundle.START_TRANSIENT"
-          xrefstyle="hyperlink"/></code> - Identical to 0 in behavior,
-          however, the autostart setting must <emphasis>not</emphasis> be
-          altered. If the bundle can not be started, for example, the bundle
-          is not ready, then a Bundle Exception must be thrown.</para>
+          <para><xref linkend="org.osgi.framework.Bundle.START_TRANSIENT"
+          xrefstyle="hyperlink"/> - Identical to 0 in behavior, however, the
+          autostart setting must <emphasis>not</emphasis> be altered. If the
+          bundle can not be started, for example, the bundle is not ready,
+          then a Bundle Exception must be thrown.</para>
         </listitem>
 
         <listitem>
-          <para><code><xref
+          <para><xref
           linkend="org.osgi.framework.Bundle.START_ACTIVATION_POLICY"
-          xrefstyle="hyperlink"/></code> - Start the bundle using the
-          activation policy declared in the manifest's Bundle-ActivationPolicy
-          header and set the autostart setting to <emphasis>Started with
-          declared activation</emphasis>.</para>
+          xrefstyle="hyperlink"/> - Start the bundle using the activation
+          policy declared in the manifest's Bundle-ActivationPolicy header and
+          set the autostart setting to <emphasis>Started with declared
+          activation</emphasis>.</para>
         </listitem>
 
         <listitem>
@@ -1903,9 +1903,8 @@ if ( it.hasNext() ) {
       not be in either of these states and the <code>stop</code> method will
       not be called for this Bundle Activator instance.</para>
 
-      <para>The <code><xref linkend="org.osgi.framework.Bundle.start--"
-      xrefstyle="hyperlink"/></code> method calls
-      <code>start(0)</code>.</para>
+      <para>The <xref linkend="org.osgi.framework.Bundle.start--"
+      xrefstyle="hyperlink"/> method calls <code>start(0)</code>.</para>
 
       <para>The optional Start Level API influences the actual order of
       starting and stopping of bundles. See <xref
@@ -1918,9 +1917,9 @@ if ( it.hasNext() ) {
       <title>Activation</title>
 
       <para>A bundle is activated by calling its Bundle Activator object, if
-      one exists. The <code><xref linkend="org.osgi.framework.BundleActivator"
-      xrefstyle="hyperlink"/></code> interface defines methods that the
-      Framework invokes when it starts and stops the bundle.</para>
+      one exists. The <xref linkend="org.osgi.framework.BundleActivator"
+      xrefstyle="hyperlink"/> interface defines methods that the Framework
+      invokes when it starts and stops the bundle.</para>
 
       <para>To inform the OSGi environment of the fully qualified class name
       serving as its Bundle Activator, a bundle developer must declare a
@@ -1950,11 +1949,11 @@ if ( it.hasNext() ) {
 
       <itemizedlist>
         <listitem>
-          <para><code><xref
+          <para><xref
           linkend="org.osgi.framework.BundleActivator.start-BundleContext-"
-          xrefstyle="hyperlink"/></code> - This method can allocate resources
-          that a bundle needs, start threads, register services, and more. If
-          this method does not register any services, the bundle can register
+          xrefstyle="hyperlink"/> - This method can allocate resources that a
+          bundle needs, start threads, register services, and more. If this
+          method does not register any services, the bundle can register
           services it needs later: for example, in a callback or an external
           event, as long as it is in the <code>ACTIVE</code> state. If the
           <code>start(BundleContext)</code> method throws an exception, the
@@ -1967,16 +1966,16 @@ if ( it.hasNext() ) {
         </listitem>
 
         <listitem>
-          <para><code><xref
+          <para><xref
           linkend="org.osgi.framework.BundleActivator.stop-BundleContext-"
-          xrefstyle="hyperlink"/></code> - This method must undo all the
-          actions of the <code>BundleActivator.start(BundleContext)</code>
-          method. However, it is unnecessary to unregister services or
-          Framework listeners, because they must be cleaned up by the
-          Framework anyway. This method is only called when the bundle has
-          reached the <code>ACTIVE</code> state. That is, when the start
-          method has thrown exception, the <code>stop</code> method is never
-          called for the same instance.</para>
+          xrefstyle="hyperlink"/> - This method must undo all the actions of
+          the <code>BundleActivator.start(BundleContext)</code> method.
+          However, it is unnecessary to unregister services or Framework
+          listeners, because they must be cleaned up by the Framework anyway.
+          This method is only called when the bundle has reached the
+          <code>ACTIVE</code> state. That is, when the start method has thrown
+          exception, the <code>stop</code> method is never called for the same
+          instance.</para>
         </listitem>
       </itemizedlist>
 
@@ -2030,15 +2029,15 @@ policy ::= 'lazy'</programlisting>
           </listitem>
 
           <listitem>
-            <para>The bundle state is moved to the <code><xref
+            <para>The bundle state is moved to the <xref
             linkend="org.osgi.framework.Bundle.STARTING"
-            xrefstyle="hyperlink"/></code> state.</para>
+            xrefstyle="hyperlink"/> state.</para>
           </listitem>
 
           <listitem>
-            <para>The <code><xref
+            <para>The <xref
             linkend="org.osgi.framework.BundleEvent.LAZY_ACTIVATION"
-            xrefstyle="hyperlink"/></code> event is fired.</para>
+            xrefstyle="hyperlink"/> event is fired.</para>
           </listitem>
 
           <listitem>
@@ -2047,9 +2046,9 @@ policy ::= 'lazy'</programlisting>
           </listitem>
 
           <listitem>
-            <para>The normal <code><xref
+            <para>The normal <xref
             linkend="org.osgi.framework.BundleEvent.STARTING"
-            xrefstyle="hyperlink"/></code> event is fired.</para>
+            xrefstyle="hyperlink"/> event is fired.</para>
           </listitem>
 
           <listitem>
@@ -2057,15 +2056,14 @@ policy ::= 'lazy'</programlisting>
           </listitem>
 
           <listitem>
-            <para>The bundle state is moved to <code><xref
+            <para>The bundle state is moved to <xref
             linkend="org.osgi.framework.Bundle.ACTIVE"
-            xrefstyle="hyperlink"/></code>.</para>
+            xrefstyle="hyperlink"/>.</para>
           </listitem>
 
           <listitem>
-            <para>The <code><xref
-            linkend="org.osgi.framework.BundleEvent.STARTED"
-            xrefstyle="hyperlink"/></code> event is fired.</para>
+            <para>The <xref linkend="org.osgi.framework.BundleEvent.STARTED"
+            xrefstyle="hyperlink"/> event is fired.</para>
           </listitem>
         </itemizedlist>
 
@@ -2180,8 +2178,8 @@ policy ::= 'lazy'</programlisting>
         </listitem>
 
         <listitem>
-          <para><code><xref linkend="org.osgi.framework.Bundle.STOP_TRANSIENT"
-          xrefstyle="hyperlink"/></code> - If the bundle was activated, then
+          <para><xref linkend="org.osgi.framework.Bundle.STOP_TRANSIENT"
+          xrefstyle="hyperlink"/> - If the bundle was activated, then
           deactivate the bundle. Does not alter the autostart setting for this
           bundle.</para>
         </listitem>
@@ -2240,9 +2238,8 @@ policy ::= 'lazy'</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code><xref linkend="org.osgi.framework.Bundle.update--"
-          xrefstyle="hyperlink"/></code> - This method updates a
-          bundle.</para>
+          <para><xref linkend="org.osgi.framework.Bundle.update--"
+          xrefstyle="hyperlink"/> - This method updates a bundle.</para>
         </listitem>
 
         <listitem>
@@ -2252,14 +2249,17 @@ policy ::= 'lazy'</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>The update process supports migration from one revision of a bundle
-      to a newer revision of the same bundle. The capabilities provided by the new
-      revision must be immediately available to the Framework. If the old bundle revision has 
-      <xref linkend="org.osgi.framework.wiring.BundleWiring.isInUse--" xrefstyle="hyperlink"/>
-      bundle wiring then all capabilities provided by the old bundle wiring must remain
-      available for existing bundles and future resolves until the bundle is refreshed,
-      see <xref linkend="framework.wiring.refreshing"/>, or the Framework is
-      restarted.  Otherwise the capabilities provided by the old revision must be removed.</para>
+      <para>The update process supports migration from one revision of a
+      bundle to a newer revision of the same bundle. The capabilities provided
+      by the new revision must be immediately available to the Framework. If
+      the old bundle revision has <xref
+      linkend="org.osgi.framework.wiring.BundleWiring.isInUse--"
+      xrefstyle="hyperlink"/> bundle wiring then all capabilities provided by
+      the old bundle wiring must remain available for existing bundles and
+      future resolves until the bundle is refreshed, see <xref
+      linkend="framework.wiring.refreshing"/>, or the Framework is restarted.
+      Otherwise the capabilities provided by the old revision must be
+      removed.</para>
 
       <para>After the update operation is complete, the framework must attempt
       to move the bundle to the same state as it was before the operation
@@ -2286,14 +2286,14 @@ policy ::= 'lazy'</programlisting>
       uninstall the bundle from the persistent storage of the
       Framework.</para>
 
-      <para>If the uninstalled bundle has
-      one or more revisions with 
-      <xref linkend="org.osgi.framework.wiring.BundleWiring.isInUse--" xrefstyle="hyperlink"/>
-      bundle wirings then all capabilities provided by the old in use bundle wirings must remain
-      available for existing bundles and future resolves until the bundle is refreshed,
-      see <xref linkend="framework.wiring.refreshing"/>, or the Framework is
-      restarted.  Otherwise the capabilities provided by the old revision must be removed.
-      </para>
+      <para>If the uninstalled bundle has one or more revisions with <xref
+      linkend="org.osgi.framework.wiring.BundleWiring.isInUse--"
+      xrefstyle="hyperlink"/> bundle wirings then all capabilities provided by
+      the old in use bundle wirings must remain available for existing bundles
+      and future resolves until the bundle is refreshed, see <xref
+      linkend="framework.wiring.refreshing"/>, or the Framework is restarted.
+      Otherwise the capabilities provided by the old revision must be
+      removed.</para>
     </section>
 
     <section>
@@ -2301,20 +2301,19 @@ policy ::= 'lazy'</programlisting>
 
       <para>The Bundle object provides a convenient way to detect changes in a
       bundle. The Framework must keep the time that a bundle is changed by any
-      of the life cycle operations. The <code><xref
+      of the life cycle operations. The <xref
       linkend="org.osgi.framework.Bundle.getLastModified--"
-      xrefstyle="hyperlink"/></code> method will return the last time the
-      bundle was installed, updated, or uninstalled. This last modified time
-      must be stored persistently.</para>
+      xrefstyle="hyperlink"/> method will return the last time the bundle was
+      installed, updated, or uninstalled. This last modified time must be
+      stored persistently.</para>
 
       <para>The method must return the number of milliseconds since midnight
       Jan. 1, 1970 UTC with the condition that a change must always result in
       a higher value than the previous last modified time of any
       bundle.</para>
 
-      <para>The <code><xref
-      linkend="org.osgi.framework.Bundle.getLastModified--"
-      xrefstyle="hyperlink"/></code> is very useful when a bundle is caching
+      <para>The <xref linkend="org.osgi.framework.Bundle.getLastModified--"
+      xrefstyle="hyperlink"/> is very useful when a bundle is caching
       resources from another bundle and needs to refresh the cache when the
       bundle changes. This life cycle change of the target bundle can happen
       while the caching bundle is not active. The last modified time is
@@ -2330,21 +2329,19 @@ policy ::= 'lazy'</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code><xref linkend="org.osgi.framework.Bundle.getHeaders--"
-          xrefstyle="hyperlink"/></code> - Returns a <code>Dictionary</code>
-          object that contains the bundle's manifest headers and values as
-          key/value pairs. The values returned are localized according to the
-          default locale returned by
-          <code>java.util.Locale.getDefault</code>.</para>
+          <para><xref linkend="org.osgi.framework.Bundle.getHeaders--"
+          xrefstyle="hyperlink"/> - Returns a <code>Dictionary</code> object
+          that contains the bundle's manifest headers and values as key/value
+          pairs. The values returned are localized according to the default
+          locale returned by <code>java.util.Locale.getDefault</code>.</para>
         </listitem>
 
         <listitem>
-          <para><code><xref
-          linkend="org.osgi.framework.Bundle.getHeaders-String-"
-          xrefstyle="hyperlink"/></code> - Returns a <code>Dictionary</code>
-          object that contains the bundle's manifest headers and values as
-          key/value pairs. The returned values are localized using the
-          specified locale. The locale may take the following values:</para>
+          <para><xref linkend="org.osgi.framework.Bundle.getHeaders-String-"
+          xrefstyle="hyperlink"/> - Returns a <code>Dictionary</code> object
+          that contains the bundle's manifest headers and values as key/value
+          pairs. The returned values are localized using the specified locale.
+          The locale may take the following values:</para>
 
           <itemizedlist>
             <listitem>
@@ -2396,10 +2393,10 @@ policy ::= 'lazy'</programlisting>
       <title>Loading Classes</title>
 
       <para>In certain cases, it is necessary to load classes as if they were
-      loaded from inside the bundle. The <code><xref
+      loaded from inside the bundle. The <xref
       linkend="org.osgi.framework.Bundle.loadClass-String-"
-      xrefstyle="hyperlink"/></code> method gives access to the bundle class
-      loader. This method can be used to:</para>
+      xrefstyle="hyperlink"/> method gives access to the bundle class loader.
+      This method can be used to:</para>
 
       <itemizedlist>
         <listitem>
@@ -2892,26 +2889,23 @@ D: Export-Package: s</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code><xref
-          linkend="org.osgi.framework.BundleContext.getBundle--"
-          xrefstyle="hyperlink"/></code> - Returns the single
-          <code>Bundle</code> object associated with the
-          <code>BundleContext</code> object.</para>
+          <para><xref linkend="org.osgi.framework.BundleContext.getBundle--"
+          xrefstyle="hyperlink"/> - Returns the single <code>Bundle</code>
+          object associated with the <code>BundleContext</code> object.</para>
         </listitem>
 
         <listitem>
-          <para><code><xref
-          linkend="org.osgi.framework.BundleContext.getBundles--"
-          xrefstyle="hyperlink"/></code> - Returns an array of the bundles
-          currently installed in the Framework.</para>
+          <para><xref linkend="org.osgi.framework.BundleContext.getBundles--"
+          xrefstyle="hyperlink"/> - Returns an array of the bundles currently
+          installed in the Framework.</para>
         </listitem>
 
         <listitem>
-          <para><code><xref
+          <para><xref
           linkend="org.osgi.framework.BundleContext.getBundle-long-"
-          xrefstyle="hyperlink"/></code> - Returns the <code>Bundle</code>
-          object specified by the unique identifier, or <code>null</code> if
-          no matching bundle is found.</para>
+          xrefstyle="hyperlink"/> - Returns the <code>Bundle</code> object
+          specified by the unique identifier, or <code>null</code> if no
+          matching bundle is found.</para>
         </listitem>
       </itemizedlist>
 
@@ -3216,8 +3210,8 @@ D: Export-Package: s</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para><code><xref linkend="org.osgi.framework.BundleEvent"
-        xrefstyle="hyperlink"/></code> - Reports changes in the life cycle of
+        <para><xref linkend="org.osgi.framework.BundleEvent"
+        xrefstyle="hyperlink"/> - Reports changes in the life cycle of
         bundles.</para>
       </listitem>
 
@@ -3243,8 +3237,8 @@ D: Export-Package: s</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code><xref linkend="org.osgi.framework.BundleListener"
-          xrefstyle="hyperlink"/></code> and <xref
+          <para><xref linkend="org.osgi.framework.BundleListener"
+          xrefstyle="hyperlink"/> and <xref
           linkend="org.osgi.framework.SynchronousBundleListener"
           xrefstyle="hyperlink"/> - Called with an event of type
           <code>BundleEvent</code> when a bundle's life cycle information has
@@ -3347,8 +3341,8 @@ D: Export-Package: s</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code><xref linkend="org.osgi.framework.FrameworkListener"
-          xrefstyle="hyperlink"/></code> - Called with an event of type
+          <para><xref linkend="org.osgi.framework.FrameworkListener"
+          xrefstyle="hyperlink"/> - Called with an event of type
           <code>FrameworkEvent</code>. Framework events are of type:</para>
 
           <itemizedlist>
