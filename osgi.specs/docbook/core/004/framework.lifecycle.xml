@@ -2270,8 +2270,8 @@ policy ::= 'lazy'</programlisting>
       <para>An updater of a bundle must have
       <code>AdminPermission[&lt;bundle&gt;,LIFECYCLE]</code> for both the
       installed bundle as well as the new bundle. The parameters of
-      <code>AdminPermission</code> are explained in <code><xref
-      linkend="framework.lifecycle.adminpermission"/></code>.</para>
+      <code>AdminPermission</code> are explained in <xref
+      linkend="framework.lifecycle.adminpermission"/>.</para>
     </section>
 
     <section>
