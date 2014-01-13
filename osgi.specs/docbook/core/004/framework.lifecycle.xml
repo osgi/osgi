@@ -2370,8 +2370,8 @@ D: Export-Package: s</programlisting>
               <entry><code>org.osgi.framework.version</code></entry>
 
               <entry><para>The specification version of the Framework, must be
-              <code><xref endterm="org.osgi.framework-version"
-              linkend="org.osgi.framework"/></code> for this
+              <xref endterm="org.osgi.framework-version.number"
+              linkend="org.osgi.framework"/> for this
               specification.</para></entry>
             </row>
 

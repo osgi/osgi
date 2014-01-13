@@ -74,11 +74,25 @@ version="1.1">
         </xsl:element>
 
         <xsl:if test="org.osgi.annotation.versioning.Version|version">
+          <xsl:variable name="version.number">
+            <xsl:choose>
+              <xsl:when test="org.osgi.annotation.versioning.Version">
+                <xsl:apply-templates select="org.osgi.annotation.versioning.Version//value[not(./value)]" mode="html"/>
+              </xsl:when>
+              <xsl:when test="version">
+                <xsl:apply-templates select="version" mode="html"/>
+              </xsl:when>
+            </xsl:choose>
+          </xsl:variable>
           <xsl:variable name="version.id">
             <xsl:call-template name="clean.id">
               <xsl:with-param name="string" select="@name"/>
             </xsl:call-template>
             <xsl:text>-version</xsl:text>
+          </xsl:variable>
+          <xsl:variable name="version.number.id">
+            <xsl:value-of select="$version.id"/>
+            <xsl:text>.number</xsl:text>
           </xsl:variable>
 
           <xsl:element name="info" namespace="{$ns}">
@@ -87,14 +101,13 @@ version="1.1">
                 <xsl:value-of select="$version.id"/>
               </xsl:attribute>
               <xsl:text>Version </xsl:text>
-              <xsl:choose>
-                <xsl:when test="org.osgi.annotation.versioning.Version">
-                  <xsl:apply-templates select="org.osgi.annotation.versioning.Version//value[not(./value)]" mode="html"/>
-                </xsl:when>
-                <xsl:when test="version">
-                  <xsl:apply-templates select="version" mode="html"/>
-                </xsl:when>
-              </xsl:choose>
+              <xsl:value-of select="$version.number"/>
+            </xsl:element>
+            <xsl:element name="edition" namespace="{$ns}">
+              <xsl:attribute name="xml:id">
+                <xsl:value-of select="$version.number.id"/>
+              </xsl:attribute>
+              <xsl:value-of select="$version.number"/>
             </xsl:element>
           </xsl:element>
         </xsl:if>

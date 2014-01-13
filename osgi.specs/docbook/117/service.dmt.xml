@@ -1127,17 +1127,17 @@ Vendor/RingTones/Bach</programlisting>
 
           <tbody>
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_BASE64"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><code>byte[]</code></entry>
 
               <entry><code>base64</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.DmtData-byte---boolean-"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><xref
               linkend="org.osgi.service.dmt.DmtData.getBase64--"
@@ -1148,9 +1148,9 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_BINARY"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><code>byte[]</code></entry>
 
@@ -1172,17 +1172,17 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><code>boolean</code></entry>
 
               <entry><code>boolean</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.DmtData-boolean-"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><xref
               linkend="org.osgi.service.dmt.DmtData.getBoolean--"
@@ -1205,17 +1205,16 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE"
-              xrefstyle="hyperlink"/></code></entry>
+              <entry><xref linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>date</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.DmtData-String-int-"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><xref
               linkend="org.osgi.service.dmt.DmtData.getString--"
@@ -1229,17 +1228,17 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>dateTime</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.DmtData-Date-"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><xref
               linkend="org.osgi.service.dmt.DmtData.getDateTime--"
@@ -1250,17 +1249,16 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT"
-              xrefstyle="hyperlink"/></code></entry>
+              <entry><xref linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><code>float</code></entry>
 
               <entry><code>float</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.DmtData-float-"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><xref
               linkend="org.osgi.service.dmt.DmtData.getFloat--"
@@ -1270,17 +1268,16 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><code>int</code></entry>
 
               <entry><code>integer</code></entry>
 
-              <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.DmtData-int-"
-              xrefstyle="hyperlink"/></code></entry>
+              <entry><xref linkend="org.osgi.service.dmt.DmtData.DmtData-int-"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><xref
               linkend="org.osgi.service.dmt.DmtData.getInt--"
@@ -1290,17 +1287,16 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG"
-              xrefstyle="hyperlink"/></code></entry>
+              <entry><xref linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><code>long</code></entry>
 
               <entry><code>long</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.DmtData-long-"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><xref
               linkend="org.osgi.service.dmt.DmtData.getLong--"
@@ -1310,17 +1306,16 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_NODE"
-              xrefstyle="hyperlink"/></code></entry>
+              <entry><xref linkend="org.osgi.service.dmt.DmtData.FORMAT_NODE"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><code>Object</code></entry>
 
               <entry><code>NODE</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.DmtData-Object-"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><xref
               linkend="org.osgi.service.dmt.DmtData.getNode--"
@@ -1337,9 +1332,8 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_NULL"
-              xrefstyle="hyperlink"/></code></entry>
+              <entry><xref linkend="org.osgi.service.dmt.DmtData.FORMAT_NULL"
+              xrefstyle="hyperlink"/></entry>
 
               <entry/>
 
@@ -1357,17 +1351,17 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_BINARY"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><code>byte[]</code></entry>
 
               <entry><code>&lt;custom&gt;</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.DmtData-String-byte---"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><xref
               linkend="org.osgi.service.dmt.DmtData.getRawBinary--"
@@ -1382,17 +1376,17 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_RAW_STRING"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>&lt;custom&gt;</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.DmtData-String-String-"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><xref
               linkend="org.osgi.service.dmt.DmtData.getRawString--"
@@ -1407,17 +1401,17 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>string</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.DmtData-String-"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><xref
               linkend="org.osgi.service.dmt.DmtData.getString--"
@@ -1427,17 +1421,16 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_TIME"
-              xrefstyle="hyperlink"/></code></entry>
+              <entry><xref linkend="org.osgi.service.dmt.DmtData.FORMAT_TIME"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>time</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.DmtData-String-int-"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><xref
               linkend="org.osgi.service.dmt.DmtData.getString--"
@@ -1449,17 +1442,16 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_XML"
-              xrefstyle="hyperlink"/></code></entry>
+              <entry><xref linkend="org.osgi.service.dmt.DmtData.FORMAT_XML"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><code>String</code></entry>
 
               <entry><code>xml</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtData.DmtData-String-int-"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><xref
               linkend="org.osgi.service.dmt.DmtData.getXml--"
@@ -1557,9 +1549,9 @@ Vendor/RingTones/Bach</programlisting>
 
           <tbody>
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtConstants.DDF_SCAFFOLD"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Scaffold nodes are automatically generated nodes by
               the Dmt Admin service to provide the children node names so that
@@ -1568,9 +1560,8 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtConstants.DDF_MAP"
-              xrefstyle="hyperlink"/></code></entry>
+              <entry><xref linkend="org.osgi.service.dmt.DmtConstants.DDF_MAP"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><code>MAP</code> nodes define a <code>key</code>
               -&gt; <code>value</code> mapping construct using the node name
@@ -1579,9 +1570,9 @@ Vendor/RingTones/Bach</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtConstants.DDF_LIST"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para><code>LIST</code> nodes use the node name to
               maintain an index in a list. See <xref
@@ -2718,9 +2709,9 @@ Vendor/RingTones/Bach</programlisting>
               linkend="org.osgi.service.dmt.MetaNode.getMimeTypes--"
               xrefstyle="hyperlink"/></para></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtConstants.DDF_SCAFFOLD"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
             </row>
 
             <row>
@@ -4213,9 +4204,9 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
 
           <tbody>
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtEventListener.FILTER_EVENT"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><code>Integer</code></entry>
 
@@ -4242,9 +4233,9 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtEventListener.FILTER_PRINCIPAL"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><code>String+</code></entry>
 
@@ -4256,9 +4247,9 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtEventListener.FILTER_SUBTREE"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><code>String+</code></entry>
 
@@ -4525,9 +4516,9 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
 
               <entry><code>Integer</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtEvent.getSessionId--"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>A unique identifier for the session that triggered
               the event. This property has the same value as <xref
@@ -4644,9 +4635,9 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
 
               <entry><code>String</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtSession.getRootUri--"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>The root URI of the session that triggered the
               event.</para></entry>
@@ -4657,9 +4648,9 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
 
               <entry><code>String</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtSession.getPrincipal--"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>The principal of the session, or absent if no
               principal is associated with this session. In the latter case
@@ -4671,9 +4662,9 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
 
               <entry><code>Integer</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtSession.getLockType--"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>The lock type of the session. The number is mapped
               as follows:</para><itemizedlist>
@@ -4782,9 +4773,8 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
 
               <entry><code>String[]</code></entry>
 
-              <entry><code><xref
-              linkend="org.osgi.service.dmt.DmtEvent.getNodes--"
-              xrefstyle="hyperlink"/></code></entry>
+              <entry><xref linkend="org.osgi.service.dmt.DmtEvent.getNodes--"
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>The absolute URIs of each affected node. This is
               the <code>nodeUri</code> parameter of the Dmt API methods. The
@@ -4799,9 +4789,9 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
 
               <entry><code>String[]</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.dmt.DmtEvent.getNewNodes--"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>The absolute URIs of new renamed or copied nodes.
               Only the <code>RENAMED</code> and <code>COPIED</code> events
@@ -5169,45 +5159,41 @@ SESSION_CLOSED {
 
           <itemizedlist>
             <listitem>
-              <para><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING"
-              xrefstyle="hyperlink"/></code></para>
+              <para><xref linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING"
+              xrefstyle="hyperlink"/></para>
             </listitem>
 
             <listitem>
-              <para><code><xref
+              <para><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN"
-              xrefstyle="hyperlink"/></code></para>
+              xrefstyle="hyperlink"/></para>
             </listitem>
 
             <listitem>
-              <para><code><xref
+              <para><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER"
-              xrefstyle="hyperlink"/></code></para>
+              xrefstyle="hyperlink"/></para>
             </listitem>
 
             <listitem>
-              <para><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG"
-              xrefstyle="hyperlink"/></code></para>
+              <para><xref linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG"
+              xrefstyle="hyperlink"/></para>
             </listitem>
 
             <listitem>
-              <para><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT"
-              xrefstyle="hyperlink"/></code></para>
+              <para><xref linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT"
+              xrefstyle="hyperlink"/></para>
             </listitem>
 
             <listitem>
-              <para><code><xref
+              <para><xref
               linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME"
-              xrefstyle="hyperlink"/></code></para>
+              xrefstyle="hyperlink"/></para>
             </listitem>
 
             <listitem>
-              <para><code><xref
-              linkend="org.osgi.service.dmt.DmtData.FORMAT_BINARY"
-              xrefstyle="hyperlink"/></code></para>
+              <para><xref linkend="org.osgi.service.dmt.DmtData.FORMAT_BINARY"
+              xrefstyle="hyperlink"/></para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -5698,57 +5684,57 @@ L/2     C</programlisting>
 
             <tbody>
               <row>
-                <entry><para><code><xref
+                <entry><para><xref
                 linkend="org.osgi.service.dmt.DmtData.FORMAT_STRING"
-                xrefstyle="hyperlink"/></code></para></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para><code>String</code></para></entry>
               </row>
 
               <row>
-                <entry><para><code><xref
+                <entry><para><xref
                 linkend="org.osgi.service.dmt.DmtData.FORMAT_BOOLEAN"
-                xrefstyle="hyperlink"/></code></para></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para><code>Boolean</code></para></entry>
               </row>
 
               <row>
-                <entry><para><code><xref
+                <entry><para><xref
                 linkend="org.osgi.service.dmt.DmtData.FORMAT_INTEGER"
-                xrefstyle="hyperlink"/></code></para></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para><code>Integer</code></para></entry>
               </row>
 
               <row>
-                <entry><para><code><xref
+                <entry><para><xref
                 linkend="org.osgi.service.dmt.DmtData.FORMAT_LONG"
-                xrefstyle="hyperlink"/></code></para></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para><code>Long</code></para></entry>
               </row>
 
               <row>
-                <entry><para><code><xref
+                <entry><para><xref
                 linkend="org.osgi.service.dmt.DmtData.FORMAT_FLOAT"
-                xrefstyle="hyperlink"/></code></para></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para><code>Float</code></para></entry>
               </row>
 
               <row>
-                <entry><para><code><xref
+                <entry><para><xref
                 linkend="org.osgi.service.dmt.DmtData.FORMAT_DATE_TIME"
-                xrefstyle="hyperlink"/></code></para></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para><code>Date</code></para></entry>
               </row>
 
               <row>
-                <entry><para><code><xref
+                <entry><para><xref
                 linkend="org.osgi.service.dmt.DmtData.FORMAT_BINARY"
-                xrefstyle="hyperlink"/></code></para></entry>
+                xrefstyle="hyperlink"/></para></entry>
 
                 <entry><para><code>byte[]</code></para></entry>
               </row>
@@ -5826,10 +5812,9 @@ L/2     C</programlisting>
           </tgroup>
         </informaltable>
 
-        <para>Replacing a complex value will generate a single <code><xref
+        <para>Replacing a complex value will generate a single <xref
         linkend="org.osgi.service.dmt.DmtConstants.EVENT_TOPIC_REPLACED"
-        xrefstyle="hyperlink"/></code> event for the <code>LIST</code>
-        node.</para>
+        xrefstyle="hyperlink"/> event for the <code>LIST</code> node.</para>
       </section>
     </section>
 
@@ -5943,9 +5928,9 @@ L/2     C</programlisting>
         must of type <code>DmtData</code>. The <code>Map</code> object must a
         copy and does not track changes in the DMT or vice-versa.</para>
 
-        <para>Replacing a complex value will generate a single <code><xref
+        <para>Replacing a complex value will generate a single <xref
         linkend="org.osgi.service.dmt.DmtConstants.EVENT_TOPIC_REPLACED"
-        xrefstyle="hyperlink"/></code> event for that node.</para>
+        xrefstyle="hyperlink"/> event for that node.</para>
       </section>
     </section>
 
@@ -6366,33 +6351,33 @@ L/2     C</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code><xref
+          <para><xref
           linkend="org.osgi.service.dmt.security.DmtPermission.ADD"
-          xrefstyle="hyperlink"/></code></para>
+          xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
-          <para><code><xref
+          <para><xref
           linkend="org.osgi.service.dmt.security.DmtPermission.DELETE"
-          xrefstyle="hyperlink"/></code></para>
+          xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
-          <para><code><xref
+          <para><xref
           linkend="org.osgi.service.dmt.security.DmtPermission.EXEC"
-          xrefstyle="hyperlink"/></code></para>
+          xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
-          <para><code><xref
+          <para><xref
           linkend="org.osgi.service.dmt.security.DmtPermission.GET"
-          xrefstyle="hyperlink"/></code></para>
+          xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>
-          <para><code><xref
+          <para><xref
           linkend="org.osgi.service.dmt.security.DmtPermission.REPLACE"
-          xrefstyle="hyperlink"/></code></para>
+          xrefstyle="hyperlink"/></para>
         </listitem>
       </itemizedlist>
 

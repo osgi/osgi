@@ -330,19 +330,19 @@
 
       <itemizedlist>
         <listitem>
-          <para><code><xref
+          <para><xref
           linkend="org.osgi.service.device.Constants.DEVICE_CATEGORY"
-          xrefstyle="hyperlink"/></code> - A marker property indicating that
-          this service must be regarded as a Device service by the device
-          manager. Its value is of type <code>String[]</code>, and its meaning
-          is defined in the associated device category specification.</para>
+          xrefstyle="hyperlink"/> - A marker property indicating that this
+          service must be regarded as a Device service by the device manager.
+          Its value is of type <code>String[]</code>, and its meaning is
+          defined in the associated device category specification.</para>
         </listitem>
 
         <listitem>
-          <para><code><xref
+          <para><xref
           linkend="org.osgi.service.device.Constants.DEVICE_DESCRIPTION"
-          xrefstyle="hyperlink"/></code> - Describes the device to an end
-          user. Its value is of type <code>String</code>.</para>
+          xrefstyle="hyperlink"/> - Describes the device to an end user. Its
+          value is of type <code>String</code>.</para>
         </listitem>
 
         <listitem>

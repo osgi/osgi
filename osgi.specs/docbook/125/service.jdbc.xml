@@ -363,9 +363,9 @@ DataSource dataSource = dsf.createDataSource(props);</programlisting>
 
       <itemizedlist>
         <listitem>
-          <para><code><xref
+          <para><xref
           linkend="org.osgi.service.jdbc.DataSourceFactory.JDBC_INITIAL_POOL_SIZE"
-          xrefstyle="hyperlink"/></code></para>
+          xrefstyle="hyperlink"/></para>
         </listitem>
 
         <listitem>

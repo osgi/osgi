@@ -1314,9 +1314,9 @@ public class HttpResourceImpl {
             <row>
               <entry><code>name</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.component.annotations.Component.name--"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>The <emphasis>name</emphasis> of a component must
               be unique within a bundle. The component name is used as a PID
@@ -1343,9 +1343,9 @@ public class HttpResourceImpl {
             <row>
               <entry><code>enabled</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.component.annotations.Component.enabled--"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Controls whether the component is
               <emphasis>enabled</emphasis> when the bundle is started. The
@@ -1361,9 +1361,9 @@ public class HttpResourceImpl {
             <row>
               <entry><code>factory</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.component.annotations.Component.factory--"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>If set to a non-empty string, it indicates that
               this component is a <emphasis>factory component</emphasis>. SCR
@@ -1374,9 +1374,9 @@ public class HttpResourceImpl {
             <row>
               <entry><code>immediate</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.component.annotations.Component.immediate--"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Controls whether component configurations must be
               immediately activated after becoming satisfied or whether
@@ -1393,15 +1393,15 @@ public class HttpResourceImpl {
             <row>
               <entry><code>configuration-policy</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.component.annotations.Component.configurationPolicy--"
-              xrefstyle="hyperlink"/></code> (<code><xref
+              xrefstyle="hyperlink"/> (<xref
               linkend="org.osgi.service.component.annotations.ConfigurationPolicy.OPTIONAL"
-              xrefstyle="hyperlink"/></code>, <code><xref
+              xrefstyle="hyperlink"/>, <xref
               linkend="org.osgi.service.component.annotations.ConfigurationPolicy.REQUIRE"
-              xrefstyle="hyperlink"/></code>, or <code><xref
+              xrefstyle="hyperlink"/>, or <xref
               linkend="org.osgi.service.component.annotations.ConfigurationPolicy.IGNORE"
-              xrefstyle="hyperlink"/></code>)</entry>
+              xrefstyle="hyperlink"/>)</entry>
 
               <entry><para>Controls whether component configurations must be
               satisfied depending on the presence of a corresponding
@@ -1435,9 +1435,9 @@ public class HttpResourceImpl {
             <row>
               <entry><code>configuration-pid</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.component.annotations.Component.configurationPid--"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>The configuration PID to be used for the component
               in conjunction with Configuration Admin. The default value for
@@ -1449,9 +1449,9 @@ public class HttpResourceImpl {
             <row>
               <entry><code>activate</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.component.annotations.Activate"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Specifies the name of the method to call when a
               component configuration is activated. The default value of this
@@ -1464,9 +1464,9 @@ public class HttpResourceImpl {
             <row>
               <entry><code>deactivate</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.component.annotations.Deactivate"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Specifies the name of the method to call when a
               component configuration is deactivated. The default value of
@@ -1479,9 +1479,9 @@ public class HttpResourceImpl {
             <row>
               <entry><code>modified</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.component.annotations.Modified"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Specifies the name of the method to call when the
               configuration properties for a component configuration is using
@@ -1531,9 +1531,9 @@ public class HttpResourceImpl {
             <row>
               <entry><code>class</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.component.annotations.Component"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>The Java fully qualified name of the implementation
               class.</para><para>The component <xref
@@ -1705,11 +1705,11 @@ public class HttpResourceImpl {
       value of <code>String[] { "www.acme.com", "backup.acme.com"
       }</code>.</para>
 
-      <para>A property can also be set with the <code><xref
+      <para>A property can also be set with the <xref
       linkend="org.osgi.service.component.annotations.Component.property--"
-      xrefstyle="hyperlink"/></code> annotation element of
-      <code>Component</code>. This element is an array of strings that must
-      follow the following syntax:</para>
+      xrefstyle="hyperlink"/> annotation element of <code>Component</code>.
+      This element is an array of strings that must follow the following
+      syntax:</para>
 
       <programlisting>property ::= name ( ':' type )? '=' value</programlisting>
 
@@ -2113,9 +2113,9 @@ public class Foo implements EventHandler { ... }</programlisting>
         </tgroup>
       </table>
 
-      <para>The following code demonstrates the use of the <code><xref
+      <para>The following code demonstrates the use of the <xref
       linkend="org.osgi.service.component.annotations.Reference"
-      xrefstyle="hyperlink"/></code> annotation.</para>
+      xrefstyle="hyperlink"/> annotation.</para>
 
       <programlisting>@Component
 public class FooImpl implements Foo {
