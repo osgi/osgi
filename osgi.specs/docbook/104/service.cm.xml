@@ -1818,19 +1818,19 @@ c.update(ht);</programlisting>
       <para>There is only one manager that manages all bundles. Its
       permissions look like:</para>
 
-      <programlisting>ConfigurationPermission[?system,<code><xref
-            linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE"
-            xrefstyle="hyperlink"/></code>]
-ConfigurationPermission[?application,<code><xref
-            linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE"
-            xrefstyle="hyperlink"/></code>]</programlisting>
+      <programlisting>ConfigurationPermission[?system,<xref
+          linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE"
+          xrefstyle="hyperlink"/>]
+ConfigurationPermission[?application,<xref
+          linkend="org.osgi.service.cm.ConfigurationPermission.CONFIGURE"
+          xrefstyle="hyperlink"/>]</programlisting>
 
       <para>A Bundle in the <code>application</code> region can have the
       following permissions:</para>
 
-      <programlisting>ConfigurationPermission[?application,<code><xref
-            linkend="org.osgi.service.cm.ConfigurationPermission.TARGET"
-            xrefstyle="hyperlink"/></code>]</programlisting>
+      <programlisting>ConfigurationPermission[?application,<xref
+          linkend="org.osgi.service.cm.ConfigurationPermission.TARGET"
+          xrefstyle="hyperlink"/>]</programlisting>
 
       <para>This managed bundle therefore has only visibility to
       configurations in the <code>application</code> region.</para>

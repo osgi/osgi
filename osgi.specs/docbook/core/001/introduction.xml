@@ -27,12 +27,14 @@
   services over their networks.</para>
 
   <para>This is the sixth release of the OSGi Core specification developed by
-  representatives from OSGi member companies. The OSGi Core Release 6 mostly
-  extends the existing APIs into new areas. The few modifications to existing
-  APIs are backward compatible so that applications for previous releases
-  should run unmodified on Release 6 Frameworks. The built-in version
-  management mechanisms allow bundles written for the new release to adapt to
-  the old Framework implementations, if necessary.</para>
+  representatives from OSGi member companies. The OSGi Core <xref
+  endterm="core.book-release" linkend="core.book"/> mostly extends the
+  existing APIs into new areas. The few modifications to existing APIs are
+  backward compatible so that applications for previous releases should run
+  unmodified on <xref endterm="core.book-release" linkend="core.book"/>
+  Frameworks. The built-in version management mechanisms allow bundles written
+  for the new release to adapt to the old Framework implementations, if
+  necessary.</para>
 
   <section>
     <title>OSGi Framework Overview</title>
@@ -545,8 +547,9 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
   <section>
     <title>Version Information</title>
 
-    <para>This document specifies OSGi Core Release 6. This specification is
-    backward compatible to all prior releases.</para>
+    <para>This document specifies OSGi Core <xref endterm="core.book-release"
+    linkend="core.book"/>. This specification is backward compatible to all
+    prior releases.</para>
 
     <para>All Security, Module, Life Cycle and Service Layers are part of the
     Framework Specification</para>

@@ -352,12 +352,10 @@
 
       <itemizedlist>
         <listitem>
-          <para><code><xref
-          linkend="org.osgi.service.upnp.UPnPDevice.PARENT_UDN"
-          xrefstyle="hyperlink"/></code> - (<code>String</code>) The Universal
-          Device Name (UDN) of the parent device. A root device most not have
-          this property registered. Type is a <code>String</code>
-          object.</para>
+          <para><xref linkend="org.osgi.service.upnp.UPnPDevice.PARENT_UDN"
+          xrefstyle="hyperlink"/> - (<code>String</code>) The Universal Device
+          Name (UDN) of the parent device. A root device most not have this
+          property registered. Type is a <code>String</code> object.</para>
         </listitem>
 
         <listitem>

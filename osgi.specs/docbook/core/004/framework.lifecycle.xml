@@ -1067,10 +1067,10 @@
               <entry><code>org.osgi.framework.version</code></entry>
 
               <entry><para>The specification version number implemented by the
-              Framework implementation. <code><xref
-              endterm="org.osgi.framework-version"
-              linkend="org.osgi.framework"/></code> is the specification
-              version number for this specification.</para></entry>
+              Framework implementation. <xref
+              endterm="org.osgi.framework-version.number"
+              linkend="org.osgi.framework"/> is the specification version
+              number for this specification.</para></entry>
             </row>
 
             <row>

@@ -861,9 +861,9 @@ web-param  ::= &lt;key&gt; '=' &lt;value&gt;</programlisting>
 
       <para>The <code>web-param</code> &lt;<code>key&gt;</code> and
       <code>&lt;value&gt;</code> as well as the <code>&lt;embedded
-      url&gt;</code> must follow <code><xref linkend="i3079490"/></code> for
-      their escaping and character set rules.A Web URL must further follow all
-      the rules of a URL. Whitespaces are not allowed between terms.</para>
+      url&gt;</code> must follow <xref linkend="i3079490"/> for their escaping
+      and character set rules.A Web URL must further follow all the rules of a
+      URL. Whitespaces are not allowed between terms.</para>
 
       <para>An example for a <code>webbundle:</code> URL:</para>
 
