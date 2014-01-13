@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package org.osgi.test.cases.framework.junit.service;
 
 import java.util.Hashtable;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
@@ -29,6 +28,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.UnfilteredServiceListener;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.concurrent.AtomicInteger;
 
 public class ServiceRegistryTests extends OSGiTestCase {
 
@@ -571,6 +571,35 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		catch (IllegalStateException e) {
 			// ignore
 		}
+	}
+
+	public void testFactoryUngetOnUnregister() {
+		String[] classes = new String[] {Marker1.class.getName(),
+				Marker2.class.getName()};
+		Hashtable<String, String> properties = new Hashtable<String, String>();
+		final AtomicInteger ungetCalled = new AtomicInteger(0);
+		properties.put("test", "yes");
+		ServiceRegistration registration = getContext().registerService(
+				classes, new ServiceFactory() {
+
+					public Object getService(Bundle bundle,
+							ServiceRegistration reg) {
+						return new ConcreteMarker(0);
+					}
+
+					public void ungetService(Bundle bundle,
+							ServiceRegistration reg, Object service) {
+						ungetCalled.incrementAndGet();
+					}
+				}, properties);
+
+		ServiceReference<Marker1> reference = getContext().getServiceReference(
+				Marker1.class);
+		Marker1 service1 = getContext().getServiceObjects(reference).getService();
+		assertEquals("wrong service returned", 0, service1.getValue());
+
+		registration.unregister();
+		assertEquals("The ServiceFactory.ungetService method was not called.", 1, ungetCalled.get());
 	}
 
 	public void testFactoryGetException() {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -712,6 +712,53 @@ public class ServiceScopesTests extends OSGiTestCase {
             tb1.uninstall();
         }
     }
+
+	public void testPrototypeScopeCleanupOnUnregister() throws Exception {
+		Bundle tb1 = install("serviceregistry.tb1.jar");
+		assertNotNull(tb1);
+		try {
+			tb1.start();
+			assertTrue((tb1.getState() & Bundle.ACTIVE) != 0);
+			BundleContext tb1Context = tb1.getBundleContext();
+			assertNotNull(tb1Context);
+
+			Hashtable<String, String> properties = new Hashtable<String, String>();
+			properties.put("test", "yes");
+			TestPrototypeServiceFactory factory = new TestPrototypeServiceFactory();
+			ServiceRegistration<TestService> registration = context.registerService(TestService.class, factory, properties);
+			assertNotNull(registration);
+			try {
+				ServiceReference<TestService> reference = tb1Context.getServiceReference(TestService.class);
+				assertNotNull(reference);
+
+				assertEquals("service.scope not set correctly", Constants.SCOPE_PROTOTYPE, reference.getProperty(Constants.SERVICE_SCOPE));
+
+				ServiceObjects<TestService> objects = tb1Context.getServiceObjects(reference);
+				assertNotNull(objects);
+				assertEquals(reference, objects.getServiceReference());
+
+				assertEquals(0, factory.services.size());
+
+				TestService service1 = tb1Context.getService(reference);
+				assertNotNull(service1);
+
+				TestService service2 = objects.getService();
+				assertNotSame("service object the same", service1, service2);
+
+				TestService service3 = objects.getService();
+				assertNotSame("service object the same", service2, service3);
+
+				assertEquals(1, factory.services.size());
+				assertEquals(3, factory.services.get(tb1).size());
+			} finally {
+				registration.unregister();
+			}
+			// test clean up on unregister now;
+			assertEquals(0, factory.services.size());
+		} finally {
+			tb1.uninstall();
+		}
+	}
 
     public interface TestService {
         public long getId();
