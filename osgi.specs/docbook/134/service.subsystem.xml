@@ -2818,9 +2818,9 @@ Subsystem-Content:
             <row>
               <entry><code>subsystem.state</code></entry>
 
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.subsystem.Subsystem.State"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Contains the current state of the
               Subsystem</para></entry>
@@ -2858,9 +2858,9 @@ Subsystem-Content:
 
           <tbody>
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLING"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>When a Subsystem is first installed the Subsystems
               implementation must register a Subsystem service with the
@@ -2874,9 +2874,9 @@ Subsystem-Content:
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>When all contents of a Subsystem has been
               successfully provisioned then the <code>subsystem.state</code>
@@ -2886,18 +2886,18 @@ Subsystem-Content:
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.subsystem.Subsystem.State.INSTALL_FAILED"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Indicates that some failure occurred while
               attempting to install the Subsystem's contents.</para></entry>
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVING"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Starting a Subsystem triggers the resolution of a
               Subsystem if the <code>subsystem.state</code> is <xref
@@ -2910,9 +2910,9 @@ Subsystem-Content:
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.subsystem.Subsystem.State.RESOLVED"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Indicates that the Subsystem is resolved. A
               Subsystem is resolved if all of its content resources are
@@ -2920,9 +2920,9 @@ Subsystem-Content:
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.subsystem.Subsystem.State.STARTING"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Indicates that the Subsystem is in the process of
               being started. During this state the resources the Subsystem
@@ -2935,9 +2935,9 @@ Subsystem-Content:
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>The <xref
               linkend="org.osgi.service.subsystem.Subsystem.State.ACTIVE"
@@ -2947,9 +2947,9 @@ Subsystem-Content:
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.subsystem.Subsystem.State.STOPPING"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Indicates that the Subsystem is in the process of
               being stopped. During this state the resources referenced by the
@@ -2957,9 +2957,9 @@ Subsystem-Content:
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLING"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>Indicates that the Subsystem is in the process of
               being uninstalled. During this state the resources referenced by
@@ -2968,9 +2968,9 @@ Subsystem-Content:
             </row>
 
             <row>
-              <entry><code><xref
+              <entry><xref
               linkend="org.osgi.service.subsystem.Subsystem.State.UNINSTALLED"
-              xrefstyle="hyperlink"/></code></entry>
+              xrefstyle="hyperlink"/></entry>
 
               <entry><para>When all of the resources referenced by the
               Subsystem which are eligible for garbage collection have been

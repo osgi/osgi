@@ -226,9 +226,9 @@
           <row>
             <entry><code>text</code></entry>
 
-            <entry><para><code><xref
+            <entry><para><xref
             linkend="org.osgi.service.provisioning.ProvisioningService.MIME_STRING"
-            xrefstyle="hyperlink"/></code></para><para><code>text/plain;charset=utf-8</code></para></entry>
+            xrefstyle="hyperlink"/></para><para><code>text/plain;charset=utf-8</code></para></entry>
 
             <entry><code>.txt</code></entry>
 
@@ -238,9 +238,9 @@
           <row>
             <entry><code>binary</code></entry>
 
-            <entry><para><code><xref
+            <entry><para><xref
             linkend="org.osgi.service.provisioning.ProvisioningService.MIME_BYTE_ARRAY"
-            xrefstyle="hyperlink"/></code></para><para><code>application/octet-stream</code></para></entry>
+            xrefstyle="hyperlink"/></para><para><code>application/octet-stream</code></para></entry>
 
             <entry><para>not <code>txt</code>, <code>.url</code>, or
             <code>.jar</code></para></entry>
@@ -252,9 +252,9 @@
           <row>
             <entry><code>bundle</code></entry>
 
-            <entry><para><code><xref
+            <entry><para><xref
             linkend="org.osgi.service.provisioning.ProvisioningService.MIME_BUNDLE"
-            xrefstyle="hyperlink"/></code></para><para><code>application/vnd.osgi.bundle</code>
+            xrefstyle="hyperlink"/></para><para><code>application/vnd.osgi.bundle</code>
             </para><para><code>MIME_BUNDLE_ALT</code></para><para><code>application/x-osgi-bundle</code></para></entry>
 
             <entry><code>.jar</code></entry>
@@ -276,9 +276,9 @@
           <row>
             <entry><code>bundle-url</code></entry>
 
-            <entry><para><code><xref
+            <entry><para><xref
             linkend="org.osgi.service.provisioning.ProvisioningService.MIME_BUNDLE_URL"
-            xrefstyle="hyperlink"/></code></para><para><code>text/x-osgi-bundle-url;
+            xrefstyle="hyperlink"/></para><para><code>text/x-osgi-bundle-url;
             charset=utf-8</code></para></entry>
 
             <entry><code>.url</code></entry>
