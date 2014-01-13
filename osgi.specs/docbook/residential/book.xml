@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <book revision="$Id$"
-      status="draft" version="5" xmlns="http://docbook.org/ns/docbook"
+      status="draft" version="5" xml:id="residential.book"
+      xmlns="http://docbook.org/ns/docbook"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       xmlns:xi="http://www.w3.org/2001/XInclude"
       xmlns:ns5="http://www.w3.org/1999/xhtml"
@@ -14,7 +15,7 @@
       <orgname>The OSGi Alliance</orgname>
     </author>
 
-    <releaseinfo>Release 5</releaseinfo>
+    <releaseinfo xml:id="residential.book-release">Release 5</releaseinfo>
 
     <pubdate>TBD</pubdate>
 

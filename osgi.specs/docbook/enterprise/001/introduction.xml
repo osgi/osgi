@@ -498,7 +498,8 @@
     <title>Version Information</title>
 
     <para>This document is the Enterprise Specification for the OSGi
-    Enterprise Release 5.</para>
+    Enterprise <xref endterm="enterprise.book-release"
+    linkend="enterprise.book"/>.</para>
 
     <section xml:id="intro.core.release">
       <title>OSGi Core Release 5</title>

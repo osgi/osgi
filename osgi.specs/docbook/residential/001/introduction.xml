@@ -324,7 +324,8 @@
     <title>Version Information</title>
 
     <para>This document is the Residential Specification for the OSGi
-    Residential Release 5.</para>
+    Residential <xref endterm="residential.book-release"
+    linkend="residential.book"/>.</para>
 
     <section xml:id="intro.core.release">
       <title>OSGi Core Release 5</title>
