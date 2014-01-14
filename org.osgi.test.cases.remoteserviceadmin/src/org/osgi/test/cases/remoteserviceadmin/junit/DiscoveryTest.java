@@ -153,7 +153,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 
 			System.out.println("************* wait for Signal 1 ********************");
 			// verify callback in parent framework
-			endpointListenerImpl.getSemAdded().waitForSignal(timeout);
+			assertTrue(endpointListenerImpl.getSemAdded()
+					.waitForSignal(timeout));
 
 			// 122.6.2 callback has to return first matched filter
 			assertEquals("filter doesn't match the first filter", endpointListenerFilter, endpointListenerImpl.getAddedMatchedFilter());
@@ -186,7 +187,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 
 			System.out.println("************* wait for Signal 2 ********************");
 			// verify callback in parent framework
-			endpointListenerImpl.getSemRemoved().waitForSignal(timeout);
+			assertTrue(endpointListenerImpl.getSemRemoved().waitForSignal(
+					timeout));
 
 			// 122.6.2 callback has to return first matched filter
 			assertEquals("filter doesn't match the first filter", endpointListenerFilter, endpointListenerImpl.getRemMatchedFilter());
@@ -372,7 +374,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			System.out
 					.println("************* wait for Signal 1 (EndpointEvent:added) ********************");
 			// verify callback in parent framework
-			endpointEventListenerImpl.getSemAdded().waitForSignal(timeout);
+			assertTrue(endpointEventListenerImpl.getSemAdded().waitForSignal(
+					timeout));
 
 			verifyBasicEndpointEventBehavior(
 					endpointEventListenerImpl.getLastMatchedFilter(),
@@ -392,7 +395,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			 System.out
 					.println("************* wait for Signal 2 (EndpointEvent:removed) ********************");
 			 // verify callback in parent framework
-			endpointEventListenerImpl.getSemRemoved().waitForSignal(timeout);
+			assertTrue(endpointEventListenerImpl.getSemRemoved().waitForSignal(
+					timeout));
 
 			verifyBasicEndpointEventBehavior(
 					endpointEventListenerImpl.getLastMatchedFilter(),
