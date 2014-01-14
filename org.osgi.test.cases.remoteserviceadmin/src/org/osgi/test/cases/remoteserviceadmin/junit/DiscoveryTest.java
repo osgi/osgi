@@ -39,6 +39,8 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
+import org.osgi.service.remoteserviceadmin.EndpointEvent;
+import org.osgi.service.remoteserviceadmin.EndpointEventListener;
 import org.osgi.service.remoteserviceadmin.EndpointListener;
 import org.osgi.service.remoteserviceadmin.ExportRegistration;
 import org.osgi.service.remoteserviceadmin.RemoteConstants;
@@ -48,6 +50,7 @@ import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
 import org.osgi.test.cases.remoteserviceadmin.impl.TestServiceImpl;
 import org.osgi.test.support.compatibility.Semaphore;
+import org.osgi.test.support.concurrent.AtomicInteger;
 import org.osgi.test.support.sleep.Sleep;
 
 /**
@@ -124,7 +127,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		// register EndpointListener in parent framework
 		//
 		final int serviceId = 12345;
-		final EndpointListenerImpl endpointListenerImpl = new SelectiveEndpointListenerImpl(serviceId);
+		final EndpointListenerImpl endpointListenerImpl = new SelectiveEndpointListenerImpl(
+				serviceId);
 
 		final String endpointListenerFilter = "(!(org.osgi.framework.uuid=" + getContext().getProperty("org.osgi.framework.uuid") + "))";
 		String secondFilter = "(mykey=has been overridden)";
@@ -317,6 +321,130 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	}
 
 	/**
+	 * 
+	 * TODO: UPDATE Naming with rsa 1.1 spec chapter/par numbers
+	 * 
+	 * */
+	public void testDiscovery____RSA_1_1___basicEndpointEvents()
+			throws Exception {
+		// verify that the server framework is exporting the test packages
+		verifyFramework();
+
+		//
+		// install test bundle in child framework
+		//
+		BundleContext childContext = getFramework().getBundleContext();
+
+		Bundle tb1Bundle = installBundle(childContext, "/tb1.jar");
+		assertNotNull(tb1Bundle);
+
+		//
+		// register EndpointListener in parent framework
+		//
+		EndpointEventListenerImpl endpointEventListenerImpl = new EndpointEventListenerImpl();
+		
+		Hashtable<String, Object> endpointEventListenerProperties = new Hashtable<String, Object>();
+		final String endpointEventListenerFilter = "(&(mykey=has been overridden)(!(org.osgi.framework.uuid="
+				+ getContext().getProperty("org.osgi.framework.uuid") + ")))";
+		String secondFilter = "(mykey=has been overridden)";
+		endpointEventListenerProperties.put(
+				EndpointEventListener.ENDPOINT_LISTENER_SCOPE, new String[] {
+						endpointEventListenerFilter, secondFilter });
+
+		ServiceRegistration<EndpointEventListener> endpointEventListenerRegistration = getContext()
+				.registerService(EndpointEventListener.class,
+						endpointEventListenerImpl,
+						endpointEventListenerProperties);
+		assertNotNull(endpointEventListenerRegistration);
+		
+		EndpointEventListenerImpl emptyEndpointListener = null;
+		try {
+			//
+			// 122.6.1 Scope and Filters
+			// register an EndpointListener w/o a scope. If called, then fail
+			//
+			emptyEndpointListener = scope_and_filter_122_6_1___RSA_1_1("");
+
+			// start test bundle in child framework
+			// this will run the test in the child framework and fail
+			tb1Bundle.start();
+
+			System.out
+					.println("************* wait for Signal 1 (EndpointEvent:added) ********************");
+			// verify callback in parent framework
+			endpointEventListenerImpl.getSemAdded().waitForSignal(timeout);
+
+			verifyBasicEndpointEventBehavior(
+					endpointEventListenerImpl.getLastMatchedFilter(),
+					endpointEventListenerImpl.getLastAddedEndpoint(),
+					endpointEventListenerFilter);
+
+			System.out
+					.println("************* Sleeping for 5s so that the discovery can settle ********************");
+			Sleep.sleep(15000);
+
+
+			//
+			// remove the endpoint
+			//
+			tb1Bundle.stop();
+
+			 System.out
+					.println("************* wait for Signal 2 (EndpointEvent:removed) ********************");
+			 // verify callback in parent framework
+			endpointEventListenerImpl.getSemRemoved().waitForSignal(timeout);
+
+			verifyBasicEndpointEventBehavior(
+					endpointEventListenerImpl.getLastMatchedFilter(),
+					endpointEventListenerImpl.getLastRemovedEndpoint(),
+					endpointEventListenerFilter);
+
+			// verify that we didn't receive any other events
+			assertEquals(2, endpointEventListenerImpl.getEventCount());
+
+			// verify 122.6.1
+			assertEquals(0, emptyEndpointListener.getEventCount());
+
+		} finally {
+			endpointEventListenerRegistration.unregister();
+
+			if (emptyEndpointListener != null) {
+				emptyEndpointListener.getServiceRegistration().unregister();
+			}
+		}
+	}
+
+	private void verifyBasicEndpointEventBehavior(String lastMatchedFilter,
+			EndpointDescription ep, final String endpointEventListenerFilter) {
+		// 122.6.2 callback has to return first matched filter
+		assertEquals("filter doesn't match the first filter",
+				endpointEventListenerFilter, lastMatchedFilter);
+
+		assertNotNull(ep);
+		assertEquals("remote service id is incorrect", 12345,
+				ep.getServiceId());
+		assertEquals("remote.id does not match", "someURI", ep.getId());
+		assertEquals("remote framework id is incorrect", getFramework()
+				.getBundleContext().getProperty("org.osgi.framework.uuid"),
+				ep.getFrameworkUUID());
+		assertFalse(
+				"remote framework id has to be UUID of remote not local framework",
+				ep.getFrameworkUUID()
+						.equals(getContext().getProperty(
+								"org.osgi.framework.uuid")));
+		assertTrue("discovered interfaces don't contain " + A.class.getName(),
+				ep.getInterfaces().contains(A.class.getName()));
+		assertFalse(
+				"discovered interfaces must not contain " + B.class.getName(),
+				ep.getInterfaces().contains(B.class.getName()));
+		assertEquals(
+				"the property of the service should have been overridden by the EndpointDescription",
+				"has been overridden", ep.getProperties().get("mykey"));
+		assertEquals("the property myprop is missing", "myvalue", ep
+				.getProperties().get("myprop"));
+	}
+
+	/**
 	 * @param xmlStr
 	 * @return
 	 * @throws IOException
@@ -493,14 +621,35 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	}
 
 	/**
-	 * Test empty filter scope
+	 * Test empty filter scope for EndpointListener
 	 */
-	private EndpointListenerImpl scope_and_filter_122_6_1(String scope) throws Exception {
+	private EndpointListenerImpl scope_and_filter_122_6_1(String scope)
+			throws Exception {
 		Hashtable<String, String> elp = new Hashtable<String, String>();
 		elp.put(EndpointListener.ENDPOINT_LISTENER_SCOPE, scope);
 
 		EndpointListenerImpl el = new EndpointListenerImpl();
-		ServiceRegistration elr = getContext().registerService(EndpointListener.class.getName(), el, elp);
+		ServiceRegistration elr = getContext().registerService(
+				EndpointListener.class.getName(), el, elp);
+		assertNotNull(elr);
+		assertNotNull(elr.getReference());
+		el.setServiceRegistration(elr);
+
+		return el;
+	}
+
+	/**
+	 * Test empty filter scope for EndpointEventListener
+	 */
+	private EndpointEventListenerImpl scope_and_filter_122_6_1___RSA_1_1(
+			String scope)
+			throws Exception {
+		Hashtable<String, String> elp = new Hashtable<String, String>();
+		elp.put(EndpointEventListener.ENDPOINT_LISTENER_SCOPE, scope);
+
+		EndpointEventListenerImpl el = new EndpointEventListenerImpl();
+		ServiceRegistration<EndpointEventListener> elr = getContext()
+				.registerService(EndpointEventListener.class, el, elp);
 		assertNotNull(elr);
 		assertNotNull(elr.getReference());
 		el.setServiceRegistration(elr);
@@ -621,5 +770,80 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 				super.endpointRemoved(endpoint, matchedFilter);
 			}
 		}
+	}
+
+	class EndpointEventListenerImpl implements EndpointEventListener {
+
+		private Semaphore semAdded = new Semaphore(0);
+		private Semaphore semRemoved = new Semaphore(0);
+		private Semaphore semModified = new Semaphore(0);
+		private Semaphore semModifiedEndmatch = new Semaphore(0);
+		private ServiceRegistration<EndpointEventListener> serviceRegistration;
+		private AtomicInteger eventCount = new AtomicInteger(0);
+		private String lastMatchedFilter;
+		private EndpointDescription lastAddedEndpoint;
+		private EndpointDescription lastRemovedEndpoint;
+
+		public void endpointChanged(EndpointEvent event, String matchedFilter) {
+			System.out
+					.println("***************************************************************** ENDPOINT CHANGED!!! "
+							+ event.getType());
+			
+			eventCount.incrementAndGet();
+
+			lastMatchedFilter = matchedFilter;
+
+			if (EndpointEvent.ADDED == event.getType()) {
+				semAdded.signal();
+				lastAddedEndpoint = event.getEndpoint();
+			}
+
+			if (EndpointEvent.MODIFIED == event.getType()) {
+				semModified.signal();
+			}
+
+			if (EndpointEvent.MODIFIED_ENDMATCH == event.getType()) {
+				semModifiedEndmatch.signal();
+			}
+
+			if (EndpointEvent.REMOVED == event.getType()) {
+				semRemoved.signal();
+				lastRemovedEndpoint = event.getEndpoint();
+			}
+		}
+
+		public EndpointDescription getLastRemovedEndpoint() {
+			return lastRemovedEndpoint;
+		}
+
+		public EndpointDescription getLastAddedEndpoint() {
+			return lastAddedEndpoint;
+		}
+
+		public int getEventCount() {
+			return eventCount.get();
+		}
+
+		public ServiceRegistration<EndpointEventListener> getServiceRegistration() {
+			return serviceRegistration;
+		}
+
+		public void setServiceRegistration(
+				ServiceRegistration<EndpointEventListener> sr) {
+			serviceRegistration = sr;
+		}
+
+		public Semaphore getSemRemoved() {
+			return semRemoved;
+		}
+
+		public Semaphore getSemAdded() {
+			return semAdded;
+		}
+
+		public String getLastMatchedFilter() {
+			return lastMatchedFilter;
+		}
+
 	}
 }
