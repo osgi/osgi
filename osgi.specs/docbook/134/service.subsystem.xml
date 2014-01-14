@@ -4124,11 +4124,11 @@ service                 ::= qname ( ';' parameter )*</programlisting>
       Scoped Subsystem's Region. Each service visible in the Scoped
       Subsystem's Region that matches one or more Subsystem-ExportService
       statements must be allowed by its associated Region's sharing policy
-      into the Scoped Subsystem's parent Region. The following example imports
+      into the Scoped Subsystem's parent Region. The following example exports
       services registered under the <code>com.acme.logging.Log</code>
       interface with a service property <code>threshold=error</code>.</para>
 
-      <programlisting>Subsystem-ExportImport: com.acme.logging.Log;filter:="(threshold=error)"</programlisting>
+      <programlisting>Subsystem-ExportService: com.acme.logging.Log;filter:="(threshold=error)"</programlisting>
 
       <para>Unscoped Subsystems have a sharing policy that shares all services
       and therefore their Deployment Manifests do not use this header to
