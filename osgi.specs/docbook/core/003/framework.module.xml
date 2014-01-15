@@ -947,7 +947,7 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     their Namespace. For example, the <code>osgi.wiring.*</code> Namespaces
     are used to control the Class Loading, see <xref
     linkend="framework.wiring"/>. However, they can also serve other purposes
-    as outlined by their Namespace. for example, a Wire could specify a
+    as outlined by their Namespace. For example, a Wire could specify a
     Dependency Injection source and target.</para>
 
     <para>Interfaces for the generic model are defined in <xref
@@ -1056,10 +1056,10 @@ list                ::= 'List' ( '&lt;' scalar '&gt;' )?</programlisting>
       <itemizedlist>
         <listitem>
           <para><code>effective</code> - <code>(resolve)</code> Specifies the
-          time a capabiltity is available, either <code>resolve</code>
+          time a capability is available, either <code>resolve</code>
           (default) or another name. The OSGi framework resolver only
           considers Capabilities without an <code>effective</code> directive
-          or <code>effective:=resolve</code>. Capabilties with other values
+          or <code>effective:=resolve</code>. Capabilities with other values
           for the <code>effective</code> directive can be considered by an
           external agent.</para>
         </listitem>
@@ -1202,7 +1202,7 @@ requirement         ::= name-space
           (default) or another name. The OSGi framework resolver only
           considers requirements without an <code>effective</code> directive
           or <code>effective:=resolve</code>. Other requirements can be
-          considered by an external agent. Additonal names for the
+          considered by an external agent. Additional names for the
           <code>effective</code> directive should be registered with the OSGi
           Alliance.</para>
         </listitem>
@@ -1224,11 +1224,12 @@ requirement         ::= name-space
           given namespace. The matching of the filter against the capability
           is done on one capability at a time. A filter like
           <code>(&amp;(a=1)(b=2))</code> matches only a capability that
-          specifies both attributes at the required value, not two capabilties
-          that each specify one of the attributes correctly. A filter is
-          optional, if no filter directive is specified the requirement always
-          matches. The attribute names in the filter expression are used to
-          locate capability attributes in a case sensitive manner.</para>
+          specifies both attributes at the required value, not two
+          capabilities that each specify one of the attributes correctly. A
+          filter is optional, if no filter directive is specified the
+          requirement always matches. The attribute names in the filter
+          expression are used to locate capability attributes in a case
+          sensitive manner.</para>
         </listitem>
 
         <listitem>
@@ -1385,7 +1386,7 @@ AA/BB-1.7                   (&amp;(osgi.ee=AA/BB)(version=1.7))
 V1-1.5/V2-1.6               (osgi.ee=V1-1.5/V2-1.6)
 MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
 
-      <para>Each element of the Bundle-RequiredExecutionEnvironment is or'ed
+      <para>Each element of the Bundle-RequiredExecutionEnvironment is ORed
       together in the final <code>osgi.ee</code> requirement's
       <code>filter</code> directive. For example:</para>
 
@@ -2178,8 +2179,8 @@ B: Export-Package: p; version=1.5.1</programlisting>
       compiled against as their base version. It is recommended to ignore the
       micro part of the version because systems tend to become very rigid if
       they require the latest bug fix to be deployed all the time. For
-      example, when compiled against version 4.2.1.V201007221030, the base
-      version should be 4.2.</para>
+      example, when compiled against version <code>4.2.1.V201007221030</code>,
+      the base version should be <code>4.2</code>.</para>
 
       <para>A consumer of an API should therefore import a range that starts
       with the base version and ends with the next major change, for example:
@@ -2638,7 +2639,7 @@ B: Bundle-SymbolicName: B
 
       <listitem>
         <para>The required execution environments as defined by the
-        Bundle-Required-ExecutionEnvironment header.</para>
+        Bundle-RequiredExecutionEnvironment header.</para>
       </listitem>
 
       <listitem>
@@ -3108,11 +3109,11 @@ boot-description    ::= package-name        // See <xref
 
       <orderedlist>
         <listitem>
-          <para>If the class or resource is in a java.* package, the request
-          is delegated to the parent class loader; otherwise, the search
-          continues with the next step. If the request is delegated to the
-          parent class loader and the class or resource is not found, then the
-          search terminates and the request fails.</para>
+          <para>If the class or resource is in a <code>java.*</code> package,
+          the request is delegated to the parent class loader; otherwise, the
+          search continues with the next step. If the request is delegated to
+          the parent class loader and the class or resource is not found, then
+          the search terminates and the request fails.</para>
         </listitem>
 
         <listitem>
@@ -3224,12 +3225,13 @@ boot-description    ::= package-name        // See <xref
       true for a bundle class loader. Framework implementations should attempt
       to load these classes from the boot class path.</para>
 
-      <para>The system bundle (bundle ID zero) is used to export non-java.*
-      packages from the parent class loader. Export definitions from the
-      system bundle are treated like normal exports, meaning that they can
-      have version numbers, and are used to resolve import definitions as part
-      of the normal bundle resolving process. Other bundles may provide
-      alternative implementations of the same packages.</para>
+      <para>The system bundle (bundle ID zero) is used to export
+      non-<code>java.*</code> packages from the parent class loader. Export
+      definitions from the system bundle are treated like normal exports,
+      meaning that they can have version numbers, and are used to resolve
+      import definitions as part of the normal bundle resolving process. Other
+      bundles may provide alternative implementations of the same
+      packages.</para>
 
       <para>The set of export definitions for the parent class loader can
       either be set by this property or calculated by the Framework. The
@@ -3703,7 +3705,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         selection-filter="(com.acme.windowing=gtk)"</programlisting>
 
     <para>This Bundle-NativeCode header would get translated into the
-    following osgi.native filter directive:</para>
+    following <code>osgi.native</code> filter directive:</para>
 
     <programlisting>(|
   (&amp;
@@ -3793,8 +3795,8 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         <listitem>
           <para>If no native clauses were selected in step <xref
           linkend="framework.module-nativecodealg1"/>, this algorithm is
-          terminated and a BundleException is thrown if the optional clause is
-          not present.</para>
+          terminated and a Bundle Exception is thrown if the optional clause
+          is not present.</para>
         </listitem>
 
         <listitem xml:id="framework.module-nativecodealg3">
@@ -3830,8 +3832,8 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
       <para>If a native code library in a selected native code clause cannot
       be found within the bundle then the bundle is still allowed to resolve.
       A missing native code library will result in an error being thrown at
-      runtime when the bundle attempts to load the native code (e.g. by
-      invoking the method <code>System.loadLibrary</code>).</para>
+      runtime when the bundle attempts to load the native code (for example,
+      by invoking the method <code>System.loadLibrary</code>).</para>
 
       <para>If the selected clause contains multiple libraries with the same
       base file name then only the lexically left most library with that base
@@ -4876,7 +4878,7 @@ bundle-description  ::= symbolic-name
     <section>
       <title>Illegal Manifest Headers for Extension Bundles</title>
 
-      <para>An extension bundle must throw a BundleException if it is
+      <para>An extension bundle must throw a Bundle Exception if it is
       installed or updated and it specifies any of the following
       headers.</para>
 
@@ -4928,7 +4930,7 @@ bundle-description  ::= symbolic-name
       <para>How a framework configures itself or the boot class path to append
       the extension bundle's JAR is implementation specific. In some execution
       environments, it may be impossible to support extension bundles. In such
-      environments, the Framework must throw a BundleException when such an
+      environments, the Framework must throw a Bundle Exception when such an
       extension bundle is installed. The resulting Bundle Exception must have
       a cause of type <code>UnsupportedOperationException</code>.</para>
     </section>
@@ -5080,7 +5082,7 @@ bundle-description  ::= symbolic-name
       <emphasis>target bundle</emphasis>. A wild card (<code>".*"
       \u002E,\u002A</code>) is permitted at the end of the name.</para>
 
-      <para>For example, if fragment bundle A attaches to its host bundle
+      <para>For example, for fragment bundle A to attach to its host bundle
       <code>B</code> then fragment bundle A requires
       <code>BundlePermission("B", "fragment")</code> so that A is permitted to
       target host bundle <code>B</code>. The direction of the actions is
