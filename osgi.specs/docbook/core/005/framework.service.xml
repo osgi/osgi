@@ -101,31 +101,31 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Service Scope</emphasis> - A property of a service
-          registration that reflects the strategy used to construct service
-          object instances. The following service scopes are supported:
-          <emphasis>singleton</emphasis>, <emphasis>bundle</emphasis>,
-          <emphasis>prototype</emphasis></para>
+          <para><emphasis>Service Scope</emphasis> - Indicates how service
+          objects are obtained when requesting a service object. The following
+          service scopes are defined: <emphasis>singleton</emphasis>,
+          <emphasis>bundle</emphasis>, and <emphasis>prototype</emphasis>. The
+          default service scope is <emphasis>singleton</emphasis>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Service Factory</emphasis> - A facility to let the
           registering bundle customize the service object for each using
-          bundle. A service factory uses the <emphasis>bundle</emphasis>
-          service scope.</para>
+          bundle. When using a Service Factory, the service scope of the
+          service is <emphasis>bundle</emphasis>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Prototype Service Factory</emphasis> - A facility to
           let the registering bundle customize the service object for each
-          caller. A prototype service factory uses the
-          <emphasis>prototype</emphasis> service scope.</para>
+          caller. When using a Prototype Service Factory, the service scope of
+          the service is <emphasis>prototype</emphasis>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Service Objects</emphasis> - A facility to let the
-          using bundle obtain multiple instances of a service object which has
-          the <emphasis>prototype</emphasis> service scope.</para>
+          using bundle obtain multiple service objects for a service with
+          <emphasis>prototype</emphasis> service scope.</para>
         </listitem>
 
         <listitem>
