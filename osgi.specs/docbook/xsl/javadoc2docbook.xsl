@@ -120,6 +120,10 @@ version="1.1">
   
         <xsl:apply-templates select="description"/>
     
+        <xsl:call-template name="descriptors">
+          <xsl:with-param name="target" select="."/>
+        </xsl:call-template>
+
         <xsl:variable name="classes" select="class[not(skip)]"/>
   
         <!-- Summary only for non-DDF output -->
@@ -205,10 +209,6 @@ version="1.1">
             </xsl:for-each>
           </xsl:element> <!-- end Permissions section -->
         </xsl:if>
-  
-        <xsl:call-template name="descriptors">
-          <xsl:with-param name="target" select="."/>
-        </xsl:call-template>
   
         <xsl:if test="$ddf">
           <xsl:apply-templates select="remark"/>
