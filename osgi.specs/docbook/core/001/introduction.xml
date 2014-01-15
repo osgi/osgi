@@ -739,6 +739,18 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
             <entry><code><xref endterm="org.osgi.util.tracker-version"
             linkend="util.tracker"/></code></entry>
           </row>
+
+          <row>
+            <entry><link linkend="org.osgi.annotation.versioning">Versioning
+            Annotations</link></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.annotation.versioning"/></code></entry>
+
+            <entry><code><xref
+            endterm="org.osgi.annotation.versioning-version"
+            linkend="org.osgi.annotation.versioning"/></code></entry>
+          </row>
         </tbody>
       </tgroup>
     </table>
@@ -781,15 +793,13 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
   <section>
     <title>Changes</title>
 
-    <remark>BJH Need to update this list.</remark>
-
     <itemizedlist>
       <listitem>
-        <para>DTO</para>
+        <para>Versioning Annotations</para>
       </listitem>
 
       <listitem>
-        <para>Package and Type annotations</para>
+        <para>Data Transfer Objects</para>
       </listitem>
     </itemizedlist>
   </section>

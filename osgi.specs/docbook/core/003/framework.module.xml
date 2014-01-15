@@ -498,6 +498,13 @@ qualifier   ::= ( alphanum | '_' | '-' )+</programlisting>
       <para>Versions are supported in the API with the <xref
       linkend="org.osgi.framework.Version" xrefstyle="hyperlink"/>
       class.</para>
+
+      <para>The <xref linkend="org.osgi.annotation.versioning.Version"
+      xrefstyle="hyperlink"/> annotation can be used in
+      <code>package-info.java</code> source files to document the version of a
+      package. This annotation can be processed by bundle assembly tools when
+      generating the version information for a bundle's Export-Package
+      manifest header.</para>
     </section>
 
     <section xml:id="i3189032">
@@ -2188,6 +2195,65 @@ B: Export-Package: p; version=1.5.1</programlisting>
       <code>[4.2,5)</code>. A provider of an API should import a range that
       starts with the base version up to the next minor change, for example:
       <code>[4.2,4.3)</code>.</para>
+    </section>
+
+    <section xml:id="framework.module-semantic.versioning.type.roles">
+      <title>Type Roles for Semantic Versioning</title>
+
+      <para>As mentioned in <xref
+      linkend="framework.module-semantic.versioning"/>, there are two roles
+      for clients of an API package: API consumers and API providers. API
+      consumers use the API and API providers implement the API. For the
+      interface and abstract class types in an API, it is important that the
+      API clearly document which of those types are only to be implemented by
+      API providers and which of those types can be implemented by API
+      consumers. For example, listener interfaces are generally implemented by
+      API consumers and instances of them passed to API providers.</para>
+
+      <para>API providers are sensitive to changes in types implemented by
+      both API consumers and API providers. An API provider must implement any
+      new changes in API provider types and must understand and likely invoke
+      any new changes in API consumer types. An API consumer can generally
+      ignore compatible changes in API provider types unless it wants to
+      invoke the new function. But an API consumer is sensitive to changes in
+      API consumer types and will probably need modification to implement the
+      new function. For example, in the <xref linkend="org.osgi.framework"
+      xrefstyle="hyperlink"/> package, the <xref
+      linkend="org.osgi.framework.BundleContext" xrefstyle="hyperlink"/> type
+      is implemented by the Framework which is the API provider. Adding a new
+      method to <xref linkend="org.osgi.framework.BundleContext"
+      xrefstyle="hyperlink"/> will require all Framework implementations to be
+      updated to implement the new method but bundles, which are the API
+      consumers, do not have to change unless they wish to call the new
+      method. However, the <xref linkend="org.osgi.framework.BundleActivator"
+      xrefstyle="hyperlink"/> type is implemented by bundles and adding a new
+      method to <xref linkend="org.osgi.framework.BundleActivator"
+      xrefstyle="hyperlink"/> will require all bundles implementing this
+      interface to be modified to implement the new method and will also
+      require all Framework implementations to be modified to utilize the new
+      method. Thus the <xref linkend="org.osgi.framework.BundleContext"
+      xrefstyle="hyperlink"/> type has an API provider role and the <xref
+      linkend="org.osgi.framework.BundleActivator" xrefstyle="hyperlink"/>
+      type has an API consumer role in the <xref linkend="org.osgi.framework"
+      xrefstyle="hyperlink"/> package.</para>
+
+      <para>Since there are generally many API consumer and few API providers,
+      API evolution must be very careful when considering changes to API
+      consumer types while being more relaxed about changing API provider
+      types. This is because you will need to change the few API providers to
+      support an updated API but you do not want to require the many existing
+      API consumers to change when an API is updated. API consumers should
+      only need to change when the API consumer wants to take advantage of new
+      API.</para>
+
+      <para>The <xref linkend="org.osgi.annotation.versioning.ProviderType"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.annotation.versioning.ConsumerType"
+      xrefstyle="hyperlink"/> annotations can be used in source files to
+      document the roles of interface and abstract class types in a package.
+      These annotation can be processed by bundle assembly tools that support
+      Semantic Versioning when generating the version range information for a
+      bundle's Import-Package manifest header.</para>
     </section>
 
     <section xml:id="i2548181">
@@ -5492,6 +5558,10 @@ URL(String protocol, String host, String file)</programlisting>
 
       <listitem>
         <para>Added support for Extension Bundle Activators.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added Type Roles for Semantic Versioning section.</para>
       </listitem>
     </itemizedlist>
   </section>
