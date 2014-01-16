@@ -14,23 +14,23 @@
  * limitations under the License.
  */
 
-package org.osgi.service.functionaldevice;
+package org.osgi.service.dal;
 
 import java.util.Dictionary;
 import java.util.Map;
-
 import org.osgi.service.event.Event;
 
 /**
  * Asynchronous event, which marks a Device Function property value
  * modification. The event can be triggered when there is a new property value,
  * but it's possible to have events in series with no value change. The event
- * properties must contain all device properties and:
+ * properties must contain:
  * <ul>
- * <li>{@link #PROPERTY_DEVICE_FUNCTION_UID} - the event source function unique
+ * <li>{@link #PROPERTY_FUNCTION_UID} - the event source function unique
  * identifier.</li>
- * <li>{@link #PROPERTY_DEVICE_FUNCTION_PROPERTY_NAME} - the property name.</li>
- * <li>{@link #PROPERTY_DEVICE_FUNCTION_PROPERTY_VALUE} - the property value.</li>
+ * <li>{@link #PROPERTY_FUNCTION_PROPERTY_NAME} - the property name.</li>
+ * <li>{@link #PROPERTY_FUNCTION_PROPERTY_VALUE} - the property value. The
+ * property value type must be a subclass of DeviceFunctionData.</li>
  * </ul>
  */
 public final class DeviceFunctionEvent extends Event {
@@ -39,71 +39,65 @@ public final class DeviceFunctionEvent extends Event {
 	 * Represents the event package. That constant can be useful for the event
 	 * handlers depending on the event filters.
 	 */
-	public static final String EVENT_PACKAGE = "org/osgi/services/abstractdevice/";
+	public static final String	EVENT_PACKAGE						= "org/osgi/services/abstractdevice/";
 
 	/**
 	 * Represents the event class. That constant can be useful for the event
 	 * handlers depending on the event filters.
 	 */
-	public static final String EVENT_CLASS = EVENT_PACKAGE
-			+ "DeviceFunctionEvent/";
+	public static final String	EVENT_CLASS							= EVENT_PACKAGE
+																			+ "DeviceFunctionEvent/";
 
 	/**
 	 * Represents the event topic for the Device Function property changed.
 	 */
-	public static final String TOPIC_PROPERTY_CHANGED = EVENT_CLASS
-			+ "PROPERTY_CHANGED";
+	public static final String	TOPIC_PROPERTY_CHANGED				= EVENT_CLASS
+																			+ "PROPERTY_CHANGED";
 
 	/**
 	 * Represents an event property key for Device Function UID. The property
 	 * value type is <code>java.lang.String</code>. The value represents the
 	 * property value change source function identifier.
 	 */
-	public static final String PROPERTY_DEVICE_FUNCTION_UID = "device.function.UID";
+	public static final String	PROPERTY_FUNCTION_UID				= "dal.function.UID";
 
 	/**
 	 * Represents an event property key for the Device Function property name.
 	 * The property value type is <code>java.lang.String</code>. The value
 	 * represents the property name.
 	 */
-	public static final String PROPERTY_DEVICE_FUNCTION_PROPERTY_NAME = "device.function.property.name";
+	public static final String	PROPERTY_FUNCTION_PROPERTY_NAME		= "dal.function.property.name";
 
 	/**
 	 * Represents an event property key for the Device Function property value.
-	 * The property value type depends on the property type. The value
-	 * represents the property value.
+	 * The property value type is a subclass of <code>DeviceFunctionData</code>.
+	 * The value represents the property value.
 	 */
-	public static final String PROPERTY_DEVICE_FUNCTION_PROPERTY_VALUE = "device.function.property.value";
+	public static final String	PROPERTY_FUNCTION_PROPERTY_VALUE	= "dal.function.property.value";
 
 	/**
 	 * Constructs a new event with the specified topic and properties.
 	 * 
-	 * @param topic
-	 *            The event topic.
-	 * @param properties
-	 *            The event properties.
+	 * @param topic The event topic.
+	 * @param properties The event properties.
 	 */
 	public DeviceFunctionEvent(String topic, Dictionary properties) {
-		// TODO Auto-generated constructor stub
 		super(topic, properties);
 	}
 
 	/**
 	 * Constructs a new event with the specified topic and properties.
 	 * 
-	 * @param topic
-	 *            The event topic.
-	 * @param properties
-	 *            The event properties.
+	 * @param topic The event topic.
+	 * @param properties The event properties.
 	 */
 	public DeviceFunctionEvent(String topic, Map properties) {
-		// TODO Auto-generated constructor stub
 		super(topic, properties);
 	}
 
 	/**
 	 * Returns the property value change source function identifier. The value
-	 * is same as the value of {@link #PROPERTY_DEVICE_FUNCTION_UID} property.
+	 * is same as the value of {@link #PROPERTY_FUNCTION_UID} property.
 	 * 
 	 * @return The property value change source function.
 	 */
@@ -114,7 +108,7 @@ public final class DeviceFunctionEvent extends Event {
 
 	/**
 	 * Returns the property name. The value is same as the value of
-	 * {@link #PROPERTY_DEVICE_FUNCTION_PROPERTY_NAME}.
+	 * {@link #PROPERTY_FUNCTION_PROPERTY_NAME}.
 	 * 
 	 * @return The property name.
 	 */
@@ -125,11 +119,11 @@ public final class DeviceFunctionEvent extends Event {
 
 	/**
 	 * Returns the property value. The value is same as the value of
-	 * {@link #PROPERTY_DEVICE_FUNCTION_PROPERTY_VALUE}.
+	 * {@link #PROPERTY_FUNCTION_PROPERTY_VALUE}.
 	 * 
 	 * @return The property value.
 	 */
-	public Object getPropertyValue() {
+	public DeviceFunctionData getPropertyValue() {
 		return null;
 		// TODO: impl
 	}

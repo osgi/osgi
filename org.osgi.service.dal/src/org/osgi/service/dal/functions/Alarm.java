@@ -14,27 +14,24 @@
  * limitations under the License.
  */
 
-package org.osgi.service.functionaldevice.functions;
+package org.osgi.service.dal.functions;
 
-import org.osgi.service.functionaldevice.DeviceFunction;
+import org.osgi.service.dal.DeviceFunction;
+import org.osgi.service.dal.functions.data.AlarmData;
 
 /**
- * <code>Keypad</code> Device Function provides support for keypad control. A
- * keypad typically consists of one or more keys/buttons, which can be
- * discerned. Different types of key presses like short and long press can
- * typically also be detected. There is only one eventable property and no
- * operations.
+ * <code>Alarm</code> Device Function provides alarm sensor support. There is
+ * only one eventable property and no operations.
  * 
- * @see KeypadData
+ * @see AlarmData
  */
-public interface Keypad extends DeviceFunction {
+public interface Alarm extends DeviceFunction {
 
 	/**
-	 * Specifies a property name for a key from the keypad. The property is
-	 * eventable.
+	 * Specifies the alarm property name. The property is eventable.
 	 * 
-	 * @see KeypadData
+	 * @see AlarmData
 	 */
-	public static final String PROPERTY_KEY = "key";
+	public static final String	PROPERTY_ALARM	= "alarm";
 
 }

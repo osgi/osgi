@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.functionaldevice;
+package org.osgi.service.dal;
 
 import java.security.BasicPermission;
 import java.security.Permission;
@@ -33,20 +33,8 @@ import java.security.PermissionCollection;
  * <td>{@link Device#remove()}</td>
  * </tr>
  * <tr>
- * <td>{@link #ACTION_ENABLE}</td>
- * <td>{@link Device#enable()}</td>
- * </tr>
- * <tr>
- * <td>{@link #ACTION_DISABLE}</td>
- * <td>{@link Device#disable()}</td>
- * </tr>
- * <tr>
- * <td>{@link #ACTION_PROPERTY}</td>
- * <td>{@link Device#setProperty(String, Object)}</td>
- * </tr>
- * <tr>
- * <td></td>
- * <td>{@link Device#setProperties(String[], Object[])}</td>
+ * <td>{@link #ACTION_SET_NAME}</td>
+ * <td>{@link Device#setName(String)}</td>
  * </tr>
  * </table>
  * 
@@ -57,42 +45,32 @@ import java.security.PermissionCollection;
  */
 public final class DevicePermission extends BasicPermission {
 
-	private static final long serialVersionUID = -3020753566295420906L;
+	private static final long	serialVersionUID	= -3020753566295420906L;
 
-	/** A permission action to enable the device. */
-	public static final String ACTION_ENABLE = "enable";
-
-	/** A permission action to disable the device. */
-	public static final String ACTION_DISABLE = "disable";
-
-	/** A permission action to modify the device properties. */
-	public static final String ACTION_PROPERTY = "property";
+	/** A permission action to modify the device name. */
+	public static final String	ACTION_SET_NAME		= "setName";
 
 	/** A permission action to remove the device. */
-	public static final String ACTION_REMOVE = "remove";
+	public static final String	ACTION_REMOVE		= "remove";
 
 	/**
 	 * Creates a new <code>FunctionalDevicePermission</code> with the given
 	 * filter and actions. The constructor must only be used to create a
 	 * permission that is going to be checked.
 	 * <p>
-	 * An filter example: (abstract.device.hardware.vendor=acme)
+	 * An filter example: (dal.device.hardware.vendor=acme)
 	 * <p>
 	 * An action list example: property, remove
 	 * 
-	 * @param filter
-	 *            A filter expression that can use any device service property.
-	 *            The filter attribute names are processed in a case insensitive
-	 *            manner. A special value of "*" can be used to match akk
-	 *            devices.
-	 * @param actions
-	 *            A comma-separated list of {@link #ACTION_DISABLE},
-	 *            {@link #ACTION_ENABLE} {@link #ACTION_PROPERTY} and
-	 *            {@link #ACTION_REMOVE}. Any combinations are allowed.
+	 * @param filter A filter expression that can use any device service
+	 *        property. The filter attribute names are processed in a case
+	 *        insensitive manner. A special value of "*" can be used to match
+	 *        akk devices.
+	 * @param actions A comma-separated list of {@link #ACTION_SET_NAME} and
+	 *        {@link #ACTION_REMOVE}. Any combinations are allowed.
 	 * 
-	 * @throws IllegalArgumentException
-	 *             If the filter syntax is not correct or invalid actions are
-	 *             specified.
+	 * @throws IllegalArgumentException If the filter syntax is not correct or
+	 *         invalid actions are specified.
 	 */
 	public DevicePermission(String filter, String actions) {
 		super(filter, actions);
@@ -108,12 +86,9 @@ public final class DevicePermission extends BasicPermission {
 	 * . The permissions constructed by this constructor must not be added to
 	 * the <code>FunctionalDevicePermission</code> permission collections.
 	 * 
-	 * @param device
-	 *            The permission device.
-	 * @param actions
-	 *            A comma-separated list of {@link #ACTION_DISABLE},
-	 *            {@link #ACTION_ENABLE} {@link #ACTION_PROPERTY} and
-	 *            {@link #ACTION_REMOVE}. Any combinations are allowed.
+	 * @param device The permission device.
+	 * @param actions A comma-separated list of {@link #ACTION_SET_NAME} and
+	 *        {@link #ACTION_REMOVE}. Any combinations are allowed.
 	 */
 	public DevicePermission(Device device, String actions) {
 		super(null);
@@ -127,8 +102,7 @@ public final class DevicePermission extends BasicPermission {
 	 * <li>represents the same device and actions</li>
 	 * </ul>
 	 * 
-	 * @param obj
-	 *            The object being compared for equality with this object.
+	 * @param obj The object being compared for equality with this object.
 	 * 
 	 * @return <code>true</code> if two permissions are equal,
 	 *         <code>false</code> otherwise.
@@ -150,8 +124,8 @@ public final class DevicePermission extends BasicPermission {
 
 	/**
 	 * Returns the canonical string representation of the actions. Always
-	 * returns present actions in the following order: {@link #ACTION_DISABLE},
-	 * {@link #ACTION_ENABLE} {@link #ACTION_PROPERTY}, {@link #ACTION_REMOVE}.
+	 * returns present actions in the following order: {@link #ACTION_SET_NAME},
+	 * {@link #ACTION_REMOVE}.
 	 * 
 	 * @return The canonical string representation of the actions.
 	 */
@@ -169,16 +143,14 @@ public final class DevicePermission extends BasicPermission {
 	 * <code>FunctionalDevicePermission</code> and this permission filter
 	 * matches the specified permission device properties.
 	 * 
-	 * @param p
-	 *            The permission to be implied. It must be constructed by
-	 *            {@link #DevicePermission(Device, String)}.
+	 * @param p The permission to be implied. It must be constructed by
+	 *        {@link #DevicePermission(Device, String)}.
 	 * 
 	 * @return <code>true</code> if the specified permission is implied by this
 	 *         permission, <code>false</code> otherwise.
 	 * 
-	 * @throws IllegalArgumentException
-	 *             If the specified permission is not constructed by
-	 *             {@link #DevicePermission(Device, String)}.
+	 * @throws IllegalArgumentException If the specified permission is not
+	 *         constructed by {@link #DevicePermission(Device, String)}.
 	 */
 	public boolean implies(Permission p) {
 		return false;

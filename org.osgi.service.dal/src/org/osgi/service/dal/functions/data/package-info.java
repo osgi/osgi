@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * Functional Device Package Version 1.0.
+ * Device Function Data 1.0.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the
@@ -26,14 +26,14 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.functionaldevice; version="[1.0,2.0)"}
+ * {@code  Import-Package: org.osgi.service.dal.functions.data; version="[1.0,2.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.functionaldevice; version="[1.0,1.1)"}
+ * {@code  Import-Package: org.osgi.service.dal.functions.data; version="[1.0,1.1)"}
  * 
  * @version 1.0
  */
 
-package org.osgi.service.functionaldevice;
+package org.osgi.service.dal.functions.data;
 
