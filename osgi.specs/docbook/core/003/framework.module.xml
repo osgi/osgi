@@ -1357,7 +1357,7 @@ bree     ::= token ('-' version)? ( '/' token ( '-' version)? )?</programlisting
       <code>bree</code> term. The structure of the <code>bree</code> term for
       the existing recommendations is:</para>
 
-      <programlisting>bree' ::= n1 ( '-' v )? ( '/' n2 ( '-' v )?)?</programlisting>
+      <programlisting>n1 ( '-' v )? ( '/' n2 ( '-' v )?)?</programlisting>
 
       <para>For example:</para>
 
@@ -1366,22 +1366,22 @@ OSGi/Minimum-1.2
 J2SE-1.4
 JavaSE-1.4</programlisting>
 
-      <para>Each BREE element that matches this pattern can thus be converted
-      into an equivalent <code>osgi.ee</code> Require-Capability filter. First
-      variable <code>n1</code> must be replaced with <code>JavaSE</code> when
-      it is <code>J2SE</code> since the Require-Capability header uses a
-      single name for the Java Standard Edition. The <code>filter</code>
-      directive can then be constructed from <code>n1</code>, <code>v</code>,
-      and <code>n2</code>. If n2 is not defined or v is not defined then the
-      parenthesized parts in which they participate are not used in the
-      expansion.</para>
+      <para>Each <code>bree</code> term that matches this pattern can thus be
+      converted into an equivalent <code>osgi.ee</code> Require-Capability
+      filter. First variable <code>n1</code> must be replaced with
+      <code>JavaSE</code> when it is <code>J2SE</code> since the
+      Require-Capability header uses a single name for the Java Standard
+      Edition. The <code>filter</code> directive can then be constructed from
+      <code>n1</code>, <code>v</code>, and <code>n2</code>. If n2 is not
+      defined or v is not defined then the parenthesized parts in which they
+      participate are not used in the expansion.</para>
 
-      <programlisting>bree-filter ::= '(&amp;(osgi.ee=' n1 ('/'n2 )? ') ( '(version=' v ')' )? ')'</programlisting>
+      <programlisting>bree-filter ::= '(&amp;(osgi.ee=' n1 ( '/' n2 )? ')' ( '(version=' v ')' )? ')'</programlisting>
 
       <para>If the <code>bree</code> term cannot be parsed into the given
       constituents then the filter must look like:</para>
 
-      <programlisting>  filter    ::= '(osgi.ee='  &lt;ee name&gt;')'</programlisting>
+      <programlisting>filter    ::= '(osgi.ee=' &lt;ee name&gt; ')'</programlisting>
 
       <para>Some examples:</para>
 
@@ -5047,11 +5047,11 @@ bundle-description  ::= symbolic-name
 
         <para>When a framework extension is installed a Framework may allow
         the extension to become resolved dynamically, without a Framework
-        restart. If a framework extension is allowed to be installed and
-        resolve dynamically after Framework initialization, then the Extension
-        Bundle Activator start method must be called as soon as the extension
-        bundle is resolved. This must happen before the resolved bundle event
-        is fired for the extension bundle.</para>
+        restart. If a framework extension is allowed to install and resolve
+        dynamically after Framework initialization, then the Extension Bundle
+        Activator start method must be called as soon as the extension bundle
+        is resolved. This must happen before the resolved bundle event is
+        fired for the extension bundle.</para>
       </section>
 
       <section>

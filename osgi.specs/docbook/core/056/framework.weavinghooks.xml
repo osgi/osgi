@@ -112,9 +112,9 @@
       <title>Tracing</title>
 
       <para>For tracing purposes, a bundle can weave a trace entry and exit
-      message around each method. This is trivial to do with byte code weaving
-      by inserting a call to a service at the beginning and end of a method.
-      In this example, a service is created that has two methods:</para>
+      message around each method. This can be done with byte code weaving by
+      inserting a call to a service at the beginning and end of a method. In
+      this example, a service is created that has two methods:</para>
 
       <itemizedlist>
         <listitem>
@@ -129,13 +129,13 @@
 
       <para>The strategy chosen here is simple. The weaver registers a Weaving
       Hook service so it receives all class loads. Any such class load is
-      checked against a list of bundles that needs tracing, any class from a
+      checked against a set of bundles that needs tracing, any class from a
       traced bundle is then woven with the trace information. If a bundle is
-      traced, the list is set up and the bundle is refreshed to ensure all
-      classes are loaded anew so the tracing code can be woven in.</para>
+      to be traced, the set is updated and the bundle is refreshed to ensure
+      all classes are loaded anew so the tracing code can be woven in.</para>
 
-      <programlisting>public class Example implements WeavingHook{
-    final Map&lt;Bundle,BundleWiring&gt; bundles = new HashMap&lt;Bundle,BundleWiring&gt;();
+      <programlisting>public class TracingWeaver implements WeavingHook {
+    final Set&lt;Bundle&gt; bundles = new HashSet&lt;Bundle&gt;();
     final List&lt;String&gt; imports = Arrays.asList(
         "com.acme.trace;version=\"[1,2)\""); 
     BundleContext context;</programlisting>
@@ -144,9 +144,9 @@
       Hook service. It receives a <code>WovenClass</code> object that provides
       the information about the class to be woven. In this case, the
       <code>bundles</code> field contains the bundles to be woven, so this is
-      checked first. If the to be loaded class is in one of the traced
+      checked first. If the to-be-loaded class is in one of the traced
       bundles, the byte codes are changed to provide trace information.
-      Otherwise the request is ignored.</para>
+      Otherwise the no change is made.</para>
 
       <para>In general, weaving code will require new imports for the
       to-be-woven bundle. These imports can be added by adding Dynamic Import
@@ -162,8 +162,7 @@
         Bundle b = bw.getBundle(); 
         if (bundles.contains(b)) {
             byte [] woven = weaveTracing(classInfo.getBytes());
-            if (!classInfo.getDynamicImports()
-                    .containsAll(imports))
+            if (!classInfo.getDynamicImports().containsAll(imports))
                 classInfo.getDynamicImports().addAll(imports);
             classInfo.setBytes(woven);
         }
@@ -171,29 +170,21 @@
 
       <para>The following <code>trace</code> method is called when a bundle
       must be traced. It ignores the request if the bundle is already traced.
-      Otherwise, it will add the bundle to the list of traced bundles and
+      Otherwise, it will add the bundle to the set of traced bundles and
       refresh the bundle.</para>
 
       <programlisting>    public synchronized void trace(Bundle b) 
         throws BundleException {
-
-        if (!bundles.containsKey(b))
-            return;
-
-        BundleWiring bw = b.adapt(BundleWiring.class);
-        bundles.put(b, bw);
-        refresh(b);
+        if (bundles.add(b))
+            refresh(b);
     }</programlisting>
 
       <para>The <code>untrace</code> method is the reverse:</para>
 
       <programlisting>    public synchronized void untrace(Bundle b) 
         throws BundleException {
-        if (!bundles.containsKey(b))
-            return;
-
-        bundles.remove(b);
-        refresh(b);
+        if (bundles.remove(b))
+            refresh(b);
     }</programlisting>
 
       <para>The refresh method uses the Bundle Wiring API to refresh a bundle.
@@ -209,7 +200,7 @@
       <para>The trace method that does the final weaving is left as an
       exercise to the reader:</para>
 
-      <programlisting>    byte[] trace(byte [] bytes) {
+      <programlisting>    byte[] weaveTracing(byte[] bytes) {
         ..
     }       
 }</programlisting>
@@ -295,7 +286,7 @@
   </section>
 
   <section>
-    <title>The Weaving Service</title>
+    <title>Weaving Hook</title>
 
     <para>The Weaving Hook service is a white board service; any party that
     wants to participate in weaving classes can register such a service. The
@@ -476,7 +467,7 @@
   </section>
 
   <section>
-    <title>The Woven Class Listener Service</title>
+    <title>Woven Class Listener</title>
 
     <para>The Woven Class Listener service is a white board service; any party
     that wants to receive notifications of woven class state transitions can
@@ -513,9 +504,9 @@
     the bundle wiring updated as a result of additional dynamic imports.
     TRANSFORMING_FAILED occurs instead if a weaving hook threw an exception.
     After TRANSFORMED comes either DEFINED or DEFINE_FAILED. DEFINED is
-    received is the class was defined successfully and after the bundle wiring
-    has been updated. DEFINE_FAILED occurs instead if a class definition error
-    occurred.</para>
+    received when the class was defined successfully and after the bundle
+    wiring has been updated. DEFINE_FAILED occurs instead if a class
+    definition error occurred.</para>
 
     <para>The following table describes the state transitions of a Woven Class
     in more detail.</para>
@@ -575,7 +566,7 @@
             <entry><para>All weaving hooks have been notified.</para>
             <itemizedlist>
                 <listitem>
-                  <para>Weaving is incomplete.</para>
+                  <para>Weaving is complete.</para>
                 </listitem>
 
                 <listitem>
@@ -625,7 +616,7 @@
             <entry><para>All woven class listeners have been notified. The
             class has been defined.</para> <itemizedlist>
                 <listitem>
-                  <para>Weaving is incomplete.</para>
+                  <para>Weaving is complete.</para>
                 </listitem>
 
                 <listitem>
@@ -650,7 +641,7 @@
             <entry><para>All weaving hooks have been notified. A class
             definition failure occurred.</para> <itemizedlist>
                 <listitem>
-                  <para>Weaving is incomplete.</para>
+                  <para>Weaving is complete.</para>
                 </listitem>
 
                 <listitem>
@@ -673,14 +664,13 @@
     <section>
       <title>Concurrency</title>
 
-      <para>Class loads can occur at any time, and Woven Class Listener
-      services must be able to handle concurrent calls to the <code>modified
-      </code> method. The framework should not hold any locks when calling
-      Woven Class Listener services, and Woven Class Listener service
-      implementations must be thread-safe. Woven class listeners must be
-      synchronously called by the framework when a woven class completes a
-      state transition. The woven class processing will not proceed until all
-      woven class listeners are done.</para>
+      <para>Class loads can occur at any time, and Woven Class Listeners must
+      be able to handle concurrent calls to the <code>modified</code> method.
+      The framework should not hold any locks when calling Woven Class
+      Listeners, and Woven Class Listener implementations must be thread-safe.
+      Woven Class Listeners must be synchronously called by the framework when
+      a woven class completes a state transition. The woven class processing
+      will not proceed until all woven class listeners are done.</para>
     </section>
 
     <section>

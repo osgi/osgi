@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,12 @@ package org.osgi.framework.hooks.weaving;
 import org.osgi.annotation.versioning.ConsumerType;
 
 /**
- * OSGi Framework Woven Class Listener Service.
+ * Woven Class Listener Service.
  * 
  * <p>
  * Bundles registering this service will receive notifications whenever a
  * {@link WovenClass woven class} completes a {@link WovenClass#getState()
- * state} transition. Implementers will therefore be unable to modify the woven
+ * state} transition. Woven Class Listeners are not able to modify the woven
  * class in contrast with {@link WeavingHook weaving hooks}.
  * 
  * <p>

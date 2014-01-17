@@ -849,10 +849,13 @@ public interface BundleContext extends BundleReference {
 	 * the specified {@code ServiceReference} object.
 	 * 
 	 * <p>
-	 * The {@link ServiceObjects} object can be used to obtain multiple
-	 * service objects for services with {@link Constants#SCOPE_PROTOTYPE
-	 * prototype} scope. For services with {@link Constants#SCOPE_SINGLETON
-	 * singleton} or {@link Constants#SCOPE_BUNDLE bundle} scope, the
+	 * The {@link ServiceObjects} object can be used to obtain multiple service
+	 * objects for services with {@link Constants#SCOPE_PROTOTYPE prototype}
+	 * scope.
+	 * 
+	 * <p>
+	 * For services with {@link Constants#SCOPE_SINGLETON singleton} or
+	 * {@link Constants#SCOPE_BUNDLE bundle} scope, the
 	 * {@link ServiceObjects#getService()} method behaves the same as the
 	 * {@link #getService(ServiceReference)} method and the
 	 * {@link ServiceObjects#ungetService(Object)} method behaves the same as

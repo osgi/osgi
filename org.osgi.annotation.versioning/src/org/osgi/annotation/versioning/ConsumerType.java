@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ import java.lang.annotation.Target;
  * 
  * <p>
  * A type can be marked {@link ConsumerType} or {@link ProviderType} but not
- * both. A type is assumed to be {@link ConsumerType} it is not marked either
+ * both. A type is assumed to be {@link ConsumerType} if it is not marked either
  * {@link ConsumerType} or {@link ProviderType}.
  * 
  * <p>

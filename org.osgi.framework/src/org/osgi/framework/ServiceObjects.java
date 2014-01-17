@@ -25,7 +25,8 @@ import org.osgi.annotation.versioning.ProviderType;
  * For services with {@link Constants#SCOPE_PROTOTYPE prototype} scope, multiple
  * service objects for the service can be obtained. For services with
  * {@link Constants#SCOPE_SINGLETON singleton} or {@link Constants#SCOPE_BUNDLE
- * bundle} scope, only one, use-counted service object is available.
+ * bundle} scope, only one, use-counted service object is available to a
+ * requesting bundle.
  * 
  * <p>
  * Any unreleased service objects obtained from this {@code ServiceObjects}
@@ -49,12 +50,14 @@ public interface ServiceObjects<S> {
 	 * <p>
 	 * This {@code ServiceObjects} object can be used to obtain multiple service
 	 * objects for the associated service if the service has
-	 * {@link Constants#SCOPE_PROTOTYPE prototype} scope. If the associated
-	 * service has {@link Constants#SCOPE_SINGLETON singleton} or
-	 * {@link Constants#SCOPE_BUNDLE bundle} scope, this method behaves the same
-	 * as calling the {@link BundleContext#getService(ServiceReference)} method
-	 * for the associated service. That is, only one, use-counted service object
-	 * is available from this {@link ServiceObjects} object.
+	 * {@link Constants#SCOPE_PROTOTYPE prototype} scope.
+	 * 
+	 * <p>
+	 * If the associated service has {@link Constants#SCOPE_SINGLETON singleton}
+	 * or {@link Constants#SCOPE_BUNDLE bundle} scope, this method behaves the
+	 * same as calling the {@link BundleContext#getService(ServiceReference)}
+	 * method for the associated service. That is, only one, use-counted service
+	 * object is available from this {@link ServiceObjects} object.
 	 * 
 	 * <p>
 	 * This method will always return {@code null} when the associated service

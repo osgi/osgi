@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1383,7 +1383,7 @@ public interface Constants {
 
 	/**
 	 * Service scope is bundle. Each bundle using the service receives a
-	 * distinct service object.
+	 * customized service object.
 	 * 
 	 * @since 1.8
 	 * @see #SERVICE_SCOPE
@@ -1392,7 +1392,7 @@ public interface Constants {
 
 	/**
 	 * Service scope is prototype. Each bundle using the service receives either
-	 * a distinct service object or can request multiple distinct service
+	 * a customized service object or can request multiple customized service
 	 * objects via {@link ServiceObjects}.
 	 * 
 	 * @since 1.8

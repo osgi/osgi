@@ -791,21 +791,21 @@
 
       <para>Implementations of the framework or user code are allowed to throw
       sub classes of the <code>ServiceException</code> class. If a sub class
-      is thrown for another reason than specified by one of the types, then
-      the type should be set to <xref
+      is thrown for a reason other than one of the specified types, then the
+      type should be set to <xref
       linkend="org.osgi.framework.ServiceException.SUBCLASSED"
       xrefstyle="hyperlink"/>. Sub classes that provide additional information
-      on existing types should keep the original type code.</para>
+      for a specified type should use the specified type.</para>
     </section>
 
     <section>
       <title>Services and Concurrency</title>
 
-      <para>Services published on one thread and gotten on another thread must
-      be safe to use. That is, the Framework must guarantee that there is a
-      <emphasis>happens-before</emphasis> relationship between the time a
+      <para>Services published on one thread and obtained on another thread
+      must be safe to use. That is, the Framework must guarantee that there is
+      a <emphasis>happens-before</emphasis> relationship between the time a
       service is registered and the time a service object or Service Reference
-      is gotten. That is both the registering and getting threads must be
+      is obtained. That is both the registering and obtaining threads must be
       properly synchronized with each other.</para>
     </section>
   </section>
@@ -1458,7 +1458,7 @@
     xrefstyle="hyperlink"/> interface, the service has <xref
     linkend="org.osgi.framework.Constants.SCOPE_BUNDLE"
     xrefstyle="hyperlink"/> scope and the Framework must call methods on the
-    registered object to create a customized service object for each distinct
+    registered object to obtain a customized service object for each distinct
     bundle that gets the service.</para>
 
     <para>When the customized service object is no longer used by a bundle -

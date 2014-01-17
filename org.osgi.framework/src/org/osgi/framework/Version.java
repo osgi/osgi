@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -237,7 +237,7 @@ public class Version implements Comparable<Version> {
 	 * 
 	 * <p>
 	 * This method performs a similar function as {@link #parseVersion(String)}
-	 * but uses the static factory {@code valueOf(String)} method signature.
+	 * but has the static factory {@code valueOf(String)} method signature.
 	 * 
 	 * @param version String representation of the version identifier. Leading
 	 *        and trailing whitespace will be ignored. Must not be {@code null}.

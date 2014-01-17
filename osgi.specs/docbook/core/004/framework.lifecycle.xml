@@ -2870,7 +2870,7 @@ D: Export-Package: s</programlisting>
 
     <para>The <code>BundleContext</code> object is only valid during the
     <code>{ STARTING, ACTIVE, STOPPING }</code> states of a bundle. However,
-    the <code>BundleContext</code> object become invalid after
+    the <code>BundleContext</code> object becomes invalid after
     <code>stop(BundleContext)</code> returns (if the bundle has a Bundle
     Activator). The <code>BundleContext</code> object becomes invalid before
     disposing of any remaining registered services and releasing any remaining
