@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="57" revision="$Id$"
+         version="5" xml:id="framework.dto"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Data Transfer Objects Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.dto-version"
+    linkend="org.osgi.dto"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>The OSGi API is rich and introspective supporting the local
+    management of bundle, services and other items. Since the API has a lot of
+    behavior and is not designed for serialization, any management model must
+    design its own representation of the relevant OSGi objects for
+    communication with remote management systems. We see this in the JMX
+    Management Model Specification, the Dmt Admin Service Specification and
+    Residential Device Management Tree Specification: the JMX Management Model
+    Specification must define the MBeans and the Residential Device Management
+    Tree Specification must define the tree representation.</para>
+
+    <para>The OSGi API continues to evolve and at each update of the OSGi API,
+    the management models will all need to update their representations of the
+    OSGi objects. Having standard, simple, easy to serialize and deserialize
+    objects which represent the relevant OSGi objects will make it easier for
+    the management model to keep up with changes in the OSGi API. Therefore,
+    this specification defines Data Transfer Objects for OSGi in general and
+    well as specific Data Transfer Objects for the Core specification. Other
+    OSGi specifications may be updated over time to define Data Transfer
+    Objects specific to their domain.</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Easy Serialization/Deserialization</emphasis> - Must
+          be easily serializable. That is, no special
+          serialization/deserialization logic must be required. Serialization
+          must be possible simply by introspection.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>No Behavior</emphasis> - Must have no behavior. That
+          is, no methods other than the default public constructor.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Public</emphasis> - Must have only public fields.
+          That is, no private implementation detail.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Limited Field Types</emphasis> - Must only use a
+          limited selection of field types.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Extendable</emphasis> - May extend other Data
+          Transfer Object types.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Snapshot</emphasis> - Does not track changes to
+          represented runtime object.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Not Thread Safe</emphasis> - External
+          synchronization is needed.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Instantiation</emphasis> - A means is provided to
+          create Data Transfer Objects for the runtime objects they
+          represent.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Data Transfer Object (DTO)</emphasis> - An object
+          for carrying data between processes. A Data Transfer Object does not
+          have any behavior. See <xref
+          linkend="framework.dto.references-dto"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Runtime Object</emphasis> - A runtime object being
+          represented by a Data Transfer Object. The runtime object can have
+          complex behavior.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>Data Transfer Object</title>
+
+    <para>A Data Transfer Object is used to represent the state of a related
+    runtime object in a form suitable for easy transfer to some receiver. The
+    receiver can be in the same Java VM but is more likely in another process
+    or on another system that is remote. All Data Transfer Objects are easily
+    serializable having only public fields of a limited set of type. These
+    types are:</para>
+
+    <para><itemizedlist>
+        <listitem>
+          <para>Primitive types</para>
+        </listitem>
+
+        <listitem>
+          <para>Wrapper classes for the primitive types</para>
+        </listitem>
+
+        <listitem>
+          <para><code>String</code></para>
+        </listitem>
+
+        <listitem>
+          <para>Data Transfer Objects</para>
+        </listitem>
+
+        <listitem>
+          <para><code>List</code></para>
+        </listitem>
+
+        <listitem>
+          <para><code>Set</code></para>
+        </listitem>
+
+        <listitem>
+          <para><code>Map</code></para>
+        </listitem>
+
+        <listitem>
+          <para>array</para>
+        </listitem>
+      </itemizedlist></para>
+
+    <para>The List, Set, Map and array aggregates must only hold objects of
+    the listed types.</para>
+
+    <para>Data Transfer Objects are public classes with no methods, other than
+    the compiler supplied default constructor, having only public fields
+    limited to the easily serializable types mentioned above. The <xref
+    linkend="org.osgi.dto" xrefstyle="hyperlink"/> package defines the basic
+    rules and the abstract base <xref linkend="org.osgi.dto.DTO"
+    xrefstyle="hyperlink"/> class which Data Transfer Objects must
+    extend.</para>
+
+    <para>A Data Transfer Object is a representation of a runtime object at
+    the point in time the Data Transfer Object was created. Data Transfer
+    Objects do not track state changes in the represented runtime object.
+    Since Data Transfer Objects are simply fields with no method behavior,
+    modifications to Data Transfer Object are inherently not thread safe. Care
+    must be taken to safely publish Data Transfer Objects for use by other
+    threads as well as proper synchronization if a Data Transfer Object is
+    mutated by one of the threads.</para>
+
+    <section>
+      <title>Naming Conventions</title>
+
+      <para>Data Transfer Objects should follow a naming convention for the
+      package containing the Data Transfer Object as well as the Data Transfer
+      Object type. For the package name, we start with the package name
+      containing the runtime type for which the Data Transfer Object is a
+      representation. A <code>dto</code> segment is inserted in the package
+      name after the base domain name. For example, a Data Transfer Object
+      representing a runtime type in the <code>org.osgi.service.foo</code>
+      package will be in the Data Transfer Object package name is
+      <code>org.osgi.dto.service.foo</code> when <code>org.osgi</code> is the
+      base domain name for OSGi.</para>
+
+      <para>The name of the Data Transfer Object type should be the name of
+      the runtime type for which the Data Transfer Object is a representation
+      followed by <code>DTO</code>. So for a type <code>Widget</code>, the
+      Data Transfer Object for that type should be <code>WidgetDTO</code>.
+      Sometimes the entity for which the Data Transfer Object provides a
+      representation does not exists as a runtime type. In this case, the name
+      of entity with a <code>DTO</code> suffix should be used. For example,
+      <code>EntityDTO</code>.</para>
+
+      <para>Putting both the package and type Data Transfer Object naming
+      conventions together, the fully qualified name for the Data Transfer
+      Object representing the runtime type
+      <code>org.osgi.service.foo.Widget</code> would be
+      <code>org.osgi.dto.service.foo.WidgetDTO</code>.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Core Data Transfer Objects</title>
+
+    <para>Data Transfer Objects are defined for several important Core
+    specification objects including <code>Bundle</code>, the Framework, and
+    <code>ServiceReference</code> as well as the Resource API types, Start
+    Level API types and Bundle Wiring API types.</para>
+
+    <section>
+      <title>Framework Data Transfer Objects</title>
+
+      <para>A <xref linkend="org.osgi.dto.framework.BundleDTO"
+      xrefstyle="hyperlink"/> represents information about a single bundle
+      such as the id of the bundle, the current state of the bundle and the
+      symbolic name and version of the bundle.</para>
+
+      <para>A <xref linkend="org.osgi.dto.framework.ServiceReferenceDTO"
+      xrefstyle="hyperlink"/> represents information about a single registered
+      service such as the service properties, the bundle which registered the
+      service and the bundles using the service.</para>
+
+      <para>A <xref linkend="org.osgi.dto.framework.FrameworkDTO"
+      xrefstyle="hyperlink"/> represents information about the Framework such
+      as the list of installed bundles, the registered services and the launch
+      properties of the framework.</para>
+    </section>
+
+    <section>
+      <title>Resource API Data Transfer Objects</title>
+
+      <para><xref linkend="org.osgi.dto.resource.CapabilityDTO"
+      xrefstyle="hyperlink"/>, <xref
+      linkend="org.osgi.dto.resource.RequirementDTO" xrefstyle="hyperlink"/>,
+      <xref linkend="org.osgi.dto.resource.ResourceDTO"
+      xrefstyle="hyperlink"/>, <xref linkend="org.osgi.dto.resource.WiringDTO"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.dto.resource.WireDTO" xrefstyle="hyperlink"/>
+      represent the capabilities and requirements wiring information of the
+      Resource API. The following figure shows the relationship between these
+      Data Transfer Object types.</para>
+
+      <figure>
+        <title>Resource API Data Transfer Objects</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.437in"
+                       contentwidth="4.959in"
+                       fileref="resourcedto-classes.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+
+    <section>
+      <title>Bundle Wiring API Data Transfer Objects</title>
+
+      <para><xref linkend="org.osgi.dto.framework.wiring.BundleRevisionDTO"
+      xrefstyle="hyperlink"/>, <xref
+      linkend="org.osgi.dto.framework.wiring.BundleWiringDTO"
+      xrefstyle="hyperlink"/>, and <xref
+      linkend="org.osgi.dto.framework.wiring.BundleWireDTO"
+      xrefstyle="hyperlink"/> represent the capabilities and requirements
+      wiring information of the Bundle Wiring API. The following figure shows
+      the relationship between these Data Transfer Object types.</para>
+
+      <figure>
+        <title>Bundle Wiring API Data Transfer Objects</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="5.437in"
+                       contentwidth="4.959in" fileref="wiringdto-classes.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para><xref linkend="org.osgi.dto.framework.wiring.BundleRevisionsDTO"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.dto.framework.wiring.BundleWiringsDTO"
+      xrefstyle="hyperlink"/> represent the history of revisions and wirings
+      for a bundle.</para>
+    </section>
+
+    <section>
+      <title>Start Level API Data Transfer Objects</title>
+
+      <para>A <xref
+      linkend="org.osgi.dto.framework.startlevel.BundleStartLevelDTO"
+      xrefstyle="hyperlink"/> represents information about the start level
+      information of a bundle such as the assigned start level, the activation
+      policy used and the whether the bundle is persistently started.</para>
+
+      <para>A <xref
+      linkend="org.osgi.dto.framework.startlevel.FrameworkStartLevelDTO"
+      xrefstyle="hyperlink"/> provides the start level information about the
+      Framework such as the active start level and the initial bundle start
+      level assigned to newly installed bundles.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Obtaining Core Data Transfer Objects</title>
+
+    <para>The <xref linkend="org.osgi.framework.Bundle.adapt-Class-"
+    xrefstyle="hyperlink"/> method allows the Bundle to be adapted to
+    different types. The <code>adapt</code> method is used to obtain the Core
+    Data Transfer Objects. For example, the <code>adapt</code> method can be
+    used to adapt a Bundle object to the current <code>BundleDTO</code>
+    object. The adapt method can be used as follows:</para>
+
+    <programlisting>// DTO for the bundle
+BundleDTO bundleDTO = bundle.adapt(BundleDTO.class);
+
+// DTO for the current bundle wiring
+BundleWiringDTO bundleWiringDTO = bundle.adapt(BundleWiringDTO.class);
+
+// DTO for the current bundle revision
+BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</programlisting>
+
+    <para>The following table shows the Core Data Transfer Objects that can be
+    obtained via the <code>adapt</code> method.</para>
+
+    <table>
+      <title>Data Transfer Objects that can be adapted from Bundle</title>
+
+      <tgroup cols="2">
+        <colspec colnum="1"/>
+
+        <colspec colnum="2" colwidth="2*"/>
+
+        <thead>
+          <row>
+            <entry>Class</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><para><xref linkend="org.osgi.dto.framework.BundleDTO"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>The Bundle Data Transfer Object for the
+            bundle.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><xref
+            linkend="org.osgi.dto.framework.ServiceReferenceDTO"
+            xrefstyle="hyperlink"/><code>[]</code></para></entry>
+
+            <entry><para>An array of Service Reference Data Transfer Objects
+            for the registered services of the bundle. If the bundle has no
+            registered services, the result is an empty array. If the bundle
+            does not have a valid bundle context, the result is
+            <code>null</code>.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><xref
+            linkend="org.osgi.dto.framework.wiring.BundleRevisionDTO"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>The Bundle Revision Data Transfer Object for the
+            bundle. If the bundle is uninstalled or otherwise does not have a
+            bundle revision, the result is <code>null</code>.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><xref
+            linkend="org.osgi.dto.framework.wiring.BundleRevisionsDTO"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>The Bundle Revisions Data Transfer Object for the
+            bundle.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><xref
+            linkend="org.osgi.dto.framework.wiring.BundleWiringDTO"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>The Bundle Wiring Data Transfer Object for the
+            bundle. If the bundle is unresolved or otherwise does not have a
+            bundle wiring, the result is <code>null</code>.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><xref
+            linkend="org.osgi.dto.framework.wiring.BundleWiringsDTO"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>The Bundle Wirings Data Transfer Object for the
+            bundle.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><xref
+            linkend="org.osgi.dto.framework.startlevel.BundleStartLevelDTO"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>The Bundle Start Level Data Transfer Object for the
+            bundle. If the bundle is uninstalled, the result is
+            <code>null</code>.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><xref
+            linkend="org.osgi.dto.framework.startlevel.FrameworkStartLevelDTO"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>The Framework Start Level Data Transfer Object if the
+            bundle is the System Bundle. If the bundle is not the System
+            Bundle, the result is <code>null</code>.</para></entry>
+          </row>
+
+          <row>
+            <entry><para><xref linkend="org.osgi.dto.framework.FrameworkDTO"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>The Framework Data Transfer Object if the bundle is
+            the System Bundle. If the bundle is not the System Bundle, the
+            result is <code>null</code>.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+  </section>
+
+  <section>
+    <title>Security</title>
+
+    <para>Data Transfer Objects have no behavior by definition and thus no
+    permissions are applicable to their use. To obtain Data Transfer Objects
+    from a Bundle object via the <code>adapt</code> method,
+    <code>AdaptPermission[&lt;dtotype&gt;,ADAPT]</code> is required for the
+    desired Data Transfer Object type.</para>
+  </section>
+
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.dto.xml"/>
+
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.dto.framework.xml"/>
+
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.dto.framework.startlevel.xml"/>
+
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.dto.framework.wiring.xml"/>
+
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.dto.resource.xml"/>
+
+  <section xml:id="framework.dto.references">
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed xml:id="framework.dto.references-dto"><title>Data Transfer
+      Object</title>https://en.wikipedia.org/wiki/Data_transfer_object</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>

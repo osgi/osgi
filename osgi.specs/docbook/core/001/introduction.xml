@@ -730,6 +730,16 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
           </row>
 
           <row>
+            <entry><xref linkend="framework.dto"
+            xrefstyle="template:%n %t"/></entry>
+
+            <entry><code><xref linkend="org.osgi.dto"/></code></entry>
+
+            <entry><code><xref endterm="org.osgi.dto-version"
+            linkend="framework.dto"/></code></entry>
+          </row>
+
+          <row>
             <entry><xref linkend="util.tracker"
             xrefstyle="template:%n %t"/></entry>
 
@@ -801,7 +811,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
       </listitem>
 
       <listitem>
-        <para>Added Data Transfer Objects.</para>
+        <para>Added <xref linkend="framework.dto"
+        xrefstyle="template:%n %t"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
