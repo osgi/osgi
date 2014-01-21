@@ -809,6 +809,9 @@ public interface Constants {
 	 *     Fragment-Host: system.bundle; extension:=&quot;framework&quot;
 	 * </pre>
 	 * 
+	 * <p>
+	 * The default value is {@link #EXTENSION_FRAMEWORK framework}.
+	 * 
 	 * @see #FRAGMENT_HOST
 	 * @see #EXTENSION_FRAMEWORK
 	 * @see #EXTENSION_BOOTCLASSPATH

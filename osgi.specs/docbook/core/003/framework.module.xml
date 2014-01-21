@@ -4313,7 +4313,7 @@ bundle-description  ::= symbolic-name       // See <xref
       <itemizedlist>
         <listitem>
           <para><code>visibility</code> - If the value is <code>private</code>
-          (Default), then all visible packages from the required bundles are
+          (default), then all visible packages from the required bundles are
           not re-exported. If the value is <code>reexport</code> then bundles
           that require this bundle will transitively have access to these
           required bundle's exported packages. That is, if bundle
@@ -4658,7 +4658,7 @@ bundle-description  ::= symbolic-name
           <itemizedlist>
             <listitem>
               <para><code>framework</code> - The fragment bundle is a
-              Framework extension bundle.</para>
+              Framework extension bundle (default).</para>
             </listitem>
 
             <listitem>
