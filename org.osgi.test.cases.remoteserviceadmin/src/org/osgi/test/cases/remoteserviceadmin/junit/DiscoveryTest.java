@@ -47,6 +47,7 @@ import org.osgi.service.remoteserviceadmin.RemoteConstants;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdmin;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
+import org.osgi.test.cases.remoteserviceadmin.common.ModifiableService;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
 import org.osgi.test.cases.remoteserviceadmin.impl.TestServiceImpl;
 import org.osgi.test.support.compatibility.Semaphore;
@@ -337,7 +338,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		//
 		BundleContext childContext = getFramework().getBundleContext();
 
-		Bundle tb1Bundle = installBundle(childContext, "/tb1.jar");
+		Bundle tb1Bundle = installBundle(childContext, "/tb7.jar");
 		assertNotNull(tb1Bundle);
 
 		//
@@ -359,13 +360,13 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 						endpointEventListenerProperties);
 		assertNotNull(endpointEventListenerRegistration);
 		
-		EndpointEventListenerImpl emptyEndpointListener = null;
+		EndpointEventListenerImpl emptyEndpointEventListener = null;
 		try {
 			//
 			// 122.6.1 Scope and Filters
 			// register an EndpointListener w/o a scope. If called, then fail
 			//
-			emptyEndpointListener = scope_and_filter_122_6_1___RSA_1_1("");
+			emptyEndpointEventListener = scope_and_filter_122_6_1___RSA_1_1("");
 
 			// start test bundle in child framework
 			// this will run the test in the child framework and fail
@@ -384,8 +385,37 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 
 			System.out
 					.println("************* Sleeping for 5s so that the discovery can settle ********************");
-			Sleep.sleep(15000);
+			Sleep.sleep(5000);
 
+
+			// get the service provided by our test bundle
+			ServiceReference modServiceRef = tb1Bundle.getRegisteredServices()[0];
+			assertNotNull(modServiceRef);
+			
+			// let it know that we want it to modify its registration (and raise
+			// an endpoint modified event)
+			Object modService = tb1Bundle.getBundleContext().getService(
+					modServiceRef);
+			assertNotNull(modService);
+			modService.getClass().getDeclaredMethod("addServiceProperty")
+					.invoke(modService);
+
+			
+			System.out
+					.println("************* wait for Signal 2 (EndpointEvent:modified) ********************");
+			// verify callback in parent framework
+			assertTrue(endpointEventListenerImpl.getSemModified()
+					.waitForSignal(
+					timeout));
+
+			verifyBasicEndpointEventBehavior(
+					endpointEventListenerImpl.getLastMatchedFilter(),
+					endpointEventListenerImpl.getLastAddedEndpoint(),
+					endpointEventListenerFilter);
+
+			System.out
+					.println("************* Sleeping for 5s so that the discovery can settle ********************");
+			Sleep.sleep(5000);
 
 			//
 			// remove the endpoint
@@ -393,7 +423,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			tb1Bundle.stop();
 
 			 System.out
-					.println("************* wait for Signal 2 (EndpointEvent:removed) ********************");
+					.println("************* wait for Signal 3 (EndpointEvent:removed) ********************");
 			 // verify callback in parent framework
 			assertTrue(endpointEventListenerImpl.getSemRemoved().waitForSignal(
 					timeout));
@@ -407,13 +437,13 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			assertEquals(2, endpointEventListenerImpl.getEventCount());
 
 			// verify 122.6.1
-			assertEquals(0, emptyEndpointListener.getEventCount());
+			assertEquals(0, emptyEndpointEventListener.getEventCount());
 
 		} finally {
 			endpointEventListenerRegistration.unregister();
 
-			if (emptyEndpointListener != null) {
-				emptyEndpointListener.getServiceRegistration().unregister();
+			if (emptyEndpointEventListener != null) {
+				emptyEndpointEventListener.getServiceRegistration().unregister();
 			}
 		}
 	}
@@ -436,8 +466,9 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 				ep.getFrameworkUUID()
 						.equals(getContext().getProperty(
 								"org.osgi.framework.uuid")));
-		assertTrue("discovered interfaces don't contain " + A.class.getName(),
-				ep.getInterfaces().contains(A.class.getName()));
+		assertTrue("discovered interfaces don't contain "
+				+ ModifiableService.class.getName(), ep.getInterfaces()
+				.contains(ModifiableService.class.getName()));
 		assertFalse(
 				"discovered interfaces must not contain " + B.class.getName(),
 				ep.getInterfaces().contains(B.class.getName()));
@@ -814,6 +845,10 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 				semRemoved.signal();
 				lastRemovedEndpoint = event.getEndpoint();
 			}
+		}
+
+		public Semaphore getSemModified() {
+			return semModified;
 		}
 
 		public EndpointDescription getLastRemovedEndpoint() {

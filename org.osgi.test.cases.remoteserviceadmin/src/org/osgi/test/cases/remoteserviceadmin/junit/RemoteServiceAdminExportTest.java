@@ -245,11 +245,10 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 	/**
 	 * 122.4.1 Exporting
-	 *
-	 * Tests the export of a service with negative edge cases according to
-	 * the spec.
-	 * Register a service an make sure that an event is sent to a registered
-	 * RemoteServiceAdminListener
+	 * 
+	 * Tests the export of a service with negative edge cases according to the
+	 * spec. Register a service and make sure that an event is sent to a
+	 * registered RemoteServiceAdminListener
 	 */
 	public void testExportRSAListenerNotification() throws Exception {
 		// create an register a service
