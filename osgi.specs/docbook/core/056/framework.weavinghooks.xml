@@ -466,7 +466,7 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="framework.weavinghooks-wovenclasslistener">
     <title>Woven Class Listener</title>
 
     <para>The Woven Class Listener service is a white board service; any party
@@ -495,18 +495,35 @@
       </mediaobject>
     </figure>
 
-    <para>Woven class listeners are not notified of the TRANSFORMING state
-    because the woven class is mutable and listeners are read-only. In all
-    states received by woven class listeners, the woven class is immutable.
-    The first notification received for a given woven class is either the
-    TRANSFORMED or TRANSFORMING_FAILED state. TRANSFORMED occurs after all
-    weaving hooks have been notified but before the class has been defined or
-    the bundle wiring updated as a result of additional dynamic imports.
-    TRANSFORMING_FAILED occurs instead if a weaving hook threw an exception.
-    After TRANSFORMED comes either DEFINED or DEFINE_FAILED. DEFINED is
-    received when the class was defined successfully and after the bundle
-    wiring has been updated. DEFINE_FAILED occurs instead if a class
-    definition error occurred.</para>
+    <para>Woven class listeners are not notified of the <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMING"
+    xrefstyle="hyperlink"/> state because the woven class is mutable and
+    listeners are read-only. In all states received by woven class listeners,
+    the woven class is immutable. The first notification received for a given
+    woven class is either the <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMED"
+    xrefstyle="hyperlink"/> or <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMING_FAILED"
+    xrefstyle="hyperlink"/> state. <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMED"
+    xrefstyle="hyperlink"/> occurs after all weaving hooks have been notified
+    but before the class has been defined or the bundle wiring updated as a
+    result of additional dynamic imports. <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMING_FAILED"
+    xrefstyle="hyperlink"/> occurs instead if a weaving hook threw an
+    exception. After <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMED"
+    xrefstyle="hyperlink"/> comes either <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.DEFINED"
+    xrefstyle="hyperlink"/> or <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.DEFINE_FAILED"
+    xrefstyle="hyperlink"/>. <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.DEFINED"
+    xrefstyle="hyperlink"/> is received when the class was defined
+    successfully and after the bundle wiring has been updated. <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.DEFINE_FAILED"
+    xrefstyle="hyperlink"/> occurs instead if a class definition error
+    occurred.</para>
 
     <para>The following table describes the state transitions of a Woven Class
     in more detail.</para>
@@ -514,18 +531,14 @@
     <table>
       <title>Woven Class State Table</title>
 
-      <tgroup cols="3">
-        <colspec colnum="1" colwidth="1*"/>
+      <tgroup cols="2">
+        <colspec colnum="1" colwidth="1.5*"/>
 
-        <colspec colnum="2" colwidth="1*"/>
-
-        <colspec colnum="3" colwidth="2*"/>
+        <colspec colnum="2" colwidth="3*"/>
 
         <thead>
           <row>
-            <entry>Source State</entry>
-
-            <entry>Target State</entry>
+            <entry>State</entry>
 
             <entry>Description</entry>
           </row>
@@ -533,9 +546,9 @@
 
         <tbody>
           <row>
-            <entry><para>-</para></entry>
-
-            <entry><para>TRANSFORMING</para></entry>
+            <entry><para><xref
+            linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMING"
+            xrefstyle="hyperlink"/></para></entry>
 
             <entry><para>A bundle class load request was made.</para>
             <itemizedlist>
@@ -559,9 +572,9 @@
           </row>
 
           <row>
-            <entry><para>TRANSFORMING</para></entry>
-
-            <entry><para>TRANSFORMED</para></entry>
+            <entry><para><xref
+            linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMED"
+            xrefstyle="hyperlink"/></para></entry>
 
             <entry><para>All weaving hooks have been notified.</para>
             <itemizedlist>
@@ -574,7 +587,7 @@
                 </listitem>
 
                 <listitem>
-                  <para>The woven class is immutable.</para>
+                  <para>The woven class is effectively immutable.</para>
                 </listitem>
 
                 <listitem>
@@ -584,9 +597,9 @@
           </row>
 
           <row>
-            <entry><para>TRANSFORMING</para></entry>
-
-            <entry><para>TRANSFORMING FAILED</para></entry>
+            <entry><para><xref
+            linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMING_FAILED"
+            xrefstyle="hyperlink"/></para></entry>
 
             <entry><para>A weaving hook threw an exception.</para>
             <itemizedlist>
@@ -599,7 +612,7 @@
                 </listitem>
 
                 <listitem>
-                  <para>The woven class is immutable.</para>
+                  <para>The woven class is effectively immutable.</para>
                 </listitem>
 
                 <listitem>
@@ -609,9 +622,9 @@
           </row>
 
           <row>
-            <entry><para>TRANSFORMED</para></entry>
-
-            <entry><para>DEFINED</para></entry>
+            <entry><para><xref
+            linkend="org.osgi.framework.hooks.weaving.WovenClass.DEFINED"
+            xrefstyle="hyperlink"/></para></entry>
 
             <entry><para>All woven class listeners have been notified. The
             class has been defined.</para> <itemizedlist>
@@ -624,7 +637,7 @@
                 </listitem>
 
                 <listitem>
-                  <para>The woven class is immutable.</para>
+                  <para>The woven class is effectively immutable.</para>
                 </listitem>
 
                 <listitem>
@@ -634,9 +647,9 @@
           </row>
 
           <row>
-            <entry><para>TRANSFORMED</para></entry>
-
-            <entry><para>DEFINE FAILED</para></entry>
+            <entry><para><xref
+            linkend="org.osgi.framework.hooks.weaving.WovenClass.DEFINE_FAILED"
+            xrefstyle="hyperlink"/></para></entry>
 
             <entry><para>All weaving hooks have been notified. A class
             definition failure occurred.</para> <itemizedlist>
@@ -649,7 +662,7 @@
                 </listitem>
 
                 <listitem>
-                  <para>The woven class is immutable.</para>
+                  <para>The woven class is effectively immutable.</para>
                 </listitem>
 
                 <listitem>
@@ -759,8 +772,11 @@
 
     <itemizedlist>
       <listitem>
-        <para>Added support for WovenClassListener to be able to observe woven
-        class state transitions.</para>
+        <para>Added support for <xref
+        linkend="org.osgi.framework.hooks.weaving.WovenClassListener"
+        xrefstyle="hyperlink"/> to be able to observe woven class state
+        transitions in <xref
+        linkend="framework.weavinghooks-wovenclasslistener"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

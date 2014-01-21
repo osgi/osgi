@@ -523,7 +523,7 @@ Export-Package: com.acme.foo;version=1</programlisting>
     byte code weaving.</para>
   </section>
 
-  <section>
+  <section xml:id="framework.wiring-fragments">
     <title>Fragments</title>
 
     <para>The type of a bundle is available on the Bundle Revision because a
@@ -899,11 +899,15 @@ for ( BundleWire wire :  B0.getBundleWiring().getRequiredWires(HOST_NAMESPACE))
     <itemizedlist>
       <listitem>
         <para>Clarified <code>osgi.identity</code> capabilities and
-        requirements relationship to host bundle wirings.</para>
+        requirements relationship to host bundle wirings in <xref
+        linkend="framework.wiring-fragments"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Added FrameworkWiring.findProviders method.</para>
+        <para>Added <xref linkend="org.osgi.framework.wiring.FrameworkWiring"
+        xrefstyle="hyperlink"/>.<xref
+        linkend="org.osgi.framework.wiring.FrameworkWiring.findProviders-Requirement-"
+        xrefstyle="hyperlink"/> method.</para>
       </listitem>
     </itemizedlist>
   </section>

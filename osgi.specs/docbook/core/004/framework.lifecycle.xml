@@ -284,8 +284,8 @@
       reasonable defaults for the environment it is started in. For example,
       the framework should export the JRE packages as system packages and it
       should store its bundles in an appropriate place. The framework must not
-      look in the System properties, the specified configuration properties
-      are complete.</para>
+      look in the System properties for configuration properties, the
+      specified configuration properties are complete.</para>
 
       <para>The configuration properties may contain any implementation
       specific properties. The properties in <xref
@@ -2810,7 +2810,7 @@ D: Export-Package: s</programlisting>
     </section>
   </section>
 
-  <section>
+  <section xml:id="framework.lifecycle-bundlecontext">
     <title>The Bundle Context</title>
 
     <para>The relationship between the Framework and its installed bundles is
@@ -3881,24 +3881,28 @@ D: Export-Package: s</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>Launching Properties is updated to include the Environment
-        Properties.</para>
+        <para><xref linkend="framework.lifecycle.launchingproperties"/> is
+        updated to include the Environment Properties.</para>
       </listitem>
 
       <listitem>
-        <para>New Framework.init method to allow FrameworkListeners to be
-        specified to observe events during framework init.</para>
+        <para>New <xref linkend="org.osgi.framework.launch.Framework"
+        xrefstyle="hyperlink"/>.<xref
+        linkend="org.osgi.framework.launch.Framework.init-FrameworkListener...-"
+        xrefstyle="hyperlink"/> method to allow FrameworkListeners to be
+        specified to observe events during Framework initialization.</para>
       </listitem>
 
       <listitem>
-        <para>Added support for Extension Bundle Activators in framework
-        initialization.</para>
+        <para>Added support for Extension Bundle Activators in <xref
+        linkend="framework.lifecycle.initializing"/>.</para>
       </listitem>
 
       <listitem>
         <para>Clarified that BundleContext may be observable as invalid during
         delivery of UNREGISTERING event for services registered by the bundle
-        being stopped.</para>
+        being stopped in <xref
+        linkend="framework.lifecycle-bundlecontext"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

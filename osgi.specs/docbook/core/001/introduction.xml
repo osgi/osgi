@@ -815,6 +815,11 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
         <para>Added <xref linkend="framework.dto"
         xrefstyle="template:%n %t"/>.</para>
       </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="framework.service.scope"/> and <xref
+        linkend="framework.service.prototypeServiceFactory"/>.</para>
+      </listitem>
     </itemizedlist>
   </section>
 </chapter>

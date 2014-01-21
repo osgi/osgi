@@ -1210,10 +1210,10 @@ Bundle B:
     header is used to specify native code paths. The OSGi Framework converts a
     <code>Bundle-NativeCode</code> into an <code>osgi.native</code>
     requirement which describes the native environment required to execute
-    native code packaged within a Bundle (see <xref linkend="i3235622"/>).
-    There is no need for a bundle to specify both a
-    <code>Bundle-NativeCode</code> header and an <code>osgi.native</code>
-    requirement.</para>
+    native code packaged within a Bundle (see <xref
+    linkend="framework.module-loading.native.code.libraries"/>). There is no
+    need for a bundle to specify both a <code>Bundle-NativeCode</code> header
+    and an <code>osgi.native</code> requirement.</para>
 
     <para>Native code included in a Fragment Bundle gets loaded by the class
     loaders of the Host Bundles the Fragment is attached to, therefore the
@@ -1362,11 +1362,11 @@ Bundle B:
     <itemizedlist>
       <listitem>
         <para>Clarified that bundles may not specify an <code>osgi.ee</code>
-        capability.</para>
+        capability in <xref linkend="framework.namespaces.osgi.ee"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Added <code>osgi.native</code> namespace.</para>
+        <para>Added <xref linkend="framework.namespaces.osgi.native"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

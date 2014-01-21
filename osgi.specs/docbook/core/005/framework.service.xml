@@ -498,7 +498,7 @@
             </row>
 
             <row>
-              <entry><code>service.id</code></entry>
+              <entry><code>service.id<superscript>†</superscript></code></entry>
 
               <entry><code>Long</code></entry>
 
@@ -529,7 +529,7 @@
             </row>
 
             <row>
-              <entry><code>service.scope</code></entry>
+              <entry><code>service.scope<superscript>†</superscript></code></entry>
 
               <entry><code>String</code></entry>
 
@@ -583,6 +583,11 @@
           </tbody>
         </tgroup>
       </table>
+
+      <para><superscript>†</superscript> The values for these service
+      properties must be set by the Framework. Any values specified for these
+      service properties during service registration or service properties
+      update must be ignored.</para>
     </section>
 
     <section xml:id="framework.service.servicerankingorder">
@@ -1807,7 +1812,8 @@
 
     <itemizedlist>
       <listitem>
-        <para>Added service scopes and PrototypeServiceFactory.</para>
+        <para>Added <xref linkend="framework.service.scope"/> and <xref
+        linkend="framework.service.prototypeServiceFactory"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

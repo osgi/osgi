@@ -314,7 +314,7 @@ link           ::= 'link' '=' &lt;url&gt;</programlisting>
 
         <para>The Bundle-NativeCode header contains a specification of native
         code libraries contained in this bundle. See <xref
-        linkend="i3235622"/>.</para>
+        linkend="framework.module-loading.native.code.libraries"/>.</para>
       </section>
 
       <section>
@@ -2745,7 +2745,7 @@ B: Bundle-SymbolicName: B
       <listitem>
         <para><emphasis>Native code</emphasis> - The native code dependencies
         specified in the Bundle-NativeCode header must be resolved. See <xref
-        linkend="i3235622"/>.</para>
+        linkend="framework.module-loading.native.code.libraries"/>.</para>
       </listitem>
     </itemizedlist>
 
@@ -2819,7 +2819,7 @@ B: Bundle-SymbolicName: B
       </listitem>
     </itemizedlist>
 
-    <section>
+    <section xml:id="framework.module-import.export.same.package">
       <title>Importing and Exporting the Same Package</title>
 
       <para>If a bundle has both import and export definitions for the
@@ -3499,7 +3499,7 @@ if ( cl instanceof BundleReference ) {
     </section>
   </section>
 
-  <section xml:id="i3235622">
+  <section xml:id="framework.module-loading.native.code.libraries">
     <title>Loading Native Code Libraries</title>
 
     <para>Dependency on native code is expressed in the Bundle-NativeCode
@@ -5548,20 +5548,24 @@ URL(String protocol, String host, String file)</programlisting>
 
     <itemizedlist>
       <listitem>
-        <para>Clarified importing and exporting the same package.</para>
+        <para>Clarified <xref
+        linkend="framework.module-import.export.same.package"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Added support for the new <code>osgi.native</code>
-        namespace.</para>
+        <para>Added support for the new <code>osgi.native</code> namespace in
+        <xref
+        linkend="framework.module-loading.native.code.libraries"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Added support for Extension Bundle Activators.</para>
+        <para>Added support for Extension Bundle Activators in <xref
+        linkend="framework.module.extensionActivator"/>.</para>
       </listitem>
 
       <listitem>
-        <para>Added Type Roles for Semantic Versioning section.</para>
+        <para>Added <xref
+        linkend="framework.module-semantic.versioning.type.roles"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

@@ -320,7 +320,7 @@
     xrefstyle="hyperlink"/> method determines that the Bundle Context has no
     visibility of the conflicting bundle.</para>
 
-    <section>
+    <section xml:id="framework.bundlehooks-system.bundlecontext">
       <title>System Bundle Context</title>
 
       <para>When the <xref
@@ -531,8 +531,9 @@
 
     <itemizedlist>
       <listitem>
-        <para>Clarified the relationship of bundle hooks to the system
-        bundle.</para>
+        <para>Clarified the relationship of bundle hooks to the system bundle
+        in <xref
+        linkend="framework.bundlehooks-system.bundlecontext"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
