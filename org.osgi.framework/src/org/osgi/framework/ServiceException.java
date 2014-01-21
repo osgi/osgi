@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2007, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2007, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,6 +74,12 @@ public class ServiceException extends RuntimeException {
 	 * @since 1.6
 	 */
 	public static final int	FACTORY_RECURSION	= 6;
+	/**
+	 * An asynchronous operation was unable to obtain the service.
+	 * 
+	 * @since 1.8
+	 */
+	public static final int	ASYNC_ERROR			= 7;
 
 	/**
 	 * Creates a {@code ServiceException} with the specified message and
