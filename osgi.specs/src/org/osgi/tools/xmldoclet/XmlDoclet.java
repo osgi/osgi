@@ -503,6 +503,7 @@ public class XmlDoclet extends Doclet {
 	}
 
 	void print(FieldDoc cnst) {
+		String dimension = cnst.type().dimension();
 		String constantValueExpression = null;
 		try {
 			constantValueExpression = cnst.constantValueExpression();
@@ -527,6 +528,8 @@ public class XmlDoclet extends Doclet {
 				+ printType(cnst.type())
 				+ "' qualifiedTypeName='"
 				+ escape(cnst.type().qualifiedTypeName())
+				+ "' dimension='"
+				+ dimension
 				+ (constantValueExpression != null ? "' constantValue='"
 						+ escape(constantValueExpression) : "") + "'>");
 		printAnnotations(cnst.annotations());
