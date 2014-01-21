@@ -35,10 +35,8 @@ import org.osgi.dto.framework.ServiceReferenceDTO;
 import org.osgi.dto.framework.startlevel.BundleStartLevelDTO;
 import org.osgi.dto.framework.startlevel.FrameworkStartLevelDTO;
 import org.osgi.dto.framework.wiring.BundleRevisionDTO;
-import org.osgi.dto.framework.wiring.BundleRevisionsDTO;
 import org.osgi.dto.framework.wiring.BundleWireDTO;
 import org.osgi.dto.framework.wiring.BundleWiringDTO;
-import org.osgi.dto.framework.wiring.BundleWiringsDTO;
 import org.osgi.dto.resource.CapabilityDTO;
 import org.osgi.dto.resource.RequirementDTO;
 import org.osgi.dto.resource.WireDTO;
@@ -61,11 +59,13 @@ public class DTOTestCase extends OSGiTestCase {
     private Bundle        tb1;
     private Map<DTO, DTO> objects;
 
-    protected void setUp() throws Exception {
+	@Override
+	protected void setUp() throws Exception {
         tb1 = install("dto.tb1.jar");
         objects = new IdentityHashMap<DTO, DTO>();
     }
 
+	@Override
     protected void tearDown() throws Exception {
         if ((tb1.getState() & Bundle.UNINSTALLED) != Bundle.UNINSTALLED) {
             tb1.uninstall();
@@ -204,28 +204,24 @@ public class DTOTestCase extends OSGiTestCase {
         assertEquals("BundleRequirement directives does not match", req.getDirectives(), dto.directives);
     }
 
-    public void testBundleRevisionsDTO() throws Exception {
+	public void testArrayBundleRevisionDTO() throws Exception {
         tb1.start();
         BundleRevisions revisions = tb1.adapt(BundleRevisions.class);
-        BundleRevisionsDTO dto = tb1.adapt(BundleRevisionsDTO.class);
-        assertBundleRevisionsDTO(revisions, dto);
+		BundleRevisionDTO[] dtos = tb1.adapt(BundleRevisionDTO[].class);
+		assertBundleRevisionDTOs(revisions, dtos);
         tb1.uninstall();
         assertEquals(Bundle.UNINSTALLED, tb1.getState());
-        dto = tb1.adapt(BundleRevisionsDTO.class);
-        assertNotNull("Current BundleRevisionsDTO for uninstalled bundle is null", dto);
-        assertEquals("Current BundleRevisionsDTO for uninstalled bundle is not empty", 0, dto.revisions.size());
+		dtos = tb1.adapt(BundleRevisionDTO[].class);
+		assertNull("Current BundleRevisionDTO[] for uninstalled bundle is not null", dtos);
     }
 
-    private void assertBundleRevisionsDTO(BundleRevisions revisions, BundleRevisionsDTO dto) throws Exception {
-        if (dtoUnderTest(dto)) {
-            return;
-        }
+	private void assertBundleRevisionDTOs(BundleRevisions revisions, BundleRevisionDTO[] dtos) throws Exception {
+		assertNotNull("dtos is null", dtos);
         List<BundleRevision> revs = revisions.getRevisions();
-        List<BundleRevisionDTO> dtos = dto.revisions;
         final int size = revs.size();
-        assertEquals("Revision count does not match", size, dtos.size());
+		assertEquals("Revision count does not match", size, dtos.length);
         for (int i = 0; i < size; i++) {
-            assertBundleRevisionDTO(revs.get(i), dtos.get(i));
+			assertBundleRevisionDTO(revs.get(i), dtos[i]);
         }
     }
 
@@ -274,7 +270,7 @@ public class DTOTestCase extends OSGiTestCase {
         assertBundleRevisionDTO(wire.getRequirer(), (BundleRevisionDTO) dto.requirer);
     }
 
-    public void testBundleWiringsDTO() throws Exception {
+	public void testArrayBundleWiringDTO() throws Exception {
         tb1.start();
         BundleRevisions revisions = tb1.adapt(BundleRevisions.class);
         List<BundleRevision> revs = revisions.getRevisions();
@@ -283,24 +279,20 @@ public class DTOTestCase extends OSGiTestCase {
         for (int i = 0; i < size; i++) {
             wirings.add(revs.get(i).getWiring());
         }
-        BundleWiringsDTO dto = tb1.adapt(BundleWiringsDTO.class);
-        assertBundleWiringsDTO(wirings, dto);
+		BundleWiringDTO[] dtos = tb1.adapt(BundleWiringDTO[].class);
+		assertBundleWiringDTOs(wirings, dtos);
         tb1.uninstall();
         assertEquals(Bundle.UNINSTALLED, tb1.getState());
-        dto = tb1.adapt(BundleWiringsDTO.class);
-        assertNotNull("Current BundleWiringsDTO for uninstalled bundle is null", dto);
-        assertEquals("Current BundleWiringsDTO for uninstalled bundle is not empty", 0, dto.wirings.size());
+		dtos = tb1.adapt(BundleWiringDTO[].class);
+		assertNull("Current BundleWiringDTO[] for uninstalled bundle is not null", dtos);
     }
 
-    private void assertBundleWiringsDTO(List<BundleWiring> wirings, BundleWiringsDTO dto) throws Exception {
-        if (dtoUnderTest(dto)) {
-            return;
-        }
-        List<BundleWiringDTO> dtos = dto.wirings;
+	private void assertBundleWiringDTOs(List<BundleWiring> wirings, BundleWiringDTO[] dtos) throws Exception {
+		assertNotNull("dtos is null", dtos);
         final int size = wirings.size();
-        assertEquals("Wiring count does not match", size, dtos.size());
+		assertEquals("Wiring count does not match", size, dtos.length);
         for (int i = 0; i < size; i++) {
-            assertBundleWiringDTO(wirings.get(i), dtos.get(i));
+			assertBundleWiringDTO(wirings.get(i), dtos[i]);
         }
     }
 

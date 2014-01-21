@@ -278,12 +278,6 @@
           </imageobject>
         </mediaobject>
       </figure>
-
-      <para><xref linkend="org.osgi.dto.framework.wiring.BundleRevisionsDTO"
-      xrefstyle="hyperlink"/> and <xref
-      linkend="org.osgi.dto.framework.wiring.BundleWiringsDTO"
-      xrefstyle="hyperlink"/> represent the history of revisions and wirings
-      for a bundle.</para>
     </section>
 
     <section>
@@ -374,11 +368,12 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
 
           <row>
             <entry><para><xref
-            linkend="org.osgi.dto.framework.wiring.BundleRevisionsDTO"
-            xrefstyle="hyperlink"/></para></entry>
+            linkend="org.osgi.dto.framework.wiring.BundleRevisionDTO"
+            xrefstyle="hyperlink"/><code>[]</code></para></entry>
 
-            <entry><para>The Bundle Revisions Data Transfer Object for the
-            bundle.</para></entry>
+            <entry><para>The Bundle Revision Data Transfer Objects for the
+            bundle. The first revision is the current revision. If the bundle
+            is uninstalled, the result is <code>null</code>.</para></entry>
           </row>
 
           <row>
@@ -393,11 +388,12 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
 
           <row>
             <entry><para><xref
-            linkend="org.osgi.dto.framework.wiring.BundleWiringsDTO"
-            xrefstyle="hyperlink"/></para></entry>
+            linkend="org.osgi.dto.framework.wiring.BundleWiringDTO"
+            xrefstyle="hyperlink"/><code>[]</code></para></entry>
 
-            <entry><para>The Bundle Wirings Data Transfer Object for the
-            bundle.</para></entry>
+            <entry><para>The Bundle WiringsData Transfer Objects for the
+            bundle. The first wiring is the current wiring. If the bundle is
+            uninstalled, the result is <code>null</code>.</para></entry>
           </row>
 
           <row>

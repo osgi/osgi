@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,8 +25,8 @@ import org.osgi.dto.resource.ResourceDTO;
  * <p>
  * An installed Bundle can be adapted to provide a {@code BundleRevisionDTO} for
  * the current revision of the Bundle. {@code BundleRevisionDTO} objects for all
- * in use revisions of the Bundle can be obtained from a
- * {@link BundleRevisionsDTO} of the Bundle.
+ * in use revisions of the Bundle can be obtained by adapting the bundle to
+ * {@code BundleRevisionDTO[]}.
  * 
  * @author $Id$
  * @NotThreadSafe

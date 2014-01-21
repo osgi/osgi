@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,8 +24,8 @@ import org.osgi.dto.resource.WiringDTO;
  * <p>
  * An installed Bundle can be adapted to provide a {@code BundleWiringDTO} for
  * the current wiring Bundle. {@code BundleWiringDTO} objects for all in use
- * wirings of the Bundle can be obtained from a {@link BundleWiringsDTO} of the
- * Bundle.
+ * wirings of the Bundle can be obtained by adapting the bundle to
+ * {@code BundleWiringDTO[]}.
  * 
  * <p>
  * The {@link WiringDTO#providedWires providedWires} field must contain an array
