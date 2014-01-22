@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,9 +53,10 @@ public interface ServiceRegistration<S> {
 	 * Updates the properties associated with a service.
 	 * 
 	 * <p>
-	 * The {@link Constants#OBJECTCLASS} and {@link Constants#SERVICE_ID} keys
-	 * cannot be modified by this method. These values are set by the Framework
-	 * when the service is registered in the OSGi environment.
+	 * The {@link Constants#OBJECTCLASS}, {@link Constants#SERVICE_ID} and
+	 * {@link Constants#SERVICE_SCOPE} keys cannot be modified by this method.
+	 * These values are set by the Framework when the service is registered in
+	 * the OSGi environment.
 	 * 
 	 * <p>
 	 * The following steps are required to modify service properties:
