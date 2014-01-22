@@ -567,10 +567,10 @@
     <section>
       <title>Extenders and Targeted PIDs</title>
 
-      <para>Extenders like Blueprint and Declarative Services use
-      Configurations but bypass the general Managed Service or Managed Service
-      Factory method. It is the responsibility of these extenders to access
-      the Configurations using the targeted PIDs.</para>
+      <para>Extenders like Declarative Services use Configurations but bypass
+      the general Managed Service or Managed Service Factory method. It is the
+      responsibility of these extenders to access the Configurations using the
+      targeted PIDs.</para>
 
       <para>Since getting a Configuration tends to create that Configuration
       it is necessary for these extenders to use the <xref
