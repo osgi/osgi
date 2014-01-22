@@ -462,7 +462,7 @@
 
           <tbody>
             <row>
-              <entry><code>objectClass</code></entry>
+              <entry><code>objectClass</code><superscript>†</superscript></entry>
 
               <entry><code>String[]</code></entry>
 
@@ -498,7 +498,7 @@
             </row>
 
             <row>
-              <entry><code>service.id<superscript>†</superscript></code></entry>
+              <entry><code>service.id</code><superscript>†</superscript></entry>
 
               <entry><code>Long</code></entry>
 
@@ -529,7 +529,7 @@
             </row>
 
             <row>
-              <entry><code>service.scope<superscript>†</superscript></code></entry>
+              <entry><code>service.scope</code><superscript>†</superscript></entry>
 
               <entry><code>String</code></entry>
 
@@ -577,8 +577,8 @@
               xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>This optional property can be used by the bundle
-              registering the service object to indicate the vendor.
-              </para></entry>
+              registering the service object to indicate the
+              vendor.</para></entry>
             </row>
           </tbody>
         </tgroup>
