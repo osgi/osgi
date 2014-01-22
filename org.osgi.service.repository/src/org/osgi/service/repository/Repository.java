@@ -58,7 +58,10 @@ public interface Repository {
 	 *         there are no matching capabilities for a specified requirement,
 	 *         then the value in the map for the specified requirement must be
 	 *         an empty collection. The returned map is the property of the
-	 *         caller and can be modified by the caller.
+	 *         caller. As the returned collections may be custom or lazy
+	 *         populated the caller is discouraged from calling {@code size()}
+	 *         on the returned collections as this may result in a long-running
+	 *         operation.
 	 */
 	Map<Requirement, Collection<Capability>> findProviders(Collection<? extends Requirement> requirements);
 
@@ -69,8 +72,10 @@ public interface Repository {
 	 *        capabilities should be returned. Must not be {@code null}.
 	 * @return A collection of matching {@code Resource}s. If there are no
 	 *         matching resources, an empty collection is returned. The returned
-	 *         collection is the property of the caller and can be modified by
-	 *         the caller.
+	 *         collection is the property of the caller. As the returned
+	 *         collection may be custom or lazy populated the caller is
+	 *         discouraged from calling {@code size()} on the returned
+	 *         collection as this may result in a long-running operation.
 	 * @since 1.1
 	 */
 	Collection<Resource> findProviders(RequirementExpression expression);
