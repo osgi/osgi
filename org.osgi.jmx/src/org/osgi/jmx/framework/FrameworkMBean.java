@@ -163,7 +163,7 @@ public interface FrameworkMBean {
 	 * <li>{@link #BUNDLE_IN_ERROR_LOCATION_ITEM}</li>
 	 * <li>{@link #COMPLETED_ITEM}</li>
 	 * <li>{@link #ERROR_ITEM}</li>
-	 * <li>{@link #REMAINING_LOCATION_ITEM P }</li>
+	 * <li>{@link #REMAINING_LOCATION_ITEM}</li>
 	 * <li>{@link #SUCCESS_ITEM}</li>
 	 * </ul>
 	 */
