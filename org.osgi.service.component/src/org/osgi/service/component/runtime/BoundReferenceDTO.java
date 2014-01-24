@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,13 +28,15 @@ import org.osgi.dto.framework.ServiceReferenceDTO;
  */
 public class BoundReferenceDTO extends DTO {
 	/**
-	 * The declared reference.
+	 * The name of the declared reference.
 	 * 
 	 * <p>
-	 * This is the representation of the declaration of the reference from the
-	 * {@code reference} element of the component description.
+	 * This is declared in the {@code name} attribute of the {@code reference}
+	 * element of the component description.
+	 * 
+	 * @see ComponentDescriptionDTO#name
 	 */
-	public ReferenceDTO				reference;
+	public String					name;
 
 	/**
 	 * The target property of the bound reference.
@@ -42,8 +44,9 @@ public class BoundReferenceDTO extends DTO {
 	 * <p>
 	 * This is the value of the {@link ComponentConfigurationDTO#properties
 	 * component property} whose name is the concatenation of the
-	 * {@link ReferenceDTO#name declared reference name} and &quot;.target&quot;.
-	 * This will be {@code null} if no target property is set for the reference.
+	 * {@link ReferenceDTO#name declared reference name} and
+	 * &quot;.target&quot;. This will be {@code null} if no target property is
+	 * set for the reference.
 	 */
 	public String					target;
 
