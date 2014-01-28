@@ -5,13 +5,6 @@ nodeploy						=true
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd, ${project.workspace}/osgi.companion/layout.bnd
 
-japi.osgi.core 				= ${replace;$(core.specs);.+;+$0}
-japi.osgi.cmpn 				= ${replace;$(cmpn.specs);.+;+$0}
-japi.osgi.enterprise		= ${replace;$(enterprise.specs);.+;+$0}
-japi.osgi.residential		= ${replace;$(residential.specs);.+;+$0}
-japi.ee.minimum				= +java, +javax
-japi.ee.foundation			= +java, +javax
-
 javadoc.bootclasspath = ${uniq; \
                     ${repo;ee.j2se;[${javac.compliance},${javac.compliance}]}, \
                     ${repo;ee.foundation}}
