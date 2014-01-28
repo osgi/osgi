@@ -54,10 +54,10 @@
             sourcepath="${project.allsourcepath}"
             destdir="${target}/javadoc">
             <bootclasspath>
-                <files includes="${javadoc.bootclasspath}"/>
+                <filelist files="${javadoc.bootclasspath}"/>
             </bootclasspath>
             <classpath>
-                <files includes="${javadoc.classpath}"/>
+                <filelist files="${javadoc.classpath}"/>
             </classpath>
             <doclet name="org.osgi.tools.xmldoclet.XmlDoclet"
                 path="${bin}">

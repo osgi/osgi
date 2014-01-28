@@ -5,6 +5,10 @@
 
 	<target name="init" depends="master.init">
 		<property name="tm"><![CDATA[&trade;]]></property>
+		<pathconvert pathsep=" " property="japitool.path">
+			<filelist files="${javadoc.bootclasspath}"/>
+			<filelist files="${javadoc.classpath}"/>
+		</pathconvert>
 		<mkdir dir="${target}/japi"/>
 	</target>
 
@@ -49,10 +53,10 @@
 				<header><![CDATA[<b>OSGi${tm} @{title}</b><br/><font size=-1>Release ${osgi.release}</font>]]></header>
 				<bottom><![CDATA[<font size=-1>${copyright.html} Licensed under the <a href="{@docRoot}/LICENSE.html">OSGi Specification License, Version 2.0</a></font>]]></bottom>
 	            <bootclasspath>
-	                <files includes="${javadoc.bootclasspath}"/>
+	                <filelist files="${javadoc.bootclasspath}"/>
 	            </bootclasspath>
 	            <classpath>
-	                <files includes="${javadoc.classpath}"/>
+	                <filelist files="${javadoc.classpath}"/>
 	            </classpath>
 				<tag name="Immutable" scope="types" description="Immutable"/>
 				<tag name="ThreadSafe" scope="types" description="ThreadSafe"/>
@@ -152,54 +156,51 @@
 				<arg value="packages" />
 				<arg value="${project.workspace}/@{name}/${target-dir}/@{name}.jar" />
 				<japitools-args />
-				<arg line="${japi.@{name}}" />
 			</java>
 		</sequential>
 	</macrodef>
 	
 	<target name="japitools.core" depends="init">
 		<japitools name="osgi.core">
-			<arg value="${repo.javase}" />
+			<arg line="${japitool.path}" />
+			<arg prefix="+" line="${core.specs}" />
 		</japitools>
 	</target>
 
 	<target name="japitools.cmpn" depends="init">
 		<japitools name="osgi.cmpn">
-			<arg value="${repo.javase}" />
-			<arg value="${repo.foundation}" />
 			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
-			<arg value="${repo.servlet}" />
-			<arg value="${repo.jpa}" />
-			<arg value="${repo.jaxp}" />
+			<arg line="${japitool.path}" />
+			<arg prefix="+" line="${cmpn.specs}" />
 		</japitools>
 	</target>
 
 	<target name="japitools.enterprise" depends="init">
 		<japitools name="osgi.enterprise">
-			<arg value="${repo.javase}" />
 			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
-			<arg value="${repo.servlet}" />
-			<arg value="${repo.jpa}" />
-			<arg value="${repo.jaxp}" />
+			<arg line="${japitool.path}" />
+			<arg prefix="+" line="${enterprise.specs}" />
 		</japitools>
 	</target>
 
 	<target name="japitools.residential" depends="init">
 		<japitools name="osgi.residential">
-			<arg value="${repo.javase}" />
-			<arg value="${repo.foundation}" />
 			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
-			<arg value="${repo.servlet}" />
-			<arg value="${repo.jaxp}" />
+			<arg line="${japitool.path}" />
+			<arg prefix="+" line="${residential.specs}" />
 		</japitools>
 	</target>
 
 	<target name="japitools.minimum" depends="init">
-		<japitools name="ee.minimum" />
+		<japitools name="ee.minimum">
+			<arg prefix="+" line="java javax" />
+		</japitools>
 	</target>
 
 	<target name="japitools.foundation" depends="init">
-		<japitools name="ee.foundation" />
+		<japitools name="ee.foundation">
+			<arg prefix="+" line="java javax" />
+		</japitools>
 	</target>
 
 	<target name="japicompat" depends="japicompat.core,japicompat.cmpn,japicompat.enterprise,japicompat.residential,japicompat.minimum,japicompat.foundation,japicompat.eecompare">
