@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,25 +31,25 @@ public class BundleDTO extends DTO {
     /**
      * The bundle's unique identifier.
      */
-    public long                   id;
+    public long   id;
 
     /**
      * The time when the bundle was last modified.
      */
-    public long                   lastModified;
+    public long   lastModified;
 
     /**
      * The bundle's state.
      */
-    public int                    state;
+    public int    state;
 
     /**
      * The bundle's symbolic name.
      */
-    public String                 symbolicName;
+    public String symbolicName;
 
     /**
      * The bundle's version.
      */
-    public String                 version;
+    public String version;
 }

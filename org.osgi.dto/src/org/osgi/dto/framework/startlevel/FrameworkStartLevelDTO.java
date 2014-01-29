@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,11 +32,11 @@ public class FrameworkStartLevelDTO extends DTO {
     /**
      * The active start level value for the framework.
      */
-    public int                startLevel;
+    public int startLevel;
 
     /**
      * The initial start level value that is assigned to a bundle when it is
      * first installed.
      */
-    public int                initialBundleStartLevel;
+    public int initialBundleStartLevel;
 }
