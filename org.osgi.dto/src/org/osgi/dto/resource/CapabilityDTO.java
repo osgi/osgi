@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,6 +27,14 @@ import org.osgi.dto.DTO;
  */
 public class CapabilityDTO extends DTO {
     /**
+     * The unique identifier of the capability.
+     * 
+     * <p>
+     * This identifier is transiently assigned and may vary across restarts.
+     */
+    public int                 id;
+
+    /**
      * The namespace for the capability.
      */
     public String              namespace;
@@ -39,13 +47,16 @@ public class CapabilityDTO extends DTO {
     /**
      * The attributes for the capability.
      * 
+     * <p>
      * The value type must be a numerical type, Boolean, String, DTO or an array
      * of any of the former.
      */
     public Map<String, Object> attributes;
 
     /**
-     * The resource declaring this capability.
+     * The identifier of the resource declaring the capability.
+     * 
+     * @see ResourceDTO#id
      */
-    public ResourceDTO         resource;
+    public int                 resource;
 }

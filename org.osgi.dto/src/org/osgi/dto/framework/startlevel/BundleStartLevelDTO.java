@@ -30,6 +30,11 @@ import org.osgi.dto.DTO;
  */
 public class BundleStartLevelDTO extends DTO {
     /**
+     * The id of the bundle associated with this start level.
+     */
+    public long    bundle;
+
+    /**
      * The assigned start level value for the bundle.
      */
     public int     startLevel;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,22 +26,26 @@ import org.osgi.dto.DTO;
  */
 public class WireDTO extends DTO {
     /**
-     * Capability for the wire.
+     * Reference to the Capability for the wire.
      */
-    public CapabilityDTO      capability;
+    public CapabilityRefDTO  capability;
 
     /**
-     * Requirement for the wire.
+     * Reference to the Requirement for the wire.
      */
-    public RequirementDTO     requirement;
+    public RequirementRefDTO requirement;
 
     /**
-     * Provider resource for the wire.
+     * The identifier of the provider resource for the wire.
+     * 
+     * @see ResourceDTO#id
      */
-    public ResourceDTO        provider;
+    public int               provider;
 
     /**
-     * Requiring resource for the wire.
+     * The identifier of the requiring resource for the wire.
+     * 
+     * @see ResourceDTO#id
      */
-    public ResourceDTO        requirer;
+    public int               requirer;
 }

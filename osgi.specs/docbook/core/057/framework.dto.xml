@@ -46,7 +46,8 @@
           <para><emphasis>Easy Serialization/Deserialization</emphasis> - Must
           be easily serializable. That is, no special
           serialization/deserialization logic must be required. Serialization
-          must be possible simply by introspection.</para>
+          must be possible simply by introspection and object graphs must be
+          acyclic.</para>
         </listitem>
 
         <listitem>
@@ -171,6 +172,9 @@
     threads as well as proper synchronization if a Data Transfer Object is
     mutated by one of the threads.</para>
 
+    <para>Data Transfer Object graphs must be acyclic to simplify
+    serialization and deserialization.</para>
+
     <section>
       <title>Naming Conventions</title>
 
@@ -240,8 +244,9 @@
       xrefstyle="hyperlink"/> and <xref
       linkend="org.osgi.dto.resource.WireDTO" xrefstyle="hyperlink"/>
       represent the capabilities and requirements wiring information of the
-      Resource API. The following figure shows the relationship between these
-      Data Transfer Object types.</para>
+      Resource API. The following figure shows the effective relationship
+      between these Data Transfer Object types. Since the graph of Data
+      Transfer Objects must be acyclic, some references are indirect.</para>
 
       <figure>
         <title>Resource API Data Transfer Objects</title>
@@ -266,7 +271,9 @@
       linkend="org.osgi.dto.framework.wiring.BundleWireDTO"
       xrefstyle="hyperlink"/> represent the capabilities and requirements
       wiring information of the Bundle Wiring API. The following figure shows
-      the relationship between these Data Transfer Object types.</para>
+      the effective relationship between these Data Transfer Object types.
+      Since the graph of Data Transfer Objects must be acyclic, some
+      references are indirect.</para>
 
       <figure>
         <title>Bundle Wiring API Data Transfer Objects</title>

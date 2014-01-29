@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,34 +20,44 @@ import java.util.List;
 import org.osgi.dto.DTO;
 
 /**
- * Data Transfer Object for a Wiring.
+ * Data Transfer Object for a Wiring node.
  * 
  * @author $Id$
  * @NotThreadSafe
  */
 public class WiringDTO extends DTO {
     /**
-     * The capabilities for the wiring.
+     * The unique identifier of the wiring node.
+     * 
+     * <p>
+     * This identifier is transiently assigned and may vary across restarts.
      */
-    public List<CapabilityDTO>  capabilities;
+    public int                     id;
 
     /**
-     * The requirements for the wiring.
+     * The references to the capabilities for the wiring node.
      */
-    public List<RequirementDTO> requirements;
+    public List<CapabilityRefDTO>  capabilities;
 
     /**
-     * The provided wires for the wiring.
+     * The references to the requirements for the wiring node.
      */
-    public List<WireDTO>        providedWires;
+    public List<RequirementRefDTO> requirements;
 
     /**
-     * The required wires for the wiring.
+     * The provided wires for the wiring node.
      */
-    public List<WireDTO>        requiredWires;
+    public List<WireDTO>           providedWires;
 
     /**
-     * Resource for the wiring.
+     * The required wires for the wiring node.
      */
-    public ResourceDTO          resource;
+    public List<WireDTO>           requiredWires;
+
+    /**
+     * The identifier of the resource associated with the wiring node.
+     * 
+     * @see ResourceDTO#id
+     */
+    public int                     resource;
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,31 +16,26 @@
 
 package org.osgi.dto.resource;
 
-import java.util.List;
 import org.osgi.dto.DTO;
 
 /**
- * Data Transfer Object for a Resource.
+ * Data Transfer Object for a reference to a Requirement.
  * 
  * @author $Id$
  * @NotThreadSafe
  */
-public class ResourceDTO extends DTO {
+public class RequirementRefDTO extends DTO {
     /**
-     * The unique identifier of the resource.
+     * The identifier of the requirement in the resource.
      * 
-     * <p>
-     * This identifier is transiently assigned and may vary across restarts.
+     * @see RequirementDTO#id
      */
-    public int                  id;
+    public int requirement;
 
     /**
-     * The capabilities of the resource.
+     * The identifier of the resource declaring the requirement.
+     * 
+     * @see ResourceDTO#id
      */
-    public List<CapabilityDTO>  capabilities;
-
-    /**
-     * The requirements of the resource.
-     */
-    public List<RequirementDTO> requirements;
+    public int resource;
 }

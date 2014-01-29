@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,11 @@ import org.osgi.dto.DTO;
  * @NotThreadSafe
  */
 public class ServiceReferenceDTO extends DTO {
+    /**
+     * The {@code service.id} of the service.
+     */
+    public long                id;
+
     /**
      * The id of the bundle that registered the service.
      */

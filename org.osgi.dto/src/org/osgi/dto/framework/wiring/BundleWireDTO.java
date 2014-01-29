@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,28 +17,29 @@
 package org.osgi.dto.framework.wiring;
 
 import org.osgi.dto.resource.WireDTO;
+import org.osgi.dto.resource.WiringDTO;
 
 /**
  * Data Transfer Object for a BundleWire.
  * 
  * <p>
- * {@code BundleWireDTO}s can be obtained from a {@link BundleWiringDTO}.
- * 
- * <p>
- * The {@link WireDTO#requirer requirer} and {@link WireDTO#provider provider}
- * fields must contain {@link BundleRevisionDTO}s.
+ * {@code BundleWireDTO}s are referenced {@link BundleWiringDTO.NodeDTO}s.
  * 
  * @author $Id$
  * @NotThreadSafe
  */
 public class BundleWireDTO extends WireDTO {
     /**
-     * Provider wiring for the bundle wire.
+     * The identifier of the provider wiring for the bundle wire.
+     * 
+     * @see WiringDTO#id
      */
-    public BundleWiringDTO    providerWiring;
+    public int providerWiring;
 
     /**
-     * Requirer wiring for the bundle wire.
+     * The identifier of the requiring wiring for the bundle wire.
+     * 
+     * @see WiringDTO#id
      */
-    public BundleWiringDTO    requirerWiring;
+    public int requirerWiring;
 }

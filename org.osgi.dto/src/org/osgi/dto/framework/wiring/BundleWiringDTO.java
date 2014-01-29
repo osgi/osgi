@@ -16,10 +16,12 @@
 
 package org.osgi.dto.framework.wiring;
 
+import java.util.Set;
+import org.osgi.dto.DTO;
 import org.osgi.dto.resource.WiringDTO;
 
 /**
- * Data Transfer Object for a BundleWiring.
+ * Data Transfer Object for a BundleWiring graph.
  * 
  * <p>
  * An installed Bundle can be adapted to provide a {@code BundleWiringDTO} for
@@ -27,27 +29,62 @@ import org.osgi.dto.resource.WiringDTO;
  * wirings of the Bundle can be obtained by adapting the bundle to
  * {@code BundleWiringDTO[]}.
  * 
- * <p>
- * The {@link WiringDTO#providedWires providedWires} field must contain an array
- * of {@link BundleWireDTO}s. The {@link WiringDTO#requiredWires requiredWires}
- * field must contain an array of {@link BundleWireDTO}s. The
- * {@link WiringDTO#resource resource} field must contain a
- * {@link BundleRevisionDTO}.
- * 
  * @author $Id$
  * @NotThreadSafe
  */
-public class BundleWiringDTO extends WiringDTO {
+public class BundleWiringDTO extends DTO {
     /**
-     * The bundle wiring's in use setting indicates that the bundle wiring is in
-     * use.
+     * The id of the bundle associated with the bundle wiring graph.
      */
-    public boolean            inUse;
+    public long                   bundle;
 
     /**
-     * The current state of the bundle wiring. The bundle wiring's current
-     * setting indicates that the bundle wiring is the current bundle wiring for
-     * the bundle.
+     * The identifier of the root wiring node of the bundle wiring graph.
+     * 
+     * @see WiringDTO#id
      */
-    public boolean            current;
+    public int                    root;
+
+    /**
+     * The set of wiring nodes referenced by the wiring graph.
+     * 
+     * <p>
+     * All wiring nodes referenced by wiring node identifiers in the wiring
+     * graph are contained in this set.
+     */
+    public Set<NodeDTO>           nodes;
+
+    /**
+     * The set of resources referenced by the wiring graph.
+     * 
+     * <p>
+     * All resources referenced by resource identifiers in the wiring graph are
+     * contained in this set.
+     */
+    public Set<BundleRevisionDTO> resources;
+
+    /**
+     * Data Transfer Object for a BundleWiring node.
+     * 
+     * <p>
+     * The {@link WiringDTO#providedWires providedWires} field must contain an
+     * array of {@link BundleWireDTO}s. The {@link WiringDTO#requiredWires
+     * requiredWires} field must contain an array of {@link BundleWireDTO}s.
+     * 
+     * @NotThreadSafe
+     */
+    public static class NodeDTO extends WiringDTO {
+        /**
+         * The bundle wiring's in use setting indicates that the bundle wiring
+         * is in use.
+         */
+        public boolean inUse;
+
+        /**
+         * The current state of the bundle wiring. The bundle wiring's current
+         * setting indicates that the bundle wiring is the current bundle wiring
+         * for the bundle.
+         */
+        public boolean current;
+    }
 }
