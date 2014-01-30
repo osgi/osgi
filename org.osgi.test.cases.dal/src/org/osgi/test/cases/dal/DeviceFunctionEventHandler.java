@@ -1,0 +1,104 @@
+/*
+ * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+package org.osgi.test.cases.dal;
+
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.List;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.dal.DeviceFunctionEvent;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventConstants;
+import org.osgi.service.event.EventHandler;
+
+/**
+ * Test event handler for {@link DeviceFunctionEvent#TOPIC_PROPERTY_CHANGED}
+ * events.
+ */
+final class DeviceFunctionEventHandler implements EventHandler {
+
+	private static final long	WAIT_EVENT_TIMEOUT	= Long.getLong(
+															"org.osgi.test.cases.dal.timeout", 10000).longValue();
+
+	private final BundleContext	bc;
+	private final List			events;
+
+	private ServiceRegistration	handlerSReg;
+
+	public DeviceFunctionEventHandler(BundleContext bc) {
+		this.bc = bc;
+		this.events = new ArrayList();
+	}
+
+	public void register(String funtionUID) {
+		if (null != this.handlerSReg) {
+			return;
+		}
+		Dictionary handlerRegProps = new Hashtable(2, 1F);
+		handlerRegProps.put(EventConstants.EVENT_TOPIC, DeviceFunctionEvent.TOPIC_PROPERTY_CHANGED);
+		if (null != funtionUID) {
+			handlerRegProps.put(
+					EventConstants.EVENT_FILTER,
+					'(' + DeviceFunctionEvent.PROPERTY_FUNCTION_UID + '=' + funtionUID + ')');
+		}
+		this.handlerSReg = this.bc.registerService(EventHandler.class.getName(), this, handlerRegProps);
+	}
+
+	public void unregister() {
+		if (null == this.handlerSReg) {
+			return;
+		}
+		this.handlerSReg.unregister();
+		this.handlerSReg = null;
+	}
+
+	public DeviceFunctionEvent[] getEvents(int eventsCount) {
+		synchronized (this.events) {
+			long startTime = System.currentTimeMillis();
+			long elapsedTime = 0;
+			try {
+				while ((this.events.size() < eventsCount) &&
+						(elapsedTime < WAIT_EVENT_TIMEOUT)) {
+					this.events.wait(WAIT_EVENT_TIMEOUT - elapsedTime);
+					elapsedTime = System.currentTimeMillis() - startTime;
+				}
+			} catch (InterruptedException ie) {
+				// go ahead
+			}
+			if (elapsedTime >= WAIT_EVENT_TIMEOUT) {
+				throw new IllegalStateException(
+						"The desired events are not received for: " + WAIT_EVENT_TIMEOUT + "ms.");
+			}
+			DeviceFunctionEvent[] result = new DeviceFunctionEvent[eventsCount];
+			for (int i = 0; i < result.length; i++) {
+				result[i] = (DeviceFunctionEvent) this.events.get(i);
+			}
+			return result;
+		}
+	}
+
+	public void handleEvent(Event event) {
+		synchronized (this.events) {
+			this.events.add(event);
+			this.events.notifyAll();
+		}
+	}
+
+}

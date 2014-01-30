@@ -1,0 +1,30 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Conditional-Package					= org.osgi.test.support.*
+
+Export-Package						= \
+	${p}.*
+
+Test-Cases							= \
+	${testcases}
+
+-buildpath							= \
+	org.osgi.test.support;				version=project , \
+	org.osgi.service.dal;				version=project, \
+	org.osgi.test.cases.dal.step; 		version=project, \
+	osgi.core;							version=4.2, \
+	osgi.cmpn;							version=4.2, \
+	ee.minimum;							version=1.2, \
+	${junit}
+
+-runbundles							= \
+	org.osgi.service.event;	 		version=latest, \
+	org.osgi.service.dal;	 		version=latest, \
+	org.osgi.service.cm;	 		version=latest, \
+	org.osgi.service.component;	 	version=latest, \
+	org.osgi.impl.service.dal; 		version=latest, \
+	org.osgi.impl.service.event;	version=latest, \
+	org.osgi.test.cases.dal.step; 	version=latest, \
+
+-runproperties = ${runsecureproperties}
