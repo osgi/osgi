@@ -1,0 +1,52 @@
+/*
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+
+package org.osgi.impl.service.dal;
+
+import java.util.Dictionary;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceFactory;
+import org.osgi.service.dal.Device;
+import org.osgi.service.dal.DeviceException;
+
+final class SimulatedDevice extends SimulatedService implements Device, ServiceFactory {
+
+	private final SimulatedDeviceFunction[]	functions;
+
+	public SimulatedDevice(Dictionary deviceProps, BundleContext bc, SimulatedDeviceFunction[] functions) {
+		super(Device.class.getName(), deviceProps, bc);
+		this.functions = functions;
+	}
+
+	public void remove() throws DeviceException, UnsupportedOperationException, SecurityException, IllegalStateException {
+		super.serviceReg.unregister();
+		if (null != this.functions) {
+			for (int i = 0; i < this.functions.length; i++) {
+				this.functions[i].remove();
+			}
+		}
+	}
+
+	public Object getServiceProperty(String propName) throws IllegalArgumentException {
+		Object value = super.serviceRef.getProperty(propName);
+		if (null == value) {
+			throw new IllegalArgumentException("The property name is missing: " + propName);
+		}
+		return value;
+	}
+
+}
