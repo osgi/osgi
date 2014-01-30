@@ -52,6 +52,8 @@ package org.osgi.service.dal.functions;
  * <li>{@link #TYPE_HEAT} - {@link Meter}</li>
  * <li>{@link #TYPE_COLD} - {@link Meter}</li>
  * </ul>
+ * The mapping is not mandatory. The device function can use custom defined
+ * types.
  */
 public interface Types {
 

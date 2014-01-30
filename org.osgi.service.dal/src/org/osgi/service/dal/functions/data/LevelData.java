@@ -36,8 +36,24 @@ import org.osgi.service.dal.functions.MultiLevelSensor;
 public class LevelData extends DeviceFunctionData {
 
 	/**
+	 * Represents the level field name. The field value is available with
+	 * {@link #level} and {@link #getLevel()}. The field type is
+	 * <code>BigDecimal</code>. The constant can be used as a key to
+	 * {@link #LevelData(Map)}.
+	 */
+	public static final String	FIELD_LEVEL	= "level";
+
+	/**
+	 * Represents the unit field name. The field value is available with
+	 * {@link #unit} and {@link #getUnit()}. The field type is
+	 * <code>String</code>. The constant can be used as a key to
+	 * {@link #LevelData(Map)}.
+	 */
+	public static final String	FIELD_UNIT	= "unit";
+
+	/**
 	 * Represent the unit as it's defined in
-	 * {@link org.osgi.service.dal.PropertyMetadata#META_INFO_UNITS}. The field
+	 * {@link org.osgi.service.dal.PropertyMetadata#UNITS}. The field
 	 * is optional. The field is accessible with {@link #getUnit()} getter.
 	 */
 	public final String		unit;
@@ -52,16 +68,23 @@ public class LevelData extends DeviceFunctionData {
 	 * Constructs new <code>LevelData</code> instance with the specified field
 	 * values. The map keys must match to the field names. The map values will
 	 * be assigned to the appropriate class fields. For example, the maps can
-	 * be: {"level"=BigDecimal(1)...}. That map will initialize the "level"
-	 * field with 1.
+	 * be: {"level"=BigDecimal(1)...}. That map will initialize the
+	 * {@link #FIELD_LEVEL} field with 1.
+	 * <p>
+	 * {@link #FIELD_UNIT} field value type must be <code>String</code>.
+	 * {@link #FIELD_LEVEL} field value type must be <code>BigDecimal</code>.
 	 * 
 	 * @param fields Contains the new <code>LevelData</code> instance field
 	 *        values.
+	 * 
+	 * @throws ClassCastException If the field value types are not expected.
+	 * @throws IllegalArgumentException If the level is missing.
+	 * @throws NullPointerException If the fields map is <code>null</code>.
 	 */
 	public LevelData(Map fields) {
 		super(fields);
-		this.unit = (String) fields.get("unit");
-		this.level = (BigDecimal) fields.get("level");
+		this.unit = (String) fields.get(FIELD_UNIT);
+		this.level = (BigDecimal) fields.get(FIELD_LEVEL);
 		if (null == this.level) {
 			throw new IllegalArgumentException("Level data is missing.");
 		}
@@ -95,7 +118,7 @@ public class LevelData extends DeviceFunctionData {
 
 	/**
 	 * Returns <code>LevelData</code> unit as it's specified in
-	 * {@link PropertyMetadata#META_INFO_UNITS} or <code>null</code> if the unit
+	 * {@link PropertyMetadata#UNITS} or <code>null</code> if the unit
 	 * is missing.
 	 * 
 	 * @return The value unit or <code>null</code> if the unit is missing.
@@ -104,8 +127,112 @@ public class LevelData extends DeviceFunctionData {
 		return this.unit;
 	}
 
+	/**
+	 * Two <code>LevelData</code> instances are equal if they contain equal
+	 * metadata, timestamp, unit and level.
+	 * 
+	 * @param other The object to compare this data.
+	 * 
+	 * @return <code>true</code> if this object is equivalent to the specified
+	 *         one.
+	 * 
+	 * @see org.osgi.service.dal.DeviceFunctionData#equals(java.lang.Object)
+	 */
+	public boolean equals(Object other) {
+		if (!(other instanceof LevelData)) {
+			return false;
+		}
+		return 0 == compareToLevelData((LevelData) other);
+	}
+
+	/**
+	 * Returns the hash code for this <code>LevelData</code> object. The hash
+	 * code is a sum of {@link DeviceFunctionData#hashCode()},
+	 * {@link String#hashCode()} and {@link BigDecimal#hashCode()}, where
+	 * {@link String#hashCode()} represents the unit hash code and
+	 * {@link BigDecimal#hashCode()} represents the level hash code.
+	 * 
+	 * @return The hash code of this <code>LevelData</code> object.
+	 * 
+	 * @see org.osgi.service.dal.DeviceFunctionData#hashCode()
+	 */
+	public int hashCode() {
+		int hashCode = super.hashCode();
+		if (null != this.unit) {
+			hashCode += this.unit.hashCode();
+		}
+		return hashCode + this.level.hashCode();
+	}
+
+	/**
+	 * Compares this <code>LevelData</code> instance with the given argument.
+	 * The argument can be:
+	 * <ul>
+	 * <li><code>BigDecimal</code> - the method returns the result of
+	 * {@link BigDecimal#compareTo(Object)} for this instance level and the
+	 * specified argument.
+	 * <li><code>LevelData</code> - the method returns <code>-1</code> if
+	 * metadata, timestamp or unit are not equivalent. Otherwise, the level is
+	 * compared with the same rules as <code>BigDecimal</code> argument.
+	 * <li><code>Map</code> - the map must be built according the rules of
+	 * {@link #LevelData(Map)}. Metadata, timestamp, unit and level are compared
+	 * according <code>BigDecimal</code> and <code>LevelData</code> argument
+	 * rules.</li>
+	 * </ul>
+	 * 
+	 * @param o An argument to be compared.
+	 * 
+	 * @return -1, 0 or 1 depending on the comparison rules.
+	 * 
+	 * @throws ClassCastException If the method is called with <code>Map</code>
+	 *         and the field value types are not expected.
+	 * @throws IllegalArgumentException If the method is called with
+	 *         <code>Map</code> and the level is missing.
+	 * @throws NullPointerException If the argument is <code>null</code>.
+	 * 
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
 	public int compareTo(Object o) {
-		return 0; // TODO: impl
+		if (o instanceof LevelData) {
+			return compareToLevelData((LevelData) o);
+		} else if (o instanceof BigDecimal) {
+			return compareToBigDecimal((BigDecimal) o);
+		}
+		return compareToMap((Map) o);
+	}
+
+	/*
+	 * Compares this instance with LevelData argument according to rules in
+	 * compareTo method.
+	 */
+	private int compareToLevelData(LevelData otherData) {
+		if (!super.equals(otherData)) {
+			return -1;
+		}
+		if (null != this.unit) {
+			if ((null == otherData.unit) || (!this.unit.equals(otherData.unit))) {
+				return -1;
+			}
+		} else if (null != otherData.unit) {
+			return -1;
+		}
+		return this.level.compareTo(otherData.level);
+	}
+
+	/*
+	 * Compares this instance with BigDecimal argument according to rules in
+	 * compareTo method.
+	 */
+	private int compareToBigDecimal(BigDecimal otherData) {
+		return this.level.compareTo(otherData);
+	}
+
+	/*
+	 * Compares this instance with Map argument according to rules in compareTo
+	 * method.
+	 */
+	private int compareToMap(Map otherData) {
+		return compareToLevelData(new LevelData(otherData));
 	}
 
 }

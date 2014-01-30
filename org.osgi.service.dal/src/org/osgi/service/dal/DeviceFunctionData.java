@@ -30,6 +30,22 @@ import java.util.Map;
 public abstract class DeviceFunctionData implements Comparable {
 
 	/**
+	 * Represents the timestamp field name. The field value is available with
+	 * {@link #timestamp} and {@link #getTimestamp()}. The field type is
+	 * <code>long</code>. The constant can be used as a key to
+	 * {@link #DeviceFunctionData(Map)}.
+	 */
+	public static final String	FIELD_TIMESTAMP			= "timestamp";
+
+	/**
+	 * Represents the metadata field name. The field value is available with
+	 * {@link #metadata} and {@link #getMetadata()}. The field type is
+	 * <code>Map</code>. The constant can be used as a key to
+	 * {@link #DeviceFunctionData(Map)}.
+	 */
+	public static final String	FIELD_METADATA			= "metadata";
+
+	/**
 	 * Metadata key, which value represents the data description. The property
 	 * value type is <code>java.lang.String</code>.
 	 */
@@ -58,14 +74,21 @@ public abstract class DeviceFunctionData implements Comparable {
 	 * specified field values. The map keys must match to the field names. The
 	 * map values will be assigned to the appropriate class fields. For example,
 	 * the maps can be: {"timestamp"=Long(1384440775495)}. That map will
-	 * initialize the "timestamp" field with 1384440775495.
+	 * initialize the {@link #FIELD_TIMESTAMP} field with 1384440775495. If
+	 * timestamp is missing, {@link Long#MIN_VALUE} is used.
+	 * <p>
+	 * {@link #FIELD_TIMESTAMP} field value type must be <code>Long</code>.
+	 * {@link #FIELD_METADATA} field value type must be <code>Map</code>.
 	 * 
 	 * @param fields Contains the new <code>DeviceFunctionData</code> instance
 	 *        field values.
+	 * 
+	 * @throws ClassCastException If the field value types are not expected.
+	 * @throws NullPointerException If the fields map is <code>null</code>.
 	 */
 	public DeviceFunctionData(final Map fields) {
-		final Long timestamp = (Long) fields.get("timestamp");
-		this.timestamp = (null != timestamp) ? timestamp.longValue() : Long.MIN_VALUE;
+		final Long timestampLocal = (Long) fields.get("timestamp");
+		this.timestamp = (null != timestampLocal) ? timestampLocal.longValue() : Long.MIN_VALUE;
 		this.metadata = (Map) fields.get("metadata");
 	}
 
@@ -106,6 +129,46 @@ public abstract class DeviceFunctionData implements Comparable {
 	 */
 	public Map getMetadata() {
 		return this.metadata;
+	}
+
+	/**
+	 * Two <code>DeviceFunctionData</code> instances are equal if their metadata
+	 * and timestamp are equivalent.
+	 * 
+	 * @param other The other instance to compare. It must be of
+	 *        <code>DeviceFunctionData</code> type.
+	 * 
+	 * @return <code>true</code> if this instance and argument have equivalent
+	 *         metadata and timestamp, <code>false</code> otherwise.
+	 * 
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object other) {
+		if (!(other instanceof DeviceFunctionData)) {
+			return false;
+		}
+		DeviceFunctionData otherData = (DeviceFunctionData) other;
+		if (null != this.metadata) {
+			if ((null == otherData.metadata) || (!this.metadata.equals(otherData.metadata))) {
+				return false;
+			}
+		} else if (null != otherData.metadata) {
+			return false;
+		}
+		return this.timestamp == otherData.timestamp;
+	}
+
+	/**
+	 * Returns the hash code of this <code>DeviceFunctionData</code>.
+	 * 
+	 * @return <code>DeviceFunctionData</code> hash code.
+	 * 
+	 * @see java.lang.Object#hashCode()
+	 */
+	public int hashCode() {
+		Long timestampLocal = new Long(this.timestamp);
+		return (null == this.metadata) ? timestampLocal.hashCode() :
+				this.metadata.hashCode() + timestampLocal.hashCode();
 	}
 
 }

@@ -17,6 +17,7 @@
 package org.osgi.service.dal;
 
 import java.util.Dictionary;
+import java.util.HashMap;
 import java.util.Map;
 import org.osgi.service.event.Event;
 
@@ -39,7 +40,7 @@ public final class DeviceFunctionEvent extends Event {
 	 * Represents the event package. That constant can be useful for the event
 	 * handlers depending on the event filters.
 	 */
-	public static final String	EVENT_PACKAGE						= "org/osgi/services/abstractdevice/";
+	public static final String	EVENT_PACKAGE						= "org/osgi/services/dal/";
 
 	/**
 	 * Represents the event class. That constant can be useful for the event
@@ -96,14 +97,30 @@ public final class DeviceFunctionEvent extends Event {
 	}
 
 	/**
+	 * Constructs a new event with the specified topic, function UID, property
+	 * name and property value.
+	 * 
+	 * @param topic The event topic.
+	 * @param funtionUID The event source function UID.
+	 * @param propName The event source property name.
+	 * @param propValue The event source property value.
+	 */
+	public DeviceFunctionEvent(
+			String topic,
+			String funtionUID,
+			String propName,
+			DeviceFunctionData propValue) {
+		super(topic, prepareEventProps(funtionUID, propName, propValue));
+	}
+
+	/**
 	 * Returns the property value change source function identifier. The value
 	 * is same as the value of {@link #PROPERTY_FUNCTION_UID} property.
 	 * 
 	 * @return The property value change source function.
 	 */
 	public String getFunctionUID() {
-		return null;
-		// TODO: impl
+		return (String) super.getProperty(PROPERTY_FUNCTION_UID);
 	}
 
 	/**
@@ -112,9 +129,8 @@ public final class DeviceFunctionEvent extends Event {
 	 * 
 	 * @return The property name.
 	 */
-	public String getPropertyName() {
-		return null;
-		// TODO: impl
+	public String getFunctionPropertyName() {
+		return (String) super.getProperty(PROPERTY_FUNCTION_PROPERTY_NAME);
 	}
 
 	/**
@@ -123,9 +139,19 @@ public final class DeviceFunctionEvent extends Event {
 	 * 
 	 * @return The property value.
 	 */
-	public DeviceFunctionData getPropertyValue() {
-		return null;
-		// TODO: impl
+	public DeviceFunctionData getFunctionPropertyValue() {
+		return (DeviceFunctionData) super.getProperty(PROPERTY_FUNCTION_PROPERTY_VALUE);
+	}
+
+	private static Map prepareEventProps(
+			String funtionUID,
+			String propName,
+			DeviceFunctionData propValue) {
+		Map eventProps = new HashMap(3, 1F);
+		eventProps.put(PROPERTY_FUNCTION_PROPERTY_NAME, propName);
+		eventProps.put(PROPERTY_FUNCTION_PROPERTY_VALUE, propValue);
+		eventProps.put(PROPERTY_FUNCTION_UID, funtionUID);
+		return eventProps;
 	}
 
 }

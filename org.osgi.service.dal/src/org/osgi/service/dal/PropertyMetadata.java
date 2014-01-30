@@ -23,19 +23,19 @@ import java.util.Map;
  * parameter.
  * 
  * The access to the Device Function properties is a bitmap value of
- * {@link #META_INFO_PROPERTY_ACCESS} metadata key. Device Function properties
+ * {@link #PROPERTY_ACCESS} metadata key. Device Function properties
  * can be accessed in three ways. Any combinations between them are possible:
  * <ul>
  * <li>
- * {@link #META_INFO_PROPERTY_ACCESS_READABLE} - available for all properties,
+ * {@link #PROPERTY_ACCESS_READABLE} - available for all properties,
  * which can be read. Device Function must provide a getter method for an access
  * to the property value.</li>
  * <li>
- * {@link #META_INFO_PROPERTY_ACCESS_WRITABLE} - available for all properties,
+ * {@link #PROPERTY_ACCESS_WRITABLE} - available for all properties,
  * which can be modified. Device Function must provide a setter method for a
  * modification of the property value.</li>
  * <li>
- * {@link #META_INFO_PROPERTY_ACCESS_EVENTABLE} - available for all properties,
+ * {@link #PROPERTY_ACCESS_EVENTABLE} - available for all properties,
  * which can report the property value. {@link DeviceFunctionEvent}s are sent on
  * property change.</li>
  * </ul>
@@ -47,38 +47,38 @@ public interface PropertyMetadata {
 
 	/**
 	 * Marks the readable Device Function properties. The flag can be used as a
-	 * part of bitmap value of {@link #META_INFO_PROPERTY_ACCESS}. The readable
+	 * part of bitmap value of {@link #PROPERTY_ACCESS}. The readable
 	 * access mandates Device Function to provide a property getter method.
 	 * 
 	 * @see DeviceFunction
 	 */
-	public static final int		META_INFO_PROPERTY_ACCESS_READABLE	= 1;
+	public static final int		PROPERTY_ACCESS_READABLE	= 1;
 
 	/**
 	 * Marks the writable Device Function properties. The flag can be used as a
-	 * part of bitmap value of {@link #META_INFO_PROPERTY_ACCESS}. The writable
+	 * part of bitmap value of {@link #PROPERTY_ACCESS}. The writable
 	 * access mandates Device Function to provide a property setter methods.
 	 * 
 	 * @see DeviceFunction
 	 */
-	public static final int		META_INFO_PROPERTY_ACCESS_WRITABLE	= 2;
+	public static final int		PROPERTY_ACCESS_WRITABLE	= 2;
 
 	/**
 	 * Marks the eventable Device Function properties. The flag can be used as a
-	 * part of bitmap value of {@link #META_INFO_PROPERTY_ACCESS}.
+	 * part of bitmap value of {@link #PROPERTY_ACCESS}.
 	 * 
 	 * @see DeviceFunction
 	 */
-	public static final int		META_INFO_PROPERTY_ACCESS_EVENTABLE	= 4;
+	public static final int		PROPERTY_ACCESS_EVENTABLE	= 4;
 
 	/**
 	 * Metadata key, which value represents the access to the Device Function
 	 * property. The property value is a bitmap of <code>Integer</code> type.
 	 * The bitmap can be any combination of:
 	 * <ul>
-	 * <li>{@link #META_INFO_PROPERTY_ACCESS_READABLE}</li>
-	 * <li>{@link #META_INFO_PROPERTY_ACCESS_WRITABLE}</li>
-	 * <li>{@link #META_INFO_PROPERTY_ACCESS_EVENTABLE}</li>
+	 * <li>{@link #PROPERTY_ACCESS_READABLE}</li>
+	 * <li>{@link #PROPERTY_ACCESS_WRITABLE}</li>
+	 * <li>{@link #PROPERTY_ACCESS_EVENTABLE}</li>
 	 * </ul>
 	 * For example, value Integer(3) means that the property is readable and
 	 * writable, but not eventable.
@@ -86,13 +86,13 @@ public interface PropertyMetadata {
 	 * The property access is available only for Device Function properties and
 	 * it's missing for the operation parameters.
 	 */
-	public static final String	META_INFO_PROPERTY_ACCESS			= "property.access";
+	public static final String	PROPERTY_ACCESS			= "property.access";
 
 	/**
 	 * Metadata key, which value represents the property description. The
 	 * property value type is <code>java.lang.String</code>.
 	 */
-	public static final String	META_INFO_DESCRIPTION				= "description";
+	public static final String	DESCRIPTION				= "description";
 
 	/**
 	 * Metadata key, which value represents the property supported units. The
@@ -113,18 +113,18 @@ public interface PropertyMetadata {
 	 * allowed. A set of predefined unit symbols are available in {@link Units}
 	 * interface.
 	 */
-	public static final String	META_INFO_UNITS						= "units";
+	public static final String	UNITS						= "units";
 
 	/**
 	 * Returns metadata about the Device Function property or operation
 	 * parameter. The keys of the <code>java.util.Map</code> result must be of
 	 * <code>java.lang.String</code> type. Possible keys:
 	 * <ul>
-	 * <li>{@link #META_INFO_DESCRIPTION} - doesn't depend on the given unit.</li>
-	 * <li>{@link #META_INFO_PROPERTY_ACCESS} - available only for Device
+	 * <li>{@link #DESCRIPTION} - doesn't depend on the given unit.</li>
+	 * <li>{@link #PROPERTY_ACCESS} - available only for Device
 	 * Function property and missing for Device FUnction operation parameters.
 	 * It doesn't depend on the given unit.</li>
-	 * <li>{@link #META_INFO_UNITS} - doesn't depend on the given unit.</li>
+	 * <li>{@link #UNITS} - doesn't depend on the given unit.</li>
 	 * <li>custom key - can depend on the unit.</li>
 	 * </ul>
 	 * 

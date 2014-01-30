@@ -37,6 +37,7 @@ import org.osgi.service.dal.functions.data.BooleanData;
  * <li>{@link Types#TYPE_DOOR}</li>
  * <li>{@link Types#TYPE_WINDOW}</li>
  * <li>{@link Types#TYPE_POWER}</li>
+ * <li>other type defined in {@link Types}</li>
  * <li>custom - vendor specific type</li>
  * </ul>
  * 
@@ -99,11 +100,12 @@ public interface BooleanControl extends DeviceFunction {
 	 * @throws IllegalStateException If this device function service object has
 	 *         already been unregistered.
 	 * @throws DeviceException If an operation error is available.
+	 * @throws IllegalArgumentException If there is an invalid argument.
 	 * 
 	 * @see BooleanControl#PROPERTY_DATA
 	 */
 	public void setData(boolean data) throws UnsupportedOperationException,
-			IllegalStateException, DeviceException;
+			IllegalStateException, DeviceException, IllegalArgumentException;
 
 	/**
 	 * Reverses the <code>BooleanControl</code> state. If the current state

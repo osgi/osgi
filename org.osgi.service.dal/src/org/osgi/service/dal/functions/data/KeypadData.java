@@ -30,6 +30,33 @@ import org.osgi.service.dal.functions.Keypad;
  */
 public class KeypadData extends DeviceFunctionData {
 
+	/**
+	 * Represents the key name field name. The field value is available with
+	 * {@link #keyName} and {@link #getKeyName()}. The field type is
+	 * <code>String</code>. The constant can be used as a key to
+	 * {@link #KeypadData(Map)}.
+	 */
+	public static final String	FIELD_KEY_NAME					= "keyName";
+
+	/**
+	 * Represents the event type field name. The field value is available with
+	 * {@link #eventType} and {@link #getEventType()}. The field type is
+	 * <code>int</code>. The constant can be used as a key to
+	 * {@link #KeypadData(Map)}.
+	 */
+	public static final String	FIELD_EVENT_TYPE				= "eventType";
+
+	/**
+	 * Represents the key code field name. The field value is available with
+	 * {@link #keyCode} and {@link #getKeyCode()}. The field type is
+	 * <code>int</code>. The constant can be used as a key to
+	 * {@link #KeypadData(Map)}.
+	 */
+	public static final String	FIELD_KEY_CODE					= "keyCode";
+
+	/** Represents an unknown keypad event type. */
+	public static final int		EVENT_TYPE_UNKNOWN				= 0;
+
 	/** Represents a keypad event type for a key pressed. */
 	public static final int	EVENT_TYPE_PRESSED				= 1;
 
@@ -69,27 +96,36 @@ public class KeypadData extends DeviceFunctionData {
 	 * Constructs new <code>KeypadData</code> instance with the specified field
 	 * values. The map keys must match to the field names. The map values will
 	 * be assigned to the appropriate class fields. For example, the maps can
-	 * be: {"eventType"=Integer(1)...}. That map will initialize the "eventType"
-	 * field with 1.
+	 * be: {"eventType"=Integer(1)...}. That map will initialize the
+	 * {@link #FIELD_EVENT_TYPE} field with 1.
+	 * <p>
+	 * {@link #FIELD_EVENT_TYPE} field value type must be <code>Integer</code>.
+	 * {@link #FIELD_KEY_CODE} field value type must be <code>Integer</code>.
+	 * {@link #FIELD_KEY_NAME} field value type must be <code>String</code>.
 	 * 
 	 * @param fields Contains the new <code>KeypadData</code> instance field
 	 *        values.
+	 * 
+	 * @throws ClassCastException If the field value types are not expected.
+	 * @throws IllegalArgumentException If the event type or key code is
+	 *         missing.
+	 * @throws NullPointerException If the fields map is <code>null</code>.
 	 */
 	public KeypadData(final Map fields) {
 		super(fields);
-		final Integer eventType = (Integer) fields.get("eventType");
-		if (null == eventType) {
+		final Integer eventTypeLocal = (Integer) fields.get(FIELD_EVENT_TYPE);
+		if (null == eventTypeLocal) {
 			throw new IllegalArgumentException("The event type is missing.");
 		}
-		this.eventType = eventType.intValue();
+		this.eventType = eventTypeLocal.intValue();
 
-		final Integer keyCode = (Integer) fields.get("keyCode");
-		if (null == keyCode) {
+		final Integer keyCodeLocal = (Integer) fields.get(FIELD_KEY_CODE);
+		if (null == keyCodeLocal) {
 			throw new IllegalArgumentException("The key code is missing.");
 		}
-		this.keyCode = keyCode.intValue();
+		this.keyCode = keyCodeLocal.intValue();
 
-		this.keyName = (String) fields.get("keyName");
+		this.keyName = (String) fields.get(FIELD_KEY_NAME);
 	}
 
 	/**

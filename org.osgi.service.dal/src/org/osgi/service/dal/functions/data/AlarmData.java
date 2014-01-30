@@ -30,6 +30,21 @@ import org.osgi.service.dal.functions.Alarm;
  */
 public class AlarmData extends DeviceFunctionData {
 
+	/**
+	 * Represents the severity field name. The field value is available with
+	 * {@link #severity} and {@link #getSeverity()}. The field type is
+	 * <code>int</code>. The constant can be used as a key to
+	 * {@link #AlarmData(Map)}.
+	 */
+	public static final String	FIELD_SEVERITY	= "severity";
+
+	/**
+	 * Represents the type field name. The field value is available with
+	 * {@link #type} and {@link #getType()}. The field type is <code>int</code>.
+	 * The constant can be used as a key to {@link #AlarmData(Map)}.
+	 */
+	public static final String	FIELD_TYPE		= "type";
+
 	/** The alarm type indicates that smoke is detected. */
 	public static final int	TYPE_SMOKE		= 1;
 
@@ -107,21 +122,29 @@ public class AlarmData extends DeviceFunctionData {
 	 * Constructs new <code>AlarmData</code> instance with the specified field
 	 * values. The map keys must match to the field names. The map values will
 	 * be assigned to the appropriate class fields. For example, the maps can
-	 * be: {"severity"=Integer(1)...}. That map will initialize the "severity"
-	 * field with 1.
+	 * be: {"severity"=Integer(1)...}. That map will initialize the
+	 * {@link #FIELD_SEVERITY} field with 1. If severity is missing,
+	 * {@link #SEVERITY_NONE} is used.
+	 * <p>
+	 * {@link #FIELD_SEVERITY} field value type must be <code>Integer</code>.
+	 * {@link #FIELD_TYPE} field value type must be <code>Integer</code>.
 	 * 
 	 * @param fields Contains the new <code>AlarmData</code> instance field
 	 *        values.
+	 * 
+	 * @throws ClassCastException If the field value types are not expected.
+	 * @throws IllegalArgumentException If the alarm type is missing.
+	 * @throws NullPointerException If the fields map is <code>null</code>.
 	 */
 	public AlarmData(final Map fields) {
 		super(fields);
-		final Integer severity = (Integer) fields.get("severity");
-		this.severity = (null != severity) ? severity.intValue() : SEVERITY_NONE;
-		final Integer type = (Integer) fields.get("type");
-		if (null == type) {
+		final Integer severityLocal = (Integer) fields.get(FIELD_SEVERITY);
+		this.severity = (null != severityLocal) ? severityLocal.intValue() : SEVERITY_NONE;
+		final Integer typeLocal = (Integer) fields.get(FIELD_TYPE);
+		if (null == typeLocal) {
 			throw new IllegalArgumentException("The alarm data type is missing.");
 		}
-		this.type = type.intValue();
+		this.type = typeLocal.intValue();
 	}
 
 	/**

@@ -17,6 +17,7 @@
 package org.osgi.service.dal.functions;
 
 import org.osgi.service.dal.DeviceFunction;
+import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.data.KeypadData;
 
 /**
@@ -25,6 +26,11 @@ import org.osgi.service.dal.functions.data.KeypadData;
  * discerned. Different types of key presses like short and long press can
  * typically also be detected. There is only one eventable property and no
  * operations.
+ * <p>
+ * <code>Keypad</code> can enumerate all supported keys in the key property
+ * metadata, {@link PropertyMetadata#getEnumValues(String)}.
+ * <code>KeypadData</code> event type will be
+ * {@link KeypadData#EVENT_TYPE_UNKNOWN} in this case.
  * 
  * @see KeypadData
  */

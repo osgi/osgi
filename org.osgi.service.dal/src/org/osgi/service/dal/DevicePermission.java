@@ -32,10 +32,6 @@ import java.security.PermissionCollection;
  * <td>{@link #ACTION_REMOVE}</td>
  * <td>{@link Device#remove()}</td>
  * </tr>
- * <tr>
- * <td>{@link #ACTION_SET_NAME}</td>
- * <td>{@link Device#setName(String)}</td>
- * </tr>
  * </table>
  * 
  * The name of the permission is a filter based. See OSGi Core Specification,
@@ -46,9 +42,6 @@ import java.security.PermissionCollection;
 public final class DevicePermission extends BasicPermission {
 
 	private static final long	serialVersionUID	= -3020753566295420906L;
-
-	/** A permission action to modify the device name. */
-	public static final String	ACTION_SET_NAME		= "setName";
 
 	/** A permission action to remove the device. */
 	public static final String	ACTION_REMOVE		= "remove";
@@ -65,15 +58,14 @@ public final class DevicePermission extends BasicPermission {
 	 * @param filter A filter expression that can use any device service
 	 *        property. The filter attribute names are processed in a case
 	 *        insensitive manner. A special value of "*" can be used to match
-	 *        akk devices.
-	 * @param actions A comma-separated list of {@link #ACTION_SET_NAME} and
-	 *        {@link #ACTION_REMOVE}. Any combinations are allowed.
+	 *        all devices.
+	 * @param action {@link #ACTION_REMOVE} action.
 	 * 
 	 * @throws IllegalArgumentException If the filter syntax is not correct or
 	 *         invalid actions are specified.
 	 */
-	public DevicePermission(String filter, String actions) {
-		super(filter, actions);
+	public DevicePermission(String filter, String action) {
+		super(filter, action);
 		// TODO: impl
 	}
 
@@ -87,10 +79,9 @@ public final class DevicePermission extends BasicPermission {
 	 * the <code>FunctionalDevicePermission</code> permission collections.
 	 * 
 	 * @param device The permission device.
-	 * @param actions A comma-separated list of {@link #ACTION_SET_NAME} and
-	 *        {@link #ACTION_REMOVE}. Any combinations are allowed.
+	 * @param action {@link #ACTION_REMOVE} action.
 	 */
-	public DevicePermission(Device device, String actions) {
+	public DevicePermission(Device device, String action) {
 		super(null);
 		// TODO: impl
 	}
@@ -123,9 +114,8 @@ public final class DevicePermission extends BasicPermission {
 	}
 
 	/**
-	 * Returns the canonical string representation of the actions. Always
-	 * returns present actions in the following order: {@link #ACTION_SET_NAME},
-	 * {@link #ACTION_REMOVE}.
+	 * Returns the canonical string representation of {@link #ACTION_REMOVE}
+	 * action.
 	 * 
 	 * @return The canonical string representation of the actions.
 	 */

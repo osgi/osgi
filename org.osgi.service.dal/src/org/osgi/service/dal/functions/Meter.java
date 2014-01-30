@@ -45,6 +45,7 @@ import org.osgi.service.dal.functions.data.LevelData;
  * <li>{@link Types#TYPE_WATER}</li>
  * <li>{@link Types#TYPE_HEAT}</li>
  * <li>{@link Types#TYPE_COLD}</li>
+ * <li>other type defined in {@link Types}</li>
  * <li>custom - vendor specific type</li>
  * </ul>
  * 
@@ -73,7 +74,7 @@ public interface Meter extends DeviceFunction {
 	 * <li>{@link #FLOW_OUT}</li>
 	 * </ul>
 	 */
-	public static final String	SERVICE_FLOW			= "meter.flow";
+	public static final String	SERVICE_FLOW			= "dal.meter.flow";
 
 	/**
 	 * Specifies the current consumption property name. The property can be read

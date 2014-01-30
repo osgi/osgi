@@ -52,33 +52,36 @@ package org.osgi.service.dal;
  * services are unregistered last after <code>Device</code> services.
  * <p>
  * Device Function service must be registered only under concrete Device
- * Function classes. It's not allowed to register Device Function service under
- * classes, which are not concrete Device Functions. For example, those
- * registrations are not allowed:
+ * Function class. It's not allowed to register Device Function service under
+ * more than one class. For example, those registrations are not allowed:
  * <ul>
  * <li>
- * <code>context.registerService(new String[] {ManagedService.class.getName(),
- * BooleanControl.class.getName()}, this, regProps);</code> -
- * <code>ManagedService</code> interface is not a Device Function interface;</li>
+ * <code>context.registerService(ManagedService.class.getName(), this, regProps);</code>
+ * - <code>ManagedService</code> interface is not a Device Function interface.</li>
  * <li>
- * <code>context.registerService(new String[] {DeviceFunction.class.getName(),
- * BooleanControl.class.getName()}, this, regProps);</code> -
- * <code>DeviceFunction</code> interface is not concrete Device Function
+ * <code>context.registerService(DeviceFunction.class.getName(), this, regProps);</code>
+ * - <code>DeviceFunction</code> interface is not concrete Device Function
  * interface.</li>
+ * <code>context.registerService(new String[] {BooleanControl.class.getName(),
+ * BooleanControl.class.getName()}, this, regProps);</code> - more than one
+ * device function is used.</li>
  * </ul>
- * That one is a valid registration: <code>context.registerService(new String[]
- * {Meter.class.getName(), BooleanControl.class.getName()}, this, regProps);</code>. <code>Meter</code> and <code>BooleanControl</code> are concrete Device
- * Function interfaces. That rule helps to the applications to find all
- * supported Device Function classes. Otherwise the Device Function services can
- * be accesses, but it's not clear which are the Device Function classes.
+ * That one is a valid registration: <code>context.registerService(
+ * Meter.class.getName(), this, regProps);</code>. <code>Meter</code> is
+ * concrete Device Function interface.
+ * <p>
+ * That rule helps to the applications to find the supported Device Function
+ * class and to identify the metadata. Otherwise the Device Function services
+ * can be accesses, but it's not clear which are the Device Function classes and
+ * metadata.
  * <p>
  * The Device Function properties must be integrated according to these rules:
  * <ul>
  * <li>Getter methods must be available for all properties with
- * {@link PropertyMetadata#META_INFO_PROPERTY_ACCESS_READABLE} access.</li>
+ * {@link PropertyMetadata#PROPERTY_ACCESS_READABLE} access.</li>
  * <li>Getter method must return a subclass of {@link DeviceFunctionData}.</li>
  * <li>Setter methods must be available for all properties with
- * {@link PropertyMetadata#META_INFO_PROPERTY_ACCESS_WRITABLE} access.</li>
+ * {@link PropertyMetadata#PROPERTY_ACCESS_WRITABLE} access.</li>
  * <li>Setter method must use {@link DeviceFunctionData} wrapped type. For
  * example, there is <code>MyFunctionData</code> with timestamp, unit and
  * <code>BigDecimal</code> value. The setter must accept as an argument the
@@ -86,7 +89,7 @@ package org.osgi.service.dal;
  * <li>It's possible to have a second setter method, which accepts the value as
  * a first argument and the unit as a second argument.</li>
  * <li>No methods are required for properties with
- * {@link PropertyMetadata#META_INFO_PROPERTY_ACCESS_EVENTABLE} access.</li>
+ * {@link PropertyMetadata#PROPERTY_ACCESS_EVENTABLE} access.</li>
  * </ul>
  * The accessor method names must be defined according JavaBeans specification.
  * <p>
@@ -167,6 +170,9 @@ public interface DeviceFunction {
 	 * Organizations that want to use device function types that do not clash
 	 * with OSGi Alliance defined types should prefix their types in own
 	 * namespace.
+	 * <p>
+	 * The type does'nt mandate specific device function interface. It can be
+	 * used with different functions.
 	 */
 	public static final String	SERVICE_TYPE			= "dal.function.type";
 
@@ -264,11 +270,9 @@ public interface DeviceFunction {
 	 * 
 	 * @param propName The property name.
 	 * 
-	 * @return The property value
-	 * 
-	 * @throws IllegalArgumentException If the property name cannot be mapped to
-	 *         value.
+	 * @return The property value or <code>null</code> if the property name
+	 *         cannot be mapped to a value.
 	 */
-	public Object getProperty(String propName) throws IllegalArgumentException;
+	public Object getServiceProperty(String propName);
 
 }

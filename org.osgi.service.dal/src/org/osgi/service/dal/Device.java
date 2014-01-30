@@ -68,8 +68,7 @@ public interface Device {
 
 	/**
 	 * The service property value contains the device name. It's an optional
-	 * property. The value type is <code>java.lang.String</code>. The property
-	 * value can be set with {@link #setName(String)} method.
+	 * property. The value type is <code>java.lang.String</code>.
 	 */
 	public static final String	SERVICE_NAME								= "dal.device.name";
 
@@ -286,33 +285,10 @@ public interface Device {
 	 * 
 	 * @param propName The property name.
 	 * 
-	 * @return The property value
-	 * 
-	 * @throws IllegalArgumentException If the property name cannot be mapped to
-	 *         value.
+	 * @return The property value or <code>null</code> if the property name
+	 *         cannot be mapped to a value.
 	 */
-	public Object getProperty(String propName) throws IllegalArgumentException;
-
-	/**
-	 * Sets the device name. The method must synchronously update the
-	 * {@link #SERVICE_NAME} service property of this device. The new name must
-	 * be persistently stored. It'll set after framework restart.
-	 * <code>null</code> name will clean up the current device name.
-	 * 
-	 * @param name The new device name or <code>null</code> to clean up the
-	 *        name.
-	 * 
-	 * @throws DeviceException If an operation error is available.
-	 * @throws UnsupportedOperationException If the operation is not supported
-	 *         over this device.
-	 * @throws SecurityException If the caller does not have the appropriate
-	 *         <code>FunctionalDevicePermission[this device, {@link DevicePermission#ACTION_SET_NAME}]</code>
-	 *         and the Java Runtime Environment supports permissions.
-	 * @throws IllegalStateException If this device service object has already
-	 *         been unregistered.
-	 */
-	public void setName(String name) throws DeviceException, UnsupportedOperationException,
-			SecurityException, IllegalStateException;
+	public Object getServiceProperty(String propName);
 
 	/**
 	 * Removes this device. The method must synchronously remove the device from

@@ -42,6 +42,7 @@ import org.osgi.service.dal.functions.data.BooleanData;
  * <li>{@link Types#TYPE_OCCUPANCY}</li>
  * <li>{@link Types#TYPE_WATER}</li>
  * <li>{@link Types#TYPE_MOTION}</li>
+ * <li>other type defined in {@link Types}</li>
  * <li>custom - vendor specific type</li>
  * </ul>
  * 

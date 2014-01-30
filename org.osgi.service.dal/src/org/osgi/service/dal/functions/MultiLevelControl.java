@@ -44,6 +44,7 @@ import org.osgi.service.dal.functions.data.LevelData;
  * <li>{@link Types#TYPE_LIQUID}</li>
  * <li>{@link Types#TYPE_POWER}</li>
  * <li>{@link Types#TYPE_NOISINESS}</li>
+ * <li>other type defined in {@link Types}</li>
  * <li>custom - vendor specific type</li>
  * </ul>
  * 
@@ -85,13 +86,14 @@ public interface MultiLevelControl extends DeviceFunction {
 	 * @throws IllegalStateException If this device function service object has
 	 *         already been unregistered.
 	 * @throws DeviceException If an operation error is available.
+	 * @throws IllegalArgumentException If there is an invalid argument.
 	 */
 	public void setData(BigDecimal level) throws UnsupportedOperationException,
-			IllegalStateException, DeviceException;
+			IllegalStateException, DeviceException, IllegalArgumentException;
 
 	/**
-	 * Sets <code>MultiLevelControl</code> level and unit to the specified
-	 * values. It's a setter method for {@link #PROPERTY_DATA} property.
+	 * Sets <code>MultiLevelControl</code> level according to the specified
+	 * unit. It's a setter method for {@link #PROPERTY_DATA} property.
 	 * 
 	 * @param level The new control level.
 	 * @param unit The level unit.
@@ -100,8 +102,9 @@ public interface MultiLevelControl extends DeviceFunction {
 	 * @throws IllegalStateException If this device function service object has
 	 *         already been unregistered.
 	 * @throws DeviceException If an operation error is available.
+	 * @throws IllegalArgumentException If there is an invalid argument.
 	 */
 	public void setData(BigDecimal level, String unit) throws UnsupportedOperationException,
-			IllegalStateException, DeviceException;
+			IllegalStateException, DeviceException, IllegalArgumentException;
 
 }

@@ -45,6 +45,7 @@ import org.osgi.service.dal.functions.data.LevelData;
  * <li>{@link Types#TYPE_POWER}</li>
  * <li>{@link Types#TYPE_NOISINESS}</li>
  * <li>{@link Types#TYPE_RAIN}</li>
+ * <li>other type defined in {@link Types}</li>
  * <li>custom - vendor specific type</li>
  * </ul>
  * 

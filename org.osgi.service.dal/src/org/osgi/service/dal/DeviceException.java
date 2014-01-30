@@ -17,6 +17,8 @@
 package org.osgi.service.dal;
 
 import java.io.IOException;
+import java.io.PrintStream;
+import java.io.PrintWriter;
 
 /**
  * <code>DeviceException</code> is a special <code>IOException</code>, which is
@@ -25,8 +27,6 @@ import java.io.IOException;
  * {@link #getCause()}.
  */
 public class DeviceException extends IOException {
-
-	private static final long	serialVersionUID			= 1L;
 
 	/** An exception code indicates that the error is unknown. */
 	public static final int		CODE_UNKNOWN				= 1;
@@ -53,6 +53,55 @@ public class DeviceException extends IOException {
 	 */
 	public static final int		CODE_NO_DATA				= 5;
 
+	private static final long	serialVersionUID			= 1L;
+	private static final String	CAUSED_BY					= "Caused by: ";
+
+	private final int			code;
+	private final Throwable		cause;
+
+	/**
+	 * Construct a new device exception with <code>null</code> message. The
+	 * cause is not initialized and the exception code is set to
+	 * {@link #CODE_UNKNOWN}.
+	 */
+	public DeviceException() {
+		this(null, null, CODE_UNKNOWN);
+	}
+
+	/**
+	 * Constructs a new device exception with the given message. The cause is
+	 * not initialized and the exception code is set to {@link #CODE_UNKNOWN}.
+	 * 
+	 * @param message The excpetion message.
+	 */
+	public DeviceException(String message) {
+		this(message, null, CODE_UNKNOWN);
+	}
+
+	/**
+	 * Constructs a new device exception with the given message and cause. The
+	 * exception code is set to {@link #CODE_UNKNOWN}.
+	 * 
+	 * @param message The exception message.
+	 * @param cause The exception cause.
+	 */
+	public DeviceException(String message, Throwable cause) {
+		this(message, cause, CODE_UNKNOWN);
+	}
+
+	/**
+	 * Constructs a new device exception with the given message, cause and code.
+	 * 
+	 * @param message The exception message.
+	 * @param cause The exception cause.
+	 * @param code The exception code.
+	 */
+	public DeviceException(String message, Throwable cause, int code) {
+		super(message);
+		this.cause = cause;
+		this.code = code;
+	}
+
 	/**
 	 * Returns the exception error code. It indicates the reason for this
 	 * exception.
@@ -60,7 +109,7 @@ public class DeviceException extends IOException {
 	 * @return An exception code.
 	 */
 	public int getCode() {
-		return CODE_UNKNOWN; // TODO: impl
+		return this.code;
 	}
 
 	/**
@@ -71,7 +120,50 @@ public class DeviceException extends IOException {
 	 * @return An throwable cause.
 	 */
 	public Throwable getCause() {
-		return null; // TODO: impl
+		return this.cause;
+	}
+
+	/**
+	 * Prints the exception stack trace to the standard error stream.
+	 * 
+	 * @see java.lang.Throwable#printStackTrace()
+	 */
+	public void printStackTrace() {
+		printStackTrace(System.err);
+	}
+
+	/**
+	 * Prints the exception stack trace to the given stream.
+	 * 
+	 * @param s The stream used for the output.
+	 * 
+	 * @see java.lang.Throwable#printStackTrace(java.io.PrintStream)
+	 */
+	public void printStackTrace(PrintStream s) {
+		synchronized (s) {
+			super.printStackTrace(s);
+			if (null != this.cause) {
+				s.println(CAUSED_BY);
+				this.cause.printStackTrace(s);
+			}
+		}
+	}
+
+	/**
+	 * Prints the exception stack trace to the given writer.
+	 * 
+	 * @param s The writer used for the output.
+	 * 
+	 * @see java.lang.Throwable#printStackTrace(java.io.PrintWriter)
+	 */
+	public void printStackTrace(PrintWriter s) {
+		synchronized (s) {
+			super.printStackTrace(s);
+			if (null != this.cause) {
+				s.println(CAUSED_BY);
+				this.cause.printStackTrace(s);
+			}
+		}
 	}
 
 }
