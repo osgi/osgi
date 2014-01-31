@@ -17,6 +17,7 @@
 package org.osgi.test.support;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URL;
@@ -127,9 +128,20 @@ public abstract class OSGiTestCase extends TestCase {
 	 *             if an error occurred while reading the bundle content
 	 */
 	public Bundle install(String bundle) throws BundleException, IOException {
-		URL entry = getContext().getBundle().getEntry(bundle);
-		assertNotNull("Can not find bundle: " + bundle, entry);
-		return getContext().installBundle(bundle, entry.openStream());
+		return getContext().installBundle(bundle, entryStream(bundle));
+	}
+
+	/**
+	 * Get InputStream to an entry within the test bundle
+	 * 
+	 * @param entry a path to an entry
+	 * @return An InputStream to the entry
+	 * @throws IOException if an error occurred while reading the entry content
+	 */
+	public InputStream entryStream(String entry) throws IOException {
+		URL url = getContext().getBundle().getEntry(entry);
+		assertNotNull("Can not find resource: " + entry, url);
+		return url.openStream();
 	}
 
 	/**

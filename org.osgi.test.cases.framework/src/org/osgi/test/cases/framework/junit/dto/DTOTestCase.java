@@ -19,11 +19,11 @@ package org.osgi.test.cases.framework.junit.dto;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
-import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
@@ -38,7 +38,9 @@ import org.osgi.dto.framework.wiring.BundleRevisionDTO;
 import org.osgi.dto.framework.wiring.BundleWireDTO;
 import org.osgi.dto.framework.wiring.BundleWiringDTO;
 import org.osgi.dto.resource.CapabilityDTO;
+import org.osgi.dto.resource.CapabilityRefDTO;
 import org.osgi.dto.resource.RequirementDTO;
+import org.osgi.dto.resource.RequirementRefDTO;
 import org.osgi.dto.resource.WireDTO;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
@@ -57,12 +59,20 @@ import org.osgi.test.support.OSGiTestCase;
 public class DTOTestCase extends OSGiTestCase {
 
     private Bundle        tb1;
-    private Map<DTO, DTO> objects;
+	private Bundle							tb2;
+	private Set<BundleRevisionDTO>			resources;
+	private Set<BundleRevisionDTO>			resourcesUntested;
+	private Set<BundleWiringDTO.NodeDTO>	nodes;
+	private Set<BundleWiringDTO.NodeDTO>	nodesUntested;
 
 	@Override
 	protected void setUp() throws Exception {
+		resources = null;
+		resourcesUntested = null;
+		nodes = null;
+		nodesUntested = null;
         tb1 = install("dto.tb1.jar");
-        objects = new IdentityHashMap<DTO, DTO>();
+		tb2 = install("dto.tb2.jar");
     }
 
 	@Override
@@ -70,12 +80,9 @@ public class DTOTestCase extends OSGiTestCase {
         if ((tb1.getState() & Bundle.UNINSTALLED) != Bundle.UNINSTALLED) {
             tb1.uninstall();
         }
-    }
-
-    private boolean dtoUnderTest(DTO dto) throws Exception {
-        assertNotNull("dto is null", dto);
-        boolean underTest = objects.put(dto, dto) != null;
-        return underTest;
+		if ((tb2.getState() & Bundle.UNINSTALLED) != Bundle.UNINSTALLED) {
+			tb2.uninstall();
+		}
     }
 
     public void testBundleDTO() throws Exception {
@@ -88,9 +95,7 @@ public class DTOTestCase extends OSGiTestCase {
     }
 
     private void assertBundleDTO(Bundle bundle, BundleDTO dto) throws Exception {
-        if (dtoUnderTest(dto)) {
-            return;
-        }
+		assertNotNull("dto is null", dto);
         assertEquals("Bundle id does not match", bundle.getBundleId(), dto.id);
         assertEquals("Bundle lastModified does not match", bundle.getLastModified(), dto.lastModified);
         assertEquals("Bundle state does not match", bundle.getState(), dto.state);
@@ -102,21 +107,19 @@ public class DTOTestCase extends OSGiTestCase {
     public void testBundleStartLevelDTO() throws Exception {
         BundleStartLevel bsl = tb1.adapt(BundleStartLevel.class);
         BundleStartLevelDTO dto = tb1.adapt(BundleStartLevelDTO.class);
-        assertBundleStartLevelDTO(bsl, dto);
+		assertBundleStartLevelDTO(tb1, bsl, dto);
         bsl.setStartLevel(10);
         tb1.start(Bundle.START_ACTIVATION_POLICY);
         assertFalse("Bundle startLevel matches", bsl.getStartLevel() == dto.startLevel);
         assertFalse("Bundle activationPolicyUsed matches", bsl.isActivationPolicyUsed() == dto.activationPolicyUsed);
         assertFalse("Bundle persistentlyStarted matches", bsl.isPersistentlyStarted() == dto.persistentlyStarted);
         dto = tb1.adapt(BundleStartLevelDTO.class);
-        assertBundleStartLevelDTO(bsl, dto);
-
+		assertBundleStartLevelDTO(tb1, bsl, dto);
     }
 
-    private void assertBundleStartLevelDTO(BundleStartLevel bsl, BundleStartLevelDTO dto) throws Exception {
-        if (dtoUnderTest(dto)) {
-            return;
-        }
+	private void assertBundleStartLevelDTO(Bundle b, BundleStartLevel bsl, BundleStartLevelDTO dto) throws Exception {
+		assertNotNull("dto is null", dto);
+		assertEquals("Bundle id does not match", b.getBundleId(), dto.bundle);
         assertEquals("Bundle startLevel does not match", bsl.getStartLevel(), dto.startLevel);
         assertEquals("Bundle activationPolicyUsed does not match", bsl.isActivationPolicyUsed(), dto.activationPolicyUsed);
         assertEquals("Bundle persistentlyStarted does not match", bsl.isPersistentlyStarted(), dto.persistentlyStarted);
@@ -126,43 +129,88 @@ public class DTOTestCase extends OSGiTestCase {
         tb1.start();
         BundleRevision revision = tb1.adapt(BundleRevision.class);
         BundleRevisionDTO dto = tb1.adapt(BundleRevisionDTO.class);
+		assertTopBundleRevisionDTO(revision, dto);
+		tb1.uninstall();
+		assertEquals(Bundle.UNINSTALLED, tb1.getState());
+		dto = tb1.adapt(BundleRevisionDTO.class);
+		assertNull("Current BundleRevisionDTO for uninstalled bundle is not null", dto);
+	}
+
+	private void assertTopBundleRevisionDTO(BundleRevision revision, BundleRevisionDTO dto) throws Exception {
+		assertNotNull("dto is null", dto);
+		resources = new HashSet<BundleRevisionDTO>();
+		resources.add(dto);
+		resources = Collections.unmodifiableSet(resources);
+		resourcesUntested = new HashSet<BundleRevisionDTO>(resources);
+		nodes = Collections.unmodifiableSet(new HashSet<BundleWiringDTO.NodeDTO>());
+		nodesUntested = new HashSet<BundleWiringDTO.NodeDTO>(nodes);
         assertBundleRevisionDTO(revision, dto);
-        tb1.uninstall();
-        assertEquals(Bundle.UNINSTALLED, tb1.getState());
-        dto = tb1.adapt(BundleRevisionDTO.class);
-        assertNull("Current BundleRevisionDTO for uninstalled bundle is not null", dto);
+		assertEquals("Too many resources", Collections.EMPTY_SET, resourcesUntested);
+		assertEquals("Too many wiring nodes", Collections.EMPTY_SET, nodesUntested);
     }
 
-    private void assertBundleRevisionDTO(BundleRevision revision, BundleRevisionDTO dto) throws Exception {
-        if (dtoUnderTest(dto)) {
-            return;
-        }
-        assertBundleDTO(revision.getBundle(), dto.bundle);
+    private BundleRevisionDTO getBundleRevisionDTObyId(int id) {
+		assertNotNull("resources not set", resources);
+		for (BundleRevisionDTO dto : resources) {
+			if (dto.id == id) {
+				return dto;
+			}
+		}
+		fail("resource id not found: " + id);
+		return null;
+	}
+
+	private void assertBundleRevisionDTO(BundleRevision revision, BundleRevisionDTO dto) throws Exception {
+		assertNotNull("dto is null", dto);
+		if (!resourcesUntested.remove(dto)) {
+			return;
+		}
+		assertEquals("Bundle id does not match", revision.getBundle().getBundleId(), dto.bundle);
         assertEquals("BundleRevision symbolicName does not match", revision.getSymbolicName(), dto.symbolicName);
         assertEquals("BundleRevision version does not match", revision.getVersion(), Version.parseVersion(dto.version));
         assertEquals("BundleRevision type does not match", revision.getTypes(), dto.type);
-        assertListCapabilityDTO(revision.getDeclaredCapabilities(null), dto.capabilities);
-        assertListRequirementDTO(revision.getDeclaredRequirements(null), dto.requirements);
+		assertListCapabilityDTO(revision.getDeclaredCapabilities(null), dto.capabilities);
+		assertListRequirementDTO(revision.getDeclaredRequirements(null), dto.requirements);
     }
 
-    private void assertListCapabilityDTO(List<BundleCapability> caps, List<CapabilityDTO> dtos) throws Exception {
+	private void assertListCapabilityDTO(List<BundleCapability> caps, List<CapabilityDTO> dtos) throws Exception {
         assertEquals("BundleCapability count does not match", caps.size(), dtos.size());
         for (int i = 0; i < caps.size(); i++) {
             BundleCapability cap = caps.get(i);
             CapabilityDTO dto = dtos.get(i);
-            assertCapabilityDTO(cap, dto);
+			assertCapabilityDTO(cap, dto);
         }
     }
 
-    private void assertCapabilityDTO(BundleCapability cap, CapabilityDTO dto) throws Exception {
-        if (dtoUnderTest(dto)) {
-            return;
-        }
-        assertBundleRevisionDTO(cap.getResource(), (BundleRevisionDTO) dto.resource);
-        assertEquals("BundleCapability namespace does not match", cap.getNamespace(), dto.namespace);
+	private void assertCapabilityDTO(BundleCapability cap, CapabilityDTO dto) throws Exception {
+		assertNotNull("dto is null", dto);
+		assertBundleRevisionDTO(cap.getRevision(), getBundleRevisionDTObyId(dto.resource));
+	    assertEquals("BundleCapability namespace does not match", cap.getNamespace(), dto.namespace);
 		assertAttributesDTO("BundleCapability attributes does not match", cap.getAttributes(), dto.attributes);
-        assertEquals("BundleCapability directives does not match", cap.getDirectives(), dto.directives);
-    }
+	    assertEquals("BundleCapability directives does not match", cap.getDirectives(), dto.directives);
+	}
+
+	private void assertListCapabilityRefDTO(List<BundleCapability> caps, List<CapabilityRefDTO> dtos) throws Exception {
+		assertEquals("BundleCapability count does not match", caps.size(), dtos.size());
+		for (int i = 0; i < caps.size(); i++) {
+			BundleCapability cap = caps.get(i);
+			CapabilityRefDTO dto = dtos.get(i);
+			assertCapabilityRefDTO(cap, dto);
+		}
+	}
+
+	private void assertCapabilityRefDTO(BundleCapability cap, CapabilityRefDTO dto) throws Exception {
+		assertNotNull("dto is null", dto);
+		BundleRevisionDTO revisionDTO = getBundleRevisionDTObyId(dto.resource);
+		assertBundleRevisionDTO(cap.getRevision(), revisionDTO);
+		for (CapabilityDTO capDTO : revisionDTO.capabilities) {
+			if (capDTO.id == dto.capability) {
+				assertCapabilityDTO(cap, capDTO);
+				return;
+			}
+		}
+		fail("capability id not found: " + dto.capability);
+	}
 
 	private void assertAttributesDTO(String message, Map<String, Object> attributes, Map<String, Object> dto) throws Exception {
 		assertEquals(message, attributes.size(), dto.size());
@@ -185,44 +233,61 @@ public class DTOTestCase extends OSGiTestCase {
 		}
 	}
 
-    private void assertListRequirementDTO(List<BundleRequirement> reqs, List<RequirementDTO> dtos) throws Exception {
+	private void assertListRequirementDTO(List<BundleRequirement> reqs, List<RequirementDTO> dtos) throws Exception {
         assertEquals("BundleRequirements count does not match", reqs.size(), dtos.size());
         for (int i = 0; i < reqs.size(); i++) {
             BundleRequirement req = reqs.get(i);
             RequirementDTO dto = dtos.get(i);
-            assertRequirementDTO(req, dto);
+			assertRequirementDTO(req, dto);
         }
     }
 
-    private void assertRequirementDTO(BundleRequirement req, RequirementDTO dto) throws Exception {
-        if (dtoUnderTest(dto)) {
-            return;
-        }
-        assertBundleRevisionDTO(req.getResource(), (BundleRevisionDTO) dto.resource);
-        assertEquals("BundleRequirement namespace does not match", req.getNamespace(), dto.namespace);
+	private void assertRequirementDTO(BundleRequirement req, RequirementDTO dto) throws Exception {
+		assertNotNull("dto is null", dto);
+		assertBundleRevisionDTO(req.getRevision(), getBundleRevisionDTObyId(dto.resource));
+	    assertEquals("BundleRequirement namespace does not match", req.getNamespace(), dto.namespace);
 		assertAttributesDTO("BundleRequirement attributes does not match", req.getAttributes(), dto.attributes);
-        assertEquals("BundleRequirement directives does not match", req.getDirectives(), dto.directives);
-    }
+	    assertEquals("BundleRequirement directives does not match", req.getDirectives(), dto.directives);
+	}
+
+	private void assertListRequirementRefDTO(List<BundleRequirement> reqs, List<RequirementRefDTO> dtos) throws Exception {
+		assertEquals("BundleRequirements count does not match", reqs.size(), dtos.size());
+		for (int i = 0; i < reqs.size(); i++) {
+			BundleRequirement req = reqs.get(i);
+			RequirementRefDTO dto = dtos.get(i);
+			assertRequirementRefDTO(req, dto);
+		}
+	}
+
+	private void assertRequirementRefDTO(BundleRequirement req, RequirementRefDTO dto) throws Exception {
+		assertNotNull("dto is null", dto);
+		BundleRevisionDTO revisionDTO = getBundleRevisionDTObyId(dto.resource);
+		assertBundleRevisionDTO(req.getRevision(), revisionDTO);
+		for (RequirementDTO reqDTO : revisionDTO.requirements) {
+			if (reqDTO.id == dto.requirement) {
+				assertRequirementDTO(req, reqDTO);
+				return;
+			}
+		}
+		fail("requirement id not found: " + dto.requirement);
+	}
 
 	public void testArrayBundleRevisionDTO() throws Exception {
         tb1.start();
+		tb1.update(entryStream("dto.tb1.jar"));
         BundleRevisions revisions = tb1.adapt(BundleRevisions.class);
 		BundleRevisionDTO[] dtos = tb1.adapt(BundleRevisionDTO[].class);
-		assertBundleRevisionDTOs(revisions, dtos);
+		assertNotNull("dtos is null", dtos);
+		List<BundleRevision> revs = revisions.getRevisions();
+		final int size = revs.size();
+		assertEquals("Revision count does not match", size, dtos.length);
+		for (int i = 0; i < size; i++) {
+			assertTopBundleRevisionDTO(revs.get(i), dtos[i]);
+		}
         tb1.uninstall();
         assertEquals(Bundle.UNINSTALLED, tb1.getState());
 		dtos = tb1.adapt(BundleRevisionDTO[].class);
 		assertNull("Current BundleRevisionDTO[] for uninstalled bundle is not null", dtos);
-    }
-
-	private void assertBundleRevisionDTOs(BundleRevisions revisions, BundleRevisionDTO[] dtos) throws Exception {
-		assertNotNull("dtos is null", dtos);
-        List<BundleRevision> revs = revisions.getRevisions();
-        final int size = revs.size();
-		assertEquals("Revision count does not match", size, dtos.length);
-        for (int i = 0; i < size; i++) {
-			assertBundleRevisionDTO(revs.get(i), dtos[i]);
-        }
     }
 
     public void testBundleWiringDTO() throws Exception {
@@ -237,19 +302,43 @@ public class DTOTestCase extends OSGiTestCase {
     }
 
     private void assertBundleWiringDTO(BundleWiring wiring, BundleWiringDTO dto) throws Exception {
-        if (dtoUnderTest(dto)) {
-            return;
-        }
+		assertNotNull("dto is null", dto);
+		assertEquals("Bundle id does not match", wiring.getBundle().getBundleId(), dto.bundle);
+		resources = Collections.unmodifiableSet(new HashSet<BundleRevisionDTO>(dto.resources));
+		resourcesUntested = new HashSet<BundleRevisionDTO>(resources);
+		nodes = Collections.unmodifiableSet(new HashSet<BundleWiringDTO.NodeDTO>(dto.nodes));
+		nodesUntested = new HashSet<BundleWiringDTO.NodeDTO>(nodes);
+		assertBundleWiringNodeDTO(wiring, getBundleWiringNodeDTObyId(dto.root));
+		assertEquals("Too many resources", Collections.EMPTY_SET, resourcesUntested);
+		assertEquals("Too many wiring nodes", Collections.EMPTY_SET, nodesUntested);
+	}
+
+	private BundleWiringDTO.NodeDTO getBundleWiringNodeDTObyId(int id) {
+		assertNotNull("wiring nodes not set", nodes);
+		for (BundleWiringDTO.NodeDTO dto : nodes) {
+			if (dto.id == id) {
+				return dto;
+			}
+		}
+		fail("wiring node id not found: " + id);
+		return null;
+	}
+
+	private void assertBundleWiringNodeDTO(BundleWiring wiring, BundleWiringDTO.NodeDTO dto) throws Exception {
+		assertNotNull("wiring node is null", dto);
+		if (!nodesUntested.remove(dto)) {
+			return;
+		}
         assertEquals("BundleWiring isCurrent does not match", wiring.isCurrent(), dto.current);
-        assertEquals("BundleWiring isCurrent does not match", wiring.isInUse(), dto.inUse);
-        assertBundleRevisionDTO(wiring.getRevision(), (BundleRevisionDTO) dto.resource);
-        assertListCapabilityDTO(wiring.getCapabilities(null), dto.capabilities);
-        assertListRequirementDTO(wiring.getRequirements(null), dto.requirements);
+		assertEquals("BundleWiring isUse does not match", wiring.isInUse(), dto.inUse);
+		assertBundleRevisionDTO(wiring.getRevision(), getBundleRevisionDTObyId(dto.resource));
+		assertListCapabilityRefDTO(wiring.getCapabilities(null), dto.capabilities);
+		assertListRequirementRefDTO(wiring.getRequirements(null), dto.requirements);
         assertListBundleWireDTO(wiring.getProvidedWires(null), dto.providedWires);
         assertListBundleWireDTO(wiring.getRequiredWires(null), dto.requiredWires);
     }
 
-    private void assertListBundleWireDTO(List<BundleWire> wires, List<WireDTO> dtos) throws Exception {
+	private void assertListBundleWireDTO(List<BundleWire> wires, List<WireDTO> dtos) throws Exception {
         assertEquals("BundleWire count does not match", wires.size(), dtos.size());
         for (int i = 0; i < wires.size(); i++) {
             BundleWire wire = wires.get(i);
@@ -259,19 +348,18 @@ public class DTOTestCase extends OSGiTestCase {
     }
 
     private void assertBundleWireDTO(BundleWire wire, BundleWireDTO dto) throws Exception {
-        if (dtoUnderTest(dto)) {
-            return;
-        }
-        assertBundleWiringDTO(wire.getProviderWiring(), dto.providerWiring);
-        assertBundleWiringDTO(wire.getRequirerWiring(), dto.requirerWiring);
-        assertCapabilityDTO(wire.getCapability(), dto.capability);
-        assertRequirementDTO(wire.getRequirement(), dto.requirement);
-        assertBundleRevisionDTO(wire.getProvider(), (BundleRevisionDTO) dto.provider);
-        assertBundleRevisionDTO(wire.getRequirer(), (BundleRevisionDTO) dto.requirer);
+		assertNotNull("dto is null", dto);
+		assertBundleWiringNodeDTO(wire.getProviderWiring(), getBundleWiringNodeDTObyId(dto.providerWiring));
+		assertBundleWiringNodeDTO(wire.getRequirerWiring(), getBundleWiringNodeDTObyId(dto.requirerWiring));
+		assertCapabilityRefDTO(wire.getCapability(), dto.capability);
+		assertRequirementRefDTO(wire.getRequirement(), dto.requirement);
+		assertBundleRevisionDTO(wire.getProvider(), getBundleRevisionDTObyId(dto.provider));
+		assertBundleRevisionDTO(wire.getRequirer(), getBundleRevisionDTObyId(dto.requirer));
     }
 
 	public void testArrayBundleWiringDTO() throws Exception {
         tb1.start();
+		tb1.update(entryStream("dto.tb1.jar"));
         BundleRevisions revisions = tb1.adapt(BundleRevisions.class);
         List<BundleRevision> revs = revisions.getRevisions();
         final int size = revs.size();
@@ -386,15 +474,17 @@ public class DTOTestCase extends OSGiTestCase {
     }
 
     private void assertServiceReferenceDTO(ServiceReference<?> ref, ServiceReferenceDTO dto) throws Exception {
-        if (dtoUnderTest(dto)) {
-            return;
-        }
+		assertNotNull("dto is null", dto);
         assertEquals("ServiceReferenceDTO has wrong bundle", ref.getBundle().getBundleId(), dto.bundle);
         assertNotNull("ServiceReferenceDTO has null properties", dto.properties);
         String[] keys = ref.getPropertyKeys();
         assertEquals("ServiceReferenceDTO properties the wrong size", keys.length, dto.properties.size());
         for (String k : keys) {
-            assertValueEquals("ServiceReferenceDTO has wrong property", ref.getProperty(k), dto.properties.get(k));
+			Object v = ref.getProperty(k);
+			if (Constants.SERVICE_ID.equals(k)) {
+				assertEquals("service.id does not match", ((Long) v).longValue(), dto.id);
+			}
+			assertValueEquals("ServiceReferenceDTO has wrong property", v, dto.properties.get(k));
         }
         assertNotNull("ServiceReferenceDTO has null usingBundles", dto.usingBundles);
         Bundle[] using = ref.getUsingBundles();
