@@ -38,7 +38,8 @@ public interface ExportRegistration {
 	/**
 	 * Return the Export Reference for the exported service.
 	 * 
-	 * @return The Export Reference for this registration.
+	 * @return The Export Reference for this registration, or <code>null</code>
+	 *         if this Import Registration is closed.
 	 * @throws IllegalStateException When this registration was not properly
 	 *         initialized. See {@link #getException()}.
 	 */

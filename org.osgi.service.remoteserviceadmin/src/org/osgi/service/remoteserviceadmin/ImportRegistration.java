@@ -37,7 +37,8 @@ public interface ImportRegistration {
 	/**
 	 * Return the Import Reference for the imported service.
 	 * 
-	 * @return The Import Reference for this registration
+	 * @return The Import Reference for this registration, or <code>null</code>
+	 *         if this Import Registration is closed.
 	 * @throws IllegalStateException When this registration was not properly
 	 *         initialized. See {@link #getException()}.
 	 */
