@@ -1,0 +1,8 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Export-Package: ${p}.*; -split-package:=first
+
+-runpath =
+-buildpath: ee.j2se;version=1.5,\
+	osgi.annotation;version=6.0
