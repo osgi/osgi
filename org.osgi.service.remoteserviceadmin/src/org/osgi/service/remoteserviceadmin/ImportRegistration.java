@@ -37,7 +37,7 @@ public interface ImportRegistration {
 	/**
 	 * Return the Import Reference for the imported service.
 	 * 
-	 * @return The Import Reference for this registration.
+	 * @return The Import Reference for this registration
 	 * @throws IllegalStateException When this registration was not properly
 	 *         initialized. See {@link #getException()}.
 	 */
@@ -50,15 +50,19 @@ public interface ImportRegistration {
 	 * 
 	 * @param endpoint The updated endpoint
 	 * 
-	 * @throws IllegalStateException When this registration was not properly
-	 *         initialized. See {@link #getException()}.
+	 * @return <code>true</code> if the endpoint was successfully updated,
+	 *         <code>false</code> otherwise. If the update fails then the
+	 *         failure can be retrieved from {@link #getException()}.
+	 * 
+	 * @throws IllegalStateException When this registration is closed, or if it
+	 *         was not properly initialized. See {@link #getException()}.
 	 * @throws IllegalArgumentException When the supplied
 	 *         {@link EndpointDescription} does not represent the same endpoint
 	 *         as this {@link ImportRegistration}.
 	 * 
 	 * @since 1.1
 	 */
-	void update(EndpointDescription endpoint);
+	boolean update(EndpointDescription endpoint);
 
 	/**
 	 * Close this Import Registration. This must close the connection to the

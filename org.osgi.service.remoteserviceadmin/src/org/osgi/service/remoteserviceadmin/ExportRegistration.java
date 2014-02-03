@@ -70,9 +70,12 @@ public interface ExportRegistration {
 	 *        properties passed to
 	 *        {@link RemoteServiceAdmin#exportService(ServiceReference, Map)}
 	 *        will be used.
-	 * @return The updated {@link EndpointDescription} for this registration.
-	 * @throws IllegalStateException When this registration was not properly
-	 *         initialized. See {@link #getException()}.
+	 * @return The updated {@link EndpointDescription} for this registration or
+	 *         null if there was a failure updating the endpoint. If a failure
+	 *         occurs then it can be accessed using {@link #getException()}.
+	 * @throws IllegalStateException If this registration is closed, or when
+	 *         this registration was not properly initialized. See
+	 *         {@link #getException()}.
 	 * 
 	 * @since 1.1
 	 */
