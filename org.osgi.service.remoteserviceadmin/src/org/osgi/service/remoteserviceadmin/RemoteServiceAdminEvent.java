@@ -77,6 +77,18 @@ public class RemoteServiceAdminEvent {
 	 */
 	public static final int			IMPORT_WARNING			= 8;
 
+	/**
+	 * Update an import registration. The Remote Service Admin will send this
+	 * event when it updates a service.
+	 */
+	public static final int			IMPORT_UPDATE			= 9;
+
+	/**
+	 * Update an export registration. The Remote Service Admin will send this
+	 * event when it exports a service.
+	 */
+	public static final int			EXPORT_UPDATE			= 10;
+
 	private final ImportReference	importReference;
 	private final ExportReference	exportReference;
 	private final Throwable			exception;
