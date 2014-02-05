@@ -1,6 +1,7 @@
 package org.osgi.test.cases.jmx.framework.junit;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -77,9 +78,6 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 				break;
 			}
 		}
-		/*
-		 * TODO FIXME: https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1388
-		 */
 		assertTrue(
 				"testbundle1 depends on testbundle2. This dependency was not reflected "
 						+ "by the result of the call to getRequiredBundles. result: "
@@ -215,14 +213,20 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 
 					assertTrue("wrong bundle registered services info", registeredServices.length == 0);
 
-					//add when 1388 bug is fixed
-					//assertFalse("wrong bundle required started info for tb1", required);
+					assertFalse("wrong bundle required started info for tb1",
+							required);
 
-					//add when 1388 bug is fixed
-					//assertTrue("wrong bundle required bundles for tb1 ", (requiredBundles.length == 1) && (requiredBundles[0] == testBundle2.getBundleId()));
+					assertEquals("wrong bundle required bundles for tb1 ", 2,
+							requiredBundles.length);
+					assertTrue(
+							"wrong bundle required bundles for tb1 ",
+							Arrays.asList(requiredBundles).contains(
+									Long.valueOf(testBundle2.getBundleId())));
+					assertTrue("wrong bundle required bundles for tb1 ", Arrays
+							.asList(requiredBundles).contains(Long.valueOf(0)));
 
-					//add when 1388 bug is fixed
-					//assertTrue("wrong bundle requiring bundles for tb1", requiringBundles.length == 0);
+					assertTrue("wrong bundle requiring bundles for tb1",
+							requiringBundles.length == 0);
 
 					assertTrue("wrong bundle start level info", startLevel == bsMBean.getStartLevel(testBundle1.getBundleId()));
 
@@ -242,11 +246,12 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 
 					assertTrue("wrong bundle required started info for tb2", required);
 
-					//add when 1388 bug is fixed
-					//assertTrue("wrong bundle required bundles for tb2", requiredBundles.length == 0);
-
-					//add when 1388 bug is fixed
-					//assertTrue("wrong bundle requiring bundles for tb2", (requiringBundles.length == 1) && (requiringBundles[0] == testBundle1.getBundleId()));
+					assertEquals("wrong bundle requiring bundles for tb2 ", 1,
+							requiringBundles.length);
+					assertTrue(
+							"wrong bundle requiring bundles for tb2",
+							Arrays.asList(requiringBundles).contains(
+									Long.valueOf(testBundle1.getBundleId())));
 
 					assertTrue("wrong bundle start level info", startLevel == bsMBean.getStartLevel(testBundle2.getBundleId()));
 
@@ -599,238 +604,429 @@ public class BundleStateMBeanTestCase extends MBeanGeneralTestCase {
 		//test listBundles method
 		try {
 			bsMBean.listBundles();
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method listBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			// This method works, this test just try to ensure no random runtime
+			// exception is thrown?
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test getExportedPackages method
 		try {
 			bsMBean.getExportedPackages( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-		} catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.getExportedPackages( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getFragments method
 		try {
 			bsMBean.getFragments( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.getFragments( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getHeaders method
 		try {
 			bsMBean.getHeaders( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.getHeaders( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getHosts method
 		try {
 			bsMBean.getHosts( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 	    }
 		try {
 			bsMBean.getHosts( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getImportedPackages method
 		try {
 			bsMBean.getImportedPackages( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.getImportedPackages( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getLastModified method
 		try {
 			bsMBean.getLastModified( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.getLastModified( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getLocation method
 		try {
 			bsMBean.getLocation( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.getLocation( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getRegisteredServices method
 		try {
 			bsMBean.getRegisteredServices( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.getRegisteredServices( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getRequiredBundles method
 		try {
 			bsMBean.getRequiredBundles( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.getRequiredBundles( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getRequiringBundles method
 		try {
 			bsMBean.getRequiringBundles( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.getRequiringBundles( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getServicesInUse method
 		try {
 			bsMBean.getServicesInUse( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.getServicesInUse( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getStartLevel method
 		try {
 			bsMBean.getStartLevel( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.getStartLevel( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getState method
 		try {
 			bsMBean.getState( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.getState( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getSymbolicName method
 		try {
 			bsMBean.getSymbolicName( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.getSymbolicName( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getVersion method
 		try {
 			bsMBean.getVersion( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.getVersion( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test isFragment method
 		try {
 			bsMBean.isFragment( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.isFragment( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test isPersistentlyStarted method
 		try {
 			bsMBean.isPersistentlyStarted( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.isPersistentlyStarted( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test isRemovalPending method
 		try {
 			bsMBean.isRemovalPending( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.isRemovalPending( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test isRequired method
 		try {
 			bsMBean.isRequired( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			bsMBean.isRequired( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 	}

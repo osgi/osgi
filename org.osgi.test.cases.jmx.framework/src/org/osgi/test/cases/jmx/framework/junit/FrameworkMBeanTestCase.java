@@ -95,7 +95,7 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 			assertTrue("bundle tb2 is not stopped for " +  waitTime + " seconds after setting framework start level smaller than its start level", waitBundleStateChange(testBundle, "RESOLVED"));
 		} catch(Exception io) {
 			io.printStackTrace();
-			assertTrue("Exception occured: " + io.toString(), false);
+			fail("Exception occured", io);
 		} finally {
 			if (testBundle >= 0) {
 				try {
@@ -172,7 +172,7 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 			assertTrue("bundle tb1 is not started for " +  waitTime + " seconds after setting its bundle start level smaller than framework start level", waitBundleStateChange(testBundle1, "ACTIVE"));
 		} catch(Exception io) {
 			io.printStackTrace();
-			assertTrue("Exception ocurred: " + io.toString(), false);
+			fail("Exception occured", io);
 		} finally {
 			if (testBundle1 >= 0) {
 				try {
@@ -200,13 +200,13 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 			assertTrue("bundle tb2 is not started for " +  waitTime + " seconds", waitBundleStateChange(testBundle, "ACTIVE"));
 		} catch(Exception io) {
 			io.printStackTrace();
-			assertTrue("Exception ocurred: " + io.toString(), false);
+			fail("Exception occured", io);
 		} finally {
 			if (testBundle >= 0) {
 				try {
 					frameworkMBean.uninstallBundle(testBundle);
 				} catch (IOException io) {
-					assertTrue("Exception ocurred: " + io.toString(), false);
+					fail("Exception occured", io);
 				}
 			}
 		}
@@ -232,7 +232,7 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 			assertTrue("un-installing bundles from URL doesn't succeed", ((Boolean) result.get("Success")).booleanValue());
 		} catch(Exception io) {
 			io.printStackTrace();
-			assertTrue("Exception ocurred: " + io.toString(), false);
+			fail("Exception occured", io);
 		}
 	}
 
@@ -257,13 +257,13 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 			assertTrue("after update bundle from url the bundle's last modified time is not changed", newLastModifiedTime > lastModifiedTime);
 		} catch(Exception io) {
 			io.printStackTrace();
-			assertTrue("Exception ocurred: " + io.toString(), false);
+			fail("Exception occured", io);
 		} finally {
 			if (testBundle >= 0) {
 				try {
 					frameworkMBean.uninstallBundle(testBundle);
 				} catch (IOException io) {
-					assertTrue("Exception ocurred: " + io.toString(), false);
+					fail("Exception occured", io);
 				}
 			}
 		}
@@ -292,7 +292,7 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 			assertTrue("after update bundles from url the bundles' last modified time is not changed", (newLastModifiedTime1 > lastModifiedTime1) && (newLastModifiedTime2 > lastModifiedTime2));
 		} catch(Exception io) {
 			io.printStackTrace();
-			assertTrue("Exception ocurred: " + io.toString(), false);
+			fail("Exception occured", io);
 		} finally {
 			if (testBundle1 >= 0) {
 				try {
@@ -324,13 +324,13 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 			assertTrue("bundle tb2 could not be resolved", frameworkMBean.resolveBundle(testBundle));
 		} catch(Exception io) {
 			io.printStackTrace();
-			assertTrue("Exception ocurred: " + io.toString(), false);
+			fail("Exception occured", io);
 		} finally {
 			if (testBundle >= 0) {
 				try {
 					frameworkMBean.uninstallBundle(testBundle);
 				} catch (IOException io) {
-					assertTrue("Exception ocurred: " + io.toString(), false);
+					fail("Exception occured", io);
 				}
 			}
 		}
@@ -350,7 +350,7 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 			assertTrue("bundle tb1 and tb2 could not be resolved", frameworkMBean.resolveBundles(new long[] {testBundle1, testBundle2}));
 		} catch(Exception io) {
 			io.printStackTrace();
-			assertTrue("Exception ocurred: " + io.toString(), false);
+			fail("Exception occured", io);
 		} finally {
 			if (testBundle1 >= 0) {
 				try {
@@ -405,7 +405,7 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 			assertTrue("bundle tb1 is not stopped for " +  waitTime + " seconds", waitBundleStateChange(testBundle1, "RESOLVED"));
 		} catch(Exception io) {
 			io.printStackTrace();
-			assertTrue("Exception ocurred: " + io.toString(), false);
+			fail("Exception occured", io);
 		} finally {
 			if (testBundle1 >= 0) {
 				try {
@@ -452,7 +452,7 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 			assertTrue("resolve of bundle tb1 doesn't succeed for " + waitTime + " seconds", waitBundleStateChange(testBundle1, "RESOLVED"));
 		} catch(Exception io) {
 			io.printStackTrace();
-			assertTrue("Exception ocurred: " + io.toString(), false);
+			fail("Exception occured", io);
 		} finally {
 			if (testBundle1 >= 0) {
 				try {
@@ -540,13 +540,13 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 			assertTrue("after update bundle from url the bundle's last modified time is not changed", newLastModifiedTime > lastModifiedTime);
 		} catch(Exception io) {
 			io.printStackTrace();
-			assertTrue("Exception ocurred: " + io.toString(), false);
+			fail("Exception occured", io);
 		} finally {
 			if (testBundle >= 0) {
 				try {
 					frameworkMBean.uninstallBundle(testBundle);
 				} catch (IOException io) {
-					assertTrue("Exception ocurred: " + io.toString(), false);
+					fail("Exception occured", io);
 				}
 			}
 			File destFile = getContext().getDataFile("/tb2.jar");
@@ -586,20 +586,20 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
 			assertTrue("after update bundles from url the bundles' last modified time is not changed", (newLastModifiedTime2 > lastModifiedTime2) && (newLastModifiedTime1 > lastModifiedTime1));
 		} catch(Exception io) {
 			io.printStackTrace();
-			assertTrue("Exception ocurred: " + io.toString(), false);
+			fail("Exception occured", io);
 		} finally {
 			if (testBundles[1] >= 0) {
 				try {
 					frameworkMBean.uninstallBundle(testBundles[1]);
 				} catch (IOException io) {
-					assertTrue("Exception ocurred: " + io.toString(), false);
+					fail("Exception occured", io);
 				}
 			}
 			if (testBundles[0] >= 0) {
 				try {
 					frameworkMBean.uninstallBundle(testBundles[0]);
 				} catch (IOException io) {
-					assertTrue("Exception ocurred: " + io.toString(), false);
+					fail("Exception occured", io);
 				}
 			}
 			File destFile = getContext().getDataFile("/tb2.jar");
@@ -900,504 +900,541 @@ public class FrameworkMBeanTestCase extends MBeanGeneralTestCase {
     }
 
     public void testExceptions() {
-		/*
-		 * Bug report for this method is https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1605
-		 */
 		assertNotNull(frameworkMBean);
 
 		//test getFrameworkStartLevel method
 		try {
 			frameworkMBean.getFrameworkStartLevel();
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getFrameworkStartLevel throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test getInitialBundleStartLevel method
 		try {
 			frameworkMBean.getInitialBundleStartLevel();
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getInitialBundleStartLevel throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test installBundle method
 		try {
 			frameworkMBean.installBundle(STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundle throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.installBundle(STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundle throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.installBundle(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundle throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 
 		//test installBundleFromURL method
 		try {
 			frameworkMBean.installBundleFromURL(STRING_NULL, STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundleFromURL throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.installBundleFromURL(STRING_EMPTY, STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundleFromURL throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.installBundleFromURL(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundleFromURL throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.installBundleFromURL(STRING_NULL, STRING_URL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundleFromURL throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.installBundleFromURL(STRING_EMPTY, STRING_URL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundleFromURL throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.installBundleFromURL(STRING_SPECIAL_SYMBOLS, STRING_URL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundleFromURL throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 
 		//test installBundles method
 		try {
 			frameworkMBean.installBundles(null);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.installBundles(new String[] {});
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.installBundles(new String[] { STRING_NULL });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.installBundles(new String[] { STRING_EMPTY });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.installBundles(new String[] { STRING_SPECIAL_SYMBOLS });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.installBundles(new String[] { STRING_URL });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test installBundlesFromURL method
 		try {
 			frameworkMBean.installBundlesFromURL(null, null);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundlesFromURL throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.installBundlesFromURL(new String[] {} , new String[] {});
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundlesFromURL throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.installBundlesFromURL(new String[] { STRING_NULL } , new String[] {});
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundlesFromURL throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.installBundlesFromURL(new String[] { STRING_URL } , new String[] { STRING_URL });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundlesFromURL throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.installBundlesFromURL(new String[] { STRING_EMPTY } , new String[] {});
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundlesFromURL throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.installBundlesFromURL(new String[] { STRING_EMPTY } , new String[] { STRING_URL, STRING_NULL });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method installBundlesFromURL throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test refreshBundle method
 		try {
 			frameworkMBean.refreshBundle(LONG_NEGATIVE);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method refreshBundle throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.refreshBundle(LONG_BIG);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method refreshBundle throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 
 		//test refreshBundles method
 		try {
 			frameworkMBean.refreshBundles(null);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method refreshBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.refreshBundles(new long[] { LONG_NEGATIVE });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method refreshBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.refreshBundles(new long[] { LONG_BIG });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method refreshBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 
 		//test resolveBundle method
 		try {
 			frameworkMBean.resolveBundle( LONG_NEGATIVE );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.resolveBundle( LONG_BIG );
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test resolveBundles method
 		try {
 			frameworkMBean.resolveBundles( null );
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method resolveBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.resolveBundles( new long[] { LONG_NEGATIVE });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method resolveBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.resolveBundles( new long[] { LONG_BIG } );
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method resolveBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 
 		//test setBundleStartLevel method
 		try {
 			frameworkMBean.setBundleStartLevel(LONG_NEGATIVE, INT_BIG);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method setBundleStartLevel throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.setBundleStartLevel(LONG_BIG, INT_BIG);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method setBundleStartLevel throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.setBundleStartLevel(1, INT_NEGATIVE);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method setBundleStartLevel throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 
 		//test setBundleStartLevels method
 		try {
 			frameworkMBean.setBundleStartLevels(null, null);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method setBundleStartLevels throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.setBundleStartLevels(new long[] {}, new int[] {});
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method setBundleStartLevels throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.setBundleStartLevels(new long[] { LONG_BIG }, new int[] {});
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method setBundleStartLevels throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.setBundleStartLevels(new long[] { 1 }, new int[] { INT_NEGATIVE });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method setBundleStartLevels throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.setBundleStartLevels(new long[] { 1 }, null);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method setBundleStartLevels throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test setFrameworkStartLevel method
 		try {
 			frameworkMBean.setFrameworkStartLevel(INT_NEGATIVE);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method setFrameworkStartLevel throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 
 		//test setInitialBundleStartLevel method
 		try {
 			frameworkMBean.setInitialBundleStartLevel(INT_NEGATIVE);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method setInitialBundleStartLevel throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 
 		//test startBundle method
 		try {
 			frameworkMBean.startBundle(LONG_NEGATIVE);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.startBundle(LONG_BIG);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test startBundles method
 		try {
 			frameworkMBean.startBundles(null);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method startBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.startBundles(new long[] { LONG_NEGATIVE });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method startBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.startBundles(new long[] { LONG_BIG });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method startBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test stopBundle method
 		try {
 			frameworkMBean.stopBundle(LONG_NEGATIVE);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.stopBundle(LONG_BIG);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test stopBundles method
 		try {
 			frameworkMBean.stopBundles(null);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method stopBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.stopBundles(new long[] { LONG_NEGATIVE });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method stopBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.stopBundles(new long[] { LONG_BIG });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method stopBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test uninstallBundle method
 		try {
 			frameworkMBean.uninstallBundle(LONG_NEGATIVE);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.uninstallBundle(LONG_BIG);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test uninstallBundles method
 		try {
 			frameworkMBean.uninstallBundles(null);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method uninstallBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.uninstallBundles(new long[] { LONG_NEGATIVE });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method uninstallBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.uninstallBundles(new long[] { LONG_BIG });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method uninstallBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test updateBundle method
 		try {
 			frameworkMBean.updateBundle(LONG_NEGATIVE);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.updateBundle(LONG_BIG);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test updateBundles method
 		try {
 			frameworkMBean.updateBundles(null);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method updateBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.updateBundles(new long[] { LONG_NEGATIVE });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method updateBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.updateBundles(new long[] { LONG_BIG });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method updateBundles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test updateBundleFromURL method
 		try {
 			frameworkMBean.updateBundleFromURL(LONG_NEGATIVE, null);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			frameworkMBean.updateBundleFromURL(1, STRING_URL);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		try {
 			frameworkMBean.updateBundleFromURL(LONG_BIG, STRING_EMPTY);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test updateBundlesFromURL method
 		try {
 			frameworkMBean.updateBundlesFromURL(null, null);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
+		}
+		catch (IllegalArgumentException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			frameworkMBean.updateBundlesFromURL(new long[] { 1, LONG_NEGATIVE, LONG_BIG }, new String[] { STRING_NULL, STRING_SPECIAL_SYMBOLS });
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
+		}
+		catch (IllegalArgumentException e) {
+			fail("unexpected exception", e);
 		}
 	}
 

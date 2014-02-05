@@ -89,51 +89,47 @@ public class ProvisioningServiceMBeanTestCase extends MBeanGeneralTestCase {
 		//test listInformation method
 		try {
 			pMBean.listInformation();			
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method listInformation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			// expected
 		}
 		
 		//test addInformationFromZip method
 		try {
 			pMBean.addInformationFromZip(STRING_NULL);			
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method addInformationFromZip throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			pMBean.addInformationFromZip(STRING_EMPTY);			
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method addInformationFromZip throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			pMBean.addInformationFromZip(STRING_URL);			
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method addInformationFromZip throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test addInformation method
 		try {
 			pMBean.addInformation(null);			
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method addInformation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test setInformation method
 		try {
 			pMBean.setInformation(null);			
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method setInformation throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 	}
 	

@@ -500,8 +500,11 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 	protected void verifyFramework() throws Exception {
 		Framework f = getFramework();
-//		assertFalse("child framework must have a different UUID",
-//				getContext().getProperty("org.osgi.framework.uuid").equals(f.getBundleContext().getProperty("org.osgi.framework.uuid")));
+		assertFalse(
+				"child framework must have a different UUID",
+				getContext().getProperty(Constants.FRAMEWORK_UUID).equals(
+						f.getBundleContext().getProperty(
+								Constants.FRAMEWORK_UUID)));
 
 		BundleWiring wiring = f.getBundleContext().getBundle()
 				.adapt(BundleWiring.class);
