@@ -3540,7 +3540,7 @@ if ( cl instanceof BundleReference ) {
         ( ',' nativecode )* ( ',' optional) ?
 nativecode          ::= path ( ';' path )*    // See <xref
         linkend="framework.general.syntax" xrefstyle="template:%n"/>
-                        ( ';' parameter )+
+                        ( ';' parameter )*
 optional            ::= '*'</programlisting>
 
     <para>When locating a path in a bundle the Framework must attempt to
