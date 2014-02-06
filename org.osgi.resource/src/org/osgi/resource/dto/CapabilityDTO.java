@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2012). All Rights Reserved.
- *
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,40 +14,49 @@
  * limitations under the License.
  */
 
-package org.osgi.dto.framework;
+package org.osgi.resource.dto;
 
-import java.util.List;
 import java.util.Map;
 import org.osgi.dto.DTO;
 
 /**
- * Data Transfer Object for a Framework.
- * 
- * <p>
- * The System Bundle can be adapted to provide a {@code FrameworkDTO} for the
- * framework of the system bundle. A {@code FrameworkDTO} obtained from a
- * framework will contain only the launch properties of the framework. These
- * properties will not include the System properties.
+ * Data Transfer Object for a Capability.
  * 
  * @author $Id$
  * @NotThreadSafe
  */
-public class FrameworkDTO extends DTO {
+public class CapabilityDTO extends DTO {
     /**
-     * The bundles that are installed in the framework.
+     * The unique identifier of the capability.
+     * 
+     * <p>
+     * This identifier is transiently assigned and may vary across restarts.
      */
-    public List<BundleDTO>           bundles;
+    public int                 id;
 
     /**
-     * The launch properties of the framework.
+     * The namespace for the capability.
+     */
+    public String              namespace;
+
+    /**
+     * The directives for the capability.
+     */
+    public Map<String, String> directives;
+
+    /**
+     * The attributes for the capability.
      * 
+     * <p>
      * The value type must be a numerical type, Boolean, String, DTO or an array
      * of any of the former.
      */
-    public Map<String, Object>       properties;
+    public Map<String, Object> attributes;
 
     /**
-     * The services that are registered in the framework.
+     * The identifier of the resource declaring the capability.
+     * 
+     * @see ResourceDTO#id
      */
-    public List<ServiceReferenceDTO> services;
+    public int                 resource;
 }

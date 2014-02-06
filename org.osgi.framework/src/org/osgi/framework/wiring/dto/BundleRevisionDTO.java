@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.osgi.dto.framework.wiring;
+package org.osgi.framework.wiring.dto;
 
-import org.osgi.dto.resource.ResourceDTO;
+import org.osgi.resource.dto.ResourceDTO;
 
 /**
  * Data Transfer Object for a BundleWiring.

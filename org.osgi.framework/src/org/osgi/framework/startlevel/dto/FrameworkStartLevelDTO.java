@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,28 +14,29 @@
  * limitations under the License.
  */
 
-package org.osgi.dto.resource;
+package org.osgi.framework.startlevel.dto;
 
 import org.osgi.dto.DTO;
 
 /**
- * Data Transfer Object for a reference to a Requirement.
+ * Data Transfer Object for a FrameworkStartLevel.
+ * 
+ * <p>
+ * The System Bundle can be adapted to provide a {@code FrameworkStartLevelDTO}
+ * for the framework of the Bundle.
  * 
  * @author $Id$
  * @NotThreadSafe
  */
-public class RequirementRefDTO extends DTO {
+public class FrameworkStartLevelDTO extends DTO {
     /**
-     * The identifier of the requirement in the resource.
-     * 
-     * @see RequirementDTO#id
+     * The active start level value for the framework.
      */
-    public int requirement;
+    public int startLevel;
 
     /**
-     * The identifier of the resource declaring the requirement.
-     * 
-     * @see ResourceDTO#id
+     * The initial start level value that is assigned to a bundle when it is
+     * first installed.
      */
-    public int resource;
+    public int initialBundleStartLevel;
 }

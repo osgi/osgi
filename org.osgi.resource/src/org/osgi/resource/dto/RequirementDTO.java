@@ -14,33 +14,49 @@
  * limitations under the License.
  */
 
-package org.osgi.dto.resource;
+package org.osgi.resource.dto;
 
-import java.util.List;
+import java.util.Map;
 import org.osgi.dto.DTO;
 
 /**
- * Data Transfer Object for a Resource.
+ * Data Transfer Object for a Requirement.
  * 
  * @author $Id$
  * @NotThreadSafe
  */
-public class ResourceDTO extends DTO {
+public class RequirementDTO extends DTO {
     /**
-     * The unique identifier of the resource.
+     * The unique identifier of the requirement.
      * 
      * <p>
      * This identifier is transiently assigned and may vary across restarts.
      */
-    public int                  id;
+    public int                 id;
 
     /**
-     * The capabilities of the resource.
+     * The namespace for the requirement.
      */
-    public List<CapabilityDTO>  capabilities;
+    public String              namespace;
 
     /**
-     * The requirements of the resource.
+     * The directives for the requirement.
      */
-    public List<RequirementDTO> requirements;
+    public Map<String, String> directives;
+
+    /**
+     * The attributes for the requirement.
+     * 
+     * <p>
+     * The value type must be a numerical type, Boolean, String, DTO or an array
+     * of any of the former.
+     */
+    public Map<String, Object> attributes;
+
+    /**
+     * The identifier of the resource declaring the requirement.
+     * 
+     * @see ResourceDTO#id
+     */
+    public int                 resource;
 }

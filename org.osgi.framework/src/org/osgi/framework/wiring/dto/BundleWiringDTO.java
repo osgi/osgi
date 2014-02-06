@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-package org.osgi.dto.framework.wiring;
+package org.osgi.framework.wiring.dto;
 
 import java.util.Set;
 import org.osgi.dto.DTO;
-import org.osgi.dto.resource.WiringDTO;
+import org.osgi.resource.dto.WiringDTO;
 
 /**
  * Data Transfer Object for a BundleWiring graph.

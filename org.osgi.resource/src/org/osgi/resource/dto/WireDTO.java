@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.dto.resource;
+package org.osgi.resource.dto;
 
 import org.osgi.dto.DTO;
 

@@ -216,17 +216,17 @@
     <section>
       <title>Framework Data Transfer Objects</title>
 
-      <para>A <xref linkend="org.osgi.dto.framework.BundleDTO"
+      <para>A <xref linkend="org.osgi.framework.dto.BundleDTO"
       xrefstyle="hyperlink"/> represents information about a single bundle
       such as the id of the bundle, the current state of the bundle and the
       symbolic name and version of the bundle.</para>
 
-      <para>A <xref linkend="org.osgi.dto.framework.ServiceReferenceDTO"
+      <para>A <xref linkend="org.osgi.framework.dto.ServiceReferenceDTO"
       xrefstyle="hyperlink"/> represents information about a single registered
       service such as the service properties, the bundle which registered the
       service and the bundles using the service.</para>
 
-      <para>A <xref linkend="org.osgi.dto.framework.FrameworkDTO"
+      <para>A <xref linkend="org.osgi.framework.dto.FrameworkDTO"
       xrefstyle="hyperlink"/> represents information about the Framework such
       as the list of installed bundles, the registered services and the launch
       properties of the framework.</para>
@@ -235,13 +235,13 @@
     <section>
       <title>Resource API Data Transfer Objects</title>
 
-      <para><xref linkend="org.osgi.dto.resource.CapabilityDTO"
+      <para><xref linkend="org.osgi.resource.dto.CapabilityDTO"
       xrefstyle="hyperlink"/>, <xref
-      linkend="org.osgi.dto.resource.RequirementDTO" xrefstyle="hyperlink"/>,
-      <xref linkend="org.osgi.dto.resource.ResourceDTO"
-      xrefstyle="hyperlink"/>, <xref linkend="org.osgi.dto.resource.WiringDTO"
+      linkend="org.osgi.resource.dto.RequirementDTO" xrefstyle="hyperlink"/>,
+      <xref linkend="org.osgi.resource.dto.ResourceDTO"
+      xrefstyle="hyperlink"/>, <xref linkend="org.osgi.resource.dto.WiringDTO"
       xrefstyle="hyperlink"/> and <xref
-      linkend="org.osgi.dto.resource.WireDTO" xrefstyle="hyperlink"/>
+      linkend="org.osgi.resource.dto.WireDTO" xrefstyle="hyperlink"/>
       represent the capabilities and requirements wiring information of the
       Resource API. The following figure shows the effective relationship
       between these Data Transfer Object types. Since the graph of Data
@@ -263,11 +263,11 @@
     <section>
       <title>Bundle Wiring API Data Transfer Objects</title>
 
-      <para><xref linkend="org.osgi.dto.framework.wiring.BundleRevisionDTO"
+      <para><xref linkend="org.osgi.framework.wiring.dto.BundleRevisionDTO"
       xrefstyle="hyperlink"/>, <xref
-      linkend="org.osgi.dto.framework.wiring.BundleWiringDTO"
+      linkend="org.osgi.framework.wiring.dto.BundleWiringDTO"
       xrefstyle="hyperlink"/>, and <xref
-      linkend="org.osgi.dto.framework.wiring.BundleWireDTO"
+      linkend="org.osgi.framework.wiring.dto.BundleWireDTO"
       xrefstyle="hyperlink"/> represent the capabilities and requirements
       wiring information of the Bundle Wiring API. The following figure shows
       the effective relationship between these Data Transfer Object types.
@@ -290,13 +290,13 @@
       <title>Start Level API Data Transfer Objects</title>
 
       <para>A <xref
-      linkend="org.osgi.dto.framework.startlevel.BundleStartLevelDTO"
+      linkend="org.osgi.framework.startlevel.dto.BundleStartLevelDTO"
       xrefstyle="hyperlink"/> represents information about the start level
       information of a bundle such as the assigned start level, the activation
       policy used and the whether the bundle is persistently started.</para>
 
       <para>A <xref
-      linkend="org.osgi.dto.framework.startlevel.FrameworkStartLevelDTO"
+      linkend="org.osgi.framework.startlevel.dto.FrameworkStartLevelDTO"
       xrefstyle="hyperlink"/> provides the start level information about the
       Framework such as the active start level and the initial bundle start
       level assigned to newly installed bundles.</para>
@@ -343,7 +343,7 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
 
         <tbody>
           <row>
-            <entry><para><xref linkend="org.osgi.dto.framework.BundleDTO"
+            <entry><para><xref linkend="org.osgi.framework.dto.BundleDTO"
             xrefstyle="hyperlink"/></para></entry>
 
             <entry><para>The Bundle Data Transfer Object for the
@@ -352,7 +352,7 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
 
           <row>
             <entry><para><xref
-            linkend="org.osgi.dto.framework.ServiceReferenceDTO"
+            linkend="org.osgi.framework.dto.ServiceReferenceDTO"
             xrefstyle="hyperlink"/><code>[]</code></para></entry>
 
             <entry><para>An array of Service Reference Data Transfer Objects
@@ -364,7 +364,7 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
 
           <row>
             <entry><para><xref
-            linkend="org.osgi.dto.framework.wiring.BundleRevisionDTO"
+            linkend="org.osgi.framework.wiring.dto.BundleRevisionDTO"
             xrefstyle="hyperlink"/></para></entry>
 
             <entry><para>The Bundle Revision Data Transfer Object for the
@@ -374,7 +374,7 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
 
           <row>
             <entry><para><xref
-            linkend="org.osgi.dto.framework.wiring.BundleRevisionDTO"
+            linkend="org.osgi.framework.wiring.dto.BundleRevisionDTO"
             xrefstyle="hyperlink"/><code>[]</code></para></entry>
 
             <entry><para>The Bundle Revision Data Transfer Objects for the
@@ -384,7 +384,7 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
 
           <row>
             <entry><para><xref
-            linkend="org.osgi.dto.framework.wiring.BundleWiringDTO"
+            linkend="org.osgi.framework.wiring.dto.BundleWiringDTO"
             xrefstyle="hyperlink"/></para></entry>
 
             <entry><para>The Bundle Wiring Data Transfer Object for the
@@ -394,7 +394,7 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
 
           <row>
             <entry><para><xref
-            linkend="org.osgi.dto.framework.wiring.BundleWiringDTO"
+            linkend="org.osgi.framework.wiring.dto.BundleWiringDTO"
             xrefstyle="hyperlink"/><code>[]</code></para></entry>
 
             <entry><para>The Bundle WiringsData Transfer Objects for the
@@ -404,7 +404,7 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
 
           <row>
             <entry><para><xref
-            linkend="org.osgi.dto.framework.startlevel.BundleStartLevelDTO"
+            linkend="org.osgi.framework.startlevel.dto.BundleStartLevelDTO"
             xrefstyle="hyperlink"/></para></entry>
 
             <entry><para>The Bundle Start Level Data Transfer Object for the
@@ -414,7 +414,7 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
 
           <row>
             <entry><para><xref
-            linkend="org.osgi.dto.framework.startlevel.FrameworkStartLevelDTO"
+            linkend="org.osgi.framework.startlevel.dto.FrameworkStartLevelDTO"
             xrefstyle="hyperlink"/></para></entry>
 
             <entry><para>The Framework Start Level Data Transfer Object if the
@@ -423,7 +423,7 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
           </row>
 
           <row>
-            <entry><para><xref linkend="org.osgi.dto.framework.FrameworkDTO"
+            <entry><para><xref linkend="org.osgi.framework.dto.FrameworkDTO"
             xrefstyle="hyperlink"/></para></entry>
 
             <entry><para>The Framework Data Transfer Object if the bundle is
@@ -447,13 +447,13 @@ BundleRevisionDTO bundleRevisionDTO = bundle.adapt(BundleRevisionDTO.class);</pr
 
   <xi:include href="../../../generated/javadoc/docbook/org.osgi.dto.xml"/>
 
-  <xi:include href="../../../generated/javadoc/docbook/org.osgi.dto.framework.xml"/>
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.framework.dto.xml"/>
 
-  <xi:include href="../../../generated/javadoc/docbook/org.osgi.dto.framework.startlevel.xml"/>
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.framework.startlevel.dto.xml"/>
 
-  <xi:include href="../../../generated/javadoc/docbook/org.osgi.dto.framework.wiring.xml"/>
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.framework.wiring.dto.xml"/>
 
-  <xi:include href="../../../generated/javadoc/docbook/org.osgi.dto.resource.xml"/>
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.resource.dto.xml"/>
 
   <section xml:id="framework.dto.references">
     <title>References</title>

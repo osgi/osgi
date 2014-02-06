@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.dto.framework;
+package org.osgi.framework.dto;
 
 import java.util.Map;
 import org.osgi.dto.DTO;

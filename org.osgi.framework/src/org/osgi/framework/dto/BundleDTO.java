@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -14,39 +14,42 @@
  * limitations under the License.
  */
 
-package org.osgi.dto.framework.startlevel;
+package org.osgi.framework.dto;
 
 import org.osgi.dto.DTO;
 
 /**
- * Data Transfer Object for a BundleStartLevel.
+ * Data Transfer Object for a Bundle.
  * 
  * <p>
- * An installed Bundle can be adapted to provide a {@code BundleStartLevelDTO}
- * for the Bundle.
+ * A Bundle can be adapted to provide a {@code BundleDTO} for the Bundle.
  * 
  * @author $Id$
  * @NotThreadSafe
  */
-public class BundleStartLevelDTO extends DTO {
+public class BundleDTO extends DTO {
     /**
-     * The id of the bundle associated with this start level.
+     * The bundle's unique identifier.
      */
-    public long    bundle;
+    public long   id;
 
     /**
-     * The assigned start level value for the bundle.
+     * The time when the bundle was last modified.
      */
-    public int     startLevel;
+    public long   lastModified;
 
     /**
-     * The bundle's autostart setting indicates that the activation policy
-     * declared in the bundle manifest must be used.
+     * The bundle's state.
      */
-    public boolean activationPolicyUsed;
+    public int    state;
 
     /**
-     * The bundle's autostart setting indicates it must be started.
+     * The bundle's symbolic name.
      */
-    public boolean persistentlyStarted;
+    public String symbolicName;
+
+    /**
+     * The bundle's version.
+     */
+    public String version;
 }

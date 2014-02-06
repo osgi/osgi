@@ -290,19 +290,19 @@ Include-Resource = \
 Test-Cases							= ${testcases}
 -signaturetest                      = \
     org.osgi.dto, \
-    org.osgi.dto.framework, \
-    org.osgi.dto.framework.startlevel, \
-    org.osgi.dto.framework.wiring, \
-    org.osgi.dto.resource, \
     org.osgi.resource, \
+    org.osgi.resource.dto, \
     org.osgi.framework, \
+    org.osgi.framework.dto, \
     org.osgi.framework.hooks.bundle, \
     org.osgi.framework.hooks.resolver, \
     org.osgi.framework.hooks.service, \
     org.osgi.framework.hooks.weaving, \
     org.osgi.framework.namespace, \
     org.osgi.framework.startlevel, \
-    org.osgi.framework.wiring
+    org.osgi.framework.startlevel.dto, \
+    org.osgi.framework.wiring, \
+    org.osgi.framework.wiring.dto
 
 -runbundles						= \
 	org.apache.servicemix.bundles.bcel;         version=5.2 

@@ -14,29 +14,39 @@
  * limitations under the License.
  */
 
-package org.osgi.dto.framework.startlevel;
+package org.osgi.framework.startlevel.dto;
 
 import org.osgi.dto.DTO;
 
 /**
- * Data Transfer Object for a FrameworkStartLevel.
+ * Data Transfer Object for a BundleStartLevel.
  * 
  * <p>
- * The System Bundle can be adapted to provide a {@code FrameworkStartLevelDTO}
- * for the framework of the Bundle.
+ * An installed Bundle can be adapted to provide a {@code BundleStartLevelDTO}
+ * for the Bundle.
  * 
  * @author $Id$
  * @NotThreadSafe
  */
-public class FrameworkStartLevelDTO extends DTO {
+public class BundleStartLevelDTO extends DTO {
     /**
-     * The active start level value for the framework.
+     * The id of the bundle associated with this start level.
      */
-    public int startLevel;
+    public long    bundle;
 
     /**
-     * The initial start level value that is assigned to a bundle when it is
-     * first installed.
+     * The assigned start level value for the bundle.
      */
-    public int initialBundleStartLevel;
+    public int     startLevel;
+
+    /**
+     * The bundle's autostart setting indicates that the activation policy
+     * declared in the bundle manifest must be used.
+     */
+    public boolean activationPolicyUsed;
+
+    /**
+     * The bundle's autostart setting indicates it must be started.
+     */
+    public boolean persistentlyStarted;
 }
