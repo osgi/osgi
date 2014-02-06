@@ -19,9 +19,9 @@
     <title>Introduction</title>
 
     <para>The OSGi API is rich and introspective supporting the local
-    management of bundle, services and other items. Since the API has a lot of
-    behavior and is not designed for serialization, any management model must
-    design its own representation of the relevant OSGi objects for
+    management of bundles, services and other items. Since the API has a lot
+    of behavior and is not designed for serialization, any management model
+    must design its own representation of the relevant OSGi objects for
     communication with remote management systems. We see this in the JMX
     Management Model Specification, the Dmt Admin Service Specification and
     Residential Device Management Tree Specification: the JMX Management Model
@@ -46,8 +46,8 @@
           <para><emphasis>Easy Serialization/Deserialization</emphasis> - Must
           be easily serializable. That is, no special
           serialization/deserialization logic must be required. Serialization
-          must be possible simply by introspection and object graphs must be
-          acyclic.</para>
+          must be possible simply by introspection and object graphs must be a
+          tree.</para>
         </listitem>
 
         <listitem>
@@ -172,8 +172,8 @@
     threads as well as proper synchronization if a Data Transfer Object is
     mutated by one of the threads.</para>
 
-    <para>Data Transfer Object graphs must be acyclic to simplify
-    serialization and deserialization.</para>
+    <para>Data Transfer Object graphs must be a tree to simplify serialization
+    and deserialization.</para>
 
     <section>
       <title>Naming Conventions</title>
@@ -246,7 +246,7 @@
       represent the capabilities and requirements wiring information of the
       Resource API. The following figure shows the effective relationship
       between these Data Transfer Object types. Since the graph of Data
-      Transfer Objects must be acyclic, some references are indirect.</para>
+      Transfer Objects must be a tree, some references are indirect.</para>
 
       <figure>
         <title>Resource API Data Transfer Objects</title>
@@ -272,8 +272,8 @@
       xrefstyle="hyperlink"/> represent the capabilities and requirements
       wiring information of the Bundle Wiring API. The following figure shows
       the effective relationship between these Data Transfer Object types.
-      Since the graph of Data Transfer Objects must be acyclic, some
-      references are indirect.</para>
+      Since the graph of Data Transfer Objects must be a tree, some references
+      are indirect.</para>
 
       <figure>
         <title>Bundle Wiring API Data Transfer Objects</title>
