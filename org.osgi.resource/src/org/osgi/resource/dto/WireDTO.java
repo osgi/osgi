@@ -17,6 +17,7 @@
 package org.osgi.resource.dto;
 
 import org.osgi.dto.DTO;
+import org.osgi.resource.Wire;
 
 /**
  * Data Transfer Object for a Wire.
@@ -26,26 +27,32 @@ import org.osgi.dto.DTO;
  */
 public class WireDTO extends DTO {
     /**
-     * Reference to the Capability for the wire.
-     */
+	 * Reference to the Capability for the wire.
+	 * 
+	 * @see Wire#getCapability()
+	 */
     public CapabilityRefDTO  capability;
 
     /**
-     * Reference to the Requirement for the wire.
-     */
+	 * Reference to the Requirement for the wire.
+	 * 
+	 * @see Wire#getRequirement()
+	 */
     public RequirementRefDTO requirement;
 
     /**
-     * The identifier of the provider resource for the wire.
-     * 
-     * @see ResourceDTO#id
-     */
+	 * The identifier of the provider resource for the wire.
+	 * 
+	 * @see ResourceDTO#id
+	 * @see Wire#getProvider()
+	 */
     public int               provider;
 
     /**
-     * The identifier of the requiring resource for the wire.
-     * 
-     * @see ResourceDTO#id
-     */
+	 * The identifier of the requiring resource for the wire.
+	 * 
+	 * @see ResourceDTO#id
+	 * @see Wire#getRequirer()
+	 */
     public int               requirer;
 }

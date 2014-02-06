@@ -18,6 +18,7 @@ package org.osgi.resource.dto;
 
 import java.util.List;
 import org.osgi.dto.DTO;
+import org.osgi.resource.Resource;
 
 /**
  * Data Transfer Object for a Resource.
@@ -35,12 +36,16 @@ public class ResourceDTO extends DTO {
     public int                  id;
 
     /**
-     * The capabilities of the resource.
-     */
+	 * The capabilities of the resource.
+	 * 
+	 * @see Resource#getCapabilities(String)
+	 */
     public List<CapabilityDTO>  capabilities;
 
     /**
-     * The requirements of the resource.
-     */
+	 * The requirements of the resource.
+	 * 
+	 * @see Resource#getRequirements(String)
+	 */
     public List<RequirementDTO> requirements;
 }

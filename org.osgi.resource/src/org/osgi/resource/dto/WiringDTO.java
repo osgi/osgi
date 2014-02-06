@@ -18,6 +18,7 @@ package org.osgi.resource.dto;
 
 import java.util.List;
 import org.osgi.dto.DTO;
+import org.osgi.resource.Wiring;
 
 /**
  * Data Transfer Object for a Wiring node.
@@ -35,29 +36,38 @@ public class WiringDTO extends DTO {
     public int                     id;
 
     /**
-     * The references to the capabilities for the wiring node.
-     */
+	 * The references to the capabilities for the wiring node.
+	 * 
+	 * @see Wiring#getResourceCapabilities(String)
+	 */
     public List<CapabilityRefDTO>  capabilities;
 
     /**
-     * The references to the requirements for the wiring node.
-     */
+	 * The references to the requirements for the wiring node.
+	 * 
+	 * @see Wiring#getResourceRequirements(String)
+	 */
     public List<RequirementRefDTO> requirements;
 
     /**
-     * The provided wires for the wiring node.
-     */
+	 * The provided wires for the wiring node.
+	 * 
+	 * @see Wiring#getProvidedResourceWires(String)
+	 */
     public List<WireDTO>           providedWires;
 
     /**
-     * The required wires for the wiring node.
-     */
+	 * The required wires for the wiring node.
+	 * 
+	 * @see Wiring#getRequiredResourceWires(String)
+	 */
     public List<WireDTO>           requiredWires;
 
     /**
-     * The identifier of the resource associated with the wiring node.
-     * 
-     * @see ResourceDTO#id
-     */
+	 * The identifier of the resource associated with the wiring node.
+	 * 
+	 * @see ResourceDTO#id
+	 * @see Wiring#getResource()
+	 */
     public int                     resource;
 }

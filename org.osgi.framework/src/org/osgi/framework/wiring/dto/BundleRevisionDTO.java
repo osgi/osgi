@@ -16,6 +16,7 @@
 
 package org.osgi.framework.wiring.dto;
 
+import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.resource.dto.ResourceDTO;
 
 /**
@@ -32,22 +33,30 @@ import org.osgi.resource.dto.ResourceDTO;
  */
 public class BundleRevisionDTO extends ResourceDTO {
     /**
-     * The symbolic name of the bundle revision.
-     */
+	 * The symbolic name of the bundle revision.
+	 * 
+	 * @see BundleRevision#getSymbolicName()
+	 */
     public String symbolicName;
 
     /**
-     * The type of the bundle revision.
-     */
+	 * The type of the bundle revision.
+	 * 
+	 * @see BundleRevision#getTypes()
+	 */
     public int    type;
 
     /**
-     * The version of the bundle revision.
-     */
+	 * The version of the bundle revision.
+	 * 
+	 * @see BundleRevision#getVersion()
+	 */
     public String version;
 
     /**
-     * The id of the bundle associated with the bundle revision.
-     */
+	 * The id of the bundle associated with the bundle revision.
+	 * 
+	 * @see BundleRevision#getBundle()
+	 */
     public long   bundle;
 }

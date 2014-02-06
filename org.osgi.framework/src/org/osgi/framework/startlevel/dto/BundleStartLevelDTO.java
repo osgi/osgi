@@ -17,6 +17,7 @@
 package org.osgi.framework.startlevel.dto;
 
 import org.osgi.dto.DTO;
+import org.osgi.framework.startlevel.BundleStartLevel;
 
 /**
  * Data Transfer Object for a BundleStartLevel.
@@ -30,23 +31,31 @@ import org.osgi.dto.DTO;
  */
 public class BundleStartLevelDTO extends DTO {
     /**
-     * The id of the bundle associated with this start level.
-     */
+	 * The id of the bundle associated with this start level.
+	 * 
+	 * @see BundleStartLevel#getBundle()
+	 */
     public long    bundle;
 
     /**
-     * The assigned start level value for the bundle.
-     */
+	 * The assigned start level value for the bundle.
+	 * 
+	 * @see BundleStartLevel#getStartLevel()
+	 */
     public int     startLevel;
 
     /**
-     * The bundle's autostart setting indicates that the activation policy
-     * declared in the bundle manifest must be used.
-     */
+	 * The bundle's autostart setting indicates that the activation policy
+	 * declared in the bundle manifest must be used.
+	 * 
+	 * @see BundleStartLevel#isActivationPolicyUsed()
+	 */
     public boolean activationPolicyUsed;
 
     /**
-     * The bundle's autostart setting indicates it must be started.
-     */
+	 * The bundle's autostart setting indicates it must be started.
+	 * 
+	 * @see BundleStartLevel#isPersistentlyStarted()
+	 */
     public boolean persistentlyStarted;
 }

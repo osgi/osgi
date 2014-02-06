@@ -16,6 +16,7 @@
 
 package org.osgi.framework.wiring.dto;
 
+import org.osgi.framework.wiring.BundleWire;
 import org.osgi.resource.dto.WireDTO;
 import org.osgi.resource.dto.WiringDTO;
 
@@ -30,16 +31,18 @@ import org.osgi.resource.dto.WiringDTO;
  */
 public class BundleWireDTO extends WireDTO {
     /**
-     * The identifier of the provider wiring for the bundle wire.
-     * 
-     * @see WiringDTO#id
-     */
+	 * The identifier of the provider wiring for the bundle wire.
+	 * 
+	 * @see WiringDTO#id
+	 * @see BundleWire#getProviderWiring()
+	 */
     public int providerWiring;
 
     /**
-     * The identifier of the requiring wiring for the bundle wire.
-     * 
-     * @see WiringDTO#id
-     */
+	 * The identifier of the requiring wiring for the bundle wire.
+	 * 
+	 * @see WiringDTO#id
+	 * @see BundleWire#getRequirerWiring()
+	 */
     public int requirerWiring;
 }

@@ -18,6 +18,8 @@ package org.osgi.framework.dto;
 
 import java.util.Map;
 import org.osgi.dto.DTO;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
 
 /**
  * Data Transfer Object for a ServiceReference.
@@ -35,25 +37,33 @@ import org.osgi.dto.DTO;
  */
 public class ServiceReferenceDTO extends DTO {
     /**
-     * The {@code service.id} of the service.
-     */
+	 * The {@code service.id} of the service.
+	 * 
+	 * @see Constants#SERVICE_ID
+	 */
     public long                id;
 
     /**
-     * The id of the bundle that registered the service.
-     */
+	 * The id of the bundle that registered the service.
+	 * 
+	 * @see ServiceReference#getBundle()
+	 */
     public long                bundle;
 
     /**
-     * The properties for the service.
-     * 
-     * The value type must be a numerical type, Boolean, String, DTO or an array
-     * of any of the former.
-     */
+	 * The properties for the service.
+	 * 
+	 * The value type must be a numerical type, Boolean, String, DTO or an array
+	 * of any of the former.
+	 * 
+	 * @see ServiceReference#getProperty(String)
+	 */
     public Map<String, Object> properties;
 
     /**
-     * The ids of the bundles that are using the service.
-     */
+	 * The ids of the bundles that are using the service.
+	 * 
+	 * @see ServiceReference#getUsingBundles()
+	 */
     public long[]              usingBundles;
 }

@@ -18,6 +18,7 @@ package org.osgi.resource.dto;
 
 import java.util.Map;
 import org.osgi.dto.DTO;
+import org.osgi.resource.Capability;
 
 /**
  * Data Transfer Object for a Capability.
@@ -36,11 +37,15 @@ public class CapabilityDTO extends DTO {
 
     /**
      * The namespace for the capability.
+     * 
+     * @see Capability#getNamespace()
      */
     public String              namespace;
 
     /**
      * The directives for the capability.
+     * 
+     * @see Capability#getDirectives()
      */
     public Map<String, String> directives;
 
@@ -50,13 +55,16 @@ public class CapabilityDTO extends DTO {
      * <p>
      * The value type must be a numerical type, Boolean, String, DTO or an array
      * of any of the former.
+     * 
+     * @see Capability#getAttributes()
      */
     public Map<String, Object> attributes;
 
     /**
-     * The identifier of the resource declaring the capability.
-     * 
-     * @see ResourceDTO#id
-     */
+	 * The identifier of the resource declaring the capability.
+	 * 
+	 * @see ResourceDTO#id
+	 * @see Capability#getResource()
+	 */
     public int                 resource;
 }

@@ -18,6 +18,7 @@ package org.osgi.framework.wiring.dto;
 
 import java.util.Set;
 import org.osgi.dto.DTO;
+import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.resource.dto.WiringDTO;
 
 /**
@@ -34,8 +35,10 @@ import org.osgi.resource.dto.WiringDTO;
  */
 public class BundleWiringDTO extends DTO {
     /**
-     * The id of the bundle associated with the bundle wiring graph.
-     */
+	 * The id of the bundle associated with the bundle wiring graph.
+	 * 
+	 * @see BundleWiring#getBundle()
+	 */
     public long                   bundle;
 
     /**
@@ -75,16 +78,20 @@ public class BundleWiringDTO extends DTO {
      */
     public static class NodeDTO extends WiringDTO {
         /**
-         * The bundle wiring's in use setting indicates that the bundle wiring
-         * is in use.
-         */
+		 * The bundle wiring's in use setting indicates that the bundle wiring
+		 * is in use.
+		 * 
+		 * @see BundleWiring#isInUse()
+		 */
         public boolean inUse;
 
         /**
-         * The current state of the bundle wiring. The bundle wiring's current
-         * setting indicates that the bundle wiring is the current bundle wiring
-         * for the bundle.
-         */
+		 * The current state of the bundle wiring. The bundle wiring's current
+		 * setting indicates that the bundle wiring is the current bundle wiring
+		 * for the bundle.
+		 * 
+		 * @see BundleWiring#isCurrent()
+		 */
         public boolean current;
     }
 }

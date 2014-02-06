@@ -17,6 +17,7 @@
 package org.osgi.framework.dto;
 
 import org.osgi.dto.DTO;
+import org.osgi.framework.Bundle;
 
 /**
  * Data Transfer Object for a Bundle.
@@ -29,27 +30,37 @@ import org.osgi.dto.DTO;
  */
 public class BundleDTO extends DTO {
     /**
-     * The bundle's unique identifier.
-     */
+	 * The bundle's unique identifier.
+	 * 
+	 * @see Bundle#getBundleId()
+	 */
     public long   id;
 
     /**
-     * The time when the bundle was last modified.
-     */
+	 * The time when the bundle was last modified.
+	 * 
+	 * @see Bundle#getLastModified()
+	 */
     public long   lastModified;
 
     /**
-     * The bundle's state.
-     */
+	 * The bundle's state.
+	 * 
+	 * @see Bundle#getState()
+	 */
     public int    state;
 
     /**
-     * The bundle's symbolic name.
-     */
+	 * The bundle's symbolic name.
+	 * 
+	 * @see Bundle#getSymbolicName()
+	 */
     public String symbolicName;
 
     /**
-     * The bundle's version.
-     */
+	 * The bundle's version.
+	 * 
+	 * @see Bundle#getVersion()
+	 */
     public String version;
 }

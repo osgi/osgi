@@ -17,6 +17,7 @@
 package org.osgi.framework.startlevel.dto;
 
 import org.osgi.dto.DTO;
+import org.osgi.framework.startlevel.FrameworkStartLevel;
 
 /**
  * Data Transfer Object for a FrameworkStartLevel.
@@ -30,13 +31,17 @@ import org.osgi.dto.DTO;
  */
 public class FrameworkStartLevelDTO extends DTO {
     /**
-     * The active start level value for the framework.
-     */
+	 * The active start level value for the framework.
+	 * 
+	 * @see FrameworkStartLevel#getStartLevel()
+	 */
     public int startLevel;
 
     /**
-     * The initial start level value that is assigned to a bundle when it is
-     * first installed.
-     */
+	 * The initial start level value that is assigned to a bundle when it is
+	 * first installed.
+	 * 
+	 * @see FrameworkStartLevel#getInitialBundleStartLevel()
+	 */
     public int initialBundleStartLevel;
 }
