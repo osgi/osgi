@@ -182,12 +182,11 @@
       package containing the Data Transfer Object as well as the Data Transfer
       Object type. For the package name, we start with the package name
       containing the runtime type for which the Data Transfer Object is a
-      representation. A <code>dto</code> segment is inserted in the package
-      name after the base domain name. For example, a Data Transfer Object
-      representing a runtime type in the <code>org.osgi.service.foo</code>
-      package will be in the Data Transfer Object package name is
-      <code>org.osgi.dto.service.foo</code> when <code>org.osgi</code> is the
-      base domain name for OSGi.</para>
+      representation. A <code>dto</code> segment is suffixed to the package
+      name. For example, a Data Transfer Object representing a runtime type in
+      the <code>org.osgi.service.foo</code> package will be in the Data
+      Transfer Object package name is
+      <code>org.osgi.service.foo.fto</code>.</para>
 
       <para>The name of the Data Transfer Object type should be the name of
       the runtime type for which the Data Transfer Object is a representation
@@ -202,7 +201,7 @@
       conventions together, the fully qualified name for the Data Transfer
       Object representing the runtime type
       <code>org.osgi.service.foo.Widget</code> would be
-      <code>org.osgi.dto.service.foo.WidgetDTO</code>.</para>
+      <code>org.osgi.service.foo.dto.WidgetDTO</code>.</para>
     </section>
   </section>
 
