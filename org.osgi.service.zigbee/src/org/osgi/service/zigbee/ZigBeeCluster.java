@@ -59,17 +59,6 @@ public interface ZigBeeCluster {
 	public ZigBeeAttribute[] getAttributes();
 
 	/**
-	 * @param commandId command identifier
-	 * @return the command identified by id
-	 */
-	public ZigBeeCommand getCommand(int commandId);
-
-	/**
-	 * @return an array of all the commands of the cluster
-	 */
-	public ZigBeeCommand[] getCommands();
-
-	/**
 	 * Read a list of attributes
 	 * 
 	 * @param attributesIds An array of attributes ids
@@ -85,5 +74,40 @@ public interface ZigBeeCluster {
 	 * @param handler The response handler
 	 */
 	public void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributesRecords, ZigBeeAttributesHandler handler);
+
+	/**
+	 * @return an array of all the commandIds of the ZigBeeCluster.
+	 */
+	int[] getCommandIds();
+
+	/**
+	 * Invokes the action. The handler will provide the invocation response in
+	 * an asynchronously way.
+	 * 
+	 * The source endpoint is not specified in this method call. To send the
+	 * appropriate message on the network, the base driver must generate a
+	 * source endpoint. The latter must not correspond to any exported endpoint.
+	 * 
+	 * @param frame a command frame sequence.
+	 * @param handler The handler that manages the command response.
+	 * @throws ZigBeeException
+	 */
+	void invoke(ZCLFrame frame, ZigBeeCommandHandler handler) throws ZigBeeException;
+
+	/**
+	 * This method is to be used by applications when the targeted device has to
+	 * distinguish between source endpoints of the message. For instance, alarms
+	 * cluster (see 3.11 Alarms Cluster in [ZCL]) generated events are
+	 * differently interpreted if they come from the oven or from the intrusion
+	 * alert system.
+	 * 
+	 * @param frame a command frame sequence.
+	 * @param handler The handler that manages the command response.
+	 * @param exportedServicePID : the source endpoint of the command request.
+	 *        In targeted situations, the source endpoint is the valid service
+	 *        PID of an exported endpoint.
+	 * @throws ZigBeeException
+	 */
+	void invoke(ZCLFrame frame, ZigBeeCommandHandler handler, String exportedServicePID) throws ZigBeeException;
 
 }

@@ -3,10 +3,10 @@ package org.osgi.test.cases.zigbee.tbc;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZigBeeAttribute;
 import org.osgi.service.zigbee.ZigBeeAttributeRecord;
 import org.osgi.service.zigbee.ZigBeeCluster;
-import org.osgi.service.zigbee.ZigBeeCommand;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeEvent;
 import org.osgi.service.zigbee.ZigBeeException;
@@ -288,12 +288,11 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			cluster = clusters[0];
 		}
 
-		ZigBeeCommand command = cluster.getCommands()[0];
-		assertNotNull("ZigBeeCommand is NULL", command);
-
-		log("ZigBeeCommand ID: " + command.getId());
+		int commandId = cluster.getCommandIds()[0];
+		log("ZigBeeCommand ID: " + commandId);
+		assertNotNull("ZigBeeCommand ID is NULL", commandId);
 		assertEquals("Command identifier not matched",
-				ZigBeeConstants.COMMAND_ID, String.valueOf(command.getId()));
+				ZigBeeConstants.COMMAND_ID, String.valueOf(commandId));
 
 	}
 
@@ -459,27 +458,28 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			fail("No exception is expected.");
 		}
 
-		// Test "control" methods of ZigBeeCommand.
+		// Test "control" methods of ZigBeeCluster.
 
-		// commands
-		ZigBeeCommand[] commands = cluster.getCommands();
-		ZigBeeCommand command = null;
-		if (commands != null && commands.length != 0) {
-			command = commands[0];
-		}
-		assertNotNull("ZigBeeCommand is NULL", command);
+		// cluster
+		int[] commandIds = cluster.getCommandIds();
+		assertNotNull("ZigBeeCluster has no command", commandIds.length);
+		int commandId = commandIds[0];
+		assertNotNull("ZigBeeCommand ID is NULL", commandId);
 
-		byte[] bytes = null;
+		// frame should be associated to commandId.
+		ZCLFrame frame = null;
 		try {
-			ZigBeeCommandHandlerImpl commandHandlerImpl = new ZigBeeCommandHandlerImpl();
-			command.invoke(bytes, commandHandlerImpl);
+			ZigBeeCommandHandlerImpl commandHandlerImpl = new
+					ZigBeeCommandHandlerImpl();
+			cluster.invoke(frame, commandHandlerImpl);
 
 			isSuccess = commandHandlerImpl.isSuccess();
 			if (isSuccess == null) {
 				fail("isSuccess is expected not to be null.");
 			} else
 				if (isSuccess) {
-					log("commandHandlerImpl.getResponse(): " + commandHandlerImpl.getResponseSuccess());
+					log("commandHandlerImpl.getResponse(): " +
+							commandHandlerImpl.getResponseSuccess());
 				} else {
 					fail("isSuccess is expected not to be false.");
 				}
@@ -488,18 +488,20 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			fail("No exception is expected.");
 		}
 
-		bytes = null;
+		frame = null;
 		String exportedServicePID = null;
 		try {
-			ZigBeeCommandHandlerImpl commandHandlerImpl = new ZigBeeCommandHandlerImpl();
-			command.invoke(bytes, commandHandlerImpl, exportedServicePID);
+			ZigBeeCommandHandlerImpl commandHandlerImpl = new
+					ZigBeeCommandHandlerImpl();
+			cluster.invoke(frame, commandHandlerImpl, exportedServicePID);
 
 			isSuccess = commandHandlerImpl.isSuccess();
 			if (isSuccess == null) {
 				fail("isSuccess is expected not to be null.");
 			} else
 				if (isSuccess) {
-					log("commandHandlerImpl.getResponse(): " + commandHandlerImpl.getResponseSuccess());
+					log("commandHandlerImpl.getResponse(): " +
+							commandHandlerImpl.getResponseSuccess());
 				} else {
 					fail("isSuccess is expected not to be false.");
 				}
@@ -552,20 +554,23 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		// assert that eventing works: the sent, and the received events must be
 		// equal.
 		try {
-			Thread.sleep(1000);
+			// It takes several seconds for the event to "travel" inside the
+			// test framework.
+			Thread.sleep(8000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 			fail("No exception is expected.");
 		}
 
 		ZigBeeEvent lastReceivedZigBeeEvent = aZigBeeEventListenerImpl.getLastReceivedZigBeeEvent();
-
-		// log("aZigbeeEvent: " + aZigbeeEvent);
-		// log("lastReceivedZigBeeEvent: " + lastReceivedZigBeeEvent);
-
+		log("lastReceivedZigBeeEvent: " + lastReceivedZigBeeEvent);
 		assertNotNull("aZigbeeEvent can not be null", aZigbeeEvent);
-		assertNotNull("lastReceivedZigBeeEvent can not be null", lastReceivedZigBeeEvent);
-		assertEquals("aZigbeeEvent, and lastReceivedZigBeeEvent must be equal.", aZigbeeEvent, lastReceivedZigBeeEvent);
+		log("aZigbeeEvent: " + aZigbeeEvent);
+
+		assertNotNull("lastReceivedZigBeeEvent can not be null",
+				lastReceivedZigBeeEvent);
+		assertEquals("aZigbeeEvent, and lastReceivedZigBeeEvent must be equal.",
+				aZigbeeEvent, lastReceivedZigBeeEvent);
 
 		// stop/destroy the test event listener.
 		aZigBeeEventListenerImpl.stop();

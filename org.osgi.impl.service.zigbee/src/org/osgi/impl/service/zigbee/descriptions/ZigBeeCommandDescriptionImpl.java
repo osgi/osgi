@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.zigbee.descriptions;
 
 import org.osgi.service.zigbee.descriptions.ZigBeeCommandDescription;
@@ -59,12 +60,27 @@ public class ZigBeeCommandDescriptionImpl implements ZigBeeCommandDescription {
 	}
 
 	public byte[] serialize(Object[] javaValues) {
-		// TODO: AAA: Auto-generated method stub
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public Object[] deserialize(byte[] bytes) {
-		// TODO: AAA: Auto-generated method stub
+		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public boolean isClusterSpecificCommand() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	public int getManufacturerCode() {
+		// TODO Auto-generated method stub
+		return -1;
+	}
+
+	public boolean isClientServerDirection() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

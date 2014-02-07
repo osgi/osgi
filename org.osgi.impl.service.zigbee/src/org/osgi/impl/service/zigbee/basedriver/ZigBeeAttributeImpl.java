@@ -36,8 +36,8 @@ public class ZigBeeAttributeImpl implements ZigBeeAttribute {
 	}
 
 	public void getValue(ZigBeeAttributesHandler handler) {
-		Map response = null;
-		response = new HashMap();
+		Map<Integer, Object> response = null;
+		response = new HashMap<Integer, Object>();
 		response.put(id, value);
 		handler.onSuccess(response);
 	}
@@ -45,8 +45,8 @@ public class ZigBeeAttributeImpl implements ZigBeeAttribute {
 	public void setValue(Object value, ZigBeeAttributesHandler handler)
 			throws ZigBeeException {
 		this.value = value;
-		Map response = null;
-		response = new HashMap();
+		Map<Integer, Object> response = null;
+		response = new HashMap<Integer, Object>();
 		response.put(id, this.value);
 		handler.onSuccess(response);
 	}

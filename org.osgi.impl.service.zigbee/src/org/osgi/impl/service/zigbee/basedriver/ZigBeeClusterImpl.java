@@ -3,21 +3,23 @@ package org.osgi.impl.service.zigbee.basedriver;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZigBeeAttribute;
 import org.osgi.service.zigbee.ZigBeeAttributeRecord;
 import org.osgi.service.zigbee.ZigBeeAttributesHandler;
 import org.osgi.service.zigbee.ZigBeeCluster;
-import org.osgi.service.zigbee.ZigBeeCommand;
+import org.osgi.service.zigbee.ZigBeeCommandHandler;
+import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
 
 /**
- * Mocked impl of ZigBeeDeviceNodeListener.
+ * Mocked impl.
  */
 public class ZigBeeClusterImpl implements ZigBeeCluster {
 
 	private Integer						id;
 	private ZigBeeAttributeImpl[]		attributes;
-	private ZigBeeCommand[]				commands;
+	private int[]						commandIds;
 	private ZigBeeClusterDescription	description;
 
 	/**
@@ -28,13 +30,13 @@ public class ZigBeeClusterImpl implements ZigBeeCluster {
 	}
 
 	/**
-	 * @param commands
+	 * @param commandIds
 	 * @param attributes
 	 * @param desc
 	 */
-	public ZigBeeClusterImpl(ZigBeeCommand[] commands, ZigBeeAttributeImpl[] attributes, ZigBeeClusterDescription desc) {
+	public ZigBeeClusterImpl(int[] commandIds, ZigBeeAttributeImpl[] attributes, ZigBeeClusterDescription desc) {
 		id = desc.getId();
-		this.commands = commands;
+		this.commandIds = commandIds;
 		this.attributes = attributes;
 		this.description = desc;
 	}
@@ -51,21 +53,13 @@ public class ZigBeeClusterImpl implements ZigBeeCluster {
 		return attributes;
 	}
 
-	public ZigBeeCommand getCommand(int commandId) {
-		return commands[commandId];
-	}
-
-	public ZigBeeCommand[] getCommands() {
-		return commands;
-	}
-
 	public String toString() {
 		return description.getGlobalClusterDescription().getClusterName();
 	}
 
 	public void readAttributes(int[] attributesIds, ZigBeeAttributesHandler handler) {
 		// TODO Auto-generated method stub
-		Map response = new HashMap();
+		Map<Integer, byte[]> response = new HashMap<Integer, byte[]>();
 		int i = 0;
 		// for (int i : attributesIds) {
 		ZigBeeAttributeImpl attribute = attributes[i];
@@ -77,6 +71,20 @@ public class ZigBeeClusterImpl implements ZigBeeCluster {
 
 	public void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributesRecords, ZigBeeAttributesHandler handler) {
 		// TODO Auto-generated method stub
+	}
+
+	public int[] getCommandIds() {
+		return this.commandIds;
+	}
+
+	public void invoke(ZCLFrame frame, ZigBeeCommandHandler handler) throws ZigBeeException {
+		byte[] response = {};
+		handler.onSuccess(response);
+	}
+
+	public void invoke(ZCLFrame frame, ZigBeeCommandHandler handler, String exportedServicePID) throws ZigBeeException {
+		byte[] response = {};
+		handler.onSuccess(response);
 	}
 
 }

@@ -4,7 +4,6 @@ package org.osgi.impl.service.zigbee.basedriver;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.zigbee.descriptions.ZigBeeAttributeDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptions.ZigBeeClusterDescriptionImpl;
-import org.osgi.impl.service.zigbee.descriptions.ZigBeeCommandDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptions.ZigBeeGlobalClusterDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptions.ZigBeeParameterDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptors.ZigBeeNodeDescriptorImpl;
@@ -12,12 +11,10 @@ import org.osgi.impl.service.zigbee.descriptors.ZigBeePowerDescriptorImpl;
 import org.osgi.impl.service.zigbee.descriptors.ZigBeeSimpleDescriptorImpl;
 import org.osgi.impl.service.zigbee.util.ZigBeeDeviceNodeListener;
 import org.osgi.service.zigbee.ZigBeeCluster;
-import org.osgi.service.zigbee.ZigBeeCommand;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptions.ZigBeeAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
-import org.osgi.service.zigbee.descriptions.ZigBeeCommandDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeGlobalClusterDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeParameterDescription;
@@ -49,13 +46,10 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 	private ZigBeeClusterDescription		clientClusterDescription;
 	private ZigBeeAttributeImpl[]			attributesServer;
 	private ZigBeeAttributeDescription[]	attributesDescription;
-	private ZigBeeCommandDescription		commandDescription;
+	// private ZigBeeCommandDescription commandDescription;
 	private ZigBeeParameterDescription[]	param;
 	private ZigBeeDataTypeDescription[]		attributesType;
-	private ZigBeeCommand[]					commandsServer;
-
-	// private ServiceRegistration registration_1;
-	// private ServiceRegistration registration_2;
+	private int[]							commandIdsServer;
 
 	/**
 	 * This constructor creates the ZigBeeBaseDriver object based on the
@@ -116,11 +110,12 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		// a server endpoint example
 		param = new ZigBeeParameterDescriptionImpl[1];
 		param[0] = new ZigBeeParameterDescriptionImpl(attributesType[0]);
-		commandDescription = new ZigBeeCommandDescriptionImpl(0x00, "Reset to Factory Defaults", false, param);
-		commandsServer = new ZigBeeCommandImpl[1];
-		commandsServer[0] = new ZigBeeCommandImpl(commandDescription);
 		serverCluster = new ZigBeeClusterImpl[1];
-		serverCluster[0] = new ZigBeeClusterImpl(commandsServer, attributesServer, serverClusterDescription);
+		commandIdsServer = new int[1];
+		commandIdsServer[0] = 0;
+		// commandDescription = new ZigBeeCommandDescriptionImpl(0x00,
+		// "Reset to Factory Defaults", false, param);
+		serverCluster[0] = new ZigBeeClusterImpl(commandIdsServer, attributesServer, serverClusterDescription);
 
 		simpledesc2 = new ZigBeeSimpleDescriptorImpl(8, (byte) 4, 3);
 		endpoint2 = new ZigBeeEndpointImpl((byte) 0x19, serverCluster, null, simpledesc2);

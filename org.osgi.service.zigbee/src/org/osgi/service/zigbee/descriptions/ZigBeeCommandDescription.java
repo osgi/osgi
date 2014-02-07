@@ -17,7 +17,7 @@
 package org.osgi.service.zigbee.descriptions;
 
 /**
- * This interface represents a ZigBee Cluster description
+ * This interface represents a ZigBee Command description
  * 
  * @version 1.0
  */
@@ -25,27 +25,27 @@ public interface ZigBeeCommandDescription {
 	/**
 	 * @return the command identifier
 	 */
-	public int getId();
+	int getId();
 
 	/**
 	 * @return the command name
 	 */
-	public String getName();
+	String getName();
 
 	/**
 	 * @return the command functional description
 	 */
-	public String getShortDescription();
+	String getShortDescription();
 
 	/**
 	 * @return true, if and only if the command is mandatory
 	 */
-	public boolean isMandatory();
+	boolean isMandatory();
 
 	/**
 	 * @return an array of command's parameters description
 	 */
-	public ZigBeeParameterDescription[] getParameterDescriptions();
+	ZigBeeParameterDescription[] getParameterDescriptions();
 
 	/**
 	 * Serialize javaValues to byte[]. This byte[] can them be used in
@@ -55,7 +55,7 @@ public interface ZigBeeCommandDescription {
 	 * @param javaValues ordered java values
 	 * @return serialized javaValues as a byte[]
 	 */
-	public byte[] serialize(Object[] javaValues);
+	byte[] serialize(Object[] javaValues);
 
 	/**
 	 * Deserialize byte[] to javaValues. This byte[] is expected to be a result
@@ -65,5 +65,25 @@ public interface ZigBeeCommandDescription {
 	 * @param bytes ordered javaValues' as a byte[]
 	 * @return deserialized byte[] as javaValues
 	 */
-	public Object[] deserialize(byte[] bytes);
+	Object[] deserialize(byte[] bytes);
+
+	/**
+	 * @return the isClusterSpecificCommand value
+	 */
+	boolean isClusterSpecificCommand();
+
+	/**
+	 * Get manufacturerCode
+	 * 
+	 * Default value is: -1 (no code)
+	 * 
+	 * @return the manufacturerCode
+	 */
+	int getManufacturerCode();
+
+	/**
+	 * @return the isClientServerDirection value
+	 */
+	boolean isClientServerDirection();
+
 }
