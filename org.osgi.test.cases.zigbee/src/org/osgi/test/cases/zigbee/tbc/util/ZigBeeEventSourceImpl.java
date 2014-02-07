@@ -70,12 +70,14 @@ public class ZigBeeEventSourceImpl implements Runnable {
 				}
 				ZigBeeEventListener aZigBeeEventListener = (ZigBeeEventListener) listeners[n++];
 
-				DefaultTestBundleControl.log(ZigBeeEventSourceImpl.class.getName() + " is      sending the following event: " + zigbeeEvent);
+				DefaultTestBundleControl.log(ZigBeeEventSourceImpl.class.getName() + " is sending the following event: " + zigbeeEvent);
 
 				aZigBeeEventListener.notifyEvent(zigbeeEvent);
 			}
 			try {
-				wait(5000);
+				int waitinms = 1000;
+				DefaultTestBundleControl.log("wait(" + waitinms + ")");
+				wait(waitinms);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

@@ -21,15 +21,11 @@ public class ZigBeeAttributesHandlerImpl implements ZigBeeAttributesHandler {
 	}
 
 	public void onSuccess(Map response) {
-		// System.out.println("ZigBeeAttributesHandlerImpl.onSuccess(" +
-		// response + ")");
 		this.isSuccess = true;
 		this.successResponse = response;
 	}
 
 	public void onFailure(ZigBeeException e) {
-		// System.out.println("ZigBeeAttributesHandlerImpl.onFailure(" +
-		// response + ")");
 		this.isSuccess = false;
 		this.failureResponse = e;
 	}

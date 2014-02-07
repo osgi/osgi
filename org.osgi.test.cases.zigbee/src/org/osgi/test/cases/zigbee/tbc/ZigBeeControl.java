@@ -428,12 +428,13 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			isSuccess = handlerAttributeGetValue1.isSuccess();
 			if (isSuccess == null) {
 				fail("isSuccess is expected not to be null.");
-			} else
+			} else {
 				if (isSuccess) {
 					log("handlerAttributeGetValue1.getSuccessResponse(): " + handlerAttributeGetValue1.getSuccessResponse());
 				} else {
 					fail("isSuccess is expected not to be false.");
 				}
+			}
 		} catch (ZigBeeException e) {
 			e.printStackTrace();
 			fail("No exception is expected.");
@@ -447,12 +448,13 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			isSuccess = handler.isSuccess();
 			if (isSuccess == null) {
 				fail("isSuccess is expected not to be null.");
-			} else
+			} else {
 				if (isSuccess) {
 					log("handler.getSuccessResponse(): " + handler.getSuccessResponse());
 				} else {
 					fail("isSuccess is expected not to be false.");
 				}
+			}
 		} catch (ZigBeeException e) {
 			e.printStackTrace();
 			fail("No exception is expected.");
@@ -473,16 +475,9 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 					ZigBeeCommandHandlerImpl();
 			cluster.invoke(frame, commandHandlerImpl);
 
-			isSuccess = commandHandlerImpl.isSuccess();
-			if (isSuccess == null) {
-				fail("isSuccess is expected not to be null.");
-			} else
-				if (isSuccess) {
-					log("commandHandlerImpl.getResponse(): " +
-							commandHandlerImpl.getResponseSuccess());
-				} else {
-					fail("isSuccess is expected not to be false.");
-				}
+			ZCLFrame response = commandHandlerImpl.getResponse();
+			log("commandHandlerImpl.getResponse(): " +
+					commandHandlerImpl.getResponse());
 		} catch (ZigBeeException e) {
 			e.printStackTrace();
 			fail("No exception is expected.");
@@ -495,16 +490,9 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 					ZigBeeCommandHandlerImpl();
 			cluster.invoke(frame, commandHandlerImpl, exportedServicePID);
 
-			isSuccess = commandHandlerImpl.isSuccess();
-			if (isSuccess == null) {
-				fail("isSuccess is expected not to be null.");
-			} else
-				if (isSuccess) {
-					log("commandHandlerImpl.getResponse(): " +
-							commandHandlerImpl.getResponseSuccess());
-				} else {
-					fail("isSuccess is expected not to be false.");
-				}
+			ZCLFrame response = commandHandlerImpl.getResponse();
+			log("commandHandlerImpl.getResponse(): " +
+					commandHandlerImpl.getResponse());
 		} catch (ZigBeeException e) {
 			e.printStackTrace();
 			fail("No exception is expected.");
@@ -556,7 +544,9 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		try {
 			// It takes several seconds for the event to "travel" inside the
 			// test framework.
-			Thread.sleep(8000);
+			int sleepinms = 1500;
+			log("Thread.sleep(" + sleepinms + ")");
+			Thread.sleep(sleepinms);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 			fail("No exception is expected.");

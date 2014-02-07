@@ -25,19 +25,14 @@ package org.osgi.service.zigbee;
 public interface ZigBeeCommandHandler {
 
 	/**
-	 * Notifies the success result of the call. This method is used when the
-	 * handler command result is a success.
+	 * Notifies the result (success or failure) of the call.
 	 * 
-	 * @param response contains the results of the call.
-	 */
-	public void onSuccess(byte[] response);
-
-	/**
-	 * Notifies the failure result of the call. This method is used when the
-	 * handler command result is a failure.
+	 * The base driver will release the handler object when he receives a null
+	 * frame in a notifyResponse call or thanks to the an implementation
+	 * specific timeout.
 	 * 
-	 * @param e the ZigBeeException.
+	 * @param frame the ZCLFrame
 	 */
-	public void onFailure(ZigBeeException e);
+	void notifyResponse(ZCLFrame frame);
 
 }

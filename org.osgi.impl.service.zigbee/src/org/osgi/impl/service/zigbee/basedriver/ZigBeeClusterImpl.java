@@ -78,13 +78,13 @@ public class ZigBeeClusterImpl implements ZigBeeCluster {
 	}
 
 	public void invoke(ZCLFrame frame, ZigBeeCommandHandler handler) throws ZigBeeException {
-		byte[] response = {};
-		handler.onSuccess(response);
+		// mocked invocation.
+		handler.notifyResponse(frame);
 	}
 
 	public void invoke(ZCLFrame frame, ZigBeeCommandHandler handler, String exportedServicePID) throws ZigBeeException {
-		byte[] response = {};
-		handler.onSuccess(response);
+		// mocked invocation.
+		handler.notifyResponse(frame);
 	}
 
 }
