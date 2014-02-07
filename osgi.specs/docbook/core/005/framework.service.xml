@@ -507,11 +507,11 @@
               xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Every registered service object is assigned a
-              unique <code>service.id</code> by the Framework. This number is
-              added to the service's properties. The Framework assigns a
-              unique value to every registered service object that is larger
-              than values provided to all previously registered service
-              objects.</para></entry>
+              unique, non-negative <code>service.id</code> by the Framework.
+              This number is added to the service's properties. The Framework
+              assigns a unique, non-negative value to every registered service
+              object that is larger than values provided to all previously
+              registered service objects.</para></entry>
             </row>
 
             <row>
@@ -1814,6 +1814,12 @@
       <listitem>
         <para>Added <xref linkend="framework.service.scope"/> and <xref
         linkend="framework.service.prototypeServiceFactory"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updated <code>service.id</code> description in <xref
+        linkend="framework.service.serviceproperties"/> to state that the
+        values are non-negative.</para>
       </listitem>
     </itemizedlist>
   </section>

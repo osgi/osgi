@@ -1283,9 +1283,10 @@ public interface Constants {
 	 * 
 	 * <p>
 	 * The value of this property is assigned by the Framework when a service is
-	 * registered. The Framework assigns a unique value that is larger than all
-	 * previously assigned values since the Framework was started. These values
-	 * are NOT persistent across restarts of the Framework.
+	 * registered. The Framework assigns a unique, non-negative value that is
+	 * larger than all previously assigned values since the Framework was
+	 * started. These values are NOT persistent across restarts of the
+	 * Framework.
 	 */
 	String	SERVICE_ID								= "service.id";
 
