@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-package org.osgi.service.component.runtime;
+package org.osgi.service.component.runtime.dto;
 
 import org.osgi.dto.DTO;
-import org.osgi.dto.framework.ServiceReferenceDTO;
+import org.osgi.framework.dto.ServiceReferenceDTO;
 
 /**
  * A representation of a bound reference to a service.
