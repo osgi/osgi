@@ -5567,6 +5567,13 @@ URL(String protocol, String host, String file)</programlisting>
         <para>Added <xref
         linkend="framework.module-semantic.versioning.type.roles"/>.</para>
       </listitem>
+
+      <listitem>
+        <para>Updated the <code>Bundle-NativeCode</code> grammar in <xref
+        linkend="framework.module-loading.native.code.libraries"/> to not
+        require a <code>parameter</code> on the <code>nativecode</code>
+        clause.</para>
+      </listitem>
     </itemizedlist>
   </section>
 </chapter>
