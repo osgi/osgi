@@ -867,7 +867,7 @@ multiplicity ::= '1' | 'n'</programlisting>
       <code>service.ranking</code> property. If there are multiple target
       services with the same service ranking, then the bound service must be
       the target service with the highest service ranking and the lowest
-      service ID as specified by the <code>service.id</code> property.</para>
+      service id as specified by the <code>service.id</code> property.</para>
 
       <para>For example, a component wants to register a resource with all
       Http Services that are available. Such a scenario has the cardinality of

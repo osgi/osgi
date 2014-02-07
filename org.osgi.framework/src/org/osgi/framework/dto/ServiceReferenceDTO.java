@@ -37,7 +37,7 @@ import org.osgi.framework.ServiceReference;
  */
 public class ServiceReferenceDTO extends DTO {
     /**
-	 * The {@code service.id} of the service.
+	 * The id of the service.
 	 * 
 	 * @see Constants#SERVICE_ID
 	 */

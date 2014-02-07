@@ -641,7 +641,7 @@ public interface BundleContext extends BundleReference {
 	 * highest ranking (as specified in its {@link Constants#SERVICE_RANKING}
 	 * property) is returned.
 	 * <p>
-	 * If there is a tie in ranking, the service with the lowest service ID (as
+	 * If there is a tie in ranking, the service with the lowest service id (as
 	 * specified in its {@link Constants#SERVICE_ID} property); that is, the
 	 * service that was registered first is returned.
 	 * 
@@ -671,7 +671,7 @@ public interface BundleContext extends BundleReference {
 	 * If multiple such services exist, the service with the highest ranking (as
 	 * specified in its {@link Constants#SERVICE_RANKING} property) is returned.
 	 * <p>
-	 * If there is a tie in ranking, the service with the lowest service ID (as
+	 * If there is a tie in ranking, the service with the lowest service id (as
 	 * specified in its {@link Constants#SERVICE_ID} property); that is, the
 	 * service that was registered first is returned.
 	 * 

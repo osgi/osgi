@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -544,7 +544,7 @@ public class ServiceTracker<S, T> implements ServiceTrackerCustomizer<S, T> {
 	 * If multiple services are being tracked, the service with the highest
 	 * ranking (as specified in its {@code service.ranking} property) is
 	 * returned. If there is a tie in ranking, the service with the lowest
-	 * service ID (as specified in its {@code service.id} property); that is,
+	 * service id (as specified in its {@code service.id} property); that is,
 	 * the service that was registered first is returned. This is the same
 	 * algorithm used by {@code BundleContext.getServiceReference}.
 	 * 
