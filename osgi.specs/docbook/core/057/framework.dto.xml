@@ -186,7 +186,7 @@
       name. For example, a Data Transfer Object representing a runtime type in
       the <code>org.osgi.service.foo</code> package will be in the Data
       Transfer Object package name is
-      <code>org.osgi.service.foo.fto</code>.</para>
+      <code>org.osgi.service.foo.dto</code>.</para>
 
       <para>The name of the Data Transfer Object type should be the name of
       the runtime type for which the Data Transfer Object is a representation
