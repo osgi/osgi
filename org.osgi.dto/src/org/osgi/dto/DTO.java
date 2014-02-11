@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,10 +27,15 @@ import java.util.Set;
 /**
  * Super type for Data Transfer Objects.
  * 
- * All data transfer objects are easily serializable having only public fields
+ * <p>
+ * A Data Transfer Object (DTO) is easily serializable having only public fields
  * of primitive types and their wrapper classes, Strings, and DTOs. List, Set,
  * Map and array aggregates may also be used. The aggregates must only hold
  * objects of the listed types or aggregates.
+ * 
+ * <p>
+ * The object graph from a Data Transfer Object must be a tree to simplify
+ * serialization and deserialization.
  * 
  * @author $Id$
  * @NotThreadSafe
@@ -56,9 +61,6 @@ public abstract class DTO {
     /**
      * Append the specified DTO's string representation to the specified
      * StringBuilder.
-     * 
-     * <p>
-     * This method handles circular DTO references.
      * 
      * @param result StringBuilder to which the string representation is
      *        appended.
@@ -94,6 +96,11 @@ public abstract class DTO {
     /**
      * Append the specified value's string representation to the specified
      * StringBuilder.
+     * 
+     * <p>
+     * This method handles cycles in the object graph, using path-based
+     * references, even though the specification requires the object graph from
+     * a DTO to be a tree.
      * 
      * @param result StringBuilder to which the string representation is
      *        appended.
