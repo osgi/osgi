@@ -30,9 +30,9 @@ public interface ZCLFrame {
 	ZCLHeader getHeader();
 
 	/**
-	 * Get payload
+	 * Get (a copy of this ZCLFrame) payload
 	 * 
-	 * @return the payload
+	 * @return a copy of the payload
 	 */
 	byte[] getPayload();
 
