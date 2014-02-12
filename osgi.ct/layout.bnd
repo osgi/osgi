@@ -1,8 +1,8 @@
-build.tests                 = ${uniq; ${build.core.tests}, ${build.cmpn.tests}, ${build.enterprise.tests}, ${build.residential.tests}}
+build.tests                 = ${uniq; org.osgi.test.filter, ${build.core.tests}, ${build.cmpn.tests}, ${build.enterprise.tests}, ${build.residential.tests}}
 
 jar.core.tests = \
-	${repo;org.apache.servicemix.bundles.bcel}
-	
+    ${repo;org.apache.servicemix.bundles.bcel}
+
 build.core.tests = \
     org.osgi.test.cases.framework, \
     org.osgi.test.cases.framework.secure, \
@@ -13,7 +13,8 @@ build.core.tests = \
     org.osgi.test.cases.url, \
     org.osgi.test.cases.tracker
 
-jar.cmpn.tests =
+jar.cmpn.tests = \
+    ${repo;org.osgi.test.filter}
 
 build.cmpn.tests = \
     org.osgi.test.cases.application, \
@@ -63,7 +64,8 @@ build.cmpn.tests = \
     org.osgi.test.cases.wireadmin, \
     org.osgi.test.cases.xml
 
-jar.enterprise.tests =
+jar.enterprise.tests = \
+    ${repo;org.osgi.test.filter}
 
 build.enterprise.tests = \
     org.osgi.test.cases.blueprint, \
@@ -102,7 +104,8 @@ build.enterprise.tests = \
     org.osgi.test.cases.webcontainer, \
    	org.osgi.test.cases.xml
 
-jar.residential.tests =
+jar.residential.tests = \
+    ${repo;org.osgi.test.filter}
 
 build.residential.tests = \
     org.osgi.test.cases.cm, \
