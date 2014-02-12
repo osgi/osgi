@@ -44,9 +44,9 @@ public interface ZCLHeader {
 	boolean isClusterSpecificCommand();
 
 	/**
-	 * @return the isManufacturerExtension value
+	 * @return the isManufacturerSpecific value
 	 */
-	boolean isManufacturerExtension();
+	boolean isManufacturerSpecific();
 
 	/**
 	 * @return the isClientServerDirection value
