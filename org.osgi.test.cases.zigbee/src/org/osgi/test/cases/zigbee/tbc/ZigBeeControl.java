@@ -12,6 +12,7 @@ import org.osgi.service.zigbee.ZigBeeEvent;
 import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.test.cases.zigbee.tbc.device.discovery.ServicesListener;
+import org.osgi.test.cases.zigbee.tbc.util.ZCLFrameImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeAttributesHandlerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeCommandHandlerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventImpl;
@@ -469,7 +470,9 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		assertNotNull("ZigBeeCommand ID is NULL", commandId);
 
 		// frame should be associated to commandId.
-		ZCLFrame frame = null;
+		byte[] mockedPayload = new byte[10];
+		mockedPayload[2] = 4;
+		ZCLFrame frame = new ZCLFrameImpl(null, mockedPayload);
 		try {
 			ZigBeeCommandHandlerImpl commandHandlerImpl = new
 					ZigBeeCommandHandlerImpl();
@@ -478,6 +481,25 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			ZCLFrame response = commandHandlerImpl.getResponse();
 			log("commandHandlerImpl.getResponse(): " +
 					commandHandlerImpl.getResponse());
+
+			assertNotNull("Response is NULL", response);
+
+			// By the way, test that ZCLFrame.getPayload() method returns a copy
+			// of the payload, and not the byte[] payload itself (that is
+			// modifiable).
+			byte[] payload = response.getPayload();
+			// payload can not be null, here.
+			if (payload[0] == 0) {
+				payload[0] = 66;
+				// If (66 == response.getPayload()[0]), then it means that the
+				// payload is returned, and not a copy of the payload.
+				assertFalse(66 == response.getPayload()[0]);
+			} else {
+				payload[0] = 0;
+				// If (0 == response.getPayload()[0]), then it means that the
+				// payload is returned, and not a copy of the payload.
+				assertFalse(0 == response.getPayload()[0]);
+			}
 		} catch (ZigBeeException e) {
 			e.printStackTrace();
 			fail("No exception is expected.");
@@ -492,7 +514,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 			ZCLFrame response = commandHandlerImpl.getResponse();
 			log("commandHandlerImpl.getResponse(): " +
-					commandHandlerImpl.getResponse());
+					response);
 		} catch (ZigBeeException e) {
 			e.printStackTrace();
 			fail("No exception is expected.");
