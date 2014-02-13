@@ -16,6 +16,8 @@
 
 package org.osgi.service.zigbee;
 
+import org.osgi.framework.Constants;
+
 /**
  * This interface represents the machine that hosts the code to run a ZigBee
  * device or client ZigBeeHost must be registered as a service
@@ -117,4 +119,25 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * @throws ZigBeeException
 	 */
 	public String getNetworkKey() throws ZigBeeException;
+
+	/**
+	 * This method is used for creating a {@link ZigBeeGroup} service that has
+	 * not yet been discovered by the ZigBee Base Driver or that does not exist
+	 * on the ZigBee network yet. <br>
+	 * The method t may be invoked on exported endpoint or even on import
+	 * endpoint. In the former case, the ZigBee Base Driver should rely on the
+	 * <i>APSME-ADD-GROUP </i> API defined by the ZigBee Specification, in the
+	 * former case it will use the proper commands of the <i>Groups</i> cluster
+	 * of the ZigBee Specification Library
+	 * 
+	 * @param pid {@link String} representing the PID (see
+	 *        {@link Constants#SERVICE_PID} ) of the {@link ZigBeeEndpoint} that
+	 *        we want leave to this Group
+	 * @param groupAddress the address of the group to create
+	 * @param handler the {@link ZigBeeCommandHandler} that will notified of the
+	 *        result of "creation"
+	 * @throws ZigBeeException
+	 */
+	public void createGroupService(String pid, int groupAddress, ZigBeeCommandHandler handler) throws ZigBeeException;
+
 }

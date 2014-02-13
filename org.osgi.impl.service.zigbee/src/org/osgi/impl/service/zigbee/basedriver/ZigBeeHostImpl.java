@@ -1,5 +1,7 @@
+
 package org.osgi.impl.service.zigbee.basedriver;
 
+import org.osgi.service.zigbee.ZigBeeCommandHandler;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeHandler;
@@ -71,6 +73,10 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	}
 
 	public void setChannelMask(ZigBeeHandler handler, int mask) throws ZigBeeException {
+		// TODO Auto-generated method stub
+	}
+
+	public void createGroupService(String pid, int groupAddress, ZigBeeCommandHandler handler) throws ZigBeeException {
 		// TODO Auto-generated method stub
 	}
 }
