@@ -58,6 +58,8 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
+	org.osgi.test.filter; version=latest, \
 	org.osgi.impl.service.resolver; version=latest
 	
--runproperties = ${runproperties}
+-runproperties = ${runproperties}, \
+	org.osgi.test.filter.exclude.services="(&(objectClass=org.osgi.service.resolver.Resolver)(service.pid=0.*))"
