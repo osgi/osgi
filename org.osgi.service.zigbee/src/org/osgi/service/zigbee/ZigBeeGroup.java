@@ -16,8 +16,6 @@
 
 package org.osgi.service.zigbee;
 
-import org.osgi.framework.Constants;
-
 /**
  * This interface represents a ZigBee Group
  * 
@@ -26,8 +24,8 @@ import org.osgi.framework.Constants;
 public interface ZigBeeGroup {
 
 	/**
-	 * Key of the {@link String} containing the Group Address of the device <br>
-	 * It is <b>mandatory</b> property for this service
+	 * Key of the {@link String} containing the Group Address of the device.<br>
+	 * It is a <b>mandatory</b> property for this service.
 	 */
 	public static final String	ID	= "zigbee.group.id";
 
@@ -53,13 +51,14 @@ public interface ZigBeeGroup {
 	 * exported endpoint or even on import endpoint. In the former case, the
 	 * ZigBee Base Driver should rely on the <i>APSME-ADD-GROUP</i> API defined
 	 * by the ZigBee Specification, in the former case it will use the proper
-	 * commands of the <i>Groups</i> cluster of the ZigBee Specification Library
+	 * commands of the <i>Groups</i> cluster of the ZigBee Specification
+	 * Library.
 	 * 
 	 * @param pid {@link String} representing the PID (see
-	 *        {@link Constants#SERVICE_PID} ) of the {@link ZigBeeEndpoint} that
-	 *        we want add to this Group
+	 *        {@link org.osgi.framework.Constants#SERVICE_PID} ) of the
+	 *        {@link ZigBeeEndpoint} that we want add to this Group.
 	 * @param handler the {@link ZigBeeCommandHandler} that will notified of the
-	 *        result of "joining"
+	 *        result of "joining".
 	 * @throws ZigBeeException
 	 */
 	public void joinGroup(String pid, ZigBeeCommandHandler handler) throws ZigBeeException;
@@ -70,13 +69,13 @@ public interface ZigBeeGroup {
 	 * ZigBee Base Driver should rely on the <i>APSME-REMOVE-GROUP </i> API
 	 * defined by the ZigBee Specification, in the former case it will use the
 	 * proper commands of the <i>Groups</i> cluster of the ZigBee Specification
-	 * Library
+	 * Library.
 	 * 
 	 * @param pid {@link String} representing the PID (see
-	 *        {@link Constants#SERVICE_PID} ) of the {@link ZigBeeEndpoint} that
-	 *        we want leave to this Group
+	 *        {@link org.osgi.framework.Constants#SERVICE_PID} ) of the
+	 *        {@link ZigBeeEndpoint} that we want leave to this Group.
 	 * @param handler the {@link ZigBeeCommandHandler} that will notified of the
-	 *        result of "leaving"
+	 *        result of "leaving".
 	 * @throws ZigBeeException
 	 */
 	public void leaveGroup(String pid, ZigBeeCommandHandler handler) throws ZigBeeException;

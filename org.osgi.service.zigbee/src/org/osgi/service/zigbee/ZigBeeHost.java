@@ -20,21 +20,21 @@ import org.osgi.framework.Constants;
 
 /**
  * This interface represents the machine that hosts the code to run a ZigBee
- * device or client ZigBeeHost must be registered as a service
+ * device or client. ZigBeeHost must be registered as a service.
  * 
  * @version 1.0
  */
 public interface ZigBeeHost extends ZigBeeNode {
 
 	/**
-	 * Starts the host
+	 * Starts the host.
 	 * 
 	 * @throws ZigBeeException
 	 */
 	public void start() throws ZigBeeException;
 
 	/**
-	 * Stops the host
+	 * Stops the host.
 	 * 
 	 * @throws ZigBeeException
 	 */
@@ -61,9 +61,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	public void setLogicalType(short logicalNodeType) throws ZigBeeException;
 
 	/**
-	 * Gets the current network channel
-	 * 
-	 * @return The current network channel
+	 * @return The current network channel.
 	 * @throws ZigBeeException
 	 */
 	public int getChannel() throws ZigBeeException;
@@ -79,9 +77,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	public void setChannel(ZigBeeHandler handler, byte channel) throws ZigBeeException;
 
 	/**
-	 * Gets the current network channel mask
-	 * 
-	 * @return The current network channel mask
+	 * @return The current network channel mask.
 	 * @throws ZigBeeException
 	 */
 	public int getChannelMask() throws ZigBeeException;
@@ -96,25 +92,22 @@ public interface ZigBeeHost extends ZigBeeNode {
 	public void setChannelMask(ZigBeeHandler handler, int mask) throws ZigBeeException;
 
 	/**
-	 * Updates the list of devices in the network, by adding the new devices
-	 * that joined the network and removing the devices that left the network
-	 * since the last refresh.
+	 * Updates the list of devices in the network by adding the new devices that
+	 * joined the network and removing the devices that left the network since
+	 * the last refresh.
 	 * 
 	 * @throws ZigBeeException
 	 */
 	public void refreshNetwork() throws ZigBeeException;
 
 	/**
-	 * Gets the network security level
-	 * 
-	 * @return 0 if security is disabled, an int code if enabled
+	 * @return The network security level, i.e. 0 if security is disabled, an
+	 *         int code if enabled.
 	 * @throws ZigBeeException
 	 */
 	public int getSecurityLevel() throws ZigBeeException;
 
 	/**
-	 * Gets the current network key
-	 * 
 	 * @return The current Network key.
 	 * @throws ZigBeeException
 	 */
@@ -124,18 +117,18 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * This method is used for creating a {@link ZigBeeGroup} service that has
 	 * not yet been discovered by the ZigBee Base Driver or that does not exist
 	 * on the ZigBee network yet. <br>
-	 * The method t may be invoked on exported endpoint or even on import
+	 * The method may be invoked on exported endpoint or even on import
 	 * endpoint. In the former case, the ZigBee Base Driver should rely on the
-	 * <i>APSME-ADD-GROUP </i> API defined by the ZigBee Specification, in the
+	 * <i>APSME-ADD-GROUP</i> API defined by the ZigBee Specification, in the
 	 * former case it will use the proper commands of the <i>Groups</i> cluster
 	 * of the ZigBee Specification Library
 	 * 
 	 * @param pid {@link String} representing the PID (see
 	 *        {@link Constants#SERVICE_PID} ) of the {@link ZigBeeEndpoint} that
-	 *        we want leave to this Group
-	 * @param groupAddress the address of the group to create
-	 * @param handler the {@link ZigBeeCommandHandler} that will notified of the
-	 *        result of "creation"
+	 *        we want leave to this Group.
+	 * @param groupAddress the address of the group to create.
+	 * @param handler the {@link ZigBeeCommandHandler} that will be notified of
+	 *        the result of "creation".
 	 * @throws ZigBeeException
 	 */
 	public void createGroupService(String pid, int groupAddress, ZigBeeCommandHandler handler) throws ZigBeeException;
