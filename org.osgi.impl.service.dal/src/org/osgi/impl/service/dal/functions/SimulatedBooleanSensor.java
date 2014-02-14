@@ -62,13 +62,8 @@ public final class SimulatedBooleanSensor extends SimulatedDeviceFunction implem
 	 * @param eventAdminTracker The event admin service tracker to post events.
 	 */
 	public SimulatedBooleanSensor(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker) {
-		super(
-				BooleanSensor.class.getName(),
-				addPropertyAndOperationNames(functionProps),
-				bc,
-				PROPERTY_METADATA,
-				OPERATION_METADATA,
-				eventAdminTracker);
+		super(PROPERTY_METADATA, OPERATION_METADATA, eventAdminTracker);
+		super.register(BooleanSensor.class.getName(), addPropertyAndOperationNames(functionProps), bc);
 	}
 
 	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {

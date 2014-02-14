@@ -192,9 +192,88 @@ public class AlarmData extends DeviceFunctionData {
 		return this.severity;
 	}
 
+	/**
+	 * Two <code>AlarmData</code> instances are equal if they contain equal
+	 * metadata, timestamp, type and severity.
+	 * 
+	 * @param other The object to compare this data.
+	 * 
+	 * @return <code>true</code> if this object is equivalent to the specified
+	 *         one.
+	 * 
+	 * @see org.osgi.service.dal.DeviceFunctionData#equals(java.lang.Object)
+	 */
+	public boolean equals(Object other) {
+		if (!(other instanceof AlarmData)) {
+			return false;
+		}
+		return 0 == compareToAlarmData((AlarmData) other);
+	}
+
+	/**
+	 * Returns the hash code for this <code>AlarmData</code> object. The hash
+	 * code is a sum of {@link DeviceFunctionData#hashCode()}, the alarm
+	 * severity and the alarm type.
+	 * 
+	 * @return The hash code of this <code>AlarmData</code> object.
+	 * 
+	 * @see org.osgi.service.dal.DeviceFunctionData#hashCode()
+	 */
+	public int hashCode() {
+		return super.hashCode() + this.severity + this.type;
+	}
+
+	/**
+	 * Compares this <code>AlarmData</code> instance with the given argument.
+	 * The argument can be:
+	 * <ul>
+	 * <li><code>AlarmData</code> - the method returns <code>-1</code> if
+	 * metadata, timestamp, type or severity are not equivalent. 0 if all fields
+	 * are equivalent. 1 if all fields are equivalent and this instance severity
+	 * is greater than the severity of the specified argument.</li>
+	 * <li><code>Map</code> - the map must be built according the rules of
+	 * {@link #AlarmData(Map)}. Metadata, timestamp, type and severity are
+	 * compared according <code>AlarmData</code> argument rules.</li>
+	 * </ul>
+	 * 
+	 * @param o An argument to be compared.
+	 * 
+	 * @return -1, 0 or 1 depending on the comparison rules.
+	 * 
+	 * @throws ClassCastException If the method is called with <code>Map</code>
+	 *         and the field value types are not expected.
+	 * @throws IllegalArgumentException If the method is called with
+	 *         <code>Map</code> and the alarm type is missing.
+	 * @throws NullPointerException If the argument is <code>null</code>.
+	 * 
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
 	public int compareTo(Object o) {
-		// TODO: impl
-		return 0;
+		if (o instanceof AlarmData) {
+			return compareToAlarmData((AlarmData) o);
+		}
+		return compareToMap((Map) o);
+	}
+
+	/*
+	 * Compares this instance with AlarmData argument according to rules in
+	 * compareTo method.
+	 */
+	private int compareToAlarmData(AlarmData otherData) {
+		if ((!super.equals(otherData)) ||
+				(this.type != otherData.type) ||
+				(this.severity < otherData.severity)) {
+			return -1;
+		}
+		return (this.severity == otherData.severity) ? 0 : 1;
+	}
+
+	/*
+	 * Compares this instance with Map argument according to rules in compareTo
+	 * method.
+	 */
+	private int compareToMap(Map otherData) {
+		return compareToAlarmData(new AlarmData(otherData));
 	}
 
 }

@@ -58,10 +58,10 @@ public final class LevelDataTest extends AbstractDeviceTest {
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put("level", TEST_VALUE);
-		fields.put("timestamp", new Long(Long.MIN_VALUE));
-		fields.put("metadata", metadata);
-		fields.put("unit", TEST_UNIT);
+		fields.put(LevelData.FIELD_LEVEL, TEST_VALUE);
+		fields.put(DeviceFunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(DeviceFunctionData.FIELD_METADATA, metadata);
+		fields.put(LevelData.FIELD_UNIT, TEST_UNIT);
 		data = new LevelData(fields);
 		assertEquals("The level data comparison is wrong!",
 				data,
@@ -97,10 +97,10 @@ public final class LevelDataTest extends AbstractDeviceTest {
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put("level", TEST_VALUE);
-		fields.put("timestamp", new Long(Long.MIN_VALUE));
-		fields.put("metadata", metadata);
-		fields.put("unit", TEST_UNIT);
+		fields.put(LevelData.FIELD_LEVEL, TEST_VALUE);
+		fields.put(DeviceFunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(DeviceFunctionData.FIELD_METADATA, metadata);
+		fields.put(LevelData.FIELD_UNIT, TEST_UNIT);
 		data = new LevelData(fields);
 		assertEquals(
 				"The level data comparison is wrong!",
@@ -129,10 +129,10 @@ public final class LevelDataTest extends AbstractDeviceTest {
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put("level", TEST_VALUE);
-		fields.put("timestamp", new Long(Long.MIN_VALUE));
-		fields.put("metadata", metadata);
-		fields.put("unit", TEST_UNIT);
+		fields.put(LevelData.FIELD_LEVEL, TEST_VALUE);
+		fields.put(DeviceFunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(DeviceFunctionData.FIELD_METADATA, metadata);
+		fields.put(LevelData.FIELD_UNIT, TEST_UNIT);
 		data = new LevelData(fields);
 		assertEquals(
 				"The level data comparison is wrong!",
@@ -155,10 +155,10 @@ public final class LevelDataTest extends AbstractDeviceTest {
 		// check with metadata
 		Map metadata = new HashMap();
 		metadata.put(DeviceFunctionData.META_INFO_DESCRIPTION, "test-description");
-		dataMap.put("level", TEST_VALUE);
-		dataMap.put("timestamp", new Long(Long.MIN_VALUE));
-		dataMap.put("metadata", metadata);
-		dataMap.put("unit", TEST_UNIT);
+		dataMap.put(LevelData.FIELD_LEVEL, TEST_VALUE);
+		dataMap.put(DeviceFunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		dataMap.put(DeviceFunctionData.FIELD_METADATA, metadata);
+		dataMap.put(LevelData.FIELD_UNIT, TEST_UNIT);
 		data = new LevelData(Long.MIN_VALUE, metadata, TEST_UNIT, TEST_VALUE);
 		assertEquals(
 				"The level data comparison is wrong!",
@@ -166,10 +166,10 @@ public final class LevelDataTest extends AbstractDeviceTest {
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put("level", TEST_VALUE);
-		fields.put("timestamp", new Long(Long.MIN_VALUE));
-		fields.put("metadata", metadata);
-		fields.put("unit", TEST_UNIT);
+		fields.put(LevelData.FIELD_LEVEL, TEST_VALUE);
+		fields.put(DeviceFunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(DeviceFunctionData.FIELD_METADATA, metadata);
+		fields.put(LevelData.FIELD_UNIT, TEST_UNIT);
 		data = new LevelData(fields);
 		assertEquals(
 				"The level data comparison is wrong!",
@@ -202,10 +202,10 @@ public final class LevelDataTest extends AbstractDeviceTest {
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put("level", TEST_VALUE);
-		fields.put("timestamp", new Long(Long.MIN_VALUE));
-		fields.put("metadata", metadata);
-		fields.put("unit", TEST_UNIT);
+		fields.put(LevelData.FIELD_LEVEL, TEST_VALUE);
+		fields.put(DeviceFunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(DeviceFunctionData.FIELD_METADATA, metadata);
+		fields.put(LevelData.FIELD_UNIT, TEST_UNIT);
 		data = new LevelData(fields);
 		assertEquals("The level data hash code is wrong!",
 				data.hashCode(),
@@ -231,10 +231,10 @@ public final class LevelDataTest extends AbstractDeviceTest {
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put("level", TEST_VALUE);
-		fields.put("timestamp", new Long(Long.MIN_VALUE));
-		fields.put("metadata", metadata);
-		fields.put("unit", TEST_UNIT);
+		fields.put(LevelData.FIELD_LEVEL, TEST_VALUE);
+		fields.put(DeviceFunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(DeviceFunctionData.FIELD_METADATA, metadata);
+		fields.put(LevelData.FIELD_UNIT, TEST_UNIT);
 		data = new LevelData(fields);
 		checkLevelDataFields(Long.MIN_VALUE, metadata, TEST_UNIT, TEST_VALUE, data);
 	}

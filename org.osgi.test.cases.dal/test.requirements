@@ -11,3 +11,5 @@ org.osgi.test.cases.dal test case requirements and manual steps:
 09. All BooleanSensor operations/getters/setters must be supported by one or many device functions.
 10. All MultiLevelControl operations/getters/setters must be supported by one or many device functions.
 11. All MultiLevelSensor operations/getters/setters must be supported by one or many device functions.
+12. All Meter operations/getters must be supported by one or many device functions.
+13. All WakeUp operations/getters/setters must be supported by at least one device function.

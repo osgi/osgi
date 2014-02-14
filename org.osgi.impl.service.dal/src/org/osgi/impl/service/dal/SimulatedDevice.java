@@ -28,8 +28,8 @@ final class SimulatedDevice extends SimulatedService implements Device, ServiceF
 	private final SimulatedDeviceFunction[]	functions;
 
 	public SimulatedDevice(Dictionary deviceProps, BundleContext bc, SimulatedDeviceFunction[] functions) {
-		super(Device.class.getName(), deviceProps, bc);
 		this.functions = functions;
+		super.register(Device.class.getName(), deviceProps, bc);
 	}
 
 	public void remove() throws DeviceException, UnsupportedOperationException, SecurityException, IllegalStateException {

@@ -32,7 +32,7 @@ import org.osgi.service.event.EventHandler;
  * Test event handler for {@link DeviceFunctionEvent#TOPIC_PROPERTY_CHANGED}
  * events.
  */
-final class DeviceFunctionEventHandler implements EventHandler {
+public final class DeviceFunctionEventHandler implements EventHandler {
 
 	private static final long	WAIT_EVENT_TIMEOUT	= Long.getLong(
 															"org.osgi.test.cases.dal.timeout", 10000).longValue();
@@ -42,11 +42,21 @@ final class DeviceFunctionEventHandler implements EventHandler {
 
 	private ServiceRegistration	handlerSReg;
 
+	/**
+	 * Constructs a new test event handler with the specified bundle context.
+	 * 
+	 * @param bc The bundle context used for the handler registration.
+	 */
 	public DeviceFunctionEventHandler(BundleContext bc) {
 		this.bc = bc;
 		this.events = new ArrayList();
 	}
 
+	/**
+	 * Registers the test handler for the specified function, if specified.
+	 * 
+	 * @param funtionUID The function identifier, can be <code>null</code>.
+	 */
 	public void register(String funtionUID) {
 		if (null != this.handlerSReg) {
 			return;
@@ -61,6 +71,9 @@ final class DeviceFunctionEventHandler implements EventHandler {
 		this.handlerSReg = this.bc.registerService(EventHandler.class.getName(), this, handlerRegProps);
 	}
 
+	/**
+	 * Unregisters the test event handler.
+	 */
 	public void unregister() {
 		if (null == this.handlerSReg) {
 			return;
@@ -69,7 +82,19 @@ final class DeviceFunctionEventHandler implements EventHandler {
 		this.handlerSReg = null;
 	}
 
-	public DeviceFunctionEvent[] getEvents(int eventsCount) {
+	/**
+	 * Returns the required events. If the events are missing, the method will
+	 * block for a given timeout.
+	 * 
+	 * @param eventsCount The desired events count.
+	 * 
+	 * @return The events required by the specified argument, the events count
+	 *         can be greater than the argument.
+	 * 
+	 * @throws IllegalStateException If the events are not received in a given
+	 *         timeout.
+	 */
+	public DeviceFunctionEvent[] getEvents(int eventsCount) throws IllegalStateException {
 		synchronized (this.events) {
 			long startTime = System.currentTimeMillis();
 			long elapsedTime = 0;

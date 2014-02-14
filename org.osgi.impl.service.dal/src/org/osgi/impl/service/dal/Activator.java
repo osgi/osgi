@@ -19,12 +19,15 @@ package org.osgi.impl.service.dal;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Timer;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.dal.functions.SimulatedBooleanControl;
 import org.osgi.impl.service.dal.functions.SimulatedBooleanSensor;
+import org.osgi.impl.service.dal.functions.SimulatedMeter;
 import org.osgi.impl.service.dal.functions.SimulatedMultiLevelControl;
 import org.osgi.impl.service.dal.functions.SimulatedMultiLevelSensor;
+import org.osgi.impl.service.dal.functions.SimulatedWakeUp;
 import org.osgi.service.dal.Device;
 import org.osgi.service.dal.DeviceFunction;
 import org.osgi.service.event.EventAdmin;
@@ -42,12 +45,14 @@ public final class Activator implements BundleActivator {
 	private SimulatedDevice[]	simulatedDevices;
 	private DeviceSimulatorImpl	deviceSimulator;
 	private ServiceTracker		eventAdminTracker;
+	private Timer				timer;
 
 	public void start(BundleContext bc) throws Exception {
+		this.timer = new Timer();
 		this.eventAdminTracker = new ServiceTracker(bc, EventAdmin.class.getName(), null);
 		this.eventAdminTracker.open();
 		registerDevices(bc);
-		this.deviceSimulator = new DeviceSimulatorImpl(bc, this.eventAdminTracker);
+		this.deviceSimulator = new DeviceSimulatorImpl(bc, this.eventAdminTracker, this.timer);
 		this.deviceSimulator.start();
 	}
 
@@ -57,6 +62,7 @@ public final class Activator implements BundleActivator {
 		}
 		this.deviceSimulator.stop();
 		this.eventAdminTracker.close();
+		this.timer.cancel();
 	}
 
 	private void registerDevices(BundleContext bc) {
@@ -97,7 +103,7 @@ public final class Activator implements BundleActivator {
 	}
 
 	private SimulatedDeviceFunction[] registerDeviceFunctions(String deviceUID, BundleContext bc) {
-		SimulatedDeviceFunction[] deviceFunctions = new SimulatedDeviceFunction[4];
+		SimulatedDeviceFunction[] deviceFunctions = new SimulatedDeviceFunction[6];
 		String[] referenceFunctionUIDs = new String[deviceFunctions.length - 1];
 
 		// setup the boolean control
@@ -126,6 +132,21 @@ public final class Activator implements BundleActivator {
 				getDeviceFunctionProps(deviceUID, 3, referenceFunctionUIDs),
 				bc,
 				this.eventAdminTracker);
+		referenceFunctionUIDs[3] = (String) deviceFunctions[3].getServiceProperty(DeviceFunction.SERVICE_UID);
+
+		// setup meter control
+		deviceFunctions[4] = new SimulatedMeter(
+				getDeviceFunctionProps(deviceUID, 4, referenceFunctionUIDs),
+				bc,
+				this.eventAdminTracker);
+		referenceFunctionUIDs[4] = (String) deviceFunctions[4].getServiceProperty(DeviceFunction.SERVICE_UID);
+
+		// setup wake up
+		deviceFunctions[5] = new SimulatedWakeUp(
+				getDeviceFunctionProps(deviceUID, 5, referenceFunctionUIDs),
+				bc,
+				this.eventAdminTracker,
+				this.timer);
 
 		return deviceFunctions;
 	}

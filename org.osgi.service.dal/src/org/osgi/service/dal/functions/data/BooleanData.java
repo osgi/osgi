@@ -136,7 +136,7 @@ public class BooleanData extends DeviceFunctionData {
 	 * <code>true</code> and the argument is <code>false</code>.</li>
 	 * <li><code>BooleanData</code> - the method returns <code>-1</code> if
 	 * metadata or timestamp are not equivalent. Otherwise, the boolean value is
-	 * compared with the same rules as <code>Boolean</code> argument.
+	 * compared with the same rules as <code>Boolean</code> argument.</li>
 	 * <li><code>Map</code> - the map must be built according the rules of
 	 * {@link #BooleanData(Map)}. Metadata, timestamp and value are compared
 	 * according <code>BooleanData</code> and <code>Boolean</code> argument

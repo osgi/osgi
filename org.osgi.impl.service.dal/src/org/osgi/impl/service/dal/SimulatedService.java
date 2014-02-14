@@ -37,13 +37,14 @@ public class SimulatedService implements ServiceFactory {
 	protected ServiceReference		serviceRef;
 
 	/**
-	 * Constructs a new service with the given arguments.
+	 * Registers the service with a service factory. There is an early access to
+	 * the service registration.
 	 * 
-	 * @param className The class name.
+	 * @param className The class used for the registration.
 	 * @param props The service properties.
-	 * @param bc The bundle context to register the service.
+	 * @param bc The bundle context used for the registration.
 	 */
-	public SimulatedService(String className, Dictionary props, BundleContext bc) {
+	protected void register(String className, Dictionary props, BundleContext bc) {
 		init(bc.registerService(className, this, props));
 	}
 

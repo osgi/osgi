@@ -17,9 +17,7 @@
 
 package org.osgi.impl.service.dal;
 
-import java.util.Dictionary;
 import java.util.Map;
-import org.osgi.framework.BundleContext;
 import org.osgi.service.dal.DeviceFunction;
 import org.osgi.service.dal.DeviceFunctionData;
 import org.osgi.service.dal.DeviceFunctionEvent;
@@ -42,23 +40,16 @@ public class SimulatedDeviceFunction extends SimulatedService implements DeviceF
 	private final ServiceTracker	eventAdminTracker;
 
 	/**
-	 * COnstructs a new simulated device function with the specified arguments.
+	 * Constructs a new simulated device function with the specified arguments.
 	 * 
-	 * @param className The function class name.
-	 * @param functionProps The function service properties.
-	 * @param bc The bundle context to register the function.
 	 * @param propertyMetadata The property metadata.
 	 * @param operationMetadata The operation metadata.
 	 * @param eventAdminTracker The event admin tracker.
 	 */
 	public SimulatedDeviceFunction(
-			String className,
-			Dictionary functionProps,
-			BundleContext bc,
 			Map propertyMetadata,
 			Map operationMetadata,
 			ServiceTracker eventAdminTracker) {
-		super(className, functionProps, bc);
 		this.propertyMetadata = propertyMetadata;
 		this.operationMetadata = operationMetadata;
 		this.eventAdminTracker = eventAdminTracker;
@@ -93,7 +84,7 @@ public class SimulatedDeviceFunction extends SimulatedService implements DeviceF
 	 * @param propName The device function property name.
 	 * @param propValue The device function property value
 	 */
-	protected void postEvent(String propName, DeviceFunctionData propValue) {
+	public void postEvent(String propName, DeviceFunctionData propValue) {
 		final EventAdmin eventAdmin = (EventAdmin) this.eventAdminTracker.getService();
 		if (null == eventAdmin) {
 			throw new UnsupportedOperationException("The operation is not suported without Event Admin.");

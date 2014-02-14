@@ -66,14 +66,9 @@ public final class SimulatedBooleanControl extends SimulatedDeviceFunction imple
 	 * @param eventAdminTracker The event admin tracker to post events.
 	 */
 	public SimulatedBooleanControl(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker) {
-		super(
-				BooleanControl.class.getName(),
-				addPropertyAndOperationNames(functionProps),
-				bc,
-				PROPERTY_METADATA,
-				OPERATION_METADATA,
-				eventAdminTracker);
+		super(PROPERTY_METADATA, OPERATION_METADATA, eventAdminTracker);
 		this.data = new BooleanData(System.currentTimeMillis(), null, false);
+		super.register(BooleanControl.class.getName(), addPropertyAndOperationNames(functionProps), bc);
 	}
 
 	public BooleanData getData() throws UnsupportedOperationException, IllegalStateException, DeviceException {

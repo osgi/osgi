@@ -170,10 +170,10 @@ public class LevelData extends DeviceFunctionData {
 	 * <ul>
 	 * <li><code>BigDecimal</code> - the method returns the result of
 	 * {@link BigDecimal#compareTo(Object)} for this instance level and the
-	 * specified argument.
+	 * specified argument.</li>
 	 * <li><code>LevelData</code> - the method returns <code>-1</code> if
 	 * metadata, timestamp or unit are not equivalent. Otherwise, the level is
-	 * compared with the same rules as <code>BigDecimal</code> argument.
+	 * compared with the same rules as <code>BigDecimal</code> argument.</li>
 	 * <li><code>Map</code> - the map must be built according the rules of
 	 * {@link #LevelData(Map)}. Metadata, timestamp, unit and level are compared
 	 * according <code>BigDecimal</code> and <code>LevelData</code> argument

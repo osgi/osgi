@@ -54,9 +54,9 @@ public final class BooleanDataTest extends AbstractDeviceTest {
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put("value", Boolean.FALSE);
-		fields.put("timestamp", new Long(Long.MIN_VALUE));
-		fields.put("metadata", metadata);
+		fields.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
+		fields.put(DeviceFunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(DeviceFunctionData.FIELD_METADATA, metadata);
 		data = new BooleanData(fields);
 		assertEquals("The boolean data comparison is wrong!",
 				data,
@@ -93,9 +93,9 @@ public final class BooleanDataTest extends AbstractDeviceTest {
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put("value", Boolean.FALSE);
-		fields.put("timestamp", new Long(Long.MIN_VALUE));
-		fields.put("metadata", metadata);
+		fields.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
+		fields.put(DeviceFunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(DeviceFunctionData.FIELD_METADATA, metadata);
 		data = new BooleanData(fields);
 		assertEquals(
 				"The boolean data comparison is wrong!",
@@ -124,9 +124,9 @@ public final class BooleanDataTest extends AbstractDeviceTest {
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put("value", Boolean.FALSE);
-		fields.put("timestamp", new Long(Long.MIN_VALUE));
-		fields.put("metadata", metadata);
+		fields.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
+		fields.put(DeviceFunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(DeviceFunctionData.FIELD_METADATA, metadata);
 		data = new BooleanData(fields);
 		assertEquals(
 				"The boolean data comparison is wrong!",
@@ -140,8 +140,8 @@ public final class BooleanDataTest extends AbstractDeviceTest {
 		// check without metadata
 		BooleanData data = new BooleanData(Long.MIN_VALUE, null, true);
 		Map dataMap = new HashMap();
-		dataMap.put("value", Boolean.TRUE);
-		dataMap.put("timestamp", new Long(Long.MIN_VALUE));
+		dataMap.put(BooleanData.FIELD_VALUE, Boolean.TRUE);
+		dataMap.put(DeviceFunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
 		assertEquals(
 				"The boolean comparison is wrong!",
 				0, data.compareTo(dataMap));
@@ -149,9 +149,9 @@ public final class BooleanDataTest extends AbstractDeviceTest {
 		// check with metadata
 		Map metadata = new HashMap();
 		metadata.put(DeviceFunctionData.META_INFO_DESCRIPTION, "test-description");
-		dataMap.put("value", Boolean.FALSE);
-		dataMap.put("timestamp", new Long(Long.MIN_VALUE));
-		dataMap.put("metadata", metadata);
+		dataMap.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
+		dataMap.put(DeviceFunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		dataMap.put(DeviceFunctionData.FIELD_METADATA, metadata);
 		data = new BooleanData(Long.MIN_VALUE, metadata, false);
 		assertEquals(
 				"The boolean data comparison is wrong!",
@@ -159,9 +159,9 @@ public final class BooleanDataTest extends AbstractDeviceTest {
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put("value", Boolean.FALSE);
-		fields.put("timestamp", new Long(Long.MIN_VALUE));
-		fields.put("metadata", metadata);
+		fields.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
+		fields.put(DeviceFunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(DeviceFunctionData.FIELD_METADATA, metadata);
 		data = new BooleanData(fields);
 		assertEquals(
 				"The boolean data comparison is wrong!",
@@ -194,9 +194,9 @@ public final class BooleanDataTest extends AbstractDeviceTest {
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put("value", Boolean.FALSE);
-		fields.put("timestamp", new Long(Long.MIN_VALUE));
-		fields.put("metadata", metadata);
+		fields.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
+		fields.put(DeviceFunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(DeviceFunctionData.FIELD_METADATA, metadata);
 		data = new BooleanData(fields);
 		assertEquals("The boolean data hash code is wrong!",
 				data.hashCode(),
@@ -222,9 +222,9 @@ public final class BooleanDataTest extends AbstractDeviceTest {
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put("value", Boolean.FALSE);
-		fields.put("timestamp", new Long(Long.MIN_VALUE));
-		fields.put("metadata", metadata);
+		fields.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
+		fields.put(DeviceFunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
+		fields.put(DeviceFunctionData.FIELD_METADATA, metadata);
 		data = new BooleanData(fields);
 		checkBooleanDataFields(Long.MIN_VALUE, metadata, false, data);
 	}

@@ -293,12 +293,12 @@ public class DeviceFunctionTest extends AbstractDeviceTest {
 			Class[] paramTypes = setters[i].getParameterTypes();
 			switch (paramTypes.length) {
 				case 1 :
-					assertFalse("There must be only one setter with one parameters.", setterWithOneParam);
+					assertFalse("There must be only one setter with one parameters: " + setters[i], setterWithOneParam);
 					setterWithOneParam = true;
 					break;
 				case 2 :
-					assertFalse("There must be only one setter with two parameters.", setterWithTwoParam);
-					setterWithOneParam = true;
+					assertFalse("There must be only one setter with two parameters: " + setters[i], setterWithTwoParam);
+					setterWithTwoParam = true;
 					break;
 				default :
 					fail("The setter must have one or two parameters.");

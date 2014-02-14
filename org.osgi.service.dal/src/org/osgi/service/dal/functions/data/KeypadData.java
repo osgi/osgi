@@ -177,9 +177,99 @@ public class KeypadData extends DeviceFunctionData {
 		return this.keyName;
 	}
 
+	/**
+	 * Two <code>KeypadData</code> instances are equal if they contain equal
+	 * metadata, timestamp, event type, key code and key name.
+	 * 
+	 * @param other The object to compare this data.
+	 * 
+	 * @return <code>true</code> if this object is equivalent to the specified
+	 *         one.
+	 * 
+	 * @see org.osgi.service.dal.DeviceFunctionData#equals(java.lang.Object)
+	 */
+	public boolean equals(Object other) {
+		if (!(other instanceof KeypadData)) {
+			return false;
+		}
+		return 0 == compareToKeypadData((KeypadData) other);
+	}
+
+	/**
+	 * Returns the hash code for this <code>KeypadData</code> object. The hash
+	 * code is a sum of {@link DeviceFunctionData#hashCode()},
+	 * {@link String#hashCode()}, event type and key code, where
+	 * {@link String#hashCode()} represents the key name hash code if available.
+	 * 
+	 * @return The hash code of this <code>LevelData</code> object.
+	 * 
+	 * @see org.osgi.service.dal.DeviceFunctionData#hashCode()
+	 */
+	public int hashCode() {
+		int hashCode = super.hashCode();
+		if (null != this.keyName) {
+			hashCode += this.keyName.hashCode();
+		}
+		return hashCode + this.eventType + this.keyCode;
+	}
+
+	/**
+	 * Compares this <code>KeypadData</code> instance with the given argument.
+	 * The argument can be:
+	 * <ul>
+	 * <li><code>KeypadData</code> - the method returns <code>-1</code> if
+	 * metadata, timestamp, event type, key code or key name are not equivalent.
+	 * 0 if all fields are equivalent.</li>
+	 * <li><code>Map</code> - the map must be built according the rules of
+	 * {@link #KeypadData(Map)}. Metadata, timestamp, event type, key code and
+	 * key name are compared according <code>KeypadData</code> argument rules.</li>
+	 * </ul>
+	 * 
+	 * @param o An argument to be compared.
+	 * 
+	 * @return -1 or 0 depending on the comparison rules.
+	 * 
+	 * @throws ClassCastException If the method is called with <code>Map</code>
+	 *         and the field value types are not expected.
+	 * @throws IllegalArgumentException If the method is called with
+	 *         <code>Map</code> and the event type or key code is missing.
+	 * @throws NullPointerException If the argument is <code>null</code>.
+	 * 
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
 	public int compareTo(Object o) {
-		// TODO: impl
+		if (o instanceof KeypadData) {
+			return compareToKeypadData((KeypadData) o);
+		}
+		return compareToMap((Map) o);
+	}
+
+	/*
+	 * Compares this instance with KeypadData argument according to rules in
+	 * compareTo method.
+	 */
+	private int compareToKeypadData(KeypadData otherData) {
+		if ((!super.equals(otherData)) ||
+				(this.eventType != otherData.eventType) ||
+				(this.keyCode != otherData.keyCode)) {
+			return -1;
+		}
+		if (null != this.keyName) {
+			if (!this.keyName.equals(otherData.keyName)) {
+				return -1;
+			}
+		} else if (null != otherData.keyName) {
+			return -1;
+		}
 		return 0;
+	}
+
+	/*
+	 * Compares this instance with Map argument according to rules in compareTo
+	 * method.
+	 */
+	private int compareToMap(Map otherData) {
+		return compareToKeypadData(new KeypadData(otherData));
 	}
 
 }

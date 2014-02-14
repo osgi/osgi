@@ -59,20 +59,15 @@ public final class SimulatedMultiLevelSensor extends SimulatedDeviceFunction imp
 	}
 	
 	/**
-	 * COnstructs a new instance with the specified arguments.
+	 * Constructs a new instance with the specified arguments.
 	 * 
 	 * @param functionProps The service properties.
 	 * @param bc The bundle context used to register the service.
 	 * @param eventAdminTracker The event admin service tracker to post events.
 	 */
 	public SimulatedMultiLevelSensor(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker) {
-		super(
-				MultiLevelSensor.class.getName(),
-				addPropertyAndOperationNames(functionProps),
-				bc,
-				PROPERTY_METADATA,
-				OPERATION_METADATA,
-				eventAdminTracker);
+		super(PROPERTY_METADATA, OPERATION_METADATA, eventAdminTracker);
+		super.register(MultiLevelSensor.class.getName(), addPropertyAndOperationNames(functionProps), bc);
 	}
 
 	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {

@@ -80,14 +80,9 @@ public final class SimulatedMultiLevelControl extends SimulatedDeviceFunction im
 	 * @param eventAdminTracker The event amdin service tracker to post events.
 	 */
 	public SimulatedMultiLevelControl(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker) {
-		super(
-				MultiLevelControl.class.getName(),
-				addPropertyAndOperationNames(functionProps),
-				bc,
-				PROPERTY_METADATA,
-				OPERATION_METADATA,
-				eventAdminTracker);
+		super(PROPERTY_METADATA, OPERATION_METADATA, eventAdminTracker);
 		this.currentLevel = new LevelData(System.currentTimeMillis(), null, null, VALUES[0]);
+		super.register(MultiLevelControl.class.getName(), addPropertyAndOperationNames(functionProps), bc);
 	}
 
 	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
