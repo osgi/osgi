@@ -27,9 +27,13 @@ public interface ZigBeeCommandHandler {
 	/**
 	 * Notifies the result (success or failure) of the call.
 	 * 
-	 * The base driver will release the handler object when he receives a null
-	 * frame in a notifyResponse call or thanks to the an implementation
+	 * The ZigBee Base Driver will release the handler object when he receives a
+	 * null frame in a notifyResponse call or thanks to the an implementation
 	 * specific timeout.
+	 * 
+	 * The ZigBee Base Driver MUST discard the Default Response if the caller
+	 * set the DisableDefaultReponse flag and the status of DefaultResponse
+	 * command is SUCCESS.
 	 * 
 	 * @param frame the ZCLFrame
 	 */
