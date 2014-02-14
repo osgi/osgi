@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.zigbee;
 
 import org.osgi.framework.BundleActivator;
@@ -19,8 +20,11 @@ public class ZigBeeBundleActivator implements BundleActivator {
 	 */
 	public void start(BundleContext bc) {
 		try {
+			System.out.println(this.getClass().getName() + " - Instantiate the ZigBeeBaseDriver.");
 			basedriver = new ZigBeeBaseDriver(bc);
+			System.out.println(this.getClass().getName() + " - Start the ZigBeeBaseDriver instance.");
 			basedriver.start();
+			System.out.println(this.getClass().getName() + " - The ZigBeeBaseDriver instance is started.");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -33,7 +37,9 @@ public class ZigBeeBundleActivator implements BundleActivator {
 	 */
 	public void stop(BundleContext bc) {
 		try {
+			System.out.println(this.getClass().getName() + " - Stop the ZigBeeBaseDriver instance.");
 			basedriver.stop();
+			System.out.println(this.getClass().getName() + " - The ZigBeeBaseDriver instance is stopped.");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
