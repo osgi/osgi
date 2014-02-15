@@ -119,7 +119,7 @@ public class Deferred<T> {
 	 */
 	private final static class PromiseImpl<T> implements Promise<T> {
 		/**
-		 * A ConcurrentLinkedQueue to hold the callbacks for this Promise, so
+		 * A ConcurrentLinkedQueue to hold the callbacks for this Promise, so no
 		 * additional synchronization is required to write to or read from the
 		 * queue.
 		 */
@@ -223,9 +223,9 @@ public class Deferred<T> {
 			 * from the queue and calling them, so the order in which callbacks
 			 * are called cannot be specified.
 			 */
-			for (Runnable runnable = callbacks.poll(); runnable != null; runnable = callbacks.poll()) {
+			for (Runnable callback = callbacks.poll(); callback != null; callback = callbacks.poll()) {
 				try {
-					runnable.run();
+					callback.run();
 				} catch (Exception e) { // TODO catch Throwable?
 					e.printStackTrace(); // TODO what should we really do here?
 				}
@@ -491,7 +491,7 @@ public class Deferred<T> {
 						t = getError();
 					} catch (InterruptedException e) {
 						/*
-						 * This can't happen since (1) we are a callback a
+						 * This can't happen since (1) we are a callback on a
 						 * resolved Promise and (2) we cleared the interrupt
 						 * status above.
 						 */
@@ -557,7 +557,7 @@ public class Deferred<T> {
 						t = returned.getError();
 					} catch (InterruptedException e) {
 						/*
-						 * This can't happen since (1) we are a callback a
+						 * This can't happen since (1) we are a callback on a
 						 * resolved Promise and (2) we cleared the interrupt
 						 * status above.
 						 */
@@ -575,7 +575,7 @@ public class Deferred<T> {
 						throw new RuntimeException(e);
 					} catch (InterruptedException e) {
 						/*
-						 * This can't happen since (1) we are a callback a
+						 * This can't happen since (1) we are a callback on a
 						 * resolved Promise and (2) we cleared the interrupt
 						 * status above.
 						 */
