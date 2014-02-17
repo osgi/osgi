@@ -16,11 +16,13 @@
 
 package org.osgi.test.cases.promise.junit;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 import org.osgi.util.promise.Deferred;
@@ -57,6 +59,8 @@ public class PromiseTest extends TestCase {
 		d.resolve("value");
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p.isDone());
+		assertNull("wrong error", p.getError());
+		assertEquals("wrong value", "value", p.getValue());
 	}
 
 	public void testPromiseSuccess2() throws Exception {
@@ -66,7 +70,7 @@ public class PromiseTest extends TestCase {
 		p.then(new Success<String, String>() {
 			public Promise<String> call(Promise<String> resolved) throws Exception {
 				latch.countDown();
-				return null;
+				return resolved;
 			}
 		});
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
@@ -74,6 +78,8 @@ public class PromiseTest extends TestCase {
 		d.resolve("value");
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p.isDone());
+		assertNull("wrong error", p.getError());
+		assertEquals("wrong value", "value", p.getValue());
 	}
 
 	public void testPromiseSuccess3() throws Exception {
@@ -82,8 +88,13 @@ public class PromiseTest extends TestCase {
 		final Promise<Integer> p = d.getPromise();
 		Promise<String> p2 = p.then(new Success<String, Number>() {
 			public Promise<String> call(Promise<Number> resolved) throws Exception {
-				latch.countDown();
-				return Promises.newResolvedPromise(resolved.getValue().toString());
+				final Promise<String> returned = Promises.newResolvedPromise(resolved.getValue().toString());
+				returned.onResolve(new Runnable() {
+					public void run() {
+						latch.countDown();
+					}
+				});
+				return returned;
 			}
 		}, new Failure() {
 			public void fail(Promise<?> resolved) throws Exception {
@@ -97,6 +108,47 @@ public class PromiseTest extends TestCase {
 		assertTrue("callback did not run after resolved", p.isDone());
 		assertTrue("callback did not run after resolved", p2.isDone());
 		assertEquals("wrong value", "15", p2.getValue());
+		assertNull("wrong error", p2.getError());
+		assertNull("wrong error", p.getError());
+		assertEquals("wrong value", Integer.valueOf(15), p.getValue());
+	}
+
+	public void testPromiseSuccess4() throws Exception {
+		final Deferred<Integer> d1 = new Deferred<Integer>();
+		final Deferred<String> d2 = new Deferred<String>();
+		final AtomicReference<String> result = new AtomicReference<String>();
+		final CountDownLatch latch = new CountDownLatch(1);
+		final Promise<Integer> p = d1.getPromise();
+		Promise<String> p2 = p.then(new Success<String, Number>() {
+			public Promise<String> call(Promise<Number> resolved) throws Exception {
+				result.set(resolved.getValue().toString());
+				Promise<String> returned = d2.getPromise();
+				returned.onResolve(new Runnable() {
+					public void run() {
+						latch.countDown();
+					}
+				});
+				return returned;
+			}
+		}, new Failure() {
+			public void fail(Promise<?> resolved) throws Exception {
+			}
+		});
+		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse("callback ran before resolved", p.isDone());
+		assertFalse("callback ran before resolved", p2.isDone());
+		d1.resolve(Integer.valueOf(15));
+		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("callback did not run after resolved", p.isDone());
+		assertFalse("callback ran before resolved", p2.isDone());
+		d2.resolve(result.get());
+		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("callback did not run after resolved", p.isDone());
+		assertTrue("callback did not run after resolved", p2.isDone());
+		assertEquals("wrong value", "15", p2.getValue());
+		assertNull("wrong error", p2.getError());
+		assertNull("wrong error", p.getError());
+		assertEquals("wrong value", Integer.valueOf(15), p.getValue());
 	}
 
 	public void testPromiseFail1() throws Exception {
@@ -110,9 +162,17 @@ public class PromiseTest extends TestCase {
 		});
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p.isDone());
-		d.fail(new RuntimeException());
+		Throwable failure = new RuntimeException();
+		d.fail(failure);
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p.isDone());
+		assertSame("wrong error", failure, p.getError());
+		try {
+			p.getValue();
+			fail("getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong error", failure, e.getCause());
+		}
 	}
 
 	public void testPromiseFail2() throws Exception {
@@ -126,9 +186,17 @@ public class PromiseTest extends TestCase {
 		});
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p.isDone());
-		d.fail(new RuntimeException());
+		Throwable failure = new RuntimeException();
+		d.fail(failure);
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p.isDone());
+		assertSame("wrong error", failure, p.getError());
+		try {
+			p.getValue();
+			fail("getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong error", failure, e.getCause());
+		}
 	}
 
 	/**
@@ -164,14 +232,20 @@ public class PromiseTest extends TestCase {
 			}
 		});
 
-		Exception e = new Exception("Y");
+		Exception failure = new Exception("Y");
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p2.isDone());
-		r.fail(e);
+		r.fail(failure);
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p2.isDone());
 
-		assertSame("wrong exception", e, p2.getError());
+		assertSame("wrong exception", failure, p2.getError());
+		try {
+			p2.getValue();
+			fail("getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong error", failure, e.getCause());
+		}
 		assertEquals("wrong number of callbacks called", 0, callbackCallCount.get());
 	}
 
@@ -214,6 +288,7 @@ public class PromiseTest extends TestCase {
 		assertTrue("callback did not run after resolved", p2.isDone());
 
 		assertEquals("wrong value", "YYYYYYYY", p2.getValue());
+		assertNull("wrong error", p2.getError());
 		assertEquals("wrong number of success callbacks called", 3, successCallbackCallCount.get());
 		assertEquals("wrong number of failure callbacks called", 0, failureCallbackCallCount.get());
 	}
@@ -250,16 +325,22 @@ public class PromiseTest extends TestCase {
 			}
 		});
 
-		Exception e = new Exception("Y");
+		Exception failure = new Exception("Y");
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p2.isDone());
-		r.fail(e);
+		r.fail(failure);
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p2.isDone());
 
 		assertEquals("wrong number of success callbacks called", 0, successCallbackCallCount.get());
 		assertEquals("wrong number of failure callbacks called", 3, failureCallbackCallCount.get());
-		assertSame("wrong exception", e, p2.getError().getCause().getCause().getCause());
+		assertSame("wrong exception", failure, p2.getError().getCause().getCause().getCause());
+		try {
+			p2.getValue();
+			fail("getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong error", failure, e.getCause().getCause().getCause().getCause());
+		}
 	}
 
 	/**
@@ -300,6 +381,7 @@ public class PromiseTest extends TestCase {
 		assertTrue("callback did not run after resolved", latch3.await(WAIT_TIME, TimeUnit.SECONDS));
 
 		assertEquals("wrong value", 10, p2.getValue().intValue());
+		assertNull("wrong error", p2.getError());
 	}
 
 	/**
@@ -327,6 +409,7 @@ public class PromiseTest extends TestCase {
 		assertFalse(p2.isDone());
 
 		assertEquals(20, p2.getValue().intValue());
+		assertNull("wrong error", p2.getError());
 	}
 
 	static Promise<Integer> async(final String value) {
