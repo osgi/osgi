@@ -73,7 +73,7 @@ public class Deferred<T> {
 	 *         resolved.
 	 */
 	public void resolve(T value) {
-		promise.resolve(value, null, false);
+		promise.resolve(value, null);
 	}
 
 	/**
@@ -95,6 +95,6 @@ public class Deferred<T> {
 	 *         resolved.
 	 */
 	public void fail(Throwable failure) {
-		promise.resolve(null, failure, false);
+		promise.resolve(null, failure);
 	}
 }

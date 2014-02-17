@@ -44,17 +44,15 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * 
 	 * <p>
 	 * This object is used as the synchronizing object to provide a critical
-	 * section in {@link #resolve(Object, Throwable, boolean)} so that only a
-	 * single thread can write the resolved state variables and release the
-	 * latch.
+	 * section in {@link #resolve(Object, Throwable)} so that only a single
+	 * thread can write the resolved state variables and open the latch.
 	 * 
 	 * <p>
-	 * The resolved state variables, {@link #value}, {@link #error},
-	 * {@link #cancelled}, must only be written when the latch is closed
-	 * (getCount() != 0) and must only be read when the latch is open
-	 * (getCount() == 0). The latch state must always be checked before writing
-	 * or reading since the resolved state variable's memory consistency is
-	 * guarded by the latch.
+	 * The resolved state variables, {@link #value} and {@link #error}, must
+	 * only be written when the latch is closed (getCount() != 0) and must only
+	 * be read when the latch is open (getCount() == 0). The latch state must
+	 * always be checked before writing or reading since the resolved state
+	 * variables' memory consistency is guarded by the latch.
 	 */
 	private final CountDownLatch					resolved;
 	/**
@@ -72,13 +70,6 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @see #resolved
 	 */
 	private Throwable								error;
-	/**
-	 * The cancellation state of this Promise if resolved.
-	 * 
-	 * @GuardedBy("resolved")
-	 * @see #resolved
-	 */
-	private boolean									cancelled;
 
 	/**
 	 * Initialize this Promise.
@@ -91,10 +82,11 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * Initialize and resolve this Promise with the specified value.
 	 * 
-	 * @param v The value of this Promise.
+	 * @param v The value of this resolved Promise.
 	 */
 	PromiseImpl(T v) {
 		value = v;
+		error = null;
 		callbacks = new ConcurrentLinkedQueue<Runnable>();
 		resolved = new CountDownLatch(0);
 	}
@@ -104,9 +96,8 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * 
 	 * @param v The value of this Promise.
 	 * @param t The failure of this Promise.
-	 * @param c The cancellation state of this Promise.
 	 */
-	void resolve(T v, Throwable t, boolean c) {
+	void resolve(T v, Throwable t) {
 		// critical section: only one resolver at a time
 		synchronized (resolved) {
 			if (resolved.getCount() == 0) {
@@ -119,7 +110,6 @@ final class PromiseImpl<T> implements Promise<T> {
 			 */
 			value = v;
 			error = t;
-			cancelled = c;
 			resolved.countDown();
 		}
 		notifyCallbacks(); // call any registered callbacks
@@ -321,62 +311,6 @@ final class PromiseImpl<T> implements Promise<T> {
 	}
 
 	/**
-	 * Returns whether this Promise has been resolved via cancellation.
-	 * 
-	 * <p>
-	 * A Promise may be resolved with a failure via {@link Promise#cancel()
-	 * cancellation}.
-	 * 
-	 * @return {@code true} if this Promise was resolved via cancellation;
-	 *         {@code false} otherwise.
-	 */
-	public boolean isCancelled() {
-		if (resolved.getCount() != 0) {
-			return false;
-		}
-		return cancelled;
-	}
-
-	/**
-	 * Cancel this promise.
-	 * 
-	 * <p>
-	 * This Promise is immediately resolved with a failure of a
-	 * {@link CancelledPromiseException}.
-	 * 
-	 * <p>
-	 * When canceling a Promise there is an inherent race condition with the
-	 * thread that would normally resolve the Promise. If this method returns
-	 * {@code false} then it means that the caller lost the race and this
-	 * Promise was otherwise resolved.
-	 * 
-	 * <p>
-	 * Note that canceling this Promise gives no guarantees that any work being
-	 * done to produce the value to resolve this Promise will be stopped before
-	 * its conclusion.
-	 * 
-	 * <p>
-	 * ### cancel() creates a failure mode for all normal Deferred users. They
-	 * always have to protect against IllegalStateException when they call
-	 * Deferred.resolve since some other idiot may have already resolved the
-	 * Promise via cancellation.
-	 * 
-	 * @return {@code true} if this Promise was resolved via cancellation;
-	 *         {@code false} if the Promise was otherwise resolved.
-	 */
-	public boolean cancel() {
-		if (resolved.getCount() != 0) {
-			Throwable t = new CancelledPromiseException();
-			try {
-				resolve(null, t, true);
-			} catch (IllegalStateException ise) {
-				// another thread may have resolved
-			}
-		}
-		return cancelled;
-	}
-
-	/**
 	 * A callback used to chain promises for the {@link #then(Success, Failure)}
 	 * method.
 	 * 
@@ -417,7 +351,7 @@ final class PromiseImpl<T> implements Promise<T> {
 						}
 					}
 					// fail chained
-					chained.resolve(null, t, false);
+					chained.resolve(null, t);
 					return;
 				}
 				Promise<R> returned = null;
@@ -425,13 +359,13 @@ final class PromiseImpl<T> implements Promise<T> {
 					try {
 						returned = success.call(PromiseImpl.this);
 					} catch (Throwable e) {
-						chained.resolve(null, e, false);
+						chained.resolve(null, e);
 						return;
 					}
 				}
 				if (returned == null) {
 					// resolve chained with null value
-					chained.resolve(null, null, false);
+					chained.resolve(null, null);
 				} else {
 					// resolve chained after returned promise is resolved
 					returned.onResolve(new Chain<R>(chained, returned));
@@ -474,7 +408,7 @@ final class PromiseImpl<T> implements Promise<T> {
 					throw new RuntimeException(e);
 				}
 				if (t != null) {
-					chained.resolve(null, t, false);
+					chained.resolve(null, t);
 					return;
 				}
 				R value;
@@ -491,7 +425,7 @@ final class PromiseImpl<T> implements Promise<T> {
 					 */
 					throw new RuntimeException(e);
 				}
-				chained.resolve(value, null, false);
+				chained.resolve(value, null);
 			} finally {
 				if (interrupted) { // restore interrupt status
 					Thread.currentThread().interrupt();

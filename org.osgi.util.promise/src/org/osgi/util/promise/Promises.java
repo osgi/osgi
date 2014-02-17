@@ -109,19 +109,4 @@ public class Promises {
 	static public Promise<Object[]> parallel(Promise<?>... promises) throws Exception {
 		return parallel(new Object[promises.length], promises);
 	}
-
-	/**
-	 * Create a copy of a promise that can safely be shared with other clients.
-	 * 
-	 * <p>
-	 * This method is useful for when a promise needs to be shared with a client
-	 * that may call {@link Promise#cancel()} on promises that it does not own.
-	 * 
-	 * @param promise A new promise that will resolve when the supplied promise
-	 *        resolves.
-	 * @return
-	 */
-	public static <T> Promise<T> shareableCopyOf(Promise<T> promise) {
-		return promise.then(null);
-	}
 }

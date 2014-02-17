@@ -221,46 +221,4 @@ public interface Promise<T> {
 	 * @see #then(Success, Failure)
 	 */
 	<R> Promise<R> then(Success<R, ? super T> success);
-
-	/**
-	 * Returns whether this Promise has been resolved via cancellation.
-	 * 
-	 * <p>
-	 * A Promise may be resolved with a failure via {@link #cancel()
-	 * cancellation}.
-	 * 
-	 * @return {@code true} if this Promise was resolved via cancellation;
-	 *         {@code false} otherwise.
-	 */
-	boolean isCancelled();
-
-	/**
-	 * Cancel this promise.
-	 * 
-	 * <p>
-	 * This Promise is immediately resolved with a failure of a
-	 * {@link CancelledPromiseException}.
-	 * 
-	 * <p>
-	 * When canceling a Promise there is an inherent race condition with the
-	 * thread that would normally resolve the Promise. If this method returns
-	 * {@code false} then it means that the caller lost the race and this
-	 * Promise was otherwise resolved.
-	 * 
-	 * <p>
-	 * Note that canceling this Promise gives no guarantees that any work being
-	 * done to produce the value to resolve this Promise will be stopped before
-	 * its conclusion.
-	 * 
-	 * <p>
-	 * ### cancel() creates a failure mode for all normal Deferred users. They
-	 * always have to protect against IllegalStateException when they call
-	 * Deferred.resolve since some other idiot may have already resolved the
-	 * Promise via cancellation.
-	 * 
-	 * @return {@code true} if this Promise was resolved via cancellation;
-	 *         {@code false} if the Promise was otherwise resolved.
-	 */
-	boolean cancel();
-
 }
