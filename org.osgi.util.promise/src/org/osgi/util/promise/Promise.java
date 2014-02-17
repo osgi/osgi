@@ -203,7 +203,7 @@ public interface Promise<T> {
 	 *         Promise must be resolved when this Promise is resolved after the
 	 *         specified Success or Failure callback, if any, is executed.
 	 */
-	<R> Promise<R> then(Success<R, ? super T> success, Failure<? super T> failure);
+	<R> Promise<R> then(Success<R, ? super T> success, Failure failure);
 
 	/**
 	 * Chain a new Promise to this Promise with a Success callback.

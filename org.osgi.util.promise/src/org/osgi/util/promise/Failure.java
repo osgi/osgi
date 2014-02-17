@@ -26,13 +26,11 @@ import org.osgi.annotation.versioning.ConsumerType;
  * {@link Promise#then(Success, Failure)} method and is called if the Promise is
  * resolved with a failure.
  * 
- * @param <T> The type of the resolved Promise passed to this callback.
- * 
  * @ThreadSafe
  * @author $Id$
  */
 @ConsumerType
-public interface Failure<T> {
+public interface Failure {
 	/**
 	 * Failure callback for a Promise.
 	 * 
@@ -55,5 +53,5 @@ public interface Failure<T> {
 	 * @throws Exception The chained Promise will be failed with the thrown
 	 *         exception.
 	 */
-	void fail(Promise<T> resolved) throws Exception;
+	void fail(Promise<?> resolved) throws Exception;
 }

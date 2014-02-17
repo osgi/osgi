@@ -85,8 +85,8 @@ public class PromiseTest extends TestCase {
 				latch.countDown();
 				return Promises.newResolvedPromise(resolved.getValue().toString());
 			}
-		}, new Failure<Number>() {
-			public void fail(Promise<Number> resolved) throws Exception {
+		}, new Failure() {
+			public void fail(Promise<?> resolved) throws Exception {
 			}
 		});
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
@@ -119,8 +119,8 @@ public class PromiseTest extends TestCase {
 		final Deferred<String> d = new Deferred<String>();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Promise<String> p = d.getPromise();
-		p.then(null, new Failure<String>() {
-			public void fail(Promise<String> resolved) throws Exception {
+		p.then(null, new Failure() {
+			public void fail(Promise<?> resolved) throws Exception {
 				latch.countDown();
 			}
 		});
@@ -188,8 +188,8 @@ public class PromiseTest extends TestCase {
 				return Promises.newResolvedPromise(promise.getValue() + promise.getValue());
 			}
 		};
-		Failure<String> wrapper = new Failure<String>() {
-			public void fail(Promise<String> promise) throws Exception {
+		Failure wrapper = new Failure() {
+			public void fail(Promise<?> promise) throws Exception {
 				failureCallbackCallCount.incrementAndGet();
 				throw new Exception(promise.getError());
 			}
@@ -231,8 +231,8 @@ public class PromiseTest extends TestCase {
 				return Promises.newResolvedPromise(promise.getValue() + promise.getValue());
 			}
 		};
-		Failure<String> wrapper = new Failure<String>() {
-			public void fail(Promise<String> promise) throws Exception {
+		Failure wrapper = new Failure() {
+			public void fail(Promise<?> promise) throws Exception {
 				failureCallbackCallCount.incrementAndGet();
 				throw new Exception(promise.getError());
 			}
