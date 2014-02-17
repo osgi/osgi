@@ -20,6 +20,7 @@ enterprise.specs = \
      org.osgi.service.serviceloader, \
      org.osgi.service.subsystem, \
 	 org.osgi.service.useradmin, \
+     org.osgi.util.promise, \
 	 org.osgi.util.xml
 
 enterprise.packages = ${replace;$(enterprise.specs);^.*$;$0.*}
