@@ -26,21 +26,17 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 public interface ZigBeeAttribute {
 
 	/**
-	 * Property key for the optional attribute id. A ZigBee Event Listener
-	 * service can announce for what ZigBee attributes it wants notifications.
+	 * Property key for the optional attribute id of a ZigBee Event Listener.
 	 */
 	public final static String	ID	= "zigbee.attribute.id";
 
 	/**
-	 * Gets the current value of the attribute.
-	 * 
-	 * @return the attribute identifier
+	 * @return the attribute identifier (i.e. ID)
 	 */
 	public int getId();
 
 	/**
-	 * Gets the current value of the attribute. This method is used when the
-	 * attribute data type is not provided.
+	 * Gets the current value of the attribute.
 	 * 
 	 * @param handler the handler
 	 * @throws ZigBeeException
@@ -52,7 +48,8 @@ public interface ZigBeeAttribute {
 	 * 
 	 * @param value the Java value to set
 	 * @param handler the handler
-	 * @throws ZigBeeException
+	 * @throws ZigBeeException when the data type is not known
+	 *         ("Unknown data type").
 	 */
 	public void setValue(Object value, ZigBeeAttributesHandler handler) throws ZigBeeException;
 
