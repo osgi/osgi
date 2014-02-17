@@ -38,8 +38,7 @@ public class Promises {
 	 * @return A new Promise that has been resolved with the specified value.
 	 */
 	public static <T> Promise<T> newResolvedPromise(T value) {
-		Deferred<T> deferred = new Deferred<T>(value);
-		return deferred.getPromise();
+		return new PromiseImpl<T>(value);
 	}
 
 	// TODO needs further review after discussion of usefulness of specifying
