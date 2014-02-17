@@ -40,7 +40,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * Example callback usage:
  * 
  * <pre>
- * final Promise{@literal<String>} foo = foo();
+ * final Promise&lt;String&gt; foo = foo();
  * foo.onResolve(new Runnable() {
  *   public void run() {
  *     System.out.println(foo.getValue());
@@ -51,12 +51,12 @@ import org.osgi.annotation.versioning.ConsumerType;
  * Example chaining usage;
  * 
  * <pre>
- * Success{@literal<String,String>} doubler = new Success{@literal<String,String>}() {
- *   public Promise{@literal<String>} call(Promise{@literal<String>} p) {
+ * Success&lt;String,String&gt; doubler = new Success&lt;String,String&gt;() {
+ *   public Promise&lt;String&gt; call(Promise&lt;String&gt; p) throws Exception {
  *     return Promises.newResolvedPromise(p.getValue()+p.getValue());
  *   }
  * };
- * final Promise{@literal<String>} foo = foo().then(doubler).then(doubler);
+ * final Promise&lt;String&gt; foo = foo().then(doubler).then(doubler);
  * foo.onResolve(new Runnable() {
  *   public void run() {
  *     System.out.println(foo.getValue());
