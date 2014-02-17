@@ -25,6 +25,10 @@
  * Example import for consumers using the API in this package:
  * <p>
  * {@code  Import-Package: org.osgi.util.promise; version="[1.0,2.0)"}
+ * <p>
+ * Example import for providers implementing the API in this package:
+ * <p>
+ * {@code  Import-Package: org.osgi.util.promise; version="[1.0,1.1)"}
  * 
  * @author $Id$
  */

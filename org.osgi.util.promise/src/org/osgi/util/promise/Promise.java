@@ -17,7 +17,7 @@
 package org.osgi.util.promise;
 
 import java.lang.reflect.InvocationTargetException;
-import org.osgi.annotation.versioning.ConsumerType;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * A Promise of a value.
@@ -69,7 +69,7 @@ import org.osgi.annotation.versioning.ConsumerType;
  * @ThreadSafe
  * @author $Id$
  */
-@ConsumerType
+@ProviderType
 public interface Promise<T> {
 
 	/**
