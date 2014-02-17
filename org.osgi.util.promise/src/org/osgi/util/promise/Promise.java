@@ -30,13 +30,14 @@ import org.osgi.annotation.versioning.ConsumerType;
  * either get a callback when the Promise is resolved with a value or an error,
  * or the Promise can be used in chaining. In chaining, callbacks are provided
  * that receive the resolved Promise, and a new Promise is generated that
- * resolves when the callback resolves
+ * resolves based upon the result of a callback.
+ * 
  * <p>
- * Both {@link #onResolve(Runnable)} and {@link #then(Success, Failure)
- * chaining} can be repeated any number of times, even after the Promise has
- * been resolved.
+ * Both {@link #onResolve(Runnable) callbacks} and
+ * {@link #then(Success, Failure) chaining} can be repeated any number of times,
+ * even after the Promise has been resolved.
  * <p>
- * Example {@code onResolve} usage:
+ * Example callback usage:
  * 
  * <pre>
  * final Promise{@literal<String>} foo = foo();
@@ -86,13 +87,14 @@ public interface Promise<T> {
 	 * Returns the value of this Promise.
 	 * 
 	 * <p>
-	 * If this Promise has been {@link #isDone() resolved}, this method
-	 * immediately returns with the value of this Promise if this Promise was
-	 * successfully resolved. If this Promise was resolved with a failure, this
-	 * method will throw an {@code InvocationTargetException} with the
-	 * {@link #getError() failure exception} as the cause. If this Promise is
-	 * unresolved, this method will block and wait for this Promise to be
-	 * resolved before completing.
+	 * If this Promise is not {@link #isDone() resolved}, this method must block
+	 * and wait for this Promise to be resolved before completing.
+	 * 
+	 * <p>
+	 * If this Promise was successfully resolved, this method returns with the
+	 * value of this Promise. If this Promise was resolved with a failure, this
+	 * method must throw an {@code InvocationTargetException} with the
+	 * {@link #getError() failure exception} as the cause.
 	 * 
 	 * @return The value of this resolved Promise.
 	 * @throws InvocationTargetException If this Promise was resolved with a
@@ -107,12 +109,13 @@ public interface Promise<T> {
 	 * Returns the failure of this Promise.
 	 * 
 	 * <p>
-	 * If this Promise has been {@link #isDone() resolved}, this method
-	 * immediately returns with the failure of this Promise if this Promise was
-	 * resolved with a failure. If this Promise was successfully resolved, this
-	 * method will return {@code null}. If this Promise is unresolved, this
-	 * method will block and wait for this Promise to be resolved before
-	 * completing.
+	 * If this Promise is not {@link #isDone() resolved}, this method must block
+	 * and wait for this Promise to be resolved before completing.
+	 * 
+	 * <p>
+	 * If this Promise was resolved with a failure, this method returns with the
+	 * failure of this Promise. If this Promise was successfully resolved, this
+	 * method must return {@code null}.
 	 * 
 	 * @return The failure of this resolved Promise or {@code null} if this
 	 *         Promise was successfully resolved.
@@ -159,9 +162,9 @@ public interface Promise<T> {
 	 * 
 	 * <p>
 	 * This method returns a new Promise which is chained to this Promise. The
-	 * returned Promise will be resolved when this Promise is resolved after the
+	 * returned Promise must be resolved when this Promise is resolved after the
 	 * specified Success or Failure callback is executed. The result of the
-	 * executed callback will be used to resolve the returned Promise. Multiple
+	 * executed callback must be used to resolve the returned Promise. Multiple
 	 * calls to this method can be used to create a chain of promises which are
 	 * resolved in sequence.
 	 * 
@@ -190,14 +193,14 @@ public interface Promise<T> {
 	 * 
 	 * @param success A Success callback to be called when this Promise is
 	 *        successfully resolved. May be {@code null} if no Success callback
-	 *        is required. In this case, the returned Promise will be resolved
+	 *        is required. In this case, the returned Promise must be resolved
 	 *        with the value {@code null} when this Promise is successfully
 	 *        resolved.
 	 * @param failure A Failure callback to be called when this Promise is
 	 *        resolved with a failure. May be {@code null} if no Failure
 	 *        callback is required.
 	 * @return A new Promise which is chained to this Promise. The returned
-	 *         Promise will be resolved when this Promise is resolved after the
+	 *         Promise must be resolved when this Promise is resolved after the
 	 *         specified Success or Failure callback, if any, is executed.
 	 */
 	<R> Promise<R> then(Success<R, ? super T> success, Failure<? super T> failure);
@@ -212,11 +215,11 @@ public interface Promise<T> {
 	 * 
 	 * @param success A Success callback to be called when this Promise is
 	 *        successfully resolved. May be {@code null} if no Success callback
-	 *        is required. In this case, the returned Promise will be resolved
+	 *        is required. In this case, the returned Promise must be resolved
 	 *        with the value {@code null} when this Promise is successfully
 	 *        resolved.
 	 * @return A new Promise which is chained to this Promise. The returned
-	 *         Promise will be resolved when this Promise is resolved after the
+	 *         Promise must be resolved when this Promise is resolved after the
 	 *         specified Success, if any, is executed.
 	 * @see #then(Success, Failure)
 	 */
