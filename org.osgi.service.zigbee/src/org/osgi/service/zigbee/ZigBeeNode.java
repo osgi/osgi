@@ -24,10 +24,10 @@ import org.osgi.service.zigbee.descriptors.ZigBeeUserDescriptor;
 /**
  * This interface represents a ZigBee node, means a physical device that can
  * communicate using the ZigBee protocol.<br>
- * Each physical may contain up 240 logical devices which are represented by the
- * {@link ZigBeeEndpoint}<br>
- * class. Each logical device is identified by an <i>EndPoint</i> address, but
- * shares either the:<br>
+ * Each physical device may contain up 240 logical devices which are represented
+ * by the {@link ZigBeeEndpoint} class.<br>
+ * Each logical device is identified by an <i>EndPoint</i> address, but shares
+ * either the:<br>
  * - <i>64-bit 802.15.4 IEEE Address</i><br>
  * - <i>16-bit ZigBee Network Address</i><br>
  * 

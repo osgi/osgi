@@ -12,6 +12,7 @@ import org.osgi.impl.service.zigbee.descriptors.ZigBeeSimpleDescriptorImpl;
 import org.osgi.impl.service.zigbee.util.ZigBeeDeviceNodeListener;
 import org.osgi.service.zigbee.ZigBeeCluster;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
+import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptions.ZigBeeAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
@@ -31,6 +32,7 @@ import org.osgi.service.zigbee.types.ZigBeeUnsignedInteger8;
  */
 public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 
+	ZigBeeHost								h;
 	private BundleContext					bc;
 	private ZigBeeNode						node1, node2;
 	private ZigBeeNodeDescriptor			nodeDesc;
@@ -128,6 +130,9 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		ZigBeeEndpoint[] endpointsNode1 = new ZigBeeEndpoint[1];
 		endpointsNode1[0] = endpoint1;
 		node1 = new ZigBeeNodeImpl(Long.valueOf("812345689"), (short) 12345, endpointsNode1);
+
+		// register node1
+		System.out.println(this.getClass().getName() + " - Resgister (hardcoded) node1: " + node1 + " in the OSGi services registry.");
 		// registration_1 =
 		bc.registerService(ZigBeeNode.class.getName(),
 				node1, null);
@@ -135,6 +140,9 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		ZigBeeEndpoint[] endpointsNode2 = new ZigBeeEndpoint[1];
 		endpointsNode2[0] = endpoint2;
 		node2 = new ZigBeeNodeImpl(Long.valueOf("6628417766"), (short) 88507, endpointsNode2, nodeDesc, powerDesc);
+
+		// register node1
+		System.out.println(this.getClass().getName() + " - Resgister (hardcoded) node2: " + node2 + " in the OSGi services registry.");
 		// registration_2 =
 		bc.registerService(ZigBeeNode.class.getName(),
 				node2, null);

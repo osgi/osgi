@@ -30,56 +30,56 @@ public class ZigBeeDataTypes {
 	 * No data type The no data type is a special type to represent an attribute
 	 * with no associated data.
 	 */
-	public static final short		NO_DATA					= 0x00;
+	public static final short	NO_DATA					= 0x00;
 
 	/**
 	 * Boolean The Boolean type represents a logical value, either TRUE (0x00)
 	 * or FALSE (0x01). The value 0xff represents an invalid value of this type.
 	 * All other values of this type are forbidden
 	 */
-	public static final short		GENERAL_DATA_8			= 0x08;
+	public static final short	GENERAL_DATA_8			= 0x08;
 	/** */
-	public static final short		GENERAL_DATA_16			= 0x09;
+	public static final short	GENERAL_DATA_16			= 0x09;
 	/** */
-	public static final short		GENERAL_DATA_24			= 0x0a;
+	public static final short	GENERAL_DATA_24			= 0x0a;
 	/** */
-	public static final short		GENERAL_DATA_32			= 0x0b;
+	public static final short	GENERAL_DATA_32			= 0x0b;
 	/** */
-	public static final short		GENERAL_DATA_40			= 0x0c;
+	public static final short	GENERAL_DATA_40			= 0x0c;
 	/** */
-	public static final short		GENERAL_DATA_48			= 0x0d;
+	public static final short	GENERAL_DATA_48			= 0x0d;
 	/** */
-	public static final short		GENERAL_DATA_56			= 0x0e;
+	public static final short	GENERAL_DATA_56			= 0x0e;
 	/** */
-	public static final short		GENERAL_DATA_64			= 0x0f;
+	public static final short	GENERAL_DATA_64			= 0x0f;
 
 	/**
 	 * Boolean The Boolean type represents a logical value, either TRUE (0x00)
 	 * or FALSE (0x01). The value 0xff represents an invalid value of this type.
 	 * All other values of this type are forbidden.
 	 */
-	public static final short		BOOLEAN					= 0x10;
+	public static final short	BOOLEAN					= 0x10;
 
 	/**
 	 * Bitmap (8-bit, 16-bit, 24-bit and 32-bit) The Bitmap type holds 8, 16, 24
 	 * or 32 logical values, one per bit, depending on its length. There is no
 	 * value to represent an invalid value of this type.
 	 */
-	public static final short		BITMAP_8				= 0x18;
+	public static final short	BITMAP_8				= 0x18;
 	/** */
-	public static final short		BITMAP_16				= 0x19;
+	public static final short	BITMAP_16				= 0x19;
 	/** */
-	public static final short		BITMAP_24				= 0x1a;
+	public static final short	BITMAP_24				= 0x1a;
 	/** */
-	public static final short		BITMAP_32				= 0x1b;
+	public static final short	BITMAP_32				= 0x1b;
 	/** */
-	public static final short		BITMAP_40				= 0x1c;
+	public static final short	BITMAP_40				= 0x1c;
 	/** */
-	public static final short		BITMAP_48				= 0x1d;
+	public static final short	BITMAP_48				= 0x1d;
 	/** */
-	public static final short		BITMAP_56				= 0x1e;
+	public static final short	BITMAP_56				= 0x1e;
 	/** */
-	public static final short		BITMAP_64				= 0x1f;
+	public static final short	BITMAP_64				= 0x1f;
 
 	/**
 	 * Unsigned integer (8-bit, 16-bit, 24-bit and 32-bit) This type represents
@@ -88,21 +88,21 @@ public class ZigBeeDataTypes {
 	 * an invalid value of this type are 0xff, 0xffff, 0xffffff and 0xffffffff
 	 * respectively.
 	 */
-	public static final short		UNSIGNED_INTEGER_8		= 0x20;
+	public static final short	UNSIGNED_INTEGER_8		= 0x20;
 	/** */
-	public static final short		UNSIGNED_INTEGER_16		= 0x21;
+	public static final short	UNSIGNED_INTEGER_16		= 0x21;
 	/** */
-	public static final short		UNSIGNED_INTEGER_24		= 0x22;
+	public static final short	UNSIGNED_INTEGER_24		= 0x22;
 	/** */
-	public static final short		UNSIGNED_INTEGER_32		= 0x23;
+	public static final short	UNSIGNED_INTEGER_32		= 0x23;
 	/** */
-	public static final short		UNSIGNED_INTEGER_40		= 0x24;
+	public static final short	UNSIGNED_INTEGER_40		= 0x24;
 	/** */
-	public static final short		UNSIGNED_INTEGER_48		= 0x25;
+	public static final short	UNSIGNED_INTEGER_48		= 0x25;
 	/** */
-	public static final short		UNSIGNED_INTEGER_56		= 0x26;
+	public static final short	UNSIGNED_INTEGER_56		= 0x26;
 	/** */
-	public static final short		UNSIGNED_INTEGER_64		= 0x27;
+	public static final short	UNSIGNED_INTEGER_64		= 0x27;
 
 	/**
 	 * Signed integer (8-bit, 16-bit, 24-bit and 32-bit) This type represents a
@@ -111,30 +111,30 @@ public class ZigBeeDataTypes {
 	 * The values that represents an invalid value of this type are 0x80,
 	 * 0x8000, 0x800000 and 0x80000000 respectively.
 	 */
-	public static final short		SIGNED_INTEGER_8		= 0x28;
+	public static final short	SIGNED_INTEGER_8		= 0x28;
 	/** */
-	public static final short		SIGNED_INTEGER_16		= 0x29;
+	public static final short	SIGNED_INTEGER_16		= 0x29;
 	/** */
-	public static final short		SIGNED_INTEGER_24		= 0x2a;
+	public static final short	SIGNED_INTEGER_24		= 0x2a;
 	/** */
-	public static final short		SIGNED_INTEGER_32		= 0x2b;
+	public static final short	SIGNED_INTEGER_32		= 0x2b;
 	/** */
-	public static final short		SIGNED_INTEGER_40		= 0x2c;
+	public static final short	SIGNED_INTEGER_40		= 0x2c;
 	/** */
-	public static final short		SIGNED_INTEGER_48		= 0x2d;
+	public static final short	SIGNED_INTEGER_48		= 0x2d;
 	/** */
-	public static final short		SIGNED_INTEGER_56		= 0x2e;
+	public static final short	SIGNED_INTEGER_56		= 0x2e;
 	/** */
-	public static final short		SIGNED_INTEGER_64		= 0x2f;
+	public static final short	SIGNED_INTEGER_64		= 0x2f;
 
 	/**
 	 * Enumeration (8-bit) The Enumeration type represents an index into a
 	 * lookup table to determine the final value. The value 0xff represents an
 	 * invalid value of this type
 	 */
-	public static final short		ENUMERATION_8			= 0x30;
+	public static final short	ENUMERATION_8			= 0x30;
 	/** */
-	public static final short		ENUMERATION_16			= 0x31;
+	public static final short	ENUMERATION_16			= 0x31;
 
 	/**
 	 * Semi-precision The ZigBee semi-precision number format is based on the
@@ -144,7 +144,7 @@ public class ZigBeeDataTypes {
 	 * calculated as: Value = -1Sign * (Hidden + Mantissa/1024) * 2
 	 * (Exponent-15)
 	 */
-	public static final short		FLOATING_SEMI			= 0x38;
+	public static final short	FLOATING_SEMI			= 0x38;
 
 	/**
 	 * Single precision The format of the single precision data type is based on
@@ -156,7 +156,7 @@ public class ZigBeeDataTypes {
 	 * sub-fields, as follows. Length of mantissa = 23 bits, length of exponent
 	 * = 8 bits For further details, see [R11]. = 0x43;
 	 */
-	public static final short		FLOATING_SINGLE			= 0x39;
+	public static final short	FLOATING_SINGLE			= 0x39;
 
 	/**
 	 * Double precision The format of the double precision data type is based on
@@ -168,7 +168,7 @@ public class ZigBeeDataTypes {
 	 * sub-fields, as follows. Length of mantissa = 52 bits, length of exponent
 	 * = 11 bits For further details, see [R11].
 	 */
-	public static final short		FLOATING_DOUBLE			= 0x3a;
+	public static final short	FLOATING_DOUBLE			= 0x3a;
 
 	/**
 	 * The octet string data type contains data in an application-defined
@@ -185,7 +185,7 @@ public class ZigBeeDataTypes {
 	 * the value of the octet count sub-field. This sub-field contains the
 	 * application-defined data.
 	 */
-	public static final short		OCTET_STRING			= 0x41;
+	public static final short	OCTET_STRING			= 0x41;
 
 	/**
 	 * Character string The character string data type contains data octets
@@ -211,19 +211,19 @@ public class ZigBeeDataTypes {
 	 * be referred to as an 'empty string'.
 	 * 
 	 */
-	public static final short		CHARACTER_STRING		= 0x42;
+	public static final short	CHARACTER_STRING		= 0x42;
 	/** */
-	public static final short		LONG_OCTET_STRING		= 0x43;
+	public static final short	LONG_OCTET_STRING		= 0x43;
 	/** */
-	public static final short		LONG_CHARACTER_STRING	= 0x44;
+	public static final short	LONG_CHARACTER_STRING	= 0x44;
 	/** */
-	public static final short		ARRAY					= 0x48;
+	public static final short	ARRAY					= 0x48;
 	/** */
-	public static final short		STRUCTURE				= 0x4c;
+	public static final short	STRUCTURE				= 0x4c;
 	/** */
-	public static final short		SET						= 0x50;
+	public static final short	SET						= 0x50;
 	/** */
-	public static final short		BAG						= 0x51;
+	public static final short	BAG						= 0x51;
 
 	/**
 	 * Time of day The Time of day data type shall be formatted as illustrated
@@ -240,7 +240,7 @@ public class ZigBeeDataTypes {
 	 * subfields have the value 0xff, this indicates an invalid or 'don't care'
 	 * value of the data type.
 	 */
-	public static final short		TIME_OF_DAY				= 0xe0;
+	public static final short	TIME_OF_DAY				= 0xe0;
 
 	/**
 	 * Date The Time of day data type shall be formatted as illustrated in
@@ -255,25 +255,25 @@ public class ZigBeeDataTypes {
 	 * an unused subfield. If all subfields have the value 0xff, this indicates
 	 * an invalid or 'don't care' value of the data type.
 	 */
-	public static final short		DATE					= 0xe1;
+	public static final short	DATE					= 0xe1;
 	/** */
-	public static final short		UTC_TIME				= 0xe2;
+	public static final short	UTC_TIME				= 0xe2;
 	/** */
-	public static final short		CLUSTER_ID				= 0xe8;
+	public static final short	CLUSTER_ID				= 0xe8;
 	/** */
-	public static final short		ATTRIBUTE_ID			= 0xe9;
+	public static final short	ATTRIBUTE_ID			= 0xe9;
 
 	/**
 	 * BACnet OID (Object Identifier) The BACnet OID data type is included to
 	 * allow interworking with BACnet (see [R12]). The format is described in
 	 * the referenced standard.
 	 */
-	public static final short		BACNET_OID				= 0xea;
+	public static final short	BACNET_OID				= 0xea;
 	/** */
-	public static final short		IEEE_ADDRESS			= 0xf0;
+	public static final short	IEEE_ADDRESS			= 0xf0;
 
 	/** Pour inverser les octets */
-	protected static final boolean	RETOURNER				= true;
+	public static final boolean	RETOURNER				= true;
 
 	/**
 	 * @param type the value's type

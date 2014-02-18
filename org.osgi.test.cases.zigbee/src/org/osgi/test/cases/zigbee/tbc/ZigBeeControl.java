@@ -71,6 +71,8 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 	 * Tests related to Node Discovery.
 	 */
 	public void testNodeDiscovery() {
+		log("---- testNodeDiscovery");
+
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
 
@@ -152,6 +154,8 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 	 * Tests related to Endpoint Discovery.
 	 */
 	public void testEndpointDiscovery() {
+		log("---- testEndpointDiscovery");
+
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
 
@@ -232,6 +236,8 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 	 * Tests related to Cluster Description.
 	 */
 	public void testClusterDescription() {
+		log("---- testClusterDescription");
+
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
 
@@ -273,6 +279,8 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 	 * Tests related to Command Description.
 	 */
 	public void testCommandDescription() {
+		log("---- testCommandDescription");
+
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
 
@@ -301,6 +309,8 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 	 * Tests related to Attribute Description.
 	 */
 	public void testAttributeDescription() {
+		log("---- testAttributeDescription");
+
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
 
@@ -363,6 +373,8 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 	 * Tests related to control.
 	 */
 	public void testControl() {
+		log("---- testControl");
+
 		// device
 		ZigBeeNode device = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", device);
@@ -530,6 +542,8 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 	 * Tests related to eventing.
 	 */
 	public void testEventing() {
+		log("---- testEventing");
+
 		// device
 		ZigBeeNode device = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", device);

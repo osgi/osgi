@@ -80,12 +80,10 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	}
 
 	public ZigBeeNodeDescriptor getNodeDescriptor() throws ZigBeeException {
-		// TODO Auto-generated method stub
 		return nodeDescriptor;
 	}
 
 	public ZigBeePowerDescriptor getPowerDescriptor() throws ZigBeeException {
-		// TODO Auto-generated method stub
 		return powerDescriptor;
 	}
 
@@ -104,9 +102,13 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		// TODO Auto-generated method stub
 	}
 
-	public void leave(boolean rejoin, boolean removeChildren,
-			ZigBeeHandler handler) throws ZigBeeException {
+	public void leave(boolean rejoin, boolean removeChildren, ZigBeeHandler handler) throws ZigBeeException {
 		// TODO Auto-generated method stub
+	}
+
+	public String toString() {
+		return "" + this.getClass().getName() + "[IEEEAddress: " + IEEEAddress + ", nwkAddress: " + nwkAddress + ", endpoints: " + endpoints + ", nodeDescriptor: " + nodeDescriptor
+				+ ", powerDescriptor: " + powerDescriptor + "]";
 	}
 
 }

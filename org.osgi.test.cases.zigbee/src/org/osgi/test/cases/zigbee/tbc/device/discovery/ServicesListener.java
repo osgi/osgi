@@ -1,3 +1,4 @@
+
 package org.osgi.test.cases.zigbee.tbc.device.discovery;
 
 import org.osgi.framework.BundleContext;
@@ -63,6 +64,7 @@ public class ServicesListener extends ServiceTracker {
 		ZigBeeNode device = (ZigBeeNode) super.addingService(ref);
 
 		DefaultTestBundleControl.log("adding ZigBee Node " + device);
+
 		synchronized (this) {
 			size++;
 			last = device;
