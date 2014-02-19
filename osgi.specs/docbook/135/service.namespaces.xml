@@ -363,7 +363,7 @@ DynamicImport-Package:
     </table>
   </section>
 
-  <section>
+  <section xml:id="service.namespaces-osgi.service.namespace">
     <title>osgi.service Namespace</title>
 
     <para>The Service Namespace is intended to be used for:</para>
