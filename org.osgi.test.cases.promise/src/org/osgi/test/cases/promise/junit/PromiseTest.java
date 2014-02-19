@@ -21,6 +21,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import junit.framework.AssertionFailedError;
@@ -208,8 +209,8 @@ public class PromiseTest extends TestCase {
 	 * @throws Exception
 	 */
 	public void testErrorChain() throws Exception {
-		Deferred<String> r = new Deferred<String>();
-		final Promise<String> p1 = r.getPromise();
+		Deferred<String> d = new Deferred<String>();
+		final Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final AtomicInteger callbackCallCount = new AtomicInteger(0);
 
@@ -235,7 +236,7 @@ public class PromiseTest extends TestCase {
 		Exception failure = new Exception("Y");
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p2.isDone());
-		r.fail(failure);
+		d.fail(failure);
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p2.isDone());
 
@@ -250,8 +251,8 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testSuccessChain() throws Exception {
-		Deferred<String> r = new Deferred<String>();
-		final Promise<String> p1 = r.getPromise();
+		Deferred<String> d = new Deferred<String>();
+		final Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final AtomicInteger successCallbackCallCount = new AtomicInteger(0);
 		final AtomicInteger failureCallbackCallCount = new AtomicInteger(0);
@@ -283,7 +284,7 @@ public class PromiseTest extends TestCase {
 
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p2.isDone());
-		r.resolve("Y");
+		d.resolve("Y");
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p2.isDone());
 
@@ -294,8 +295,8 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testExceptionOverride() throws Exception {
-		Deferred<String> r = new Deferred<String>();
-		final Promise<String> p1 = r.getPromise();
+		Deferred<String> d = new Deferred<String>();
+		final Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final AtomicInteger successCallbackCallCount = new AtomicInteger(0);
 		final AtomicInteger failureCallbackCallCount = new AtomicInteger(0);
@@ -328,7 +329,7 @@ public class PromiseTest extends TestCase {
 		Exception failure = new Exception("Y");
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p2.isDone());
-		r.fail(failure);
+		d.fail(failure);
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p2.isDone());
 
@@ -350,9 +351,9 @@ public class PromiseTest extends TestCase {
 	 * value. Does take some getting used to.
 	 */
 	public void testRepeat() throws Exception {
-		Deferred<String> r = new Deferred<String>();
-		Promise<String> p1 = r.getPromise();
-		r.resolve("10");
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p1 = d.getPromise();
+		d.resolve("10");
 		assertTrue("promise not resolved", p1.isDone());
 
 		final CountDownLatch latch1 = new CountDownLatch(1);
@@ -388,14 +389,24 @@ public class PromiseTest extends TestCase {
 	 * Test the basic chaining functionality.
 	 */
 	public void testThen() throws Exception {
-		Deferred<String> r = new Deferred<String>();
-		Promise<String> p1 = r.getPromise();
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
 		Promise<Integer> p2 = p1.then(new Success<Integer, String>() {
 			public Promise<Integer> call(final Promise<String> promise)
 					throws Exception {
 				latch.countDown();
-				return async(promise.getValue());
+				final Deferred<Integer> n = new Deferred<Integer>();
+				timer.schedule(new TimerTask() {
+					public void run() {
+						try {
+							n.resolve(Integer.valueOf(promise.getValue()));
+						} catch (Exception e) {
+							n.fail(e);
+						}
+					}
+				}, 500);
+				return n.getPromise();
 			}
 		});
 
@@ -403,7 +414,7 @@ public class PromiseTest extends TestCase {
 		assertFalse(p1.isDone());
 		assertFalse(p2.isDone());
 
-		r.resolve("20");
+		d.resolve("20");
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p1.isDone());
 		assertFalse(p2.isDone());
@@ -412,18 +423,125 @@ public class PromiseTest extends TestCase {
 		assertNull("wrong error", p2.getError());
 	}
 
-	static Promise<Integer> async(final String value) {
-		final Deferred<Integer> n = new Deferred<Integer>();
+	public void testValueInterrupted() throws Exception {
+		final Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		final Thread thread = Thread.currentThread();
+		assertFalse(p.isDone());
 		timer.schedule(new TimerTask() {
 			public void run() {
-				try {
-					n.resolve(Integer.valueOf(value));
-				} catch (Exception e) {
-					n.fail(e);
-				}
+				thread.interrupt();
+				timer.schedule(new TimerTask() {
+					public void run() {
+						d.resolve("failsafe");
+					}
+				}, 1000);
 			}
 		}, 500);
-		return n.getPromise();
+		try {
+			p.getValue();
+			fail("failed to throw InterruptedException");
+		} catch (InterruptedException e) {
+			// expected
+		}
+	}
+
+	public void testErrorInterrupted() throws Exception {
+		final Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		final Thread thread = Thread.currentThread();
+		assertFalse(p.isDone());
+		timer.schedule(new TimerTask() {
+			public void run() {
+				thread.interrupt();
+				timer.schedule(new TimerTask() {
+					public void run() {
+						d.resolve("failsafe");
+					}
+				}, 1000);
+			}
+		}, 500);
+		try {
+			p.getError();
+			fail("failed to throw InterruptedException");
+		} catch (InterruptedException e) {
+			// expected
+		}
+	}
+
+	public void testNullCallback() throws Exception {
+		Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		try {
+			p.onResolve(null);
+			fail("failed to error on null callback");
+		} catch (NullPointerException e) {
+			// expected
+		}
+	}
+
+	public void testMultiResolve() throws Exception {
+		final Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		final AtomicBoolean fail = new AtomicBoolean(false);
+		assertFalse(p.isDone());
+		p.onResolve(new Runnable() {
+			public void run() {
+				try {
+					d.resolve("onResolve");
+					fail.set(true);
+				} catch (IllegalStateException e) {
+					// expected
+				}
+			}
+		});
+		d.resolve("first");
+		assertTrue(p.isDone());
+		assertFalse("failed to error on callback resolve", fail.get());
+		try {
+			d.resolve("second");
+			fail("failed to error on second resolve");
+		} catch (IllegalStateException e) {
+			// expected
+		}
+		try {
+			d.fail(new Exception("second"));
+			fail("failed to error on fail after resolve");
+		} catch (IllegalStateException e) {
+			// expected
+		}
+	}
+
+	public void testMultiFail() throws Exception {
+		final Deferred<String> d = new Deferred<String>();
+		Promise<String> p = d.getPromise();
+		final AtomicBoolean fail = new AtomicBoolean(false);
+		assertFalse(p.isDone());
+		p.onResolve(new Runnable() {
+			public void run() {
+				try {
+					d.fail(new Exception("onResolve"));
+					fail.set(true);
+				} catch (IllegalStateException e) {
+					// expected
+				}
+			}
+		});
+		d.fail(new Exception("first"));
+		assertTrue(p.isDone());
+		assertFalse("failed to error on callback fail", fail.get());
+		try {
+			d.fail(new Exception("second"));
+			fail("failed to error on second fail");
+		} catch (IllegalStateException e) {
+			// expected
+		}
+		try {
+			d.resolve("second");
+			fail("failed to error on resolve after fail");
+		} catch (IllegalStateException e) {
+			// expected
+		}
 	}
 
 	/**
