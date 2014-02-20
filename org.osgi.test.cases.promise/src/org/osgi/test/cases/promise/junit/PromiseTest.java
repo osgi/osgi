@@ -17,6 +17,7 @@
 package org.osgi.test.cases.promise.junit;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.CountDownLatch;
@@ -541,6 +542,63 @@ public class PromiseTest extends TestCase {
 			fail("failed to error on resolve after fail");
 		} catch (IllegalStateException e) {
 			// expected
+		}
+	}
+
+	public void testCallbackException1() throws Exception {
+		final int size = 20;
+		final Deferred<String> d = new Deferred<String>();
+		final Promise<String> p = d.getPromise();
+		final CountDownLatch latch = new CountDownLatch(size);
+		final AtomicInteger count = new AtomicInteger(0);
+		Random random = new Random();
+		int next = random.nextInt(size);
+		final int runtimeFail = next;
+		do {
+			next = random.nextInt(size);
+		} while (next == runtimeFail);
+		final int errorFail = next;
+		for (int i = 0; i < size; i++) {
+			p.onResolve(new Runnable() {
+				public void run() {
+					final int callback = count.getAndIncrement();
+					latch.countDown();
+					if (callback == runtimeFail) {
+						throw new RuntimeException("bad callback " + callback);
+					} else if (callback == errorFail) {
+						throw new Error("bad callback " + callback);
+					}
+				}
+			});
+		}
+		assertFalse("should not be resolved", p.isDone());
+		assertEquals("some callbacks called", size, latch.getCount());
+		final String result = "value";
+		d.resolve(result);
+		assertTrue("should be resolved", p.isDone());
+		assertNull("wrong error", p.getError());
+		assertEquals("wrong value", result, p.getValue());
+		assertTrue("all callbacks did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
+	}
+
+	public void testCallbackException2() throws Exception {
+		final Deferred<String> d = new Deferred<String>();
+		final Promise<String> p = d.getPromise();
+		assertFalse("should not be resolved", p.isDone());
+		Throwable failure = new RuntimeException();
+		d.fail(failure);
+		p.onResolve(new Runnable() {
+			public void run() {
+				throw new Error("bad callback upon onResolve");
+			}
+		});
+		assertTrue("should be resolved", p.isDone());
+		assertSame("wrong error", failure, p.getError());
+		try {
+			p.getValue();
+			fail("getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong error", failure, e.getCause());
 		}
 	}
 

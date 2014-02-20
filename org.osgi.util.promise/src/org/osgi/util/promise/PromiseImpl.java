@@ -131,8 +131,8 @@ final class PromiseImpl<T> implements Promise<T> {
 		for (Runnable callback = callbacks.poll(); callback != null; callback = callbacks.poll()) {
 			try {
 				callback.run();
-			} catch (Exception e) { // TODO catch Throwable?
-				e.printStackTrace(); // TODO what should we really do here?
+			} catch (Throwable t) {
+				Logger.logCallbackException(t);
 			}
 		}
 	}
@@ -310,6 +310,20 @@ final class PromiseImpl<T> implements Promise<T> {
 					Thread.currentThread().interrupt();
 				}
 			}
+		}
+	}
+
+	/**
+	 * Use the lazy initialization holder class idiom to delay creating a Logger
+	 * until we actually need it.
+	 */
+	private static class Logger {
+		private final static java.util.logging.Logger	LOGGER;
+		static {
+			LOGGER = java.util.logging.Logger.getLogger(PromiseImpl.class.getName());
+		}
+		static void logCallbackException(Throwable t) {
+			LOGGER.log(java.util.logging.Level.WARNING, "Exception from Promise callback", t);
 		}
 	}
 }
