@@ -218,7 +218,7 @@ final class PromiseImpl<T> implements Promise<T> {
 					 * resolved Promise and (2) we cleared the interrupt status
 					 * above.
 					 */
-					throw new RuntimeException(e);
+					throw new Error(e);
 				}
 				if (t != null) {
 					if (failure != null) {
@@ -284,7 +284,7 @@ final class PromiseImpl<T> implements Promise<T> {
 					 * resolved Promise and (2) we cleared the interrupt status
 					 * above.
 					 */
-					throw new RuntimeException(e);
+					throw new Error(e);
 				}
 				if (t != null) {
 					chained.resolve(null, t);
@@ -295,14 +295,14 @@ final class PromiseImpl<T> implements Promise<T> {
 					value = returned.getValue();
 				} catch (InvocationTargetException e) {
 					// This can't happen since we checked error above
-					throw new RuntimeException(e);
+					throw new Error(e);
 				} catch (InterruptedException e) {
 					/*
 					 * This can't happen since (1) we are a callback on a
 					 * resolved Promise and (2) we cleared the interrupt status
 					 * above.
 					 */
-					throw new RuntimeException(e);
+					throw new Error(e);
 				}
 				chained.resolve(value, null);
 			} finally {
