@@ -17,6 +17,9 @@
 package org.osgi.test.cases.promise.junit;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -28,6 +31,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
 import org.osgi.util.promise.Deferred;
+import org.osgi.util.promise.FailedPromisesException;
 import org.osgi.util.promise.Failure;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
@@ -609,6 +613,245 @@ public class PromiseTest extends TestCase {
 		}
 	}
 
+	public void testNewResolvedPromise() throws Exception {
+		final CountDownLatch latch = new CountDownLatch(1);
+		String value = new String("value");
+		final Promise<String> p = Promises.newResolvedPromise(value);
+		assertTrue("promise not resolved", p.isDone());
+		p.onResolve(new Runnable() {
+			public void run() {
+				latch.countDown();
+			}
+		});
+		assertTrue("callback did not run", latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertNull("wrong error", p.getError());
+		assertSame("wrong value", value, p.getValue());
+	}
+
+	public void testLatchPromiseSuccess1() throws Exception {
+		final Deferred<Integer> d1 = new Deferred<Integer>();
+		final Promise<Integer> p1 = d1.getPromise();
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		p1.onResolve(new Runnable() {
+			public void run() {
+				latch1.countDown();
+			}
+		});
+		final Deferred<Long> d2 = new Deferred<Long>();
+		final Promise<Long> p2 = d2.getPromise();
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		p2.onResolve(new Runnable() {
+			public void run() {
+				latch2.countDown();
+			}
+		});
+		final Promise<Void> latched = Promises.newLatchPromise(p1, p2);
+		final CountDownLatch latch = new CountDownLatch(1);
+		latched.onResolve(new Runnable() {
+			public void run() {
+				latch.countDown();
+			}
+		});
+		assertFalse("p1 resolved", p1.isDone());
+		assertFalse("p2 resolved", p2.isDone());
+		assertFalse("latched resolved", latched.isDone());
+		Integer value1 = new Integer(12);
+		d1.resolve(value1);
+		assertTrue("p1 callback did not run after resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("p1 not resolved", p1.isDone());
+		assertNull("p1 wrong error", p1.getError());
+		assertSame("p1 wrong value", value1, p1.getValue());
+		assertFalse("p2 resolved", p2.isDone());
+		assertFalse("latched resolved", latched.isDone());
+		Long value2 = new Long(24);
+		d2.resolve(value2);
+		assertTrue("p2 callback did not run after resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("p2 not resolved", p2.isDone());
+		assertNull("p2 wrong error", p2.getError());
+		assertEquals("p2 wrong value", value2, p2.getValue());
+		assertTrue("latched callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("latched not resolved", latched.isDone());
+		assertNull("latched wrong error", latched.getError());
+		assertNull("latched wrong value", latched.getValue());
+	}
+
+	public void testLatchPromiseSuccess2() throws Exception {
+		final Deferred<String> d1 = new Deferred<String>();
+		final Promise<String> p1 = d1.getPromise();
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		p1.onResolve(new Runnable() {
+			public void run() {
+				latch1.countDown();
+			}
+		});
+		final Deferred<String> d2 = new Deferred<String>();
+		final Promise<String> p2 = d2.getPromise();
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		p2.onResolve(new Runnable() {
+			public void run() {
+				latch2.countDown();
+			}
+		});
+		Collection<Promise<String>> promises = new ArrayList<Promise<String>>();
+		promises.add(p1);
+		promises.add(p2);
+		final Promise<Void> latched = Promises.newLatchPromise(promises);
+		final CountDownLatch latch = new CountDownLatch(1);
+		latched.onResolve(new Runnable() {
+			public void run() {
+				latch.countDown();
+			}
+		});
+		assertFalse("p1 resolved", p1.isDone());
+		assertFalse("p2 resolved", p2.isDone());
+		assertFalse("latched resolved", latched.isDone());
+		String value1 = new String("12");
+		d1.resolve(value1);
+		assertTrue("p1 callback did not run after resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("p1 not resolved", p1.isDone());
+		assertNull("p1 wrong error", p1.getError());
+		assertSame("p1 wrong value", value1, p1.getValue());
+		assertFalse("p2 resolved", p2.isDone());
+		assertFalse("latched resolved", latched.isDone());
+		String value2 = new String("12");
+		d2.resolve(value2);
+		assertTrue("p2 callback did not run after resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("p2 not resolved", p2.isDone());
+		assertNull("p2 wrong error", p2.getError());
+		assertSame("p2 wrong value", value2, p2.getValue());
+		assertTrue("latched callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("latched not resolved", latched.isDone());
+		assertNull("latched wrong error", latched.getError());
+		assertNull("latched wrong value", latched.getValue());
+	}
+
+	public void testLatchPromiseFail1() throws Exception {
+		final Deferred<Integer> d1 = new Deferred<Integer>();
+		final Promise<Integer> p1 = d1.getPromise();
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		p1.onResolve(new Runnable() {
+			public void run() {
+				latch1.countDown();
+			}
+		});
+		final Deferred<Long> d2 = new Deferred<Long>();
+		final Promise<Long> p2 = d2.getPromise();
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		p2.onResolve(new Runnable() {
+			public void run() {
+				latch2.countDown();
+			}
+		});
+		final Deferred<Long> d3 = new Deferred<Long>();
+		final Promise<Long> p3 = d3.getPromise();
+		final CountDownLatch latch3 = new CountDownLatch(1);
+		p2.onResolve(new Runnable() {
+			public void run() {
+				latch3.countDown();
+			}
+		});
+		final Promise<Void> latched = Promises.newLatchPromise(p1, p2, p3);
+		final CountDownLatch latch = new CountDownLatch(1);
+		latched.onResolve(new Runnable() {
+			public void run() {
+				latch.countDown();
+			}
+		});
+		assertFalse("p1 resolved", p1.isDone());
+		assertFalse("p2 resolved", p2.isDone());
+		assertFalse("p3 resolved", p3.isDone());
+		assertFalse("latched resolved", latched.isDone());
+		Throwable f1 = new Exception("fail1");
+		d1.fail(f1);
+		assertTrue("p1 callback did not run after resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("p1 not resolved", p1.isDone());
+		assertSame("p1 wrong error", f1, p1.getError());
+		try {
+			p1.getValue();
+			fail("p1 getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong error", f1, e.getCause());
+		}
+		assertFalse("p2 resolved", p2.isDone());
+		assertFalse("latched resolved", latched.isDone());
+		Long value2 = new Long(24);
+		d2.resolve(value2);
+		assertTrue("p2 callback did not run after resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("p2 not resolved", p2.isDone());
+		assertNull("p2 wrong error", p2.getError());
+		assertSame("p2 wrong value", value2, p2.getValue());
+		assertFalse("latched resolved", latched.isDone());
+		Throwable f3 = new Exception("fail3");
+		d3.fail(f3);
+		assertTrue("p3 callback did not run after resolved", latch3.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("p3 not resolved", p3.isDone());
+		assertSame("p3 wrong error", f3, p3.getError());
+		try {
+			p3.getValue();
+			fail("p3 getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong error", f3, e.getCause());
+		}
+		assertTrue("latched callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("latched not resolved", latched.isDone());
+		FailedPromisesException fail = (FailedPromisesException)latched.getError();
+		assertNotNull("latched wrong error", fail);
+		Collection<Promise<?>> failedPromises = fail.getFailedPromises();
+		assertEquals("latched error contains wrong number of failed promise", 2, failedPromises.size());
+		assertTrue("latched error doesn't contain failed promise p1", failedPromises.contains(p1));
+		assertTrue("latched error doesn't contain failed promise p3", failedPromises.contains(p3));
+		try {
+			latched.getValue();
+			fail("latched getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong error", fail, e.getCause());
+		}
+	}
+
+	public void testLatchPromiseEmpty1() throws Exception {
+		Collection<Promise<String>> promises = Collections.emptyList();
+		final Promise<Void> latched = Promises.newLatchPromise(promises);
+		assertTrue("latched not resolved", latched.isDone());
+		final CountDownLatch latch = new CountDownLatch(1);
+		latched.onResolve(new Runnable() {
+			public void run() {
+				latch.countDown();
+			}
+		});
+		assertTrue("latched callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertNull("latched wrong error", latched.getError());
+		assertNull("latched wrong value", latched.getValue());
+	}
+
+	public void testLatchPromiseEmpty2() throws Exception {
+		final Promise<Void> latched = Promises.newLatchPromise();
+		assertTrue("latched not resolved", latched.isDone());
+		final CountDownLatch latch = new CountDownLatch(1);
+		latched.onResolve(new Runnable() {
+			public void run() {
+				latch.countDown();
+			}
+		});
+		assertTrue("latched callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertNull("latched wrong error", latched.getError());
+		assertNull("latched wrong value", latched.getValue());
+	}
+
+	public void testLatchPromiseNull() throws Exception {
+		try {
+			Promises.newLatchPromise((Promise<?>[]) null);
+			fail("expected NullPointerException");
+		} catch (NullPointerException e) {
+			// expected
+		}
+		try {
+			Promises.newLatchPromise((Collection<Promise<Object>>) null);
+			fail("expected NullPointerException");
+		} catch (NullPointerException e) {
+			// expected
+		}
+	}
+	
 	/**
 	 * Fail with cause t.
 	 * 

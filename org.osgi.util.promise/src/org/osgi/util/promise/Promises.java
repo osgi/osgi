@@ -16,8 +16,11 @@
 
 package org.osgi.util.promise;
 
-import java.lang.reflect.Array;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -41,72 +44,93 @@ public class Promises {
 		return new PromiseImpl<T>(value);
 	}
 
-	// TODO needs further review after discussion of usefulness of specifying
-	// these methods
-
 	/**
-	 * Run all the given promises in parallel. This will return a new promise
-	 * that will be resolved when all the given promises have been resolved.
+	 * Create a new Promise that is a latch on the resolution of the specified
+	 * Promises.
 	 * 
-	 * @param array the array that the return values from the promises are to be
-	 *        stored in. If the array is not big enough then a new array of the
-	 *        same element type will be used.
-	 * @param promises the array of promises
-	 * @return a new promise that will resolve when all of the supplied promises
-	 *         resolve.
-	 * @throws Exception
+	 * <p>
+	 * The new Promise acts as a gate and must be resolved after all of the
+	 * specified Promises are resolved.
+	 * 
+	 * @param promises The Promises which must be resolved before the returned
+	 *        Promise must be resolved. Must not be {@code null}.
+	 * @return A Promise that is resolved only when all the specified Promises
+	 *         are resolved. The returned Promise will be successfully resolved,
+	 *         with the value {@code null}, if all the specified Promises are
+	 *         successfully resolved. The returned Promise will be resolved with
+	 *         a failure of {@link FailedPromisesException} if any of the
+	 *         specified Promises are resolved with a failure. The failure
+	 *         {@link FailedPromisesException} must contain all of the specified
+	 *         Promises which resolved with a failure.
 	 */
-	static public <T> Promise<T[]> parallel(T[] array, Promise<? extends T>... promises) throws Exception {
-		final Deferred<T[]> resolver = new Deferred<T[]>();
-		final AtomicInteger count = new AtomicInteger(promises.length);
-		final Throwable[] exceptions = new Throwable[promises.length];
-
-		final T[] values = array.length >= promises.length ? array :
-				(T[]) Array.newInstance(array.getClass().getComponentType(), promises.length);
-		final AtomicBoolean errors = new AtomicBoolean(false);
-
-		int i = 0;
-		for (final Promise<? extends T> p : promises) {
-			final int index = i;
-
-			p.onResolve(new Runnable() {
-
+	public static <T> Promise<Void> newLatchPromise(Collection<Promise<T>> promises) {
+		if (promises.isEmpty()) {
+			return newResolvedPromise(null);
+		}
+		final Deferred<Void> deferred = new Deferred<Void>();
+		final int size = promises.size();
+		final List<Promise<?>> failed = Collections.synchronizedList(new ArrayList<Promise<?>>(size));
+		final AtomicInteger count = new AtomicInteger(size);
+		for (final Promise<?> promise : promises) {
+			promise.onResolve(new Runnable() {
 				public void run() {
+					final boolean interrupted = Thread.interrupted();
 					try {
-						if ((exceptions[index] = p.getError()) == null)
-							values[index] = p.getValue();
-						else
-							errors.set(true);
-
-					} catch (Exception e) {
-						exceptions[index] = e;
-						errors.set(true);
-					}
-
-					if (count.decrementAndGet() == 0) {
-						if (errors.get())
-							resolver.fail(new ParallelException(values,
-									exceptions));
-						else
-							resolver.resolve(values);
+						Throwable t = null;
+						try {
+							t = promise.getError();
+						} catch (InterruptedException e) {
+							/*
+							 * This can't happen since (1) we are a callback on
+							 * a resolved Promise and (2) we cleared the
+							 * interrupt status above.
+							 */
+							throw new Error(e);
+						}
+						if (t != null) {
+							failed.add(promise);
+						}
+						// If last specified promise to resolve
+						if (count.decrementAndGet() == 0) {
+							if (failed.isEmpty()) {
+								deferred.resolve(null);
+							} else {
+								deferred.fail(new FailedPromisesException(failed));
+							}
+						}
+					} finally {
+						if (interrupted) { // restore interrupt status
+							Thread.currentThread().interrupt();
+						}
 					}
 				}
-
 			});
-			i++;
 		}
-		return resolver.getPromise();
+		return deferred.getPromise();
 	}
 
 	/**
-	 * Run all the given promises in parallel. This will return a new promise
-	 * that will be resolved when all the given promises have been resolved.
+	 * Create a new Promise that is a latch on the resolution of the specified
+	 * Promises.
 	 * 
-	 * @param promises the array of promises
-	 * @return a new promise
-	 * @throws Exception
+	 * <p>
+	 * The new Promise acts as a gate and must be resolved after all of the
+	 * specified Promises are resolved.
+	 * 
+	 * @param promises The Promises which must be resolved before the returned
+	 *        Promise must be resolved. Must not be {@code null}.
+	 * @return A Promise that is resolved only when all the specified Promises
+	 *         are resolved. The returned Promise will be successfully resolved,
+	 *         with the value {@code null}, if all the specified Promises are
+	 *         successfully resolved. The returned Promise will be resolved with
+	 *         a failure of {@link FailedPromisesException} if any of the
+	 *         specified Promises are resolved with a failure. The failure
+	 *         {@link FailedPromisesException} must contain all of the specified
+	 *         Promises which resolved with a failure.
 	 */
-	static public Promise<Object[]> parallel(Promise<?>... promises) throws Exception {
-		return parallel(new Object[promises.length], promises);
+	public static Promise<Void> newLatchPromise(Promise<?>... promises) {
+		@SuppressWarnings("unchecked")
+		List<Promise<Object>> list = Arrays.asList((Promise<Object>[]) promises);
+		return newLatchPromise(list);
 	}
 }
