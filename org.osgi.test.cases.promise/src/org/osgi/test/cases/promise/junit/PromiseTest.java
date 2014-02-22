@@ -58,11 +58,12 @@ public class PromiseTest extends TestCase {
 		});
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p.isDone());
-		d.resolve("value");
+		String value = new String("value");
+		d.resolve(value);
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p.isDone());
 		assertNull("wrong error", p.getError());
-		assertEquals("wrong value", "value", p.getValue());
+		assertSame("wrong value", value, p.getValue());
 	}
 
 	public void testPromiseSuccess2() throws Exception {
@@ -77,11 +78,12 @@ public class PromiseTest extends TestCase {
 		});
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p.isDone());
-		d.resolve("value");
+		String value = new String("value");
+		d.resolve(value);
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p.isDone());
 		assertNull("wrong error", p.getError());
-		assertEquals("wrong value", "value", p.getValue());
+		assertSame("wrong value", value, p.getValue());
 	}
 
 	public void testPromiseSuccess3() throws Exception {
@@ -105,14 +107,15 @@ public class PromiseTest extends TestCase {
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p.isDone());
 		assertFalse("callback ran before resolved", p2.isDone());
-		d.resolve(Integer.valueOf(15));
+		Integer value = new Integer(15);
+		d.resolve(value);
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p.isDone());
 		assertTrue("callback did not run after resolved", p2.isDone());
 		assertEquals("wrong value", "15", p2.getValue());
 		assertNull("wrong error", p2.getError());
 		assertNull("wrong error", p.getError());
-		assertEquals("wrong value", Integer.valueOf(15), p.getValue());
+		assertSame("wrong value", value, p.getValue());
 	}
 
 	public void testPromiseSuccess4() throws Exception {
@@ -139,7 +142,8 @@ public class PromiseTest extends TestCase {
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p.isDone());
 		assertFalse("callback ran before resolved", p2.isDone());
-		d1.resolve(Integer.valueOf(15));
+		Integer value = new Integer(15);
+		d1.resolve(value);
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p.isDone());
 		assertFalse("callback ran before resolved", p2.isDone());
@@ -147,10 +151,10 @@ public class PromiseTest extends TestCase {
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p.isDone());
 		assertTrue("callback did not run after resolved", p2.isDone());
-		assertEquals("wrong value", "15", p2.getValue());
+		assertSame("wrong value", result.get(), p2.getValue());
 		assertNull("wrong error", p2.getError());
 		assertNull("wrong error", p.getError());
-		assertEquals("wrong value", Integer.valueOf(15), p.getValue());
+		assertSame("wrong value", value, p.getValue());
 	}
 
 	public void testPromiseFail1() throws Exception {
@@ -285,7 +289,8 @@ public class PromiseTest extends TestCase {
 
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertFalse("callback ran before resolved", p2.isDone());
-		d.resolve("Y");
+		String value = new String("Y");
+		d.resolve(value);
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p2.isDone());
 
@@ -354,7 +359,8 @@ public class PromiseTest extends TestCase {
 	public void testRepeat() throws Exception {
 		Deferred<String> d = new Deferred<String>();
 		Promise<String> p1 = d.getPromise();
-		d.resolve("10");
+		String value = new String("10");
+		d.resolve(value);
 		assertTrue("promise not resolved", p1.isDone());
 
 		final CountDownLatch latch1 = new CountDownLatch(1);
@@ -415,7 +421,8 @@ public class PromiseTest extends TestCase {
 		assertFalse(p1.isDone());
 		assertFalse(p2.isDone());
 
-		d.resolve("20");
+		String value = new String("20");
+		d.resolve(value);
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(p1.isDone());
 		assertFalse(p2.isDone());
@@ -577,7 +584,7 @@ public class PromiseTest extends TestCase {
 		d.resolve(result);
 		assertTrue("should be resolved", p.isDone());
 		assertNull("wrong error", p.getError());
-		assertEquals("wrong value", result, p.getValue());
+		assertSame("wrong value", result, p.getValue());
 		assertTrue("all callbacks did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 	}
 
