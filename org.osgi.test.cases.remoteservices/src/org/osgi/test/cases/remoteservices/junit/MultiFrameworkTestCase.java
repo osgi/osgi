@@ -20,8 +20,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.URL;
+import java.net.URLDecoder;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -109,7 +111,14 @@ public abstract class MultiFrameworkTestCase extends OSGiTestCase {
 				StringTokenizer equaltok = new StringTokenizer(
 						fwproperty.trim(), "=");
 				String name = equaltok.nextToken().trim();
-				String value = equaltok.nextToken().trim();
+				String value = null;
+				try {
+					value = URLDecoder.decode(equaltok.nextToken().trim(),
+							"UTF-8");
+				} catch (UnsupportedEncodingException e) {
+					// Valid Java implementations must support UTF-8
+					throw new AssertionError();
+				}
 				properties.put(name, value);
 			}
 		}
