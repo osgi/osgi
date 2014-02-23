@@ -44,6 +44,10 @@ import org.osgi.test.cases.remoteserviceadmin.common.Utils;
  * The bundle is very similar to tb1 but uses the RSA 1.1 EndpointEventListener
  * instead of the deprecated EndpointListener.
  * 
+ * The bundle further provides an implementation of the ModifiableService
+ * allowing to remotely change the service registration to cause a service
+ * modified event.
+ * 
  * @author <a href="mailto:marc@marc-schaaf.de">Marc Schaaf</a>
  * 
  */
@@ -52,6 +56,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 	private ServiceRegistration<ModifiableService> registration;
 	private EndpointDescription endpoint;
 	private BundleContext bctx;
+	private Map<String, Object> endpointProperties;
 
 	public void start(BundleContext context) throws Exception {
 		this.bctx = context;
@@ -93,6 +98,8 @@ public class Activator implements BundleActivator, ModifiableService, B {
 		endpoint = new EndpointDescription(registration.getReference(),
 				properties);
 
+		endpointProperties = properties;
+
 		//
 		// find the EndpointListeners and call them with the endpoint
 		// description
@@ -124,7 +131,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 
 	public void addServiceProperty() {
 		System.out
-				.println("------------------------- ADD SERVICE PROPERTY AND SEND MODIFIED EVENT ---------------- ");
+				.println("TestBundle7: ------------------------- ADD SERVICE PROPERTY AND SEND MODIFIED EVENT ---------------- ");
 		// update the service registration
 		Hashtable<String, String> properties_reg = createBasicServiceProperties();
 		properties_reg.put("someNewProp", "SomeValue");
@@ -136,6 +143,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 		properties.put("someNewProp", "SomeValue");
 		endpoint= new EndpointDescription(registration.getReference(),
 				properties);
+
 		EndpointEvent endpointEvent = new EndpointEvent(EndpointEvent.MODIFIED,
 				endpoint);
 		try {
@@ -153,7 +161,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 		registration.setProperties(properties_reg);
 
 		// notify all endpointEventListeners about the modification
-		Map<String, Object> properties = endpoint.getProperties();
+		Map<String, Object> properties = endpointProperties;
 		properties.put("mykey", "set to a non matching value");
 		endpoint = new EndpointDescription(registration.getReference(),
 				properties);
@@ -189,7 +197,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 				foundListener = true;
 				listener.endpointChanged(endpointEvent, matchedFilter);
 				System.out
-						.println("******************** Propagated EndpointChanged Event to endpointEventListener: "
+						.println("TestBundle7: ******************** Propagated EndpointChanged Event to endpointEventListener: "
 								+ listener + " <<  " + endpointEvent.getType());
 			}
 		}
