@@ -328,6 +328,18 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			}
 
 
+			// gather all export references so that we can check if calls
+			// against them are really null once the ExportRegistrations where
+			// closed. Need to gather them here as later there will be no chance
+			// to get them anympore.
+			List<ExportReference> oldExportReferences = new LinkedList<ExportReference>();
+			for (Iterator<ExportRegistration> regIt = exportRegistrations
+					.iterator(); regIt.hasNext();) {
+				ExportRegistration exportRegistration = regIt.next();
+				oldExportReferences
+						.add(exportRegistration.getExportReference());
+			}
+
 			// ungetting the RSA service will also close the ExportRegistration and therefore
 			// emit an event
 			ungetService(remoteServiceAdmin);
@@ -336,14 +348,25 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 								// events.
 
 			if (!exportFailed) {
+
+				for (ExportReference exRef : oldExportReferences) {
+					assertNull(
+							"122.4.1: after closing ExportRegistration, ExportReference.getExportedEndpoint must return null",
+							exRef.getExportedEndpoint());
+					assertNull(
+							"122.4.1: after closing ExportRegistration, ExportReference.getExportedService must return null",
+							exRef.getExportedService());
+				}
+				oldExportReferences.clear();
+
+
 				for (Iterator<ExportRegistration> registrationiterator = exportRegistrations.iterator(); registrationiterator.hasNext();) {
 					ExportRegistration exportregistration = registrationiterator.next();
-					ExportReference reference = exportregistration.getExportReference();
 
-					assertNull("122.4.1: after closing ExportRegistration, ExportReference.getExportedEndpoint must return null",
-							reference.getExportedEndpoint());
-					assertNull("122.4.1: after closing ExportRegistration, ExportReference.getExportedService must return null",
-							reference.getExportedService());
+					ExportReference reference = exportregistration.getExportReference();
+					assertNull(
+							"After closing the ExportRegistration, all calls against the ExportRegistration must return null",
+							reference);
 				}
 
 				event = remoteServiceAdminListener.getNextEvent();
