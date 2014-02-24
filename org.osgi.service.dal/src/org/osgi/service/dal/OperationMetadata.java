@@ -19,9 +19,9 @@ package org.osgi.service.dal;
 import java.util.Map;
 
 /**
- * Contains metadata about Device Function operation.
+ * Contains metadata about function operation.
  * 
- * @see DeviceFunction
+ * @see Function
  * @see PropertyMetadata
  */
 public interface OperationMetadata {
@@ -33,7 +33,7 @@ public interface OperationMetadata {
 	public static final String	META_INFO_DESCRIPTION	= "description";
 
 	/**
-	 * Returns metadata about the Device Function operation. The keys of the
+	 * Returns metadata about the function operation. The keys of the
 	 * <code>java.util.Map</code> result must be of
 	 * <code>java.lang.String</code> type. Possible keys:
 	 * <ul>

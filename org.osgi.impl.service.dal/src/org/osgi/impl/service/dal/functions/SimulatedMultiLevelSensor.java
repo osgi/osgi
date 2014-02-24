@@ -23,10 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.dal.PropertyMetadataImpl;
-import org.osgi.impl.service.dal.SimulatedDeviceFunction;
+import org.osgi.impl.service.dal.SimulatedFunction;
 import org.osgi.service.dal.DeviceException;
-import org.osgi.service.dal.DeviceFunction;
-import org.osgi.service.dal.DeviceFunctionData;
+import org.osgi.service.dal.Function;
+import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.MultiLevelSensor;
 import org.osgi.service.dal.functions.data.LevelData;
@@ -35,7 +35,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Simulated <code>MultiLevelSensor</code>.
  */
-public final class SimulatedMultiLevelSensor extends SimulatedDeviceFunction implements MultiLevelSensor {
+public final class SimulatedMultiLevelSensor extends SimulatedFunction implements MultiLevelSensor {
 
 	private static final Map	PROPERTY_METADATA;
 	private static final Map	OPERATION_METADATA	= null;
@@ -51,7 +51,7 @@ public final class SimulatedMultiLevelSensor extends SimulatedDeviceFunction imp
 		PropertyMetadata propMetadata = new PropertyMetadataImpl(
 				metadata, // metadata
 				null,     // resolution
-				new DeviceFunctionData[] {LEVEL_DATA},// enumValues
+				new FunctionData[] {LEVEL_DATA},// enumValues
 				LEVEL_DATA,     // minValue
 				LEVEL_DATA);    // maxValue
 		PROPERTY_METADATA = new HashMap();
@@ -72,7 +72,7 @@ public final class SimulatedMultiLevelSensor extends SimulatedDeviceFunction imp
 
 	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
 		functionProps.put(
-				DeviceFunction.SERVICE_PROPERTY_NAMES,
+				Function.SERVICE_PROPERTY_NAMES,
 				new String[] {MultiLevelSensor.PROPERTY_DATA});
 		return functionProps;
 	}

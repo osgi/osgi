@@ -18,7 +18,7 @@
 package org.osgi.impl.service.dal;
 
 import java.util.Map;
-import org.osgi.service.dal.DeviceFunctionData;
+import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.PropertyMetadata;
 
 /**
@@ -28,9 +28,9 @@ public final class PropertyMetadataImpl implements PropertyMetadata {
 
 	private final Map		metadata;
 	private final Object	resolution;
-	private final DeviceFunctionData[]	enumValues;
-	private final DeviceFunctionData	minValue;
-	private final DeviceFunctionData	maxValue;
+	private final FunctionData[]	enumValues;
+	private final FunctionData	minValue;
+	private final FunctionData	maxValue;
 
 	/**
 	 * Constructs the property metadata with the specified arguments.
@@ -44,9 +44,9 @@ public final class PropertyMetadataImpl implements PropertyMetadata {
 	public PropertyMetadataImpl(
 			Map metadata,
 			Object resolution,
-			DeviceFunctionData[] enumValues,
-			DeviceFunctionData minValue,
-			DeviceFunctionData maxValue) {
+			FunctionData[] enumValues,
+			FunctionData minValue,
+			FunctionData maxValue) {
 		this.metadata = metadata;
 		this.resolution = resolution;
 		this.enumValues = enumValues;
@@ -62,15 +62,15 @@ public final class PropertyMetadataImpl implements PropertyMetadata {
 		return this.resolution;
 	}
 
-	public DeviceFunctionData[] getEnumValues(String unit) throws IllegalArgumentException {
+	public FunctionData[] getEnumValues(String unit) throws IllegalArgumentException {
 		return this.enumValues;
 	}
 
-	public DeviceFunctionData getMinValue(String unit) throws IllegalArgumentException {
+	public FunctionData getMinValue(String unit) throws IllegalArgumentException {
 		return this.minValue;
 	}
 
-	public DeviceFunctionData getMaxValue(String unit) throws IllegalArgumentException {
+	public FunctionData getMaxValue(String unit) throws IllegalArgumentException {
 		return this.maxValue;
 	}
 

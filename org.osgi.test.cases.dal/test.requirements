@@ -1,15 +1,9 @@
 org.osgi.test.cases.dal test case requirements and manual steps:
 00. All manual steps are described and defined as constants in org.osgi.test.cases.dal.Commands.
 01. All device service properties must be supported by one or many devices.
-02. All device function properties must be supported by one or many device functions.
-03. There must be at least one device function with readable property.
-04. There must be at least one device function with writable property.
-05. There must be at least one device function with at least one operation.
+02. All function properties must be supported by one or many functions.
+03. There must be at least one function with readable property.
+04. There must be at least one function with writable property.
+05. There must be at least one function with at least one operation.
 06. There must be at least one device with remove operation support.
 07. There must be at least one BooleanControl with eventable property.
-08. All BooleanControl operations/getters/setters must be supported by one or many device functions.
-09. All BooleanSensor operations/getters/setters must be supported by one or many device functions.
-10. All MultiLevelControl operations/getters/setters must be supported by one or many device functions.
-11. All MultiLevelSensor operations/getters/setters must be supported by one or many device functions.
-12. All Meter operations/getters must be supported by one or many device functions.
-13. All WakeUp operations/getters/setters must be supported by at least one device function.

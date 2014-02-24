@@ -1,0 +1,8 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd	
+
+Export-Package: ${p}.*; -split-package:=first
+
+-buildpath = \
+	org.osgi.service.dal;		version=project, \
+	ee.minimum;					version=1.2

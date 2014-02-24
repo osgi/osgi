@@ -21,7 +21,7 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import org.osgi.framework.Constants;
 import org.osgi.service.dal.Device;
-import org.osgi.service.dal.DeviceFunction;
+import org.osgi.service.dal.Function;
 import org.osgi.service.dal.simulator.DeviceSimulator;
 import org.osgi.test.cases.step.TestStep;
 import org.osgi.util.tracker.ServiceTracker;
@@ -72,11 +72,11 @@ public class TestStepImpl implements TestStep {
 				final String functionUID = deviceUID + ':' + i;
 				functionProps[i] = new Hashtable(6, 1F);
 				functionProps[i].put(Constants.OBJECTCLASS, parameters[i]);
-				functionProps[i].put(DeviceFunction.SERVICE_UID, functionUID);
-				functionProps[i].put(DeviceFunction.SERVICE_VERSION, functionUID + "-version");
-				functionProps[i].put(DeviceFunction.SERVICE_DESCRIPTION, functionUID + "-description");
-				functionProps[i].put(DeviceFunction.SERVICE_DEVICE_UID, deviceUID);
-				functionProps[i].put(DeviceFunction.SERVICE_TYPE, functionUID + "-type");
+				functionProps[i].put(Function.SERVICE_UID, functionUID);
+				functionProps[i].put(Function.SERVICE_VERSION, functionUID + "-version");
+				functionProps[i].put(Function.SERVICE_DESCRIPTION, functionUID + "-description");
+				functionProps[i].put(Function.SERVICE_DEVICE_UID, deviceUID);
+				functionProps[i].put(Function.SERVICE_TYPE, functionUID + "-type");
 			}
 		}
 		return deviceSimulator.registerDevice(deviceProps, functionProps);

@@ -34,7 +34,7 @@ public interface DeviceSimulator {
 	 * 
 	 * @param deviceProps The device properties. They cannot be
 	 *        <code>null</code>.
-	 * @param functionProps The device function properties. They can be
+	 * @param functionProps The function properties. They can be
 	 *        <code>null</code>.
 	 * 
 	 * @return The registered device.

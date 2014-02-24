@@ -25,7 +25,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.dal.DeviceFunction;
+import org.osgi.service.dal.Function;
 
 /**
  * Test utility class.
@@ -114,26 +114,6 @@ public final class TestUtil {
 	}
 
 	/**
-	 * Based on the accessor name, returns the properyt name.
-	 * 
-	 * @param beanAccessorMethod The accessor name.
-	 * 
-	 * @return The property name.
-	 */
-	public static String getPropertyName(String beanAccessorMethod) {
-		if (beanAccessorMethod.length() < 4) {
-			return null;
-		}
-		char firstChar = beanAccessorMethod.charAt(0);
-		if ((('g' == firstChar) || ('s' == firstChar)) &&
-				('e' == beanAccessorMethod.charAt(1)) &&
-				('t' == beanAccessorMethod.charAt(2))) {
-			return beanAccessorMethod.substring(3).toLowerCase();
-		}
-		return null;
-	}
-
-	/**
 	 * Returns all class methods with the given name.
 	 * 
 	 * @param classObj The class to search in.
@@ -154,26 +134,26 @@ public final class TestUtil {
 	}
 
 	/**
-	 * Returns the device function class instance.
+	 * Returns the function class instance.
 	 * 
-	 * @param deviceFunction The device function.
+	 * @param function The function.
 	 * @param bc The bundle context.
 	 * 
 	 * @return The function class.
 	 * 
 	 * @throws ClassNotFoundException If the class cannot be found.
 	 */
-	public static Class getDeviceFunctionClass(DeviceFunction deviceFunction, BundleContext bc) throws ClassNotFoundException {
+	public static Class getFunctionClass(Function function, BundleContext bc) throws ClassNotFoundException {
 		try {
-			Long serviceId = (Long) deviceFunction.getServiceProperty(Constants.SERVICE_ID);
+			Long serviceId = (Long) function.getServiceProperty(Constants.SERVICE_ID);
 			ServiceReference[] sRefs = bc.getServiceReferences(
 					null, '(' + Constants.SERVICE_ID + '=' + serviceId + ')');
 			if (1 != sRefs.length) {
 				throw new IllegalArgumentException(
-						"Cannot find the device function service with id: " + serviceId);
+						"Cannot find the function service with id: " + serviceId);
 			}
 			return sRefs[0].getBundle().loadClass(
-					(((String[]) deviceFunction.getServiceProperty(Constants.OBJECTCLASS))[0]));
+					(((String[]) function.getServiceProperty(Constants.OBJECTCLASS))[0]));
 		} catch (InvalidSyntaxException e) {
 			// the filter is valid, it's not possible
 			return null;

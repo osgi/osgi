@@ -25,16 +25,16 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.service.dal.Device;
-import org.osgi.service.dal.DeviceFunction;
+import org.osgi.service.dal.Function;
 
 /**
- * Test listener to track device and device function related service events.
+ * Test listener to track device and function related service events.
  */
 final class DeviceServiceListener implements ServiceListener {
 
 	private static final String	DEVICE_FILTER	=
 														"(|(" + Constants.OBJECTCLASS + '=' + Device.class.getName() + ")(" +
-																Constants.OBJECTCLASS + '=' + DeviceFunction.class.getName() + "))";
+																Constants.OBJECTCLASS + '=' + Function.class.getName() + "))";
 
 	private final List			events;
 	private final BundleContext	bc;

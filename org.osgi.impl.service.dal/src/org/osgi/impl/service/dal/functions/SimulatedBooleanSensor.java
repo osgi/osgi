@@ -22,9 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.dal.PropertyMetadataImpl;
-import org.osgi.impl.service.dal.SimulatedDeviceFunction;
+import org.osgi.impl.service.dal.SimulatedFunction;
 import org.osgi.service.dal.DeviceException;
-import org.osgi.service.dal.DeviceFunction;
+import org.osgi.service.dal.Function;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.BooleanSensor;
 import org.osgi.service.dal.functions.data.BooleanData;
@@ -33,7 +33,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Simulated <code>BooleanSensor</code>.
  */
-public final class SimulatedBooleanSensor extends SimulatedDeviceFunction implements BooleanSensor {
+public final class SimulatedBooleanSensor extends SimulatedFunction implements BooleanSensor {
 
 	private static final Map	PROPERTY_METADATA;
 	private static final Map	OPERATION_METADATA	= null;
@@ -68,7 +68,7 @@ public final class SimulatedBooleanSensor extends SimulatedDeviceFunction implem
 
 	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
 		functionProps.put(
-				DeviceFunction.SERVICE_PROPERTY_NAMES,
+				Function.SERVICE_PROPERTY_NAMES,
 				new String[] {BooleanSensor.PROPERTY_DATA});
 		return functionProps;
 	}

@@ -61,7 +61,7 @@ public class DeviceSimulatorImpl implements DeviceSimulator {
 	 * 
 	 * @param bc The bundle context.
 	 * @param eventAdminTracker The event admin tracker.
-	 * @param timer The timer used by some device functions.
+	 * @param timer The timer used by some functions.
 	 */
 	public DeviceSimulatorImpl(final BundleContext bc, final ServiceTracker eventAdminTracker, Timer timer) {
 		this.registeredDevices = new ArrayList();
@@ -71,32 +71,32 @@ public class DeviceSimulatorImpl implements DeviceSimulator {
 	}
 
 	/*
-	 * All device function implementations must provide a constructor with three
+	 * All function implementations must provide a constructor with three
 	 * parameters: properties, bundle context and event admin tracker.
 	 */
 	public Device registerDevice(Dictionary deviceProps, Dictionary[] functionProps) {
 		if (null == deviceProps) {
 			throw new NullPointerException("The device properties are null.");
 		}
-		SimulatedDeviceFunction[] deviceFunctions = null;
+		SimulatedFunction[] functions = null;
 		if (null != functionProps) {
-			deviceFunctions = new SimulatedDeviceFunction[functionProps.length];
+			functions = new SimulatedFunction[functionProps.length];
 			for (int i = 0; i < functionProps.length; i++) {
 				Class functionClass;
 				try {
 					functionClass = Class.forName(
 							getSimulatedFunctionClass((String) functionProps[i].get(Constants.OBJECTCLASS)));
-					deviceFunctions[i] = newDeviceFunctionInstance(functionClass, functionProps[i]);
+					functions[i] = newFunctionInstance(functionClass, functionProps[i]);
 				} catch (Exception e) {
 					for (int ii = 0; ii < i; ii++) {
-						deviceFunctions[ii].remove();
+						functions[ii].remove();
 					}
-					throw new IllegalArgumentException("The device function type is not supported: " +
+					throw new IllegalArgumentException("The function type is not supported: " +
 							(String) functionProps[i].get(Constants.OBJECTCLASS));
 				}
 			}
 		}
-		Device device = new SimulatedDevice(deviceProps, this.bc, deviceFunctions);
+		Device device = new SimulatedDevice(deviceProps, this.bc, functions);
 		synchronized (this.lock) {
 			if (null != this.registeredDevices) {
 				this.registeredDevices.add(device);
@@ -127,15 +127,15 @@ public class DeviceSimulatorImpl implements DeviceSimulator {
 		this.deviceSimulatorSReg.unregister();
 	}
 
-	private SimulatedDeviceFunction newDeviceFunctionInstance(Class functionClass, Dictionary functionProps) throws IllegalAccessException, InstantiationException, InvocationTargetException,
+	private SimulatedFunction newFunctionInstance(Class functionClass, Dictionary functionProps) throws IllegalAccessException, InstantiationException, InvocationTargetException,
 			NoSuchMethodException {
 		try {
 			Constructor functionConstructor = functionClass.getConstructor(FUNCTION_CONSTRUCTOR_ARGS);
-			return (SimulatedDeviceFunction) functionConstructor.newInstance(
+			return (SimulatedFunction) functionConstructor.newInstance(
 					new Object[] {functionProps, this.bc, this.eventAdminTracker});
 		} catch (NoSuchMethodException nsme) {
 			Constructor functionConstructor = functionClass.getConstructor(FUNCTION_CONSTRUCTOR_ARGS_TIMER);
-			return (SimulatedDeviceFunction) functionConstructor.newInstance(
+			return (SimulatedFunction) functionConstructor.newInstance(
 					new Object[] {functionProps, this.bc, this.eventAdminTracker, this.timer});
 		}
 	}

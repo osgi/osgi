@@ -19,62 +19,61 @@ package org.osgi.service.dal;
 import java.util.Map;
 
 /**
- * Contains metadata about Device Function property or Device Function operation
- * parameter.
+ * Contains metadata about function property or function operation parameter.
  * 
- * The access to the Device Function properties is a bitmap value of
- * {@link #PROPERTY_ACCESS} metadata key. Device Function properties
- * can be accessed in three ways. Any combinations between them are possible:
+ * The access to the function properties is a bitmap value of
+ * {@link #PROPERTY_ACCESS} metadata key. Function properties can be accessed in
+ * three ways. Any combinations between them are possible:
  * <ul>
  * <li>
- * {@link #PROPERTY_ACCESS_READABLE} - available for all properties,
- * which can be read. Device Function must provide a getter method for an access
- * to the property value.</li>
+ * {@link #PROPERTY_ACCESS_READABLE} - available for all properties, which can
+ * be read. Function must provide a getter method for an access to the property
+ * value.</li>
  * <li>
- * {@link #PROPERTY_ACCESS_WRITABLE} - available for all properties,
- * which can be modified. Device Function must provide a setter method for a
- * modification of the property value.</li>
+ * {@link #PROPERTY_ACCESS_WRITABLE} - available for all properties, which can
+ * be modified. Function must provide a setter method for a modification of the
+ * property value.</li>
  * <li>
- * {@link #PROPERTY_ACCESS_EVENTABLE} - available for all properties,
- * which can report the property value. {@link DeviceFunctionEvent}s are sent on
- * property change.</li>
+ * {@link #PROPERTY_ACCESS_EVENTABLE} - available for all properties, which can
+ * report the property value. {@link FunctionEvent}s are sent on property
+ * change.</li>
  * </ul>
  * 
- * @see DeviceFunction
+ * @see Function
  * @see PropertyMetadata
  */
 public interface PropertyMetadata {
 
 	/**
-	 * Marks the readable Device Function properties. The flag can be used as a
-	 * part of bitmap value of {@link #PROPERTY_ACCESS}. The readable
-	 * access mandates Device Function to provide a property getter method.
+	 * Marks the readable function properties. The flag can be used as a part of
+	 * bitmap value of {@link #PROPERTY_ACCESS}. The readable access mandates
+	 * function to provide a property getter method.
 	 * 
-	 * @see DeviceFunction
+	 * @see Function
 	 */
 	public static final int		PROPERTY_ACCESS_READABLE	= 1;
 
 	/**
-	 * Marks the writable Device Function properties. The flag can be used as a
-	 * part of bitmap value of {@link #PROPERTY_ACCESS}. The writable
-	 * access mandates Device Function to provide a property setter methods.
+	 * Marks the writable function properties. The flag can be used as a part of
+	 * bitmap value of {@link #PROPERTY_ACCESS}. The writable access mandates
+	 * function to provide a property setter methods.
 	 * 
-	 * @see DeviceFunction
+	 * @see Function
 	 */
 	public static final int		PROPERTY_ACCESS_WRITABLE	= 2;
 
 	/**
-	 * Marks the eventable Device Function properties. The flag can be used as a
-	 * part of bitmap value of {@link #PROPERTY_ACCESS}.
+	 * Marks the eventable function properties. The flag can be used as a part
+	 * of bitmap value of {@link #PROPERTY_ACCESS}.
 	 * 
-	 * @see DeviceFunction
+	 * @see Function
 	 */
 	public static final int		PROPERTY_ACCESS_EVENTABLE	= 4;
 
 	/**
-	 * Metadata key, which value represents the access to the Device Function
-	 * property. The property value is a bitmap of <code>Integer</code> type.
-	 * The bitmap can be any combination of:
+	 * Metadata key, which value represents the access to the function property.
+	 * The property value is a bitmap of <code>Integer</code> type. The bitmap
+	 * can be any combination of:
 	 * <ul>
 	 * <li>{@link #PROPERTY_ACCESS_READABLE}</li>
 	 * <li>{@link #PROPERTY_ACCESS_WRITABLE}</li>
@@ -83,8 +82,8 @@ public interface PropertyMetadata {
 	 * For example, value Integer(3) means that the property is readable and
 	 * writable, but not eventable.
 	 * <p>
-	 * The property access is available only for Device Function properties and
-	 * it's missing for the operation parameters.
+	 * The property access is available only for function properties and it's
+	 * missing for the operation parameters.
 	 */
 	public static final String	PROPERTY_ACCESS			= "property.access";
 
@@ -116,14 +115,14 @@ public interface PropertyMetadata {
 	public static final String	UNITS						= "units";
 
 	/**
-	 * Returns metadata about the Device Function property or operation
-	 * parameter. The keys of the <code>java.util.Map</code> result must be of
+	 * Returns metadata about the function property or operation parameter. The
+	 * keys of the <code>java.util.Map</code> result must be of
 	 * <code>java.lang.String</code> type. Possible keys:
 	 * <ul>
 	 * <li>{@link #DESCRIPTION} - doesn't depend on the given unit.</li>
-	 * <li>{@link #PROPERTY_ACCESS} - available only for Device
-	 * Function property and missing for Device FUnction operation parameters.
-	 * It doesn't depend on the given unit.</li>
+	 * <li>{@link #PROPERTY_ACCESS} - available only for function property and
+	 * missing for function operation parameters. It doesn't depend on the given
+	 * unit.</li>
 	 * <li>{@link #UNITS} - doesn't depend on the given unit.</li>
 	 * <li>custom key - can depend on the unit.</li>
 	 * </ul>
@@ -140,8 +139,7 @@ public interface PropertyMetadata {
 	 * Returns the resolution value of specific range. For example, if the range
 	 * is [0, 100], the resolution can be 10. That's the different between two
 	 * values in series. The resolution type depends on the property type. If
-	 * the property is using data bean like
-	 * {@link org.osgi.service.dal.functions.data.LevelData}, the
+	 * the property is using data bean like <code>LevelData</code>, the
 	 * resolution will the <code>BigDecimal</code>.
 	 * 
 	 * @param unit The unit to align the resolution, can be <code>null</code>.
@@ -168,7 +166,7 @@ public interface PropertyMetadata {
 	 * 
 	 * @throws IllegalArgumentException If the unit is not supported.
 	 */
-	public DeviceFunctionData[] getEnumValues(String unit) throws IllegalArgumentException;
+	public FunctionData[] getEnumValues(String unit) throws IllegalArgumentException;
 
 	/**
 	 * Returns the property minimum value according to the specified unit. If
@@ -184,7 +182,7 @@ public interface PropertyMetadata {
 	 * 
 	 * @throws IllegalArgumentException If the unit is not supported.
 	 */
-	public DeviceFunctionData getMinValue(String unit) throws IllegalArgumentException;
+	public FunctionData getMinValue(String unit) throws IllegalArgumentException;
 
 	/**
 	 * Returns the property maximum value according to the specified unit. If
@@ -200,6 +198,6 @@ public interface PropertyMetadata {
 	 * 
 	 * @throws IllegalArgumentException If the unit is not supported.
 	 */
-	public DeviceFunctionData getMaxValue(String unit) throws IllegalArgumentException;
+	public FunctionData getMaxValue(String unit) throws IllegalArgumentException;
 
 }

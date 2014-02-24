@@ -22,9 +22,9 @@ import java.util.HashMap;
 import java.util.Map;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.dal.PropertyMetadataImpl;
-import org.osgi.impl.service.dal.SimulatedDeviceFunction;
+import org.osgi.impl.service.dal.SimulatedFunction;
 import org.osgi.service.dal.DeviceException;
-import org.osgi.service.dal.DeviceFunction;
+import org.osgi.service.dal.Function;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.BooleanControl;
 import org.osgi.service.dal.functions.data.BooleanData;
@@ -33,7 +33,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Simulated <code>BooleanControl</code>.
  */
-public final class SimulatedBooleanControl extends SimulatedDeviceFunction implements BooleanControl {
+public final class SimulatedBooleanControl extends SimulatedFunction implements BooleanControl {
 
 	private static final Map	PROPERTY_METADATA;
 	private static final Map	OPERATION_METADATA	= null;
@@ -95,10 +95,10 @@ public final class SimulatedBooleanControl extends SimulatedDeviceFunction imple
 
 	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
 		functionProps.put(
-				DeviceFunction.SERVICE_PROPERTY_NAMES,
+				Function.SERVICE_PROPERTY_NAMES,
 				new String[] {BooleanControl.PROPERTY_DATA});
 		functionProps.put(
-				DeviceFunction.SERVICE_OPERATION_NAMES,
+				Function.SERVICE_OPERATION_NAMES,
 				new String[] {
 						BooleanControl.OPERATION_REVERSE,
 						BooleanControl.OPERATION_SET_FALSE,

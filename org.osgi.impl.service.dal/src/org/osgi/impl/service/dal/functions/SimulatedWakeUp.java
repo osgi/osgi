@@ -25,9 +25,9 @@ import java.util.Timer;
 import java.util.TimerTask;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.dal.PropertyMetadataImpl;
-import org.osgi.impl.service.dal.SimulatedDeviceFunction;
+import org.osgi.impl.service.dal.SimulatedFunction;
 import org.osgi.service.dal.DeviceException;
-import org.osgi.service.dal.DeviceFunction;
+import org.osgi.service.dal.Function;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.Units;
 import org.osgi.service.dal.functions.WakeUp;
@@ -38,7 +38,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Simulated <code>WakeUp</code> function.
  */
-public final class SimulatedWakeUp extends SimulatedDeviceFunction implements WakeUp {
+public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 
 	private static final String		MILLIS				= Units.PREFIX_MILLI + Units.SECOND;
 	private static final String[]	MILLIS_ARRAY		= new String[] {MILLIS};
@@ -153,7 +153,7 @@ public final class SimulatedWakeUp extends SimulatedDeviceFunction implements Wa
 
 	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
 		functionProps.put(
-				DeviceFunction.SERVICE_PROPERTY_NAMES,
+				Function.SERVICE_PROPERTY_NAMES,
 				new String[] {
 						WakeUp.PROPERTY_WAKE_UP_INTERVAL,
 						WakeUp.PROPERTY_AWAKE});

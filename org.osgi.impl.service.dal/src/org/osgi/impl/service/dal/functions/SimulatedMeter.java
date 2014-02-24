@@ -23,10 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.dal.PropertyMetadataImpl;
-import org.osgi.impl.service.dal.SimulatedDeviceFunction;
+import org.osgi.impl.service.dal.SimulatedFunction;
 import org.osgi.service.dal.DeviceException;
-import org.osgi.service.dal.DeviceFunction;
-import org.osgi.service.dal.DeviceFunctionData;
+import org.osgi.service.dal.Function;
+import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.Units;
 import org.osgi.service.dal.functions.Meter;
@@ -36,7 +36,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Simulated <code>Meter</code>.
  */
-public final class SimulatedMeter extends SimulatedDeviceFunction implements Meter {
+public final class SimulatedMeter extends SimulatedFunction implements Meter {
 
 	private static final String	MILLIS	= Units.PREFIX_MILLI + Units.SECOND;
 	private static final String[]	MILLIS_ARRAY				= new String[] {MILLIS};
@@ -58,7 +58,7 @@ public final class SimulatedMeter extends SimulatedDeviceFunction implements Met
 		PropertyMetadata currentPropMetadata = new PropertyMetadataImpl(
 				metadata, // metadata
 				CURRENT_MEASUREMENT_LEVEL,     // resolution
-				new DeviceFunctionData[] {CURRENT_MEASUREMENT_LEVEL},// enumValues
+				new FunctionData[] {CURRENT_MEASUREMENT_LEVEL},// enumValues
 				CURRENT_MEASUREMENT_LEVEL,     // minValue
 				CURRENT_MEASUREMENT_LEVEL);    // maxValue
 		PropertyMetadata totalPropMetadata = new PropertyMetadataImpl(
@@ -101,10 +101,10 @@ public final class SimulatedMeter extends SimulatedDeviceFunction implements Met
 
 	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
 		functionProps.put(
-				DeviceFunction.SERVICE_PROPERTY_NAMES,
+				Function.SERVICE_PROPERTY_NAMES,
 				new String[] {Meter.PROPERTY_CURRENT, Meter.PROPERTY_TOTAL});
 		functionProps.put(
-				DeviceFunction.SERVICE_OPERATION_NAMES,
+				Function.SERVICE_OPERATION_NAMES,
 				new String[] {Meter.OPERATION_RESET_TOTAL});
 		return functionProps;
 	}

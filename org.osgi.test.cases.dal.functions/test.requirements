@@ -1,0 +1,7 @@
+org.osgi.test.cases.dal.functions test case requirements and manual steps:
+01. All BooleanControl operations/getters/setters must be supported by one or many functions.
+02. All BooleanSensor operations/getters/setters must be supported by one or many functions.
+03. All MultiLevelControl operations/getters/setters must be supported by one or many functions.
+04. All MultiLevelSensor operations/getters/setters must be supported by one or many functions.
+05. All Meter operations/getters must be supported by one or many functions.
+06. All WakeUp operations/getters/setters must be supported by at least one function.

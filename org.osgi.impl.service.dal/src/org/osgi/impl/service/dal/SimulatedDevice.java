@@ -25,9 +25,9 @@ import org.osgi.service.dal.DeviceException;
 
 final class SimulatedDevice extends SimulatedService implements Device, ServiceFactory {
 
-	private final SimulatedDeviceFunction[]	functions;
+	private final SimulatedFunction[]	functions;
 
-	public SimulatedDevice(Dictionary deviceProps, BundleContext bc, SimulatedDeviceFunction[] functions) {
+	public SimulatedDevice(Dictionary deviceProps, BundleContext bc, SimulatedFunction[] functions) {
 		this.functions = functions;
 		super.register(Device.class.getName(), deviceProps, bc);
 	}

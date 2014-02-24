@@ -23,10 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.dal.PropertyMetadataImpl;
-import org.osgi.impl.service.dal.SimulatedDeviceFunction;
+import org.osgi.impl.service.dal.SimulatedFunction;
 import org.osgi.service.dal.DeviceException;
-import org.osgi.service.dal.DeviceFunction;
-import org.osgi.service.dal.DeviceFunctionData;
+import org.osgi.service.dal.Function;
+import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.MultiLevelControl;
 import org.osgi.service.dal.functions.MultiLevelSensor;
@@ -36,7 +36,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Simulated <code>MultiLevelControl</code>.
  */
-public final class SimulatedMultiLevelControl extends SimulatedDeviceFunction implements MultiLevelControl {
+public final class SimulatedMultiLevelControl extends SimulatedFunction implements MultiLevelControl {
 
 	private static final Map	PROPERTY_METADATA;
 	private static final Map	OPERATION_METADATA	= null;
@@ -48,7 +48,7 @@ public final class SimulatedMultiLevelControl extends SimulatedDeviceFunction im
 	static {
 		VALUES = new BigDecimal[100];
 		LEVEL_DATA = new LevelData[VALUES.length];
-		DeviceFunctionData[] enumValues = new LevelData[VALUES.length];
+		FunctionData[] enumValues = new LevelData[VALUES.length];
 		for (int i = 0; i < VALUES.length; i++) {
 			VALUES[i] = new BigDecimal(i);
 			LEVEL_DATA[i] = new LevelData(Long.MIN_VALUE, null, null, VALUES[i]);
@@ -87,7 +87,7 @@ public final class SimulatedMultiLevelControl extends SimulatedDeviceFunction im
 
 	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
 		functionProps.put(
-				DeviceFunction.SERVICE_PROPERTY_NAMES,
+				Function.SERVICE_PROPERTY_NAMES,
 				new String[] {MultiLevelSensor.PROPERTY_DATA});
 		return functionProps;
 	}

@@ -29,7 +29,7 @@ import org.osgi.impl.service.dal.functions.SimulatedMultiLevelControl;
 import org.osgi.impl.service.dal.functions.SimulatedMultiLevelSensor;
 import org.osgi.impl.service.dal.functions.SimulatedWakeUp;
 import org.osgi.service.dal.Device;
-import org.osgi.service.dal.DeviceFunction;
+import org.osgi.service.dal.Function;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -98,73 +98,73 @@ public final class Activator implements BundleActivator {
 			this.simulatedDevices[i] = new SimulatedDevice(
 					deviceProps,
 					bc,
-					registerDeviceFunctions(deviceUID, bc));
+					registerFunctions(deviceUID, bc));
 		}
 	}
 
-	private SimulatedDeviceFunction[] registerDeviceFunctions(String deviceUID, BundleContext bc) {
-		SimulatedDeviceFunction[] deviceFunctions = new SimulatedDeviceFunction[6];
-		String[] referenceFunctionUIDs = new String[deviceFunctions.length - 1];
+	private SimulatedFunction[] registerFunctions(String deviceUID, BundleContext bc) {
+		SimulatedFunction[] functions = new SimulatedFunction[6];
+		String[] referenceFunctionUIDs = new String[functions.length - 1];
 
 		// setup the boolean control
-		deviceFunctions[0] = new SimulatedBooleanControl(
-				getDeviceFunctionProps(deviceUID, 0, referenceFunctionUIDs),
+		functions[0] = new SimulatedBooleanControl(
+				getFunctionProps(deviceUID, 0, referenceFunctionUIDs),
 				bc,
 				this.eventAdminTracker);
-		referenceFunctionUIDs[0] = (String) deviceFunctions[0].getServiceProperty(DeviceFunction.SERVICE_UID);
+		referenceFunctionUIDs[0] = (String) functions[0].getServiceProperty(Function.SERVICE_UID);
 
 		// setup the booelean sensor
-		deviceFunctions[1] = new SimulatedBooleanSensor(
-				getDeviceFunctionProps(deviceUID, 1, referenceFunctionUIDs),
+		functions[1] = new SimulatedBooleanSensor(
+				getFunctionProps(deviceUID, 1, referenceFunctionUIDs),
 				bc,
 				this.eventAdminTracker);
-		referenceFunctionUIDs[1] = (String) deviceFunctions[1].getServiceProperty(DeviceFunction.SERVICE_UID);
+		referenceFunctionUIDs[1] = (String) functions[1].getServiceProperty(Function.SERVICE_UID);
 
 		// setup the multi-level sensor
-		deviceFunctions[2] = new SimulatedMultiLevelSensor(
-				getDeviceFunctionProps(deviceUID, 2, referenceFunctionUIDs),
+		functions[2] = new SimulatedMultiLevelSensor(
+				getFunctionProps(deviceUID, 2, referenceFunctionUIDs),
 				bc,
 				this.eventAdminTracker);
-		referenceFunctionUIDs[2] = (String) deviceFunctions[2].getServiceProperty(DeviceFunction.SERVICE_UID);
+		referenceFunctionUIDs[2] = (String) functions[2].getServiceProperty(Function.SERVICE_UID);
 
 		// setup the multi-level control
-		deviceFunctions[3] = new SimulatedMultiLevelControl(
-				getDeviceFunctionProps(deviceUID, 3, referenceFunctionUIDs),
+		functions[3] = new SimulatedMultiLevelControl(
+				getFunctionProps(deviceUID, 3, referenceFunctionUIDs),
 				bc,
 				this.eventAdminTracker);
-		referenceFunctionUIDs[3] = (String) deviceFunctions[3].getServiceProperty(DeviceFunction.SERVICE_UID);
+		referenceFunctionUIDs[3] = (String) functions[3].getServiceProperty(Function.SERVICE_UID);
 
 		// setup meter control
-		deviceFunctions[4] = new SimulatedMeter(
-				getDeviceFunctionProps(deviceUID, 4, referenceFunctionUIDs),
+		functions[4] = new SimulatedMeter(
+				getFunctionProps(deviceUID, 4, referenceFunctionUIDs),
 				bc,
 				this.eventAdminTracker);
-		referenceFunctionUIDs[4] = (String) deviceFunctions[4].getServiceProperty(DeviceFunction.SERVICE_UID);
+		referenceFunctionUIDs[4] = (String) functions[4].getServiceProperty(Function.SERVICE_UID);
 
 		// setup wake up
-		deviceFunctions[5] = new SimulatedWakeUp(
-				getDeviceFunctionProps(deviceUID, 5, referenceFunctionUIDs),
+		functions[5] = new SimulatedWakeUp(
+				getFunctionProps(deviceUID, 5, referenceFunctionUIDs),
 				bc,
 				this.eventAdminTracker,
 				this.timer);
 
-		return deviceFunctions;
+		return functions;
 	}
 
-	private static Dictionary getDeviceFunctionProps(
+	private static Dictionary getFunctionProps(
 			String deviceUID, int index, String[] referenceFunctionUIDs) {
 		final Dictionary functionProps = new Hashtable();
 		if (index > 0) {
 			String[] referenceFunctionUIDsLocal = new String[index];
 			System.arraycopy(referenceFunctionUIDs, 0, referenceFunctionUIDsLocal, 0, index);
-			functionProps.put(DeviceFunction.SERVICE_REFERENCE_UIDS, referenceFunctionUIDsLocal);
+			functionProps.put(Function.SERVICE_REFERENCE_UIDS, referenceFunctionUIDsLocal);
 		}
 		final String functionUID = deviceUID + ":function:" + index;
-		functionProps.put(DeviceFunction.SERVICE_UID, functionUID);
-		functionProps.put(DeviceFunction.SERVICE_DESCRIPTION, functionUID + "-description");
-		functionProps.put(DeviceFunction.SERVICE_DEVICE_UID, deviceUID);
-		functionProps.put(DeviceFunction.SERVICE_TYPE, FUNCTION_TYPE_SIMULATOR);
-		functionProps.put(DeviceFunction.SERVICE_VERSION, functionUID + "-version");
+		functionProps.put(Function.SERVICE_UID, functionUID);
+		functionProps.put(Function.SERVICE_DESCRIPTION, functionUID + "-description");
+		functionProps.put(Function.SERVICE_DEVICE_UID, deviceUID);
+		functionProps.put(Function.SERVICE_TYPE, FUNCTION_TYPE_SIMULATOR);
+		functionProps.put(Function.SERVICE_VERSION, functionUID + "-version");
 		return functionProps;
 	}
 

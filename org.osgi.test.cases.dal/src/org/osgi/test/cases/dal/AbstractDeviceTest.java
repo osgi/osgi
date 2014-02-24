@@ -17,17 +17,12 @@
 
 package org.osgi.test.cases.dal;
 
-import java.math.BigDecimal;
-import java.util.Map;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.dal.Device;
-import org.osgi.service.dal.DeviceFunction;
-import org.osgi.service.dal.DeviceFunctionData;
-import org.osgi.service.dal.PropertyMetadata;
+import org.osgi.service.dal.Function;
 import org.osgi.service.dal.functions.data.BooleanData;
-import org.osgi.service.dal.functions.data.LevelData;
 import org.osgi.test.cases.step.TestStep;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.util.tracker.ServiceTracker;
@@ -40,7 +35,7 @@ public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 
 	/**
 	 * A service listener, which can track <code>Device</code> and
-	 * <code>DeviceFunction</code> services.
+	 * <code>Function</code> services.
 	 */
 	protected final DeviceServiceListener	deviceServiceListener;
 
@@ -98,8 +93,8 @@ public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Returns the device function with the specified class name, property name
-	 * and property value. Each argument can be <code>null</code>.
+	 * Returns the function with the specified class name, property name and
+	 * property value. Each argument can be <code>null</code>.
 	 * 
 	 * @param functionClassName Specifies the function class name, can be
 	 *        <code>null</code>.
@@ -107,12 +102,12 @@ public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 	 * @param propValue Specifies the property value, can be <code>null</code>.
 	 *        That means any value.
 	 * 
-	 * @return The device functions according to the specified arguments.
+	 * @return The functions according to the specified arguments.
 	 * 
 	 * @throws InvalidSyntaxException If invalid filter is built with the
 	 *         specified arguments.
 	 */
-	protected DeviceFunction[] getDeviceFunctions(String functionClassName, final String propName, String propValue) throws InvalidSyntaxException {
+	protected Function[] getFunctions(String functionClassName, final String propName, String propValue) throws InvalidSyntaxException {
 		String filter = null;
 		if (null != propName) {
 			if (null == propValue) {
@@ -122,15 +117,15 @@ public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 		}
 		BundleContext bc = super.getContext();
 		ServiceReference[] functionSRefs = bc.getServiceReferences(functionClassName, filter);
-		assertNotNull("There is no device function with property: " + propName + " and class: " + functionClassName, functionSRefs);
-		DeviceFunction[] deviceFunctions = new DeviceFunction[functionSRefs.length];
-		for (int i = 0; i < deviceFunctions.length; i++) {
-			deviceFunctions[i] = (DeviceFunction) bc.getService(functionSRefs[i]);
+		assertNotNull("There is no function with property: " + propName + " and class: " + functionClassName, functionSRefs);
+		Function[] functions = new Function[functionSRefs.length];
+		for (int i = 0; i < functions.length; i++) {
+			functions[i] = (Function) bc.getService(functionSRefs[i]);
 			assertNotNull(
-					"The device function service is missing with UID: " + functionSRefs[i].getProperty(Device.SERVICE_UID),
-					deviceFunctions[i]);
+					"The function service is missing with UID: " + functionSRefs[i].getProperty(Device.SERVICE_UID),
+					functions[i]);
 		}
-		return deviceFunctions;
+		return functions;
 	}
 
 	/**
@@ -170,69 +165,6 @@ public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 		assertEquals("The boolean value is not correct!", expectedValue, actualData.getValue());
 		assertTrue("The boolean data timestamp is not correct!",
 				System.currentTimeMillis() >= actualData.getTimestamp());
-	}
-
-	/**
-	 * Asserts that the given <code>LevelData</code> level is equivalent to the
-	 * expected level. If metadata is available, the metadata consistency is
-	 * checked too.
-	 * 
-	 * @param expectedMetadata The metadata to check.
-	 * @param expectedValue THe expected value.
-	 * @param actualData The actual value.
-	 */
-	protected void assertEquals(PropertyMetadata expectedMetadata, BigDecimal expectedValue, LevelData actualData) {
-		assertNotNull("The level data is missing!", actualData);
-		assertEquals("The level value is not correct!", expectedValue, actualData.getLevel());
-		assertTrue("The level data timestamp is not correct!",
-				System.currentTimeMillis() >= actualData.getTimestamp());
-		String valueUnit = actualData.getUnit();
-		if ((null == expectedMetadata) || (null == valueUnit)) {
-			return;
-		}
-		Map additionalMetadata = expectedMetadata.getMetadata(null);
-		if (null == additionalMetadata) {
-			return;
-		}
-		String[] units = (String[]) additionalMetadata.get(PropertyMetadata.UNITS);
-		if (null == units) {
-			return;
-		}
-		for (int i = 0; i < units.length; i++) {
-			if (valueUnit.equals(units[i])) {
-				return;
-			}
-		}
-		fail("The level data unit is not availale in metadata: " + valueUnit);
-	}
-
-	/**
-	 * Asserts the device function data field values.
-	 * 
-	 * @param timestamp The timestamp to check.
-	 * @param metadata The metadata to check.
-	 * @param actualData The actual data.
-	 */
-	protected void assertDeviceFunctionDataFields(long timestamp, Map metadata, DeviceFunctionData actualData) {
-		// timestamp
-		assertEquals(
-				"The timestamp field is not correct!",
-				timestamp,
-				actualData.timestamp);
-		assertEquals(
-				"The timestamp is not correct!",
-				timestamp,
-				actualData.getTimestamp());
-
-		// metadata
-		assertEquals(
-				"The metadata field is not correct!",
-				metadata,
-				actualData.metadata);
-		assertEquals(
-				"The metadata is not correct!",
-				metadata,
-				actualData.getMetadata());
 	}
 
 }

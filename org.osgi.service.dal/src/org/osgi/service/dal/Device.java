@@ -19,9 +19,9 @@ package org.osgi.service.dal;
 /**
  * Represents the device in the OSGi service registry. Note that
  * <code>Device</code> services are registered last. Before their registration,
- * there is <code>DeviceFunction</code> services registration. The reverse order
- * is used when the services are unregistered. <code>Device</code> services are
- * unregistered first before <code>DeviceFunction</code> services.
+ * there is <code>Function</code> services registration. The reverse order is
+ * used when the services are unregistered. <code>Device</code> services are
+ * unregistered first before <code>Function</code> services.
  */
 public interface Device {
 
