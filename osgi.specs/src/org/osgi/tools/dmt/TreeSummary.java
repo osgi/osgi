@@ -179,7 +179,7 @@ public class TreeSummary {
 							dmtType = "float";
 						} else
 							if (c == Date.class) {
-								dmtType = "dateTime";
+								dmtType = "date_time";
 							} else
 								if (c == URI.class) {
 									dmtType = "node_uri";
