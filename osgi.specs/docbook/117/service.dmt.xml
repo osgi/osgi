@@ -2927,9 +2927,12 @@ Y           { ya, yb }      P3</programlisting>
       unique names for these nodes, see <xref linkend="i2489028"/>.</para>
 
       <para>A Parent Plugin is not responsible for any scaffolding nodes to
-      make its Child Plugins reachable. It is the responsibility of the Dmt
-      Admin service to add child node names to any child node names returned
-      from a plugin so that Child Plugins are always reachable.</para>
+      make its Child Plugins reachable. However, Dmt Admin may assume that a
+      Plugin Root node always exists and may not provide a scaffold node on
+      the Plugin Root. A Plugin is recommended to always provide the Plugin
+      Root node to make its Child Plugins reachable. When a Parent Plugin
+      provides the nodes to its mount points, the nodes should be the correct
+      interior nodes to make its Child Plugins reachable.</para>
 
       <para>For example, the following setup of plugins:</para>
 
