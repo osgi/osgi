@@ -39,7 +39,7 @@ import org.osgi.dmt.ddf.Scope;
  * <p>
  * The {@link #Target() Target} node selects a set of nodes {@code N} that can
  * be viewed as a list of URIs or as a virtual sub-tree. The {@link #Result()
- * Target} node is the virtual sub-tree (beginning at the session base) and the
+ * Result} node is the virtual sub-tree (beginning at the session base) and the
  * {@link #ResultUriList() ResultUriList} is a LIST of session relative URIs.
  * The actual selection of the nodes must be postponed until either of these
  * nodes (or one of their sub-nodes) is accessed for the first time. Either
@@ -88,16 +88,15 @@ import org.osgi.dmt.ddf.Scope;
 
 public interface Filter {
 	/**
-	 * A URI always ending in a slash ('/'), relative the current session, with
-	 * optional wildcards, selecting a set of sub-nodes {@code N}. Wildcards can
-	 * be an asterisk ({@code '*'} &#92;u002A) or a minus sign ({@code '-'}
-	 * &#92;u002D). An asterisk can be used in place of a single node name in
-	 * the URI, a minus sign stands for any number of consecutive node names.
-	 * The default value of this node is the empty string, which indicates that
-	 * no nodes must be selected. Changing this value must clear any existing
-	 * results. If the {@link #Result()} or {@link #ResultUriList()
-	 * ResultUriList} is read to get {@code N} then a new search must be
-	 * executed.
+	 * An absolute URI always ending in a slash (’/’), with optional wildcards,
+	 * selecting a set of sub-nodes {@code N}. Wildcards can be an asterisk (
+	 * {@code '*'} &#92;u002A) or a minus sign ({@code '-'} &#92;u002D). An
+	 * asterisk can be used in place of a single node name in the URI, a minus
+	 * sign stands for any number of consecutive node names. The default value
+	 * of this node is the empty string, which indicates that no nodes must be
+	 * selected. Changing this value must clear any existing results. If the
+	 * {@link #Result()} or {@link #ResultUriList() ResultUriList} is read to
+	 * get {@code N} then a new search must be executed.
 	 * <p>
 	 * A URI must always end in '/' to indicate that the target can only select
 	 * interior nodes.
@@ -139,10 +138,8 @@ public interface Filter {
 	/**
 	 * The Result tree is a virtual read-only tree of all nodes that were
 	 * selected by the {@link #Target() Target} and matched the Filter, that is,
-	 * all nodes in set {@code N}. The {@link #Target() Target} contains a
-	 * relative URI (with optional wildcards) from the parent of the Filters
-	 * node. The {@link #Result() Result} node acts as the parent of this same
-	 * relative path for each node in {@code N}.
+	 * all nodes in set {@code N}. The {@link #Result() Result} node acts as a
+	 * parent instead of the session root for each node in {@code N}.
 	 * <p>
 	 * The {@link #Result() Result} node is a snapshot taken the first time it
 	 * is accessed after a change in the {@code Filter} and/or the
