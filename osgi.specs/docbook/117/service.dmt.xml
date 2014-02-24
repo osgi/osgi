@@ -4884,8 +4884,8 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
         </mediaobject>
       </figure>
 
-      <para>When the Dmt Session is closed (assuming it is atomic), the
-      following events are published:</para>
+      <para>When the Dmt Session is opened, the following event is
+      published:</para>
 
       <programlisting>SESSION_OPENED {
         session.id = 42
@@ -4899,8 +4899,12 @@ Replace=www.sonera.fi-8765+321_ibm.com&amp;Get=*</programlisting>
         bundle.version=1.2.4711
         bundle.id=442
         ...
-}
-ADDED {
+}</programlisting>
+
+      <para>When the Dmt Session is closed (assuming it is atomic), the
+      following events are published:</para>
+
+      <programlisting>ADDED {
         nodes = [./A/B/C, ./A/B/C/D ]       # note the coalescing
         session.id = 42
         ...
