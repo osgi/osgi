@@ -42,7 +42,7 @@ public class DDFNode {
 		DMT_TYPES.put(Long.class.getName(), "long");
 		DMT_TYPES.put(float.class.getName(), "float");
 		DMT_TYPES.put(Float.class.getName(), "float");
-		DMT_TYPES.put(Date.class.getName(), "datetime");
+		DMT_TYPES.put(Date.class.getName(), "date_time");
 		DMT_TYPES.put(String.class.getName(), "string");
 		DMT_TYPES.put(URI.class.getName(), "node_uri");
 		DMT_TYPES.put("org.osgi.dmt.ddf.base64", "base64");
