@@ -1358,6 +1358,19 @@ public interface Constants {
 	String	SERVICE_DESCRIPTION						= "service.description";
 
 	/**
+	 * Service property identifying the {@link Bundle#getBundleId() bundle id}
+	 * of the {@link ServiceReference#getBundle() bundle registering the
+	 * service}.
+	 * 
+	 * <p>
+	 * This property is set by the Framework when a service is registered. The
+	 * value of this property must be of type {@code Long}.
+	 * 
+	 * @since 1.8
+	 */
+	String	SERVICE_BUNDLEID						= "service.bundleid";
+
+	/**
 	 * Service property identifying a service's scope.
 	 * 
 	 * <p>

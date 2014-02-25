@@ -481,6 +481,21 @@
             </row>
 
             <row>
+              <entry><code>service.bundleid</code><superscript>†</superscript></entry>
+
+              <entry><code>Long</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.framework.Constants.SERVICE_BUNDLEID"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>The <code>service.bundleid</code> property
+              identifies the bundle registering the service. The Framework
+              must set this property automatically with the value of the
+              bundle id of the registering bundle.</para></entry>
+            </row>
+
+            <row>
               <entry><code>service.description</code></entry>
 
               <entry><code>String</code></entry>
@@ -502,7 +517,7 @@
 
               <entry><code>Long</code></entry>
 
-              <entry><para xml:id="i2070478"><xref
+              <entry><para><xref
               linkend="org.osgi.framework.Constants.SERVICE_ID"
               xrefstyle="hyperlink"/></para></entry>
 
@@ -1820,6 +1835,11 @@
         <para>Updated <code>service.id</code> description in <xref
         linkend="framework.service.serviceproperties"/> to state that the
         values are non-negative.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <code>service.bundleid</code> service property in <xref
+        linkend="framework.service.serviceproperties"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

@@ -53,10 +53,10 @@ public interface ServiceRegistration<S> {
 	 * Updates the properties associated with a service.
 	 * 
 	 * <p>
-	 * The {@link Constants#OBJECTCLASS}, {@link Constants#SERVICE_ID} and
-	 * {@link Constants#SERVICE_SCOPE} keys cannot be modified by this method.
-	 * These values are set by the Framework when the service is registered in
-	 * the OSGi environment.
+	 * The {@link Constants#OBJECTCLASS}, {@link Constants#SERVICE_BUNDLEID},
+	 * {@link Constants#SERVICE_ID} and {@link Constants#SERVICE_SCOPE} keys
+	 * cannot be modified by this method. These values are set by the Framework
+	 * when the service is registered in the OSGi environment.
 	 * 
 	 * <p>
 	 * The following steps are required to modify service properties:
