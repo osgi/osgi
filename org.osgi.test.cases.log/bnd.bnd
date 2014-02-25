@@ -22,4 +22,4 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.cm;  version=latest
 
 -runproperties					= ${runproperties}, \
-	org.osgi.test.filter.exclude.services="(objectClass=org.eclipse.equinox.log.*)"
+	org.osgi.test.filter.exclude.services="(&(objectClass=org.osgi.service.log.*)(service.bundleid=0))"
