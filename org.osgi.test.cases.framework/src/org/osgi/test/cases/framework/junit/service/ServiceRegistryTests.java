@@ -1048,6 +1048,11 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		assertTrue("service.id not Long", id instanceof Long);
 		assertTrue("service.id is negative", ((Long) id).longValue() >= 0);
 
+		Object bundleid = ref.getProperty(Constants.SERVICE_BUNDLEID);
+		assertNotNull("service.bundleid not set", bundleid);
+		assertTrue("service.bundleid not Long", bundleid instanceof Long);
+		assertEquals("service.bundleid is incorrect", ref.getBundle().getBundleId(), ((Long) bundleid).longValue());
+
 		Object scope = ref.getProperty(Constants.SERVICE_SCOPE);
 		assertNotNull("service.scope not set", scope);
 		assertTrue("service.scope not String", scope instanceof String);
