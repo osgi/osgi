@@ -4312,6 +4312,11 @@ service                 ::= qname ( ';' parameter )*</programlisting>
       contents that are not satisfied by the capabilities of the Subsystem
       content.</para>
 
+      <para>Unsatisfied mandatory requirements result in a subsystem 
+      installation failure. Unsatisfied optional requirements do not. However,
+      implementations must ensure any unsatisfied optional requirements are
+      added to the sharing policy.</para>
+
       <section>
         <title>Package Imports</title>
 
@@ -4337,8 +4342,8 @@ service                 ::= qname ( ';' parameter )*</programlisting>
         this reason, the application Subsystem sharing policy only imports
         services required by the Subsystem's content bundles that are not also
         provided by the content bundles. This specification provides a means of 
-        declaratively identifying the services a bundle provides using the 
-        <code>Provide-Capability</code> and <code>Require-Capability</code> 
+        declaratively identifying the services a bundle provides or requires 
+        using the <code>Provide-Capability</code> and <code>Require-Capability</code> 
         headers with the <code>osgi.service</code> namespace. See <xref 
         linkend="service.namespaces-osgi.service.namespace"/></para>
         
@@ -4348,6 +4353,13 @@ service                 ::= qname ( ';' parameter )*</programlisting>
         <programlisting>Provide-Capability: osgi.service;
  objectClass=com.foo.MyService;
  a.service.prop=somePropertyValue</programlisting>
+
+        <para>Note that declaring a provided service in this manner only affects
+        resolution. It does not affect service visibility at runtime. In other 
+        words, a subsystem that imports service <code>com.acme.Foo</code> will
+        see all of the corresponding service registrations that its parent sees
+        regardless of whether or not the provider declared this service in the
+        <code>Provide-Capability</code> header.</para>
 
         <para>An example of a bundle requiring a service and declaring the 
         requirement using the <code>Require-Capability</code> header is as 
@@ -4406,8 +4418,8 @@ service                 ::= qname ( ';' parameter )*</programlisting>
       <section>
         <title>Dependencies</title>
 
-        <para>Application Subsystems implicit requirements are determined as
-        describe in the Application Deployment section in <xref
+        <para>Application Subsystems' implicit requirements are determined as
+        described in the Application Deployment section in <xref
         linkend="i3330142"/>. Any mandatory requirements from constituents
         that are not satisfied by capabilities provided by the target
         environment or other constituents must be satisfied by additional
