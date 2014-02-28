@@ -394,7 +394,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	}
 	
 	private Bundle[] getSubsystemsImplementationBundles() {
-		String property = System.getProperty("org.osgi.test.cases.subsystem.impl.bundles");
+		String property = getContext().getProperty("org.osgi.test.cases.subsystem.impl.bundles");
 		if (property == null || property.length() == 0) {
 			return initialRootConstituents.toArray(new Bundle[initialRootConstituents.size()]);
 		}
