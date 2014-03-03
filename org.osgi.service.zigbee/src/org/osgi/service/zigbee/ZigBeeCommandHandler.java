@@ -35,8 +35,8 @@ public interface ZigBeeCommandHandler {
 	 * set the DisableDefaultReponse flag and the status of DefaultResponse
 	 * command is SUCCESS.
 	 * 
-	 * Several responses MAY be sent to an endpoint. A handler could be called
-	 * several times on a command handler.
+	 * Multiple response management: Several responses MAY be sent to an
+	 * endpoint. A handler could be called several times on a command handler.
 	 * 
 	 * @param frame the ZCLFrame
 	 */
