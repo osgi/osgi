@@ -2114,7 +2114,7 @@ policy ::= 'lazy'</programlisting>
 
         <para>For example:</para>
 
-        <programlisting>Bundle-ActivationPolicy: lazy; <code>«</code>
+        <programlisting>Bundle-ActivationPolicy: lazy; «
     include:="com.acme.service.base,com.acme.service.help"</programlisting>
 
         <para>When a class load triggers the lazy activation, the Framework

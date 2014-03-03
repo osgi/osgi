@@ -756,7 +756,7 @@ unreserved    ::= &lt;see <xref linkend="i3323360"/>&gt;</programlisting>
       <para>It includes a default symbolic name of <code>com.acme.foo</code>
       and default version of <code>1.0.0</code>.</para>
 
-      <programlisting>subsystem://http%3A%2F%2Fwww.foo.com%2Fsub%2523system.esa? <code>«</code>
+      <programlisting>subsystem://http%3A%2F%2Fwww.foo.com%2Fsub%2523system.esa? «
     Subsystem-SymbolicName=com.acme.foo&amp;Subsystem-Version=1.0.0</programlisting>
 
       <para>When installing a Subsystem containing other Subsystem Archives
@@ -1049,7 +1049,7 @@ OSGI-INF/l10n/subsystem.properties</programlisting>
       <listitem>
         <para>The Root Subsystem has a symbolic name of
         <code>org.osgi.service.subsystem.root</code>, version 1.0.0, Subsystem
-        identifier of 0, and a location of<programlisting>subsystem://?Subsystem-SymbolicName=org.osgi.service.subsystem.root&amp; <code>«</code>
+        identifier of 0, and a location of <programlisting>subsystem://?Subsystem-SymbolicName=org.osgi.service.subsystem.root&amp; «
     Subsystem-Version=1.0.0</programlisting></para>
       </listitem>
     </itemizedlist>

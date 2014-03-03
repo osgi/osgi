@@ -227,7 +227,7 @@
       lines, the <code>«</code> character is used. Spaces must be ignored in
       this case. For example:</para>
 
-      <programlisting>http://www.acme.com/sp/ <code>«</code>
+      <programlisting>http://www.acme.com/sp/ «
 file?abc=12</programlisting>
 
       <para>is equivalent to:</para>

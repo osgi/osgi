@@ -393,7 +393,7 @@
     to include the bundle-version and bundle-symbolic-name synthetic
     attributes that are available on every exported package.</para>
 
-    <programlisting>com.acme.weavesupport.core;version=1.2;bundle-version=3.2; <code>«</code>
+    <programlisting>com.acme.weavesupport.core;version=1.2;bundle-version=3.2; «
     bundle-symbolic-name=com.acme.weavesupport</programlisting>
 
     <para>After calling the last Weaving Hook service, the

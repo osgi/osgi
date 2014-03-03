@@ -601,7 +601,7 @@ value          ::= &lt;any jmx supported value&gt;</programlisting>
       and its UUID so that multiple instances on the same VM can be
       discriminated. An example of an Object Name is:</para>
 
-      <programlisting>osgi.core:type=framework,version=1.7,framework=org.apache.felix.framework,<code>«</code>
+      <programlisting>osgi.core:type=framework,version=1.7,framework=org.apache.felix.framework, «
     uuid=f81d4fae-7dec-11d0-a765-00a0c91e6bf6</programlisting>
 
       <para>The advantage of the framework property is that it can be used to

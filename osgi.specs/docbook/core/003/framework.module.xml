@@ -529,7 +529,7 @@ ceiling       ::= version</programlisting>
       <para>Note that the use of a comma in the version range requires it to
       be enclosed in double quotes. For example:</para>
 
-      <programlisting>Import-Package: com.acme.foo;version="[1.23,2)", <code>«</code>
+      <programlisting>Import-Package: com.acme.foo;version="[1.23,2)", «
    com.acme.bar;version="[4.0, 5.0)"</programlisting>
 
       <para>In the following table, for each specified range in the left-hand
@@ -1026,8 +1026,8 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
       <para>The deployer of the environment sets the following launching
       property when starting the framework:</para>
 
-      <programlisting>org.osgi.framework.system.capabilities.extra= <code>«</code>
-  com.acme.display; width:Long=1920; height:Long=1080; interlace=p, <code>«</code>
+      <programlisting>org.osgi.framework.system.capabilities.extra= «
+  com.acme.display; width:Long=1920; height:Long=1080; interlace=p, «
   com.microsoft; edition=home; version:Version=7; api=win32</programlisting>
 
       <para>The framework will be able to satisfy the display requirement but
@@ -1146,10 +1146,10 @@ attr:Long="       23      ",            // ok, because nummeric</programlisting>
 
       <para>For example:</para>
 
-      <programlisting>Provide-Capability: <code>«</code>
-   com.acme.dictionary; from:String=nl; to=de; version:Version=3.4, <code>«</code>
-   com.acme.dictionary; from:String=de; to=nl; version:Version=4.1, <code>«</code>
-   com.acme.ip2location;country:List="nl,be,fr,uk";version:Version=1.3,<code>«</code>
+      <programlisting>Provide-Capability: «
+   com.acme.dictionary; from:String=nl; to=de; version:Version=3.4, «
+   com.acme.dictionary; from:String=de; to=nl; version:Version=4.1, «
+   com.acme.ip2location;country:List="nl,be,fr,uk";version:Version=1.3, «
    com.acme.seps;       tokens:List&lt;String&gt;="\\,,;,\\\""</programlisting>
     </section>
 
@@ -1316,7 +1316,7 @@ bree     ::= token ('-' version)? ( '/' token ( '-' version)? )?</programlisting
 
       <para>For example:</para>
 
-      <programlisting>Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0, <code>«</code>
+      <programlisting>Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0, «
   OSGi/Minimum-1.1</programlisting>
 
       <para>If a bundle includes this header in the manifest then the bundle
@@ -1810,8 +1810,8 @@ package-names ::= package-name
 
       <para>Example of a correct definition:</para>
 
-      <programlisting>Import-Package: com.acme.foo;com.acme.bar; <code>«</code>
-    version="[1.23,1.24]"; <code>«</code>
+      <programlisting>Import-Package: com.acme.foo;com.acme.bar; «
+    version="[1.23,1.24]"; «
     resolution:=mandatory</programlisting>
     </section>
 
@@ -2312,11 +2312,11 @@ B: Export-Package: p; version=1.5.1</programlisting>
       <emphasis>not</emphasis> be available to the code when bundle
       <code>A</code> is resolved).</para>
 
-      <programlisting>A: Import-Package: p; <code>«</code>
-        resolution:=optional; <code>«</code>
+      <programlisting>A: Import-Package: p; «
+        resolution:=optional; «
         version=1.6
-B: Export-Package: p; <code>«</code>
-        q; <code>«</code>
+B: Export-Package: p; «
+        q; «
         version=1.5.0</programlisting>
 
       <figure>
@@ -2501,8 +2501,8 @@ C: Export-Package: q; version=2.0</programlisting>
       <para>For example, the following statements will match.</para>
 
       <programlisting>A: Import-Package: com.acme.foo;company=ACME
-B: Export-Package: com.acme.foo; <code>«</code>
-          company="ACME"; <code>«</code>
+B: Export-Package: com.acme.foo; «
+          company="ACME"; «
           security=false</programlisting>
 
       <para>Attribute values are compared string wise except for the version
@@ -2535,9 +2535,9 @@ B: Export-Package: com.acme.foo; <code>«</code>
 
       <programlisting>A: Import-Package: com.acme.foo;company=ACME
 
-B: Export-Package: com.acme.foo; <code>«</code>
-          company="ACME"; <code>«</code>
-          security=false; <code>«</code>
+B: Export-Package: com.acme.foo; «
+          company="ACME"; «
+          security=false; «
           mandatory:=security</programlisting>
     </section>
 
@@ -2584,7 +2584,7 @@ B: Export-Package: com.acme.foo; <code>«</code>
       <para>The following example shows an export statement, and a list of
       files with their visibility status.</para>
 
-      <programlisting>Export-Package: com.acme.foo; include:="Qux*,BarImpl"; <code>«</code>
+      <programlisting>Export-Package: com.acme.foo; include:="Qux*,BarImpl"; «
         exclude:=QuxImpl
 
 com/acme/foo               
@@ -2659,8 +2659,8 @@ public class Implementation {
       <para>For example, the following definitions will match:</para>
 
       <programlisting>A: Bundle-SymbolicName: A
-   Import-Package: com.acme.foo; <code>«</code>
-        bundle-symbolic-name=B; <code>«</code>
+   Import-Package: com.acme.foo; «
+        bundle-symbolic-name=B; «
         bundle-version="[1.41,2.0.0)"
 
 B: Bundle-SymbolicName: B
@@ -2671,8 +2671,8 @@ B: Bundle-SymbolicName: B
       specify a version and thus defaults to 0.0.0:</para>
 
       <programlisting>A: Bundle-SymbolicName: A
-   Import-Package: com.acme.foo; <code>«</code>
-          bundle-symbolic-name=B; <code>«</code>
+   Import-Package: com.acme.foo; «
+          bundle-symbolic-name=B; «
           bundle-version="[1.41,2.0.0)"
 
 B: Bundle-SymbolicName: B
@@ -3588,23 +3588,23 @@ optional            ::= '*'</programlisting>
     <code>NATIVECODE_ERROR</code>. The following is a typical example of a
     native code declaration in a bundle's manifest:</para>
 
-    <programlisting>Bundle-NativeCode: lib/http.dll ; lib/zlib.dll; <code>«</code>
-        osname = Windows95 ; <code>«</code>
-        osname = Windows98 ; <code>«</code>
-        osname = WindowsNT ; <code>«</code>
-        processor = x86 ; <code>«</code>
-        selection-filter = <code>«</code>
-            "(com.acme.windowing=win32)"; <code>«</code>
-        language = en ; <code>«</code>
-        language = se , <code>«</code>
-    lib/solaris/libhttp.so ; <code>«</code>
-        osname = Solaris ; <code>«</code>
-        osname = SunOS ; <code>«</code>
-        processor = sparc, <code>«</code>
-    lib/linux/libhttp.so ; <code>«</code>
-        osname = Linux ; <code>«</code>
-        processor = mips; <code>«</code>
-        selection-filter = <code>«</code>
+    <programlisting>Bundle-NativeCode: lib/http.dll ; lib/zlib.dll; «
+        osname = Windows95 ; «
+        osname = Windows98 ; «
+        osname = WindowsNT ; «
+        processor = x86 ; «
+        selection-filter = «
+            "(com.acme.windowing=win32)"; «
+        language = en ; «
+        language = se , «
+    lib/solaris/libhttp.so ; «
+        osname = Solaris ; «
+        osname = SunOS ; «
+        processor = sparc, «
+    lib/linux/libhttp.so ; «
+        osname = Linux ; «
+        processor = mips; «
+        selection-filter = «
             "(com.acme.windowing=gtk)"</programlisting>
 
     <para>If multiple native code libraries need to be installed on one
@@ -3618,24 +3618,24 @@ optional            ::= '*'</programlisting>
 
     <programlisting>// The effect of this header has probably 
 // not the intended effect!
-Bundle-NativeCode: lib/http.DLL ; <code>«</code>
-    osname = Windows95 ; <code>«</code>
-    osversion = "3.1" ; <code>«</code>
-    osname = WindowsXP ; <code>«</code>
-    osversion = "5.1" ; <code>«</code>
+Bundle-NativeCode: lib/http.DLL ; «
+    osname = Windows95 ; «
+    osversion = "3.1" ; «
+    osname = WindowsXP ; «
+    osversion = "5.1" ; «
     processor = x86</programlisting>
 
     <para>The above example implies that the native library will load on
     Windows XP 3.1 and later, which was probably not intended. The single
     clause should be split in two clauses:</para>
 
-    <programlisting>Bundle-NativeCode: lib/http.DLL ; <code>«</code>
-        osname = Windows95 ; <code>«</code>
-        osversion = 3.1; <code>«</code>
-        processor = x86, <code>«</code>
-    lib/http.DLL ; <code>«</code>
-        osname = WindowsXP ; <code>«</code>
-        osversion = 5.1; <code>«</code>
+    <programlisting>Bundle-NativeCode: lib/http.DLL ; «
+        osname = Windows95 ; «
+        osversion = 3.1; «
+        processor = x86, «
+    lib/http.DLL ; «
+        osname = WindowsXP ; «
+        osversion = 5.1; «
         processor = x86</programlisting>
 
     <para>Any paths specified in the matching clause must be present in the
@@ -3651,16 +3651,16 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
     <para>The following is a typical example of a native code declaration in a
     bundle's manifest with an optional clause:</para>
 
-    <programlisting>Bundle-NativeCode: lib/win32/winxp/optimized.dll; <code>«</code>
-        lib/win32/native.dll ; <code>«</code>
-        osname = WindowsXP ; <code>«</code>
-        processor = x86 , <code>«</code>
-    lib/win32/native.dll ; <code>«</code>
-        osname = Windows95 ; <code>«</code>
-        osname = Windows98 ; <code>«</code>
-        osname = WindowsNT ; <code>«</code>
-        osname = Windows2000; <code>«</code>
-        processor = x86 , <code>«</code>
+    <programlisting>Bundle-NativeCode: lib/win32/winxp/optimized.dll; «
+        lib/win32/native.dll ; «
+        osname = WindowsXP ; «
+        processor = x86 , «
+    lib/win32/native.dll ; «
+        osname = Windows95 ; «
+        osname = Windows98 ; «
+        osname = WindowsNT ; «
+        osname = Windows2000; «
+        processor = x86 , «
         *</programlisting>
 
     <para>Frameworks must convert a Bundle-NativeCode header to a requirement
@@ -4410,10 +4410,10 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
       bundles and a number of language resources (also bundles) that are
       optional.</para>
 
-      <programlisting>Require-Bundle: com.acme.facade;visibility:=reexport, <code>«</code>
- com.acme.bar.one;visibility:=reexport, <code>«</code>
- com.acme.bar.two;visibility:=reexport, <code>«</code>
- com.acme.bar._nl;visibility:=reexport;resolution:=optional, <code>«</code>
+      <programlisting>Require-Bundle: com.acme.facade;visibility:=reexport, «
+ com.acme.bar.one;visibility:=reexport, «
+ com.acme.bar.two;visibility:=reexport, «
+ com.acme.bar._nl;visibility:=reexport;resolution:=optional, «
  com.acme.bar._en;visibility:=reexport;resolution:=optional</programlisting>
 
       <para>A bundle may both import packages (via Import-Package) and require
