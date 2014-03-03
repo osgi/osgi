@@ -3909,13 +3909,6 @@ Bundle-NativeCode: lib/http.DLL ; «
       a/b/c/http.dll</code> then only <code>http.dll</code> in
       <code>lib1</code> and <code>foo.dll</code> will be used.</para>
 
-      <para>If a selection filter is evaluated and its syntax is invalid, then
-      the bundle must fail to resolve. If a selection filter is not evaluated
-      (it may be in a native code clause where the <code>osname</code> or
-      <code>processor</code> does not match), then the invalid filter must not
-      cause the bundle to fail to resolve. This is also true even if the
-      optional clause is specified.</para>
-
       <para>Designing a bundle native code header can become quickly
       complicated when different operating systems, libraries, and languages
       are used. The best practice for designing the header is to place all
