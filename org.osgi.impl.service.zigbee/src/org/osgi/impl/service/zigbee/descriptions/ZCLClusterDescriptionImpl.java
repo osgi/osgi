@@ -2,23 +2,23 @@
 package org.osgi.impl.service.zigbee.descriptions;
 
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
+import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeCommandDescription;
-import org.osgi.service.zigbee.descriptions.ZigBeeGlobalClusterDescription;
 
 /**
  * Mocked impl.
  */
 public class ZCLClusterDescriptionImpl implements ZCLClusterDescription {
 
-	private int								id;
-	private ZigBeeGlobalClusterDescription	global;
+	private int							id;
+	private ZCLGlobalClusterDescription	global;
 
 	/**
 	 * @param id
 	 * @param global
 	 */
-	public ZCLClusterDescriptionImpl(int id, ZigBeeGlobalClusterDescription global) {
+	public ZCLClusterDescriptionImpl(int id, ZCLGlobalClusterDescription global) {
 		this.id = id;
 		this.global = global;
 	}
@@ -27,7 +27,7 @@ public class ZCLClusterDescriptionImpl implements ZCLClusterDescription {
 		return id;
 	}
 
-	public ZigBeeGlobalClusterDescription getGlobalClusterDescription() {
+	public ZCLGlobalClusterDescription getGlobalClusterDescription() {
 		return global;
 	}
 

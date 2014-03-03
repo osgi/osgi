@@ -3,8 +3,8 @@ package org.osgi.impl.service.zigbee.basedriver;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.zigbee.descriptions.ZCLClusterDescriptionImpl;
+import org.osgi.impl.service.zigbee.descriptions.ZCLGlobalClusterDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptions.ZigBeeAttributeDescriptionImpl;
-import org.osgi.impl.service.zigbee.descriptions.ZigBeeGlobalClusterDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptions.ZigBeeParameterDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptors.ZigBeeNodeDescriptorImpl;
 import org.osgi.impl.service.zigbee.descriptors.ZigBeePowerDescriptorImpl;
@@ -15,9 +15,9 @@ import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
+import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
-import org.osgi.service.zigbee.descriptions.ZigBeeGlobalClusterDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeParameterDescription;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
@@ -43,7 +43,7 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 	private ZigBeeSimpleDescriptor			simpledesc2;
 	private ZCLCluster[]					serverCluster;
 	private ZCLCluster[]					clientCluster;
-	private ZigBeeGlobalClusterDescription	globalDescription;
+	private ZCLGlobalClusterDescription		globalDescription;
 	private ZCLClusterDescription			serverClusterDescription;
 	private ZCLClusterDescription			clientClusterDescription;
 	private ZigBeeAttributeImpl[]			attributesServer;
@@ -98,7 +98,7 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		attributesServer[7] = new ZigBeeAttributeImpl(attributesDescription[7]);
 		attributesServer[8] = new ZigBeeAttributeImpl(attributesDescription[8]);
 
-		globalDescription = new ZigBeeGlobalClusterDescriptionImpl(54, "Basic", "General", null, null);
+		globalDescription = new ZCLGlobalClusterDescriptionImpl(54, "Basic", "General", null, null);
 		serverClusterDescription = new ZCLClusterDescriptionImpl(88, globalDescription);
 		clientClusterDescription = new ZCLClusterDescriptionImpl(67, globalDescription);
 

@@ -2,12 +2,12 @@
 package org.osgi.impl.service.zigbee.descriptions;
 
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
-import org.osgi.service.zigbee.descriptions.ZigBeeGlobalClusterDescription;
+import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
 
 /**
- * Mocked impl of ZigBeeGlobalClusterDescription.
+ * Mocked impl.
  */
-public class ZigBeeGlobalClusterDescriptionImpl implements ZigBeeGlobalClusterDescription {
+public class ZCLGlobalClusterDescriptionImpl implements ZCLGlobalClusterDescription {
 
 	private int						id;
 	private String					name;
@@ -23,7 +23,7 @@ public class ZigBeeGlobalClusterDescriptionImpl implements ZigBeeGlobalClusterDe
 	 * @param client
 	 * @param server
 	 */
-	public ZigBeeGlobalClusterDescriptionImpl(int id, String name, String domain, ZCLClusterDescription client, ZCLClusterDescription server) {
+	public ZCLGlobalClusterDescriptionImpl(int id, String name, String domain, ZCLClusterDescription client, ZCLClusterDescription server) {
 		this.id = id;
 		this.name = name;
 		this.domain = domain;

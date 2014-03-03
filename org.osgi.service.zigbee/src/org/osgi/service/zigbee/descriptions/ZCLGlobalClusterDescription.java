@@ -21,7 +21,7 @@ package org.osgi.service.zigbee.descriptions;
  * 
  * @version 1.0
  */
-public interface ZigBeeGlobalClusterDescription {
+public interface ZCLGlobalClusterDescription {
 
 	/**
 	 * @return the cluster identifier

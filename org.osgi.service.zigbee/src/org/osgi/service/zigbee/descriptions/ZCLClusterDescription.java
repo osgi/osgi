@@ -45,5 +45,5 @@ public interface ZCLClusterDescription {
 	/**
 	 * @return an array of cluster's Commands description
 	 */
-	public ZigBeeGlobalClusterDescription getGlobalClusterDescription();
+	public ZCLGlobalClusterDescription getGlobalClusterDescription();
 }
