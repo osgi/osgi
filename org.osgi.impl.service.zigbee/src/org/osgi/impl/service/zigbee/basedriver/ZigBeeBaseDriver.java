@@ -2,8 +2,8 @@
 package org.osgi.impl.service.zigbee.basedriver;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.impl.service.zigbee.descriptions.ZCLClusterDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptions.ZigBeeAttributeDescriptionImpl;
-import org.osgi.impl.service.zigbee.descriptions.ZigBeeClusterDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptions.ZigBeeGlobalClusterDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptions.ZigBeeParameterDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptors.ZigBeeNodeDescriptorImpl;
@@ -14,8 +14,8 @@ import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.ZigBeeNode;
+import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeAttributeDescription;
-import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeGlobalClusterDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeParameterDescription;
@@ -44,8 +44,8 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 	private ZCLCluster[]					serverCluster;
 	private ZCLCluster[]					clientCluster;
 	private ZigBeeGlobalClusterDescription	globalDescription;
-	private ZigBeeClusterDescription		serverClusterDescription;
-	private ZigBeeClusterDescription		clientClusterDescription;
+	private ZCLClusterDescription			serverClusterDescription;
+	private ZCLClusterDescription			clientClusterDescription;
 	private ZigBeeAttributeImpl[]			attributesServer;
 	private ZigBeeAttributeDescription[]	attributesDescription;
 	// private ZigBeeCommandDescription commandDescription;
@@ -99,8 +99,8 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		attributesServer[8] = new ZigBeeAttributeImpl(attributesDescription[8]);
 
 		globalDescription = new ZigBeeGlobalClusterDescriptionImpl(54, "Basic", "General", null, null);
-		serverClusterDescription = new ZigBeeClusterDescriptionImpl(88, globalDescription);
-		clientClusterDescription = new ZigBeeClusterDescriptionImpl(67, globalDescription);
+		serverClusterDescription = new ZCLClusterDescriptionImpl(88, globalDescription);
+		clientClusterDescription = new ZCLClusterDescriptionImpl(67, globalDescription);
 
 		// a client endpoint example
 		clientCluster = new ZCLClusterImpl[1];

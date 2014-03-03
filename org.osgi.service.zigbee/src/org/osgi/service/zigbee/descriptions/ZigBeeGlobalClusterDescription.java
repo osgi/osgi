@@ -44,15 +44,15 @@ public interface ZigBeeGlobalClusterDescription {
 	public String getClusterFunctionalDomain();
 
 	/**
-	 * @return a {@link ZigBeeClusterDescription} representing the client
-	 *         cluster description
+	 * @return a ZCLClusterDescription representing the client cluster
+	 *         description
 	 */
-	public ZigBeeClusterDescription getClientClusterDescription();
+	public ZCLClusterDescription getClientClusterDescription();
 
 	/**
-	 * @return a {@link ZigBeeClusterDescription} representing the server
-	 *         cluster description
+	 * @return a ZCLClusterDescription representing the server cluster
+	 *         description
 	 */
-	public ZigBeeClusterDescription getServerClusterDescription();
+	public ZCLClusterDescription getServerClusterDescription();
 
 }

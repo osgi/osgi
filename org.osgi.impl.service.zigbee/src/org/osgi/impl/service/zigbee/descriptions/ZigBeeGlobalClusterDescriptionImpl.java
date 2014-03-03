@@ -1,6 +1,7 @@
+
 package org.osgi.impl.service.zigbee.descriptions;
 
-import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
+import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeGlobalClusterDescription;
 
 /**
@@ -8,12 +9,12 @@ import org.osgi.service.zigbee.descriptions.ZigBeeGlobalClusterDescription;
  */
 public class ZigBeeGlobalClusterDescriptionImpl implements ZigBeeGlobalClusterDescription {
 
-	private int							id;
-	private String						name;
-	private String						desc;
-	private String						domain;
-	private ZigBeeClusterDescription	client	= null;
-	private ZigBeeClusterDescription	server	= null;
+	private int						id;
+	private String					name;
+	private String					desc;
+	private String					domain;
+	private ZCLClusterDescription	client	= null;
+	private ZCLClusterDescription	server	= null;
 
 	/**
 	 * @param id
@@ -22,7 +23,7 @@ public class ZigBeeGlobalClusterDescriptionImpl implements ZigBeeGlobalClusterDe
 	 * @param client
 	 * @param server
 	 */
-	public ZigBeeGlobalClusterDescriptionImpl(int id, String name, String domain, ZigBeeClusterDescription client, ZigBeeClusterDescription server) {
+	public ZigBeeGlobalClusterDescriptionImpl(int id, String name, String domain, ZCLClusterDescription client, ZCLClusterDescription server) {
 		this.id = id;
 		this.name = name;
 		this.domain = domain;
@@ -47,11 +48,11 @@ public class ZigBeeGlobalClusterDescriptionImpl implements ZigBeeGlobalClusterDe
 		return domain;
 	}
 
-	public ZigBeeClusterDescription getClientClusterDescription() {
+	public ZCLClusterDescription getClientClusterDescription() {
 		return client;
 	}
 
-	public ZigBeeClusterDescription getServerClusterDescription() {
+	public ZCLClusterDescription getServerClusterDescription() {
 		return server;
 	}
 

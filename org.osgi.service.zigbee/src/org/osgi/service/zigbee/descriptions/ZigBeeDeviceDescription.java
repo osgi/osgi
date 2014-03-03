@@ -46,11 +46,11 @@ public interface ZigBeeDeviceDescription {
 	/**
 	 * @return An array of server cluster description.
 	 */
-	public ZigBeeClusterDescription[] getServerClustersDescriptions();
+	public ZCLClusterDescription[] getServerClustersDescriptions();
 
 	/**
 	 * @return an array of client cluster description.
 	 */
-	public ZigBeeClusterDescription[] getClientClustersDescriptions();
+	public ZCLClusterDescription[] getClientClustersDescriptions();
 
 }

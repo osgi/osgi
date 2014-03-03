@@ -10,17 +10,17 @@ import org.osgi.service.zigbee.ZigBeeAttributeRecord;
 import org.osgi.service.zigbee.ZigBeeAttributesHandler;
 import org.osgi.service.zigbee.ZigBeeCommandHandler;
 import org.osgi.service.zigbee.ZigBeeException;
-import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
+import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 
 /**
  * Mocked impl.
  */
 public class ZCLClusterImpl implements ZCLCluster {
 
-	private Integer						id;
-	private ZigBeeAttributeImpl[]		attributes;
-	private int[]						commandIds;
-	private ZigBeeClusterDescription	description;
+	private Integer					id;
+	private ZigBeeAttributeImpl[]	attributes;
+	private int[]					commandIds;
+	private ZCLClusterDescription	description;
 
 	/**
 	 * @param id
@@ -34,7 +34,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 	 * @param attributes
 	 * @param desc
 	 */
-	public ZCLClusterImpl(int[] commandIds, ZigBeeAttributeImpl[] attributes, ZigBeeClusterDescription desc) {
+	public ZCLClusterImpl(int[] commandIds, ZigBeeAttributeImpl[] attributes, ZCLClusterDescription desc) {
 		id = desc.getId();
 		this.commandIds = commandIds;
 		this.attributes = attributes;

@@ -17,11 +17,11 @@
 package org.osgi.service.zigbee.descriptions;
 
 /**
- * This interface represents a ZigBee Cluster description
+ * This interface represents a ZCL Cluster description
  * 
  * @version 1.0
  */
-public interface ZigBeeClusterDescription {
+public interface ZCLClusterDescription {
 	/**
 	 * @return the cluster identifier
 	 */
