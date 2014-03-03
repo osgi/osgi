@@ -136,4 +136,25 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 */
 	public void createGroupService(String pid, int groupAddress, ZigBeeCommandHandler handler) throws ZigBeeException;
 
+	/**
+	 * Enable to broadcast a given frame on a given cluster.
+	 * 
+	 * @param clusterID the cluster ID.
+	 * @param frame a command frame sequence.
+	 * @param handler The handler that manages the command response.
+	 */
+	void broadcast(Integer clusterID, ZCLFrame frame, ZigBeeCommandHandler handler);
+
+	/**
+	 * Enable to broadcast a given frame on a given cluster.
+	 * 
+	 * @param clusterID the cluster ID.
+	 * @param frame a command frame sequence.
+	 * @param handler The handler that manages the command response.
+	 * @param exportedServicePID : the source endpoint of the command request.
+	 *        In targeted situations, the source endpoint is the valid service
+	 *        PID of an exported endpoint.
+	 */
+	void broadcast(Integer clusterID, ZCLFrame frame, ZigBeeCommandHandler handler, String exportedServicePID);
+
 }

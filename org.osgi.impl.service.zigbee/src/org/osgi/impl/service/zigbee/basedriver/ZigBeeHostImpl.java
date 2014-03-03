@@ -1,6 +1,7 @@
 
 package org.osgi.impl.service.zigbee.basedriver;
 
+import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZigBeeCommandHandler;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeException;
@@ -77,6 +78,14 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	}
 
 	public void createGroupService(String pid, int groupAddress, ZigBeeCommandHandler handler) throws ZigBeeException {
+		// TODO Auto-generated method stub
+	}
+
+	public void broadcast(Integer clusterID, ZCLFrame frame, ZigBeeCommandHandler handler) {
+		// TODO Auto-generated method stub
+	}
+
+	public void broadcast(Integer clusterID, ZCLFrame frame, ZigBeeCommandHandler handler, String exportedServicePID) {
 		// TODO Auto-generated method stub
 	}
 }
