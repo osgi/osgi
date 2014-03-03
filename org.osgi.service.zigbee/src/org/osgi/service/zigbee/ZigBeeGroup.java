@@ -30,25 +30,13 @@ public interface ZigBeeGroup {
 	public static final String	ID	= "zigbee.group.id";
 
 	/**
-	 * @return An array of servers(inputs) clusters, returns an empty array if
-	 *         does not provides any servers clusters.
-	 */
-	public ZCLCluster[] getServerClusters();
-
-	/**
-	 * @param serverClusterId The server(input) cluster identifier
-	 * @return the server(input) cluster identified by id
-	 */
-	public ZCLCluster getServerCluster(int serverClusterId);
-
-	/**
 	 * @return The 16bit group address.
 	 */
-	public short getGroupAddress();
+	short getGroupAddress();
 
 	/**
-	 * This method is used for adding an Endpoint to group, it may be invoked on
-	 * exported endpoint or even on import endpoint. In the former case, the
+	 * This method is used for adding an Endpoint to a Group, it may be invoked
+	 * on exported Endpoint or even on import Endpoint. In the former case, the
 	 * ZigBee Base Driver should rely on the <i>APSME-ADD-GROUP</i> API defined
 	 * by the ZigBee Specification, in the former case it will use the proper
 	 * commands of the <i>Groups</i> cluster of the ZigBee Specification
@@ -61,11 +49,11 @@ public interface ZigBeeGroup {
 	 *        result of "joining".
 	 * @throws ZigBeeException
 	 */
-	public void joinGroup(String pid, ZigBeeCommandHandler handler) throws ZigBeeException;
+	void joinGroup(String pid, ZigBeeCommandHandler handler) throws ZigBeeException;
 
 	/**
-	 * This method is used for adding an Endpoint to group, it may be invoked on
-	 * exported endpoint or even on import endpoint. In the former case, the
+	 * This method is used for adding an Endpoint to a Group, it may be invoked
+	 * on exported Endpoint or even on import Endpoint. In the former case, the
 	 * ZigBee Base Driver should rely on the <i>APSME-REMOVE-GROUP </i> API
 	 * defined by the ZigBee Specification, in the former case it will use the
 	 * proper commands of the <i>Groups</i> cluster of the ZigBee Specification
@@ -78,6 +66,36 @@ public interface ZigBeeGroup {
 	 *        result of "leaving".
 	 * @throws ZigBeeException
 	 */
-	public void leaveGroup(String pid, ZigBeeCommandHandler handler) throws ZigBeeException;
+	void leaveGroup(String pid, ZigBeeCommandHandler handler) throws ZigBeeException;
+
+	/**
+	 * Invokes the action on a Group. The handler will provide the invocation
+	 * response in an asynchronously way.
+	 * 
+	 * The source endpoint is not specified in this method call. To send the
+	 * appropriate message on the network, the base driver must generate a
+	 * source endpoint. The latter must not correspond to any exported endpoint.
+	 * 
+	 * @param frame a command frame sequence.
+	 * @param handler The handler that manages the command response.
+	 * @throws ZigBeeException
+	 */
+	void invoke(ZCLFrame frame, ZigBeeCommandHandler handler) throws ZigBeeException;
+
+	/**
+	 * This method is to be used by applications when the targeted device has to
+	 * distinguish between source endpoints of the message. For instance, alarms
+	 * cluster (see 3.11 Alarms Cluster in [ZCL]) generated events are
+	 * differently interpreted if they come from the oven or from the intrusion
+	 * alert system.
+	 * 
+	 * @param frame a command frame sequence.
+	 * @param handler The handler that manages the command response.
+	 * @param exportedServicePID : the source endpoint of the command request.
+	 *        In targeted situations, the source endpoint is the valid service
+	 *        PID of an exported endpoint.
+	 * @throws ZigBeeException
+	 */
+	void invoke(ZCLFrame frame, ZigBeeCommandHandler handler, String exportedServicePID) throws ZigBeeException;
 
 }
