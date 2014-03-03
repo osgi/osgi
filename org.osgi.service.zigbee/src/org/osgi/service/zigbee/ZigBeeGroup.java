@@ -33,13 +33,13 @@ public interface ZigBeeGroup {
 	 * @return An array of servers(inputs) clusters, returns an empty array if
 	 *         does not provides any servers clusters.
 	 */
-	public ZigBeeCluster[] getServerClusters();
+	public ZCLCluster[] getServerClusters();
 
 	/**
 	 * @param serverClusterId The server(input) cluster identifier
 	 * @return the server(input) cluster identified by id
 	 */
-	public ZigBeeCluster getServerCluster(int serverClusterId);
+	public ZCLCluster getServerCluster(int serverClusterId);
 
 	/**
 	 * @return The 16bit group address.

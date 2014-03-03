@@ -17,11 +17,11 @@
 package org.osgi.service.zigbee;
 
 /**
- * This interface represents a ZigBee Cluster
+ * This interface represents a ZCL Cluster
  * 
  * @version 1.0
  */
-public interface ZigBeeCluster {
+public interface ZCLCluster {
 
 	/**
 	 * Property key for the optional cluster id. A ZigBee Event Listener service

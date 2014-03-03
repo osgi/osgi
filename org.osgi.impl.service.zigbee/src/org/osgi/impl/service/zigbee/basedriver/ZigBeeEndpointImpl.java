@@ -1,7 +1,7 @@
 
 package org.osgi.impl.service.zigbee.basedriver;
 
-import org.osgi.service.zigbee.ZigBeeCluster;
+import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeHandler;
@@ -14,8 +14,8 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 
 	private int						id;
 	private ZigBeeSimpleDescriptor	desc;
-	private ZigBeeCluster[]			inputs;
-	private ZigBeeCluster[]			outputs;
+	private ZCLCluster[]			inputs;
+	private ZCLCluster[]			outputs;
 
 	/**
 	 * @param id
@@ -23,7 +23,7 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 	 * @param ouputs
 	 * @param desc
 	 */
-	public ZigBeeEndpointImpl(int id, ZigBeeCluster[] inputs, ZigBeeCluster[] ouputs, ZigBeeSimpleDescriptor desc) {
+	public ZigBeeEndpointImpl(int id, ZCLCluster[] inputs, ZCLCluster[] ouputs, ZigBeeSimpleDescriptor desc) {
 		this.id = id;
 		this.inputs = inputs;
 		this.outputs = ouputs;
@@ -45,22 +45,22 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return desc;
 	}
 
-	public ZigBeeCluster[] getServerClusters() {
+	public ZCLCluster[] getServerClusters() {
 		// TODO Auto-generated method stub
 		return inputs;
 	}
 
-	public ZigBeeCluster getServerCluster(int serverClusterId) {
+	public ZCLCluster getServerCluster(int serverClusterId) {
 		// TODO Auto-generated method stub
 		return inputs[serverClusterId];
 	}
 
-	public ZigBeeCluster[] getClientClusters() {
+	public ZCLCluster[] getClientClusters() {
 		// TODO Auto-generated method stub
 		return outputs;
 	}
 
-	public ZigBeeCluster getClientCluster(int clientClusterId) {
+	public ZCLCluster getClientCluster(int clientClusterId) {
 		// TODO Auto-generated method stub
 		return outputs[clientClusterId];
 	}

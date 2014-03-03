@@ -112,25 +112,25 @@ public interface ZigBeeEndpoint {
 	 * @return An array of servers(inputs) clusters, returns an empty array if
 	 *         does not provides any servers clusters.
 	 */
-	public ZigBeeCluster[] getServerClusters();
+	public ZCLCluster[] getServerClusters();
 
 	/**
 	 * @param serverClusterId The server(input) cluster identifier
 	 * @return the server(input) cluster identified by id
 	 */
-	public ZigBeeCluster getServerCluster(int serverClusterId);
+	public ZCLCluster getServerCluster(int serverClusterId);
 
 	/**
 	 * @return An array of clients(outputs) clusters, returns an empty array if
 	 *         does not provides any clients clusters.
 	 */
-	public ZigBeeCluster[] getClientClusters();
+	public ZCLCluster[] getClientClusters();
 
 	/**
 	 * @param clientClusterId The client(output) cluster identifier
 	 * @return the client(output) cluster identified by id
 	 */
-	public ZigBeeCluster getClientCluster(int clientClusterId);
+	public ZCLCluster getClientCluster(int clientClusterId);
 
 	/**
 	 * This method modify the <i>Binding Table</i> of physical device by adding

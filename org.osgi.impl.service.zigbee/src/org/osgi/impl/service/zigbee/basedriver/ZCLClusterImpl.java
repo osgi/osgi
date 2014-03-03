@@ -3,11 +3,11 @@ package org.osgi.impl.service.zigbee.basedriver;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZigBeeAttribute;
 import org.osgi.service.zigbee.ZigBeeAttributeRecord;
 import org.osgi.service.zigbee.ZigBeeAttributesHandler;
-import org.osgi.service.zigbee.ZigBeeCluster;
 import org.osgi.service.zigbee.ZigBeeCommandHandler;
 import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
@@ -15,7 +15,7 @@ import org.osgi.service.zigbee.descriptions.ZigBeeClusterDescription;
 /**
  * Mocked impl.
  */
-public class ZigBeeClusterImpl implements ZigBeeCluster {
+public class ZCLClusterImpl implements ZCLCluster {
 
 	private Integer						id;
 	private ZigBeeAttributeImpl[]		attributes;
@@ -25,7 +25,7 @@ public class ZigBeeClusterImpl implements ZigBeeCluster {
 	/**
 	 * @param id
 	 */
-	public ZigBeeClusterImpl(Integer id) {
+	public ZCLClusterImpl(Integer id) {
 		this.id = id;
 	}
 
@@ -34,7 +34,7 @@ public class ZigBeeClusterImpl implements ZigBeeCluster {
 	 * @param attributes
 	 * @param desc
 	 */
-	public ZigBeeClusterImpl(int[] commandIds, ZigBeeAttributeImpl[] attributes, ZigBeeClusterDescription desc) {
+	public ZCLClusterImpl(int[] commandIds, ZigBeeAttributeImpl[] attributes, ZigBeeClusterDescription desc) {
 		id = desc.getId();
 		this.commandIds = commandIds;
 		this.attributes = attributes;

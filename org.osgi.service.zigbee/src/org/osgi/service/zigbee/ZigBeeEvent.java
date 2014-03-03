@@ -26,7 +26,7 @@ public interface ZigBeeEvent {
 	/**
 	 * @return The cluster object concerned by the events
 	 */
-	public ZigBeeCluster getCluster();
+	public ZCLCluster getCluster();
 
 	/**
 	 * @return An object containing the new value for the ZigBee attribute that

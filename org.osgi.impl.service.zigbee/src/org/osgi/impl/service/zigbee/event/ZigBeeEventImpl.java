@@ -1,7 +1,7 @@
 
 package org.osgi.impl.service.zigbee.event;
 
-import org.osgi.service.zigbee.ZigBeeCluster;
+import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZigBeeEvent;
 
 /**
@@ -9,19 +9,19 @@ import org.osgi.service.zigbee.ZigBeeEvent;
  */
 public class ZigBeeEventImpl implements ZigBeeEvent {
 
-	private ZigBeeCluster	cluster;
-	private Object			value;
+	private ZCLCluster	cluster;
+	private Object		value;
 
 	/**
 	 * @param cluster
 	 * @param value
 	 */
-	public ZigBeeEventImpl(ZigBeeCluster cluster, Object value) {
+	public ZigBeeEventImpl(ZCLCluster cluster, Object value) {
 		this.cluster = cluster;
 		this.value = value;
 	}
 
-	public ZigBeeCluster getCluster() {
+	public ZCLCluster getCluster() {
 		return cluster;
 	}
 

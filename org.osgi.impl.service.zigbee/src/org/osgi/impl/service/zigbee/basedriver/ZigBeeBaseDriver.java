@@ -10,7 +10,7 @@ import org.osgi.impl.service.zigbee.descriptors.ZigBeeNodeDescriptorImpl;
 import org.osgi.impl.service.zigbee.descriptors.ZigBeePowerDescriptorImpl;
 import org.osgi.impl.service.zigbee.descriptors.ZigBeeSimpleDescriptorImpl;
 import org.osgi.impl.service.zigbee.util.ZigBeeDeviceNodeListener;
-import org.osgi.service.zigbee.ZigBeeCluster;
+import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.ZigBeeNode;
@@ -41,8 +41,8 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 	private ZigBeeEndpoint					endpoint2;
 	private ZigBeeSimpleDescriptor			simpledesc1;
 	private ZigBeeSimpleDescriptor			simpledesc2;
-	private ZigBeeCluster[]					serverCluster;
-	private ZigBeeCluster[]					clientCluster;
+	private ZCLCluster[]					serverCluster;
+	private ZCLCluster[]					clientCluster;
 	private ZigBeeGlobalClusterDescription	globalDescription;
 	private ZigBeeClusterDescription		serverClusterDescription;
 	private ZigBeeClusterDescription		clientClusterDescription;
@@ -103,8 +103,8 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		clientClusterDescription = new ZigBeeClusterDescriptionImpl(67, globalDescription);
 
 		// a client endpoint example
-		clientCluster = new ZigBeeClusterImpl[1];
-		clientCluster[0] = new ZigBeeClusterImpl(null, null, clientClusterDescription);
+		clientCluster = new ZCLClusterImpl[1];
+		clientCluster[0] = new ZCLClusterImpl(null, null, clientClusterDescription);
 
 		simpledesc1 = new ZigBeeSimpleDescriptorImpl(6, (byte) 1, 5);
 		endpoint1 = new ZigBeeEndpointImpl((byte) 0x21, null, clientCluster, simpledesc1);
@@ -112,12 +112,12 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		// a server endpoint example
 		param = new ZigBeeParameterDescriptionImpl[1];
 		param[0] = new ZigBeeParameterDescriptionImpl(attributesType[0]);
-		serverCluster = new ZigBeeClusterImpl[1];
+		serverCluster = new ZCLClusterImpl[1];
 		commandIdsServer = new int[1];
 		commandIdsServer[0] = 0;
 		// commandDescription = new ZigBeeCommandDescriptionImpl(0x00,
 		// "Reset to Factory Defaults", false, param);
-		serverCluster[0] = new ZigBeeClusterImpl(commandIdsServer, attributesServer, serverClusterDescription);
+		serverCluster[0] = new ZCLClusterImpl(commandIdsServer, attributesServer, serverClusterDescription);
 
 		simpledesc2 = new ZigBeeSimpleDescriptorImpl(8, (byte) 4, 3);
 		endpoint2 = new ZigBeeEndpointImpl((byte) 0x19, serverCluster, null, simpledesc2);

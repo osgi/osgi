@@ -3,10 +3,10 @@ package org.osgi.test.cases.zigbee.tbc;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZigBeeAttribute;
 import org.osgi.service.zigbee.ZigBeeAttributeRecord;
-import org.osgi.service.zigbee.ZigBeeCluster;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeEvent;
 import org.osgi.service.zigbee.ZigBeeException;
@@ -190,7 +190,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 							.getSimpleDescriptor().getApplicationDeviceVersion()));
 
 			String listInput = "[]";
-			ZigBeeCluster[] servers = endpoint.getServerClusters();
+			ZCLCluster[] servers = endpoint.getServerClusters();
 			if (servers != null) {
 				listInput = "[";
 				for (int i = 0; i < servers.length; i++) {
@@ -208,7 +208,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 					ZigBeeConstants.ENDPOINT_INPUT_CLUSTERS, listInput);
 
 			String listOuput = "[]";
-			ZigBeeCluster[] clients = endpoint.getClientClusters();
+			ZCLCluster[] clients = endpoint.getClientClusters();
 			if (clients != null) {
 				listOuput = "[";
 				for (int i = 0; i < clients.length; i++) {
@@ -245,11 +245,11 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		ZigBeeEndpoint endpoint = endpoints[0];
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 
-		ZigBeeCluster[] clusters = endpoint.getClientClusters();
+		ZCLCluster[] clusters = endpoint.getClientClusters();
 		if (clusters == null || clusters.length == 0) {
 			clusters = endpoint.getServerClusters();
 		}
-		ZigBeeCluster cluster = null;
+		ZCLCluster cluster = null;
 		if (clusters != null && clusters.length != 0) {
 			cluster = clusters[0];
 		}
@@ -288,11 +288,11 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		ZigBeeEndpoint endpoint = endpoints[0];
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 
-		ZigBeeCluster[] clusters = endpoint.getClientClusters();
+		ZCLCluster[] clusters = endpoint.getClientClusters();
 		if (clusters == null || clusters.length == 0) {
 			clusters = endpoint.getServerClusters();
 		}
-		ZigBeeCluster cluster = null;
+		ZCLCluster cluster = null;
 		if (clusters != null && clusters.length != 0) {
 			cluster = clusters[0];
 		}
@@ -318,8 +318,8 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		ZigBeeEndpoint endpoint = endpoints[0];
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 
-		ZigBeeCluster[] clusters = endpoint.getServerClusters();
-		ZigBeeCluster cluster = null;
+		ZCLCluster[] clusters = endpoint.getServerClusters();
+		ZCLCluster cluster = null;
 		if (clusters != null && clusters.length != 0) {
 			cluster = clusters[0];
 		}
@@ -385,8 +385,8 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 
 		// clusters
-		ZigBeeCluster[] clusters = endpoint.getServerClusters();
-		ZigBeeCluster cluster = null;
+		ZCLCluster[] clusters = endpoint.getServerClusters();
+		ZCLCluster cluster = null;
 		if (clusters != null && clusters.length != 0) {
 			cluster = clusters[0];
 		}
@@ -554,8 +554,8 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 
 		// clusters
-		ZigBeeCluster[] clusters = endpoint.getServerClusters();
-		ZigBeeCluster cluster = null;
+		ZCLCluster[] clusters = endpoint.getServerClusters();
+		ZCLCluster cluster = null;
 		if (clusters != null && clusters.length != 0) {
 			cluster = clusters[0];
 		}
