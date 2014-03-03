@@ -32,8 +32,8 @@ import org.osgi.service.zigbee.types.ZigBeeUnsignedInteger8;
  */
 public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 
-	ZigBeeHost								h;
 	private BundleContext					bc;
+	private ZigBeeHost						host;
 	private ZigBeeNode						node1, node2;
 	private ZigBeeNodeDescriptor			nodeDesc;
 	private ZigBeePowerDescriptor			powerDesc;
@@ -122,6 +122,26 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		simpledesc2 = new ZigBeeSimpleDescriptorImpl(8, (byte) 4, 3);
 		endpoint2 = new ZigBeeEndpointImpl((byte) 0x19, serverCluster, null, simpledesc2);
 
+		// ZigBeeHost that owns node1, and node2.
+		int panId = 33;
+		int channel = 16;
+		int baud = 115000;
+		int securityLevel = 0;
+		// 64-bit 802.15.4 IEEE Address, e.g. 00:25:96:FF:FE:AB:37:56
+		Long IEEEAddress = Long.valueOf("0123456789");
+		// 16-bit ZigBee Network Address
+		short nwkAddress = Short.valueOf("2468");
+		ZigBeeEndpoint[] endpointsHost = new ZigBeeEndpoint[2];
+		endpointsHost[0] = endpoint1;
+		endpointsHost[1] = endpoint2;
+
+		host = new ZigBeeHostImpl(panId, channel, baud, securityLevel, IEEEAddress, nwkAddress, endpointsHost);
+
+		// register host
+		System.out.println(this.getClass().getName() + " - Register (hardcoded) host: " + host + " in the OSGi services registry.");
+		bc.registerService(ZigBeeHost.class.getName(),
+				host, null);
+
 		// node descriptor
 		nodeDesc = new ZigBeeNodeDescriptorImpl(ZigBeeNode.END_DEVICE, (short) 868, 45, 36, false, false);
 		powerDesc = new ZigBeePowerDescriptorImpl((short) 2, (short) 1, (short) 1, true);
@@ -131,19 +151,17 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		endpointsNode1[0] = endpoint1;
 		node1 = new ZigBeeNodeImpl(Long.valueOf("812345689"), (short) 12345, endpointsNode1);
 
-		// register node1
-		System.out.println(this.getClass().getName() + " - Resgister (hardcoded) node1: " + node1 + " in the OSGi services registry.");
-		// registration_1 =
-		bc.registerService(ZigBeeNode.class.getName(),
-				node1, null);
-
 		ZigBeeEndpoint[] endpointsNode2 = new ZigBeeEndpoint[1];
 		endpointsNode2[0] = endpoint2;
 		node2 = new ZigBeeNodeImpl(Long.valueOf("6628417766"), (short) 88507, endpointsNode2, nodeDesc, powerDesc);
 
 		// register node1
-		System.out.println(this.getClass().getName() + " - Resgister (hardcoded) node2: " + node2 + " in the OSGi services registry.");
-		// registration_2 =
+		System.out.println(this.getClass().getName() + " - Register (hardcoded) node1: " + node1 + " in the OSGi services registry.");
+		bc.registerService(ZigBeeNode.class.getName(),
+				node1, null);
+
+		// register node2
+		System.out.println(this.getClass().getName() + " - Register (hardcoded) node2: " + node2 + " in the OSGi services registry.");
 		bc.registerService(ZigBeeNode.class.getName(),
 				node2, null);
 
