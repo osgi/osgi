@@ -41,6 +41,14 @@ public class HttpTestBundle1 extends DefaultTestBundleControl {
 	
 	protected void setUp() {
 		_httpSR = getContext().getServiceReference(HttpService.class.getName());
+		if ( _httpSR == null ) {
+			try {
+				Thread.sleep(3000);
+			} catch (final InterruptedException e) {
+				// ignore
+			}
+			_httpSR = getContext().getServiceReference(HttpService.class.getName());
+		}
 		assertNotNull(_httpSR);
 		_http = (HttpService) getContext().getService(_httpSR);
 		assertNotNull(_http);

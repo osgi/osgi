@@ -24,7 +24,8 @@ Test-Cases							= ${testcases}
 
 -runbundles							= \
 	org.osgi.impl.service.log; version=latest, \
-	org.osgi.impl.bundle.servlet;		version=2.1, \
+	org.osgi.service.cm; version=4.2, \
+	org.osgi.service.event; version=4.2, \
 	org.osgi.impl.service.http; version=latest
 
 

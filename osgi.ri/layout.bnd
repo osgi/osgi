@@ -14,7 +14,6 @@ build.cmpn.impls = \
 	org.osgi.impl.service.deploymentadmin , \
 	org.osgi.impl.service.device.manager , \
 	org.osgi.impl.service.dmt , \
-	org.osgi.impl.service.http , \
 	org.osgi.impl.service.io , \
 	org.osgi.impl.service.jdbc, \
 	org.osgi.impl.service.jndi, \
@@ -37,6 +36,7 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.service.component}, \
 	${repo;org.osgi.impl.service.coordinator}, \
 	${repo;org.osgi.impl.service.event}, \
+	${repo;org.osgi.impl.service.http}, \
 	${repo;org.osgi.impl.service.jpa}, \
 	${repo;org.osgi.impl.service.metatype}, \
 	${repo;org.osgi.impl.service.provisioning}, \
@@ -55,7 +55,6 @@ build.enterprise.impls = \
 	org.osgi.impl.bundle.jaxp, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.transaction, \
-	org.osgi.impl.service.http , \
 	org.osgi.impl.service.jdbc, \
 	org.osgi.impl.service.jndi, \
 	org.osgi.impl.service.log , \
@@ -74,6 +73,7 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.service.component}, \
 	${repo;org.osgi.impl.service.coordinator}, \
 	${repo;org.osgi.impl.service.event}, \
+	${repo;org.osgi.impl.service.http}, \
 	${repo;org.osgi.impl.service.jpa}, \
 	${repo;org.osgi.impl.service.metatype}, \
 	${repo;org.osgi.impl.service.provisioning}, \
@@ -91,7 +91,6 @@ build.residential.impls = \
 	org.osgi.impl.bundle.jaxp, \
 	org.osgi.impl.service.device.manager, \
 	org.osgi.impl.service.dmt, \
-	org.osgi.impl.service.http, \
 	org.osgi.impl.service.log, \
 	org.osgi.impl.service.residentialmanagement, \
 	org.osgi.impl.service.tr069todmt, \
@@ -104,6 +103,7 @@ jar.residential.impls = \
 	${repo;org.osgi.impl.service.cm}, \
 	${repo;org.osgi.impl.service.component}, \
 	${repo;org.osgi.impl.service.event}, \
+	${repo;org.osgi.impl.service.http}, \
 	${repo;org.osgi.impl.service.metatype}, \
 	${repo;org.osgi.impl.service.provisioning}, \
     ${repo;org.osgi.util.xml}
