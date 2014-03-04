@@ -16,6 +16,9 @@
 
 package org.osgi.service.zigbee;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+
 /**
  * @author <a href="mailto:stefano.lenzi@isti.cnr.it">Stefano "Kismet" Lenzi</a>
  * @author <a href="mailto:francesco.furfari@isti.cnr.it">Francesco Furfari</a>
@@ -35,5 +38,17 @@ public interface ZCLFrame {
 	 * @return a copy of the payload
 	 */
 	byte[] getPayload();
+
+	/**
+	 * @return this ZCLFrame's inputstream that can be used in order to obtain
+	 *         this ZCLFrame's input bytes.
+	 */
+	ByteArrayInputStream getInputStream();
+
+	/**
+	 * @return this ZCLFrame's outputstream that can be used in order to write
+	 *         data/bytes to this ZCLFrame.
+	 */
+	ByteArrayOutputStream getOutputStream();
 
 }

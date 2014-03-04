@@ -1,6 +1,8 @@
 
 package org.osgi.test.cases.zigbee.tbc.util;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZCLHeader;
 
@@ -30,5 +32,15 @@ public class ZCLFrameImpl implements ZCLFrame {
 		System.arraycopy(payload, 0, result, 0, payload.length);
 		return result;
 		// return this.payload;
+	}
+
+	public ByteArrayInputStream getInputStream() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ByteArrayOutputStream getOutputStream() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

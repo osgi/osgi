@@ -1,6 +1,8 @@
 
 package org.osgi.impl.service.zigbee.basedriver;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZCLHeader;
 
@@ -29,5 +31,15 @@ public class ZCLFrameImpl implements ZCLFrame {
 		byte[] result = new byte[payload.length];
 		System.arraycopy(payload, 0, result, 0, payload.length);
 		return result;
+	}
+
+	public ByteArrayInputStream getInputStream() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public ByteArrayOutputStream getOutputStream() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
