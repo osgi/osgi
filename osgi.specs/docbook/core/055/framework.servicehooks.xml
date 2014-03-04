@@ -636,7 +636,7 @@
     to selected target bundles. For this reason, the hook implementation can
     remove selected service references from the result collection.</para>
 
-    <section xml:id="framework.servicehooks-system.bundlecontext">
+    <section>
       <title>System Bundle Context</title>
 
       <para>When one of the <code>getServiceReference</code> or
@@ -970,9 +970,8 @@ public void removed( Collection lis ) {
 
     <itemizedlist>
       <listitem>
-        <para>Clarified the relationship of service hooks to the system bundle
-        in <xref
-        linkend="framework.servicehooks-system.bundlecontext"/>.</para>
+        <para>Clarified the relationship of service hooks to the system
+        bundle.</para>
       </listitem>
     </itemizedlist>
   </section>
