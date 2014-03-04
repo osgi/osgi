@@ -16,6 +16,8 @@
 
 package org.osgi.service.zigbee.types;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
@@ -64,11 +66,11 @@ public class ZigBeeUTCTime implements ZigBeeDataTypeDescription {
 		return ZigBeeDataTypes.UTC_TIME;
 	}
 
-	public byte[] serialize(Object param) {
-		return ZigBeeDataTypes.encode(ZigBeeDataTypes.UTC_TIME, param);
+	public void serialize(Object param, ByteArrayOutputStream outdata) {
+		ZigBeeDataTypes.encode(ZigBeeDataTypes.UTC_TIME, param, outdata);
 	}
 
-	public Object deserialize(byte[] data) {
+	public Object deserialize(ByteArrayInputStream data) {
 		return ZigBeeDataTypes.decode(ZigBeeDataTypes.UTC_TIME, data);
 	}
 }

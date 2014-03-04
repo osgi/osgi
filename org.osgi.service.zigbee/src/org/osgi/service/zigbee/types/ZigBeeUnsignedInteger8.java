@@ -16,6 +16,8 @@
 
 package org.osgi.service.zigbee.types;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
@@ -64,11 +66,11 @@ public class ZigBeeUnsignedInteger8 implements ZigBeeDataTypeDescription {
 		return ZigBeeDataTypes.UNSIGNED_INTEGER_8;
 	}
 
-	public byte[] serialize(Object param) {
-		return ZigBeeDataTypes.encode(ZigBeeDataTypes.UNSIGNED_INTEGER_8, param);
+	public void serialize(Object param, ByteArrayOutputStream outdata) {
+		ZigBeeDataTypes.encode(ZigBeeDataTypes.UNSIGNED_INTEGER_8, param, outdata);
 	}
 
-	public Object deserialize(byte[] data) {
+	public Object deserialize(ByteArrayInputStream data) {
 		return ZigBeeDataTypes.decode(ZigBeeDataTypes.UNSIGNED_INTEGER_8, data);
 	}
 }

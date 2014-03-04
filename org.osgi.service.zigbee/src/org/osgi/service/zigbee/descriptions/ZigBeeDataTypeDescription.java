@@ -16,6 +16,9 @@
 
 package org.osgi.service.zigbee.descriptions;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+
 /**
  * This interface represents the ZigBee data type abstraction.
  * 
@@ -24,7 +27,7 @@ package org.osgi.service.zigbee.descriptions;
 public interface ZigBeeDataTypeDescription {
 
 	/**
-	 * @return The data type identifier
+	 * @return The data type identifier.
 	 */
 	public short getId();
 
@@ -34,7 +37,7 @@ public interface ZigBeeDataTypeDescription {
 	public String getName();
 
 	/**
-	 * @return The data type invalid number if exists, otherwise returns null
+	 * @return The data type invalid number if exists, otherwise returns null.
 	 */
 	public Object getInvalidNumber();
 
@@ -49,15 +52,17 @@ public interface ZigBeeDataTypeDescription {
 	public Class getJavaDataType();
 
 	/**
-	 * @param param Object to be serialized using the associated type
-	 * @return An array of bytes that represents the serialized value of param
+	 * @param param Object to be serialized using the associated type.
+	 * @param outdata ByteArrayOutputStream in which the array of bytes that
+	 *        represents the serialized value of param will be added.
 	 */
-	public byte[] serialize(Object param);
+	public void serialize(Object param, ByteArrayOutputStream outdata);
 
 	/**
-	 * @param data Array of bytes to be deserialized using associated type
-	 * @return An object that represents the deserialized value of data
+	 * @param data ByteArrayInputStream Array of bytes to be deserialized using
+	 *        associated type.
+	 * @return An object that represents the deserialized value of data.
 	 */
-	public Object deserialize(byte[] data);
+	public Object deserialize(ByteArrayInputStream data);
 
 }

@@ -16,6 +16,8 @@
 
 package org.osgi.service.zigbee.types;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
@@ -64,11 +66,11 @@ public class ZigBeeBitmap48 implements ZigBeeDataTypeDescription {
 		return ZigBeeDataTypes.BITMAP_48;
 	}
 
-	public byte[] serialize(Object param) {
-		return ZigBeeDataTypes.encode(ZigBeeDataTypes.BITMAP_48, param);
+	public void serialize(Object param, ByteArrayOutputStream outdata) {
+		ZigBeeDataTypes.encode(ZigBeeDataTypes.BITMAP_48, param, outdata);
 	}
 
-	public Object deserialize(byte[] data) {
+	public Object deserialize(ByteArrayInputStream data) {
 		return ZigBeeDataTypes.decode(ZigBeeDataTypes.BITMAP_48, data);
 	}
 }

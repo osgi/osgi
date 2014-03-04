@@ -16,6 +16,9 @@
 
 package org.osgi.service.zigbee;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+
 /**
  * This interface represents all ZigBee data types, and contains the common
  * serialize/deserialize methods for the org.osgi.service.zigbee.types.*
@@ -278,20 +281,20 @@ public class ZigBeeDataTypes {
 	/**
 	 * @param type the value's type
 	 * @param value the Java value
-	 * @return the given value encoded as a byte[]
+	 * @param outdata ByteArrayOutputStream in which the array of bytes that
+	 *        represents the encoded value of param will be added.
 	 */
-	public static byte[] encode(short type, Object value) {
-		// TODO
-		return null;
+	public static void encode(short type, Object value, ByteArrayOutputStream outdata) {
+		// TODO Auto-generated method stub
 	}
 
 	/**
 	 * @param type the value's type
-	 * @param value the byte[] value
+	 * @param value the ByteArrayInputStream value
 	 * @return the given value decoded as a Java Object
 	 */
-	public static Object decode(short type, byte[] value) {
-		// TODO
+	public static Object decode(short type, ByteArrayInputStream value) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
