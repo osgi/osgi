@@ -59,7 +59,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * The {@code BundleContext} object is only valid during the execution of its
  * context bundle; that is, during the period from when the context bundle is in
  * the {@code STARTING}, {@code STOPPING}, and {@code ACTIVE} bundle states.
- * However, the {@code BundleContext} object become invalid after
+ * However, the {@code BundleContext} object becomes invalid after
  * {@link BundleActivator#stop(BundleContext)} returns (if the bundle has a
  * Bundle Activator). The {@code BundleContext} object becomes invalid before
  * disposing of any remaining registered services and releasing any remaining

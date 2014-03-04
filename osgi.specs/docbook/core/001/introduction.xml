@@ -242,7 +242,7 @@ file?abc=12</programlisting>
       This syntax is based on the following symbols:</para>
 
       <programlisting>*           Repetition of the previous element zero or
-            more times, e.g. ( ',' element ) *
+            more times, e.g. ( ',' element )*
 +           Repetition one or more times
 ?           Previous element is optional
 ( ... )     Grouping
@@ -271,14 +271,14 @@ qname           ::= &lt;see <xref linkend="i487605"/>
                      for fully qualified class names&gt;
 identifier      ::= jletter jletterordigit *
 extended        ::= ( alphanum | '_' | '-' | '.' )+
-quoted-string   ::= '"' ( ~["\#x0D#x0A#x00] | '\"'|'\\')*'"'
+quoted-string   ::= '"' ( ~["\#x0D#x0A#x00] | '\"' | '\\' )* '"'
 argument        ::= extended  | quoted-string
 parameter       ::= directive | attribute
 directive       ::= extended ':=' argument
 attribute       ::= extended '=' argument
 
 unique-name     ::= identifier ( '.' identifier )*
-symbolic-name   ::= token('.'token)*
+symbolic-name   ::= token ( '.' token )*
 package-name    ::= unique-name
 
 path            ::= special-chars+ | quoted-string

@@ -1067,10 +1067,10 @@
               <entry><code>org.osgi.framework.version</code></entry>
 
               <entry><para>The specification version number implemented by the
-              Framework implementation. <xref
+              Framework implementation. The specification version number of
+              this specification is <xref
               endterm="org.osgi.framework-version.number"
-              linkend="org.osgi.framework"/> is the specification version
-              number for this specification.</para></entry>
+              linkend="org.osgi.framework"/>.</para></entry>
             </row>
 
             <row>
@@ -1201,14 +1201,14 @@
       <title>Initializing the Framework</title>
 
       <para>Before the framework can be used, it must be
-      <emphasis>initialized</emphasis>. Initialization is caused by the
-      <code>init</code> method or implicitly the <code>start</code> method. An
-      initialized framework is operational, but none of its bundles are
-      active. This is reflected in the <code>STARTING</code> state. As long as
-      the framework is in this state, new bundles can be installed without any
-      installed code interfering. Existing bundles must all be in the
-      <code>INSTALLED</code> or <code>RESOLVED</code> state. In this state,
-      the framework will run at start level 0.</para>
+      <emphasis>initialized</emphasis>. Initialization is caused by one of the
+      <code>init</code> methods or implicitly by the <code>start</code>
+      method. An initialized framework is operational, but none of its bundles
+      are active. This is reflected in the <code>STARTING</code> state. As
+      long as the framework is in this state, new bundles can be installed
+      without any installed code interfering. Existing bundles must all be in
+      the <code>INSTALLED</code> or <code>RESOLVED</code> state. In this
+      state, the framework will run at start level 0.</para>
 
       <para>A framework object can be initialized multiple times. After
       initialization:</para>
@@ -1252,7 +1252,7 @@
         </listitem>
 
         <listitem>
-          <para>All resovled extension bundle activators <code>start</code>
+          <para>All resolved extension bundle activators <code>start</code>
           methods have been called</para>
         </listitem>
       </itemizedlist>
@@ -1292,10 +1292,10 @@
         listeners. Any framework events broadcast during the initialization
         process must be delivered to the specified framework listeners in the
         order they are specified before returning from the <code>init</code>
-        method. After returning from <code>init</code> the specified listeners
-        are no longer notified of framework events. This allows a launcher to
-        initialize a <code>Framework</code> with an init framework listener in
-        order to detect errors while calling framework extension
+        method. After returning from <code>init</code>, the specified
+        listeners are no longer notified of framework events. This allows a
+        launcher to initialize a <code>Framework</code> with an init framework
+        listener in order to detect errors from framework extension
         activators.</para>
       </section>
     </section>
@@ -1362,10 +1362,10 @@
         called to inform the framework extension that the
         <code>Framework</code> is shutting down, see <xref
         linkend="framework.module.extensionActivator"/>. Before disabling
-        event handling during the <code>Framework</code> shutdown process the
+        event handling during the <code>Framework</code> shutdown process, the
         framework must call the <code>stop</code> method for each Extension
         Bundle Activator that was started successfully. While calling
-        Extension Bundle Activator <code>stop</code> methods the framework
+        Extension Bundle Activator <code>stop</code> methods, the framework
         must be in the <code>STOPPING</code> state and have a valid bundle
         context. Any exception thrown by an Extension Bundle Activator
         <code>stop</code> method must be wrapped in a
@@ -1375,10 +1375,10 @@
 
         <para>The framework must guarantee that if the <code>start</code>
         method has executed successfully for an Extension Bundle Activator,
-        that same <code>BundleActivator</code> object must be called with its
+        that same <code>BundleActivator</code> object must be called on its
         <code>stop</code> method when the framework is shutdown. After calling
         the <code>stop</code> method, that particular
-        <code>BundleActivator</code> object must never be used again.
+        <code>BundleActivator</code> object must never be used again. An
         Extension Bundle Activators that threw an exception during
         <code>start</code> must not be called on shutdown.</para>
       </section>
@@ -1997,7 +1997,7 @@ if ( it.hasNext() ) {
         policy is specified in the Bundle-ActivationPolicy header with the
         following syntax:</para>
 
-        <programlisting>Bundle-ActivationPolicy ::= policy ( ';' directive)*
+        <programlisting>Bundle-ActivationPolicy ::= policy ( ';' directive )*
 policy ::= 'lazy'</programlisting>
 
         <para>The only policy defined is the <code>lazy</code> activation
@@ -2252,7 +2252,7 @@ policy ::= 'lazy'</programlisting>
       <para>The update process supports migration from one revision of a
       bundle to a newer revision of the same bundle. The capabilities provided
       by the new revision must be immediately available to the Framework. If
-      the old bundle revision has <xref
+      the old bundle revision has an <xref
       linkend="org.osgi.framework.wiring.BundleWiring.isInUse--"
       xrefstyle="hyperlink"/> bundle wiring then all capabilities provided by
       the old bundle wiring must remain available for existing bundles and
@@ -3387,9 +3387,9 @@ D: Export-Package: s</programlisting>
             <listitem>
               <para><xref
               linkend="org.osgi.framework.FrameworkEvent.STOPPED_BOOTCLASSPATH_MODIFIED"
-              xrefstyle="hyperlink"/> -Sent by the Framework because of a stop
-              operation on the system bundle and a boot class path extension
-              bundle has been installed or updated.</para>
+              xrefstyle="hyperlink"/> - Sent by the Framework because of a
+              stop operation on the system bundle and a boot class path
+              extension bundle has been installed or updated.</para>
             </listitem>
 
             <listitem>

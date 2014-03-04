@@ -262,7 +262,7 @@ link           ::= 'link' '=' &lt;url&gt;</programlisting>
           </listitem>
 
           <listitem>
-            <para><code>link</code> -(optional) Provide a URL to a page that
+            <para><code>link</code> - (optional) Provide a URL to a page that
             defines or explains the license. If this link is absent, the name
             field is used for this purpose. The URL is relative to the root of
             the bundle. That is, it is possible to refer to a file inside the
@@ -1188,9 +1188,8 @@ org.osgi.framework.system.capabilities.extra</programlisting>
       <para>The Bundle's Require-Capability header has the following
       grammar:</para>
 
-      <programlisting>Require-Capability  ::= requirement (',' requirement )* 
-requirement         ::= name-space 
-                            ( ';' directive | typed-attr )*</programlisting>
+      <programlisting>Require-Capability ::= requirement ( ',' requirement )* 
+requirement        ::= name-space ( ';' directive | typed-attr )*</programlisting>
 
       <para>Requirements have attributes that can be set with the
       Require-Capability header. The purpose of these attributes are to
@@ -1308,11 +1307,10 @@ requirement         ::= name-space
       <para>The syntax of this header is a list of comma-separated names of
       execution environments.</para>
 
-      <programlisting>Bundle-RequiredExecutionEnvironment ::= 
-    ee-name ( ',' ee-name )*
+      <programlisting>Bundle-RequiredExecutionEnvironment ::= ee-name ( ',' ee-name )*
 
 ee-name  ::= bree | &lt;ee name&gt;
-bree     ::= token ('-' version)? ( '/' token ( '-' version)? )?</programlisting>
+bree     ::= token ( '-' version )? ( '/' token ( '-' version )? )?</programlisting>
 
       <para>For example:</para>
 
@@ -1357,7 +1355,7 @@ bree     ::= token ('-' version)? ( '/' token ( '-' version)? )?</programlisting
       <code>bree</code> term. The structure of the <code>bree</code> term for
       the existing recommendations is:</para>
 
-      <programlisting>n1 ( '-' v )? ( '/' n2 ( '-' v )?)?</programlisting>
+      <programlisting>n1 ( '-' v )? ( '/' n2 ( '-' v )? )?</programlisting>
 
       <para>For example:</para>
 
@@ -2239,7 +2237,7 @@ B: Export-Package: p; version=1.5.1</programlisting>
 
       <para>Since there are generally many API consumer and few API providers,
       API evolution must be very careful when considering changes to API
-      consumer types while being more relaxed about changing API provider
+      consumer types while being more relaxed about changes to API provider
       types. This is because you will need to change the few API providers to
       support an updated API but you do not want to require the many existing
       API consumers to change when an API is updated. API consumers should
@@ -2921,10 +2919,9 @@ B: Bundle-SymbolicName: B
       <para>The Bundle-ClassPath manifest header must conform to the following
       syntax:</para>
 
-      <programlisting>Bundle-ClassPath    ::=  entry ( ',' entry )*entry
-                    ::= target ( ';' target )* 
-                            ( ';' parameter ) *
-target              ::= path | '.'           // See <xref
+      <programlisting>Bundle-ClassPath ::= entry ( ',' entry )*
+entry            ::= target ( ';' target )* ( ';' parameter ) *
+target           ::= path | '.'     // See <xref
           linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>The Framework must ignore any unrecognized parameters.</para>
@@ -3041,7 +3038,7 @@ B:fragment.jar</programlisting>
       <programlisting>DynamicImport-Package ::= dynamic-description 
            ( ',' dynamic-description )*
 dynamic-description ::= wildcard-names ( ';' parameter )*
-wildcard-names      ::= wildcard-name ( ';' wildcard-name)*
+wildcard-names      ::= wildcard-name ( ';' wildcard-name )*
 wildcard-name       ::= package-name 
             | ( package-name '.*' )   // See <xref
           linkend="framework.general.syntax" xrefstyle="template:%n"/>
@@ -3537,7 +3534,7 @@ if ( cl instanceof BundleReference ) {
     syntax:</para>
 
     <programlisting>Bundle-NativeCode   ::= nativecode 
-        ( ',' nativecode )* ( ',' optional) ?
+        ( ',' nativecode )* ( ',' optional ) ?
 nativecode          ::= path ( ';' path )*    // See <xref
         linkend="framework.general.syntax" xrefstyle="template:%n"/>
                         ( ';' parameter )*
@@ -3584,9 +3581,10 @@ optional            ::= '*'</programlisting>
     </itemizedlist>
 
     <para>If a selection-filter attribute contains an invalid filter, then the
-    bundle must fail to install with a Bundle Exception of type
-    <code>NATIVECODE_ERROR</code>. The following is a typical example of a
-    native code declaration in a bundle's manifest:</para>
+    bundle must fail to install with a Bundle Exception of type <xref
+    linkend="org.osgi.framework.BundleException.NATIVECODE_ERROR"
+    xrefstyle="hyperlink"/>. The following is a typical example of a native
+    code declaration in a bundle's manifest:</para>
 
     <programlisting>Bundle-NativeCode: lib/http.dll ; lib/zlib.dll; «
         osname = Windows95 ; «
@@ -3862,8 +3860,8 @@ Bundle-NativeCode: lib/http.DLL ; «
         <listitem>
           <para>If no native clauses were selected in step <xref
           linkend="framework.module-nativecodealg1"/>, this algorithm is
-          terminated and a Bundle Exception is thrown if the optional clause
-          is not present.</para>
+          terminated. A Bundle Exception is thrown if the optional clause is
+          not present.</para>
         </listitem>
 
         <listitem xml:id="framework.module-nativecodealg3">
@@ -4634,7 +4632,7 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
 
       <programlisting>Fragment-Host       ::= bundle-description
 bundle-description  ::= symbolic-name 
-                            (';' parameter ) * // See <xref
+                            ( ';' parameter )* // See <xref
           linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>The following directives are architected by the Framework for
@@ -4841,8 +4839,9 @@ bundle-description  ::= symbolic-name
         </listitem>
       </itemizedlist>
 
-      <para>A Fragment bundle can become unresolved by calling the
-      <code>refreshBundles</code> method.</para>
+      <para>A Fragment bundle can become unresolved by calling the <xref
+      linkend="org.osgi.framework.wiring.FrameworkWiring.refreshBundles-Collection-FrameworkListener...-"
+      xrefstyle="hyperlink"/> method.</para>
     </section>
 
     <section>
@@ -5020,32 +5019,8 @@ bundle-description  ::= symbolic-name
 
       <para>Supplying an Extension Bundle Activator is optional and only valid
       for Extension Bundles of type <code>framework</code>. For normal Bundles
-      and Fragments the <code>ExtensionBundle-Activator</code> is
+      and Fragments, the <code>ExtensionBundle-Activator</code> must be
       ignored.</para>
-
-      <section>
-        <title>Update and Uninstall</title>
-
-        <para>Unlike normal bundles, updating or uninstalling an extension
-        bundle does not take effect at runtime until the Framework is shutdown
-        and restarted. The old content of the extension bundle must remain
-        attached to the system bundle until the framework is shutdown. This
-        extends to the Extension Bundle Activators that have had the start
-        method called. All started Extension Bundle Activators must not have
-        the stop method called until the Framework is shutdown.</para>
-      </section>
-
-      <section>
-        <title>Installing</title>
-
-        <para>When a framework extension is installed a Framework may allow
-        the extension to become resolved dynamically, without a Framework
-        restart. If a framework extension is allowed to install and resolve
-        dynamically after Framework initialization, then the Extension Bundle
-        Activator start method must be called as soon as the extension bundle
-        is resolved. This must happen before the resolved bundle event is
-        fired for the extension bundle.</para>
-      </section>
 
       <section>
         <title>Framework Initialization and Shutdown</title>
@@ -5053,11 +5028,34 @@ bundle-description  ::= symbolic-name
         <para>An Extension Bundle Activator allows a framework extension to
         hook into the Framework initialization and shutdown process. <xref
         linkend="framework.lifecycle.initializing"/> describes how the
-        <code>start</code> method for Extension Bundle Activators are called
+        <code>start</code> method for Extension Bundle Activators is called
         during Framework initialization. <xref
         linkend="framework.lifecycle.stopping"/> describes how the
-        <code>stop</code> method for Extension Bundle Activators are called
+        <code>stop</code> method for Extension Bundle Activators is called
         during Framework shutdown.</para>
+      </section>
+
+      <section>
+        <title>Installing</title>
+
+        <para>When a framework extension is installed, a Framework may allow
+        the extension to become resolved dynamically, without a Framework
+        restart. If a framework extension is allowed to install and resolve
+        dynamically after Framework initialization, then the Extension Bundle
+        Activator start method must be called as soon as the extension bundle
+        is resolved. This must happen before the Bundle Event of type
+        <code>RESOLVED</code> is fired for the extension bundle.</para>
+      </section>
+
+      <section>
+        <title>Update and Uninstall</title>
+
+        <para>Unlike normal bundles, updating or uninstalling an extension
+        bundle does not take effect until the Framework is shutdown and
+        restarted. The original content of the extension bundle must remain
+        attached to the system bundle and the Extension Bundle Activator must
+        not have its stop method called until the Framework is
+        shutdown.</para>
       </section>
     </section>
 
