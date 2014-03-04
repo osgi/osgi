@@ -27,36 +27,31 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.HttpContext;
 import org.osgi.service.http.HttpService;
 import org.osgi.service.http.NamespaceException;
+import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.util.tracker.ServiceTracker;
 
 public class HttpTestBundle1 extends DefaultTestBundleControl {
 	// Http service
 	HttpService			_http;
-	ServiceReference	_httpSR;
+	ServiceTracker	_httpST;
 	int					_httpPort;
 	
-	protected void setUp() {
-		_httpSR = getContext().getServiceReference(HttpService.class.getName());
-		if ( _httpSR == null ) {
-			try {
-				Thread.sleep(3000);
-			} catch (final InterruptedException e) {
-				// ignore
-			}
-			_httpSR = getContext().getServiceReference(HttpService.class.getName());
-		}
-		assertNotNull(_httpSR);
-		_http = (HttpService) getContext().getService(_httpSR);
+	protected void setUp() throws Exception {
+		_httpST = new ServiceTracker(getContext(), HttpService.class.getName(),
+				null);
+		_httpST.open();
+		_http = (HttpService) _httpST.waitForService(OSGiTestCaseProperties
+				.getTimeout() * OSGiTestCaseProperties.getScaling());
 		assertNotNull(_http);
 		_httpPort = guessHttpPort();
 	}
 
-	protected void tearDown() {
-		getContext().ungetService(_httpSR);
+	protected void tearDown() throws Exception {
+		_httpST.close();
 	}
 	
 	// REGISTRATION BEHAVIOUR
