@@ -72,6 +72,8 @@ public interface Framework extends Bundle {
 	 * {@code ConditionalPermissionAdmin}.</li>
 	 * <li>Be {@link #adapt(Class) adaptable} to the OSGi defined types to which
 	 * a system bundle can be adapted.</li>
+	 * <li>Have called the {@code start} method of the extension bundle
+	 * activator for all resolved extension bundles.</li>
 	 * </ul>
 	 * 
 	 * <p>
