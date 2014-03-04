@@ -403,6 +403,8 @@ public interface BundleContext extends BundleReference {
 	 * specified classes.</li>
 	 * <li>A property named {@link Constants#SERVICE_SCOPE} identifying the
 	 * scope of the service.</li>
+	 * <li>A property named {@link Constants#SERVICE_BUNDLEID} identifying the
+	 * the context bundle.</li>
 	 * </ul>
 	 * Properties with these names in the specified {@code Dictionary} will be
 	 * ignored.</li>
