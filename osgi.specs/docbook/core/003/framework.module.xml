@@ -3713,34 +3713,34 @@ Bundle-NativeCode: lib/http.DLL ; «
     native code clauses AND filter type. Consider the following
     Bundle-NativeCode header which contains a single clause:</para>
 
-    <programlisting>Bundle-NativeCode: 
-      lib/http.dll; lib/zlib.dll;
-      osname=Windows95;
-      osname=Windows98; 
-      osname=WindowsNT;
-      processor=x86;
-      selection-filter="(com.acme.windowing=win32)"; 
-      language=en;
+    <programlisting>Bundle-NativeCode: «
+      lib/http.dll; lib/zlib.dll; «
+      osname=Windows95; «
+      osname=Windows98; «
+      osname=WindowsNT; «
+      processor=x86; «
+      selection-filter="(com.acme.windowing=win32)";  «
+      language=en; «
       language=se</programlisting>
 
     <para>This clause would get translated into the following AND filter
     type:</para>
 
-    <programlisting>Require-Capability: 
-      osgi.native;
-      filter:="
-        (&amp;
-          (|
-            (osgi.native.osname~=Windows95)
-            (osgi.native.osname~=Windows98)
-            (osgi.native.osname~=WindowsNT)
-          )
-          (osgi.native.processor~=x86)
-          (|
-            (osgi.native.language~=en)
-            (osgi.native.language~=se)
-          )
-          (com.acme.windowing=win32)
+    <programlisting>Require-Capability: «
+      osgi.native; «
+      filter:=" «
+        (&amp; «
+          (| «
+            (osgi.native.osname~=Windows95) «
+            (osgi.native.osname~=Windows98) «
+            (osgi.native.osname~=WindowsNT) «
+          ) «
+          (osgi.native.processor~=x86) «
+          (| «
+            (osgi.native.language~=en) «
+            (osgi.native.language~=se) «
+          ) «
+          (com.acme.windowing=win32) «
         )"</programlisting>
 
     <para>The Bundle-NativeCode header may specify multiple clauses, each
@@ -3753,22 +3753,22 @@ Bundle-NativeCode: lib/http.DLL ; «
     filter directive. Consider the following Bundle-NativeCode header which
     contains three clauses:</para>
 
-    <programlisting>Bundle-NativeCode: 
-      lib/http.dll; lib/zlib.dll;
-        osname=Windows95;
-        osname=Windows98; 
-        osname=WindowsNT;
-        processor=x86;
-        selection-filter = "(com.acme.windowing=win32)"; 
-        language=en;
-        language=se,
-      lib/solaris/libhttp.so;
-        osname=Solaris;
-        osname=SunOS;
-        processor=sparc,
-      lib/linux/libhttp.so;
-        osname=Linux;
-        processor=mips;
+    <programlisting>Bundle-NativeCode: «
+      lib/http.dll; lib/zlib.dll; «
+        osname=Windows95; «
+        osname=Windows98; «
+        osname=WindowsNT; «
+        processor=x86; «
+        selection-filter = "(com.acme.windowing=win32)"; «
+        language=en; «
+        language=se, «
+      lib/solaris/libhttp.so; «
+        osname=Solaris; «
+        osname=SunOS; «
+        processor=sparc, «
+      lib/linux/libhttp.so; «
+        osname=Linux; «
+        processor=mips; «
         selection-filter="(com.acme.windowing=gtk)"</programlisting>
 
     <para>This Bundle-NativeCode header would get translated into the

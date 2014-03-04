@@ -252,18 +252,18 @@
     defines the provided versions as a comma separated list. For
     example:</para>
 
-    <programlisting>Provide-Capability:
-    osgi.ee;
-        osgi.ee="OSGi/Minimum";
-        version:List&lt;Version&gt;="1.0,1.1,1.2", 
-    osgi.ee;
-        osgi.ee="JavaSE"; 
+    <programlisting>Provide-Capability: «
+    osgi.ee; «
+        osgi.ee="OSGi/Minimum"; «
+        version:List&lt;Version&gt;="1.0,1.1,1.2", «
+    osgi.ee; «
+        osgi.ee="JavaSE"; «
         version:List&lt;Version&gt;="1.2,1.3,1.4,1.5,1.6"</programlisting>
 
     <para>Bundles can require the <code>osgi.ee</code> capability if they have
     a dependency on a specific execution environment, for example:</para>
 
-    <programlisting>Require-Capability:
+    <programlisting>Require-Capability: «
    osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=1.6))"</programlisting>
 
     <para>It is also possible to exclude certain execution environments. For
@@ -272,7 +272,7 @@
     should not resolve in the later version to ensure the latest version is
     used. The following code shows such an example:</para>
 
-    <programlisting>Require-Capability:
+    <programlisting>Require-Capability: «
    osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=1.4)(!(version=1.5)))"</programlisting>
 
     <para>The <code>osgi.ee</code> requirement is not hosted when it is part
@@ -1144,11 +1144,11 @@ Bundle B:
       <para>For example, a bundle could contain the following requirement
       modeling a relation:</para>
 
-      <programlisting>Require-Capability:
-    osgi.identity;
-        filter:="(&amp;(osgi.identity=org.example.foo-source)(version=1.1))";
-        effective:=meta;
-        classifier:=sources;
+      <programlisting>Require-Capability: «
+    osgi.identity; «
+        filter:="(&amp;(osgi.identity=org.example.foo-source)(version=1.1))"; «
+        effective:=meta; «
+        classifier:=sources; «
         resolution:=optional</programlisting>
 
       <para>The code to retrieve a related resource could look like:</para>
@@ -1185,24 +1185,24 @@ Bundle B:
     example, the following capability is provided when running a 64-bit VM on
     a Windows 7 machine with the language set to en_US:</para>
 
-    <programlisting>Provide-Capability:
-    osgi.native; 
-        osgi.native.osname:List&lt;String&gt;="Windows7,Windows 7,Win7,Win32"; 
-        osgi.native.osversion:Version="7.0";
-        osgi.native.processor:List&lt;String&gt;="x86-64,amd64,em64t,x86_64";
+    <programlisting>Provide-Capability: «
+    osgi.native; «
+        osgi.native.osname:List&lt;String&gt;="Windows7,Windows 7,Win7,Win32"; «
+        osgi.native.osversion:Version="7.0"; «
+        osgi.native.processor:List&lt;String&gt;="x86-64,amd64,em64t,x86_64"; «
         osgi.native.language="en"</programlisting>
 
     <para>Bundles can require an <code>osgi.native</code> capability which
     matches the native environment required for the bundle to function
     properly, for example:</para>
 
-    <programlisting>Require-Capability:
-     osgi.native;
-       filter:="
-         (&amp;
-           (osgi.native.osname~=win32)
-           (osgi.native.processor~=x86-64)
-           (osgi.native.language~=en)
+    <programlisting>Require-Capability: «
+     osgi.native; «
+       filter:=" «
+         (&amp; «
+           (osgi.native.osname~=win32) «
+           (osgi.native.processor~=x86-64) «
+           (osgi.native.language~=en) «
          )"</programlisting>
 
     <para>The <code>osgi.native</code> namespace is not used to specify native
