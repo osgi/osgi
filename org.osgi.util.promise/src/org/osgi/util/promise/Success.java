@@ -26,14 +26,15 @@ import org.osgi.annotation.versioning.ConsumerType;
  * {@link Promise#then(Success)} method and is called if the Promise is resolved
  * successfully.
  * 
+ * @param <T> The value type of the resolved Promise passed as input to this
+ *        callback.
  * @param <R> The value type of the returned Promise from this callback.
- * @param <T> The value type of the resolved Promise passed to this callback.
  * 
  * @ThreadSafe
  * @author $Id$
  */
 @ConsumerType
-public interface Success<R, T> {
+public interface Success<T, R> {
 	/**
 	 * Success callback for a Promise.
 	 * 

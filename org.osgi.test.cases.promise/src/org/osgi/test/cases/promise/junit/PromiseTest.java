@@ -94,7 +94,7 @@ public class PromiseTest extends TestCase {
 		final Deferred<Integer> d = new Deferred<Integer>();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Promise<Integer> p = d.getPromise();
-		Promise<String> p2 = p.then(new Success<String, Number>() {
+		Promise<String> p2 = p.then(new Success<Number, String>() {
 			public Promise<String> call(Promise<Number> resolved) throws Exception {
 				final Promise<String> returned = Promises.newResolvedPromise(resolved.getValue().toString());
 				returned.onResolve(new Runnable() {
@@ -128,7 +128,7 @@ public class PromiseTest extends TestCase {
 		final AtomicReference<String> result = new AtomicReference<String>();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Promise<Integer> p = d1.getPromise();
-		Promise<String> p2 = p.then(new Success<String, Number>() {
+		Promise<String> p2 = p.then(new Success<Number, String>() {
 			public Promise<String> call(Promise<Number> resolved) throws Exception {
 				result.set(resolved.getValue().toString());
 				Promise<String> returned = d2.getPromise();
@@ -384,7 +384,7 @@ public class PromiseTest extends TestCase {
 		assertTrue("callback did not run after resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
 
 		final CountDownLatch latch3 = new CountDownLatch(1);
-		Promise<Integer> p2 = p1.then(new Success<Integer, String>() {
+		Promise<Integer> p2 = p1.then(new Success<String, Integer>() {
 			public Promise<Integer> call(Promise<String> promise) throws Exception {
 				latch3.countDown();
 				return Promises.newResolvedPromise(Integer.valueOf(promise.getValue()));
@@ -403,7 +403,7 @@ public class PromiseTest extends TestCase {
 		Deferred<String> d = new Deferred<String>();
 		Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
-		Promise<Integer> p2 = p1.then(new Success<Integer, String>() {
+		Promise<Integer> p2 = p1.then(new Success<String, Integer>() {
 			public Promise<Integer> call(final Promise<String> promise)
 					throws Exception {
 				latch.countDown();
