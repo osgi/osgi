@@ -14,7 +14,7 @@ Test-Cases = ${testcases}
 -buildpath = \
     org.osgi.test.support; version=project, \
     org.osgi.util.promise;  version=project, \
-    ee.j2se; version=1.5, \
+    ee.j2se; version=${javac.compliance}, \
     ${junit}
 
 -runbundles = \
