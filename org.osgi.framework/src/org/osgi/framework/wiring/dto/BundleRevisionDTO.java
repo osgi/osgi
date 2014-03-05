@@ -20,7 +20,7 @@ import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.resource.dto.ResourceDTO;
 
 /**
- * Data Transfer Object for a BundleWiring.
+ * Data Transfer Object for a BundleRevision.
  * 
  * <p>
  * An installed Bundle can be adapted to provide a {@code BundleRevisionDTO} for
