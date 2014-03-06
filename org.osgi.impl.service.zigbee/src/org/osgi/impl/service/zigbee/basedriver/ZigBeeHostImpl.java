@@ -17,6 +17,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	private int	securityLevel;
 
 	/**
+	 * @param hostPId
 	 * @param panId
 	 * @param channel
 	 * @param baud
@@ -25,8 +26,8 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	 * @param nwkAddress
 	 * @param endpoints
 	 */
-	public ZigBeeHostImpl(int panId, int channel, int baud, int securityLevel, Long IEEEAddress, short nwkAddress, ZigBeeEndpoint[] endpoints) {
-		super(IEEEAddress, nwkAddress, endpoints);
+	public ZigBeeHostImpl(String hostPId, int panId, int channel, int baud, int securityLevel, Long IEEEAddress, short nwkAddress, ZigBeeEndpoint[] endpoints) {
+		super(IEEEAddress, nwkAddress, hostPId, endpoints);
 		this.channel = channel;
 		this.securityLevel = securityLevel;
 	}

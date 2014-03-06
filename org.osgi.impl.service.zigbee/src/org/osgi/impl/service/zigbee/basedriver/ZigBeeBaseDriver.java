@@ -68,6 +68,8 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 	 * getting notifications.
 	 */
 	public void start() {
+		System.out.println(this.getClass().getName() + " - Start the base driver.");
+
 		// types
 		attributesType = new ZigBeeDataTypeDescription[4];
 		attributesType[0] = ZigBeeUnsignedInteger8.getInstance();
@@ -123,6 +125,7 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		endpoint2 = new ZigBeeEndpointImpl((byte) 0x19, serverCluster, null, simpledesc2);
 
 		// ZigBeeHost that owns node1, and node2.
+		String hostPId = "hardcoded hostPId";
 		int panId = 33;
 		int channel = 16;
 		int baud = 115000;
@@ -135,7 +138,7 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		endpointsHost[0] = endpoint1;
 		endpointsHost[1] = endpoint2;
 
-		host = new ZigBeeHostImpl(panId, channel, baud, securityLevel, IEEEAddress, nwkAddress, endpointsHost);
+		host = new ZigBeeHostImpl(hostPId, panId, channel, baud, securityLevel, IEEEAddress, nwkAddress, endpointsHost);
 
 		// register host
 		System.out.println(this.getClass().getName() + " - Register (hardcoded) host: " + host + " in the OSGi services registry.");
@@ -149,11 +152,11 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		// nodes
 		ZigBeeEndpoint[] endpointsNode1 = new ZigBeeEndpoint[1];
 		endpointsNode1[0] = endpoint1;
-		node1 = new ZigBeeNodeImpl(Long.valueOf("812345689"), (short) 12345, endpointsNode1);
+		node1 = new ZigBeeNodeImpl(Long.valueOf("812345689"), (short) 12345, hostPId, endpointsNode1);
 
 		ZigBeeEndpoint[] endpointsNode2 = new ZigBeeEndpoint[1];
 		endpointsNode2[0] = endpoint2;
-		node2 = new ZigBeeNodeImpl(Long.valueOf("6628417766"), (short) 88507, endpointsNode2, nodeDesc, powerDesc);
+		node2 = new ZigBeeNodeImpl(Long.valueOf("6628417766"), (short) 88507, hostPId, endpointsNode2, nodeDesc, powerDesc);
 
 		// register node1
 		System.out.println(this.getClass().getName() + " - Register (hardcoded) node1: " + node1 + " in the OSGi services registry.");
@@ -174,6 +177,7 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 	 * getting notifications.
 	 */
 	public void stop() {
+		System.out.println(this.getClass().getName() + " - Stop the base driver.");
 		// TODO
 	}
 

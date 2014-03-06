@@ -17,6 +17,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 
 	private Long					IEEEAddress;
 	private short					nwkAddress;
+	private String					hostPId;
 	private ZigBeeEndpoint[]		endpoints;
 	private ZigBeeNodeDescriptor	nodeDescriptor;
 	private ZigBeePowerDescriptor	powerDescriptor;
@@ -24,40 +25,43 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	/**
 	 * @param IEEEAddress
 	 * @param nwkAddress
+	 * @param hostPId
 	 * @param endpoints
 	 */
-	public ZigBeeNodeImpl(Long IEEEAddress, short nwkAddress, ZigBeeEndpoint[] endpoints) {
+	public ZigBeeNodeImpl(Long IEEEAddress, short nwkAddress, String hostPId, ZigBeeEndpoint[] endpoints) {
 		this.IEEEAddress = IEEEAddress;
 		this.nwkAddress = nwkAddress;
+		this.hostPId = hostPId;
 		this.endpoints = endpoints;
 	}
 
 	/**
 	 * @param IEEEAddress
 	 * @param nwkAddress
+	 * @param hostPId
 	 * @param endpoints
 	 * @param nodeDesc
 	 * @param powerDesc
 	 */
-	public ZigBeeNodeImpl(Long IEEEAddress, short nwkAddress, ZigBeeEndpoint[] endpoints, ZigBeeNodeDescriptor nodeDesc, ZigBeePowerDescriptor powerDesc) {
+	public ZigBeeNodeImpl(Long IEEEAddress, short nwkAddress, String hostPId, ZigBeeEndpoint[] endpoints, ZigBeeNodeDescriptor nodeDesc, ZigBeePowerDescriptor powerDesc) {
 		this.IEEEAddress = IEEEAddress;
 		this.nwkAddress = nwkAddress;
+		this.hostPId = hostPId;
 		this.endpoints = endpoints;
 		this.powerDescriptor = powerDesc;
 		this.nodeDescriptor = nodeDesc;
 	}
 
 	public Long getIEEEAddress() {
-		return IEEEAddress;
+		return this.IEEEAddress;
 	}
 
 	public short getNetworkAddress() {
-		return nwkAddress;
+		return this.nwkAddress;
 	}
 
 	public String getHostPId() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.hostPId;
 	}
 
 	public Integer getPanId() {
@@ -107,7 +111,8 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	}
 
 	public String toString() {
-		return "" + this.getClass().getName() + "[IEEEAddress: " + IEEEAddress + ", nwkAddress: " + nwkAddress + ", endpoints: " + endpoints + ", nodeDescriptor: " + nodeDescriptor
+		return "" + this.getClass().getName() + "[IEEEAddress: " + IEEEAddress + ", nwkAddress: " + nwkAddress + ", hostPId: " + hostPId + ", endpoints: " + endpoints + ", nodeDescriptor: "
+				+ nodeDescriptor
 				+ ", powerDescriptor: " + powerDescriptor + "]";
 	}
 
