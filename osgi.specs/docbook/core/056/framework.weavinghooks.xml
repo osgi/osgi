@@ -290,9 +290,11 @@
   <section>
     <title>Weaving Hook</title>
 
-    <para>The Weaving Hook service is a white board service. Any party that
-    wants to participate in weaving classes can register such a service. The
-    framework obtains the Weaving Hook services and calls their <xref
+    <para>The Weaving Hook service is a <xref
+    linkend="framework.weavinghooks-whiteboard.pattern.ref"/> service. Any
+    party that wants to participate in weaving classes can register such a
+    service. The framework obtains the Weaving Hook services and calls their
+    <xref
     linkend="org.osgi.framework.hooks.weaving.WeavingHook.weave-WovenClass-"
     xrefstyle="hyperlink"/> method for each class that must be loaded. The
     Weaving Hook services must be called in the service ranking order. See
@@ -473,7 +475,8 @@
   <section xml:id="framework.weavinghooks-wovenclasslistener">
     <title>Woven Class Listener</title>
 
-    <para>The Woven Class Listener service is a white board service;. Any
+    <para>The Woven Class Listener service is a <xref
+    linkend="framework.weavinghooks-whiteboard.pattern.ref"/> service. Any
     party that wants to receive notifications of woven class state transitions
     can register such a service. The framework obtains the Woven Class
     Listener services and calls their <xref
@@ -776,6 +779,16 @@
   </section>
 
   <xi:include href="../../../generated/javadoc/docbook/org.osgi.framework.hooks.weaving.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed
+      xml:id="framework.weavinghooks-whiteboard.pattern.ref"><title>Whiteboard
+      Pattern</title>http://www.osgi.org/wiki/uploads/Links/whiteboard.pdf</bibliomixed>
+    </bibliolist>
+  </section>
 
   <section>
     <title>Changes</title>

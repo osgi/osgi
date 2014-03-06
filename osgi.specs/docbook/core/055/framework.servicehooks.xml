@@ -74,7 +74,8 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Whiteboard based</emphasis> - Use the whiteboard to
+          <para><emphasis>Whiteboard based</emphasis> - Use the <xref
+          linkend="framework.servicehooks-whiteboard.pattern.ref"/> to
           simplify the writing of the interceptors.</para>
         </listitem>
       </itemizedlist>
@@ -964,6 +965,16 @@ public void removed( Collection lis ) {
   </section>
 
   <xi:include href="../../../generated/javadoc/docbook/org.osgi.framework.hooks.service.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed
+      xml:id="framework.servicehooks-whiteboard.pattern.ref"><title>Whiteboard
+      Pattern</title>http://www.osgi.org/wiki/uploads/Links/whiteboard.pdf</bibliomixed>
+    </bibliolist>
+  </section>
 
   <section>
     <title>Changes</title>
