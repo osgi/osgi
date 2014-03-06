@@ -670,12 +670,13 @@
     able to perform its function, having the knowledge what bundles are
     waiting for, allows a number of interesting scenarios.</para>
 
-    <para>The Listener Hook is a white-board service that is informed about
-    the coming and going of all service listeners. When a Listener Hook
-    service is registered with the Framework, the Framework will inform this
-    service of all existing listeners and keep it updated of all removed and
-    newly registered service listeners. The events are dispatched in order of
-    the Listener Hook service registration.</para>
+    <para>The Listener Hook is a <xref
+    linkend="framework.servicehooks-whiteboard.pattern.ref"/> service that is
+    informed about the coming and going of all service listeners. When a
+    Listener Hook service is registered with the Framework, the Framework will
+    inform this service of all existing listeners and keep it updated of all
+    removed and newly registered service listeners. The events are dispatched
+    in order of the Listener Hook service registration.</para>
 
     <para>In the following figure, it is depicted how the interceptor can find
     out about target bundles listening for services. It
