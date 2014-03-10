@@ -3670,26 +3670,26 @@ Bundle-NativeCode: lib/http.DLL ; «
 
     <itemizedlist>
       <listitem>
-        <para><code>osgi.native.osname</code> – Uses the approximate equals
+        <para><code>osgi.native.osname</code> - Uses the approximate equals
         (~=) filter type to evaluate the value specified by the
         <code>osname</code> Bundle-NativeCode attribute.</para>
       </listitem>
 
       <listitem>
-        <para><code>osgi.native.osversion</code> – Create a
+        <para><code>osgi.native.osversion</code> - Create a
         <code>VersionRange</code> using the value specified by the osversion
         Bundle-NativeCode attribute and then create a filter string out of the
         <code>VersionRange</code>.</para>
       </listitem>
 
       <listitem>
-        <para><code>osgi.native.processor</code> – Uses the approximate equals
+        <para><code>osgi.native.processor</code> - Uses the approximate equals
         (~=) filter type to evaluate the value specified by the
         <code>processor</code> Bundle-NativeCode attribute.</para>
       </listitem>
 
       <listitem>
-        <para><code>osgi.native.language</code> – Uses the approximate equals
+        <para><code>osgi.native.language</code> - Uses the approximate equals
         (~=) filter type to evaluate the value specified by the
         <code>language</code> Bundle-NativeCode attribute.</para>
       </listitem>
