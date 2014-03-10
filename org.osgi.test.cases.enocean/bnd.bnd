@@ -20,8 +20,7 @@ Include-Resource:
 -runbundles: org.osgi.impl.service.log;version=latest,\
 	org.osgi.impl.service.cm;version=latest,\
 	org.osgi.impl.service.event;version=latest,\
-	org.osgi.impl.service.enocean;version=latest,\
-	comm.rxtx;version=latest
+	org.osgi.impl.service.enocean;version=latest
 
 -runproperties: comm.rxtx.disable=true, \
 	org.osgi.service.enocean.host.path=:testcase:, \
