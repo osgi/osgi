@@ -72,15 +72,21 @@ public class ControlImpl implements Control {
 			port = Integer.parseInt(hostport.substring(i + 1));
 		}
 		Socket soc = new Socket(host, port);
-		soc.setSoTimeout(5000);
-		OutputStream out = soc.getOutputStream();
-		out.write(request.getBytes());
-		out.flush();
-		java.io.InputStream in = soc.getInputStream();
-		int j;
-		while ((j = in.read()) != -1) {
-			baos.write(j);
+		try {
+			soc.setSoTimeout(5000);
+			OutputStream out = soc.getOutputStream();
+			out.write(request.getBytes());
+			out.flush();
+			soc.shutdownOutput();
+			java.io.InputStream in = soc.getInputStream();
+			int j;
+			while ((j = in.read()) != -1) {
+				baos.write(j);
+			}
+			in.close();
+			return baos.toString();
+		} finally {
+			soc.close();
 		}
-		return baos.toString();
 	}
 }
