@@ -315,14 +315,14 @@
 
           <tbody>
             <row>
-              <entry><para><code>org.osgi.framework.«</code></para><para><code> bootdelegation</code></para></entry>
+              <entry><para><code>org.osgi.framework.«</code></para><para><code>&#160;bootdelegation</code></para></entry>
 
               <entry><para>Set the boot delegation mask, see <xref
               linkend="framework.module.parentdelegation"/>.</para></entry>
             </row>
 
             <row>
-              <entry><para><code>org.osgi.framework.«</code></para><para><code> bsnversion</code></para></entry>
+              <entry><para><code>org.osgi.framework.«</code></para><para><code>&#160;bsnversion</code></para></entry>
 
               <entry><para>Allow installation of multiple bundles with the
               same bundle symbolic name or restrict this. The property can
@@ -349,7 +349,7 @@
             </row>
 
             <row>
-              <entry><para><code>org.osgi.framework.«</code></para><para><code> bundle.parent</code></para></entry>
+              <entry><para><code>org.osgi.framework.«</code></para><para><code>&#160;bundle.parent</code></para></entry>
 
               <entry><para>This property is used to specify what class loader
               is used for boot delegation. That is, <code>java.*</code> and
@@ -379,7 +379,7 @@
             </row>
 
             <row>
-              <entry><para><code>org.osgi.framework.«</code></para><para><code> command.execpermission</code></para></entry>
+              <entry><para><code>org.osgi.framework.«</code></para><para><code>&#160;command.execpermission</code></para></entry>
 
               <entry><para>Specifies an optional OS specific command to set
               file permissions on a bundle's native code. This is required on
@@ -392,7 +392,7 @@
             </row>
 
             <row>
-              <entry><para><code>org.osgi.framework.«</code></para><para><code> executionenvironment</code></para></entry>
+              <entry><para><code>org.osgi.framework.«</code></para><para><code>&#160;executionenvironment</code></para></entry>
 
               <entry><para>A comma-separated list of provided execution
               environments (EE). All methods of each listed EE must be present
@@ -419,7 +419,7 @@
             </row>
 
             <row>
-              <entry><para><code>org.osgi.framework.library.«</code></para><para><code> extensions</code></para></entry>
+              <entry><para><code>org.osgi.framework.library.«</code></para><para><code>&#160;extensions</code></para></entry>
 
               <entry><para>A comma separated list of additional library file
               extensions that must be used when searching for native code. If
@@ -487,7 +487,7 @@
             </row>
 
             <row>
-              <entry><para><code>org.osgi.framework.startlevel.«</code></para><para><code> beginning</code></para></entry>
+              <entry><para><code>org.osgi.framework.startlevel.«</code></para><para><code>&#160;beginning</code></para></entry>
 
               <entry><para>Specifies the beginning start level of the
               framework. See <xref linkend="framework.startlevel"/> for more
@@ -509,7 +509,7 @@
             </row>
 
             <row>
-              <entry><para><code>org.osgi.framework.storage.«</code></para><para><code> clean</code></para></entry>
+              <entry><para><code>org.osgi.framework.storage.«</code></para><para><code>&#160;clean</code></para></entry>
 
               <entry><para>Specifies if and when the storage area for the
               framework should be cleaned. If no value is specified, the
@@ -530,7 +530,7 @@
             </row>
 
             <row>
-              <entry><para><code>org.osgi.framework.system.«</code></para><para><code> capabilities</code></para></entry>
+              <entry><para><code>org.osgi.framework.system.«</code></para><para><code>&#160;capabilities</code></para></entry>
 
               <entry><para>Specifies the capabilities of the environment in
               the grammar specified for the <code>Provide-Capability</code>
@@ -548,7 +548,7 @@
             </row>
 
             <row>
-              <entry><para><code>org.osgi.framework.system.«</code></para><para><code> capabilities.extra</code></para></entry>
+              <entry><para><code>org.osgi.framework.system.«</code></para><para><code>&#160;capabilities.extra</code></para></entry>
 
               <entry><para>Capabilities defined in this property are added to
               the <code>org.osgi.framework.system.capabilities</code>
@@ -558,7 +558,7 @@
             </row>
 
             <row>
-              <entry><para><code>org.osgi.framework.system.«</code></para><para><code> packages</code></para></entry>
+              <entry><para><code>org.osgi.framework.system.«</code></para><para><code>&#160;packages</code></para></entry>
 
               <entry><para>The packages that should be exported from the
               System Bundle. If not set, the framework must provide a
@@ -566,7 +566,7 @@
             </row>
 
             <row>
-              <entry><para><code>org.osgi.framework.system.«</code></para><para><code> packages.extra</code></para></entry>
+              <entry><para><code>org.osgi.framework.system.«</code></para><para><code>&#160;packages.extra</code></para></entry>
 
               <entry><para>Packages specified in this property are added to
               the <code>org.osgi.framework.system.packages</code> property and
@@ -578,7 +578,7 @@
             </row>
 
             <row>
-              <entry><para><code>org.osgi.framework.trust.«</code></para><para><code> repositories</code></para></entry>
+              <entry><para><code>org.osgi.framework.trust.«</code></para><para><code>&#160;repositories</code></para></entry>
 
               <entry><para>This property is used to configure trust
               repositories for the framework. The value is path of files.The
@@ -595,7 +595,7 @@
             </row>
 
             <row>
-              <entry><para><code>org.osgi.framework.«</code></para><para><code> windowsystem</code></para></entry>
+              <entry><para><code>org.osgi.framework.«</code></para><para><code>&#160;windowsystem</code></para></entry>
 
               <entry><para>Provide the name of the current window system. This
               can be used by the native code clause, <xref
@@ -1088,7 +1088,7 @@
             </row>
 
             <row>
-              <entry><para><code>org.osgi.supports.«</code></para><para><code> framework.extension</code></para></entry>
+              <entry><para><code>org.osgi.supports.«</code></para><para><code>&#160;framework.extension</code></para></entry>
 
               <entry><para>Support for framework extensions is mandatory, must
               therefore be set to <code>true</code>, see <xref
@@ -1096,7 +1096,7 @@
             </row>
 
             <row>
-              <entry><para><code>org.osgi.supports.«</code></para><para><code> bootclasspath.extension</code></para></entry>
+              <entry><para><code>org.osgi.supports.«</code></para><para><code>&#160;bootclasspath.extension</code></para></entry>
 
               <entry><para>Must be set to <code>true</code> or
               <code>false</code>, see <xref
@@ -1104,7 +1104,7 @@
             </row>
 
             <row>
-              <entry><para><code>org.osgi.supports.«</code></para><para><code> framework.fragment</code></para></entry>
+              <entry><para><code>org.osgi.supports.«</code></para><para><code>&#160;framework.fragment</code></para></entry>
 
               <entry><para>Support for fragment bundles is mandatory, must
               therefore be set to <code>true</code>, see <xref
@@ -1112,7 +1112,7 @@
             </row>
 
             <row>
-              <entry><para><code>org.osgi.supports.«</code></para><para><code> framework.requirebundle</code></para></entry>
+              <entry><para><code>org.osgi.supports.«</code></para><para><code>&#160;framework.requirebundle</code></para></entry>
 
               <entry><para>Support for Require Bundle is mandatory, must
               therefore be set to <code>true</code>, see <xref
@@ -3150,7 +3150,7 @@ D: Export-Package: s</programlisting>
             </row>
 
             <row>
-              <entry><para><code>Bundle-Required«</code></para><para><code> ExecutionEnvironment</code></para></entry>
+              <entry><para><code>Bundle-Required«</code></para><para><code>&#160;ExecutionEnvironment</code></para></entry>
 
               <entry><code>mandatory</code></entry>
 
