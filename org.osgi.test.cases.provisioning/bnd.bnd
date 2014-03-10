@@ -54,7 +54,6 @@ Include-Resource: \
 -runbundles						= \
 	org.osgi.impl.service.cm; version=latest, \
 	org.osgi.impl.service.log; version=latest, \
-	org.osgi.impl.bundle.servlet;		version=2.1, \
 	org.osgi.impl.service.http; version=latest, \
 	org.osgi.impl.service.useradmin; version=latest, \
 	org.osgi.impl.service.provisioning; version=latest, \

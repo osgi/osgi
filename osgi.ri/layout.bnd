@@ -29,7 +29,6 @@ jar.cmpn.impls = \
 	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery}, \
 	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}, \
     ${repo;org.osgi.impl.bundle.serviceloader}, \
-	${repo;org.osgi.impl.bundle.servlet;2.1}, \
 	${repo;org.osgi.impl.bundle.webcontainer}, \
 	${repo;org.osgi.impl.service.blueprint}, \
 	${repo;org.osgi.impl.service.cm}, \
@@ -66,7 +65,6 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery}, \
 	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}, \
 	${repo;org.osgi.impl.bundle.serviceloader}, \
-	${repo;org.osgi.impl.bundle.servlet;2.1}, \
 	${repo;org.osgi.impl.bundle.webcontainer}, \
 	${repo;org.osgi.impl.service.blueprint}, \
 	${repo;org.osgi.impl.service.cm}, \
@@ -99,7 +97,6 @@ build.residential.impls = \
 	org.osgi.impl.service.useradmin
 
 jar.residential.impls = \
-	${repo;org.osgi.impl.bundle.servlet;2.1}, \
 	${repo;org.osgi.impl.service.cm}, \
 	${repo;org.osgi.impl.service.component}, \
 	${repo;org.osgi.impl.service.event}, \
