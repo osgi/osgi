@@ -1182,7 +1182,7 @@ address    ::= &lt;fr&gt; | &lt;us&gt; | &lt;nl&gt;</programlisting>
             <row>
               <entry><code>intentType</code></entry>
 
-              <entry><para><code>  sca:Interaction</code></para><para><code>|
+              <entry><para><code>&#160;&#160;sca:Interaction</code></para><para><code>|
               sca:Implementation</code></para><para>(optional)</para></entry>
 
               <entry><para>SCA allows Intents to configure the Distribution
