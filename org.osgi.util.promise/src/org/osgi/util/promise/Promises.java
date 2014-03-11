@@ -19,9 +19,7 @@ package org.osgi.util.promise;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Static helper methods for {@link Promise}s.
@@ -77,46 +75,60 @@ public class Promises {
 		if (promises.isEmpty()) {
 			return newResolvedPromise(null);
 		}
-		final Deferred<Void> deferred = new Deferred<Void>();
-		final int size = promises.size();
-		final List<Promise<?>> failed = Collections.synchronizedList(new ArrayList<Promise<?>>(size));
-		final AtomicInteger count = new AtomicInteger(size);
-		for (final Promise<?> promise : promises) {
-			promise.onResolve(new Runnable() {
-				public void run() {
-					final boolean interrupted = Thread.interrupted();
-					try {
-						Throwable f = null;
-						try {
-							f = promise.getFailure();
-						} catch (InterruptedException e) {
-							/*
-							 * This should not happen since (1) we are a
-							 * callback on a resolved Promise and (2) we cleared
-							 * the interrupt status above.
-							 */
-							throw new Error(e);
-						}
-						if (f != null) {
-							failed.add(promise);
-						}
-						// If last specified promise to resolve
-						if (count.decrementAndGet() == 0) {
-							if (failed.isEmpty()) {
-								deferred.resolve(null);
-							} else {
-								deferred.fail(new FailedPromisesException(failed));
-							}
-						}
-					} finally {
-						if (interrupted) { // restore interrupt status
-							Thread.currentThread().interrupt();
-						}
-					}
-				}
-			});
+		Deferred<Void> chained = new Deferred<Void>();
+		LatchPromise<T> latchPromise = new LatchPromise<T>(chained, promises.size());
+		for (Promise<T> promise : promises) {
+			promise.then(latchPromise, latchPromise);
 		}
-		return deferred.getPromise();
+		return chained.getPromise();
+	}
+
+	/**
+	 * A callback used to resolve a Deferred when the specified count of
+	 * Promises are resolved for the
+	 * {@link Promises#newLatchPromise(Collection)} method.
+	 * 
+	 * @ThreadSafe
+	 */
+	private static final class LatchPromise<T> implements Success<T, Void>, Failure {
+		private final Deferred<Void>	chained;
+		private final List<Promise<?>>	failed;		// @GuardedBy("this")
+		private int						count;		// @GuardedBy("this")
+
+		LatchPromise(Deferred<Void> chained, int count) {
+			this.chained = chained;
+			this.count = count;
+			this.failed = new ArrayList<Promise<?>>(count);
+		}
+
+		public Promise<Void> call(Promise<T> resolved) throws Exception {
+			resolveChained(null);
+			return null;
+		}
+
+		public void fail(Promise<?> resolved) throws Exception {
+			resolveChained(resolved);
+		}
+
+		private void resolveChained(Promise<?> failedPromise) {
+			Throwable failure = null;
+			synchronized (this) {
+				if (failedPromise != null) {
+					failed.add(failedPromise);
+				}
+				if (--count > 0) {
+					return;
+				}
+				if (!failed.isEmpty()) {
+					failure = new FailedPromisesException(failed);
+				}
+			}
+			if (failure == null) {
+				chained.resolve(null);
+			} else {
+				chained.fail(failure);
+			}
+		}
 	}
 
 	/**
