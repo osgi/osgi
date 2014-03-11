@@ -872,6 +872,240 @@ public class PromiseTest extends TestCase {
 		}
 	}
 	
+	public void testResolveWithSuccess() throws Exception {
+		final Deferred<Integer> d1 = new Deferred<Integer>();
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final Promise<Integer> p1 = d1.getPromise();
+		p1.onResolve(new Runnable() {
+			public void run() {
+				latch1.countDown();
+			}
+		});
+		final Deferred<Number> d2 = new Deferred<Number>();
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		final Promise<Number> p2 = d2.getPromise();
+		p2.onResolve(new Runnable() {
+			public void run() {
+				latch2.countDown();
+			}
+		});
+		final Promise<Void> p3 = d2.resolveWith(p1);
+		final CountDownLatch latch3 = new CountDownLatch(1);
+		p3.onResolve(new Runnable() {
+			public void run() {
+				latch3.countDown();
+			}
+		});
+		assertFalse("callback ran before resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse("callback ran before resolved", p1.isDone());
+		assertFalse("callback ran before resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse("callback ran before resolved", p2.isDone());
+		assertFalse("callback ran before resolved", latch3.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse("callback ran before resolved", p3.isDone());
+
+		Integer value = Integer.valueOf(42);
+		d1.resolve(value);
+		assertTrue("callback did not run after resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("callback did not run after resolved", p1.isDone());
+		assertTrue("callback did not run after resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("callback did not run after resolved", p2.isDone());
+		assertTrue("callback did not run after resolved", latch3.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("callback did not run after resolved", p3.isDone());
+		assertNull("wrong failure", p1.getFailure());
+		assertSame("wrong value", value, p1.getValue());
+		assertNull("wrong failure", p2.getFailure());
+		assertSame("wrong value", value, p2.getValue());
+		assertNull("wrong failure", p3.getFailure());
+		assertNull("wrong value", p3.getValue());
+	}
+
+	public void testResolveWithFailure() throws Exception {
+		final Deferred<Integer> d1 = new Deferred<Integer>();
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final Promise<Integer> p1 = d1.getPromise();
+		p1.onResolve(new Runnable() {
+			public void run() {
+				latch1.countDown();
+			}
+		});
+		final Deferred<Number> d2 = new Deferred<Number>();
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		final Promise<Number> p2 = d2.getPromise();
+		p2.onResolve(new Runnable() {
+			public void run() {
+				latch2.countDown();
+			}
+		});
+		final Promise<Void> p3 = d2.resolveWith(p1);
+		final CountDownLatch latch3 = new CountDownLatch(1);
+		p3.onResolve(new Runnable() {
+			public void run() {
+				latch3.countDown();
+			}
+		});
+		assertFalse("callback ran before resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse("callback ran before resolved", p1.isDone());
+		assertFalse("callback ran before resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse("callback ran before resolved", p2.isDone());
+		assertFalse("callback ran before resolved", latch3.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse("callback ran before resolved", p3.isDone());
+
+		Throwable failure = new RuntimeException();
+		d1.fail(failure);
+		assertTrue("callback did not run after resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("callback did not run after resolved", p1.isDone());
+		assertTrue("callback did not run after resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("callback did not run after resolved", p2.isDone());
+		assertTrue("callback did not run after resolved", latch3.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("callback did not run after resolved", p3.isDone());
+		assertSame("wrong failure", failure, p1.getFailure());
+		try {
+			p1.getValue();
+			fail("getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong failure", failure, e.getCause());
+		}
+		assertSame("wrong failure", failure, p2.getFailure());
+		try {
+			p2.getValue();
+			fail("getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong failure", failure, e.getCause());
+		}
+		assertNull("wrong failure", p3.getFailure());
+		assertNull("wrong value", p3.getValue());
+	}
+
+	public void testResolveWithAlready1() throws Exception {
+		final Deferred<Integer> d1 = new Deferred<Integer>();
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final Promise<Integer> p1 = d1.getPromise();
+		p1.onResolve(new Runnable() {
+			public void run() {
+				latch1.countDown();
+			}
+		});
+		final Deferred<Number> d2 = new Deferred<Number>();
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		final Promise<Number> p2 = d2.getPromise();
+		p2.onResolve(new Runnable() {
+			public void run() {
+				latch2.countDown();
+			}
+		});
+		final Promise<Void> p3 = d2.resolveWith(p1);
+		final CountDownLatch latch3 = new CountDownLatch(1);
+		p3.onResolve(new Runnable() {
+			public void run() {
+				latch3.countDown();
+			}
+		});
+		assertFalse("callback ran before resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse("callback ran before resolved", p1.isDone());
+		assertFalse("callback ran before resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse("callback ran before resolved", p2.isDone());
+		assertFalse("callback ran before resolved", latch3.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse("callback ran before resolved", p3.isDone());
+
+		Integer value = Integer.valueOf(42);
+		d2.resolve(value);
+		assertTrue("callback did not run after resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("callback did not run after resolved", p2.isDone());
+		assertFalse("callback ran before resolved", latch3.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse("callback ran before resolved", p3.isDone());
+		assertNull("wrong failure", p2.getFailure());
+		assertSame("wrong value", value, p2.getValue());
+
+		Throwable failure = new RuntimeException();
+		d1.fail(failure);
+		assertTrue("callback did not run after resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("callback did not run after resolved", p1.isDone());
+		assertTrue("callback did not run after resolved", latch3.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("callback did not run after resolved", p3.isDone());
+		assertSame("wrong failure", failure, p1.getFailure());
+		try {
+			p1.getValue();
+			fail("getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong failure", failure, e.getCause());
+		}
+		assertTrue("wrong failure", p3.getFailure() instanceof IllegalStateException);
+		try {
+			p3.getValue();
+			fail("getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertTrue("wrong failure", e.getCause() instanceof IllegalStateException);
+		}
+	}
+
+	public void testResolveWithAlready2() throws Exception {
+		Integer value = Integer.valueOf(42);
+		final Promise<Integer> p1 = Promises.newResolvedPromise(value);
+		final Deferred<Number> d2 = new Deferred<Number>();
+		d2.resolve(value);
+
+		final Promise<Void> p3 = d2.resolveWith(p1);
+		assertTrue("not resolved", p3.isDone());
+		assertTrue("wrong failure", p3.getFailure() instanceof IllegalStateException);
+		try {
+			p3.getValue();
+			fail("getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertTrue("wrong failure", e.getCause() instanceof IllegalStateException);
+		}
+	}
+
+	public void testResolveWithAlready3() throws Exception {
+		Integer value = Integer.valueOf(42);
+		Throwable failure = new RuntimeException();
+		final Promise<Integer> p1 = Promises.newResolvedPromise(value);
+		final Deferred<Number> d2 = new Deferred<Number>();
+		d2.fail(failure);
+
+		final Promise<Void> p3 = d2.resolveWith(p1);
+		assertTrue("not resolved", p3.isDone());
+		assertTrue("wrong failure", p3.getFailure() instanceof IllegalStateException);
+		try {
+			p3.getValue();
+			fail("getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertTrue("wrong failure", e.getCause() instanceof IllegalStateException);
+		}
+	}
+
+	public void testResolveWithAlready4() throws Exception {
+		Integer value = Integer.valueOf(42);
+		final Promise<Integer> p1 = Promises.newResolvedPromise(value);
+		final Deferred<Number> d2 = new Deferred<Number>();
+		final Promise<Number> p2 = d2.getPromise();
+		final Promise<Void> p3 = d2.resolveWith(p1);
+		assertTrue("not resolved", p2.isDone());
+		assertTrue("not resolved", p3.isDone());
+		assertNull("wrong failure", p2.getFailure());
+		assertSame("wrong value", value, p2.getValue());
+		assertNull("wrong failure", p3.getFailure());
+		assertNull("wrong value", p3.getValue());
+	}
+
+	public void testResolveWithAlready5() throws Exception {
+		Throwable failure = new RuntimeException();
+		final Promise<Integer> p1 = Promises.newFailedPromise(failure);
+		final Deferred<Number> d2 = new Deferred<Number>();
+		final Promise<Number> p2 = d2.getPromise();
+		final Promise<Void> p3 = d2.resolveWith(p1);
+		assertTrue("not resolved", p2.isDone());
+		assertTrue("not resolved", p3.isDone());
+		assertSame("wrong failure", failure, p2.getFailure());
+		try {
+			p2.getValue();
+			fail("getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong failure", failure, e.getCause());
+		}
+		assertNull("wrong failure", p3.getFailure());
+		assertNull("wrong value", p3.getValue());
+	}
+
 	/**
 	 * Fail with cause t.
 	 * 

@@ -97,4 +97,78 @@ public class Deferred<T> {
 	public void fail(Throwable failure) {
 		promise.resolve(null, failure);
 	}
+
+	/**
+	 * Resolve the Promise associated with this Deferred with the specified
+	 * Promise.
+	 * 
+	 * <p>
+	 * If the specified Promise is successfully resolved, the associated Promise
+	 * is resolved with the value of the specified Promise. If the specified
+	 * Promise is resolved with a failure, the associated Promise is resolved
+	 * with the failure of the specified Promise.
+	 * 
+	 * <p>
+	 * After the associated Promise is resolved with the specified Promise, all
+	 * registered {@link Promise#onResolve(Runnable) callbacks} are called and
+	 * any {@link Promise#then(Success, Failure) chained} Promises are resolved.
+	 * 
+	 * <p>
+	 * Resolving the associated Promise <i>happens-before</i> any registered
+	 * callback is called. That is, in a registered callback,
+	 * {@link Promise#isDone()} must return {@code true} and
+	 * {@link Promise#getValue()} and {@link Promise#getFailure()} must not
+	 * block.
+	 * 
+	 * @param with A Promise whose value or failure will be used to resolve the
+	 *        associated Promise.
+	 * @return A Promise that is resolved only when the associated Promise is
+	 *         resolved by the specified Promise. The returned Promise will be
+	 *         successfully resolved, with the value {@code null}, if the
+	 *         associated Promise was resolved by the specified Promise. The
+	 *         returned Promise will be resolved with a failure of
+	 *         {@link IllegalStateException} if the associated Promise was
+	 *         already resolved when the specified Promise was resolved.
+	 */
+	public Promise<Void> resolveWith(Promise<? extends T> with) {
+		Deferred<Void> chained = new Deferred<Void>();
+		ResolveWith resolveWith = new ResolveWith(chained);
+		with.then(resolveWith, resolveWith);
+		return chained.getPromise();
+	}
+
+	/**
+	 * A callback used to resolve a Deferred with another Promise for the
+	 * {@link #resolveWith(Promise)} method.
+	 * 
+	 * @Immutable
+	 */
+	private final class ResolveWith implements Success<T, Void>, Failure {
+		private final Deferred<Void>	chained;
+
+		ResolveWith(Deferred<Void> chained) {
+			this.chained = chained;
+		}
+
+		public Promise<Void> call(Promise<T> resolved) throws Exception {
+			try {
+				Deferred.this.resolve(resolved.getValue());
+			} catch (Throwable e) {
+				chained.fail(e);
+				return null;
+			}
+			chained.resolve(null);
+			return null;
+		}
+
+		public void fail(Promise<?> resolved) throws Exception {
+			try {
+				Deferred.this.fail(resolved.getFailure());
+			} catch (Throwable e) {
+				chained.fail(e);
+				return;
+			}
+			chained.resolve(null);
+		}
+	}
 }
