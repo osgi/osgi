@@ -66,7 +66,7 @@ public class PromiseTest extends TestCase {
 		d.resolve(value);
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p.isDone());
-		assertNull("wrong error", p.getError());
+		assertNull("wrong failure", p.getFailure());
 		assertSame("wrong value", value, p.getValue());
 	}
 
@@ -86,7 +86,7 @@ public class PromiseTest extends TestCase {
 		d.resolve(value);
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p.isDone());
-		assertNull("wrong error", p.getError());
+		assertNull("wrong failure", p.getFailure());
 		assertSame("wrong value", value, p.getValue());
 	}
 
@@ -117,8 +117,8 @@ public class PromiseTest extends TestCase {
 		assertTrue("callback did not run after resolved", p.isDone());
 		assertTrue("callback did not run after resolved", p2.isDone());
 		assertEquals("wrong value", "15", p2.getValue());
-		assertNull("wrong error", p2.getError());
-		assertNull("wrong error", p.getError());
+		assertNull("wrong failure", p2.getFailure());
+		assertNull("wrong failure", p.getFailure());
 		assertSame("wrong value", value, p.getValue());
 	}
 
@@ -156,8 +156,8 @@ public class PromiseTest extends TestCase {
 		assertTrue("callback did not run after resolved", p.isDone());
 		assertTrue("callback did not run after resolved", p2.isDone());
 		assertSame("wrong value", result.get(), p2.getValue());
-		assertNull("wrong error", p2.getError());
-		assertNull("wrong error", p.getError());
+		assertNull("wrong failure", p2.getFailure());
+		assertNull("wrong failure", p.getFailure());
 		assertSame("wrong value", value, p.getValue());
 	}
 
@@ -176,12 +176,12 @@ public class PromiseTest extends TestCase {
 		d.fail(failure);
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p.isDone());
-		assertSame("wrong error", failure, p.getError());
+		assertSame("wrong failure", failure, p.getFailure());
 		try {
 			p.getValue();
 			fail("getValue failed to throw InvocationTargetException");
 		} catch (InvocationTargetException e) {
-			assertSame("wrong error", failure, e.getCause());
+			assertSame("wrong failure", failure, e.getCause());
 		}
 	}
 
@@ -200,24 +200,24 @@ public class PromiseTest extends TestCase {
 		d.fail(failure);
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p.isDone());
-		assertSame("wrong error", failure, p.getError());
+		assertSame("wrong failure", failure, p.getFailure());
 		try {
 			p.getValue();
 			fail("getValue failed to throw InvocationTargetException");
 		} catch (InvocationTargetException e) {
-			assertSame("wrong error", failure, e.getCause());
+			assertSame("wrong failure", failure, e.getCause());
 		}
 	}
 
 	/**
-	 * Test if we can get the errors when there is a chain. The idea is that you
-	 * only specify the failure callback on the last
+	 * Test if we can get the failures when there is a chain. The idea is that
+	 * you only specify the failure callback on the last
 	 * {@link Promise#then(Success,Failure)} method. Any failures will bubble
 	 * up.
 	 * 
 	 * @throws Exception
 	 */
-	public void testErrorChain() throws Exception {
+	public void testFailureChain() throws Exception {
 		Deferred<String> d = new Deferred<String>();
 		final Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -234,7 +234,7 @@ public class PromiseTest extends TestCase {
 		p2.onResolve(new Runnable() {
 			public void run() {
 				try {
-					if (p2.getError() != null)
+					if (p2.getFailure() != null)
 						latch.countDown();
 				} catch (Exception e) {
 					fail("unexpected exception", e);
@@ -249,12 +249,12 @@ public class PromiseTest extends TestCase {
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p2.isDone());
 
-		assertSame("wrong exception", failure, p2.getError());
+		assertSame("wrong exception", failure, p2.getFailure());
 		try {
 			p2.getValue();
 			fail("getValue failed to throw InvocationTargetException");
 		} catch (InvocationTargetException e) {
-			assertSame("wrong error", failure, e.getCause());
+			assertSame("wrong failure", failure, e.getCause());
 		}
 		assertEquals("wrong number of callbacks called", 0, callbackCallCount.get());
 	}
@@ -275,7 +275,7 @@ public class PromiseTest extends TestCase {
 		Failure wrapper = new Failure() {
 			public void fail(Promise<?> promise) throws Exception {
 				failureCallbackCallCount.incrementAndGet();
-				throw new Exception(promise.getError());
+				throw new Exception(promise.getFailure());
 			}
 		};
 		final Promise<String> p2 = p1.then(doubler, wrapper).then(doubler, wrapper).then(doubler, wrapper);
@@ -283,7 +283,7 @@ public class PromiseTest extends TestCase {
 		p2.onResolve(new Runnable() {
 			public void run() {
 				try {
-					if (p2.getError() == null)
+					if (p2.getFailure() == null)
 						latch.countDown();
 				} catch (Exception e) {
 					fail("unexpected exception", e);
@@ -299,7 +299,7 @@ public class PromiseTest extends TestCase {
 		assertTrue("callback did not run after resolved", p2.isDone());
 
 		assertEquals("wrong value", "YYYYYYYY", p2.getValue());
-		assertNull("wrong error", p2.getError());
+		assertNull("wrong failure", p2.getFailure());
 		assertEquals("wrong number of success callbacks called", 3, successCallbackCallCount.get());
 		assertEquals("wrong number of failure callbacks called", 0, failureCallbackCallCount.get());
 	}
@@ -320,7 +320,7 @@ public class PromiseTest extends TestCase {
 		Failure wrapper = new Failure() {
 			public void fail(Promise<?> promise) throws Exception {
 				failureCallbackCallCount.incrementAndGet();
-				throw new Exception(promise.getError());
+				throw new Exception(promise.getFailure());
 			}
 		};
 		final Promise<String> p2 = p1.then(doubler, wrapper).then(doubler, wrapper).then(doubler, wrapper);
@@ -328,7 +328,7 @@ public class PromiseTest extends TestCase {
 		p2.onResolve(new Runnable() {
 			public void run() {
 				try {
-					if (p2.getError() != null)
+					if (p2.getFailure() != null)
 						latch.countDown();
 				} catch (Exception e) {
 					fail("unexpected exception", e);
@@ -345,12 +345,12 @@ public class PromiseTest extends TestCase {
 
 		assertEquals("wrong number of success callbacks called", 0, successCallbackCallCount.get());
 		assertEquals("wrong number of failure callbacks called", 3, failureCallbackCallCount.get());
-		assertSame("wrong exception", failure, p2.getError().getCause().getCause().getCause());
+		assertSame("wrong exception", failure, p2.getFailure().getCause().getCause().getCause());
 		try {
 			p2.getValue();
 			fail("getValue failed to throw InvocationTargetException");
 		} catch (InvocationTargetException e) {
-			assertSame("wrong error", failure, e.getCause().getCause().getCause().getCause());
+			assertSame("wrong failure", failure, e.getCause().getCause().getCause().getCause());
 		}
 	}
 
@@ -393,7 +393,7 @@ public class PromiseTest extends TestCase {
 		assertTrue("callback did not run after resolved", latch3.await(WAIT_TIME, TimeUnit.SECONDS));
 
 		assertEquals("wrong value", 10, p2.getValue().intValue());
-		assertNull("wrong error", p2.getError());
+		assertNull("wrong failure", p2.getFailure());
 	}
 
 	/**
@@ -432,7 +432,7 @@ public class PromiseTest extends TestCase {
 		assertFalse(p2.isDone());
 
 		assertEquals(20, p2.getValue().intValue());
-		assertNull("wrong error", p2.getError());
+		assertNull("wrong failure", p2.getFailure());
 	}
 
 	public void testValueInterrupted() throws Exception {
@@ -458,7 +458,7 @@ public class PromiseTest extends TestCase {
 		}
 	}
 
-	public void testErrorInterrupted() throws Exception {
+	public void testFailureInterrupted() throws Exception {
 		final Deferred<String> d = new Deferred<String>();
 		Promise<String> p = d.getPromise();
 		final Thread thread = Thread.currentThread();
@@ -474,7 +474,7 @@ public class PromiseTest extends TestCase {
 			}
 		}, 500);
 		try {
-			p.getError();
+			p.getFailure();
 			fail("failed to throw InterruptedException");
 		} catch (InterruptedException e) {
 			// expected
@@ -587,7 +587,7 @@ public class PromiseTest extends TestCase {
 		final String result = "value";
 		d.resolve(result);
 		assertTrue("should be resolved", p.isDone());
-		assertNull("wrong error", p.getError());
+		assertNull("wrong failure", p.getFailure());
 		assertSame("wrong value", result, p.getValue());
 		assertTrue("all callbacks did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 	}
@@ -604,12 +604,12 @@ public class PromiseTest extends TestCase {
 			}
 		});
 		assertTrue("should be resolved", p.isDone());
-		assertSame("wrong error", failure, p.getError());
+		assertSame("wrong failure", failure, p.getFailure());
 		try {
 			p.getValue();
 			fail("getValue failed to throw InvocationTargetException");
 		} catch (InvocationTargetException e) {
-			assertSame("wrong error", failure, e.getCause());
+			assertSame("wrong failure", failure, e.getCause());
 		}
 	}
 
@@ -624,7 +624,7 @@ public class PromiseTest extends TestCase {
 			}
 		});
 		assertTrue("callback did not run", latch.await(WAIT_TIME, TimeUnit.SECONDS));
-		assertNull("wrong error", p.getError());
+		assertNull("wrong failure", p.getFailure());
 		assertSame("wrong value", value, p.getValue());
 	}
 
@@ -659,7 +659,7 @@ public class PromiseTest extends TestCase {
 		d1.resolve(value1);
 		assertTrue("p1 callback did not run after resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("p1 not resolved", p1.isDone());
-		assertNull("p1 wrong error", p1.getError());
+		assertNull("p1 wrong failure", p1.getFailure());
 		assertSame("p1 wrong value", value1, p1.getValue());
 		assertFalse("p2 resolved", p2.isDone());
 		assertFalse("latched resolved", latched.isDone());
@@ -667,11 +667,11 @@ public class PromiseTest extends TestCase {
 		d2.resolve(value2);
 		assertTrue("p2 callback did not run after resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("p2 not resolved", p2.isDone());
-		assertNull("p2 wrong error", p2.getError());
+		assertNull("p2 wrong failure", p2.getFailure());
 		assertEquals("p2 wrong value", value2, p2.getValue());
 		assertTrue("latched callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("latched not resolved", latched.isDone());
-		assertNull("latched wrong error", latched.getError());
+		assertNull("latched wrong failure", latched.getFailure());
 		assertNull("latched wrong value", latched.getValue());
 	}
 
@@ -709,7 +709,7 @@ public class PromiseTest extends TestCase {
 		d1.resolve(value1);
 		assertTrue("p1 callback did not run after resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("p1 not resolved", p1.isDone());
-		assertNull("p1 wrong error", p1.getError());
+		assertNull("p1 wrong failure", p1.getFailure());
 		assertSame("p1 wrong value", value1, p1.getValue());
 		assertFalse("p2 resolved", p2.isDone());
 		assertFalse("latched resolved", latched.isDone());
@@ -717,11 +717,11 @@ public class PromiseTest extends TestCase {
 		d2.resolve(value2);
 		assertTrue("p2 callback did not run after resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("p2 not resolved", p2.isDone());
-		assertNull("p2 wrong error", p2.getError());
+		assertNull("p2 wrong failure", p2.getFailure());
 		assertSame("p2 wrong value", value2, p2.getValue());
 		assertTrue("latched callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("latched not resolved", latched.isDone());
-		assertNull("latched wrong error", latched.getError());
+		assertNull("latched wrong failure", latched.getFailure());
 		assertNull("latched wrong value", latched.getValue());
 	}
 
@@ -765,12 +765,12 @@ public class PromiseTest extends TestCase {
 		d1.fail(f1);
 		assertTrue("p1 callback did not run after resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("p1 not resolved", p1.isDone());
-		assertSame("p1 wrong error", f1, p1.getError());
+		assertSame("p1 wrong failure", f1, p1.getFailure());
 		try {
 			p1.getValue();
 			fail("p1 getValue failed to throw InvocationTargetException");
 		} catch (InvocationTargetException e) {
-			assertSame("wrong error", f1, e.getCause());
+			assertSame("wrong failure", f1, e.getCause());
 		}
 		assertFalse("p2 resolved", p2.isDone());
 		assertFalse("latched resolved", latched.isDone());
@@ -778,24 +778,24 @@ public class PromiseTest extends TestCase {
 		d2.resolve(value2);
 		assertTrue("p2 callback did not run after resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("p2 not resolved", p2.isDone());
-		assertNull("p2 wrong error", p2.getError());
+		assertNull("p2 wrong failure", p2.getFailure());
 		assertSame("p2 wrong value", value2, p2.getValue());
 		assertFalse("latched resolved", latched.isDone());
 		Throwable f3 = new Exception("fail3");
 		d3.fail(f3);
 		assertTrue("p3 callback did not run after resolved", latch3.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("p3 not resolved", p3.isDone());
-		assertSame("p3 wrong error", f3, p3.getError());
+		assertSame("p3 wrong failure", f3, p3.getFailure());
 		try {
 			p3.getValue();
 			fail("p3 getValue failed to throw InvocationTargetException");
 		} catch (InvocationTargetException e) {
-			assertSame("wrong error", f3, e.getCause());
+			assertSame("wrong failure", f3, e.getCause());
 		}
 		assertTrue("latched callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("latched not resolved", latched.isDone());
-		FailedPromisesException fail = (FailedPromisesException)latched.getError();
-		assertNotNull("latched wrong error", fail);
+		FailedPromisesException fail = (FailedPromisesException) latched.getFailure();
+		assertNotNull("latched wrong failure", fail);
 		Collection<Promise<?>> failedPromises = fail.getFailedPromises();
 		assertEquals("latched error contains wrong number of failed promise", 2, failedPromises.size());
 		assertTrue("latched error doesn't contain failed promise p1", failedPromises.contains(p1));
@@ -804,7 +804,7 @@ public class PromiseTest extends TestCase {
 			latched.getValue();
 			fail("latched getValue failed to throw InvocationTargetException");
 		} catch (InvocationTargetException e) {
-			assertSame("wrong error", fail, e.getCause());
+			assertSame("wrong failure", fail, e.getCause());
 		}
 	}
 
@@ -819,7 +819,7 @@ public class PromiseTest extends TestCase {
 			}
 		});
 		assertTrue("latched callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
-		assertNull("latched wrong error", latched.getError());
+		assertNull("latched wrong failure", latched.getFailure());
 		assertNull("latched wrong value", latched.getValue());
 	}
 
@@ -833,7 +833,7 @@ public class PromiseTest extends TestCase {
 			}
 		});
 		assertTrue("latched callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
-		assertNull("latched wrong error", latched.getError());
+		assertNull("latched wrong failure", latched.getFailure());
 		assertNull("latched wrong value", latched.getValue());
 	}
 

@@ -41,7 +41,7 @@ public class Promises {
 	 * @return A new Promise that has been resolved with the specified value.
 	 */
 	public static <T> Promise<T> newResolvedPromise(T value) {
-		return new PromiseImpl<T>(value);
+		return new PromiseImpl<T>(value, null);
 	}
 
 	/**
@@ -76,18 +76,18 @@ public class Promises {
 				public void run() {
 					final boolean interrupted = Thread.interrupted();
 					try {
-						Throwable t = null;
+						Throwable f = null;
 						try {
-							t = promise.getError();
+							f = promise.getFailure();
 						} catch (InterruptedException e) {
 							/*
-							 * This can't happen since (1) we are a callback on
-							 * a resolved Promise and (2) we cleared the
-							 * interrupt status above.
+							 * This should not happen since (1) we are a
+							 * callback on a resolved Promise and (2) we cleared
+							 * the interrupt status above.
 							 */
 							throw new Error(e);
 						}
-						if (t != null) {
+						if (f != null) {
 							failed.add(promise);
 						}
 						// If last specified promise to resolve

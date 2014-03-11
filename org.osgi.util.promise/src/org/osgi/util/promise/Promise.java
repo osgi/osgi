@@ -94,7 +94,7 @@ public interface Promise<T> {
 	 * If this Promise was successfully resolved, this method returns with the
 	 * value of this Promise. If this Promise was resolved with a failure, this
 	 * method must throw an {@code InvocationTargetException} with the
-	 * {@link #getError() failure exception} as the cause.
+	 * {@link #getFailure() failure exception} as the cause.
 	 * 
 	 * @return The value of this resolved Promise.
 	 * @throws InvocationTargetException If this Promise was resolved with a
@@ -122,7 +122,7 @@ public interface Promise<T> {
 	 * @throws InterruptedException If the current thread was interrupted while
 	 *         waiting.
 	 */
-	Throwable getError() throws InterruptedException;
+	Throwable getFailure() throws InterruptedException;
 
 	/**
 	 * Register a callback to be called when this Promise is resolved.
@@ -138,7 +138,7 @@ public interface Promise<T> {
 	 * <p>
 	 * Resolving this Promise <i>happens-before</i> any registered callback is
 	 * called. That is, in a registered callback, {@link #isDone()} must return
-	 * {@code true} and {@link #getValue()} and {@link #getError()} must not
+	 * {@code true} and {@link #getValue()} and {@link #getFailure()} must not
 	 * block.
 	 * 
 	 * <p>
@@ -182,7 +182,7 @@ public interface Promise<T> {
 	 * <p>
 	 * Resolving this Promise <i>happens-before</i> any registered callback is
 	 * called. That is, in a registered callback, {@link #isDone()} must return
-	 * {@code true} and {@link #getValue()} and {@link #getError()} must not
+	 * {@code true} and {@link #getValue()} and {@link #getFailure()} must not
 	 * block.
 	 * 
 	 * <p>

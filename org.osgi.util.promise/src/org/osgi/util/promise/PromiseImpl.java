@@ -48,7 +48,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * thread can write the resolved state variables and open the latch.
 	 * 
 	 * <p>
-	 * The resolved state variables, {@link #value} and {@link #error}, must
+	 * The resolved state variables, {@link #value} and {@link #fail}, must
 	 * only be written when the latch is closed (getCount() != 0) and must only
 	 * be read when the latch is open (getCount() == 0). The latch state must
 	 * always be checked before writing or reading since the resolved state
@@ -69,7 +69,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @GuardedBy("resolved")
 	 * @see #resolved
 	 */
-	private Throwable								error;
+	private Throwable								fail;
 
 	/**
 	 * Initialize this Promise.
@@ -80,13 +80,14 @@ final class PromiseImpl<T> implements Promise<T> {
 	}
 
 	/**
-	 * Initialize and resolve this Promise with the specified value.
+	 * Initialize and resolve this Promise.
 	 * 
 	 * @param v The value of this resolved Promise.
+	 * @param f The failure of this resolved Promise.
 	 */
-	PromiseImpl(T v) {
+	PromiseImpl(T v, Throwable f) {
 		value = v;
-		error = null;
+		fail = f;
 		callbacks = new ConcurrentLinkedQueue<Runnable>();
 		resolved = new CountDownLatch(0);
 	}
@@ -95,9 +96,9 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * Resolve this Promise.
 	 * 
 	 * @param v The value of this Promise.
-	 * @param t The failure of this Promise.
+	 * @param f The failure of this Promise.
 	 */
-	void resolve(T v, Throwable t) {
+	void resolve(T v, Throwable f) {
 		// critical section: only one resolver at a time
 		synchronized (resolved) {
 			if (resolved.getCount() == 0) {
@@ -109,7 +110,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			 * that must verify the latch is open before reading.
 			 */
 			value = v;
-			error = t;
+			fail = f;
 			resolved.countDown();
 		}
 		notifyCallbacks(); // call any registered callbacks
@@ -149,8 +150,8 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	public T getValue() throws InvocationTargetException, InterruptedException {
 		resolved.await();
-		if (error != null) {
-			throw new InvocationTargetException(error);
+		if (fail != null) {
+			throw new InvocationTargetException(fail);
 		}
 		return value;
 	}
@@ -158,9 +159,9 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public Throwable getError() throws InterruptedException {
+	public Throwable getFailure() throws InterruptedException {
 		resolved.await();
-		return error;
+		return fail;
 	}
 
 	/**
@@ -209,28 +210,28 @@ final class PromiseImpl<T> implements Promise<T> {
 		public void run() {
 			final boolean interrupted = Thread.interrupted();
 			try {
-				Throwable t = null;
+				Throwable f = null;
 				try {
-					t = getError();
+					f = getFailure();
 				} catch (InterruptedException e) {
 					/*
-					 * This can't happen since (1) we are a callback on a
+					 * This should not happen since (1) we are a callback on a
 					 * resolved Promise and (2) we cleared the interrupt status
 					 * above.
 					 */
 					throw new Error(e);
 				}
-				if (t != null) {
+				if (f != null) {
 					if (failure != null) {
 						try {
 							failure.fail(PromiseImpl.this);
 						} catch (Throwable e) {
 							// propagate new exception
-							t = e;
+							f = e;
 						}
 					}
 					// fail chained
-					chained.resolve(null, t);
+					chained.resolve(null, f);
 					return;
 				}
 				Promise<R> returned = null;
@@ -275,30 +276,30 @@ final class PromiseImpl<T> implements Promise<T> {
 		public void run() {
 			final boolean interrupted = Thread.interrupted();
 			try {
-				Throwable t = null;
+				Throwable f = null;
 				try {
-					t = returned.getError();
+					f = returned.getFailure();
 				} catch (InterruptedException e) {
 					/*
-					 * This can't happen since (1) we are a callback on a
+					 * This should not happen since (1) we are a callback on a
 					 * resolved Promise and (2) we cleared the interrupt status
 					 * above.
 					 */
 					throw new Error(e);
 				}
-				if (t != null) {
-					chained.resolve(null, t);
+				if (f != null) {
+					chained.resolve(null, f);
 					return;
 				}
 				R value;
 				try {
 					value = returned.getValue();
 				} catch (InvocationTargetException e) {
-					// This can't happen since we checked error above
+					// This should not happen since we checked fail above
 					throw new Error(e);
 				} catch (InterruptedException e) {
 					/*
-					 * This can't happen since (1) we are a callback on a
+					 * This should not happen since (1) we are a callback on a
 					 * resolved Promise and (2) we cleared the interrupt status
 					 * above.
 					 */
