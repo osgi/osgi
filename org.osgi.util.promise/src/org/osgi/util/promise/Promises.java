@@ -45,6 +45,16 @@ public class Promises {
 	}
 
 	/**
+	 * Create a new Promise that has been resolved with the specified failure.
+	 * 
+	 * @param failure The failure of the resolved Promise.
+	 * @return A new Promise that has been resolved with the specified failure.
+	 */
+	public static <T> Promise<T> newFailedPromise(Throwable failure) {
+		return new PromiseImpl<T>(null, failure);
+	}
+
+	/**
 	 * Create a new Promise that is a latch on the resolution of the specified
 	 * Promises.
 	 * 

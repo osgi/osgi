@@ -628,6 +628,26 @@ public class PromiseTest extends TestCase {
 		assertSame("wrong value", value, p.getValue());
 	}
 
+	public void testNewFailedPromise() throws Exception {
+		final CountDownLatch latch = new CountDownLatch(1);
+		Throwable failure = new Exception("value");
+		final Promise<String> p = Promises.newFailedPromise(failure);
+		assertTrue("promise not resolved", p.isDone());
+		p.onResolve(new Runnable() {
+			public void run() {
+				latch.countDown();
+			}
+		});
+		assertTrue("callback did not run", latch.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertSame("wrong failure", failure, p.getFailure());
+		try {
+			p.getValue();
+			fail("getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong failure", failure, e.getCause());
+		}
+	}
+
 	public void testLatchPromiseSuccess1() throws Exception {
 		final Deferred<Integer> d1 = new Deferred<Integer>();
 		final Promise<Integer> p1 = d1.getPromise();
