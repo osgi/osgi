@@ -1,7 +1,6 @@
 
 package org.osgi.test.cases.zigbee.tbc.util;
 
-import java.util.Map;
 import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeHandler;
 
@@ -10,7 +9,7 @@ import org.osgi.service.zigbee.ZigBeeHandler;
  */
 public class ZigBeeHandlerImpl implements ZigBeeHandler {
 
-	private Map	response;
+	private Object	response;
 
 	/**
 	 * Constructor.
@@ -19,7 +18,7 @@ public class ZigBeeHandlerImpl implements ZigBeeHandler {
 
 	}
 
-	public void onSuccess(Map response) {
+	public void onSuccess(Object response) {
 		// System.out.println("ZigBeeHandlerImpl.onSuccess(" + response + ")");
 		this.isSuccess = true;
 		this.response = response;
@@ -54,7 +53,7 @@ public class ZigBeeHandlerImpl implements ZigBeeHandler {
 	 * @return ZigBeeHandlerImpl.reponse. Can be null, if the handler hasn't
 	 *         receive a response yet, or if the response is null.
 	 */
-	public Map getResponse() {
+	public Object getResponse() {
 		return response;
 	}
 

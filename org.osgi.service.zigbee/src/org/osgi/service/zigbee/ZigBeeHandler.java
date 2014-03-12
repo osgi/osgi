@@ -16,7 +16,6 @@
 
 package org.osgi.service.zigbee;
 
-import java.util.Map;
 
 /**
  * ZigBeeHandler manages response of a request to the Base Driver
@@ -32,7 +31,7 @@ public interface ZigBeeHandler {
 	 * 
 	 * @param response contains the results of the call.
 	 */
-	public void onSuccess(Map response);
+	public void onSuccess(Object response);
 
 	/**
 	 * Notifies the failure result of the call. This method is used when the
