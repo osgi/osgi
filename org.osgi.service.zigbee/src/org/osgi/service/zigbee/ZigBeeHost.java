@@ -32,6 +32,10 @@ public interface ZigBeeHost extends ZigBeeNode {
 	/**
 	 * Starts the host.
 	 * 
+	 * The host status must be persitent, i.e. if the host was started, then the
+	 * host must starts again when the bundle restarts. In addition, the values
+	 * of channel, pan id, extended pan id, and host pid must remain the same.
+	 * 
 	 * @throws ZigBeeException
 	 */
 	public void start() throws ZigBeeException;
@@ -42,6 +46,13 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * @throws ZigBeeException
 	 */
 	public void stop() throws ZigBeeException;
+
+	/**
+	 * Get the host's start/stop state.
+	 * 
+	 * @return true if the host is started.
+	 */
+	boolean isStarted();
 
 	/**
 	 * Indicates if a ZigBee device can join the network.

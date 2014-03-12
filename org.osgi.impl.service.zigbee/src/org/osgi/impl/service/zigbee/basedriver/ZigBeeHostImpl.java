@@ -45,6 +45,11 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		// TODO Auto-generated method stub
 	}
 
+	public boolean isStarted() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 	public void refreshNetwork() throws ZigBeeException {
 		// TODO Auto-generated method stub
 	}
@@ -89,4 +94,5 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	public void broadcast(Integer clusterID, ZCLFrame frame, ZigBeeCommandHandler handler, String exportedServicePID) {
 		// TODO Auto-generated method stub
 	}
+
 }

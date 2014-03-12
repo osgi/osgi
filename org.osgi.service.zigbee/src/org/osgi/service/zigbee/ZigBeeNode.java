@@ -186,7 +186,7 @@ public interface ZigBeeNode {
 	public short getNetworkAddress();
 
 	/**
-	 * @return The ZigBee local Host PID
+	 * @return The ZigBee Host OSGi service PID.
 	 */
 	public String getHostPId();
 
