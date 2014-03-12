@@ -315,6 +315,67 @@ final class PromiseImpl<T> implements Promise<T> {
 	}
 
 	/**
+	 * Resolve this Promise with the specified Promise.
+	 * 
+	 * <p>
+	 * If the specified Promise is successfully resolved, this Promise is
+	 * resolved with the value of the specified Promise. If the specified
+	 * Promise is resolved with a failure, this Promise is resolved with the
+	 * failure of the specified Promise.
+	 * 
+	 * @param with A Promise whose value or failure will be used to resolve this
+	 *        Promise.
+	 * @return A Promise that is resolved only when this Promise is resolved by
+	 *         the specified Promise. The returned Promise will be successfully
+	 *         resolved, with the value {@code null}, if this Promise was
+	 *         resolved by the specified Promise. The returned Promise will be
+	 *         resolved with a failure of {@link IllegalStateException} if this
+	 *         Promise was already resolved when the specified Promise was
+	 *         resolved.
+	 */
+	Promise<Void> resolveWith(Promise<? extends T> with) {
+		PromiseImpl<Void> chained = new PromiseImpl<Void>();
+		ResolveWith resolveWith = new ResolveWith(chained);
+		with.then(resolveWith, resolveWith);
+		return chained;
+	}
+
+	/**
+	 * A callback used to resolve this Promise with another Promise for the
+	 * {@link PromiseImpl#resolveWith(Promise)} method.
+	 * 
+	 * @Immutable
+	 */
+	private final class ResolveWith implements Success<T, Void>, Failure {
+		private final PromiseImpl<Void>	chained;
+
+		ResolveWith(PromiseImpl<Void> chained) {
+			this.chained = chained;
+		}
+
+		public Promise<Void> call(Promise<T> with) throws Exception {
+			try {
+				resolve(with.getValue(), null);
+			} catch (Throwable e) {
+				chained.resolve(null, e);
+				return null;
+			}
+			chained.resolve(null, null);
+			return null;
+		}
+
+		public void fail(Promise<?> with) throws Exception {
+			try {
+				resolve(null, with.getFailure());
+			} catch (Throwable e) {
+				chained.resolve(null, e);
+				return;
+			}
+			chained.resolve(null, null);
+		}
+	}
+
+	/**
 	 * Use the lazy initialization holder class idiom to delay creating a Logger
 	 * until we actually need it.
 	 */

@@ -17,16 +17,17 @@
 package org.osgi.util.promise;
 
 /**
- * A Deferred Promise implementation.
+ * A Deferred Promise resolution.
  * 
  * <p>
  * Instances of this class can be used to create a {@link Promise} that can be
  * resolved in the future. The {@link #getPromise() associated} Promise can be
  * successfully resolved with {@link #resolve(Object)} or resolved with a
- * failure with {@link #fail(Throwable)}.
+ * failure with {@link #fail(Throwable)}. It can also be resolved with the
+ * resolution of another promise using {@link #resolveWith(Promise)}.
  * 
  * <p>
- * The associated Promise can be provided to any one, but the Deferred instance
+ * The associated Promise can be provided to any one, but the Deferred object
  * should be made available only to the party that will responsible for
  * resolving the Promise.
  * 
@@ -131,44 +132,6 @@ public class Deferred<T> {
 	 *         already resolved when the specified Promise was resolved.
 	 */
 	public Promise<Void> resolveWith(Promise<? extends T> with) {
-		Deferred<Void> chained = new Deferred<Void>();
-		ResolveWith resolveWith = new ResolveWith(chained);
-		with.then(resolveWith, resolveWith);
-		return chained.getPromise();
-	}
-
-	/**
-	 * A callback used to resolve a Deferred with another Promise for the
-	 * {@link #resolveWith(Promise)} method.
-	 * 
-	 * @Immutable
-	 */
-	private final class ResolveWith implements Success<T, Void>, Failure {
-		private final Deferred<Void>	chained;
-
-		ResolveWith(Deferred<Void> chained) {
-			this.chained = chained;
-		}
-
-		public Promise<Void> call(Promise<T> resolved) throws Exception {
-			try {
-				Deferred.this.resolve(resolved.getValue());
-			} catch (Throwable e) {
-				chained.fail(e);
-				return null;
-			}
-			chained.resolve(null);
-			return null;
-		}
-
-		public void fail(Promise<?> resolved) throws Exception {
-			try {
-				Deferred.this.fail(resolved.getFailure());
-			} catch (Throwable e) {
-				chained.fail(e);
-				return;
-			}
-			chained.resolve(null);
-		}
+		return promise.resolveWith(with);
 	}
 }
