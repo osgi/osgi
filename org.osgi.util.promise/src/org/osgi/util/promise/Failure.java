@@ -26,6 +26,10 @@ import org.osgi.annotation.versioning.ConsumerType;
  * {@link Promise#then(Success, Failure)} method and is called if the Promise is
  * resolved with a failure.
  * 
+ * <p>
+ * This is a functional interface and can be used as the assignment target for a
+ * lambda expression or method reference.
+ * 
  * @ThreadSafe
  * @author $Id$
  */

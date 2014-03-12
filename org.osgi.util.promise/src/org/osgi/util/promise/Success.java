@@ -26,6 +26,10 @@ import org.osgi.annotation.versioning.ConsumerType;
  * {@link Promise#then(Success)} method and is called if the Promise is resolved
  * successfully.
  * 
+ * <p>
+ * This is a functional interface and can be used as the assignment target for a
+ * lambda expression or method reference.
+ * 
  * @param <T> The value type of the resolved Promise passed as input to this
  *        callback.
  * @param <R> The value type of the returned Promise from this callback.
