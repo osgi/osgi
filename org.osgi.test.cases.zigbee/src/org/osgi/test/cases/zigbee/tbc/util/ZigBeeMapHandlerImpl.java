@@ -2,13 +2,13 @@
 package org.osgi.test.cases.zigbee.tbc.util;
 
 import java.util.Map;
-import org.osgi.service.zigbee.ZigBeeAttributesHandler;
 import org.osgi.service.zigbee.ZigBeeException;
+import org.osgi.service.zigbee.ZigBeeMapHandler;
 
 /**
- * Mocked impl of ZigBeeAttributesHandler.
+ * Mocked impl.
  */
-public class ZigBeeAttributesHandlerImpl implements ZigBeeAttributesHandler {
+public class ZigBeeMapHandlerImpl implements ZigBeeMapHandler {
 
 	private Map				successResponse;
 	private ZigBeeException	failureResponse;
@@ -16,7 +16,7 @@ public class ZigBeeAttributesHandlerImpl implements ZigBeeAttributesHandler {
 	/**
 	 * Constructor.
 	 */
-	public ZigBeeAttributesHandlerImpl() {
+	public ZigBeeMapHandlerImpl() {
 
 	}
 

@@ -13,11 +13,11 @@ import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.test.cases.zigbee.tbc.device.discovery.ServicesListener;
 import org.osgi.test.cases.zigbee.tbc.util.ZCLFrameImpl;
-import org.osgi.test.cases.zigbee.tbc.util.ZigBeeAttributesHandlerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeCommandHandlerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventListenerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventSourceImpl;
+import org.osgi.test.cases.zigbee.tbc.util.ZigBeeMapHandlerImpl;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
@@ -395,7 +395,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		// Test "control" methods of ZigBeeCluster.
 
 		int[] attributesIds = {8};
-		ZigBeeAttributesHandlerImpl handlerCluster = new ZigBeeAttributesHandlerImpl();
+		ZigBeeMapHandlerImpl handlerCluster = new ZigBeeMapHandlerImpl();
 		Boolean isSuccess;
 
 		// cluster.readAttributes
@@ -435,7 +435,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		ZigBeeAttribute attribute = attributes[8];
 
 		try {
-			ZigBeeAttributesHandlerImpl handlerAttributeGetValue1 = new ZigBeeAttributesHandlerImpl();
+			ZigBeeMapHandlerImpl handlerAttributeGetValue1 = new ZigBeeMapHandlerImpl();
 			attribute.getValue(handlerAttributeGetValue1);
 
 			isSuccess = handlerAttributeGetValue1.isSuccess();
@@ -455,7 +455,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 		try {
 			Object value = new Object();
-			ZigBeeAttributesHandlerImpl handler = new ZigBeeAttributesHandlerImpl();
+			ZigBeeMapHandlerImpl handler = new ZigBeeMapHandlerImpl();
 			attribute.setValue(value, handler);
 
 			isSuccess = handler.isSuccess();

@@ -64,7 +64,7 @@ public interface ZCLCluster {
 	 * @param attributesIds An array of attributes ids
 	 * @param handler The response handler
 	 */
-	public void readAttributes(int[] attributesIds, ZigBeeAttributesHandler handler);
+	public void readAttributes(int[] attributesIds, ZigBeeMapHandler handler);
 
 	/**
 	 * Write a list of attributes
@@ -73,7 +73,7 @@ public interface ZCLCluster {
 	 * @param attributesRecords An array of attributes records
 	 * @param handler The response handler
 	 */
-	public void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributesRecords, ZigBeeAttributesHandler handler);
+	public void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributesRecords, ZigBeeMapHandler handler);
 
 	/**
 	 * @return an array of all the commandIds of the ZigBeeCluster.

@@ -19,13 +19,12 @@ package org.osgi.service.zigbee;
 import java.util.Map;
 
 /**
- * ZigBeeAttributesHandler manages response of a attribute request to the Base
- * Driver
+ * Manage response of a request to the Base Driver
  * 
  * @version 1.0
  */
 
-public interface ZigBeeAttributesHandler {
+public interface ZigBeeMapHandler {
 
 	/**
 	 * Notifies the success result of the call. This method is used when the

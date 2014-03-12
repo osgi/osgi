@@ -7,9 +7,9 @@ import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZigBeeAttribute;
 import org.osgi.service.zigbee.ZigBeeAttributeRecord;
-import org.osgi.service.zigbee.ZigBeeAttributesHandler;
 import org.osgi.service.zigbee.ZigBeeCommandHandler;
 import org.osgi.service.zigbee.ZigBeeException;
+import org.osgi.service.zigbee.ZigBeeMapHandler;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 
 /**
@@ -57,7 +57,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 		return description.getGlobalClusterDescription().getClusterName();
 	}
 
-	public void readAttributes(int[] attributesIds, ZigBeeAttributesHandler handler) {
+	public void readAttributes(int[] attributesIds, ZigBeeMapHandler handler) {
 		// TODO Auto-generated method stub
 		Map<Integer, byte[]> response = new HashMap<Integer, byte[]>();
 		int i = 0;
@@ -69,7 +69,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 		handler.onSuccess(response);
 	}
 
-	public void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributesRecords, ZigBeeAttributesHandler handler) {
+	public void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributesRecords, ZigBeeMapHandler handler) {
 		// TODO Auto-generated method stub
 	}
 

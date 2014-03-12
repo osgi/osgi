@@ -41,7 +41,7 @@ public interface ZigBeeAttribute {
 	 * @param handler the handler
 	 * @throws ZigBeeException
 	 */
-	public void getValue(ZigBeeAttributesHandler handler) throws ZigBeeException;
+	public void getValue(ZigBeeMapHandler handler) throws ZigBeeException;
 
 	/**
 	 * Sets the current value of the attribute.
@@ -51,7 +51,7 @@ public interface ZigBeeAttribute {
 	 * @throws ZigBeeException when the data type is not known
 	 *         ("Unknown data type").
 	 */
-	public void setValue(Object value, ZigBeeAttributesHandler handler) throws ZigBeeException;
+	public void setValue(Object value, ZigBeeMapHandler handler) throws ZigBeeException;
 
 	/**
 	 * @return the Attribute data type. It may be null if the data type is not
