@@ -44,6 +44,7 @@ jar.cmpn.impls = \
     ${repo;org.osgi.impl.service.repository}, \
     ${repo;org.osgi.impl.service.subsystem}, \
 	${repo;org.osgi.impl.service.wireadmin}, \
+    ${repo;org.osgi.util.function}, \
     ${repo;org.osgi.util.measurement}, \
     ${repo;org.osgi.util.position}, \
     ${repo;org.osgi.util.promise}, \
@@ -79,6 +80,7 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.service.resolver}, \
 	${repo;org.osgi.impl.service.repository}, \
 	${repo;org.osgi.impl.service.subsystem}, \
+    ${repo;org.osgi.util.function}, \
     ${repo;org.osgi.util.promise}, \
     ${repo;org.osgi.util.xml}
 	
