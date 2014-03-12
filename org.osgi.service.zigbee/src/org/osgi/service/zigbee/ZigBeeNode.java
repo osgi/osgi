@@ -49,9 +49,9 @@ public interface ZigBeeNode {
 	public static final String	IEEE_ADDRESS					= "zigbee.node.ieee.address";
 
 	/**
-	 * Property key for the device node type
+	 * Property key for the device logical type
 	 */
-	public static final String	NODE_TYPE						= "zigbee.node.description.node.type";
+	public static final String	LOGICAL_TYPE					= "zigbee.node.description.node.type";
 
 	/**
 	 * Property key for a manufacturer code that is allocated by the ZigBee
@@ -159,6 +159,20 @@ public interface ZigBeeNode {
 	 * Key of {@link String} containing the device node network extended PAN ID
 	 */
 	public static final String	EXTENDED_PAN_ID					= "zigbee.node.extended.pan.id";
+
+	/**
+	 * ZigBee power source, i.e. 3rd bit of "MAC Capabilities" in Node
+	 * Descriptor. Set to 1 if the current power source is mains power, set to 0
+	 * otherwise.
+	 */
+	public static final String	POWER_SOURCE					= "zigbee.node.power.source";
+
+	/**
+	 * ZigBee receiver on when idle, i.e. 4th bit of "MAC Capabilities" in Node
+	 * Descriptor. Set to 1 if the device does not disable its receiver to
+	 * conserve power during idle periods, set to 0 otherwise.
+	 */
+	public static final String	RECEIVER_ON_WHEN_IDLE			= "zigbee.node.receiver.on.when.idle";
 
 	/**
 	 * ZigBee coordinator

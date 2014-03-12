@@ -82,9 +82,9 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 				dev.getIEEEAddress().toString());
 
 		try {
-			log("ZigBeeNode NODE_TYPE: " + dev.getNodeDescriptor().getLogicalType());
-			assertEquals("Node type not matched",
-					ZigBeeConstants.NODE_TYPE,
+			log("ZigBeeNode LOGICAL_TYPE: " + dev.getNodeDescriptor().getLogicalType());
+			assertEquals("Logical type not matched",
+					ZigBeeConstants.LOGICAL_TYPE,
 					String.valueOf(dev.getNodeDescriptor().getLogicalType()));
 
 			log("ZigBeeNode MANUFACTURER_CODE: " + dev.getNodeDescriptor().getManufacturerCode());
