@@ -76,11 +76,12 @@ public interface ZigBeeGroup {
 	 * appropriate message on the network, the base driver must generate a
 	 * source endpoint. The latter must not correspond to any exported endpoint.
 	 * 
+	 * @param clusterId a cluster identifier.
 	 * @param frame a command frame sequence.
 	 * @param handler The handler that manages the command response.
 	 * @throws ZigBeeException
 	 */
-	void invoke(ZCLFrame frame, ZigBeeCommandHandler handler) throws ZigBeeException;
+	void invoke(Integer clusterId, ZCLFrame frame, ZigBeeCommandHandler handler) throws ZigBeeException;
 
 	/**
 	 * This method is to be used by applications when the targeted device has to
@@ -89,6 +90,7 @@ public interface ZigBeeGroup {
 	 * differently interpreted if they come from the oven or from the intrusion
 	 * alert system.
 	 * 
+	 * @param clusterId a cluster identifier.
 	 * @param frame a command frame sequence.
 	 * @param handler The handler that manages the command response.
 	 * @param exportedServicePID : the source endpoint of the command request.
@@ -96,6 +98,6 @@ public interface ZigBeeGroup {
 	 *        PID of an exported endpoint.
 	 * @throws ZigBeeException
 	 */
-	void invoke(ZCLFrame frame, ZigBeeCommandHandler handler, String exportedServicePID) throws ZigBeeException;
+	void invoke(Integer clusterId, ZCLFrame frame, ZigBeeCommandHandler handler, String exportedServicePID) throws ZigBeeException;
 
 }
