@@ -31,7 +31,7 @@ package org.osgi.util.promise;
  * should be made available only to the party that will responsible for
  * resolving the Promise.
  * 
- * @param <T> The result type associated with the created Promise.
+ * @param <T> The value type associated with the created Promise.
  * 
  * @Immutable
  * @author $Id$

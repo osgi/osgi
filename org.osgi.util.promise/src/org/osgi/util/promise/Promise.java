@@ -64,7 +64,7 @@ import org.osgi.annotation.versioning.ProviderType;
  * });
  * </pre>
  * 
- * @param <T> The result type associated with this Promise.
+ * @param <T> The value type associated with this Promise.
  * 
  * @ThreadSafe
  * @author $Id$
@@ -191,6 +191,7 @@ public interface Promise<T> {
 	 * upon that the registration of the callback <i>happens-before</i> the
 	 * registered callback is called.
 	 * 
+	 * @param <R> The value type associated with the returned Promise.
 	 * @param success A Success callback to be called when this Promise is
 	 *        successfully resolved. May be {@code null} if no Success callback
 	 *        is required. In this case, the returned Promise must be resolved
@@ -213,6 +214,7 @@ public interface Promise<T> {
 	 * {@link #then(Success, Failure)} with the specified Success callback and
 	 * {@code null} for the Failure callback.
 	 * 
+	 * @param <R> The value type associated with the returned Promise.
 	 * @param success A Success callback to be called when this Promise is
 	 *        successfully resolved. May be {@code null} if no Success callback
 	 *        is required. In this case, the returned Promise must be resolved
