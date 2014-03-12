@@ -175,7 +175,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public <R> Promise<R> then(Success<? super T, R> success, Failure failure) {
+	public <R> Promise<R> then(Success<? super T, ? extends R> success, Failure failure) {
 		PromiseImpl<R> chained = new PromiseImpl<R>();
 		@SuppressWarnings("unchecked")
 		Runnable then = new Then<R>(chained, (Success<T, R>) success, failure);
@@ -186,7 +186,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public <R> Promise<R> then(Success<? super T, R> success) {
+	public <R> Promise<R> then(Success<? super T, ? extends R> success) {
 		return then(success, null);
 	}
 
