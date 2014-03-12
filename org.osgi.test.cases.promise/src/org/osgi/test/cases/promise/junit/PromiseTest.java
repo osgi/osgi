@@ -403,15 +403,15 @@ public class PromiseTest extends TestCase {
 		Deferred<String> d = new Deferred<String>();
 		Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
-		Promise<Integer> p2 = p1.then(new Success<String, Integer>() {
-			public Promise<Integer> call(final Promise<String> promise)
+		Promise<Number> p2 = p1.<Number> then(new Success<Object, Integer>() {
+			public Promise<Integer> call(final Promise<Object> promise)
 					throws Exception {
 				latch.countDown();
 				final Deferred<Integer> n = new Deferred<Integer>();
 				timer.schedule(new TimerTask() {
 					public void run() {
 						try {
-							n.resolve(Integer.valueOf(promise.getValue()));
+							n.resolve(Integer.valueOf(promise.getValue().toString()));
 						} catch (Exception e) {
 							n.fail(e);
 						}
