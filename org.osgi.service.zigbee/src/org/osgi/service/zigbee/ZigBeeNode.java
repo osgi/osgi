@@ -242,9 +242,8 @@ public interface ZigBeeNode {
 	 * Request to leave the network.
 	 * 
 	 * @param handler
-	 * @throws ZigBeeException
 	 */
-	public void leave(ZigBeeHandler handler) throws ZigBeeException;
+	public void leave(ZigBeeHandler handler);
 
 	/**
 	 * Requests the device to leave the network. The ZigBeeHandler onSuccess
@@ -257,8 +256,7 @@ public interface ZigBeeNode {
 	 *        asked to leave the network is also being asked to remove its child
 	 *        devices, if any. Otherwise, it has a value of 0.
 	 * @param handler The handler
-	 * @throws ZigBeeException
 	 */
-	public void leave(boolean rejoin, boolean removeChildren, ZigBeeHandler handler) throws ZigBeeException;
+	public void leave(boolean rejoin, boolean removeChildren, ZigBeeHandler handler);
 
 }

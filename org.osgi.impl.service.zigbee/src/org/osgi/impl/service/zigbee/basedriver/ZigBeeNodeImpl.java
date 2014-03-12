@@ -102,11 +102,11 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		return null;
 	}
 
-	public void leave(ZigBeeHandler handler) throws ZigBeeException {
+	public void leave(ZigBeeHandler handler) {
 		// TODO Auto-generated method stub
 	}
 
-	public void leave(boolean rejoin, boolean removeChildren, ZigBeeHandler handler) throws ZigBeeException {
+	public void leave(boolean rejoin, boolean removeChildren, ZigBeeHandler handler) {
 		// TODO Auto-generated method stub
 	}
 

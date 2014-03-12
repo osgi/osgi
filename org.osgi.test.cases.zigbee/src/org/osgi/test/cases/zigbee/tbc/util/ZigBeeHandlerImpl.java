@@ -27,7 +27,7 @@ public class ZigBeeHandlerImpl implements ZigBeeHandler {
 	public void onFailure(ZigBeeException e) {
 		// System.out.println("ZigBeeHandlerImpl.onFailure(" + response + ")");
 		this.isSuccess = false;
-		this.response = response;
+		this.response = e;
 	}
 
 	// Code below is for the testcases only.

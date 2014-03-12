@@ -66,7 +66,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		return securityLevel;
 	}
 
-	public void setChannel(ZigBeeHandler handler, byte channel) throws ZigBeeException {
+	public void setChannel(ZigBeeHandler handler, byte channel) {
 		// TODO Auto-generated method stub
 	}
 
@@ -74,7 +74,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		// TODO Auto-generated method stub
 	}
 
-	public void setChannelMask(ZigBeeHandler handler, int mask) throws ZigBeeException {
+	public void setChannelMask(ZigBeeHandler handler, int mask) {
 		// TODO Auto-generated method stub
 	}
 

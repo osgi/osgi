@@ -75,9 +75,8 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * 
 	 * @param handler The handler that manages the command response.
 	 * @param channel The network channel.
-	 * @throws ZigBeeException
 	 */
-	public void setChannel(ZigBeeHandler handler, byte channel) throws ZigBeeException;
+	public void setChannel(ZigBeeHandler handler, byte channel);
 
 	/**
 	 * @return The current network channel mask.
@@ -90,9 +89,8 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * 
 	 * @param handler The handler that manages the command response.
 	 * @param mask A value representing the channel mask.
-	 * @throws ZigBeeException
 	 */
-	public void setChannelMask(ZigBeeHandler handler, int mask) throws ZigBeeException;
+	public void setChannelMask(ZigBeeHandler handler, int mask);
 
 	/**
 	 * Updates the list of devices in the network by adding the new devices that
