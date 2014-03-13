@@ -1,6 +1,7 @@
 enterprise.specs = \
 	 org.osgi.jmx, \
 	 org.osgi.namespace, \
+	 org.osgi.service.async, \
 	 org.osgi.service.blueprint, \
 	 org.osgi.service.cm, \
 	 org.osgi.service.component, \

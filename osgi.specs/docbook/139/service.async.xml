@@ -1,0 +1,269 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="139"
+         revision="$Id:"
+         version="5" xml:id="service.async"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Asynchronous Service Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.async-version"
+    linkend="org.osgi.service.async"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>OSGi Bundles collaborate using loosely coupled services registered 
+    in the OSGi service registry. This is a powerful and flexible model, and 
+    allows for the dynamic replacement of services at runtime. OSGi services 
+    are therefore a very common interaction pattern within OSGi.</para>
+
+    <para>As with most Java APIs and Objects, OSGi services are primarily 
+    synchronous in operation. This has several benefits; synchronous APIs are 
+    typically easier to write and to use than asynchronous ones; synchronous 
+    APIs provide immediate feedback; synchronous implementations typically 
+    have a less complex threading model.</para>
+
+    <para>Asynchronous APIs, however, have different advantages. Asynchronous 
+    APIs can reduce bottlenecks by encouraging more effective use of 
+    parallelism, improving the responsiveness of the application. In many 
+    cases asynchronous programs can easier to write for high throughput 
+    systems.</para>
+
+    <para>The purpose of the Asynchronous Service is to bridge the gap between 
+    existing, primarily synchronous, services in the OSGi service registry, and
+    asynchronous programming. The Asynchronous Service therefore provides a way
+    to invoke arbitrary OSGi services asynchronously, providing results and 
+    failure notifications through the OSGi Promise API *****TODO REF*****</para>
+
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Asynchronous Invocation</emphasis> - A single method 
+          call that is to be executed without blocking the requesting thread.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Client</emphasis> - Application code that wishes 
+          to invoke one or more OSGi services asynchronously.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Async Service</emphasis> - The OSGi service representing 
+          the Asynchronous Services implementation. Used by the client to make one
+          or more <emphasis>Asynchronous Invocations</emphasis>.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Async Mediator</emphasis> - A mediator object created by
+          the <emphasis>Async Service</emphasis> which represents the target service. 
+          Used by the <emphasis>Client</emphasis> to register asynchronous invocations.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Success Callback</emphasis> - A callback made when an 
+          asynchronous invocation exits with a normal return value.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Failure Callback</emphasis> - A callback made when an asynchronous 
+          invocation exits by throwing an exception.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Async Service</emphasis> - A service that can create
+          Async Mediators and run Asynchronous Invocations.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Target Service</emphasis> - A service that is to be 
+          called asynchronously by the client.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Client</emphasis> - The code that makes asynchronous
+          invocations using the Async Service</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Promise</emphasis> - An OSGi promise, representing
+          the result of the Asynchronous Invocation.</para>
+        </listitem>
+      </itemizedlist>
+
+      <figure>
+        <title>Class and Service overview</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="2.100in"
+                       contentwidth="7.000in"
+                       fileref="async-classes.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+  </section>
+  <section>
+    <title>Usage</title>
+
+    <para>This section is an introduction in the usage of the Async Service. 
+    It is not the formal specification, the normative part starts at
+    <xref linkend="async_service_main_body"/>. This section leaves out some of the details
+    for clarity.</para>
+
+    <section>
+      <title>Synopsis</title>
+
+      <para>The Async service provides a mechanism for a client to
+      <emphasis>asynchronously</emphasis> invoke methods on a target
+      service. The service may be aware of the asynchronous nature of
+      the call and actively participate in it, or be unaware and 
+      execute normally. In either case the client's thread will not
+      block, and will continue executing its next instructions. Clients
+      are notified of the completion of their task, and whether it was 
+      successful or not, through the use of the OSGi Promise API.</para>
+      
+      <para>Each asynchronous invocation is registered by the client making
+      a method call on an <emphasis>Async Mediator</emphasis>, and then
+      started by making a call to the Async service that created the mediator.
+      This call returns a Promise that will eventually be resolved with the
+      return value from the asynchronous invocation.</para>
+
+      <para>An Async Mediator can be created by the client, either from an
+      Object, or directly from a Service Reference. Using a Service Reference
+      has the advantage that the mediator will track the underlying service.
+      This means that if the service is unregistered before the asynchronous
+      call begins then the Promise will resolve with a failure, rather than
+      continuing using an invalid service object.</para>
+    </section>
+
+    <section>
+      <title>Making Asynchronus Invocations</title>
+
+      <para>The general pattern for a client is to obtain the Async service,
+      and a ServiceReference for the target service. The client then creates 
+      an Async Mediator for the target service, invokes a method on the mediator,
+      then starts the asynchronous call. This is demonstrated in the following
+      example:</para>
+
+      <programlisting>
+      
+private Async asyncService;
+private ServiceReference&lt;List&gt; listRef;
+
+@Reference
+synchronized void setAsync(Async async) {
+    asyncService = async;
+}
+
+@Reference(service = List.class)
+synchronized void setList(ServiceReference&lt;List&gt; list) {
+    listRef = list;
+}
+
+public synchronized void doStuff() {
+    List mediator = asyncService.mediate(ref);
+    Promise&lt;Boolean&gt; promise = asyncService
+           .call(mediator.contains(“badEntry”));
+    ...
+}
+
+      </programlisting>
+
+      <para>This example demonstrates how simply clients can make asynchronous
+      calls using the Async service. The eventual result can be obtained
+      from the promise using one of the relevant callbacks.</para>
+
+      <para>One important thing to note is that whilst the call to
+      <code>asyncService.call(...)</code> causes the asynchronous invocation to
+      begin, the actual execution of the underlying task may be queued until
+      a thread is available to run it. If the service has been unregistered
+      before the execution actually begins then the promise will be resolved
+      with a ServiceException. The type of the ServiceException will be
+      ASYNC ***** TODO REF core *****</para>
+
+    </section>
+    <section>
+      <title>Asynchronous invocations of void methods</title>
+      <para>The return value of the mediator method call is used to provide
+      type information to the Async service. This, however, does not work
+      for <code>void</code> methods that have no return value. In this case
+      the client can either pass an arbitrary object to the <code>call</code>
+      method, or use the zero argument version of the <code>call</code>
+      method. In either case the returned promise will eventually resolve
+      with a value of <code>null</code>. This is demonstrated in 
+      <xref linkend="async_service_void_example"/>
+      </para>
+      
+      <programlisting id="async_service_void_example">    
+private Async asyncService;
+private ServiceReference&lt;List&gt; listRef;
+
+@Reference
+synchronized void setAsync(Async async) {
+    asyncService = async;
+}
+
+@Reference(service = List.class)
+synchronized void setList(ServiceReference&lt;List&gt; list) {
+    listRef = list;
+}
+
+public synchronized void doStuff() {
+    List mediator = asyncService.mediate(ref);
+    mediator.clear();
+    Promise&lt;Void&gt; promise = asyncService
+           .call();
+    ...
+}
+      </programlisting>
+    </section>
+
+    <section>
+      <title>Multi Threading</title>
+
+      <para>By their very definition asychronous tasks do not run inline, and
+      typically they will not run on the same thread as the caller. This is not,
+      however, a guarantee. A valid implementation of the Async service may have
+      only one worker thread, which may be the thread currently running in the 
+      client code. Asynchronous invocations also have the same threading model as
+      the OSGi Promise API. This means that callbacks may run on arbitrary threads,
+      which may, or may not, be the same as the client thread, or the thread which 
+      executed the asynchronous work.
+      </para>
+    </section>
+  </section>
+
+
+  <section xml:id="async_service_main_body">
+    <title>Async Service</title>
+
+   <para>***** TODO *****</para>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.async.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed><title><xref linkend="intro.core.release"
+      xrefstyle="template:%t"/></title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>
