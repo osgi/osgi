@@ -10,32 +10,28 @@ public class ZigBeeSimpleDescriptorImpl implements ZigBeeSimpleDescriptor {
 
 	private int		deviceId;
 	private byte	version;
-	private Integer	profileId;
+	private int		profileId;
 
 	/**
 	 * @param deviceId
 	 * @param version
 	 * @param profileId
 	 */
-	public ZigBeeSimpleDescriptorImpl(int deviceId, byte version, Integer profileId) {
-		// TODO Auto-generated constructor stub
+	public ZigBeeSimpleDescriptorImpl(int deviceId, byte version, int profileId) {
 		this.deviceId = deviceId;
 		this.version = version;
 		this.profileId = profileId;
 	}
 
 	public int getApplicationDeviceId() {
-		// TODO Auto-generated method stub
 		return deviceId;
 	}
 
 	public byte getApplicationDeviceVersion() {
-		// TODO Auto-generated method stub
 		return version;
 	}
 
-	public Integer getApplicationProfileId() {
-		// TODO Auto-generated method stub
+	public int getApplicationProfileId() {
 		return profileId;
 	}
 
@@ -44,22 +40,22 @@ public class ZigBeeSimpleDescriptorImpl implements ZigBeeSimpleDescriptor {
 		return 0;
 	}
 
-	public int[] getInputClusterList() {
+	public int[] getInputClusters() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public int[] getOutputClusterList() {
+	public int[] getOutputClusters() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public boolean providesInputCluster(int id) {
+	public boolean providesInputCluster(int clusterId) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
-	public boolean providesOutputCluster(int id) {
+	public boolean providesOutputCluster(int clusterId) {
 		// TODO Auto-generated method stub
 		return false;
 	}

@@ -16,7 +16,7 @@ import org.osgi.service.zigbee.descriptors.ZigBeeUserDescriptor;
 public class ZigBeeNodeImpl implements ZigBeeNode {
 
 	private Long					IEEEAddress;
-	private short					nwkAddress;
+	private int						nwkAddress;
 	private String					hostPId;
 	private ZigBeeEndpoint[]		endpoints;
 	private ZigBeeNodeDescriptor	nodeDescriptor;
@@ -28,7 +28,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	 * @param hostPId
 	 * @param endpoints
 	 */
-	public ZigBeeNodeImpl(Long IEEEAddress, short nwkAddress, String hostPId, ZigBeeEndpoint[] endpoints) {
+	public ZigBeeNodeImpl(Long IEEEAddress, int nwkAddress, String hostPId, ZigBeeEndpoint[] endpoints) {
 		this.IEEEAddress = IEEEAddress;
 		this.nwkAddress = nwkAddress;
 		this.hostPId = hostPId;
@@ -43,7 +43,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	 * @param nodeDesc
 	 * @param powerDesc
 	 */
-	public ZigBeeNodeImpl(Long IEEEAddress, short nwkAddress, String hostPId, ZigBeeEndpoint[] endpoints, ZigBeeNodeDescriptor nodeDesc, ZigBeePowerDescriptor powerDesc) {
+	public ZigBeeNodeImpl(Long IEEEAddress, int nwkAddress, String hostPId, ZigBeeEndpoint[] endpoints, ZigBeeNodeDescriptor nodeDesc, ZigBeePowerDescriptor powerDesc) {
 		this.IEEEAddress = IEEEAddress;
 		this.nwkAddress = nwkAddress;
 		this.hostPId = hostPId;
@@ -56,7 +56,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		return this.IEEEAddress;
 	}
 
-	public short getNetworkAddress() {
+	public int getNetworkAddress() {
 		return this.nwkAddress;
 	}
 
@@ -64,7 +64,7 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		return this.hostPId;
 	}
 
-	public Integer getPanId() {
+	public int getPanId() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -74,12 +74,21 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		return null;
 	}
 
-	public ZigBeeEndpoint[] getEndpoints() {
-		return endpoints;
+	public int[] getEndpoints() {
+		int i = endpoints.length;
+		int[] endpointsIds = new int[i];
+		for (int j = 0; j < i; j = j + 1) {
+			endpointsIds[j] = endpoints[j].getId();
+		}
+		return endpointsIds;
 	}
 
-	public ZigBeeEndpoint getEndpoint(short id) {
-		// TODO Auto-generated method stub
+	public ZigBeeEndpoint getEndpoint(int id) {
+		for (int j = 0; j < endpoints.length; j = j + 1) {
+			if (id == endpoints[j].getId()) {
+				return endpoints[j];
+			}
+		}
 		return null;
 	}
 

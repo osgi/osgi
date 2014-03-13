@@ -159,8 +159,10 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
 
-		ZigBeeEndpoint[] endpoints = dev.getEndpoints();
-		ZigBeeEndpoint endpoint = endpoints[0];
+		int[] endpointIds = dev.getEndpoints();
+		assertNotNull("endpointIds is NULL", endpointIds);
+		assertNotNull("endpointIds[0] is NULL", endpointIds[0]);
+		ZigBeeEndpoint endpoint = dev.getEndpoint(endpointIds[0]);
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 
 		log("ZigBeeEndpoint ENDPOINT: " + endpoint.getId());
@@ -241,8 +243,10 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
 
-		ZigBeeEndpoint[] endpoints = dev.getEndpoints();
-		ZigBeeEndpoint endpoint = endpoints[0];
+		int[] endpointIds = dev.getEndpoints();
+		assertNotNull("endpointIds is NULL", endpointIds);
+		assertNotNull("endpointIds[0] is NULL", endpointIds[0]);
+		ZigBeeEndpoint endpoint = dev.getEndpoint(endpointIds[0]);
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 
 		ZCLCluster[] clusters = endpoint.getClientClusters();
@@ -284,8 +288,10 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
 
-		ZigBeeEndpoint[] endpoints = dev.getEndpoints();
-		ZigBeeEndpoint endpoint = endpoints[0];
+		int[] endpointIds = dev.getEndpoints();
+		assertNotNull("endpointIds is NULL", endpointIds);
+		assertNotNull("endpointIds[0] is NULL", endpointIds[0]);
+		ZigBeeEndpoint endpoint = dev.getEndpoint(endpointIds[0]);
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 
 		ZCLCluster[] clusters = endpoint.getClientClusters();
@@ -316,8 +322,10 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
 
-		ZigBeeEndpoint[] endpoints = dev.getEndpoints();
-		ZigBeeEndpoint endpoint = endpoints[0];
+		int[] endpointIds = dev.getEndpoints();
+		assertNotNull("endpointIds is NULL", endpointIds);
+		assertNotNull("endpointIds[0] is NULL", endpointIds[0]);
+		ZigBeeEndpoint endpoint = dev.getEndpoint(endpointIds[0]);
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 
 		ZCLCluster[] clusters = endpoint.getServerClusters();
@@ -379,12 +387,14 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		log("---- testControl");
 
 		// device
-		ZigBeeNode device = listener.getZigBeeNode();
-		assertNotNull("ZigBeeNode is NULL", device);
+		ZigBeeNode dev = listener.getZigBeeNode();
+		assertNotNull("ZigBeeNode is NULL", dev);
 
 		// endpoints
-		ZigBeeEndpoint[] endpoints = device.getEndpoints();
-		ZigBeeEndpoint endpoint = endpoints[0];
+		int[] endpointIds = dev.getEndpoints();
+		assertNotNull("endpointIds is NULL", endpointIds);
+		assertNotNull("endpointIds[0] is NULL", endpointIds[0]);
+		ZigBeeEndpoint endpoint = dev.getEndpoint(endpointIds[0]);
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 
 		// clusters
@@ -552,12 +562,14 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		log("---- testEventing");
 
 		// device
-		ZigBeeNode device = listener.getZigBeeNode();
-		assertNotNull("ZigBeeNode is NULL", device);
+		ZigBeeNode dev = listener.getZigBeeNode();
+		assertNotNull("ZigBeeNode is NULL", dev);
 
 		// endpoints
-		ZigBeeEndpoint[] endpoints = device.getEndpoints();
-		ZigBeeEndpoint endpoint = endpoints[0];
+		int[] endpointIds = dev.getEndpoints();
+		assertNotNull("endpointIds is NULL", endpointIds);
+		assertNotNull("endpointIds[0] is NULL", endpointIds[0]);
+		ZigBeeEndpoint endpoint = dev.getEndpoint(endpointIds[0]);
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
 
 		// clusters

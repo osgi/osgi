@@ -28,7 +28,7 @@ public interface ZigBeeSimpleDescriptor {
 	/**
 	 * @return the application profile id.
 	 */
-	public Integer getApplicationProfileId();
+	public int getApplicationProfileId();
 
 	/**
 	 * @return device id as defined per profile.
@@ -49,26 +49,26 @@ public interface ZigBeeSimpleDescriptor {
 	 * @return An array of input(server) cluster identifiers, returns an empty
 	 *         array if does not provides any inputs(servers) clusters.
 	 */
-	public int[] getInputClusterList();
+	public int[] getInputClusters();
 
 	/**
 	 * @return An array of output(client) cluster identifiers, returns an empty
 	 *         array if does not provides any outputs(clients) clusters.
 	 */
-	public int[] getOutputClusterList();
+	public int[] getOutputClusters();
 
 	/**
-	 * @param id the cluster identifier
+	 * @param clusterId the cluster identifier
 	 * @return true if and only if the endpoint implements the given cluster id
 	 *         as an input cluster
 	 */
-	public boolean providesInputCluster(int id);
+	public boolean providesInputCluster(int clusterId);
 
 	/**
-	 * @param id the cluster identifier
+	 * @param clusterId the cluster identifier
 	 * @return true if and only if the endpoint implements the given cluster id
 	 *         as an output cluster
 	 */
-	public boolean providesOutputCluster(int id);
+	public boolean providesOutputCluster(int clusterId);
 
 }

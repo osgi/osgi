@@ -119,7 +119,7 @@ public interface ZigBeeNode {
 	 * message transfer. <br>
 	 * It is <b>optional</b> property for this service
 	 */
-	public static final String	MAXIMUM_INCOMING_TRANSFERT_SIZE	= "zigbee.node.description.maximum.incoming.transfet.size";
+	public static final String	MAXIMUM_INCOMING_TRANSFERT_SIZE	= "zigbee.node.description.maximum.incoming.transfert.size";
 
 	/**
 	 * Property key for the current sleep/power-saving mode of the node.
@@ -156,7 +156,10 @@ public interface ZigBeeNode {
 	public static final String	PAN_ID							= "zigbee.node.pan.id";
 
 	/**
-	 * Key of {@link String} containing the device node network extended PAN ID
+	 * Key of {@link String} containing the device node network extended PAN ID.
+	 * If the device type is “Coordinator”, the extended pan id may be available
+	 * only after the network is started. It means that internally the
+	 * ZigBeeHost interface must update the service properties.
 	 */
 	public static final String	EXTENDED_PAN_ID					= "zigbee.node.extended.pan.id";
 
@@ -175,19 +178,19 @@ public interface ZigBeeNode {
 	public static final String	RECEIVER_ON_WHEN_IDLE			= "zigbee.node.receiver.on.when.idle";
 
 	/**
-	 * ZigBee coordinator
+	 * ZigBee coordinator type
 	 */
-	public static final short	COORDINATOR						= 0;
+	public static final short	COORDINATOR_TYPE				= 0;
 
 	/**
-	 * ZigBee router
+	 * ZigBee router type
 	 */
-	public static final short	ROUTER							= 1;
+	public static final short	ROUTER_TYPE						= 1;
 
 	/**
-	 * ZigBee end device
+	 * ZigBee end device type
 	 */
-	public static final short	END_DEVICE						= 2;
+	public static final short	END_DEVICE_TYPE					= 2;
 
 	/**
 	 * @return The ZigBee device node IEEE Address.
@@ -197,7 +200,7 @@ public interface ZigBeeNode {
 	/**
 	 * @return The ZigBee device node current network address.
 	 */
-	public short getNetworkAddress();
+	public int getNetworkAddress();
 
 	/**
 	 * @return The ZigBee Host OSGi service PID.
@@ -207,7 +210,7 @@ public interface ZigBeeNode {
 	/**
 	 * @return The network Personal Area Network identifier(PAND ID)
 	 */
-	public Integer getPanId();
+	public int getPanId();
 
 	/**
 	 * @return The network Extended PAN identifier(EPID)
@@ -215,16 +218,16 @@ public interface ZigBeeNode {
 	public Long getExtendedPanId();
 
 	/**
-	 * @return an array of all the endpoints associated with the ZigBee device
-	 *         node.
+	 * @return an array of all the endpoints' id associated with the ZigBee
+	 *         device node.
 	 */
-	public ZigBeeEndpoint[] getEndpoints();
+	public int[] getEndpoints();
 
 	/**
 	 * @param id The endpoint identifier to be retrieved.
 	 * @return The endpoint associated with id.
 	 */
-	public ZigBeeEndpoint getEndpoint(short id);
+	public ZigBeeEndpoint getEndpoint(int id);
 
 	/**
 	 * @return the node descriptor.

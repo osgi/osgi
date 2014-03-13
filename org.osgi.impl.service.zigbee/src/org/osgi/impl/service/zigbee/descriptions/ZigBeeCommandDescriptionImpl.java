@@ -1,6 +1,8 @@
 
 package org.osgi.impl.service.zigbee.descriptions;
 
+import org.osgi.service.zigbee.ZCLFrame;
+import org.osgi.service.zigbee.ZCLHeader;
 import org.osgi.service.zigbee.descriptions.ZigBeeCommandDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeParameterDescription;
 
@@ -59,12 +61,12 @@ public class ZigBeeCommandDescriptionImpl implements ZigBeeCommandDescription {
 		return parametersDesc;
 	}
 
-	public byte[] serialize(Object[] javaValues) {
+	public ZCLFrame serialize(ZCLHeader header, Object[] javaValues) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Object[] deserialize(byte[] bytes) {
+	public Object[] deserialize(ZCLFrame frame) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -83,4 +85,5 @@ public class ZigBeeCommandDescriptionImpl implements ZigBeeCommandDescription {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
 }

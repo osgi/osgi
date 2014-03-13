@@ -16,6 +16,9 @@
 
 package org.osgi.service.zigbee.descriptions;
 
+import org.osgi.service.zigbee.ZCLFrame;
+import org.osgi.service.zigbee.ZCLHeader;
+
 /**
  * This interface represents a ZigBee Command description
  * 
@@ -48,24 +51,23 @@ public interface ZigBeeCommandDescription {
 	ZigBeeParameterDescription[] getParameterDescriptions();
 
 	/**
-	 * Serialize javaValues to byte[]. This byte[] can them be used in
-	 * org.osgi.service.zigbee.ZigBeeCommand.invoke(byte[] bytes,
-	 * ZigBeeCommandHandler handler) throws ZigBeeException.
+	 * Serialize javaValues to a ZCLFrame that can them be used in invocations
+	 * (e.g. via ZigBeeCluster, or ZigBeeGroup).
 	 * 
+	 * @param header the ZCLFrame's header
 	 * @param javaValues ordered java values
 	 * @return serialized javaValues as a byte[]
 	 */
-	byte[] serialize(Object[] javaValues);
+	ZCLFrame serialize(ZCLHeader header, Object[] javaValues);
 
 	/**
-	 * Deserialize byte[] to javaValues. This byte[] is expected to be a result
-	 * of the invocation of org.osgi.service.zigbee.ZigBeeCommand.invoke(byte[]
-	 * bytes, ZigBeeCommandHandler handler) throws ZigBeeException.
+	 * Deserialize ZCLFrame to javaValues. This ZCLFrame is expected to be a
+	 * result of an invocation. (e.g. via ZigBeeCluster, or ZigBeeGroup).
 	 * 
-	 * @param bytes ordered javaValues' as a byte[]
-	 * @return deserialized byte[] as javaValues
+	 * @param frame the ZCLFrame
+	 * @return deserialized Object[] as javaValues
 	 */
-	Object[] deserialize(byte[] bytes);
+	Object[] deserialize(ZCLFrame frame);
 
 	/**
 	 * @return the isClusterSpecificCommand value
