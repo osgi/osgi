@@ -297,7 +297,9 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			cluster = clusters[0];
 		}
 
-		int commandId = cluster.getCommandIds()[0];
+		ZigBeeMapHandlerImpl zigBeeMapHandler = new ZigBeeMapHandlerImpl();
+		cluster.getCommandIds(zigBeeMapHandler);
+		int commandId = ((int[]) zigBeeMapHandler.getSuccessResponse().get("CommandIds"))[0];
 		log("ZigBeeCommand ID: " + commandId);
 		assertNotNull("ZigBeeCommand ID is NULL", commandId);
 		assertEquals("Command identifier not matched",
@@ -323,8 +325,9 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		if (clusters != null && clusters.length != 0) {
 			cluster = clusters[0];
 		}
-
-		ZigBeeAttribute attribute = cluster.getAttributes()[0];
+		ZigBeeMapHandlerImpl zigBeeMapHandler = new ZigBeeMapHandlerImpl();
+		cluster.getAttributes(zigBeeMapHandler);
+		ZigBeeAttribute attribute = ((ZigBeeAttribute[]) zigBeeMapHandler.getSuccessResponse().get("Attributes"))[0];
 		assertNotNull("ZigBeeAttribute is NULL", attribute);
 
 		log("ZigBeeAttribute ID: " + attribute.getId());
@@ -429,7 +432,9 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		// Test "control" methods of ZigBeeAttribute.
 
 		// attributes
-		ZigBeeAttribute[] attributes = cluster.getAttributes();
+		ZigBeeMapHandlerImpl zigBeeMapHandler = new ZigBeeMapHandlerImpl();
+		cluster.getAttributes(zigBeeMapHandler);
+		ZigBeeAttribute[] attributes = (ZigBeeAttribute[]) zigBeeMapHandler.getSuccessResponse().get("Attributes");
 		log("attributes: " + attributes);
 
 		ZigBeeAttribute attribute = attributes[8];
@@ -476,7 +481,9 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		// Test "control" methods of ZigBeeCluster.
 
 		// cluster
-		int[] commandIds = cluster.getCommandIds();
+		zigBeeMapHandler = new ZigBeeMapHandlerImpl();
+		cluster.getCommandIds(zigBeeMapHandler);
+		int[] commandIds = (int[]) zigBeeMapHandler.getSuccessResponse().get("CommandIds");
 		assertNotNull("ZigBeeCluster has no command", commandIds.length);
 		int commandId = commandIds[0];
 		assertNotNull("ZigBeeCommand ID is NULL", commandId);

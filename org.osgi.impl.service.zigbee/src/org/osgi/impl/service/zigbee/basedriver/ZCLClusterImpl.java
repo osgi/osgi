@@ -17,8 +17,8 @@ import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
  */
 public class ZCLClusterImpl implements ZCLCluster {
 
-	private Integer					id;
-	private ZigBeeAttributeImpl[]	attributes;
+	private int						id;
+	private ZigBeeAttribute[]		attributes;
 	private int[]					commandIds;
 	private ZCLClusterDescription	description;
 
@@ -34,27 +34,33 @@ public class ZCLClusterImpl implements ZCLCluster {
 	 * @param attributes
 	 * @param desc
 	 */
-	public ZCLClusterImpl(int[] commandIds, ZigBeeAttributeImpl[] attributes, ZCLClusterDescription desc) {
-		id = desc.getId();
+	public ZCLClusterImpl(int[] commandIds, ZigBeeAttribute[] attributes, ZCLClusterDescription desc) {
+		this.id = desc.getId();
 		this.commandIds = commandIds;
 		this.attributes = attributes;
 		this.description = desc;
 	}
 
-	public Integer getId() {
+	public int getId() {
 		return id;
 	}
 
-	public ZigBeeAttribute getAttribute(int attributeId) {
-		return attributes[attributeId];
+	public void getAttribute(int attributeId, ZigBeeMapHandler handler) {
+		Map response = new HashMap<String, Object>();
+		response.put("Attributes", attributes[attributeId]);
+		handler.onSuccess(response);
 	}
 
-	public ZigBeeAttribute[] getAttributes() {
-		return attributes;
+	public void getAttributes(ZigBeeMapHandler handler) {
+		Map response = new HashMap<String, Object>();
+		response.put("Attributes", this.attributes);
+		handler.onSuccess(response);
 	}
 
-	public String toString() {
-		return description.getGlobalClusterDescription().getClusterName();
+	public void getCommandIds(ZigBeeMapHandler handler) {
+		Map response = new HashMap<String, Object>();
+		response.put("CommandIds", this.commandIds);
+		handler.onSuccess(response);
 	}
 
 	public void readAttributes(int[] attributesIds, ZigBeeMapHandler handler) {
@@ -62,7 +68,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 		Map<Integer, byte[]> response = new HashMap<Integer, byte[]>();
 		int i = 0;
 		// for (int i : attributesIds) {
-		ZigBeeAttributeImpl attribute = attributes[i];
+		ZigBeeAttribute attribute = attributes[i];
 		byte[] attributeValue = {0};
 		response.put(attribute.getId(), attributeValue);
 		// }
@@ -73,10 +79,6 @@ public class ZCLClusterImpl implements ZCLCluster {
 		// TODO Auto-generated method stub
 	}
 
-	public int[] getCommandIds() {
-		return this.commandIds;
-	}
-
 	public void invoke(ZCLFrame frame, ZigBeeCommandHandler handler) throws ZigBeeException {
 		// mocked invocation.
 		handler.notifyResponse(frame);
@@ -85,6 +87,10 @@ public class ZCLClusterImpl implements ZCLCluster {
 	public void invoke(ZCLFrame frame, ZigBeeCommandHandler handler, String exportedServicePID) throws ZigBeeException {
 		// mocked invocation.
 		handler.notifyResponse(frame);
+	}
+
+	public String toString() {
+		return description.getGlobalClusterDescription().getClusterName();
 	}
 
 }

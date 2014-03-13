@@ -39,6 +39,11 @@ public interface ZCLHeader {
 	int getManufacturerCode();
 
 	/**
+	 * @return the transaction sequence number
+	 */
+	short getTransactionSequenceNumber();
+
+	/**
 	 * @return the isClusterSpecificCommand value
 	 */
 	boolean isClusterSpecificCommand();
