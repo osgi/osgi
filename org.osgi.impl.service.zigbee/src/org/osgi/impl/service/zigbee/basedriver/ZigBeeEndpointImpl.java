@@ -19,8 +19,8 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 
 	/**
 	 * @param id
-	 * @param inputs
-	 * @param ouputs
+	 * @param inputs i.e. ServerClusters
+	 * @param ouputs i.e. ClientClusters
 	 * @param desc
 	 */
 	public ZigBeeEndpointImpl(int id, ZCLCluster[] inputs, ZCLCluster[] ouputs, ZigBeeSimpleDescriptor desc) {
@@ -30,9 +30,8 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		this.desc = desc;
 	}
 
-	public Integer getId() {
-		// TODO Auto-generated method stub
-		return id;
+	public int getId() {
+		return this.id;
 	}
 
 	public Long getNodeAddress() {
@@ -46,22 +45,18 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 	}
 
 	public ZCLCluster[] getServerClusters() {
-		// TODO Auto-generated method stub
 		return inputs;
 	}
 
 	public ZCLCluster getServerCluster(int serverClusterId) {
-		// TODO Auto-generated method stub
 		return inputs[serverClusterId];
 	}
 
 	public ZCLCluster[] getClientClusters() {
-		// TODO Auto-generated method stub
 		return outputs;
 	}
 
 	public ZCLCluster getClientCluster(int clientClusterId) {
-		// TODO Auto-generated method stub
 		return outputs[clientClusterId];
 	}
 

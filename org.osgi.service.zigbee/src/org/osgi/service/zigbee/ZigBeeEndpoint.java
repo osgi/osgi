@@ -95,7 +95,7 @@ public interface ZigBeeEndpoint {
 	 * @return identifier of the endpoint represented by this object, value
 	 *         ranges from 1 to 240.
 	 */
-	public Integer getId();
+	public int getId();
 
 	/**
 	 * @return The IEEE Address of the node containing this endpoint
@@ -117,8 +117,10 @@ public interface ZigBeeEndpoint {
 	/**
 	 * @param serverClusterId The server(input) cluster identifier
 	 * @return the server(input) cluster identified by id
+	 * @throws ZigBeeException if the given id is not listed in the simple
+	 *         descriptor
 	 */
-	public ZCLCluster getServerCluster(int serverClusterId);
+	public ZCLCluster getServerCluster(int serverClusterId) throws ZigBeeException;
 
 	/**
 	 * @return An array of clients(outputs) clusters, returns an empty array if
@@ -129,8 +131,10 @@ public interface ZigBeeEndpoint {
 	/**
 	 * @param clientClusterId The client(output) cluster identifier
 	 * @return the client(output) cluster identified by id
+	 * @throws ZigBeeException if the given id is not listed in the simple
+	 *         descriptor
 	 */
-	public ZCLCluster getClientCluster(int clientClusterId);
+	public ZCLCluster getClientCluster(int clientClusterId) throws ZigBeeException;
 
 	/**
 	 * This method modify the <i>Binding Table</i> of physical device by adding
