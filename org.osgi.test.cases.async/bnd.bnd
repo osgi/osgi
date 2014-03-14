@@ -14,9 +14,7 @@ Import-Package: ${-signaturetest}, *
 	${junit}
 
 -runbundles						= \
-	org.osgi.service.async; version=latest,\
-	org.osgi.util.promise; version=6.0.0,\
-	org.osgi.impl.service.async; version=6.0.0
+	org.osgi.impl.service.async; version=latest
 
 -runproperties = ${runproperties}
 

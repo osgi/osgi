@@ -253,7 +253,53 @@ public synchronized void doStuff() {
   <section xml:id="async_service_main_body">
     <title>Async Service</title>
 
-   <para>***** TODO *****</para>
+    <para>The Async service is the primary interaction point between a client and the 
+    Async Service implementation. An Async Services implementation must expose a service 
+    implementing the <code>org.osgi.service.async.Async</code> interface. Clients obtain 
+    an instance of the Async Service using the normal OSGi service registry mechanisms, 
+    either directly using the OSGi framework API, or using dependency injection.</para>
+    
+    
+    <para>The Async service is used to:</para>
+    <itemizedlist>
+      <listitem>
+        <para>Create async mediators</para>
+      </listitem>
+
+      <listitem>
+        <para>Begin asynchronous invocations</para>
+      </listitem>
+
+      <listitem>
+        <para>Obtain Promise objects representing the result of the asynchronous invocation</para>
+      </listitem>
+    </itemizedlist>
+   
+    <section>
+      <title>Creating an Async Mediator</title>
+    </section>
+   
+    <section>
+      <title>Thread safety and instance sharing</title>
+      
+      <para>Implementations of the Async service must be thread safe. They should be safe to 
+      use simultaneously across multiple clients and from multiple threads within the same client.
+      </para>
+      
+      <para>Async mediators, unlike instances of the Async service, are not required to be thread
+      safe. Clients should not share mediator objects with other bundles, or accross threads.
+      </para>
+    
+      <para>It is expected, although not required, that the Async service implementation will
+      use a Service Factory to create customized implementations for each client bundle. This
+      simplifies the tracking of the relevant client bundle context to use when performing
+      service lookups on the client bundle's behalf. Clients should therefore not share
+      instances of the Async service with other bundles. Instead both bundles should obtain
+      their own instances from the service registry.</para>
+    
+    </section>
+    
+    
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.async.xml"/>
