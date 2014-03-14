@@ -18,6 +18,8 @@ package org.osgi.util.promise;
 
 import java.lang.reflect.InvocationTargetException;
 import org.osgi.annotation.versioning.ProviderType;
+import org.osgi.util.function.Function;
+import org.osgi.util.function.Predicate;
 
 /**
  * A Promise of a value.
@@ -230,4 +232,118 @@ public interface Promise<T> {
 	 * @see #then(Success, Failure)
 	 */
 	<R, S extends R> Promise<R> then(Success<? super T, S> success);
+
+	/**
+	 * Filter the value of this Promise.
+	 * 
+	 * <p>
+	 * If this Promise is successfully resolved, the returned Promise will
+	 * either be resolved with the value of this Promise if the specified
+	 * Predicate accepts that value or failed with a
+	 * {@code NoSuchElementException} if the specified Predicate does not accept
+	 * that value. If the specified Predicate throws an exception, the returned
+	 * Promise will be failed with the exception.
+	 * 
+	 * <p>
+	 * If this Promise is resolved with a failure, the returned Promise will be
+	 * failed with that failure.
+	 * 
+	 * @param predicate The Predicate to evaluate the value of this Promise.
+	 * @return A Promise that filters the value of this Promise.
+	 */
+	Promise<T> filter(Predicate<? super T> predicate);
+
+	/**
+	 * Map the value of this Promise.
+	 * 
+	 * <p>
+	 * If this Promise is successfully resolved, the returned Promise will be
+	 * resolved with the value of specified Function as applied to the value of
+	 * this Promise. If the specified Function throws an exception, the returned
+	 * Promise will be failed with the exception.
+	 * 
+	 * <p>
+	 * If this Promise is resolved with a failure, the returned Promise will be
+	 * failed with that failure.
+	 * 
+	 * @param <R> The value type associated with the returned Promise.
+	 * @param <S> A subtype of the value type associated with the returned
+	 *        Promise.
+	 * @param mapper The Function that will map the value of this Promise to the
+	 *        value that will be used to resolve the returned Promise.
+	 * @return A Promise that returns the value of this Promise as mapped by the
+	 *         specified Function.
+	 */
+	<R, S extends R> Promise<R> map(Function<? super T, S> mapper);
+
+	/**
+	 * FlatMap the value of this Promise.
+	 * 
+	 * <p>
+	 * If this Promise is successfully resolved, the returned Promise will be
+	 * resolved with the Promise from the specified Function as applied to the
+	 * value of this Promise. If the specified Function throws an exception, the
+	 * returned Promise will be failed with the exception.
+	 * 
+	 * <p>
+	 * If this Promise is resolved with a failure, the returned Promise will be
+	 * failed with that failure.
+	 * 
+	 * @param <R> The value type associated with the returned Promise.
+	 * @param <S> A subtype of the value type associated with the returned
+	 *        Promise.
+	 * @param mapper The Function that will flatMap the value of this Promise to
+	 *        a Promise that will be used to resolve the returned Promise.
+	 * @return A Promise that returns the value of this Promise as mapped by the
+	 *         specified Function.
+	 */
+	<R, S extends R> Promise<R> flatMap(Function<? super T, Promise<S>> mapper);
+
+	/**
+	 * Recover from a failure of this Promise.
+	 * 
+	 * <p>
+	 * If this Promise is successfully resolved, the returned Promise will be
+	 * resolved with the value of this Promise.
+	 * 
+	 * <p>
+	 * If this Promise is resolved with a failure, the specified Function is
+	 * applied to this Promise and the function value is used to resolve the
+	 * returned Promise. If the function value is not {@code null}, the returned
+	 * Promise will be resolved with the value. If the function value is
+	 * {@code null}, the returned Promise will be failed with the failure of
+	 * this Promise. If the specified Function throws an exception, the returned
+	 * Promise will be failed with the exception.
+	 * 
+	 * @param <S> A subtype of the value type associated with this Promise.
+	 * @param recovery The Function whose value will be used to resolve the
+	 *        returned Promise if this Promise resolves with a failure.
+	 * @return A Promise that returns the value of this Promise or recovers from
+	 *         the failure of this Promise.
+	 */
+	<S extends T> Promise<T> recover(Function<Promise<?>, S> recovery);
+
+	/**
+	 * Recover from a failure of this Promise.
+	 * 
+	 * <p>
+	 * If this Promise is successfully resolved, the returned Promise will be
+	 * resolved with the value of this Promise.
+	 * 
+	 * <p>
+	 * If this Promise is resolved with a failure, the specified Function is
+	 * applied to this Promise and the function value Promise is used to resolve
+	 * the returned Promise. If the function value Promise is not {@code null},
+	 * the returned Promise will be resolved with the value Promise. If the
+	 * function value is {@code null}, the returned Promise will be failed with
+	 * the failure of this Promise. If the specified Function throws an
+	 * exception, the returned Promise will be failed with the exception.
+	 * 
+	 * @param <S> A subtype of the value type associated with this Promise.
+	 * @param recovery The Function whose value Promise will be used to resolve
+	 *        the returned Promise if this Promise resolves with a failure.
+	 * @return A Promise that returns the value of this Promise or recovers from
+	 *         the failure of this Promise.
+	 */
+	<S extends T> Promise<T> recoverWith(Function<Promise<?>, Promise<S>> recovery);
 }

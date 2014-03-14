@@ -17,8 +17,11 @@
 package org.osgi.util.promise;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.NoSuchElementException;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.CountDownLatch;
+import org.osgi.util.function.Function;
+import org.osgi.util.function.Predicate;
 
 /**
  * Promise implementation.
@@ -375,10 +378,175 @@ final class PromiseImpl<T> implements Promise<T> {
 	}
 
 	/**
+	 * {@inheritDoc}
+	 */
+	public Promise<T> filter(Predicate<? super T> predicate) {
+		return then(new Filter<T>(predicate));
+	}
+
+	/**
+	 * A callback used by the {@link PromiseImpl#filter(Predicate)} method.
+	 * 
+	 * @Immutable
+	 */
+	private static final class Filter<T> implements Success<T, T> {
+		private final Predicate<? super T>	predicate;
+
+		Filter(Predicate<? super T> predicate) {
+			this.predicate = predicate;
+		}
+
+		public Promise<T> call(Promise<T> resolved) throws Exception {
+			if (predicate.test(resolved.getValue())) {
+				return resolved;
+			}
+			throw new NoSuchElementException();
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public <R, S extends R> Promise<R> map(Function<? super T, S> mapper) {
+		return then(new Map<T, S>(mapper));
+	}
+
+	/**
+	 * A callback used by the {@link PromiseImpl#map(Function)} method.
+	 * 
+	 * @Immutable
+	 */
+	private static final class Map<T, S> implements Success<T, S> {
+		private final Function<? super T, S>	mapper;
+
+		Map(Function<? super T, S> mapper) {
+			this.mapper = mapper;
+		}
+
+		public Promise<S> call(Promise<T> resolved) throws Exception {
+			return new PromiseImpl<S>(mapper.apply(resolved.getValue()), null);
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public <R, S extends R> Promise<R> flatMap(Function<? super T, Promise<S>> mapper) {
+		return then(new FlatMap<T, S>(mapper));
+	}
+
+	/**
+	 * A callback used by the {@link PromiseImpl#flatMap(Function)} method.
+	 * 
+	 * @Immutable
+	 */
+	private static final class FlatMap<T, S> implements Success<T, S> {
+		private final Function<? super T, Promise<S>>	mapper;
+
+		FlatMap(Function<? super T, Promise<S>> mapper) {
+			this.mapper = mapper;
+		}
+
+		public Promise<S> call(Promise<T> resolved) throws Exception {
+			return mapper.apply(resolved.getValue());
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public <S extends T> Promise<T> recover(Function<Promise<?>, S> recovery) {
+		PromiseImpl<T> chained = new PromiseImpl<T>();
+		Recover<T, S> recover = new Recover<T, S>(chained, recovery);
+		then(recover, recover);
+		return chained;
+	}
+
+	/**
+	 * A callback used by the {@link PromiseImpl#recover(Function)} method.
+	 * 
+	 * @Immutable
+	 */
+	private static final class Recover<T, S extends T> implements Success<T, Void>, Failure {
+		private final PromiseImpl<T>					chained;
+		private final Function<Promise<?>, S>	recovery;
+
+		Recover(PromiseImpl<T> chained, Function<Promise<?>, S> recovery) {
+			this.chained = chained;
+			this.recovery = recovery;
+		}
+
+		public Promise<Void> call(Promise<T> resolved) throws Exception {
+			chained.resolve(resolved.getValue(), null);
+			return null;
+		}
+
+		public void fail(Promise<?> resolved) throws Exception {
+			S recovered;
+			try {
+				recovered = recovery.apply(resolved);
+			} catch (Throwable e) {
+				chained.resolve(null, e);
+				return;
+			}
+			if (recovered == null) {
+				chained.resolve(null, resolved.getFailure());
+			} else {
+				chained.resolve(recovered, null);
+			}
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public <S extends T> Promise<T> recoverWith(Function<Promise<?>, Promise<S>> recovery) {
+		PromiseImpl<T> chained = new PromiseImpl<T>();
+		RecoverWith<T, S> recoverWith = new RecoverWith<T, S>(chained, recovery);
+		then(recoverWith, recoverWith);
+		return chained;
+	}
+
+	/**
+	 * A callback used by the {@link PromiseImpl#recoverWith(Function)} method.
+	 * 
+	 * @Immutable
+	 */
+	private static final class RecoverWith<T, S extends T> implements Success<T, Void>, Failure {
+		private final PromiseImpl<T>								chained;
+		private final Function<Promise<?>, Promise<S>>	recovery;
+
+		RecoverWith(PromiseImpl<T> chained, Function<Promise<?>, Promise<S>> recovery) {
+			this.chained = chained;
+			this.recovery = recovery;
+		}
+
+		public Promise<Void> call(Promise<T> resolved) throws Exception {
+			chained.resolve(resolved.getValue(), null);
+			return null;
+		}
+
+		public void fail(Promise<?> resolved) throws Exception {
+			Promise<S> recovered;
+			try {
+				recovered = recovery.apply(resolved);
+			} catch (Throwable e) {
+				chained.resolve(null, e);
+				return;
+			}
+			if (recovered == null) {
+				chained.resolve(null, resolved.getFailure());
+			} else {
+				recovered.onResolve(new Chain<T, S>(chained, recovered));
+			}
+		}
+	}
+
+	/**
 	 * Use the lazy initialization holder class idiom to delay creating a Logger
 	 * until we actually need it.
 	 */
-	private static class Logger {
+	private static final class Logger {
 		private final static java.util.logging.Logger	LOGGER;
 		static {
 			LOGGER = java.util.logging.Logger.getLogger(PromiseImpl.class.getName());

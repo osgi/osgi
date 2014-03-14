@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -30,6 +31,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
+import org.osgi.util.function.Function;
+import org.osgi.util.function.Predicate;
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.FailedPromisesException;
 import org.osgi.util.promise.Failure;
@@ -60,6 +63,17 @@ public class PromiseTest extends TestCase {
 	public static void fail(String message, Throwable t) {
 		AssertionFailedError e = new AssertionFailedError(message + ": "
 				+ t.getMessage());
+		e.initCause(t);
+		throw e;
+	}
+
+	/**
+	 * Fail with cause t.
+	 * 
+	 * @param t Cause of the failure.
+	 */
+	public static void fail(Throwable t) {
+		AssertionFailedError e = new AssertionFailedError(t.getMessage());
 		e.initCause(t);
 		throw e;
 	}
@@ -892,7 +906,7 @@ public class PromiseTest extends TestCase {
 			// expected
 		}
 	}
-	
+
 	public void testResolveWithSuccess() throws Exception {
 		final Deferred<Integer> d1 = new Deferred<Integer>();
 		final CountDownLatch latch1 = new CountDownLatch(1);
@@ -1125,6 +1139,440 @@ public class PromiseTest extends TestCase {
 		}
 		assertNull("wrong failure", p3.getFailure());
 		assertNull("wrong value", p3.getValue());
+	}
+
+	public void testFilter() throws Exception {
+		String value1 = new String("value");
+		String value3 = new String("");
+		Promise<String> p1 = Promises.newResolvedPromise(value1);
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		Promise<String> p2 = p1.filter(new Predicate<String>() {
+			public boolean test(String t) {
+				latch1.countDown();
+				return t.length() > 0;
+			}
+		});
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		Promise<String> p4 = p1.filter(new Predicate<String>() {
+			public boolean test(String t) {
+				latch2.countDown();
+				return t.length() == 0;
+			}
+		});
+		Promise<String> p3 = Promises.newResolvedPromise(value3);
+		final CountDownLatch latch3 = new CountDownLatch(1);
+		Promise<String> p5 = p3.filter(new Predicate<String>() {
+			public boolean test(String t) {
+				latch3.countDown();
+				return t.length() > 0;
+			}
+		});
+
+		assertTrue(p1.isDone());
+		assertTrue(p2.isDone());
+		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue(p3.isDone());
+		assertTrue(p4.isDone());
+		assertTrue(latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue(p5.isDone());
+		assertTrue(latch3.await(WAIT_TIME, TimeUnit.SECONDS));
+
+		assertSame("wrong value", value1, p1.getValue());
+		assertNull("wrong failure", p1.getFailure());
+		assertSame("wrong value", value1, p2.getValue());
+		assertNull("wrong failure", p2.getFailure());
+		assertSame("wrong value", value3, p3.getValue());
+		assertNull("wrong failure", p3.getFailure());
+		Throwable f4 = p4.getFailure();
+		assertNotNull("wrong failure", f4);
+		try {
+			p4.getValue();
+			fail("p4 getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong failure", f4, e.getCause());
+		}
+		Throwable f5 = p5.getFailure();
+		assertNotNull("wrong failure", f5);
+		assertTrue(f5 instanceof NoSuchElementException);
+		try {
+			p5.getValue();
+			fail("p5 getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong failure", f5, e.getCause());
+		}
+	}
+
+	public void testFilterException() throws Exception {
+		String value1 = new String("value");
+		final Error failure = new Error("fail");
+		Promise<String> p1 = Promises.newResolvedPromise(value1);
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		Promise<String> p2 = p1.filter(new Predicate<String>() {
+			public boolean test(String t) {
+				latch1.countDown();
+				throw failure;
+			}
+		}).filter(new Predicate<String>() {
+			public boolean test(String t) {
+				latch2.countDown();
+				return t.length() > 0;
+			}
+		});
+
+		assertTrue(p1.isDone());
+		assertTrue(p2.isDone());
+		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse(latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+
+		assertSame("wrong value", value1, p1.getValue());
+		assertNull("wrong failure", p1.getFailure());
+		assertSame("wrong failure", failure, p2.getFailure());
+		try {
+			p2.getValue();
+			fail("p2 getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong failure", failure, e.getCause());
+		}
+	}
+
+	public void testFilterFailed() throws Exception {
+		final Error failure = new Error("fail");
+		Promise<String> p1 = Promises.newFailedPromise(failure);
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		Promise<String> p2 = p1.filter(new Predicate<String>() {
+			public boolean test(String t) {
+				latch1.countDown();
+				return t.length() > 0;
+			}
+		});
+
+		assertTrue(p1.isDone());
+		assertTrue(p2.isDone());
+		assertFalse(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+
+		assertSame("wrong failure", failure, p2.getFailure());
+		try {
+			p2.getValue();
+			fail("p2 getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong failure", failure, e.getCause());
+		}
+	}
+
+	public void testMap() throws Exception {
+		Integer value1 = new Integer(42);
+		Promise<Integer> p1 = Promises.newResolvedPromise(value1);
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		Promise<Number> p2 = p1.map(new Function<Number, Long>() {
+			public Long apply(Number t) {
+				latch1.countDown();
+				return new Long(t.longValue());
+			}
+		});
+		Promise<String> p3 = p2.map(new Function<Number, String>() {
+			public String apply(Number t) {
+				latch2.countDown();
+				return t.toString();
+			}
+		});
+		assertTrue(p1.isDone());
+		assertTrue(p3.isDone());
+		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue(latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+
+		assertEquals("wrong value", value1.toString(), p3.getValue());
+		assertNull("wrong failure", p3.getFailure());
+	}
+
+	public void testMapException() throws Exception {
+		Integer value1 = new Integer(42);
+		final Error failure = new Error("fail");
+		Promise<Integer> p1 = Promises.newResolvedPromise(value1);
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		Promise<String> p2 = p1.map(new Function<Number, Long>() {
+			public Long apply(Number t) {
+				latch1.countDown();
+				throw failure;
+			}
+		}).map(new Function<Number, String>() {
+			public String apply(Number t) {
+				latch2.countDown();
+				return t.toString();
+			}
+		});
+		assertTrue(p1.isDone());
+		assertTrue(p2.isDone());
+		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse(latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+
+		assertSame("wrong failure", failure, p2.getFailure());
+		try {
+			p2.getValue();
+			fail("p2 getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong failure", failure, e.getCause());
+		}
+	}
+
+	public void testFlatMap() throws Exception {
+		Integer value1 = new Integer(42);
+		Promise<Integer> p1 = Promises.newResolvedPromise(value1);
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		Promise<Number> p2 = p1.flatMap(new Function<Number, Promise<Long>>() {
+			public Promise<Long> apply(Number t) {
+				latch1.countDown();
+				return Promises.newResolvedPromise(new Long(t.longValue()));
+			}
+		});
+		Promise<String> p3 = p2.flatMap(new Function<Number, Promise<String>>() {
+			public Promise<String> apply(Number t) {
+				latch2.countDown();
+				return Promises.newResolvedPromise(t.toString());
+			}
+		});
+		assertTrue(p1.isDone());
+		assertTrue(p2.isDone());
+		assertTrue(p3.isDone());
+		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue(latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+
+		assertEquals("wrong value", value1.toString(), p3.getValue());
+		assertNull("wrong failure", p3.getFailure());
+	}
+
+	public void testFlatMapException() throws Exception {
+		Integer value1 = new Integer(42);
+		final Error failure = new Error("fail");
+		Promise<Integer> p1 = Promises.newResolvedPromise(value1);
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		Promise<String> p2 = p1.flatMap(new Function<Number, Promise<Long>>() {
+			public Promise<Long> apply(Number t) {
+				latch1.countDown();
+				throw failure;
+			}
+		}).flatMap(new Function<Number, Promise<String>>() {
+			public Promise<String> apply(Number t) {
+				latch2.countDown();
+				return Promises.newResolvedPromise(t.toString());
+			}
+		});
+		assertTrue(p1.isDone());
+		assertTrue(p2.isDone());
+		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse(latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+
+		assertSame("wrong failure", failure, p2.getFailure());
+		try {
+			p2.getValue();
+			fail("p2 getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong failure", failure, e.getCause());
+		}
+	}
+
+	public void testRecoverNoFailure() throws Exception {
+		final Integer value1 = new Integer(42);
+		final Long value2 = new Long(43);
+		final Promise<Number> p1 = Promises.newResolvedPromise(value1);
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
+			public Long apply(Promise<?> t) {
+				latch1.countDown();
+				return value2;
+			}
+		});
+		assertTrue(p1.isDone());
+		assertTrue(p2.isDone());
+		assertFalse(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+
+		assertSame("wrong value", value1, p2.getValue());
+		assertNull("wrong failure", p2.getFailure());
+	}
+
+	public void testRecoverFailure() throws Exception {
+		final Throwable failure = new Error("fail");
+		final Long value2 = new Long(43);
+		final Promise<Number> p1 = Promises.newFailedPromise(failure);
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
+			public Long apply(Promise<?> t) {
+				latch1.countDown();
+				try {
+					assertSame(failure, t.getFailure());
+				} catch (InterruptedException e) {
+					fail(e);
+				}
+				return value2;
+			}
+		});
+		assertTrue(p1.isDone());
+		assertTrue(p2.isDone());
+		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+
+		assertSame("wrong value", value2, p2.getValue());
+		assertNull("wrong failure", p2.getFailure());
+	}
+
+	public void testRecoverFailureNull() throws Exception {
+		final Throwable failure = new Error("fail");
+		final Promise<Number> p1 = Promises.newFailedPromise(failure);
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
+			public Long apply(Promise<?> t) {
+				latch1.countDown();
+				try {
+					assertSame(failure, t.getFailure());
+				} catch (InterruptedException e) {
+					fail(e);
+				}
+				return null;
+			}
+		});
+		assertTrue(p1.isDone());
+		assertTrue(p2.isDone());
+		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+
+		assertSame("wrong failure", failure, p2.getFailure());
+		try {
+			p2.getValue();
+			fail("p2 getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong failure", failure, e.getCause());
+		}
+	}
+
+	public void testRecoverFailureException() throws Exception {
+		final Throwable failure1 = new Error("fail1");
+		final Error failure2 = new Error("fail2");
+		final Promise<Number> p1 = Promises.newFailedPromise(failure1);
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
+			public Long apply(Promise<?> t) {
+				latch1.countDown();
+				try {
+					assertSame(failure1, t.getFailure());
+				} catch (InterruptedException e) {
+					fail(e);
+				}
+				throw failure2;
+			}
+		});
+		assertTrue(p1.isDone());
+		assertTrue(p2.isDone());
+		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+
+		assertSame("wrong failure", failure2, p2.getFailure());
+		try {
+			p2.getValue();
+			fail("p2 getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong failure", failure2, e.getCause());
+		}
+	}
+
+	public void testRecoverWithNoFailure() throws Exception {
+		final Integer value1 = new Integer(42);
+		final Long value2 = new Long(43);
+		final Promise<Number> p1 = Promises.newResolvedPromise(value1);
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<Long>>() {
+			public Promise<Long> apply(Promise<?> t) {
+				latch1.countDown();
+				return Promises.newResolvedPromise(value2);
+			}
+		});
+		assertTrue(p1.isDone());
+		assertTrue(p2.isDone());
+		assertFalse(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+
+		assertSame("wrong value", value1, p2.getValue());
+		assertNull("wrong failure", p2.getFailure());
+	}
+
+	public void testRecoverWithFailure() throws Exception {
+		final Throwable failure = new Error("fail");
+		final Long value2 = new Long(43);
+		final Promise<Number> p1 = Promises.newFailedPromise(failure);
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<Long>>() {
+			public Promise<Long> apply(Promise<?> t) {
+				latch1.countDown();
+				try {
+					assertSame(failure, t.getFailure());
+				} catch (InterruptedException e) {
+					fail(e);
+				}
+				return Promises.newResolvedPromise(value2);
+			}
+		});
+		assertTrue(p1.isDone());
+		assertTrue(p2.isDone());
+		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+
+		assertSame("wrong value", value2, p2.getValue());
+		assertNull("wrong failure", p2.getFailure());
+	}
+
+	public void testRecoverWithFailureNull() throws Exception {
+		final Throwable failure = new Error("fail");
+		final Promise<Number> p1 = Promises.newFailedPromise(failure);
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<Long>>() {
+			public Promise<Long> apply(Promise<?> t) {
+				latch1.countDown();
+				try {
+					assertSame(failure, t.getFailure());
+				} catch (InterruptedException e) {
+					fail(e);
+				}
+				return null;
+			}
+		});
+		assertTrue(p1.isDone());
+		assertTrue(p2.isDone());
+		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+
+		assertSame("wrong failure", failure, p2.getFailure());
+		try {
+			p2.getValue();
+			fail("p2 getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong failure", failure, e.getCause());
+		}
+	}
+
+	public void testRecoverWithFailureException() throws Exception {
+		final Throwable failure1 = new Error("fail1");
+		final Error failure2 = new Error("fail2");
+		final Promise<Number> p1 = Promises.newFailedPromise(failure1);
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<Long>>() {
+			public Promise<Long> apply(Promise<?> t) {
+				latch1.countDown();
+				try {
+					assertSame(failure1, t.getFailure());
+				} catch (InterruptedException e) {
+					fail(e);
+				}
+				throw failure2;
+			}
+		});
+		assertTrue(p1.isDone());
+		assertTrue(p2.isDone());
+		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+
+		assertSame("wrong failure", failure2, p2.getFailure());
+		try {
+			p2.getValue();
+			fail("p2 getValue failed to throw InvocationTargetException");
+		} catch (InvocationTargetException e) {
+			assertSame("wrong failure", failure2, e.getCause());
+		}
 	}
 
 }
