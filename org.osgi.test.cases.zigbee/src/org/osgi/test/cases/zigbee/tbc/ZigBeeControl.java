@@ -196,9 +196,10 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			if (servers != null) {
 				listInput = "[";
 				for (int i = 0; i < servers.length; i++) {
-					listInput += endpoint.getServerCluster(i);
-					if (i < endpoint.getServerClusters().length - 1)
+					listInput += endpoint.getServerCluster(i).getId();
+					if (i < endpoint.getServerClusters().length - 1) {
 						listInput += ",";
+					}
 				}
 				listInput += "]";
 			} else {
@@ -214,8 +215,9 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 				listOuput = "[";
 				for (int i = 0; i < clients.length; i++) {
 					listOuput += endpoint.getClientCluster(i);
-					if (i < endpoint.getClientClusters().length - 1)
+					if (i < endpoint.getClientClusters().length - 1) {
 						listOuput += ",";
+					}
 				}
 				listOuput += "]";
 			}

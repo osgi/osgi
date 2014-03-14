@@ -51,7 +51,7 @@ public final class ZigBeeConstants {
 	/**  */
 	public static final String	ENDPOINT_APP_DEVICE_VERSION				= "4";
 	/**  */
-	public static final String	ENDPOINT_INPUT_CLUSTERS					= "[Basic]";
+	public static final String	ENDPOINT_INPUT_CLUSTERS					= "[88]";
 	/**  */
 	public static final String	ENDPOINT_OUTPUT_CLUSTERS				= "[]";
 
