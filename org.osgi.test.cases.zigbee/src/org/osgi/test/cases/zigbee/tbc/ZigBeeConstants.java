@@ -6,8 +6,10 @@ package org.osgi.test.cases.zigbee.tbc;
  */
 public final class ZigBeeConstants {
 
-	/** Node ieee address */
-	public static final String	NODE_IEEE_ADDRESS						= "6628417766";
+	/** Node ieee address 1 */
+	public static final String	NODE_IEEE_ADDRESS_1						= "8123456899";
+	/** Node ieee address 2 */
+	public static final String	NODE_IEEE_ADDRESS_2						= "6628417766";
 	/**  */
 	public static final String	LOGICAL_TYPE							= "2";
 

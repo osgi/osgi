@@ -78,7 +78,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 		log("ZigBeeNode IEEE_ADDRESS: " + dev.getIEEEAddress().toString());
 		assertEquals("IEEE ADDRESS not matched",
-				ZigBeeConstants.NODE_IEEE_ADDRESS,
+				ZigBeeConstants.NODE_IEEE_ADDRESS_2,
 				dev.getIEEEAddress().toString());
 
 		try {
@@ -201,8 +201,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 						listInput += ",";
 				}
 				listInput += "]";
-			}
-			else {
+			} else {
 				log("ENDPOINT server empty NULL");
 			}
 			log("ZigBeeEndpoint INPUT_CLUSTERS: " + listInput);
@@ -223,7 +222,6 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			log("ZigBeeEndpoint OUTPUT_CLUSTERS: " + listOuput);
 			assertEquals("Output clusters list not matched",
 					ZigBeeConstants.ENDPOINT_OUTPUT_CLUSTERS, listOuput);
-
 		} catch (ZigBeeException e) {
 			e.printStackTrace();
 		}

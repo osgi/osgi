@@ -80,4 +80,9 @@ public class ZigBeeAttributeDescriptionImpl implements ZigBeeAttributeDescriptio
 		return false;
 	}
 
+	public String toString() {
+		return "" + this.getClass().getName() + "[id: " + id + ", isReadOnly: " + isReadOnly + ", defaultValue: " + defaultValue + ", name: " + name + ", isMandatory: " + isMandatory
+				+ ", isReportable: " + isReportable + ", datatype: " + datatype + "]";
+	}
+
 }

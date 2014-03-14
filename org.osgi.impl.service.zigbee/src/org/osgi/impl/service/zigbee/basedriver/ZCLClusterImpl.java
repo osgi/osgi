@@ -89,8 +89,34 @@ public class ZCLClusterImpl implements ZCLCluster {
 		handler.notifyResponse(frame);
 	}
 
+	// public String toString() {
+	// return description.getGlobalClusterDescription().getClusterName();
+	// }
+
 	public String toString() {
-		return description.getGlobalClusterDescription().getClusterName();
+		String attributesAsAString = null;
+		if (attributes != null) {
+			attributesAsAString = "[";
+			int i = 0;
+			while (i < attributes.length) {
+				attributesAsAString = attributesAsAString + attributes[i].toString();
+				i = i + 1;
+			}
+			attributesAsAString = attributesAsAString + "]";
+		}
+
+		String commandIdsAsAString = null;
+		if (commandIds != null) {
+			commandIdsAsAString = "[";
+			int i = 0;
+			while (i < commandIds.length) {
+				commandIdsAsAString = commandIdsAsAString + commandIds[i];
+				i = i + 1;
+			}
+			commandIdsAsAString = commandIdsAsAString + "]";
+		}
+
+		return "" + this.getClass().getName() + "[id: " + id + ", attributes: " + attributesAsAString + ", commandIds: " + commandIdsAsAString + ", description: " + description + "]";
 	}
 
 }

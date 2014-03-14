@@ -20,11 +20,33 @@ public class ZigBeeBundleActivator implements BundleActivator {
 	 */
 	public void start(BundleContext bc) {
 		try {
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
 			System.out.println(this.getClass().getName() + " - Instantiate the ZigBeeBaseDriver.");
 			basedriver = new ZigBeeBaseDriver(bc);
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
 			System.out.println(this.getClass().getName() + " - Start the ZigBeeBaseDriver instance.");
 			basedriver.start();
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
 			System.out.println(this.getClass().getName() + " - The ZigBeeBaseDriver instance is started.");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
+			System.out.println(this.getClass().getName() + " - ////////// ////////// ////////// ////////// //////////");
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

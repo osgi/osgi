@@ -56,4 +56,8 @@ public class ZCLGlobalClusterDescriptionImpl implements ZCLGlobalClusterDescript
 		return server;
 	}
 
+	public String toString() {
+		return "" + this.getClass().getName() + "[id: " + id + ", name: " + name + ", desc: " + desc + ", domain: " + domain + ", client: " + client + ", server: " + server + "]";
+	}
+
 }

@@ -60,4 +60,8 @@ public class ZigBeeSimpleDescriptorImpl implements ZigBeeSimpleDescriptor {
 		return false;
 	}
 
+	public String toString() {
+		return "" + this.getClass().getName() + "[deviceId: " + deviceId + ", version: " + version + ", profileId: " + profileId + "]";
+	}
+
 }

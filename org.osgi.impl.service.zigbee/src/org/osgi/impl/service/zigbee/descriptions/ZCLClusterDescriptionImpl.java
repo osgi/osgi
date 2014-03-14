@@ -45,4 +45,9 @@ public class ZCLClusterDescriptionImpl implements ZCLClusterDescription {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	public String toString() {
+		return "" + this.getClass().getName() + "[id: " + id + ", global: " + global + "]";
+	}
+
 }

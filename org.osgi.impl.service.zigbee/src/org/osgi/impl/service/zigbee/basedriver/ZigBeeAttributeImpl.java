@@ -52,7 +52,7 @@ public class ZigBeeAttributeImpl implements ZigBeeAttribute {
 	}
 
 	public String toString() {
-		return ZigBeeAttributeImpl.class.getName() + ":[id:" + getId() + ",dataType:" + getDataType() + ",description:" + description + ",value:" + value + "]";
+		return ZigBeeAttributeImpl.class.getName() + ":[id: " + getId() + ", dataType: " + getDataType() + ", description: " + description + ", value: " + value + "]";
 	}
 
 }
