@@ -60,8 +60,8 @@ public interface Success<T, R> {
 	 * 
 	 * @param resolved The successfully resolved {@link Promise}.
 	 * @return The Promise to use to resolve the chained Promise, or
-	 *         {@code null} if the chained Promise is to be resolved
-	 *         immediately.
+	 *         {@code null} if the chained Promise is to be resolved immediately
+	 *         with the value {@code null}.
 	 * @throws Exception The chained Promise will be failed with the thrown
 	 *         exception.
 	 */
