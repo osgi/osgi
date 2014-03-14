@@ -1261,6 +1261,75 @@
     </section>
 
     <section>
+      <title>Updates</title>
+
+      <para>Services Registrations are dynamic and service properties may
+      change during the lifetime of a service. Remote services must mirror
+      these dynamics without making it appear as though the service has become
+        unavailable. This requires that the exporting distribution provider
+        and the importing distribution provider support the changing of
+        service properties.</para>
+
+      <para>There are two types of service properties:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            Properties that are intended to be consumed by the distribution
+            provider, such as:
+            the exported interfaces and configuration types, exported intents and
+            configuration type specific properties. These properties are typically prefixed
+            with
+            <code>'service.'</code>
+            or
+            <code>'endpoint.'</code>
+            see table [xyz].
+            <remark>Add proper link to table.</remark>
+          </para>
+        </listitem>
+
+        <listitem><para>Service properties not intended for the distribution provider.
+    These are typically used to communicate
+    information to the consumer of the service and are often specific to the
+    domain of the service.</para>
+        </listitem>
+      </itemizedlist>
+    The following methods to
+    support the updating of service properties on Export Registrations and the propagation
+    of these updates to the remote proxies via Import Registrations.
+
+      <itemizedlist>
+        <listitem>
+          <para>ExportRegistration.<xref
+          linkend="org.osgi.service.remoteserviceadmin.ExportRegistration.update-Map-"
+          xrefstyle="hyperlink"/> - Allows the Topology Manager to update an
+            existing export registration it created after receiving a notification of changed
+            properties on the remoted service.</para>
+        </listitem>
+
+        <listitem>
+          <para>ImportRegistration.<xref
+          linkend="org.osgi.service.remoteserviceadmin.ImportRegistration.update-EndpointDescription-"
+          xrefstyle="hyperlink"/> - Allows the Topology Manager to update
+          the import registration representing a remote service after the remote service
+          properties have been updated. Typically the topology manager is notified of
+          such change via the Discovery mechanism.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+    The distribution
+    provider must support the updates of service properties <emphasis>not</emphasis> intended
+    for the distribution provider, where supported property values are as defined in the
+    <emphasis>Filter Syntax</emphasis> of <xref
+      linkend="intro.core.release" xrefstyle="template:%t"/>.
+
+    Distribution providers may support updates to a wider set of properties or data types, but
+    these may fail with other implementations.
+      </para>
+    </section>
+
+    <section>
       <title>Reflection</title>
 
       <para>The Remote Service Admin service provides the following methods to
@@ -1288,75 +1357,16 @@
     <section xml:id="i1736585">
       <title>Registration Life Cycle</title>
 
-      <para>The registration life cycle of imported and exported services is
-      non-trivial because:</para>
-
-      <itemizedlist>
-        <listitem>
-          <para>Multiple Export Registrations can use to the same
-          Endpoint.</para>
-        </listitem>
-
-        <listitem>
-          <para>Multiple Import Registrations can use to the same service
-          proxy</para>
-        </listitem>
-      </itemizedlist>
-
-      <para>For example, Topology Manager <code>A</code> could create an
-      Export Registration for service <code>S</code> to Endpoint
-      <code>E</code>. Topology Manager <code>B</code> could attempt to create
-      exactly the same Endpoint <code>E</code> for service <code>S</code>.
-      However, an Endpoint occupies a unique address and it is often not
-      possible to create multiple Endpoints for the same address. A Remote
-      Service Admin service must therefore detect the case that multiple
-      registrations share the same Endpoint between Topology Manager
-      <code>A</code>'s registration and <code>B</code>'s registration.
-      However, if Topology Manager <code>B</code> now closes its Export
-      Registration then Topology Manager <code>A</code> still assumes the
-      availability of the Endpoint. This scenario is depicted in <xref
-      linkend="i1817652" xrefstyle="template:Figure %n on page %p"/>. A
-      similar example can be made for an Import Registration. In that case the
-      same service proxy can be shared between multiple Import
-      Registrations.</para>
-
-      <figure xml:id="i1817652">
-        <title>Sharing Endpoints and proxies</title>
-
-        <mediaobject>
-          <imageobject>
-            <imagedata align="center" contentdepth="1.494in"
-                       contentwidth="4.936in"
-                       fileref="sharing-endpoints-proxies.svg"/>
-          </imageobject>
-        </mediaobject>
-      </figure>
-
-      <para>To simplify the implementation of Topology Managers, the Remote
-      Service Admin must make this sharing of Endpoints and proxies between
-      different registrations transparent. Both the Import and Export
-      Registrations must be unique objects for every registration call. That
-      is, even if the same Topology Manager creates a registration for the
-      same Endpoint/proxy then it must still receive a new registration.
-      Though reference counting of the close operations could be used to
-      detect when an Endpoint or proxy can be cleared, it would require that
-      the Topology Manager exactly matches the close calls with the creation
-      of the registrations. However, it is very hard to ensure that the
-      <code>close</code> method is only called once in certain error and
-      cleanup scenarios. The Remote Service Admin must therefore return unique
-      objects for all registrations and manage the cleanup of proxies and
-      Endpoints internally, even if the <code>close</code> method is called
-      multiple times on a registration.</para>
-
-      <para>A Remote Service Admin service must use a Service Factory for its
-      service object to maintain separation between Topology Managers. All
+      <para>All
       registrations obtained through a Remote Service Admin service are life
       cycle bound to the Topology Manager that created it. That is, if a
       Topology Manager ungets its Remote Service Admin service, all
       registrations obtained through this service must automatically be
       closed. This model ensures that all registrations are properly closed if
       either the Remote Service Admin or the Topology Manager stops because in
-      both cases the framework performs the unget automatically.</para>
+      both cases the framework performs the unget automatically. Such behavior
+      can be achieved by implementing the Remote Service Admin service as a 
+      Service Factory.</para>
     </section>
 
     <section xml:id="i1791501">
