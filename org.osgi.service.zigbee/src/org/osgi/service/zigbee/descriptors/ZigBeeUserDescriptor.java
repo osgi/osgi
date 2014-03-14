@@ -30,6 +30,11 @@ public interface ZigBeeUserDescriptor {
 	 * @return a user-friendly that identify the device, such as 'Bedroom TV' or
 	 *         'Stairs light'
 	 */
-	public String getUserDescription();
+	String getUserDescriptor();
+
+	/**
+	 * @param userDescriptor the user descriptor
+	 */
+	void setUserDescriptor(String userDescriptor);
 
 }

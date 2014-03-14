@@ -140,10 +140,10 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			}
 
 			if (dev.getNodeDescriptor().isUserDescriptorAvailable()) {
-				log("ZigBeeNode USER_DESCRIPTION: " + dev.getUserDescriptor().getUserDescription());
+				log("ZigBeeNode USER_DESCRIPTION: " + dev.getUserDescriptor().getUserDescriptor());
 				assertEquals("User description not matched",
 						ZigBeeConstants.NODE_USER_DESCRIPTION,
-						dev.getUserDescriptor().getUserDescription());
+						dev.getUserDescriptor().getUserDescriptor());
 			}
 		} catch (ZigBeeException e) {
 			e.printStackTrace();
