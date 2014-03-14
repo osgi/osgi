@@ -175,18 +175,16 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public <R> Promise<R> then(Success<? super T, ? extends R> success, Failure failure) {
+	public <R, S extends R> Promise<R> then(Success<? super T, S> success, Failure failure) {
 		PromiseImpl<R> chained = new PromiseImpl<R>();
-		@SuppressWarnings("unchecked")
-		Runnable then = new Then<R>(chained, (Success<T, R>) success, failure);
-		onResolve(then);
+		onResolve(new Then<R, S>(chained, success, failure));
 		return chained;
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
-	public <R> Promise<R> then(Success<? super T, ? extends R> success) {
+	public <R, S extends R> Promise<R> then(Success<? super T, S> success) {
 		return then(success, null);
 	}
 
@@ -196,14 +194,15 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * 
 	 * @Immutable
 	 */
-	private final class Then<R> implements Runnable {
+	private final class Then<R, S extends R> implements Runnable {
 		private final PromiseImpl<R>	chained;
-		private final Success<T, R>		success;
+		private final Success<T, S>		success;
 		private final Failure			failure;
 
-		Then(PromiseImpl<R> chained, Success<T, R> success, Failure failure) {
+		@SuppressWarnings("unchecked")
+		Then(PromiseImpl<R> chained, Success<? super T, S> success, Failure failure) {
 			this.chained = chained;
-			this.success = success;
+			this.success = (Success<T, S>) success;
 			this.failure = failure;
 		}
 
@@ -234,7 +233,7 @@ final class PromiseImpl<T> implements Promise<T> {
 					chained.resolve(null, f);
 					return;
 				}
-				Promise<R> returned = null;
+				Promise<S> returned = null;
 				if (success != null) {
 					try {
 						returned = success.call(PromiseImpl.this);
@@ -247,8 +246,8 @@ final class PromiseImpl<T> implements Promise<T> {
 					// resolve chained with null value
 					chained.resolve(null, null);
 				} else {
-					// resolve chained after returned promise is resolved
-					returned.onResolve(new Chain<R>(chained, returned));
+					// resolve chained after promise promise is resolved
+					returned.onResolve(new Chain<R, S>(chained, returned));
 				}
 			} finally {
 				if (interrupted) { // restore interrupt status
@@ -259,18 +258,18 @@ final class PromiseImpl<T> implements Promise<T> {
 	}
 
 	/**
-	 * A callback used to resolve the chained Promise when the Promise returned
-	 * by the Success callback is resolved.
+	 * A callback used to resolve the chained Promise when the Promise promise
+	 * is resolved.
 	 * 
 	 * @Immutable
 	 */
-	private final static class Chain<R> implements Runnable {
+	private final static class Chain<R, S extends R> implements Runnable {
 		private final PromiseImpl<R>	chained;
-		private final Promise<R>		returned;
+		private final Promise<S>		promise;
 
-		Chain(PromiseImpl<R> chained, Promise<R> returned) {
+		Chain(PromiseImpl<R> chained, Promise<S> promise) {
 			this.chained = chained;
-			this.returned = returned;
+			this.promise = promise;
 		}
 
 		public void run() {
@@ -278,7 +277,7 @@ final class PromiseImpl<T> implements Promise<T> {
 			try {
 				Throwable f = null;
 				try {
-					f = returned.getFailure();
+					f = promise.getFailure();
 				} catch (InterruptedException e) {
 					/*
 					 * This should not happen since (1) we are a callback on a
@@ -291,9 +290,9 @@ final class PromiseImpl<T> implements Promise<T> {
 					chained.resolve(null, f);
 					return;
 				}
-				R value;
+				S value;
 				try {
-					value = returned.getValue();
+					value = promise.getValue();
 				} catch (InvocationTargetException e) {
 					// This should not happen since we checked fail above
 					throw new Error(e);

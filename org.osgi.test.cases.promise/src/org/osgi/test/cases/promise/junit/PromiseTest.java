@@ -51,6 +51,19 @@ public class PromiseTest extends TestCase {
 		super.tearDown();
 	}
 
+	/**
+	 * Fail with cause t.
+	 * 
+	 * @param message Failure message.
+	 * @param t Cause of the failure.
+	 */
+	public static void fail(String message, Throwable t) {
+		AssertionFailedError e = new AssertionFailedError(message + ": "
+				+ t.getMessage());
+		e.initCause(t);
+		throw e;
+	}
+
 	public void testPromiseSuccess1() throws Exception {
 		final Deferred<String> d = new Deferred<String>();
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -71,41 +84,13 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testPromiseSuccess2() throws Exception {
-		final Deferred<String> d = new Deferred<String>();
-		final CountDownLatch latch = new CountDownLatch(1);
-		final Promise<String> p = d.getPromise();
-		p.then(new Success<String, String>() {
-			public Promise<String> call(Promise<String> resolved) throws Exception {
-				latch.countDown();
-				return resolved;
-			}
-		});
-		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
-		assertFalse("callback ran before resolved", p.isDone());
-		String value = new String("value");
-		d.resolve(value);
-		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
-		assertTrue("callback did not run after resolved", p.isDone());
-		assertNull("wrong failure", p.getFailure());
-		assertSame("wrong value", value, p.getValue());
-	}
-
-	public void testPromiseSuccess3() throws Exception {
 		final Deferred<Integer> d = new Deferred<Integer>();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Promise<Integer> p = d.getPromise();
-		Promise<String> p2 = p.then(new Success<Number, String>() {
-			public Promise<String> call(Promise<Number> resolved) throws Exception {
-				final Promise<String> returned = Promises.newResolvedPromise(resolved.getValue().toString());
-				returned.onResolve(new Runnable() {
-					public void run() {
-						latch.countDown();
-					}
-				});
-				return returned;
-			}
-		}, new Failure() {
-			public void fail(Promise<?> resolved) throws Exception {
+		Promise<Number> p2 = p.then(new Success<Number, Long>() {
+			public Promise<Long> call(Promise<Number> resolved) throws Exception {
+				latch.countDown();
+				return Promises.newResolvedPromise(new Long(resolved.getValue().longValue()));
 			}
 		});
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
@@ -116,7 +101,43 @@ public class PromiseTest extends TestCase {
 		assertTrue("callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("callback did not run after resolved", p.isDone());
 		assertTrue("callback did not run after resolved", p2.isDone());
-		assertEquals("wrong value", "15", p2.getValue());
+		assertNull("wrong failure", p.getFailure());
+		assertNull("wrong failure", p2.getFailure());
+		assertSame("wrong value", value, p.getValue());
+		assertEquals("wrong value", value.intValue(), p2.getValue().intValue());
+	}
+
+	public void testPromiseSuccess3() throws Exception {
+		final Deferred<Integer> d = new Deferred<Integer>();
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		final Promise<Integer> p = d.getPromise();
+		Promise<Number> p2 = p.then(new Success<Number, Long>() {
+			public Promise<Long> call(Promise<Number> resolved) throws Exception {
+				final Promise<Long> returned = Promises.newResolvedPromise(new Long(resolved.getValue().longValue()));
+				returned.onResolve(new Runnable() {
+					public void run() {
+						latch1.countDown();
+					}
+				});
+				return returned;
+			}
+		}, new Failure() {
+			public void fail(Promise<?> resolved) throws Exception {
+				latch2.countDown();
+			}
+		});
+		assertFalse("callback ran before resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse("callback ran before resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse("callback ran before resolved", p.isDone());
+		assertFalse("callback ran before resolved", p2.isDone());
+		Integer value = new Integer(15);
+		d.resolve(value);
+		assertTrue("callback did not run after resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertFalse("callback ran before resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("callback did not run after resolved", p.isDone());
+		assertTrue("callback did not run after resolved", p2.isDone());
+		assertEquals("wrong value", value.intValue(), p2.getValue().intValue());
 		assertNull("wrong failure", p2.getFailure());
 		assertNull("wrong failure", p.getFailure());
 		assertSame("wrong value", value, p.getValue());
@@ -403,7 +424,7 @@ public class PromiseTest extends TestCase {
 		Deferred<String> d = new Deferred<String>();
 		Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
-		Promise<Number> p2 = p1.<Number> then(new Success<Object, Integer>() {
+		Promise<Number> p2 = p1.then(new Success<Object, Integer>() {
 			public Promise<Integer> call(final Promise<Object> promise)
 					throws Exception {
 				latch.countDown();
@@ -1104,19 +1125,6 @@ public class PromiseTest extends TestCase {
 		}
 		assertNull("wrong failure", p3.getFailure());
 		assertNull("wrong value", p3.getValue());
-	}
-
-	/**
-	 * Fail with cause t.
-	 * 
-	 * @param message Failure message.
-	 * @param t Cause of the failure.
-	 */
-	public static void fail(String message, Throwable t) {
-		AssertionFailedError e = new AssertionFailedError(message + ": "
-				+ t.getMessage());
-		e.initCause(t);
-		throw e;
 	}
 
 }

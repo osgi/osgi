@@ -38,7 +38,7 @@ public class Promises {
 	 * @param value The value of the resolved Promise.
 	 * @return A new Promise that has been resolved with the specified value.
 	 */
-	public static <T> Promise<T> newResolvedPromise(T value) {
+	public static <T, S extends T> Promise<T> newResolvedPromise(S value) {
 		return new PromiseImpl<T>(value, null);
 	}
 

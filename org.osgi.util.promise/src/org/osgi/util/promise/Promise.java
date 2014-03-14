@@ -192,6 +192,8 @@ public interface Promise<T> {
 	 * registered callback is called.
 	 * 
 	 * @param <R> The value type associated with the returned Promise.
+	 * @param <S> A subtype of the value type associated with the returned
+	 *        Promise.
 	 * @param success A Success callback to be called when this Promise is
 	 *        successfully resolved. May be {@code null} if no Success callback
 	 *        is required. In this case, the returned Promise must be resolved
@@ -204,7 +206,7 @@ public interface Promise<T> {
 	 *         Promise must be resolved when this Promise is resolved after the
 	 *         specified Success or Failure callback, if any, is executed.
 	 */
-	<R> Promise<R> then(Success<? super T, ? extends R> success, Failure failure);
+	<R, S extends R> Promise<R> then(Success<? super T, S> success, Failure failure);
 
 	/**
 	 * Chain a new Promise to this Promise with a Success callback.
@@ -215,6 +217,8 @@ public interface Promise<T> {
 	 * {@code null} for the Failure callback.
 	 * 
 	 * @param <R> The value type associated with the returned Promise.
+	 * @param <S> A subtype of the value type associated with the returned
+	 *        Promise.
 	 * @param success A Success callback to be called when this Promise is
 	 *        successfully resolved. May be {@code null} if no Success callback
 	 *        is required. In this case, the returned Promise must be resolved
@@ -225,5 +229,5 @@ public interface Promise<T> {
 	 *         specified Success, if any, is executed.
 	 * @see #then(Success, Failure)
 	 */
-	<R> Promise<R> then(Success<? super T, ? extends R> success);
+	<R, S extends R> Promise<R> then(Success<? super T, S> success);
 }
