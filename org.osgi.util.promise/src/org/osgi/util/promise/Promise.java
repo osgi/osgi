@@ -351,4 +351,26 @@ public interface Promise<T> {
 	 *         the failure of this Promise.
 	 */
 	<S extends T> Promise<T> recoverWith(Function<Promise<?>, Promise<S>> recovery);
+
+	/**
+	 * Fall back to another Promise if this Promise fails.
+	 * 
+	 * <p>
+	 * If this Promise is successfully resolved, the returned Promise will be
+	 * resolved with the value of this Promise.
+	 * 
+	 * <p>
+	 * If this Promise is resolved with a failure, the successful result of the
+	 * specified Promise is used to resolve the returned Promise. If the
+	 * specified Promise is resolved with a failure, the returned Promise will
+	 * be failed with the failure of this Promise.
+	 * 
+	 * @param <S> A subtype of the value type associated with this Promise.
+	 * @param fallback The Promise whose value will be used to resolve the
+	 *        returned Promise if this Promise resolves with a failure. Must not
+	 *        be {@code null}.
+	 * @return A Promise that returns the value of this Promise or falls back to
+	 *         the value of the specified Promise.
+	 */
+	<S extends T> Promise<T> fallbackTo(Promise<S> fallback);
 }

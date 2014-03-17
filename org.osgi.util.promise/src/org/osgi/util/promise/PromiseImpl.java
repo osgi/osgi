@@ -250,7 +250,7 @@ final class PromiseImpl<T> implements Promise<T> {
 					// resolve chained with null value
 					chained.resolve(null, null);
 				} else {
-					// resolve chained after promise promise is resolved
+					// resolve chained after returned promise is resolved
 					returned.onResolve(new Chain<R, S>(chained, returned));
 				}
 			} finally {
@@ -270,10 +270,18 @@ final class PromiseImpl<T> implements Promise<T> {
 	private final static class Chain<R, S extends R> implements Runnable {
 		private final PromiseImpl<R>	chained;
 		private final Promise<S>		promise;
+		private final Throwable			failure;
 
 		Chain(PromiseImpl<R> chained, Promise<S> promise) {
 			this.chained = chained;
 			this.promise = promise;
+			this.failure = null;
+		}
+
+		Chain(PromiseImpl<R> chained, Promise<S> promise, Throwable failure) {
+			this.chained = chained;
+			this.promise = promise;
+			this.failure = failure;
 		}
 
 		public void run() {
@@ -292,6 +300,9 @@ final class PromiseImpl<T> implements Promise<T> {
 					return;
 				}
 				if (f != null) {
+					if (failure != null) {
+						f = failure;
+					}
 					chained.resolve(null, f);
 					return;
 				}
@@ -543,6 +554,40 @@ final class PromiseImpl<T> implements Promise<T> {
 			} else {
 				recovered.onResolve(new Chain<T, S>(chained, recovered));
 			}
+		}
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public <S extends T> Promise<T> fallbackTo(Promise<S> fallback) {
+		PromiseImpl<T> chained = new PromiseImpl<T>();
+		FallbackTo<T, S> fallbackTo = new FallbackTo<T, S>(chained, fallback);
+		then(fallbackTo, fallbackTo);
+		return chained;
+	}
+
+	/**
+	 * A callback used by the {@link PromiseImpl#fallbackTo(Promise)} method.
+	 * 
+	 * @Immutable
+	 */
+	private static final class FallbackTo<T, S extends T> implements Success<T, Void>, Failure {
+		private final PromiseImpl<T>	chained;
+		private final Promise<S>		fallback;
+
+		FallbackTo(PromiseImpl<T> chained, Promise<S> fallback) {
+			this.chained = chained;
+			this.fallback = requireNonNull(fallback);
+		}
+
+		public Promise<Void> call(Promise<T> resolved) throws Exception {
+			chained.resolve(resolved.getValue(), null);
+			return null;
+		}
+
+		public void fail(Promise<?> resolved) throws Exception {
+			fallback.onResolve(new Chain<T, S>(chained, fallback, resolved.getFailure()));
 		}
 	}
 
