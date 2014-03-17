@@ -16,6 +16,8 @@
 
 package org.osgi.service.zigbee.descriptors;
 
+import org.osgi.service.zigbee.ZDPException;
+
 /**
  * This interface represents a User Descriptor as described in the ZigBee
  * Specification The User Descriptor contains information that allows the user
@@ -34,7 +36,8 @@ public interface ZigBeeUserDescriptor {
 
 	/**
 	 * @param userDescriptor the user descriptor
+	 * @throws ZDPException
 	 */
-	void setUserDescriptor(String userDescriptor);
+	void setUserDescriptor(String userDescriptor) throws ZDPException;
 
 }

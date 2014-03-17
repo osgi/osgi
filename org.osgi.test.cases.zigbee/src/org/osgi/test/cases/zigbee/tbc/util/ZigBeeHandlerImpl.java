@@ -1,7 +1,7 @@
 
 package org.osgi.test.cases.zigbee.tbc.util;
 
-import org.osgi.service.zigbee.ZigBeeException;
+import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZigBeeHandler;
 
 /**
@@ -24,7 +24,7 @@ public class ZigBeeHandlerImpl implements ZigBeeHandler {
 		this.response = response;
 	}
 
-	public void onFailure(ZigBeeException e) {
+	public void onFailure(ZCLException e) {
 		// System.out.println("ZigBeeHandlerImpl.onFailure(" + response + ")");
 		this.isSuccess = false;
 		this.response = e;

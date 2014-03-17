@@ -36,16 +36,21 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * host must starts again when the bundle restarts. In addition, the values
 	 * of channel, pan id, extended pan id, and host pid must remain the same.
 	 * 
-	 * @throws ZigBeeException
+	 * With the PAN that is chosen with the host is an end device. If no PAN ID
+	 * is registered, If the host is a router or an end device, the host may
+	 * start without a registered PAN_ID property and set the property when the
+	 * host finds and joins a network.
+	 * 
+	 * @throws ZCLException
 	 */
-	public void start() throws ZigBeeException;
+	public void start() throws ZCLException;
 
 	/**
 	 * Stops the host.
 	 * 
-	 * @throws ZigBeeException
+	 * @throws ZCLException
 	 */
-	public void stop() throws ZigBeeException;
+	public void stop() throws ZCLException;
 
 	/**
 	 * Get the host's start/stop state.
@@ -58,9 +63,9 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * Indicates if a ZigBee device can join the network.
 	 * 
 	 * @param duration The time during which associations are permitted.
-	 * @throws ZigBeeException
+	 * @throws ZCLException
 	 */
-	public void permitJoin(short duration) throws ZigBeeException;
+	public void permitJoin(short duration) throws ZCLException;
 
 	/**
 	 * Sets the host logical node type. The logical type will then be available
@@ -70,15 +75,15 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * device( {@link org.osgi.service.zigbee.ZigBeeNode -> END_DEVICE})
 	 * 
 	 * @param logicalNodeType The logical node type.
-	 * @throws ZigBeeException
+	 * @throws ZCLException
 	 */
-	public void setLogicalType(short logicalNodeType) throws ZigBeeException;
+	public void setLogicalType(short logicalNodeType) throws ZCLException;
 
 	/**
 	 * @return The current network channel.
-	 * @throws ZigBeeException
+	 * @throws ZCLException
 	 */
-	public int getChannel() throws ZigBeeException;
+	public int getChannel() throws ZCLException;
 
 	/**
 	 * Sets the network channel. 802.15.4 and ZigBee break the 2.4Ghz band into
@@ -91,9 +96,9 @@ public interface ZigBeeHost extends ZigBeeNode {
 
 	/**
 	 * @return The current network channel mask.
-	 * @throws ZigBeeException
+	 * @throws ZCLException
 	 */
-	public int getChannelMask() throws ZigBeeException;
+	public int getChannelMask() throws ZCLException;
 
 	/**
 	 * Set the network channel mask
@@ -108,22 +113,22 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * joined the network and removing the devices that left the network since
 	 * the last refresh.
 	 * 
-	 * @throws ZigBeeException
+	 * @throws ZCLException
 	 */
-	public void refreshNetwork() throws ZigBeeException;
+	public void refreshNetwork() throws ZCLException;
 
 	/**
 	 * @return The network security level, i.e. 0 if security is disabled, an
 	 *         int code if enabled.
-	 * @throws ZigBeeException
+	 * @throws ZCLException
 	 */
-	public int getSecurityLevel() throws ZigBeeException;
+	public int getSecurityLevel() throws ZCLException;
 
 	/**
 	 * @return The current Network key.
-	 * @throws ZigBeeException
+	 * @throws ZCLException
 	 */
-	public String getNetworkKey() throws ZigBeeException;
+	public String getNetworkKey() throws ZCLException;
 
 	/**
 	 * This method is used for creating a {@link ZigBeeGroup} service that has
@@ -141,9 +146,9 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * @param groupAddress the address of the group to create.
 	 * @param handler the {@link ZigBeeCommandHandler} that will be notified of
 	 *        the result of "creation".
-	 * @throws ZigBeeException
+	 * @throws ZCLException
 	 */
-	public void createGroupService(String pid, int groupAddress, ZigBeeCommandHandler handler) throws ZigBeeException;
+	public void createGroupService(String pid, int groupAddress, ZigBeeCommandHandler handler) throws ZCLException;
 
 	/**
 	 * Enable to broadcast a given frame on a given cluster.

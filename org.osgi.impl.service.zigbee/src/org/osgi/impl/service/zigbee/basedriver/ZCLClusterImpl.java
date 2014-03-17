@@ -4,11 +4,11 @@ package org.osgi.impl.service.zigbee.basedriver;
 import java.util.HashMap;
 import java.util.Map;
 import org.osgi.service.zigbee.ZCLCluster;
+import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZigBeeAttribute;
 import org.osgi.service.zigbee.ZigBeeAttributeRecord;
 import org.osgi.service.zigbee.ZigBeeCommandHandler;
-import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeMapHandler;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 
@@ -79,12 +79,12 @@ public class ZCLClusterImpl implements ZCLCluster {
 		// TODO Auto-generated method stub
 	}
 
-	public void invoke(ZCLFrame frame, ZigBeeCommandHandler handler) throws ZigBeeException {
+	public void invoke(ZCLFrame frame, ZigBeeCommandHandler handler) throws ZCLException {
 		// mocked invocation.
 		handler.notifyResponse(frame);
 	}
 
-	public void invoke(ZCLFrame frame, ZigBeeCommandHandler handler, String exportedServicePID) throws ZigBeeException {
+	public void invoke(ZCLFrame frame, ZigBeeCommandHandler handler, String exportedServicePID) throws ZCLException {
 		// mocked invocation.
 		handler.notifyResponse(frame);
 	}

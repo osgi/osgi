@@ -2,8 +2,8 @@
 package org.osgi.impl.service.zigbee.basedriver;
 
 import org.osgi.service.zigbee.ZCLCluster;
+import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
-import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 
@@ -39,9 +39,9 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return Long.valueOf("-1");
 	}
 
-	public ZigBeeSimpleDescriptor getSimpleDescriptor() throws ZigBeeException {
+	public void getSimpleDescriptor(ZigBeeHandler handler) throws ZCLException {
 		// TODO Auto-generated method stub
-		return desc;
+		handler.onSuccess(desc);
 	}
 
 	public ZCLCluster[] getServerClusters() {
@@ -70,7 +70,7 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 
 	}
 
-	public void notExported(ZigBeeException e) {
+	public void notExported(ZCLException e) {
 		// TODO Auto-generated method stub
 	}
 

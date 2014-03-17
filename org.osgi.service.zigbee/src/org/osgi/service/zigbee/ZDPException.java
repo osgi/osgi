@@ -33,8 +33,6 @@ public class ZDPException extends RuntimeException {
 	/** generated */
 	private static final long	serialVersionUID	= 2909437185484211441L;
 
-	// TODO AAA: replace the existing exception code by the proper ones.
-
 	/**
 	 * The requested operation or transmission was completed successfully.
 	 */

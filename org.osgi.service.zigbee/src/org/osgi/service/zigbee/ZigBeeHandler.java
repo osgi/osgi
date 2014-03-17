@@ -16,7 +16,6 @@
 
 package org.osgi.service.zigbee;
 
-
 /**
  * ZigBeeHandler manages response of a request to the Base Driver
  * 
@@ -37,8 +36,8 @@ public interface ZigBeeHandler {
 	 * Notifies the failure result of the call. This method is used when the
 	 * handler command result is a failure.
 	 * 
-	 * @param e the ZigBeeException.
+	 * @param e the ZCLException.
 	 */
-	public void onFailure(ZigBeeException e);
+	public void onFailure(ZCLException e);
 
 }

@@ -46,100 +46,24 @@ public interface ZigBeeNode {
 	 * A ZigBee Event Listener service can announce for what ZigBee device nodes
 	 * it wants notifications.
 	 */
-	public static final String	IEEE_ADDRESS					= "zigbee.node.ieee.address";
+	public static final String	IEEE_ADDRESS			= "zigbee.node.ieee.address";
 
 	/**
 	 * Property key for the device logical type
 	 */
-	public static final String	LOGICAL_TYPE					= "zigbee.node.description.node.type";
+	public static final String	LOGICAL_TYPE			= "zigbee.node.description.node.type";
 
 	/**
 	 * Property key for a manufacturer code that is allocated by the ZigBee
 	 * Alliance, relating the manufacturer to the device.
 	 */
-	public static final String	MANUFACTURER_CODE				= "zigbee.node.description.manufacturer.code";
-
-	/**
-	 * Property key of the {@link String} containing the name of the
-	 * manufacturer of the device.
-	 */
-	public static final String	MANUFACTURER_NAME				= "zigbee.node.description.manufacturer.name";
-
-	/**
-	 * Property key of the {@link String} containing the name of the
-	 * manufacturers model of the device. <br>
-	 * It is <b>optional</b> property for this service
-	 */
-	public static final String	MODEL_NAME						= "zigbee.node.description.model.name";
-
-	/**
-	 * Property key of the {@link String} containing the manufacturers serial
-	 * number of the device. <br>
-	 * It is <b>optional</b> property for this service
-	 */
-	public static final String	SERIAL_NAME						= "zigbee.node.description.serial.number";
-
-	/**
-	 * Property key of the {@link String} containing the URL through which more
-	 * information relating to the device can be obtained. <br>
-	 * It is <b>optional</b> property for this service
-	 */
-	public static final String	NODE_URL						= "zigbee.node.description.url";
-
-	/**
-	 * Property key of the {@link String} containing the URL through which the
-	 * icon for the device can be obtained. <br>
-	 * It is <b>optional</b> property for this service
-	 */
-	public static final String	ICON_URL						= "zigbee.node.description.icon.url";
-
-	/**
-	 * Property key of the {@link String} containing information that allow the
-	 * user to identify the device using a user-friendly character string <br>
-	 * It is <b>optional</b> property for this service
-	 */
-	public static final String	USER_DESCRIPTION				= "zigbee.node.description.user.desc";
+	public static final String	MANUFACTURER_CODE		= "zigbee.node.description.manufacturer.code";
 
 	/**
 	 * Property key for the node capability as required by the IEEE802.15.4 MAC
 	 * sub-layer.
 	 */
-	public static final String	CAPABILITIES_MAC				= "zigbee.node.description.capabilities.mac";
-
-	/**
-	 * Property key for the maximum size, in octets, of the network sub-layer
-	 * data unit for this node. <br>
-	 * It is <b>optional</b> property for this service
-	 */
-	public static final String	MAXIMUM_BUFFER_SIZE				= "zigbee.node.description.maximum.buffer.size";
-
-	/**
-	 * Property key for the maximum size, in octets, of the application
-	 * sub-layer data unit that can be transferred to this node in one single
-	 * message transfer. <br>
-	 * It is <b>optional</b> property for this service
-	 */
-	public static final String	MAXIMUM_INCOMING_TRANSFERT_SIZE	= "zigbee.node.description.maximum.incoming.transfert.size";
-
-	/**
-	 * Property key for the current sleep/power-saving mode of the node.
-	 */
-	public static final String	CURRENT_POWER_MODE				= "zigbee.node.description.current.power.mode";
-
-	/**
-	 * Property key for the current power source being utilized by the node.
-	 */
-	public static final String	CURRENT_POWER_SOURCE			= "zigbee.node.description.current.power.source";
-
-	/**
-	 * Property key for the power sources available on the node.
-	 */
-	public static final String	AVAILABLE_POWER_SOURCE			= "zigbee.node.description.available.power.source";
-
-	/**
-	 * Property key for the level of charge of the power source.
-	 */
-	public static final String	CURRENT_POWER_SOURCE_LEVEL		= "zigbee.node.description.power.source.level";
+	public static final String	CAPABILITIES_MAC		= "zigbee.node.description.capabilities.mac";
 
 	/**
 	 * Key of {@link String} containing the {@link ZigBeeHost} pid.<br>
@@ -148,12 +72,12 @@ public interface ZigBeeNode {
 	 * belong to a specific network MUST specify the same value for this
 	 * property.
 	 */
-	public static final String	HOST_PID						= "zigbee.node.host.pid";
+	public static final String	HOST_PID				= "zigbee.node.host.pid";
 
 	/**
 	 * Key of {@link String} containing the device node network PAN ID
 	 */
-	public static final String	PAN_ID							= "zigbee.node.pan.id";
+	public static final String	PAN_ID					= "zigbee.node.pan.id";
 
 	/**
 	 * Key of {@link String} containing the device node network extended PAN ID.
@@ -161,36 +85,36 @@ public interface ZigBeeNode {
 	 * only after the network is started. It means that internally the
 	 * ZigBeeHost interface must update the service properties.
 	 */
-	public static final String	EXTENDED_PAN_ID					= "zigbee.node.extended.pan.id";
+	public static final String	EXTENDED_PAN_ID			= "zigbee.node.extended.pan.id";
 
 	/**
 	 * ZigBee power source, i.e. 3rd bit of "MAC Capabilities" in Node
 	 * Descriptor. Set to 1 if the current power source is mains power, set to 0
 	 * otherwise.
 	 */
-	public static final String	POWER_SOURCE					= "zigbee.node.power.source";
+	public static final String	POWER_SOURCE			= "zigbee.node.power.source";
 
 	/**
 	 * ZigBee receiver on when idle, i.e. 4th bit of "MAC Capabilities" in Node
 	 * Descriptor. Set to 1 if the device does not disable its receiver to
 	 * conserve power during idle periods, set to 0 otherwise.
 	 */
-	public static final String	RECEIVER_ON_WHEN_IDLE			= "zigbee.node.receiver.on.when.idle";
+	public static final String	RECEIVER_ON_WHEN_IDLE	= "zigbee.node.receiver.on.when.idle";
 
 	/**
 	 * ZigBee coordinator type
 	 */
-	public static final short	COORDINATOR_TYPE				= 0;
+	public static final short	COORDINATOR_TYPE		= 0;
 
 	/**
 	 * ZigBee router type
 	 */
-	public static final short	ROUTER_TYPE						= 1;
+	public static final short	ROUTER_TYPE				= 1;
 
 	/**
 	 * ZigBee end device type
 	 */
-	public static final short	END_DEVICE_TYPE					= 2;
+	public static final short	END_DEVICE_TYPE			= 2;
 
 	/**
 	 * @return The ZigBee device node IEEE Address.
@@ -230,30 +154,34 @@ public interface ZigBeeNode {
 	public ZigBeeEndpoint getEndpoint(int id);
 
 	/**
-	 * @return the node descriptor.
-	 * @throws ZigBeeException
+	 * @param handler that will be used in order to return the node descriptor
+	 *        {@link ZigBeeNodeDescriptor}.
+	 * @throws ZCLException
 	 */
-	public ZigBeeNodeDescriptor getNodeDescriptor() throws ZigBeeException;
+	public void getNodeDescriptor(ZigBeeHandler handler) throws ZCLException;
 
 	/**
-	 * @return the node power descriptor.
-	 * @throws ZigBeeException
+	 * @param handler that will be used in order to return the node power
+	 *        descriptor {@link ZigBeePowerDescriptor}.
+	 * @throws ZCLException
 	 */
-	public ZigBeePowerDescriptor getPowerDescriptor() throws ZigBeeException;
+	public void getPowerDescriptor(ZigBeeHandler handler) throws ZCLException;
 
 	/**
-	 * @return the node complex descriptor. Can be null if complex descriptor is
-	 *         not provided.
-	 * @throws ZigBeeException
+	 * @param handler that will be used in order to return the node complex
+	 *        descriptor {@link ZigBeeComplexDescriptor}. Can be null if complex
+	 *        descriptor is not provided.
+	 * @throws ZCLException
 	 */
-	public ZigBeeComplexDescriptor getComplexDescriptor() throws ZigBeeException;
+	public void getComplexDescriptor(ZigBeeHandler handler) throws ZCLException;
 
 	/**
-	 * @return the node user descriptor. Can be null if user descriptor is not
-	 *         provided.
-	 * @throws ZigBeeException
+	 * @param handler that will be used in order to return the node user
+	 *        descriptor {@link ZigBeeUserDescriptor}. Can be null if user
+	 *        descriptor is not provided.
+	 * @throws ZCLException
 	 */
-	public ZigBeeUserDescriptor getUserDescriptor() throws ZigBeeException;
+	public void getUserDescriptor(ZigBeeHandler handler) throws ZCLException;
 
 	/**
 	 * Request to leave the network.

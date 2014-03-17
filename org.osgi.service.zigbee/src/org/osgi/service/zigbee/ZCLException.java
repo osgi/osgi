@@ -17,11 +17,11 @@
 package org.osgi.service.zigbee;
 
 /**
- * This class represents root exception for all the code related to ZigBee
+ * This class represents root exception for all the code related to ZigBee/ZCL.
  * 
  * @version 1.0
  */
-public class ZigBeeException extends Exception {
+public class ZCLException extends RuntimeException {
 
 	/** generated */
 	private static final long	serialVersionUID					= -7330626950388193679L;
@@ -107,7 +107,7 @@ public class ZigBeeException extends Exception {
 	/**
 	 * @param errordesc exception error description
 	 */
-	public ZigBeeException(String errordesc) {
+	public ZCLException(String errordesc) {
 		super(errordesc);
 		errorCode = 0;
 	}
@@ -116,7 +116,7 @@ public class ZigBeeException extends Exception {
 	 * @param errorCode An error code.
 	 * @param errorDesc An error description which explain the type of problem.
 	 */
-	public ZigBeeException(int errorCode, String errorDesc) {
+	public ZCLException(int errorCode, String errorDesc) {
 		super(errorDesc);
 		this.errorCode = errorCode;
 	}

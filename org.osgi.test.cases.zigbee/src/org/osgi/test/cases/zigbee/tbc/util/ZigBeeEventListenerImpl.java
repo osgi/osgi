@@ -3,9 +3,9 @@ package org.osgi.test.cases.zigbee.tbc.util;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZigBeeEvent;
 import org.osgi.service.zigbee.ZigBeeEventListener;
-import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -52,7 +52,7 @@ public class ZigBeeEventListenerImpl implements ZigBeeEventListener {
 		return lastReceivedZigBeeEvent;
 	}
 
-	public void onFailure(ZigBeeException e) {
+	public void onFailure(ZCLException e) {
 		// TODO Auto-generated method stub
 	}
 

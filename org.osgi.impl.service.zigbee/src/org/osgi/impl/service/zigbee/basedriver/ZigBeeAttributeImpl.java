@@ -3,8 +3,8 @@ package org.osgi.impl.service.zigbee.basedriver;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZigBeeAttribute;
-import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeMapHandler;
 import org.osgi.service.zigbee.descriptions.ZigBeeAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
@@ -42,8 +42,7 @@ public class ZigBeeAttributeImpl implements ZigBeeAttribute {
 		handler.onSuccess(response);
 	}
 
-	public void setValue(Object value, ZigBeeMapHandler handler)
-			throws ZigBeeException {
+	public void setValue(Object value, ZigBeeMapHandler handler) throws ZCLException {
 		this.value = value;
 		Map<Integer, Object> response = null;
 		response = new HashMap<Integer, Object>();

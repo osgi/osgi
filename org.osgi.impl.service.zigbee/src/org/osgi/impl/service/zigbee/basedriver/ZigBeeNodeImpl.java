@@ -1,8 +1,8 @@
 
 package org.osgi.impl.service.zigbee.basedriver;
 
+import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
-import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
@@ -21,6 +21,8 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	private ZigBeeEndpoint[]		endpoints;
 	private ZigBeeNodeDescriptor	nodeDescriptor;
 	private ZigBeePowerDescriptor	powerDescriptor;
+	private ZigBeeComplexDescriptor	complexDescriptor;
+	private ZigBeeUserDescriptor	userDescriptor;
 
 	/**
 	 * @param IEEEAddress
@@ -92,23 +94,24 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		return null;
 	}
 
-	public ZigBeeNodeDescriptor getNodeDescriptor() throws ZigBeeException {
-		return nodeDescriptor;
-	}
-
-	public ZigBeePowerDescriptor getPowerDescriptor() throws ZigBeeException {
-		return powerDescriptor;
-	}
-
-	public ZigBeeComplexDescriptor getComplexDescriptor()
-			throws ZigBeeException {
+	public void getNodeDescriptor(ZigBeeHandler handler) throws ZCLException {
 		// TODO Auto-generated method stub
-		return null;
+		handler.onSuccess(nodeDescriptor);
 	}
 
-	public ZigBeeUserDescriptor getUserDescriptor() throws ZigBeeException {
+	public void getPowerDescriptor(ZigBeeHandler handler) throws ZCLException {
 		// TODO Auto-generated method stub
-		return null;
+		handler.onSuccess(powerDescriptor);
+	}
+
+	public void getComplexDescriptor(ZigBeeHandler handler) throws ZCLException {
+		// TODO Auto-generated method stub
+		handler.onSuccess(complexDescriptor);
+	}
+
+	public void getUserDescriptor(ZigBeeHandler handler) throws ZCLException {
+		// TODO Auto-generated method stub
+		handler.onSuccess(userDescriptor);
 	}
 
 	public void leave(ZigBeeHandler handler) {

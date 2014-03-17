@@ -103,10 +103,11 @@ public interface ZigBeeEndpoint {
 	public Long getNodeAddress();
 
 	/**
-	 * @return the node simple descriptor.
-	 * @throws ZigBeeException
+	 * @param handler that will be used in order to return the node simple
+	 *        descriptor {@link ZigBeeSimpleDescriptor}.
+	 * @throws ZCLException
 	 */
-	public ZigBeeSimpleDescriptor getSimpleDescriptor() throws ZigBeeException;
+	public void getSimpleDescriptor(ZigBeeHandler handler) throws ZCLException;
 
 	/**
 	 * @return An array of servers(inputs) clusters, returns an empty array if
@@ -117,10 +118,10 @@ public interface ZigBeeEndpoint {
 	/**
 	 * @param serverClusterId The server(input) cluster identifier
 	 * @return the server(input) cluster identified by id
-	 * @throws ZigBeeException if the given id is not listed in the simple
+	 * @throws ZCLException if the given id is not listed in the simple
 	 *         descriptor
 	 */
-	public ZCLCluster getServerCluster(int serverClusterId) throws ZigBeeException;
+	public ZCLCluster getServerCluster(int serverClusterId) throws ZCLException;
 
 	/**
 	 * @return An array of clients(outputs) clusters, returns an empty array if
@@ -131,10 +132,10 @@ public interface ZigBeeEndpoint {
 	/**
 	 * @param clientClusterId The client(output) cluster identifier
 	 * @return the client(output) cluster identified by id
-	 * @throws ZigBeeException if the given id is not listed in the simple
+	 * @throws ZCLException if the given id is not listed in the simple
 	 *         descriptor
 	 */
-	public ZCLCluster getClientCluster(int clientClusterId) throws ZigBeeException;
+	public ZCLCluster getClientCluster(int clientClusterId) throws ZCLException;
 
 	/**
 	 * This method modify the <i>Binding Table</i> of physical device by adding
@@ -168,9 +169,9 @@ public interface ZigBeeEndpoint {
 	 * This method is used to get details about problems when an error occurs
 	 * during exporting an endpoint
 	 * 
-	 * @param e A device {@link ZigBeeException} the occurred exception
+	 * @param e A device {@link ZCLException} the occurred exception
 	 */
-	public void notExported(ZigBeeException e);
+	public void notExported(ZCLException e);
 
 	/**
 	 * This method is used to get bound endpoints (identified by their service

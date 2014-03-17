@@ -1,10 +1,10 @@
 
 package org.osgi.impl.service.zigbee.basedriver;
 
+import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZigBeeCommandHandler;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
-import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.ZigBeeHost;
 
@@ -32,16 +32,16 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		this.securityLevel = securityLevel;
 	}
 
-	public String getNetworkKey() throws ZigBeeException {
+	public String getNetworkKey() throws ZCLException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void start() throws ZigBeeException {
+	public void start() throws ZCLException {
 		// TODO Auto-generated method stub
 	}
 
-	public void stop() throws ZigBeeException {
+	public void stop() throws ZCLException {
 		// TODO Auto-generated method stub
 	}
 
@@ -50,15 +50,15 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		return false;
 	}
 
-	public void refreshNetwork() throws ZigBeeException {
+	public void refreshNetwork() throws ZCLException {
 		// TODO Auto-generated method stub
 	}
 
-	public void permitJoin(short duration) throws ZigBeeException {
+	public void permitJoin(short duration) throws ZCLException {
 		// TODO Auto-generated method stub
 	}
 
-	public int getChannelMask() throws ZigBeeException {
+	public int getChannelMask() throws ZCLException {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -75,7 +75,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		// TODO Auto-generated method stub
 	}
 
-	public void setLogicalType(short logicalNodeType) throws ZigBeeException {
+	public void setLogicalType(short logicalNodeType) throws ZCLException {
 		// TODO Auto-generated method stub
 	}
 
@@ -83,7 +83,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		// TODO Auto-generated method stub
 	}
 
-	public void createGroupService(String pid, int groupAddress, ZigBeeCommandHandler handler) throws ZigBeeException {
+	public void createGroupService(String pid, int groupAddress, ZigBeeCommandHandler handler) throws ZCLException {
 		// TODO Auto-generated method stub
 	}
 

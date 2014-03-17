@@ -2,7 +2,7 @@
 package org.osgi.test.cases.zigbee.tbc.util;
 
 import java.util.Map;
-import org.osgi.service.zigbee.ZigBeeException;
+import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZigBeeMapHandler;
 
 /**
@@ -11,7 +11,7 @@ import org.osgi.service.zigbee.ZigBeeMapHandler;
 public class ZigBeeMapHandlerImpl implements ZigBeeMapHandler {
 
 	private Map				successResponse;
-	private ZigBeeException	failureResponse;
+	private ZCLException	failureResponse;
 
 	/**
 	 * Constructor.
@@ -25,7 +25,7 @@ public class ZigBeeMapHandlerImpl implements ZigBeeMapHandler {
 		this.successResponse = response;
 	}
 
-	public void onFailure(ZigBeeException e) {
+	public void onFailure(ZCLException e) {
 		this.isSuccess = false;
 		this.failureResponse = e;
 	}
@@ -65,7 +65,7 @@ public class ZigBeeMapHandlerImpl implements ZigBeeMapHandler {
 	 *         handler hasn't receive a response yet, or if the response is
 	 *         null.
 	 */
-	public ZigBeeException getFailureResponse() {
+	public ZCLException getFailureResponse() {
 		return failureResponse;
 	}
 

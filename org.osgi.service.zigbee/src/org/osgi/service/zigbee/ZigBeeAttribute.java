@@ -39,19 +39,19 @@ public interface ZigBeeAttribute {
 	 * Gets the current value of the attribute.
 	 * 
 	 * @param handler the handler
-	 * @throws ZigBeeException
+	 * @throws ZCLException
 	 */
-	public void getValue(ZigBeeMapHandler handler) throws ZigBeeException;
+	public void getValue(ZigBeeMapHandler handler) throws ZCLException;
 
 	/**
 	 * Sets the current value of the attribute.
 	 * 
 	 * @param value the Java value to set
 	 * @param handler the handler
-	 * @throws ZigBeeException when the data type is not known
+	 * @throws ZCLException when the data type is not known
 	 *         ("Unknown data type").
 	 */
-	public void setValue(Object value, ZigBeeMapHandler handler) throws ZigBeeException;
+	public void setValue(Object value, ZigBeeMapHandler handler) throws ZCLException;
 
 	/**
 	 * @return the Attribute data type. It may be null if the data type is not

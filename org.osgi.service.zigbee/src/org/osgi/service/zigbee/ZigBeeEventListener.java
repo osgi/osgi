@@ -61,13 +61,13 @@ public interface ZigBeeEventListener {
 
 	/**
 	 * Notifies a failure, i.e. when either a
-	 * ZigBeeException.UNSUPPORTED_ATTRIBUTE, or a
-	 * ZigBeeException.UNREPORTABLE_ATTRIBUTE, or ZigBeeException.INVALID_VALUE,
-	 * or ZigBeeException.INVALID_DATA_TYPE status occurs.
+	 * ZCLException.UNSUPPORTED_ATTRIBUTE, or a
+	 * ZCLException.UNREPORTABLE_ATTRIBUTE, or ZCLException.INVALID_VALUE, or
+	 * ZCLException.INVALID_DATA_TYPE status occurs.
 	 * 
-	 * @param e the ZigBeeException.
+	 * @param e the ZCLException.
 	 */
-	public void onFailure(ZigBeeException e);
+	public void onFailure(ZCLException e);
 
 	/**
 	 * TIMEOUT_PERIOD is sent from the attribute owner to the listening client
