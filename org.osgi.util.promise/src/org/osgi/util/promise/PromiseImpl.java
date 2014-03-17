@@ -188,7 +188,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * {@inheritDoc}
 	 */
 	public <R, S extends R> Promise<R> then(Success<? super T, S> success) {
-		return then(success, null);
+		return this.<R, S> then(success, null);
 	}
 
 	/**
@@ -408,7 +408,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * {@inheritDoc}
 	 */
 	public <R, S extends R> Promise<R> map(Function<? super T, S> mapper) {
-		return then(new Map<T, S>(mapper));
+		return this.<R, S> then(new Map<T, S>(mapper));
 	}
 
 	/**
@@ -432,7 +432,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * {@inheritDoc}
 	 */
 	public <R, S extends R> Promise<R> flatMap(Function<? super T, Promise<S>> mapper) {
-		return then(new FlatMap<T, S>(mapper));
+		return this.<R, S> then(new FlatMap<T, S>(mapper));
 	}
 
 	/**

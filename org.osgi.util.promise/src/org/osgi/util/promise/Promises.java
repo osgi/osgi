@@ -73,7 +73,7 @@ public class Promises {
 	 */
 	public static <T> Promise<Void> newLatchPromise(Collection<Promise<T>> promises) {
 		if (promises.isEmpty()) {
-			return newResolvedPromise(null);
+			return newResolvedPromise((Void) null);
 		}
 		Deferred<Void> chained = new Deferred<Void>();
 		LatchPromise<T> latchPromise = new LatchPromise<T>(chained, promises.size());

@@ -101,7 +101,7 @@ public class PromiseTest extends TestCase {
 		final Deferred<Integer> d = new Deferred<Integer>();
 		final CountDownLatch latch = new CountDownLatch(1);
 		final Promise<Integer> p = d.getPromise();
-		Promise<Number> p2 = p.then(new Success<Number, Long>() {
+		Promise<Number> p2 = p.<Number, Long> then(new Success<Number, Long>() {
 			public Promise<Long> call(Promise<Number> resolved) throws Exception {
 				latch.countDown();
 				return Promises.newResolvedPromise(new Long(resolved.getValue().longValue()));
@@ -126,7 +126,7 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		final Promise<Integer> p = d.getPromise();
-		Promise<Number> p2 = p.then(new Success<Number, Long>() {
+		Promise<Number> p2 = p.<Number, Long> then(new Success<Number, Long>() {
 			public Promise<Long> call(Promise<Number> resolved) throws Exception {
 				final Promise<Long> returned = Promises.newResolvedPromise(new Long(resolved.getValue().longValue()));
 				returned.onResolve(new Runnable() {
@@ -264,7 +264,7 @@ public class PromiseTest extends TestCase {
 				return Promises.newResolvedPromise(promise.getValue() + promise.getValue());
 			}
 		};
-		final Promise<String> p2 = p1.then(doubler).then(doubler).then(doubler);
+		final Promise<String> p2 = p1.<String, String> then(doubler).<String, String> then(doubler).then(doubler);
 
 		p2.onResolve(new Runnable() {
 			public void run() {
@@ -313,7 +313,7 @@ public class PromiseTest extends TestCase {
 				throw new Exception(promise.getFailure());
 			}
 		};
-		final Promise<String> p2 = p1.then(doubler, wrapper).then(doubler, wrapper).then(doubler, wrapper);
+		final Promise<String> p2 = p1.<String, String> then(doubler, wrapper).<String, String> then(doubler, wrapper).then(doubler, wrapper);
 
 		p2.onResolve(new Runnable() {
 			public void run() {
@@ -358,7 +358,7 @@ public class PromiseTest extends TestCase {
 				throw new Exception(promise.getFailure());
 			}
 		};
-		final Promise<String> p2 = p1.then(doubler, wrapper).then(doubler, wrapper).then(doubler, wrapper);
+		final Promise<String> p2 = p1.<String, String> then(doubler, wrapper).<String, String> then(doubler, wrapper).then(doubler, wrapper);
 
 		p2.onResolve(new Runnable() {
 			public void run() {
@@ -438,7 +438,7 @@ public class PromiseTest extends TestCase {
 		Deferred<String> d = new Deferred<String>();
 		Promise<String> p1 = d.getPromise();
 		final CountDownLatch latch = new CountDownLatch(1);
-		Promise<Number> p2 = p1.then(new Success<Object, Integer>() {
+		Promise<Number> p2 = p1.<Number, Integer> then(new Success<Object, Integer>() {
 			public Promise<Integer> call(final Promise<Object> promise)
 					throws Exception {
 				latch.countDown();
@@ -1265,25 +1265,24 @@ public class PromiseTest extends TestCase {
 		Promise<Integer> p1 = Promises.newResolvedPromise(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		Promise<Number> p2 = p1.map(new Function<Number, Long>() {
+		Promise<String> p2 = p1.<Number, Long> map(new Function<Number, Long>() {
 			public Long apply(Number t) {
 				latch1.countDown();
 				return new Long(t.longValue());
 			}
-		});
-		Promise<String> p3 = p2.map(new Function<Number, String>() {
+		}).map(new Function<Number, String>() {
 			public String apply(Number t) {
 				latch2.countDown();
 				return t.toString();
 			}
 		});
 		assertTrue(p1.isDone());
-		assertTrue(p3.isDone());
+		assertTrue(p2.isDone());
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(latch2.await(WAIT_TIME, TimeUnit.SECONDS));
 
-		assertEquals("wrong value", value1.toString(), p3.getValue());
-		assertNull("wrong failure", p3.getFailure());
+		assertEquals("wrong value", value1.toString(), p2.getValue());
+		assertNull("wrong failure", p2.getFailure());
 	}
 
 	public void testMapException() throws Exception {
@@ -1292,7 +1291,7 @@ public class PromiseTest extends TestCase {
 		Promise<Integer> p1 = Promises.newResolvedPromise(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		Promise<String> p2 = p1.map(new Function<Number, Long>() {
+		Promise<String> p2 = p1.<Number, Long> map(new Function<Number, Long>() {
 			public Long apply(Number t) {
 				latch1.countDown();
 				throw failure;
@@ -1322,13 +1321,12 @@ public class PromiseTest extends TestCase {
 		Promise<Integer> p1 = Promises.newResolvedPromise(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		Promise<Number> p2 = p1.flatMap(new Function<Number, Promise<Long>>() {
+		Promise<String> p2 = p1.<Number, Long> flatMap(new Function<Number, Promise<Long>>() {
 			public Promise<Long> apply(Number t) {
 				latch1.countDown();
 				return Promises.newResolvedPromise(new Long(t.longValue()));
 			}
-		});
-		Promise<String> p3 = p2.flatMap(new Function<Number, Promise<String>>() {
+		}).flatMap(new Function<Number, Promise<String>>() {
 			public Promise<String> apply(Number t) {
 				latch2.countDown();
 				return Promises.newResolvedPromise(t.toString());
@@ -1336,12 +1334,11 @@ public class PromiseTest extends TestCase {
 		});
 		assertTrue(p1.isDone());
 		assertTrue(p2.isDone());
-		assertTrue(p3.isDone());
 		assertTrue(latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue(latch2.await(WAIT_TIME, TimeUnit.SECONDS));
 
-		assertEquals("wrong value", value1.toString(), p3.getValue());
-		assertNull("wrong failure", p3.getFailure());
+		assertEquals("wrong value", value1.toString(), p2.getValue());
+		assertNull("wrong failure", p2.getFailure());
 	}
 
 	public void testFlatMapException() throws Exception {
@@ -1350,7 +1347,7 @@ public class PromiseTest extends TestCase {
 		Promise<Integer> p1 = Promises.newResolvedPromise(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		Promise<String> p2 = p1.flatMap(new Function<Number, Promise<Long>>() {
+		Promise<String> p2 = p1.<Number, Long> flatMap(new Function<Number, Promise<Long>>() {
 			public Promise<Long> apply(Number t) {
 				latch1.countDown();
 				throw failure;
@@ -1378,7 +1375,7 @@ public class PromiseTest extends TestCase {
 	public void testRecoverNoFailure() throws Exception {
 		final Integer value1 = new Integer(42);
 		final Long value2 = new Long(43);
-		final Promise<Number> p1 = Promises.newResolvedPromise(value1);
+		final Promise<Number> p1 = Promises.newResolvedPromise((Number) value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
 			public Long apply(Promise<?> t) {
@@ -1478,7 +1475,7 @@ public class PromiseTest extends TestCase {
 	public void testRecoverWithNoFailure() throws Exception {
 		final Integer value1 = new Integer(42);
 		final Long value2 = new Long(43);
-		final Promise<Number> p1 = Promises.newResolvedPromise(value1);
+		final Promise<Number> p1 = Promises.newResolvedPromise((Number) value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<Long>>() {
 			public Promise<Long> apply(Promise<?> t) {
