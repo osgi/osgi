@@ -150,7 +150,7 @@ public interface Promise<T> {
 	 * registered callback is called.
 	 * 
 	 * @param callback A callback to be called when this Promise is resolved.
-	 * @throws NullPointerException If the specified callback is {@code null}.
+	 *        Must not be {@code null}.
 	 */
 	void onResolve(Runnable callback);
 
@@ -249,6 +249,7 @@ public interface Promise<T> {
 	 * failed with that failure.
 	 * 
 	 * @param predicate The Predicate to evaluate the value of this Promise.
+	 *        Must not be {@code null}.
 	 * @return A Promise that filters the value of this Promise.
 	 */
 	Promise<T> filter(Predicate<? super T> predicate);
@@ -270,7 +271,8 @@ public interface Promise<T> {
 	 * @param <S> A subtype of the value type associated with the returned
 	 *        Promise.
 	 * @param mapper The Function that will map the value of this Promise to the
-	 *        value that will be used to resolve the returned Promise.
+	 *        value that will be used to resolve the returned Promise. Must not
+	 *        be {@code null}.
 	 * @return A Promise that returns the value of this Promise as mapped by the
 	 *         specified Function.
 	 */
@@ -293,7 +295,8 @@ public interface Promise<T> {
 	 * @param <S> A subtype of the value type associated with the returned
 	 *        Promise.
 	 * @param mapper The Function that will flatMap the value of this Promise to
-	 *        a Promise that will be used to resolve the returned Promise.
+	 *        a Promise that will be used to resolve the returned Promise. Must
+	 *        not be {@code null}.
 	 * @return A Promise that returns the value of this Promise as mapped by the
 	 *         specified Function.
 	 */
@@ -317,7 +320,8 @@ public interface Promise<T> {
 	 * 
 	 * @param <S> A subtype of the value type associated with this Promise.
 	 * @param recovery The Function whose value will be used to resolve the
-	 *        returned Promise if this Promise resolves with a failure.
+	 *        returned Promise if this Promise resolves with a failure. Must not
+	 *        be {@code null}.
 	 * @return A Promise that returns the value of this Promise or recovers from
 	 *         the failure of this Promise.
 	 */
@@ -341,7 +345,8 @@ public interface Promise<T> {
 	 * 
 	 * @param <S> A subtype of the value type associated with this Promise.
 	 * @param recovery The Function whose value Promise will be used to resolve
-	 *        the returned Promise if this Promise resolves with a failure.
+	 *        the returned Promise if this Promise resolves with a failure. Must
+	 *        not be {@code null}.
 	 * @return A Promise that returns the value of this Promise or recovers from
 	 *         the failure of this Promise.
 	 */

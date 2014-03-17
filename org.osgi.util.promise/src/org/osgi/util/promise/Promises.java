@@ -45,11 +45,12 @@ public class Promises {
 	/**
 	 * Create a new Promise that has been resolved with the specified failure.
 	 * 
-	 * @param failure The failure of the resolved Promise.
+	 * @param failure The failure of the resolved Promise. Must not be
+	 *        {@code null}.
 	 * @return A new Promise that has been resolved with the specified failure.
 	 */
 	public static <T> Promise<T> newFailedPromise(Throwable failure) {
-		return new PromiseImpl<T>(null, failure);
+		return new PromiseImpl<T>(null, PromiseImpl.requireNonNull(failure));
 	}
 
 	/**

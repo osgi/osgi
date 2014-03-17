@@ -527,6 +527,16 @@ public class PromiseTest extends TestCase {
 		}
 	}
 
+	public void testFailNull() throws Exception {
+		Deferred<String> d = new Deferred<String>();
+		try {
+			d.fail(null);
+			fail("failed to error on null failure");
+		} catch (NullPointerException e) {
+			// expected
+		}
+	}
+
 	public void testMultiResolve() throws Exception {
 		final Deferred<String> d = new Deferred<String>();
 		Promise<String> p = d.getPromise();
@@ -649,18 +659,29 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testNewResolvedPromise() throws Exception {
-		final CountDownLatch latch = new CountDownLatch(1);
-		String value = new String("value");
-		final Promise<String> p = Promises.newResolvedPromise(value);
-		assertTrue("promise not resolved", p.isDone());
-		p.onResolve(new Runnable() {
+		final CountDownLatch latch1 = new CountDownLatch(1);
+		final CountDownLatch latch2 = new CountDownLatch(1);
+		String value1 = new String("value");
+		final Promise<String> p1 = Promises.newResolvedPromise(value1);
+		final Promise<String> p2 = Promises.newResolvedPromise((String) null);
+		assertTrue("promise not resolved", p1.isDone());
+		assertTrue("promise not resolved", p2.isDone());
+		p1.onResolve(new Runnable() {
 			public void run() {
-				latch.countDown();
+				latch1.countDown();
 			}
 		});
-		assertTrue("callback did not run", latch.await(WAIT_TIME, TimeUnit.SECONDS));
-		assertNull("wrong failure", p.getFailure());
-		assertSame("wrong value", value, p.getValue());
+		p2.onResolve(new Runnable() {
+			public void run() {
+				latch2.countDown();
+			}
+		});
+		assertTrue("callback did not run", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertTrue("callback did not run", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
+		assertNull("wrong failure", p1.getFailure());
+		assertSame("wrong value", value1, p1.getValue());
+		assertNull("wrong failure", p2.getFailure());
+		assertNull("wrong value", p2.getValue());
 	}
 
 	public void testNewFailedPromise() throws Exception {
@@ -680,6 +701,12 @@ public class PromiseTest extends TestCase {
 			fail("getValue failed to throw InvocationTargetException");
 		} catch (InvocationTargetException e) {
 			assertSame("wrong failure", failure, e.getCause());
+		}
+		try {
+			Promises.newFailedPromise(null);
+			fail("expected NullPointerException");
+		} catch (NullPointerException e) {
+			// expected
 		}
 	}
 
@@ -1141,6 +1168,16 @@ public class PromiseTest extends TestCase {
 		assertNull("wrong value", p3.getValue());
 	}
 
+	public void testResolveWithNull() throws Exception {
+		Deferred<String> d = new Deferred<String>();
+		try {
+			d.resolveWith(null);
+			fail("failed to error on null promise");
+		} catch (NullPointerException e) {
+			// expected
+		}
+	}
+
 	public void testFilter() throws Exception {
 		String value1 = new String("value");
 		String value3 = new String("");
@@ -1260,6 +1297,17 @@ public class PromiseTest extends TestCase {
 		}
 	}
 
+	public void testFilterNull() throws Exception {
+		String value1 = new String("value");
+		Promise<String> p1 = Promises.newResolvedPromise(value1);
+		try {
+			p1.filter(null);
+			fail("failed to error on null predicate");
+		} catch (NullPointerException e) {
+			// expected
+		}
+	}
+
 	public void testMap() throws Exception {
 		Integer value1 = new Integer(42);
 		Promise<Integer> p1 = Promises.newResolvedPromise(value1);
@@ -1316,6 +1364,17 @@ public class PromiseTest extends TestCase {
 		}
 	}
 
+	public void testMapNull() throws Exception {
+		String value1 = new String("value");
+		Promise<String> p1 = Promises.newResolvedPromise(value1);
+		try {
+			p1.map(null);
+			fail("failed to error on null function");
+		} catch (NullPointerException e) {
+			// expected
+		}
+	}
+
 	public void testFlatMap() throws Exception {
 		Integer value1 = new Integer(42);
 		Promise<Integer> p1 = Promises.newResolvedPromise(value1);
@@ -1369,6 +1428,17 @@ public class PromiseTest extends TestCase {
 			fail("p2 getValue failed to throw InvocationTargetException");
 		} catch (InvocationTargetException e) {
 			assertSame("wrong failure", failure, e.getCause());
+		}
+	}
+
+	public void testFlatMapNull() throws Exception {
+		String value1 = new String("value");
+		Promise<String> p1 = Promises.newResolvedPromise(value1);
+		try {
+			p1.flatMap(null);
+			fail("failed to error on null function");
+		} catch (NullPointerException e) {
+			// expected
 		}
 	}
 
@@ -1472,6 +1542,17 @@ public class PromiseTest extends TestCase {
 		}
 	}
 
+	public void testRecoverNull() throws Exception {
+		String value1 = new String("value");
+		Promise<String> p1 = Promises.newResolvedPromise(value1);
+		try {
+			p1.recover(null);
+			fail("failed to error on null function");
+		} catch (NullPointerException e) {
+			// expected
+		}
+	}
+
 	public void testRecoverWithNoFailure() throws Exception {
 		final Integer value1 = new Integer(42);
 		final Long value2 = new Long(43);
@@ -1569,6 +1650,17 @@ public class PromiseTest extends TestCase {
 			fail("p2 getValue failed to throw InvocationTargetException");
 		} catch (InvocationTargetException e) {
 			assertSame("wrong failure", failure2, e.getCause());
+		}
+	}
+
+	public void testRecoverWithNull() throws Exception {
+		String value1 = new String("value");
+		Promise<String> p1 = Promises.newResolvedPromise(value1);
+		try {
+			p1.recoverWith(null);
+			fail("failed to error on null function");
+		} catch (NullPointerException e) {
+			// expected
 		}
 	}
 

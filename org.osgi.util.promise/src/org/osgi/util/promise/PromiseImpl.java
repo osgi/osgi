@@ -330,7 +330,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * failure of the specified Promise.
 	 * 
 	 * @param with A Promise whose value or failure will be used to resolve this
-	 *        Promise.
+	 *        Promise. Must not be {@code null}.
 	 * @return A Promise that is resolved only when this Promise is resolved by
 	 *         the specified Promise. The returned Promise will be successfully
 	 *         resolved, with the value {@code null}, if this Promise was
@@ -397,7 +397,7 @@ final class PromiseImpl<T> implements Promise<T> {
 		private final Predicate<? super T>	predicate;
 
 		Filter(Predicate<? super T> predicate) {
-			this.predicate = predicate;
+			this.predicate = requireNonNull(predicate);
 		}
 
 		public Promise<T> call(Promise<T> resolved) throws Exception {
@@ -424,7 +424,7 @@ final class PromiseImpl<T> implements Promise<T> {
 		private final Function<? super T, S>	mapper;
 
 		Map(Function<? super T, S> mapper) {
-			this.mapper = mapper;
+			this.mapper = requireNonNull(mapper);
 		}
 
 		public Promise<S> call(Promise<T> resolved) throws Exception {
@@ -448,7 +448,7 @@ final class PromiseImpl<T> implements Promise<T> {
 		private final Function<? super T, Promise<S>>	mapper;
 
 		FlatMap(Function<? super T, Promise<S>> mapper) {
-			this.mapper = mapper;
+			this.mapper = requireNonNull(mapper);
 		}
 
 		public Promise<S> call(Promise<T> resolved) throws Exception {
@@ -477,7 +477,7 @@ final class PromiseImpl<T> implements Promise<T> {
 
 		Recover(PromiseImpl<T> chained, Function<Promise<?>, S> recovery) {
 			this.chained = chained;
-			this.recovery = recovery;
+			this.recovery = requireNonNull(recovery);
 		}
 
 		public Promise<Void> call(Promise<T> resolved) throws Exception {
@@ -522,7 +522,7 @@ final class PromiseImpl<T> implements Promise<T> {
 
 		RecoverWith(PromiseImpl<T> chained, Function<Promise<?>, Promise<S>> recovery) {
 			this.chained = chained;
-			this.recovery = recovery;
+			this.recovery = requireNonNull(recovery);
 		}
 
 		public Promise<Void> call(Promise<T> resolved) throws Exception {
@@ -544,6 +544,13 @@ final class PromiseImpl<T> implements Promise<T> {
 				recovered.onResolve(new Chain<T, S>(chained, recovered));
 			}
 		}
+	}
+
+	static <V> V requireNonNull(V value) {
+		if (value != null) {
+			return value;
+		}
+		throw new NullPointerException();
 	}
 
 	/**

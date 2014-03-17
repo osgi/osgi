@@ -89,14 +89,16 @@ public class Deferred<T> {
 	 * Resolving the associated Promise <i>happens-before</i> any registered
 	 * callback is called. That is, in a registered callback,
 	 * {@link Promise#isDone()} must return {@code true} and
-	 * {@link Promise#getValue()} and {@link Promise#getFailure()} must not block.
+	 * {@link Promise#getValue()} and {@link Promise#getFailure()} must not
+	 * block.
 	 * 
-	 * @param failure The failure of the resolved Promise.
+	 * @param failure The failure of the resolved Promise. Must not be
+	 *        {@code null}.
 	 * @throws IllegalStateException If the associated Promise was already
 	 *         resolved.
 	 */
 	public void fail(Throwable failure) {
-		promise.resolve(null, failure);
+		promise.resolve(null, PromiseImpl.requireNonNull(failure));
 	}
 
 	/**
@@ -122,7 +124,7 @@ public class Deferred<T> {
 	 * block.
 	 * 
 	 * @param with A Promise whose value or failure will be used to resolve the
-	 *        associated Promise.
+	 *        associated Promise. Must not be {@code null}.
 	 * @return A Promise that is resolved only when the associated Promise is
 	 *         resolved by the specified Promise. The returned Promise will be
 	 *         successfully resolved, with the value {@code null}, if the
