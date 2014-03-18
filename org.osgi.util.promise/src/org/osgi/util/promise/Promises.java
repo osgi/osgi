@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * Static helper methods for {@link Promise}s.
@@ -31,7 +32,7 @@ public class Promises {
 	private Promises() {
 		// disallow object creation
 	}
-	
+
 	/**
 	 * Create a new Promise that has been resolved with the specified value.
 	 * 
@@ -70,71 +71,28 @@ public class Promises {
 	 *        Promise must be resolved. Must not be {@code null}.
 	 * @return A Promise that is resolved only when all the specified Promises
 	 *         are resolved. The returned Promise will be successfully resolved,
-	 *         with the value {@code null}, if all the specified Promises are
-	 *         successfully resolved. The returned Promise will be resolved with
-	 *         a failure of {@link FailedPromisesException} if any of the
-	 *         specified Promises are resolved with a failure. The failure
+	 *         with a List of the values in the order of the specified Promises,
+	 *         if all the specified Promises are successfully resolved. The List
+	 *         in the returned Promise is the property of the caller and is
+	 *         modifiable. The returned Promise will be resolved with a failure
+	 *         of {@link FailedPromisesException} if any of the specified
+	 *         Promises are resolved with a failure. The failure
 	 *         {@link FailedPromisesException} must contain all of the specified
 	 *         Promises which resolved with a failure.
 	 */
-	public static <T> Promise<Void> newLatchPromise(Collection<Promise<T>> promises) {
+	public static <T> Promise<List<T>> all(Collection<Promise<T>> promises) {
 		if (promises.isEmpty()) {
-			return newResolvedPromise((Void) null);
+			List<T> result = new ArrayList<T>();
+			return newResolvedPromise(result);
 		}
-		Deferred<Void> chained = new Deferred<Void>();
-		LatchPromise<T> latchPromise = new LatchPromise<T>(chained, promises.size());
-		for (Promise<T> promise : promises) {
-			promise.then(latchPromise, latchPromise);
+		/* make a copy and capture the ordering */
+		List<Promise<T>> list = new ArrayList<Promise<T>>(promises);
+		PromiseImpl<List<T>> chained = new PromiseImpl<List<T>>();
+		All<T> all = new All<T>(chained, list);
+		for (Promise<T> promise : list) {
+			promise.then(all, all);
 		}
-		return chained.getPromise();
-	}
-
-	/**
-	 * A callback used to resolve a Deferred when the specified count of
-	 * Promises are resolved for the
-	 * {@link Promises#newLatchPromise(Collection)} method.
-	 * 
-	 * @ThreadSafe
-	 */
-	private static final class LatchPromise<T> implements Success<T, Void>, Failure {
-		private final Deferred<Void>	chained;
-		private final List<Promise<?>>	failed;		// @GuardedBy("this")
-		private int						count;		// @GuardedBy("this")
-
-		LatchPromise(Deferred<Void> chained, int count) {
-			this.chained = chained;
-			this.count = count;
-			this.failed = new ArrayList<Promise<?>>(count);
-		}
-
-		public Promise<Void> call(Promise<T> resolved) throws Exception {
-			resolveChained(null);
-			return null;
-		}
-
-		public void fail(Promise<?> resolved) throws Exception {
-			resolveChained(resolved);
-		}
-
-		private void resolveChained(Promise<?> failedPromise) {
-			Throwable failure = null;
-			synchronized (this) {
-				if (failedPromise != null) {
-					failed.add(failedPromise);
-				}
-				if (--count > 0) {
-					return;
-				}
-				if (!failed.isEmpty()) {
-					failure = new FailedPromisesException(failed);
-				}
-			}
-			if (failure == null) {
-				chained.resolve(null);
-			} else {
-				chained.fail(failure);
-			}
-		}
+		return chained;
 	}
 
 	/**
@@ -145,20 +103,90 @@ public class Promises {
 	 * The new Promise acts as a gate and must be resolved after all of the
 	 * specified Promises are resolved.
 	 * 
+	 * @param <T> The value type associated with the specified Promises.
 	 * @param promises The Promises which must be resolved before the returned
 	 *        Promise must be resolved. Must not be {@code null}.
 	 * @return A Promise that is resolved only when all the specified Promises
 	 *         are resolved. The returned Promise will be successfully resolved,
-	 *         with the value {@code null}, if all the specified Promises are
-	 *         successfully resolved. The returned Promise will be resolved with
-	 *         a failure of {@link FailedPromisesException} if any of the
-	 *         specified Promises are resolved with a failure. The failure
+	 *         with a List of the values in the order of the specified Promises,
+	 *         if all the specified Promises are successfully resolved. The List
+	 *         in the returned Promise is the property of the caller and is
+	 *         modifiable. The returned Promise will be resolved with a failure
+	 *         of {@link FailedPromisesException} if any of the specified
+	 *         Promises are resolved with a failure. The failure
 	 *         {@link FailedPromisesException} must contain all of the specified
 	 *         Promises which resolved with a failure.
 	 */
-	public static Promise<Void> newLatchPromise(Promise<?>... promises) {
+	public static <T> Promise<List<T>> all(Promise<? extends T>... promises) {
 		@SuppressWarnings("unchecked")
-		List<Promise<Object>> list = Arrays.asList((Promise<Object>[]) promises);
-		return newLatchPromise(list);
+		List<Promise<T>> list = Arrays.asList((Promise<T>[]) promises);
+		return all(list);
 	}
+
+	/**
+	 * A callback used to resolve a Promise when the specified count of Promises
+	 * are resolved for the {@link Promises#all(Collection)} method.
+	 * 
+	 * @ThreadSafe
+	 */
+	private static final class All<T> implements Success<T, Void>, Failure {
+		private final PromiseImpl<List<T>>	chained;
+		private final List<Promise<T>>		promises;
+		private final AtomicInteger			promiseCount;
+		private final AtomicInteger			failedCount;
+
+		All(PromiseImpl<List<T>> chained, List<Promise<T>> promises) {
+			this.chained = chained;
+			this.promises = promises;
+			this.promiseCount = new AtomicInteger(promises.size());
+			this.failedCount = new AtomicInteger(0);
+		}
+
+		public Promise<Void> call(Promise<T> resolved) throws Exception {
+			resolve();
+			return null;
+		}
+
+		public void fail(Promise<?> resolved) throws Exception {
+			failedCount.incrementAndGet();
+			resolve();
+		}
+
+		private void resolve() throws Exception {
+			if (promiseCount.decrementAndGet() != 0) {
+				return;
+			}
+			if (failedCount.get() > 0) {
+				List<Promise<?>> failed = new ArrayList<Promise<?>>(failedCount.get());
+				for (Promise<T> promise : promises) {
+					boolean failure;
+					try {
+						failure = promise.getFailure() != null;
+					} catch (Throwable e) {
+						chained.resolve(null, e);
+						return;
+					}
+					if (failure) {
+						failed.add(promise);
+					}
+				}
+				chained.resolve(null, new FailedPromisesException(failed));
+				return;
+			}
+
+			List<T> result = new ArrayList<T>(promises.size());
+			for (Promise<T> promise : promises) {
+				T value;
+				try {
+					value = promise.getValue();
+				} catch (Throwable e) {
+					chained.resolve(null, e);
+					return;
+				}
+				result.add(value);
+			}
+			chained.resolve(result, null);
+		}
+	}
+
 }

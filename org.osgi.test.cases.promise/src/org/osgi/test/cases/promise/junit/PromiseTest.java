@@ -20,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.Timer;
@@ -710,7 +711,7 @@ public class PromiseTest extends TestCase {
 		}
 	}
 
-	public void testLatchPromiseSuccess1() throws Exception {
+	public void testAllSuccess1() throws Exception {
 		final Deferred<Integer> d1 = new Deferred<Integer>();
 		final Promise<Integer> p1 = d1.getPromise();
 		final CountDownLatch latch1 = new CountDownLatch(1);
@@ -727,7 +728,8 @@ public class PromiseTest extends TestCase {
 				latch2.countDown();
 			}
 		});
-		final Promise<Void> latched = Promises.newLatchPromise(p1, p2);
+		@SuppressWarnings("unchecked")
+		final Promise<List<Number>> latched = Promises.<Number> all(p1, p2);
 		final CountDownLatch latch = new CountDownLatch(1);
 		latched.onResolve(new Runnable() {
 			public void run() {
@@ -750,14 +752,18 @@ public class PromiseTest extends TestCase {
 		assertTrue("p2 callback did not run after resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("p2 not resolved", p2.isDone());
 		assertNull("p2 wrong failure", p2.getFailure());
-		assertEquals("p2 wrong value", value2, p2.getValue());
+		assertSame("p2 wrong value", value2, p2.getValue());
 		assertTrue("latched callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("latched not resolved", latched.isDone());
 		assertNull("latched wrong failure", latched.getFailure());
-		assertNull("latched wrong value", latched.getValue());
+		List<Number> list = latched.getValue();
+		assertNotNull("latched wrong value", list);
+		assertEquals(2, list.size());
+		assertSame("p1 wrong value", value1, list.get(0));
+		assertSame("p2 wrong value", value2, list.get(1));
 	}
 
-	public void testLatchPromiseSuccess2() throws Exception {
+	public void testAllSuccess2() throws Exception {
 		final Deferred<String> d1 = new Deferred<String>();
 		final Promise<String> p1 = d1.getPromise();
 		final CountDownLatch latch1 = new CountDownLatch(1);
@@ -774,10 +780,10 @@ public class PromiseTest extends TestCase {
 				latch2.countDown();
 			}
 		});
-		Collection<Promise<String>> promises = new ArrayList<Promise<String>>();
+		List<Promise<String>> promises = new ArrayList<Promise<String>>();
 		promises.add(p1);
 		promises.add(p2);
-		final Promise<Void> latched = Promises.newLatchPromise(promises);
+		final Promise<List<String>> latched = Promises.all(promises);
 		final CountDownLatch latch = new CountDownLatch(1);
 		latched.onResolve(new Runnable() {
 			public void run() {
@@ -795,7 +801,7 @@ public class PromiseTest extends TestCase {
 		assertSame("p1 wrong value", value1, p1.getValue());
 		assertFalse("p2 resolved", p2.isDone());
 		assertFalse("latched resolved", latched.isDone());
-		String value2 = new String("12");
+		String value2 = new String("24");
 		d2.resolve(value2);
 		assertTrue("p2 callback did not run after resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("p2 not resolved", p2.isDone());
@@ -804,10 +810,14 @@ public class PromiseTest extends TestCase {
 		assertTrue("latched callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("latched not resolved", latched.isDone());
 		assertNull("latched wrong failure", latched.getFailure());
-		assertNull("latched wrong value", latched.getValue());
+		List<String> list = latched.getValue();
+		assertNotNull("latched wrong value", list);
+		assertEquals(2, list.size());
+		assertSame("p1 wrong value", value1, list.get(0));
+		assertSame("p2 wrong value", value2, list.get(1));
 	}
 
-	public void testLatchPromiseFail1() throws Exception {
+	public void testAllFail1() throws Exception {
 		final Deferred<Integer> d1 = new Deferred<Integer>();
 		final Promise<Integer> p1 = d1.getPromise();
 		final CountDownLatch latch1 = new CountDownLatch(1);
@@ -832,7 +842,8 @@ public class PromiseTest extends TestCase {
 				latch3.countDown();
 			}
 		});
-		final Promise<Void> latched = Promises.newLatchPromise(p1, p2, p3);
+		@SuppressWarnings("unchecked")
+		final Promise<List<Number>> latched = Promises.<Number> all(p1, p2, p3);
 		final CountDownLatch latch = new CountDownLatch(1);
 		latched.onResolve(new Runnable() {
 			public void run() {
@@ -890,9 +901,9 @@ public class PromiseTest extends TestCase {
 		}
 	}
 
-	public void testLatchPromiseEmpty1() throws Exception {
+	public void testAllEmpty1() throws Exception {
 		Collection<Promise<String>> promises = Collections.emptyList();
-		final Promise<Void> latched = Promises.newLatchPromise(promises);
+		final Promise<List<String>> latched = Promises.all(promises);
 		assertTrue("latched not resolved", latched.isDone());
 		final CountDownLatch latch = new CountDownLatch(1);
 		latched.onResolve(new Runnable() {
@@ -902,11 +913,14 @@ public class PromiseTest extends TestCase {
 		});
 		assertTrue("latched callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertNull("latched wrong failure", latched.getFailure());
-		assertNull("latched wrong value", latched.getValue());
+		List<String> list = latched.getValue();
+		assertNotNull("latched wrong value", list);
+		assertTrue(list.isEmpty());
 	}
 
-	public void testLatchPromiseEmpty2() throws Exception {
-		final Promise<Void> latched = Promises.newLatchPromise();
+	public void testAllEmpty2() throws Exception {
+		@SuppressWarnings("unchecked")
+		final Promise<List<Object>> latched = Promises.all();
 		assertTrue("latched not resolved", latched.isDone());
 		final CountDownLatch latch = new CountDownLatch(1);
 		latched.onResolve(new Runnable() {
@@ -916,18 +930,20 @@ public class PromiseTest extends TestCase {
 		});
 		assertTrue("latched callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertNull("latched wrong failure", latched.getFailure());
-		assertNull("latched wrong value", latched.getValue());
+		List<Object> list = latched.getValue();
+		assertNotNull("latched wrong value", list);
+		assertTrue(list.isEmpty());
 	}
 
-	public void testLatchPromiseNull() throws Exception {
+	public void testAllNull() throws Exception {
 		try {
-			Promises.newLatchPromise((Promise<?>[]) null);
+			Promises.all((Promise<?>[]) null);
 			fail("expected NullPointerException");
 		} catch (NullPointerException e) {
 			// expected
 		}
 		try {
-			Promises.newLatchPromise((Collection<Promise<Object>>) null);
+			Promises.all((Collection<Promise<Object>>) null);
 			fail("expected NullPointerException");
 		} catch (NullPointerException e) {
 			// expected
