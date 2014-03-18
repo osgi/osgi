@@ -51,9 +51,9 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * thread can write the resolved state variables and open the latch.
 	 * 
 	 * <p>
-	 * The resolved state variables, {@link #value} and {@link #fail}, must
-	 * only be written when the latch is closed (getCount() != 0) and must only
-	 * be read when the latch is open (getCount() == 0). The latch state must
+	 * The resolved state variables, {@link #value} and {@link #fail}, must only
+	 * be written when the latch is closed (getCount() != 0) and must only be
+	 * read when the latch is open (getCount() == 0). The latch state must
 	 * always be checked before writing or reading since the resolved state
 	 * variables' memory consistency is guarded by the latch.
 	 */
@@ -483,7 +483,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @Immutable
 	 */
 	private static final class Recover<T, S extends T> implements Success<T, Void>, Failure {
-		private final PromiseImpl<T>					chained;
+		private final PromiseImpl<T>			chained;
 		private final Function<Promise<?>, S>	recovery;
 
 		Recover(PromiseImpl<T> chained, Function<Promise<?>, S> recovery) {
@@ -528,7 +528,7 @@ final class PromiseImpl<T> implements Promise<T> {
 	 * @Immutable
 	 */
 	private static final class RecoverWith<T, S extends T> implements Success<T, Void>, Failure {
-		private final PromiseImpl<T>								chained;
+		private final PromiseImpl<T>					chained;
 		private final Function<Promise<?>, Promise<S>>	recovery;
 
 		RecoverWith(PromiseImpl<T> chained, Function<Promise<?>, Promise<S>> recovery) {
@@ -607,6 +607,7 @@ final class PromiseImpl<T> implements Promise<T> {
 		static {
 			LOGGER = java.util.logging.Logger.getLogger(PromiseImpl.class.getName());
 		}
+
 		static void logCallbackException(Throwable t) {
 			LOGGER.log(java.util.logging.Level.WARNING, "Exception from Promise callback", t);
 		}

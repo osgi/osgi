@@ -67,7 +67,8 @@ public class Deferred<T> {
 	 * Resolving the associated Promise <i>happens-before</i> any registered
 	 * callback is called. That is, in a registered callback,
 	 * {@link Promise#isDone()} must return {@code true} and
-	 * {@link Promise#getValue()} and {@link Promise#getFailure()} must not block.
+	 * {@link Promise#getValue()} and {@link Promise#getFailure()} must not
+	 * block.
 	 * 
 	 * @param value The value of the resolved Promise.
 	 * @throws IllegalStateException If the associated Promise was already
