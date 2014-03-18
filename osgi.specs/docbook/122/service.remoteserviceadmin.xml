@@ -2209,36 +2209,106 @@ xml                    ::= &lt;*&gt; *</programlisting>
           href="../../generated/xmlns/rsa/v1.0.0/rsa.xsd" parse="text"/></programlisting>
     </section>
   </section>
-
+  
   <section>
-    <title>Use of the osgi.extender Namespace</title>
+    <title>Capability Namespaces</title>
 
-    <para>
+    <section>
+      <title>Local Discovery Extender</title>
+
+      <para>
         A bundle containing Endpoint Description Extender resources can 
         indicate its dependency on the Remote Service Admin extender 
         by declaring a requirement on the <code>osgi.extender</code>
         namespace.
-    </para>
+      </para>
 
-    <programlisting>Require-Capability: osgi.extender;
+      <programlisting>Require-Capability: osgi.extender;
     filter:="(&amp;(osgi.extender=osgi.remoteserviceadmin)
              (version&gt;=1.1)(!(version&gt;=2.0)))"</programlisting>
 
-    <para>
+      <para>
         With this constraint declared a bundle that depends on the extender
         will fail to resolve if no extender is present in the framework.
-    </para>
+      </para>
 
-    <para>    
+      <para>    
         Implementations of this specification must provide this extender
         capability as follows:
-    </para>
+      </para>
 
-    <programlisting>Provide-Capability: osgi.extender;
+      <programlisting>Provide-Capability: osgi.extender;
     osgi.entender="osgi.remoteserviceadmin";
     version:Version="1.1";
-    uses:="org.osgi.service.remoteserviceadmin"
-    </programlisting>
+    uses:="org.osgi.service.remoteserviceadmin"</programlisting>
+    
+    </section>
+    
+    <section>
+      <title>Discovery Provider Capability</title>
+      
+      <para>Discovery Providers use the <code>osgi.remoteserviceadmin.discovery</code> 
+      namespace to declare themselves as such. 
+      The version defined for this namespace indicates the version 
+      of this specification that the discovery provider supports.</para>
+      
+      <para>This namespace has one defined attribute, <code>protocols</code> 
+      of type <code>List&lt;String&gt;</code>, which contains a list of the 
+      discovery protocols supported by the discovery provider. Local discovery providers 
+      (using the Endpoint XML extender), should use the value <code>local</code> to indicate 
+      that they support this. Other values for the protocols attribute are 
+      implementation specific.      
+      </para>
+      
+      <para>Example: A discovery provider that provides local and SLP discovery:</para>
+      
+      <programlisting>Provide-Capability: osgi.remoteserviceadmin.discovery;
+    protocols:List&lt;String&gt;="SLP,local"; version:Version=1.1</programlisting>
+    </section>
+    
+    <section>
+      <title>Distribution Provider Capability</title>
+      
+      <para>Distribution providers advertise their 
+        supported distribution mechanisms using configuration types. 
+        These are selected at runtime using the <code>service.exported.configs</code> 
+        service property. Distribution providers can use the 
+        <code>osgi.remoteserviceadmin.distribution</code> namespace
+        with attribute <code>configs</code>, of type <code>List&lt;String&gt;</code>, 
+        to advertise the supported config types. 
+        The version defined for this namespace indicates the version 
+        of this specification that the distribution provider supports. 
+      </para>
+      
+      <para>
+        Example: A Distribution provider that supports the <code>org.acme.jaxws</code> and
+        <code>org.acme.jaxrs</code> configuration types: 
+      </para>
+      
+      <programlisting>Provide-Capability: osgi.remoteserviceadmin.distribution;
+    configs:List&lt;String&gt;="org.acme.jaxws,org.acme.jaxrs"; version:Version=1.1</programlisting>
+    </section>    
+    
+    <section>
+      <title>Topology Manager Capability</title>
+      
+      <para>Remote Service Admin topology managers may use different policies when 
+        determining which services to export and/or import. Topology managers use
+        the namespace  
+        <code>osgi.remoteserviceadmin.topology</code> 
+        to declare this bevavior.
+        This namespace defines the <code>policy String</code> attribute        
+        with predefined values 
+        <code>promiscuous</code> and <code>fail-over</code> but other values may also be
+        used.
+        <remark>How do we define those two values precisely?</remark>
+        The version defined for this namespace indicates the version 
+        of this specification that the topology manager supports.
+      </para>
+      
+      <programlisting>Provide-Capability: osgi.remoteserviceadmin.topology;
+    policy=promiscuous; version:Version=1.1</programlisting>
+    </section>    
   </section>
 
   <section xml:id="i1789427">
