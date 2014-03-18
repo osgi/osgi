@@ -3,6 +3,8 @@ package org.osgi.test.cases.zigbee.tbc;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceReference;
 import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZCLAttributeRecord;
 import org.osgi.service.zigbee.ZCLCluster;
@@ -82,10 +84,10 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
 
-		log("ZigBeeNode IEEE_ADDRESS: " + dev.getIEEEAddress().toString());
+		log("ZigBeeNode IEEE_ADDRESS: " + dev.getIEEEAddress());
 		assertEquals("IEEE ADDRESS not matched",
 				ZigBeeConstants.NODE_IEEE_ADDRESS_2,
-				dev.getIEEEAddress().toString());
+				dev.getIEEEAddress());
 
 		try {
 			ZigBeeHandlerImpl handler = new ZigBeeHandlerImpl();
@@ -205,6 +207,49 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 	}
 
 	/**
+	 * @param endpointIeeeAddress
+	 * @return the ZigBeeEndpoint having the given endpointIeeeAddress.
+	 */
+	private ZigBeeEndpoint getZigBeeEndpoint(Long endpointIeeeAddress) {
+		ZigBeeEndpoint endpoint = null;
+		try {
+			ServiceReference[] srs = getContext().getAllServiceReferences(ZigBeeEndpoint.class.getName(), null);
+			log("srs: " + srs);
+			assertNotNull("There must be at least one endpoint service reference", srs);
+			assertEquals("There must be two endpoint service references", 2, srs.length);
+			int srsIndex = 0;
+			while (srsIndex < srs.length) {
+				ServiceReference sr = srs[srsIndex];
+				log("sr: " + sr);
+				int j = 0;
+				while (j < sr.getPropertyKeys().length) {
+					log("sr.getPropertyKeys()[" + j + "]: " + sr.getPropertyKeys()[j] + ", sr.getProperty(key): " + sr.getProperty(sr.getPropertyKeys()[j]));
+					// [bnd] sr.getPropertyKeys()[0]: zigbee.node.ieee.address,
+					// sr.getProperty(key): 8123456899
+					// [bnd] sr.getPropertyKeys()[1]: zigbee.device.profile.id,
+					// sr.getProperty(key): 0
+					// [bnd] sr.getPropertyKeys()[2]: objectClass,
+					// sr.getProperty(key): [Ljava.lang.String;@12f1eff
+					// [bnd] sr.getPropertyKeys()[3]: service.id,
+					// sr.getProperty(key): 29
+					j = j + 1;
+				}
+				if (endpointIeeeAddress.equals(sr.getProperty(ZigBeeNode.IEEE_ADDRESS))) {
+					// The sr's value associated to ZigBeeEndpoint.PROFILE_ID
+					// may also be checked.
+					endpoint = (ZigBeeEndpoint) getContext().getService(sr);
+					break;
+				}
+				srsIndex = srsIndex + 1;
+			}
+		} catch (InvalidSyntaxException e) {
+			e.printStackTrace();
+			fail("No InvalidSyntaxException is expected", e);
+		}
+		return endpoint;
+	}
+
+	/**
 	 * Tests related to Endpoint Discovery.
 	 */
 	public void testEndpointDiscovery() {
@@ -213,24 +258,18 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
 
-		// TODO AAA: 2014-03-18: look for endpoints in the OSGi services
-		// registry, and use the props: ZigBeeNode.IEEE_ADDRESS and
-		// ZigBeeEndpoint.ENDPOINT_ID.
-		int[] endpointIds = dev.getEndpoints();
-		assertNotNull("endpointIds is NULL", endpointIds);
-		assertNotNull("endpointIds[0] is NULL", endpointIds[0]);
-		ZigBeeEndpoint endpoint = dev.getEndpoint(endpointIds[0]);
+		ZigBeeEndpoint endpoint = getZigBeeEndpoint(ZigBeeConstants.NODE_IEEE_ADDRESS_1);
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
-
 		log("ZigBeeEndpoint ENDPOINT: " + endpoint.getId());
 		assertEquals("Endpoint identifier not matched",
-				ZigBeeConstants.ENDPOINT,
-				String.valueOf(endpoint.getId()));
+				ZigBeeConstants.ENDPOINT_ID,
+				endpoint.getId());
 
 		try {
 			ZigBeeHandlerImpl handler = new ZigBeeHandlerImpl();
 			endpoint.getSimpleDescriptor(handler);
-			ZigBeeSimpleDescriptor zigBeeSimpleDescriptor = (ZigBeeSimpleDescriptor) handler.getResponse();
+			ZigBeeSimpleDescriptor zigBeeSimpleDescriptor =
+					(ZigBeeSimpleDescriptor) handler.getResponse();
 			log("ZigBeeEndpoint PROFILE_ID: " +
 					zigBeeSimpleDescriptor.getApplicationProfileId());
 			assertEquals("Application Profile identifier not matched",
@@ -239,7 +278,8 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 			handler = new ZigBeeHandlerImpl();
 			endpoint.getSimpleDescriptor(handler);
-			zigBeeSimpleDescriptor = (ZigBeeSimpleDescriptor) handler.getResponse();
+			zigBeeSimpleDescriptor = (ZigBeeSimpleDescriptor)
+					handler.getResponse();
 			log("ZigBeeEndpoint DEVICE_ID: " +
 					zigBeeSimpleDescriptor.getApplicationDeviceId());
 			assertEquals("Application Device identifier not matched",
@@ -248,7 +288,8 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 			handler = new ZigBeeHandlerImpl();
 			endpoint.getSimpleDescriptor(handler);
-			zigBeeSimpleDescriptor = (ZigBeeSimpleDescriptor) handler.getResponse();
+			zigBeeSimpleDescriptor = (ZigBeeSimpleDescriptor)
+					handler.getResponse();
 			log("ZigBeeEndpoint DEVICE_VERSION: " +
 					zigBeeSimpleDescriptor.getApplicationDeviceVersion());
 			assertEquals("Application device version not matched",
@@ -307,11 +348,12 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
 
-		int[] endpointIds = dev.getEndpoints();
-		assertNotNull("endpointIds is NULL", endpointIds);
-		assertNotNull("endpointIds[0] is NULL", endpointIds[0]);
-		ZigBeeEndpoint endpoint = dev.getEndpoint(endpointIds[0]);
+		ZigBeeEndpoint endpoint = getZigBeeEndpoint(ZigBeeConstants.NODE_IEEE_ADDRESS_1);
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
+		log("ZigBeeEndpoint ENDPOINT: " + endpoint.getId());
+		assertEquals("Endpoint identifier not matched",
+				ZigBeeConstants.ENDPOINT_ID,
+				endpoint.getId());
 
 		ZCLCluster[] clusters = endpoint.getClientClusters();
 		if (clusters == null || clusters.length == 0) {
@@ -327,8 +369,8 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		assertEquals("Clusters identifier not matched",
 				ZigBeeConstants.CLUSTER_ID, String.valueOf(cluster.getId()));
 
-		// Use ZigBeeClusterImpl instead of ZigBeeCluster cluster, in order to
-		// do the tests?
+		// Use ZigBeeClusterImpl instead of ZigBeeCluster cluster, in order
+		// to do the tests?
 		//
 		// log("ZigBeeCluster NAME: " +
 		// cluster.getDescription().getGlobalClusterDescription().getClusterName());
@@ -352,11 +394,12 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
 
-		int[] endpointIds = dev.getEndpoints();
-		assertNotNull("endpointIds is NULL", endpointIds);
-		assertNotNull("endpointIds[0] is NULL", endpointIds[0]);
-		ZigBeeEndpoint endpoint = dev.getEndpoint(endpointIds[0]);
+		ZigBeeEndpoint endpoint = getZigBeeEndpoint(ZigBeeConstants.NODE_IEEE_ADDRESS_1);
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
+		log("ZigBeeEndpoint ENDPOINT: " + endpoint.getId());
+		assertEquals("Endpoint identifier not matched",
+				ZigBeeConstants.ENDPOINT_ID,
+				endpoint.getId());
 
 		ZCLCluster[] clusters = endpoint.getClientClusters();
 		if (clusters == null || clusters.length == 0) {
@@ -374,7 +417,6 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		assertNotNull("ZCLCommand ID is NULL", commandId);
 		assertEquals("Command identifier not matched",
 				ZigBeeConstants.COMMAND_ID, String.valueOf(commandId));
-
 	}
 
 	/**
@@ -386,11 +428,12 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
 
-		int[] endpointIds = dev.getEndpoints();
-		assertNotNull("endpointIds is NULL", endpointIds);
-		assertNotNull("endpointIds[0] is NULL", endpointIds[0]);
-		ZigBeeEndpoint endpoint = dev.getEndpoint(endpointIds[0]);
+		ZigBeeEndpoint endpoint = getZigBeeEndpoint(ZigBeeConstants.NODE_IEEE_ADDRESS_1);
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
+		log("ZigBeeEndpoint ENDPOINT: " + endpoint.getId());
+		assertEquals("Endpoint identifier not matched",
+				ZigBeeConstants.ENDPOINT_ID,
+				endpoint.getId());
 
 		ZCLCluster[] clusters = endpoint.getServerClusters();
 		ZCLCluster cluster = null;
@@ -409,7 +452,8 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		// Use ZCLAttributeImpl instead of ZCLAttribute attribute, in
 		// order to do the tests?
 		//
-		// log("ZCLAttribute NAME: " + attribute.getDescription().getName());
+		// log("ZCLAttribute NAME: " +
+		// attribute.getDescription().getName());
 		// assertEquals("Attribute name not matched",
 		// ZigBeeConstants.ATTRIBUTE_NAME,
 		// attribute.getDescription().getName());
@@ -455,11 +499,12 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		assertNotNull("ZigBeeNode is NULL", dev);
 
 		// endpoints
-		int[] endpointIds = dev.getEndpoints();
-		assertNotNull("endpointIds is NULL", endpointIds);
-		assertNotNull("endpointIds[0] is NULL", endpointIds[0]);
-		ZigBeeEndpoint endpoint = dev.getEndpoint(endpointIds[0]);
+		ZigBeeEndpoint endpoint = getZigBeeEndpoint(ZigBeeConstants.NODE_IEEE_ADDRESS_1);
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
+		log("ZigBeeEndpoint ENDPOINT: " + endpoint.getId());
+		assertEquals("Endpoint identifier not matched",
+				ZigBeeConstants.ENDPOINT_ID,
+				endpoint.getId());
 
 		// clusters
 		ZCLCluster[] clusters = endpoint.getServerClusters();
@@ -630,11 +675,12 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		assertNotNull("ZigBeeNode is NULL", dev);
 
 		// endpoints
-		int[] endpointIds = dev.getEndpoints();
-		assertNotNull("endpointIds is NULL", endpointIds);
-		assertNotNull("endpointIds[0] is NULL", endpointIds[0]);
-		ZigBeeEndpoint endpoint = dev.getEndpoint(endpointIds[0]);
+		ZigBeeEndpoint endpoint = getZigBeeEndpoint(ZigBeeConstants.NODE_IEEE_ADDRESS_1);
 		assertNotNull("ZigBeeEndpoint is NULL", endpoint);
+		log("ZigBeeEndpoint ENDPOINT: " + endpoint.getId());
+		assertEquals("Endpoint identifier not matched",
+				ZigBeeConstants.ENDPOINT_ID,
+				endpoint.getId());
 
 		// clusters
 		ZCLCluster[] clusters = endpoint.getServerClusters();

@@ -7,9 +7,9 @@ package org.osgi.test.cases.zigbee.tbc;
 public final class ZigBeeConstants {
 
 	/** Node ieee address 1 */
-	public static final String	NODE_IEEE_ADDRESS_1						= "8123456899";
+	public static final Long	NODE_IEEE_ADDRESS_1						= Long.valueOf("8123456899");
 	/** Node ieee address 2 */
-	public static final String	NODE_IEEE_ADDRESS_2						= "6628417766";
+	public static final Long	NODE_IEEE_ADDRESS_2						= Long.valueOf("6628417766");
 	/**  */
 	public static final String	LOGICAL_TYPE							= "2";
 
@@ -43,13 +43,13 @@ public final class ZigBeeConstants {
 	public static final String	NODE_USER_DESCRIPTION					= "";
 
 	/**  */
-	public static final String	ENDPOINT								= "25";
+	public static final int		ENDPOINT_ID								= (byte) 0x21;
 	/**  */
-	public static final String	ENDPOINT_APP_PROFILE_ID					= "3";
+	public static final String	ENDPOINT_APP_PROFILE_ID					= "5";
 	/**  */
-	public static final String	ENDPOINT_APP_DEVICE_ID					= "8";
+	public static final String	ENDPOINT_APP_DEVICE_ID					= "6";
 	/**  */
-	public static final String	ENDPOINT_APP_DEVICE_VERSION				= "4";
+	public static final String	ENDPOINT_APP_DEVICE_VERSION				= "1";
 	/**  */
 	public static final String	ENDPOINT_INPUT_CLUSTERS					= "[88]";
 	/**  */

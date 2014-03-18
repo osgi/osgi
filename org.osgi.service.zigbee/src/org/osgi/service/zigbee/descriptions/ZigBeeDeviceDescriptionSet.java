@@ -21,8 +21,9 @@ package org.osgi.service.zigbee.descriptions;
  * registered as an OSGi Service that provides method to retrieve endpoint
  * descriptions.
  * 
- * It is expected to use ZigBeeEndpoint.PROFILE_ID, and
- * ZigBeeNode.MANUFACTURER_CODE.
+ * In addition to the ZigBeeDeviceDescriptionSet.VERSION, PROFILE_NAME, and
+ * DEVICES OSGi service properties; ZigBeeDeviceDescriptionSet is also expected
+ * to use ZigBeeEndpoint.PROFILE_ID, and ZigBeeNode.MANUFACTURER_CODE.
  * 
  * @version 1.0
  */

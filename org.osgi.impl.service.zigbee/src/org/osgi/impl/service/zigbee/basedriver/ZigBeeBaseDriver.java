@@ -1,6 +1,8 @@
 
 package org.osgi.impl.service.zigbee.basedriver;
 
+import java.util.Dictionary;
+import java.util.Properties;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.zigbee.descriptions.ZCLAttributeDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptions.ZCLClusterDescriptionImpl;
@@ -42,8 +44,8 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 	private ZigBeeEndpoint					endpoint2;
 	private ZigBeeSimpleDescriptor			simpledesc1;
 	private ZigBeeSimpleDescriptor			simpledesc2;
-	private ZCLCluster[]					serverCluster;
-	private ZCLCluster[]					clientCluster;
+	private ZCLCluster[]					serverClusters;
+	private ZCLCluster[]					clientClusters;
 	private ZCLGlobalClusterDescription		globalDescription;
 	private ZCLClusterDescription			serverClusterDescription;
 	private ZCLClusterDescription			clientClusterDescription;
@@ -106,36 +108,27 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		clientClusterDescription = new ZCLClusterDescriptionImpl(67, globalDescription);
 
 		// a client endpoint example
-		clientCluster = new ZCLClusterImpl[1];
-		clientCluster[0] = new ZCLClusterImpl(null, null, clientClusterDescription);
-
-		simpledesc1 = new ZigBeeSimpleDescriptorImpl(6, (byte) 1, 5);
-		int endpoint1id = (byte) 0x21;
-		endpoint1 = new ZigBeeEndpointImpl(endpoint1id, null, clientCluster, simpledesc1);
-
-		// register endpoint1
-		System.out.println(this.getClass().getName() + " - Register (hardcoded) endpoint1: " + endpoint1 + " in the OSGi services registry.");
-		bc.registerService(ZigBeeEndpoint.class.getName(),
-				endpoint1, null);
-
-		// a server endpoint example
-		param = new ZigBeeParameterDescriptionImpl[1];
-		param[0] = new ZigBeeParameterDescriptionImpl(attributesType[0]);
-		serverCluster = new ZCLClusterImpl[1];
+		serverClusters = new ZCLClusterImpl[1];
 		commandIdsServer = new int[1];
 		commandIdsServer[0] = 0;
 		// commandDescription = new ZCLCommandDescriptionImpl(0x00,
 		// "Reset to Factory Defaults", false, param);
-		serverCluster[0] = new ZCLClusterImpl(commandIdsServer, attributesServer, serverClusterDescription);
+		serverClusters[0] = new ZCLClusterImpl(commandIdsServer, attributesServer, serverClusterDescription);
+
+		clientClusters = new ZCLClusterImpl[1];
+		clientClusters[0] = new ZCLClusterImpl(null, null, clientClusterDescription);
+
+		simpledesc1 = new ZigBeeSimpleDescriptorImpl(6, (byte) 1, 5);
+		int endpoint1id = (byte) 0x21;
+		endpoint1 = new ZigBeeEndpointImpl(endpoint1id, serverClusters, null, simpledesc1);
+
+		// a server endpoint example
+		param = new ZigBeeParameterDescriptionImpl[1];
+		param[0] = new ZigBeeParameterDescriptionImpl(attributesType[0]);
 
 		simpledesc2 = new ZigBeeSimpleDescriptorImpl(8, (byte) 4, 3);
 		int endpoint2id = (byte) 0x19;
-		endpoint2 = new ZigBeeEndpointImpl(endpoint2id, serverCluster, null, simpledesc2);
-
-		// register endpoint2
-		System.out.println(this.getClass().getName() + " - Register (hardcoded) endpoint2: " + endpoint2 + " in the OSGi services registry.");
-		bc.registerService(ZigBeeEndpoint.class.getName(),
-				endpoint2, null);
+		endpoint2 = new ZigBeeEndpointImpl(endpoint2id, null, clientClusters, simpledesc2);
 
 		// ZigBeeHost that owns node1, and node2.
 		String hostPId = "hardcoded hostPId";
@@ -144,18 +137,32 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		int baud = 115000;
 		int securityLevel = 0;
 		// 64-bit 802.15.4 IEEE Address, e.g. 00:25:96:FF:FE:AB:37:56
-		Long IEEEAddress = Long.valueOf("0123456789");
+		Long ieeeAddress = Long.valueOf("8123456899");
 		// 16-bit ZigBee Network Address
 		short nwkAddress = Short.valueOf("2468");
 		ZigBeeEndpoint[] endpointsHost = new ZigBeeEndpoint[2];
 		endpointsHost[0] = endpoint1;
 		endpointsHost[1] = endpoint2;
-		host = new ZigBeeHostImpl(hostPId, panId, channel, baud, securityLevel, IEEEAddress, nwkAddress, endpointsHost);
+		host = new ZigBeeHostImpl(hostPId, panId, channel, baud, securityLevel, ieeeAddress, nwkAddress, endpointsHost);
 
 		// register host
 		System.out.println(this.getClass().getName() + " - Register (hardcoded) host: " + host + " in the OSGi services registry.");
 		bc.registerService(ZigBeeHost.class.getName(),
 				host, null);
+
+		// register endpoint1
+		Dictionary<Object, Object> endpoint1properties = new Properties();
+		endpoint1properties.put(ZigBeeNode.IEEE_ADDRESS, ieeeAddress);
+		endpoint1properties.put(ZigBeeEndpoint.PROFILE_ID, 0);
+		System.out.println(this.getClass().getName() + " - Register (hardcoded) endpoint1: " + endpoint1 + " in the OSGi services registry with the following properties - endpoint1properties: "
+				+ endpoint1properties);
+		bc.registerService(ZigBeeEndpoint.class.getName(),
+				endpoint1, endpoint1properties);
+
+		// register endpoint2
+		System.out.println(this.getClass().getName() + " - Register (hardcoded) endpoint2: " + endpoint2 + " in the OSGi services registry.");
+		bc.registerService(ZigBeeEndpoint.class.getName(),
+				endpoint2, null);
 
 		// node descriptor
 		nodeDesc = new ZigBeeNodeDescriptorImpl(ZigBeeNode.END_DEVICE_TYPE, (short) 868, 45, 36, false, false);
@@ -164,7 +171,7 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		// nodes
 		ZigBeeEndpoint[] endpointsNode1 = new ZigBeeEndpoint[1];
 		endpointsNode1[0] = endpoint1;
-		node1 = new ZigBeeNodeImpl(Long.valueOf("8123456899"), 12345, hostPId, endpointsNode1);
+		node1 = new ZigBeeNodeImpl(ieeeAddress, 12345, hostPId, endpointsNode1);
 		ZigBeeEndpoint[] endpointsNode2 = new ZigBeeEndpoint[1];
 		endpointsNode2[0] = endpoint2;
 		node2 = new ZigBeeNodeImpl(Long.valueOf("6628417766"), 88507, hostPId, endpointsNode2, nodeDesc, powerDesc);
