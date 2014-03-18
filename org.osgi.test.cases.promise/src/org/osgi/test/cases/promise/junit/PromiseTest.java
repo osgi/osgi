@@ -1678,30 +1678,34 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testFallbackToFailure() throws Exception {
-		final Throwable failure = new Error("fail");
-		final Long value2 = new Long(43);
-		final Promise<Number> p1 = Promises.newFailedPromise(failure);
-		final Promise<Number> p2 = Promises.newResolvedPromise((Number) value2);
-		final Promise<Number> p3 = p1.fallbackTo(p2);
+		final Error failure1 = new Error("fail1");
+		final Error failure2 = new Error("fail2");
+		final Long value3 = new Long(43);
+		final Promise<Number> p1 = Promises.newFailedPromise(failure1);
+		final Promise<Number> p2 = Promises.newFailedPromise(failure2);
+		final Promise<Number> p3 = Promises.newResolvedPromise((Number) value3);
+		final Promise<Number> p4 = p1.fallbackTo(p2).fallbackTo(p3);
 		assertTrue(p1.isDone());
-		assertTrue(p3.isDone());
+		assertTrue(p4.isDone());
 
-		assertSame("wrong value", value2, p3.getValue());
-		assertNull("wrong failure", p3.getFailure());
+		assertSame("wrong value", value3, p4.getValue());
+		assertNull("wrong failure", p4.getFailure());
 	}
 
 	public void testFallbackToFailureException() throws Exception {
-		final Throwable failure1 = new Error("fail1");
+		final Error failure1 = new Error("fail1");
 		final Error failure2 = new Error("fail2");
+		final Error failure3 = new Error("fail3");
 		final Promise<Number> p1 = Promises.newFailedPromise(failure1);
 		final Promise<Number> p2 = Promises.newFailedPromise(failure2);
-		final Promise<Number> p3 = p1.fallbackTo(p2);
+		final Promise<Number> p3 = Promises.newFailedPromise(failure3);
+		final Promise<Number> p4 = p1.fallbackTo(p2).fallbackTo(p3);
 		assertTrue(p1.isDone());
-		assertTrue(p3.isDone());
+		assertTrue(p4.isDone());
 
-		assertSame("wrong failure", failure1, p3.getFailure());
+		assertSame("wrong failure", failure1, p4.getFailure());
 		try {
-			p3.getValue();
+			p4.getValue();
 			fail("p2 getValue failed to throw InvocationTargetException");
 		} catch (InvocationTargetException e) {
 			assertSame("wrong failure", failure1, e.getCause());
