@@ -928,26 +928,15 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			}
 
 			// export the service again
-			exportRegistrations = remoteServiceAdmin.exportService(registration.getReference(), properties);
-			assertNotNull(exportRegistrations);
-			assertEquals("only one export registration was expected since only one config type was requested", 1, exportRegistrations.size());
+			// https://www.osgi.org/members/bugzilla/show_bug.cgi?id=2591
+			try {
+				exportRegistrations = remoteServiceAdmin.exportService(
+						registration.getReference(), properties);
+				fail("Expected an illegal argumnet exception for garbage input");
+			} catch (IllegalArgumentException e) {
+				// as expected
 
-			// expect ERROR event
-			event = remoteServiceAdminListener.getNextEvent();
-			assertNotNull("no RemoteServiceAdminEvent received", event);
-			// David B: There can be an additional event, as the registerService and the exportService both emit the event...
-            assertEquals(0, remoteServiceAdminListener.getEventCount());
-			assertNotNull("122.10.11: source must not be null", event.getSource());
-			assertEquals(RemoteServiceAdminEvent.EXPORT_ERROR, event.getType());
-			assertNotNull(event.getException());
-
-			//Marc: Based on the API the getReference should simply return null
-			assertNull(event.getExportReference());
-//			try {
-//				event.getExportReference();
-//				fail("IllegalStateException expected");
-//			} catch (IllegalStateException ie) {}
-
+			}
 
 			// ungetting the RSA service will also close the ExportRegistration and therefore
 			// emit an event
