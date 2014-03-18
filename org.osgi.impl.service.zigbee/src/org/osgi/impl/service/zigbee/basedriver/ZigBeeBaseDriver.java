@@ -2,21 +2,22 @@
 package org.osgi.impl.service.zigbee.basedriver;
 
 import org.osgi.framework.BundleContext;
+import org.osgi.impl.service.zigbee.descriptions.ZCLAttributeDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptions.ZCLClusterDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptions.ZCLGlobalClusterDescriptionImpl;
-import org.osgi.impl.service.zigbee.descriptions.ZigBeeAttributeDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptions.ZigBeeParameterDescriptionImpl;
 import org.osgi.impl.service.zigbee.descriptors.ZigBeeNodeDescriptorImpl;
 import org.osgi.impl.service.zigbee.descriptors.ZigBeePowerDescriptorImpl;
 import org.osgi.impl.service.zigbee.descriptors.ZigBeeSimpleDescriptorImpl;
 import org.osgi.impl.service.zigbee.util.ZigBeeDeviceNodeListener;
+import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.ZigBeeNode;
+import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
-import org.osgi.service.zigbee.descriptions.ZigBeeAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeParameterDescription;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
@@ -46,9 +47,9 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 	private ZCLGlobalClusterDescription		globalDescription;
 	private ZCLClusterDescription			serverClusterDescription;
 	private ZCLClusterDescription			clientClusterDescription;
-	private ZigBeeAttributeImpl[]			attributesServer;
-	private ZigBeeAttributeDescription[]	attributesDescription;
-	// private ZigBeeCommandDescription commandDescription;
+	private ZCLAttribute[]					attributesServer;
+	private ZCLAttributeDescription[]		attributesDescription;
+	// private ZCLCommandDescription commandDescription;
 	private ZigBeeParameterDescription[]	param;
 	private ZigBeeDataTypeDescription[]		attributesType;
 	private int[]							commandIdsServer;
@@ -77,28 +78,28 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		attributesType[2] = ZigBeeEnumeration8.getInstance();
 		attributesType[3] = ZigBeeBoolean.getInstance();
 
-		attributesDescription = new ZigBeeAttributeDescription[9];
-		attributesDescription[0] = new ZigBeeAttributeDescriptionImpl(0x0000, false, new Integer(0x00), "ZCLVersion", false, false, attributesType[0]);
-		attributesDescription[1] = new ZigBeeAttributeDescriptionImpl(0x0001, false, new Integer(0x00), "ApplicationVersion", false, false, attributesType[0]);
-		attributesDescription[2] = new ZigBeeAttributeDescriptionImpl(0x0002, false, new Integer(0x00), "StackVersion", false, false, attributesType[0]);
-		attributesDescription[3] = new ZigBeeAttributeDescriptionImpl(0x0003, false, new Integer(0x00), "HWVersion", false, false, attributesType[0]);
-		attributesDescription[4] = new ZigBeeAttributeDescriptionImpl(0x0004, false, "", "ManufacturerName", false, false, attributesType[1]);
-		attributesDescription[5] = new ZigBeeAttributeDescriptionImpl(0x0005, false, "", "ModelIdentifier", false, false, attributesType[1]);
-		attributesDescription[6] = new ZigBeeAttributeDescriptionImpl(0x0006, false, "", "DateCode", false, false, attributesType[1]);
-		attributesDescription[7] = new ZigBeeAttributeDescriptionImpl(0x0007, false, "", "PowerSource", false, false, attributesType[2]);
-		attributesDescription[8] = new ZigBeeAttributeDescriptionImpl(0x0008, false, new Boolean(true), "DeviceEnabled", true, true, attributesType[3]);
+		attributesDescription = new ZCLAttributeDescription[9];
+		attributesDescription[0] = new ZCLAttributeDescriptionImpl(0x0000, false, new Integer(0x00), "ZCLVersion", false, false, attributesType[0]);
+		attributesDescription[1] = new ZCLAttributeDescriptionImpl(0x0001, false, new Integer(0x00), "ApplicationVersion", false, false, attributesType[0]);
+		attributesDescription[2] = new ZCLAttributeDescriptionImpl(0x0002, false, new Integer(0x00), "StackVersion", false, false, attributesType[0]);
+		attributesDescription[3] = new ZCLAttributeDescriptionImpl(0x0003, false, new Integer(0x00), "HWVersion", false, false, attributesType[0]);
+		attributesDescription[4] = new ZCLAttributeDescriptionImpl(0x0004, false, "", "ManufacturerName", false, false, attributesType[1]);
+		attributesDescription[5] = new ZCLAttributeDescriptionImpl(0x0005, false, "", "ModelIdentifier", false, false, attributesType[1]);
+		attributesDescription[6] = new ZCLAttributeDescriptionImpl(0x0006, false, "", "DateCode", false, false, attributesType[1]);
+		attributesDescription[7] = new ZCLAttributeDescriptionImpl(0x0007, false, "", "PowerSource", false, false, attributesType[2]);
+		attributesDescription[8] = new ZCLAttributeDescriptionImpl(0x0008, false, new Boolean(true), "DeviceEnabled", true, true, attributesType[3]);
 
 		// a server endpoint example
-		attributesServer = new ZigBeeAttributeImpl[9];
-		attributesServer[0] = new ZigBeeAttributeImpl(attributesDescription[0]);
-		attributesServer[1] = new ZigBeeAttributeImpl(attributesDescription[1]);
-		attributesServer[2] = new ZigBeeAttributeImpl(attributesDescription[2]);
-		attributesServer[3] = new ZigBeeAttributeImpl(attributesDescription[3]);
-		attributesServer[4] = new ZigBeeAttributeImpl(attributesDescription[4]);
-		attributesServer[5] = new ZigBeeAttributeImpl(attributesDescription[5]);
-		attributesServer[6] = new ZigBeeAttributeImpl(attributesDescription[6]);
-		attributesServer[7] = new ZigBeeAttributeImpl(attributesDescription[7]);
-		attributesServer[8] = new ZigBeeAttributeImpl(attributesDescription[8]);
+		attributesServer = new ZCLAttribute[9];
+		attributesServer[0] = new ZCLAttributeImpl(attributesDescription[0]);
+		attributesServer[1] = new ZCLAttributeImpl(attributesDescription[1]);
+		attributesServer[2] = new ZCLAttributeImpl(attributesDescription[2]);
+		attributesServer[3] = new ZCLAttributeImpl(attributesDescription[3]);
+		attributesServer[4] = new ZCLAttributeImpl(attributesDescription[4]);
+		attributesServer[5] = new ZCLAttributeImpl(attributesDescription[5]);
+		attributesServer[6] = new ZCLAttributeImpl(attributesDescription[6]);
+		attributesServer[7] = new ZCLAttributeImpl(attributesDescription[7]);
+		attributesServer[8] = new ZCLAttributeImpl(attributesDescription[8]);
 
 		globalDescription = new ZCLGlobalClusterDescriptionImpl(54, "Basic", "General", null, null);
 		serverClusterDescription = new ZCLClusterDescriptionImpl(88, globalDescription);
@@ -123,7 +124,7 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		serverCluster = new ZCLClusterImpl[1];
 		commandIdsServer = new int[1];
 		commandIdsServer[0] = 0;
-		// commandDescription = new ZigBeeCommandDescriptionImpl(0x00,
+		// commandDescription = new ZCLCommandDescriptionImpl(0x00,
 		// "Reset to Factory Defaults", false, param);
 		serverCluster[0] = new ZCLClusterImpl(commandIdsServer, attributesServer, serverClusterDescription);
 

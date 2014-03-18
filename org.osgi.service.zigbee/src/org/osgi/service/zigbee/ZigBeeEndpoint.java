@@ -26,25 +26,28 @@ import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 public interface ZigBeeEndpoint {
 
 	/**
-	 * Key of the {@link String} containing the EndPoint Address of the device <br>
+	 * Key of the {@link String} property containing the EndPoint Address of the
+	 * device <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
-	public static final String	ID						= "zigbee.endpoint.id";
+	public static final String	ENDPOINT_ID				= "zigbee.endpoint.id";
 
 	/**
-	 * Key of the {@link String} profile id implemented by the device. <br>
+	 * Key of the {@link String} property containing the profile id implemented
+	 * by the device. <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
 	public static final String	PROFILE_ID				= "zigbee.device.profile.id";
 
 	/**
-	 * Key of the {@link String} containing the DeviceId of the device <br>
+	 * Key of the {@link String} property containing the DeviceId of the device <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
 	public static final String	DEVICE_ID				= "zigbee.device.id";
 
 	/**
-	 * Key of the {@link String} containing the DeviceVersion of the device <br>
+	 * Key of the {@link String} property containing the DeviceVersion of the
+	 * device <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
 	public static final String	DEVICE_VERSION			= "zigbee.device.version";
@@ -68,25 +71,27 @@ public interface ZigBeeEndpoint {
 	public static final String	OUTPUT_CLUSTERS			= "zigbee.endpoint.clusters.output";
 
 	/**
-	 * Key of {@link String} containing the targeted network host pid It is an
-	 * <b>optional</b> property for this service. If provided, HOST_PID property
-	 * must have the priority to identify the host that is targeted for export.
+	 * Key of {@link String} property containing the targeted network host pid
+	 * It is an <b>optional</b> property for this service. If provided, HOST_PID
+	 * property must have the priority to identify the host that is targeted for
+	 * export.
 	 */
 	public static final String	HOST_PID_TARGET			= "zigbee.device.target.host.pid";
 
 	/**
-	 * Key of {@link String} containing the targeted network PAN ID
+	 * Key of {@link String} property containing the targeted network PAN ID
 	 */
 	public static final String	PAN_ID_TARGET			= "zigbee.device.target.pan.id";
 
 	/**
-	 * Key of {@link String} containing the targeted network extended PAN ID
+	 * Key of {@link String} property containing the targeted network extended
+	 * PAN ID
 	 */
 	public static final String	EXTENDED_PAN_ID_TARGET	= "zigbee.device.target.extended.pan.id";
 
 	/**
-	 * Key of the {@link String} mentioning that an endpoint an exported one or
-	 * not <br>
+	 * Key of the {@link String} property mentioning that an endpoint an
+	 * exported one or not <br>
 	 * It is <b>optional</b> property for this service
 	 */
 	public static final String	ZIGBEE_EXPORT			= "zigbee.export";

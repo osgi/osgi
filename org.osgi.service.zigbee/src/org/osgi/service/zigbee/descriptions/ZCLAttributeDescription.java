@@ -17,11 +17,11 @@
 package org.osgi.service.zigbee.descriptions;
 
 /**
- * This interface represents a ZigBee Attribute description
+ * This interface represents a ZCLAttributeDescription
  * 
  * @version 1.0
  */
-public interface ZigBeeAttributeDescription {
+public interface ZCLAttributeDescription {
 
 	/**
 	 * @return the attribute identifier

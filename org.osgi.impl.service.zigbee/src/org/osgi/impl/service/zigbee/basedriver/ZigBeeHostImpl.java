@@ -1,15 +1,15 @@
 
 package org.osgi.impl.service.zigbee.basedriver;
 
+import org.osgi.service.zigbee.ZCLCommandHandler;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
-import org.osgi.service.zigbee.ZigBeeCommandHandler;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.ZigBeeHost;
 
 /**
- * Mocked impl of ZigBeeNodeImpl -> ZigBeeHost -> ZigBeeNode.
+ * Mocked impl.
  */
 public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 
@@ -37,7 +37,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		return null;
 	}
 
-	public void start() throws ZCLException {
+	public void start(int panId, long extendedPanId) throws ZCLException {
 		// TODO Auto-generated method stub
 	}
 
@@ -83,15 +83,15 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		// TODO Auto-generated method stub
 	}
 
-	public void createGroupService(String pid, int groupAddress, ZigBeeCommandHandler handler) throws ZCLException {
+	public void createGroupService(String pid, int groupAddress, ZCLCommandHandler handler) throws ZCLException {
 		// TODO Auto-generated method stub
 	}
 
-	public void broadcast(Integer clusterID, ZCLFrame frame, ZigBeeCommandHandler handler) {
+	public void broadcast(Integer clusterID, ZCLFrame frame, ZCLCommandHandler handler) {
 		// TODO Auto-generated method stub
 	}
 
-	public void broadcast(Integer clusterID, ZCLFrame frame, ZigBeeCommandHandler handler, String exportedServicePID) {
+	public void broadcast(Integer clusterID, ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID) {
 		// TODO Auto-generated method stub
 	}
 

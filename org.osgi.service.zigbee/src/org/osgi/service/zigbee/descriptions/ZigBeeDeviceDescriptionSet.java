@@ -37,9 +37,6 @@ public interface ZigBeeDeviceDescriptionSet {
 	/** MANUFACTURER_CODE */
 	public final static String	MANUFACTURER_CODE	= "zigbee.profile.manufacturer.code";
 
-	/** MANUFACTURER_NAME */
-	public final static String	MANUFACTURER_NAME	= "zigbee.profile.manufacturer.name";
-
 	/** DEVICES */
 	public final static String	DEVICES				= "zigbee.profile.devices";
 

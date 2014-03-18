@@ -19,11 +19,11 @@ package org.osgi.service.zigbee;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
 /**
- * This interface represents a ZigBee Attribute
+ * This interface represents a ZCLAttribute
  * 
  * @version 1.0
  */
-public interface ZigBeeAttribute {
+public interface ZCLAttribute {
 
 	/**
 	 * Property key for the optional attribute id of a ZigBee Event Listener.

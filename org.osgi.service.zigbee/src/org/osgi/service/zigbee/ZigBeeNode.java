@@ -60,12 +60,6 @@ public interface ZigBeeNode {
 	public static final String	MANUFACTURER_CODE		= "zigbee.node.description.manufacturer.code";
 
 	/**
-	 * Property key for the node capability as required by the IEEE802.15.4 MAC
-	 * sub-layer.
-	 */
-	public static final String	CAPABILITIES_MAC		= "zigbee.node.description.capabilities.mac";
-
-	/**
 	 * Key of {@link String} containing the {@link ZigBeeHost} pid.<br>
 	 * The host pid is intended to uniquely identify the ZigBee local host,
 	 * since there could be many hosts on the same platform. All the nodes that
@@ -139,19 +133,7 @@ public interface ZigBeeNode {
 	/**
 	 * @return The network Extended PAN identifier(EPID)
 	 */
-	public Long getExtendedPanId();
-
-	/**
-	 * @return an array of all the endpoints' id associated with the ZigBee
-	 *         device node.
-	 */
-	public int[] getEndpoints();
-
-	/**
-	 * @param id The endpoint identifier to be retrieved.
-	 * @return The endpoint associated with id.
-	 */
-	public ZigBeeEndpoint getEndpoint(int id);
+	public long getExtendedPanId();
 
 	/**
 	 * @param handler that will be used in order to return the node descriptor

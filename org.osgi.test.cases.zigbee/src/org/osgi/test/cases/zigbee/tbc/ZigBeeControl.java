@@ -3,11 +3,11 @@ package org.osgi.test.cases.zigbee.tbc;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import org.osgi.service.zigbee.ZCLAttribute;
+import org.osgi.service.zigbee.ZCLAttributeRecord;
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
-import org.osgi.service.zigbee.ZigBeeAttribute;
-import org.osgi.service.zigbee.ZigBeeAttributeRecord;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeEvent;
 import org.osgi.service.zigbee.ZigBeeNode;
@@ -17,8 +17,8 @@ import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeUserDescriptor;
 import org.osgi.test.cases.zigbee.tbc.device.discovery.ServicesListener;
+import org.osgi.test.cases.zigbee.tbc.util.ZCLCommandHandlerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZCLFrameImpl;
-import org.osgi.test.cases.zigbee.tbc.util.ZigBeeCommandHandlerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventListenerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventSourceImpl;
@@ -213,6 +213,9 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		ZigBeeNode dev = listener.getZigBeeNode();
 		assertNotNull("ZigBeeNode is NULL", dev);
 
+		// TODO AAA: 2014-03-18: look for endpoints in the OSGi services
+		// registry, and use the props: ZigBeeNode.IEEE_ADDRESS and
+		// ZigBeeEndpoint.ENDPOINT_ID.
 		int[] endpointIds = dev.getEndpoints();
 		assertNotNull("endpointIds is NULL", endpointIds);
 		assertNotNull("endpointIds[0] is NULL", endpointIds[0]);
@@ -367,8 +370,8 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		ZigBeeMapHandlerImpl zigBeeMapHandler = new ZigBeeMapHandlerImpl();
 		cluster.getCommandIds(zigBeeMapHandler);
 		int commandId = ((int[]) zigBeeMapHandler.getSuccessResponse().get("CommandIds"))[0];
-		log("ZigBeeCommand ID: " + commandId);
-		assertNotNull("ZigBeeCommand ID is NULL", commandId);
+		log("ZCLCommand ID: " + commandId);
+		assertNotNull("ZCLCommand ID is NULL", commandId);
 		assertEquals("Command identifier not matched",
 				ZigBeeConstants.COMMAND_ID, String.valueOf(commandId));
 
@@ -396,40 +399,40 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		}
 		ZigBeeMapHandlerImpl zigBeeMapHandler = new ZigBeeMapHandlerImpl();
 		cluster.getAttributes(zigBeeMapHandler);
-		ZigBeeAttribute attribute = ((ZigBeeAttribute[]) zigBeeMapHandler.getSuccessResponse().get("Attributes"))[0];
-		assertNotNull("ZigBeeAttribute is NULL", attribute);
+		ZCLAttribute attribute = ((ZCLAttribute[]) zigBeeMapHandler.getSuccessResponse().get("Attributes"))[0];
+		assertNotNull("ZCLAttribute is NULL", attribute);
 
-		log("ZigBeeAttribute ID: " + attribute.getId());
+		log("ZCLAttribute ID: " + attribute.getId());
 		assertEquals("Attribute identifier not matched",
 				ZigBeeConstants.ATTRIBUTE_ID, String.valueOf(attribute.getId()));
 
-		// Use ZigBeeAttributeImpl instead of ZigBeeAttribute attribute, in
+		// Use ZCLAttributeImpl instead of ZCLAttribute attribute, in
 		// order to do the tests?
 		//
-		// log("ZigBeeAttribute NAME: " + attribute.getDescription().getName());
+		// log("ZCLAttribute NAME: " + attribute.getDescription().getName());
 		// assertEquals("Attribute name not matched",
 		// ZigBeeConstants.ATTRIBUTE_NAME,
 		// attribute.getDescription().getName());
 		//
-		// log("ZigBeeCommand MANDATORY: " +
+		// log("ZCLCommand MANDATORY: " +
 		// attribute.getDescription().isMandatory());
 		// assertEquals("Attribute mandatory state not matched",
 		// ZigBeeConstants.ATTRIBUTE_MANDATORY,
 		// String.valueOf(attribute.getDescription().isMandatory()));
 		//
-		// log("ZigBeeCommand REPORTABLE: " +
+		// log("ZCLCommand REPORTABLE: " +
 		// attribute.getDescription().isReportable());
 		// assertEquals("Attribute reportable state not matched",
 		// ZigBeeConstants.ATTRIBUTE_REPORTABLE,
 		// String.valueOf(attribute.getDescription().isReportable()));
 		//
-		// log("ZigBeeCommand ACCESS_TYPE: " +
+		// log("ZCLCommand ACCESS_TYPE: " +
 		// attribute.getDescription().getAccessType());
 		// assertEquals("Attribute access type not matched",
 		// ZigBeeConstants.ATTRIBUTE_ACCESS_TYPE,
 		// String.valueOf(attribute.getDescription().getAccessType()));
 		//
-		// log("ZigBeeCommand DATA_TYPE: " +
+		// log("ZCLCommand DATA_TYPE: " +
 		// attribute.getDescription().getDataTypeDescription().getName());
 		// assertEquals("Attribute data type not matched",
 		// ZigBeeConstants.ATTRIBUTE_DATA_TYPE,
@@ -487,7 +490,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		// cluster.writeAttributes(undivided, attributesRecords,
 		// handlerCluster);
 		Boolean undivided = true;
-		ZigBeeAttributeRecord[] attributesRecords = null;
+		ZCLAttributeRecord[] attributesRecords = null;
 		cluster.writeAttributes(undivided, attributesRecords,
 				handlerCluster);
 		isSuccess = handlerCluster.isSuccess();
@@ -500,15 +503,15 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 				fail("isSuccess is expected not to be false.");
 			}
 
-		// Test "control" methods of ZigBeeAttribute.
+		// Test "control" methods of ZCLAttribute.
 
 		// attributes
 		ZigBeeMapHandlerImpl zigBeeMapHandler = new ZigBeeMapHandlerImpl();
 		cluster.getAttributes(zigBeeMapHandler);
-		ZigBeeAttribute[] attributes = (ZigBeeAttribute[]) zigBeeMapHandler.getSuccessResponse().get("Attributes");
+		ZCLAttribute[] attributes = (ZCLAttribute[]) zigBeeMapHandler.getSuccessResponse().get("Attributes");
 		log("attributes: " + attributes);
 
-		ZigBeeAttribute attribute = attributes[8];
+		ZCLAttribute attribute = attributes[8];
 
 		try {
 			ZigBeeMapHandlerImpl handlerAttributeGetValue1 = new ZigBeeMapHandlerImpl();
@@ -557,15 +560,15 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		int[] commandIds = (int[]) zigBeeMapHandler.getSuccessResponse().get("CommandIds");
 		assertNotNull("ZigBeeCluster has no command", commandIds.length);
 		int commandId = commandIds[0];
-		assertNotNull("ZigBeeCommand ID is NULL", commandId);
+		assertNotNull("ZCLCommand ID is NULL", commandId);
 
 		// frame should be associated to commandId.
 		byte[] mockedPayload = new byte[10];
 		mockedPayload[2] = 4;
 		ZCLFrame frame = new ZCLFrameImpl(null, mockedPayload);
 		try {
-			ZigBeeCommandHandlerImpl commandHandlerImpl = new
-					ZigBeeCommandHandlerImpl();
+			ZCLCommandHandlerImpl commandHandlerImpl = new
+					ZCLCommandHandlerImpl();
 			cluster.invoke(frame, commandHandlerImpl);
 
 			ZCLFrame response = commandHandlerImpl.getResponse();
@@ -598,8 +601,8 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		frame = null;
 		String exportedServicePID = null;
 		try {
-			ZigBeeCommandHandlerImpl commandHandlerImpl = new
-					ZigBeeCommandHandlerImpl();
+			ZCLCommandHandlerImpl commandHandlerImpl = new
+					ZCLCommandHandlerImpl();
 			cluster.invoke(frame, commandHandlerImpl, exportedServicePID);
 
 			ZCLFrame response = commandHandlerImpl.getResponse();
@@ -690,27 +693,27 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 	// ===========================METHODS==================================
 	// ====================================================================
 
-	// TODO: AAA: implement export test methods.
+	// TODO AAA: implement export test methods.
 
 	// ====================================================================
 	// ===========================EXCEPTIONS TEST==========================
 	// ===========================METHODS==================================
 	// ====================================================================
 
-	// TODO: AAA: implement exceptions test methods.
+	// TODO AAA: implement exceptions test methods.
 
 	// ====================================================================
 	// ===========================ZIGBEE DATA TYPES TEST===================
 	// ===========================METHODS==================================
 	// ====================================================================
 
-	// TODO: AAA: implement zigbee data types test methods.
+	// TODO AAA: implement zigbee data types test methods.
 
 	// ====================================================================
 	// ===========================HOST/COORDINATOR GETTERS/SETTERS TEST====
 	// ===========================METHODS==================================
 	// ====================================================================
 
-	// TODO: AAA: implement host/coordinator getters/setters test methods.
+	// TODO AAA: implement host/coordinator getters/setters test methods.
 
 }

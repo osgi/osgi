@@ -45,11 +45,10 @@ public interface ZigBeeGroup {
 	 * @param pid {@link String} representing the PID (see
 	 *        {@link org.osgi.framework.Constants#SERVICE_PID} ) of the
 	 *        {@link ZigBeeEndpoint} that we want add to this Group.
-	 * @param handler the {@link ZigBeeCommandHandler} that will notified of the
-	 *        result of "joining".
+	 * @param handler the handler that will notified of the result of "joining".
 	 * @throws ZCLException
 	 */
-	void joinGroup(String pid, ZigBeeCommandHandler handler) throws ZCLException;
+	void joinGroup(String pid, ZCLCommandHandler handler) throws ZCLException;
 
 	/**
 	 * This method is used for adding an Endpoint to a Group, it may be invoked
@@ -62,11 +61,10 @@ public interface ZigBeeGroup {
 	 * @param pid {@link String} representing the PID (see
 	 *        {@link org.osgi.framework.Constants#SERVICE_PID} ) of the
 	 *        {@link ZigBeeEndpoint} that we want leave to this Group.
-	 * @param handler the {@link ZigBeeCommandHandler} that will notified of the
-	 *        result of "leaving".
+	 * @param handler the handler that will notified of the result of "leaving".
 	 * @throws ZCLException
 	 */
-	void leaveGroup(String pid, ZigBeeCommandHandler handler) throws ZCLException;
+	void leaveGroup(String pid, ZCLCommandHandler handler) throws ZCLException;
 
 	/**
 	 * Invokes the action on a Group. The handler will provide the invocation
@@ -81,7 +79,7 @@ public interface ZigBeeGroup {
 	 * @param handler The handler that manages the command response.
 	 * @throws ZCLException
 	 */
-	void invoke(Integer clusterId, ZCLFrame frame, ZigBeeCommandHandler handler) throws ZCLException;
+	void invoke(Integer clusterId, ZCLFrame frame, ZCLCommandHandler handler) throws ZCLException;
 
 	/**
 	 * This method is to be used by applications when the targeted device has to
@@ -98,6 +96,6 @@ public interface ZigBeeGroup {
 	 *        PID of an exported endpoint.
 	 * @throws ZCLException
 	 */
-	void invoke(Integer clusterId, ZCLFrame frame, ZigBeeCommandHandler handler, String exportedServicePID) throws ZCLException;
+	void invoke(Integer clusterId, ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID) throws ZCLException;
 
 }

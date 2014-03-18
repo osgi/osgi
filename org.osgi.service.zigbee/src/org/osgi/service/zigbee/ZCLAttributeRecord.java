@@ -19,43 +19,43 @@ package org.osgi.service.zigbee;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
 /**
- * This class represents a ZigBee Attribute Record
+ * This class represents a ZCLAttributeRecord
  * 
  * @version 1.0
  */
-public final class ZigBeeAttributeRecord {
+public final class ZCLAttributeRecord {
 
 	private short						id;
 	private ZigBeeDataTypeDescription	dataType;
 	private Object						value;
 
 	/**
-	 * @param id the ZigBeeAttributeRecord id
-	 * @param dataType the ZigBeeAttributeRecord dataType
-	 * @param value the ZigBeeAttributeRecord value
+	 * @param id the attribute record id
+	 * @param dataType the attribute record dataType
+	 * @param value the attribute record value
 	 */
-	public ZigBeeAttributeRecord(short id, ZigBeeDataTypeDescription dataType, Object value) {
+	public ZCLAttributeRecord(short id, ZigBeeDataTypeDescription dataType, Object value) {
 		this.id = id;
 		this.dataType = dataType;
 		this.value = value;
 	}
 
 	/**
-	 * @return the ZigBeeAttributeRecord id
+	 * @return the id
 	 */
 	public short getId() {
 		return id;
 	}
 
 	/**
-	 * @return the ZigBeeAttributeRecord dataType
+	 * @return the dataType
 	 */
 	public ZigBeeDataTypeDescription getDataType() {
 		return dataType;
 	}
 
 	/**
-	 * @return the ZigBeeAttributeRecord value
+	 * @return the value
 	 */
 	public Object getValue() {
 		return value;

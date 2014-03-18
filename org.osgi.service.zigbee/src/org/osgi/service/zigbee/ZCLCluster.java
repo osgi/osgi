@@ -48,7 +48,7 @@ public interface ZCLCluster {
 	int getId();
 
 	/**
-	 * Get the ZigBeeAttribute corresponding to given attributeId.
+	 * Get the Attribute corresponding to given attributeId.
 	 * 
 	 * @param attributeId an Attribute identifier
 	 * @param handler the response handler
@@ -57,7 +57,7 @@ public interface ZCLCluster {
 	void getAttribute(int attributeId, ZigBeeMapHandler handler);
 
 	/**
-	 * Get an array of all this Cluster's ZigBeeAttributes.
+	 * Get an array of all this Cluster's Attributes.
 	 * 
 	 * @param handler the response handler
 	 */
@@ -78,7 +78,7 @@ public interface ZCLCluster {
 	 * @param attributesRecords An array of attributes records
 	 * @param handler the response handler
 	 */
-	void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributesRecords, ZigBeeMapHandler handler);
+	void writeAttributes(boolean undivided, ZCLAttributeRecord[] attributesRecords, ZigBeeMapHandler handler);
 
 	/**
 	 * Get an array of all the commandIds of the ZigBeeCluster.
@@ -99,7 +99,7 @@ public interface ZCLCluster {
 	 * @param handler The handler that manages the command response.
 	 * @throws ZCLException
 	 */
-	void invoke(ZCLFrame frame, ZigBeeCommandHandler handler) throws ZCLException;
+	void invoke(ZCLFrame frame, ZCLCommandHandler handler) throws ZCLException;
 
 	/**
 	 * This method is to be used by applications when the targeted device has to
@@ -115,6 +115,6 @@ public interface ZCLCluster {
 	 *        PID of an exported endpoint.
 	 * @throws ZCLException
 	 */
-	void invoke(ZCLFrame frame, ZigBeeCommandHandler handler, String exportedServicePID) throws ZCLException;
+	void invoke(ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID) throws ZCLException;
 
 }

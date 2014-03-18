@@ -1,27 +1,27 @@
 
 package org.osgi.test.cases.zigbee.tbc.util;
 
+import org.osgi.service.zigbee.ZCLCommandHandler;
 import org.osgi.service.zigbee.ZCLFrame;
-import org.osgi.service.zigbee.ZigBeeCommandHandler;
 
 /**
- * Mocked impl of ZigBeeCommandHandler.
+ * Mocked impl.
  */
-public class ZigBeeCommandHandlerImpl implements ZigBeeCommandHandler {
+public class ZCLCommandHandlerImpl implements ZCLCommandHandler {
 
 	private ZCLFrame	response;
 
 	/**
 	 * Constructor.
 	 */
-	public ZigBeeCommandHandlerImpl() {
+	public ZCLCommandHandlerImpl() {
 
 	}
 
 	/**
 	 * (non-Javadoc)
 	 * 
-	 * @see org.osgi.service.zigbee.ZigBeeCommandHandler#notifyResponse(org.osgi.service.zigbee.ZCLFrame)
+	 * @see org.osgi.service.zigbee.ZCLCommandHandler#notifyResponse(org.osgi.service.zigbee.ZCLFrame)
 	 */
 	public void notifyResponse(ZCLFrame frame) {
 		this.response = frame;

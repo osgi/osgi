@@ -50,9 +50,8 @@ public class ZigBeeMapHandlerImpl implements ZigBeeMapHandler {
 	/**
 	 * FOR TESTCASES ONLY!
 	 * 
-	 * @return ZigBeeAttributesHandlerImpl.successResponse. Can be null, if the
-	 *         handler hasn't receive a response yet, or if the response is
-	 *         null.
+	 * @return ZigBeeMapHandlerImpl.successResponse. Can be null, if the handler
+	 *         hasn't receive a response yet, or if the response is null.
 	 */
 	public Map getSuccessResponse() {
 		return successResponse;
@@ -61,9 +60,8 @@ public class ZigBeeMapHandlerImpl implements ZigBeeMapHandler {
 	/**
 	 * FOR TESTCASES ONLY!
 	 * 
-	 * @return ZigBeeAttributesHandlerImpl.failureResponse. Can be null, if the
-	 *         handler hasn't receive a response yet, or if the response is
-	 *         null.
+	 * @return ZigBeeMapHandlerImpl.failureResponse. Can be null, if the handler
+	 *         hasn't receive a response yet, or if the response is null.
 	 */
 	public ZCLException getFailureResponse() {
 		return failureResponse;

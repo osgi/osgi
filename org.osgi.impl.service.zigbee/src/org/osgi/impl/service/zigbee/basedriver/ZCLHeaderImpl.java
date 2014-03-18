@@ -57,9 +57,4 @@ public class ZCLHeaderImpl implements ZCLHeader {
 		return isDefaultResponseEnabled;
 	}
 
-	public short getTransactionSequenceNumber() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
 }

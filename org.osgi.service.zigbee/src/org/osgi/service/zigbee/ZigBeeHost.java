@@ -32,18 +32,24 @@ public interface ZigBeeHost extends ZigBeeNode {
 	/**
 	 * Starts the host.
 	 * 
+	 * If the host is a Coordinator, then it can be started with or without
+	 * PAN_ID and Extended PAN_ID (i.e. if no PAN_ID, and Extended PAN_ID are
+	 * given, then they will be automatically generated and then added to the
+	 * service properties).
+	 * 
+	 * If the host is a router, or an end device, then the host may start
+	 * without a registered PAN_ID property; the property will be set when the
+	 * host will find and join a ZigBee network.
+	 * 
 	 * The host status must be persitent, i.e. if the host was started, then the
 	 * host must starts again when the bundle restarts. In addition, the values
 	 * of channel, pan id, extended pan id, and host pid must remain the same.
 	 * 
-	 * With the PAN that is chosen with the host is an end device. If no PAN ID
-	 * is registered, If the host is a router or an end device, the host may
-	 * start without a registered PAN_ID property and set the property when the
-	 * host finds and joins a network.
-	 * 
+	 * @param panId optional parameter
+	 * @param extendedPanId optional parameter
 	 * @throws ZCLException
 	 */
-	public void start() throws ZCLException;
+	public void start(int panId, long extendedPanId) throws ZCLException;
 
 	/**
 	 * Stops the host.
@@ -61,6 +67,14 @@ public interface ZigBeeHost extends ZigBeeNode {
 
 	/**
 	 * Indicates if a ZigBee device can join the network.
+	 * 
+	 * Broadcasts a Mgmt_Permit_req to all routers and the coordinator. If the
+	 * duration argument is not equal to zero or 0xFF, the argument is a number
+	 * of seconds and joining is permitted until it counts down to zero, after
+	 * which time, joining is not permitted. If the duration is set to zero,
+	 * joining is not permitted. If set to 0xFF, joining is permitted
+	 * indefinitely or until another Mgmt_Permit_Joining_req is received by the
+	 * coordinator.
 	 * 
 	 * @param duration The time during which associations are permitted.
 	 * @throws ZCLException
@@ -144,11 +158,11 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 *        {@link Constants#SERVICE_PID} ) of the {@link ZigBeeEndpoint} that
 	 *        we want leave to this Group.
 	 * @param groupAddress the address of the group to create.
-	 * @param handler the {@link ZigBeeCommandHandler} that will be notified of
-	 *        the result of "creation".
+	 * @param handler the ZCLCommandHandler that will be notified of the result
+	 *        of "creation".
 	 * @throws ZCLException
 	 */
-	public void createGroupService(String pid, int groupAddress, ZigBeeCommandHandler handler) throws ZCLException;
+	public void createGroupService(String pid, int groupAddress, ZCLCommandHandler handler) throws ZCLException;
 
 	/**
 	 * Enable to broadcast a given frame on a given cluster.
@@ -157,7 +171,7 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * @param frame a command frame sequence.
 	 * @param handler The handler that manages the command response.
 	 */
-	void broadcast(Integer clusterID, ZCLFrame frame, ZigBeeCommandHandler handler);
+	void broadcast(Integer clusterID, ZCLFrame frame, ZCLCommandHandler handler);
 
 	/**
 	 * Enable to broadcast a given frame on a given cluster.
@@ -169,6 +183,6 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 *        In targeted situations, the source endpoint is the valid service
 	 *        PID of an exported endpoint.
 	 */
-	void broadcast(Integer clusterID, ZCLFrame frame, ZigBeeCommandHandler handler, String exportedServicePID);
+	void broadcast(Integer clusterID, ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID);
 
 }

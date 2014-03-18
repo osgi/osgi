@@ -17,12 +17,12 @@
 package org.osgi.service.zigbee;
 
 /**
- * ZigBeeCommandHandler manages response of a command request to the Base Driver
+ * Manage response of a command request to the Base Driver
  * 
  * @version 1.0
  */
 
-public interface ZigBeeCommandHandler {
+public interface ZCLCommandHandler {
 
 	/**
 	 * Notifies the result (success or failure) of the call.

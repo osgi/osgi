@@ -71,27 +71,9 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		return 0;
 	}
 
-	public Long getExtendedPanId() {
+	public long getExtendedPanId() {
 		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public int[] getEndpoints() {
-		int i = endpoints.length;
-		int[] endpointsIds = new int[i];
-		for (int j = 0; j < i; j = j + 1) {
-			endpointsIds[j] = endpoints[j].getId();
-		}
-		return endpointsIds;
-	}
-
-	public ZigBeeEndpoint getEndpoint(int id) {
-		for (int j = 0; j < endpoints.length; j = j + 1) {
-			if (id == endpoints[j].getId()) {
-				return endpoints[j];
-			}
-		}
-		return null;
+		return -1;
 	}
 
 	public void getNodeDescriptor(ZigBeeHandler handler) throws ZCLException {

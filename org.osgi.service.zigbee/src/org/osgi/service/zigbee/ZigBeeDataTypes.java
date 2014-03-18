@@ -35,11 +35,7 @@ public class ZigBeeDataTypes {
 	 */
 	public static final short	NO_DATA					= 0x00;
 
-	/**
-	 * Boolean The Boolean type represents a logical value, either TRUE (0x00)
-	 * or FALSE (0x01). The value 0xff represents an invalid value of this type.
-	 * All other values of this type are forbidden
-	 */
+	/** */
 	public static final short	GENERAL_DATA_8			= 0x08;
 	/** */
 	public static final short	GENERAL_DATA_16			= 0x09;

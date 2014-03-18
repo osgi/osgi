@@ -1,10 +1,10 @@
 
 package org.osgi.impl.service.zigbee.descriptions;
 
+import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
+import org.osgi.service.zigbee.descriptions.ZCLCommandDescription;
 import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
-import org.osgi.service.zigbee.descriptions.ZigBeeAttributeDescription;
-import org.osgi.service.zigbee.descriptions.ZigBeeCommandDescription;
 
 /**
  * Mocked impl.
@@ -31,17 +31,17 @@ public class ZCLClusterDescriptionImpl implements ZCLClusterDescription {
 		return global;
 	}
 
-	public ZigBeeCommandDescription[] getReceivedCommandDescriptions() {
+	public ZCLCommandDescription[] getReceivedCommandDescriptions() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public ZigBeeCommandDescription[] getGeneratedCommandDescriptions() {
+	public ZCLCommandDescription[] getGeneratedCommandDescriptions() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public ZigBeeAttributeDescription[] getAttributeDescriptions() {
+	public ZCLAttributeDescription[] getAttributeDescriptions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -30,17 +30,17 @@ public interface ZCLClusterDescription {
 	/**
 	 * @return an array of cluster's generated command description
 	 */
-	public ZigBeeCommandDescription[] getGeneratedCommandDescriptions();
+	public ZCLCommandDescription[] getGeneratedCommandDescriptions();
 
 	/**
 	 * @return an array of cluster's received command description
 	 */
-	public ZigBeeCommandDescription[] getReceivedCommandDescriptions();
+	public ZCLCommandDescription[] getReceivedCommandDescriptions();
 
 	/**
 	 * @return an array of cluster's Attributes description
 	 */
-	public ZigBeeAttributeDescription[] getAttributeDescriptions();
+	public ZCLAttributeDescription[] getAttributeDescriptions();
 
 	/**
 	 * @return an array of cluster's Commands description

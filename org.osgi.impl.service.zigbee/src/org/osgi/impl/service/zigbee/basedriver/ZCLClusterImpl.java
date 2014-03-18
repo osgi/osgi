@@ -3,12 +3,12 @@ package org.osgi.impl.service.zigbee.basedriver;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.osgi.service.zigbee.ZCLAttribute;
+import org.osgi.service.zigbee.ZCLAttributeRecord;
 import org.osgi.service.zigbee.ZCLCluster;
+import org.osgi.service.zigbee.ZCLCommandHandler;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
-import org.osgi.service.zigbee.ZigBeeAttribute;
-import org.osgi.service.zigbee.ZigBeeAttributeRecord;
-import org.osgi.service.zigbee.ZigBeeCommandHandler;
 import org.osgi.service.zigbee.ZigBeeMapHandler;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 
@@ -18,7 +18,7 @@ import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 public class ZCLClusterImpl implements ZCLCluster {
 
 	private int						id;
-	private ZigBeeAttribute[]		attributes;
+	private ZCLAttribute[]			attributes;
 	private int[]					commandIds;
 	private ZCLClusterDescription	description;
 
@@ -34,7 +34,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 	 * @param attributes
 	 * @param desc
 	 */
-	public ZCLClusterImpl(int[] commandIds, ZigBeeAttribute[] attributes, ZCLClusterDescription desc) {
+	public ZCLClusterImpl(int[] commandIds, ZCLAttribute[] attributes, ZCLClusterDescription desc) {
 		this.id = desc.getId();
 		this.commandIds = commandIds;
 		this.attributes = attributes;
@@ -68,23 +68,23 @@ public class ZCLClusterImpl implements ZCLCluster {
 		Map<Integer, byte[]> response = new HashMap<Integer, byte[]>();
 		int i = 0;
 		// for (int i : attributesIds) {
-		ZigBeeAttribute attribute = attributes[i];
+		ZCLAttribute attribute = attributes[i];
 		byte[] attributeValue = {0};
 		response.put(attribute.getId(), attributeValue);
 		// }
 		handler.onSuccess(response);
 	}
 
-	public void writeAttributes(boolean undivided, ZigBeeAttributeRecord[] attributesRecords, ZigBeeMapHandler handler) {
+	public void writeAttributes(boolean undivided, ZCLAttributeRecord[] attributesRecords, ZigBeeMapHandler handler) {
 		// TODO Auto-generated method stub
 	}
 
-	public void invoke(ZCLFrame frame, ZigBeeCommandHandler handler) throws ZCLException {
+	public void invoke(ZCLFrame frame, ZCLCommandHandler handler) throws ZCLException {
 		// mocked invocation.
 		handler.notifyResponse(frame);
 	}
 
-	public void invoke(ZCLFrame frame, ZigBeeCommandHandler handler, String exportedServicePID) throws ZCLException {
+	public void invoke(ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID) throws ZCLException {
 		// mocked invocation.
 		handler.notifyResponse(frame);
 	}

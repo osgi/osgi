@@ -20,11 +20,11 @@ import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZCLHeader;
 
 /**
- * This interface represents a ZigBee Command description
+ * This interface represents a ZCLCommandDescription
  * 
  * @version 1.0
  */
-public interface ZigBeeCommandDescription {
+public interface ZCLCommandDescription {
 	/**
 	 * @return the command identifier
 	 */

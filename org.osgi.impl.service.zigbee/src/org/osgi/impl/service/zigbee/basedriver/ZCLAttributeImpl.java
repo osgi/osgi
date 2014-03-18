@@ -3,25 +3,25 @@ package org.osgi.impl.service.zigbee.basedriver;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZCLException;
-import org.osgi.service.zigbee.ZigBeeAttribute;
 import org.osgi.service.zigbee.ZigBeeMapHandler;
-import org.osgi.service.zigbee.descriptions.ZigBeeAttributeDescription;
+import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
 /**
- * Mocked impl of ZigBeeAttribute.
+ * Mocked impl.
  */
-public class ZigBeeAttributeImpl implements ZigBeeAttribute {
+public class ZCLAttributeImpl implements ZCLAttribute {
 
-	private int							id;
-	private Object						value;
-	private ZigBeeAttributeDescription	description;
+	private int						id;
+	private Object					value;
+	private ZCLAttributeDescription	description;
 
 	/**
 	 * @param desc
 	 */
-	public ZigBeeAttributeImpl(ZigBeeAttributeDescription desc) {
+	public ZCLAttributeImpl(ZCLAttributeDescription desc) {
 		id = desc.getId();
 		value = desc.getDefaultValue();
 		description = desc;
@@ -51,7 +51,7 @@ public class ZigBeeAttributeImpl implements ZigBeeAttribute {
 	}
 
 	public String toString() {
-		return ZigBeeAttributeImpl.class.getName() + ":[id: " + getId() + ", dataType: " + getDataType() + ", description: " + description + ", value: " + value + "]";
+		return ZCLAttributeImpl.class.getName() + ":[id: " + getId() + ", dataType: " + getDataType() + ", description: " + description + ", value: " + value + "]";
 	}
 
 }

@@ -22,25 +22,25 @@ import org.osgi.service.zigbee.ZigBeeDataTypes;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
 /**
- * This interface represents a ZigBeeAttributeID as described in the ZigBee
+ * This interface represents a ZCLAttributeID as described in the ZigBee
  * Specification.
  * 
  * @version 1.0
  */
-public class ZigBeeAttributeID implements ZigBeeDataTypeDescription {
+public class ZCLAttributeID implements ZigBeeDataTypeDescription {
 
-	public static final short			ID					= 0x09;
+	public static final short		ID					= 0x09;
 
-	private static ZigBeeAttributeID	singletonInstance	= new ZigBeeAttributeID();
+	private static ZCLAttributeID	singletonInstance	= new ZCLAttributeID();
 
-	private ZigBeeAttributeID() {
+	private ZCLAttributeID() {
 
 	}
 
 	/**
 	 * @return the singleton instance.
 	 */
-	public static ZigBeeAttributeID getInstance() {
+	public static ZCLAttributeID getInstance() {
 		return singletonInstance;
 	}
 
