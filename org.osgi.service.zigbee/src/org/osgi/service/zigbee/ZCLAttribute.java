@@ -41,7 +41,7 @@ public interface ZCLAttribute {
 	 * @param handler the handler
 	 * @throws ZCLException
 	 */
-	public void getValue(ZigBeeMapHandler handler) throws ZCLException;
+	public void getValue(ZigBeeHandler handler) throws ZCLException;
 
 	/**
 	 * Sets the current value of the attribute.
@@ -51,7 +51,7 @@ public interface ZCLAttribute {
 	 * @throws ZCLException when the data type is not known
 	 *         ("Unknown data type").
 	 */
-	public void setValue(Object value, ZigBeeMapHandler handler) throws ZCLException;
+	public void setValue(Object value, ZigBeeHandler handler) throws ZCLException;
 
 	/**
 	 * @return the Attribute data type. It may be null if the data type is not

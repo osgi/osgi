@@ -101,7 +101,7 @@ public interface ZigBeeNodeDescriptor {
 	/**
 	 * @return the manufacurer code field.
 	 */
-	public Integer getManufacturerCode();
+	public int getManufacturerCode();
 
 	/**
 	 * @return the maximum buffer size field.

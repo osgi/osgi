@@ -9,7 +9,7 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
  */
 public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 
-	private Integer						id;
+	private int							id;
 	private boolean						isReadOnly;
 	private Object						defaultValue;
 	private String						name;
@@ -26,7 +26,7 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 	 * @param isReportable
 	 * @param datatype
 	 */
-	public ZCLAttributeDescriptionImpl(Integer id, boolean isReadOnly, Object defaultvalue, String name,
+	public ZCLAttributeDescriptionImpl(int id, boolean isReadOnly, Object defaultvalue, String name,
 			boolean isMandatory, boolean isReportable, ZigBeeDataTypeDescription datatype) {
 		// TODO Auto-generated constructor stub
 		this.id = id;
@@ -38,7 +38,7 @@ public class ZCLAttributeDescriptionImpl implements ZCLAttributeDescription {
 		this.datatype = datatype;
 	}
 
-	public Integer getId() {
+	public int getId() {
 		return id;
 	}
 

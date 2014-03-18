@@ -23,7 +23,7 @@ import org.osgi.framework.Constants;
  * device or client. This machine is, for example, the ZigBee chip/dongle that
  * is controlled by the basedriver (below/under the OSGi execution environment).<br>
  * ZigBeeHost is more than a ZigBeeNode.<br>
- * It must be registered as a service.
+ * It must be registered as a OSGi service.
  * 
  * @version 1.0
  */

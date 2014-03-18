@@ -48,13 +48,12 @@ public interface ZCLCluster {
 	int getId();
 
 	/**
-	 * Get the Attribute corresponding to given attributeId.
+	 * Get the cluster attribute identified corresponding to given attributeId.
 	 * 
 	 * @param attributeId an Attribute identifier
 	 * @param handler the response handler
-	 * @return the cluster attribute identified by id
 	 */
-	void getAttribute(int attributeId, ZigBeeMapHandler handler);
+	void getAttribute(int attributeId, ZigBeeHandler handler);
 
 	/**
 	 * Get an array of all this Cluster's Attributes.

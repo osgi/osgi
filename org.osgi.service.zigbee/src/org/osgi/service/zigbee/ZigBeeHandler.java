@@ -36,8 +36,8 @@ public interface ZigBeeHandler {
 	 * Notifies the failure result of the call. This method is used when the
 	 * handler command result is a failure.
 	 * 
-	 * @param e the ZCLException.
+	 * @param e the exception.
 	 */
-	public void onFailure(ZCLException e);
+	public void onFailure(Exception e);
 
 }

@@ -9,6 +9,7 @@ import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLCommandHandler;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
+import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.ZigBeeMapHandler;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 
@@ -45,7 +46,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 		return id;
 	}
 
-	public void getAttribute(int attributeId, ZigBeeMapHandler handler) {
+	public void getAttribute(int attributeId, ZigBeeHandler handler) {
 		Map response = new HashMap<String, Object>();
 		response.put("Attributes", attributes[attributeId]);
 		handler.onSuccess(response);

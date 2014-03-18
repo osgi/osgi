@@ -52,7 +52,7 @@ public class ZigBeeNodeDescriptorImpl implements ZigBeeNodeDescriptor {
 	/**
 	 * @return the manufacurer code field.
 	 */
-	public Integer getManufacturerCode() {
+	public int getManufacturerCode() {
 		return manufacturerCode;
 	}
 

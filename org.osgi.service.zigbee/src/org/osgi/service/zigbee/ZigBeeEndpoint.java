@@ -19,7 +19,10 @@ package org.osgi.service.zigbee;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 
 /**
- * This interface represents a ZigBee EndPoint
+ * This interface represents a ZigBee EndPoint.
+ * 
+ * A ZigBeeEndpoint must be registered as a OSGi service with
+ * ZigBeeNode.IEEE_ADDRESS, and ZigBeeEndpoint.ENDPOINT_ID properties.
  * 
  * @version 1.0
  */

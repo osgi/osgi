@@ -92,7 +92,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		try {
 			ZigBeeHandlerImpl handler = new ZigBeeHandlerImpl();
 			dev.getNodeDescriptor(handler);
-			ZigBeeNodeDescriptor zigBeeNodeDescriptor = (org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor) handler.getResponse();
+			ZigBeeNodeDescriptor zigBeeNodeDescriptor = (org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor) handler.getSuccessResponse();
 			log("ZigBeeNode LOGICAL_TYPE: " + zigBeeNodeDescriptor.getLogicalType());
 			assertEquals("Logical type not matched",
 					ZigBeeConstants.LOGICAL_TYPE,
@@ -100,7 +100,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 			handler = new ZigBeeHandlerImpl();
 			dev.getNodeDescriptor(handler);
-			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler.getResponse();
+			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler.getSuccessResponse();
 			log("ZigBeeNode MANUFACTURER_CODE: " +
 					zigBeeNodeDescriptor.getManufacturerCode());
 			assertEquals("Manufacturer code not matched",
@@ -109,7 +109,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 			handler = new ZigBeeHandlerImpl();
 			dev.getNodeDescriptor(handler);
-			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler.getResponse();
+			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler.getSuccessResponse();
 			log("ZigBeeNode MAXIMUM_BUFFER_SIZE: " +
 					String.valueOf(zigBeeNodeDescriptor.getMaxBufferSize()));
 			assertEquals("Maximum buffer size not matched",
@@ -118,7 +118,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 			handler = new ZigBeeHandlerImpl();
 			dev.getNodeDescriptor(handler);
-			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler.getResponse();
+			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler.getSuccessResponse();
 			log("ZigBeeNode MAXIMUM_INCOMING_TRANSFERT_SIZE: " +
 					zigBeeNodeDescriptor.getMaxIncomingTransferSize());
 			assertEquals("Maximum incoming transfert size not matched",
@@ -127,7 +127,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 			handler = new ZigBeeHandlerImpl();
 			dev.getPowerDescriptor(handler);
-			ZigBeePowerDescriptor zigBeePowerDescriptor = (ZigBeePowerDescriptor) handler.getResponse();
+			ZigBeePowerDescriptor zigBeePowerDescriptor = (ZigBeePowerDescriptor) handler.getSuccessResponse();
 			log("ZigBeeNode CURRENT_POWER_MODE: " +
 					zigBeePowerDescriptor.getCurrentPowerMode());
 			assertEquals("Current power mode not matched",
@@ -136,7 +136,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 			handler = new ZigBeeHandlerImpl();
 			dev.getPowerDescriptor(handler);
-			zigBeePowerDescriptor = (ZigBeePowerDescriptor) handler.getResponse();
+			zigBeePowerDescriptor = (ZigBeePowerDescriptor) handler.getSuccessResponse();
 			log("ZigBeeNode CURRENT_POWER_SOURCE: " +
 					zigBeePowerDescriptor.getCurrentPowerSource());
 			assertEquals("Current power source not matched",
@@ -145,7 +145,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 			handler = new ZigBeeHandlerImpl();
 			dev.getPowerDescriptor(handler);
-			zigBeePowerDescriptor = (ZigBeePowerDescriptor) handler.getResponse();
+			zigBeePowerDescriptor = (ZigBeePowerDescriptor) handler.getSuccessResponse();
 			log("ZigBeeNode AVAILABLE_POWER_SOURCE: " +
 					zigBeePowerDescriptor.isConstantMainsPowerAvailable());
 			assertEquals("Availability of power source not matched",
@@ -154,7 +154,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 			handler = new ZigBeeHandlerImpl();
 			dev.getPowerDescriptor(handler);
-			zigBeePowerDescriptor = (ZigBeePowerDescriptor) handler.getResponse();
+			zigBeePowerDescriptor = (ZigBeePowerDescriptor) handler.getSuccessResponse();
 			log("ZigBeeNode CURRENT_POWER_SOURCE_LEVEL: " +
 					zigBeePowerDescriptor.getCurrentPowerSourceLevel());
 			assertEquals("Current power source not matched",
@@ -163,12 +163,12 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 			handler = new ZigBeeHandlerImpl();
 			dev.getNodeDescriptor(handler);
-			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler.getResponse();
+			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler.getSuccessResponse();
 			if (zigBeeNodeDescriptor.isComplexDescriptorAvailable()) {
 
 				handler = new ZigBeeHandlerImpl();
 				dev.getComplexDescriptor(handler);
-				ZigBeeComplexDescriptor zigBeeComplexDescriptor = (ZigBeeComplexDescriptor) handler.getResponse();
+				ZigBeeComplexDescriptor zigBeeComplexDescriptor = (ZigBeeComplexDescriptor) handler.getSuccessResponse();
 				log("ZigBeeNode MODEL_NAME: " +
 						zigBeeComplexDescriptor.getModelName());
 				assertEquals("Model name not matched",
@@ -190,11 +190,11 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 			handler = new ZigBeeHandlerImpl();
 			dev.getNodeDescriptor(handler);
-			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler.getResponse();
+			zigBeeNodeDescriptor = (ZigBeeNodeDescriptor) handler.getSuccessResponse();
 			if (zigBeeNodeDescriptor.isUserDescriptorAvailable()) {
 				handler = new ZigBeeHandlerImpl();
 				dev.getUserDescriptor(handler);
-				ZigBeeUserDescriptor zigBeeUserDescriptor = (ZigBeeUserDescriptor) handler.getResponse();
+				ZigBeeUserDescriptor zigBeeUserDescriptor = (ZigBeeUserDescriptor) handler.getSuccessResponse();
 				log("ZigBeeNode USER_DESCRIPTION: " +
 						zigBeeUserDescriptor.getUserDescriptor());
 				assertEquals("User description not matched",
@@ -269,7 +269,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			ZigBeeHandlerImpl handler = new ZigBeeHandlerImpl();
 			endpoint.getSimpleDescriptor(handler);
 			ZigBeeSimpleDescriptor zigBeeSimpleDescriptor =
-					(ZigBeeSimpleDescriptor) handler.getResponse();
+					(ZigBeeSimpleDescriptor) handler.getSuccessResponse();
 			log("ZigBeeEndpoint PROFILE_ID: " +
 					zigBeeSimpleDescriptor.getApplicationProfileId());
 			assertEquals("Application Profile identifier not matched",
@@ -279,7 +279,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			handler = new ZigBeeHandlerImpl();
 			endpoint.getSimpleDescriptor(handler);
 			zigBeeSimpleDescriptor = (ZigBeeSimpleDescriptor)
-					handler.getResponse();
+					handler.getSuccessResponse();
 			log("ZigBeeEndpoint DEVICE_ID: " +
 					zigBeeSimpleDescriptor.getApplicationDeviceId());
 			assertEquals("Application Device identifier not matched",
@@ -289,7 +289,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			handler = new ZigBeeHandlerImpl();
 			endpoint.getSimpleDescriptor(handler);
 			zigBeeSimpleDescriptor = (ZigBeeSimpleDescriptor)
-					handler.getResponse();
+					handler.getSuccessResponse();
 			log("ZigBeeEndpoint DEVICE_VERSION: " +
 					zigBeeSimpleDescriptor.getApplicationDeviceVersion());
 			assertEquals("Application device version not matched",
@@ -559,7 +559,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		ZCLAttribute attribute = attributes[8];
 
 		try {
-			ZigBeeMapHandlerImpl handlerAttributeGetValue1 = new ZigBeeMapHandlerImpl();
+			ZigBeeHandlerImpl handlerAttributeGetValue1 = new ZigBeeHandlerImpl();
 			attribute.getValue(handlerAttributeGetValue1);
 
 			isSuccess = handlerAttributeGetValue1.isSuccess();
@@ -579,7 +579,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 
 		try {
 			Object value = new Object();
-			ZigBeeMapHandlerImpl handler = new ZigBeeMapHandlerImpl();
+			ZigBeeHandlerImpl handler = new ZigBeeHandlerImpl();
 			attribute.setValue(value, handler);
 
 			isSuccess = handler.isSuccess();

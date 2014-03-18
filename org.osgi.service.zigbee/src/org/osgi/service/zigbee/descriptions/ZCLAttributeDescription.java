@@ -26,7 +26,7 @@ public interface ZCLAttributeDescription {
 	/**
 	 * @return the attribute identifier
 	 */
-	public Integer getId();
+	public int getId();
 
 	/**
 	 * @return The attribute name

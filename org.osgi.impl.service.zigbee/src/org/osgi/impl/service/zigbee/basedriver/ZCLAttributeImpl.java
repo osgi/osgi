@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZCLException;
-import org.osgi.service.zigbee.ZigBeeMapHandler;
+import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 
@@ -35,14 +35,14 @@ public class ZCLAttributeImpl implements ZCLAttribute {
 		return description.getDataTypeDescription();
 	}
 
-	public void getValue(ZigBeeMapHandler handler) {
+	public void getValue(ZigBeeHandler handler) {
 		Map<Integer, Object> response = null;
 		response = new HashMap<Integer, Object>();
 		response.put(id, value);
 		handler.onSuccess(response);
 	}
 
-	public void setValue(Object value, ZigBeeMapHandler handler) throws ZCLException {
+	public void setValue(Object value, ZigBeeHandler handler) throws ZCLException {
 		this.value = value;
 		Map<Integer, Object> response = null;
 		response = new HashMap<Integer, Object>();

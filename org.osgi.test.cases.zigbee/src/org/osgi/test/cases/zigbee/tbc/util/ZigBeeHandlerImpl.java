@@ -1,7 +1,6 @@
 
 package org.osgi.test.cases.zigbee.tbc.util;
 
-import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZigBeeHandler;
 
 /**
@@ -9,7 +8,8 @@ import org.osgi.service.zigbee.ZigBeeHandler;
  */
 public class ZigBeeHandlerImpl implements ZigBeeHandler {
 
-	private Object	response;
+	private Object		successResponse;
+	private Exception	failureResponse;
 
 	/**
 	 * Constructor.
@@ -19,15 +19,13 @@ public class ZigBeeHandlerImpl implements ZigBeeHandler {
 	}
 
 	public void onSuccess(Object response) {
-		// System.out.println("ZigBeeHandlerImpl.onSuccess(" + response + ")");
 		this.isSuccess = true;
-		this.response = response;
+		this.successResponse = response;
 	}
 
-	public void onFailure(ZCLException e) {
-		// System.out.println("ZigBeeHandlerImpl.onFailure(" + response + ")");
+	public void onFailure(Exception e) {
 		this.isSuccess = false;
-		this.response = e;
+		this.failureResponse = e;
 	}
 
 	// Code below is for the testcases only.
@@ -50,11 +48,21 @@ public class ZigBeeHandlerImpl implements ZigBeeHandler {
 	/**
 	 * FOR TESTCASES ONLY!
 	 * 
-	 * @return ZigBeeHandlerImpl.reponse. Can be null, if the handler hasn't
-	 *         receive a response yet, or if the response is null.
+	 * @return Can be null, if the handler hasn't receive a response yet, or if
+	 *         the response is null.
 	 */
-	public Object getResponse() {
-		return response;
+	public Object getSuccessResponse() {
+		return successResponse;
+	}
+
+	/**
+	 * FOR TESTCASES ONLY!
+	 * 
+	 * @return Can be null, if the handler hasn't receive a response yet, or if
+	 *         the response is null.
+	 */
+	public Exception getFailureResponse() {
+		return failureResponse;
 	}
 
 }
