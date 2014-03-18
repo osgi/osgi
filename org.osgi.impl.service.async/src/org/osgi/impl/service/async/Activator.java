@@ -16,21 +16,17 @@ public class Activator implements BundleActivator {
 		
 		private final AtomicInteger count = new AtomicInteger();
 		
-		@Override
 		public Thread newThread(Runnable r) {
 			Thread t = new Thread(r, "Asynchronous Execution Service Thread " + count.incrementAndGet());
 			return t;
 		}
 	});
 	
-	@Override
 	public void start(BundleContext context) throws Exception {
 		context.registerService(Async.class.getName(), new AsyncServiceFactory(executor), new Hashtable<String, Object>());
 	}
 
-	@Override
 	public void stop(BundleContext context) throws Exception {
 		executor.shutdownNow();
 	}
-
 }

@@ -32,7 +32,6 @@ public class Work<T> implements Runnable {
 	}
 
 
-	@Override
 	public void run() {
 		Object service;
 		if(ref != null) {

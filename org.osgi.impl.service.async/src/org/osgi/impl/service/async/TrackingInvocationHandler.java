@@ -47,7 +47,6 @@ class TrackingInvocationHandler implements InvocationHandler {
 		this.ref = null;
 	}
 
-	@Override
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
 		asyncService.registerInvocation(new MethodCall(ref, delegate, method, args));

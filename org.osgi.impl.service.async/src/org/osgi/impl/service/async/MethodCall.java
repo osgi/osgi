@@ -31,7 +31,7 @@ public class MethodCall {
 	public <V> Promise<V> invokeAsynchronously(Bundle clientBundle, ExecutorService executor) {
 		Deferred<V> deferred = new Deferred<V>();
 		try {
-			executor.execute(new Work<>(reference, clientBundle, service, method, arguments, deferred));
+			executor.execute(new Work<V>(reference, clientBundle, service, method, arguments, deferred));
 		} catch (RejectedExecutionException ree) {
 			deferred.fail(new ServiceException("The Async service is unable to accept new requests", 7, ree));
 		}

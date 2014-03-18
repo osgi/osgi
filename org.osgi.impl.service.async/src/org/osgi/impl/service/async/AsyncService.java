@@ -35,7 +35,6 @@ public class AsyncService implements Async {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public <T> T mediate(T service) {
 		
 		Class<?> cls = service.getClass();
@@ -57,7 +56,6 @@ public class AsyncService implements Async {
 	}
 
 	@SuppressWarnings("unchecked")
-	@Override
 	public <T> T mediate(ServiceReference<T> ref) {
 		Object o = ref.getProperty(Constants.OBJECTCLASS);
 		
@@ -87,14 +85,12 @@ public class AsyncService implements Async {
 				ifaces.toArray(new Class[ifaces.size()]), new TrackingInvocationHandler(this, ref));
 	}
 
-	@Override
 	public <T> Promise<T> call(T call) throws IllegalStateException {
 		MethodCall currentInvocation = consumeCurrentInvocation();
 		if(currentInvocation == null) throw new IllegalStateException("Incorrect API usage - this thread has no pending method calls");
 		return currentInvocation.invokeAsynchronously(clientBundle, executor);
 	}
 
-	@Override
 	public Promise<?> call() throws IllegalStateException {
 		return call(null);
 	}
