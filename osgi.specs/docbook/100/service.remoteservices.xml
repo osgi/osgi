@@ -625,13 +625,12 @@ tracker.open();</programlisting>
     <section>
       <title>Remote Services Life Cycle</title>
 
-      <para>If a distribution provider has distributed a service, it must
-      closely track any modifications on the exported service. If there is a
-      corresponding imported service, it must closely match any modified
-      service properties in the way that was specified for the registration.
-      If the exported service is unregistered, the endpoint must be withdrawn
-      as soon as possible. If there is a corresponding imported service, then
-      this imported service must also be unregistered expediently.</para>
+      <para>A distributed service must closely track any modifications on the 
+      corresponding service registration. If service properties are modified, 
+      these modifications should be propagated to the distributed service and
+      associated service proxies. If 
+      the exported service is unregistered, the endpoint must be withdrawn as 
+      soon as possible and any imported service proxies unregistered.</para>
     </section>
 
     <section>
