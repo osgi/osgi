@@ -615,6 +615,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 				for (Iterator<ExportRegistration> it = exportRegistrations2.iterator(); it.hasNext();) {
 					ExportRegistration er = it.next();
 
+					ExportReference exref = er.getExportReference();
 					er.close();
 					try {
 						er.close(); // must
@@ -623,14 +624,15 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 					}
 
 					assertNull("122.4.1: after closing ExportRegistration, ExportReference.getExportedEndpoint must return null",
-							er.getExportReference().getExportedEndpoint());
+							exref.getExportedEndpoint());
 					assertNull("122.4.1: after closing ExportRegistration, ExportReference.getExportedService must return null",
-							er.getExportReference().getExportedService());
+							exref.getExportedService());
 				}
 				assertEquals(exportRegistrations.size(), rsa.getExportedServices().size());
 				for (Iterator<ExportRegistration> it = exportRegistrations.iterator(); it.hasNext();) {
 					ExportRegistration er = it.next();
 
+					ExportReference exref = er.getExportReference();
 					er.close();
 					try {
 						er.close(); // must
@@ -639,9 +641,9 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 					}
 
 					assertNull("122.4.1: after closing ExportRegistration, ExportReference.getExportedEndpoint must return null",
-							er.getExportReference().getExportedEndpoint());
+							exref.getExportedEndpoint());
 					assertNull("122.4.1: after closing ExportRegistration, ExportReference.getExportedService must return null",
-							er.getExportReference().getExportedService());
+							exref.getExportedService());
 				}
 				assertNotNull(rsa.getExportedServices());
 				assertEquals(0, rsa.getExportedServices().size());
