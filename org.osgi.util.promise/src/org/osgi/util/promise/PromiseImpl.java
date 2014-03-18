@@ -492,20 +492,29 @@ final class PromiseImpl<T> implements Promise<T> {
 		}
 
 		public Promise<Void> call(Promise<T> resolved) throws Exception {
-			chained.resolve(resolved.getValue(), null);
+			T value;
+			try {
+				value = resolved.getValue();
+			} catch (Throwable e) {
+				chained.resolve(null, e);
+				return null;
+			}
+			chained.resolve(value, null);
 			return null;
 		}
 
 		public void fail(Promise<?> resolved) throws Exception {
 			S recovered;
+			Throwable failure;
 			try {
 				recovered = recovery.apply(resolved);
+				failure = resolved.getFailure();
 			} catch (Throwable e) {
 				chained.resolve(null, e);
 				return;
 			}
 			if (recovered == null) {
-				chained.resolve(null, resolved.getFailure());
+				chained.resolve(null, failure);
 			} else {
 				chained.resolve(recovered, null);
 			}
@@ -537,20 +546,29 @@ final class PromiseImpl<T> implements Promise<T> {
 		}
 
 		public Promise<Void> call(Promise<T> resolved) throws Exception {
-			chained.resolve(resolved.getValue(), null);
+			T value;
+			try {
+				value = resolved.getValue();
+			} catch (Throwable e) {
+				chained.resolve(null, e);
+				return null;
+			}
+			chained.resolve(value, null);
 			return null;
 		}
 
 		public void fail(Promise<?> resolved) throws Exception {
 			Promise<S> recovered;
+			Throwable failure;
 			try {
 				recovered = recovery.apply(resolved);
+				failure = resolved.getFailure();
 			} catch (Throwable e) {
 				chained.resolve(null, e);
 				return;
 			}
 			if (recovered == null) {
-				chained.resolve(null, resolved.getFailure());
+				chained.resolve(null, failure);
 			} else {
 				recovered.onResolve(new Chain<T, S>(chained, recovered));
 			}
@@ -582,12 +600,26 @@ final class PromiseImpl<T> implements Promise<T> {
 		}
 
 		public Promise<Void> call(Promise<T> resolved) throws Exception {
-			chained.resolve(resolved.getValue(), null);
+			T value;
+			try {
+				value = resolved.getValue();
+			} catch (Throwable e) {
+				chained.resolve(null, e);
+				return null;
+			}
+			chained.resolve(value, null);
 			return null;
 		}
 
 		public void fail(Promise<?> resolved) throws Exception {
-			fallback.onResolve(new Chain<T, S>(chained, fallback, resolved.getFailure()));
+			Throwable failure;
+			try {
+				failure = resolved.getFailure();
+			} catch (Throwable e) {
+				chained.resolve(null, e);
+				return;
+			}
+			fallback.onResolve(new Chain<T, S>(chained, fallback, failure));
 		}
 	}
 
