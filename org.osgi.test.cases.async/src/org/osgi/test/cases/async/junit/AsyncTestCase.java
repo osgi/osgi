@@ -38,12 +38,10 @@ public class AsyncTestCase extends OSGiTestCase {
 	private class MyServiceImpl implements MyService {
 		private final long timeToSleep = 500;
 
-		@Override
 		public void doSlowStuff() throws Exception  {
 			Thread.sleep(timeToSleep);
 		}
 
-		@Override
 		public int countSlowly(int times) throws Exception {
 			for(int i = 0; i < times; i++) {
 				Thread.sleep(timeToSleep);
@@ -77,7 +75,6 @@ public class AsyncTestCase extends OSGiTestCase {
 		final CountDownLatch latch = new CountDownLatch(1);
 		
 		p.then(new Success<Integer, Void>() {
-			@Override
 			public Promise<Void> call(Promise<Integer> resolved)
 					throws Exception {
 				latch.countDown();
