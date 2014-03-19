@@ -64,7 +64,10 @@ public class Promises {
 	 * The new Promise acts as a gate and must be resolved after all of the
 	 * specified Promises are resolved.
 	 * 
-	 * @param <T> The value type associated with the specified Promises.
+	 * @param <T> The value type of the List value associated with the returned
+	 *        Promise.
+	 * @param <S> A subtype of the value type of the List value associated with
+	 *        the returned Promise.
 	 * @param promises The Promises which must be resolved before the returned
 	 *        Promise must be resolved. Must not be {@code null}.
 	 * @return A Promise that is resolved only when all the specified Promises
@@ -78,16 +81,16 @@ public class Promises {
 	 *         {@link FailedPromisesException} must contain all of the specified
 	 *         Promises which resolved with a failure.
 	 */
-	public static <T> Promise<List<T>> all(Collection<Promise<T>> promises) {
+	public static <T, S extends T> Promise<List<T>> all(Collection<Promise<S>> promises) {
 		if (promises.isEmpty()) {
 			List<T> result = new ArrayList<T>();
 			return resolved(result);
 		}
 		/* make a copy and capture the ordering */
-		List<Promise<T>> list = new ArrayList<Promise<T>>(promises);
+		List<Promise<S>> list = new ArrayList<Promise<S>>(promises);
 		PromiseImpl<List<T>> chained = new PromiseImpl<List<T>>();
-		All<T> all = new All<T>(chained, list);
-		for (Promise<T> promise : list) {
+		All<T, S> all = new All<T, S>(chained, list);
+		for (Promise<S> promise : list) {
 			promise.onResolve(all);
 		}
 		return chained;
@@ -127,12 +130,12 @@ public class Promises {
 	 * 
 	 * @ThreadSafe
 	 */
-	private static final class All<T> implements Runnable {
+	private static final class All<T, S extends T> implements Runnable {
 		private final PromiseImpl<List<T>>	chained;
-		private final List<Promise<T>>		promises;
+		private final List<Promise<S>>		promises;
 		private final AtomicInteger			promiseCount;
 
-		All(PromiseImpl<List<T>> chained, List<Promise<T>> promises) {
+		All(PromiseImpl<List<T>> chained, List<Promise<S>> promises) {
 			this.chained = chained;
 			this.promises = promises;
 			this.promiseCount = new AtomicInteger(promises.size());
@@ -144,9 +147,9 @@ public class Promises {
 			}
 			List<T> result = new ArrayList<T>(promises.size());
 			List<Promise<?>> failed = new ArrayList<Promise<?>>(promises.size());
-			for (Promise<T> promise : promises) {
+			for (Promise<S> promise : promises) {
 				boolean failure;
-				T value;
+				S value;
 				try {
 					failure = promise.getFailure() != null;
 					value = failure ? null : promise.getValue();

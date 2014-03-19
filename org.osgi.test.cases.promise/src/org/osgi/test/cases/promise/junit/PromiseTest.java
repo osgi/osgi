@@ -764,26 +764,26 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testAllSuccess2() throws Exception {
-		final Deferred<String> d1 = new Deferred<String>();
-		final Promise<String> p1 = d1.getPromise();
+		final Deferred<Integer> d1 = new Deferred<Integer>();
+		final Promise<Integer> p1 = d1.getPromise();
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		p1.onResolve(new Runnable() {
 			public void run() {
 				latch1.countDown();
 			}
 		});
-		final Deferred<String> d2 = new Deferred<String>();
-		final Promise<String> p2 = d2.getPromise();
+		final Deferred<Integer> d2 = new Deferred<Integer>();
+		final Promise<Integer> p2 = d2.getPromise();
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		p2.onResolve(new Runnable() {
 			public void run() {
 				latch2.countDown();
 			}
 		});
-		List<Promise<String>> promises = new ArrayList<Promise<String>>();
+		List<Promise<Integer>> promises = new ArrayList<Promise<Integer>>();
 		promises.add(p1);
 		promises.add(p2);
-		final Promise<List<String>> latched = all(promises);
+		final Promise<List<Number>> latched = Promises.<Number, Integer> all(promises);
 		final CountDownLatch latch = new CountDownLatch(1);
 		latched.onResolve(new Runnable() {
 			public void run() {
@@ -793,7 +793,7 @@ public class PromiseTest extends TestCase {
 		assertFalse("p1 resolved", p1.isDone());
 		assertFalse("p2 resolved", p2.isDone());
 		assertFalse("latched resolved", latched.isDone());
-		String value1 = new String("12");
+		Integer value1 = new Integer(12);
 		d1.resolve(value1);
 		assertTrue("p1 callback did not run after resolved", latch1.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("p1 not resolved", p1.isDone());
@@ -801,7 +801,7 @@ public class PromiseTest extends TestCase {
 		assertSame("p1 wrong value", value1, p1.getValue());
 		assertFalse("p2 resolved", p2.isDone());
 		assertFalse("latched resolved", latched.isDone());
-		String value2 = new String("24");
+		Integer value2 = new Integer(24);
 		d2.resolve(value2);
 		assertTrue("p2 callback did not run after resolved", latch2.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("p2 not resolved", p2.isDone());
@@ -810,7 +810,7 @@ public class PromiseTest extends TestCase {
 		assertTrue("latched callback did not run after resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
 		assertTrue("latched not resolved", latched.isDone());
 		assertNull("latched wrong failure", latched.getFailure());
-		List<String> list = latched.getValue();
+		List<Number> list = latched.getValue();
 		assertNotNull("latched wrong value", list);
 		assertEquals(2, list.size());
 		assertSame("p1 wrong value", value1, list.get(0));
@@ -818,16 +818,16 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testAllFail1() throws Exception {
-		final Deferred<Integer> d1 = new Deferred<Integer>();
-		final Promise<Integer> p1 = d1.getPromise();
+		final Deferred<Number> d1 = new Deferred<Number>();
+		final Promise<Number> p1 = d1.getPromise();
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		p1.onResolve(new Runnable() {
 			public void run() {
 				latch1.countDown();
 			}
 		});
-		final Deferred<Long> d2 = new Deferred<Long>();
-		final Promise<Long> p2 = d2.getPromise();
+		final Deferred<Number> d2 = new Deferred<Number>();
+		final Promise<Number> p2 = d2.getPromise();
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		p2.onResolve(new Runnable() {
 			public void run() {
@@ -843,7 +843,7 @@ public class PromiseTest extends TestCase {
 			}
 		});
 		@SuppressWarnings("unchecked")
-		final Promise<List<Number>> latched = Promises.<Number> all(p1, p2, p3);
+		final Promise<List<Number>> latched = all(p1, p2, p3);
 		final CountDownLatch latch = new CountDownLatch(1);
 		latched.onResolve(new Runnable() {
 			public void run() {
