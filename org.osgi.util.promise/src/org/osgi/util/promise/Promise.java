@@ -248,6 +248,10 @@ public interface Promise<T> {
 	 * If this Promise is resolved with a failure, the returned Promise will be
 	 * failed with that failure.
 	 * 
+	 * <p>
+	 * This method may be called at any time including before and after this
+	 * Promise has been resolved.
+	 * 
 	 * @param predicate The Predicate to evaluate the value of this Promise.
 	 *        Must not be {@code null}.
 	 * @return A Promise that filters the value of this Promise.
@@ -266,6 +270,10 @@ public interface Promise<T> {
 	 * <p>
 	 * If this Promise is resolved with a failure, the returned Promise will be
 	 * failed with that failure.
+	 * 
+	 * <p>
+	 * This method may be called at any time including before and after this
+	 * Promise has been resolved.
 	 * 
 	 * @param <R> The value type associated with the returned Promise.
 	 * @param <S> A subtype of the value type associated with the returned
@@ -291,6 +299,10 @@ public interface Promise<T> {
 	 * If this Promise is resolved with a failure, the returned Promise will be
 	 * failed with that failure.
 	 * 
+	 * <p>
+	 * This method may be called at any time including before and after this
+	 * Promise has been resolved.
+	 * 
 	 * @param <R> The value type associated with the returned Promise.
 	 * @param <S> A subtype of the value type associated with the returned
 	 *        Promise.
@@ -303,7 +315,7 @@ public interface Promise<T> {
 	<R, S extends R> Promise<R> flatMap(Function<? super T, Promise<S>> mapper);
 
 	/**
-	 * Recover from a failure of this Promise.
+	 * Recover from a failure of this Promise with a recovery value.
 	 * 
 	 * <p>
 	 * If this Promise is successfully resolved, the returned Promise will be
@@ -311,24 +323,37 @@ public interface Promise<T> {
 	 * 
 	 * <p>
 	 * If this Promise is resolved with a failure, the specified Function is
-	 * applied to this Promise and the function value is used to resolve the
-	 * returned Promise. If the function value is not {@code null}, the returned
-	 * Promise will be resolved with the value. If the function value is
-	 * {@code null}, the returned Promise will be failed with the failure of
-	 * this Promise. If the specified Function throws an exception, the returned
-	 * Promise will be failed with the exception.
+	 * applied to this Promise to produce a recovery value.
+	 * <ul>
+	 * <li>If the recovery value is not {@code null}, the returned Promise will
+	 * be resolved with the recovery value.</li>
+	 * <li>If the recovery value is {@code null}, the returned Promise will be
+	 * failed with the failure of this Promise.</li>
+	 * <li>If the specified Function throws an exception, the returned Promise
+	 * will be failed with that exception.</li>
+	 * </ul>
+	 * 
+	 * <p>
+	 * To recover from a failure of this Promise with a recovery value of
+	 * {@code null}, the {@link #recoverWith(Function)} method must be used. The
+	 * specified Function for {@link #recoverWith(Function)} can return
+	 * {@code Promises.resolved(null)} to supply the desired {@code null} value.
+	 * 
+	 * <p>
+	 * This method may be called at any time including before and after this
+	 * Promise has been resolved.
 	 * 
 	 * @param <S> A subtype of the value type associated with this Promise.
-	 * @param recovery The Function whose value will be used to resolve the
-	 *        returned Promise if this Promise resolves with a failure. Must not
-	 *        be {@code null}.
-	 * @return A Promise that returns the value of this Promise or recovers from
-	 *         the failure of this Promise.
+	 * @param recovery If this Promise resolves with a failure, the specified
+	 *        Function is called to produce a recovery value to be used to
+	 *        resolve the returned Promise. Must not be {@code null}.
+	 * @return A Promise that resolves with the value of this Promise or
+	 *         recovers from the failure of this Promise.
 	 */
 	<S extends T> Promise<T> recover(Function<Promise<?>, S> recovery);
 
 	/**
-	 * Recover from a failure of this Promise.
+	 * Recover from a failure of this Promise with a recovery Promise.
 	 * 
 	 * <p>
 	 * If this Promise is successfully resolved, the returned Promise will be
@@ -336,19 +361,26 @@ public interface Promise<T> {
 	 * 
 	 * <p>
 	 * If this Promise is resolved with a failure, the specified Function is
-	 * applied to this Promise and the function value Promise is used to resolve
-	 * the returned Promise. If the function value Promise is not {@code null},
-	 * the returned Promise will be resolved with the value Promise. If the
-	 * function value is {@code null}, the returned Promise will be failed with
-	 * the failure of this Promise. If the specified Function throws an
-	 * exception, the returned Promise will be failed with the exception.
+	 * applied to this Promise to produce a recovery Promise.
+	 * <ul>
+	 * <li>If the recovery Promise is not {@code null}, the returned Promise
+	 * will be resolved with the recovery Promise.</li>
+	 * <li>If the recovery Promise is {@code null}, the returned Promise will be
+	 * failed with the failure of this Promise.</li>
+	 * <li>If the specified Function throws an exception, the returned Promise
+	 * will be failed with that exception.</li>
+	 * </ul>
+	 * 
+	 * <p>
+	 * This method may be called at any time including before and after this
+	 * Promise has been resolved.
 	 * 
 	 * @param <S> A subtype of the value type associated with this Promise.
-	 * @param recovery The Function whose value Promise will be used to resolve
-	 *        the returned Promise if this Promise resolves with a failure. Must
-	 *        not be {@code null}.
-	 * @return A Promise that returns the value of this Promise or recovers from
-	 *         the failure of this Promise.
+	 * @param recovery If this Promise resolves with a failure, the specified
+	 *        Function is called to produce a recovery Promise to be used to
+	 *        resolve the returned Promise. Must not be {@code null}.
+	 * @return A Promise that resolves with the value of this Promise or
+	 *         recovers from the failure of this Promise.
 	 */
 	<S extends T> Promise<T> recoverWith(Function<Promise<?>, Promise<S>> recovery);
 
@@ -364,6 +396,10 @@ public interface Promise<T> {
 	 * specified Promise is used to resolve the returned Promise. If the
 	 * specified Promise is resolved with a failure, the returned Promise will
 	 * be failed with the failure of this Promise.
+	 * 
+	 * <p>
+	 * This method may be called at any time including before and after this
+	 * Promise has been resolved.
 	 * 
 	 * @param <S> A subtype of the value type associated with this Promise.
 	 * @param fallback The Promise whose value will be used to resolve the
