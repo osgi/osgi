@@ -37,12 +37,10 @@ public class Promises {
 	 * Create a new Promise that has been resolved with the specified value.
 	 * 
 	 * @param <T> The value type associated with the returned Promise.
-	 * @param <S> A subtype of the value type associated with the returned
-	 *        Promise.
 	 * @param value The value of the resolved Promise.
 	 * @return A new Promise that has been resolved with the specified value.
 	 */
-	public static <T, S extends T> Promise<T> resolved(S value) {
+	public static <T> Promise<T> resolved(T value) {
 		return new PromiseImpl<T>(value, null);
 	}
 

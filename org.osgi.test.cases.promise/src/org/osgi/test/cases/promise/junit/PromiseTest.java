@@ -664,7 +664,7 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		String value1 = new String("value");
 		final Promise<String> p1 = resolved(value1);
-		final Promise<String> p2 = resolved((String) null);
+		final Promise<String> p2 = resolved(null);
 		assertTrue("promise not resolved", p1.isDone());
 		assertTrue("promise not resolved", p2.isDone());
 		p1.onResolve(new Runnable() {
@@ -1459,9 +1459,9 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testRecoverNoFailure() throws Exception {
-		final Integer value1 = new Integer(42);
+		final Number value1 = new Integer(42);
 		final Long value2 = new Long(43);
-		final Promise<Number> p1 = resolved((Number) value1);
+		final Promise<Number> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
 			public Long apply(Promise<?> t) {
@@ -1570,9 +1570,9 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testRecoverWithNoFailure() throws Exception {
-		final Integer value1 = new Integer(42);
+		final Number value1 = new Integer(42);
 		final Long value2 = new Long(43);
-		final Promise<Number> p1 = resolved((Number) value1);
+		final Promise<Number> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<Long>>() {
 			public Promise<Long> apply(Promise<?> t) {
@@ -1681,10 +1681,10 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testFallbackToNoFailure() throws Exception {
-		final Integer value1 = new Integer(42);
+		final Number value1 = new Integer(42);
 		final Long value2 = new Long(43);
-		final Promise<Number> p1 = resolved((Number) value1);
-		final Promise<Number> p2 = resolved((Number) value2);
+		final Promise<Number> p1 = resolved(value1);
+		final Promise<Long> p2 = resolved(value2);
 		final Promise<Number> p3 = p1.fallbackTo(p2);
 		assertTrue(p1.isDone());
 		assertTrue(p3.isDone());
@@ -1699,7 +1699,7 @@ public class PromiseTest extends TestCase {
 		final Long value3 = new Long(43);
 		final Promise<Number> p1 = failed(failure1);
 		final Promise<Number> p2 = failed(failure2);
-		final Promise<Number> p3 = resolved((Number) value3);
+		final Promise<Long> p3 = resolved(value3);
 		final Promise<Number> p4 = p1.fallbackTo(p2).fallbackTo(p3);
 		assertTrue(p1.isDone());
 		assertTrue(p4.isDone());
@@ -1714,7 +1714,7 @@ public class PromiseTest extends TestCase {
 		final Error failure3 = new Error("fail3");
 		final Promise<Number> p1 = failed(failure1);
 		final Promise<Number> p2 = failed(failure2);
-		final Promise<Number> p3 = failed(failure3);
+		final Promise<Long> p3 = failed(failure3);
 		final Promise<Number> p4 = p1.fallbackTo(p2).fallbackTo(p3);
 		assertTrue(p1.isDone());
 		assertTrue(p4.isDone());
