@@ -170,9 +170,10 @@ final class PromiseImpl<T> implements Promise<T> {
 	/**
 	 * {@inheritDoc}
 	 */
-	public void onResolve(Runnable callback) {
+	public Promise<T> onResolve(Runnable callback) {
 		callbacks.offer(callback);
 		notifyCallbacks(); // call any registered callbacks
+		return this;
 	}
 
 	/**

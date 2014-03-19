@@ -151,8 +151,9 @@ public interface Promise<T> {
 	 * 
 	 * @param callback A callback to be called when this Promise is resolved.
 	 *        Must not be {@code null}.
+	 * @return This Promise.
 	 */
-	void onResolve(Runnable callback);
+	Promise<T> onResolve(Runnable callback);
 
 	/**
 	 * Chain a new Promise to this Promise with Success and Failure callbacks.

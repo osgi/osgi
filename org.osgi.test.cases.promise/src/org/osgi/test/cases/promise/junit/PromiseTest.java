@@ -80,10 +80,9 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testPromiseSuccess1() throws Exception {
-		final Deferred<String> d = new Deferred<String>();
 		final CountDownLatch latch = new CountDownLatch(1);
-		final Promise<String> p = d.getPromise();
-		p.onResolve(new Runnable() {
+		final Deferred<String> d = new Deferred<String>();
+		final Promise<String> p = d.getPromise().onResolve(new Runnable() {
 			public void run() {
 				latch.countDown();
 			}
@@ -99,8 +98,8 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testPromiseSuccess2() throws Exception {
-		final Deferred<Integer> d = new Deferred<Integer>();
 		final CountDownLatch latch = new CountDownLatch(1);
+		final Deferred<Integer> d = new Deferred<Integer>();
 		final Promise<Integer> p = d.getPromise();
 		Promise<Number> p2 = p.<Number, Long> then(new Success<Number, Long>() {
 			public Promise<Long> call(Promise<Number> resolved) throws Exception {
@@ -198,10 +197,9 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testPromiseFail1() throws Exception {
-		final Deferred<String> d = new Deferred<String>();
 		final CountDownLatch latch = new CountDownLatch(1);
-		final Promise<String> p = d.getPromise();
-		p.onResolve(new Runnable() {
+		final Deferred<String> d = new Deferred<String>();
+		final Promise<String> p = d.getPromise().onResolve(new Runnable() {
 			public void run() {
 				latch.countDown();
 			}
@@ -222,8 +220,8 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testPromiseFail2() throws Exception {
-		final Deferred<String> d = new Deferred<String>();
 		final CountDownLatch latch = new CountDownLatch(1);
+		final Deferred<String> d = new Deferred<String>();
 		final Promise<String> p = d.getPromise();
 		p.then(null, new Failure() {
 			public void fail(Promise<?> resolved) throws Exception {
@@ -712,26 +710,23 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testAllSuccess1() throws Exception {
-		final Deferred<Integer> d1 = new Deferred<Integer>();
-		final Promise<Integer> p1 = d1.getPromise();
 		final CountDownLatch latch1 = new CountDownLatch(1);
-		p1.onResolve(new Runnable() {
+		final Deferred<Integer> d1 = new Deferred<Integer>();
+		final Promise<Integer> p1 = d1.getPromise().onResolve(new Runnable() {
 			public void run() {
 				latch1.countDown();
 			}
 		});
-		final Deferred<Long> d2 = new Deferred<Long>();
-		final Promise<Long> p2 = d2.getPromise();
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		p2.onResolve(new Runnable() {
+		final Deferred<Long> d2 = new Deferred<Long>();
+		final Promise<Long> p2 = d2.getPromise().onResolve(new Runnable() {
 			public void run() {
 				latch2.countDown();
 			}
 		});
-		@SuppressWarnings("unchecked")
-		final Promise<List<Number>> latched = Promises.<Number> all(p1, p2);
 		final CountDownLatch latch = new CountDownLatch(1);
-		latched.onResolve(new Runnable() {
+		@SuppressWarnings("unchecked")
+		final Promise<List<Number>> latched = Promises.<Number> all(p1, p2).onResolve(new Runnable() {
 			public void run() {
 				latch.countDown();
 			}
@@ -764,18 +759,16 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testAllSuccess2() throws Exception {
-		final Deferred<Integer> d1 = new Deferred<Integer>();
-		final Promise<Integer> p1 = d1.getPromise();
 		final CountDownLatch latch1 = new CountDownLatch(1);
-		p1.onResolve(new Runnable() {
+		final Deferred<Integer> d1 = new Deferred<Integer>();
+		final Promise<Integer> p1 = d1.getPromise().onResolve(new Runnable() {
 			public void run() {
 				latch1.countDown();
 			}
 		});
-		final Deferred<Integer> d2 = new Deferred<Integer>();
-		final Promise<Integer> p2 = d2.getPromise();
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		p2.onResolve(new Runnable() {
+		final Deferred<Integer> d2 = new Deferred<Integer>();
+		final Promise<Integer> p2 = d2.getPromise().onResolve(new Runnable() {
 			public void run() {
 				latch2.countDown();
 			}
@@ -783,9 +776,8 @@ public class PromiseTest extends TestCase {
 		List<Promise<Integer>> promises = new ArrayList<Promise<Integer>>();
 		promises.add(p1);
 		promises.add(p2);
-		final Promise<List<Number>> latched = Promises.<Number, Integer> all(promises);
 		final CountDownLatch latch = new CountDownLatch(1);
-		latched.onResolve(new Runnable() {
+		final Promise<List<Number>> latched = Promises.<Number, Integer> all(promises).onResolve(new Runnable() {
 			public void run() {
 				latch.countDown();
 			}
@@ -818,34 +810,30 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testAllFail1() throws Exception {
-		final Deferred<Number> d1 = new Deferred<Number>();
-		final Promise<Number> p1 = d1.getPromise();
 		final CountDownLatch latch1 = new CountDownLatch(1);
-		p1.onResolve(new Runnable() {
+		final Deferred<Number> d1 = new Deferred<Number>();
+		final Promise<Number> p1 = d1.getPromise().onResolve(new Runnable() {
 			public void run() {
 				latch1.countDown();
 			}
 		});
-		final Deferred<Number> d2 = new Deferred<Number>();
-		final Promise<Number> p2 = d2.getPromise();
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		p2.onResolve(new Runnable() {
+		final Deferred<Number> d2 = new Deferred<Number>();
+		final Promise<Number> p2 = d2.getPromise().onResolve(new Runnable() {
 			public void run() {
 				latch2.countDown();
 			}
 		});
-		final Deferred<Long> d3 = new Deferred<Long>();
-		final Promise<Long> p3 = d3.getPromise();
 		final CountDownLatch latch3 = new CountDownLatch(1);
-		p2.onResolve(new Runnable() {
+		final Deferred<Long> d3 = new Deferred<Long>();
+		final Promise<Long> p3 = d3.getPromise().onResolve(new Runnable() {
 			public void run() {
 				latch3.countDown();
 			}
 		});
-		@SuppressWarnings("unchecked")
-		final Promise<List<Number>> latched = all(p1, p2, p3);
 		final CountDownLatch latch = new CountDownLatch(1);
-		latched.onResolve(new Runnable() {
+		@SuppressWarnings("unchecked")
+		final Promise<List<Number>> latched = all(p1, p2, p3).onResolve(new Runnable() {
 			public void run() {
 				latch.countDown();
 			}
@@ -951,25 +939,22 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testResolveWithSuccess() throws Exception {
-		final Deferred<Integer> d1 = new Deferred<Integer>();
 		final CountDownLatch latch1 = new CountDownLatch(1);
-		final Promise<Integer> p1 = d1.getPromise();
-		p1.onResolve(new Runnable() {
+		final Deferred<Integer> d1 = new Deferred<Integer>();
+		final Promise<Integer> p1 = d1.getPromise().onResolve(new Runnable() {
 			public void run() {
 				latch1.countDown();
 			}
 		});
-		final Deferred<Number> d2 = new Deferred<Number>();
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		final Promise<Number> p2 = d2.getPromise();
-		p2.onResolve(new Runnable() {
+		final Deferred<Number> d2 = new Deferred<Number>();
+		final Promise<Number> p2 = d2.getPromise().onResolve(new Runnable() {
 			public void run() {
 				latch2.countDown();
 			}
 		});
-		final Promise<Void> p3 = d2.resolveWith(p1);
 		final CountDownLatch latch3 = new CountDownLatch(1);
-		p3.onResolve(new Runnable() {
+		final Promise<Void> p3 = d2.resolveWith(p1).onResolve(new Runnable() {
 			public void run() {
 				latch3.countDown();
 			}
@@ -998,25 +983,22 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testResolveWithFailure() throws Exception {
-		final Deferred<Integer> d1 = new Deferred<Integer>();
 		final CountDownLatch latch1 = new CountDownLatch(1);
-		final Promise<Integer> p1 = d1.getPromise();
-		p1.onResolve(new Runnable() {
+		final Deferred<Integer> d1 = new Deferred<Integer>();
+		final Promise<Integer> p1 = d1.getPromise().onResolve(new Runnable() {
 			public void run() {
 				latch1.countDown();
 			}
 		});
-		final Deferred<Number> d2 = new Deferred<Number>();
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		final Promise<Number> p2 = d2.getPromise();
-		p2.onResolve(new Runnable() {
+		final Deferred<Number> d2 = new Deferred<Number>();
+		final Promise<Number> p2 = d2.getPromise().onResolve(new Runnable() {
 			public void run() {
 				latch2.countDown();
 			}
 		});
-		final Promise<Void> p3 = d2.resolveWith(p1);
 		final CountDownLatch latch3 = new CountDownLatch(1);
-		p3.onResolve(new Runnable() {
+		final Promise<Void> p3 = d2.resolveWith(p1).onResolve(new Runnable() {
 			public void run() {
 				latch3.countDown();
 			}
@@ -1055,25 +1037,22 @@ public class PromiseTest extends TestCase {
 	}
 
 	public void testResolveWithAlready1() throws Exception {
-		final Deferred<Integer> d1 = new Deferred<Integer>();
 		final CountDownLatch latch1 = new CountDownLatch(1);
-		final Promise<Integer> p1 = d1.getPromise();
-		p1.onResolve(new Runnable() {
+		final Deferred<Integer> d1 = new Deferred<Integer>();
+		final Promise<Integer> p1 = d1.getPromise().onResolve(new Runnable() {
 			public void run() {
 				latch1.countDown();
 			}
 		});
-		final Deferred<Number> d2 = new Deferred<Number>();
 		final CountDownLatch latch2 = new CountDownLatch(1);
-		final Promise<Number> p2 = d2.getPromise();
-		p2.onResolve(new Runnable() {
+		final Deferred<Number> d2 = new Deferred<Number>();
+		final Promise<Number> p2 = d2.getPromise().onResolve(new Runnable() {
 			public void run() {
 				latch2.countDown();
 			}
 		});
-		final Promise<Void> p3 = d2.resolveWith(p1);
 		final CountDownLatch latch3 = new CountDownLatch(1);
-		p3.onResolve(new Runnable() {
+		final Promise<Void> p3 = d2.resolveWith(p1).onResolve(new Runnable() {
 			public void run() {
 				latch3.countDown();
 			}
