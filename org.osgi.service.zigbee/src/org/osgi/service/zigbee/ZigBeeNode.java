@@ -138,32 +138,28 @@ public interface ZigBeeNode {
 	/**
 	 * @param handler that will be used in order to return the node descriptor
 	 *        {@link ZigBeeNodeDescriptor}.
-	 * @throws ZCLException
 	 */
-	public void getNodeDescriptor(ZigBeeHandler handler) throws ZCLException;
+	public void getNodeDescriptor(ZigBeeHandler handler);
 
 	/**
 	 * @param handler that will be used in order to return the node power
 	 *        descriptor {@link ZigBeePowerDescriptor}.
-	 * @throws ZCLException
 	 */
-	public void getPowerDescriptor(ZigBeeHandler handler) throws ZCLException;
+	public void getPowerDescriptor(ZigBeeHandler handler);
 
 	/**
 	 * @param handler that will be used in order to return the node complex
 	 *        descriptor {@link ZigBeeComplexDescriptor}. Can be null if complex
 	 *        descriptor is not provided.
-	 * @throws ZCLException
 	 */
-	public void getComplexDescriptor(ZigBeeHandler handler) throws ZCLException;
+	public void getComplexDescriptor(ZigBeeHandler handler);
 
 	/**
 	 * @param handler that will be used in order to return the node user
 	 *        descriptor {@link ZigBeeUserDescriptor}. Can be null if user
 	 *        descriptor is not provided.
-	 * @throws ZCLException
 	 */
-	public void getUserDescriptor(ZigBeeHandler handler) throws ZCLException;
+	public void getUserDescriptor(ZigBeeHandler handler);
 
 	/**
 	 * Request to leave the network.

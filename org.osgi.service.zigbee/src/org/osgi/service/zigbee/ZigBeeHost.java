@@ -41,9 +41,10 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * without a registered PAN_ID property; the property will be set when the
 	 * host will find and join a ZigBee network.
 	 * 
-	 * The host status must be persitent, i.e. if the host was started, then the
-	 * host must starts again when the bundle restarts. In addition, the values
-	 * of channel, pan id, extended pan id, and host pid must remain the same.
+	 * The host status must be persistent, i.e. if the host was started, then
+	 * the host must starts again when the bundle restarts. In addition, the
+	 * values of channel, pan id, extended pan id, and host pid must remain the
+	 * same.
 	 * 
 	 * @param panId optional parameter
 	 * @param extendedPanId optional parameter
