@@ -77,6 +77,13 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * indefinitely or until another Mgmt_Permit_Joining_req is received by the
 	 * coordinator.
 	 * 
+	 * As described in
+	 * "Table 2.133 Fields of the Mgmt_Permit_Joining_rsp Command" of the ZigBee
+	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a permitjoin
+	 * request can have the following status: SUCCESS, INVALID_REQUEST,
+	 * NOT_AUTHORIZED or any status code returned from the
+	 * NLMEPERMITJOINING.confirm primitive.
+	 * 
 	 * @param duration The time during which associations are permitted.
 	 * @throws ZCLException
 	 */

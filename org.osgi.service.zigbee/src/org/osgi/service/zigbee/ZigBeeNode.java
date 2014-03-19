@@ -127,18 +127,33 @@ public interface ZigBeeNode {
 	public long getExtendedPanId();
 
 	/**
+	 * As described in "Table 2.91 Fields of the Node_Desc_rsp Command" of the
+	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
+	 * node_decr request can have the following status: SUCCESS,
+	 * DEVICE_NOT_FOUND ,INV_REQUESTTYPE or NO_DESCRIPTOR.
+	 * 
 	 * @param handler that will be used in order to return the node descriptor
 	 *        {@link ZigBeeNodeDescriptor}.
 	 */
 	public void getNodeDescriptor(ZigBeeHandler handler);
 
 	/**
+	 * As described in "Table 2.92 Fields of the Power_Desc_rsp Command" of the
+	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
+	 * power_decr request can have the following status: SUCCESS,
+	 * DEVICE_NOT_FOUND, INV_REQUESTTYPE or NO_DESCRIPTOR.
+	 * 
 	 * @param handler that will be used in order to return the node power
 	 *        descriptor {@link ZigBeePowerDescriptor}.
 	 */
 	public void getPowerDescriptor(ZigBeeHandler handler);
 
 	/**
+	 * As described in "Table 2.96 Fields of the Complex_Desc_rsp Command" of
+	 * the ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
+	 * complex_desc request can have the following status: SUCCESS,
+	 * DEVICE_NOT_FOUND, INV_REQUESTTYPE or NO_DESCRIPTOR.
+	 * 
 	 * @param handler that will be used in order to return the node complex
 	 *        descriptor {@link ZigBeeComplexDescriptor}. Can be null if complex
 	 *        descriptor is not provided.
@@ -146,6 +161,11 @@ public interface ZigBeeNode {
 	public void getComplexDescriptor(ZigBeeHandler handler);
 
 	/**
+	 * As described in "Table 2.97 Fields of the User_Desc_rsp Command" of the
+	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
+	 * user_desc request can have the following status: SUCCESS, NOT_SUPPORTED,
+	 * DEVICE_NOT_FOUND, INV_REQUESTTYPE or NO_DESCRIPTOR.
+	 * 
 	 * @param handler that will be used in order to return the node user
 	 *        descriptor {@link ZigBeeUserDescriptor}. Can be null if user
 	 *        descriptor is not provided.
@@ -155,6 +175,12 @@ public interface ZigBeeNode {
 	/**
 	 * Request to leave the network.
 	 * 
+	 * As described in "Table 2.131 Fields of the Mgmt_Leave_rsp Command" of the
+	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
+	 * mgmt_leave request can have the following status: NOT_SUPPORTED,
+	 * NOT_AUTHORIZED or any status code returned from the NLMELEAVE.confirm
+	 * primitive.
+	 * 
 	 * @param handler
 	 */
 	public void leave(ZigBeeHandler handler);
@@ -162,6 +188,12 @@ public interface ZigBeeNode {
 	/**
 	 * Requests the device to leave the network. The ZigBeeHandler onSuccess
 	 * method is called if and only if the ZigBeeDeviceNode has been removed.
+	 * 
+	 * As described in "Table 2.131 Fields of the Mgmt_Leave_rsp Command" of the
+	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
+	 * mgmt_leave request can have the following status: NOT_SUPPORTED,
+	 * NOT_AUTHORIZED or any status code returned from the NLMELEAVE.confirm
+	 * primitive.
 	 * 
 	 * @param rejoin This field has a value of 1 if the device being asked to
 	 *        leave from the current parent is requested to rejoin the network.

@@ -120,6 +120,11 @@ public interface ZigBeeEndpoint {
 	public Long getNodeAddress();
 
 	/**
+	 * As described in "Table 2.93 Fields of the Simple_Desc_rsp Command" of the
+	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
+	 * simple_decr request can have the following status: SUCCESS, INVALID_EP,
+	 * NOT_ACTIVE, DEVICE_NOT_FOUND, INV_REQUESTTYPE or NO_DESCRIPTOR.
+	 * 
 	 * @param handler that will be used in order to return the node simple
 	 *        descriptor {@link ZigBeeSimpleDescriptor}.
 	 * @throws ZCLException
@@ -158,9 +163,12 @@ public interface ZigBeeEndpoint {
 	 * This method modify the <i>Binding Table</i> of physical device by adding
 	 * the following entry:
 	 * 
-	 * <pre>
-	 * this.getNodeAddress(), this.getId(), clusterId, device.getNodeAddress(), device.getId()
-	 * </pre>
+	 * <pre>this.getNodeAddress(), this.getId(), clusterId, device.getNodeAddress(), device.getId()</pre>
+	 * 
+	 * As described in "Table 2.7 APSME-BIND.confirm Parameters" of the ZigBee
+	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a binding
+	 * request can have the following results: SUCCESS, ILLEGAL_REQUEST,
+	 * TABLE_FULL, NOT_SUPPORTED.
 	 * 
 	 * @param servicePid to bound to
 	 * @param clusterId the cluster identifier to bound to
@@ -172,9 +180,12 @@ public interface ZigBeeEndpoint {
 	 * This method modify the <i>Binding Table</i> of physical device by
 	 * removing the entry if exists:
 	 * 
-	 * <pre>
-	 * this.getNodeAddress(), this.getId(), clusterId, device.getNodeAddress(), device.getId()
-	 * </pre>
+	 * <pre>this.getNodeAddress(), this.getId(), clusterId, device.getNodeAddress(), device.getId()</pre>
+	 * 
+	 * As described in "Table 2.9 APSME-UNBIND.confirm Parameters" of the ZigBee
+	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, an unbind
+	 * request can have the following results: SUCCESS, ILLEGAL_REQUEST,
+	 * INVALID_BINDING.
 	 * 
 	 * @param servicePid to unbound from
 	 * @param clusterId The cluster identifier to unbound from
