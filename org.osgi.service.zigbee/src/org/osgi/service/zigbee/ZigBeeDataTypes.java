@@ -23,256 +23,336 @@ import java.io.ByteArrayOutputStream;
  * This interface represents all ZigBee data types, and contains the common
  * serialize/deserialize methods for the org.osgi.service.zigbee.types.*
  * 
- * @author Fabrice Blache
+ * Reference: 075366r04ZB_AFG-ZigBee_Cluster_Library_Public_download_version.pdf
  * 
  * @version 1.0
  */
 public class ZigBeeDataTypes {
 
 	/**
-	 * No data type The no data type is a special type to represent an attribute
-	 * with no associated data.
+	 * 2.5.2.1 No Data Type
+	 * 
+	 * The no data type is a special type to represent an attribute with no
+	 * associated data.
 	 */
-	public static final short	NO_DATA					= 0x00;
-
-	/** */
-	public static final short	GENERAL_DATA_8			= 0x08;
-	/** */
-	public static final short	GENERAL_DATA_16			= 0x09;
-	/** */
-	public static final short	GENERAL_DATA_24			= 0x0a;
-	/** */
-	public static final short	GENERAL_DATA_32			= 0x0b;
-	/** */
-	public static final short	GENERAL_DATA_40			= 0x0c;
-	/** */
-	public static final short	GENERAL_DATA_48			= 0x0d;
-	/** */
-	public static final short	GENERAL_DATA_56			= 0x0e;
-	/** */
-	public static final short	GENERAL_DATA_64			= 0x0f;
+	public static final short	NO_DATA										= 0x00;
 
 	/**
-	 * Boolean The Boolean type represents a logical value, either TRUE (0x00)
-	 * or FALSE (0x01). The value 0xff represents an invalid value of this type.
-	 * All other values of this type are forbidden.
+	 * 2.5.2.2 General Data (8, 16, 24, 32, 40, 48, 56 and 64-bit)
+	 * 
+	 * This type has no rules about its use, and may be used when a data element
+	 * is needed but its use does not conform to any of the standard types.
 	 */
-	public static final short	BOOLEAN					= 0x10;
+	public static final short	GENERAL_DATA_8								= 0x08;
+	/** */
+	public static final short	GENERAL_DATA_16								= 0x09;
+	/** */
+	public static final short	GENERAL_DATA_24								= 0x0a;
+	/** */
+	public static final short	GENERAL_DATA_32								= 0x0b;
+	/** */
+	public static final short	GENERAL_DATA_40								= 0x0c;
+	/** */
+	public static final short	GENERAL_DATA_48								= 0x0d;
+	/** */
+	public static final short	GENERAL_DATA_56								= 0x0e;
+	/** */
+	public static final short	GENERAL_DATA_64								= 0x0f;
 
 	/**
-	 * Bitmap (8-bit, 16-bit, 24-bit and 32-bit) The Bitmap type holds 8, 16, 24
-	 * or 32 logical values, one per bit, depending on its length. There is no
-	 * value to represent an invalid value of this type.
+	 * 2.5.2.3 Boolean
+	 * 
+	 * The Boolean type represents a logical value, either FALSE (0x00) or TRUE
+	 * (0x01). The value 0xff represents an invalid value of this type. All
+	 * other values of this type are forbidden.
 	 */
-	public static final short	BITMAP_8				= 0x18;
-	/** */
-	public static final short	BITMAP_16				= 0x19;
-	/** */
-	public static final short	BITMAP_24				= 0x1a;
-	/** */
-	public static final short	BITMAP_32				= 0x1b;
-	/** */
-	public static final short	BITMAP_40				= 0x1c;
-	/** */
-	public static final short	BITMAP_48				= 0x1d;
-	/** */
-	public static final short	BITMAP_56				= 0x1e;
-	/** */
-	public static final short	BITMAP_64				= 0x1f;
+	public static final short	BOOLEAN										= 0x10;
 
 	/**
-	 * Unsigned integer (8-bit, 16-bit, 24-bit and 32-bit) This type represents
-	 * an unsigned integer with a decimal range of 0 to 28-1, 0 to 216-1, 0 to
-	 * 224-1, or 0 to 232-1, depending on its length. The values that represents
-	 * an invalid value of this type are 0xff, 0xffff, 0xffffff and 0xffffffff
+	 * 2.5.2.4 Bitmap (8, 16, 24, 32, 40, 48, 56 and 64-bit)
+	 * 
+	 * The Bitmap type holds 8, 16, 24, 32, 40, 48, 56 or 64 logical values, one
+	 * per bit, depending on its length. There is no value that represents an
+	 * invalid value of this type.
+	 */
+	public static final short	BITMAP_8									= 0x18;
+	/** */
+	public static final short	BITMAP_16									= 0x19;
+	/** */
+	public static final short	BITMAP_24									= 0x1a;
+	/** */
+	public static final short	BITMAP_32									= 0x1b;
+	/** */
+	public static final short	BITMAP_40									= 0x1c;
+	/** */
+	public static final short	BITMAP_48									= 0x1d;
+	/** */
+	public static final short	BITMAP_56									= 0x1e;
+	/** */
+	public static final short	BITMAP_64									= 0x1f;
+
+	/**
+	 * 2.5.2.5 Unsigned Integer (8, 16, 24, 32, 40, 48, 56 and 64-bit)
+	 * 
+	 * This type represents an unsigned integer with a decimal range of 0 to
+	 * 2^8-1, 0 to 2^16-1, 0 to 2^24-1, 0 to 2^32-1, 0 to 2^40-1, 0 to 2^48-1, 0
+	 * to 2^56-1, or 0 to 2^64-1, depending on its length. The values that
+	 * represents an invalid value of this type are 0xff, 0xffff, 0xffffff,
+	 * 0xffffffff, 0xffffffffff, 0xffffffffffff, 0xffffffffffffff and
+	 * 0xffffffffffffffff respectively.
+	 */
+	public static final short	UNSIGNED_INTEGER_8							= 0x20;
+	/** */
+	public static final short	UNSIGNED_INTEGER_16							= 0x21;
+	/** */
+	public static final short	UNSIGNED_INTEGER_24							= 0x22;
+	/** */
+	public static final short	UNSIGNED_INTEGER_32							= 0x23;
+	/** */
+	public static final short	UNSIGNED_INTEGER_40							= 0x24;
+	/** */
+	public static final short	UNSIGNED_INTEGER_48							= 0x25;
+	/** */
+	public static final short	UNSIGNED_INTEGER_56							= 0x26;
+	/** */
+	public static final short	UNSIGNED_INTEGER_64							= 0x27;
+
+	/**
+	 * 2.5.2.6 Signed Integer (8, 16, 24, 32, 40, 48, 56 and 64-bit)
+	 * 
+	 * This type represents a signed integer with a decimal range of -(2^7-1) to
+	 * 2^7-1, - (2^15-1) to 2^15-1, -(2^23-1) to 2^23-1, -(2^31-1) to 2^31-1,
+	 * -(2^39-1) to 2^39-1, -(2^47-1) to 2^47-1, -(2^55-1) to 2^55-1, or
+	 * -(2^63-1) to 2^63-1, depending on its length. The values that represents
+	 * an invalid value of this type are 0x80, 0x8000, 0x800000, 0x80000000,
+	 * 0x8000000000, 0x800000000000, 0x80000000000000 and 0x8000000000000000
 	 * respectively.
 	 */
-	public static final short	UNSIGNED_INTEGER_8		= 0x20;
+	public static final short	SIGNED_INTEGER_8							= 0x28;
 	/** */
-	public static final short	UNSIGNED_INTEGER_16		= 0x21;
+	public static final short	SIGNED_INTEGER_16							= 0x29;
 	/** */
-	public static final short	UNSIGNED_INTEGER_24		= 0x22;
+	public static final short	SIGNED_INTEGER_24							= 0x2a;
 	/** */
-	public static final short	UNSIGNED_INTEGER_32		= 0x23;
+	public static final short	SIGNED_INTEGER_32							= 0x2b;
 	/** */
-	public static final short	UNSIGNED_INTEGER_40		= 0x24;
+	public static final short	SIGNED_INTEGER_40							= 0x2c;
 	/** */
-	public static final short	UNSIGNED_INTEGER_48		= 0x25;
+	public static final short	SIGNED_INTEGER_48							= 0x2d;
 	/** */
-	public static final short	UNSIGNED_INTEGER_56		= 0x26;
+	public static final short	SIGNED_INTEGER_56							= 0x2e;
 	/** */
-	public static final short	UNSIGNED_INTEGER_64		= 0x27;
+	public static final short	SIGNED_INTEGER_64							= 0x2f;
 
 	/**
-	 * Signed integer (8-bit, 16-bit, 24-bit and 32-bit) This type represents a
-	 * signed integer with a decimal range of -(27-1) to 27-1, -(215-1) to
-	 * 215-1, -(223-1) to 223-1, or -(231-1) to 231-1, depending on its length.
-	 * The values that represents an invalid value of this type are 0x80,
-	 * 0x8000, 0x800000 and 0x80000000 respectively.
+	 * 2.5.2.7 Enumeration (8-bit, 16-bit)
+	 * 
+	 * The Enumeration type represents an index into a lookup table to determine
+	 * the final value. The values 0xff and 0xffff represent invalid values of
+	 * the 8-bit and 16- bit types respectively.
 	 */
-	public static final short	SIGNED_INTEGER_8		= 0x28;
+	public static final short	ENUMERATION_8								= 0x30;
 	/** */
-	public static final short	SIGNED_INTEGER_16		= 0x29;
-	/** */
-	public static final short	SIGNED_INTEGER_24		= 0x2a;
-	/** */
-	public static final short	SIGNED_INTEGER_32		= 0x2b;
-	/** */
-	public static final short	SIGNED_INTEGER_40		= 0x2c;
-	/** */
-	public static final short	SIGNED_INTEGER_48		= 0x2d;
-	/** */
-	public static final short	SIGNED_INTEGER_56		= 0x2e;
-	/** */
-	public static final short	SIGNED_INTEGER_64		= 0x2f;
+	public static final short	ENUMERATION_16								= 0x31;
 
 	/**
-	 * Enumeration (8-bit) The Enumeration type represents an index into a
-	 * lookup table to determine the final value. The value 0xff represents an
-	 * invalid value of this type
+	 * 2.5.2.8 Semi-precision
+	 * 
+	 * The ZigBee semi-precision number format is based on the IEEE 754 standard
+	 * for binary floating-point arithmetic. This number format should be used
+	 * very sparingly, when absolutely necessary, keeping in mind the code and
+	 * processing required supporting it.
+	 * 
+	 * See reference on top of this class.
 	 */
-	public static final short	ENUMERATION_8			= 0x30;
-	/** */
-	public static final short	ENUMERATION_16			= 0x31;
+	public static final short	FLOATING_SEMI								= 0x38;
 
 	/**
-	 * Semi-precision The ZigBee semi-precision number format is based on the
-	 * IEEE 754 standard for binary floating-point arithmetic [R11]. This number
-	 * format should be used very sparingly, when absolutely necessary, keeping
-	 * in mind the code and processing required supporting it. The value is
-	 * calculated as: Value = -1Sign * (Hidden + Mantissa/1024) * 2
-	 * (Exponent-15)
+	 * 2.5.2.9 Single Precision
+	 * 
+	 * The format of the single precision data type is based on the IEEE 754
+	 * standard for binary floating-point arithmetic. This number format should
+	 * be used very sparingly, when absolutely necessary, keeping in mind the
+	 * code and processing required supporting it.
+	 * 
+	 * See reference on top of this class.
 	 */
-	public static final short	FLOATING_SEMI			= 0x38;
+	public static final short	FLOATING_SINGLE								= 0x39;
 
 	/**
-	 * Single precision The format of the single precision data type is based on
-	 * the IEEE 754 standard for binary floating-point arithmetic [R11]. This
-	 * number format should be used very sparingly, when absolutely necessary,
-	 * keeping in mind the code and processing required supporting it. The
-	 * format and interpretation of values of this data type follow the same
-	 * rules as given for the semi-precision data type, but with shorter
-	 * sub-fields, as follows. Length of mantissa = 23 bits, length of exponent
-	 * = 8 bits For further details, see [R11]. = 0x43;
+	 * 2.5.2.10 Double Precision
+	 * 
+	 * The format of the double precision data type is based on the IEEE 754
+	 * standard for binary floating-point arithmetic. This number format should
+	 * be used very sparingly, when absolutely necessary, keeping in mind the
+	 * code and processing required supporting it.
+	 * 
+	 * See reference on top of this class.
 	 */
-	public static final short	FLOATING_SINGLE			= 0x39;
+	public static final short	FLOATING_DOUBLE								= 0x3a;
 
 	/**
-	 * Double precision The format of the double precision data type is based on
-	 * the IEEE 754 standard for binary floating-point arithmetic [R11]. This
-	 * number format should be used very sparingly, when absolutely necessary,
-	 * keeping in mind the code and processing required supporting it. The
-	 * format and interpretation of values of this data type follow the same
-	 * rules as given for the semi-precision data type, but with shorter
-	 * sub-fields, as follows. Length of mantissa = 52 bits, length of exponent
-	 * = 11 bits For further details, see [R11].
-	 */
-	public static final short	FLOATING_DOUBLE			= 0x3a;
-
-	/**
+	 * 2.5.2.11 Octet String
+	 * 
 	 * The octet string data type contains data in an application-defined
-	 * format, not defined in this specification. The octet string data type
-	 * shall be formatted as illustrated in Error! Reference source not found..
+	 * format, not defined in this specification.
 	 * 
-	 * Octets: 1 Variable Octet count Octet data Figure 27 - Format of the octet
-	 * string type The octet count sub-field is one octet in length and
-	 * specifies the number of octets contained in the octet data sub-field.
-	 * Setting this sub-field to 0x00 represents an octet string with no octet
-	 * data (an "empty string"). Setting this sub-field to 0xff represents an
-	 * invalid octet string value. In both cases the octet data sub-field has
-	 * zero length. The octet data sub-field is n octets in length, where n is
-	 * the value of the octet count sub-field. This sub-field contains the
-	 * application-defined data.
+	 * See reference on top of this class.
 	 */
-	public static final short	OCTET_STRING			= 0x41;
+	public static final short	OCTET_STRING								= 0x41;
 
 	/**
-	 * Character string The character string data type contains data octets
-	 * encoding characters according to the language and character set field of
-	 * the complex descriptor. The character string data type shall be formatted
-	 * as illustrated in Figure 28.
+	 * 2.5.2.12 Character String
 	 * 
-	 * Octets: 1 Variable Character count Character data
+	 * The character string data type contains data octets encoding characters
+	 * according to the language and character set field of the complex
+	 * descriptor.
 	 * 
-	 * The character count sub-field is one octet in length and specifies the
-	 * number of characters, encoded according to the language and character set
-	 * field of the complex descriptor (see [R2]), contained in the character
-	 * data sub-field. Setting this sub-field to 0x00 represents a character
-	 * string with no character data (an "empty string"). Setting this sub-field
-	 * to 0xff represents an invalid character string value. In both cases the
-	 * character data sub-field has zero length. The character data sub-field is
-	 * e*n octets in length, where e is the size of the character, as specified
-	 * by the language and character set field of the complex descriptor, and n
-	 * is the value of the character count sub-field. This sub-field contains
-	 * the encoded characters that comprise the desired character string. A
-	 * character string with no contents, i.e. with the character count
-	 * sub-field equal to 0x00 and a zero length character data sub-field, shall
-	 * be referred to as an 'empty string'.
-	 * 
+	 * See reference on top of this class.
 	 */
-	public static final short	CHARACTER_STRING		= 0x42;
-	/** */
-	public static final short	LONG_OCTET_STRING		= 0x43;
-	/** */
-	public static final short	LONG_CHARACTER_STRING	= 0x44;
-	/** */
-	public static final short	ARRAY					= 0x48;
-	/** */
-	public static final short	STRUCTURE				= 0x4c;
-	/** */
-	public static final short	SET						= 0x50;
-	/** */
-	public static final short	BAG						= 0x51;
+	public static final short	CHARACTER_STRING							= 0x42;
 
 	/**
-	 * Time of day The Time of day data type shall be formatted as illustrated
-	 * in Figure 29.
+	 * 2.5.2.13 Long Octet String
 	 * 
-	 * Octets: 1 1 1 1 Hours Minutes Seconds Hundredths
+	 * The long octet string data type contains data in an application-defined
+	 * format, not defined in this specification.
 	 * 
-	 * The hours subfield represents hours according to a 24 hour clock. The
-	 * range is from 0 to 23. The minutes subfield represents minutes of the
-	 * current hour. The range is from 0 to 59. The seconds subfield represents
-	 * seconds of the current minute. The range is from 0 to 59. The hundredths
-	 * subfield represents 100ths of the current second. The range is from 0 to
-	 * 99. A value of 0xff in any subfield indicates an unused subfield. If all
-	 * subfields have the value 0xff, this indicates an invalid or 'don't care'
-	 * value of the data type.
+	 * See reference on top of this class.
 	 */
-	public static final short	TIME_OF_DAY				= 0xe0;
+	public static final short	LONG_OCTET_STRING							= 0x43;
 
 	/**
-	 * Date The Time of day data type shall be formatted as illustrated in
-	 * Figure 30. Octets: 1 1 1 1 Year - 1900 Month Day of month Day of week
+	 * 2.5.2.14 Long Character String
 	 * 
-	 * The year - 1900 subfield has a range of 0 to 255, representing years from
-	 * 1900 to 2155. The month subfield has a range of 1 to 12, representing
-	 * January to December. The day of month subfield has a range of 1 to 31.
-	 * Note that values in the range 29 to 31 may be invalid, depending on the
-	 * month and year. The day of week subfield has a range of 1 to 7,
-	 * representing Monday to Sunday. A value of 0xff in any subfield indicates
-	 * an unused subfield. If all subfields have the value 0xff, this indicates
-	 * an invalid or 'don't care' value of the data type.
+	 * The long character string data type contains data octets encoding
+	 * characters according to the language and character set field of the
+	 * complex descriptor.
+	 * 
+	 * See reference on top of this class.
 	 */
-	public static final short	DATE					= 0xe1;
-	/** */
-	public static final short	UTC_TIME				= 0xe2;
-	/** */
-	public static final short	CLUSTER_ID				= 0xe8;
-	/** */
-	public static final short	ATTRIBUTE_ID			= 0xe9;
+	public static final short	LONG_CHARACTER_STRING						= 0x44;
 
 	/**
-	 * BACnet OID (Object Identifier) The BACnet OID data type is included to
-	 * allow interworking with BACnet (see [R12]). The format is described in
-	 * the referenced standard.
+	 * 2.5.2.15 Array
+	 * 
+	 * An array is an ordered sequence of zero or more elements, all of the same
+	 * data type. This data type may be any ZCL defined data type, including
+	 * array, structure, bag or set. The total nesting depth is limited to 15,
+	 * and may be further limited by any relevant profile or application.
+	 * 
+	 * See reference on top of this class.
 	 */
-	public static final short	BACNET_OID				= 0xea;
-	/** */
-	public static final short	IEEE_ADDRESS			= 0xf0;
+	public static final short	ARRAY										= 0x48;
 
-	/** Pour inverser les octets */
-	public static final boolean	RETOURNER				= true;
+	/**
+	 * 2.5.2.16 Structure
+	 * 
+	 * A structure is an ordered sequence of elements, which may be of different
+	 * data types. Each data type may be any ZCL defined data type, including
+	 * array, structure, bag or set. The total nesting depth is limited to 15,
+	 * and may be further limited by any relevant profile or application.
+	 * 
+	 * See reference on top of this class.
+	 */
+	public static final short	STRUCTURE									= 0x4c;
+
+	/**
+	 * 2.5.2.17 Set
+	 * 
+	 * A set is a collection of elements with no associated order. Each element
+	 * has the same data type, which may be any ZCL defined data type, including
+	 * array, structure, bag or set. The nesting depth is limited to 15, and may
+	 * be further limited by any relevant profile or application.
+	 * 
+	 * See reference on top of this class.
+	 */
+	public static final short	SET											= 0x50;
+
+	/**
+	 * 2.5.2.18 Bag
+	 * 
+	 * A bag behaves exactly the same as a set, except that the restriction that
+	 * no two elements may have the same value is removed.
+	 */
+	public static final short	BAG											= 0x51;
+
+	/**
+	 * 2.5.2.19 Time of Day
+	 * 
+	 * The Time of Day data type shall be formatted as illustrated in spec.
+	 * 
+	 * See reference on top of this class.
+	 */
+	public static final short	TIME_OF_DAY									= 0xe0;
+
+	/**
+	 * 2.5.2.20 Date
+	 * 
+	 * The Time of day data type shall be formatted as illustrated in spec.
+	 * 
+	 * See reference on top of this class.
+	 */
+	public static final short	DATE										= 0xe1;
+
+	/**
+	 * 2.5.2.21 UTCTime
+	 * 
+	 * UTCTime is an unsigned 32-bit value representing the number of seconds
+	 * since 0 hours, 0 minutes, 0 seconds, on the 1st of January, 2000 UTC
+	 * (Universal Coordinated Time). The value that represents an invalid value
+	 * of this type is 0xffffffffff.
+	 * 
+	 * Note that UTCTime does not hold a standard textual representation of
+	 * Universal Coordinated Time (UTC). However, UTC (to a precision of one
+	 * second) may be derived from it.
+	 */
+	public static final short	UTC_TIME									= 0xe2;
+
+	/**
+	 * 2.5.2.22 Cluster ID
+	 * 
+	 * This type represents a cluster identifier as defined in spec.
+	 * 
+	 * See reference on top of this class.
+	 */
+	public static final short	CLUSTER_ID									= 0xe8;
+
+	/**
+	 * 2.5.2.23 Attribute ID
+	 * 
+	 * This type represents an attribute identifier as defined in spec.
+	 * 
+	 * See reference on top of this class.
+	 */
+	public static final short	ATTRIBUTE_ID								= 0xe9;
+
+	/**
+	 * 2.5.2.24 BACnet OID (Object Identifier)
+	 * 
+	 * The BACnet OID data type is included to allow interworking with BACnet.
+	 * The format is described in the referenced standard.
+	 * 
+	 * See reference on top of this class.
+	 */
+	public static final short	BACNET_OID									= 0xea;
+
+	/**
+	 * 2.5.2.25 IEEE Address
+	 * 
+	 * The IEEE Address data type is a 64-bit IEEE address that is unique to
+	 * every ZigBee device. A value of 0xffffffffffffffff indicates that the
+	 * address is unknown.
+	 */
+	public static final short	IEEE_ADDRESS								= 0xf0;
+
+	/**
+	 * 2.5.2.26 128-bit Security Key
+	 * 
+	 * The 128-bit Security Key data type is for use in ZigBee security, and may
+	 * take any 128-bit value.
+	 */
+	public static final short	ONE_HUNDRED_TWENTY_EIGHT_BIT_SECURITY_KEY	= 0xf1;
 
 	/**
 	 * @param type the value's type
