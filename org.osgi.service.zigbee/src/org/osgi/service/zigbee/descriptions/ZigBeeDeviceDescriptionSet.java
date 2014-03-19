@@ -21,9 +21,10 @@ package org.osgi.service.zigbee.descriptions;
  * registered as an OSGi Service that provides method to retrieve endpoint
  * descriptions.
  * 
- * In addition to the ZigBeeDeviceDescriptionSet.VERSION, PROFILE_NAME, and
- * DEVICES OSGi service properties; ZigBeeDeviceDescriptionSet is also expected
- * to use ZigBeeEndpoint.PROFILE_ID, and ZigBeeNode.MANUFACTURER_CODE.
+ * In addition to the ZigBeeDeviceDescriptionSet's (OSGi service) properties;
+ * ZigBeeDeviceDescriptionSet is also expected to be registered as an OSGi
+ * service with the following ZigBeeEndpoint.PROFILE_ID, and
+ * ZigBeeNode.MANUFACTURER_CODE properties.
  * 
  * @version 1.0
  */
@@ -32,17 +33,23 @@ public interface ZigBeeDeviceDescriptionSet {
 	/**
 	 * Property key for a version of the application profile. The format is
 	 * ‘major.minor’ with major and minor being integers.
+	 * 
+	 * This property is <b>mandatory</b>.
 	 */
 	public final static String	VERSION			= "zigbee.profile.version";
 
 	/**
 	 * Property key for a profile name.
+	 * 
+	 * This property is <b>mandatory</b>.
 	 */
 	public final static String	PROFILE_NAME	= "zigbee.profile.name";
 
 	/**
 	 * Property key for a comma separated list of devices identifiers supported
 	 * by the set.
+	 * 
+	 * This property is <b>mandatory</b>.
 	 */
 	public final static String	DEVICES			= "zigbee.profile.devices";
 
