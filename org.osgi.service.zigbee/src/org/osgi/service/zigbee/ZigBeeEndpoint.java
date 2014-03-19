@@ -43,6 +43,15 @@ public interface ZigBeeEndpoint {
 	public static final String	PROFILE_ID				= "zigbee.device.profile.id";
 
 	/**
+	 * Key of {@link String} containing the {@link ZigBeeHost} pid.<br>
+	 * The ZigBee local host identifier is intended to uniquely identify the
+	 * ZigBee local host, since there could be many hosts on the same platform.
+	 * This property is not mandatory. All the nodes that belong to a specific
+	 * network MUST specify the value of the associated host number.
+	 */
+	public static final String	HOST_PID				= "zigbee.endpoint.host.pid";
+
+	/**
 	 * Key of the {@link String} property containing the DeviceId of the device <br>
 	 * It is <b>mandatory</b> property for this service
 	 */

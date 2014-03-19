@@ -60,15 +60,6 @@ public interface ZigBeeNode {
 	public static final String	MANUFACTURER_CODE		= "zigbee.node.description.manufacturer.code";
 
 	/**
-	 * Key of {@link String} containing the {@link ZigBeeHost} pid.<br>
-	 * The host pid is intended to uniquely identify the ZigBee local host,
-	 * since there could be many hosts on the same platform. All the nodes that
-	 * belong to a specific network MUST specify the same value for this
-	 * property.
-	 */
-	public static final String	HOST_PID				= "zigbee.node.host.pid";
-
-	/**
 	 * Key of {@link String} containing the device node network PAN ID
 	 */
 	public static final String	PAN_ID					= "zigbee.node.pan.id";
