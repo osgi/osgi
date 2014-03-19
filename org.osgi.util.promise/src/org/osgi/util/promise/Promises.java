@@ -90,7 +90,7 @@ public class Promises {
 		PromiseImpl<List<T>> chained = new PromiseImpl<List<T>>();
 		All<T> all = new All<T>(chained, list);
 		for (Promise<T> promise : list) {
-			promise.then(all, all);
+			promise.onResolve(all);
 		}
 		return chained;
 	}
@@ -129,63 +129,44 @@ public class Promises {
 	 * 
 	 * @ThreadSafe
 	 */
-	private static final class All<T> implements Success<T, Void>, Failure {
+	private static final class All<T> implements Runnable {
 		private final PromiseImpl<List<T>>	chained;
 		private final List<Promise<T>>		promises;
 		private final AtomicInteger			promiseCount;
-		private final AtomicInteger			failedCount;
 
 		All(PromiseImpl<List<T>> chained, List<Promise<T>> promises) {
 			this.chained = chained;
 			this.promises = promises;
 			this.promiseCount = new AtomicInteger(promises.size());
-			this.failedCount = new AtomicInteger(0);
 		}
 
-		public Promise<Void> call(Promise<T> resolved) throws Exception {
-			resolve();
-			return null;
-		}
-
-		public void fail(Promise<?> resolved) throws Exception {
-			failedCount.incrementAndGet();
-			resolve();
-		}
-
-		private void resolve() throws Exception {
+		public void run() {
 			if (promiseCount.decrementAndGet() != 0) {
 				return;
 			}
-			if (failedCount.get() > 0) {
-				List<Promise<?>> failed = new ArrayList<Promise<?>>(failedCount.get());
-				for (Promise<T> promise : promises) {
-					boolean failure;
-					try {
-						failure = promise.getFailure() != null;
-					} catch (Throwable e) {
-						chained.resolve(null, e);
-						return;
-					}
-					if (failure) {
-						failed.add(promise);
-					}
-				}
-				chained.resolve(null, new FailedPromisesException(failed));
-				return;
-			}
-
 			List<T> result = new ArrayList<T>(promises.size());
+			List<Promise<?>> failed = new ArrayList<Promise<?>>(promises.size());
 			for (Promise<T> promise : promises) {
+				boolean failure;
 				T value;
 				try {
-					value = promise.getValue();
+					failure = promise.getFailure() != null;
+					value = failure ? null : promise.getValue();
 				} catch (Throwable e) {
 					chained.resolve(null, e);
 					return;
 				}
-				result.add(value);
+				if (failure) {
+					failed.add(promise);
+				} else {
+					result.add(value);
+				}
 			}
-			chained.resolve(result, null);
+			if (failed.isEmpty()) {
+				chained.resolve(result, null);
+			} else {
+				chained.resolve(null, new FailedPromisesException(failed));
+			}
 		}
 	}
 }
