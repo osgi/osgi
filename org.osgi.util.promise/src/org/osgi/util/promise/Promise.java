@@ -130,7 +130,7 @@ public interface Promise<T> {
 	 * Register a callback to be called when this Promise is resolved.
 	 * 
 	 * <p>
-	 * The specified callback is called when the Promise is resolved either
+	 * The specified callback is called when this Promise is resolved either
 	 * successfully or with a failure.
 	 * 
 	 * <p>
