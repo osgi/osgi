@@ -42,7 +42,7 @@ public class Promises {
 	 * @param value The value of the resolved Promise.
 	 * @return A new Promise that has been resolved with the specified value.
 	 */
-	public static <T, S extends T> Promise<T> newResolvedPromise(S value) {
+	public static <T, S extends T> Promise<T> resolved(S value) {
 		return new PromiseImpl<T>(value, null);
 	}
 
@@ -54,7 +54,7 @@ public class Promises {
 	 *        {@code null}.
 	 * @return A new Promise that has been resolved with the specified failure.
 	 */
-	public static <T> Promise<T> newFailedPromise(Throwable failure) {
+	public static <T> Promise<T> failed(Throwable failure) {
 		return new PromiseImpl<T>(null, PromiseImpl.requireNonNull(failure));
 	}
 
@@ -83,7 +83,7 @@ public class Promises {
 	public static <T> Promise<List<T>> all(Collection<Promise<T>> promises) {
 		if (promises.isEmpty()) {
 			List<T> result = new ArrayList<T>();
-			return newResolvedPromise(result);
+			return resolved(result);
 		}
 		/* make a copy and capture the ordering */
 		List<Promise<T>> list = new ArrayList<Promise<T>>(promises);
@@ -124,7 +124,7 @@ public class Promises {
 	}
 
 	/**
-	 * A callback used to resolve a Promise when the specified count of Promises
+	 * A callback used to resolve a Promise when the specified list of Promises
 	 * are resolved for the {@link Promises#all(Collection)} method.
 	 * 
 	 * @ThreadSafe
@@ -188,5 +188,4 @@ public class Promises {
 			chained.resolve(result, null);
 		}
 	}
-
 }

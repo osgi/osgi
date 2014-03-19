@@ -16,6 +16,7 @@
 
 package org.osgi.test.cases.promise.junit;
 
+import static org.osgi.util.promise.Promises.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -40,7 +41,6 @@ import org.osgi.util.promise.Failure;
 import org.osgi.util.promise.Promise;
 import org.osgi.util.promise.Promises;
 import org.osgi.util.promise.Success;
-
 public class PromiseTest extends TestCase {
 	public static final long	WAIT_TIME	= 2L;
 	static Timer				timer		= new Timer();
@@ -105,7 +105,7 @@ public class PromiseTest extends TestCase {
 		Promise<Number> p2 = p.<Number, Long> then(new Success<Number, Long>() {
 			public Promise<Long> call(Promise<Number> resolved) throws Exception {
 				latch.countDown();
-				return Promises.newResolvedPromise(new Long(resolved.getValue().longValue()));
+				return resolved(new Long(resolved.getValue().longValue()));
 			}
 		});
 		assertFalse("callback ran before resolved", latch.await(WAIT_TIME, TimeUnit.SECONDS));
@@ -129,7 +129,7 @@ public class PromiseTest extends TestCase {
 		final Promise<Integer> p = d.getPromise();
 		Promise<Number> p2 = p.<Number, Long> then(new Success<Number, Long>() {
 			public Promise<Long> call(Promise<Number> resolved) throws Exception {
-				final Promise<Long> returned = Promises.newResolvedPromise(new Long(resolved.getValue().longValue()));
+				final Promise<Long> returned = resolved(new Long(resolved.getValue().longValue()));
 				returned.onResolve(new Runnable() {
 					public void run() {
 						latch1.countDown();
@@ -262,7 +262,7 @@ public class PromiseTest extends TestCase {
 		Success<String, String> doubler = new Success<String, String>() {
 			public Promise<String> call(Promise<String> promise) throws Exception {
 				callbackCallCount.incrementAndGet();
-				return Promises.newResolvedPromise(promise.getValue() + promise.getValue());
+				return resolved(promise.getValue() + promise.getValue());
 			}
 		};
 		final Promise<String> p2 = p1.<String, String> then(doubler).<String, String> then(doubler).then(doubler);
@@ -305,7 +305,7 @@ public class PromiseTest extends TestCase {
 		Success<String, String> doubler = new Success<String, String>() {
 			public Promise<String> call(Promise<String> promise) throws Exception {
 				successCallbackCallCount.incrementAndGet();
-				return Promises.newResolvedPromise(promise.getValue() + promise.getValue());
+				return resolved(promise.getValue() + promise.getValue());
 			}
 		};
 		Failure wrapper = new Failure() {
@@ -350,7 +350,7 @@ public class PromiseTest extends TestCase {
 		Success<String, String> doubler = new Success<String, String>() {
 			public Promise<String> call(Promise<String> promise) throws Exception {
 				successCallbackCallCount.incrementAndGet();
-				return Promises.newResolvedPromise(promise.getValue() + promise.getValue());
+				return resolved(promise.getValue() + promise.getValue());
 			}
 		};
 		Failure wrapper = new Failure() {
@@ -423,7 +423,7 @@ public class PromiseTest extends TestCase {
 		Promise<Integer> p2 = p1.then(new Success<String, Integer>() {
 			public Promise<Integer> call(Promise<String> promise) throws Exception {
 				latch3.countDown();
-				return Promises.newResolvedPromise(Integer.valueOf(promise.getValue()));
+				return resolved(Integer.valueOf(promise.getValue()));
 			}
 		});
 		assertTrue("callback did not run after resolved", latch3.await(WAIT_TIME, TimeUnit.SECONDS));
@@ -663,8 +663,8 @@ public class PromiseTest extends TestCase {
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		String value1 = new String("value");
-		final Promise<String> p1 = Promises.newResolvedPromise(value1);
-		final Promise<String> p2 = Promises.newResolvedPromise((String) null);
+		final Promise<String> p1 = resolved(value1);
+		final Promise<String> p2 = resolved((String) null);
 		assertTrue("promise not resolved", p1.isDone());
 		assertTrue("promise not resolved", p2.isDone());
 		p1.onResolve(new Runnable() {
@@ -688,7 +688,7 @@ public class PromiseTest extends TestCase {
 	public void testNewFailedPromise() throws Exception {
 		final CountDownLatch latch = new CountDownLatch(1);
 		Throwable failure = new Exception("value");
-		final Promise<String> p = Promises.newFailedPromise(failure);
+		final Promise<String> p = failed(failure);
 		assertTrue("promise not resolved", p.isDone());
 		p.onResolve(new Runnable() {
 			public void run() {
@@ -704,7 +704,7 @@ public class PromiseTest extends TestCase {
 			assertSame("wrong failure", failure, e.getCause());
 		}
 		try {
-			Promises.newFailedPromise(null);
+			failed(null);
 			fail("expected NullPointerException");
 		} catch (NullPointerException e) {
 			// expected
@@ -783,7 +783,7 @@ public class PromiseTest extends TestCase {
 		List<Promise<String>> promises = new ArrayList<Promise<String>>();
 		promises.add(p1);
 		promises.add(p2);
-		final Promise<List<String>> latched = Promises.all(promises);
+		final Promise<List<String>> latched = all(promises);
 		final CountDownLatch latch = new CountDownLatch(1);
 		latched.onResolve(new Runnable() {
 			public void run() {
@@ -903,7 +903,7 @@ public class PromiseTest extends TestCase {
 
 	public void testAllEmpty1() throws Exception {
 		Collection<Promise<String>> promises = Collections.emptyList();
-		final Promise<List<String>> latched = Promises.all(promises);
+		final Promise<List<String>> latched = all(promises);
 		assertTrue("latched not resolved", latched.isDone());
 		final CountDownLatch latch = new CountDownLatch(1);
 		latched.onResolve(new Runnable() {
@@ -920,7 +920,7 @@ public class PromiseTest extends TestCase {
 
 	public void testAllEmpty2() throws Exception {
 		@SuppressWarnings("unchecked")
-		final Promise<List<Object>> latched = Promises.all();
+		final Promise<List<Object>> latched = all();
 		assertTrue("latched not resolved", latched.isDone());
 		final CountDownLatch latch = new CountDownLatch(1);
 		latched.onResolve(new Runnable() {
@@ -937,13 +937,13 @@ public class PromiseTest extends TestCase {
 
 	public void testAllNull() throws Exception {
 		try {
-			Promises.all((Promise<?>[]) null);
+			all((Promise<?>[]) null);
 			fail("expected NullPointerException");
 		} catch (NullPointerException e) {
 			// expected
 		}
 		try {
-			Promises.all((Collection<Promise<Object>>) null);
+			all((Collection<Promise<Object>>) null);
 			fail("expected NullPointerException");
 		} catch (NullPointerException e) {
 			// expected
@@ -1118,7 +1118,7 @@ public class PromiseTest extends TestCase {
 
 	public void testResolveWithAlready2() throws Exception {
 		Integer value = Integer.valueOf(42);
-		final Promise<Integer> p1 = Promises.newResolvedPromise(value);
+		final Promise<Integer> p1 = resolved(value);
 		final Deferred<Number> d2 = new Deferred<Number>();
 		d2.resolve(value);
 
@@ -1136,7 +1136,7 @@ public class PromiseTest extends TestCase {
 	public void testResolveWithAlready3() throws Exception {
 		Integer value = Integer.valueOf(42);
 		Throwable failure = new RuntimeException();
-		final Promise<Integer> p1 = Promises.newResolvedPromise(value);
+		final Promise<Integer> p1 = resolved(value);
 		final Deferred<Number> d2 = new Deferred<Number>();
 		d2.fail(failure);
 
@@ -1153,7 +1153,7 @@ public class PromiseTest extends TestCase {
 
 	public void testResolveWithAlready4() throws Exception {
 		Integer value = Integer.valueOf(42);
-		final Promise<Integer> p1 = Promises.newResolvedPromise(value);
+		final Promise<Integer> p1 = resolved(value);
 		final Deferred<Number> d2 = new Deferred<Number>();
 		final Promise<Number> p2 = d2.getPromise();
 		final Promise<Void> p3 = d2.resolveWith(p1);
@@ -1167,7 +1167,7 @@ public class PromiseTest extends TestCase {
 
 	public void testResolveWithAlready5() throws Exception {
 		Throwable failure = new RuntimeException();
-		final Promise<Integer> p1 = Promises.newFailedPromise(failure);
+		final Promise<Integer> p1 = failed(failure);
 		final Deferred<Number> d2 = new Deferred<Number>();
 		final Promise<Number> p2 = d2.getPromise();
 		final Promise<Void> p3 = d2.resolveWith(p1);
@@ -1197,7 +1197,7 @@ public class PromiseTest extends TestCase {
 	public void testFilter() throws Exception {
 		String value1 = new String("value");
 		String value3 = new String("");
-		Promise<String> p1 = Promises.newResolvedPromise(value1);
+		Promise<String> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		Promise<String> p2 = p1.filter(new Predicate<String>() {
 			public boolean test(String t) {
@@ -1212,7 +1212,7 @@ public class PromiseTest extends TestCase {
 				return t.length() == 0;
 			}
 		});
-		Promise<String> p3 = Promises.newResolvedPromise(value3);
+		Promise<String> p3 = resolved(value3);
 		final CountDownLatch latch3 = new CountDownLatch(1);
 		Promise<String> p5 = p3.filter(new Predicate<String>() {
 			public boolean test(String t) {
@@ -1258,7 +1258,7 @@ public class PromiseTest extends TestCase {
 	public void testFilterException() throws Exception {
 		String value1 = new String("value");
 		final Error failure = new Error("fail");
-		Promise<String> p1 = Promises.newResolvedPromise(value1);
+		Promise<String> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		Promise<String> p2 = p1.filter(new Predicate<String>() {
@@ -1291,7 +1291,7 @@ public class PromiseTest extends TestCase {
 
 	public void testFilterFailed() throws Exception {
 		final Error failure = new Error("fail");
-		Promise<String> p1 = Promises.newFailedPromise(failure);
+		Promise<String> p1 = failed(failure);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		Promise<String> p2 = p1.filter(new Predicate<String>() {
 			public boolean test(String t) {
@@ -1315,7 +1315,7 @@ public class PromiseTest extends TestCase {
 
 	public void testFilterNull() throws Exception {
 		String value1 = new String("value");
-		Promise<String> p1 = Promises.newResolvedPromise(value1);
+		Promise<String> p1 = resolved(value1);
 		try {
 			p1.filter(null);
 			fail("failed to error on null predicate");
@@ -1326,7 +1326,7 @@ public class PromiseTest extends TestCase {
 
 	public void testMap() throws Exception {
 		Integer value1 = new Integer(42);
-		Promise<Integer> p1 = Promises.newResolvedPromise(value1);
+		Promise<Integer> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		Promise<String> p2 = p1.<Number, Long> map(new Function<Number, Long>() {
@@ -1352,7 +1352,7 @@ public class PromiseTest extends TestCase {
 	public void testMapException() throws Exception {
 		Integer value1 = new Integer(42);
 		final Error failure = new Error("fail");
-		Promise<Integer> p1 = Promises.newResolvedPromise(value1);
+		Promise<Integer> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		Promise<String> p2 = p1.<Number, Long> map(new Function<Number, Long>() {
@@ -1382,7 +1382,7 @@ public class PromiseTest extends TestCase {
 
 	public void testMapNull() throws Exception {
 		String value1 = new String("value");
-		Promise<String> p1 = Promises.newResolvedPromise(value1);
+		Promise<String> p1 = resolved(value1);
 		try {
 			p1.map(null);
 			fail("failed to error on null function");
@@ -1393,18 +1393,18 @@ public class PromiseTest extends TestCase {
 
 	public void testFlatMap() throws Exception {
 		Integer value1 = new Integer(42);
-		Promise<Integer> p1 = Promises.newResolvedPromise(value1);
+		Promise<Integer> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		Promise<String> p2 = p1.<Number, Long> flatMap(new Function<Number, Promise<Long>>() {
 			public Promise<Long> apply(Number t) {
 				latch1.countDown();
-				return Promises.newResolvedPromise(new Long(t.longValue()));
+				return resolved(new Long(t.longValue()));
 			}
 		}).flatMap(new Function<Number, Promise<String>>() {
 			public Promise<String> apply(Number t) {
 				latch2.countDown();
-				return Promises.newResolvedPromise(t.toString());
+				return resolved(t.toString());
 			}
 		});
 		assertTrue(p1.isDone());
@@ -1419,7 +1419,7 @@ public class PromiseTest extends TestCase {
 	public void testFlatMapException() throws Exception {
 		Integer value1 = new Integer(42);
 		final Error failure = new Error("fail");
-		Promise<Integer> p1 = Promises.newResolvedPromise(value1);
+		Promise<Integer> p1 = resolved(value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final CountDownLatch latch2 = new CountDownLatch(1);
 		Promise<String> p2 = p1.<Number, Long> flatMap(new Function<Number, Promise<Long>>() {
@@ -1430,7 +1430,7 @@ public class PromiseTest extends TestCase {
 		}).flatMap(new Function<Number, Promise<String>>() {
 			public Promise<String> apply(Number t) {
 				latch2.countDown();
-				return Promises.newResolvedPromise(t.toString());
+				return resolved(t.toString());
 			}
 		});
 		assertTrue(p1.isDone());
@@ -1449,7 +1449,7 @@ public class PromiseTest extends TestCase {
 
 	public void testFlatMapNull() throws Exception {
 		String value1 = new String("value");
-		Promise<String> p1 = Promises.newResolvedPromise(value1);
+		Promise<String> p1 = resolved(value1);
 		try {
 			p1.flatMap(null);
 			fail("failed to error on null function");
@@ -1461,7 +1461,7 @@ public class PromiseTest extends TestCase {
 	public void testRecoverNoFailure() throws Exception {
 		final Integer value1 = new Integer(42);
 		final Long value2 = new Long(43);
-		final Promise<Number> p1 = Promises.newResolvedPromise((Number) value1);
+		final Promise<Number> p1 = resolved((Number) value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
 			public Long apply(Promise<?> t) {
@@ -1480,7 +1480,7 @@ public class PromiseTest extends TestCase {
 	public void testRecoverFailure() throws Exception {
 		final Throwable failure = new Error("fail");
 		final Long value2 = new Long(43);
-		final Promise<Number> p1 = Promises.newFailedPromise(failure);
+		final Promise<Number> p1 = failed(failure);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
 			public Long apply(Promise<?> t) {
@@ -1503,7 +1503,7 @@ public class PromiseTest extends TestCase {
 
 	public void testRecoverFailureNull() throws Exception {
 		final Throwable failure = new Error("fail");
-		final Promise<Number> p1 = Promises.newFailedPromise(failure);
+		final Promise<Number> p1 = failed(failure);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
 			public Long apply(Promise<?> t) {
@@ -1532,7 +1532,7 @@ public class PromiseTest extends TestCase {
 	public void testRecoverFailureException() throws Exception {
 		final Throwable failure1 = new Error("fail1");
 		final Error failure2 = new Error("fail2");
-		final Promise<Number> p1 = Promises.newFailedPromise(failure1);
+		final Promise<Number> p1 = failed(failure1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recover(new Function<Promise<?>, Long>() {
 			public Long apply(Promise<?> t) {
@@ -1560,7 +1560,7 @@ public class PromiseTest extends TestCase {
 
 	public void testRecoverNull() throws Exception {
 		String value1 = new String("value");
-		Promise<String> p1 = Promises.newResolvedPromise(value1);
+		Promise<String> p1 = resolved(value1);
 		try {
 			p1.recover(null);
 			fail("failed to error on null function");
@@ -1572,12 +1572,12 @@ public class PromiseTest extends TestCase {
 	public void testRecoverWithNoFailure() throws Exception {
 		final Integer value1 = new Integer(42);
 		final Long value2 = new Long(43);
-		final Promise<Number> p1 = Promises.newResolvedPromise((Number) value1);
+		final Promise<Number> p1 = resolved((Number) value1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<Long>>() {
 			public Promise<Long> apply(Promise<?> t) {
 				latch1.countDown();
-				return Promises.newResolvedPromise(value2);
+				return resolved(value2);
 			}
 		});
 		assertTrue(p1.isDone());
@@ -1591,7 +1591,7 @@ public class PromiseTest extends TestCase {
 	public void testRecoverWithFailure() throws Exception {
 		final Throwable failure = new Error("fail");
 		final Long value2 = new Long(43);
-		final Promise<Number> p1 = Promises.newFailedPromise(failure);
+		final Promise<Number> p1 = failed(failure);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<Long>>() {
 			public Promise<Long> apply(Promise<?> t) {
@@ -1601,7 +1601,7 @@ public class PromiseTest extends TestCase {
 				} catch (InterruptedException e) {
 					fail(e);
 				}
-				return Promises.newResolvedPromise(value2);
+				return resolved(value2);
 			}
 		});
 		assertTrue(p1.isDone());
@@ -1614,7 +1614,7 @@ public class PromiseTest extends TestCase {
 
 	public void testRecoverWithFailureNull() throws Exception {
 		final Throwable failure = new Error("fail");
-		final Promise<Number> p1 = Promises.newFailedPromise(failure);
+		final Promise<Number> p1 = failed(failure);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<Long>>() {
 			public Promise<Long> apply(Promise<?> t) {
@@ -1643,7 +1643,7 @@ public class PromiseTest extends TestCase {
 	public void testRecoverWithFailureException() throws Exception {
 		final Throwable failure1 = new Error("fail1");
 		final Error failure2 = new Error("fail2");
-		final Promise<Number> p1 = Promises.newFailedPromise(failure1);
+		final Promise<Number> p1 = failed(failure1);
 		final CountDownLatch latch1 = new CountDownLatch(1);
 		final Promise<Number> p2 = p1.recoverWith(new Function<Promise<?>, Promise<Long>>() {
 			public Promise<Long> apply(Promise<?> t) {
@@ -1671,7 +1671,7 @@ public class PromiseTest extends TestCase {
 
 	public void testRecoverWithNull() throws Exception {
 		String value1 = new String("value");
-		Promise<String> p1 = Promises.newResolvedPromise(value1);
+		Promise<String> p1 = resolved(value1);
 		try {
 			p1.recoverWith(null);
 			fail("failed to error on null function");
@@ -1683,8 +1683,8 @@ public class PromiseTest extends TestCase {
 	public void testFallbackToNoFailure() throws Exception {
 		final Integer value1 = new Integer(42);
 		final Long value2 = new Long(43);
-		final Promise<Number> p1 = Promises.newResolvedPromise((Number) value1);
-		final Promise<Number> p2 = Promises.newResolvedPromise((Number) value2);
+		final Promise<Number> p1 = resolved((Number) value1);
+		final Promise<Number> p2 = resolved((Number) value2);
 		final Promise<Number> p3 = p1.fallbackTo(p2);
 		assertTrue(p1.isDone());
 		assertTrue(p3.isDone());
@@ -1697,9 +1697,9 @@ public class PromiseTest extends TestCase {
 		final Error failure1 = new Error("fail1");
 		final Error failure2 = new Error("fail2");
 		final Long value3 = new Long(43);
-		final Promise<Number> p1 = Promises.newFailedPromise(failure1);
-		final Promise<Number> p2 = Promises.newFailedPromise(failure2);
-		final Promise<Number> p3 = Promises.newResolvedPromise((Number) value3);
+		final Promise<Number> p1 = failed(failure1);
+		final Promise<Number> p2 = failed(failure2);
+		final Promise<Number> p3 = resolved((Number) value3);
 		final Promise<Number> p4 = p1.fallbackTo(p2).fallbackTo(p3);
 		assertTrue(p1.isDone());
 		assertTrue(p4.isDone());
@@ -1712,9 +1712,9 @@ public class PromiseTest extends TestCase {
 		final Error failure1 = new Error("fail1");
 		final Error failure2 = new Error("fail2");
 		final Error failure3 = new Error("fail3");
-		final Promise<Number> p1 = Promises.newFailedPromise(failure1);
-		final Promise<Number> p2 = Promises.newFailedPromise(failure2);
-		final Promise<Number> p3 = Promises.newFailedPromise(failure3);
+		final Promise<Number> p1 = failed(failure1);
+		final Promise<Number> p2 = failed(failure2);
+		final Promise<Number> p3 = failed(failure3);
 		final Promise<Number> p4 = p1.fallbackTo(p2).fallbackTo(p3);
 		assertTrue(p1.isDone());
 		assertTrue(p4.isDone());
@@ -1730,7 +1730,7 @@ public class PromiseTest extends TestCase {
 
 	public void testFallbackToNull() throws Exception {
 		String value1 = new String("value");
-		Promise<String> p1 = Promises.newResolvedPromise(value1);
+		Promise<String> p1 = resolved(value1);
 		try {
 			p1.fallbackTo(null);
 			fail("failed to error on null promise");
