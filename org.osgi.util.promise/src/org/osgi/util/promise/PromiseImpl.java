@@ -153,10 +153,10 @@ final class PromiseImpl<T> implements Promise<T> {
 	 */
 	public T getValue() throws InvocationTargetException, InterruptedException {
 		resolved.await();
-		if (fail != null) {
-			throw new InvocationTargetException(fail);
+		if (fail == null) {
+			return value;
 		}
-		return value;
+		throw new InvocationTargetException(fail);
 	}
 
 	/**
