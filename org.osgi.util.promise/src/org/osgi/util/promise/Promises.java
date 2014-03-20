@@ -16,6 +16,7 @@
 
 package org.osgi.util.promise;
 
+import static org.osgi.util.promise.PromiseImpl.requireNonNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -53,7 +54,7 @@ public class Promises {
 	 * @return A new Promise that has been resolved with the specified failure.
 	 */
 	public static <T> Promise<T> failed(Throwable failure) {
-		return new PromiseImpl<T>(null, PromiseImpl.requireNonNull(failure));
+		return new PromiseImpl<T>(null, requireNonNull(failure));
 	}
 
 	/**

@@ -16,6 +16,8 @@
 
 package org.osgi.util.promise;
 
+import static org.osgi.util.promise.PromiseImpl.requireNonNull;
+
 /**
  * A Deferred Promise resolution.
  * 
@@ -99,7 +101,7 @@ public class Deferred<T> {
 	 *         resolved.
 	 */
 	public void fail(Throwable failure) {
-		promise.resolve(null, PromiseImpl.requireNonNull(failure));
+		promise.resolve(null, requireNonNull(failure));
 	}
 
 	/**
