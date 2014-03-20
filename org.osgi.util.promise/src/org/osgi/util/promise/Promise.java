@@ -195,8 +195,6 @@ public interface Promise<T> {
 	 * registered callback is called.
 	 * 
 	 * @param <R> The value type associated with the returned Promise.
-	 * @param <S> A subtype of the value type associated with the returned
-	 *        Promise.
 	 * @param success A Success callback to be called when this Promise is
 	 *        successfully resolved. May be {@code null} if no Success callback
 	 *        is required. In this case, the returned Promise must be resolved
@@ -209,7 +207,7 @@ public interface Promise<T> {
 	 *         Promise must be resolved when this Promise is resolved after the
 	 *         specified Success or Failure callback, if any, is executed.
 	 */
-	<R, S extends R> Promise<R> then(Success<? super T, S> success, Failure failure);
+	<R> Promise<R> then(Success<? super T, ? extends R> success, Failure failure);
 
 	/**
 	 * Chain a new Promise to this Promise with a Success callback.
@@ -220,8 +218,6 @@ public interface Promise<T> {
 	 * {@code null} for the Failure callback.
 	 * 
 	 * @param <R> The value type associated with the returned Promise.
-	 * @param <S> A subtype of the value type associated with the returned
-	 *        Promise.
 	 * @param success A Success callback to be called when this Promise is
 	 *        successfully resolved. May be {@code null} if no Success callback
 	 *        is required. In this case, the returned Promise must be resolved
@@ -232,7 +228,7 @@ public interface Promise<T> {
 	 *         specified Success, if any, is executed.
 	 * @see #then(Success, Failure)
 	 */
-	<R, S extends R> Promise<R> then(Success<? super T, S> success);
+	<R> Promise<R> then(Success<? super T, ? extends R> success);
 
 	/**
 	 * Filter the value of this Promise.
@@ -277,15 +273,13 @@ public interface Promise<T> {
 	 * Promise has been resolved.
 	 * 
 	 * @param <R> The value type associated with the returned Promise.
-	 * @param <S> A subtype of the value type associated with the returned
-	 *        Promise.
 	 * @param mapper The Function that will map the value of this Promise to the
 	 *        value that will be used to resolve the returned Promise. Must not
 	 *        be {@code null}.
 	 * @return A Promise that returns the value of this Promise as mapped by the
 	 *         specified Function.
 	 */
-	<R, S extends R> Promise<R> map(Function<? super T, S> mapper);
+	<R> Promise<R> map(Function<? super T, ? extends R> mapper);
 
 	/**
 	 * FlatMap the value of this Promise.
@@ -305,15 +299,13 @@ public interface Promise<T> {
 	 * Promise has been resolved.
 	 * 
 	 * @param <R> The value type associated with the returned Promise.
-	 * @param <S> A subtype of the value type associated with the returned
-	 *        Promise.
 	 * @param mapper The Function that will flatMap the value of this Promise to
 	 *        a Promise that will be used to resolve the returned Promise. Must
 	 *        not be {@code null}.
 	 * @return A Promise that returns the value of this Promise as mapped by the
 	 *         specified Function.
 	 */
-	<R, S extends R> Promise<R> flatMap(Function<? super T, Promise<S>> mapper);
+	<R> Promise<R> flatMap(Function<? super T, Promise<? extends R>> mapper);
 
 	/**
 	 * Recover from a failure of this Promise with a recovery value.
@@ -344,14 +336,13 @@ public interface Promise<T> {
 	 * This method may be called at any time including before and after this
 	 * Promise has been resolved.
 	 * 
-	 * @param <S> A subtype of the value type associated with this Promise.
 	 * @param recovery If this Promise resolves with a failure, the specified
 	 *        Function is called to produce a recovery value to be used to
 	 *        resolve the returned Promise. Must not be {@code null}.
 	 * @return A Promise that resolves with the value of this Promise or
 	 *         recovers from the failure of this Promise.
 	 */
-	<S extends T> Promise<T> recover(Function<Promise<?>, S> recovery);
+	Promise<T> recover(Function<Promise<?>, ? extends T> recovery);
 
 	/**
 	 * Recover from a failure of this Promise with a recovery Promise.
@@ -376,14 +367,13 @@ public interface Promise<T> {
 	 * This method may be called at any time including before and after this
 	 * Promise has been resolved.
 	 * 
-	 * @param <S> A subtype of the value type associated with this Promise.
 	 * @param recovery If this Promise resolves with a failure, the specified
 	 *        Function is called to produce a recovery Promise to be used to
 	 *        resolve the returned Promise. Must not be {@code null}.
 	 * @return A Promise that resolves with the value of this Promise or
 	 *         recovers from the failure of this Promise.
 	 */
-	<S extends T> Promise<T> recoverWith(Function<Promise<?>, Promise<S>> recovery);
+	Promise<T> recoverWith(Function<Promise<?>, Promise<? extends T>> recovery);
 
 	/**
 	 * Fall back to another Promise if this Promise fails.
@@ -402,12 +392,11 @@ public interface Promise<T> {
 	 * This method may be called at any time including before and after this
 	 * Promise has been resolved.
 	 * 
-	 * @param <S> A subtype of the value type associated with this Promise.
 	 * @param fallback The Promise whose value will be used to resolve the
 	 *        returned Promise if this Promise resolves with a failure. Must not
 	 *        be {@code null}.
 	 * @return A Promise that returns the value of this Promise or falls back to
 	 *         the value of the specified Promise.
 	 */
-	<S extends T> Promise<T> fallbackTo(Promise<S> fallback);
+	Promise<T> fallbackTo(Promise<? extends T> fallback);
 }
