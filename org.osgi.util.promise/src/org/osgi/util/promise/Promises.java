@@ -88,10 +88,10 @@ public class Promises {
 			return resolved(result);
 		}
 		/* make a copy and capture the ordering */
-		List<Promise<S>> list = new ArrayList<Promise<S>>(promises);
+		List<Promise<? extends T>> list = new ArrayList<Promise<? extends T>>(promises);
 		PromiseImpl<List<T>> chained = new PromiseImpl<List<T>>();
-		All<T, S> all = new All<T, S>(chained, list);
-		for (Promise<S> promise : list) {
+		All<T> all = new All<T>(chained, list);
+		for (Promise<? extends T> promise : list) {
 			promise.onResolve(all);
 		}
 		return chained;
@@ -131,12 +131,12 @@ public class Promises {
 	 * 
 	 * @ThreadSafe
 	 */
-	private static final class All<T, S extends T> implements Runnable {
-		private final PromiseImpl<List<T>>	chained;
-		private final List<Promise<S>>		promises;
-		private final AtomicInteger			promiseCount;
+	private static final class All<T> implements Runnable {
+		private final PromiseImpl<List<T>>			chained;
+		private final List<Promise<? extends T>>	promises;
+		private final AtomicInteger					promiseCount;
 
-		All(PromiseImpl<List<T>> chained, List<Promise<S>> promises) {
+		All(PromiseImpl<List<T>> chained, List<Promise<? extends T>> promises) {
 			this.chained = chained;
 			this.promises = promises;
 			this.promiseCount = new AtomicInteger(promises.size());
@@ -148,9 +148,9 @@ public class Promises {
 			}
 			List<T> result = new ArrayList<T>(promises.size());
 			List<Promise<?>> failed = new ArrayList<Promise<?>>(promises.size());
-			for (Promise<S> promise : promises) {
+			for (Promise<? extends T> promise : promises) {
 				boolean failure;
-				S value;
+				T value;
 				try {
 					failure = promise.getFailure() != null;
 					value = failure ? null : promise.getValue();
