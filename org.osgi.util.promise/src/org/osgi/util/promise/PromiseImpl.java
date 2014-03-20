@@ -211,53 +211,44 @@ final class PromiseImpl<T> implements Promise<T> {
 		}
 
 		public void run() {
+			Throwable f;
 			final boolean interrupted = Thread.interrupted();
 			try {
-				Throwable f = null;
-				try {
-					f = getFailure();
-				} catch (InterruptedException e) {
-					/*
-					 * This should not happen since (1) we are a callback on a
-					 * resolved Promise and (2) we cleared the interrupt status
-					 * above.
-					 */
-					chained.resolve(null, e);
-					return;
-				}
-				if (f != null) {
-					if (failure != null) {
-						try {
-							failure.fail(PromiseImpl.this);
-						} catch (Throwable e) {
-							// propagate new exception
-							f = e;
-						}
-					}
-					// fail chained
-					chained.resolve(null, f);
-					return;
-				}
-				Promise<? extends R> returned = null;
-				if (success != null) {
-					try {
-						returned = success.call(PromiseImpl.this);
-					} catch (Throwable e) {
-						chained.resolve(null, e);
-						return;
-					}
-				}
-				if (returned == null) {
-					// resolve chained with null value
-					chained.resolve(null, null);
-				} else {
-					// resolve chained after returned promise is resolved
-					returned.onResolve(new Chain<R>(chained, returned));
-				}
+				f = getFailure();
+			} catch (Throwable e) {
+				f = e; // propagate new exception
 			} finally {
 				if (interrupted) { // restore interrupt status
 					Thread.currentThread().interrupt();
 				}
+			}
+			if (f != null) {
+				if (failure != null) {
+					try {
+						failure.fail(PromiseImpl.this);
+					} catch (Throwable e) {
+						f = e; // propagate new exception
+					}
+				}
+				// fail chained
+				chained.resolve(null, f);
+				return;
+			}
+			Promise<? extends R> returned = null;
+			if (success != null) {
+				try {
+					returned = success.call(PromiseImpl.this);
+				} catch (Throwable e) {
+					chained.resolve(null, e);
+					return;
+				}
+			}
+			if (returned == null) {
+				// resolve chained with null value
+				chained.resolve(null, null);
+			} else {
+				// resolve chained when returned promise is resolved
+				returned.onResolve(new Chain<R>(chained, returned));
 			}
 		}
 	}
@@ -286,49 +277,24 @@ final class PromiseImpl<T> implements Promise<T> {
 		}
 
 		public void run() {
+			R value = null;
+			Throwable f;
 			final boolean interrupted = Thread.interrupted();
 			try {
-				Throwable f = null;
-				try {
-					f = promise.getFailure();
-				} catch (InterruptedException e) {
-					/*
-					 * This should not happen since (1) we are a callback on a
-					 * resolved Promise and (2) we cleared the interrupt status
-					 * above.
-					 */
-					chained.resolve(null, e);
-					return;
-				}
-				if (f != null) {
-					if (failure != null) {
-						f = failure;
-					}
-					chained.resolve(null, f);
-					return;
-				}
-				R value;
-				try {
+				f = promise.getFailure();
+				if (f == null) {
 					value = promise.getValue();
-				} catch (InvocationTargetException e) {
-					// This should not happen since we checked fail above
-					chained.resolve(null, e);
-					return;
-				} catch (InterruptedException e) {
-					/*
-					 * This should not happen since (1) we are a callback on a
-					 * resolved Promise and (2) we cleared the interrupt status
-					 * above.
-					 */
-					chained.resolve(null, e);
-					return;
+				} else if (failure != null) {
+					f = failure;
 				}
-				chained.resolve(value, null);
+			} catch (Throwable e) {
+				f = e; // propagate new exception
 			} finally {
 				if (interrupted) { // restore interrupt status
 					Thread.currentThread().interrupt();
 				}
 			}
+			chained.resolve(value, f);
 		}
 	}
 
