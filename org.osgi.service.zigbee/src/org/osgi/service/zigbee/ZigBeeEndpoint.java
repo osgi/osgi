@@ -43,11 +43,12 @@ public interface ZigBeeEndpoint {
 	public static final String	PROFILE_ID				= "zigbee.device.profile.id";
 
 	/**
-	 * Key of {@link String} containing the {@link ZigBeeHost} pid.<br>
+	 * Key of {@link String} containing the {@link ZigBeeHost}'s pid.<br>
 	 * The ZigBee local host identifier is intended to uniquely identify the
 	 * ZigBee local host, since there could be many hosts on the same platform.
-	 * This property is not mandatory. All the nodes that belong to a specific
-	 * network MUST specify the value of the associated host number.
+	 * All the nodes that belong to a specific network MUST specify the value of
+	 * the associated host number. It is mandatory for imported endpoints,
+	 * optional for exported endpoints.
 	 */
 	public static final String	HOST_PID				= "zigbee.endpoint.host.pid";
 
@@ -65,12 +66,6 @@ public interface ZigBeeEndpoint {
 	public static final String	DEVICE_VERSION			= "zigbee.device.version";
 
 	/**
-	 * Constant used by all ZigBee devices indicating the device category <br>
-	 * It is <b>mandatory</b> property for this service
-	 */
-	public static final String	DEVICE_CATEGORY			= "ZigBee";
-
-	/**
 	 * Key of the int array of containing the ids of each input cluster <br>
 	 * It is <b>mandatory</b> property for this service
 	 */
@@ -81,14 +76,6 @@ public interface ZigBeeEndpoint {
 	 * It is <b>mandatory</b> property for this service
 	 */
 	public static final String	OUTPUT_CLUSTERS			= "zigbee.endpoint.clusters.output";
-
-	/**
-	 * Key of {@link String} property containing the targeted network host pid
-	 * It is an <b>optional</b> property for this service. If provided, HOST_PID
-	 * property must have the priority to identify the host that is targeted for
-	 * export.
-	 */
-	public static final String	HOST_PID_TARGET			= "zigbee.device.target.host.pid";
 
 	/**
 	 * Key of {@link String} property containing the targeted network PAN ID
@@ -107,6 +94,12 @@ public interface ZigBeeEndpoint {
 	 * It is <b>optional</b> property for this service
 	 */
 	public static final String	ZIGBEE_EXPORT			= "zigbee.export";
+
+	/**
+	 * Constant used by all ZigBee devices indicating the device category <br>
+	 * It is <b>mandatory</b> property for this service
+	 */
+	public static final String	DEVICE_CATEGORY			= "ZigBee";
 
 	/**
 	 * @return identifier of the endpoint represented by this object, value

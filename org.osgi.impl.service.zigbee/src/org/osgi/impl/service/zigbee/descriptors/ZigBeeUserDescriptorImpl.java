@@ -1,6 +1,7 @@
 
 package org.osgi.impl.service.zigbee.descriptors;
 
+import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.descriptors.ZigBeeUserDescriptor;
 
 /**
@@ -13,7 +14,7 @@ public class ZigBeeUserDescriptorImpl implements ZigBeeUserDescriptor {
 		return null;
 	}
 
-	public void setUserDescriptor(String userDescriptor) {
+	public void setUserDescriptor(String userDescriptor, ZigBeeHandler handler) {
 		// TODO Auto-generated method stub
 
 	}

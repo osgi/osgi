@@ -28,7 +28,7 @@ package org.osgi.service.zigbee;
  *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  * 
  */
-public class ZDPException extends RuntimeException {
+public class ZigBeeException extends RuntimeException {
 
 	/** generated */
 	private static final long	serialVersionUID	= 2909437185484211441L;
@@ -126,7 +126,7 @@ public class ZDPException extends RuntimeException {
 	/**
 	 * @param errordesc exception error description
 	 */
-	public ZDPException(String errordesc) {
+	public ZigBeeException(String errordesc) {
 		super(errordesc);
 		errorCode = 0;
 	}
@@ -135,7 +135,7 @@ public class ZDPException extends RuntimeException {
 	 * @param errorCode An error code.
 	 * @param errorDesc An error description which explain the type of problem.
 	 */
-	public ZDPException(int errorCode, String errorDesc) {
+	public ZigBeeException(int errorCode, String errorDesc) {
 		super(errorDesc);
 		this.errorCode = errorCode;
 	}

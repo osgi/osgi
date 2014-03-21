@@ -16,7 +16,7 @@
 
 package org.osgi.service.zigbee.descriptors;
 
-import org.osgi.service.zigbee.ZDPException;
+import org.osgi.service.zigbee.ZigBeeHandler;
 
 /**
  * This interface represents a User Descriptor as described in the ZigBee
@@ -35,9 +35,14 @@ public interface ZigBeeUserDescriptor {
 	String getUserDescriptor();
 
 	/**
+	 * As described in "Table 2.137 ZDP Enumerations Description" of the ZigBee
+	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a set user desc
+	 * request may throw: NOT_SUPPORTED, DEVICE_NOT_FOUND, INV_REQUESTTYPE or
+	 * NO_DESCRIPTOR.
+	 * 
 	 * @param userDescriptor the user descriptor
-	 * @throws ZDPException
+	 * @param handler the response handler
 	 */
-	void setUserDescriptor(String userDescriptor) throws ZDPException;
+	void setUserDescriptor(String userDescriptor, ZigBeeHandler handler);
 
 }

@@ -46,11 +46,9 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * values of channel, pan id, extended pan id, and host pid must remain the
 	 * same.
 	 * 
-	 * @param panId optional parameter
-	 * @param extendedPanId optional parameter
 	 * @throws ZCLException
 	 */
-	public void start(int panId, long extendedPanId) throws ZCLException;
+	public void start() throws ZCLException;
 
 	/**
 	 * Stops the host.
@@ -65,6 +63,20 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * @return true if the host is started.
 	 */
 	boolean isStarted();
+
+	/**
+	 * Set the panId.
+	 * 
+	 * @param panId The network Personal Area Network identifier (PAND ID)
+	 */
+	void setPanId(int panId);
+
+	/**
+	 * Set the extendedPanId.
+	 * 
+	 * @param extendedPanId The network Extended PAN identifier(EPID)
+	 */
+	void setExtendedPanId(long extendedPanId);
 
 	/**
 	 * Indicates if a ZigBee device can join the network.

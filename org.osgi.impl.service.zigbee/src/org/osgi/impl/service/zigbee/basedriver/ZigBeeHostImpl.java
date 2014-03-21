@@ -32,12 +32,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		this.securityLevel = securityLevel;
 	}
 
-	public String getNetworkKey() throws ZCLException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	public void start(int panId, long extendedPanId) throws ZCLException {
+	public void start() throws ZCLException {
 		// TODO Auto-generated method stub
 	}
 
@@ -48,6 +43,19 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 	public boolean isStarted() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	public void setPanId(int panId) {
+		// TODO Auto-generated method stub
+	}
+
+	public void setExtendedPanId(long extendedPanId) {
+		// TODO Auto-generated method stub
+	}
+
+	public String getNetworkKey() throws ZCLException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public void refreshNetwork() throws ZCLException {

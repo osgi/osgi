@@ -48,10 +48,8 @@ public interface ZCLAttribute {
 	 * 
 	 * @param value the Java value to set
 	 * @param handler the handler
-	 * @throws ZCLException when the data type is not known
-	 *         ("Unknown data type").
 	 */
-	public void setValue(Object value, ZigBeeHandler handler) throws ZCLException;
+	public void setValue(Object value, ZigBeeHandler handler);
 
 	/**
 	 * @return the Attribute data type. It may be null if the data type is not
