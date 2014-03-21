@@ -246,6 +246,12 @@ public synchronized void doStuff() {
       which may, or may not, be the same as the client thread, or the thread which 
       executed the asynchronous work.
       </para>
+      
+      <para> It is important for multi-threaded clients to note that calls to the mediator
+      and async service must occur on the same thread. For example it is not supported to 
+      invoke a mediator using one thread, and then to begin the asynchronous invocation by
+      calling one of the <code>Async.call(...)</code> methods on a different thread.
+      </para>
     </section>
   </section>
 
@@ -274,20 +280,67 @@ public synchronized void doStuff() {
         <para>Obtain Promise objects representing the result of the asynchronous invocation</para>
       </listitem>
     </itemizedlist>
-   
+    
     <section>
-      <title>Creating an Async Mediator</title>
+      <title>Using the Async service</title>
+      <para> The first action that a client wishing to make an asynchronous invocation must take is
+      to create an async mediator using one of the <code>mediate</code> methods. Once created the client
+      invokes the method that should be run asynchronously, supplying the arguments that should be used.
+      This call records the invocation, but does not start the asynchronous task. The Asynchronous task
+      begins when the client makes invokes one of the <code>call</code> methods on the Async service.
+      The <code>call</code> methods must return a valid Promise representing the state of the asynchronous
+      invocation. This must resolve with the value returned by the asynchronous invocation, or fail with
+      the failure thrown by the asynchronous invocation. 
+      </para>
     </section>
-   
+    
+    <section>
+      <title>Asynchronous failures</title>
+      <para>There are a variety of reasons that asynchronous invocations may be started correctly by the
+      client, but then fail without running the asynchronous task. In any of these cases the Promise 
+      representing the asynchronous invocation must fail with an org.osgi.framework.ServiceException. 
+      This ServiceException must be initialised with a type of ASYNC (***** Ref core R6 *****). 
+      </para>
+      
+      <para> The following list of scenarios is not exhaustive, but indicates failure scenarios that must
+      result in a ServiceException</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para>If the client is using a service reference backed mediator and the client bundle's 
+          bundle context becomes invalid before looking up the target service.</para>
+        </listitem>
+
+        <listitem>
+          <para>If the client is using a service reference backed mediator and the service is 
+          unregistered before making the asynchronous invocation.</para>
+        </listitem>
+        
+        <listitem>
+          <para>If the client is using a service reference backed mediator and the service lookup
+          returns <code>null</code></para>
+        </listitem>
+
+        <listitem>
+          <para>If the Async service is unable to accept new work, for example it is in the process 
+          of being shut down.</para>
+        </listitem>
+       
+        <listitem>
+          <para>If the target service is unable to be invoked using the recorded arguments.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+    
     <section>
       <title>Thread safety and instance sharing</title>
       
       <para>Implementations of the Async service must be thread safe. They should be safe to 
       use simultaneously across multiple clients and from multiple threads within the same client.
-      </para>
-      
-      <para>Async mediators, unlike instances of the Async service, are not required to be thread
-      safe. Clients should not share mediator objects with other bundles, or accross threads.
+      Whilst the async service is able to be used across multiple threads, if a client wishes to 
+      make an asynchronous invocation then the call to the mediator and the call to 
+      <code>async.call(...)</code> must occur on the same thread. The returned Promise may then 
+      be shared between threads if required. 
       </para>
     
       <para>It is expected, although not required, that the Async service implementation will
@@ -296,10 +349,149 @@ public synchronized void doStuff() {
       service lookups on the client bundle's behalf. Clients should therefore not share
       instances of the Async service with other bundles. Instead both bundles should obtain
       their own instances from the service registry.</para>
+    </section>
+  </section>
+   
+  <section>
+    <title>The Async Mediator</title>
+    <para>Async Mediators are dynamically created objects that have the same type or interface as the
+    object being mediated, and are used to record method invocations and arguments. Mediators 
+    may be created either from a <code>ServiceReference</code> or from a service
+    object. The actions and overall result are similar for both <code>mediate(...)</code> methods,
+    with the primary difference being the manner in which the types to be mediated are determined.
+    </para>
+      
+    <section>
+      <title>Determining the mediated types for a <code>ServiceReference</code></title>
+       
+      <para>Mediator objects for service references are lazy, and creating one should not result
+      in a lookup of the service object. Therefore, when creating the Async Mediator object the 
+      Async Service must not introspect the service object, but instead it should attempt to load 
+      all of the types listed in the objectClass property of the service reference, using the client 
+      bundle. Any ClassNotFoundException thrown when attempting to load these classes should be ignored.
+      The successfully loaded classes are then used when creating the mediator object. If the set of
+      successfully loaded classes is null then an IllegalArgumentException must be thrown.
+      </para>
+    </section>
+      
+    <section>
+      <title>Determining the mediated types for a service object</title>
+        
+      <para>When mediating a service object there is no way to be lazy, therefore the service object
+      can be introspected to determine its type. In this case the class to be mediated is the class
+      returned by calls to <code>serviceObject.getClass()</code>.
+      </para>
+    </section>
+      
+    <section>
+      <title>Building the mediator object</title>
+      <para>Once the set of types to be mediated has been determined then the set must be filtered into
+      java interface types and java class types. The generated mediator object must extend the most
+      specialised class type, and implement all of the provided interfaces. If there is no class type to 
+      be extended then the mediated object should extend <code>java.lang.Object</code>.
+      </para>
+       
+      <para>There are three reasons why the Async service may not be able to mediate a class type:</para>
+       
+      <itemizedlist>
+        <listitem>
+          <para>The most specialised class type is final</para>
+        </listitem>
+
+        <listitem>
+          <para>The most specialised class type has no zero-argument constructor</para>
+        </listitem>
+
+        <listitem>
+          <para>One or more public methods present in the type hierarchy (other than those declared by java.lang.Object) are final</para>
+        </listitem>
+      </itemizedlist>
     
+      <para>If any of these constraints are violated then the Async service should fall back to the next 
+      most specialised type, creating an interface-only mediator if necessary.
+      </para>
+    </section>
+      
+    <section>
+      <title>Async mediator behaviours</title>
+      <para>When invoked the Async mediator should record the method call, and its arguments, and then 
+      return rapidly (i.e. it should not perform blocking operations). The values returned by the mediator
+      object are opaque, and the client should not attempt to interpret the returned value. The value may be 
+      null (or null-like in the case of primitives) or contain implementation specific information. If the
+      mediated method call has a return type, specifically it is non-void, then this object must be
+      passed to the the async service's <code>call</code> method when beginning the asynchronous invocation</para>
     </section>
     
+    <section>
+      <title>Thread safety and instance sharing</title>
+      
+      <para>Async mediators, unlike instances of the Async service, are not required to be thread
+      safe. Clients should not share mediator objects with other bundles, or accross threads.
+      Also, if a client wishes to make an asynchronous invocation then the call to the mediator
+      and the call to <code>async.call(...)</code> must occur on the same thread. The returned
+      Promise may then be shared between threads if required. 
+      </para>
     
+      <para>Async mediators created from <code>ServiceReference</code> objects are lazy, and may remain
+      directly associated with the service reference and client bundle after creation. Clients should 
+      therefore not share mediator objects with other bundles. Instead both bundles should create
+      their own mediators.</para>
+    </section>
+  </section>
+  
+  <section>
+    <title>Delegating to asynchronous implementations</title>
+    <para>Some service APIs are already asynchronous in operation, and others are partly asynchronous, 
+    in that some methods run asynchronously and others do not. There are also services which have a 
+    synchronous API, but could run asynchronously because they are a proxy to another service. 
+    A good example of this kind of service is a remote service. Remote services are local views of a 
+    remote endpoint, and depending upon the implementation of the endpoint it may be possible to make 
+    the remote call asynchronously, optimizing the thread usage of any local asynchronous call.
+    </para>
+    
+    <para>Services that already have some level of asynchronous support may advertise this to clients
+    and to the Async Service by implementing <code>org.osgi.service.async.AsyncDelegate</code>. This 
+    interface can be used by the asynchronous services implementation, or by the client directly, to 
+    make an asynchronous call on the service.
+    </para>
+    
+    <para>When making an asynchronous invocation the async service must check to see whether the 
+    target service implements AsyncDelegate. If the target service does implement AsyncDelegate then
+    the async service must delegate the asynchronous call using the <code>async</code> method.
+    </para>
+    <para>If the call to the AsyncDelegate returns a Promise, then the Promise returned by the async 
+    service must be resolved with that Promise. If the call to the AsyncDelegate returns <code>null</code>
+    then the async service must continue with the asynchronous invocation as if the target service did 
+    not implement AsyncDelegate. If the call to the AsyncDelegate throws an Exception then this must be
+    used to fail the promise returned by the async service.
+    </para>
+    
+    <para>Because the AsyncDelegate behaviour is transparently handled by the async service, clients of
+    the async service do not need to know whether the target service implements AsyncDelegate or not, 
+    their usage pattern can remain unchanged.
+    </para>
+  </section>
+  
+    <section xml:id="service.async.security">
+    <title>Security</title>
+
+    <para>Asynchronous Services implementations must be careful to avoid elevating the privileges of client 
+    bundles when calling services asynchronously. This means that the implementation must:</para>
+    
+    <itemizedlist>
+      <listitem>
+        <para>Use the client bundle to load interfaces when generating the asynchronous mediator. 
+        This prevents clients from gaining access to interfaces they would not normally be permitted to import.</para>
+      </listitem>
+
+      <listitem>
+        <para>Use the client's bundle context when retrieving the target service. This prevents the client bundle 
+        from being able to make calls on a service object that they would normally be forbidden from obtaining.</para>
+      </listitem>
+    </itemizedlist>
+    
+    <para>Further security considerations can be addressed using normal OSGi security rules. For example access to 
+    the Async service can be controlled using ServicePermission[Async, GET].</para>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.async.xml"/>
