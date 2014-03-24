@@ -42,6 +42,11 @@ public interface ZigBeeGroup {
 	 * commands of the <i>Groups</i> cluster of the ZigBee Specification
 	 * Library.
 	 * 
+	 * As described in "Table 2.15 APSME-ADD-GROUP.confirm Parameters" of the
+	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
+	 * add_group request can have the following status: SUCCESS,
+	 * INVALID_PARAMETER or TABLE_FULL.
+	 * 
 	 * @param pid {@link String} representing the PID (see
 	 *        {@link org.osgi.framework.Constants#SERVICE_PID} ) of the
 	 *        {@link ZigBeeEndpoint} that we want add to this Group.
@@ -57,6 +62,11 @@ public interface ZigBeeGroup {
 	 * defined by the ZigBee Specification, in the former case it will use the
 	 * proper commands of the <i>Groups</i> cluster of the ZigBee Specification
 	 * Library.
+	 * 
+	 * As described in "Table 2.17 APSME-REMOVE-GROUP.confirm Parameters" of the
+	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
+	 * remove_group request can have the following status: SUCCESS,
+	 * INVALID_GROUP or INVALID_PARAMETER.
 	 * 
 	 * @param pid {@link String} representing the PID (see
 	 *        {@link org.osgi.framework.Constants#SERVICE_PID} ) of the
