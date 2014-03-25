@@ -22,6 +22,10 @@ import java.util.Map;
  * Manage response of a request to the Base Driver
  * 
  * @version 1.0
+ * 
+ * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
+ *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
+ *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
 
 public interface ZigBeeMapHandler {

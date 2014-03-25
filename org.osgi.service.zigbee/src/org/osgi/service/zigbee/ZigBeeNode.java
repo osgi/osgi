@@ -32,6 +32,10 @@ import org.osgi.service.zigbee.descriptors.ZigBeeUserDescriptor;
  * - <i>16-bit ZigBee Network Address</i><br>
  * 
  * @version 1.0
+ * 
+ * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
+ *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
+ *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
 public interface ZigBeeNode {
 
@@ -66,7 +70,7 @@ public interface ZigBeeNode {
 
 	/**
 	 * Key of {@link String} containing the device node network extended PAN ID.
-	 * If the device type is “Coordinator”, the extended pan id may be available
+	 * If the device type is "Coordinator", the extended pan id may be available
 	 * only after the network is started. It means that internally the
 	 * ZigBeeHost interface must update the service properties.
 	 */

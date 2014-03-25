@@ -26,6 +26,10 @@ import java.io.ByteArrayOutputStream;
  * Reference: 075366r04ZB_AFG-ZigBee_Cluster_Library_Public_download_version.pdf
  * 
  * @version 1.0
+ * 
+ * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
+ *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
+ *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
 public class ZigBeeDataTypes {
 

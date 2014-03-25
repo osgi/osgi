@@ -17,6 +17,8 @@
 package org.osgi.service.zigbee;
 
 /**
+ * This interface represents a ZCL Header.
+ * 
  * @author <a href="mailto:stefano.lenzi@isti.cnr.it">Stefano "Kismet" Lenzi</a>
  * @author <a href="mailto:francesco.furfari@isti.cnr.it">Francesco Furfari</a>
  */

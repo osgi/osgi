@@ -25,6 +25,10 @@ import org.osgi.service.zigbee.ZigBeeHandler;
  * User Descriptor is optional.
  * 
  * @version 1.0
+ * 
+ * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
+ *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
+ *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
 public interface ZigBeeUserDescriptor {
 

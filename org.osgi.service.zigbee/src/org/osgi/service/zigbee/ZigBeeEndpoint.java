@@ -25,6 +25,10 @@ import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
  * ZigBeeNode.IEEE_ADDRESS, and ZigBeeEndpoint.ENDPOINT_ID properties.
  * 
  * @version 1.0
+ * 
+ * @author see RFC 192 authors: Andre Bottaro, Arnaud Rinquin, Jean-Pierre
+ *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
+ *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
 public interface ZigBeeEndpoint {
 
