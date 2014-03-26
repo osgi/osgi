@@ -268,7 +268,7 @@
 			  <para>204 (NO CONTENT): the request was received and valid and the framework has issued the update.</para>
       		</listitem>
   			<listitem>
-        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to update. The body of the message is a bundleexception representation <TODO>ref</TODO> describing the reason why the installation did not succeed.</para>
+        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to update. The body of the message is a bundleexception representation <TODO>ref</TODO> describing the reason why the update did not succeed.</para>
       		</listitem>
       		<listitem>
 			  <para>404 (NOT FOUND): there is not bundle with the given bundle id.</para>
@@ -289,7 +289,7 @@
 			  <para>204 (NO CONTENT): the request was received and valid and the framework has issued the update.</para>
       		</listitem>
   			<listitem>
-        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to update. The body of the message is a bundleexception representation <TODO>ref</TODO> describing the reason why the installation did not succeed.</para>
+        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to update. The body of the message is a bundleexception representation <TODO>ref</TODO> describing the reason why the update did not succeed.</para>
       		</listitem>
       		<listitem>
 			  <para>404 (NOT FOUND): there is not bundle with the given bundle id.</para>
@@ -308,16 +308,71 @@
 			  <para>204 (NO CONTENT): the request was received and valid and the framework has uninstalled the bundle.</para>
       		</listitem>
   			<listitem>
-        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to uninstall. The body of the message is a bundleexception representation <TODO>ref</TODO> describing the reason why the installation did not succeed.</para>
+        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to uninstall. The body of the message is a bundleexception representation <TODO>ref</TODO> describing the reason why the uninstallation did not succeed.</para>
       		</listitem>
       		<listitem>
 			  <para>404 (NOT FOUND): there is not bundle with the given bundle id.</para>
       		</listitem>            		
 	    </itemizedlist>        
       </section>
-      
+           
     </section>
  
+ 
+   <section>
+      <title>Bundle State Resource</title>
+	 
+      The bundle state resource represents the internal state of an installed bundle qualified through its bundle id. 
+      It supports the GET and PUT requests. 
+
+      <section>
+        <title>GET</title>
+	    The GET request retrieves a bundle state representation <TODO>ref</TODO> from the REST management service. 
+	    The request can return the following status codes:
+	  
+	    <itemizedlist>
+      		<listitem>
+			  <para>200 (OK): the request has been served successfully and the body of the response is a bundle state representation.</para>
+      		</listitem>
+      		<listitem>
+			  <para>404 (NOT FOUND): there is not bundle with the given bundle id.</para>
+      		</listitem>            		
+      		<listitem>
+        	  <para>406 (NOT ACCEPTABLE): the REST management service does not support any of the requested representations.</para>
+      		</listitem>
+	    </itemizedlist>        
+      </section>
+    
+ 	  <section>
+        <title>PUT</title>
+	    The PUT request sets the target state for the given bundle. This can, e.g., be state=32 for transitioning the bundle to started, or state=4 for stopping the bundle and transitioning it to resolved. 
+	    The body of the request needs to be a bundle state representation <TODO>ref</TODO>. Not all state transitions are valid.
+
+		The body of the response is the new bundle state implementation <TODO>ref</TODO>.
+	    The request can return the following status codes:
+	  
+	    <itemizedlist>
+      		<listitem>
+			  <para>200 (OK): the request was received and valid. The framework has performed a state change and the new bundle state is contained in the body.</para>
+      		</listitem>
+  			<listitem>
+        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to perform the state transition. 
+        	  							The body of the message is a bundleexception representation <TODO>ref</TODO> describing the reason why the operation did not succeed.</para>
+      		</listitem>      		
+      		<listitem>
+        	  <para>402 (PRECONDITION FAILED): the requested target state is not reachable from the current bundle state.</para>
+      		</listitem>
+      		<listitem>
+			  <para>404 (NOT FOUND): there is not bundle with the given bundle id.</para>
+      		</listitem>            		      		
+      		<listitem>
+        	  <para>415 (UNSUPPORTED MEDIA TYPE): the request had a media type that is not supported by the REST management service.</para>
+      		</listitem>
+	    </itemizedlist>        
+      </section>
+    </section>
+
+
  
  </section>
 
