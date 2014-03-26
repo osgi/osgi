@@ -1,20 +1,20 @@
 
 package org.osgi.impl.service.zigbee.descriptions;
 
+import org.osgi.service.zigbee.descriptions.ZCLParameterDescription;
 import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
-import org.osgi.service.zigbee.descriptions.ZigBeeParameterDescription;
 
 /**
- * Mocked impl of ZigBeeParameterDescription.
+ * Mocked impl.
  */
-public class ZigBeeParameterDescriptionImpl implements ZigBeeParameterDescription {
+public class ZCLParameterDescriptionImpl implements ZCLParameterDescription {
 
 	private ZigBeeDataTypeDescription	type;
 
 	/**
 	 * @param type
 	 */
-	public ZigBeeParameterDescriptionImpl(ZigBeeDataTypeDescription type) {
+	public ZCLParameterDescriptionImpl(ZigBeeDataTypeDescription type) {
 		this.type = type;
 	}
 

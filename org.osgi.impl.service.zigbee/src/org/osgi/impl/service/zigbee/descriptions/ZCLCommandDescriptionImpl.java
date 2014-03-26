@@ -4,17 +4,17 @@ package org.osgi.impl.service.zigbee.descriptions;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZCLHeader;
 import org.osgi.service.zigbee.descriptions.ZCLCommandDescription;
-import org.osgi.service.zigbee.descriptions.ZigBeeParameterDescription;
+import org.osgi.service.zigbee.descriptions.ZCLParameterDescription;
 
 /**
  * Mocked impl.
  */
 public class ZCLCommandDescriptionImpl implements ZCLCommandDescription {
 
-	private int								id;
-	private String							name;
-	private boolean							isMandatory;
-	private ZigBeeParameterDescription[]	parametersDesc;
+	private int							id;
+	private String						name;
+	private boolean						isMandatory;
+	private ZCLParameterDescription[]	parametersDesc;
 
 	/**
 	 * @param id
@@ -34,7 +34,7 @@ public class ZCLCommandDescriptionImpl implements ZCLCommandDescription {
 	 * @param mandatory
 	 * @param parametersDesc
 	 */
-	public ZCLCommandDescriptionImpl(int id, String name, boolean mandatory, ZigBeeParameterDescription[] parametersDesc) {
+	public ZCLCommandDescriptionImpl(int id, String name, boolean mandatory, ZCLParameterDescription[] parametersDesc) {
 		this.id = id;
 		this.name = name;
 		this.isMandatory = mandatory;
@@ -57,7 +57,7 @@ public class ZCLCommandDescriptionImpl implements ZCLCommandDescription {
 		return isMandatory;
 	}
 
-	public ZigBeeParameterDescription[] getParameterDescriptions() {
+	public ZCLParameterDescription[] getParameterDescriptions() {
 		return parametersDesc;
 	}
 

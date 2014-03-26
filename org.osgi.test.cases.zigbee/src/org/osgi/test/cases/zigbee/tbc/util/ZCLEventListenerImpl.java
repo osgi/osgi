@@ -3,15 +3,15 @@ package org.osgi.test.cases.zigbee.tbc.util;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.zigbee.ZCLEventListener;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZigBeeEvent;
-import org.osgi.service.zigbee.ZigBeeEventListener;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
- * Mocked test event listener.
+ * Mocked test.
  */
-public class ZigBeeEventListenerImpl implements ZigBeeEventListener {
+public class ZCLEventListenerImpl implements ZCLEventListener {
 
 	private BundleContext		bc;
 	private ServiceRegistration	sr;
@@ -20,7 +20,7 @@ public class ZigBeeEventListenerImpl implements ZigBeeEventListener {
 	/**
 	 * @param bc
 	 */
-	public ZigBeeEventListenerImpl(BundleContext bc) {
+	public ZCLEventListenerImpl(BundleContext bc) {
 		this.bc = bc;
 	}
 
@@ -28,7 +28,7 @@ public class ZigBeeEventListenerImpl implements ZigBeeEventListener {
 	 * Register the test event listener in the OSGi Service Registry.
 	 */
 	public void start() {
-		bc.registerService(ZigBeeEventListener.class.getName(), this, null);
+		bc.registerService(ZCLEventListener.class.getName(), this, null);
 	}
 
 	/**
@@ -42,7 +42,7 @@ public class ZigBeeEventListenerImpl implements ZigBeeEventListener {
 
 	public void notifyEvent(ZigBeeEvent zigbeeEvent) {
 		lastReceivedZigBeeEvent = zigbeeEvent;
-		DefaultTestBundleControl.log(ZigBeeEventListenerImpl.class.getName() + " just received the following event: " + lastReceivedZigBeeEvent);
+		DefaultTestBundleControl.log(ZCLEventListener.class.getName() + " just received the following event: " + lastReceivedZigBeeEvent);
 	}
 
 	/**

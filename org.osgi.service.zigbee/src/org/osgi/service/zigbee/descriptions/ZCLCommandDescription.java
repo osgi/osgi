@@ -52,7 +52,7 @@ public interface ZCLCommandDescription {
 	/**
 	 * @return an array of command's parameters description
 	 */
-	ZigBeeParameterDescription[] getParameterDescriptions();
+	ZCLParameterDescription[] getParameterDescriptions();
 
 	/**
 	 * Serialize javaValues to a ZCLFrame that can them be used in invocations

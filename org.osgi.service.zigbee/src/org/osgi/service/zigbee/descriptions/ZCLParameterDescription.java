@@ -25,7 +25,7 @@ package org.osgi.service.zigbee.descriptions;
  *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
  *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
-public interface ZigBeeParameterDescription {
+public interface ZCLParameterDescription {
 
 	/**
 	 * @return the parameter data type

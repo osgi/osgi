@@ -1,14 +1,14 @@
 
 package org.osgi.impl.service.zigbee.event;
 
+import org.osgi.service.zigbee.ZCLEventListener;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZigBeeEvent;
-import org.osgi.service.zigbee.ZigBeeEventListener;
 
 /**
- * Mocked impl of ZigBeeEventListener.
+ * Mocked impl.
  */
-public class ZigBeeEventListenerImpl implements ZigBeeEventListener {
+public class ZCLEventListenerImpl implements ZCLEventListener {
 
 	public void notifyEvent(ZigBeeEvent event) {
 		// TODO Auto-generated method stub

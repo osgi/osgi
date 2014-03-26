@@ -25,7 +25,7 @@ package org.osgi.service.zigbee;
  *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
  *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
-public interface ZigBeeEventListener {
+public interface ZCLEventListener {
 
 	/**
 	 * Property key for the optional attribute data type of an attribute

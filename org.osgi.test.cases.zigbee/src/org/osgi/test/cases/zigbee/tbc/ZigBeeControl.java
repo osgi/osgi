@@ -20,9 +20,9 @@ import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeUserDescriptor;
 import org.osgi.test.cases.zigbee.tbc.device.discovery.ServicesListener;
 import org.osgi.test.cases.zigbee.tbc.util.ZCLCommandHandlerImpl;
+import org.osgi.test.cases.zigbee.tbc.util.ZCLEventListenerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZCLFrameImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventImpl;
-import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventListenerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventSourceImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeHandlerImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeMapHandlerImpl;
@@ -701,8 +701,8 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		aZigBeeEventSourceImpl.start();
 
 		// create, and launch a test event listener.
-		ZigBeeEventListenerImpl aZigBeeEventListenerImpl = new ZigBeeEventListenerImpl(getContext());
-		aZigBeeEventListenerImpl.start();
+		ZCLEventListenerImpl aZCLEventListenerImpl = new ZCLEventListenerImpl(getContext());
+		aZCLEventListenerImpl.start();
 
 		// assert that eventing works: the sent, and the received events must be
 		// equal.
@@ -717,7 +717,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			fail("No exception is expected.");
 		}
 
-		ZigBeeEvent lastReceivedZigBeeEvent = aZigBeeEventListenerImpl.getLastReceivedZigBeeEvent();
+		ZigBeeEvent lastReceivedZigBeeEvent = aZCLEventListenerImpl.getLastReceivedZigBeeEvent();
 		log("lastReceivedZigBeeEvent: " + lastReceivedZigBeeEvent);
 		assertNotNull("aZigbeeEvent can not be null", aZigbeeEvent);
 		log("aZigbeeEvent: " + aZigbeeEvent);
@@ -728,7 +728,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 				aZigbeeEvent, lastReceivedZigBeeEvent);
 
 		// stop/destroy the test event listener.
-		aZigBeeEventListenerImpl.stop();
+		aZCLEventListenerImpl.stop();
 
 		// stop/destroy the test event source.
 		aZigBeeEventSourceImpl.stop();
