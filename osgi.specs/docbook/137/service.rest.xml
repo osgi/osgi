@@ -90,53 +90,237 @@
     </section>
   </section>
 
- <section>
+  <section>
     <title>Resources</title>
  
-    <para> 
-
+	The framework and its state is mapped to a set of different resources. Each resource is accessible through a resource identifier, as summarized in <TODO>ref</TODO>. 
 
     <section>
       <title>Framework Startlevel Resource</title>
-	    
-    <table>
-      <title></title>
+	 
+      The startlevel resource represents the active start level of the framework. It supports the GET and PUT requests. 
 
-      <tgroup cols="2">
-        <colspec colnum="1" colwidth="1*"/>
+      <section>
+        <title>GET</title>
+	    The GET request retrieves a framework startlevel representation <TODO>ref</TODO> from the REST management service. 
+	    The request can return the following status codes:
+	  
+	    <itemizedlist>
+      		<listitem>
+			  <para>200 (OK): the request has been served successfully and the body of the response is a startlevel representation.</para>
+      		</listitem>
+      		<listitem>
+        	  <para>406 (NOT ACCEPTABLE): the REST management service does not support any of the requested representations.</para>
+      		</listitem>
+	    </itemizedlist>        
+      </section>
+    
+ 	  <section>
+        <title>PUT</title>
+	    The PUT request sets the target framework startlevel. The body of the request needs to be a framework startlevel representation <TODO>ref</TODO>. 
 
-        <colspec colnum="2" colwidth="5*"/>
-
-        <thead>
-          <row>
-            <entry>Nethod</entry>
-
-            <entry>Description</entry>
-          </row>
-        </thead>
-
-        <tbody>
-          <row>
-	    <entry><para><code>[GET]</code></para></entry>
-
-            <entry><para>get the startlevel. Returns a framework startlevel representation</para></entry>
-          </row>
-
-          <row>
-            <entry><para><code>[PUT]</code></para></entry>
-
-            <entry><para>set the startlevel. Expects the body of the message to be a framework startlevel representation</para></entry>
-          </row>
-
-        </tbody>
-      </tgroup>
-    </table>
+	    The request can return the following status codes:
+	  
+	    <itemizedlist>
+      		<listitem>
+			  <para>204 (NO CONTENT): the request was received and valid. The framework will asynchronously start to adjust the framework startlevel until the target startlevel has been reached.</para>
+      		</listitem>
+      		<listitem>
+        	  <para>415 (UNSUPPORTED MEDIA TYPE): the request had a media type that is not supported by the REST management service.</para>
+      		</listitem>
+      		<listitem>
+        	  <para>400 (BAD REQUEST): the REST management service received an IllegalArgumentException when trying to adjust the framework startlevel, e.g., because the requested startlevel was zero or negative.</para>
+      		</listitem>
+	    </itemizedlist>        
+      </section>
     </section>
-    
-    
-    </para>
- </section>
  
+
+    <section>
+      <title>Bundles Resource</title>
+	 
+      The bundles resource represents the list of all bundles installed on the managed framework. It supports the GET request and two syntactically different forms of POST requests which are used to install new bundles to the framework. 
+
+      <section>
+        <title>GET</title>
+	    The GET request retrieves a bundle list representation <TODO>ref</TODO> from the REST management service. 
+	    
+	    The request can return the following status codes:
+	  
+	    <itemizedlist>
+      		<listitem>
+			  <para>200 (OK): the request has been served successfully and the body of the response is a bundle list representation.</para>
+      		</listitem>
+      		<listitem>
+        	  <para>406 (NOT ACCEPTABLE): the REST management service does not support any of the requested representations.</para>
+      		</listitem>
+	    </itemizedlist>        
+      </section>
+    
+      <section>
+        <title>POST with Location String</title>
+	    The POST request installs a new bundle to the managed framework and thereby logically appends it to the bundles resource. The new bundle to be 
+	    installed is referenced by a location string which is passed as the body of the request. In order to disambiguate the request from the other form of POST, 
+	    the content type must be set to text/plain. In practice, the location string is usually a URL. Since the framework will use the location
+	    retrieving the physical bundle, it needs to be accessible from the remotely managed framework and not necessarily from the managing client.  
+	  
+	    The management service implementation must check if the result of the install request matches the requested bundle
+        since the OSGi framework will return an existing bundle object as the return value of an install call if there was already one with the same location string installed.
+        One way of doing it is comparing the last modification timestamp. A detected collision is indicated to the requesting clients through an error code 409. 
+	  
+	  	The response for the POST request is a local URI denoting path of the newly installed bundle relative to the REST management service root URL.
+	  	The request can return the following status codes:
+	  	
+	    <itemizedlist>
+      		<listitem>
+			  <para>200 (OK): the bundle has been successfully installed and the body of the response contains the URI.</para>
+      		</listitem>
+  			<listitem>
+        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to install. The body of the message is a bundleexception representation <TODO>ref</TODO> describing the reason why the installation did not succeed.</para>
+      		</listitem>
+      		<listitem>
+        	  <para>409 (CONFLICT): there is already a bundle installed with the same location string.</para>
+      		</listitem>
+        </itemizedlist>        
+      </section>
+
+	  <section>
+        <title>POST with Bundle</title>
+	    This variant of the POST request uploads the bundle as the body of the request. The media type of the request should be set to vnd.osgi.bundle 
+	    which must be supported by all REST management services. Implementations are free to accept other media types for this request with the 
+	    exception of text/plain. For instance, they can opt to additionally support application/zip or application/x-jar.   
+	    
+        Clients should use the HTTP Content-Location field to set a bundle location.  
+        If no content location is given, REST management service implementations must generate a unique location string in order to avoid unintended collisions between unrelated bundles. 
+               
+	  	The response for the POST request is a local URI denoting path of the newly installed bundle relative to the REST management service root URL.
+	  	The request can return the following status codes:
+	  	
+	    <itemizedlist>
+      		<listitem>
+			  <para>200 (OK): the bundle has been successfully installed and the body of the response contains the URI.</para>
+      		</listitem>
+  			<listitem>
+        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to install. The body of the message is a bundleexception representation <TODO>ref</TODO> describing the reason why the installation did not succeed.</para>
+      		</listitem>
+      		<listitem>
+        	  <para>409 (CONFLICT): there is already a bundle installed with the same location string.</para>
+      		</listitem>
+        </itemizedlist>        
+      </section>      
+ 
+      <section>
+        <title>GET of the Representations</title>
+			The bundles resource returns a list of the URIs of all bundles installed on the framework. 
+			For clients interested in all bundles there is also the possibility to retrieve the bundle representation of each installed bundle with 
+			a single request through the bundles/representations resource.
+			
+			
+			The body of the response is a bundle representations list <TODO>ref</TODO>.
+	  	  	The request can return the following status codes:
+	  
+	    <itemizedlist>
+      		<listitem>
+			  <para>200 (OK): the request has been served successfully and the body of the response is a bundle list representation.</para>
+      		</listitem>
+      		<listitem>
+        	  <para>406 (NOT ACCEPTABLE): the REST management service does not support any of the requested representations.</para>
+      		</listitem>
+	    </itemizedlist>        
+      </section>
+    </section>
+ 
+    <section>
+      <title>Bundle Resource</title>
+	 
+      The bundle resource represents a single, distinct bundle in the system. Hence, it has to be qualified by a bundle id. 
+      The resource supports the GET, two variants of PUT, and the DELETE requests. 
+
+      <section>
+        <title>GET</title>
+	    The GET request retrieves a bundle representation <TODO>ref</TODO> from the REST management service. 
+	    The request can return the following status codes:
+	  
+	    <itemizedlist>
+      		<listitem>
+			  <para>200 (OK): the request has been served successfully and the body of the response is a bundle representation.</para>
+      		</listitem>
+      		<listitem>
+			  <para>404 (NOT FOUND): there is not bundle with the given bundle id.</para>
+      		</listitem>      		
+      		<listitem>
+        	  <para>406 (NOT ACCEPTABLE): the REST management service does not support any of the requested representations.</para>
+      		</listitem>
+	    </itemizedlist>        
+      </section>
+    
+ 	  <section>
+        <title>PUT with Location String</title>
+	    The PUT request updates the bundle with a new version, referenced by a location string which is passed as the body of the request. 
+	    In order to disambiguate the request from the other form of PUT, the content type must be set to text/plain. 
+		The same rationale as in <TODO>ref bundle list POST</TODO>, if a location string is given it must point to a location reachable by the managed framework. 
+		If no location string is passed as the body of the request, the framework will perform an update based on the existing bundle's location string.
+
+	    The request can return the following status codes:
+	  
+	    <itemizedlist>
+      		<listitem>
+			  <para>204 (NO CONTENT): the request was received and valid and the framework has issued the update.</para>
+      		</listitem>
+  			<listitem>
+        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to update. The body of the message is a bundleexception representation <TODO>ref</TODO> describing the reason why the installation did not succeed.</para>
+      		</listitem>
+      		<listitem>
+			  <para>404 (NOT FOUND): there is not bundle with the given bundle id.</para>
+      		</listitem>            		
+	    </itemizedlist>        
+      </section>
+
+ 	  <section>
+        <title>PUT with Bundle</title>
+	    The PUT request updates the bundle with a new version, uploaded as the body of the request. 
+	    The media type of the request should be set to vnd.osgi.bundle which must be supported by all REST management services. Implementations are free to accept other media types for this request with the 
+	    exception of text/plain. For instance, they can opt to additionally support application/zip or application/x-jar.
+	    
+	    The request can return the following status codes:
+	  
+	    <itemizedlist>
+      		<listitem>
+			  <para>204 (NO CONTENT): the request was received and valid and the framework has issued the update.</para>
+      		</listitem>
+  			<listitem>
+        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to update. The body of the message is a bundleexception representation <TODO>ref</TODO> describing the reason why the installation did not succeed.</para>
+      		</listitem>
+      		<listitem>
+			  <para>404 (NOT FOUND): there is not bundle with the given bundle id.</para>
+      		</listitem>            		
+	    </itemizedlist>        
+      </section>
+      
+      <section>
+        <title>DELETE</title>
+	    The DELETE request uninstalls the bundle from the framework.
+	    
+	    The request can return the following status codes:
+	  
+	    <itemizedlist>
+      		<listitem>
+			  <para>204 (NO CONTENT): the request was received and valid and the framework has uninstalled the bundle.</para>
+      		</listitem>
+  			<listitem>
+        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to uninstall. The body of the message is a bundleexception representation <TODO>ref</TODO> describing the reason why the installation did not succeed.</para>
+      		</listitem>
+      		<listitem>
+			  <para>404 (NOT FOUND): there is not bundle with the given bundle id.</para>
+      		</listitem>            		
+	    </itemizedlist>        
+      </section>
+      
+    </section>
+ 
+ 
+ </section>
+
 
  <section>
     <title>Representations</title>
