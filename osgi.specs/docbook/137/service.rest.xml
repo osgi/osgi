@@ -446,11 +446,36 @@
       </section>
     </section>
  
+ 	<section>
+      <title>Services Resource</title>
+ 	</section>
+ 	
+ 	<section>
+      <title>Service Resource</title>
+ 	</section>
+ 	
+ 
  </section>
 
 
  <section>
     <title>Representations</title>
+
+ 	<section>
+      <title>Bundle Representation</title>
+ 	</section>
+
+ 	<section>
+      <title>Bundles Representation</title>
+ 	</section>
+
+ 	<section>
+      <title>Bundle State Representation</title>
+ 	</section>
+
+ 	<section>
+      <title>Bundle Header Representation</title>
+ 	</section>
 
     <section>
         <title>Framework Startlevel Representation</title>
@@ -492,8 +517,26 @@
         </tbody>
       </tgroup>
     </table>
-
 	</section>
+
+ 	<section>
+      <title>Bundle Startlevel Representation</title>
+ 	</section>
+
+ 	<section>
+      <title>Service Representation</title>
+ 	</section>
+
+ 	<section>
+      <title>Services Representation</title>
+ 	</section>
+
+ 	<section>
+      <title>Bundle Exception Representation</title>
+ 	</section>
+
+
+
  </section>
 
   <section>
