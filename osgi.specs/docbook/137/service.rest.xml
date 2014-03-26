@@ -569,6 +569,12 @@
  
  	<section>
       <title>Services Resource</title>
+      
+      <para>
+      
+      
+      </para>
+      
  	</section>
  	
  	<section>
@@ -583,77 +589,334 @@
     <title>Representations</title>
 
  	<section>
-      <title>Bundle Representation</title>
+      	<title>Bundle Representation</title>
+		<section>
+	    	<title>JSON</title>
+			<para><code>Content-Type: application/org.osgi.bundle+json</code></para>
+	    	<programlisting>	 
+{
+   "id":0,
+   "lastModified":1314999275542,
+   "location":"System Bundle",
+   "state":32,
+   "symbolicName":"org.eclipse.osgi",
+   "version":"3.7.0.v20110613"
+}			</programlisting>
+		</section>
+
+		<section>
+	    	<title>XML</title>
+			<para><code>Content-Type: application/org.osgi.bundle+xml</code></para>
+			<programlisting><![CDATA[
+<bundle>
+   <id>0</id>
+   <lastModified>1314999275542</lastModified>
+   <location>System Bundle</location>
+   <state>32</state>
+   <symbolicName>org.eclipse.osgi</symbolicName>
+   <version>3.7.0.v20110613</version>
+</bundle>
+			]]></programlisting>    
+		</section>
  	</section>
 
  	<section>
-      <title>Bundles Representation</title>
+      <title>Bundles Representations</title>
+      	<section>
+      		<title>Bundle List Representation</title>
+		<section>
+	    	<title>JSON</title>
+			<para><code>Content-Type: application/org.osgi.bundles+json</code></para>
+	    	<programlisting>	 
+{
+   [bundleURI, bundleURI, ..., bundleURI]
+}			
+			</programlisting>
+		</section>
+
+		<section>
+	    	<title>XML</title>
+			<para><code>Content-Type: application/org.osgi.bundles+xml</code></para>
+			<programlisting><![CDATA[
+<bundles>
+   <uri>bundleURI</uri>
+   <uri>bundleURI</uri>
+   ...
+   <uri>bundleURI</uri>
+</bundles>			
+			]]></programlisting>    
+		</section>
+      	</section>
+
+      	<section>
+      		<title>Bundle Representations List Representation</title>
+		<section>
+	    	<title>JSON</title>
+			<para><code>Content-Type: application/org.osgi.bundles.representations+json</code></para>
+	    	<programlisting>	 
+[BUNDLE REPRESENTATION, BUNDLE REPRESENTATION, …, BUNDLE REPRESENTATION]		
+			</programlisting>
+		</section>
+
+		<section>
+	    	<title>XML</title>
+			<para><code>Content-Type: application/org.osgi.bundles.representations+xml</code></para>
+			<programlisting><![CDATA[
+<bundles>
+   BUNDLE REPRESENTATION
+   BUNDLE REPRESENTATION
+   ...
+   BUNDLE REPRESENTATION
+</bundles>		
+			]]></programlisting>    
+		</section>
+      	</section>		
  	</section>
 
  	<section>
       <title>Bundle State Representation</title>
+		<section>
+	    	<title>JSON</title>
+			<para><code>Content-Type: application/org.osgi.bundlestate+json</code></para>
+	    	<programlisting>	 
+{
+   "state":32
+   “options”:1
+}	
+			</programlisting>
+		</section>
+
+		<section>
+	    	<title>XML</title>
+			<para><code>Content-Type: application/org.osgi.bundlestate+xml</code></para>
+			<programlisting><![CDATA[
+<bundleState>
+   <state>32</state>
+   <options>1</options>
+</bundleState>
+			]]></programlisting>    
+		</section>
  	</section>
 
  	<section>
       <title>Bundle Header Representation</title>
+
+		<section>
+	    	<title>JSON</title>
+			<para><code>Content-Type: application/org.osgi.bundleheader+json</code></para>
+	    	<programlisting>	 
+{
+   key:value,
+   key:value,
+   ...
+   key:value
+}
+			</programlisting>
+		</section>
+
+		<section>
+	    	<title>XML</title>
+			<para><code>Content-Type: application/org.osgi.bundleheader+xml</code></para>
+			<programlisting><![CDATA[
+<bundleHeader>
+   <entry key="key" value="value"/>
+   <entry key="key" value="value"/>
+   ...
+   <entry key="key" value="value"/>
+<bundleHeader>
+			]]></programlisting>    
+		</section>
+
  	</section>
 
-    <section>
-        <title>Framework Startlevel Representation</title>
+	<section>
+		<title>Framework Startlevel Representation</title>
 
-    <table>
-      <tgroup cols="2">
-        <colspec colnum="1" colwidth="1*"/>
-
-        <colspec colnum="2" colwidth="5*"/>
-
-
-        <tbody>
-          <row>
-	    <entry><para><code>JSON</code></para></entry>
-
-	    <entry><para><emphasis>Content-Type: application/org.osgi.frameworkstartlevel+json</emphasis>
-			    <code>
+		<section>
+	    	<title>JSON</title>
+			<para><code>Content-Type: application/org.osgi.frameworkstartlevel+json</code></para>
+	    	<programlisting>	 
 {
     "startLevel":6,
     "initialBundleStartLevel":4
 }
-</code>	    
-	    </para></entry>
-          </row>
+			</programlisting>
+		</section>
 
-          <row>
-	    <entry><para><code>XML</code></para></entry>
-
-	    <entry><para><emphasis>application/org.osgi.frameworkstartlevel+xml</emphasis>
-<code>
-&lt;frameworkStartLevel&gt;
-    &lt;startLevel>6&lt;/startLevel&gt;
-    &lt;initialBundleStartLevel>4&lt;/initialBundleStartLevel&gt;
-&lt;/frameworkStartLevel&gt;
-</code>	    
-	    </para></entry>
-          </row>
-
-        </tbody>
-      </tgroup>
-    </table>
+		<section>
+	    	<title>XML</title>
+			<para><code>Content-Type: application/org.osgi.frameworkstartlevel+xml</code></para>
+			<programlisting><![CDATA[
+<frameworkStartLevel>
+    <startLevel>6</startLevel>
+    <initialBundleStartLevel>4</initialBundleStartLevel>
+</frameworkStartLevel>
+			]]></programlisting>    
+		</section>
 	</section>
 
  	<section>
       <title>Bundle Startlevel Representation</title>
+
+		<section>
+	    	<title>JSON</title>
+			<para><code>Content-Type: application/org.osgi.bundlestartlevel+json</code></para>
+	    	<programlisting>	 
+{
+   "startLevel":6
+
+   “activationPolicyUsed”:true
+   “persistentlyStarted”:false
+}
+			</programlisting>
+		</section>
+
+		<section>
+	    	<title>XML</title>
+			<para><code>Content-Type: application/org.osgi.bundlestartlevel+xml</code></para>
+			<programlisting><![CDATA[
+<bundleStartLevel>
+    <startLevel>6</startLevel>
+
+    <activationPolicyUsed>true</actiovationPolicyUsed>
+    <persistentlyStarted>false</persistentlyStarted>
+</bundleStartLevel>
+			]]></programlisting>    
+		</section>
+		
  	</section>
 
  	<section>
       <title>Service Representation</title>
+
+		<section>
+	    	<title>JSON</title>
+			<para><code>Content-Type: application/org.osgi.service+json</code></para>
+	    	<programlisting>	 
+{
+   properties:
+   {
+      key:value,
+      key:value,
+      ...
+      key:value
+   },
+   "bundle":bundleURI,
+   "usingBundles":[bundleURI, bundleURI, … bundleURI],
+}
+			</programlisting>
+		</section>
+
+		<section>
+	    	<title>XML</title>
+			<para><code>Content-Type: application/org.osgi.service+xml</code></para>
+			<programlisting><![CDATA[
+<service>
+   <properties>
+      <entry key=”key” value=”value”/>
+      <entry key=”key” value=”value”/>
+      ...
+      <entry key=”key” value=”value”/>
+   </properties>
+   <bundle>bundleURI</bundle>
+   <usingBundles>
+      <bundle>bundleURI</bundle>
+      <bundle>bundleURI</bundle>
+      ...
+      <bundle>bundleURI</bundle>
+   </usingBundles>
+</service>
+			]]></programlisting>    
+		</section>
  	</section>
 
  	<section>
-      <title>Services Representation</title>
+      <title>Services Representations</title>
+ 
+ 		<section>
+ 			<title>Service List Representation</title>
+		<section>
+	    	<title>JSON</title>
+			<para><code>Content-Type: application/org.osgi.services+json</code></para>
+	    	<programlisting>	 
+{
+   [serviceURI, serviceURI, ..., serviceURI]
+}
+			</programlisting>
+		</section>
+
+		<section>
+	    	<title>XML</title>
+			<para><code>Content-Type: application/org.osgi.service+xml</code></para>
+			<programlisting><![CDATA[
+<service>
+   <properties>
+      <entry key=”key” value=”value”/>
+      <entry key=”key” value=”value”/>
+      ...
+      <entry key=”key” value=”value”/>
+   </properties>
+   <bundle>bundleURI</bundle>
+   <usingBundles>
+      <bundle>bundleURI</bundle>
+      <bundle>bundleURI</bundle>
+      ...
+      <bundle>bundleURI</bundle>
+   </usingBundles>
+</service>
+			]]></programlisting>    
+		</section>      
+ 		</section>     
+ 		
+ 		<section>
+ 			<title>Service Representations List Representation</title>
+		<section>
+	    	<title>JSON</title>
+			<para><code>Content-Type: org.osgi.services.representations+json</code></para>
+	    	<programlisting>	 
+[SERVICE REPRESENTATION, SERVICE REPRESENTATION, …, SERVICE REPRESENTATION]
+			</programlisting>
+		</section>
+
+		<section>
+	    	<title>XML</title>
+			<para><code>Content-Type: application/org.osgi.services.representations+xml</code></para>
+			<programlisting><![CDATA[
+<services>
+   SERVICE REPRESENTATION
+   SERVICE REPRESENTATION
+   ...
+   SERVICE REPRESENTATION
+</services>
+			]]></programlisting>    
+		</section>      
+ 		</section>      				
  	</section>
 
  	<section>
       <title>Bundle Exception Representation</title>
+      
+      		<section>
+	    	<title>JSON</title>
+			<para><code>Content-Type: application/org.osgi.bundleexception+json</code></para>
+	    	<programlisting>	 
+{
+   “typecode”: 5,
+   “message”: “BundleException: Bundle activation error”
+}
+			</programlisting>
+		</section>
+
+		<section>
+	    	<title>XML</title>
+			<para><code>Content-Type: application/org.osgi.bundleexception+xml</code></para>
+			<programlisting><![CDATA[
+<bundleexception>
+   <typecode>5</typecode>
+   <message>BundleException: Bundle activation error</message>
+</bundleexception>
+			]]></programlisting>    
+		</section>
  	</section>
 
  </section>
