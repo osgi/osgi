@@ -372,7 +372,29 @@
       </section>
     </section>
 
+   <section>
+      <title>Bundle Header Resource</title>
+	 
+      The bundle header resource represents manifest header of a bundle which is qualified by its bundle id. It can only be read through a GET request. 
 
+      <section>
+        <title>GET</title>
+	    The GET request retrieves a bundle header representation <TODO>ref</TODO> from the REST management service. 
+	    The request can return the following status codes:
+	  
+	    <itemizedlist>
+      		<listitem>
+			  <para>200 (OK): the request has been served successfully and the body of the response is a bundle header representation.</para>
+      		</listitem>
+      		<listitem>
+			  <para>404 (NOT FOUND): there is not bundle with the given bundle id.</para>
+      		</listitem>            		
+      		<listitem>
+        	  <para>406 (NOT ACCEPTABLE): the REST management service does not support any of the requested representations.</para>
+      		</listitem>
+	    </itemizedlist>        
+      </section>
+    </section>
  
  </section>
 
