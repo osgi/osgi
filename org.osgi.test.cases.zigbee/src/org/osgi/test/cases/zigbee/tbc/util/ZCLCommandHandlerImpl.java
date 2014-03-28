@@ -10,6 +10,7 @@ import org.osgi.service.zigbee.ZCLFrame;
 public class ZCLCommandHandlerImpl implements ZCLCommandHandler {
 
 	private ZCLFrame	response;
+	private Exception	e;
 
 	/**
 	 * Constructor.
@@ -18,13 +19,9 @@ public class ZCLCommandHandlerImpl implements ZCLCommandHandler {
 
 	}
 
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see org.osgi.service.zigbee.ZCLCommandHandler#notifyResponse(org.osgi.service.zigbee.ZCLFrame)
-	 */
-	public void notifyResponse(ZCLFrame frame) {
+	public void notifyResponse(ZCLFrame frame, Exception exception) {
 		this.response = frame;
+		this.e = exception;
 	}
 
 	// Code below is for the testcases only.
@@ -35,6 +32,15 @@ public class ZCLCommandHandlerImpl implements ZCLCommandHandler {
 	 */
 	public ZCLFrame getResponse() {
 		return this.response;
+	}
+
+	/**
+	 * FOR TESTCASES ONLY!
+	 * 
+	 * @return Can be null, if the handler hasn't receive an exception yet.
+	 */
+	public Exception getException() {
+		return this.e;
 	}
 
 }

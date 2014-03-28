@@ -82,12 +82,12 @@ public class ZCLClusterImpl implements ZCLCluster {
 
 	public void invoke(ZCLFrame frame, ZCLCommandHandler handler) throws ZCLException {
 		// mocked invocation.
-		handler.notifyResponse(frame);
+		handler.notifyResponse(frame, null);
 	}
 
 	public void invoke(ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID) throws ZCLException {
 		// mocked invocation.
-		handler.notifyResponse(frame);
+		handler.notifyResponse(frame, null);
 	}
 
 	// public String toString() {

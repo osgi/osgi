@@ -28,7 +28,10 @@ package org.osgi.service.zigbee;
 public interface ZCLCommandHandler {
 
 	/**
-	 * Notifies the result (success or failure) of the call.
+	 * Notifies the result (success or failure) of the call. The entity calling
+	 * notifyresponse() (i.e., the base driver in the import situation) must not
+	 * parse the ZCL frame payload. Thus, error codes that are conveyed in the
+	 * ZCLFrame payload must not be turned into exceptions.
 	 * 
 	 * The ZigBee Base Driver will release the handler object when he receives a
 	 * null frame in a notifyResponse call or thanks to the an implementation
@@ -42,7 +45,8 @@ public interface ZCLCommandHandler {
 	 * endpoint. A handler could be called several times on a command handler.
 	 * 
 	 * @param frame the ZCLFrame
+	 * @param e is any exception related to ZigBee communication failure.
 	 */
-	void notifyResponse(ZCLFrame frame);
+	void notifyResponse(ZCLFrame frame, Exception e);
 
 }
