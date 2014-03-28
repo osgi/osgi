@@ -32,11 +32,11 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		this.securityLevel = securityLevel;
 	}
 
-	public void start() throws ZCLException {
+	public void start() throws Exception {
 		// TODO Auto-generated method stub
 	}
 
-	public void stop() throws ZCLException {
+	public void stop() throws Exception {
 		// TODO Auto-generated method stub
 	}
 

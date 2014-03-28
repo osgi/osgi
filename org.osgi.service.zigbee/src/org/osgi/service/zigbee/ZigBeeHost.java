@@ -50,16 +50,16 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * values of channel, pan id, extended pan id, and host pid must remain the
 	 * same.
 	 * 
-	 * @throws ZCLException
+	 * @throws Exception
 	 */
-	public void start() throws ZCLException;
+	public void start() throws Exception;
 
 	/**
 	 * Stops the host.
 	 * 
-	 * @throws ZCLException
+	 * @throws Exception
 	 */
-	public void stop() throws ZCLException;
+	public void stop() throws Exception;
 
 	/**
 	 * Get the host's start/stop state.
