@@ -6,4 +6,4 @@
 Private-Package: ${p}.*; -split-package:=first
 
 -buildpath = \
-    ee.minimum; version=latest
+    ee.minimum; version=1.3
