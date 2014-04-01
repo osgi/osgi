@@ -33,14 +33,17 @@
     <para>Asynchronous APIs, however, have different advantages. Asynchronous 
     APIs can reduce bottlenecks by encouraging more effective use of 
     parallelism, improving the responsiveness of the application. In many 
-    cases asynchronous programs can be easier to write for high throughput 
-    systems.</para>
+    cases high throughput systems can be written more simply and elegantly using 
+    asynchronous programming techniques.</para>
 
-    <para>The purpose of the Asynchronous Service is to bridge the gap between 
-    existing, primarily synchronous, services in the OSGi service registry, and
-    asynchronous programming. The Asynchronous Service therefore provides a way
-    to invoke arbitrary OSGi services asynchronously, providing results and 
-    failure notifications through the OSGi Promise API *****TODO REF*****</para>
+    <para>The OSGi Promise API *****TODO REF***** provides powerful primitives
+    for asynchronous programming, including the ability to compose flows in a
+    functional style. There are, however, many existing services that do not
+    use the Promise API. The purpose of the Asynchronous Service is to bridge 
+    the gap between these existing, primarily synchronous, services in the OSGi 
+    service registry, and asynchronous programming. The Asynchronous Service 
+    therefore provides a way to invoke arbitrary OSGi services asynchronously, 
+    providing results and failure notifications through the OSGi Promise API.</para>
 
     <section>
       <title>Essentials</title>
@@ -235,6 +238,49 @@ public synchronized void doStuff() {
     </section>
 
     <section>
+      <title>Fire and Forget calls</title>
+
+      <para>Sometimes a client does not require any notification that an async
+      invocation has completed. In this case the client could use one of the 
+      <code>call()</code> methods and simply discard the returned Promise object. 
+      This, however, can be wasteful of resources. The act of resolving the Promise 
+      object may be expensive, for example it may involve serializing the return 
+      value over a network if the remote call was asynchronous. 
+      </para>
+      
+      <para>If the client knows that no Promise object is needed then it can signal
+      this to the async service. This allows the async service to optimise the async
+      invocation by not creating and resolving a Promise. To indicate that the client 
+      wants to make a fire-and-forget style call the client invokes the mediator as 
+      normal, but then begins the asynchronous invocation using the 
+      <code>execute()</code> method as in <xref linkend="async_service_fire_and_forget_example"/>.
+      </para>
+      
+            <programlisting id="async_service_fire_and_forget_example">    
+private Async asyncService;
+private ServiceReference&lt;List&gt; listRef;
+
+@Reference
+synchronized void setAsync(Async async) {
+    asyncService = async;
+}
+
+@Reference(service = List.class)
+synchronized void setList(ServiceReference&lt;List&gt; list) {
+    listRef = list;
+}
+
+public synchronized void doStuff() {
+    List mediator = asyncService.mediate(listRef);
+    mediator.clear();
+    asyncService.execute();
+    ...
+}
+      </programlisting>
+      
+    </section>
+
+    <section>
       <title>Multi Threading</title>
 
       <para>By their very definition asychronous tasks do not run inline, and
@@ -287,11 +333,16 @@ public synchronized void doStuff() {
       to create an async mediator using one of the <code>mediate</code> methods. Once created the client
       invokes the method that should be run asynchronously, supplying the arguments that should be used.
       This call records the invocation, but does not start the asynchronous task. The asynchronous task
-      begins when the client makes invokes one of the <code>call</code> methods on the Async service.
-      The <code>call</code> methods must return a valid Promise representing the state of the async
-      invocation. This must resolve with the value returned by the async invocation, or fail with
+      begins when the client makes invokes one of the <code>call</code> or <code>execute</code> methods 
+      on the Async service. The <code>call</code> methods must return a Promise representing the async 
+      invocation. The promise must resolve with the value returned by the async invocation, or fail with 
       the failure thrown by the async invocation. 
       </para>
+      
+      <para>If the client attempts to begin an async invocation without first having called a method
+      on the mediator object then the Async service must detect this usage error and throw an 
+      <code>IllegalStateException</code> to the client. This applies to all methods that begin
+      an async invocation.</para>
     </section>
     
     <section>
@@ -300,6 +351,9 @@ public synchronized void doStuff() {
       client, but then fail without running the asynchronous task. In any of these cases the Promise 
       representing the async invocation must fail with an org.osgi.framework.ServiceException. 
       This ServiceException must be initialised with a type of ASYNC (***** Ref core R6 *****). 
+      If there is no Promise representing the async invocation then there is no way to notify the
+      client of the failure, therefore the ServiceException must be logged by the AsyncService using 
+      all available Log service implementations.
       </para>
       
       <para> The following list of scenarios is not exhaustive, but indicates failure scenarios that must
@@ -337,12 +391,12 @@ public synchronized void doStuff() {
     <section>
       <title>Thread safety and instance sharing</title>
       
-      <para>Implementations of the Async service must be thread safe. They should be safe to 
-      use simultaneously across multiple clients and from multiple threads within the same client.
+      <para>Implementations of the Async service must be thread safe and may be used
+      simultaneously across multiple clients and from multiple threads within the same client.
       Whilst the async service is able to be used across multiple threads, if a client wishes to 
-      make an async invocation then the call to the mediator and the call to 
-      <code>async.call(...)</code> must occur on the same thread. The returned Promise may then 
-      be shared between threads if required. 
+      make an async invocation then the call to the mediator and the call to begin the async 
+      invocation must occur on the same thread. The returned Promise may then be shared between 
+      threads if required. 
       </para>
     
       <para>It is expected, although not required, that the Async service implementation will
@@ -357,8 +411,11 @@ public synchronized void doStuff() {
   <section>
     <title>The Async Mediator</title>
     <para>Async Mediators are dynamically created objects that have the same type or interface as the
-    object being mediated, and are used to record method invocations and arguments. Mediators 
-    may be created either from a <code>ServiceReference</code> or from a service
+    object being mediated, and are used to record method invocations and arguments. Mediator objects
+    are specific to an async service implementation, and must only be used in conjunction with the 
+    async service object that they were created by.</para>
+    
+    <para>Mediators may be created either from a <code>ServiceReference</code> or from a service
     object. The actions and overall result are similar for both <code>mediate(...)</code> methods,
     with the primary difference being the manner in which the types to be mediated are determined.
     </para>
@@ -372,7 +429,7 @@ public synchronized void doStuff() {
       all of the types listed in the objectClass property of the service reference, using the client 
       bundle. Any ClassNotFoundException thrown when attempting to load these classes should be ignored.
       The successfully loaded classes are then used when creating the mediator object. If the set of
-      successfully loaded classes is null then an IllegalArgumentException must be thrown.
+      successfully loaded classes is empty then an IllegalArgumentException must be thrown.
       </para>
     </section>
       
@@ -416,12 +473,17 @@ public synchronized void doStuff() {
       
     <section>
       <title>Async mediator behaviours</title>
-      <para>When invoked the Async mediator should record the method call, and its arguments, and then 
+      <para>When invoked the Async mediator must record the method call, and its arguments, and then 
       return rapidly (i.e. it should not perform blocking operations). The values returned by the mediator
       object are opaque, and the client should not attempt to interpret the returned value. The value may be 
       null (or null-like in the case of primitives) or contain implementation specific information. If the
       mediated method call has a return type, specifically it is non-void, then this object must be
       passed to the the async service's <code>call</code> method when beginning the async invocation</para>
+      
+      <para>Async service mediators should make a best-effort attempt to detect incorrect API usage
+      from the client. If this incorrect usage is detected then the mediator object should throw an
+      IllegalStateException when invoked. An example of incorrect usage is for a client to make
+      multiple invocations on a mediator object without making any calls to the async service.</para>
     </section>
     
     <section>
@@ -457,34 +519,69 @@ public synchronized void doStuff() {
     make an asynchronous call on the service.
     </para>
     
-    <para>When making an async invocation the async service must check to see whether the 
-    target service implements AsyncDelegate. If the target service does implement AsyncDelegate then
-    the async service must delegate the asynchronous call using the <code>async</code> method. The
-    asynchronous processing then continues as follows:
-    </para>
-    
-    <itemizedlist>
-      <listitem>
-        <para>If the call to the AsyncDelegate returns a Promise, then the Promise returned by the async 
-        service must be resolved with that Promise.</para>
-      </listitem>
-
-      <listitem>
-        <para>If the call to the AsyncDelegate throws an Exception then this must be used to fail the 
-        promise returned by the async service.</para>
-      </listitem>
-
-      <listitem>
-        <para>If the AsyncDelegate is unable to optimise the call then it may return a <code>null</code> 
-        Promise from the <code>async</code> method. In this case the async service must continue processing
-        the async invocation, treating the service as a normal Object.</para>
-      </listitem>
-    </itemizedlist>
-    
     <para>Because the AsyncDelegate behaviour is transparently handled by the async service, clients of
     the async service do not need to know whether the target service implements AsyncDelegate or not, 
     their usage pattern can remain unchanged.
     </para>
+    
+    <para>When making an async invocation the async service must check to see whether the 
+    target service implements AsyncDelegate. If the target service does implement AsyncDelegate then
+    the async service must attempt to delegate the asynchronous call. The exact delegation pattern
+    depends on whether a Promise is required.</para>
+    
+    <section>
+      <title>Obtaining a Promise from an AsyncDelegate</title>
+    
+      <para>If a promise is needed by the client then the async service must attempt to delegate to the 
+      <code>async</code> method. The delegation proceeds as follows:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para>If the call to the AsyncDelegate returns a Promise, then the Promise returned by the async 
+          service must be resolved with that Promise.</para>
+        </listitem>
+
+        <listitem>
+          <para>If the call to the AsyncDelegate throws an Exception then this must be used to fail the 
+          promise returned by the async service.</para>
+        </listitem>
+
+        <listitem>
+          <para>If the AsyncDelegate is unable to optimise the call then it may return a <code>null</code> 
+          Promise from the <code>async</code> method. In this case the async service must continue processing
+          the async invocation, treating the service as a normal Object.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+     
+    <section>
+      <title>Delegating fire and forget calls to an AsyncDelegate</title>
+    
+      <para>If no promise is needed by the client then the async service must attempt to delegate to the 
+      <code>execute</code> method. This gives the AsyncDelegate implementation the opportunity to further 
+      optimise its processing. The delegation proceeds as follows:</para>
+      
+      <itemizedlist>
+        <listitem>
+          <para>If the call to the AsyncDelegate returns <code>true</code> then the async service should return
+          control to the client.</para>
+        </listitem>
+
+        <listitem>
+          <para>If the call to the AsyncDelegate throws an Exception then this must be logged to any
+          available Log services</para>
+        </listitem>
+
+        <listitem>
+          <para>If the AsyncDelegate is unable to optimise the call then it may return <code>false</code> 
+          from the <code>execute</code> method. In this case the async service must continue processing
+          the async invocation, treating the service as a normal Object.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+    
+    
+
   </section>
   
     <section xml:id="service.async.security">

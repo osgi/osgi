@@ -154,9 +154,33 @@ public interface Async {
 
 	/**
 	 * <p>
+	 * This method should be used by clients in preference to {@link #call()}
+	 * and {@link #call(Object)} when no callbacks, or other features of
+	 * {@link Promise}, are needed.
+	 * </p>
+	 * 
+	 * <p>
 	 * This method launches the last method call registered by a mediated object
 	 * as an asynchronous task. The task runs as a "fire and forget" process,
 	 * and there will be no notification of its success or failure.
+	 * </p>
+	 * 
+	 * <p>
+	 * Typically this method is used like {@link #call()}:
+	 * </p>
+	 * 
+	 * <pre>
+	 * I i = async.mediate(s);
+	 * i.someMethod()
+	 * Promise&lt;?&gt; p = async.call();
+	 * </pre>
+	 * 
+	 * 
+	 * <p>
+	 * The advantage of the {@link #execute()} method is that it allows for
+	 * greater optimisation of the underlying asynchronous execution. Clients
+	 * are therefore likely to see better performance when using this method
+	 * compared to using {@link #call()} and discarding the return value.
 	 * </p>
 	 */
 	void execute();
