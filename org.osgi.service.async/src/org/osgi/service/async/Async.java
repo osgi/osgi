@@ -152,4 +152,13 @@ public interface Async {
 	 */
 	 Promise<?> call();
 
+	/**
+	 * <p>
+	 * This method launches the last method call registered by a mediated object
+	 * as an asynchronous task. The task runs as a "fire and forget" process,
+	 * and there will be no notification of its success or failure.
+	 * </p>
+	 */
+	void execute();
+
 }

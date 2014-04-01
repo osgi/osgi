@@ -42,21 +42,30 @@ public class Work<T> implements Runnable {
 		} else {
 			service = object;
 			if(service == null) {
-				deferred.fail(new ServiceException("Unable to locate the mediated object", 7));
+				if(deferred != null) {
+					deferred.fail(new ServiceException("Unable to locate the mediated object", 7));
+				}
 				return;
 			}
 		}
 
 		if(service instanceof AsyncDelegate) {
 			try {
-				@SuppressWarnings("unchecked")
-				Promise<T> p = (Promise<T>) ((AsyncDelegate)service).async(method, args);
-				if(p != null) {
-					deferred.resolveWith(p);
+				if(deferred != null) {
+					@SuppressWarnings("unchecked")
+					Promise<T> p = (Promise<T>) ((AsyncDelegate)service).async(method, args);
+					if(p != null) {
+						deferred.resolveWith(p);
+						return;
+					}
+				} else if(((AsyncDelegate)service).execute(method, args)) {
 					return;
 				}
 			} catch (Exception e) {
-				deferred.fail(new ServiceException("The AsyncDelegate threw an exception", 7, e));
+				if(deferred != null) {
+					deferred.fail(new ServiceException("The AsyncDelegate threw an exception", 7, e));
+				}
+				return;
 			}
 		}
 		
@@ -67,12 +76,17 @@ public class Work<T> implements Runnable {
 			
 			@SuppressWarnings("unchecked")
 			T returnValue = (T) method.invoke(service, args);
-			
-			deferred.resolve(returnValue);
+			if(deferred != null) {
+				deferred.resolve(returnValue);
+			}
 		} catch (InvocationTargetException ite) {
-			deferred.fail(ite.getTargetException());
+			if(deferred != null) {
+				deferred.fail(ite.getTargetException());
+			}
 		} catch (Exception e) {
-			deferred.fail(new ServiceException("There was a failure invoking the service", 7, e));
+			if(deferred != null) {
+				deferred.fail(new ServiceException("There was a failure invoking the service", 7, e));
+			}
 		}
 	}
 
@@ -80,16 +94,20 @@ public class Work<T> implements Runnable {
 	private Object getService() {
 		BundleContext context = client.getBundleContext();
 		if(context == null) {
-			deferred.fail(new ServiceException("The client bundle context for " + client + 
+			if(deferred != null) {
+				deferred.fail(new ServiceException("The client bundle context for " + client + 
 					" is no longer valid", 7));
+			}
 			return null;
 		}
 		
 		Object o = context.getService(ref);
 		
 		if(o == null) {
-			deferred.fail(new ServiceException("The service " + ref + 
+			if(deferred != null) {
+				deferred.fail(new ServiceException("The service " + ref + 
 					" is no longer valid", 7));
+			}
 		}
 		
 		return o;

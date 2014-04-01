@@ -37,4 +37,12 @@ public class MethodCall {
 		}
 		return deferred.getPromise();
 	}
+
+	public void fireAndForget(Bundle clientBundle, ExecutorService executor) {
+		try {
+			executor.execute(new Work<Object>(reference, clientBundle, service, method, arguments, null));
+		} catch (RejectedExecutionException ree) {
+			throw new ServiceException("The Async service is unable to accept new requests", 7, ree);
+		}
+	}
 }

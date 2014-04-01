@@ -64,12 +64,20 @@ public class AsyncTestCase extends OSGiTestCase {
 		registration.unregister();
 	}
 	
+	/**
+	 * A basic test that demonstrates that a call can be made asynchronously
+	 * @throws Exception
+	 */
 	public void testAsyncCall() throws Exception {
 		
 		MyService service = async.mediate(registration.getReference());
 		
+		// This call waits for a second
 		Promise<Integer> p = async.call(service.countSlowly(2));
 		
+		// The promise should not have resolved yet. Theoretically this is
+		// a race, but it should not take over a second to get here from the
+		// previous statement.
 		assertFalse(p.isDone());
 		
 		final CountDownLatch latch = new CountDownLatch(1);
@@ -82,6 +90,8 @@ public class AsyncTestCase extends OSGiTestCase {
 			}
 		});
 		
+		// Wait for up to three seconds for the asynchronous completion callback to be called. This
+		// should happen after approximately one second, so three seconds should be plenty.
 		assertTrue("Did not complete within a reasonable time", latch.await(3000, TimeUnit.MILLISECONDS));
 		
 	}

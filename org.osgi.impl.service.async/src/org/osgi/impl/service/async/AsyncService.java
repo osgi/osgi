@@ -95,6 +95,12 @@ public class AsyncService implements Async {
 		return call(null);
 	}
 
+	public void execute() throws IllegalStateException {
+		MethodCall currentInvocation = consumeCurrentInvocation();
+		if(currentInvocation == null) throw new IllegalStateException("Incorrect API usage - this thread has no pending method calls");
+		currentInvocation.fireAndForget(clientBundle, executor);
+	}
+
 	void registerInvocation(MethodCall invocation) {
 		if(invocations.putIfAbsent(Thread.currentThread(), invocation) != null) {
 			invocations.remove(Thread.currentThread());
