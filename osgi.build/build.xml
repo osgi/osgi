@@ -20,7 +20,6 @@
 				Sourcepath    : ${project.allsourcepath}
 				Destdir       : ${target}/javadoc/@{name}
 			    Packages      : @{packages}
-	            Bootclasspath : ${javadoc.bootclasspath}
 	            Classpath     : ${javadoc.classpath}
 			</echo>
 	        <javadoc 
@@ -47,9 +46,6 @@
 				<doctitle><![CDATA[OSGi${tm} @{title} Release ${osgi.release}]]></doctitle>
 				<header><![CDATA[<b>OSGi${tm} @{title}</b><br/><font size=-1>Release ${osgi.release}</font>]]></header>
 				<bottom><![CDATA[<font size=-1>${copyright.html} Licensed under the <a href="{@docRoot}/LICENSE.html">OSGi Specification License, Version 2.0</a></font>]]></bottom>
-	            <bootclasspath>
-	                <filelist files="${javadoc.bootclasspath}"/>
-	            </bootclasspath>
 	            <classpath>
 	                <filelist files="${javadoc.classpath}"/>
 	            </classpath>
