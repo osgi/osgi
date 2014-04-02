@@ -65,54 +65,6 @@
 				<tag name="security" scope="methods" description="Required Permissions"/>
 				<tag name="noimplement" scope="types" description="Consumers of this API must not implement this interface"/>
 			</javadoc>
-			<!-- Patch javadoc clickjack vulnerability.
-				First find the patch insertion point and then insert the patch.
-				This can be removed when we move up to a fixed version of javadoc.
-			-->
-			<replaceregexp file="${target}/javadoc/@{name}/index.html" encoding="UTF-8" flags="s">
-			  <regexp pattern='(if \(targetPage.indexOf\(":"\) != -1\)\s+targetPage = "undefined";)(\s+function loadFrames\(\) \{)' />
-			  <substitution expression='\1//patch//\2'/>
-			</replaceregexp>
-			<replace file="${target}/javadoc/@{name}/index.html" encoding="UTF-8">
-			  <replacetoken>//patch//</replacetoken>
-			  <replacevalue><![CDATA[
-    if (targetPage != "" && !validURL(targetPage))
-        targetPage = "undefined";
-    function validURL(url) {
-        var pos = url.indexOf(".html");
-        if (pos == -1 || pos != url.length - 5)
-            return false;
-        var allowNumber = false;
-        var allowSep = false;
-        var seenDot = false;
-        for (var i = 0; i < url.length - 5; i++) {
-            var ch = url.charAt(i);
-            if ('a' <= ch && ch <= 'z' ||
-                    'A' <= ch && ch <= 'Z' ||
-                    ch == '$' ||
-                    ch == '_') {
-                allowNumber = true;
-                allowSep = true;
-            } else if ('0' <= ch && ch <= '9'
-                    || ch == '-') {
-                if (!allowNumber)
-                     return false;
-            } else if (ch == '/' || ch == '.') {
-                if (!allowSep)
-                    return false;
-                allowNumber = false;
-                allowSep = false;
-                if (ch == '.')
-                     seenDot = true;
-                if (ch == '/' && seenDot)
-                     return false;
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }]]></replacevalue>
-			</replace>
 			<copy file="${project.workspace}/osgi.companion/legal/OSGiSpecificationLicense-v20.html"
 			    tofile="${target}/javadoc/@{name}/LICENSE.html"
 		    	verbose="${verbose}"
