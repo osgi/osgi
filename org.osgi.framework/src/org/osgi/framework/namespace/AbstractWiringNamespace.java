@@ -16,6 +16,7 @@
 
 package org.osgi.framework.namespace;
 
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.resource.Namespace;
 
 /**
@@ -33,6 +34,7 @@ import org.osgi.resource.Namespace;
  * @Immutable
  * @author $Id$
  */
+@ProviderType
 public abstract class AbstractWiringNamespace extends Namespace {
 
 	/**

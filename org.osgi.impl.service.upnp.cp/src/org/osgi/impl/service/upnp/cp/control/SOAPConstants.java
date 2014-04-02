@@ -1,7 +1,11 @@
 package org.osgi.impl.service.upnp.cp.control;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+
 // This interface contains the constant strings, used in the control layer.
-interface SOAPConstants {
+public class SOAPConstants {
 	public static final String	post			= "POST ";
 	public static final String	host			= "HOST: ";
 	public static final String	http			= "HTTP/1.1";
@@ -36,14 +40,31 @@ interface SOAPConstants {
 	public static final String	result			= "return";
 	public static final String	rn				= "\r\n";
 	public static final String	httpEnv			= "\"http://schemas.xmlsoap.org/soap/envelope/\"";
-	public static final String	osNameVersion	= System.getProperty("os.name")
+	public static final String	osNameVersion	= getProperty("os.name")
 														+ "/"
-														+ System
-																.getProperty("os.version");
+														+ getProperty("os.version");
 	public static final String	productVersion	= "Samsung-UPnP/1.0";
 	public static final String	ERROR_405		= "405 Method Not Allowed";
 	public static final String	ERROR_501		= "501 Not Implemented";
 	public static final String	ERROR_510		= "510 Not Extended";
 	public static final String	ERROR_500		= "500 Internal Server Error";
 	public static final String	RES_OK			= "200 OK";
+
+	/**
+	 * Return the property value from the bundle context properties.
+	 * 
+	 * @param key The property key name.
+	 * @return The property value or null if the property is not set.
+	 */
+	public static String getProperty(String key) {
+		Bundle bundle = FrameworkUtil.getBundle(SOAPConstants.class);
+		if (bundle != null) {
+			BundleContext context = bundle.getBundleContext();
+			if (context != null) {
+				return context.getProperty(key);
+			}
+		}
+		return System.getProperty(key);
+	}
+
 }

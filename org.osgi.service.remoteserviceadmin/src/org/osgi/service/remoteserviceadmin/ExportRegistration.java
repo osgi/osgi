@@ -17,6 +17,7 @@
 package org.osgi.service.remoteserviceadmin;
 
 import java.util.Map;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -30,9 +31,9 @@ import org.osgi.framework.ServiceReference;
  * {@code null}.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface ExportRegistration {
 	/**
 	 * Return the Export Reference for the exported service.

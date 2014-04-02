@@ -17,6 +17,7 @@
 package org.osgi.service.url;
 
 import java.net.URL;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Interface used by {@code URLStreamHandlerService} objects to call the
@@ -33,6 +34,7 @@ import java.net.URL;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface URLStreamHandlerSetter {
 	/**
 	 * @see "java.net.URLStreamHandler.setURL(URL,String,String,int,String,String)"
@@ -40,10 +42,12 @@ public interface URLStreamHandlerSetter {
 	 * @deprecated This method is only for compatibility with handlers written
 	 *             for JDK 1.1.
 	 */
+	@SuppressWarnings("javadoc")
 	public void setURL(URL u, String protocol, String host, int port, String file, String ref);
 
 	/**
 	 * @see "java.net.URLStreamHandler.setURL(URL,String,String,int,String,String,String,String)"
 	 */
+	@SuppressWarnings("javadoc")
 	public void setURL(URL u, String protocol, String host, int port, String authority, String userInfo, String path, String query, String ref);
 }

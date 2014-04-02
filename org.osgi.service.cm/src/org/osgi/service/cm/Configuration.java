@@ -18,6 +18,7 @@ package org.osgi.service.cm;
 
 import java.io.IOException;
 import java.util.Dictionary;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Filter;
 
 /**
@@ -70,9 +71,10 @@ import org.osgi.framework.Filter;
  * Service Factory and a Managed Service. When it is important to differentiate
  * between these two the term "factory configuration" is used.
  * 
- * @noimplement
  * @author $Id$
+ * @ThreadSafe
  */
+@ProviderType
 public interface Configuration {
 	/**
 	 * Get the PID for this {@code Configuration} object.
@@ -120,8 +122,8 @@ public interface Configuration {
 	 * callback is delayed until aforementioned registration occurs.
 	 * 
 	 * <p>
-	 * Also initiates an asynchronous call to all {@link ConfigurationListener}s
-	 * with a {@link ConfigurationEvent#CM_UPDATED} event.
+	 * Also notifies all Configuration Listeners with a
+	 * {@link ConfigurationEvent#CM_UPDATED} event.
 	 * 
 	 * @param properties the new set of properties for this configuration
 	 * @throws IOException if update cannot be made persistent
@@ -143,8 +145,8 @@ public interface Configuration {
 	 * {@code deleted} method.
 	 * 
 	 * <p>
-	 * Also initiates an asynchronous call to all {@link ConfigurationListener}s
-	 * with a {@link ConfigurationEvent#CM_DELETED} event.
+	 * Also notifies all Configuration Listeners with a
+	 * {@link ConfigurationEvent#CM_DELETED} event.
 	 * 
 	 * @throws IOException If delete fails.
 	 * @throws IllegalStateException If this configuration has been deleted.
@@ -200,8 +202,8 @@ public interface Configuration {
 	 * visible then they must be updated with this configuration.
 	 * 
 	 * <p>
-	 * Also initiates an asynchronous call to all {@link ConfigurationListener}s
-	 * with a {@link ConfigurationEvent#CM_LOCATION_CHANGED} event.
+	 * Also notifies all Configuration Listeners with a
+	 * {@link ConfigurationEvent#CM_LOCATION_CHANGED} event.
 	 * 
 	 * @param location a location, region, or {@code null}
 	 * @throws IllegalStateException If this configuration has been deleted.
@@ -238,15 +240,14 @@ public interface Configuration {
 	/**
 	 * Get the change count.
 	 * 
-	 * The Configuration must maintain a change counter that every time when
-	 * this configuration is updated and its properties are stored is
-	 * incremented with a positive value. The counter must be changed after the
-	 * properties are persisted but before the targets are updated and events
-	 * are sent out.
+	 * Each Configuration must maintain a change counter that is incremented
+	 * with a positive value every time the configuration is updated and its
+	 * properties are stored. The counter must be incremented before the targets
+	 * are updated and events are sent out.
 	 * 
-	 * @return A monotonously increasing value reflecting changes in this
-	 *         Configuration
-	 * 
+	 * @return A monotonically increasing value reflecting changes in this
+	 *         Configuration.
+	 * @throws IllegalStateException If this configuration has been deleted.
 	 * @since 1.5
 	 */
 	public long getChangeCount();

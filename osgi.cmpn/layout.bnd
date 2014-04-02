@@ -31,6 +31,7 @@ cmpn.specs = \
 	 org.osgi.service.wireadmin, \
 	 org.osgi.util.measurement, \
 	 org.osgi.util.position, \
+     org.osgi.util.promise, \
 	 org.osgi.util.xml
 
 cmpn.packages = ${replace;$(cmpn.specs);^.*$;$0.*}

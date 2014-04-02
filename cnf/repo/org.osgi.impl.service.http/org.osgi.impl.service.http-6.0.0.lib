@@ -1,0 +1,5 @@
+org.apache.felix.http.servlet-api; version=0.0.1
+org.apache.felix.http.api; version=2.3.0
+org.apache.felix.http.jetty; version=2.3.0
+org.osgi.service.cm
+org.osgi.service.event

@@ -218,6 +218,7 @@ public class BundleTracker<T> implements BundleTrackerCustomizer<T> {
 	 * @see BundleTrackerCustomizer#addingBundle(Bundle, BundleEvent)
 	 */
 	public T addingBundle(Bundle bundle, BundleEvent event) {
+		@SuppressWarnings("unchecked")
 		T result = (T) bundle;
 		return result;
 	}
@@ -463,6 +464,7 @@ public class BundleTracker<T> implements BundleTrackerCustomizer<T> {
 		 * @return Customized object for the tracked item or {@code null} if the
 		 *         item is not to be tracked.
 		 */
+		@Override
 		T customizerAdding(final Bundle item, final BundleEvent related) {
 			return customizer.addingBundle(item, related);
 		}
@@ -475,6 +477,7 @@ public class BundleTracker<T> implements BundleTrackerCustomizer<T> {
 		 * @param related Action related object.
 		 * @param object Customized object for the tracked item.
 		 */
+		@Override
 		void customizerModified(final Bundle item, final BundleEvent related, final T object) {
 			customizer.modifiedBundle(item, related, object);
 		}
@@ -487,6 +490,7 @@ public class BundleTracker<T> implements BundleTrackerCustomizer<T> {
 		 * @param related Action related object.
 		 * @param object Customized object for the tracked item.
 		 */
+		@Override
 		void customizerRemoved(final Bundle item, final BundleEvent related, final T object) {
 			customizer.removedBundle(item, related, object);
 		}

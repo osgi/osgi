@@ -1,7 +1,10 @@
 package org.osgi.impl.service.upnp.cp.event;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.OutputStream;
 import java.net.Socket;
+
+import org.osgi.impl.service.upnp.cp.control.SOAPConstants;
 
 public final class Processor implements Runnable {
 	private GenaServer			genaServer;
@@ -57,8 +60,7 @@ public final class Processor implements Runnable {
 		try {
 			String errorResponse = "HTTP/1.1 " + i + " " + message + "\r\n"
 					+ "Connection: close\r\n" + "SERVER: "
-					+ System.getProperty("os.name") + "/"
-					+ System.getProperty("os.version")
+					+ SOAPConstants.osNameVersion
 					+ " UPnP/1.0 SamsungUPnP/1.0\r\n\r\n";
 			dos.write(errorResponse.getBytes());
 			dos.flush();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.osgi.service.component;
 
 import java.util.Dictionary;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
@@ -49,9 +50,9 @@ import org.osgi.framework.ServiceReference;
  * will be passed the reason code for the component instance's deactivation.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface ComponentContext {
 	/**
 	 * Returns the component properties for this Component Context.
@@ -69,7 +70,7 @@ public interface ComponentContext {
 	 * multiple services are bound to the reference, the service with the
 	 * highest ranking (as specified in its {@code Constants.SERVICE_RANKING}
 	 * property) is returned. If there is a tie in ranking, the service with the
-	 * lowest service ID (as specified in its {@code Constants.SERVICE_ID}
+	 * lowest service id (as specified in its {@code Constants.SERVICE_ID}
 	 * property); that is, the service that was registered first is returned.
 	 * 
 	 * @param name The name of a reference as specified in a {@code reference}
@@ -97,7 +98,7 @@ public interface ComponentContext {
 	 * @throws ComponentException If the Service Component Runtime catches an
 	 *         exception while activating the bound service.
 	 */
-	public Object locateService(String name, ServiceReference reference);
+	public Object locateService(String name, ServiceReference<?> reference);
 
 	/**
 	 * Returns the service objects for the specified reference name.
@@ -182,5 +183,5 @@ public interface ComponentContext {
 	 *         {@code null} if the component instance is not registered as a
 	 *         service.
 	 */
-	public ServiceReference getServiceReference();
+	public ServiceReference<?> getServiceReference();
 }

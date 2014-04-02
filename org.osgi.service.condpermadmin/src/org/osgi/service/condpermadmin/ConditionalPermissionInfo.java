@@ -16,6 +16,7 @@
 
 package org.osgi.service.condpermadmin;
 
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 /**
@@ -24,9 +25,9 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  * Permission Admin service.
  * 
  * @Immutable
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface ConditionalPermissionInfo {
 	/**
 	 * This string is used to indicate that a row in the Conditional Permission

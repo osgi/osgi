@@ -156,6 +156,7 @@ public class Event {
 	 * @return {@code true} if {@code object} is a {@code Event} and is equal to
 	 *         this object; {@code false} otherwise.
 	 */
+	@Override
 	public boolean equals(Object object) {
 		if (object == this) { // quick test
 			return true;
@@ -174,6 +175,7 @@ public class Event {
 	 * 
 	 * @return An integer which is a hash code value for this object.
 	 */
+	@Override
 	public int hashCode() {
 		int h = 31 * 17 + topic.hashCode();
 		h = 31 * h + properties.hashCode();
@@ -185,6 +187,7 @@ public class Event {
 	 * 
 	 * @return The string representation of this event.
 	 */
+	@Override
 	public String toString() {
 		return getClass().getName() + " [topic=" + topic + "]";
 	}
@@ -242,6 +245,7 @@ public class Event {
 			this.properties = properties;
 		}
 
+		@Override
 		public Enumeration<Object> elements() {
 			Collection<Object> values = properties.values();
 			List<Object> result = new ArrayList<Object>(values.size() + 1);
@@ -250,6 +254,7 @@ public class Event {
 			return Collections.enumeration(result);
 		}
 
+		@Override
 		public Object get(Object key) {
 			if (EVENT_TOPIC.equals(key)) {
 				return topic;
@@ -257,10 +262,12 @@ public class Event {
 			return properties.get(key);
 		}
 
+		@Override
 		public boolean isEmpty() {
 			return false;
 		}
 
+		@Override
 		public Enumeration<String> keys() {
 			Collection<String> keys = properties.keySet();
 			List<String> result = new ArrayList<String>(keys.size() + 1);
@@ -269,14 +276,17 @@ public class Event {
 			return Collections.enumeration(result);
 		}
 
+		@Override
 		public Object put(String key, Object value) {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public Object remove(Object key) {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public int size() {
 			return properties.size() + 1;
 		}

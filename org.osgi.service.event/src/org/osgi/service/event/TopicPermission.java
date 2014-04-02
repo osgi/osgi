@@ -256,6 +256,7 @@ public final class TopicPermission extends Permission {
 	 * @return {@code true} if the specified {@code TopicPermission} action is
 	 *         implied by this object; {@code false} otherwise.
 	 */
+	@Override
 	public boolean implies(Permission p) {
 		if (p instanceof TopicPermission) {
 			TopicPermission requested = (TopicPermission) p;
@@ -284,6 +285,7 @@ public final class TopicPermission extends Permission {
 	 * @return Canonical string representation of the {@code TopicPermission}
 	 *         actions.
 	 */
+	@Override
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
@@ -310,6 +312,7 @@ public final class TopicPermission extends Permission {
 	 * 
 	 * @return A new {@code PermissionCollection} object.
 	 */
+	@Override
 	public PermissionCollection newPermissionCollection() {
 		return new TopicPermissionCollection();
 	}
@@ -326,6 +329,7 @@ public final class TopicPermission extends Permission {
 	 *         the same topic name and actions as this {@code TopicPermission}
 	 *         object; {@code false} otherwise.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -342,6 +346,7 @@ public final class TopicPermission extends Permission {
 	 * 
 	 * @return A hash code value for this object.
 	 */
+	@Override
 	public int hashCode() {
 		int h = 31 * 17 + getName().hashCode();
 		h = 31 * h + getActions().hashCode();
@@ -416,6 +421,7 @@ final class TopicPermissionCollection extends PermissionCollection {
 	 * @throws SecurityException If this {@code TopicPermissionCollection}
 	 *         object has been marked read-only.
 	 */
+	@Override
 	public void add(final Permission permission) {
 		if (!(permission instanceof TopicPermission)) {
 			throw new IllegalArgumentException("invalid permission: " + permission);
@@ -454,6 +460,7 @@ final class TopicPermissionCollection extends PermissionCollection {
 	 * @return {@code true} if {@code permission} is a proper subset of a
 	 *         permission in the set; {@code false} otherwise.
 	 */
+	@Override
 	public boolean implies(final Permission permission) {
 		if (!(permission instanceof TopicPermission)) {
 			return false;
@@ -514,6 +521,7 @@ final class TopicPermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all {@code TopicPermission} objects.
 	 */
+	@Override
 	public synchronized Enumeration<Permission> elements() {
 		List<Permission> all = new ArrayList<Permission>(permissions.values());
 		return Collections.enumeration(all);
@@ -532,6 +540,7 @@ final class TopicPermissionCollection extends PermissionCollection {
 
 	private synchronized void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		ObjectInputStream.GetField gfields = in.readFields();
+		@SuppressWarnings("unchecked")
 		Hashtable<String, TopicPermission> hashtable = (Hashtable<String, TopicPermission>) gfields.get("permissions", null);
 		permissions = new HashMap<String, TopicPermission>(hashtable);
 		all_allowed = gfields.get("all_allowed", false);

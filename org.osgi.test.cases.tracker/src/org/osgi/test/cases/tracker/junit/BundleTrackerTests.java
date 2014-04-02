@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.util.Map;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.wiring.Wiring;
 import org.osgi.util.tracker.BundleTracker;
 import org.osgi.util.tracker.BundleTrackerCustomizer;
 
@@ -500,6 +501,122 @@ public class BundleTrackerTests extends OSGiTestCase {
 			assertNull("adding called", events[0]);
 			assertNull("modified called", events[1]);
 			assertNull("removed called", events[2]);
+		}
+	}
+
+	public void testModified() throws Exception {
+		final boolean[] customizerCalled = new boolean[] {false, false, false};
+		BundleTracker<BundleWrapper> bt = new BundleTracker<BundleWrapper>(
+				getContext(), Bundle.INSTALLED | Bundle.RESOLVED
+						| Bundle.STARTING | Bundle.ACTIVE | Bundle.STOPPING,
+				new BundleTrackerCustomizer<BundleWrapper>() {
+
+					public BundleWrapper addingBundle(Bundle bundle,
+							BundleEvent event) {
+						synchronized (customizerCalled) {
+							customizerCalled[0] = true;
+						}
+						return new BundleWrapper(bundle);
+					}
+
+					public void modifiedBundle(Bundle bundle,
+							BundleEvent event, BundleWrapper tracked) {
+						synchronized (customizerCalled) {
+							customizerCalled[1] = true;
+						}
+					}
+
+					public void removedBundle(Bundle bundle, BundleEvent event,
+							BundleWrapper tracked) {
+						synchronized (customizerCalled) {
+							customizerCalled[2] = true;
+						}
+					}
+
+				});
+
+		synchronized (customizerCalled) {
+			assertFalse("adding called", customizerCalled[0]);
+			assertFalse("modified called", customizerCalled[1]);
+			assertFalse("removed called", customizerCalled[2]);
+		}
+
+		Bundle[] bundles;
+		bt.open();
+		try {
+			bundles = bt.getBundles();
+			assertNotNull("getBundles() null", bundles);
+			for (int i = 0, l = bundles.length; i < l; i++) {
+				Bundle bundle = bundles[i];
+				BundleWrapper tracked = bt.getObject(bundle);
+				assertEquals("tracked.getBundle() != bundle", bundle,
+						tracked.getBundle());
+			}
+			Map<Bundle, BundleWrapper> map = bt.getTracked();
+			assertEquals("size() != map.size()", bt.size(), map.size());
+			for (Map.Entry<Bundle, BundleWrapper> e : map.entrySet()) {
+				Bundle bundle = e.getKey();
+				BundleWrapper tracked = e.getValue();
+				assertEquals("default tracked != bundle", bundle,
+						tracked.getBundle());
+			}
+			synchronized (customizerCalled) {
+				assertTrue("adding not called", customizerCalled[0]);
+				customizerCalled[0] = false;
+				assertFalse("modified called", customizerCalled[1]);
+				assertFalse("removed called", customizerCalled[2]);
+			}
+
+			Bundle tb1 = install("tb1.jar");
+			try {
+				synchronized (customizerCalled) {
+					assertTrue("adding called", customizerCalled[0]);
+					customizerCalled[0] = false;
+					assertFalse("modified called", customizerCalled[1]);
+					assertFalse("removed called", customizerCalled[2]);
+				}
+				Wiring.resolveBundles(getContext(), tb1);
+				synchronized (customizerCalled) {
+					assertFalse("adding not called", customizerCalled[0]);
+					assertTrue("modified called", customizerCalled[1]);
+					customizerCalled[1] = false;
+					assertFalse("removed called", customizerCalled[2]);
+				}
+				tb1.start();
+				synchronized (customizerCalled) {
+					assertFalse("adding not called", customizerCalled[0]);
+					assertTrue("modified called", customizerCalled[1]);
+					customizerCalled[1] = false;
+					assertFalse("removed called", customizerCalled[2]);
+				}
+				tb1.stop();
+				synchronized (customizerCalled) {
+					assertFalse("adding not called", customizerCalled[0]);
+					assertTrue("modified called", customizerCalled[1]);
+					customizerCalled[1] = false;
+					assertFalse("removed called", customizerCalled[2]);
+				}
+				tb1.start();
+				synchronized (customizerCalled) {
+					assertFalse("adding not called", customizerCalled[0]);
+					assertTrue("modified called", customizerCalled[1]);
+					customizerCalled[1] = false;
+					assertFalse("removed called", customizerCalled[2]);
+				}
+				bt.remove(tb1);
+				synchronized (customizerCalled) {
+					assertFalse("adding called", customizerCalled[0]);
+					assertFalse("modified called", customizerCalled[1]);
+					assertTrue("removed not called", customizerCalled[2]);
+					customizerCalled[2] = false;
+				}
+			}
+			finally {
+				tb1.uninstall();
+			}
+		}
+		finally {
+			bt.close();
 		}
 	}
 

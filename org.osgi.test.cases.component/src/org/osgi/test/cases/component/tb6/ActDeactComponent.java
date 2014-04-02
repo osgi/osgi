@@ -29,20 +29,20 @@ import org.osgi.test.cases.component.service.ComponentContextExposer;
 public class ActDeactComponent implements ComponentContextExposer {
 	private Dictionary			properties;
   private ComponentContext ctxt;
-  private static final int ACTIVATE_CC = 1 << 0;
-  private static final int DEACTIVATE_CC = 1 << 1;
-  private static final int ACT = 1 << 2;
-  private static final int DEACT = 1 << 3;
-  private static final int ACT_CC = 1 << 4;
-  private static final int DEACT_CC = 1 << 5;
-  private static final int ACT_BC = 1 << 6;
-  private static final int DEACT_BC = 1 << 7;
-  private static final int ACT_MAP = 1 << 8;
-  private static final int DEACT_MAP = 1 << 9;
-  private static final int ACT_CC_BC_MAP = 1 << 10;
-  private static final int DEACT_CC_BC_MAP = 1 << 11;
-  private static final int DEACT_INT = 1 << 12;
-  private static final int DEACT_CC_BC_MAP_INT = 1 << 13;
+	public static final int		ACTIVATE_CC			= 1 << 0;
+	public static final int		DEACTIVATE_CC		= 1 << 1;
+	public static final int		ACT					= 1 << 2;
+	public static final int		DEACT				= 1 << 3;
+	public static final int		ACT_CC				= 1 << 4;
+	public static final int		DEACT_CC			= 1 << 5;
+	public static final int		ACT_BC				= 1 << 6;
+	public static final int		DEACT_BC			= 1 << 7;
+	public static final int		ACT_MAP				= 1 << 8;
+	public static final int		DEACT_MAP			= 1 << 9;
+	public static final int		ACT_CC_BC_MAP		= 1 << 10;
+	public static final int		DEACT_CC_BC_MAP		= 1 << 11;
+	public static final int		DEACT_INT			= 1 << 12;
+	public static final int		DEACT_CC_BC_MAP_INT	= 1 << 13;
 
   protected void activate(ComponentContext ctxt) {
     this.ctxt = ctxt;

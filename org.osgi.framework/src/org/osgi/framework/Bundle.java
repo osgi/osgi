@@ -25,6 +25,7 @@ import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.List;
 import java.util.Map;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.wiring.FrameworkWiring;
 
 /**
@@ -74,9 +75,9 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * bundle id} and is greater if it has a higher bundle id.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface Bundle extends Comparable<Bundle> {
 	/**
 	 * The bundle is uninstalled and may not be used.
@@ -279,14 +280,14 @@ public interface Bundle extends Comparable<Bundle> {
 	 * before continuing. If this does not occur in a reasonable time, a
 	 * {@code BundleException} is thrown to indicate this bundle was unable to
 	 * be started.</li>
-	 * <li>If this bundle's state is {@code ACTIVE} then this method returns
-	 * immediately.</li>
 	 * <li>If the {@link #START_TRANSIENT} option is not set then set this
 	 * bundle's autostart setting to <em>Started with declared activation</em>
 	 * if the {@link #START_ACTIVATION_POLICY} option is set or
 	 * <em>Started with eager activation</em> if not set. When the Framework is
 	 * restarted and this bundle's autostart setting is not <em>Stopped</em>,
 	 * this bundle must be automatically started.</li>
+	 * <li>If this bundle's state is {@code ACTIVE} then this method returns
+	 * immediately.</li>
 	 * <li>If this bundle's state is not {@code RESOLVED}, an attempt is made to
 	 * resolve this bundle. If the Framework cannot resolve this bundle, a
 	 * {@code BundleException} is thrown.</li>
@@ -318,9 +319,6 @@ public interface Bundle extends Comparable<Bundle> {
 	 * <li>A {@code BundleException} is then thrown.</li>
 	 * </ul>
 	 * </li>
-	 * <li>If this bundle's state is {@code UNINSTALLED}, because this bundle
-	 * was uninstalled while the {@code BundleActivator.start} method was
-	 * running, a {@code BundleException} is thrown.</li>
 	 * <li>This bundle's state is set to {@code ACTIVE}.</li>
 	 * <li>A bundle event of type {@link BundleEvent#STARTED} is fired.</li>
 	 * </ol>
@@ -762,8 +760,8 @@ public interface Bundle extends Comparable<Bundle> {
 	/**
 	 * Returns this bundle's {@code ServiceReference} list for all services it
 	 * is using or returns {@code null} if this bundle is not using any
-	 * services. A bundle is considered to be using a service if its use count
-	 * for that service is greater than zero.
+	 * services. A bundle is considered to be using a service if it has any
+	 * unreleased service objects.
 	 * 
 	 * <p>
 	 * If the Java Runtime Environment supports permissions, a

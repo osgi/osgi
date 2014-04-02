@@ -278,6 +278,7 @@ public final class ConfigurationPermission extends BasicPermission {
 	 *         object; {@code false} otherwise.
 	 */
 
+	@Override
 	public boolean implies(Permission p) {
 		if (!(p instanceof ConfigurationPermission)) {
 			return false;
@@ -359,6 +360,7 @@ public final class ConfigurationPermission extends BasicPermission {
 	 * @return {@code true} if {@code obj} is equivalent to this
 	 *         {@code ConfigurationPermission}; {@code false} otherwise.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -379,6 +381,7 @@ public final class ConfigurationPermission extends BasicPermission {
 	 * @return Hash code value for this object.
 	 */
 
+	@Override
 	public int hashCode() {
 		int h = 31 * 17 + getName().hashCode();
 		h = 31 * h + getActions().hashCode();
@@ -396,6 +399,7 @@ public final class ConfigurationPermission extends BasicPermission {
 	 * @return Canonical string representation of the
 	 *         {@code ConfigurationPermission} actions.
 	 */
+	@Override
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
@@ -426,6 +430,7 @@ public final class ConfigurationPermission extends BasicPermission {
 	 * 
 	 * @return A new {@code PermissionCollection} object.
 	 */
+	@Override
 	public PermissionCollection newPermissionCollection() {
 		return new ConfigurationPermissionCollection();
 	}
@@ -502,6 +507,7 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 	 *            object has been marked read-only.
 	 */
 
+	@Override
 	public void add(Permission permission) {
 		if (!(permission instanceof ConfigurationPermission)) {
 			throw new IllegalArgumentException("invalid permission: " + permission);
@@ -542,6 +548,7 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 	 * @return {@code true} if {@code permission} is a proper subset of a
 	 *         permission in the set; {@code false} otherwise.
 	 */
+	@Override
 	public boolean implies(Permission permission) {
 		if (!(permission instanceof ConfigurationPermission)) {
 			return false;
@@ -580,6 +587,7 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all {@code ConfigurationPermission} objects.
 	 */
+	@Override
 	public synchronized Enumeration<Permission> elements() {
 		List<Permission> all = new ArrayList<Permission>(permissions.values());
 		return Collections.enumeration(all);
@@ -605,7 +613,9 @@ final class ConfigurationPermissionCollection extends PermissionCollection {
 			permissions.put("*", new ConfigurationPermission("*", ConfigurationPermission.CONFIGURE));
 			all_allowed = true;
 		} else {
-			permissions = (HashMap<String, ConfigurationPermission>) gfields.get("permissions", new HashMap<String, ConfigurationPermission>());
+			@SuppressWarnings("unchecked")
+			HashMap<String, ConfigurationPermission> p = (HashMap<String, ConfigurationPermission>) gfields.get("permissions", new HashMap<String, ConfigurationPermission>());
+			permissions = p;
 			all_allowed = gfields.get("all_allowed", false);
 		}
 	}

@@ -16,6 +16,7 @@
 
 package org.osgi.framework.startlevel;
 
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.FrameworkListener;
@@ -32,9 +33,9 @@ import org.osgi.framework.FrameworkListener;
  * obtained by calling {@link BundleReference#getBundle()}.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface FrameworkStartLevel extends BundleReference {
 	/**
 	 * Return the active start level value of the Framework.

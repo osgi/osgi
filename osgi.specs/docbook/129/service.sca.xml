@@ -254,7 +254,7 @@
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt; 
 &lt;schema xmlns="http://www.w3.org/2001/XMLSchema"
-   xmlns:sca="http://www.osoa.org/xmlns/sca/1.0"
+   xmlns:sca="http://docs.oasis-open.org/ns/opencsa/sca/200912"
    xmlns:acme="http://acme.com/defs" &gt; 
    targetNamespace="http://acme.com/defs"&gt;  
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,9 +23,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-
 import junit.framework.AssertionFailedError;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -89,17 +87,17 @@ public class BundleHookTests extends OSGiTestCase {
 				null, null, null, null};
 
 		// register services
-		Hashtable props = new Hashtable();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put("name", getName());
 
 
 		// register find hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "min value");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MIN_VALUE));
-		ServiceRegistration regHook1 = testContext.registerService(
-				FindHook.class.getName(), new FindHook() {
+		ServiceRegistration<FindHook> regHook1 = testContext.registerService(
+				FindHook.class, new FindHook() {
 					public void find(BundleContext context,
-							Collection bundles) {
+							Collection<Bundle> bundles) {
 						try {
 							synchronized (hookCalled) {
 								hookCalled[++hookCalled[0]] = 1;
@@ -108,9 +106,9 @@ public class BundleHookTests extends OSGiTestCase {
 									context);
 							assertEquals("wrong number of bundles in hook", 1,
 									bundles.size());
-							for (Iterator iter = bundles.iterator(); iter
+							for (Iterator<Bundle> iter = bundles.iterator(); iter
 									.hasNext();) {
-								Bundle bundle = (Bundle) iter.next();
+								Bundle bundle = iter.next();
 								if (bundle.getBundleId() != testBundles[2].getBundleId())
 									fail(bundle.getSymbolicName() + " is present");
 							}
@@ -147,10 +145,10 @@ public class BundleHookTests extends OSGiTestCase {
 		// register find hook 2
 		props.put(Constants.SERVICE_DESCRIPTION, "max value first");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
-		ServiceRegistration regHook2 = testContext.registerService(
-				FindHook.class.getName(), new FindHook() {
+		ServiceRegistration<FindHook> regHook2 = testContext.registerService(
+				FindHook.class, new FindHook() {
 					public void find(BundleContext context,
-							Collection bundles) {
+							Collection<Bundle> bundles) {
 						try {
 							synchronized (hookCalled) {
 								hookCalled[++hookCalled[0]] = 2;
@@ -159,9 +157,9 @@ public class BundleHookTests extends OSGiTestCase {
 									context);
 							assertEquals("wrong number of bundles in hook", originalNumBundles,
 									bundles.size());
-							for (Iterator iter = bundles.iterator(); iter
+							for (Iterator<Bundle> iter = bundles.iterator(); iter
 									.hasNext();) {
-								Bundle bundle = (Bundle) iter.next();
+								Bundle bundle = iter.next();
 								if (!Arrays.asList(testBundles).contains(bundle))
 									iter.remove();
 							}
@@ -198,10 +196,10 @@ public class BundleHookTests extends OSGiTestCase {
 		// register find hook 3
 		props.put(Constants.SERVICE_DESCRIPTION, "max value second");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
-		ServiceRegistration regHook3 = testContext.registerService(
-				FindHook.class.getName(), new FindHook() {
+		ServiceRegistration<FindHook> regHook3 = testContext.registerService(
+				FindHook.class, new FindHook() {
 					public void find(BundleContext context,
-							Collection bundles) {
+							Collection<Bundle> bundles) {
 						try {
 							synchronized (hookCalled) {
 								hookCalled[++hookCalled[0]] = 3;
@@ -247,10 +245,10 @@ public class BundleHookTests extends OSGiTestCase {
 		// register find hook 4
 		props.put(Constants.SERVICE_DESCRIPTION, "max value third");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
-		ServiceRegistration regHook4 = testContext.registerService(
-				FindHook.class.getName(), new FindHook() {
+		ServiceRegistration<FindHook> regHook4 = testContext.registerService(
+				FindHook.class, new FindHook() {
 					public void find(BundleContext context,
-							Collection bundles) {
+							Collection<Bundle> bundles) {
 						try {
 							synchronized (hookCalled) {
 								hookCalled[++hookCalled[0]] = 4;
@@ -286,7 +284,7 @@ public class BundleHookTests extends OSGiTestCase {
 			assertEquals("Wrong number of bundles", 1, bundles.length);
 
 			// test removed services are not in the result
-			List bundleList = Arrays.asList(bundles);
+			List<Bundle> bundleList = Arrays.asList(bundles);
 			assertFalse("contains bundle 1", bundleList.contains(testBundles[0]));
 			assertFalse("contains bundle 2", bundleList.contains(testBundles[1]));
 			assertTrue("missing bundle 3", bundleList.contains(testBundles[2]));
@@ -332,13 +330,13 @@ public class BundleHookTests extends OSGiTestCase {
 		final boolean[] factoryCalled = new boolean[] {false, false};
 		final boolean[] hookCalled = new boolean[] {false};
 		final FindHook findHook1 = new FindHook() {
-			public void find(BundleContext context, Collection bundles) {
+			public void find(BundleContext context, Collection<Bundle> bundles) {
 				synchronized (hookCalled) {
 					hookCalled[0] = true;
 				}
 			}
 		};
-		Hashtable props = new Hashtable();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put("name", getName());
 		props.put(Constants.SERVICE_DESCRIPTION, "find hook 1");
 		synchronized (factoryCalled) {
@@ -348,21 +346,21 @@ public class BundleHookTests extends OSGiTestCase {
 		synchronized (factoryError) {
 			factoryError[0] = null;
 		}
-		ServiceRegistration regHook1 = testContext.registerService(
-				FindHook.class.getName(), new ServiceFactory() {
+		ServiceRegistration<?> regHook1 = testContext.registerService(
+				FindHook.class.getName(), new ServiceFactory<FindHook>() {
 
-					public Object getService(Bundle bundle,
-							ServiceRegistration registration) {
+					public FindHook getService(Bundle bundle,
+							ServiceRegistration<FindHook> registration) {
 						try {
 							synchronized (factoryCalled) {
 								factoryCalled[0] = true;
 							}
 							assertNotNull("using bundle null", bundle);
-							ServiceReference reference = registration
+							ServiceReference<FindHook> reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
 							assertNotNull("service not used by a bundle", users);
-							List userList = Arrays.asList(users);
+							List<Bundle> userList = Arrays.asList(users);
 							assertTrue("missing using bundle", userList
 									.contains(bundle));
 						}
@@ -375,18 +373,18 @@ public class BundleHookTests extends OSGiTestCase {
 					}
 
 					public void ungetService(Bundle bundle,
-							ServiceRegistration registration, Object service) {
+							ServiceRegistration<FindHook> registration, FindHook service) {
 						try {
 							synchronized (factoryCalled) {
 								factoryCalled[1] = true;
 							}
 							assertNotNull("using bundle null", bundle);
 							assertEquals("wrong service", findHook1, service);
-							ServiceReference reference = registration
+							ServiceReference<FindHook> reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
 							assertNotNull("service not used by a bundle", users);
-							List userList = Arrays.asList(users);
+							List<Bundle> userList = Arrays.asList(users);
 							assertTrue("missing using bundle", userList
 									.contains(bundle));
 						}
@@ -417,7 +415,7 @@ public class BundleHookTests extends OSGiTestCase {
 			assertNotNull("bundles is null", bundles);
 			assertEquals("Wrong number of references", originalNumBundles, bundles.length);
 
-			List bundleList = Arrays.asList(bundles);
+			List<Bundle> bundleList = Arrays.asList(bundles);
 			assertTrue("missing service 1", bundleList.containsAll(Arrays.asList(originalBundles)));
 
 			synchronized (hookCalled) {
@@ -462,23 +460,22 @@ public class BundleHookTests extends OSGiTestCase {
 	public void testFindHook03() {
 		final BundleContext testContext = getContext();
 
-		final int originalNumBundles = testContext.getBundles().length;
 		final int[] hookCalled = new int[] {0, 0, 0, 0};
 		final AssertionFailedError[] hookError = new AssertionFailedError[] {
 				null, null, null};
 
 		// register services
-		Hashtable props = new Hashtable();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put("name", getName());
 
 
 		// register find hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "min value");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MIN_VALUE));
-		ServiceRegistration regHook1 = testContext.registerService(
-				FindHook.class.getName(), new FindHook() {
+		ServiceRegistration<FindHook> regHook1 = testContext.registerService(
+				FindHook.class, new FindHook() {
 					public void find(BundleContext context,
-							Collection bundles) {
+							Collection<Bundle> bundles) {
 						try {
 							synchronized (hookCalled) {
 								hookCalled[++hookCalled[0]] = 1;
@@ -520,18 +517,17 @@ public class BundleHookTests extends OSGiTestCase {
 		// register find hook 2
 		props.put(Constants.SERVICE_DESCRIPTION, "max value first");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
-		ServiceRegistration regHook2 = testContext.registerService(
-				FindHook.class.getName(), new FindHook() {
+		ServiceRegistration<FindHook> regHook2 = testContext.registerService(
+				FindHook.class, new FindHook() {
 					public void find(BundleContext context,
-							Collection bundles) {
+							Collection<Bundle> bundles) {
 						try {
 							synchronized (hookCalled) {
 								hookCalled[++hookCalled[0]] = 2;
 							}
 							assertEquals("wrong context in hook", testContext,
 									context);
-							assertEquals("wrong number of bundles in hook", 1,
-									bundles.size());
+							assertTrue("wrong number of bundles in hook: " + bundles.size(), bundles.size() > 0);
 							bundles.clear();
 
 							try {
@@ -566,10 +562,10 @@ public class BundleHookTests extends OSGiTestCase {
 		// register find hook 3
 		props.put(Constants.SERVICE_DESCRIPTION, "max value second");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
-		ServiceRegistration regHook3 = testContext.registerService(
-				FindHook.class.getName(), new FindHook() {
+		ServiceRegistration<FindHook> regHook3 = testContext.registerService(
+				FindHook.class, new FindHook() {
 					public void find(BundleContext context,
-							Collection bundles) {
+							Collection<Bundle> bundles) {
 						try {
 							synchronized (hookCalled) {
 								hookCalled[++hookCalled[0]] = 3;
@@ -610,6 +606,23 @@ public class BundleHookTests extends OSGiTestCase {
 			}
 			assertNull("bundle is not null", bundle);
 
+			for (int i = 0; i < hookCalled.length; i++) {
+				hookCalled[i] = 0;
+			}
+
+			Bundle[] bundles = testContext.getBundles();
+			assertEquals("all hooks not called", 3, hookCalled[0]);
+			assertEquals("hook 2 not called first", 2, hookCalled[1]);
+			assertEquals("hook 3 not called second", 3, hookCalled[2]);
+			assertEquals("hook 1 not called third ", 1, hookCalled[3]);
+			for (int i = 0; i < hookError.length; i++) {
+				if (hookError[i] != null) {
+					throw hookError[i];
+				}
+			}
+			// Note that null is never returned from getBundles()
+			assertNotNull("Bundles is null.", bundles);
+			assertEquals("Wrong number of bundles.", 0, bundles.length);
 
 			// remove the hooks
 			regHook1.unregister();
@@ -624,6 +637,185 @@ public class BundleHookTests extends OSGiTestCase {
 			bundle = testContext.getBundle(testBundles[0].getBundleId());
 			assertEquals("hooks called", 0, hookCalled[0]);
 			assertEquals("Wrong bundle found", testBundles[0], bundle);
+		}
+		finally {
+			// unregister hooks
+			if (regHook1 != null)
+				regHook1.unregister();
+			if (regHook2 != null)
+				regHook2.unregister();
+			if (regHook3 != null)
+				regHook3.unregister();
+		}
+	}
+
+	public void testSystemFindHook() {
+		final BundleContext systemContext = getContext().getBundle(Constants.SYSTEM_BUNDLE_LOCATION).getBundleContext();
+		final long originNumBundles = getContext().getBundles().length;
+
+		final int[] hookCalled = new int[] {0, 0, 0, 0};
+		final AssertionFailedError[] hookError = new AssertionFailedError[] {
+				null, null, null};
+
+		// register services
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
+		props.put("name", getName());
+
+
+		// register find hook 1
+		props.put(Constants.SERVICE_DESCRIPTION, "min value");
+		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MIN_VALUE));
+		ServiceRegistration<FindHook> regHook1 = systemContext.registerService(
+				FindHook.class, new FindHook() {
+					public void find(BundleContext context,
+							Collection<Bundle> bundles) {
+						try {
+							synchronized (hookCalled) {
+								hookCalled[++hookCalled[0]] = 1;
+							}
+							assertEquals("wrong context in hook", systemContext,
+									context);
+							assertEquals("wrong number of bundles in hook", 0,
+									bundles.size());
+
+							try {
+								bundles.add(testBundles[0]);
+								fail("add to collection succeeded");
+							}
+							catch (UnsupportedOperationException e) {
+								// should get an exception
+							}
+							catch (Exception e) {
+								fail("incorrect exception", e);
+							}
+							try {
+								bundles.addAll(Arrays
+										.asList(new Bundle[] {testBundles[0]}));
+								fail("addAll to collection succeeded");
+							}
+							catch (UnsupportedOperationException e) {
+								// should get an exception
+							}
+							catch (Exception e) {
+								fail("incorrect exception", e);
+							}
+						}
+						catch (AssertionFailedError a) {
+							hookError[0] = a;
+							return;
+						}
+					}
+				}, props);
+
+		// register find hook 2
+		props.put(Constants.SERVICE_DESCRIPTION, "max value first");
+		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		ServiceRegistration<FindHook> regHook2 = systemContext.registerService(
+				FindHook.class, new FindHook() {
+					public void find(BundleContext context,
+							Collection<Bundle> bundles) {
+						try {
+							synchronized (hookCalled) {
+								hookCalled[++hookCalled[0]] = 2;
+							}
+							assertEquals("wrong context in hook", systemContext,
+									context);
+							assertTrue("wrong number of bundles in hook: " + bundles.size(), bundles.size() > 0);
+							bundles.clear();
+
+							try {
+								bundles.add(systemContext.getBundle());
+								fail("add to collection succeeded");
+							}
+							catch (UnsupportedOperationException e) {
+								// should get an exception
+							}
+							catch (Exception e) {
+								fail("incorrect exception", e);
+							}
+							try {
+								bundles.addAll(Arrays
+										.asList(new Bundle[] {systemContext.getBundle()}));
+								fail("addAll to collection succeeded");
+							}
+							catch (UnsupportedOperationException e) {
+								// should get an exception
+							}
+							catch (Exception e) {
+								fail("incorrect exception", e);
+							}
+						}
+						catch (AssertionFailedError a) {
+							hookError[1] = a;
+							return;
+						}
+					}
+				}, props);
+
+		// register find hook 3
+		props.put(Constants.SERVICE_DESCRIPTION, "max value second");
+		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		ServiceRegistration<FindHook> regHook3 = systemContext.registerService(
+				FindHook.class, new FindHook() {
+					public void find(BundleContext context,
+							Collection<Bundle> bundles) {
+						try {
+							synchronized (hookCalled) {
+								hookCalled[++hookCalled[0]] = 3;
+							}
+							assertEquals("wrong context in hook", systemContext,
+									context);
+							assertEquals("wrong number of bundles in hook", 0,
+									bundles.size());
+						}
+						catch (AssertionFailedError a) {
+							hookError[2] = a;
+							return;
+						}
+						// throw an exception from the hook to test that the
+						// next hooks are called.
+						throw new RuntimeException(getName());
+					}
+				}, props);
+
+
+		// get bundle and hook removes some bundles
+		try {
+			// get bundle by location must not be filtered
+			Bundle bundle = systemContext.getBundle(testBundles[0].getLocation());
+			assertEquals("hooks called", 0, hookCalled[0]);
+			assertEquals("Wrong bundle found", testBundles[0], bundle);
+
+			// get bundle by id must NOT cause filter when system bundle is used
+			bundle = systemContext.getBundle(testBundles[0].getBundleId());
+			assertEquals("all hooks not called", 3, hookCalled[0]);
+			assertEquals("hook 2 not called first", 2, hookCalled[1]);
+			assertEquals("hook 3 not called second", 3, hookCalled[2]);
+			assertEquals("hook 1 not called third ", 1, hookCalled[3]);
+			for (int i = 0; i < hookError.length; i++) {
+				if (hookError[i] != null) {
+					throw hookError[i];
+				}
+			}
+			assertEquals("Wrong bundle found", testBundles[0], bundle);
+
+			for (int i = 0; i < hookCalled.length; i++) {
+				hookCalled[i] = 0;
+			}
+
+			Bundle[] bundles = systemContext.getBundles();
+			assertEquals("all hooks not called", 3, hookCalled[0]);
+			assertEquals("hook 2 not called first", 2, hookCalled[1]);
+			assertEquals("hook 3 not called second", 3, hookCalled[2]);
+			assertEquals("hook 1 not called third ", 1, hookCalled[3]);
+			for (int i = 0; i < hookError.length; i++) {
+				if (hookError[i] != null) {
+					throw hookError[i];
+				}
+			}
+			// Note that null is never returned from getBundles()
+			assertNotNull("Bundles is null.", bundles);
+			assertEquals("Wrong number of bundles.", originNumBundles, bundles.length);
 		}
 		finally {
 			// unregister hooks
@@ -675,16 +867,62 @@ public class BundleHookTests extends OSGiTestCase {
 		}
 	}
 
+	public void testSystemFindHookInstall() {
+		final int[] hookCalled = new int[] { 0, 0 };
+		Bundle testBundle = null;
+		try {
+			testBundle = install("hooks.tb1.jar");
+		} catch (Exception e) {
+			fail("Failed to install bundle.", e);
+		}
+		assertEquals("Wrong bundle found", testBundles[0], testBundle);
+
+		// register services
+		Hashtable<String, String> props = new Hashtable<String, String>();
+		props.put("name", getName());
+		// register find hook 1
+		ServiceRegistration<FindHook> regHook1 = getContext().registerService(
+				FindHook.class, new FindHook() {
+					public void find(BundleContext context,
+							Collection<Bundle> bundles) {
+						synchronized (hookCalled) {
+							hookCalled[++hookCalled[0]] = 1;
+						}
+						bundles.removeAll(Arrays.asList(testBundles));
+					}
+				}, props);
+		try {
+			BundleContext systemContext = getContext().getBundle(
+					Constants.SYSTEM_BUNDLE_LOCATION).getBundleContext();
+			// find hook must be ignored when using the system bundle context
+			try {
+				testBundle = systemContext.installBundle("hooks.tb1.jar",
+						getContext().getBundle().getEntry("hooks.tb1.jar")
+								.openStream());
+			} catch (Exception e) {
+				fail("Failed to install bundle.", e);
+			}
+			assertEquals("Wrong bundle found", testBundles[0], testBundle);
+			assertEquals("all hooks not called", 1, hookCalled[0]);
+			assertEquals("hook 1 not called first", 1, hookCalled[1]);
+		} finally {
+			// unregister hooks
+			if (regHook1 != null)
+				regHook1.unregister();
+		}
+	}
+
 	public void testEventHook01() {
 		final BundleContext testContext = getContext();
 
-		final Integer[] hookIDs = new Integer[] {new Integer(1), new Integer(2), new Integer(3), new Integer(4)};
-		final LinkedList hookCalled = new LinkedList();
+		final Integer[] hookIDcallOrder = new Integer[] { new Integer(2),
+				new Integer(3), new Integer(4), new Integer(1) };
+		final LinkedList<Integer> hookCalled = new LinkedList<Integer>();
 		final AssertionFailedError[] hookError = new AssertionFailedError[] {
 				null, null, null, null};
 		final boolean[] filterEvent = new boolean[] {false};
-		final LinkedList syncEvents = new LinkedList();
-		final LinkedList asyncEvents = new LinkedList();
+		final LinkedList<BundleEvent> syncEvents = new LinkedList<BundleEvent>();
+		final LinkedList<BundleEvent> asyncEvents = new LinkedList<BundleEvent>();
 
 		final SynchronousBundleListener sbl = new SynchronousBundleListener() {
 			public void bundleChanged(BundleEvent event) {
@@ -702,20 +940,20 @@ public class BundleHookTests extends OSGiTestCase {
 		};
 
 		// register services
-		Hashtable props = new Hashtable();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put("name", getName());
 
 
 		// register event hook 0
 		props.put(Constants.SERVICE_DESCRIPTION, "min value");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MIN_VALUE));
-		ServiceRegistration regHook0 = testContext.registerService(
-				EventHook.class.getName(), new EventHook() {
+		ServiceRegistration<EventHook> regHook0 = testContext.registerService(
+				EventHook.class, new EventHook() {
 					public void event(BundleEvent event,
-							Collection contexts) {
+							Collection<BundleContext> contexts) {
 						try {
 							synchronized (hookCalled) {
-								hookCalled.add(hookIDs[0]);
+								hookCalled.add(hookIDcallOrder[3]);
 							}
 
 							if (filterEvent[0])
@@ -750,16 +988,16 @@ public class BundleHookTests extends OSGiTestCase {
 					}
 				}, props);
 
-		// register find hook 1
+		// register event hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "max value first");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
-		ServiceRegistration regHook1 = testContext.registerService(
-				EventHook.class.getName(), new EventHook() {
+		ServiceRegistration<EventHook> regHook1 = testContext.registerService(
+				EventHook.class, new EventHook() {
 					public void event(BundleEvent event,
-							Collection contexts) {
+							Collection<BundleContext> contexts) {
 						try {
 							synchronized (hookCalled) {
-								hookCalled.add(hookIDs[1]);
+								hookCalled.add(hookIDcallOrder[0]);
 							}
 							synchronized (filterEvent) {
 								if (filterEvent[0])
@@ -773,16 +1011,16 @@ public class BundleHookTests extends OSGiTestCase {
 					}
 				}, props);
 
-		// register find hook 2
+		// register event hook 2
 		props.put(Constants.SERVICE_DESCRIPTION, "max value second");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
-		ServiceRegistration regHook2 = testContext.registerService(
-				EventHook.class.getName(), new EventHook() {
+		ServiceRegistration<EventHook> regHook2 = testContext.registerService(
+				EventHook.class, new EventHook() {
 					public void event(BundleEvent event,
-							Collection contexts) {
+							Collection<BundleContext> contexts) {
 						try {
 							synchronized (hookCalled) {
-								hookCalled.add(hookIDs[2]);
+								hookCalled.add(hookIDcallOrder[1]);
 							}
 						}
 						catch (AssertionFailedError a) {
@@ -795,16 +1033,16 @@ public class BundleHookTests extends OSGiTestCase {
 					}
 				}, props);
 
-		// register find hook 4
+		// register event hook 4
 		props.put(Constants.SERVICE_DESCRIPTION, "max value third");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
-		ServiceRegistration regHook4 = testContext.registerService(
-				EventHook.class.getName(), new EventHook() {
+		ServiceRegistration<EventHook> regHook4 = testContext.registerService(
+				EventHook.class, new EventHook() {
 					public void event(BundleEvent event,
-							Collection contexts) {
+							Collection<BundleContext> contexts) {
 						try {
 							synchronized (hookCalled) {
-								hookCalled.add(hookIDs[3]);
+								hookCalled.add(hookIDcallOrder[2]);
 							}
 						}
 						catch (AssertionFailedError a) {
@@ -837,7 +1075,7 @@ public class BundleHookTests extends OSGiTestCase {
 					new BundleEvent(BundleEvent.STARTED, testBundle)
 			};
 
-			checkHooks(expectedEvents.length, hookCalled, hookIDs);
+			checkHooks(expectedEvents.length, hookCalled, hookIDcallOrder);
 			// need to sleep to allow async events to be fired
 			Sleep.sleep(2000);
 			checkEvents(expectedEvents, syncEvents, asyncEvents);
@@ -871,7 +1109,7 @@ public class BundleHookTests extends OSGiTestCase {
 					new BundleEvent(BundleEvent.STOPPING, testBundle),
 					new BundleEvent(BundleEvent.STOPPED, testBundle)
 			};
-			checkHooks(expectedEvents.length, hookCalled, hookIDs);
+			checkHooks(expectedEvents.length, hookCalled, hookIDcallOrder);
 			checkEvents(new BundleEvent[0], syncEvents, asyncEvents);
 
 			// remove the hooks
@@ -927,42 +1165,50 @@ public class BundleHookTests extends OSGiTestCase {
 	}
 
 	private void checkEvents(BundleEvent[] expectedEvents,
-			LinkedList syncEvents, LinkedList asyncEvents) {
-		assertEquals("Wrong number of events captured.", expectedEvents.length, syncEvents.size());
+			LinkedList<BundleEvent> syncEvents, LinkedList<BundleEvent> asyncEvents) {
+		assertEquals("Wrong number of events captured.", expectedEvents.length,
+				syncEvents.size());
 		for (int i = 0; i < expectedEvents.length; i++) {
-			BundleEvent actualEvent = (BundleEvent) syncEvents.removeFirst();
-			assertEquals("Wrong bundle for event.", expectedEvents[i].getBundle(), actualEvent.getBundle());
-			assertEquals("Wrong type of event.", expectedEvents[i].getType(), actualEvent.getType());
-			if ((expectedEvents[i].getType() & (BundleEvent.STARTING | BundleEvent.STOPPING | BundleEvent.LAZY_ACTIVATION)) == 0) {
-				BundleEvent actualAsyncEvent = (BundleEvent) asyncEvents.removeFirst();
-				assertEquals("Wrong bundle for event.", expectedEvents[i].getBundle(), actualAsyncEvent.getBundle());
-				assertEquals("Wrong type of event.", expectedEvents[i].getType(), actualAsyncEvent.getType());
+			BundleEvent actualEvent = syncEvents.removeFirst();
+			assertEquals("Wrong bundle for event.",
+					expectedEvents[i].getBundle(), actualEvent.getBundle());
+			assertEquals("Wrong type of event.", expectedEvents[i].getType(),
+					actualEvent.getType());
+			if ((expectedEvents[i].getType() & (BundleEvent.STARTING
+					| BundleEvent.STOPPING | BundleEvent.LAZY_ACTIVATION)) == 0) {
+				BundleEvent actualAsyncEvent = asyncEvents
+						.removeFirst();
+				assertEquals("Wrong bundle for event.",
+						expectedEvents[i].getBundle(),
+						actualAsyncEvent.getBundle());
+				assertEquals("Wrong type of event.",
+						expectedEvents[i].getType(), actualAsyncEvent.getType());
 			}
 		}
 
 	}
 
-	private void checkHooks(int numEvents, LinkedList hookCalled, Integer[] hookIDs) {
+	private void checkHooks(int numEvents, LinkedList<Integer> hookCalled,
+			Integer[] hookIDcallOrder) {
 		for (int i = 0; i < numEvents; i++) {
-			assertEquals("Hook 1 not called first.", hookIDs[1], hookCalled.removeFirst());
-			assertEquals("Hook 2 not called second.", hookIDs[2], hookCalled.removeFirst());
-			assertEquals("Hook 3 not called third.", hookIDs[3], hookCalled.removeFirst());
-			assertEquals("Hook 4 not called forth.", hookIDs[0], hookCalled.removeFirst());
+			for (Integer id : hookIDcallOrder) {
+				assertEquals("Hook not called in proper order: " + i, id,
+						hookCalled.removeFirst());
+			}
 		}
 	}
-
 
 	public void testEventHook02() {
 		final BundleContext testContext = getContext();
 
 		// register services
-		Hashtable props = new Hashtable();
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
 		props.put("name", getName());
-		final AssertionFailedError[] factoryError = new AssertionFailedError[] {null};
-		final boolean[] factoryCalled = new boolean[] {false, false};
-		final boolean[] hookCalled = new boolean[] {false};
+		final AssertionFailedError[] factoryError = new AssertionFailedError[] { null };
+		final boolean[] factoryCalled = new boolean[] { false, false };
+		final boolean[] hookCalled = new boolean[] { false };
 		final EventHook eventHook1 = new EventHook() {
-			public void event(BundleEvent arg0, Collection arg1) {
+			public void event(BundleEvent arg0, Collection<BundleContext> arg1) {
 				synchronized (hookCalled) {
 					hookCalled[0] = true;
 				}
@@ -976,25 +1222,24 @@ public class BundleHookTests extends OSGiTestCase {
 		synchronized (factoryError) {
 			factoryError[0] = null;
 		}
-		ServiceRegistration regHook1 = testContext.registerService(
-				EventHook.class.getName(), new ServiceFactory() {
+		ServiceRegistration<?> regHook1 = testContext.registerService(
+				EventHook.class.getName(), new ServiceFactory<EventHook>() {
 
-					public Object getService(Bundle bundle,
-							ServiceRegistration registration) {
+					public EventHook getService(Bundle bundle,
+							ServiceRegistration<EventHook> registration) {
 						try {
 							synchronized (factoryCalled) {
 								factoryCalled[0] = true;
 							}
 							assertNotNull("using bundle null", bundle);
-							ServiceReference reference = registration
+							ServiceReference<EventHook> reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
 							assertNotNull("service not used by a bundle", users);
-							List userList = Arrays.asList(users);
-							assertTrue("missing using bundle", userList
-									.contains(bundle));
-						}
-						catch (AssertionFailedError a) {
+							List<Bundle> userList = Arrays.asList(users);
+							assertTrue("missing using bundle",
+									userList.contains(bundle));
+						} catch (AssertionFailedError a) {
 							synchronized (factoryError) {
 								factoryError[0] = a;
 							}
@@ -1003,22 +1248,21 @@ public class BundleHookTests extends OSGiTestCase {
 					}
 
 					public void ungetService(Bundle bundle,
-							ServiceRegistration registration, Object service) {
+							ServiceRegistration<EventHook> registration, EventHook service) {
 						try {
 							synchronized (factoryCalled) {
 								factoryCalled[1] = true;
 							}
 							assertNotNull("using bundle null", bundle);
 							assertEquals("wrong service", eventHook1, service);
-							ServiceReference reference = registration
+							ServiceReference<EventHook> reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
 							assertNotNull("service not used by a bundle", users);
-							List userList = Arrays.asList(users);
-							assertTrue("missing using bundle", userList
-									.contains(bundle));
-						}
-						catch (AssertionFailedError a) {
+							List<Bundle> userList = Arrays.asList(users);
+							assertTrue("missing using bundle",
+									userList.contains(bundle));
+						} catch (AssertionFailedError a) {
 							synchronized (factoryError) {
 								factoryError[0] = a;
 							}
@@ -1063,8 +1307,7 @@ public class BundleHookTests extends OSGiTestCase {
 			synchronized (factoryCalled) {
 				assertTrue("factory ungetService not called", factoryCalled[1]);
 			}
-		}
-		finally {
+		} finally {
 			// unregister hook and services
 			if (regHook1 != null)
 				regHook1.unregister();
@@ -1077,7 +1320,176 @@ public class BundleHookTests extends OSGiTestCase {
 		}
 	}
 
+	public void testSystemEventHook() {
+		final BundleContext testContext = getContext();
+		final BundleContext systemContext = getContext().getBundle(
+				Constants.SYSTEM_BUNDLE_LOCATION).getBundleContext();
+
+		final Integer[] hookIDcallOrder = new Integer[] { new Integer(2),
+				new Integer(1) };
+		final LinkedList<Integer> hookCalled = new LinkedList<Integer>();
+		final AssertionFailedError[] hookError = new AssertionFailedError[] {
+				null, null };
+		final LinkedList<BundleEvent> syncEvents = new LinkedList<BundleEvent>();
+		final LinkedList<BundleEvent> asyncEvents = new LinkedList<BundleEvent>();
+
+		final SynchronousBundleListener sbl = new SynchronousBundleListener() {
+			public void bundleChanged(BundleEvent event) {
+				synchronized (syncEvents) {
+					syncEvents.add(event);
+				}
+			}
+		};
+		final BundleListener bl = new BundleListener() {
+			public void bundleChanged(BundleEvent event) {
+				synchronized (asyncEvents) {
+					asyncEvents.add(event);
+				}
+			}
+		};
+
+		// register services
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
+		props.put("name", getName());
+
+		// register event hook 0
+		props.put(Constants.SERVICE_DESCRIPTION, "min value");
+		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MIN_VALUE));
+		ServiceRegistration<EventHook> regHook0 = testContext.registerService(
+				EventHook.class, new EventHook() {
+					public void event(BundleEvent event, Collection<BundleContext> contexts) {
+						try {
+							synchronized (hookCalled) {
+								hookCalled.add(hookIDcallOrder[1]);
+							}
+
+							assertTrue("Should not contain system context.",
+									!contexts.contains(testContext));
+
+							try {
+								contexts.add(systemContext);
+								fail("add to collection succeeded");
+							} catch (UnsupportedOperationException e) {
+								// should get an exception
+							} catch (Exception e) {
+								fail("incorrect exception", e);
+							}
+							try {
+								contexts.addAll(Arrays
+										.asList(new BundleContext[] { systemContext }));
+								fail("addAll to collection succeeded");
+							} catch (UnsupportedOperationException e) {
+								// should get an exception
+							} catch (Exception e) {
+								fail("incorrect exception", e);
+							}
+						} catch (AssertionFailedError a) {
+							hookError[0] = a;
+							return;
+						}
+					}
+				}, props);
+
+		// register event hook 1
+		props.put(Constants.SERVICE_DESCRIPTION, "max value first");
+		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
+		ServiceRegistration<EventHook> regHook1 = testContext.registerService(
+				EventHook.class, new EventHook() {
+					public void event(BundleEvent event, Collection<BundleContext> contexts) {
+						try {
+							synchronized (hookCalled) {
+								hookCalled.add(hookIDcallOrder[0]);
+							}
+							contexts.remove(systemContext);
+						} catch (AssertionFailedError a) {
+							hookError[1] = a;
+							return;
+						}
+					}
+				}, props);
+
+		// register the test listeners with system context
+		systemContext.addBundleListener(sbl);
+		systemContext.addBundleListener(bl);
+		// install a test bundle to test hooks.
+		Bundle testBundle = null;
+		try {
+			try {
+				testBundle = install("hooks.tb4.jar");
+				testBundle.start();
+			} catch (BundleException e) {
+				fail("Failed to start test bundle.", e);
+			} catch (IOException e) {
+				fail("Failed to read test bundle.", e);
+			}
+
+			assertEquals("all hooks not called", 8, hookCalled.size());
+			BundleEvent[] expectedEvents = new BundleEvent[] {
+					new BundleEvent(BundleEvent.INSTALLED, testBundle),
+					new BundleEvent(BundleEvent.RESOLVED, testBundle),
+					new BundleEvent(BundleEvent.STARTING, testBundle),
+					new BundleEvent(BundleEvent.STARTED, testBundle) };
+
+			checkHooks(expectedEvents.length, hookCalled, hookIDcallOrder);
+			// need to sleep to allow async events to be fired
+			Sleep.sleep(2000);
+			checkEvents(expectedEvents, syncEvents, asyncEvents);
+
+			for (int i = 0; i < hookError.length; i++) {
+				if (hookError[i] != null) {
+					throw hookError[i];
+				}
+			}
+
+			hookCalled.clear();
+
+			synchronized (asyncEvents) {
+				asyncEvents.clear();
+			}
+			synchronized (syncEvents) {
+				syncEvents.clear();
+			}
+
+			try {
+				testBundle.stop();
+			} catch (BundleException e) {
+				fail("Unexpected stop error.", e);
+			}
+			// need to sleep to allow async events to be fired
+			Sleep.sleep(2000);
+			expectedEvents = new BundleEvent[] {
+					new BundleEvent(BundleEvent.STOPPING, testBundle),
+					new BundleEvent(BundleEvent.STOPPED, testBundle) };
+			checkHooks(expectedEvents.length, hookCalled, hookIDcallOrder);
+			checkEvents(expectedEvents, syncEvents, asyncEvents);
+		} catch (InterruptedException e) {
+			fail("Unexpected interuption", e);
+		} finally {
+			// unregister hook and services
+			if (regHook0 != null)
+				regHook0.unregister();
+			if (regHook1 != null)
+				regHook1.unregister();
+			testContext.removeBundleListener(bl);
+			testContext.removeBundleListener(sbl);
+			if (testBundle != null)
+				try {
+					testBundle.uninstall();
+				} catch (BundleException e) {
+					// nothing
+				}
+		}
+	}
+
 	public void testCollisionHook() throws BundleException, IOException {
+		doTestCollisionHook(getContext());
+	}
+
+	public void testSystemCollisionHook() throws BundleException, IOException {
+		doTestCollisionHook(getContext().getBundle(Constants.SYSTEM_BUNDLE_LOCATION).getBundleContext());
+	}
+
+	private void doTestCollisionHook(BundleContext installContext) throws BundleException, IOException {
 		Bundle test1 = testBundles[0];
 		try {
 			test1.update(getContext().getBundle().getEntry("hooks.tb2.jar").openStream());
@@ -1087,7 +1499,7 @@ public class BundleHookTests extends OSGiTestCase {
 		}
 		Bundle junk = null;
 		try {
-			junk = getContext().installBundle("junk", getContext().getBundle().getEntry("hooks.tb1.jar").openStream());
+			junk = installContext.installBundle("junk", getContext().getBundle().getEntry("hooks.tb2.jar").openStream());
 			fail("Expected to fail to install duplication bsn/version that causes collision");
 		} catch (BundleException e) {
 			// expected;
@@ -1098,11 +1510,11 @@ public class BundleHookTests extends OSGiTestCase {
 		}
 
 		CollisionHook hook = new CollisionHook() {
-			public void filterCollisions(int operationType, Bundle target, Collection collisionCandidates) {
+			public void filterCollisions(int operationType, Bundle target, Collection<Bundle> collisionCandidates) {
 				collisionCandidates.clear();
 			}
 		};
-		ServiceRegistration reg = getContext().registerService(CollisionHook.class, hook, null);
+		ServiceRegistration<CollisionHook> reg = getContext().registerService(CollisionHook.class, hook, null);
 		try {
 			try {
 				test1.update(getContext().getBundle().getEntry("hooks.tb2.jar").openStream());
@@ -1110,7 +1522,7 @@ public class BundleHookTests extends OSGiTestCase {
 				fail("Expected to succeed in updating to a duplicate bsn/version", e);
 			}
 			try {
-				junk = getContext().installBundle("junk", getContext().getBundle().getEntry("hooks.tb1.jar").openStream());
+				junk = installContext.installBundle("junk", getContext().getBundle().getEntry("hooks.tb2.jar").openStream());
 			} catch (BundleException e) {
 				fail("Expected to succeed to install duplication bsn/version that causes collision", e);
 			} finally {
@@ -1122,4 +1534,5 @@ public class BundleHookTests extends OSGiTestCase {
 			reg.unregister();
 		}
 	}
+
 }

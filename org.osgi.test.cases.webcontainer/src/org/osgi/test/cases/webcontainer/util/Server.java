@@ -16,6 +16,8 @@
 
 package org.osgi.test.cases.webcontainer.util;
 
+import org.osgi.framework.BundleContext;
+
 /**
  * @version $Rev$ $Date$
  */
@@ -24,22 +26,12 @@ public class Server {
     int port;
     String host;
 
-    public Server() {
+	public Server(BundleContext context) {
         // when host is not specified, let's try to read it from the system
         // property.
-        String p = System.getProperty("org.osgi.service.webcontainer.host");
+		String p = context.getProperty("org.osgi.service.webcontainer.host");
         this.host = (p == null) ? "localhost" : p;
-        this.port = guessHttpPort();
-    }
-
-    public Server(String host) {
-        this.host = host;
-        this.port = guessHttpPort();
-    }
-
-    public Server(String host, int port) {
-        this.host = host;
-        this.port = port;
+		this.port = guessHttpPort(context);
     }
 
     public void setHost(String host) {
@@ -60,9 +52,10 @@ public class Server {
 
     // TODO: the http CT has this method impl that we may be able to borrow
     // here.
-    int guessHttpPort() {
+	int guessHttpPort(BundleContext context) {
         // Try to find the HTTP port.
-        String p = System.getProperty("org.osgi.service.webcontainer.port.http");
+		String p = context
+				.getProperty("org.osgi.service.webcontainer.port.http");
         return (p == null) ? 8080 : Integer.parseInt(p);
     }
 }

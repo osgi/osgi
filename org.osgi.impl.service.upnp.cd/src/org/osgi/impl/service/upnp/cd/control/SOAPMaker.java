@@ -1,10 +1,11 @@
 package org.osgi.impl.service.upnp.cd.control;
 
 import java.text.DateFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.Enumeration;
 
 // This class creates a SOAP message to send to the contol device via HTTP.
-public class SOAPMaker implements SOAPConstants {
+public class SOAPMaker extends SOAPConstants {
 	// This is the object whose lock will be used to synchronize the createQuery
 	// method.
 	private Object	queryLock	= new Object();

@@ -10,6 +10,7 @@ nodeploy						=true
 -dependson 					=  \
     ee.minimum, \
     ee.foundation, \
+    osgi.annotation, \
     osgi.core, \
     osgi.cmpn, \
     osgi.enterprise, \

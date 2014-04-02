@@ -25,7 +25,9 @@
 
     <para>This specification provides a means for a handler bundle to
     intercept any bundle class loading calls in the framework, transform the
-    byte codes, and add new dynamic imports.</para>
+    byte codes, and add new dynamic imports. A means for observing the final
+    weaving results, both before and after they take effect, is also
+    provided.</para>
 
     <section>
       <title>Essentials</title>
@@ -60,6 +62,11 @@
           <para><emphasis>Multiple</emphasis> - Allow for multiple weavers per
           bundle in a defined order.</para>
         </listitem>
+
+        <listitem>
+          <para><emphasis>Observation</emphasis> - Allow woven class state
+          transitions to be observed.</para>
+        </listitem>
       </itemizedlist>
     </section>
 
@@ -74,7 +81,13 @@
 
         <listitem>
           <para><emphasis>Woven Class</emphasis> - An object representing the
-          class to be woven</para>
+          class to be woven.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Woven Class Listener</emphasis> - A service
+          registered by a bundle that wants to observe woven class state
+          transitions.</para>
         </listitem>
       </itemizedlist>
 
@@ -95,125 +108,204 @@
   <section>
     <title>Usage</title>
 
-    <para>For tracing purposes, a bundle can weave a trace entry and exit
-    message around each method. This is trivially to do with byte code weaving
-    by inserting a call to a service at the begin and end of a method. In this
-    example, a service is created that has two methods:</para>
+    <section>
+      <title>Tracing</title>
 
-    <itemizedlist>
-      <listitem>
-        <para><code>trace(Bundle)</code> - Byte code weave the given bundle
-        with trace entry and exit methods.</para>
-      </listitem>
+      <para>For tracing purposes, a bundle can weave a trace entry and exit
+      message around each method. This can be done with byte code weaving by
+      inserting a call to a service at the beginning and end of a method. In
+      this example, a service is created that has two methods:</para>
 
-      <listitem>
-        <para><code>untrace(Bundle)</code> - Remove any weavings.</para>
-      </listitem>
-    </itemizedlist>
+      <itemizedlist>
+        <listitem>
+          <para><code>trace(Bundle)</code> - Byte code weave the given bundle
+          with trace entry and exit methods.</para>
+        </listitem>
 
-    <para>The strategy chosen here is simple. The weaver registers a Weaving
-    Hook service so it receives all class loads. Any such class load is
-    checked against a list of bundles that needs tracing, any class from a
-    traced bundle is then woven with the trace information. If a bundle is
-    traced, the list is set up and the bundle is refreshed to ensure all
-    classes are loaded anew so the tracing code can be woven in.</para>
+        <listitem>
+          <para><code>untrace(Bundle)</code> - Remove any weavings.</para>
+        </listitem>
+      </itemizedlist>
 
-    <programlisting>public class Example implements WeavingHook{
-    final Map&lt;Bundle,BundleWiring&gt; bundles = new HashMap&lt;Bundle,BundleWiring&gt;();
+      <para>The strategy chosen here is simple. The weaver registers a Weaving
+      Hook service so it receives all class loads. Any such class load is
+      checked against a set of bundles that needs tracing, any class from a
+      traced bundle is then woven with the trace information. If a bundle is
+      to be traced, the set is updated and the bundle is refreshed to ensure
+      all classes are loaded anew so the tracing code can be woven in.</para>
+
+      <programlisting>public class TracingWeaver implements WeavingHook {
+    final Set&lt;Bundle&gt; bundles = new HashSet&lt;Bundle&gt;();
     final List&lt;String&gt; imports = Arrays.asList(
         "com.acme.trace;version=\"[1,2)\""); 
     BundleContext context;</programlisting>
 
-    <para>The <code>weave</code> method is the service method of the Weaving
-    Hook service. It receives a <code>WovenClass</code> object that provides
-    the information about the to-be-woven class. In this case, the
-    <code>bundles</code> field contains the bundles to be woven, so this is
-    checked first. If the to be loaded class is in one of the traced bundles,
-    the byte codes are changed to provide trace information. Otherwise the
-    request is ignored.</para>
+      <para>The <code>weave</code> method is the service method of the Weaving
+      Hook service. It receives a <code>WovenClass</code> object that provides
+      the information about the class to be woven. In this case, the
+      <code>bundles</code> field contains the bundles to be woven, so this is
+      checked first. If the to-be-loaded class is in one of the traced
+      bundles, the byte codes are changed to provide trace information.
+      Otherwise the no change is made.</para>
 
-    <para>In general, weaving code will require new imports for the
-    to-be-woven bundle. These imports can be added by adding Dynamic Import
-    Package statements to the list received from the
-    <code>getDynamicImports</code> method. This is a list of
-    <code>String</code> objects, the syntax of each string is equal to a
-    clause in the DynamicImport-Package header, see <xref
-    linkend="framework.module.dynamicimportpackage"/> for the exact
-    syntax.</para>
+      <para>In general, weaving code will require new imports for the
+      to-be-woven bundle. These imports can be added by adding Dynamic Import
+      Package clauses to the list received from the <xref
+      linkend="org.osgi.framework.hooks.weaving.WovenClass.getDynamicImports--"
+      xrefstyle="hyperlink"/> method. This is a list of <code>String</code>
+      objects, the syntax of each string is equal to a clause in the
+      DynamicImport-Package header. See <xref
+      linkend="framework.module.dynamicimportpackage"/> for the proper
+      syntax.</para>
 
-    <programlisting>    public void weave(WovenClass classInfo) {
+      <programlisting>    public void weave(WovenClass classInfo) {
         BundleWiring bw = classInfo.getBundleWiring(); 
         Bundle b = bw.getBundle(); 
-        if ( bundles.contains(b) ) {
+        if (bundles.contains(b)) {
             byte [] woven = weaveTracing(classInfo.getBytes());
-            if ( !classInfo.getDynamicImports()
-                    .containsAll(imports))
+            if (!classInfo.getDynamicImports().containsAll(imports))
                 classInfo.getDynamicImports().addAll(imports);
             classInfo.setBytes(woven);
         }
     }</programlisting>
 
-    <para>The following <code>trace</code> method is called when a bundle must
-    be traced. It ignores the request if the bundle is already traced.
-    Otherwise, it will add the bundle to the list of traced bundles and
-    refresh the bundle.</para>
+      <para>The following <code>trace</code> method is called when a bundle
+      must be traced. It ignores the request if the bundle is already traced.
+      Otherwise, it will add the bundle to the set of traced bundles and
+      refresh the bundle.</para>
 
-    <programlisting>    public synchronized void trace(Bundle b) 
-        throws BundleException {
-
-        if ( !bundles.containsKey(b))
-            return;
-
-        BundleWiring bw =b.adapt(BundleWiring.class);
-        bundles.put(b, bw);
-        refresh(b);
+      <programlisting>    public void trace(Bundle b) {
+        if (bundles.add(b))
+            refresh(b);
     }</programlisting>
 
-    <para>The <code>untrace</code> method is the reverse:</para>
+      <para>The <code>untrace</code> method is the reverse:</para>
 
-    <programlisting>    public synchronized void untrace(Bundle b) 
-        throws BundleException {
-        if ( !bundles.containsKey(b))
-            return;
-
-        bundles.remove(b);
-        refresh(b);
+      <programlisting>    public void untrace(Bundle b) {
+        if (bundles.remove(b))
+            refresh(b);
     }</programlisting>
 
-    <para>The refresh method uses the Bundle Wiring API to refresh a bundle.
-    Refreshing a bundle will throw away its class loader and so that all used
-    classes are reloaded when needed.</para>
+      <para>The refresh method uses the Bundle Wiring API to refresh a bundle.
+      Refreshing a bundle will throw away its class loader so that all used
+      classes are reloaded when needed.</para>
 
-    <programlisting>    private void refresh(Bundle b) {
+      <programlisting>    private void refresh(Bundle b) {
         Bundle fwb = context.getBundle(0);
         FrameworkWiring fw = fwb.adapt(FrameworkWiring.class);
-        fw.refreshBundles( Arrays.asList(b));
+        fw.refreshBundles(Arrays.asList(b));
     }</programlisting>
 
-    <para>The trace method that does the final weaving is left as an exercise
-    to the reader:</para>
+      <para>The trace method that does the final weaving is left as an
+      exercise to the reader:</para>
 
-    <programlisting>    byte[] trace(byte [] bytes ) {
+      <programlisting>    byte[] weaveTracing(byte[] bytes) {
         ..
     }       
 }</programlisting>
+    </section>
+
+    <section>
+      <title>Isolation</title>
+
+      <para>The <xref linkend="framework.resolverhooks"/> allows bundles to be
+      separated into various regions isolated by sharing policies. The dynamic
+      imports added in the tracing example will need to be taken into account
+      by the sharing policies of regions containing bundles whose classes were
+      woven in order for the bundles to resolve. This can be accomplished
+      using a Woven Class Listener. Using a Weaving Hook would not be
+      appropriate since there is no guarantee that a Weaving Hook observes the
+      final list of dynamic imports.</para>
+
+      <para>The region registers a Woven Class Listener service so it receives
+      notifications of Woven Class state transitions. The sharing policy of
+      the region containing the bundle whose class was woven is updated with
+      the dynamic imports, if any. This action occurs while the Woven Class is
+      in the <xref
+      linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMED"
+      xrefstyle="hyperlink"/> state to ensure the region is prepared to accept
+      the imports before the bundle wiring is updated upon entering the <xref
+      linkend="org.osgi.framework.hooks.weaving.WovenClass.DEFINED"
+      xrefstyle="hyperlink"/> state. The region is initialized with the set of
+      bundles composing it and a static sharing policy consisting of
+      namespaces mapped to sets of filters indicating the allowed
+      capabilities.</para>
+
+      <programlisting>public class Region implements WovenClassListener, ResolverHook {
+    final Set&lt;Bundle&gt; bundles;
+    final Map&lt;String, Set&lt;Filter&gt;&gt; policy;</programlisting>
+
+      <para>The <code>modified</code> method is the service method of the
+      Woven Class Listener service. It receives a Woven Class object that
+      provides the information about the woven class that underwent a state
+      transition. If the current state is <xref
+      linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMED"
+      xrefstyle="hyperlink"/>, and the associated bundle is part of the
+      region, the sharing policy is updated with the additional dynamic
+      imports, if any.</para>
+
+      <programlisting>    public void modified(WovenClass wovenClass) {
+        if ((wovenClass.getState() &amp; WovenClass.TRANSFORMED) == 0)
+            return;
+        Bundle bundle = wovenClass.getBundleWiring().getBundle();
+        if (!bundles.contains(bundle))
+           return;
+        Set&lt;Filter&gt; filters = policy.get(PackageNamespace.PACKAGE_NAMESPACE);
+        for (String dynamicImport : wovenClass.getDynamicImports())
+            filters.add(toFilter(dynamicImport));
+    }</programlisting>
+
+      <para>The region also implements <code>ResolverHook</code>. When the
+      <code>filterMatches</code> method is called, the requirement is
+      inspected to see if its matching capabilities are allowed into the
+      region. If not, the list of candidates is cleared.</para>
+
+      <programlisting>    public void filterMatches(BundleRequirement requirement, 
+            Collection&lt;BundleCapability&gt; candidates) {
+        Bundle bundle = requirement.getRevision().getBundle();
+        if (!bundles.contains(bundle))
+            return;
+        String namespace = requirement.getNamespace();
+        if (!policy.containsKey(namespace))
+            return;
+        Map&lt;String, String&gt; directives = requirement.getDirectives();
+        String filter = directives.get(
+            PackageNamespace.REQUIREMENT_FILTER_DIRECTIVE);
+        Set&lt;Filter&gt; filters = policy.get(namespace);
+        if (!filters.contains(toFilter(filter)))
+            candidates.clear();
+    }</programlisting>
+
+      <para>The <code>toFilter</code> method responsible for converting the
+      requirement filters and dynamic import package clauses into a Filter is
+      left as an exercise to the reader.</para>
+
+      <programlisting>    private Filter toFilter(String s) {
+        ...
+    }
+}</programlisting>
+    </section>
   </section>
 
   <section>
-    <title>The Weaving Service</title>
+    <title>Weaving Hook</title>
 
-    <para>The Weaving Hook service is a white board service; any party that
-    wants to participate in weaving classes can register such a service. The
-    framework picks up the Weaving Hook services and calls their
-    <code>weave</code> method for each class that must be loaded. The weave
-    methods must be called in the service ranking order, see <xref
-    linkend="framework.service.servicerankingorder"/>.</para>
+    <para>The Weaving Hook service is a <xref
+    linkend="framework.weavinghooks-whiteboard.pattern.ref"/> service. Any
+    party that wants to participate in weaving classes can register such a
+    service. The framework obtains the Weaving Hook services and calls their
+    <xref
+    linkend="org.osgi.framework.hooks.weaving.WeavingHook.weave-WovenClass-"
+    xrefstyle="hyperlink"/> method for each class that must be loaded. The
+    Weaving Hook services must be called in the service ranking order. See
+    <xref linkend="framework.service.servicerankingorder"/>.</para>
 
-    <para>The Weaving Hook <code>weave</code> method is called with a
-    <code>WovenClass</code> object that represents the class to-be-woven. This
+    <para>The Weaving Hook <code>weave</code> method is called with a <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass"
+    xrefstyle="hyperlink"/> object that represents the class to be woven. This
     class is similar to the Java <code>ClassFileTransformer</code> class but
     adds bundle wiring information and can be made available in environments
-    prior to Java 5. The methods must all be called in privileged blocks, see
+    prior to Java 5. The methods must all be called in privileged blocks. See
     <xref linkend="framework.lifecycle.privilegedcallbacks"/>.</para>
 
     <para>The <code>WovenClass</code> object provides access to:</para>
@@ -252,20 +344,20 @@
     the following code checks if the class comes from a specific
     bundle:</para>
 
-    <programlisting>if ( wovenClass.getBundleWiring().getBundle()== mybundle )
+    <programlisting>if (wovenClass.getBundleWiring().getBundle().equals(mybundle))
   ...</programlisting>
 
     <para>If the Weaving Hook service decides to weave the class, it must
     calculate new bytes for the provided Woven Class, these bytes can be set
     with the <xref
     linkend="org.osgi.framework.hooks.weaving.WovenClass.setBytes-byte---"
-    xrefstyle="hyperlink"/> method. This implies that ordering is relevant,
+    xrefstyle="hyperlink"/> method. This implies that ordering is relevant.
     Weaving Hook services that are lower in ranking (called later) will weave
     any of the changes of higher ranking Weaving Hook services. Not all
     combinations of Weaving Hook services will therefore work as
     expected.</para>
 
-    <para>Weaving a class can create new dependencies that are unknown the
+    <para>Weaving a class can create new dependencies that are unknown to the
     woven class. In the trace example, the entry and exit traces require
     access to the tracing subsystem, a dependency the original class did not
     have. The <code>WovenClass</code> object allows these extra imports to be
@@ -274,7 +366,7 @@
     <xref
     linkend="org.osgi.framework.hooks.weaving.WovenClass.getDynamicImports--"
     xrefstyle="hyperlink"/> method. This method returns a mutable list of
-    <code>String</code>during the <code>weave</code> method, the Weaving Hook
+    <code>String</code> during the <code>weave</code> method, the Weaving Hook
     service can add new dynamic import package clauses to this list while the
     <code>weave</code> method is active. The syntax of the strings is defined
     by the DynamicImport-Package header, see <xref
@@ -307,7 +399,7 @@
     to include the bundle-version and bundle-symbolic-name synthetic
     attributes that are available on every exported package.</para>
 
-    <programlisting>com.acme.weavesupport.core;version=1.2;bundle-version=3.2; <code>«</code>
+    <programlisting>com.acme.weavesupport.core;version=1.2;bundle-version=3.2; «
     bundle-symbolic-name=com.acme.weavesupport</programlisting>
 
     <para>After calling the last Weaving Hook service, the
@@ -328,12 +420,13 @@
       method. The framework should not hold any locks when calling the Weaving
       Hook services, and Weaving Hook service implementations must be
       thread-safe. Furthermore Weaving Hook services may be re-entrant, and
-      should be careful to avoid cycles when weaving,</para>
+      should be careful to avoid cycles when weaving.</para>
 
-      <para>For example when a class is being woven the Weaving Hook may
-      implicitly load a class by having a reference to it or it can explicitly
-      load a class. This new class load will also pass through the Weaving
-      Hook service, so care must be taken to avoid infinite looping.</para>
+      <para>For example when a class is being woven, the Weaving Hook may
+      implicitly load a class by having a reference to it or the Weaving Hook
+      can explicitly load a class. This new class load will also pass through
+      the Weaving Hook service, so care must be taken to avoid infinite
+      looping.</para>
     </section>
 
     <section>
@@ -371,51 +464,343 @@
         </listitem>
 
         <listitem>
-          <para>The bundle class loader must throw a Class Format Error with
-          the cause being the exception thrown by the Weaving Hook
-          service.</para>
+          <para>The bundle class loader must throw a
+          <code>ClassFormatError</code> with the cause being the exception
+          thrown by the Weaving Hook service.</para>
         </listitem>
       </orderedlist>
+    </section>
+  </section>
+
+  <section xml:id="framework.weavinghooks-wovenclasslistener">
+    <title>Woven Class Listener</title>
+
+    <para>The Woven Class Listener service is a <xref
+    linkend="framework.weavinghooks-whiteboard.pattern.ref"/> service. Any
+    party that wants to receive notifications of woven class state transitions
+    can register such a service. The framework obtains the Woven Class
+    Listener services and calls their <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClassListener.modified-WovenClass-"
+    xrefstyle="hyperlink"/> method whenever a Woven Class undergoes a state
+    transition.</para>
+
+    <para>The Woven Class Listener <code>modified</code> method is called with
+    a <xref linkend="org.osgi.framework.hooks.weaving.WovenClass"
+    xrefstyle="hyperlink"/> object that represents the woven class that
+    underwent a state transition. The method must be called in a privileged
+    block. See <xref
+    linkend="framework.lifecycle.privilegedcallbacks"/>.</para>
+
+    <para>The following diagram depicts the state transitions of a Woven
+    Class.</para>
+
+    <figure>
+      <title>Woven Class State Diagram</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="2.017in"
+                     contentwidth="7.125in" fileref="wovenClass-states.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>Woven Class Listeners are not notified of the <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMING"
+    xrefstyle="hyperlink"/> state because the Woven Class is mutable and
+    listeners are not permitted to mutate the Woven Class. For all states
+    observed by Woven Class Listeners, the Woven Class is effectively
+    immutable. The first notification received for a given Woven Class is
+    either the <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMED"
+    xrefstyle="hyperlink"/> or <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMING_FAILED"
+    xrefstyle="hyperlink"/> state. The <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMED"
+    xrefstyle="hyperlink"/> state occurs after all Weaving Hooks have been
+    notified but before the class has been defined or the bundle wiring has
+    been updated for any additional dynamic imports. The <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMING_FAILED"
+    xrefstyle="hyperlink"/> state occurs if any Weaving Hook throws an
+    exception. After the <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMED"
+    xrefstyle="hyperlink"/> state, a Woven Class can transition to either the
+    <xref linkend="org.osgi.framework.hooks.weaving.WovenClass.DEFINED"
+    xrefstyle="hyperlink"/> state or the <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.DEFINE_FAILED"
+    xrefstyle="hyperlink"/> state. The <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.DEFINED"
+    xrefstyle="hyperlink"/> state occurs when the class was defined
+    successfully and after the bundle wiring has been updated. The <xref
+    linkend="org.osgi.framework.hooks.weaving.WovenClass.DEFINE_FAILED"
+    xrefstyle="hyperlink"/> state occurs if a class definition error
+    occurred.</para>
+
+    <para><xref linkend="framework.weavinghooks-woven.class.state.table"/>
+    describes the states of a Woven Class in more detail.</para>
+
+    <table xml:id="framework.weavinghooks-woven.class.state.table">
+      <title>Woven Class State Table</title>
+
+      <tgroup cols="2">
+        <colspec colnum="1" colwidth="1.5*"/>
+
+        <colspec colnum="2" colwidth="3*"/>
+
+        <thead>
+          <row>
+            <entry>State</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><para><xref
+            linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMING"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>A bundle class load request was
+            made.</para><itemizedlist>
+                <listitem>
+                  <para>Weaving is incomplete.</para>
+                </listitem>
+
+                <listitem>
+                  <para>The class is undefined.</para>
+                </listitem>
+
+                <listitem>
+                  <para>The Woven Class is mutable.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Weaving Hooks are notified but Woven Class Listeners
+                  are not.</para>
+                </listitem>
+              </itemizedlist></entry>
+          </row>
+
+          <row>
+            <entry><para><xref
+            linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMED"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>All Weaving Hooks have been
+            notified.</para><itemizedlist>
+                <listitem>
+                  <para>Weaving is complete.</para>
+                </listitem>
+
+                <listitem>
+                  <para>The class is undefined.</para>
+                </listitem>
+
+                <listitem>
+                  <para>The Woven Class is effectively immutable.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Woven Class Listeners are notified.</para>
+                </listitem>
+              </itemizedlist></entry>
+          </row>
+
+          <row>
+            <entry><para><xref
+            linkend="org.osgi.framework.hooks.weaving.WovenClass.TRANSFORMING_FAILED"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>A Weaving Hook threw an
+            exception.</para><itemizedlist>
+                <listitem>
+                  <para>Weaving is incomplete.</para>
+                </listitem>
+
+                <listitem>
+                  <para>The class is undefined.</para>
+                </listitem>
+
+                <listitem>
+                  <para>The Woven Class is effectively immutable.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Woven Class Listeners are notified.</para>
+                </listitem>
+              </itemizedlist></entry>
+          </row>
+
+          <row>
+            <entry><para><xref
+            linkend="org.osgi.framework.hooks.weaving.WovenClass.DEFINED"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>All Woven Class Listeners have been notified. The
+            class has been defined.</para><itemizedlist>
+                <listitem>
+                  <para>Weaving is complete.</para>
+                </listitem>
+
+                <listitem>
+                  <para>The class is defined.</para>
+                </listitem>
+
+                <listitem>
+                  <para>The Woven Class is effectively immutable.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Woven Class Listeners are notified.</para>
+                </listitem>
+              </itemizedlist></entry>
+          </row>
+
+          <row>
+            <entry><para><xref
+            linkend="org.osgi.framework.hooks.weaving.WovenClass.DEFINE_FAILED"
+            xrefstyle="hyperlink"/></para></entry>
+
+            <entry><para>All Weaving Hooks have been notified. A class
+            definition failure occurred.</para><itemizedlist>
+                <listitem>
+                  <para>Weaving is complete.</para>
+                </listitem>
+
+                <listitem>
+                  <para>The class is undefined.</para>
+                </listitem>
+
+                <listitem>
+                  <para>The Woven Class is effectively immutable.</para>
+                </listitem>
+
+                <listitem>
+                  <para>Woven Class Listeners are notified.</para>
+                </listitem>
+              </itemizedlist></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <section>
+      <title>Concurrency</title>
+
+      <para>Class loads can occur at any time, and Woven Class Listeners must
+      be able to handle concurrent calls to the <code>modified</code> method.
+      The framework should not hold any locks when calling Woven Class
+      Listeners, and Woven Class Listener implementations must be thread-safe.
+      Woven Class Listeners must be synchronously called by the framework when
+      a Woven Class completes a state transition. The woven class processing
+      will not proceed until all Woven Class Listeners are done.</para>
+    </section>
+
+    <section>
+      <title>Error Handling</title>
+
+      <para>Woven Class Listeners must not cause the weaving process to fail.
+      If a Woven Class Listener throws an exception, the framework should log
+      the exception but otherwise ignore it.</para>
     </section>
   </section>
 
   <section>
     <title>Security</title>
 
-    <para>All hooks described in this specification are highly complex
-    facilities that require great care in their implementation to maintain the
-    Framework invariants concerning the service registry. It is therefore
-    important that in a secure system the permission to register these hooks
-    is only given to privileged bundles.</para>
+    <section>
+      <title>Weaving Hooks</title>
 
-    <para>In this case, the user of the hook services is the framework.
-    Therefore, there is never a need to provide:</para>
+      <para>All hooks described in this specification are highly complex
+      facilities that require great care in their implementation to maintain
+      the Framework invariants. It is therefore important that in a secure
+      system the permission to register these hooks is only given to
+      privileged bundles.</para>
 
-    <itemizedlist>
-      <listitem>
-        <para><code>ServicePermission[..WeavingHook,GET]</code>,</para>
-      </listitem>
-    </itemizedlist>
+      <para>In this case, the user of the hook services is the framework.
+      Therefore, there is never a need to provide:</para>
 
-    <para>Implementers of these hooks must have:</para>
+      <itemizedlist>
+        <listitem>
+          <para><code>ServicePermission[..WeavingHook,GET]</code></para>
+        </listitem>
+      </itemizedlist>
 
-    <itemizedlist>
-      <listitem>
-        <para><code>ServicePermission[..WeavingHook,REGISTER]</code> for
-        Weaving Hook services.</para>
-      </listitem>
-    </itemizedlist>
+      <para>Implementers of these hooks must have:</para>
 
-    <para>In addition, a Weave Hook must have Admin Permission with the
-    <code>WEAVE</code> action to be able to use the methods on the
-    <code>WovenClass</code> object that mutate the state like <xref
-    linkend="org.osgi.framework.hooks.weaving.WovenClass.setBytes-byte---"
-    xrefstyle="hyperlink"/>, <xref
-    linkend="org.osgi.framework.hooks.weaving.WovenClass.getBytes--"
-    xrefstyle="hyperlink"/>, and <xref
-    linkend="org.osgi.framework.hooks.weaving.WovenClass.getDynamicImports--"
-    xrefstyle="hyperlink"/> when used to modify the imports.</para>
+      <itemizedlist>
+        <listitem>
+          <para><code>ServicePermission[..WeavingHook,REGISTER]</code> for
+          Weaving Hook services.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>In addition, a Weaving Hook must have Admin Permission with the
+      <xref linkend="org.osgi.framework.AdminPermission.WEAVE"
+      xrefstyle="hyperlink"/> action to be able to use the methods on the
+      <code>WovenClass</code> object that mutate the state like <xref
+      linkend="org.osgi.framework.hooks.weaving.WovenClass.setBytes-byte---"
+      xrefstyle="hyperlink"/>, <xref
+      linkend="org.osgi.framework.hooks.weaving.WovenClass.getBytes--"
+      xrefstyle="hyperlink"/>, and the mutating methods on the list returned
+      by <xref
+      linkend="org.osgi.framework.hooks.weaving.WovenClass.getDynamicImports--"
+      xrefstyle="hyperlink"/>. Moreover, a Weaving Hook must have Package
+      Permission with the <code>IMPORT</code> action in order to add or
+      replace dynamic imports.</para>
+    </section>
+
+    <section>
+      <title>Woven Bundles</title>
+
+      <para>The Framework must grant implied <code>PackagePermission[somePkg,
+      IMPORT]</code> permissions to bundles whose classes are being woven with
+      additional dynamic imports, assuming the weaver has a matching package
+      import permission. The permission check for the weaver must occur during
+      any call to the list that results in the addition or setting of a
+      dynamic import. If the check fails, a SecurityException must be thrown.
+      If it succeeds, the implied permission must be granted to the woven
+      bundle immediately before defining the class.</para>
+    </section>
+
+    <section>
+      <title>Woven Class Listeners</title>
+
+      <para>Implementers of these listeners must have:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>ServicePermission[..WovenClassListener,REGISTER]</code>
+          for Woven Class Listener services.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
   </section>
 
   <xi:include href="../../../generated/javadoc/docbook/org.osgi.framework.hooks.weaving.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed
+      xml:id="framework.weavinghooks-whiteboard.pattern.ref"><title>Whiteboard
+      Pattern</title>http://www.osgi.org/wiki/uploads/Links/whiteboard.pdf</bibliomixed>
+    </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Added support for <xref
+        linkend="org.osgi.framework.hooks.weaving.WovenClassListener"
+        xrefstyle="hyperlink"/> to be able to observe woven class state
+        transitions in <xref
+        linkend="framework.weavinghooks-wovenclasslistener"/>.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
 </chapter>

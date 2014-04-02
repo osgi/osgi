@@ -64,9 +64,9 @@
     Compendium <xref endterm="cmpn.book-release" linkend="cmpn.book"/>.</para>
 
     <section xml:id="intro.core.release">
-      <title>OSGi Core Release 5</title>
+      <title>OSGi Core Release 6</title>
 
-      <para>This specification is based on the OSGi Core Release 5. This
+      <para>This specification is based on the OSGi Core Release 6. This
       specification can be downloaded from:</para>
 
       <programlisting>http://www.osgi.org/Specifications/HomePage</programlisting>
@@ -518,42 +518,21 @@
   </section>
 
   <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Added <xref linkend="service.repository"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="service.loader"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="service.subsystem"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="service.namespaces"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="service.resolver"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Removed <emphasis>SCA Configuration Type
-        Specification</emphasis>.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
-
-  <section>
     <title>References</title>
 
     <bibliolist>
       <bibliomixed xml:id="i311124"><title>OSGi
       Specifications</title>http://www.osgi.org/Specifications/HomePage</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <remark>BJH Need to write change list.</remark>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

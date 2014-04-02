@@ -155,6 +155,10 @@ Include-Resource = \
 	div.tb24c.jar, \
 	div.tb25.resolved.jar, \
 	div.tb25.unresolved.jar, \
+	div.tb26.jar, \
+	div.tb27.jar, \
+	dto.tb1.jar, \
+	dto.tb2.jar, \
 	dynpkgimport.tb0.jar, \
 	dynpkgimport.tb1.jar, \
 	dynpkgimport.tb2.jar, \
@@ -238,6 +242,7 @@ Include-Resource = \
 	resolver.tb13a.jar, \
 	resolver.tb13b.jar, \
 	resolver.tb14.jar, \
+	serviceregistry.tb1.jar, \
 	startlevel.tb1.jar, \
 	startlevel.tb2.jar, \
 	startlevel.tb3.jar, \
@@ -274,37 +279,43 @@ Include-Resource = \
 
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
+	org.osgi.dto;							version=project	, \
 	org.osgi.resource;						version=project	, \
 	org.osgi.framework;						version=project	, \
-	osgi.core;								version=4.2	, \
 	osgi.cmpn;								version=4.0	, \
-	ee.minimum; 							version=1.2.1, \
+	ee.minimum; 							version=1.3, \
 	org.apache.servicemix.bundles.bcel;     version=5.2 , \
 	${junit}
 
 Test-Cases							= ${testcases}
 -signaturetest                      = \
+    org.osgi.dto, \
     org.osgi.resource, \
+    org.osgi.resource.dto, \
     org.osgi.framework, \
+    org.osgi.framework.dto, \
     org.osgi.framework.hooks.bundle, \
     org.osgi.framework.hooks.resolver, \
     org.osgi.framework.hooks.service, \
     org.osgi.framework.hooks.weaving, \
     org.osgi.framework.namespace, \
     org.osgi.framework.startlevel, \
-    org.osgi.framework.wiring
+    org.osgi.framework.startlevel.dto, \
+    org.osgi.framework.wiring, \
+    org.osgi.framework.wiring.dto
 
 -runbundles						= \
 	org.apache.servicemix.bundles.bcel;         version=5.2 
 
 -runproperties = ${runproperties}, \
-	org.osgi.framework.executionenvironment = "AA/BB,CC-XX/DD-YY,EE-2.0/FF-YY,GG-XX/HH-1.0,II-1.0/JJ-2.0,div/tb7a,OSGi/Minimum-1.0,OSGi/Minimum-1.1,OSGi/Minimum-1.2,JRE-1.1,J2SE-1.2,J2SE-1.3,J2SE-1.4,J2SE-1.5", \
 	${p}.div.tb12=abc, \
 	${p}.div.tb15=abc, \
 	${p}.div.tb16=xyz, \
 	org.osgi.framework.system.capabilities.extra = "osgi.ee; osgi.ee=\"testOSGiEE\", \
 	  osgi.ee; osgi.ee=\"AA/BB\", \
+	  osgi.ee; osgi.ee=\"CC-XX/DD-YY\", \
 	  osgi.ee; osgi.ee=\"EE/FF-YY\"; version:Version=\"2.0\", \
 	  osgi.ee; osgi.ee=\"GG-XX/HH\"; version:Version=\"1.0\", \
-	  osgi.ee; osgi.ee=\"II-1.0/JJ-2.0\"
+	  osgi.ee; osgi.ee=\"II-1.0/JJ-2.0\", \
+	  osgi.ee; osgi.ee=\"div/tb7a\""
 

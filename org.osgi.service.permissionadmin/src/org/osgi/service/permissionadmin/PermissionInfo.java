@@ -253,6 +253,7 @@ public class PermissionInfo {
 	 * 
 	 * @return The string representation of this {@code PermissionInfo}.
 	 */
+	@Override
 	public String toString() {
 		return getEncoded();
 	}
@@ -304,6 +305,7 @@ public class PermissionInfo {
 	 *         the same type, name and actions as this {@code PermissionInfo}
 	 *         object; {@code false} otherwise.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -331,6 +333,7 @@ public class PermissionInfo {
 	 * 
 	 * @return A hash code value for this object.
 	 */
+	@Override
 	public int hashCode() {
 		int h = 31 * 17 + type.hashCode();
 		if (name != null) {

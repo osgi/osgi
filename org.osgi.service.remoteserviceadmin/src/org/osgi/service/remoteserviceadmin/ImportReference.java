@@ -16,6 +16,7 @@
 
 package org.osgi.service.remoteserviceadmin;
 
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -25,9 +26,9 @@ import org.osgi.framework.ServiceReference;
  * service is no longer imported, all methods must return {@code null}.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface ImportReference {
 	/**
 	 * Return the Service Reference for the proxy for the endpoint.
@@ -35,7 +36,7 @@ public interface ImportReference {
 	 * @return The Service Reference to the proxy for the endpoint. Must be
 	 *         {@code null} when the service is no longer imported.
 	 */
-	ServiceReference getImportedService();
+	ServiceReference<?> getImportedService();
 
 	/**
 	 * Return the Endpoint Description for the remote endpoint.

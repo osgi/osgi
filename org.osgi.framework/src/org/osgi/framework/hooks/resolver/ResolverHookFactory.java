@@ -17,6 +17,7 @@
 package org.osgi.framework.hooks.resolver;
 
 import java.util.Collection;
+import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.FrameworkWiring;
@@ -33,6 +34,7 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * @see ResolverHook
  * @author $Id$
  */
+@ConsumerType
 public interface ResolverHookFactory {
 	/**
 	 * This method is called by the framework each time a resolve process begins

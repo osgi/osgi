@@ -17,6 +17,7 @@
 package org.osgi.framework.wiring;
 
 import java.util.Map;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.namespace.AbstractWiringNamespace;
 import org.osgi.resource.Requirement;
 
@@ -25,9 +26,9 @@ import org.osgi.resource.Requirement;
  * revision}.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface BundleRequirement extends Requirement {
 	/**
 	 * Returns the bundle revision declaring this requirement.

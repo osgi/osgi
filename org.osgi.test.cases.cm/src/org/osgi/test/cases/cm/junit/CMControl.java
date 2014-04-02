@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi
  * Specification may be subject to third party intellectual property
@@ -26,6 +26,7 @@ package org.osgi.test.cases.cm.junit;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -40,6 +41,7 @@ import java.util.PropertyPermission;
 import java.util.Set;
 
 import junit.framework.AssertionFailedError;
+
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
@@ -76,7 +78,7 @@ import org.osgi.test.support.sleep.Sleep;
 public class CMControl extends DefaultTestBundleControl {
 	private ConfigurationAdmin cm;
 	private PermissionAdmin permAdmin;
-	private static final long SIGNAL_WAITING_TIME = Long.getLong("org.osgi.test.cases.cm.signal_waiting_time", 4000).longValue();
+	private long					SIGNAL_WAITING_TIME;
 	private List list;
 	private boolean permissionFlag;
 	private Bundle setAllPermissionBundle;
@@ -212,6 +214,8 @@ public class CMControl extends DefaultTestBundleControl {
 	private static final String neverlandLocation = "http://neverneverland/";
 
 	protected void setUp() throws Exception {
+		SIGNAL_WAITING_TIME = getLongProperty(
+				"org.osgi.test.cases.cm.signal_waiting_time", 4000);
 		// printoutBundleList();
 
 	    assignCm();
@@ -323,6 +327,12 @@ public class CMControl extends DefaultTestBundleControl {
 		this.printoutPermissions();
 	}
 
+    private List getBundlePermission(Bundle b) {
+        if (permAdmin == null) return null;
+        PermissionInfo[] pis = permAdmin.getPermissions(b.getLocation());
+        return Arrays.asList(pis);
+    }
+
 	private void add(List permissionsInfos, String clazz, String name,
 			String actions) {
 		permissionsInfos.add(new PermissionInfo(clazz, name, actions));
@@ -412,15 +422,22 @@ public class CMControl extends DefaultTestBundleControl {
 		/* must fail because of inappropriate Permission. */
 		String message = "try to get location without appropriate ConfigurationPermission.";
 		try {
-			String location = conf.getBundleLocation();
-			assertEquals("The location must be " + thisLocation, thisLocation,
-					location);
-		} catch (AssertionFailedError e) {
-			throw e;
-		} catch (Throwable e) {
-			fail("Throwable must not be thrown because the configuring bundle has implicit CP for thisLocation",
-					e);
-
+            conf.getBundleLocation();
+            /*
+             * A SecurityException should have been thrown if security is
+             * enabled
+             */
+            if (System.getSecurityManager() != null) failException(message, SecurityException.class);
+        } catch (AssertionFailedError e) {
+            throw e;
+        } catch (Throwable e) {
+            /* Check that we got the correct exception */
+            assertException(message, SecurityException.class, e);
+            /*
+             * A SecurityException should not have been thrown if security is
+             * not enabled
+             */
+            if (System.getSecurityManager() == null) fail("Security is not enabled", e);
 		}
 
 		/* Get the configuration again (should be exactly the same) */
@@ -1898,34 +1915,16 @@ public class CMControl extends DefaultTestBundleControl {
 			bundle1.stop();
 			assertEquals("Dynamic binding(STOPPED). Wait for a while.",
 					conf.getBundleLocation(), bundle1.getLocation());
-			calledback = sync2.waitForSignal(SIGNAL_WAITING_TIME, ++count2);
+            calledback = sync2.waitForSignal(SIGNAL_WAITING_TIME, count2 + 1);
 			assertFalse("ManagedService2 MUST NOT be called back.", calledback);
 			bundle1.uninstall();
 			trace("Dynamic binding(UNINSTALLED). Wait for a while.");
 			calledback2 = sync2
 					.waitForSignal(SIGNAL_WAITING_TIME * 2, ++count2);
-			/*
-			 * Open issue. Should the newly dynamically bound ManagedService be
-			 * called back ? Ikuo thinks yes while BJ thinks no. The
-			 * implementator of this CT (Ikuo) thinks CT should not be strict in
-			 * this point because it is not clear in the spec of version 1.3.
-			 */
-			// assertTrue("ManagedService MUST be called back.", calledback2);
-			if (!calledback2) {
-				count2--;
-			}
+            assertTrue("ManagedService2 MUST be called back.", calledback2);
 
-			/*
-			 * Open Issue: Ikuo thinks the Conf which got unbound from bundle1
-			 * should get bound to any of other target bundles if other target
-			 * bundle exists. However Felix thinks not (when Conf#update(props)
-			 * is called, it will be bound. The implementator of this CT (Ikuo)
-			 * thinks CT should not be strict in this point because it is not
-			 * clear in the spec of version 1.3.
-			 */
-
-			// assertEquals("Dynamic binding(UNINSTALLED). Wait for a while.",
-			// bundle2.getLocation(), conf.getBundleLocation());
+            assertEquals("Dynamic binding(UNINSTALLED). Wait for a while.", bundle2.getLocation(),
+                conf.getBundleLocation());
 			props.put("StringKey", "stringvalue2");
 			conf.update(props);
 			calledback2 = sync2.waitForSignal(SIGNAL_WAITING_TIME, ++count2);
@@ -1955,6 +1954,112 @@ public class CMControl extends DefaultTestBundleControl {
 				conf.delete();
 		}
 
+        /*
+         * 9. Test dynamic bindings from getConfiguration(pid) and
+         * createConfiguration(pid) (Member Bug 2551)
+         */
+        trace("############ 9 testDynamicBinding()");
+        String dynamicPid1 = Util.createPid("dynamicPid1");
+        String dynamicPid2 = Util.createPid("dynamicPid2");
+        String dynamicFactoryPid = Util.createPid("dynamicFactoryPid");
+        String dynamicFactoryPidInstance = null;
+        try {
+            props = new Hashtable();
+            props.put("StringKey", "String Value");
+
+            // make sure this bundle has enough permissions
+            this.setAppropriatePermission();
+
+            // ensure unbound configuration
+            conf = this.cm.getConfiguration(dynamicPid1, null);
+            assertNotNull("Configuration must exist for " + dynamicPid1, conf);
+            assertNull("Configuration must be new for " + dynamicPid1, conf.getProperties());
+            assertNull("Configuration for " + dynamicPid1 + " must be unbound",
+                this.getBundleLocationForCompare(conf));
+            conf.update(props);
+
+            SynchronizerImpl sync = new SynchronizerImpl("ID1");
+            reg = getContext().registerService(Synchronizer.class.getName(), sync, propsForSync1);
+            bundle1 = getContext().installBundle(getWebServer() + "targetb1.jar");
+            this.startTargetBundle(bundle1);
+            trace("Wait for signal.");
+
+            ServiceReference caref = bundle1.getBundleContext().getServiceReference(ConfigurationAdmin.class);
+            ConfigurationAdmin ca = (ConfigurationAdmin) bundle1.getBundleContext().getService(caref);
+
+            // ensure configuration 1 is bound to bundle1
+            conf = ca.getConfiguration(dynamicPid1);
+            assertNotNull("Configuration must exist for " + dynamicPid1, conf);
+            assertNotNull("Configuration must not be new for " + dynamicPid1, conf.getProperties());
+            assertEquals("Configuration for " + dynamicPid1 + " must be bound to " + bundle1.getLocation(),
+                bundle1.getLocation(), this.getBundleLocationForCompare(conf));
+
+            // ensure configuration 2 is bound to bundle1
+            conf = ca.getConfiguration(dynamicPid2);
+            assertNotNull("Configuration must exist for " + dynamicPid2, conf);
+            assertNull("Configuration must be new for " + dynamicPid2, conf.getProperties());
+            assertEquals("Configuration for " + dynamicPid2 + " must be bound to " + bundle1.getLocation(),
+                bundle1.getLocation(), this.getBundleLocationForCompare(conf));
+            conf.update(props);
+
+            // ensure factory configuration bound to bundle1
+            conf = ca.createFactoryConfiguration(dynamicFactoryPid);
+            dynamicFactoryPidInstance = conf.getPid();
+            assertNotNull("Factory Configuration must exist for " + dynamicFactoryPid, conf);
+            assertNull("Factory Configuration must be new for " + dynamicFactoryPid, conf.getProperties());
+            assertEquals(
+                "Factory Configuration for " + dynamicFactoryPid + " must be bound to " + bundle1.getLocation(),
+                bundle1.getLocation(), this.getBundleLocationForCompare(conf));
+            conf.update(props);
+
+            SynchronizerImpl sync2 = new SynchronizerImpl("SyncListener");
+            reg2 = getContext().registerService(ConfigurationListener.class.getName(), new SyncEventListener(sync2),
+                null);
+
+            // unsinstall the bundle, make sure configurations are unbound
+            this.uninstallBundle(bundle1);
+
+            // wait for three (CM_LOCATION_CHANGED) events
+            boolean threeEvents = sync2.waitForSignal(500, 3);
+            assertTrue("Expecting three CM_LOCATION_CHANGED events after bundle uninstallation", threeEvents);
+
+            // ensure configuration 1 is unbound
+            conf = this.cm.getConfiguration(dynamicPid1, null);
+            assertNotNull("Configuration must exist for " + dynamicPid1, conf);
+            assertNotNull("Configuration must not be new for " + dynamicPid1, conf.getProperties());
+            assertNull("Configuration for " + dynamicPid1 + " must be unbound", this.getBundleLocationForCompare(conf));
+
+            // ensure configuration 2 is unbound
+            conf = this.cm.getConfiguration(dynamicPid2, null);
+            assertNotNull("Configuration must exist for " + dynamicPid2, conf);
+            assertNotNull("Configuration must not be new for " + dynamicPid2, conf.getProperties());
+            assertNull("Configuration for " + dynamicPid2 + " must be unbound", this.getBundleLocationForCompare(conf));
+
+            // ensure factory configuration is unbound
+            conf = this.cm.getConfiguration(dynamicFactoryPidInstance, null);
+            assertNotNull("Configuration must exist for " + dynamicFactoryPidInstance, conf);
+            assertEquals("Configuration " + dynamicFactoryPidInstance + " must be factory configuration for "
+                + dynamicFactoryPid, dynamicFactoryPid, conf.getFactoryPid());
+            assertNotNull("Configuration must not be new for " + dynamicFactoryPidInstance, conf.getProperties());
+            assertNull("Configuration for " + dynamicFactoryPidInstance + " must be unbound",
+                this.getBundleLocationForCompare(conf));
+
+        } finally {
+            if (reg != null) reg.unregister();
+            reg = null;
+            if (reg2 != null) reg2.unregister();
+            reg2 = null;
+            if (bundle1 != null && bundle1.getState() != Bundle.UNINSTALLED) bundle1.uninstall();
+            bundle1 = null;
+            conf = cm.getConfiguration(dynamicPid1);
+            if (conf != null) conf.delete();
+            conf = cm.getConfiguration(dynamicPid2);
+            if (conf != null) conf.delete();
+            if (dynamicFactoryPidInstance != null) {
+                conf = cm.getConfiguration(dynamicFactoryPidInstance);
+                if (conf != null) conf.delete();
+            }
+        }
 	}
 
 	private void startTargetBundle(Bundle bundle) throws BundleException {
@@ -2616,7 +2721,7 @@ public class CMControl extends DefaultTestBundleControl {
 			props.put("StringKey", "stringvalue2");
 			conf.update(props);
 			trace("Wait for signal.");
-			calledback = sync.waitForSignal(SIGNAL_WAITING_TIME, ++count);
+			calledback = sync.waitForSignal(SIGNAL_WAITING_TIME, count + 1);
 			this.printoutPropertiesForDebug(sync);
 			assertFalse("ManagedService must NOT be called back", calledback);
 
@@ -3578,9 +3683,25 @@ public class CMControl extends DefaultTestBundleControl {
 	private String getBundleLocationForCompare(Configuration conf)
 			throws BundleException {
 		String location = null;
-		if (this.permissionFlag)
-			location = conf.getBundleLocation();
-		else {
+        if (this.permissionFlag) {
+            try {
+                location = conf.getBundleLocation();
+            } catch (SecurityException se) {
+                // Bug 2539: Need to be hard on granting appropriate permission
+                System.out.println("Temporarily grant CONFIGURE(" + thisLocation
+                    + ") to get location of configuration " + conf.getPid());
+                List perms = getBundlePermission(thisBundle);
+                try {
+                    setCPtoBundle("*", ConfigurationPermission.CONFIGURE, thisBundle);
+                    location = conf.getBundleLocation();
+                } catch (SecurityException se2) {
+                    throw se;
+                } finally {
+                    System.out.println("Resetting permissions for " + thisLocation + " to: " + perms);
+                    resetBundlePermission(thisBundle, perms);
+                }
+            }
+        } else {
 			this.setAppropriatePermission();
 			location = conf.getBundleLocation();
 			this.setInappropriatePermission();
@@ -4401,6 +4522,20 @@ public class CMControl extends DefaultTestBundleControl {
 		}
 	}
 
+    class SyncEventListener implements SynchronousConfigurationListener {
+
+        private final Synchronizer sync;
+
+        public SyncEventListener(final Synchronizer sync) {
+            this.sync = sync;
+        }
+
+        public void configurationEvent(ConfigurationEvent event) {
+            this.sync.signal();
+        }
+
+    }
+
 	/*
 	 * Shigekuni KONDO, Ikuo YAMASAKI, (Yushi Kuroda), NTT Corporation adds
 	 * tests for specification version 1.4
@@ -4797,6 +4932,13 @@ public class CMControl extends DefaultTestBundleControl {
 		permissionFlag = true;
 		this.setBundlePermission(bundle, list);
 	}
+
+    private void resetBundlePermission(Bundle b, List list) throws BundleException {
+        this.resetPermissions();
+        if (list != null) {
+            this.setBundlePermission(b, list);
+        }
+    }
 
 	private String traceTestId(final String header, int micro) {
 		String testId = header + String.valueOf(micro);
@@ -5408,7 +5550,7 @@ public class CMControl extends DefaultTestBundleControl {
 			testId = traceTestId(header, ++micro);
 			setCPtoBundle(locationA, ConfigurationPermission.CONFIGURE,
 					thisBundle);
-			if (minor == 2 || minor == 8) {
+            if (minor == 2) {
 				loc = conf.getBundleLocation();
 				assertEquals("Check conf location", locationOld, loc);
 			} else {
@@ -5418,17 +5560,12 @@ public class CMControl extends DefaultTestBundleControl {
 			// 3
 			testId = traceTestId(header, ++micro);
 			setCPtoBundle("?", ConfigurationPermission.CONFIGURE, thisBundle);
-			if (minor == 8) {
-				loc = conf.getBundleLocation();
-				assertEquals("Check conf location", locationOld, loc);
-			} else {
-				this.assertThrowsSEbyGetLocation(conf, testId);
-			}
+            this.assertThrowsSEbyGetLocation(conf, testId);
 
 			// 4
 			testId = traceTestId(header, ++micro);
 			setCPtoBundle("?*", ConfigurationPermission.CONFIGURE, thisBundle);
-			if (minor == 5 || minor == 6 || minor == 7 || minor == 8) {
+            if (minor == 5 || minor == 6 || minor == 7) {
 				loc = conf.getBundleLocation();
 				assertEquals("Check conf location", locationOld, loc);
 			} else {
@@ -5439,7 +5576,7 @@ public class CMControl extends DefaultTestBundleControl {
 			testId = traceTestId(header, ++micro);
 			setCPtoBundle(regionA, ConfigurationPermission.CONFIGURE,
 					thisBundle);
-			if (minor == 6 || minor == 8) {
+            if (minor == 6) {
 				loc = conf.getBundleLocation();
 				assertEquals("Check conf location", locationOld, loc);
 			} else {
@@ -5449,12 +5586,7 @@ public class CMControl extends DefaultTestBundleControl {
 			// 6
 			testId = traceTestId(header, ++micro);
 			setCPtoBundle("*", ConfigurationPermission.TARGET, thisBundle);
-			if (minor == 8) {
-				loc = conf.getBundleLocation();
-				assertEquals("Check conf location", locationOld, loc);
-			} else {
-				this.assertThrowsSEbyGetLocation(conf, testId);
-			}
+            this.assertThrowsSEbyGetLocation(conf, testId);
 
 			// 7
 			testId = traceTestId(header, ++micro);
@@ -5487,8 +5619,9 @@ public class CMControl extends DefaultTestBundleControl {
 			conf.delete();
 			resetPermissions();
 			conf = cm.getConfiguration(pid1, thisLocation);
-			setCPtoBundle(null, null, thisBundle);
-			loc = conf.getBundleLocation();
+            // Bug2539: need to have CONFIGURE(thisLocation)
+            setCPtoBundle(thisLocation, ConfigurationPermission.CONFIGURE, thisBundle);
+            loc = conf.getBundleLocation();
 			assertEquals("Check conf location", thisLocation, loc);
 		} finally {
 			this.resetPermissions();

@@ -17,6 +17,7 @@
 package org.osgi.framework;
 
 import java.util.EventListener;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * A {@code BundleEvent} listener. {@code BundleListener} is a listener
@@ -36,7 +37,7 @@ import java.util.EventListener;
  * @NotThreadSafe
  * @author $Id$
  */
-
+@ConsumerType
 public interface BundleListener extends EventListener {
 	/**
 	 * Receives notification that a bundle has had a lifecycle change.

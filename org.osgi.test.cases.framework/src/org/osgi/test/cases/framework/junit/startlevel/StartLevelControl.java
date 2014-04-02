@@ -41,6 +41,8 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.sleep.Sleep;
 
 public class StartLevelControl extends DefaultTestBundleControl {
+	private static final int ZERO = 0;
+	private static final int NEGATIVE = -5;
 	private FrameworkStartLevel		fsl;
 	private int						ibsl;
 	private int						origSl;
@@ -57,9 +59,8 @@ public class StartLevelControl extends DefaultTestBundleControl {
 	private FrameworkEventCollector	fec;
 	private BundleEventCollector	bec;
 
-	static {
-		String sleepTimeString = System
-				.getProperty("osgi.tc.startlevel.sleeptime");
+	protected void setUp() throws Exception {
+		String sleepTimeString = getProperty("osgi.tc.startlevel.sleeptime");
 		int sleepTime = SLEEP;
 		if (sleepTimeString != null) {
 			try {
@@ -67,33 +68,28 @@ public class StartLevelControl extends DefaultTestBundleControl {
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				System.out
-						.println("Error while parsing sleep value! The default one will be used : "
-								+ SLEEP);
+				log("Error while parsing sleep value! The default one will be used : "
+						+ SLEEP);
 			}
 			if (sleepTime < 200) {
-				System.out.println("The sleep value is too low : " + sleepTime
+				log("The sleep value is too low : " + sleepTime
 						+ " ! The default one will be used : " + SLEEP);
 			}
 			else {
 				SLEEP = sleepTime;
 			}
 		}
-		sleepTimeString = System.getProperty("osgi.tc.startlevel.timeout");
+		sleepTimeString = getProperty("osgi.tc.startlevel.timeout");
 		if (sleepTimeString != null) {
 			try {
 				TIMEOUT = Integer.parseInt(sleepTimeString);
 			}
 			catch (Exception e) {
 				e.printStackTrace();
-				System.out
-						.println("Error while parsing timeout value! The default one will be used : "
-								+ TIMEOUT);
+				log("Error while parsing timeout value! The default one will be used : "
+						+ TIMEOUT);
 			}
 		}
-	}
-
-	protected void setUp() throws Exception {
 		fsl = getContext().getBundle(0).adapt(FrameworkStartLevel.class);
 		ibsl = fsl.getInitialBundleStartLevel();
 		origSl = fsl.getStartLevel();
@@ -627,6 +623,52 @@ public class StartLevelControl extends DefaultTestBundleControl {
 		}
 		finally {
 			tb4.uninstall();
+		}
+	}
+
+	public void testExceptions() throws Exception {
+		Bundle tb1 = getContext().installBundle(
+				getWebServer() + "startlevel.tb1.jar");
+		try {
+			try {
+				fsl.setInitialBundleStartLevel(ZERO);
+				fail("Expected IllegalArgumentException.");
+			} catch (IllegalArgumentException e) {
+				// expected
+			}
+			try {
+				fsl.setInitialBundleStartLevel(NEGATIVE);
+				fail("Expected IllegalArgumentException.");
+			} catch (IllegalArgumentException e) {
+				// expected
+			}
+			try {
+				fsl.setStartLevel(ZERO);
+				fail("Expected IllegalArgumentException.");
+			} catch (IllegalArgumentException e) {
+				// expected
+			}
+			try {
+				fsl.setStartLevel(NEGATIVE);
+				fail("Expected IllegalArgumentException.");
+			} catch (IllegalArgumentException e) {
+				// expected
+			}
+			BundleStartLevel bsl = tb1.adapt(BundleStartLevel.class);
+			try {
+				bsl.setStartLevel(ZERO);
+				fail("Expected IllegalArgumentException.");
+			} catch (IllegalArgumentException e) {
+				// expected
+			}
+			try {
+				bsl.setStartLevel(NEGATIVE);
+				fail("Expected IllegalArgumentException.");
+			} catch (IllegalArgumentException e) {
+				// expected
+			}
+		} finally {
+			tb1.uninstall();
 		}
 	}
 

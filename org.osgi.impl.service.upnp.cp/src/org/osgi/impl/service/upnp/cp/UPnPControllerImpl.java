@@ -42,7 +42,7 @@ public class UPnPControllerImpl implements UPnPController {
 		this.bc = bc;
 		devices = new Hashtable(10);
 		deviceListeners = new Vector(10, 10);
-		IP = System.getProperty("org.osgi.service.http.hostname");
+		IP = bc.getProperty("org.osgi.service.http.hostname");
 		try {
 			if (IP == null) {
 				IP = InetAddress.getLocalHost().getHostAddress();

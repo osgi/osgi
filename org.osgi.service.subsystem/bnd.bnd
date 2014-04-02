@@ -4,5 +4,6 @@
 Export-Package: ${p}.*; -split-package:=first
 
 -buildpath = \
-	ee.j2se; version=${javac.compliance}, \
-	osgi.core;					version=5.0
+    ee.j2se; version=${javac.compliance}, \
+    osgi.annotation; version=6.0, \
+    osgi.core; version=5.0

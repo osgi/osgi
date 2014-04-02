@@ -18,6 +18,7 @@ package org.osgi.service.cm;
 
 import java.io.IOException;
 import java.util.Dictionary;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 
@@ -114,9 +115,10 @@ import org.osgi.framework.InvalidSyntaxException;
  * {@code ConfigurationAdmin} must use a
  * {@link org.osgi.framework.ServiceFactory} to support this concept.
  * 
- * @noimplement
  * @author $Id$
+ * @ThreadSafe
  */
+@ProviderType
 public interface ConfigurationAdmin {
 	/**
 	 * Configuration property naming the Factory PID in the configuration

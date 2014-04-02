@@ -16,6 +16,8 @@
 
 package org.osgi.service.event;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * Listener for Events.
  * 
@@ -58,6 +60,7 @@ package org.osgi.service.event;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface EventHandler {
 	/**
 	 * Called by the {@link EventAdmin} service to notify the listener of an

@@ -29,7 +29,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 import java.util.Set;
 import java.util.StringTokenizer;
 
@@ -172,7 +171,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 	private String getStorageAreaRoot() {
 		BundleContext context = getBundleContextWithoutFail();
 		if (context == null) {
-			String storageroot = System.getProperty(STORAGEROOT, DEFAULT_STORAGEROOT);
+			String storageroot = getProperty(STORAGEROOT, DEFAULT_STORAGEROOT);
 			assertNotNull("Must set property: " + STORAGEROOT, storageroot);
 			return storageroot;
 		}
@@ -187,7 +186,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 
 	private BundleContext getBundleContextWithoutFail() {
 		try {
-			if ("true".equals(System.getProperty("noframework")))
+			if ("true".equals(getProperty("noframework")))
 				return null;
 			return getContext();
 		} catch (Throwable t) {
@@ -291,7 +290,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 		
 		List bundles = new LinkedList();
 		
-		StringTokenizer st = new StringTokenizer(System.getProperty(
+		StringTokenizer st = new StringTokenizer(getProperty(
 				"org.osgi.test.cases.remoteserviceadmin.bundles", ""), ",");
 		while (st.hasMoreTokens()) {
 			String bundle = st.nextToken();
@@ -414,8 +413,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 	 *         in the runoptions in bnd.bnd
 	 */
 	protected Map<String, Object> loadCTProperties() {
-		String serverconfig = System
-				.getProperty("org.osgi.test.cases.remoteserviceadmin.serverconfig");
+		String serverconfig = getProperty("org.osgi.test.cases.remoteserviceadmin.serverconfig");
 		Assert.assertNotNull(
 				"did not find org.osgi.test.cases.remoteserviceadmin.serverconfig system property",
 				serverconfig);
@@ -424,7 +422,7 @@ public abstract class MultiFrameworkTestCase extends DefaultTestBundleControl /*
 		for (StringTokenizer tok = new StringTokenizer(serverconfig, ","); tok
 				.hasMoreTokens();) {
 			String propertyName = tok.nextToken();
-			String value = System.getProperty(propertyName);
+			String value = getProperty(propertyName);
 			Assert.assertNotNull("system property not found: " + propertyName, value);
 			properties.put(propertyName, value);
 		}

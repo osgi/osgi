@@ -17,6 +17,7 @@
 package org.osgi.framework;
 
 import java.util.Dictionary;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * A reference to a service.
@@ -46,11 +47,11 @@ import java.util.Dictionary;
  * @see BundleContext#getServiceReferences(Class, String)
  * @see BundleContext#getServiceReferences(String, String)
  * @see BundleContext#getService(ServiceReference)
+ * @see BundleContext#getServiceObjects(ServiceReference)
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
-
+@ProviderType
 public interface ServiceReference<S> extends Comparable<Object> {
 	/**
 	 * Returns the property value to which the specified property key is mapped

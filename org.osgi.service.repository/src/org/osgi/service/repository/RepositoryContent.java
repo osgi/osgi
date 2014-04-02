@@ -17,26 +17,30 @@
 package org.osgi.service.repository;
 
 import java.io.InputStream;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.resource.Resource;
 
 /**
- * An accessor for the default content of a resource.
+ * An accessor for the content of a resource.
  * 
  * All {@link Resource} objects which represent resources in a
  * {@link Repository} must implement this interface. A user of the resource can
  * then cast the {@link Resource} object to this type and then obtain an
- * {@code InputStream} to the default content of the resource.
+ * {@code InputStream} to the content of the resource.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface RepositoryContent {
 
 	/**
-	 * Returns a new input stream to the default format of this resource.
+	 * Returns a new input stream to the content of this resource. The content
+	 * is represented on the resource through the {@code osgi.content}
+	 * capability. If more than one such capability is associated with the
+	 * resource, the first such capability is returned.
 	 * 
-	 * @return A new input stream for associated resource.
+	 * @return A new input stream for associated content.
 	 */
 	InputStream getContent();
 }

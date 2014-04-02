@@ -17,14 +17,11 @@
 package org.osgi.test.cases.blueprint.components.serviceimport;
 
 import java.util.Properties;
-
-import org.osgi.service.blueprint.container.ServiceUnavailableException;
-import org.osgi.test.cases.blueprint.framework.TestService;
-import org.osgi.test.cases.blueprint.services.AssertionService;
-import org.osgi.test.cases.blueprint.services.TestServiceOne;
-
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.service.blueprint.container.ServiceUnavailableException;
+import org.osgi.test.cases.blueprint.services.AssertionService;
+import org.osgi.test.cases.blueprint.services.TestServiceOne;
 
 
 /**
@@ -65,6 +62,7 @@ public class UnregisteredCollectionDependencyChecker extends DependencyDriver {
             try {
                 String filterString = e.getFilter();
                 AssertionService.assertNotNull(this, "Null filter from ServiceUnavailableException", filterString);
+                filterString = cleanupFilterForR6(filterString);
                 Filter filter = serviceManager.createFilter(filterString);
                 Properties filterProps = new Properties();
                 filterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
@@ -89,6 +87,7 @@ public class UnregisteredCollectionDependencyChecker extends DependencyDriver {
             try {
                 String filterString = e.getFilter();
                 AssertionService.assertNotNull(this, "Null filter from ServiceUnavailableException", filterString);
+                filterString = cleanupFilterForR6(filterString);
                 Filter filter = serviceManager.createFilter(filterString);
                 Properties filterProps = new Properties();
                 filterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
@@ -102,6 +101,22 @@ public class UnregisteredCollectionDependencyChecker extends DependencyDriver {
             }
         }
         super.init();
+    }
+
+    /**
+     * Core R6 adds new automatic service properties which Blueprint should not
+     * include in the ServiceUnavailableException filter string. This method
+     * removes any "service.*" properties in the input filter string.
+     * 
+     * @param filterstring The original filter string.
+     * @return The cleaned up filter string.
+     */
+    private String cleanupFilterForR6(String filterstring) {
+        for (int start = filterstring.indexOf("(service."); start >= 0; start = filterstring.indexOf("(service.")) {
+            int end = filterstring.indexOf(")", start);
+            filterstring = filterstring.substring(0, start) + filterstring.substring(end + 1);
+        }
+        return filterstring;
     }
 }
 

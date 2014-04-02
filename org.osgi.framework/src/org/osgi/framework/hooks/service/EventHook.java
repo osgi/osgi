@@ -17,6 +17,7 @@
 package org.osgi.framework.hooks.service;
 
 import java.util.Collection;
+import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 
@@ -31,7 +32,7 @@ import org.osgi.framework.ServiceEvent;
  * @deprecated As of 1.1. Replaced by {@link EventListenerHook}.
  * @author $Id$
  */
-
+@ConsumerType
 public interface EventHook {
 	/**
 	 * Event hook method. This method is called prior to service event delivery

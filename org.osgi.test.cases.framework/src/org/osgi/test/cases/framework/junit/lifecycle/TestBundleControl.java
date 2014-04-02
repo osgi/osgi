@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Hashtable;
 import java.util.Vector;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
@@ -23,6 +22,7 @@ import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.Version;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -137,7 +137,7 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 	/**
 	 * Tests halfway broken inputstream during install.
 	 */
-	public void testBrokenStream() throws Exception {
+	public void testBrokenStreamInstall() throws Exception {
 		byte b[] = new byte[500];
 		try {
 			URL url = getContext().getBundle().getEntry("lifecycle.tb4.jar");
@@ -159,6 +159,47 @@ public class TestBundleControl extends DefaultTestBundleControl implements
 		}
 		catch (IOException ioe) {
 			fail("Failed to read content", ioe);
+		}
+	}
+
+	/**
+	 * Tests halfway broken inputstream during update.
+	 */
+	public void testBrokenStreamUpdate() throws Exception {
+		Bundle tb = installBundle("lifecycle.tb6a.jar", false);
+		try {
+			tb.start();
+			long Id = tb.getBundleId();
+			String bsn = tb.getSymbolicName();
+			Version version = tb.getVersion();
+
+			URL url = getContext().getBundle().getEntry("lifecycle.tb6b.jar");
+			assertNotNull("lifecycle.tb6b.jar is null", url);
+			InputStream in = url.openStream();
+
+			// Read 500 bytes of the file
+			byte b[] = new byte[500];
+			for (int i = 0; i < 500; i += in.read(b, i, 500 - i)) {
+				// empty
+			}
+			// Now, make an InputStream from those first 500 bytes.
+			ByteArrayInputStream bin = new ByteArrayInputStream(b);
+			try {
+				tb.update(bin);
+				fail("No exception thrown, Error!");
+			} catch (BundleException be) {
+				// do nothing; pass
+			}
+
+			// Make sure it is still the same bundle and active
+			assertEquals("Bundle is not active.", Bundle.ACTIVE, tb.getState());
+			assertEquals("Wrong bundle id", Id, tb.getBundleId());
+			assertEquals("Wrong symbolic name.", bsn, tb.getSymbolicName());
+			assertEquals("Wrong version.", version, tb.getVersion());
+		} catch (IOException ioe) {
+			fail("Failed to read content", ioe);
+		} finally {
+			tb.uninstall();
 		}
 	}
 

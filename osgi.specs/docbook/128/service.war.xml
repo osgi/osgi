@@ -867,7 +867,7 @@ web-param  ::= &lt;key&gt; '=' &lt;value&gt;</programlisting>
 
       <para>An example for a <code>webbundle:</code> URL:</para>
 
-      <programlisting>webbundle:http://www.acme.com:8021/sales.war?</programlisting>
+      <programlisting>webbundle:http://www.acme.com:8021/sales.war?Web-ContextPath=/sales</programlisting>
 
       <para>Any URL scheme understood by the framework can be embedded, such
       as an <code>http:</code>, or <code>file:</code> URL. Some forms of
@@ -883,7 +883,8 @@ web-param  ::= &lt;key&gt; '=' &lt;value&gt;</programlisting>
       embedded URL to simplify this processing. The following example shows an
       HTTP URL with some query parameters:</para>
 
-      <programlisting>webbundle:http://www.acme.com/sales?id=123?Bundle-SymbolicName=com.example</programlisting>
+    <programlisting>webbundle:http://www.acme.com/sales?id=123?Bundle-SymbolicName=com.example&amp;
+                                             Web-ContextPath=/</programlisting>
     </section>
 
     <section>
@@ -909,7 +910,7 @@ web-param  ::= &lt;key&gt; '=' &lt;value&gt;</programlisting>
 
       <para>For the following example:</para>
 
-      <programlisting>webbundle:http://acme.com/repo?war=example.war?Bundle-SymbolicName=com.example</programlisting>
+      <programlisting>webbundle:http://acme.com/repo?war=example.war?Web-ContextPath=/sales</programlisting>
 
       <para>The aforementioned methods must return:</para>
 
@@ -925,7 +926,7 @@ web-param  ::= &lt;key&gt; '=' &lt;value&gt;</programlisting>
 
         <listitem>
           <para><code>getQuery</code> -
-          <code>Bundle-SymbolicName=com.example</code></para>
+          <code>Web-ContextPath=/sales</code></para>
         </listitem>
       </itemizedlist>
     </section>

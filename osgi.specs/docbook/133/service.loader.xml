@@ -346,7 +346,8 @@ if ( it.hasNext() ) {
 
       <programlisting>Require-Capability:
     osgi.extender;
-        filter:="(osgi.extender=osgi.serviceloader.processor)"</programlisting>
+        filter:="(&amp;(osgi.extender=osgi.serviceloader.processor)
+                 (version>=1.0)(!(version>=2.0)))"</programlisting>
 
       <para>If the extender <code>osgi.serviceloader.processor</code>
       requirement is satisfied then the wired Mediator must process the
@@ -446,7 +447,8 @@ Bundle-ClassPath:       legacy.jar</programlisting>
 
       <programlisting>Require-Capability:                                         
   osgi.extender;
-    filter:="(osgi.extender=osgi.serviceloader.processor)"</programlisting>
+    filter:="(&amp;(osgi.extender=osgi.serviceloader.processor)
+             (version>=1.0)(!(version>=2.0)))"</programlisting>
 
       <para>With this manifest, the Consumer bundle has full visibility to all
       Service Provider bundles that are published. The following lines can be
@@ -540,7 +542,8 @@ Bundle-ClassPath:       legacy.jar</programlisting>
 
       <programlisting>Require-Capability:
     osgi.extender;
-        filter:="(osgi.extender=osgi.serviceloader.registrar)"</programlisting>
+        filter:="(&amp;(osgi.extender=osgi.serviceloader.registrar)
+                 (version>=1.0)(!(version>=2.0)))"</programlisting>
 
       <para>The registrar must then inspect each
       <code>osgi.serviceloader</code> capability and register an associated
@@ -623,7 +626,8 @@ Import-Package:         com.example; version=3.45</programlisting>
 
       <programlisting>Require-Capability:                                         
     osgi.extender; 
-        filter:="(osgi.extender=osgi.serviceloader.registrar)"</programlisting>
+        filter:="(&amp;(osgi.extender=osgi.serviceloader.registrar)
+                 (version>=1.0)(!(version>=2.0)))"</programlisting>
 
       <para>To publish two Service Providers for the same type, two
       capabilities must be declared:</para>

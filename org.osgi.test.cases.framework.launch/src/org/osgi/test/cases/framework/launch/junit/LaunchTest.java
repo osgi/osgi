@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
 import org.osgi.framework.launch.Framework;
 import org.osgi.framework.launch.FrameworkFactory;
 import org.osgi.test.support.OSGiTestCase;
@@ -59,7 +61,7 @@ public abstract class LaunchTest extends OSGiTestCase {
 		frameworkFactoryClassName = getFrameworkFactoryClassName();
 		assertNotNull("Could not find framework factory class", frameworkFactoryClassName);
 		frameworkFactory = getFrameworkFactory();
-		StringTokenizer st = new StringTokenizer(System.getProperty(
+		StringTokenizer st = new StringTokenizer(getProperty(
 				"org.osgi.test.cases.framework.launch.bundles", ""), ",");
 		rootBundles.clear();
 		while (st.hasMoreTokens()) {
@@ -85,10 +87,15 @@ public abstract class LaunchTest extends OSGiTestCase {
 		return getClass().getResource(bundle);
 	}
 	
-	protected void initFramework(Framework framework) {
+	protected void initFramework(Framework framework,
+			FrameworkListener... listeners) {
 		boolean unintialized = (framework.getState() & (Framework.INSTALLED | Framework.RESOLVED)) != 0;
 		try {
-			framework.init();
+			if (listeners == null || listeners.length == 0) {
+				framework.init();
+			} else {
+				framework.init(listeners);
+			}
 			assertNotNull("BundleContext is null after init", framework.getBundleContext());
 		}
 		catch (BundleException e) {
@@ -146,7 +153,8 @@ public abstract class LaunchTest extends OSGiTestCase {
 		// if the framework was not STARTING STOPPING or ACTIVE then we assume the waitForStop returned immediately with a FrameworkEvent.STOPPED
 		// and does not change the state of the framework
 		int expectedState = (previousState & (Bundle.STARTING | Bundle.ACTIVE | Bundle.STOPPING)) != 0 ? Bundle.RESOLVED : previousState;
-		assertEquals("Wrong framework state after init", expectedState, framework.getState());
+		assertEquals("Wrong framework state after stop", expectedState,
+				framework.getState());
 	}
 	
 	private FrameworkFactory getFrameworkFactory() {
@@ -229,7 +237,7 @@ public abstract class LaunchTest extends OSGiTestCase {
 	}
 
 	private String getStorageAreaRoot() {
-			String storageroot = System.getProperty(STORAGEROOT);
+		String storageroot = getProperty(STORAGEROOT);
 			assertNotNull("Must set property: " + STORAGEROOT, storageroot);
 			return storageroot;
 	}
@@ -258,5 +266,16 @@ public abstract class LaunchTest extends OSGiTestCase {
 			return file.delete();
 		}
 		return (true);
+	}
+
+	protected Map<String, String> getConfiguration(String testName) {
+		return getConfiguration(testName, true);
+	}
+
+	protected Map<String, String> getConfiguration(String testName, boolean delete) {
+		Map<String, String> configuration = new HashMap<String, String>();
+		if (testName != null)
+			configuration.put(Constants.FRAMEWORK_STORAGE, getStorageArea(testName, delete).getAbsolutePath());
+		return configuration;
 	}
 }

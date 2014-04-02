@@ -17,6 +17,7 @@
 package org.osgi.service.coordinator;
 
 import java.util.Collection;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * A Coordinator service coordinates activities between different parties.
@@ -81,9 +82,9 @@ import java.util.Collection;
  * </pre>
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface Coordinator {
 
 	/**

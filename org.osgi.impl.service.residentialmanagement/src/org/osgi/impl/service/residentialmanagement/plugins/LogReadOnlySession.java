@@ -30,12 +30,14 @@ import java.util.Vector;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.log.*;
 import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.spi.ReadableDataSession;
+import org.osgi.service.log.LogEntry;
+import org.osgi.service.log.LogListener;
+import org.osgi.service.log.LogReaderService;
 
 /**
  * 
@@ -46,7 +48,11 @@ public class LogReadOnlySession implements ReadableDataSession, LogListener {
 	protected int rootLength = 1;
 	protected Vector logEntries = new Vector();
 	protected LogReaderService lr = null;
-	protected int lengthOfLogEntryList = Integer.parseInt(System.getProperty("logEntry.list.length", "200"));
+	protected int				lengthOfLogEntryList	= Integer
+																.parseInt(RMTConstants
+																		.getProperty(
+																				"logEntry.list.length",
+																				"200"));
 	protected boolean keepLogEntriesFlag = false;
 
 	LogReadOnlySession(BundleContext context) {

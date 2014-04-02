@@ -17,7 +17,10 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkUtil;
 
 public class DAConstants {
     
@@ -86,17 +89,34 @@ public class DAConstants {
     public static final String ICON_STORAGE_ROOT;
     
     static {
-    	String val = System.getProperty("org.osgi.impl.service.deploymentadmin.iconcachearea");
+		String val = getProperty("org.osgi.impl.service.deploymentadmin.iconcachearea");
     	if (val == null) {
     		ICON_STORAGE_ROOT = "iconcache";
     	} else {
     		ICON_STORAGE_ROOT = val;
     	}
     	String prop = "org.osgi.service.dmt.osgi.root";
-    	val = System.getProperty(prop);
+		val = getProperty(prop);
     	if (null == val)
     		throw new RuntimeException(prop + " system property is not defined.");
     	DMT_DEPLOYMENT_ROOT = val + "/Deployment/Inventory/Deployed/";
     }
+
+	/**
+	 * Return the property value from the bundle context properties.
+	 * 
+	 * @param key The property key name.
+	 * @return The property value or null if the property is not set.
+	 */
+	public static String getProperty(String key) {
+		Bundle bundle = FrameworkUtil.getBundle(DAConstants.class);
+		if (bundle != null) {
+			BundleContext context = bundle.getBundleContext();
+			if (context != null) {
+				return context.getProperty(key);
+			}
+		}
+		return System.getProperty(key);
+	}
 
 }

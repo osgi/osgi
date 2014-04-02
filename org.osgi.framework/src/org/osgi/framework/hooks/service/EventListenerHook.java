@@ -18,6 +18,7 @@ package org.osgi.framework.hooks.service;
 
 import java.util.Collection;
 import java.util.Map;
+import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.hooks.service.ListenerHook.ListenerInfo;
@@ -33,7 +34,7 @@ import org.osgi.framework.hooks.service.ListenerHook.ListenerInfo;
  * @since 1.1
  * @author $Id$
  */
-
+@ConsumerType
 public interface EventListenerHook {
 	/**
 	 * Event listener hook method. This method is called prior to service event

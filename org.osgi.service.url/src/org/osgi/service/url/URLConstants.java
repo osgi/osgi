@@ -16,6 +16,8 @@
 
 package org.osgi.service.url;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * Defines standard names for property keys associated with
  * {@link URLStreamHandlerService} and {@code java.net.ContentHandler} services.
@@ -24,9 +26,9 @@ package org.osgi.service.url;
  * The values associated with these keys are of type {@code java.lang.String[]}
  * or {@code java.lang.String}, unless otherwise indicated.
  * 
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface URLConstants {
 	/**
 	 * Service property naming the protocols serviced by a

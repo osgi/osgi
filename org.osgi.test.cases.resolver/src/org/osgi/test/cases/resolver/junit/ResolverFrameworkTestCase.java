@@ -31,7 +31,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.ServiceRegistration;
@@ -92,86 +91,11 @@ public class ResolverFrameworkTestCase extends AbstractResolverTestCase {
 				result);
 	}
 
-	// awaiting decision regarding dynamic imports
-	/*
-	public void testDynamicImport2() throws Exception {
-		rc = new FrameworkTestResolveContext(
-				BundleSource.FW_TEST_BUNDLE_WITH_DUMMY, "dynpkgimport.tlx.jar",
-				"dynpkgimport.tb1.jar");
-
-		final Map<Resource, List<Wire>> result = shouldResolve(rc);
-
-		rc.shouldBeWiredTo("dynpkgimport.tb1.jar", "dynpkgimport.tlx.jar",
-				result);
-	}
-
-	public void testDynamicImport3() throws Exception {
-		rc = new FrameworkTestResolveContext(
-				BundleSource.FW_TEST_BUNDLE_WITH_DUMMY, "classloading.tb1.jar",
-				"classloading.tb8a.jar", "classloading.tb17b.jar");
-
-		final Map<Resource, List<Wire>> result = shouldResolve(rc);
-
-		rc.shouldBeWiredTo("classloading.tb17b.jar", "classloading.tb1.jar",
-				result);
-		rc.shouldBeWiredTo("classloading.tb17b.jar", "classloading.tb8a.jar",
-				result);
-	}
-
-	public void testDynamicImport4() throws Exception {
-		rc = new FrameworkTestResolveContext(
-				BundleSource.FW_TEST_BUNDLE_WITH_DUMMY,
-				"classloading.tb8a.jar", "classloading.tb8b.jar",
-				"classloading.tb17c.jar");
-
-		final Map<Resource, List<Wire>> result = shouldResolve(rc);
-
-		rc.shouldBeWiredTo("classloading.tb17c.jar", "classloading.tb8a.jar",
-				result);
-		rc.shouldBeWiredTo("classloading.tb17c.jar", "classloading.tb8b.jar",
-				result);
-	}
-
-	public void testDynamicImport5() throws Exception {
-		rc = new FrameworkTestResolveContext(
-				BundleSource.FW_TEST_BUNDLE_WITH_DUMMY, "classloading.tb1.jar",
-				"classloading.tb17i.jar");
-
-		final Map<Resource, List<Wire>> result = shouldResolve(rc);
-
-		rc.shouldBeWiredTo("classloading.tb17i.jar", "classloading.tb1.jar",
-				result);
-	}
-
-	public void testDynamicImport6() throws Exception {
-		rc = new FrameworkTestResolveContext(
-				BundleSource.FW_TEST_BUNDLE_WITH_DUMMY, "classloading.tb1.jar",
-				"classloading.tb17i.jar", "classloading.tb17j.jar");
-
-		final Map<Resource, List<Wire>> result = shouldResolve(rc);
-		rc.shouldBeWiredTo("classloading.tb17i.jar", "classloading.tb1.jar",
-				result);
-		rc.shouldBeWiredTo("classloading.tb17j.jar", "classloading.tb17i.jar",
-				result);
-	}
-	*/
-
 	public void testDynamicImport7() throws Exception {
 		rc = new FrameworkTestResolveContext("classloading.tb1.jar",
 				"classloading.tb17d.jar");
 
 		shouldResolve(rc);
-	}
-
-	public void testDynamicImport8() throws Exception {
-		try {
-			rc = new FrameworkTestResolveContext("classloading.tb1.jar",
-					"classloading.tb17d.jar", "classloading.tb17e.jar");
-			shouldNotResolve(rc);
-		} catch (final Exception e) {
-			// the framework might already catch this one.
-			return;
-		}
 	}
 
 	public void testDynamicImport9() throws Exception {

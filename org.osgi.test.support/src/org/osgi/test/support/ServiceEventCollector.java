@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2007, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2007, 2013). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -44,6 +44,7 @@ public class ServiceEventCollector extends EventCollector<ServiceEvent>
 			addEvent(event);
 	}
 
+	@Override
 	public Comparator<ServiceEvent> getComparator() {
 		return new Comparator<ServiceEvent>() {
 			public int compare(ServiceEvent event1, ServiceEvent event2) {

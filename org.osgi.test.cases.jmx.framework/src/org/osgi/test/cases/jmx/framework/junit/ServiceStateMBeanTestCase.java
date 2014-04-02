@@ -355,56 +355,100 @@ public class ServiceStateMBeanTestCase extends MBeanGeneralTestCase {
 		//test listServices method
 		try {
 			ssMBean.listServices();
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
+		}
+		catch (IllegalArgumentException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test getBundleIdentifier method
 		try {
 			ssMBean.getBundleIdentifier(LONG_NEGATIVE);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			ssMBean.getBundleIdentifier(LONG_BIG);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getObjectClass method
 		try {
 			ssMBean.getObjectClass(LONG_NEGATIVE);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			ssMBean.getObjectClass(LONG_BIG);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getProperties method
 		try {
 			ssMBean.getProperties(LONG_NEGATIVE);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			ssMBean.getProperties(LONG_BIG);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getUsingBundles method
 		try {
 			ssMBean.getUsingBundles(LONG_NEGATIVE);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			ssMBean.getUsingBundles(LONG_BIG);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 	}

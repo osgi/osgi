@@ -1,0 +1,4 @@
+Bundle-Name: ${p}.dto.tb1
+Bundle-SymbolicName: ${p}.dto.tb1
+Export-Package: ${p}.dto.dummy1
+Import-Package: ${p}.dto.dummy2

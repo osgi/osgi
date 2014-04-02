@@ -16,15 +16,16 @@
 
 package org.osgi.framework.wiring;
 
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.resource.Wire;
 
 /**
  * A wire connecting a {@link BundleCapability} to a {@link BundleRequirement}.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface BundleWire extends Wire {
 	/**
 	 * Returns the {@link BundleCapability} for this wire.

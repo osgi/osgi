@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.resource.Capability;
 import org.osgi.resource.Requirement;
 import org.osgi.resource.Resource;
@@ -60,6 +61,7 @@ import org.osgi.resource.Wiring;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public abstract class ResolveContext {
 	/**
 	 * Return the resources that must be resolved for this resolve context.
@@ -67,8 +69,9 @@ public abstract class ResolveContext {
 	 * <p>
 	 * The default implementation returns an empty collection.
 	 * 
-	 * @return The resources that must be resolved for this resolve context. May
-	 *         be empty if there are no mandatory resources.
+	 * @return A collection of the resources that must be resolved for this
+	 *         resolve context. May be empty if there are no mandatory
+	 *         resources. The returned collection may be unmodifiable.
 	 */
 	public Collection<Resource> getMandatoryResources() {
 		return emptyCollection();
@@ -82,14 +85,15 @@ public abstract class ResolveContext {
 	 * <p>
 	 * The default implementation returns an empty collection.
 	 * 
-	 * @return The resources that the resolver should attempt to resolve for
-	 *         this resolve context. May be empty if there are no mandatory
-	 *         resources.
+	 * @return A collection of the resources that the resolver should attempt to
+	 *         resolve for this resolve context. May be empty if there are no
+	 *         optional resources. The returned collection may be unmodifiable.
 	 */
 	public Collection<Resource> getOptionalResources() {
 		return emptyCollection();
 	}
 
+	@SuppressWarnings("unchecked")
 	private static <T> Collection<T> emptyCollection() {
 		return Collections.EMPTY_LIST;
 	}
@@ -115,7 +119,7 @@ public abstract class ResolveContext {
 	 * that must originate from an attached host.
 	 * 
 	 * <p>
-	 * Each returned Capability must match the given Requirement. This implies
+	 * Each returned Capability must match the given Requirement. This means
 	 * that the filter in the Requirement must match as well as any namespace
 	 * specific directives. For example, the mandatory attributes for the
 	 * {@code osgi.wiring.package} namespace.

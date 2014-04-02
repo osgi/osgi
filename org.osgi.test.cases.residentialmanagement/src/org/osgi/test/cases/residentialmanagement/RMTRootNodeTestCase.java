@@ -20,7 +20,7 @@ public class RMTRootNodeTestCase extends RMTTestBase {
 	 * @throws Exception 
 	 */
 	public void testSystemProperty() throws Exception {
-		String root = System.getProperty("org.osgi.dmt.residential"); 
+		String root = getProperty("org.osgi.dmt.residential");
 		assertNotNull( "The system property 'org.osgi.dmt.residential' is not set.", root );
 		assertTrue("The configured root must be an absolute Uri.", Uri.isAbsoluteUri(root));
 		assertTrue("The configured root uri is invalid.", Uri.isValidUri(root));
@@ -31,7 +31,7 @@ public class RMTRootNodeTestCase extends RMTTestBase {
 	 * @throws Exception
 	 */
 	public void testExistenceOfRootNode() throws Exception {
-		String root = System.getProperty("org.osgi.dmt.residential");
+		String root = getProperty("org.osgi.dmt.residential");
 		
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertNotNull( session );
@@ -43,7 +43,7 @@ public class RMTRootNodeTestCase extends RMTTestBase {
 	 * @throws Exception
 	 */
 	public void testChildrenOfRootNode() throws Exception {
-		String root = System.getProperty("org.osgi.dmt.residential");
+		String root = getProperty("org.osgi.dmt.residential");
 		session = dmtAdmin.getSession(".", DmtSession.LOCK_TYPE_SHARED);
 		assertNotNull( session );
 		

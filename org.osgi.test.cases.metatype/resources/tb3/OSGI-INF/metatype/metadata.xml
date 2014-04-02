@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<MetaData 
-		xmlns="http://www.osgi.org/xmlns/metatype/v1.2.0">
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.2.0">
 	<OCD id="minOnly" name="minOnly">
 		<AD cardinality="1" id="string" min="4" type="String"/>
 		<AD cardinality="1" id="long" min="1000" type="Long"/>
@@ -43,4 +42,4 @@
 	<Designate pid="minMax">
 		<Object ocdref="minMax"/>
 	</Designate>
-</MetaData>
+</metatype:MetaData>

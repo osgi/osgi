@@ -24,8 +24,6 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
-import org.osgi.service.dmt.*;
-import org.osgi.service.dmt.spi.TransactionalDataSession;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -35,16 +33,20 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.osgi.framework.launch.Framework;
-import org.osgi.framework.startlevel.BundleStartLevel;
-import org.osgi.framework.startlevel.FrameworkStartLevel;
-import org.osgi.framework.wiring.FrameworkWiring;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
 import org.osgi.framework.FrameworkEvent;
 import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.launch.Framework;
+import org.osgi.framework.startlevel.BundleStartLevel;
+import org.osgi.framework.startlevel.FrameworkStartLevel;
+import org.osgi.framework.wiring.FrameworkWiring;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.Uri;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
 
 /**
  * 
@@ -68,9 +70,11 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 	private Hashtable restoreBundlesForUninstall = null;
 	private Hashtable restoreBundlesForUpdate = null;
 	private Hashtable restoreBundles = null;
-	private long timeOut = Long.parseLong(System.getProperty(
+	private long			timeOut						= Long.parseLong(RMTConstants
+																.getProperty(
 			RMTConstants.TIMEOUT_FOR_SETSTARTLEVEL, "10000"));
-	private long waitTime = Long.parseLong(System.getProperty(
+	private long			waitTime					= Long.parseLong(RMTConstants
+																.getProperty(
 			RMTConstants.WAIT_TIME_FOR_SETSTARTLEVEL, "500"));
 
 	FrameworkReadWriteSession(FrameworkPlugin plugin, BundleContext context,
@@ -457,7 +461,9 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 	}
 
 	class FrameworkUpdateThread extends Thread {
-		private int waitTime = Integer.parseInt(System.getProperty(
+		private int	waitTime	= Integer
+										.parseInt(RMTConstants
+												.getProperty(
 				RMTConstants.WAIT_TIME_FOR_FRAMEWORK_UPDATE, "5000"));
 
 		FrameworkUpdateThread() {

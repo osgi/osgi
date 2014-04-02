@@ -16,10 +16,12 @@
 
 package org.osgi.service.cm;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * Synchronous Listener for Configuration Events. When a
- * {@code ConfigurationEvent} is fired, it is synchronously delivered to a
- * {@code SynchronousConfigurationListener}.
+ * {@code ConfigurationEvent} is fired, it is synchronously delivered to all
+ * {@code SynchronousConfigurationListener}s.
  * 
  * <p>
  * {@code SynchronousConfigurationListener} objects are registered with the
@@ -39,7 +41,9 @@ package org.osgi.service.cm;
  * 
  * @author $Id$
  * @since 1.5
+ * @ThreadSafe
  */
+@ConsumerType
 public interface SynchronousConfigurationListener extends ConfigurationListener {
 	// Marker interface
 }

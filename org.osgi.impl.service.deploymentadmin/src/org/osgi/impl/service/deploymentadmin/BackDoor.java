@@ -19,13 +19,14 @@
 package org.osgi.impl.service.deploymentadmin;
 
 import java.io.*;
-import java.lang.reflect.Method;
 import java.net.URL;
 import java.security.*;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import org.eclipse.osgi.internal.provisional.verifier.CertificateChain;
-import org.eclipse.osgi.internal.provisional.verifier.CertificateVerifier;
-import org.eclipse.osgi.internal.provisional.verifier.CertificateVerifierFactory;
 import org.eclipse.osgi.service.urlconversion.URLConverter;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -40,10 +41,8 @@ import org.osgi.util.tracker.ServiceTracker;
 public class BackDoor {
 	
 	public static Filter               FILTER_URL_CONVERTER;
-	public static Filter               FILTER_CERT_VER_FACT;
 	
 	private BundleContext              context;
-	private TrackerCertVerifierFactory trackCertVerFact;
 	private TrackerURLConverter        trackURLConverter;
 
 
@@ -53,27 +52,14 @@ public class BackDoor {
 			FILTER_URL_CONVERTER = BackDoor.this.context.createFilter(
 					"(&(" + Constants.OBJECTCLASS + "=" + URLConverter.class.getName() + 
 					")(protocol=bundleentry))");
-			FILTER_CERT_VER_FACT = BackDoor.this.context.createFilter(
-					"(" + Constants.OBJECTCLASS + "=" + CertificateVerifierFactory.class.getName() + ")");
 		} catch (InvalidSyntaxException e) {
 			throw new RuntimeException("Internal error");
 		}
 				
-		trackCertVerFact = new TrackerCertVerifierFactory();
-		trackCertVerFact.open();
 		trackURLConverter = new TrackerURLConverter();
 		trackURLConverter.open();
 	}
 	
-	/*
-     * Class to track the CertificateVerifierFactory
-     */
-    private class TrackerCertVerifierFactory extends ServiceTracker {
-        public TrackerCertVerifierFactory() {
-            super(BackDoor.this.context, FILTER_CERT_VER_FACT, null);
-        }
-    }
-
     /*
      * Class to track the URLConverter
      */
@@ -84,24 +70,13 @@ public class BackDoor {
     }
     
     public void destroy() {
-    	trackCertVerFact.close();
     	trackURLConverter.close();
     }
 
     public File getDataFile(final Bundle b) {
 		return (File) AccessController.doPrivileged(new PrivilegedAction() {
 			public Object run() {
-				File ret = null;
-				try {
-					Method m;
-					m = b.getClass().getMethod("getBundleData", new Class[] {});
-					Object bundleData = m.invoke(b, new Object[] {});
-					m = bundleData.getClass().getMethod("getDataFile",
-							new Class[] {String.class});
-					ret = (File) m.invoke(bundleData, new String[] {""});
-				} catch (Exception e) {
-				}
-				return ret;
+				return b.getDataFile("");
 			}
 		});
 	}
@@ -128,24 +103,26 @@ public class BackDoor {
 	}
 
 	public String[] getDNChains(Bundle b) {
-		CertificateVerifierFactory cvf = (CertificateVerifierFactory) trackCertVerFact.getService();
-		if (null == cvf)
-			return null;
-		CertificateVerifier cv;
-		try {
-			cv = cvf.getVerifier(b);
-		} catch (IOException e) {
+		Map signers = b.getSignerCertificates(Bundle.SIGNERS_ALL);
+		if (signers.isEmpty()) {
 			return null;
 		}
-		if (null == cv)
-			return null;
-		CertificateChain[] chains = cv.getChains();
-		if (null == chains)
-			return null;
-		String[] ret = new String[chains.length];
-		for (int i = 0; i < chains.length; i++)
-			ret[i] = chains[i].getChain();
-		return ret;
+		List ret = new ArrayList(signers.size());
+		for (Iterator iChains = signers.values().iterator(); iChains.hasNext();) {
+			ret.add(getChain((List) iChains.next()));
+		}
+		return (String[]) ret.toArray(new String[ret.size()]);
 	}
 
+	private String getChain(List chain) {
+		StringBuffer sb = new StringBuffer();
+		for (Iterator iChain = chain.iterator(); iChain.hasNext();) {
+			X509Certificate cert = (X509Certificate) iChain.next();
+			sb.append(cert.getSubjectDN().getName());
+			if (iChain.hasNext()) {
+				sb.append("; ");
+			}
+		}
+		return sb.toString();
+	}
 }

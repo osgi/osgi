@@ -77,7 +77,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		timeout = Long.getLong("rsa.ct.timeout", 300000L);
+		timeout = getLongProperty("rsa.ct.timeout", 300000L);
 	}
 	/**
 	 * @see org.osgi.test.cases.remoteserviceadmin.junit.MultiFrameworkTestCase#tearDown()
@@ -96,9 +96,9 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
 
 		//make sure that the server framework System Bundle exports the interfaces
-		String systemPackagesXtra = System.getProperty(SYSTEM_PACKAGES_EXTRA);
+		String systemPackagesXtra = getProperty(SYSTEM_PACKAGES_EXTRA);
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
-		int console = Integer.getInteger("osgi.console", 0);
+		int console = getIntegerProperty("osgi.console", 0);
 		if (console != 0) {
 			configuration.put("osgi.console", "" + console + 1);
 		}
@@ -123,7 +123,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		//
 		// register EndpointListener in parent framework
 		//
-		final EndpointListenerImpl endpointListenerImpl = new EndpointListenerImpl();
+		final int serviceId = 12345;
+		final EndpointListenerImpl endpointListenerImpl = new SelectiveEndpointListenerImpl(serviceId);
 
 		final String endpointListenerFilter = "(!(org.osgi.framework.uuid=" + getContext().getProperty("org.osgi.framework.uuid") + "))";
 		String secondFilter = "(mykey=has been overridden)";
@@ -151,11 +152,11 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			endpointListenerImpl.getSemAdded().waitForSignal(timeout);
 
 			// 122.6.2 callback has to return first matched filter
-			assertEquals("filter doesn't match the first filter", endpointListenerFilter, endpointListenerImpl.getMatchedFilter());
+			assertEquals("filter doesn't match the first filter", endpointListenerFilter, endpointListenerImpl.getAddedMatchedFilter());
 
 			EndpointDescription ep = endpointListenerImpl.getAddedEndpoint();
 			assertNotNull(ep);
-			assertEquals("remote service id is incorrect", 12345, ep.getServiceId());
+			assertEquals("remote service id is incorrect", serviceId, ep.getServiceId());
 			assertEquals("remote.id does not match", "someURI", ep.getId());
 			assertEquals("remote framework id is incorrect", getFramework()
 					.getBundleContext().getProperty("org.osgi.framework.uuid"), ep
@@ -184,11 +185,11 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			endpointListenerImpl.getSemRemoved().waitForSignal(timeout);
 
 			// 122.6.2 callback has to return first matched filter
-			assertEquals("filter doesn't match the first filter", endpointListenerFilter, endpointListenerImpl.getMatchedFilter());
+			assertEquals("filter doesn't match the first filter", endpointListenerFilter, endpointListenerImpl.getRemMatchedFilter());
 
 			ep = endpointListenerImpl.getRemovedEndpoint();
 			assertNotNull(ep);
-			assertEquals("remote service id is incorrect", 12345, ep.getServiceId());
+			assertEquals("remote service id is incorrect", serviceId, ep.getServiceId());
 			assertEquals("remote.id does not match", "someURI", ep.getId());
 			assertEquals("remote framework id is incorrect", getFramework()
 					.getBundleContext().getProperty("org.osgi.framework.uuid"), ep
@@ -512,7 +513,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	class EndpointListenerImpl implements EndpointListener {
 		private Semaphore semAdded = new Semaphore(0);
 		private Semaphore semRemoved = new Semaphore(0);
-		private String matchedFilter;
+		private String addedMatchedFilter;
+		private String remMatchedFilter;
 		private EndpointDescription addedEndpoint;
 		private EndpointDescription removedEndpoint;
 		private ServiceRegistration serviceRegistration;
@@ -539,7 +541,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 				String matchedFilter) {
 
 			this.addedEndpoint = endpoint;
-			this.matchedFilter = matchedFilter;
+			this.addedMatchedFilter = matchedFilter;
 			semAdded.signal();
 		}
 
@@ -550,7 +552,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 				String matchedFilter) {
 
 			this.removedEndpoint = endpoint;
-			this.matchedFilter = matchedFilter;
+			this.remMatchedFilter = matchedFilter;
 			semRemoved.signal();
 		}
 
@@ -571,8 +573,15 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		/**
 		 * @return the matchedFilter
 		 */
-		public String getMatchedFilter() {
-			return matchedFilter;
+		public String getAddedMatchedFilter() {
+			return addedMatchedFilter;
+		}
+
+		/**
+		 * @return the matchedFilter
+		 */
+		public String getRemMatchedFilter() {
+			return remMatchedFilter;
 		}
 
 		/**
@@ -587,6 +596,30 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		 */
 		public EndpointDescription getRemovedEndpoint() {
 			return removedEndpoint;
+		}
+	}
+
+	class SelectiveEndpointListenerImpl extends EndpointListenerImpl {
+		private final int serviceId;
+
+		public SelectiveEndpointListenerImpl(int serviceId) {
+			this.serviceId = serviceId;
+		}
+
+		public void endpointAdded(EndpointDescription endpoint,
+				String matchedFilter) {
+
+			if (serviceId == endpoint.getServiceId()) {
+				super.endpointAdded(endpoint, matchedFilter);
+			}
+		}
+
+		public void endpointRemoved(EndpointDescription endpoint,
+				String matchedFilter) {
+
+			if (serviceId == endpoint.getServiceId()) {
+				super.endpointRemoved(endpoint, matchedFilter);
+			}
 		}
 	}
 }

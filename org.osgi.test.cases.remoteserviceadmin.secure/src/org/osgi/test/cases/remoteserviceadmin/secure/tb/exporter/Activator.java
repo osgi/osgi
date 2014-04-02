@@ -42,6 +42,7 @@ import org.osgi.service.remoteserviceadmin.RemoteServiceAdmin;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 import org.osgi.test.cases.remoteserviceadmin.secure.common.A;
+import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.compatibility.Semaphore;
 
@@ -64,17 +65,12 @@ public class Activator implements BundleActivator, A {
 	int  factor;
 
 	/**
-	 *
-	 */
-	public Activator() {
-		timeout = Long.getLong("rsa.ct.timeout", 300000L);
-	}
-
-	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
+		timeout = OSGiTestCaseProperties.getLongProperty("rsa.ct.timeout",
+				300000L);
 
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put("mykey", "will be overridden");
@@ -294,7 +290,7 @@ public class Activator implements BundleActivator, A {
 	 *         in the runoptions in bnd.bnd
 	 */
 	protected Map<String, Object> loadCTProperties() {
-		String serverconfig = System
+		String serverconfig = context
 				.getProperty("org.osgi.test.cases.remoteserviceadmin.secure.serverconfig");
 		Assert.assertNotNull(
 				"did not find org.osgi.test.cases.remoteserviceadmin.secure.serverconfig system property",
@@ -304,7 +300,7 @@ public class Activator implements BundleActivator, A {
 		for (StringTokenizer tok = new StringTokenizer(serverconfig, ","); tok
 				.hasMoreTokens();) {
 			String propertyName = tok.nextToken();
-			String value = System.getProperty(propertyName);
+			String value = context.getProperty(propertyName);
 			Assert.assertNotNull("system property not found: " + propertyName, value);
 			properties.put(propertyName, value);
 		}

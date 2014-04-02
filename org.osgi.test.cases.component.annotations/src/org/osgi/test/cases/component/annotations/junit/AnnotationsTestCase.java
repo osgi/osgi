@@ -72,7 +72,7 @@ public class AnnotationsTestCase extends OSGiTestCase {
 
 	protected void setUp() throws Exception {
 		final String propName = "org.osgi.test.cases.component.annotations.bundle.symbolic.name";
-		String bsn = System.getProperty(propName);
+		String bsn = getProperty(propName);
 		assertNotNull(
 				"The system property \""
 						+ propName

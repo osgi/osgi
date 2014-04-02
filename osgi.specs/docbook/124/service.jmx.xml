@@ -601,7 +601,7 @@ value          ::= &lt;any jmx supported value&gt;</programlisting>
       and its UUID so that multiple instances on the same VM can be
       discriminated. An example of an Object Name is:</para>
 
-      <programlisting>osgi.core:type=framework,version=1.7,framework=org.apache.felix.framework,<code>«</code>
+      <programlisting>osgi.core:type=framework,version=1.7,framework=org.apache.felix.framework, «
     uuid=f81d4fae-7dec-11d0-a765-00a0c91e6bf6</programlisting>
 
       <para>The advantage of the framework property is that it can be used to
@@ -867,43 +867,6 @@ static CompositeType HEADER = Item.composite( "HEADER", "Thisis a header",
     Permission Admin. It is strongly advised that implementations limit the
     set of available permissions based on authenticating the remote
     manager.</para>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>The Object Names now contain framework name and UUID</para>
-      </listitem>
-
-      <listitem>
-        <para>Versions are updated</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <code>Version</code> to the scalar types</para>
-      </listitem>
-
-      <listitem>
-        <para>Added a <xref
-        linkend="org.osgi.jmx.framework.wiring.BundleWiringStateMBean"
-        xrefstyle="hyperlink"/> reflecting the Framework's Wiring API</para>
-      </listitem>
-
-      <listitem>
-        <para>Changed <xref linkend="org.osgi.jmx.framework.BundleStateMBean"
-        xrefstyle="hyperlink"/>, <xref
-        linkend="org.osgi.jmx.framework.FrameworkMBean"
-        xrefstyle="hyperlink"/>, <xref
-        linkend="org.osgi.jmx.framework.ServiceStateMBean"
-        xrefstyle="hyperlink"/></para>
-      </listitem>
-
-      <listitem>
-        <para>Clarified how lists are encoded for properties</para>
-      </listitem>
-    </itemizedlist>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.jmx.xml"/>

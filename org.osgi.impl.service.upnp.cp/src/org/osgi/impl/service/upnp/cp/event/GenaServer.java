@@ -7,6 +7,8 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Dictionary;
 
+import org.osgi.impl.service.upnp.cp.control.SOAPConstants;
+
 public class GenaServer extends Thread {
 	private boolean			done	= false;
 	public Socket			client;
@@ -72,7 +74,7 @@ public class GenaServer extends Thread {
 	public void shutdown() throws IOException {
 		done = true;
 		if (done) {
-			String hostname = System
+			String hostname = SOAPConstants
 					.getProperty("org.osgi.service.http.hostname");
 			try {
 				if (hostname == null) {

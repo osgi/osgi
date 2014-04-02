@@ -26,7 +26,7 @@
   operators, utilities, and others to deliver differentiated and valuable
   services over their networks.</para>
 
-  <para>This is the fifth release of the OSGi Core specification developed by
+  <para>This is the sixth release of the OSGi Core specification developed by
   representatives from OSGi member companies. The OSGi Core <xref
   endterm="core.book-release" linkend="core.book"/> mostly extends the
   existing APIs into new areas. The few modifications to existing APIs are
@@ -227,7 +227,7 @@
       lines, the <code>«</code> character is used. Spaces must be ignored in
       this case. For example:</para>
 
-      <programlisting>http://www.acme.com/sp/ <code>«</code>
+      <programlisting>http://www.acme.com/sp/ «
 file?abc=12</programlisting>
 
       <para>is equivalent to:</para>
@@ -242,7 +242,7 @@ file?abc=12</programlisting>
       This syntax is based on the following symbols:</para>
 
       <programlisting>*           Repetition of the previous element zero or
-            more times, e.g. ( ',' element ) *
+            more times, e.g. ( ',' element )*
 +           Repetition one or more times
 ?           Previous element is optional
 ( ... )     Grouping
@@ -271,14 +271,14 @@ qname           ::= &lt;see <xref linkend="i487605"/>
                      for fully qualified class names&gt;
 identifier      ::= jletter jletterordigit *
 extended        ::= ( alphanum | '_' | '-' | '.' )+
-quoted-string   ::= '"' ( ~["\#x0D#x0A#x00] | '\"'|'\\')*'"'
+quoted-string   ::= '"' ( ~["\#x0D#x0A#x00] | '\"' | '\\' )* '"'
 argument        ::= extended  | quoted-string
 parameter       ::= directive | attribute
 directive       ::= extended ':=' argument
 attribute       ::= extended '=' argument
 
 unique-name     ::= identifier ( '.' identifier )*
-symbolic-name   ::= token('.'token)*
+symbolic-name   ::= token ( '.' token )*
 package-name    ::= unique-name
 
 path            ::= special-chars+ | quoted-string
@@ -548,8 +548,8 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
     <title>Version Information</title>
 
     <para>This document specifies OSGi Core <xref endterm="core.book-release"
-    linkend="core.book"/>. This specification is backward compatible to
-    releases 1, 2, and 3, and 4.</para>
+    linkend="core.book"/>. This specification is backward compatible to all
+    prior releases.</para>
 
     <para>All Security, Module, Life Cycle and Service Layers are part of the
     Framework Specification</para>
@@ -730,6 +730,16 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
           </row>
 
           <row>
+            <entry><xref linkend="framework.dto"
+            xrefstyle="template:%n %t"/></entry>
+
+            <entry><code><xref linkend="org.osgi.dto"/></code></entry>
+
+            <entry><code><xref endterm="org.osgi.dto-version"
+            linkend="framework.dto"/></code></entry>
+          </row>
+
+          <row>
             <entry><xref linkend="util.tracker"
             xrefstyle="template:%n %t"/></entry>
 
@@ -739,34 +749,46 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
             <entry><code><xref endterm="org.osgi.util.tracker-version"
             linkend="util.tracker"/></code></entry>
           </row>
+
+          <row>
+            <entry><link linkend="org.osgi.annotation.versioning">Versioning
+            Annotations</link></entry>
+
+            <entry><code><xref
+            linkend="org.osgi.annotation.versioning"/></code></entry>
+
+            <entry><code><xref
+            endterm="org.osgi.annotation.versioning-version"
+            linkend="org.osgi.annotation.versioning"/></code></entry>
+          </row>
         </tbody>
       </tgroup>
     </table>
-  </section>
 
-  <section>
-    <title>Changes</title>
+    <para>A compliant framework implementation must implement all of the
+    specifications in this document except as outlined below.</para>
 
-    <itemizedlist>
-      <listitem>
-        <para>Removed remote services chapter to the Compendium</para>
-      </listitem>
+    <para><itemizedlist>
+        <listitem>
+          <para><xref linkend="service.condpermadmin"
+          xrefstyle="template:%n %t"/> and <xref
+          linkend="service.permissionadmin" xrefstyle="template:%n %t"/> are
+          mandatory only if <xref linkend="framework.security"
+          xrefstyle="template:%n %t"/> is supported and a Security Manager is
+          installed.</para>
+        </listitem>
 
-      <listitem>
-        <para>Moved the Tracker to the Core</para>
-      </listitem>
+        <listitem>
+          <para><xref linkend="service.url" xrefstyle="template:%n %t"/> is
+          mandatory if the framework implementation system bundle exports the
+          <xref linkend="org.osgi.service.url"/> package.</para>
+        </listitem>
 
-      <listitem>
-        <para>Added the <xref linkend="framework.resource"/>. This generified
-        the framework's requirement-capability model. This affected the module
-        layer and the Wiring API.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added a number of namespaces, see <xref
-        linkend="framework.namespaces"/>.</para>
-      </listitem>
-    </itemizedlist>
+        <listitem>
+          <para><xref linkend="util.tracker" xrefstyle="template:%n %t"/> is
+          optional.</para>
+        </listitem>
+      </itemizedlist></para>
   </section>
 
   <section>
@@ -776,5 +798,28 @@ special-chars   ::= ~["\#x0D#x0A#x00:=;,&lt;see <xref linkend="i487605"/>
       <bibliomixed xml:id="i487605"><title>Java Language Specification Third
       Edition</title>http://docs.oracle.com/javase/specs/</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Added <xref
+        linkend="framework.module-semantic.versioning.type.roles"/> and <link
+        linkend="org.osgi.annotation.versioning">Versioning Annotations</link>
+        to document version and type role information for packages.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="framework.dto"
+        xrefstyle="template:%n %t"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="framework.service.scope"/> and <xref
+        linkend="framework.service.prototypeServiceFactory"/>.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

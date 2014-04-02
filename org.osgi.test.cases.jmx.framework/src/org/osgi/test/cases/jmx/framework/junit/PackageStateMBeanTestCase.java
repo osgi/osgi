@@ -120,57 +120,87 @@ public class PackageStateMBeanTestCase extends MBeanGeneralTestCase {
 	}
 
 	public void testExceptions() {
-		/*
-		 * Bug report for this method is https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1605
-		 */
 		//test listPackages method
 		try {
 			pMBean.listPackages();
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method listPackages throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test getExportingBundles method
 		try {
 			pMBean.getExportingBundles(STRING_NULL, STRING_NULL);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			pMBean.getExportingBundles(STRING_EMPTY, STRING_EMPTY);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			pMBean.getExportingBundles(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
+		}
+		catch (IllegalArgumentException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test getImportingBundles method
 		try {
 			pMBean.getImportingBundles(STRING_NULL, STRING_NULL, LONG_NEGATIVE);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			pMBean.getImportingBundles(STRING_EMPTY, STRING_SPECIAL_SYMBOLS, LONG_NEGATIVE);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test isRemovalPending method
 		try {
 			pMBean.isRemovalPending(STRING_NULL, STRING_NULL, LONG_NEGATIVE);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			pMBean.isRemovalPending(STRING_EMPTY, STRING_SPECIAL_SYMBOLS, LONG_NEGATIVE);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 	}
 

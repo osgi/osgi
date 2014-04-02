@@ -23,7 +23,7 @@ public class ConsumerImpl implements Consumer {
 	}
 
 	public void producersConnected(Wire[] wires) {
-		if (System.getProperty("dump.now") != null) {
+		if (wac.getProperty("dump.now") != null) {
 			WireAdminControl
 					.log("**********************************************************************");
 			WireAdminControl

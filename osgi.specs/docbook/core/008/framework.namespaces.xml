@@ -246,23 +246,24 @@
     <title>osgi.ee Namespace</title>
 
     <para>An OSGi Framework must register capabilities for all the execution
-    environments it is known to be backward compatible with. For example, if
-    the Java VM provides Java SE 6, then it is backward compatible with 1.2,
-    1.3, 1.4, 1.5, and 1.6. The <code>osgi.ee</code> capability defines the
-    provided versions as a comma separated list. For example:</para>
+    environments the Java VM is known to be backward compatible with. For
+    example, if the Java VM provides Java SE 6, then it is backward compatible
+    with 1.2, 1.3, 1.4, 1.5, and 1.6. The <code>osgi.ee</code> capability
+    defines the provided versions as a comma separated list. For
+    example:</para>
 
-    <programlisting>Provide-Capability:
-    osgi.ee;
-        osgi.ee="OSGi/Minimum";
-        version:List&lt;Version&gt;="1.0,1.1,1.2", 
-    osgi.ee;
-        osgi.ee="JavaSE"; 
+    <programlisting>Provide-Capability: «
+    osgi.ee; «
+        osgi.ee="OSGi/Minimum"; «
+        version:List&lt;Version&gt;="1.0,1.1,1.2", «
+    osgi.ee; «
+        osgi.ee="JavaSE"; «
         version:List&lt;Version&gt;="1.2,1.3,1.4,1.5,1.6"</programlisting>
 
     <para>Bundles can require the <code>osgi.ee</code> capability if they have
     a dependency on a specific execution environment, for example:</para>
 
-    <programlisting>Require-Capability:
+    <programlisting>Require-Capability: «
    osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=1.6))"</programlisting>
 
     <para>It is also possible to exclude certain execution environments. For
@@ -271,20 +272,16 @@
     should not resolve in the later version to ensure the latest version is
     used. The following code shows such an example:</para>
 
-    <programlisting>Require-Capability: <code>«</code>
-   osgi.ee;filter:="(&amp;(osgi.ee=JavaSE) <code>«</code>
-        (version=1.4)(!(version=1.5)))"</programlisting>
+    <programlisting>Require-Capability: «
+   osgi.ee;filter:="(&amp;(osgi.ee=JavaSE)(version=1.4)(!(version=1.5)))"</programlisting>
 
     <para>The <code>osgi.ee</code> requirement is not hosted when it is part
     of a Fragment. That is, a requirement from this namespace must be treated
     as part of the Fragment Bundle and must not be hosted.</para>
 
-    <para>The names for the execution environments are not normatively defined
-    in this specification except the name for <code>JavaSE</code> and
-    <code>OSGi/Minimum</code>. A list of well known names are maintained at
-    <xref linkend="i1775657"/>. The <code>osgi.ee</code> capability is defined
-    in table <xref linkend="framework.namespaces-ee.namespace"/> and in the
-    <xref linkend="org.osgi.framework.namespace.ExecutionEnvironmentNamespace"
+    <para>The <code>osgi.ee</code> capability is defined in table <xref
+    linkend="framework.namespaces-ee.namespace"/> and in the <xref
+    linkend="org.osgi.framework.namespace.ExecutionEnvironmentNamespace"
     xrefstyle="hyperlink"/> class.</para>
 
     <table pgwide="1" xml:id="framework.namespaces-ee.namespace">
@@ -356,12 +353,16 @@
       </tgroup>
     </table>
 
-    <para>The <code>osgi.ee</code> namespace is an alternative to the
-    Bundle-RequiredExecutionEnvironment header in <xref
-    linkend="framework.module.bree"/>. <xref
-    linkend="framework.namespaces-ee.names"/> defines a number of names used
-    for common execution environments. Further (non-normative) names can be
-    found at <xref linkend="i1775657"/>.</para>
+    <para>Provide-Capability headers in the <code>osgi.ee</code> namespace
+    must not be used in a bundle's manifest; Require-Capability with this
+    namespace is allowed. An <code>osgi.ee</code> requirement is an
+    alternative to the Bundle-RequiredExecutionEnvironment header in <xref
+    linkend="framework.module.bree"/>.</para>
+
+    <para>The names for the execution environments are not normatively defined
+    in this specification except those defined in <xref
+    linkend="framework.namespaces-ee.names"/>. A list of well-known
+    (non-normative) names are maintained at <xref linkend="i1775657"/>.</para>
 
     <table xml:id="framework.namespaces-ee.names">
       <title>osgi.ee execution environment names</title>
@@ -996,7 +997,8 @@ Bundle B:
 
             <entry><code>'true' |'false'</code></entry>
 
-            <entry><para>If this resource is a singleton.</para></entry>
+            <entry><para>If this resource is a singleton. The default value is
+            <code>false</code>.</para></entry>
           </row>
 
           <row>
@@ -1142,11 +1144,11 @@ Bundle B:
       <para>For example, a bundle could contain the following requirement
       modeling a relation:</para>
 
-      <programlisting>Require-Capability:
-    osgi.identity;
-        filter:="(&amp;(osgi.identity=org.example.foo-source)(version=1.1))";
-        effective:=meta;
-        classifier:=sources;
+      <programlisting>Require-Capability: «
+    osgi.identity; «
+        filter:="(&amp;(osgi.identity=org.example.foo-source)(version=1.1))"; «
+        effective:=meta; «
+        classifier:=sources; «
         resolution:=optional</programlisting>
 
       <para>The code to retrieve a related resource could look like:</para>
@@ -1173,6 +1175,178 @@ Bundle B:
     </section>
   </section>
 
+  <section xml:id="framework.namespaces.osgi.native">
+    <title>osgi.native Namespace</title>
+
+    <para>The <code>osgi.native</code> namespace is used to describe the
+    native environment in which the Framework is executing. An OSGi Framework
+    must provide a capability in the <code>osgi.native</code> namespace that
+    represents the native environment in which the Framework is executing. For
+    example, the following capability is provided when running a 64-bit VM on
+    a Windows 7 machine with the language set to en_US:</para>
+
+    <programlisting>Provide-Capability: «
+    osgi.native; «
+        osgi.native.osname:List&lt;String&gt;="Windows7,Windows 7,Win7,Win32"; «
+        osgi.native.osversion:Version="7.0"; «
+        osgi.native.processor:List&lt;String&gt;="x86-64,amd64,em64t,x86_64"; «
+        osgi.native.language="en"</programlisting>
+
+    <para>Bundles can require an <code>osgi.native</code> capability which
+    matches the native environment required for the bundle to function
+    properly, for example:</para>
+
+    <programlisting>Require-Capability: «
+     osgi.native; «
+       filter:=" «
+         (&amp; «
+           (osgi.native.osname~=win32) «
+           (osgi.native.processor~=x86-64) «
+           (osgi.native.language~=en) «
+         )"</programlisting>
+
+    <para>The <code>osgi.native</code> namespace is not used to specify native
+    code paths packaged within a bundle. The <code>Bundle-NativeCode</code>
+    header is used to specify native code paths. The OSGi Framework converts a
+    <code>Bundle-NativeCode</code> into an <code>osgi.native</code>
+    requirement which describes the native environment required to execute
+    native code packaged within a Bundle (see <xref
+    linkend="framework.module-loading.native.code.libraries"/>). There is no
+    need for a bundle to specify both a <code>Bundle-NativeCode</code> header
+    and an <code>osgi.native</code> requirement.</para>
+
+    <para>Native code included in a Fragment Bundle gets loaded by the class
+    loaders of the Host Bundles the Fragment is attached to, therefore the
+    <code>osgi.native</code> requirement is hosted when it is part of a
+    Fragment. That is, a requirement from this namespace must be treated as
+    part of the Host Bundles the Fragment is attached to.</para>
+
+    <para>The <code>osgi.native</code> capability is defined in table <xref
+    linkend="framework.namespaces-native.namespace"/> and in the <xref
+    linkend="org.osgi.framework.namespace.NativeNamespace"
+    xrefstyle="hyperlink"/> class.</para>
+
+    <table pgwide="1" xml:id="framework.namespaces-native.namespace">
+      <title>osgi.native Namespace definition</title>
+
+      <tgroup cols="6">
+        <colspec colnum="1" colwidth="4*"/>
+
+        <colspec colnum="2" colwidth="1*"/>
+
+        <colspec colnum="3" colwidth="1*"/>
+
+        <colspec colnum="4" colwidth="2*"/>
+
+        <colspec colnum="5" colwidth="3*"/>
+
+        <colspec colnum="6" colwidth="7*"/>
+
+        <thead>
+          <row>
+            <entry>Name</entry>
+
+            <entry>Kind</entry>
+
+            <entry>M/O</entry>
+
+            <entry>Type</entry>
+
+            <entry>Syntax</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><code>osgi.native.osname</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>M</code></entry>
+
+            <entry><para><code>List</code></para><para><code>&lt;String&gt;</code></para></entry>
+
+            <entry><para><code>osname</code></para><para><code>( ',' osname
+            )*</code></para></entry>
+
+            <entry><para>A comma separated list of canonical os name aliases
+            to the <code>org.osgi.framework.os.name</code> launching property
+            value (See <xref linkend="framework.module.os-names"/> and <xref
+            linkend="i3287541"/>). For example, an
+            <code>org.osgi.framework.os.name</code> value of
+            <code>Windows95</code> will get a <code>List&lt;String&gt;</code>
+            value of <code>Windows95,Windows
+            95,Win95,Win32</code></para></entry>
+          </row>
+
+          <row>
+            <entry><code>osgi.native.osversion</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>M</code></entry>
+
+            <entry><para><code>Version</code></para></entry>
+
+            <entry><code>version</code></entry>
+
+            <entry><para>A <code>Version</code> as parsed from the value of
+            the <code>org.osgi.framework.os.version</code> launching
+            property</para></entry>
+          </row>
+
+          <row>
+            <entry><code>osgi.native.processor</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>M</code></entry>
+
+            <entry><para><code>List</code></para><para><code>&lt;String&gt;</code></para></entry>
+
+            <entry><para><code>processor</code></para><para><code>( ','
+            processor )*</code></para></entry>
+
+            <entry><para>A comma separated list of canonical processor aliases
+            to the <code>org.osgi.framework.processor</code> launching
+            property value (See <xref
+            linkend="framework.module.processor-names"/> and <xref
+            linkend="i3287541"/>). For example, an
+            <code>org.osgi.framework.processor</code> value of
+            <code>x86</code> will get a <code>List&lt;String&gt;</code> value
+            of <code>x86,pentium,i386,i486,i586,i686</code></para></entry>
+          </row>
+
+          <row>
+            <entry><code>osgi.native.language</code></entry>
+
+            <entry><code>CA</code></entry>
+
+            <entry><code>M</code></entry>
+
+            <entry><para><code>String</code></para></entry>
+
+            <entry/>
+
+            <entry><para>The value of the
+            <code>org.osgi.framework.language</code> launching
+            property</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
+    <para>In addition to the attributes defined in <xref
+    linkend="framework.namespaces-native.namespace"/> an OSGi Framework must
+    populate the <code>osgi.native</code> capability attributes with the
+    values included in the Framework launching properties (see <xref
+    linkend="framework.lifecycle.launchingproperties"/>). Launching property
+    keys that start with <code>osgi.native.</code> are excluded to prevent
+    collisions with the defined capability attribute keys.</para>
+  </section>
+
   <section>
     <title>References</title>
 
@@ -1180,5 +1354,20 @@ Bundle B:
       <bibliomixed xml:id="i1775657"><title>Specification
       References</title>http://www.osgi.org/Specifications/Reference</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Clarified that bundles may not specify an <code>osgi.ee</code>
+        capability in <xref linkend="framework.namespaces.osgi.ee"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="framework.namespaces.osgi.native"/>.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

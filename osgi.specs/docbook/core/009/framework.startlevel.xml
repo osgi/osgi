@@ -164,8 +164,7 @@
         <listitem>
           <para><xref linkend="org.osgi.framework.startlevel.BundleStartLevel"
           xrefstyle="hyperlink"/> - Used to get and set the start level on a
-          specific bundle. This adaptation must return <code>null</code> for
-          the system bundle (bundle 0).</para>
+          specific bundle.</para>
         </listitem>
 
         <listitem>
@@ -181,9 +180,7 @@
     <section>
       <title>Bundle Start Level Bundle Adaptation</title>
 
-      <para>The Bundle Start Level adaptation is only possible for non-system
-      bundles (the adapt method must return <code>null</code> for a system
-      bundle). The adaptation provides the following methods:</para>
+      <para>The adaptation provides the following methods:</para>
 
       <itemizedlist>
         <listitem>
@@ -481,8 +478,7 @@
       <title>System Bundle</title>
 
       <para>The System Bundle is defined to have a start level of zero. The
-      start level of the System Bundle cannot be changed because the system
-      bundle must not adapt to a <code>BundleStartLevel</code> object.</para>
+      start level of the System Bundle cannot be changed.</para>
     </section>
   </section>
 

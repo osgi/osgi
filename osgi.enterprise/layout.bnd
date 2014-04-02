@@ -20,6 +20,7 @@ enterprise.specs = \
      org.osgi.service.serviceloader, \
      org.osgi.service.subsystem, \
 	 org.osgi.service.useradmin, \
+     org.osgi.util.promise, \
 	 org.osgi.util.xml
 
 enterprise.packages = ${replace;$(enterprise.specs);^.*$;$0.*}
@@ -32,5 +33,4 @@ enterprise.resources = {${enterprise.legal}/about.html}, \
 		  				xmlns/metatype=${project.workspace}/xmlns/metatype, \
   						xmlns/rsa=${project.workspace}/xmlns/rsa, \
   						xmlns/repository=${project.workspace}/xmlns/repository, \
-  						xmlns/scact=${project.workspace}/xmlns/scact, \
   						xmlns/scr=${project.workspace}/xmlns/scr

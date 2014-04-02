@@ -24,7 +24,6 @@ Include-Resource = tb1.jar, \
 				   classloading.tb16k.jar, \
 				   classloading.tb17a.jar, \
 				   classloading.tb17d.jar, \
-				   classloading.tb17e.jar, \
 				   classloading.tb17g.jar, \
 				   classloading.tb8b.jar, \
 				   classloading.tb9a.jar, \
@@ -58,6 +57,8 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
+	org.osgi.test.filter; version=latest, \
 	org.osgi.impl.service.resolver; version=latest
 	
--runproperties = ${runproperties}
+-runproperties = ${runproperties}, \
+	org.osgi.test.filter.exclude.services="(&(objectClass=org.osgi.service.resolver.*)(service.bundleid=0))"

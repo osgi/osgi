@@ -17,6 +17,7 @@
 package org.osgi.resource;
 
 import java.util.Map;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * A capability that has been declared from a {@link Resource}.
@@ -29,6 +30,7 @@ import java.util.Map;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface Capability {
 
 	/**

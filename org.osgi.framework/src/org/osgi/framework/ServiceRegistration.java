@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package org.osgi.framework;
 
 import java.util.Dictionary;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * A registered service.
@@ -33,10 +34,9 @@ import java.util.Dictionary;
  * @param <S> Type of Service.
  * @see BundleContext#registerService(String[],Object,Dictionary)
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
-
+@ProviderType
 public interface ServiceRegistration<S> {
 	/**
 	 * Returns a {@code ServiceReference} object for a service being registered.
@@ -53,7 +53,8 @@ public interface ServiceRegistration<S> {
 	 * Updates the properties associated with a service.
 	 * 
 	 * <p>
-	 * The {@link Constants#OBJECTCLASS} and {@link Constants#SERVICE_ID} keys
+	 * The {@link Constants#OBJECTCLASS}, {@link Constants#SERVICE_BUNDLEID},
+	 * {@link Constants#SERVICE_ID} and {@link Constants#SERVICE_SCOPE} keys
 	 * cannot be modified by this method. These values are set by the Framework
 	 * when the service is registered in the OSGi environment.
 	 * 

@@ -10,7 +10,9 @@ Private-Package						=  \
 Export-Package						= \
 	${p}.permissions.util, \
 	${p}.lifecycle.servicereferencegetter, \
-	${p}.junit.adaptions
+	${p}.junit.adaptions, \
+	${p}.junit.hooks.weaving, \
+	${p}.junit.serviceregistry.export
 
 Include-Resource = \
     adaptAllPerms.jar,\
@@ -44,9 +46,15 @@ Include-Resource = \
 	resolver.tb1.jar, \
 	resolver.tb2.jar, \
 	resolver.tb5.jar, \
+	serviceregistry.tb1.jar, \
+	serviceregistry.tb2.jar, \
 	syncbundlelistener.tb1a.jar, \
 	syncbundlelistener.tb1b.jar, \
+	weaving.tb.woven.jar,\
 	weaving.tb1.jar,\
+	weaving.tb2.jar,\
+	weaving.tb3.jar,\
+	weaving.tb4.jar,\
 	wiring.tb1.jar,\
 	wiring.tb2.jar,\
 	wiring.tb3.jar,\

@@ -16,6 +16,8 @@
 
 package org.osgi.framework.hooks.weaving;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * OSGi Framework Weaving Hook Service.
  * 
@@ -36,7 +38,7 @@ package org.osgi.framework.hooks.weaving;
  * @ThreadSafe
  * @author $Id$
  */
-
+@ConsumerType
 public interface WeavingHook {
 	/**
 	 * Weaving hook method.
