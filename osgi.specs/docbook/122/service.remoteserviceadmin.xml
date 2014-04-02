@@ -633,7 +633,7 @@
           </row>
 
           <row>
-            <entry><para><code>endpoint.package.</code></para><para><code> version.&lt;package-name&gt;</code></para></entry>
+            <entry><para><code>endpoint.package.</code></para><para><code>&#160;version.&lt;package-name&gt;</code></para></entry>
 
             <entry><code>String</code></entry>
 
@@ -2082,7 +2082,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
           <row>
             <entry><code>value-type</code></entry>
 
-            <entry><para><code>  String</code></para><para><code>|
+            <entry><para><code>&#160;&#160;String</code></para><para><code>|
             long</code></para><para><code>| Long</code></para><para><code>|
             double</code></para><para><code>|
             Double</code></para><para><code>| float</code></para><para><code>|

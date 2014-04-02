@@ -139,19 +139,19 @@
           </row>
 
           <row>
-            <entry><code> ExecEnvNumberOfEntries</code></entry>
+            <entry><code>&#160;ExecEnvNumberOfEntries</code></entry>
 
             <entry><para/></entry>
           </row>
 
           <row>
-            <entry><code> DeploymentUnitNumberOfEntries</code></entry>
+            <entry><code>&#160;DeploymentUnitNumberOfEntries</code></entry>
 
             <entry><para/></entry>
           </row>
 
           <row>
-            <entry><code> ExecutionUnitNumberOfEntries</code></entry>
+            <entry><code>&#160;ExecutionUnitNumberOfEntries</code></entry>
 
             <entry><para/></entry>
           </row>
@@ -163,7 +163,7 @@
           </row>
 
           <row>
-            <entry><code> Enable</code></entry>
+            <entry><code>&#160;Enable</code></entry>
 
             <entry><para>Indicates whether or not this OSGi Framework is
             enabled. Disabling an enabled OSGi Framework must stop it, while
@@ -180,7 +180,7 @@
           </row>
 
           <row>
-            <entry><code> Status</code></entry>
+            <entry><code>&#160;Status</code></entry>
 
             <entry><para>Indicates the status of the OSGi Framework.
             Enumeration of:</para><itemizedlist>
@@ -202,7 +202,7 @@
           </row>
 
           <row>
-            <entry><code> Reset</code></entry>
+            <entry><code>&#160;Reset</code></entry>
 
             <entry><para>Setting this parameter to <code>true</code> causes
             this OSGi Framework to revert back to the state it was in when the
@@ -232,14 +232,14 @@
           </row>
 
           <row>
-            <entry><code> Alias</code></entry>
+            <entry><code>&#160;Alias</code></entry>
 
             <entry><para>A non-volatile handle used to reference this instance
             for alias based addressing.</para></entry>
           </row>
 
           <row>
-            <entry><code> Name</code></entry>
+            <entry><code>&#160;Name</code></entry>
 
             <entry><para>A Name that adequately distinguishes this OSGi
             Framework from all other OSGi Frameworks. This must be the OSGi
@@ -248,7 +248,7 @@
           </row>
 
           <row>
-            <entry><code> Type</code></entry>
+            <entry><code>&#160;Type</code></entry>
 
             <entry><para>Indicates the complete type and specification version
             of this <code>ExecEnv</code>. For an OSGi Framework it must
@@ -258,7 +258,7 @@
           </row>
 
           <row>
-            <entry><code> InitialRunLevel</code></entry>
+            <entry><code>&#160;InitialRunLevel</code></entry>
 
             <entry><para>The run level that this <code>ExecEnv</code> will be
             in upon startup (whether that is caused by a CPE Boot or the
@@ -276,7 +276,7 @@
           </row>
 
           <row>
-            <entry><code> RequestedRunLevel</code></entry>
+            <entry><code>&#160;RequestedRunLevel</code></entry>
 
             <entry><para>Sets the start level of this OSGi Framework, meaning
             that altering this parameter's value will change the value of the
@@ -289,7 +289,7 @@
           </row>
 
           <row>
-            <entry><code> CurrentRunLevel</code></entry>
+            <entry><code>&#160;CurrentRunLevel</code></entry>
 
             <entry><para>The start level that this OSGi Framework is currently
             operating in. This value is altered by changing the
@@ -303,7 +303,7 @@
           </row>
 
           <row>
-            <entry><code> Version</code></entry>
+            <entry><code>&#160;Version</code></entry>
 
             <entry><para>The Version of this OSGi Framework as specified by
             its Vendor. This is not the version of its specification. Must be
@@ -312,7 +312,7 @@
           </row>
 
           <row>
-            <entry><code> Vendor</code></entry>
+            <entry><code>&#160;Vendor</code></entry>
 
             <entry><para>The vendor that produced this OSGi Framework, the
             value of the <code>org.osgi.framework.vendor</code> Framework
@@ -320,7 +320,7 @@
           </row>
 
           <row>
-            <entry><code> ParentExecEnv</code></entry>
+            <entry><code>&#160;ParentExecEnv</code></entry>
 
             <entry><para>The value must be the path name of a row in the
             <code>ExecEnv</code> table, it can either be the operating system
@@ -332,31 +332,31 @@
           </row>
 
           <row>
-            <entry><code> AllocatedDiskSpace</code></entry>
+            <entry><code>&#160;AllocatedDiskSpace</code></entry>
 
             <entry><para>Implementation specific.</para></entry>
           </row>
 
           <row>
-            <entry><code> AvailableDiskSpace</code></entry>
+            <entry><code>&#160;AvailableDiskSpace</code></entry>
 
             <entry><para>Implementation specific.</para></entry>
           </row>
 
           <row>
-            <entry><code> AllocatedMemory</code></entry>
+            <entry><code>&#160;AllocatedMemory</code></entry>
 
             <entry><para>Implementation specific.</para></entry>
           </row>
 
           <row>
-            <entry><code> AvailableMemory</code></entry>
+            <entry><code>&#160;AvailableMemory</code></entry>
 
             <entry><para>Implementation specific.</para></entry>
           </row>
 
           <row>
-            <entry><code> ProcessorRefList</code></entry>
+            <entry><code>&#160;ProcessorRefList</code></entry>
 
             <entry><para>Comma-separated list of paths into the
             <code>DeviceInfo.Processor</code> table. If the referenced object
@@ -366,7 +366,7 @@
           </row>
 
           <row>
-            <entry><code> ActiveExecutionUnits</code></entry>
+            <entry><code>&#160;ActiveExecutionUnits</code></entry>
 
             <entry><para>Comma-separated list of paths into the
             <code>ExecutionUnit</code> table. If the referenced object is
@@ -376,7 +376,7 @@
           </row>
 
           <row>
-            <entry><para><code>Device.SoftwareModules.</code></para><para><code>    DeploymentUnit.{i}.</code></para></entry>
+            <entry><para><code>Device.SoftwareModules.</code></para><para><code>&#160;&#160;&#160;&#160;DeploymentUnit.{i}.</code></para></entry>
 
             <entry><para>This table serves as the Bundles inventory and
             contains status information about each Bundle. A new instance of
@@ -385,7 +385,7 @@
           </row>
 
           <row>
-            <entry><code> UUID</code></entry>
+            <entry><code>&#160;UUID</code></entry>
 
             <entry><para>A Universally Unique Identifier either provided by
             the ACS, or generated by the CPE, at the time of Deployment Unit
@@ -398,21 +398,21 @@
           </row>
 
           <row>
-            <entry><code> DUID</code></entry>
+            <entry><code>&#160;DUID</code></entry>
 
             <entry><para>The Bundle id from the <code>getBundleId()</code>
             method.</para></entry>
           </row>
 
           <row>
-            <entry><code> Alias</code></entry>
+            <entry><code>&#160;Alias</code></entry>
 
             <entry><para>A non-volatile handle used to reference this
             instance.</para></entry>
           </row>
 
           <row>
-            <entry><code> Name</code></entry>
+            <entry><code>&#160;Name</code></entry>
 
             <entry><para>Indicates the Bundle Symbolic Name of this Bundle.
             The value of this parameter is used in the generation of the UUID
@@ -421,7 +421,7 @@
           </row>
 
           <row>
-            <entry><code> Status</code></entry>
+            <entry><code>&#160;Status</code></entry>
 
             <entry><para>Indicates the status of this Bundle. Enumeration
             of:</para><itemizedlist>
@@ -462,7 +462,7 @@
           </row>
 
           <row>
-            <entry><code> Resolved</code></entry>
+            <entry><code>&#160;Resolved</code></entry>
 
             <entry><para>Indicates whether or not this
             <code>DeploymentUnit</code> has resolved all of its dependencies.
@@ -473,7 +473,7 @@
           </row>
 
           <row>
-            <entry><code> URL</code></entry>
+            <entry><code>&#160;URL</code></entry>
 
             <entry><para>Contains the URL used by the most recent
             <code>ChangeDUState</code> RPC to either Install or Update this
@@ -482,7 +482,7 @@
           </row>
 
           <row>
-            <entry><code> Description</code></entry>
+            <entry><code>&#160;Description</code></entry>
 
             <entry><para>Textual description of this Bundle, must be the value
             of the Bundle-Description manifest header or an empty string if
@@ -490,7 +490,7 @@
           </row>
 
           <row>
-            <entry><code> Vendor</code></entry>
+            <entry><code>&#160;Vendor</code></entry>
 
             <entry><para>The author of this <code>DeploymentUnit</code>
             formatted as a domain name. The value of this parameter is used in
@@ -500,26 +500,26 @@
           </row>
 
           <row>
-            <entry><code> Version</code></entry>
+            <entry><code>&#160;Version</code></entry>
 
             <entry><para>Version of this Bundle, it mist be he value of the
             <code>geVersion()</code> method.</para></entry>
           </row>
 
           <row>
-            <entry><code> VendorLogList</code></entry>
+            <entry><code>&#160;VendorLogList</code></entry>
 
             <entry><para>Empty String</para></entry>
           </row>
 
           <row>
-            <entry><code> VendorConfigList</code></entry>
+            <entry><code>&#160;VendorConfigList</code></entry>
 
             <entry><para>Empty String</para></entry>
           </row>
 
           <row>
-            <entry><code> ExecutionUnitList</code></entry>
+            <entry><code>&#160;ExecutionUnitList</code></entry>
 
             <entry><para>A path into the <code>ExecutionUnit</code> table for
             the corresponding <code>ExecutionUnit</code> for this Bundle,
@@ -527,7 +527,7 @@
           </row>
 
           <row>
-            <entry><code> ExecutionEnvRef</code></entry>
+            <entry><code>&#160;ExecutionEnvRef</code></entry>
 
             <entry><para>The value must be the path name of a row in the
             <code>ExecEnv</code> table of the corresponding OSGi
@@ -535,7 +535,7 @@
           </row>
 
           <row>
-            <entry><para><code>Device.SoftwareModules.</code></para><para><code>     ExecutionUnit.{i}.</code></para></entry>
+            <entry><para><code>Device.SoftwareModules.</code></para><para><code>&#160;&#160;&#160;&#160;&#160;ExecutionUnit.{i}.</code></para></entry>
 
             <entry><para>This table serves as the Execution Unit inventory and
             contains both status information about each Execution Unit as well
@@ -545,7 +545,7 @@
           </row>
 
           <row>
-            <entry><code> EUID</code></entry>
+            <entry><code>&#160;EUID</code></entry>
 
             <entry><para>Table wide identifier for a bundle chosen by the OSGi
             Framework during installation of the associated
@@ -557,14 +557,14 @@
           </row>
 
           <row>
-            <entry><code> Alias</code></entry>
+            <entry><code>&#160;Alias</code></entry>
 
             <entry><para>A non-volatile handle used to reference this
             instance.</para></entry>
           </row>
 
           <row>
-            <entry><code> Name</code></entry>
+            <entry><code>&#160;Name</code></entry>
 
             <entry><para>The name should be unique across all Bundles
             instances contained within its associated
@@ -574,7 +574,7 @@
           </row>
 
           <row>
-            <entry><code> ExecEnvLabel</code></entry>
+            <entry><code>&#160;ExecEnvLabel</code></entry>
 
             <entry><para>The name must be unique across all Bundles contained
             within a specific OSGi Framework. This must therefore be the
@@ -582,7 +582,7 @@
           </row>
 
           <row>
-            <entry><code> AutoStart</code></entry>
+            <entry><code>&#160;AutoStart</code></entry>
 
             <entry><para>If <code>true</code> and the proper start level is
             met, then this Bundle will be automatically started by the device
@@ -603,7 +603,7 @@
           </row>
 
           <row>
-            <entry><code> RunLevel</code></entry>
+            <entry><code>&#160;RunLevel</code></entry>
 
             <entry><para>Determines when this Bundle will be started. If
             <code>AutoStart</code> is <code>true</code> and the <code>
@@ -614,7 +614,7 @@
           </row>
 
           <row>
-            <entry><code> Status</code></entry>
+            <entry><code>&#160;Status</code></entry>
 
             <entry><para>Indicates the status of this
             <code>ExecutionUnit</code>. Enumeration of:</para><itemizedlist>
@@ -648,7 +648,7 @@
           </row>
 
           <row>
-            <entry><code> RequestedState</code></entry>
+            <entry><code>&#160;RequestedState</code></entry>
 
             <entry><para>Indicates the state transition that the ACS is
             requesting for this Bundle. Enumeration of:</para><itemizedlist>
@@ -676,7 +676,7 @@
           </row>
 
           <row>
-            <entry><code> ExecutionFaultCode</code></entry>
+            <entry><code>&#160;ExecutionFaultCode</code></entry>
 
             <entry><para>If while running or transitioning between states this
             Bundle raises an Exception then this parameter embodies the
@@ -724,7 +724,7 @@
           </row>
 
           <row>
-            <entry><code> ExecutionFaultMessage</code></entry>
+            <entry><code>&#160;ExecutionFaultMessage</code></entry>
 
             <entry><para>If while running or transitioning between states this
             Bundle identifies a fault this parameter provides a more detailed
@@ -737,65 +737,65 @@
           </row>
 
           <row>
-            <entry><code> Vendor</code></entry>
+            <entry><code>&#160;Vendor</code></entry>
 
             <entry><para>Vendor of this Bundle. The value of the Bundle-Vendor
             manifest header</para></entry>
           </row>
 
           <row>
-            <entry><code> Description</code></entry>
+            <entry><code>&#160;Description</code></entry>
 
             <entry><para>Textual description of this Bundle. The value of the
             Bundle-Description manifest header</para></entry>
           </row>
 
           <row>
-            <entry><code> Version</code></entry>
+            <entry><code>&#160;Version</code></entry>
 
             <entry><para>Version of the Bundle. The value of the
             <code>getVersion()</code> method.</para></entry>
           </row>
 
           <row>
-            <entry><code> VendorLogList</code></entry>
+            <entry><code>&#160;VendorLogList</code></entry>
 
             <entry><para>Empty string.</para></entry>
           </row>
 
           <row>
-            <entry><code> VendorConfigList</code></entry>
+            <entry><code>&#160;VendorConfigList</code></entry>
 
             <entry><para>Empty string.</para></entry>
           </row>
 
           <row>
-            <entry><code> DiskSpaceInUse</code></entry>
+            <entry><code>&#160;DiskSpaceInUse</code></entry>
 
             <entry><para>Implementation defined</para></entry>
           </row>
 
           <row>
-            <entry><code> MemoryInUse</code></entry>
+            <entry><code>&#160;MemoryInUse</code></entry>
 
             <entry><para>Implementation defined</para></entry>
           </row>
 
           <row>
-            <entry><code> References</code></entry>
+            <entry><code>&#160;References</code></entry>
 
             <entry><para>Empty String</para></entry>
           </row>
 
           <row>
-            <entry><code> AssociatedProcessList</code></entry>
+            <entry><code>&#160;AssociatedProcessList</code></entry>
 
             <entry><para>Empty String as an OSGi bundle reuses the process of
             the VM.</para></entry>
           </row>
 
           <row>
-            <entry><code> SupportedDataModelList</code></entry>
+            <entry><code>&#160;SupportedDataModelList</code></entry>
 
             <entry><para>Comma-separated list of strings. Each list item must
             be the path name of a row in the DeviceInfo.SupportedDataModel
@@ -807,14 +807,14 @@
           </row>
 
           <row>
-            <entry><code> ExecutionEnvRef</code></entry>
+            <entry><code>&#160;ExecutionEnvRef</code></entry>
 
             <entry><para>The path to the OSGi Framework that hosts this bundle
             in the <code>ExecEnv</code> table.</para></entry>
           </row>
 
           <row>
-            <entry><para><code>Device.SoftwareModules.</code></para><para><code> ExecutionUnit.{i}.Extensions.</code></para></entry>
+            <entry><para><code>Device.SoftwareModules.</code></para><para><code>&#160;ExecutionUnit.{i}.Extensions.</code></para></entry>
 
             <entry><para>This object proposes a general location for vendor
             extensions specific to this Execution Unit, which allows multiple

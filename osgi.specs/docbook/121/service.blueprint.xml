@@ -2049,7 +2049,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
             <row>
               <entry><code>activation</code></entry>
 
-              <entry><para><code>  lazy</code></para><para><code>|
+              <entry><para><code>&#160;&#160;lazy</code></para><para><code>|
               eager</code></para></entry>
 
               <entry><para><code>activation</code></para><para><code>:
@@ -2093,7 +2093,7 @@ type-converters     ::= &lt;bean&gt; | &lt;ref&gt;</programlisting>
             <row>
               <entry><code>scope</code></entry>
 
-              <entry><para><code>  singleton</code></para><para><code>|
+              <entry><para><code>&#160;&#160;singleton</code></para><para><code>|
               prototype</code></para></entry>
 
               <entry><para><code>scope</code></para><para><code>:
@@ -2883,7 +2883,7 @@ registration-listener ::= target</programlisting>
             <row>
               <entry><code>activation</code></entry>
 
-              <entry><para><code>  lazy</code></para><para><code>|
+              <entry><para><code>&#160;&#160;lazy</code></para><para><code>|
               eager</code></para></entry>
 
               <entry><para><code>activation</code></para><para><code>:
@@ -2927,9 +2927,9 @@ registration-listener ::= target</programlisting>
             <row>
               <entry><code>auto-export</code></entry>
 
-              <entry><para><code>  disabled</code></para><para><code>|
+              <entry><para><code>&#160;&#160;disabled</code></para><para><code>|
               interfaces</code></para><para><code>|
-              class-</code></para><para><code>  hierarchy</code></para><para><code>|
+              class-</code></para><para><code>&#160;&#160;hierarchy</code></para><para><code>|
               all-classes</code></para></entry>
 
               <entry><para><code>autoExport</code></para><para><code>:
@@ -2985,7 +2985,7 @@ registration-listener ::= target</programlisting>
               linkend="service.blueprint-service.manager.registration.listener"/>.</entry>
 
               <entry><para><code>registrationListeners</code></para><para><code>:
-              List&lt;Registration</code></para><para><code>  Listener&gt;</code></para></entry>
+              List&lt;Registration</code></para><para><code>&#160;&#160;Listener&gt;</code></para></entry>
 
               <entry><para>The registration listeners. See <xref
               linkend="i2392507"/>.</para></entry>
@@ -3639,7 +3639,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
             <row>
               <entry><code>activation</code></entry>
 
-              <entry><para><code>  lazy</code></para><para><code>|
+              <entry><para><code>&#160;&#160;lazy</code></para><para><code>|
               eager</code></para></entry>
 
               <entry><para><code>activation</code></para><para><code>:
@@ -3670,7 +3670,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
             <row>
               <entry><code>availability</code></entry>
 
-              <entry><para><code>  mandatory</code></para><para><code>|
+              <entry><para><code>&#160;&#160;mandatory</code></para><para><code>|
               optional</code></para></entry>
 
               <entry><para><code>availability</code></para><para><code>:
@@ -3837,8 +3837,8 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
             <row>
               <entry><code>member-type</code></entry>
 
-              <entry><para><code>  service-</code></para><para><code>  object</code></para><para><code>|
-              service-</code></para><para><code>  reference</code></para></entry>
+              <entry><para><code>&#160;&#160;service-</code></para><para><code>&#160;&#160;object</code></para><para><code>|
+              service-</code></para><para><code>&#160;&#160;reference</code></para></entry>
 
               <entry><para><code>memberType</code></para><para><code>:
               int</code></para></entry>
@@ -4634,8 +4634,8 @@ public class FooImpl implements Foo { }</programlisting>
             <row>
               <entry
               colname="col3"><para><code>collectionClass</code></para><para><code>:
-              Class&lt;</code></para><para><code>  List | Set | Object[]
-              &gt;</code></para></entry>
+              Class&lt;</code></para><para><code>&#160;&#160;List | Set |
+              Object[] &gt;</code></para></entry>
 
               <entry colname="col4"><para>The actual collection class to be
               used, derived from the appropriate definition. </para></entry>

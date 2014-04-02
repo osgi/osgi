@@ -5577,7 +5577,7 @@ SESSION_CLOSED {
             </row>
 
             <row>
-              <entry><code> [index]</code></entry>
+              <entry><code>&#160;[index]</code></entry>
 
               <entry><code>Get</code></entry>
 
@@ -5803,7 +5803,7 @@ L/2     C</programlisting>
               </row>
 
               <row>
-                <entry><code> [index]</code></entry>
+                <entry><code>&#160;[index]</code></entry>
 
                 <entry><code>Get Set Add Del</code></entry>
 
@@ -5906,7 +5906,7 @@ L/2     C</programlisting>
             </row>
 
             <row>
-              <entry><code> [long]</code></entry>
+              <entry><code>&#160;[long]</code></entry>
 
               <entry><code>Get Set Add Del</code></entry>
 
@@ -6094,7 +6094,7 @@ L/2     C</programlisting>
             </row>
 
             <row>
-              <entry><code> Ext</code></entry>
+              <entry><code>&#160;Ext</code></entry>
 
               <entry><code>Get</code></entry>
 
@@ -6108,7 +6108,7 @@ L/2     C</programlisting>
             </row>
 
             <row>
-              <entry><code>  com.acme</code></entry>
+              <entry><code>&#160;&#160;com.acme</code></entry>
 
               <entry><code>Get</code></entry>
 
@@ -6122,7 +6122,7 @@ L/2     C</programlisting>
             </row>
 
             <row>
-              <entry><code>   Transactional</code></entry>
+              <entry><code>&#160;&#160;&#160;Transactional</code></entry>
 
               <entry><code>Get</code></entry>
 
