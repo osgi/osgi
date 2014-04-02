@@ -5,9 +5,6 @@ nodeploy						=true
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd, ${project.workspace}/osgi.companion/layout.bnd
 
-javadoc.bootclasspath = ${uniq; \
-                    ${repo;ee.j2se;[${javac.compliance},${javac.compliance}]}, \
-                    ${repo;ee.foundation}}
 javadoc.classpath = ${uniq; \
                     ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}, \
                     ${repo;org.eclipse.persistence.jpa_spec}, \
