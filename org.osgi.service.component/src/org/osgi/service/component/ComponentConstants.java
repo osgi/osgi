@@ -16,12 +16,14 @@
 
 package org.osgi.service.component;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * Defines standard names for Service Component constants.
  * 
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface ComponentConstants {
 	/**
 	 * Manifest header specifying the XML documents within a bundle that contain

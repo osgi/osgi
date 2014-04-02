@@ -42,9 +42,9 @@ public class RemoteServiceAdminSecureTest extends MultiFrameworkTestCase {
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
 
 		//make sure that the server framework System Bundle exports the interfaces
-		String systemPackagesXtra = System.getProperty(SYSTEM_PACKAGES_EXTRA);
+		String systemPackagesXtra = getProperty(SYSTEM_PACKAGES_EXTRA);
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
-		int console = Integer.getInteger("osgi.console", 0);
+		int console = getIntegerProperty("osgi.console", 0);
 		if (console != 0) {
 			configuration.put("osgi.console", "" + console + 1);
 		}

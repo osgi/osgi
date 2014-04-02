@@ -15,12 +15,12 @@
       <orgname>The OSGi Alliance</orgname>
     </author>
 
-    <releaseinfo xml:id="core.book-release">Release 5</releaseinfo>
+    <releaseinfo xml:id="core.book-release">Release 6</releaseinfo>
 
-    <pubdate>March 2012</pubdate>
+    <pubdate>June 2014</pubdate>
 
     <copyright>
-      <year>2000, 2012</year>
+      <year>2000, 2014</year>
 
       <holder>OSGi Alliance</holder>
     </copyright>
@@ -63,6 +63,8 @@
   <xi:include href="055/framework.servicehooks.xml"/>
 
   <xi:include href="056/framework.weavinghooks.xml"/>
+
+  <xi:include href="057/framework.dto.xml"/>
 
   <xi:include href="../701/util.tracker.xml"/>
 </book>

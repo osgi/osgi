@@ -17,6 +17,10 @@
 
 package org.osgi.test.support;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+
 public class OSGiTestCaseProperties {
 	private OSGiTestCaseProperties() {
 		// empty
@@ -26,39 +30,26 @@ public class OSGiTestCaseProperties {
 	private static final int	scaling; 
 	
 	static {
-		String timoutStr;
-		String scalingStr;
+		long t = 60000L;
 		try {
-			timoutStr = System.getProperty("org.osgi.test.testcase.timeout",
-					"60000");
-			scalingStr = System.getProperty("org.osgi.test.testcase.scaling",
-					"1");
-		}
-		catch (SecurityException e) {
-			timoutStr = "60000";
-			scalingStr = "1";
-		}
-		long t;
-		int s;
-		try {
-			t = Long.parseLong(timoutStr);
+			t = getLongProperty("org.osgi.test.testcase.timeout", t);
 			if (t < 0) {
 				t = 0;
 			}
-		}
-		catch (Exception e) {
-			t = 60000l;
+		} catch (SecurityException e) {
+			// use default value
 		}
 
+		int s = 1;
 		try {
-			s = Integer.parseInt(scalingStr);
+			s = getIntegerProperty("org.osgi.test.testcase.scaling", s);
 			if (s < 0) {
 				s = 0;
 			}
+		} catch (SecurityException e) {
+			// use default value
 		}
-		catch (Exception e) {
-			s = 1;
-		}
+
 		timeout = t;
 		scaling = s;
 
@@ -70,5 +61,99 @@ public class OSGiTestCaseProperties {
 
 	public static int getScaling() {
 		return scaling;
+	}
+
+	/**
+	 * Return the property value from the bundle context properties.
+	 * 
+	 * @param key The property key name.
+	 * @return The property value or null if the property is not set.
+	 */
+	public static String getProperty(String key) {
+		Bundle bundle = FrameworkUtil.getBundle(OSGiTestCaseProperties.class);
+		if (bundle != null) {
+			BundleContext context;
+			try {
+				context = bundle.getBundleContext();
+			} catch (SecurityException e) {
+				context = null;
+			}
+			if (context != null) {
+				return context.getProperty(key);
+			}
+		}
+		return System.getProperty(key);
+	}
+
+	/**
+	 * Return the property value from the bundle context properties.
+	 * 
+	 * @param key The property key name.
+	 * @param defaultValue The default property value to return if the property
+	 *        is not set.
+	 * @return The property value or defaultValue if the property is not set.
+	 */
+	public static String getProperty(String key, String defaultValue) {
+		String propValue = getProperty(key);
+		if (propValue == null) {
+			return defaultValue;
+		}
+		return propValue;
+	}
+
+	/**
+	 * Return the boolean property value from the bundle context properties.
+	 * 
+	 * @param key The property key name.
+	 * @param defaultValue The default property value to return if the property
+	 *        is not set.
+	 * @return The property value or defaultValue if the property is not set.
+	 */
+	public static boolean getBooleanProperty(String key, boolean defaultValue) {
+		String propValue = getProperty(key);
+		if (propValue == null) {
+			return defaultValue;
+		}
+		return Boolean.valueOf(propValue).booleanValue();
+	}
+
+	/**
+	 * Return the integer property value from the bundle context properties.
+	 * 
+	 * @param key The property key name.
+	 * @param defaultValue The default property value to return if the property
+	 *        is not set.
+	 * @return The property value or defaultValue if the property is not set.
+	 */
+	public static int getIntegerProperty(String key, int defaultValue) {
+		String propValue = getProperty(key);
+		if (propValue == null) {
+			return defaultValue;
+		}
+		try {
+			return Integer.parseInt(propValue);
+		} catch (NumberFormatException e) {
+			return defaultValue;
+		}
+	}
+
+	/**
+	 * Return the long property value from the bundle context properties.
+	 * 
+	 * @param key The property key name.
+	 * @param defaultValue The default property value to return if the property
+	 *        is not set.
+	 * @return The property value or defaultValue if the property is not set.
+	 */
+	public static long getLongProperty(String key, long defaultValue) {
+		String propValue = getProperty(key);
+		if (propValue == null) {
+			return defaultValue;
+		}
+		try {
+			return Long.parseLong(propValue);
+		} catch (NumberFormatException e) {
+			return defaultValue;
+		}
 	}
 }

@@ -17,6 +17,7 @@
 package org.osgi.service.blueprint.reflect;
 
 import java.util.List;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Metadata for a Map based value.
@@ -27,6 +28,7 @@ import java.util.List;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface MapMetadata extends NonNullMetadata {
 	/**
 	 * Return the name of the type of the map keys.

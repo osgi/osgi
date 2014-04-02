@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,22 +76,27 @@ public class AtomicInteger extends Number {
 		return addAndGet(-1);
 	}
 
+	@Override
 	public int intValue() {
 		return get();
 	}
 
+	@Override
 	public double doubleValue() {
 		return get();
 	}
 
+	@Override
 	public float floatValue() {
 		return get();
 	}
 
+	@Override
 	public long longValue() {
 		return get();
 	}
 
+	@Override
 	public String toString() {
 		return Integer.toString(get());
 	}

@@ -16,6 +16,8 @@
 
 package org.osgi.resource;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * Capability and Requirement Namespaces base class.
  * 
@@ -36,6 +38,7 @@ package org.osgi.resource;
  * @Immutable
  * @author $Id$
  */
+@ConsumerType
 public abstract class Namespace {
 
 	/**

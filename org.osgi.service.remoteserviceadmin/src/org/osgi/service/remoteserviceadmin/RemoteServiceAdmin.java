@@ -18,6 +18,7 @@ package org.osgi.service.remoteserviceadmin;
 
 import java.util.Collection;
 import java.util.Map;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -30,9 +31,9 @@ import org.osgi.framework.ServiceReference;
  * and find out about the current imports and exports.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface RemoteServiceAdmin {
 
 	/**
@@ -81,7 +82,7 @@ public interface RemoteServiceAdmin {
 	 *         through the properties is not supported by the distribution
 	 *         provider.
 	 */
-	Collection<ExportRegistration> exportService(ServiceReference reference, Map<String, ?> properties);
+	Collection<ExportRegistration> exportService(ServiceReference<?> reference, Map<String, ?> properties);
 
 	/**
 	 * Import a service from an Endpoint. The Remote Service Admin must use the

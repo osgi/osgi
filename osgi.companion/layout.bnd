@@ -1,4 +1,5 @@
--include: ${project.workspace}/osgi.core/layout.bnd, \
+-include: ${project.workspace}/osgi.annotation/layout.bnd, \
+	${project.workspace}/osgi.core/layout.bnd, \
 	${project.workspace}/osgi.cmpn/layout.bnd, \
 	${project.workspace}/osgi.enterprise/layout.bnd, \
 	${project.workspace}/osgi.residential/layout.bnd

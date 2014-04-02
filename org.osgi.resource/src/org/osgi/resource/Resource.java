@@ -17,6 +17,7 @@
 package org.osgi.resource;
 
 import java.util.List;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * A resource is the representation of a uniquely identified and typed data. A
@@ -31,6 +32,7 @@ import java.util.List;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface Resource {
 	/**
 	 * Returns the capabilities declared by this resource.

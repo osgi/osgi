@@ -866,7 +866,7 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
       <para>Implied permissions are permissions that the framework grants a
       bundle without any specific action. These permissions are necessary for
       normal operation. For example, each bundle gets permissions to read,
-      write, and delete the bundle persistent storage area. The complete list
+      write, and delete the bundle persistent storage area. The standard list
       of implied permissions is as follows:</para>
 
       <itemizedlist>
@@ -992,16 +992,6 @@ dc=acme.com, cn=Bugs Bunny, o=ACME, c=US</programlisting>
         prevent this case from causing harm.</para>
       </section>
     </section>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>New implied Capability Permission</para>
-      </listitem>
-    </itemizedlist>
   </section>
 
   <section>

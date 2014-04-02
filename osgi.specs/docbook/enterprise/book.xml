@@ -20,7 +20,7 @@
     <pubdate>Date TBD</pubdate>
 
     <copyright>
-      <year>2000, 2012</year>
+      <year>2000, 2013</year>
 
       <holder>OSGi Alliance</holder>
     </copyright>
@@ -66,8 +66,6 @@
 
   <xi:include href="../128/service.war.xml"/>
 
-  <xi:include href="../129/service.sca.xml"/>
-
   <xi:include href="../130/service.coordinator.xml"/>
 
   <xi:include href="../132/service.repository.xml"/>
@@ -79,6 +77,8 @@
   <xi:include href="../135/service.namespaces.xml"/>
 
   <xi:include href="../136/service.resolver.xml"/>
+  
+  <xi:include href="../137/service.rest.xml"/>
 
   <xi:include href="../702/util.xml.xml"/>
 </book>

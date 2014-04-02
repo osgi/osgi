@@ -16,6 +16,7 @@
 
 package org.osgi.util.tracker;
 
+import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -47,6 +48,7 @@ import org.osgi.framework.ServiceReference;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface ServiceTrackerCustomizer<S, T> {
 	/**
 	 * A service is being added to the {@code ServiceTracker}.

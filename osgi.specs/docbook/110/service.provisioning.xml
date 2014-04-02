@@ -744,10 +744,10 @@ while (i.hasNext()) {
       '?', becoming the first HTTP parameter. The following two examples show
       these two variants:</para>
 
-      <programlisting>http://server.operator.com/service-x? <code>«</code>
+      <programlisting>http://server.operator.com/service-x? «
     foo=bar&amp;service_platform_id=VIN:123456789
 
-http://server.operator.com/service-x? <code>«</code>
+http://server.operator.com/service-x? «
     service_platform_id=VIN:123456789</programlisting>
 
       <para>Proper URL encoding must be applied when the URL contains
@@ -1250,8 +1250,8 @@ http://server.operator.com/service-x? <code>«</code>
 
       <para>Which, when mapped to HTTP, must become:</para>
 
-      <programlisting>http://server.operator.com/service-x <code>«</code>
-    service_platform_id=VIN:123456789&amp; <code>«</code>
+      <programlisting>http://server.operator.com/service-x «
+    service_platform_id=VIN:123456789&amp; «
     clientfg=AHPmWcw%2FsiWYC37xZNdKvQ%3D%3D</programlisting>
     </section>
   </section>

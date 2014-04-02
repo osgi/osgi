@@ -48,4 +48,4 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.log; version=latest
 
 -runproperties = ${runproperties}, \
-	scr.bundle.name=org.eclipse.equinox.ds
+	scr.bundle.name=org.apache.felix.scr

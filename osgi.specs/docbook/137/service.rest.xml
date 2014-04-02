@@ -1,0 +1,310 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="137"
+         revision="$Id$"
+         version="5" xml:id="service.rest"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>REST Management Service Specification</title>
+
+  <info>
+    <releaseinfo><xref endterm="org.osgi.service.rest-version"
+    linkend="org.osgi.service.rest"/></releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>
+	    Cloud computing is a continuing trend in the IT industry. 
+	    Due to its service model which embraces dynamism as opposed to masking it, OSGi appears to be an ideal base for building scalable and dependable applications for the cloud where changes in the deployment, network topology, and service availability are the norm rather than the exception. 
+	    One of the possible scenarios for OSGi to be successfully applied to cloud computing is using it in a Platform as a Service (PaaS) spirit. 
+	    Users write their bundles and can deploy them to their own OSGi instance running in the cloud. 
+	    This, however, requires the platform provider to expose the OSGi management API to the end user and make them available through a network protocol. 
+	    One of the popular approaches in cloud computing to remote communication is the use of RESTful web services. 
+
+	    Representational State Transfer (REST) is the architectural style of the world wide web. 
+	    It can be described as a set of constraints that govern the interactions between the main components of the Internet.  
+	    Recently, REST style interaction has gained popularity as a architecture for web services (RESTful web services), mainly to overcome the perceived complexity and verbosity of SOAP-based web services.
+	    This specification describes a REST interface for framework management, client-side Java and JavaScript APIs, and an extension mechanism through which other bundles can contribute their own RESTful management APIs and make them discoverable by clients. 
+    </para>
+    
+    <section>
+      <title>Essentials</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Client-Server</emphasis> A separation of concern between the entity responsible for the user-interaction (client) and the other entity (server) responsible for data storage. For instance, in the original world wide web the browser is the client rendering and presenting the content delivered by one or more web servers. As a result, web content becomes more portable and content providers more scalable.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Stateless</emphasis> State is entirely kept at the client side. Therefore, every request must contain all state required for the server to accomplish the transaction and deliver content. The main rationale behind this design constraint is to again improve the scalability since in a pure stateless design the server resources are not burdened with maintaining any client state. Another perceived advantage is that the failure models of stateless interactions is simpler and fault tolerance easier to achieve.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Cacheable</emphasis> Content marked as cacheable can be temporarily stored and used to immediately answer future equivalent requests and improve efficiency and reduce network utilization and access latencies. Due to the end-to-end principle, caches can be placed where necessary, e.g., at the client (forward-proxy), or at the server side (backward-proxy). Content marked as non-cacheable must be freshly retrieved with every request even in the presence of caches.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Layered</emphasis> Layering introduces natural boundaries to coupling since every layer only accesses the services provided by the lower layer and provides services to the next higher layer.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Uniform Interface</emphasis> Generality of component interfaces provides a natural decoupling of implementation and interface. REST furthermore encourages the separation of identifiable resources (addressing) and their representation (content delivery).</para>
+  	</listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Entities</title>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Resource</emphasis> A resource is abstract piece of information that can be addressed by a resource identifier. The mapping of a resource to a concrete set of entities can vary over time.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Representation</emphasis> A representation is a sequence of bytes plus associated meta-data that describe the state of a resource. The data format of a representation is called the media-type. Every concrete representation of a resource is just one of arbitrarily many possible representations. The selection of a concrete representation of a resource can be made according to the media types supported by both the client and the server.</para>
+        </listitem>
+	<listitem>
+          <para><emphasis>REST Management Service</emphasis> The management service exposes a REST API for remotely managing an OSGi framework through the network in a lightweight and portable fashion.</para>
+        </listitem>
+        <listitem>
+          <para><emphasis>Client</emphasis> The client is a machine using the management service by issuing REST requests through the network. It can do so either directly or indirectly, i.e., through client-side libraries using the REST calls internally.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>Synopsis</title>
+
+      <para>
+	      The manageable entities of an OSGi framework are mapped to resources accessible through resource identifiers. 
+	      These identifiers are relative to the (usually externally accessible) root URL of the management service. 
+      	      Clients can either discover this root URL or receive it through configuration. 
+	      Subsequently, a client is able to introspect the state of the framework and perform management operations. 
+
+	      The internal state of a framework resource is expressed and transmitted as a representation. 
+	      The format of the representation is subject to a mutual agreement between client and management service regarding media types commonly supported by both endpoints.
+	      This specification describes two possible representation formats: JSON and XML. 
+      </para>
+    </section>
+  </section>
+
+ <section>
+    <title>Resources</title>
+ 
+    <para> 
+
+
+    <section>
+      <title>Framework Startlevel Resource</title>
+	    
+    <table>
+      <title></title>
+
+      <tgroup cols="2">
+        <colspec colnum="1" colwidth="1*"/>
+
+        <colspec colnum="2" colwidth="5*"/>
+
+        <thead>
+          <row>
+            <entry>Nethod</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+	    <entry><para><code>[GET]</code></para></entry>
+
+            <entry><para>get the startlevel. Returns a framework startlevel representation</para></entry>
+          </row>
+
+          <row>
+            <entry><para><code>[PUT]</code></para></entry>
+
+            <entry><para>set the startlevel. Expects the body of the message to be a framework startlevel representation</para></entry>
+          </row>
+
+        </tbody>
+      </tgroup>
+    </table>
+    </section>
+    
+    
+    </para>
+ </section>
+ 
+
+ <section>
+    <title>Representations</title>
+
+    <section>
+        <title>Framework Startlevel Representation</title>
+
+    <table>
+      <tgroup cols="2">
+        <colspec colnum="1" colwidth="1*"/>
+
+        <colspec colnum="2" colwidth="5*"/>
+
+
+        <tbody>
+          <row>
+	    <entry><para><code>JSON</code></para></entry>
+
+	    <entry><para><emphasis>Content-Type: application/org.osgi.frameworkstartlevel+json</emphasis>
+			    <code>
+{
+    "startLevel":6,
+    "initialBundleStartLevel":4
+}
+</code>	    
+	    </para></entry>
+          </row>
+
+          <row>
+	    <entry><para><code>XML</code></para></entry>
+
+	    <entry><para><emphasis>application/org.osgi.frameworkstartlevel+xml</emphasis>
+<code>
+&lt;frameworkStartLevel&gt;
+    &lt;startLevel>6&lt;/startLevel&gt;
+    &lt;initialBundleStartLevel>4&lt;/initialBundleStartLevel&gt;
+&lt;/frameworkStartLevel&gt;
+</code>	    
+	    </para></entry>
+          </row>
+
+        </tbody>
+      </tgroup>
+    </table>
+
+	</section>
+ </section>
+
+  <section>
+    <title>Domain A</title>
+
+    <para>This is body text.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Bulleted</para>
+      </listitem>
+
+      <listitem>
+        <para>Bulleted</para>
+      </listitem>
+      
+      <listitem>
+        <para>Bulleted</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Numbered lists:</para>
+
+    <orderedlist>
+      <listitem>
+        <para>Numbered</para>
+      </listitem>
+      
+      <listitem>
+        <para>Numbered</para>
+      </listitem>
+      
+      <listitem>
+        <para>Numbered</para>
+      </listitem>
+    </orderedlist> 
+
+    <para>An <emphasis>emphasized</emphasis> term.</para>
+
+    <para>The following is a Program Listing style:</para>
+
+    <programlisting>Some s = (Some) context.getService(ref);</programlisting>
+
+    <para>A remark:</para>
+
+    <para>
+      <remark>This is a discussion remark</remark>
+    </para>
+
+    <section>
+      <title>Subsection</title>
+      <section>
+        <title>Sub-subsection</title>
+      </section>
+    </section>
+  </section>
+  
+  <section>
+    <title>Domain B</title>
+  </section>
+  
+  <section>
+    <title>Domain C</title>
+  </section>
+  
+  <section>
+    <title>Life Cycle</title>
+  </section>
+  
+  <section>
+    <title>Error Handling</title>
+  </section>
+  
+  <section>
+    <title>Events</title>
+    
+    <section>
+      <title>Domain Events</title>
+    </section>
+
+    <section>
+      <title>Event Admin Mapping</title>
+    </section>
+  </section>
+  
+  <section>
+    <title>Class Loading</title>
+  </section>
+  
+  <section>
+    <title>Data Transfer Objects</title>
+  </section>
+  
+  <section>
+    <title>XML Schema</title>
+
+    <para>A wide code example (for use with XML Schema). Note that the XML schema is typically included 
+        through <code>xi:include</code> tags rather than embedded directly.</para>
+
+    <programlisting role="pgwide">&lt;?xml version="1.0"?&gt;
+&lt;!-- XML Schema --&gt;
+&lt;top&gt; ... &lt;/top&gt;</programlisting>
+
+  </section>
+  
+  <section>
+    <title>Security</title>
+  </section>
+
+  <!-- Include javadoc here, once available
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.rest.xml"/>
+  -->
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed><title>Framework Module Layer</title>OSGi
+      Core, Chapter 3 Module Layer</bibliomixed>
+
+      <bibliomixed><title>XML Schema Part 2: Data types
+      Second Edition</title>http://www.w3.org/TR/xmlschema-2/</bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>

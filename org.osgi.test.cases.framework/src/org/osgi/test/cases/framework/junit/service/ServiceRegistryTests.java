@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2011). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,9 @@
 
 package org.osgi.test.cases.framework.junit.service;
 
+import java.util.Arrays;
 import java.util.Hashtable;
-
+import java.util.List;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
@@ -29,6 +30,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.framework.UnfilteredServiceListener;
 import org.osgi.test.support.OSGiTestCase;
+import org.osgi.test.support.concurrent.AtomicInteger;
 
 public class ServiceRegistryTests extends OSGiTestCase {
 
@@ -505,6 +507,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		ServiceRegistration registration = getContext().registerService(
 				classes, new ConcreteMarker(1), properties);
 		assertNotNull(registration);
+		assertServiceProperties(registration.getReference());
 		registration.setProperties(properties);
 		registration.unregister();
 	}
@@ -533,6 +536,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 								service);
 					}
 				}, properties);
+		assertServiceProperties(registration.getReference());
 
 		ServiceReference reference = getContext().getServiceReference(
 				Marker1.class.getName());
@@ -573,6 +577,36 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		}
 	}
 
+	public void testFactoryUngetOnUnregister() {
+		String[] classes = new String[] {Marker1.class.getName(),
+				Marker2.class.getName()};
+		Hashtable<String, String> properties = new Hashtable<String, String>();
+		final AtomicInteger ungetCalled = new AtomicInteger(0);
+		properties.put("test", "yes");
+		ServiceRegistration registration = getContext().registerService(
+				classes, new ServiceFactory() {
+
+					public Object getService(Bundle bundle,
+							ServiceRegistration reg) {
+						return new ConcreteMarker(0);
+					}
+
+					public void ungetService(Bundle bundle,
+							ServiceRegistration reg, Object service) {
+						ungetCalled.incrementAndGet();
+					}
+				}, properties);
+		assertServiceProperties(registration.getReference());
+
+		ServiceReference<Marker1> reference = getContext().getServiceReference(
+				Marker1.class);
+		Marker1 service1 = getContext().getServiceObjects(reference).getService();
+		assertEquals("wrong service returned", 0, service1.getValue());
+
+		registration.unregister();
+		assertEquals("The ServiceFactory.ungetService method was not called.", 1, ungetCalled.get());
+	}
+
 	public void testFactoryGetException() {
 		String[] classes = new String[] {Marker1.class.getName(),
 				Marker2.class.getName()};
@@ -592,6 +626,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 						// empty
 					}
 				}, properties);
+		assertServiceProperties(registration.getReference());
 
 		try {
 			ServiceReference reference = getContext().getServiceReference(
@@ -625,6 +660,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 								"testFactoryException:ungetService");
 					}
 				}, properties);
+		assertServiceProperties(registration.getReference());
 
 		try {
 			ServiceReference reference = getContext().getServiceReference(
@@ -665,6 +701,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 						// empty
 					}
 				}, properties);
+		assertServiceProperties(registration.getReference());
 
 		try {
 			ServiceReference reference = getContext().getServiceReference(
@@ -720,6 +757,7 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		for (int i = 0; i < 1000; i++) {
 			registrations[i] = getContext().registerService(classes,
 					new ConcreteMarker(i + 1000), properties);
+			assertServiceProperties(registrations[i].getReference());
 		}
 
 		ServiceReference reference[] = getContext().getServiceReferences(
@@ -760,14 +798,17 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MIN_VALUE));
 		ServiceRegistration reg1 = getContext().registerService(
 				Runnable.class.getName(), runIt, props);
+		assertServiceProperties(reg1.getReference());
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
 		ServiceRegistration reg2 = getContext().registerService(
 				Runnable.class.getName(), runIt, props);
+		assertServiceProperties(reg2.getReference());
 
 		props.put(Constants.SERVICE_DESCRIPTION, "max value second");
 		props.put(Constants.SERVICE_RANKING, new Integer(Integer.MAX_VALUE));
 		ServiceRegistration reg3 = getContext().registerService(
 				Runnable.class.getName(), runIt, props);
+		assertServiceProperties(reg3.getReference());
 
 		try {
 			ServiceReference ref = getContext().getServiceReference(
@@ -824,9 +865,11 @@ public class ServiceRegistryTests extends OSGiTestCase {
 		props.put(Constants.SERVICE_RANKING, new Integer(15));
 		ServiceRegistration reg1 = getContext().registerService(
 				Runnable.class.getName(), runIt, props);
+		assertServiceProperties(reg1.getReference());
 		props.put(Constants.SERVICE_RANKING, new Integer(10));
 		ServiceRegistration reg2 = getContext().registerService(
 				Runnable.class.getName(), runIt, props);
+		assertServiceProperties(reg2.getReference());
 		try {
 			assertEquals("wrong service reference", reg1.getReference(),
 					getContext().getServiceReference("java.lang.Runnable"));
@@ -891,8 +934,10 @@ public class ServiceRegistryTests extends OSGiTestCase {
 			props.put(getName(), Boolean.FALSE);
 			reg1 = getContext().registerService(Runnable.class.getName(),
 					runIt, props);
+			assertServiceProperties(reg1.getReference());
 			reg2 = getContext().registerService(Runnable.class.getName(),
 					runIt, props);
+			assertServiceProperties(reg2.getReference());
 			assertEquals("Did get ServiceEvent.REGISTERED", 2, results[0]);
 			assertEquals("Did get ServiceEvent.MODIFIED", 0, results[1]);
 			assertEquals("Did get ServiceEvent.MODIFIED_ENDMATCH", 0,
@@ -992,6 +1037,34 @@ public class ServiceRegistryTests extends OSGiTestCase {
 				reg1.unregister();
 			if (reg2 != null)
 				reg2.unregister();
+		}
+	}
+
+	private static List<String>	scopes	= Arrays.asList(Constants.SCOPE_SINGLETON, Constants.SCOPE_BUNDLE, Constants.SCOPE_PROTOTYPE);
+
+	private static void assertServiceProperties(ServiceReference<?> ref) {
+		Object id = ref.getProperty(Constants.SERVICE_ID);
+		assertNotNull("service.id not set", id);
+		assertTrue("service.id not Long", id instanceof Long);
+		assertTrue("service.id is negative", ((Long) id).longValue() >= 0);
+
+		Object bundleid = ref.getProperty(Constants.SERVICE_BUNDLEID);
+		assertNotNull("service.bundleid not set", bundleid);
+		assertTrue("service.bundleid not Long", bundleid instanceof Long);
+		assertEquals("service.bundleid is incorrect", ref.getBundle().getBundleId(), ((Long) bundleid).longValue());
+
+		Object scope = ref.getProperty(Constants.SERVICE_SCOPE);
+		assertNotNull("service.scope not set", scope);
+		assertTrue("service.scope not String", scope instanceof String);
+		assertTrue("service.scope has invalid value: " + scope, scopes.contains(scope));
+
+		Object objectClass = ref.getProperty(Constants.OBJECTCLASS);
+		assertNotNull("objectClass not set", objectClass);
+		assertTrue("objectClass not String[]", objectClass instanceof String[]);
+		assertTrue("objectClass empty array", ((String[]) objectClass).length > 0);
+		for (String o : (String[]) objectClass) {
+			assertNotNull("objectClass has null value", o);
+			assertTrue("objectClass has an empty string", o.length() > 0);
 		}
 	}
 

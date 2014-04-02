@@ -57,24 +57,6 @@ public class Activator implements BundleActivator, HttpContext {
 	public static long	TIMEOUT4	= 100;
 	public static long	TIMEOUT5	= 50;
 
-	static {
-		String scalingStr = System.getProperty("org.osgi.test.testcase.scaling");
-		if (scalingStr != null) {
-			try {
-				long scale = Long.parseLong(scalingStr);
-				if (scale > 0) {
-					TIMEOUT1 *= scale;
-					TIMEOUT2 *= scale;
-					TIMEOUT4 *= scale;
-					TIMEOUT5 *= scale;
-				}
-			}
-			catch (Exception e) {
-				// empty
-			}
-		}
-	}
-
 	public boolean handleSecurity(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		return true;
@@ -115,6 +97,21 @@ public class Activator implements BundleActivator, HttpContext {
 	public static String	hostPort;
 
 	public void start(BundleContext c) throws Exception {
+		String scalingStr = c.getProperty("org.osgi.test.testcase.scaling");
+		if (scalingStr != null) {
+			try {
+				long scale = Long.parseLong(scalingStr);
+				if (scale > 0) {
+					TIMEOUT1 *= scale;
+					TIMEOUT2 *= scale;
+					TIMEOUT4 *= scale;
+					TIMEOUT5 *= scale;
+				}
+			}
+			catch (Exception e) {
+				// empty
+			}
+		}
 		tracker = new ServiceTracker(c, HttpService.class
 				.getName(), null) {
 			public Object addingService(ServiceReference ref) {

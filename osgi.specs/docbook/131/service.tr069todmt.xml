@@ -1325,7 +1325,7 @@ _-_-_
               </row>
 
               <row>
-                <entry><code> [string]</code></entry>
+                <entry><code>&#160;[string]</code></entry>
 
                 <entry><code>Get Set Add Del</code></entry>
 
@@ -2935,11 +2935,11 @@ IGD.LAN.2.Hosts.HostNumberOfEntries</programlisting>
 
             <row>
               <entry
-              morerows="1"><para><code>IGD.LAN.1.Hosts.«</code></para><para><code> 1.Active</code></para></entry>
+              morerows="1"><para><code>IGD.LAN.1.Hosts.«</code></para><para><code>&#160;1.Active</code></para></entry>
 
               <entry><code>false</code></entry>
 
-              <entry><para><code>IGD.LAN.1.Hosts.Host.</code></para><para><code> 1.Active</code></para></entry>
+              <entry><para><code>IGD.LAN.1.Hosts.Host.</code></para><para><code>&#160;1.Active</code></para></entry>
 
               <entry><para>The path is a parameter path, therefore only the
               source is returned.</para></entry>
@@ -3553,7 +3553,7 @@ de-telekom-shell</programlisting>
           </row>
 
           <row>
-            <entry><code> [string]</code></entry>
+            <entry><code>&#160;[string]</code></entry>
 
             <entry><code>Get Set Add Del</code></entry>
 
@@ -3567,7 +3567,7 @@ de-telekom-shell</programlisting>
           </row>
 
           <row>
-            <entry><code>  InstanceId</code></entry>
+            <entry><code>&#160;&#160;InstanceId</code></entry>
 
             <entry><code>Get</code></entry>
 
@@ -3581,7 +3581,7 @@ de-telekom-shell</programlisting>
           </row>
 
           <row>
-            <entry><code>  Pid</code></entry>
+            <entry><code>&#160;&#160;Pid</code></entry>
 
             <entry><code>Get</code></entry>
 
@@ -3595,7 +3595,7 @@ de-telekom-shell</programlisting>
           </row>
 
           <row>
-            <entry><code>  Properties</code></entry>
+            <entry><code>&#160;&#160;Properties</code></entry>
 
             <entry><code>Get</code></entry>
 
@@ -3609,7 +3609,7 @@ de-telekom-shell</programlisting>
           </row>
 
           <row>
-            <entry><code>   [string]</code></entry>
+            <entry><code>&#160;&#160;&#160;[string]</code></entry>
 
             <entry><code>Get Set Add Del</code></entry>
 
@@ -3625,7 +3625,7 @@ de-telekom-shell</programlisting>
           </row>
 
           <row>
-            <entry><code>    [index]</code></entry>
+            <entry><code>&#160;&#160;&#160;&#160;[index]</code></entry>
 
             <entry><code>Get Set Add Del</code></entry>
 

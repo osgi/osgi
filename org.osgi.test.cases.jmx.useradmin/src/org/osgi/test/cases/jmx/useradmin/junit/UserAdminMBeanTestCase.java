@@ -442,591 +442,725 @@ public class UserAdminMBeanTestCase extends MBeanGeneralTestCase {
 	}
 
 	public void testExceptions() {
-		/*
-		 * Bug report for this method is https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1605
-		 */
 		assertNotNull(userManagerMBean);
 
 		//test listGroups method
 		try {
 			userManagerMBean.listGroups();
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method listGroups throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test listRoles method
 		try {
 			userManagerMBean.listRoles();
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method listRoles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test listUsers method
 		try {
 			userManagerMBean.listUsers();
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method listUsers throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test addCredential method
 		try {
 			userManagerMBean.addCredential(STRING_NULL, null, STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.addCredential(STRING_EMPTY, new byte[] {}, STRING_EMPTY);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.addCredential(STRING_SPECIAL_SYMBOLS, new byte[] {}, STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test addCredentialString method
 		try {
 			userManagerMBean.addCredentialString(STRING_NULL, STRING_NULL, STRING_NULL);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.addCredentialString(STRING_EMPTY, STRING_EMPTY, STRING_EMPTY);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.addCredentialString(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test addMember method
 		try {
 			userManagerMBean.addMember(STRING_NULL, STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method addMember throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.addMember(STRING_EMPTY, STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method addMember throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.addMember(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method addMember throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 
 		//test addProperty method
 		try {
 			userManagerMBean.addProperty(STRING_NULL, null, STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method addProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.addProperty(STRING_EMPTY, new byte[] {}, STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method addProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.addProperty(STRING_SPECIAL_SYMBOLS, new byte[] {}, STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method addProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 
 		//test addPropertyString method
 		try {
 			userManagerMBean.addPropertyString(STRING_NULL, STRING_NULL, STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method addPropertyString throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.addPropertyString(STRING_EMPTY, STRING_EMPTY, STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method addPropertyString throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.addPropertyString(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method addPropertyString throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 
 		//test addRequiredMember method
 		try {
 			userManagerMBean.addRequiredMember(STRING_NULL, STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method addRequiredMember throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.addRequiredMember(STRING_EMPTY, STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method addRequiredMember throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.addRequiredMember(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method addRequiredMember throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 
 		//test createGroup method
 		try {
 			userManagerMBean.createGroup(STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method createGroup throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.createGroup(STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method createGroup throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			userManagerMBean.createGroup(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method createGroup throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test createUser method
 		try {
 			userManagerMBean.createUser(STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method createUser throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.createUser(STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method createUser throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			userManagerMBean.createUser(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method createUser throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test getAuthorization method
 		try {
 			userManagerMBean.getAuthorization(STRING_NULL);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.getAuthorization(STRING_EMPTY);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.getAuthorization(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getCredentials method
 		try {
 			userManagerMBean.getCredentials(STRING_NULL);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.getCredentials(STRING_EMPTY);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.getCredentials(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getGroup method
 		try {
 			userManagerMBean.getGroup(STRING_NULL);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.getGroup(STRING_EMPTY);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
+		}
+		catch (IllegalArgumentException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			userManagerMBean.getGroup(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
+		}
+		catch (IllegalArgumentException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test getGroups method
 		try {
 			userManagerMBean.getGroups(STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getGroups throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			userManagerMBean.getGroups(STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getGroups throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.getGroups(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getGroups throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 
 		//test getImpliedRoles method
 		try {
 			userManagerMBean.getImpliedRoles(STRING_NULL);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.getImpliedRoles(STRING_EMPTY);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.getImpliedRoles(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getMembers method
 		try {
 			userManagerMBean.getMembers(STRING_NULL);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.getMembers(STRING_EMPTY);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
+		}
+		catch (IllegalArgumentException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			userManagerMBean.getMembers(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
+		}
+		catch (IllegalArgumentException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test getProperties method
 		try {
 			userManagerMBean.getProperties(STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getProperties throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.getProperties(STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getProperties throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			userManagerMBean.getProperties(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getProperties throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test getRequiredMembers method
 		try {
 			userManagerMBean.getRequiredMembers(STRING_NULL);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.getRequiredMembers(STRING_EMPTY);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
+		}
+		catch (IllegalArgumentException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			userManagerMBean.getRequiredMembers(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
+		}
+		catch (IllegalArgumentException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test getRole method
 		try {
 			userManagerMBean.getRole(STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.getRole(STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			userManagerMBean.getRole(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test getRoles method
 		try {
 			userManagerMBean.getRoles(STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getRoles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			userManagerMBean.getRoles(STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getRoles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.getRoles(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getRoles throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 
 		//test getUser method
 		try {
 			userManagerMBean.getUser(STRING_NULL);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.getUser(STRING_EMPTY);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.getUser(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test getUserWithProperty method
 		try {
 			userManagerMBean.getUserWithProperty(STRING_NULL, STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getUserWithProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.getUserWithProperty(STRING_EMPTY, STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getUserWithProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			userManagerMBean.getUserWithProperty(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getUserWithProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test getUsers method
 		try {
 			userManagerMBean.getUsers(STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getUsers throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			userManagerMBean.getUsers(STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getUsers throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.getUsers(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method getUsers throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 
 		//test removeCredential method
 		try {
 			userManagerMBean.removeCredential(STRING_NULL, STRING_NULL);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.removeCredential(STRING_EMPTY, STRING_EMPTY);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.removeCredential(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test removeGroup method
 		try {
 			userManagerMBean.removeGroup(STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method removeGroup throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.removeGroup(STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method removeGroup throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			userManagerMBean.removeGroup(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method removeGroup throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test removeMember method
 		try {
 			userManagerMBean.removeMember(STRING_NULL, STRING_NULL);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.removeMember(STRING_EMPTY, STRING_EMPTY);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.removeMember(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-        } catch(IllegalArgumentException iae) {
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
+		}
+		catch (IllegalArgumentException e) {
+			// expected
 		}
 
 		//test removeProperty method
 		try {
 			userManagerMBean.removeProperty(STRING_NULL, STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method removeProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.removeProperty(STRING_EMPTY, STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method removeProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.removeProperty(STRING_SPECIAL_SYMBOLS, STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method removeProperty throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 
 		//test removeRole method
 		try {
 			userManagerMBean.removeRole(STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method removeRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.removeRole(STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method removeRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			userManagerMBean.removeRole(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method removeRole throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test removeUser method
 		try {
 			userManagerMBean.removeUser(STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method removeUser throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			userManagerMBean.removeUser(STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method removeUser throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			userManagerMBean.removeUser(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method removeUser throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 	}
 

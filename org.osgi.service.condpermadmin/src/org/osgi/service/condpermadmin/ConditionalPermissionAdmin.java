@@ -18,6 +18,7 @@ package org.osgi.service.condpermadmin;
 
 import java.security.AccessControlContext;
 import java.util.Enumeration;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.service.permissionadmin.PermissionInfo;
 
 /**
@@ -27,9 +28,9 @@ import org.osgi.service.permissionadmin.PermissionInfo;
  * the Conditional Permission Table.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface ConditionalPermissionAdmin {
 	/**
 	 * Create a new Conditional Permission Info in the Conditional Permission

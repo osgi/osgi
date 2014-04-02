@@ -16,6 +16,7 @@
 
 package org.osgi.framework;
 
+import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.hooks.service.ListenerHook;
 
 /**
@@ -67,7 +68,7 @@ import org.osgi.framework.hooks.service.ListenerHook;
  * @since 1.7
  * @author $Id$
  */
-
+@ConsumerType
 public interface UnfilteredServiceListener extends ServiceListener {
 	// This is a marker interface
 }

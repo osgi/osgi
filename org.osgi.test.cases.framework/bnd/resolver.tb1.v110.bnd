@@ -23,3 +23,5 @@ Provide-Capability: \
 Export-Package: ${p}.resolver.tb1;version="1.1.0";-noimport:=true
 Include-Resource: \
 	/ = resources/resolver.tb1.v110/
+
+-noee=true

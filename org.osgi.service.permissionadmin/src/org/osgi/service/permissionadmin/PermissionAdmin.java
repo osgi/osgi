@@ -16,6 +16,8 @@
 
 package org.osgi.service.permissionadmin;
 
+import org.osgi.annotation.versioning.ProviderType;
+
 /**
  * The Permission Admin service allows management agents to manage the
  * permissions of bundles. There is at most one Permission Admin service present
@@ -55,9 +57,9 @@ package org.osgi.service.permissionadmin;
  * {@code getDefaultPermissions}.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface PermissionAdmin {
 	/**
 	 * Gets the permissions assigned to the bundle with the specified location.

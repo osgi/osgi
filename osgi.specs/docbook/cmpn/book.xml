@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <book revision="$Id$"
-      status="final" version="5" xml:id="cmpn.book"
+      status="draft" version="5" xml:id="cmpn.book"
       xmlns="http://docbook.org/ns/docbook"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -15,9 +15,9 @@
       <orgname>The OSGi Alliance</orgname>
     </author>
 
-    <releaseinfo xml:id="cmpn.book-release">Release 5</releaseinfo>
+    <releaseinfo xml:id="cmpn.book-release">Release 6</releaseinfo>
 
-    <pubdate>May 2013</pubdate>
+    <pubdate>TBD</pubdate>
 
     <copyright>
       <year>2000, 2013</year>

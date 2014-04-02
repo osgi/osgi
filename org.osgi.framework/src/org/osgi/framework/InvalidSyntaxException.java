@@ -99,6 +99,7 @@ public class InvalidSyntaxException extends Exception {
 	 * @return The cause of this exception or {@code null} if no cause was set.
 	 * @since 1.3
 	 */
+	@Override
 	public Throwable getCause() {
 		return super.getCause();
 	}
@@ -114,6 +115,7 @@ public class InvalidSyntaxException extends Exception {
 	 *         been set.
 	 * @since 1.3
 	 */
+	@Override
 	public Throwable initCause(Throwable cause) {
 		return super.initCause(cause);
 	}

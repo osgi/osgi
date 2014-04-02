@@ -13,6 +13,12 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.FutureTask;
 
 import javax.management.MBeanServer;
 import javax.management.MBeanServerFactory;
@@ -32,6 +38,7 @@ import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.jmx.framework.FrameworkMBean;
+import org.osgi.test.support.OSGiTestCaseProperties;
 
 public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
@@ -44,6 +51,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 	private String frameworkFactoryClassName;
 	private FrameworkFactory frameworkFactory;
 	private String rootStorageArea;
+	private ExecutorService executor;
 
 	/**
 	 * @see junit.framework.TestCase#setUp()
@@ -71,6 +79,8 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		startFramework();
 
 		installFramework();
+
+		executor = Executors.newFixedThreadPool(1);
 	}
 
 	public void testShutdown() throws Exception {
@@ -93,9 +103,10 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 		context.ungetService(reference);
 
+		Future<FrameworkEvent> waitForStopFuture = waitForStop();
 		mbean.shutdownFramework();
 
-		FrameworkEvent event = framework.waitForStop(10000);
+		FrameworkEvent event = waitForStopFuture.get();
 		assertTrue("event indicated that framework was not moved to stopped state when shutdown was called",
 					event.getType() == FrameworkEvent.STOPPED);
 		assertTrue("framework was not moved to stopped state when was shutdown",
@@ -122,9 +133,10 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 		context.ungetService(reference);
 
+		Future<FrameworkEvent> waitForStopFuture = waitForStop();
 		mbean.restartFramework();
 
-		FrameworkEvent event = framework.waitForStop(10000);
+		FrameworkEvent event = waitForStopFuture.get();
 		assertTrue("event indicated that framework was not moved to stopped state when shutdown was called",
 					event.getType() == FrameworkEvent.STOPPED_UPDATE);
 
@@ -161,9 +173,10 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 		context.ungetService(reference);
 
+		Future<FrameworkEvent> waitForStopFuture = waitForStop();
 		mbean.updateFramework();
 
-		FrameworkEvent event = framework.waitForStop(10000);
+		FrameworkEvent event = waitForStopFuture.get();
 		assertTrue("event indicated that framework was not moved to stopped state when shutdown was called",
 					event.getType() == FrameworkEvent.STOPPED_UPDATE);
 
@@ -200,9 +213,10 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 		context.ungetService(reference);
 
+		Future<FrameworkEvent> waitForStopFuture = waitForStop();
 		mbean.restartFramework();
 
-		FrameworkEvent event = framework.waitForStop(10000);
+		FrameworkEvent event = waitForStopFuture.get();
 		assertTrue(
 				"event indicated that framework was not moved to stopped state when shutdown was called",
 				event.getType() == FrameworkEvent.STOPPED_UPDATE);
@@ -233,9 +247,10 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 		context.ungetService(reference);
 
+		waitForStopFuture = waitForStop();
 		mbean.updateFramework();
 
-		event = framework.waitForStop(10000);
+		event = waitForStopFuture.get();
 		assertTrue(
 				"event indicated that framework was not moved to stopped state when shutdown was called",
 				event.getType() == FrameworkEvent.STOPPED_UPDATE);
@@ -266,9 +281,10 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 		context.ungetService(reference);
 
+		waitForStopFuture = waitForStop();
 		mbean.shutdownFramework();
 
-		event = framework.waitForStop(10000);
+		event = waitForStopFuture.get();
 		assertTrue(
 				"event indicated that framework was not moved to stopped state when shutdown was called",
 				event.getType() == FrameworkEvent.STOPPED);
@@ -279,6 +295,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
+		executor.shutdown();
 	}
 
 	private String getFrameworkFactoryClassName() throws IOException {
@@ -290,7 +307,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 	private BundleContext getBundleContextWithoutFail() {
 		try {
-			if ("true".equals(System.getProperty("noframework")))
+			if ("true".equals(getProperty("noframework")))
 				return null;
 			return getContext();
 		} catch (Throwable t) {
@@ -341,7 +358,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 	private String getStorageAreaRoot() {
 		BundleContext context = getBundleContextWithoutFail();
 		if (context == null) {
-			String storageroot = System.getProperty(STORAGEROOT, DEFAULT_STORAGEROOT);
+			String storageroot = getProperty(STORAGEROOT, DEFAULT_STORAGEROOT);
 			assertNotNull("Must set property: " + STORAGEROOT, storageroot);
 			return storageroot;
 		}
@@ -407,7 +424,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 		List bundles = new LinkedList();
 
-		StringTokenizer st = new StringTokenizer(System.getProperty(
+		StringTokenizer st = new StringTokenizer(getProperty(
 				"org.osgi.test.cases.jmx.framework.bundles", ""), ",");
 		while (st.hasMoreTokens()) {
 			String bundle = st.nextToken();
@@ -443,8 +460,9 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 	private void stopFramework() {
 		int previousState = framework.getState();
 		try {
+			Future<FrameworkEvent> stopFuture = waitForStop();
             framework.stop();
-			FrameworkEvent event = framework.waitForStop(10000);
+			FrameworkEvent event = stopFuture.get();
 			assertNotNull("FrameworkEvent is null", event);
 			assertEquals("Wrong event type", FrameworkEvent.STOPPED, event.getType());
 			assertNull("BundleContext is not null after stop", framework.getBundleContext());
@@ -454,6 +472,8 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		}
 		catch (InterruptedException e) {
 			fail("Unexpected InterruptedException waiting for stop", e);
+		} catch (ExecutionException e) {
+			fail("Unexpected ExecutuionException waiting for stop", e);
 		}
 		// if the framework was not STARTING STOPPING or ACTIVE then we assume the waitForStop returned immediately with a FrameworkEvent.STOPPED
 		// and does not change the state of the framework
@@ -470,7 +490,7 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 		configuration.put(Constants.FRAMEWORK_STORAGE_CLEAN, "true");
 
 		//make sure that the server framework System Bundle exports the interfaces
-		String systemPackagesXtra = System.getProperty(SYSTEM_PACKAGES_EXTRA);
+		String systemPackagesXtra = getProperty(SYSTEM_PACKAGES_EXTRA);
         configuration.put(Constants.FRAMEWORK_SYSTEMPACKAGES_EXTRA, systemPackagesXtra);
 		if (consoleId != 0) {
 			configuration.put("osgi.console", "" + consoleId++);
@@ -480,8 +500,11 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 	protected void verifyFramework() throws Exception {
 		Framework f = getFramework();
-//		assertFalse("child framework must have a different UUID",
-//				getContext().getProperty("org.osgi.framework.uuid").equals(f.getBundleContext().getProperty("org.osgi.framework.uuid")));
+		assertFalse(
+				"child framework must have a different UUID",
+				getContext().getProperty(Constants.FRAMEWORK_UUID).equals(
+						f.getBundleContext().getProperty(
+								Constants.FRAMEWORK_UUID)));
 
 		BundleWiring wiring = f.getBundleContext().getBundle()
 				.adapt(BundleWiring.class);
@@ -524,6 +547,38 @@ public class FrameworkMBeanLifecycleTestCase extends MBeanGeneralTestCase {
 
 	static int	consoleId;
 	{
-		consoleId = Integer.getInteger("osgi.console", 0).intValue();
+		consoleId = OSGiTestCaseProperties
+				.getIntegerProperty("osgi.console", 0);
+	}
+
+	private Future<FrameworkEvent> waitForStop() {
+		final boolean[] inCall = new boolean[] { false };
+		FutureTask<FrameworkEvent> future = new FutureTask<FrameworkEvent>(
+				new Callable<FrameworkEvent>() {
+
+					public FrameworkEvent call() throws Exception {
+						synchronized (inCall) {
+							inCall[0] = true;
+							inCall.notifyAll();
+						}
+						return framework.waitForStop(10000);
+					}
+				});
+		executor.execute(future);
+
+		try {
+			synchronized (inCall) {
+				if (!inCall[0]) {
+					inCall.wait(5000);
+				}
+			}
+			// need to make extra sure waitForStop is called before
+			// returning
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			fail("Unexpected interruption.", e);
+		}
+
+		return future;
 	}
 }

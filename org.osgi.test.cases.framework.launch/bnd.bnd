@@ -19,7 +19,10 @@ Include-Resource = \
     launch.tb1.jar, \
     launch.tb2.jar, \
     launch.tb3.jar, \
-    launch.tb4.jar
+    launch.tb4.jar, \
+    extensions.tb1.jar, \
+    extensions.tb2.jar, \
+    extensions.tb3.jar
 	
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.framework.launch

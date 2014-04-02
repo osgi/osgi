@@ -327,6 +327,7 @@ public final class EndpointPermission extends Permission {
 	 * @return {@code true} if the specified permission is implied by this
 	 *         object; {@code false} otherwise.
 	 */
+	@Override
 	public boolean implies(Permission p) {
 		if (!(p instanceof EndpointPermission)) {
 			return false;
@@ -376,6 +377,7 @@ public final class EndpointPermission extends Permission {
 	 * 
 	 * @return The canonical string representation of the actions.
 	 */
+	@Override
 	public String getActions() {
 		String result = actions;
 		if (result == null) {
@@ -413,6 +415,7 @@ public final class EndpointPermission extends Permission {
 	 * @return A new {@code PermissionCollection} object suitable for storing
 	 *         {@code EndpointPermission} objects.
 	 */
+	@Override
 	public PermissionCollection newPermissionCollection() {
 		return new EndpointPermissionCollection();
 	}
@@ -428,6 +431,7 @@ public final class EndpointPermission extends Permission {
 	 *         name, actions and endpoint as this {@code EndpointPermission}
 	 *         object; {@code false} otherwise.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -447,6 +451,7 @@ public final class EndpointPermission extends Permission {
 	 * 
 	 * @return Hash code value for this object.
 	 */
+	@Override
 	public int hashCode() {
 		int h = 31 * 17 + getName().hashCode();
 		h = 31 * h + getActions().hashCode();
@@ -534,6 +539,7 @@ final class EndpointPermissionCollection extends PermissionCollection {
 	 * @throws SecurityException If this {@code EndpointPermissionCollection}
 	 *         object has been marked read-only.
 	 */
+	@Override
 	public void add(final Permission permission) {
 		if (!(permission instanceof EndpointPermission)) {
 			throw new IllegalArgumentException("invalid permission: " + permission);
@@ -579,6 +585,7 @@ final class EndpointPermissionCollection extends PermissionCollection {
 	 * @return {@code true} if {@code permission} is a proper subset of a
 	 *         permission in the set; {@code false} otherwise.
 	 */
+	@Override
 	public boolean implies(final Permission permission) {
 		if (!(permission instanceof EndpointPermission)) {
 			return false;
@@ -620,6 +627,7 @@ final class EndpointPermissionCollection extends PermissionCollection {
 	 * 
 	 * @return Enumeration of all the EndpointPermission objects.
 	 */
+	@Override
 	public synchronized Enumeration<Permission> elements() {
 		List<Permission> all = new ArrayList<Permission>(permissions.values());
 		return Collections.enumeration(all);
@@ -637,7 +645,9 @@ final class EndpointPermissionCollection extends PermissionCollection {
 
 	private synchronized void readObject(java.io.ObjectInputStream in) throws IOException, ClassNotFoundException {
 		ObjectInputStream.GetField gfields = in.readFields();
-		permissions = (HashMap<String, EndpointPermission>) gfields.get("permissions", new HashMap<String, EndpointPermission>());
+		@SuppressWarnings("unchecked")
+		HashMap<String, EndpointPermission> p = (HashMap<String, EndpointPermission>) gfields.get("permissions", new HashMap<String, EndpointPermission>());
+		permissions = p;
 		all_allowed = gfields.get("all_allowed", false);
 	}
 }

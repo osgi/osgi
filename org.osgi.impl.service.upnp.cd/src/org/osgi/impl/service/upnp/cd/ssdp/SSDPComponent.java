@@ -1,9 +1,15 @@
 package org.osgi.impl.service.upnp.cd.ssdp;
 
 import java.io.IOException;
-import java.net.*;
-import java.util.*;
-import org.osgi.framework.*;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.upnp.cd.control.SOAPConstants;
 import org.osgi.service.http.HttpService;
 
 // This class initiated ssdp and exporter  functionalities.It maintains the ssdp related 
@@ -34,18 +40,16 @@ public class SSDPComponent implements SSDPConstants {
 		cacheValue = chVal.longValue();
 		genaURL = genaIP;
 		eventregistry = evRegistry;
-		String osname = System.getProperty("os.name");
-		String osver = System.getProperty("os.version");
-		server = new String(osname + "/" + osver
+		server = new String(SOAPConstants.osNameVersion
 				+ " UPNP/1.0 SAMSUNG-UPnP-STACK/1.0");
 		allDeviceDetails = new Hashtable(10);
 		HttpService httpService = null;
 		try {
 			ServiceReference sr = bc
 					.getServiceReference("org.osgi.service.http.HttpService");
-			if (System.getProperty("org.osgi.service.http.port") != null)
+			if (bc.getProperty("org.osgi.service.http.port") != null)
 				baseURL = genaIP.substring(0, genaIP.indexOf(":") + 1)
-						+ System.getProperty("org.osgi.service.http.port");
+						+ bc.getProperty("org.osgi.service.http.port");
 			else
 				baseURL = genaIP.substring(0, genaIP.indexOf(":") + 1) + "8080";
 			httpService = (HttpService) bc.getService(sr);

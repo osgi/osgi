@@ -155,7 +155,7 @@ public class DeploymentAdminImpl implements DeploymentAdmin, BundleActivator {
         keystore = DAKeyStore.getKeyStore(context);
         
         // fetch session timeout system property
-        String s = System.getProperty(DAConstants.SESSION_TIMEOUT);
+		String s = context.getProperty(DAConstants.SESSION_TIMEOUT);
         if (null == s)
             sessionTimeout = 1000;
         else

@@ -38,6 +38,7 @@
 package org.osgi.test.cases.dmt.tc3.tbc;
 
 import org.osgi.service.dmt.DmtData;
+import org.osgi.test.support.OSGiTestCaseProperties;
 
 public class DmtConstants  {
 
@@ -47,7 +48,8 @@ public class DmtConstants  {
 	
 	public static String PARAMETER_3 = "";
 	
-    public static final String OSGi_ROOT = System.getProperty("org.osgi.service.dmt.osgi.root");
+	public static final String	OSGi_ROOT				= OSGiTestCaseProperties
+																.getProperty("org.osgi.service.dmt.osgi.root");
 
 	public static final String OSGi_LOG = OSGi_ROOT + "/Log";
 	

@@ -25,10 +25,14 @@
  */
 package org.osgi.impl.service.residentialmanagement.plugins;
 
+import java.io.BufferedInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -38,10 +42,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Vector;
-import java.util.Date;
-import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -50,19 +50,19 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.SynchronousBundleListener;
+import org.osgi.framework.startlevel.BundleStartLevel;
+import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.framework.wiring.BundleCapability;
 import org.osgi.framework.wiring.BundleRequirement;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.framework.wiring.BundleWire;
 import org.osgi.framework.wiring.BundleWiring;
-import org.osgi.framework.startlevel.BundleStartLevel;
-import org.osgi.framework.startlevel.FrameworkStartLevel;
+import org.osgi.service.dmt.DmtConstants;
 import org.osgi.service.dmt.DmtData;
 import org.osgi.service.dmt.DmtException;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.Uri;
 import org.osgi.service.dmt.spi.ReadableDataSession;
-import org.osgi.service.dmt.DmtConstants;
 
 /**
  * 
@@ -90,7 +90,8 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 				properties.put(RMTConstants.LAUNCHING_PROPERTIES[i],
 						context.getProperty(RMTConstants.LAUNCHING_PROPERTIES[i]));
 		}
-		String root = System.getProperty(RMTConstants.KEY_OF_RMT_ROOT_URI);
+		String root = RMTConstants
+				.getProperty(RMTConstants.KEY_OF_RMT_ROOT_URI);
 		if (root != null) {
 			String[] rootArray = RMTUtil.pathToArrayUri(root + "/");
 			rootLength = rootArray.length;
@@ -279,7 +280,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 					BundleSubTree bs = (BundleSubTree) this.bundlesTable
 							.get(path[2]);
 					if (bs.getWires() != null) {
-						Vector vec = (Vector) ((Map) bs.getWires())
+						Vector vec = (Vector) bs.getWires()
 								.get(path[4]);
 						if (vec != null) {
 							try {
@@ -310,7 +311,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 				BundleSubTree bs = (BundleSubTree) this.bundlesTable
 						.get(path[2]);
 				if (bs.getWires() != null) {
-					Vector vec = (Vector) ((Map) bs.getWires()).get(path[4]);
+					Vector vec = (Vector) bs.getWires().get(path[4]);
 					if (vec != null) {
 						try {
 							vec.get(Integer.parseInt(path[5]));
@@ -341,7 +342,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 				BundleSubTree bs = (BundleSubTree) this.bundlesTable
 						.get(path[2]);
 				if (bs.getWires() != null) {
-					Vector vec = (Vector) ((Map) bs.getWires()).get(path[4]);
+					Vector vec = (Vector) bs.getWires().get(path[4]);
 					if (vec != null) {
 						try {
 							WiresSubtree ws = (WiresSubtree) vec.get(Integer
@@ -1267,7 +1268,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			if (bs != null
 					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
 				if (path[3].equals(RMTConstants.ENTRIES)) {
-					Vector vec = (Vector) bs.getEntries();
+					Vector vec = bs.getEntries();
 					EntrySubtree es = (EntrySubtree) vec.get(Integer
 							.parseInt(path[4]));
 					if (path[5].equals(RMTConstants.PATH))
@@ -1278,7 +1279,7 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 						return new DmtData(es.getInstanceId());
 				}
 				if (path[3].equals(RMTConstants.SIGNERS)) {
-					Vector vec = (Vector) bs.getSigners();
+					Vector vec = bs.getSigners();
 					SignersSubtree ss = (SignersSubtree) vec.get(Integer
 							.parseInt(path[4]));
 					if (path[5].equals(RMTConstants.ISTRUSTED))
@@ -1294,11 +1295,11 @@ class FrameworkReadOnlySession implements ReadableDataSession,
 			if (bs != null
 					&& bs.getLocatonNode().findNode(new String[] { path[3] }) != null) {
 				if (path[3].equals(RMTConstants.SIGNERS)) {
-					Vector vec = (Vector) bs.getSigners();
+					Vector vec = bs.getSigners();
 					SignersSubtree ss = (SignersSubtree) vec.get(Integer
 							.parseInt(path[4]));
 					if (path[5].equals(RMTConstants.CERTIFICATECHAIN)) {
-						Vector cvec = (Vector) ss.getCertifitateChainList();
+						Vector cvec = ss.getCertifitateChainList();
 						String name = (String) cvec.get(Integer
 								.parseInt(path[6]));
 						return new DmtData(name);

@@ -15,6 +15,7 @@ import org.osgi.service.dmt.DmtSession;
 import org.osgi.service.dmt.MetaNode;
 import org.osgi.service.dmt.Uri;
 import org.osgi.service.log.LogService;
+import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.sleep.Sleep;
 
@@ -47,7 +48,8 @@ public abstract class RMTTestBase extends DefaultTestBundleControl implements
 		
 		int delay = 500;
 		try {
-			delay = Integer.parseInt(System.getProperty("org.osgi.test.cases.rmt.delay"));
+			delay = Integer.parseInt(OSGiTestCaseProperties
+					.getProperty("org.osgi.test.cases.rmt.delay"));
 		} catch (Exception e) {
 			System.out.println("System property 'org.osgi.test.cases.rmt.delay' not set or invalid.");
 		}

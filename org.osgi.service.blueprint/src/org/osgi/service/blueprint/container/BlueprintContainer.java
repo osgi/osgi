@@ -18,6 +18,7 @@ package org.osgi.service.blueprint.container;
 
 import java.util.Collection;
 import java.util.Set;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.service.blueprint.reflect.BeanMetadata;
 import org.osgi.service.blueprint.reflect.ComponentMetadata;
 import org.osgi.service.blueprint.reflect.ReferenceListMetadata;
@@ -39,9 +40,9 @@ import org.osgi.service.blueprint.reflect.ServiceReferenceMetadata;
  * registered as a service and its managed components can be queried.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface BlueprintContainer {
 	/**
 	 * Returns the set of component ids managed by this Blueprint Container.

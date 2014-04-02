@@ -1,8 +1,12 @@
 package org.osgi.impl.service.residentialmanagement.plugins;
 
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleContext;
+import org.osgi.framework.FrameworkUtil;
+
 public class RMTConstants {
 	
-	protected static final String RMT_ROOT = System.getProperty("org.osgi.dmt.residential");
+	protected static final String	RMT_ROOT						= getProperty("org.osgi.dmt.residential");
 	
 	//Framework
 	protected static final String FRAMEWORKSTARTLEVEL = "StartLevel";
@@ -100,4 +104,34 @@ public class RMTConstants {
 	protected static final String RESULT = "Result";
 	protected static final String INSTANCEID = "InstanceId";
 	protected static final String FILTER_NODE_TYPE = "org.osgi/1.0/FiltersManagementObject";
+
+	/**
+	 * Return the property value from the bundle context properties.
+	 * 
+	 * @param key The property key name.
+	 * @return The property value or null if the property is not set.
+	 */
+	public static String getProperty(String key) {
+		Bundle bundle = FrameworkUtil.getBundle(RMTConstants.class);
+		if (bundle != null) {
+			BundleContext context = bundle.getBundleContext();
+			if (context != null) {
+				return context.getProperty(key);
+			}
+		}
+		return System.getProperty(key);
+	}
+
+	/**
+	 * Return the property value from the bundle context properties.
+	 * 
+	 * @param key The property key name.
+	 * @param defaultValue The default property value to return if the property
+	 *        is not set.
+	 * @return The property value or defaultValue if the property is not set.
+	 */
+	public static String getProperty(String key, String defaultValue) {
+		String value = getProperty(key);
+		return (value == null) ? defaultValue : value;
+	}
 }

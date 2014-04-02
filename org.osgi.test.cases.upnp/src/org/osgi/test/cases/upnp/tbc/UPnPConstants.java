@@ -3,6 +3,8 @@ package org.osgi.test.cases.upnp.tbc;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import org.osgi.test.support.OSGiTestCaseProperties;
+
 /**
  * 
  * 
@@ -336,12 +338,14 @@ public final class UPnPConstants {
 	public static final String	E_FLOAT				= "45.6";
 
 	static {
-		HTTP_PORT = Integer.getInteger("org.osgi.service.http.port", 80)
-				.intValue();
-		UPnPMCPort = Integer.getInteger(DUPnPMCPort, 1900).intValue();
+		HTTP_PORT = OSGiTestCaseProperties.getIntegerProperty(
+				"org.osgi.service.http.port", 80);
+		UPnPMCPort = OSGiTestCaseProperties.getIntegerProperty(DUPnPMCPort,
+				1900);
 		SEARCH_ADDRESS = UPnPMCAddress + ':' + UPnPMCPort;
 		V_MC_HOST = ("239.255.255.250:" + UPnPMCPort).intern();
-		String localHost = System.getProperty("org.osgi.service.http.hostname");
+		String localHost = OSGiTestCaseProperties
+				.getProperty("org.osgi.service.http.hostname");
 		try {
 			if (localHost == null) {
 				localHost = InetAddress.getLocalHost().getHostAddress();

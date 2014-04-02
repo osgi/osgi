@@ -231,24 +231,22 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
     identity name, type, and version are known. For example, to get a bundle
     resource:</para>
 
-    <programlisting>Resource getResource( String type, Stringname, Version version ) {
+    <programlisting>Resource getResource( String type, String name, Version version ) {
   String filter = String.format(
     "(&amp;(type=%s)(osgi.identity=%s)(version=%s))",
     type,
     name,
     version );
   
-  RCBuilder b = new RCBuilder("osgi.identity");
-  Requirement r = b.directive("filter", filter).toRequirement();
+  RequirementBuilder builder = repo.newRequirementBuilder("osgi.identity");
+  builder.addDirective("filter", filter);
+  Requirement r = builder.build();
 
   List&lt;Capability&gt; capabilities = find( r );
   if ( capabilities.isEmpty() ) 
     return null;
   return capabilities.get( 0 ).getResource();
 }</programlisting>
-
-    <para>The <code>RCBuilder</code> class used in this example is a
-    convenience class to construct <code>Requirement</code> instances.</para>
 
     <para>Resources that originate from Repository services must implement the
     <xref linkend="org.osgi.service.repository.RepositoryContent"
@@ -339,6 +337,51 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
     }
     return null;
 }</programlisting>
+
+    <section>
+      <title>Combining Requirements</title>
+
+      <para>In some cases it may be useful to find resources in the repository
+      that satisfy criteria across multiple namespaces.</para>
+
+      <para>A simple Requirement object can contain a filter that makes
+      assertions about capability attributes within a single namespace. So for
+      example, a single requirement can state that a package
+      <code>org.example.mypkg</code> must be exported in a version between
+      <code>3.1</code> inclusive and <code>4.0</code> exclusive:</para>
+
+      <programlisting>
+  RequirementBuilder rb = repo.newRequirementBuilder("osgi.wiring.package");
+  String rf = "(&amp;(osgi.wiring.package=org.example.mypkg)"
+              + "(version&gt;=3.1)(!(version&gt;=4.0)))";
+  rb.addDirective("filter", rf);
+  Requirement r = rb.build();
+    </programlisting>
+
+      <para>This requirement contains three conditions on the
+      <code>osgi.wiring.package</code> capability.</para>
+
+      <para>In some situations it may be needed to specify requirements that
+      cover multiple namespaces. For example a bundle might be needed that
+      exports the above package, but the bundle must also have the ASL2
+      license. A resource's license is available as an attribute on the
+      <code>osgi.identity</code> namespace. Constructing a constraint that
+      combines requirements from multiple namespaces can be done by using an
+      Expression Combiner, which can be obtained from the Repository service.
+      The Repository service provides a <xref
+      linkend="org.osgi.service.repository.Repository.findProviders-RequirementExpression-"
+      xrefstyle="hyperlink"/> overload that can take a requirement expression
+      and returns a collection of matching resources: <programlisting>
+  RequirementBuilder lb = repo.newRequirementBuilder("osgi.identity");
+  String lf = "(license=http://opensource.org/licenses/Apache-2.0)";
+  lb.addDirective("filter", lf);
+
+  RequirementExpression expr = repo.getExpressionCombiner().and(
+    lb.buildExpression(), rb.buildExpression());
+
+  Collection&lt;Resource&gt; matches = repo.findProviders(expr);
+      </programlisting></para>
+    </section>
   </section>
 
   <section xml:id="i3222899">
@@ -414,7 +457,7 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
       </tgroup>
     </table>
 
-    <para>The Repository implements the following method:</para>
+    <para>The Repository implements the following methods:</para>
 
     <itemizedlist>
       <listitem>
@@ -423,6 +466,30 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
         xrefstyle="hyperlink"/> - For each requirement find all the
         capabilities that match that requirement and return them as a
         <code>Map&lt;Requirement,Collection&lt;Capability&gt;&gt;</code>.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.repository.Repository.findProviders-RequirementExpression-"
+        xrefstyle="hyperlink"/> - Find all resources that match the
+        requirement expression. The requirement expression is used to combine
+        multiple requirements using the <code>and</code>, <code>or</code> and
+        <code>not</code> operators.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.repository.Repository.getExpressionCombiner--"
+        xrefstyle="hyperlink"/> - Obtain an expression combiner. This
+        expression combiner is used to produce requirement expressions from
+        simple requirements or other requirement expressions.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.repository.Repository.newRequirementBuilder-String-"
+        xrefstyle="hyperlink"/> - Obtain a convenience builder for Requirement
+        objects.</para>
       </listitem>
     </itemizedlist>
 
@@ -465,9 +532,7 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
       linkend="org.osgi.service.repository.RepositoryContent"
       xrefstyle="hyperlink"/> interface. The purpose of this interface is to
       allow users of the Repositories access to an Input Stream that provides
-      access to the resource in a format specified by the resource type, see
-      the <code>osgi.identity</code> namespace. If the resource type does not
-      specify a format then it must be an Input Stream to a JAR.</para>
+      access to the resource.</para>
 
       <para>The <xref linkend="org.osgi.service.repository.RepositoryContent"
       xrefstyle="hyperlink"/> interface provides a single method:</para>
@@ -477,8 +542,8 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
           <para><xref
           linkend="org.osgi.service.repository.RepositoryContent.getContent--"
           xrefstyle="hyperlink"/> - Return an Input Stream for the resource,
-          default a JAR stream unless otherwise specified for the type in the
-          <code>osgi.identity</code> namespace.</para>
+          if more than one <code>osgi.content</code> capability is present the
+          content associated with the first capability is returned.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -493,15 +558,20 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
     ways. It is possible to deliver a bundle as a JAR file, a Pack200 file, or
     some other format. In general, the <xref
     linkend="org.osgi.service.repository.RepositoryContent"
-    xrefstyle="hyperlink"/> interface provides access to the default format,
-    which is the JAR format in most cases.</para>
+    xrefstyle="hyperlink"/> interface provides access to the default
+    format.</para>
 
     <para>The Repository can advertise the different formats with
     <code>osgi.content</code> capabilities. Each of those capabilities is
     identified with a unique SHA-256 checksum and has a URL for the resource
     in the specified format. The <code>size</code> and <code>mime</code>
     attributes provide information the download format, this can be used for
-    selection.</para>
+    selection. If more than one <code>osgi.content</code> capability is
+    associated with a resource, the first capability must represent the
+    default format. If the resource has a standard or widely used format
+    (e.g., JAR for bundles and ESA for subsystems), and that format is
+    provided as part of the repository, then that format should be the default
+    format.</para>
 
     <para>The <code>osgi.content</code> Namespace supports the attributes
     defined in the following table and <xref
@@ -646,7 +716,7 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
       <title>Repository Element</title>
 
       <para>The <code>repository</code> element is the root of the document.
-      The <code>requirement</code> element has the following child
+      The <code>repository</code> element has the following child
       elements:</para>
 
       <itemizedlist>
@@ -929,10 +999,10 @@ scalar  ::= 'String' | 'Version' | 'Long' | 'Double'</programlisting>
 
       <para>A list conversion requires the value to be broken in tokens
       separated by comma (<code>',' \u002C</code>). Whitespace around the list
-      and around commas must be trimmed. Each token must then be converted to
-      the given type according to the <code>scalar</code> type specifier. The
-      exact rules for the comma separated lists are defined in <xref
-      linkend="i3273289"/>, see <emphasis>Bundle Capability
+      and around commas must be trimmed for non-String types. Each token must
+      then be converted to the given type according to the <code>scalar</code>
+      type specifier. The exact rules for the comma separated lists are
+      defined in <xref linkend="i3273289"/>, see <emphasis>Bundle Capability
       Attributes</emphasis>.</para>
 
       <para>The conversion of value <code>s</code>, when <code>scalar</code>,
@@ -1074,6 +1144,20 @@ scalar  ::= 'String' | 'Version' | 'Long' | 'Double'</programlisting>
             increment='13582741'
             xmlns='http://www.osgi.org/xmlns/repository/v1.0.0'&gt;
   &lt;resource&gt;
+
+    &lt;requirement namespace='osgi.wiring.package'&gt;
+      &lt;directive name='filter' value=
+                           '(&amp;amp;(osgi.wiring.package=org.apache.commons.pool)(version&amp;gt;=1.5.6))'/&gt;
+    &lt;/requirement&gt;
+
+    &lt;requirement namespace='osgi.identity'&gt;
+      &lt;directive name='effective' value='meta'/&gt;
+      &lt;directive name='resolution' value='optional'/&gt;
+      &lt;directive name='filter' value=
+              '(&amp;(version=1.5.6)(osgi.identity=org.acme.pool-src))'
+        &lt;directive name='classifier' value='sources'/&gt;
+    &lt;/requirement&gt;
+
     &lt;capability namespace='osgi.identity'&gt;
       &lt;attribute name='osgi.identity' value='org.acme.pool'/&gt;
       &lt;attribute name='version'type='Version' value='1.5.6'/&gt;
@@ -1099,19 +1183,6 @@ scalar  ::= 'String' | 'Version' | 'Long' | 'Double'</programlisting>
       &lt;attribute name='bundle-symbolic-name' value='org.acme.pool'/&gt;
       &lt;directive name='uses' value='org.acme.pool,org.acme.util'/&gt;
     &lt;/capability&gt;
-
-    &lt;requirement namespace='osgi.wiring.package'&gt;
-      &lt;directive name='filter' value=
-                           '(&amp;amp;(osgi.wiring.package=org.apache.commons.pool)(version&amp;gt;=1.5.6))'/&gt;
-    &lt;/requirement&gt;
-
-    &lt;requirement namespace='osgi.identity'&gt;
-      &lt;directive name='effective' value='meta'/&gt;
-      &lt;directive name='resolution' value='optional'/&gt;
-      &lt;directive name='filter' value=
-              '(&amp;(version=1.5.6)(osgi.identity=org.acme.pool-src))'
-        &lt;directive name='classifier' value='sources'/&gt;
-    &lt;/requirement&gt;
 
   &lt;/resource&gt;
 &lt;/repository&gt;</programlisting>
@@ -1204,5 +1275,27 @@ ServicePermission[...Repository, GET ]</programlisting>
       <bibliomixed xml:id="i3273347"><title>XML Schema Part 2: Data types
       Second Edition</title>http://www.w3.org/TR/xmlschema-2/</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Introduction of <emphasis>Requirement Expressions</emphasis> to
+        represent combined requirements.</para>
+      </listitem>
+
+      <listitem>
+        <para>Introduction of <emphasis>Requirement Builder</emphasis> to
+        facilitate the creation of Requirement objects.</para>
+      </listitem>
+
+      <listitem>
+        <para>Changes to default content for the <emphasis>Repository
+        Content</emphasis> API and <code>osgi.content</code>
+        capability.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

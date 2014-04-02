@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 
@@ -211,19 +210,23 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			this.signers = signers;
 		}
 
+		@SuppressWarnings("unused")
 		public long getBundleId() {
 			return id;
 		}
 
+		@SuppressWarnings("unused")
 		public String getLocation() {
 			return location;
 		}
 
+		@SuppressWarnings("unused")
 		public Map<X509Certificate, List<X509Certificate>> getSignerCertificates(
 				int type) {
 			return new HashMap<X509Certificate, List<X509Certificate>>(signers);
 		}
 
+		@SuppressWarnings("unused")
 		public String getSymbolicName() {
 			return name;
 		}
@@ -236,10 +239,12 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			this.principal = principal;
 		}
 
+		@Override
 		public Principal getSubjectDN() {
 			return principal;
 		}
 
+		@Override
 		public boolean equals(Object obj) {
 			if (this == obj) {
 				return true;
@@ -250,89 +255,110 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			return false;
 		}
 
+		@Override
 		public int hashCode() {
 			return principal.hashCode();
 		}
 
+		@Override
 		public String toString() {
 			return principal.toString();
 		}
 
+		@Override
 		public void checkValidity() throws CertificateExpiredException,
 				java.security.cert.CertificateNotYetValidException {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public void checkValidity(Date var0)
 				throws java.security.cert.CertificateExpiredException,
 				java.security.cert.CertificateNotYetValidException {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public int getBasicConstraints() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public Principal getIssuerDN() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public boolean[] getIssuerUniqueID() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public boolean[] getKeyUsage() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public Date getNotAfter() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public Date getNotBefore() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public BigInteger getSerialNumber() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public String getSigAlgName() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public String getSigAlgOID() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public byte[] getSigAlgParams() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public byte[] getSignature() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public boolean[] getSubjectUniqueID() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public byte[] getTBSCertificate() throws CertificateEncodingException {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public int getVersion() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public byte[] getEncoded() throws CertificateEncodingException {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public PublicKey getPublicKey() {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public void verify(PublicKey var0)
 				throws java.security.InvalidKeyException,
 				java.security.NoSuchAlgorithmException,
@@ -342,6 +368,7 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public void verify(PublicKey var0, String var1)
 				throws InvalidKeyException, NoSuchAlgorithmException,
 				NoSuchProviderException, SignatureException,
@@ -377,6 +404,7 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			return name;
 		}
 
+		@Override
 		public boolean equals(Object obj) {
 			if (this == obj) {
 				return true;
@@ -387,10 +415,12 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			return false;
 		}
 
+		@Override
 		public int hashCode() {
 			return name.hashCode();
 		}
 
+		@Override
 		public String toString() {
 			return getName();
 		}
@@ -412,10 +442,12 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			this.properties = properties;
 		}
 
+		@SuppressWarnings("unused")
 		public Bundle getBundle() {
 			return bundle;
 		}
 
+		@SuppressWarnings("unused")
 		public Object getProperty(String key) {
 			Object result = properties.get(key);
 			if (result != null) {
@@ -429,6 +461,7 @@ public abstract class PermissionTestCase extends OSGiTestCase {
 			return null;
 		}
 
+		@SuppressWarnings("unused")
 		public String[] getPropertyKeys() {
 			String[] result = new String[properties.size()];
 			properties.keySet().toArray(result);

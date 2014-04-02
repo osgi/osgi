@@ -64,6 +64,7 @@ final class SignerProperty {
 	 * @param o SignerProperty to compare against.
 	 * @return true if the DN name chain matches the pattern.
 	 */
+	@Override
 	public boolean equals(Object o) {
 		if (!(o instanceof SignerProperty))
 			return false;
@@ -91,6 +92,7 @@ final class SignerProperty {
 	 * Since the equals method does not obey the general equals contract, this
 	 * method cannot generate hash codes which obey the equals contract.
 	 */
+	@Override
 	public int hashCode() {
 		return 31;
 	}

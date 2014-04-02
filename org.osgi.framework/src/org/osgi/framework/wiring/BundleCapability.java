@@ -17,6 +17,7 @@
 package org.osgi.framework.wiring;
 
 import java.util.Map;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.namespace.AbstractWiringNamespace;
 import org.osgi.resource.Capability;
 
@@ -25,9 +26,9 @@ import org.osgi.resource.Capability;
  * revision}.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface BundleCapability extends Capability {
 
 	/**

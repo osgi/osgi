@@ -17,17 +17,6 @@
  */
 package org.osgi.impl.service.deploymentadmin.plugin;
 
-import org.osgi.service.dmt.DmtData;
-import org.osgi.service.dmt.DmtException;
-import org.osgi.service.dmt.DmtSession;
-import org.osgi.service.dmt.MetaNode;
-import org.osgi.service.dmt.Uri;
-import org.osgi.service.dmt.spi.DataPlugin;
-import org.osgi.service.dmt.spi.ExecPlugin;
-import org.osgi.service.dmt.spi.ReadWriteDataSession;
-import org.osgi.service.dmt.spi.ReadableDataSession;
-import org.osgi.service.dmt.spi.TransactionalDataSession;
-
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -47,6 +36,16 @@ import org.osgi.impl.service.deploymentadmin.DeploymentPackageImpl;
 import org.osgi.impl.service.deploymentadmin.Logger;
 import org.osgi.impl.service.deploymentadmin.Metanode;
 import org.osgi.impl.service.deploymentadmin.PluginCtx;
+import org.osgi.service.dmt.DmtData;
+import org.osgi.service.dmt.DmtException;
+import org.osgi.service.dmt.DmtSession;
+import org.osgi.service.dmt.MetaNode;
+import org.osgi.service.dmt.Uri;
+import org.osgi.service.dmt.spi.DataPlugin;
+import org.osgi.service.dmt.spi.ExecPlugin;
+import org.osgi.service.dmt.spi.ReadWriteDataSession;
+import org.osgi.service.dmt.spi.ReadableDataSession;
+import org.osgi.service.dmt.spi.TransactionalDataSession;
 
 public class PluginDelivered implements DataPlugin, ReadableDataSession, 
         ExecPlugin, Serializable {
@@ -57,7 +56,7 @@ public class PluginDelivered implements DataPlugin, ReadableDataSession,
 	private transient File      store;
 
 	public PluginDelivered(PluginCtx pluginCtx) {
-	    String delArea = System.getProperty(DAConstants.DELIVERED_AREA);
+		String delArea = DAConstants.getProperty(DAConstants.DELIVERED_AREA);
 	    if (null == delArea)
 	        delArea = "/temp";
 	    store = new File(delArea);

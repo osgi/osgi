@@ -132,7 +132,7 @@ public final class HostNamespace extends AbstractWiringNamespace {
 
 	/**
 	 * The requirement directive used to specify the type of the extension
-	 * fragment.
+	 * fragment. The default value is {@link #EXTENSION_FRAMEWORK framework}.
 	 * 
 	 * @see #EXTENSION_FRAMEWORK
 	 * @see #EXTENSION_BOOTCLASSPATH

@@ -800,9 +800,10 @@ Attribute   ::= Value *</programlisting>
 
               <entry><para>The PID that is associated with an
               <code>OCD</code>. This can be a reference to a factory or
-              singleton configuration object. Either <code>pid</code> or
-              <code>factoryPid</code> must be specified. See <xref
-              linkend="i1492258"/>.</para></entry>
+              singleton configuration object. The PID can be a Targeted PID,
+              if <code>factoryPid</code> is not set or empty. Either
+              <code>pid</code> or <code>factoryPid</code> must be specified.
+              See <xref linkend="i1492258"/>.</para></entry>
             </row>
 
             <row>
@@ -818,10 +819,10 @@ Attribute   ::= Value *</programlisting>
 
               <entry><para>If the <code>factoryPid</code> attribute is set,
               this Designate element defines a factory configuration for the
-              given factory, if it is not set or empty, it designates a
-              singleton configuration. Either <code>pid</code> or
-              <code>factoryPid</code> must be specified. See <xref
-              linkend="i1492258"/>.</para></entry>
+              given factory. If it is not set or empty, it designates a
+              singleton configuration. The PID can be a Targeted PID. Either
+              <code>pid</code> or <code>factoryPid</code> must be specified.
+              See <xref linkend="i1492258"/>.</para></entry>
             </row>
 
             <row>
@@ -835,14 +836,15 @@ Attribute   ::= Value *</programlisting>
 
               <entry><para/></entry>
 
-              <entry><para>Location of the bundle that implements the PID.
-              This binds the PID to the bundle. I.e. no other bundle using the
-              same PID may use this designation. In a Meta Type resource this
-              field may be set to an wildcard (<code>'*' \u002A</code>) to
-              indicate the bundle where the resource comes from. This is an
-              optional attribute but can be mandatory in certain usage
-              schemes, for example the Autoconf Resource
-              Processor.</para></entry>
+              <entry><para>The value is used to set the location of any
+              configuration created using this Meta Type resource. This may
+              contain a bundle location or a multi-location. In a Meta Type
+              resource, using the wildcard value (<code>'*' \u002A</code>)
+              indicates the bundle location of the bundle containing the
+              resource must be used as the location. See <xref
+              linkend="i1573084"/></para><para>This is an optional attribute
+              but can be mandatory in certain usage schemes, for example the
+              Autoconf Resource Processor.</para></entry>
             </row>
 
             <row>
@@ -1039,7 +1041,11 @@ Password <phrase role="symbol">↔</phrase> <xref
               xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>A validation value. Similar to the <code>min</code>
-              field.</para></entry>
+              field. When <code>min</code> or <code>max</code> are numbers,
+              attribute values with a numeric data type are valid if <code>min
+              &lt;= value &lt;= max</code>. Attribute values with a string (or
+              equivalent) data type are valid if <code>min &lt;=
+              value.length() &lt;= max</code>.</para></entry>
             </row>
 
             <row>

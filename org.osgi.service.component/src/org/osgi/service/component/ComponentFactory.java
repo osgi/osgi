@@ -17,6 +17,7 @@
 package org.osgi.service.component;
 
 import java.util.Dictionary;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * When a component is declared with the {@code factory} attribute on its
@@ -26,9 +27,9 @@ import java.util.Dictionary;
  * configuration as necessary.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface ComponentFactory {
 	/**
 	 * Create and activate a new component configuration. Additional properties

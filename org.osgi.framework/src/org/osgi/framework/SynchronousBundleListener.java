@@ -16,6 +16,8 @@
 
 package org.osgi.framework;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * A synchronous {@code BundleEvent} listener. {@code SynchronousBundleListener}
  * is a listener interface that may be implemented by a bundle developer. When a
@@ -59,7 +61,7 @@ package org.osgi.framework;
  * @ThreadSafe
  * @author $Id$
  */
-
+@ConsumerType
 public interface SynchronousBundleListener extends BundleListener {
 	// This is a marker interface
 }

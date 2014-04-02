@@ -108,7 +108,8 @@ public class Base64Encoder extends OutputStream {
      *
      * @exception IOException if an I/O error occurs
      */
-    public void write(int b) throws IOException {
+    @Override
+	public void write(int b) throws IOException {
         // Take 24-bits from three octets, translate into four encoded chars
         // Break lines at 76 chars
         // If necessary, pad with 0 bits on the right at the end
@@ -159,7 +160,8 @@ public class Base64Encoder extends OutputStream {
      * @param len the length of the data
      * @exception IOException if an I/O error occurs
      */
-    public void write(byte[] buf, int off, int len) throws IOException {
+    @Override
+	public void write(byte[] buf, int off, int len) throws IOException {
         // This could of course be optimized
         for (int i = 0; i < len; i++) {
             write(buf[off + i]);
@@ -172,7 +174,8 @@ public class Base64Encoder extends OutputStream {
      *
      * @exception IOException if an I/O error occurs
      */
-    public void close() throws IOException {
+    @Override
+	public void close() throws IOException {
         // Handle leftover bytes
         if (charCount % 3 == 1) { // one leftover
             int lookup = (carryOver << 4) & 63;

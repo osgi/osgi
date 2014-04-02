@@ -36,12 +36,15 @@
  */
 package org.osgi.test.cases.monitor.tbc;
 
+import org.osgi.test.support.OSGiTestCaseProperties;
+
 /**
  * @author Alexandre Santos
  */
 public class MonitorConstants {
 
-	public static final String OSGI_ROOT = System.getProperty("org.osgi.service.dmt.osgi.root");
+	public static final String		OSGI_ROOT						= OSGiTestCaseProperties
+																			.getProperty("org.osgi.service.dmt.osgi.root");
 	public static final String LONGID = "abcdefghjklmnoprstuvwyzabcdfghijk";
 	public final static String INVALID_ID = ";/?:@&=+$,";
 	public final static String SV_MONITORABLEID1 = "cesar";

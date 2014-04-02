@@ -1,9 +1,14 @@
 package org.osgi.impl.service.upnp.cp.ssdp;
 
 import java.io.IOException;
-import java.net.*;
+import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.net.MulticastSocket;
 import java.util.Hashtable;
-import org.osgi.impl.service.upnp.cp.util.*;
+
+import org.osgi.impl.service.upnp.cp.control.SOAPConstants;
+import org.osgi.impl.service.upnp.cp.util.UPnPController;
+import org.osgi.impl.service.upnp.cp.util.UPnPException;
 
 public class SSDPComponent implements SSDPConstants {
 	private SSDPMulticastListener	multicastListener;
@@ -25,9 +30,7 @@ public class SSDPComponent implements SSDPConstants {
 	// This constructor construct the SDDPcomponent. It initializez all required
 	// information for discovery layer.
 	public SSDPComponent(UPnPController contrl) throws UPnPException {
-		String osname = System.getProperty("os.name");
-		String osver = System.getProperty("os.version");
-		server = new String(osname + "/" + osver + OSVERSION);
+		server = new String(SOAPConstants.osNameVersion + OSVERSION);
 		ssdpdevices = new Hashtable(10, 10);
 		devExpTimes = new Hashtable(10, 10);
 		controller = contrl;

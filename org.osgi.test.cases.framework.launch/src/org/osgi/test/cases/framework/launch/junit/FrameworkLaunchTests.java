@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@ package org.osgi.test.cases.framework.launch.junit;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -53,17 +52,6 @@ public class FrameworkLaunchTests extends LaunchTest {
 		}
 	}
 	private static ClassLoader bootClassLoader = new BootClassLoader();
-
-	private Map<String, String> getConfiguration(String testName) {
-		return getConfiguration(testName, true);
-	}
-
-	private Map<String, String> getConfiguration(String testName, boolean delete) {
-		Map<String, String> configuration = new HashMap<String, String>();
-		if (testName != null)
-			configuration.put(Constants.FRAMEWORK_STORAGE, getStorageArea(testName, delete).getAbsolutePath());
-		return configuration;
-	}
 
 	private void updateFramework(Framework framework) {
 		int previousState = framework.getState();
@@ -451,7 +439,7 @@ public class FrameworkLaunchTests extends LaunchTest {
 	public void testExecPermission() throws BundleException, IOException {
 		File testOutputFile = new File(rootStorageArea, getName() + File.separator + "execPermissions.out");
 		Map<String, String> configuration = getConfiguration(getName());
-		String osName = System.getProperty("os.name");
+		String osName = getProperty("os.name");
 		if (osName.toLowerCase().indexOf("windows") >= 0)
 			configuration.put(Constants.FRAMEWORK_EXECPERMISSION, "cmd.exe /c copy ${abspath} " + testOutputFile.getAbsolutePath());
 		else

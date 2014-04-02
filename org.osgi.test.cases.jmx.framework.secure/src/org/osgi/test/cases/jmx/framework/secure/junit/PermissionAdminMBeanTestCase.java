@@ -97,138 +97,127 @@ public class PermissionAdminMBeanTestCase extends MBeanGeneralTestCase {
 	}
 	
 	public void testExceptions() {
-		/*
-		 * Bug report for this method is https://www.osgi.org/members/bugzilla/show_bug.cgi?id=1605
-		 */
 		assertNotNull(pMBean);
 		
 		//test listDefaultPermissions method
 		try {
 			pMBean.listDefaultPermissions();			
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();
-			assertTrue("method listDefaultPermissions throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		
 		//test listLocations method		
 		try {
 			pMBean.listLocations();
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();			
-			assertTrue("method listLocations throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		
 		//test getPermissions method
 		try {
 			pMBean.getPermissions(STRING_NULL);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();			
-			assertTrue("method getPermissions throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			pMBean.getPermissions(STRING_EMPTY);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();			
-			assertTrue("method getPermissions throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			pMBean.getPermissions(STRING_SPECIAL_SYMBOLS);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();			
-			assertTrue("method getPermissions throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 
 		//test setDefaultPermissions method		
 		try {
 			pMBean.setDefaultPermissions(null);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();		
-			assertTrue("method setDefaultPermissions throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			pMBean.setDefaultPermissions(new String[] {});
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();			
-			assertTrue("method setDefaultPermissions throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			pMBean.setDefaultPermissions(new String[] { STRING_NULL });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();			
-			assertTrue("method setDefaultPermissions throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			pMBean.setDefaultPermissions(new String[] { STRING_EMPTY });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();			
-			assertTrue("method setDefaultPermissions throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			pMBean.setDefaultPermissions(new String[] { STRING_SPECIAL_SYMBOLS });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();			
-			assertTrue("method setDefaultPermissions throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		
 		//test setPermissions method		
 		try {
 			pMBean.setPermissions(STRING_NULL, new String[] {});
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();			
-			assertTrue("method setPermissions throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			pMBean.setPermissions(STRING_EMPTY, new String[] {});
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();			
-			assertTrue("method setPermissions throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			pMBean.setPermissions(STRING_SPECIAL_SYMBOLS, new String[] {});
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();			
-			assertTrue("method setPermissions throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+		}
+		catch (IOException e) {
+			fail("unexpected exception", e);
 		}
 		try {
 			pMBean.setPermissions(STRING_NULL, null);
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();			
-			assertTrue("method setPermissions throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			pMBean.setPermissions(STRING_NULL, new String[] { STRING_NULL });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();			
-			assertTrue("method setPermissions throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			pMBean.setPermissions(STRING_NULL, new String[] { STRING_EMPTY });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();			
-			assertTrue("method setPermissions throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}
 		try {
 			pMBean.setPermissions(STRING_EMPTY, new String[] { STRING_SPECIAL_SYMBOLS });
-		} catch(IOException ioException) {
-		} catch(RuntimeException e) {
-			e.printStackTrace();			
-			assertTrue("method setPermissions throws runtime exception, but only IOException is allowed; runtime exception is " + e.toString(), false);
+			fail("expected exception");
+		}
+		catch (IOException e) {
+			// expected
 		}		
 	}
 	

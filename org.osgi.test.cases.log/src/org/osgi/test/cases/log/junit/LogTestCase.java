@@ -14,6 +14,7 @@ public class LogTestCase extends OSGiTestCase {
 
 	ServiceReference logServiceReference;
 	LogService logService;
+	ServiceReference	logReaderServiceReference;
 	LogReaderService logReaderService;
 	
 	protected void setUp() throws Exception {
@@ -22,12 +23,17 @@ public class LogTestCase extends OSGiTestCase {
 				.getName());
 		logService = (LogService) getContext().getService(logServiceReference);
 		
-		ServiceReference logReaderServiceReference = getContext()
+		logReaderServiceReference = getContext()
 				.getServiceReference(LogReaderService.class.getName());
 		logReaderService = (LogReaderService) getContext()
 				.getService(logReaderServiceReference);
 	}
-	
+
+	protected void tearDown() throws Exception {
+		getContext().ungetService(logServiceReference);
+		getContext().ungetService(logReaderServiceReference);
+	}
+
 	public void testLog() {
 		LogReader reader = new LogReader();
 		LogReader readers[] = new LogReader[] { reader };

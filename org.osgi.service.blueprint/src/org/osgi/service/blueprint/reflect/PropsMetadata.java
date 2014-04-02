@@ -17,6 +17,7 @@
 package org.osgi.service.blueprint.reflect;
 
 import java.util.List;
+import org.osgi.annotation.versioning.ConsumerType;
 
 /**
  * Metadata for a {@code java.util.Properties} based value.
@@ -31,6 +32,7 @@ import java.util.List;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface PropsMetadata extends NonNullMetadata {
 
 	/**

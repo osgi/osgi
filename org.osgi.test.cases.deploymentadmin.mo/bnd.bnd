@@ -70,6 +70,5 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.deploymentadmin.deliveredarea=${target-dir}/${p}.delivered, \
 	org.osgi.vendor.deploymentadmin=org.osgi.impl.service.deploymentadmin.perm, \
 	org.osgi.vendor.dmtree.DigestDelegate=org.osgi.impl.service.dmt.export.Digest, \
-	org.osgi.service.dmt.osgi.root=./OSGi/
-	
--runsystempackages = org.eclipse.osgi.internal.provisional.verifier		
+	org.osgi.service.dmt.osgi.root=./OSGi
+		

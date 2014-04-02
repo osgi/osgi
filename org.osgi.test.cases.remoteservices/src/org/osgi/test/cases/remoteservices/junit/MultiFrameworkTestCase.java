@@ -153,7 +153,7 @@ public abstract class MultiFrameworkTestCase extends OSGiTestCase {
 	private String getStorageAreaRoot() {
 		BundleContext context = getBundleContextWithoutFail();
 		if (context == null) {
-			String storageroot = System.getProperty(STORAGEROOT, DEFAULT_STORAGEROOT);
+			String storageroot = getProperty(STORAGEROOT, DEFAULT_STORAGEROOT);
 			assertNotNull("Must set property: " + STORAGEROOT, storageroot);
 			return storageroot;
 		}
@@ -168,7 +168,7 @@ public abstract class MultiFrameworkTestCase extends OSGiTestCase {
 
 	private BundleContext getBundleContextWithoutFail() {
 		try {
-			if ("true".equals(System.getProperty("noframework")))
+			if ("true".equals(getProperty("noframework")))
 				return null;
 			return getContext();
 		} catch (Throwable t) {
@@ -270,7 +270,7 @@ public abstract class MultiFrameworkTestCase extends OSGiTestCase {
 		
 		List bundles = new LinkedList();
 		
-		StringTokenizer st = new StringTokenizer(System.getProperty(
+		StringTokenizer st = new StringTokenizer(getProperty(
 				"org.osgi.test.cases.remoteservices.bundles", ""), ",");
 		while (st.hasMoreTokens()) {
 			String bundle = st.nextToken();

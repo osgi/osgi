@@ -17,6 +17,7 @@
 package org.osgi.service.cm;
 
 import java.util.Dictionary;
+import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -68,7 +69,9 @@ import org.osgi.framework.ServiceReference;
  * for all configuration updates.
  * 
  * @author $Id$
+ * @ThreadSafe
  */
+@ConsumerType
 public interface ConfigurationPlugin {
 	/**
 	 * A service property to limit the Managed Service or Managed Service

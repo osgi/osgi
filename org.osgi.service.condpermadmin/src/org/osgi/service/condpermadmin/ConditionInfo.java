@@ -205,6 +205,7 @@ public class ConditionInfo {
 	 * 
 	 * @return The string representation of this {@code ConditionInfo}.
 	 */
+	@Override
 	public String toString() {
 		return getEncoded();
 	}
@@ -242,6 +243,7 @@ public class ConditionInfo {
 	 *         the same type and args as this {@code ConditionInfo} object;
 	 *         {@code false} otherwise.
 	 */
+	@Override
 	public boolean equals(Object obj) {
 		if (obj == this) {
 			return true;
@@ -268,7 +270,7 @@ public class ConditionInfo {
 	 * 
 	 * @return A hash code value for this object.
 	 */
-
+	@Override
 	public int hashCode() {
 		int h = 31 * 17 + type.hashCode();
 		for (int i = 0; i < args.length; i++) {

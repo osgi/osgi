@@ -60,9 +60,9 @@ public class DAKeyStore {
     private void init() throws Exception {
         // get the keystore file
         
-        String ksFile = System.getProperty(DAConstants.KEYSTORE_PATH);
+		String ksFile = DAConstants.getProperty(DAConstants.KEYSTORE_PATH);
         if (null == ksFile) {
-			ksFile = System.getProperty(DAConstants.KEYSTORE_FW_URL);
+			ksFile = DAConstants.getProperty(DAConstants.KEYSTORE_FW_URL);
 			if (null != ksFile) {
                 logger.log(Logger.LOG_INFO, "Keystore location is not defined. Set the " + 
                         DAConstants.KEYSTORE_PATH + " system property! Framework keystore will " +
@@ -70,7 +70,7 @@ public class DAKeyStore {
             }
         }
         if (null == ksFile) {
-            File f = new File(System.getProperty("user.home"));
+			File f = new File(DAConstants.getProperty("user.home"));
             f = new File(f, ".keystore");
             if (f.exists()) {
                 ksFile = f.getPath();
@@ -88,7 +88,7 @@ public class DAKeyStore {
 
         // get the keystore pwd
         
-        String pwd = System.getProperty(DAConstants.KEYSTORE_PWD);
+		String pwd = DAConstants.getProperty(DAConstants.KEYSTORE_PWD);
         if (null == pwd)
             logger.log(Logger.LOG_INFO, "There is no keystore password set. Set the " +
                     DAConstants.KEYSTORE_PWD + " system property! Keystore integrity will " +
@@ -96,7 +96,7 @@ public class DAKeyStore {
         
         // get the keystore type
         
-        String ksType = System.getProperty(DAConstants.KEYSTORE_TYPE);
+		String ksType = DAConstants.getProperty(DAConstants.KEYSTORE_TYPE);
         if (null == ksType) {
             ksType = "JKS";
             logger.log(Logger.LOG_INFO, "There is no keystore type set. Set the " +

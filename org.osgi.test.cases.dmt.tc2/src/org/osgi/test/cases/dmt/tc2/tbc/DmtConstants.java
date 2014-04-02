@@ -39,10 +39,12 @@ package org.osgi.test.cases.dmt.tc2.tbc;
 
 import org.osgi.service.dmt.DmtEvent;
 import org.osgi.service.dmt.security.DmtPermission;
+import org.osgi.test.support.OSGiTestCaseProperties;
 
 public class DmtConstants {
 
-	public static final String OSGi_ROOT = System.getProperty("org.osgi.service.dmt.osgi.root");
+	public static final String	OSGi_ROOT			= OSGiTestCaseProperties
+															.getProperty("org.osgi.service.dmt.osgi.root");
 
 	public static final String OSGi_LOG = OSGi_ROOT + "/Log";
 	
@@ -108,44 +110,24 @@ public class DmtConstants {
     public static final boolean SUPPORTS_ASYNCHRONOUS_NOTIFICATION;
     
     static {
-    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.supports_node_title")!=null) {
-    		SUPPORTS_NODE_TITLE = Boolean.getBoolean("org.osgi.test.cases.dmt.tc2.supports_node_title");
-    	} else {
-    		SUPPORTS_NODE_TITLE = true;
-    	}
-    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.supports_node_timestamp")!=null) {
-    		SUPPORTS_NODE_TIMESTAMP = Boolean.getBoolean("org.osgi.test.cases.dmt.tc2.supports_node_timestamp");
-    	} else {
-    		SUPPORTS_NODE_TIMESTAMP = true;
-    	}
-    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.supports_node_size")!=null) {
-    		SUPPORTS_NODE_SIZE= Boolean.getBoolean("org.osgi.test.cases.dmt.tc2.supports_node_size");
-    	} else {
-    		SUPPORTS_NODE_SIZE= true;
-    	}
-    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.supports_node_version")!=null) {
-    		SUPPORTS_NODE_VERSION = Boolean.getBoolean("org.osgi.test.cases.dmt.tc2.supports_node_version");
-    	} else {
-    		SUPPORTS_NODE_VERSION = true;
-    	}
-    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.timeout")!=null) {
-    		TIMEOUT = Integer.parseInt(System.getProperty("org.osgi.test.cases.dmt.tc2.timeout")) + 1000;
-    	} else {
-    		TIMEOUT = 31000;
-    	}
-    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.wait_for_event")!=null) {
-    		WAITING_TIME = Integer.parseInt(System.getProperty("org.osgi.test.cases.dmt.tc2.wait_for_event"));
-    	} else {
-    		WAITING_TIME = 1200;
-    	}
+		SUPPORTS_NODE_TITLE = OSGiTestCaseProperties.getBooleanProperty(
+				"org.osgi.test.cases.dmt.tc2.supports_node_title", true);
+		SUPPORTS_NODE_TIMESTAMP = OSGiTestCaseProperties.getBooleanProperty(
+				"org.osgi.test.cases.dmt.tc2.supports_node_timestamp", true);
+		SUPPORTS_NODE_SIZE = OSGiTestCaseProperties.getBooleanProperty(
+				"org.osgi.test.cases.dmt.tc2.supports_node_size", true);
+		SUPPORTS_NODE_VERSION = OSGiTestCaseProperties.getBooleanProperty(
+				"org.osgi.test.cases.dmt.tc2.supports_node_version", true);
+		TIMEOUT = OSGiTestCaseProperties.getIntegerProperty(
+				"org.osgi.test.cases.dmt.tc2.timeout", 30000) + 1000;
+		WAITING_TIME = OSGiTestCaseProperties.getIntegerProperty(
+				"org.osgi.test.cases.dmt.tc2.wait_for_event", 1200);
     	
-    	if (System.getProperty("org.osgi.test.cases.dmt.tc2.supports_asynchronous_notifications")!=null) {
-    		SUPPORTS_ASYNCHRONOUS_NOTIFICATION = Boolean.getBoolean("org.osgi.test.cases.dmt.tc2.supports_node_version");
-    	} else {
-    		SUPPORTS_ASYNCHRONOUS_NOTIFICATION = true;
-    	}
-    	
-    }
+		SUPPORTS_ASYNCHRONOUS_NOTIFICATION = OSGiTestCaseProperties
+				.getBooleanProperty(
+										"org.osgi.test.cases.dmt.tc2.supports_asynchronous_notifications",
+						true);
+	}
 	
     /**
      * This method returns the String corresponding to the code of the DmtExceptions's format

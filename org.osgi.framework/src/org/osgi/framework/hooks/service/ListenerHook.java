@@ -17,6 +17,8 @@
 package org.osgi.framework.hooks.service;
 
 import java.util.Collection;
+import org.osgi.annotation.versioning.ConsumerType;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -29,7 +31,7 @@ import org.osgi.framework.BundleContext;
  * @ThreadSafe
  * @author $Id$
  */
-
+@ConsumerType
 public interface ListenerHook {
 	/**
 	 * Added listeners hook method. This method is called to provide the hook
@@ -66,8 +68,8 @@ public interface ListenerHook {
 	 * which added the Service Listener and the filter with which it was added.
 	 * 
 	 * @ThreadSafe
-	 * @noimplement
 	 */
+	@ProviderType
 	public interface ListenerInfo {
 		/**
 		 * Return the context of the bundle which added the listener.

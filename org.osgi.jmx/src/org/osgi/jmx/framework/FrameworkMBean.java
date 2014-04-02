@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2009, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2009, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -163,7 +163,7 @@ public interface FrameworkMBean {
 	 * <li>{@link #BUNDLE_IN_ERROR_LOCATION_ITEM}</li>
 	 * <li>{@link #COMPLETED_ITEM}</li>
 	 * <li>{@link #ERROR_ITEM}</li>
-	 * <li>{@link #REMAINING_LOCATION_ITEM P }</li>
+	 * <li>{@link #REMAINING_LOCATION_ITEM}</li>
 	 * <li>{@link #SUCCESS_ITEM}</li>
 	 * </ul>
 	 */

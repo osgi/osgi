@@ -25,6 +25,7 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceListener;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
+import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.BundleTracker;
@@ -44,16 +45,15 @@ public class Activator implements BundleActivator, ServiceListener {
 	long timeout;
 	int  factor;
 
-	public Activator() {
-		timeout = Long.getLong("rsa.ct.timeout", 300000L);
-		factor = Integer.getInteger("rsa.ct.timeout.factor", 3);
-	}
-
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
+		timeout = OSGiTestCaseProperties.getLongProperty("rsa.ct.timeout",
+				300000L);
+		factor = OSGiTestCaseProperties.getIntegerProperty(
+				"rsa.ct.timeout.factor", 3);
 		test();
 	}
 

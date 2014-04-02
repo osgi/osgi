@@ -16,6 +16,8 @@
 
 package org.osgi.service.blueprint.reflect;
 
+import org.osgi.annotation.versioning.ConsumerType;
+
 /**
  * Metadata for a value that cannot {@code null}. All Metadata subtypes extend
  * this type except for {@link NullMetadata}.
@@ -27,6 +29,7 @@ package org.osgi.service.blueprint.reflect;
  * @ThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface NonNullMetadata extends Metadata {
 	// marker interface
 }

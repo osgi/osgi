@@ -46,6 +46,7 @@ import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
+import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.compatibility.Semaphore;
 
@@ -65,20 +66,16 @@ public class Activator implements BundleActivator, A, B {
 	Collection<ExportRegistration> exportRegistrations;
 	TestRemoteServiceAdminListener remoteServiceAdminListener;
 	long timeout;
-	int  factor;
 	String version;
 	ServiceReference rsaRef;
-
-	public Activator() {
-		timeout = Long.getLong("rsa.ct.timeout", 300000L);
-		factor = Integer.getInteger("rsa.ct.timeout.factor", 3);
-	}
 
 	/**
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
 		this.context = context;
+		timeout = OSGiTestCaseProperties.getLongProperty("rsa.ct.timeout",
+				300000L);
 
 		// read my version from the bundle header
 		version = context.getBundle().getHeaders().get("RSA-Version");
@@ -294,7 +291,7 @@ public class Activator implements BundleActivator, A, B {
 	 * @return
 	 */
 	private Map<String, Object> loadServerTCKProperties() {
-		String serverconfig = System
+		String serverconfig = context
 				.getProperty("org.osgi.test.cases.remoteserviceadmin.serverconfig");
 		Assert.assertNotNull(
 				"did not find org.osgi.test.cases.remoteserviceadmin.serverconfig system property",
@@ -304,7 +301,7 @@ public class Activator implements BundleActivator, A, B {
 		for (StringTokenizer tok = new StringTokenizer(serverconfig, ","); tok
 				.hasMoreTokens();) {
 			String propertyName = tok.nextToken();
-			String value = System.getProperty(propertyName);
+			String value = context.getProperty(propertyName);
 			Assert.assertNotNull("system property not found: " + propertyName, value);
 			properties.put(propertyName, value);
 		}

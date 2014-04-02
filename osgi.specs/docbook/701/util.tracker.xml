@@ -267,7 +267,7 @@ context.addBundleListener( new BundleListener() {
         </listitem>
 
         <listitem>
-          <para><emphasis>Modified</emphasis> -The target is modified. For
+          <para><emphasis>Modified</emphasis> - The target is modified. For
           example, the service properties have changed or the bundle has
           changed state. This callback provides a mechanism for the client to
           update its internal structures. The callback provides the wrapper
@@ -1008,32 +1008,6 @@ context.addBundleListener( new BundleListener() {
       methods of Bundle Trackers must therefore have the appropriate Admin
       Permission.</para>
     </section>
-  </section>
-
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>The Service Tracker is generified</para>
-      </listitem>
-
-      <listitem>
-        <para>A new constructor was added that takes a <code>Class</code>
-        object as criterion</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <code>BundleTracker.isEmpty</code> and
-        <code>getTracked</code> methods</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <code>ServiceTracker.isEmpty</code>,
-        <code>getTracked</code>, and <code>getServices(T[])</code>
-        methods.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.util.tracker.xml"/>

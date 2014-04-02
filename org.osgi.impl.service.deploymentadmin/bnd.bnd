@@ -19,6 +19,6 @@ Export-Package 					= ${p}.perm, \
 -buildpath						= \
     org.osgi.service.deploymentadmin;				version= project, \
 	ee.j2se;										version= ${javac.compliance}, \
-	osgi.core;										version= 4.0.1, \
+	osgi.core;										version= 4.3, \
 	osgi.cmpn;										version= 4.3, \
 	org.eclipse.osgi;								version= 3.5

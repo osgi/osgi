@@ -28,12 +28,12 @@ import org.osgi.test.cases.component.service.ComponentEnabler;
 public class BindUnbind implements BaseService {
   private Dictionary properties = new Properties();
   private ComponentContext ctxt;
-  private static final int BIND_SR = 1 << 0;
-  private static final int UNBIND_SR = 1 << 1;
-  private static final int BIND_CE = 1 << 2;
-  private static final int UNBIND_CE = 1 << 3;
-  private static final int BIND_CE_MAP = 1 << 4;
-  private static final int UNBIND_CE_MAP = 1 << 5;
+	public static final int		BIND_SR			= 1 << 0;
+	public static final int		UNBIND_SR		= 1 << 1;
+	public static final int		BIND_CE			= 1 << 2;
+	public static final int		UNBIND_CE		= 1 << 3;
+	public static final int		BIND_CE_MAP		= 1 << 4;
+	public static final int		UNBIND_CE_MAP	= 1 << 5;
 
   protected void activate(ComponentContext ctxt) {
     this.ctxt = ctxt;

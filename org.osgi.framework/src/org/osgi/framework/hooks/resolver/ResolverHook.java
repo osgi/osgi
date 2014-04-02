@@ -17,6 +17,7 @@
 package org.osgi.framework.hooks.resolver;
 
 import java.util.Collection;
+import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.namespace.BundleNamespace;
 import org.osgi.framework.namespace.IdentityNamespace;
@@ -132,6 +133,7 @@ import org.osgi.framework.wiring.FrameworkWiring;
  * @NotThreadSafe
  * @author $Id$
  */
+@ConsumerType
 public interface ResolverHook {
 	/**
 	 * Filter resolvable candidates hook method. This method may be called

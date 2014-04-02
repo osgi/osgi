@@ -16,13 +16,7 @@
 
 package org.osgi.service.remoteserviceadmin;
 
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_FRAMEWORK_UUID;
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_ID;
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_PACKAGE_VERSION_;
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.ENDPOINT_SERVICE_ID;
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_IMPORTED;
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_IMPORTED_CONFIGS;
-import static org.osgi.service.remoteserviceadmin.RemoteConstants.SERVICE_INTENTS;
+import static org.osgi.service.remoteserviceadmin.RemoteConstants.*;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.ArrayList;
@@ -141,7 +135,7 @@ public class EndpointDescription {
 	 * @throws IllegalArgumentException When the properties are not proper for
 	 *         an Endpoint Description
 	 */
-	public EndpointDescription(final ServiceReference reference, final Map<String, ?> properties) {
+	public EndpointDescription(final ServiceReference<?> reference, final Map<String, ?> properties) {
 		Map<String, Object> props = new TreeMap<String, Object>(String.CASE_INSENSITIVE_ORDER);
 
 		if (properties != null) {
@@ -430,7 +424,7 @@ public class EndpointDescription {
 	private List<String> getStringPlusProperty(String key) {
 		Object value = properties.get(key);
 		if (value == null) {
-			return Collections.EMPTY_LIST;
+			return emptyList();
 		}
 
 		if (value instanceof String) {
@@ -460,6 +454,11 @@ public class EndpointDescription {
 			return Collections.unmodifiableList(result);
 		}
 
+		return emptyList();
+	}
+
+	@SuppressWarnings("unchecked")
+	private static <T> List<T> emptyList() {
 		return Collections.EMPTY_LIST;
 	}
 
@@ -514,6 +513,7 @@ public class EndpointDescription {
 	 * 
 	 * @return An integer which is a hash code value for this object.
 	 */
+	@Override
 	public int hashCode() {
 		return getId().hashCode();
 	}
@@ -529,6 +529,7 @@ public class EndpointDescription {
 	 * @return {@code true} if {@code object} is a {@code EndpointDescription}
 	 *         and is equal to this object; {@code false} otherwise.
 	 */
+	@Override
 	public boolean equals(Object other) {
 		if (this == other) {
 			return true;
@@ -572,6 +573,7 @@ public class EndpointDescription {
 	 * 
 	 * @return String form of this EndpointDescription.
 	 */
+	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append('{');
@@ -632,34 +634,42 @@ public class EndpointDescription {
 			this.wrapped = wrapped;
 		}
 
+		@Override
 		public Enumeration<V> elements() {
 			return Collections.enumeration(wrapped.values());
 		}
 
+		@Override
 		public V get(Object key) {
 			return wrapped.get(key);
 		}
 
+		@Override
 		public boolean isEmpty() {
 			return wrapped.isEmpty();
 		}
 
+		@Override
 		public Enumeration<K> keys() {
 			return Collections.enumeration(wrapped.keySet());
 		}
 
+		@Override
 		public V put(K key, V value) {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public V remove(Object key) {
 			throw new UnsupportedOperationException();
 		}
 
+		@Override
 		public int size() {
 			return wrapped.size();
 		}
 
+		@Override
 		public String toString() {
 			return wrapped.toString();
 		}

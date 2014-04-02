@@ -262,7 +262,7 @@ link           ::= 'link' '=' &lt;url&gt;</programlisting>
           </listitem>
 
           <listitem>
-            <para><code>link</code> -(optional) Provide a URL to a page that
+            <para><code>link</code> - (optional) Provide a URL to a page that
             defines or explains the license. If this link is absent, the name
             field is used for this purpose. The URL is relative to the root of
             the bundle. That is, it is possible to refer to a file inside the
@@ -314,7 +314,7 @@ link           ::= 'link' '=' &lt;url&gt;</programlisting>
 
         <para>The Bundle-NativeCode header contains a specification of native
         code libraries contained in this bundle. See <xref
-        linkend="i3235622"/>.</para>
+        linkend="framework.module-loading.native.code.libraries"/>.</para>
       </section>
 
       <section>
@@ -498,6 +498,13 @@ qualifier   ::= ( alphanum | '_' | '-' )+</programlisting>
       <para>Versions are supported in the API with the <xref
       linkend="org.osgi.framework.Version" xrefstyle="hyperlink"/>
       class.</para>
+
+      <para>The <xref linkend="org.osgi.annotation.versioning.Version"
+      xrefstyle="hyperlink"/> annotation can be used in
+      <code>package-info.java</code> source files to document the version of a
+      package. This annotation can be processed by bundle assembly tools when
+      generating the version information for a bundle's Export-Package
+      manifest header.</para>
     </section>
 
     <section xml:id="i3189032">
@@ -522,7 +529,7 @@ ceiling       ::= version</programlisting>
       <para>Note that the use of a comma in the version range requires it to
       be enclosed in double quotes. For example:</para>
 
-      <programlisting>Import-Package: com.acme.foo;version="[1.23,2)", <code>«</code>
+      <programlisting>Import-Package: com.acme.foo;version="[1.23,2)", «
    com.acme.bar;version="[4.0, 5.0)"</programlisting>
 
       <para>In the following table, for each specified range in the left-hand
@@ -652,7 +659,7 @@ attr        ::= &lt;see text&gt;</programlisting>
       <code>String</code> or <code>String[]</code>. In all other cases the
       result must be <code>false</code>.</para>
 
-      <para>The evaluation of the approximate match ('<code>~='</code>) filter
+      <para>The evaluation of the approximate match (<code>'~='</code>) filter
       type is implementation specific but should at least ignore case and
       white space differences. Codes such as soundex or other smart
       <emphasis>closeness</emphasis> comparisons could be used.</para>
@@ -882,7 +889,8 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     organizations and individuals. To minimize name clashes it is recommended
     to use the reverse domain name rule used for packages and bundle symbolic
     names. It is also recommended to register these Namespaces with the OSGi
-    Alliance, see <xref linkend="i3215677"/> to prevent clashes.</para>
+    Alliance, see <xref linkend="framework.module.namespace-registry"/> to
+    prevent clashes.</para>
 
     <para>Given a Namespace, it is possible to declare a
     <emphasis>capability</emphasis> of that Namespace. A capability provides
@@ -946,7 +954,7 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
     their Namespace. For example, the <code>osgi.wiring.*</code> Namespaces
     are used to control the Class Loading, see <xref
     linkend="framework.wiring"/>. However, they can also serve other purposes
-    as outlined by their Namespace. for example, a Wire could specify a
+    as outlined by their Namespace. For example, a Wire could specify a
     Dependency Injection source and target.</para>
 
     <para>Interfaces for the generic model are defined in <xref
@@ -1018,8 +1026,8 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
       <para>The deployer of the environment sets the following launching
       property when starting the framework:</para>
 
-      <programlisting>org.osgi.framework.system.capabilities.extra= <code>«</code>
-  com.acme.display; width:Long=1920; height:Long=1080; interlace=p, <code>«</code>
+      <programlisting>org.osgi.framework.system.capabilities.extra= «
+  com.acme.display; width:Long=1920; height:Long=1080; interlace=p, «
   com.microsoft; edition=home; version:Version=7; api=win32</programlisting>
 
       <para>The framework will be able to satisfy the display requirement but
@@ -1044,21 +1052,21 @@ dict.put( "cn", new String[] { "a", "b", "c" } );</programlisting>
 capability          ::= name-space 
                             ( ';' directive | typed-attr )*
 name-space          ::= symbolic-name
-typed-attr          ::=  extended ( ':' type ) '=' argument
+typed-attr          ::=  extended ( ':' type )? '=' argument
 type                ::= scalar | list
 scalar              ::= 'String' | 'Version' | 'Long' 
                             |   'Double' 
-list                ::= 'List&lt;' scalar '&gt;'</programlisting>
+list                ::= 'List' ( '&lt;' scalar '&gt;' )?</programlisting>
 
       <para>The header has the following directives architected:</para>
 
       <itemizedlist>
         <listitem>
           <para><code>effective</code> - <code>(resolve)</code> Specifies the
-          time a capabiltity is available, either <code>resolve</code>
+          time a capability is available, either <code>resolve</code>
           (default) or another name. The OSGi framework resolver only
           considers Capabilities without an <code>effective</code> directive
-          or <code>effective:=resolve</code>. Capabilties with other values
+          or <code>effective:=resolve</code>. Capabilities with other values
           for the <code>effective</code> directive can be considered by an
           external agent.</para>
         </listitem>
@@ -1102,42 +1110,46 @@ attr:Version="    23      ",            // error
 attr:Long="       23      ",            // ok, because nummeric</programlisting>
 
       <para>Multi-valued attributes can be constructed with the
-      <code>List&lt;&gt;</code> operator. The <code>List&lt;&gt;</code>
-      operator specifies a <code>scalar</code> type that is repeated in the
-      <code>argument</code> value by separating it on commas (<code>','
-      \u002C</code>). Parsing of the corresponding <code>argument</code> list
-      must be done according to the following rules:</para>
+      <code>List</code> type. The <code>List</code> type can specify a
+      <code>scalar</code> type for the list elements. If no element type is
+      specified, <code>String</code> is assumed. Parsing of the corresponding
+      <code>argument</code> list must be done according to the following
+      rules:</para>
 
       <itemizedlist>
         <listitem>
-          <para>White space around the commas must be trimmed for
-          non-<code>String</code> types.</para>
+          <para>Element values in the list are separated by commas (<code>','
+          \u002C</code>).</para>
+        </listitem>
+
+        <listitem>
+          <para>White space around an element value must be trimmed for
+          non-<code>String</code> element types.</para>
         </listitem>
 
         <listitem>
           <para>Commas or reverse solidi (<code>'\' \u005C</code>) that are
-          part of the value must be escaped by prefixing them with a reverse
-          solidus. In practice, this requires escaping with two reverse solidi
-          because a reverse solidus must already be escaped in strings.</para>
-        </listitem>
-
-        <listitem>
-          <para>The whole argument must be surrounded by quotes because the
-          comma is a significant token in the manifest grammar.</para>
+          part of an element value must be escaped by prefixing them with a
+          reverse solidus. In practice, this requires escaping with two
+          reverse solidi because a reverse solidus must already be escaped in
+          strings.</para>
         </listitem>
       </itemizedlist>
 
+      <para>The whole <code>argument</code> must be surrounded by quotes
+      because the comma is a significant token in the manifest grammar.</para>
+
       <para>The version attribute requires the Version type to be specified to
-      be compared as a version:</para>
+      be compared as a Version rather than as a String:</para>
 
       <programlisting>version:Version=1.23</programlisting>
 
       <para>For example:</para>
 
-      <programlisting>Provide-Capability: <code>«</code>
-   com.acme.dictionary; from:String=nl; to=de; version:Version=3.4, <code>«</code>
-   com.acme.dictionary; from:String=de; to=nl; version:Version=4.1, <code>«</code>
-   com.acme.ip2location;country:List&lt;String&gt;="nl,be,fr,uk";version:Version=1.3,<code>«</code>
+      <programlisting>Provide-Capability: «
+   com.acme.dictionary; from:String=nl; to=de; version:Version=3.4, «
+   com.acme.dictionary; from:String=de; to=nl; version:Version=4.1, «
+   com.acme.ip2location;country:List="nl,be,fr,uk";version:Version=1.3, «
    com.acme.seps;       tokens:List&lt;String&gt;="\\,,;,\\\""</programlisting>
     </section>
 
@@ -1176,8 +1188,8 @@ org.osgi.framework.system.capabilities.extra</programlisting>
       <para>The Bundle's Require-Capability header has the following
       grammar:</para>
 
-      <programlisting>Require-Capability  ::= requirement (',' requirement )* 
-requirement         ::= name-space ( ';' parameter )* </programlisting>
+      <programlisting>Require-Capability ::= requirement ( ',' requirement )* 
+requirement        ::= name-space ( ';' directive | typed-attr )*</programlisting>
 
       <para>Requirements have attributes that can be set with the
       Require-Capability header. The purpose of these attributes are to
@@ -1196,7 +1208,7 @@ requirement         ::= name-space ( ';' parameter )* </programlisting>
           (default) or another name. The OSGi framework resolver only
           considers requirements without an <code>effective</code> directive
           or <code>effective:=resolve</code>. Other requirements can be
-          considered by an external agent. Additonal names for the
+          considered by an external agent. Additional names for the
           <code>effective</code> directive should be registered with the OSGi
           Alliance.</para>
         </listitem>
@@ -1218,10 +1230,12 @@ requirement         ::= name-space ( ';' parameter )* </programlisting>
           given namespace. The matching of the filter against the capability
           is done on one capability at a time. A filter like
           <code>(&amp;(a=1)(b=2))</code> matches only a capability that
-          specifies both attributes at the required value, not two capabilties
-          that each specify one of the attributes correctly. A filter is
-          optional, if no filter directive is specified the requirement always
-          matches.</para>
+          specifies both attributes at the required value, not two
+          capabilities that each specify one of the attributes correctly. A
+          filter is optional, if no filter directive is specified the
+          requirement always matches. The attribute names in the filter
+          expression are used to locate capability attributes in a case
+          sensitive manner.</para>
         </listitem>
 
         <listitem>
@@ -1293,15 +1307,14 @@ requirement         ::= name-space ( ';' parameter )* </programlisting>
       <para>The syntax of this header is a list of comma-separated names of
       execution environments.</para>
 
-      <programlisting>Bundle-RequiredExecutionEnvironment ::= 
-    ee-name ( ',' ee-name )*
+      <programlisting>Bundle-RequiredExecutionEnvironment ::= ee-name ( ',' ee-name )*
 
 ee-name  ::= bree | &lt;ee name&gt;
-bree     ::= token ('-' version)? ( '/' token ( '-' version)? )?</programlisting>
+bree     ::= token ( '-' version )? ( '/' token ( '-' version )? )?</programlisting>
 
       <para>For example:</para>
 
-      <programlisting>Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0, <code>«</code>
+      <programlisting>Bundle-RequiredExecutionEnvironment: CDC-1.0/Foundation-1.0, «
   OSGi/Minimum-1.1</programlisting>
 
       <para>If a bundle includes this header in the manifest then the bundle
@@ -1342,7 +1355,7 @@ bree     ::= token ('-' version)? ( '/' token ( '-' version)? )?</programlisting
       <code>bree</code> term. The structure of the <code>bree</code> term for
       the existing recommendations is:</para>
 
-      <programlisting>bree' ::= n1 ( '-' v )? ( '/' n2 ( '-' v )?)?</programlisting>
+      <programlisting>n1 ( '-' v )? ( '/' n2 ( '-' v )? )?</programlisting>
 
       <para>For example:</para>
 
@@ -1351,22 +1364,22 @@ OSGi/Minimum-1.2
 J2SE-1.4
 JavaSE-1.4</programlisting>
 
-      <para>Each BREE element that matches this pattern can thus be converted
-      into an equivalent <code>osgi.ee</code> Require-Capability filter. First
-      variable <code>n1</code> must be replaced with <code>JavaSE</code> when
-      it is <code>J2SE</code> since the Require-Capability header uses a
-      single name for the Java Standard Edition. The <code>filter</code>
-      directive can then be constructed from <code>n1</code>, <code>v</code>,
-      and <code>n2</code>. If n2 is not defined or v is not defined then the
-      parenthesized parts in which they participate are not used in the
-      expansion.</para>
+      <para>Each <code>bree</code> term that matches this pattern can thus be
+      converted into an equivalent <code>osgi.ee</code> Require-Capability
+      filter. First variable <code>n1</code> must be replaced with
+      <code>JavaSE</code> when it is <code>J2SE</code> since the
+      Require-Capability header uses a single name for the Java Standard
+      Edition. The <code>filter</code> directive can then be constructed from
+      <code>n1</code>, <code>v</code>, and <code>n2</code>. If n2 is not
+      defined or v is not defined then the parenthesized parts in which they
+      participate are not used in the expansion.</para>
 
-      <programlisting>bree-filter ::= '(&amp;(osgi.ee=' n1 ('/'n2 )? ') ( '(version=' v ')' )? ')'</programlisting>
+      <programlisting>bree-filter ::= '(&amp;(osgi.ee=' n1 ( '/' n2 )? ')' ( '(version=' v ')' )? ')'</programlisting>
 
       <para>If the <code>bree</code> term cannot be parsed into the given
       constituents then the filter must look like:</para>
 
-      <programlisting>  filter    ::= '(osgi.ee='  &lt;ee name&gt;')'</programlisting>
+      <programlisting>filter    ::= '(osgi.ee=' &lt;ee name&gt; ')'</programlisting>
 
       <para>Some examples:</para>
 
@@ -1378,7 +1391,7 @@ AA/BB-1.7                   (&amp;(osgi.ee=AA/BB)(version=1.7))
 V1-1.5/V2-1.6               (osgi.ee=V1-1.5/V2-1.6)
 MyEE-badVersion             (osgi.ee=MyEE-badVersion)</programlisting>
 
-      <para>Each element of the Bundle-RequiredExecutionEnvironment is or'ed
+      <para>Each element of the Bundle-RequiredExecutionEnvironment is ORed
       together in the final <code>osgi.ee</code> requirement's
       <code>filter</code> directive. For example:</para>
 
@@ -1742,9 +1755,9 @@ package-names ::= package-name
           <para><code>version</code> - A <code>version-range</code> to select
           the exporter's package version. The syntax must follow <xref
           linkend="i3189032"/>. For more information on version selection, see
-          <xref linkend="i2515150"/>. If this attribute is not specified, it
-          is assumed to be <code>[0.0.0,</code> <phrase
-          role="symbol">∞</phrase><code>)</code>.</para>
+          <xref linkend="framework.module-semantic.versioning"/>. If this
+          attribute is not specified, it is assumed to be <code>[0.0.0,</code>
+          <phrase role="symbol">∞</phrase><code>)</code>.</para>
         </listitem>
 
         <listitem>
@@ -1765,8 +1778,8 @@ package-names ::= package-name
           select the bundle version of the exporting bundle. The default value
           is <code>[0.0.0,</code> <phrase
           role="symbol">∞</phrase><code>)</code>. See <xref
-          linkend="i2515150"/>. In the case of a fragment bundle, the version
-          is from the host bundle.</para>
+          linkend="framework.module-semantic.versioning"/>. In the case of a
+          fragment bundle, the version is from the host bundle.</para>
         </listitem>
       </itemizedlist>
 
@@ -1795,8 +1808,8 @@ package-names ::= package-name
 
       <para>Example of a correct definition:</para>
 
-      <programlisting>Import-Package: com.acme.foo;com.acme.bar; <code>«</code>
-    version="[1.23,1.24]"; <code>«</code>
+      <programlisting>Import-Package: com.acme.foo;com.acme.bar; «
+    version="[1.23,1.24]"; «
     resolution:=mandatory</programlisting>
     </section>
 
@@ -1963,7 +1976,8 @@ package-names   ::= package-name                // See <xref
 
       <para>Importing an exported package must use a version range according
       to its compatibility requirements, being either a consumer or a provider
-      of that API. See <xref linkend="i2515150"/> for more information.</para>
+      of that API. See <xref linkend="framework.module-semantic.versioning"/>
+      for more information.</para>
     </section>
 
     <section>
@@ -2112,7 +2126,7 @@ B: Export-Package: p; version=1.5.1</programlisting>
       </figure>
     </section>
 
-    <section xml:id="i2515150">
+    <section xml:id="framework.module-semantic.versioning">
       <title>Semantic Versioning</title>
 
       <para>Version ranges encode the assumptions about
@@ -2171,14 +2185,73 @@ B: Export-Package: p; version=1.5.1</programlisting>
       compiled against as their base version. It is recommended to ignore the
       micro part of the version because systems tend to become very rigid if
       they require the latest bug fix to be deployed all the time. For
-      example, when compiled against version 4.2.1.V201007221030, the base
-      version should be 4.2.</para>
+      example, when compiled against version <code>4.2.1.V201007221030</code>,
+      the base version should be <code>4.2</code>.</para>
 
       <para>A consumer of an API should therefore import a range that starts
       with the base version and ends with the next major change, for example:
       <code>[4.2,5)</code>. A provider of an API should import a range that
       starts with the base version up to the next minor change, for example:
       <code>[4.2,4.3)</code>.</para>
+    </section>
+
+    <section xml:id="framework.module-semantic.versioning.type.roles">
+      <title>Type Roles for Semantic Versioning</title>
+
+      <para>As mentioned in <xref
+      linkend="framework.module-semantic.versioning"/>, there are two roles
+      for clients of an API package: API consumers and API providers. API
+      consumers use the API and API providers implement the API. For the
+      interface and abstract class types in an API, it is important that the
+      API clearly document which of those types are only to be implemented by
+      API providers and which of those types can be implemented by API
+      consumers. For example, listener interfaces are generally implemented by
+      API consumers and instances of them passed to API providers.</para>
+
+      <para>API providers are sensitive to changes in types implemented by
+      both API consumers and API providers. An API provider must implement any
+      new changes in API provider types and must understand and likely invoke
+      any new changes in API consumer types. An API consumer can generally
+      ignore compatible changes in API provider types unless it wants to
+      invoke the new function. But an API consumer is sensitive to changes in
+      API consumer types and will probably need modification to implement the
+      new function. For example, in the <xref linkend="org.osgi.framework"
+      xrefstyle="hyperlink"/> package, the <xref
+      linkend="org.osgi.framework.BundleContext" xrefstyle="hyperlink"/> type
+      is implemented by the Framework which is the API provider. Adding a new
+      method to <xref linkend="org.osgi.framework.BundleContext"
+      xrefstyle="hyperlink"/> will require all Framework implementations to be
+      updated to implement the new method but bundles, which are the API
+      consumers, do not have to change unless they wish to call the new
+      method. However, the <xref linkend="org.osgi.framework.BundleActivator"
+      xrefstyle="hyperlink"/> type is implemented by bundles and adding a new
+      method to <xref linkend="org.osgi.framework.BundleActivator"
+      xrefstyle="hyperlink"/> will require all bundles implementing this
+      interface to be modified to implement the new method and will also
+      require all Framework implementations to be modified to utilize the new
+      method. Thus the <xref linkend="org.osgi.framework.BundleContext"
+      xrefstyle="hyperlink"/> type has an API provider role and the <xref
+      linkend="org.osgi.framework.BundleActivator" xrefstyle="hyperlink"/>
+      type has an API consumer role in the <xref linkend="org.osgi.framework"
+      xrefstyle="hyperlink"/> package.</para>
+
+      <para>Since there are generally many API consumer and few API providers,
+      API evolution must be very careful when considering changes to API
+      consumer types while being more relaxed about changes to API provider
+      types. This is because you will need to change the few API providers to
+      support an updated API but you do not want to require the many existing
+      API consumers to change when an API is updated. API consumers should
+      only need to change when the API consumer wants to take advantage of new
+      API.</para>
+
+      <para>The <xref linkend="org.osgi.annotation.versioning.ProviderType"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.annotation.versioning.ConsumerType"
+      xrefstyle="hyperlink"/> annotations can be used in source files to
+      document the roles of interface and abstract class types in a package.
+      These annotation can be processed by bundle assembly tools that support
+      Semantic Versioning when generating the version range information for a
+      bundle's Import-Package manifest header.</para>
     </section>
 
     <section xml:id="i2548181">
@@ -2237,11 +2310,11 @@ B: Export-Package: p; version=1.5.1</programlisting>
       <emphasis>not</emphasis> be available to the code when bundle
       <code>A</code> is resolved).</para>
 
-      <programlisting>A: Import-Package: p; <code>«</code>
-        resolution:=optional; <code>«</code>
+      <programlisting>A: Import-Package: p; «
+        resolution:=optional; «
         version=1.6
-B: Export-Package: p; <code>«</code>
-        q; <code>«</code>
+B: Export-Package: p; «
+        q; «
         version=1.5.0</programlisting>
 
       <figure>
@@ -2426,8 +2499,8 @@ C: Export-Package: q; version=2.0</programlisting>
       <para>For example, the following statements will match.</para>
 
       <programlisting>A: Import-Package: com.acme.foo;company=ACME
-B: Export-Package: com.acme.foo; <code>«</code>
-          company="ACME"; <code>«</code>
+B: Export-Package: com.acme.foo; «
+          company="ACME"; «
           security=false</programlisting>
 
       <para>Attribute values are compared string wise except for the version
@@ -2460,9 +2533,9 @@ B: Export-Package: com.acme.foo; <code>«</code>
 
       <programlisting>A: Import-Package: com.acme.foo;company=ACME
 
-B: Export-Package: com.acme.foo; <code>«</code>
-          company="ACME"; <code>«</code>
-          security=false; <code>«</code>
+B: Export-Package: com.acme.foo; «
+          company="ACME"; «
+          security=false; «
           mandatory:=security</programlisting>
     </section>
 
@@ -2509,7 +2582,7 @@ B: Export-Package: com.acme.foo; <code>«</code>
       <para>The following example shows an export statement, and a list of
       files with their visibility status.</para>
 
-      <programlisting>Export-Package: com.acme.foo; include:="Qux*,BarImpl"; <code>«</code>
+      <programlisting>Export-Package: com.acme.foo; include:="Qux*,BarImpl"; «
         exclude:=QuxImpl
 
 com/acme/foo               
@@ -2584,8 +2657,8 @@ public class Implementation {
       <para>For example, the following definitions will match:</para>
 
       <programlisting>A: Bundle-SymbolicName: A
-   Import-Package: com.acme.foo; <code>«</code>
-        bundle-symbolic-name=B; <code>«</code>
+   Import-Package: com.acme.foo; «
+        bundle-symbolic-name=B; «
         bundle-version="[1.41,2.0.0)"
 
 B: Bundle-SymbolicName: B
@@ -2596,8 +2669,8 @@ B: Bundle-SymbolicName: B
       specify a version and thus defaults to 0.0.0:</para>
 
       <programlisting>A: Bundle-SymbolicName: A
-   Import-Package: com.acme.foo; <code>«</code>
-          bundle-symbolic-name=B; <code>«</code>
+   Import-Package: com.acme.foo; «
+          bundle-symbolic-name=B; «
           bundle-version="[1.41,2.0.0)"
 
 B: Bundle-SymbolicName: B
@@ -2631,7 +2704,7 @@ B: Bundle-SymbolicName: B
 
       <listitem>
         <para>The required execution environments as defined by the
-        Bundle-Required-ExecutionEnvironment header.</para>
+        Bundle-RequiredExecutionEnvironment header.</para>
       </listitem>
 
       <listitem>
@@ -2670,7 +2743,7 @@ B: Bundle-SymbolicName: B
       <listitem>
         <para><emphasis>Native code</emphasis> - The native code dependencies
         specified in the Bundle-NativeCode header must be resolved. See <xref
-        linkend="i3235622"/>.</para>
+        linkend="framework.module-loading.native.code.libraries"/>.</para>
       </listitem>
     </itemizedlist>
 
@@ -2678,36 +2751,6 @@ B: Bundle-SymbolicName: B
     can be described in terms of requirements on wiring relations. The
     resolving process is an iterative process that searches through the
     solution space.</para>
-
-    <para>If a module has both import and export definitions for the
-    <emphasis>same</emphasis> package, then the Framework needs to decide
-    which to choose.</para>
-
-    <para>It must first try to resolve the overlapping import definition. The
-    following outcomes are possible:</para>
-
-    <itemizedlist>
-      <listitem>
-        <para><emphasis>External</emphasis> - If this resolves to an export
-        statement in another bundle, then the overlapping export definition in
-        this bundle is discarded.</para>
-      </listitem>
-
-      <listitem>
-        <para><emphasis>Internal</emphasis> - If it is resolved to an export
-        statement in this module, then the overlapping import definition in
-        this module is discarded.</para>
-      </listitem>
-
-      <listitem>
-        <para><emphasis>Unresolved</emphasis> - There is no matching export
-        definition. In this case the framework is free to discard either the
-        overlapping export definition or overlapping import definition in this
-        bundle. If the export definition is discarded and the import
-        definition is not optional then the bundle will fail to
-        resolve.</para>
-      </listitem>
-    </itemizedlist>
 
     <para>A bundle can be resolved if the following conditions are met:</para>
 
@@ -2731,7 +2774,7 @@ B: Bundle-SymbolicName: B
     <itemizedlist>
       <listitem>
         <para>The importer's version range matches the exporter's version. See
-        <xref linkend="i2515150"/>.</para>
+        <xref linkend="framework.module-semantic.versioning"/>.</para>
       </listitem>
 
       <listitem>
@@ -2773,6 +2816,45 @@ B: Bundle-SymbolicName: B
         with a higher ID.</para>
       </listitem>
     </itemizedlist>
+
+    <section xml:id="framework.module-import.export.same.package">
+      <title>Importing and Exporting the Same Package</title>
+
+      <para>If a bundle has both import and export definitions for the
+      <emphasis>same</emphasis> package, then the Framework needs to decide
+      which to choose.</para>
+
+      <para>It must first try to resolve the overlapping import definition.
+      The following outcomes are possible:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>External</emphasis> - If this resolves to an export
+          statement in another bundle, then the overlapping export definition
+          in this bundle is discarded.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Internal</emphasis> - If it is resolved to an export
+          statement in this bundle, then the overlapping import definition in
+          this bundle is discarded.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Unresolved</emphasis> - There is no matching export
+          definition. In this case the framework is free to discard either the
+          overlapping export definition or overlapping import definition in
+          this bundle. If the export definition is discarded and the import
+          definition is not optional then the bundle will fail to
+          resolve.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The above only applies to the import and export package
+      definitions of a bundle. For namespaces other than
+      <code>osgi.wiring.package</code>, a requirement definition of a bundle
+      may be wired to a capability definition of that same bundle.</para>
+    </section>
   </section>
 
   <section xml:id="i2570775">
@@ -2837,10 +2919,9 @@ B: Bundle-SymbolicName: B
       <para>The Bundle-ClassPath manifest header must conform to the following
       syntax:</para>
 
-      <programlisting>Bundle-ClassPath    ::=  entry ( ',' entry )*entry
-                    ::= target ( ';' target )* 
-                            ( ';' parameter ) *
-target              ::= path | '.'           // See <xref
+      <programlisting>Bundle-ClassPath ::= entry ( ',' entry )*
+entry            ::= target ( ';' target )* ( ';' parameter ) *
+target           ::= path | '.'     // See <xref
           linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>The Framework must ignore any unrecognized parameters.</para>
@@ -2952,12 +3033,12 @@ B:fragment.jar</programlisting>
       wirings) during class loading, and therefore do not affect module
       resolution. Dynamic imports apply only to packages for which no wire has
       been established and no definition could be found in any other way.
-      Dynamic import is used as last resort.</para>
+      Dynamic import is used as a last resort.</para>
 
       <programlisting>DynamicImport-Package ::= dynamic-description 
            ( ',' dynamic-description )*
 dynamic-description ::= wildcard-names ( ';' parameter )*
-wildcard-names      ::= wildcard-name ( ';' wildcard-name)*
+wildcard-names      ::= wildcard-name ( ';' wildcard-name )*
 wildcard-name       ::= package-name 
             | ( package-name '.*' )   // See <xref
           linkend="framework.general.syntax" xrefstyle="template:%n"/>
@@ -2965,7 +3046,7 @@ wildcard-name       ::= package-name
 
       <para>No directives are architected by the Framework for
       DynamicImport-Package. Arbitrary matching attributes may be specified.
-      The following arbitrary matching attributes are architected by the
+      The following matching attributes are architected by the
       Framework:</para>
 
       <itemizedlist>
@@ -3092,11 +3173,11 @@ boot-description    ::= package-name        // See <xref
 
       <orderedlist>
         <listitem>
-          <para>If the class or resource is in a java.* package, the request
-          is delegated to the parent class loader; otherwise, the search
-          continues with the next step. If the request is delegated to the
-          parent class loader and the class or resource is not found, then the
-          search terminates and the request fails.</para>
+          <para>If the class or resource is in a <code>java.*</code> package,
+          the request is delegated to the parent class loader; otherwise, the
+          search continues with the next step. If the request is delegated to
+          the parent class loader and the class or resource is not found, then
+          the search terminates and the request fails.</para>
         </listitem>
 
         <listitem>
@@ -3208,12 +3289,13 @@ boot-description    ::= package-name        // See <xref
       true for a bundle class loader. Framework implementations should attempt
       to load these classes from the boot class path.</para>
 
-      <para>The system bundle (bundle ID zero) is used to export non-java.*
-      packages from the parent class loader. Export definitions from the
-      system bundle are treated like normal exports, meaning that they can
-      have version numbers, and are used to resolve import definitions as part
-      of the normal bundle resolving process. Other bundles may provide
-      alternative implementations of the same packages.</para>
+      <para>The system bundle (bundle ID zero) is used to export
+      non-<code>java.*</code> packages from the parent class loader. Export
+      definitions from the system bundle are treated like normal exports,
+      meaning that they can have version numbers, and are used to resolve
+      import definitions as part of the normal bundle resolving process. Other
+      bundles may provide alternative implementations of the same
+      packages.</para>
 
       <para>The set of export definitions for the parent class loader can
       either be set by this property or calculated by the Framework. The
@@ -3414,7 +3496,7 @@ if ( cl instanceof BundleReference ) {
     </section>
   </section>
 
-  <section xml:id="i3235622">
+  <section xml:id="framework.module-loading.native.code.libraries">
     <title>Loading Native Code Libraries</title>
 
     <para>Dependency on native code is expressed in the Bundle-NativeCode
@@ -3452,10 +3534,10 @@ if ( cl instanceof BundleReference ) {
     syntax:</para>
 
     <programlisting>Bundle-NativeCode   ::= nativecode 
-        ( ',' nativecode )* ( ',' optional) ?
+        ( ',' nativecode )* ( ',' optional ) ?
 nativecode          ::= path ( ';' path )*    // See <xref
         linkend="framework.general.syntax" xrefstyle="template:%n"/>
-                        ( ';' parameter )+
+                        ( ';' parameter )*
 optional            ::= '*'</programlisting>
 
     <para>When locating a path in a bundle the Framework must attempt to
@@ -3469,7 +3551,7 @@ optional            ::= '*'</programlisting>
         <para><code>osname</code> - Name of the operating system. The value of
         this attribute must be the name of the operating system upon which the
         native libraries run. A number of canonical names are defined in <xref
-        linkend="i2068690"/>.</para>
+        linkend="framework.module.os-names"/>.</para>
       </listitem>
 
       <listitem>
@@ -3481,7 +3563,8 @@ optional            ::= '*'</programlisting>
       <listitem>
         <para><code>processor</code> - The processor architecture. The value
         of this attribute must be the name of the processor architecture upon
-        which the native libraries run. See <xref linkend="i2068690"/>.</para>
+        which the native libraries run. A number of canonical names are
+        defined in <xref linkend="framework.module.processor-names"/>.</para>
       </listitem>
 
       <listitem>
@@ -3497,26 +3580,29 @@ optional            ::= '*'</programlisting>
       </listitem>
     </itemizedlist>
 
-    <para>The following is a typical example of a native code declaration in a
-    bundle's manifest:</para>
+    <para>If a selection-filter attribute contains an invalid filter, then the
+    bundle must fail to install with a Bundle Exception of type <xref
+    linkend="org.osgi.framework.BundleException.NATIVECODE_ERROR"
+    xrefstyle="hyperlink"/>. The following is a typical example of a native
+    code declaration in a bundle's manifest:</para>
 
-    <programlisting>Bundle-NativeCode: lib/http.dll ; lib/zlib.dll; <code>«</code>
-        osname = Windows95 ; <code>«</code>
-        osname = Windows98 ; <code>«</code>
-        osname = WindowsNT ; <code>«</code>
-        processor = x86 ; <code>«</code>
-        selection-filter = <code>«</code>
-            "(com.acme.windowing=win32)"; <code>«</code>
-        language = en ; <code>«</code>
-        language = se , <code>«</code>
-    lib/solaris/libhttp.so ; <code>«</code>
-        osname = Solaris ; <code>«</code>
-        osname = SunOS ; <code>«</code>
-        processor = sparc, <code>«</code>
-    lib/linux/libhttp.so ; <code>«</code>
-        osname = Linux ; <code>«</code>
-        processor = mips; <code>«</code>
-        selection-filter = <code>«</code>
+    <programlisting>Bundle-NativeCode: lib/http.dll ; lib/zlib.dll; «
+        osname = Windows95 ; «
+        osname = Windows98 ; «
+        osname = WindowsNT ; «
+        processor = x86 ; «
+        selection-filter = «
+            "(com.acme.windowing=win32)"; «
+        language = en ; «
+        language = se , «
+    lib/solaris/libhttp.so ; «
+        osname = Solaris ; «
+        osname = SunOS ; «
+        processor = sparc, «
+    lib/linux/libhttp.so ; «
+        osname = Linux ; «
+        processor = mips; «
+        selection-filter = «
             "(com.acme.windowing=gtk)"</programlisting>
 
     <para>If multiple native code libraries need to be installed on one
@@ -3530,24 +3616,24 @@ optional            ::= '*'</programlisting>
 
     <programlisting>// The effect of this header has probably 
 // not the intended effect!
-Bundle-NativeCode: lib/http.DLL ; <code>«</code>
-    osname = Windows95 ; <code>«</code>
-    osversion = "3.1" ; <code>«</code>
-    osname = WindowsXP ; <code>«</code>
-    osversion = "5.1" ; <code>«</code>
+Bundle-NativeCode: lib/http.DLL ; «
+    osname = Windows95 ; «
+    osversion = "3.1" ; «
+    osname = WindowsXP ; «
+    osversion = "5.1" ; «
     processor = x86</programlisting>
 
     <para>The above example implies that the native library will load on
     Windows XP 3.1 and later, which was probably not intended. The single
     clause should be split in two clauses:</para>
 
-    <programlisting>Bundle-NativeCode: lib/http.DLL ; <code>«</code>
-        osname = Windows95 ; <code>«</code>
-        osversion = 3.1; <code>«</code>
-        processor = x86, <code>«</code>
-    lib/http.DLL ; <code>«</code>
-        osname = WindowsXP ; <code>«</code>
-        osversion = 5.1; <code>«</code>
+    <programlisting>Bundle-NativeCode: lib/http.DLL ; «
+        osname = Windows95 ; «
+        osversion = 3.1; «
+        processor = x86, «
+    lib/http.DLL ; «
+        osname = WindowsXP ; «
+        osversion = 5.1; «
         processor = x86</programlisting>
 
     <para>Any paths specified in the matching clause must be present in the
@@ -3563,35 +3649,174 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
     <para>The following is a typical example of a native code declaration in a
     bundle's manifest with an optional clause:</para>
 
-    <programlisting>Bundle-NativeCode: lib/win32/winxp/optimized.dll; <code>«</code>
-        lib/win32/native.dll ; <code>«</code>
-        osname = WindowsXP ; <code>«</code>
-        processor = x86 , <code>«</code>
-    lib/win32/native.dll ; <code>«</code>
-        osname = Windows95 ; <code>«</code>
-        osname = Windows98 ; <code>«</code>
-        osname = WindowsNT ; <code>«</code>
-        osname = Windows2000; <code>«</code>
-        processor = x86 , <code>«</code>
+    <programlisting>Bundle-NativeCode: lib/win32/winxp/optimized.dll; «
+        lib/win32/native.dll ; «
+        osname = WindowsXP ; «
+        processor = x86 , «
+    lib/win32/native.dll ; «
+        osname = Windows95 ; «
+        osname = Windows98 ; «
+        osname = WindowsNT ; «
+        osname = Windows2000; «
+        processor = x86 , «
         *</programlisting>
+
+    <para>Frameworks must convert a Bundle-NativeCode header to a requirement
+    in the <code>osgi.native</code> namespace when used in the Wiring API, see
+    <xref linkend="framework.wiring"/>. Each native code clause specified in a
+    Bundle-NativeCode header is converted into a filter component for the
+    <code>osgi.native</code> requirement filter directive using the following
+    architected matching attributes:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><code>osgi.native.osname</code> - Uses the approximate equals
+        (~=) filter type to evaluate the value specified by the
+        <code>osname</code> Bundle-NativeCode attribute.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>osgi.native.osversion</code> - Create a
+        <code>VersionRange</code> using the value specified by the osversion
+        Bundle-NativeCode attribute and then create a filter string out of the
+        <code>VersionRange</code>.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>osgi.native.processor</code> - Uses the approximate equals
+        (~=) filter type to evaluate the value specified by the
+        <code>processor</code> Bundle-NativeCode attribute.</para>
+      </listitem>
+
+      <listitem>
+        <para><code>osgi.native.language</code> - Uses the approximate equals
+        (~=) filter type to evaluate the value specified by the
+        <code>language</code> Bundle-NativeCode attribute.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>In cases where the same Bundle-NativeCode attribute is specified
+    multiple times within the same clause then the filter components for each
+    value for that attribute are ORed together. For example, if osname
+    attribute is specified as both "Windows95" and "Windows7" then the
+    resulting filter will contain:</para>
+
+    <programlisting>(|
+        (osgi.native.osname~=Windows95)
+        (osgi.native.osname~=Windows7)
+)</programlisting>
+
+    <para>If the <code>selection-filter</code> Bundle-NativeCode attribute is
+    specified then the specified filter is included as a component of the
+    native code clauses AND filter type. Consider the following
+    Bundle-NativeCode header which contains a single clause:</para>
+
+    <programlisting>Bundle-NativeCode: «
+      lib/http.dll; lib/zlib.dll; «
+      osname=Windows95; «
+      osname=Windows98; «
+      osname=WindowsNT; «
+      processor=x86; «
+      selection-filter="(com.acme.windowing=win32)";  «
+      language=en; «
+      language=se</programlisting>
+
+    <para>This clause would get translated into the following AND filter
+    type:</para>
+
+    <programlisting>Require-Capability: «
+      osgi.native; «
+      filter:=" «
+        (&amp; «
+          (| «
+            (osgi.native.osname~=Windows95) «
+            (osgi.native.osname~=Windows98) «
+            (osgi.native.osname~=WindowsNT) «
+          ) «
+          (osgi.native.processor~=x86) «
+          (| «
+            (osgi.native.language~=en) «
+            (osgi.native.language~=se) «
+          ) «
+          (com.acme.windowing=win32) «
+        )"</programlisting>
+
+    <para>The Bundle-NativeCode header may specify multiple clauses, each
+    having their own list of native code paths and set of matching attributes.
+    Instead of using a separate <code>osgi.native</code> requirement for each
+    Bundle-NativeCode clause, the complete Bundle-NativeCode header is
+    specified as a single <code>osgi.native</code> requirement. This is done
+    by using an OR filter type using all of the individual Bundle-NativeCode
+    clause filter components (as specified above) as components of a single
+    filter directive. Consider the following Bundle-NativeCode header which
+    contains three clauses:</para>
+
+    <programlisting>Bundle-NativeCode: «
+      lib/http.dll; lib/zlib.dll; «
+        osname=Windows95; «
+        osname=Windows98; «
+        osname=WindowsNT; «
+        processor=x86; «
+        selection-filter = "(com.acme.windowing=win32)"; «
+        language=en; «
+        language=se, «
+      lib/solaris/libhttp.so; «
+        osname=Solaris; «
+        osname=SunOS; «
+        processor=sparc, «
+      lib/linux/libhttp.so; «
+        osname=Linux; «
+        processor=mips; «
+        selection-filter="(com.acme.windowing=gtk)"</programlisting>
+
+    <para>This Bundle-NativeCode header would get translated into the
+    following <code>osgi.native</code> filter directive:</para>
+
+    <programlisting>(|
+  (&amp;
+    (|
+      (osgi.native.osname~=Windows95)
+      (osgi.native.osname~=Windows98)
+      (osgi.native.osname~=WindowsNT)
+    )
+    (osgi.native.processor~=x86)
+    (|
+      (osgi.native.language~=en)
+      (osgi.native.language~=se)
+    )
+    (com.acme.windowing=win32)
+  )
+  (&amp;
+    (|
+      (osgi.native.osname~=Solaris)
+      (osgi.native.osname~=SunOs)
+    )
+    (osgi.native.processor~=sparc)
+  )
+  (&amp;
+    (osgi.native.osname~=Linux)
+    (osgi.native.processor~=mips)
+    (com.acme.windowing=gtk)
+  )
+)</programlisting>
+
+    <para>If the optional '*' is specified at the end of the Bundle-NativeCode
+    manifest header, then the native code for the bundle is considered to be
+    optional. When the Framework converts a Bundle-NativeCode header into an
+    <code>osgi.native</code> requirement which is designated as optional then
+    the requirement resolution directive must be set to
+    <code>optional</code></para>
 
     <section xml:id="framework.module.nativecodealgorithm">
       <title>Native Code Algorithm</title>
 
       <para>In the description of this algorithm, [x] represents the value of
-      the Framework property x and ~= represents the match operation. The
-      match operation is a case insensitive comparison.</para>
-
-      <para>Certain properties can be aliased. In those cases, the manifest
-      header should contain the generic name for that property but the
-      Framework should attempt to include aliases when it matches. (See <xref
-      linkend="i2068690"/>). If a property is not an alias, or has the wrong
-      value, the Operator should set the appropriate system property to the
-      generic name or to a valid value because Java System properties with
-      this name override the Framework construction of these properties. For
-      example, if the operating system returns version <code>2.4.2-kwt</code>,
-      the Operator should set the system property
-      org.osgi.framework.os.version to 2.4.2.</para>
+      the launching property x (see <xref
+      linkend="framework.lifecycle.launchingproperties"/>) and ~= represents
+      the match operation. The match operation is a case insensitive
+      comparison. Certain properties can be aliased. In those cases, the
+      manifest header should contain the generic name for that property but
+      the Framework should attempt to include aliases when it matches.</para>
 
       <para>The Framework must select the native code clause using the
       following algorithm:</para>
@@ -3603,12 +3828,13 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
 
           <itemizedlist>
             <listitem>
-              <para><code>osname ~= [org.osgi.framework.os.name]</code></para>
+              <para><code>osname ~= [org.osgi.framework.os.name]</code> or
+              <code>osname</code> is not specified</para>
             </listitem>
 
             <listitem>
-              <para><code>processor ~=
-              [org.osgi.framework.processor]</code></para>
+              <para><code>processor ~= [org.osgi.framework.processor]</code>
+              or <code>processor</code> is not specified</para>
             </listitem>
 
             <listitem>
@@ -3624,8 +3850,9 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
 
             <listitem>
               <para><code>selection-filter</code> evaluates to
-              <code>true</code> when using the values of the system properties
-              or <code>selection-filter</code> is not specified</para>
+              <code>true</code> when using the values of the launching
+              properties or <code>selection-filter</code> is not
+              specified</para>
             </listitem>
           </itemizedlist>
         </listitem>
@@ -3633,7 +3860,7 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
         <listitem>
           <para>If no native clauses were selected in step <xref
           linkend="framework.module-nativecodealg1"/>, this algorithm is
-          terminated and a BundleException is thrown if the optional clause is
+          terminated. A Bundle Exception is thrown if the optional clause is
           not present.</para>
         </listitem>
 
@@ -3668,21 +3895,17 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
       </orderedlist>
 
       <para>If a native code library in a selected native code clause cannot
-      be found within the bundle then the bundle must fail to resolve. This is
-      <code>true</code> even if the optional clause is specified. If the
-      selected clause contains multiple libraries with the same base file name
-      then only the lexically left most library with that base file name will
-      be used. For example, if the selected clause contains the libraries
-      <code>lib1/http.dll; lib2/http.dll; lib3/foo.dll; a/b/c/http.dll</code>
-      then only <code>http.dll</code> in <code>lib1</code> and
-      <code>foo.dll</code> will be used.</para>
+      be found within the bundle then the bundle is still allowed to resolve.
+      A missing native code library will result in an error being thrown at
+      runtime when the bundle attempts to load the native code (for example,
+      by invoking the method <code>System.loadLibrary</code>).</para>
 
-      <para>If a selection filter is evaluated and its syntax is invalid, then
-      the bundle must fail to resolve. If a selection filter is not evaluated
-      (it may be in a native code clause where the <code>osname</code> or
-      <code>processor</code> does not match), then the invalid filter must not
-      cause the bundle to fail to resolve. This is also true even if the
-      optional clause is specified.</para>
+      <para>If the selected clause contains multiple libraries with the same
+      base file name then only the lexically left most library with that base
+      file name will be used. For example, if the selected clause contains the
+      libraries <code>lib1/http.dll; lib2/http.dll; lib3/foo.dll;
+      a/b/c/http.dll</code> then only <code>http.dll</code> in
+      <code>lib1</code> and <code>foo.dll</code> will be used.</para>
 
       <para>Designing a bundle native code header can become quickly
       complicated when different operating systems, libraries, and languages
@@ -3775,22 +3998,22 @@ Bundle-NativeCode: lib/http.DLL ; <code>«</code>
       table is then mapped to the Bundle-NativeCode header in the following
       code example.</para>
 
-      <programlisting>Bundle-NativeCode:  nativecodewin32.dll; v
-        delta.dll; <code>«</code>
-        osname=win32; <code>«</code>
-        processor=x86; <code>«</code>
-        language=en, <code>«</code>
-    nativecodegtk.so; <code>«</code>
-        osname=linux; <code>«</code>
-        processor=x86; <code>«</code>
-        language=en; <code>«</code>
-        selection-filter= <code>«</code>
-            "(com.acme.windowing=gtk)", <code>«</code>
-    nativecodeqt.so; <code>«</code>
-        osname=linux; <code>«</code>
-        processor=x86; <code>«</code>
-        language=en; <code>«</code>
-        selection-filter = <code>«</code> 
+      <programlisting>Bundle-NativeCode:  nativecodewin32.dll; «
+        delta.dll; «
+        osname=win32; «
+        processor=x86; «
+        language=en, «
+    nativecodegtk.so; «
+        osname=linux; «
+        processor=x86; «
+        language=en; «
+        selection-filter= «
+            "(com.acme.windowing=gtk)", «
+    nativecodeqt.so; «
+        osname=linux; «
+        processor=x86; «
+        language=en; «
+        selection-filter = «
             "(com.acme.windowing=qt)"</programlisting>
     </section>
 
@@ -3973,7 +4196,7 @@ acme\ special\ header=user-defined Acme Data</programlisting>
     <para>If the Bundle-ManifestVersion is not specified, then the bundle
     manifest version defaults to 1, and certain Release 4 syntax, such as a
     new manifest header, is ignored rather than causing an error. Release 3
-    bundles must be treated according to the R3 specification.</para>
+    bundles must be treated according to the Release 3 specification.</para>
 
     <para>The following (non-exhaustive) list of errors causes a bundle to
     fail to install:</para>
@@ -4081,7 +4304,7 @@ bundle-description  ::= symbolic-name       // See <xref
       <itemizedlist>
         <listitem>
           <para><code>visibility</code> - If the value is <code>private</code>
-          (Default), then all visible packages from the required bundles are
+          (default), then all visible packages from the required bundles are
           not re-exported. If the value is <code>reexport</code> then bundles
           that require this bundle will transitively have access to these
           required bundle's exported packages. That is, if bundle
@@ -4178,10 +4401,10 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
       bundles and a number of language resources (also bundles) that are
       optional.</para>
 
-      <programlisting>Require-Bundle: com.acme.facade;visibility:=reexport, <code>«</code>
- com.acme.bar.one;visibility:=reexport, <code>«</code>
- com.acme.bar.two;visibility:=reexport, <code>«</code>
- com.acme.bar._nl;visibility:=reexport;resolution:=optional, <code>«</code>
+      <programlisting>Require-Bundle: com.acme.facade;visibility:=reexport, «
+ com.acme.bar.one;visibility:=reexport, «
+ com.acme.bar.two;visibility:=reexport, «
+ com.acme.bar._nl;visibility:=reexport;resolution:=optional, «
  com.acme.bar._en;visibility:=reexport;resolution:=optional</programlisting>
 
       <para>A bundle may both import packages (via Import-Package) and require
@@ -4409,7 +4632,7 @@ B:  Export-Package: p;partial=true;mandatory:=partial</programlisting>
 
       <programlisting>Fragment-Host       ::= bundle-description
 bundle-description  ::= symbolic-name 
-                            (';' parameter ) * // See <xref
+                            ( ';' parameter )* // See <xref
           linkend="framework.general.syntax" xrefstyle="template:%n"/></programlisting>
 
       <para>The following directives are architected by the Framework for
@@ -4426,7 +4649,7 @@ bundle-description  ::= symbolic-name
           <itemizedlist>
             <listitem>
               <para><code>framework</code> - The fragment bundle is a
-              Framework extension bundle.</para>
+              Framework extension bundle (default).</para>
             </listitem>
 
             <listitem>
@@ -4449,9 +4672,10 @@ bundle-description  ::= symbolic-name
       <itemizedlist>
         <listitem>
           <para><code>bundle-version</code> - The version range to select the
-          the host bundle. If a range is used, then the fragment can attach to
-          multiple hosts. See <xref linkend="i2515150"/>. The default value is
-          <code>[0.0.0,</code><phrase
+          host bundle. If a range is used, then the fragment can attach to
+          multiple hosts. See <xref
+          linkend="framework.module-semantic.versioning"/>. The default value
+          is <code>[0.0.0,</code><phrase
           role="symbol">∞</phrase><code>)</code>.</para>
         </listitem>
       </itemizedlist>
@@ -4615,8 +4839,9 @@ bundle-description  ::= symbolic-name
         </listitem>
       </itemizedlist>
 
-      <para>A Fragment bundle can become unresolved by calling the
-      <code>refreshPackages</code> method.</para>
+      <para>A Fragment bundle can become unresolved by calling the <xref
+      linkend="org.osgi.framework.wiring.FrameworkWiring.refreshBundles-Collection-FrameworkListener...-"
+      xrefstyle="hyperlink"/> method.</para>
     </section>
 
     <section>
@@ -4713,7 +4938,7 @@ bundle-description  ::= symbolic-name
     <section>
       <title>Illegal Manifest Headers for Extension Bundles</title>
 
-      <para>An extension bundle must throw a BundleException if it is
+      <para>An extension bundle must throw a Bundle Exception if it is
       installed or updated and it specifies any of the following
       headers.</para>
 
@@ -4765,9 +4990,73 @@ bundle-description  ::= symbolic-name
       <para>How a framework configures itself or the boot class path to append
       the extension bundle's JAR is implementation specific. In some execution
       environments, it may be impossible to support extension bundles. In such
-      environments, the Framework must throw a BundleException when such an
+      environments, the Framework must throw a Bundle Exception when such an
       extension bundle is installed. The resulting Bundle Exception must have
       a cause of type <code>UnsupportedOperationException</code>.</para>
+    </section>
+
+    <section xml:id="framework.module.extensionActivator">
+      <title>Framework Extension Activator</title>
+
+      <para>A framework extension may hook into the Framework initialization
+      and shutdown process by specifying an Extension Bundle Activator. The
+      <xref linkend="org.osgi.framework.BundleActivator"
+      xrefstyle="hyperlink"/> interface defines methods that the Framework
+      invokes when the Framework is initialized and shutdown.</para>
+
+      <para>To inform the OSGi environment of a fully qualified class name
+      serving as its Extension Bundle Activator, a framework extension
+      developer must declare an <code>ExtensionBundle-Activator</code>
+      manifest header in the framework extension bundle's manifest file. The
+      following is an example of an ExtensionBundle-Activator:</para>
+
+      <programlisting>ExtensionBundle-Activator: com.acme.Activator</programlisting>
+
+      <para>The class acting as an Extension Bundle Activator must implement
+      the <code>BundleActivator</code> interface, be declared public, and have
+      a public default constructor so an instance of it may be created with
+      <code>Class.newInstance</code>.</para>
+
+      <para>Supplying an Extension Bundle Activator is optional and only valid
+      for Extension Bundles of type <code>framework</code>. For normal Bundles
+      and Fragments, the <code>ExtensionBundle-Activator</code> must be
+      ignored.</para>
+
+      <section>
+        <title>Framework Initialization and Shutdown</title>
+
+        <para>An Extension Bundle Activator allows a framework extension to
+        hook into the Framework initialization and shutdown process. <xref
+        linkend="framework.lifecycle.initializing"/> describes how the
+        <code>start</code> method for Extension Bundle Activators is called
+        during Framework initialization. <xref
+        linkend="framework.lifecycle.stopping"/> describes how the
+        <code>stop</code> method for Extension Bundle Activators is called
+        during Framework shutdown.</para>
+      </section>
+
+      <section>
+        <title>Installing</title>
+
+        <para>When a framework extension is installed, a Framework may allow
+        the extension to become resolved dynamically, without a Framework
+        restart. If a framework extension is allowed to install and resolve
+        dynamically after Framework initialization, then the Extension Bundle
+        Activator start method must be called as soon as the extension bundle
+        is resolved. This must happen before the Bundle Event of type
+        <code>RESOLVED</code> is fired for the extension bundle.</para>
+      </section>
+
+      <section>
+        <title>Update and Uninstall</title>
+
+        <para>Unlike normal bundles, updating or uninstalling an extension
+        bundle does not take effect until the Framework is shutdown and
+        restarted. The original content of the extension bundle must remain
+        attached to the system bundle and the Extension Bundle Activator must
+        not have its stop method called until the Framework is
+        shutdown.</para>
+      </section>
     </section>
 
     <section>
@@ -4829,12 +5118,12 @@ bundle-description  ::= symbolic-name
       <para>AllPermission must be granted to extension bundles because they
       will be loaded under the Protection Domain of either the boot class path
       or the Framework implementation. Both of these Protection Domains have
-      All Permissions granted to them. It must therefore not be allowed for an
-      extension bundle to be installed unless it already has been granted All
-      Permissions.</para>
+      All Permissions granted to them. Attempting to install an extension
+      bundle that has not already been granted All Permissions must result in
+      a Bundle Exception.</para>
 
       <para>The installer of an extension bundle must have
-      <code>AdminPermission[ &lt;extension
+      <code>AdminPermission[&lt;extension
       bundle&gt;,EXTENSIONLIFECYCLE]</code> to install an extension
       bundle.</para>
     </section>
@@ -4852,7 +5141,7 @@ bundle-description  ::= symbolic-name
       <emphasis>target bundle</emphasis>. A wild card (<code>".*"
       \u002E,\u002A</code>) is permitted at the end of the name.</para>
 
-      <para>For example, if fragment bundle A attaches to its host bundle
+      <para>For example, for fragment bundle A to attach to its host bundle
       <code>B</code> then fragment bundle A requires
       <code>BundlePermission("B", "fragment")</code> so that A is permitted to
       target host bundle <code>B</code>. The direction of the actions is
@@ -5158,36 +5447,6 @@ URL(String protocol, String host, String file)</programlisting>
   </section>
 
   <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Made changes to separate the generic Requirement/Capability
-        model from the Bundle Wiring model.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added support for static <code>valueOf</code> methods in the
-        Filter</para>
-      </listitem>
-
-      <listitem>
-        <para>Extended the description about the
-        Bundle-RequiredExecutionEnvironment and the osgi.ee Namespace.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added a <code>VersionRange</code> class</para>
-      </listitem>
-
-      <listitem>
-        <para>Added additional header to Illegal Manifest headers for
-        Extension bundles</para>
-      </listitem>
-    </itemizedlist>
-  </section>
-
-  <section>
     <title>References</title>
 
     <bibliolist>
@@ -5244,8 +5503,12 @@ URL(String protocol, String host, String file)</programlisting>
       <bibliomixed xml:id="i3211606"><title>OSGi IANA Mime
       Type</title>http://www.iana.org/assignments/media-types/application/vnd.osgi.bundle</bibliomixed>
 
-      <bibliomixed xml:id="i3215677"><title>OSGi Header Namespace
+      <bibliomixed xml:id="i3215677"><title>OSGi Header
       Registry</title>http://www.osgi.org/Specifications/ReferenceHeaders</bibliomixed>
+
+      <bibliomixed xml:id="framework.module.namespace-registry"><title>OSGi
+      Namespace
+      Registry</title>http://www.osgi.org/Specifications/ReferenceNamespaces</bibliomixed>
 
       <bibliomixed xml:id="i3219167"><title>Portable Network Graphics (PNG)
       Specification (Second
@@ -5269,5 +5532,39 @@ URL(String protocol, String host, String file)</programlisting>
       <bibliomixed xml:id="i3246284"><title>Google Web
       Toolkit</title>http://code.google.com/webtoolkit/</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Clarified <xref
+        linkend="framework.module-import.export.same.package"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added support for the new <code>osgi.native</code> namespace in
+        <xref
+        linkend="framework.module-loading.native.code.libraries"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added support for Extension Bundle Activators in <xref
+        linkend="framework.module.extensionActivator"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref
+        linkend="framework.module-semantic.versioning.type.roles"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updated the <code>Bundle-NativeCode</code> grammar in <xref
+        linkend="framework.module-loading.native.code.libraries"/> to not
+        require a <code>parameter</code> on the <code>nativecode</code>
+        clause.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>

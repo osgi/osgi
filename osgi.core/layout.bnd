@@ -1,4 +1,5 @@
 core.specs = \
+ org.osgi.dto, \
  org.osgi.resource, \
  org.osgi.framework, \
  org.osgi.service.condpermadmin, \

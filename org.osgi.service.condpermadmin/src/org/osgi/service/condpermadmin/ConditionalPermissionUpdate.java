@@ -17,6 +17,7 @@
 package org.osgi.service.condpermadmin;
 
 import java.util.List;
+import org.osgi.annotation.versioning.ProviderType;
 
 /**
  * Update the Conditional Permission Table. There may be many update objects in
@@ -25,10 +26,10 @@ import java.util.List;
  * commit will fail and this object should be discarded.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  * @since 1.1
  */
+@ProviderType
 public interface ConditionalPermissionUpdate {
 	/**
 	 * This method returns the list of {@link ConditionalPermissionInfo}s for
@@ -37,9 +38,8 @@ public interface ConditionalPermissionUpdate {
 	 * method will be replace the Conditional Permission Table if commit is
 	 * called and is successful.
 	 * <p>
-	 * The {@link ConditionalPermissionInfo#delete() delete} method of the
-	 * ConditionalPermissionInfos in the list must throw
-	 * UnsupportedOperationException.
+	 * The {@code delete()} method of the {@link ConditionalPermissionInfo}s in
+	 * the list must throw UnsupportedOperationException.
 	 * <p>
 	 * The list returned by this method is ordered and the most significant
 	 * table entry is the first entry in the list.

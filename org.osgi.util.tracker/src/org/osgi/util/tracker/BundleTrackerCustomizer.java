@@ -16,6 +16,7 @@
 
 package org.osgi.util.tracker;
 
+import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleEvent;
 
@@ -45,6 +46,7 @@ import org.osgi.framework.BundleEvent;
  * @author $Id$
  * @since 1.4
  */
+@ConsumerType
 public interface BundleTrackerCustomizer<T> {
 	/**
 	 * A bundle is being added to the {@code BundleTracker}.

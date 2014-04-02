@@ -151,9 +151,9 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Configuration information</emphasis> - <emphasis>
-          </emphasis>The information needed by a bundle before it can provide
-          its intended functionality.</para>
+          <para><emphasis>Configuration information</emphasis> - The
+          information needed by a bundle before it can provide its intended
+          functionality.</para>
         </listitem>
 
         <listitem>
@@ -433,8 +433,8 @@
 
                 <entry><code>USB.0123-0002-9909873</code></entry>
 
-                <entry><para>idVendor (hex 4)</para><para>idProduct (hex
-                4)</para><para>iSerialNumber (decimal)</para></entry>
+                <entry><para>idVendor (hex 4)</para> <para>idProduct (hex
+                4)</para> <para>iSerialNumber (decimal)</para></entry>
 
                 <entry><para>Universal Serial Bus. Use the standard device
                 descriptor.</para></entry>
@@ -567,10 +567,10 @@
     <section>
       <title>Extenders and Targeted PIDs</title>
 
-      <para>Extenders like Blueprint and Declarative Services use
-      Configurations but bypass the general Managed Service or Managed Service
-      Factory method. It is the responsibility of these extenders to access
-      the Configurations using the targeted PIDs.</para>
+      <para>Extenders like Declarative Services use Configurations but bypass
+      the general Managed Service or Managed Service Factory method. It is the
+      responsibility of these extenders to access the Configurations using the
+      targeted PIDs.</para>
 
       <para>Since getting a Configuration tends to create that Configuration
       it is necessary for these extenders to use the <xref
@@ -814,6 +814,11 @@ private       ::= '.' symbolic-name</programlisting>
       mixed types. Using mixed types or nesting makes it impossible to use the
       meta typing specification. See <xref
       linkend="service.metatype"/>.</para>
+
+      <para>Property values that are collections may have an ordering that
+      must be preserved when persisting the configuration so that later access
+      to the property value will see the preserved ordering of the
+      collection.</para>
     </section>
 
     <section xml:id="service.cm.propertypropagation">
@@ -932,6 +937,13 @@ private       ::= '.' symbolic-name</programlisting>
         number.</para>
       </listitem>
     </itemizedlist>
+
+    <para>A Managed Service may be registered with more than one PID and
+    therefore be associated with multiple Configuration objects, one for each
+    PID. Using multiple PIDs for a Managed Service is not recommended. For
+    example, when a configuration is deleted for a Managed Service there is no
+    way to identify which PID is associated with the deleted
+    configuration.</para>
 
     <section>
       <title>Singletons</title>
@@ -2428,4 +2440,15 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.cm.xml"/>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Clarified that collection property values may have an ordering
+        that must be preserved.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
 </chapter>

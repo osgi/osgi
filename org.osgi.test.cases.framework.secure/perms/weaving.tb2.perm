@@ -1,0 +1,25 @@
+# Lines beginning with '#' or '//' are comments
+#
+# This file contains the permissions to be granted. The permissions are listed 
+# one per line in PermissionInfo encoded format. See 
+# org.osgi.service.permissionadmin.PermissionInfo.
+
+(java.util.PropertyPermission "org.osgi.test.cases.framework.secure.weaving.expectSecurityException.all" "read")
+(java.util.PropertyPermission "org.osgi.test.cases.framework.secure.weaving.expectSecurityException.addDynamicImport" "read")
+(java.util.PropertyPermission "org.osgi.test.cases.framework.secure.weaving.rethrowSecurityException" "read")
+(java.util.PropertyPermission "org.osgi.test.cases.framework.secure.weaving.invalidSetBytes" "read")
+
+(org.osgi.framework.AdminPermission "(name=org.osgi.test.cases.framework.secure.weaving.tb.woven)" "resource")
+
+(org.osgi.framework.PackagePermission "junit.framework" "import")
+(org.osgi.framework.PackagePermission "org.osgi.framework" "import")
+(org.osgi.framework.PackagePermission "org.osgi.framework.hooks.weaving" "import")
+(org.osgi.framework.PackagePermission "org.osgi.framework.wiring" "import")
+(org.osgi.framework.PackagePermission "org.osgi.test.cases.framework.secure.junit.hooks.weaving" "import")
+(org.osgi.framework.PackagePermission "org.osgi.test.cases.framework.secure.weaving.tb.woven" "import")
+(org.osgi.framework.PackagePermission "org.osgi.test.support" "import")
+
+(org.osgi.framework.ServicePermission "org.osgi.framework.hooks.weaving.WeavingHook" "register")
+
+# Permissions relevant to the test.
+(org.osgi.framework.PackagePermission "org.osgi.resource" "import")

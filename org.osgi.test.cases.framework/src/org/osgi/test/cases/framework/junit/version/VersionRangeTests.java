@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,7 @@ package org.osgi.test.cases.framework.junit.version;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import junit.framework.TestCase;
-
 import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.Version;
@@ -46,6 +44,13 @@ public class VersionRangeTests extends TestCase {
 		new VersionRange(" ( 1.2.3 , 2.0.0 ] ");
 		new VersionRange("1.2.3");
 		new VersionRange(" 1.2.3 ");
+		VersionRange.valueOf("[1,2)");
+		VersionRange.valueOf("[1.2.3,2.0.0)");
+		VersionRange.valueOf("(1.2.3,2.0.0]");
+		VersionRange.valueOf(" [ 1.2.3 , 2.0.0 ) ");
+		VersionRange.valueOf(" ( 1.2.3 , 2.0.0 ] ");
+		VersionRange.valueOf("1.2.3");
+		VersionRange.valueOf(" 1.2.3 ");
 	}
 
 	public void testConstructorsBadArguments() {
@@ -78,159 +83,47 @@ public class VersionRangeTests extends TestCase {
 		try {
 			new VersionRange(null);
 			fail("VersionRange created with illegal arguments");
-		}
-		catch (RuntimeException ex) {
+		} catch (RuntimeException ex) {
 			// This is an expected exception and may be ignored
 		}
+		try {
+			VersionRange.valueOf(null);
+			fail("VersionRange created with illegal arguments");
+		} catch (RuntimeException ex) {
+			// This is an expected exception and may be ignored
+		}
+		testConstructorsBadArguments("");
+		testConstructorsBadArguments("x");
+		testConstructorsBadArguments(" 1.2.3 x");
+		testConstructorsBadArguments(" 1.2.3 [");
+		testConstructorsBadArguments(" 1.2.3 ( ");
+		testConstructorsBadArguments(" x 1.2.3 ");
+		testConstructorsBadArguments("[");
+		testConstructorsBadArguments("(1");
+		testConstructorsBadArguments("[1,");
+		testConstructorsBadArguments("[1,2");
+		testConstructorsBadArguments("[1,2x");
+		testConstructorsBadArguments("	[1,2)	x");
+		testConstructorsBadArguments("x	[1,2)");
+		testConstructorsBadArguments("	[1,2)	)");
+		testConstructorsBadArguments("	[1,,2)	");
+		testConstructorsBadArguments("	[1,2))	");
+		testConstructorsBadArguments("[[1,2)");
+		testConstructorsBadArguments("	[,2)	");
+		testConstructorsBadArguments("[2)");
+	}
 
+	private void testConstructorsBadArguments(String arg) {
 		try {
-			new VersionRange("");
+			new VersionRange(arg);
 			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("x");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange(" 1.2.3 x");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange(" 1.2.3 [");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange(" 1.2.3 ( ");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange(" x 1.2.3 ");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("[");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("(1");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("[1,");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("[1,2");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("[1,2x");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("	[1,2)	x");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("x	[1,2)");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("	[1,2)	)");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("	[1,,2)	");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("	[1,2))	");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("[[1,2)");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-
-		try {
-			new VersionRange("	[,2)	");
-			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
+		} catch (IllegalArgumentException ex) {
 			// This is an expected exception and may be ignored
 		}
 		try {
-			new VersionRange("[2)");
+			VersionRange.valueOf(arg);
 			fail("VersionRange created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
+		} catch (IllegalArgumentException ex) {
 			// This is an expected exception and may be ignored
 		}
 
@@ -817,6 +710,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange('[', version11, version22, ')');
 		assertTrue("not included", includesByFilter(range, version11));
@@ -825,6 +719,7 @@ public class VersionRangeTests extends TestCase {
 		assertFalse("included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange('(', version11, version22, ']');
 		assertFalse("included", includesByFilter(range, version11));
@@ -833,6 +728,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange('(', version11, version22, ')');
 		assertFalse("included", includesByFilter(range, version11));
@@ -841,6 +737,7 @@ public class VersionRangeTests extends TestCase {
 		assertFalse("included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange("[2.3.4,5.6.7)");
 		assertTrue("not included", includesByFilter(range, version11));
@@ -849,6 +746,7 @@ public class VersionRangeTests extends TestCase {
 		assertFalse("included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange("[2.3.4,5.6.7]");
 		assertTrue("not included", includesByFilter(range, version11));
@@ -857,6 +755,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange("(2.3.4,5.6.7]");
 		assertTrue("not included", includesByFilter(range, version11));
@@ -865,6 +764,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange("(2.3.4,5.6.7)");
 		assertTrue("not included", includesByFilter(range, version11));
@@ -873,6 +773,7 @@ public class VersionRangeTests extends TestCase {
 		assertFalse("included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange("[2.3.4.-,5.6.7.-)");
 		assertTrue("not included", includesByFilter(range, version11));
@@ -881,6 +782,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange("(2.3.4.-,5.6.7.-]");
 		assertFalse("included", includesByFilter(range, version11));
@@ -889,6 +791,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertFalse("included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange('[', version11, null, ')');
 		assertTrue("not included", includesByFilter(range, version11));
@@ -897,6 +800,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertTrue("not included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange('(', version12, null, ')');
 		assertTrue("not included", includesByFilter(range, version11));
@@ -905,6 +809,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertTrue("not included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange('[', version12, null, ')');
 		assertTrue("not included", includesByFilter(range, version11));
@@ -913,6 +818,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertTrue("not included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange("2.3.4");
 		assertTrue("not included", includesByFilter(range, version11));
@@ -921,6 +827,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertTrue("not included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange("2.3.4.-");
 		assertTrue("not included", includesByFilter(range, version11));
@@ -929,6 +836,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version22));
 		assertTrue("not included", includesByFilter(range, version3));
 		assertTrue("not included", includesByFilter(range, version4));
+		assertFalse("included", includesByFilter(range, null));
 
 		range = new VersionRange('[', Version.emptyVersion, null, ')');
 		assertTrue("not included", includesByFilter(range, version11));
@@ -939,6 +847,7 @@ public class VersionRangeTests extends TestCase {
 		assertTrue("not included", includesByFilter(range, version4));
 		assertTrue("not included",
 				includesByFilter(range, Version.emptyVersion));
+		assertFalse("included", includesByFilter(range, null));
 
 	}
 
@@ -949,7 +858,9 @@ public class VersionRangeTests extends TestCase {
 		// System.out.println(range + " => " + filterString);
 		Filter filter = FrameworkUtil.createFilter(filterString);
 		Map<String, Version> map = new HashMap<String, Version>();
-		map.put(attributeName, version);
+		if (version != null) {
+			map.put(attributeName, version);
+		}
 		return filter.matches(map);
 	}
 

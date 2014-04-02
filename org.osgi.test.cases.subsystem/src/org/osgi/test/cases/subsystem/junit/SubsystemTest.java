@@ -358,24 +358,8 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		removeListeners();
 	}
 
-	protected void stopImplementation() {
-		Bundle[] implementation = initialRootConstituents.toArray(new Bundle[initialRootConstituents.size()]);
-		for (int i = implementation.length - 1; i >= 0; i--) {
-			Bundle b = implementation[i];
-			if (b.getBundleId() == 0 || b.equals(getContext().getBundle())) {
-				// skip the system bundle and the test bundle
-				continue;
-			}
-			try {
-				b.stop();
-			} catch (BundleException e) {
-				// Just ignore
-			}
-		}
-	}
-
 	protected void startImplementation() {
-		Bundle[] implementation = initialRootConstituents.toArray(new Bundle[initialRootConstituents.size()]);
+		Bundle[] implementation = getSubsystemsImplementationBundles();
 		for (int i = 0; i < implementation.length; i++) {
 			Bundle b = implementation[i];
 			if (b.getBundleId() == 0 || b.equals(getContext().getBundle())) {
@@ -391,6 +375,38 @@ public abstract class SubsystemTest extends OSGiTestCase {
 				fail("Failed to restart implementation.", e);
 			}
 		}
+	}
+	
+	protected void stopImplementation() {
+		Bundle[] implementation = getSubsystemsImplementationBundles();
+		for (int i = implementation.length - 1; i >= 0; i--) {
+			Bundle b = implementation[i];
+			if (b.getBundleId() == 0 || b.equals(getContext().getBundle())) {
+				// skip the system bundle and the test bundle
+				continue;
+			}
+			try {
+				b.stop();
+			} catch (BundleException e) {
+				// Just ignore
+			}
+		}
+	}
+	
+	private Bundle[] getSubsystemsImplementationBundles() {
+		String property = getContext().getProperty("org.osgi.test.cases.subsystem.impl.bundles");
+		if (property == null || property.length() == 0) {
+			return initialRootConstituents.toArray(new Bundle[initialRootConstituents.size()]);
+		}
+		property = property.trim();
+		Collection<String> symbolicNames = Arrays.asList(property.split("\\s*,\\s*"));
+		Collection<Bundle> result = new ArrayList<Bundle>(symbolicNames.size());
+		for (Bundle bundle : initialRootConstituents) {
+			if (symbolicNames.contains(bundle.getSymbolicName())) {
+				result.add(bundle);
+			}
+		}
+		return result.toArray(new Bundle[result.size()]);
 	}
 
 	protected ServiceRegistration<Repository> registerRepository(String repositoryName) {
@@ -854,7 +870,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 		return null;
 	}
 
-	private InputStream getBundleContent(String tag, String namedBundle) {
+	protected InputStream getBundleContent(String tag, String namedBundle) {
 		URL url = getContext().getBundle().getEntry(namedBundle);
 		if (url == null)
 			fail("Could not locate test bundle '" + namedBundle + "': " + tag);

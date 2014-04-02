@@ -27,12 +27,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import javax.security.auth.kerberos.ServicePermission;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.PackagePermission;
+import org.osgi.framework.ServicePermission;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.condpermadmin.BundleLocationCondition;
 import org.osgi.service.condpermadmin.ConditionInfo;
@@ -197,7 +196,7 @@ public class SubsystemSecureTests extends OSGiTestCase {
 				return subsystemInfo.getSubsystemResource().getContent();
 			}
 		});
-		testSubsystem = root.install(getName(), input);
+		testSubsystem = root.install(getName(), input, null);
 		return testSubsystem;
 	}
 
@@ -419,6 +418,36 @@ public class SubsystemSecureTests extends OSGiTestCase {
 				}
 			});
 			fail("Expected to get security exception when getting the location.");
+		} catch (SecurityException e) {
+			// expected
+		}
+	}
+	
+	public void testAllowGetDeploymentHeaders() {
+		final Subsystem subsystem = installTestSubsystem();
+		setPermissions(ConditionalPermissionInfo.ALLOW);
+		try {
+			Map<String, String> headers = runner.run(new PrivilegedExceptionAction<Map<String, String>>() {
+				public Map<String, String> run() {
+					return subsystem.getDeploymentHeaders();
+				}
+			});
+			assertNotNull("Headers is null.", headers);
+		} catch (Exception e) {
+			fail("Expected to be able to get the headers.", e);
+		}
+	}
+
+	public void testDenyGetDeploymentHeaders() throws Exception {
+		final Subsystem subsystem = installTestSubsystem();
+		setPermissions(ConditionalPermissionInfo.DENY);
+		try {
+			runner.run(new PrivilegedExceptionAction<Map<String, String>>() {
+				public Map<String, String> run() {
+					return subsystem.getDeploymentHeaders();
+				}
+			});
+			fail("Expected to get security exception when getting the headers.");
 		} catch (SecurityException e) {
 			// expected
 		}

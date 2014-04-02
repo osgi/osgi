@@ -247,6 +247,27 @@
         <para>Other if new events are defined in later versions</para>
       </listitem>
     </itemizedlist>
+
+    <section>
+      <title>System Bundle Listeners</title>
+
+      <para>Bundle Listeners may be registered with the system bundle's
+      <code>BundleContext</code>. If at least one Bundle Listener is
+      registered with the system bundle's <code>BundleContext</code> then the
+      system bundle's <code>BundleContext</code> must be contained in the
+      shrinkable collection passed to the <xref
+      linkend="org.osgi.framework.hooks.bundle.EventHook.event-BundleEvent-Collection-"
+      xrefstyle="hyperlink"/> bundle event hook method. Just like other
+      <code>BundleContext</code> objects contained in the shrinkable
+      collection, the system bundle's <code>BundleContext</code> may be
+      removed. If the system bundle's <code>BundleContext</code> is removed by
+      a bundle Event Hook then the <code>BundleContext</code> will not be
+      contained in the collection for the remaining bundle Event Hooks called.
+      Unlike other <code>BundleContext</code> objects, if the system bundle's
+      <code>BundleContext</code> is removed from the shrinkable collection
+      then the bundle event is still delivered to the Bundle Listeners added
+      to the system bundle's <code>BundleContext</code>.</para>
+    </section>
   </section>
 
   <section>
@@ -298,6 +319,40 @@
     linkend="org.osgi.framework.hooks.bundle.FindHook.find-BundleContext-Collection-"
     xrefstyle="hyperlink"/> method determines that the Bundle Context has no
     visibility of the conflicting bundle.</para>
+
+    <section>
+      <title>System Bundle Context</title>
+
+      <para>When the <xref
+      linkend="org.osgi.framework.BundleContext.getBundle-long-"
+      xrefstyle="hyperlink"/> or <xref
+      linkend="org.osgi.framework.BundleContext.getBundles--"
+      xrefstyle="hyperlink"/> methods are called using the system bundle's
+      <code>BundleContext</code> then the bundle Find Hooks are called in the
+      same way the hooks are called when a normal <code>BundleContext</code>
+      is used. The system bundle's <code>BundleContext</code> along with the
+      shrinkable candidate bundles collection is passed to the <xref
+      linkend="org.osgi.framework.hooks.bundle.FindHook.find-BundleContext-Collection-"
+      xrefstyle="hyperlink"/> method. Bundle Find Hooks may remove bundles
+      from the shrinkable collection. If a bundle is removed by a bundle Find
+      Hook then the bundle will not be contained in the collection for the
+      remaining bundle Find Hooks called. Unlike other
+      <code>BundleContext</code> objects, if the system bundle's
+      <code>BundleContext</code> is used to find bundles then the Framework
+      ignores the bundle removals performed by the bundle Find Hooks and
+      allows the bundles removed to remain visible in the find results.</para>
+
+      <para>The bundle Find Hook is also used during an install operation.
+      When the system bundle's <code>BundleContext</code> is used to install a
+      bundle then the bundle Find Hooks are called in the same way the hooks
+      are called when a normal <code>BundleContext</code> is used. Unlike
+      other <code>BundleContext</code> objects, if the system bundle's
+      <code>BundleContext</code> is used to install bundles then the Framework
+      ignores the bundle removals performed by the bundle Find Hooks. This
+      implies that if the system bundle's <code>BundleContext</code> is used
+      to install a bundle at a location where an existing bundle is installed
+      then the existing bundle is always returned.</para>
+    </section>
   </section>
 
   <section xml:id="framework.bundlehooks.collisionhook">
@@ -399,6 +454,28 @@
         xrefstyle="hyperlink"/></para>
       </listitem>
     </itemizedlist>
+
+    <section>
+      <title>System Bundle Context</title>
+
+      <para>When the system bundle's <code>BundleContext</code> is used to
+      install a bundle then the Collision Hooks are called in the same way the
+      hooks are called when a normal <code>BundleContext</code> is used. The
+      system bundle along with the shrinkable candidate bundles collection is
+      passed to the <xref
+      linkend="org.osgi.framework.hooks.bundle.CollisionHook.filterCollisions-int-Bundle-Collection-"
+      xrefstyle="hyperlink"/> method. Bundle Collision Hooks may remove
+      bundles from the shrinkable collection. If a bundle is removed by a
+      bundle Collision Hook then the bundle will not be contained in the
+      collection for the remaining bundle Collision Hooks called. Unlike the
+      other bundle and service hooks, if the system bundle's
+      <code>BundleContext</code> is used to install a bundle then the
+      Framework must not ignore the bundle removals performed by the bundle
+      Collision Hooks. This implies that the system bundle's
+      <code>BundleContext</code> can be used to install the same bundle
+      multiple times when the <code>org.osgi.framework.bsnversion</code>
+      launching property is set to <code>managed</code>.</para>
+    </section>
   </section>
 
   <section>
@@ -447,15 +524,16 @@
     </itemizedlist>
   </section>
 
+  <xi:include href="../../../generated/javadoc/docbook/org.osgi.framework.hooks.bundle.xml"/>
+
   <section>
     <title>Changes</title>
 
     <itemizedlist>
       <listitem>
-        <para>Added the Bundle Collision Hook</para>
+        <para>Clarified the relationship of bundle hooks to the system
+        bundle.</para>
       </listitem>
     </itemizedlist>
   </section>
-
-  <xi:include href="../../../generated/javadoc/docbook/org.osgi.framework.hooks.bundle.xml"/>
 </chapter>

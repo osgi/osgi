@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2012). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 package org.osgi.test.cases.framework.junit.version;
 
 import junit.framework.TestCase;
-
 import org.osgi.framework.Version;
 
 /**
@@ -41,9 +40,11 @@ public class VersionTests extends TestCase {
 
 		new Version("0.0.0");
 		Version.parseVersion("0.0.0");
+		Version.valueOf("0.0.0");
 		new Version(
 				"0.0.0.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-0123456789");
 		Version.parseVersion("0.0.0.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-0123456789");
+		Version.valueOf("0.0.0.ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz_-0123456789");
 
 	}
 
@@ -91,6 +92,13 @@ public class VersionTests extends TestCase {
 		}
 
 		try {
+			Version.valueOf(null);
+			fail("Version created with null argument");
+		} catch (RuntimeException ex) {
+			// This is an expected exception and may be ignored
+		}
+
+		try {
 			new Version("");
 			fail("Version created with illegal arguments");
 		}
@@ -98,107 +106,40 @@ public class VersionTests extends TestCase {
 			// This is an expected exception and may be ignored
 		}
 
-		try {
-			new Version("-1.2.3");
-			fail("Version created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-		try {
-			new Version("1.-2.3");
-			fail("Version created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-		try {
-			new Version("1.2.-3");
-			fail("Version created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-		try {
-			new Version("1.2.3.4.5");
-			fail("Version created with illegal qualifier");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-		try {
-			Version.parseVersion("1.2.3.4.5");
-			fail("Version created with illegal qualifier");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
+		testConstructorsBadArguments("-1.2.3");
+		testConstructorsBadArguments("1.-2.3");
+		testConstructorsBadArguments("1.2.-3");
+		testConstructorsBadArguments("1.2.3.4.5");
 
-		try {
-			new Version("1.2.3.");
-			fail("Version created with illegal qualifier");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-		try {
-			new Version("1.2.3-");
-			fail("Version created with illegal qualifier");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-		try {
-			new Version("1.2.3-4.5");
-			fail("Version created with illegal qualifier");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-		try {
-			Version.parseVersion("1.2.3-4.5");
-			fail("Version created with illegal qualifier");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-		try {
-			new Version("a.2.3");
-			fail("Version created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-		try {
-			new Version("1.b.3");
-			fail("Version created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
-		try {
-			new Version("1.2.c");
-			fail("Version created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
-			// This is an expected exception and may be ignored
-		}
+		testConstructorsBadArguments("1.2.3.");
+		testConstructorsBadArguments("1.2.3-");
+		testConstructorsBadArguments("1.2.3-4.5");
+		testConstructorsBadArguments("a.2.3");
+		testConstructorsBadArguments("1.b.3");
+		testConstructorsBadArguments("1.2.c");
+		testConstructorsBadArguments("1.");
+		testConstructorsBadArguments("1.2.");
+	}
 
+	private void testConstructorsBadArguments(String arg) {
 		try {
-			new Version("1.");
+			new Version(arg);
 			fail("Version created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
+		} catch (IllegalArgumentException ex) {
 			// This is an expected exception and may be ignored
 		}
 		try {
-			new Version("1.2.");
+			Version.parseVersion(arg);
 			fail("Version created with illegal arguments");
-		}
-		catch (IllegalArgumentException ex) {
+		} catch (IllegalArgumentException ex) {
 			// This is an expected exception and may be ignored
 		}
-
+		try {
+			Version.valueOf(arg);
+			fail("Version created with illegal arguments");
+		} catch (IllegalArgumentException ex) {
+			// This is an expected exception and may be ignored
+		}
 	}
 
 	public void testEquals() {
@@ -300,7 +241,7 @@ public class VersionTests extends TestCase {
 				version2.equals(version1));
 
 		version1 = new Version("0.0.0.a");
-		version2 = Version.parseVersion(" 0.0.0.a  ");
+		version2 = Version.valueOf(" 0.0.0.a  ");
 		assertEquals("Testing the method equals() with the same versions",
 				version1, version2);
 		assertEquals("Testing the method equals() with the same versions",
@@ -514,7 +455,8 @@ public class VersionTests extends TestCase {
 		version1 = new Version(1, 1, 1);
 		Comparable testVersion = version1;
 		try {
-			testVersion.compareTo(incorrect);
+			@SuppressWarnings({"unused", "unchecked"})
+			int result = testVersion.compareTo(incorrect);
 			fail("Testing the method compareTo() with an incorrect object");
 		}
 		catch (ClassCastException ex) {
@@ -533,6 +475,10 @@ public class VersionTests extends TestCase {
 		assertSame("not emptyVersion", Version.parseVersion(""),
 				Version.emptyVersion);
 		assertSame("not emptyVersion", Version.parseVersion("	"),
+				Version.emptyVersion);
+		assertSame("not emptyVersion", Version.valueOf(""),
+				Version.emptyVersion);
+		assertSame("not emptyVersion", Version.valueOf("	"),
 				Version.emptyVersion);
 	}
 

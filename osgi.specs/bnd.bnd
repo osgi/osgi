@@ -19,7 +19,7 @@ javadoc.classpath = ${uniq; \
                     ${repo;org.eclipse.persistence.jpa_spec}, \
                     ${repo;com.icl.saxon}}
 
-javadoc.packages = ${uniq; ${core.packages}, ${cmpn.packages}, ${enterprise.packages}, ${residential.packages}, org.osgi.dmt.*}
+javadoc.packages = ${uniq; ${annotation.packages}, ${core.packages}, ${cmpn.packages}, ${enterprise.packages}, ${residential.packages}, org.osgi.dmt.*}
 
 minimum-latest      = 1.2.1
 minimum-previous    = 1.1.3

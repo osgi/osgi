@@ -140,7 +140,7 @@ public class WireAdminControl extends DefaultTestBundleControl {
 	}
 
 	synchronized void syncup(String pid) {
-		if (System.getProperty("dump.now") != null) {
+		if (getProperty("dump.now") != null) {
 			log("Syncing up " + pid);
 		}
 		synchCounterx++;

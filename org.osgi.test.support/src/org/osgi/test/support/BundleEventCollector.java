@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2007, 2010). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2007, 2013). All Rights Reserved.
  * 
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -42,6 +42,7 @@ public class BundleEventCollector extends EventCollector<BundleEvent> implements
 			addEvent(event);
 	}
 
+	@Override
 	public Comparator<BundleEvent> getComparator() {
 		return new Comparator<BundleEvent>() {
 			public int compare(BundleEvent event1, BundleEvent event2) {

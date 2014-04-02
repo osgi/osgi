@@ -108,7 +108,7 @@ public class UserAdminImpl implements UserAdmin {
 		// Initialize the database
 		rolemap = new Hashtable();
 		// Load database from file
-		String filename = System.getProperty(DBPROP);
+		String filename = activator.bc.getProperty(DBPROP);
 		if (filename == null)
 			dbfile = activator.bc.getDataFile(DB);
 		else
@@ -301,11 +301,11 @@ public class UserAdminImpl implements UserAdmin {
 				GroupImpl group = (GroupImpl) role;
 				Enumeration en2 = group.basic_members.elements();
 				for (int i = 0; en2.hasMoreElements(); i++) {
-					p.put(counter + "bm" + i, (String) en2.nextElement());
+					p.put(counter + "bm" + i, en2.nextElement());
 				}
 				en2 = group.required_members.elements();
 				for (int i = 0; en2.hasMoreElements(); i++) {
-					p.put(counter + "rm" + i, (String) en2.nextElement());
+					p.put(counter + "rm" + i, en2.nextElement());
 				}
 			}
 		}

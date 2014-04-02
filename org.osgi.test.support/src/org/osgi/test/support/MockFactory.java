@@ -87,7 +87,9 @@ public class MockFactory {
 				}
 			}
 		};
-		return (T) Proxy.newProxyInstance(proxyLoader, new Class[] {interfce},
+        @SuppressWarnings("unchecked")
+        T newProxyInstance = (T) Proxy.newProxyInstance(proxyLoader, new Class[] {interfce},
 				handler);
+        return newProxyInstance;
 	}
 }

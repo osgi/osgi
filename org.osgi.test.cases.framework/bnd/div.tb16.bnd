@@ -14,6 +14,7 @@ Bundle-NativeCode: \
  qnx_ppc/libNative.so; osname=QNX; processor=PowerPC; selection-filter="(${p}.div.tb16=xyz)", \
  qnx_armle/libNative.so; osname=QNX; processor=arm_le; selection-filter="(${p}.div.tb16=xyz)", \
  windows_x86/Native.dll; osname=win32; processor=x86; selection-filter="(${p}.div.tb16=xyz)", \
+ windows_x86-64/Native.dll; osname=win32; processor=x86-64; selection-filter="(${p}.div.tb16=xyz)", \
  solaris_sparc/libNative.so; osname=Solaris; processor=sparc; selection-filter="(${p}.div.tb16=xyz)", \
  solaris_sparc/libNative.so; osname=SunOS; processor=sparc; selection-filter="(${p}.div.tb16=xyz)", \
  windows_arm/Native.dll; osname="windows ce"; processor=arm_le; selection-filter="(${p}.div.tb16=xyz)", \

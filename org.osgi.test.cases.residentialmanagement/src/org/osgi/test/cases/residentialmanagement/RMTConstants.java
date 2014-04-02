@@ -1,5 +1,7 @@
 package org.osgi.test.cases.residentialmanagement;
 
+import org.osgi.test.support.OSGiTestCaseProperties;
+
 /**
  * Defines a number of string constants for use in the testclasses implementing this interface.
  * @author steffen
@@ -7,7 +9,8 @@ package org.osgi.test.cases.residentialmanagement;
  */
 public interface RMTConstants {
 
-	static final String RMT_ROOT = System.getProperty("org.osgi.dmt.residential");
+	static final String	RMT_ROOT						= OSGiTestCaseProperties
+																.getProperty("org.osgi.dmt.residential");
 	static final String FRAMEWORK = "Framework";
 	static final String FRAMEWORK_ROOT = RMT_ROOT + "/" + FRAMEWORK;
 	static final String FILTER_ROOT = RMT_ROOT + "/Filter";

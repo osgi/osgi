@@ -19,6 +19,7 @@ package org.osgi.framework.wiring;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
+import org.osgi.annotation.versioning.ProviderType;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleReference;
 import org.osgi.framework.namespace.IdentityNamespace;
@@ -52,9 +53,9 @@ import org.osgi.resource.Wiring;
  * a bundle returns {@code null}.
  * 
  * @ThreadSafe
- * @noimplement
  * @author $Id$
  */
+@ProviderType
 public interface BundleWiring extends BundleReference, Wiring {
 	/**
 	 * Returns {@code true} if this bundle wiring is the current bundle wiring.
@@ -113,8 +114,8 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 *         an empty list if this bundle wiring provides no capabilities in
 	 *         the specified namespace. If this bundle wiring is not
 	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
-	 *         given namespace, the list contains the wires in the order the
-	 *         capabilities were specified in the manifests of the
+	 *         given namespace, the list contains the capabilities in the order
+	 *         the capabilities were specified in the manifests of the
 	 *         {@link #getRevision() bundle revision} and the attached
 	 *         fragments<sup>&#8224;</sup> of this bundle wiring. There is no
 	 *         ordering defined between capabilities in different namespaces.
@@ -143,8 +144,8 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 *         or an empty list if this bundle wiring uses no requirements in
 	 *         the specified namespace. If this bundle wiring is not
 	 *         {@link #isInUse() in use}, {@code null} will be returned. For a
-	 *         given namespace, the list contains the wires in the order the
-	 *         requirements were specified in the manifests of the
+	 *         given namespace, the list contains the requirements in the order
+	 *         the requirements were specified in the manifests of the
 	 *         {@link #getRevision() bundle revision} and the attached fragments
 	 *         of this bundle wiring. There is no ordering defined between
 	 *         requirements in different namespaces.
@@ -176,9 +177,10 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 * requirements} in use by this bundle wiring.
 	 * 
 	 * <p>
-	 * This method may return different results if this bundle wiring adds wires
-	 * to more requirements. For example, dynamically importing a package will
-	 * establish a new wire to the dynamically imported package.
+	 * This method may return different results if this bundle wiring
+	 * establishes additional wires to more requirements. For example,
+	 * dynamically importing a package will establish a new wire to the
+	 * dynamically imported package.
 	 * 
 	 * @param namespace The namespace of the requirements for which to return
 	 *        wires or {@code null} to return the wires for the requirements in
@@ -191,8 +193,9 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 *         given namespace, the list contains the wires in the order the
 	 *         requirements were specified in the manifests of the
 	 *         {@link #getRevision() bundle revision} and the attached fragments
-	 *         of this bundle wiring. There is no ordering defined between
-	 *         requirements in different namespaces.
+	 *         of this bundle wiring followed by dynamically established wires,
+	 *         if any, in the order they were established. There is no ordering
+	 *         defined between requirements in different namespaces.
 	 */
 	List<BundleWire> getRequiredWires(String namespace);
 
@@ -405,7 +408,7 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 * @return A list containing a snapshot of the {@link Capability}s, or an
 	 *         empty list if this wiring provides no capabilities in the
 	 *         specified namespace. For a given namespace, the list contains the
-	 *         wires in the order the capabilities were specified in the
+	 *         capabilities in the order the capabilities were specified in the
 	 *         manifests of the {@link #getResource() resource} and the attached
 	 *         fragment resources<sup>&#8224;</sup> of this wiring. There is no
 	 *         ordering defined between capabilities in different namespaces.
@@ -436,11 +439,11 @@ public interface BundleWiring extends BundleReference, Wiring {
 	 *        {@code null} to return the requirements from all namespaces.
 	 * @return A list containing a snapshot of the {@link Requirement}s, or an
 	 *         empty list if this wiring uses no requirements in the specified
-	 *         namespace. For a given namespace, the list contains the wires in
-	 *         the order the requirements were specified in the manifests of the
-	 *         {@link #getResource() resource} and the attached fragment
-	 *         resources of this wiring. There is no ordering defined between
-	 *         requirements in different namespaces.
+	 *         namespace. For a given namespace, the list contains the
+	 *         requirements in the order the requirements were specified in the
+	 *         manifests of the {@link #getResource() resource} and the attached
+	 *         fragment resources of this wiring. There is no ordering defined
+	 *         between requirements in different namespaces.
 	 * @since 1.1
 	 */
 	List<Requirement> getResourceRequirements(String namespace);
