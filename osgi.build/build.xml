@@ -1,15 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="publish">
-	<target name="deploy" depends="master.deploy,javadoc,japitools,japicompat">
+	<target name="deploy" depends="master.deploy,javadoc">
 	</target>
 
 	<target name="init" depends="master.init">
 		<property name="tm"><![CDATA[&trade;]]></property>
-		<pathconvert pathsep=" " property="japitool.path">
-			<filelist files="${javadoc.bootclasspath}"/>
-			<filelist files="${javadoc.classpath}"/>
-		</pathconvert>
-		<mkdir dir="${target}/japi"/>
 	</target>
 
 	<macrodef name="javadoc.macro">
@@ -92,132 +87,6 @@
 		<javadoc.macro name="residential" title="Residential" packages="${residential.packages}" />
 	</target>
 	
-	<target name="japitools" depends="japitools.core,japitools.cmpn,japitools.enterprise,japitools.residential,japitools.minimum,japitools.foundation">
-	</target>
-
-	<macrodef name="japitools">
-		<attribute name="name"/>
-		<element name="japitools-args" implicit="true" optional="true" />
-		<sequential>
-			<echo>@{name} ${project.workspace}/@{name}/${target-dir}/@{name}.jar</echo>
-			<java classname="net.wuffies.japi.Japize">
-				<classpath path="${licensed}/japitools/share/java/japitools.jar" />
-				<arg value="unzip" />
-				<arg value="as" />
-				<arg value="${target}/japi/@{name}-latest.japi" />
-				<arg value="packages" />
-				<arg value="${project.workspace}/@{name}/${target-dir}/@{name}.jar" />
-				<japitools-args />
-			</java>
-		</sequential>
-	</macrodef>
-	
-	<target name="japitools.core" depends="init">
-		<japitools name="osgi.core">
-			<arg line="${japitool.path}" />
-			<arg prefix="+" line="${core.specs}" />
-		</japitools>
-	</target>
-
-	<target name="japitools.cmpn" depends="init">
-		<japitools name="osgi.cmpn">
-			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
-			<arg line="${japitool.path}" />
-			<arg prefix="+" line="${cmpn.specs}" />
-		</japitools>
-	</target>
-
-	<target name="japitools.enterprise" depends="init">
-		<japitools name="osgi.enterprise">
-			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
-			<arg line="${japitool.path}" />
-			<arg prefix="+" line="${enterprise.specs}" />
-		</japitools>
-	</target>
-
-	<target name="japitools.residential" depends="init">
-		<japitools name="osgi.residential">
-			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
-			<arg line="${japitool.path}" />
-			<arg prefix="+" line="${residential.specs}" />
-		</japitools>
-	</target>
-
-	<target name="japitools.minimum" depends="init">
-		<japitools name="ee.minimum">
-			<arg prefix="+" line="java javax" />
-		</japitools>
-	</target>
-
-	<target name="japitools.foundation" depends="init">
-		<japitools name="ee.foundation">
-			<arg prefix="+" line="java javax" />
-		</japitools>
-	</target>
-
-	<target name="japicompat" depends="japicompat.core,japicompat.cmpn,japicompat.enterprise,japicompat.residential,japicompat.minimum,japicompat.foundation,japicompat.eecompare">
-	</target>
-	
-	<macrodef name="japicompat">
-		<attribute name="name"/>
-		<attribute name="options" default="-h -v" />
-		<sequential>
-			<echo>@{name}</echo>
-			<exec executable="perl" failifexecutionfails="false">
-				<arg value="${licensed}/japitools/bin/japicompat" />
-				<arg line="@{options}" />
-				<arg value="-o" />
-				<arg value="${target}/japi/@{name}-japicompat.html" />
-				<arg value="${build}/japi-published/@{name}-published.japi" />
-				<arg value="${target}/japi/@{name}-latest.japi" />
-			</exec>
-			<exec executable="perl" failifexecutionfails="false">
-				<arg value="${licensed}/japitools/bin/japicompat" />
-				<arg line="@{options}" />
-				<arg value="-o" />
-				<arg value="${target}/japi/@{name}-changed-japicompat.html" />
-				<arg value="${target}/japi/@{name}-latest.japi" />
-				<arg value="${build}/japi-published/@{name}-published.japi" />
-			</exec>
-		</sequential>
-	</macrodef>
-
-	<target name="japicompat.core" depends="init">
-		<japicompat name="osgi.core" />
-	</target>
-
-	<target name="japicompat.cmpn" depends="init">
-		<japicompat name="osgi.cmpn" />
-	</target>
-
-	<target name="japicompat.enterprise" depends="init">
-		<japicompat name="osgi.enterprise" />
-	</target>
-
-	<target name="japicompat.residential" depends="init">
-		<japicompat name="osgi.residential" />
-	</target>
-
-	<target name="japicompat.minimum" depends="init">
-		<japicompat name="ee.minimum" options="-h" />
-	</target>
-
-	<target name="japicompat.foundation" depends="init">
-		<japicompat name="ee.foundation" options="-h" />
-	</target>
-
-	<target name="japicompat.eecompare" depends="init">
-		<echo>ee compare</echo>
-		<exec executable="perl" failifexecutionfails="false">
-			<arg value="${licensed}/japitools/bin/japicompat" />
-			<arg value="-h" />
-			<arg value="-o" />
-			<arg value="${target}/japi/ee.minimum2foundation-japicompat.html" />
-			<arg value="${target}/japi/ee.minimum-latest.japi" />
-			<arg value="${target}/japi/ee.foundation-latest.japi" />
-		</exec>
-	</target>
-
 	<target name="echo" depends="master.echo">
 		<echo>core.specs:             ${core.specs}</echo>
 		<echo>cmpn.specs:             ${cmpn.specs}</echo>
