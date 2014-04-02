@@ -49,6 +49,7 @@
 	            <classpath>
 	                <filelist files="${javadoc.classpath}"/>
 	            </classpath>
+	        	<arg value="-Xdoclint:none"/>
 				<tag name="Immutable" scope="types" description="Immutable"/>
 				<tag name="ThreadSafe" scope="types" description="ThreadSafe"/>
 				<tag name="NotThreadSafe" scope="types" description="NotThreadSafe"/>
