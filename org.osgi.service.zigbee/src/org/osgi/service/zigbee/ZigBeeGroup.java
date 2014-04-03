@@ -55,9 +55,9 @@ public interface ZigBeeGroup {
 	 *        {@link org.osgi.framework.Constants#SERVICE_PID} ) of the
 	 *        {@link ZigBeeEndpoint} that we want add to this Group.
 	 * @param handler the handler that will notified of the result of "joining".
-	 * @throws ZCLException
+	 * @throws Exception
 	 */
-	void joinGroup(String pid, ZCLCommandHandler handler) throws ZCLException;
+	void joinGroup(String pid, ZCLCommandHandler handler) throws Exception;
 
 	/**
 	 * This method is used for adding an Endpoint to a Group, it may be invoked
@@ -76,9 +76,9 @@ public interface ZigBeeGroup {
 	 *        {@link org.osgi.framework.Constants#SERVICE_PID} ) of the
 	 *        {@link ZigBeeEndpoint} that we want leave to this Group.
 	 * @param handler the handler that will notified of the result of "leaving".
-	 * @throws ZCLException
+	 * @throws Exception
 	 */
-	void leaveGroup(String pid, ZCLCommandHandler handler) throws ZCLException;
+	void leaveGroup(String pid, ZCLCommandHandler handler) throws Exception;
 
 	/**
 	 * Invokes the action on a Group. The handler will provide the invocation

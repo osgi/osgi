@@ -112,9 +112,9 @@ public interface ZigBeeEndpoint {
 	 * 
 	 * @param handler that will be used in order to return the node simple
 	 *        descriptor {@link ZigBeeSimpleDescriptor}.
-	 * @throws ZCLException
+	 * @throws Exception
 	 */
-	public void getSimpleDescriptor(ZigBeeHandler handler) throws ZCLException;
+	public void getSimpleDescriptor(ZigBeeHandler handler) throws Exception;
 
 	/**
 	 * @return An array of servers(inputs) clusters, returns an empty array if
@@ -125,10 +125,9 @@ public interface ZigBeeEndpoint {
 	/**
 	 * @param serverClusterId The server(input) cluster identifier
 	 * @return the server(input) cluster identified by id
-	 * @throws ZCLException if the given id is not listed in the simple
-	 *         descriptor
+	 * @throws Exception if the given id is not listed in the simple descriptor
 	 */
-	public ZCLCluster getServerCluster(int serverClusterId) throws ZCLException;
+	public ZCLCluster getServerCluster(int serverClusterId) throws Exception;
 
 	/**
 	 * @return An array of clients(outputs) clusters, returns an empty array if
@@ -139,10 +138,9 @@ public interface ZigBeeEndpoint {
 	/**
 	 * @param clientClusterId The client(output) cluster identifier
 	 * @return the client(output) cluster identified by id
-	 * @throws ZCLException if the given id is not listed in the simple
-	 *         descriptor
+	 * @throws Exception if the given id is not listed in the simple descriptor
 	 */
-	public ZCLCluster getClientCluster(int clientClusterId) throws ZCLException;
+	public ZCLCluster getClientCluster(int clientClusterId) throws Exception;
 
 	/**
 	 * This method modify the <i>Binding Table</i> of physical device by adding

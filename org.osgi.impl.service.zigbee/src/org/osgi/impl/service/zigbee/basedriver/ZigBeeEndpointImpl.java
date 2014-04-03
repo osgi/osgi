@@ -39,7 +39,7 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return Long.valueOf("-1");
 	}
 
-	public void getSimpleDescriptor(ZigBeeHandler handler) throws ZCLException {
+	public void getSimpleDescriptor(ZigBeeHandler handler) throws Exception {
 		// TODO Auto-generated method stub
 		handler.onSuccess(desc);
 	}
@@ -48,7 +48,7 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return inputs;
 	}
 
-	public ZCLCluster getServerCluster(int serverClusterId) {
+	public ZCLCluster getServerCluster(int serverClusterId) throws Exception {
 		return inputs[serverClusterId];
 	}
 
@@ -56,7 +56,7 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return outputs;
 	}
 
-	public ZCLCluster getClientCluster(int clientClusterId) {
+	public ZCLCluster getClientCluster(int clientClusterId) throws Exception {
 		return outputs[clientClusterId];
 	}
 

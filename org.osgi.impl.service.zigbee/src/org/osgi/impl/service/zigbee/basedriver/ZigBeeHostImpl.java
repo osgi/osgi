@@ -2,7 +2,6 @@
 package org.osgi.impl.service.zigbee.basedriver;
 
 import org.osgi.service.zigbee.ZCLCommandHandler;
-import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeHandler;
@@ -53,20 +52,20 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		// TODO Auto-generated method stub
 	}
 
-	public String getNetworkKey() throws ZCLException {
+	public String getNetworkKey() throws Exception {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public void refreshNetwork() throws ZCLException {
+	public void refreshNetwork() throws Exception {
 		// TODO Auto-generated method stub
 	}
 
-	public void permitJoin(short duration) throws ZCLException {
+	public void permitJoin(short duration) throws Exception {
 		// TODO Auto-generated method stub
 	}
 
-	public int getChannelMask() throws ZCLException {
+	public int getChannelMask() throws Exception {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -83,7 +82,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		// TODO Auto-generated method stub
 	}
 
-	public void setLogicalType(short logicalNodeType) throws ZCLException {
+	public void setLogicalType(short logicalNodeType) throws Exception {
 		// TODO Auto-generated method stub
 	}
 
@@ -91,7 +90,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		// TODO Auto-generated method stub
 	}
 
-	public void createGroupService(String pid, int groupAddress, ZCLCommandHandler handler) throws ZCLException {
+	public void createGroupService(String pid, int groupAddress, ZCLCommandHandler handler) throws Exception {
 		// TODO Auto-generated method stub
 	}
 

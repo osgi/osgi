@@ -101,9 +101,9 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * NLMEPERMITJOINING.confirm primitive.
 	 * 
 	 * @param duration The time during which associations are permitted.
-	 * @throws ZCLException
+	 * @throws Exception
 	 */
-	public void permitJoin(short duration) throws ZCLException;
+	public void permitJoin(short duration) throws Exception;
 
 	/**
 	 * Sets the host logical node type. The logical type will then be available
@@ -113,15 +113,15 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * device( {@link org.osgi.service.zigbee.ZigBeeNode -> END_DEVICE})
 	 * 
 	 * @param logicalNodeType The logical node type.
-	 * @throws ZCLException
+	 * @throws Exception
 	 */
-	public void setLogicalType(short logicalNodeType) throws ZCLException;
+	public void setLogicalType(short logicalNodeType) throws Exception;
 
 	/**
 	 * @return The current network channel.
-	 * @throws ZCLException
+	 * @throws Exception
 	 */
-	public int getChannel() throws ZCLException;
+	public int getChannel() throws Exception;
 
 	/**
 	 * Sets the network channel. 802.15.4 and ZigBee break the 2.4Ghz band into
@@ -134,9 +134,9 @@ public interface ZigBeeHost extends ZigBeeNode {
 
 	/**
 	 * @return The current network channel mask.
-	 * @throws ZCLException
+	 * @throws Exception
 	 */
-	public int getChannelMask() throws ZCLException;
+	public int getChannelMask() throws Exception;
 
 	/**
 	 * Set the network channel mask
@@ -151,22 +151,22 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * joined the network and removing the devices that left the network since
 	 * the last refresh.
 	 * 
-	 * @throws ZCLException
+	 * @throws Exception
 	 */
-	public void refreshNetwork() throws ZCLException;
+	public void refreshNetwork() throws Exception;
 
 	/**
 	 * @return The network security level, i.e. 0 if security is disabled, an
 	 *         int code if enabled.
-	 * @throws ZCLException
+	 * @throws Exception
 	 */
-	public int getSecurityLevel() throws ZCLException;
+	public int getSecurityLevel() throws Exception;
 
 	/**
 	 * @return The current Network key.
-	 * @throws ZCLException
+	 * @throws Exception
 	 */
-	public String getNetworkKey() throws ZCLException;
+	public String getNetworkKey() throws Exception;
 
 	/**
 	 * This method is used for creating a {@link ZigBeeGroup} service that has
@@ -184,9 +184,9 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * @param groupAddress the address of the group to create.
 	 * @param handler the ZCLCommandHandler that will be notified of the result
 	 *        of "creation".
-	 * @throws ZCLException
+	 * @throws Exception
 	 */
-	public void createGroupService(String pid, int groupAddress, ZCLCommandHandler handler) throws ZCLException;
+	public void createGroupService(String pid, int groupAddress, ZCLCommandHandler handler) throws Exception;
 
 	/**
 	 * Enable to broadcast a given frame on a given cluster.

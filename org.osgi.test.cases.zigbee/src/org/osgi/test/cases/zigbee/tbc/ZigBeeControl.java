@@ -329,7 +329,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			log("ZigBeeEndpoint OUTPUT_CLUSTERS: " + listOuput);
 			assertEquals("Output clusters list not matched",
 					ZigBeeConstants.ENDPOINT_OUTPUT_CLUSTERS, listOuput);
-		} catch (ZCLException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
