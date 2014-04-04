@@ -32,6 +32,7 @@ import org.osgi.test.cases.condpermadmin.junit.ConditionalDomTBCService;
 import org.osgi.test.cases.condpermadmin.junit.ConditionalPermTBCService;
 import org.osgi.test.cases.condpermadmin.junit.ConditionalTBCService;
 import org.osgi.test.cases.condpermadmin.testcond.TestPostPonedCondition;
+import org.osgi.test.support.wiring.Wiring;
 
 
 public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTests {
@@ -62,7 +63,9 @@ public class ConditionalPermissionOrderTests extends AbstractPermissionAdminTest
 	    tb1 = installBundle("tb1.jar", true);
 	    tb2 = installBundle("tb2.jar", true);
 	    tb3 = installBundle("tb3.jar", true);
-	    installBundle("testcond.jar", false);
+		assertTrue("testcond.jar not resolved", Wiring.resolveBundles(
+				getContext(),
+				new Bundle[] {installBundle("testcond.jar", false)}));
 
 	    tbc = (ConditionalTBCService)getService(ConditionalTBCService.class.getName());
 	    permTBC = (ConditionalPermTBCService)getService(ConditionalPermTBCService.class.getName());

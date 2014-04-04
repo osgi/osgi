@@ -50,6 +50,7 @@ import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.test.cases.condpermadmin.testcond.TestCondition;
 import org.osgi.test.cases.condpermadmin.testcond.TestConditionRecursive;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.wiring.Wiring;
 
 /**
  * Contains the test methods of the conditional permission test case.
@@ -927,7 +928,9 @@ public class ConditionalTestControl extends DefaultTestBundleControl {
 	assertTrue(serviceAvailable(PermissionAdmin.class)); 
 	assertTrue(serviceAvailable(ConditionalPermissionAdmin.class));
 
-	installBundle("testcond.jar", false);
+		assertTrue("testcond.jar not resolved", Wiring.resolveBundles(
+				getContext(),
+				new Bundle[] {installBundle("testcond.jar", false)}));
 
     testBundle = installBundle("tb1.jar");
     testBundleLocation = testBundle.getLocation();
