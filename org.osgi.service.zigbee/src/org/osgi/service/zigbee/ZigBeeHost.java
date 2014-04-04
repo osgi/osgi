@@ -133,13 +133,13 @@ public interface ZigBeeHost extends ZigBeeNode {
 	public void setChannel(ZigBeeHandler handler, byte channel);
 
 	/**
-	 * @return The current network channel mask.
+	 * @return The currently configured channel mask.
 	 * @throws Exception
 	 */
 	public int getChannelMask() throws Exception;
 
 	/**
-	 * Set the network channel mask
+	 * Set a new configured channel mask.
 	 * 
 	 * @param handler The handler that manages the command response.
 	 * @param mask A value representing the channel mask.
