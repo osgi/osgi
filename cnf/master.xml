@@ -177,7 +177,7 @@
 	</target>
 
 	<target name="publish" depends="deploy">
-		<echo>Exit project ${project.name}</echo>
+		<echo>Exit project ${project.name} (${top})</echo>
 	</target>
 
 	<!--
