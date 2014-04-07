@@ -16,6 +16,9 @@
 
 package org.osgi.service.zigbee;
 
+import java.util.Map;
+import org.osgi.service.zigbee.data.LinkQuality;
+import org.osgi.service.zigbee.data.Route;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
@@ -175,6 +178,34 @@ public interface ZigBeeNode {
 	 *        descriptor is not provided.
 	 */
 	public void getUserDescriptor(ZigBeeHandler handler);
+
+	/**
+	 * The ZigBee Base Drive may use the Mgmt_Lqi_req / Mgmt_Lqi_rsp messages to
+	 * retrieve the Link Quality table (i.e also known as NeighborTableList in
+	 * the ZigBee Specification). <br>
+	 * The method limit the Link Quality table to the {@link ZigBeeNode} service
+	 * discovered.<br>
+	 * The device may not support in that case an empty {@link Map} will be
+	 * returned
+	 * 
+	 * @return a {@link Map} containing the Service.PID as key and the Link
+	 *         Quality for the node.
+	 * @throws ZigBeeException
+	 */
+	public Map<String, LinkQuality> getLinksQuality() throws ZigBeeException;
+
+	/**
+	 * The ZigBee Base Drive may use the Mgmt_Rtg_req / Mgmt_Rtg_rsp messages to
+	 * retrieve the Routing Table (i.e also known as RoutingTableList in the
+	 * ZigBee Specification). <br>
+	 * The device may not support in that case an empty {@link Map} will be
+	 * returned
+	 * 
+	 * @return a {@link Map} containing the Service.PID of the destination of
+	 *         the route as key and the detail of the route as value
+	 * @throws ZigBeeException
+	 */
+	public Map<String, Route> getRoutingTable() throws ZigBeeException;
 
 	/**
 	 * Request to leave the network.

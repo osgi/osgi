@@ -1,17 +1,21 @@
 
 package org.osgi.impl.service.zigbee.basedriver;
 
+import java.util.Map;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
+import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.ZigBeeNode;
+import org.osgi.service.zigbee.data.LinkQuality;
+import org.osgi.service.zigbee.data.Route;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeUserDescriptor;
 
 /**
- * Mocked impl of ZigBeeNode.
+ * Mocked impl.
  */
 public class ZigBeeNodeImpl implements ZigBeeNode {
 
@@ -94,6 +98,16 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 	public void getUserDescriptor(ZigBeeHandler handler) throws ZCLException {
 		// TODO Auto-generated method stub
 		handler.onSuccess(userDescriptor);
+	}
+
+	public Map<String, LinkQuality> getLinksQuality() throws ZigBeeException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public Map<String, Route> getRoutingTable() throws ZigBeeException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	public void leave(ZigBeeHandler handler) {
