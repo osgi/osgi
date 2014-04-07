@@ -7,8 +7,6 @@ import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeException;
 import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.ZigBeeNode;
-import org.osgi.service.zigbee.data.LinkQuality;
-import org.osgi.service.zigbee.data.Route;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
@@ -100,12 +98,12 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		handler.onSuccess(userDescriptor);
 	}
 
-	public Map<String, LinkQuality> getLinksQuality() throws ZigBeeException {
+	public Map getLinksQuality() throws ZigBeeException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Map<String, Route> getRoutingTable() throws ZigBeeException {
+	public Map getRoutingTable() throws ZigBeeException {
 		// TODO Auto-generated method stub
 		return null;
 	}
