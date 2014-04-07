@@ -44,8 +44,8 @@
 		will not execute. This method will set that property and it will set
 		it in the child ant.
 	-->
-		<property name="top" value="${target}" />
 	<target name="dependencies" depends="init" unless="top">
+		<property name="top" value="${project.name}" />
 		
 		<!-- Have to compile the bnd plugins before ... -->		
         <subant target="" inheritAll="false" buildpath="${build}">
