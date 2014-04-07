@@ -44,16 +44,16 @@
 		will not execute. This method will set that property and it will set
 		it in the child ant.
 	-->
-	<target name="dependencies" depends="init" if="project.dependson" unless="top">
 		<property name="top" value="${target}" />
+	<target name="dependencies" depends="init" unless="top">
 		
 		<!-- Have to compile the bnd plugins before ... -->		
         <subant target="" inheritAll="false" buildpath="${build}">
             <property name="top" value="${top}" />
         </subant>
 		
-		<!-- Now build all dependends in their dependency order -->
-		<subant target="" inheritAll="false" buildpath="${project.dependson}">
+		<!-- Now build all dependents in their dependency order -->
+		<subant target="" inheritAll="false" buildpath="${project.dependson}" unless:blank="${project.dependson}">
 			<property name="top" value="${top}" />
 		</subant>
 	</target>
