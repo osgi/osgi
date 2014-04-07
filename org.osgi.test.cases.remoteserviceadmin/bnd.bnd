@@ -48,8 +48,8 @@ Test-Cases							= ${testcases}
 -runproperties = ${runproperties}, \
 	rsa.ct.timeout=30000,\
 	rsa.ct.timeout.factor=3,\
-	amdatu.remote.logging.level=4,\
-	amdatu.remote.console.level=4,\
+	amdatu.remote.logging.level=0,\
+	amdatu.remote.console.level=3,\
 	${p}.framework.properties="org.osgi.service.http.port=@@FREE_PORT@@", \
 	${p}.system.packages.extra="${junit.package}", \
     ${p}.serverconfig="service.exported.intents.extra,service.exported.configs", \
