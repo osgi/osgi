@@ -3,7 +3,7 @@
 	The is master OSGi build file. It is included from projects
 	as is.
 -->
-<project name="master" default="publish">
+<project name="master" default="publish" xmlns:if="ant:if" xmlns:unless="ant:unless">
 
 	<target name="all" depends="publish">
 		<!-- all target is a synonym for publish target -->
@@ -18,8 +18,8 @@
 
 	<target name="init" unless="initialized">
 		<!-- mark init has been run -->
-		<antversion property="initialized" atleast="1.8" />
-		<fail unless="initialized" message="Ant version is not at least 1.8" />
+		<antversion property="initialized" atleast="1.9.1" />
+		<fail unless="initialized" message="This build requires ant version 1.9.1 or later." />
 
 		<!-- The following three properties are local to this file to get bootstrapped. 
 		   The actual properties to be used should be project.dir, project.workspace and
