@@ -102,6 +102,16 @@
 
           <tbody>
             <row>
+              <entry><xref linkend="service.remoteservices"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><code>-</code></entry>
+
+              <entry><code><xref endterm="service.remoteservices-version"
+              linkend="service.remoteservices"/></code></entry>
+            </row>
+
+            <row>
               <entry><xref linkend="service.log"
               xrefstyle="template:%n %t"/></entry>
 
