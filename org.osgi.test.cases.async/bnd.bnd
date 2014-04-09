@@ -11,7 +11,6 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.util.promise;version=project,\
 	osgi.core;version=4.3.1,\
 	osgi.cmpn;version=4.3.1,\
-	ee.j2se;version=1.5,\
 	${junit}
 
 -runbundles						= \

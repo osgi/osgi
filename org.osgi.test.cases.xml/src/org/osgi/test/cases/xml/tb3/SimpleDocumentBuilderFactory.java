@@ -18,4 +18,13 @@ public class SimpleDocumentBuilderFactory extends DocumentBuilderFactory {
 			throws IllegalArgumentException {
 		throw new IllegalArgumentException(s);
 	}
+
+	public void setFeature(String name, boolean value)
+			throws ParserConfigurationException {
+		throw new ParserConfigurationException();
+	}
+
+	public boolean getFeature(String name) throws ParserConfigurationException {
+		throw new ParserConfigurationException();
+	}
 }

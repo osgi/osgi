@@ -29,8 +29,10 @@ prebuild				=
 java 					= java
 javac 					= javac
 javac.debug				= on
-javac.source 			= 1.3
-javac.target 			= 1.2
+javac.source 			= 1.8
+javac.target 			= 1.8
+javac.profile           = compact1
+
 
 
 #Bnd options

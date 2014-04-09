@@ -16,7 +16,6 @@ Test-Cases							= ${testcases}
     org.osgi.util.position;                 version=project , \
 	osgi.core;								version=4.0	, \
 	osgi.cmpn;								version=4.0	, \
-	ee.minimum;								version=1.2		, \
 	${junit}
 
 -runbundles						= \

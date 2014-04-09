@@ -1,3 +1,4 @@
+javac.profile=compact2
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
@@ -12,7 +13,6 @@ Include-Resource					= resources, \
 	org.osgi.service.component.annotations;					version=project	, \
 	osgi.core;									version=4.3.1	, \
 	osgi.cmpn;									version=4.3.1	, \
-	ee.j2se;									version=${javac.compliance}	, \
 	${junit}
 
 -runbundles						= \

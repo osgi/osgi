@@ -51,7 +51,6 @@ Test-Cases							= ${testcases}
 	org.osgi.service.deploymentadmin; 	version=project, \
 	osgi.core;							version=4.2, \
 	osgi.cmpn;							version=4.3, \
-	ee.foundation; 						version=1.1, \
 	${junit}
 		
 -runproperties = ${runsecureproperties}, \

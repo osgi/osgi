@@ -17,7 +17,6 @@ Include-Resource 				: ${cmpn.resources}
 	${cmpn.specs} 
 
 -buildpath 					= \
-	${replace;${cmpn.specs};.+;$0\\;version=project}, \
-	ee.foundation;version=1.1
+	${replace;${cmpn.specs};.+;$0\\;version=project}
 
 -include : layout.bnd

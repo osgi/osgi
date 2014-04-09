@@ -16,7 +16,6 @@ Test-Cases = ${testcases}
     org.osgi.test.support; version=project, \
     org.osgi.util.function; version=project, \
     org.osgi.util.promise; version=project, \
-    ee.j2se; version=${javac.compliance}, \
     ${junit}
 
 -runbundles = \

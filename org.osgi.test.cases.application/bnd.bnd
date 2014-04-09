@@ -24,7 +24,6 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.bundle.midletcontainer; 	version=project, \
 	osgi.core;								version=4.0.1	, \
 	osgi.cmpn;								version=4.3	, \
-	ee.foundation; 							version=1.1	, \
 	${junit}
 
 # org.osgi.impl.service.application must be loaded before osgi.cmpn since the 

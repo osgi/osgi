@@ -44,7 +44,6 @@
             Sourcepath    : ${project.allsourcepath}
             Destdir       : ${target}/javadoc
             Packages      : ${javadoc.packages}
-            Bootclasspath : ${javadoc.bootclasspath}
             Classpath     : ${javadoc.classpath}
         </echo>
         <javadoc
@@ -53,9 +52,6 @@
             packagenames="${javadoc.packages}"
             sourcepath="${project.allsourcepath}"
             destdir="${target}/javadoc">
-            <bootclasspath>
-                <filelist files="${javadoc.bootclasspath}"/>
-            </bootclasspath>
             <classpath>
                 <filelist files="${javadoc.classpath}"/>
             </classpath>

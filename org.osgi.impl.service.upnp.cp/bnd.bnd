@@ -9,14 +9,10 @@ Export-Package				= \
 	org.osgi.service.upnp; -split-package:=first; provide:=true, \
   	org.osgi.impl.service.upnp.cp.util;version=1.0;-split-package:=first
 
-Bundle-RequiredExecutionEnvironment = J2SE-1.4 
-
-
 Private-Package 			= ${p}.*;-split-package:=first
 
 -buildpath = \
 	org.osgi.service.upnp; 			version=project, \
 	osgi.core;						version=4.2, \
 	osgi.cmpn;						version=4.2, \
-	ee.j2se;						version=${javac.compliance}, \
 	org.osgi.impl.bundle.servlet; 	version=2.1

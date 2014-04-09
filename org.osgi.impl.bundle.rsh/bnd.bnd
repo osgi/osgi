@@ -1,3 +1,4 @@
+javac.profile=compact2
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
@@ -6,12 +7,10 @@ Bundle-Description				= OSGi rsh URL handler reference implementation by IBM Cor
 Import-Service					= org.osgi.service.provisioning.ProvisioningService
 Export-Service					= org.osgi.service.url.URLStreamHandlerService
 
-Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
 Export-Package 					= org.osgi.util.xml
 Private-Package					= ${p}.*
 
 -buildpath						= \
-	ee.j2se;					version=${javac.compliance}, \
 	osgi.core;					version=4.1, \
 	osgi.cmpn;					version=4.1

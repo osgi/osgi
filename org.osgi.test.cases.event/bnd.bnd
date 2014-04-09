@@ -22,7 +22,6 @@ Test-Cases							= ${testcases}
     org.osgi.service.event;                 version=project , \
 	osgi.core;									version=4.2	, \
 	osgi.cmpn;									version=4.0	, \
-	ee.foundation											, \
 	${junit}
 
 -runbundles							= \

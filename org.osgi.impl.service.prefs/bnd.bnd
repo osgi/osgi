@@ -12,5 +12,4 @@ Export-Package				= org.osgi.service.prefs; -split-package:=first; provide:=true
 
 -buildpath = \
 	org.osgi.service.prefs; 	version=project, \
-	osgi;						version=3.0, \
-	ee.minimum;					version=1.0
+	osgi;						version=3.0

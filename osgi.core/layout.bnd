@@ -2,9 +2,9 @@ core.specs = \
  org.osgi.dto, \
  org.osgi.resource, \
  org.osgi.framework, \
+ org.osgi.service.permissionadmin, \
  org.osgi.service.condpermadmin, \
  org.osgi.service.packageadmin, \
- org.osgi.service.permissionadmin, \
  org.osgi.service.startlevel, \
  org.osgi.service.url, \
  org.osgi.util.tracker

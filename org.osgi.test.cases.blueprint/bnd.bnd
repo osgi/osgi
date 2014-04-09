@@ -2,7 +2,6 @@
 -include: ${build}/eclipse/jdt.bnd
 
 Export-Package						= ${p}.*
-Bundle-RequiredExecutionEnvironment = J2SE-1.4
 Bundle-Vendor: IBM
 Bundle-DocURL: http://www.osgi.org/
 Bundle-ContactAddress: info@mail.osgi.org
@@ -395,7 +394,6 @@ Test-Cases							= ${testcases}
     org.osgi.service.blueprint;             version=project , \
 	osgi.core;								version=4.2		, \
 	osgi.cmpn;								version=4.2		, \
-	ee.j2se;								version=${javac.compliance}	, \
 	${junit}
 
 -runbundles							= \

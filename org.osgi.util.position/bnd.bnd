@@ -5,5 +5,4 @@ Export-Package: ${p}.*; -split-package:=first
 
 -buildpath = \
 	osgi.core;					version=4.0, \
-	org.osgi.util.measurement;	version=project, \
-	ee.minimum;					version=1.0
+	org.osgi.util.measurement;	version=project

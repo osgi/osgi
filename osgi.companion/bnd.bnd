@@ -8,8 +8,6 @@ nodeploy						=true
 # the repository (if they are deployable)
 
 -dependson 					=  \
-    ee.minimum, \
-    ee.foundation, \
     osgi.annotation, \
     osgi.core, \
     osgi.cmpn, \

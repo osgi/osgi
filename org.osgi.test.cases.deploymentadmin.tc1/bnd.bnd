@@ -71,7 +71,6 @@ Test-Cases							= ${testcases}
     org.osgi.test.support; 				version=project , \
 	osgi.core;							version=4.2, \
 	osgi.cmpn;							version=4.3, \
-	ee.foundation; 						version=1.1, \
 	${junit}
 
 -runproperties = ${runsecureproperties}, \

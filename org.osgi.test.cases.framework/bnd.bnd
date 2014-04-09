@@ -283,7 +283,6 @@ Include-Resource = \
 	org.osgi.resource;						version=project	, \
 	org.osgi.framework;						version=project	, \
 	osgi.cmpn;								version=4.0	, \
-	ee.minimum; 							version=1.3, \
 	org.apache.servicemix.bundles.bcel;     version=5.2 , \
 	${junit}
 

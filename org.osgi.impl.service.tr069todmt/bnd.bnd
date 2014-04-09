@@ -5,7 +5,6 @@ Bundle-Activator = ${p}.TR069ConnectorFactoryImpl
 Export-Package = org.osgi.service.tr069todmt; -split-package:=first; provide:=true
 Export-Service = org.osgi.service.tr069todmt.TR069ConnectorFactory
 Import-Service = org.osgi.service.log.LogService
-Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
 Private-Package = ${p}.*
 
@@ -13,5 +12,4 @@ Private-Package = ${p}.*
 	org.osgi.service.tr069todmt;version=project, \
 	org.osgi.service.dmt;version=project, \
 	osgi.cmpn; version=4.1, \
-	osgi.core; version=4.1, \
-	ee.j2se; version=${javac.compliance}
+	osgi.core; version=4.1

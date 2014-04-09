@@ -4,5 +4,4 @@
 Export-Package: ${p}.*; -split-package:=first
 
 -buildpath = \
-    ee.j2se; version=${javac.compliance}, \
     osgi.annotation; version=6.0

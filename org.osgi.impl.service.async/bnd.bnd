@@ -12,5 +12,4 @@ Export-Package					= org.osgi.service.async; -split-package:=first; provide:=tru
 	org.osgi.service.async;		version=project, \
 	org.osgi.util.promise;		version=project, \
 	org.osgi.util.function;		version=project, \
-	ee.j2se;					version=1.5, \
 	osgi.core;					version=4.3.1

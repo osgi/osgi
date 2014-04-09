@@ -49,7 +49,6 @@ Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.resolver
 
 -buildpath							= \
-    ee.j2se; version=${javac.compliance}, \
     org.osgi.test.support;                  version=project  , \
     org.osgi.service.resolver;              version=project , \
 	osgi.core;								version=5.0		, \

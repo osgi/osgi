@@ -1,3 +1,4 @@
+javac.profile=
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 

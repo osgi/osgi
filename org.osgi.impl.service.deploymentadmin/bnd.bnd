@@ -1,10 +1,9 @@
+javac.profile=compact2
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
 Bundle-Vendor					= Nokia
 Bundle-Activator				= $(p).Activator
-
-Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
 Private-Package				= \
 	${p}, \
@@ -18,7 +17,6 @@ Export-Package 					= ${p}.perm, \
 
 -buildpath						= \
     org.osgi.service.deploymentadmin;				version= project, \
-	ee.j2se;										version= ${javac.compliance}, \
 	osgi.core;										version= 4.3, \
 	osgi.cmpn;										version= 4.3, \
 	org.eclipse.osgi;								version= 3.5

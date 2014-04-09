@@ -27,7 +27,8 @@
 		<dirname property="-projectdir" file="${ant.file}" />
 		<dirname property="-workspacedir" file="${-projectdir}" />
 		<basename property="-projectname" file="${-projectdir}" />
-		<echo>Enter project ${-projectname} (${top})</echo>
+		<echo if:set="top">Enter project ${-projectname} (${top})</echo>
+		<echo unless:set="top">Enter project ${-projectname}</echo>
 		
 		<taskdef resource="aQute/bnd/ant/taskdef.properties" classpath="${-workspacedir}/licensed/repo/biz.aQute.bnd/biz.aQute.bnd-latest.jar" />
 
@@ -62,34 +63,27 @@
 	     COMPILE
 	     Compile the sources. 
 	-->
-	<macrodef name="javac.macro">
-		<attribute name="output" default="${project.output}"/>
-		<attribute name="bootclasspath" default="${project.bootclasspath}"/>
-		<attribute name="target" default="${javac.target}"/>
-		<sequential>
-			<echo>Compile ${project.sourcepath} to @{output}</echo>
-			<echo>-source ${javac.source} -target @{target} -bootclasspath @{bootclasspath}</echo>
-			<mkdir dir="@{output}"/>
-			<javac fork="yes"
-				executable="${javac}"
-				srcdir="${project.sourcepath}"
-				destdir="@{output}"
-				classpath="${project.buildpath}"
-				bootclasspath="@{bootclasspath}"
-				deprecation="true"
-				listfiles="true"
-				target="@{target}"
-				source="${javac.source}"
-				encoding="UTF-8"
-				debug="${javac.debug}"
-				includeAntRuntime="no"
-				verbose="${verbose}" />
-		</sequential>
-	</macrodef>
-
-	<target name="compile" depends="dependencies,-compilejsr14" if="project.sourcepath">
-		<javac.macro bootclasspath="${-project.bootclasspath}" target="${-javac.target}" />
-		
+	<target name="compile" depends="dependencies" if="project.sourcepath">
+        <mkdir dir="${project.output}"/>
+        <echo>Compile ${project.sourcepath} to ${project.output}</echo>
+        <echo unless:blank="${javac.profile}">-source ${javac.source} -target ${javac.target} -profile ${javac.profile}</echo>
+        <echo if:blank="${javac.profile}">-source ${javac.source} -target ${javac.target}</echo>
+        <javac fork="yes"
+            executable="${javac}"
+            srcdir="${project.sourcepath}"
+            destdir="${project.output}"
+            classpath="${project.buildpath}"
+            includeAntRuntime="no"
+            deprecation="true"
+            listfiles="true"
+            source="${javac.source}"
+            target="${javac.target}"
+            debug="${javac.debug}"
+            encoding="UTF-8"
+            verbose="${verbose}">
+            <compilerarg line="-profile ${javac.profile}" unless:blank="${javac.profile}"/>
+        	<bootclasspath path="${project.bootclasspath}" unless:blank="${project.bootclasspath}"/>
+        </javac>
 		<!-- The eclipse compiler copies resources but javac does not --> 
 		<copy todir="${project.output}" verbose="${verbose}" preservelastmodified="true">
 			<fileset dir="${project.sourcepath}">
@@ -97,62 +91,6 @@
                 <exclude name="**/*.class"/>
 			</fileset>
 		</copy>
-	</target>
-
-	<target name="-compilejsr14" depends="-checkjsr14" if="-jsr14compile">
-		<javac.macro output="${target}/jsr14" />
-	</target>
-
-	<target name="-checkjsr14">
-		<!-- If the jsr14 property is false, then we build jsr14 projects
-		first with jsr14, if the compiler supports jsr14, and then with 1.5
-		for the final output.
-		-->
-
-		<!-- default is to build jsr14 output. Run ant with -Djsr14=no to generate 1.5 output. -->
-		<property name="jsr14" value="true" />
-		<!--  javac 1.5 and 1.6 support -target jsr14 -->
-		<condition property="-jsr14supported" value="true" else="false">
-			<matches pattern="^1\.[5-6]$" string="${ant.java.version}"/>
-		</condition>
-		<!-- Project requests jsr14 if source is 1.5, target is jsr14 and ee is minimum -->
-		<condition property="-jsr14target">
-			<and>
-				<equals arg1="1.5" arg2="${javac.source}" casesensitive="false" />
-				<equals arg1="jsr14" arg2="${javac.target}" casesensitive="false" />
-				<matches pattern="^$|.*[/\\]ee\.minimum-[.0-9]+\.jar$" string="${project.bootclasspath}" casesensitive="false" />
-			</and>
-		</condition>
-		<!-- Set -javac.target to 1.5 if project requests jsr14 and build does not want or javac does not support jsr14 -->
-		<condition property="-javac.target" value="1.5" else="${javac.target}">
-			<and>
-				<isset property="-jsr14target" />
-				<or>
-					<isfalse value="${jsr14}"/>
-					<isfalse value="${-jsr14supported}"/>
-				</or>
-			</and>
-		</condition>
-		<!-- Set -project.bootclasspath to 1.5 if project requests jsr14 and build does not want or javac does not support jsr14 -->
-		<condition property="-project.bootclasspath" value="${ee.j2se-15.jar}" else="${project.bootclasspath}">
-			<and>
-				<isset property="-jsr14target" />
-				<or>
-					<isfalse value="${jsr14}"/>
-					<isfalse value="${-jsr14supported}"/>
-				</or>
-				<length string="${project.bootclasspath}" trim="true" when="greater" length="0" />
-			</and>
-		</condition>
-		<!-- Compile jsr14 if project requests jsr14, build does not want jsr14, javac supports jsr14 and there is something to compile -->
-		<condition property="-jsr14compile">
-			<and>
-				<isset property="-jsr14target" />
-				<isfalse value="${jsr14}"/>
-				<istrue value="${-jsr14supported}"/>
-				<isset property="project.sourcepath" />
-			</and>
-		</condition>
 	</target>
 
 	<!--
@@ -214,6 +152,7 @@
 		<echo>javac.source:           ${javac.source}</echo>
 		<echo>javac.target:           ${javac.target}</echo>
 		<echo>javac.compliance:       ${javac.compliance}</echo>
+		<echo>javac.profile:          ${javac.profile}</echo>
 		<echo>base.modfied:           ${base.modified} (${base.modified.readable})</echo>
 		<echo>target:                 ${target}</echo>
 		<echo>repo:                   ${repo}</echo>

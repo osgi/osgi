@@ -1,9 +1,9 @@
+javac.profile=compact3
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
 Export-Package: ${p}.*; -split-package:=first
 
 -buildpath = \
-	osgi.core;					version=4.2, \
-	ee.j2se;					version=${javac.compliance}
+	osgi.core;					version=4.2
 	

@@ -1,3 +1,4 @@
+javac.profile=compact3
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
@@ -9,7 +10,7 @@ Import-Package: ${-signaturetest}, *
 Include-Resource                    = \
     tb2.jar
 
--buildpath                          = ee.j2se; version=${javac.compliance}, \
+-buildpath = \
     org.osgi.test.support;          version=project, \
     org.osgi.jmx;                   version=project , \
     osgi.core;                      version=4.3.1   , \

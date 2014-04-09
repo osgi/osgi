@@ -2,22 +2,19 @@
 nodeploy   = true
 
 -dependson = osgi.companion, dmforest
+
+javac.profile=
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd, ${project.workspace}/osgi.companion/layout.bnd
 
 -buildpath: \
-    ee.j2se;         version=${javac.compliance}, \
     dmforest;        version=project, \
     com.sun.tools;   version=1.5.0, \
     org.apache.bcel; version=1.0
 
-javadoc.bootclasspath = ${uniq; \
-                    ${repo;ee.j2se;[${javac.compliance},${javac.compliance}]}, \
-                    ${repo;ee.foundation}}
 javadoc.classpath = ${uniq; \
                     ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}, \
-                    ${repo;org.eclipse.persistence.jpa_spec}, \
-                    ${repo;com.icl.saxon}}
+                    ${repo;org.eclipse.persistence.jpa_spec}}
 
 javadoc.packages = ${uniq; ${annotation.packages}, ${core.packages}, ${cmpn.packages}, ${enterprise.packages}, ${residential.packages}, org.osgi.dmt.*}
 

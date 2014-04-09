@@ -18,9 +18,8 @@ Test-Cases							= ${testcases}
 -buildpath							= \
     org.osgi.test.support;                  version=project , \
     org.osgi.service.io;                  	version=project , \
-	osgi.core;								version=4.0	, \
-	osgi.cmpn;								version=4.0	, \
-	ee.foundation;							version=1.1		, \
+	osgi.core;								version=4.3.1	, \
+	osgi.cmpn;								version=4.3.1	, \
 	${junit}
 
 -runbundles							= \
