@@ -236,9 +236,29 @@
     osgi.contract=JavaServlet;
     version:Version=2.5;
     uses:="javax.servlet,javax.servlet.http"
-Import-Package:
-    javax.servlet;      version="[1.0,2)",
-    javax.servlet.http; version="[1.0,2)"</programlisting>
+Export-Package:
+    javax.servlet;      version="2.5",
+    javax.servlet.http; version="2.5"</programlisting>
+
+    <para>A contract may support multiple versions of a named contract.
+    Such a contract must use a single capability for the contract name that
+    specifies a list of all the versions that are supported. For example,
+    the JavaServlet 3.1 contract capability would be specified with the
+    following:</para>
+
+    <programlisting>Provide-Capability: osgi.contract;
+    osgi.contract=JavaServlet;
+    version:List&lt;Version&gt;="2.5,3.0,3.1";
+    uses:=
+        "javax.servlet,
+        javax.servlet.annotation,
+        javax.servlet.descriptor,
+        javax.servlet.http"
+Export-Package:
+    javax.servlet;            version="3.1",
+    javax.servlet.annotation; version="3.1",
+    javax.servlet.descriptor; version="3.1",
+    javax.servlet.http;       version="3.1"</programlisting>
 
     <para>A client bundle that requires the Servlet 2.5 contract can then have
     the following manifest:</para>
@@ -270,6 +290,15 @@ DynamicImport-Package:
     attribute. The contract bundle does not require such coordination; it also
     allows the package exporters to reside in different and unrelated
     bundles.</para>
+
+    <para>A client bundle may only work with a specific range of contract
+    versions.  For example, a client may not work with JavaServlet with a
+    version range of [3.0,3.1).  In this case the following could be used</para>
+
+    <programlisting>Require-Capability: osgi.contract;
+    filter:="(&amp;(osgi.contract=JavaServlet)(version&gt;=3.0)(!(version&gt;=3.1)))",
+Import-Package:
+    javax.servlet, javax.servlet.http</programlisting>
 
     <para>The definition of the <code>osgi.contract</code> Namespace is in the
     following table and in the <xref
@@ -334,11 +363,13 @@ DynamicImport-Package:
 
             <entry><code>O</code></entry>
 
-            <entry><code>Version</code></entry>
+            <entry><code>Version+</code></entry>
 
             <entry><code>version</code></entry>
 
-            <entry><para>A version for the contract</para></entry>
+            <entry><para>A list of versions for the contract.  A contract
+            that supports multiple versions must use a single capability
+            with a version attribute that lists all versions supported.</para></entry>
           </row>
 
           <row>
