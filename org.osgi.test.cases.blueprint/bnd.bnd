@@ -384,7 +384,20 @@ Include-Resource					= \
  	www/comp1_no_config.jar=comp1_no_config.jar, \
  	www/comp1_dir_no_config.jar=comp1_dir_no_config.jar, \
  	www/comp1_different_version.jar=comp1_different_version.jar, \
- 	www/Service_lazy_export.jar=Service_lazy_export.jar
+ 	www/Service_lazy_export.jar=Service_lazy_export.jar, \
+ 	www/generic_collection_injection.jar=generic_collection_injection.jar , \
+    www/error_generic_conversion.jar=error_generic_conversion.jar , \
+    www/error_generic_rawclass.jar=error_generic_rawclass.jar , \
+    www/error_reference_list_import.jar=error_reference_list_import.jar , \
+    www/error_reference_list_service_import.jar=error_reference_list_service_import.jar , \
+    www/error_enum_conversion.jar=error_enum_conversion.jar , \
+    www/generic_property_injection.jar=generic_property_injection.jar , \
+    www/managed_service_export2.jar=managed_service_export2.jar , \
+    www/reference_collection_import.jar=reference_collection_import.jar , \
+    www/reference_list_import.jar=reference_list_import.jar , \
+    www/reference_list_service_import.jar=reference_list_service_import.jar , \
+    www/pattern_injection.jar=pattern_injection.jar
+ 	
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.blueprint.container, org.osgi.service.blueprint.reflect
