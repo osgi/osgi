@@ -24,9 +24,9 @@
 
     <target name="core-diff" depends="javadoc,xmlns,core.xml,core-diff.xml,core-diff.fo,core-diff.pdf" />
 
-    <target name="cmpn" depends="javadoc,ee,xmlns,cmpn.xml,cmpn.fo,cmpn.pdf" />
+    <target name="cmpn" depends="javadoc,xmlns,cmpn.xml,cmpn.fo,cmpn.pdf" />
 
-    <target name="cmpn-diff" depends="javadoc,ee,xmlns,cmpn.xml,cmpn-diff.xml,cmpn-diff.fo,cmpn-diff.pdf" />
+    <target name="cmpn-diff" depends="javadoc,xmlns,cmpn.xml,cmpn-diff.xml,cmpn-diff.fo,cmpn-diff.pdf" />
 
     <target name="enterprise" depends="javadoc,xmlns,enterprise.xml,enterprise.fo,enterprise.pdf" />
 
@@ -76,24 +76,6 @@
             <param name="ddf.only" expression="1"/>
         </xslt>
         <property name="-javadoc" value="true"/>
-    </target>
-
-    <target name="ee" depends="compile" unless="-ee">
-        <echo>${minimum-latest.jar}</echo>
-        <echo>${foundation-latest.jar}</echo>
-        <delete dir="${target}/ee"/>
-        <mkdir dir="${target}/ee"/>
-        <java classname="org.osgi.tools.jar2xml.JAR2XML" classpath="${project.buildpath}" fork="true" output="${target}/ee/ee.xml">
-            <arg line="-tagged minimum ${minimum-latest.jar}" />
-            <arg line="-tagged foundation ${foundation-latest.jar}" />
-        </java>
-        <xslt style="docbook/xsl/ee2docbook.xsl"
-            in="${target}/ee/ee.xml"
-            out="${target}/ee/docbook/ee.xml">
-            <classpath location="${saxon}" />
-            <factory name="com.icl.saxon.TransformerFactoryImpl" />
-        </xslt>
-        <property name="-ee" value="true"/>
     </target>
 
     <target name="rdmtsummary" depends="compile" unless="-rdmtsummary">

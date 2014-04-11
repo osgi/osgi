@@ -17,7 +17,6 @@ Include-Resource 				: ${residential.resources}
 	${residential.specs} 
 
 -buildpath 					= \
-	${replace;${residential.specs};.+;$0\\;version=project}, \
-	ee.foundation;version=1.1
+	${replace;${residential.specs};.+;$0\\;version=project}
 
 -include : layout.bnd

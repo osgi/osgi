@@ -77,8 +77,6 @@ osgi.version				= ${osgi.release}.0
 
 build.version				= ${osgi.version}.0.${project.build}
 
-ee.j2se-15.jar = ${repo;ee.j2se;1.5;lowest}
-
 # Documentation
 Bundle-Copyright       	= ${copyright}
 Bundle-Vendor			= OSGi Alliance
