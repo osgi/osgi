@@ -25,20 +25,24 @@
 
 package org.osgi.test.support.signature;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.IOException;
 
 public class PoolEntry {
-	public final static int		CONSTANT_Utf8				= 1;
-	public final static short	CONSTANT_Integer			= 3;
-	public final static short	CONSTANT_Float				= 4;
-	public final static short	CONSTANT_Long				= 5;
-	public final static short	CONSTANT_Double				= 6;
-	public final static short	CONSTANT_Class				= 7;
-	public final static short	CONSTANT_String				= 8;
-	public final static short	CONSTANT_FieldRef			= 9;
-	public final static short	CONSTANT_MethodRef			= 10;
-	public final static short	CONSTANT_InterfaceMethodRef	= 11;
-	public final static short	CONSTANT_NameAndType		= 12;
+	public final static int	CONSTANT_Utf8				= 1;
+	public final static int	CONSTANT_Integer			= 3;
+	public final static int	CONSTANT_Float				= 4;
+	public final static int	CONSTANT_Long				= 5;
+	public final static int	CONSTANT_Double				= 6;
+	public final static int	CONSTANT_Class				= 7;
+	public final static int	CONSTANT_String				= 8;
+	public final static int	CONSTANT_FieldRef			= 9;
+	public final static int	CONSTANT_MethodRef			= 10;
+	public final static int	CONSTANT_InterfaceMethodRef	= 11;
+	public final static int	CONSTANT_NameAndType		= 12;
+	public final static int	CONSTANT_MethodHandle		= 15;
+	public final static int	CONSTANT_MethodType			= 16;
+	public final static int	CONSTANT_InvokeDynamic		= 18;
 
 	int							tag;
 	int							a;
@@ -55,27 +59,27 @@ public class PoolEntry {
 				break;
 
 			case CONSTANT_Integer : // Integer
-				o = new Integer(in.readInt());
+				o = Integer.valueOf(in.readInt());
 				break;
 
 			case CONSTANT_Float : // Float
-				o = new Float(in.readFloat());
+				o = Float.valueOf(in.readFloat());
 				break;
 
 			case CONSTANT_Long : // Long
-				o = new Long(in.readLong());
+				o = Long.valueOf(in.readLong());
 				break;
 
 			case CONSTANT_Double : // Double
-				o = new Double(in.readDouble());
+				o = Double.valueOf(in.readDouble());
 				break;
 
 			case CONSTANT_Class : // Class
-				a = in.readUnsignedShort();
+				a = in.readUnsignedShort(); // name index
 				break;
 
 			case CONSTANT_String : // String
-				a = in.readUnsignedShort();
+				a = in.readUnsignedShort(); // string index
 				break;
 
 			case CONSTANT_FieldRef : // Field Ref
@@ -86,10 +90,24 @@ public class PoolEntry {
 				break;
 
 			case CONSTANT_NameAndType : // Name and Type
-				a = in.readUnsignedShort();
-				b = in.readUnsignedShort();
+				a = in.readUnsignedShort(); // name index
+				b = in.readUnsignedShort(); // descriptor index
 				break;
 				
+			case CONSTANT_MethodHandle : // Method Handle
+				a = in.readUnsignedByte(); // reference kind
+				b = in.readUnsignedShort(); // reference index
+				break;
+				
+			case CONSTANT_MethodType : // Method Type
+				a = in.readUnsignedShort(); // descriptor index
+				break;
+
+			case CONSTANT_InvokeDynamic : // Invoke Dynamic
+				a = in.readUnsignedShort(); // bootstrap method attribute index
+				b = in.readUnsignedShort(); // name and type index
+				break;
+
 			default :
 				throw new IllegalArgumentException("Invalid constant pool: "
 						+ tag);
@@ -149,7 +167,13 @@ public class PoolEntry {
 		"FIELDREF<9>            ",
 		"METHODREF<10>          ",
 		"INTERFACEMETHODREF<11> ",
-		"NAMEANDTYPE<12>        "
+							"NAMEANDTYPE<12>        ",
+							"<13>                   ",
+							"<14>                   ",
+							"METHODHANDLE<15>       ",
+							"METHODTYPE<16>         ",
+							"<17>                   ",
+							"INVOKEDYNAMIC<18>      "
 	};
 	@Override
 	public String toString() {
@@ -165,15 +189,22 @@ public class PoolEntry {
 
 			case CONSTANT_String : // String
 			case CONSTANT_Class : // Class
-				return NAMES[tag] + a;
+				return NAMES[tag] + a + ": " + String.valueOf(pool[a]);
 
 			case CONSTANT_FieldRef : // Field Ref
 			case CONSTANT_MethodRef : // Method Ref
 			case CONSTANT_InterfaceMethodRef : // Interface Method Ref
-				return NAMES[tag] + a + "," + b + ": " + pool[a].toString() + " : " + pool[b].toString();
+				return NAMES[tag] + a + "," + b + ": " + String.valueOf(pool[a]) + " : " + String.valueOf(pool[b]);
 
 			case CONSTANT_NameAndType : // Name and Type
-				return NAMES[tag] + a + "," + b + ": " + pool[a].toString() + " : " + pool[b].toString();
+				return NAMES[tag] + a + "," + b + ": " + String.valueOf(pool[a]) + " : " + String.valueOf(pool[b]);
+
+			case CONSTANT_MethodHandle : // Method Handle
+			case CONSTANT_InvokeDynamic : // Invoke Dynamic
+				return NAMES[tag] + a + "," + b + ": " + String.valueOf(pool[b]);
+
+			case CONSTANT_MethodType : // Method Type
+				return NAMES[tag] + a + ": " + String.valueOf(pool[a]);
 		}
 		return "?";
 	}
