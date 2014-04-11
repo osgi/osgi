@@ -19,7 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLConnection;
 import java.util.jar.Attributes;
 import java.util.jar.Manifest;
 
@@ -92,13 +91,13 @@ public class TW6Test extends WebContainerTestBundleControl {
             Attributes attrs = mf.getAttributes("welcome.jsp");
             String val = null;
             if (attrs != null) {
-                val = attrs.getValue("SHA1-Digest");
+				val = attrs.getValue("SHA-256-Digest");
             }
             assertNull(val);  
             
             // verify signature did exist in the original war.
             mf = super.getManifestFromWarName("tw6.war");
-            val = mf.getAttributes("welcome.jsp").getValue("SHA1-Digest");
+			val = mf.getAttributes("welcome.jsp").getValue("SHA-256-Digest");
             assertNotNull(val);  
         } finally {
             if (is != null) {
