@@ -69,7 +69,11 @@ public class TestControl extends DefaultTestBundleControl {
 				ref);
 		mts = (MetaTypeService) getContext().getService(ref);
 		
-		bundle = installBundle("tb1.jar");
+		bundle = getTestBundle();
+	}
+
+	protected Bundle getTestBundle() throws Exception {
+		return install("tb1.jar");
 	}
 
 	/**

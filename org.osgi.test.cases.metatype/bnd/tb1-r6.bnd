@@ -1,0 +1,7 @@
+Bundle-Version: 4.2.0
+Bundle-SymbolicName: $(p).tb1-r6
+
+Private-Package	: $(p).tb1-r6
+
+Include-Resource					= \
+ resources/tb1-r6

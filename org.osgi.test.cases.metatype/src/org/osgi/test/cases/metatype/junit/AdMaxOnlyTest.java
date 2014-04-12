@@ -124,7 +124,7 @@ public class AdMaxOnlyTest extends MetaTypeTest {
 	
 	protected void setUp() throws Exception {
 		ref = getContext().getServiceReference(MetaTypeService.class.getName());
-		bundle = install("tb3.jar");
+		bundle = getTestBundle();
 		bundle.start();
 		MetaTypeService mts = (MetaTypeService)getContext().getService(ref);
 		MetaTypeInformation mti = mts.getMetaTypeInformation(bundle);
@@ -133,6 +133,10 @@ public class AdMaxOnlyTest extends MetaTypeTest {
 		for (int i = 0; i < ads.length; i++) {
 			this.ads.put(ads[i].getID(), ads[i]);
 		}
+	}
+
+	protected Bundle getTestBundle() throws Exception {
+		return install("tb3.jar");
 	}
 	
 	protected void tearDown() throws Exception {

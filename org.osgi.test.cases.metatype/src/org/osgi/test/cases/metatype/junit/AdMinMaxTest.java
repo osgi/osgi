@@ -170,7 +170,7 @@ public class AdMinMaxTest extends MetaTypeTest {
 	
 	protected void setUp() throws Exception {
 		ref = getContext().getServiceReference(MetaTypeService.class.getName());
-		bundle = install("tb3.jar");
+		bundle = getTestBundle();
 		bundle.start();
 		MetaTypeService mts = (MetaTypeService)getContext().getService(ref);
 		MetaTypeInformation mti = mts.getMetaTypeInformation(bundle);
@@ -181,6 +181,10 @@ public class AdMinMaxTest extends MetaTypeTest {
 		}
 	}
 	
+	protected Bundle getTestBundle() throws Exception {
+		return install("tb3.jar");
+	}
+
 	protected void tearDown() throws Exception {
 		getContext().ungetService(ref);
 		bundle.stop();
