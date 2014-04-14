@@ -48,7 +48,7 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return inputs;
 	}
 
-	public ZCLCluster getServerCluster(int serverClusterId) throws Exception {
+	public ZCLCluster getServerCluster(int serverClusterId) {
 		return inputs[serverClusterId];
 	}
 
@@ -56,7 +56,7 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return outputs;
 	}
 
-	public ZCLCluster getClientCluster(int clientClusterId) throws Exception {
+	public ZCLCluster getClientCluster(int clientClusterId) {
 		return outputs[clientClusterId];
 	}
 
