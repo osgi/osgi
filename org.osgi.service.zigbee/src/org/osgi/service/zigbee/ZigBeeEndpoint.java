@@ -112,9 +112,8 @@ public interface ZigBeeEndpoint {
 	 * 
 	 * @param handler that will be used in order to return the node simple
 	 *        descriptor {@link ZigBeeSimpleDescriptor}.
-	 * @throws Exception
 	 */
-	public void getSimpleDescriptor(ZigBeeHandler handler) throws Exception;
+	public void getSimpleDescriptor(ZigBeeHandler handler);
 
 	/**
 	 * @return An array of servers(inputs) clusters, returns an empty array if
@@ -151,7 +150,7 @@ public interface ZigBeeEndpoint {
 	 * As described in "Table 2.7 APSME-BIND.confirm Parameters" of the ZigBee
 	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a binding
 	 * request can have the following results: SUCCESS, ILLEGAL_REQUEST,
-	 * TABLE_FULL, NOT_SUPPORTED.
+	 * TABLE_FULL, NOT_SUPPORTED: {@link APSME}.
 	 * 
 	 * @param servicePid to bound to
 	 * @param clusterId the cluster identifier to bound to
@@ -168,7 +167,7 @@ public interface ZigBeeEndpoint {
 	 * As described in "Table 2.9 APSME-UNBIND.confirm Parameters" of the ZigBee
 	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, an unbind
 	 * request can have the following results: SUCCESS, ILLEGAL_REQUEST,
-	 * INVALID_BINDING.
+	 * INVALID_BINDING: {@link APSME}.
 	 * 
 	 * @param servicePid to unbound from
 	 * @param clusterId The cluster identifier to unbound from

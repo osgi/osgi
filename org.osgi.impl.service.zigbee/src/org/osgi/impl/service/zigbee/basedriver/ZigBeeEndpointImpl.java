@@ -39,7 +39,7 @@ public class ZigBeeEndpointImpl implements ZigBeeEndpoint {
 		return Long.valueOf("-1");
 	}
 
-	public void getSimpleDescriptor(ZigBeeHandler handler) throws Exception {
+	public void getSimpleDescriptor(ZigBeeHandler handler) {
 		// TODO Auto-generated method stub
 		handler.onSuccess(desc);
 	}
