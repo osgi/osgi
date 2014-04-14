@@ -90,7 +90,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		// TODO Auto-generated method stub
 	}
 
-	public void createGroupService(String pid, int groupAddress, ZCLCommandHandler handler) throws Exception {
+	public void createGroupService(String pid, int groupAddress, ZCLCommandHandler handler) {
 		// TODO Auto-generated method stub
 	}
 

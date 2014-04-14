@@ -55,9 +55,8 @@ public interface ZigBeeGroup {
 	 *        {@link org.osgi.framework.Constants#SERVICE_PID} ) of the
 	 *        {@link ZigBeeEndpoint} that we want add to this Group.
 	 * @param handler the handler that will notified of the result of "joining".
-	 * @throws Exception
 	 */
-	void joinGroup(String pid, ZCLCommandHandler handler) throws Exception;
+	void joinGroup(String pid, ZCLCommandHandler handler);
 
 	/**
 	 * This method is used for adding an Endpoint to a Group, it may be invoked
@@ -76,9 +75,8 @@ public interface ZigBeeGroup {
 	 *        {@link org.osgi.framework.Constants#SERVICE_PID} ) of the
 	 *        {@link ZigBeeEndpoint} that we want leave to this Group.
 	 * @param handler the handler that will notified of the result of "leaving".
-	 * @throws Exception
 	 */
-	void leaveGroup(String pid, ZCLCommandHandler handler) throws Exception;
+	void leaveGroup(String pid, ZCLCommandHandler handler);
 
 	/**
 	 * Invokes the action on a Group. The handler will provide the invocation
@@ -91,9 +89,8 @@ public interface ZigBeeGroup {
 	 * @param clusterId a cluster identifier.
 	 * @param frame a command frame sequence.
 	 * @param handler The handler that manages the command response.
-	 * @throws ZCLException
 	 */
-	void invoke(Integer clusterId, ZCLFrame frame, ZCLCommandHandler handler) throws ZCLException;
+	void invoke(Integer clusterId, ZCLFrame frame, ZCLCommandHandler handler);
 
 	/**
 	 * This method is to be used by applications when the targeted device has to
@@ -108,8 +105,7 @@ public interface ZigBeeGroup {
 	 * @param exportedServicePID : the source endpoint of the command request.
 	 *        In targeted situations, the source endpoint is the valid service
 	 *        PID of an exported endpoint.
-	 * @throws ZCLException
 	 */
-	void invoke(Integer clusterId, ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID) throws ZCLException;
+	void invoke(Integer clusterId, ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID);
 
 }

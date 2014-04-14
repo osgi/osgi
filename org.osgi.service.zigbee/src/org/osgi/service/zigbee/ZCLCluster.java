@@ -100,9 +100,8 @@ public interface ZCLCluster {
 	 * 
 	 * @param frame a command frame sequence.
 	 * @param handler The handler that manages the command response.
-	 * @throws ZCLException
 	 */
-	void invoke(ZCLFrame frame, ZCLCommandHandler handler) throws ZCLException;
+	void invoke(ZCLFrame frame, ZCLCommandHandler handler);
 
 	/**
 	 * This method is to be used by applications when the targeted device has to
@@ -116,8 +115,7 @@ public interface ZCLCluster {
 	 * @param exportedServicePID : the source endpoint of the command request.
 	 *        In targeted situations, the source endpoint is the valid service
 	 *        PID of an exported endpoint.
-	 * @throws ZCLException
 	 */
-	void invoke(ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID) throws ZCLException;
+	void invoke(ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID);
 
 }

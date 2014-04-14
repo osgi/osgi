@@ -45,7 +45,7 @@ public interface ZCLCommandHandler {
 	 * endpoint. A handler could be called several times on a command handler.
 	 * 
 	 * @param frame the ZCLFrame
-	 * @param e is any exception related to ZigBee communication failure.
+	 * @param e the exception if any
 	 */
 	void notifyResponse(ZCLFrame frame, Exception e);
 

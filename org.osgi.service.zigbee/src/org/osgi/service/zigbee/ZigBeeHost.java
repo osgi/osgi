@@ -184,9 +184,8 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * @param groupAddress the address of the group to create.
 	 * @param handler the ZCLCommandHandler that will be notified of the result
 	 *        of "creation".
-	 * @throws Exception
 	 */
-	public void createGroupService(String pid, int groupAddress, ZCLCommandHandler handler) throws Exception;
+	public void createGroupService(String pid, int groupAddress, ZCLCommandHandler handler);
 
 	/**
 	 * Enable to broadcast a given frame on a given cluster.

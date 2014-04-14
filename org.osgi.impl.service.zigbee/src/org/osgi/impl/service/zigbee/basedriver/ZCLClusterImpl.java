@@ -7,7 +7,6 @@ import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZCLAttributeRecord;
 import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLCommandHandler;
-import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.ZigBeeMapHandler;
@@ -80,12 +79,12 @@ public class ZCLClusterImpl implements ZCLCluster {
 		// TODO Auto-generated method stub
 	}
 
-	public void invoke(ZCLFrame frame, ZCLCommandHandler handler) throws ZCLException {
+	public void invoke(ZCLFrame frame, ZCLCommandHandler handler) {
 		// mocked invocation.
 		handler.notifyResponse(frame, null);
 	}
 
-	public void invoke(ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID) throws ZCLException {
+	public void invoke(ZCLFrame frame, ZCLCommandHandler handler, String exportedServicePID) {
 		// mocked invocation.
 		handler.notifyResponse(frame, null);
 	}
