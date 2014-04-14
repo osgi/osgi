@@ -127,10 +127,10 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * Sets the network channel. 802.15.4 and ZigBee break the 2.4Ghz band into
 	 * 16 channels, numbered from 11 to 26.
 	 * 
-	 * @param handler The handler that manages the command response.
 	 * @param channel The network channel.
+	 * @param handler The handler that manages the command response.
 	 */
-	public void setChannel(ZigBeeHandler handler, byte channel);
+	public void setChannel(byte channel, ZigBeeHandler handler);
 
 	/**
 	 * @return The currently configured channel mask.
@@ -141,10 +141,10 @@ public interface ZigBeeHost extends ZigBeeNode {
 	/**
 	 * Set a new configured channel mask.
 	 * 
-	 * @param handler The handler that manages the command response.
 	 * @param mask A value representing the channel mask.
+	 * @param handler The handler that manages the command response.
 	 */
-	public void setChannelMask(ZigBeeHandler handler, int mask);
+	public void setChannelMask(int mask, ZigBeeHandler handler);
 
 	/**
 	 * Updates the list of devices in the network by adding the new devices that
