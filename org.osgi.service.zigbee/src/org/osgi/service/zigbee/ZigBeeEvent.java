@@ -28,9 +28,24 @@ package org.osgi.service.zigbee;
 public interface ZigBeeEvent {
 
 	/**
-	 * @return The cluster object concerned by the events
+	 * @return The ZigBee device node IEEE Address.
 	 */
-	public ZCLCluster getCluster();
+	public Long getIEEEAddress();
+
+	/**
+	 * @return The endpoint identifier.
+	 */
+	public int getEndpointId();
+
+	/**
+	 * @return The cluster id.
+	 */
+	public int getClusterId();
+
+	/**
+	 * @return the attribute identifier (i.e. the attribute's ID)
+	 */
+	public int getAttributeId();
 
 	/**
 	 * @return An object containing the new value for the ZigBee attribute that

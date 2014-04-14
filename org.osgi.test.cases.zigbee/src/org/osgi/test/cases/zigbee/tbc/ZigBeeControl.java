@@ -694,7 +694,10 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		// listener.
 		Dictionary<String, String> events = new Hashtable<String, String>();
 		events.put("eventKey", "eventValue");
-		ZigBeeEvent aZigbeeEvent = new ZigBeeEventImpl(cluster, events);
+
+		// TODO AAA: Is there an easy way to get attributeId?
+		int attributeId = -1;
+		ZigBeeEvent aZigbeeEvent = new ZigBeeEventImpl(dev.getIEEEAddress(), endpoint.getId(), cluster.getId(), attributeId, events);
 
 		// create, and launch a test event source.
 		ZigBeeEventSourceImpl aZigBeeEventSourceImpl = new ZigBeeEventSourceImpl(getContext(), aZigbeeEvent);
