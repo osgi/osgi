@@ -4,7 +4,7 @@ package org.osgi.impl.service.zigbee.basedriver;
 import java.util.Map;
 import org.osgi.service.zigbee.ZCLException;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
-import org.osgi.service.zigbee.ZigBeeException;
+import org.osgi.service.zigbee.ZDPException;
 import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
@@ -98,12 +98,12 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		handler.onSuccess(userDescriptor);
 	}
 
-	public Map getLinksQuality() throws ZigBeeException {
+	public Map getLinksQuality() throws ZDPException {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public Map getRoutingTable() throws ZigBeeException {
+	public Map getRoutingTable() throws ZDPException {
 		// TODO Auto-generated method stub
 		return null;
 	}

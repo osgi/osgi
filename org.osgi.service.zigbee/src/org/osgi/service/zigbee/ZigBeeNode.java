@@ -190,9 +190,9 @@ public interface ZigBeeNode {
 	 * 
 	 * @return a {@link Map} containing the Service.PID as {@link String} key
 	 *         and the {@link LinkQuality} for the node as value.
-	 * @throws ZigBeeException
+	 * @throws ZDPException
 	 */
-	public Map getLinksQuality() throws ZigBeeException;
+	public Map getLinksQuality() throws ZDPException;
 
 	/**
 	 * The ZigBee Base Drive may use the Mgmt_Rtg_req / Mgmt_Rtg_rsp messages to
@@ -204,9 +204,9 @@ public interface ZigBeeNode {
 	 * @return a {@link Map} containing the Service.PID of the destination of
 	 *         the route as {@link String} key and the detail of the
 	 *         {@link Route} as value.
-	 * @throws ZigBeeException
+	 * @throws ZDPException
 	 */
-	public Map getRoutingTable() throws ZigBeeException;
+	public Map getRoutingTable() throws ZDPException;
 
 	/**
 	 * Request to leave the network.

@@ -17,8 +17,8 @@
 package org.osgi.service.zigbee;
 
 /**
- * This class represents root exception for all the code related to ZigBee/ZDP
- * (see Table 2.137 ZDP Enumerations Description in ZIGBEE SPECIFICATION:
+ * This class represents root exception for all the code related to ZDP (see
+ * Table 2.137 ZDP Enumerations Description in ZIGBEE SPECIFICATION:
  * 1_053474r17ZB_TSC-ZigBee-Specification.pdf)
  * 
  * @version 1.0
@@ -28,7 +28,7 @@ package org.osgi.service.zigbee;
  *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  * 
  */
-public class ZigBeeException extends RuntimeException {
+public class ZDPException extends RuntimeException {
 
 	/** generated */
 	private static final long	serialVersionUID	= 2909437185484211441L;
@@ -126,7 +126,7 @@ public class ZigBeeException extends RuntimeException {
 	/**
 	 * @param errordesc exception error description
 	 */
-	public ZigBeeException(String errordesc) {
+	public ZDPException(String errordesc) {
 		super(errordesc);
 		errorCode = 0;
 	}
@@ -135,7 +135,7 @@ public class ZigBeeException extends RuntimeException {
 	 * @param errorCode An error code.
 	 * @param errorDesc An error description which explain the type of problem.
 	 */
-	public ZigBeeException(int errorCode, String errorDesc) {
+	public ZDPException(int errorCode, String errorDesc) {
 		super(errorDesc);
 		this.errorCode = errorCode;
 	}
