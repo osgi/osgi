@@ -121,6 +121,19 @@ public class ZDPException extends RuntimeException {
 	 * Note that: 0x8e-0xff Reserved.
 	 */
 
+	//
+	// Below, the error codes specified by the OSGi Alliance.
+	//
+
+	/** OSGI_EXISTING_ID (16) – another endpoint exists with the same ID. */
+	public static final short	OSGI_EXISTING_ID	= 0x10;
+
+	/**
+	 * OSGI_MULTIPLE_HOSTS (17) – several hosts exist for this PAN ID target or
+	 * HOST_PID target.
+	 */
+	public static final short	OSGI_MULTIPLE_HOSTS	= 0x11;
+
 	private final int			errorCode;
 
 	/**
@@ -147,4 +160,5 @@ public class ZDPException extends RuntimeException {
 	public int getZigBeeErrorCode() {
 		return errorCode;
 	}
+
 }

@@ -79,4 +79,31 @@ public class APSMEException extends RuntimeException {
 	public static final int		APSME_REMOVE_GROUP_INVALID_GROUP		= 31;
 	public static final int		APSME_REMOVE_GROUP_INVALID_PARAMETER	= 32;
 
+	private final int			errorCode;
+
+	/**
+	 * @param errordesc exception error description
+	 */
+	public APSMEException(String errordesc) {
+		super(errordesc);
+		errorCode = 0;
+	}
+
+	/**
+	 * @param errorCode An error code.
+	 * @param errorDesc An error description which explain the type of problem.
+	 */
+	public APSMEException(int errorCode, String errorDesc) {
+		super(errorDesc);
+		this.errorCode = errorCode;
+	}
+
+	/**
+	 * @return A ZigBee error code defined a ZigBee Forum working committee or
+	 *         specified by a ZigBee vendor.
+	 */
+	public int getZigBeeErrorCode() {
+		return errorCode;
+	}
+
 }
