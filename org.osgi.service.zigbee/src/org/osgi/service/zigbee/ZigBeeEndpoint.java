@@ -193,6 +193,11 @@ public interface ZigBeeEndpoint {
 	 * several Mgmt_Bind_req command), then an exception with the error code
 	 * that was sent on the last response is thrown.
 	 * 
+	 * As described in "Table 2.129 Fields of the Mgmt_Bind_rsp Command" of the
+	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
+	 * Mgmt_Bind_rsp command can have the following status: NOT_SUPPORTED or any
+	 * status code returned from the APSME-GET.confirm primitive.
+	 * 
 	 * @param clusterId
 	 * @param handler
 	 */
