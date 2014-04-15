@@ -17,7 +17,7 @@
 package org.osgi.service.zigbee;
 
 /**
- * This interface defines the static variables for APSME error codes.
+ * This exception class is specialized for the APSME errors.
  * 
  * @version 1.0
  * 
@@ -25,7 +25,10 @@ package org.osgi.service.zigbee;
  *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
  *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
-public interface APSME {
+public class APSMEException extends RuntimeException {
+
+	/** generated */
+	private static final long	serialVersionUID						= 5649912932079902597L;
 
 	/**
 	 * As described in "Table 2.7 APSME-BIND.confirm Parameters" of the ZigBee
@@ -33,10 +36,10 @@ public interface APSME {
 	 * request can have the following results: SUCCESS, ILLEGAL_REQUEST,
 	 * TABLE_FULL, NOT_SUPPORTED.
 	 */
-	public static final int	APSME_BIND_SUCCESS						= 0;
-	public static final int	APSME_BIND_ILLEGAL_REQUEST				= 1;
-	public static final int	APSME_BIND_TABLE_FULL					= 2;
-	public static final int	APSME_BIND_NOT_SUPPORTED				= 3;
+	public static final int		APSME_BIND_SUCCESS						= 0;
+	public static final int		APSME_BIND_ILLEGAL_REQUEST				= 1;
+	public static final int		APSME_BIND_TABLE_FULL					= 2;
+	public static final int		APSME_BIND_NOT_SUPPORTED				= 3;
 
 	/**
 	 * As described in "Table 2.9 APSME-UNBIND.confirm Parameters" of the ZigBee
@@ -44,9 +47,9 @@ public interface APSME {
 	 * request can have the following results: SUCCESS, ILLEGAL_REQUEST,
 	 * INVALID_BINDING.
 	 */
-	public static final int	APSME_UNBIND_SUCCESS					= 10;
-	public static final int	APSME_UNBIND_ILLEGAL_REQUEST			= 11;
-	public static final int	APSME_UNBIND_INVALID_BINDING			= 12;
+	public static final int		APSME_UNBIND_SUCCESS					= 10;
+	public static final int		APSME_UNBIND_ILLEGAL_REQUEST			= 11;
+	public static final int		APSME_UNBIND_INVALID_BINDING			= 12;
 
 	/**
 	 * <i>APSME-ADD-GROUP</i> API defined by the ZigBee Specification, in the
@@ -58,9 +61,9 @@ public interface APSME {
 	 * add_group request can have the following status: SUCCESS,
 	 * INVALID_PARAMETER or TABLE_FULL.
 	 */
-	public static final int	APSME_ADD_GROUP_SUCCESS					= 20;
-	public static final int	APSME_ADD_GROUP_INVALID_PARAMETER		= 21;
-	public static final int	APSME_ADD_GROUP_TABLE_FULL				= 22;
+	public static final int		APSME_ADD_GROUP_SUCCESS					= 20;
+	public static final int		APSME_ADD_GROUP_INVALID_PARAMETER		= 21;
+	public static final int		APSME_ADD_GROUP_TABLE_FULL				= 22;
 
 	/**
 	 * APSME-REMOVE-GROUP </i> API defined by the ZigBee Specification, in the
@@ -72,8 +75,8 @@ public interface APSME {
 	 * remove_group request can have the following status: SUCCESS,
 	 * INVALID_GROUP or INVALID_PARAMETER.
 	 */
-	public static final int	APSME_REMOVE_GROUP_SUCCESS				= 30;
-	public static final int	APSME_REMOVE_GROUP_INVALID_GROUP		= 31;
-	public static final int	APSME_REMOVE_GROUP_INVALID_PARAMETER	= 32;
+	public static final int		APSME_REMOVE_GROUP_SUCCESS				= 30;
+	public static final int		APSME_REMOVE_GROUP_INVALID_GROUP		= 31;
+	public static final int		APSME_REMOVE_GROUP_INVALID_PARAMETER	= 32;
 
 }
