@@ -59,6 +59,6 @@ public interface LinkQuality {
 	 * @return the relationship between {@link ZigBeeNode} returning this and
 	 *         the {@link ZigBeeNode} identified by the {@link #getNeighbour()}
 	 */
-	public int getRelathionship();
+	public int getRelationship();
 
 }
