@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package org.osgi.service.zigbee.data;
+package org.osgi.service.zigbee;
 
-import org.osgi.service.zigbee.ZigBeeNode;
 
 /**
  * This interface represents an entry of the RoutingTableList (see Table 2.128
@@ -30,6 +29,31 @@ import org.osgi.service.zigbee.ZigBeeNode;
  *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
 public interface Route {
+
+	/**
+	 * ACTIVE route status.
+	 */
+	public static final int	ACTIVE				= 0;
+
+	/**
+	 * DISCOVERY_UNDERWAY route status.
+	 */
+	public static final int	DISCOVERY_UNDERWAY	= 1;
+
+	/**
+	 * DISCOVERY_FAILED route status.
+	 */
+	public static final int	DISCOVERY_FAILED	= 2;
+
+	/**
+	 * INACTIVE route status.
+	 */
+	public static final int	INACTIVE			= 3;
+
+	/**
+	 * VALIDATION_UNDERDAY route status.
+	 */
+	public static final int	VALIDATION_UNDERDAY	= 4;
 
 	/**
 	 * @return the Service.PID of the {@link ZigBeeNode} as destination of this

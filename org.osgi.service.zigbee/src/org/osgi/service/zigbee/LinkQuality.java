@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.zigbee.data;
-
-import org.osgi.service.zigbee.ZigBeeNode;
+package org.osgi.service.zigbee;
 
 /**
  * This interface represents an entry of the RoutingTableList (see Table 2.126
@@ -35,14 +33,14 @@ public interface LinkQuality {
 	 * @return the Service.PID refering to the {@link ZigBeeNode} representing
 	 *         neighbour
 	 */
-	public String getNeighbour();
+	public String getNeighbor();
 
 	/**
 	 * See the LQI field of the (NeighborTableList Record Format).
 	 * 
 	 * @return the Link Quality Indicator estimated by {@link ZigBeeNode}
 	 *         returning this for communicating with {@link ZigBeeNode}
-	 *         identified by the {@link #getNeighbour()}
+	 *         identified by the {@link #getNeighbor()}
 	 */
 	public int getLQI();
 
@@ -57,7 +55,7 @@ public interface LinkQuality {
 	 * See the Relationship field of the (NeighborTableList Record Format).
 	 * 
 	 * @return the relationship between {@link ZigBeeNode} returning this and
-	 *         the {@link ZigBeeNode} identified by the {@link #getNeighbour()}
+	 *         the {@link ZigBeeNode} identified by the {@link #getNeighbor()}
 	 */
 	public int getRelationship();
 

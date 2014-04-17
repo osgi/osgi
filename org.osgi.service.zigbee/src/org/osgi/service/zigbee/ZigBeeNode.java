@@ -17,8 +17,6 @@
 package org.osgi.service.zigbee;
 
 import java.util.Map;
-import org.osgi.service.zigbee.data.LinkQuality;
-import org.osgi.service.zigbee.data.Route;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
