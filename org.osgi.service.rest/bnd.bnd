@@ -5,4 +5,5 @@ Export-Package: ${p}.*; -split-package:=first
 
 -buildpath: ee.j2se; version=${javac.compliance}, \
 	osgi.core;version=latest, \
+	osgi.annotation;version=latest, \
 	org.osgi.dto;version=latest
