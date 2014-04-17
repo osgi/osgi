@@ -16,7 +16,7 @@
 
 /**
  * Rest Java Client Package Version 1.0.
- * @author $Id: 4fab41bbdf232d40360ee52e0c8f6ddb1f206082 $
+ * @author $Id$
  */
 
 @Version("1.0.0")
