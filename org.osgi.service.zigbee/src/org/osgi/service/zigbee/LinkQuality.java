@@ -17,7 +17,7 @@
 package org.osgi.service.zigbee;
 
 /**
- * This interface represents an entry of the RoutingTableList (see Table 2.126
+ * This interface represents an entry of the NeighborTableList (see Table 2.126
  * NeighborTableList Record Format in ZIGBEE SPECIFICATION:
  * 1_053474r17ZB_TSC-ZigBee-Specification.pdf)
  * 
@@ -31,7 +31,7 @@ public interface LinkQuality {
 
 	/**
 	 * @return the Service.PID refering to the {@link ZigBeeNode} representing
-	 *         neighbour
+	 *         neighbor
 	 */
 	public String getNeighbor();
 
