@@ -16,7 +16,6 @@
 
 package org.osgi.service.zigbee;
 
-
 /**
  * This interface represents an entry of the RoutingTableList (see Table 2.128
  * RoutingTableList Record Format in ZIGBEE SPECIFICATION:
@@ -31,29 +30,29 @@ package org.osgi.service.zigbee;
 public interface Route {
 
 	/**
-	 * ACTIVE route status.
+	 * Constant value representing an active route
 	 */
-	public static final int	ACTIVE				= 0;
+	public static final int	ACTIVE				= 0x00;
 
 	/**
-	 * DISCOVERY_UNDERWAY route status.
+	 * Constant value representing a route that is under discovery
 	 */
-	public static final int	DISCOVERY_UNDERWAY	= 1;
+	public static final int	DISCOVERY_UNDERWAY	= 0x01;
 
 	/**
-	 * DISCOVERY_FAILED route status.
+	 * Constant value representing a failed route discovery
 	 */
-	public static final int	DISCOVERY_FAILED	= 2;
+	public static final int	DISCOVERY_FAILED	= 0x02;
 
 	/**
-	 * INACTIVE route status.
+	 * Constant value representing an inactive route
 	 */
-	public static final int	INACTIVE			= 3;
+	public static final int	INACTIVE			= 0x03;
 
 	/**
-	 * VALIDATION_UNDERDAY route status.
+	 * Constant value representing a route which is under validation
 	 */
-	public static final int	VALIDATION_UNDERDAY	= 4;
+	public static final int	VALIDATION_UNDERWAY	= 0x04;
 
 	/**
 	 * @return the Service.PID of the {@link ZigBeeNode} as destination of this
