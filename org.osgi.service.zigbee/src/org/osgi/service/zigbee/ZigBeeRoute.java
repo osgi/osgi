@@ -27,7 +27,7 @@ package org.osgi.service.zigbee;
  *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
  *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
-public interface Route {
+public interface ZigBeeRoute {
 
 	/**
 	 * Constant value representing an active route

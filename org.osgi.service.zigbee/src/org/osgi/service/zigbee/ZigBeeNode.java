@@ -187,7 +187,7 @@ public interface ZigBeeNode {
 	 * returned
 	 * 
 	 * @return a {@link Map} containing the Service.PID as {@link String} key
-	 *         and the {@link LinkQuality} for the node as value.
+	 *         and the {@link ZigBeeLinkQuality} for the node as value.
 	 * @throws ZDPException
 	 */
 	public Map getLinksQuality() throws ZDPException;
@@ -201,7 +201,7 @@ public interface ZigBeeNode {
 	 * 
 	 * @return a {@link Map} containing the Service.PID of the destination of
 	 *         the route as {@link String} key and the detail of the
-	 *         {@link Route} as value.
+	 *         {@link ZigBeeRoute} as value.
 	 * @throws ZDPException
 	 */
 	public Map getRoutingTable() throws ZDPException;

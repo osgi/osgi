@@ -27,7 +27,7 @@ package org.osgi.service.zigbee;
  *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
  *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
-public interface LinkQuality {
+public interface ZigBeeLinkQuality {
 
 	/**
 	 * * Constant value representing a parent relationship between current
