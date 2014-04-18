@@ -30,6 +30,36 @@ package org.osgi.service.zigbee;
 public interface LinkQuality {
 
 	/**
+	 * * Constant value representing a parent relationship between current
+	 * {@link ZigBeeNode} and the neighbor
+	 */
+	public static final int	PARENT_NEIGHBOR			= 0x00;
+
+	/**
+	 * Constant value representing a child relationship between current
+	 * {@link ZigBeeNode} and the neighbor
+	 */
+	public static final int	CHILD_NEIGHBOR			= 0x01;
+
+	/**
+	 * Constant value representing a sibling relationship between current
+	 * {@link ZigBeeNode} and the neighbor
+	 */
+	public static final int	SIBLING_NEIGHBOR		= 0x02;
+
+	/**
+	 * Constant value representing a others relationship between current
+	 * {@link ZigBeeNode} and the neighbor
+	 */
+	public static final int	OTHERS_NEIGHBOR			= 0x03;
+
+	/**
+	 * Constant value representing a previous child relationship between current
+	 * {@link ZigBeeNode} and the neighbor
+	 */
+	public static final int	PREVIOUS_CHILD_NEIGHBOR	= 0x04;
+
+	/**
 	 * @return the Service.PID refering to the {@link ZigBeeNode} representing
 	 *         neighbor
 	 */
