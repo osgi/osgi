@@ -138,9 +138,15 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
             if (isBundle) {
                 // bundle
                 BundleEntry be = new BundleEntry(resPath, bSn, bVer, missing, attrs, this);
+                // The order we iterate over manifest entries is not necessarily
+                // the same as the order of the entries in the deployment
+                // package.
                 bundleEntries.add(be);
             } else {
                 // resource
+                // The order we iterate over manifest entries is not necessarily
+                // the same as the order of the entries in the deployment
+                // package.
                 resourceEntries.add(new ResourceEntry(resPath, attrs, this));
             }
         }
@@ -148,6 +154,18 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     
     public synchronized List getBundleEntries() {
         return bundleEntries;
+    }
+
+    public void processedBundleEntry(BundleEntry be) {
+        /*
+         * Move BundleEntry to end of list. When done processing all entries,
+         * the list will be in the order of processing.
+         */
+        synchronized (bundleEntries) {
+            if (bundleEntries.remove(be)) {
+                bundleEntries.add(be);
+            }
+        }
     }
 
 	boolean contains(BundleEntry be) {
@@ -425,6 +443,18 @@ public class DeploymentPackageImpl implements DeploymentPackage, Serializable {
     
 	public synchronized List getResourceEntries() {
         return resourceEntries;
+    }
+
+    public void processedResourceEntry(ResourceEntry re) {
+        /*
+         * Move ResourceEntry to end of list. When done processing all entries,
+         * the list will be in the order of processing.
+         */
+        synchronized (resourceEntries) {
+            if (resourceEntries.remove(re)) {
+                resourceEntries.add(re);
+            }
+        }
     }
 
     void remove(ResourceEntry re) {

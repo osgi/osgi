@@ -560,11 +560,13 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
                 	wrProcs.add(wrProc);
                 ResourceEntry re = srcDp.getResourceEntryByName(actEntry.getName());
                 re.updateCertificates(actEntry);
+                srcDp.processedResourceEntry(re);
             } else {
             	// ResourceEntry must be updated
             	ResourceEntry reT = targetDp.getResourceEntryByName(actEntry.getName());
             	ResourceEntry reS = srcDp.getResourceEntryByName(actEntry.getName());
             	reS.update(reT);
+                srcDp.processedResourceEntry(reS);
             }
             wjis.closeEntry();
             actEntry = wjis.nextEntry();
@@ -899,12 +901,14 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
 							return b.getLocation();
 						}});
 	                be.setLocation(location);
+                    srcDp.processedBundleEntry(be);
                 }
             } else {
             	// BundleEntry must be updated
             	BundleEntry beT = targetDp.getBundleEntryByName(actEntry.getName());
             	BundleEntry beS = srcDp.getBundleEntryByName(actEntry.getName());
             	beS.update(beT);
+                srcDp.processedBundleEntry(beS);
             }
             wjis.closeEntry();
             actEntry = wjis.nextEntry();
