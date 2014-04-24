@@ -16,6 +16,7 @@
 
 package org.osgi.service.zigbee;
 
+import java.io.IOException;
 import org.osgi.framework.Constants;
 
 /**
@@ -127,10 +128,17 @@ public interface ZigBeeHost extends ZigBeeNode {
 	 * Sets the network channel. 802.15.4 and ZigBee break the 2.4Ghz band into
 	 * 16 channels, numbered from 11 to 26.
 	 * 
+	 * As described in "Table 2.13 APSME-SET.confirm Parameters" of the ZigBee
+	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a set request
+	 * can have the following status: SUCCESS, INVALID_PARAMETER or
+	 * UNSUPPORTED_ATTRIBUTE (see {@link APSException}).
+	 * 
 	 * @param channel The network channel.
-	 * @param handler The handler that manages the command response.
+	 * @throws IOException for serial communication exception.
+	 * @throws IllegalStateException for state issues in the dongle depending if
+	 *         it is a coordinator and of coordinator capabilities.
 	 */
-	public void setChannel(byte channel, ZigBeeHandler handler);
+	public void setChannel(byte channel) throws IOException, IllegalStateException;
 
 	/**
 	 * @return The currently configured channel mask.
@@ -141,10 +149,17 @@ public interface ZigBeeHost extends ZigBeeNode {
 	/**
 	 * Set a new configured channel mask.
 	 * 
+	 * As described in "Table 2.13 APSME-SET.confirm Parameters" of the ZigBee
+	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a set request
+	 * can have the following status: SUCCESS, INVALID_PARAMETER or
+	 * UNSUPPORTED_ATTRIBUTE (see {@link APSException}).
+	 * 
 	 * @param mask A value representing the channel mask.
-	 * @param handler The handler that manages the command response.
+	 * @throws IOException for serial communication exception.
+	 * @throws IllegalStateException for state issues in the dongle depending if
+	 *         it is a coordinator and of coordinator capabilities.
 	 */
-	public void setChannelMask(int mask, ZigBeeHandler handler);
+	public void setChannelMask(int mask) throws IOException, IllegalStateException;
 
 	/**
 	 * Updates the list of devices in the network by adding the new devices that

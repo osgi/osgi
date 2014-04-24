@@ -1,10 +1,10 @@
 
 package org.osgi.impl.service.zigbee.basedriver;
 
+import java.io.IOException;
 import org.osgi.service.zigbee.ZCLCommandHandler;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZigBeeEndpoint;
-import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.ZigBeeHost;
 
 /**
@@ -78,7 +78,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		return securityLevel;
 	}
 
-	public void setChannel(byte channel, ZigBeeHandler handler) {
+	public void setChannel(byte channel) throws IOException, IllegalStateException {
 		// TODO Auto-generated method stub
 	}
 
@@ -86,7 +86,7 @@ public class ZigBeeHostImpl extends ZigBeeNodeImpl implements ZigBeeHost {
 		// TODO Auto-generated method stub
 	}
 
-	public void setChannelMask(int mask, ZigBeeHandler handler) {
+	public void setChannelMask(int mask) throws IOException, IllegalStateException {
 		// TODO Auto-generated method stub
 	}
 
