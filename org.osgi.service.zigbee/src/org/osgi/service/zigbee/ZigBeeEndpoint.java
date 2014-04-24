@@ -150,7 +150,7 @@ public interface ZigBeeEndpoint {
 	 * As described in "Table 2.7 APSME-BIND.confirm Parameters" of the ZigBee
 	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a binding
 	 * request can have the following results: SUCCESS, ILLEGAL_REQUEST,
-	 * TABLE_FULL, NOT_SUPPORTED: {@link APSME}.
+	 * TABLE_FULL, NOT_SUPPORTED (see {@link APSException}).
 	 * 
 	 * @param servicePid to bound to
 	 * @param clusterId the cluster identifier to bound to
@@ -167,7 +167,7 @@ public interface ZigBeeEndpoint {
 	 * As described in "Table 2.9 APSME-UNBIND.confirm Parameters" of the ZigBee
 	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, an unbind
 	 * request can have the following results: SUCCESS, ILLEGAL_REQUEST,
-	 * INVALID_BINDING: {@link APSME}.
+	 * INVALID_BINDING (see {@link APSException}).
 	 * 
 	 * @param servicePid to unbound from
 	 * @param clusterId The cluster identifier to unbound from
@@ -196,7 +196,8 @@ public interface ZigBeeEndpoint {
 	 * As described in "Table 2.129 Fields of the Mgmt_Bind_rsp Command" of the
 	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
 	 * Mgmt_Bind_rsp command can have the following status: NOT_SUPPORTED or any
-	 * status code returned from the APSME-GET.confirm primitive.
+	 * status code returned from the APSME-GET.confirm primitive (see
+	 * {@link APSException}).
 	 * 
 	 * @param clusterId
 	 * @param handler

@@ -49,7 +49,7 @@ public interface ZigBeeGroup {
 	 * As described in "Table 2.15 APSME-ADD-GROUP.confirm Parameters" of the
 	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
 	 * add_group request can have the following status: SUCCESS,
-	 * INVALID_PARAMETER or TABLE_FULL: {@link APSME}.
+	 * INVALID_PARAMETER or TABLE_FULL (see {@link APSException}).
 	 * 
 	 * @param pid {@link String} representing the PID (see
 	 *        {@link org.osgi.framework.Constants#SERVICE_PID} ) of the
@@ -69,7 +69,7 @@ public interface ZigBeeGroup {
 	 * As described in "Table 2.17 APSME-REMOVE-GROUP.confirm Parameters" of the
 	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
 	 * remove_group request can have the following status: SUCCESS,
-	 * INVALID_GROUP or INVALID_PARAMETER: {@link APSME}.
+	 * INVALID_GROUP or INVALID_PARAMETER (see {@link APSException}).
 	 * 
 	 * @param pid {@link String} representing the PID (see
 	 *        {@link org.osgi.framework.Constants#SERVICE_PID} ) of the

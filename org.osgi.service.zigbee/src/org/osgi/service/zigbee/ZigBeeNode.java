@@ -213,7 +213,7 @@ public interface ZigBeeNode {
 	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
 	 * mgmt_leave request can have the following status: NOT_SUPPORTED,
 	 * NOT_AUTHORIZED or any status code returned from the NLMELEAVE.confirm
-	 * primitive.
+	 * primitive (see {@link ZDPException}).
 	 * 
 	 * @param handler
 	 */
@@ -227,7 +227,7 @@ public interface ZigBeeNode {
 	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
 	 * mgmt_leave request can have the following status: NOT_SUPPORTED,
 	 * NOT_AUTHORIZED or any status code returned from the NLMELEAVE.confirm
-	 * primitive.
+	 * primitive (see {@link ZDPException}).
 	 * 
 	 * @param rejoin This field has a value of 1 if the device being asked to
 	 *        leave from the current parent is requested to rejoin the network.

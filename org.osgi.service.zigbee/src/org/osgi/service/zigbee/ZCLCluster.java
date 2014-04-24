@@ -72,7 +72,7 @@ public interface ZCLCluster {
 	 * As described in "Table 2.11 APSME-GET.confirm Parameters" of the ZigBee
 	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
 	 * APSME-GET.confirm can have the following status: SUCCESS, or
-	 * UNSUPPORTED_ATTRIBUTE.
+	 * UNSUPPORTED_ATTRIBUTE (see {@link APSException}).
 	 * 
 	 * @param attributesIds An array of attributes ids
 	 * @param handler the response handler
@@ -85,7 +85,7 @@ public interface ZCLCluster {
 	 * As described in "Table 2.13 APSME-SET.confirm Parameters" of the ZigBee
 	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
 	 * APSME-SET.confirm can have the following status: SUCCESS,
-	 * INVALID_PARAMETER or UNSUPPORTED_ATTRIBUTE.
+	 * INVALID_PARAMETER or UNSUPPORTED_ATTRIBUTE (see {@link APSException}).
 	 * 
 	 * @param undivided The write command is undivided or not
 	 * @param attributesRecords An array of attributes records
@@ -100,7 +100,8 @@ public interface ZCLCluster {
 	 * later than 1.2 of the Home Automation Profile or other profiles that
 	 * enables the discovery of command IDs as a general command. When the
 	 * device implements a profile that does not support this feature, the
-	 * method call throws a ZCLException with code UNSUPPORTED_GENERAL_COMMAND.
+	 * method call throws a ZCLException with code
+	 * GENERAL_COMMAND_NOT_SUPPORTED.
 	 * 
 	 * @param handler the response handler
 	 */
