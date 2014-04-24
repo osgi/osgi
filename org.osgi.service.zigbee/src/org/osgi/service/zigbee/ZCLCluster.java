@@ -96,6 +96,12 @@ public interface ZCLCluster {
 	/**
 	 * Get an array of all the commandIds of the ZigBeeCluster.
 	 * 
+	 * This method is implemented for devices implementing a version equal or
+	 * later than 1.2 of the Home Automation Profile or other profiles that
+	 * enables the discovery of command IDs as a general command. When the
+	 * device implements a profile that does not support this feature, the
+	 * method call throws a ZCLException with code UNSUPPORTED_GENERAL_COMMAND.
+	 * 
 	 * @param handler the response handler
 	 */
 	void getCommandIds(ZigBeeMapHandler handler);
