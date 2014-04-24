@@ -64,7 +64,7 @@ public interface ZCLCluster {
 	 * 
 	 * @param handler the response handler
 	 */
-	void getAttributes(ZigBeeMapHandler handler);
+	void getAttributes(ZigBeeHandler handler);
 
 	/**
 	 * Read a list of attributes.
@@ -77,7 +77,7 @@ public interface ZCLCluster {
 	 * @param attributesIds An array of attributes ids
 	 * @param handler the response handler
 	 */
-	void readAttributes(int[] attributesIds, ZigBeeMapHandler handler);
+	void readAttributes(int[] attributesIds, ZigBeeHandler handler);
 
 	/**
 	 * Write a list of attributes.
@@ -91,7 +91,7 @@ public interface ZCLCluster {
 	 * @param attributesRecords An array of attributes records
 	 * @param handler the response handler
 	 */
-	void writeAttributes(boolean undivided, ZCLAttributeRecord[] attributesRecords, ZigBeeMapHandler handler);
+	void writeAttributes(boolean undivided, ZCLAttributeRecord[] attributesRecords, ZigBeeHandler handler);
 
 	/**
 	 * Get an array of all the commandIds of the ZigBeeCluster.
@@ -105,7 +105,7 @@ public interface ZCLCluster {
 	 * 
 	 * @param handler the response handler
 	 */
-	void getCommandIds(ZigBeeMapHandler handler);
+	void getCommandIds(ZigBeeHandler handler);
 
 	/**
 	 * Invokes the action. The handler will provide the invocation response in

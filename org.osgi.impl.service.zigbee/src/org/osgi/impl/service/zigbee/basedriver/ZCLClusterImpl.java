@@ -9,7 +9,6 @@ import org.osgi.service.zigbee.ZCLCluster;
 import org.osgi.service.zigbee.ZCLCommandHandler;
 import org.osgi.service.zigbee.ZCLFrame;
 import org.osgi.service.zigbee.ZigBeeHandler;
-import org.osgi.service.zigbee.ZigBeeMapHandler;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
 
 /**
@@ -51,19 +50,19 @@ public class ZCLClusterImpl implements ZCLCluster {
 		handler.onSuccess(response);
 	}
 
-	public void getAttributes(ZigBeeMapHandler handler) {
+	public void getAttributes(ZigBeeHandler handler) {
 		Map response = new HashMap<String, Object>();
 		response.put("Attributes", this.attributes);
 		handler.onSuccess(response);
 	}
 
-	public void getCommandIds(ZigBeeMapHandler handler) {
+	public void getCommandIds(ZigBeeHandler handler) {
 		Map response = new HashMap<String, Object>();
 		response.put("CommandIds", this.commandIds);
 		handler.onSuccess(response);
 	}
 
-	public void readAttributes(int[] attributesIds, ZigBeeMapHandler handler) {
+	public void readAttributes(int[] attributesIds, ZigBeeHandler handler) {
 		// TODO Auto-generated method stub
 		Map<Integer, byte[]> response = new HashMap<Integer, byte[]>();
 		int i = 0;
@@ -75,7 +74,7 @@ public class ZCLClusterImpl implements ZCLCluster {
 		handler.onSuccess(response);
 	}
 
-	public void writeAttributes(boolean undivided, ZCLAttributeRecord[] attributesRecords, ZigBeeMapHandler handler) {
+	public void writeAttributes(boolean undivided, ZCLAttributeRecord[] attributesRecords, ZigBeeHandler handler) {
 		// TODO Auto-generated method stub
 	}
 

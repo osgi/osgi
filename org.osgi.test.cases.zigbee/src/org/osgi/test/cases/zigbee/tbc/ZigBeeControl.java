@@ -3,6 +3,7 @@ package org.osgi.test.cases.zigbee.tbc;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Map;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.zigbee.ZCLAttribute;
@@ -25,7 +26,6 @@ import org.osgi.test.cases.zigbee.tbc.util.ZCLFrameImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeEventSourceImpl;
 import org.osgi.test.cases.zigbee.tbc.util.ZigBeeHandlerImpl;
-import org.osgi.test.cases.zigbee.tbc.util.ZigBeeMapHandlerImpl;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
@@ -410,9 +410,9 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 			cluster = clusters[0];
 		}
 
-		ZigBeeMapHandlerImpl zigBeeMapHandler = new ZigBeeMapHandlerImpl();
-		cluster.getCommandIds(zigBeeMapHandler);
-		int commandId = ((int[]) zigBeeMapHandler.getSuccessResponse().get("CommandIds"))[0];
+		ZigBeeHandlerImpl zigBeeHandler = new ZigBeeHandlerImpl();
+		cluster.getCommandIds(zigBeeHandler);
+		int commandId = ((int[]) ((Map) zigBeeHandler.getSuccessResponse()).get("CommandIds"))[0];
 		log("ZCLCommand ID: " + commandId);
 		assertNotNull("ZCLCommand ID is NULL", commandId);
 		assertEquals("Command identifier not matched",
@@ -440,9 +440,9 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		if (clusters != null && clusters.length != 0) {
 			cluster = clusters[0];
 		}
-		ZigBeeMapHandlerImpl zigBeeMapHandler = new ZigBeeMapHandlerImpl();
-		cluster.getAttributes(zigBeeMapHandler);
-		ZCLAttribute attribute = ((ZCLAttribute[]) zigBeeMapHandler.getSuccessResponse().get("Attributes"))[0];
+		ZigBeeHandlerImpl zigBeeHandler = new ZigBeeHandlerImpl();
+		cluster.getAttributes(zigBeeHandler);
+		ZCLAttribute attribute = ((ZCLAttribute[]) ((Map) zigBeeHandler.getSuccessResponse()).get("Attributes"))[0];
 		assertNotNull("ZCLAttribute is NULL", attribute);
 
 		log("ZCLAttribute ID: " + attribute.getId());
@@ -517,7 +517,7 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		// Test "control" methods of ZigBeeCluster.
 
 		int[] attributesIds = {8};
-		ZigBeeMapHandlerImpl handlerCluster = new ZigBeeMapHandlerImpl();
+		ZigBeeHandlerImpl handlerCluster = new ZigBeeHandlerImpl();
 		Boolean isSuccess;
 
 		// cluster.readAttributes
@@ -551,9 +551,9 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		// Test "control" methods of ZCLAttribute.
 
 		// attributes
-		ZigBeeMapHandlerImpl zigBeeMapHandler = new ZigBeeMapHandlerImpl();
-		cluster.getAttributes(zigBeeMapHandler);
-		ZCLAttribute[] attributes = (ZCLAttribute[]) zigBeeMapHandler.getSuccessResponse().get("Attributes");
+		ZigBeeHandlerImpl zigBeeHandler = new ZigBeeHandlerImpl();
+		cluster.getAttributes(zigBeeHandler);
+		ZCLAttribute[] attributes = (ZCLAttribute[]) ((Map) zigBeeHandler.getSuccessResponse()).get("Attributes");
 		log("attributes: " + attributes);
 
 		ZCLAttribute attribute = attributes[8];
@@ -600,9 +600,9 @@ public class ZigBeeControl extends DefaultTestBundleControl {
 		// Test "control" methods of ZigBeeCluster.
 
 		// cluster
-		zigBeeMapHandler = new ZigBeeMapHandlerImpl();
-		cluster.getCommandIds(zigBeeMapHandler);
-		int[] commandIds = (int[]) zigBeeMapHandler.getSuccessResponse().get("CommandIds");
+		zigBeeHandler = new ZigBeeHandlerImpl();
+		cluster.getCommandIds(zigBeeHandler);
+		int[] commandIds = (int[]) ((Map) zigBeeHandler.getSuccessResponse()).get("CommandIds");
 		assertNotNull("ZigBeeCluster has no command", commandIds.length);
 		int commandId = commandIds[0];
 		assertNotNull("ZCLCommand ID is NULL", commandId);
