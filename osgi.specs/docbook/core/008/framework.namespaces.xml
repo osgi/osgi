@@ -391,6 +391,24 @@
           </row>
 
           <row>
+            <entry><code>JavaSE/compact1</code></entry>
+
+            <entry><para>Java SE Embedded compact1 profile.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>JavaSE/compact2</code></entry>
+
+            <entry><para>Java SE Embedded compact2 profile.</para></entry>
+          </row>
+
+          <row>
+            <entry><code>JavaSE/compact3</code></entry>
+
+            <entry><para>Java SE Embedded compact3 profile.</para></entry>
+          </row>
+
+          <row>
             <entry><code>OSGi/Minimum</code></entry>
 
             <entry><para>The OSGi Minimum execution environment, see the OSGi
@@ -1361,12 +1379,9 @@ Bundle B:
 
     <itemizedlist>
       <listitem>
-        <para>Clarified that bundles may not specify an <code>osgi.ee</code>
-        capability in <xref linkend="framework.namespaces.osgi.ee"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Added <xref linkend="framework.namespaces.osgi.native"/>.</para>
+        <para>Added <code>osgi.ee</code> capability names for Java SE Embedded
+        compact profiles in <xref
+        linkend="framework.namespaces.osgi.ee"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
