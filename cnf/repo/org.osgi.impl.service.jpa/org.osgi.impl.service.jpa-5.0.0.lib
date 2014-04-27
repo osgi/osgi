@@ -5,4 +5,4 @@ org.eclipse.persistence.antlr;      version=2.0.1
 org.eclipse.persistence.incubator.geminijpa.core; version=2.0.2
 org.eclipse.persistence.incubator.geminijpa.jpa; version=2.0.2
 com.oracle.gemini.jpa;             version=1.0.0
-org.osgi.service.jdbc
+org.osgi.service.jdbc; version=latest

@@ -13,10 +13,10 @@ javac.profile=
     org.apache.bcel; version=1.0
 
 javadoc.classpath = ${uniq; \
-                    ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}, \
-                    ${repo;org.eclipse.persistence.jpa_spec}}
+                    ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec;latest}, \
+                    ${repo;org.eclipse.persistence.jpa_spec;latest}}
 
 javadoc.packages = ${uniq; ${annotation.packages}, ${core.packages}, ${cmpn.packages}, ${enterprise.packages}, ${residential.packages}, org.osgi.dmt.*}
 
-saxon    = ${repo;com.icl.saxon}
-log4j    = ${repo;org.apache.log4j}
+saxon    = ${repo;com.icl.saxon;latest}
+log4j    = ${repo;org.apache.log4j;latest}

@@ -1,2 +1,2 @@
 org.eclipse.equinox.metatype; version=1.3.0
-org.osgi.service.metatype
+org.osgi.service.metatype; version=latest

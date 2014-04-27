@@ -1,6 +1,6 @@
 javac.profile=
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
-
+-nobundles = true
 -buildpath = biz.aQute.bnd; version=latest, \
 			ee.j2se; version=${javac.compliance}

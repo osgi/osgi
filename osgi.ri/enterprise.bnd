@@ -3,7 +3,7 @@ Bundle-Description: OSGi Enterprise Release ${version;=;${build.version}} Refere
 Include-Resource				: \
 	  	\
 	  	${replace;${uniq;\
-        ${repo;${build.enterprise.impls}}, \
+        ${repo;${build.enterprise.impls};latest}, \
         ${jar.enterprise.impls} \
 	  	};.+;jar/=$0},\
 	 	\
