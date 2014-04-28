@@ -8,24 +8,21 @@
 	</target>
 
 	<macrodef name="javadoc.macro">
-		<attribute name="title"/>
 		<attribute name="name"/>
-		<attribute name="packages"/>
 		<attribute name="link" default="../core"/>
 		<sequential>
-			<echo>javadoc/@{name} @{title}</echo>
+			<echo>javadoc/@{name} ${javadoc.@{name}.name}</echo>
 			<delete dir="${target}/javadoc/@{name}"/>
 			<echo>
 				Project output: ${project.output}
 				Sourcepath    : ${project.allsourcepath}
 				Destdir       : ${target}/javadoc/@{name}
-			    Packages      : @{packages}
+			    Packages      : ${javadoc.@{name}.packages}
 	            Classpath     : ${javadoc.classpath}
 			</echo>
 	        <javadoc 
 				access="protected" 
 				author="false" 
-				classpath="${project.output}"
 				sourcepath="${project.allsourcepath}"
 				destdir="${target}/javadoc/@{name}" 
 				nodeprecated="false" 
@@ -33,7 +30,7 @@
 				noindex="false" 
 				nonavbar="false" 
 				notree="false" 
-				packagenames="@{packages}" 
+				packagenames="${javadoc.@{name}.packages}" 
 				link="@{link}"
 				source="1.5" 
 				splitindex="true" 
@@ -42,9 +39,9 @@
 				encoding="UTF-8"
 				docencoding="UTF-8"
 				charset="UTF-8"
-				windowtitle="OSGi @{title} Release ${osgi.release}">
-				<doctitle><![CDATA[OSGi${tm} @{title} Release ${osgi.release}]]></doctitle>
-				<header><![CDATA[<b>OSGi${tm} @{title}</b><br/><font size=-1>Release ${osgi.release}</font>]]></header>
+				windowtitle="OSGi ${javadoc.@{name}.name} Release ${osgi.release}">
+				<doctitle><![CDATA[OSGi${tm} ${javadoc.@{name}.name} Release ${osgi.release}]]></doctitle>
+				<header><![CDATA[<b>OSGi${tm} ${javadoc.@{name}.name}</b><br/><font size=-1>Release ${osgi.release}</font>]]></header>
 				<bottom><![CDATA[<font size=-1>${copyright.html} Licensed under the <a href="{@docRoot}/LICENSE.html">OSGi Specification License, Version 2.0</a></font>]]></bottom>
 	            <classpath>
 	                <filelist files="${javadoc.classpath}"/>
@@ -68,22 +65,23 @@
 	</target>
 	
 	<target name="javadoc.core" depends="init">
-		<javadoc.macro name="core" title="Core" packages="${annotation.packages},${core.packages}" />
+		<javadoc.macro name="core" />
 	</target>
 	
 	<target name="javadoc.cmpn" depends="init">
-		<javadoc.macro name="cmpn" title="Compendium" packages="${cmpn.packages}" />
+		<javadoc.macro name="cmpn" />
 	</target>
 	
 	<target name="javadoc.enterprise" depends="init">
-		<javadoc.macro name="enterprise" title="Enterprise" packages="${enterprise.packages}" />
+		<javadoc.macro name="enterprise" />
 	</target>
 	
 	<target name="javadoc.residential" depends="init">
-		<javadoc.macro name="residential" title="Residential" packages="${residential.packages}" />
+		<javadoc.macro name="residential" />
 	</target>
 	
 	<target name="echo" depends="master.echo">
+		<echo>annotation.specs:       ${annotation.specs}</echo>
 		<echo>core.specs:             ${core.specs}</echo>
 		<echo>cmpn.specs:             ${cmpn.specs}</echo>
 		<echo>residential.specs:      ${residential.specs}</echo>
