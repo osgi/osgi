@@ -19,7 +19,7 @@ package org.osgi.service.zigbee.types;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import org.osgi.service.zigbee.ZigBeeDataTypes;
-import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
+import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 
 /**
  * This interface represents a ZigBeeBitmap24 as described in the ZigBee
@@ -31,7 +31,7 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
  *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
  *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
-public class ZigBeeBitmap24 implements ZigBeeDataTypeDescription {
+public class ZigBeeBitmap24 implements ZCLDataTypeDescription {
 
 	private static ZigBeeBitmap24	singletonInstance	= new ZigBeeBitmap24();
 

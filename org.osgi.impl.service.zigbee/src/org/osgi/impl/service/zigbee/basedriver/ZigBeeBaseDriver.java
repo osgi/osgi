@@ -19,9 +19,9 @@ import org.osgi.service.zigbee.ZigBeeHost;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLClusterDescription;
+import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 import org.osgi.service.zigbee.descriptions.ZCLGlobalClusterDescription;
 import org.osgi.service.zigbee.descriptions.ZCLParameterDescription;
-import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
 import org.osgi.service.zigbee.descriptors.ZigBeeNodeDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeePowerDescriptor;
 import org.osgi.service.zigbee.descriptors.ZigBeeSimpleDescriptor;
@@ -53,7 +53,7 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 	private ZCLAttributeDescription[]	attributesDescription;
 	// private ZCLCommandDescription commandDescription;
 	private ZCLParameterDescription[]	param;
-	private ZigBeeDataTypeDescription[]	attributesType;
+	private ZCLDataTypeDescription[]	attributesType;
 	private int[]						commandIdsServer;
 
 	/**
@@ -74,7 +74,7 @@ public class ZigBeeBaseDriver implements ZigBeeDeviceNodeListener {
 		System.out.println(this.getClass().getName() + " - Start the base driver.");
 
 		// types
-		attributesType = new ZigBeeDataTypeDescription[4];
+		attributesType = new ZCLDataTypeDescription[4];
 		attributesType[0] = ZigBeeUnsignedInteger8.getInstance();
 		attributesType[1] = ZigBeeCharacterString.getInstance();
 		attributesType[2] = ZigBeeEnumeration8.getInstance();

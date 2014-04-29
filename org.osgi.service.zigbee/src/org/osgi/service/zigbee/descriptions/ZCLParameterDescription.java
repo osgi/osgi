@@ -30,7 +30,7 @@ public interface ZCLParameterDescription {
 	/**
 	 * @return the parameter data type
 	 */
-	public ZigBeeDataTypeDescription getDataTypeDescription();
+	public ZCLDataTypeDescription getDataTypeDescription();
 
 	/**
 	 * checks whether the value object is conform to the parameter data type

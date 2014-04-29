@@ -16,7 +16,7 @@
 
 package org.osgi.service.zigbee;
 
-import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
+import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 
 /**
  * This class represents a ZCLAttributeRecord
@@ -29,16 +29,16 @@ import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
  */
 public final class ZCLAttributeRecord {
 
-	private short						id;
-	private ZigBeeDataTypeDescription	dataType;
-	private Object						value;
+	private short					id;
+	private ZCLDataTypeDescription	dataType;
+	private Object					value;
 
 	/**
 	 * @param id the attribute record id
 	 * @param dataType the attribute record dataType
 	 * @param value the attribute record value
 	 */
-	public ZCLAttributeRecord(short id, ZigBeeDataTypeDescription dataType, Object value) {
+	public ZCLAttributeRecord(short id, ZCLDataTypeDescription dataType, Object value) {
 		this.id = id;
 		this.dataType = dataType;
 		this.value = value;
@@ -54,7 +54,7 @@ public final class ZCLAttributeRecord {
 	/**
 	 * @return the dataType
 	 */
-	public ZigBeeDataTypeDescription getDataType() {
+	public ZCLDataTypeDescription getDataType() {
 		return dataType;
 	}
 

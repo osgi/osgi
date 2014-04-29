@@ -16,7 +16,7 @@
 
 package org.osgi.service.zigbee;
 
-import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
+import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 
 /**
  * This interface represents a ZCLAttribute
@@ -60,6 +60,6 @@ public interface ZCLAttribute {
 	 *         retrievable (issue with read attribute and discover attributes
 	 *         commands).
 	 */
-	public ZigBeeDataTypeDescription getDataType();
+	public ZCLDataTypeDescription getDataType();
 
 }

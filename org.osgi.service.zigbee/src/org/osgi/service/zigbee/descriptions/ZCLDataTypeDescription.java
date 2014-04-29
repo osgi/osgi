@@ -20,7 +20,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 
 /**
- * This interface represents the ZigBee data type abstraction.
+ * This interface represents the ZCL data type abstraction.
  * 
  * @version 1.0
  * 
@@ -28,7 +28,7 @@ import java.io.ByteArrayOutputStream;
  *         Poutcheu, Fabrice Blache, Christophe Demottie, Antonin Chazalet,
  *         Evgeni Grigorov, Nicola Portinaro, Stefano Lenzi.
  */
-public interface ZigBeeDataTypeDescription {
+public interface ZCLDataTypeDescription {
 
 	/**
 	 * @return The data type identifier.

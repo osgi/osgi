@@ -64,10 +64,10 @@ public interface ZCLAttributeDescription {
 	public boolean isReadOnly();
 
 	/**
-	 * @return A {@link ZigBeeDataTypeDescription} representing the attribute
-	 *         data type
+	 * @return A {@link ZCLDataTypeDescription} representing the attribute data
+	 *         type
 	 */
-	public ZigBeeDataTypeDescription getDataTypeDescription();
+	public ZCLDataTypeDescription getDataTypeDescription();
 
 	/**
 	 * checks whether the value object is conform to the attribute data type

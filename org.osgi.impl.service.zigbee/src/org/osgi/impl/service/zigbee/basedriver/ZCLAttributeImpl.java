@@ -6,7 +6,7 @@ import java.util.Map;
 import org.osgi.service.zigbee.ZCLAttribute;
 import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.descriptions.ZCLAttributeDescription;
-import org.osgi.service.zigbee.descriptions.ZigBeeDataTypeDescription;
+import org.osgi.service.zigbee.descriptions.ZCLDataTypeDescription;
 
 /**
  * Mocked impl.
@@ -30,7 +30,7 @@ public class ZCLAttributeImpl implements ZCLAttribute {
 		return id;
 	}
 
-	public ZigBeeDataTypeDescription getDataType() {
+	public ZCLDataTypeDescription getDataType() {
 		return description.getDataTypeDescription();
 	}
 
