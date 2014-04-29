@@ -65,7 +65,7 @@
 	</target>
 	
 	<target name="javadoc.core" depends="init">
-		<javadoc.macro name="core" />
+		<javadoc.macro name="core" link="" />
 	</target>
 	
 	<target name="javadoc.cmpn" depends="init">
