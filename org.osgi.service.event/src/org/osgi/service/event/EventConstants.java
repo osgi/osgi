@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -237,7 +237,7 @@ public interface EventConstants {
 	 * This constant was released with an incorrectly spelled name. It has been
 	 * replaced by {@link #EXCEPTION_CLASS}
 	 * 
-	 * @deprecated As of 1.1, replaced by EXCEPTION_CLASS
+	 * @deprecated As of 1.1. Replaced by {@link #EXCEPTION_CLASS}.
 	 */
 	public static final String	EXECPTION_CLASS				= "exception.class";
 }

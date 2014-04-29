@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ public interface ConditionalPermissionAdmin {
 	 * @throws IllegalArgumentException If no permissions are specified.
 	 * @throws SecurityException If the caller does not have
 	 *         {@code AllPermission}.
-	 * @deprecated Since 1.1. Use {@link #newConditionalPermissionUpdate()}
+	 * @deprecated As of 1.1. Use {@link #newConditionalPermissionUpdate()}
 	 *             instead.
 	 */
 	ConditionalPermissionInfo addConditionalPermissionInfo(ConditionInfo[] conditions, PermissionInfo[] permissions);
@@ -93,7 +93,7 @@ public interface ConditionalPermissionAdmin {
 	 * @throws IllegalArgumentException If no permissions are specified.
 	 * @throws SecurityException If the caller does not have
 	 *         {@code AllPermission}.
-	 * @deprecated Since 1.1. Use {@link #newConditionalPermissionUpdate()}
+	 * @deprecated As of 1.1. Use {@link #newConditionalPermissionUpdate()}
 	 *             instead.
 	 */
 	ConditionalPermissionInfo setConditionalPermissionInfo(String name, ConditionInfo[] conditions, PermissionInfo[] permissions);
@@ -112,7 +112,7 @@ public interface ConditionalPermissionAdmin {
 	 * 
 	 * @return An enumeration of the Conditional Permission Infos that are
 	 *         currently in the Conditional Permission Table.
-	 * @deprecated Since 1.1. Use {@link #newConditionalPermissionUpdate()}
+	 * @deprecated As of 1.1. Use {@link #newConditionalPermissionUpdate()}
 	 *             instead.
 	 */
 	Enumeration<ConditionalPermissionInfo> getConditionalPermissionInfos();
@@ -124,7 +124,7 @@ public interface ConditionalPermissionAdmin {
 	 * @return The Conditional Permission Info with the specified name or
 	 *         {@code null} if no Conditional Permission Info with the specified
 	 *         name exists in the Conditional Permission Table.
-	 * @deprecated Since 1.1. Use {@link #newConditionalPermissionUpdate()}
+	 * @deprecated As of 1.1. Use {@link #newConditionalPermissionUpdate()}
 	 *             instead.
 	 */
 	ConditionalPermissionInfo getConditionalPermissionInfo(String name);

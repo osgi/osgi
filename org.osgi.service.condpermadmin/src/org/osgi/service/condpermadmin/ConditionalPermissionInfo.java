@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,7 +85,7 @@ public interface ConditionalPermissionInfo {
 	 *         1.1.
 	 * @throws SecurityException If the caller does not have
 	 *         {@code AllPermission}.
-	 * @deprecated Since 1.1. Use
+	 * @deprecated As of 1.1. Use
 	 *             {@link ConditionalPermissionAdmin#newConditionalPermissionUpdate()}
 	 *             instead to manage the Conditional Permissions.
 	 */

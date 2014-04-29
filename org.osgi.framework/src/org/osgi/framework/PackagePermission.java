@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2000, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2000, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ public final class PackagePermission extends BasicPermission {
 	 * The action string {@code export}. The {@code export} action implies the
 	 * {@code import} action.
 	 * 
-	 * @deprecated Since 1.5. Use {@code exportonly} instead.
+	 * @deprecated As of 1.5. Use {@code exportonly} instead.
 	 */
 	public final static String						EXPORT				= "export";
 
