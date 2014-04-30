@@ -26,6 +26,6 @@ Test-Cases							= ${testcases}
 	${junit}
 
 -runbundles							= \
-    org.osgi.util.xml
+    org.osgi.util.xml; version=latest
 
 -runproperties = ${runproperties}
