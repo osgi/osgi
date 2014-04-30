@@ -196,15 +196,18 @@ public interface ZigBeeNode {
 	 * The ZigBee Base Drive may use the Mgmt_Rtg_req / Mgmt_Rtg_rsp messages to
 	 * retrieve the Routing Table (i.e also known as RoutingTableList in the
 	 * ZigBee Specification). <br>
-	 * The device may not support in that case an empty {@link Map} will be
-	 * returned
+	 * The target device may report error code NOT_SUPPORTED, or
+	 * UNSUPPORTED_ATTRIBUTE in case of failure that will be notified to the
+	 * handler
 	 * 
-	 * @return a {@link Map} containing the Service.PID of the destination of
-	 *         the route as {@link String} key and the detail of the
-	 *         {@link ZigBeeRoute} as value.
-	 * @throws ZDPException
+	 * @param handler that will notified with the result of this operation. In
+	 *        case of success, the object notified with
+	 *        {@link ZigBeeHandler#onSuccess(Object)} will be a {@link Map}
+	 *        containing the Service.PID as {@link String} key of the
+	 *        {@link ZigBeeNode} service and the value the {@link ZigBeeRoute}
+	 *        for that node.
 	 */
-	public Map getRoutingTable() throws ZDPException;
+	public void getRoutingTable(ZigBeeHandler handler);
 
 	/**
 	 * Request to leave the network.

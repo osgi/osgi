@@ -3,8 +3,8 @@ package org.osgi.impl.service.zigbee.basedriver;
 
 import java.util.Map;
 import org.osgi.service.zigbee.ZCLException;
-import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZDPException;
+import org.osgi.service.zigbee.ZigBeeEndpoint;
 import org.osgi.service.zigbee.ZigBeeHandler;
 import org.osgi.service.zigbee.ZigBeeNode;
 import org.osgi.service.zigbee.descriptors.ZigBeeComplexDescriptor;
@@ -103,9 +103,8 @@ public class ZigBeeNodeImpl implements ZigBeeNode {
 		return null;
 	}
 
-	public Map getRoutingTable() throws ZDPException {
+	public void getRoutingTable(ZigBeeHandler handler) {
 		// TODO Auto-generated method stub
-		return null;
 	}
 
 	public void leave(ZigBeeHandler handler) {
