@@ -3,7 +3,7 @@ Bundle-Description: OSGi Residential Release ${version;=;${build.version}} Refer
 Include-Resource				: \
 		\
 	  	${replace;${uniq;\
-        ${repo;${build.residential.impls};latest}, \
+        ${repo;${build.residential.impls}}, \
         ${jar.residential.impls} \
 	  	};.+;jar/=$0},\
 	 	\

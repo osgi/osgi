@@ -50,4 +50,4 @@ Test-Cases							= ${testcases}
     net.mdns.port=65354, \
     net.mdns.interface=127.0.0.1, \
     org.eclipse.ecf.osgi.services.discovery.disableDiscovery=true, \
-    ${p}.bundles="${uniq;${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"
+    ${p}.bundles="${uniq;${repo;org.osgi.impl.service.log},${repo;org.osgi.impl.service.remoteserviceadmin}}"

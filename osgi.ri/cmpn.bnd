@@ -3,7 +3,7 @@ Bundle-Description: OSGi Compendium Release ${version;=;${build.version}} Refere
 Include-Resource				: \
 		\
 	  	${replace;${uniq;\
-        ${repo;${build.cmpn.impls};latest}, \
+        ${repo;${build.cmpn.impls}}, \
         ${jar.cmpn.impls} \
 	  	};.+;jar/=$0},\
 	 	\
