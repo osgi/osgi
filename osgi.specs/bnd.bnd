@@ -1,6 +1,7 @@
 -nobundles = true
 nodeploy   = true
 
+project.dependson = ${project.workspace}/dmforest
 -dependson = osgi.companion, dmforest
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd, ${project.workspace}/osgi.companion/layout.bnd
