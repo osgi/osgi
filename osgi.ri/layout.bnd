@@ -22,7 +22,12 @@ build.cmpn.impls = \
 	org.osgi.impl.service.prefs , \
 	org.osgi.impl.service.upnp.cp , \
 	org.osgi.impl.service.upnp.cd , \
-	org.osgi.impl.service.useradmin 
+	org.osgi.impl.service.useradmin, \
+    org.osgi.util.function, \
+    org.osgi.util.measurement, \
+    org.osgi.util.position, \
+    org.osgi.util.promise, \
+    org.osgi.util.xml
 
 jar.cmpn.impls = \
 	${repo;org.osgi.impl.bundle.derby}, \
@@ -43,12 +48,7 @@ jar.cmpn.impls = \
     ${repo;org.osgi.impl.service.resolver}, \
     ${repo;org.osgi.impl.service.repository}, \
     ${repo;org.osgi.impl.service.subsystem}, \
-	${repo;org.osgi.impl.service.wireadmin}, \
-    ${repo;org.osgi.util.function}, \
-    ${repo;org.osgi.util.measurement}, \
-    ${repo;org.osgi.util.position}, \
-    ${repo;org.osgi.util.promise}, \
-    ${repo;org.osgi.util.xml}
+	${repo;org.osgi.impl.service.wireadmin}
 
 build.enterprise.impls = \
 	org.osgi.impl.bundle.component.annotations, \
@@ -58,8 +58,11 @@ build.enterprise.impls = \
 	org.osgi.impl.service.jdbc, \
 	org.osgi.impl.service.jndi, \
 	org.osgi.impl.service.log , \
-	org.osgi.impl.service.useradmin
-	
+	org.osgi.impl.service.useradmin, \
+    org.osgi.util.function, \
+    org.osgi.util.promise, \
+    org.osgi.util.xml
+
 jar.enterprise.impls = \
 	${repo;org.osgi.impl.bundle.derby}, \
 	${repo;org.osgi.impl.bundle.jmx}, \
@@ -79,11 +82,8 @@ jar.enterprise.impls = \
 	${repo;org.osgi.impl.service.remoteserviceadmin}, \
 	${repo;org.osgi.impl.service.resolver}, \
 	${repo;org.osgi.impl.service.repository}, \
-	${repo;org.osgi.impl.service.subsystem}, \
-    ${repo;org.osgi.util.function}, \
-    ${repo;org.osgi.util.promise}, \
-    ${repo;org.osgi.util.xml}
-	
+	${repo;org.osgi.impl.service.subsystem}
+
 
 build.residential.impls = \
 	org.osgi.impl.bundle.component.annotations, \
@@ -96,7 +96,8 @@ build.residential.impls = \
 	org.osgi.impl.service.tr069todmt, \
 	org.osgi.impl.service.upnp.cp, \
 	org.osgi.impl.service.upnp.cd, \
-	org.osgi.impl.service.useradmin
+	org.osgi.impl.service.useradmin, \
+    org.osgi.util.xml
 
 jar.residential.impls = \
 	${repo;org.osgi.impl.service.cm}, \
@@ -104,6 +105,5 @@ jar.residential.impls = \
 	${repo;org.osgi.impl.service.event}, \
 	${repo;org.osgi.impl.service.http}, \
 	${repo;org.osgi.impl.service.metatype}, \
-	${repo;org.osgi.impl.service.provisioning}, \
-    ${repo;org.osgi.util.xml}
+	${repo;org.osgi.impl.service.provisioning}
 
