@@ -3,7 +3,7 @@ nodeploy						=true
 
 -dependson 					=  osgi.ct
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${project.workspace}/osgi.companion/layout.bnd
+-include: ${project.workspace}/osgi.companion/layout.bnd
 
 javadoc.all = core,cmpn,enterprise,residential
 
