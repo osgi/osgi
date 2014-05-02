@@ -3,11 +3,27 @@ nodeploy						=true
 
 -dependson 					=  osgi.ct
 # Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd, ${project.workspace}/osgi.companion/layout.bnd
+-include: ${project.workspace}/osgi.companion/layout.bnd
 
-javadoc.bootclasspath = ${uniq; \
-                    ${repo;ee.j2se;[${javac.compliance},${javac.compliance}]}, \
-                    ${repo;ee.foundation}}
+javadoc.all = core,cmpn,enterprise,residential
+
+javadoc.core.name = Core
+javadoc.cmpn.name = Compendium
+javadoc.enterprise.name = Enterprise
+javadoc.residential.name = Residential
+
+javadoc.core.specs = ${annotation.specs},${core.specs}
+javadoc.core.packages = ${annotation.packages},${core.packages}
+
+javadoc.cmpn.specs = ${cmpn.specs}
+javadoc.cmpn.packages = ${cmpn.packages}
+
+javadoc.enterprise.specs = ${enterprise.specs}
+javadoc.enterprise.packages = ${enterprise.packages}
+
+javadoc.residential.specs = ${residential.specs}
+javadoc.residential.packages = ${residential.packages}
+
 javadoc.classpath = ${uniq; \
                     ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}, \
                     ${repo;org.eclipse.persistence.jpa_spec}, \

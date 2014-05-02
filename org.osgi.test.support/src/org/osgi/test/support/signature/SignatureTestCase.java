@@ -33,7 +33,6 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
-
 import org.osgi.framework.Bundle;
 import org.osgi.test.support.OSGiTestCase;
 
@@ -113,7 +112,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 	public boolean doClass(int access, String name, String superName,
 			String[] interfaces) {
 		clazz = null;
-		if (!isVisible(access)) {
+		if (!isAPI(access)) {
 			return false;
 		}
 
@@ -160,7 +159,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		while (c != null) {
 			Field[] f = c.getDeclaredFields();
 			for (int i = 0, l = f.length; i < l; i++) {
-				if (!isVisible(f[i].getModifiers())) {
+				if (!isAPI(f[i].getModifiers())) {
 					continue;
 				}
 				String key = f[i].getName();
@@ -179,7 +178,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		while (c != null) {
 			Method[] m = c.getDeclaredMethods();
 			for (int i = 0, l = m.length; i < l; i++) {
-				if (!isVisible(m[i].getModifiers())) {
+				if (!isAPI(m[i].getModifiers())) {
 					continue;
 				}
 				String key = m[i].getName() + getMethodDescriptor(m[i]);
@@ -197,7 +196,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		Map<String, Constructor< ? >> result = new HashMap<String, Constructor< ? >>();
 		Constructor< ? >[] m = c.getDeclaredConstructors();
 		for (int i = 0, l = m.length; i < l; i++) {
-			if (!isVisible(m[i].getModifiers())) {
+			if (!isAPI(m[i].getModifiers())) {
 				continue;
 			}
 			StringBuffer sb = new StringBuffer();
@@ -219,7 +218,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 
 	public void doField(int access, String name, String desiredDescriptor,
 			Object constant) {
-		if (!isVisible(access))
+		if (!isAPI(access))
 			return;
 
 		log("#visit " + getClassName(clazz) + "." + name + " "
@@ -285,7 +284,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 	public void doMethod(int access, String name, String desc,
 			String[] exceptions) {
 
-		if (!isVisible(access))
+		if (!isAPI(access))
 			return;
 
 		log("#visit " + getClassName(clazz) + "." + name + " " + desc);
@@ -309,7 +308,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		if (m == null) {
 			// Method not found!
 			fail("Could not find constructor: " + getClassName(clazz) + "."
-					+ name + " " + desiredDescriptor);
+					+ name + " " + key);
 		}
 
 		int cMods = m.getModifiers();
@@ -356,7 +355,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		Method m = methods.remove(key);
 		if (m == null) {
 			// Method not found!
-			fail("Could not find method: " + getClassName(clazz) + "." + name);
+			fail("Could not find method: " + getClassName(clazz) + "." + key);
 		}
 		int cMods = m.getModifiers();
 		checkModifiers(access, cMods, ACC_PUBLIC | ACC_PRIVATE | ACC_PROTECTED
@@ -443,7 +442,7 @@ public abstract class SignatureTestCase extends OSGiTestCase implements
 		return sb.toString();
 	}
 
-	private boolean isVisible(int access) {
-		return (access & (ACC_PUBLIC | ACC_PROTECTED)) != 0;
+	private boolean isAPI(int access) {
+		return ((access & (ACC_PUBLIC | ACC_PROTECTED)) != 0) && ((access & (ACC_SYNTHETIC)) == 0);
 	}
 }

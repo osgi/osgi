@@ -1,7 +1,0 @@
-# Set javac settings from JDT prefs
--include: ${build}/eclipse/jdt.bnd
-
-Export-Package: ${p}.*; -split-package:=first
-
--buildpath = \
-	ee.minimum;					version=1.2
