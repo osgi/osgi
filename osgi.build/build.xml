@@ -1,37 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="publish">
-	<target name="deploy" depends="master.deploy,javadoc,japitools,japicompat">
+	<target name="deploy" depends="master.deploy,javadoc">
 	</target>
 
 	<target name="init" depends="master.init">
 		<property name="tm"><![CDATA[&trade;]]></property>
-		<pathconvert pathsep=" " property="japitool.path">
-			<filelist files="${javadoc.bootclasspath}"/>
-			<filelist files="${javadoc.classpath}"/>
-		</pathconvert>
-		<mkdir dir="${target}/japi"/>
 	</target>
 
 	<macrodef name="javadoc.macro">
-		<attribute name="title"/>
 		<attribute name="name"/>
-		<attribute name="packages"/>
 		<attribute name="link" default="../core"/>
 		<sequential>
-			<echo>javadoc/@{name} @{title}</echo>
+			<echo>javadoc/@{name} ${javadoc.@{name}.name}</echo>
 			<delete dir="${target}/javadoc/@{name}"/>
 			<echo>
 				Project output: ${project.output}
 				Sourcepath    : ${project.allsourcepath}
 				Destdir       : ${target}/javadoc/@{name}
-			    Packages      : @{packages}
-	            Bootclasspath : ${javadoc.bootclasspath}
+			    Packages      : ${javadoc.@{name}.packages}
 	            Classpath     : ${javadoc.classpath}
 			</echo>
 	        <javadoc 
 				access="protected" 
 				author="false" 
-				classpath="${project.output}"
 				sourcepath="${project.allsourcepath}"
 				destdir="${target}/javadoc/@{name}" 
 				nodeprecated="false" 
@@ -39,7 +30,7 @@
 				noindex="false" 
 				nonavbar="false" 
 				notree="false" 
-				packagenames="@{packages}" 
+				packagenames="${javadoc.@{name}.packages}" 
 				link="@{link}"
 				source="1.5" 
 				splitindex="true" 
@@ -48,13 +39,10 @@
 				encoding="UTF-8"
 				docencoding="UTF-8"
 				charset="UTF-8"
-				windowtitle="OSGi @{title} Release ${osgi.release}">
-				<doctitle><![CDATA[OSGi${tm} @{title} Release ${osgi.release}]]></doctitle>
-				<header><![CDATA[<b>OSGi${tm} @{title}</b><br/><font size=-1>Release ${osgi.release}</font>]]></header>
+				windowtitle="OSGi ${javadoc.@{name}.name} Release ${osgi.release}">
+				<doctitle><![CDATA[OSGi${tm} ${javadoc.@{name}.name} Release ${osgi.release}]]></doctitle>
+				<header><![CDATA[<b>OSGi${tm} ${javadoc.@{name}.name}</b><br/><font size=-1>Release ${osgi.release}</font>]]></header>
 				<bottom><![CDATA[<font size=-1>${copyright.html} Licensed under the <a href="{@docRoot}/LICENSE.html">OSGi Specification License, Version 2.0</a></font>]]></bottom>
-	            <bootclasspath>
-	                <filelist files="${javadoc.bootclasspath}"/>
-	            </bootclasspath>
 	            <classpath>
 	                <filelist files="${javadoc.classpath}"/>
 	            </classpath>
@@ -65,54 +53,6 @@
 				<tag name="security" scope="methods" description="Required Permissions"/>
 				<tag name="noimplement" scope="types" description="Consumers of this API must not implement this interface"/>
 			</javadoc>
-			<!-- Patch javadoc clickjack vulnerability.
-				First find the patch insertion point and then insert the patch.
-				This can be removed when we move up to a fixed version of javadoc.
-			-->
-			<replaceregexp file="${target}/javadoc/@{name}/index.html" encoding="UTF-8" flags="s">
-			  <regexp pattern='(if \(targetPage.indexOf\(":"\) != -1\)\s+targetPage = "undefined";)(\s+function loadFrames\(\) \{)' />
-			  <substitution expression='\1//patch//\2'/>
-			</replaceregexp>
-			<replace file="${target}/javadoc/@{name}/index.html" encoding="UTF-8">
-			  <replacetoken>//patch//</replacetoken>
-			  <replacevalue><![CDATA[
-    if (targetPage != "" && !validURL(targetPage))
-        targetPage = "undefined";
-    function validURL(url) {
-        var pos = url.indexOf(".html");
-        if (pos == -1 || pos != url.length - 5)
-            return false;
-        var allowNumber = false;
-        var allowSep = false;
-        var seenDot = false;
-        for (var i = 0; i < url.length - 5; i++) {
-            var ch = url.charAt(i);
-            if ('a' <= ch && ch <= 'z' ||
-                    'A' <= ch && ch <= 'Z' ||
-                    ch == '$' ||
-                    ch == '_') {
-                allowNumber = true;
-                allowSep = true;
-            } else if ('0' <= ch && ch <= '9'
-                    || ch == '-') {
-                if (!allowNumber)
-                     return false;
-            } else if (ch == '/' || ch == '.') {
-                if (!allowSep)
-                    return false;
-                allowNumber = false;
-                allowSep = false;
-                if (ch == '.')
-                     seenDot = true;
-                if (ch == '/' && seenDot)
-                     return false;
-            } else {
-                return false;
-            }
-        }
-        return true;
-    }]]></replacevalue>
-			</replace>
 			<copy file="${project.workspace}/osgi.companion/legal/OSGiSpecificationLicense-v20.html"
 			    tofile="${target}/javadoc/@{name}/LICENSE.html"
 		    	verbose="${verbose}"
@@ -125,148 +65,23 @@
 	</target>
 	
 	<target name="javadoc.core" depends="init">
-		<javadoc.macro name="core" title="Core" packages="${annotation.packages},${core.packages}" />
+		<javadoc.macro name="core" link="" />
 	</target>
 	
 	<target name="javadoc.cmpn" depends="init">
-		<javadoc.macro name="cmpn" title="Compendium" packages="${cmpn.packages}" />
+		<javadoc.macro name="cmpn" />
 	</target>
 	
 	<target name="javadoc.enterprise" depends="init">
-		<javadoc.macro name="enterprise" title="Enterprise" packages="${enterprise.packages}" />
+		<javadoc.macro name="enterprise" />
 	</target>
 	
 	<target name="javadoc.residential" depends="init">
-		<javadoc.macro name="residential" title="Residential" packages="${residential.packages}" />
+		<javadoc.macro name="residential" />
 	</target>
 	
-	<target name="japitools" depends="japitools.core,japitools.cmpn,japitools.enterprise,japitools.residential,japitools.minimum,japitools.foundation">
-	</target>
-
-	<macrodef name="japitools">
-		<attribute name="name"/>
-		<element name="japitools-args" implicit="true" optional="true" />
-		<sequential>
-			<echo>@{name} ${project.workspace}/@{name}/${target-dir}/@{name}.jar</echo>
-			<java classname="net.wuffies.japi.Japize">
-				<classpath path="${licensed}/japitools/share/java/japitools.jar" />
-				<arg value="unzip" />
-				<arg value="as" />
-				<arg value="${target}/japi/@{name}-latest.japi" />
-				<arg value="packages" />
-				<arg value="${project.workspace}/@{name}/${target-dir}/@{name}.jar" />
-				<japitools-args />
-			</java>
-		</sequential>
-	</macrodef>
-	
-	<target name="japitools.core" depends="init">
-		<japitools name="osgi.core">
-			<arg line="${japitool.path}" />
-			<arg prefix="+" line="${core.specs}" />
-		</japitools>
-	</target>
-
-	<target name="japitools.cmpn" depends="init">
-		<japitools name="osgi.cmpn">
-			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
-			<arg line="${japitool.path}" />
-			<arg prefix="+" line="${cmpn.specs}" />
-		</japitools>
-	</target>
-
-	<target name="japitools.enterprise" depends="init">
-		<japitools name="osgi.enterprise">
-			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
-			<arg line="${japitool.path}" />
-			<arg prefix="+" line="${enterprise.specs}" />
-		</japitools>
-	</target>
-
-	<target name="japitools.residential" depends="init">
-		<japitools name="osgi.residential">
-			<arg value="${project.workspace}/osgi.core/${target-dir}/osgi.core.jar" />
-			<arg line="${japitool.path}" />
-			<arg prefix="+" line="${residential.specs}" />
-		</japitools>
-	</target>
-
-	<target name="japitools.minimum" depends="init">
-		<japitools name="ee.minimum">
-			<arg prefix="+" line="java javax" />
-		</japitools>
-	</target>
-
-	<target name="japitools.foundation" depends="init">
-		<japitools name="ee.foundation">
-			<arg prefix="+" line="java javax" />
-		</japitools>
-	</target>
-
-	<target name="japicompat" depends="japicompat.core,japicompat.cmpn,japicompat.enterprise,japicompat.residential,japicompat.minimum,japicompat.foundation,japicompat.eecompare">
-	</target>
-	
-	<macrodef name="japicompat">
-		<attribute name="name"/>
-		<attribute name="options" default="-h -v" />
-		<sequential>
-			<echo>@{name}</echo>
-			<exec executable="perl" failifexecutionfails="false">
-				<arg value="${licensed}/japitools/bin/japicompat" />
-				<arg line="@{options}" />
-				<arg value="-o" />
-				<arg value="${target}/japi/@{name}-japicompat.html" />
-				<arg value="${build}/japi-published/@{name}-published.japi" />
-				<arg value="${target}/japi/@{name}-latest.japi" />
-			</exec>
-			<exec executable="perl" failifexecutionfails="false">
-				<arg value="${licensed}/japitools/bin/japicompat" />
-				<arg line="@{options}" />
-				<arg value="-o" />
-				<arg value="${target}/japi/@{name}-changed-japicompat.html" />
-				<arg value="${target}/japi/@{name}-latest.japi" />
-				<arg value="${build}/japi-published/@{name}-published.japi" />
-			</exec>
-		</sequential>
-	</macrodef>
-
-	<target name="japicompat.core" depends="init">
-		<japicompat name="osgi.core" />
-	</target>
-
-	<target name="japicompat.cmpn" depends="init">
-		<japicompat name="osgi.cmpn" />
-	</target>
-
-	<target name="japicompat.enterprise" depends="init">
-		<japicompat name="osgi.enterprise" />
-	</target>
-
-	<target name="japicompat.residential" depends="init">
-		<japicompat name="osgi.residential" />
-	</target>
-
-	<target name="japicompat.minimum" depends="init">
-		<japicompat name="ee.minimum" options="-h" />
-	</target>
-
-	<target name="japicompat.foundation" depends="init">
-		<japicompat name="ee.foundation" options="-h" />
-	</target>
-
-	<target name="japicompat.eecompare" depends="init">
-		<echo>ee compare</echo>
-		<exec executable="perl" failifexecutionfails="false">
-			<arg value="${licensed}/japitools/bin/japicompat" />
-			<arg value="-h" />
-			<arg value="-o" />
-			<arg value="${target}/japi/ee.minimum2foundation-japicompat.html" />
-			<arg value="${target}/japi/ee.minimum-latest.japi" />
-			<arg value="${target}/japi/ee.foundation-latest.japi" />
-		</exec>
-	</target>
-
 	<target name="echo" depends="master.echo">
+		<echo>annotation.specs:       ${annotation.specs}</echo>
 		<echo>core.specs:             ${core.specs}</echo>
 		<echo>cmpn.specs:             ${cmpn.specs}</echo>
 		<echo>residential.specs:      ${residential.specs}</echo>

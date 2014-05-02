@@ -3,7 +3,7 @@
 	The is master OSGi build file. It is included from projects
 	as is.
 -->
-<project name="master" default="publish">
+<project name="master" default="publish" xmlns:if="ant:if" xmlns:unless="ant:unless">
 
 	<target name="all" depends="publish">
 		<!-- all target is a synonym for publish target -->
@@ -18,8 +18,8 @@
 
 	<target name="init" unless="initialized">
 		<!-- mark init has been run -->
-		<antversion property="initialized" atleast="1.8" />
-		<fail unless="initialized" message="Ant version is not at least 1.8" />
+		<antversion property="initialized" atleast="1.9.1" />
+		<fail unless="initialized" message="This build requires ant version 1.9.1 or later." />
 
 		<!-- The following three properties are local to this file to get bootstrapped. 
 		   The actual properties to be used should be project.dir, project.workspace and
@@ -44,16 +44,16 @@
 		will not execute. This method will set that property and it will set
 		it in the child ant.
 	-->
-	<target name="dependencies" depends="init" if="project.dependson" unless="top">
-		<property name="top" value="${target}" />
+	<target name="dependencies" depends="init" unless="top">
+		<property name="top" value="${project.name}" />
 		
 		<!-- Have to compile the bnd plugins before ... -->		
         <subant target="" inheritAll="false" buildpath="${build}">
             <property name="top" value="${top}" />
         </subant>
 		
-		<!-- Now build all dependends in their dependency order -->
-		<subant target="" inheritAll="false" buildpath="${project.dependson}">
+		<!-- Now build all dependents in their dependency order -->
+		<subant target="" inheritAll="false" buildpath="${project.dependson}" unless:blank="${project.dependson}">
 			<property name="top" value="${top}" />
 		</subant>
 	</target>
@@ -177,7 +177,7 @@
 	</target>
 
 	<target name="publish" depends="deploy">
-		<echo>Exit project ${project.name}</echo>
+		<echo>Exit project ${project.name} (${top})</echo>
 	</target>
 
 	<!--
