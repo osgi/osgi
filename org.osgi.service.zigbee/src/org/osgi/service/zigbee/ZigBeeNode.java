@@ -183,14 +183,18 @@ public interface ZigBeeNode {
 	 * the ZigBee Specification). <br>
 	 * The method limit the Link Quality table to the {@link ZigBeeNode} service
 	 * discovered.<br>
-	 * The device may not support in that case an empty {@link Map} will be
-	 * returned
+	 * The target device may report error code NOT_SUPPORTED, or
+	 * UNSUPPORTED_ATTRIBUTE in case of failure that will be notified to the
+	 * handler.
 	 * 
-	 * @return a {@link Map} containing the Service.PID as {@link String} key
-	 *         and the {@link ZigBeeLinkQuality} for the node as value.
-	 * @throws ZDPException
+	 * @param handler that will notified with the result of this operation. In
+	 *        case of success, the object notified with
+	 *        {@link ZigBeeHandler#onSuccess(Object)} will be a {@link Map}
+	 *        containing the Service.PID as {@link String} key of the
+	 *        {@link ZigBeeNode} service and the value the
+	 *        {@link ZigBeeLinkQuality} for that node.
 	 */
-	public Map getLinksQuality() throws ZDPException;
+	public void getLinksQuality(ZigBeeHandler handler);
 
 	/**
 	 * The ZigBee Base Drive may use the Mgmt_Rtg_req / Mgmt_Rtg_rsp messages to
@@ -198,7 +202,7 @@ public interface ZigBeeNode {
 	 * ZigBee Specification). <br>
 	 * The target device may report error code NOT_SUPPORTED, or
 	 * UNSUPPORTED_ATTRIBUTE in case of failure that will be notified to the
-	 * handler
+	 * handler.
 	 * 
 	 * @param handler that will notified with the result of this operation. In
 	 *        case of success, the object notified with
