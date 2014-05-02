@@ -1,0 +1,123 @@
+/* 
+ * osgi.build Gradle build script
+ */
+
+def buildProject = project
+
+/* Configure the rootProject */
+configure(rootProject) {
+  defaultTasks = [':assemble', ':javadoc']
+  buildDir = buildProject.buildDir
+
+  task assemble {
+    dependsOn ":${buildProject.name}:${name}"
+    description 'Assembles all the bundles.'
+    group 'build'
+  }
+
+  task javadoc {
+    dependsOn ":${buildProject.name}:${name}"
+    description 'Builds all the javadoc.'
+    group 'documentation'
+  }
+}
+
+/* Configure this project */
+def specNames = bnd.javadoc_all.split(',').collect { it.trim() }
+
+specNames.eachWithIndex { specName, specIndex ->
+  def specTitle = bnd("javadoc.${specName}.name")
+
+  task(type: Javadoc, "javadoc.${specName}.html") {
+    description "Build the javadoc html for ${specTitle}."
+    group 'documentation'
+    destinationDir new File(docsDir, specName)
+    classpath = files(bnd.javadoc_classpath.split(','), bnd.allSrcDirs)
+    def specList = bnd("javadoc.${specName}.specs")
+    source files(specList.split(',').collect {
+      it = it.trim()
+      def specProject = rootProject.project(it)
+      def specInclude = it.replace('.','/')+'/**/*.java'
+      return specProject.sourceSets.main.java.srcDirs.collect {
+        specProject.fileTree(it).include(specInclude)
+      }
+    })
+    configure(options) {
+      docTitle = "OSGi&trade; ${specTitle} Release ${bnd.osgi_release}"
+      windowTitle = "OSGi ${specTitle} Release ${bnd.osgi_release}"
+      bottom = "<font size=-1>${bnd.copyright_html} Licensed under the <a href=\"{@docRoot}/LICENSE.html\">OSGi Specification License, Version 2.0</a></font>"
+      header = "<b>OSGi&trade; ${specTitle}</b><br/><font size=-1>Release ${bnd.osgi_release}</font>"
+      charSet = 'UTF-8'
+      encoding = 'UTF-8'
+      docEncoding = 'UTF-8'
+      version = false
+      use = true
+      splitIndex = true
+      author = false
+      noDeprecated = false
+      noDeprecatedList = false
+      noIndex = false
+      noNavBar = false
+      noTree = false
+      if (specIndex > 0) {
+        links = ['../'+specNames[0]]
+      }
+      tags = ['Immutable:t:"Immutable"',
+              'ThreadSafe:t:"ThreadSafe"',
+              'NotThreadSafe:t:"NotThreadSafe"',
+              'GuardedBy:mf:"Guarded By:"',
+              'security:m:"Required Permissions"',
+              'noimplement:t:"Consumers of this API must not implement this interface"']
+    }
+    /* Turn off javadoc 8 overly pedantic lint checking */
+    if (JavaVersion.current().isJava8Compatible()) {
+      options.addStringOption('Xdoclint:none', '-protected') 
+    }
+    doFirst {
+      project.delete(destinationDir)
+      logger.info "Title         : ${options.windowTitle}"
+      logger.info "Packages      : ${specList}"
+      logger.info "Destdir       : ${destinationDir}"
+    }
+    def license = rootProject.project('osgi.companion').file('legal/OSGiSpecificationLicense-v20.html')
+    inputs.file license
+    doLast {
+      copy {
+        from license
+        into destinationDir
+        rename {
+          'LICENSE.html'
+        }
+      }
+    }
+    /* core javadoc html (first in list) must be built first for link */
+    if (specIndex > 0) {
+      dependsOn "javadoc.${specNames[0]}.html"
+    }
+  }
+
+  task(type: Zip, "javadoc.${specName}") {
+    description "Build the javadoc zip for ${specTitle}."
+    group 'documentation'
+    dependsOn "javadoc.${specName}.html"
+    from docsDir
+    include "${specName}/**"
+    destinationDir docsDir
+    archiveName "osgi.${specName}.javadoc.zip"
+  }
+}
+
+task javadoc(overwrite: true) {
+  description 'Build all the OSGi javadoc.'
+  group 'documentation'
+  specNames.each {
+    dependsOn "javadoc.${it}"
+  }
+}
+
+echo.doLast {
+  specNames.each {
+    def specList = bnd("javadoc.${it}.specs")
+    println "javadoc.${it}.specs:  ${specList}"
+  }
+}
