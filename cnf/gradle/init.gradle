@@ -31,18 +31,38 @@ def cnf = getBndProject(workspace, bnd_cnf)
 include cnf.name
 
 /* Start with the declared build project name */
-def projectName = bnd_build
+def defaultProjectName = bnd_build
 
 /* If in a subproject, use the subproject name */
 for (def currentDir = startParameter.currentDir; currentDir != rootDir; currentDir = currentDir.parentFile) {
-  projectName = currentDir.name
+  defaultProjectName = currentDir.name
 }
 
-/* Add the project and its dependencies to the graph */
-def project = getBndProject(workspace, projectName)
-include project.name
-project.dependson.each {
-  include it.name
+/* Build a set of project names we need to include from the specified tasks */
+def projectNames = startParameter.taskNames.collect { taskName ->
+  def elements = taskName.split(':')
+  switch (elements.length) {
+    case 1:
+      return defaultProjectName
+    case 2:
+      return elements[0].empty ? bnd_build : elements[0]
+    default:
+      return elements[0].empty ? elements[1] : elements[0]
+  }
+}.toSet()
+
+/* Include the default project name if in a subproject or no tasks specified */
+if ((startParameter.currentDir != rootDir) || projectNames.empty) {
+  projectNames += defaultProjectName
+}
+
+/* Add each project and its dependencies to the graph */
+projectNames.each { projectName ->
+  def project = getBndProject(workspace, projectName)
+  include project.name
+  project.dependson.each {
+    include it.name
+  }
 }
 
 /* Get the bnd project for the specified project name */
