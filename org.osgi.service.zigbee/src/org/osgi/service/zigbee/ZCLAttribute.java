@@ -42,6 +42,10 @@ public interface ZCLAttribute {
 	/**
 	 * Gets the current value of the attribute.
 	 * 
+	 * Only one Map entry, the key is the attribute identifier of Integer type
+	 * and the value is the associated attribute value of byte[] type. In case
+	 * of a failure, onFailure is called with a ZCLException.
+	 * 
 	 * @param handler the handler
 	 * @throws ZCLException
 	 */
@@ -49,6 +53,10 @@ public interface ZCLAttribute {
 
 	/**
 	 * Sets the current value of the attribute.
+	 * 
+	 * Only one Map entry, the key is the attribute identifier of Integer type
+	 * and the value is true if the attribute value has been written or false
+	 * otherwise.
 	 * 
 	 * @param value the Java value to set
 	 * @param handler the handler
