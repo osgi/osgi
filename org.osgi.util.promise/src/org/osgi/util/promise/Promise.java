@@ -376,7 +376,7 @@ public interface Promise<T> {
 	Promise<T> recoverWith(Function<Promise<?>, Promise<? extends T>> recovery);
 
 	/**
-	 * Fall back to another Promise if this Promise fails.
+	 * Fall back to the value of the specified Promise if this Promise fails.
 	 * 
 	 * <p>
 	 * If this Promise is successfully resolved, the returned Promise will be
@@ -386,7 +386,8 @@ public interface Promise<T> {
 	 * If this Promise is resolved with a failure, the successful result of the
 	 * specified Promise is used to resolve the returned Promise. If the
 	 * specified Promise is resolved with a failure, the returned Promise will
-	 * be failed with the failure of this Promise.
+	 * be failed with the failure of this Promise rather than the failure of the
+	 * specified Promise.
 	 * 
 	 * <p>
 	 * This method may be called at any time including before and after this
