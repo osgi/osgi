@@ -188,7 +188,7 @@ class BndPlugin implements Plugin<Project> {
           }
           if (!parseBoolean(bnd('nodeploy','false'))) {
             doLast {
-              def deploySet = fileTree(buildDir).include(bnd.bin_includes.split(','))
+              def deploySet = fileTree(buildDir).include(bnd.bin_includes.split(/\s*,\s*/))
               def boolean first = true
               deploySet.each {
                 try {
