@@ -32,6 +32,7 @@ class BndPlugin implements Plugin<Project> {
         throw new GradleException("Project ${bndProject.name} is not a valid bnd project")
       }
       extensions.create('bnd', BndProperties, bndProject)
+      bnd.ext.project = bndProject
       convention.plugins.bnd = new BndPluginConvention(this)
       bnd.ext.verbose = parseBoolean(bnd('verbose','false'))
 
@@ -152,24 +153,6 @@ class BndPlugin implements Plugin<Project> {
         }
       }
 
-      if (project == cnf) {
-        /* clean bnd cache */
-        clean.doLast {
-          project.delete(file('cache'))
-        }
-        /* After building cnf, we need to refresh the bnd Projects to pickup
-         * the bnd plugins built in cnf.
-         */
-        classes.doLast {
-          if (compileJava.didWork || processResources.didWork) {
-            logger.info "Refresh bnd Projects after building bnd plugins in ${cnf.name}"
-            rootProject.subprojects { sub ->
-              plugins.getPlugin(this.class).bndProject.refresh()
-            }
-          }
-        }
-      }
-
       jar {
         description 'Assemble the project bundles.'
         deleteAllActions() // Replace the standard jar task actions
@@ -186,10 +169,6 @@ class BndPlugin implements Plugin<Project> {
             exclude sourceSets.test.output.files.collect { relativePath(it) }
             exclude relativePath(buildDir)
             exclude '.*' // eclipse and git metadata
-          }
-          /* bnd plugins in cnf project */
-          inputs.files cnf.sourceSets.main.output.files.collect {
-            fileTree(it)
           }
           outputs.files bndProject.deliverables.collect { it.file }
           doLast {
@@ -241,9 +220,15 @@ class BndPlugin implements Plugin<Project> {
         }
       }
 
-      /* Also clean compiler output */
       clean {
-       dependsOn cleanCompileJava, cleanCompileTestJava
+        /* Also clean compiler output */
+        dependsOn cleanCompileJava, cleanCompileTestJava
+        if (project == cnf) {
+          /* clean bnd cache */
+          doLast {
+            project.delete(file('cache'))
+          }
+        }
       }
 
       docsDirName = 'javadoc'
