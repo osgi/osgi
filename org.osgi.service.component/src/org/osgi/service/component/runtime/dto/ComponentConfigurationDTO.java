@@ -69,6 +69,15 @@ public class ComponentConfigurationDTO extends DTO {
 	public ComponentDescriptionDTO	description;
 
 	/**
+	 * The id of the component configuration.
+	 * 
+	 * <p>
+	 * The id is a non-persistent, unique value assigned at runtime. The id is
+	 * also available as the {@code component.id} component property.
+	 */
+	public long						id;
+
+	/**
 	 * The current state of the component configuration.
 	 * 
 	 * <p>

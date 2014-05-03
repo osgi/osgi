@@ -168,13 +168,4 @@ public class ComponentDescriptionDTO extends DTO {
 	 * pid if the component description does not declare a configuration pid.
 	 */
 	public String[]				configurationPid;
-
-	/**
-	 * The id of the component description.
-	 * 
-	 * <p>
-	 * The id is a non-persistent, unique value assigned at runtime. The id is
-	 * also available as the {@code component.id} component property.
-	 */
-	public long					id;
 }
