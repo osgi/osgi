@@ -23,7 +23,7 @@ configure(rootProject) {
 }
 
 /* Configure this project */
-def specNames = bnd.javadoc_all.split(',').collect { it.trim() }
+def specNames = bnd.javadoc_all.split(/\s*,\s*/)
 
 specNames.eachWithIndex { specName, specIndex ->
   def specTitle = bnd("javadoc.${specName}.name")
@@ -32,10 +32,9 @@ specNames.eachWithIndex { specName, specIndex ->
     description "Build the javadoc html for ${specTitle}."
     group 'documentation'
     destinationDir new File(docsDir, specName)
-    classpath = files(bnd.javadoc_classpath.split(','), bnd.allSrcDirs)
+    classpath = files(bnd.javadoc_classpath.split(/\s*,\s*/), bnd.allSrcDirs)
     def specList = bnd("javadoc.${specName}.specs")
-    source files(specList.split(',').collect {
-      it = it.trim()
+    source files(specList.split(/\s*,\s*/).collect {
       def specProject = rootProject.project(it)
       def specInclude = it.replace('.','/')+'/**/*.java'
       return specProject.sourceSets.main.java.srcDirs.collect {
