@@ -6,6 +6,7 @@
 classes.doLast {
   if (compileJava.didWork || processResources.didWork) {
     logger.info "Refresh bnd Projects after building bnd plugins in ${cnf.name}"
+    bnd.project.refresh()
     rootProject.subprojects { subproject ->
       if (subproject != cnf) {
         bnd.project.refresh()
