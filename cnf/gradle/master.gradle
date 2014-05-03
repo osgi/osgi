@@ -87,7 +87,7 @@ class BndPlugin implements Plugin<Project> {
 
       compileJava {
         configure compileOptions
-        classpath = files(bndProject.buildpath.collect { it.file })
+        classpath = files(bndProject.buildpath.collect { it.file } - sourceSets.main.output.classesDir)
         if (logger.isEnabled(LogLevel.INFO)) {
           doFirst {
             logger.info "Compile ${sourceSets.main.java.srcDirs} to ${sourceSets.main.output.classesDir}"
@@ -109,14 +109,14 @@ class BndPlugin implements Plugin<Project> {
             bndProject.propertiesChanged()
             bndProject.clear()
             bndProject.prepare()
-            classpath = files(bndProject.buildpath.collect { it.file })
+            classpath = files(bndProject.buildpath.collect { it.file } - sourceSets.main.output.classesDir)
           }
         }
       }
 
       compileTestJava {
         configure compileOptions
-        classpath = files(bndProject.testpath.collect { it.file })
+        classpath = files(bndProject.testpath.collect { it.file } - sourceSets.test.output.classesDir)
         if (preCompileRefresh) {
           doFirst {
             logger.info 'Refreshing the bnd Project before compilation.'
@@ -124,7 +124,7 @@ class BndPlugin implements Plugin<Project> {
             bndProject.propertiesChanged()
             bndProject.clear()
             bndProject.prepare()
-            classpath = files(bndProject.testpath.collect { it.file })
+            classpath = files(bndProject.testpath.collect { it.file } - sourceSets.test.output.classesDir)
           }
         }
       }
