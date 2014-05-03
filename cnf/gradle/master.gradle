@@ -268,9 +268,6 @@ class BndPlugin implements Plugin<Project> {
         }
       }
 
-      if (project != cnf) {
-        dependencies.add('compile', cnf)
-      }
       bndProject.dependson.each {
         dependencies.add('compile', rootProject.project(it.name))
       }

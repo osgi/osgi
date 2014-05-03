@@ -1,6 +1,7 @@
 /*
  * cnf Gradle build script
  */
+assert project == cnf
 
 /* After building, we need to refresh the bnd Projects to pickup the bnd plugins built in cnf. */
 classes.doLast {
@@ -24,5 +25,6 @@ rootProject.subprojects {
     jar {
       inputs.files cnfOutput
     }
+    dependencies.add('compile', cnf)
   }
 }
