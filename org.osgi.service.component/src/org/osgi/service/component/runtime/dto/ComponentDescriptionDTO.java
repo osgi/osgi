@@ -58,7 +58,8 @@ public class ComponentDescriptionDTO extends DTO {
 	 * 
 	 * <p>
 	 * This is declared in the {@code scope} attribute of the {@code service}
-	 * element.
+	 * element. This will be {@code null} if the component description does not
+	 * declare any service interfaces.
 	 */
 	public String				scope;
 
