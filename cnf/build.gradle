@@ -7,8 +7,8 @@ classes.doLast {
   if (compileJava.didWork || processResources.didWork) {
     logger.info "Refresh bnd Projects after building bnd plugins in ${cnf.name}"
     bnd.project.refresh()
-    rootProject.subprojects { subproject ->
-      if (subproject != cnf) {
+    rootProject.subprojects {
+      if (project != cnf) {
         bnd.project.refresh()
       }
     }
@@ -19,8 +19,8 @@ classes.doLast {
 def cnfOutput = sourceSets.main.output.files.collect {
   fileTree(it)
 }
-rootProject.subprojects { subproject ->
-  if (subproject != cnf) {
+rootProject.subprojects {
+  if (project != cnf) {
     jar {
       inputs.files cnfOutput
     }

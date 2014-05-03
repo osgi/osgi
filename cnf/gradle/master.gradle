@@ -6,12 +6,12 @@
  */
 
 /* Configure the cnf project first */
-configure(cnf) { project ->
+configure(cnf) {
   plugins.apply BndPlugin
 }
 
 /* Configure the subprojects */
-subprojects { project ->
+subprojects {
   plugins.apply BndPlugin
 }
 
