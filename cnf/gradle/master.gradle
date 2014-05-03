@@ -1,4 +1,4 @@
-/* 
+/*
  * Master Gradle build script
  *
  * Depends on bnd_* values from gradle.properties.
