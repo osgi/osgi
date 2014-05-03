@@ -159,14 +159,14 @@ public class ComponentDescriptionDTO extends DTO {
 	public String				configurationPolicy;
 
 	/**
-	 * The configuration pid.
+	 * The configuration pids.
 	 * 
 	 * <p>
-	 * This is declared in the {@code configuration-pid} attribute of the
-	 * {@code component} element. This will be the default configuration pid if
-	 * the component description does not declare a configuration pid.
+	 * These are declared in the {@code configuration-pid} attribute of the
+	 * {@code component} element. This will contain the default configuration
+	 * pid if the component description does not declare a configuration pid.
 	 */
-	public String				configurationPid;
+	public String[]				configurationPid;
 
 	/**
 	 * The id of the component description.
