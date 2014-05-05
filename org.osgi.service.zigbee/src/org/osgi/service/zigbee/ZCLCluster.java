@@ -98,10 +98,9 @@ public interface ZCLCluster {
 	 * 
 	 * This method is implemented for devices implementing a version equal or
 	 * later than 1.2 of the Home Automation Profile or other profiles that
-	 * enables the discovery of command IDs as a general command. When the
-	 * device implements a profile that does not support this feature, the
-	 * method call throws a ZCLException with code
-	 * GENERAL_COMMAND_NOT_SUPPORTED.
+	 * enable the discovery of command IDs as a general command. When the device
+	 * implements a profile that does not support this feature, the method call
+	 * throws a ZCLException with code GENERAL_COMMAND_NOT_SUPPORTED.
 	 * 
 	 * @param handler the response handler
 	 */
