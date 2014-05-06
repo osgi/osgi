@@ -67,12 +67,17 @@ public interface ZCLCluster {
 	void getAttributes(ZigBeeHandler handler);
 
 	/**
-	 * Read a list of attributes.
+	 * Read a list of attributes. <br>
 	 * 
 	 * As described in "Table 2.11 APSME-GET.confirm Parameters" of the ZigBee
 	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
 	 * APSME-GET.confirm can have the following status: SUCCESS, or
-	 * UNSUPPORTED_ATTRIBUTE (see {@link APSException}).
+	 * UNSUPPORTED_ATTRIBUTE (see {@link APSException}). <br>
+	 * 
+	 * The response object given to the handler is a Map. For each Map entry,
+	 * the key is the attribute identifier of Integer type and the value is the
+	 * associated attribute value of Object type (or null if an
+	 * UNSUPPORTED_ATTRIBUTE occurred).
 	 * 
 	 * @param attributesIds An array of attributes ids
 	 * @param handler the response handler
@@ -80,12 +85,19 @@ public interface ZCLCluster {
 	void readAttributes(int[] attributesIds, ZigBeeHandler handler);
 
 	/**
-	 * Write a list of attributes.
+	 * Write a list of attributes. <br>
 	 * 
 	 * As described in "Table 2.13 APSME-SET.confirm Parameters" of the ZigBee
 	 * specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
 	 * APSME-SET.confirm can have the following status: SUCCESS,
-	 * INVALID_PARAMETER or UNSUPPORTED_ATTRIBUTE (see {@link APSException}).
+	 * INVALID_PARAMETER or UNSUPPORTED_ATTRIBUTE (see {@link APSException}). <br>
+	 * 
+	 * The response object given to the handler is a Map. For each Map entry,
+	 * the key is the attribute identifier of Integer type and the value is the
+	 * associated attribute status, i.e. SUCCESS, INVALID_VALUE, etc. In case
+	 * undivided equals false, onSuccess() is always called to notify the
+	 * response. In case undivided equals true and an error has occurred,
+	 * onFailure is called with a ZCLException.
 	 * 
 	 * @param undivided The write command is undivided or not
 	 * @param attributesRecords An array of attributes records
@@ -94,13 +106,16 @@ public interface ZCLCluster {
 	void writeAttributes(boolean undivided, ZCLAttributeRecord[] attributesRecords, ZigBeeHandler handler);
 
 	/**
-	 * Get an array of all the commandIds of the ZigBeeCluster.
+	 * Get an array of all the commandIds of the ZigBeeCluster. <br>
 	 * 
 	 * This method is implemented for devices implementing a version equal or
 	 * later than 1.2 of the Home Automation Profile or other profiles that
 	 * enable the discovery of command IDs as a general command. When the device
 	 * implements a profile that does not support this feature, the method call
-	 * throws a ZCLException with code GENERAL_COMMAND_NOT_SUPPORTED.
+	 * throws a ZCLException with code GENERAL_COMMAND_NOT_SUPPORTED. <br>
+	 * 
+	 * The response object given to the handler is a List containing the
+	 * commandIds.
 	 * 
 	 * @param handler the response handler
 	 */

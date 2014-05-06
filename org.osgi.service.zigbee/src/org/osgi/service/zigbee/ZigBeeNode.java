@@ -214,13 +214,16 @@ public interface ZigBeeNode {
 	public void getRoutingTable(ZigBeeHandler handler);
 
 	/**
-	 * Request to leave the network.
+	 * Request to leave the network. <br>
 	 * 
 	 * As described in "Table 2.131 Fields of the Mgmt_Leave_rsp Command" of the
 	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
 	 * mgmt_leave request can have the following status: NOT_SUPPORTED,
 	 * NOT_AUTHORIZED or any status code returned from the NLMELEAVE.confirm
-	 * primitive (see {@link ZDPException}).
+	 * primitive (see {@link ZDPException}). <br>
+	 * 
+	 * The response object given to the handler is a short that corresponds to
+	 * one of the ZDPException' codes.
 	 * 
 	 * @param handler
 	 */
@@ -228,13 +231,16 @@ public interface ZigBeeNode {
 
 	/**
 	 * Requests the device to leave the network. The ZigBeeHandler onSuccess
-	 * method is called if and only if the ZigBeeDeviceNode has been removed.
+	 * method is called if and only if the ZigBeeDeviceNode has been removed. <br>
 	 * 
 	 * As described in "Table 2.131 Fields of the Mgmt_Leave_rsp Command" of the
 	 * ZigBee specification 1_053474r17ZB_TSC-ZigBee-Specification.pdf, a
 	 * mgmt_leave request can have the following status: NOT_SUPPORTED,
 	 * NOT_AUTHORIZED or any status code returned from the NLMELEAVE.confirm
-	 * primitive (see {@link ZDPException}).
+	 * primitive (see {@link ZDPException}). <br>
+	 * 
+	 * The response object given to the handler is a short that corresponds to
+	 * one of the ZDPException' codes.
 	 * 
 	 * @param rejoin This field has a value of 1 if the device being asked to
 	 *        leave from the current parent is requested to rejoin the network.

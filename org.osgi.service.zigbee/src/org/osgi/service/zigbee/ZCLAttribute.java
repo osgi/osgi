@@ -40,11 +40,12 @@ public interface ZCLAttribute {
 	public int getId();
 
 	/**
-	 * Gets the current value of the attribute.
+	 * Gets the current value of the attribute. <br>
 	 * 
-	 * Only one Map entry, the key is the attribute identifier of Integer type
-	 * and the value is the associated attribute value of byte[] type. In case
-	 * of a failure, onFailure is called with a ZCLException.
+	 * The response object given to the handler is the attribute's Java data
+	 * type (see {@link #getDataType()} method) that will contain the current
+	 * attribute value. In case of a failure, onFailure is called with a
+	 * ZCLException.
 	 * 
 	 * @param handler the handler
 	 * @throws ZCLException
@@ -52,11 +53,11 @@ public interface ZCLAttribute {
 	public void getValue(ZigBeeHandler handler) throws ZCLException;
 
 	/**
-	 * Sets the current value of the attribute.
+	 * Sets the current value of the attribute. <br>
 	 * 
-	 * Only one Map entry, the key is the attribute identifier of Integer type
-	 * and the value is true if the attribute value has been written or false
-	 * otherwise.
+	 * The response object given to the handler is a boolean set to true if the
+	 * attribute value has been written or false otherwise. In case of a
+	 * failure, onFailure is called with a ZCLException.
 	 * 
 	 * @param value the Java value to set
 	 * @param handler the handler
