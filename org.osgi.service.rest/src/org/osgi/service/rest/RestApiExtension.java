@@ -41,7 +41,7 @@ package org.osgi.service.rest;
  * it.
  * </p>
  * 
- * @author $Id: $
+ * @author $Id$
  */
 public interface RestApiExtension {
 

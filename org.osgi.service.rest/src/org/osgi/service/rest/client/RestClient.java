@@ -29,7 +29,7 @@ import org.osgi.framework.startlevel.dto.FrameworkStartLevelDTO;
  * Provides a Java client API for accessing and managing a remote OSGi framework
  * through the REST API.
  * 
- * @author $Id: $
+ * @author $Id$
  */
 public interface RestClient {
 
@@ -369,7 +369,7 @@ public interface RestClient {
 	 * A Signer is used as a callback to give users the possibility to sign
 	 * requests according to the specifications of their cloud provider.
 	 * 
-	 * @author $Id: $
+	 * @author $Id$
 	 */
 	public interface Signer {
 
@@ -390,7 +390,7 @@ public interface RestClient {
 	/**
 	 * Requested modifications to the HTTP request.
 	 * 
-	 * @author $Id: $
+	 * @author $Id$
 	 */
 	public interface RequestModifications {
 
