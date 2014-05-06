@@ -16,11 +16,10 @@
 
 /**
  * Rest Service Package Version 1.0.
- * @author $Id$
+ * @author $Id: 7ec0108b863c197420d0589bd963f0d5b882373a $
  */
 
 @Version("1.0.0")
 package org.osgi.service.rest;
 
 import org.osgi.annotation.versioning.Version;
-
