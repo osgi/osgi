@@ -91,7 +91,8 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 				ServiceReference modifiableServiceRef = getContext()
 						.getServiceReference(ModifiableService.class.getName());
 				assertNotNull(modifiableServiceRef);
-				modifiableService = getContext().getService(
+				modifiableService = (ModifiableService) getContext()
+						.getService(
 						modifiableServiceRef);
 				assertNotNull(modifiableService);
 			}
@@ -137,7 +138,8 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 				ServiceReference alreadyModifiedServiceRef = alreadyModifiedServiceRefs[0];
 				
 				assertNotNull(alreadyModifiedServiceRef);
-				alreadyModifiedService = getContext().getService(
+				alreadyModifiedService = (ModifiableService) getContext()
+						.getService(
 						alreadyModifiedServiceRef);
 				assertNotNull(alreadyModifiedService);
 			}
