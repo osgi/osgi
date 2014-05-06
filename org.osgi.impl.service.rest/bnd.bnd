@@ -1,0 +1,13 @@
+# Set javac settings from JDT prefs
+-include: ${build}/eclipse/jdt.bnd
+
+Bundle-Activator				= ${p}.Activator
+
+Private-Package 					= ${p}.*
+Export-Package					= org.osgi.service.rest; -split-package:=first
+
+-buildpath						= \
+	org.osgi.service.rest;		version=project, \
+	ee.j2se;					version=1.5, \
+	osgi.core;                  version=latest, \
+	org.restlet; 				version=2.0.11
