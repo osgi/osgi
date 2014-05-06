@@ -18,6 +18,7 @@ package org.osgi.service.rest.client;
 
 import java.io.InputStream;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 import org.osgi.framework.dto.BundleDTO;
 import org.osgi.framework.dto.ServiceReferenceDTO;
@@ -28,7 +29,7 @@ import org.osgi.framework.startlevel.dto.FrameworkStartLevelDTO;
  * Provides a Java client API for accessing and managing a remote OSGi framework
  * through the REST API.
  * 
- * @author
+ * @author $Id: $
  */
 public interface RestClient {
 
@@ -363,5 +364,52 @@ public interface RestClient {
 	 */
 	ServiceReferenceDTO getServiceReference(String servicePath)
 			throws Exception;
+
+	/**
+	 * A Signer is used as a callback to give users the possibility to sign
+	 * requests according to the specifications of their cloud provider.
+	 * 
+	 * @author $Id: $
+	 */
+	public interface Signer {
+
+		/**
+		 * Passes a request url to the user and expects a map of header elements
+		 * and values to be added to the Http request.
+		 * 
+		 * @param url Passes the URL string that the client wants to send to the
+		 *        REST API.
+		 * @return Returns the desired modifications to the HTTP request. This
+		 *         can involve both additions to the HTTP header and additions
+		 *         to the request's query string.
+		 */
+		RequestModifications sign(String url);
+
+	}
+
+	/**
+	 * Requested modifications to the HTTP request.
+	 * 
+	 * @author $Id: $
+	 */
+	public interface RequestModifications {
+
+		/**
+		 * Get the requested additions to the HTTP header.
+		 * 
+		 * @return Must return an Iterator over map entries describing the
+		 *         requested additions as key/value pairs.
+		 */
+		Iterator<Map.Entry<String, String>> getHeaderAdditions();
+
+		/**
+		 * Get the requested additions to the request's query string.
+		 * 
+		 * @return Must return an Iterator over map entries describing the
+		 *         requested additions as key/value pairs.
+		 */
+		Iterator<Map.Entry<String, String>> getQueryStringAdditions();
+
+	}
 
 }

@@ -41,7 +41,7 @@ package org.osgi.service.rest;
  * it.
  * </p>
  * 
- * @author
+ * @author $Id: $
  */
 public interface RestApiExtension {
 
@@ -65,4 +65,3 @@ public interface RestApiExtension {
 	public static final String	NAME		= "org.osgi.rest.name";
 
 }
-

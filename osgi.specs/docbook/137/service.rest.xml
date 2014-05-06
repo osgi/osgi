@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter label="137"
-         revision="$Id$"
+         revision="$Id: 1358b982f816c57ba56b881b6a20d42cf0e4b5a4 $"
          version="5" xml:id="service.rest"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -101,7 +101,7 @@
 	   <remark>needs some text</remark>
   	</para>
 
-    <section>
+    <section xml:id="service.rest-resource.identifiers">
   	  <title>Resource Identifier Overview</title>
   	
   	  <para>
@@ -166,7 +166,8 @@
     <title>Resources</title>
  
  	<para>
-	   The framework and its state is mapped to a set of different resources. Each resource is accessible through a resource identifier, as summarized in <remark>ref</remark>. 
+	   The framework and its state is mapped to a set of different resources. Each resource is accessible through a resource identifier, as summarized in <xref
+    linkend="service.rest-resource.identifiers"/>. 
 	</para>
 	
     <section>
@@ -178,7 +179,7 @@
 	  
       <section>
         <title>GET</title>
-	    The GET request retrieves a framework startlevel representation <remark>ref</remark> from the REST management service. 
+	    The GET request retrieves a <xref linkend="service.rest-framework.startlevel.representation" xrefstyle="template:%t"/> from the REST management service. 
 	    The request can return the following status codes:
 	  
 	    <itemizedlist>
@@ -194,7 +195,7 @@
  	  <section>
         <title>PUT</title>
 	    <para>
-	       The PUT request sets the target framework startlevel. The body of the request needs to be a framework startlevel representation <remark>ref</remark>. 
+	       The PUT request sets the target framework startlevel. The body of the request needs to be a <xref linkend="service.rest-framework.startlevel.representation" xrefstyle="template:%t"/>. 
 	       
 	       The request can return the following status codes:
 	  	</para>
@@ -223,7 +224,7 @@
 
       <section>
         <title>GET</title>
-	    The GET request retrieves a bundle list representation <remark>ref</remark> from the REST management service. 
+	    The GET request retrieves a <xref linkend="service.rest-bundle.list.representation" xrefstyle="template:%t"/> from the REST management service. 
 	    
 	    The request can return the following status codes:
 	  
@@ -262,7 +263,7 @@
 			  <para>200 (OK): the bundle has been successfully installed and the body of the response contains the URI.</para>
       		</listitem>
   			<listitem>
-        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to install. The body of the message is a bundleexception representation <remark>ref</remark> describing the reason why the installation did not succeed.</para>
+        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to install. The body of the message is a <xref linkend="service.rest-bundle.exception.representation" xrefstyle="template:%t"/> describing the reason why the installation did not succeed.</para>
       		</listitem>
       		<listitem>
         	  <para>409 (CONFLICT): there is already a bundle installed with the same location string.</para>
@@ -293,7 +294,7 @@
 			  <para>200 (OK): the bundle has been successfully installed and the body of the response contains the URI.</para>
       		</listitem>
   			<listitem>
-        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to install. The body of the message is a bundleexception representation <remark>ref</remark> describing the reason why the installation did not succeed.</para>
+        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to install. The body of the message is a <xref linkend="service.rest-bundle.exception.representation" xrefstyle="template:%t"/> describing the reason why the installation did not succeed.</para>
       		</listitem>
       		<listitem>
         	  <para>409 (CONFLICT): there is already a bundle installed with the same location string.</para>
@@ -310,7 +311,7 @@
 			</para>
 			
 			<para>
-			The body of the response is a bundle representations list <remark>ref</remark>.
+			The body of the response is a <xref linkend="service.rest-bundle.representations.list.representation" xrefstyle="template:%t"/>.
 	  	  	The request can return the following status codes:
 	  		</para>
 	
@@ -336,7 +337,7 @@
       <section>
         <title>GET</title>
 	    <para>
-	    The GET request retrieves a bundle representation <remark>ref</remark> from the REST management service.
+	    The GET request retrieves a <xref linkend="service.rest-bundle.representation" xrefstyle="template:%t"/> from the REST management service.
 	     
 	    The request can return the following status codes:
 	  	</para>
@@ -370,7 +371,7 @@
 			  <para>204 (NO CONTENT): the request was received and valid and the framework has issued the update.</para>
       		</listitem>
   			<listitem>
-        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to update. The body of the message is a bundleexception representation <remark>ref</remark> describing the reason why the update did not succeed.</para>
+        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to update. The body of the message is a <xref linkend="service.rest-bundle.exception.representation" xrefstyle="template:%t"/> describing the reason why the update did not succeed.</para>
       		</listitem>
       		<listitem>
 			  <para>404 (NOT FOUND): there is not bundle with the given bundle id.</para>
@@ -393,7 +394,7 @@
 			  <para>204 (NO CONTENT): the request was received and valid and the framework has issued the update.</para>
       		</listitem>
   			<listitem>
-        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to update. The body of the message is a bundleexception representation <remark>ref</remark> describing the reason why the update did not succeed.</para>
+        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to update. The body of the message is a <xref linkend="service.rest-bundle.exception.representation" xrefstyle="template:%t"/> describing the reason why the update did not succeed.</para>
       		</listitem>
       		<listitem>
 			  <para>404 (NOT FOUND): there is not bundle with the given bundle id.</para>
@@ -414,7 +415,7 @@
 			  <para>204 (NO CONTENT): the request was received and valid and the framework has uninstalled the bundle.</para>
       		</listitem>
   			<listitem>
-        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to uninstall. The body of the message is a bundleexception representation <remark>ref</remark> describing the reason why the uninstallation did not succeed.</para>
+        	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to uninstall. The body of the message is a <xref linkend="service.rest-bundle.exception.representation" xrefstyle="template:%t"/> describing the reason why the uninstallation did not succeed.</para>
       		</listitem>
       		<listitem>
 			  <para>404 (NOT FOUND): there is not bundle with the given bundle id.</para>
@@ -436,7 +437,7 @@
       <section>
         <title>GET</title>
         <para>
-	    The GET request retrieves a bundle state representation <remark>ref</remark> from the REST management service. 
+	    The GET request retrieves a <xref linkend="service.rest-bundle.state.representation" xrefstyle="template:%t"/> from the REST management service. 
 	    The request can return the following status codes:
 	    </para>
 	  
@@ -457,9 +458,9 @@
         <title>PUT</title>
         <para>
 	    The PUT request sets the target state for the given bundle. This can, e.g., be state=32 for transitioning the bundle to started, or state=4 for stopping the bundle and transitioning it to resolved. 
-	    The body of the request needs to be a bundle state representation <remark>ref</remark>. Not all state transitions are valid.
+	    The body of the request needs to be a <xref linkend="service.rest-bundle.state.representation" xrefstyle="template:%t"/>. Not all state transitions are valid.
 
-		The body of the response is the new bundle state implementation <remark>ref</remark>.
+		The body of the response is the new <xref linkend="service.rest-bundle.state.representation" xrefstyle="template:%t"/>.
 	    The request can return the following status codes:
 	    </para>
 	  
@@ -469,7 +470,7 @@
       		</listitem>
   			<listitem>
         	  <para>400 (BAD REQUEST): the REST management service received a BundleException when trying to perform the state transition. 
-        	  							The body of the message is a bundleexception representation <remark>ref</remark> describing the reason why the operation did not succeed.</para>
+        	  							The body of the message is a <xref linkend="service.rest-bundle.exception.representation" xrefstyle="template:%t"/> describing the reason why the operation did not succeed.</para>
       		</listitem>      		
       		<listitem>
         	  <para>402 (PRECONDITION FAILED): the requested target state is not reachable from the current bundle state.</para>
@@ -495,7 +496,7 @@
         <title>GET</title>
         
         <para>
-	    The GET request retrieves a bundle header representation <remark>ref</remark> from the REST management service. 
+	    The GET request retrieves a <xref linkend="service.rest-bundle.header.representation" xrefstyle="template:%t"/> from the REST management service. 
 	    The request can return the following status codes:
 	    </para>
 	  
@@ -523,7 +524,7 @@
 
       <section>
         <title>GET</title>
-	    The GET request retrieves a bundle startlevel representation <remark>ref</remark> from the REST management service. 
+	    The GET request retrieves a <xref linkend="service.rest-bundle.startlevel.representation" xrefstyle="template:%t"/> from the REST management service. 
 	    The request can return the following status codes:
 	  
 	    <itemizedlist>
@@ -542,7 +543,7 @@
  	  <section>
         <title>PUT</title>
         <para>
-	    The PUT request sets the target bundle startlevel. The body of the request needs to be a bundle startlevel representation <remark>ref</remark>. 
+	    The PUT request sets the target bundle startlevel. The body of the request needs to be a <xref linkend="service.rest-bundle.startlevel.representation" xrefstyle="template:%t"/>. 
 
 	    The request can return the following status codes:
 	    </para>
@@ -555,7 +556,7 @@
       		<listitem>
         	  <para>400 (BAD REQUEST):  either the target startlevel state involved invalid values, e.g., a startlevel smaller or equal to zero and the REST 
         	  							management service got an IllegalArgumentException, or the REST management service received a BundleException when trying to perform the startlevel change. 
-        	  							In the latter case, the body of the message is a bundleexception representation <remark>ref</remark> describing the reason why the operation did not succeed.</para>
+        	  							In the latter case, the body of the message is a <xref linkend="service.rest-bundle.exception.representation" xrefstyle="template:%t"/> describing the reason why the operation did not succeed.</para>
       		</listitem>
       		<listitem>
 			  <para>404 (NOT FOUND): there is not bundle with the given bundle id.</para>
@@ -588,7 +589,7 @@
  <section>
     <title>Representations</title>
 
- 	<section>
+ 	<section xml:id="service.rest-bundle.representation">
       	<title>Bundle Representation</title>
 		<section>
 	    	<title>JSON</title>
@@ -622,7 +623,7 @@
 
  	<section>
       <title>Bundles Representations</title>
-      	<section>
+      	<section xml:id="service.rest-bundle.list.representation">
       		<title>Bundle List Representation</title>
 		<section>
 	    	<title>JSON</title>
@@ -648,7 +649,7 @@
 		</section>
       	</section>
 
-      	<section>
+      	<section xml:id="service.rest-bundle.representations.list.representation">
       		<title>Bundle Representations List Representation</title>
 		<section>
 	    	<title>JSON</title>
@@ -673,7 +674,7 @@
       	</section>		
  	</section>
 
- 	<section>
+ 	<section xml:id="service.bundle.state.representation">
       <title>Bundle State Representation</title>
 		<section>
 	    	<title>JSON</title>
@@ -698,7 +699,7 @@
 		</section>
  	</section>
 
- 	<section>
+ 	<section xml:id="service.rest-bundle.header.representation">
       <title>Bundle Header Representation</title>
 
 		<section>
@@ -729,7 +730,7 @@
 
  	</section>
 
-	<section>
+	<section xml:id="service.rest-framework.startlevel.representation">
 		<title>Framework Startlevel Representation</title>
 
 		<section>
@@ -755,7 +756,7 @@
 		</section>
 	</section>
 
- 	<section>
+ 	<section xml:id="service.rest-bundle.startlevel.representation">
       <title>Bundle Startlevel Representation</title>
 
 		<section>
@@ -786,7 +787,7 @@
 		
  	</section>
 
- 	<section>
+ 	<section xml:id="service.rest-service.representation">
       <title>Service Representation</title>
 
 		<section>
@@ -833,7 +834,7 @@
  	<section>
       <title>Services Representations</title>
  
- 		<section>
+ 		<section xml:id="service.rest-service.list.representation">
  			<title>Service List Representation</title>
 		<section>
 	    	<title>JSON</title>
@@ -868,7 +869,7 @@
 		</section>      
  		</section>     
  		
- 		<section>
+ 		<section xml:id="service.rest-service.representations.list.representation">
  			<title>Service Representations List Representation</title>
 		<section>
 	    	<title>JSON</title>
@@ -893,7 +894,7 @@
  		</section>      				
  	</section>
 
- 	<section>
+ 	<section xml:id="service.rest-bundle.exception.representation">
       <title>Bundle Exception Representation</title>
       
       		<section>
@@ -923,22 +924,20 @@
 
   <section>
     <title>Extending the REST Management Service</title>
+      
   </section>
   
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.rest.xml"/>
+  
   <section>
-    <title>Client APIs</title>
+    <title>Java Client API</title>
+      
+  </section>
 
-	<section>
-      <title>Java Client API</title>
-
-      <!-- Include javadoc here, once available
-         <xi:include href="../../generated/javadoc/docbook/org.osgi.service.rest.xml"/>
-       -->
-    </section>
+	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.rest.client.xml"/>
 
 	<section>
       <title>Javascript Client API</title>
-    </section>
   </section>
 
   <section>
