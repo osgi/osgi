@@ -238,7 +238,7 @@
 	    </itemizedlist>        
       </section>
     
-      <section>
+      <section xml:id="service.rest-bundles.post.location">
         <title>POST with Location String</title>
 	    <para>
 	    The POST request installs a new bundle to the managed framework and thereby logically appends it to the bundles resource. The new bundle to be 
@@ -271,7 +271,7 @@
         </itemizedlist>        
       </section>
 
-	  <section>
+	  <section xml:id="service.rest-bundles.post.bundle">
         <title>POST with Bundle</title>
         <para>
 	       This variant of the POST request uploads the bundle as the body of the request. The media type of the request should be set to vnd.osgi.bundle 
@@ -360,7 +360,7 @@
 	    <para>
 	    The PUT request updates the bundle with a new version, referenced by a location string which is passed as the body of the request. 
 	    In order to disambiguate the request from the other form of PUT, the content type must be set to text/plain. 
-		The same rationale as in <remark>ref bundle list POST</remark>, if a location string is given it must point to a location reachable by the managed framework. 
+		The same rationale applies as for <xref linkend="service.rest-bundles.post.location" xrefstyle="template:%t"/> and <xref linkend="service.rest-bundles.post.bundle"/>, if a location string is given it must point to a location reachable by the managed framework. 
 		If no location string is passed as the body of the request, the framework will perform an update based on the existing bundle's location string.
 
 	    The request can return the following status codes:
@@ -674,7 +674,7 @@
       	</section>		
  	</section>
 
- 	<section xml:id="service.bundle.state.representation">
+ 	<section xml:id="service.rest-bundle.state.representation">
       <title>Bundle State Representation</title>
 		<section>
 	    	<title>JSON</title>
