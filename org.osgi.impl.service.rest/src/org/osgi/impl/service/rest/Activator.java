@@ -25,7 +25,7 @@ public class Activator implements BundleActivator {
 		component = new Component();
 		component.getServers().add(Protocol.HTTP, 8888);
 		component.getClients().add(Protocol.CLAP);
-		component.getDefaultHost().attach("", new RestAPI(context));
+		component.getDefaultHost().attach("", new RestService(context));
 		component.start();
 	}
 

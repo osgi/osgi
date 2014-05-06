@@ -34,15 +34,11 @@ import org.osgi.service.rest.RestApiExtension;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 import org.restlet.Application;
-import org.restlet.Context;
-import org.restlet.Request;
-import org.restlet.Response;
 import org.restlet.Restlet;
-import org.restlet.resource.Directory;
 import org.restlet.resource.ServerResource;
 import org.restlet.routing.Router;
 
-public class RestAPI extends Application {
+public class RestService extends Application {
 
 	public static final String BUNDLE_CONTEXT_ATTR = "context";
 
@@ -52,7 +48,7 @@ public class RestAPI extends Application {
 
 	private ServiceTracker<RestApiExtension, Class<? extends ServerResource>> tracker;
 
-	RestAPI(final BundleContext context) {
+	RestService(final BundleContext context) {
 		this.context = context;
 		getTunnelService().setExtensionsTunnel(true);
 	}
@@ -109,11 +105,6 @@ public class RestAPI extends Application {
 
 		extensions.attach("", ExtensionsResource.class);
 
-		// FIXME: this is needed for the web interface only
-		final Directory dir = new HackedDirectory(getContext(),
-				"clap://thread/static/");
-		root.attach("/", dir);
-
 		return root;
 	}
 
@@ -159,21 +150,6 @@ public class RestAPI extends Application {
 				final ServiceReference<RestApiExtension> reference,
 				final Class<? extends ServerResource> service) {
 			router.detach(service);
-		}
-
-	}
-
-	private class HackedDirectory extends Directory {
-
-		public HackedDirectory(final Context context, final String path) {
-			super(context, path);
-		}
-
-		public void handle(final Request request, final Response response) {
-			// UGLY...
-			Thread.currentThread().setContextClassLoader(
-					getClass().getClassLoader());
-			super.handle(request, response);
 		}
 
 	}

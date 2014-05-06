@@ -34,7 +34,7 @@ import org.osgi.framework.Version;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.impl.service.rest.PojoReflector;
-import org.osgi.impl.service.rest.RestAPI;
+import org.osgi.impl.service.rest.RestService;
 import org.osgi.impl.service.rest.pojos.BundleExceptionPojo;
 import org.osgi.resource.Capability;
 import org.osgi.service.rest.RestApiExtension;
@@ -61,13 +61,13 @@ public class AbstractOSGiResource<T> extends ServerResource {
 
 	protected BundleContext getBundleContext() {
 		return (BundleContext) getContext().getAttributes().get(
-				RestAPI.BUNDLE_CONTEXT_ATTR);
+				RestService.BUNDLE_CONTEXT_ATTR);
 	}
 
 	@SuppressWarnings("unchecked")
 	protected ServiceTracker<RestApiExtension, Class<? extends ServerResource>> getTracker() {
 		return (ServiceTracker<RestApiExtension, Class<? extends ServerResource>>) getContext()
-				.getAttributes().get(RestAPI.TRACKER_ATTR);
+				.getAttributes().get(RestService.TRACKER_ATTR);
 	}
 
 	protected FrameworkStartLevel getFrameworkStartLevel() {
