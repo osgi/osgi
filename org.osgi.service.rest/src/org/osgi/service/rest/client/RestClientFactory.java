@@ -23,7 +23,7 @@ import org.osgi.service.rest.client.RestClient.Signer;
  * The RestClientFactory is used to create a new Java REST client instance
  * connected to a specific remote framework.
  * 
- * @author $Id: $
+ * @author $Id$
  */
 public interface RestClientFactory {
 

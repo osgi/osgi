@@ -16,7 +16,7 @@
 
 /**
  * Rest Service Package Version 1.0.
- * @author $Id: 7ec0108b863c197420d0589bd963f0d5b882373a $
+ * @author $Id$
  */
 
 @Version("1.0.0")
