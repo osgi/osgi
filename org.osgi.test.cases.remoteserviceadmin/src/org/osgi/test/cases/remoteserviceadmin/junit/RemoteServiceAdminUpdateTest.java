@@ -66,7 +66,7 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 
 		try {
 			// give the child framework and tb8 some time to start and export
-			// the serivce
+			// the service
 			Thread.sleep(10000);
 
 			// reconstruct the endpoint description in version 1.0.0
@@ -119,11 +119,9 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 			EndpointDescription endpointModified = Utils.reconstructEndpoint(
 					"1.0.0", this, 1);
 
-			// import
-			ImportRegistration importRegModified = rsa
-					.importService(endpointModified);
-			assertNotNull(importRegModified);
-			assertNull(importRegModified.getException());
+			// request the update of the import
+			assertTrue(importReg.update(endpointModified));
+			assertNull(importReg.getException());
 
 			// get the modified service that has been exported by tb8
 			ModifiableService alreadyModifiedService = null;
@@ -133,7 +131,9 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 								ModifiableService.class.getName(),
 								"(someNewProp=SomeValue)");
 
-				assertEquals("after importing the updated remote service, we need to be able to find one suitable service",1, alreadyModifiedServiceRefs.length);
+				assertTrue(
+						"after importing the updated remote service, we need to be able to find at least one suitable service",
+						alreadyModifiedServiceRefs.length >= 1);
 
 				ServiceReference alreadyModifiedServiceRef = alreadyModifiedServiceRefs[0];
 				
