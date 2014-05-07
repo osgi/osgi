@@ -98,34 +98,46 @@
   	<title>Interacting with the REST Management Service</title>
 
     <para>
-	   <remark>needs some text</remark>
+	   The REST Management Service is not a traditional OSGi service and it does not even appear in the service registry. Its purpose 
+	   is to expose a management interface to clients which can perform operations on the framework through a network connection. 
+	   Therefore, it is ideally suited for situations where the user of an OSGi framework does not have direct access to the machine it is running on, a typical situation in Infrastructure as a Service (IaaS) or Platform as a Service (PaaS). 
+	   However, even in other domains having a lightweight and easily accessible management solution can be of benefit, e.g., for embedded devices. 
+	   The advantage of REST is that it uses HTTP and therefore does usually not interfere with firewalls. Furthermore, the REST format is easily embeddable into client-side scripting technologies like JavaScript and can be consumed in web browsers.
   	</para>
+
+	<para>
+	   Much of the value of the REST Management Service lies in client-side libraries which can use the REST protocol and interact with the OSGi framework through the Management Service. 
+	   Therefore, this specification contains API for two clients, a <link linkend="org.osgi.service.rest.client">Java Client API</link> and a <link linkend="service.rest-javascript.api">JavaScript Client API</link>. 	
+	</para>
 
     <section xml:id="service.rest-resource.identifiers">
   	  <title>Resource Identifier Overview</title>
   	
   	  <para>
-  	   <remark>needs some text</remark>
+  	    The REST Management Service comprises of a set of resources that can be retrieved and in some cases also modified through REST requests. 
+  	    These resources need to be made available under well-defined paths so that clients can interact with them. 
+  	    As the initial entry point a client receives a URL to the REST Management Service. This can be done, e.g., as part of the creation of a cloud-based OSGi framework, and the precise mechanism would be proprietary to the cloud platform used. 
+  	    Relative to this URL the client can access the resources through the following resource identifiers:  
   	  </para>
   	
-  	  <code>
-	  	framework
-		framework/state
-		framework/startlevel
-		framework/bundles
+<programlisting>
+framework
+framework/state
+framework/startlevel
+framework/bundles
 
-		framework/bundles/representations
+framework/bundles/representations
 
-		framework/bundle/{bundleid}
-		framework/bundle/{bundleid}/state
-		framework/bundle/{bundleid}/startlevel
-		framework/bundle/{bundleid}/header
-		framework/services
+framework/bundle/{bundleid}
+framework/bundle/{bundleid}/state
+framework/bundle/{bundleid}/startlevel
+framework/bundle/{bundleid}/header
+framework/services
 
-		framework/services/representations
+framework/services/representations
 
-		framework/service/{serviceid}
-	  </code>
+framework/service/{serviceid}
+</programlisting>
 	
 	  <para>
 		framework/bundle/0/state is an alias for framework/state
@@ -133,7 +145,7 @@
 
 	  <para>
 		The bundles, bundles/representations, services, and services/representations resources allow the use of a query parameter which specifies a filter to restrict the result set.
-		The filter expression follows the IETF RFC 1960 String Representation of LDAP Search Filter format <remark>TODO: ref</remark>.
+		The filter expression follows the Core Specifications Framework Filter Syntax<citation>CoreFilter</citation>.
 	  </para>
 
 	  <para>
@@ -151,15 +163,39 @@
     <section>
         <title>Content Type Matching</title>
 
-		<remark>explain the representations and how they are matched based on HTTP accept headers.</remark>
+      <para>
+        Resources can present themselves through different representation variants. For instance, an implementation of the 
+        REST Management Service could support both a JSON representation and an XML representation of the same resource.
+        Matching the clients capabilities to understand certain representation formats with the servers supported formats follows 
+         the typical HTTP pattern of content negotiation and requires the client to set corresponding HTTP Accept headers for 
+         supported formats in the form of their media types. This specification describes the format and media types for representations 
+         in JSON and XML format in <xref linkend="service.rest-representation"/>.  
+      </para>
+      
+      <para>
+         Implementations of the REST Management Service offering different variants of representations must return the best matching variant 
+         based on the HTTP accept header. In addition, they must respect the file extensions defined for the different media types as specified 
+         in the respective IETF RFC (e.g., “.xml” as specified in IETF RFC 3032 and “.json” as specified in IETF RFC 4627). 
+         If a file extension is appended to the resource, an implementation must return the variant mandated by the file extension 
+         provided that it supports this content type.
+      </para>
     </section>	
 
     <section>
         <title>Versioning and Interoperability</title>
 
-		<remark>explain the versioning of the REST API.</remark>
-    </section>	
-	
+        <para>
+            All representations described in this specification have version 1. 
+            Future versions of the representations must contain the version number in their 
+            content type (e.g.,  <emphasis>application/org.osgi.bundlesV2</emphasis>)to allow legacy clients to explicitly 
+            request an older version of the representation by setting their accept header accordingly.
+		</para>
+		
+		<para>
+            Clients must understand all attributes described in this documents and may ignore any further attribute 
+            that a speficic implementation of the REST Management Service might add.
+        </para>
+    </section>
   </section>
 
   <section>
@@ -572,7 +608,7 @@
       <title>Services Resource</title>
       
       <para>
-      
+      	<remark>TODO: add</remark>
       
       </para>
       
@@ -580,13 +616,20 @@
  	
  	<section>
       <title>Service Resource</title>
+ 	  
+ 	  <para>
+ 	    <remark>TODO: add</remark>
+ 	  
+ 	  </para>
+ 	  
  	</section>
+ 	
  	
  
  </section>
 
 
- <section>
+ <section xml:id="service.rest-representation">
     <title>Representations</title>
 
  	<section xml:id="service.rest-bundle.representation">
@@ -924,20 +967,20 @@
 
   <section>
     <title>Extending the REST Management Service</title>
+
+    <remark>TODO: add some text</remark>
       
   </section>
   
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.rest.xml"/>
   
-  <section>
-    <title>Java Client API</title>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.rest.client.xml"/>
+
+  <section xml:id="service.rest-javascript.api">
+      <title>JavaScript Client API</title>
       
-  </section>
-
-	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.rest.client.xml"/>
-
-	<section>
-      <title>Javascript Client API</title>
+      <remark>TODO: add</remark>
   </section>
 
   <section>
@@ -961,113 +1004,12 @@
     </para>
   </section>
 
- 
-
-  
-<!-- 
-  <section>
-    <title>Domain A</title>
-
-    <para>This is body text.</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>Bulleted</para>
-      </listitem>
-
-      <listitem>
-        <para>Bulleted</para>
-      </listitem>
-      
-      <listitem>
-        <para>Bulleted</para>
-      </listitem>
-    </itemizedlist>
-
-    <para>Numbered lists:</para>
-
-    <orderedlist>
-      <listitem>
-        <para>Numbered</para>
-      </listitem>
-      
-      <listitem>
-        <para>Numbered</para>
-      </listitem>
-      
-      <listitem>
-        <para>Numbered</para>
-      </listitem>
-    </orderedlist> 
-
-    <para>An <emphasis>emphasized</emphasis> term.</para>
-
-    <para>The following is a Program Listing style:</para>
-
-    <programlisting>Some s = (Some) context.getService(ref);</programlisting>
-
-    <para>A remark:</para>
-
-    <para>
-      <remark>This is a discussion remark</remark>
-    </para>
-
-    <section>
-      <title>Subsection</title>
-      <section>
-        <title>Sub-subsection</title>
-      </section>
-    </section>
-  </section>
-  
-  <section>
-    <title>Domain B</title>
-  </section>
-  
-  <section>
-    <title>Domain C</title>
-  </section>
-  
-  <section>
-    <title>Life Cycle</title>
-  </section>
-  
-  <section>
-    <title>Error Handling</title>
-  </section>
-  
-  <section>
-    <title>Events</title>
-    
-    <section>
-      <title>Domain Events</title>
-    </section>
-
-    <section>
-      <title>Event Admin Mapping</title>
-    </section>
-  </section>
-  
-  <section>
-    <title>Class Loading</title>
-  </section>
-  
-  <section>
-    <title>Data Transfer Objects</title>
-  </section>
- 
-   -->
-  
-
-  
- 
-
   <section>
     <title>References</title>
 
     <bibliolist>
-      <bibliomixed><title>Framework Module Layer</title>OSGi
-      Core, Chapter 3 Module Layer</bibliomixed>
+      <bibliomixed><abbrev>CoreFilter</abbrev><title>Framework Filter Syntax</title>OSGi
+      Core, Chapter 3.2.7 Filter Syntax</bibliomixed>
 
       <bibliomixed><title>XML Schema Part 2: Data types
       Second Edition</title>http://www.w3.org/TR/xmlschema-2/</bibliomixed>
