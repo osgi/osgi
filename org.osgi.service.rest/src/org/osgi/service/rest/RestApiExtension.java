@@ -60,8 +60,20 @@ public interface RestApiExtension {
 	 * this service property describes the name of the service who wants to
 	 * contribute its REST API extension. Services specified in OSGi
 	 * specifications must use their canonical package name as the name.
-	 * Third-party services should use their package names.
+	 * Third-party services should use their package names. The type of this
+	 * property is <code>java.lang.String</code> and the property is mandatory.
 	 */
 	public static final String	NAME		= "org.osgi.rest.name";
+
+	/**
+	 * this service property describes the refers to the id of the service the
+	 * the REST API extension provides management capabilities for. Clients can
+	 * use this information to retrieve the service properties of the service,
+	 * e.g., for the case that there are multiple services of the same type on
+	 * the framework and the client wants to retrieve the REST management
+	 * extension for a specific service instance. The type of the property is
+	 * <code>java.lang.Long</code> and the property is optional.
+	 */
+	public static final String	SERVICE		= "org.osgi.rest.service";
 
 }

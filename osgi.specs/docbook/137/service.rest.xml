@@ -343,7 +343,7 @@ framework/service/{serviceid}
 			<para>
 			The bundles resource returns a list of the URIs of all bundles installed on the framework. 
 			For clients interested in all bundles there is also the possibility to retrieve the bundle representation of each installed bundle with 
-			a single request through the bundles/representations resource.
+			a single request through the <emphasis>bundles/representations</emphasis> resource.
 			</para>
 			
 			<para>
@@ -608,24 +608,80 @@ framework/service/{serviceid}
       <title>Services Resource</title>
       
       <para>
-      	<remark>TODO: add</remark>
-      
+		The services resource represents the set of all services available on the framework, optionally constrained by a filter expression. 
+		It is read-only and therefore only supports the GET request. 
       </para>
+
+      <section>
+        <title>GET</title>
+	    The GET request retrieves a <xref linkend="service.rest-service.list.representation" xrefstyle="template:%t"/> from the REST management service. 
+	    The request can return the following status codes:
+	  
+	    <itemizedlist>
+      		<listitem>
+			  <para>200 (OK): the request has been served successfully and the body of the response is a service list representation.</para>
+      		</listitem>
+      		<listitem>
+			  <para>400 (BAD REQUEST): the provided filter expression was not valid.</para>
+      		</listitem>            		
+      		<listitem>
+        	  <para>406 (NOT ACCEPTABLE): the REST management service does not support any of the requested representations.</para>
+      		</listitem>
+	    </itemizedlist>        
+      </section>
+
+      <section>
+        <title>GET of the Representations</title>
+	    The services resource returns a list of the URIs of all services registered on the framework. For clients interested
+	    in all services there is also the possiblity to retrieve the service representation of each available service with a single request through the 
+	    <emphasis>services/representations</emphasis> resource. 
+
+
+	    The body of the response is a  <xref linkend="service.rest-service.representations.list.representation" xrefstyle="template:%t"/> from the REST management service. 
+	    The request can return the following status codes:
+	  
+	    <itemizedlist>
+      		<listitem>
+			  <para>200 (OK): the request has been served successfully and the body of the response is a service list representation.</para>
+      		</listitem>
+      		<listitem>
+			  <para>400 (BAD REQUEST): the provided filter expression was not valid.</para>
+      		</listitem>            		
+      		<listitem>
+        	  <para>406 (NOT ACCEPTABLE): the REST management service does not support any of the requested representations.</para>
+      		</listitem>
+	    </itemizedlist>        
+      </section>
+
       
  	</section>
  	
  	<section>
       <title>Service Resource</title>
- 	  
- 	  <para>
- 	    <remark>TODO: add</remark>
- 	  
- 	  </para>
- 	  
+      
+       <para>
+		The service resource represents a single, distinct service in the framework. Hence, it has to be qualified by a service id.  
+		Services can only be read through the REST Management Service and therefore only support the GET request. 
+      </para>
+
+      <section>
+        <title>GET</title>
+	    The GET request retrieves a <xref linkend="service.rest-service.representation" xrefstyle="template:%t"/>. 
+	    The request can return the following status codes:
+	  
+	    <itemizedlist>
+      		<listitem>
+			  <para>200 (OK): the request has been served successfully and the body of the response is a service representation.</para>
+      		</listitem>
+      		<listitem>
+			  <para>404 (NOT FOUND): there is not service with the given service id.</para>
+      		</listitem>            		      		
+      		<listitem>
+        	  <para>406 (NOT ACCEPTABLE): the REST management service does not support any of the requested representations.</para>
+      		</listitem>
+	    </itemizedlist>        
+      </section>
  	</section>
- 	
- 	
- 
  </section>
 
 
@@ -968,7 +1024,88 @@ framework/service/{serviceid}
   <section>
     <title>Extending the REST Management Service</title>
 
-    <remark>TODO: add some text</remark>
+    <para>
+    This specification describes a REST-based management interface for the core framework functionality. 
+    Other services on the framework might also benefit from management access through REST. 
+    This can involve services speficied by the OSGi Alliance as part of the Core Framework, Compendium, or Enterprise
+    Specifications but also application-specific services provided by the developer.
+    It is desirable to expose such management services as extensions of the REST Management Service. 
+    </para> 
+    
+    <para>
+    This REST service can be implemented by using various technologies such as Java Servlets, Restlet, JAX-RS, and others. 
+    Therefore, it might not always be possible to integrate extensions at the implementation level because they might use other 
+    underlying technologies to implement their REST interface. Defining a format for delegating requests between the REST Management Service and 
+    extensions would furthermore necessarily expose implementation details and is therefore not feasible either. 
+    As a consequence, this specification only describes how to logically integrate extensions with the REST Management Service. 
+    Implementations of this specification might offer mechanisms for tighter integration for the case that extensions are developed using the same underlying technology. 
+    </para>
+      
+    <para>
+    The main purpose of the extension mechanism is therefore to make extensions discoverable by the client and give it a mechanism to 
+    check if a REST interface exists for a speficic service. This is made possible by the <xref linkend="service.rest-extension.list.resource" xrefstyle="template:%t"/>
+    which contains a description and a path for every extension currently available. Services who want to contribute their extensions to the REST Management Service
+    can do so by registering the <xref linkend="org.osgi.service.rest.RestApiExtension" xrefstyle="template:%t"/> service using the Whiteboard Pattern.
+    The extension interface is only a marker and the relevant information is exposed through the <emphasis>NAME</emphasis>, 
+    <emphasis>URI_PATH</emphasis>, and optionally <emphasis>SERVICE</emphasis> properties.  
+    </para>
+    
+    <para>
+    In order to be discoverable REST interface extensions to OSGi core, compendium, or enterprise services must use their canonical package name as names. 
+    User-defined extensions should use the package name of the sevice they provide management capabilities for. 
+    </para>  
+      
+    <section xml:id="service.rest-extension.resource">
+      <title>Extension Resource</title>
+      
+       <para>
+		The extension resource enumerates all extensions currently registered through the Whiteboard Pattern. It is read-only and therefore only support the GET request. 
+      </para>
+
+      <section>
+        <title>GET</title>
+	    The GET request retrieves a <xref linkend="service.rest-extension.list.representation" xrefstyle="template:%t"/>. 
+	    The request can return the following status codes:
+	  
+	    <itemizedlist>
+      		<listitem>
+			  <para>200 (OK): the request has been served successfully and the body of the response is a extension list representation.</para>
+      		</listitem>
+      		<listitem>
+        	  <para>406 (NOT ACCEPTABLE): the REST management service does not support any of the requested representations.</para>
+      		</listitem>
+	    </itemizedlist>        
+      </section>
+ 	</section>  
+      
+    <section xml:id="service.rest-extension.list.representation">
+      <title>Extension List Representation</title>
+      
+      		<section>
+	    	<title>JSON</title>
+			<para><code>Content-Type: application/org.osgi.extensions+json</code></para>
+	    	<programlisting>	 
+{ 
+   [ { "name" : "org.osgi.service.event", "path" : "extensions/eventadmin", 
+       "service" : 12 }, … ]
+}
+			</programlisting>
+		</section>
+
+		<section>
+	    	<title>XML</title>
+			<para><code>Content-Type: application/org.osgi.extensions+xml</code></para>
+			<programlisting><![CDATA[
+<extensions>
+   <extension>
+      <name>org.osgi.service.event</name>
+      <path>extensions/eventadmin</path>
+      <service>12</service>
+   </extension>
+</extensions>      
+			]]></programlisting>    
+		</section>
+ 	</section>  
       
   </section>
   
