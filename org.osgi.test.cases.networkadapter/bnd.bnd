@@ -1,0 +1,143 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+    ${p}.junit.*, \
+    ${p}.util.*
+Import-Package: ${-signaturetest}, *
+
+-buildpath: org.osgi.test.support;version=project,\
+    org.osgi.service.networkadapter;version=project,\
+    osgi.core;version=4.3,\
+    osgi.cmpn;version=4.2,\
+    ee.minimum;version=1.2.1,\
+    org.osgi.test.cases.dal.step;version=project,\
+    ${junit}
+
+Test-Cases							= ${testcases}
+-signaturetest						= org.osgi.service.nwifinfo
+
+-runbundles = \
+    org.osgi.impl.service.log; version=latest, \
+    org.osgi.test.cases.dal.step; version=latest, \
+    org.osgi.impl.service.networkadapter; version=latest
+
+-runproperties = ${runproperties}, \
+    network.adapter.type="test.nwif.type", \
+    displayname="test.displayname", \
+    name="test.name", \
+    hardwareaddress="aa:bb:cc:dd:ee:ff", \
+    mtu="1500", \
+    is.loopback="false", \
+    is.point.to.point="false", \
+    is.up="true", \
+    is.virtual="false", \
+    supports.multicast="false", \
+    parent="", \
+    sub.interface="", \
+    \
+    host.ipaddress.4=0.1.1.10, \
+    host.masklength.4=24, \
+    private.ipaddress.4=10.1.1.10, \
+    private.masklength.4=24, \
+    private.ipaddress.4.1=10.1.1.20, \
+    private.masklength.4.1=24, \
+    shared.ipaddress.4=100.64.1.10, \
+    shared.masklength.4=24, \
+    loopback.ipaddress.4=127.0.0.1, \
+    loopback.masklength.4=32, \
+    linklocal.ipaddress.4=169.254.1.10, \
+    linklocal.masklength.4=24, \
+    global.ipaddress.4=1.1.1.10, \
+    global.masklength.4=24, \
+    loopback.ipaddress.6=::1, \
+    loopback.masklength.6=128, \
+    unspecified.ipaddress.6=::, \
+    unspecified.masklength.6=128, \
+    uniquelocal.ipaddress.6=fec0::10, \
+    uniquelocal.masklength.6=64, \
+    linkedscopedunicast.ipaddress.6=fe80::10, \
+    linkedscopedunicast.masklength.6=64, \
+    global.ipaddress.6=2001::10, \
+    global.masklength.6=64, \
+    \
+    lb.network.adapter.type="test.lb.network.adapter.type", \
+    lb.displayname="test.lb.displayname", \
+    lb.name="test.lb.name", \
+    lb.hardwareaddress="aa:bb:cc:dd:ee:ff", \
+    lb.mtu="1500", \
+    lb.is.up="true", \
+    lb.is.virtual="false", \
+    lb.supports.multicast="false", \
+    lb.parent="", \
+    lb.sub.interface="", \
+    lb.ipaddress.version="IPV4", \
+    lb.ipaddress.scope="LOOPBACK", \
+    lb.ipaddress="127.0.0.1", \
+    lb.masklength="8", \
+    \
+    ptp.network.adapter.type="test.ptp.network.adapter.type", \
+    ptp.displayname="test.ptp.displayname", \
+    ptp.name="test.ptp.name", \
+    ptp.hardwareaddress="aa:bb:cc:dd:ee:ff", \
+    ptp.mtu="1500", \
+    ptp.is.up="true", \
+    ptp.is.virtual="false", \
+    ptp.supports.multicast="false", \
+    ptp.parent="", \
+    ptp.sub.interface="", \
+    ptp.ipaddress.version="IPV4", \
+    ptp.ipaddress.scope="PRIVATE_USE", \
+    ptp.ipaddress="192.168.1.20", \
+    ptp.masklength="24", \
+    \
+    up.network.adapter.type="test.up.network.adapter.type", \
+    up.displayname="test.up.displayname", \
+    up.name="test.up.name", \
+    up.hardwareaddress="aa:bb:cc:dd:ee:ff", \
+    up.mtu="1500", \
+    up.is.loopback="false", \
+    up.is.point.to.point="false", \
+    up.is.virtual="false", \
+    up.supports.multicast="false", \
+    up.parent="", \
+    up.sub.interface="", \
+    up.ipaddress.version="IPV4", \
+    up.ipaddress.scope="PRIVATE_USE", \
+    up.ipaddress="192.168.1.30", \
+    up.masklength="24", \
+    \
+    vir.network.adapter.type="test.vir.network.adapter.type", \
+    vir.displayname="test.vir.displayname", \
+    vir.name="test.vir.name", \
+    vir.hardwareaddress="aa:bb:cc:dd:ee:ff", \
+    vir.mtu="1500", \
+    vir.is.loopback="false", \
+    vir.is.point.to.point="false", \
+    vir.is.up="true", \
+    vir.supports.multicast="false", \
+    vir.parent="", \
+    vir.sub.interface="", \
+    vir.ipaddress.version="IPV4", \
+    vir.ipaddress.scope="PRIVATE_USE", \
+    vir.ipaddress="192.168.1.40", \
+    vir.masklength="24", \
+    \
+    mul.network.adapter.type="test.mul.network.adapter.type", \
+    mul.displayname="test.mul.displayname", \
+    mul.name="test.mul.name", \
+    mul.hardwareaddress="aa:bb:cc:dd:ee:ff", \
+    mul.mtu="1500", \
+    mul.is.loopback="false", \
+    mul.is.point.to.point="false", \
+    mul.is.up="true", \
+    mul.is.virtual="false", \
+    mul.parent="", \
+    mul.sub.interface="", \
+    mul.ipaddress.version="IPV4", \
+    mul.ipaddress.scope="PRIVATE_USE", \
+    mul.ipaddress="192.168.1.50", \
+    mul.masklength="24"
+
+
