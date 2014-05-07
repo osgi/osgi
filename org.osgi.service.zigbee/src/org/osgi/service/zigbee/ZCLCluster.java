@@ -76,8 +76,8 @@ public interface ZCLCluster {
 	 * 
 	 * The response object given to the handler is a Map. For each Map entry,
 	 * the key is the attribute identifier of Integer type and the value is the
-	 * associated attribute value of Object type (or null if an
-	 * UNSUPPORTED_ATTRIBUTE occurred).
+	 * associated attribute value in the corresponding Java wrapper type (or
+	 * null if an UNSUPPORTED_ATTRIBUTE occurred).
 	 * 
 	 * @param attributesIds An array of attributes ids
 	 * @param handler the response handler
