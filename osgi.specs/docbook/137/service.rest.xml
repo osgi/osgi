@@ -1117,18 +1117,13 @@ framework/service/{serviceid}
   <section xml:id="service.rest-javascript.api">
       <title>JavaScript Client API</title>
       
-      <remark>TODO: add</remark>
+      <remark>TODO: add a way to generate the documentation from the annotations in the Javascript code.</remark>
   </section>
 
   <section>
     <title>XML Schema</title>
 
-    <para>A wide code example (for use with XML Schema). Note that the XML schema is typically included 
-        through <code>xi:include</code> tags rather than embedded directly.</para>
-
-    <programlisting role="pgwide">&lt;?xml version="1.0"?&gt;
-&lt;!-- XML Schema --&gt;
-&lt;top&gt; ... &lt;/top&gt;</programlisting>
+    <remark>TODO: needs schema</remark>
 
   </section>
   
