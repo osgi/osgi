@@ -34,7 +34,27 @@ public class TestScaffoldOperations extends ScaffoldNodeHelper {
 		getNodeSizeOperation(session, uri);
 		
 		getNodeTimeStampOperation(session, uri);
+		
 	}
+	
+	/**
+	 * checks that the DmtAdmin throws a DmtExeption of type COMMAND_NOT_ALLOWED, if execute is invoked on a scaffold node
+	 */
+	public void testScaffoldNodeExecution() throws Exception {
+
+		prepareScaffoldPlugin();
+		
+		String uri = "./A";
+		session = dmtAdmin.getSession( uri, DmtSession.LOCK_TYPE_EXCLUSIVE);
+		
+		try {
+			session.execute( uri, null );
+			fail( "The DmtAdmin must throw a DmtException of type COMMAND_NOT_ALLOWED for execute() on Scaffold nodes." );
+		} catch (DmtException e) {
+			pass( "The DmtAdmin correctly throws a DmtException of type COMMAND_NOT_ALLOWED for execute() on Scaffold nodes." );
+		} 
+	}
+	
 	
 	/**
 	 * checks that the getChildNodeNames operation is supported and provides valid data

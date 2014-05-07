@@ -379,10 +379,18 @@ public class DmtSessionImpl implements DmtSession {
 	private void internalExecute(String nodeUri, final String correlator,
 			final String data) throws DmtException {
 
+
 		// session must be writable
 		checkWriteSession("execute");
 
 		final Node node = makeAbsoluteUriAndCheck(nodeUri, SHOULD_EXIST);
+
+		// S. Druesedow: 06.05.2014, added scaffold node check according to bug 2421
+		if ( isScaffoldNode( node ) )
+			throw new DmtException(nodeUri,
+					DmtException.COMMAND_NOT_ALLOWED,
+					"execute operations are not allowed on scaffold nodes ");
+
 
 		checkOperation(node, Acl.EXEC, MetaNode.CMD_EXECUTE);
 
@@ -414,7 +422,9 @@ public class DmtSessionImpl implements DmtSession {
 		if ( plugin == null || plugin.getMountPoints().size() == 0 )
 			return false;
 		// must only have one rootUri, if MPs are specified
-		for (String mp : plugin.getMountPoints()) {
+		Iterator it = plugin.getMountPoints().iterator();
+		while (it.hasNext()) {
+			String mp = (String) it.next();
 			if ( nodeUri.startsWith(mp))
 				return true;
 		}
@@ -602,11 +612,14 @@ public class DmtSessionImpl implements DmtSession {
 		String uri = node.getUri();
 		String mpUri = uri.substring(0, uri.lastIndexOf("/") + 1) + "#";
 		Plugin plugin = context.getPluginDispatcher().getDataPluginFor(node.getParent().getPath());
-		if ( plugin != null )
-			for (String mp : plugin.getMountPoints()) {
+		if ( plugin != null ) {
+			Iterator it = plugin.getMountPoints().iterator();
+			while (it.hasNext()) {
+				String mp = (String) it.next();
 				if ( mp.equals(mpUri))
 					return true;
 			}
+		}
 		return false;
 	}
 	
