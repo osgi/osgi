@@ -275,7 +275,10 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			assertNotNull(importRef2);
 			ServiceReference sref2 = importRef.getImportedService();
 			assertNotNull(sref2);
-			assertSame("122.4.2: ImportRegistration has to point to the same proxy service", sref, sref2);
+			// Bug 2642, It is not required anymore that proxy services are
+			// shared among multiple imports
+			// assertSame("122.4.2: ImportRegistration has to point to the same proxy service",
+			// sref, sref2);
 
 			event = eventHandler.getNextEvent();
 			assertNotNull("no Event received", event);
