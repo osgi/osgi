@@ -603,7 +603,9 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 					assertNotNull(ref);
 
 					assertEquals(registration.getReference(), ref.getExportedService());
-					assertTrue(endpoints.contains(ref.getExportedEndpoint()));
+					// As of RSA 1.1 endpoints are not required to be shared so
+					// we don't test for it anymore
+					// assertTrue(endpoints.contains(ref.getExportedEndpoint()));
 
                     assertTrue("ExportReference does not show up in exported reference list of RSA service", exportrefs.contains(ref));
 				}
