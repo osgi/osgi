@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.service.async;
+package org.osgi.service.async.delegate;
 
 import java.lang.reflect.Method;
 import org.osgi.annotation.versioning.ConsumerType;

@@ -7,7 +7,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.async.AsyncDelegate;
+import org.osgi.service.async.delegate.AsyncDelegate;
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.Promise;
 
