@@ -17,6 +17,7 @@
  */
 package org.osgi.impl.service.dmt;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
@@ -55,13 +56,20 @@ public class DmtEventImpl implements DmtEvent {
     	if ( nodeUris == null ) {
             List<Node> nodes = coreEvent.getNodes();
             if ( nodes != null ) {
-	            if(principals != null)
-	                this.nodeUris = filterNodesByAcls(nodes, coreEvent.getAcls(), principals);
-	            else {
-	            	nodeUris = new String[nodes.size()];
-	            	for (int i = 0; i < nodes.size(); i++)
-	    				nodeUris[i] = nodes.get(i).getUri();
-	            }
+            	List<String> uris = new ArrayList();
+        		SecurityManager sm = System.getSecurityManager();
+            	for (int i = 0; i < nodes.size(); i++) {
+            		if ( sm != null ) {
+	            		try {
+	        				sm.checkPermission(new DmtPermission(nodes.get(i).getUri(), DmtPermission.GET));
+						} catch (SecurityException e) {
+							// skip rest of this iteration
+							continue;
+						}
+            		}
+            		uris.add( nodes.get(i).getUri());
+            	}
+            	nodeUris = uris.toArray(new String[uris.size()]);
             }
     	}
         return nodeUris;
@@ -71,13 +79,20 @@ public class DmtEventImpl implements DmtEvent {
     	if ( newNodeUris == null ) {
             List<Node> newNodes = coreEvent.getNewNodes();
             if ( newNodes != null ) {
-	            if(principals != null)
-	                this.newNodeUris = filterNodesByAcls(newNodes, coreEvent.getAcls(), principals);
-	            else {
-	            	newNodeUris = new String[newNodes.size()];
-	            	for (int i = 0; i < newNodes.size(); i++)
-	            		newNodeUris[i] = newNodes.get(i).getUri();
-	            }
+            	List<String> uris = new ArrayList();
+        		SecurityManager sm = System.getSecurityManager();
+            	for (int i = 0; i < newNodes.size(); i++) {
+            		if ( sm != null ) {
+	            		try {
+	        				sm.checkPermission(new DmtPermission(newNodes.get(i).getUri(), DmtPermission.GET));
+						} catch (SecurityException e) {
+							// skip rest of this iteration
+							continue;
+						}
+            		}
+            		uris.add( newNodes.get(i).getUri());
+            	}
+            	newNodeUris = uris.toArray(new String[uris.size()]);
             }
     	}
         return newNodeUris;
