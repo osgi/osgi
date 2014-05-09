@@ -168,7 +168,6 @@ class BndPlugin implements Plugin<Project> {
             exclude sourceSets.test.java.srcDirs.collect { relativePath(it) }
             exclude sourceSets.test.output.files.collect { relativePath(it) }
             exclude relativePath(buildDir)
-            exclude '.*' // eclipse and git metadata
           }
           outputs.files bndProject.deliverables.collect { it.file }
           doLast {
