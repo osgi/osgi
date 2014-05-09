@@ -423,22 +423,19 @@ public void doStuff() {
     <section>
       <title>Determining the mediated types for a service reference</title>
        
-      <para>Mediator objects for service references are lazy, and creating one should not result
-      in a lookup of the service object. Therefore, when creating the Async mediator object the 
-      Async service must not introspect the service object, but instead it should attempt to load 
-      all of the types listed in the objectClass property of the service reference, using the client 
-      bundle. Any <code>ClassNotFoundException</code> thrown when attempting to load these 
-      classes should be ignored. The successfully loaded classes are then used when creating the mediator object. If the set of
-      successfully loaded classes is empty then an instance of <code>Object</code> should be returned.
+      <para>When creating an Async mediator object for a service reference the Async service must not 
+      introspect the service object to determine which types are mediated, but instead it must use 
+      the types listed in the objectClass property of the service reference. The mediator object must
+      be type compatible with the service object for all types listed in the objectClass property.
       </para>
     </section>
       
     <section>
       <title>Determining the mediated types for a service object</title>
         
-      <para>When mediating a service object there is no way to be lazy, therefore the service object
-      can be introspected to determine its type. In this case the class to be mediated is the class
-      returned by calls to <code>serviceObject.getClass()</code>.
+      <para>When mediating a service object there are no advertised types, therefore the service object
+      must be introspected to determine the mediated types. In this case the type to be mediated is the 
+      type returned by calls to <code>serviceObject.getClass()</code>.
       </para>
     </section>
       
@@ -496,7 +493,7 @@ public void doStuff() {
       Promise may then be shared between threads if required. 
       </para>
     
-      <para>Async mediators created from <code>ServiceReference</code> objects are lazy, and may remain
+      <para>Async mediators created from <code>ServiceReference</code> objects remain
       directly associated with the service reference and client bundle after creation. Clients should 
       therefore not share mediator objects with other bundles. Instead both bundles should create
       their own mediators.</para>
