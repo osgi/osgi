@@ -37,24 +37,28 @@ javac.target 			= 1.2
 -sources               	= true
 -sourcepath             = ${project}/${src}
 
--plugin	            	= aQute.lib.deployer.FileRepo; \
-                                location=${repo}; \
-                                readonly=true, \
-                          aQute.lib.deployer.FileRepo; \
-                                location=${licensed-repo}; \
-                                readonly=true, \
-                          aQute.lib.deployer.FileRepo; \
-                                location=${released-repo}, \
-  						  aQute.bnd.signing.JartoolSigner; \
-  						        keystore=${build}/keystore; \
-  						        keypass=testtest; \
-  						        storepass=testtest, \
-                          Packaging; \
-                                path:="${build}/${bin}";\
-                                command:=-pack, \
-                          SignatureTest; \
-                                path:=${build}/${bin}; \
-                                command:="-signaturetest"
+-plugin = aQute.lib.deployer.FileRepo; \
+            name='Main'; \
+            location="${repo}"; \
+            readonly=true, \
+          aQute.lib.deployer.FileRepo; \
+            name='Licensed'; \
+            location="${licensed-repo}"; \
+            readonly=true, \
+          aQute.lib.deployer.FileRepo; \
+            name='Release'; \
+            location="${released-repo}", \
+          aQute.bnd.signing.JartoolSigner; \
+            keystore="${build}/keystore"; \
+            keypass=testtest; \
+            storepass=testtest, \
+          Packaging; \
+            path:="${build}/${bin}"; \
+            command:=-pack, \
+          SignatureTest; \
+            path:="${build}/${bin}"; \
+            command:="-signaturetest"
+-deployrepo: Release
 
 
 -make                   =  \
