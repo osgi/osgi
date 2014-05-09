@@ -275,6 +275,7 @@ class BndPlugin implements Plugin<Project> {
   }
 
   private void checkErrors() {
+    bndProject.getInfo(bndProject.workspace, "${bndProject.workspace.base.name} :")
     def int errorCount = 0
     bndProject.warnings.each {
       project.logger.warn "Warning: ${it}"
