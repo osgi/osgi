@@ -76,6 +76,7 @@ def getBndProject(Workspace workspace, String projectName) {
     return project
   }
 
+  project.getInfo(workspace, "${rootDir} :")
   def errorCount = 0
   project.warnings.each {
     println "Warning: ${it}"

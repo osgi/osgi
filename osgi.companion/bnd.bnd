@@ -2,7 +2,6 @@
 # copy to build against.
 
 -nobundles							=true
-nodeploy						=true
 
 # The following line builds all these files and publishes them to 
 # the repository (if they are deployable)

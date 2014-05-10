@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="publish">
-	<target name="deploy" depends="master.deploy,javadoc">
+	<target name="release" depends="master.release,javadoc">
 	</target>
 
 	<target name="init" depends="master.init">

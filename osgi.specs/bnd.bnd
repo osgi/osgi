@@ -1,5 +1,4 @@
 -nobundles = true
-nodeploy   = true
 
 project.dependson = ${project.workspace}/dmforest
 -dependson = osgi.companion, dmforest

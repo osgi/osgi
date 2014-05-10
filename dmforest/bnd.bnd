@@ -2,6 +2,5 @@
 -include: ${build}/eclipse/jdt.bnd
 
 -nobundles=true
-nodeploy=true
 
 -buildpath: org.osgi.service.dmt; version=project

@@ -87,10 +87,10 @@ class BndPlugin implements Plugin<Project> {
 
       compileJava {
         configure compileOptions
-        classpath = files(bndProject.buildpath.collect { it.file } - sourceSets.main.output.classesDir)
+        classpath = files(bndProject.buildpath.collect { it.file } - destinationDir)
         if (logger.isEnabled(LogLevel.INFO)) {
           doFirst {
-            logger.info "Compile ${sourceSets.main.java.srcDirs} to ${sourceSets.main.output.classesDir}"
+            logger.info "Compile ${sourceSets.main.java.srcDirs} to ${destinationDir}"
             if (profile.empty) {
               logger.info "-source ${sourceCompatibility} -target ${targetCompatibility}"
             } else {
@@ -109,14 +109,14 @@ class BndPlugin implements Plugin<Project> {
             bndProject.propertiesChanged()
             bndProject.clear()
             bndProject.prepare()
-            classpath = files(bndProject.buildpath.collect { it.file } - sourceSets.main.output.classesDir)
+            classpath = files(bndProject.buildpath.collect { it.file } - destinationDir)
           }
         }
       }
 
       compileTestJava {
         configure compileOptions
-        classpath = files(bndProject.testpath.collect { it.file } - sourceSets.test.output.classesDir)
+        classpath = files(bndProject.testpath.collect { it.file } - destinationDir, compileJava.destinationDir, compileJava.classpath)
         if (preCompileRefresh) {
           doFirst {
             logger.info 'Refreshing the bnd Project before compilation.'
@@ -124,7 +124,7 @@ class BndPlugin implements Plugin<Project> {
             bndProject.propertiesChanged()
             bndProject.clear()
             bndProject.prepare()
-            classpath = files(bndProject.testpath.collect { it.file } - sourceSets.test.output.classesDir)
+            classpath = files(bndProject.testpath.collect { it.file } - destinationDir, compileJava.destinationDir, compileJava.classpath)
           }
         }
       }
@@ -168,7 +168,6 @@ class BndPlugin implements Plugin<Project> {
             exclude sourceSets.test.java.srcDirs.collect { relativePath(it) }
             exclude sourceSets.test.output.files.collect { relativePath(it) }
             exclude relativePath(buildDir)
-            exclude '.*' // eclipse and git metadata
           }
           outputs.files bndProject.deliverables.collect { it.file }
           doLast {
@@ -186,37 +185,40 @@ class BndPlugin implements Plugin<Project> {
               }
             }
           }
-          if (!parseBoolean(bnd('nodeploy','false'))) {
+          if (!bnd('-releaserepo', '').empty) {
             doLast {
-              def deploySet = fileTree(buildDir).include(bnd.bin_includes.split(/\s*,\s*/))
-              def boolean first = true
-              deploySet.each {
-                try {
-                  bndProject.deploy(it)
-                } catch (Exception e) {
-                  throw new GradleException("Project ${bndProject.name} failed to deploy", e)
-                }
-                checkErrors()
-                if (first) {
-                  first = false
-                  logger.info 'Deployed bundles:'
-                }
-                logger.info "${it}"
+              try {
+                bndProject.release()
+              } catch (Exception e) {
+                throw new GradleException("Project ${bndProject.name} failed to release", e)
               }
+              checkErrors()
+              logger.info 'Generated bundles released.'
             }
           }
         }
       }
 
+      test {
+        dependsOn testClasses
+        enabled !(parseBoolean(bnd('-nojunit', 'false')) || parseBoolean(bnd('no.junit', 'false')))
+        if (enabled) {
+          classpath = files(compileTestJava.destinationDir, compileTestJava.classpath)
+        }
+      }
+
       check {
         dependsOn assemble
-        doLast {
-          try {
-            bndProject.test()
-          } catch (Exception e) {
-            throw new GradleException("Project ${bndProject.name} failed to test", e)
+        enabled !(parseBoolean(bnd('-nojunitosgi', 'false')) || bnd('Test-Cases', '').empty)
+        if (enabled) {
+          doLast {
+            try {
+              bndProject.test()
+            } catch (Exception e) {
+              throw new GradleException("Project ${bndProject.name} failed to test", e)
+            }
+            checkErrors()
           }
-          checkErrors()
         }
       }
 
@@ -247,7 +249,7 @@ class BndPlugin implements Plugin<Project> {
           println "project.workspace:      ${rootDir}"
           println "project.dir:            ${projectDir}"
           println "project.name:           ${project.name}"
-          println "project.output:         ${sourceSets.main.output.classesDir}"
+          println "project.output:         ${compileJava.destinationDir}"
           println "project.sourcepath:     ${files(sourceSets.main.java.srcDirs).asPath}"
           println "project.allsourcepath:  ${bnd.allSrcDirs.asPath}"
           println "project.buildpath:      ${compileJava.classpath.asPath}"
@@ -264,17 +266,18 @@ class BndPlugin implements Plugin<Project> {
           println "repo:                   ${bnd.repo}"
           println "licensed-repo:          ${bnd('licensed-repo')}"
           println "released-repo:          ${bnd('released-repo')}"
-          println "nodeploy:               ${parseBoolean(bnd.nodeploy)}"
         }
       }
 
       bndProject.dependson.each {
         dependencies.add('compile', rootProject.project(it.name))
+        check.dependsOn(":${it.name}:check")
       }
     }
   }
 
   private void checkErrors() {
+    bndProject.getInfo(bndProject.workspace, "${bndProject.workspace.base.name} :")
     def int errorCount = 0
     bndProject.warnings.each {
       project.logger.warn "Warning: ${it}"
