@@ -1,8 +1,8 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd	
 
-#-nobundles=true
-nodeploy=true
+-releaserepo=
+
 Export-Package: ${p}.*; -split-package:=first
 
 # Remarkably, this project MUST not have the OSGi libs!

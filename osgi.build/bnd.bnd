@@ -1,5 +1,4 @@
 -nobundles							=true
-nodeploy						=true
 
 -dependson 					=  osgi.ct
 # Set javac settings from JDT prefs

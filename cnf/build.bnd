@@ -22,7 +22,6 @@ licensed-repo			= ${licensed}/repo
 released-repo			= ${build}/${target-dir}/repo
 project.name            = ${basename;${project}}
 p			            = ${project.name}
-bin.includes			= ${project.name}.jar
 prebuild				= 
 
 # Java compiler options
@@ -58,7 +57,7 @@ javac.target 			= 1.2
           SignatureTest; \
             path:="${build}/${bin}"; \
             command:="-signaturetest"
--deployrepo: Release
+-releaserepo: Release
 
 
 -make                   =  \

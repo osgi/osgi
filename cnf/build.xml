@@ -15,8 +15,8 @@
 		</delete>
 	</target>
 
-	<target name="deploy" depends="compile">
-		<!-- No deployment phase for cnf -->
+	<target name="release" depends="compile">
+		<!-- No release phase for cnf -->
 	</target>
 
 </project>
