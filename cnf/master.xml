@@ -27,7 +27,8 @@
 		<dirname property="-projectdir" file="${ant.file}" />
 		<dirname property="-workspacedir" file="${-projectdir}" />
 		<basename property="-projectname" file="${-projectdir}" />
-		<echo>Enter project ${-projectname} (${top})</echo>
+		<echo if:set="top">Enter project ${-projectname} (${top})</echo>
+		<echo unless:set="top">Enter project ${-projectname}</echo>
 		
 		<taskdef resource="aQute/bnd/ant/taskdef.properties" classpath="${-workspacedir}/licensed/repo/biz.aQute.bnd/biz.aQute.bnd-latest.jar" />
 
@@ -170,13 +171,11 @@
 		<bndproject basedir="${project.dir}"/>
 	</target>
 
-	<target name="deploy" depends="jars" unless="nodeploy">
-		<bnddeploy>
-			<fileset dir="${target}" includes="${bin.includes}" />
-		</bnddeploy>
+	<target name="release" depends="jars">
+		<bndrelease unless:blank="${-releaserepo}" />
 	</target>
 
-	<target name="publish" depends="deploy">
+	<target name="publish" depends="release">
 		<echo>Exit project ${project.name} (${top})</echo>
 	</target>
 
@@ -219,7 +218,7 @@
 		<echo>repo:                   ${repo}</echo>
 		<echo>licensed repo:          ${licensed-repo}</echo>
 		<echo>released repo:          ${released-repo}</echo>
-		<echo>nodeploy:               ${nodeploy}</echo>
+		<echo>-releaserepo:           ${-releaserepo}</echo>
 	</target>
 
 </project>

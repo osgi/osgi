@@ -1,5 +1,6 @@
 /.gradle/
 /*/bin/
+/*/bin_test/
 /*/generated/
 /*/doc/
 .DS_Store
