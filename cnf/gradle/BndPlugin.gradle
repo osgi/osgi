@@ -158,7 +158,7 @@ public class BndPlugin implements Plugin<Project> {
             exclude sourceSets.test.output.files.collect { relativePath(it) }
             exclude relativePath(buildDir)
           }
-          outputs.files bndProject.deliverables.collect { it.file }
+          outputs.files bndProject.deliverables.collect { it.file }, new File(buildDir, 'buildfiles')
           doLast {
             def built
             try {
