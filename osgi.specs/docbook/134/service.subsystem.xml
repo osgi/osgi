@@ -1941,10 +1941,14 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     currently installed Subsystems and their constituent resources. This
     resolve context must search Repositories in the following order when
     searching for capabilities to satisfy content dependencies within the
-    <code>ResolveContext.findProviders</code> method. All repositories must be
-    searched, with Repository services being optional unless a matching 
-    capability has not yet been found. The order of matching capabilities
-    presented to the Resolver must coincide with the Repository search order.</para>
+    <code>ResolveContext.findProviders</code> method. The Content Repository,
+    Preferred Provider Repository, System Repository and Local Repository must
+    all be searched and all the results presented to the Resolver with a 
+    corresponding preference. If a result was found in these repositories,
+    searching the registered Repository services is optional, but if no result
+    was found yet, the registered Repository services must be searched.  The
+    order of matching capabilities presented to the Resolver must coincide
+    with the Repository search order.</para>
 
     <orderedlist>
       <listitem xml:id="service.subsystem-determiningdependencies1">
