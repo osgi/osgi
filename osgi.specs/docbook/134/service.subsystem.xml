@@ -3853,7 +3853,7 @@ Subsystem-Content:
     <para>A pre-calculated deployment in the form of a deployment manifest can
     be included as part of a Subsystem Archive or provided by a deployer at
     installation time. Manifests provided at install time override those
-    included within an archive, and those within an archive override generated
+    included within an archive, and those within an archive override calculated
     ones. The deployment manifest defines the precise deployment of the 
     Subsystem. Providing a deployment manifest means a Subsystem can be deployed
     and the exact resources that are installed are known ahead of time. This 
