@@ -1279,8 +1279,7 @@
             <code>'service.'</code>
             or
             <code>'endpoint.'</code>
-            see table [xyz].
-            <remark>Add proper link to table.</remark>
+            see <xref linkend="service.remoteserviceadmin-endpoint.properties" xrefstyle="template:Table %n on page %p"/>.
           </para>
         </listitem>
 
@@ -2661,19 +2660,27 @@ xml                    ::= &lt;*&gt; *</programlisting>
 
     <itemizedlist>
       <listitem>
-        Removed text around setting of Framework UUID property (not needed for Core Frameworks version 4.3 or newer).
-      </listitem>
-
-      <listitem>
         Introduced Endpoint Event Listener.
       </listitem>
 
       <listitem>
         Deprecated Endpoint Listener.
       </listitem>
+      
+      <listitem>
+        Added update to Import Registration and Export Registration.
+      </listitem>
 
       <listitem>
-        Added <code>osgi.extender </code>definition.
+        Added capability namespace definitions.
+      </listitem>
+      
+      <listitem>
+        Removed endpoint sharing.
+      </listitem>
+      
+      <listitem>
+        Removed text around setting of Framework UUID property (not needed for Core Frameworks version 4.3 or newer).
       </listitem>
     </itemizedlist>
   </section>
