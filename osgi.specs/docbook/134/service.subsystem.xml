@@ -4752,6 +4752,22 @@ service                 ::= qname ( ';' parameter )*</programlisting>
   </section>
 
   <section>
+    <title>Stopping and Uninstalling Subsystems Implementation</title>
+
+    <para>When the Subsystems implementation is stopped all of the installed
+    Subsystems must be persistently stored and present when the Subsystems 
+    implementation becomes active again.  This includes any bundles that got
+    installed as part of a Subsystem installation.  The Subsystems
+    implementation is not required to do any additional cleanup when the
+    Subsystems implementation is stopped or uninstalled.  All bundles that got
+    installed as a result of installing a Subsystem may still be installed
+    after stopping or uninstalling the Subsystems implementation bundle. If it
+    is important to clean up the bundles associated with a Subsystem
+    installation then the Subsystem should should be uninstalled before 
+    uninstalling the Subsystems implementation.</para>
+  </section>
+
+  <section>
     <title>Security</title>
 
     <section>
