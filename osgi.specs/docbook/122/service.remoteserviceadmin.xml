@@ -426,7 +426,9 @@
 
         <para>Splitting the Topology Manager and discovery in two bundles
         allows different implementations of the discovery bundle, for example,
-        to use different protocols.</para>
+        to use different protocols. See 
+        <xref linkend="org.osgi.service.remoteserviceadmin.namespace.TopologyNamespace.PROMISCUOUS_POLICY"
+        xrefstyle="hyperlink"/>.</para>
       </section>
 
       <section>
@@ -471,7 +473,9 @@
         to be influenced by the load of the target systems. The important
         aspect is that the Topology Manager can ignore the complex details of
         discovery protocols, communication protocols, and service proxying and
-        instead focus on the topology.</para>
+        instead focus on the topology. See
+        <xref linkend="org.osgi.service.remoteserviceadmin.namespace.TopologyNamespace.FAIL_OVER_POLICY"
+        xrefstyle="hyperlink"/>.</para>
       </section>
     </section>
   </section>
