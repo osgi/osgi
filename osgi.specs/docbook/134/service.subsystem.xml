@@ -441,14 +441,14 @@
       </section>
       
       <section>
-        <title>Subsystem-Category</title>
+        <title>Subsystem-Category: osgi, test, nursery</title>
         
         <para>The Subsystem-Category header identifies the categories of the 
         subsystem as a comma-delimited list.</para>
       </section>
       
       <section>
-        <title>Subsystem-ContactAddress</title>
+        <title>Subsystem-ContactAddress: 2400 Oswego Road, Austin, TX 74563</title>
         
         <para>The Subsystem-ContactAddress header identifies the contact address 
         where problems with the subsystem may be reported; for example, an email 
@@ -464,7 +464,7 @@
       </section>
       
       <section>
-        <title>Subsystem-Copyright</title>
+        <title>Subsystem-Copyright: OSGi (c) 2014</title>
         
         <para>The Subsystem-Copyright header identifies the subsystem's 
         copyright information.</para>
@@ -480,7 +480,7 @@
       </section>
       
       <section>
-        <title>Subsystem-DocURL</title>
+        <title>Subsystem-DocURL: http://www.example.com/Firewall/doc</title>
         
         <para>The Subsystem-DocURL header identifies the subsystem's 
         documentation URL, from which further information about the subsystem 
@@ -497,10 +497,20 @@
       </section>
       
       <section>
-        <title>Subsystem-Icon</title>
+        <title>Subsystem-Icon: /icons/acme-logo.png; size=64</title>
         
-        <para>The Subsystem-Icon header identifies the icon URL for the 
-        subsystem.</para>
+        <para>The optional Subsystem-Icon header provides a list of URLs 
+        to icons representing this subsystem in different sizes. The following
+        attribute is permitted:
+        <itemizedlist>
+          <listitem>
+            size - (integer) Specifies the size of the icon in pixels horizontal.
+          	It is recommended to always includea 64x64 icon.
+          </listitem>
+        </itemizedlist>
+        The URLs are interpreted as relative to the subsytem archive. That is,
+        if a URL with a scheme is provided, then this is taken as an absolute URL.
+        Otherwise, the path points to an entry in the subsystem archive file.</para>
       </section>
 
       <section>
@@ -513,9 +523,77 @@
       </section>
 
       <section>
-        <title>Subsystem-License</title>
-        
-        <para>The Subsystem-License header identifies the subsystem's license.</para>
+        <title>Subsystem-License:
+        http://www.opensource.org/licenses/jabberpl.php</title>
+
+        <para>The Subsystem-License header provides an optional machine readable
+        form of license information. The purpose of this header is to automate
+        some of the license processing required by many organizations like for
+        example license acceptance before a subsystem is used. The header is
+        structured to provide the use of unique license naming to merge
+        acceptance requests, as well as links to human readable information
+        about the included licenses. This header is purely informational for
+        management agents and must not be processed by the Subsystems
+        implementation.</para>
+
+        <para>The syntax for this header is as follows:</para>
+
+        <programlisting>Subsystem-License ::= '&lt;&lt;EXTERNAL&gt;&gt;' | 
+                      ( license ( ',' license ) * )
+license        ::= name ( ';' license-attr ) *
+license-attr   ::= description | link
+description    ::= 'description' '=' string
+link           ::= 'link' '=' &lt;url&gt;</programlisting>
+
+        <para>This header has the following attributes:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para><code>name</code> - Provides a globally unique name for this
+            license, preferably world wide, but it should at least be unique
+            with respect to the other clauses. The magic name
+            <code>&lt;&lt;EXTERNAL&gt;&gt;</code> is used to indicate that
+            this artifact does not contain any license information but that
+            licensing information is provided in some other way. This is also
+            the default contents of this header.</para>
+
+            <para>Clients of this subsystem can assume that licenses with the
+            same name refer to the same license. This can for example be used
+            to minimize the click through licenses. This name should be the
+            canonical URL of the license, it must not be localized by the
+            translator. This URL does not have to exist but must not be used
+            for later versions of the license. It is recommended to use URLs
+            from <xref linkend="subsystems.osi"/>. Other licenses should use the
+            following structure, but this is not mandated:</para>
+          </listitem>
+        </itemizedlist>
+
+        <programlisting>  http://&lt;domain-name&gt;/licenses/
+            &lt;license-name&gt;-&lt;version&gt;.&lt;extension&gt;</programlisting>
+
+        <itemizedlist>
+          <listitem>
+            <para><code>description</code> - (optional) Provide the
+            description of the license. This is a short description that is
+            usable in a list box on a UI to select more information about the
+            license.</para>
+          </listitem>
+
+          <listitem>
+            <para><code>link</code> - (optional) Provide a URL to a page that
+            defines or explains the license. If this link is absent, the name
+            field is used for this purpose. The URL is relative to the root of
+            the bundle. That is, it is possible to refer to a file inside the
+            bundle.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>If the Subsystem-License statement is absent, then this does not
+        mean that the subsystem is not licensed. Licensing could be handled
+        outside the subsystem and the <code>&lt;&lt;EXTERNAL&gt;&gt;</code> form
+        should be assumed. This header is informational and may not have any
+        legal bearing. Consult a lawyer before using this header to automate
+        licensing processing.</para>
       </section>
 
       <section>
@@ -573,9 +651,10 @@
       </section>
 
       <section>
-        <title>Subsystem-Vendor</title>
+        <title>Subsystem-Vendor: OSGi Alliance</title>
         
-        <para>The Subsystem-Vendor header identifies the subsystem's vendor.</para>
+        <para>The Subsystem-Vendor header contains a human-readable description
+        of the subsystem vendor.</para>
       </section>
 
       <section>
@@ -4832,6 +4911,9 @@ service                 ::= qname ( ';' parameter )*</programlisting>
 
       <bibliomixed xml:id="i3324343"><title>Equinox Region
       Digraph</title>http://underlap.blogspot.com/2011/02/stumbling-towards-better-design.html</bibliomixed>
+
+      <bibliomixed xml:id="subsystems.osi"><title>Open Source initiative</title>
+      http://www.opensource.org/</bibliomixed>
     </bibliolist>
   </section>
   
