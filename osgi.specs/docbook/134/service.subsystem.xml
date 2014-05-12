@@ -899,9 +899,12 @@ osgi.identity=org.acme.billing;
         <title>Localization Properties</title>
         
         <para>A localization entry contains key/value entries for localized 
-        information. All headers in a subsystem's manifest can be localized. 
-        However, the subsystems implementation must always use the non-localized
-        versions of headers that have subsystem semantics.</para>
+        information. All headers in a subsystem's manifest can be localized.
+        However, the subsystems implementation must always use the
+        non-localized versions of headers that have subsystem semantics.
+        Note that the use of localization on certain such headers, such as
+        Subsystem-SymbolicName, may cause errors as a value with a 
+        % sign will not be valid.</para>
 
         <para>A localization key can be specified as the value of a subsystem's 
         manifest header using the following syntax:</para>
