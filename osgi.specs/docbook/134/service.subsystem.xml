@@ -3538,7 +3538,11 @@ Subsystem-Content:
       set to <xref
       linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED"
       xrefstyle="hyperlink"/>. There is no explicit operation for initiating
-      the resolve process of a Subsystem.</para>
+      the resolve process of a Subsystem. The Subsystems implementation is free
+      to initiate the resolve process for a Subsystem for any reason. For 
+      example, the Subsystems implementation may choose to try to resolve all
+      currently installed Subsystems when the start operation is performed on
+      a single Subsystem.</para>
     </section>
 
     <section xml:id="i3365470">

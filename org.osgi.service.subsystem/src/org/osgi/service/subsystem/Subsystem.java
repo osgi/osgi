@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -203,9 +203,8 @@ public interface Subsystem {
 		/**
 		 * The subsystem is in the process of resolving.
 		 * <p>
-		 * A subsystem is in the {@code RESOLVING} state when the
-		 * {@link Subsystem#start() start} method is active, and attempts are
-		 * being made to resolve its content resources. If the resolve method
+		 * A subsystem is in the {@code RESOLVING} state when attempts are being
+		 * made to resolve its content resources. If the resolve process
 		 * completes without exception, then the subsystem has successfully
 		 * resolved and must move to the {@link #RESOLVED} state. Otherwise, the
 		 * subsystem has failed to resolve and must move to the INSTALLED state.
