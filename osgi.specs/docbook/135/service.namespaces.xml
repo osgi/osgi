@@ -201,7 +201,12 @@
     binds it to a set of packages with the uses constraint. The bundle that
     declares this contract must then import or export each of the listed
     packages with the correct versioning. Such a bundle is called a
-    <emphasis>contract bundle</emphasis>.</para>
+    <emphasis>contract bundle</emphasis>. The contract bundle must ensure
+    that it is bound to the correct versions of the packages contained within
+    the contract it is providing. If the contract bundle imports the packages
+    which are specified as part of the contract then proper matching
+    attributes must be used to make sure it is bound to the correct versions of
+    the packages.</para>
 
     <para>An <code>osgi.contract</code> capability can then be used in the
     following ways:</para>
