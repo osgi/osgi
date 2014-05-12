@@ -23,6 +23,7 @@ configure(rootProject) {
 }
 
 /* Configure this project */
+docsDirName = 'javadoc'
 def specNames = bnd.javadoc_all.split(/\s*,\s*/)
 
 specNames.eachWithIndex { specName, specIndex ->
