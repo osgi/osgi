@@ -2,10 +2,11 @@
 -include: ${build}/eclipse/jdt.bnd
 
 -nouses = true
+-noee = true
 Bundle-Description					: Contains the Java SE 1.7 execution environment stubbed classes and sources
-Bundle-Version: 1.7.0.$(project.build)
-Bundle-RequiredExecutionEnvironment	: JavaSE-1.7
+Bundle-Version: 1.7.0.${project.build}
+exportversion = 0.0.0.${project.build}
 
-Export-Package						: java.*;-noimport:=true, javax.*;-noimport:=true, org.*;-noimport:=true
+Export-Package						: java.*;-noimport:=true;version=${exportversion}, javax.*;-noimport:=true;version=${exportversion}, org.*;-noimport:=true;version=${exportversion}
 Private-Package						: *
 Include-Resource 					: legal/about.html, legal/LICENSE
