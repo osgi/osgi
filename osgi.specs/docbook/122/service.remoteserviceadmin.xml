@@ -1136,14 +1136,6 @@
       multiple configuration types recognized then the Remote Service Admin is
       free to select any one of the recognized types.</para>
 
-      <para>If an Endpoint was already imported as a service proxy, then the
-      Remote Service Admin service must return a new Import Registration that
-      is associated with the existing service proxy/Endpoint combination. The
-      Remote Service Admin service must ensure that the imported service proxy
-      remains available as long as there is at least one open Import
-      Registration that refers to it and the corresponding remote Endpoint is
-      still valid.</para>
-
       <para>The Remote Service Admin service must ensure that service
       properties are according to the Remote Services chapter for an imported
       service. This means that it must register the following
@@ -1799,6 +1791,13 @@ st.open();</programlisting>
 
       <listitem>
         <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_UPDATE"
+        xrefstyle="hyperlink"/> - An exported service is updated. The service properties have changed.
+        </para>
+      </listitem>
+
+      <listitem>
+        <para><xref
         linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.EXPORT_WARNING"
         xrefstyle="hyperlink"/> - An exported service is experiencing problems
         but the Endpoint is still available.</para>
@@ -1824,6 +1823,13 @@ st.open();</programlisting>
         linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_UNREGISTRATION"
         xrefstyle="hyperlink"/> - An Import Registration was closed, removing
         the proxy if this was the last registration.</para>
+      </listitem>
+
+      <listitem>
+        <para><xref
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent.IMPORT_UPDATE"
+        xrefstyle="hyperlink"/> - An imported service is updated. The service properties have changed.
+        </para>
       </listitem>
 
       <listitem>
@@ -2441,6 +2447,9 @@ xml                    ::= &lt;*&gt; *</programlisting>
     </section>
   </section>
 
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.remoteserviceadmin.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.remoteserviceadmin.namespace.xml"/>
+
   <section>
     <title>Changes</title>
 
@@ -2462,8 +2471,6 @@ xml                    ::= &lt;*&gt; *</programlisting>
       </listitem>
     </itemizedlist>
   </section>
-
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.remoteserviceadmin.xml"/>
 
   <section>
     <title>References</title>
