@@ -881,8 +881,8 @@ Bundle B:
     <para>The effect of the <code>osgi.wiring.host</code> namespace is that
     all declared capabilities and requirements of the fragment, except the
     <code>osgi.wiring.host</code> and <code>osgi.ee</code> requirements and
-    the <code>osgi.identity</code> capability and requirements, are merged
-    with the host bundle as defined in the <xref
+    the <code>osgi.identity</code> capability, are merged with the host bundle
+    as defined in the <xref
     linkend="framework.module.fragmentbundles"/>.</para>
 
     <para>The following directives must be ignored when specified on the
