@@ -150,18 +150,22 @@ public class Promises {
 			}
 			List<T> result = new ArrayList<T>(promises.size());
 			List<Promise<?>> failed = new ArrayList<Promise<?>>(promises.size());
+			Throwable cause = null;
 			for (Promise<? extends T> promise : promises) {
-				boolean failure;
+				Throwable failure;
 				T value;
 				try {
-					failure = promise.getFailure() != null;
-					value = failure ? null : promise.getValue();
+					failure = promise.getFailure();
+					value = (failure != null) ? null : promise.getValue();
 				} catch (Throwable e) {
 					chained.resolve(null, e);
 					return;
 				}
-				if (failure) {
+				if (failure != null) {
 					failed.add(promise);
+					if (cause == null) {
+						cause = failure;
+					}
 				} else {
 					result.add(value);
 				}
@@ -169,7 +173,7 @@ public class Promises {
 			if (failed.isEmpty()) {
 				chained.resolve(result, null);
 			} else {
-				chained.resolve(null, new FailedPromisesException(failed));
+				chained.resolve(null, new FailedPromisesException(failed, cause));
 			}
 		}
 	}
