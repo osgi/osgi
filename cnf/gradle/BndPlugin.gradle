@@ -1,9 +1,17 @@
 /*
  * BndPlugin for Gradle.
  *
- * Depends on bnd_*, bndWorkspace and cnf properties which must be set 
- * in the rootProject before applying this plugin.
+ * The bnd classes must be available on the classpath for this script.
+ *
+ * If the bndWorkspace property is set, it will be used for the bnd Workspace.
+ *
+ * If the bnd_defaultTask property is set, it will be used for the the default
+ * task.
+ *
+ * If the bnd_preCompileRefresh property is set to 'true', the project
+ * properties will be refreshed just before compiling the project.
  */
+import aQute.bnd.build.Workspace
 
 public class BndPlugin implements Plugin<Project> {
   private Project project
@@ -13,13 +21,25 @@ public class BndPlugin implements Plugin<Project> {
   void apply(Project p) {
     p.configure(p) { project ->
       this.project = project
+      if (!project.hasProperty('bndWorkspace')) {
+        rootProject.ext.bndWorkspace = Workspace.getWorkspace(rootDir)
+        if (bndWorkspace == null) {
+          throw new GradleException("Unable to load bnd workspace ${rootDir}")
+        }
+        bndWorkspace.allProjects.each {
+          it.setDelayRunDependencies(true)
+        }
+      }
       this.bndProject = bndWorkspace.getProject(name)
-      this.preCompileRefresh = parseBoolean(bnd_preCompileRefresh)
+      if (bndProject == null) {
+        throw new GradleException("Unable to load bnd project ${name} from workspace ${rootDir}")
+      }
       bndProject.prepare();
       if (!bndProject.isValid()) {
         checkErrors()
         throw new GradleException("Project ${bndProject.name} is not a valid bnd project")
       }
+      this.preCompileRefresh = project.hasProperty('bnd_preCompileRefresh') ? parseBoolean(bnd_preCompileRefresh) : false
       extensions.create('bnd', BndProperties, bndProject)
       bnd.ext.project = bndProject
       convention.plugins.bnd = new BndPluginConvention(this)
@@ -28,7 +48,9 @@ public class BndPlugin implements Plugin<Project> {
       buildDir = relativePath(bndProject.targetDir)
       plugins.apply 'java'
 
-      defaultTasks = [bnd_defaultTask]
+      if (project.hasProperty('bnd_defaultTask')) {
+        defaultTasks = [bnd_defaultTask]
+      }
 
       /* We use the same directory for java and resources. */
       sourceSets {
@@ -175,7 +197,7 @@ public class BndPlugin implements Plugin<Project> {
             }
           }
           /* vvvv OSGi customization vvvv */
-          if (!bnd('-releaserepo', '').empty) {
+          if (!bndUnprocessed('-releaserepo', '').empty) {
             doLast {
               try {
                 bndProject.release()
@@ -194,7 +216,7 @@ public class BndPlugin implements Plugin<Project> {
         description 'Release this project to the release repository.'
         dependsOn assemble
         group 'release'
-        enabled !bnd('-releaserepo', '').empty
+        enabled !bndUnprocessed('-releaserepo', '').empty
         if (enabled) {
           inputs.files bndProject.deliverables.collect { it.file }
           doLast {
@@ -247,12 +269,6 @@ public class BndPlugin implements Plugin<Project> {
       clean {
         /* Also clean compiler output */
         dependsOn cleanCompileJava, cleanCompileTestJava
-        if (project == cnf) {
-          /* clean bnd cache */
-          doLast {
-            project.delete(file('cache'))
-          }
-        }
       }
 
       javadoc {
@@ -352,11 +368,13 @@ public class BndPlugin implements Plugin<Project> {
     bndProject.warnings.each {
       project.logger.warn "Warning: ${it}"
     }
+    bndProject.warnings.clear()
     bndProject.errors.each {
       project.logger.error "Error  : ${it}"
       errorCount++
     }
-    if (!bndProject.isOk()) {
+    bndProject.errors.clear()
+    if (!bndProject.isFailOk() && (errorCount > 0)) {
       def str = 'even though no errors were reported'
       if (errorCount == 1) {
         str = 'one error was reported'
