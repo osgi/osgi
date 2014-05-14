@@ -70,7 +70,8 @@ public class Promises {
 	 * @param <S> A subtype of the value type of the List value associated with
 	 *        the returned Promise.
 	 * @param promises The Promises which must be resolved before the returned
-	 *        Promise must be resolved. Must not be {@code null}.
+	 *        Promise must be resolved. Must not be {@code null} and all of the
+	 *        elements in the collection must not be {@code null}.
 	 * @return A Promise that is resolved only when all the specified Promises
 	 *         are resolved. The returned Promise will be successfully resolved,
 	 *         with a List of the values in the order of the specified Promises,
@@ -107,7 +108,8 @@ public class Promises {
 	 * 
 	 * @param <T> The value type associated with the specified Promises.
 	 * @param promises The Promises which must be resolved before the returned
-	 *        Promise must be resolved. Must not be {@code null}.
+	 *        Promise must be resolved. Must not be {@code null} and all of the
+	 *        arguments must not be {@code null}.
 	 * @return A Promise that is resolved only when all the specified Promises
 	 *         are resolved. The returned Promise will be successfully resolved,
 	 *         with a List of the values in the order of the specified Promises,
