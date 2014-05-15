@@ -54,6 +54,9 @@ javac.target 			= 1.2
           Packaging; \
             path:="${build}/${bin}"; \
             command:=-pack, \
+          CTPackaging; \
+            path:="${build}/${bin}"; \
+            command:=-ctpack, \
           SignatureTest; \
             path:="${build}/${bin}"; \
             command:="-signaturetest"
