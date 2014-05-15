@@ -327,6 +327,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	 * 
 	 * TODO: UPDATE Naming with rsa 1.1 spec chapter/par numbers
 	 * 
+	 * TODO: need the same test however so that a endpoint modified endmatch
+	 * event is raised -> clone once clear that this one is correct
 	 * */
 	public void testDiscovery____RSA_1_1___basicEndpointEvents()
 			throws Exception {
@@ -338,8 +340,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		//
 		BundleContext childContext = getFramework().getBundleContext();
 
-		Bundle tb1Bundle = installBundle(childContext, "/tb7.jar");
-		assertNotNull(tb1Bundle);
+		Bundle tb7Bundle = installBundle(childContext, "/tb7.jar");
+		assertNotNull(tb7Bundle);
 
 		//
 		// register EndpointListener in parent framework
@@ -370,13 +372,15 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 
 			// start test bundle in child framework
 			// this will run the test in the child framework and fail
-			tb1Bundle.start();
+			tb7Bundle.start();
 
 			System.out
 					.println("************* wait for Signal 1 (EndpointEvent:added) ********************");
 			// verify callback in parent framework
 			assertTrue(endpointEventListenerImpl.getSemAdded().waitForSignal(
 					timeout));
+			System.out
+					.println("************* recieved Signal 1 (EndpointEvent:added) ********************");
 
 			verifyBasicEndpointEventBehavior(
 					endpointEventListenerImpl.getLastMatchedFilter(),
@@ -389,12 +393,12 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 
 
 			// get the service provided by our test bundle
-			ServiceReference modServiceRef = tb1Bundle.getRegisteredServices()[0];
+			ServiceReference modServiceRef = tb7Bundle.getRegisteredServices()[0];
 			assertNotNull(modServiceRef);
 			
 			// let it know that we want it to modify its registration (and raise
 			// an endpoint modified event)
-			Object modService = tb1Bundle.getBundleContext().getService(
+			Object modService = tb7Bundle.getBundleContext().getService(
 					modServiceRef);
 			assertNotNull(modService);
 			modService.getClass().getDeclaredMethod("addServiceProperty")
@@ -407,6 +411,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			assertTrue(endpointEventListenerImpl.getSemModified()
 					.waitForSignal(
 					timeout));
+			System.out
+					.println("************* recieved Signal 2 (EndpointEvent:modified) ********************");
 
 			verifyBasicEndpointEventBehavior(
 					endpointEventListenerImpl.getLastMatchedFilter(),
@@ -420,13 +426,15 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 			//
 			// remove the endpoint
 			//
-			tb1Bundle.stop();
+			tb7Bundle.stop();
 
 			 System.out
 					.println("************* wait for Signal 3 (EndpointEvent:removed) ********************");
 			 // verify callback in parent framework
 			assertTrue(endpointEventListenerImpl.getSemRemoved().waitForSignal(
 					timeout));
+			System.out
+					.println("************* recieved Signal 3 (EndpointEvent:removed) ********************");
 
 			verifyBasicEndpointEventBehavior(
 					endpointEventListenerImpl.getLastMatchedFilter(),
