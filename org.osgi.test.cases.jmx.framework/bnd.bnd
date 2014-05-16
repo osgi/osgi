@@ -35,6 +35,6 @@ Test-Cases                          = ${testcases}
             
 -runproperties = ${runproperties}, \
     ${p}.system.packages.extra="${junit.package}", \
-    ${p}.bundles="${uniq;${repo;org.osgi.impl.service.cm},${repo;org.osgi.impl.service.log},${repo;org.osgi.impl.bundle.jmx}}"
+    ${p}.bundles="${uniq;${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.bundle.jmx;latest}}"
 #   osgi.console=1111
 

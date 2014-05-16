@@ -108,7 +108,7 @@
 		<bndproject basedir="${project.dir}"/>
 	</target>
 
-	<target name="release" depends="jars">
+	<target name="release" depends="jars" if="-releaserepo">
 		<bndrelease unless:blank="${-releaserepo}" />
 	</target>
 
@@ -155,8 +155,6 @@
 		<echo>target:                 ${target}</echo>
 		<echo>repo:                   ${repo}</echo>
 		<echo>licensed repo:          ${licensed-repo}</echo>
-		<echo>released repo:          ${released-repo}</echo>
-		<echo>-releaserepo:           ${-releaserepo}</echo>
 	</target>
 
 </project>

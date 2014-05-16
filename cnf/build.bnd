@@ -19,7 +19,6 @@ build					= ${workspace}/cnf
 licensed				= ${workspace}/licensed
 repo					= ${build}/repo
 licensed-repo			= ${licensed}/repo
-released-repo			= ${build}/${target-dir}/repo
 project.name            = ${basename;${project}}
 p			            = ${project.name}
 prebuild				= 
@@ -46,9 +45,6 @@ javac.profile           = compact1
             name='Licensed'; \
             location="${licensed-repo}"; \
             readonly=true, \
-          aQute.lib.deployer.FileRepo; \
-            name='Release'; \
-            location="${released-repo}", \
           aQute.bnd.signing.JartoolSigner; \
             keystore="${build}/keystore"; \
             keypass=testtest; \
@@ -62,7 +58,6 @@ javac.profile           = compact1
           SignatureTest; \
             path:="${build}/${bin}"; \
             command:="-signaturetest"
--releaserepo: Release
 
 
 -make                   =  \
