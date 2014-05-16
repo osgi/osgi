@@ -30,8 +30,6 @@ build.cmpn.impls = \
 
 jar.cmpn.impls = \
 	${repo;org.osgi.impl.bundle.derby;latest}, \
-	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery;latest}, \
-	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config;latest}, \
     ${repo;org.osgi.impl.bundle.serviceloader;latest}, \
 	${repo;org.osgi.impl.bundle.webcontainer;latest}, \
 	${repo;org.osgi.impl.service.blueprint;latest}, \
@@ -64,8 +62,6 @@ build.enterprise.impls = \
 jar.enterprise.impls = \
 	${repo;org.osgi.impl.bundle.derby;latest}, \
 	${repo;org.osgi.impl.bundle.jmx;latest}, \
-	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery;latest}, \
-	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config;latest}, \
 	${repo;org.osgi.impl.bundle.serviceloader;latest}, \
 	${repo;org.osgi.impl.bundle.webcontainer;latest}, \
 	${repo;org.osgi.impl.service.blueprint;latest}, \
