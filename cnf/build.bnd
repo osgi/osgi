@@ -56,6 +56,9 @@ javac.profile           = compact1
           Packaging; \
             path:="${build}/${bin}"; \
             command:=-pack, \
+          CTPackaging; \
+            path:="${build}/${bin}"; \
+            command:=-ctpack, \
           SignatureTest; \
             path:="${build}/${bin}"; \
             command:="-signaturetest"

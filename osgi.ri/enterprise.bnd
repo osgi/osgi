@@ -1,13 +1,7 @@
 Bundle-Description: OSGi Enterprise Release ${version;=;${build.version}} Reference Implementations
 
 Include-Resource				: \
-	  	\
-	  	${replace;${uniq;\
-        ${repo;${build.enterprise.impls}}, \
-        ${jar.enterprise.impls} \
-	  	};.+;jar/=$0},\
-	 	\
 		NOTICE=legal/NOTICE.txt, \
 		{about.html=legal/about.html}
 
-
+-pack: ${build.enterprise.impls},${jar.enterprise.impls}
