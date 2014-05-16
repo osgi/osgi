@@ -76,10 +76,7 @@
   <para>The Enterprise Specification includes the recommended specifications
   for a number of areas. The services of the Enterprise Specification have
   been designed to guarantee integration with OSGi and cooperation among each
-  other. Since the last release, the specifications have been expanded with
-  support for Application deployment through the Subsystems specification,
-  Provisioning with the Repository and Resolver, and integration with the
-  JavaSE Service Loader mechanism. Together they address more use-cases found
+  other. Together they address use-cases found
   in the enterprise context and provide a powerful set of tools to build
   enterprise OSGi deployments.</para>
 
@@ -163,9 +160,9 @@
     <section>
       <title>Web Applications and HTTP Servlets</title>
 
-      <para>Current Java EE architectures almost always require support for
+      <para>Current Enterprise Java architectures almost always require support for
       web technologies in the form of Java Servlets or Web Applications. The
-      Enterprise Specification includes two complementary service
+      Enterprise Specification includes three complementary service
       specifications in support:</para>
 
       <itemizedlist>
@@ -187,17 +184,27 @@
           for this purpose: registering servlets and registering resources.
           See <xref linkend="service.http"/>.</para>
         </listitem>
+        
+        <listitem>
+          <para><emphasis>Http Whiteboard Service Specification</emphasis> - 
+          The <xref linkend="enterprise.intro-whiteboard.pattern.ref"/> pattern has 
+          shown to be a powerful and flexible mechanism for registering customized
+          functionality with a container. The Http Whiteboard Service Specification
+          allows the registration of Servlet, Servlet Filters, Resources and 
+          Servlet-related listeners via the Whiteboard pattern, providing an 
+          alternative approach to working with servlets to the Http Service
+          Specification.
+          See <xref linkend="service.http.whiteboard"/>.
+          </para>
+        </listitem>
       </itemizedlist>
     </section>
 
     <section>
-      <title>Event models</title>
+      <title>Asynchronous Processing and Event models</title>
 
-      <para>The OSGi service model is based on synchronous APIs. Support for
-      asynchronous invocations and event driven interactions usually involves
-      the definition of listeners. However, this model does not scale well for
-      fine grained events that must be dispatched to many different handlers.
-      The Enterprise Specification therefore contains the:</para>
+      <para>A number of specifications focus specifically on asynchronous programming
+      and executing of components, as well as the sending and receiving of events.</para>
 
       <itemizedlist>
         <listitem>
@@ -206,6 +213,28 @@
           mechanism. It is based on a event publish and subscribe model,
           popular in many message based systems. See <xref
           linkend="service.event"/>.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Asynchronous Services</emphasis> - Asynchronous 
+          processing can be the key to scalability for large 
+          enterprise applications, especially under heavy load. OSGi Services
+          have traditionally followed the Java interface-based design
+          which by default provides synchronous semantics. The Asynchronous
+          Services specification adds an asynchronous programming model to 
+          new and existing OSGi services. See <xref linkend="service.async"/>.   
+          </para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Promises</emphasis> - Many JavaScript applications 
+          use Promises-based APIs to facilitate asynchronous processing
+          of a workflow in which executions are time consuming or subject to 
+          waiting for I/O operations. The OSGi Promises specification defines 
+          a Promises API for use in OSGi applications. The Promises API is
+          used by other specifications, such as the Asynchronous Services
+          specification, but can also be used independently. 
+          </para>
         </listitem>
       </itemizedlist>
     </section>
@@ -230,6 +259,17 @@
           over JMX. See <xref linkend="service.jmx"/>.</para>
         </listitem>
 
+        <listitem>
+          <para><emphasis>REST Management Service Specification</emphasis> - REST
+          is a powerful paradigm for accessing resources over a
+          network and is widely used in Enterprise and Cloud settings as a 
+          protocol of choice, especially since it generally avoids
+          problems with internet firewalls, from which other protocols may suffer. 
+          The REST Management Service Specification
+          provides an API to manage and control an OSGi framework using REST
+          operations. See <xref linkend="service.rest"/>.</para>
+        </listitem>
+      
         <listitem>
           <para><emphasis>User Admin Service Specification</emphasis> - The
           User Admin Service Specification provides authorization for OSGi
@@ -791,6 +831,38 @@
             </row>
 
             <row>
+              <entry><xref linkend="service.rest"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><code><xref
+              linkend="org.osgi.service.rest"/></code></entry>
+
+              <entry><code><xref endterm="org.osgi.service.rest-version"
+              linkend="service.rest"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="service.async"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><code><xref
+              linkend="org.osgi.service.async"/></code></entry>
+
+              <entry><code><xref endterm="org.osgi.service.async-version"
+              linkend="service.async"/></code></entry>
+            </row>
+            
+            <row>
+              <entry>
+            <remark>Add Promises.</remark>
+              </entry>
+              <entry>
+              </entry>
+              <entry>
+              </entry>
+            </row>
+
+            <row>
               <entry><xref linkend="util.xml"
               xrefstyle="template:%n %t"/></entry>
 
@@ -821,11 +893,38 @@
   </section>
 
   <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed
+      xml:id="enterprise.intro-whiteboard.pattern.ref"><title>Whiteboard
+      Pattern</title>http://www.osgi.org/wiki/uploads/Links/whiteboard.pdf</bibliomixed>
+    </bibliolist>
+  </section>
+
+  <section>
     <title>Changes</title>
 
     <itemizedlist>
       <listitem>
-        <remark>BJH Need to write change list.</remark>
+        <para>Added <xref linkend="service.rest"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.async"/>.</para>
+        <remark>Add Promises.</remark>
+      </listitem>
+
+      <listitem>
+        <para>Updated <xref linkend="service.remoteserviceadmin"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updated <xref linkend="service.subsystem"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updated <xref linkend="service.repository"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
