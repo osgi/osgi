@@ -1,7 +1,7 @@
 build.impls                 = ${uniq; ${build.cmpn.impls}, ${build.enterprise.impls}, ${build.residential.impls}}
 
 jar.core.impls = \
-	${repo;org.osgi.impl.framework}
+	${repo;org.osgi.impl.framework;latest}
 
 build.cmpn.impls = \
 	org.osgi.impl.bundle.autoconf, \
@@ -30,25 +30,23 @@ build.cmpn.impls = \
     org.osgi.util.xml
 
 jar.cmpn.impls = \
-	${repo;org.osgi.impl.bundle.derby}, \
-	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery}, \
-	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}, \
-    ${repo;org.osgi.impl.bundle.serviceloader}, \
-	${repo;org.osgi.impl.bundle.webcontainer}, \
-	${repo;org.osgi.impl.service.blueprint}, \
-	${repo;org.osgi.impl.service.cm}, \
-	${repo;org.osgi.impl.service.component}, \
-	${repo;org.osgi.impl.service.coordinator}, \
-	${repo;org.osgi.impl.service.event}, \
-	${repo;org.osgi.impl.service.http}, \
-	${repo;org.osgi.impl.service.jpa}, \
-	${repo;org.osgi.impl.service.metatype}, \
-	${repo;org.osgi.impl.service.provisioning}, \
-	${repo;org.osgi.impl.service.remoteserviceadmin}, \
-    ${repo;org.osgi.impl.service.resolver}, \
-    ${repo;org.osgi.impl.service.repository}, \
-    ${repo;org.osgi.impl.service.subsystem}, \
-	${repo;org.osgi.impl.service.wireadmin}
+	${repo;org.osgi.impl.bundle.derby;latest}, \
+    ${repo;org.osgi.impl.bundle.serviceloader;latest}, \
+	${repo;org.osgi.impl.bundle.webcontainer;latest}, \
+	${repo;org.osgi.impl.service.blueprint;latest}, \
+	${repo;org.osgi.impl.service.cm;latest}, \
+	${repo;org.osgi.impl.service.component;latest}, \
+	${repo;org.osgi.impl.service.coordinator;latest}, \
+	${repo;org.osgi.impl.service.event;latest}, \
+	${repo;org.osgi.impl.service.http;latest}, \
+	${repo;org.osgi.impl.service.jpa;latest}, \
+	${repo;org.osgi.impl.service.metatype;latest}, \
+	${repo;org.osgi.impl.service.provisioning;latest}, \
+	${repo;org.osgi.impl.service.remoteserviceadmin;latest}, \
+    ${repo;org.osgi.impl.service.resolver;latest}, \
+    ${repo;org.osgi.impl.service.repository;latest}, \
+    ${repo;org.osgi.impl.service.subsystem;latest}, \
+	${repo;org.osgi.impl.service.wireadmin;latest}
 
 build.enterprise.impls = \
 	org.osgi.impl.bundle.component.annotations, \
@@ -64,25 +62,23 @@ build.enterprise.impls = \
     org.osgi.util.xml
 	
 jar.enterprise.impls = \
-	${repo;org.osgi.impl.bundle.derby}, \
-	${repo;org.osgi.impl.bundle.jmx}, \
-	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery}, \
-	${repo;org.osgi.impl.bundle.remoteserviceadmin.discovery.config}, \
-	${repo;org.osgi.impl.bundle.serviceloader}, \
-	${repo;org.osgi.impl.bundle.webcontainer}, \
-	${repo;org.osgi.impl.service.blueprint}, \
-	${repo;org.osgi.impl.service.cm}, \
-	${repo;org.osgi.impl.service.component}, \
-	${repo;org.osgi.impl.service.coordinator}, \
-	${repo;org.osgi.impl.service.event}, \
-	${repo;org.osgi.impl.service.http}, \
-	${repo;org.osgi.impl.service.jpa}, \
-	${repo;org.osgi.impl.service.metatype}, \
-	${repo;org.osgi.impl.service.provisioning}, \
-	${repo;org.osgi.impl.service.remoteserviceadmin}, \
-	${repo;org.osgi.impl.service.resolver}, \
-	${repo;org.osgi.impl.service.repository}, \
-	${repo;org.osgi.impl.service.subsystem}
+	${repo;org.osgi.impl.bundle.derby;latest}, \
+	${repo;org.osgi.impl.bundle.jmx;latest}, \
+	${repo;org.osgi.impl.bundle.serviceloader;latest}, \
+	${repo;org.osgi.impl.bundle.webcontainer;latest}, \
+	${repo;org.osgi.impl.service.blueprint;latest}, \
+	${repo;org.osgi.impl.service.cm;latest}, \
+	${repo;org.osgi.impl.service.component;latest}, \
+	${repo;org.osgi.impl.service.coordinator;latest}, \
+	${repo;org.osgi.impl.service.event;latest}, \
+	${repo;org.osgi.impl.service.http;latest}, \
+	${repo;org.osgi.impl.service.jpa;latest}, \
+	${repo;org.osgi.impl.service.metatype;latest}, \
+	${repo;org.osgi.impl.service.provisioning;latest}, \
+	${repo;org.osgi.impl.service.remoteserviceadmin;latest}, \
+	${repo;org.osgi.impl.service.resolver;latest}, \
+	${repo;org.osgi.impl.service.repository;latest}, \
+	${repo;org.osgi.impl.service.subsystem;latest}
 
 build.residential.impls = \
 	org.osgi.impl.bundle.component.annotations, \
@@ -99,10 +95,10 @@ build.residential.impls = \
     org.osgi.util.xml
 
 jar.residential.impls = \
-	${repo;org.osgi.impl.service.cm}, \
-	${repo;org.osgi.impl.service.component}, \
-	${repo;org.osgi.impl.service.event}, \
-	${repo;org.osgi.impl.service.http}, \
-	${repo;org.osgi.impl.service.metatype}, \
-	${repo;org.osgi.impl.service.provisioning}
+	${repo;org.osgi.impl.service.cm;latest}, \
+	${repo;org.osgi.impl.service.component;latest}, \
+	${repo;org.osgi.impl.service.event;latest}, \
+	${repo;org.osgi.impl.service.http;latest}, \
+	${repo;org.osgi.impl.service.metatype;latest}, \
+	${repo;org.osgi.impl.service.provisioning;latest}
 
