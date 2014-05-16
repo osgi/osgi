@@ -1,12 +1,7 @@
 Bundle-Description: OSGi Residential Release ${version;=;${build.version}} Reference Implementations
 
 Include-Resource				: \
-		\
-	  	${replace;${uniq;\
-        ${repo;${build.residential.impls}}, \
-        ${jar.residential.impls} \
-	  	};.+;jar/=$0},\
-	 	\
 		NOTICE=legal/NOTICE.txt, \
 		{about.html=legal/about.html}
  
+-pack: ${build.residential.impls},${jar.residential.impls}
