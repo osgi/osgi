@@ -1,12 +1,6 @@
-# Build the companion JARs before the impls/tests so they all use a fresh
-# copy to build against.
+-nobundles = true
 
--nobundles							=true
-
-# The following line builds all these files and publishes them to 
-# the repository (if they are deployable)
-
--dependson 					=  \
+-dependson = \
     osgi.annotation, \
     osgi.core, \
     osgi.cmpn, \
