@@ -1,6 +1,6 @@
--nobundles							=true
+-nobundles = true
 
--dependson 					=  osgi.ct
+-dependson = osgi.companion, osgi.ri, osgi.ct
 # Set javac settings from JDT prefs
 -include: ${project.workspace}/osgi.companion/layout.bnd
 
