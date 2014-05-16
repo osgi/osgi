@@ -1,6 +1,6 @@
 -include            : layout.bnd
--dependson          : osgi.ri, ${build.tests}
+-dependson          : ${build.tests}
 -resourceonly       : true
 
 # Build the osgi spec files
--sub       = *.bnd
+-sub       = !layout.bnd, *.bnd
