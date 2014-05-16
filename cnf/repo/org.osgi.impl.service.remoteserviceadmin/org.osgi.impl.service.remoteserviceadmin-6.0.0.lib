@@ -1,6 +1,6 @@
-org.osgi.service.remoteserviceadmin
-org.osgi.service.cm
-org.osgi.service.event
+org.osgi.service.remoteserviceadmin; version=latest
+org.osgi.service.cm; version=latest
+org.osgi.service.event; version=latest
 
 org.eclipse.core.jobs; version=3.5.300
 org.eclipse.ecf; version=3.2.0

@@ -196,19 +196,6 @@ public class BndPlugin implements Plugin<Project> {
               }
             }
           }
-          /* vvvv OSGi customization vvvv */
-          if (!bndUnprocessed('-releaserepo', '').empty) {
-            doLast {
-              try {
-                bndProject.release()
-              } catch (Exception e) {
-                throw new GradleException("Project ${bndProject.name} failed to release", e)
-              }
-              checkErrors()
-              logger.info 'Generated bundles released.'
-            }
-          }
-          /* ^^^^ OSGi customization ^^^^ */
         }
       }
 

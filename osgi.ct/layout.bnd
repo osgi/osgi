@@ -1,7 +1,7 @@
 build.tests                 = ${uniq; org.osgi.test.filter, ${build.core.tests}, ${build.cmpn.tests}, ${build.enterprise.tests}, ${build.residential.tests}}
 
 jar.core.tests = \
-    ${repo;org.apache.servicemix.bundles.bcel}
+    ${repo;org.apache.servicemix.bundles.bcel;latest}
 
 build.core.tests = \
     org.osgi.test.cases.framework, \
@@ -14,7 +14,7 @@ build.core.tests = \
     org.osgi.test.cases.tracker
 
 jar.cmpn.tests = \
-    ${repo;org.osgi.test.filter}
+    ${repo;org.osgi.test.filter;latest}
 
 build.cmpn.tests = \
     org.osgi.test.cases.application, \
@@ -66,7 +66,7 @@ build.cmpn.tests = \
     org.osgi.test.cases.xml
 
 jar.enterprise.tests = \
-    ${repo;org.osgi.test.filter}
+    ${repo;org.osgi.test.filter;latest}
 
 build.enterprise.tests = \
     org.osgi.test.cases.blueprint, \
@@ -107,7 +107,7 @@ build.enterprise.tests = \
    	org.osgi.test.cases.xml
 
 jar.residential.tests = \
-    ${repo;org.osgi.test.filter}
+    ${repo;org.osgi.test.filter;latest}
 
 build.residential.tests = \
     org.osgi.test.cases.cm, \

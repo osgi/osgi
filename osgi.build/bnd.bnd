@@ -24,6 +24,6 @@ javadoc.residential.specs = ${residential.specs}
 javadoc.residential.packages = ${residential.packages}
 
 javadoc.classpath = ${uniq; \
-                    ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}, \
-                    ${repo;org.eclipse.persistence.jpa_spec}, \
-                    ${repo;com.icl.saxon}}
+                    ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec;latest}, \
+                    ${repo;org.eclipse.persistence.jpa_spec;latest}, \
+                    ${repo;com.icl.saxon;latest}}

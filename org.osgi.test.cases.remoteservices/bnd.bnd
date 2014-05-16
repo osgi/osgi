@@ -32,4 +32,4 @@ Test-Cases							= ${testcases}
     ecf.generic.client.keepalive="30001", \
     net.mdns.port=65354, \
     net.mdns.interface=127.0.0.1, \
-    ${p}.bundles="${uniq;${repo;org.osgi.impl.service.log},${repo;org.osgi.impl.service.remoteserviceadmin}}"
+    ${p}.bundles="${uniq;${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"
