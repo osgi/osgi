@@ -299,7 +299,6 @@ public class BndPlugin implements Plugin<Project> {
         description "Displays project information in project '${project.path}'."
         group 'help'
         doLast {
-          println "verbose:                ${bnd.verbose}"
           println "project.workspace:      ${rootDir}"
           println "project.dir:            ${projectDir}"
           println "project.name:           ${project.name}"
@@ -314,13 +313,8 @@ public class BndPlugin implements Plugin<Project> {
           println "javac:                  ${compileJava.options.forkOptions.executable}"
           println "javac.source:           ${sourceCompatibility}"
           println "javac.target:           ${targetCompatibility}"
-          println "javac.compliance:       ${bnd.javac_compliance}"
           println "javac.profile:          ${profile}"
-          println "base.modfied:           ${bnd.base_modified} (${bnd.base_modified_readable})"
           println "target:                 ${buildDir}"
-          println "repo:                   ${bnd.repo}"
-          println "licensed-repo:          ${bnd('licensed-repo')}"
-          println "released-repo:          ${bnd('released-repo')}"
         }
       }
 
