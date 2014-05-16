@@ -5,10 +5,6 @@
 	<!-- Set top property to prevent dependency target recursing -->
 	<property name="top" value="${target}" />
 	
-	<target name="init" depends="master.init">
-		<mkdir dir="${released-repo}" />
-	</target>
-
 	<target name="clean" depends="master.clean">
 		<delete quiet="true" includeEmptyDirs="true" verbose="${verbose}">
 			<fileset dir="${build}/cache" />
