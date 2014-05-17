@@ -39,7 +39,7 @@ public class Packaging implements AnalyzerPlugin {
 		if (!analyzer.getProperties().containsKey(PACK))
 			return false;
 
-		Map<String, String> filesToPath = Create.map();
+		Map<String, String> fileToPath = Create.map();
 
 		String pack = analyzer.getProperty(PACK);
 		ProjectBuilder pb = (ProjectBuilder) analyzer;
@@ -57,7 +57,7 @@ public class Packaging implements AnalyzerPlugin {
 			try {
 				Project project = workspace.getProject(entry);
 				if (project != null) {
-					pack(analyzer, jar, project, null, filesToPath);
+					pack(analyzer, jar, project, null, fileToPath);
 				}
 				else {
 					while (entry.endsWith("~")) {
@@ -65,7 +65,7 @@ public class Packaging implements AnalyzerPlugin {
 					}
 					flatten(analyzer, null, jar, new File(entry),
 							Collections.<String, String> emptyMap(), true,
-							filesToPath);
+							fileToPath);
 				}
 			}
 			catch (Exception t) {
@@ -85,7 +85,7 @@ public class Packaging implements AnalyzerPlugin {
 	 * @throws Exception
 	 */
 	protected void pack(Analyzer analyzer, Jar jar, Project project,
-			Collection<Container> sharedRunpath, Map<String, String> filesToPath)
+			Collection<Container> sharedRunpath, Map<String, String> fileToPath)
 			throws Exception {
 
 		/**
@@ -99,7 +99,7 @@ public class Packaging implements AnalyzerPlugin {
 		}
 
 		flatten(analyzer, null, jar, project,
-				Collections.<String, String> emptyMap(), true, filesToPath);
+				Collections.<String, String> emptyMap(), true, fileToPath);
 	}
 
 	protected void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
@@ -158,6 +158,33 @@ public class Packaging implements AnalyzerPlugin {
 	protected void flatten(Analyzer analyzer, StringBuilder sb, Jar jar,
 			File sub, Map<String, String> map, boolean store,
 			Map<String, String> fileToPath) throws Exception {
+		String path = fileToPath.get(sub.getAbsolutePath());
+		if (path == null) {
+			path = "jar/" + canonicalName(analyzer, sub);
+			fileToPath.put(sub.getAbsolutePath(), path);
+		}
+		if (store && (jar.getResource(path) == null)) {
+			jar.putResource(path, new FileResource(sub));
+		}
+		if (sb != null) {
+			sb.append("\\\n    ");
+			sb.append(path);
+			sb.append(";version=file");
+			for (Map.Entry<String, String> entry : map.entrySet()) {
+				if (!entry.getKey().equals("version")) {
+					sb.append(";");
+					sb.append(entry.getKey());
+					sb.append("=\"");
+					sb.append(entry.getValue());
+					sb.append("\"");
+				}
+			}
+			sb.append(", ");
+		}
+	}
+
+	protected String canonicalName(Analyzer analyzer, File sub)
+			throws Exception {
 		Jar s = new Jar(sub);
 		try {
 			Manifest m = s.getManifest();
@@ -167,7 +194,7 @@ public class Packaging implements AnalyzerPlugin {
 				analyzer.error(
 						"Invalid bundle in flattening a path (no Bundle-SymbolicName set): %s",
 						sub.getAbsolutePath());
-				return;
+				return sub.getName();
 			}
 
 			int n = bsn.indexOf(';');
@@ -179,29 +206,9 @@ public class Packaging implements AnalyzerPlugin {
 					Constants.BUNDLE_VERSION);
 			Version v = Version.parseVersion(version);
 
-			String path = "jar/" + bsn + "-" + v.getMajor() + "."
+			String path = bsn + "-" + v.getMajor() + "."
 					+ v.getMinor() + "." + v.getMicro() + ".jar";
-
-			if (store) {
-				fileToPath.put(sub.getAbsolutePath(), path);
-				jar.putResource(path, new FileResource(sub));
-			}
-			if (sb != null) {
-				sb.append("\\\n    ");
-				sb.append(path);
-				sb.append(";version=file");
-				for (Map.Entry<String, String> entry : map.entrySet()) {
-					if (!entry.getKey().equals("version")) {
-						sb.append(";");
-						sb.append(entry.getKey());
-						sb.append("=\"");
-						sb.append(entry.getValue());
-						sb.append("\"");
-					}
-				}
-				sb.append(", ");
-			}
-
+			return path;
 		}
 		finally {
 			s.close();

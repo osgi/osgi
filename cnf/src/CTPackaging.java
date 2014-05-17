@@ -45,7 +45,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 		if (!analyzer.getProperties().containsKey(PACK))
 			return false;
 
-		Map<String, String> filesToPath = Create.map();
+		Map<String, String> fileToPath = Create.map();
 
 		String pack = analyzer.getProperty(PACK);
 		ProjectBuilder pb = (ProjectBuilder) analyzer;
@@ -68,7 +68,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 		sb.append("# Workspace information\n");
 		sb.append(Constants.RUNPATH);
 		sb.append(" = ");
-		flatten(analyzer, sb, jar, runpath, false, filesToPath);
+		flatten(analyzer, sb, jar, runpath, false, fileToPath);
 		sb.append("\n\n-runtrace = true\n");
 		jar.putResource("shared.inc", new EmbeddedResource(sb.toString()
 				.getBytes("UTF-8"), 0));
@@ -77,7 +77,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 			try {
 				Project project = workspace.getProject(entry);
 				if (project != null) {
-					pack(analyzer, jar, project, runpath, filesToPath);
+					pack(analyzer, jar, project, runpath, fileToPath);
 				}
 				else {
 					while (entry.endsWith("~")) {
@@ -85,7 +85,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 					}
 					flatten(analyzer, null, jar, new File(entry),
 							Collections.<String, String> emptyMap(), true,
-							filesToPath);
+							fileToPath);
 				}
 			}
 			catch (Exception t) {
@@ -107,7 +107,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 
 		List<Container> extra = pb.getProject().getBundles(Strategy.HIGHEST,
 				"com.springsource.junit", null);
-		flatten(analyzer, null, jar, extra, true, filesToPath);
+		flatten(analyzer, null, jar, extra, true, fileToPath);
 
 		StringBuilder script = new StringBuilder();
 		script.append("java -jar jar/bnd.jar runtests --title ");
@@ -128,7 +128,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 	 * @throws Exception
 	 */
 	protected void pack(Analyzer analyzer, Jar jar, Project project,
-			Collection<Container> sharedRunpath, Map<String, String> filesToPath)
+			Collection<Container> sharedRunpath, Map<String, String> fileToPath)
 			throws Exception {
 		Collection<Container> runpath = project.getRunpath();
 		Collection<Container> runbundles = project.getRunbundles();
@@ -160,7 +160,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 		sb.append("\n");
 		sb.append("-target = ");
 		flatten(analyzer, sb, jar, project,
-				Collections.<String, String> emptyMap(), true, filesToPath);
+				Collections.<String, String> emptyMap(), true, fileToPath);
 		sb.deleteCharAt(sb.length() - 1);
 
 		if (!equals(runpath, sharedRunpath)) {
@@ -168,12 +168,12 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 			sb.append("\n");
 			sb.append(Constants.RUNPATH);
 			sb.append(" = ");
-			flatten(analyzer, sb, jar, runpath, false, filesToPath);
+			flatten(analyzer, sb, jar, runpath, false, fileToPath);
 		}
 		sb.append("\n\n");
 		sb.append(Constants.RUNBUNDLES);
 		sb.append(" = ");
-		flatten(analyzer, sb, jar, runbundles, false, filesToPath);
+		flatten(analyzer, sb, jar, runbundles, false, fileToPath);
 
 		Map<String, String> properties = OSGiHeader
 				.parseProperties(runproperties);
@@ -190,7 +190,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 			sb.append(key);
 			sb.append("=");
 
-			value = replacePaths(analyzer, jar, filesToPath, value,
+			value = replacePaths(analyzer, jar, fileToPath, value,
 					key.endsWith(".bundles") == false);
 
 			sb.append("\"");
@@ -228,7 +228,7 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 	}
 
 	private String replacePaths(Analyzer analyzer, Jar jar,
-			Map<String, String> filesToPath, String value, boolean include)
+			Map<String, String> fileToPath, String value, boolean store)
 			throws Exception {
 		Collection<String> paths = Processor.split(value);
 		List<String> result = Create.list();
@@ -237,13 +237,11 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 			if (f.isAbsolute() && f.exists()
 					&& !f.getPath().contains(analyzer.getProperty("target"))) {
 				f = f.getCanonicalFile();
-				path = filesToPath.get(f.getAbsolutePath());
+				path = fileToPath.get(f.getAbsolutePath());
 				if (path == null) {
-					path = "jar/" + f.getName();
-					if (path.endsWith(".jar")) {
-						if (include)
-							jar.putResource(path, new FileResource(f));
-						filesToPath.put(f.getAbsolutePath(), path);
+					if (f.getName().endsWith(".jar")) {
+						path = "jar/" + canonicalName(analyzer, f);
+						fileToPath.put(f.getAbsolutePath(), path);
 					}
 					else {
 						path = "property-resources/" + f.getName();
@@ -254,15 +252,20 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 							path = "property-resources/" + f.getName() + "-"
 									+ n++;
 
-						filesToPath.put(f.getAbsolutePath(), path);
-						if (include) {
-							if (f.isFile()) {
-								jar.putResource(path, new FileResource(f));
-							}
-							else {
-								Jar j = new Jar(f);
-								jar.addAll(j, null, path);
-							}
+						fileToPath.put(f.getAbsolutePath(), path);
+					}
+				}
+				if (store && (jar.getResource(path) == null)) {
+					if (f.isFile()) {
+						jar.putResource(path, new FileResource(f));
+					}
+					else {
+						Jar j = new Jar(f);
+						try {
+							jar.addAll(j, null, path);
+						}
+						finally {
+							j.close();
 						}
 					}
 				}
