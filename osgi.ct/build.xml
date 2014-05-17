@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="project" default="publish">
-	<import file="../cnf/master.xml" />
+	<import file="../cnf/ant/master.xml" />
 
 	<target name="runtests" depends="osgi.ct.core,osgi.ct.cmpn,osgi.ct.enterprise, osgi.ct.residential">
 	</target>
