@@ -88,5 +88,5 @@
 		<echo>enterprise.specs:       ${enterprise.specs}</echo>
 	</target>
 
-	<import file="../cnf/master.xml" />
+	<import file="../cnf/ant/master.xml" />
 </project>
