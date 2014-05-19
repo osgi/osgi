@@ -43,7 +43,6 @@ public class BndPlugin implements Plugin<Project> {
       extensions.create('bnd', BndProperties, bndProject)
       bnd.ext.project = bndProject
       convention.plugins.bnd = new BndPluginConvention(this)
-      bnd.ext.verbose = parseBoolean(bnd('verbose','false'))
 
       buildDir = relativePath(bndProject.targetDir)
       plugins.apply 'java'
@@ -72,17 +71,19 @@ public class BndPlugin implements Plugin<Project> {
         bootclasspath = files(bndProject.getBundle('ee.j2se', '1.5', null, ['strategy':'lowest']).file)
       }
       targetCompatibility = javacTarget
-      def profile = bnd('javac.profile', '')
       def javac = bnd('javac', 'javac')
-      def javacDebug = parseBoolean(bnd('javac.debug','false'))
+      def javacProfile = bnd('javac.profile', '')
+      def javacDebug = parseBoolean(bnd('javac.debug', 'false'))
+      def javacDeprecation = parseBoolean(bnd('javac.deprecation', 'true'))
+      def javacEncoding = bnd('javac.encoding', 'UTF-8')
       def compileOptions = {
         if (javacDebug) {
           options.debugOptions.debugLevel = 'source,lines,vars'
         }
-        options.verbose = bnd.verbose
+        options.verbose = logger.isEnabled(LogLevel.DEBUG)
         options.listFiles = logger.isEnabled(LogLevel.INFO)
-        options.deprecation = true
-        options.encoding = 'UTF-8'
+        options.deprecation = javacDeprecation
+        options.encoding = javacEncoding
         if (javac != 'javac') {
           options.fork = true
           options.forkOptions.executable = javac
@@ -91,8 +92,8 @@ public class BndPlugin implements Plugin<Project> {
           options.fork = true
           options.bootClasspath = bootclasspath.asPath
         }
-        if (!profile.empty) {
-          options.compilerArgs += ['-profile', profile]
+        if (!javacProfile.empty) {
+          options.compilerArgs += ['-profile', javacProfile]
         }
       }
 
@@ -203,7 +204,7 @@ public class BndPlugin implements Plugin<Project> {
         description 'Release this project to the release repository.'
         dependsOn assemble
         group 'release'
-        enabled !bndUnprocessed('-releaserepo', '').empty
+        enabled !bnd('-releaserepo', 'unset').empty
         if (enabled) {
           inputs.files bndProject.deliverables.collect { it.file }
           doLast {
@@ -313,7 +314,9 @@ public class BndPlugin implements Plugin<Project> {
           println "javac:                  ${compileJava.options.forkOptions.executable}"
           println "javac.source:           ${sourceCompatibility}"
           println "javac.target:           ${targetCompatibility}"
-          println "javac.profile:          ${profile}"
+          if (!javacProfile.empty) {
+            println "javac.profile:          ${javacProfile}"
+          }
           println "target:                 ${buildDir}"
         }
       }
@@ -393,7 +396,7 @@ class BndProperties {
   String propertyMissing(String name) {
     def String value = get(name)
     if (value == null) {
-      value = get(name.replace('_','.'))
+      value = get(name.replace('_', '.'))
     }
     return value
   }
