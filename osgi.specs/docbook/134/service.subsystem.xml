@@ -3954,7 +3954,7 @@ Subsystem-Content:
 
       <section>
         <title>Deployed-Content:
-        com.acme.logging;type:=osgi.bundle;deployed-version=1.0.0</title>
+        com.acme.logging;type=osgi.bundle;deployed-version=1.0.0</title>
 
         <para>The Deployed-Content header lists requirements for the exact
         resources that are considered to be the contents of this Subsystem.
@@ -3964,7 +3964,7 @@ Subsystem-Content:
 
       <section>
         <title>Provision-Resource:
-        com.acme.logging;type:=osgi.bundle;deployed-version=1.0.0</title>
+        com.acme.logging;type=osgi.bundle;deployed-version=1.0.0</title>
 
         <para>The Provision-Resource header lists requirements for the exact
         resources to be installed in order to satisfy requirements from the
@@ -4065,7 +4065,7 @@ Subsystem-Content:
         deployed-version=1.0,
     com.acme.persistence;
         deployed-version=1.1;
-        type:=osgi.subsystem.composite </programlisting>
+        type=osgi.subsystem.composite </programlisting>
 
       <para>Each entry must uniquely identify the resource to be provisioned
       as a constituent of the Subsystem.</para>
