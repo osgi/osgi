@@ -1,1 +1,1 @@
-apply from: file("$bnd_cnf/gradle/init.gradle")
+apply from: file("${bnd_cnf}/gradle/init.gradle")
