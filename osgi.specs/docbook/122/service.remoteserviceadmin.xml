@@ -2312,7 +2312,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
   
               <entry><code>List&lt;String&gt;</code></entry>
   
-              <entry><code>* | 'local'</code></entry>
+              <entry><code>symbolic-name</code></entry>
   
               <entry><para>The discovery protocols supported. A value of 
               <code>local</code> indicates support for the <xref linkend="i1889341"/>.</para></entry>
@@ -2396,11 +2396,11 @@ xml                    ::= &lt;*&gt; *</programlisting>
   
               <entry><code>List&lt;String&gt;</code></entry>
   
-              <entry><para><code>package-name</code></para><para><code>(','
-            package-name)*</code></para></entry>
+              <entry><code>symbolic-name</code></entry>
   
-              <entry><para>The discovery protocols supported. A value of 
-              <code>local</code> indicates support for the <xref linkend="i1889341"/>.</para></entry>
+              <entry><para>Supported configuration types. See
+              <xref linkend="service.remoteserviceadmin.endpointdescription"/> 
+              .</para></entry>
             </row>
   
             <row>
@@ -2437,13 +2437,11 @@ xml                    ::= &lt;*&gt; *</programlisting>
         determining which services to export and/or import. Topology managers use
         the namespace  
         <code>osgi.remoteserviceadmin.topology</code> 
-        to declare this bevavior.
-        This namespace defines the <code>policy String</code> attribute        
-        with predefined values 
-        <code>promiscuous</code> and <code>fail-over</code> but other values may also be
-        used. In general the policy is implementation specific, but an example definition
-        of the two pre-defined values can be found at <xref linkend="ExamplePolicies"/>.
-        <remark>Should this also be a List&lt;String&gt;?</remark>
+        to declare this behavior.
+        This namespace defines the <code>policy</code> attribute of type 
+        <code>List&lt;String&gt;</code>. Values are implementation specific,        
+        but example definitions
+        can be found at <xref linkend="ExamplePolicies"/>.
       </para>
       
      <table pgwide="1">
@@ -2486,10 +2484,9 @@ xml                    ::= &lt;*&gt; *</programlisting>
   
               <entry><code>M</code></entry>
   
-              <entry><code>String</code></entry>
+              <entry><code>List&lt;String&gt;</code></entry>
   
-              <entry><para><code>promiscuous |</code></para>
-              <para><code>fail-over | *</code></para></entry>
+              <entry><code>symbolic-name</code></entry>
   
               <entry><para>The policy used for importing and exporting services.
               In general the policy is implementation specific.</para></entry>
