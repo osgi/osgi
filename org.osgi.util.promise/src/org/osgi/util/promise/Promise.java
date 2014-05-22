@@ -55,7 +55,7 @@ import org.osgi.util.function.Predicate;
  * <pre>
  * Success&lt;String,String&gt; doubler = new Success&lt;String,String&gt;() {
  *   public Promise&lt;String&gt; call(Promise&lt;String&gt; p) throws Exception {
- *     return Promises.newResolvedPromise(p.getValue()+p.getValue());
+ *     return Promises.resolved(p.getValue()+p.getValue());
  *   }
  * };
  * final Promise&lt;String&gt; foo = foo().then(doubler).then(doubler);
