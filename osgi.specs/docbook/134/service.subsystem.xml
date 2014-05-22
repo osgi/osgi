@@ -439,20 +439,21 @@
         <para>The Require-Capability header declares the required capabilities
         for a Scoped Subsystem. See <xref linkend="i3394044"/>.</para>
       </section>
-      
+
       <section>
         <title>Subsystem-Category: osgi, test, nursery</title>
-        
-        <para>The Subsystem-Category header identifies the categories of the 
+
+        <para>The Subsystem-Category header identifies the categories of the
         subsystem as a comma-delimited list.</para>
       </section>
-      
+
       <section>
-        <title>Subsystem-ContactAddress: 2400 Oswego Road, Austin, TX 74563</title>
-        
-        <para>The Subsystem-ContactAddress header identifies the contact address 
-        where problems with the subsystem may be reported; for example, an email 
-        address.</para>
+        <title>Subsystem-ContactAddress: 2400 Oswego Road, Austin, TX
+        74563</title>
+
+        <para>The Subsystem-ContactAddress header identifies the contact
+        address where problems with the subsystem may be reported; for
+        example, an email address.</para>
       </section>
 
       <section>
@@ -462,11 +463,11 @@
         that are considered to be the contents of this Subsystem. See <xref
         linkend="i3321875"/>.</para>
       </section>
-      
+
       <section>
         <title>Subsystem-Copyright: OSGi (c) 2014</title>
-        
-        <para>The Subsystem-Copyright header identifies the subsystem's 
+
+        <para>The Subsystem-Copyright header identifies the subsystem's
         copyright information.</para>
       </section>
 
@@ -478,12 +479,12 @@
         description for this Subsystem, which can potentially be
         localized.</para>
       </section>
-      
+
       <section>
         <title>Subsystem-DocURL: http://www.example.com/Firewall/doc</title>
-        
-        <para>The Subsystem-DocURL header identifies the subsystem's 
-        documentation URL, from which further information about the subsystem 
+
+        <para>The Subsystem-DocURL header identifies the subsystem's
+        documentation URL, from which further information about the subsystem
         may be obtained.</para>
       </section>
 
@@ -495,22 +496,22 @@
         services for a Scoped Subsystem. See <xref
         linkend="i3321933"/>.</para>
       </section>
-      
+
       <section>
         <title>Subsystem-Icon: /icons/acme-logo.png; size=64</title>
-        
-        <para>The optional Subsystem-Icon header provides a list of URLs 
-        to icons representing this subsystem in different sizes. The following
-        attribute is permitted:
-        <itemizedlist>
-          <listitem>
-            size - (integer) Specifies the size of the icon in pixels horizontal.
-          	It is recommended to always includea 64x64 icon.
-          </listitem>
-        </itemizedlist>
-        The URLs are interpreted as relative to the subsytem archive. That is,
-        if a URL with a scheme is provided, then this is taken as an absolute URL.
-        Otherwise, the path points to an entry in the subsystem archive file.</para>
+
+        <para>The optional Subsystem-Icon header provides a list of URLs to
+        icons representing this subsystem in different sizes. The following
+        attribute is permitted: <itemizedlist>
+            <listitem>
+              <para>size - (integer) Specifies the size of the icon in pixels
+              horizontal. It is recommended to always includea 64x64
+              icon.</para>
+            </listitem>
+          </itemizedlist> The URLs are interpreted as relative to the subsytem
+        archive. That is, if a URL with a scheme is provided, then this is
+        taken as an absolute URL. Otherwise, the path points to an entry in
+        the subsystem archive file.</para>
       </section>
 
       <section>
@@ -526,15 +527,15 @@
         <title>Subsystem-License:
         http://www.opensource.org/licenses/jabberpl.php</title>
 
-        <para>The Subsystem-License header provides an optional machine readable
-        form of license information. The purpose of this header is to automate
-        some of the license processing required by many organizations like for
-        example license acceptance before a subsystem is used. The header is
-        structured to provide the use of unique license naming to merge
-        acceptance requests, as well as links to human readable information
-        about the included licenses. This header is purely informational for
-        management agents and must not be processed by the Subsystems
-        implementation.</para>
+        <para>The Subsystem-License header provides an optional machine
+        readable form of license information. The purpose of this header is to
+        automate some of the license processing required by many organizations
+        like for example license acceptance before a subsystem is used. The
+        header is structured to provide the use of unique license naming to
+        merge acceptance requests, as well as links to human readable
+        information about the included licenses. This header is purely
+        informational for management agents and must not be processed by the
+        Subsystems implementation.</para>
 
         <para>The syntax for this header is as follows:</para>
 
@@ -563,8 +564,8 @@ link           ::= 'link' '=' &lt;url&gt;</programlisting>
             canonical URL of the license, it must not be localized by the
             translator. This URL does not have to exist but must not be used
             for later versions of the license. It is recommended to use URLs
-            from <xref linkend="subsystems.osi"/>. Other licenses should use the
-            following structure, but this is not mandated:</para>
+            from <xref linkend="subsystems.osi"/>. Other licenses should use
+            the following structure, but this is not mandated:</para>
           </listitem>
         </itemizedlist>
 
@@ -590,22 +591,23 @@ link           ::= 'link' '=' &lt;url&gt;</programlisting>
 
         <para>If the Subsystem-License statement is absent, then this does not
         mean that the subsystem is not licensed. Licensing could be handled
-        outside the subsystem and the <code>&lt;&lt;EXTERNAL&gt;&gt;</code> form
-        should be assumed. This header is informational and may not have any
-        legal bearing. Consult a lawyer before using this header to automate
-        licensing processing.</para>
+        outside the subsystem and the <code>&lt;&lt;EXTERNAL&gt;&gt;</code>
+        form should be assumed. This header is informational and may not have
+        any legal bearing. Consult a lawyer before using this header to
+        automate licensing processing.</para>
       </section>
 
       <section>
         <title>Subsystem-Localization: OSGI-INF/l10n/subsystem</title>
-        
-        <para>The Subsystem-Localization header identifies the default base name
-        of the localization properties files contained in the subsystem archive.
-        The default value is <code>OSGI-INF/l10n/subsystem</code>. Translations 
-        are therefore, by default, <code>OSGI-INF/l10n/subsystem_de.properties
-        </code>, <code>OSGI-INF/l10n/subsystem_nl.properties</code>, and so on. 
-        The location is relative to the root of the subsystem archive. See
-        <xref linkend="service.subsystem-subsystem.localization.detail"/></para>
+
+        <para>The Subsystem-Localization header identifies the default base
+        name of the localization properties files contained in the subsystem
+        archive. The default value is <code>OSGI-INF/l10n/subsystem</code>.
+        Translations are therefore, by default,
+        <code>OSGI-INF/l10n/subsystem_de.properties </code>,
+        <code>OSGI-INF/l10n/subsystem_nl.properties</code>, and so on. The
+        location is relative to the root of the subsystem archive. See <xref
+        linkend="service.subsystem-subsystem.localization.detail"/></para>
       </section>
 
       <section>
@@ -652,9 +654,9 @@ link           ::= 'link' '=' &lt;url&gt;</programlisting>
 
       <section>
         <title>Subsystem-Vendor: OSGi Alliance</title>
-        
-        <para>The Subsystem-Vendor header contains a human-readable description
-        of the subsystem vendor.</para>
+
+        <para>The Subsystem-Vendor header contains a human-readable
+        description of the subsystem vendor.</para>
       </section>
 
       <section>
@@ -888,43 +890,44 @@ osgi.identity=org.acme.billing;
 
       <programlisting>osgi.identity; filter:="(type=osgi.subsystem.composite)"</programlisting>
     </section>
-    
+
     <section xml:id="service.subsystem-subsystem.localization.detail">
       <title>Subsystem-Localization Header</title>
-      
-      <para>For consistency and ease of comprehension, the design for localizing
-      subsystem manifest headers follows the approach used by bundles.</para>
-      
+
+      <para>For consistency and ease of comprehension, the design for
+      localizing subsystem manifest headers follows the approach used by
+      bundles.</para>
+
       <section>
         <title>Localization Properties</title>
-        
-        <para>A localization entry contains key/value entries for localized 
+
+        <para>A localization entry contains key/value entries for localized
         information. All headers in a subsystem's manifest can be localized.
         However, the subsystems implementation must always use the
-        non-localized versions of headers that have subsystem semantics.
-        Note that the use of localization on certain such headers, such as
-        Subsystem-SymbolicName, may cause errors as a value with a 
-        % sign will not be valid.</para>
+        non-localized versions of headers that have subsystem semantics. Note
+        that the use of localization on certain such headers, such as
+        Subsystem-SymbolicName, may cause errors as a value with a % sign will
+        not be valid.</para>
 
-        <para>A localization key can be specified as the value of a subsystem's 
-        manifest header using the following syntax:</para>
+        <para>A localization key can be specified as the value of a
+        subsystem's manifest header using the following syntax:</para>
 
         <programlisting>header-value ::= ’%’text
 text ::= &lt; any value which is both a valid manifest header value and a valid
     property key name &gt;</programlisting>
-        
-        <para>For example, consider the following subsystem manifest entries:
-        </para>
+
+        <para>For example, consider the following subsystem manifest
+        entries:</para>
 
         <programlisting>Subsystem-Name: %acme subsystem
 Subsystem-Description: %acme description
 Subsystem-SymbolicName: acme.Subsystem
 Acme-Defined-Header: %acme special header</programlisting>
 
-        <para>User-defined headers can also be localized. Spaces in the 
+        <para>User-defined headers can also be localized. Spaces in the
         localization keys are explicitly allowed.</para>
 
-        <para>The previous example manifest entries could be localized by the 
+        <para>The previous example manifest entries could be localized by the
         following entries in the manifest localization entry <code>
         OSGI-INF/l10n/subsystem.properties</code>.</para>
 
@@ -932,25 +935,25 @@ Acme-Defined-Header: %acme special header</programlisting>
 acme\ subsystem=The ACME Subsystem
 acme\ description=The ACME Subsystem provides all of the ACME \ services
 acme\ special\ header=user-defined Acme Data</programlisting>
-        
-        <para>The above manifest entries could also have French localizations in
-        the manifest localization entry:</para>
+
+        <para>The above manifest entries could also have French localizations
+        in the manifest localization entry:</para>
 
         <programlisting>OSGI-INF/l10n/subsystem_fr_FR.properties.</programlisting>
       </section>
-      
+
       <section>
         <title>Locating Localization Entries</title>
-        
-        <para>The Subsystems implementation must search for localization entries
-        by appending suffixes to the localization base name according to a 
-        specified locale and finally appending the .properties suffix. If a 
-        translation is not found, the locale must be made more generic by first 
-        removing the variant, then the country and finally the language until an 
-        entry is found that contains a valid translation. For example, looking 
-        up a translation for the locale <code>en_GB_welsh</code> will search in 
-        the following order:</para>
-        
+
+        <para>The Subsystems implementation must search for localization
+        entries by appending suffixes to the localization base name according
+        to a specified locale and finally appending the .properties suffix. If
+        a translation is not found, the locale must be made more generic by
+        first removing the variant, then the country and finally the language
+        until an entry is found that contains a valid translation. For
+        example, looking up a translation for the locale
+        <code>en_GB_welsh</code> will search in the following order:</para>
+
         <programlisting>OSGI-INF/l10n/subsystem_en_GB_welsh.properties
 OSGI-INF/l10n/subsystem_en_GB.properties
 OSGI-INF/l10n/subsystem_en.properties
@@ -1943,10 +1946,10 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
     searching for capabilities to satisfy content dependencies within the
     <code>ResolveContext.findProviders</code> method. The Content Repository,
     Preferred Provider Repository, System Repository and Local Repository must
-    all be searched and all the results presented to the Resolver with a 
+    all be searched and all the results presented to the Resolver with a
     corresponding preference. If a result was found in these repositories,
     searching the registered Repository services is optional, but if no result
-    was found yet, the registered Repository services must be searched.  The
+    was found yet, the registered Repository services must be searched. The
     order of matching capabilities presented to the Resolver must coincide
     with the Repository search order.</para>
 
@@ -1969,7 +1972,7 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       </listitem>
 
       <listitem>
-        <para>The Local Repository. This allows a Subsystem Archive to 
+        <para>The Local Repository. This allows a Subsystem Archive to
         optionally include dependencies.</para>
       </listitem>
 
@@ -3538,8 +3541,8 @@ Subsystem-Content:
       set to <xref
       linkend="org.osgi.service.subsystem.Subsystem.State.INSTALLED"
       xrefstyle="hyperlink"/>. There is no explicit operation for initiating
-      the resolve process of a Subsystem. The Subsystems implementation is free
-      to initiate the resolve process for a Subsystem for any reason. For 
+      the resolve process of a Subsystem. The Subsystems implementation is
+      free to initiate the resolve process for a Subsystem for any reason. For
       example, the Subsystems implementation may choose to try to resolve all
       currently installed Subsystems when the start operation is performed on
       a single Subsystem.</para>
@@ -3857,17 +3860,18 @@ Subsystem-Content:
     <para>A pre-calculated deployment in the form of a deployment manifest can
     be included as part of a Subsystem Archive or provided by a deployer at
     installation time. Manifests provided at install time override those
-    included within an archive, and those within an archive override calculated
-    ones. The deployment manifest defines the precise deployment of the 
-    Subsystem. Providing a deployment manifest means a Subsystem can be deployed
-    and the exact resources that are installed are known ahead of time. This 
-    allows test teams to test specific deployments and these same deployments 
-    can then be used in production. The deployment manifest is a locking down of
-    the variability in a Subsystem manifest (or the equivalent if the Subsystem 
-    definition is calculated during deployment based on the Subsystem Archive). 
-    The deployment manifest follows the same syntax rules as the Subsystem 
-    manifest but uses different headers for deployment-specific information. A 
-    deployment manifest describes the following:</para>
+    included within an archive, and those within an archive override
+    calculated ones. The deployment manifest defines the precise deployment of
+    the Subsystem. Providing a deployment manifest means a Subsystem can be
+    deployed and the exact resources that are installed are known ahead of
+    time. This allows test teams to test specific deployments and these same
+    deployments can then be used in production. The deployment manifest is a
+    locking down of the variability in a Subsystem manifest (or the equivalent
+    if the Subsystem definition is calculated during deployment based on the
+    Subsystem Archive). The deployment manifest follows the same syntax rules
+    as the Subsystem manifest but uses different headers for
+    deployment-specific information. A deployment manifest describes the
+    following:</para>
 
     <itemizedlist>
       <listitem>
@@ -4402,7 +4406,7 @@ service                 ::= qname ( ';' parameter )*</programlisting>
       contents that are not satisfied by the capabilities of the Subsystem
       content.</para>
 
-      <para>Unsatisfied mandatory requirements result in a subsystem 
+      <para>Unsatisfied mandatory requirements result in a subsystem
       installation failure. Unsatisfied optional requirements do not. However,
       implementations must ensure any unsatisfied optional requirements are
       added to the sharing policy.</para>
@@ -4431,40 +4435,42 @@ service                 ::= qname ( ';' parameter )*</programlisting>
         by content bundles over those provided outside the application. For
         this reason, the application Subsystem sharing policy only imports
         services required by the Subsystem's content bundles that are not also
-        provided by the content bundles. This specification provides a means of 
-        declaratively identifying the services a bundle provides or requires 
-        using the <code>Provide-Capability</code> and <code>Require-Capability</code> 
-        headers with the <code>osgi.service</code> namespace. See <xref 
+        provided by the content bundles. This specification provides a means
+        of declaratively identifying the services a bundle provides or
+        requires using the <code>Provide-Capability</code> and
+        <code>Require-Capability</code> headers with the
+        <code>osgi.service</code> namespace. See <xref
         linkend="service.namespaces-osgi.service.namespace"/></para>
-        
-        <para>An example of a bundle providing the service and declaring it 
+
+        <para>An example of a bundle providing the service and declaring it
         using the <code>Provide-Capability</code> header is as follows:</para>
-        
+
         <programlisting>Provide-Capability: osgi.service;
  objectClass=com.foo.MyService;
  a.service.prop=somePropertyValue</programlisting>
 
-        <para>Note that declaring a provided service in this manner only affects
-        resolution. It does not affect service visibility at runtime. In other 
-        words, a subsystem that imports service <code>com.acme.Foo</code> will
-        see all of the corresponding service registrations that its parent sees
-        regardless of whether or not the provider declared this service in the
-        <code>Provide-Capability</code> header.</para>
+        <para>Note that declaring a provided service in this manner only
+        affects resolution. It does not affect service visibility at runtime.
+        In other words, a subsystem that imports service
+        <code>com.acme.Foo</code> will see all of the corresponding service
+        registrations that its parent sees regardless of whether or not the
+        provider declared this service in the <code>Provide-Capability</code>
+        header.</para>
 
-        <para>An example of a bundle requiring a service and declaring the 
-        requirement using the <code>Require-Capability</code> header is as 
+        <para>An example of a bundle requiring a service and declaring the
+        requirement using the <code>Require-Capability</code> header is as
         follows:</para>
 
         <programlisting>Require-Capability: osgi.service;
- filter:=&quot;(&amp;(objectClass=com.foo.MyService)(a.service.prop=somePropertyValue))&quot;</programlisting>
+ filter:="(&amp;(objectClass=com.foo.MyService)(a.service.prop=somePropertyValue))"</programlisting>
 
-        <para>These headers can be hand-written (e.g., to declare programmatic 
-        use of an OSGi service) or generated by a tool (e.g., BND) based on a 
-        declarative component model configuration (e.g., Declarative Services or 
-        Blueprint). A Subsystems implementation must assume these headers, if 
-        present, declare all of the service dependencies. Implementations must 
-        therefore not search the bundle for additional dependencies from other 
-        sources.</para>
+        <para>These headers can be hand-written (e.g., to declare programmatic
+        use of an OSGi service) or generated by a tool (e.g., BND) based on a
+        declarative component model configuration (e.g., Declarative Services
+        or Blueprint). A Subsystems implementation must assume these headers,
+        if present, declare all of the service dependencies. Implementations
+        must therefore not search the bundle for additional dependencies from
+        other sources.</para>
 
         <para>A deployment manifest for an application Subsystem would list
         these service imports using the Subsystem-ImportService header.</para>
@@ -4713,45 +4719,45 @@ service                 ::= qname ( ';' parameter )*</programlisting>
       </section>
     </section>
   </section>
-  
+
   <section>
     <title>Weaving Hooks</title>
-    
+
     <para>Subsystems implementations must ensure that dynamic package imports
     added by weaving hooks are available to subsystems whose classes have been
     woven by updating the sharing policies.</para>
-    
-    <para>Dynamic package imports added by weaving hooks are observed by 
-    registering a <code>WovenClassListener</code> service and receiving 
-    notifications via the <code>WovenClassListener.modified(WovenClass)</code> 
-    method. The sharing policy must be updated while the woven class is in the 
-    <code>TRANSFORMED</code> state so that it takes effect before the bundle 
-    wiring is updated during the transition to <code>DEFINED</code>; otherwise, 
-    the class would fail to load.</para>
-    
+
+    <para>Dynamic package imports added by weaving hooks are observed by
+    registering a <code>WovenClassListener</code> service and receiving
+    notifications via the <code>WovenClassListener.modified(WovenClass)</code>
+    method. The sharing policy must be updated while the woven class is in the
+    <code>TRANSFORMED</code> state so that it takes effect before the bundle
+    wiring is updated during the transition to <code>DEFINED</code>;
+    otherwise, the class would fail to load.</para>
+
     <para>The bundle containing the woven class can be obtained by calling the
-    <code>WovenClass.getBundleWiring().getBundle()</code> method. A bundle might
-    be a constituent of multiple subsystems, but never more than one scoped 
-    subsystem. The rest are features, which have no sharing policies to update. 
-    It's possible the bundle will not be a constituent of a scoped subsystem.
-    The scoped subsystem, if any, containing the bundle as a constituent is 
-    retrieved.</para>
-    
-    <para>It's possible for a classload request to occur on a bundle in an 
-    unresolved subsystem because the framework is free to resolve bundles 
-    whenever it desires. A resolved bundle can potentially receive a classload 
-    request. For example, a <code>BundleEventListener</code> registered with the
-    system  bundle context could receive the <code>RESOLVED</code> event and, 
-    for whatever reason, load a class. Also, a resolved bundle in an unresolved 
-    feature might get wired to another bundle. If this is the case, the 
-    subsystem must be resolved in order to guarantee the dynamic imports will 
-    not effect the resolution and, therefore, potentially create a wiring 
-    inconsistent with the deployment manifest. Just as the framework is free to
-    resolve bundles at anytime and for whatever reason, Subsystems 
+    <code>WovenClass.getBundleWiring().getBundle()</code> method. A bundle
+    might be a constituent of multiple subsystems, but never more than one
+    scoped subsystem. The rest are features, which have no sharing policies to
+    update. It's possible the bundle will not be a constituent of a scoped
+    subsystem. The scoped subsystem, if any, containing the bundle as a
+    constituent is retrieved.</para>
+
+    <para>It's possible for a classload request to occur on a bundle in an
+    unresolved subsystem because the framework is free to resolve bundles
+    whenever it desires. A resolved bundle can potentially receive a classload
+    request. For example, a <code>BundleEventListener</code> registered with
+    the system bundle context could receive the <code>RESOLVED</code> event
+    and, for whatever reason, load a class. Also, a resolved bundle in an
+    unresolved feature might get wired to another bundle. If this is the case,
+    the subsystem must be resolved in order to guarantee the dynamic imports
+    will not effect the resolution and, therefore, potentially create a wiring
+    inconsistent with the deployment manifest. Just as the framework is free
+    to resolve bundles at anytime and for whatever reason, Subsystems
     implementations are free to resolve subsystems.</para>
-    
-    <para>The sharing policy is only updated if the dynamic import cannot be 
-    completely satisfied from within the subsystem. Note that all dynamic 
+
+    <para>The sharing policy is only updated if the dynamic import cannot be
+    completely satisfied from within the subsystem. Note that all dynamic
     imports with a wildcard must always be added to the sharing policy.</para>
   </section>
 
@@ -4759,15 +4765,15 @@ service                 ::= qname ( ';' parameter )*</programlisting>
     <title>Stopping and Uninstalling Subsystems Implementation</title>
 
     <para>When the Subsystems implementation is stopped all of the installed
-    Subsystems must be persistently stored and present when the Subsystems 
-    implementation becomes active again.  This includes any bundles that got
-    installed as part of a Subsystem installation.  The Subsystems
+    Subsystems must be persistently stored and present when the Subsystems
+    implementation becomes active again. This includes any bundles that got
+    installed as part of a Subsystem installation. The Subsystems
     implementation is not required to do any additional cleanup when the
-    Subsystems implementation is stopped or uninstalled.  All bundles that got
+    Subsystems implementation is stopped or uninstalled. All bundles that got
     installed as a result of installing a Subsystem may still be installed
     after stopping or uninstalling the Subsystems implementation bundle. If it
     is important to clean up the bundles associated with a Subsystem
-    installation then the Subsystem should should be uninstalled before 
+    installation then the Subsystem should should be uninstalled before
     uninstalling the Subsystems implementation.</para>
   </section>
 
@@ -4939,11 +4945,11 @@ service                 ::= qname ( ';' parameter )*</programlisting>
       <bibliomixed xml:id="i3324343"><title>Equinox Region
       Digraph</title>http://underlap.blogspot.com/2011/02/stumbling-towards-better-design.html</bibliomixed>
 
-      <bibliomixed xml:id="subsystems.osi"><title>Open Source initiative</title>
-      http://www.opensource.org/</bibliomixed>
+      <bibliomixed xml:id="subsystems.osi"><title>Open Source
+      initiative</title> http://www.opensource.org/</bibliomixed>
     </bibliolist>
   </section>
-  
+
   <section>
     <title>Changes</title>
 
@@ -4951,29 +4957,37 @@ service                 ::= qname ( ';' parameter )*</programlisting>
       <listitem>
         <para>Specified the translation of subsystem manifest headers.</para>
       </listitem>
+
       <listitem>
         <para>Added more informational subsystem manifest headers.</para>
       </listitem>
+
       <listitem>
-        <para>Specified the interaction between Subsystems and Weaving Hooks for
-        the purposes of supporting dynamically added import packages.</para>
+        <para>Specified the interaction between Subsystems and Weaving Hooks
+        for the purposes of supporting dynamically added import
+        packages.</para>
       </listitem>
+
       <listitem>
         <para>Added the ability to override the archive's deployment manifest
         at install time.</para>
       </listitem>
+
       <listitem>
-        <para>Added the ability to retrieve deployment manifest headers.</para>
+        <para>Added the ability to retrieve deployment manifest
+        headers.</para>
       </listitem>
+
       <listitem>
         <para>Specified a means for declaratively identifying the services a
         bundle provides.</para>
       </listitem>
+
       <listitem>
         <para>Modified the procedure for determining dependencies to include
         the capabilities, in a specified order, from all repositories in order
-        to increase the likelihood that a resolution will be found such as when
-        a uses constraint violation would otherwise result.</para>
+        to increase the likelihood that a resolution will be found such as
+        when a uses constraint violation would otherwise result.</para>
       </listitem>
     </itemizedlist>
   </section>
