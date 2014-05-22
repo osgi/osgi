@@ -76,9 +76,8 @@
   <para>The Enterprise Specification includes the recommended specifications
   for a number of areas. The services of the Enterprise Specification have
   been designed to guarantee integration with OSGi and cooperation among each
-  other. Together they address use-cases found
-  in the enterprise context and provide a powerful set of tools to build
-  enterprise OSGi deployments.</para>
+  other. Together they address use-cases found in the enterprise context and
+  provide a powerful set of tools to build enterprise OSGi deployments.</para>
 
   <para>These Enterprise Specification areas are described in the following
   sections.</para>
@@ -160,10 +159,10 @@
     <section>
       <title>Web Applications and HTTP Servlets</title>
 
-      <para>Current Enterprise Java architectures almost always require support for
-      web technologies in the form of Java Servlets or Web Applications. The
-      Enterprise Specification includes three complementary service
-      specifications in support:</para>
+      <para>Current Enterprise Java architectures almost always require
+      support for web technologies in the form of Java Servlets or Web
+      Applications. The Enterprise Specification includes three complementary
+      service specifications in support:</para>
 
       <itemizedlist>
         <listitem>
@@ -184,18 +183,17 @@
           for this purpose: registering servlets and registering resources.
           See <xref linkend="service.http"/>.</para>
         </listitem>
-        
+
         <listitem>
-          <para><emphasis>Http Whiteboard Service Specification</emphasis> - 
-          The <xref linkend="enterprise.intro-whiteboard.pattern.ref"/> pattern has 
-          shown to be a powerful and flexible mechanism for registering customized
-          functionality with a container. The Http Whiteboard Service Specification
-          allows the registration of Servlet, Servlet Filters, Resources and 
-          Servlet-related listeners via the Whiteboard pattern, providing an 
-          alternative approach to working with servlets to the Http Service
-          Specification.
-          See <xref linkend="service.http.whiteboard"/>.
-          </para>
+          <para><emphasis>Http Whiteboard Service Specification</emphasis> -
+          The <xref linkend="enterprise.intro-whiteboard.pattern.ref"/>
+          pattern has shown to be a powerful and flexible mechanism for
+          registering customized functionality with a container. The Http
+          Whiteboard Service Specification allows the registration of Servlet,
+          Servlet Filters, Resources and Servlet-related listeners via the
+          Whiteboard pattern, providing an alternative approach to working
+          with servlets to the Http Service Specification. See <xref
+          linkend="service.http.whiteboard"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -203,8 +201,9 @@
     <section>
       <title>Asynchronous Processing and Event models</title>
 
-      <para>A number of specifications focus specifically on asynchronous programming
-      and executing of components, as well as the sending and receiving of events.</para>
+      <para>A number of specifications focus specifically on asynchronous
+      programming and executing of components, as well as the sending and
+      receiving of events.</para>
 
       <itemizedlist>
         <listitem>
@@ -216,25 +215,23 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Asynchronous Services</emphasis> - Asynchronous 
-          processing can be the key to scalability for large 
-          enterprise applications, especially under heavy load. OSGi Services
-          have traditionally followed the Java interface-based design
-          which by default provides synchronous semantics. The Asynchronous
-          Services specification adds an asynchronous programming model to 
-          new and existing OSGi services. See <xref linkend="service.async"/>.   
-          </para>
+          <para><emphasis>Asynchronous Services</emphasis> - Asynchronous
+          processing can be the key to scalability for large enterprise
+          applications, especially under heavy load. OSGi Services have
+          traditionally followed the Java interface-based design which by
+          default provides synchronous semantics. The Asynchronous Services
+          specification adds an asynchronous programming model to new and
+          existing OSGi services. See <xref linkend="service.async"/>.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Promises</emphasis> - Many JavaScript applications 
-          use Promises-based APIs to facilitate asynchronous processing
-          of a workflow in which executions are time consuming or subject to 
-          waiting for I/O operations. The OSGi Promises specification defines 
+          <para><emphasis>Promises</emphasis> - Many JavaScript applications
+          use Promises-based APIs to facilitate asynchronous processing of a
+          workflow in which executions are time consuming or subject to
+          waiting for I/O operations. The OSGi Promises specification defines
           a Promises API for use in OSGi applications. The Promises API is
           used by other specifications, such as the Asynchronous Services
-          specification, but can also be used independently. 
-          </para>
+          specification, but can also be used independently.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -260,16 +257,16 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>REST Management Service Specification</emphasis> - REST
-          is a powerful paradigm for accessing resources over a
-          network and is widely used in Enterprise and Cloud settings as a 
-          protocol of choice, especially since it generally avoids
-          problems with internet firewalls, from which other protocols may suffer. 
-          The REST Management Service Specification
-          provides an API to manage and control an OSGi framework using REST
-          operations. See <xref linkend="service.rest"/>.</para>
+          <para><emphasis>REST Management Service Specification</emphasis> -
+          REST is a powerful paradigm for accessing resources over a network
+          and is widely used in Enterprise and Cloud settings as a protocol of
+          choice, especially since it generally avoids problems with internet
+          firewalls, from which other protocols may suffer. The REST
+          Management Service Specification provides an API to manage and
+          control an OSGi framework using REST operations. See <xref
+          linkend="service.rest"/>.</para>
         </listitem>
-      
+
         <listitem>
           <para><emphasis>User Admin Service Specification</emphasis> - The
           User Admin Service Specification provides authorization for OSGi
@@ -851,16 +848,6 @@
               <entry><code><xref endterm="org.osgi.service.async-version"
               linkend="service.async"/></code></entry>
             </row>
-            
-            <row>
-              <entry>
-            <remark>Add Promises.</remark>
-              </entry>
-              <entry>
-              </entry>
-              <entry>
-              </entry>
-            </row>
 
             <row>
               <entry><xref linkend="util.xml"
@@ -870,6 +857,18 @@
 
               <entry><code><xref endterm="org.osgi.util.xml-version"
               linkend="util.xml"/></code></entry>
+            </row>
+
+            <row>
+              <entry><xref linkend="util.promise"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.util.promise"/></code></para><para><code><xref
+              linkend="org.osgi.util.function"/></code></para></entry>
+
+              <entry><code><xref endterm="org.osgi.util.promise-version"
+              linkend="util.promise"/></code></entry>
             </row>
           </tbody>
         </tgroup>
@@ -912,7 +911,6 @@
 
       <listitem>
         <para>Added <xref linkend="service.async"/>.</para>
-        <remark>Add Promises.</remark>
       </listitem>
 
       <listitem>
@@ -925,6 +923,10 @@
 
       <listitem>
         <para>Updated <xref linkend="service.repository"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="util.promise"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
