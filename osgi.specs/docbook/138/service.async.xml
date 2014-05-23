@@ -34,15 +34,15 @@
     cases high throughput systems can be written more simply and elegantly
     using asynchronous programming techniques.</para>
 
-    <para>The OSGi Promise API <remark>needs a ref</remark> provides powerful
-    primitives for asynchronous programming, including the ability to compose
-    flows in a functional style. There are, however, many existing services
-    that do not use the Promise API. The purpose of the Asynchronous Service
-    is to bridge the gap between these existing, primarily synchronous,
-    services in the OSGi service registry, and asynchronous programming. The
-    Asynchronous Service therefore provides a way to invoke arbitrary OSGi
-    services asynchronously, providing results and failure notifications
-    through the OSGi Promise API.</para>
+    <para>The <xref linkend="util.promise"/> provides powerful primitives for
+    asynchronous programming, including the ability to compose flows in a
+    functional style. There are, however, many existing services that do not
+    use the Promise API. The purpose of the Asynchronous Service is to bridge
+    the gap between these existing, primarily synchronous, services in the
+    OSGi service registry, and asynchronous programming. The Asynchronous
+    Service therefore provides a way to invoke arbitrary OSGi services
+    asynchronously, providing results and failure notifications through the
+    Promise API.</para>
 
     <section>
       <title>Essentials</title>
@@ -105,8 +105,8 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Promise</emphasis> - An OSGi promise, representing
-          the result of the Async Invocation.</para>
+          <para><emphasis>Promise</emphasis> - A promise, representing the
+          result of the Async Invocation.</para>
         </listitem>
       </itemizedlist>
 
@@ -128,7 +128,7 @@
 
     <para>This section is an introduction in the usage of the Async service.
     It is not the formal specification, the normative part starts at <xref
-    linkend="async_service_main_body"/>. This section leaves out some of the
+    linkend="service.async-main.body"/>. This section leaves out some of the
     details for clarity.</para>
 
     <section>
@@ -141,7 +141,7 @@
       either case the client's thread will not block, and will continue
       executing its next instructions. Clients are notified of the completion
       of their task, and whether it was successful or not, through the use of
-      the OSGi Promise API.</para>
+      the Promise API.</para>
 
       <para>Each async invocation is registered by the client making a method
       call on an <emphasis>Async Mediator</emphasis>, and then started by
@@ -199,9 +199,8 @@ public synchronized void doStuff() {
       begin, the actual execution of the underlying task may be queued until a
       thread is available to run it. If the service has been unregistered
       before the execution actually begins then the promise will be resolved
-      with a <code>ServiceException</code>. The type of the service exception
-      will be <code>ServiceException#ASYNC</code> <remark>needs a
-      ref</remark></para>
+      with a Service Exception. The type of the service exception will be
+      <code>ASYNC_ERROR</code>.</para>
     </section>
 
     <section>
@@ -285,10 +284,9 @@ public void doStuff() {
       not, however, a guarantee. A valid implementation of the Async service
       may have only one worker thread, which may be the thread currently
       running in the client code. Async invocations also have the same
-      threading model as the OSGi Promise API. This means that callbacks may
-      run on arbitrary threads, which may, or may not, be the same as the
-      client thread, or the thread which executed the asynchronous
-      work.</para>
+      threading model as the Promise API. This means that callbacks may run on
+      arbitrary threads, which may, or may not, be the same as the client
+      thread, or the thread which executed the asynchronous work.</para>
 
       <para>It is important for multi-threaded clients to note that calls to
       the mediator and async service must occur on the same thread. For
@@ -298,7 +296,7 @@ public void doStuff() {
     </section>
   </section>
 
-  <section xml:id="async_service_main_body">
+  <section xml:id="service.async-main.body">
     <title>Async Service</title>
 
     <para>The Async service is the primary interaction point between a client
@@ -354,13 +352,12 @@ public void doStuff() {
       <para>There are a variety of reasons that async invocations may be
       started correctly by the client, but then fail without running the
       asynchronous task. In any of these cases the Promise representing the
-      async invocation must fail with an
-      <code>org.osgi.framework.ServiceException</code>. This service exception
-      must be initialised with a type of <code>ServiceException#ASYNC</code>
-      <remark>needs a ref</remark>. If there is no promise representing the
-      async invocation then there is no way to notify the client of the
-      failure, therefore the service exception must be logged by the Async
-      service using all available Log Service implementations.</para>
+      async invocation must fail with a Service Exception. This service
+      exception must be initialised with a type of <code>ASYNC_ERROR</code>.
+      If there is no promise representing the async invocation then there is
+      no way to notify the client of the failure, therefore the service
+      exception must be logged by the Async service using all available Log
+      Service implementations.</para>
 
       <para>The following list of scenarios is not exhaustive, but indicates
       failure scenarios that must result in a service exception with a type of
@@ -615,7 +612,7 @@ public void doStuff() {
     </section>
   </section>
 
-  <section xml:id="service.async.security">
+  <section xml:id="service.async-security">
     <title>Security</title>
 
     <para>Asynchronous Services implementations must be careful to avoid
