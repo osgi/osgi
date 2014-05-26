@@ -2515,7 +2515,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
       </para>
 
       <programlisting>Provide-Capability: osgi.remoteserviceadmin.topology;
-    policy=promiscuous; version:Version=1.1</programlisting>
+    policy:List&lt;String&gt;=promiscuous; version:Version=1.1</programlisting>
     </section>    
   </section>
 
