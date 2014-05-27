@@ -159,6 +159,12 @@ public interface ComponentContext {
 	 * Enables the specified component name. The specified component name must
 	 * be in the same bundle as this component.
 	 * 
+	 * <p>
+	 * This method must return after changing the enabled state of the specified
+	 * component name. Any actions that result from this, such as activating or
+	 * deactivating a component configuration, must occur asynchronously to this
+	 * method call.
+	 * 
 	 * @param name The name of a component or {@code null} to indicate all
 	 *        components in the bundle.
 	 */
@@ -167,6 +173,12 @@ public interface ComponentContext {
 	/**
 	 * Disables the specified component name. The specified component name must
 	 * be in the same bundle as this component.
+	 * 
+	 * <p>
+	 * This method must return after changing the enabled state of the specified
+	 * component name. Any actions that result from this, such as activating or
+	 * deactivating a component configuration, must occur asynchronously to this
+	 * method call.
 	 * 
 	 * @param name The name of a component.
 	 */

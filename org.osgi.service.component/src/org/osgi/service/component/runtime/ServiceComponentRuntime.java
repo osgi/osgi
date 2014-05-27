@@ -124,6 +124,12 @@ public interface ServiceComponentRuntime {
 	 * If the specified component description is currently enabled, this method
 	 * has no effect.
 	 * 
+	 * <p>
+	 * This method must return after changing the enabled state of the specified
+	 * component description. Any actions that result from this, such as
+	 * activating or deactivating a component configuration, must occur
+	 * asynchronously to this method call.
+	 * 
 	 * @param description The component description to enable. Must not be
 	 *        {@code null}.
 	 * @see #isComponentEnabled(ComponentDescriptionDTO)
@@ -136,6 +142,12 @@ public interface ServiceComponentRuntime {
 	 * <p>
 	 * If the specified component description is currently disabled, this method
 	 * has no effect.
+	 * 
+	 * <p>
+	 * This method must return after changing the enabled state of the specified
+	 * component description. Any actions that result from this, such as
+	 * activating or deactivating a component configuration, must occur
+	 * asynchronously to this method call.
 	 * 
 	 * @param description The component description to disable. Must not be
 	 *        {@code null}.
