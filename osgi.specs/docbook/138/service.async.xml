@@ -434,12 +434,14 @@ public void doStuff() {
     <section>
       <title>Determining the mediated types for a service reference</title>
 
-      <para>When creating an Async mediator object for a service reference the
-      Async service must not introspect the service object to determine which
-      types are mediated, but instead it must use the types listed in the
-      objectClass property of the service reference. The mediator object must
-      be type compatible with the service object for all types listed in the
-      objectClass property.</para>
+      <para>The Async Mediator object must implement all of the types listed in 
+      the objectClass property of the service reference. For these types, the 
+      Async Mediator object must be type compatible with the service object 
+      represented by the service reference. Types that are implemented by the 
+      service object but not listed in the objectClass property of the service
+      reference may not be provided by the Async Mediator object; clients 
+      should not attempt to cast the Async Mediator object to a type that
+      is not present in the service reference objectClass property.</para>
     </section>
 
     <section>
