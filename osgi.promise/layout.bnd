@@ -1,0 +1,10 @@
+promise.specs = \
+    org.osgi.util.promise, \
+    org.osgi.util.function
+
+promise.packages = ${replace;${promise.specs};^.*$;$0.*}
+
+promise.legal = ${project.workspace}/osgi.companion/legal
+
+promise.resources = {${promise.legal}/about.html}, \
+    ${promise.legal}/LICENSE
