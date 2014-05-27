@@ -19,26 +19,27 @@
 
     <para>One of the fundamental pieces of an asynchronous programming model
     is the mechanism by which clients retrieve the result of the asynchronous
-    work. Since Java 5 there has been a
+    task. Since Java 5, there has been a
     <code>java.util.concurrent.Future</code> interface available in the Java
     class libraries, which means that it is the <emphasis>de facto</emphasis>
-    API in Java for asynchronous work result handling. Futures have some
-    limitations however, in that they have no mechanism for registering
+    API in Java for handling the result of an asynchronous task. Futures have
+    some limitations however, in that they have no mechanism for registering
     callbacks. Java 8 introduces the class
     <code>java.util.concurrent.CompletableFuture</code> which addresses this
     but the requirement of Java 8 is unsuitable for many OSGi users at this
     time.</para>
 
     <para>This specification defines a Promises API which can be used on many
-    versions of Java. The Promises API defined by this specification is
-    independent of all other OSGi specifications including the OSGi Framework
-    and thus can be easily use outside of the OSGi environment.</para>
+    versions of Java including Java 5 and Java ME CDC/Foundation. The Promises
+    API defined by this specification is independent of all other OSGi
+    specifications including the OSGi Framework and thus can be easily used
+    outside of the OSGi environment.</para>
 
     <para>A Promise object holds the result of a potentially asynchronous
-    activity. The receiver of a Promise object can register callbacks on the
+    task. The receiver of a Promise object can register callbacks on the
     Promise to be notified when the result is available or can block on the
     result becoming available. Promises can be chained together in powerful
-    ways to handle recovery</para>
+    ways to handle asynchronous work flows and recovery.</para>
 
     <section>
       <title>Essentials</title>
@@ -58,28 +59,29 @@
 
         <listitem>
           <para><emphasis>Asynchronous</emphasis> - The design supports
-          asynchronous activities.</para>
+          asynchronous tasks.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Small</emphasis> - The implementation is very
-          compact.</para>
+          <para><emphasis>Small</emphasis> - The API and implementation are
+          very compact.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Complete</emphasis> - The design provides a very
-          complete set of operations for Promise as a set of primitives which
-          can be used to address most use cases.</para>
+          complete set of operations for Promise which are primitives that can
+          be used to address most use cases.</para>
         </listitem>
 
         <listitem>
-          <para><emphasis>Monad</emphasis> - The design supports monad
+          <para><emphasis>Monad</emphasis> - The design supports monadic
           programming. See <xref linkend="util.promise-ref.monad"/>.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Resolution</emphasis> - A Promise can be resolved
-          successfully or unsuccessfully.</para>
+          successfully with a value or unsuccessfully with an
+          exception.</para>
         </listitem>
 
         <listitem>
@@ -95,18 +97,18 @@
       <itemizedlist>
         <listitem>
           <para><emphasis>Promise</emphasis> - A Promise object holds the
-          eventual result of a potential asynchronous activity.</para>
+          eventual result of a potentially asynchronous task.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Callback</emphasis> - The receiver of a Promise can
-          register callbacks on the Promise to be notified when the activity
-          is completed.</para>
+          register callbacks on the Promise to be notified when the task is
+          completed.</para>
         </listitem>
 
         <listitem>
           <para><emphasis>Deferred</emphasis> - A Deferred object represents
-          the potentially asynchronous activity and is used to complete the
+          the potentially asynchronous task and is used to resolve the
           Promise.</para>
         </listitem>
       </itemizedlist>
@@ -127,20 +129,20 @@
   <section>
     <title>Promise</title>
 
-    <para>A Promise object holds the eventual result of a potential
-    asynchronous activity. A Promise is either unresolved or resolved. An
-    unresolved Promise does not have the result of the associated activity
-    available while a resolved Promise has the result of the associated
-    activity available. The <xref
+    <para>A Promise object holds the eventual result of a potentially
+    asynchronous task. A Promise is either unresolved or resolved. An
+    <emphasis>unresolved</emphasis> Promise does not have the result of the
+    associated task available while a <emphasis>resolved</emphasis> Promise
+    has the result of the associated task available. The <xref
     linkend="org.osgi.util.promise.Promise.isDone--" xrefstyle="hyperlink"/>
-    method will return <code>true</code> of the Promise is resolved and
-    <code>false</code> otherwise.</para>
+    method will return <code>true</code> if the Promise is resolved and
+    <code>false</code> if the Promise is unresolved.</para>
 
     <para>A resolved Promise can be either resolved with a value, which means
-    the associated activity completed successfully and supplied a result, or
-    resolved with a failure, which means the associated activity completed
-    unsuccessfully and supplied an exception. The <xref
-    linkend="org.osgi.util.promise.Promise.getFailure--"
+    the associated task <emphasis>completed successfully</emphasis> and
+    supplied a result, or resolved with a failure, which means the associated
+    task <emphasis>completed unsuccessfully</emphasis> and supplied an
+    exception. The <xref linkend="org.osgi.util.promise.Promise.getFailure--"
     xrefstyle="hyperlink"/> method can be called to determine if the resolved
     Promise completed successfully with a value or unsuccessfully with a
     failure. If the <xref linkend="org.osgi.util.promise.Promise.getFailure--"
@@ -157,8 +159,8 @@
     xrefstyle="hyperlink"/> or <xref
     linkend="org.osgi.util.promise.Promise.getValue--" xrefstyle="hyperlink"/>
     will block until the Promise is resolved. In general, these two methods
-    should not be used outside of a callback. Use callbacks to be used to be
-    notified when the Promise is resolved. See <xref
+    should not be used outside of a callback. Use callbacks to be notified
+    when the Promise is resolved. See <xref
     linkend="util.promise-callbacks"/>.</para>
   </section>
 
@@ -166,7 +168,7 @@
     <title>Deferred</title>
 
     <para><xref linkend="org.osgi.util.promise.Promise"
-    xrefstyle="hyperlink"/> is an interface which can allow for many
+    xrefstyle="hyperlink"/> is an interface which can allow for many Promise
     implementations. This API contains the <xref
     linkend="org.osgi.util.promise.Deferred" xrefstyle="hyperlink"/> class
     which provides a standard Promise implementation. A Deferred object can be
@@ -180,7 +182,7 @@
 
     <programlisting>public Promise&lt;String&gt; getTimeConsumingAnswer() {
   Deferred&lt;String&gt; deferred = new Deferred&lt;String&gt;();
-  asynchronously(() -&gt; doWork(deferred));
+  asynchronously(() -&gt; doTask(deferred));
   return deferred.getPromise();
 }</programlisting>
 
@@ -191,11 +193,11 @@
     linkend="org.osgi.util.promise.Deferred.fail-Throwable-"
     xrefstyle="hyperlink"/>.</para>
 
-    <programlisting>private void doWork(Deferred&lt;String&gt; deferred) {
+    <programlisting>private void doTask(Deferred&lt;String&gt; deferred) {
   try {
     String answer;
     // compute time consuming answer
-    deferred.resolve(answer); // sucessfully resolve with value
+    deferred.resolve(answer); // successfully resolve with value
   } catch (Exception e) {
     deferred.fail(e); // unsuccessfully resolve with exception
   }
@@ -206,10 +208,9 @@
     linkend="org.osgi.util.promise.Deferred.resolveWith-Promise-"
     xrefstyle="hyperlink"/>.</para>
 
-    <programlisting>private void doWork(Deferred&lt;String&gt; deferred) {
+    <programlisting>private void doTask(Deferred&lt;String&gt; deferred) {
   try {
-    Promise&lt;String&gt; answer;
-    answer = someMethodReturningAPromise();
+    Promise&lt;String&gt; answer = someMethodReturningAPromise();
     deferred.resolveWith(answer); // resolve with another Promise
   } catch (Exception e) {
     deferred.fail(e); // unsuccessfully resolve with exception
@@ -221,7 +222,7 @@
     xrefstyle="hyperlink"/> or <xref
     linkend="org.osgi.util.promise.Deferred.fail-Throwable-"
     xrefstyle="hyperlink"/> is called when the Promise associated with the
-    Deferred an already resolved, then an Illegal State Exception will be
+    Deferred is already resolved, then an Illegal State Exception will be
     thrown.</para>
   </section>
 
@@ -229,17 +230,16 @@
     <title>Callbacks</title>
 
     <para>To be notified when a Promise has been resolved, callbacks are used.
-    The Promise API provides two forms of callbacks. The basic
+    The Promise API provides two forms of callbacks: the basic
     <code>Runnable</code> callback and the more specialized <xref
     linkend="org.osgi.util.promise.Success" xrefstyle="hyperlink"/> and <xref
     linkend="org.osgi.util.promise.Failure" xrefstyle="hyperlink"/>
     callbacks.</para>
 
-    <para>Callbacks may be registered at any time including before and after a
-    Promise has been resolved. If they are registered before the Promise is
-    resolved, they will be called later when the Promise is resolved. If they
-    are registered on an already resolved Promise, they will be called
-    immediately.</para>
+    <para>A callback may be called on a different thread than the thread which
+    registered the callback. So the callback must be thread safe but can rely
+    upon that the registration of the callback
+    <emphasis>happens-before</emphasis> the callback is called.</para>
 
     <para>Resolving a Promise <emphasis>happens-before</emphasis> any
     registered callback is called. That is, for the resolved Promise, in a
@@ -249,13 +249,14 @@
     and <xref linkend="org.osgi.util.promise.Promise.getFailure--"
     xrefstyle="hyperlink"/> must not block.</para>
 
-    <para>A callback may be called on a different thread than the thread which
-    registered the callback. So the callback must be thread safe but can rely
-    upon that the registration of the callback
-    <emphasis>happens-before</emphasis> the callback is called.</para>
+    <para>Callbacks may be registered at any time including before and after a
+    Promise has been resolved. If a callback is registered before the Promise
+    is resolved, it will be called later when the Promise is resolved. If a
+    callback is registered on an already resolved Promise, it will be called
+    right away.</para>
 
     <section>
-      <title>onResolve</title>
+      <title>Runnable</title>
 
       <para>The <xref
       linkend="org.osgi.util.promise.Promise.onResolve-Runnable-"
@@ -280,7 +281,7 @@ answer.onResolve(new Runnable() {
     </section>
 
     <section>
-      <title>then</title>
+      <title>Success and Failure</title>
 
       <para>The <xref linkend="org.osgi.util.promise.Promise.then-Success-"
       xrefstyle="hyperlink"/> and <xref
@@ -315,8 +316,9 @@ answer.then(p -&gt; processResult(p.getValue()), p -&gt; handleFailure(p.getFail
     was called. The returned Promise must be resolved when the original
     Promise is resolved after the specified Success or Failure callback is
     executed. The result of the executed callback must be used to resolve the
-    returned Promise. Multiple calls to the <code>then</code> methods can be
-    used to create a chain of promises which are resolved in sequence.</para>
+    returned Promise. A sequence of calls to the <code>then</code> methods can
+    be used to create a chain of promises which are resolved in
+    sequence.</para>
 
     <para>If the original Promise is successfully resolved, the Success
     callback is executed and the Promise returned by the Success callback, if
@@ -328,14 +330,28 @@ answer.then(p -&gt; processResult(p.getValue()), p -&gt; handleFailure(p.getFail
     <para>In the following example, a Promise which will supply the name of
     the file to download is chained to a Promise which will return a mirror
     URL to use to download the file which is then further chained to a Promise
-    which will return an InputStream from which to read the download
+    which will return an Input Stream from which to read the download
     file.</para>
+
+    <programlisting>Promise&lt;String&gt; name = getDownloadName();
+Promise&lt;URL&gt; mirror = name.then(p -&gt; getMirror(p.getValue()));
+Promise&lt;InputStream&gt; in = mirror.then(p -&gt; p.getValue().openStream());</programlisting>
+
+    <para>Since we probably do not need the intermediate Promises, we can
+    collapse the chain into a single statement.</para>
+
+    <programlisting>Promise&lt;InputStream&gt; in = getDownloadName().then(p -&gt; getMirror(p.getValue()))
+                                           .then(p -&gt; p.getValue().openStream());</programlisting>
+
+    <para>The chain of Promises will also propagate any exceptions that occur
+    to resolve the last Promise in the chain which means we do not need to do
+    any exception handling in the intermediate tasks.</para>
   </section>
 
   <section xml:id="util.promise-monad.programming">
-    <title>Monad Programming</title>
+    <title>Monad</title>
 
-    <para>The Promise API support monad programming<xref
+    <para>The Promise API supports monadic programming. See <xref
     linkend="util.promise-ref.monad"/>. The <xref
     linkend="org.osgi.util.promise.Promise" xrefstyle="hyperlink"/> interface
     defines a number of interesting methods including <code>map</code>,
@@ -392,8 +408,8 @@ answer.then(p -&gt; processResult(p.getValue()), p -&gt; handleFailure(p.getFail
 
       <listitem>
         <para><xref linkend="org.osgi.util.promise.Promise.recover-Function-"
-        xrefstyle="hyperlink"/> - Recover from a failure of the Promise with a
-        recovery value.</para>
+        xrefstyle="hyperlink"/> - Recover from the unsuccessful resolution of
+        the Promise with a recovery value.</para>
 
         <para>If the Promise is successfully resolved, the function argument
         is not called and the Promise returned by the recover method is
@@ -412,8 +428,8 @@ answer.then(p -&gt; processResult(p.getValue()), p -&gt; handleFailure(p.getFail
       <listitem>
         <para><xref
         linkend="org.osgi.util.promise.Promise.recoverWith-Function-"
-        xrefstyle="hyperlink"/> - Recover from a failure of the Promise with a
-        recovery Promise.</para>
+        xrefstyle="hyperlink"/> - Recover from the unsuccessful resolution of
+        the Promise with a recovery Promise.</para>
 
         <para>If the Promise is successfully resolved, the function argument
         is not called and the Promise returned by the recover method is
@@ -432,8 +448,8 @@ answer.then(p -&gt; processResult(p.getValue()), p -&gt; handleFailure(p.getFail
       <listitem>
         <para><xref
         linkend="org.osgi.util.promise.Promise.fallbackTo-Promise-"
-        xrefstyle="hyperlink"/> - Fall back to the value of the fallback
-        Promise if the Promise fails.</para>
+        xrefstyle="hyperlink"/> - Fall back to the value of the Promise
+        argument if the Promise unsuccessfully resolves.</para>
 
         <para>If the Promise is successfully resolved, the Promise argument is
         not used and the Promise returned by the fallbackTo method is resolved
@@ -453,21 +469,22 @@ answer.then(p -&gt; processResult(p.getValue()), p -&gt; handleFailure(p.getFail
     that are processed in sequence. For example, in the following chain, the
     value of the original promise, once resolved, is filtered for acceptable
     values. If the filter says the value is not acceptable, the recover method
-    will be used to replace it with a default value. With these chains, one
-    can write powerful programs without the need to resort to complex
-    if/then/else logic.</para>
+    will be used to replace it with a default value.</para>
 
-    <programlisting>promise.filter(v -&gt; isAcceptableValue(v)).recover(p -&gt; getDefaultValue())</programlisting>
+    <programlisting>return promise.filter(v -&gt; isValueOk(v)).recover(p -&gt; getDefaultValue())</programlisting>
+
+    <para>With these chains, one can write powerful programs without the need
+    to resort to complex if/then/else and try/catch logic.</para>
   </section>
 
   <section>
     <title>Functional Interfaces</title>
 
-    <para>In Java 8, the concept of Functional Interfaces is introduced <xref
-    linkend="util.promise-ref.functional.interfaces"/>. Functional interfaces
-    are interfaces with a single abstract method and instances of functional
-    interfaces can be created with lambda expressions, method references, or
-    constructor references. Many methods on <xref
+    <para>In Java 8, the concept of Functional Interfaces is introduced. See
+    <xref linkend="util.promise-ref.functional.interfaces"/>. Functional
+    interfaces are interfaces with a single abstract method. Instances of
+    functional interfaces can be created with lambda expressions, method
+    references, or constructor references. Many methods on <xref
     linkend="org.osgi.util.promise.Promise" xrefstyle="hyperlink"/> take
     functional interface arguments and so are suitable for use with lambda
     expressions and method references in Java 8.</para>
@@ -478,7 +495,7 @@ answer.then(p -&gt; processResult(p.getValue()), p -&gt; handleFailure(p.getFail
     These are equivalent to functional interfaces which are part of the
     <code>java.util.function</code> package introduced in Java 8. Since OSGi
     intends the Promise API to be usable on versions of Java prior to Java 8,
-    we define our own interfaces. In the future, if Java 8, or later, becomes
+    we define our own interfaces. In the future, if Java 8 or later, becomes
     the base supported Java level for this specification, OSGi can update the
     <xref linkend="org.osgi.util.promise.Promise" xrefstyle="hyperlink"/>
     interface to add default methods which accept the
@@ -490,11 +507,11 @@ answer.then(p -&gt; processResult(p.getValue()), p -&gt; handleFailure(p.getFail
     <title>Promises Class</title>
 
     <para>The <xref linkend="org.osgi.util.promise.Promises"
-    xrefstyle="hyperlink"/> class provides several useful methods when working
-    with Promises.</para>
+    xrefstyle="hyperlink"/> class provides several useful static methods when
+    working with Promises.</para>
 
     <para>Often, you may need to create an already resolved Promise to return
-    or chain with other Promise. The <xref
+    or chain with another Promise. The <xref
     linkend="org.osgi.util.promise.Promises.resolved-T-"
     xrefstyle="hyperlink"/> method can be used to create a new Promise already
     successfully resolved with the specified value. The <xref
@@ -538,8 +555,8 @@ answer.then(p -&gt; processResult(p.getValue()), p -&gt; handleFailure(p.getFail
       <bibliomixed><title>ECMAScript 6
       drafts</title>http://wiki.ecmascript.org/doku.php?id=harmony:specification_drafts</bibliomixed>
 
-      <bibliomixed xml:id="util.promise-ref.monad"><title>Monad
-      Programming</title>https://en.wikipedia.org/wiki/Monad_%28functional_programming%29</bibliomixed>
+      <bibliomixed
+      xml:id="util.promise-ref.monad"><title>Monad</title>https://en.wikipedia.org/wiki/Monad_%28functional_programming%29</bibliomixed>
 
       <bibliomixed
       xml:id="util.promise-ref.functional.interfaces"><title>Function
