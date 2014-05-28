@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="705" revision="$Id$" version="5" xml:id="util.promise"
+<chapter label="705"
+         revision="$Id$"
+         version="5" xml:id="util.promise"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
          xmlns:xi="http://www.w3.org/2001/XInclude"
@@ -23,7 +25,7 @@
     <code>java.util.concurrent.Future</code> interface available in the Java
     class libraries, which means that it is the <emphasis>de facto</emphasis>
     API in Java for handling the result of an asynchronous task. Futures have
-    some limitations however, in that they have no mechanism for registering
+    some limitations however in that they have no mechanism for registering
     callbacks. Java 8 introduces the class
     <code>java.util.concurrent.CompletableFuture</code> which addresses this
     but the requirement of Java 8 is unsuitable for many OSGi users at this
@@ -40,6 +42,13 @@
     Promise to be notified when the result is available or can block on the
     result becoming available. Promises can be chained together in powerful
     ways to handle asynchronous work flows and recovery.</para>
+
+    <para>Promises capture the effects of latency and errors by making these
+    explicit in the API signatures. Latency is represented by callbacks which
+    will eventually be called. Errors are represented by the failure member.
+    In essence, this is what sets Promises apart from things such as RPC calls
+    where such effects are not explicitly captured but rather attempted to be
+    transparently handled.</para>
 
     <section>
       <title>Essentials</title>
