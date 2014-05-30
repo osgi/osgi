@@ -18,5 +18,8 @@ apply from: cnf.file('gradle/BndPlugin.gradle')
 
 /* Configure the subprojects */
 subprojects {
-  plugins.apply BndPlugin
+  def bndProject = bndWorkspace.getProject(name)
+  if (bndProject != null) {
+    plugins.apply BndPlugin
+  }
 }
