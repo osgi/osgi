@@ -105,10 +105,6 @@ public class CTPackaging extends Packaging implements AnalyzerPlugin {
 		else
 			analyzer.error("Cannot find bnd's jar file in a repository ");
 
-		List<Container> extra = pb.getProject().getBundles(Strategy.HIGHEST,
-				"com.springsource.junit", null);
-		flatten(analyzer, null, jar, extra, true, fileToPath);
-
 		StringBuilder script = new StringBuilder();
 		script.append("java -jar jar/bnd.jar runtests --title ");
 		script.append(pb.getProject());
