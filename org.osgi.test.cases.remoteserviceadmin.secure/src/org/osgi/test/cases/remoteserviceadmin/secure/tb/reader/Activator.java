@@ -96,7 +96,7 @@ public class Activator implements BundleActivator {
 			if (!isExportingFramework) {
 				Assert.assertTrue(icoll.size() > 0);
 			} else {
-				Assert.assertTrue(coll.size() == 0);
+				Assert.assertTrue(icoll.size() == 0);
 			}
 		} finally {
 			// Make sure the service instance of the RSA can be closed by the RSA Service Factory
