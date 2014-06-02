@@ -2202,6 +2202,17 @@ resource           ::= symbolic-name ( ';' attribute )*</programlisting>
       used to satisfy the requirement <code>S1</code><phrase
       role="symbol">→</phrase><code>X</code>.</para>
     </section>
+    <section>
+      <title>System Capabilities</title>
+      <para>The <code>osgi.ee</code> and <code>osgi.native</code> namespaces are used
+      by the System Bundle to describe capabilities for the Java execution environment and
+      the native environment.  These capabilities must only be provided by the System
+      Bundle.  A Subsystems implementation must allow access to the <code>osgi.ee</code>
+      and <code>osgi.native</code> capabilities provided by the System Bundle to every
+      Subsystem installed.  This includes scoped subsystems which may or may not already
+      have an import sharing policy configured to import these namespaces from the System
+      Bundle.</para>
+    </section>
   </section>
 
   <section xml:id="i3345965">
