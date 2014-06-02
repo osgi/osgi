@@ -3,14 +3,13 @@
  *
  * Called by build.gradle in the root of the workspace to configure the project set.
  *
- * Depends on bnd_jar property from gradle.properties.
- * Depends on bndWorkspace and cnf properties set by settings.gradle.
+ * Depends on bndURI, bndWorkspace and cnf properties set by settings.gradle.
  */
 
 /* Add bnd as a script dependency */
 buildscript {
   dependencies {
-    classpath files(rootProject.file(bnd_jar))
+    classpath files(bndURI)
   }
 }
 
@@ -19,5 +18,8 @@ apply from: cnf.file('gradle/BndPlugin.gradle')
 
 /* Configure the subprojects */
 subprojects {
-  plugins.apply BndPlugin
+  def bndProject = bndWorkspace.getProject(name)
+  if (bndProject != null) {
+    plugins.apply BndPlugin
+  }
 }
