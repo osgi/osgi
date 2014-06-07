@@ -25,7 +25,7 @@ import org.osgi.util.function.Predicate;
  * A Promise of a value.
  * 
  * <p>
- * A Promise represents a future value. It handles the interactions to for
+ * A Promise represents a future value. It handles the interactions for
  * asynchronous processing. A {@link Deferred} object can be used to create a
  * Promise and later resolve the Promise. A Promise is used by the caller of an
  * asynchronous function to get the result or handle the error. The caller can
