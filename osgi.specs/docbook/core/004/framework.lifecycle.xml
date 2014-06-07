@@ -538,9 +538,13 @@
               These capabilities will be provided from the system bundle. If
               this property is not set, the framework must calculate this
               header based on the environment. It should at least set the
-              following namespace:</para><itemizedlist>
+              following namespaces:</para><itemizedlist>
                   <listitem>
                     <para><code>osgi.ee</code></para>
+                  </listitem>
+
+                  <listitem>
+                    <para><code>osgi.native</code></para>
                   </listitem>
                 </itemizedlist><para>Deployers should use the
               <code>org.osgi.framework.system.capabilities.extra</code>
