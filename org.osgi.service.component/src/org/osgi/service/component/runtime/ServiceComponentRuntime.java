@@ -22,6 +22,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.service.component.runtime.dto.ComponentConfigurationDTO;
 import org.osgi.service.component.runtime.dto.ComponentDescriptionDTO;
+import org.osgi.util.promise.Promise;
 
 /**
  * The {@code ServiceComponentRuntime} service represents the Declarative
@@ -132,9 +133,12 @@ public interface ServiceComponentRuntime {
 	 * 
 	 * @param description The component description to enable. Must not be
 	 *        {@code null}.
+	 * @return A promise that will be resolved when the actions that result from
+	 *         changing the enabled state of the specified component have
+	 *         completed.
 	 * @see #isComponentEnabled(ComponentDescriptionDTO)
 	 */
-	void enableComponent(ComponentDescriptionDTO description);
+	Promise<Void> enableComponent(ComponentDescriptionDTO description);
 
 	/**
 	 * Disables the specified component description.
@@ -151,7 +155,10 @@ public interface ServiceComponentRuntime {
 	 * 
 	 * @param description The component description to disable. Must not be
 	 *        {@code null}.
+	 * @return A promise that will be resolved when the actions that result from
+	 *         changing the enabled state of the specified component have
+	 *         completed.
 	 * @see #isComponentEnabled(ComponentDescriptionDTO)
 	 */
-	void disableComponent(ComponentDescriptionDTO description);
+	Promise<Void> disableComponent(ComponentDescriptionDTO description);
 }
