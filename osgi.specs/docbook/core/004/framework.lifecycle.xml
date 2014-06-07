@@ -723,6 +723,22 @@
             </row>
 
             <row>
+              <entry><code>PowerPC-64</code></entry>
+
+              <entry><code>ppc64</code></entry>
+
+              <entry>IBM Power PC 64-bit Big Endian mode</entry>
+            </row>
+
+            <row>
+              <entry><code>PowerPC-64-LE</code></entry>
+
+              <entry><code>ppc64le</code></entry>
+
+              <entry>IBM Power PC 64-bit Little Endian mode</entry>
+            </row>
+
+            <row>
               <entry><code>Sh4</code></entry>
 
               <entry/>
