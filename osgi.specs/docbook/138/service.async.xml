@@ -643,6 +643,8 @@ public void doStuff() {
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.async.xml"/>
 
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.async.delegate.xml"/>
+
   <section>
     <title>References</title>
 
