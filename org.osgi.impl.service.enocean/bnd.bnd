@@ -15,5 +15,7 @@ Private-Package: ${p}.*;-split-package:=first,\
 -buildpath: ee.j2se;version=${javac.compliance},\
 	osgi.core;version=4.2,\
 	osgi.cmpn;version=4.2,\
-	org.osgi.service.enocean;version=latest
+	org.osgi.service.enocean;version=latest,\
+	org.osgi.test.cases.enoceansimulation;version=latest
+
 -dsannotations: *

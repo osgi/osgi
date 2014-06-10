@@ -6,7 +6,6 @@ import java.io.OutputStream;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanHost;
-import org.osgi.service.enocean.EnOceanSerialInOut;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.test.cases.enocean.descriptions.EnOceanChannelDescription_TMP_00;
 import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescription_A5_02_01;
@@ -16,9 +15,8 @@ import org.osgi.test.cases.enocean.utils.EventListener;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
 import org.osgi.test.cases.enocean.utils.Utils;
+import org.osgi.test.cases.enoceansimulation.EnOceanSerialInOut;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-
-
 
 public abstract class EnOceanTestCase extends DefaultTestBundleControl {
 

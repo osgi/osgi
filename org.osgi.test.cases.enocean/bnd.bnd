@@ -9,18 +9,19 @@ Import-Package: ${-signaturetest}, *
 
 Include-Resource: 
 
--buildpath							= \
-	org.osgi.service.enocean;		version=project	, \
-    org.osgi.test.support;          version=project , \
-	osgi.core;						version=4.0.1		, \
-	osgi.cmpn;						version=4.2		, \
-	ee.foundation;					version=1.1		, \
-	${junit}
+-buildpath: org.osgi.service.enocean;version=project,\
+	org.osgi.test.support;version=project,\
+	osgi.core;version=4.0.1,\
+	osgi.cmpn;version=4.2,\
+	ee.foundation;version=1.1,\
+	${junit},\
+	org.osgi.test.cases.enoceansimulation;version=latest
 	
 -runbundles: org.osgi.impl.service.log;version=latest,\
 	org.osgi.impl.service.cm;version=latest,\
 	org.osgi.impl.service.event;version=latest,\
-	org.osgi.impl.service.enocean;version=latest
+	org.osgi.impl.service.enocean;version=latest,\
+	org.osgi.test.cases.enoceansimulation;version=latest
 
 -runproperties: comm.rxtx.disable=true, \
 	org.osgi.service.enocean.host.path=:testcase:, \

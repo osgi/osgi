@@ -27,7 +27,7 @@ import org.osgi.impl.service.enocean.basedriver.esp.EspPacket;
 import org.osgi.impl.service.enocean.utils.EnOceanHostImplException;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
-import org.osgi.service.enocean.EnOceanSerialInOut;
+import org.osgi.test.cases.enoceansimulation.EnOceanSerialInOut;
 
 public class EnOceanHostTestImpl extends EnOceanHostImpl implements EnOceanSerialInOut {
 

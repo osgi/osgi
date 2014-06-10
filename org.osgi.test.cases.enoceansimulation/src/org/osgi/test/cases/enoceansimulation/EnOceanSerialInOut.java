@@ -1,4 +1,5 @@
-package org.osgi.service.enocean;
+
+package org.osgi.test.cases.enoceansimulation;
 
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -20,8 +21,8 @@ import java.io.OutputStream;
  */
 
 /**
- * This class is intended to provide in/out methods from serial to emulate
- * an EnOcean dongle during integration tests.
+ * This class is intended to provide in/out methods from serial to emulate an
+ * EnOcean dongle during integration tests.
  * 
  * @author $Id$
  */
