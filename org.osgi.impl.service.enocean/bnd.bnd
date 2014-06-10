@@ -16,6 +16,6 @@ Private-Package: ${p}.*;-split-package:=first,\
 	osgi.core;version=4.2,\
 	osgi.cmpn;version=4.2,\
 	org.osgi.service.enocean;version=latest,\
-	org.osgi.test.cases.enoceansimulation;version=latest
+	org.osgi.test.cases.enoceansimulation;version=project
 
 -dsannotations: *
