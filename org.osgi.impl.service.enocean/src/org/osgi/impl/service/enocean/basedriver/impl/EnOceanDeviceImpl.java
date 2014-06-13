@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.enocean.basedriver.impl;
 
 import java.util.Map;
@@ -28,8 +29,9 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 
 	/**
 	 * An {@link EnOceanDeviceImpl} creation is directly related to its
-	 * registration within the framework.
-	 * Such a Device should only be registered after a proper teach-in procedure, so that the RORG, FIUNC and TYPE are already known.  
+	 * registration within the framework. Such a Device should only be
+	 * registered after a proper teach-in procedure, so that the RORG, FIUNC and
+	 * TYPE are already known.
 	 */
 	public EnOceanDeviceImpl(BundleContext bc, EnOceanBaseDriver driver, int uid, int rorg) {
 		this.bc = bc;
@@ -181,7 +183,7 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	public void setLastMessage(EnOceanMessage msg) {
 		lastMessage = msg;
 	}
-	
+
 	/**
 	 * Safe function to get an integer property
 	 * 
@@ -213,5 +215,5 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 			Logger.e(TAG, "attempt to unregister a device twice : " + e.getMessage());
 		}
 	}
-	
+
 }

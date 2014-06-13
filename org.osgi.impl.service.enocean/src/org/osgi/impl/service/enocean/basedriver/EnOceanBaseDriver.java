@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.enocean.basedriver;
 
 import java.util.Hashtable;
@@ -44,17 +45,16 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	private ServiceRegistration	eventHandlerRegistration;
 	private EnOceanHostImpl		host;
 
-	public static final String	TAG	= "EnOceanBaseDriver";
+	public static final String	TAG							= "EnOceanBaseDriver";
 
 	public static final String	CONFIG_EXPORTED_PID_TABLE	= "org.enocean.ExportedDeviceTable";
 
 	/**
 	 * The {@link EnOceanBaseDriver} constructor initiates the connection
-	 * towards an {@link EnOceanHostImpl} device. Then it registers itself as
-	 * a service listener for any {@link EnOceanDevice},
-	 * {@link EnOceanMessageSet}, {@link EnOceanRPCDescriptionSet},
-	 * {@link EnOceanChannelDescriptionSet} that would be registered in the
-	 * framework.
+	 * towards an {@link EnOceanHostImpl} device. Then it registers itself as a
+	 * service listener for any {@link EnOceanDevice}, {@link EnOceanMessageSet}
+	 * , {@link EnOceanRPCDescriptionSet}, {@link EnOceanChannelDescriptionSet}
+	 * that would be registered in the framework.
 	 * 
 	 */
 	public EnOceanBaseDriver(BundleContext bc) {
@@ -168,7 +168,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 				try {
 					if (chipId == null && hasExport != null) {
 						host.allocChipID(servicePid);
-					}					
+					}
 				} catch (Exception e) {
 					System.out.println("exception: " + e.getMessage());
 				}
@@ -178,7 +178,6 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 			return service;
 		}
 	}
-
 
 	public void modifiedService(ServiceReference arg0, Object service) {
 		// TODO
@@ -192,7 +191,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		if (event.getTopic().equals(EnOceanEvent.TOPIC_MSG_RECEIVED)) {
 			if (event.getProperty(EnOceanEvent.PROPERTY_EXPORTED) != null) {
 				EnOceanMessage msg = (EnOceanMessage) event.getProperty(EnOceanEvent.PROPERTY_MESSAGE);
-				if(msg != null) {
+				if (msg != null) {
 					EspPacket pkt = new EspPacket(msg);
 					System.out.println("Writing packet : " + Utils.bytesToHexString(pkt.serialize()));
 					host.send(pkt.serialize());

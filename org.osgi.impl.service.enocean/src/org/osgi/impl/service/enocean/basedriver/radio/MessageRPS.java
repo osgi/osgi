@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.impl.service.enocean.basedriver.radio;
 
 /**
@@ -32,7 +31,7 @@ public class MessageRPS extends Message {
 	}
 
 	/**
-	 * @return  true if the message teach-in embeds profile & manufacturer info.
+	 * @return true if the message teach-in embeds profile & manufacturer info.
 	 */
 	public boolean hasTeachInInfo() {
 		return true;
@@ -44,14 +43,14 @@ public class MessageRPS extends Message {
 	public int teachInFunc() {
 		return -1;
 	}
-	
+
 	/**
 	 * @return a fake TYPE
 	 */
 	public int teachInType() {
 		return -1;
 	}
-	
+
 	/**
 	 * @return a fake MANUF
 	 */

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.impl.service.enocean.basedriver.esp;
 
 import org.osgi.impl.service.enocean.utils.Utils;

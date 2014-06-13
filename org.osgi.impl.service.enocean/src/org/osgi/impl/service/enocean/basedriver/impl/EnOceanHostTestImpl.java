@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.impl.service.enocean.basedriver.impl;
 
 import java.io.ByteArrayInputStream;

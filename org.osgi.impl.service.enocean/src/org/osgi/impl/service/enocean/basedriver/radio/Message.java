@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.impl.service.enocean.basedriver.radio;
 
 import java.util.ArrayList;
@@ -22,27 +21,26 @@ import java.util.List;
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanMessage;
 
-
 public abstract class Message implements EnOceanMessage {
 
-	public static final byte	MESSAGE_4BS	= (byte) 0xA5;
-	public static final byte	MESSAGE_RPS	= (byte) 0xF6;
-	public static final byte	MESSAGE_1BS	= (byte) 0xD5;
-	public static final byte	MESSAGE_VLD	= (byte) 0xD2;
+	public static final byte	MESSAGE_4BS		= (byte) 0xA5;
+	public static final byte	MESSAGE_RPS		= (byte) 0xF6;
+	public static final byte	MESSAGE_1BS		= (byte) 0xD5;
+	public static final byte	MESSAGE_VLD		= (byte) 0xD2;
 	public static final byte	MESSAGE_SYS_EX	= (byte) 0xC5;
 
-	private byte	RORG;
-	private byte[]	data;
-	private byte[]	senderId;
-	private byte	status;
-	private byte			subTelNum;
-	private byte[]			destinationId;
-	private byte			dbm;
-	private byte			securityLevel;
-	private byte			func;
-	private byte			type;
+	private byte				RORG;
+	private byte[]				data;
+	private byte[]				senderId;
+	private byte				status;
+	private byte				subTelNum;
+	private byte[]				destinationId;
+	private byte				dbm;
+	private byte				securityLevel;
+	private byte				func;
+	private byte				type;
 
-	private byte[]			messageBytes;
+	private byte[]				messageBytes;
 
 	public Message() {
 	}

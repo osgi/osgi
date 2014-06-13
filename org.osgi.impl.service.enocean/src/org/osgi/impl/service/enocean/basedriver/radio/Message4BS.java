@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-
 package org.osgi.impl.service.enocean.basedriver.radio;
-
 
 /**
  * Prototype of a 4BS telegram
@@ -41,7 +39,7 @@ public class Message4BS extends Message {
 	}
 
 	/**
-	 * @return  true if the message teach-in embeds profile & manufacturer info.
+	 * @return true if the message teach-in embeds profile & manufacturer info.
 	 */
 	public boolean hasTeachInInfo() {
 		return (getPayloadBytes()[3] & 0x80) != 0;
@@ -53,7 +51,7 @@ public class Message4BS extends Message {
 	public int teachInFunc() {
 		return (getPayloadBytes()[0] >> 2) & 0xff;
 	}
-	
+
 	/**
 	 * @return the TYPE in the case of a teach-in message with information.
 	 */
@@ -62,7 +60,7 @@ public class Message4BS extends Message {
 		byte b1 = getPayloadBytes()[1];
 		return (((b0 & 0x03) << 5) & 0xff) | ((((b1 >> 3)) & 0xff));
 	}
-	
+
 	/**
 	 * @return the MANUF in the case of a teach-in message with information.
 	 */

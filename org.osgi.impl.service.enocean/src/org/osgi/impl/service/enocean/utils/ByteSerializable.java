@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.impl.service.enocean.utils;
 
 public interface ByteSerializable {

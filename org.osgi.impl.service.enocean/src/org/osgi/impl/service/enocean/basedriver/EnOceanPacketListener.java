@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-
 package org.osgi.impl.service.enocean.basedriver;
-
 
 public interface EnOceanPacketListener {
 

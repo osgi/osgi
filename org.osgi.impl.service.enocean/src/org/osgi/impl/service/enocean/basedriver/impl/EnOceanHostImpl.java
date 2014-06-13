@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.impl.service.enocean.basedriver.impl;
 
 import java.io.IOException;
@@ -39,15 +38,15 @@ import org.osgi.service.enocean.EnOceanHost;
 
 public class EnOceanHostImpl extends Thread implements EnOceanHost {
 
-	protected static final String	TAG							= "EnOceanHostImpl";
-	protected static final byte		ENOCEAN_ESP_FRAME_START		= 0x55;
+	protected static final String	TAG						= "EnOceanHostImpl";
+	protected static final byte		ENOCEAN_ESP_FRAME_START	= 0x55;
 	protected String				donglePath;
 	protected InputStream			inputStream;
 	protected OutputStream			outputStream;
 
 	private static final int		MAX_ALLOCATED_CHIP_ID	= 127;
-	private ArrayList			listeners;
-	private int					baseId;
+	private ArrayList				listeners;
+	private int						baseId;
 
 	protected boolean				isRunning;
 	private ChipPIDMapping			chipIdPidMap;
@@ -90,7 +89,6 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 			listeners.add(packetListener);
 		}
 	}
-
 
 	public void reset() throws EnOceanException {
 		// TODO Auto-generated method stub

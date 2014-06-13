@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.impl.service.enocean.basedriver.radio;
 
 import java.util.ArrayList;
@@ -29,7 +28,7 @@ import org.osgi.service.enocean.EnOceanRPC;
  */
 public class MessageSYS_EX extends Message {
 
-	private int	subTelNum;
+	private int		subTelNum;
 	private List	subTelegrams	= new ArrayList();
 
 	public int getRorg() {
@@ -58,7 +57,7 @@ public class MessageSYS_EX extends Message {
 		// Generate first telegram
 		byte[] data_0 = new byte[] {
 				(byte) (len >> 1),
-				(byte)(((len & 0x01) << 7) | ((manuf & 0x7f0) >> 4)),
+				(byte) (((len & 0x01) << 7) | ((manuf & 0x7f0) >> 4)),
 				(byte) (((manuf & 0x0f) << 4) | ((func & 0xf00) >> 8)),
 				(byte) (func & 0xff)
 		};

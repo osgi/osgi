@@ -9,8 +9,7 @@ Export-Package: org.osgi.service.enocean.*;-split-package:=first;provide:=true
 	
 Bundle-RequiredExecutionEnvironment = J2SE-1.4 
 
-Private-Package: ${p}.*;-split-package:=first,\
-	org.osgi.impl.service.enocean
+Private-Package: ${p}.*;-split-package:=first
 
 -buildpath: ee.j2se;version=${javac.compliance},\
 	osgi.core;version=4.2,\

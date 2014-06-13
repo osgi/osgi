@@ -14,20 +14,30 @@
  * limitations under the License.
  */
 
-
 package org.osgi.impl.service.enocean.utils;
 
-public class PortInUseException extends Exception
-{
-	public String	currentOwner;
+/**
+ * Port in use exception.
+ */
+public class PortInUseException extends Exception {
 
-	PortInUseException(String paramString)
-	{
+	/** generated */
+	private static final long	serialVersionUID	= -8943051586981003647L;
+
+	/**
+	 * This exception's current owner.
+	 */
+	public String				currentOwner;
+
+	PortInUseException(String paramString) {
 		super(paramString);
 		this.currentOwner = paramString;
 	}
 
-	public PortInUseException()
-	{
+	/**
+	 * Constructor.
+	 */
+	public PortInUseException() {
+
 	}
 }
