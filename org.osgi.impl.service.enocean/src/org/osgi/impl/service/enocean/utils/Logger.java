@@ -16,6 +16,9 @@
 
 package org.osgi.impl.service.enocean.utils;
 
+/**
+ * 
+ */
 public final class Logger {
 
 	static final boolean	DEBUG	= Boolean.getBoolean("org.osgi.service.enocean.loglevel.debug");
@@ -23,23 +26,43 @@ public final class Logger {
 	static final boolean	INFO	= Boolean.getBoolean("org.osgi.service.enocean.loglevel.info");
 	static final boolean	ERROR	= Boolean.getBoolean("org.osgi.service.enocean.loglevel.error");
 
+	/**
+	 * @param tag
+	 * @param msg
+	 */
 	public static final void d(String tag, String msg) {
-		if (DEBUG)
+		if (DEBUG) {
 			System.out.println("[" + tag + "] " + msg);
+		}
 	}
 
+	/**
+	 * @param tag
+	 * @param msg
+	 */
 	public static final void i(String tag, String msg) {
-		if (INFO)
+		if (INFO) {
 			System.out.println("[" + tag + "] " + msg);
+		}
 	}
 
+	/**
+	 * @param tag
+	 * @param msg
+	 */
 	public static final void w(String tag, String msg) {
-		if (WARN)
+		if (WARN) {
 			System.out.println("[" + tag + "] " + msg);
+		}
 	}
 
+	/**
+	 * @param tag
+	 * @param msg
+	 */
 	public static final void e(String tag, String msg) {
-		if (ERROR)
+		if (ERROR) {
 			System.out.println("[" + tag + "] " + msg);
+		}
 	}
 }

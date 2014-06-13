@@ -16,9 +16,12 @@ import org.osgi.service.enocean.EnOceanHandler;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.EnOceanRPC;
 
+/**
+ *
+ */
 public class EnOceanDeviceImpl implements EnOceanDevice {
 
-	public static final String	TAG	= EnOceanDeviceImpl.class.getName();
+	private static final String	TAG	= EnOceanDeviceImpl.class.getName();
 	private BundleContext		bc;
 	private ServiceRegistration	sReg;
 
@@ -32,25 +35,38 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	 * registration within the framework. Such a Device should only be
 	 * registered after a proper teach-in procedure, so that the RORG, FIUNC and
 	 * TYPE are already known.
+	 * 
+	 * @param bundleContext
+	 * @param driver
+	 * @param uid
+	 * @param rorg
 	 */
-	public EnOceanDeviceImpl(BundleContext bc, EnOceanBaseDriver driver, int uid, int rorg) {
-		this.bc = bc;
+	public EnOceanDeviceImpl(BundleContext bundleContext, EnOceanBaseDriver driver, int uid, int rorg) {
+		this.bc = bundleContext;
 		this.driver = driver;
 		this.chip_id = uid;
 		props = new Properties();
 		props.put(Constants.DEVICE_CATEGORY, EnOceanDevice.DEVICE_CATEGORY);
 		props.put(EnOceanDevice.CHIP_ID, String.valueOf(uid));
 		props.put(EnOceanDevice.RORG, String.valueOf(rorg));
-		sReg = bc.registerService(EnOceanDevice.class.getName(), this, props);
+		sReg = this.bc.registerService(EnOceanDevice.class.getName(), this, props);
 		Logger.d(TAG, "registering EnOceanDevice : " + Utils.bytesToHexString(Utils.intTo4Bytes(uid)));
 		/* Initializations */
 		lastMessage = null;
 	}
 
+	/**
+	 * @return the base driver's properties.
+	 */
 	public Properties getServiceProperties() {
 		return props;
 	}
 
+	/**
+	 * @param func
+	 * @param type
+	 * @param manuf
+	 */
 	public void registerProfile(int func, int type, int manuf) {
 		props.put(EnOceanDevice.FUNC, String.valueOf(func));
 		props.put(EnOceanDevice.TYPE, String.valueOf(type));
@@ -83,6 +99,9 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 
 	}
 
+	/**
+	 * @return the last telegram as an EnOceanMessage.
+	 */
 	public EnOceanMessage getLastTelegram() {
 		// TODO Auto-generated method stub
 		return null;
@@ -93,20 +112,34 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		return null;
 	}
 
+	/**
+	 * @return the RPC.
+	 */
 	public Map getRPC() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * @return the name.
+	 */
 	public String getName() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+	 * @param message
+	 * @param handler
+	 * @throws EnOceanException
+	 */
 	public void send(EnOceanMessage message, EnOceanHandler handler) throws EnOceanException {
 		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * @return the las message as an EnOceanMessage.
+	 */
 	public EnOceanMessage getLastMessage() {
 		return lastMessage;
 	}
@@ -116,6 +149,9 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		return null;
 	}
 
+	/**
+	 * @return the profile name.
+	 */
 	public String getProfileName() {
 		// TODO Auto-generated method stub
 		return null;
@@ -126,21 +162,33 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		return 0;
 	}
 
+	/**
+	 * @param name
+	 */
 	public void setName(String name) {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * @param profileName
+	 */
 	public void setProfileName(String profileName) {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * @param securityLevel
+	 */
 	public void getSecurityLevelFormat(int securityLevel) {
 		// TODO Auto-generated method stub
 
 	}
 
+	/**
+	 * @param rorg
+	 */
 	public void setRorg(int rorg) {
 		props.put(EnOceanDevice.RORG, String.valueOf(rorg));
 	}
@@ -155,6 +203,9 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		sReg.setProperties(props);
 	}
 
+	/**
+	 * @param manuf
+	 */
 	public void setManufacturer(int manuf) {
 		props.put(EnOceanDevice.MANUFACTURER, String.valueOf(manuf));
 		sReg.setProperties(props);
@@ -180,6 +231,9 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 		return getIntProperty(EnOceanDevice.MANUFACTURER);
 	}
 
+	/**
+	 * @param msg
+	 */
 	public void setLastMessage(EnOceanMessage msg) {
 		lastMessage = msg;
 	}

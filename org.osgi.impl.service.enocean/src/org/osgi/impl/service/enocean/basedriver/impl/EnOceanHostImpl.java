@@ -36,21 +36,42 @@ import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanHost;
 
+/**
+ *
+ */
 public class EnOceanHostImpl extends Thread implements EnOceanHost {
 
+	/**
+	 * EnOcean base driver impl's tag/prefix for logger.
+	 */
 	protected static final String	TAG						= "EnOceanHostImpl";
+	/** ENOCEAN_ESP_FRAME_START */
 	protected static final byte		ENOCEAN_ESP_FRAME_START	= 0x55;
+	/**
+	 * EnOceanHostImpl's dongle path.
+	 */
 	protected String				donglePath;
+	/**
+	 * EnOceanHostImpl's input stream.
+	 */
 	protected InputStream			inputStream;
+	/**
+	 * EnOceanHostImpl's output stream.
+	 */
 	protected OutputStream			outputStream;
 
 	private static final int		MAX_ALLOCATED_CHIP_ID	= 127;
 	private ArrayList				listeners;
 	private int						baseId;
 
+	/** Is EnOceanHostImpl running? */
 	protected boolean				isRunning;
 	private ChipPIDMapping			chipIdPidMap;
 
+	/**
+	 * @param path
+	 * @param bc
+	 */
 	public EnOceanHostImpl(String path, BundleContext bc) {
 		this.isRunning = false;
 		this.listeners = new ArrayList();
@@ -62,9 +83,18 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 		}
 	}
 
+	/**
+	 * @throws EnOceanHostImplException
+	 */
 	public void startup() throws EnOceanHostImplException {
+		// TODO Auto-generated method stub
 	}
 
+	/**
+	 * @param servicePID
+	 * @throws ArrayIndexOutOfBoundsException
+	 * @throws IOException
+	 */
 	public void allocChipID(String servicePID) throws ArrayIndexOutOfBoundsException, IOException {
 		int chipId = getChipId(servicePID);
 		if (chipId == -1) {
@@ -134,6 +164,9 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 		}
 	}
 
+	/**
+	 * @param data
+	 */
 	protected void dispatchToListeners(byte[] data) {
 		for (int i = 0; i < listeners.size(); i++) {
 			EnOceanPacketListener listener = (EnOceanPacketListener) listeners.get(i);
@@ -190,7 +223,11 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 		return new EspPacket(header, payload);
 	}
 
+	/**
+	 * @param data
+	 */
 	public void send(byte[] data) {
+		// TODO Auto-generated method stub
 	}
 
 	class ChipPIDMapping {

@@ -21,12 +21,20 @@ import java.util.List;
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanMessage;
 
+/**
+ *
+ */
 public abstract class Message implements EnOceanMessage {
 
+	/** MESSAGE_4BS */
 	public static final byte	MESSAGE_4BS		= (byte) 0xA5;
+	/** MESSAGE_RPS */
 	public static final byte	MESSAGE_RPS		= (byte) 0xF6;
+	/** MESSAGE_1BS */
 	public static final byte	MESSAGE_1BS		= (byte) 0xD5;
+	/** MESSAGE_VLD */
 	public static final byte	MESSAGE_VLD		= (byte) 0xD2;
+	/** MESSAGE_SYS_EX */
 	public static final byte	MESSAGE_SYS_EX	= (byte) 0xC5;
 
 	private byte				RORG;
@@ -42,9 +50,16 @@ public abstract class Message implements EnOceanMessage {
 
 	private byte[]				messageBytes;
 
+	/**
+	 * 
+	 */
 	public Message() {
+
 	}
 
+	/**
+	 * @param data
+	 */
 	public Message(byte[] data) {
 		this.messageBytes = data;
 		setRORG(data[0]);
@@ -75,6 +90,9 @@ public abstract class Message implements EnOceanMessage {
 		return (RORG & 0xff);
 	}
 
+	/**
+	 * @param rorg
+	 */
 	public void setRORG(int rorg) {
 		RORG = (byte) (rorg & 0xff);
 	}
@@ -89,6 +107,8 @@ public abstract class Message implements EnOceanMessage {
 
 	/**
 	 * Sender ID of the message
+	 * 
+	 * @param senderId
 	 */
 	public void setSenderId(byte[] senderId) {
 		this.senderId = senderId;
@@ -102,6 +122,9 @@ public abstract class Message implements EnOceanMessage {
 		return (status & 0xff);
 	}
 
+	/**
+	 * @param status
+	 */
 	public void setStatus(int status) {
 		this.status = (byte) (status & 0xff);
 	}
@@ -110,6 +133,9 @@ public abstract class Message implements EnOceanMessage {
 		return subTelNum;
 	}
 
+	/**
+	 * @param subTelNum
+	 */
 	public void setSubTelNum(byte subTelNum) {
 		this.subTelNum = subTelNum;
 	}
@@ -118,6 +144,9 @@ public abstract class Message implements EnOceanMessage {
 		return Utils.bytes2intLE(destinationId, 0, 4);
 	}
 
+	/**
+	 * @param destinationId
+	 */
 	public void setDestinationId(byte[] destinationId) {
 		this.destinationId = destinationId;
 	}
@@ -126,6 +155,9 @@ public abstract class Message implements EnOceanMessage {
 		return dbm;
 	}
 
+	/**
+	 * @param dbm
+	 */
 	public void setDbm(byte dbm) {
 		this.dbm = dbm;
 	}
@@ -134,10 +166,16 @@ public abstract class Message implements EnOceanMessage {
 		return securityLevel;
 	}
 
+	/**
+	 * @param securityLevel
+	 */
 	public void setSecurityLevel(byte securityLevel) {
 		this.securityLevel = securityLevel;
 	}
 
+	/**
+	 * @param func
+	 */
 	public void setFunc(int func) {
 		this.func = (byte) func;
 	}
@@ -146,6 +184,9 @@ public abstract class Message implements EnOceanMessage {
 		return func;
 	}
 
+	/**
+	 * @param type
+	 */
 	public void setType(int type) {
 		this.type = (byte) type;
 	}
@@ -158,19 +199,37 @@ public abstract class Message implements EnOceanMessage {
 		return data;
 	}
 
+	/**
+	 * @return telegram(s)
+	 */
 	public List getTelegrams() {
 		List list = new ArrayList();
 		list.add(getBytes());
 		return list;
 	}
 
+	/**
+	 * @return isTeachin.
+	 */
 	public abstract boolean isTeachin();
 
+	/**
+	 * @return hasTeachInInfo.
+	 */
 	public abstract boolean hasTeachInInfo();
 
+	/**
+	 * @return teachInFunc.
+	 */
 	public abstract int teachInFunc();
 
+	/**
+	 * @return teachInType.
+	 */
 	public abstract int teachInType();
 
+	/**
+	 * @return teachInManuf.
+	 */
 	public abstract int teachInManuf();
 }

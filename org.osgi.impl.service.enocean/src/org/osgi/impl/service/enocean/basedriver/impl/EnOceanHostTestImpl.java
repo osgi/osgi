@@ -28,11 +28,18 @@ import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.test.cases.enoceansimulation.EnOceanSerialInOut;
 
+/**
+ *
+ */
 public class EnOceanHostTestImpl extends EnOceanHostImpl implements EnOceanSerialInOut {
 
 	private ByteArrayOutputStream	byteStream;
 	private CustomInputStream		duplicatedStream;
 
+	/**
+	 * @param path
+	 * @param bc
+	 */
 	public EnOceanHostTestImpl(String path, BundleContext bc) {
 		super(path, bc);
 	}
@@ -81,6 +88,9 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl implements EnOceanSeria
 		}
 	}
 
+	/**
+	 * 
+	 */
 	public void close() {
 		this.isRunning = false;
 		if (this.outputStream != null)
@@ -117,7 +127,7 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl implements EnOceanSeria
 		}
 
 		public void replace(byte[] data) {
-			this.buf = (byte[]) data.clone();
+			this.buf = data.clone();
 			this.mark = 0;
 			this.pos = 0;
 			this.count = data.length;

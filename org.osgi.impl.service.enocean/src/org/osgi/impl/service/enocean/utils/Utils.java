@@ -16,6 +16,9 @@
 
 package org.osgi.impl.service.enocean.utils;
 
+/**
+ *
+ */
 public class Utils {
 	private static byte[]	crc8_table	= new byte[] {
 										(byte) 0x00, (byte) 0x07, (byte) 0x0e, (byte) 0x09, (byte) 0x1c, (byte) 0x1b, (byte) 0x12, (byte) 0x15,
@@ -69,7 +72,8 @@ public class Utils {
 	}
 
 	/**
-	 * Returns a byte[] collection from a single byte
+	 * @param x
+	 * @return a byte[] collection from a single byte.
 	 */
 	public static byte[] byteToBytes(byte x) {
 		byte[] out = new byte[1];
@@ -78,7 +82,10 @@ public class Utils {
 	}
 
 	/**
-	 * Concatenates two byte arrays
+	 * @param a
+	 * @param b
+	 * @return concatenated the two given byte arrays in one, and only one byte
+	 *         array.
 	 */
 	public static byte[] byteConcat(byte[] a, byte[] b) {
 		byte[] c = new byte[a.length + b.length];
@@ -91,6 +98,11 @@ public class Utils {
 		return c;
 	}
 
+	/**
+	 * @param a
+	 * @param b
+	 * @return corresponding byte array.
+	 */
 	public static byte[] byteConcat(byte[] a, byte b) {
 		byte[] c = new byte[a.length + 1];
 		for (int i = 0; i < a.length; i++) {
@@ -100,6 +112,11 @@ public class Utils {
 		return c;
 	}
 
+	/**
+	 * @param a
+	 * @param b
+	 * @return corresponding byte array.
+	 */
 	public static byte[] byteConcat(byte a, byte[] b) {
 		byte[] c = new byte[b.length + 1];
 		for (int i = 0; i < b.length; i++) {
@@ -109,6 +126,11 @@ public class Utils {
 		return c;
 	}
 
+	/**
+	 * @param a
+	 * @param b
+	 * @return corresponding byte array.
+	 */
 	public static byte[] byteConcat(byte a, byte b) {
 		byte[] c = new byte[2];
 		c[0] = a;
@@ -118,6 +140,11 @@ public class Utils {
 
 	/**
 	 * Concatenates a byte array and an int, up to max bytes from the right
+	 * 
+	 * @param a
+	 * @param x
+	 * @param max
+	 * @return corresponding byte array.
 	 */
 	public static byte[] intConcat(byte[] a, int x, int max) {
 		byte[] c = new byte[a.length + max];
@@ -130,6 +157,9 @@ public class Utils {
 
 	/**
 	 * Collection of helper functions TODO: Pay attention to ENDIANNESS
+	 * 
+	 * @param x
+	 * @return corresponding byte array.
 	 */
 	public static byte[] intTo1Byte(int x) {
 		byte[] out = new byte[1];
@@ -137,6 +167,10 @@ public class Utils {
 		return out;
 	}
 
+	/**
+	 * @param x
+	 * @return corresponding byte array.
+	 */
 	public static byte[] intTo2Bytes(int x) {
 		byte[] out = new byte[2];
 		out[1] = (byte) (x & 0xff);
@@ -144,6 +178,10 @@ public class Utils {
 		return out;
 	}
 
+	/**
+	 * @param x
+	 * @return corresponding byte array.
+	 */
 	public static byte[] intTo4Bytes(int x) {
 		byte[] out = new byte[4];
 		out[3] = (byte) (x & 0xff);
@@ -155,6 +193,10 @@ public class Utils {
 
 	final private static char[]	hexArray	= {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'};
 
+	/**
+	 * @param bytes
+	 * @return corresponding string of hex char(s).
+	 */
 	public static String bytesToHexString(byte[] bytes) {
 		char[] hexChars = new char[bytes.length * 2];
 		int v;
@@ -166,6 +208,12 @@ public class Utils {
 		return new String(hexChars);
 	}
 
+	/**
+	 * @param bytes
+	 * @param offset
+	 * @param len
+	 * @return sum.
+	 */
 	public static int bytes2intLE(byte[] bytes, int offset, int len) {
 		int sum = 0;
 		for (int i = 0; i < len; i++) {
@@ -175,6 +223,12 @@ public class Utils {
 		return sum;
 	}
 
+	/**
+	 * @param bytes
+	 * @param offset
+	 * @param len
+	 * @return byte array.
+	 */
 	public static byte[] byteRange(byte[] bytes, int offset, int len) {
 		byte[] out = new byte[len];
 		for (int i = 0; i < len; i++) {
@@ -183,6 +237,11 @@ public class Utils {
 		return out;
 	}
 
+	/**
+	 * @param orig
+	 * @param len
+	 * @return padded.
+	 */
 	public static byte[] padUpTo(byte[] orig, int len) {
 		byte[] padded = new byte[len];
 		if (orig.length < len) {

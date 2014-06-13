@@ -39,10 +39,16 @@ public class MessageSYS_EX extends Message {
 		return subTelNum;
 	}
 
+	/**
+	 * @param data
+	 */
 	public MessageSYS_EX(byte[] data) {
 		super(data);
 	}
 
+	/**
+	 * @param rpc
+	 */
 	public MessageSYS_EX(EnOceanRPC rpc) {
 		int seq = getRandomSeq();
 		byte[] payload = rpc.getPayload();

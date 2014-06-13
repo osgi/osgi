@@ -16,8 +16,17 @@
 
 package org.osgi.impl.service.enocean.utils;
 
+/**
+ * 
+ */
 public class EnOceanDriverException extends Exception {
 
+	/** generated */
+	private static final long	serialVersionUID	= -959105375824289441L;
+
+	/**
+	 * @param string
+	 */
 	public EnOceanDriverException(String string) {
 		super("[EnOceanDriverException] " + string);
 	}

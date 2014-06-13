@@ -16,8 +16,17 @@
 
 package org.osgi.impl.service.enocean.utils;
 
+/**
+ *
+ */
 public class EnOceanHostImplException extends Exception {
 
+	/** generated */
+	private static final long	serialVersionUID	= 1835608007533636966L;
+
+	/**
+	 * @param string
+	 */
 	public EnOceanHostImplException(String string) {
 		super("[EnOceanHostImplException] " + string);
 	}

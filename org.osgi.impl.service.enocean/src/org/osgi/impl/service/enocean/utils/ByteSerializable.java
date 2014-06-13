@@ -16,8 +16,14 @@
 
 package org.osgi.impl.service.enocean.utils;
 
+/**
+ *
+ */
 public interface ByteSerializable {
 
+	/**
+	 * @return serialized value.
+	 */
 	public byte[] serialize();
 
 }

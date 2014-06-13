@@ -30,6 +30,9 @@ package org.osgi.impl.service.enocean.basedriver.radio;
  */
 public class Message4BS extends Message {
 
+	/**
+	 * @param data
+	 */
 	public Message4BS(byte[] data) {
 		super(data);
 	}

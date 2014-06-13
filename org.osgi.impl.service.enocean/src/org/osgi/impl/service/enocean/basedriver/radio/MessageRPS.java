@@ -17,11 +17,13 @@
 package org.osgi.impl.service.enocean.basedriver.radio;
 
 /**
- * Prototype of a RPS telegram
- * 
+ * Prototype of a RPS telegram.
  */
 public class MessageRPS extends Message {
 
+	/**
+	 * @param data
+	 */
 	public MessageRPS(byte[] data) {
 		super(data);
 	}

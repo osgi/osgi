@@ -16,13 +16,16 @@
 
 package org.osgi.impl.service.enocean.basedriver;
 
+/**
+ * EnOcean's packet listener.
+ */
 public interface EnOceanPacketListener {
 
 	/**
 	 * Callback interface method to send complete received packets towards a
 	 * listener
 	 * 
-	 * @param packet the full packet that has been received.
+	 * @param data the full packet that has been received.
 	 */
 	public void radioPacketReceived(byte[] data);
 
