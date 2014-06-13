@@ -14,24 +14,27 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.enocean;
 
+/**
+ * EnOcean's event.
+ */
 public final class EnOceanEvent {
-	
-	/**
-	 * Main topic for all OSGi dispatched EnOcean messages, imported or exported.
-	 */
-	public static final String TOPIC_MSG_RECEIVED = "org/osgi/service/enocean/EnOceanEvent/MESSAGE_RECEIVED";
-	
-	/**
-	 * Property key for the {@link EnOceanMessage} object embedded in an event.
-	 */
-	public static final String PROPERTY_MESSAGE = "enocean.message";
-	
-	/**
-	 * Property key used to tell apart messages that are exported or imported.
-	 */
-	public static final String PROPERTY_EXPORTED = "enocean.message.is_exported";
+
+    /**
+     * Main topic for all OSGi dispatched EnOcean messages, imported or
+     * exported.
+     */
+    public static final String TOPIC_MSG_RECEIVED = "org/osgi/service/enocean/EnOceanEvent/MESSAGE_RECEIVED";
+
+    /**
+     * Property key for the {@link EnOceanMessage} object embedded in an event.
+     */
+    public static final String PROPERTY_MESSAGE   = "enocean.message";
+
+    /**
+     * Property key used to tell apart messages that are exported or imported.
+     */
+    public static final String PROPERTY_EXPORTED  = "enocean.message.is_exported";
 
 }

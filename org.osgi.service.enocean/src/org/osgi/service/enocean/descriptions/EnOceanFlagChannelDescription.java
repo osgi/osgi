@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.enocean.descriptions;
 
-
 /**
- * Subinterface of {@link EnOceanChannelDescription} that describes boolean channels.
+ * Subinterface of {@link EnOceanChannelDescription} that describes boolean
+ * channels.
  * 
  * @version 1.0
  * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanFlagChannelDescription extends EnOceanChannelDescription {
-	
-
+    // TODO
 }

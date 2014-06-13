@@ -23,13 +23,15 @@ package org.osgi.service.enocean;
  * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanHandler {
-		
-	/**
-	 * Notifies of the answer to a RPC.
-	 * 
-	 * @param original the original {@link EnOceanRPC} that originated this answer.
-	 * @param payload the payload of the response; may be deserialiazed to an {@link EnOceanRPC} object.
-	 */
-	public void notifyResponse(EnOceanRPC original, byte[] payload);
+
+    /**
+     * Notifies of the answer to a RPC.
+     * 
+     * @param original the original {@link EnOceanRPC} that originated this
+     *        answer.
+     * @param payload the payload of the response; may be deserialiazed to an
+     *        {@link EnOceanRPC} object.
+     */
+    public void notifyResponse(EnOceanRPC original, byte[] payload);
 
 }

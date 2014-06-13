@@ -14,23 +14,22 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.enocean.descriptions;
 
-
-
 /**
- * Subinterface of {@link EnOceanChannelDescription} that describes enumerated channels.
+ * Subinterface of {@link EnOceanChannelDescription} that describes enumerated
+ * channels.
  * 
  * @version 1.0
  * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanEnumChannelDescription extends EnOceanChannelDescription {
-	
-	/**
-	 * Gets all the possible value for this channel.
-	 * @return
-	 */
-	public EnOceanChannelEnumValue[] getPossibleValues();
+
+    /**
+     * Gets all the possible value for this channel.
+     * 
+     * @return corresponding value(s).
+     */
+    public EnOceanChannelEnumValue[] getPossibleValues();
 
 }

@@ -14,35 +14,36 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.enocean.descriptions;
 
 /**
- * This transitional interface is used to define all the possible values taken by an enumerated channel.
+ * This transitional interface is used to define all the possible values taken
+ * by an enumerated channel.
  * 
  * @version 1.0
  * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanChannelEnumValue {
-	
-	/**
-	 * The start value of the enumeration.
-	 * 
-	 * @return the start value.
-	 */
-	public int getStart();
-	
-	/**
-	 * The stop value of the enumeration.
-	 * 
-	 * @return the stop value.
-	 */
-	public int getStop();
-	
-	/**
-	 * A non-mandatory description of what this enumerated value is about.
-	 * @return the english description of this channel.
-	 */
-	public String getDescription();
+
+    /**
+     * The start value of the enumeration.
+     * 
+     * @return the start value.
+     */
+    public int getStart();
+
+    /**
+     * The stop value of the enumeration.
+     * 
+     * @return the stop value.
+     */
+    public int getStop();
+
+    /**
+     * A non-mandatory description of what this enumerated value is about.
+     * 
+     * @return the english description of this channel.
+     */
+    public String getDescription();
 
 }

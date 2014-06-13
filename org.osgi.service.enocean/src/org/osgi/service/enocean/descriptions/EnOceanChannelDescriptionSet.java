@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.enocean.descriptions;
-
-
 
 /**
  * This interface represents an EnOcean Channel Description Set.
@@ -30,13 +27,16 @@ package org.osgi.service.enocean.descriptions;
  */
 public interface EnOceanChannelDescriptionSet {
 
-	/**
-	 * Retrieves a {@link EnOceanChannelDescription} object according to its identifier.
-	 * 
-	 * @param id the unique string identifier of the description object.
-	 * @return The corresponding {@link EnOceanChannelDescription} object, or null.
-	 * @throws IllegalArgumentException if the supplied String is invalid, null, or other reason.
-	 */
-	public EnOceanChannelDescription getChannelDescription(String channelId) throws IllegalArgumentException;
+    /**
+     * Retrieves a {@link EnOceanChannelDescription} object according to its
+     * identifier.
+     * 
+     * @param channelId the unique string identifier of the description object.
+     * @return The corresponding {@link EnOceanChannelDescription} object, or
+     *         null.
+     * @throws IllegalArgumentException if the supplied String is invalid, null,
+     *         or other reason.
+     */
+    public EnOceanChannelDescription getChannelDescription(String channelId) throws IllegalArgumentException;
 
 }

@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.enocean.descriptions;
 
-
+/**
+ *
+ */
 public interface EnOceanRPCDescription {
-	
-	/**
-	 * Get a friendly name for the RPC
-	 * 
-	 */
-	public String getName();
+
+    /**
+     * Get a friendly name for the RPC
+     * 
+     * @return the name.
+     */
+    public String getName();
 
 }

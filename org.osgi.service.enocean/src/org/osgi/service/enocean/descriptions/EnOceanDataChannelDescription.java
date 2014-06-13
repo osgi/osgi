@@ -14,46 +14,52 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.enocean.descriptions;
 
-
 /**
- * Subinterface of {@link EnOceanChannelDescription} that describes physical measuring channels.
+ * Subinterface of {@link EnOceanChannelDescription} that describes physical
+ * measuring channels.
  * 
  * @version 1.0
  * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanDataChannelDescription extends EnOceanChannelDescription {
-	
-	/**
-	 * The start of the raw input range for this channel.
-	 * @return
-	 */
-	public int getDomainStart();
-	
-	/**
-	 * The end of the raw input range for this channel.
-	 * @return
-	 */
-	public int getDomainStop();
-	
-	/**
-	 * The scale start at which this channel will be mapped to (-20,0°C for instance) 
-	 * @return
-	 */
-	public double getRangeStart();
-	
-	/**
-	 * The scale stop at which this channel will be mapped to (+30,0°C for instance) 
-	 * @return
-	 */
-	public double getRangeStop();	
-	
-	/**
-	 * The non-mandatory physical unit description of this channel.
-	 * @return
-	 */
-	public String getUnit();
-	
+
+    /**
+     * The start of the raw input range for this channel.
+     * 
+     * @return the domain start.
+     */
+    public int getDomainStart();
+
+    /**
+     * The end of the raw input range for this channel.
+     * 
+     * @return the domain stop.
+     */
+    public int getDomainStop();
+
+    /**
+     * The scale start at which this channel will be mapped to (-20,0°C for
+     * instance)
+     * 
+     * @return the range start.
+     */
+    public double getRangeStart();
+
+    /**
+     * The scale stop at which this channel will be mapped to (+30,0°C for
+     * instance)
+     * 
+     * @return the range stop.
+     */
+    public double getRangeStop();
+
+    /**
+     * The non-mandatory physical unit description of this channel.
+     * 
+     * @return the unit as a String
+     */
+    public String getUnit();
+
 }

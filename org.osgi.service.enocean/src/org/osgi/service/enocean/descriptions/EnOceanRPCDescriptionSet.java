@@ -14,30 +14,28 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.enocean.descriptions;
 
 import org.osgi.service.enocean.EnOceanRPC;
 
-
-
 /**
  * This interface represents an EnOcean RPC Set.
- * {@link EnOceanRPCDescriptionSet} is registered as an OSGi Service.
- * Provides a method to retrieve the {@link EnOceanRPC} objects
- * it documents.
+ * {@link EnOceanRPCDescriptionSet} is registered as an OSGi Service. Provides a
+ * method to retrieve the {@link EnOceanRPC} objects it documents.
  * 
  * @version 1.0
  * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanRPCDescriptionSet {
 
-	/**
-	 * Retrieves a {@link EnOceanRPC} object according to its identifier.
-	 * 
-	 * @param id the unique string identifier of the description object.
-	 * @return The corresponding {@link EnOceanRPC} object, or null.
-	 */
-	public EnOceanRPCDescription getRPC(short manufacturerId, short commandID) throws IllegalArgumentException;
+    /**
+     * Retrieves a {@link EnOceanRPC} object according to its identifier.
+     * 
+     * @param manufacturerId
+     * @param commandID
+     * @return The corresponding {@link EnOceanRPC} object, or null.
+     * @throws IllegalArgumentException
+     */
+    public EnOceanRPCDescription getRPC(short manufacturerId, short commandID) throws IllegalArgumentException;
 
 }

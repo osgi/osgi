@@ -14,31 +14,37 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.enocean.descriptions;
 
 import org.osgi.service.enocean.EnOceanChannel;
 import org.osgi.service.enocean.EnOceanException;
 
+/**
+ *
+ */
 public interface EnOceanMessageDescription {
 
-	
-	/**
-	 * Serializes a series of {@link EnOceanChannel} objects into the corresponding byte[] sequence.
-	 * 
-	 * @throws EnOceanException
-	 */
-	public byte[] serialize(EnOceanChannel[] channels) throws EnOceanException, EnOceanException;
+    /**
+     * Serializes a series of {@link EnOceanChannel} objects into the
+     * corresponding byte[] sequence.
+     * 
+     * @param channels
+     * @return serialized value.
+     * @throws EnOceanException
+     */
+    public byte[] serialize(EnOceanChannel[] channels) throws EnOceanException;
 
-	
-	/**
-	 * Deserializes an array of bytes into the EnOceanChannels available to the payload, if possible.
-	 * If the actual instance type of the message is not compatible with the bytes
-	 * it is fed with (RORG to begin with), throw an IllegalArgumentException.
-	 * 
-	 * @throws EnOceanException
-	 */
-	public EnOceanChannel[] deserialize(byte[] bytes) throws EnOceanException, EnOceanException;
-
+    /**
+     * Deserializes an array of bytes into the EnOceanChannels available to the
+     * payload, if possible. If the actual instance type of the message is not
+     * compatible with the bytes it is fed with (RORG to begin with), throw an
+     * IllegalArgumentException.
+     * 
+     * @param bytes
+     * @return deserialized value.
+     * 
+     * @throws EnOceanException
+     */
+    public EnOceanChannel[] deserialize(byte[] bytes) throws EnOceanException;
 
 }

@@ -14,61 +14,69 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.enocean;
 
 /**
- * A very basic interface for RPCs. 
+ * A very basic interface for RPCs.
  * 
  * @version 1.0
  * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanRPC {
-	
-	/**
-	 * The Manufacturer ID property string, used in EventAdmin RPC broadcasting.
-	 */
-	public static final String MANUFACTURER_ID = "enocean.rpc.manufacturer_id";
 
-	/**
-	 * The Function ID property string, used in EventAdmin RPC broadcasting.
-	 */
-	public static final String FUNCTION_ID = "enocean.rpc.function_id";
-			
-	/**
-	 * Gets the manufacturerID for this RPC.
-	 */
-	public int getManufacturerId();
-	
-	/**
-	 * Gets the functionID for this RPC. 
-	 */
-	public int getFunctionId();
-	
-	/**
-	 * Gets the current payload of the RPC.
-	 * 
-	 * @return the payload, in bytes, of this RPC.
-	 */
-	public byte[] getPayload();
-	
-	/**
-	 * Sets the current payload of the RPC.
-	 * 
-	 * @param data the payload, in bytes, of this RPC.
-	 */
-	public void setPayload(byte[] data);
+    /**
+     * The Manufacturer ID property string, used in EventAdmin RPC broadcasting.
+     */
+    public static final String MANUFACTURER_ID = "enocean.rpc.manufacturer_id";
 
-	/**
-	 * Sets the RPC's senderID.
-	 * 
-	 * This member has to belong to {@link EnOceanRPC} interface, for the object may be sent as a standalone using EventAdmin for instance.
-	 */
-	public int getSenderId();
-	
-	/**
-	 * Sets the RPC's senderID.
-	 */
-	public void setSenderId(int chipId);
-	
+    /**
+     * The Function ID property string, used in EventAdmin RPC broadcasting.
+     */
+    public static final String FUNCTION_ID     = "enocean.rpc.function_id";
+
+    /**
+     * Gets the manufacturerID for this RPC.
+     * 
+     * @return manufacturer id.
+     */
+    public int getManufacturerId();
+
+    /**
+     * Gets the functionID for this RPC.
+     * 
+     * @return function id.
+     */
+    public int getFunctionId();
+
+    /**
+     * Gets the current payload of the RPC.
+     * 
+     * @return the payload, in bytes, of this RPC.
+     */
+    public byte[] getPayload();
+
+    /**
+     * Sets the current payload of the RPC.
+     * 
+     * @param data the payload, in bytes, of this RPC.
+     */
+    public void setPayload(byte[] data);
+
+    /**
+     * Sets the RPC's senderID.
+     * 
+     * This member has to belong to {@link EnOceanRPC} interface, for the object
+     * may be sent as a standalone using EventAdmin for instance.
+     * 
+     * @return sender id.
+     */
+    public int getSenderId();
+
+    /**
+     * Sets the RPC's senderID.
+     * 
+     * @param chipId
+     */
+    public void setSenderId(int chipId);
+
 }

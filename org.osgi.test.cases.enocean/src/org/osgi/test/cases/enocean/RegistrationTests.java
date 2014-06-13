@@ -6,6 +6,7 @@ import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.test.cases.enocean.messages.MessageA5_02_01;
 import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.utils.Fixtures;
+import org.osgi.test.cases.enocean.utils.Logger;
 
 public class RegistrationTests extends EnOceanTestCase {
 
@@ -15,16 +16,19 @@ public class RegistrationTests extends EnOceanTestCase {
 	 * @throws Exception
 	 */
 	public void testAutoDeviceRegistration() throws Exception {
-	
+
 		/* Insert a device */
 		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
 		outputStream.write(pkt.serialize());
 		outputStream.flush();
-	
-		String lastServiceEvent = devices.waitForService(); // Device added
-		lastServiceEvent = devices.waitForService(); // Device modified
-														// (profile)
+
+		// Device added
+		String lastServiceEvent = devices.waitForService();
+		Logger.d("Device added, lastServiceEvent: " + lastServiceEvent);
+		// Device modified (profile)
+		lastServiceEvent = devices.waitForService();
+		Logger.d("Device modified (profile), lastServiceEvent: " + lastServiceEvent);
 
 		/*
 		 * NOTE: The service should have been modified AFTER insertion,
@@ -33,7 +37,7 @@ public class RegistrationTests extends EnOceanTestCase {
 		 * event.
 		 */
 		ServiceReference ref = devices.getServiceReference();
-	
+
 		/*
 		 * Verify that the device has been registered with the correct service
 		 * properties

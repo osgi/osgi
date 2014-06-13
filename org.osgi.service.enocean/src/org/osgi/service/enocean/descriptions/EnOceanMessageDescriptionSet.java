@@ -14,34 +14,34 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.enocean.descriptions;
-
-
 
 /**
  * This interface represents an EnOcean Message Description Set.
  * {@link EnOceanMessageDescriptionSet} is registered as an OSGi Service.
- * Provides method to retrieve the {@link EnOceanMessageDescription} objects
- * it documents.
+ * Provides method to retrieve the {@link EnOceanMessageDescription} objects it
+ * documents.
  * 
  * @version 1.0
  * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanMessageDescriptionSet {
 
-	/**
-	 * Retrieves a {@link EnOceanMessageDescription} object according to its identifiers.
-	 * See EnOcean Equipment Profile Specification for more details.
-	 * 
-	 * @param rorg the radio telegram type of the message.
-	 * @param func The func subtype of this message.
-	 * @param type The type subselector.
-	 * @param extra Some extra information; some {@link EnOceanMessageDescription} 
-	 * objects need an additional specifier. If not needed, has to be set to -1.
-	 * @return The {@link EnOceanMessageDescription} object looked for, or null.
-	 * @throws IllegalArgumentException if there was an error related to the input arguments.
-	 */
-	public EnOceanMessageDescription getMessageDescription(int rorg, int func, int type, int extra) throws IllegalArgumentException;
+    /**
+     * Retrieves a {@link EnOceanMessageDescription} object according to its
+     * identifiers. See EnOcean Equipment Profile Specification for more
+     * details.
+     * 
+     * @param rorg the radio telegram type of the message.
+     * @param func The func subtype of this message.
+     * @param type The type subselector.
+     * @param extra Some extra information; some
+     *        {@link EnOceanMessageDescription} objects need an additional
+     *        specifier. If not needed, has to be set to -1.
+     * @return The {@link EnOceanMessageDescription} object looked for, or null.
+     * @throws IllegalArgumentException if there was an error related to the
+     *         input arguments.
+     */
+    public EnOceanMessageDescription getMessageDescription(int rorg, int func, int type, int extra) throws IllegalArgumentException;
 
 }

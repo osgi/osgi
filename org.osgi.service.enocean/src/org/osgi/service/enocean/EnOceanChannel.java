@@ -14,44 +14,43 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.enocean;
-
 
 /**
  * Holds the raw value and channel identification info of an EnOceanChannel.
- *  
+ * 
  * @version 1.0
  * @author Victor Perron <victor.perron@orange.fr>
  */
 public interface EnOceanChannel {
 
-	
-	/**
-	 * @return The unique ID of this channel.
-	 */
-	public String getChannelId();
+    /**
+     * @return The unique ID of this channel.
+     */
+    public String getChannelId();
 
-	
-	/**
-	 * @return The offset, in bits, where this channel is found in the telegram.
-	 */
-	public int getOffset();
-	
-	/**
-	 * @return The size, in bits, of this channel.
-	 */
-	public int getSize();
+    /**
+     * @return The offset, in bits, where this channel is found in the telegram.
+     */
+    public int getOffset();
 
-	/**
-	 * Gets the raw value of this channel.
-	 */
-	byte[] getRawValue();
-	
-	/**
-	 * Sets the raw value of a channel.
-	 * @param rawValue
-	 */
-	void setRawValue(byte[] rawValue);
+    /**
+     * @return The size, in bits, of this channel.
+     */
+    public int getSize();
+
+    /**
+     * Gets the raw value of this channel.
+     * 
+     * @return corresponding value.
+     */
+    byte[] getRawValue();
+
+    /**
+     * Sets the raw value of a channel.
+     * 
+     * @param rawValue
+     */
+    void setRawValue(byte[] rawValue);
 
 }
