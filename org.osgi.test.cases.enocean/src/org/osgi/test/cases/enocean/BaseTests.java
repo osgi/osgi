@@ -16,8 +16,9 @@ import org.osgi.test.cases.enocean.rpc.QueryFunction;
 import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 
-
-
+/**
+ *
+ */
 public class BaseTests extends EnOceanTestCase {
 
 	/**
@@ -33,7 +34,7 @@ public class BaseTests extends EnOceanTestCase {
 	 */
 	public void testInterfaceExceptions() throws Exception {
 		boolean exceptionCaught = false;
-	
+
 		try { /*
 			 * Check that passing a NULL array of bytes results in an
 			 * IllegalArgumentException
@@ -45,7 +46,7 @@ public class BaseTests extends EnOceanTestCase {
 			exceptionCaught = true;
 		}
 		assertEquals(true, exceptionCaught);
-	
+
 		try { /*
 			 * Check that passing a wrongly sized byte array also results in an
 			 * exception
@@ -57,7 +58,7 @@ public class BaseTests extends EnOceanTestCase {
 			exceptionCaught = true;
 		}
 		assertEquals(true, exceptionCaught);
-		
+
 		try { /*
 			 * Tests that serializing a NULL object in EnOceanChannelDescription
 			 * in an exception
@@ -69,7 +70,7 @@ public class BaseTests extends EnOceanTestCase {
 			exceptionCaught = true;
 		}
 		assertEquals(true, exceptionCaught);
-	
+
 		try { /*
 			 * Tests that serializing a wrong object in
 			 * EnOceanChannelDescription in an exception
@@ -81,7 +82,7 @@ public class BaseTests extends EnOceanTestCase {
 			exceptionCaught = true;
 		}
 		assertEquals(true, exceptionCaught);
-	
+
 		try { /*
 			 * Tests that serializing a wrong value in EnOceanChannelDescription
 			 * in an exception
@@ -93,7 +94,7 @@ public class BaseTests extends EnOceanTestCase {
 			exceptionCaught = true;
 		}
 		assertEquals(true, exceptionCaught);
-	
+
 		try { /*
 			 * Tests that deserializing a NULL value in
 			 * EnOceanChannelDescription in an exception
@@ -105,7 +106,7 @@ public class BaseTests extends EnOceanTestCase {
 			exceptionCaught = true;
 		}
 		assertEquals(true, exceptionCaught);
-	
+
 		try { /*
 			 * Tests that deserializing a wrong object in
 			 * EnOceanChannelDescription in an exception
@@ -117,7 +118,7 @@ public class BaseTests extends EnOceanTestCase {
 			exceptionCaught = true;
 		}
 		assertEquals(true, exceptionCaught);
-	
+
 		try { /*
 			 * Tests that getting a NULL index in an
 			 * EnOceanChannelDescriptionSet results in an
@@ -129,7 +130,7 @@ public class BaseTests extends EnOceanTestCase {
 			exceptionCaught = true;
 		}
 		assertEquals(true, exceptionCaught);
-	
+
 		try { /*
 			 * Tests that sending a message EnOceanChannelDescriptionSet results
 			 * in an IllegalArgumentException
@@ -140,7 +141,7 @@ public class BaseTests extends EnOceanTestCase {
 			exceptionCaught = true;
 		}
 		assertEquals(true, exceptionCaught);
-	
+
 	}
 
 	/**
@@ -151,9 +152,9 @@ public class BaseTests extends EnOceanTestCase {
 	 * @throws Exception
 	 */
 	public void testUseOfDescriptions() throws Exception {
-		
+
 		EnOceanMessage temperatureMsg = new MessageA5_02_01(Fixtures.TEMPERATURE);
-		
+
 		/*
 		 * Here, we _know_ the message profile (A5-02-01). In a real context,
 		 * the base driver would provide this information directly in the

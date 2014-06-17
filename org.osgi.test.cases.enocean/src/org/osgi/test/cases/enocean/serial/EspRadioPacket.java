@@ -14,14 +14,19 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.serial;
 
 import org.osgi.test.cases.enocean.utils.ByteSerializable;
 import org.osgi.test.cases.enocean.utils.Utils;
 
+/**
+ *
+ */
 public class EspRadioPacket extends EspPacket {
 
+	/**
+	 * @param pkt
+	 */
 	public EspRadioPacket(ByteSerializable pkt) {
 		setPacketType(TYPE_RADIO);
 		setOptionalLength(7);
@@ -34,7 +39,7 @@ public class EspRadioPacket extends EspPacket {
 		private int	destinationId;	// 4 bytes
 		private int	dBm;			// 1 byte
 		private int	securityLevel;	// 1 byte
-	
+
 		public RadioOptions() {
 			// Fill in default values for a SEND
 			setSubTelNum(3);
@@ -42,7 +47,7 @@ public class EspRadioPacket extends EspPacket {
 			setdBm(0xff);
 			setSecurityLevel(0);
 		}
-	
+
 		public byte[] getBytes() {
 			byte[] data = Utils.intTo1Byte(getSubTelNum());
 			data = Utils.byteConcat(data, Utils.intTo4Bytes(getDestinationId()));
@@ -50,39 +55,39 @@ public class EspRadioPacket extends EspPacket {
 			data = Utils.byteConcat(data, Utils.intTo1Byte(getSecurityLevel()));
 			return data;
 		}
-	
+
 		public int getSubTelNum() {
 			return subTelNum;
 		}
-	
+
 		public void setSubTelNum(int subTelNum) {
 			this.subTelNum = subTelNum;
 		}
-	
+
 		public int getDestinationId() {
 			return destinationId;
 		}
-	
+
 		public void setDestinationId(int destinationId) {
 			this.destinationId = destinationId;
 		}
-	
+
 		public int getdBm() {
 			return dBm;
 		}
-	
+
 		public void setdBm(int dBm) {
 			this.dBm = dBm;
 		}
-	
+
 		public int getSecurityLevel() {
 			return securityLevel;
 		}
-	
+
 		public void setSecurityLevel(int securityLevel) {
 			this.securityLevel = securityLevel;
 		}
-	
+
 	}
 
 }

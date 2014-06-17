@@ -14,19 +14,28 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.devices;
 
 import java.util.Map;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanMessage;
 
+/**
+ *
+ */
 public abstract class EnOceanDeviceImpl implements EnOceanDevice {
+
+	/**  */
 	protected int[]				learntDevices;
+	/**  */
 	protected Map				availableRpcs;
+	/**  */
 	protected EnOceanMessage	lastMessage;
+	/**  */
 	protected byte[]			encryptionKey;
+	/**  */
 	protected int				rollingCode;
+	/**  */
 	protected boolean			learnMode;
 
 	public void setLearningMode(boolean learnMode) {
@@ -49,6 +58,9 @@ public abstract class EnOceanDeviceImpl implements EnOceanDevice {
 		this.encryptionKey = key;
 	}
 
+	/**
+	 * @return the last message.
+	 */
 	public EnOceanMessage getLastMessage() {
 		return lastMessage;
 	}

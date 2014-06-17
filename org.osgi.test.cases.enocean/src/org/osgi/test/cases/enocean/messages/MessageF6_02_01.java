@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.messages;
 
 import org.osgi.service.enocean.EnOceanChannel;
@@ -31,17 +30,25 @@ import org.osgi.test.cases.enocean.descriptions.EnOceanChannelDescription_R1_00;
  */
 public class MessageF6_02_01 extends MessageType_RPS {
 
+	/**  */
 	public static final int	FUNC	= 0x02;
+	/**  */
 	public static final int	TYPE	= 0x01;
 
-
+	/**
+	 * @param action1
+	 * @param eb
+	 * @param action2
+	 * @param secondAction
+	 * @throws IllegalArgumentException
+	 */
 	public MessageF6_02_01(int action1, boolean eb, int action2, boolean secondAction) throws IllegalArgumentException {
 
 		EnOceanChannel channelAction1 = new RPSActionChannel_00();
 		EnOceanChannel channelEnergyBow = new RPSEnergyBow_00();
 		EnOceanChannel channelAction2 = new RPSActionChannel_01();
 		EnOceanChannel channelSecondAction = new RPSSecondAction_00();
-		
+
 		EnOceanChannelDescription description = new EnOceanChannelDescription_R1_00();
 		channelAction1.setRawValue(description.serialize(new Integer(action1)));
 		channelAction2.setRawValue(description.serialize(new Integer(action2)));

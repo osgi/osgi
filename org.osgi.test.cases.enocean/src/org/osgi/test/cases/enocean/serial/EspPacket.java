@@ -14,21 +14,31 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.serial;
 
 import org.osgi.test.cases.enocean.utils.ByteSerializable;
 import org.osgi.test.cases.enocean.utils.Utils;
 
+/**
+ *
+ */
 public class EspPacket {
 
+	/** SYNC_BYTE */
 	public static final byte	SYNC_BYTE				= 0x55;
+	/** TYPE_RADIO */
 	public static final int		TYPE_RADIO				= 0x01;
+	/** TYPE_RESPONSE */
 	public static final int		TYPE_RESPONSE			= 0x02;
+	/** TYPE_RADIO_SUB_TEL */
 	public static final int		TYPE_RADIO_SUB_TEL		= 0x03;
+	/** TYPE_EVENT */
 	public static final int		TYPE_EVENT				= 0x04;
+	/** TYPE_COMMON_COMMAND */
 	public static final int		TYPE_COMMON_COMMAND		= 0x05;
+	/** TYPE_SMART_ACK_RADIO */
 	public static final int		TYPE_SMART_ACK_RADIO	= 0x06;
+	/** TYPE_REMOTE_MAN_COMMAND */
 	public static final int		TYPE_REMOTE_MAN_COMMAND	= 0x07;
 
 	private int					dataLength;					// 2 bytes
@@ -38,6 +48,25 @@ public class EspPacket {
 	private ByteSerializable	data;
 	private ByteSerializable	optional;
 
+	/**
+	 * 
+	 */
+	public EspPacket() {
+
+	}
+
+	/**
+	 * @param data
+	 */
+	public EspPacket(byte[] data) {
+		byte[] header = Utils.byteRange(data, 0, 6);
+		byte[] payload = Utils.byteRange(data, 6, data.length - 7);
+		deserialize(header, payload);
+	}
+
+	/**
+	 * @return serialized value.
+	 */
 	public byte[] serialize() {
 		byte[] dataBytes = data.getBytes();
 		setDataLength(dataBytes.length);
@@ -47,42 +76,72 @@ public class EspPacket {
 		return Utils.byteConcat(serializeHeader(), dataBytes);
 	}
 
+	/**
+	 * @return data's length.
+	 */
 	public int getDataLength() {
 		return dataLength;
 	}
 
+	/**
+	 * @param dataLength
+	 */
 	public void setDataLength(int dataLength) {
 		this.dataLength = dataLength;
 	}
 
+	/**
+	 * @return optional's length.
+	 */
 	public int getOptionalLength() {
 		return optionalLength;
 	}
 
+	/**
+	 * @param optionalLength
+	 */
 	public void setOptionalLength(int optionalLength) {
 		this.optionalLength = optionalLength;
 	}
 
+	/**
+	 * @return packet's type.
+	 */
 	public int getPacketType() {
 		return packetType;
 	}
 
+	/**
+	 * @param packetType
+	 */
 	public void setPacketType(int packetType) {
 		this.packetType = packetType;
 	}
 
+	/**
+	 * @return data.
+	 */
 	public ByteSerializable getData() {
 		return data;
 	}
 
+	/**
+	 * @param embedded
+	 */
 	public void setData(ByteSerializable embedded) {
 		this.data = embedded;
 	}
 
+	/**
+	 * @return optional.
+	 */
 	public ByteSerializable getOptional() {
 		return optional;
 	}
 
+	/**
+	 * @param optional
+	 */
 	public void setOptional(ByteSerializable optional) {
 		this.optional = optional;
 	}
@@ -94,15 +153,6 @@ public class EspPacket {
 		header = Utils.byteConcat(header, Utils.intTo1Byte(getPacketType()));
 		byte[] fullHeader = Utils.byteConcat(syncByte, header);
 		return Utils.byteConcat(fullHeader, Utils.crc8(header));
-	}
-
-	public EspPacket() {
-	}
-
-	public EspPacket(byte[] data) {
-		byte[] header = Utils.byteRange(data, 0, 6);
-		byte[] payload = Utils.byteRange(data, 6, data.length - 7);
-		deserialize(header, payload);
 	}
 
 	private void deserialize(byte[] header, byte[] payload) {

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.messages;
 
 /**
@@ -36,14 +35,21 @@ public abstract class MessageType_4BS extends Message {
 
 	private Boolean	isTeachin;
 
+	/**  */
 	public MessageType_4BS() {
 		setRORG(Message.MESSAGE_4BS);
 	}
 
+	/**
+	 * @return isTeachin.
+	 */
 	public Boolean isTeachin() {
 		return isTeachin;
 	}
 
+	/**
+	 * @param isTeachin
+	 */
 	public void setTeachin(Boolean isTeachin) {
 		this.isTeachin = isTeachin;
 	}

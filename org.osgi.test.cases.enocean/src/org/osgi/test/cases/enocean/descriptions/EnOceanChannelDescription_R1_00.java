@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.descriptions;
 
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
@@ -25,15 +24,18 @@ import org.osgi.test.cases.enocean.descriptions.enumvalues.EnOceanChannelEnumVal
 import org.osgi.test.cases.enocean.descriptions.enumvalues.EnOceanChannelEnumValue_R1_00_VALUE2;
 import org.osgi.test.cases.enocean.descriptions.enumvalues.EnOceanChannelEnumValue_R1_00_VALUE3;
 
+/**
+ *
+ */
 public class EnOceanChannelDescription_R1_00 implements EnOceanEnumChannelDescription {
 
-	EnOceanChannelEnumValue[] possibleValues = new EnOceanChannelEnumValue[] {
-			new EnOceanChannelEnumValue_R1_00_VALUE0(),
-			new EnOceanChannelEnumValue_R1_00_VALUE1(),
-			new EnOceanChannelEnumValue_R1_00_VALUE2(),
-			new EnOceanChannelEnumValue_R1_00_VALUE3()
+	EnOceanChannelEnumValue[]	possibleValues	= new EnOceanChannelEnumValue[] {
+												new EnOceanChannelEnumValue_R1_00_VALUE0(),
+												new EnOceanChannelEnumValue_R1_00_VALUE1(),
+												new EnOceanChannelEnumValue_R1_00_VALUE2(),
+												new EnOceanChannelEnumValue_R1_00_VALUE3()
 												};
-	
+
 	public String getType() {
 		return EnOceanChannelDescription.TYPE_ENUM;
 	}

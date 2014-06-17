@@ -10,6 +10,9 @@ import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.sleep.Sleep;
 
+/**
+ *
+ */
 public class PersistencyTests extends DefaultTestBundleControl {
 
 	/**

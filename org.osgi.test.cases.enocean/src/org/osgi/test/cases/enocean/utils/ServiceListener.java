@@ -8,19 +8,29 @@ import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.util.tracker.ServiceTracker;
 
-
+/**
+ *
+ */
 public class ServiceListener extends ServiceTracker {
 
+	/** SERVICE_ADDED */
 	public static final String	SERVICE_ADDED		= "SERVICE_ADDED";
+	/** SERVICE_MODIFIED */
 	public static final String	SERVICE_MODIFIED	= "SERVICE_MODIFIED";
+	/** SERVICE_REMOVED */
 	public static final String	SERVICE_REMOVED		= "SERVICE_REMOVED";
 
-	private final Semaphore	waiter;
+	private final Semaphore		waiter;
 
-	private BundleContext	bc;
+	private BundleContext		bc;
 	private String				lastAction;
 	private ServiceReference	serviceReference;
 
+	/**
+	 * @param bc
+	 * @param cls
+	 * @throws InvalidSyntaxException
+	 */
 	public ServiceListener(BundleContext bc, Class cls)
 			throws InvalidSyntaxException {
 		super(bc, bc.createFilter("(&(objectclass=" + cls.getName() + "))"), null);
@@ -83,6 +93,10 @@ public class ServiceListener extends ServiceTracker {
 		return null;
 	}
 
+	/**
+	 * @return the event type (added, modified, removed) or null.
+	 * @throws InterruptedException
+	 */
 	public String waitForService() throws InterruptedException {
 		return waitForEvent(OSGiTestCaseProperties.getTimeout());
 	}

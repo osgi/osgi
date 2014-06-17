@@ -14,22 +14,25 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.messages;
 
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.test.cases.enocean.utils.ByteSerializable;
 import org.osgi.test.cases.enocean.utils.Utils;
 
-
+/**
+ *
+ */
 public class Message implements EnOceanMessage, ByteSerializable {
 
+	/** MESSAGE_4BS */
 	public static final int	MESSAGE_4BS	= 0xA5;
+	/** MESSAGE_RPS */
 	public static final int	MESSAGE_RPS	= 0xF6;
 
-	private byte	RORG;
-	private byte[]	data;
-	private byte[]	senderId;
+	private byte			RORG;
+	private byte[]			data;
+	private byte[]			senderId;
 	private byte			status;			// bit7: checksum type.
 												// 1=crc8,0=checksum
 												// bits 0-4: repeater count.
@@ -58,10 +61,16 @@ public class Message implements EnOceanMessage, ByteSerializable {
 		return Utils.byteConcat(pktBytes, status);
 	}
 
+	/**
+	 * @param rorg
+	 */
 	public void setRORG(int rorg) {
 		RORG = (byte) (rorg & 0xff);
 	}
 
+	/**
+	 * @param data
+	 */
 	public void setData(byte[] data) {
 		this.data = data;
 	}
@@ -70,6 +79,9 @@ public class Message implements EnOceanMessage, ByteSerializable {
 		return Utils.bytes2intLE(senderId, 0, 4);
 	}
 
+	/**
+	 * @param senderId
+	 */
 	public void setSenderId(int senderId) {
 		this.senderId = Utils.intTo4Bytes(senderId);
 	}
@@ -78,6 +90,9 @@ public class Message implements EnOceanMessage, ByteSerializable {
 		return status;
 	}
 
+	/**
+	 * @param status
+	 */
 	public void setStatus(byte status) {
 		this.status = status;
 	}
@@ -90,6 +105,9 @@ public class Message implements EnOceanMessage, ByteSerializable {
 		return func;
 	}
 
+	/**
+	 * @param func
+	 */
 	public void setFunc(int func) {
 		this.func = func;
 	}
@@ -98,6 +116,9 @@ public class Message implements EnOceanMessage, ByteSerializable {
 		return type;
 	}
 
+	/**
+	 * @param type
+	 */
 	public void setType(int type) {
 		this.type = type;
 	}

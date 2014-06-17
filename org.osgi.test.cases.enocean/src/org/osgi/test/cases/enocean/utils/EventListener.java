@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.utils;
 
 import java.util.Hashtable;
@@ -25,13 +24,21 @@ import org.osgi.service.event.EventHandler;
 import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.Semaphore;
 
+/**
+ *
+ */
 public class EventListener implements EventHandler {
 
-	private Semaphore	waiter;
-	private Event		lastEvent;
-	private BundleContext	bc;
+	private Semaphore			waiter;
+	private Event				lastEvent;
+	private BundleContext		bc;
 	private ServiceRegistration	sReg;
 
+	/**
+	 * @param bc
+	 * @param topics
+	 * @param filter
+	 */
 	public EventListener(BundleContext bc, String[] topics, String filter) {
 		this.bc = bc;
 		Hashtable ht = new Hashtable();
@@ -39,10 +46,10 @@ public class EventListener implements EventHandler {
 		if (filter != null) {
 			ht.put(org.osgi.service.event.EventConstants.EVENT_FILTER, filter);
 		}
-		sReg = bc.registerService(EventHandler.class.getName(), this, ht);
+		sReg = this.bc.registerService(EventHandler.class.getName(), this, ht);
 		waiter = new Semaphore();
 	}
-			
+
 	public void handleEvent(Event event) {
 		lastEvent = event;
 		waiter.signal();
@@ -62,10 +69,17 @@ public class EventListener implements EventHandler {
 		return null;
 	}
 
+	/**
+	 * @return event.
+	 * @throws InterruptedException
+	 */
 	public Event waitForEvent() throws InterruptedException {
 		return waitForEvent(OSGiTestCaseProperties.getTimeout());
 	}
 
+	/**
+	 * 
+	 */
 	public void close() {
 		sReg.unregister();
 		waiter.signal();

@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.serial;
 
 import org.osgi.test.cases.enocean.utils.ByteSerializable;
 
+/**
+ *
+ */
 public class TrivialByteSerializable implements ByteSerializable {
 
 	private byte[]	data;
 
+	/**
+	 * @param data
+	 */
 	public TrivialByteSerializable(byte[] data) {
 		this.data = data;
 	}

@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.channels;
 
 import org.osgi.service.enocean.EnOceanChannel;
 
+/**
+ *
+ */
 public class RPSEnergyBow_00 implements EnOceanChannel {
 
 	private byte[]	rawValue;
@@ -42,6 +44,5 @@ public class RPSEnergyBow_00 implements EnOceanChannel {
 	public void setRawValue(byte[] rawValue) {
 		this.rawValue = rawValue;
 	}
-
 
 }

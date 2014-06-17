@@ -17,6 +17,9 @@ import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
 import org.osgi.test.cases.enocean.utils.Utils;
 
+/**
+ *
+ */
 public class ExportTestCase extends EnOceanTestCase {
 
 	/**
@@ -27,7 +30,7 @@ public class ExportTestCase extends EnOceanTestCase {
 	public void testDeviceExport() throws Exception {
 
 		ServiceRegistration sReg = Fixtures.registerDevice(getContext());
-	
+
 		/* Wait for the proper and full registration */
 		String lastServiceEvent = devices.waitForService();
 		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
@@ -58,7 +61,7 @@ public class ExportTestCase extends EnOceanTestCase {
 		EspPacket pkt = new EspPacket(Utils.byteRange(data, 0, size));
 
 		assertEquals("EnOcean radio message and forged message mismatch", Utils.bytesToHex(msg.getBytes()), Utils.bytesToHex(pkt.getData().getBytes()));
-	
+
 		// Needed not to mess with further tests
 		sReg.unregister();
 		getContext().ungetService(hostRef);

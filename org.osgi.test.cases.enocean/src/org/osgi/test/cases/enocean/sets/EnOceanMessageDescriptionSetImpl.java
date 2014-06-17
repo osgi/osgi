@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.sets;
 
 import java.util.Hashtable;
@@ -22,10 +21,20 @@ import java.util.Map;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescriptionSet;
 
+/**
+ *
+ */
 public class EnOceanMessageDescriptionSetImpl implements EnOceanMessageDescriptionSet {
 
 	private Map	messageTable	= new Hashtable();
 
+	/**
+	 * @param rorg
+	 * @param func
+	 * @param type
+	 * @param extra
+	 * @param msg
+	 */
 	public void putMessage(int rorg, int func, int type, int extra, EnOceanMessageDescription msg) {
 		String key = generateKey(rorg, func, type, extra);
 		messageTable.put(key, msg);

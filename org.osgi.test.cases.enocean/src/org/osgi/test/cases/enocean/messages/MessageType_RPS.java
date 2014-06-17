@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.messages;
 
 /**
@@ -26,15 +25,22 @@ package org.osgi.test.cases.enocean.messages;
  */
 public abstract class MessageType_RPS extends Message {
 
+	/**  */
 	public MessageType_RPS() {
 		setRORG(Message.MESSAGE_RPS);
 	}
 
 	/* All RPS messages are also teach-in messages */
+	/**
+	 * @return isTeachin.
+	 */
 	public Boolean isTeachin() {
 		return Boolean.TRUE;
 	}
 
+	/**
+	 * @param isTeachin
+	 */
 	public void setTeachin(Boolean isTeachin) {
 		// Do nothing
 	}

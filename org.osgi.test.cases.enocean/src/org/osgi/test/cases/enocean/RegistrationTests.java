@@ -8,6 +8,9 @@ import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.Logger;
 
+/**
+ *
+ */
 public class RegistrationTests extends EnOceanTestCase {
 
 	/**

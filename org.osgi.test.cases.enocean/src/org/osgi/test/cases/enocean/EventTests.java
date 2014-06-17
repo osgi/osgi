@@ -16,8 +16,10 @@ import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
 
+/**
+ *
+ */
 public class EventTests extends EnOceanTestCase {
-
 
 	/**
 	 * Checks that our test suite is able to locally send and receive messages.
@@ -30,7 +32,7 @@ public class EventTests extends EnOceanTestCase {
 		properties.put(Fixtures.SELF_TEST_EVENT_KEY, Fixtures.SELF_TEST_EVENT_VALUE);
 		Event sourceEvent = new Event(Fixtures.SELF_TEST_EVENT_TOPIC, properties);
 		eventAdmin.sendEvent(sourceEvent);
-	
+
 		Event destinationEvent = events.waitForEvent();
 		assertEquals("event name mismatch", Fixtures.SELF_TEST_EVENT_TOPIC, destinationEvent.getTopic());
 		assertEquals("event property mismatch", Fixtures.SELF_TEST_EVENT_VALUE, destinationEvent.getProperty(Fixtures.SELF_TEST_EVENT_KEY));
@@ -46,12 +48,12 @@ public class EventTests extends EnOceanTestCase {
 	 * @throws Exception
 	 */
 	public void testEventNotification() throws Exception {
-	
+
 		/* Insert a device */
 		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket teachInPkt = new EspRadioPacket(teachIn);
 		outputStream.write(teachInPkt.serialize());
-	
+
 		/* First get a reference towards the device */
 		String lastServiceEvent = devices.waitForService();
 		ServiceReference ref = devices.getServiceReference();
@@ -63,15 +65,15 @@ public class EventTests extends EnOceanTestCase {
 		measure.setSenderId(Fixtures.HOST_ID);
 		EspRadioPacket measurePkt = new EspRadioPacket(measure);
 		outputStream.write(measurePkt.serialize());
-	
+
 		Event event = events.waitForEvent();
-	
+
 		assertEquals("topic mismatch", EnOceanEvent.TOPIC_MSG_RECEIVED, event.getTopic());
 		assertEquals("senderId mismatch", Fixtures.STR_HOST_ID, event.getProperty(EnOceanDevice.CHIP_ID));
 		assertEquals("rorg mismatch", Fixtures.STR_RORG, event.getProperty(EnOceanDevice.RORG));
 		assertEquals("func mismatch", Fixtures.STR_FUNC, event.getProperty(EnOceanDevice.FUNC));
 		assertEquals("type mismatch", Fixtures.STR_TYPE_1, event.getProperty(EnOceanDevice.TYPE));
-	
+
 		EnOceanMessage msg = (EnOceanMessage) event.getProperty(EnOceanEvent.PROPERTY_MESSAGE);
 		assertNotNull(msg);
 		EnOceanMessageDescription description = new EnOceanMessageDescription_A5_02_01();

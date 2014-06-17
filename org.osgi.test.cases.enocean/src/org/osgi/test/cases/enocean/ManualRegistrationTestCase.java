@@ -8,6 +8,9 @@ import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
 
+/**
+ *
+ */
 public class ManualRegistrationTestCase extends EnOceanTestCase {
 
 	/**
@@ -26,7 +29,7 @@ public class ManualRegistrationTestCase extends EnOceanTestCase {
 
 		String lastServiceEvent = devices.waitForService();
 		ServiceReference ref = devices.getServiceReference();
-		
+
 		assertEquals(ServiceListener.SERVICE_ADDED, lastServiceEvent);
 		assertEquals("CHIP_ID mismatch", Fixtures.STR_HOST_ID_2, ref.getProperty(EnOceanDevice.CHIP_ID));
 		assertEquals("RORG mismatch", Fixtures.STR_RORG_RPS, ref.getProperty(EnOceanDevice.RORG));

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.devices;
 
 import org.osgi.service.enocean.EnOceanException;
@@ -22,9 +21,14 @@ import org.osgi.service.enocean.EnOceanHandler;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.EnOceanRPC;
 
-
+/**
+ *
+ */
 public class TemperatureSensingDevice extends EnOceanDeviceImpl {
 
+	/**
+	 * 
+	 */
 	public TemperatureSensingDevice() {
 		lastMessage = null;
 		encryptionKey = null;
@@ -32,10 +36,22 @@ public class TemperatureSensingDevice extends EnOceanDeviceImpl {
 		learnMode = false;
 	}
 
+	/**
+	 * @param message
+	 * @param handler
+	 * @throws EnOceanException
+	 * @throws EnOceanException
+	 */
 	public void send(byte[] message, EnOceanHandler handler) throws EnOceanException, EnOceanException {
 		// TODO
 	}
 
+	/**
+	 * @param message
+	 * @param handler
+	 * @throws EnOceanException
+	 * @throws EnOceanException
+	 */
 	public void send(EnOceanMessage message, EnOceanHandler handler) throws EnOceanException, EnOceanException {
 		send(message.getBytes(), handler);
 	}

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.sets;
 
 import java.util.Hashtable;
@@ -22,14 +21,20 @@ import java.util.Map;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescriptionSet;
 
+/**
+ *
+ */
 public class EnOceanChannelDescriptionSetImpl implements EnOceanChannelDescriptionSet {
-	
+
 	private Map	channelTable	= new Hashtable();
 
+	/**
+	 * @param channelId
+	 * @param channel
+	 */
 	public void putChannelDescription(String channelId, EnOceanChannelDescription channel) {
 		channelTable.put(channelId, channel);
 	}
-
 
 	public EnOceanChannelDescription getChannelDescription(String channelId) throws IllegalArgumentException {
 		if (channelId == null) {
@@ -42,6 +47,5 @@ public class EnOceanChannelDescriptionSetImpl implements EnOceanChannelDescripti
 			throw new IllegalArgumentException("There was an error reading the messageSet : " + e.getMessage());
 		}
 	}
-
 
 }

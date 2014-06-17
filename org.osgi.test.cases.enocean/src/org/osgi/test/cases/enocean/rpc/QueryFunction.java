@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.rpc;
 
 import org.osgi.service.enocean.EnOceanRPC;
 
+/**
+ *
+ */
 public class QueryFunction implements EnOceanRPC {
 
-	private int		senderId	= -1;
+	private int	senderId	= -1;
 
 	public int getManufacturerId() {
 		return 0x07ff;

@@ -1,3 +1,4 @@
+
 package org.osgi.test.cases.enocean.descriptions;
 
 import org.osgi.service.enocean.EnOceanChannel;
@@ -7,16 +8,28 @@ import org.osgi.test.cases.enocean.channels.LearnChannel_4BS;
 import org.osgi.test.cases.enocean.channels.TemperatureChannel_00;
 import org.osgi.test.cases.enocean.utils.Utils;
 
+/**
+ *
+ */
 public class EnOceanMessageDescription_A5_02_01 implements EnOceanMessageDescription {
 
+	/**
+	 * @return hardcoded 0xA5.
+	 */
 	public int getRorg() {
 		return 0xA5;
 	}
 
+	/**
+	 * @return hardcoded 0x02.
+	 */
 	public int getFunc() {
 		return 0x02;
 	}
 
+	/**
+	 * @return hardcoded 0x01.
+	 */
 	public int getType() {
 		return 0x01;
 	}

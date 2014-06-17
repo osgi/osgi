@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.channels;
 
 import org.osgi.service.enocean.EnOceanChannel;
 
+/**
+ *
+ */
 public class RPSSecondAction_00 implements EnOceanChannel {
 
 	private byte[]	rawValue;

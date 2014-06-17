@@ -14,12 +14,14 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.descriptions;
 
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
 import org.osgi.service.enocean.descriptions.EnOceanDataChannelDescription;
 
+/**
+ *
+ */
 public class EnOceanChannelDescription_TMP_00 implements EnOceanDataChannelDescription {
 
 	public String getType() {
@@ -30,20 +32,20 @@ public class EnOceanChannelDescription_TMP_00 implements EnOceanDataChannelDescr
 		// y = a*x + b where...
 		float denominator = (getDomainStop() - getDomainStart());
 		float numerator_a = (float) (getRangeStop() - getRangeStart());
-		float numerator_b = (float) (getRangeStart()*getDomainStop()-getRangeStop()*getDomainStart());
+		float numerator_b = (float) (getRangeStart() * getDomainStop() - getRangeStop() * getDomainStart());
 		float a = numerator_a / denominator;
 		float b = numerator_b / denominator;
-		return a*x+b;
+		return a * x + b;
 	}
 
 	private int unscale(float y) {
 		// x = A*y + B where A = 1/a and B = -b/a, so...
 		float denominator = (float) (getRangeStop() - getRangeStart());
 		float numerator_A = getDomainStop() - getDomainStart();
-		float numerator_B = (float) (getRangeStop()*getDomainStart()-getRangeStart()*getDomainStop());
+		float numerator_B = (float) (getRangeStop() * getDomainStart() - getRangeStart() * getDomainStop());
 		float A = numerator_A / denominator;
 		float B = numerator_B / denominator;
-		return Math.round(A*y+B);
+		return Math.round(A * y + B);
 	}
 
 	public byte[] serialize(Object obj) throws IllegalArgumentException {

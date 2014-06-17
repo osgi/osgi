@@ -18,18 +18,31 @@ import org.osgi.test.cases.enocean.utils.Utils;
 import org.osgi.test.cases.enoceansimulation.EnOceanSerialInOut;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
+/**
+ *
+ */
 public abstract class EnOceanTestCase extends DefaultTestBundleControl {
 
+	/** devices */
 	protected ServiceListener					devices;
+	/** events */
 	protected EventListener						events;
 
+	/** msgDescriptionSet */
 	protected EnOceanMessageDescriptionSetImpl	msgDescriptionSet;
+	/** channelDescriptionSet */
 	protected EnOceanChannelDescriptionSetImpl	channelDescriptionSet;
+	/** eventAdminRef */
 	protected ServiceReference					eventAdminRef;
+	/** enOceanHostRef */
 	protected ServiceReference					enOceanHostRef;
+	/** inputStream */
 	protected InputStream						inputStream;
+	/** outputStream */
 	protected OutputStream						outputStream;
+	/** enOceanHostInOut */
 	protected EnOceanSerialInOut				enOceanHostInOut;
+	/** eventAdmin */
 	protected EventAdmin						eventAdmin;
 
 	protected void setUp() throws Exception {

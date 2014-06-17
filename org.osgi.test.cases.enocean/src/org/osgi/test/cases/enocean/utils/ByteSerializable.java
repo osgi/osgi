@@ -14,17 +14,19 @@
  * limitations under the License.
  */
 
-
 package org.osgi.test.cases.enocean.utils;
 
 /**
- * Helper class that enables better abstraction models when encapsulating
- * several layers of byte-backed packets of data.
+ * Helper class that enables better abstraction model when encapsulating several
+ * layers of byte-backed packets of data.
  * 
  * @author Victor Perron
  */
 public interface ByteSerializable {
 
+	/**
+	 * @return value.
+	 */
 	public byte[] getBytes();
 
 }
