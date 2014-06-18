@@ -631,8 +631,7 @@ public void doStuff() {
       <listitem>
         <para>Use the client's bundle context when retrieving the target
         service. This prevents the client bundle from being able to make calls
-        on a service object that they would normally be forbidden from
-        obtaining.</para>
+        on a service object that they do not have permission to obtain.</para>
       </listitem>
     </itemizedlist>
 
