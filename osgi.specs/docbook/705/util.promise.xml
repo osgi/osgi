@@ -382,7 +382,7 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; p.getValue().openStream());<
 
         <para>If the Promise is unsuccessfully resolved, the predicate
         argument is not called and the Promise returned by the filter method
-        is unsuccessfully resolved with failure of the Promise.</para>
+        is unsuccessfully resolved with the failure of the Promise.</para>
       </listitem>
 
       <listitem>
@@ -398,7 +398,7 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; p.getValue().openStream());<
 
         <para>If the Promise is unsuccessfully resolved, the function argument
         is not called and the Promise returned by the map method is
-        unsuccessfully resolved with failure of the Promise.</para>
+        unsuccessfully resolved with the failure of the Promise.</para>
       </listitem>
 
       <listitem>
@@ -414,7 +414,7 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; p.getValue().openStream());<
 
         <para>If the Promise is unsuccessfully resolved, the function argument
         is not called and the Promise returned by the flatMap method is
-        unsuccessfully resolved with failure of the Promise.</para>
+        unsuccessfully resolved with the failure of the Promise.</para>
       </listitem>
 
       <listitem>
@@ -431,9 +431,10 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; p.getValue().openStream());<
         value is not <code>null</code>, the Promise returned by the recover
         method is successfully resolved with the recovery value. If the
         recovery value is <code>null</code>, the Promise returned by the
-        recover method is unsuccessfully resolved with failure of the Promise.
-        If the function throws an exception, the Promise returned by the
-        recover method is unsuccessfully resolved with that exception.</para>
+        recover method is unsuccessfully resolved with the failure of the
+        Promise. If the function throws an exception, the Promise returned by
+        the recover method is unsuccessfully resolved with that
+        exception.</para>
       </listitem>
 
       <listitem>
@@ -451,8 +452,8 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; p.getValue().openStream());<
         recovery Promise is not <code>null</code>, the Promise returned by the
         recover method is resolved with the recovery Promise. If the recovery
         Promise is <code>null</code>, the Promise returned by the recover
-        method is unsuccessfully resolved with failure of the Promise. If the
-        function throws an exception, the Promise returned by the recover
+        method is unsuccessfully resolved with the failure of the Promise. If
+        the function throws an exception, the Promise returned by the recover
         method is unsuccessfully resolved with that exception.</para>
       </listitem>
 
@@ -471,7 +472,7 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; p.getValue().openStream());<
         Promise argument is successfully resolved, the Promise returned by the
         fallbackTo method is resolved with the value of the Promise argument.
         If the Promise argument is unsuccessfully resolved, the Promise
-        returned by the fallbackTo method is unsuccessfully resolved with
+        returned by the fallbackTo method is unsuccessfully resolved with the
         failure of the Promise.</para>
       </listitem>
     </itemizedlist>
