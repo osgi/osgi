@@ -5,6 +5,7 @@ Bundle-Activator				= ${p}.Activator
 
 Private-Package 					= ${p}.*
 Export-Package					= org.osgi.service.async; -split-package:=first; provide:=true,\
+								  org.osgi.service.async.delegate,\
 								  org.osgi.util.promise,\
 								  org.osgi.util.function
 
