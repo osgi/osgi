@@ -374,9 +374,11 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; p.getValue().openStream());<
         <para>If the Promise is successfully resolved, the predicate argument
         is called with the value of the Promise. If the predicate accepts the
         value, then the value is used to successfully resolve the Promise
-        returned by the filter method. Otherwise, the Promise returned by the
-        filter method is unsuccessfully resolved with a No Such Element
-        Exception.</para>
+        returned by the filter method. If the predicate does not accept the
+        value, the Promise returned by the filter method is unsuccessfully
+        resolved with a No Such Element Exception. If the predicate throws an
+        exception, the Promise returned by the filter method is unsuccessfully
+        resolved with that exception.</para>
 
         <para>If the Promise is unsuccessfully resolved, the predicate
         argument is not called and the Promise returned by the filter method
