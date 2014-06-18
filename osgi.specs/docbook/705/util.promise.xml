@@ -168,7 +168,7 @@
     linkend="org.osgi.util.promise.Promise.getFailure--"
     xrefstyle="hyperlink"/> or <xref
     linkend="org.osgi.util.promise.Promise.getValue--" xrefstyle="hyperlink"/>
-    will block until the Promise is resolved. In general, these two methods
+    must block until the Promise is resolved. In general, these two methods
     should not be used outside of a callback. Use callbacks to be notified
     when the Promise is resolved. See <xref
     linkend="util.promise-callbacks"/>.</para>
@@ -231,7 +231,7 @@
     xrefstyle="hyperlink"/> or <xref
     linkend="org.osgi.util.promise.Deferred.fail-Throwable-"
     xrefstyle="hyperlink"/> is called when the Promise associated with the
-    Deferred is already resolved, then an Illegal State Exception will be
+    Deferred is already resolved, then an Illegal State Exception must be
     thrown.</para>
   </section>
 
@@ -270,7 +270,7 @@
       <para>The <xref
       linkend="org.osgi.util.promise.Promise.onResolve-Runnable-"
       xrefstyle="hyperlink"/> method is used to register a
-      <code>Runnable</code> with the Promise which will be called when the
+      <code>Runnable</code> with the Promise which must be called when the
       Promise is resolved either successfully with a value or unsuccessfully
       with a failure. The resolved Promise is not passed to the Runnable, so
       if the Runnable implementation needs access to the resolved Promise, it
@@ -538,7 +538,7 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; p.getValue().openStream());<
     xrefstyle="hyperlink"/> and <xref
     linkend="org.osgi.util.promise.Promises.all-Collection-"
     xrefstyle="hyperlink"/> methods which return a new Promise that is a latch
-    on the specified Promises. The returned Promise will resolve only when all
+    on the specified Promises. The returned Promise must resolve only when all
     of the specified Promises have resolved.</para>
   </section>
 

@@ -48,13 +48,13 @@ public interface Failure {
 	 * callback was registered as the chained Promise.
 	 * 
 	 * <p>
-	 * If this methods completes normally, the chained Promise will be failed
+	 * If this methods completes normally, the chained Promise must be failed
 	 * with the same exception which failed the resolved Promise. If this method
-	 * throws an exception, the chained Promise will be failed with the thrown
+	 * throws an exception, the chained Promise must be failed with the thrown
 	 * exception.
 	 * 
 	 * @param resolved The failed resolved {@link Promise}.
-	 * @throws Exception The chained Promise will be failed with the thrown
+	 * @throws Exception The chained Promise must be failed with the thrown
 	 *         exception.
 	 */
 	void fail(Promise<?> resolved) throws Exception;

@@ -73,11 +73,11 @@ public class Promises {
 	 *        Promise must be resolved. Must not be {@code null} and all of the
 	 *        elements in the collection must not be {@code null}.
 	 * @return A Promise that is resolved only when all the specified Promises
-	 *         are resolved. The returned Promise will be successfully resolved,
-	 *         with a List of the values in the order of the specified Promises,
+	 *         are resolved. The returned Promise must be successfully resolved
+	 *         with a List of the values in the order of the specified Promises
 	 *         if all the specified Promises are successfully resolved. The List
 	 *         in the returned Promise is the property of the caller and is
-	 *         modifiable. The returned Promise will be resolved with a failure
+	 *         modifiable. The returned Promise must be resolved with a failure
 	 *         of {@link FailedPromisesException} if any of the specified
 	 *         Promises are resolved with a failure. The failure
 	 *         {@link FailedPromisesException} must contain all of the specified
@@ -111,11 +111,11 @@ public class Promises {
 	 *        Promise must be resolved. Must not be {@code null} and all of the
 	 *        arguments must not be {@code null}.
 	 * @return A Promise that is resolved only when all the specified Promises
-	 *         are resolved. The returned Promise will be successfully resolved,
-	 *         with a List of the values in the order of the specified Promises,
+	 *         are resolved. The returned Promise must be successfully resolved
+	 *         with a List of the values in the order of the specified Promises
 	 *         if all the specified Promises are successfully resolved. The List
 	 *         in the returned Promise is the property of the caller and is
-	 *         modifiable. The returned Promise will be resolved with a failure
+	 *         modifiable. The returned Promise must be resolved with a failure
 	 *         of {@link FailedPromisesException} if any of the specified
 	 *         Promises are resolved with a failure. The failure
 	 *         {@link FailedPromisesException} must contain all of the specified
