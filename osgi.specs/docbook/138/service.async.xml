@@ -332,7 +332,7 @@ public void doStuff() {
       <code>mediate</code> methods. Once created the client invokes the method
       that should be run asynchronously, supplying the arguments that should
       be used. This call records the invocation, but does not start the
-      asynchronous task. The asynchronous task begins when the client makes
+      asynchronous task. The asynchronous task begins when the client 
       invokes one of the <code>call</code> or <code>execute</code> methods on
       the Async service. The <code>call</code> methods must return a Promise
       representing the async invocation. The promise must resolve with the
