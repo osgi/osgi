@@ -144,8 +144,9 @@
     associated task available while a <emphasis>resolved</emphasis> Promise
     has the result of the associated task available. The <xref
     linkend="org.osgi.util.promise.Promise.isDone--" xrefstyle="hyperlink"/>
-    method will return <code>true</code> if the Promise is resolved and
-    <code>false</code> if the Promise is unresolved.</para>
+    method must return <code>true</code> if the Promise is resolved and
+    <code>false</code> if the Promise is unresolved. A Promise must only be
+    resolved once.</para>
 
     <para>A resolved Promise can be either resolved with a value, which means
     the associated task <emphasis>completed successfully</emphasis> and
@@ -226,8 +227,7 @@
   }
 }</programlisting>
 
-    <para>A Promise can only be resolved once. If <xref
-    linkend="org.osgi.util.promise.Deferred.resolve-T-"
+    <para>If <xref linkend="org.osgi.util.promise.Deferred.resolve-T-"
     xrefstyle="hyperlink"/> or <xref
     linkend="org.osgi.util.promise.Deferred.fail-Throwable-"
     xrefstyle="hyperlink"/> is called when the Promise associated with the
