@@ -486,7 +486,7 @@ Promise&lt;InputStream&gt; in = mirror.then(p -&gt; p.getValue().openStream());<
     <programlisting>return promise.filter(v -&gt; isValueOk(v)).recover(p -&gt; getDefaultValue())</programlisting>
 
     <para>With these chains, one can write powerful programs without the need
-    to resort to complex if/then/else and try/catch logic.</para>
+    to resort to complex if/else and try/catch logic.</para>
   </section>
 
   <section>
