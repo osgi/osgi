@@ -52,7 +52,7 @@ public class AsyncTestCase extends OSGiTestCase {
 
 	protected void setUp() throws InterruptedException {
 		registration = getContext().registerService(MyService.class, new MyServiceImpl(), null);
-		asyncTracker = new ServiceTracker<>(getContext(), Async.class, null);
+		asyncTracker = new ServiceTracker<Async, Async>(getContext(), Async.class, null);
 		asyncTracker.open();
 		async = asyncTracker.waitForService(5000);
 		
