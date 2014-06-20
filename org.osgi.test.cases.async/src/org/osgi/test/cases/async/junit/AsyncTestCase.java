@@ -13,55 +13,78 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-
 package org.osgi.test.cases.async.junit;
 
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.async.Async;
-import org.osgi.test.cases.async.junit.services.MyService;
+import org.osgi.service.log.LogEntry;
+import org.osgi.service.log.LogReaderService;
+import org.osgi.test.cases.async.junit.impl.AsyncErrorListener;
+import org.osgi.test.cases.async.junit.impl.MyServiceAsyncDelegate;
+import org.osgi.test.cases.async.junit.impl.MyServiceException;
+import org.osgi.test.cases.async.junit.impl.MyServiceFactory;
+import org.osgi.test.cases.async.junit.impl.MyServiceImpl;
+import org.osgi.test.cases.async.services.MyService;
 import org.osgi.test.support.OSGiTestCase;
 import org.osgi.util.promise.Promise;
-import org.osgi.util.promise.Success;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class AsyncTestCase extends OSGiTestCase {
 	
 	private ServiceTracker<Async, Async>	asyncTracker;
 	private Async	async;
+
+	private ServiceTracker<LogReaderService, LogReaderService> logReaderTracker;
+	private LogReaderService logReader;
+	private AsyncErrorListener asyncErrors;
+	private ExecutorService asyncExecutor;
 	
-	private ServiceRegistration<MyService> registration;
+	private MyServiceImpl myServiceImpl;
+	private MyServiceAsyncDelegate myServiceDelegate;
+	private MyServiceFactory myServiceFactory;
+
+	private ServiceRegistration<MyService> normalReg;
+	private ServiceRegistration<MyService> delegateReg;
+	private ServiceRegistration<MyService> factoryReg;
 	
-	private class MyServiceImpl implements MyService {
-		private final long timeToSleep = 500;
-
-		public void doSlowStuff() throws Exception  {
-			Thread.sleep(timeToSleep);
-		}
-
-		public int countSlowly(int times) throws Exception {
-			for(int i = 0; i < times; i++) {
-				Thread.sleep(timeToSleep);
-			}
-			return times;
-		}
-	}
-
 	protected void setUp() throws InterruptedException {
-		registration = getContext().registerService(MyService.class, new MyServiceImpl(), null);
+		myServiceImpl = new MyServiceImpl();
+		normalReg = getContext().registerService(MyService.class, myServiceImpl, null);
+
+		asyncExecutor = Executors.newSingleThreadExecutor();
+		myServiceDelegate = new MyServiceAsyncDelegate(asyncExecutor);
+		delegateReg = getContext().registerService(MyService.class, myServiceDelegate, null);
+
+		myServiceFactory = new MyServiceFactory();
+		factoryReg = getContext().registerService(MyService.class, myServiceFactory, null);
+
 		asyncTracker = new ServiceTracker<Async, Async>(getContext(), Async.class, null);
 		asyncTracker.open();
 		async = asyncTracker.waitForService(5000);
-		
+
 		assertNotNull("No Async service available within 5 seconds", async);
+
+		logReaderTracker = new ServiceTracker<LogReaderService, LogReaderService>(getContext(), LogReaderService.class, null);
+		logReaderTracker.open();
+		logReader = logReaderTracker.waitForService(5000);
+		assertNotNull("No LogReaderService available within 5 seconds", logReader);
+		logReader.addLogListener(asyncErrors  = new AsyncErrorListener());
 	}
 	
 	protected void tearDown() {
+
+		normalReg.unregister();
+		delegateReg.unregister();
+		factoryReg.unregister();
+
+		asyncExecutor.shutdown();
+
 		asyncTracker.close();
-		registration.unregister();
+		logReader.removeLogListener(asyncErrors);
+		logReaderTracker.close();
 	}
 	
 	/**
@@ -70,7 +93,7 @@ public class AsyncTestCase extends OSGiTestCase {
 	 */
 	public void testAsyncCall() throws Exception {
 		
-		MyService service = async.mediate(registration.getReference());
+		MyService service = async.mediate(normalReg.getReference());
 		
 		// This call waits for a second
 		Promise<Integer> p = async.call(service.countSlowly(2));
@@ -80,20 +103,50 @@ public class AsyncTestCase extends OSGiTestCase {
 		// previous statement.
 		assertFalse(p.isDone());
 		
-		final CountDownLatch latch = new CountDownLatch(1);
-		
-		p.then(new Success<Integer, Void>() {
-			public Promise<Void> call(Promise<Integer> resolved)
-					throws Exception {
-				latch.countDown();
-				return null;
-			}
-		});
-		
-		// Wait for up to three seconds for the asynchronous completion callback to be called. This
-		// should happen after approximately one second, so three seconds should be plenty.
-		assertTrue("Did not complete within a reasonable time", latch.await(3000, TimeUnit.MILLISECONDS));
-		
+		assertEquals("Wrong value.", 2, AsyncTestUtils.awaitResolve(p).intValue());
+		assertEquals("Wrong method called.", MyService.METHOD_countSlowly, myServiceImpl.lastMethodCalled());
 	}
 
+	public void testAsyncCallGetUngetServiceCalls() throws Exception {
+		MyService service = async.mediate(factoryReg.getReference());
+
+		Promise<Integer> p = async.call(service.countSlowly(2));
+		assertFalse(p.isDone());
+		assertEquals("Wrong value.", 2, AsyncTestUtils.awaitResolve(p).intValue());
+
+		assertEquals("Wrong method called.", MyService.METHOD_countSlowly, myServiceFactory.getMySerivceImpl().lastMethodCalled());
+		myServiceFactory.awaitUngetService();
+	}
+
+	public void testAsyncExecuteGetUngetServiceCalls() throws Exception {
+		async.mediate(factoryReg.getReference()).countSlowly(2);
+
+		async.execute();
+
+		myServiceFactory.awaitUngetService();
+		assertEquals("Wrong method called.", MyService.METHOD_countSlowly, myServiceFactory.getMySerivceImpl().lastMethodCalled());
+	}
+
+	public void testAsyncCallGetUngetServiceCallsWithFailure() throws Exception {
+		MyService service = async.mediate(factoryReg.getReference());
+
+		Promise<Integer> p = async.call(service.failSlowly(2));
+		assertFalse(p.isDone());
+		assertTrue("Wrong failture type.", AsyncTestUtils.awaitFailure(p) instanceof MyServiceException);
+
+		assertEquals("Wrong method called.", MyService.METHOD_failSlowly, myServiceFactory.getMySerivceImpl().lastMethodCalled());
+		myServiceFactory.awaitUngetService();
+	}
+
+	public void testAsyncExecuteGetUngetServiceCallsWithFailure() throws Exception {
+		async.mediate(factoryReg.getReference()).failSlowly(2);
+
+		Promise<LogEntry> asyncErrorPromise = asyncErrors.getAsyncError();
+		async.execute();
+		Throwable error = AsyncTestUtils.awaitResolve(asyncErrorPromise).getException();
+		assertTrue("Wrong error type: " + error, error instanceof MyServiceException);
+
+		myServiceFactory.awaitUngetService();
+		assertEquals("Wrong method called.", MyService.METHOD_failSlowly, myServiceFactory.getMySerivceImpl().lastMethodCalled());
+	}
 }
