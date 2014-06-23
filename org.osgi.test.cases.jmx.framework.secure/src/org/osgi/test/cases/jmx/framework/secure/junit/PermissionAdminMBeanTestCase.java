@@ -71,29 +71,45 @@ public class PermissionAdminMBeanTestCase extends MBeanGeneralTestCase {
 	
 	public void testSetPermissions() throws IOException {
 		assertNotNull(pMBean);
-        String permissionInfo = (new PermissionInfo(AllPermission.class.getName(), "", "")).getEncoded();
-		pMBean.setPermissions(testbundle.getLocation(), new String[] {permissionInfo});
-		
-		String[] mBeanPermissions = pMBean.getPermissions(testbundle.getLocation());
-		boolean found = false;
-		if (mBeanPermissions != null) {
+		final String location = testbundle.getLocation();
+		PermissionInfo[] perms = pAdmin.getPermissions(location);
+		try {
+			String permissionInfo = (new PermissionInfo(
+					AllPermission.class.getName(), "", "")).getEncoded();
+			pMBean.setPermissions(location, new String[] {permissionInfo});
+
+			String[] mBeanPermissions = pMBean.getPermissions(location);
+			assertNotNull("set permissions doesn't work", mBeanPermissions);
 			for (int i = 0; i < mBeanPermissions.length; i++) {
 				if (permissionInfo.equals(mBeanPermissions[i])) {
-					found = true;
-					break;
+					return;
 				}
 			}
+			fail("set permission didn't changed the mbean permissions");
 		}
-		assertTrue("set permission didn't changed the mbean permissions", found);
+		finally {
+			pAdmin.setPermissions(location, perms);
+		}
 	}
 
 	public void testSetDefaultPermissions() throws IOException {
 		assertNotNull(pMBean);
-		String permissionInfo = (new PermissionInfo(AllPermission.class.getName(), "", "")).getEncoded();		
-		pMBean.setDefaultPermissions(new String[] {permissionInfo});
-		String[] mBeanPermissions = pMBean.listDefaultPermissions();
-		assertTrue("set default permissions doesn't work", (mBeanPermissions != null) && (mBeanPermissions.length == 1) &&
-															permissionInfo.equals(mBeanPermissions[0]));
+		PermissionInfo[] perms = pAdmin.getDefaultPermissions();
+		try {
+			String permissionInfo = (new PermissionInfo(
+					AllPermission.class.getName(), "", "")).getEncoded();
+			pMBean.setDefaultPermissions(new String[] {permissionInfo});
+			String[] mBeanPermissions = pMBean.listDefaultPermissions();
+			assertNotNull("set default permissions doesn't work",
+					mBeanPermissions);
+			assertEquals("set default permissions doesn't work", 1,
+					mBeanPermissions.length);
+			assertEquals("set default permissions doesn't work",
+					permissionInfo, mBeanPermissions[0]);
+		}
+		finally {
+			pAdmin.setDefaultPermissions(perms);
+		}
 	}
 	
 	public void testExceptions() {
@@ -137,18 +153,28 @@ public class PermissionAdminMBeanTestCase extends MBeanGeneralTestCase {
 		}
 
 		//test setDefaultPermissions method		
+		PermissionInfo[] perms = pAdmin.getDefaultPermissions();
 		try {
 			pMBean.setDefaultPermissions(null);
 		}
 		catch (IOException e) {
 			fail("unexpected exception", e);
 		}
+		finally {
+			pAdmin.setDefaultPermissions(perms);
+		}
+
+		perms = pAdmin.getDefaultPermissions();
 		try {
 			pMBean.setDefaultPermissions(new String[] {});
 		}
 		catch (IOException e) {
 			fail("unexpected exception", e);
 		}
+		finally {
+			pAdmin.setDefaultPermissions(perms);
+		}
+
 		try {
 			pMBean.setDefaultPermissions(new String[] { STRING_NULL });
 			fail("expected exception");
@@ -179,18 +205,29 @@ public class PermissionAdminMBeanTestCase extends MBeanGeneralTestCase {
 		catch (IOException e) {
 			// expected
 		}
+
+		perms = pAdmin.getPermissions(STRING_EMPTY);
 		try {
 			pMBean.setPermissions(STRING_EMPTY, new String[] {});
 		}
 		catch (IOException e) {
 			fail("unexpected exception", e);
 		}
+		finally {
+			pAdmin.setPermissions(STRING_EMPTY, perms);
+		}
+
+		perms = pAdmin.getPermissions(STRING_SPECIAL_SYMBOLS);
 		try {
 			pMBean.setPermissions(STRING_SPECIAL_SYMBOLS, new String[] {});
 		}
 		catch (IOException e) {
 			fail("unexpected exception", e);
 		}
+		finally {
+			pAdmin.setPermissions(STRING_SPECIAL_SYMBOLS, perms);
+		}
+
 		try {
 			pMBean.setPermissions(STRING_NULL, null);
 			fail("expected exception");
@@ -228,7 +265,10 @@ public class PermissionAdminMBeanTestCase extends MBeanGeneralTestCase {
 		if (testbundle != null) {
 			try {
 				super.uninstallBundle(testbundle);
-			} catch (Exception io) {}
+			}
+			catch (Exception io) {
+				// ignored
+			}
 		}
 	}
 }
