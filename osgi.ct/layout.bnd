@@ -18,6 +18,7 @@ jar.cmpn.tests = \
 
 build.cmpn.tests = \
     org.osgi.test.cases.application, \
+    org.osgi.test.cases.async, \
     org.osgi.test.cases.blueprint, \
     org.osgi.test.cases.blueprint.java5, \
     org.osgi.test.cases.blueprint.secure, \
@@ -69,6 +70,7 @@ jar.enterprise.tests = \
     ${repo;org.osgi.test.filter;latest}
 
 build.enterprise.tests = \
+    org.osgi.test.cases.async, \
     org.osgi.test.cases.blueprint, \
     org.osgi.test.cases.blueprint.java5, \
     org.osgi.test.cases.blueprint.secure, \

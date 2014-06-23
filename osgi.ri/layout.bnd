@@ -11,6 +11,7 @@ build.cmpn.impls = \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.transaction, \
 	org.osgi.impl.service.application, \
+    org.osgi.impl.service.async, \
 	org.osgi.impl.service.deploymentadmin , \
 	org.osgi.impl.service.device.manager , \
 	org.osgi.impl.service.dmt , \
@@ -53,6 +54,7 @@ build.enterprise.impls = \
 	org.osgi.impl.bundle.jaxp, \
 	org.osgi.impl.bundle.rsh, \
 	org.osgi.impl.bundle.transaction, \
+	org.osgi.impl.service.async, \
 	org.osgi.impl.service.jdbc, \
 	org.osgi.impl.service.jndi, \
 	org.osgi.impl.service.log , \
