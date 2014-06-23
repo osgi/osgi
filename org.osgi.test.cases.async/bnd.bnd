@@ -3,19 +3,18 @@
 
 Conditional-Package					= org.osgi.test.support.*
 Private-Package						=  \
-	${p}.junit,\
 	${p}.junit.*
 Export-Package						= \
-	${p}.services,\
-	${p}.services.types
+	${p}.services.*
 Import-Package: ${-signaturetest}, *
 
 Include-Resource					= \
 	tb1.jar
 
 -buildpath: org.osgi.test.support;version=project,\
-	org.osgi.service.async;version=project,\
+	org.osgi.util.function;version=project,\
 	org.osgi.util.promise;version=project,\
+	org.osgi.service.async;version=project,\
 	osgi.core;version=6.0.0,\
 	osgi.cmpn;version=4.3.1,\
 	ee.j2se;version=1.5,\
