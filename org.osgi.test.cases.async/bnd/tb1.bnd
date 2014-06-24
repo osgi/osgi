@@ -6,6 +6,6 @@ Bundle-ContactAddress: info@mail.osgi.org
 Bundle-Category: osgi,test
 Bundle-Copyright: ${copyright}
 
-Import-Package: *, ${p}.services, ${p}.services.types
+Import-Package: *, ${p}.services
 Private-Package						= \
 	${p}.tb1.*

@@ -22,6 +22,7 @@ import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 import org.osgi.service.async.delegate.AsyncDelegate;
+import org.osgi.test.cases.async.junit.AsyncTestUtils;
 import org.osgi.test.cases.async.services.MyService;
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.Promise;
@@ -32,21 +33,27 @@ public class MyServiceAsyncDelegate extends MyServiceImpl implements AsyncDelega
 		FAIL,
 		NON_ASYNC;
 	}
-	private final ExecutorService asyncExecutor;
 	private static final Map<String, MyServiceAsyncDelegate.DelegateType> delegateTypes = new HashMap<String, MyServiceAsyncDelegate.DelegateType>();
 	static {
 		delegateTypes.put(MyService.METHOD_countSlowly, DelegateType.ASYNC);
-		delegateTypes.put(MyService.METHOD_delegateFail, DelegateType.FAIL);
 		delegateTypes.put(MyService.METHOD_doSlowStuff, DelegateType.ASYNC);
 		delegateTypes.put(MyService.METHOD_failSlowly, DelegateType.ASYNC);
-		delegateTypes.put(MyService.METHOD_slowNonAsyncStuff, DelegateType.NON_ASYNC);
-		delegateTypes.put(MyService.METHOD_take, DelegateType.ASYNC);
+		delegateTypes.put(MyService.METHOD_delegateFail, DelegateType.FAIL);
+		delegateTypes.put(MyService.METHOD_nonDelegateCountSlowly, DelegateType.NON_ASYNC);
+		delegateTypes.put(MyService.METHOD_nonDelegateFailSlowly, DelegateType.NON_ASYNC);
 	}
+
+	private final ExecutorService asyncExecutor;
+	private final Deferred<String> delegateMethodCalled = new Deferred<String>();
 
 	public MyServiceAsyncDelegate(ExecutorService asyncExecutor) {
 		this.asyncExecutor = asyncExecutor;
 	}
 	public Promise<?> async(final Method m, final Object[] args) throws Exception {
+		delegateMethodCalled.resolve("async");
+		return doAsync(m, args);
+	}
+	private Promise<?> doAsync(final Method m, final Object[] args) throws Exception {
 		MyServiceAsyncDelegate.DelegateType delegateType = delegateTypes.get(m.getName());
 		if (delegateType == null) {
 			throw new NoSuchMethodError(m.getName());
@@ -57,7 +64,12 @@ public class MyServiceAsyncDelegate extends MyServiceImpl implements AsyncDelega
 				asyncExecutor.execute(new Runnable() {
 					public void run() {
 						try {
-							m.invoke(this, args);
+							Object result = m.invoke(MyServiceAsyncDelegate.this, args);
+							// We 2x the results so we can detect that our async was really called.
+							if (result instanceof Integer) {
+								result = new Integer(2 * ((Integer) result).intValue());
+							}
+							deferred.resolve(result);
 						} catch (IllegalAccessException e) {
 							deferred.fail(e);
 						} catch (InvocationTargetException e) {
@@ -68,6 +80,7 @@ public class MyServiceAsyncDelegate extends MyServiceImpl implements AsyncDelega
 				return deferred.getPromise();
 			}
 			case FAIL : {
+				lastMethodCalled.resolve(null);
 				throw new MyServiceException();
 			}
 			case NON_ASYNC : {
@@ -79,6 +92,11 @@ public class MyServiceAsyncDelegate extends MyServiceImpl implements AsyncDelega
 		}
 	}
 	public boolean execute(Method m, Object[] args) throws Exception {
-		return async(m, args) != null;
+		delegateMethodCalled.resolve("execute");
+		return doAsync(m, args) != null;
+	}
+
+	public String getDelegateMethodCalled() throws InterruptedException, InvocationTargetException {
+		return AsyncTestUtils.awaitResolve(delegateMethodCalled.getPromise());
 	}
 }

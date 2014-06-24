@@ -15,48 +15,63 @@
  */
 package org.osgi.test.cases.async.junit.impl;
 
+import java.lang.reflect.InvocationTargetException;
+
+import org.osgi.test.cases.async.junit.AsyncTestUtils;
 import org.osgi.test.cases.async.services.MyService;
-import org.osgi.test.cases.async.services.types.Argument;
+import org.osgi.util.promise.Deferred;
 
 public class MyServiceImpl implements MyService {
-	volatile String lastMethodCalled;
-	private final long timeToSleep = 500;
+	private static final long timeToSleep = 500;
+	protected final Deferred<String> lastMethodCalled = new Deferred<String>();
 
 	public void doSlowStuff(int times) throws Exception  {
-		countSlowly(times);
-		lastMethodCalled = METHOD_doSlowStuff;
+		doCountSlowly(times);
+		lastMethodCalled.resolve(METHOD_doSlowStuff);
 	}
 
 	public int countSlowly(int times) throws Exception {
+		try {
+			return doCountSlowly(times);
+		} finally {
+			lastMethodCalled.resolve(METHOD_countSlowly);
+		}
+	}
+
+	private int doCountSlowly(int times) throws Exception {
 		for(int i = 0; i < times; i++) {
 			Thread.sleep(timeToSleep);
 		}
-		lastMethodCalled = METHOD_countSlowly;
 		return times;
 	}
 
 	public int failSlowly(int times) throws Exception {
-		countSlowly(times);
-		lastMethodCalled = METHOD_failSlowly;
+		doCountSlowly(times);
+		lastMethodCalled.resolve(METHOD_failSlowly);
 		throw new MyServiceException();
 	}
 
-	public int slowNonDelegateStuff(int times) throws Exception {
-		int result =  countSlowly(times);
-		lastMethodCalled = METHOD_slowNonAsyncStuff;
-		return result;
+	public int nonDelegateCountSlowly(int times) throws Exception {
+		try {
+			return doCountSlowly(times);
+		} finally {
+			lastMethodCalled.resolve(METHOD_nonDelegateCountSlowly);
+		}
+	}
+
+	public int nonDelegateFailSlowly(int times) throws Exception {
+		doCountSlowly(times);
+		lastMethodCalled.resolve(METHOD_nonDelegateFailSlowly);
+		throw new MyServiceException();
 	}
 
 	public int delegateFail() throws Exception {
-		lastMethodCalled = METHOD_delegateFail;
-		throw new MyServiceException();
+		lastMethodCalled.resolve(METHOD_delegateFail);
+		// Do not fail here
+		return 0;
 	}
 
-	public void take(Argument arg) {
-		lastMethodCalled = METHOD_take;
-	}
-
-	public String lastMethodCalled() {
-		return lastMethodCalled;
+	public String lastMethodCalled() throws InterruptedException, InvocationTargetException {
+		return AsyncTestUtils.awaitResolve(lastMethodCalled.getPromise());
 	}
 }

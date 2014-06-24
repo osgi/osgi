@@ -15,15 +15,11 @@
  */
 package org.osgi.test.cases.async.junit;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.async.Async;
 import org.osgi.service.log.LogEntry;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.test.cases.async.junit.impl.AsyncErrorListener;
-import org.osgi.test.cases.async.junit.impl.MyServiceAsyncDelegate;
 import org.osgi.test.cases.async.junit.impl.MyServiceException;
 import org.osgi.test.cases.async.junit.impl.MyServiceFactory;
 import org.osgi.test.cases.async.junit.impl.MyServiceImpl;
@@ -40,23 +36,16 @@ public class AsyncTestCase extends OSGiTestCase {
 	private ServiceTracker<LogReaderService, LogReaderService> logReaderTracker;
 	private LogReaderService logReader;
 	private AsyncErrorListener asyncErrors;
-	private ExecutorService asyncExecutor;
 	
 	private MyServiceImpl myServiceImpl;
-	private MyServiceAsyncDelegate myServiceDelegate;
 	private MyServiceFactory myServiceFactory;
 
 	private ServiceRegistration<MyService> normalReg;
-	private ServiceRegistration<MyService> delegateReg;
 	private ServiceRegistration<MyService> factoryReg;
 	
 	protected void setUp() throws InterruptedException {
 		myServiceImpl = new MyServiceImpl();
 		normalReg = getContext().registerService(MyService.class, myServiceImpl, null);
-
-		asyncExecutor = Executors.newSingleThreadExecutor();
-		myServiceDelegate = new MyServiceAsyncDelegate(asyncExecutor);
-		delegateReg = getContext().registerService(MyService.class, myServiceDelegate, null);
 
 		myServiceFactory = new MyServiceFactory();
 		factoryReg = getContext().registerService(MyService.class, myServiceFactory, null);
@@ -77,10 +66,7 @@ public class AsyncTestCase extends OSGiTestCase {
 	protected void tearDown() {
 
 		normalReg.unregister();
-		delegateReg.unregister();
 		factoryReg.unregister();
-
-		asyncExecutor.shutdown();
 
 		asyncTracker.close();
 		logReader.removeLogListener(asyncErrors);

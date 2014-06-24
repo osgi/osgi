@@ -21,7 +21,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.async.Async;
 import org.osgi.test.cases.async.services.MyService;
-import org.osgi.test.cases.async.services.types.Argument;
 import org.osgi.test.support.OSGiTestCase;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -45,7 +44,7 @@ public class ProgrammerErrorTestCase extends OSGiTestCase {
 			return 0;
 		}
 
-		public int slowNonDelegateStuff(int times) throws Exception {
+		public int nonDelegateCountSlowly(int times) throws Exception {
 			return 0;
 		}
 
@@ -53,9 +52,9 @@ public class ProgrammerErrorTestCase extends OSGiTestCase {
 			return 0;
 		}
 
-		public void take(Argument arg) {
+		public int nonDelegateFailSlowly(int times) throws Exception {
+			return 0;
 		}
-
 	}
 
 	protected void setUp() throws InterruptedException {

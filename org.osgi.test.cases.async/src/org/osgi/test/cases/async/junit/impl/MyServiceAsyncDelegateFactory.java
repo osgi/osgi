@@ -13,8 +13,19 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.async.services.types;
+package org.osgi.test.cases.async.junit.impl;
 
-public class Argument {
+import java.util.concurrent.ExecutorService;
 
+public class MyServiceAsyncDelegateFactory extends MyServiceFactory {
+	public MyServiceAsyncDelegateFactory(ExecutorService asyncExecutor) {
+		super(new MyServiceAsyncDelegate(asyncExecutor));
+	}
+
+	@Override
+	public MyServiceAsyncDelegate getMySerivceImpl() {
+		return (MyServiceAsyncDelegate) super.getMySerivceImpl();
+	}
+
+	
 }

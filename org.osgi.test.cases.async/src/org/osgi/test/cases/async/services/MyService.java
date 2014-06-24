@@ -15,15 +15,14 @@
  */
 package org.osgi.test.cases.async.services;
 
-import org.osgi.test.cases.async.services.types.Argument;
 
 public interface MyService {
 	public static final String METHOD_doSlowStuff = "doSlowStuff";
 	public static final String METHOD_countSlowly = "countSlowly";
 	public static final String METHOD_failSlowly = "failSlowly";
-	public static final String METHOD_slowNonAsyncStuff = "slowNonAsyncStuff";
+	public static final String METHOD_nonDelegateCountSlowly = "nonDelegateCountSlowly";
+	public static final String METHOD_nonDelegateFailSlowly = "nonDelegateFailSlowly";
 	public static final String METHOD_delegateFail = "delegateFail";
-	public static final String METHOD_take = "take";
 	
 
 	void doSlowStuff(int times) throws Exception;
@@ -32,9 +31,9 @@ public interface MyService {
 
 	int failSlowly(int times) throws Exception;
 
-	int slowNonDelegateStuff(int times) throws Exception;
+	int nonDelegateCountSlowly(int times) throws Exception;
+
+	int nonDelegateFailSlowly(int times) throws Exception;
 
 	int delegateFail() throws Exception;
-
-	void take(Argument arg);
 }

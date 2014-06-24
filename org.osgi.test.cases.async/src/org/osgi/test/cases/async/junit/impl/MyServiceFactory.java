@@ -29,7 +29,15 @@ import org.osgi.test.cases.async.services.MyService;
 public class MyServiceFactory implements ServiceFactory<MyService> {
 	private final CountDownLatch latch = new CountDownLatch(2);
 	private final AtomicBoolean returnNullFromFactory = new AtomicBoolean(false);
-	private final MyServiceImpl myService = new MyServiceImpl();
+	private final MyServiceImpl myService;
+
+	public MyServiceFactory() {
+		this(null);
+	}
+
+	public MyServiceFactory(MyServiceImpl myService) {
+		this.myService = myService == null ? new MyServiceImpl() : myService;
+	}
 
 	public MyService getService(Bundle bundle,
 			ServiceRegistration<MyService> registration) {
