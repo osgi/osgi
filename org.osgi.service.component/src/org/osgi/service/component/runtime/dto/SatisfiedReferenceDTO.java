@@ -20,13 +20,13 @@ import org.osgi.dto.DTO;
 import org.osgi.framework.dto.ServiceReferenceDTO;
 
 /**
- * A representation of a bound reference to a service.
+ * A representation of a satisfied reference.
  * 
  * @since 1.3
  * @NotThreadSafe
  * @author $Id$
  */
-public class BoundReferenceDTO extends DTO {
+public class SatisfiedReferenceDTO extends DTO {
 	/**
 	 * The name of the declared reference.
 	 * 
@@ -39,13 +39,13 @@ public class BoundReferenceDTO extends DTO {
 	public String					name;
 
 	/**
-	 * The target property of the bound reference.
+	 * The target property of the satisfied reference.
 	 * 
 	 * <p>
 	 * This is the value of the {@link ComponentConfigurationDTO#properties
 	 * component property} whose name is the concatenation of the
 	 * {@link ReferenceDTO#name declared reference name} and
-	 * &quot;.target&quot;. This will be {@code null} if no target property is
+	 * &quot;.target&quot;. This must be {@code null} if no target property is
 	 * set for the reference.
 	 */
 	public String					target;
@@ -55,7 +55,8 @@ public class BoundReferenceDTO extends DTO {
 	 * 
 	 * <p>
 	 * Each {@link ServiceReferenceDTO} in the array represents a service bound
-	 * to the component configuration.
+	 * to the satisfied reference. The array must be empty if there are no bound
+	 * services.
 	 */
-	public ServiceReferenceDTO[]	serviceReferences;
+	public ServiceReferenceDTO[]	boundServices;
 }
