@@ -31,7 +31,7 @@ public class ReferenceDTO extends DTO {
 	 * 
 	 * <p>
 	 * This is declared in the {@code name} attribute of the {@code reference}
-	 * element. This will be the default name if the component description does
+	 * element. This must be the default name if the component description does
 	 * not declare a name for the reference.
 	 */
 	public String	name;
@@ -50,7 +50,7 @@ public class ReferenceDTO extends DTO {
 	 * 
 	 * <p>
 	 * This is declared in the {@code cardinality} attribute of the
-	 * {@code reference} element. This will be the default cardinality if the
+	 * {@code reference} element. This must be the default cardinality if the
 	 * component description does not declare a cardinality for the reference.
 	 */
 	public String	cardinality;
@@ -60,7 +60,7 @@ public class ReferenceDTO extends DTO {
 	 * 
 	 * <p>
 	 * This is declared in the {@code policy} attribute of the {@code reference}
-	 * element. This will be the default policy if the component description
+	 * element. This must be the default policy if the component description
 	 * does not declare a policy for the reference.
 	 */
 	public String	policy;
@@ -70,7 +70,7 @@ public class ReferenceDTO extends DTO {
 	 * 
 	 * <p>
 	 * This is declared in the {@code policy-option} attribute of the
-	 * {@code reference} element. This will be the default policy option if the
+	 * {@code reference} element. This must be the default policy option if the
 	 * component description does not declare a policy option for the reference.
 	 */
 	public String	policyOption;
@@ -80,7 +80,7 @@ public class ReferenceDTO extends DTO {
 	 * 
 	 * <p>
 	 * This is declared in the {@code target} attribute of the {@code reference}
-	 * element. This will be {@code null} if the component description does not
+	 * element. This must be {@code null} if the component description does not
 	 * declare a target for the reference.
 	 */
 	public String	target;
@@ -90,7 +90,7 @@ public class ReferenceDTO extends DTO {
 	 * 
 	 * <p>
 	 * This is declared in the {@code bind} attribute of the {@code reference}
-	 * element. This will be {@code null} if the component description does not
+	 * element. This must be {@code null} if the component description does not
 	 * declare a bind method for the reference.
 	 */
 	public String	bind;
@@ -100,7 +100,7 @@ public class ReferenceDTO extends DTO {
 	 * 
 	 * <p>
 	 * This is declared in the {@code unbind} attribute of the {@code reference}
-	 * element. This will be {@code null} if the component description does not
+	 * element. This must be {@code null} if the component description does not
 	 * declare an unbind method for the reference.
 	 */
 	public String	unbind;
@@ -110,7 +110,7 @@ public class ReferenceDTO extends DTO {
 	 * 
 	 * <p>
 	 * This is declared in the {@code updated} attribute of the
-	 * {@code reference} element. This will be {@code null} if the component
+	 * {@code reference} element. This must be {@code null} if the component
 	 * description does not declare an updated method for the reference.
 	 */
 	public String	updated;
@@ -120,7 +120,7 @@ public class ReferenceDTO extends DTO {
 	 * 
 	 * <p>
 	 * This is declared in the {@code scope} attribute of the {@code reference}
-	 * element. This will be the default scope if the component description does
+	 * element. This must be the default scope if the component description does
 	 * not declare a scope for the reference.
 	 */
 	public String	scope;
