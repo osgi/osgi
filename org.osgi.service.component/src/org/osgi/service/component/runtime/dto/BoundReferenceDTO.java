@@ -34,7 +34,7 @@ public class BoundReferenceDTO extends DTO {
 	 * This is declared in the {@code name} attribute of the {@code reference}
 	 * element of the component description.
 	 * 
-	 * @see ComponentDescriptionDTO#name
+	 * @see ReferenceDTO#name
 	 */
 	public String					name;
 
