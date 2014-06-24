@@ -15,6 +15,7 @@
  */
 package org.osgi.test.cases.async.junit.impl;
 
+@SuppressWarnings("serial")
 public class MyServiceException extends RuntimeException {
 
 }
