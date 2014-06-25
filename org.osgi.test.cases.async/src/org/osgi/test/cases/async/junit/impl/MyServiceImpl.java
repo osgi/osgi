@@ -18,10 +18,11 @@ package org.osgi.test.cases.async.junit.impl;
 import java.lang.reflect.InvocationTargetException;
 
 import org.osgi.test.cases.async.junit.AsyncTestUtils;
+import org.osgi.test.cases.async.services.AnotherService;
 import org.osgi.test.cases.async.services.MyService;
 import org.osgi.util.promise.Deferred;
 
-public class MyServiceImpl implements MyService {
+public class MyServiceImpl implements MyService, AnotherService {
 	private static final long timeToSleep = 500;
 	protected final Deferred<String> lastMethodCalled = new Deferred<String>();
 
@@ -73,5 +74,32 @@ public class MyServiceImpl implements MyService {
 
 	public String lastMethodCalled() throws InterruptedException, InvocationTargetException {
 		return AsyncTestUtils.awaitResolve(lastMethodCalled.getPromise());
+	}
+
+	public void otherSlowStuff(int times) throws Exception {
+		doSlowStuff(times);
+		lastMethodCalled.resolve(METHOD_otherSlowStuff);
+	}
+
+	public static final class FinalMyServiceImpl extends MyServiceImpl {
+		// To test mediated types for final classes
+	}
+
+	public static class FinalMethodMyServiceImpl extends MyServiceImpl {
+		// To test mediated type classes with final methods
+		public final int someFinalMethod(int times) {
+			return 0;
+		}
+	}
+
+	public static class ExtendedFinalMethodMyServiceImpl extends FinalMethodMyServiceImpl {
+		// To test mediated type classes with final methods in hierarchy
+	}
+
+	public static class NoZeroArgConstructorMyServiceImpl extends MyServiceImpl {
+		// To test mediated type classes with no zero arg constructors
+		public NoZeroArgConstructorMyServiceImpl(int someArg) {
+			super();
+		}
 	}
 }

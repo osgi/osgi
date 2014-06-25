@@ -23,6 +23,7 @@ import java.util.concurrent.ExecutorService;
 
 import org.osgi.service.async.delegate.AsyncDelegate;
 import org.osgi.test.cases.async.junit.AsyncTestUtils;
+import org.osgi.test.cases.async.services.AnotherService;
 import org.osgi.test.cases.async.services.MyService;
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.Promise;
@@ -38,6 +39,7 @@ public class MyServiceAsyncDelegate extends MyServiceImpl implements AsyncDelega
 		delegateTypes.put(MyService.METHOD_countSlowly, DelegateType.ASYNC);
 		delegateTypes.put(MyService.METHOD_doSlowStuff, DelegateType.ASYNC);
 		delegateTypes.put(MyService.METHOD_failSlowly, DelegateType.ASYNC);
+		delegateTypes.put(AnotherService.METHOD_otherSlowStuff, DelegateType.ASYNC);
 		delegateTypes.put(MyService.METHOD_delegateFail, DelegateType.FAIL);
 		delegateTypes.put(MyService.METHOD_nonDelegateCountSlowly, DelegateType.NON_ASYNC);
 		delegateTypes.put(MyService.METHOD_nonDelegateFailSlowly, DelegateType.NON_ASYNC);

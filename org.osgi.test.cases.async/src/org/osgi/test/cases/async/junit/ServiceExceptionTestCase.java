@@ -78,7 +78,12 @@ public class ServiceExceptionTestCase extends OSGiTestCase {
 		} catch (IllegalStateException e) {
 			// may have been unregistered as part of the test
 		}
-		// Note that we don't uninstall tb1 each time
+		try {
+			clientBundle.stop();
+		} catch (BundleException e) {
+			// did out best
+		}
+		// Note that we don't uninstall clientBundle each time
 	}
 
 	private Async getClientAsync() {
