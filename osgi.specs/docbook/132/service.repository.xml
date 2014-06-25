@@ -371,16 +371,31 @@ void removeRepository( Repository repo ) { repos.remove(repo); }</programlisting
       The Repository service provides a <xref
       linkend="org.osgi.service.repository.Repository.findProviders-RequirementExpression-"
       xrefstyle="hyperlink"/> overload that can take a requirement expression
-      and returns a collection of matching resources: <programlisting>
-  RequirementBuilder lb = repo.newRequirementBuilder("osgi.identity");
+      and returns a Promise to a collection of matching resources. 
+<programlisting>  RequirementBuilder lb = repo.newRequirementBuilder("osgi.identity");
   String lf = "(license=http://opensource.org/licenses/Apache-2.0)";
   lb.addDirective("filter", lf);
 
   RequirementExpression expr = repo.getExpressionCombiner().and(
     lb.buildExpression(), rb.buildExpression());
 
-  Collection&lt;Resource&gt; matches = repo.findProviders(expr);
-      </programlisting></para>
+  Promise&lt;Collection&lt;Resource&gt;&gt; p = repo.findProviders(expr);
+
+  // Let findProviders() do its work async and update a ui component 
+  // once the result is available
+  p.then(new Success&lt;Collection&lt;Resource&gt;, Void&gt;() {
+    public Promise&lt;Void&gt; call(Promise&lt;Collection&lt;Resource&gt;&gt; resolved) 
+        throws Exception {
+      ui.update(resolved.getValue());
+      return null;
+    }
+  });
+
+  // Instead of the async chain above its also possiblye to 
+  // wait for the promise value synchronously:
+  //   Collection&lt;Resource&gt; resources = p.getValue();</programlisting>
+  For more details on OSGi Promises, see the <xref linkend="util.promise"/>.
+</para>
     </section>
   </section>
 
