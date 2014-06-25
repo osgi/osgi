@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -144,7 +144,10 @@ public @interface AttributeDefinition {
 	 * The default value for this AttributeDefinition.
 	 * 
 	 * <p>
-	 * If not specified, there is no default value.
+	 * If not specified, if the annotated element is part of an annotation and
+	 * has a <code>default</code> value, then the value is the
+	 * <code>default</code> value of the annotated element. Otherwise, there is
+	 * no default value.
 	 * 
 	 * @see "The default attribute of the AD element of a Meta Type Resource."
 	 */
