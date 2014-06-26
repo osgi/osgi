@@ -15,7 +15,6 @@
  */
 package org.osgi.test.cases.async.secure.junit.impl;
 
-import java.lang.reflect.InvocationTargetException;
 import java.security.AccessController;
 
 import org.osgi.test.cases.async.secure.junit.AsyncTestUtils;
@@ -31,11 +30,7 @@ public class MyServiceImpl implements MyService {
 		try {
 			int result = doCountSlowly(times);
 			if (withSecuriyCheck) {
-				SecurityManager sm = System.getSecurityManager();
-				if (sm != null) {
-					sm.checkPermission(new MyPermission("test"));
-				}
-				//AccessController.checkPermission(new MyPermission("test"));
+				AccessController.checkPermission(new MyPermission("test"));
 			}
 			success.resolve(result);
 			return result;
