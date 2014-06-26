@@ -6,7 +6,6 @@ Private-Package						=  \
 	${p}.junit.*
 Export-Package						= \
 	${p}.services.*
-Import-Package: ${-signaturetest}, *
 
 Include-Resource					= \
 	tb1.jar, \
@@ -27,6 +26,5 @@ Include-Resource					= \
 -runproperties = ${runsecureproperties}
 
 Test-Cases							= ${testcases}
--signaturetest                      = org.osgi.service.async
 	
 	
