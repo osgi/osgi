@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,8 +48,7 @@ public @interface ObjectClassDefinition {
 	 * If not specified, the id of this ObjectClassDefinition is the fully
 	 * qualified name of the annotated type using the dollar sign ({@code '$'}
 	 * &#92;u0024) to separate nested class names from the name of their
-	 * enclosing class. The id is not to be confused with a PID which can be
-	 * specified by the {@link #pid()} or {@link #factoryPid()} element.
+	 * enclosing class.
 	 * 
 	 * @see "The id attribute of the OCD element of a Meta Type Resource."
 	 */
@@ -100,32 +99,6 @@ public @interface ObjectClassDefinition {
 	 * @see "The localization attribute of the OCD element of a Meta Type Resource."
 	 */
 	String localization() default "";
-
-	/**
-	 * The PIDs associated with this ObjectClassDefinition.
-	 * 
-	 * <p>
-	 * For each specified PID, a {@code Designate} element with a pid attribute
-	 * is generated that {@link #id() references} this ObjectClassDefinition. If
-	 * not specified, no Designate elements with pid attributes will be
-	 * generated.
-	 * 
-	 * @see "The pid of the Designate element of a Meta Type Resource."
-	 */
-	String[] pid() default {};
-
-	/**
-	 * The factory PIDs associated with this ObjectClassDefinition.
-	 * 
-	 * <p>
-	 * For each specified factory PID, a {@code Designate} element with a
-	 * factoryPid attribute is generated that {@link #id() references} this
-	 * ObjectClassDefinition. If not specified, no Designate elements with
-	 * factoryPid attributes will be generated.
-	 * 
-	 * @see "The factoryPid of the Designate element of a Meta Type Resource."
-	 */
-	String[] factoryPid() default {};
 
 	/**
 	 * The icon resources associated with this ObjectClassDefinition.
