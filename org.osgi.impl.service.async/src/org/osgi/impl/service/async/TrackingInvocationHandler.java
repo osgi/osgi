@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.osgi.framework.Bundle;
 import org.osgi.framework.ServiceReference;
 
 class TrackingInvocationHandler implements InvocationHandler {
@@ -31,25 +32,28 @@ class TrackingInvocationHandler implements InvocationHandler {
 	 * 
 	 */
 	private final AsyncService asyncService;
+	private final Bundle clientBundle;
 	private final ServiceReference<?> ref;
 	private final Object delegate;
 	
-	public TrackingInvocationHandler(AsyncService asyncService, ServiceReference<?> ref) {
+	public TrackingInvocationHandler(AsyncService asyncService, Bundle clientBundle, ServiceReference<?> ref) {
 		super();
 		this.asyncService = asyncService;
+		this.clientBundle = clientBundle;
 		this.ref = ref;
 		this.delegate = null;
 	}
-	public TrackingInvocationHandler(AsyncService asyncService, Object service) {
+	public TrackingInvocationHandler(AsyncService asyncService, Bundle clientBundle, Object service) {
 		super();
 		this.asyncService = asyncService;
+		this.clientBundle = clientBundle;
 		this.delegate = service;
 		this.ref = null;
 	}
 
 	public Object invoke(Object proxy, Method method, Object[] args)
 			throws Throwable {
-		asyncService.registerInvocation(new MethodCall(ref, delegate, method, args));
+		asyncService.registerInvocation(new MethodCall(clientBundle, ref, delegate, method, args));
 		Class<?> returnType = method.getReturnType();
 		return RETURN_VALUES.get(returnType);
 	}

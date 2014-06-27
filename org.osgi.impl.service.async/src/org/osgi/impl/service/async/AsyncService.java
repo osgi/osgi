@@ -52,7 +52,7 @@ public class AsyncService implements Async {
 		} while ((cls = cls.getSuperclass()) != null);
 		
 		return (T) Proxy.newProxyInstance(clientBundle.adapt(BundleWiring.class).getClassLoader(), 
-				interfaces.toArray(new Class[interfaces.size()]), new TrackingInvocationHandler(this, service));
+				interfaces.toArray(new Class[interfaces.size()]), new TrackingInvocationHandler(this, clientBundle, service));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -82,7 +82,7 @@ public class AsyncService implements Async {
 		}
 		
 		return (T) Proxy.newProxyInstance(clientBundle.adapt(BundleWiring.class).getClassLoader(), 
-				ifaces.toArray(new Class[ifaces.size()]), new TrackingInvocationHandler(this, ref));
+				ifaces.toArray(new Class[ifaces.size()]), new TrackingInvocationHandler(this, clientBundle, ref));
 	}
 
 	public <T> Promise<T> call(T call) throws IllegalStateException {
