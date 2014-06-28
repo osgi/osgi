@@ -17,6 +17,7 @@
 package org.osgi.service.component.runtime.dto;
 
 import org.osgi.dto.DTO;
+import org.osgi.framework.dto.ServiceReferenceDTO;
 
 /**
  * A representation of an unsatisfied reference.
@@ -48,4 +49,16 @@ public class UnsatisfiedReferenceDTO extends DTO {
 	 * set for the reference.
 	 */
 	public String					target;
+
+	/**
+	 * The target services.
+	 * 
+	 * <p>
+	 * Each {@link ServiceReferenceDTO} in the array represents a target service
+	 * for the reference. The array must be empty if there are no target
+	 * services. The upper bound on the number of target services in the array
+	 * is the upper bound on the {@link ReferenceDTO#cardinality cardinality} of
+	 * the reference.
+	 */
+	public ServiceReferenceDTO[]	targetServices;
 }
