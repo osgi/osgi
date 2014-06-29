@@ -25,18 +25,13 @@ public class Work<T> implements Runnable {
 			
 			@SuppressWarnings("unchecked")
 			T returnValue = (T) methodCall.method.invoke(service, methodCall.arguments);
-			if(deferred != null) {
-				deferred.resolve(returnValue);
-			}
+			deferred.resolve(returnValue);
 			
 		} catch (InvocationTargetException ite) {
-			if(deferred != null) {
-				deferred.fail(ite.getTargetException());
-			}
+			Throwable targetException = ite.getTargetException();
+			deferred.fail(targetException);
 		} catch (Exception e) {
-			if(deferred != null) {
-				deferred.fail(e);
-			}
+			deferred.fail(e);
 		} finally {
 			methodCall.releaseService();
 		}

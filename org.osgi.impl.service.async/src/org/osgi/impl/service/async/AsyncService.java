@@ -17,7 +17,9 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.async.Async;
+import org.osgi.service.log.LogService;
 import org.osgi.util.promise.Promise;
+import org.osgi.util.tracker.ServiceTracker;
 
 
 public class AsyncService implements Async {
@@ -28,10 +30,13 @@ public class AsyncService implements Async {
 	
 	private final ExecutorService executor;
 	
-	public AsyncService(Bundle clientBundle, ExecutorService executor) {
+	private final ServiceTracker<LogService, LogService> logServiceTracker;
+	
+	public AsyncService(Bundle clientBundle, ExecutorService executor, ServiceTracker<LogService, LogService> logServiceTracker) {
 		super();
 		this.clientBundle = clientBundle;
 		this.executor = executor;
+		this.logServiceTracker = logServiceTracker;
 	}
 
 	@SuppressWarnings("unchecked")
@@ -52,7 +57,8 @@ public class AsyncService implements Async {
 		} while ((cls = cls.getSuperclass()) != null);
 		
 		return (T) Proxy.newProxyInstance(clientBundle.adapt(BundleWiring.class).getClassLoader(), 
-				interfaces.toArray(new Class[interfaces.size()]), new TrackingInvocationHandler(this, clientBundle, service));
+				interfaces.toArray(new Class[interfaces.size()]), new TrackingInvocationHandler(this, 
+						clientBundle, logServiceTracker, service));
 	}
 
 	@SuppressWarnings("unchecked")
@@ -82,7 +88,8 @@ public class AsyncService implements Async {
 		}
 		
 		return (T) Proxy.newProxyInstance(clientBundle.adapt(BundleWiring.class).getClassLoader(), 
-				ifaces.toArray(new Class[ifaces.size()]), new TrackingInvocationHandler(this, clientBundle, ref));
+				ifaces.toArray(new Class[ifaces.size()]), new TrackingInvocationHandler(this, 
+						clientBundle, logServiceTracker, ref));
 	}
 
 	public <T> Promise<T> call(T call) throws IllegalStateException {

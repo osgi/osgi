@@ -9,13 +9,17 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.async.delegate.AsyncDelegate;
+import org.osgi.service.log.LogService;
 import org.osgi.util.promise.Deferred;
+import org.osgi.util.promise.Failure;
 import org.osgi.util.promise.Promise;
+import org.osgi.util.tracker.ServiceTracker;
 
 
 public class MethodCall {
 
 	private final Bundle clientBundle;
+	private final ServiceTracker<LogService, LogService> logServiceTracker;
 	
 	private final ServiceReference<?> reference;
 	private final Object service;
@@ -23,9 +27,10 @@ public class MethodCall {
 	final Method method;
 	final Object[] arguments;
 	
-	public MethodCall(Bundle clientBundle, ServiceReference<?> reference, Object service,
-			Method method, Object[] arguments) {
+	public MethodCall(Bundle clientBundle, ServiceTracker<LogService, LogService> logServiceTracker, 
+			ServiceReference<?> reference, Object service, Method method, Object[] arguments) {
 		this.clientBundle = clientBundle;
+		this.logServiceTracker = logServiceTracker;
 		this.reference = reference;
 		this.service = service;
 		this.method = method;
@@ -82,6 +87,7 @@ public class MethodCall {
 				if(p != null) {
 					try {
 						deferred.resolveWith(p);
+						return deferred.getPromise();
 					} finally {
 						releaseService();
 					}
@@ -119,6 +125,7 @@ public class MethodCall {
 		try {
 			svc = getService();
 		} catch (Exception e) {
+			logError("Unable to obtain the service object", e);
 			return;
 		}
 		
@@ -130,6 +137,7 @@ public class MethodCall {
 				}
 			} catch (Exception e) {
 				releaseService();
+				logError("The AsyncDelegate rejected the fire-and-forget invocation with an exception", e);
 				return;
 			}
 		}
@@ -142,9 +150,24 @@ public class MethodCall {
 				public void run() {
 					releaseService();
 				}
+			}).then(null, new Failure(){
+				public void fail(Promise<?> resolved) throws Exception {
+					logError("The fire-and-forget invocation failed", resolved.getFailure());
+				}
 			});
 		} catch (RejectedExecutionException ree) {
+			logError("The Async Service threadpool rejected the fire-and-forget invocation", ree);
 			return;
+		}
+	}
+
+	void logError(String message, Throwable e) {
+		for(LogService log : logServiceTracker.getServices(new LogService[0])) {
+			if(reference == null) {
+				log.log(LogService.LOG_ERROR, message, e);
+			} else {
+				log.log(reference,  LogService.LOG_ERROR, message, e);
+			}
 		}
 	}
 }
