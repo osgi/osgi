@@ -500,12 +500,16 @@ public void doStuff() {
       passed to the the async service's <code>call</code> method when
       beginning the async invocation</para>
 
-      <para>Async mediators should make a best-effort attempt to detect
-      incorrect API usage from the client. If this incorrect usage is detected
-      then the mediator object should throw an IllegalStateException when
-      invoked. An example of incorrect usage is for a client to make multiple
-      invocations on a mediator object without making any calls to the Async
+      <para>Async mediators should make a best-effort attempt to detect incorrect API usage
+      from the client. If this incorrect usage is detected then the mediator object
+      must throw an IllegalStateException when invoked. An example of incorrect usage
+      that must be detected is when a client makes multiple invocations on a single
+      mediator object from the same thread without making any calls to the Async
       service.</para>
+
+      <para>After a usage error has been detected and an IllegalStateException has been
+      thrown the mediator object must be reset so that a subsequent invocation from
+      the client thread can proceed normally.</para>
     </section>
 
     <section>
