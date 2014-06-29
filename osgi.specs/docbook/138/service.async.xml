@@ -623,6 +623,31 @@ public void doStuff() {
         </listitem>
       </itemizedlist>
     </section>
+    
+    <section>
+      <title>Lifecycle for Async Delegate Services</title>
+      
+      <para>If an Async Delegate service implementation accepts an asynchronous 
+      task, either via a call to <code>execute()</code> or <code>async()</code>, 
+      then it is responsible for continuing to process the work until completion. 
+      This means that if the service is unregistered for some reason then the task 
+      must be properly cleaned up and succeed or fail as appropriate.</para>
+
+      <para>If the Async services implementation used a service reference to 
+      obtain the Async Delegate service object then it must release the service 
+      object after the task has been accepted. This means that if the Async 
+      Delegate service object is provided by a service factory then the service 
+      object should take extra care not to destroy its internal state when released. 
+      The service object must remain valid until all executing asynchronous tasks 
+      are either completed or failed.</para>
+
+      <para>In the case where an AsyncDelegate service rejects an asynchronous task 
+      with a return of <code>false</code> or <code>null</code>, the Async service 
+      implementation will take over the execution of the task. In this case the 
+      Async service should not release the service object until the asynchronous task 
+      is completed. If the asynchronous task is rejected with an Exception then the 
+      service must be released immediately.</para>
+    </section>
   </section>
 
   <section xml:id="service.async-security">
