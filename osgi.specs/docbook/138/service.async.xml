@@ -409,6 +409,19 @@ public void doStuff() {
       bundles should obtain their own instances from the service
       registry.</para>
     </section>
+    
+    <section>
+      <title>Service Object Lifecycle management</title>
+
+      <para>If the Async Service is being used to call an OSGi service object 
+      and the service reference is available then the service object should be 
+      looked up immediately before the asynchronous task begins executing. This 
+      ensures that the service is still available at the point it is eventually 
+      called. Any call to <code>getService()</code> must have a corresponding call
+      to <code>ungetService()</code> after the mediated method invoked has 
+      returned and, if available, the promise is resolved, but before the 
+      asynchronous task releases its thread of execution.</para>
+    </section>
   </section>
 
   <section>
