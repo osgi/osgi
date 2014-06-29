@@ -385,13 +385,7 @@ public void doStuff() {
           <para>If the Async service is unable to accept new work, for example
           it is in the process of being shut down.</para>
         </listitem>
-
-        <listitem>
-          <para>If the target service is unable to be invoked using the
-          recorded arguments. This error should never occur for properly
-          packaged bundles, however it can occur if there are missing uses
-          constraints for one or more service packages.</para>
-        </listitem>
+        
       </itemizedlist>
     </section>
 
