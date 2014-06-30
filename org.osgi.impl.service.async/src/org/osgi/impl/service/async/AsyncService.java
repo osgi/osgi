@@ -66,6 +66,7 @@ public class AsyncService implements Async {
 		Object o = ref.getProperty(Constants.OBJECTCLASS);
 		
 		List<String> ifaceNames;
+		Bundle registeringBundle = ref.getBundle();
 		
 		if(o == null) {
 			throw new IllegalArgumentException("This service reference has no objectclass " + ref);
@@ -78,7 +79,7 @@ public class AsyncService implements Async {
 		Collection<Class<?>> ifaces = new ArrayList<Class<?>>(ifaceNames.size());
 		for(String s : ifaceNames) {
 			try {
-				Class<?> c = clientBundle.loadClass(s);
+				Class<?> c = registeringBundle.loadClass(s);
 				if(c.isInterface()) {
 					ifaces.add(c);
 				}
@@ -87,7 +88,7 @@ public class AsyncService implements Async {
 			}
 		}
 		
-		return (T) Proxy.newProxyInstance(clientBundle.adapt(BundleWiring.class).getClassLoader(), 
+		return (T) Proxy.newProxyInstance(registeringBundle.adapt(BundleWiring.class).getClassLoader(), 
 				ifaces.toArray(new Class[ifaces.size()]), new TrackingInvocationHandler(this, 
 						clientBundle, logServiceTracker, ref));
 	}
