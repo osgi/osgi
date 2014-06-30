@@ -298,7 +298,7 @@ public interface Device {
 	 * @throws UnsupportedOperationException If the operation is not supported
 	 *         over this device.
 	 * @throws SecurityException If the caller does not have the appropriate
-	 *         <code>FunctionalDevicePermission[this device, {@link DevicePermission#ACTION_REMOVE}]</code>
+	 *         <code>DevicePermission[this device, {@link DevicePermission#ACTION_REMOVE}]</code>
 	 *         and the Java Runtime Environment supports permissions.
 	 * @throws IllegalStateException If this device service object has already
 	 *         been unregistered.

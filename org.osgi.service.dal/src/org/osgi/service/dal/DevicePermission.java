@@ -22,18 +22,9 @@ import java.security.PermissionCollection;
 
 /**
  * A bundle's authority to perform specific privileged administrative operations
- * on the devices. The actions for this permission are:
- * <table>
- * <tr>
- * <td>Action</td>
- * <td>Method</td>
- * </tr>
- * <tr>
- * <td>{@link #ACTION_REMOVE}</td>
- * <td>{@link Device#remove()}</td>
- * </tr>
- * </table>
- * 
+ * on the devices. The method {@link Device#remove()} is protected with
+ * {@link #ACTION_REMOVE} permission action.
+ * <p>
  * The name of the permission is a filter based. See OSGi Core Specification,
  * Filter Based Permissions. The filter gives an access to all device service
  * properties. The service property names are case insensitive. The filter
@@ -47,9 +38,9 @@ public final class DevicePermission extends BasicPermission {
 	public static final String	ACTION_REMOVE		= "remove";
 
 	/**
-	 * Creates a new <code>FunctionalDevicePermission</code> with the given
-	 * filter and actions. The constructor must only be used to create a
-	 * permission that is going to be checked.
+	 * Creates a new <code>DevicePermission</code> with the given filter and
+	 * actions. The constructor must only be used to create a permission that is
+	 * going to be checked.
 	 * <p>
 	 * An filter example: (dal.device.hardware.vendor=acme)
 	 * <p>
@@ -70,13 +61,12 @@ public final class DevicePermission extends BasicPermission {
 	}
 
 	/**
-	 * Creates a new <code>FunctionalDevicePermission</code> with the given
-	 * device and actions. The permission must be used for the security checks
-	 * like:
+	 * Creates a new <code>DevicePermission</code> with the given device and
+	 * actions. The permission must be used for the security checks like:
 	 * <p>
-	 * <code>securityManager.checkPermission(new FunctionalDevicePermission(this, "remove"));</code>
+	 * <code>securityManager.checkPermission(new DevicePermission(this, "remove"));</code>
 	 * . The permissions constructed by this constructor must not be added to
-	 * the <code>FunctionalDevicePermission</code> permission collections.
+	 * the <code>DevicePermission</code> permission collections.
 	 * 
 	 * @param device The permission device.
 	 * @param action {@link #ACTION_REMOVE} action.
@@ -87,7 +77,7 @@ public final class DevicePermission extends BasicPermission {
 	}
 
 	/**
-	 * Two <code>FunctionalDevicePermission</code> instances are equal if:
+	 * Two <code>DevicePermission</code> instances are equal if:
 	 * <ul>
 	 * <li>represents the same filter and actions</li>
 	 * <li>represents the same device and actions</li>
@@ -130,8 +120,8 @@ public final class DevicePermission extends BasicPermission {
 	 * constructed by {@link #DevicePermission(Device, String)}.
 	 * 
 	 * Returns <code>true</code> if the specified permission is a
-	 * <code>FunctionalDevicePermission</code> and this permission filter
-	 * matches the specified permission device properties.
+	 * <code>DevicePermission</code> and this permission filter matches the
+	 * specified permission device properties.
 	 * 
 	 * @param p The permission to be implied. It must be constructed by
 	 *        {@link #DevicePermission(Device, String)}.
@@ -149,7 +139,7 @@ public final class DevicePermission extends BasicPermission {
 
 	/**
 	 * Returns a new <code>PermissionCollection</code> suitable for storing
-	 * <code>FunctionalDevicePermission</code> instances.
+	 * <code>DevicePermission</code> instances.
 	 * 
 	 * @return A new <code>PermissionCollection</code> instance.
 	 */

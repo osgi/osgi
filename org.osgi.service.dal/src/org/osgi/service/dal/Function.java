@@ -41,9 +41,13 @@ package org.osgi.service.dal;
  * <li>{@link #SERVICE_DESCRIPTION} - optional service property. The property
  * value is the function description.</li>
  * <li>{@link #SERVICE_OPERATION_NAMES} - optional service property. The
- * property value is the function operation names.</li>
+ * property is missing when there are no function operations and property must
+ * be set when there are function operations. The property value is the function
+ * operation names.</li>
  * <li>{@link #SERVICE_PROPERTY_NAMES} - optional service property. The property
- * value is the function property names.</li>
+ * is missing when there are no function properties and property must be set
+ * when there are function properties. The property value is the function
+ * property names.</li>
  * </ul>
  * The <code>Function</code> services are registered before the
  * <code>Device</code> services. It's possible that {@link #SERVICE_DEVICE_UID}
@@ -51,27 +55,46 @@ package org.osgi.service.dal;
  * order is used when the services are unregistered. <code>Function</code>
  * services are unregistered last after <code>Device</code> services.
  * <p>
- * Function service must be registered only under concrete function class. It's
- * not allowed to register function service under more than one class. For
- * example, those registrations are not allowed:
+ * Function service must be registered under the function class hierarchy. Other
+ * interfaces are not allowed. All classes from the function class hierarchy
+ * must participate as registration classes in the order from child to parent.
+ * The <code>Function</code> interface must be the last one in the list. For
+ * example, <code>MeterV2 extends MeterV1 extends Function</code> are function
+ * interfaces. If the implementation would like to provide <code>MeterV2</code>
+ * functionality, the registration is:
+ * <code>context.registerService(new String[]{MeterV2.class.getName(), MeterV1.class.getName(), Function.class.getName()}, this, regProps);</code>
+ * <code>MeterV2</code> is the last child in the class hierarchy and it's on the
+ * first position. <code>MeterV1</code> is a parent of <code>MeterV2</code> and
+ * child of <code>Function</code>. <code>MeterV1</code> position is between
+ * <code>MeterV2</code> and <code>Function</code> in the registration classes.
+ * If the implementation would like to provide <code>MeterV1</code>
+ * functionality, the registration is:
+ * <code>context.registerService(new String[]{MeterV1.class.getName(), Function.class.getName()}, this, regProps);</code>
+ * If the implementation would like to mark that there is a function, but no
+ * specific function interface exists, the registration can be:
+ * <code>context.registerService(new String[]{Function.class.getName()}, this, regProps);</code>
+ * Note that such functions usually don't have operations and properties.
+ * <p>
+ * Some examples of not allowed registrations:
  * <ul>
  * <li>
- * <code>context.registerService(ManagedService.class.getName(), this, regProps);</code>
- * - <code>ManagedService</code> interface is not a function interface.</li>
+ * <code>context.registerService(new String[] {ManagedService.class.getName(), Function.class.getName()}, this, regProps);</code>
+ * - <code>ManagedService</code> interface doesn't participate in a function
+ * class hierarchy.</li>
  * <li>
- * <code>context.registerService(Function.class.getName(), this, regProps);</code>
- * - <code>Function</code> interface is not concrete function interface.</li>
- * <code>context.registerService(new String[] {BooleanControl.class.getName(),
- * BooleanControl.class.getName()}, this, regProps);</code> - more than one
- * function is used.</li>
+ * <code>context.registerService(new String[] {MeterV1.class.getName()}, this, regProps);</code>
+ * - <code>Function</code> interface is missing.</li>
+ * <li>
+ * <code>context.registerService(new String[] {MeterV1.class.getName(), Alarm.class.getName(), Function.class.getName()}, this, regProps);</code>
+ * , where <code>MeterV1 extends Function</code> and
+ * <code>Alarm extends Function</code> - <code>MeterV1</code> and
+ * <code>Alarm</code> are from different function class hierarchies.</li>
  * </ul>
- * That one is a valid registration: <code>context.registerService(
- * Meter.class.getName(), this, regProps);</code>. <code>Meter</code> is
- * concrete function interface.
  * <p>
- * That rule helps to the applications to find the supported function class and
- * to identify the metadata. Otherwise the function services can be accesses,
- * but it's not clear which are the function classes and metadata.
+ * That registration rule helps to the applications to find the supported
+ * function classes and to identify the metadata. Otherwise the function
+ * services can be accesses, but it's not clear which are the function classes
+ * and metadata.
  * <p>
  * The function properties must be integrated according to these rules:
  * <ul>
@@ -207,17 +230,20 @@ public interface Function {
 
 	/**
 	 * The service property value contains the function operation names. It's an
-	 * optional property. The value type is <code>java.lang.String[]</code>.
-	 * It's not possible to exist two or more function operations with the same
-	 * name i.e. the operation overloading is not allowed.
+	 * optional property. The property is missing when there are no function
+	 * operations and property must be set when there are function operations.
+	 * The value type is <code>java.lang.String[]</code>. It's not possible to
+	 * exist two or more function operations with the same name i.e. the
+	 * operation overloading is not allowed.
 	 */
 	public static final String	SERVICE_OPERATION_NAMES	= "dal.function.operation.names";
 
 	/**
 	 * The service property value contains the function property names. It's an
-	 * optional property. The value type is <code>java.lang.String[]</code>.
-	 * It's not possible to exist two or more function properties with the same
-	 * name.
+	 * optional property. The property is missing when there are no function
+	 * properties and property must be set when there are function properties.
+	 * The value type is <code>java.lang.String[]</code>. It's not possible to
+	 * exist two or more function properties with the same name.
 	 */
 	public static final String	SERVICE_PROPERTY_NAMES	= "dal.function.property.names";
 
