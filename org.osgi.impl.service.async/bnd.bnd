@@ -3,15 +3,21 @@
 
 Bundle-Activator				= ${p}.Activator
 
-Private-Package 					= ${p}.*
+Private-Package 				= ${p}.*
+
+Conditional-Package				= net.sf.cglib.*
+
+Import-Package					= !net.sf.cglib.asm.util, *
+
 Export-Package					= org.osgi.service.async.*; -split-package:=first; provide:=true,\
 								  org.osgi.util.promise,\
 								  org.osgi.util.function
 
--buildpath						= \
-	org.osgi.service.async;		version=project, \
-	org.osgi.util.promise;		version=project, \
-	org.osgi.util.function;		version=project, \
-	ee.j2se;					version=1.5, \
-	osgi.core;					version=4.3.1, \
-	osgi.cmpn;					version=4.3.1
+-buildpath:  \
+	org.osgi.service.async;version=project,\
+	org.osgi.util.promise;version=project,\
+	org.osgi.util.function;version=project,\
+	ee.j2se;version=1.5,\
+	osgi.core;version=4.3.1,\
+	osgi.cmpn;version=4.3.1,\
+	com.springsource.net.sf.cglib
