@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,8 +95,8 @@ public @interface Component {
 	 * is started.
 	 * 
 	 * <p>
-	 * If {@code true}, this Component is enabled. If {@code false} or not
-	 * specified, this Component is disabled.
+	 * If {@code true} or not specified, this Component is enabled. If
+	 * {@code false}, this Component is disabled.
 	 * 
 	 * @see "The enabled attribute of the component element of a Component Description."
 	 */
