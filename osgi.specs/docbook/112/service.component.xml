@@ -940,12 +940,12 @@ public class HttpResourceImpl {
 
       <para>The <emphasis>dynamic policy</emphasis> is slightly more complex
       since the component implementation must properly handle changes in the
-      set of bound services that can occur on any thread. With the dynamic
-      policy, SCR can change the set of bound services without deactivating a
-      component configuration. If the component uses the event strategy to
-      access services, then the component instance will be notified of changes
-      in the set of bound services by calls to the bind, and unbind
-      methods.</para>
+      set of bound services that can occur on any thread at any time after the
+      component instance is created. With the dynamic policy, SCR can change
+      the set of bound services without deactivating a component
+      configuration. If the component uses the event strategy to access
+      services, then the component instance will be notified of changes in the
+      set of bound services by calls to the bind, and unbind methods.</para>
 
       <para>If the <code>policy-option</code> is <code>reluctant</code> then a
       bound reference is not rebound even if a more suitable service becomes
