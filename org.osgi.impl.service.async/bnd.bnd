@@ -13,6 +13,8 @@ Export-Package					= org.osgi.service.async.*; -split-package:=first; provide:=t
 								  org.osgi.util.promise,\
 								  org.osgi.util.function
 
+Include-Resource: OSGI-INF/=permissions
+
 -buildpath:  \
 	org.osgi.service.async;version=project,\
 	org.osgi.util.promise;version=project,\

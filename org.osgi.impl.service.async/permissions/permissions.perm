@@ -1,0 +1,12 @@
+# Lines beginning with '#' or '//' are comments
+#
+# This file contains the permissions to be granted
+# to the Async Service Reference implementation.
+# The permissions are listed one per
+# line in PermissionInfo encoded format.
+# See org.osgi.service.permissionadmin.PermissionInfo
+
+# AllPermission is required as the AsyncService may call
+# any method, and will be on the base of the stack
+
+(java.security.AllPermission)

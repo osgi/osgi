@@ -1,5 +1,7 @@
 package org.osgi.impl.service.async;
 
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.Hashtable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -18,8 +20,17 @@ public class Activator implements BundleActivator {
 		
 		private final AtomicInteger count = new AtomicInteger();
 		
-		public Thread newThread(Runnable r) {
-			Thread t = new Thread(r, "Asynchronous Execution Service Thread " + count.incrementAndGet());
+		public Thread newThread(final Runnable r) {
+			Thread t = new Thread(new Runnable(){
+				public void run() {
+					AccessController.doPrivileged(new PrivilegedAction<Void>() {
+						public Void run() {
+							r.run();
+							return null;
+						}
+					});
+				}
+			}, "Asynchronous Execution Service Thread " + count.incrementAndGet());
 			return t;
 		}
 	});

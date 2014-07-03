@@ -4,6 +4,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
+import java.security.AccessController;
+import java.security.PrivilegedAction;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -64,8 +66,16 @@ public class AsyncService implements Async {
 		this.logServiceTracker = logServiceTracker;
 	}
 
+	public <T> T mediate(final T service) {
+		return AccessController.doPrivileged(new PrivilegedAction<T>() {
+			public T run() {
+				return privMediate(service);
+			}
+		});
+	}
+
 	@SuppressWarnings("unchecked")
-	public <T> T mediate(T service) {
+	private <T> T privMediate(T service) {
 		
 		TrackingInvocationHandler handler = new TrackingInvocationHandler(this, 
 				clientBundle, logServiceTracker, service);
@@ -74,8 +84,16 @@ public class AsyncService implements Async {
 				new CGLibAwareClassLoader(service.getClass().getClassLoader()));
 	}
 
+	public <T> T mediate(final ServiceReference<T> ref) {
+		return AccessController.doPrivileged(new PrivilegedAction<T>() {
+			public T run() {
+				return privMediate(ref);
+			}
+		});
+	}
+	
 	@SuppressWarnings("unchecked")
-	public <T> T mediate(ServiceReference<T> ref) {
+	private <T> T privMediate(ServiceReference<T> ref) {
 		Object o = ref.getProperty(Constants.OBJECTCLASS);
 		
 		List<String> ifaceNames;
