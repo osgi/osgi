@@ -92,8 +92,7 @@ junit					= com.springsource.junit;version=3.8;export="${junit.package}"
 	org.osgi.impl.framework;		version=latest
 
 -runtrace=true
-runproperties = report=true, \
-	osgi.resolverMode=strict
+runproperties = report=true
 runsecureproperties = ${runproperties}, \
 	org.osgi.framework.security=osgi, \
 	org.osgi.framework.trust.repositories=${build}/keystore
