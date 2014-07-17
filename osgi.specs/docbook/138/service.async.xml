@@ -653,21 +653,43 @@ public void doStuff() {
   <section xml:id="service.async-security">
     <title>Security</title>
 
-    <para>Asynchronous Services implementations must be careful to avoid
-    elevating the privileges of client bundles when calling services
-    asynchronously. This means that the implementation must:</para>
+    <para>Asynchronous Services implementations must be careful to avoid elevating 
+    the privileges of client bundles when calling services asynchronously, and also 
+    to avoid restricting the privileges of clients that are permitted to make a call. 
+    This means that the implementation must:</para>
 
     <itemizedlist>
       <listitem>
-        <para>Use the client bundle to load interfaces when generating the
-        asynchronous mediator. This prevents clients from gaining access to
-        interfaces they would not normally be permitted to import.</para>
+        <para>Be granted <code>AllPermission</code>. As the Async service will 
+        always be on the stack when invoking a service object asynchronously 
+        it must be granted <code>AllPermission</code> so that it does not 
+        interfere with security any checks made by the service object.</para>
       </listitem>
-
       <listitem>
-        <para>Use the client's bundle context when retrieving the target
-        service. This prevents the client bundle from being able to make calls
-        on a service object that they do not have permission to obtain.</para>
+        <para>Establish the caller's <code>AccessControlContext</code> in a 
+        worker thread before starting to call the service object. This prevents 
+        a bundle from being able to call a service asynchronously that it would 
+        not normally be able to call. The <code>AccessControlContext</code> must 
+        be collected during any call to <code>call()</code> or 
+        <code>execute()</code></para>
+      </listitem>
+      <listitem>
+        <para>Use a <code>doPrivileged</code> block when mediating a concrete
+        type. A no-args constructor in a concrete type may perform actions that
+        the client may not have permission to perform. This should not prevent
+        the client from mediating the object, as the client is not directly 
+        performing these actions. </para>
+      </listitem>
+      <listitem>
+        <para>If the mediator object was created using a service reference, then
+        the Async services implementation must use the client's bundle context 
+        when retrieving the target service. If the service lookup occurs on a
+        worker thread then the lookup must use the <code>AccessControlContext</code>. 
+        collected during the call to <code>call()</code> or <code>execute()</code>. 
+        This prevents the client bundle from being able to make calls on a service 
+        object that they do not have permission to obtain, and ensures that an 
+        appropriately customised object is returned if the service is implemented 
+        using a service factory.</para>
       </listitem>
     </itemizedlist>
 
