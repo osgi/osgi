@@ -57,7 +57,7 @@ public class ExportTestCase extends EnOceanTestCase {
 		eventAdmin.sendEvent(evt);
 
 		byte[] data = new byte[256];
-		int size = inputStream.read(data);
+		int size = serialInputStream.read(data);
 		EspPacket pkt = new EspPacket(Utils.byteRange(data, 0, size));
 
 		assertEquals("EnOcean radio message and forged message mismatch", Utils.bytesToHex(msg.getBytes()), Utils.bytesToHex(pkt.getData().getBytes()));

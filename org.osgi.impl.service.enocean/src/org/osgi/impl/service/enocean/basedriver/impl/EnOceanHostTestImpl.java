@@ -16,25 +16,22 @@
 
 package org.osgi.impl.service.enocean.basedriver.impl;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.enocean.basedriver.esp.EspPacket;
 import org.osgi.impl.service.enocean.utils.EnOceanHostImplException;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
-import org.osgi.test.cases.enoceansimulation.EnOceanSerialInOut;
+import org.osgi.test.cases.enoceansimulation.EnOceanInOut;
 
 /**
  *
  */
-public class EnOceanHostTestImpl extends EnOceanHostImpl implements EnOceanSerialInOut {
+public class EnOceanHostTestImpl extends EnOceanHostImpl {
 
-	private ByteArrayOutputStream	byteStream;
-	private CustomInputStream		duplicatedStream;
+	private EnOceanInOut		enOceanInOut;
+	private CustomInputStream	duplicatedInputStream;
 
 	/**
 	 * @param path
@@ -42,20 +39,20 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl implements EnOceanSeria
 	 */
 	public EnOceanHostTestImpl(String path, BundleContext bc) {
 		super(path, bc);
+		// Create, and register the EnOceanInOut service.
+		try {
+			enOceanInOut = new EnOceanInOutImpl();
+			bc.registerService(EnOceanInOut.class.getName(), enOceanInOut, null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			Logger.e(TAG, "exception when registering enOceanInOut. e.getMessage(): " + e.getMessage());
+		}
 	}
 
 	public void startup() throws EnOceanHostImplException {
 		this.isRunning = true;
-		this.inputStream = new CustomInputStream(new byte[] {});
-		this.outputStream = new ByteArrayOutputStream();
-		this.duplicatedStream = (CustomInputStream) inputStream;
-		this.byteStream = (ByteArrayOutputStream) outputStream;
+		this.duplicatedInputStream = (CustomInputStream) enOceanInOut.getSerialInputStream();
 		this.start();
-	}
-
-	public void resetBuffers() {
-		this.duplicatedStream.reset();
-		this.byteStream.reset();
 	}
 
 	public void run() {
@@ -66,15 +63,16 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl implements EnOceanSeria
 				e.printStackTrace();
 			}
 			try {
-				if (byteStream.size() == 0) {
+				ByteArrayOutputStream byteOutputStream = (ByteArrayOutputStream) enOceanInOut.getSerialOutputStream();
+				if (byteOutputStream.size() == 0) {
 					continue;
 				}
-				byte[] data = byteStream.toByteArray();
+				byte[] data = byteOutputStream.toByteArray();
 				if (data[0] != ENOCEAN_ESP_FRAME_START)
 					continue;
-				duplicatedStream.replace(data);
-				duplicatedStream.read();
-				byteStream.reset();
+				duplicatedInputStream.replace(data);
+				duplicatedInputStream.read();
+				byteOutputStream.reset();
 				Logger.d(TAG, "read bytes: " + Utils.bytesToHexString(data));
 				if (data[0] == ENOCEAN_ESP_FRAME_START) {
 					EspPacket packet = readPacket();
@@ -93,45 +91,72 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl implements EnOceanSeria
 	 */
 	public void close() {
 		this.isRunning = false;
-		if (this.outputStream != null)
+		if (this.enOceanInOut.getSerialOutputStream() != null)
 			try {
-				this.outputStream.close();
+				this.enOceanInOut.getSerialOutputStream().close();
 			} catch (IOException ioexception) {
 				Logger.w(TAG, "Error while closing output stream.");
 			}
-		if (this.inputStream != null) {
+		if (this.enOceanInOut.getSerialInputStream() != null) {
 			try {
-				this.inputStream.close();
+				this.enOceanInOut.getSerialInputStream().close();
 			} catch (IOException ioexception1) {
 				Logger.w(TAG, "Error while closing input stream.");
 			}
 		}
 	}
 
-	public InputStream getInputStream() {
-		return inputStream;
-	}
-
-	public OutputStream getOutputStream() {
-		return outputStream;
-	}
-
 	public void send(byte[] data) {
-		duplicatedStream.replace(data);
+		duplicatedInputStream.replace(data);
 	}
 
-	class CustomInputStream extends ByteArrayInputStream {
-
-		public CustomInputStream(byte[] var0) {
-			super(var0);
+	/**
+	 * Low-level ESP3 reader implementation. Reads the header, deducts the
+	 * paylsoad size, checks for errors, and sends back the read packet to the
+	 * caller.
+	 * 
+	 * @return the complete byte[] ESP packet
+	 * @throws IOException
+	 */
+	protected EspPacket readPacket() throws IOException {
+		byte[] header = new byte[4];
+		for (int i = 0; i < 4; i++) {
+			header[i] = (byte) this.enOceanInOut.getSerialInputStream().read();
 		}
-
-		public void replace(byte[] data) {
-			this.buf = data.clone();
-			this.mark = 0;
-			this.pos = 0;
-			this.count = data.length;
+		Logger.d(TAG, "read header: " + Utils.bytesToHexString(header));
+		// Check the CRC
+		int headerCrc = this.enOceanInOut.getSerialInputStream().read();
+		if (headerCrc == -1) {
+			throw new IOException("could not read entire packet");
 		}
-
+		Logger.d(TAG, "header_crc = 0x" + Utils.bytesToHexString(new byte[] {(byte) headerCrc}));
+		Logger.d(TAG, "h_comp_crc = 0x" + Utils.bytesToHexString(new byte[] {Utils.crc8(header)}));
+		if ((byte) headerCrc != Utils.crc8(header)) {
+			throw new IOException("header was malformed or corrupt");
+		}
+		// Read the payload using header info
+		int payloadLength = ((header[0] << 8) | header[1]) + header[2];
+		byte[] payload = new byte[payloadLength];
+		for (int i = 0; i < payloadLength; i++) {
+			payload[i] = (byte) this.enOceanInOut.getSerialInputStream().read();
+		}
+		Logger.d(TAG, "read payload: " + Utils.bytesToHexString(payload));
+		// Check payload CRC
+		int payloadCrc = this.enOceanInOut.getSerialInputStream().read();
+		if (payloadCrc == -1) {
+			throw new IOException("could not read entire packet");
+		}
+		Logger.d(TAG, "orig_crc     = 0x" + Utils.bytesToHexString(new byte[] {(byte) payloadCrc}));
+		Logger.d(TAG, "computed_crc = 0x" + Utils.bytesToHexString(new byte[] {Utils.crc8(payload)}));
+		if ((byte) payloadCrc != Utils.crc8(payload)) {
+			throw new IOException("payload was malformed or corrupt");
+		}
+		payload = Utils.byteConcat(payload, (byte) payloadCrc);
+		// Add the sync byte to the header
+		header = Utils.byteConcat(EspPacket.SYNC_BYTE, header);
+		header = Utils.byteConcat(header, (byte) headerCrc);
+		Logger.d(TAG, "Received EnOcean packet. Frame data: " + Utils.bytesToHexString(Utils.byteConcat(header, payload)));
+		return new EspPacket(header, payload);
 	}
+
 }

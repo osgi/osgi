@@ -11,7 +11,8 @@ Bundle-RequiredExecutionEnvironment = J2SE-1.4
 
 Private-Package: ${p}.*;-split-package:=first
 
--buildpath: ee.j2se;version=${javac.compliance},\
+-buildpath:  \
+	ee.j2se;version=${javac.compliance},\
 	osgi.core;version=4.2,\
 	osgi.cmpn;version=4.2,\
 	org.osgi.service.enocean;version=latest,\

@@ -33,43 +33,36 @@ public class BaseTests extends EnOceanTestCase {
 	 * @throws Exception
 	 */
 	public void testInterfaceExceptions() throws Exception {
-		boolean exceptionCaught = false;
 
-		try { /*
-			 * Check that passing a NULL array of bytes results in an
-			 * IllegalArgumentException
-			 */
-			exceptionCaught = false;
+		try {
+			log("testInterfaceExceptions(), Check that passing a NULL array of bytes throws an IllegalArgumentException.");
 			EnOceanMessageDescription msgDescription = new EnOceanMessageDescription_A5_02_01();
 			msgDescription.deserialize(null);
+			fail();
 		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
+			// Here, everything worked as expected.
+			log("testInterfaceExceptions(), --> OK.");
 		}
-		assertEquals(true, exceptionCaught);
 
-		try { /*
-			 * Check that passing a wrongly sized byte array also results in an
-			 * exception
-			 */
-			exceptionCaught = false;
+		try {
+			log("testInterfaceExceptions(), Check that passing a wrongly sized byte array also throws an IllegalArgumentException.");
 			EnOceanMessageDescription msgDescription = new EnOceanMessageDescription_A5_02_01();
 			msgDescription.deserialize(new byte[] {0x55, 0x02, 0x34, 0x56, 0x67});
+			fail();
 		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
+			log("testInterfaceExceptions(), --> OK.");
 		}
-		assertEquals(true, exceptionCaught);
 
-		try { /*
-			 * Tests that serializing a NULL object in EnOceanChannelDescription
-			 * in an exception
-			 */
-			exceptionCaught = false;
+		try {
+			log("testInterfaceExceptions(), Check that serializing a NULL object in EnOceanChannelDescription throws an IllegalArgumentException.");
 			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
 			channelDescription.serialize(null);
+			fail();
 		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
+			log("testInterfaceExceptions(), --> OK.");
 		}
-		assertEquals(true, exceptionCaught);
+
+		boolean exceptionCaught = false;
 
 		try { /*
 			 * Tests that serializing a wrong object in
@@ -182,20 +175,26 @@ public class BaseTests extends EnOceanTestCase {
 	 * @throws Exception
 	 */
 	public void testRPC() throws Exception {
-
+		log("testRPC(), Insert a device");
 		/* Insert a device */
 		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
-		outputStream.write(pkt.serialize());
+		serialOutputStream.write(pkt.serialize());
 
-		devices.waitForService();
+		log("testRPC(), devices.waitForService()");
+		String wfs = devices.waitForService();
+		log("testRPC(), waitForService returned: " + wfs);
 
 		ServiceReference ref = devices.getServiceReference();
+		log("testRPC(), ref: " + ref);
 		EnOceanDevice device = (EnOceanDevice) getContext().getService(ref);
+		log("testRPC(), device: " + device);
 
 		EnOceanRPC rpc = new QueryFunction();
+		log("testRPC(), rpc: " + rpc);
 		device.invoke(rpc, null);
 
+		log("testRPC(), unget service with service reference ref: " + ref);
 		getContext().ungetService(ref);
 	}
 

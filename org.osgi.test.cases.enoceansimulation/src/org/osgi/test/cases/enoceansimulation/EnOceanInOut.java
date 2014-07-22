@@ -1,9 +1,3 @@
-
-package org.osgi.test.cases.enoceansimulation;
-
-import java.io.InputStream;
-import java.io.OutputStream;
-
 /*
  * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
  * 
@@ -20,29 +14,34 @@ import java.io.OutputStream;
  * limitations under the License.
  */
 
+package org.osgi.test.cases.enoceansimulation;
+
+import java.io.InputStream;
+import java.io.OutputStream;
+
 /**
- * This class is intended to provide in/out methods from serial to emulate an
- * EnOcean dongle during integration tests.
- * 
- * @author $Id$
+ * This class is intended to provide in/out (i.e. read/write) methods to emulate
+ * an EnOcean gateway during integration tests.
  */
-public interface EnOceanSerialInOut {
-	
+public interface EnOceanInOut {
+
 	/**
 	 * Resets the data being exchanged on both input and output streams.
 	 */
 	public void resetBuffers();
-	
+
 	/**
 	 * Returns a handle to the current input stream used by the driver's host.
+	 * 
 	 * @return
 	 */
-	public InputStream getInputStream();
-	
+	public InputStream getSerialInputStream();
+
 	/**
 	 * Returns a handle to the current output stream used by the driver's host.
+	 * 
 	 * @return
 	 */
-	public OutputStream getOutputStream();
+	public OutputStream getSerialOutputStream();
 
 }

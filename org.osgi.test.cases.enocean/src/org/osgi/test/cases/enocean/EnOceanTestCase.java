@@ -5,7 +5,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanDevice;
-import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.test.cases.enocean.descriptions.EnOceanChannelDescription_TMP_00;
 import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescription_A5_02_01;
@@ -15,7 +14,7 @@ import org.osgi.test.cases.enocean.utils.EventListener;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
 import org.osgi.test.cases.enocean.utils.Utils;
-import org.osgi.test.cases.enoceansimulation.EnOceanSerialInOut;
+import org.osgi.test.cases.enoceansimulation.EnOceanInOut;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -34,24 +33,24 @@ public abstract class EnOceanTestCase extends DefaultTestBundleControl {
 	protected EnOceanChannelDescriptionSetImpl	channelDescriptionSet;
 	/** eventAdminRef */
 	protected ServiceReference					eventAdminRef;
-	/** enOceanHostRef */
-	protected ServiceReference					enOceanHostRef;
-	/** inputStream */
-	protected InputStream						inputStream;
-	/** outputStream */
-	protected OutputStream						outputStream;
-	/** enOceanHostInOut */
-	protected EnOceanSerialInOut				enOceanHostInOut;
+	/** enOceanInOutRef */
+	protected ServiceReference					enOceanInOutRef;
+	/** serialInputStream */
+	protected InputStream						serialInputStream;
+	/** serialOutputStream */
+	protected OutputStream						serialOutputStream;
+	/** enOceanInOut */
+	protected EnOceanInOut						enOceanInOut;
 	/** eventAdmin */
 	protected EventAdmin						eventAdmin;
 
 	protected void setUp() throws Exception {
 
 		/* Gets the currently registered EnOceanHost and access its streams */
-		enOceanHostRef = getContext().getServiceReference(EnOceanHost.class.getName());
-		enOceanHostInOut = (EnOceanSerialInOut) getContext().getService(enOceanHostRef);
-		inputStream = enOceanHostInOut.getInputStream();
-		outputStream = enOceanHostInOut.getOutputStream();
+		enOceanInOutRef = getContext().getServiceReference(EnOceanInOut.class.getName());
+		enOceanInOut = (EnOceanInOut) getContext().getService(enOceanInOutRef);
+		serialInputStream = enOceanInOut.getSerialInputStream();
+		serialOutputStream = enOceanInOut.getSerialOutputStream();
 
 		/* Tracks device creation */
 		devices = new ServiceListener(getContext(), EnOceanDevice.class);
@@ -74,10 +73,10 @@ public abstract class EnOceanTestCase extends DefaultTestBundleControl {
 
 	protected void tearDown() throws Exception {
 		getContext().ungetService(eventAdminRef);
-		getContext().ungetService(enOceanHostRef);
+		getContext().ungetService(enOceanInOutRef);
 		devices.close();
 		events.close();
-		enOceanHostInOut.resetBuffers();
+		enOceanInOut.resetBuffers();
 		ServiceReference[] deviceRefs = getContext().getServiceReferences(EnOceanDevice.class.getName(), null);
 		if (deviceRefs != null) {
 			for (int i = 0; i < deviceRefs.length; i++) {

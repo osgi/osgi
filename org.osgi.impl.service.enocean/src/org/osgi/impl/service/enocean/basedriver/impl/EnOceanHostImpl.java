@@ -17,8 +17,6 @@
 package org.osgi.impl.service.enocean.basedriver.impl;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.UnknownServiceException;
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -27,10 +25,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.enocean.basedriver.EnOceanBaseDriver;
 import org.osgi.impl.service.enocean.basedriver.EnOceanPacketListener;
-import org.osgi.impl.service.enocean.basedriver.esp.EspPacket;
 import org.osgi.impl.service.enocean.utils.EnOceanHostImplException;
 import org.osgi.impl.service.enocean.utils.Logger;
-import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.cm.Configuration;
 import org.osgi.service.cm.ConfigurationAdmin;
 import org.osgi.service.enocean.EnOceanException;
@@ -45,20 +41,24 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 	 * EnOcean base driver impl's tag/prefix for logger.
 	 */
 	protected static final String	TAG						= "EnOceanHostImpl";
+
 	/** ENOCEAN_ESP_FRAME_START */
 	protected static final byte		ENOCEAN_ESP_FRAME_START	= 0x55;
+
 	/**
 	 * EnOceanHostImpl's dongle path.
 	 */
 	protected String				donglePath;
-	/**
-	 * EnOceanHostImpl's input stream.
-	 */
-	protected InputStream			inputStream;
-	/**
-	 * EnOceanHostImpl's output stream.
-	 */
-	protected OutputStream			outputStream;
+
+	// /**
+	// * EnOceanHostImpl's input stream.
+	// */
+	// private InputStream serialInputStream;
+
+	// /**
+	// * EnOceanHostImpl's output stream.
+	// */
+	// private OutputStream serialOutputStream;
 
 	private static final int		MAX_ALLOCATED_CHIP_ID	= 127;
 	private ArrayList				listeners;
@@ -175,55 +175,6 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 	}
 
 	/**
-	 * Low-level ESP3 reader implementation. Reads the header, deducts the
-	 * paylsoad size, checks for errors, and sends back the read packet to the
-	 * caller.
-	 * 
-	 * @return the complete byte[] ESP packet
-	 * @throws IOException
-	 */
-	protected EspPacket readPacket() throws IOException {
-		byte[] header = new byte[4];
-		for (int i = 0; i < 4; i++) {
-			header[i] = (byte) inputStream.read();
-		}
-		Logger.d(TAG, "read header: " + Utils.bytesToHexString(header));
-		// Check the CRC
-		int headerCrc = inputStream.read();
-		if (headerCrc == -1) {
-			throw new IOException("could not read entire packet");
-		}
-		Logger.d(TAG, "header_crc = 0x" + Utils.bytesToHexString(new byte[] {(byte) headerCrc}));
-		Logger.d(TAG, "h_comp_crc = 0x" + Utils.bytesToHexString(new byte[] {Utils.crc8(header)}));
-		if ((byte) headerCrc != Utils.crc8(header)) {
-			throw new IOException("header was malformed or corrupt");
-		}
-		// Read the payload using header info
-		int payloadLength = ((header[0] << 8) | header[1]) + header[2];
-		byte[] payload = new byte[payloadLength];
-		for (int i = 0; i < payloadLength; i++) {
-			payload[i] = (byte) inputStream.read();
-		}
-		Logger.d(TAG, "read payload: " + Utils.bytesToHexString(payload));
-		// Check payload CRC
-		int payloadCrc = inputStream.read();
-		if (payloadCrc == -1) {
-			throw new IOException("could not read entire packet");
-		}
-		Logger.d(TAG, "orig_crc     = 0x" + Utils.bytesToHexString(new byte[] {(byte) payloadCrc}));
-		Logger.d(TAG, "computed_crc = 0x" + Utils.bytesToHexString(new byte[] {Utils.crc8(payload)}));
-		if ((byte) payloadCrc != Utils.crc8(payload)) {
-			throw new IOException("payload was malformed or corrupt");
-		}
-		payload = Utils.byteConcat(payload, (byte) payloadCrc);
-		// Add the sync byte to the header
-		header = Utils.byteConcat(EspPacket.SYNC_BYTE, header);
-		header = Utils.byteConcat(header, (byte) headerCrc);
-		Logger.d(TAG, "Received EnOcean packet. Frame data: " + Utils.bytesToHexString(Utils.byteConcat(header, payload)));
-		return new EspPacket(header, payload);
-	}
-
-	/**
 	 * @param data
 	 */
 	public void send(byte[] data) {
@@ -231,7 +182,6 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 	}
 
 	class ChipPIDMapping {
-
 		private Configuration	config;
 		private Dictionary		mappings;
 

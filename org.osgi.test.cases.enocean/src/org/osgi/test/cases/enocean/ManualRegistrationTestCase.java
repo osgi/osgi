@@ -24,8 +24,8 @@ public class ManualRegistrationTestCase extends EnOceanTestCase {
 		MessageF6_02_01 teachIn = new MessageF6_02_01(1, true, 1, true);
 		teachIn.setSenderId(Fixtures.HOST_ID_2);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
-		outputStream.write(pkt.serialize());
-		outputStream.flush();
+		serialOutputStream.write(pkt.serialize());
+		serialOutputStream.flush();
 
 		String lastServiceEvent = devices.waitForService();
 		ServiceReference ref = devices.getServiceReference();
