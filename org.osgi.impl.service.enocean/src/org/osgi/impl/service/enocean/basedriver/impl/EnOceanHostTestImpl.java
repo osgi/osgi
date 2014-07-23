@@ -51,7 +51,7 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 
 	public void startup() throws EnOceanHostImplException {
 		this.isRunning = true;
-		this.duplicatedInputStream = (CustomInputStream) enOceanInOut.getSerialInputStream();
+		this.duplicatedInputStream = (CustomInputStream) enOceanInOut.getInputStream();
 		this.start();
 	}
 
@@ -63,7 +63,7 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 				e.printStackTrace();
 			}
 			try {
-				ByteArrayOutputStream byteOutputStream = (ByteArrayOutputStream) enOceanInOut.getSerialOutputStream();
+				ByteArrayOutputStream byteOutputStream = (ByteArrayOutputStream) enOceanInOut.getOutputStream();
 				if (byteOutputStream.size() == 0) {
 					continue;
 				}
@@ -91,15 +91,15 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 	 */
 	public void close() {
 		this.isRunning = false;
-		if (this.enOceanInOut.getSerialOutputStream() != null)
+		if (this.enOceanInOut.getOutputStream() != null)
 			try {
-				this.enOceanInOut.getSerialOutputStream().close();
+				this.enOceanInOut.getOutputStream().close();
 			} catch (IOException ioexception) {
 				Logger.w(TAG, "Error while closing output stream.");
 			}
-		if (this.enOceanInOut.getSerialInputStream() != null) {
+		if (this.enOceanInOut.getInputStream() != null) {
 			try {
-				this.enOceanInOut.getSerialInputStream().close();
+				this.enOceanInOut.getInputStream().close();
 			} catch (IOException ioexception1) {
 				Logger.w(TAG, "Error while closing input stream.");
 			}
@@ -118,14 +118,14 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 	 * @return the complete byte[] ESP packet
 	 * @throws IOException
 	 */
-	protected EspPacket readPacket() throws IOException {
+	private EspPacket readPacket() throws IOException {
 		byte[] header = new byte[4];
 		for (int i = 0; i < 4; i++) {
-			header[i] = (byte) this.enOceanInOut.getSerialInputStream().read();
+			header[i] = (byte) this.enOceanInOut.getInputStream().read();
 		}
 		Logger.d(TAG, "read header: " + Utils.bytesToHexString(header));
 		// Check the CRC
-		int headerCrc = this.enOceanInOut.getSerialInputStream().read();
+		int headerCrc = this.enOceanInOut.getInputStream().read();
 		if (headerCrc == -1) {
 			throw new IOException("could not read entire packet");
 		}
@@ -138,11 +138,11 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 		int payloadLength = ((header[0] << 8) | header[1]) + header[2];
 		byte[] payload = new byte[payloadLength];
 		for (int i = 0; i < payloadLength; i++) {
-			payload[i] = (byte) this.enOceanInOut.getSerialInputStream().read();
+			payload[i] = (byte) this.enOceanInOut.getInputStream().read();
 		}
 		Logger.d(TAG, "read payload: " + Utils.bytesToHexString(payload));
 		// Check payload CRC
-		int payloadCrc = this.enOceanInOut.getSerialInputStream().read();
+		int payloadCrc = this.enOceanInOut.getInputStream().read();
 		if (payloadCrc == -1) {
 			throw new IOException("could not read entire packet");
 		}

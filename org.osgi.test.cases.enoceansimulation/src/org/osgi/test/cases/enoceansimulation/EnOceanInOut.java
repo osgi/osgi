@@ -35,13 +35,13 @@ public interface EnOceanInOut {
 	 * 
 	 * @return
 	 */
-	public InputStream getSerialInputStream();
+	public InputStream getInputStream();
 
 	/**
 	 * Returns a handle to the current output stream used by the driver's host.
 	 * 
 	 * @return
 	 */
-	public OutputStream getSerialOutputStream();
+	public OutputStream getOutputStream();
 
 }

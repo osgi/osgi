@@ -23,8 +23,8 @@ public class RegistrationTests extends EnOceanTestCase {
 		/* Insert a device */
 		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
-		serialOutputStream.write(pkt.serialize());
-		serialOutputStream.flush();
+		outputStream.write(pkt.serialize());
+		outputStream.flush();
 
 		// Device added
 		String lastServiceEvent = devices.waitForService();

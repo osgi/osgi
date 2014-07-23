@@ -29,32 +29,32 @@ public class EnOceanInOutImpl implements EnOceanInOut {
 	/**
 	 * EnOceanHostImpl's input stream.
 	 */
-	private CustomInputStream	serialInputStream;
+	private CustomInputStream		inputStream;
 
 	/**
 	 * EnOceanHostImpl's output stream.
 	 */
-	private ByteArrayOutputStream	serialOutputStream;
+	private ByteArrayOutputStream	outputStream;
 
 	/**
 	 * 
 	 */
 	public EnOceanInOutImpl() {
-		serialInputStream = new CustomInputStream(new byte[] {});
-		serialOutputStream = new ByteArrayOutputStream();
+		inputStream = new CustomInputStream(new byte[] {});
+		outputStream = new ByteArrayOutputStream();
 	}
 
 	public void resetBuffers() {
-		serialInputStream.reset();
-		serialOutputStream.reset();
+		inputStream.reset();
+		outputStream.reset();
 	}
 
-	public InputStream getSerialInputStream() {
-		return serialInputStream;
+	public InputStream getInputStream() {
+		return inputStream;
 	}
 
-	public OutputStream getSerialOutputStream() {
-		return serialOutputStream;
+	public OutputStream getOutputStream() {
+		return outputStream;
 	}
 
 }

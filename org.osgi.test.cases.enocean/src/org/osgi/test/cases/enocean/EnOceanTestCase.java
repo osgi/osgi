@@ -35,10 +35,10 @@ public abstract class EnOceanTestCase extends DefaultTestBundleControl {
 	protected ServiceReference					eventAdminRef;
 	/** enOceanInOutRef */
 	protected ServiceReference					enOceanInOutRef;
-	/** serialInputStream */
-	protected InputStream						serialInputStream;
-	/** serialOutputStream */
-	protected OutputStream						serialOutputStream;
+	/** inputStream */
+	protected InputStream						inputStream;
+	/** outputStream */
+	protected OutputStream						outputStream;
 	/** enOceanInOut */
 	protected EnOceanInOut						enOceanInOut;
 	/** eventAdmin */
@@ -49,8 +49,8 @@ public abstract class EnOceanTestCase extends DefaultTestBundleControl {
 		/* Gets the currently registered EnOceanHost and access its streams */
 		enOceanInOutRef = getContext().getServiceReference(EnOceanInOut.class.getName());
 		enOceanInOut = (EnOceanInOut) getContext().getService(enOceanInOutRef);
-		serialInputStream = enOceanInOut.getSerialInputStream();
-		serialOutputStream = enOceanInOut.getSerialOutputStream();
+		inputStream = enOceanInOut.getInputStream();
+		outputStream = enOceanInOut.getOutputStream();
 
 		/* Tracks device creation */
 		devices = new ServiceListener(getContext(), EnOceanDevice.class);

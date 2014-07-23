@@ -53,12 +53,12 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 	// /**
 	// * EnOceanHostImpl's input stream.
 	// */
-	// private InputStream serialInputStream;
+	// private InputStream inputStream;
 
 	// /**
 	// * EnOceanHostImpl's output stream.
 	// */
-	// private OutputStream serialOutputStream;
+	// private OutputStream outputStream;
 
 	private static final int		MAX_ALLOCATED_CHIP_ID	= 127;
 	private ArrayList				listeners;

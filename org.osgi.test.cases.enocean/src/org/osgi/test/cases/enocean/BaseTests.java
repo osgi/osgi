@@ -179,7 +179,7 @@ public class BaseTests extends EnOceanTestCase {
 		/* Insert a device */
 		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
-		serialOutputStream.write(pkt.serialize());
+		outputStream.write(pkt.serialize());
 
 		log("testRPC(), devices.waitForService()");
 		String wfs = devices.waitForService();
