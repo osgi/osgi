@@ -1259,7 +1259,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 				ComponentConstants.DEACTIVATION_REASON_DISPOSED,
 				0xFF & (getBaseConfigData(bs) >> 16));
 
-		bs = getBaseService(CC_BC_MAP_INT_NS110);
+		bs = getBaseService(CONT_EXP);
 		assertNotNull("bs should not be null", bs);
 		log("stop tb6");
 		tb6.stop();

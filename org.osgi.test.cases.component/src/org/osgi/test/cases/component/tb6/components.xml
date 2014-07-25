@@ -200,13 +200,14 @@
 
 	<!-- This component provides ComponentContext -->
 	<component
-	      xmlns="http://www.osgi.org/xmlns/scr/v1.0.0"
+	      xmlns="http://www.osgi.org/xmlns/scr/v1.1.0"
 	      name="org.osgi.test.cases.component.tb6.ContExp"
 	      immediate="true">
 	   <implementation
 	         class="org.osgi.test.cases.component.tb6.ContExp"/>
 	   <service>
 			<provide interface="org.osgi.test.cases.component.tb6.ContExp"/>
+            <provide interface="org.osgi.test.cases.component.service.BaseService"/>
 		</service>
 	</component>
 	

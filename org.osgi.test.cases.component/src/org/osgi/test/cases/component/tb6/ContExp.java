@@ -16,6 +16,8 @@
 package org.osgi.test.cases.component.tb6;
 
 import java.util.Dictionary;
+import java.util.Enumeration;
+import java.util.Properties;
 
 import org.osgi.service.component.ComponentContext;
 import org.osgi.test.cases.component.service.ComponentContextExposer;
@@ -23,18 +25,36 @@ import org.osgi.test.cases.component.service.ComponentContextExposer;
 public class ContExp implements ComponentContextExposer {
   private ComponentContext ctxt;
   Dictionary properties;
+	public static final int		ACTIVATE	= 1 << 0;
+	public static final int		DEACTIVATE	= 1 << 1;
 
   protected void activate(ComponentContext ctxt) {
     this.ctxt = ctxt;
-    properties = ctxt.getProperties();
+		properties = new Properties();
+		Dictionary props = ctxt.getProperties();
+		Enumeration en = props.keys();
+		while (en.hasMoreElements()) {
+			Object key = en.nextElement();
+			properties.put(key, props.get(key));
+		}
 		log(getComponentName() + " activate");
+		setDataBits(ACTIVATE);
   }
 
-  protected void deactivate(ComponentContext ctxt) {
-
+	protected void deactivate(int reason) {
 		log(getComponentName() + " deactivate");
+		setDataBits(DEACTIVATE | reason << 16);
   }
   
+	private void setDataBits(int value) {
+		if (properties == null) {
+			return;
+		}
+		Object prop = properties.get("config.base.data");
+		int data = (prop instanceof Integer) ? ((Integer) prop).intValue() : 0;
+		properties.put("config.base.data", new Integer(data | value));
+	}
+
   public ComponentContext getComponentContext() {
     return ctxt;
   }
