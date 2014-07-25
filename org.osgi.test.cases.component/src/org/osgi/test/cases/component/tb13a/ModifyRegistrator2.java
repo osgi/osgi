@@ -44,47 +44,47 @@ public class ModifyRegistrator2 implements ComponentContextExposer {
 			Object key = en.nextElement();
 			properties.put(key, props.get(key));
 		}
-		log(properties.get("component.name") + " activate");
+		log(getComponentName() + " activate");
 		setDataBits(ACTIVATE);
 	}
 
 	protected void deactivate(ComponentContext ctxt) {
-		log(properties.get("component.name") + " deactivate");
+		log(getComponentName() + " deactivate");
 		setDataBits(DEACTIVATE);
 	}
 
 	protected void modified() {
-		log(properties.get("component.name") + " modified");
+		log(getComponentName() + " modified");
 		setDataBits(MODIFIED);
 	}
 
 	protected void mod() {
-		log(properties.get("component.name") + " mod");
+		log(getComponentName() + " mod");
 		setDataBits(MOD);
 	}
 
 	protected void modCc(ComponentContext ctxt) {
-		log(properties.get("component.name") + " modCc");
+		log(getComponentName() + " modCc");
 		setDataBits(MOD_CC);
 	}
 
 	protected void modBc(BundleContext bc) {
-		log(properties.get("component.name") + " modBc");
+		log(getComponentName() + " modBc");
 		setDataBits(MOD_BC);
 	}
 
 	protected void modMap(Map props) {
-		log(properties.get("component.name") + " modMap");
+		log(getComponentName() + " modMap");
 		setDataBits(MOD_MAP);
 	}
 
 	protected void modCcBcMap(ComponentContext ctxt, BundleContext bc, Map props) {
-		log(properties.get("component.name") + " modCcBcMap");
+		log(getComponentName() + " modCcBcMap");
 		setDataBits(MOD_CC_BC_MAP);
 	}
 
 	protected void throwException(ComponentContext ctxt) {
-		log(properties.get("component.name") + " throwException");
+		log(getComponentName() + " throwException");
     throw new RuntimeException("Test method throwException(ComponentContext) is called!");
   }
 
@@ -103,6 +103,11 @@ public class ModifyRegistrator2 implements ComponentContextExposer {
 
 	public ComponentContext getComponentContext() {
 		return ctxt;
+	}
+
+	private String getComponentName() {
+		return properties.get("component.name") + "@"
+				+ Integer.toHexString(System.identityHashCode(this));
 	}
 
 	private static void log(String message) {

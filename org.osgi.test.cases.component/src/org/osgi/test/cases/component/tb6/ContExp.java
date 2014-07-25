@@ -27,10 +27,12 @@ public class ContExp implements ComponentContextExposer {
   protected void activate(ComponentContext ctxt) {
     this.ctxt = ctxt;
     properties = ctxt.getProperties();
+		log(getComponentName() + " activate");
   }
 
   protected void deactivate(ComponentContext ctxt) {
 
+		log(getComponentName() + " deactivate");
   }
   
   public ComponentContext getComponentContext() {
@@ -41,4 +43,12 @@ public class ContExp implements ComponentContextExposer {
     return properties;
   }
 
+	private String getComponentName() {
+		return properties.get("component.name") + "@"
+				+ System.identityHashCode(this);
+	}
+
+	private static void log(String message) {
+		System.out.println(message);
+	}
 }
