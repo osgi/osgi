@@ -1,25 +1,15 @@
 # Set javac settings from JDT prefs
-javac.source            = 1.4
-javac.target            = jsr14
-
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd	
 
-Bundle-Activator			= org.osgi.impl.service.resourcemanagement.Activator
+Bundle-Activator			= ${p}.Activator
 Bundle-Description			= Template for a Reference Implementation.
 
-Export-Service				= org.osgi.service.resourcemanagement.ResourceManager
-
-Private-Package: ${p}.*,\
-	org.osgi.impl.service.resourcemanagement
+Private-Package: ${p}.*
 
 -buildpath: osgi.core;version=4.3,\
+    osgi.cmpn;version=4.3,\
 	org.osgi.service.resourcemanagement;version=latest,\
-	osgi,\
-	ee.minimum
-Bundle-Version: 1.0.1
-DynamicImport-Package: org.osgi.framework.wiring
-Import-Package: !org.osgi.framework.wiring,\
-	org.osgi.framework;version=1.5,\
-	*
-Export-Package: org.osgi.impl.service.resourcemanagement.threadmanager
+	ee.minimum;version=1.2.1
+	
+Export-Package: ${p}.threadmanager
 

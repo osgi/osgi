@@ -1,17 +1,14 @@
 # Set javac settings from JDT prefs
-javac.source            = 1.4
-javac.target            = jsr14
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd	
 
-Bundle-Activator: org.osgi.impl.service.resourcemanagement.fakemonitors.Activator
+Bundle-Activator: ${p}.Activator
 Bundle-Description: Fake Monitors
 
 
-Private-Package: org.osgi.impl.service.resourcemanagement.fakemonitors
+Private-Package: ${p}.*
 
 -buildpath: osgi.core;version=4.3,\
-	osgi.cmpn;version=4.2,\
+	osgi.cmpn;version=4.3,\
 	org.osgi.service.resourcemanagement;version=latest,\
 	org.osgi.impl.service.resourcemanagement.util;version=latest,\
-	ee.minimum
-Bundle-Version: 1.0.3
+	ee.minimum;version=1.2.1

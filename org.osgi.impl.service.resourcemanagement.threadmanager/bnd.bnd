@@ -1,9 +1,9 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd	
 
 -buildpath: org.osgi.impl.service.resourcemanagement;version=latest,\
-	osgi.core
+	osgi.core;version=4.3
 	
 
-Private-Package: org.osgi.impl.service.resourcemanagement.threadmanager.impl
-Bundle-Activator: org.osgi.impl.service.resourcemanagement.threadmanager.impl.Activator
-
-Bundle-Version: 1.0.0
+Private-Package: ${p}.*
+Bundle-Activator: ${p}.impl.Activator
