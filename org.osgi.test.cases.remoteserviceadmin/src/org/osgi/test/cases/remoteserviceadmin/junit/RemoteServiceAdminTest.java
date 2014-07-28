@@ -161,7 +161,7 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 					"org/osgi/service/remoteserviceadmin/IMPORT_REGISTRATION",
 					"org/osgi/service/remoteserviceadmin/IMPORT_UNREGISTRATION",
 			"org/osgi/service/remoteserviceadmin/IMPORT_ERROR"});
-			TestEventHandler eventHandler = new TestEventHandler();
+			TestEventHandler eventHandler = new TestEventHandler(timeout);
 			registerService(EventHandler.class.getName(), eventHandler, props);
 
 			//
@@ -233,7 +233,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			//
 			// 122.8.1 verify that import notification was sent to EventHandler
 			//
-			Event event = eventHandler.getNextEvent();
+			Event event = eventHandler
+					.getNextEventForTopic("org/osgi/service/remoteserviceadmin/IMPORT_REGISTRATION");
 			assertNotNull("no Event received", event);
 			assertEquals(0, eventHandler.getEventCount());
 
@@ -280,7 +281,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 			// assertSame("122.4.2: ImportRegistration has to point to the same proxy service",
 			// sref, sref2);
 
-			event = eventHandler.getNextEvent();
+			event = eventHandler
+					.getNextEventForTopic("org/osgi/service/remoteserviceadmin/IMPORT_REGISTRATION");
 			assertNotNull("no Event received", event);
 			assertEquals(0, eventHandler.getEventCount());
 			topic = event.getTopic();
@@ -344,7 +346,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 
 			assertNull(importReference.getImportedEndpoint());
 
-			event = eventHandler.getNextEvent();
+			event = eventHandler
+					.getNextEventForTopic("org/osgi/service/remoteserviceadmin/IMPORT_UNREGISTRATION");
 			assertNotNull("no Event received", event);
 			assertEquals(0, eventHandler.getEventCount());
 			topic = event.getTopic();
@@ -374,7 +377,8 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 
 			assertNull(importReference.getImportedEndpoint());
 
-			event = eventHandler.getNextEvent();
+			event = eventHandler
+					.getNextEventForTopic("org/osgi/service/remoteserviceadmin/IMPORT_UNREGISTRATION");
 			assertNotNull("no Event received", event);
 			assertEquals(0, eventHandler.getEventCount());
 			topic = event.getTopic();
@@ -558,36 +562,6 @@ public class RemoteServiceAdminTest extends MultiFrameworkTestCase {
 		}
 	}
 	
-	class TestEventHandler implements EventHandler {
-		private final LinkedList<Event> eventlist = new LinkedList<Event>();
-		private final Semaphore sem = new Semaphore(0);
 
-
-		/**
-		 * @see org.osgi.service.event.EventHandler#handleEvent(org.osgi.service.event.Event)
-		 */
-		public void handleEvent(Event event) {
-			eventlist.add(event);
-			sem.signal();
-		}
-		
-		Event getNextEvent() {
-			try {
-				sem.waitForSignal(timeout);
-			} catch (InterruptedException e1) {
-				return null;
-			}
-			
-			try {
-				return eventlist.removeFirst();
-			} catch (NoSuchElementException e) {
-				return null;
-			}
-		}
-		
-		int getEventCount() {
-			return eventlist.size();
-		}
-	}
 
 }

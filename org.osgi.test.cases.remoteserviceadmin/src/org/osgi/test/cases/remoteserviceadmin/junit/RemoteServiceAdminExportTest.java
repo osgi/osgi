@@ -417,14 +417,15 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 					"org/osgi/service/remoteserviceadmin/EXPORT_REGISTRATION",
 					"org/osgi/service/remoteserviceadmin/EXPORT_UNREGISTRATION",
 					"org/osgi/service/remoteserviceadmin/EXPORT_ERROR"});
-			TestEventHandler eventHandler = new TestEventHandler();
+			TestEventHandler eventHandler = new TestEventHandler(timeout);
 
 			registerService(EventHandler.class.getName(), eventHandler, props);
 
 			props = new Hashtable<String, Object>();
 			props.put(EventConstants.EVENT_TOPIC, new String[]{
 					"org/osgi/service/remoteserviceadmin/EXPORT_UNREGISTRATION"});
-			TestEventHandler unregistrationEventHandler = new TestEventHandler();
+			TestEventHandler unregistrationEventHandler = new TestEventHandler(
+					timeout);
 
 			registerService(EventHandler.class.getName(), unregistrationEventHandler, props);
 
@@ -453,13 +454,11 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			ServiceReference sref = getServiceReference(remoteServiceAdmin);
 
-			Event event = eventHandler.getNextEvent();
+			Event event = eventHandler
+.getNextEventForTopic(
+					"org/osgi/service/remoteserviceadmin/EXPORT_REGISTRATION",
+					"org/osgi/service/remoteserviceadmin/EXPORT_ERROR");
 			assertNotNull("no Event received", event);
-            // David B: there is a race condition in that the registration of the remote service above will generate an event
-            // that can potentially be picked up by the eventHandler, even though it was registered later. Therefore we're emptying
-            // the eventList here to reach a consistent state before continuing with the test.
-			// commented out the next line
-			// assertEquals(0, eventHandler.getEventCount());
 
 			assertEquals(sref.getBundle(), event.getProperty("bundle"));
 			assertEquals(sref.getBundle().getSymbolicName(), event.getProperty("bundle.symbolicname"));
@@ -485,7 +484,8 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			ungetService(remoteServiceAdmin);
 
 			if (!exportFailed) {
-				event = unregistrationEventHandler.getNextEvent();
+				event = unregistrationEventHandler
+						.getNextEventForTopic("org/osgi/service/remoteserviceadmin/EXPORT_UNREGISTRATION");
 				assertNotNull("no EXPORT_UNREGISTRATION event received", event);
 				// David B: you should be getting 2 unregistration events, one for each service?
 				// commented out the next line
@@ -559,6 +559,11 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 
 				Collection<ExportReference> exportrefs = rsa.getExportedServices();
 
+				for (ExportReference eRef : exportrefs) {
+					System.out.println("Exported Endpoint: "
+							+ eRef.getExportedEndpoint());
+				}
+				
 				assertNotNull(exportrefs);
 				assertEquals(exportRegistrations.size() + exportRegistrations2.size(), exportrefs.size());
 
@@ -1199,35 +1204,4 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 		}
 	}
 
-	class TestEventHandler implements EventHandler {
-		private final LinkedList<Event> eventlist = new LinkedList<Event>();
-		private final Semaphore sem = new Semaphore(0);
-
-
-		/**
-		 * @see org.osgi.service.event.EventHandler#handleEvent(org.osgi.service.event.Event)
-		 */
-		public void handleEvent(Event event) {
-			eventlist.add(event);
-			sem.signal();
-		}
-
-		Event getNextEvent() {
-			try {
-				sem.waitForSignal(timeout);
-			} catch (InterruptedException e1) {
-				return null;
-			}
-
-			try {
-				return eventlist.removeFirst();
-			} catch (NoSuchElementException e) {
-				return null;
-			}
-		}
-
-		int getEventCount() {
-			return eventlist.size();
-		}
-	}
 }
