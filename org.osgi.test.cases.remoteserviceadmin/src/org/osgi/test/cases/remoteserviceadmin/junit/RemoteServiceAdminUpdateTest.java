@@ -1,6 +1,7 @@
 package org.osgi.test.cases.remoteserviceadmin.junit;
 
 import java.util.HashMap;
+import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 
@@ -10,14 +11,20 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventConstants;
+import org.osgi.service.event.EventHandler;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
 import org.osgi.service.remoteserviceadmin.ImportRegistration;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdmin;
+import org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent;
 import org.osgi.test.cases.remoteserviceadmin.common.ModifiableService;
+import org.osgi.test.cases.remoteserviceadmin.common.TestEventHandler;
 import org.osgi.test.cases.remoteserviceadmin.common.Utils;
 
 public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 	private static final String SYSTEM_PACKAGES_EXTRA = "org.osgi.test.cases.remoteserviceadmin.system.packages.extra";
+	private long m_timeout;
 
 	public Map<String, String> getConfiguration() {
 		Map<String, String> configuration = new HashMap<String, String>();
@@ -32,6 +39,9 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 		if (console != 0) {
 			configuration.put("osgi.console", "" + console + 1);
 		}
+
+		m_timeout = getLongProperty("rsa.ct.timeout", 300000L);
+
 		return configuration;
 	}
 
@@ -44,10 +54,24 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 	public void testExportImportManually() throws Exception {
 		verifyFramework();
 
+		TestEventHandler eventHandler = new TestEventHandler(m_timeout);
+
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
+		props.put(EventConstants.EVENT_TOPIC, new String[] {
+				"org/osgi/service/remoteserviceadmin/IMPORT_REGISTRATION",
+				"org/osgi/service/remoteserviceadmin/IMPORT_UNREGISTRATION",
+				"org/osgi/service/remoteserviceadmin/IMPORT_ERROR",
+				"org/osgi/service/remoteserviceadmin/IMPORT_UPDATE" });
+
+		// register an event handler to verify that the required register and
+		// update events are generated
+		registerService(EventHandler.class.getName(), eventHandler, props);
+
 		//
 		// install test bundle in child framework
 		//
 		BundleContext childContext = getFramework().getBundleContext();
+
 
 		Bundle tb8Bundle = installBundle(childContext, "/tb8.jar");
 		assertNotNull(tb8Bundle);
@@ -84,6 +108,22 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 			ImportRegistration importReg = rsa.importService(endpoint);
 			assertNotNull(importReg);
 			assertNull(importReg.getException());
+
+			{ // check if the required IMPORT_REGISTRATION event was raised
+				Event event = eventHandler
+					.getNextEventForTopic("org/osgi/service/remoteserviceadmin/IMPORT_REGISTRATION");
+				assertNotNull(event);
+				RemoteServiceAdminEvent rsaevent = TestEventHandler
+						.verifyBasicRsaEventProperties(rsaRef, event);
+				assertNotNull(rsaevent);
+				assertNotNull(event.getProperty("timestamp"));
+
+				// check event type
+				String topic = event.getTopic();
+				assertNull("cause in event", event.getProperty("cause"));
+				assertEquals(RemoteServiceAdminEvent.IMPORT_REGISTRATION,
+						rsaevent.getType());
+			}
 
 			// get the modifiable service that has been exported from tb8
 			ModifiableService modifiableService = null;
@@ -142,6 +182,26 @@ public class RemoteServiceAdminUpdateTest extends MultiFrameworkTestCase {
 						.getService(
 						alreadyModifiedServiceRef);
 				assertNotNull(alreadyModifiedService);
+			}
+
+			{ // check if the required IMPORT_UPDATE event was raised
+				Event event = eventHandler
+						.getNextEventForTopic("org/osgi/service/remoteserviceadmin/IMPORT_UPDATE");
+				assertNotNull(
+						"After the upddate of an imported endpoit we should have received an IMPORT_UPDATE event",
+						event);
+
+				RemoteServiceAdminEvent rsaevent = TestEventHandler
+						.verifyBasicRsaEventProperties(
+						rsaRef, event);
+				assertNotNull(rsaevent);
+				assertNotNull(event.getProperty("timestamp"));
+
+				// check event type
+				String topic = event.getTopic();
+				assertNull("cause in event", event.getProperty("cause"));
+				assertEquals(RemoteServiceAdminEvent.IMPORT_UPDATE,
+						rsaevent.getType());
 			}
 
 		} finally {

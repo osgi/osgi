@@ -12,15 +12,20 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.service.event.Event;
+import org.osgi.service.event.EventConstants;
+import org.osgi.service.event.EventHandler;
 import org.osgi.service.remoteserviceadmin.EndpointDescription;
 import org.osgi.service.remoteserviceadmin.ExportReference;
 import org.osgi.service.remoteserviceadmin.ExportRegistration;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdmin;
+import org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.ModifiableService;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
+import org.osgi.test.cases.remoteserviceadmin.common.TestEventHandler;
 import org.osgi.test.cases.remoteserviceadmin.common.TestRemoteServiceAdminListener;
 import org.osgi.test.cases.remoteserviceadmin.common.Utils;
 import org.osgi.test.support.OSGiTestCaseProperties;
@@ -73,6 +78,7 @@ public class Activator implements BundleActivator, ModifiableService, B {
 	 * by parent framework @see {@link Utils.exportEndpointDescription}
 	 */
 	private int registrationCounter = 0;
+	private TestEventHandler m_eventHandler;
 
 	private Hashtable<String, String> createBasicServiceProperties() {
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
@@ -98,6 +104,19 @@ public class Activator implements BundleActivator, ModifiableService, B {
 	}
 
 	private void test() throws Exception {
+
+		m_eventHandler = new TestEventHandler(timeout);
+
+		Hashtable<String, Object> props = new Hashtable<String, Object>();
+		props.put(EventConstants.EVENT_TOPIC, new String[] {
+				"org/osgi/service/remoteserviceadmin/EXPORT_REGISTRATION",
+				"org/osgi/service/remoteserviceadmin/EXPORT_UNREGISTRATION",
+				"org/osgi/service/remoteserviceadmin/EXPORT_ERROR",
+				"org/osgi/service/remoteserviceadmin/EXPORT_UPDATE" });
+
+		bctx.registerService(EventHandler.class.getName(), m_eventHandler,
+				props);
+
 		// lookup RemoteServiceAdmin service
 		rsaRef = bctx.getServiceReference(RemoteServiceAdmin.class.getName());
 		Assert.assertNotNull(rsaRef);
@@ -150,7 +169,25 @@ public class Activator implements BundleActivator, ModifiableService, B {
 			verifyBasicEndpointDescriptionProperties(ed);
 
 			Utils.exportEndpointDescription(ed, version, registrationCounter++);
+
+			{ // check if the required EXPORT_REGISTRATION event was raised
+				Event event = m_eventHandler
+						.getNextEventForTopic("org/osgi/service/remoteserviceadmin/EXPORT_REGISTRATION");
+				Assert.assertNotNull(event);
+				RemoteServiceAdminEvent rsaevent = TestEventHandler
+						.verifyBasicRsaEventProperties(rsaRef, event);
+				Assert.assertNotNull(rsaevent);
+				Assert.assertNotNull(event.getProperty("timestamp"));
+
+				// check event type
+				String topic = event.getTopic();
+				Assert.assertNull("cause in event", event.getProperty("cause"));
+				Assert.assertEquals(
+						RemoteServiceAdminEvent.EXPORT_REGISTRATION,
+						rsaevent.getType());
+			}
 		}
+
 
 	}
 
@@ -204,6 +241,22 @@ public class Activator implements BundleActivator, ModifiableService, B {
 					"SomeValue",
 					edNew.getProperties()
 					.get("someNewProp"));
+
+			{ // check if the required EXPORT_UPDATE event was raised
+				Event event = m_eventHandler
+						.getNextEventForTopic("org/osgi/service/remoteserviceadmin/EXPORT_UPDATE");
+				Assert.assertNotNull(event);
+				RemoteServiceAdminEvent rsaevent = TestEventHandler
+						.verifyBasicRsaEventProperties(rsaRef, event);
+				Assert.assertNotNull(rsaevent);
+				Assert.assertNotNull(event.getProperty("timestamp"));
+
+				// check event type
+				String topic = event.getTopic();
+				Assert.assertNull("cause in event", event.getProperty("cause"));
+				Assert.assertEquals(RemoteServiceAdminEvent.EXPORT_UPDATE,
+						rsaevent.getType());
+			}
 		}
 
 	}
@@ -227,5 +280,4 @@ public class Activator implements BundleActivator, ModifiableService, B {
 				ed.getFrameworkUUID());
 		Assert.assertNotNull(ed.getProperties().get("endpoint.service.id"));
 	}
-
 }

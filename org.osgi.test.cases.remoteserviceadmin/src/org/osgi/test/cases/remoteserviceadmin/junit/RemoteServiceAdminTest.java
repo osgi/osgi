@@ -46,6 +46,7 @@ import org.osgi.service.remoteserviceadmin.RemoteServiceAdminEvent;
 import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
+import org.osgi.test.cases.remoteserviceadmin.common.TestEventHandler;
 import org.osgi.test.cases.remoteserviceadmin.common.Utils;
 import org.osgi.test.support.compatibility.Semaphore;
 

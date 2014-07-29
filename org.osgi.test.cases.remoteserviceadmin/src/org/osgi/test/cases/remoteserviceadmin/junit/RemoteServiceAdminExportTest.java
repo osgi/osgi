@@ -46,6 +46,7 @@ import org.osgi.service.remoteserviceadmin.RemoteServiceAdminListener;
 import org.osgi.test.cases.remoteserviceadmin.common.A;
 import org.osgi.test.cases.remoteserviceadmin.common.B;
 import org.osgi.test.cases.remoteserviceadmin.common.RemoteServiceConstants;
+import org.osgi.test.cases.remoteserviceadmin.common.TestEventHandler;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.test.support.sleep.Sleep;
@@ -454,8 +455,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 			//
 			ServiceReference sref = getServiceReference(remoteServiceAdmin);
 
-			Event event = eventHandler
-.getNextEventForTopic(
+			Event event = eventHandler.getNextEventForTopic(
 					"org/osgi/service/remoteserviceadmin/EXPORT_REGISTRATION",
 					"org/osgi/service/remoteserviceadmin/EXPORT_ERROR");
 			assertNotNull("no Event received", event);
