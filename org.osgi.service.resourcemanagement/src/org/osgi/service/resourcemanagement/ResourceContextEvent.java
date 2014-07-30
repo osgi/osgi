@@ -1,6 +1,5 @@
 package org.osgi.service.resourcemanagement;
 
-import org.osgi.framework.Bundle;
 
 /**
  * 
@@ -27,7 +26,7 @@ public class ResourceContextEvent {
 	/**
 	 * A bundle has been added to e {@link ResourceContext}
 	 * <p>
-	 * The {@link ResourceContext#addBundle(Bundle)} method has been invoked
+	 * The {@link ResourceContext#addBundle(long)} method has been invoked
 	 */
 	public static final int	BUNDLE_ADDED				= 2;
 
