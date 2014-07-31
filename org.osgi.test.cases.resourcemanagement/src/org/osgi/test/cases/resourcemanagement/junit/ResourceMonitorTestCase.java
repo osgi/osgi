@@ -12,6 +12,9 @@ import org.osgi.service.resourcemanagement.ResourceMonitorException;
 import org.osgi.service.resourcemanagement.ResourceMonitorFactory;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
+/**
+ *
+ */
 public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 
 	/**
@@ -70,6 +73,7 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 			}
 
 		} catch (InvalidSyntaxException e) {
+			e.printStackTrace();
 		}
 	}
 

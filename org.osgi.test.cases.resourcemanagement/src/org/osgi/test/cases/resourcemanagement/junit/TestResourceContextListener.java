@@ -7,6 +7,9 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.resourcemanagement.ResourceContextEvent;
 import org.osgi.service.resourcemanagement.ResourceContextListener;
 
+/**
+ *
+ */
 public class TestResourceContextListener implements ResourceContextListener {
 
 	/**
@@ -20,13 +23,18 @@ public class TestResourceContextListener implements ResourceContextListener {
 	private final List events;
 
 
+	/**
+	 * 
+	 */
 	public TestResourceContextListener() {
 		events = new ArrayList();
 	}
 
 	/**
-	 * Register this instance as a {@link ResourceContextListener} service.
-	 * Once registered, this instance will receive {@link ResourceContextEvent}.
+	 * Register this instance as a {@link ResourceContextListener} service. Once
+	 * registered, this instance will receive {@link ResourceContextEvent}.
+	 * 
+	 * @param bundleContext
 	 */
 	public void start(BundleContext bundleContext) {
 		serviceRegistration = bundleContext

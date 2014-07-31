@@ -4,14 +4,25 @@ import org.osgi.service.resourcemanagement.ResourceContext;
 import org.osgi.service.resourcemanagement.ResourceMonitor;
 import org.osgi.service.resourcemanagement.ResourceMonitorException;
 
+/**
+ *
+ */
 public class FakeResourceMonitor implements ResourceMonitor {
 	
 	private String resourceType;
 	private ResourceContext resourceContext;
 
+	/**
+	 * 
+	 */
 	public FakeResourceMonitor() {
+		// nothing to do.
 	}
 
+	/**
+	 * @param pResourceType
+	 * @param pResourceContext
+	 */
 	public FakeResourceMonitor(String pResourceType,
 			ResourceContext pResourceContext) {
 		resourceType = pResourceType;
@@ -67,9 +78,11 @@ public class FakeResourceMonitor implements ResourceMonitor {
 	}
 	
 	public void notifyIncomingThread(Thread t) {
+		// TODO?
 	}
 
 	public void notifyOutgoingThread(Thread t) {
+		// TODO?
 	}
 
 }

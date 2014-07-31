@@ -19,6 +19,9 @@ import org.osgi.service.resourcemanagement.ResourceMonitor;
 import org.osgi.service.resourcemanagement.ResourceMonitorFactory;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
+/**
+ *
+ */
 public class ResourceListenerTestCase extends DefaultTestBundleControl
 		implements ResourceListener {
 
@@ -66,6 +69,9 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 	 */
 	private final List receivedEvents;
 
+	/**
+	 * 
+	 */
 	public ResourceListenerTestCase() {
 		receivedEvents = new ArrayList();
 	}
@@ -98,6 +104,7 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 								.iterator().next());
 			}
 		} catch (InvalidSyntaxException e) {
+			e.printStackTrace();
 		}
 
 	}

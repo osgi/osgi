@@ -16,6 +16,9 @@
 
 package org.osgi.test.cases.resourcemanagement.junit;
 
+/**
+ * 
+ */
 public class SignatureTestCase extends
 		org.osgi.test.support.signature.SignatureTestCase {
 	// concrete subclass

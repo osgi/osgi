@@ -15,6 +15,9 @@ import org.osgi.service.resourcemanagement.ResourceMonitorException;
 import org.osgi.service.resourcemanagement.ResourceMonitorFactory;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
+/**
+ *
+ */
 public class ResourceManagerTestCase extends DefaultTestBundleControl {
 
 	/**
@@ -185,6 +188,9 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 
 	}
 
+	/**
+	 * @throws ResourceMonitorException
+	 */
 	public void testCreateResourceContextWithADeletedTemplate()
 			throws ResourceMonitorException {
 		final String name1 = "context1";

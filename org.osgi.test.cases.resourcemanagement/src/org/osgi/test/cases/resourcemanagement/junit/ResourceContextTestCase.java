@@ -27,6 +27,9 @@ import org.osgi.service.resourcemanagement.ResourceManager;
 import org.osgi.service.resourcemanagement.ResourceMonitorException;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
+/**
+ *
+ */
 public class ResourceContextTestCase extends DefaultTestBundleControl {
 
 	/**
@@ -131,6 +134,9 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 
 	}
 
+	/**
+	 * 
+	 */
 	public void testRemoveContextWithDestination() {
 		final String name1 = "context1";
 		final String name2 = "context2";

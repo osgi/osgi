@@ -13,6 +13,9 @@ import org.osgi.service.resourcemanagement.ResourceContextListener;
 import org.osgi.service.resourcemanagement.ResourceManager;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
+/**
+ *
+ */
 public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 		implements ResourceContextListener {
 
@@ -56,6 +59,9 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	 */
 	private ServiceRegistration listenerServiceRegistration;
 
+	/**
+	 * 
+	 */
 	public ResourceContextListenerTestCase() {
 		events = new ArrayList();
 	}
@@ -93,7 +99,6 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 		ResourceContextEvent event = (ResourceContextEvent) events.get(0);
 		assertTrue(event.getType() == ResourceContextEvent.RESOURCE_CONTEXT_CREATED);
 		assertTrue(event.getContext().getName().equals(RESOURCE_CONTEXT_NAME));
-
 	}
 
 	/**
@@ -218,6 +223,9 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 
 	}
 
+	/**
+	 * 
+	 */
 	public void testUnregisterResourceContextListener() {
 		// register this instance as a ResourceContextListener without filters
 		registerListener(null, null);
