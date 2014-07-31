@@ -25,8 +25,7 @@ import org.osgi.service.resourcemanagement.ResourceMonitor;
  * resource type. CPUMonitor instance monitors the CPU consumed by a
  * {@link ResourceContext} instance.
  * 
- * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
- *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
+ * @author $Id$
  */
 public interface CPUMonitor extends ResourceMonitor {
 

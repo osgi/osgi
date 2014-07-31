@@ -25,8 +25,7 @@ import org.osgi.service.resourcemanagement.ResourceMonitor;
  * resource type. A ThreadMonitor instance monitors and limits the thread
  * created by a {@link ResourceContext} instance.
  * 
- * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
- *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
+ * @author $Id$
  */
 public interface ThreadMonitor extends ResourceMonitor {
 

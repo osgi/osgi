@@ -19,8 +19,7 @@ package org.osgi.service.resourcemanagement;
 /**
  * Resource Monitor Exception reports an invalid usage of a monitor.
  * 
- * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
- *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
+ * @author $Id$
  */
 public class ResourceMonitorException extends Exception {
 

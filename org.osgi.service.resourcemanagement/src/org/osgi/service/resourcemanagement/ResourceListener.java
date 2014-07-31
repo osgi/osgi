@@ -74,8 +74,7 @@ import org.osgi.framework.ServiceListener;
  * {@link ServiceListener}.
  * </p>
  * 
- * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
- *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
+ * @author $Id$
  */
 public interface ResourceListener {
 

@@ -39,8 +39,7 @@ import org.osgi.service.resourcemanagement.ResourceMonitor;
  * {@link DatagramSocket#connect(java.net.SocketAddress)}). A UDP Socket leaves
  * the in-use state when it is closed ({@link DatagramSocket#close()}).
  * 
- * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
- *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
+ * @author $Id$
  */
 public interface SocketMonitor extends ResourceMonitor {
 

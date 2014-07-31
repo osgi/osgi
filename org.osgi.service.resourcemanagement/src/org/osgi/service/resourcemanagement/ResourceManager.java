@@ -32,8 +32,7 @@ import org.osgi.service.resourcemanagement.monitor.ThreadMonitor;
  * @ThreadSafe
  * @noimplement
  * 
- * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
- *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
+ * @author $Id$
  */
 public interface ResourceManager {
 

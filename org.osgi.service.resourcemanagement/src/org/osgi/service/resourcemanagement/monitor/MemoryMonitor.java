@@ -25,8 +25,7 @@ import org.osgi.service.resourcemanagement.ResourceMonitor;
  * resource type. A MemoryMonitor instance monitors and limits the memory used
  * by a {@link ResourceContext} instance.
  * 
- * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
- *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
+ * @author $Id$
  */
 public interface MemoryMonitor extends ResourceMonitor {
 

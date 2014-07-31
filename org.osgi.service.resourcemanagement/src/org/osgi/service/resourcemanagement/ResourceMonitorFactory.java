@@ -21,8 +21,7 @@ package org.osgi.service.resourcemanagement;
  * instance. These factories should only be used by ResourceManager singleton or
  * authorities.
  * 
- * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
- *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
+ * @author $Id$
  */
 public interface ResourceMonitorFactory {
 

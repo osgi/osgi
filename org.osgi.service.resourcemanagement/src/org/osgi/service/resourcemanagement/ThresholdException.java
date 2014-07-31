@@ -19,8 +19,7 @@ package org.osgi.service.resourcemanagement;
 /**
  * Threshold exception are thrown an invalid threshold setting is detected.
  * 
- * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
- *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
+ * @author $Id$
  */
 public class ThresholdException extends Exception {
 
