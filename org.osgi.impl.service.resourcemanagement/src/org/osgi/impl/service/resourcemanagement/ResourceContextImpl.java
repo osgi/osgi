@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.resourcemanagement;
 
 import java.util.ArrayList;
@@ -5,7 +6,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.osgi.impl.service.resourcemanagement.bundlemanagement.BundleHolder;
 import org.osgi.impl.service.resourcemanagement.bundlemanagement.BundleManager;
 import org.osgi.impl.service.resourcemanagement.lock.ResourceContextLock;
@@ -24,57 +24,52 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 	/**
 	 * lock.
 	 */
-	private final ResourceContextLock lock;
+	private final ResourceContextLock			lock;
 
 	/**
 	 * Resource Context name.
 	 */
-	private final String name;
+	private final String						name;
 
 	/**
-	 * Bundles belonging to the Context
+	 * Bundles belonging to the Context. List<Long> bundles.
 	 */
-	private final List/* <Long> */bundles;
+	private final List							bundles;
 
 	/**
-	 * Resource Monitors associated to the context.
+	 * Resource Monitors associated to the context. Map<String, ResourceMonitor>
+	 * monitors.
 	 */
-	private final Map/* <String, ResourceMonitor> */monitors;
+	private final Map							monitors;
 
 	/**
 	 * notifier for ResourceContextEvent.
 	 */
-	private final ResourceContextEventNotifier eventNotifier;
+	private final ResourceContextEventNotifier	eventNotifier;
 
 	/**
 	 * resource manager.
 	 */
-	private final ResourceManagerImpl resourceManager;
+	private final ResourceManagerImpl			resourceManager;
 
 	/**
 	 * bundle manager service
 	 */
-	private final BundleManager bundleManager;
+	private final BundleManager					bundleManager;
 
 	/**
 	 * is true if the current context has been deleted (i.e.
 	 * {@link #removeContext(ResourceContext)} has been previously called).
 	 */
-	private boolean isRemoved = false;
+	private boolean								isRemoved	= false;
 
 	/**
 	 * Default constructor to be used to create new context.
 	 * 
-	 * @param pResourceManager
-	 *            resource manager (the one calling this method)
-	 * @param pBundleManager
-	 *            bundle manager
-	 * @param pName
-	 *            name of the ResourceContext
-	 * @param pEventNotifier
-	 *            event notifier
-	 * @param pPersistedResourceMonitorTypes
-	 *            types of resource monitor.
+	 * @param pResourceManager resource manager (the one calling this method)
+	 * @param pBundleManager bundle manager
+	 * @param pName name of the ResourceContext
+	 * @param pEventNotifier event notifier
 	 */
 	public ResourceContextImpl(final ResourceManagerImpl pResourceManager,
 			final BundleManager pBundleManager, final String pName,
@@ -86,10 +81,9 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 
 		lock = new ResourceContextLock();
 
-		bundles = new ArrayList/* <Long> */();
+		bundles = new ArrayList();
 
-		monitors = new Hashtable/* <String, ResourceMonitor> */();
-
+		monitors = new Hashtable();
 	}
 
 	public String getName() {
@@ -201,26 +195,27 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 		checkResourceContextExistency();
 
 		// delete all bundles
-		List/* <Long> */bs = new ArrayList/* <Long> */();
+		List bs = new ArrayList();
 		synchronized (bundles) {
 			bs.addAll(bundles);
 		}
-		for (Iterator/* <Long> */it = bs.iterator(); it.hasNext();) {
+		for (Iterator it = bs.iterator(); it.hasNext();) {
 			try {
 				Long bundleId = (Long) it.next();
 				removeBundle(bundleId.longValue(), destination);
 			} catch (RuntimeException e) {
 				// this exception can be thrown if the destination context has
 				// been deleted
+				e.printStackTrace();
 			}
 		}
 
 		// delete all monitors
-		List/* <ResourceMonitor> */rms = new ArrayList/* <ResourceMonitor> */();
+		List resourceMonitors = new ArrayList();
 		synchronized (monitors) {
-			rms.addAll(monitors.values());
+			resourceMonitors.addAll(monitors.values());
 		}
-		for (Iterator/* <ResourceMonitor> */it = rms.iterator(); it.hasNext();) {
+		for (Iterator it = resourceMonitors.iterator(); it.hasNext();) {
 			ResourceMonitor rm = (ResourceMonitor) it.next();
 			rm.delete();
 		}

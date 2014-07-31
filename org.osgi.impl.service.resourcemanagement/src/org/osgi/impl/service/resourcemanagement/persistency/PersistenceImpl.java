@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.resourcemanagement.persistency;
 
 import java.io.File;
@@ -8,7 +9,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.resourcemanagement.persistency.json.JSONArray;
 import org.osgi.impl.service.resourcemanagement.persistency.json.JSONList;
@@ -16,17 +16,19 @@ import org.osgi.impl.service.resourcemanagement.persistency.json.JSONLong;
 import org.osgi.impl.service.resourcemanagement.persistency.json.JSONObject;
 import org.osgi.impl.service.resourcemanagement.persistency.json.JSONString;
 
+/**
+ *
+ */
 public class PersistenceImpl implements Persistence {
 
-	public static final String PERSISTENT_FILE = "context.json";
+	/** PERSISTENT_FILE */
+	public static final String	PERSISTENT_FILE							= "context.json";
 
-	private static final String RESOURCE_CONTEXT_NAME_PARAMETER = "name";
-	private static final String RESOURCE_CONTEXT_BUNDLE_IDS_PARAMETER = "bundle.ids";
-	private static final String RESOURCE_CONTEXT_MONITORS = "monitors";
-	private static final String RESOURCE_MONITOR_TYPE = "monitor.type";
-	private static final String RESOURCE_MONITOR_ENABLED = "monitor.enabled";
-	
-	
+	private static final String	RESOURCE_CONTEXT_NAME_PARAMETER			= "name";
+	private static final String	RESOURCE_CONTEXT_BUNDLE_IDS_PARAMETER	= "bundle.ids";
+	private static final String	RESOURCE_CONTEXT_MONITORS				= "monitors";
+	private static final String	RESOURCE_MONITOR_TYPE					= "monitor.type";
+	private static final String	RESOURCE_MONITOR_ENABLED				= "monitor.enabled";
 
 	/**
 	 * Persist the provided list of resource context as a JSON file.
@@ -142,8 +144,8 @@ public class PersistenceImpl implements Persistence {
 	/**
 	 * Get a json string representing the provided resource context
 	 * 
-	 * @param resourceContextInfo
-	 *            resource context to be transformed into json string.
+	 * @param resourceContextInfo resource context to be transformed into json
+	 *        string.
 	 * @return a json string {"name":"contextname","bundle.ids":[id1,id2]}
 	 */
 	private static String resourceContextToJson(

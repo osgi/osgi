@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.resourcemanagement.util;
 
 import java.util.ArrayList;
@@ -28,47 +29,43 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	/**
 	 * context of the bundle.
 	 */
-	private final BundleContext bundleContext;
+	private final BundleContext		bundleContext;
 
 	/**
 	 * Tracks {@link ResourceListener} services.
 	 */
-	private final ServiceTracker serviceTracker;
+	private final ServiceTracker	serviceTracker;
 
 	/**
 	 * Used to filter {@link ResourceListener}
 	 */
-	private final String resourceType;
+	private final String			resourceType;
 
 	/**
 	 * Used to filter {@link ResourceListener}
 	 */
-	private final ResourceContext resourceContext;
+	private final ResourceContext	resourceContext;
 
 	/**
 	 * Each {@link ResourceListener} of this list will receive a
 	 * {@link ResourceEvent} for each call to
 	 */
-	private final List resourceListeners;
+	private final List				resourceListeners;
 
 	/**
-	 * Map of >ResourceListener, ResourceEvent> Keep track of the last sent
+	 * Map of <ResourceListener, ResourceEvent> Keep track of the last sent
 	 * notifications for each {@link ResourceListener}.
 	 */
-	private final Map lastNotifications;
-
+	private final Map				lastNotifications;
 
 	/**
 	 * Create a new EventNotifier.
 	 * 
-	 * @param pResourceType
-	 *            type of resource. Used to filter to which
-	 *            {@link ResourceListener} this EventNotifier will send
-	 *            {@link ResourceEvent}
-	 * @param pResourceContext
-	 *            resourceContext associated to this notifier
-	 * @param pBundleContext
-	 *            bundle context
+	 * @param pResourceType type of resource. Used to filter to which
+	 *        {@link ResourceListener} this EventNotifier will send
+	 *        {@link ResourceEvent}
+	 * @param pResourceContext resourceContext associated to this notifier
+	 * @param pBundleContext bundle context
 	 */
 	public EventNotifier(final String pResourceType,
 			final ResourceContext pResourceContext,
@@ -118,8 +115,7 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	/**
 	 * Notify all ResourceListeners.
 	 * 
-	 * @param value
-	 *            new resource usage value
+	 * @param value new resource usage value
 	 */
 	public void notify(final Object value) {
 		List/* <ResourceListener> */currentResourceListeners = getResourceListeners();
@@ -141,7 +137,7 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 				// in the case where this listener has previously received a
 				// notification
 				// and this notification is either of type ERROR or WARNING
-				
+
 				// if the current event is null => then generate a NORMAL event
 				// type
 				if (event == null) {
@@ -182,8 +178,7 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	 * the framework. This ResourceListener is added into the resourceListeners
 	 * list.
 	 * 
-	 * @param reference
-	 *            reference of the new available {@link ResourceListener}
+	 * @param reference reference of the new available {@link ResourceListener}
 	 * @return listener service object.
 	 */
 	public Object addingService(ServiceReference reference) {
@@ -208,10 +203,8 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	 * This method is called when a tracked {@link ResourceListener} is no
 	 * longer available.
 	 * 
-	 * @param reference
-	 *            reference
-	 * @param service
-	 *            service
+	 * @param reference reference
+	 * @param service service
 	 */
 	public void removedService(ServiceReference reference, Object service) {
 		ResourceListener listener = (ResourceListener) service;
@@ -231,8 +224,7 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	/**
 	 * Add a new tracked ResourceListener. Thread safe.
 	 * 
-	 * @param resourceListener
-	 *            resource listener to be added
+	 * @param resourceListener resource listener to be added
 	 */
 	private void addResourceListener(ResourceListener resourceListener) {
 		synchronized (resourceListeners) {
@@ -243,8 +235,7 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	/**
 	 * Remove a ResourceListener from the list. Thread-safe
 	 * 
-	 * @param resourceListener
-	 *            resourceListener to be removed
+	 * @param resourceListener resourceListener to be removed
 	 */
 	private void removeResourceListener(ResourceListener resourceListener) {
 		synchronized (resourceListeners) {
@@ -322,12 +313,9 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	/**
 	 * Compare value with the comparable object.
 	 * 
-	 * @param comparable
-	 *            comparable
-	 * @param value
-	 *            value to be compared with comparable
-	 * @param expected
-	 *            expected result of the comparison
+	 * @param comparable comparable
+	 * @param value value to be compared with comparable
+	 * @param expected expected result of the comparison
 	 * @return true if the result of the comparison between comparable and value
 	 *         is equal to expected
 	 */

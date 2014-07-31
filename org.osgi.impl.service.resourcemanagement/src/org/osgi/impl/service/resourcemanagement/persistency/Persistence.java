@@ -1,8 +1,12 @@
+
 package org.osgi.impl.service.resourcemanagement.persistency;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.service.resourcemanagement.ResourceManager;
 
+/**
+ *
+ */
 public interface Persistence {
 
 	/**
@@ -23,12 +27,9 @@ public interface Persistence {
 	 * 
 	 * </p>
 	 * 
-	 * @param bundleContext
-	 *            bundle context to be used to get a file in the private storage
-	 *            area of the ResourceManager bundle.
-	 * 
-	 * @param resourceContexts
-	 *            resource contexts to be persisted.
+	 * @param bundleContext bundle context to be used to get a file in the
+	 *        private storage area of the ResourceManager bundle.
+	 * @param resourceContextInfos resource contexts to be persisted.
 	 */
 	void persist(BundleContext bundleContext,
 			ResourceContextInfo[] resourceContextInfos);
@@ -36,8 +37,7 @@ public interface Persistence {
 	/**
 	 * Load from the context file the persisted resource context.
 	 * 
-	 * @param context
-	 *            the bundle context to be used to load the persisted file.
+	 * @param context the bundle context to be used to load the persisted file.
 	 * @return persisted resource context
 	 */
 	ResourceContextInfo[] load(BundleContext context);

@@ -1,11 +1,17 @@
+
 package org.osgi.impl.service.resourcemanagement.persistency.json;
 
+/**
+ */
 public class JsonTokenizer {
 
-	private final String stringToBeParsed;
-	private String currentToken;
-	private int currentPosition = 0;
+	private final String	stringToBeParsed;
+	private String			currentToken;
+	private int				currentPosition	= 0;
 
+	/**
+	 * @param pStringToBeParsed
+	 */
 	public JsonTokenizer(String pStringToBeParsed) {
 		stringToBeParsed = pStringToBeParsed;
 		nextToken();
@@ -16,7 +22,7 @@ public class JsonTokenizer {
 	 * retrieved throught a call to current token;
 	 */
 	public void nextToken() {
-		String token = null;
+		// String token = null;
 		int initialPosition = currentPosition;
 		while ((currentPosition < stringToBeParsed.length())
 				&& (!isDelimeter())) {

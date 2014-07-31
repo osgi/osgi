@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.resourcemanagement.bundlemanagement;
 
 import org.osgi.framework.BundleContext;
@@ -16,10 +17,8 @@ public interface BundleManager {
 	 * <p>
 	 * This method registers a Bundle Listener.<:p>
 	 * 
-	 * @param bundleContext
-	 *            bundle context
-	 * @exception RuntimeException
-	 *                if the provided bundleContext is null
+	 * @param bundleContext bundle context
+	 * @exception RuntimeException if the provided bundleContext is null
 	 */
 	public void start(BundleContext bundleContext) throws RuntimeException;
 
@@ -39,12 +38,10 @@ public interface BundleManager {
 	 * method is thread safe.
 	 * </p>
 	 * 
-	 * @param bundleId
-	 *            bundle identifier
-	 * @param bundleHolder
-	 *            bundle holder
-	 * @throws RuntimeException
-	 *             if the bundle is associated to another bundle holder.
+	 * @param bundleId bundle identifier
+	 * @param bundleHolder bundle holder
+	 * @throws RuntimeException if the bundle is associated to another bundle
+	 *         holder.
 	 */
 	void addBundleToHolder(long bundleId, BundleHolder bundleHolder)
 			throws RuntimeException;
@@ -57,13 +54,10 @@ public interface BundleManager {
 	 * This method is thread safe
 	 * </p>
 	 * 
-	 * @param bundleId
-	 *            bundle identifier
-	 * @param bundleHolder
-	 *            bundle holder
-	 * @throws RuntimeException
-	 *             if the bundle is not currently associated with the specified
-	 *             bundle holder.
+	 * @param bundleId bundle identifier
+	 * @param bundleHolder bundle holder
+	 * @throws RuntimeException if the bundle is not currently associated with
+	 *         the specified bundle holder.
 	 */
 	void removeBundleFromHolder(long bundleId, BundleHolder bundleHolder)
 			throws RuntimeException;
@@ -71,8 +65,7 @@ public interface BundleManager {
 	/**
 	 * Retrieves the ResourceContext associated with the provided bundle.
 	 * 
-	 * @param bundleId
-	 *            bundle id
+	 * @param bundleId bundle id
 	 * @return the ResourceContext holding the bundle or null.
 	 */
 	ResourceContext getResourceContext(long bundleId);

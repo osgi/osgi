@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.resourcemanagement;
 
 import java.util.ArrayList;
@@ -5,7 +6,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
 import org.osgi.framework.BundleListener;
@@ -27,31 +27,29 @@ public class PersistenceManager implements BundleListener {
 	/**
 	 * read/write a json file for ResourceContext's persistence
 	 */
-	private final Persistence persistence;
+	private final Persistence		persistence;
 
 	/**
 	 * bundle context.
 	 */
-	private final BundleContext bundleContext;
+	private final BundleContext		bundleContext;
 
 	/**
 	 * this map contains bundles which has not been resolved during the
 	 * restoring phase.
 	 */
-	private final Map unresolvedBundles;
+	private final Map				unresolvedBundles;
 
 	/**
 	 * resource manager instance.
 	 */
-	private final ResourceManager resourceManager;
+	private final ResourceManager	resourceManager;
 
 	/**
 	 * Creates a new Persistence Manager.
 	 * 
-	 * @param pBbundleContext
-	 *            bundle context
-	 * @param pResourceManager
-	 *            resource manager
+	 * @param pBbundleContext bundle context
+	 * @param pResourceManager resource manager
 	 */
 	public PersistenceManager(BundleContext pBbundleContext,
 			ResourceManager pResourceManager) {
@@ -61,7 +59,6 @@ public class PersistenceManager implements BundleListener {
 		resourceManager = pResourceManager;
 
 	}
-
 
 	/**
 	 * This method is called whenever a bundle changes its states.
@@ -83,15 +80,16 @@ public class PersistenceManager implements BundleListener {
 					try {
 						resourceContext.addBundle(bundleId);
 					} catch (RuntimeException e) {
-
+						e.printStackTrace();
 					}
 				}
 			}
 
-		} else if (event.getType() == BundleEvent.UNINSTALLED) {
-			// a bundle has been uninstalled
-			// this case should not be used
-		}
+		} else
+			if (event.getType() == BundleEvent.UNINSTALLED) {
+				// a bundle has been uninstalled
+				// this case should not be used
+			}
 
 	}
 
@@ -144,8 +142,7 @@ public class PersistenceManager implements BundleListener {
 
 		// retrieve all existing ResourceContext
 		ResourceContext[] resourceContexts = resourceManager.listContext();
-		ResourceContextInfo[] rcis = new ResourceContextInfo[resourceContexts.length]; 
-
+		ResourceContextInfo[] rcis = new ResourceContextInfo[resourceContexts.length];
 
 		// iterate over all existing ResourceContext
 		for (int i = 0; i < resourceContexts.length; i++) {
@@ -174,9 +171,9 @@ public class PersistenceManager implements BundleListener {
 			ResourceContextInfo rci = new ResourceContextInfo(
 					resourceContext.getName(), bundleIdsSet);
 			rcis[i] = rci;
-			
+
 		}
-		
+
 		persistence.persist(bundleContext, rcis);
 	}
 

@@ -1,23 +1,35 @@
+
 package org.osgi.impl.service.resourcemanagement.persistency.json;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ *
+ */
 public class JSONArray extends JSONObject {
 
-	private final List/* <JSONObject> */elements;
+	// List<JSONObject> elements
+	private final List	elements;
 
 	/**
 	 * Create a new JSONArray
 	 */
 	public JSONArray() {
-		elements = new ArrayList/* <JSONObject> */();
+		elements = new ArrayList();
 	}
 
-	public List/* <JSONObject> */getElements() {
+	/**
+	 * @return List<JSONObject> of elements.
+	 */
+	public List getElements() {
 		return elements;
 	}
 
+	/**
+	 * @param tokenizer
+	 * @return the corresponding JSONArray.
+	 */
 	public static JSONArray parseJsonArray(JsonTokenizer tokenizer) {
 		JSONArray jsonArray = new JSONArray();
 		String token = null;
@@ -32,26 +44,26 @@ public class JSONArray extends JSONObject {
 
 			// parse next json object
 			JSONObject object = JSONObject.parseJsonObject(tokenizer);
-			
+
 			// store the parsed object
 			jsonArray.getElements().add(object);
-			
+
 			// check next token is a , or ]
 			// tokenizer.nextToken();
 			token = tokenizer.getCurrentToken();
 			if ((!token.equals(",")) && (!token.equals("]"))) {
 				throw new RuntimeException("Expected a \",\" or \"]\", found "
 						+ token);
-			} else if (token.equals(",")) {
-				// next token
-				tokenizer.nextToken();
-			}
+			} else
+				if (token.equals(",")) {
+					// next token
+					tokenizer.nextToken();
+				}
 		}
 		// the array is now fully parsed, go to the next token
 		tokenizer.nextToken();
 
 		return jsonArray;
 	}
-
 
 }

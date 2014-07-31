@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.resourcemanagement.threadmanager;
 
 import org.osgi.service.resourcemanagement.ResourceContext;
@@ -13,11 +14,10 @@ public interface ThreadManager {
 	 * the existing bundles in order to get their classloaders.
 	 * </p>
 	 * 
-	 * @param context
-	 *            context of the bundle.
+	 * @param context context of the bundle.
 	 */
 	/* void start(BundleContext context); */
-	
+
 	/**
 	 * <p>
 	 * Stop the thread manager.
@@ -33,22 +33,18 @@ public interface ThreadManager {
 	/**
 	 * Return the ResourceContext associated to the provided thread.
 	 * 
-	 * @param t
-	 *            thread
+	 * @param t thread
 	 * @return the ResourceContext associated with this thread or null.
-	 * @throws IllegalStateException
-	 *             if the ThreadManager has not been previously started or has
-	 *             been stopped.
+	 * @throws IllegalStateException if the ThreadManager has not been
+	 *         previously started or has been stopped.
 	 */
 	ResourceContext getResourceContext(Thread t) throws IllegalStateException;
 
 	/**
 	 * Associate the thread t to the Resource Context rc
 	 * 
-	 * @param t
-	 *            thread
-	 * @param rc
-	 *            resource context
+	 * @param t thread
+	 * @param rc resource context
 	 */
 	void switchContext(Thread t, ResourceContext rc);
 

@@ -1,21 +1,25 @@
+
 package org.osgi.impl.service.resourcemanagement.lock;
 
-
+/**
+ *
+ */
 public class ResourceContextLock {
 
 	/**
 	 * number of user holding the lock
 	 */
-	private int count = 0;
+	private int	count	= 0;
 
-
+	/**
+	 * 
+	 */
 	public ResourceContextLock() {
+
 	}
 
 	/**
 	 * Acquire bundle lock
-	 * 
-	 * @throws InterruptedException
 	 */
 	public void acquire() {
 		synchronized (this) {
@@ -23,6 +27,7 @@ public class ResourceContextLock {
 				try {
 					this.wait();
 				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
 			count++;
@@ -42,7 +47,7 @@ public class ResourceContextLock {
 	/**
 	 * Check if the bundle lock is acquired.
 	 * 
-	 * @return
+	 * @return true if acquired.
 	 */
 	public boolean isLocked() {
 		boolean isLocked = false;

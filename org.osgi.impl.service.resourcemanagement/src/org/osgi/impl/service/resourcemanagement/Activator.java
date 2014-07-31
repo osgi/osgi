@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.impl.service.resourcemanagement;
 
 import org.osgi.framework.BundleActivator;
@@ -27,32 +28,29 @@ import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
- * 
- * TODO Add Javadoc comment for this type.
- * 
+ * Activator
  */
 public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 
 	/**
 	 * bundle manager.
 	 */
-	private BundleManager bundleManager;
+	private BundleManager					bundleManager;
 
 	/**
 	 * thread manager.
 	 */
-	private ThreadManager threadManager;
+	private ThreadManager					threadManager;
 
 	/**
 	 * resource manager.
 	 */
-	private ResourceManagerImpl resourceManager;
+	private ResourceManagerImpl				resourceManager;
 
 	/**
 	 * event notifier.
 	 */
-	private ResourceContextEventNotifier eventNotifier;
-
+	private ResourceContextEventNotifier	eventNotifier;
 
 	/**
 	 * service registration for Resource Manager service.
@@ -62,12 +60,12 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 	/**
 	 * bundle context.
 	 */
-	private BundleContext bundleContext;
+	private BundleContext					bundleContext;
 
 	/**
 	 * Service tracker for ThreadManager service.
 	 */
-	private ServiceTracker threadManagerServiceTracker;
+	private ServiceTracker					threadManagerServiceTracker;
 
 	/**
 	 * @param context
@@ -79,7 +77,6 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 		System.out.println("start activator ");
 
 		bundleContext = context;
-		
 
 		// threadManager = new ThreadManagerImpl(bundleManager);
 		// threadManager.start(context);
@@ -108,8 +105,6 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 
 		threadManager = null;
 
-
-
 	}
 
 	/**
@@ -127,6 +122,7 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 	}
 
 	public void modifiedService(ServiceReference reference, Object service) {
+		// TODO?
 	}
 
 	/**

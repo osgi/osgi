@@ -1,17 +1,31 @@
+
 package org.osgi.impl.service.resourcemanagement.persistency.json;
 
+/**
+ *
+ */
 public class JSONString extends JSONObject {
 
-	private final String value;
+	private final String	value;
 
+	/**
+	 * @param pValue
+	 */
 	public JSONString(String pValue) {
 		value = pValue;
 	}
 
+	/**
+	 * @return the value.
+	 */
 	public String getValue() {
 		return value;
 	}
 
+	/**
+	 * @param tokenizer
+	 * @return the corresponding JSONString.
+	 */
 	public static JSONString parseJsonString(JsonTokenizer tokenizer) {
 		// next token should be the string value
 		tokenizer.nextToken();
@@ -31,9 +45,11 @@ public class JSONString extends JSONObject {
 		return jsonString;
 	}
 
+	/**
+	 * return hardcoded true.
+	 */
 	public boolean isJsonString() {
 		return true;
 	}
-
 
 }

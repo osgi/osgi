@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.resourcemanagement;
 
 import java.util.Collection;
@@ -20,62 +21,71 @@ import org.osgi.service.resourcemanagement.ResourceMonitorFactory;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
+/**
+ *
+ */
 public class ResourceManagerImpl implements ResourceManager,
 		ServiceTrackerCustomizer {
 
-	private ResourceContextLock lock;
+	private ResourceContextLock					lock;
 
 	/**
 	 * Map containing Resource Context object. Keys are the name of the
-	 * ResourceContext.
+	 * ResourceContext. Map<String, ResourceContext> resourceContexts.
 	 */
-	private final Map/* <String, ResourceContext> */resourceContexts;
+	private final Map							resourceContexts;
 
 	/**
-	 * list of available factories
+	 * list of available factories. Map<String, ResourceMonitorFactory>
+	 * resourceMonitorFactories.
 	 */
-	private final Map/* <String, ResourceMonitorFactory> */resourceMonitorFactories;
+	private final Map							resourceMonitorFactories;
 
 	/**
 	 * Notifier for ResourceContext events
 	 */
-	private final ResourceContextEventNotifier eventNotifier;
+	private final ResourceContextEventNotifier	eventNotifier;
 
 	/**
 	 * Thread manager
 	 */
-	private final ThreadManager threadManager;
+	private final ThreadManager					threadManager;
 
 	/**
 	 * Bundle manager.
 	 */
-	private final BundleManager bundleManager;
+	private final BundleManager					bundleManager;
 
 	/**
-	 * service tracker (for ResourceMonitorFactory)
+	 * Service tracker (for ResourceMonitorFactory)
 	 */
-	private ServiceTracker serviceTracker;
+	private ServiceTracker						serviceTracker;
 
 	/**
 	 * Bundle context
 	 */
-	private BundleContext context;
+	private BundleContext						context;
 
 	/**
 	 * system resource context
 	 */
-	private ResourceContext systemResourceContext;
+	private ResourceContext						systemResourceContext;
 
 	/**
 	 * framework resource context
 	 */
-	private ResourceContext frameworkResourceContext;
+	private ResourceContext						frameworkResourceContext;
 
 	/**
 	 * persistence manager
 	 */
-	private PersistenceManager persistenceManager;
+	private PersistenceManager					persistenceManager;
 
+	/**
+	 * @param pBundleManager
+	 * @param pEventNotifier
+	 * @param pThreadManager
+	 */
 	public ResourceManagerImpl(BundleManager pBundleManager,
 			ResourceContextEventNotifier pEventNotifier,
 			ThreadManager pThreadManager) {
@@ -94,6 +104,9 @@ public class ResourceManagerImpl implements ResourceManager,
 
 	}
 
+	/**
+	 * @param persistedResourceContexts
+	 */
 	public void restoreContext(ResourceContextInfo[] persistedResourceContexts) {
 		for (int i = 0; i < persistedResourceContexts.length; i++) {
 			ResourceContextInfo persistedResourceContext = persistedResourceContexts[i];
@@ -117,6 +130,9 @@ public class ResourceManagerImpl implements ResourceManager,
 		}
 	}
 
+	/**
+	 * @param pContext
+	 */
 	public void start(BundleContext pContext) {
 		context = pContext;
 		persistenceManager = new PersistenceManager(pContext, this);
@@ -130,6 +146,9 @@ public class ResourceManagerImpl implements ResourceManager,
 		serviceTracker.open();
 	}
 
+	/**
+	 * @param pContext
+	 */
 	public void stop(BundleContext pContext) {
 		serviceTracker.close();
 		serviceTracker = null;
@@ -198,6 +217,9 @@ public class ResourceManagerImpl implements ResourceManager,
 		return resourceContext;
 	}
 
+	/**
+	 * @param resourceContext
+	 */
 	protected void removeContext(ResourceContext resourceContext) {
 
 		lock.acquire();
@@ -270,7 +292,7 @@ public class ResourceManagerImpl implements ResourceManager,
 		synchronized (resourceMonitorFactories) {
 			supportedTypes = (String[]) resourceMonitorFactories.keySet()
 					.toArray(
-					supportedTypes);
+							supportedTypes);
 		}
 		return supportedTypes;
 	}
@@ -279,8 +301,7 @@ public class ResourceManagerImpl implements ResourceManager,
 	 * This method is called when a new ResourceMonitorFactory is available on
 	 * the fremwork.
 	 * 
-	 * @param reference
-	 *            service reference of the new factory
+	 * @param reference service reference of the new factory
 	 * @return the ResourceMonitorFactory object
 	 */
 	public Object addingService(ServiceReference reference) {
@@ -310,11 +331,12 @@ public class ResourceManagerImpl implements ResourceManager,
 		synchronized (resourceMonitorFactories) {
 			resourceMonitorFactories.remove(factory.getType());
 		}
-
 	}
 
 	/**
 	 * Retrieves all ResourceMonitorFactories
+	 * 
+	 * @param factoryType
 	 * 
 	 * @return factories
 	 */
@@ -344,16 +366,16 @@ public class ResourceManagerImpl implements ResourceManager,
 			// framework resource context
 			frameworkResourceContext = createContext(FRAMEWORK_CONTEXT_NAME,
 					(ResourceContext) null);
+			System.out.println("DEBUG: frameworkResourceContext: " + frameworkResourceContext);
 		}
 	}
 
 	/**
 	 * Create a new ResourceContext
 	 * 
-	 * @param name
-	 *            resource context name
-	 * @param resourceMonitorTypes
-	 *            types of resource monitor associated with this context
+	 * @param name resource context name
+	 * @param resourceMonitorTypes types of resource monitor associated with
+	 *        this context
 	 * @return a new ResourceContext
 	 */
 	private ResourceContext createContext(String name) {
@@ -377,8 +399,7 @@ public class ResourceManagerImpl implements ResourceManager,
 	 * Retrieves the ResourceMonitorFactory based on the type of ResourceMonitor
 	 * it can create.
 	 * 
-	 * @param resourceType
-	 *            type of resource
+	 * @param resourceType type of resource
 	 * @return the ResourceMonitorFactory or null
 	 */
 	private ResourceMonitorFactory getFactory(String resourceType) {
@@ -391,19 +412,17 @@ public class ResourceManagerImpl implements ResourceManager,
 		filter.append(resourceType);
 		filter.append(")");
 		try {
-			Collection/* <ServiceReference<ResourceMonitorFactory>> */srs = context
+			Collection srs = context
 					.getServiceReferences(ResourceMonitorFactory.class,
 							filter.toString());
 
 			if ((srs != null) && (!srs.isEmpty())) {
-				ServiceReference/* <ResourceMonitorFactory> */sr = (ServiceReference) srs
-						.iterator()
-						.next();
+				ServiceReference sr = (ServiceReference) srs.iterator().next();
 				factory = (ResourceMonitorFactory) context.getService(sr);
 			}
-
 		} catch (InvalidSyntaxException e) {
 			// not expected
+			e.printStackTrace();
 		}
 
 		return factory;

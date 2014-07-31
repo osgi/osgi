@@ -1,3 +1,4 @@
+
 package org.osgi.impl.service.resourcemanagement.util;
 
 import java.io.BufferedReader;
@@ -10,7 +11,6 @@ import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.service.resourcemanagement.ResourceMonitor;
 import org.osgi.service.resourcemanagement.ResourceMonitorFactory;
@@ -26,8 +26,8 @@ import org.osgi.service.resourcemanagement.ResourceMonitorFactory;
  */
 public class Persistence {
 
-	public static final String FILE_NAME = "persist.csv";
-
+	/** FILE_NAME */
+	public static final String	FILE_NAME	= "persist.csv";
 
 	/**
 	 * Persist a collection of monitors into the persistent data storage area of
@@ -35,20 +35,16 @@ public class Persistence {
 	 * each {@link ResourceMonitor} is persisted into the fileName file using a
 	 * CSV format.
 	 * 
-	 * @param mms
-	 *            collection of {@link ResourceMonitor} to persist
-	 * @param bundleContext
-	 *            bundle context (to get access to a bundle persistent storage
-	 * @param pFileName
-	 *            name of the persist file. if null, use the default (
-	 *            {@link #FILE_NAME})
-	 * @throws PersistenceException
-	 *             if any exception occurs
+	 * @param mms collection of {@link ResourceMonitor} to persist
+	 * @param bundleContext bundle context (to get access to a bundle persistent
+	 *        storage
+	 * @param pFileName name of the persist file. if null, use the default (
+	 *        {@link #FILE_NAME})
+	 * @throws PersistenceException if any exception occurs
 	 */
 	public static void persistMonitors(Collection mms,
 			BundleContext bundleContext, String pFileName)
 			throws PersistenceException {
-
 
 		// retrieve the fileName to be used or get default one.
 		String fileName = pFileName;
@@ -80,7 +76,6 @@ public class Persistence {
 					+ "not found.", e);
 		}
 
-
 		for (Iterator it = mms.iterator(); it.hasNext();) {
 			ResourceMonitor mm = (ResourceMonitor) it.next();
 			ResourceMonitorInfo mmi = new ResourceMonitorInfo(mm);
@@ -93,21 +88,18 @@ public class Persistence {
 
 	}
 
-
 	/**
 	 * Load persisted ResourceMonitor data from the fileName file. This file is
 	 * a CSV file containing the name of ResourceContext and the state of each
 	 * ResourceMonitor.
 	 * 
-	 * @param bundleContext
-	 *            used to load fileName file from the bundle storage area
-	 * @param fileName
-	 *            name of the file. if null, use default one ({@link #FILE_NAME}
-	 *            ).
+	 * @param bundleContext used to load fileName file from the bundle storage
+	 *        area
+	 * @param pFileName name of the file. if null, use default one (
+	 *        {@link #FILE_NAME} ).
 	 * @return Collection of {@link ResourceMonitorInfo}. This collection may be
 	 *         null.
-	 * @throws PersistenceException
-	 *             if any exception occurs
+	 * @throws PersistenceException if any exception occurs
 	 */
 	public static Collection loadMonitors(BundleContext bundleContext,
 			String pFileName) throws PersistenceException {
@@ -121,7 +113,6 @@ public class Persistence {
 
 		File file = bundleContext.getDataFile(fileName);
 		FileReader fr = null;
-
 
 		try {
 			fr = new FileReader(file);
@@ -158,11 +149,11 @@ public class Persistence {
 			try {
 				fr.close();
 			} catch (IOException e) {
+				e.printStackTrace();
 			}
 			fr = null;
 		}
 		file = null;
-
 
 		return mmis;
 	}

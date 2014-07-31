@@ -1,11 +1,11 @@
 /**
  * 
  */
+
 package org.osgi.impl.service.resourcemanagement.bundlemanagement;
 
 import java.util.Hashtable;
 import java.util.Map;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleEvent;
@@ -14,57 +14,54 @@ import org.osgi.service.resourcemanagement.ResourceContext;
 
 /**
  * @author mpcy8647
- *
+ * 
  */
 public class BundleManagerImpl implements BundleManager, BundleListener {
 
 	/**
 	 * the BundleManager has not been initialized. It can not be used.
 	 */
-	private static final int NOT_INITIALIZED = 0;
+	private static final int	NOT_INITIALIZED	= 0;
 
 	/**
 	 * the BundleManager is ready to be used.
 	 */
-	private static final int INITIALIZED = 1;
+	private static final int	INITIALIZED		= 1;
 
 	/**
 	 * the Bundle Manager has been destroyed and can not be used any more.
 	 */
-	private static final int DESTROYED = 2;
+	private static final int	DESTROYED		= 2;
 
 	/**
 	 * if bundle identifier is in this list, the related bundle abject is
 	 * currently lock, i.e. no other operation can be done until this bundle
 	 * lock is released.
 	 */
-	private Map/* <Long, BundleLock> */bundleLocks;
+	private Map					/* <Long, BundleLock> */bundleLocks;
 
 	/**
 	 * this map contains the association between bundle and resource contexts.
 	 * if a bundle id is in this map, the bundle is associated to a resource
 	 * contexts.
 	 */
-	private Map/* <Long, BundleHolder> */resourceContexts;
-
+	private Map					/* <Long, BundleHolder> */resourceContexts;
 
 	/**
 	 * bundle context.
 	 */
-	private BundleContext bundleContext;
+	private BundleContext		bundleContext;
 
+	private int					state			= NOT_INITIALIZED;
 
-
-	private int state = NOT_INITIALIZED;
-
+	/**
+	 * 
+	 */
 	public BundleManagerImpl() {
 		bundleLocks = new Hashtable/* <Long, BundleLock> */();
 		resourceContexts = new Hashtable/* <Long, BundleHolder> */();
 	}
 
-	/* (non-Javadoc)
-	 * @see org.osgi.impl.service.resourcemanagement.bundlemanagement.BundleManager#addBundleToHolder(long, org.osgi.impl.service.resourcemanagement.bundlemanagement.BundleHolder)
-	 */
 	public void addBundleToHolder(long bundleId, BundleHolder bundleHolder)
 			throws RuntimeException {
 		checkState(state, INITIALIZED);
@@ -92,9 +89,6 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 
 	}
 
-	/* (non-Javadoc)
-	 * @see org.osgi.impl.service.resourcemanagement.bundlemanagement.BundleManager#removeBundleFromHolder(long, org.osgi.impl.service.resourcemanagement.bundlemanagement.BundleHolder)
-	 */
 	public void removeBundleFromHolder(long bundleId, BundleHolder bundleHolder)
 			throws RuntimeException {
 		checkState(state, INITIALIZED);
@@ -134,32 +128,30 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 
 	}
 
-
-
 	public void bundleChanged(BundleEvent event) {
 		// create/delete Bundle Locks
 		if (event.getType() == BundleEvent.INSTALLED) {
 			addBundleLock(event.getBundle().getBundleId());
-		} else if (event.getType() == BundleEvent.UNINSTALLED) {
-			long bundleId = event.getBundle().getBundleId();
-			removeBundleLock(bundleId);
-			
-			// if the bundle was associated to a context
-			// remove it
-			synchronized (resourceContexts) {
-				BundleHolder holder = (BundleHolder) resourceContexts
-						.get(bundleId);
-				if (holder != null) {
-					holder.removeBundleToHolder(bundleId);
+		} else
+			if (event.getType() == BundleEvent.UNINSTALLED) {
+				long bundleId = event.getBundle().getBundleId();
+				removeBundleLock(bundleId);
+
+				// if the bundle was associated to a context
+				// remove it
+				synchronized (resourceContexts) {
+					BundleHolder holder = (BundleHolder) resourceContexts
+							.get(bundleId);
+					if (holder != null) {
+						holder.removeBundleToHolder(bundleId);
+					}
 				}
+
 			}
-			
-		}
 	}
 
 	public void start(BundleContext pBundleContext)
 			throws RuntimeException {
-		
 
 		checkState(state, NOT_INITIALIZED);
 
@@ -182,7 +174,6 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 	}
 
 	public void stop() {
-
 		checkState(state, INITIALIZED);
 
 		state = DESTROYED;
@@ -193,8 +184,6 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 		synchronized (bundleLocks) {
 			bundleLocks.clear();
 		}
-
-
 	}
 
 	public ResourceContext getResourceContext(long bundleId) {
@@ -213,7 +202,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 			}
 		}
 	}
-	
+
 	private void removeBundleLock(long bundleId) {
 		synchronized (bundleLocks) {
 			bundleLocks.remove(bundleId);
@@ -244,7 +233,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 		}
 	}
 
-	private static void checkState(int currentState, int expectedState) throws RuntimeException{
+	private static void checkState(int currentState, int expectedState) throws RuntimeException {
 		if (currentState != expectedState) {
 			throw new RuntimeException("Invalid state");
 		}

@@ -1,15 +1,29 @@
+
 package org.osgi.impl.service.resourcemanagement.threadmanager.impl;
- 
+
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.resourcemanagement.threadmanager.ThreadManager;
 import org.osgi.service.resourcemanagement.ResourceContext;
 
+/**
+ *
+ */
 public class ThreadManagerImpl implements ThreadManager {
 
-	public void start(BundleContext context) {};
-	
-	public void stop(BundleContext context) {};
-	
+	/**
+	 * @param context
+	 */
+	public void start(BundleContext context) {
+		// nothing to do.
+	}
+
+	/**
+	 * @param context
+	 */
+	public void stop(BundleContext context) {
+		// nothing to do.
+	}
+
 	public ResourceContext getResourceContext(Thread t)
 			throws IllegalStateException {
 		// TODO Auto-generated method stub

@@ -1,9 +1,12 @@
+
 package org.osgi.impl.service.resourcemanagement.bundlemanagement;
 
+/**
+ *
+ */
 public class BundleLock {
 
-
-	private boolean isLocked;
+	private boolean	isLocked;
 
 	/**
 	 * Acquire bundle lock. This method blocks until the bundle lock is
@@ -23,6 +26,7 @@ public class BundleLock {
 				try {
 					this.wait();
 				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}
 		}

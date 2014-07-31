@@ -1,26 +1,39 @@
+
 package org.osgi.impl.service.resourcemanagement.util;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.osgi.service.resourcemanagement.ResourceMonitor;
 
+/**
+ * 
+ */
 public class ResourceMonitorInfo {
 
-	private final String resourceContextName;
-	private boolean enabled;
+	private final String	resourceContextName;
+	private boolean			enabled;
 
+	/**
+	 * @param pResourceContextName
+	 * @param pEnabled
+	 */
 	public ResourceMonitorInfo(final String pResourceContextName,
 			final boolean pEnabled) {
 		resourceContextName = pResourceContextName;
 		enabled = pEnabled;
 	}
 
+	/**
+	 * @param resourceMonitor
+	 */
 	public ResourceMonitorInfo(final ResourceMonitor resourceMonitor) {
 		resourceContextName = resourceMonitor.getContext().getName();
 		enabled = resourceMonitor.isEnabled();
 	}
-	
+
+	/**
+	 * @param memoryMonitorInfoAsCsv
+	 */
 	public ResourceMonitorInfo(final String memoryMonitorInfoAsCsv) {
 		String[] splitted = split(memoryMonitorInfoAsCsv, ";");
 		if ((splitted != null) && (splitted.length == 2)) {
@@ -33,18 +46,30 @@ public class ResourceMonitorInfo {
 
 	}
 
+	/**
+	 * @return resource context name.
+	 */
 	public String getResourceContextName() {
 		return resourceContextName;
 	}
 
+	/**
+	 * @return true if enabled.
+	 */
 	public boolean isEnabled() {
 		return enabled;
 	}
 
+	/**
+	 * @param pEnabled
+	 */
 	public void setEnabled(boolean pEnabled) {
 		enabled = pEnabled;
 	}
 
+	/**
+	 * @return csv data.
+	 */
 	public String toCsv() {
 		return resourceContextName + ";" + enabled;
 	}
@@ -63,9 +88,8 @@ public class ResourceMonitorInfo {
 			fromIndex = index + 1;
 		}
 		parts.add(inputString.substring(fromIndex, length));
-		
-		return (String[]) parts.toArray(new String[parts.size()]);
 
+		return (String[]) parts.toArray(new String[parts.size()]);
 	}
 
 }

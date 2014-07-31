@@ -1,21 +1,37 @@
+
 package org.osgi.impl.service.resourcemanagement.persistency.json;
 
 import java.util.Hashtable;
 import java.util.Map;
 
+/**
+ *
+ */
 public class JSONList extends JSONObject {
 
-	private final Map/* <String, JSONObject> */elements;
+	/**
+	 * Map < String, JSONObject > elements.
+	 */
+	private final Map	elements;
 
-
+	/**
+	 * 
+	 */
 	public JSONList() {
-		elements = new Hashtable/* <String, JSONObject> */();
+		elements = new Hashtable();
 	}
 
-	public Map/* <String, JSONObject> */getElements() {
+	/**
+	 * @return Map < String, JSONObject > of elements.
+	 */
+	public Map getElements() {
 		return elements;
 	}
 
+	/**
+	 * @param tokenizer
+	 * @return the corresponding JSONList.
+	 */
 	public static JSONList parseJSONList(JsonTokenizer tokenizer) {
 		JSONList jsonList = new JSONList();
 
@@ -30,36 +46,37 @@ public class JSONList extends JSONObject {
 
 			// the next object should be a Json string
 			JSONString jsonString = JSONString.parseJsonString(tokenizer);
-			
+
 			// next token should be a ":"
 			// tokenizer.nextToken();
 			token = tokenizer.getCurrentToken();
 			if (!token.equals(":")) {
 				throw new RuntimeException("Expect a \":\", found " + token);
 			}
-			
+
 			// get next token and parse it
 			tokenizer.nextToken();
 			JSONObject valueJsonObject = JSONObject.parseJsonObject(tokenizer);
-			
+
 			// store value
 			jsonList.elements.put(jsonString.getValue(), valueJsonObject);
-			
+
 			// next token could be either a "," or a end of list ("}")
 			// tokenizer.nextToken();
 			token = tokenizer.getCurrentToken();
 			if ((!token.equals(",")) && (!token.equals("}"))) {
 				throw new RuntimeException("Expected \",\" or \"}\", found " + token);
-			} else if (token.equals(",")) {
-				tokenizer.nextToken();
-			}
+			} else
+				if (token.equals(",")) {
+					tokenizer.nextToken();
+				}
 
 		}
-		
+
 		// end of the list, go to the next token
 		tokenizer.nextToken();
 
 		return jsonList;
 	}
-	
+
 }

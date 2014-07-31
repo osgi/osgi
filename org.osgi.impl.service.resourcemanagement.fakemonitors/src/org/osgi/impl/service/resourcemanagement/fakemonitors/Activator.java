@@ -1,58 +1,62 @@
+
 package org.osgi.impl.service.resourcemanagement.fakemonitors;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.service.resourcemanagement.ResourceManager;
 
+/**
+ *
+ */
 public class Activator implements BundleActivator {
 
 	/**
 	 * memory factory
 	 */
-	private FakeMonitorFactory memoryFactory;
+	private FakeMonitorFactory	memoryFactory;
 
 	/**
 	 * cpu factory
 	 */
-	private FakeMonitorFactory cpuFactory;
+	private FakeMonitorFactory	cpuFactory;
 
 	/**
 	 * thread factory
 	 */
-	private FakeMonitorFactory threadFactory;
+	private FakeMonitorFactory	threadFactory;
 
 	/**
 	 * socket factory
 	 */
-	private FakeMonitorFactory socketFactory;
+	private FakeMonitorFactory	socketFactory;
 
 	/**
 	 * disk storage factory
 	 */
-	private FakeMonitorFactory diskStorageFactory;
+	private FakeMonitorFactory	diskStorageFactory;
 
 	/**
 	 * bandwidth factory
 	 */
-	private FakeMonitorFactory bandwidthFactory;
+	private FakeMonitorFactory	bandwidthFactory;
 
 	/**
 	 * flash factory
 	 */
-	private FakeMonitorFactory flashFactory;
+	private FakeMonitorFactory	flashFactory;
 
 	public void start(BundleContext context) throws Exception {
 		memoryFactory = new FakeMonitorFactory(context,
 				ResourceManager.RES_TYPE_MEMORY, 1000, 1000, 250000, 350000,
 				1000,
 				300000);
-		
+
 		cpuFactory = new FakeMonitorFactory(context,
 				ResourceManager.RES_TYPE_CPU, 1000, 1000, 0, 20, 1, 10);
-		
+
 		threadFactory = new FakeMonitorFactory(context,
 				ResourceManager.RES_TYPE_THREADS, 1000, 1000, 0, 2, 1, 1);
-		
+
 		socketFactory = new FakeMonitorFactory(context,
 				ResourceManager.RES_TYPE_SOCKET, 1000, 1000, 0, 5, 1, 2);
 
@@ -67,7 +71,6 @@ public class Activator implements BundleActivator {
 		// orange otb demo
 		flashFactory = new FakeMonitorFactory(context, "resource.type.flash",
 				1000, 1000, 250000, 350000, 1000, 300000);
-
 
 	}
 
