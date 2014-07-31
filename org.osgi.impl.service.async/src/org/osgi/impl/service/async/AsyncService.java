@@ -1,16 +1,10 @@
 package org.osgi.impl.service.async;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
@@ -18,7 +12,6 @@ import java.util.concurrent.ExecutorService;
 import net.sf.cglib.proxy.Enhancer;
 
 import org.osgi.framework.Bundle;
-import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.wiring.BundleWiring;
 import org.osgi.service.async.Async;
@@ -66,116 +59,90 @@ public class AsyncService implements Async {
 		this.logServiceTracker = logServiceTracker;
 	}
 
-	public <T> T mediate(final T service) {
+	public <T> T mediate(final T service, final Class<T> iface) {
 		return AccessController.doPrivileged(new PrivilegedAction<T>() {
 			public T run() {
-				return privMediate(service);
+				return privMediate(service, iface);
 			}
 		});
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> T privMediate(T service) {
+	private <T> T privMediate(T service, Class<T> iface) {
 		
 		TrackingInvocationHandler handler = new TrackingInvocationHandler(this, 
 				clientBundle, logServiceTracker, service);
 		
-		return (T) proxyClass(Collections.<Class<?>>emptyList(), service.getClass(), handler, 
-				new CGLibAwareClassLoader(service.getClass().getClassLoader()));
+		if(iface.isInterface()) {
+			return (T) Proxy.newProxyInstance(
+					new ClassLoader(service.getClass().getClassLoader()){}, 
+					new Class[] {iface}, handler);
+		} else {
+			return (T) proxyClass(iface, handler, 
+					new CGLibAwareClassLoader(service.getClass().getClassLoader()));
+		}
 	}
 
-	public <T> T mediate(final ServiceReference<T> ref) {
+	public <T> T mediate(final ServiceReference<T> ref, final Class<T> iface) {
 		return AccessController.doPrivileged(new PrivilegedAction<T>() {
 			public T run() {
-				return privMediate(ref);
+				return privMediate(ref, iface);
 			}
 		});
 	}
 	
 	@SuppressWarnings("unchecked")
-	private <T> T privMediate(ServiceReference<T> ref) {
-		Object o = ref.getProperty(Constants.OBJECTCLASS);
-		
-		List<String> ifaceNames;
-		final Bundle registeringBundle = ref.getBundle();
-		
-		if(o == null) {
-			throw new IllegalArgumentException("This service reference has no objectclass " + ref);
-		} else if (o instanceof String[]) {
-			ifaceNames = Arrays.asList((String[]) o); 
-		} else {
-			ifaceNames = Collections.singletonList(o.toString());
-		}
-		
-		Collection<Class<?>> ifaces = new ArrayList<Class<?>>(ifaceNames.size());
-		
-		Class<?> mostSpecificClass = Object.class;
-		for(String s : ifaceNames) {
-			try {
-				Class<?> c = registeringBundle.loadClass(s);
-				if(c.isInterface()) {
-					ifaces.add(c);
-				} else if (mostSpecificClass.isAssignableFrom(c)) {
-					mostSpecificClass = c;
-				}
-			} catch (ClassNotFoundException e) {
-				//Just don't proxy this interface
-			}
-		}
-		
+	private <T> T privMediate(ServiceReference<T> ref, Class<T> iface) {
+
 		TrackingInvocationHandler handler = new TrackingInvocationHandler(this, 
 				clientBundle, logServiceTracker, ref);
+		
+		Bundle registeringBundle = ref.getBundle();
 
-		if(mostSpecificClass == Object.class) {
-			return (T) Proxy.newProxyInstance(registeringBundle.adapt(BundleWiring.class).getClassLoader(), 
-				ifaces.toArray(new Class[ifaces.size()]), handler);
+		if(iface.isInterface()) {
+			return (T) Proxy.newProxyInstance(
+					new ClassLoader(registeringBundle.adapt(BundleWiring.class).getClassLoader()){}, 
+					new Class[] {iface}, handler);
 		} else {
-			return (T) proxyClass(ifaces, mostSpecificClass, handler, 
+			return (T) proxyClass(iface, handler, 
 					new CGLibAwareClassLoader(registeringBundle));
 		}
 	}
 
-	private Object proxyClass(Collection<Class<?>> ifaces,
-			Class<?> mostSpecificClass, TrackingInvocationHandler handler,
-			ClassLoader classLoader) {
+	private Object proxyClass(Class<?> mostSpecificClass, 
+			TrackingInvocationHandler handler, ClassLoader classLoader) {
 		
-		mostSpecificClass = acceptClass(mostSpecificClass);
+		acceptClassType(mostSpecificClass);
 		
 		Enhancer enhancer = new Enhancer();
 		enhancer.setClassLoader(classLoader);
 		enhancer.setSuperclass(mostSpecificClass);
-		enhancer.setInterfaces(ifaces.toArray(new Class[ifaces.size()]));
 		enhancer.setCallback(handler);
 		
 		return enhancer.create();
 	}
 
-	private Class<?> acceptClass(Class<?> mostSpecificClass) {
-		if(Modifier.isFinal(mostSpecificClass.getModifiers())) {
-			mostSpecificClass = mostSpecificClass.getSuperclass();
+	private void acceptClassType(Class<?> type) {
+		
+		if(Modifier.isFinal(type.getModifiers())) {
+			throw new IllegalArgumentException("The type " + type.getName() + " is final");
+		}
+		try {
+			type.getConstructor();
+		} catch (NoSuchMethodException nsme) {
+			throw new IllegalArgumentException("The type " + type.getName() + " has no zero-argument constructor", nsme);
 		}
 		
-		outer: while(mostSpecificClass != null) {
-			
-			Class<?> top = mostSpecificClass;
-			while(top != Object.class) {
-				for(Method m : top.getDeclaredMethods()) {
-					if(Modifier.isFinal(m.getModifiers())) {
-						mostSpecificClass = mostSpecificClass.getSuperclass();
-						continue outer;
-					}
-				}
-				top = top.getSuperclass();
-			}
-			
-			for(Constructor<?> c : mostSpecificClass.getDeclaredConstructors()) {
-				if(c.getParameterTypes().length == 0 && !Modifier.isPrivate(c.getModifiers())) {
-					break outer;
+		Class<?> toCheck = type;
+		while(toCheck != Object.class) {
+			for(Method m : toCheck.getDeclaredMethods()) {
+				if(Modifier.isFinal(m.getModifiers())) {
+					throw new IllegalArgumentException("The type hierarchy for " + type.getName() + 
+							" has a final method " + m.getName() + " defined on " + toCheck.getName());
 				}
 			}
-			mostSpecificClass = mostSpecificClass.getSuperclass();
+			toCheck = toCheck.getSuperclass();
 		}
-		return mostSpecificClass != null ? mostSpecificClass : Object.class;
 	}
 
 	public <T> Promise<T> call(T call) throws IllegalStateException {
@@ -188,10 +155,10 @@ public class AsyncService implements Async {
 		return call(null);
 	}
 
-	public void execute() throws IllegalStateException {
+	public Promise<Void> execute() throws IllegalStateException {
 		MethodCall currentInvocation = consumeCurrentInvocation();
 		if(currentInvocation == null) throw new IllegalStateException("Incorrect API usage - this thread has no pending method calls");
-		currentInvocation.fireAndForget(clientBundle, executor);
+		return currentInvocation.fireAndForget(clientBundle, executor);
 	}
 
 	void registerInvocation(MethodCall invocation) {

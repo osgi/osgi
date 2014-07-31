@@ -118,101 +118,145 @@ public class BuildingMediatorTestCase extends OSGiTestCase {
 	}
 
 	public void testReferenceToSingleObjectClassOnly() throws Exception {
-		Object service = async.mediate(normalReg.getReference());
+		Object service = async.mediate(normalReg.getReference(), MyService.class);
 		assertIsAssignable(service, MyService.class);
 		assertNotAssignable(service, AnotherService.class, MyServiceImpl.class);
 	}
 
-	public void testReferenceToMultiObjectClassOnly() throws Exception {
-		Object service = async.mediate(multiObjectClassReg.getReference());
-		assertIsAssignable(service, MyService.class, AnotherService.class);
-		assertNotAssignable(service, MyServiceImpl.class);
+	/* Added by tim.ward@paremus.com to cover new mediator construction rules */
+	
+	@SuppressWarnings("unchecked")
+	public void testReferenceToSingleObjectClassMediatedToWrongType() throws Exception {
+		@SuppressWarnings("rawtypes")
+		Object service = async.mediate((ServiceReference) normalReg.getReference(), AnotherService.class);
+		assertIsAssignable(service, AnotherService.class);
+		assertNotAssignable(service, MyService.class, MyServiceImpl.class);
 	}
+	
+	@SuppressWarnings("unchecked")
+	public void testReferenceToMultiObjectClassOnly() throws Exception {
+		Object service = async.mediate((ServiceReference<MyService>)multiObjectClassReg.getReference(), MyService.class);
+		assertIsAssignable(service, MyService.class);
+		assertNotAssignable(service, AnotherService.class, MyServiceImpl.class);
+		service = async.mediate((ServiceReference<AnotherService>)multiObjectClassReg.getReference(), AnotherService.class);
+		assertIsAssignable(service, AnotherService.class);
+		assertNotAssignable(service, MyService.class, MyServiceImpl.class);
+	}
+	/* End additions */
 
 	public void testReferenceToImplClass() throws Exception {
-		Object service = async.mediate(implOnlyObjectClassReg.getReference());
+		Object service = async.mediate(implOnlyObjectClassReg.getReference(), MyServiceImpl.class);
 		assertIsAssignable(service, MyService.class, AnotherService.class, MyServiceImpl.class);
 	}
 
 	public void testDirectToImplClass() throws Exception {
-		Object service = async.mediate(myService);
+		Object service = async.mediate(myService, MyServiceImpl.class);
 		assertIsAssignable(service, MyService.class, AnotherService.class, MyServiceImpl.class);
+		
+		/* Added by tim.ward@paremus.com to cover new mediator construction rules */
+		
+		service = async.mediate(myService, AnotherService.class);
+		assertIsAssignable(service, AnotherService.class);
+		assertNotAssignable(service, MyService.class, MyServiceImpl.class);
+
+		service = async.mediate(myService, MyService.class);
+		assertIsAssignable(service, MyService.class);
+		assertNotAssignable(service, AnotherService.class, MyServiceImpl.class);
+		
+		/* End additions */
 	}
 
 	public void testReferenceMediateToFinalClass() {
-		Object service = async.mediate(finalClassReg.getReference());
-		// Should fall back to MyServiceImpl type
-		assertIsAssignable(service, MyService.class, AnotherService.class, MyServiceImpl.class);
-		assertNotAssignable(service, FinalMyServiceImpl.class);
+		try {
+			async.mediate(finalClassReg.getReference(), FinalMyServiceImpl.class);
+			fail("Should not be able to mediate a final class");
+		} catch (IllegalArgumentException iee) {
+			//Expected
+		}
 	}
 
 	public void testDirectMediateToFinalClass() {
-		Object service = async.mediate(new MyServiceImpl.FinalMyServiceImpl());
-		// Should fall back to MyServiceImpl type
-		assertIsAssignable(service, MyService.class, AnotherService.class, MyServiceImpl.class);
-		assertNotAssignable(service, FinalMyServiceImpl.class);
+		try {
+			async.mediate(new MyServiceImpl.FinalMyServiceImpl(), FinalMyServiceImpl.class);
+			fail("Should not be able to mediate a final class");
+		} catch (IllegalArgumentException iee) {
+			//Expected
+		}
 	}
 
 	public void testReferenceMediateToFinalMethod() {
-		Object service = async.mediate(finalMethodReg.getReference());
-		// Should fall back to MyServiceImpl type
-		assertIsAssignable(service, MyService.class, AnotherService.class, MyServiceImpl.class);
-		assertNotAssignable(service, FinalMethodMyServiceImpl.class);
+		try {
+			async.mediate(finalMethodReg.getReference(), FinalMethodMyServiceImpl.class);
+			fail("Should not be able to mediate a class with a final method");
+		} catch (IllegalArgumentException iee) {
+			//Expected
+		}
 	}
 
 	public void testDirectMediateToFinalMethod() {
-		Object service = async.mediate(new MyServiceImpl.FinalMethodMyServiceImpl());
-		// Should fall back to MyServiceImpl type
-		assertIsAssignable(service, MyService.class, AnotherService.class, MyServiceImpl.class);
-		assertNotAssignable(service, FinalMethodMyServiceImpl.class);
+		try {
+			async.mediate(new MyServiceImpl.FinalMethodMyServiceImpl(), FinalMethodMyServiceImpl.class);
+			fail("Should not be able to mediate a class with a final method");
+		} catch (IllegalArgumentException iee) {
+			//Expected
+		}
 	}
 
 	public void testReferenceMediateToExtendFinalClass() {
-		Object service = async.mediate(extendFinalMethodReg.getReference());
-		// Should fall back to MyServiceImpl type
-		assertIsAssignable(service, MyService.class, AnotherService.class, MyServiceImpl.class);
-		assertNotAssignable(service, ExtendedFinalMethodMyServiceImpl.class, FinalMethodMyServiceImpl.class);
+		try {
+			async.mediate(extendFinalMethodReg.getReference(), ExtendedFinalMethodMyServiceImpl.class);
+			fail("Should not be able to mediate a class with a final method");
+		} catch (IllegalArgumentException iee) {
+			//Expected
+		}
 	}
 
 	public void testDirectMediateToExtendFinalMethod() {
-		Object service = async.mediate(new MyServiceImpl.ExtendedFinalMethodMyServiceImpl());
-		// Should fall back to MyServiceImpl type
-		assertIsAssignable(service, MyService.class, AnotherService.class, MyServiceImpl.class);
-		assertNotAssignable(service, ExtendedFinalMethodMyServiceImpl.class, FinalMethodMyServiceImpl.class);
+		try {
+			async.mediate(new MyServiceImpl.ExtendedFinalMethodMyServiceImpl(), 
+				ExtendedFinalMethodMyServiceImpl.class);
+			fail("Should not be able to mediate a class with a final method");
+		} catch (IllegalArgumentException iee) {
+			//Expected
+		}
 	}
 
 	public void testReferenceMediateToNoZeroArgConstructor() {
-		Object service = async.mediate(noZeroArgConstructorReg.getReference());
-		// Should fall back to MyServiceImpl type
-		assertIsAssignable(service, MyService.class, AnotherService.class, MyServiceImpl.class);
-		assertNotAssignable(service, NoZeroArgConstructorMyServiceImpl.class);
+		try {
+			async.mediate(noZeroArgConstructorReg.getReference(), NoZeroArgConstructorMyServiceImpl.class);
+			fail("Should not be able to mediate a class no zero args constructor");
+		} catch (IllegalArgumentException iee) {
+			//Expected
+		}
 	}
 
 	public void testDirectMediateToNoZeroArgConstructor() {
-		Object service = async.mediate(new MyServiceImpl.NoZeroArgConstructorMyServiceImpl(1));
-		// Should fall back to MyServiceImpl type
-		assertIsAssignable(service, MyService.class, AnotherService.class, MyServiceImpl.class);
-		assertNotAssignable(service, NoZeroArgConstructorMyServiceImpl.class);
+		try {
+			async.mediate(new MyServiceImpl.NoZeroArgConstructorMyServiceImpl(1), NoZeroArgConstructorMyServiceImpl.class);
+			fail("Should not be able to mediate a class no zero args constructor");
+		} catch (IllegalArgumentException iee) {
+			//Expected
+		}
 	}
 
 	public void testReferenceMediateToTypesNotVisibleToClient() {
-		Object service = getClientAsync().mediate(normalReg.getReference());
+		Object service = getClientAsync().mediate(normalReg.getReference(), MyService.class);
 		assertIsAssignable(service, MyService.class);
 		assertNotAssignable(service, AnotherService.class, MyServiceImpl.class);
 	}
 
 	public void testDirectMediateToTypesNotVisibleToClient() {
-		Object service = getClientAsync().mediate(myService);
+		Object service = getClientAsync().mediate(myService, MyServiceImpl.class);
 		assertIsAssignable(service, MyService.class, AnotherService.class, MyServiceImpl.class);
 	}
 
 	public void testReferenceMediateToVMTypes() {
-		Object service = async.mediate(listReg.getReference());
+		Object service = async.mediate(listReg.getReference(), List.class);
 		assertIsAssignable(service, List.class);
 	}
 
 	public void testDirectMediateToVMTypes() {
-		Object service = async.mediate(new ArrayList<String>());
+		Object service = async.mediate(new ArrayList<String>(), ArrayList.class);
 		assertIsAssignable(service, List.class, ArrayList.class);
 	}
 }

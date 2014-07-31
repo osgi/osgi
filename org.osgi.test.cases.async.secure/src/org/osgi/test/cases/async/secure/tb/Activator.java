@@ -22,10 +22,8 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.async.Async;
 import org.osgi.test.cases.async.secure.services.MyService;
-import org.osgi.util.promise.Promise;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class Activator implements BundleActivator {
@@ -44,21 +42,21 @@ public class Activator implements BundleActivator {
 		props.put(MyService.TEST_KEY, MyService.TEST_callWithSecurityCheck + "_" + name);
 		context.registerService(Callable.class.getName(), new Callable() {
 			public Object call() throws Exception {
-				return async.call(async.mediate(myServiceRef).countSlowly(2, true));
+				return async.call(async.mediate(myServiceRef, MyService.class).countSlowly(2, true));
 			}
 		}, props);
 
 		props.put(MyService.TEST_KEY, MyService.TEST_callWithoutSecurityCheck + "_" + name);
 		context.registerService(Callable.class.getName(), new Callable() {
 			public Object call() throws Exception {
-				return async.call(async.mediate(myServiceRef).countSlowly(2, false));
+				return async.call(async.mediate(myServiceRef, MyService.class).countSlowly(2, false));
 			}
 		}, props);
 
 		props.put(MyService.TEST_KEY, MyService.TEST_executeWithSecurityCheck + "_" + name);
 		context.registerService(Callable.class.getName(), new Callable() {
 			public Object call() throws Exception {
-				async.mediate(myServiceRef).countSlowly(2, true);
+				async.mediate(myServiceRef, MyService.class).countSlowly(2, true);
 				async.execute();
 				return null;
 			}
@@ -67,7 +65,7 @@ public class Activator implements BundleActivator {
 		props.put(MyService.TEST_KEY, MyService.TEST_executeWithoutSecurityCheck + "_" + name);
 		context.registerService(Callable.class.getName(), new Callable() {
 			public Object call() throws Exception {
-				async.mediate(myServiceRef).countSlowly(2, false);
+				async.mediate(myServiceRef, MyService.class).countSlowly(2, false);
 				async.execute();
 				return null;
 			}

@@ -63,14 +63,17 @@ public interface Async {
 	 * </p>
 	 * 
 	 * <pre>
-	 * I i = async.mediate(s);
+	 * I i = async.mediate(s, I.class);
 	 * Promise&lt;String&gt; p = async.call(i.foo());
 	 * </pre>
 	 * 
-	 * @param target The service object
+	 * @param target The service object to mediate
+	 * @param iface The type that the mediated object should provide
 	 * @return A mediator for the service object
+	 * @throws IllegalArgumentException if the type represented by iface cannot
+	 *         be mediated
 	 */
-	<T> T mediate(T target);
+	<T> T mediate(T target, Class<T> iface);
 
 	/**
 	 * <p>
@@ -86,8 +89,8 @@ public interface Async {
 	 * </p>
 	 * 
 	 * <p>
-	 * This method differs from {@link #mediate(Object)} in that it can track
-	 * the availability of the backing service. This is recommended as the
+	 * This method differs from {@link #mediate(Object, Class)} in that it can
+	 * track the availability of the backing service. This is recommended as the
 	 * preferred option for mediating OSGi services as asynchronous tasks may
 	 * not start executing until some time after they are requested. Tracking
 	 * the validity of the {@link ServiceReference} for the service ensures that
@@ -99,56 +102,70 @@ public interface Async {
 	 * </p>
 	 * 
 	 * <pre>
-	 * I i = async.mediate(s);
+	 * I i = async.mediate(s, I.class);
 	 * Promise&lt;String&gt; p = async.call(i.foo());
 	 * </pre>
 	 * 
-	 * @param target The service object
+	 * @param target The service reference to mediate
+	 * @param iface The type that the mediated object should provide
 	 * @return A mediator for the service object
+	 * @throws IllegalArgumentException if the type represented by iface cannot
+	 *         be mediated
 	 */
-	<T> T mediate(ServiceReference<T> target);
+	<T> T mediate(ServiceReference<T> target, Class<T> iface);
 
 	/**
-	 * <p>This method launches the last method call registered by a mediated
-	 * object as an asynchronous task. The result of the task can be obtained
-	 * using the returned promise</p>
+	 * <p>
+	 * This method launches the last method call registered by a mediated object
+	 * as an asynchronous task. The result of the task can be obtained using the
+	 * returned promise
+	 * </p>
 	 * 
-	 * <p> Typically the parameter for this method will be supplied inline like this:</p>
+	 * <p>
+	 * Typically the parameter for this method will be supplied inline like
+	 * this:
+	 * </p>
 	 * 
 	 * <pre>
-	 * I i = async.mediate(s);
+	 * I i = async.mediate(s, I.class);
 	 * Promise&lt;String&gt; p = async.call(i.foo());
 	 * </pre>
 	 * 
 	 * @param r the return value of the mediated call, used for type information
-	 * @return a Promise which can be used to retrieve the result of the 
-	 * 		asynchronous execution
+	 * @return a Promise which can be used to retrieve the result of the
+	 *         asynchronous execution
 	 */
 	<R> Promise<R> call(R r);
 
 	/**
-	 * <p>This method launches the last method call registered by a mediated
-	 * object as an asynchronous task. The result of the task can be obtained
-	 * using the returned promise</p>
+	 * <p>
+	 * This method launches the last method call registered by a mediated object
+	 * as an asynchronous task. The result of the task can be obtained using the
+	 * returned promise
+	 * </p>
 	 * 
-	 * <p>Generally it is preferrable to use {@link #call(Object)} like this:</p>
+	 * <p>
+	 * Generally it is preferrable to use {@link #call(Object)} like this:
+	 * </p>
 	 * 
 	 * <pre>
-	 * I i = async.mediate(s);
+	 * I i = async.mediate(s, I.class);
 	 * Promise&lt;String&gt; p = async.call(i.foo());
 	 * </pre>
-	 *  
-	 * <p>However this pattern does not work for void methods. Void methods can
-	 * therefore be handled like this:</p>
+	 * 
+	 * <p>
+	 * However this pattern does not work for void methods. Void methods can
+	 * therefore be handled like this:
+	 * </p>
 	 * 
 	 * <pre>
-	 * I i = async.mediate(s);
+	 * I i = async.mediate(s, I.class);
 	 * i.voidMethod()
 	 * Promise&lt;?&gt; p = async.call();
 	 * </pre>
 	 * 
-	 * @return a Promise which can be used to retrieve the result of the 
-	 * 		asynchronous execution
+	 * @return a Promise which can be used to retrieve the result of the
+	 *         asynchronous execution
 	 */
 	 Promise<?> call();
 
@@ -160,9 +177,22 @@ public interface Async {
 	 * </p>
 	 * 
 	 * <p>
+	 * The advantage of the {@link #execute()} method is that it allows for
+	 * greater optimisation of the underlying asynchronous execution. Clients
+	 * are therefore likely to see better performance when using this method
+	 * compared to using {@link #call()} and discarding the return value.
+	 * </p>
+	 * 
+	 * <p>
 	 * This method launches the last method call registered by a mediated object
 	 * as an asynchronous task. The task runs as a "fire and forget" process,
-	 * and there will be no notification of its success or failure.
+	 * and there will be no notification of its eventual success or failure. The
+	 * {@link Promise} returned by this method is different from the Promise
+	 * returned by {@link #call()}, in that the returned Promise will resolve
+	 * when the fire and forget task is successfully started, or fail if the
+	 * task cannot be started. Note that there is no happens-before relationship
+	 * and the returned Promise may resolve before or after the fire-and-forget
+	 * task starts, or completes.
 	 * </p>
 	 * 
 	 * <p>
@@ -170,19 +200,14 @@ public interface Async {
 	 * </p>
 	 * 
 	 * <pre>
-	 * I i = async.mediate(s);
+	 * I i = async.mediate(s, I.class);
 	 * i.someMethod()
 	 * Promise&lt;?&gt; p = async.call();
 	 * </pre>
 	 * 
-	 * 
-	 * <p>
-	 * The advantage of the {@link #execute()} method is that it allows for
-	 * greater optimisation of the underlying asynchronous execution. Clients
-	 * are therefore likely to see better performance when using this method
-	 * compared to using {@link #call()} and discarding the return value.
-	 * </p>
+	 * @return a promise representing whether the fire and forget task was able
+	 *         to start
 	 */
-	void execute();
+	Promise<Void> execute();
 
 }

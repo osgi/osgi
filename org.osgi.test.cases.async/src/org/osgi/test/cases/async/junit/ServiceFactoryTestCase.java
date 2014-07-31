@@ -66,7 +66,7 @@ public class ServiceFactoryTestCase extends OSGiTestCase {
 	
 
 	public void testAsyncCallGetUngetServiceCalls() throws Exception {
-		MyService service = async.mediate(factoryReg.getReference());
+		MyService service = async.mediate(factoryReg.getReference(), MyService.class);
 
 		Promise<Integer> p = async.call(service.countSlowly(2));
 		assertFalse(p.isDone());
@@ -77,7 +77,7 @@ public class ServiceFactoryTestCase extends OSGiTestCase {
 	}
 
 	public void testAsyncExecuteGetUngetServiceCalls() throws Exception {
-		async.mediate(factoryReg.getReference()).countSlowly(2);
+		async.mediate(factoryReg.getReference(), MyService.class).countSlowly(2);
 
 		async.execute();
 
@@ -86,7 +86,7 @@ public class ServiceFactoryTestCase extends OSGiTestCase {
 	}
 
 	public void testAsyncCallGetUngetServiceCallsWithFailure() throws Exception {
-		MyService service = async.mediate(factoryReg.getReference());
+		MyService service = async.mediate(factoryReg.getReference(), MyService.class);
 
 		Promise<Integer> p = async.call(service.failSlowly(2));
 		assertFalse(p.isDone());
@@ -97,7 +97,7 @@ public class ServiceFactoryTestCase extends OSGiTestCase {
 	}
 
 	public void testAsyncExecuteGetUngetServiceCallsWithFailure() throws Exception {
-		async.mediate(factoryReg.getReference()).failSlowly(2);
+		async.mediate(factoryReg.getReference(), MyService.class).failSlowly(2);
 
 		Promise<LogEntry> asyncErrorPromise = asyncErrors.getAsyncError();
 		async.execute();

@@ -13,11 +13,12 @@ import org.osgi.service.log.LogService;
 import org.osgi.util.promise.Deferred;
 import org.osgi.util.promise.Failure;
 import org.osgi.util.promise.Promise;
+import org.osgi.util.promise.Promises;
 import org.osgi.util.tracker.ServiceTracker;
 
 
 public class MethodCall {
-
+	
 	private final Bundle clientBundle;
 	private final ServiceTracker<LogService, LogService> logServiceTracker;
 	
@@ -120,33 +121,34 @@ public class MethodCall {
 		return promise;
 	}
 
-	public void fireAndForget(Bundle clientBundle, ExecutorService executor) {
+	public Promise<Void> fireAndForget(Bundle clientBundle, ExecutorService executor) {
 		Object svc;
 		try {
 			svc = getService();
 		} catch (Exception e) {
 			logError("Unable to obtain the service object", e);
-			return;
+			return Promises.failed(e);
 		}
 		
 		if(svc instanceof AsyncDelegate) {
 			try {
 				if(((AsyncDelegate) svc).execute(method, arguments)) {
 					releaseService();
-					return;
+					return Promises.resolved(null);
 				}
 			} catch (Exception e) {
 				releaseService();
 				logError("The AsyncDelegate rejected the fire-and-forget invocation with an exception", e);
-				return;
+				return Promises.failed(e);
 			}
 		}
 		//If we get here then svc is either not an async delegate, or it rejected the call
 		
-		Deferred<Object> deferred = new Deferred<Object>();
+		Deferred<Void> cleanup = new Deferred<Void>();
+		Deferred<Void> started = new Deferred<Void>();
 		try {
-			executor.execute(new Work<Object>(this, deferred));
-			deferred.getPromise().onResolve(new Runnable() {
+			executor.execute(new FireAndForgetWork(this, cleanup, started));
+			cleanup.getPromise().onResolve(new Runnable() {
 				public void run() {
 					releaseService();
 				}
@@ -155,9 +157,10 @@ public class MethodCall {
 					logError("The fire-and-forget invocation failed", resolved.getFailure());
 				}
 			});
+			return started.getPromise();
 		} catch (RejectedExecutionException ree) {
 			logError("The Async Service threadpool rejected the fire-and-forget invocation", ree);
-			return;
+			return Promises.failed(new ServiceException("Unable to enqueue the fire-and forget task", 7, ree));
 		}
 	}
 
