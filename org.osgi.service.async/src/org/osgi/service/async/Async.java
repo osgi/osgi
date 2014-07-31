@@ -202,7 +202,7 @@ public interface Async {
 	 * <pre>
 	 * I i = async.mediate(s, I.class);
 	 * i.someMethod()
-	 * Promise&lt;?&gt; p = async.call();
+	 * Promise&lt;?&gt; p = async.execute();
 	 * </pre>
 	 * 
 	 * @return a promise representing whether the fire and forget task was able
