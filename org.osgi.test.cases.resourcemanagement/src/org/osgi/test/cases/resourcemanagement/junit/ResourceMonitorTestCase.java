@@ -1,7 +1,6 @@
 package org.osgi.test.cases.resourcemanagement.junit;
 
 import java.util.Collection;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -43,9 +42,9 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 	public void setBundleContext(BundleContext context) {
 		bundleContext = context;
 
-		ServiceReference<ResourceManager> serviceReference = bundleContext
+		ServiceReference serviceReference = bundleContext
 				.getServiceReference(ResourceManager.class);
-		resourceManager = bundleContext.getService(serviceReference);
+		resourceManager = (ResourceManager) bundleContext.getService(serviceReference);
 		
 		
 		StringBuffer filter = new StringBuffer();
@@ -65,7 +64,7 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 				if (factoryReferences.size() > 0) {
 					ServiceReference factoryReference = (ServiceReference) factoryReferences
 							.iterator().next();
-					cpuFactory = bundleContext.getService(factoryReference);
+					cpuFactory = (ResourceMonitorFactory) bundleContext.getService(factoryReference);
 
 				}
 			}

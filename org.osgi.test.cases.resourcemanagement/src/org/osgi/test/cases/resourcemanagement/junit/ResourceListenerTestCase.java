@@ -6,7 +6,6 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -58,8 +57,9 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 
 	/**
 	 * Service registration of the listener
+	 * ServiceRegistration<ResourceListener>
 	 */
-	private ServiceRegistration<ResourceListener> listenerSr;
+	private ServiceRegistration		listenerSr;
 
 	/**
 	 * list of received events
@@ -74,9 +74,9 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 		bundleContext = context;
 
 		// retrieve the ResourceManager
-		ServiceReference<ResourceManager> resourceManagerSr = bundleContext
+		ServiceReference resourceManagerSr = bundleContext
 				.getServiceReference(ResourceManager.class);
-		resourceManager = bundleContext.getService(resourceManagerSr);
+		resourceManager = (ResourceManager) bundleContext.getService(resourceManagerSr);
 
 		// retrieve cpu factory
 		StringBuffer filter = new StringBuffer();
@@ -93,8 +93,8 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 			Collection factorySrs = bundleContext.getServiceReferences(
 					ResourceMonitorFactory.class, filter.toString());
 			if ((factorySrs != null) && (factorySrs.size() > 0)) {
-				cpuFactory = bundleContext
-						.getService((ServiceReference<ResourceMonitorFactory>) factorySrs
+				cpuFactory = (ResourceMonitorFactory) bundleContext
+						.getService((ServiceReference) factorySrs
 								.iterator().next());
 			}
 		} catch (InvalidSyntaxException e) {
@@ -143,7 +143,8 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 		registerListener();
 
 		// wait for events
-		Thread.sleep(150000);
+		log("Wait for events for 15000ms.");
+		Thread.sleep(15000);
 
 		// unregister the listener
 		unregisterListener();
@@ -170,7 +171,8 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 		registerListener();
 
 		// wait for events
-		Thread.sleep(150000);
+		log("Wait for events for 15000ms.");
+		Thread.sleep(15000);
 
 		// unregister the listener
 		unregisterListener();
@@ -198,7 +200,8 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 		registerListener();
 
 		// wait for events
-		Thread.sleep(150000);
+		log("Wait for events for 15000ms.");
+		Thread.sleep(15000);
 
 		// unregister the listener
 		unregisterListener();
@@ -224,7 +227,8 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 		registerListener();
 
 		// wait for events
-		Thread.sleep(150000);
+		log("Wait for events for 15000ms.");
+		Thread.sleep(15000);
 
 		// unregister the listener
 		unregisterListener();
@@ -250,7 +254,8 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 		registerListener();
 
 		// wait for events
-		Thread.sleep(150000);
+		log("Wait for events for 15000ms.");
+		Thread.sleep(15000);
 
 		// unregister the listener
 		unregisterListener();
@@ -276,7 +281,8 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 		registerListener();
 
 		// wait for events
-		Thread.sleep(150000);
+		log("Wait for events for 15000ms.");
+		Thread.sleep(15000);
 
 		// unregister the listener
 		unregisterListener();

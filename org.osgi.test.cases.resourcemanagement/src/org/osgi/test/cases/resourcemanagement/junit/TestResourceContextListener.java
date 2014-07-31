@@ -2,7 +2,6 @@ package org.osgi.test.cases.resourcemanagement.junit;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.resourcemanagement.ResourceContextEvent;
@@ -11,9 +10,9 @@ import org.osgi.service.resourcemanagement.ResourceContextListener;
 public class TestResourceContextListener implements ResourceContextListener {
 
 	/**
-	 * service registration
+	 * service registration ServiceRegistration<ResourceContextListener>
 	 */
-	private ServiceRegistration<ResourceContextListener> serviceRegistration;
+	private ServiceRegistration	serviceRegistration;
 	
 	/**
 	 * list of received events
@@ -30,7 +29,7 @@ public class TestResourceContextListener implements ResourceContextListener {
 	 * Once registered, this instance will receive {@link ResourceContextEvent}.
 	 */
 	public void start(BundleContext bundleContext) {
-		serviceRegistration = (ServiceRegistration<ResourceContextListener>) bundleContext
+		serviceRegistration = bundleContext
 				.registerService(
 				ResourceContextListener.class.getName(),
 				this, null);

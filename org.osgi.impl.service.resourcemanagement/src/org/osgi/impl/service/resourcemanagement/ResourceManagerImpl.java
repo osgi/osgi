@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -285,7 +284,7 @@ public class ResourceManagerImpl implements ResourceManager,
 	 * @return the ResourceMonitorFactory object
 	 */
 	public Object addingService(ServiceReference reference) {
-		ResourceMonitorFactory factory = context.getService(reference);
+		ResourceMonitorFactory factory = (ResourceMonitorFactory) context.getService(reference);
 		if (factory != null) {
 			synchronized (resourceMonitorFactories) {
 				resourceMonitorFactories.put(factory.getType(), factory);
@@ -400,7 +399,7 @@ public class ResourceManagerImpl implements ResourceManager,
 				ServiceReference/* <ResourceMonitorFactory> */sr = (ServiceReference) srs
 						.iterator()
 						.next();
-				factory = context.getService(sr);
+				factory = (ResourceMonitorFactory) context.getService(sr);
 			}
 
 		} catch (InvalidSyntaxException e) {

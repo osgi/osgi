@@ -1,17 +1,20 @@
 # Set javac settings from JDT prefs
--include: ${project.workspace}/cnf/eclipse/jdt.bnd	
+-include: ${build}/eclipse/jdt.bnd
 
+Bundle-Vendor				= Orange
 Bundle-Description: Resource Management Utils provides classes common for Resource Monitor Factories bundles. It includes the EventNotifier class which can be used by Resource Monitor to notify all their related ResourceListeners.
-
-
-Private-Package 			= ${p}.*
-
--buildpath: osgi.core;version=4.3,\
-	osgi.cmpn;version=4.2,\
-	org.osgi.service.resourcemanagement;version=latest,\
-	ee.minimum
-	
 Bundle-Name: Resource Management Utils
+
 Export-Package: org.osgi.impl.service.resourcemanagement.util
-Bundle-Version: 1.0.1
+
 Import-Package: org.osgi.framework;version=1.5,*
+
+Private-Package: ${p}.*
+
+-buildpath:  \
+	ee.j2se;version=${javac.compliance},\
+	osgi.core;version=4.3,\
+	osgi.cmpn;version=4.3,\
+	org.osgi.service.resourcemanagement;version=latest
+
+Bundle-Version: 1.0.1

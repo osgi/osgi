@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -39,9 +38,9 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 	public void setBundleContext(BundleContext context) {
 		bundleContext = context;
 
-		ServiceReference<ResourceManager> serviceReference = bundleContext
+		ServiceReference serviceReference = bundleContext
 				.getServiceReference(ResourceManager.class);
-		resourceManager = bundleContext.getService(serviceReference);
+		resourceManager = (ResourceManager) bundleContext.getService(serviceReference);
 
 	}
 
@@ -265,7 +264,7 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 		// ResourceMonitorFactory service.
 		List computedSupportedTypes = new ArrayList();
 		for (Iterator it = factorySrs.iterator(); it.hasNext();) {
-			ResourceMonitorFactory rmf = getContext().getService(
+			ResourceMonitorFactory rmf = (ResourceMonitorFactory) getContext().getService(
 					(ServiceReference) it.next());
 			// add the type in the list
 			computedSupportedTypes.add(rmf.getType());

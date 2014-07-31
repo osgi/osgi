@@ -19,7 +19,6 @@
 package org.osgi.test.cases.resourcemanagement.junit;
 
 import java.util.List;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.resourcemanagement.ResourceContext;
@@ -75,10 +74,10 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 	public void setBundleContext(BundleContext context) {
 		this.context = context;
 
-		ServiceReference<ResourceManager> resourceManagerSr = (ServiceReference<ResourceManager>) context
+		ServiceReference resourceManagerSr = context
 				.getServiceReference(ResourceManager.class.getName());
 		if (resourceManagerSr != null) {
-			resourceManager = context.getService(resourceManagerSr);
+			resourceManager = (ResourceManager) context.getService(resourceManagerSr);
 		}
 	}
 

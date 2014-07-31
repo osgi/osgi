@@ -1,5 +1,5 @@
 package org.osgi.impl.service.resourcemanagement.threadmanager.impl;
-
+ 
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.resourcemanagement.threadmanager.ThreadManager;
 import org.osgi.service.resourcemanagement.ResourceContext;

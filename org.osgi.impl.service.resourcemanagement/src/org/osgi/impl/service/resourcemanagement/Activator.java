@@ -57,7 +57,7 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 	/**
 	 * service registration for Resource Manager service.
 	 */
-	private ServiceRegistration<ResourceManager> resourceManagerServiceRegistration;
+	private ServiceRegistration				resourceManagerServiceRegistration;
 
 	/**
 	 * bundle context.
@@ -118,7 +118,7 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 	 */
 	public Object addingService(ServiceReference reference) {
 		if (threadManager == null) {
-			threadManager = bundleContext.getService(reference);
+			threadManager = (ThreadManager) bundleContext.getService(reference);
 			startResourceManager();
 			return threadManager;
 		}
@@ -149,7 +149,7 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 				threadManager);
 		resourceManager.start(bundleContext);
 
-		resourceManagerServiceRegistration = (ServiceRegistration<ResourceManager>) bundleContext
+		resourceManagerServiceRegistration = bundleContext
 				.registerService(ResourceManager.class.getName(),
 						resourceManager, null);
 

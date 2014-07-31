@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.List;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
@@ -69,7 +68,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 
 		ServiceReference sr = bundleContext
 				.getServiceReference(ResourceManager.class.getName());
-		resourceManager = bundleContext.getService(sr);
+		resourceManager = (ResourceManager) bundleContext.getService(sr);
 	}
 
 	/**

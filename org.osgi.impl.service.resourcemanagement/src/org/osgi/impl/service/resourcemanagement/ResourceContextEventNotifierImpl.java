@@ -3,7 +3,6 @@ package org.osgi.impl.service.resourcemanagement;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.resourcemanagement.ResourceContextEvent;
@@ -48,7 +47,7 @@ public class ResourceContextEventNotifierImpl implements
 					.iterator(); it.hasNext();) {
 				ResourceContextListener currentRcl = (ResourceContextListener) it
 						.next();
-				ServiceReference/* <ResourceContextListener> */currentSr = (ServiceReference<ResourceContextListener>) listeners
+				ServiceReference/* <ResourceContextListener> */currentSr = (ServiceReference) listeners
 						.get(currentRcl);
 
 				int[] eventTypeFilter = getEventTypeFilter(currentSr);
@@ -74,7 +73,7 @@ public class ResourceContextEventNotifierImpl implements
 
 
 	public Object addingService(ServiceReference reference) {
-		ResourceContextListener rcl = context.getService(reference);
+		ResourceContextListener rcl = (ResourceContextListener) context.getService(reference);
 
 		synchronized (listeners) {
 			listeners.put(rcl, reference);

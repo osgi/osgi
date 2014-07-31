@@ -5,7 +5,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
@@ -190,7 +189,7 @@ public class EventNotifier implements ServiceTrackerCustomizer {
 	public Object addingService(ServiceReference reference) {
 		System.out.println("add a ResourceListener");
 
-		ResourceListener listener = bundleContext.getService(reference);
+		ResourceListener listener = (ResourceListener) bundleContext.getService(reference);
 
 		addResourceListener(listener);
 
