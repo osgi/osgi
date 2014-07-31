@@ -21,23 +21,24 @@ import org.osgi.service.resourcemanagement.ResourceManager;
 import org.osgi.service.resourcemanagement.ResourceMonitor;
 
 /**
- * A {@link ResourceMonitor} for the 
- * {@link ResourceManager#RES_TYPE_MEMORY} resource type.
- * A MemoryMonitor instance monitors and limits the memory used
+ * A {@link ResourceMonitor} for the {@link ResourceManager#RES_TYPE_MEMORY}
+ * resource type. A MemoryMonitor instance monitors and limits the memory used
  * by a {@link ResourceContext} instance.
- *   
+ * 
+ * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
+ *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
  */
 public interface MemoryMonitor extends ResourceMonitor {
-  
-  /**
-   * Returns the size of the java heap used by the bundles in this 
-   * resource context.
-   * <p>
-   * The {@link #getUsage()} method returns the same value,
-   * wrapped in a {@link Long}
-   * @return the size of the used java heap in bytes
-   */
-  public long getUsedMemory();
-  
-  
+
+	/**
+	 * Returns the size of the java heap used by the bundles in this resource
+	 * context.
+	 * <p>
+	 * The {@link #getUsage()} method returns the same value, wrapped in a
+	 * {@link Long}
+	 * 
+	 * @return the size of the used java heap in bytes
+	 */
+	public long getUsedMemory();
+
 }

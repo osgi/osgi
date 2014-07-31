@@ -73,22 +73,25 @@ import org.osgi.framework.ServiceListener;
  * A ResourceMonitor tracks threshold value modification by using a
  * {@link ServiceListener}.
  * </p>
+ * 
+ * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
+ *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
  */
 public interface ResourceListener {
-  
-  	/**
+
+	/**
 	 * Mandatory property specifying the Resource Context associated with the
 	 * listener.
 	 */
-  public final String RESOURCE_CONTEXT = "resource.context";
-  
-  	/**
+	public final String	RESOURCE_CONTEXT		= "resource.context";
+
+	/**
 	 * Mandatory property defining the type of Resource (i.e the
 	 * ResourceMonitor) associated to this Listener.
 	 */
-  public final String RESOURCE_TYPE = "resource.type";
-  
-  	/**
+	public final String	RESOURCE_TYPE			= "resource.type";
+
+	/**
 	 * Optional property defining the value of the upper warning threshold.
 	 */
 	public final String	UPPER_WARNING_THRESHOLD	= "upper.warning.threshold";
@@ -113,13 +116,13 @@ public interface ResourceListener {
 	 * 
 	 * @param event The {@link ResourceEvent} object
 	 */
-  public void notify(ResourceEvent event);
+	public void notify(ResourceEvent event);
 
 	/**
 	 * Retrieves the lower warning threshold value set by the listener. If the
 	 * resource usage decreases under this threshold value, the
-	 * {@link #notify(ResourceEvent)} will be called. The provided
-	 * ResourceEvent then indicates the WARNING state is reached.
+	 * {@link #notify(ResourceEvent)} will be called. The provided ResourceEvent
+	 * then indicates the WARNING state is reached.
 	 * 
 	 * @return a comparable object or null if no threshold is set.
 	 */
@@ -137,9 +140,9 @@ public interface ResourceListener {
 
 	/**
 	 * Retrieves the upper warning threshold value set by this listener. If the
-	 * resource usage exceeds this threshold, the
-	 * {@link #notify(ResourceEvent)} method will be called. The provided
-	 * {@link ResourceEvent} then indicates the WARNING state is reached.
+	 * resource usage exceeds this threshold, the {@link #notify(ResourceEvent)}
+	 * method will be called. The provided {@link ResourceEvent} then indicates
+	 * the WARNING state is reached.
 	 * 
 	 * @return a comparable object or null if no threshold is reached.
 	 */
@@ -147,9 +150,9 @@ public interface ResourceListener {
 
 	/**
 	 * Retrieves the upper error threshold value set by this listener. If the
-	 * resource usage exceeds this threshold, the
-	 * {@link #notify(ResourceEvent)} will be called. The provided
-	 * {@link ResourceEvent} then indicates the ERROR state is reached.
+	 * resource usage exceeds this threshold, the {@link #notify(ResourceEvent)}
+	 * will be called. The provided {@link ResourceEvent} then indicates the
+	 * ERROR state is reached.
 	 * 
 	 * @return a comparable object or null if no threshold is reached.
 	 */

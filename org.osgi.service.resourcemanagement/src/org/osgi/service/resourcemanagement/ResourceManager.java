@@ -31,6 +31,9 @@ import org.osgi.service.resourcemanagement.monitor.ThreadMonitor;
  * 
  * @ThreadSafe
  * @noimplement
+ * 
+ * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
+ *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
  */
 public interface ResourceManager {
 
@@ -40,7 +43,7 @@ public interface ResourceManager {
 	 * <code>ResourceManager</code> implementations must create
 	 * {@link ThreadMonitor} instances for this resource type.
 	 */
-	public static final String RES_TYPE_THREADS = "resource.type.threads";
+	public static final String	RES_TYPE_THREADS		= "resource.type.threads";
 
 	/**
 	 * The name of the CPU resource type, used to monitor and control the CPU
@@ -48,7 +51,7 @@ public interface ResourceManager {
 	 * implementations must create {@link CPUMonitor} instances for this
 	 * resource type.
 	 */
-	public static final String RES_TYPE_CPU = "resource.type.cpu";
+	public static final String	RES_TYPE_CPU			= "resource.type.cpu";
 
 	/**
 	 * The name of the disk storage resource type, used to monitor and control
@@ -56,7 +59,7 @@ public interface ResourceManager {
 	 * <code>ResourceManager</code> implementations must create
 	 * {@link DiskStorageMonitor} instances for this resource type.
 	 */
-	public static final String RES_TYPE_DISK_STORAGE = "resource.type.disk.storage";
+	public static final String	RES_TYPE_DISK_STORAGE	= "resource.type.disk.storage";
 
 	/**
 	 * The name of the memory resource type, used to monitor and control the
@@ -64,7 +67,7 @@ public interface ResourceManager {
 	 * <code>ResourceManager</code> implementations must create
 	 * {@link MemoryMonitor} instances for this resource type.
 	 */
-	public static final String RES_TYPE_MEMORY = "resource.type.memory";
+	public static final String	RES_TYPE_MEMORY			= "resource.type.memory";
 
 	/**
 	 * The name of the socket resource type, used to monitor and control the
@@ -72,19 +75,19 @@ public interface ResourceManager {
 	 * <code>ResourceManager</code> implementations must create
 	 * {@link SocketMonitor} instances for this resource type.
 	 */
-	public static final String RES_TYPE_SOCKET = "resource.type.socket";
+	public static final String	RES_TYPE_SOCKET			= "resource.type.socket";
 
 	/**
 	 * The name of the special, optional resource context, representing the
 	 * whole OSGi framework.
 	 */
-	public static final String FRAMEWORK_CONTEXT_NAME = "framework";
+	public static final String	FRAMEWORK_CONTEXT_NAME	= "framework";
 
 	/**
 	 * The name of the Resource Context associated with System bundle (bundle
 	 * 0).
 	 */
-	public static final String SYSTEM_CONTEXT_NAME = "system";
+	public static final String	SYSTEM_CONTEXT_NAME		= "system";
 
 	/**
 	 * Lists all available {@link ResourceContext resource contexts}. The list
@@ -114,8 +117,7 @@ public interface ResourceManager {
 	/**
 	 * Returns the context with the specified name
 	 * 
-	 * @param name
-	 *            The resource context name
+	 * @param name The resource context name
 	 * @return An existing {@link ResourceContext} with the specified name, or
 	 *         null if such a context doesn't exist
 	 */
@@ -162,9 +164,8 @@ public interface ResourceManager {
 	/**
 	 * Returns the resource context explicitly associated with this thread.
 	 * 
-	 * @param t
-	 *            The thread object for which the associated resource context
-	 *            must be returned
+	 * @param t The thread object for which the associated resource context must
+	 *        be returned
 	 * @return The {@link ResourceContext} explicitly associated with the
 	 *         specified thread, or <code>null</code> if there is no such
 	 *         association.

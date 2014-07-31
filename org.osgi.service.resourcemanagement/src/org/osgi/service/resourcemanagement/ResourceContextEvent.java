@@ -1,9 +1,26 @@
+/*
+ * Copyright (c) OSGi Alliance (2010, 2013). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package org.osgi.service.resourcemanagement;
 
-
 /**
- * 
  * @Immutable
+ * 
+ * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
+ *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
  */
 public class ResourceContextEvent {
 
@@ -13,7 +30,7 @@ public class ResourceContextEvent {
 	 * The {@link ResourceManager#createContext(String, ResourceContext)} method
 	 * has been invoked.
 	 */
-	public static final int	RESOURCE_CONTEXT_CREATED	= 0;
+	public static final int			RESOURCE_CONTEXT_CREATED	= 0;
 
 	/**
 	 * A {@link ResourceContext} has been deleted
@@ -21,14 +38,14 @@ public class ResourceContextEvent {
 	 * The {@link ResourceContext#removeContext(ResourceContext)} method has
 	 * been invoked
 	 */
-	public static final int	RESOURCE_CONTEXT_DELETED	= 1;
+	public static final int			RESOURCE_CONTEXT_DELETED	= 1;
 
 	/**
 	 * A bundle has been added to e {@link ResourceContext}
 	 * <p>
 	 * The {@link ResourceContext#addBundle(long)} method has been invoked
 	 */
-	public static final int	BUNDLE_ADDED				= 2;
+	public static final int			BUNDLE_ADDED				= 2;
 
 	/**
 	 * A bundle has been removed from a {@link ResourceContext}
@@ -37,7 +54,7 @@ public class ResourceContextEvent {
 	 * {@link ResourceContext#removeBundle(long, ResourceContext)} method have
 	 * been invoked, or the bundle has been uninstalled
 	 */
-	public static final int	BUNDLE_REMOVED				= 3;
+	public static final int			BUNDLE_REMOVED				= 3;
 
 	/**
 	 * event type.
@@ -47,7 +64,7 @@ public class ResourceContextEvent {
 	/**
 	 * bundle.
 	 */
-	private final long		bundleId;
+	private final long				bundleId;
 
 	/**
 	 * context.
@@ -82,7 +99,6 @@ public class ResourceContextEvent {
 		context = pResourceContext;
 		bundleId = pBundleId;
 	}
-
 
 	/**
 	 * Retrieves the type of this Resource Context Event.

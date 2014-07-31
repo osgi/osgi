@@ -39,6 +39,9 @@ package org.osgi.service.resourcemanagement;
  * 
  * @ThreadSafe
  * @noimplement
+ * 
+ * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
+ *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
  */
 public interface ResourceMonitor {
 

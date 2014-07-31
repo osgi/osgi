@@ -16,7 +16,6 @@
 
 package org.osgi.service.resourcemanagement;
 
-
 /**
  * <p>
  * An event sent to {@link ResourceListener} when resource usage violates one of
@@ -30,25 +29,28 @@ package org.osgi.service.resourcemanagement;
  * 
  * @Immutable
  * @see ResourceListener
+ * 
+ * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
+ *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
  */
 public class ResourceEvent {
 
 	/**
 	 * Type of ResourceEvent indicating a threshold goes to the NORMAL state.
 	 */
-	public static final int	NORMAL						= 0;
+	public static final int			NORMAL	= 0;
 
 	/**
 	 * Type of ResourceEvent indicating a threshold goes to the WARNING state.
 	 */
-	public static final int	WARNING						= 1;
+	public static final int			WARNING	= 1;
 
 	/**
 	 * Type of ResourceEvent indicating a threshold goes to the ERROR state.
 	 */
-	public static final int	ERROR						= 2;
+	public static final int			ERROR	= 2;
 
-	private final int		type;
+	private final int				type;
 	private final boolean			isUpperThrehsold;
 	private final ResourceContext	resourceContext;
 	private final Object			value;
@@ -101,8 +103,6 @@ public class ResourceEvent {
 	public ResourceContext getContext() {
 		return resourceContext;
 	}
-
-
 
 	/**
 	 * Returns true if the threshold triggering this event is an upper

@@ -21,14 +21,16 @@ import org.osgi.service.resourcemanagement.ResourceManager;
 import org.osgi.service.resourcemanagement.ResourceMonitor;
 
 /**
- * A {@link ResourceMonitor} for the 
- * {@link ResourceManager#RES_TYPE_THREADS} resource type.
- * A ThreadMonitor instance monitors and limits the thread created by a 
- * {@link ResourceContext} instance.  
+ * A {@link ResourceMonitor} for the {@link ResourceManager#RES_TYPE_THREADS}
+ * resource type. A ThreadMonitor instance monitors and limits the thread
+ * created by a {@link ResourceContext} instance.
+ * 
+ * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
+ *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
  */
 public interface ThreadMonitor extends ResourceMonitor {
-  
-  	/**
+
+	/**
 	 * Returns the number of alive threads created by the bundles in this
 	 * resource context. A Thread is considered to be alive when its java state
 	 * is one of the following:
@@ -44,7 +46,6 @@ public interface ThreadMonitor extends ResourceMonitor {
 	 * 
 	 * @return the number of alive threads created by this resource context
 	 */
-  public int getAliveThreads();
-  
-  
+	public int getAliveThreads();
+
 }

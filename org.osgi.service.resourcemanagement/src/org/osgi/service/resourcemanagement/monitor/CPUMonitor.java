@@ -21,21 +21,23 @@ import org.osgi.service.resourcemanagement.ResourceManager;
 import org.osgi.service.resourcemanagement.ResourceMonitor;
 
 /**
- * A {@link ResourceMonitor} for the 
- * {@link ResourceManager#RES_TYPE_CPU} resource type.  
- * CPUMonitor instance monitors the CPU consumed by a
+ * A {@link ResourceMonitor} for the {@link ResourceManager#RES_TYPE_CPU}
+ * resource type. CPUMonitor instance monitors the CPU consumed by a
  * {@link ResourceContext} instance.
+ * 
+ * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
+ *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
  */
 public interface CPUMonitor extends ResourceMonitor {
-  
-  /**
-   * Returns the CPU usage as a cumulative number of nanoseconds
-   * <p>
-   * The {@link #getUsage()} method returns the same value,
-   * wrapped in a {@link Long}
-   * @return the CPU usage in nanoseconds
-   */
-  public int getCPUUsage();
-  
-  
+
+	/**
+	 * Returns the CPU usage as a cumulative number of nanoseconds
+	 * <p>
+	 * The {@link #getUsage()} method returns the same value, wrapped in a
+	 * {@link Long}
+	 * 
+	 * @return the CPU usage in nanoseconds
+	 */
+	public int getCPUUsage();
+
 }

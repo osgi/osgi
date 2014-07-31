@@ -40,6 +40,9 @@ import org.osgi.framework.Bundle;
  * 
  * @ThreadSafe
  * @noimplement
+ * 
+ * @author see RFC 200 authors: Andre Bottaro, Gregory Bonnardel, Svetozar
+ *         Dimov, Evgeni Grigorov, Arnaud Rinquin, Antonin Chazalet.
  */
 public interface ResourceContext {
 
@@ -72,7 +75,7 @@ public interface ResourceContext {
 	 * A {@link ResourceContextEvent} with type
 	 * {@link ResourceContextEvent#BUNDLE_ADDED} will be sent.
 	 * 
-	 * @param b The bundle to add to this resource context
+	 * @param bundleId The bundle to add to this resource context
 	 */
 	public void addBundle(long bundleId);
 
@@ -104,7 +107,6 @@ public interface ResourceContext {
 	 */
 	public void removeBundle(long bundleId, ResourceContext destination);
 
-
 	/**
 	 * Returns a ResourceMonitor instance for the specified resource type. If
 	 * the ResourceManager implementation does not support this resource type,
@@ -116,7 +118,6 @@ public interface ResourceContext {
 	 *         supported
 	 */
 	public ResourceMonitor getMonitor(String resourceType);
-
 
 	/**
 	 * Retrieves all the existing ResourceMonitor belonging to this context.
