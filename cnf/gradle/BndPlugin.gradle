@@ -12,6 +12,7 @@
  * properties will be refreshed just before compiling the project.
  */
 import aQute.bnd.build.Workspace
+import aQute.bnd.osgi.Constants
 
 public class BndPlugin implements Plugin<Project> {
   private Project project
@@ -21,7 +22,7 @@ public class BndPlugin implements Plugin<Project> {
   void apply(Project p) {
     p.configure(p) { project ->
       this.project = project
-      if (!project.hasProperty('bndWorkspace')) {
+      if (!rootProject.hasProperty('bndWorkspace')) {
         rootProject.ext.bndWorkspace = Workspace.getWorkspace(rootDir)
         if (bndWorkspace == null) {
           throw new GradleException("Unable to load bnd workspace ${rootDir}")
@@ -48,7 +49,7 @@ public class BndPlugin implements Plugin<Project> {
       plugins.apply 'java'
 
       if (project.hasProperty('bnd_defaultTask')) {
-        defaultTasks = [bnd_defaultTask]
+        defaultTasks = bnd_defaultTask.trim().split(/\s*,\s*/)
       }
 
       /* We use the same directory for java and resources. */
@@ -71,9 +72,9 @@ public class BndPlugin implements Plugin<Project> {
         bootclasspath = files(bndProject.getBundle('ee.j2se', '1.5', null, ['strategy':'lowest']).file)
       }
       targetCompatibility = javacTarget
-      def javac = bnd('javac', 'javac')
+      def javac = bnd('javac')
       def javacProfile = bnd('javac.profile', '')
-      def javacDebug = parseBoolean(bnd('javac.debug', 'false'))
+      def javacDebug = parseBoolean(bnd('javac.debug'))
       def javacDeprecation = parseBoolean(bnd('javac.deprecation', 'true'))
       def javacEncoding = bnd('javac.encoding', 'UTF-8')
       def compileOptions = {
@@ -181,7 +182,7 @@ public class BndPlugin implements Plugin<Project> {
             exclude sourceSets.test.output.files.collect { relativePath(it) }
             exclude relativePath(buildDir)
           }
-          outputs.files bndProject.deliverables.collect { it.file }, new File(buildDir, 'buildfiles')
+          outputs.files bndProject.deliverables.collect { it.file }, new File(buildDir, Constants.BUILDFILES)
           doLast {
             def built
             try {
@@ -201,10 +202,10 @@ public class BndPlugin implements Plugin<Project> {
       }
 
       task('release') {
-        description 'Release this project to the release repository.'
+        description 'Release the project to the release repository.'
         dependsOn assemble
         group 'release'
-        enabled !bnd('-releaserepo', 'unset').empty
+        enabled !bnd(Constants.RELEASEREPO, 'unset').empty
         if (enabled) {
           inputs.files bndProject.deliverables.collect { it.file }
           doLast {
@@ -214,20 +215,19 @@ public class BndPlugin implements Plugin<Project> {
               throw new GradleException("Project ${bndProject.name} failed to release", e)
             }
             checkErrors()
-            logger.info 'Bundles released to the release repository.'
           }
         }
       }
 
       task('releaseNeeded') {
-        description 'Release this project and all projects it depends on to the release repository.'
+        description 'Release the project and all projects it depends on to the release repository.'
         dependsOn release
         group 'release'
       }
 
       test {
         dependsOn testClasses
-        enabled !(parseBoolean(bnd('-nojunit', 'false')) || parseBoolean(bnd('no.junit', 'false')))
+        enabled !(parseBoolean(bnd(Constants.NOJUNIT, 'false')) || parseBoolean(bnd('no.junit', 'false')))
         if (enabled) {
           classpath = files(compileTestJava.destinationDir, compileTestJava.classpath)
         }
@@ -235,7 +235,7 @@ public class BndPlugin implements Plugin<Project> {
 
       check {
         dependsOn assemble
-        enabled !(parseBoolean(bnd('-nojunitosgi', 'false')) || bndUnprocessed('Test-Cases', '').empty)
+        enabled !(parseBoolean(bnd(Constants.NOJUNITOSGI, 'false')) || bndUnprocessed(Constants.TESTCASES, '').empty)
         if (enabled) {
           doLast {
             try {
@@ -249,14 +249,16 @@ public class BndPlugin implements Plugin<Project> {
       }
 
       task('checkNeeded') {
-        description 'Runs all checks on this project and all projects it depends on.'
+        description 'Runs all checks on the project and all projects it depends on.'
         dependsOn check
         group 'verification'
       }
 
       clean {
-        /* Also clean compiler output */
-        dependsOn cleanCompileJava, cleanCompileTestJava
+        deleteAllActions() // Replace the standard task actions
+        doLast {
+          bndProject.clean()
+        }
       }
 
       javadoc {
@@ -287,7 +289,7 @@ public class BndPlugin implements Plugin<Project> {
       }
 
       task('export') {
-        description "Export all the bndrun files to runnable jars."
+        description 'Export all the bndrun files to runnable jars.'
         group 'export'
         fileTree(projectDir) {
             include '*.bndrun'
@@ -297,9 +299,14 @@ public class BndPlugin implements Plugin<Project> {
       }
 
       task('echo') {
-        description "Displays the bnd project information of project '${project.path}'."
+        description 'Displays the bnd project information.'
         group 'help'
         doLast {
+          println()
+          println '------------------------------------------------------------'
+          println "Project ${project.name}"
+          println '------------------------------------------------------------'
+          println()
           println "project.workspace:      ${rootDir}"
           println "project.dir:            ${projectDir}"
           println "project.name:           ${project.name}"
@@ -323,7 +330,7 @@ public class BndPlugin implements Plugin<Project> {
       }
 
       task('bndproperties') {
-        description "Displays the bnd properties of project '${project.path}'."
+        description 'Displays the bnd properties.'
         group 'help'
         doLast {
           println()
@@ -349,6 +356,7 @@ public class BndPlugin implements Plugin<Project> {
 
   private void checkErrors() {
     bndProject.getInfo(bndProject.workspace, "${bndProject.workspace.base.name} :")
+    def boolean failed = !bndProject.isOk()
     def int errorCount = 0
     bndProject.warnings.each {
       project.logger.warn "Warning: ${it}"
@@ -359,7 +367,7 @@ public class BndPlugin implements Plugin<Project> {
       errorCount++
     }
     bndProject.errors.clear()
-    if (!bndProject.isFailOk() && (errorCount > 0)) {
+    if (failed) {
       def str = 'even though no errors were reported'
       if (errorCount == 1) {
         str = 'one error was reported'
@@ -391,6 +399,9 @@ class BndProperties {
     def value = get(name)
     if (value == null) {
       value = defaultValue
+      if (value instanceof String) {
+        value = value.trim()
+      }
     }
     return value
   }
@@ -418,6 +429,9 @@ class BndPluginConvention {
     def value = project.bnd.project.getUnprocessedProperty(name, null)
     if (value == null) {
       value = defaultValue
+    }
+    if (value instanceof String) {
+      value = value.trim()
     }
     return value
   }
