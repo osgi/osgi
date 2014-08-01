@@ -63,6 +63,8 @@
                 minOccurs="0" maxOccurs="unbounded" />
             <element name="implementation" type="scr:Timplementation"
                 minOccurs="1" maxOccurs="1" />
+            <element name="field-reference" type="scr:Tfieldreference"
+                minOccurs="0" maxOccurs="unbounded" />
             <any namespace="##any" processContents="lax" minOccurs="0"
                 maxOccurs="unbounded" />
         </sequence>
@@ -191,6 +193,40 @@
             use="optional" />
         <anyAttribute processContents="lax" />
     </complexType>
+    <complexType name="Tfieldreference">
+        <sequence>
+            <any namespace="##any" processContents="lax" minOccurs="0"
+                maxOccurs="unbounded" />
+        </sequence>
+        <attribute name="name" type="token" use="optional">
+            <annotation>
+                <documentation xml:lang="en">
+                    The default value of this attribute is the value of
+                    the interface attribute of this element. If multiple 
+                    instances of this element within a component element 
+                    use the same value for the interface attribute, then 
+                    using the default value for this attribute will result 
+                    in duplicate names. In this case, this attribute 
+                    must be specified with a unique value.
+                </documentation>
+            </annotation>
+        </attribute>
+        <attribute name="interface" type="token" use="required" />
+        <attribute name="cardinality" type="scr:Tcardinality"
+            default="1..1" use="optional" />
+        <attribute name="policy" type="scr:Tpolicy" default="static"
+            use="optional" />
+        <attribute name="policy-option" type="scr:Tpolicy-option" 
+            default="reluctant" use="optional" />
+        <attribute name="target" type="string" use="optional" />
+        <attribute name="field" type="token" use="required" />
+        <attribute name="strategy" type="scr:Tfieldreferencestrategy" default="replace"
+            use="optional" />
+        <attribute name="scope" type="scr:Treferencescope" default="bundle"
+            use="optional" />
+        <attribute name="valuetype" type="scr:Tfieldvaluetype" use="optional" />
+        <anyAttribute processContents="lax" />
+    </complexType>
     <simpleType name="Tjava-types">
         <restriction base="string">
             <enumeration value="String" />
@@ -242,6 +278,21 @@
         <restriction base="string">
             <enumeration value="bundle" />
             <enumeration value="prototype" />
+        </restriction>
+    </simpleType>
+    <simpleType name="Tfieldreferencestrategy">
+        <restriction base="string">
+            <enumeration value="update" />
+            <enumeration value="replace" />
+        </restriction>
+    </simpleType>
+    <simpleType name="Tfieldvaluetype">
+        <restriction base="string">
+            <enumeration value="service" />
+            <enumeration value="properties" />
+            <enumeration value="reference" />
+            <enumeration value="serviceobjects" />
+            <enumeration value="typle" />
         </restriction>
     </simpleType>
     <attribute name="must-understand" type="boolean">
