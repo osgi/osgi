@@ -250,43 +250,7 @@ public class ResourceManagerImpl implements ResourceManager,
 				.getResourceContext(bundleId);
 		return resourceContext;
 	}
-
-	public ResourceContext getCurrentContext() {
-		ResourceContext resourceContext = getContext(Thread.currentThread());
-		return resourceContext;
-	}
-
-	public ResourceContext switchCurrentContext(ResourceContext context) {
-		ResourceContext previousResourceContext = getCurrentContext();
-
-		Thread currentThread = Thread.currentThread();
-		threadManager.switchContext(currentThread, context);
-
-		// notify all ResourceMonitors of the outgoing ResourceContent
-		if (previousResourceContext != null) {
-			ResourceMonitor[] outgoingMonitors = previousResourceContext
-					.getMonitors();
-			for (int i = 0; i < outgoingMonitors.length; i++) {
-				ResourceMonitor outgoingMonitor = outgoingMonitors[i];
-				outgoingMonitor.notifyOutgoingThread(currentThread);
-			}
-		}
-
-		// notify all ResourceMonitor of the incoming ResourceContext
-		ResourceMonitor[] incomingMonitors = context.getMonitors();
-		for (int i = 0; i < incomingMonitors.length; i++) {
-			ResourceMonitor incomingMonitor = incomingMonitors[i];
-			incomingMonitor.notifyIncomingThread(currentThread);
-		}
-
-		return previousResourceContext;
-	}
-
-	public ResourceContext getContext(Thread t) {
-		ResourceContext resourceContext = threadManager.getResourceContext(t);
-		return resourceContext;
-	}
-
+	
 	public String[] getSupportedTypes() {
 		String[] supportedTypes = new String[0];
 		synchronized (resourceMonitorFactories) {

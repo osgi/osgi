@@ -3,6 +3,9 @@ package org.osgi.impl.service.resourcemanagement.threadmanager;
 
 import org.osgi.service.resourcemanagement.ResourceContext;
 
+/**
+ * ThreadManager interface.
+ */
 public interface ThreadManager {
 
 	/**
@@ -39,13 +42,5 @@ public interface ThreadManager {
 	 *         previously started or has been stopped.
 	 */
 	ResourceContext getResourceContext(Thread t) throws IllegalStateException;
-
-	/**
-	 * Associate the thread t to the Resource Context rc
-	 * 
-	 * @param t thread
-	 * @param rc resource context
-	 */
-	void switchContext(Thread t, ResourceContext rc);
 
 }

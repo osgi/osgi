@@ -30,9 +30,4 @@ public class ThreadManagerImpl implements ThreadManager {
 		return null;
 	}
 
-	public void switchContext(Thread t, ResourceContext rc) {
-		// TODO Auto-generated method stub
-
-	}
-
 }

@@ -132,46 +132,6 @@ public interface ResourceManager {
 	public ResourceContext getContext(long bundleId);
 
 	/**
-	 * Returns the resource context associated with the current thread.
-	 * 
-	 * @return The {@link ResourceContext} associated with the current thread,
-	 *         or null if the thread is not associated with a resource context
-	 */
-	public ResourceContext getCurrentContext();
-
-	/**
-	 * Explicitly associates the current thread with a resource context. All
-	 * further resource allocations made by this thread will be assigned to this
-	 * resource context.
-	 * <p>
-	 * To remove the explicit resource context association for the current, call
-	 * this method with a <code>null</code> parameter.
-	 * </p>
-	 * <p>
-	 * This method automatically notifies all {@link ResourceMonitor} of the
-	 * leaving {@link ResourceContext} as well as all {@link ResourceMonitor} of
-	 * the incoming {@link ResourceContext} about this swich context operation.
-	 * 
-	 * @param context The {@link ResourceContext} to associate the current
-	 *        threat with, or null to remove an explicit association.
-	 * @return The {@link ResourceContext} that this thread was previously
-	 *         explicitly associated with, or <code>null</code> if there was no
-	 *         such association.
-	 */
-	public ResourceContext switchCurrentContext(ResourceContext context);
-
-	/**
-	 * Returns the resource context explicitly associated with this thread.
-	 * 
-	 * @param t The thread object for which the associated resource context must
-	 *        be returned
-	 * @return The {@link ResourceContext} explicitly associated with the
-	 *         specified thread, or <code>null</code> if there is no such
-	 *         association.
-	 */
-	public ResourceContext getContext(Thread t);
-
-	/**
 	 * Returns a list with the supported resource type names.
 	 * 
 	 * @return An array containing the names of all resource types that this
