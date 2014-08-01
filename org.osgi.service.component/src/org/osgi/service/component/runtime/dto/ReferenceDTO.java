@@ -26,6 +26,52 @@ import org.osgi.dto.DTO;
  * @author $Id$
  */
 public class ReferenceDTO extends DTO {
+
+	/**
+	 * Constant for the lookup strategy
+	 * 
+	 * @see #strategy
+	 */
+	String			STRATEGY_LOOKUP			= "LOOKUP";
+
+	/**
+	 * Constant for the method strategy
+	 * 
+	 * @see #strategy
+	 */
+	String			STRATEGY_METHOD			= "METHOD";
+
+	/**
+	 * Constant for the field replace strategy
+	 * 
+	 * @see #strategy
+	 */
+	String			STRATEGY_FIELD_REPLACE	= "FIELD_REPLACE";
+
+	/**
+	 * Constant for the field update strategy
+	 * 
+	 * @see #strategy
+	 */
+	String			STRATEGY_FIELD_UPDATE	= "FIELD_UPDATE";
+
+	/**
+	 * The strategy of the reference.
+	 * 
+	 * <p>
+	 * This field returns the strategy used for this reference. If the value is
+	 * either {@code #STRATEGY_FIELD_REPLACE} or {@code #STRATEGY_FIELD_UPDATE},
+	 * {@link #field} returns the name of the field. If the strategy is
+	 * {@code #STRATEGY_METHOD} {@link #bind}, {@link #unbind}, and
+	 * {@link #updated} return the name of the methods.
+	 *
+	 * @see #STRATEGY_FIELD_REPLACE
+	 * @see #STRATEGY_FIELD_UPDATE
+	 * @see #STRATEGY_LOOKUP
+	 * @see #STRATEGY_METHOD
+	 */
+	public String	strategy;
+
 	/**
 	 * The name of the reference.
 	 * 
@@ -90,8 +136,9 @@ public class ReferenceDTO extends DTO {
 	 * 
 	 * <p>
 	 * This is declared in the {@code bind} attribute of the {@code reference}
-	 * element. This must be {@code null} if the component description does not
-	 * declare a bind method for the reference.
+	 * element. This must be {@code null} if the component is not using the
+	 * method strategy or the component description does not declare a bind
+	 * method for the reference.
 	 */
 	public String	bind;
 
@@ -100,8 +147,11 @@ public class ReferenceDTO extends DTO {
 	 * 
 	 * <p>
 	 * This is declared in the {@code unbind} attribute of the {@code reference}
-	 * element. This must be {@code null} if the component description does not
-	 * declare an unbind method for the reference.
+	 * element. This must be {@code null} if the component is not using the
+	 * method strategy or the component description does not declare an unbind
+	 * method for the reference.
+	 *
+	 * @see #strategy
 	 */
 	public String	unbind;
 
@@ -110,10 +160,25 @@ public class ReferenceDTO extends DTO {
 	 * 
 	 * <p>
 	 * This is declared in the {@code updated} attribute of the
-	 * {@code reference} element. This must be {@code null} if the component
-	 * description does not declare an updated method for the reference.
+	 * {@code reference} element. This must be {@code null} if the component is
+	 * not using the method strategy or the component description does not
+	 * declare an updated method for the reference.
+	 * 
+	 * @see #strategy
 	 */
 	public String	updated;
+
+	/**
+	 * The name of the field of the reference.
+	 * 
+	 * <p>
+	 * This is declared in the {@code field} attribute of the {@code reference}
+	 * element. This must be {@code null} if the component is using the lookup
+	 * or method strategy.
+	 * 
+	 * @see #strategy
+	 */
+	public String	field;
 
 	/**
 	 * The scope of the reference.
