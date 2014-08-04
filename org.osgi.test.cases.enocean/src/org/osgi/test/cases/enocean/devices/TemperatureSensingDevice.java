@@ -103,7 +103,6 @@ public class TemperatureSensingDevice extends EnOceanDeviceImpl {
 
 	public void remove() {
 		// TODO Auto-generated method stub
-
 	}
 
 }

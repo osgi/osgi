@@ -28,7 +28,6 @@ import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescriptionSet;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescriptionSet;
-import org.osgi.service.enocean.descriptions.EnOceanRPCDescriptionSet;
 import org.osgi.service.event.Event;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.service.event.EventHandler;
@@ -63,7 +62,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	 * The {@link EnOceanBaseDriver} constructor initiates the connection
 	 * towards an {@link EnOceanHostImpl} device. Then it registers itself as a
 	 * service listener for any {@link EnOceanDevice},
-	 * {@link EnOceanMessageDescriptionSet} , {@link EnOceanRPCDescriptionSet},
+	 * {@link EnOceanMessageDescriptionSet},
 	 * {@link EnOceanChannelDescriptionSet} that would be registered in the
 	 * framework.
 	 * 

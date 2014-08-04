@@ -56,13 +56,6 @@ public interface EnOceanRPC {
     public byte[] getPayload();
 
     /**
-     * Sets the current payload of the RPC.
-     * 
-     * @param data the payload, in bytes, of this RPC.
-     */
-    public void setPayload(byte[] data);
-
-    /**
      * Sets the RPC's senderID.
      * 
      * This member has to belong to {@link EnOceanRPC} interface, for the object
@@ -78,5 +71,12 @@ public interface EnOceanRPC {
      * @param chipId
      */
     public void setSenderId(int chipId);
+
+    /**
+     * Get a friendly name for the RPC
+     * 
+     * @return the name.
+     */
+    public String getName();
 
 }

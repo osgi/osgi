@@ -37,16 +37,17 @@ public class QueryFunction implements EnOceanRPC {
 		return null;
 	}
 
-	public void setPayload(byte[] data) {
-		// does nothing;
-	}
-
 	public int getSenderId() {
 		return senderId;
 	}
 
 	public void setSenderId(int chipId) {
 		this.senderId = chipId;
+	}
+
+	public String getName() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

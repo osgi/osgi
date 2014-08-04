@@ -17,7 +17,7 @@ import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.EnOceanRPC;
 
 /**
- *
+ * EnOcean device implementation.
  */
 public class EnOceanDeviceImpl implements EnOceanDevice {
 
