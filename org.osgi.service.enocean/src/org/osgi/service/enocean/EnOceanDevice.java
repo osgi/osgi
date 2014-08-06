@@ -179,7 +179,7 @@ public interface EnOceanDevice {
     public void invoke(EnOceanRPC rpc, EnOceanHandler handler) throws IllegalArgumentException;
 
     /**
-     * Removes the device from both EnOcean Network and OSGi service platform.
+     * Removes the device's OSGi service from OSGi service platform.
      */
     public void remove();
 
