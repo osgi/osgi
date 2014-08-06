@@ -7,7 +7,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.resourcemanagement.threadmanager.ThreadManager;
 
 /**
- *
+ * Activator of ThreadManager Impl.
  */
 public class Activator implements BundleActivator {
 
@@ -24,6 +24,7 @@ public class Activator implements BundleActivator {
 	public void start(BundleContext context) throws Exception {
 		threadManager = new ThreadManagerImpl();
 		serviceRegistration = context.registerService(ThreadManager.class.getName(), threadManager, null);
+		System.out.println("ThreadManager has been started, and registered as an OSGi service - serviceRegistration: " + serviceRegistration);
 	}
 
 	public void stop(BundleContext context) throws Exception {

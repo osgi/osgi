@@ -104,7 +104,7 @@ public class PersistenceImpl implements Persistence {
 							.getElements().iterator(); bundleIdsIt.hasNext();) {
 						JSONLong bundleIdJsonLong = (JSONLong) bundleIdsIt
 								.next();
-						bundles.add(bundleIdJsonLong.getValue());
+						bundles.add(Long.valueOf(Long.toString(bundleIdJsonLong.getValue())));
 					}
 				}
 

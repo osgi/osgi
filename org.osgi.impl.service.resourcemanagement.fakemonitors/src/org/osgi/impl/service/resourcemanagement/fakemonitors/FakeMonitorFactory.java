@@ -59,7 +59,7 @@ public class FakeMonitorFactory implements ResourceMonitorFactory,
 	 * register the factory as a ResourceContextListener to be informed when a
 	 * ResourceContext is deleted. ServiceRegistration<ResourceContextListener>
 	 */
-	private ServiceRegistration	serviceRegistration;
+	private ServiceRegistration						serviceRegistration;
 
 	private final Lock			semaphore;
 
@@ -88,12 +88,11 @@ public class FakeMonitorFactory implements ResourceMonitorFactory,
 		semaphore = new Lock();
 		fakeMonitors = new Hashtable();
 
-		// register this factory as a ResourceContextListener
-		// Dictionary<String, Object> properties = new Hashtable<String,
-		// Object>();
+		// register this factory as a ResourceContextListener.
+		// Dictionary<String, Object> properties.
 		Dictionary properties = new Hashtable();
 		properties.put(ResourceContextListener.EVENT_TYPE,
-				ResourceContextEvent.RESOURCE_CONTEXT_DELETED);
+				Integer.valueOf(Integer.toString(ResourceContextEvent.RESOURCE_CONTEXT_DELETED)));
 		properties.put(ResourceMonitorFactory.RESOURCE_TYPE_PROPERTY,
 				factoryType);
 		serviceRegistration = bundleContext

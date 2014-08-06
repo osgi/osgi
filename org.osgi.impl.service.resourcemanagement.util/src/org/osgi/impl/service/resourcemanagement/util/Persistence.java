@@ -144,14 +144,21 @@ public class Persistence {
 						+ fileName, e);
 			}
 
-			br = null;
-
 			try {
 				fr.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			fr = null;
+
+			try {
+				if (br != null) {
+					br.close();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			br = null;
 		}
 		file = null;
 

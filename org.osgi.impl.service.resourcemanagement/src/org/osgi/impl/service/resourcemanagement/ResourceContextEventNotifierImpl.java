@@ -117,7 +117,7 @@ public class ResourceContextEventNotifierImpl implements
 			filter = (int[]) propertyValue;
 		} catch (ClassCastException e) {
 			// should be an int
-			filter = new int[] {(Integer) propertyValue};
+			filter = new int[] {((Integer) propertyValue).intValue()};
 		}
 
 		return filter;

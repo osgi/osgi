@@ -264,14 +264,14 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 
 	public void addBundleToHolder(long bundleId) {
 		synchronized (bundles) {
-			bundles.add(bundleId);
+			bundles.add(Long.valueOf(Long.toString(bundleId)));
 		}
 
 	}
 
 	public void removeBundleToHolder(long bundleId) {
 		synchronized (bundles) {
-			bundles.remove(bundleId);
+			bundles.remove(Long.valueOf(Long.toString(bundleId)));
 		}
 
 	}

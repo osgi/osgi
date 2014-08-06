@@ -35,8 +35,8 @@ public class PersistenceManager implements BundleListener {
 	private final BundleContext		bundleContext;
 
 	/**
-	 * this map contains bundles which has not been resolved during the
-	 * restoring phase.
+	 * This map < Long, String > contains bundles which has not been resolved
+	 * during the restoring phase.
 	 */
 	private final Map				unresolvedBundles;
 
@@ -57,7 +57,6 @@ public class PersistenceManager implements BundleListener {
 		persistence = new PersistenceImpl();
 		unresolvedBundles = new Hashtable();
 		resourceManager = pResourceManager;
-
 	}
 
 	/**
@@ -110,6 +109,7 @@ public class PersistenceManager implements BundleListener {
 					contextName, null);
 
 			// try to associate bundle
+//			List<Long> bundleIds = rci.getBundleIds();
 			List bundleIds = rci.getBundleIds();
 			for (Iterator it = bundleIds.iterator(); it.hasNext();) {
 				Long bundleId = (Long) it.next();
@@ -125,7 +125,6 @@ public class PersistenceManager implements BundleListener {
 					unresolvedBundles.put(bundleId, resourceContext.getName());
 				}
 			}
-
 		}
 
 		// register this instance as a BundleListener
@@ -150,13 +149,17 @@ public class PersistenceManager implements BundleListener {
 			String currentContextName = resourceContext.getName();
 
 			long[] bundleIds = resourceContext.getBundleIds();
+//			List<Long> bundleIdsSet = new ArrayList<Long>();
 			List bundleIdsSet = new ArrayList();
 			// add all associated bundle into bundleIds
 			for (int j = 0; j < bundleIds.length; j++) {
-				bundleIdsSet.add(bundleIds[j]);
+				bundleIdsSet.add(Long.valueOf(Long.toString(bundleIds[j])));
 			}
 
 			// iterate over the unresolved bundle map
+			// for (Iterator<Long> it = unresolvedBundles.keySet().iterator();
+			// it.hasNext();) {
+
 			for (Iterator it = unresolvedBundles.keySet().iterator(); it
 					.hasNext();) {
 				Long bundleId = (Long) it.next();
@@ -176,5 +179,4 @@ public class PersistenceManager implements BundleListener {
 
 		persistence.persist(bundleContext, rcis);
 	}
-
 }

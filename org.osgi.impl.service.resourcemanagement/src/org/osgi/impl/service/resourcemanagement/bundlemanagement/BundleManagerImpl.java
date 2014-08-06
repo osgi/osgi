@@ -70,7 +70,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 		acquireBundleLock(bundleId);
 
 		synchronized (resourceContexts) {
-			if (resourceContexts.containsKey(bundleId)) {
+			if (resourceContexts.containsKey(Long.valueOf(Long.toString(bundleId)))) {
 				// release bundle lock
 				releaseBundleLock(bundleId);
 
@@ -79,7 +79,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 						+ " is already associated.");
 			}
 
-			resourceContexts.put(bundleId, bundleHolder);
+			resourceContexts.put(Long.valueOf(Long.toString(bundleId)), bundleHolder);
 		}
 
 		bundleHolder.addBundleToHolder(bundleId);
@@ -97,7 +97,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 		acquireBundleLock(bundleId);
 
 		synchronized (resourceContexts) {
-			if (!resourceContexts.containsKey(bundleId)) {
+			if (!resourceContexts.containsKey(Long.valueOf(Long.toString(bundleId)))) {
 				// release bundle lock
 				releaseBundleLock(bundleId);
 
@@ -107,7 +107,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 			}
 
 			BundleHolder currentBH = (BundleHolder) resourceContexts
-					.get(bundleId);
+					.get(Long.valueOf(Long.toString(bundleId)));
 			if (!currentBH.equals(bundleHolder)) {
 				// release bundle lock
 				releaseBundleLock(bundleId);
@@ -118,7 +118,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 			}
 
 			// de-associate bundle
-			resourceContexts.remove(bundleId);
+			resourceContexts.remove(Long.valueOf(Long.toString(bundleId)));
 		}
 
 		bundleHolder.removeBundleToHolder(bundleId);
@@ -141,7 +141,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 				// remove it
 				synchronized (resourceContexts) {
 					BundleHolder holder = (BundleHolder) resourceContexts
-							.get(bundleId);
+							.get(Long.valueOf(Long.toString(bundleId)));
 					if (holder != null) {
 						holder.removeBundleToHolder(bundleId);
 					}
@@ -189,29 +189,29 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 	public ResourceContext getResourceContext(long bundleId) {
 		ResourceContext resourceContext;
 		synchronized (resourceContexts) {
-			resourceContext = (ResourceContext) resourceContexts.get(bundleId);
+			resourceContext = (ResourceContext) resourceContexts.get(Long.valueOf(Long.toString(bundleId)));
 		}
 		return resourceContext;
 	}
 
 	private void addBundleLock(long bundleId) {
 		synchronized (bundleLocks) {
-			if (!bundleLocks.containsKey(bundleId)) {
+			if (!bundleLocks.containsKey(Long.valueOf(Long.toString(bundleId)))) {
 				BundleLock bl = new BundleLock();
-				bundleLocks.put(bundleId, bl);
+				bundleLocks.put(Long.valueOf(Long.toString(bundleId)), bl);
 			}
 		}
 	}
 
 	private void removeBundleLock(long bundleId) {
 		synchronized (bundleLocks) {
-			bundleLocks.remove(bundleId);
+			bundleLocks.remove(Long.valueOf(Long.toString(bundleId)));
 		}
 	}
 
 	private void acquireBundleLock(long bundleId) throws RuntimeException {
 		synchronized (bundleLocks) {
-			BundleLock bl = (BundleLock) bundleLocks.get(bundleId);
+			BundleLock bl = (BundleLock) bundleLocks.get(Long.valueOf(Long.toString(bundleId)));
 			if (bl == null) {
 				throw new RuntimeException("Bundle " + bundleId
 						+ " does not exist");
@@ -224,7 +224,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 
 	private void releaseBundleLock(long bundleId) throws RuntimeException {
 		synchronized (bundleLocks) {
-			BundleLock bl = (BundleLock) bundleLocks.get(bundleId);
+			BundleLock bl = (BundleLock) bundleLocks.get(Long.valueOf(Long.toString(bundleId)));
 			if (bl == null) {
 				throw new RuntimeException();
 			} else {

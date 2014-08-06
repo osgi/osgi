@@ -400,7 +400,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 			if (filters.length > 1) {
 				properties.put(ResourceContextListener.EVENT_TYPE, filters);
 			} else if (filters.length == 1) {
-				properties.put(ResourceContextListener.EVENT_TYPE, filters[0]);
+					properties.put(ResourceContextListener.EVENT_TYPE, Integer.valueOf(Integer.toString(filters[0])));
 			}
 		}
 		if (resourceContexts != null) {

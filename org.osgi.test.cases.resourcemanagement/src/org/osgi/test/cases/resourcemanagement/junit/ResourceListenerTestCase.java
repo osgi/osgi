@@ -139,7 +139,7 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 	public void testUpperErrorThreshold() throws InterruptedException {
 
 		// set upper ERROR threshold to 50
-		upperError = 50l;
+		upperError = Long.valueOf(Long.toString(50l));
 
 		// set other threshold
 		upperWarning = null;
@@ -167,7 +167,7 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 	 */
 	public void testUpperWarningThreshold() throws InterruptedException {
 		// set upper WARNING threshold to 35
-		upperWarning = 35l;
+		upperWarning = Long.valueOf(Long.toString(35l));
 
 		// set other threshold
 		upperError = null;
@@ -195,8 +195,8 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 	 */
 	public void testUpperWarningAndErrorThreshold() throws InterruptedException {
 		// set upper WARNING threshold to 35
-		upperWarning = 35l;
-		upperError = 50l;
+		upperWarning = Long.valueOf(Long.toString(35l));
+		upperError = Long.valueOf(Long.toString(50l));
 
 		// set other threshold
 
@@ -223,7 +223,7 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 	 * @throws InterruptedException
 	 */
 	public void testLowerWarningThreshold() throws InterruptedException {
-		lowerWarning = 70l;
+		lowerWarning = Long.valueOf(Long.toString(70l));
 
 		// set other threshold
 		lowerError = null;
@@ -250,7 +250,7 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 	 * @throws InterruptedException
 	 */
 	public void testLowerErrorThreshold() throws InterruptedException {
-		lowerError = 70l;
+		lowerError = Long.valueOf(Long.toString(70l));
 
 		// set other threshold
 		lowerWarning = null;
@@ -277,8 +277,8 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 	 * @throws InterruptedException
 	 */
 	public void testLowerWarningAndErrorThreshold() throws InterruptedException {
-		lowerError = 50l;
-		lowerWarning = 70l;
+		lowerError = Long.valueOf(Long.toString(50l));
+		lowerWarning = Long.valueOf(Long.toString(70l));
 
 		// set other threshold
 		upperWarning = null;

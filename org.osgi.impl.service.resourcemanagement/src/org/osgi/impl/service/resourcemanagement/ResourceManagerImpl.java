@@ -116,7 +116,7 @@ public class ResourceManagerImpl implements ResourceManager,
 			for (Iterator/* <Long> */it = persistedResourceContext
 					.getBundleIds()
 					.iterator(); it.hasNext();) {
-				long bundleId = (Long) it.next();
+				long bundleId = ((Long) it.next()).longValue();
 				try {
 					newly.addBundle(bundleId);
 				} catch (RuntimeException e) {

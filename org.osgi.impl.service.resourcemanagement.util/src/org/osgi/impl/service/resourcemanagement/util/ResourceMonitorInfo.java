@@ -38,7 +38,7 @@ public class ResourceMonitorInfo {
 		String[] splitted = split(memoryMonitorInfoAsCsv, ";");
 		if ((splitted != null) && (splitted.length == 2)) {
 			resourceContextName = splitted[0];
-			enabled = Boolean.valueOf(splitted[1]);
+			enabled = Boolean.valueOf(splitted[1]).booleanValue();
 		} else {
 			throw new NullPointerException(
 					"ResourceContextName or Enabled is null");
@@ -75,6 +75,7 @@ public class ResourceMonitorInfo {
 	}
 
 	private static String[] split(String inputString, String separatingCharacter) {
+		// List<String> parts = new ArrayList<String>();
 		List parts = new ArrayList();
 		int length = inputString.length();
 		int fromIndex = 0;
