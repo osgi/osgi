@@ -34,7 +34,7 @@ public class CustomInputStream extends ByteArrayInputStream {
 	 * @param data
 	 */
 	public void replace(byte[] data) {
-		this.buf = data.clone();
+		this.buf = (byte[]) data.clone();
 		this.mark = 0;
 		this.pos = 0;
 		this.count = data.length;
