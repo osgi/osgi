@@ -3,7 +3,7 @@
     /*
     * $Id$
     * 
-    * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
+    * Copyright (c) OSGi Alliance (2005, 2014). All Rights Reserved.
     * 
     * Licensed under the Apache License, Version 2.0 (the "License");
     * you may not use this file except in compliance with the License.
@@ -61,10 +61,10 @@
                 maxOccurs="1" />
             <element name="reference" type="scr:Treference"
                 minOccurs="0" maxOccurs="unbounded" />
-            <element name="implementation" type="scr:Timplementation"
-                minOccurs="1" maxOccurs="1" />
             <element name="field-reference" type="scr:Tfieldreference"
                 minOccurs="0" maxOccurs="unbounded" />
+            <element name="implementation" type="scr:Timplementation"
+                minOccurs="1" maxOccurs="1" />
             <any namespace="##any" processContents="lax" minOccurs="0"
                 maxOccurs="unbounded" />
         </sequence>
@@ -292,7 +292,7 @@
             <enumeration value="properties" />
             <enumeration value="reference" />
             <enumeration value="serviceobjects" />
-            <enumeration value="typle" />
+            <enumeration value="tuple" />
         </restriction>
     </simpleType>
     <attribute name="must-understand" type="boolean">
