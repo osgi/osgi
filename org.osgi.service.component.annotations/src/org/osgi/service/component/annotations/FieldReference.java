@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,7 +37,7 @@ import java.lang.annotation.Target;
  * be ordered in ascending lexicographical order (using {@code String.compareTo}
  * ) of the reference {@link #name() name}s.
  * 
- * @see "The reference element of a Component Description."
+ * @see "The field-reference element of a Component Description."
  * @since 1.3
  * @author $Id$
  */
@@ -45,29 +45,29 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface FieldReference {
 	/**
-	 * The name of this reference.
+	 * The name of the field reference.
 	 * 
 	 * <p>
 	 * If not specified, the name of this reference is based upon the name of
 	 * the field being annotated.
 	 * 
-	 * @see "The name attribute of the reference element of a Component Description."
+	 * @see "The name attribute of the field-reference element of a Component Description."
 	 */
 	String name() default "";
 
 	/**
-	 * The type of the service to bind to this reference.
+	 * The type of the service to bind to the field reference.
 	 * 
 	 * <p>
 	 * If not specified, the type of the service to bind is based upon the type
 	 * of the field being annotated.
 	 * 
-	 * @see "The interface attribute of the reference element of a Component Description."
+	 * @see "The interface attribute of the field-reference element of a Component Description."
 	 */
 	Class<?> service() default Object.class;
 
 	/**
-	 * The strategy of the service to bind to this reference.
+	 * The strategy the field value for the field reference.
 	 * 
 	 * <p>
 	 * If not specified, the strategy is detected based on the modifiers of the
@@ -75,12 +75,12 @@ public @interface FieldReference {
 	 * {@link FieldReferenceStrategy#UPDATE} is used, otherwise
 	 * {@link FieldReferenceStrategy#REPLACE} is used.
 	 * 
-	 * @see "The interface attribute of the reference element of a Component Description."
+	 * @see "The strategy attribute of the field-reference element of a Component Description."
 	 */
 	FieldReferenceStrategy strategy() default FieldReferenceStrategy.REPLACE;
 
 	/**
-	 * The cardinality of the reference.
+	 * The cardinality of the field reference.
 	 * 
 	 * <p>
 	 * If not specified, the cardinality is detected based on the type of the
@@ -89,12 +89,12 @@ public @interface FieldReference {
 	 * {@link ReferenceCardinality#OPTIONAL 0..1} cardinality. Otherwise the
 	 * reference has a {@link ReferenceCardinality#MANDATORY 1..1} cardinality.
 	 * 
-	 * @see "The cardinality attribute of the reference element of a Component Description."
+	 * @see "The cardinality attribute of the field-reference element of a Component Description."
 	 */
 	ReferenceCardinality cardinality() default ReferenceCardinality.MANDATORY;
 
 	/**
-	 * The policy for the reference.
+	 * The policy for the field reference.
 	 * 
 	 * <p>
 	 * If not specified, the policy is detected based on the modifiers of the
@@ -102,38 +102,36 @@ public @interface FieldReference {
 	 * {@link ReferencePolicy#DYNAMIC} reference policy is used, otherwise the
 	 * {@link ReferencePolicy#STATIC STATIC} reference policy is used.
 	 * 
-	 * @see "The policy attribute of the reference element of a Component Description."
+	 * @see "The policy attribute of the field-reference element of a Component Description."
 	 */
 	ReferencePolicy policy() default ReferencePolicy.STATIC;
 
 	/**
-	 * The target filter for the reference.
+	 * The target filter for the field reference.
 	 * 
-	 * @see "The target attribute of the reference element of a Component Description."
+	 * @see "The target attribute of the field-reference element of a Component Description."
 	 */
 	String target() default "";
 
 	/**
-	 * The policy option for the reference.
+	 * The policy option for the field reference.
 	 * 
 	 * <p>
 	 * If not specified, the {@link ReferencePolicyOption#RELUCTANT RELUCTANT}
 	 * reference policy option is used.
 	 * 
-	 * @see "The policy-option attribute of the reference element of a Component Description."
-	 * @since 1.2
+	 * @see "The policy-option attribute of the field-reference element of a Component Description."
 	 */
 	ReferencePolicyOption policyOption() default ReferencePolicyOption.RELUCTANT;
 
 	/**
-	 * The requested service scope for this Reference.
+	 * The requested service scope for the field reference.
 	 * 
 	 * <p>
 	 * If not specified, the {@link ReferenceScope#BUNDLE bundle} service scope
 	 * is requested.
 	 * 
-	 * @see "The scope attribute of the reference element of a Component Description."
-	 * @since 1.3
+	 * @see "The scope attribute of the field-reference element of a Component Description."
 	 */
 	ReferenceScope scope() default ReferenceScope.BUNDLE;
 }
