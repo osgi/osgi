@@ -101,10 +101,11 @@ public class EndpointDescription {
 		interfaces = verifyObjectClassProperty();
 		serviceId = verifyLongProperty(ENDPOINT_SERVICE_ID);
 		frameworkUUID = verifyStringProperty(ENDPOINT_FRAMEWORK_UUID);
-		id = verifyStringProperty(ENDPOINT_ID).trim();
-		if (id == null) {
+		String endpointId = verifyStringProperty(ENDPOINT_ID);
+		if (endpointId == null) {
 			throw new IllegalArgumentException(ENDPOINT_ID + " property must be set");
 		}
+		id = endpointId.trim();
 		if (getConfigurationTypes().isEmpty()) {
 			throw new IllegalArgumentException(SERVICE_IMPORTED_CONFIGS + " property must be set and non-empty");
 		}
@@ -181,10 +182,11 @@ public class EndpointDescription {
 		interfaces = verifyObjectClassProperty();
 		serviceId = verifyLongProperty(ENDPOINT_SERVICE_ID);
 		frameworkUUID = verifyStringProperty(ENDPOINT_FRAMEWORK_UUID);
-		id = verifyStringProperty(ENDPOINT_ID).trim();
-		if (id == null) {
+		String endpointId = verifyStringProperty(ENDPOINT_ID);
+		if (endpointId == null) {
 			throw new IllegalArgumentException(ENDPOINT_ID + " property must be set");
 		}
+		id = endpointId.trim();
 		if (getConfigurationTypes().isEmpty()) {
 			throw new IllegalArgumentException(SERVICE_IMPORTED_CONFIGS + " property must be set and non-empty");
 		}
