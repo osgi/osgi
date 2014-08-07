@@ -2194,10 +2194,12 @@ public class CMControl extends DefaultTestBundleControl {
 		}
 
 		/* contains case variants of the same key name */
-		props2.put("SomeKey", "SomeValue");
+		Hashtable casevariants = new Hashtable();
+		casevariants.put("somekey", "somevalue");
+		casevariants.put("SomeKey", "SomeValue");
 		message = "updating with illegal properties (case variants of the same key)";
 		try {
-			conf2.update(illegalprops);
+			conf2.update(casevariants);
 			/* A IllegalArgumentException should have been thrown */
 			failException(message, IllegalArgumentException.class);
 		} catch (AssertionFailedError e) {
