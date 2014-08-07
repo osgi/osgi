@@ -32,28 +32,28 @@ public class ReferenceDTO extends DTO {
 	 * 
 	 * @see #strategy
 	 */
-	String			STRATEGY_LOOKUP			= "LOOKUP";
+	public static final String	STRATEGY_LOOKUP			= "LOOKUP";
 
 	/**
 	 * Constant for the method strategy
 	 * 
 	 * @see #strategy
 	 */
-	String			STRATEGY_METHOD			= "METHOD";
+	public static final String	STRATEGY_METHOD			= "METHOD";
 
 	/**
 	 * Constant for the field replace strategy
 	 * 
 	 * @see #strategy
 	 */
-	String			STRATEGY_FIELD_REPLACE	= "FIELD_REPLACE";
+	public static final String	STRATEGY_FIELD_REPLACE	= "FIELD_REPLACE";
 
 	/**
 	 * Constant for the field update strategy
 	 * 
 	 * @see #strategy
 	 */
-	String			STRATEGY_FIELD_UPDATE	= "FIELD_UPDATE";
+	public static final String	STRATEGY_FIELD_UPDATE	= "FIELD_UPDATE";
 
 	/**
 	 * The strategy of the reference.
