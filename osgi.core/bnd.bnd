@@ -17,6 +17,10 @@ Include-Resource				: ${core.resources}
 
 -buildpath 					= \
 	${replace;${core.specs};.+;$0\\;version=project}, \
+	osgi.annotation;version=latest, \
 	ee.minimum;version=1.2
 
 -include : layout.bnd
+javadoc.name = core
+javadoc.specs = ${core.specs}
+javadoc.title = Core
