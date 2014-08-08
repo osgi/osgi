@@ -1,0 +1,5 @@
+/*
+ * osgi.annotation Gradle build script
+ */
+
+apply from: cnf.file('gradle/javadoc.gradle')

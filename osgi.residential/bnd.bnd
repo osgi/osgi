@@ -17,6 +17,13 @@ Include-Resource 				: ${residential.resources}
 
 -buildpath 					= \
 	${replace;${residential.specs};.+;$0\\;version=project}, \
-	ee.foundation;version=1.1
+    osgi.annotation;version=latest, \
+    osgi.core;version=latest, \
+    org.apache.geronimo.specs.geronimo-servlet_2.5_spec;version=latest, \
+    com.icl.saxon;version=latest, \
+    ee.minimum;version=1.2
 
 -include : layout.bnd
+javadoc.name = residential
+javadoc.specs = ${residential.specs}
+javadoc.title = Residential
