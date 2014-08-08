@@ -25,6 +25,4 @@ Include-Resource 				: ${enterprise.resources}
 	ee.minimum;version=1.2
 
 -include : layout.bnd
-javadoc.name = enterprise
-javadoc.specs = ${enterprise.specs}
 javadoc.title = Enterprise

@@ -14,6 +14,4 @@ Export-Package: ${promise.packages}
     osgi.annotation;version=latest
 
 -include = layout.bnd
-javadoc.name = promise
-javadoc.specs = ${promise.specs}
 javadoc.title = Promise
