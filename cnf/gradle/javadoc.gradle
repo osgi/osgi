@@ -37,7 +37,7 @@ task javadoc(overwrite: true, type: Javadoc) {
     classpath bnd.project.bootclasspath*.file
   }
   if (bnd.javadoc_name != 'annotation') {
-    if (bnd.javadoc_name != 'core') {
+    if ((bnd.javadoc_name != 'core') && (bnd.javadoc_name != 'promise')) {
       dependsOn ":osgi.core:javadoc"
       options.linksOffline('../core', rootProject.file("osgi.core/${relativePath(destinationDir)}").absolutePath)
     }
