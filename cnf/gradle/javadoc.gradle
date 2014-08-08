@@ -1,14 +1,17 @@
 /*
  * OSGi javadoc Gradle script
  */
- 
+
+def javadocName = project.name - 'osgi.'
+def javadocSpecs = bnd("${javadocName}.specs")
+
 task javadoc(overwrite: true, type: Javadoc) {
   description 'Build the javadoc.'
   group 'documentation'
   dependsOn compileJava
   classpath = compileJava.classpath
   source bnd.allSrcDirs
-  bnd.javadoc_specs.split(/\s*,\s*/).each {
+  javadocSpecs.split(/\s*,\s*/).each {
     include it.replace('.','/')+'/**/*.java'
   }
   configure(options) {
@@ -36,13 +39,13 @@ task javadoc(overwrite: true, type: Javadoc) {
             'noimplement:t:"Consumers of this API must not implement this interface"']
     classpath bnd.project.bootclasspath*.file
   }
-  if (bnd.javadoc_name != 'annotation') {
-    if (bnd.javadoc_name != 'core') {
-      dependsOn ":osgi.core:javadoc"
-      options.linksOffline('../core', rootProject.file("osgi.core/${relativePath(destinationDir)}").absolutePath)
+  // compute dependencies on other javadoc builds based upon the classpath
+  classpath.each {
+    def matcher = it =~ "/(osgi\\.([^/]*))/"
+    if (matcher) {
+      dependsOn ":${matcher[0][1]}:javadoc"
+      options.linksOffline("../${matcher[0][2]}", rootProject.file("${matcher[0][1]}/${relativePath(destinationDir)}").absolutePath)
     }
-    dependsOn ":osgi.annotation:javadoc"
-    options.linksOffline('../annotation', rootProject.file("osgi.annotation/${relativePath(destinationDir)}").absolutePath)
   }
   /* Turn off javadoc 8 overly pedantic lint checking */
   if (JavaVersion.current().isJava8Compatible()) {
@@ -51,7 +54,7 @@ task javadoc(overwrite: true, type: Javadoc) {
   doFirst {
     project.delete(destinationDir)
     logger.info "Title         : ${options.windowTitle}"
-    logger.info "Packages      : ${bnd.javadoc_specs}"
+    logger.info "Packages      : ${javadocSpecs}"
     logger.info "Destdir       : ${destinationDir}"
   }
   def license = rootProject.file('osgi.companion/legal/OSGiSpecificationLicense-v20.html')
@@ -72,8 +75,8 @@ task(type: Zip, 'javadoc.zip') {
   group 'documentation'
   dependsOn javadoc
   from javadoc.destinationDir
-  into bnd.javadoc_name
+  into javadocName
   destinationDir docsDir
-  archiveName "osgi.${bnd.javadoc_name}.javadoc.zip"
+  archiveName "osgi.${javadocName}.javadoc.zip"
 }
 
