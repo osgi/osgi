@@ -1,0 +1,79 @@
+/*
+ * OSGi javadoc Gradle script
+ */
+ 
+task javadoc(overwrite: true, type: Javadoc) {
+  description 'Build the javadoc.'
+  group 'documentation'
+  dependsOn compileJava
+  classpath = compileJava.classpath
+  source bnd.allSrcDirs
+  bnd.javadoc_specs.split(/\s*,\s*/).each {
+    include it.replace('.','/')+'/**/*.java'
+  }
+  configure(options) {
+    docTitle = "OSGi&trade; ${bnd.javadoc_title} Release ${bnd.osgi_release}"
+    windowTitle = "OSGi ${bnd.javadoc_title} Release ${bnd.osgi_release}"
+    bottom = "<font size=-1>${bnd.copyright_html} Licensed under the <a href=\"{@docRoot}/LICENSE.html\">OSGi Specification License, Version 2.0</a></font>"
+    header = "<b>OSGi&trade; ${bnd.javadoc_title}</b><br/><font size=-1>Release ${bnd.osgi_release}</font>"
+    charSet = 'UTF-8'
+    encoding = 'UTF-8'
+    docEncoding = 'UTF-8'
+    version = false
+    use = true
+    splitIndex = true
+    author = false
+    noDeprecated = false
+    noDeprecatedList = false
+    noIndex = false
+    noNavBar = false
+    noTree = false
+    tags = ['Immutable:t:"Immutable"',
+            'ThreadSafe:t:"ThreadSafe"',
+            'NotThreadSafe:t:"NotThreadSafe"',
+            'GuardedBy:mf:"Guarded By:"',
+            'security:m:"Required Permissions"',
+            'noimplement:t:"Consumers of this API must not implement this interface"']
+    classpath bnd.project.bootclasspath*.file
+  }
+  if (bnd.javadoc_name != 'annotation') {
+    if (bnd.javadoc_name != 'core') {
+      dependsOn ":osgi.core:javadoc"
+      options.linksOffline('../core', rootProject.file("osgi.core/${relativePath(destinationDir)}").absolutePath)
+    }
+    dependsOn ":osgi.annotation:javadoc"
+    options.linksOffline('../annotation', rootProject.file("osgi.annotation/${relativePath(destinationDir)}").absolutePath)
+  }
+  /* Turn off javadoc 8 overly pedantic lint checking */
+  if (JavaVersion.current().isJava8Compatible()) {
+    options.addStringOption('Xdoclint:none', '-protected') 
+  }
+  doFirst {
+    project.delete(destinationDir)
+    logger.info "Title         : ${options.windowTitle}"
+    logger.info "Packages      : ${bnd.javadoc_specs}"
+    logger.info "Destdir       : ${destinationDir}"
+  }
+  def license = rootProject.file('osgi.companion/legal/OSGiSpecificationLicense-v20.html')
+  inputs.file license
+  doLast {
+    copy {
+      from license
+      into destinationDir
+      rename {
+        'LICENSE.html'
+      }
+    }
+  }
+}
+
+task(type: Zip, 'javadoc.zip') {
+  description 'Zip the javadoc.'
+  group 'documentation'
+  dependsOn javadoc
+  from javadoc.destinationDir
+  into bnd.javadoc_name
+  destinationDir docsDir
+  archiveName "osgi.${bnd.javadoc_name}.javadoc.zip"
+}
+

@@ -17,7 +17,14 @@ Include-Resource 				: ${enterprise.resources}
 
 -buildpath 					= \
 	${replace;${enterprise.specs};.+;$0\\;version=project}, \
-	ee.foundation;version=1.1
+    osgi.annotation;version=latest, \
+    osgi.core;version=latest, \
+    org.apache.geronimo.specs.geronimo-servlet_2.5_spec;version=latest, \
+    org.eclipse.persistence.jpa_spec;version=latest, \
+    com.icl.saxon;version=latest, \
+	ee.minimum;version=1.2
 
 -include : layout.bnd
- 
+javadoc.name = enterprise
+javadoc.specs = ${enterprise.specs}
+javadoc.title = Enterprise
