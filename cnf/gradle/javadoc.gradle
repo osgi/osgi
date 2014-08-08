@@ -39,13 +39,13 @@ task javadoc(overwrite: true, type: Javadoc) {
             'noimplement:t:"Consumers of this API must not implement this interface"']
     classpath bnd.project.bootclasspath*.file
   }
-  if (javadocName != 'annotation') {
-    if (javadocName != 'core') {
-      dependsOn ":osgi.core:javadoc"
-      options.linksOffline('../core', rootProject.file("osgi.core/${relativePath(destinationDir)}").absolutePath)
+  // compute dependencies on other javadoc builds based upon the classpath
+  classpath.each {
+    def matcher = it =~ "/(osgi\\.([^/]*))/"
+    if (matcher) {
+      dependsOn ":${matcher[0][1]}:javadoc"
+      options.linksOffline("../${matcher[0][2]}", rootProject.file("${matcher[0][1]}/${relativePath(destinationDir)}").absolutePath)
     }
-    dependsOn ":osgi.annotation:javadoc"
-    options.linksOffline('../annotation', rootProject.file("osgi.annotation/${relativePath(destinationDir)}").absolutePath)
   }
   /* Turn off javadoc 8 overly pedantic lint checking */
   if (JavaVersion.current().isJava8Compatible()) {
