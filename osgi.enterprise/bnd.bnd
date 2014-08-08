@@ -21,8 +21,7 @@ Include-Resource 				: ${enterprise.resources}
     osgi.core;version=latest, \
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec;version=latest, \
     org.eclipse.persistence.jpa_spec;version=latest, \
-    com.icl.saxon;version=latest, \
-	ee.minimum;version=1.2
+    com.icl.saxon;version=latest
 
 -include : layout.bnd
 javadoc.name = enterprise

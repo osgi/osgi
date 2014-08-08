@@ -13,8 +13,7 @@ Include-Resource: ${annotation.resources}
     ${annotation.specs} 
 
 -buildpath = \
-    ${replace;${annotation.specs};.+;$0\\;version=project}, \
-    ee.minimum; version=1.3
+    ${replace;${annotation.specs};.+;$0\\;version=project}
 
 -include : layout.bnd
 javadoc.name = annotation
