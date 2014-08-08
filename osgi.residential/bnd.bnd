@@ -23,6 +23,4 @@ Include-Resource 				: ${residential.resources}
     com.icl.saxon;version=latest
 
 -include : layout.bnd
-javadoc.name = residential
-javadoc.specs = ${residential.specs}
 javadoc.title = Residential

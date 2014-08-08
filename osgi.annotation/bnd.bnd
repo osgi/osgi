@@ -16,6 +16,4 @@ Include-Resource: ${annotation.resources}
     ${replace;${annotation.specs};.+;$0\\;version=project}
 
 -include : layout.bnd
-javadoc.name = annotation
-javadoc.specs = ${annotation.specs}
 javadoc.title = Annotation

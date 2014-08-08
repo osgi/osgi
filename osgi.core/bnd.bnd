@@ -20,6 +20,4 @@ Include-Resource				: ${core.resources}
 	osgi.annotation;version=latest
 
 -include : layout.bnd
-javadoc.name = core
-javadoc.specs = ${core.specs}
 javadoc.title = Core

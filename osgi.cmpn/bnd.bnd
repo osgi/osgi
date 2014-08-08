@@ -24,6 +24,4 @@ Include-Resource 				: ${cmpn.resources}
     com.icl.saxon;version=latest
 
 -include : layout.bnd
-javadoc.name = cmpn
-javadoc.specs = ${cmpn.specs}
 javadoc.title = Compendium

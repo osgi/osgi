@@ -24,6 +24,4 @@ Include-Resource 				: ${enterprise.resources}
     com.icl.saxon;version=latest
 
 -include : layout.bnd
-javadoc.name = enterprise
-javadoc.specs = ${enterprise.specs}
 javadoc.title = Enterprise
