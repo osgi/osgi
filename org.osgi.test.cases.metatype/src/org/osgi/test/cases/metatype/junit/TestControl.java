@@ -793,7 +793,8 @@ public class TestControl extends DefaultTestBundleControl {
 		return result;
 	}
 
-	private static class ManagedServiceMetaTypeProvider implements ManagedService, MetaTypeProvider {
+	static class ManagedServiceMetaTypeProvider implements ManagedService,
+			MetaTypeProvider {
 		public ObjectClassDefinition getObjectClassDefinition(String id,
 				String locale) {
 			return null;
@@ -809,7 +810,8 @@ public class TestControl extends DefaultTestBundleControl {
 		}
 	}
 	
-	private static class ManagedServiceFactoryMetaTypeProvider implements ManagedServiceFactory, MetaTypeProvider {
+	static class ManagedServiceFactoryMetaTypeProvider implements
+			ManagedServiceFactory, MetaTypeProvider {
 		public ObjectClassDefinition getObjectClassDefinition(String id,
 				String locale) {
 			return null;

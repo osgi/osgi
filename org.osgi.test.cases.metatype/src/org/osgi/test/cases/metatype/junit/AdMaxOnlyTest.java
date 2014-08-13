@@ -129,9 +129,9 @@ public class AdMaxOnlyTest extends MetaTypeTest {
 		MetaTypeService mts = (MetaTypeService)getContext().getService(ref);
 		MetaTypeInformation mti = mts.getMetaTypeInformation(bundle);
 		ObjectClassDefinition ocd = mti.getObjectClassDefinition("maxOnly", null);
-		AttributeDefinition[] ads = ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
-		for (int i = 0; i < ads.length; i++) {
-			this.ads.put(ads[i].getID(), ads[i]);
+		AttributeDefinition[] lads = ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
+		for (int i = 0; i < lads.length; i++) {
+			this.ads.put(lads[i].getID(), lads[i]);
 		}
 	}
 

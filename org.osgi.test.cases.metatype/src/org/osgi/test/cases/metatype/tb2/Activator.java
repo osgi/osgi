@@ -27,7 +27,6 @@ package org.osgi.test.cases.metatype.tb2;
 
 import java.util.Hashtable;
 
-import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
