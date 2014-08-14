@@ -1,7 +1,6 @@
 
 package org.osgi.test.cases.enocean;
 
-import java.io.InputStream;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.event.EventAdmin;
@@ -21,18 +20,10 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  */
 public abstract class EnOceanTestCase extends DefaultTestBundleControl {
 
-	// /** enOceanInOutRef */
-	// protected ServiceReference enOceanInOutRef;
 	/** testStepServiceRef */
 	protected ServiceReference					testStepServiceRef;
-	// /** enOceanInOut */
-	// protected EnOceanInOut enOceanInOut;
 	/** testStepService */
 	protected TestStep							testStepService;
-	/** inputStream */
-	protected InputStream						enOceanInOutInputStreamYYY;
-	// /** outputStream */
-	// protected OutputStream enOceanInOutOutputStream;
 
 	/** devices */
 	protected ServiceListener					devices;
@@ -56,14 +47,8 @@ public abstract class EnOceanTestCase extends DefaultTestBundleControl {
 		 * Gets the currently registered EnOceanHost and access its streams. Get
 		 * testStepService.
 		 */
-		// enOceanInOutRef =
-		// getContext().getServiceReference(EnOceanInOut.class.getName());
 		testStepServiceRef = getContext().getServiceReference(TestStep.class.getName());
-		// enOceanInOut = (EnOceanInOut)
-		// getContext().getService(enOceanInOutRef);
 		testStepService = (TestStep) getContext().getService(testStepServiceRef);
-		// enOceanInOutInputStream = enOceanInOut.getInputStream();
-		// enOceanInOutOutputStream = enOceanInOut.getOutputStream();
 
 		/* Tracks device creation */
 		devices = new ServiceListener(getContext(), EnOceanDevice.class);
@@ -86,10 +71,8 @@ public abstract class EnOceanTestCase extends DefaultTestBundleControl {
 
 	protected void tearDown() throws Exception {
 		getContext().ungetService(eventAdminRef);
-		// getContext().ungetService(enOceanInOutRef);
 		devices.close();
 		events.close();
-		// enOceanInOut.resetBuffers();
 		ServiceReference[] deviceRefs = getContext().getServiceReferences(EnOceanDevice.class.getName(), null);
 		if (deviceRefs != null) {
 			for (int i = 0; i < deviceRefs.length; i++) {

@@ -23,12 +23,8 @@ public class RegistrationTests extends EnOceanTestCase {
 		/* Insert a device */
 		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
-		// Use testStepService instead of enOceanInOutOutputStream...
 		// Push everything in the command...
 		testStepService.execute(pkt.serialize());
-		// log("DEBUG: write in enOceanInOutOutputStream");
-		// enOceanInOutOutputStream.write(pkt.serialize());
-		// enOceanInOutOutputStream.flush();
 
 		// Device added
 		String lastServiceEvent = devices.waitForService();

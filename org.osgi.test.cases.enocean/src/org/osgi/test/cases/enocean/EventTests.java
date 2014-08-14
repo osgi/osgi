@@ -51,11 +51,8 @@ public class EventTests extends EnOceanTestCase {
 		/* Insert a device */
 		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket teachInPkt = new EspRadioPacket(teachIn);
-		// Use testStepService instead of enOceanInOutOutputStream...
 		// Push everything in the command...
 		testStepService.execute(teachInPkt.serialize());
-		// log("DEBUG: write in enOceanInOutOutputStream");
-		// enOceanInOutOutputStream.write(teachInPkt.serialize());
 
 		/* First get a reference towards the device */
 		String lastServiceEvent = devices.waitForService();
@@ -67,11 +64,8 @@ public class EventTests extends EnOceanTestCase {
 		MessageA5_02_01 measure = new MessageA5_02_01(Fixtures.TEMPERATURE);
 		measure.setSenderId(Fixtures.HOST_ID);
 		EspRadioPacket measurePkt = new EspRadioPacket(measure);
-		// Use testStepService instead of enOceanInOutOutputStream...
 		// Push everything in the command...
 		testStepService.execute(measurePkt.serialize());
-		// log("DEBUG: write in enOceanInOutOutputStream");
-		// enOceanInOutOutputStream.write(measurePkt.serialize());
 
 		Event event = events.waitForEvent();
 

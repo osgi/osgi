@@ -57,8 +57,6 @@ public class ExportTestCase extends EnOceanTestCase {
 		eventAdmin.sendEvent(evt);
 
 		byte[] data = new byte[256];
-		// log("DEBUG: read from enOceanInOutInputStream");
-		// int size = enOceanInOutInputStream.read(data);
 		log("DEBUG: call testStepService.getCurrentData()");
 		data = testStepService.getCurrentData();
 		int size = data.length;
