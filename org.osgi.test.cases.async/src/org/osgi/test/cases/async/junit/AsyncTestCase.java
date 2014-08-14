@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+, MyService.class * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +69,7 @@ public class AsyncTestCase extends OSGiTestCase {
 	 */
 	public void testAsyncCall() throws Exception {
 		
-		MyService service = async.mediate(normalReg.getReference());
+		MyService service = async.mediate(normalReg.getReference(), MyService.class);
 		
 		// This call waits for a second
 		Promise<Integer> p = async.call(service.countSlowly(2));

@@ -96,7 +96,7 @@ public class ServiceExceptionTestCase extends OSGiTestCase {
 	}
 
 	public void testAsyncCallAfterUnregistered() throws Exception {
-		MyService mediated = async.mediate(factoryReg.getReference());
+		MyService mediated = async.mediate(factoryReg.getReference(), MyService.class);
 		int mediatedResult = mediated.countSlowly(10);
 		factoryReg.unregister();
 
@@ -104,7 +104,7 @@ public class ServiceExceptionTestCase extends OSGiTestCase {
 	}
 
 	public void testAsyncExecuteAfterUnregistered() throws Exception {
-		async.mediate(factoryReg.getReference()).countSlowly(10);
+		async.mediate(factoryReg.getReference(), MyService.class).countSlowly(10);
 
 		factoryReg.unregister();
 
@@ -114,7 +114,7 @@ public class ServiceExceptionTestCase extends OSGiTestCase {
 	}
 
 	public void testAsyncCallWhenFactoryReturnsNull() throws Exception {
-		MyService mediated = async.mediate(factoryReg.getReference());
+		MyService mediated = async.mediate(factoryReg.getReference(), MyService.class);
 		int mediatedResult = mediated.countSlowly(10);
 		factory.setReturnNull(true);
 
@@ -122,7 +122,7 @@ public class ServiceExceptionTestCase extends OSGiTestCase {
 	}
 
 	public void testAsyncExecuteWhenFactoryReturnsNull() throws Exception {
-		async.mediate(factoryReg.getReference()).countSlowly(10);
+		async.mediate(factoryReg.getReference(), MyService.class).countSlowly(10);
 
 		factory.setReturnNull(true);
 
@@ -134,7 +134,7 @@ public class ServiceExceptionTestCase extends OSGiTestCase {
 	public void testAsyncCallWhenImplStopped() throws Exception {
 		// Note that no test is done in this case for execute because there is no way
 		// the impl can log after it is stopped.
-		MyService mediated = async.mediate(factoryReg.getReference());
+		MyService mediated = async.mediate(factoryReg.getReference(), MyService.class);
 		int mediatedResult = mediated.countSlowly(10);
 		try {
 			asyncBundle.stop();
@@ -146,7 +146,7 @@ public class ServiceExceptionTestCase extends OSGiTestCase {
 
 	public void testAsyncCallWhenClientStopped() throws Exception {
 		Async clientAsync = getClientAsync();
-		MyService mediated = clientAsync.mediate(factoryReg.getReference());
+		MyService mediated = clientAsync.mediate(factoryReg.getReference(), MyService.class);
 		int mediatedResult = mediated.countSlowly(10);
 		try {
 			clientBundle.stop();
@@ -158,7 +158,7 @@ public class ServiceExceptionTestCase extends OSGiTestCase {
 
 	public void testAsyncExecuteWhenClientStopped() throws Exception {
 		Async clientAsync = getClientAsync();
-		clientAsync.mediate(factoryReg.getReference()).countSlowly(10);
+		clientAsync.mediate(factoryReg.getReference(), MyService.class).countSlowly(10);
 		try {
 			clientBundle.stop();
 			Promise<LogEntry> asyncErrorPromise = asyncErrors.getAsyncError();

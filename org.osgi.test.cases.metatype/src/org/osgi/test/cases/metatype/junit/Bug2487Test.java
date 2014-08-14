@@ -49,12 +49,16 @@ public class Bug2487Test extends MetaTypeTest {
 	
 	protected void setUp() throws Exception {
 		ref = getContext().getServiceReference(MetaTypeService.class.getName());
-		bundle = install("bug2487.jar");
+		bundle = getTestBundle();
 		bundle.start();
 		MetaTypeService mts = (MetaTypeService)getContext().getService(ref);
 		mti = mts.getMetaTypeInformation(bundle);
 	}
-	
+
+	protected Bundle getTestBundle() throws Exception {
+		return install("bug2487.jar");
+	}
+
 	protected void tearDown() throws Exception {
 		getContext().ungetService(ref);
 		bundle.uninstall();

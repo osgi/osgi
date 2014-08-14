@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metatype:MetaData xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.3.0">
+	<Designate factoryPid="car.1">
+		<Object ocdref="1"/>
+	</Designate>
+	<OCD id="1" name="car">
+		<AD default="yellow" id="11" name="color" type="String">
+			<Option label="black" value="black"/>
+			<Option label="white" value="white"/>
+		</AD>
+	</OCD>
+</metatype:MetaData>

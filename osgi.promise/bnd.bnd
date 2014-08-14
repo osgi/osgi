@@ -10,6 +10,8 @@ Export-Package: ${promise.packages}
 
 -dependson = ${promise.specs} 
 
--buildpath = ${replace;${promise.specs};.+;$0\\;version=project}
+-buildpath = ${replace;${promise.specs};.+;$0\\;version=project}, \
+    osgi.annotation;version=latest
 
 -include = layout.bnd
+javadoc.title = Promise

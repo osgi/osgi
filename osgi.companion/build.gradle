@@ -1,0 +1,25 @@
+/*
+ * osgi.companion Gradle build script
+ */
+
+def buildProject = project
+
+/* Configure the rootProject */
+configure(rootProject) {
+  defaultTasks += ':javadoc'
+
+  task javadoc {
+    dependsOn ":${buildProject.name}:${name}"
+    description 'Build all the OSGi javadoc.'
+    group 'documentation'
+  }
+}
+
+/* Configure this project */
+task javadoc(overwrite: true) {
+  description 'Build all the OSGi javadoc.'
+  group 'documentation'
+  bnd('-dependson').split(/\s*,\s*/).findAll({it.startsWith('osgi.')}).each {
+    dependsOn ":${it}:javadoc.zip"
+  }
+}

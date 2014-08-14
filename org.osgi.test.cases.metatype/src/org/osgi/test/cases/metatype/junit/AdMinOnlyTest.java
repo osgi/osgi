@@ -124,15 +124,19 @@ public class AdMinOnlyTest extends MetaTypeTest {
 	
 	protected void setUp() throws Exception {
 		ref = getContext().getServiceReference(MetaTypeService.class.getName());
-		bundle = install("tb3.jar");
+		bundle = getTestBundle();
 		bundle.start();
 		MetaTypeService mts = (MetaTypeService)getContext().getService(ref);
 		MetaTypeInformation mti = mts.getMetaTypeInformation(bundle);
 		ObjectClassDefinition ocd = mti.getObjectClassDefinition("minOnly", null);
-		AttributeDefinition[] ads = ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
-		for (int i = 0; i < ads.length; i++) {
-			this.ads.put(ads[i].getID(), ads[i]);
+		AttributeDefinition[] lads = ocd.getAttributeDefinitions(ObjectClassDefinition.ALL);
+		for (int i = 0; i < lads.length; i++) {
+			this.ads.put(lads[i].getID(), lads[i]);
 		}
+	}
+
+	protected Bundle getTestBundle() throws Exception {
+		return install("tb3.jar");
 	}
 	
 	protected void tearDown() throws Exception {

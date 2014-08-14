@@ -53,20 +53,24 @@ public class ActDeactComponent implements ComponentContextExposer {
 			Object key = en.nextElement();
 			properties.put(key, props.get(key));
 		}
+		log(getComponentName() + " activate");
     setDataBits(ACTIVATE_CC);
   }
 
   protected void deactivate(ComponentContext ctxt) {
+		log(getComponentName() + " deactivate");
     setDataBits(DEACTIVATE_CC);
   }
 
   protected void act() {
     properties = new Properties();
     properties.put(ComponentConstants.COMPONENT_NAME, getName());
+		log(getComponentName() + " act");
     setDataBits(ACT);
   }
 
   protected void deact() {
+		log(getComponentName() + " deact");
     setDataBits(DEACT);
   }
 
@@ -79,20 +83,24 @@ public class ActDeactComponent implements ComponentContextExposer {
 			Object key = en.nextElement();
 			properties.put(key, props.get(key));
 		}
+		log(getComponentName() + " actCc");
     setDataBits(ACT_CC);
   }
 
   protected void deactCc(ComponentContext ctxt) {
+		log(getComponentName() + " deactCc");
     setDataBits(DEACT_CC);
   }
 
   protected void actBc(BundleContext bc) {
     properties = new Properties();
     properties.put(ComponentConstants.COMPONENT_NAME, getName());
+		log(getComponentName() + " actBc");
     setDataBits(ACT_BC);
   }
 
   protected void deactBc(BundleContext bc) {
+		log(getComponentName() + " deactBc");
     setDataBits(DEACT_BC);
   }
 
@@ -103,10 +111,12 @@ public class ActDeactComponent implements ComponentContextExposer {
       Object key = it.next();
       properties.put(key, props.get(key));
     }
+		log(getComponentName() + " actMap");
     setDataBits(ACT_MAP);
   }
 
   protected void deactMap(Map props) {
+		log(getComponentName() + " deactMap");
     setDataBits(DEACT_MAP);
   }
 
@@ -119,19 +129,23 @@ public class ActDeactComponent implements ComponentContextExposer {
 			Object key = en.nextElement();
 			properties.put(key, props.get(key));
 		}
+		log(getComponentName() + " actCcBcMap");
     setDataBits(ACT_CC_BC_MAP);
   }
 
   protected void deactCcBcMap(ComponentContext ctxt, BundleContext bc, Map props) {
+		log(getComponentName() + " deactCcBcMap");
     setDataBits(DEACT_CC_BC_MAP);
   }
 
   protected void deactInt(int reason) {
+		log(getComponentName() + " deactInt");
     setDataBits(DEACT_INT | reason << 16);
   }
 
   protected void deactCcBcMapInt(ComponentContext ctxt, BundleContext bc,
       Map props, int reason) {
+		log(getComponentName() + " deactCcBcMapInt");
     setDataBits(DEACT_CC_BC_MAP_INT | reason << 16);
   }
 
@@ -153,7 +167,16 @@ public class ActDeactComponent implements ComponentContextExposer {
     return "name.unknown";
   }
 
+	private String getComponentName() {
+		return properties.get("component.name") + "@"
+				+ Integer.toHexString(System.identityHashCode(this));
+	}
+
   public ComponentContext getComponentContext() {
     return ctxt;
   }
+
+	private static void log(String message) {
+		System.out.println(message);
+	}
 }

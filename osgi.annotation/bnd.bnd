@@ -17,3 +17,4 @@ Include-Resource: ${annotation.resources}
     ee.minimum; version=1.3
 
 -include : layout.bnd
+javadoc.title = Annotation

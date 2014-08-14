@@ -74,7 +74,7 @@ public class ProgrammerErrorTestCase extends OSGiTestCase {
 	}
 
 	public void testAsyncCallWithoutMediatorCall() {
-		async.mediate(normalReg.getReference());
+		async.mediate(normalReg.getReference(), MyService.class);
 		try {
 			async.call();
 			fail("Expected IllegalStateException");
@@ -86,7 +86,7 @@ public class ProgrammerErrorTestCase extends OSGiTestCase {
 	}
 
 	public void testAsyncCallWithMediatorCalledMultipleTimes() {
-		MyService mediated = async.mediate(normalReg.getReference());
+		MyService mediated = async.mediate(normalReg.getReference(), MyService.class);
 		try {
 			mediated.countSlowly(10);
 			try {
@@ -108,7 +108,7 @@ public class ProgrammerErrorTestCase extends OSGiTestCase {
 	}
 
 	public void testAsyncCallMultipleTimesWithSameMediator() {
-		MyService mediated = async.mediate(normalReg.getReference());
+		MyService mediated = async.mediate(normalReg.getReference(), MyService.class);
 		try {
 			mediated.countSlowly(10);
 			async.execute();
@@ -135,11 +135,11 @@ public class ProgrammerErrorTestCase extends OSGiTestCase {
 	}
 
 	public void testNewMediatorWithPendingMethods() {
-		MyService mediated = async.mediate(normalReg.getReference());
+		MyService mediated = async.mediate(normalReg.getReference(), MyService.class);
 		try {
 			mediated.doSlowStuff(10);
 			// must be able to always create a new mediated object on the same thread
-			MyService newMediated = async.mediate(normalReg.getReference());
+			MyService newMediated = async.mediate(normalReg.getReference(), MyService.class);
 			try {
 				// must not be able to create new mediated calls from the same thread
 				// even if it is a different mediator
@@ -160,7 +160,7 @@ public class ProgrammerErrorTestCase extends OSGiTestCase {
 	}
 	public void testAsyncAndMediatorCalledWithDifferentThreads() throws InterruptedException {
 		final CountDownLatch called = new CountDownLatch(1);
-		final MyService mediated = async.mediate(normalReg.getReference());
+		final MyService mediated = async.mediate(normalReg.getReference(), MyService.class);
 		final AtomicReference<Throwable> error = new AtomicReference<Throwable>();
 		Runnable callMediated = new Runnable() {
 			public void run() {

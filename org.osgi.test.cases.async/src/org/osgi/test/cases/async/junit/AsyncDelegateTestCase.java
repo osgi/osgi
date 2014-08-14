@@ -71,7 +71,7 @@ public class AsyncDelegateTestCase extends OSGiTestCase  {
 	}
 
 	public void testCallDelegateReturnPromise() throws Exception {
-		MyService service = async.mediate(delegateReg.getReference());
+		MyService service = async.mediate(delegateReg.getReference(), MyService.class);
 
 		Promise<Integer> p = async.call(service.countSlowly(2));
 		assertFalse(p.isDone());
@@ -84,7 +84,7 @@ public class AsyncDelegateTestCase extends OSGiTestCase  {
 	}
 
 	public void testCallDelegateReturnPromiseFail() throws Exception {
-		MyService service = async.mediate(delegateReg.getReference());
+		MyService service = async.mediate(delegateReg.getReference(), MyService.class);
 
 		Promise<Integer> p = async.call(service.failSlowly(2));
 		assertFalse(p.isDone());
@@ -96,7 +96,7 @@ public class AsyncDelegateTestCase extends OSGiTestCase  {
 	}
 
 	public void testCallDelegateReturnNull() throws Exception {
-		MyService service = async.mediate(delegateReg.getReference());
+		MyService service = async.mediate(delegateReg.getReference(), MyService.class);
 
 		Promise<Integer> p = async.call(service.nonDelegateCountSlowly(2));
 		assertFalse(p.isDone());
@@ -108,7 +108,7 @@ public class AsyncDelegateTestCase extends OSGiTestCase  {
 	}
 
 	public void testCallDelegateReturnNullFail() throws Exception {
-		MyService service = async.mediate(delegateReg.getReference());
+		MyService service = async.mediate(delegateReg.getReference(), MyService.class);
 
 		Promise<Integer> p = async.call(service.nonDelegateFailSlowly(2));
 		assertFalse(p.isDone());
@@ -120,7 +120,7 @@ public class AsyncDelegateTestCase extends OSGiTestCase  {
 	}
 
 	public void testCallDelegateException() throws Exception {
-		MyService service = async.mediate(delegateReg.getReference());
+		MyService service = async.mediate(delegateReg.getReference(), MyService.class);
 
 		Promise<Integer> p = async.call(service.delegateFail());
 		// fails instantaneously
@@ -133,7 +133,7 @@ public class AsyncDelegateTestCase extends OSGiTestCase  {
 	}
 
 	public void testExecuteDelegateReturnTrue() throws Exception {
-		MyService service = async.mediate(delegateReg.getReference());
+		MyService service = async.mediate(delegateReg.getReference(), MyService.class);
 
 		service.countSlowly(2);
 		async.execute();
@@ -144,7 +144,7 @@ public class AsyncDelegateTestCase extends OSGiTestCase  {
 	}
 
 	public void testExecuteDelegateReturnTrueFail() throws Exception {
-		MyService service = async.mediate(delegateReg.getReference());
+		MyService service = async.mediate(delegateReg.getReference(), MyService.class);
 
 		service.failSlowly(2);
 		// cannot check for logging here since the work is done on a thread outside of Async impl
@@ -156,7 +156,7 @@ public class AsyncDelegateTestCase extends OSGiTestCase  {
 	}
 
 	public void testExecuteDelegateReturnFalse() throws Exception {
-		async.mediate(delegateReg.getReference()).nonDelegateCountSlowly(2);
+		async.mediate(delegateReg.getReference(), MyService.class).nonDelegateCountSlowly(2);
 
 		async.execute();
 
@@ -166,7 +166,7 @@ public class AsyncDelegateTestCase extends OSGiTestCase  {
 	}
 
 	public void testExecuteDelegateReturnFalseFail() throws Exception {
-		MyService service = async.mediate(delegateReg.getReference());
+		MyService service = async.mediate(delegateReg.getReference(), MyService.class);
 
 		service.nonDelegateFailSlowly(2);
 		// cannot check for logging here since the work is done on a thread outside of Async impl
@@ -178,7 +178,7 @@ public class AsyncDelegateTestCase extends OSGiTestCase  {
 	}
 
 	public void testExecuteDelegateException() throws Exception {
-		async.mediate(delegateReg.getReference()).delegateFail();
+		async.mediate(delegateReg.getReference(), MyService.class).delegateFail();
 
 		Promise<LogEntry> asyncErrorPromise = asyncErrors.getAsyncError();
 		async.execute();

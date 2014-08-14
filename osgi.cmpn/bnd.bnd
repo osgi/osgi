@@ -17,6 +17,12 @@ Include-Resource 				: ${cmpn.resources}
 
 -buildpath 					= \
 	${replace;${cmpn.specs};.+;$0\\;version=project}, \
+    osgi.annotation;version=latest, \
+    osgi.core;version=latest, \
+    org.apache.geronimo.specs.geronimo-servlet_2.5_spec;version=latest, \
+    org.eclipse.persistence.jpa_spec;version=latest, \
+    com.icl.saxon;version=latest, \
 	ee.foundation;version=1.1
 
 -include : layout.bnd
+javadoc.title = Compendium
