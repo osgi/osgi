@@ -60,12 +60,12 @@ public class XmlDoclet extends Doclet {
 	PrintWriter	pw;
 	String		currentPackage;
 	String		currentClass;
-	RootDoc		root;
+	final RootDoc	root;
 
 	public static boolean start(RootDoc doc) {
 		try {
-			XmlDoclet doclet = new XmlDoclet();
-			doclet.startx(doc);
+			XmlDoclet doclet = new XmlDoclet(doc);
+			doclet.start();
 			return true;
 		}
 		catch (Exception e) {
@@ -78,8 +78,11 @@ public class XmlDoclet extends Doclet {
 		return LanguageVersion.JAVA_1_5;
 	}
 
-	public void startx(RootDoc doc) throws Exception {
-		this.root = doc;
+	private XmlDoclet(RootDoc root) {
+		this.root = root;
+	}
+
+	public void start() throws Exception {
 		File file = new File(getDestDir(), "javadoc.xml");
 		FileOutputStream out = new FileOutputStream(file);
 		pw = new PrintWriter(new OutputStreamWriter(out, "utf-8"));
