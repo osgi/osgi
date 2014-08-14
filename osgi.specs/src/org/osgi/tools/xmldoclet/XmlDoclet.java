@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.sun.javadoc.AnnotationDesc;
@@ -85,9 +87,20 @@ public class XmlDoclet extends Doclet {
 		pw.println("<?xml version='1.0' encoding='utf-8'?>");
 		pw.println("<top>");
 
-		PackageDoc packages[] = doc.specifiedPackages();
-		for (int p = 0; packages != null && p < packages.length; p++)
-			print(packages[p]);
+		Set<PackageDoc> packages = new TreeSet<PackageDoc>();
+		PackageDoc specifiedPackages[] = root.specifiedPackages();
+		for (int p = 0; specifiedPackages != null && p < specifiedPackages.length; p++) {
+			packages.add(specifiedPackages[p]);
+		}
+
+		ClassDoc specifiedClasses[] = root.specifiedClasses();
+		for (int c = 0; specifiedClasses != null && c < specifiedClasses.length; c++) {
+			packages.add(specifiedClasses[c].containingPackage());
+		}
+
+		for (PackageDoc packageDoc : packages) {
+			print(packageDoc);
+		}
 
 		pw.println("</top>");
 		pw.close();
