@@ -57,8 +57,14 @@ public class ExportTestCase extends EnOceanTestCase {
 		eventAdmin.sendEvent(evt);
 
 		byte[] data = new byte[256];
-		int size = inputStream.read(data);
+		// log("DEBUG: read from enOceanInOutInputStream");
+		// int size = enOceanInOutInputStream.read(data);
+		log("DEBUG: call testStepService.getCurrentData()");
+		data = testStepService.getCurrentData();
+		int size = data.length;
 		EspPacket pkt = new EspPacket(Utils.byteRange(data, 0, size));
+
+		log("DEBUG: Utils.bytesToHex(msg.getBytes()): " + Utils.bytesToHex(msg.getBytes()) + ", Utils.bytesToHex(pkt.getData().getBytes()): " + Utils.bytesToHex(pkt.getData().getBytes()));
 
 		assertEquals("EnOcean radio message and forged message mismatch", Utils.bytesToHex(msg.getBytes()), Utils.bytesToHex(pkt.getData().getBytes()));
 

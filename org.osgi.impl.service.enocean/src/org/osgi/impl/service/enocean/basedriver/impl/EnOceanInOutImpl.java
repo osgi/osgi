@@ -16,9 +16,7 @@
 
 package org.osgi.impl.service.enocean.basedriver.impl;
 
-import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.OutputStream;
 import org.osgi.test.cases.enoceansimulation.EnOceanInOut;
 
 /**
@@ -31,30 +29,30 @@ public class EnOceanInOutImpl implements EnOceanInOut {
 	 */
 	private CustomInputStream		inputStream;
 
-	/**
-	 * EnOceanHostImpl's output stream.
-	 */
-	private ByteArrayOutputStream	outputStream;
+	// /**
+	// * EnOceanHostImpl's output stream.
+	// */
+	// private ByteArrayOutputStream outputStream;
 
 	/**
 	 * 
 	 */
 	public EnOceanInOutImpl() {
 		inputStream = new CustomInputStream(new byte[] {});
-		outputStream = new ByteArrayOutputStream();
+		// outputStream = new ByteArrayOutputStream();
 	}
 
 	public void resetBuffers() {
 		inputStream.reset();
-		outputStream.reset();
+		// outputStream.reset();
 	}
 
 	public InputStream getInputStream() {
 		return inputStream;
 	}
 
-	public OutputStream getOutputStream() {
-		return outputStream;
-	}
+	// public OutputStream getOutputStream() {
+	// return outputStream;
+	// }
 
 }

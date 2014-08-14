@@ -179,16 +179,27 @@ public class BaseTests extends EnOceanTestCase {
 		/* Insert a device */
 		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
-		outputStream.write(pkt.serialize());
+		// Use testStepService instead of enOceanInOutOutputStream...
+		// Push everything in the command...
+		testStepService.execute(pkt.serialize());
+		// log("DEBUG: write in enOceanInOutOutputStream");
+		// enOceanInOutOutputStream.write(pkt.serialize());
 
 		log("testRPC(), devices.waitForService()");
 		String wfs = devices.waitForService();
 		log("testRPC(), waitForService returned: " + wfs);
+		// [bnd] testRPC(), waitForService returned: SERVICE_ADDED
 
 		ServiceReference ref = devices.getServiceReference();
 		log("testRPC(), ref: " + ref);
+		// [bnd] testRPC(), ref:
+		// {org.osgi.service.enocean.EnOceanDevice}={enocean.device.chip_id=305419896,
+		// enocean.device.profile.rorg=165, DEVICE_CATEGORY=EnOcean,
+		// service.id=40, service.bundleid=7, service.scope=singleton}
 		EnOceanDevice device = (EnOceanDevice) getContext().getService(ref);
 		log("testRPC(), device: " + device);
+		// [bnd] testRPC(), device:
+		// org.osgi.impl.service.enocean.basedriver.impl.EnOceanDeviceImpl@49f92de5
 
 		EnOceanRPC rpc = new QueryFunction();
 		log("testRPC(), rpc: " + rpc);

@@ -16,8 +16,6 @@
 
 package org.osgi.test.cases.enoceansimulation;
 
-import java.io.InputStream;
-import java.io.OutputStream;
 
 /**
  * This class is intended to provide in/out (i.e. read/write) methods to emulate
@@ -25,23 +23,24 @@ import java.io.OutputStream;
  */
 public interface EnOceanInOut {
 
-	/**
-	 * Resets the data being exchanged on both input and output streams.
-	 */
-	public void resetBuffers();
+	// /**
+	// * Resets the data being exchanged on both input and output streams.
+	// */
+	// public void resetBuffers();
 
-	/**
-	 * Returns a handle to the current input stream used by the driver's host.
-	 * 
-	 * @return
-	 */
-	public InputStream getInputStream();
+	// /**
+	// * Returns a handle to the current input stream used by the driver's host.
+	// *
+	// * @return
+	// */
+	// public InputStream getInputStream();
 
-	/**
-	 * Returns a handle to the current output stream used by the driver's host.
-	 * 
-	 * @return
-	 */
-	public OutputStream getOutputStream();
+	// /**
+	// * Returns a handle to the current output stream used by the driver's
+	// host.
+	// *
+	// * @return
+	// */
+	// public OutputStream getOutputStream();
 
 }

@@ -168,6 +168,7 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 	 * @param data
 	 */
 	protected void dispatchToListeners(byte[] data) {
+		Logger.d(TAG, "dispatchToListeners(" + data + ")");
 		for (int i = 0; i < listeners.size(); i++) {
 			EnOceanPacketListener listener = (EnOceanPacketListener) listeners.get(i);
 			listener.radioPacketReceived(data);

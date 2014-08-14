@@ -2,7 +2,6 @@
 package org.osgi.test.cases.enocean;
 
 import java.io.InputStream;
-import java.io.OutputStream;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.event.EventAdmin;
@@ -14,7 +13,7 @@ import org.osgi.test.cases.enocean.utils.EventListener;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
 import org.osgi.test.cases.enocean.utils.Utils;
-import org.osgi.test.cases.enoceansimulation.EnOceanInOut;
+import org.osgi.test.cases.enoceansimulation.teststep.TestStep;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -22,35 +21,49 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  */
 public abstract class EnOceanTestCase extends DefaultTestBundleControl {
 
+	// /** enOceanInOutRef */
+	// protected ServiceReference enOceanInOutRef;
+	/** testStepServiceRef */
+	protected ServiceReference					testStepServiceRef;
+	// /** enOceanInOut */
+	// protected EnOceanInOut enOceanInOut;
+	/** testStepService */
+	protected TestStep							testStepService;
+	/** inputStream */
+	protected InputStream						enOceanInOutInputStreamYYY;
+	// /** outputStream */
+	// protected OutputStream enOceanInOutOutputStream;
+
 	/** devices */
 	protected ServiceListener					devices;
+
 	/** events */
 	protected EventListener						events;
+
+	/** eventAdminRef */
+	protected ServiceReference					eventAdminRef;
+	/** eventAdmin */
+	protected EventAdmin						eventAdmin;
 
 	/** msgDescriptionSet */
 	protected EnOceanMessageDescriptionSetImpl	msgDescriptionSet;
 	/** channelDescriptionSet */
 	protected EnOceanChannelDescriptionSetImpl	channelDescriptionSet;
-	/** eventAdminRef */
-	protected ServiceReference					eventAdminRef;
-	/** enOceanInOutRef */
-	protected ServiceReference					enOceanInOutRef;
-	/** inputStream */
-	protected InputStream						inputStream;
-	/** outputStream */
-	protected OutputStream						outputStream;
-	/** enOceanInOut */
-	protected EnOceanInOut						enOceanInOut;
-	/** eventAdmin */
-	protected EventAdmin						eventAdmin;
 
 	protected void setUp() throws Exception {
 
-		/* Gets the currently registered EnOceanHost and access its streams */
-		enOceanInOutRef = getContext().getServiceReference(EnOceanInOut.class.getName());
-		enOceanInOut = (EnOceanInOut) getContext().getService(enOceanInOutRef);
-		inputStream = enOceanInOut.getInputStream();
-		outputStream = enOceanInOut.getOutputStream();
+		/*
+		 * Gets the currently registered EnOceanHost and access its streams. Get
+		 * testStepService.
+		 */
+		// enOceanInOutRef =
+		// getContext().getServiceReference(EnOceanInOut.class.getName());
+		testStepServiceRef = getContext().getServiceReference(TestStep.class.getName());
+		// enOceanInOut = (EnOceanInOut)
+		// getContext().getService(enOceanInOutRef);
+		testStepService = (TestStep) getContext().getService(testStepServiceRef);
+		// enOceanInOutInputStream = enOceanInOut.getInputStream();
+		// enOceanInOutOutputStream = enOceanInOut.getOutputStream();
 
 		/* Tracks device creation */
 		devices = new ServiceListener(getContext(), EnOceanDevice.class);
@@ -73,15 +86,15 @@ public abstract class EnOceanTestCase extends DefaultTestBundleControl {
 
 	protected void tearDown() throws Exception {
 		getContext().ungetService(eventAdminRef);
-		getContext().ungetService(enOceanInOutRef);
+		// getContext().ungetService(enOceanInOutRef);
 		devices.close();
 		events.close();
-		enOceanInOut.resetBuffers();
+		// enOceanInOut.resetBuffers();
 		ServiceReference[] deviceRefs = getContext().getServiceReferences(EnOceanDevice.class.getName(), null);
 		if (deviceRefs != null) {
 			for (int i = 0; i < deviceRefs.length; i++) {
 				EnOceanDevice device = (EnOceanDevice) getContext().getService(deviceRefs[i]);
-				log("unregistering device : '" + Utils.bytesToHex(Utils.intTo4Bytes(device.getChipId())) + "'");
+				log("EnOceanTestCase: unregistering device : '" + Utils.bytesToHex(Utils.intTo4Bytes(device.getChipId())) + "'");
 				device.remove();
 			}
 		}

@@ -24,17 +24,24 @@ public class ManualRegistrationTestCase extends EnOceanTestCase {
 		MessageF6_02_01 teachIn = new MessageF6_02_01(1, true, 1, true);
 		teachIn.setSenderId(Fixtures.HOST_ID_2);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
-		outputStream.write(pkt.serialize());
-		outputStream.flush();
+		// Use testStepService instead of enOceanInOutOutputStream...
+		// Push everything in the command...
+		testStepService.execute(pkt.serialize());
+		// log("DEBUG: write in enOceanInOutOutputStream");
+		// enOceanInOutOutputStream.write(pkt.serialize());
+		// enOceanInOutOutputStream.flush();
 
 		String lastServiceEvent = devices.waitForService();
+		log("DEBUG: lastServiceEvent: " + lastServiceEvent);
 		ServiceReference ref = devices.getServiceReference();
+		log("DEBUG: ref: " + ref);
 
 		assertEquals(ServiceListener.SERVICE_ADDED, lastServiceEvent);
 		assertEquals("CHIP_ID mismatch", Fixtures.STR_HOST_ID_2, ref.getProperty(EnOceanDevice.CHIP_ID));
 		assertEquals("RORG mismatch", Fixtures.STR_RORG_RPS, ref.getProperty(EnOceanDevice.RORG));
 		assertNull(ref.getProperty(EnOceanDevice.FUNC));
 
+		log("DEBUG: Thread.sleep(500);");
 		Thread.sleep(500); // for some reason the fw may not have had time to
 							// register properly
 

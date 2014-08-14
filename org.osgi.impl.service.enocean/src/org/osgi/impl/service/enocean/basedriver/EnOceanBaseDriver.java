@@ -79,6 +79,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 		System.out.println("initial host path : " + hostPath);
 		if (hostPath != null && hostPath != "") {
 			if (hostPath.equals(":testcase:")) {
+				System.out.println("Create, and register EnOceanHostTestImpl.");
 				host = new EnOceanHostTestImpl(hostPath, this.bc);
 			}
 			registerHost(hostPath, host);
@@ -117,7 +118,8 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 	 * @see org.osgi.impl.service.enocean.basedriver.EnOceanPacketListener#radioPacketReceived(byte[])
 	 */
 	public void radioPacketReceived(byte[] data) {
-
+		Logger.d(TAG, "radioPacketReceived(data: " + data + ")");
+		Logger.d(TAG, "radioPacketReceived - data[0]: " + data[0] + ")");
 		Message msg;
 
 		/* First, determine if teach-in and eventually create a device */
@@ -158,7 +160,7 @@ public class EnOceanBaseDriver implements EnOceanPacketListener, ServiceTrackerC
 			int func = implDev.getFunc();
 			int type = implDev.getType();
 
-			Logger.d(TAG, "rorg: " + rorg + ", func:" + func + ", type:" + type);
+			Logger.d(TAG, "rorg: " + rorg + ", func: " + func + ", type: " + type);
 
 			msg.setFunc(func);
 			msg.setType(type);

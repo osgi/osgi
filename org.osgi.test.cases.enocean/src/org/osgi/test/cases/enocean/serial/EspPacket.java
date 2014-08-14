@@ -156,7 +156,6 @@ public class EspPacket {
 	}
 
 	private void deserialize(byte[] header, byte[] payload) {
-
 		if ((header[0] != SYNC_BYTE) || (header.length != 6)) {
 			throw new IllegalArgumentException("wrong header");
 		}

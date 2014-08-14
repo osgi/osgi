@@ -16,22 +16,30 @@
 
 package org.osgi.impl.service.enocean.basedriver.impl;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.enocean.basedriver.esp.EspPacket;
 import org.osgi.impl.service.enocean.utils.EnOceanHostImplException;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.test.cases.enoceansimulation.EnOceanInOut;
+import org.osgi.test.cases.enoceansimulation.teststep.TestStep;
+import org.osgi.test.cases.enoceansimulation.teststep.impl.TestStepForEnOceanImpl;
 
 /**
  *
  */
 public class EnOceanHostTestImpl extends EnOceanHostImpl {
 
-	private EnOceanInOut		enOceanInOut;
-	private CustomInputStream	duplicatedInputStream;
+	/**
+	 * EnOcean base driver impl's tag/prefix for logger.
+	 */
+	protected static final String	TAG	= "EnOceanHostTestImpl";
+
+	private EnOceanInOut			enOceanInOut;
+	// private CustomInputStream duplicatedInputStream;
+	private TestStepForEnOceanImpl				testStepService;
 
 	/**
 	 * @param path
@@ -47,39 +55,89 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 			e.printStackTrace();
 			Logger.e(TAG, "exception when registering enOceanInOut. e.getMessage(): " + e.getMessage());
 		}
+
+		// Get TestStepService service.
+		ServiceReference testStepServiceRef = bc.getServiceReference(TestStep.class.getName());
+		if (testStepServiceRef == null) {
+			String errorMessage = "EnOceanHostTestImpl can NOT get at least one ServiceReference object for a service that implements and was registered under the " + TestStep.class.getName()
+					+ " class.";
+			Logger.d(this.getClass().getName(), errorMessage);
+			throw new IllegalStateException(errorMessage);
+		} else {
+			testStepService = (TestStepForEnOceanImpl) bc.getService(testStepServiceRef);
+		}
+
 	}
 
 	public void startup() throws EnOceanHostImplException {
 		this.isRunning = true;
-		this.duplicatedInputStream = (CustomInputStream) enOceanInOut.getInputStream();
+		// this.duplicatedInputStream = (CustomInputStream)
+		// enOceanInOut.getInputStream();
 		this.start();
 	}
 
 	public void run() {
 		while (this.isRunning) {
 			try {
-				Thread.sleep(50);
+				Thread.sleep(400);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
+			// Logger.d(TAG,
+			// "EnOceanHostTestImpl.run() - periodically read in enOceanInOut.getOutputStream()");
 			try {
-				ByteArrayOutputStream byteOutputStream = (ByteArrayOutputStream) enOceanInOut.getOutputStream();
-				if (byteOutputStream.size() == 0) {
-					continue;
-				}
-				byte[] data = byteOutputStream.toByteArray();
-				if (data[0] != ENOCEAN_ESP_FRAME_START)
-					continue;
-				duplicatedInputStream.replace(data);
-				duplicatedInputStream.read();
-				byteOutputStream.reset();
-				Logger.d(TAG, "read bytes: " + Utils.bytesToHexString(data));
-				if (data[0] == ENOCEAN_ESP_FRAME_START) {
-					EspPacket packet = readPacket();
-					if (packet.getPacketType() == EspPacket.TYPE_RADIO) {
-						dispatchToListeners(packet.getFullData());
+
+				TestStepForEnOceanImpl testStepForEnOceanImpl =
+						testStepService;
+				byte[] command =
+						testStepForEnOceanImpl.getCurrentCommandAndReplaceItByNull();
+				// Logger.d(TAG, "command: " + command);
+				if (command == null) {
+					// Logger.d(TAG, "command == null");
+				} else {
+					byte[] data = command;
+					if (data[0] != ENOCEAN_ESP_FRAME_START) {
+						Logger.d(TAG, "data[0] != ENOCEAN_ESP_FRAME_START");
+					} else {
+						// duplicatedInputStream.replace(data);
+						// duplicatedInputStream.read();
+						// byteOutputStream.reset();
+						Logger.d(TAG, "read bytes: " + Utils.bytesToHexString(data));
+						if (data[0] == ENOCEAN_ESP_FRAME_START) {
+							Logger.d(TAG, "data[0] == ENOCEAN_ESP_FRAME_START");
+							// InputStream is =
+							// this.enOceanInOut.getInputStream()
+							EspPacket packet = readPacket(data);
+							if (packet.getPacketType() == EspPacket.TYPE_RADIO) {
+								Logger.d(TAG,
+										"packet.getPacketType() == EspPacket.TYPE_RADIO");
+								dispatchToListeners(packet.getFullData());
+							}
+						}
 					}
 				}
+
+				// // Move the following from the use of EnOceanInOut to
+				// TestStep.
+				// ByteArrayOutputStream byteOutputStream =
+				// (ByteArrayOutputStream) enOceanInOut.getOutputStream();
+				// if (byteOutputStream.size() == 0) {
+				// continue;
+				// }
+				// byte[] data = byteOutputStream.toByteArray();
+				// if (data[0] != ENOCEAN_ESP_FRAME_START) {
+				// continue;
+				// }
+				// duplicatedInputStream.replace(data);
+				// duplicatedInputStream.read();
+				// byteOutputStream.reset();
+				// Logger.d(TAG, "read bytes: " + Utils.bytesToHexString(data));
+				// if (data[0] == ENOCEAN_ESP_FRAME_START) {
+				// EspPacket packet = readPacket();
+				// if (packet.getPacketType() == EspPacket.TYPE_RADIO) {
+				// dispatchToListeners(packet.getFullData());
+				// }
+				// }
 			} catch (IOException ioexception) {
 				Logger.e(TAG, "Error while reading input packet: " + ioexception.getMessage());
 			}
@@ -91,23 +149,25 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 	 */
 	public void close() {
 		this.isRunning = false;
-		if (this.enOceanInOut.getOutputStream() != null)
-			try {
-				this.enOceanInOut.getOutputStream().close();
-			} catch (IOException ioexception) {
-				Logger.w(TAG, "Error while closing output stream.");
-			}
-		if (this.enOceanInOut.getInputStream() != null) {
-			try {
-				this.enOceanInOut.getInputStream().close();
-			} catch (IOException ioexception1) {
-				Logger.w(TAG, "Error while closing input stream.");
-			}
-		}
+		// if (this.enOceanInOut.getOutputStream() != null) {
+		// try {
+		// this.enOceanInOut.getOutputStream().close();
+		// } catch (IOException ioexception) {
+		// Logger.w(TAG, "Error while closing output stream.");
+		// }
+		// }
+		// if (this.enOceanInOut.getInputStream() != null) {
+		// try {
+		// this.enOceanInOut.getInputStream().close();
+		// } catch (IOException ioexception1) {
+		// Logger.w(TAG, "Error while closing input stream.");
+		// }
+		// }
 	}
 
 	public void send(byte[] data) {
-		duplicatedInputStream.replace(data);
+		// duplicatedInputStream.replace(data);
+		testStepService.pushDataInTestStep(data);
 	}
 
 	/**
@@ -118,14 +178,23 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 	 * @return the complete byte[] ESP packet
 	 * @throws IOException
 	 */
-	private EspPacket readPacket() throws IOException {
+	private EspPacket readPacket(byte[] data) throws IOException {
+		Logger.d(TAG, "data: " + data);
+		Logger.d(TAG, "data.length: " + data.length);
+		// I don't understand why, but the first byte must be ignored... So int
+		// j = 1; instead of int j = 0;
+		int j = 1;
 		byte[] header = new byte[4];
 		for (int i = 0; i < 4; i++) {
-			header[i] = (byte) this.enOceanInOut.getInputStream().read();
+			// header[i] = (byte) this.enOceanInOut.getInputStream().read();
+			header[i] = data[j];
+			j = j + 1;
 		}
 		Logger.d(TAG, "read header: " + Utils.bytesToHexString(header));
 		// Check the CRC
-		int headerCrc = this.enOceanInOut.getInputStream().read();
+		// int headerCrc = this.enOceanInOut.getInputStream().read();
+		int headerCrc = data[j];
+		j = j + 1;
 		if (headerCrc == -1) {
 			throw new IOException("could not read entire packet");
 		}
@@ -134,15 +203,21 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 		if ((byte) headerCrc != Utils.crc8(header)) {
 			throw new IOException("header was malformed or corrupt");
 		}
+
 		// Read the payload using header info
 		int payloadLength = ((header[0] << 8) | header[1]) + header[2];
 		byte[] payload = new byte[payloadLength];
 		for (int i = 0; i < payloadLength; i++) {
-			payload[i] = (byte) this.enOceanInOut.getInputStream().read();
+			// payload[i] = (byte) this.enOceanInOut.getInputStream().read();
+			// Logger.d(TAG, "i: " + i + ", j: " + j);
+			// Logger.d(TAG, "data[j]: " + data[j]);
+			payload[i] = data[j];
+			j = j + 1;
 		}
 		Logger.d(TAG, "read payload: " + Utils.bytesToHexString(payload));
 		// Check payload CRC
-		int payloadCrc = this.enOceanInOut.getInputStream().read();
+		// int payloadCrc = this.enOceanInOut.getInputStream().read();
+		int payloadCrc = data[j];
 		if (payloadCrc == -1) {
 			throw new IOException("could not read entire packet");
 		}
