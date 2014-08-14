@@ -1,7 +1,12 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd	
 
+Bundle-Vendor					= Orange
+Bundle-Activator				= ${p}.Activator
+
 Export-Package: ${p}.*; -split-package:=first
+
+Private-Package					= ${p}.teststep.impl.*
 
 -buildpath = \
 	osgi.core;					version=4.3, \
