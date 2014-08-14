@@ -1,32 +1,49 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
-Conditional-Package					= org.osgi.test.support.*
-Private-Package						=  \
-	${p}.junit.*
-# Export-Package						= \
-#	${p}.services.*
-Import-Package: *
-#Import-Package: ${-signaturetest}, *
+Bundle-Description					: Rest Service test cases.
 
-# Include-Resource					= \
-# 	tb1.jar
+Conditional-Package          = org.osgi.test.support.*
+Private-Package            =  \
+  ${p}.junit.*
+
+# Export-Package            = \
+#  ${p}.services.*
+
+Import-Package: ${-signaturetest}, *
+
+Bundle-Category: osgi,test
+
+Include-Resource          = \
+  tb1.jar=tb1.jar, \
+  tb11.jar=tb11.jar, \
+  tb2.jar=tb2.jar, \
+  tb21.jar=tb21.jar, \
+  tb3.jar=tb3.jar, \
+  tb4.jar=tb4.jar, \
+
+Test-Cases              = ${testcases}
+-signaturetest          = org.osgi.service.rest
 
 -buildpath: org.osgi.test.support;version=project,\
-	org.osgi.service.rest;version=project,\
-	osgi.core;version=6.0.0,\
-	osgi.cmpn;version=5.0.0,\
-	ee.j2se;version=1.5,\
-	${junit}
+  org.osgi.service.rest;version=project,\
+  osgi.core;version=6.0.0,\
+  osgi.cmpn;version=5.0.0,\
+  ee.j2se;version=${javac.compliance},\
+  org.restlet;version=latest,\
+  ${junit}
 
--runbundles						= \
-	org.osgi.impl.service.rest; version=latest, \
-    org.restlet; 				version=2.0.11
-	
+-runbundles            = \
+  org.osgi.impl.service.rest; version=latest, \
+  org.restlet; version=latest, \
+  org.osgi.impl.service.http; version=latest,\
+  org.osgi.service.rest;version=latest
 
 -runproperties = ${runproperties}
+#  rest.ct.base.uri="http://localhost:8888,\
+#  rest.ct.non.supported.media.type=application/vnd.oasis.opendocument.chart,\
+#  rest.ct.basic.authentication=false,\
+#  rest.ct.user=username,\
+#  rest.ct.pass=password,\
 
-Test-Cases							= ${testcases}
-# -signaturetest                      = org.osgi.service.rest
-	
-	
+  

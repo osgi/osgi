@@ -13,11 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.osgi.test.cases.rest.junit;
+package org.osgi.test.cases.rest.tb2;
 
-import org.osgi.test.support.OSGiTestCase;
+import org.osgi.framework.BundleActivator;
+import org.osgi.framework.BundleContext;
 
-public class RestTestCase extends OSGiTestCase {
-	public void testDummy() throws InterruptedException {
-	}
+public class TBActivator implements BundleActivator {
+
+  public void start(BundleContext context) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void stop(BundleContext context) throws Exception {
+    // TODO Auto-generated method stub
+    
+  }
+
 }
