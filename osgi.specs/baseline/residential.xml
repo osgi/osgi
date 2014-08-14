@@ -261,9 +261,11 @@
           concepts. See <xref linkend="tr157softwaremodules"/>.</para>
         </listitem>
 
+<!--
         <listitem>
           <para><emphasis>Enocean</emphasis> – <xref linkend="enocean"/>.</para>
         </listitem>
+-->
 
         <listitem>
           <para><emphasis>TR-069 Connector Service Specification</emphasis> –
@@ -49329,13 +49331,15 @@ Answer the associated TR-069 fault code.
   </section>
 </chapter>
 
-  <chapter label="199" revision="$Id$" version="5" xml:id="enocean" xml:base="rfc199/enocean.xml">
+<!-- 
+  <chapter label="139" revision="$Id$" version="5" xml:id="enocean" xml:base="rfc199/enocean.xml">
     <title>EnOcean Device Service Specification</title>
     <info>
       <releaseinfo xml:id="enocean-version">Version 1.0</releaseinfo>
     </info>
-    <para><xref linkend="rfc199_bibliomixed_id_20140602_11h53_45"/> %%TODO </para>
+    <para><xref linkend="rfc199_bibliomixed_id_20140602_11h53_45"/></para>
   </chapter>
+-->
 
   <chapter xmlns:ns5="http://www.w3.org/2000/svg" xmlns:ns4="http://www.w3.org/1998/Math/MathML" xmlns:ns3="http://www.w3.org/1999/xhtml" label="702" revision="$Id$" version="5" xml:id="util.xml" xml:base="../702/util.xml.xml">
   <title>XML Parser Service Specification</title>
