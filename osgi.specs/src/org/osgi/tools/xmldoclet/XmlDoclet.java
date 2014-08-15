@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import com.sun.javadoc.AnnotationDesc;
@@ -58,12 +60,12 @@ public class XmlDoclet extends Doclet {
 	PrintWriter	pw;
 	String		currentPackage;
 	String		currentClass;
-	RootDoc		root;
+	final RootDoc	root;
 
 	public static boolean start(RootDoc doc) {
 		try {
-			XmlDoclet doclet = new XmlDoclet();
-			doclet.startx(doc);
+			XmlDoclet doclet = new XmlDoclet(doc);
+			doclet.start();
 			return true;
 		}
 		catch (Exception e) {
@@ -76,8 +78,11 @@ public class XmlDoclet extends Doclet {
 		return LanguageVersion.JAVA_1_5;
 	}
 
-	public void startx(RootDoc doc) throws Exception {
-		this.root = doc;
+	private XmlDoclet(RootDoc root) {
+		this.root = root;
+	}
+
+	public void start() throws Exception {
 		File file = new File(getDestDir(), "javadoc.xml");
 		FileOutputStream out = new FileOutputStream(file);
 		pw = new PrintWriter(new OutputStreamWriter(out, "utf-8"));
@@ -85,9 +90,20 @@ public class XmlDoclet extends Doclet {
 		pw.println("<?xml version='1.0' encoding='utf-8'?>");
 		pw.println("<top>");
 
-		PackageDoc packages[] = doc.specifiedPackages();
-		for (int p = 0; packages != null && p < packages.length; p++)
-			print(packages[p]);
+		Set<PackageDoc> packages = new TreeSet<PackageDoc>();
+		PackageDoc specifiedPackages[] = root.specifiedPackages();
+		for (int p = 0; specifiedPackages != null && p < specifiedPackages.length; p++) {
+			packages.add(specifiedPackages[p]);
+		}
+
+		ClassDoc specifiedClasses[] = root.specifiedClasses();
+		for (int c = 0; specifiedClasses != null && c < specifiedClasses.length; c++) {
+			packages.add(specifiedClasses[c].containingPackage());
+		}
+
+		for (PackageDoc packageDoc : packages) {
+			print(packageDoc);
+		}
 
 		pw.println("</top>");
 		pw.close();
