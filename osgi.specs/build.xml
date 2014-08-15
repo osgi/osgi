@@ -255,7 +255,7 @@
             <local name="book.base.url" />
             <makeurl property="book.base.url" file="${project.dir}/docbook/@{book}" />
             <copy file="docbook/fop/fop-osgi.xconf" toFile="${target}/fop/fop-@{name}.xconf" overwrite="true">
-                <filterset begintoken="${" endtoken="}">
+                <filterset>
                     <filter token="book.base.url" value="${book.base.url}" />
                     <filter token="font.base.url" value="${font.base.url}" />
                     <filter token="font.base.dir" value="${font.base.dir}" />
