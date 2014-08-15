@@ -19,6 +19,7 @@ task javadoc(overwrite: true, type: Javadoc) {
     windowTitle = "OSGi ${bnd.javadoc_title} Release ${bnd.osgi_release}"
     bottom = "<font size=-1>${bnd.copyright_html} Licensed under the <a href=\"{@docRoot}/LICENSE.html\">OSGi Specification License, Version 2.0</a></font>"
     header = "<b>OSGi&trade; ${bnd.javadoc_title}</b><br/><font size=-1>Release ${bnd.osgi_release}</font>"
+    memberLevel = JavadocMemberLevel.PROTECTED
     charSet = 'UTF-8'
     encoding = 'UTF-8'
     docEncoding = 'UTF-8'
