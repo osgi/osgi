@@ -1,0 +1,294 @@
+/*
+ * osgi.specs Gradle build script
+ */
+import org.apache.tools.ant.filters.ReplaceTokens
+
+task javadoc('overwrite': true, 'type': Javadoc) {
+  description 'Build the docbook flavored javadoc.'
+  group 'documentation'
+  dependsOn compileJava
+  destinationDir = new File(buildDir, 'javadoc')
+  ext.javadocxml = new File(destinationDir, 'javadoc.xml')
+  ext.stylesheet = file('docbook/xsl/javadoc2docbook.xsl')
+  inputs.file stylesheet
+  classpath = compileJava.classpath
+  source bnd.allSrcDirs
+  bnd.javadoc_specs.split(/\s*,\s*/).each {
+    include it.replace('.','/')+'/**/*.java'
+  }
+  configure(options) {
+    memberLevel = JavadocMemberLevel.PROTECTED
+    encoding = 'UTF-8'
+    title = ''
+    doclet 'org.osgi.tools.xmldoclet.XmlDoclet'
+    docletpath compileJava.destinationDir
+  }
+  doLast {
+    ant.xslt('style': stylesheet, 
+      'in': javadocxml,
+      'out': "${destinationDir}/docbook/javadoc.txt") {
+      classpath('location': bnd.saxon)
+      factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+      param('name': 'destdir', 'expression': "${destinationDir}/docbook")
+      param('name': 'ddf.only', 'expression': '0')
+    }
+    ant.xslt('style': stylesheet, 
+      'in': javadocxml,
+      'out': "${destinationDir}/docbook/ddf.txt") {
+      classpath('location': bnd.saxon)
+      factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+      param('name': 'destdir', 'expression': "${destinationDir}/docbook")
+      param('name': 'ddf.only', 'expression': '1')
+    }
+  }
+}
+
+task('rdmtsummary') {
+  description 'Build the docbook flavored Residential DMT summary.'
+  group 'documentation'
+  dependsOn compileJava
+  ext.destinationDir = new File(buildDir, 'residentialdmt')
+  ext.treesummaryxml = new File(destinationDir, 'treesummary.xml')
+  inputs.files rootProject.project('dmforest').sourceSets.main.allJava
+  outputs.dir destinationDir
+  doFirst {
+    project.mkdir(destinationDir)
+  }
+  doLast {
+    treesummaryxml.withOutputStream { os ->
+      javaexec {
+        classpath compileJava.destinationDir
+        classpath compileJava.classpath
+        main = 'org.osgi.tools.dmt.TreeSummary'
+        standardOutput new BufferedOutputStream(os)
+        args 'org.osgi.dmt.residential.$'
+      }.assertNormalExitValue()
+    }
+  }
+}
+
+task('xmlns', 'type': Copy) {
+  description 'Build the docbook flavored schemas.'
+  group 'documentation'
+  from rootProject.file('xmlns')
+  into new File(buildDir, 'xmlns')
+  include '**/*.xsd'
+  includeEmptyDirs = false
+  doLast {
+    ant.replaceregexp('match': /.*(<(\w+:)?schema)/,
+      'replace': /\1/,
+      'flags': 's',
+      'encoding': 'UTF-8') {
+      fileset('dir': destinationDir, 'includes': '**/*.xsd')
+    }
+  }
+}
+
+ext.fop_home = new File(bnd.licensed, 'fop')
+ext.fop_classpath = files(fileTree('dir': new File(fop_home, 'lib'), 'include': '*.jar'),
+  fileTree('dir': new File(fop_home, 'build'), 'includes': ['fop.jar', 'fop-hyph.jar']))
+
+tasks.addRule('Pattern: <name>.xml: Generate the docbook xml file for the book <name>.') { taskName ->
+  if (taskName.endsWith('.xml') && !taskName.endsWith('-diff.xml')) {
+    task(taskName) {
+      ext.book = taskName - '.xml'
+      description "Generate the docbook xml file for the book ${book}."
+      group 'documentation'
+      ext.destinationDir = new File(buildDir, 'book')
+      ext.stylesheet = file('docbook/xsl/identity.xsl')
+      ext.bookxml = new File(destinationDir, taskName)
+      inputs.files stylesheet, fileTree('dir': 'docbook', 'include': '**/*.xml')
+      outputs.file bookxml
+      doFirst {
+        project.mkdir(destinationDir)
+      }
+      doLast {
+        ant.xslt('style': stylesheet, 
+          'in': "docbook/${book}/book.xml",
+          'out': bookxml,
+          'force': true) {
+          sysproperty('key': 'org.apache.xerces.xni.parser.XMLParserConfiguration',
+            'value': 'org.apache.xerces.parsers.XIncludeParserConfiguration')
+          classpath {
+            fileset('dir': "${fop_home}/lib") {
+              include('name': 'xercesImpl*.jar')
+              include('name': 'xml-apis*.jar')
+            }
+            pathelement('location': bnd.saxon)
+          }
+          factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+        }
+      }
+    }
+  }
+}
+
+configure(tasks.getByPath('core.xml')) {
+  [javadoc, xmlns].each {
+    dependsOn it
+    inputs.files it.outputs.files
+  }
+}
+configure(tasks.getByPath('cmpn.xml')) {
+  [javadoc, xmlns].each {
+    dependsOn it
+    inputs.files it.outputs.files
+  }
+}
+configure(tasks.getByPath('enterprise.xml')) {
+  [javadoc, xmlns].each {
+    dependsOn it
+    inputs.files it.outputs.files
+  }
+}
+configure(tasks.getByPath('residential.xml')) {
+  [javadoc, xmlns, rdmtsummary].each {
+    dependsOn it
+    inputs.files it.outputs.files
+  }
+}
+
+tasks.addRule('Pattern: <name>-diff.xml: Generate the docbook diff xml file for the book <name>.') { taskName ->
+  if (taskName.endsWith('-diff.xml')) {
+    task(taskName) {
+      ext.book = taskName - '-diff.xml'
+      description "Generate the docbook diff xml file for the book ${book}."
+      group 'documentation'
+      def booktask = tasks.getByPath("${book}.xml")
+      dependsOn booktask
+      ext.destinationDir = new File(buildDir, 'book')
+      ext.stylesheet = file("${bnd.licensed}/diffmk/style/docbook.xsl")
+      ext.bookxml = new File(destinationDir, taskName)
+      inputs.files stylesheet, booktask.bookxml
+      outputs.file bookxml
+      doFirst {
+        project.mkdir(destinationDir)
+      }
+      doLast {
+        def tmpxml = new File(temporaryDir, 'diff.xml')
+        javaexec {
+          classpath "${bnd.licensed}/diffmk/bin/diffmk.jar"
+          main = 'net.sf.diffmk.DiffMk'
+          jvmArgs '-Xmx256m'
+          args '--verbose'
+          args '1'
+          args '--words'
+          args file("baseline/${book}.xml")
+          args booktask.bookxml
+          args tmpxml
+        }.assertNormalExitValue()
+        ant.xslt('style': stylesheet, 
+          'in': tmpxml,
+          'out': bookxml) {
+          classpath('location': bnd.saxon)
+          factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+        }
+      }
+    }
+  }
+}
+
+tasks.addRule('Pattern: <name>.fo: Generate the docbook fo file for the book <name>.') { taskName ->
+  if (taskName.endsWith('.fo')) {
+    task(taskName) {
+      ext.book = taskName - '.fo'
+      description "Generate the docbook fo file for the book ${book}."
+      group 'documentation'
+      def booktask = tasks.getByPath("${book}.xml")
+      dependsOn booktask
+      ext.destinationDir = new File(buildDir, 'fo')
+      ext.stylesheet = file('docbook/xsl/custom-fo.xsl')
+      ext.bookfo = new File(destinationDir, taskName)
+      ext.watermark = 'docbook/graphics/draft.svg'
+      inputs.files stylesheet, booktask.bookxml
+      outputs.file bookfo
+      doFirst {
+        project.mkdir(destinationDir)
+      }
+      doLast {
+        ant.xslt('style': stylesheet, 
+          'in': booktask.bookxml,
+          'out': bookfo) {
+          classpath('location': bnd.saxon)
+          factory('name': 'com.icl.saxon.TransformerFactoryImpl')
+          param('name': 'draft.watermark.image', 'expression': watermark)
+        }
+      }
+    }
+  }
+}
+
+tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <name>.') { taskName ->
+  if (taskName.endsWith('.pdf')) {
+    task(taskName) {
+      ext.book = taskName - '.pdf'
+      description "Generate the docbook pdf file for the book ${book}."
+      group 'documentation'
+      def fotask = tasks.getByPath("${book}.fo")
+      dependsOn fotask
+      ext.destinationDir = buildDir
+      ext.bookpdf = new File(destinationDir, "osgi.${taskName}")
+      def fontbasedir = file('fonts')
+      def fopxconf = file('docbook/fop/fop-osgi.xconf')
+      def log4jprops = file('docbook/fop/log4j.properties')
+      inputs.files fopxconf, log4jprops, fotask.bookfo, fileTree('dir': 'docbook', 'include': '**/*.svg')
+      inputs.dir fontbasedir
+      outputs.file bookpdf
+      doFirst {
+        project.mkdir(destinationDir)
+      }
+      doLast {
+        def basebook = book - '-diff'
+        copy {
+          from fopxconf
+          into temporaryDir
+          filter(ReplaceTokens,
+            'tokens': ['book.base.url': file("docbook/${basebook}").toURI().toString(),
+              'font.base.url': fontbasedir.toURI().toString(),
+              'font.base.dir': fontbasedir.absolutePath])
+        }
+        javaexec {
+          systemProperty('java.awt.headless', 'true')
+          systemProperty('JAVA_FONTS', fontbasedir)
+          systemProperty('log4j.configuration', log4jprops.toURI())
+          classpath compileJava.destinationDir
+          classpath bnd.log4j
+          classpath fop_classpath
+          main = 'org.osgi.tools.fop.FOPMain'
+          jvmArgs '-Xms256m'
+          jvmArgs '-Xmx512m'
+          args '-c', new File(temporaryDir, fopxconf.name)
+          args '-fo', fotask.bookfo
+          args '-pdf', bookpdf
+        }.assertNormalExitValue()
+      }
+    }
+  }
+}
+
+task('fontmetrics') {
+  description 'Build the font metrics.'
+  group 'documentation'
+  inputs.files fileTree('dir': file('fonts'), 'include': '*.ttf')
+  outputs.files inputs.files.collect {
+    it.absolutePath.replaceAll(/\.ttf$/, /.xml/)
+  }
+  doLast {
+    inputs.files.each { ttf ->
+      javaexec {
+        classpath fop_classpath
+        main = 'org.apache.fop.fonts.apps.TTFReader'
+        args ttf.absolutePath
+        args ttf.absolutePath.replaceAll(/\.ttf$/, /.xml/)
+      }.assertNormalExitValue()
+    }
+  }
+}
+
+defaultTasks += 'specifications'
+
+task('specifications') {
+  description 'Generates all the specifications.'
+  group 'documentation'
+  dependsOn 'core.pdf', 'cmpn.pdf', 'enterprise.pdf', 'residential.pdf'
+}

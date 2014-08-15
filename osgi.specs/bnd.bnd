@@ -1,6 +1,5 @@
 -nobundles = true
 
-project.dependson = ${project.workspace}/dmforest
 -dependson = osgi.companion, dmforest
 
 javac.profile=
@@ -10,13 +9,13 @@ javac.profile=
 -buildpath: \
     dmforest;        version=project, \
     com.sun.tools;   version=1.5.0, \
-    org.apache.bcel; version=1.0
+    org.apache.bcel; version=1.0, \
+    org.apache.geronimo.specs.geronimo-servlet_2.5_spec; version=latest, \
+    org.eclipse.persistence.jpa_spec; version=latest, \
+    com.icl.saxon; version=latest, \
+    org.osgi.service.io; version=project
 
-javadoc.classpath = ${uniq; \
-                    ${repo;org.apache.geronimo.specs.geronimo-servlet_2.5_spec}, \
-                    ${repo;org.eclipse.persistence.jpa_spec}}
+javadoc.specs = ${uniq; ${annotation.specs}, ${core.specs}, ${cmpn.specs}, ${enterprise.specs}, ${residential.specs}, org.osgi.dmt}
 
-javadoc.packages = ${uniq; ${annotation.packages}, ${core.packages}, ${cmpn.packages}, ${enterprise.packages}, ${residential.packages}, org.osgi.dmt.*}
-
-saxon    = ${repo;com.icl.saxon}
-log4j    = ${repo;org.apache.log4j}
+saxon    = ${repo;com.icl.saxon;latest}
+log4j    = ${repo;org.apache.log4j;latest}
