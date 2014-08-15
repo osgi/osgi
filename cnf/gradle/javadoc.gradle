@@ -50,7 +50,7 @@ task javadoc(overwrite: true, type: Javadoc) {
   }
   /* Turn off javadoc 8 overly pedantic lint checking */
   if (JavaVersion.current().isJava8Compatible()) {
-    options.addStringOption('Xdoclint:none', '-protected') 
+    options.addStringOption('Xdoclint:none', '-quiet') 
   }
   doFirst {
     project.delete(destinationDir)
