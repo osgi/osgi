@@ -1,6 +1,6 @@
 /*
  * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -22,7 +22,7 @@ public class TBActivator implements BundleActivator {
 
   public void start(BundleContext context) throws Exception {
     // TODO Auto-generated method stub
-    
+
   }
 
   public void stop(BundleContext context) throws Exception {
