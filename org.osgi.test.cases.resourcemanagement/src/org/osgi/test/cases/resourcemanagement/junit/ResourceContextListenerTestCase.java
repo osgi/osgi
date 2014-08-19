@@ -1,3 +1,4 @@
+
 package org.osgi.test.cases.resourcemanagement.junit;
 
 import java.util.ArrayList;
@@ -22,42 +23,42 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	/**
 	 * name of the ResourceContext used for the tests
 	 */
-	private static final String RESOURCE_CONTEXT_NAME = "context1";
+	private static final String	RESOURCE_CONTEXT_NAME	= "context1";
 
 	/**
 	 * name2 of the ResourceContext used for the tests
 	 */
-	private static final String RESOURCE_CONTEXT_NAME2 = "context2";
+	private static final String	RESOURCE_CONTEXT_NAME2	= "context2";
 
 	/**
 	 * bundle id 1
 	 */
-	private static final long BUNDLE_ID = 1l;
+	private static final long	BUNDLE_ID				= 1l;
 
 	/**
 	 * bundle id 2
 	 */
-	private static final long BUNDLE_ID2 = 2l;
+	private static final long	BUNDLE_ID2				= 2l;
 
 	/**
 	 * bundle context
 	 */
-	private BundleContext bundleContext;
+	private BundleContext		bundleContext;
 
 	/**
 	 * resource manager
 	 */
-	private ResourceManager resourceManager;
+	private ResourceManager		resourceManager;
 
 	/**
 	 * events
 	 */
-	private List events;
+	private List				events;
 
 	/**
 	 * service registration of the listener
 	 */
-	private ServiceRegistration listenerServiceRegistration;
+	private ServiceRegistration	listenerServiceRegistration;
 
 	/**
 	 * 
@@ -85,7 +86,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 		// registers the ResourceContextListener with a RESOURCE_CONTEXT_CREATED
 		// type filter
 		registerListener(
-				new int[] { ResourceContextEvent.RESOURCE_CONTEXT_CREATED },
+				new int[] {ResourceContextEvent.RESOURCE_CONTEXT_CREATED},
 				null);
 
 		// executes the scenarios
@@ -109,7 +110,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 		// registers the ResourceContextListener with a RESOURCE_CONTEXT_DELETED
 		// type filter
 		registerListener(
-				new int[] { ResourceContextEvent.RESOURCE_CONTEXT_DELETED },
+				new int[] {ResourceContextEvent.RESOURCE_CONTEXT_DELETED},
 				null);
 
 		// executes the scenarios
@@ -131,7 +132,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	public void testRegisterA_BUNDLE_ADDED_Listener() {
 		// registers the ResourceContextListener with a BUNDLE_ADDED
 		// type filter
-		registerListener(new int[] { ResourceContextEvent.BUNDLE_ADDED }, null);
+		registerListener(new int[] {ResourceContextEvent.BUNDLE_ADDED}, null);
 
 		// executes the scenarios
 		executeScenario1();
@@ -153,7 +154,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	public void testRegisterA_BUNDLE_REMOVED_Listener() {
 		// registers the ResourceContextListener with a BUNDLE_REMOVED
 		// type filter
-		registerListener(new int[] { ResourceContextEvent.BUNDLE_REMOVED },
+		registerListener(new int[] {ResourceContextEvent.BUNDLE_REMOVED},
 				null);
 
 		// executes the scenarios
@@ -178,7 +179,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 
 		// register this instance as a ResourceContextListener filtering events
 		// of context1.
-		registerListener(null, new String[] { RESOURCE_CONTEXT_NAME });
+		registerListener(null, new String[] {RESOURCE_CONTEXT_NAME});
 
 		// executes scenario1 (related to context1) and scenario2 (related to
 		// context2)
@@ -284,8 +285,8 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 		// event type all related to context1
 		registerListener(new int[] {
 				ResourceContextEvent.RESOURCE_CONTEXT_CREATED,
-				ResourceContextEvent.RESOURCE_CONTEXT_DELETED },
-				new String[] { RESOURCE_CONTEXT_NAME });
+				ResourceContextEvent.RESOURCE_CONTEXT_DELETED},
+				new String[] {RESOURCE_CONTEXT_NAME});
 
 		// executes scenario1 (related to context1) and scenario2 (related to
 		// context2)
@@ -389,28 +390,28 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	/**
 	 * Registers this instance as a ResourceContextListener.
 	 * 
-	 * @param filters
-	 *            event filter types.
-	 * @param resourceContexts
-	 *            resourceContexts
+	 * @param filters event filter types.
+	 * @param resourceContexts resourceContexts
 	 */
 	private void registerListener(int[] filters, String[] resourceContexts) {
 		Dictionary properties = new Hashtable();
 		if (filters != null) {
 			if (filters.length > 1) {
 				properties.put(ResourceContextListener.EVENT_TYPE, filters);
-			} else if (filters.length == 1) {
+			} else
+				if (filters.length == 1) {
 					properties.put(ResourceContextListener.EVENT_TYPE, Integer.valueOf(Integer.toString(filters[0])));
-			}
+				}
 		}
 		if (resourceContexts != null) {
 			if (resourceContexts.length > 1) {
 				properties.put(ResourceContextListener.RESOURCE_CONTEXT,
 						resourceContexts);
-			} else if (resourceContexts.length == 1) {
-				properties.put(ResourceContextListener.RESOURCE_CONTEXT,
-						resourceContexts[0]);
-			}
+			} else
+				if (resourceContexts.length == 1) {
+					properties.put(ResourceContextListener.RESOURCE_CONTEXT,
+							resourceContexts[0]);
+				}
 		}
 
 		listenerServiceRegistration = bundleContext.registerService(

@@ -1,3 +1,4 @@
+
 package org.osgi.test.cases.resourcemanagement.junit;
 
 import java.util.ArrayList;
@@ -25,38 +26,38 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 public class ResourceListenerTestCase extends DefaultTestBundleControl
 		implements ResourceListener {
 
-	private static final String CONTEXT_NAME = "context1";
+	private static final String		CONTEXT_NAME	= "context1";
 
 	/**
 	 * bundle context
 	 */
-	private BundleContext bundleContext;
+	private BundleContext			bundleContext;
 
 	/**
 	 * resource monitor
 	 */
-	private ResourceMonitor resourceMonitor;
+	private ResourceMonitor			resourceMonitor;
 
 	/**
 	 * resource context
 	 */
-	private ResourceContext resourceContext;
+	private ResourceContext			resourceContext;
 
 	/**
 	 * resource manager
 	 */
-	private ResourceManager resourceManager;
+	private ResourceManager			resourceManager;
 
 	/**
 	 * cpu Resource Monitor Factory
 	 */
-	private ResourceMonitorFactory cpuFactory;
+	private ResourceMonitorFactory	cpuFactory;
 
 	// thresholds
-	private Comparable lowerError;
-	private Comparable lowerWarning;
-	private Comparable upperError;
-	private Comparable upperWarning;
+	private Comparable				lowerError;
+	private Comparable				lowerWarning;
+	private Comparable				upperError;
+	private Comparable				upperWarning;
 
 	/**
 	 * Service registration of the listener
@@ -67,7 +68,7 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 	/**
 	 * list of received events
 	 */
-	private final List receivedEvents;
+	private final List				receivedEvents;
 
 	/**
 	 * 
@@ -369,10 +370,10 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 				int eventType = currentEvent.getType();
 				Object value = currentEvent.getValue();
 				boolean isUpperThreshold = currentEvent.isUpperThreshold();
-				
+
 				log("checked event (type:" + eventType + ", value=" + value
 						+ ", isUpper:" + isUpperThreshold);
-				
+
 				Comparable threshold = null;
 				if (isUpperThreshold) {
 					if (eventType == ResourceEvent.NORMAL) {
@@ -401,33 +402,37 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 						}
 						assertTrue(checked);
 
-					} else if (eventType == ResourceEvent.WARNING) {
-						// check if current value is higher than WARNING
-						// threshold
-						threshold = getUpperWarningThreshold();
-						assertNotNull(threshold);
-						assertTrue(threshold.compareTo(value) <= 0);
+					} else
+						if (eventType == ResourceEvent.WARNING) {
+							// check if current value is higher than WARNING
+							// threshold
+							threshold = getUpperWarningThreshold();
+							assertNotNull(threshold);
+							assertTrue(threshold.compareTo(value) <= 0);
 
-						// check if current value is under ERROR threshold
-						threshold = getUpperErrorThreshold();
-						if (threshold != null) {
-							assertTrue(threshold.compareTo(value) > 0);
-						}
+							// check if current value is under ERROR threshold
+							threshold = getUpperErrorThreshold();
+							if (threshold != null) {
+								assertTrue(threshold.compareTo(value) > 0);
+							}
 
-					} else if (eventType == ResourceEvent.ERROR) {
-						// check if current value is higher than the ERROR
-						// threshold
-						threshold = getUpperErrorThreshold();
-						assertNotNull(threshold);
-						assertTrue(threshold.compareTo(value) <= 0);
+						} else
+							if (eventType == ResourceEvent.ERROR) {
+								// check if current value is higher than the
+								// ERROR
+								// threshold
+								threshold = getUpperErrorThreshold();
+								assertNotNull(threshold);
+								assertTrue(threshold.compareTo(value) <= 0);
 
-						// check if current value is higher than the WARNING
-						// threshold
-						threshold = getUpperWarningThreshold();
-						if (threshold != null) {
-							assertTrue(threshold.compareTo(value) < 0);
-						}
-					}
+								// check if current value is higher than the
+								// WARNING
+								// threshold
+								threshold = getUpperWarningThreshold();
+								if (threshold != null) {
+									assertTrue(threshold.compareTo(value) < 0);
+								}
+							}
 				} else {
 					// lower threshold type
 					if (eventType == ResourceEvent.NORMAL) {
@@ -450,29 +455,33 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 
 						// at least, one of the two thresholds has to be set
 						assertTrue(checked);
-					} else if (eventType == ResourceEvent.WARNING) {
-						// check current value is under WARNING threshold
-						threshold = getLowerWarningThreshold();
-						assertNotNull(threshold);
-						assertTrue(threshold.compareTo(value) >= 0);
+					} else
+						if (eventType == ResourceEvent.WARNING) {
+							// check current value is under WARNING threshold
+							threshold = getLowerWarningThreshold();
+							assertNotNull(threshold);
+							assertTrue(threshold.compareTo(value) >= 0);
 
-						// check current value is higher than ERROR threshold
-						threshold = getLowerErrorThreshold();
-						if (threshold != null) {
-							assertTrue(threshold.compareTo(value) < 0);
-						}
-					} else if (eventType == ResourceEvent.ERROR) {
-						// check current value is under ERROR threshold
-						threshold = getLowerErrorThreshold();
-						assertNotNull(threshold);
-						assertTrue(threshold.compareTo(value) >= 0);
+							// check current value is higher than ERROR
+							// threshold
+							threshold = getLowerErrorThreshold();
+							if (threshold != null) {
+								assertTrue(threshold.compareTo(value) < 0);
+							}
+						} else
+							if (eventType == ResourceEvent.ERROR) {
+								// check current value is under ERROR threshold
+								threshold = getLowerErrorThreshold();
+								assertNotNull(threshold);
+								assertTrue(threshold.compareTo(value) >= 0);
 
-						// check current value is under WARNING threshold
-						threshold = getLowerWarningThreshold();
-						if (threshold != null) {
-							assertTrue(threshold.compareTo(value) > 0);
-						}
-					}
+								// check current value is under WARNING
+								// threshold
+								threshold = getLowerWarningThreshold();
+								if (threshold != null) {
+									assertTrue(threshold.compareTo(value) > 0);
+								}
+							}
 				}
 
 			}

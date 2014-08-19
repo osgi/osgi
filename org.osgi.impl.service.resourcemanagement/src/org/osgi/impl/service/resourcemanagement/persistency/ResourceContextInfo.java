@@ -9,8 +9,8 @@ import java.util.List;
 public class ResourceContextInfo {
 
 	private final String	name;
-//	private final List<Long>	bundleIds;
-	private final List	bundleIds;
+	// private final List<Long> bundleIds;
+	private final List		bundleIds;
 
 	/**
 	 * @param pName
@@ -31,7 +31,7 @@ public class ResourceContextInfo {
 	/**
 	 * @return list of Long of bundleIds.
 	 */
-	public List  getBundleIds() {
+	public List getBundleIds() {
 		return bundleIds;
 	}
 

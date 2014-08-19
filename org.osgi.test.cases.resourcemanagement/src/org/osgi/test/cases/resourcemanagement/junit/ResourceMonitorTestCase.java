@@ -1,3 +1,4 @@
+
 package org.osgi.test.cases.resourcemanagement.junit;
 
 import java.util.Collection;
@@ -20,27 +21,27 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 	/**
 	 * bundle context.
 	 */
-	private BundleContext bundleContext;
+	private BundleContext			bundleContext;
 
 	/**
 	 * resource manager.
 	 */
-	private ResourceManager resourceManager;
+	private ResourceManager			resourceManager;
 
 	/**
 	 * cpu factory.
 	 */
-	private ResourceMonitorFactory cpuFactory;
+	private ResourceMonitorFactory	cpuFactory;
 
 	/**
 	 * resourceContext
 	 */
-	private ResourceContext resourceContext;
+	private ResourceContext			resourceContext;
 
 	/**
 	 * resource context name
 	 */
-	private final String resourceContextName = "context1";
+	private final String			resourceContextName	= "context1";
 
 	public void setBundleContext(BundleContext context) {
 		bundleContext = context;
@@ -48,8 +49,7 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 		ServiceReference serviceReference = bundleContext
 				.getServiceReference(ResourceManager.class);
 		resourceManager = (ResourceManager) bundleContext.getService(serviceReference);
-		
-		
+
 		StringBuffer filter = new StringBuffer();
 		filter.append("(&(");
 		filter.append(Constants.OBJECTCLASS);
@@ -104,12 +104,12 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 		ResourceMonitor[] monitors = resourceContext.getMonitors();
 		assertNotNull(monitors);
 		assertTrue(monitors.length == 0);
-		
+
 		// create ResourceMonitor
 		ResourceMonitor resourceMonitor = cpuFactory
 				.createResourceMonitor(resourceContext);
 		assertNotNull(resourceMonitor);
-		
+
 		// check ResourceContext
 		monitors = resourceContext.getMonitors();
 		assertTrue(monitors.length == 1);
@@ -147,8 +147,6 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 		assertTrue(monitors[0].equals(resourceMonitor));
 
 	}
-
-
 
 	/**
 	 * Test deleting a ResourceMonitor. Check the monitor is removed from the
@@ -258,7 +256,6 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 			exception = true;
 		}
 		assertTrue(exception);
-
 
 	}
 

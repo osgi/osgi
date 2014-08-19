@@ -1,3 +1,4 @@
+
 package org.osgi.test.cases.resourcemanagement.junit;
 
 import java.util.ArrayList;
@@ -23,17 +24,17 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 	/**
 	 * bundle context
 	 */
-	private BundleContext bundleContext;
+	private BundleContext				bundleContext;
 
 	/**
 	 * resource manager.
 	 */
-	private ResourceManager resourceManager;
+	private ResourceManager				resourceManager;
 
 	/**
 	 * resource context listener
 	 */
-	private TestResourceContextListener resourceContextListener;
+	private TestResourceContextListener	resourceContextListener;
 
 	/**
 	 * Set bundle context.
@@ -158,8 +159,7 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 	/**
 	 * Test create a ResourceContext based on a template.
 	 * 
-	 * @throws ResourceMonitorException
-	 *             not expected
+	 * @throws ResourceMonitorException not expected
 	 */
 	public void testCreateResourceContextWithTemplate()
 			throws ResourceMonitorException {

@@ -1,3 +1,4 @@
+
 package org.osgi.test.cases.resourcemanagement.junit;
 
 import org.osgi.service.resourcemanagement.ResourceContext;
@@ -8,9 +9,9 @@ import org.osgi.service.resourcemanagement.ResourceMonitorException;
  *
  */
 public class FakeResourceMonitor implements ResourceMonitor {
-	
-	private String resourceType;
-	private ResourceContext resourceContext;
+
+	private String			resourceType;
+	private ResourceContext	resourceContext;
 
 	/**
 	 * 
@@ -76,7 +77,7 @@ public class FakeResourceMonitor implements ResourceMonitor {
 		// TODO Auto-generated method stub
 		return 0;
 	}
-	
+
 	public void notifyIncomingThread(Thread t) {
 		// TODO?
 	}

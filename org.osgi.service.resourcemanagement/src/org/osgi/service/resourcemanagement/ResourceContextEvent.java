@@ -72,8 +72,8 @@ public class ResourceContextEvent {
 
 	/**
 	 * Create a new ResourceContextEvent. This constructor should be used when
-	 * the type of the event is either {@link #RESOURCE_CONTEXT_CREATED} or {
-	 * {@value #RESOURCE_CONTEXT_DELETED}.
+	 * the type of the event is either {@link #RESOURCE_CONTEXT_CREATED} or
+	 * {@link #RESOURCE_CONTEXT_DELETED}.
 	 * 
 	 * @param pType event type
 	 * @param pResourceContext context

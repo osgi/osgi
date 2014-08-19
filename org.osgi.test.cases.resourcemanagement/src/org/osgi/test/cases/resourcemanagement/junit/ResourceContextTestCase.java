@@ -35,17 +35,17 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 	/**
 	 * bundleContext
 	 */
-	private BundleContext context;
+	private BundleContext				context;
 
 	/**
 	 * resource manager
 	 */
-	private ResourceManager resourceManager;
+	private ResourceManager				resourceManager;
 
 	/**
 	 * resource context listener
 	 */
-	private TestResourceContextListener resourceContextListener;
+	private TestResourceContextListener	resourceContextListener;
 
 	protected void tearDown() throws Exception {
 		super.tearDown();
@@ -403,8 +403,6 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 		assertTrue(exception);
 
 	}
-
-
 
 	/**
 	 * Test remove a bundle from context with a destination. Expect one

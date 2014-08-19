@@ -250,7 +250,7 @@ public class ResourceManagerImpl implements ResourceManager,
 				.getResourceContext(bundleId);
 		return resourceContext;
 	}
-	
+
 	public String[] getSupportedTypes() {
 		String[] supportedTypes = new String[0];
 		synchronized (resourceMonitorFactories) {

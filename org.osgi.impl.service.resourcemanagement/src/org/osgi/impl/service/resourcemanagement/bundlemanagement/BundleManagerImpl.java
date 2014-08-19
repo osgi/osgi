@@ -38,14 +38,14 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 	 * currently lock, i.e. no other operation can be done until this bundle
 	 * lock is released.
 	 */
-	private Map					/* <Long, BundleLock> */bundleLocks;
+	private Map				/* <Long, BundleLock> */bundleLocks;
 
 	/**
 	 * this map contains the association between bundle and resource contexts.
 	 * if a bundle id is in this map, the bundle is associated to a resource
 	 * contexts.
 	 */
-	private Map					/* <Long, BundleHolder> */resourceContexts;
+	private Map				/* <Long, BundleHolder> */resourceContexts;
 
 	/**
 	 * bundle context.

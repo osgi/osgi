@@ -109,7 +109,7 @@ public class PersistenceManager implements BundleListener {
 					contextName, null);
 
 			// try to associate bundle
-//			List<Long> bundleIds = rci.getBundleIds();
+			// List<Long> bundleIds = rci.getBundleIds();
 			List bundleIds = rci.getBundleIds();
 			for (Iterator it = bundleIds.iterator(); it.hasNext();) {
 				Long bundleId = (Long) it.next();
@@ -149,7 +149,7 @@ public class PersistenceManager implements BundleListener {
 			String currentContextName = resourceContext.getName();
 
 			long[] bundleIds = resourceContext.getBundleIds();
-//			List<Long> bundleIdsSet = new ArrayList<Long>();
+			// List<Long> bundleIdsSet = new ArrayList<Long>();
 			List bundleIdsSet = new ArrayList();
 			// add all associated bundle into bundleIds
 			for (int j = 0; j < bundleIds.length; j++) {

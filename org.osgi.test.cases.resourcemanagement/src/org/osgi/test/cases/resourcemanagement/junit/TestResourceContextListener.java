@@ -1,3 +1,4 @@
+
 package org.osgi.test.cases.resourcemanagement.junit;
 
 import java.util.ArrayList;
@@ -16,12 +17,11 @@ public class TestResourceContextListener implements ResourceContextListener {
 	 * service registration ServiceRegistration<ResourceContextListener>
 	 */
 	private ServiceRegistration	serviceRegistration;
-	
+
 	/**
 	 * list of received events
 	 */
-	private final List events;
-
+	private final List			events;
 
 	/**
 	 * 
@@ -39,10 +39,10 @@ public class TestResourceContextListener implements ResourceContextListener {
 	public void start(BundleContext bundleContext) {
 		serviceRegistration = bundleContext
 				.registerService(
-				ResourceContextListener.class.getName(),
-				this, null);
+						ResourceContextListener.class.getName(),
+						this, null);
 	}
-	
+
 	/**
 	 * Unregister this instance as a {@link ResourceContextListener} service.
 	 * Once unregistered, this instance won't receive anymore

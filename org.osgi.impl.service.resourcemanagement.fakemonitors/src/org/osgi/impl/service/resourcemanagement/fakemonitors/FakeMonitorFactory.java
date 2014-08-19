@@ -59,7 +59,7 @@ public class FakeMonitorFactory implements ResourceMonitorFactory,
 	 * register the factory as a ResourceContextListener to be informed when a
 	 * ResourceContext is deleted. ServiceRegistration<ResourceContextListener>
 	 */
-	private ServiceRegistration						serviceRegistration;
+	private ServiceRegistration	serviceRegistration;
 
 	private final Lock			semaphore;
 
