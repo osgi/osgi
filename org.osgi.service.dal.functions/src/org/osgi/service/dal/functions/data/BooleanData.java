@@ -33,9 +33,8 @@ public class BooleanData extends FunctionData {
 
 	/**
 	 * Represents the value field name. The field value is available with
-	 * {@link #value} and {@link #getValue()}. The field type is
-	 * <code>boolean</code>. The constant can be used as a key to
-	 * {@link #BooleanData(Map)}.
+	 * {@link #value} and {@link #getValue()}. The field type is {@code boolean}
+	 * . The constant can be used as a key to {@link #BooleanData(Map)}.
 	 */
 	public static final String	FIELD_VALUE	= "value";
 
@@ -46,20 +45,19 @@ public class BooleanData extends FunctionData {
 	public final boolean	value;
 
 	/**
-	 * Constructs new <code>BooleanData</code> instance with the specified field
+	 * Constructs new {@code BooleanData} instance with the specified field
 	 * values. The map keys must match to the field names. The map values will
 	 * be assigned to the appropriate class fields. For example, the maps can
 	 * be: {"value"=Boolean(true)...}. That map will initialize the
-	 * {@link #FIELD_VALUE} field with <code>true</code>.
+	 * {@link #FIELD_VALUE} field with {@code true}.
 	 * <p>
-	 * {@link #FIELD_VALUE} field value type must be <code>Boolean</code>.
+	 * {@link #FIELD_VALUE} field value type must be {@code Boolean}.
 	 * 
-	 * @param fields Contains the new <code>BooleanData</code> instance field
-	 *        values.
+	 * @param fields Contains the new {@code BooleanData} instance field values.
 	 * 
 	 * @throws ClassCastException If the field value types are not expected.
 	 * @throws IllegalArgumentException If the value is missing.
-	 * @throws NullPointerException If the fields map is <code>null</code>.
+	 * @throws NullPointerException If the fields map is {@code null}.
 	 */
 	public BooleanData(final Map fields) {
 		super(fields);
@@ -71,8 +69,7 @@ public class BooleanData extends FunctionData {
 	}
 
 	/**
-	 * Constructs new <code>BooleanData</code> instance with the specified
-	 * arguments.
+	 * Constructs new {@code BooleanData} instance with the specified arguments.
 	 * 
 	 * @param timestamp The boolean data timestamp.
 	 * @param metadata The boolean data metadata.
@@ -84,22 +81,21 @@ public class BooleanData extends FunctionData {
 	}
 
 	/**
-	 * Returns <code>BooleanData</code> value.
+	 * Returns {@code BooleanData} value.
 	 * 
-	 * @return <code>BooleanData</code> value.
+	 * @return {@code BooleanData} value.
 	 */
 	public boolean getValue() {
 		return this.value;
 	}
 
 	/**
-	 * Two <code>BooleanData</code> instances are equal if they contain equal
+	 * Two {@code BooleanData} instances are equal if they contain equal
 	 * metadata, timestamp and boolean value.
 	 * 
 	 * @param other The object to compare this data.
 	 * 
-	 * @return <code>true</code> if this object is equivalent to the specified
-	 *         one.
+	 * @return {@code true} if this object is equivalent to the specified one.
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#equals(java.lang.Object)
 	 */
@@ -111,12 +107,12 @@ public class BooleanData extends FunctionData {
 	}
 
 	/**
-	 * Returns the hash code for this <code>BooleanData</code> object. The hash
-	 * code is a sum of {@link FunctionData#hashCode()} and
+	 * Returns the hash code for this {@code BooleanData} object. The hash code
+	 * is a sum of {@link FunctionData#hashCode()} and
 	 * {@link Boolean#hashCode()}, where {@link Boolean#hashCode()} represents
 	 * the boolean value hash code.
 	 * 
-	 * @return The hash code of this <code>BooleanData</code> object.
+	 * @return The hash code of this {@code BooleanData} object.
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#hashCode()
 	 */
@@ -126,32 +122,30 @@ public class BooleanData extends FunctionData {
 	}
 
 	/**
-	 * Compares this <code>BooleanData</code> instance with the given argument.
-	 * The argument can be:
+	 * Compares this {@code BooleanData} instance with the given argument. The
+	 * argument can be:
 	 * <ul>
-	 * <li><code>Boolean</code> - the method returns <code>0</code> if this
-	 * instance contains equivalent boolean value. <code>-1</code> if this
-	 * instance contains <code>false</code> and the argument is
-	 * <code>true</code>. <code>1</code> if this instance contains
-	 * <code>true</code> and the argument is <code>false</code>.</li>
-	 * <li><code>BooleanData</code> - the method returns <code>-1</code> if
-	 * metadata or timestamp are not equivalent. Otherwise, the boolean value is
-	 * compared with the same rules as <code>Boolean</code> argument.</li>
-	 * <li><code>Map</code> - the map must be built according the rules of
+	 * <li>{@code Boolean} - the method returns {@code 0} if this instance
+	 * contains equivalent boolean value. {@code -1} if this instance contains
+	 * {@code false} and the argument is {@code true}. {@code 1} if this
+	 * instance contains {@code true} and the argument is {@code false}.</li>
+	 * <li>{@code BooleanData} - the method returns {@code -1} if metadata or
+	 * timestamp are not equivalent. Otherwise, the boolean value is compared
+	 * with the same rules as {@code Boolean} argument.</li>
+	 * <li>{@code Map} - the map must be built according the rules of
 	 * {@link #BooleanData(Map)}. Metadata, timestamp and value are compared
-	 * according <code>BooleanData</code> and <code>Boolean</code> argument
-	 * rules.</li>
+	 * according {@code BooleanData} and {@code Boolean} argument rules.</li>
 	 * </ul>
 	 * 
 	 * @param o An argument to be compared.
 	 * 
 	 * @return -1, 0 or 1 depending on the comparison rules.
 	 * 
-	 * @throws ClassCastException If the method is called with <code>Map</code>
-	 *         and field value types are not expected.
-	 * @throws IllegalArgumentException If the method is called with
-	 *         <code>Map</code> and the value is missing.
-	 * @throws NullPointerException If the argument is <code>null</code>.
+	 * @throws ClassCastException If the method is called with {@code Map} and
+	 *         field value types are not expected.
+	 * @throws IllegalArgumentException If the method is called with {@code Map}
+	 *         and the value is missing.
+	 * @throws NullPointerException If the argument is {@code null}.
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */

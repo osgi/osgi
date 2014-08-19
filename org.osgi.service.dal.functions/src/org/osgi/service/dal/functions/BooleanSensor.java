@@ -21,9 +21,9 @@ import org.osgi.service.dal.Function;
 import org.osgi.service.dal.functions.data.BooleanData;
 
 /**
- * <code>BooleanSensor</code> function provides boolean sensor monitoring. It
- * reports its state when an important event is available. The state is
- * accessible with {@link #getData()} getter. There are no operations.
+ * {@code BooleanSensor} function provides boolean sensor monitoring. It reports
+ * its state when an important event is available. The state is accessible with
+ * {@link #getData()} getter. There are no operations.
  * <p>
  * As an example, the function is easily mappable to ZigBee Occupancy Sensing
  * cluster and Z-Wave Binary Sensor command class.
@@ -57,10 +57,10 @@ public interface BooleanSensor extends Function {
 	public static final String	PROPERTY_DATA	= "data";
 
 	/**
-	 * Returns the <code>BooleanSensor</code>current state. It's a getter method
-	 * for {@link #PROPERTY_DATA} property.
+	 * Returns the {@code BooleanSensor} current state. It's a getter method for
+	 * {@link #PROPERTY_DATA} property.
 	 * 
-	 * @return The <code>BooleanSensor</code> current state.
+	 * @return The {@code BooleanSensor} current state.
 	 * 
 	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already

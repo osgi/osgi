@@ -21,9 +21,9 @@ import org.osgi.service.dal.Function;
 import org.osgi.service.dal.functions.data.LevelData;
 
 /**
- * <code>MultiLevelSensor</code> function provides multi-level sensor
- * monitoring. It reports its state when an important event is available. The
- * state is accessible with {@link #getData()} getter. There are no operations.
+ * {@code MultiLevelSensor} function provides multi-level sensor monitoring. It
+ * reports its state when an important event is available. The state is
+ * accessible with {@link #getData()} getter. There are no operations.
  * <p>
  * As an example, the function is easily mappable to ZigBee Illuminance
  * Measurement, Temperature Measurement, Pressure Measurement, Flow Measurement
@@ -62,10 +62,10 @@ public interface MultiLevelSensor extends Function {
 	public static final String	PROPERTY_DATA	= "data";
 
 	/**
-	 * Returns the <code>MultiLevelSensor</code> current state. It's a getter
-	 * method for {@link #PROPERTY_DATA} property.
+	 * Returns the {@code MultiLevelSensor} current state. It's a getter method
+	 * for {@link #PROPERTY_DATA} property.
 	 * 
-	 * @return The <code>MultiLevelSensor</code> current state.
+	 * @return The {@code MultiLevelSensor} current state.
 	 * 
 	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already

@@ -20,7 +20,7 @@ import org.osgi.service.dal.Function;
 import org.osgi.service.dal.functions.data.AlarmData;
 
 /**
- * <code>Alarm</code> function provides alarm sensor support. There is only one
+ * {@code Alarm} function provides alarm sensor support. There is only one
  * eventable property and no operations.
  * 
  * @see AlarmData

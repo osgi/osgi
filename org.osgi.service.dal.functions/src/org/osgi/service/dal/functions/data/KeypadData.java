@@ -23,7 +23,7 @@ import org.osgi.service.dal.functions.Keypad;
 /**
  * Represents a keypad event data that is collected when a change with some key
  * from device keypad has occurred. The key code is mapped to
- * <code>FunctionData</code> value.
+ * {@code FunctionData} value.
  * 
  * @see Keypad
  * @see FunctionData
@@ -33,7 +33,7 @@ public class KeypadData extends FunctionData {
 	/**
 	 * Represents the key name field name. The field value is available with
 	 * {@link #keyName} and {@link #getKeyName()}. The field type is
-	 * <code>String</code>. The constant can be used as a key to
+	 * {@code String}. The constant can be used as a key to
 	 * {@link #KeypadData(Map)}.
 	 */
 	public static final String	FIELD_KEY_NAME					= "keyName";
@@ -41,16 +41,15 @@ public class KeypadData extends FunctionData {
 	/**
 	 * Represents the event type field name. The field value is available with
 	 * {@link #eventType} and {@link #getEventType()}. The field type is
-	 * <code>int</code>. The constant can be used as a key to
+	 * {@code int}. The constant can be used as a key to
 	 * {@link #KeypadData(Map)}.
 	 */
 	public static final String	FIELD_EVENT_TYPE				= "eventType";
 
 	/**
 	 * Represents the key code field name. The field value is available with
-	 * {@link #keyCode} and {@link #getKeyCode()}. The field type is
-	 * <code>int</code>. The constant can be used as a key to
-	 * {@link #KeypadData(Map)}.
+	 * {@link #keyCode} and {@link #getKeyCode()}. The field type is {@code int}
+	 * . The constant can be used as a key to {@link #KeypadData(Map)}.
 	 */
 	public static final String	FIELD_KEY_CODE					= "keyCode";
 
@@ -93,23 +92,22 @@ public class KeypadData extends FunctionData {
 	public final int		keyCode;
 
 	/**
-	 * Constructs new <code>KeypadData</code> instance with the specified field
+	 * Constructs new {@code KeypadData} instance with the specified field
 	 * values. The map keys must match to the field names. The map values will
 	 * be assigned to the appropriate class fields. For example, the maps can
 	 * be: {"eventType"=Integer(1)...}. That map will initialize the
 	 * {@link #FIELD_EVENT_TYPE} field with 1.
 	 * <p>
-	 * {@link #FIELD_EVENT_TYPE} field value type must be <code>Integer</code>.
-	 * {@link #FIELD_KEY_CODE} field value type must be <code>Integer</code>.
-	 * {@link #FIELD_KEY_NAME} field value type must be <code>String</code>.
+	 * {@link #FIELD_EVENT_TYPE} field value type must be {@code Integer}.
+	 * {@link #FIELD_KEY_CODE} field value type must be {@code Integer}.
+	 * {@link #FIELD_KEY_NAME} field value type must be {@code String}.
 	 * 
-	 * @param fields Contains the new <code>KeypadData</code> instance field
-	 *        values.
+	 * @param fields Contains the new {@code KeypadData} instance field values.
 	 * 
 	 * @throws ClassCastException If the field value types are not expected.
 	 * @throws IllegalArgumentException If the event type or key code is
 	 *         missing.
-	 * @throws NullPointerException If the fields map is <code>null</code>.
+	 * @throws NullPointerException If the fields map is {@code null}.
 	 */
 	public KeypadData(final Map fields) {
 		super(fields);
@@ -129,8 +127,7 @@ public class KeypadData extends FunctionData {
 	}
 
 	/**
-	 * Constructs new <code>KeypadData</code> instance with the specified
-	 * arguments.
+	 * Constructs new {@code KeypadData} instance with the specified arguments.
 	 * 
 	 * @param timestamp The data timestamp.
 	 * @param metadata The data metadata.
@@ -167,10 +164,10 @@ public class KeypadData extends FunctionData {
 
 	/**
 	 * Represents a human readable name of the corresponding key code. This
-	 * field is optional and sometimes it could be missed(might be
-	 * <code>null</code>).
+	 * field is optional and sometimes it could be missed(might be {@code null}
+	 * ).
 	 * 
-	 * @return A string with the name of the key or <code>null</code> if not
+	 * @return A string with the name of the key or {@code null} if not
 	 *         specified.
 	 */
 	public String getKeyName() {
@@ -178,13 +175,12 @@ public class KeypadData extends FunctionData {
 	}
 
 	/**
-	 * Two <code>KeypadData</code> instances are equal if they contain equal
+	 * Two {@code KeypadData} instances are equal if they contain equal
 	 * metadata, timestamp, event type, key code and key name.
 	 * 
 	 * @param other The object to compare this data.
 	 * 
-	 * @return <code>true</code> if this object is equivalent to the specified
-	 *         one.
+	 * @return {@code true} if this object is equivalent to the specified one.
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#equals(java.lang.Object)
 	 */
@@ -196,12 +192,12 @@ public class KeypadData extends FunctionData {
 	}
 
 	/**
-	 * Returns the hash code for this <code>KeypadData</code> object. The hash
-	 * code is a sum of {@link FunctionData#hashCode()},
-	 * {@link String#hashCode()}, event type and key code, where
-	 * {@link String#hashCode()} represents the key name hash code if available.
+	 * Returns the hash code for this {@code KeypadData} object. The hash code
+	 * is a sum of {@link FunctionData#hashCode()}, {@link String#hashCode()},
+	 * event type and key code, where {@link String#hashCode()} represents the
+	 * key name hash code if available.
 	 * 
-	 * @return The hash code of this <code>LevelData</code> object.
+	 * @return The hash code of this {@code LevelData} object.
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#hashCode()
 	 */
@@ -214,26 +210,26 @@ public class KeypadData extends FunctionData {
 	}
 
 	/**
-	 * Compares this <code>KeypadData</code> instance with the given argument.
-	 * The argument can be:
+	 * Compares this {@code KeypadData} instance with the given argument. The
+	 * argument can be:
 	 * <ul>
-	 * <li><code>KeypadData</code> - the method returns <code>-1</code> if
-	 * metadata, timestamp, event type, key code or key name are not equivalent.
-	 * 0 if all fields are equivalent.</li>
-	 * <li><code>Map</code> - the map must be built according the rules of
+	 * <li>{@code KeypadData} - the method returns {@code -1} if metadata,
+	 * timestamp, event type, key code or key name are not equivalent. 0 if all
+	 * fields are equivalent.</li>
+	 * <li>{@code Map} - the map must be built according the rules of
 	 * {@link #KeypadData(Map)}. Metadata, timestamp, event type, key code and
-	 * key name are compared according <code>KeypadData</code> argument rules.</li>
+	 * key name are compared according {@code KeypadData} argument rules.</li>
 	 * </ul>
 	 * 
 	 * @param o An argument to be compared.
 	 * 
 	 * @return -1 or 0 depending on the comparison rules.
 	 * 
-	 * @throws ClassCastException If the method is called with <code>Map</code>
-	 *         and the field value types are not expected.
-	 * @throws IllegalArgumentException If the method is called with
-	 *         <code>Map</code> and the event type or key code is missing.
-	 * @throws NullPointerException If the argument is <code>null</code>.
+	 * @throws ClassCastException If the method is called with {@code Map} and
+	 *         the field value types are not expected.
+	 * @throws IllegalArgumentException If the method is called with {@code Map}
+	 *         and the event type or key code is missing.
+	 * @throws NullPointerException If the argument is {@code null}.
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */

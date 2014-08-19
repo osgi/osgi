@@ -21,11 +21,11 @@ import org.osgi.service.dal.Function;
 import org.osgi.service.dal.functions.data.BooleanData;
 
 /**
- * <code>BooleanControl</code> function provides a boolean control support. The
+ * {@code BooleanControl} function provides a boolean control support. The
  * function state is accessible with {@link #getData()} getter and
  * {@link #setData(boolean)} setter. The state can be reversed with
- * {@link #reverse()} method, can be set to <code>true</code> value with
- * {@link #setTrue()} method and can be set to <code>false</code> value with
+ * {@link #reverse()} method, can be set to {@code true} value with
+ * {@link #setTrue()} method and can be set to {@code false} value with
  * {@link #setFalse()} method.
  * <p>
  * As an example, the function is easily mappable to ZigBee OnOff cluster and
@@ -53,14 +53,14 @@ public interface BooleanControl extends Function {
 
 	/**
 	 * Specifies the operation name, which sets the control state to
-	 * <code>true</code> value. The operation can be executed with
-	 * {@link #setTrue()} method.
+	 * {@code true} value. The operation can be executed with {@link #setTrue()}
+	 * method.
 	 */
 	public static final String	OPERATION_SET_TRUE	= "setTrue";
 
 	/**
 	 * Specifies the operation name, which sets the control state to
-	 * <code>false</code> value. The operation can be executed with
+	 * {@code false} value. The operation can be executed with
 	 * {@link #setFalse()} method.
 	 */
 	public static final String	OPERATION_SET_FALSE	= "setFalse";
@@ -74,10 +74,10 @@ public interface BooleanControl extends Function {
 	public static final String	PROPERTY_DATA		= "data";
 
 	/**
-	 * Returns the current state of <code>BooleanControl</code>. It's a getter
-	 * method for {@link #PROPERTY_DATA} property.
+	 * Returns the current state of {@code BooleanControl}. It's a getter method
+	 * for {@link #PROPERTY_DATA} property.
 	 * 
-	 * @return The current state of <code>BooleanControl</code>.
+	 * @return The current state of {@code BooleanControl}.
 	 * 
 	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
@@ -91,8 +91,8 @@ public interface BooleanControl extends Function {
 			IllegalStateException, DeviceException;
 
 	/**
-	 * Sets the <code>BooleanControl</code> state to the specified value. It's
-	 * setter method for {@link #PROPERTY_DATA} property.
+	 * Sets the {@code BooleanControl} state to the specified value. It's setter
+	 * method for {@link #PROPERTY_DATA} property.
 	 * 
 	 * @param data The new function value.
 	 * 
@@ -108,11 +108,10 @@ public interface BooleanControl extends Function {
 			IllegalStateException, DeviceException, IllegalArgumentException;
 
 	/**
-	 * Reverses the <code>BooleanControl</code> state. If the current state
-	 * represents <code>true</code> value, it'll be reversed to
-	 * <code>false</code>. If the current state represents <code>false</code>
-	 * value, it'll be reversed to <code>true</code>. The operation name is
-	 * {@link #OPERATION_REVERSE}.
+	 * Reverses the {@code BooleanControl} state. If the current state
+	 * represents {@code true} value, it'll be reversed to {@code false}. If the
+	 * current state represents {@code false} value, it'll be reversed to
+	 * {@code true}. The operation name is {@link #OPERATION_REVERSE}.
 	 * 
 	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
@@ -123,8 +122,8 @@ public interface BooleanControl extends Function {
 			IllegalStateException, DeviceException;
 
 	/**
-	 * Sets the <code>BooleanControl</code> state to <code>true</code> value.
-	 * The operation name is {@link #OPERATION_SET_TRUE}.
+	 * Sets the {@code BooleanControl} state to {@code true} value. The
+	 * operation name is {@link #OPERATION_SET_TRUE}.
 	 * 
 	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
@@ -135,8 +134,8 @@ public interface BooleanControl extends Function {
 			IllegalStateException, DeviceException;
 
 	/**
-	 * Sets the <code>BooleanControl</code> state to <code>false</code> value.
-	 * The operation name is {@link #OPERATION_SET_FALSE}.
+	 * Sets the {@code BooleanControl} state to {@code false} value. The
+	 * operation name is {@link #OPERATION_SET_FALSE}.
 	 * 
 	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already

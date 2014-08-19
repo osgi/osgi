@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-
 package org.osgi.service.dal.functions;
 
 import java.math.BigDecimal;
@@ -25,10 +24,10 @@ import org.osgi.service.dal.functions.data.BooleanData;
 import org.osgi.service.dal.functions.data.LevelData;
 
 /**
- * <code>WakeUp</code> function provides device awake monitoring and management.
- * It's especially applicable to battery-operated devices. Such device can
- * notify the system that it's awake and can receive commands with an event to
- * property {@link #PROPERTY_AWAKE}.
+ * {@code WakeUp} function provides device awake monitoring and management. It's
+ * especially applicable to battery-operated devices. Such device can notify the
+ * system that it's awake and can receive commands with an event to property
+ * {@link #PROPERTY_AWAKE}.
  * <p>
  * The device can periodically wake up for commands. The interval can be managed
  * with {@link #PROPERTY_WAKE_UP_INTERVAL} property.
@@ -47,8 +46,8 @@ public interface WakeUp extends Function {
 	 * {@link PropertyMetadata#PROPERTY_ACCESS_EVENTABLE}. If the device is
 	 * awake, it will trigger a property event.
 	 * <p>
-	 * The property value type is <code>BooleanData</code>. The boolean data is
-	 * always <code>true</code>. It marks that the device is awake.
+	 * The property value type is {@code BooleanData}. The boolean data is
+	 * always {@code true}. It marks that the device is awake.
 	 */
 	public static final String	PROPERTY_AWAKE				= "awake";
 
@@ -73,7 +72,7 @@ public interface WakeUp extends Function {
 	 * wake up and receive command based on this interval.
 	 * <p>
 	 * The interval can be measured in different units like hours, minutes,
-	 * seconds etc. The unit is specified in <code>LevelData</code> instance.
+	 * seconds etc. The unit is specified in {@code LevelData} instance.
 	 * 
 	 * @return The current wake up interval.
 	 * 

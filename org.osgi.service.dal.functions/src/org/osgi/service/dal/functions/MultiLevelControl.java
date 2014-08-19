@@ -22,8 +22,8 @@ import org.osgi.service.dal.Function;
 import org.osgi.service.dal.functions.data.LevelData;
 
 /**
- * <code>MultiLevelControl</code> function provides multi-level control support.
- * The function level is accessible with {@link #getData()} getter,
+ * {@code MultiLevelControl} function provides multi-level control support. The
+ * function level is accessible with {@link #getData()} getter,
  * {@link #setData(BigDecimal)} setter and {@link #setData(BigDecimal, String)}
  * setter.
  * <p>
@@ -61,10 +61,10 @@ public interface MultiLevelControl extends Function {
 	public static final String	PROPERTY_DATA	= "data";
 
 	/**
-	 * Returns <code>MultiLevelControl</code> level. It's a getter method for
+	 * Returns {@code MultiLevelControl} level. It's a getter method for
 	 * {@link #PROPERTY_DATA} property.
 	 * 
-	 * @return <code>MultiLevelControl</code> level.
+	 * @return {@code MultiLevelControl} level.
 	 * 
 	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
@@ -77,7 +77,7 @@ public interface MultiLevelControl extends Function {
 			IllegalStateException, DeviceException;
 
 	/**
-	 * Sets <code>MultiLevelControl</code> level to the specified value. It's a
+	 * Sets {@code MultiLevelControl} level to the specified value. It's a
 	 * setter method for {@link #PROPERTY_DATA} property.
 	 * 
 	 * @param level The new control level.
@@ -92,8 +92,8 @@ public interface MultiLevelControl extends Function {
 			IllegalStateException, DeviceException, IllegalArgumentException;
 
 	/**
-	 * Sets <code>MultiLevelControl</code> level according to the specified
-	 * unit. It's a setter method for {@link #PROPERTY_DATA} property.
+	 * Sets {@code MultiLevelControl} level according to the specified unit.
+	 * It's a setter method for {@link #PROPERTY_DATA} property.
 	 * 
 	 * @param level The new control level.
 	 * @param unit The level unit.

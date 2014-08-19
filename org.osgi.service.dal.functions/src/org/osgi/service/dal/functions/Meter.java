@@ -21,7 +21,7 @@ import org.osgi.service.dal.Function;
 import org.osgi.service.dal.functions.data.LevelData;
 
 /**
- * <code>Meter</code> function can measure metering information. The function
+ * {@code Meter} function can measure metering information. The function
  * provides three properties and one operation:
  * <ul>
  * <li>{@link #PROPERTY_CURRENT}</li> - property accessible with
@@ -68,7 +68,7 @@ public interface Meter extends Function {
 	/**
 	 * The service property value contains the metering flow. It's an optional
 	 * property and available only if it's supported by the meter. The value
-	 * type is <code>java.lang.String</code>. Possible property values:
+	 * type is {@code java.lang.String}. Possible property values:
 	 * <ul>
 	 * <li>{@link #FLOW_IN}</li>
 	 * <li>{@link #FLOW_OUT}</li>
