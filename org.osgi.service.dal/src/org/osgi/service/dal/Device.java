@@ -17,11 +17,11 @@
 package org.osgi.service.dal;
 
 /**
- * Represents the device in the OSGi service registry. Note that
- * <code>Device</code> services are registered last. Before their registration,
- * there is <code>Function</code> services registration. The reverse order is
- * used when the services are unregistered. <code>Device</code> services are
- * unregistered first before <code>Function</code> services.
+ * Represents the device in the OSGi service registry. Note that {@code Device}
+ * services are registered last. Before their registration, there is
+ * {@code Function} services registration. The reverse order is used when the
+ * services are unregistered. {@code Device} services are unregistered first
+ * before {@code Function} services.
  */
 public interface Device {
 
@@ -36,7 +36,7 @@ public interface Device {
 
 	/**
 	 * The service property value contains the device unique identifier. It's a
-	 * mandatory property. The value type is <code>java.lang.String</code>. To
+	 * mandatory property. The value type is {@code java.lang.String}. To
 	 * simplify the unique identifier generation, the property value must follow
 	 * the rule:
 	 * <p>
@@ -53,7 +53,7 @@ public interface Device {
 	/**
 	 * The service property value contains the reference device unique
 	 * identifiers. It's an optional property. The value type is
-	 * <code>java.lang.String[]</code>. It can be used to represent different
+	 * {@code java.lang.String[]}. It can be used to represent different
 	 * relationships between the devices. For example, the ZigBee controller can
 	 * have a reference to the USB dongle.
 	 */
@@ -62,19 +62,19 @@ public interface Device {
 	/**
 	 * The service property value contains the device driver name. For example,
 	 * ZigBee, Z-Wave, Bluetooth etc. It's a mandatory property. The value type
-	 * is <code>java.lang.String</code>.
+	 * is {@code java.lang.String}.
 	 */
 	public static final String	SERVICE_DRIVER								= "dal.device.driver";
 
 	/**
 	 * The service property value contains the device name. It's an optional
-	 * property. The value type is <code>java.lang.String</code>.
+	 * property. The value type is {@code java.lang.String}.
 	 */
 	public static final String	SERVICE_NAME								= "dal.device.name";
 
 	/**
 	 * The service property value contains the device status. It's a mandatory
-	 * property. The value type is <code>java.lang.Integer</code>. The possible
+	 * property. The value type is {@code java.lang.Integer}. The possible
 	 * values are:
 	 * <ul>
 	 * <li> {@link #STATUS_ONLINE}</li>
@@ -90,8 +90,7 @@ public interface Device {
 	/**
 	 * The service property value contains the device status detail. It holds
 	 * the reason for the current device status. It's an optional property. The
-	 * value type is <code>java.lang.Integer</code>. There are two value
-	 * categories:
+	 * value type is {@code java.lang.Integer}. There are two value categories:
 	 * <ul>
 	 * <li>positive values i.e. > 0</li> - Those values contain details related
 	 * to the current status. Examples: {@link #STATUS_DETAIL_CONNECTING} and
@@ -107,50 +106,49 @@ public interface Device {
 
 	/**
 	 * The service property value contains the device hardware vendor. It's an
-	 * optional property. The value type is <code>java.lang.String</code>.
+	 * optional property. The value type is {@code java.lang.String}.
 	 */
 	public static final String	SERVICE_HARDWARE_VENDOR						= "dal.device.hardware.vendor";
 
 	/**
 	 * The service property value contains the device hardware version. It's an
-	 * optional property. The value type is <code>java.lang.String</code>.
+	 * optional property. The value type is {@code java.lang.String}.
 	 */
 	public static final String	SERVICE_HARDWARE_VERSION					= "dal.device.hardware.version";
 
 	/**
 	 * The service property value contains the device firmware vendor. It's an
-	 * optional property. The value type is <code>java.lang.String</code>.
+	 * optional property. The value type is {@code java.lang.String}.
 	 */
 	public static final String	SERVICE_FIRMWARE_VENDOR						= "dal.device.firmware.vendor";
 
 	/**
 	 * The service property value contains the device firmware version. It's an
-	 * optional property. The value type is <code>java.lang.String</code>.
+	 * optional property. The value type is {@code java.lang.String}.
 	 */
 	public static final String	SERVICE_FIRMWARE_VERSION					= "dal.device.firmware.version";
 
 	/**
 	 * The service property value contains the device types like DVD, TV etc.
-	 * It's an optional property. The value type is
-	 * <code>java.lang.String[]</code>.
+	 * It's an optional property. The value type is {@code java.lang.String[]}.
 	 */
 	public static final String	SERVICE_TYPES								= "dal.device.types";
 
 	/**
 	 * The service property value contains the device model. It's an optional
-	 * property. The value type is <code>java.lang.String</code>.
+	 * property. The value type is {@code java.lang.String}.
 	 */
 	public static final String	SERVICE_MODEL								= "dal.device.model";
 
 	/**
 	 * The service property value contains the device serial number. It's an
-	 * optional property. The value type is <code>java.lang.String</code>.
+	 * optional property. The value type is {@code java.lang.String}.
 	 */
 	public static final String	SERVICE_SERIAL_NUMBER						= "dal.device.serial.number";
 
 	/**
 	 * The service property value contains the device description. It's an
-	 * optional property. The value type is <code>java.lang.String</code>.
+	 * optional property. The value type is {@code java.lang.String}.
 	 */
 	public static final String	SERVICE_DESCRIPTION							= "dal.device.description";
 
@@ -285,10 +283,21 @@ public interface Device {
 	 * 
 	 * @param propName The property name.
 	 * 
-	 * @return The property value or <code>null</code> if the property name
-	 *         cannot be mapped to a value.
+	 * @return The property value or {@code null} if the property name cannot be
+	 *         mapped to a value.
 	 */
 	public Object getServiceProperty(String propName);
+
+	/**
+	 * Returns an array with all device service property keys. The method will
+	 * return the same value as
+	 * {@link org.osgi.framework.ServiceReference#getProperty(String)} for the
+	 * service reference of this device. The result cannot be {@code null}.
+	 * 
+	 * @return An array with all device service property keys, cannot be
+	 *         {@code null}.
+	 */
+	public String[] getServicePropertyKeys();
 
 	/**
 	 * Removes this device. The method must synchronously remove the device from
@@ -298,8 +307,9 @@ public interface Device {
 	 * @throws UnsupportedOperationException If the operation is not supported
 	 *         over this device.
 	 * @throws SecurityException If the caller does not have the appropriate
-	 *         <code>DevicePermission[this device, {@link DevicePermission#ACTION_REMOVE}]</code>
-	 *         and the Java Runtime Environment supports permissions.
+	 *         {@code DevicePermission(this device, }
+	 *         {@link DevicePermission#ACTION_REMOVE}{@code )} and the Java
+	 *         Runtime Environment supports permissions.
 	 * @throws IllegalStateException If this device service object has already
 	 *         been unregistered.
 	 */
