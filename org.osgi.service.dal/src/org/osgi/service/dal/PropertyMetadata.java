@@ -72,8 +72,8 @@ public interface PropertyMetadata {
 
 	/**
 	 * Metadata key, which value represents the access to the function property.
-	 * The property value is a bitmap of <code>Integer</code> type. The bitmap
-	 * can be any combination of:
+	 * The property value is a bitmap of {@code Integer} type. The bitmap can be
+	 * any combination of:
 	 * <ul>
 	 * <li>{@link #PROPERTY_ACCESS_READABLE}</li>
 	 * <li>{@link #PROPERTY_ACCESS_WRITABLE}</li>
@@ -89,14 +89,14 @@ public interface PropertyMetadata {
 
 	/**
 	 * Metadata key, which value represents the property description. The
-	 * property value type is <code>java.lang.String</code>.
+	 * property value type is {@code java.lang.String}.
 	 */
 	public static final String	DESCRIPTION				= "description";
 
 	/**
 	 * Metadata key, which value represents the property supported units. The
-	 * property value type is <code>java.lang.String[]</code>. Each unit must
-	 * follow those rules:
+	 * property value type is {@code java.lang.String[]}. Each unit must follow
+	 * those rules:
 	 * <ul>
 	 * <li>The International System of Units must be used where it's applicable.
 	 * For example, kg for kilogram and km for kilometre.</li>
@@ -116,8 +116,8 @@ public interface PropertyMetadata {
 
 	/**
 	 * Returns metadata about the function property or operation parameter. The
-	 * keys of the <code>java.util.Map</code> result must be of
-	 * <code>java.lang.String</code> type. Possible keys:
+	 * keys of the {@code java.util.Map} result must be of
+	 * {@code java.lang.String} type. Possible keys:
 	 * <ul>
 	 * <li>{@link #DESCRIPTION} - doesn't depend on the given unit.</li>
 	 * <li>{@link #PROPERTY_ACCESS} - available only for function property and
@@ -130,7 +130,7 @@ public interface PropertyMetadata {
 	 * @param unit The unit to align the metadata if it's applicable. It can be
 	 *        null, which means that the default unit will be used.
 	 * 
-	 * @return The property metadata or <code>null</code> if no such metadata is
+	 * @return The property metadata or {@code null} if no such metadata is
 	 *         available.
 	 */
 	public Map getMetadata(String unit);
@@ -139,13 +139,13 @@ public interface PropertyMetadata {
 	 * Returns the resolution value of specific range. For example, if the range
 	 * is [0, 100], the resolution can be 10. That's the different between two
 	 * values in series. The resolution type depends on the property type. If
-	 * the property is using data bean like <code>LevelData</code>, the
-	 * resolution will the <code>BigDecimal</code>.
+	 * the property is using data bean like {@code LevelData}, the resolution
+	 * will the {@code BigDecimal}.
 	 * 
-	 * @param unit The unit to align the resolution, can be <code>null</code>.
+	 * @param unit The unit to align the resolution, can be {@code null}.
 	 * 
-	 * @return The resolution according to the specified unit or
-	 *         <code>null</code> if no resolution is supported.
+	 * @return The resolution according to the specified unit or {@code null} if
+	 *         no resolution is supported.
 	 * 
 	 * @throws IllegalArgumentException If the unit is not supported.
 	 */
@@ -153,16 +153,15 @@ public interface PropertyMetadata {
 
 	/**
 	 * Returns the property possible values according to the specified unit. If
-	 * the unit is <code>null</code>, the values set is aligned to the default
-	 * unit. If there is no such set of supported values, <code>null</code> is
-	 * returned. The values must be sorted in increasing order.
+	 * the unit is {@code null}, the values set is aligned to the default unit.
+	 * If there is no such set of supported values, {@code null} is returned.
+	 * The values must be sorted in increasing order.
 	 * 
-	 * @param unit The unit to align the supported values, can be
-	 *        <code>null</code>.
+	 * @param unit The unit to align the supported values, can be {@code null}.
 	 * 
 	 * @return The supported values according to the specified unit or
-	 *         <code>null</code> if no such values are supported. The values
-	 *         must be sorted in increasing order.
+	 *         {@code null} if no such values are supported. The values must be
+	 *         sorted in increasing order.
 	 * 
 	 * @throws IllegalArgumentException If the unit is not supported.
 	 */
@@ -170,15 +169,13 @@ public interface PropertyMetadata {
 
 	/**
 	 * Returns the property minimum value according to the specified unit. If
-	 * the unit is <code>null</code>, the minimum value is aligned to the
-	 * default unit. If there is no minimum value, <code>null</code> is
-	 * returned.
+	 * the unit is {@code null}, the minimum value is aligned to the default
+	 * unit. If there is no minimum value, {@code null} is returned.
 	 * 
-	 * @param unit The unit to align the minimum value, can be <code>null</code>
-	 *        .
+	 * @param unit The unit to align the minimum value, can be {@code null} .
 	 * 
-	 * @return The minimum value according to the specified unit or
-	 *         <code>null</code> if no minimum value is supported.
+	 * @return The minimum value according to the specified unit or {@code null}
+	 *         if no minimum value is supported.
 	 * 
 	 * @throws IllegalArgumentException If the unit is not supported.
 	 */
@@ -186,15 +183,13 @@ public interface PropertyMetadata {
 
 	/**
 	 * Returns the property maximum value according to the specified unit. If
-	 * the unit is <code>null</code>, the maximum value is aligned to the
-	 * default unit. If there is no maximum value, <code>null</code> is
-	 * returned.
+	 * the unit is {@code null}, the maximum value is aligned to the default
+	 * unit. If there is no maximum value, {@code null} is returned.
 	 * 
-	 * @param unit The unit to align the maximum value, can be <code>null</code>
-	 *        .
+	 * @param unit The unit to align the maximum value, can be {@code null} .
 	 * 
-	 * @return The maximum value according to the specified unit or
-	 *         <code>null</code> if no maximum value is supported.
+	 * @return The maximum value according to the specified unit or {@code null}
+	 *         if no maximum value is supported.
 	 * 
 	 * @throws IllegalArgumentException If the unit is not supported.
 	 */

@@ -28,35 +28,35 @@ public interface OperationMetadata {
 
 	/**
 	 * Metadata key, which value represents the operation description. The
-	 * property value type is <code>java.lang.String</code>.
+	 * property value type is {@code java.lang.String}.
 	 */
 	public static final String	META_INFO_DESCRIPTION	= "description";
 
 	/**
 	 * Returns metadata about the function operation. The keys of the
-	 * <code>java.util.Map</code> result must be of
-	 * <code>java.lang.String</code> type. Possible keys:
+	 * {@code java.util.Map} result must be of {@code java.lang.String} type.
+	 * Possible keys:
 	 * <ul>
 	 * <li>{@link #META_INFO_DESCRIPTION}</li>
 	 * <li>custom key</li>
 	 * </ul>
 	 * 
-	 * @return The operation metadata or <code>null</code> if no such metadata
-	 *         is available.
+	 * @return The operation metadata or {@code null} if no such metadata is
+	 *         available.
 	 */
 	public Map getMetadata();
 
 	/**
-	 * Returns metadata about the operation return value or <code>null</code> if
-	 * no such metadata is available.
+	 * Returns metadata about the operation return value or {@code null} if no
+	 * such metadata is available.
 	 * 
 	 * @return Operation return value metadata.
 	 */
 	public PropertyMetadata getReturnValueMetadata();
 
 	/**
-	 * Returns metadata about the operation parameters or <code>null</code> if
-	 * no such medatadata is available.
+	 * Returns metadata about the operation parameters or {@code null} if no
+	 * such medatadata is available.
 	 * 
 	 * @return Operation parameters medata.
 	 */

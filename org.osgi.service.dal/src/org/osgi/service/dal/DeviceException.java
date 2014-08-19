@@ -21,9 +21,9 @@ import java.io.PrintStream;
 import java.io.PrintWriter;
 
 /**
- * <code>DeviceException</code> is a special <code>IOException</code>, which is
- * thrown to indicate that there is a device operation fail. The error reason
- * can be located with {@link #getCode()} method. The cause is available with
+ * {@code DeviceException} is a special {@code IOException}, which is thrown to
+ * indicate that there is a device operation fail. The error reason can be
+ * located with {@link #getCode()} method. The cause is available with
  * {@link #getCause()}.
  */
 public class DeviceException extends IOException {
@@ -60,9 +60,8 @@ public class DeviceException extends IOException {
 	private final Throwable		cause;
 
 	/**
-	 * Construct a new device exception with <code>null</code> message. The
-	 * cause is not initialized and the exception code is set to
-	 * {@link #CODE_UNKNOWN}.
+	 * Construct a new device exception with {@code null} message. The cause is
+	 * not initialized and the exception code is set to {@link #CODE_UNKNOWN}.
 	 */
 	public DeviceException() {
 		this(null, null, CODE_UNKNOWN);
@@ -113,7 +112,7 @@ public class DeviceException extends IOException {
 	}
 
 	/**
-	 * Returns the cause for this exception or <code>null</code> if the cause is
+	 * Returns the cause for this exception or {@code null} if the cause is
 	 * missing. The cause can be protocol specific exception with an appropriate
 	 * message and error code.
 	 * 

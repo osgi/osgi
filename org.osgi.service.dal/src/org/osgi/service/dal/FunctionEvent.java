@@ -57,21 +57,21 @@ public final class FunctionEvent extends Event {
 
 	/**
 	 * Represents an event property key for function UID. The property value
-	 * type is <code>java.lang.String</code>. The value represents the property
-	 * value change source function identifier.
+	 * type is {@code java.lang.String}. The value represents the property value
+	 * change source function identifier.
 	 */
 	public static final String	PROPERTY_FUNCTION_UID				= "dal.function.UID";
 
 	/**
 	 * Represents an event property key for the function property name. The
-	 * property value type is <code>java.lang.String</code>. The value
-	 * represents the property name.
+	 * property value type is {@code java.lang.String}. The value represents the
+	 * property name.
 	 */
 	public static final String	PROPERTY_FUNCTION_PROPERTY_NAME		= "dal.function.property.name";
 
 	/**
 	 * Represents an event property key for the function property value. The
-	 * property value type is a subclass of <code>FunctionData</code>. The value
+	 * property value type is a subclass of {@code FunctionData}. The value
 	 * represents the property value.
 	 */
 	public static final String	PROPERTY_FUNCTION_PROPERTY_VALUE	= "dal.function.property.value";

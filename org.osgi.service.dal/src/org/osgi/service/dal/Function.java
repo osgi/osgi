@@ -49,26 +49,25 @@ package org.osgi.service.dal;
  * when there are function properties. The property value is the function
  * property names.</li>
  * </ul>
- * The <code>Function</code> services are registered before the
- * <code>Device</code> services. It's possible that {@link #SERVICE_DEVICE_UID}
- * point to missing services at the moment of the registration. The reverse
- * order is used when the services are unregistered. <code>Function</code>
- * services are unregistered last after <code>Device</code> services.
+ * The {@code Function} services are registered before the {@code Device}
+ * services. It's possible that {@link #SERVICE_DEVICE_UID} point to missing
+ * services at the moment of the registration. The reverse order is used when
+ * the services are unregistered. {@code Function} services are unregistered
+ * last after {@code Device} services.
  * <p>
  * Function service must be registered under the function class hierarchy. Other
  * interfaces are not allowed. All classes from the function class hierarchy
  * must participate as registration classes in the order from child to parent.
- * The <code>Function</code> interface must be the last one in the list. For
- * example, <code>MeterV2 extends MeterV1 extends Function</code> are function
- * interfaces. If the implementation would like to provide <code>MeterV2</code>
- * functionality, the registration is:
+ * The {@code Function} interface must be the last one in the list. For example,
+ * {@code MeterV2 extends MeterV1 extends Function} are function interfaces. If
+ * the implementation would like to provide {@code MeterV2} functionality, the
+ * registration is:
  * <code>context.registerService(new String[]{MeterV2.class.getName(), MeterV1.class.getName(), Function.class.getName()}, this, regProps);</code>
- * <code>MeterV2</code> is the last child in the class hierarchy and it's on the
- * first position. <code>MeterV1</code> is a parent of <code>MeterV2</code> and
- * child of <code>Function</code>. <code>MeterV1</code> position is between
- * <code>MeterV2</code> and <code>Function</code> in the registration classes.
- * If the implementation would like to provide <code>MeterV1</code>
- * functionality, the registration is:
+ * {@code MeterV2} is the last child in the class hierarchy and it's on the
+ * first position. {@code MeterV1} is a parent of {@code MeterV2} and child of
+ * {@code Function}. {@code MeterV1} position is between {@code MeterV2} and
+ * {@code Function} in the registration classes. If the implementation would
+ * like to provide {@code MeterV1} functionality, the registration is:
  * <code>context.registerService(new String[]{MeterV1.class.getName(), Function.class.getName()}, this, regProps);</code>
  * If the implementation would like to mark that there is a function, but no
  * specific function interface exists, the registration can be:
@@ -79,16 +78,16 @@ package org.osgi.service.dal;
  * <ul>
  * <li>
  * <code>context.registerService(new String[] {ManagedService.class.getName(), Function.class.getName()}, this, regProps);</code>
- * - <code>ManagedService</code> interface doesn't participate in a function
- * class hierarchy.</li>
+ * - {@code ManagedService} interface doesn't participate in a function class
+ * hierarchy.</li>
  * <li>
  * <code>context.registerService(new String[] {MeterV1.class.getName()}, this, regProps);</code>
- * - <code>Function</code> interface is missing.</li>
+ * - {@code Function} interface is missing.</li>
  * <li>
  * <code>context.registerService(new String[] {MeterV1.class.getName(), Alarm.class.getName(), Function.class.getName()}, this, regProps);</code>
- * , where <code>MeterV1 extends Function</code> and
- * <code>Alarm extends Function</code> - <code>MeterV1</code> and
- * <code>Alarm</code> are from different function class hierarchies.</li>
+ * , where {@code MeterV1 extends Function} and {@code Alarm extends Function} -
+ * {@code MeterV1} and {@code Alarm} are from different function class
+ * hierarchies.</li>
  * </ul>
  * <p>
  * That registration rule helps to the applications to find the supported
@@ -104,9 +103,9 @@ package org.osgi.service.dal;
  * <li>Setter methods must be available for all properties with
  * {@link PropertyMetadata#PROPERTY_ACCESS_WRITABLE} access.</li>
  * <li>Setter method must use {@link FunctionData} wrapped type. For example,
- * there is <code>MyFunctionData</code> with timestamp, unit and
- * <code>BigDecimal</code> value. The setter must accept as an argument the
- * value of type <code>BigDecimal</code>.</li>
+ * there is {@code MyFunctionData} with timestamp, unit and {@code BigDecimal}
+ * value. The setter must accept as an argument the value of type
+ * {@code BigDecimal}.</li>
  * <li>It's possible to have a second setter method, which accepts the value as
  * a first argument and the unit as a second argument.</li>
  * <li>No methods are required for properties with
@@ -123,13 +122,12 @@ package org.osgi.service.dal;
  * rules. The data type can be one of the following types:
  * <ul>
  * <li>Java primitive type or corresponding reference type.</li>
- * <li><code>java.lang.String</code>.</li>
- * <li><code>Beans</code>, but the beans properties must use those rules. Java
- * Beans are defined in JavaBeans specification.</li>
+ * <li>{@code java.lang.String}.</li>
+ * <li>{@code Beans}, but the beans properties must use those rules. Java Beans
+ * are defined in JavaBeans specification.</li>
  * <li>
- * <code>java.util.Map</code>s. The keys can be any reference type of Java
- * primitive types or <code>java.lang.String</code>. The values must use those
- * rules.</li>
+ * {@code java.util.Map}s. The keys can be any reference type of Java primitive
+ * types or {@code java.lang.String}. The values must use those rules.</li>
  * <li>Arrays of defined types.</li>
  * </ul>
  * The properties metadata is accessible with
@@ -160,14 +158,14 @@ package org.osgi.service.dal;
  * java.lang.UnsupportedOperationException must be thrown. It indicates that
  * function is partially supported.</li>
  * <li>The function operations, getters and setters must not override
- * <code>java.lang.Object</code> and this interface methods.</li>
+ * {@code java.lang.Object} and this interface methods.</li>
  * </ul>
  */
 public interface Function {
 
 	/**
 	 * The service property value contains the function unique identifier. It's
-	 * a mandatory property. The value type is <code>java.lang.String</code>. To
+	 * a mandatory property. The value type is {@code java.lang.String}. To
 	 * simplify the unique identifier generation, the property value must follow
 	 * the rule:
 	 * <p>
@@ -188,8 +186,7 @@ public interface Function {
 	/**
 	 * The service property value contains the function type. It's an optional
 	 * property. For example, the sensor function can have different types like
-	 * temperature or pressure etc. The value type is
-	 * <code>java.lang.String</code>.
+	 * temperature or pressure etc. The value type is {@code java.lang.String}.
 	 * <p>
 	 * Organizations that want to use function types that do not clash with OSGi
 	 * Alliance defined types should prefix their types in own namespace.
@@ -203,28 +200,28 @@ public interface Function {
 	 * The service property value contains the function version. That version
 	 * can point to specific implementation version and vary in the different
 	 * vendor implementations. It's an optional property. The value type is
-	 * <code>java.lang.String</code>.
+	 * {@code java.lang.String}.
 	 */
 	public static final String	SERVICE_VERSION			= "dal.function.version";
 
 	/**
 	 * The service property value contains the device unique identifier. The
 	 * function belongs to this device. It's an optional property. The value
-	 * type is <code>java.lang.String</code>.
+	 * type is {@code java.lang.String}.
 	 */
 	public static final String	SERVICE_DEVICE_UID		= "dal.function.device.UID";
 
 	/**
 	 * The service property value contains the reference function unique
 	 * identifiers. It's an optional property. The value type is
-	 * <code>java.lang.String[]</code>. It can be used to represent different
+	 * {@code java.lang.String[]}. It can be used to represent different
 	 * relationships between the functions.
 	 */
 	public static final String	SERVICE_REFERENCE_UIDS	= "dal.function.reference.UIDs";
 
 	/**
 	 * The service property value contains the function description. It's an
-	 * optional property. The value type is <code>java.lang.String</code>.
+	 * optional property. The value type is {@code java.lang.String}.
 	 */
 	public static final String	SERVICE_DESCRIPTION		= "dal.function.description";
 
@@ -232,9 +229,9 @@ public interface Function {
 	 * The service property value contains the function operation names. It's an
 	 * optional property. The property is missing when there are no function
 	 * operations and property must be set when there are function operations.
-	 * The value type is <code>java.lang.String[]</code>. It's not possible to
-	 * exist two or more function operations with the same name i.e. the
-	 * operation overloading is not allowed.
+	 * The value type is {@code java.lang.String[]}. It's not possible to exist
+	 * two or more function operations with the same name i.e. the operation
+	 * overloading is not allowed.
 	 */
 	public static final String	SERVICE_OPERATION_NAMES	= "dal.function.operation.names";
 
@@ -242,8 +239,8 @@ public interface Function {
 	 * The service property value contains the function property names. It's an
 	 * optional property. The property is missing when there are no function
 	 * properties and property must be set when there are function properties.
-	 * The value type is <code>java.lang.String[]</code>. It's not possible to
-	 * exist two or more function properties with the same name.
+	 * The value type is {@code java.lang.String[]}. It's not possible to exist
+	 * two or more function properties with the same name.
 	 */
 	public static final String	SERVICE_PROPERTY_NAMES	= "dal.function.property.names";
 
@@ -257,8 +254,8 @@ public interface Function {
 	 * @param propertyName The function property name, which metadata is
 	 *        requested.
 	 * 
-	 * @return The property metadata for the given property name.
-	 *         <code>null</code> if the property metadata is not supported.
+	 * @return The property metadata for the given property name. {@code null}
+	 *         if the property metadata is not supported.
 	 * 
 	 * @throws IllegalArgumentException If the function property with the
 	 *         specified name is not supported.
@@ -275,8 +272,8 @@ public interface Function {
 	 * @param operationName The function operation name, which metadata is
 	 *        requested.
 	 * 
-	 * @return The operation metadata for the given operation name.
-	 *         <code>null</code> if the operation metadata is not supported.
+	 * @return The operation metadata for the given operation name. {@code null}
+	 *         if the operation metadata is not supported.
 	 * 
 	 * @throws IllegalArgumentException If the function operation with the
 	 *         specified name is not supported.
@@ -295,8 +292,8 @@ public interface Function {
 	 * 
 	 * @param propName The property name.
 	 * 
-	 * @return The property value or <code>null</code> if the property name
-	 *         cannot be mapped to a value.
+	 * @return The property value or {@code null} if the property name cannot be
+	 *         mapped to a value.
 	 */
 	public Object getServiceProperty(String propName);
 
