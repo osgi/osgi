@@ -1,19 +1,11 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
-
 
 package org.osgi.test.cases.dal;
 
@@ -29,8 +21,7 @@ import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
 
 /**
- * Test event handler for {@link FunctionEvent#TOPIC_PROPERTY_CHANGED}
- * events.
+ * Test event handler for {@link FunctionEvent#TOPIC_PROPERTY_CHANGED} events.
  */
 public final class FunctionEventHandler implements EventHandler {
 
@@ -55,7 +46,7 @@ public final class FunctionEventHandler implements EventHandler {
 	/**
 	 * Registers the test handler for the specified function, if specified.
 	 * 
-	 * @param funtionUID The function identifier, can be <code>null</code>.
+	 * @param funtionUID The function identifier, can be {@code null}.
 	 */
 	public void register(String funtionUID) {
 		if (null != this.handlerSReg) {

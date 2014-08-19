@@ -1,19 +1,11 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
-
 
 package org.osgi.test.cases.dal;
 
@@ -29,10 +21,7 @@ import org.osgi.service.dal.Device;
 import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.FunctionData;
-import org.osgi.service.dal.FunctionEvent;
 import org.osgi.service.dal.PropertyMetadata;
-import org.osgi.service.dal.functions.BooleanControl;
-import org.osgi.service.dal.functions.data.BooleanData;
 import org.osgi.test.cases.step.TestStep;
 
 /**
@@ -43,18 +32,26 @@ public class FunctionTest extends AbstractDeviceTest {
 	/**
 	 * The function must be registered under only one interface, the function
 	 * interface. The test method checks that rule.
+	 * 
+	 * @throws ClassNotFoundException If the function class cannot be loaded.
 	 */
-	public void testRegistrationClasses() {
+	public void testRegistrationClasses() throws ClassNotFoundException {
 		Function[] functions = null;
 		try {
-			functions = super.getFunctions(null, Function.SERVICE_UID, null);
+			functions = super.getFunctions(Function.SERVICE_UID, null);
 		} catch (InvalidSyntaxException e) {
 			// not possible
 			fail(null, e);
 		}
 		for (int i = 0; i < functions.length; i++) {
 			String[] regClasses = (String[]) functions[i].getServiceProperty(Constants.OBJECTCLASS);
-			assertEquals("Only one registration class is allowed!", 1, regClasses.length);
+			assertTrue("At least one registration class is expected!", regClasses.length >= 1);
+			assertEquals("The last registration class must be: " + Function.class.getName(),
+					Function.class.getName(), regClasses[regClasses.length - 1]);
+			Class[] classes = loadClasses(regClasses);
+			for (int ii = 0, lastIndex = classes.length - 1; ii < lastIndex; ii++) {
+				assertTrue("The child in the class hierarchy must be before the parent", classes[ii + 1].isAssignableFrom(classes[ii]));
+			}
 		}
 	}
 
@@ -67,13 +64,10 @@ public class FunctionTest extends AbstractDeviceTest {
 	 */
 	public void testRegistrationOrder() throws InvalidSyntaxException {
 		TestStep testStep = super.getTestStep();
-		String deviceID = testStep.execute(Commands.REGISTER_DEVICE,
-				new String[] {BooleanControl.class.getName()})[0];
+		String deviceID = testStep.execute(Commands.REGISTER_DEVICE_SINGLE_FUNCTION, null)[0];
 		long deviceServiceID = ((Long) super.getDevice(deviceID).getServiceProperty(Constants.SERVICE_ID)).longValue();
-		Function[] functions = getFunctions(
-				null, Function.SERVICE_DEVICE_UID, deviceID);
+		Function[] functions = getFunctions(Function.SERVICE_DEVICE_UID, deviceID);
 		assertEquals("Only one function must be supported!", 1, functions.length);
-		assertTrue("Boolean control must be supported.", functions[0] instanceof BooleanControl);
 		long functionServiceID = ((Long) functions[0].getServiceProperty(Constants.SERVICE_ID)).longValue();
 		assertTrue("The function must be registered before the device!", functionServiceID < deviceServiceID);
 	}
@@ -91,12 +85,9 @@ public class FunctionTest extends AbstractDeviceTest {
 	 */
 	public void testUnregistrationOrder() throws InvalidSyntaxException, DeviceException, UnsupportedOperationException, IllegalStateException {
 		TestStep testStep = super.getTestStep();
-		// FIXME: remove BooleanControl dependency
-		String deviceID = testStep.execute(Commands.REGISTER_DEVICE,
-				new String[] {BooleanControl.class.getName()})[0];
+		String deviceID = testStep.execute(Commands.REGISTER_DEVICE_SINGLE_FUNCTION, null)[0];
 		Device device = super.getDevice(deviceID);
-		Function[] functions = getFunctions(
-				null, Function.SERVICE_DEVICE_UID, deviceID);
+		Function[] functions = getFunctions(Function.SERVICE_DEVICE_UID, deviceID);
 		assertEquals("Only one function must be supported!", 1, functions.length);
 		super.deviceServiceListener.clear();
 		device.remove();
@@ -117,7 +108,7 @@ public class FunctionTest extends AbstractDeviceTest {
 					assertTrue("The device must be unregistered first!", isDeviceUnregistered);
 					assertFalse("The function is already unregistered!", isFunctionUnregistered);
 					isFunctionUnregistered = true;
-			}
+				}
 		}
 	}
 
@@ -134,8 +125,8 @@ public class FunctionTest extends AbstractDeviceTest {
 	}
 
 	/**
-	 * Checks that {@link Function#getServiceProperty(String)} returns the
-	 * same value as {@link ServiceReference#getProperty(String)}.
+	 * Checks that {@link Function#getServiceProperty(String)} returns the same
+	 * value as {@link ServiceReference#getProperty(String)}.
 	 */
 	public void testFunctionProperties() {
 		ServiceReference[] functionSRefs = getFunctionSRefs();
@@ -213,43 +204,6 @@ public class FunctionTest extends AbstractDeviceTest {
 	}
 
 	/**
-	 * Check the function events.
-	 * 
-	 * @throws InvalidSyntaxException If the registered device UID can break
-	 *         LDAP filter.
-	 * @throws UnsupportedOperationException If {@link BooleanControl#setTrue()}
-	 *         is not supported.
-	 * @throws IllegalStateException If the function service is unregistered.
-	 * @throws DeviceException If an error is available while executing the
-	 *         operation.
-	 */
-	public void testPropertyEvents() throws InvalidSyntaxException, UnsupportedOperationException, IllegalStateException, DeviceException {
-		Function[] functions = getFunctions(
-				BooleanControl.class.getName(), PropertyMetadata.PROPERTY_ACCESS_EVENTABLE);
-		BooleanControl booleanControl = (BooleanControl) functions[0];
-		final String functionUID = (String) booleanControl.getServiceProperty(Function.SERVICE_UID);
-		FunctionEventHandler eventHandler = new FunctionEventHandler(super.getContext());
-		eventHandler.register(functionUID);
-		FunctionEvent functionEvent;
-		try {
-			booleanControl.setTrue();
-			functionEvent = eventHandler.getEvents(1)[0];
-		} finally {
-			eventHandler.unregister();
-		}
-		BooleanData propertyData = (BooleanData) functionEvent.getFunctionPropertyValue();
-		super.assertEquals(true, propertyData);
-		assertEquals(
-				"The event function identifier is not correct!",
-				functionUID,
-				functionEvent.getFunctionUID());
-		assertEquals(
-				"The property name is not correct!",
-				BooleanControl.PROPERTY_DATA,
-				functionEvent.getFunctionPropertyName());
-	}
-
-	/**
 	 * Tests that there is no operation overloading.
 	 * 
 	 * @throws ClassNotFoundException If the function class cannot be loaded.
@@ -257,7 +211,7 @@ public class FunctionTest extends AbstractDeviceTest {
 	public void testOperations() throws ClassNotFoundException {
 		Function[] functions = null;
 		try {
-			functions = super.getFunctions(null, Function.SERVICE_OPERATION_NAMES, null);
+			functions = super.getFunctions(Function.SERVICE_OPERATION_NAMES, null);
 		} catch (InvalidSyntaxException e) {
 			fail(null, e);
 		}
@@ -271,6 +225,17 @@ public class FunctionTest extends AbstractDeviceTest {
 				assertEquals("There is operation overloafing for: " + operationNames[ii], 1, methods.length);
 			}
 		}
+	}
+
+	private static Class[] loadClasses(String[] classNames) throws ClassNotFoundException {
+		if (null == classNames) {
+			return null;
+		}
+		Class[] classes = new Class[classNames.length];
+		for (int i = 0; i < classNames.length; i++) {
+			classes[i] = Class.forName(classNames[i]);
+		}
+		return classes;
 	}
 
 	private void checkPropertySetter(Function function, String propertyName) throws NoSuchMethodException, ClassNotFoundException {
@@ -373,7 +338,7 @@ public class FunctionTest extends AbstractDeviceTest {
 	private void checkFunctionPropertyType(String propertyName, Class[] expectedTypes) {
 		Function[] functions = null;
 		try {
-			functions = super.getFunctions(null, propertyName, null);
+			functions = super.getFunctions(propertyName, null);
 		} catch (InvalidSyntaxException e) {
 			fail(null, e);
 		}
