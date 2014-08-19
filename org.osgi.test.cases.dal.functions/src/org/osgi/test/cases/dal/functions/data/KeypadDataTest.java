@@ -1,19 +1,11 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
-
 
 package org.osgi.test.cases.dal.functions.data;
 
@@ -24,7 +16,7 @@ import org.osgi.service.dal.functions.data.KeypadData;
 import org.osgi.test.cases.dal.functions.AbstractFunctionTest;
 
 /**
- * Validates the <code>KeypadData</code> data structure.
+ * Validates the {@code KeypadData} data structure.
  */
 public final class KeypadDataTest extends AbstractFunctionTest {
 
@@ -72,7 +64,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 	}
 
 	/**
-	 * Checks {@link KeypadData#compareTo(Object)} with <code>KeypadData</code>.
+	 * Checks {@link KeypadData#compareTo(Object)} with {@code KeypadData}.
 	 */
 	public void testKeypadDataComparison() {
 		// check without metadata
@@ -111,7 +103,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 	}
 
 	/**
-	 * Checks {@link KeypadData#compareTo(Object)} with <code>Map</code>.
+	 * Checks {@link KeypadData#compareTo(Object)} with {@code Map}.
 	 */
 	public void testMapComparison() {
 		// check without metadata
@@ -182,7 +174,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 	}
 
 	/**
-	 * Checks <code>KeypadData</code> field values.
+	 * Checks {@code KeypadData} field values.
 	 */
 	public void testKeypadDataFields() {
 		// check without metadata
@@ -207,7 +199,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 	}
 
 	/**
-	 * Checks the <code>KeypadData</code> construction with an invalid fields.
+	 * Checks the {@code KeypadData} construction with an invalid fields.
 	 */
 	public void testInvalidFields() {
 		final Map fields = new HashMap();
@@ -259,7 +251,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 			new KeypadData(fields);
 			fail("The keypad data is built with invalid fields: " + fields);
 		} catch (ClassCastException cce) {
-			// expected, go ahead
+			// go ahead, it's expected
 		}
 	}
 

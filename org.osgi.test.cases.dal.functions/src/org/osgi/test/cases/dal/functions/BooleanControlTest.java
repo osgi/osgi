@@ -1,30 +1,23 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
-
 
 package org.osgi.test.cases.dal.functions;
 
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.Function;
+import org.osgi.service.dal.FunctionEvent;
+import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.BooleanControl;
 import org.osgi.service.dal.functions.data.BooleanData;
 
 /**
- * Validates the <code>BooleanControl</code> functions.
+ * Validates the {@code BooleanControl} functions.
  */
 public final class BooleanControlTest extends AbstractFunctionTest {
 
@@ -35,13 +28,7 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 	 * @throws DeviceException If operation error is available.
 	 */
 	public void testSetTrue() throws IllegalStateException, DeviceException {
-		Function[] booleanControls = null;
-		try {
-			booleanControls = super.getFunctions(BooleanControl.class.getName(), null, null);
-		} catch (InvalidSyntaxException e) {
-			// not possible
-			fail(null, e);
-		}
+		Function[] booleanControls = super.getFunctions(BooleanControl.class.getName());
 		boolean check = false;
 		for (int i = 0; i < booleanControls.length; i++) {
 			final BooleanControl currentBooleanControl = (BooleanControl) booleanControls[i];
@@ -63,13 +50,7 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 	 * @throws DeviceException If operation error is available.
 	 */
 	public void testSetFalse() throws IllegalStateException, DeviceException {
-		Function[] booleanControls = null;
-		try {
-			booleanControls = super.getFunctions(BooleanControl.class.getName(), null, null);
-		} catch (InvalidSyntaxException e) {
-			// not possible
-			fail(null, e);
-		}
+		Function[] booleanControls = super.getFunctions(BooleanControl.class.getName());
 		boolean check = false;
 		for (int i = 0; i < booleanControls.length; i++) {
 			final BooleanControl currentBooleanControl = (BooleanControl) booleanControls[i];
@@ -78,7 +59,7 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 				check = true;
 				super.assertEquals(false, currentBooleanControl.getData());
 			} catch (UnsupportedOperationException uoe) {
-				// expected, go ahead
+				//expected, go ahead
 			}
 		}
 		assertTrue("At least one Boolean Control must support setFalse operation.", check);
@@ -91,13 +72,7 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 	 * @throws DeviceException If operation error is available.
 	 */
 	public void testReverse() throws IllegalStateException, DeviceException {
-		Function[] booleanControls = null;
-		try {
-			booleanControls = super.getFunctions(BooleanControl.class.getName(), null, null);
-		} catch (InvalidSyntaxException e) {
-			// not possible
-			fail(null, e);
-		}
+		Function[] booleanControls = super.getFunctions(BooleanControl.class.getName());
 		boolean check = false;
 		for (int i = 0; i < booleanControls.length; i++) {
 			final BooleanControl currentBooleanControl = (BooleanControl) booleanControls[i];
@@ -113,4 +88,39 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 		assertTrue("At least one Boolean Control must support reverse operation.", check);
 	}
 
+	/**
+	 * Checks {@code BooleanControl} function events.
+	 * 
+	 * @throws UnsupportedOperationException If {@link BooleanControl#setTrue()}
+	 *         is not supported.
+	 * @throws IllegalStateException If the function service is unregistered.
+	 * @throws DeviceException If an error is available while executing the
+	 *         operation.
+	 */
+	public void testPropertyEvent() throws UnsupportedOperationException, IllegalStateException, DeviceException {
+		final Function[] functions = getFunctions(
+				BooleanControl.class.getName(), PropertyMetadata.PROPERTY_ACCESS_EVENTABLE);
+		final BooleanControl booleanControl = (BooleanControl) functions[0];
+		final String functionUID = (String) booleanControl.getServiceProperty(Function.SERVICE_UID);
+		final FunctionEventHandler eventHandler = new FunctionEventHandler(super.getContext());
+		eventHandler.register(functionUID, BooleanControl.PROPERTY_DATA);
+		final FunctionEvent functionEvent;
+		final BooleanData currentData = booleanControl.getData();
+		try {
+			booleanControl.reverse();
+			functionEvent = eventHandler.getEvents(1)[0];
+		} finally {
+			eventHandler.unregister();
+		}
+		BooleanData propertyData = (BooleanData) functionEvent.getFunctionPropertyValue();
+		super.assertEquals(!currentData.getValue(), propertyData);
+		assertEquals(
+				"The event function identifier is not correct!",
+				functionUID,
+				functionEvent.getFunctionUID());
+		assertEquals(
+				"The property name is not correct!",
+				BooleanControl.PROPERTY_DATA,
+				functionEvent.getFunctionPropertyName());
+	}
 }

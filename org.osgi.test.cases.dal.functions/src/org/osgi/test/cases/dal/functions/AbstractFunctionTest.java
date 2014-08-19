@@ -1,23 +1,17 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
-
 
 package org.osgi.test.cases.dal.functions;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
@@ -25,10 +19,13 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.dal.Device;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.FunctionData;
+import org.osgi.service.dal.FunctionEvent;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.data.BooleanData;
 import org.osgi.service.dal.functions.data.LevelData;
+import org.osgi.test.cases.step.TestStep;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * Common class for all Device Abstraction Layer function TCs. It contains some
@@ -37,31 +34,63 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 
 	/**
-	 * Returns the function with the specified class name, property name and
-	 * property value. Each argument can be <code>null</code>.
+	 * The service tracker tracks the test stepper service.
+	 */
+	private final ServiceTracker	testStepTracker;
+
+	/**
+	 * The constructor initializes the stepper tracker.
+	 */
+	public AbstractFunctionTest() {
+		this.testStepTracker = new ServiceTracker(super.getContext(), TestStep.class.getName(), null);
+	}
+
+	/**
+	 * Opens the trackers.
+	 * 
+	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#setUp()
+	 */
+	protected void setUp() throws Exception {
+		this.testStepTracker.open();
+	}
+
+	/**
+	 * Closes the trackers.
+	 * 
+	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#tearDown()
+	 */
+	protected void tearDown() throws Exception {
+		this.testStepTracker.close();
+	}
+
+	/**
+	 * Returns the test stepper service.
+	 * 
+	 * @return The test stepper service.
+	 */
+	protected TestStep getTestStep() {
+		TestStep testStep = (TestStep) this.testStepTracker.getService();
+		assertNotNull("The test step service is misisng.", testStep);
+		return testStep;
+	}
+
+	/**
+	 * Returns the function with the specified class name.
 	 * 
 	 * @param functionClassName Specifies the function class name, can be
-	 *        <code>null</code>.
-	 * @param propName Specifies the property name, can be <code>null</code>.
-	 * @param propValue Specifies the property value, can be <code>null</code>.
-	 *        That means any value.
+	 *        {@code null}.
 	 * 
 	 * @return The functions according to the specified arguments.
-	 * 
-	 * @throws InvalidSyntaxException If invalid filter is built with the
-	 *         specified arguments.
 	 */
-	protected Function[] getFunctions(String functionClassName, final String propName, String propValue) throws InvalidSyntaxException {
-		String filter = null;
-		if (null != propName) {
-			if (null == propValue) {
-				propValue = "*";
-			}
-			filter = '(' + propName + '=' + propValue + ')';
-		}
+	protected Function[] getFunctions(String functionClassName) {
 		BundleContext bc = super.getContext();
-		ServiceReference[] functionSRefs = bc.getServiceReferences(functionClassName, filter);
-		assertNotNull("There is no function with property: " + propName + " and class: " + functionClassName, functionSRefs);
+		ServiceReference[] functionSRefs = null;
+		try {
+			functionSRefs = bc.getServiceReferences(functionClassName, null);
+		} catch (InvalidSyntaxException e) {
+			// not possible, the filter is not used
+		}
+		assertNotNull("At least one function is expected of: " + functionClassName, functionSRefs);
 		Function[] functions = new Function[functionSRefs.length];
 		for (int i = 0; i < functions.length; i++) {
 			functions[i] = (Function) bc.getService(functionSRefs[i]);
@@ -73,8 +102,8 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Asserts that the given <code>BooleanData</code> value is equivalent to
-	 * the expected value.
+	 * Asserts that the given {@code BooleanData} value is equivalent to the
+	 * expected value.
 	 * 
 	 * @param expectedValue Exception value.
 	 * @param actualData Actual value.
@@ -87,7 +116,7 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Asserts that the given <code>LevelData</code> level is equivalent to the
+	 * Asserts that the given {@code LevelData} level is equivalent to the
 	 * expected level. If metadata is available, the metadata consistency is
 	 * checked too.
 	 * 
@@ -128,7 +157,7 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 	 * @param actualData The actual data.
 	 */
 	protected void assertFunctionDataFields(long timestamp, Map metadata, FunctionData actualData) {
-		// timestamp
+		// time stamp
 		assertEquals(
 				"The timestamp field is not correct!",
 				timestamp,
@@ -147,6 +176,93 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 				"The metadata is not correct!",
 				metadata,
 				actualData.getMetadata());
+	}
+
+	/**
+	 * Validates the function event with a manual test step.
+	 * 
+	 * @param functionClassName The function class name.
+	 * @param propName The function property name.
+	 */
+	protected void checkPropertyEvent(String functionClassName, String propName) {
+		final Function[] functions = getFunctions(
+				functionClassName, PropertyMetadata.PROPERTY_ACCESS_EVENTABLE);
+		final String functionUID = (String) functions[0].getServiceProperty(Function.SERVICE_UID);
+		final FunctionEventHandler eventHandler = new FunctionEventHandler(super.getContext());
+		final TestStep testStep = getTestStep();
+		eventHandler.register(functionUID, propName);
+		final FunctionEvent functionEvent;
+		try {
+			testStep.execute(Commands.PUBLISH_PROPERTY_EVENT,
+					new String[] {functionUID, propName});
+			functionEvent = eventHandler.getEvents(1)[0];
+		} finally {
+			eventHandler.unregister();
+		}
+		assertNotNull("No data in the alarm event.", functionEvent.getFunctionPropertyValue());
+		assertEquals(
+				"The event function identifier is not correct!",
+				functionUID,
+				functionEvent.getFunctionUID());
+		assertEquals(
+				"The property name is not correct!",
+				propName,
+				functionEvent.getFunctionPropertyName());
+	}
+
+	/**
+	 * Returns all functions with the given class and at least one property with
+	 * the desired access.
+	 * 
+	 * @param functionClass The function class.
+	 * @param propertyAccess The functions must have at least one property with
+	 *        the given access.
+	 * 
+	 * @return All functions with the given class and at least one property with
+	 *         the desired access.
+	 */
+	protected Function[] getFunctions(String functionClass, int propertyAccess) {
+		try {
+			ServiceReference[] functionSRefs = super.getContext().getServiceReferences(
+					functionClass, '(' + Function.SERVICE_PROPERTY_NAMES + "=*)");
+			assertNotNull("There are no functions.", functionSRefs);
+			List result = new ArrayList(functionSRefs.length);
+			for (int i = 0; i < functionSRefs.length; i++) {
+				final Function function = (Function) super.getContext().getService(functionSRefs[i]);
+				if (null == function) {
+					continue;
+				}
+				String[] propertyNames = (String[]) function.getServiceProperty(
+						Function.SERVICE_PROPERTY_NAMES);
+				for (int ii = 0; ii < propertyNames.length; ii++) {
+					if (isPropertyAccessValid(function, propertyNames[ii], propertyAccess)) {
+						result.add(function);
+						break;
+					}
+				}
+			}
+			assertFalse(
+					"There is no function, which contains a proeprty with an access: " + propertyAccess,
+					result.isEmpty());
+			return (Function[]) result.toArray(new Function[result.size()]);
+		} catch (InvalidSyntaxException e) {
+			// the filter is valid
+		}
+		return null;
+	}
+
+	private static boolean isPropertyAccessValid(
+			Function function, String propertyName, int propertyAccess) {
+		final PropertyMetadata propertyMetadata = function.getPropertyMetadata(propertyName);
+		if (null == propertyMetadata) {
+			return false;
+		}
+		final Map metadata = propertyMetadata.getMetadata(null);
+		if (null == metadata) {
+			return false;
+		}
+		Integer accessType = (Integer) metadata.get(PropertyMetadata.PROPERTY_ACCESS);
+		return (null != accessType) && (propertyAccess == (accessType.intValue() & propertyAccess));
 	}
 
 }

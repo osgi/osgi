@@ -1,30 +1,21 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
-
 
 package org.osgi.test.cases.dal.functions;
 
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.functions.Meter;
 import org.osgi.service.dal.functions.data.LevelData;
 
 /**
- * Validates the <code>Meter</code> functions.
+ * Validates the {@code Meter} functions.
  */
 public final class MeterTest extends AbstractFunctionTest {
 
@@ -35,13 +26,7 @@ public final class MeterTest extends AbstractFunctionTest {
 	 * @throws IllegalStateException If the function is removed.
 	 */
 	public void testTotal() throws IllegalStateException, DeviceException {
-		Function[] meters = null;
-		try {
-			meters = super.getFunctions(Meter.class.getName(), null, null);
-		} catch (InvalidSyntaxException e) {
-			// not possible
-			fail(null, e);
-		}
+		Function[] meters = super.getFunctions(Meter.class.getName());
 		boolean check = false;
 		for (int i = 0; i < meters.length; i++) {
 			final Meter currentMeter = (Meter) meters[i];
@@ -66,13 +51,7 @@ public final class MeterTest extends AbstractFunctionTest {
 	 * @throws IllegalStateException If the function is removed.
 	 */
 	public void testCurrent() throws IllegalStateException, DeviceException {
-		Function[] meters = null;
-		try {
-			meters = super.getFunctions(Meter.class.getName(), null, null);
-		} catch (InvalidSyntaxException e) {
-			// not possible
-			fail(null, e);
-		}
+		Function[] meters = super.getFunctions(Meter.class.getName());
 		boolean check = false;
 		for (int i = 0; i < meters.length; i++) {
 			final Meter currentMeter = (Meter) meters[i];
@@ -100,13 +79,7 @@ public final class MeterTest extends AbstractFunctionTest {
 	 * @throws IllegalStateException If the function is removed.
 	 */
 	public void testResetTotal() throws IllegalStateException, DeviceException {
-		Function[] meters = null;
-		try {
-			meters = super.getFunctions(Meter.class.getName(), null, null);
-		} catch (InvalidSyntaxException e) {
-			// not possible
-			fail(null, e);
-		}
+		Function[] meters = super.getFunctions(Meter.class.getName());
 		boolean check = false;
 		for (int i = 0; i < meters.length; i++) {
 			final Meter currentMeter = (Meter) meters[i];
@@ -118,6 +91,20 @@ public final class MeterTest extends AbstractFunctionTest {
 			}
 		}
 		assertTrue("At least one Meter must support resetTotal.", check);
+	}
+
+	/**
+	 * Checks {@code Meter} current consumption events.
+	 */
+	public void testCurrentPropertyEvent() {
+		super.checkPropertyEvent(Meter.class.getName(), Meter.PROPERTY_CURRENT);
+	}
+
+	/**
+	 * Checks {@code Meter} total consumption events.
+	 */
+	public void testTotalPropertyEvent() {
+		super.checkPropertyEvent(Meter.class.getName(), Meter.PROPERTY_TOTAL);
 	}
 
 }
