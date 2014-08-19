@@ -1,19 +1,11 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
-
 
 package org.osgi.impl.service.dal.functions;
 
@@ -23,7 +15,6 @@ import java.util.Map;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.dal.PropertyMetadataImpl;
 import org.osgi.impl.service.dal.SimulatedFunction;
-import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.BooleanSensor;
@@ -31,7 +22,7 @@ import org.osgi.service.dal.functions.data.BooleanData;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * Simulated <code>BooleanSensor</code>.
+ * Simulated {@code BooleanSensor}.
  */
 public final class SimulatedBooleanSensor extends SimulatedFunction implements BooleanSensor {
 
@@ -43,7 +34,8 @@ public final class SimulatedBooleanSensor extends SimulatedFunction implements B
 		metadata.put(
 				PropertyMetadata.PROPERTY_ACCESS,
 				new Integer(
-						PropertyMetadata.PROPERTY_ACCESS_READABLE));
+						PropertyMetadata.PROPERTY_ACCESS_READABLE |
+								PropertyMetadata.PROPERTY_ACCESS_EVENTABLE));
 		PropertyMetadata propMetadata = new PropertyMetadataImpl(
 				metadata, // metadata
 				null,     // resolution
@@ -51,7 +43,7 @@ public final class SimulatedBooleanSensor extends SimulatedFunction implements B
 				null,     // minValue
 				null);    // maxValue
 		PROPERTY_METADATA = new HashMap();
-		PROPERTY_METADATA.put(BooleanSensor.PROPERTY_DATA, propMetadata);
+		PROPERTY_METADATA.put(PROPERTY_DATA, propMetadata);
 	}
 	
 	/**
@@ -63,18 +55,27 @@ public final class SimulatedBooleanSensor extends SimulatedFunction implements B
 	 */
 	public SimulatedBooleanSensor(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker) {
 		super(PROPERTY_METADATA, OPERATION_METADATA, eventAdminTracker);
-		super.register(BooleanSensor.class.getName(), addPropertyAndOperationNames(functionProps), bc);
+		super.register(
+				new String[] {BooleanSensor.class.getName(), Function.class.getName()},
+				addPropertyAndOperationNames(functionProps), bc);
 	}
 
 	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
 		functionProps.put(
-				Function.SERVICE_PROPERTY_NAMES,
-				new String[] {BooleanSensor.PROPERTY_DATA});
+				SERVICE_PROPERTY_NAMES,
+				new String[] {PROPERTY_DATA});
 		return functionProps;
 	}
 
-	public BooleanData getData() throws UnsupportedOperationException, IllegalStateException, DeviceException {
+	public BooleanData getData() {
 		return new BooleanData(System.currentTimeMillis(), null, true);
+	}
+
+	public void publishEvent(String propName) throws IllegalArgumentException {
+		if (!PROPERTY_DATA.equals(propName)) {
+			throw new IllegalArgumentException("The property is not supported: " + propName);
+		}
+		super.postEvent(propName, getData());
 	}
 
 }

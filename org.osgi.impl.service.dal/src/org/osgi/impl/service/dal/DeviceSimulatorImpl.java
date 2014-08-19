@@ -1,19 +1,11 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
-
 
 package org.osgi.impl.service.dal;
 
@@ -105,6 +97,22 @@ public class DeviceSimulatorImpl implements DeviceSimulator {
 		}
 		DeviceUtil.silentDeviceRemove(device);
 		throw new IllegalStateException("The device simulator service is unregistred.");
+	}
+
+	public void publishEvent(String functionUID, String propertyName) {
+		synchronized (this.lock) {
+			if (null == this.registeredDevices) {
+				throw new IllegalStateException("The device simulator service is unregistred.");
+			}
+			for (int i = 0, size = this.registeredDevices.size(); i < size; i++) {
+				SimulatedFunction function = ((SimulatedDevice) this.registeredDevices.get(i)).getFunction(functionUID);
+				if (null != function) {
+					function.publishEvent(propertyName);
+					return;
+				}
+			}
+			throw new IllegalArgumentException("There is no function with the given identifier: " + functionUID);
+		}
 	}
 
 	/**

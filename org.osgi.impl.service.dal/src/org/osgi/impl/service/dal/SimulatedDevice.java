@@ -1,19 +1,11 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
-
 
 package org.osgi.impl.service.dal;
 
@@ -22,6 +14,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.service.dal.Device;
 import org.osgi.service.dal.DeviceException;
+import org.osgi.service.dal.DevicePermission;
+import org.osgi.service.dal.Function;
 
 final class SimulatedDevice extends SimulatedService implements Device, ServiceFactory {
 
@@ -29,10 +23,15 @@ final class SimulatedDevice extends SimulatedService implements Device, ServiceF
 
 	public SimulatedDevice(Dictionary deviceProps, BundleContext bc, SimulatedFunction[] functions) {
 		this.functions = functions;
-		super.register(Device.class.getName(), deviceProps, bc);
+		super.register(new String[] {Device.class.getName()}, deviceProps, bc);
 	}
 
 	public void remove() throws DeviceException, UnsupportedOperationException, SecurityException, IllegalStateException {
+		SecurityManager securityManager = System.getSecurityManager();
+		if (null != securityManager) {
+			securityManager.checkPermission(
+					new DevicePermission(this, DevicePermission.ACTION_REMOVE));
+		}
 		super.serviceReg.unregister();
 		if (null != this.functions) {
 			for (int i = 0; i < this.functions.length; i++) {
@@ -47,6 +46,22 @@ final class SimulatedDevice extends SimulatedService implements Device, ServiceF
 			throw new IllegalArgumentException("The property name is missing: " + propName);
 		}
 		return value;
+	}
+
+	public String[] getServicePropertyKeys() {
+		return super.serviceRef.getPropertyKeys();
+	}
+
+	public SimulatedFunction getFunction(String functionUID) {
+		if ((null == this.functions) || (null == functionUID)) {
+			return null;
+		}
+		for (int i = 0; i < this.functions.length; i++) {
+			if (functionUID.equals(this.functions[i].getServiceProperty(Function.SERVICE_UID))) {
+				return this.functions[i];
+			}
+		}
+		return null;
 	}
 
 }

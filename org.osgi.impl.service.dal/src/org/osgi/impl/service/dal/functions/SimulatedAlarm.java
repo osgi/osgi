@@ -9,7 +9,6 @@
 
 package org.osgi.impl.service.dal.functions;
 
-import java.math.BigDecimal;
 import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
@@ -17,69 +16,60 @@ import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.dal.PropertyMetadataImpl;
 import org.osgi.impl.service.dal.SimulatedFunction;
 import org.osgi.service.dal.Function;
-import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.PropertyMetadata;
-import org.osgi.service.dal.functions.MultiLevelSensor;
-import org.osgi.service.dal.functions.data.LevelData;
+import org.osgi.service.dal.functions.Alarm;
+import org.osgi.service.dal.functions.data.AlarmData;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * Simulated {@code MultiLevelSensor}.
+ * Simulated {@code Alarm}.
  */
-public final class SimulatedMultiLevelSensor extends SimulatedFunction implements MultiLevelSensor {
+public final class SimulatedAlarm extends SimulatedFunction implements Alarm {
 
 	private static final Map	PROPERTY_METADATA;
-	private static final Map	OPERATION_METADATA	= null;
-	private static final BigDecimal VALUE = new BigDecimal(1);
-	private static final LevelData LEVEL_DATA = new LevelData(Long.MIN_VALUE, null, null, VALUE);
-		
+
 	static {
 		Map metadata = new HashMap();
 		metadata.put(
 				PropertyMetadata.PROPERTY_ACCESS,
-				new Integer(
-						PropertyMetadata.PROPERTY_ACCESS_READABLE |
-								PropertyMetadata.PROPERTY_ACCESS_EVENTABLE));
+				new Integer(PropertyMetadata.PROPERTY_ACCESS_EVENTABLE));
 		PropertyMetadata propMetadata = new PropertyMetadataImpl(
 				metadata, // metadata
 				null,     // resolution
-				new FunctionData[] {LEVEL_DATA},// enumValues
-				LEVEL_DATA,     // minValue
-				LEVEL_DATA);    // maxValue
+				null,     // enumValues
+				null,     // minValue
+				null);    // maxValue
 		PROPERTY_METADATA = new HashMap();
-		PROPERTY_METADATA.put(PROPERTY_DATA, propMetadata);
+		PROPERTY_METADATA.put(PROPERTY_ALARM, propMetadata);
 	}
-	
+
 	/**
 	 * Constructs a new instance with the specified arguments.
 	 * 
 	 * @param functionProps The service properties.
-	 * @param bc The bundle context used to register the service.
+	 * @param bc The bundle context to register the service.
 	 * @param eventAdminTracker The event admin service tracker to post events.
 	 */
-	public SimulatedMultiLevelSensor(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker) {
-		super(PROPERTY_METADATA, OPERATION_METADATA, eventAdminTracker);
+	public SimulatedAlarm(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker) {
+		super(PROPERTY_METADATA, null, eventAdminTracker);
 		super.register(
-				new String[] {MultiLevelSensor.class.getName(), Function.class.getName()},
+				new String[] {Alarm.class.getName(), Function.class.getName()},
 				addPropertyAndOperationNames(functionProps), bc);
 	}
 
 	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
 		functionProps.put(
 				SERVICE_PROPERTY_NAMES,
-				new String[] {PROPERTY_DATA});
+				new String[] {PROPERTY_ALARM});
 		return functionProps;
 	}
 
-	public LevelData getData() {
-		return new LevelData(System.currentTimeMillis(), null, null, VALUE);
-	}
-
 	public void publishEvent(String propName) throws IllegalArgumentException {
-		if (!PROPERTY_DATA.equals(propName)) {
+		if (!PROPERTY_ALARM.equals(propName)) {
 			throw new IllegalArgumentException("The property is not supported: " + propName);
 		}
-		super.postEvent(propName, getData());
+		super.postEvent(propName,
+				new AlarmData(System.currentTimeMillis(), null, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD));
 	}
 
 }

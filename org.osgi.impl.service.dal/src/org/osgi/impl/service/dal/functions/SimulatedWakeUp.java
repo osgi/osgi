@@ -1,19 +1,11 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
-
 
 package org.osgi.impl.service.dal.functions;
 
@@ -26,7 +18,6 @@ import java.util.TimerTask;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.dal.PropertyMetadataImpl;
 import org.osgi.impl.service.dal.SimulatedFunction;
-import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.Units;
@@ -36,7 +27,7 @@ import org.osgi.service.dal.functions.data.LevelData;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * Simulated <code>WakeUp</code> function.
+ * Simulated {@code WakeUp} function.
  */
 public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 
@@ -69,7 +60,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 				MIN_WAKE_UP_INTERVAL,     // minValue
 				null);    // maxValue
 		PROPERTY_METADATA = new HashMap();
-		PROPERTY_METADATA.put(WakeUp.PROPERTY_WAKE_UP_INTERVAL, propMetadata);
+		PROPERTY_METADATA.put(PROPERTY_WAKE_UP_INTERVAL, propMetadata);
 
 		metadata = new HashMap();
 		metadata.put(
@@ -82,7 +73,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 				null,     // enumValues
 				null,     // minValue
 				null);    // maxValue
-		PROPERTY_METADATA.put(WakeUp.PROPERTY_AWAKE, propMetadata);
+		PROPERTY_METADATA.put(PROPERTY_AWAKE, propMetadata);
 	}
 	
 	/**
@@ -96,10 +87,12 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 	public SimulatedWakeUp(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker, Timer timer) {
 		super(PROPERTY_METADATA, OPERATION_METADATA, eventAdminTracker);
 		this.timer = timer;
-		super.register(WakeUp.class.getName(), addPropertyAndOperationNames(functionProps), bc);
+		super.register(
+				new String[] {WakeUp.class.getName(), Function.class.getName()},
+				addPropertyAndOperationNames(functionProps), bc);
 	}
 
-	public LevelData getWakeUpInterval() throws UnsupportedOperationException, IllegalStateException, DeviceException {
+	public LevelData getWakeUpInterval() {
 		synchronized (this.lock) {
 			if (this.removed) {
 				throw new IllegalStateException("The Wake Up function is removed.");
@@ -108,35 +101,18 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 		}
 	}
 
-	public void setWakeUpInterval(BigDecimal interval) throws UnsupportedOperationException, IllegalStateException, DeviceException, IllegalArgumentException {
-		final long longInterval = interval.longValue();
-		if (longInterval < 0) {
-			throw new IllegalArgumentException("The interval is negative: " + interval);
-		}
-		synchronized (this.lock) {
-			if (this.removed) {
-				throw new IllegalStateException("The Wake Up function is removed.");
-			}
-			if (null != this.timerTask) {
-				this.timerTask.cancel();
-				this.timerTask = null;
-			}
-			if (longInterval > 0) {
-				this.timerTask = new WakeUpTimeTask();
-				this.timer.schedule(this.timerTask, longInterval, longInterval);
-			}
-			this.wakeUpInterval = new LevelData(System.currentTimeMillis(), null, MILLIS, interval);
-		}
+	public void setWakeUpInterval(BigDecimal interval) {
+		setWakeUpInterval(interval, true);
 	}
 
-	public void setWakeUpInterval(BigDecimal interval, String unit) throws UnsupportedOperationException, IllegalStateException, DeviceException, IllegalArgumentException {
+	public void setWakeUpInterval(BigDecimal interval, String unit) {
 		if ((null != unit) && (!MILLIS.equals(unit))) {
 			throw new IllegalArgumentException("The unit is not supported: " + unit);
 		}
 		this.setWakeUpInterval(interval);
 	}
 
-	public void sleep() throws UnsupportedOperationException, IllegalStateException, DeviceException {
+	public void sleep() {
 		// nothing special to do
 	}
 
@@ -151,12 +127,44 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 		super.remove();
 	}
 
+	public void publishEvent(String propName) throws IllegalArgumentException {
+		if (PROPERTY_AWAKE.equals(propName)) {
+			setWakeUpInterval(getWakeUpInterval().getLevel(), false);
+		} else
+			if (PROPERTY_WAKE_UP_INTERVAL.equals(propName)) {
+				throw new UnsupportedOperationException("The property is not eventable: " + propName);
+			} else {
+				throw new IllegalArgumentException("The property is not supported: " + propName);
+			}
+	}
+
+	private void setWakeUpInterval(BigDecimal interval, boolean execDelay) {
+		final long longInterval = interval.longValue();
+		if (longInterval < 0) {
+			throw new IllegalArgumentException("The interval is negative: " + interval);
+		}
+		synchronized (this.lock) {
+			if (this.removed) {
+				throw new IllegalStateException("The Wake Up function is removed.");
+			}
+			if (null != this.timerTask) {
+				this.timerTask.cancel();
+				this.timerTask = null;
+			}
+			if (longInterval > 0) {
+				this.timerTask = new WakeUpTimeTask();
+				this.timer.schedule(this.timerTask, execDelay ? longInterval : 0, longInterval);
+			}
+			this.wakeUpInterval = new LevelData(System.currentTimeMillis(), null, MILLIS, interval);
+		}
+	}
+
 	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
 		functionProps.put(
-				Function.SERVICE_PROPERTY_NAMES,
+				SERVICE_PROPERTY_NAMES,
 				new String[] {
-						WakeUp.PROPERTY_WAKE_UP_INTERVAL,
-						WakeUp.PROPERTY_AWAKE});
+						PROPERTY_WAKE_UP_INTERVAL,
+						PROPERTY_AWAKE});
 		return functionProps;
 	}
 

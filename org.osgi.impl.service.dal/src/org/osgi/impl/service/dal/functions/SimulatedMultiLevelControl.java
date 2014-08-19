@@ -1,19 +1,11 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
-
 
 package org.osgi.impl.service.dal.functions;
 
@@ -24,17 +16,15 @@ import java.util.Map;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.dal.PropertyMetadataImpl;
 import org.osgi.impl.service.dal.SimulatedFunction;
-import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.MultiLevelControl;
-import org.osgi.service.dal.functions.MultiLevelSensor;
 import org.osgi.service.dal.functions.data.LevelData;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * Simulated <code>MultiLevelControl</code>.
+ * Simulated {@code MultiLevelControl}.
  */
 public final class SimulatedMultiLevelControl extends SimulatedFunction implements MultiLevelControl {
 
@@ -69,7 +59,7 @@ public final class SimulatedMultiLevelControl extends SimulatedFunction implemen
 				LEVEL_DATA[0],     // minValue
 				LEVEL_DATA[LEVEL_DATA.length - 1]);    // maxValue
 		PROPERTY_METADATA = new HashMap();
-		PROPERTY_METADATA.put(MultiLevelSensor.PROPERTY_DATA, propMetadata);
+		PROPERTY_METADATA.put(PROPERTY_DATA, propMetadata);
 	}
 	
 	/**
@@ -82,29 +72,43 @@ public final class SimulatedMultiLevelControl extends SimulatedFunction implemen
 	public SimulatedMultiLevelControl(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker) {
 		super(PROPERTY_METADATA, OPERATION_METADATA, eventAdminTracker);
 		this.currentLevel = new LevelData(System.currentTimeMillis(), null, null, VALUES[0]);
-		super.register(MultiLevelControl.class.getName(), addPropertyAndOperationNames(functionProps), bc);
+		super.register(
+				new String[] {MultiLevelControl.class.getName(), Function.class.getName()},
+				addPropertyAndOperationNames(functionProps), bc);
 	}
 
 	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
 		functionProps.put(
-				Function.SERVICE_PROPERTY_NAMES,
-				new String[] {MultiLevelSensor.PROPERTY_DATA});
+				SERVICE_PROPERTY_NAMES,
+				new String[] {PROPERTY_DATA});
 		return functionProps;
 	}
 
-	public LevelData getData() throws UnsupportedOperationException, IllegalStateException, DeviceException {
+	public LevelData getData() {
 		return this.currentLevel;
 	}
 
-	public void setData(BigDecimal level) throws UnsupportedOperationException, IllegalStateException, DeviceException {
+	public void setData(BigDecimal level) {
+		if (this.currentLevel.getLevel().equals(level)) {
+			return; // nothing to do
+		}
 		checkLevel(level);
 		LevelData newLevel = new LevelData(System.currentTimeMillis(), null, null, level);
 		this.currentLevel = newLevel;
-		super.postEvent(MultiLevelControl.PROPERTY_DATA, newLevel);
+		super.postEvent(PROPERTY_DATA, newLevel);
 	}
 
-	public void setData(BigDecimal level, String unit) throws UnsupportedOperationException, IllegalStateException, DeviceException {
+	public void setData(BigDecimal level, String unit) {
 		setData(level);
+	}
+
+	public void publishEvent(String propName) throws IllegalArgumentException {
+		if (!PROPERTY_DATA.equals(propName)) {
+			throw new IllegalArgumentException("The property is not supported: " + propName);
+		}
+		final BigDecimal newValue = this.currentLevel.getLevel().equals(VALUES[0]) ?
+				VALUES[VALUES.length - 1] : VALUES[0];
+		setData(newValue);
 	}
 
 	private static void checkLevel(BigDecimal level) {

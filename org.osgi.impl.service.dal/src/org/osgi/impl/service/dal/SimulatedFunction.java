@@ -1,19 +1,11 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
-
 
 package org.osgi.impl.service.dal;
 
@@ -29,7 +21,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Common implementation of the simulated function.
  */
-public class SimulatedFunction extends SimulatedService implements Function {
+public abstract class SimulatedFunction extends SimulatedService implements Function {
 
 	/** The property metadata. */
 	protected final Map	propertyMetadata;
@@ -56,11 +48,13 @@ public class SimulatedFunction extends SimulatedService implements Function {
 	}
 
 	public PropertyMetadata getPropertyMetadata(String propertyName) throws IllegalArgumentException {
-		return (PropertyMetadata) this.propertyMetadata.get(propertyName);
+		return (null == this.propertyMetadata) ? null :
+				(PropertyMetadata) this.propertyMetadata.get(propertyName);
 	}
 
 	public OperationMetadata getOperationMetadata(String operationName) throws IllegalArgumentException {
-		return (OperationMetadata) this.operationMetadata.get(operationName);
+		return (null == this.operationMetadata) ? null :
+				(OperationMetadata) this.operationMetadata.get(operationName);
 	}
 
 	public Object getServiceProperty(String propName) throws IllegalArgumentException {
@@ -77,6 +71,14 @@ public class SimulatedFunction extends SimulatedService implements Function {
 	public void remove() {
 		super.serviceReg.unregister();
 	}
+
+	/**
+	 * The child is responsible to publish an event with the current data.
+	 * 
+	 * @param propName The function property name.
+	 * @throws IllegalArgumentException If the property is not supported.
+	 */
+	public abstract void publishEvent(String propName) throws IllegalArgumentException;
 
 	/**
 	 * Posts a new function property event through Event Admin service.
@@ -96,5 +98,4 @@ public class SimulatedFunction extends SimulatedService implements Function {
 				propValue);
 		eventAdmin.postEvent(event);
 	}
-
 }

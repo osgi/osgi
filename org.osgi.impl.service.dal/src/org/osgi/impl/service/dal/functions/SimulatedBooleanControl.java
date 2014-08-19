@@ -1,19 +1,11 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
-
 
 package org.osgi.impl.service.dal.functions;
 
@@ -23,7 +15,6 @@ import java.util.Map;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.dal.PropertyMetadataImpl;
 import org.osgi.impl.service.dal.SimulatedFunction;
-import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.BooleanControl;
@@ -31,7 +22,7 @@ import org.osgi.service.dal.functions.data.BooleanData;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * Simulated <code>BooleanControl</code>.
+ * Simulated {@code BooleanControl}.
  */
 public final class SimulatedBooleanControl extends SimulatedFunction implements BooleanControl {
 
@@ -55,7 +46,7 @@ public final class SimulatedBooleanControl extends SimulatedFunction implements 
 				null,     // minValue
 				null);    // maxValue
 		PROPERTY_METADATA = new HashMap();
-		PROPERTY_METADATA.put(BooleanControl.PROPERTY_DATA, propMetadata);
+		PROPERTY_METADATA.put(PROPERTY_DATA, propMetadata);
 	}
 	
 	/**
@@ -68,41 +59,53 @@ public final class SimulatedBooleanControl extends SimulatedFunction implements 
 	public SimulatedBooleanControl(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker) {
 		super(PROPERTY_METADATA, OPERATION_METADATA, eventAdminTracker);
 		this.data = new BooleanData(System.currentTimeMillis(), null, false);
-		super.register(BooleanControl.class.getName(), addPropertyAndOperationNames(functionProps), bc);
+		super.register(
+				new String[] {BooleanControl.class.getName(), Function.class.getName()},
+				addPropertyAndOperationNames(functionProps), bc);
 	}
 
-	public BooleanData getData() throws UnsupportedOperationException, IllegalStateException, DeviceException {
+	public BooleanData getData() {
 		return this.data;
 	}
 
-	public void setData(boolean data) throws UnsupportedOperationException, IllegalStateException, DeviceException {
+	public void setData(boolean data) {
+		if (this.data.getValue() == data) {
+			return; // nothing to do
+		}
 		BooleanData newData = new BooleanData(System.currentTimeMillis(), null, data);
 		this.data = newData;
 		super.postEvent(PROPERTY_DATA, newData);
 	}
 
-	public void reverse() throws UnsupportedOperationException, IllegalStateException, DeviceException {
+	public void reverse() {
 		setData(this.data.getValue() ? false : true);
 	}
 
-	public void setTrue() throws UnsupportedOperationException, IllegalStateException, DeviceException {
+	public void setTrue() {
 		setData(true);
 	}
 
-	public void setFalse() throws UnsupportedOperationException, IllegalStateException, DeviceException {
+	public void setFalse() {
 		setData(false);
+	}
+
+	public void publishEvent(String propName) throws IllegalArgumentException {
+		if (!PROPERTY_DATA.equals(propName)) {
+			throw new IllegalArgumentException("The property is not supported: " + propName);
+		}
+		reverse();
 	}
 
 	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
 		functionProps.put(
-				Function.SERVICE_PROPERTY_NAMES,
-				new String[] {BooleanControl.PROPERTY_DATA});
+				SERVICE_PROPERTY_NAMES,
+				new String[] {PROPERTY_DATA});
 		functionProps.put(
-				Function.SERVICE_OPERATION_NAMES,
+				SERVICE_OPERATION_NAMES,
 				new String[] {
-						BooleanControl.OPERATION_REVERSE,
-						BooleanControl.OPERATION_SET_FALSE,
-						BooleanControl.OPERATION_SET_TRUE});
+						OPERATION_REVERSE,
+						OPERATION_SET_FALSE,
+						OPERATION_SET_TRUE});
 		return functionProps;
 	}
 

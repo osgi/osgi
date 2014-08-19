@@ -1,19 +1,11 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
-
 
 package org.osgi.impl.service.dal.functions;
 
@@ -24,7 +16,6 @@ import java.util.Map;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.dal.PropertyMetadataImpl;
 import org.osgi.impl.service.dal.SimulatedFunction;
-import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.PropertyMetadata;
@@ -34,7 +25,7 @@ import org.osgi.service.dal.functions.data.LevelData;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- * Simulated <code>Meter</code>.
+ * Simulated {@code Meter}.
  */
 public final class SimulatedMeter extends SimulatedFunction implements Meter {
 
@@ -51,7 +42,8 @@ public final class SimulatedMeter extends SimulatedFunction implements Meter {
 		Map metadata = new HashMap();
 		metadata.put(
 				PropertyMetadata.PROPERTY_ACCESS,
-				new Integer(PropertyMetadata.PROPERTY_ACCESS_READABLE));
+				new Integer(PropertyMetadata.PROPERTY_ACCESS_READABLE |
+						PropertyMetadata.PROPERTY_ACCESS_EVENTABLE));
 		metadata.put(
 				PropertyMetadata.UNITS,
 				MILLIS_ARRAY);
@@ -68,8 +60,8 @@ public final class SimulatedMeter extends SimulatedFunction implements Meter {
 				new LevelData(Long.MIN_VALUE, null, MILLIS, new BigDecimal(0)),     // minValue
 				null);    // maxValue
 		PROPERTY_METADATA = new HashMap();
-		PROPERTY_METADATA.put(Meter.PROPERTY_CURRENT, currentPropMetadata);
-		PROPERTY_METADATA.put(Meter.PROPERTY_TOTAL, totalPropMetadata);
+		PROPERTY_METADATA.put(PROPERTY_CURRENT, currentPropMetadata);
+		PROPERTY_METADATA.put(PROPERTY_TOTAL, totalPropMetadata);
 	}
 
 	/**
@@ -83,29 +75,42 @@ public final class SimulatedMeter extends SimulatedFunction implements Meter {
 	public SimulatedMeter(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker) {
 		super(PROPERTY_METADATA, OPERATION_METADATA, eventAdminTracker);
 		this.startTime = System.currentTimeMillis();
-		super.register(Meter.class.getName(), addPropertyAndOperationNames(functionProps), bc);
+		super.register(
+				new String[] {Meter.class.getName(), Function.class.getName()},
+				addPropertyAndOperationNames(functionProps), bc);
 	}
 
-	public LevelData getCurrent() throws UnsupportedOperationException, IllegalStateException, DeviceException {
+	public LevelData getCurrent() {
 		return new LevelData(System.currentTimeMillis(), null, MILLIS, CURRENT_MEASUREMENT);
 	}
 
-	public LevelData getTotal() throws UnsupportedOperationException, IllegalStateException, DeviceException {
+	public LevelData getTotal() {
 		long currentTime = System.currentTimeMillis();
 		return new LevelData(currentTime, null, MILLIS, new BigDecimal(currentTime - this.startTime));
 	}
 
-	public void resetTotal() throws UnsupportedOperationException, IllegalStateException, DeviceException {
+	public void resetTotal() {
 		this.startTime = System.currentTimeMillis();
+	}
+
+	public void publishEvent(String propName) throws IllegalArgumentException {
+		if (PROPERTY_CURRENT.equals(propName)) {
+			super.postEvent(propName, getCurrent());
+		} else
+			if (PROPERTY_TOTAL.equals(propName)) {
+				super.postEvent(propName, getTotal());
+			} else {
+				throw new IllegalArgumentException("The property is not supported: " + propName);
+			}
 	}
 
 	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
 		functionProps.put(
-				Function.SERVICE_PROPERTY_NAMES,
-				new String[] {Meter.PROPERTY_CURRENT, Meter.PROPERTY_TOTAL});
+				SERVICE_PROPERTY_NAMES,
+				new String[] {PROPERTY_CURRENT, PROPERTY_TOTAL});
 		functionProps.put(
-				Function.SERVICE_OPERATION_NAMES,
-				new String[] {Meter.OPERATION_RESET_TOTAL});
+				SERVICE_OPERATION_NAMES,
+				new String[] {OPERATION_RESET_TOTAL});
 		return functionProps;
 	}
 
