@@ -2,9 +2,9 @@
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
 Bundle-Vendor					= ProSyst
-Bundle-Activator				= ${p}.Activator
+Bundle-Activator				= org.osgi.test.cases.step.dal.Activator
 
-Private-Package					= ${p}.*
+Private-Package					= org.osgi.test.cases.step.dal.*
 
 Export-Package 					= \
     org.osgi.test.cases.step; -split-package:=first; provide:=true

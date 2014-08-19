@@ -1,27 +1,20 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
 
-
-package org.osgi.test.cases.dal.step;
+package org.osgi.test.cases.step.dal;
 
 import java.util.Dictionary;
 import java.util.Hashtable;
 import org.osgi.framework.Constants;
 import org.osgi.service.dal.Device;
 import org.osgi.service.dal.Function;
+import org.osgi.service.dal.functions.BooleanControl;
 import org.osgi.service.dal.simulator.DeviceSimulator;
 import org.osgi.test.cases.step.TestStep;
 import org.osgi.util.tracker.ServiceTracker;
@@ -53,9 +46,17 @@ public class TestStepImpl implements TestStep {
 	public String[] execute(String command, String[] parameters) {
 		if (Commands.REGISTER_DEVICE.equals(command)) {
 			return new String[] {(String) registerNewDevice(parameters).getServiceProperty(Device.SERVICE_UID)};
-		} else {
-			throw new IllegalArgumentException("The user message is not supported.");
-		}
+		} else
+			if (Commands.REGISTER_DEVICE_SINGLE_FUNCTION.equals(command)) {
+				String[] params = new String[] {BooleanControl.class.getName()};
+				return new String[] {(String) registerNewDevice(params).getServiceProperty(Device.SERVICE_UID)};
+			} else
+				if (Commands.PUBLISH_PROPERTY_EVENT.equals(command)) {
+					getDeviceSimulator().publishEvent(parameters[0], parameters[1]);
+				} else {
+					throw new IllegalArgumentException("The user message is not supported.");
+				}
+		return null;
 	}
 
 	private Device registerNewDevice(String[] parameters) {
