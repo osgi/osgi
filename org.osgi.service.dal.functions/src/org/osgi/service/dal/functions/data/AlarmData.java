@@ -23,7 +23,7 @@ import org.osgi.service.dal.functions.Alarm;
 /**
  * Function alarm data. It cares about the alarm type, severity, timestamp and
  * additional metadata. It doesn't support unit. The alarm type is mapped to
- * <code>FunctionData</code> value.
+ * {@code FunctionData} value.
  * 
  * @see Alarm
  * @see FunctionData
@@ -33,17 +33,20 @@ public class AlarmData extends FunctionData {
 	/**
 	 * Represents the severity field name. The field value is available with
 	 * {@link #severity} and {@link #getSeverity()}. The field type is
-	 * <code>int</code>. The constant can be used as a key to
-	 * {@link #AlarmData(Map)}.
+	 * {@code int}. The constant can be used as a key to {@link #AlarmData(Map)}
+	 * .
 	 */
 	public static final String	FIELD_SEVERITY	= "severity";
 
 	/**
 	 * Represents the type field name. The field value is available with
-	 * {@link #type} and {@link #getType()}. The field type is <code>int</code>.
-	 * The constant can be used as a key to {@link #AlarmData(Map)}.
+	 * {@link #type} and {@link #getType()}. The field type is {@code int}. The
+	 * constant can be used as a key to {@link #AlarmData(Map)}.
 	 */
 	public static final String	FIELD_TYPE		= "type";
+
+	/** The alarm type indicates that the type is not specified. */
+	public static final int		TYPE_UNDEFINED	= 0;
 
 	/** The alarm type indicates that smoke is detected. */
 	public static final int	TYPE_SMOKE		= 1;
@@ -119,22 +122,21 @@ public class AlarmData extends FunctionData {
 	public final int		type;
 
 	/**
-	 * Constructs new <code>AlarmData</code> instance with the specified field
+	 * Constructs new {@code AlarmData} instance with the specified field
 	 * values. The map keys must match to the field names. The map values will
 	 * be assigned to the appropriate class fields. For example, the maps can
 	 * be: {"severity"=Integer(1)...}. That map will initialize the
 	 * {@link #FIELD_SEVERITY} field with 1. If severity is missing,
 	 * {@link #SEVERITY_NONE} is used.
 	 * <p>
-	 * {@link #FIELD_SEVERITY} field value type must be <code>Integer</code>.
-	 * {@link #FIELD_TYPE} field value type must be <code>Integer</code>.
+	 * {@link #FIELD_SEVERITY} field value type must be {@code Integer}.
+	 * {@link #FIELD_TYPE} field value type must be {@code Integer}.
 	 * 
-	 * @param fields Contains the new <code>AlarmData</code> instance field
-	 *        values.
+	 * @param fields Contains the new {@code AlarmData} instance field values.
 	 * 
 	 * @throws ClassCastException If the field value types are not expected.
 	 * @throws IllegalArgumentException If the alarm type is missing.
-	 * @throws NullPointerException If the fields map is <code>null</code>.
+	 * @throws NullPointerException If the fields map is {@code null}.
 	 */
 	public AlarmData(final Map fields) {
 		super(fields);
@@ -148,8 +150,7 @@ public class AlarmData extends FunctionData {
 	}
 
 	/**
-	 * Constructs new <code>AlarmData</code> instance with the specified
-	 * arguments.
+	 * Constructs new {@code AlarmData} instance with the specified arguments.
 	 * 
 	 * @param timestamp The alarm data timestamp.
 	 * @param metadata The alarm data metadata.
@@ -165,6 +166,7 @@ public class AlarmData extends FunctionData {
 	/**
 	 * Returns the alarm type. The type can be one of the predefined:
 	 * <ul>
+	 * <li>{@link #TYPE_UNDEFINED}</li>
 	 * <li>{@link #TYPE_SMOKE}</li>
 	 * <li>{@link #TYPE_HEAT}</li>
 	 * <li>{@link #TYPE_COLD}</li>
@@ -193,13 +195,12 @@ public class AlarmData extends FunctionData {
 	}
 
 	/**
-	 * Two <code>AlarmData</code> instances are equal if they contain equal
-	 * metadata, timestamp, type and severity.
+	 * Two {@code AlarmData} instances are equal if they contain equal metadata,
+	 * timestamp, type and severity.
 	 * 
 	 * @param other The object to compare this data.
 	 * 
-	 * @return <code>true</code> if this object is equivalent to the specified
-	 *         one.
+	 * @return {@code true} if this object is equivalent to the specified one.
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#equals(java.lang.Object)
 	 */
@@ -211,11 +212,11 @@ public class AlarmData extends FunctionData {
 	}
 
 	/**
-	 * Returns the hash code for this <code>AlarmData</code> object. The hash
-	 * code is a sum of {@link FunctionData#hashCode()}, the alarm
-	 * severity and the alarm type.
+	 * Returns the hash code for this {@code AlarmData} object. The hash code is
+	 * a sum of {@link FunctionData#hashCode()}, the alarm severity and the
+	 * alarm type.
 	 * 
-	 * @return The hash code of this <code>AlarmData</code> object.
+	 * @return The hash code of this {@code AlarmData} object.
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#hashCode()
 	 */
@@ -224,27 +225,27 @@ public class AlarmData extends FunctionData {
 	}
 
 	/**
-	 * Compares this <code>AlarmData</code> instance with the given argument.
-	 * The argument can be:
+	 * Compares this {@code AlarmData} instance with the given argument. The
+	 * argument can be:
 	 * <ul>
-	 * <li><code>AlarmData</code> - the method returns <code>-1</code> if
-	 * metadata, timestamp, type or severity are not equivalent. 0 if all fields
-	 * are equivalent. 1 if all fields are equivalent and this instance severity
-	 * is greater than the severity of the specified argument.</li>
-	 * <li><code>Map</code> - the map must be built according the rules of
+	 * <li>{@code AlarmData} - the method returns {@code -1} if metadata,
+	 * timestamp, type or severity are not equivalent. 0 if all fields are
+	 * equivalent. 1 if all fields are equivalent and this instance severity is
+	 * greater than the severity of the specified argument.</li>
+	 * <li>{@code Map} - the map must be built according the rules of
 	 * {@link #AlarmData(Map)}. Metadata, timestamp, type and severity are
-	 * compared according <code>AlarmData</code> argument rules.</li>
+	 * compared according {@code AlarmData} argument rules.</li>
 	 * </ul>
 	 * 
 	 * @param o An argument to be compared.
 	 * 
 	 * @return -1, 0 or 1 depending on the comparison rules.
 	 * 
-	 * @throws ClassCastException If the method is called with <code>Map</code>
-	 *         and the field value types are not expected.
-	 * @throws IllegalArgumentException If the method is called with
-	 *         <code>Map</code> and the alarm type is missing.
-	 * @throws NullPointerException If the argument is <code>null</code>.
+	 * @throws ClassCastException If the method is called with {@code Map} and
+	 *         the field value types are not expected.
+	 * @throws IllegalArgumentException If the method is called with {@code Map}
+	 *         and the alarm type is missing.
+	 * @throws NullPointerException If the argument is {@code null}.
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
