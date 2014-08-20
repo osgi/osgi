@@ -57,8 +57,9 @@ public class ExportTestCase extends EnOceanTestCase {
 		eventAdmin.sendEvent(evt);
 
 		byte[] data = new byte[256];
-		log("DEBUG: call testStepService.getCurrentData()");
-		data = testStepService.getCurrentData();
+		log("DEBUG: get any new data from testStepService.");
+		String[] executionResult = testStepService.execute("Any_new_data", null);
+		data = executionResult[0].getBytes();
 		int size = data.length;
 		EspPacket pkt = new EspPacket(Utils.byteRange(data, 0, size));
 

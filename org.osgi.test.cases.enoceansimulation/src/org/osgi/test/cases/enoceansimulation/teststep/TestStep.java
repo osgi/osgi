@@ -38,6 +38,10 @@ public interface TestStep {
 	 * call TestStep in order to request for the execution of a command by the
 	 * StepService.
 	 * 
+	 * The TestStep can receive data from the Reference Implementation (or any
+	 * spec implementation). This execute method also enables the Conformance
+	 * Test to get these data.
+	 * 
 	 * @param command The command to be executed by the Reference
 	 *        Implementation, or by another implementation.
 	 * 
@@ -52,14 +56,5 @@ public interface TestStep {
 	 * @return The execution result.
 	 */
 	public String[] execute(String command, String[] parameters);
-
-	/**
-	 * The TestStep can receive data/command/message from the StepService. This
-	 * method enables the Conformance Test to get these data. Once data has been
-	 * retrieved, it is removed from the TestStep.
-	 * 
-	 * @return all the data.
-	 */
-	public byte[] getCurrentData();
 
 }

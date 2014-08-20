@@ -59,8 +59,15 @@ public class TestStepForEnOceanImpl implements TestStep {
 				currentCommand = parameters[0].getBytes();
 				// ignore result;
 			} else {
-				Logger.e(TestStepForEnOceanImpl.class.getName(), "The given command is UNKNOWN.");
-				// ignore result;
+				if ("Any_new_data".equals(command)) {
+					Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(...) returns currentData: " + currentData + ", currentData.length: " + currentData.length);
+					result = new String[] {new String(currentData)};
+					currentData = null;
+					return result;
+				} else {
+					Logger.e(TestStepForEnOceanImpl.class.getName(), "The given command is UNKNOWN.");
+					// ignore result;
+				}
 			}
 		}
 		return result;
@@ -74,13 +81,6 @@ public class TestStepForEnOceanImpl implements TestStep {
 	public void pushDataInTestStep(byte[] data) {
 		Logger.d(TestStepForEnOceanImpl.class.getName(), "pushDataInTestStep(data: " + data + ")");
 		currentData = data;
-	}
-
-	public byte[] getCurrentData() {
-		Logger.d(TestStepForEnOceanImpl.class.getName(), "getCurrentData() returns currentData: " + currentData + ", currentData.length: " + currentData.length);
-		byte[] result = currentData;
-		currentData = null;
-		return result;
 	}
 
 }
