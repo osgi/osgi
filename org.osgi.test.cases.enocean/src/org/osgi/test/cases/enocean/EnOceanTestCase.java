@@ -42,7 +42,6 @@ public abstract class EnOceanTestCase extends DefaultTestBundleControl {
 	protected EnOceanChannelDescriptionSetImpl	channelDescriptionSet;
 
 	protected void setUp() throws Exception {
-
 		/*
 		 * Gets the currently registered EnOceanHost and access its streams. Get
 		 * testStepService.

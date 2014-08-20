@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.enoceansimulation.teststep.impl;
+package org.osgi.impl.service.enocean.utils.teststep;
 
-import org.osgi.test.cases.enoceansimulation.Activator;
+import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.test.cases.enoceansimulation.teststep.TestStep;
 
 /**
@@ -42,14 +42,14 @@ public class TestStepForEnOceanImpl implements TestStep {
 	 * @return the current command.
 	 */
 	public byte[] getCurrentCommandAndReplaceItByNull() {
-		Activator.log(TestStepForEnOceanImpl.class, "getCurrentCommandAndReplaceItByNull() returns currentCommand: " + currentCommand);
+		Logger.d(TestStepForEnOceanImpl.class.getName(), "getCurrentCommandAndReplaceItByNull() returns currentCommand: " + currentCommand);
 		byte[] result = currentCommand;
 		currentCommand = null;
 		return result;
 	}
 
 	public void execute(byte[] command) {
-		Activator.log(TestStepForEnOceanImpl.class, "execute(command: " + command + ")");
+		Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(command: " + command + ")");
 		currentCommand = command;
 	}
 
@@ -59,12 +59,12 @@ public class TestStepForEnOceanImpl implements TestStep {
 	 * @param data
 	 */
 	public void pushDataInTestStep(byte[] data) {
-		Activator.log(TestStepForEnOceanImpl.class, "pushDataInTestStep(data: " + data + ")");
+		Logger.d(TestStepForEnOceanImpl.class.getName(), "pushDataInTestStep(data: " + data + ")");
 		currentData = data;
 	}
 
 	public byte[] getCurrentData() {
-		Activator.log(TestStepForEnOceanImpl.class, "getCurrentData() returns currentData: " + currentData + ", currentData.length: " + currentData.length);
+		Logger.d(TestStepForEnOceanImpl.class.getName(), "getCurrentData() returns currentData: " + currentData + ", currentData.length: " + currentData.length);
 		byte[] result = currentData;
 		currentData = null;
 		return result;

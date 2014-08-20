@@ -18,13 +18,13 @@ package org.osgi.impl.service.enocean.basedriver.impl;
 
 import java.io.IOException;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.enocean.basedriver.esp.EspPacket;
 import org.osgi.impl.service.enocean.utils.EnOceanHostImplException;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
+import org.osgi.impl.service.enocean.utils.teststep.TestStepForEnOceanImpl;
 import org.osgi.test.cases.enoceansimulation.teststep.TestStep;
-import org.osgi.test.cases.enoceansimulation.teststep.impl.TestStepForEnOceanImpl;
 
 /**
  *
@@ -34,9 +34,10 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 	/**
 	 * EnOcean base driver impl's tag/prefix for logger.
 	 */
-	protected static final String	TAG	= "EnOceanHostTestImpl";
+	protected static final String	TAG						= "EnOceanHostTestImpl";
 
-	private TestStepForEnOceanImpl	testStepService;
+	private TestStepForEnOceanImpl	testStepForEnOceanImpl	= new TestStepForEnOceanImpl();
+	private ServiceRegistration		testStepSR;
 
 	/**
 	 * @param path
@@ -45,17 +46,10 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 	public EnOceanHostTestImpl(String path, BundleContext bc) {
 		super(path, bc);
 
-		// Get TestStepService service.
-		ServiceReference testStepServiceRef = bc.getServiceReference(TestStep.class.getName());
-		if (testStepServiceRef == null) {
-			String errorMessage = "EnOceanHostTestImpl can NOT get at least one ServiceReference object for a service that implements and was registered under the " + TestStep.class.getName()
-					+ " class.";
-			Logger.d(this.getClass().getName(), errorMessage);
-			throw new IllegalStateException(errorMessage);
-		} else {
-			testStepService = (TestStepForEnOceanImpl) bc.getService(testStepServiceRef);
-		}
-
+		Logger.d(this.getClass().getName(), "Create, and register EnOcean's Test Step OSGi service.");
+		this.testStepSR = bc.registerService(
+				TestStep.class.getName(), testStepForEnOceanImpl, null);
+		Logger.d(this.getClass().getName(), "EnOcean's Test Step OSGi service has been created, and registered.");
 	}
 
 	public void startup() throws EnOceanHostImplException {
@@ -73,9 +67,6 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 			// Logger.d(TAG,
 			// "EnOceanHostTestImpl.run() - periodically check testStepService.getCurrentCommandAndReplaceItByNull()");
 			try {
-
-				TestStepForEnOceanImpl testStepForEnOceanImpl =
-						testStepService;
 				byte[] command =
 						testStepForEnOceanImpl.getCurrentCommandAndReplaceItByNull();
 				// Logger.d(TAG, "command: " + command);
@@ -102,6 +93,9 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 				Logger.e(TAG, "Error while reading input packet: " + ioexception.getMessage());
 			}
 		}
+		Logger.d(this.getClass().getName(), "Unregister EnOcean's Test Step OSGi service.");
+		this.testStepSR.unregister();
+		Logger.d(this.getClass().getName(), "EnOcean's Test Step OSGi service has been unregistered.");
 	}
 
 	/**
@@ -112,7 +106,7 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 	}
 
 	public void send(byte[] data) {
-		testStepService.pushDataInTestStep(data);
+		testStepForEnOceanImpl.pushDataInTestStep(data);
 	}
 
 	/**
