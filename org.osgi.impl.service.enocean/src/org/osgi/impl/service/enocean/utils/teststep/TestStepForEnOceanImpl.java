@@ -48,9 +48,22 @@ public class TestStepForEnOceanImpl implements TestStep {
 		return result;
 	}
 
-	public void execute(byte[] command) {
-		Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(command: " + command + ")");
-		currentCommand = command;
+	public String[] execute(String command, String[] parameters) {
+		Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(command: " + command + ", parameters: " + parameters + ")");
+		String[] result = null;
+		if ("MessageA5_02_01".equals(command)) {
+			currentCommand = parameters[0].getBytes();
+			// ignore result;
+		} else {
+			if ("MessageF6_02_01".equals(command)) {
+				currentCommand = parameters[0].getBytes();
+				// ignore result;
+			} else {
+				Logger.e(TestStepForEnOceanImpl.class.getName(), "The given command is UNKNOWN.");
+				// ignore result;
+			}
+		}
+		return result;
 	}
 
 	/**
@@ -71,4 +84,3 @@ public class TestStepForEnOceanImpl implements TestStep {
 	}
 
 }
-

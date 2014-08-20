@@ -25,7 +25,8 @@ public class ManualRegistrationTestCase extends EnOceanTestCase {
 		teachIn.setSenderId(Fixtures.HOST_ID_2);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
 		// Push everything in the command...
-		testStepService.execute(pkt.serialize());
+		String[] params = {new String(pkt.serialize())};
+		testStepService.execute("MessageF6_02_01", params);
 
 		String lastServiceEvent = devices.waitForService();
 		log("DEBUG: lastServiceEvent: " + lastServiceEvent);

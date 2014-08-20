@@ -180,7 +180,8 @@ public class BaseTests extends EnOceanTestCase {
 		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
 		// Push everything in the command...
-		testStepService.execute(pkt.serialize());
+		String[] params = {new String(pkt.serialize())};
+		testStepService.execute("MessageA5_02_01", params);
 
 		log("testRPC(), devices.waitForService()");
 		String wfs = devices.waitForService();

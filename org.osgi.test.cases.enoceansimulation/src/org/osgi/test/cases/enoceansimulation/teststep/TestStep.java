@@ -22,7 +22,7 @@ package org.osgi.test.cases.enoceansimulation.teststep;
  * registry.
  */
 public interface TestStep {
-	
+
 	// /**
 	// * Executes the command with the given parameters.
 	// *
@@ -34,17 +34,25 @@ public interface TestStep {
 	// public String[] execute(String command, String[] parameters);
 
 	/**
-	 * Executes the given EspRadioPacket, i.e. the Conformance Test can call
-	 * TestStep in order to request for the execution of a command/message by
-	 * the StepService.
+	 * Executes the command with the given parameters, i.e. the Conformance Test
+	 * call TestStep in order to request for the execution of a command by the
+	 * StepService.
 	 * 
-	 * @param command The command/message (here, in EnOcean, an EspRadioPacket)
-	 *        to execute.
+	 * @param command The command to be executed by the Reference
+	 *        Implementation, or by another implementation.
+	 * 
+	 *        In EnOcean, this command will most of the time be transformed into
+	 *        an EnOcean message, e.g. EspRadioPacket, by the TestStep
+	 *        implementation.
+	 * 
+	 * @param parameters The parameters to be used when executing the command.
+	 * 
+	 *        In EnOcean, parameters[0] contains the EnOcean message, if any.
 	 * 
 	 * @return The execution result.
 	 */
-	public void execute(byte[] command);
-	
+	public String[] execute(String command, String[] parameters);
+
 	/**
 	 * The TestStep can receive data/command/message from the StepService. This
 	 * method enables the Conformance Test to get these data. Once data has been
