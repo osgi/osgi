@@ -83,7 +83,7 @@ public class AsyncService implements Async {
 		}
 	}
 
-	public <T> T mediate(final ServiceReference<T> ref, final Class<T> iface) {
+	public <T> T mediate(final ServiceReference<? extends T> ref, final Class<T> iface) {
 		return AccessController.doPrivileged(new PrivilegedAction<T>() {
 			public T run() {
 				return privMediate(ref, iface);
@@ -92,7 +92,7 @@ public class AsyncService implements Async {
 	}
 	
 	@SuppressWarnings("unchecked")
-	private <T> T privMediate(ServiceReference<T> ref, Class<T> iface) {
+	private <T> T privMediate(ServiceReference<? extends T> ref, Class<T> iface) {
 
 		TrackingInvocationHandler handler = new TrackingInvocationHandler(this, 
 				clientBundle, logServiceTracker, ref);

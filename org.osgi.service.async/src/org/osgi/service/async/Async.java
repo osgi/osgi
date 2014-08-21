@@ -112,7 +112,7 @@ public interface Async {
 	 * @throws IllegalArgumentException if the type represented by iface cannot
 	 *         be mediated
 	 */
-	<T> T mediate(ServiceReference<T> target, Class<T> iface);
+	<T> T mediate(ServiceReference<? extends T> target, Class<T> iface);
 
 	/**
 	 * <p>
