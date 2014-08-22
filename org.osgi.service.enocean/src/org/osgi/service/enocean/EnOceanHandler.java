@@ -20,7 +20,7 @@ package org.osgi.service.enocean;
  * The interface used to get callback answers from a RPC or a Message.
  * 
  * @version 1.0
- * @author Victor Perron <victor.perron@orange.fr>
+ * @author $Id$
  */
 public interface EnOceanHandler {
 

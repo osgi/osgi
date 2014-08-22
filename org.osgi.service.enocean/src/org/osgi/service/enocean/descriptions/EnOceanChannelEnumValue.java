@@ -21,7 +21,7 @@ package org.osgi.service.enocean.descriptions;
  * by an enumerated channel.
  * 
  * @version 1.0
- * @author Victor Perron <victor.perron@orange.fr>
+ * @author $Id$
  */
 public interface EnOceanChannelEnumValue {
 

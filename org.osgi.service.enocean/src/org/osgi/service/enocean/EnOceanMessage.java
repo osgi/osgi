@@ -20,7 +20,7 @@ package org.osgi.service.enocean;
  * Holds the necessary methods to interact with an EnOcean message.
  * 
  * @version 1.0
- * @author Victor Perron <victor.perron@orange.fr>
+ * @author $Id$
  */
 public interface EnOceanMessage {
 

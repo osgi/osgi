@@ -23,7 +23,7 @@ import java.util.Map;
  * EnOcean protocol.
  * 
  * @version 1.0
- * @author Victor Perron <victor.perron@orange.fr>
+ * @author $Id$
  */
 public interface EnOceanDevice {
 
@@ -165,7 +165,8 @@ public interface EnOceanDevice {
      * Retrieves the currently available RPCs to this device; those are stored
      * using their manfufacturerId:commandId identifiers.
      * 
-     * @return A list of the available RPCs, in a Map<Integer, Integer[]> form.
+     * @return A list of the available RPCs, in a Map< Integer, Integer[] >
+     *         form.
      */
     public Map getRPCs();
 

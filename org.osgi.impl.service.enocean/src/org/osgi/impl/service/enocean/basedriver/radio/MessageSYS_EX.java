@@ -24,7 +24,7 @@ import org.osgi.service.enocean.EnOceanRPC;
 /**
  * SYS_EX message implementation.
  * 
- * @author Victor Perron <victor.perron@orange.fr>
+ * @author $Id$
  */
 public class MessageSYS_EX extends Message {
 

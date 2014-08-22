@@ -22,7 +22,7 @@ package org.osgi.service.enocean;
  * code : EnOceanHost.
  * 
  * @version 1.0
- * @author Victor Perron <victor.perron@orange.fr>
+ * @author $Id$
  */
 public class EnOceanException extends RuntimeException {
 
