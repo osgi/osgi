@@ -1132,6 +1132,10 @@
 		</itemizedlist>
 	</section>
 
+	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.enocean.xml"/>
+
+	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.enocean.descriptions.xml"/>
+	
 	<section>
 		<title>References</title>
 		<bibliolist>

@@ -12,6 +12,7 @@ residential.specs = \
 	 org.osgi.service.tr069todmt, \
 	 org.osgi.service.upnp, \
 	 org.osgi.service.useradmin, \
+	 org.osgi.service.enocean, \
 	 org.osgi.util.tracker, \
 	 org.osgi.util.xml
 
