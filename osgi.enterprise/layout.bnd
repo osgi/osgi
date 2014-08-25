@@ -9,6 +9,7 @@ enterprise.specs = \
 	 org.osgi.service.coordinator, \
 	 org.osgi.service.event, \
 	 org.osgi.service.http, \
+	 org.osgi.service.http.whiteboard, \
 	 org.osgi.service.jdbc, \
 	 org.osgi.service.jndi, \
 	 org.osgi.service.jpa, \

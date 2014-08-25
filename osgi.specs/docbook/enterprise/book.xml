@@ -82,6 +82,8 @@
 
   <xi:include href="../138/service.async.xml"/>
 
+  <xi:include href="../140/service.http.whiteboard.xml"/>
+
   <xi:include href="../702/util.xml.xml"/>
 
   <xi:include href="../705/util.promise.xml"/>
