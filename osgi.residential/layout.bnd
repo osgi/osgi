@@ -8,13 +8,15 @@ residential.specs = \
 	 org.osgi.service.http, \
 	 org.osgi.service.log, \
 	 org.osgi.service.metatype, \
-     org.osgi.service.provisioning, \
+	 org.osgi.service.provisioning, \
 	 org.osgi.service.tr069todmt, \
 	 org.osgi.service.upnp, \
 	 org.osgi.service.useradmin, \
 	 org.osgi.service.enocean, \
 	 org.osgi.util.tracker, \
-	 org.osgi.util.xml
+	 org.osgi.util.xml, \
+	 org.osgi.service.dal, \
+	 org.osgi.service.dal.functions, \
 
 residential.packages = ${replace;$(residential.specs);^.*$;$0.*}
 
