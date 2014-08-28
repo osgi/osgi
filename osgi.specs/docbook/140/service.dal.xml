@@ -1,0 +1,1458 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="140"
+         version="5"
+         xml:id="service.dal"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Device Abstraction Layer</title>
+  <info>
+    <releaseinfo xml:id="service.dal-version">Version 1.0</releaseinfo>
+  </info>
+  <section xml:id="service.dal.introduction">
+    <title>Introduction</title>
+    <para>
+      Remote device control provides opportunity to save energy,
+      to provide better security, to save your time during daily tasks and many more.
+      The devices can play different roles in their networks as events reporters,
+      controllers etc. That dynamic behavior is well mappable to
+      the dynamic OSGi service registry. There is a registration of
+      <code>Device</code> service. It realizes basic set of
+      management operations and provides rich set of properties.
+      The applications are allowed to track the device status,
+      to read descriptive information and to follow the device relations.
+      A set of functions can belong to the device. They represents the device
+      operations and related properties in an atomic way. The device functions
+      can be found in the OSGi service registry. The applications are allowed to
+      get directly the required functions if they don't need information about
+      the device. For example, light device is registered as a <code>Device</code>
+      service and there is a <code>Function</code> service to
+      turn on and turn off the light.
+    </para>
+    <section>
+      <title>Entities</title>
+      <itemizedlist>
+        <listitem>
+          <emphasis>Device</emphasis> - represents the device in
+          the OSGi service registry. It's described with a set of
+          service properties and provides basic management operations.
+        </listitem>
+        <listitem>
+          <emphasis>Function</emphasis> - atomic functional entity.
+          The device can support a few functions like switch and sensor.
+          The function provides a set of properties and operations.
+        </listitem>
+        <listitem>
+          <emphasis>FunctionEvent</emphasis> - asynchronous event.
+          It's sent through <code>EventAdmin</code> service and
+          notifies for <code>Function</code> property change.
+        </listitem>
+        <listitem>
+          <emphasis>FunctionData</emphasis> - data structure carries
+          <code>Function</code> property value with additional metadata.
+        </listitem>
+        <listitem>
+          <emphasis>PropertyMetadata</emphasis> and
+          <emphasis>OperationMetadata</emphasis> -
+          contains metadata about the Function properties and operations.
+        </listitem>
+      </itemizedlist>
+      <figure pgwide="1">
+        <title>Device Abstraction Layer Overview</title>
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center"
+                       width="80%"
+                       fileref="service.dal.overview.diagram.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+    </section>
+  </section>
+  <section xml:id="service.dal.device.access.category">
+    <title>Device Access Category</title>
+    <para>
+      The device access category is called <emphasis>DAL</emphasis>.
+      The category name is defined as a value of
+      <code>Device.DEVICE_CATEGORY</code> constant. It can be used as a part of
+      <code>org.osgi.service.device.Constants.DEVICE_CATEGORY</code>
+      service property key value. The category impose this specification rules.
+    </para>
+  </section>
+  <section xml:id="service.dal.device.service">
+    <title>Device Service</title>
+    <para>
+      <code>Device</code> interface is dedicated for a common access to the devices
+      provided by different protocols. It can be mapped one to one with the physical
+      device, but can be mapped only with a given functional part of the device.
+      In this scenario, the physical device can be realized with a set of
+      <code>Device</code> services and different relations between them.
+      <code>Device</code> service can represent pure software unit.
+      For example, it can simulate the real device work.
+      There are basic management operations for remove, property access and property
+      update. New protocol devices can be supported with a registration of new
+      <code>Device</code> services.
+    </para>
+    <para>
+      If the underlying protocol and the implementation allow,
+      the <code>Device</code> services must be registered again after
+      the OSGi framework reboot. The service properties must be restored,
+      the supported functions must be provided and <code>Device</code>
+      relations must be visible to the applications.
+    </para>
+    <para>
+      The OSGi service registry has the advantage of being easily accessible.
+      The services can be filtered and accessed with their properties.
+      The device service has a rich set of such properties:
+      <itemizedlist>
+        <listitem>
+          <emphasis>Device.SERVICE_UID</emphasis> – Specifies the device unique
+          identifier. It's a mandatory property.
+          The value type is <code>java.lang.String</code>.
+          To simplify the unique identifier generation,
+          the property value must follow the rule:
+          <programlisting>UID ::= driver-name ':' device-id
+UID – device unique identifier
+driver-name – the value of the <code>Device.SERVICE_DRIVER</code> service property
+device-id – device unique identifier in the scope of the driver</programlisting>
+        </listitem>
+        <listitem>
+          <emphasis>Device.SERVICE_REFERENCE_UIDS</emphasis> –
+          Specifies the reference device unique identifiers.
+          It's an optional property.
+          The value type is <code>java.lang.String[]</code>.
+          It can be used to represent different relationships between the devices.
+          For example, The ZigBee controller can have a reference to the USB dongle.
+        </listitem>
+        <listitem>
+          <emphasis>Device.SERVICE_DRIVER</emphasis> –
+          Specifies the device driver name.
+          For example, ZigBee, Z-Wave, Bluetooth etc. It's a mandatory property.
+          The value type is <code>java.lang.String</code>.
+        </listitem>
+        <listitem>
+          <emphasis>Device.SERVICE_NAME</emphasis> –
+          Specifies the device name. It's an optional property.
+          The value type is <code>java.lang.String</code>.
+        </listitem>
+        <listitem>
+          <emphasis>Device.SERVICE_STATUS</emphasis> –
+          Specifies the current device status. It's a mandatory property.
+          The value type <code>java.lang.Integer</code>. The possible values are:
+          <itemizedlist>
+            <listitem>
+              <emphasis>Device.STATUS_REMOVED</emphasis> –
+              Indicates that the device is removed from the network.
+              That status must be set as the last device status and
+              after that the device service can be unregistered
+              from the service registry. The status is available for
+              stale device services too. All transitions to and from
+              this status are described in <xref linkend="service.dal.status.transitions.removed"/>.
+            </listitem>
+            <listitem>
+              <emphasis>Device.STATUS_OFFLINE</emphasis> –
+              Indicates that the device is currently not available for operations.
+              The end device is still installed in the network and
+              can become online later. The controller is unplugged or
+              there is no connection. All transitions to and from this status
+              are described in detail in <xref linkend="service.dal.status.transitions.offline"/>.
+            </listitem>
+            <listitem>
+              <emphasis>Device.STATUS_ONLINE</emphasis> –
+              Indicates that the device is currently available for operations.
+              All transitions to and from this status are described
+              in detail in <xref linkend="service.dal.status.transitions.online"/>.
+            </listitem>
+            <listitem>
+              <emphasis>Device.STATUS_PROCESSING</emphasis> –
+              Indicates that the device is currently busy with an operation.
+              All transitions to and from this status are described
+              in detail in <xref linkend="service.dal.status.transitions.processing"/>.
+            </listitem>
+            <listitem>
+              <emphasis>Device.STATUS_NOT_INITIALIZED</emphasis> –
+              Indicates that the device is currently not initialized.
+              Some protocols don't provide device information
+              right after the device is connected.
+              The device can be initialized later when it's awakened.
+              All transitions to and from this status are described in detail in
+              <xref linkend="service.dal.status.transitions.not.initialized"/>.
+            </listitem>
+            <listitem>
+              <emphasis>Device.STATUS_NOT_CONFIGURED</emphasis> –
+              Indicates that the device is currently not configured.
+              The device can require additional actions to become completely
+              connected to the network. All transitions to and from this status are
+              described in detail in <xref linkend="service.dal.status.transitions.not.configured"/>.
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+          <emphasis>Device.SERVICE_STATUS_DETAIL</emphasis> –
+          Provides the reason for the current device status.
+          It's an optional property. The property value cannot be externally
+          set or modified. The value type is <code>java.lang.Integer</code>.
+          There are two value categories. Positive values indicate the reason
+          for the current status like
+          <code>Device.STATUS_DETAIL_CONNECTING</code>.
+          Negative values indicate errors related to the current device status
+          like <code>Device.STATUS_DETAIL_DEVICE_BROKEN</code>.
+          The list with defined status details is:
+          <itemizedlist>
+            <listitem>
+              <emphasis>Device.STATUS_DETAIL_CONNECTING</emphasis> –
+              The reason for the current device status is that
+              the device is currently connecting to the network.
+              It indicates the reason with a positive value <code>1</code>.
+              The device status must be <code>STATUS_PROCESSING</code>.
+            </listitem>
+            <listitem>
+              <emphasis>Device.STATUS_DETAIL_INITIALIZING</emphasis> –
+              The reason for the current device status is that
+              the device is currently in process of initialization.
+              It indicates the reason with a positive value <code>2</code>.
+              The network controller initializing means that information about
+              the network is currently read.
+              The device status must be <code>STATUS_PROCESSING</code>.
+            </listitem>
+            <listitem>
+              <emphasis>Device.STATUS_DETAIL_REMOVING</emphasis> –
+              The reason for the current device status is that
+              the device is leaving the network.
+              It indicates the reason with positive value <code>3</code>.
+              The device status must be <code>STATUS_PROCESSING</code>.
+            </listitem>
+            <listitem>
+              <emphasis>Device.STATUS_DETAIL_CONFIGURATION_NOT_APPLIED</emphasis> –
+              The reason for the current device status is that the device
+              configuration is not applied.
+              It indicates an error with a negative value <code>-1</code>.
+              The device status must be <code>STATUS_NOT_CONFIGURED</code>.
+            </listitem>
+            <listitem>
+              <emphasis>Device.STATUS_DETAIL_DEVICE_BROKEN</emphasis> –
+              The reason for the offline device is that the device is broken.
+              It indicates an error with a negative value <code>-2</code>.
+              The device status must be <code>STATUS_OFFLINE</code>.
+            </listitem>
+            <listitem>
+              <emphasis>Device.STATUS_DETAIL_DEVICE_COMMUNICATION_ERROR</emphasis> –
+              The reason for the current device status is that the device
+              communication is problematic.
+              It indicates an error with a negative value <code>-3</code>.
+              The device status must be <code>STATUS_ONLINE</code> or
+              <code>STATUS_NOT_INITIALIZED</code>.
+            </listitem>
+            <listitem>
+              <emphasis>Device.STATUS_DETAIL_DEVICE_DATA_INSUFFICIENT</emphasis> –
+              The reason for the uninitialized device is that the device doesn't
+              provide enough information and cannot be determined.
+              It indicates an error with a negative value <code>-4</code>.
+              The device status must be <code>STATUS_NOT_INITIALIZED</code>.
+            </listitem>
+            <listitem>
+              <emphasis>Device.STATUS_DETAIL_DEVICE_NOT_ACCESSIBLE</emphasis> –
+              The reason for the offline device is that the device is not accessible
+              and further communication is not possible.
+              It indicates an error with a negative value <code>-5</code>.
+              The device status must be <code>STATUS_OFFLINE</code>.
+            </listitem>
+            <listitem>
+              <emphasis>Device.STATUS_DETAIL_ERROR_APPLYING_CONFIGURATION</emphasis>
+              – The reason for the current device status is that 
+              the device cannot be configured.
+              It indicates an error with a negative value <code>-6</code>.
+              The device status must be <code>STATUS_NOT_CONFIGURED</code>.
+            </listitem>
+            <listitem>
+              <emphasis>Device.STATUS_DETAIL_IN_DUTY_CYCLE</emphasis> –
+              The reason for the offline device is that the device is in duty cycle.
+              It indicates an error with a negative value <code>-7</code>.
+              The device status must be <code>STATUS_OFFLINE</code>.
+            </listitem>
+          </itemizedlist>
+          Custom status details are allowed, but they must not overlap
+          the specified codes.
+          <xref linkend="service.dal.table.status.detail.mapping"/> table contains
+          the mapping of the status details to the statuses.
+          <table xml:id="service.dal.table.status.detail.mapping">
+            <title>Status detail to status mapping.</title>
+            <tgroup cols="2">
+              <thead>
+                <row>
+                  <entry>Status Detail</entry>
+                  <entry>Status</entry>
+                </row>
+              </thead>
+              <tbody>
+                <row>
+                  <entry><code>CONNECTING</code></entry>
+                  <entry><code>PROCESSING</code></entry>
+                </row>
+                <row>
+                  <entry><code>INITIALIZING</code></entry>
+                  <entry><code>PROCESSING</code></entry>
+                </row>
+                <row>
+                  <entry><code>REMOVING</code></entry>
+                  <entry><code>PROCESSING</code></entry>
+                </row>
+                <row>
+                  <entry><code>CONFIGURATION_NOT_APPLIED</code></entry>
+                  <entry><code>NOT_CONFIGURED</code></entry>
+                </row>
+                <row>
+                  <entry><code>DEVICE_BROKEN</code></entry>
+                  <entry><code>OFFLINE</code></entry>
+                </row>
+                <row>
+                  <entry><code>DEVICE_COMMUNICATION_ERROR</code></entry>
+                  <entry><code>ONLINE, NOT_INITIALIZED</code></entry>
+                </row>
+                <row>
+                  <entry><code>DEVICE_DATA_INSUFFICIENT</code></entry>
+                  <entry><code>NOT_INITIALIZED</code></entry>
+                </row>
+                <row>
+                  <entry><code>DEVICE_NOT_ACCESSIBLE</code></entry>
+                  <entry><code>OFFLINE</code></entry>
+                </row>
+                <row>
+                  <entry><code>ERROR_APPLYING_CONFIGURATION</code></entry>
+                  <entry><code>NOT_CONFIGURED</code></entry>
+                </row>
+                <row>
+                  <entry><code>IN_DUTY_CYCLE</code></entry>
+                  <entry><code>OFFLINE</code></entry>
+                </row>
+              </tbody>
+            </tgroup>
+          </table>
+        </listitem>
+        <listitem>
+          <emphasis>Device.SERVICE_HARDWARE_VENDOR</emphasis> –
+          Specifies the device hardware vendor. It's an optional property.
+          The value type is <code>java.lang.String</code>.
+        </listitem>
+        <listitem>
+          <emphasis>Device.SERVICE_HARDWARE_VERSION</emphasis> –
+          Specifies the device hardware version. It's an optional property.
+          The value type is <code>java.lang.String</code>.
+        </listitem>
+        <listitem>
+          <emphasis>Device.SERVICE_FIRMWARE_VENDOR</emphasis> –
+          Specifies the device firmware vendor. It's an optional property.
+          The value type is <code>java.lang.String</code>.
+        </listitem>
+        <listitem>
+          <emphasis>Device.SERVICE_FIRMWARE_VERSION</emphasis> –
+          Specifies the device firmware version. It's an optional property.
+          The value type is <code>java.lang.String</code>.
+        </listitem>
+        <listitem>
+          <emphasis>Device.SERVICE_TYPES</emphasis> – Specified the device types.
+          It's an optional property.
+          The value type is <code>java.lang.String[]</code>.
+        </listitem>
+        <listitem>
+          <emphasis>Device.SERVICE_MODEL</emphasis> – Specifies the device model.
+          It's an optional property.
+          The value type is <code>java.lang.String</code>.
+        </listitem>
+        <listitem>
+          <emphasis>Device.SERVICE_SERIAL_NUMBER</emphasis> –
+          Specifies the device serial number. It's an optional property.
+          The value type is <code>java.lang.String</code>.
+        </listitem>
+      </itemizedlist>
+    </para>
+    <para>
+      The device services are registered in the OSGi service registry with
+      <code>org.osgi.service.dal.Device</code> interface.
+      The next code snippet prints the online devices.
+      <programlisting>ServiceReference[] deviceSRefs = context.getServiceReferences(
+    Device.class.getName(),
+    '(' + Device.SERVICE_STATUS + '=' + Device.STATUS_ONLINE + ')');
+if (null == deviceSRefs) {
+    return; // no such services
+}
+for (int i = 0; i &lt; deviceSRefs.length; i++) {
+    printDevice(deviceSRefs[i]);
+}</programlisting>
+    </para>
+    <para>
+      Applications need to have an access to the device properties.
+      For convenience, there are helper methods:
+      <itemizedlist>
+        <listitem>
+          <emphasis>getServiceProperty(String propName)</emphasis> –
+          Returns the current value of the specified property.
+          The method will return the same value as
+          <code>org.osgi.framework.ServiceReference.getProperty(String)</code>
+          for the service reference of this device.
+        </listitem>
+        <listitem>
+          <emphasis>getServicePropertyKeys()</emphasis> –
+          Returns an array with all device service property keys.
+          The method will return the same value as
+          <code>org.osgi.framework.ServiceReference.getPropertyKeys()</code>
+          for the service reference of this device.
+        </listitem>
+      </itemizedlist>
+    </para>
+    <section>
+      <title>Reference Device Services</title>
+      <para>
+        <code>Device</code> service can have a reference to other devices.
+        That link can be used to represent different relationships between devices.
+        For example, the ZigBee dongle can be used as USB Device and
+        ZigBee network controller <code>Device</code>.
+        The network controller device can have a reference to the physical
+        USB device as it's depicted on the next diagram.
+        <figure pgwide="1">
+          <title>Device Reference</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata align="center"
+                         width="15%"
+                         fileref="service.dal.device.reference.svg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </para>
+      <para>
+        The related service property is <code>Device.SERVICE_REFERENCE_UIDS</code>.
+      </para>
+    </section>
+    <section>
+      <title>Device Service Registration</title>
+      <para>
+        The devices are registered as services in the OSGi service registry.
+        The service interface is <code>org.osgi.service.dal.Device</code>.
+        There is a registration order.
+        <code>Device</code> services are registered last.
+        Before their registration,
+        there is <code>Function</code> service registration.
+      </para>
+    </section>
+    <section>
+      <title>Device Service Unregistration</title>
+      <para>
+        OSGi service registry is only about the read-only access for the services.
+        There are no control operations.
+        The service provider is responsible to register, update or
+        unregister the services. That design is not very convenient for
+        the device life cycle. The <code>Device</code> interface provides
+        a callback method <code>remove()</code>. The method can be optionally
+        implemented by the device provider.
+        <code>java.lang.UnsupportedOperationException</code> can be thrown
+        if the method is not supported.
+        When the remove callback is called, an appropriate command will be synchronously send to the device.
+        As a result it can leave the network and device related
+        service will be unregistered.
+        There is an unregistration order.
+        The registration reverse order is used when the services are unregistered.
+        <code>Device</code> services are unregistered first
+        before <code>Function</code> services.
+      </para>
+    </section>
+  </section>
+  <section xml:id="service.dal.status.transitions">
+    <title>Device Status Transitions</title>
+    <para>
+      The device status uncover the device availability.
+      It can demonstrate that device is currently not available for operations
+      or that the device requires some additional configuration steps.
+      The status can jump over the different values according to
+      the rules defined in this section.
+      The status transitions are summarized in
+      <xref linkend="service.dal.table.device.status.transitions"/>,
+      visualized in <xref linkend="service.dal.figure.device.status.transitions"/>
+      and described in detail in the next sections.
+      The entry device status is always <code>STATUS_PROCESSING</code>.
+      When the device info is processed, the device can go to another status.
+      The last possible device status is <code>STATUS_REMOVED</code>.
+      The status must be set when the device is removed from the network.
+      After that status, the device service will be unregistered.
+    </para>
+    <figure pgwide="1" xml:id="service.dal.figure.device.status.transitions">
+      <title>Device Status Transitions</title>
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center"
+                     width="80%"
+                     fileref="service.dal.status.transitions.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+    <table xml:id="service.dal.table.device.status.transitions">
+      <title>Device Status Transitions</title>
+      <tgroup cols="7">
+        <thead>
+          <row>
+            <entry>From\To Status</entry>
+            <entry><code>PROCESSING</code></entry>
+            <entry><code>ONLINE</code></entry>
+            <entry><code>OFFLINE</code></entry>
+            <entry><code>NOT INITIALIZED</code></entry>
+            <entry><code>NOT CONFIGURED</code></entry>
+            <entry><code>REMOVED</code></entry>
+          </row>
+        </thead>
+        <tbody>
+          <row>
+            <entry><code>PROCESSING</code></entry>
+            <entry>-</entry>
+            <entry>Initial device data has been read.</entry>
+            <entry>Device is not accessible.</entry>
+            <entry>Initial device data is partially read.</entry>
+            <entry>Device has a pending configuration.</entry>
+            <entry>Device is removed.</entry>
+          </row>
+          <row>
+            <entry><code>ONLINE</code></entry>
+            <entry>Device data is processing.</entry>
+            <entry>-</entry>
+            <entry>Device is not accessible.</entry>
+            <entry>-</entry>
+            <entry>Device has a new pending configuration.</entry>
+            <entry>Device is removed.</entry>
+          </row>
+          <row>
+            <entry><code>OFFLINE</code></entry>
+            <entry>Device data is processing.</entry>
+            <entry>Device data has been read.</entry>
+            <entry>-</entry>
+            <entry>-</entry>
+            <entry>Device has a pending configuration.</entry>
+            <entry>Device is removed.</entry>
+          </row>
+          <row>
+            <entry><code>NOT INITIALIZED</code></entry>
+            <entry>Device data is processing.</entry>
+            <entry>-</entry>
+            <entry>Device is not accessible.</entry>
+            <entry>-</entry>
+            <entry>-</entry>
+            <entry>Device is removed.</entry>
+          </row>
+          <row>
+            <entry><code>NOT CONFIGURED</code></entry>
+            <entry>Device data is processing.</entry>
+            <entry>Device pending configuration is satisfied.</entry>
+            <entry>Device is not accessible.</entry>
+            <entry>-</entry>
+            <entry>-</entry>
+            <entry>Device is removed.</entry>
+          </row>
+          <row>
+            <entry><code>REMOVED</code></entry>
+            <entry>-</entry>
+            <entry>-</entry>
+            <entry>-</entry>
+            <entry>-</entry>
+            <entry>-</entry>
+            <entry>-</entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+    <section xml:id="service.dal.status.transitions.removed">
+      <title>Transitions to STATUS_REMOVED</title>
+      <para>
+        The device can go to <code>Device.STATUS_REMOVED</code>
+        from any other status. Once reached, the device status cannot be
+        updated any more. The device is removed from the network
+        and the device service is unregistered from
+        the OSGi service registry. If there are stale references
+        to the Device service, their status will be set to STATUS_REMOVED.
+      </para>
+      <para>
+        The common way for a given device to be removed is
+        <code>Device.remove()</code>. When the method returns, the device status
+        will be <code>STATUS_REMOVED</code>.
+        It requires a synchronous execution of the operation.
+      </para>
+    </section>
+    <section xml:id="service.dal.status.transitions.offline">
+      <title>Transitions to and from STATUS_OFFLINE</title>
+      <para>
+        The <code>STATUS_OFFLINE</code> indicates that the device is
+        currently not available for operations.
+        That status can be set, because of different reasons.
+        The network controller can be unplugged, connection to
+        the device is lost etc. This variety provides an access to
+        that status from any other except <code>STATUS_REMOVED</code>.
+        Transitions to and from this status are:
+        <itemizedlist>
+          <listitem>
+            From <code>STATUS_OFFLINE</code> to <code>STATUS_REMOVED</code> –
+            device is removed. The status can be set as
+            a result of <code>Device.remove()</code> method call.
+          </listitem>
+          <listitem>
+            From <code>STATUS_OFFLINE</code> to <code>STATUS_PROCESSING</code> –
+            device data is processing.
+          </listitem>
+          <listitem>
+            From <code>STATUS_OFFLINE</code> to <code>STATUS_NOT_CONFIGURED</code> –
+            device has a pending configuration.
+          </listitem>
+          <listitem>
+            From <code>STATUS_OFFLINE</code> to <code>STATUS_ONLINE</code> – device data has been read and the device is currently available for operations.
+          </listitem>
+          <listitem>
+            From <code>STATUS_OFFLINE</code> to <code>STATUS_NOT_INITIALIZED</code>
+            – That transition is not possible, because the status
+            have to go through STATUS_PROCESSING.
+            If the processing is unsuccessful,
+            <code>STATUS_NOT_INITIALIZED</code> will be set.
+          </listitem>
+          <listitem>
+            To <code>STATUS_OFFLINE</code> from <code>STATUS_REMOVED</code> –
+            That transition is not possible. If device is removed,
+            the service will be unregistered from the service registry.
+          </listitem>
+          <listitem>
+            To <code>STATUS_OFFLINE</code> from <code>STATUS_PROCESSING</code> –
+            device is not accessible any more while device data is processing.
+          </listitem>
+          <listitem>
+            To <code>STATUS_OFFLINE</code> from <code>STATUS_NOT_CONFIGURED</code> –
+            Not configured device is not accessible any more.
+          </listitem>
+          <listitem>
+            To <code>STATUS_OFFLINE</code> from <code>STATUS_ONLINE</code> –
+            Online device is not accessible any more.
+          </listitem>
+          <listitem>
+            To <code>STATUS_OFFLINE</code> from <code>STATUS_NOT_INITIALIZED</code>
+            – Not initialized device is not accessible any more.
+          </listitem>
+        </itemizedlist>
+        The possible transitions are summarized on
+        <xref linkend="service.dal.figure.device.status.transitions.offline"/>.
+        <figure pgwide="1" xml:id="service.dal.figure.device.status.transitions.offline">
+          <title>Transitions to and from STATUS_OFFLINE</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata align="center"
+                         width="70%"
+                         fileref="service.dal.status.transitions.offline.svg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </para>
+    </section>
+    <section xml:id="service.dal.status.transitions.online">
+      <title>Transitions to and from STATUS_ONLINE</title>
+      <para>
+        The <code>STATUS_ONLINE</code> indicates that the device is currently
+        available for operations.
+        The online devices are initialized and ready for use.
+        Transitions to and from this status are:
+        <itemizedlist>
+          <listitem>
+            From <code>STATUS_ONLINE</code> to <code>STATUS_REMOVED</code> –
+            device is removed. The status can be set as a result of
+            <code>Device.remove()</code> method call.
+          </listitem>
+          <listitem>
+            From <code>STATUS_ONLINE</code> to <code>STATUS_PROCESSING</code> –
+            device data is processing.
+          </listitem>
+          <listitem>
+            From <code>STATUS_ONLINE</code> to <code>STATUS_NOT_CONFIGURED</code> –
+            device has a pending configuration.
+          </listitem>
+          <listitem>
+            From <code>STATUS_ONLINE</code> to <code>STATUS_OFFLINE</code> –
+            Online device is not accessible any more.
+          </listitem>
+          <listitem>
+            From <code>STATUS_ONLINE</code> to <code>STATUS_NOT_INITIALIZED</code> –
+            That transition is not possible. Online devices are initialized.
+          </listitem>
+          <listitem>
+            To <code>STATUS_ONLINE</code> from <code>STATUS_REMOVED</code> –
+            That transition is not possible. If device is removed,
+            the service will be unregistered from the service registry.
+          </listitem>
+          <listitem>
+            To <code>STATUS_ONLINE</code> from <code>STATUS_PROCESSING</code> –
+            Initial device data has been read.
+            The device is available for operations.
+          </listitem>
+          <listitem>
+            To <code>STATUS_ONLINE</code> from <code>STATUS_NOT_CONFIGURED</code> –
+            The device pending configuration is satisfied.
+          </listitem>
+          <listitem>
+            To <code>STATUS_ONLINE</code> from <code>STATUS_OFFLINE</code> –
+            device is accessible for operations.
+          </listitem>
+          <listitem>
+            To <code>STATUS_ONLINE</code> from <code>STATUS_NOT_INITIALIZED</code> –
+            That transition is not possible.
+            The device data has to be processed and
+            then the device can become online.
+            Intermediate status <code>STATUS_PROCESSING</code> will be used.
+          </listitem>
+        </itemizedlist>
+        The possible transitions are summarized on
+        <xref linkend="service.dal.figure.device.status.transitions.online"/>.
+        <figure pgwide="1" xml:id="service.dal.figure.device.status.transitions.online">
+          <title>Transitions to and from STATUS_ONLINE</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata align="center"
+                         width="90%"
+                         fileref="service.dal.status.transitions.online.svg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </para>
+    </section>
+    <section xml:id="service.dal.status.transitions.processing">
+      <title>Transitions to and from STATUS_PROCESSING</title>
+      <para>
+        The status indicates that the device is currently busy with an operation.
+        It can be time consuming operation and can result to any other status.
+        The operation processing can be reached by any other status except
+        <code>STATUS_REMOVED</code>. An example, offline device requires
+        some data processing to become online. It will apply the statuses
+        <code>STATUS_OFFLINE</code>, <code>STATUS_PROCESSING</code> and
+        <code>STATUS_ONLINE</code>. Transitions to and from this status are:
+        <itemizedlist>
+          <listitem>
+            From <code>STATUS_PROCESSING</code> to <code>STATUS_REMOVED</code> –
+            device is removed. The status can be set as a result of
+            <code>Device.remove()</code> method call.
+          </listitem>
+          <listitem>
+            From <code>STATUS_PROCESSING</code> to <code>STATUS_ONLINE</code> –
+            Initial device data has been read.
+            The device is available for operations.
+          </listitem>
+          <listitem>
+            From <code>STATUS_PROCESSING</code> to
+            <code>STATUS_NOT_CONFIGURED</code> – device has a pending configuration.
+          </listitem>
+          <listitem>
+            From <code>STATUS_PROCESSING</code> to <code>STATUS_OFFLINE</code> –
+            Online device is not accessible any more.
+          </listitem>
+          <listitem>
+            From <code>STATUS_PROCESSING</code> to
+            <code>STATUS_NOT_INITIALIZED</code> –
+            device initial data is partially read.
+          </listitem>
+          <listitem>
+            To <code>STATUS_PROCESSING</code> from <code>STATUS_REMOVED</code> –
+            That transition is not possible. If device is removed,
+            the service will be unregistered from the service registry.
+          </listitem>
+          <listitem>
+            To <code>STATUS_PROCESSING</code> from <code>STATUS_ONLINE</code> –
+            device is busy with an operation.
+          </listitem>
+          <listitem>
+            To <code>STATUS_PROCESSING</code> from
+            <code>STATUS_NOT_CONFIGURED</code> –
+            The device pending configuration is satisfied and
+            the device is busy with an operation.
+          </listitem>
+          <listitem>
+            To <code>STATUS_PROCESSING</code> from <code>STATUS_OFFLINE</code> –
+            device is busy with an operation.
+          </listitem>
+          <listitem>
+            To <code>STATUS_PROCESSING</code> from
+            <code>STATUS_NOT_INITIALIZED</code> – device initial data is processing.
+          </listitem>
+        </itemizedlist>
+        The possible transitions are summarized on
+        <xref linkend="service.dal.figure.device.status.transitions.processing"/>.
+        <figure pgwide="1" xml:id="service.dal.figure.device.status.transitions.processing">
+          <title>Transitions to and from STATUS_PROCESSING</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata align="center"
+                         width="90%"
+                         fileref="service.dal.status.transitions.processing.svg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </para>
+    </section>
+    <section xml:id="service.dal.status.transitions.not.initialized">
+      <title>Transitions to and from STATUS_NOT_INITIALIZED</title>
+      <para>
+        The status indicates that the device is currently not initialized.
+        Some protocols don't provide device information right after
+        the device is connected.
+        The device can be initialized later when it's awakened.
+        Not initialized device requires some data processing to become online.
+        <code>STATUS_PROCESSING</code> is used as an intermediate status.
+        Transitions to and from this status are:
+        <itemizedlist>
+          <listitem>
+            From <code>STATUS_NOT_INITIALIZED</code> to <code>STATUS_REMOVED</code>
+            – device is removed.
+            The status can be set as a result
+            of <code>Device.remove()</code> method call.
+          </listitem>
+          <listitem>
+            From <code>STATUS_NOT_INITIALIZED</code> to
+            <code>STATUS_PROCESSING</code> – device data is processing.
+          </listitem>
+          <listitem>
+            From <code>STATUS_NOT_INITIALIZED</code> to
+            <code>STATUS_NOT_CONFIGURED</code> – That transition is not possible.
+            Device requires some data processing.
+          </listitem>
+          <listitem>
+            From <code>STATUS_NOT_INITIALIZED</code> to <code>STATUS_OFFLINE</code>
+            – device is not accessible any more.
+          </listitem>
+          <listitem>
+            From <code>STATUS_NOT_INITIALIZED</code> to <code>STATUS_ONLINE</code> –
+            That transition is not possible.
+            Device requires some data processing to become online.
+          </listitem>
+          <listitem>
+            To <code>STATUS_NOT_INITIALIZED</code> from <code>STATUS_REMOVED</code>
+            – That transition is not possible.
+            If device is removed, the service will be unregistered
+            from the service registry.
+          </listitem>
+          <listitem>
+            To <code>STATUS_NOT_INITIALIZED</code> from
+            <code>STATUS_PROCESSING</code> – device data is partially read.
+          </listitem>
+          <listitem>
+            To <code>STATUS_NOT_INITIALIZED</code> from
+            <code>STATUS_NOT_CONFIGURED</code> – That transition is not possible.
+            When device pending configuration is satisfied, the device requires
+            additional data processing.
+          </listitem>
+          <listitem>
+            To <code>STATUS_NOT_INITIALIZED</code> from <code>STATUS_OFFLINE</code>
+            – That transition is not possible. Device requires some data
+            processing and then can become not initialized.
+          </listitem>
+          <listitem>
+            To <code>STATUS_NOT_INITIALIZED</code> from <code>STATUS_ONLINE</code> –
+            That transition is not possible. Online device is initialized.
+          </listitem>
+        </itemizedlist>
+        The possible transitions are summarized on
+        <xref linkend="service.dal.figure.device.status.transitions.not.initialized"/>.
+        <figure pgwide="1" 
+                xml:id="service.dal.figure.device.status.transitions.not.initialized">
+          <title>Transitions to and from STATUS_NOT_INITIALIZED</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata align="center"
+                         width="70%"
+                         fileref="service.dal.status.transitions.not.initialized.svg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </para>
+    </section>
+    <section xml:id="service.dal.status.transitions.not.configured">
+      <title>Transitions to and from STATUS_NOT_CONFIGURED</title>
+      <para>
+        Indicates that the device is currently not configured.
+        The device can require additional actions to become
+        completely connected to the network.
+        For example, a given device button has to be pushed.
+        That status doesn't have transitions with
+        <code>STATUS_NOT_INITIALIZED</code>,
+        because some data processing is required.
+        Transitions to and from this status are:
+        <itemizedlist>
+          <listitem>
+            From <code>STATUS_NOT_CONFIGURED</code> to <code>STATUS_REMOVED</code> –
+            device is removed. The status can be set as a result of
+            <code>Device.remove()</code> method call.
+          </listitem>
+          <listitem>
+            From <code>STATUS_NOT_CONFIGURED</code> to
+            <code>STATUS_PROCESSING</code> – device pending configuration is
+            satisfied and some additional data processing is required.
+          </listitem>
+          <listitem>
+            From <code>STATUS_NOT_CONFIGURED</code> to <code>STATUS_ONLINE</code> –
+            device pending configuration is satisfied.
+          </listitem>
+          <listitem>
+            From <code>STATUS_NOT_CONFIGURED</code> to <code>STATUS_OFFLINE</code> –
+            device is not accessible any more.
+          </listitem>
+          <listitem>
+            From <code>STATUS_NOT_CONFIGURED</code> to
+            <code>STATUS_NOT_INITIALIZED</code> – That transition is not possible.
+            When device pending configuration is satisfied,
+            the device requires additional data processing.
+          </listitem>
+          <listitem>
+            To <code>STATUS_NOT_CONFIGURED</code> from <code>STATUS_REMOVED</code> –
+            That transition is not possible. If device is removed,
+            the service will be unregistered from the service registry.
+          </listitem>
+          <listitem>
+            To <code>STATUS_NOT_CONFIGURED</code> from
+            <code>STATUS_PROCESSING</code> –
+            Initial device data has been read but there is a pending configuration.
+          </listitem>
+          <listitem>
+            To <code>STATUS_NOT_CONFIGURED</code> from <code>STATUS_ONLINE</code> –
+            device has a pending configuration.
+          </listitem>
+          <listitem>
+            To <code>STATUS_NOT_CONFIGURED</code> from <code>STATUS_OFFLINE</code> –
+            device is going to be online, but has a pending configuration.
+          </listitem>
+          <listitem>
+            To <code>STATUS_NOT_CONFIGURED</code> from
+            <code>STATUS_NOT_INITIALIZED</code> – That transition is not possible.
+            That transition is not possible. Device requires some data processing.
+          </listitem>
+        </itemizedlist>
+        The possible transitions are summarized on
+        <xref linkend="service.dal.figure.device.status.transitions.not.configured"/>.
+        <figure pgwide="1" 
+                xml:id="service.dal.figure.device.status.transitions.not.configured">
+          <title>Transitions to and from STATUS_NOT_CONFIGURED</title>
+          <mediaobject>
+            <imageobject>
+              <imagedata align="center"
+                         width="100%"
+                         fileref="service.dal.status.transitions.not.configured.svg"/>
+            </imageobject>
+          </mediaobject>
+        </figure>
+      </para>
+    </section>
+  </section>
+  <section xml:id="service.dal.function">
+    <title>Functions</title>
+    The user applications can execute the device operations and manage the device
+    properties. That control is realized with the help of <code>Function</code>
+    services. The Function service can be registered in the service registry
+    with those service properties:
+    <itemizedlist>
+      <listitem>
+        <emphasis>Function.SERVICE_UID</emphasis> – mandatory service property.
+        The property value is the function unique identifier.
+        The value type is <code>java.lang.String</code>.
+        To simplify the unique identifier generation,
+        the property value must follow the rule:
+        <programlisting>function UID ::= device-id ':' function-id
+function UID – function unique identifier
+device-id – the value of the Device.SERVICE_UID Device service property
+function-id – function identifier in the scope of the device</programlisting>
+        <para>
+          If the function is not bound to a device, the function unique identifier
+          can be device independent.
+        </para>
+      </listitem>
+      <listitem>
+        <emphasis>Function.SERVICE_TYPE</emphasis> – mandatory service property.
+        The service property value contains the function type.
+        For example, the sensor function can have
+        different types like temperature or pressure etc. It's an optional property.
+        The value type is <code>java.lang.String</code>.
+        <para>
+          Organizations that want to use function types that do not clash with OSGi
+          Alliance defined types should prefix their types in own namespace.
+        </para>
+      </listitem>
+      <listitem>
+        <emphasis>Function.SERVICE_VERSION</emphasis> – optional service property.
+        The service property value contains the function version.
+        That version can point to specific implementation version
+        and vary in the different vendor implementations.
+        The value type is <code>java.lang.String</code>.
+      </listitem>
+      <listitem>
+        <emphasis>Function.SERVICE_DEVICE_UID</emphasis> –
+        optional service property. The property value is the device identifier.
+        The function belongs to this device. The value type is java.lang.String.
+      </listitem>
+      <listitem>
+        <emphasis>Function.SERVICE_REFERENCE_UIDS</emphasis> –
+        optional service property. The service property value contains
+        the reference function unique identifiers.
+        The value type is <code>java.lang.String[]</code>.
+        It can be used to represent different relationships between the functions.
+      </listitem>
+      <listitem>
+        <emphasis>Function.SERVICE_DESCRIPTION</emphasis> –
+        optional service property. The property value is the function description.
+        The value type is <code>java.lang.String</code>.
+      </listitem>
+      <listitem>
+        <emphasis>Function.SERVICE_OPERATION_NAMES</emphasis> –
+        optional service property.
+        The property is missing when there are no function operations
+        and property must be set when there are function operations.
+        The property value is the function operation names.
+        The value type is <code>java.lang.String[]</code>.
+        It's not possible to exist two or more function operations
+        with the same name i.e. the operation overloading is not allowed.
+      </listitem>
+      <listitem>
+        <emphasis>Function.SERVICE_PROPERTY_NAMES</emphasis> –
+        optional service property.
+        The property is missing when there are no function properties
+        and property must be set when there are function properties.
+        The property value is the function property names.
+        The value type is <code>java.lang.String[]</code>.
+        It's not possible to exist two or more function properties
+        with the same name.
+      </listitem>
+    </itemizedlist>
+    <para>
+      The <code>Function</code> services are registered
+      before the <code>Device</code> service.
+      It's possible that <code>Function.SERVICE_DEVICE_UID</code>
+      points to missing services at the moment of the registration.
+      The reverse order is used when the services are unregistered.
+      <code>Device</code> service is unregistered
+      before the <code>Function</code> services.
+    </para>
+    <para>
+      <code>Function</code> service must be registered under
+      the function class hierarchy.
+      Other interfaces are not allowed.
+      All classes from the function class hierarchy must participate
+      as registration classes in the order from child to parent.
+      The <code>Function</code> interface must be the last one in the list.
+      For example, <code>MeterV2 extends MeterV1 extends Function</code> are
+      function interfaces.
+      If the implementation would like to provide <code>MeterV2</code>
+      functionality, the registration is:
+      <programlisting>context.registerService(new String[]{
+  MeterV2.class.getName(),
+  MeterV1.class.getName(),
+  Function.class.getName()}, this, regProps);</programlisting>
+      <code>MeterV2</code> is the last child in the class hierarchy and
+      it's on the first position. <code>MeterV1</code> is a parent of
+      <code>MeterV2</code> and child of <code>Function</code>.
+      <code>MeterV1</code> position is between <code>MeterV2</code> and
+      <code>Function</code> in the registration classes.
+      If the implementation would like to provide <code>MeterV1</code>
+      functionality, the registration is:
+      <programlisting>context.registerService(new String[]{
+  MeterV1.class.getName(),
+  Function.class.getName()}, this, regProps);</programlisting>
+      If the implementation would like to mark that there is a function,
+      but no specific function interface exists, the registration can be:
+      <programlisting>context.registerService(new String[]{
+  Function.class.getName()}, this, regProps);</programlisting>
+      Note that such functions usually don't have operations and properties.
+    </para>
+    <para>
+      Some examples of not allowed registrations:
+      <itemizedlist>
+        <listitem>
+          <code>context.registerService(new String[] {ManagedService.class.getName(), Function.class.getName()}, this, regProps);</code> - <code>ManagedService</code>
+          interface doesn't participate in a function class hierarchy.
+        </listitem>
+        <listitem>
+          <code>context.registerService(new String[] {MeterV1.class.getName()}, this, regProps);</code> -
+          <code>Function</code> interface is missing.
+        </listitem>
+        <listitem>
+          <code>context.registerService(new String[] {MeterV1.class.getName(), Alarm.class.getName(), Function.class.getName()}, this, regProps);</code>
+          where <code>MeterV1 extends Function and Alarm extends Function</code>. -
+          <code>MeterV1</code> and <code>Alarm</code> are from different function class hierarchies.
+        </listitem>
+      </itemizedlist>
+    </para>
+    <para>
+      That registration rule helps to the applications to find the supported
+      function classes and to identify the metadata.
+      Otherwise the function services can be accesses,
+      but it's not clear which are the function classes and metadata.
+    </para>
+    <section>
+      <title>Function Interface</title>
+      <para>
+        <code>Function</code> is built by a set of properties and operations.
+        The function can have unique identifier, type, version, description,
+        link to the <code>Device</code> service and information about
+        the reference functions.
+        <code>Function</code> interface must be the base interface for all
+        functions. If the device provider defines custom functions,
+        all of them must extend <code>Function</code> interface.
+        It provides a common access to the operations and properties meta data.
+      </para>
+      <para>
+        There are some general type rules, which unifies the access to
+        the function data. They make easier the transfer over different protocols.
+        All properties and operation arguments must use:
+        <itemizedlist>
+          <listitem>
+            Java primitive type or corresponding reference type.
+          </listitem>
+          <listitem>
+            <code>java.lang.String</code>
+          </listitem>
+          <listitem>
+            Java Beans, but their properties must use those rules.
+            Java Beans are defined in <xref linkend="service.dal.ref.bean.spec"/>.
+          </listitem>
+          <listitem>
+            <code>java.util.Map</code> instances.
+            The map keys can be any reference type of Java primitive types or
+            <code>java.lang.String</code>. The values must use those rules.
+          </listitem>
+          <listitem>
+            Arrays of defined types.
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        In order to provide common behavior, all functions must follow a set
+        of common rules related to the implementation of their setters,
+        getters, operations and events:
+        <itemizedlist>
+          <listitem>
+            The setter method must be executed synchronously.
+            If the underlying protocol can return response to the setter call,
+            it must be awaited.
+            It simplifies the property value modifications and doesn't require
+            asynchronous callback.
+          </listitem>
+          <listitem>
+            The operation method must be executed synchronously.
+            If the underlying protocol can return an operation confirmation or
+            response, they must be awaited.
+            It simplifies the operation execution and doesn't require
+            asynchronous callback.
+          </listitem>
+          <listitem>
+            The getter must return the last know cached property value.
+            The device implementation is responsible to keep that value up to date.
+            It'll speed up the applications when the function property values
+            are collected. The same cached value can be shared between
+            a few requests instead of a few calls to the real device.
+          </listitem>
+          <listitem>
+            If a given function operation, getter or setter is not supported,
+            <code>java.lang.UnsupportedOperationException</code> must be thrown.
+            It indicates that function is partially supported.
+          </listitem>
+          <listitem>
+            The function operations, getters and setters must not override
+            <code>java.lang.Object</code> and this interface methods.
+            For example:
+            <itemizedlist>
+              <listitem>
+                <code>hashCode()</code> – it's <code>java.lang.Object</code> method
+                and invalid function operation;
+              </listitem>
+              <listitem>
+                <code>wait()</code> – it's <code>java.lang.Object</code> method
+                and invalid function operation;
+              </listitem>
+              <listitem>
+                <code>getClass()</code> – it's <code>java.lang.Object</code> method
+                and invalid function getter;
+              </listitem>
+              <listitem>
+                <code>getPropertyMetadata(String propertyName)</code> –
+                it's <code>org.osgi.service.dal.Function</code> method
+                and invalid function getter.
+              </listitem>
+            </itemizedlist>
+          </listitem>
+        </itemizedlist>
+      </para>
+    </section>
+    <section>
+      <title>Function Operations</title>
+      <para>
+        <code>Function</code> operations are general callable units.
+        They can perform a specific task on the device like turn on or turn off.
+        They can be used by the applications to control the device.
+        Operation names are available as a value of the service property
+        <code>Function.SERVICE_OPERATION_NAMES</code>.
+        The operations are identified by their names.
+        It's not possible to exist two operations with the same name i.e.
+        overloaded operations are not allowed or to override the property accessor
+        methods. The operations are regular java methods.
+        That implies that they have zero or more arguments and zero or one return
+        value. The operation arguments and return value must
+        follow the general type rules.
+      </para>
+      <para>
+        The operations can be optionally described with a set of meta data
+        properties. Metadata is accessible with
+        <code>Function.getOperationMetadata(String)</code> method.
+        The result provides metadata about the operation, operation arguments
+        and result value. Operation arguments and result value are using the same
+        metadata as the function properties.
+        The full details are defined in the next section.
+      </para>
+    </section>
+    <section xml:id="service.dal.function.properties">
+      <title>Function Properties</title>
+      <para>
+        <code>Function</code> properties are class fields.
+        Their values can be read with getter methods and
+        can be set with setter methods.
+        The property names are available as a value of the service property
+        <code>Function.SERVICE_PROPERTY_NAMES</code>.
+        The properties are identified by their names.
+        It's not possible to exist two properties with the same name.
+      </para>
+      <para>
+        The function properties must be integrated according to these rules:
+        <itemizedlist>
+          <listitem>
+            Getter methods must be available for all properties with
+            <code>PropertyMetadata.PROPERTY_ACCESS_READABLE</code> access.
+          </listitem>
+          <listitem>
+            Getter method must return a subclass of <code>FunctionData</code>.
+          </listitem>
+          <listitem>
+            Setter methods must be available for all properties with
+            <code>PropertyMetadata.PROPERTY_ACCESS_WRITABLE</code> access.
+          </listitem>
+          <listitem>
+            Setter method must use <code>FunctionData</code> wrapped type.
+            For example, there is <code>MyFunctionData</code> with timestamp,
+            unit and <code>BigDecimal</code> value.
+            The setter must accept as an argument the value of type
+            <code>BigDecimal</code>.
+          </listitem>
+          <listitem>
+            It's possible to have a second setter method, which accepts the value as a first argument and the unit as a second argument.
+          </listitem>
+          <listitem>
+            No methods are required for properties with
+            <code>PropertyMetadata.PROPERTY_ACCESS_EVENTABLE</code> access.
+          </listitem>
+        </itemizedlist>
+      </para>
+      <para>
+        The accessor method names must be defined according to <xref linkend="service.dal.ref.bean.spec"/>.
+      </para>
+      <para>
+        The properties can be optionally described with a set of meta data
+        properties. The property values can be collected with
+        <code>Function.getPropertyMetadata(String)</code> method.
+        The method result is <code>PropertyMetadata</code> with:
+        <itemizedlist>
+          <listitem>
+            Minimum value – available through
+            <code>PropertyMetadata.getMinValue(String)</code>.
+            The minimum value can be different for the different units.
+          </listitem>
+          <listitem>
+            Maximum value – available through
+            <code>PropertyMetadata.getMaxValue(String)</code>.
+            The maximum value can be different for the different units.
+          </listitem>
+          <listitem>
+            Enumeration of values – available through
+            <code>PropertyMetadata.getEnumValues(String)</code>.
+            The array of the possible values is sorted in increasing
+            order according to the given unit.
+          </listitem>
+          <listitem>
+            Resolution – available through
+            <code>PropertyMetadata.getResolution(String)</code>.
+            For example, if the range is [0, 100], the resolution can be 10.
+            That's the different between two values in series.
+            The resolution type depends on the property type.
+            If the property is using data bean like
+            <code>org.osgi.service.dal.functions.data.LevelData</code>,
+            the resolution will the <code>BigDecimal</code>.
+          </listitem>
+          <listitem>
+            Property access – available as a value in
+            <code>PropertyMetadata.getMetadata(String)</code> result map.
+            It's a bitmap of <code>java.lang.Integer</code> type and
+            doesn't depend on the given unit.
+            The access is available only for the function properties and
+            it's missing for the operation arguments and result metadata.
+            The bitmap can be any combination of:
+            <itemizedlist>
+              <listitem>
+                <code>PropertyMetadata.PROPERTY_ACCESS_READABLE</code> –
+                Marks the property as a readable.
+                Function must provide a getter method for this property
+                according to <xref linkend="service.dal.ref.bean.spec"/>.
+                Function operations must not be overridden by this getter method.
+              </listitem>
+              <listitem>
+                <code>PropertyMetadata.PROPERTY_ACCESS_WRITABLE</code> –
+                Marks the property as writable.
+                Function must provide a setter method for this property
+                according to <xref linkend="service.dal.ref.bean.spec"/>.
+                Function operations must not be overridden by this setter method.
+              </listitem>
+              <listitem>
+                <code>PropertyMetadata.PROPERTY_ACCESS_EVENTABLE</code> –
+                Marks the property as eventable.
+                Function must not provide special methods because
+                of this access type.
+                <code>FunctionEvent</code> is sent on property change.
+                Note that the event can be sent when there is no value change.
+              </listitem>
+            </itemizedlist>
+          </listitem>
+          <listitem>
+            Unit - available as a value in
+            <code>PropertyMetadata.getMetadata()</code> result map.
+            The value contains the property supported units.
+            The property value type is <code>java.lang.String[]</code>.
+            Each unit must follow those rules:
+            <itemizedlist>
+              <listitem>
+                The International System of Units must be used where it's
+                applicable.
+                For example, kg for kilogram and km for kilometre.
+              </listitem>
+              <listitem>
+                If the unit name matches to a Unicode symbol name,
+                the Unicode symbol must be used.
+                For example, the degree unit matches to the
+                Unicode degree sign (\u00B0).
+              </listitem>
+              <listitem>
+                If the unit name doesn't match to a Unicode symbol,
+                the unit symbol must be built by Unicode Basic Latin block
+                of characters, superscript and subscript characters.
+                For example, watt per square metre steradian is built
+                by W/(m\u00B2 sr), where \u00B2 is Unicode superscript two.
+              </listitem>
+            </itemizedlist>
+            <para>
+              If those rules cannot be applied to the unit symbol,
+              custom rules are allowed.
+            </para>
+            <para>
+              A set of predefined unit symbols are available
+              in <code>Units</code> interface.
+            </para>
+          </listitem>
+          <listitem>
+            Description – available as a value in
+            <code>PropertyMetadata.getMetadata()</code> result map.
+            The property value type is <code>java.lang.String</code>
+            and specifies a user readable description.
+            It doesn't depend on the given unit.
+          </listitem>
+          <listitem>
+            Vendor custom properties – available as a value in
+            <code>PropertyMetadata.getMetadata()</code> result map
+            and can depend on the given unit.
+          </listitem>
+        </itemizedlist>
+      </para>
+    </section>
+    <section xml:id="service.dal.function.event">
+      <title>Function Property Event</title>
+      <para>
+        The eventable function properties can trigger a new event on each property
+        value touch. It doesn't require a modification of the value.
+        For example, the motion sensor can send a few events with no property value
+        change when motion is detected and continued to be detected.
+        The event must implement FunctionEvent interface.
+        The event properties are:
+        <itemizedlist>
+          <listitem>
+            <code>FunctionEvent.PROPERTY_FUNCTION_UID</code> –
+            the event source function unique identifier.
+          </listitem>
+          <listitem>
+            <code>FunctionEvent.PROPERTY_FUNCTION_PROPERTY_NAME</code> –
+            the property name.
+          </listitem>
+          <listitem>
+            <code>FunctionEvent.PROPERTY_FUNCTION_PROPERTY_VALUE</code> –
+            the property value.
+          </listitem>
+        </itemizedlist>
+        For example, there is function with an eventable boolean property called
+        “state”. When “state” value is changed to <code>false</code>,
+        function implementation can post:
+        <programlisting>FunctionEvent {
+    dal.function.UID=acme.function
+    dal.function.property.name=”state”
+    dal.function.property.value=ACMEFuntionData(java.lang.Boolean.FALSE...)
+}</programlisting>
+      </para>
+    </section>
+  </section>
+  <section xml:id="service.dal.security">
+    <title>Security</title>
+    <section>
+      <title>Device Permission</title>
+      <para>
+        The device permission controls the bundle's authority to perform specific
+        privileged administrative operations on the devices.
+        There is only one action for this permission
+        <code>DevicePermission.ACTION_REMOVE</code> to protect
+        <code>Device.remove()</code> method.
+      </para>
+      <para>
+        The name of the permission is a filter based. For more details about filter
+        based permissions, see OSGi Core Specification, Filter Based Permissions.
+        The filter provides an access to all device service properties.
+        The service property names are case insensitive.
+        The filter attribute names are processed in a case insensitive manner.
+        For example, the operator can give a bundle the permission to
+        only manage devices of vendor "acme":
+        <programlisting>org.osgi.service.dal.DevicePermission("dal.device.hardware.vendor=acme", …)</programlisting>
+      </para>
+      <para>
+        The permission action allows the operator to assign only the necessary
+        permissions to the bundle. For example, the management bundle can have
+        permission to remove all registered devices:
+        <programlisting>org.osgi.service.dal.DevicePermission("*", "remove")</programlisting>
+      </para>
+      <para>
+        The code that needs to check the device permission must always use the constructor that takes the device as a parameter DevicePermission(Device, String) with a single action. For example, the implementation of org.osgi.service.dal.Device.remove() method must check that the caller has an access to the operation:
+        <programlisting>public class DeviceImpl implements Device {
+    public void start() {
+        securityManager.checkPermission(new DevicePermission(this, “remove”));
+    }
+}</programlisting>
+      </para>
+    </section>
+    <section>
+      <title>Required Permissions</title>
+      The <code>Device</code> implementation must check the caller for
+      the appropriate <code>DevicePermission</code> before execution
+      of the remove operation. Once the <code>DevicePermission</code>
+      is checked against the caller the implementation will
+      proceed with the actual operation.
+      The operation can require a number of other permissions to complete.
+      The implementation must isolate the caller from such permission checks
+      by use of proper privileged blocks.
+    </section>
+  </section>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.dal.xml"/>
+  <section xml:id="service.dal.references">
+    <title>References</title>
+    <bibliolist>
+      <bibliomixed xml:id="service.dal.ref.bean.spec">
+        <title>JavaBeans Spec</title>
+        http://www.oracle.com/technetwork/java/javase/documentation/spec-136004.html
+      </bibliomixed>
+    </bibliolist>
+  </section>
+</chapter>
