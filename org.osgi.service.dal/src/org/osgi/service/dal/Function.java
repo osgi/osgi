@@ -283,18 +283,28 @@ public interface Function {
 
 	/**
 	 * Returns the current value of the specified property. The method will
-	 * return the same value as
-	 * {@link org.osgi.framework.ServiceReference#getProperty(String)} for the
-	 * service reference of this function.
+	 * return the same value as {@code ServiceReference.getProperty(String)} for
+	 * the service reference of this function.
 	 * <p>
 	 * This method must continue to return property values after the device
 	 * function service has been unregistered.
 	 * 
-	 * @param propName The property name.
+	 * @param propKey The property key.
 	 * 
-	 * @return The property value or {@code null} if the property name cannot be
+	 * @return The property value or {@code null} if the property key cannot be
 	 *         mapped to a value.
 	 */
-	public Object getServiceProperty(String propName);
+	public Object getServiceProperty(String propKey);
 
-}
+	/**
+	 * Returns an array with all function service property keys. The method will
+	 * return the same value as {@code ServiceReference.getPropertyKeys()} for
+	 * the service reference of this function. The result cannot be {@code null}
+	 * .
+	 * 
+	 * @return An array with all function service property keys, cannot be
+	 *         {@code null}.
+	 */
+	public String[] getServicePropertyKeys();
+
+ }

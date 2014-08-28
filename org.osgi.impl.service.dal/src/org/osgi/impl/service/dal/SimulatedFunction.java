@@ -65,6 +65,10 @@ public abstract class SimulatedFunction extends SimulatedService implements Func
 		return value;
 	}
 
+	public String[] getServicePropertyKeys() {
+		return super.serviceRef.getPropertyKeys();
+	}
+
 	/**
 	 * Unregisters the function from the service registry.
 	 */
