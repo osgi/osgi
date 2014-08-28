@@ -55,6 +55,33 @@ public class TestStepImpl implements TestStep {
         return null;
     }
 
+    /**
+     * The method that adds the network IF,IP address.
+     * <br>
+     * The parameters are as follows.<br>
+     * <ul>
+     * <li>index 0  : networkAdapter type
+     * <li>index 1  : displayName (permits the null)
+     * <li>index 2  : name
+     * <li>index 3  : MAC address (Separator ":")
+     * <li>index 4  : MTU
+     * <li>index 5  : is loopback
+     * <li>index 6  : is point to point
+     * <li>index 7  : is up
+     * <li>index 8  : is virtual
+     * <li>index 9  : supports multicast
+     * <li>index 10 : parent
+     * <li>index 11 : sub interface (Separator ":") (permits the null)
+     * <li>index 12 : IP address version (non-use)
+     * <li>index 13 : IP address scope (non-use)
+     * <li>index 14 : address (non-use)
+     * <li>index 15 : subnetmask length (non-use)
+     * </ul>
+     * Based on an appointed parameter, registers the NetworkAdapter service and NetworkAddress service.<br>
+     *
+     * @param parameters The parameter mentioned above
+     * @return String Array {NetworkAdapter ID ,NetworkAddress ID}
+     */
     private String[] addNetworkAdapter(String[] parameters) {
 
         String networkAdapterId = NetworkIfUtil.getNetworkAdapterId(parameters[2], parameters[3]);
@@ -78,6 +105,22 @@ public class TestStepImpl implements TestStep {
         return new String[]{networkAdapterId, networkAddressId};
     }
 
+    /**
+     * The method that adds the IP address.
+     * <br>
+     * The parameters are as follows.<br>
+     * <ul>
+     * <li>index 0  : NetworkAdapter ID
+     * <li>index 1 : IP address version
+     * <li>index 2 : IP address scope
+     * <li>index 3 : address
+     * <li>index 4 : subnetmask length
+     * </ul>
+     * Based on an appointed parameter, registers the NetworkAddress service.<br>
+     *
+     * @param parameters The parameter mentioned above
+     * @return String Array{NetworkAddress ID}
+     */
     private String[] addNetworkAddress(String[] parameters) {
 
         String networkAdapterId = parameters[0];
@@ -93,6 +136,20 @@ public class TestStepImpl implements TestStep {
         return new String[]{networkAddressId};
     }
 
+    /**
+     * The method that modifies the IP address.
+     * <br>
+     * The parameters are as follows.<br>
+     * <ul>
+     * <li>index 0 : NetworkAddress ID
+     * <li>index 1 : IP address version
+     * <li>index 2 : IP address scope
+     * <li>index 3 : address
+     * <li>index 4 : subnetmask length
+     * </ul>
+     *
+     * @param parameters The parameter mentioned above
+     */
     private void modifyNetworkAddress(String[] parameters) {
 
         String networkAddressId = parameters[0];
@@ -104,6 +161,16 @@ public class TestStepImpl implements TestStep {
         NetworkIfTracker.getInstance().modifiedNetworkAddress(networkAddressId, addressVersion, addressScope, address, length);
     }
 
+    /**
+     * The method that removes network IF.
+     * <br>
+     * The parameters are as follows.<br>
+     * <ul>
+     * <li>index 0 : NetworkAdapter ID
+     * </ul>
+     *
+     * @param parameters The parameter mentioned above
+     */
     private void removeNetworkAdapter(String[] parameters) {
 
         String networkAdapterId = parameters[0];
@@ -111,6 +178,16 @@ public class TestStepImpl implements TestStep {
         NetworkIfTracker.getInstance().removedNetworkAdapter(networkAdapterId);
     }
 
+    /**
+     * The method that removes network IF and IP address.
+     * <br>
+     * The parameters are as follows.<br>
+     * <ul>
+     * <li>index 0 : NetworkAddress ID
+     * </ul>
+     *
+     * @param parameters The parameter mentioned above
+     */
     private void removeNetworkAddress(String[] parameters) {
 
         String networkAddressId = parameters[0];

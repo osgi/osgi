@@ -18,6 +18,7 @@ package org.osgi.impl.service.networkadapter;
 
 import java.util.Dictionary;
 import java.util.Properties;
+
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -25,7 +26,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.test.cases.step.TestStep;
 
 /**
- * BundleActivator
+ * Implementation of BundleActivator.
  * <br>
  */
 public class Activator implements BundleActivator {
@@ -42,33 +43,48 @@ public class Activator implements BundleActivator {
 
     /**
      * Getter method of BundleContext.
-     * <br>
+     *
      * @return BundleContext
      */
     public static BundleContext getContext() {
         return context;
     }
 
+    /**
+     * Method to start the bundle.
+     *
+     * @param BundleContext
+     * @throws Exception If an exception is thrown during the start process.
+     */
     public void start(BundleContext context) throws Exception {
 
         Activator.context = context;
 
+        // Starts a monitoring of the network information.
         NetworkIfTracker.getInstance().open();
 
         TestStep testStep = new TestStepImpl();
         Dictionary prop = new Properties();
-        prop.put(Constants.SERVICE_PID, "org.osgi.impl.service.nwifinfo");
+        prop.put(Constants.SERVICE_PID, "org.osgi.impl.service.networkadapter");
         testStepReg = context.registerService(TestStep.class.getName(), testStep, prop);
     }
 
+    /**
+     * Method to stop the bundle.
+     *
+     * @param BundleContext
+     * @throws Exception If an exception is thrown during the start process.
+     */
     public void stop(BundleContext context) throws Exception {
 
         if (testStepReg != null) {
             testStepReg.unregister();
         }
 
+        // Ends a monitoring of the network information.
         NetworkIfTracker.getInstance().close();
 
+        // Releases the retention information.
         NetworkIfManager.getInstance().close();
 
         Activator.context = null;

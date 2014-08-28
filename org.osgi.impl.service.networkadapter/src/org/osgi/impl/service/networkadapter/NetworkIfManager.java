@@ -20,29 +20,76 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
+
 import org.osgi.framework.ServiceRegistration;
 
+/**
+ * The class which manages ServiceRegistration and the service property.
+ * <br>
+ * This class is a class using the Singleton pattern.
+ */
 class NetworkIfManager {
 
+    /**
+     * The only instance of this class.
+     */
     private static NetworkIfManager instance = new NetworkIfManager();
 
+    /**
+     * Map which manages the service property of the NetworkAdapter service.
+     * <br>
+     * Key: NetworkAdapter ID
+     * Value: service property
+     */
     private Map networkAdapterPropMap = new HashMap();
 
+    /**
+     * Map which manages the ServiceRegistration of the NetworkAdapter service.
+     * <br>
+     * Key: NetworkAdapter ID
+     * Value: ServiceRegistration
+     */
     private Map networkAdapterRegMap = new HashMap();
 
+    /**
+     * Map which manages the service property of the NetworkAddress service.
+     * <br>
+     * Key: NetworkAddress ID
+     * Value: service property
+     */
     private Map networkAddressPropMap = new HashMap();
 
+    /**
+     * Map which manages the ServiceRegistration of the NetworkAddress service.
+     * <br>
+     * Key: NetworkAddress ID
+     * Value: ServiceRegistration
+     */
     private Map networkAddressRegMap = new HashMap();
 
+    /**
+     * Constructor.
+     */
     private NetworkIfManager() {
     }
 
+    /**
+     * The method to acquire instance.
+     * <br>
+     * @return The only instance of this class.
+     */
     public static NetworkIfManager getInstance() {
         return instance;
     }
 
+    /**
+     * The method that unregister of all services and releases the resource.
+     * <br>
+     * It is necessary to call in the state that monitoring of the network information by Native ended.
+     */
     synchronized void close() {
 
+        // Unregisters all services.
         for (Iterator iterator = networkAddressRegMap.entrySet().iterator(); iterator.hasNext();) {
             Map.Entry entry = (Map.Entry) iterator.next();
             ServiceRegistration reg = (ServiceRegistration)entry.getValue();

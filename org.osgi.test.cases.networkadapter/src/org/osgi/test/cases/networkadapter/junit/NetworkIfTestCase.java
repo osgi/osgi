@@ -16,11 +16,12 @@
 package org.osgi.test.cases.networkadapter.junit;
 
 import java.util.Arrays;
+
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceReference;
-import org.osgi.service.networkadapter.NetworkAddress;
 import org.osgi.service.networkadapter.NetworkAdapter;
+import org.osgi.service.networkadapter.NetworkAddress;
 import org.osgi.test.cases.networkadapter.util.NetworkIfTestUtil;
 import org.osgi.test.cases.networkadapter.util.TestServiceListener;
 import org.osgi.test.cases.step.TestStep;
@@ -34,6 +35,9 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
     protected void tearDown() throws Exception {
     }
 
+    /**
+     * Tests NetworkAdapter add operation.
+     */
     public void testAddAction01() {
         String[] ids = null;
         TestStep testStep = null;
@@ -44,7 +48,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             TestServiceListener addressListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(addressListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAddress.class.getName() + ")");
 
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.nwifinfo)");
+            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
 
             String command = "addNetworkAdapter";
             String[] parameters = new String[16];
@@ -70,9 +74,11 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             getContext().removeServiceListener(adapterListener);
             getContext().removeServiceListener(addressListener);
 
+            // Confirmation of the number of the services.
             assertEquals(1, adapterListener.size());
             assertEquals(0, addressListener.size());
 
+            // Confirmation of the service property.
             ServiceReference adapterRef = adapterListener.get(0);
             assertEquals(parameters[0], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE));
             assertEquals(parameters[1], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME));
@@ -98,6 +104,12 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
     }
 
 
+    /**
+     * Tests NetworkAdapter add operation.
+     * Appoint the following IP addresses.<br>
+     * version: IPV4<br>
+     * scope: HOST<br>
+     */
     public void testAddAction02() {
 
         String version = NetworkAddress.IPADDRESS_VERSION_4;
@@ -108,6 +120,12 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         testAddNetworkAdapter(version, scope, address, masklength);
     }
 
+    /**
+     * Tests NetworkAdapter add operation.
+     * Appoint the following IP addresses.<br>
+     * version: IPV4<br>
+     * scope: PRIVATE_USE<br>
+     */
     public void testAddAction03() {
 
         String version = NetworkAddress.IPADDRESS_VERSION_4;
@@ -118,6 +136,12 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         testAddNetworkAdapter(version, scope, address, masklength);
     }
 
+    /**
+     * Tests NetworkAdapter add operation.
+     * Appoint the following IP addresses.<br>
+     * version: IPV4<br>
+     * scope: SHARED<br>
+     */
     public void testAddAction04() {
 
         String version = NetworkAddress.IPADDRESS_VERSION_4;
@@ -128,6 +152,12 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         testAddNetworkAdapter(version, scope, address, masklength);
     }
 
+    /**
+     * Tests NetworkAdapter add operation.
+     * Appoint the following IP addresses.<br>
+     * version: IPV4<br>
+     * scope: LOOPBACK<br>
+     */
     public void testAddAction05() {
 
         String version = NetworkAddress.IPADDRESS_VERSION_4;
@@ -138,6 +168,12 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         testAddNetworkAdapter(version, scope, address, masklength);
     }
 
+    /**
+     * Tests NetworkAdapter add operation.
+     * Appoint the following IP addresses.<br>
+     * version: IPV4<br>
+     * scope: LINKLOCAL<br>
+     */
     public void testAddAction06() {
 
         String version = NetworkAddress.IPADDRESS_VERSION_4;
@@ -148,6 +184,12 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         testAddNetworkAdapter(version, scope, address, masklength);
     }
 
+    /**
+     * Tests NetworkAdapter add operation.
+     * Appoint the following IP addresses.<br>
+     * version: IPV4<br>
+     * scope: GLOBAL<br>
+     */
     public void testAddAction07() {
 
         String version = NetworkAddress.IPADDRESS_VERSION_4;
@@ -158,6 +200,12 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         testAddNetworkAdapter(version, scope, address, masklength);
     }
 
+    /**
+     * Tests NetworkAdapter add operation.
+     * Appoint the following IP addresses.<br>
+     * version: IPV6<br>
+     * scope: LOOPBACK<br>
+     */
     public void testAddAction08() {
 
         String version = NetworkAddress.IPADDRESS_VERSION_6;
@@ -168,6 +216,12 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         testAddNetworkAdapter(version, scope, address, masklength);
     }
 
+    /**
+     * Tests NetworkAdapter add operation.
+     * Appoint the following IP addresses.<br>
+     * version: IPV6<br>
+     * scope: UNSPECIFIED<br>
+     */
     public void testAddAction09() {
 
         String version = NetworkAddress.IPADDRESS_VERSION_6;
@@ -178,6 +232,12 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         testAddNetworkAdapter(version, scope, address, masklength);
     }
 
+    /**
+     * Tests NetworkAdapter add operation.
+     * Appoint the following IP addresses.<br>
+     * version: IPV6<br>
+     * scope: UNIQUE_LOCAL<br>
+     */
     public void testAddAction10() {
 
         String version = NetworkAddress.IPADDRESS_VERSION_6;
@@ -188,6 +248,12 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         testAddNetworkAdapter(version, scope, address, masklength);
     }
 
+    /**
+     * Tests NetworkAdapter add operation.
+     * Appoint the following IP addresses.<br>
+     * version: IPV6<br>
+     * scope: LINKLOCAL<br>
+     */
     public void testAddAction11() {
 
         String version = NetworkAddress.IPADDRESS_VERSION_6;
@@ -198,6 +264,12 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         testAddNetworkAdapter(version, scope, address, masklength);
     }
 
+    /**
+     * Tests NetworkAdapter add operation.
+     * Appoint the following IP addresses.<br>
+     * version: IPV6<br>
+     * scope: GLOBAL<br>
+     */
     public void testAddAction12() {
 
         String version = NetworkAddress.IPADDRESS_VERSION_6;
@@ -219,7 +291,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             TestServiceListener addressListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(addressListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAddress.class.getName() + ")");
 
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.nwifinfo)");
+            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
 
             String command = "addNetworkAdapter";
             String[] parameters = new String[16];
@@ -245,9 +317,11 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             getContext().removeServiceListener(adapterListener);
             getContext().removeServiceListener(addressListener);
 
+            // Confirmation of the number of the services.
             assertEquals(1, adapterListener.size());
             assertEquals(1, addressListener.size());
 
+            // Confirmation of the service property.
             ServiceReference adapterRef = adapterListener.get(0);
             assertEquals(parameters[0], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE));
             assertEquals(parameters[1], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME));
@@ -280,6 +354,16 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         }
     }
 
+    /**
+     * Tests NetworkAdapter add operation.
+     * Appoint the following IP addresses.<br>
+     * IP address 1<br>
+     * version: IPV4<br>
+     * scope: PRIVATE_USE<br>
+     * IP address 2<br>
+     * version: IPV6<br>
+     * scope: UNIQUE_LOCAL<br>
+     */
     public void testAddAction13() {
 
         String[] ids = null;
@@ -289,7 +373,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
 
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.nwifinfo)");
+            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
 
             String command = "addNetworkAdapter";
             String[] parameters = new String[16];
@@ -320,6 +404,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             TestServiceListener addressListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(addressListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAddress.class.getName() + ")");
 
+            // Addition of the IP address information
             command = "addNetworkAddress";
             String[] parameters1 = new String[5];
             parameters1[0] = ids[0];
@@ -333,9 +418,11 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             getContext().removeServiceListener(adapterListener);
             getContext().removeServiceListener(addressListener);
 
+            // Confirmation of the number of the services.
             assertEquals(0, adapterListener.size());
             assertEquals(1, addressListener.size());
 
+            // Confirmation of the service property.
             ServiceReference addressRef = addressListener.get(0);
             assertEquals(parameters[0], addressRef.getProperty(NetworkAddress.NETWORKADAPTER_TYPE));
             assertEquals(parameters1[1], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
@@ -355,13 +442,23 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         }
     }
 
+    /**
+     * Tests NetworkAddress modify operation.
+     * <br>
+     * IP address before a change.<br>
+     * version: IPV4<br>
+     * scope: PRIVATE_USE<br>
+     * IP address after a change.<br>
+     * version: IPV4<br>
+     * scope: PRIVATE_USE<br>
+     */
     public void testModifyAction01() {
 
         String[] ids = null;
         TestStep testStep = null;
 
         try {
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.nwifinfo)");
+            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
 
             String command = "addNetworkAdapter";
             String[] parameters = new String[16];
@@ -389,6 +486,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             TestServiceListener addressListener = new TestServiceListener(ServiceEvent.MODIFIED);
             getContext().addServiceListener(addressListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAddress.class.getName() + ")");
 
+            // Change of the IP address information
             command = "modifyNetworkAddress";
             parameters = new String[5];
             parameters[0] = ids[1];
@@ -402,9 +500,11 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             getContext().removeServiceListener(adapterListener);
             getContext().removeServiceListener(addressListener);
 
+            // Confirmation of the number of the services.
             assertEquals(0, adapterListener.size());
             assertEquals(1, addressListener.size());
 
+            // Confirmation of the service property.
             ServiceReference addressRef = addressListener.get(0);
             assertEquals(parameters[1], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
             assertEquals(parameters[2], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
@@ -422,13 +522,23 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         }
     }
 
+    /**
+     * Tests NetworkAddress modify operation.
+     * <br>
+     * IP address before a change.<br>
+     * version: IPV4<br>
+     * scope: PRIVATE_USE<br>
+     * IP address after a change.<br>
+     * version: IPV4<br>
+     * scope: GLOBAL<br>
+     */
     public void testModifyAction02() {
 
         String[] ids = null;
         TestStep testStep = null;
 
         try {
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.nwifinfo)");
+            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
 
             String command = "addNetworkAdapter";
             String[] parameters = new String[16];
@@ -456,6 +566,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             TestServiceListener addressListener = new TestServiceListener(ServiceEvent.MODIFIED);
             getContext().addServiceListener(addressListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAddress.class.getName() + ")");
 
+            // Change of the IP address information
             command = "modifyNetworkAddress";
             parameters = new String[5];
             parameters[0] = ids[1];
@@ -469,9 +580,11 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             getContext().removeServiceListener(adapterListener);
             getContext().removeServiceListener(addressListener);
 
+            // Confirmation of the number of the services.
             assertEquals(0, adapterListener.size());
             assertEquals(1, addressListener.size());
 
+            // Confirmation of the service property.
             ServiceReference addressRef = addressListener.get(0);
             assertEquals(parameters[1], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
             assertEquals(parameters[2], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
@@ -489,13 +602,23 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         }
     }
 
+    /**
+     * Tests NetworkAddress modify operation.
+     * <br>
+     * IP address before a change.<br>
+     * version: IPV4<br>
+     * scope: PRIVATE_USE<br>
+     * IP address after a change.<br>
+     * version: IPV6<br>
+     * scope: UNIQUE_LOCAL<br>
+     */
     public void testModifyAction03() {
 
         String[] ids = null;
         TestStep testStep = null;
 
         try {
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.nwifinfo)");
+            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
 
             String command = "addNetworkAdapter";
             String[] parameters = new String[16];
@@ -523,6 +646,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             TestServiceListener addressListener = new TestServiceListener(ServiceEvent.MODIFIED);
             getContext().addServiceListener(addressListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAddress.class.getName() + ")");
 
+            // Change of the IP address information
             command = "modifyNetworkAddress";
             parameters = new String[5];
             parameters[0] = ids[1];
@@ -536,10 +660,11 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             getContext().removeServiceListener(adapterListener);
             getContext().removeServiceListener(addressListener);
 
-
+            // Confirmation of the number of the services.
             assertEquals(0, adapterListener.size());
             assertEquals(1, addressListener.size());
 
+            // Confirmation of the service property.
             ServiceReference addressRef = addressListener.get(0);
             assertEquals(parameters[1], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
             assertEquals(parameters[2], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
@@ -557,13 +682,17 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         }
     }
 
+    /**
+     * Tests NetworkAddress remove operation.
+     * Two NetworkAddress.
+     */
     public void testRemoveAction01() {
 
         String[] ids = null;
         TestStep testStep = null;
 
         try {
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.nwifinfo)");
+            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
 
             String command = "addNetworkAdapter";
             String[] parameters = new String[16];
@@ -601,6 +730,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             TestServiceListener addressListener = new TestServiceListener(ServiceEvent.UNREGISTERING);
             getContext().addServiceListener(addressListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAddress.class.getName() + ")");
 
+            // Deletion of the IP address information.
             command = "removeNetworkAddress";
             String[] parameters2 = new String[1];
             parameters2[0] = ids[1];
@@ -609,6 +739,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             getContext().removeServiceListener(adapterListener);
             getContext().removeServiceListener(addressListener);
 
+            // Confirmation of the service unregistration.
             assertEquals(0, adapterListener.size());
 
             assertEquals(1, addressListener.size());
@@ -630,13 +761,17 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         }
     }
 
+    /**
+     * Tests NetworkAddress remove operation.
+     * One NetworkAddress.
+     */
     public void testRemoveAction02() {
 
         String[] ids = null;
         TestStep testStep = null;
 
         try {
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.nwifinfo)");
+            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
 
             String command = "addNetworkAdapter";
             String[] parameters = new String[16];
@@ -664,6 +799,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             TestServiceListener addressListener = new TestServiceListener(ServiceEvent.UNREGISTERING);
             getContext().addServiceListener(addressListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAddress.class.getName() + ")");
 
+            // Deletion of the IP address information.
             command = "removeNetworkAddress";
             String[] parameters1 = new String[1];
             parameters1[0] = ids[1];
@@ -672,6 +808,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             getContext().removeServiceListener(adapterListener);
             getContext().removeServiceListener(addressListener);
 
+            // Confirmation of the service unregistration.
             assertEquals(0, adapterListener.size());
 
             assertEquals(1, addressListener.size());
@@ -692,13 +829,16 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
         }
     }
 
+    /**
+     * Tests NetworkAdapter remove operation.
+     */
     public void testRemoveAction03() {
 
         String[] ids = null;
         TestStep testStep = null;
 
         try {
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.nwifinfo)");
+            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
 
             String command = "addNetworkAdapter";
             String[] parameters = new String[16];
@@ -726,6 +866,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             TestServiceListener addressListener = new TestServiceListener(ServiceEvent.UNREGISTERING);
             getContext().addServiceListener(addressListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAddress.class.getName() + ")");
 
+            // Deletion of the IP address information.
             command = "removeNetworkAdapter";
             String[] parameters1 = new String[1];
             parameters1[0] = ids[0];
@@ -734,6 +875,7 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
             getContext().removeServiceListener(adapterListener);
             getContext().removeServiceListener(addressListener);
 
+            // Confirmation of the service unregistration.
             assertEquals(1, adapterListener.size());
             ServiceReference adapterRef = adapterListener.get(0);
             assertEquals(parameters[0], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE));

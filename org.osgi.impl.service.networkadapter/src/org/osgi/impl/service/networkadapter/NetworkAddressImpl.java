@@ -18,12 +18,24 @@ package org.osgi.impl.service.networkadapter;
 
 import java.net.InetAddress;
 import java.util.Dictionary;
+
 import org.osgi.service.networkadapter.NetworkAddress;
 
+/**
+ * Implementation of NetworkAddress.
+ */
 public class NetworkAddressImpl implements NetworkAddress {
 
+	/**
+	 * The identifier of own.
+	 */
     private String id;
 
+    /**
+     * Constructor.
+     *
+     * @param id The identifier of own.
+     */
     NetworkAddressImpl(String id) {
 
         this.id = id;
@@ -77,6 +89,12 @@ public class NetworkAddressImpl implements NetworkAddress {
         return sb.toString();
     }
 
+    /**
+     * Method to get a service property.
+     *
+     * @param key Key of service property.
+     * @return Value of service property.
+     */
     private Object getProperty(String key) {
 
         Dictionary prop = NetworkIfManager.getInstance().getNetworkAddressProp(id);

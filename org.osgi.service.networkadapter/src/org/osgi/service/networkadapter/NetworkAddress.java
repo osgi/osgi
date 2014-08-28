@@ -3,9 +3,14 @@ package org.osgi.service.networkadapter;
 import java.net.InetAddress;
 
 /**
+ * <p>
  * This interface represents an IP address information.
- * <br>
- * IP address information service is set the following information as service property.<br>
+ * </p>
+ * <p>
+ * NetworkAddress interface provides information of IP addresses available in which execution
+ * environment on a Network Interface Information Service bundle is running.
+ * IP address information service is set the following information as service property.
+ * </p>
  * <ul>
  * <li>{@link #NETWORKADAPTER_TYPE} : Network Interface Type
  * <li>{@link #IPADDRESS_VERSION} : IP Address Version
@@ -14,8 +19,22 @@ import java.net.InetAddress;
  * <li>{@link #SUBNETMASK_LENGTH} : Subnet Mask Length(IPv4) or Prefix Length(IPv6)
  * <li>{@link #NETWORKADAPTER_PID} : Service PID of the NetworkAdapter service to which this service belongs
  * </ul>
+ * <p>
+ * NetworkAddress service is registered with the service repository for each available IP address.
+ * When associated IP addresses are deleted, or the network interface to which the IP address is bound becomes unavailable, the NetworkAddress service is unregistered.
+ * When the associated IP address changes, NetworkAddress service is updated.
+ * The user bundle can detect the change of IP address by monitoring the registration or unregistering, updating of NetworkAddress service.
+ * Because IP addresses are bound to the network interface, if any, Service PID of the associated NetworkAdapter service and its network interface type are set to service property.
+ * NetworkAdapter service MUST be registered after the all associated NetworkAddress services are registered. On the other hand,
+ * when unregistering services, after associated NetworkAdapter service is unregistered, NetworkAddress of all related services are unregistered.
+ * </p>
  */
 public interface NetworkAddress {
+
+    /**
+     * The value integer of service property, when information is not available.<br>
+     */
+    public Integer EMPTY_INTEGER = new Integer(-1);
 
     /**
      * The key string of "networkAdapter.type" service property.<br>
@@ -44,11 +63,12 @@ public interface NetworkAddress {
     /**
      * The key string of "subnetmask.length" service property.<br>
      * Subnet Mask Length(IPv4) or Prefix Length(IPv6) is specified.
+     * {@link #EMPTY_INTEGER} if no length is available.<br>
      */
     public String SUBNETMASK_LENGTH = "subnetmask.length";
 
     /**
-     * The key string of "networkAdapter.id" service property.<br>
+     * The key string of "networkAdapter.pid" service property.<br>
      * Service PID of the interface information service to which it belongs is specified.
      */
     public String NETWORKADAPTER_PID = "networkAdapter.pid";
@@ -120,28 +140,28 @@ public interface NetworkAddress {
     /**
      * Returns the network interface type of "networkAdapter.type" service property value.<br>
      *
-     * @return Network Interface Type
+     * @return Network Interface Type, or null if "networkAdapter.type" service property value is empty.
      */
     public String getNetworkAdapterType();
 
     /**
      * Returns the IP address version of "ipaddress.version" service property value.<br>
      *
-     * @return IP Address Version
+     * @return IP Address Version, or null if "ipaddress.version" service property value is empty.
      */
     public String getIpAddressVersion();
 
     /**
      * Returns the IP address scope of "ipaddress.scope" service property value.<br>
      *
-     * @return IP Address Scope
+     * @return IP Address Scope, or null if "ipaddress.scope" service property value is empty.
      */
     public String getIpAddressScope();
 
     /**
      * Returns the IP address of "ipaddress" service property value.<br>
      *
-     * @return IP Address string
+     * @return IP Address string, or null if "ipaddress" service property value is empty.
      */
     public String getIpAddress();
 
@@ -150,21 +170,21 @@ public interface NetworkAddress {
      * <br>
      * Returned object is created from "ipaddress" service property value.<br>
      *
-     * @return InetAddress
+     * @return InetAddress, or null if "ipaddress" service property value is empty.
      */
     public InetAddress getInetAddress();
 
     /**
      * Returns the "subnetmask.length" service property value.<br>
      *
-     * @return Subnet Mask Length(IPv4) or Prefix Length(IPv6)
+     * @return Subnet Mask Length(IPv4) or Prefix Length(IPv6), or -1 if "subnetmask.length" service property value is empty.
      */
     public int getSubnetMaskLength();
 
     /**
      * Returns the "networkadapter.pid" service property value.<br>
      *
-     * @return Service ID of the interface information service to which it belongs
+     * @return Service ID of the interface information service to which it belongs, or null if "networkadapter.pid" service property value is empty.
      */
     public String getNetworkAdapterPid();
 

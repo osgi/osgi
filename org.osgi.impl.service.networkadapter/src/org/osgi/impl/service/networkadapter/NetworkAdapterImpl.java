@@ -18,14 +18,30 @@ package org.osgi.impl.service.networkadapter;
 
 import java.net.SocketException;
 import java.util.Dictionary;
+
 import org.osgi.service.networkadapter.NetworkAdapter;
 
+/**
+ * Implementation of NetworkAdapter.
+ */
 public class NetworkAdapterImpl implements NetworkAdapter {
 
+	/**
+	 * The identifier of own.
+	 */
     private String id;
 
+	/**
+	 * The MTU of own.
+	 */
     private int mtu;
 
+    /**
+     * Constructor.
+     *
+     * @param id The identifier of own.
+     * @param mtu The MTU of own.
+     */
     NetworkAdapterImpl(String id, int mtu) {
 
         this.id = id;
@@ -88,6 +104,12 @@ public class NetworkAdapterImpl implements NetworkAdapter {
         return sb.toString();
     }
 
+    /**
+     * Method to get a service property.
+     *
+     * @param key Key of service property.
+     * @return Value of service property.
+     */
     private Object getProperty(String key) {
 
         Dictionary prop = NetworkIfManager.getInstance().getNetworkAdapterProp(id);

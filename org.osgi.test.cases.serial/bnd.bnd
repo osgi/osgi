@@ -1,0 +1,60 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+    ${p}.junit.*,\
+    ${p}.util.*
+Import-Package: ${-signaturetest}, *
+
+-buildpath: org.osgi.test.support;version=project,\
+    org.osgi.service.serial;version=project,\
+    osgi.core;version=4.3,\
+    osgi.cmpn;version=4.2,\
+    ee.minimum;version=1.2.1,\
+    org.osgi.test.cases.dal.step;version=project,\
+    ${junit}
+
+Test-Cases							= ${testcases}
+-signaturetest						= org.osgi.service.serial
+
+-runbundles = \
+    org.osgi.impl.service.log; version=latest, \
+    org.osgi.service.event; version=latest, \
+    org.osgi.service.dal; version=latest, \
+    org.osgi.service.dal.functions; version=latest, \
+    org.osgi.impl.service.dal; version=latest, \
+    org.osgi.test.cases.dal.step; version=latest, \
+    org.osgi.impl.service.serial; version=latest
+
+-runproperties = ${runproperties}, \
+    serial.comport.1="COM1", \
+    bus.type.1="testType1", \
+    serial.comport.2="COM2", \
+    bus.type.2="testType2", \
+    usb.bus="3", \
+    usb.address="2", \
+    usb.bcdUSB="0210", \
+    usb.bDeviceClass="ff", \
+    usb.bDeviceSubClass="ff", \
+    usb.bDeviceProtocol="ff", \
+    usb.bMaxPacketSize0="12800", \
+    usb.idVendor="0403", \
+    usb.idProduct="8372", \
+    usb.bcdDevice="0200", \
+    usb.Manufacturer="Buffalo Inc.", \
+    device.description="USB2.0 PC Camera", \
+    device.serial="57B0002600000001", \
+    usb.bNumConfigurations="1", \
+    usb.bInterfaceNumber="1", \
+    usb.bAlternateSetting="1", \
+    usb.bNumEndpoints="1", \
+    usb.bInterfaceClass="ff", \
+    usb.bInterfaceSubClass="ff", \
+    usb.bInterfaceProtocol="ff", \
+    usb.Interface="1", \
+    support.inputstream="true", \
+    support.outputstream="true", \
+    support.baudrate="4800", \
+    unsupport.baudrate="-1"
+

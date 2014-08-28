@@ -32,6 +32,31 @@ class NetworkIfData {
     private String parent;
     private String[] subInterface;
 
+    /**
+     * Constructor.
+     * <br>
+     * The parameters are as follows.<br>
+     * <ul>
+     * <li>index 0  : networkAdapter type
+     * <li>index 1  : displayName
+     * <li>index 2  : name
+     * <li>index 3  : MAC address (Separator ":")
+     * <li>index 4  : MTU
+     * <li>index 5  : is loopback
+     * <li>index 6  : is point to point
+     * <li>index 7  : is up
+     * <li>index 8  : is virtual
+     * <li>index 9  : supports multicast
+     * <li>index 10 : parent
+     * <li>index 11 : subInterface (Separator ":")
+     * <li>index 12 : IP address version (non-use)
+     * <li>index 13 : IP address scope (non-use)
+     * <li>index 14 : address (non-use)
+     * <li>index 15 : subnetmask length (non-use)
+     * </ul>
+     *
+     * @param parameters The parameter mentioned above
+     */
     NetworkIfData(String[] parameters) {
 
         nwifType = parameters[0];

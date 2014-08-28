@@ -16,10 +16,11 @@
 package org.osgi.test.cases.networkadapter.junit;
 
 import java.net.InetAddress;
+
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceEvent;
-import org.osgi.service.networkadapter.NetworkAddress;
 import org.osgi.service.networkadapter.NetworkAdapter;
+import org.osgi.service.networkadapter.NetworkAddress;
 import org.osgi.test.cases.networkadapter.util.NetworkIfTestUtil;
 import org.osgi.test.cases.networkadapter.util.TestServiceListener;
 import org.osgi.test.cases.step.TestStep;
@@ -33,6 +34,9 @@ public class NetworkAddressTestCase extends DefaultTestBundleControl {
     protected void tearDown() throws Exception {
     }
 
+    /**
+     * Tests NetworkAddress of the interface that starts.
+     */
     public void testNetworkAddress01() {
 
         String[] ids = null;
@@ -43,7 +47,7 @@ public class NetworkAddressTestCase extends DefaultTestBundleControl {
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
             TestServiceListener addressListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(addressListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAddress.class.getName() + ")");
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.nwifinfo)");
+            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
 
             String command = "addNetworkAdapter";
             String[] parameters = new String[16];

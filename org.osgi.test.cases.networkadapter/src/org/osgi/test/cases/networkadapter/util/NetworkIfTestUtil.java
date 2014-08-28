@@ -17,10 +17,6 @@ package org.osgi.test.cases.networkadapter.util;
 
 import java.util.StringTokenizer;
 
-/**
- * ユーティリティクラス.
- * <br>
- */
 public class NetworkIfTestUtil {
 
     private static final int MACADDRESS_TOKEN_COUNT = 6;
@@ -29,7 +25,6 @@ public class NetworkIfTestUtil {
     private static final String SEPARATOR_COLON = ":";
     private static final int SHIFT_COUNT = 4;
 
-    // 検知試験用
     public static final String PROP_NETWORK_ADAPTER_TYPE = "network.adapter.type";
     public static final String PROP_DISPLAYNAME = "displayname";
     public static final String PROP_NAME = "name";
@@ -80,7 +75,7 @@ public class NetworkIfTestUtil {
 
 
 
-    // ループバックアドレス_true試験用（ポイントツーポイントインタフェース_false試験用）
+    // for loopback interface.
     public static final String PROP_LB_NETWORK_ADAPTER_TYPE = "lb.network.adapter.type";
     public static final String PROP_LB_DISPLAYNAME = "lb.displayname";
     public static final String PROP_LB_NAME = "lb.name";
@@ -96,7 +91,7 @@ public class NetworkIfTestUtil {
     public static final String PROP_LB_IPADDRESS = "lb.ipaddress";
     public static final String PROP_LB_MASKLENGTH = "lb.masklength";
 
-    // ポイントツーポイントインタフェース_true試験用（ループバックアドレス_false試験用）
+    // for point to point interface
     public static final String PROP_PTP_NETWORK_ADAPTER_TYPE = "ptp.network.adapter.type";
     public static final String PROP_PTP_DISPLAYNAME = "ptp.displayname";
     public static final String PROP_PTP_NAME = "ptp.name";
@@ -112,7 +107,7 @@ public class NetworkIfTestUtil {
     public static final String PROP_PTP_IPADDRESS = "ptp.ipaddress";
     public static final String PROP_PTP_MASKLENGTH = "ptp.masklength";
 
-    // 起動状態_true/false試験用（仮想インタフェース_false試験用）
+    // for the interface of the start/not start state.
     public static final String PROP_UP_NETWORK_ADAPTER_TYPE = "up.network.adapter.type";
     public static final String PROP_UP_DISPLAYNAME = "up.displayname";
     public static final String PROP_UP_NAME = "up.name";
@@ -129,7 +124,7 @@ public class NetworkIfTestUtil {
     public static final String PROP_UP_IPADDRESS = "up.ipaddress";
     public static final String PROP_UP_MASKLENGTH = "up.masklength";
 
-    // 仮想インタフェース(true)試験用
+    // for virtual interface
     public static final String PROP_VIR_NETWORK_ADAPTER_TYPE = "vir.network.adapter.type";
     public static final String PROP_VIR_DISPLAYNAME = "vir.displayname";
     public static final String PROP_VIR_NAME = "vir.name";
@@ -146,7 +141,7 @@ public class NetworkIfTestUtil {
     public static final String PROP_VIR_IPADDRESS = "vir.ipaddress";
     public static final String PROP_VIR_MASKLENGTH = "vir.masklength";
 
-    // マルチキャストサポート(true/false)試験用
+    // for the interface supporting/not supporting multicast
     public static final String PROP_MUL_NETWORK_ADAPTER_TYPE = "mul.network.adapter.type";
     public static final String PROP_MUL_DISPLAYNAME = "mul.displayname";
     public static final String PROP_MUL_NAME = "mul.name";
@@ -163,19 +158,12 @@ public class NetworkIfTestUtil {
     public static final String PROP_MUL_IPADDRESS = "mul.ipaddress";
     public static final String PROP_MUL_MASKLENGTH = "mul.masklength";
 
-    /**
-     * MACアドレスを表す文字列をbyte配列表現に変換するメソッド.
-     * <br>
-     * @param mac MACアドレスの文字列
-     * @return MACアドレスのbyte配列
-     */
     public static byte[] toByteArrayMac(String mac) {
 
         byte[] macByteArray = null;
         try {
             StringTokenizer tokenizer = new StringTokenizer(mac, SEPARATOR_COLON);
 
-            // 分割数が6でない場合、例外をスローする
             if (tokenizer.countTokens() != MACADDRESS_TOKEN_COUNT) {
                 throw new IllegalArgumentException("The number of colons must be 6.");
             }
@@ -183,25 +171,21 @@ public class NetworkIfTestUtil {
             macByteArray = new byte[MACADDRESS_TOKEN_COUNT];
 
             for (int byteIndex = 0; byteIndex < MACADDRESS_TOKEN_COUNT; byteIndex++) {
-                // 分割された文字列をchar型で取得
                 char[] hexDigit = tokenizer.nextToken().toCharArray();
 
-                // hexDigitの配列の要素数が2でない場合、例外をスローする。
                 if (hexDigit.length != MACADDRESS_TOKEN_LENGTH) {
                     throw new IllegalArgumentException(
                             "Number of array elements must be 2. <hexDigit.length=" + hexDigit.length + ">");
                 }
 
-                // 16進数に変換する
                 int hex1 = Character.digit(hexDigit[0], HEX_NUMBER);
                 int hex2 = Character.digit(hexDigit[1], HEX_NUMBER);
 
-                // 16進数に変換できない場合、例外をスローする
                 if ((hex1 == -1) || (hex2 == -1)) {
                     throw new IllegalArgumentException(
                             "can not be converted to hexadecimal. <hex1=" + hex1 + ", hex2=" + hex2 + ">");
                 }
-                // 左へ4ビットシフト
+
                 hex1 = hex1 << SHIFT_COUNT;
                 int hex = hex1 | hex2;
                 macByteArray[byteIndex] = (byte) hex;
@@ -217,12 +201,6 @@ public class NetworkIfTestUtil {
         return macByteArray;
     }
 
-    /**
-     * ":"区切りの文字列をString配列表現に変換するメソッド.
-     * <br>
-     * @param str ":"区切りの文字列
-     * @return String配列
-     */
     public static String[] toStringArray(String str) {
 
         if (str == null || str.length() == 0) {

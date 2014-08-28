@@ -16,6 +16,7 @@
 package org.osgi.test.cases.networkadapter.junit;
 
 import java.util.Arrays;
+
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.service.networkadapter.NetworkAdapter;
@@ -32,6 +33,9 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
     protected void tearDown() throws Exception {
     }
 
+    /**
+     * Tests NetworkAdapter of the loopback interface.
+     */
     public void testNetworkAdapter01() {
 
         String[] ids = null;
@@ -40,7 +44,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
         try {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.nwifinfo)");
+            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
 
             String command = "addNetworkAdapter";
             String[] parameters = new String[16];
@@ -90,6 +94,9 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
         }
     }
 
+    /**
+     * Tests NetworkAdapter of the point-to-point interface.
+     */
     public void testNetworkAdapter02() {
 
         String[] ids = null;
@@ -98,7 +105,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
         try {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.nwifinfo)");
+            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
 
             String command = "addNetworkAdapter";
             String[] parameters = new String[16];
@@ -148,6 +155,9 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
         }
     }
 
+    /**
+     * Tests NetworkAdapter of the interface that starts.
+     */
     public void testNetworkAdapter03() {
 
         String[] ids = null;
@@ -156,7 +166,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
         try {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.nwifinfo)");
+            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
 
             String command = "addNetworkAdapter";
             String[] parameters = new String[16];
@@ -206,6 +216,9 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
         }
     }
 
+    /**
+     * Tests NetworkAdapter of the interface that stops.
+     */
     public void testNetworkAdapter04() {
 
         String[] ids = null;
@@ -214,7 +227,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
         try {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.nwifinfo)");
+            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
 
             String command = "addNetworkAdapter";
             String[] parameters = new String[16];
@@ -264,6 +277,9 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
         }
     }
 
+    /**
+     * Tests NetworkAdapter of the virtual interface.
+     */
     public void testNetworkAdapter05() {
 
         String[] ids = null;
@@ -272,7 +288,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
         try {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.nwifinfo)");
+            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
 
             String command = "addNetworkAdapter";
             String[] parameters = new String[16];
@@ -322,6 +338,9 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
         }
     }
 
+    /**
+     * Tests NetworkAdapter of the interface that supports multicast.
+     */
     public void testNetworkAdapter06() {
 
         String[] ids = null;
@@ -330,7 +349,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
         try {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.nwifinfo)");
+            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
 
             String command = "addNetworkAdapter";
             String[] parameters = new String[16];
@@ -379,6 +398,9 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
         }
     }
 
+    /**
+     * Tests NetworkAdapter of the interface that dose not supports multicast.
+     */
     public void testNetworkAdapter07() {
 
         String[] ids = null;
@@ -387,7 +409,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
         try {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.nwifinfo)");
+            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
 
             String command = "addNetworkAdapter";
             String[] parameters = new String[16];

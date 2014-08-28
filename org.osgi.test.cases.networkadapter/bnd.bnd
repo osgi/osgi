@@ -16,10 +16,14 @@ Import-Package: ${-signaturetest}, *
     ${junit}
 
 Test-Cases							= ${testcases}
--signaturetest						= org.osgi.service.nwifinfo
+-signaturetest						= org.osgi.service.networkadapter
 
 -runbundles = \
     org.osgi.impl.service.log; version=latest, \
+    org.osgi.service.event; version=latest, \
+    org.osgi.service.dal; version=latest, \
+    org.osgi.service.dal.functions; version=latest, \
+    org.osgi.impl.service.dal; version=latest, \
     org.osgi.test.cases.dal.step; version=latest, \
     org.osgi.impl.service.networkadapter; version=latest
 
