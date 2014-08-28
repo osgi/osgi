@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="141"
+<chapter label="142"
          version="5"
          xml:id="service.dal.functions"
          xmlns="http://docbook.org/ns/docbook"
@@ -485,4 +485,5 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
     </table>
   </section>
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.dal.functions.xml"/>
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.dal.functions.data.xml"/>
 </chapter>
