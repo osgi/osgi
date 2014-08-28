@@ -15,7 +15,7 @@
  */
 
 /**
- * Function Data 1.0.
+ * Device Abstraction Layer Functions Data Package 1.0.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the

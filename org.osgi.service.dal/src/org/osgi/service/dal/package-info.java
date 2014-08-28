@@ -15,7 +15,7 @@
  */
 
 /**
- * Device Package Version 1.0.
+ * Device Abstraction Layer Package Version 1.0.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the

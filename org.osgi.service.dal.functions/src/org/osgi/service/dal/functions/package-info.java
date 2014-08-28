@@ -15,7 +15,7 @@
  */
 
 /**
- * Functions 1.0.
+ * Device Abstraction Layer Functions Package 1.0.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the
