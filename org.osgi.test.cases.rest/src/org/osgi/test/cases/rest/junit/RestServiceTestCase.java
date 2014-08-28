@@ -431,7 +431,7 @@ public class RestServiceTestCase extends RestTestUtils {
 
 // protected
 
-  protected void assertBundleRepresentation(Bundle bundle, JSONObject bundleRepresentation) {
+  protected void assertBundleRepresentation(Bundle bundle, JSONObject bundleRepresentation) throws JSONException {
     assertEquals("lastModified:", bundle.getLastModified(), bundleRepresentation.getLong("lastModified"));
     assertEquals("location:", bundle.getLocation(), bundleRepresentation.getString("location"));
     assertEquals("state:", bundle.getState(), bundleRepresentation.getInt("state"));
@@ -439,7 +439,7 @@ public class RestServiceTestCase extends RestTestUtils {
     assertEquals("version:", bundle.getVersion().toString(), bundleRepresentation.getString("version"));
   }
 
-  protected void assertBundleListRepresentation(Bundle[] bundles, JSONArray jsonBundleList) {
+  protected void assertBundleListRepresentation(Bundle[] bundles, JSONArray jsonBundleList) throws JSONException {
     assertNotNull("Bundle list", jsonBundleList);
     assertEquals("Bundle list length:", bundles.length, jsonBundleList.length());
 
@@ -454,11 +454,11 @@ public class RestServiceTestCase extends RestTestUtils {
     }
   }
 
-  protected void assertBundleStateRepresentation(Bundle bundle, JSONObject bundleStateRepresentation) {
+  protected void assertBundleStateRepresentation(Bundle bundle, JSONObject bundleStateRepresentation) throws JSONException {
     assertEquals("state:", bundle.getState(), bundleStateRepresentation.getInt("state"));
   }
 
-  protected void assertBundleHeaderRepresentation(Bundle bundle, JSONObject bundleHeaderRepresentation) {
+  protected void assertBundleHeaderRepresentation(Bundle bundle, JSONObject bundleHeaderRepresentation) throws JSONException {
     Dictionary<String, String> headers = bundle.getHeaders();
 
     for (Enumeration<String> keys = headers.keys(); keys.hasMoreElements();) {
@@ -467,7 +467,7 @@ public class RestServiceTestCase extends RestTestUtils {
     }
   }
 
-  protected void assertBundleStartLevelRepresentation(Bundle bundle, JSONObject bundleStartLevelRepresentation) {
+  protected void assertBundleStartLevelRepresentation(Bundle bundle, JSONObject bundleStartLevelRepresentation) throws JSONException {
     BundleStartLevel bundleStartLevel = getBundleStartLevel(bundle);
 
     assertEquals("startLevel:", bundleStartLevel.getStartLevel(), bundleStartLevelRepresentation.getInt("startLevel"));
@@ -475,7 +475,7 @@ public class RestServiceTestCase extends RestTestUtils {
     assertEquals("persistentlyStarted:", bundleStartLevel.isPersistentlyStarted(), bundleStartLevelRepresentation.getBoolean("persistentlyStarted"));
   }
 
-  protected void assertServiceList(JSONArray jsonServiceList, ServiceReference<?>[] serviceRefs) {
+  protected void assertServiceList(JSONArray jsonServiceList, ServiceReference<?>[] serviceRefs) throws JSONException {
     assertNotNull("Service list", jsonServiceList);
 
     assertEquals("Service list length:", serviceRefs.length, jsonServiceList.length());
@@ -491,7 +491,7 @@ public class RestServiceTestCase extends RestTestUtils {
     }
   }
 
-  protected void assertServiceRepresentationList(JSONArray jsonServiceRepresentationList, ServiceReference<?>[] serviceRefs) {
+  protected void assertServiceRepresentationList(JSONArray jsonServiceRepresentationList, ServiceReference<?>[] serviceRefs) throws JSONException {
     if (serviceRefs != null) {
       assertNotNull("Service representation list", jsonServiceRepresentationList);
 
@@ -514,7 +514,7 @@ public class RestServiceTestCase extends RestTestUtils {
     }
   }
 
-  protected void assertService(JSONObject serviceRepresentation, ServiceReference<?> serviceRef) {
+  protected void assertService(JSONObject serviceRepresentation, ServiceReference<?> serviceRef) throws JSONException {
     assertNotNull("Service representation ", serviceRepresentation);
 
     String[] propKeys = serviceRef.getPropertyKeys();
@@ -559,10 +559,10 @@ public class RestServiceTestCase extends RestTestUtils {
     }
   }
 
-  protected void assertBundleException(Object result, String assertMessage)  {
+  protected void assertBundleException(Object result, String assertMessage) throws JSONException  {
     assertNotNull(assertMessage, result);
 
-    if (result instanceof JSONObject) {
+    if (result instanceof JSONObject) {	
       // TODO
       int typeCode = ((JSONObject)result).getInt("typecode");
       String message = ((JSONObject)result).getString("message");
@@ -574,7 +574,7 @@ public class RestServiceTestCase extends RestTestUtils {
     }
   }
 
-  protected Object updateFWStartLevel(int startLevel, int initialBundleStartLevel, int expectedStatusCode, MediaType acceptMediaType, MediaType contentMediaType) {
+  protected Object updateFWStartLevel(int startLevel, int initialBundleStartLevel, int expectedStatusCode, MediaType acceptMediaType, MediaType contentMediaType) throws JSONException {
     ClientResource resource = new ClientResource(baseURI + FW_START_LEVEL_URI);
     JSONWriter jsonWriter = new JSONStringer().object();
     jsonWriter.key("startLevel").value(startLevel);
@@ -653,7 +653,7 @@ public class RestServiceTestCase extends RestTestUtils {
     return null;
   }
 
-  protected JSONObject updateBundleState(String requestURI, int newState, int options, int expectedStatusCode, MediaType acceptMediaType, MediaType contentMediaType) throws ResourceException, IOException {
+  protected JSONObject updateBundleState(String requestURI, int newState, int options, int expectedStatusCode, MediaType acceptMediaType, MediaType contentMediaType) throws ResourceException, IOException, JSONException {
     ClientResource resource = new ClientResource(baseURI + requestURI);
     JSONWriter jsonWriter = new JSONStringer().object();
     jsonWriter.key("state").value(newState);
@@ -681,7 +681,7 @@ public class RestServiceTestCase extends RestTestUtils {
     return null;
   }
 
-  protected JSONObject updateBundleStartLevel(String requestURI, int newStartLevel, int expectedStatusCode, MediaType acceptMediaType, MediaType contentMediaType) throws ResourceException, IOException {
+  protected JSONObject updateBundleStartLevel(String requestURI, int newStartLevel, int expectedStatusCode, MediaType acceptMediaType, MediaType contentMediaType) throws ResourceException, IOException, JSONException {
     ClientResource resource = new ClientResource(baseURI + requestURI);
     JSONWriter jsonWriter = new JSONStringer().object();
     jsonWriter.key("startLevel").value(newStartLevel);

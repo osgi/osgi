@@ -14,6 +14,7 @@ package org.osgi.impl.service.rest.resources;
 
 import org.osgi.impl.service.rest.PojoReflector;
 import org.osgi.impl.service.rest.pojos.ExtensionList;
+import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.Get;
@@ -27,6 +28,10 @@ public class ExtensionsResource extends AbstractOSGiResource<ExtensionList> {
 	@Get("json|text")
 	public Representation doGet(final Representation value,
 			final Variant variant) {
-		return getRepresentation(new ExtensionList(getTracker()), variant);
+		try {
+			return getRepresentation(new ExtensionList(getTracker()), variant);
+		} catch (final Exception e) {
+			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
+		}
 	}
 }

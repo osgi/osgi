@@ -32,12 +32,16 @@ public class BundleResource extends AbstractOSGiResource<BundlePojo> {
 
 	@Get("json|txt")
 	public Representation doGet(final Representation none, final Variant variant) {
-		final Bundle bundle = getBundleFromKeys("bundleId",
-				"bundleSymbolicName", "bundleVersion");
-		if (bundle == null) {
-			return ERROR(Status.CLIENT_ERROR_NOT_FOUND);
+		try {
+			final Bundle bundle = getBundleFromKeys("bundleId",
+					"bundleSymbolicName", "bundleVersion");
+			if (bundle == null) {
+				return ERROR(Status.CLIENT_ERROR_NOT_FOUND);
+			}
+			return getRepresentation(new BundlePojo(bundle), variant);
+		} catch (final Exception e) {
+			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
 		}
-		return getRepresentation(new BundlePojo(bundle), variant);
 	}
 
 	@Delete("txt")

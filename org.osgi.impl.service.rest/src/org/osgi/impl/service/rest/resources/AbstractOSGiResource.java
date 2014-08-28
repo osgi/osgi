@@ -12,6 +12,7 @@
  */
 package org.osgi.impl.service.rest.resources;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Dictionary;
@@ -166,7 +167,7 @@ public class AbstractOSGiResource<T> extends ServerResource {
 	}
 
 	protected Representation getRepresentation(final T bean,
-			final Variant variant) {
+			final Variant variant) throws IOException {
 		final Representation rep;
 		System.err.println("VARIANT MEDIA TYPE " + variant.getMediaType());
 
@@ -176,14 +177,7 @@ public class AbstractOSGiResource<T> extends ServerResource {
 		} else if (MediaType.APPLICATION_JSON.includes(variant.getMediaType())
 				|| MediaType.TEXT_ALL.includes(variant.getMediaType())) {
 			if (bean instanceof Collection) {
-				final ArrayList<JSONObject> reps = new ArrayList<JSONObject>();
-				for (final Object item : (Collection<?>) bean) {
-					System.err.println("serializing " + item);
-					reps.add(new JSONObject(item));
-				}
-
-				// final JSONArray arr = new JSONArray((Collection<?>) bean);
-				final JSONArray arr = new JSONArray(reps);
+				final JSONArray arr = new JSONArray((Collection<?>) bean);
 				rep = toRepresentation(arr, variant);
 			} else if (bean instanceof Map) {
 				rep = toRepresentation(new JSONObject((Map<?, ?>) bean),
@@ -225,8 +219,12 @@ public class AbstractOSGiResource<T> extends ServerResource {
 		t.printStackTrace();
 		if (t instanceof BundleException) {
 			setStatus(status);
-			return this.toRepresentation(new BundleExceptionPojo(
-					(BundleException) t), variant);
+			try {
+				return toRepresentation(new BundleExceptionPojo(
+						(BundleException) t), variant);
+			} catch (final IOException ioe) {
+				// fallback
+			}
 		}
 
 		setStatus(status, t);

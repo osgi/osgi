@@ -29,8 +29,12 @@ public class FrameworkStartLevelResource extends
 
 	@Get("json|txt")
 	public Representation getStartLevel(final Variant variant) {
-		return getRepresentation(new FrameworkStartLevelPojo(
-				getFrameworkStartLevel()), variant);
+		try {
+			return getRepresentation(new FrameworkStartLevelPojo(
+					getFrameworkStartLevel()), variant);
+		} catch (final Exception e) {
+			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
+		}
 	}
 
 	@Put("json|txt")
