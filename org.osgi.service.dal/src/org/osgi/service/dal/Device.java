@@ -92,14 +92,14 @@ public interface Device {
 	 * the reason for the current device status. It's an optional property. The
 	 * value type is {@code java.lang.Integer}. There are two value categories:
 	 * <ul>
-	 * <li>positive values i.e. > 0</li> - Those values contain details related
-	 * to the current status. Examples: {@link #STATUS_DETAIL_CONNECTING} and
-	 * {@link #STATUS_DETAIL_INITIALIZING}.
-	 * <li>negative values i.e. < 0</li> - Those values contain errors related
-	 * to the current status. Examples:
+	 * <li>positive values i.e. > 0 - those values contain details related to
+	 * the current status. Examples: {@link #STATUS_DETAIL_CONNECTING} and
+	 * {@link #STATUS_DETAIL_INITIALIZING}.</li>
+	 * <li>negative values i.e. < 0 - those values contain errors related to the
+	 * current status. Examples:
 	 * {@link #STATUS_DETAIL_CONFIGURATION_NOT_APPLIED},
 	 * {@link #STATUS_DETAIL_DEVICE_BROKEN} and
-	 * {@link #STATUS_DETAIL_DEVICE_COMMUNICATION_ERROR}.
+	 * {@link #STATUS_DETAIL_DEVICE_COMMUNICATION_ERROR}.</li>
 	 * </ul>
 	 */
 	public static final String	SERVICE_STATUS_DETAIL						= "dal.device.status.detail";
@@ -274,25 +274,23 @@ public interface Device {
 
 	/**
 	 * Returns the current value of the specified property. The method will
-	 * return the same value as
-	 * {@link org.osgi.framework.ServiceReference#getProperty(String)} for the
-	 * service reference of this device.
+	 * return the same value as {@code ServiceReference.getProperty(String)} for
+	 * the service reference of this device.
 	 * <p>
 	 * This method must continue to return property values after the device
 	 * service has been unregistered.
 	 * 
-	 * @param propName The property name.
+	 * @param propKey The property key.
 	 * 
-	 * @return The property value or {@code null} if the property name cannot be
+	 * @return The property value or {@code null} if the property key cannot be
 	 *         mapped to a value.
 	 */
-	public Object getServiceProperty(String propName);
+	public Object getServiceProperty(String propKey);
 
 	/**
 	 * Returns an array with all device service property keys. The method will
-	 * return the same value as
-	 * {@link org.osgi.framework.ServiceReference#getProperty(String)} for the
-	 * service reference of this device. The result cannot be {@code null}.
+	 * return the same value as {@code ServiceReference.getPropertyKeys()} for
+	 * the service reference of this device. The result cannot be {@code null}.
 	 * 
 	 * @return An array with all device service property keys, cannot be
 	 *         {@code null}.
@@ -316,4 +314,4 @@ public interface Device {
 	public void remove() throws DeviceException, UnsupportedOperationException,
 			SecurityException, IllegalStateException;
 
-}
+ }

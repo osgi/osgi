@@ -24,14 +24,14 @@ import org.osgi.service.dal.functions.data.LevelData;
  * {@code Meter} function can measure metering information. The function
  * provides three properties and one operation:
  * <ul>
- * <li>{@link #PROPERTY_CURRENT}</li> - property accessible with
- * {@link #getCurrent()} getter;
- * <li>{@link #PROPERTY_TOTAL}</li> - property accessible with
- * {@link #getTotal()} getter;
- * <li>{@link #SERVICE_FLOW}</li> - property accessible with {@link #getTotal()}
- * getter;
- * <li>{@link #OPERATION_RESET_TOTAL}</li> - operation can be executed with
- * {@link #resetTotal()}.
+ * <li>{@link #PROPERTY_CURRENT} - property accessible with
+ * {@link #getCurrent()} getter;</li>
+ * <li>{@link #PROPERTY_TOTAL} - property accessible with {@link #getTotal()}
+ * getter;</li>
+ * <li>{@link #SERVICE_FLOW} - property accessible with {@link #getTotal()}
+ * getter;</li>
+ * <li>{@link #OPERATION_RESET_TOTAL} - operation can be executed with
+ * {@link #resetTotal()}.</li>
  * </ul>
  * <p>
  * As an example, the function is easily mappable to ZigBee Simple Metering
