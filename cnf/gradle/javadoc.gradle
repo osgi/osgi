@@ -39,6 +39,7 @@ task javadoc(overwrite: true, type: Javadoc) {
             'security:m:"Required Permissions"',
             'noimplement:t:"Consumers of this API must not implement this interface"']
     classpath bnd.project.bootclasspath*.file
+    links('http://docs.oracle.com/javase/6/docs/api/')
   }
   // compute dependencies on other javadoc builds based upon the classpath
   classpath.each {
