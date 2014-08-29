@@ -2,10 +2,7 @@
 -include: ${build}/eclipse/jdt.bnd
 
 Export-Package:  \
-	${p}.*;-split-package:=first,\
-	org.osgi.service.http.context,\
-	org.osgi.service.http.runtime,\
-	org.osgi.service.http.runtime.dto
+	org.osgi.service.http.*;-split-package:=first
 
 -buildpath = \
     ee.j2se; version=${javac.compliance}, \
