@@ -1,15 +1,19 @@
 /*
- *	Licensed Materials - Property of IBM.
- *	(C) Copyright IBM Corporation 2011
- *	All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
  *
- *	US Government Users Restricted Rights -
- *	Use, duplication or disclosure restricted by
- *	GSA ADP Schedule Contract with IBM Corporation.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  Created by Jan S. Rellermeyer
- *  Copyright 2011 ibm.com. All rights reserved.
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.osgi.impl.service.rest.resources;
 
 import java.io.IOException;
@@ -20,7 +24,6 @@ import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.osgi.framework.Bundle;
@@ -46,15 +49,23 @@ import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.ServerResource;
 
+/**
+ * Abstract OSGi resource with the functionality to translate OSGi entities to
+ * representations according to requested media types (variants).
+ * 
+ * @author Jan S. Rellermeyer, IBM Research
+ *
+ * @param <T> the pojo base class which is reflected by the pojo reflector.
+ */
 public class AbstractOSGiResource<T> extends ServerResource {
 
-	private static final String number = "([0-9]*)";
+	private static final String				number	= "([0-9]*)";
 
-	protected final static Representation SUCCESS = null;
+	protected final static Representation	SUCCESS	= null;
 
-	protected final static Representation ERROR = null;
+	protected final static Representation	ERROR	= null;
 
-	private final PojoReflector<T> reflector;
+	private final PojoReflector<T>			reflector;
 
 	protected AbstractOSGiResource(final PojoReflector<T> reflector) {
 		this.reflector = reflector;

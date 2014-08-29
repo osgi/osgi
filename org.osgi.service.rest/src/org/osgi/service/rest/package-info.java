@@ -17,7 +17,7 @@
 /**
  * Rest Service Package Version 1.0.
  * 
- * @author $Id$
+ * @author Jan S. Rellermeyer, IBM Research
  */
 
 @Version("1.0.0")

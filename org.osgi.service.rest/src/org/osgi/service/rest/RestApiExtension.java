@@ -41,7 +41,7 @@ package org.osgi.service.rest;
  * it.
  * </p>
  * 
- * @author $Id$
+ * @author Jan S. Rellermeyer, IBM Research
  */
 public interface RestApiExtension {
 

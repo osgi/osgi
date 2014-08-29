@@ -1,14 +1,17 @@
 /*
- *	Licensed Materials - Property of IBM.
- *	(C) Copyright IBM Corporation 2013
- *	All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
  *
- *	US Government Users Restricted Rights -
- *	Use, duplication or disclosure restricted by
- *	GSA ADP Schedule Contract with IBM Corporation.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  Created by Jan S. Rellermeyer
- *  Copyright 2013 ibm.com. All rights reserved.
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 package org.osgi.impl.service.rest.client;
@@ -18,7 +21,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,44 +36,49 @@ import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 
+/**
+ * Implementation of the (Java) REST client
+ * 
+ * @author Jan S. Rellermeyer, IBM Research
+ */
 public class RestClientImpl implements RestClient {
 
-	private static final MediaType FRAMEWORK_STARTLEVEL_JSON = new MediaType(
-			"application/org.osgi.framework.startlevel+json");
+	private static final MediaType	FRAMEWORK_STARTLEVEL_JSON		= new MediaType(
+																			"application/org.osgi.framework.startlevel+json");
 
-	private static final MediaType BUNDLE_JSON = new MediaType(
-			"application/org.osgi.bundle+json");
+	private static final MediaType	BUNDLE_JSON						= new MediaType(
+																			"application/org.osgi.bundle+json");
 
-	private static final MediaType BUNDLES_JSON = new MediaType(
-			"application/org.osgi.bundles+json");
+	private static final MediaType	BUNDLES_JSON					= new MediaType(
+																			"application/org.osgi.bundles+json");
 
-	private static final MediaType BUNDLES_REPRESENTATIONS_JSON = new MediaType(
-			"application/org.osgi.bundles.representations+json");
+	private static final MediaType	BUNDLES_REPRESENTATIONS_JSON	= new MediaType(
+																			"application/org.osgi.bundles.representations+json");
 
-	private static final MediaType BUNDLE_STATE_JSON = new MediaType(
-			"application/org.osgi.bundle.state+json");
+	private static final MediaType	BUNDLE_STATE_JSON				= new MediaType(
+																			"application/org.osgi.bundle.state+json");
 
-	private static final MediaType BUNDLE_HEADER_JSON = new MediaType(
-			"application/org.osgi.bundle.header+json");
+	private static final MediaType	BUNDLE_HEADER_JSON				= new MediaType(
+																			"application/org.osgi.bundle.header+json");
 
-	private static final MediaType BUNDLE_STARTLEVEL_JSON = new MediaType(
-			"application/org.osgi.bundle.startlevel+json");
+	private static final MediaType	BUNDLE_STARTLEVEL_JSON			= new MediaType(
+																			"application/org.osgi.bundle.startlevel+json");
 
-	private static final MediaType SERVICE_JSON = new MediaType(
-			"application/org.osgi.service+json");
+	private static final MediaType	SERVICE_JSON					= new MediaType(
+																			"application/org.osgi.service+json");
 
-	private static final MediaType SERVICES_JSON = new MediaType(
-			"application/org.osgi.services+json");
+	private static final MediaType	SERVICES_JSON					= new MediaType(
+																			"application/org.osgi.services+json");
 
-	private static final MediaType SERVICES_REPRESENTATIONS_JSON = new MediaType(
-			"application/org.osgi.services.representations+json");
+	private static final MediaType	SERVICES_REPRESENTATIONS_JSON	= new MediaType(
+																			"application/org.osgi.services.representations+json");
 
-	private final URI baseUri;
+	private final URI				baseUri;
 
 	public RestClientImpl(final URI uri) {
 		this.baseUri = uri.normalize().resolve("/");
 	}
-	
+
 	/**
 	 * @see org.osgi.rest.client.RestClient#getFrameworkStartLevel()
 	 */
@@ -85,9 +92,8 @@ public class RestClientImpl implements RestClient {
 	}
 
 	/**
-	 * @see
-	 * org.osgi.rest.client.RestClient#setFrameworkStartLevel(org.osgi.dto.framework
-	 * .startlevel.FrameworkStartLevelDTO)
+	 * @see org.osgi.rest.client.RestClient#setFrameworkStartLevel(org.osgi.dto.framework
+	 *      .startlevel.FrameworkStartLevelDTO)
 	 */
 	public void setFrameworkStartLevel(final FrameworkStartLevelDTO startLevel)
 			throws Exception {
@@ -249,8 +255,7 @@ public class RestClientImpl implements RestClient {
 	}
 
 	/**
-	 * @see
-	 * org.osgi.rest.client.RestClient#getBundleStartLevel(java.lang.String)
+	 * @see org.osgi.rest.client.RestClient#getBundleStartLevel(java.lang.String)
 	 */
 	public BundleStartLevelDTO getBundleStartLevel(final String bundlePath)
 			throws Exception {
@@ -264,7 +269,7 @@ public class RestClientImpl implements RestClient {
 
 	/**
 	 * @see org.osgi.rest.client.RestClient#setBundleStartLevel(long,
-	 * org.osgi.dto.framework.startlevel.BundleStartLevelDTO)
+	 *      org.osgi.dto.framework.startlevel.BundleStartLevelDTO)
 	 */
 	public void setBundleStartLevel(final long id,
 			final BundleStartLevelDTO startLevel) throws Exception {
@@ -272,9 +277,8 @@ public class RestClientImpl implements RestClient {
 	}
 
 	/**
-	 * @see
-	 * org.osgi.rest.client.RestClient#setBundleStartLevel(java.lang.String,
-	 * org.osgi.dto.framework.startlevel.BundleStartLevelDTO)
+	 * @see org.osgi.rest.client.RestClient#setBundleStartLevel(java.lang.String,
+	 *      org.osgi.dto.framework.startlevel.BundleStartLevelDTO)
 	 */
 	public void setBundleStartLevel(final String bundlePath,
 			final BundleStartLevelDTO startLevel) throws Exception {
@@ -328,7 +332,7 @@ public class RestClientImpl implements RestClient {
 
 	/**
 	 * @see org.osgi.rest.client.RestClient#updateBundle(long,
-	 * java.io.InputStream)
+	 *      java.io.InputStream)
 	 */
 	public void updateBundle(final long id, final InputStream in)
 			throws Exception {
@@ -383,9 +387,8 @@ public class RestClientImpl implements RestClient {
 	}
 
 	/**
-	 * @see
-	 * org.osgi.rest.client.RestClient#getServiceRepresentations(java.lang.String
-	 * )
+	 * @see org.osgi.rest.client.RestClient#getServiceRepresentations(java.lang.String
+	 *      )
 	 */
 	public Collection<ServiceReferenceDTO> getServiceRepresentations(
 			final String filter) throws Exception {
@@ -401,8 +404,7 @@ public class RestClientImpl implements RestClient {
 	}
 
 	/**
-	 * @see
-	 * org.osgi.rest.client.RestClient#getServiceReference(java.lang.String)
+	 * @see org.osgi.rest.client.RestClient#getServiceReference(java.lang.String)
 	 */
 	public ServiceReferenceDTO getServiceReference(final String servicePath)
 			throws Exception {

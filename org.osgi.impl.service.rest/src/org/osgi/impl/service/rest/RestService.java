@@ -1,22 +1,25 @@
 /*
- *	Licensed Materials - Property of IBM.
- *	(C) Copyright IBM Corporation 2011
- *	All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
  *
- *	US Government Users Restricted Rights -
- *	Use, duplication or disclosure restricted by
- *	GSA ADP Schedule Contract with IBM Corporation.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  Created by Jan S. Rellermeyer
- *  Copyright 2011 ibm.com. All rights reserved.
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.osgi.impl.service.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.rest.resources.BundleHeaderResource;
@@ -38,15 +41,20 @@ import org.restlet.Restlet;
 import org.restlet.resource.ServerResource;
 import org.restlet.routing.Router;
 
+/**
+ * Rest service implementation. Manages the routing of paths to resources, etc.
+ * 
+ * @author Jan S. Rellermeyer, IBM Research
+ */
 public class RestService extends Application {
 
-	public static final String BUNDLE_CONTEXT_ATTR = "context";
+	public static final String													BUNDLE_CONTEXT_ATTR	= "context";
 
-	public static final String TRACKER_ATTR = "tracker";
+	public static final String													TRACKER_ATTR		= "tracker";
 
-	private final BundleContext context;
+	private final BundleContext													context;
 
-	private ServiceTracker<RestApiExtension, Class<? extends ServerResource>> tracker;
+	private ServiceTracker<RestApiExtension, Class<? extends ServerResource>>	tracker;
 
 	RestService(final BundleContext context) {
 		this.context = context;
@@ -112,7 +120,7 @@ public class RestService extends Application {
 			implements
 			ServiceTrackerCustomizer<RestApiExtension, Class<? extends ServerResource>> {
 
-		private final Router router;
+		private final Router	router;
 
 		public ExtensionsTrackerCustomizer(final Router router) {
 			this.router = router;
@@ -129,8 +137,6 @@ public class RestService extends Application {
 			try {
 				final URI uri = new URI("/" + uri_path);
 				router.attach(uri.toString(), proprietary_extension_unit);
-
-				System.out.println("attached " + uri_path);
 
 				return proprietary_extension_unit;
 			} catch (URISyntaxException e) {

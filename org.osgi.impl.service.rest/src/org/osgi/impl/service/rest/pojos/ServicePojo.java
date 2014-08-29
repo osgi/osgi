@@ -1,32 +1,40 @@
 /*
- *	Licensed Materials - Property of IBM.
- *	(C) Copyright IBM Corporation 2012
- *	All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
  *
- *	US Government Users Restricted Rights -
- *	Use, duplication or disclosure restricted by
- *	GSA ADP Schedule Contract with IBM Corporation.
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
  *
- *  Created by Jan S. Rellermeyer
- *  Copyright 2013 ibm.com. All rights reserved.
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
+
 package org.osgi.impl.service.rest.pojos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.ServiceReference;
 
+/**
+ * Pojo for services.
+ * 
+ * @author Jan S. Rellermeyer, IBM Research
+ */
 public final class ServicePojo {
 
-	private Map<String, Object> properties;
+	private Map<String, Object>	properties;
 
-	private String bundle;
+	private String				bundle;
 
-	private String[] usingBundles;
+	private String[]			usingBundles;
 
 	public ServicePojo(final ServiceReference<?> sref) {
 		final Map<String, Object> props = new HashMap<String, Object>();
@@ -35,13 +43,13 @@ public final class ServicePojo {
 		}
 		setProperties(props);
 		setBundle(getBundleUri(sref.getBundle()));
-		final List<String> usingBundles = new ArrayList<String>();
+		final List<String> usingBundlesList = new ArrayList<String>();
 		if (sref.getUsingBundles() != null) {
 			for (final Bundle using : sref.getUsingBundles()) {
-				usingBundles.add(getBundleUri(using));
+				usingBundlesList.add(getBundleUri(using));
 			}
 		}
-		setUsingBundles(usingBundles.toArray(new String[usingBundles.size()]));
+		setUsingBundles(usingBundlesList.toArray(new String[usingBundlesList.size()]));
 	}
 
 	public void setProperties(final Map<String, Object> properties) {
@@ -68,8 +76,8 @@ public final class ServicePojo {
 		return usingBundles;
 	}
 
-	private String getBundleUri(final org.osgi.framework.Bundle bundle) {
-		return "framework/bundle/" + bundle.getBundleId();
+	private String getBundleUri(final org.osgi.framework.Bundle b) {
+		return "framework/bundle/" + b.getBundleId();
 	}
 
 }
