@@ -6,22 +6,18 @@ Bundle-Activator				= ${p}.Activator
 Private-Package 				= ${p}.*
 Export-Package					= org.osgi.service.rest; -split-package:=first
 
--buildpath						= \
+-buildpath = \
 	org.osgi.service.rest;		version=project, \
-	ee.j2se;					version=1.5, \
-	osgi.core;                  version=latest, \
+	ee.j2se;					version=${javac.compliance}, \
+	osgi.core;                  version=6.0, \
+	org.json;					version=1.0.0, \
+	org.restlet; 				version=2.2.2
+	
+-runbundles = \
+	org.json;					version=1.0.0, \
 	org.restlet; 				version=2.2.2, \
 	org.restlet.ext.json;		version=2.2.2, \
-	org.restlet.ext.xml;		version=2.2.2, \
-	org.json;					version=1.0.0
-	
--runbundles            			= \
-	org.json;					version=1.0.0, \
-		org.restlet.ext.json;		version=2.2.2, \
-	org.restlet; 				version=2.2.2, \
-	org.restlet.ext.xml;		version=2.2.2, \
-	org.osgi.impl.service.rest; version=latest, \
-	org.osgi.service.rest;		version=latest
+	org.restlet.ext.xml;		version=2.2.2
 	
 -runproperties = ${runproperties}, \
-	org.osgi.framework.bootdelegation="sun.*, com.sun.*"
+	org.osgi.framework.bootdelegation="sun.*,com.sun.*"

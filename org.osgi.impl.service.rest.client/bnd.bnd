@@ -2,14 +2,12 @@
 -include: ${build}/eclipse/jdt.bnd
 
 Private-Package 				= ${p}.*
-Export-Package					= org.osgi.service.rest; -split-package:=first
+Export-Package					= org.osgi.service.rest.client; -split-package:=first
 
 -buildpath						= \
 	org.osgi.service.rest;		version=project, \
-	ee.j2se;					version=1.5, \
-	osgi.core;                  version=latest, \
-	org.restlet; 				version=2.2.2, \
-	org.restlet.ext.json;		version=2.2.2, \
+	ee.j2se;					version=${javac.compliance}, \
+	osgi.core;                  version=6.0, \
 	org.json;					version=1.0.0, \
-	org.osgi.dto;				version=project
-	
+	org.restlet; 				version=2.2.2, \
+	org.restlet.ext.json;		version=2.2.2

@@ -30,20 +30,21 @@ Test-Cases              = ${testcases}
   osgi.core;version=6.0.0,\
   osgi.cmpn;version=5.0.0,\
   ee.j2se;version=${javac.compliance},\
-  org.restlet;version=latest,\
-  org.json;	version=1.0.0, \
+  org.json;version=1.0.0, \
+  org.restlet;version=2.2.2,\
   ${junit}
 
 -runbundles            = \
   org.osgi.impl.service.rest; version=latest, \
+  org.osgi.impl.service.rest.client; version=latest, \
+  org.json;					version=1.0.0, \
   org.restlet; 				version=2.2.2, \
   org.restlet.ext.json;		version=2.2.2, \
   org.restlet.ext.xml;		version=2.2.2, \
-  org.json;					version=1.0.0, \
-  org.osgi.impl.service.http; version=latest,\
-  org.osgi.service.rest;version=latest
+  org.osgi.impl.service.http; version=latest
 
--runproperties = ${runproperties}
+-runproperties = ${runproperties}, \
+    org.osgi.framework.bootdelegation="sun.*,com.sun.*"
 #  rest.ct.base.uri="http://localhost:8888,\
 #  rest.ct.non.supported.media.type=application/vnd.oasis.opendocument.chart,\
 #  rest.ct.basic.authentication=false,\
