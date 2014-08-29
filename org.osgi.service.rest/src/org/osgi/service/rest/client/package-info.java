@@ -15,13 +15,13 @@
  */
 
 /**
- * Rest Service Package Version 1.0.
+ * Rest Service Client Package Version 1.0.
  * 
  * @author $Id$
  */
 
 @Version("1.0.0")
-package org.osgi.service.rest;
+package org.osgi.service.rest.client;
 
 import org.osgi.annotation.versioning.Version;
 
