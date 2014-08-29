@@ -19,7 +19,7 @@ Include-Resource: OSGI-INF/=permissions
 	org.osgi.service.async;version=project,\
 	org.osgi.util.promise;version=project,\
 	org.osgi.util.function;version=project,\
-	ee.j2se;version=1.5,\
+	ee.j2se;version=${javac.compliance},\
 	osgi.core;version=4.3.1,\
 	osgi.cmpn;version=4.3.1,\
 	com.springsource.net.sf.cglib

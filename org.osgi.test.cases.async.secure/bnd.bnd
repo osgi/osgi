@@ -17,7 +17,7 @@ Include-Resource					= \
 	org.osgi.service.async;version=project,\
 	osgi.core;version=6.0.0,\
 	osgi.cmpn;version=4.3.1,\
-	ee.j2se;version=1.5,\
+	ee.j2se;version=${javac.compliance},\
 	${junit}
 
 -runbundles						= \

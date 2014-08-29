@@ -17,7 +17,7 @@ Import-Package: *
 	javax.servlet;version=3.0.0,\
 	osgi.core;version=6.0.0,\
 	osgi.cmpn;version=5.0.0,\
-	ee.j2se;version=1.5,\
+	ee.j2se;version=${javac.compliance},\
 	${junit}
 
 -runbundles						= \
