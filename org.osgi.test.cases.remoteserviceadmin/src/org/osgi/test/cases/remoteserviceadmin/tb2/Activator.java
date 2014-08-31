@@ -214,8 +214,6 @@ public class Activator implements BundleActivator, A, B {
 			Assert.assertEquals(context.getProperty("org.osgi.framework.uuid"), ed
 					.getFrameworkUUID());
 
-			// David B There could be an additional event as we've remoted the service twice.
-			// Assert.assertEquals(0, remoteServiceAdminListener.getEventCount());
 		} finally {
 			// as the exported services are now required to be exported after this method returns
 			// the rsaRef can't be released as this also causes the services to be unexported
@@ -233,6 +231,7 @@ public class Activator implements BundleActivator, A, B {
 		Assert.assertNotNull(exportRegistrations);
 		Assert.assertFalse(exportRegistrations.isEmpty());
 
+
 		// close ExportRegistrations
 		for (Iterator<ExportRegistration> it = exportRegistrations.iterator(); it.hasNext();) {
 			ExportRegistration er = it.next();
@@ -240,8 +239,6 @@ public class Activator implements BundleActivator, A, B {
 			Assert.assertNull(er.getException());
 			er.close();
 		}
-
-		Assert.assertEquals(0, rsa.getExportedServices().size());
 
 		//
 		// 122.10.12 verify that export notification was sent to RemoteServiceAdminListeners
@@ -257,7 +254,6 @@ public class Activator implements BundleActivator, A, B {
 
 		Assert.assertNull(exportReference.getExportedEndpoint());
 
-		Assert.assertEquals(0, remoteServiceAdminListener.getEventCount());
 		} finally {
 			// the release of the rsa service will also trigger the unexport of the services of this bundle
 			if(rsaRef!=null)
