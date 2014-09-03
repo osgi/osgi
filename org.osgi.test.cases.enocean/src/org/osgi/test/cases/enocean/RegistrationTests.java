@@ -25,7 +25,7 @@ public class RegistrationTests extends EnOceanTestCase {
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
 		// Push everything in the command...
 		String[] params = {new String(pkt.serialize())};
-		testStepService.execute("MessageF6_02_01", params);
+		testStepService.execute("MessageA5_02_01", params);
 
 		// Device added
 		String lastServiceEvent = devices.waitForService();

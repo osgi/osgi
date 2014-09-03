@@ -56,15 +56,17 @@ the Base Driver needs to know about it before firing on EventAdmin.
 
 ExportTestCase:
 - testDeviceExport, tests device exportation: registers a local device as a 
-service to be exported by the base driver, checks that a chip ID is has been 
+service to be exported by the base driver, checks that a chip ID has been 
 created and set as a property, sends a message on the EnOcean network, checks 
-that the message has been sent, and received by CT through the Step Service.
+that the message has been sent, received by the base driver, and checked by 
+the CT through the step service.
 
 ManualRegistrationTestCase:
 - testManualDeviceRegistration, tests initial device registration from a raw 
 Radio teach-in packet that doesn’t contain any profile data, and that is 
-simulated through the step service. This test thus requires the end-user 
-involvement.
+triggered through the step service. This test thus requires the end-user 
+involvement. Finally, the CT checks that the device's profile has been properly 
+updated.
 
 PersistencyTests:
 - testDeviceExportPersistency, tests device export persistency: registers a 
@@ -74,7 +76,7 @@ that the original chip ID, and the new one are equal.
 
 RegistrationTests:
 - testAutoDeviceRegistration, tests initial, and automatic device registration 
-from a raw Radio teach-in packet that is simulated through the step service.
+from a raw Radio teach-in packet that is triggered through the step service.
 
 SignatureTests:
 - testSignatures, cf. testSignatures() method from org.osgi.test.support.
