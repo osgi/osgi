@@ -66,7 +66,7 @@
 
   <xi:include href="../142/service.dal.functions.xml"/>
 
-  <xi:include href="../143/service.nii.xml"/>
+  <xi:include href="../143/service.network.xml"/>
 
   <xi:include href="../702/util.xml.xml"/>
 </book>
