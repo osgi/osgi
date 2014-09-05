@@ -171,21 +171,11 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <rect
-       inkscape:export-ydpi="90"
-       inkscape:export-xdpi="90"
-       inkscape:export-filename="/home/ewgeni/dev/work/REG/DAL/reosurces/components.png"
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:3.05188036;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="rect5229-69-4-0-8-6"
-       width="483.88504"
-       height="103.23383"
-       x="20.697142"
-       y="715.8822" />
-    <rect
        style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2.85769463;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect5229-69-4-0-2"
        width="423.47006"
        height="103.42802"
-       x="-565.28845"
+       x="-577.28845"
        y="713.76483"
        inkscape:export-filename="/home/ewgeni/dev/work/REG/DAL/reosurces/components.png"
        inkscape:export-xdpi="90"
@@ -195,11 +185,34 @@
        id="rect5229-7"
        width="205.71428"
        height="104.28571"
-       x="-448.32932"
+       x="-484.32932"
        y="404.22931"
        inkscape:export-filename="/home/ewgeni/dev/work/REG/DAL/reosurces/components.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
+    <g
+       id="g4325"
+       transform="translate(-36,0)">
+      <rect
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/ewgeni/dev/work/REG/DAL/reosurces/components.png"
+         y="394.86218"
+         x="-455.71429"
+         height="104.28571"
+         width="205.71428"
+         id="rect5229"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none" />
+      <path
+         inkscape:export-ydpi="90"
+         inkscape:export-xdpi="90"
+         inkscape:export-filename="/home/ewgeni/dev/work/REG/DAL/reosurces/components.png"
+         sodipodi:nodetypes="ccccc"
+         inkscape:connector-curvature="0"
+         id="rect5653"
+         d="m -243.98557,507.3106 -70.50389,0 -1.06824,0 71.57213,-73.05635 z"
+         style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.13854587;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0" />
+    </g>
     <rect
        style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2.54513168;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect5229-69-4-7"
@@ -220,41 +233,31 @@
        inkscape:export-filename="/home/ewgeni/dev/work/REG/DAL/reosurces/components.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
-    <rect
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="rect5229"
-       width="205.71428"
-       height="104.28571"
-       x="-455.71429"
-       y="394.86218"
-       inkscape:export-filename="/home/ewgeni/dev/work/REG/DAL/reosurces/components.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="-449.25342"
+       x="-485.25342"
        y="433.51776"
        id="text3118"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="-449.25342"
+         x="-485.25342"
          y="433.51776"
          id="tspan3120"><tspan
-           x="-449.25342"
+           x="-485.25342"
            y="433.51776"
            style="font-size:25px;-inkscape-font-specification:Sans"
            id="tspan3122">&lt;&lt;interface&gt;&gt;</tspan><tspan
            dx="0"
-           x="-253.89207"
+           x="-289.89209"
            y="433.51776"
            style="font-size:25px;-inkscape-font-specification:Sans"
            id="tspan3124" /></tspan><tspan
          sodipodi:role="line"
-         x="-449.25342"
+         x="-485.25342"
          y="479.71899"
          id="tspan3126"><tspan
-           x="-449.25342"
+           x="-485.25342"
            y="479.71899"
            style="font-weight:bold;-inkscape-font-specification:Sans Bold"
            id="tspan3128">Device</tspan></tspan></text>
@@ -300,7 +303,7 @@
        inkscape:connector-curvature="3"
        inkscape:connector-type="polyline"
        id="path5290"
-       d="m -248.08144,445.21932 294.73431,0"
+       d="m -278.79348,445.21932 327.265138,0"
        style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        inkscape:export-filename="/home/ewgeni/dev/work/REG/DAL/reosurces/components.png"
        inkscape:export-xdpi="90"
@@ -308,18 +311,18 @@
     <text
        sodipodi:linespacing="125%"
        id="text5292"
-       y="435.79077"
-       x="-234.85715"
+       y="437.79077"
+       x="-276.85715"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        xml:space="preserve"
        inkscape:export-filename="/home/ewgeni/dev/work/REG/DAL/reosurces/components.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          style="font-size:28px"
-         y="435.79077"
-         x="-234.85715"
+         y="437.79077"
+         x="-276.85715"
          id="tspan5294"
-         sodipodi:role="line">0..n       have     0..n</tspan></text>
+         sodipodi:role="line">0..1 Function belongs </tspan></text>
     <path
        inkscape:connector-curvature="3"
        inkscape:connector-type="polyline"
@@ -332,7 +335,7 @@
     <text
        sodipodi:linespacing="125%"
        id="text3848"
-       y="256.36218"
+       y="228.36218"
        x="221.99995"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        xml:space="preserve"
@@ -340,20 +343,20 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          style="font-size:28px"
-         y="256.36218"
+         y="228.36218"
          x="221.99995"
-         id="tspan3850"
-         sodipodi:role="line">0..n</tspan><tspan
+         sodipodi:role="line"
+         id="tspan4329">0..n</tspan><tspan
          id="tspan3878"
          style="font-size:28px"
-         y="291.36218"
+         y="263.36218"
          x="221.99995"
          sodipodi:role="line" /><tspan
          id="tspan3852"
          style="font-size:28px"
-         y="326.36218"
+         y="298.36218"
          x="221.99995"
-         sodipodi:role="line">post</tspan></text>
+         sodipodi:role="line">posts</tspan></text>
     <text
        sodipodi:linespacing="125%"
        id="text5292-6"
@@ -368,7 +371,7 @@
          y="123.33849"
          x="-233.35684"
          id="tspan5294-2"
-         sodipodi:role="line">1      contain    1</tspan></text>
+         sodipodi:role="line">   event contains        </tspan></text>
     <text
        transform="matrix(0.96966453,-0.24443958,0.24443958,0.96966453,0,0)"
        sodipodi:linespacing="125%"
@@ -384,7 +387,7 @@
          y="513.34082"
          x="330.26517"
          id="tspan4021"
-         sodipodi:role="line">provide     0..n</tspan></text>
+         sodipodi:role="line">provides    0..n</tspan></text>
     <text
        inkscape:transform-center-y="-14.142136"
        inkscape:transform-center-x="-34.345187"
@@ -402,7 +405,7 @@
          y="339.93906"
          x="533.91888"
          id="tspan4021-2"
-         sodipodi:role="line">provide     0..n</tspan></text>
+         sodipodi:role="line">provides    0..n</tspan></text>
     <g
        id="g5747"
        transform="matrix(1.1352933,0,0,1,-6.6817652,0)"
@@ -443,18 +446,18 @@
        transform="matrix(0.95065084,0.31026276,-0.31026276,0.95065084,0,0)"
        sodipodi:linespacing="125%"
        id="text3893"
-       y="301.06613"
-       x="-182.45068"
+       y="301.48782"
+       x="-215.97423"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        xml:space="preserve"
        inkscape:export-filename="/home/ewgeni/dev/work/REG/DAL/reosurces/components.png"
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90"><tspan
          style="font-size:28px"
-         y="301.06613"
-         x="-182.45068"
+         y="301.48782"
+         x="-215.97423"
          id="tspan3895"
-         sodipodi:role="line">0..n                   provide</tspan></text>
+         sodipodi:role="line">0..n            provides</tspan></text>
     <rect
        style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:2.12995028;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        id="rect5229-69-4-9"
@@ -533,7 +536,7 @@
            id="tspan3164">OperationMetaData</tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="M 370.22516,443.74103 645.9883,378.08962"
+       d="M 370.24639,443.7198 649.81951,376.18463"
        id="path4011"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="3"
@@ -550,8 +553,8 @@
        inkscape:export-xdpi="90"
        inkscape:export-ydpi="90" />
     <path
-       style="fill:none;stroke:#000000;stroke-width:1.65597105;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#Arrow2Lstart);marker-mid:none"
-       d="m 673.5033,751.33749 -174.65996,0"
+       style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#Arrow2Lstart);marker-mid:none"
+       d="m 675.29525,751.33749 -218.54684,0"
        id="path4186"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="3"
@@ -561,7 +564,7 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="515.09662"
+       x="465.09662"
        y="741.23523"
        id="text4188"
        sodipodi:linespacing="125%"
@@ -570,16 +573,16 @@
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan4190"
-         x="515.09662"
+         x="465.09662"
          y="741.23523"
-         style="font-size:28px">receive</tspan><tspan
+         style="font-size:28px">receives</tspan><tspan
          sodipodi:role="line"
-         x="515.09662"
+         x="465.09662"
          y="776.23523"
          style="font-size:28px"
          id="tspan5732">property</tspan><tspan
          sodipodi:role="line"
-         x="515.09662"
+         x="465.09662"
          y="811.23523"
          style="font-size:28px"
          id="tspan4192">change</tspan></text>
@@ -606,7 +609,7 @@
        id="rect5229-69-4-0"
        width="423.47006"
        height="103.42802"
-       x="-574.38489"
+       x="-586.38489"
        y="703.66333"
        inkscape:export-filename="/home/ewgeni/dev/work/REG/DAL/reosurces/components.png"
        inkscape:export-xdpi="90"
@@ -614,44 +617,58 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="-557.01202"
+       x="-569.01202"
        y="770.07599"
        id="text3166"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="-557.01202"
+         x="-569.01202"
          y="770.07599"
          id="tspan3168"><tspan
-           x="-557.01202"
+           x="-569.01202"
            y="770.07599"
            id="tspan3170">Device user bundle</tspan></tspan></text>
-    <rect
-       inkscape:export-ydpi="90"
-       inkscape:export-xdpi="90"
-       inkscape:export-filename="/home/ewgeni/dev/work/REG/8th.release/components.png"
-       style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.05188036;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       id="rect5229-69-4-0-8"
-       width="483.88504"
-       height="103.23383"
-       x="13.184372"
-       y="705.7807" />
+    <g
+       id="g4091"
+       transform="translate(-50,0)">
+      <rect
+         y="715.8822"
+         x="20.697142"
+         height="103.23383"
+         width="483.88504"
+         id="rect5229-69-4-0-8-6"
+         style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:3.05188036;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         inkscape:export-filename="/home/ewgeni/dev/work/REG/DAL/reosurces/components.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+      <rect
+         y="705.7807"
+         x="13.184372"
+         height="103.23383"
+         width="483.88504"
+         id="rect5229-69-4-0-8"
+         style="fill:#ffffff;fill-opacity:1;stroke:#000000;stroke-width:3.05188036;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+         inkscape:export-filename="/home/ewgeni/dev/work/REG/8th.release/components.png"
+         inkscape:export-xdpi="90"
+         inkscape:export-ydpi="90" />
+    </g>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="44.03315"
+       x="-5.9668503"
        y="772.30975"
        id="text3172"
        sodipodi:linespacing="125%"><tspan
          sodipodi:role="line"
-         x="44.03315"
+         x="-5.9668503"
          y="772.30975"
          id="tspan3174"><tspan
-           x="44.03315"
+           x="-5.9668503"
            y="772.30975"
            id="tspan3176">Function user bundle</tspan></tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m -359.6083,498.79257 -2.44989,204.87677"
+       d="m -377.6083,498.79257 -2.44989,204.87677"
        id="path4113"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="3"
@@ -660,7 +677,7 @@
        inkscape:export-ydpi="90" />
     <path
        style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
-       d="m 208.0954,498.79464 -2.0282,202.0384"
+       d="m 208.08909,498.80095 -2.01558,205.87821"
        id="path4131"
        inkscape:connector-type="polyline"
        inkscape:connector-curvature="3"
@@ -670,8 +687,8 @@
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="-353.59402"
-       y="624.0575"
+       x="-371.59402"
+       y="589.29352"
        id="text4133"
        sodipodi:linespacing="125%"
        inkscape:export-filename="/home/ewgeni/dev/work/REG/DAL/reosurces/components.png"
@@ -679,14 +696,19 @@
        inkscape:export-ydpi="90"><tspan
          sodipodi:role="line"
          id="tspan4135"
-         x="-353.59402"
-         y="624.0575"
-         style="font-size:28px">find</tspan></text>
+         x="-371.59402"
+         y="589.29352"
+         style="font-size:28px">finds,</tspan><tspan
+         sodipodi:role="line"
+         x="-371.59402"
+         y="624.29352"
+         style="font-size:28px"
+         id="tspan3105">manages</tspan></text>
     <text
        xml:space="preserve"
        style="font-size:40px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
        x="218.43655"
-       y="571.79352"
+       y="587.79352"
        id="text4137"
        sodipodi:linespacing="125%"
        inkscape:export-filename="/home/ewgeni/dev/work/REG/DAL/reosurces/components.png"
@@ -695,18 +717,18 @@
          sodipodi:role="line"
          id="tspan4139"
          x="218.43655"
-         y="571.79352"
-         style="font-size:28px">find,</tspan><tspan
+         y="587.79352"
+         style="font-size:28px">finds,</tspan><tspan
          sodipodi:role="line"
          x="218.43655"
-         y="606.79352"
+         y="622.79352"
          style="font-size:28px"
-         id="tspan4145">get property value,</tspan><tspan
+         id="tspan4145">gets property value,</tspan><tspan
          sodipodi:role="line"
          x="218.43655"
-         y="641.79352"
+         y="657.79352"
          style="font-size:28px"
-         id="tspan4143">execute operation</tspan></text>
+         id="tspan4143">executes operation</tspan></text>
     <path
        style="fill:none;stroke:#000000;stroke-width:2;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
        d="M 46.767293,135.44394 -250.8181,134.8434"
@@ -814,15 +836,6 @@
            id="tspan3200">EventHandler</tspan></tspan></text>
     <path
        style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.13854587;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0"
-       d="m -243.98557,507.3106 -70.50389,0 -1.06824,0 71.57213,-73.05635 z"
-       id="rect5653"
-       inkscape:connector-curvature="0"
-       sodipodi:nodetypes="ccccc"
-       inkscape:export-filename="/home/ewgeni/dev/work/REG/DAL/reosurces/components.png"
-       inkscape:export-xdpi="90"
-       inkscape:export-ydpi="90" />
-    <path
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.13854587;stroke-miterlimit:4;stroke-opacity:1;stroke-dashoffset:0"
        d="m 375.19732,505.04249 -70.50389,0 -1.06824,0 71.57213,-73.05635 z"
        id="rect5653-2"
        inkscape:connector-curvature="0"
@@ -858,5 +871,41 @@
            y="171.64998"
            style="font-weight:bold;-inkscape-font-specification:Sans Bold"
            id="tspan3212">FunctionEvent</tspan></tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:48px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="426.63614"
+       y="125.29207"
+       id="text4087"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4089"
+         x="426.63614"
+         y="125.29207"
+         style="font-size:28px">0..n</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:48px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="-370.87537"
+       y="534.28503"
+       id="text4087-7"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4089-0"
+         x="-370.87537"
+         y="534.28503"
+         style="font-size:28px">0..n</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:48px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="217.21098"
+       y="534.21124"
+       id="text4087-7-2"
+       sodipodi:linespacing="125%"><tspan
+         sodipodi:role="line"
+         id="tspan4089-0-3"
+         x="217.21098"
+         y="534.21124"
+         style="font-size:28px">0..n</tspan></text>
   </g>
 </svg>

@@ -124,7 +124,9 @@ public interface PropertyMetadata {
 	 * missing for function operation parameters. It doesn't depend on the given
 	 * unit.</li>
 	 * <li>{@link #UNITS} - doesn't depend on the given unit.</li>
-	 * <li>custom key - can depend on the unit.</li>
+	 * <li>custom key - can depend on the unit. Organizations that want to use
+	 * custom keys that do not clash with OSGi Alliance defined should prefix
+	 * their keys in own namespace.</li>
 	 * </ul>
 	 * 
 	 * @param unit The unit to align the metadata if it's applicable. It can be

@@ -44,8 +44,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * <p>
  * The name of the permission is a filter based. See OSGi Core Specification,
  * Filter Based Permissions. The filter gives an access to all device service
- * properties. The service property names are case insensitive. The filter
- * attribute names are processed in a case insensitive manner.
+ * properties. Filter attribute names are processed in a case sensitive manner.
  */
 public final class DevicePermission extends BasicPermission {
 

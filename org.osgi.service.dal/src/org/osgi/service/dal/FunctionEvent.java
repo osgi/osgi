@@ -34,7 +34,7 @@ import org.osgi.service.event.Event;
  * property value type must be a subclass of FunctionData.</li>
  * </ul>
  */
-public final class FunctionEvent extends Event {
+public class FunctionEvent extends Event {
 
 	/**
 	 * Represents the event package. That constant can be useful for the event

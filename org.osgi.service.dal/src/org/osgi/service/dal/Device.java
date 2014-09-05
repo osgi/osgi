@@ -153,10 +153,10 @@ public interface Device {
 	public static final String	SERVICE_DESCRIPTION							= "dal.device.description";
 
 	/**
-	 * Device status indicates that the device is removed from the network. That
-	 * status must be set as the last device status and after that the device
-	 * service can be unregistered from the service registry. It can be used as
-	 * a value of {@link #SERVICE_STATUS} service property.
+	 * Device status indicates that the device has been removed from the
+	 * network. That status must be set as the last device status and after that
+	 * the device service can be unregistered from the service registry. It can
+	 * be used as a value of {@link #SERVICE_STATUS} service property.
 	 */
 	public static final Integer	STATUS_REMOVED								= new Integer(1);
 
@@ -169,7 +169,8 @@ public interface Device {
 
 	/**
 	 * Device status indicates that the device is currently available for
-	 * operations. It can be used as a value of {@link #SERVICE_STATUS} service
+	 * operations. The recent communication with the device has been passed
+	 * through. It can be used as a value of {@link #SERVICE_STATUS} service
 	 * property.
 	 */
 	public static final Integer	STATUS_ONLINE								= new Integer(3);
