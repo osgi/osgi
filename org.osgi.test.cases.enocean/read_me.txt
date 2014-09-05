@@ -34,8 +34,8 @@ named:
 - and org.osgi.test.cases.enocean.SignatureTests.
 
 BaseTests contains the following tests:
-- testRPC, tests RPC sending and receiving. 2 message examples mock messages 
-of an EnOcean temperature sensor.
+- testRPC, tests RPC sending and receiving, i.e. insert an EnOcean temperature 
+sensor device, and test a RPC invocation on this device.
 - testInterfaceExceptions, tests that common errors cases are properly handled 
 (i.e. that the relevant exceptions are thrown).
 - testUseOfDescriptions, tests that a properly set profile ID in a raw 
