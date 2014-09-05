@@ -37,7 +37,7 @@ public final class HttpWhiteboardConstants {
 	public static final String	HTTP_WHITEBOARD_DEFAUT_CONTEXT_NAME		= "default";
 
 	/**
-	 * Service property specifying the name(s) of an
+	 * Service property specifying the name of an
 	 * {@link org.osgi.service.http.context.ServletContextHelper} service.
 	 * 
 	 * <p>
@@ -54,10 +54,9 @@ public final class HttpWhiteboardConstants {
 	 * 
 	 * <p>
 	 * For {@link org.osgi.service.http.context.ServletContextHelper} services,
-	 * the value of this service property must be of type {@code String},
-	 * {@code String[]}, or {@code Collection<String>}. Each value must follow
-	 * the "symbolic-name" specification from Section 1.3.2 of the OSGi Core
-	 * Specification.
+	 * the value of this service property must be of type {@code String}. The
+	 * value must follow the "symbolic-name" specification from Section 1.3.2 of
+	 * the OSGi Core Specification.
 	 * 
 	 * @see #HTTP_WHITEBOARD_CONTEXT_PATH
 	 * @see #HTTP_WHITEBOARD_CONTEXT_SELECT

@@ -71,7 +71,7 @@ import org.osgi.framework.Bundle;
  * service property}.
  * 
  * <p>
- * A context can be registered with the
+ * A context is registered with the
  * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_PATH
  * service property} to define a path under which all services registered with
  * this context are reachable.

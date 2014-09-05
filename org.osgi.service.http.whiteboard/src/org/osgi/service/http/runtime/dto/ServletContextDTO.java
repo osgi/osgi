@@ -31,10 +31,10 @@ public class ServletContextDTO extends DTO {
 	/**
 	 * The names of the HTTP context.
 	 * 
-	 * An array of the names the corresponding
-	 * {@link org.osgi.service.http.context.ServletContextHelper} is used for.
+	 * The name of the corresponding
+	 * {@link org.osgi.service.http.context.ServletContextHelper}.
 	 */
-	public String[]				names;
+	public String				name;
 
 	/**
 	 * The context name of the servlet context.

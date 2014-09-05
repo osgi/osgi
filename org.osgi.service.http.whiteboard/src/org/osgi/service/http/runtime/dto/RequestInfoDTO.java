@@ -36,25 +36,24 @@ public class RequestInfoDTO extends DTO {
 	public long		servletContextId;
 	
 	/**
-	 * The filters processing this request.
+	 * The filters processing this request. If no filters are called for
+	 * processing this request, {@code null} is returned.
 	 */
 	public FilterDTO[] filterDTOs;
 	
 	/**
-	 * The servlet processing this request. 
-	 * If the request is processed by a servlet, this field
-	 * points to the DTO of the servlet. If the request is
-	 * processed by another type of component like a resource, this
-	 * field is null.
+	 * The servlet processing this request. If the request is processed by a
+	 * servlet, this field points to the DTO of the servlet. If the request is
+	 * processed by another type of component like a resource, this field is
+	 * {@code null}.
 	 */
 	public ServletDTO servletDTO;
 
 	/**
-	 * The resource processing this request. 
-	 * If the request is processed by a resource, this field
-	 * points to the DTO of the resource. If the request is
-	 * processed by another type of component like a servlet, this
-	 * field is null.
+	 * The resource processing this request. If the request is processed by a
+	 * resource, this field points to the DTO of the resource. If the request is
+	 * processed by another type of component like a servlet, this field is
+	 * {@code null}.
 	 */
 	public ResourceDTO resourceDTO;
 }
