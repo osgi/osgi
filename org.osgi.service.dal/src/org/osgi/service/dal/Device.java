@@ -32,7 +32,7 @@ public interface Device {
 	 * 
 	 * @see org.osgi.service.device.Constants#DEVICE_CATEGORY
 	 */
-	public static final String	DEVICE_CATEGORY								= "DAL";
+	public static final String	DEVICE_CATEGORY							= "DAL";
 
 	/**
 	 * The service property value contains the device unique identifier. It's a
@@ -48,7 +48,7 @@ public interface Device {
 	 * <p>
 	 * device-id - device unique identifier in the scope of the driver
 	 */
-	public static final String	SERVICE_UID									= "dal.device.UID";
+	public static final String	SERVICE_UID								= "dal.device.UID";
 
 	/**
 	 * The service property value contains the reference device unique
@@ -57,20 +57,20 @@ public interface Device {
 	 * relationships between the devices. For example, the ZigBee controller can
 	 * have a reference to the USB dongle.
 	 */
-	public static final String	SERVICE_REFERENCE_UIDS						= "dal.device.reference.UIDs";
+	public static final String	SERVICE_REFERENCE_UIDS					= "dal.device.reference.UIDs";
 
 	/**
 	 * The service property value contains the device driver name. For example,
 	 * ZigBee, Z-Wave, Bluetooth etc. It's a mandatory property. The value type
 	 * is {@code java.lang.String}.
 	 */
-	public static final String	SERVICE_DRIVER								= "dal.device.driver";
+	public static final String	SERVICE_DRIVER							= "dal.device.driver";
 
 	/**
 	 * The service property value contains the device name. It's an optional
 	 * property. The value type is {@code java.lang.String}.
 	 */
-	public static final String	SERVICE_NAME								= "dal.device.name";
+	public static final String	SERVICE_NAME							= "dal.device.name";
 
 	/**
 	 * The service property value contains the device status. It's a mandatory
@@ -85,7 +85,7 @@ public interface Device {
 	 * <li> {@link #STATUS_NOT_CONFIGURED}</li>
 	 * </ul>
 	 */
-	public static final String	SERVICE_STATUS								= "dal.device.status";
+	public static final String	SERVICE_STATUS							= "dal.device.status";
 
 	/**
 	 * The service property value contains the device status detail. It holds
@@ -97,60 +97,60 @@ public interface Device {
 	 * {@link #STATUS_DETAIL_INITIALIZING}.</li>
 	 * <li>negative values i.e. < 0 - those values contain errors related to the
 	 * current status. Examples:
-	 * {@link #STATUS_DETAIL_CONFIGURATION_NOT_APPLIED},
-	 * {@link #STATUS_DETAIL_DEVICE_BROKEN} and
-	 * {@link #STATUS_DETAIL_DEVICE_COMMUNICATION_ERROR}.</li>
+	 * {@link #STATUS_DETAIL_CONFIGURATION_UNAPPLIED},
+	 * {@link #STATUS_DETAIL_BROKEN} and
+	 * {@link #STATUS_DETAIL_COMMUNICATION_ERROR}.</li>
 	 * </ul>
 	 */
-	public static final String	SERVICE_STATUS_DETAIL						= "dal.device.status.detail";
+	public static final String	SERVICE_STATUS_DETAIL					= "dal.device.status.detail";
 
 	/**
 	 * The service property value contains the device hardware vendor. It's an
 	 * optional property. The value type is {@code java.lang.String}.
 	 */
-	public static final String	SERVICE_HARDWARE_VENDOR						= "dal.device.hardware.vendor";
+	public static final String	SERVICE_HARDWARE_VENDOR					= "dal.device.hardware.vendor";
 
 	/**
 	 * The service property value contains the device hardware version. It's an
 	 * optional property. The value type is {@code java.lang.String}.
 	 */
-	public static final String	SERVICE_HARDWARE_VERSION					= "dal.device.hardware.version";
+	public static final String	SERVICE_HARDWARE_VERSION				= "dal.device.hardware.version";
 
 	/**
 	 * The service property value contains the device firmware vendor. It's an
 	 * optional property. The value type is {@code java.lang.String}.
 	 */
-	public static final String	SERVICE_FIRMWARE_VENDOR						= "dal.device.firmware.vendor";
+	public static final String	SERVICE_FIRMWARE_VENDOR					= "dal.device.firmware.vendor";
 
 	/**
 	 * The service property value contains the device firmware version. It's an
 	 * optional property. The value type is {@code java.lang.String}.
 	 */
-	public static final String	SERVICE_FIRMWARE_VERSION					= "dal.device.firmware.version";
+	public static final String	SERVICE_FIRMWARE_VERSION				= "dal.device.firmware.version";
 
 	/**
 	 * The service property value contains the device types like DVD, TV etc.
 	 * It's an optional property. The value type is {@code java.lang.String[]}.
 	 */
-	public static final String	SERVICE_TYPES								= "dal.device.types";
+	public static final String	SERVICE_TYPES							= "dal.device.types";
 
 	/**
 	 * The service property value contains the device model. It's an optional
 	 * property. The value type is {@code java.lang.String}.
 	 */
-	public static final String	SERVICE_MODEL								= "dal.device.model";
+	public static final String	SERVICE_MODEL							= "dal.device.model";
 
 	/**
 	 * The service property value contains the device serial number. It's an
 	 * optional property. The value type is {@code java.lang.String}.
 	 */
-	public static final String	SERVICE_SERIAL_NUMBER						= "dal.device.serial.number";
+	public static final String	SERVICE_SERIAL_NUMBER					= "dal.device.serial.number";
 
 	/**
 	 * The service property value contains the device description. It's an
 	 * optional property. The value type is {@code java.lang.String}.
 	 */
-	public static final String	SERVICE_DESCRIPTION							= "dal.device.description";
+	public static final String	SERVICE_DESCRIPTION						= "dal.device.description";
 
 	/**
 	 * Device status indicates that the device has been removed from the
@@ -158,14 +158,14 @@ public interface Device {
 	 * the device service can be unregistered from the service registry. It can
 	 * be used as a value of {@link #SERVICE_STATUS} service property.
 	 */
-	public static final Integer	STATUS_REMOVED								= new Integer(1);
+	public static final Integer	STATUS_REMOVED							= new Integer(1);
 
 	/**
 	 * Device status indicates that the device is currently not available for
 	 * operations. It can be used as a value of {@link #SERVICE_STATUS} service
 	 * property.
 	 */
-	public static final Integer	STATUS_OFFLINE								= new Integer(2);
+	public static final Integer	STATUS_OFFLINE							= new Integer(2);
 
 	/**
 	 * Device status indicates that the device is currently available for
@@ -173,14 +173,14 @@ public interface Device {
 	 * through. It can be used as a value of {@link #SERVICE_STATUS} service
 	 * property.
 	 */
-	public static final Integer	STATUS_ONLINE								= new Integer(3);
+	public static final Integer	STATUS_ONLINE							= new Integer(3);
 
 	/**
 	 * Device status indicates that the device is currently busy with an
 	 * operation. It can be used as a value of {@link #SERVICE_STATUS} service
 	 * property.
 	 */
-	public static final Integer	STATUS_PROCESSING							= new Integer(4);
+	public static final Integer	STATUS_PROCESSING						= new Integer(4);
 
 	/**
 	 * Device status indicates that the device is currently not initialized.
@@ -188,7 +188,7 @@ public interface Device {
 	 * connected. The device can be initialized later when it's awakened. It can
 	 * be used as a value of {@link #SERVICE_STATUS} service property.
 	 */
-	public static final Integer	STATUS_NOT_INITIALIZED						= new Integer(5);
+	public static final Integer	STATUS_NOT_INITIALIZED					= new Integer(5);
 
 	/**
 	 * Device status indicates that the device is currently not configured. The
@@ -196,14 +196,14 @@ public interface Device {
 	 * the network. It can be used as a value of {@link #SERVICE_STATUS} service
 	 * property.
 	 */
-	public static final Integer	STATUS_NOT_CONFIGURED						= new Integer(6);
+	public static final Integer	STATUS_NOT_CONFIGURED					= new Integer(6);
 
 	/**
 	 * Device status detail indicates that the device is currently connecting to
 	 * the network. It can be used as a value of {@link #SERVICE_STATUS_DETAIL}
 	 * service property. The device status must be {@link #STATUS_PROCESSING}.
 	 */
-	public static final Integer	STATUS_DETAIL_CONNECTING					= new Integer(1);
+	public static final Integer	STATUS_DETAIL_CONNECTING				= new Integer(1);
 
 	/**
 	 * Device status detail indicates that the device is currently in process of
@@ -211,14 +211,14 @@ public interface Device {
 	 * {@link #SERVICE_STATUS_DETAIL} service property. The device status must
 	 * be {@link #STATUS_PROCESSING}.
 	 */
-	public static final Integer	STATUS_DETAIL_INITIALIZING					= new Integer(2);
+	public static final Integer	STATUS_DETAIL_INITIALIZING				= new Integer(2);
 
 	/**
 	 * Device status detail indicates that the device is leaving the network. It
 	 * can be used as a value of {@link #SERVICE_STATUS_DETAIL} service
 	 * property. The device status must be {@link #STATUS_PROCESSING}.
 	 */
-	public static final Integer	STATUS_DETAIL_REMOVING						= new Integer(3);
+	public static final Integer	STATUS_DETAIL_REMOVING					= new Integer(3);
 
 	/**
 	 * Device status detail indicates that the device configuration is not
@@ -226,14 +226,14 @@ public interface Device {
 	 * service property. The device status must be
 	 * {@link #STATUS_NOT_CONFIGURED}.
 	 */
-	public static final Integer	STATUS_DETAIL_CONFIGURATION_NOT_APPLIED		= new Integer(-1);
+	public static final Integer	STATUS_DETAIL_CONFIGURATION_UNAPPLIED	= new Integer(-1);
 
 	/**
 	 * Device status detail indicates that the device is broken. It can be used
 	 * as a value of {@link #SERVICE_STATUS_DETAIL} service property. The device
 	 * status must be {@link #STATUS_OFFLINE}.
 	 */
-	public static final Integer	STATUS_DETAIL_DEVICE_BROKEN					= new Integer(-2);
+	public static final Integer	STATUS_DETAIL_BROKEN					= new Integer(-2);
 
 	/**
 	 * Device status detail indicates that the device communication is
@@ -241,7 +241,7 @@ public interface Device {
 	 * service property. The device status must be {@link #STATUS_ONLINE} or
 	 * {@link #STATUS_NOT_INITIALIZED}.
 	 */
-	public static final Integer	STATUS_DETAIL_DEVICE_COMMUNICATION_ERROR	= new Integer(-3);
+	public static final Integer	STATUS_DETAIL_COMMUNICATION_ERROR		= new Integer(-3);
 
 	/**
 	 * Device status detail indicates that the device doesn't provide enough
@@ -249,7 +249,7 @@ public interface Device {
 	 * {@link #SERVICE_STATUS_DETAIL} service property. The device status must
 	 * be {@link #STATUS_NOT_INITIALIZED}.
 	 */
-	public static final Integer	STATUS_DETAIL_DEVICE_DATA_INSUFFICIENT		= new Integer(-4);
+	public static final Integer	STATUS_DETAIL_DATA_INSUFFICIENT			= new Integer(-4);
 
 	/**
 	 * Device status detail indicates that the device is not accessible and
@@ -257,21 +257,21 @@ public interface Device {
 	 * {@link #SERVICE_STATUS_DETAIL} service property. The device status must
 	 * be {@link #STATUS_OFFLINE}.
 	 */
-	public static final Integer	STATUS_DETAIL_DEVICE_NOT_ACCESSIBLE			= new Integer(-5);
+	public static final Integer	STATUS_DETAIL_NOT_ACCESSIBLE			= new Integer(-5);
 
 	/**
 	 * Device status detail indicates that the device cannot be configured. It
 	 * can be used as a value of {@link #SERVICE_STATUS_DETAIL} service
 	 * property. The device status must be {@link #STATUS_NOT_CONFIGURED}.
 	 */
-	public static final Integer	STATUS_DETAIL_ERROR_APPLYING_CONFIGURATION	= new Integer(-6);
+	public static final Integer	STATUS_DETAIL_CONFIGURATION_ERROR		= new Integer(-6);
 
 	/**
 	 * Device status detail indicates that the device is in duty cycle. It can
 	 * be used as a value of {@link #SERVICE_STATUS_DETAIL} service property.
 	 * The device status must be {@link #STATUS_OFFLINE}.
 	 */
-	public static final Integer	STATUS_DETAIL_IN_DUTY_CYCLE					= new Integer(-7);
+	public static final Integer	STATUS_DETAIL_DUTY_CYCLE				= new Integer(-7);
 
 	/**
 	 * Returns the current value of the specified property. The method will

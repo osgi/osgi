@@ -206,7 +206,7 @@ device-id – device unique identifier in the scope of the driver</programlistin
             for the current status like
             <code>Device.STATUS_DETAIL_CONNECTING</code>.
             Negative values indicate errors related to the current device status
-            like <code>Device.STATUS_DETAIL_DEVICE_BROKEN</code>.
+            like <code>Device.STATUS_DETAIL_BROKEN</code>.
             The list with defined status details is:
             <itemizedlist>
               <listitem>
@@ -233,20 +233,20 @@ device-id – device unique identifier in the scope of the driver</programlistin
                 The device status must be <code>STATUS_PROCESSING</code>.
               </listitem>
               <listitem>
-                <emphasis>Device.STATUS_DETAIL_CONFIGURATION_NOT_APPLIED</emphasis> –
+                <emphasis>Device.STATUS_DETAIL_CONFIGURATION_UNAPPLIED</emphasis> –
                 The reason for the current device status is that the device
                 configuration is not applied.
                 It indicates an error with a negative value <code>-1</code>.
                 The device status must be <code>STATUS_NOT_CONFIGURED</code>.
               </listitem>
               <listitem>
-                <emphasis>Device.STATUS_DETAIL_DEVICE_BROKEN</emphasis> –
+                <emphasis>Device.STATUS_DETAIL_BROKEN</emphasis> –
                 The reason for the offline device is that the device is broken.
                 It indicates an error with a negative value <code>-2</code>.
                 The device status must be <code>STATUS_OFFLINE</code>.
               </listitem>
               <listitem>
-                <emphasis>Device.STATUS_DETAIL_DEVICE_COMMUNICATION_ERROR</emphasis> –
+                <emphasis>Device.STATUS_DETAIL_COMMUNICATION_ERROR</emphasis> –
                 The reason for the current device status is that the device
                 communication is problematic.
                 It indicates an error with a negative value <code>-3</code>.
@@ -254,28 +254,28 @@ device-id – device unique identifier in the scope of the driver</programlistin
                 <code>STATUS_NOT_INITIALIZED</code>.
               </listitem>
               <listitem>
-                <emphasis>Device.STATUS_DETAIL_DEVICE_DATA_INSUFFICIENT</emphasis> –
+                <emphasis>Device.STATUS_DETAIL_DATA_INSUFFICIENT</emphasis> –
                 The reason for the uninitialized device is that the device doesn't
                 provide enough information and cannot be determined.
                 It indicates an error with a negative value <code>-4</code>.
                 The device status must be <code>STATUS_NOT_INITIALIZED</code>.
               </listitem>
               <listitem>
-                <emphasis>Device.STATUS_DETAIL_DEVICE_NOT_ACCESSIBLE</emphasis> –
+                <emphasis>Device.STATUS_DETAIL_NOT_ACCESSIBLE</emphasis> –
                 The reason for the offline device is that the device is not accessible
                 and further communication is not possible.
                 It indicates an error with a negative value <code>-5</code>.
                 The device status must be <code>STATUS_OFFLINE</code>.
               </listitem>
               <listitem>
-                <emphasis>Device.STATUS_DETAIL_ERROR_APPLYING_CONFIGURATION</emphasis>
+                <emphasis>Device.STATUS_DETAIL_CONFIGURATION_ERROR</emphasis>
                 – The reason for the current device status is that 
                 the device cannot be configured.
                 It indicates an error with a negative value <code>-6</code>.
                 The device status must be <code>STATUS_NOT_CONFIGURED</code>.
               </listitem>
               <listitem>
-                <emphasis>Device.STATUS_DETAIL_IN_DUTY_CYCLE</emphasis> –
+                <emphasis>Device.STATUS_DETAIL_DUTY_CYCLE</emphasis> –
                 The reason for the offline device is that the device is in duty cycle.
                 It indicates an error with a negative value <code>-7</code>.
                 The device status must be <code>STATUS_OFFLINE</code>.

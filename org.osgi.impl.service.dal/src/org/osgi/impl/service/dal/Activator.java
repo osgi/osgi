@@ -71,7 +71,7 @@ public final class Activator implements BundleActivator {
 				deviceProps.put(Device.SERVICE_STATUS, Device.STATUS_ONLINE);
 			} else {
 				deviceProps.put(Device.SERVICE_STATUS, Device.STATUS_OFFLINE);
-				deviceProps.put(Device.SERVICE_STATUS_DETAIL, Device.STATUS_DETAIL_DEVICE_BROKEN);
+				deviceProps.put(Device.SERVICE_STATUS_DETAIL, Device.STATUS_DETAIL_BROKEN);
 			}
 			deviceProps.put(Device.SERVICE_STATUS, Device.STATUS_ONLINE);
 			deviceProps.put(Device.SERVICE_UID, deviceUID);
