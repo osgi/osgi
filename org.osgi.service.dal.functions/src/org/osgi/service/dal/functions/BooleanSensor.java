@@ -24,10 +24,7 @@ import org.osgi.service.dal.functions.data.BooleanData;
  * {@code BooleanSensor} function provides boolean sensor monitoring. It reports
  * its state when an important event is available. The state is accessible with
  * {@link #getData()} getter. There are no operations.
- * <p>
- * As an example, the function is easily mappable to ZigBee Occupancy Sensing
- * cluster and Z-Wave Binary Sensor command class.
- * 
+ * <p> 
  * The sensor type can be:
  * <ul>
  * <li>{@link Types#LIGHT}</li>

@@ -25,11 +25,6 @@ import org.osgi.service.dal.functions.data.LevelData;
  * reports its state when an important event is available. The state is
  * accessible with {@link #getData()} getter. There are no operations.
  * <p>
- * As an example, the function is easily mappable to ZigBee Illuminance
- * Measurement, Temperature Measurement, Pressure Measurement, Flow Measurement
- * and Relative Humidity Measurement cluster and Z-Wave Multilevel Sensor
- * command class.
- * 
  * The sensor type can be:
  * <ul>
  * <li>{@link Types#LIGHT}</li>

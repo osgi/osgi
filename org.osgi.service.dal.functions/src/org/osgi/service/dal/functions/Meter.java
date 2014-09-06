@@ -34,9 +34,6 @@ import org.osgi.service.dal.functions.data.LevelData;
  * {@link #resetTotal()}.</li>
  * </ul>
  * <p>
- * As an example, the function is easily mappable to ZigBee Simple Metering
- * cluster and Z-Wave Meter command class.
- * 
  * The sensor type can be:
  * <ul>
  * <li>{@link Types#PRESSURE}</li>

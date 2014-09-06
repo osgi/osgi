@@ -28,9 +28,6 @@ import org.osgi.service.dal.functions.data.BooleanData;
  * {@link #setTrue()} method and can be set to {@code false} value with
  * {@link #setFalse()} method.
  * <p>
- * As an example, the function is easily mappable to ZigBee OnOff cluster and
- * Z-Wave Binary Switch command class.
- * 
  * The control type can be:
  * <ul>
  * <li>{@link Types#LIGHT}</li>

@@ -27,9 +27,6 @@ import org.osgi.service.dal.functions.data.LevelData;
  * {@link #setData(BigDecimal)} setter and {@link #setData(BigDecimal, String)}
  * setter.
  * <p>
- * As an example, the function is easily mappable to ZigBee Level Control and
- * Z-Wave Multilevel Switch command class.
- * 
  * The control type can be:
  * <ul>
  * <li>{@link Types#LIGHT}</li>
