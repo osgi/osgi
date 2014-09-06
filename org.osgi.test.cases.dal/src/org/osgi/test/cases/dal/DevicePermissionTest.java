@@ -73,7 +73,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 		checkInvalidAction(null, NullPointerException.class);
 		checkInvalidAction("", IllegalArgumentException.class);
 		checkInvalidAction(
-				DevicePermission.ACTION_REMOVE + DevicePermission.ACTION_REMOVE, IllegalArgumentException.class);
+				DevicePermission.REMOVE + DevicePermission.REMOVE, IllegalArgumentException.class);
 	}
 
 	/**
@@ -81,8 +81,8 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	 */
 	public void testFilterEquals() {
 		checkEquals(
-				new DevicePermission("*", DevicePermission.ACTION_REMOVE),
-				new DevicePermission("*", DevicePermission.ACTION_REMOVE));
+				new DevicePermission("*", DevicePermission.REMOVE),
+				new DevicePermission("*", DevicePermission.REMOVE));
 	}
 
 	/**
@@ -94,8 +94,8 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 		testDeviceProps.put(Device.SERVICE_UID, "test_device_id");
 		Device testDevice = new TestDevice(testDeviceProps);
 		checkEquals(
-				new DevicePermission(testDevice, DevicePermission.ACTION_REMOVE),
-				new DevicePermission(testDevice, DevicePermission.ACTION_REMOVE));
+				new DevicePermission(testDevice, DevicePermission.REMOVE),
+				new DevicePermission(testDevice, DevicePermission.REMOVE));
 	}
 
 	/**
@@ -104,17 +104,17 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	public void testFilterNotEquals() {
 		String testDeviceId = "test_device_id";
 		DevicePermission filterPermission = new DevicePermission(
-				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.ACTION_REMOVE);
+				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.REMOVE);
 		assertFalse("The device permission is equal to a property permission.",
 				filterPermission.equals(new PropertyPermission("test-property", "read")));
 
 		Map testDeviceProps = new HashMap();
 		testDeviceProps.put(Device.SERVICE_UID, testDeviceId);
 		assertFalse("The device permission with a filter is equal to another one with device instance.",
-				filterPermission.equals(new DevicePermission(new TestDevice(testDeviceProps), DevicePermission.ACTION_REMOVE)));
+				filterPermission.equals(new DevicePermission(new TestDevice(testDeviceProps), DevicePermission.REMOVE)));
 
 		assertFalse("The device permission is equal to another one with different filter.",
-				filterPermission.equals(new DevicePermission("*", DevicePermission.ACTION_REMOVE)));
+				filterPermission.equals(new DevicePermission("*", DevicePermission.REMOVE)));
 	}
 
 	/**
@@ -124,17 +124,17 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 		String testDeviceId = "test_device_id";
 		Map testDeviceProps = new HashMap();
 		testDeviceProps.put(Device.SERVICE_UID, testDeviceId);
-		DevicePermission devicePermission = new DevicePermission(new TestDevice(testDeviceProps), DevicePermission.ACTION_REMOVE);
+		DevicePermission devicePermission = new DevicePermission(new TestDevice(testDeviceProps), DevicePermission.REMOVE);
 		assertFalse("The device permission is equal to a property permission.",
 				devicePermission.equals(new PropertyPermission("test-property", "read")));
 
 		DevicePermission filterPermission = new DevicePermission(
-				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.ACTION_REMOVE);
+				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.REMOVE);
 		assertFalse("The device permission with a device is equal to another one with filter.",
 				devicePermission.equals(filterPermission));
 
 		assertFalse("The device permission is equal to another one with different device.",
-				devicePermission.equals(new DevicePermission(new TestDevice(null), DevicePermission.ACTION_REMOVE)));
+				devicePermission.equals(new DevicePermission(new TestDevice(null), DevicePermission.REMOVE)));
 	}
 
 	/**
@@ -143,9 +143,9 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	public void testFilterHash() {
 		String testDeviceId = "test_device_id";
 		DevicePermission filterPermissionFirst = new DevicePermission(
-				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.ACTION_REMOVE);
+				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.REMOVE);
 		DevicePermission filterPermissionSecond = new DevicePermission(
-				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.ACTION_REMOVE);
+				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.REMOVE);
 		assertEquals("The device permission hash is not correct.",
 				filterPermissionFirst.hashCode(),
 				filterPermissionSecond.hashCode());
@@ -159,9 +159,9 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 		Map testDeviceProps = new HashMap();
 		testDeviceProps.put(Device.SERVICE_UID, testDeviceId);
 		DevicePermission devicePermissionFirst = new DevicePermission(
-				new TestDevice(testDeviceProps), DevicePermission.ACTION_REMOVE);
+				new TestDevice(testDeviceProps), DevicePermission.REMOVE);
 		DevicePermission devicePermissionSecond = new DevicePermission(
-				new TestDevice(testDeviceProps), DevicePermission.ACTION_REMOVE);
+				new TestDevice(testDeviceProps), DevicePermission.REMOVE);
 		assertEquals("The device permission hash is not correct.",
 				devicePermissionFirst.hashCode(),
 				devicePermissionSecond.hashCode());
@@ -176,20 +176,20 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 		Map testDeviceProps = new HashMap();
 		testDeviceProps.put(Device.SERVICE_UID, testDeviceId);
 		DevicePermission devicePermission = new DevicePermission(
-				new TestDevice(testDeviceProps), DevicePermission.ACTION_REMOVE);
+				new TestDevice(testDeviceProps), DevicePermission.REMOVE);
 		DevicePermission filterPermission = new DevicePermission(
-				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.ACTION_REMOVE);
+				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.REMOVE);
 		assertTrue(
 				"The device permission is not implied: " + devicePermission,
 				filterPermission.implies(devicePermission));
 		assertTrue(
 				"The wildcard device permission cannot imply.",
 				(new DevicePermission(
-						"*", DevicePermission.ACTION_REMOVE)).implies(devicePermission));
+						"*", DevicePermission.REMOVE)).implies(devicePermission));
 		assertTrue(
 				"The device permission with wildcard for device UID cannot imply.",
 				(new DevicePermission(
-						'(' + Device.SERVICE_UID + "=*)", DevicePermission.ACTION_REMOVE)).implies(devicePermission));
+						'(' + Device.SERVICE_UID + "=*)", DevicePermission.REMOVE)).implies(devicePermission));
 	}
 
 	/**
@@ -201,9 +201,9 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 		Map testDeviceProps = new HashMap();
 		testDeviceProps.put(Device.SERVICE_UID, testDeviceId);
 		DevicePermission devicePermission = new DevicePermission(
-				new TestDevice(testDeviceProps), DevicePermission.ACTION_REMOVE);
+				new TestDevice(testDeviceProps), DevicePermission.REMOVE);
 		DevicePermission filterPermission = new DevicePermission(
-				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.ACTION_REMOVE);
+				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.REMOVE);
 		assertFalse(
 				"The device permission with device instance must not imply any other permission.",
 				devicePermission.implies(filterPermission));
@@ -213,7 +213,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 		assertFalse(
 				"The device permission with a filter implies another permission with a filter.",
 				filterPermission.implies(new DevicePermission(
-						'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.ACTION_REMOVE)));
+						'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.REMOVE)));
 		assertFalse(
 				"The device permission implies property permission.",
 				filterPermission.implies(new PropertyPermission("test-ptop", "read")));
@@ -228,10 +228,10 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	 */
 	public void testSerialization() throws IOException, ClassNotFoundException {
 		checkSerialization(new DevicePermission(
-				'(' + Device.SERVICE_UID + "=test-id)", DevicePermission.ACTION_REMOVE));
+				'(' + Device.SERVICE_UID + "=test-id)", DevicePermission.REMOVE));
 		checkSerialization(new DevicePermission(
-				'(' + Device.SERVICE_UID + "=*)", DevicePermission.ACTION_REMOVE));
-		checkSerialization(new DevicePermission("*", DevicePermission.ACTION_REMOVE));
+				'(' + Device.SERVICE_UID + "=*)", DevicePermission.REMOVE));
+		checkSerialization(new DevicePermission("*", DevicePermission.REMOVE));
 	}
 
 	/**
@@ -240,7 +240,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	 * @throws IOException In case of I/O error.
 	 */
 	public void testSerializationFail() throws IOException {
-		checkSerializationFail(new DevicePermission(new TestDevice(null), DevicePermission.ACTION_REMOVE));
+		checkSerializationFail(new DevicePermission(new TestDevice(null), DevicePermission.REMOVE));
 	}
 
 	/**
@@ -250,7 +250,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	public void testCollectionAdd() {
 		String testDeviceId = "test_device_id";
 		DevicePermission filterPermission = new DevicePermission(
-				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.ACTION_REMOVE);
+				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.REMOVE);
 		PermissionCollection permCollection = filterPermission.newPermissionCollection();
 		permCollection.add(filterPermission);
 		Enumeration perms = permCollection.elements();
@@ -265,7 +265,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	 * collection.
 	 */
 	public void testCollectionFailAdd() {
-		checkCollectionFailAdd(new DevicePermission(new TestDevice(null), DevicePermission.ACTION_REMOVE));
+		checkCollectionFailAdd(new DevicePermission(new TestDevice(null), DevicePermission.REMOVE));
 		checkCollectionFailAdd(new PropertyPermission("test-prop", "read"));
 	}
 
@@ -277,9 +277,9 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 		Map testDeviceProps = new HashMap();
 		testDeviceProps.put(Device.SERVICE_UID, testDeviceId);
 		DevicePermission devicePermission = new DevicePermission(
-				new TestDevice(testDeviceProps), DevicePermission.ACTION_REMOVE);
+				new TestDevice(testDeviceProps), DevicePermission.REMOVE);
 		DevicePermission filterPermission = new DevicePermission(
-				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.ACTION_REMOVE);
+				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.REMOVE);
 		PermissionCollection permissionCollection = filterPermission.newPermissionCollection();
 		permissionCollection.add(filterPermission);
 		assertTrue(
@@ -287,11 +287,11 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 				permissionCollection.implies(devicePermission));
 
 		permissionCollection.add(
-				new DevicePermission("*", DevicePermission.ACTION_REMOVE));
+				new DevicePermission("*", DevicePermission.REMOVE));
 		assertTrue(
 				"The connection cannot imply the device permission.",
 				permissionCollection.implies(new DevicePermission(
-						new TestDevice(null), DevicePermission.ACTION_REMOVE)));
+						new TestDevice(null), DevicePermission.REMOVE)));
 	}
 
 	/**
@@ -302,9 +302,9 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 		Map testDeviceProps = new HashMap();
 		testDeviceProps.put(Device.SERVICE_UID, testDeviceId);
 		DevicePermission devicePermission = new DevicePermission(
-				new TestDevice(testDeviceProps), DevicePermission.ACTION_REMOVE);
+				new TestDevice(testDeviceProps), DevicePermission.REMOVE);
 		DevicePermission filterPermission = new DevicePermission(
-				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.ACTION_REMOVE);
+				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.REMOVE);
 		PermissionCollection permissionCollection = filterPermission.newPermissionCollection();
 
 		assertFalse("The empty collection must not imply any permission.",
@@ -312,7 +312,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 		permissionCollection.add(
 				new DevicePermission(
 						'(' + Device.SERVICE_UID + '=' + testDeviceId + testDeviceId + ')',
-						DevicePermission.ACTION_REMOVE));
+						DevicePermission.REMOVE));
 		assertFalse("The collection doesn't contain permission to imply the device permission: " + permissionCollection,
 				permissionCollection.implies(devicePermission));
 		assertFalse("The permission collection must not imply property permission.",
@@ -327,7 +327,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	 */
 	public void testCollectionSerialization() throws IOException, ClassNotFoundException {
 		DevicePermission filterPermission = new DevicePermission(
-				'(' + Device.SERVICE_UID + "=test_device_is)", DevicePermission.ACTION_REMOVE);
+				'(' + Device.SERVICE_UID + "=test_device_is)", DevicePermission.REMOVE);
 		PermissionCollection permissionCollection = filterPermission.newPermissionCollection();
 		checkSerialization(permissionCollection);
 
@@ -335,14 +335,14 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 		checkSerialization(permissionCollection);
 
 		permissionCollection.add(new DevicePermission(
-				'(' + Device.SERVICE_UID + "=*)", DevicePermission.ACTION_REMOVE));
+				'(' + Device.SERVICE_UID + "=*)", DevicePermission.REMOVE));
 		checkSerialization(permissionCollection);
 	}
 
 	private void checkCollectionFailAdd(Permission permission) {
 		String testDeviceId = "test_device_id";
 		DevicePermission filterPermission = new DevicePermission(
-				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.ACTION_REMOVE);
+				'(' + Device.SERVICE_UID + '=' + testDeviceId + ')', DevicePermission.REMOVE);
 		PermissionCollection permCollection = filterPermission.newPermissionCollection();
 		try {
 			permCollection.add(permission);
@@ -424,7 +424,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 
 	private void checkInvalidDevice(Device device, Class exceptionClass) {
 		try {
-			new DevicePermission(device, DevicePermission.ACTION_REMOVE);
+			new DevicePermission(device, DevicePermission.REMOVE);
 			fail("The device permission has been built with invalid device: " + device);
 		} catch (RuntimeException re) {
 			assertTrue("Unexpected exception: " + re, exceptionClass.isAssignableFrom(re.getClass()));
@@ -450,7 +450,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 
 	private void checkInvalidFilter(String filter, Class excpetionClass) {
 		try {
-			new DevicePermission(filter, DevicePermission.ACTION_REMOVE);
+			new DevicePermission(filter, DevicePermission.REMOVE);
 			fail("The device permission has been built with invalid filter: " + filter);
 		} catch (RuntimeException re) {
 			assertTrue("Unexpected exception: " + re, excpetionClass.isAssignableFrom(re.getClass()));
@@ -458,21 +458,21 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	}
 
 	private void checkDevice(Device device) {
-		final DevicePermission devicePermission = new DevicePermission(device, DevicePermission.ACTION_REMOVE);
+		final DevicePermission devicePermission = new DevicePermission(device, DevicePermission.REMOVE);
 		assertEquals("The permission filter is not correctly set.",
 				'(' + Device.SERVICE_UID + '=' + device.getServiceProperty(Device.SERVICE_UID) + ')',
 				devicePermission.getName());
 		assertEquals("The permission action is not correctly set.",
-				DevicePermission.ACTION_REMOVE, devicePermission.getActions());
+				DevicePermission.REMOVE, devicePermission.getActions());
 	}
 
 	private void checkFilter(String filter) {
 		final DevicePermission devicePermission = new DevicePermission(
-				filter, DevicePermission.ACTION_REMOVE);
+				filter, DevicePermission.REMOVE);
 		assertEquals("The permission filter is not correctly set.",
 				filter, devicePermission.getName());
 		assertEquals("The permission action is not correctly set.",
-				DevicePermission.ACTION_REMOVE, devicePermission.getActions());
+				DevicePermission.REMOVE, devicePermission.getActions());
 	}
 
 }

@@ -22,19 +22,19 @@ import java.util.Map;
  * Contains metadata about function property or function operation parameter.
  * 
  * The access to the function properties is a bitmap value of
- * {@link #PROPERTY_ACCESS} metadata key. Function properties can be accessed in
+ * {@link #ACCESS} metadata key. Function properties can be accessed in
  * three ways. Any combinations between them are possible:
  * <ul>
  * <li>
- * {@link #PROPERTY_ACCESS_READABLE} - available for all properties, which can
+ * {@link #ACCESS_READABLE} - available for all properties, which can
  * be read. Function must provide a getter method for an access to the property
  * value.</li>
  * <li>
- * {@link #PROPERTY_ACCESS_WRITABLE} - available for all properties, which can
+ * {@link #ACCESS_WRITABLE} - available for all properties, which can
  * be modified. Function must provide a setter method for a modification of the
  * property value.</li>
  * <li>
- * {@link #PROPERTY_ACCESS_EVENTABLE} - available for all properties, which can
+ * {@link #ACCESS_EVENTABLE} - available for all properties, which can
  * report the property value. {@link FunctionEvent}s are sent on property
  * change.</li>
  * </ul>
@@ -46,52 +46,52 @@ public interface PropertyMetadata {
 
 	/**
 	 * Marks the readable function properties. The flag can be used as a part of
-	 * bitmap value of {@link #PROPERTY_ACCESS}. The readable access mandates
+	 * bitmap value of {@link #ACCESS}. The readable access mandates
 	 * function to provide a property getter method.
 	 * 
 	 * @see Function
 	 */
-	public static final int		PROPERTY_ACCESS_READABLE	= 1;
+	public static final int		ACCESS_READABLE	= 1;
 
 	/**
 	 * Marks the writable function properties. The flag can be used as a part of
-	 * bitmap value of {@link #PROPERTY_ACCESS}. The writable access mandates
+	 * bitmap value of {@link #ACCESS}. The writable access mandates
 	 * function to provide a property setter methods.
 	 * 
 	 * @see Function
 	 */
-	public static final int		PROPERTY_ACCESS_WRITABLE	= 2;
+	public static final int		ACCESS_WRITABLE	= 2;
 
 	/**
 	 * Marks the eventable function properties. The flag can be used as a part
-	 * of bitmap value of {@link #PROPERTY_ACCESS}.
+	 * of bitmap value of {@link #ACCESS}.
 	 * 
 	 * @see Function
 	 */
-	public static final int		PROPERTY_ACCESS_EVENTABLE	= 4;
+	public static final int		ACCESS_EVENTABLE	= 4;
 
 	/**
 	 * Metadata key, which value represents the access to the function property.
 	 * The property value is a bitmap of {@code Integer} type. The bitmap can be
 	 * any combination of:
 	 * <ul>
-	 * <li>{@link #PROPERTY_ACCESS_READABLE}</li>
-	 * <li>{@link #PROPERTY_ACCESS_WRITABLE}</li>
-	 * <li>{@link #PROPERTY_ACCESS_EVENTABLE}</li>
+	 * <li>{@link #ACCESS_READABLE}</li>
+	 * <li>{@link #ACCESS_WRITABLE}</li>
+	 * <li>{@link #ACCESS_EVENTABLE}</li>
 	 * </ul>
-	 * For example, value Integer(3) means that the property is readable and
-	 * writable, but not eventable.
+	 * For example, value {@code Integer(3)} means that the property is readable
+	 * and writable, but not eventable.
 	 * <p>
 	 * The property access is available only for function properties and it's
 	 * missing for the operation parameters.
 	 */
-	public static final String	PROPERTY_ACCESS			= "property.access";
+	public static final String	ACCESS				= "access";
 
 	/**
 	 * Metadata key, which value represents the property description. The
 	 * property value type is {@code java.lang.String}.
 	 */
-	public static final String	DESCRIPTION				= "description";
+	public static final String	DESCRIPTION			= "description";
 
 	/**
 	 * Metadata key, which value represents the property supported units. The
@@ -112,7 +112,7 @@ public interface PropertyMetadata {
 	 * allowed. A set of predefined unit symbols are available in {@link Units}
 	 * interface.
 	 */
-	public static final String	UNITS						= "units";
+	public static final String	UNITS				= "units";
 
 	/**
 	 * Returns metadata about the function property or operation parameter. The
@@ -120,7 +120,7 @@ public interface PropertyMetadata {
 	 * {@code java.lang.String} type. Possible keys:
 	 * <ul>
 	 * <li>{@link #DESCRIPTION} - doesn't depend on the given unit.</li>
-	 * <li>{@link #PROPERTY_ACCESS} - available only for function property and
+	 * <li>{@link #ACCESS} - available only for function property and
 	 * missing for function operation parameters. It doesn't depend on the given
 	 * unit.</li>
 	 * <li>{@link #UNITS} - doesn't depend on the given unit.</li>

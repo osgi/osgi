@@ -35,7 +35,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 
 		// check with metadata
 		Map metadata = new HashMap();
-		metadata.put(FunctionData.META_INFO_DESCRIPTION, "test-description");
+		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new BooleanData(Long.MIN_VALUE, metadata, false);
 		assertEquals("The boolean data comparison is wrong!",
 				data,
@@ -73,7 +73,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 
 		// check with metadata
 		Map metadata = new HashMap();
-		metadata.put(FunctionData.META_INFO_DESCRIPTION, "test-description");
+		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new BooleanData(Long.MIN_VALUE, metadata, false);
 		assertEquals(
 				"The boolean data comparison is wrong!",
@@ -107,7 +107,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 
 		// check with metadata
 		Map metadata = new HashMap();
-		metadata.put(FunctionData.META_INFO_DESCRIPTION, "test-description");
+		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new BooleanData(Long.MIN_VALUE, metadata, false);
 		assertEquals(
 				"The boolean data comparison is wrong!",
@@ -139,7 +139,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 
 		// check with metadata
 		Map metadata = new HashMap();
-		metadata.put(FunctionData.META_INFO_DESCRIPTION, "test-description");
+		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		dataMap.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
 		dataMap.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
 		dataMap.put(FunctionData.FIELD_METADATA, metadata);
@@ -174,7 +174,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 
 		// check with metadata
 		Map metadata = new HashMap();
-		metadata.put(FunctionData.META_INFO_DESCRIPTION, "test-description");
+		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new BooleanData(Long.MIN_VALUE, metadata, false);
 		assertEquals("The boolean data hash code is wrong!",
 				data.hashCode(),
@@ -207,7 +207,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 
 		// check with metadata
 		Map metadata = new HashMap();
-		metadata.put(FunctionData.META_INFO_DESCRIPTION, "test-description");
+		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new BooleanData(Long.MIN_VALUE, metadata, false);
 		checkBooleanDataFields(Long.MIN_VALUE, metadata, false, data);
 

@@ -31,8 +31,8 @@ public final class SimulatedKeypad extends SimulatedFunction implements Keypad {
 	static {
 		Map metadata = new HashMap();
 		metadata.put(
-				PropertyMetadata.PROPERTY_ACCESS,
-				new Integer(PropertyMetadata.PROPERTY_ACCESS_EVENTABLE));
+				PropertyMetadata.ACCESS,
+				new Integer(PropertyMetadata.ACCESS_EVENTABLE));
 		PropertyMetadata propMetadata = new PropertyMetadataImpl(
 				metadata, // metadata
 				null,     // resolution

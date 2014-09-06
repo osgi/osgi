@@ -35,7 +35,7 @@ public abstract class FunctionData implements Comparable {
 	 * {@code long}. The constant can be used as a key to
 	 * {@link #FunctionData(Map)}.
 	 */
-	public static final String	FIELD_TIMESTAMP			= "timestamp";
+	public static final String	FIELD_TIMESTAMP	= "timestamp";
 
 	/**
 	 * Represents the metadata field name. The field value is available with
@@ -43,13 +43,13 @@ public abstract class FunctionData implements Comparable {
 	 * {@code Map}. The constant can be used as a key to
 	 * {@link #FunctionData(Map)}.
 	 */
-	public static final String	FIELD_METADATA			= "metadata";
+	public static final String	FIELD_METADATA	= "metadata";
 
 	/**
 	 * Metadata key, which value represents the data description. The property
 	 * value type is {@code java.lang.String}.
 	 */
-	public static final String	META_INFO_DESCRIPTION	= "description";
+	public static final String	DESCRIPTION		= "description";
 
 	/**
 	 * Contains {@code FunctionData} timestamp. The timestamp is the difference
@@ -64,7 +64,7 @@ public abstract class FunctionData implements Comparable {
 	 * Contains {@code FunctionData} metadata. It's dynamic metadata related
 	 * only to this specific value. Possible keys:
 	 * <ul>
-	 * <li>{@link #META_INFO_DESCRIPTION}</li>
+	 * <li>{@link #DESCRIPTION}</li>
 	 * <li>custom key</li>
 	 */
 	public final Map			metadata;
@@ -121,7 +121,7 @@ public abstract class FunctionData implements Comparable {
 	 * Returns {@code FunctionData} metadata. It's dynamic metadata related only
 	 * to this specific value. Possible keys:
 	 * <ul>
-	 * <li>{@link #META_INFO_DESCRIPTION}</li>
+	 * <li>{@link #DESCRIPTION}</li>
 	 * <li>custom key</li>
 	 * 
 	 * @return {@code FunctionData} metadata or {@code null} is there is no

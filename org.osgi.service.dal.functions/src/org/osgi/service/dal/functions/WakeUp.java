@@ -43,7 +43,7 @@ public interface WakeUp extends Function {
 
 	/**
 	 * Specifies the awake property name. The property access type can be
-	 * {@link PropertyMetadata#PROPERTY_ACCESS_EVENTABLE}. If the device is
+	 * {@link PropertyMetadata#ACCESS_EVENTABLE}. If the device is
 	 * awake, it will trigger a property event.
 	 * <p>
 	 * The property value type is {@code BooleanData}. The boolean data is

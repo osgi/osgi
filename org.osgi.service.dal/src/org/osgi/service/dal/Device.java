@@ -257,7 +257,7 @@ public interface Device {
 	 * {@link #SERVICE_STATUS_DETAIL} service property. The device status must
 	 * be {@link #STATUS_OFFLINE}.
 	 */
-	public static final Integer	STATUS_DETAIL_NOT_ACCESSIBLE			= new Integer(-5);
+	public static final Integer	STATUS_DETAIL_INACCESSIBLE				= new Integer(-5);
 
 	/**
 	 * Device status detail indicates that the device cannot be configured. It
@@ -307,7 +307,7 @@ public interface Device {
 	 *         over this device.
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code DevicePermission(this device, }
-	 *         {@link DevicePermission#ACTION_REMOVE}{@code )} and the Java
+	 *         {@link DevicePermission#REMOVE}{@code )} and the Java
 	 *         Runtime Environment supports permissions.
 	 * @throws IllegalStateException If this device service object has already
 	 *         been unregistered.

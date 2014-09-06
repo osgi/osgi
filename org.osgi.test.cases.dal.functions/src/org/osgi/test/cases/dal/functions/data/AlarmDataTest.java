@@ -35,7 +35,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 
 		// check with metadata
 		Map metadata = new HashMap();
-		metadata.put(FunctionData.META_INFO_DESCRIPTION, "test-description");
+		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD);
 		assertEquals("The alarm data comparison is wrong!",
 				data,
@@ -74,7 +74,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 
 		// check with metadata
 		Map metadata = new HashMap();
-		metadata.put(FunctionData.META_INFO_DESCRIPTION, "test-description");
+		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD);
 		assertEquals(
 				"The alarm data comparison is wrong!",
@@ -113,7 +113,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 
 		// check with metadata
 		Map metadata = new HashMap();
-		metadata.put(FunctionData.META_INFO_DESCRIPTION, "test-description");
+		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		fields.put(FunctionData.FIELD_METADATA, metadata);
 		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD);
 		assertEquals(
@@ -142,7 +142,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 
 		// check with metadata
 		Map metadata = new HashMap();
-		metadata.put(FunctionData.META_INFO_DESCRIPTION, "test-description");
+		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD);
 		assertEquals("The alarm data hash code is wrong!",
 				data.hashCode(),
@@ -176,7 +176,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 
 		// check with metadata
 		Map metadata = new HashMap();
-		metadata.put(FunctionData.META_INFO_DESCRIPTION, "test-description");
+		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD);
 		checkAlarmDataFields(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD, data);
 

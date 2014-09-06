@@ -30,14 +30,14 @@ public interface OperationMetadata {
 	 * Metadata key, which value represents the operation description. The
 	 * property value type is {@code java.lang.String}.
 	 */
-	public static final String	META_INFO_DESCRIPTION	= "description";
+	public static final String	DESCRIPTION	= "description";
 
 	/**
 	 * Returns metadata about the function operation. The keys of the
 	 * {@code java.util.Map} result must be of {@code java.lang.String} type.
 	 * Possible keys:
 	 * <ul>
-	 * <li>{@link #META_INFO_DESCRIPTION}</li>
+	 * <li>{@link #DESCRIPTION}</li>
 	 * <li>custom key</li>
 	 * </ul>
 	 * 

@@ -98,10 +98,10 @@ package org.osgi.service.dal;
  * The function properties must be integrated according to these rules:
  * <ul>
  * <li>Getter methods must be available for all properties with
- * {@link PropertyMetadata#PROPERTY_ACCESS_READABLE} access.</li>
+ * {@link PropertyMetadata#ACCESS_READABLE} access.</li>
  * <li>Getter method must return a subclass of {@link FunctionData}.</li>
  * <li>Setter methods must be available for all properties with
- * {@link PropertyMetadata#PROPERTY_ACCESS_WRITABLE} access.</li>
+ * {@link PropertyMetadata#ACCESS_WRITABLE} access.</li>
  * <li>Setter method must use {@link FunctionData} wrapped type. For example,
  * there is {@code MyFunctionData} with timestamp, unit and {@code BigDecimal}
  * value. The setter must accept as an argument the value of type
@@ -109,7 +109,7 @@ package org.osgi.service.dal;
  * <li>It's possible to have a second setter method, which accepts the value as
  * a first argument and the unit as a second argument.</li>
  * <li>No methods are required for properties with
- * {@link PropertyMetadata#PROPERTY_ACCESS_EVENTABLE} access.</li>
+ * {@link PropertyMetadata#ACCESS_EVENTABLE} access.</li>
  * </ul>
  * The accessor method names must be defined according JavaBeans specification.
  * <p>

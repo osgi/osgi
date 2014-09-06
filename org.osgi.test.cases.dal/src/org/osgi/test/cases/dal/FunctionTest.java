@@ -173,11 +173,11 @@ public class FunctionTest extends AbstractDeviceTest {
 	 */
 	public void testPropertyGetter() throws NoSuchMethodException, ClassNotFoundException {
 		Function[] functions = getFunctions(
-				null, PropertyMetadata.PROPERTY_ACCESS_READABLE);
+				null, PropertyMetadata.ACCESS_READABLE);
 		for (int i = 0; i < functions.length; i++) {
 			String[] propertyNames = (String[]) functions[i].getServiceProperty(Function.SERVICE_PROPERTY_NAMES);
 			for (int ii = 0; ii < propertyNames.length; ii++) {
-				if (isPropertyAccessValid(functions[i], propertyNames[ii], PropertyMetadata.PROPERTY_ACCESS_READABLE)) {
+				if (isPropertyAccessValid(functions[i], propertyNames[ii], PropertyMetadata.ACCESS_READABLE)) {
 					checkPropertyGetter(functions[i], propertyNames[ii]);
 				}
 			}
@@ -192,11 +192,11 @@ public class FunctionTest extends AbstractDeviceTest {
 	 */
 	public void testPropertySetters() throws NoSuchMethodException, ClassNotFoundException {
 		Function[] functions = getFunctions(
-				null, PropertyMetadata.PROPERTY_ACCESS_WRITABLE);
+				null, PropertyMetadata.ACCESS_WRITABLE);
 		for (int i = 0; i < functions.length; i++) {
 			String[] propertyNames = (String[]) functions[i].getServiceProperty(Function.SERVICE_PROPERTY_NAMES);
 			for (int ii = 0; ii < propertyNames.length; ii++) {
-				if (isPropertyAccessValid(functions[i], propertyNames[ii], PropertyMetadata.PROPERTY_ACCESS_READABLE)) {
+				if (isPropertyAccessValid(functions[i], propertyNames[ii], PropertyMetadata.ACCESS_READABLE)) {
 					checkPropertySetter(functions[i], propertyNames[ii]);
 				}
 			}
@@ -331,7 +331,7 @@ public class FunctionTest extends AbstractDeviceTest {
 		if (null == metadata) {
 			return false;
 		}
-		Integer accessType = (Integer) metadata.get(PropertyMetadata.PROPERTY_ACCESS);
+		Integer accessType = (Integer) metadata.get(PropertyMetadata.ACCESS);
 		return (null != accessType) && (propertyAccess == (accessType.intValue() & propertyAccess));
 	}
 

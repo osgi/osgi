@@ -99,7 +99,7 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 	 */
 	public void testPropertyEvent() throws UnsupportedOperationException, IllegalStateException, DeviceException {
 		final Function[] functions = getFunctions(
-				BooleanControl.class.getName(), PropertyMetadata.PROPERTY_ACCESS_EVENTABLE);
+				BooleanControl.class.getName(), PropertyMetadata.ACCESS_EVENTABLE);
 		final BooleanControl booleanControl = (BooleanControl) functions[0];
 		final String functionUID = (String) booleanControl.getServiceProperty(Function.SERVICE_UID);
 		final FunctionEventHandler eventHandler = new FunctionEventHandler(super.getContext());

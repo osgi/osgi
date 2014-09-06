@@ -30,7 +30,7 @@ final class SimulatedDevice extends SimulatedService implements Device, ServiceF
 		SecurityManager securityManager = System.getSecurityManager();
 		if (null != securityManager) {
 			securityManager.checkPermission(
-					new DevicePermission(this, DevicePermission.ACTION_REMOVE));
+					new DevicePermission(this, DevicePermission.REMOVE));
 		}
 		super.serviceReg.unregister();
 		if (null != this.functions) {

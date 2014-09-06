@@ -48,10 +48,10 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 	static {
 		Map metadata = new HashMap();
 		metadata.put(
-				PropertyMetadata.PROPERTY_ACCESS,
+				PropertyMetadata.ACCESS,
 				new Integer(
-						PropertyMetadata.PROPERTY_ACCESS_READABLE |
-								PropertyMetadata.PROPERTY_ACCESS_WRITABLE));
+						PropertyMetadata.ACCESS_READABLE |
+								PropertyMetadata.ACCESS_WRITABLE));
 		metadata.put(PropertyMetadata.UNITS, MILLIS_ARRAY);
 		PropertyMetadata propMetadata = new PropertyMetadataImpl(
 				metadata, // metadata
@@ -64,9 +64,9 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 
 		metadata = new HashMap();
 		metadata.put(
-				PropertyMetadata.PROPERTY_ACCESS,
+				PropertyMetadata.ACCESS,
 				new Integer(
-						PropertyMetadata.PROPERTY_ACCESS_EVENTABLE));
+						PropertyMetadata.ACCESS_EVENTABLE));
 		propMetadata = new PropertyMetadataImpl(
 				metadata, // metadata
 				null,     // resolution

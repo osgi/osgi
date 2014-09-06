@@ -38,7 +38,7 @@ public class DeviceSecureTest extends DefaultTestBundleControl {
 	 */
 	public void testRemoveDeviceAllow() throws PrivilegedActionException {
 		AccessControlContext acc = prepareACC(
-				new DevicePermission("*", DevicePermission.ACTION_REMOVE));
+				new DevicePermission("*", DevicePermission.REMOVE));
 		ServiceReference[] deviceSRefs = getDeviceSRefs();
 		boolean isRemoved = false;
 		for (int i = 0; i < deviceSRefs.length; i++) {

@@ -261,7 +261,7 @@ device-id – device unique identifier in the scope of the driver</programlistin
                 The device status must be <code>STATUS_NOT_INITIALIZED</code>.
               </listitem>
               <listitem>
-                <emphasis>Device.STATUS_DETAIL_NOT_ACCESSIBLE</emphasis> –
+                <emphasis>Device.STATUS_DETAIL_INACCESSIBLE</emphasis> –
                 The reason for the offline device is that the device is not accessible
                 and further communication is not possible.
                 It indicates an error with a negative value <code>-5</code>.
@@ -1245,14 +1245,14 @@ function-id – function identifier in the scope of the device</programlisting>
         <itemizedlist>
           <listitem>
             Getter methods must be available for all properties with
-            <code>PropertyMetadata.PROPERTY_ACCESS_READABLE</code> access.
+            <code>PropertyMetadata.ACCESS_READABLE</code> access.
           </listitem>
           <listitem>
             Getter method must return a subclass of <code>FunctionData</code>.
           </listitem>
           <listitem>
             Setter methods must be available for all properties with
-            <code>PropertyMetadata.PROPERTY_ACCESS_WRITABLE</code> access.
+            <code>PropertyMetadata.ACCESS_WRITABLE</code> access.
           </listitem>
           <listitem>
             Setter method must use <code>FunctionData</code> wrapped type.
@@ -1266,7 +1266,7 @@ function-id – function identifier in the scope of the device</programlisting>
           </listitem>
           <listitem>
             No methods are required for properties with
-            <code>PropertyMetadata.PROPERTY_ACCESS_EVENTABLE</code> access.
+            <code>PropertyMetadata.ACCESS_EVENTABLE</code> access.
           </listitem>
         </itemizedlist>
       </para>
@@ -1315,21 +1315,21 @@ function-id – function identifier in the scope of the device</programlisting>
             The bitmap can be any combination of:
             <itemizedlist>
               <listitem>
-                <code>PropertyMetadata.PROPERTY_ACCESS_READABLE</code> –
+                <code>PropertyMetadata.ACCESS_READABLE</code> –
                 Marks the property as a readable.
                 Function must provide a getter method for this property
                 according to <xref linkend="service.dal.ref.bean.spec"/>.
                 Function operations must not be overridden by this getter method.
               </listitem>
               <listitem>
-                <code>PropertyMetadata.PROPERTY_ACCESS_WRITABLE</code> –
+                <code>PropertyMetadata.ACCESS_WRITABLE</code> –
                 Marks the property as writable.
                 Function must provide a setter method for this property
                 according to <xref linkend="service.dal.ref.bean.spec"/>.
                 Function operations must not be overridden by this setter method.
               </listitem>
               <listitem>
-                <code>PropertyMetadata.PROPERTY_ACCESS_EVENTABLE</code> –
+                <code>PropertyMetadata.ACCESS_EVENTABLE</code> –
                 Marks the property as eventable.
                 Function must not provide special methods because
                 of this access type.
@@ -1405,15 +1405,15 @@ function-id – function identifier in the scope of the device</programlisting>
         The event properties are:
         <itemizedlist>
           <listitem>
-            <code>FunctionEvent.PROPERTY_FUNCTION_UID</code> –
+            <code>FunctionEvent.FUNCTION_UID</code> –
             the event source function unique identifier.
           </listitem>
           <listitem>
-            <code>FunctionEvent.PROPERTY_FUNCTION_PROPERTY_NAME</code> –
+            <code>FunctionEvent.PROPERTY_NAME</code> –
             the property name.
           </listitem>
           <listitem>
-            <code>FunctionEvent.PROPERTY_FUNCTION_PROPERTY_VALUE</code> –
+            <code>FunctionEvent.PROPERTY_VALUE</code> –
             the property value.
           </listitem>
         </itemizedlist>
@@ -1436,7 +1436,7 @@ function-id – function identifier in the scope of the device</programlisting>
         The device permission controls the bundle's authority to perform specific
         privileged administrative operations on the devices.
         There is only one action for this permission
-        <code>DevicePermission.ACTION_REMOVE</code> to protect
+        <code>DevicePermission.REMOVE</code> to protect
         <code>Device.remove()</code> method.
       </para>
       <para>
@@ -1460,7 +1460,7 @@ function-id – function identifier in the scope of the device</programlisting>
   ...
   public void remove() {
     securityManager.checkPermission(
-      new DevicePermission(this, DevicePermission.ACTION_REMOVE));
+      new DevicePermission(this, DevicePermission.REMOVE));
   }
   ...
 }</programlisting>

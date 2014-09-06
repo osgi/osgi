@@ -36,10 +36,10 @@ public final class SimulatedMultiLevelSensor extends SimulatedFunction implement
 	static {
 		Map metadata = new HashMap();
 		metadata.put(
-				PropertyMetadata.PROPERTY_ACCESS,
+				PropertyMetadata.ACCESS,
 				new Integer(
-						PropertyMetadata.PROPERTY_ACCESS_READABLE |
-								PropertyMetadata.PROPERTY_ACCESS_EVENTABLE));
+						PropertyMetadata.ACCESS_READABLE |
+								PropertyMetadata.ACCESS_EVENTABLE));
 		PropertyMetadata propMetadata = new PropertyMetadataImpl(
 				metadata, // metadata
 				null,     // resolution

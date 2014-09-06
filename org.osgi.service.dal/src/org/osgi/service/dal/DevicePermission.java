@@ -40,7 +40,7 @@ import org.osgi.framework.InvalidSyntaxException;
 /**
  * A bundle's authority to perform specific privileged administrative operations
  * on the devices. The method {@link Device#remove()} is protected with
- * {@link #ACTION_REMOVE} permission action.
+ * {@link #REMOVE} permission action.
  * <p>
  * The name of the permission is a filter based. See OSGi Core Specification,
  * Filter Based Permissions. The filter gives an access to all device service
@@ -51,7 +51,7 @@ public final class DevicePermission extends BasicPermission {
 	private static final long	serialVersionUID	= -3020753566295420906L;
 
 	/** A permission action to remove the device. */
-	public static final String	ACTION_REMOVE		= "remove";
+	public static final String		REMOVE				= "remove";
 
 	/**
 	 * If the permission was built with filter, this filed contains LDAP filter
@@ -83,7 +83,7 @@ public final class DevicePermission extends BasicPermission {
 	 *        property. The filter attribute names are processed in a case
 	 *        insensitive manner. A special value of "*" can be used to match
 	 *        all devices.
-	 * @param action {@link #ACTION_REMOVE} action.
+	 * @param action {@link #REMOVE} action.
 	 * 
 	 * @throws IllegalArgumentException If the filter syntax is not correct or
 	 *         invalid action is specified.
@@ -104,7 +104,7 @@ public final class DevicePermission extends BasicPermission {
 	 * the {@code DevicePermission} permission collections.
 	 * 
 	 * @param device The permission device.
-	 * @param action {@link #ACTION_REMOVE} action.
+	 * @param action {@link #REMOVE} action.
 	 * 
 	 * @throws IllegalArgumentException If an invalid action is specified.
 	 * @throws NullPointerException If the device or action is null.
@@ -152,13 +152,13 @@ public final class DevicePermission extends BasicPermission {
 	}
 
 	/**
-	 * Returns the canonical string representation of {@link #ACTION_REMOVE}
+	 * Returns the canonical string representation of {@link #REMOVE}
 	 * action.
 	 * 
 	 * @return The canonical string representation of the actions.
 	 */
 	public String getActions() {
-		return ACTION_REMOVE;
+		return REMOVE;
 	}
 
 	/**
@@ -270,7 +270,7 @@ public final class DevicePermission extends BasicPermission {
 		if (null == action) {
 			throw new NullPointerException("The action is null.");
 		}
-		if (!ACTION_REMOVE.equals(action)) {
+		if (!REMOVE.equals(action)) {
 			throw new IllegalArgumentException("The action must be: " + action);
 		}
 	}

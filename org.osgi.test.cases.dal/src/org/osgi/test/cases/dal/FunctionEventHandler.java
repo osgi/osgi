@@ -57,7 +57,7 @@ public final class FunctionEventHandler implements EventHandler {
 		if (null != funtionUID) {
 			handlerRegProps.put(
 					EventConstants.EVENT_FILTER,
-					'(' + FunctionEvent.PROPERTY_FUNCTION_UID + '=' + funtionUID + ')');
+					'(' + FunctionEvent.FUNCTION_UID + '=' + funtionUID + ')');
 		}
 		this.handlerSReg = this.bc.registerService(EventHandler.class.getName(), this, handlerRegProps);
 	}

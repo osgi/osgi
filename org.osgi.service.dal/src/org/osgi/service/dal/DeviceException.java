@@ -29,29 +29,29 @@ import java.io.PrintWriter;
 public class DeviceException extends IOException {
 
 	/** An exception code indicates that the error is unknown. */
-	public static final int		CODE_UNKNOWN				= 1;
+	public static final int		UNKNOWN				= 1;
 
 	/** An exception code indicates that there is an error in the communication. */
-	public static final int		CODE_COMMUNICATION_ERROR	= 2;
+	public static final int		COMMUNICATION_ERROR	= 2;
 
 	/**
 	 * An exception code indicates that there is expired timeout without any
 	 * processing.
 	 */
-	public static final int		CODE_TIMEOUT				= 3;
+	public static final int		TIMEOUT				= 3;
 
 	/**
 	 * An exception code indicates that the device is not initialized. The
 	 * device status is {@link Device#STATUS_NOT_INITIALIZED} or
 	 * {@link Device#STATUS_PROCESSING}.
 	 */
-	public static final int		CODE_NOT_INITIALIZED		= 4;
+	public static final int		NOT_INITIALIZED		= 4;
 
 	/**
 	 * An exception code indicates that the requested value is currently not
 	 * available.
 	 */
-	public static final int		CODE_NO_DATA				= 5;
+	public static final int		NO_DATA				= 5;
 
 	private static final long	serialVersionUID			= 1L;
 	private static final String	CAUSED_BY					= "Caused by: ";
@@ -61,31 +61,31 @@ public class DeviceException extends IOException {
 
 	/**
 	 * Construct a new device exception with {@code null} message. The cause is
-	 * not initialized and the exception code is set to {@link #CODE_UNKNOWN}.
+	 * not initialized and the exception code is set to {@link #UNKNOWN}.
 	 */
 	public DeviceException() {
-		this(null, null, CODE_UNKNOWN);
+		this(null, null, UNKNOWN);
 	}
 
 	/**
 	 * Constructs a new device exception with the given message. The cause is
-	 * not initialized and the exception code is set to {@link #CODE_UNKNOWN}.
+	 * not initialized and the exception code is set to {@link #UNKNOWN}.
 	 * 
 	 * @param message The excpetion message.
 	 */
 	public DeviceException(String message) {
-		this(message, null, CODE_UNKNOWN);
+		this(message, null, UNKNOWN);
 	}
 
 	/**
 	 * Constructs a new device exception with the given message and cause. The
-	 * exception code is set to {@link #CODE_UNKNOWN}.
+	 * exception code is set to {@link #UNKNOWN}.
 	 * 
 	 * @param message The exception message.
 	 * @param cause The exception cause.
 	 */
 	public DeviceException(String message, Throwable cause) {
-		this(message, cause, CODE_UNKNOWN);
+		this(message, cause, UNKNOWN);
 	}
 
 	/**

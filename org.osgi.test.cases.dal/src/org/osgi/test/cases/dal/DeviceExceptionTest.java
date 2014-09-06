@@ -25,7 +25,7 @@ public final class DeviceExceptionTest extends DefaultTestBundleControl {
 		DeviceException de = new DeviceException();
 		assertNull("No exception message is expected.", de.getMessage());
 		assertEquals("Unknown exception code is expected.",
-				DeviceException.CODE_UNKNOWN, de.getCode());
+				DeviceException.UNKNOWN, de.getCode());
 		assertNull("No exception cause is expected.", de.getCause());
 	}
 
@@ -50,11 +50,11 @@ public final class DeviceExceptionTest extends DefaultTestBundleControl {
 	 */
 	public void testExceptionCodes() {
 		int[] exceptionCodes = new int[] {
-				DeviceException.CODE_COMMUNICATION_ERROR,
-				DeviceException.CODE_NO_DATA,
-				DeviceException.CODE_NOT_INITIALIZED,
-				DeviceException.CODE_TIMEOUT,
-				DeviceException.CODE_UNKNOWN,
+				DeviceException.COMMUNICATION_ERROR,
+				DeviceException.NO_DATA,
+				DeviceException.NOT_INITIALIZED,
+				DeviceException.TIMEOUT,
+				DeviceException.UNKNOWN,
 				Integer.MIN_VALUE,
 		};
 		for (int i = 0; i < exceptionCodes.length; i++) {
@@ -70,7 +70,7 @@ public final class DeviceExceptionTest extends DefaultTestBundleControl {
 		de = new DeviceException(message, null);
 		assertEquals("The exception message is not correct.", message, de.getMessage());
 
-		de = new DeviceException(message, null, DeviceException.CODE_UNKNOWN);
+		de = new DeviceException(message, null, DeviceException.UNKNOWN);
 		assertEquals("The exception message is not correct.", message, de.getMessage());
 	}
 
@@ -78,7 +78,7 @@ public final class DeviceExceptionTest extends DefaultTestBundleControl {
 		DeviceException de = new DeviceException(null, cause);
 		assertSame("The exception cause is not correct.", cause, de.getCause());
 
-		de = new DeviceException(null, cause, DeviceException.CODE_UNKNOWN);
+		de = new DeviceException(null, cause, DeviceException.UNKNOWN);
 		assertEquals("The exception cause is not correct.", cause, de.getCause());
 	}
 

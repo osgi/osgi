@@ -39,7 +39,7 @@ public final class LevelDataTest extends AbstractFunctionTest {
 
 		// check with metadata
 		Map metadata = new HashMap();
-		metadata.put(FunctionData.META_INFO_DESCRIPTION, "test-description");
+		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new LevelData(Long.MIN_VALUE, metadata, TEST_UNIT, TEST_VALUE);
 		assertEquals("The level data comparison is wrong!",
 				data,
@@ -78,7 +78,7 @@ public final class LevelDataTest extends AbstractFunctionTest {
 
 		// check with metadata
 		Map metadata = new HashMap();
-		metadata.put(FunctionData.META_INFO_DESCRIPTION, "test-description");
+		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new LevelData(Long.MIN_VALUE, metadata, TEST_UNIT, TEST_VALUE);
 		assertEquals(
 				"The level data comparison is wrong!",
@@ -113,7 +113,7 @@ public final class LevelDataTest extends AbstractFunctionTest {
 
 		// check with metadata
 		Map metadata = new HashMap();
-		metadata.put(FunctionData.META_INFO_DESCRIPTION, "test-description");
+		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new LevelData(Long.MIN_VALUE, metadata, TEST_UNIT, TEST_VALUE);
 		assertEquals(
 				"The level data comparison is wrong!",
@@ -146,7 +146,7 @@ public final class LevelDataTest extends AbstractFunctionTest {
 
 		// check with metadata
 		Map metadata = new HashMap();
-		metadata.put(FunctionData.META_INFO_DESCRIPTION, "test-description");
+		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		dataMap.put(LevelData.FIELD_LEVEL, TEST_VALUE);
 		dataMap.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
 		dataMap.put(FunctionData.FIELD_METADATA, metadata);
@@ -183,7 +183,7 @@ public final class LevelDataTest extends AbstractFunctionTest {
 
 		// check with metadata
 		Map metadata = new HashMap();
-		metadata.put(FunctionData.META_INFO_DESCRIPTION, "test-description");
+		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new LevelData(Long.MIN_VALUE, metadata, TEST_UNIT, TEST_VALUE);
 		assertEquals("The level data hash code is wrong!",
 				data.hashCode(),
@@ -217,7 +217,7 @@ public final class LevelDataTest extends AbstractFunctionTest {
 
 		// check with metadata
 		Map metadata = new HashMap();
-		metadata.put(FunctionData.META_INFO_DESCRIPTION, "test-description");
+		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		data = new LevelData(Long.MIN_VALUE, metadata, TEST_UNIT, TEST_VALUE);
 		checkLevelDataFields(Long.MIN_VALUE, metadata, TEST_UNIT, TEST_VALUE, data);
 

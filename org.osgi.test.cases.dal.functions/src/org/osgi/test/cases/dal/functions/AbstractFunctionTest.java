@@ -186,7 +186,7 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 	 */
 	protected void checkPropertyEvent(String functionClassName, String propName) {
 		final Function[] functions = getFunctions(
-				functionClassName, PropertyMetadata.PROPERTY_ACCESS_EVENTABLE);
+				functionClassName, PropertyMetadata.ACCESS_EVENTABLE);
 		final String functionUID = (String) functions[0].getServiceProperty(Function.SERVICE_UID);
 		final FunctionEventHandler eventHandler = new FunctionEventHandler(super.getContext());
 		final TestStep testStep = getTestStep();
@@ -261,7 +261,7 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 		if (null == metadata) {
 			return false;
 		}
-		Integer accessType = (Integer) metadata.get(PropertyMetadata.PROPERTY_ACCESS);
+		Integer accessType = (Integer) metadata.get(PropertyMetadata.ACCESS);
 		return (null != accessType) && (propertyAccess == (accessType.intValue() & propertyAccess));
 	}
 

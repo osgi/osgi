@@ -28,9 +28,9 @@ public final class FunctionEventTest extends DefaultTestBundleControl {
 	 */
 	public void testEventProperties() {
 		Hashtable eventProps = new Hashtable();
-		eventProps.put(FunctionEvent.PROPERTY_FUNCTION_PROPERTY_NAME, PROP_NAME);
-		eventProps.put(FunctionEvent.PROPERTY_FUNCTION_PROPERTY_VALUE, PROP_VALUE);
-		eventProps.put(FunctionEvent.PROPERTY_FUNCTION_UID, FUNCTION_UID);
+		eventProps.put(FunctionEvent.PROPERTY_NAME, PROP_NAME);
+		eventProps.put(FunctionEvent.PROPERTY_VALUE, PROP_VALUE);
+		eventProps.put(FunctionEvent.FUNCTION_UID, FUNCTION_UID);
 		checkEventProps(new FunctionEvent(
 				FunctionEvent.TOPIC_PROPERTY_CHANGED, (Dictionary) eventProps));
 

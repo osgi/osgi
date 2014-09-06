@@ -27,10 +27,10 @@ import org.osgi.service.event.Event;
  * to have events in series with no value change. The event properties must
  * contain:
  * <ul>
- * <li>{@link #PROPERTY_FUNCTION_UID} - the event source function unique
+ * <li>{@link #FUNCTION_UID} - the event source function unique
  * identifier.</li>
- * <li>{@link #PROPERTY_FUNCTION_PROPERTY_NAME} - the property name.</li>
- * <li>{@link #PROPERTY_FUNCTION_PROPERTY_VALUE} - the property value. The
+ * <li>{@link #PROPERTY_NAME} - the property name.</li>
+ * <li>{@link #PROPERTY_VALUE} - the property value. The
  * property value type must be a subclass of FunctionData.</li>
  * </ul>
  */
@@ -40,41 +40,39 @@ public class FunctionEvent extends Event {
 	 * Represents the event package. That constant can be useful for the event
 	 * handlers depending on the event filters.
 	 */
-	public static final String	EVENT_PACKAGE						= "org/osgi/service/dal/";
+	public static final String	EVENT_PACKAGE			= "org/osgi/service/dal/";
 
 	/**
 	 * Represents the event class. That constant can be useful for the event
 	 * handlers depending on the event filters.
 	 */
-	public static final String	EVENT_CLASS							= EVENT_PACKAGE
-																			+ "FunctionEvent/";
+	public static final String	EVENT_CLASS				= EVENT_PACKAGE + "FunctionEvent/";
 
 	/**
 	 * Represents the event topic for the function property changed.
 	 */
-	public static final String	TOPIC_PROPERTY_CHANGED				= EVENT_CLASS
-																			+ "PROPERTY_CHANGED";
+	public static final String	TOPIC_PROPERTY_CHANGED	= EVENT_CLASS + "PROPERTY_CHANGED";
 
 	/**
 	 * Represents an event property key for function UID. The property value
 	 * type is {@code java.lang.String}. The value represents the property value
 	 * change source function identifier.
 	 */
-	public static final String	PROPERTY_FUNCTION_UID				= "dal.function.UID";
+	public static final String	FUNCTION_UID			= "dal.function.UID";
 
 	/**
 	 * Represents an event property key for the function property name. The
 	 * property value type is {@code java.lang.String}. The value represents the
 	 * property name.
 	 */
-	public static final String	PROPERTY_FUNCTION_PROPERTY_NAME		= "dal.function.property.name";
+	public static final String	PROPERTY_NAME			= "dal.function.property.name";
 
 	/**
 	 * Represents an event property key for the function property value. The
 	 * property value type is a subclass of {@code FunctionData}. The value
 	 * represents the property value.
 	 */
-	public static final String	PROPERTY_FUNCTION_PROPERTY_VALUE	= "dal.function.property.value";
+	public static final String	PROPERTY_VALUE			= "dal.function.property.value";
 
 	/**
 	 * Constructs a new event with the specified topic and properties.
@@ -115,32 +113,32 @@ public class FunctionEvent extends Event {
 
 	/**
 	 * Returns the property value change source function identifier. The value
-	 * is same as the value of {@link #PROPERTY_FUNCTION_UID} property.
+	 * is same as the value of {@link #FUNCTION_UID} property.
 	 * 
 	 * @return The property value change source function.
 	 */
 	public String getFunctionUID() {
-		return (String) super.getProperty(PROPERTY_FUNCTION_UID);
+		return (String) super.getProperty(FUNCTION_UID);
 	}
 
 	/**
 	 * Returns the property name. The value is same as the value of
-	 * {@link #PROPERTY_FUNCTION_PROPERTY_NAME}.
+	 * {@link #PROPERTY_NAME}.
 	 * 
 	 * @return The property name.
 	 */
 	public String getFunctionPropertyName() {
-		return (String) super.getProperty(PROPERTY_FUNCTION_PROPERTY_NAME);
+		return (String) super.getProperty(PROPERTY_NAME);
 	}
 
 	/**
 	 * Returns the property value. The value is same as the value of
-	 * {@link #PROPERTY_FUNCTION_PROPERTY_VALUE}.
+	 * {@link #PROPERTY_VALUE}.
 	 * 
 	 * @return The property value.
 	 */
 	public FunctionData getFunctionPropertyValue() {
-		return (FunctionData) super.getProperty(PROPERTY_FUNCTION_PROPERTY_VALUE);
+		return (FunctionData) super.getProperty(PROPERTY_VALUE);
 	}
 
 	private static Map prepareEventProps(
@@ -148,9 +146,9 @@ public class FunctionEvent extends Event {
 			String propName,
 			FunctionData propValue) {
 		Map eventProps = new HashMap(3, 1F);
-		eventProps.put(PROPERTY_FUNCTION_PROPERTY_NAME, propName);
-		eventProps.put(PROPERTY_FUNCTION_PROPERTY_VALUE, propValue);
-		eventProps.put(PROPERTY_FUNCTION_UID, funtionUID);
+		eventProps.put(PROPERTY_NAME, propName);
+		eventProps.put(PROPERTY_VALUE, propValue);
+		eventProps.put(FUNCTION_UID, funtionUID);
 		return eventProps;
 	}
 
