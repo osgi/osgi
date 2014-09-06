@@ -33,8 +33,8 @@ import org.osgi.service.dal.functions.data.LevelData;
  * with {@link #PROPERTY_WAKE_UP_INTERVAL} property.
  * <p>
  * The application can minimize the power consumption with {@link #sleep()}
- * operation. As a result, the device will sleep and will not receive commands
- * to the next awake.
+ * operation. As a result of the call, the device will sleep and will not
+ * receive commands to the next awake.
  * 
  * @see LevelData
  * @see BooleanData

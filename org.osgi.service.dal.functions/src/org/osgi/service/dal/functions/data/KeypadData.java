@@ -214,16 +214,16 @@ public class KeypadData extends FunctionData {
 	 * argument can be:
 	 * <ul>
 	 * <li>{@code KeypadData} - the method returns {@code -1} if metadata,
-	 * timestamp, event type, key code or key name are not equivalent. 0 if all
-	 * fields are equivalent.</li>
+	 * timestamp, event type, key code or key name are not equivalent. {@code 0}
+	 * if all fields are equivalent.</li>
 	 * <li>{@code Map} - the map must be built according the rules of
 	 * {@link #KeypadData(Map)}. Metadata, timestamp, event type, key code and
-	 * key name are compared according {@code KeypadData} argument rules.</li>
+	 * key name are compared according to {@code KeypadData} argument rules.</li>
 	 * </ul>
 	 * 
 	 * @param o An argument to be compared.
 	 * 
-	 * @return -1 or 0 depending on the comparison rules.
+	 * @return {@code -1} or {@code 0} depending on the comparison rules.
 	 * 
 	 * @throws ClassCastException If the method is called with {@code Map} and
 	 *         the field value types are not expected.

@@ -134,12 +134,13 @@ public class BooleanData extends FunctionData {
 	 * with the same rules as {@code Boolean} argument.</li>
 	 * <li>{@code Map} - the map must be built according the rules of
 	 * {@link #BooleanData(Map)}. Metadata, timestamp and value are compared
-	 * according {@code BooleanData} and {@code Boolean} argument rules.</li>
+	 * according to {@code BooleanData} and {@code Boolean} argument rules.</li>
 	 * </ul>
 	 * 
 	 * @param o An argument to be compared.
 	 * 
-	 * @return -1, 0 or 1 depending on the comparison rules.
+	 * @return {@code -1}, {@code 0} or {@code 1} depending on the comparison
+	 *         rules.
 	 * 
 	 * @throws ClassCastException If the method is called with {@code Map} and
 	 *         field value types are not expected.

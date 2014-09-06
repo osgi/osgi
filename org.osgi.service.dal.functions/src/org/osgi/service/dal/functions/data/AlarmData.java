@@ -176,6 +176,7 @@ public class AlarmData extends FunctionData {
 	 * <li>{@link #TYPE_POWER_FAIL}</li>
 	 * <li>{@link #TYPE_HW_FAIL}</li>
 	 * <li>{@link #TYPE_SW_FAIL}</li>
+	 * <li>vendor specific</li>
 	 * </ul>
 	 * The vendor can define own alarm types with negative values.
 	 * 
@@ -229,17 +230,18 @@ public class AlarmData extends FunctionData {
 	 * argument can be:
 	 * <ul>
 	 * <li>{@code AlarmData} - the method returns {@code -1} if metadata,
-	 * timestamp, type or severity are not equivalent. 0 if all fields are
-	 * equivalent. 1 if all fields are equivalent and this instance severity is
-	 * greater than the severity of the specified argument.</li>
+	 * timestamp, type or severity are not equivalent. {@code 0} if all fields
+	 * are equivalent. {@code 1} if all fields are equivalent and this instance
+	 * severity is greater than the severity of the specified argument.</li>
 	 * <li>{@code Map} - the map must be built according the rules of
 	 * {@link #AlarmData(Map)}. Metadata, timestamp, type and severity are
-	 * compared according {@code AlarmData} argument rules.</li>
+	 * compared according to {@code AlarmData} argument rules.</li>
 	 * </ul>
 	 * 
 	 * @param o An argument to be compared.
 	 * 
-	 * @return -1, 0 or 1 depending on the comparison rules.
+	 * @return {@code -1}, {@code 0} or {@code 1} depending on the comparison
+	 *         rules.
 	 * 
 	 * @throws ClassCastException If the method is called with {@code Map} and
 	 *         the field value types are not expected.

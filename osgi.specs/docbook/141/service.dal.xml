@@ -106,7 +106,7 @@
       relations must be visible to the applications.
     </para>
     <section>
-      <title>Service Properties</title>
+      <title>Device Service Properties</title>
       <para>
         The OSGi service registry has the advantage of being easily accessible.
         The services can be filtered and accessed with their properties.
@@ -411,7 +411,7 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
        </para>
     </section>
     <section xml:id="service.dal.device.registration">
-      <title>Registration</title>
+      <title>Device Registration</title>
       <para>
         The devices are registered as services in the OSGi service registry.
         The service interface is <code>org.osgi.service.dal.Device</code>.
@@ -468,7 +468,7 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
       </para>
     </section>
     <section xml:id="service.dal.status.transitions">
-      <title>Status Transitions</title>
+      <title>Device Status Transitions</title>
       <para>
         The device status reveals the device availability.
         It can demonstrate that device is currently not available for operations
@@ -960,7 +960,7 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
       Different access types supports the applications to read, write or receive events.
     </para>
     <section>
-      <title>Service Properties</title>
+      <title>Function Service Properties</title>
       <para>
         The OSGi service registry has the advantage of being easily accessible.
         The services can be filtered and accessed with their properties.
@@ -1041,7 +1041,7 @@ function-id – function identifier in the scope of the device</programlisting>
       </para>
     </section>
     <section xml:id="service.dal.function.registration">
-      <title>Registration</title>
+      <title>Function Registration</title>
       <para>
         On start up, the <code>Function</code> services are registered
         before the <code>Device</code> service.
@@ -1204,7 +1204,7 @@ function-id – function identifier in the scope of the device</programlisting>
       </para>
     </section>
     <section>
-      <title>Operations</title>
+      <title>Function Operations</title>
       <para>
         <code>Function</code> operations are the main callable units.
         They can perform a specific task on the device like turn on or turn off.
@@ -1230,7 +1230,7 @@ function-id – function identifier in the scope of the device</programlisting>
       </para>
     </section>
     <section xml:id="service.dal.function.properties">
-      <title>Properties</title>
+      <title>Function Properties</title>
       <para>
         <code>Function</code> properties are class fields.
         Their values can be read with getter methods and
@@ -1395,7 +1395,7 @@ function-id – function identifier in the scope of the device</programlisting>
       </para>
     </section>
     <section xml:id="service.dal.function.event">
-      <title>Property Events</title>
+      <title>Function Property Events</title>
       <para>
         The eventable function properties can trigger a new event on each property
         value touch. It doesn't require a modification of the value.

@@ -33,10 +33,10 @@ import org.osgi.service.dal.functions.data.BooleanData;
  * 
  * The control type can be:
  * <ul>
- * <li>{@link Types#TYPE_LIGHT}</li>
- * <li>{@link Types#TYPE_DOOR}</li>
- * <li>{@link Types#TYPE_WINDOW}</li>
- * <li>{@link Types#TYPE_POWER}</li>
+ * <li>{@link Types#LIGHT}</li>
+ * <li>{@link Types#DOOR}</li>
+ * <li>{@link Types#WINDOW}</li>
+ * <li>{@link Types#POWER}</li>
  * <li>other type defined in {@link Types}</li>
  * <li>custom - vendor specific type</li>
  * </ul>

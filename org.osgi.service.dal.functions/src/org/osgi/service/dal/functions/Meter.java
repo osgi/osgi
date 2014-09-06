@@ -39,12 +39,12 @@ import org.osgi.service.dal.functions.data.LevelData;
  * 
  * The sensor type can be:
  * <ul>
- * <li>{@link Types#TYPE_PRESSURE}</li>
- * <li>{@link Types#TYPE_GAS}</li>
- * <li>{@link Types#TYPE_POWER}</li>
- * <li>{@link Types#TYPE_WATER}</li>
- * <li>{@link Types#TYPE_HEAT}</li>
- * <li>{@link Types#TYPE_COLD}</li>
+ * <li>{@link Types#PRESSURE}</li>
+ * <li>{@link Types#GAS}</li>
+ * <li>{@link Types#POWER}</li>
+ * <li>{@link Types#WATER}</li>
+ * <li>{@link Types#HEAT}</li>
+ * <li>{@link Types#COLD}</li>
  * <li>other type defined in {@link Types}</li>
  * <li>custom - vendor specific type</li>
  * </ul>
@@ -77,15 +77,15 @@ public interface Meter extends Function {
 	public static final String	SERVICE_FLOW			= "dal.meter.flow";
 
 	/**
-	 * Specifies the current consumption property name. The property can be read
-	 * with {@link #getCurrent()} getter.
+	 * Specifies the current consumption or generation property name. The
+	 * property can be read with {@link #getCurrent()} getter.
 	 */
 	public static final String	PROPERTY_CURRENT		= "current";
 
 	/**
-	 * Specifies the total consumption property name. It has been measured since
-	 * the last call of {@link #resetTotal()} or device initial run. The
-	 * property can be read with {@link #getTotal()} getter.
+	 * Specifies the total consumption or generation property name. It has been
+	 * measured since the last call of {@link #resetTotal()} or device initial
+	 * run. The property can be read with {@link #getTotal()} getter.
 	 */
 	public static final String	PROPERTY_TOTAL			= "total";
 

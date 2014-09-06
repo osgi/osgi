@@ -170,12 +170,13 @@ public class LevelData extends FunctionData {
 	 * with the same rules as {@code BigDecimal} argument.</li>
 	 * <li>{@code Map} - the map must be built according the rules of
 	 * {@link #LevelData(Map)}. Metadata, timestamp, unit and level are compared
-	 * according {@code BigDecimal} and {@code LevelData} argument rules.</li>
+	 * according to {@code BigDecimal} and {@code LevelData} argument rules.</li>
 	 * </ul>
 	 * 
 	 * @param o An argument to be compared.
 	 * 
-	 * @return -1, 0 or 1 depending on the comparison rules.
+	 * @return {@code -1}, {@code 0} or {@code 1} depending on the comparison
+	 *         rules.
 	 * 
 	 * @throws ClassCastException If the method is called with {@code Map} and
 	 *         the field value types are not expected.

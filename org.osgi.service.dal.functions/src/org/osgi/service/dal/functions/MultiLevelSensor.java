@@ -32,19 +32,19 @@ import org.osgi.service.dal.functions.data.LevelData;
  * 
  * The sensor type can be:
  * <ul>
- * <li>{@link Types#TYPE_LIGHT}</li>
- * <li>{@link Types#TYPE_TEMPERATURE}</li>
- * <li>{@link Types#TYPE_FLOW}</li>
- * <li>{@link Types#TYPE_PRESSURE}</li>
- * <li>{@link Types#TYPE_HUMIDITY}</li>
- * <li>{@link Types#TYPE_GAS}</li>
- * <li>{@link Types#TYPE_SMOKE}</li>
- * <li>{@link Types#TYPE_DOOR}</li>
- * <li>{@link Types#TYPE_WINDOW}</li>
- * <li>{@link Types#TYPE_LIQUID}</li>
- * <li>{@link Types#TYPE_POWER}</li>
- * <li>{@link Types#TYPE_NOISINESS}</li>
- * <li>{@link Types#TYPE_RAIN}</li>
+ * <li>{@link Types#LIGHT}</li>
+ * <li>{@link Types#TEMPERATURE}</li>
+ * <li>{@link Types#FLOW}</li>
+ * <li>{@link Types#PRESSURE}</li>
+ * <li>{@link Types#HUMIDITY}</li>
+ * <li>{@link Types#GAS}</li>
+ * <li>{@link Types#SMOKE}</li>
+ * <li>{@link Types#DOOR}</li>
+ * <li>{@link Types#WINDOW}</li>
+ * <li>{@link Types#LIQUID}</li>
+ * <li>{@link Types#POWER}</li>
+ * <li>{@link Types#NOISINESS}</li>
+ * <li>{@link Types#RAIN}</li>
  * <li>other type defined in {@link Types}</li>
  * <li>custom - vendor specific type</li>
  * </ul>

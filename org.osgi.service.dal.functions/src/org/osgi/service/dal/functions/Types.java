@@ -21,36 +21,36 @@ package org.osgi.service.dal.functions;
  * Shares common constants for all functions defined in this package. The
  * defined function types are mapped as follow:
  * <ul>
- * <li>{@link #TYPE_LIGHT} - {@link MultiLevelControl}, {@link MultiLevelSensor}, {@link BooleanSensor} and {@link BooleanControl}</li>
- * <li>{@link #TYPE_TEMPERATURE} - {@link MultiLevelControl} and
+ * <li>{@link #LIGHT} - {@link MultiLevelControl}, {@link MultiLevelSensor}, {@link BooleanSensor} and {@link BooleanControl}</li>
+ * <li>{@link #TEMPERATURE} - {@link MultiLevelControl} and
  * {@link MultiLevelSensor}</li>
- * <li>{@link #TYPE_FLOW} - {@link MultiLevelControl} and
+ * <li>{@link #FLOW} - {@link MultiLevelControl} and
  * {@link MultiLevelSensor}</li>
- * <li>{@link #TYPE_PRESSURE} - {@link MultiLevelControl},
+ * <li>{@link #PRESSURE} - {@link MultiLevelControl},
  * {@link MultiLevelSensor} and {@link Meter}</li>
- * <li>{@link #TYPE_HUMIDITY} - {@link MultiLevelControl} and
+ * <li>{@link #HUMIDITY} - {@link MultiLevelControl} and
  * {@link MultiLevelSensor}</li>
- * <li>{@link #TYPE_GAS} - {@link MultiLevelControl}, {@link MultiLevelSensor},
+ * <li>{@link #GAS} - {@link MultiLevelControl}, {@link MultiLevelSensor},
  * {@link BooleanSensor} and {@link Meter}</li>
- * <li>{@link #TYPE_SMOKE} - {@link MultiLevelControl}, {@link MultiLevelSensor}
+ * <li>{@link #SMOKE} - {@link MultiLevelControl}, {@link MultiLevelSensor}
  * and {@link BooleanSensor}</li>
- * <li>{@link #TYPE_DOOR} - {@link MultiLevelControl}, {@link MultiLevelSensor},
+ * <li>{@link #DOOR} - {@link MultiLevelControl}, {@link MultiLevelSensor},
  * {@link BooleanSensor} and {@link BooleanControl}</li>
- * <li>{@link #TYPE_WINDOW} - {@link MultiLevelControl},
+ * <li>{@link #WINDOW} - {@link MultiLevelControl},
  * {@link MultiLevelSensor}, {@link BooleanSensor} and {@link BooleanControl}</li>
- * <li>{@link #TYPE_LIQUID} - {@link MultiLevelControl} and
+ * <li>{@link #LIQUID} - {@link MultiLevelControl} and
  * {@link MultiLevelSensor}</li>
- * <li>{@link #TYPE_POWER} - {@link MultiLevelControl}, {@link MultiLevelSensor}, {@link BooleanSensor}, {@link BooleanControl} and {@link Meter}</li>
- * <li>{@link #TYPE_NOISINESS} - {@link MultiLevelControl} and
+ * <li>{@link #POWER} - {@link MultiLevelControl}, {@link MultiLevelSensor}, {@link BooleanSensor}, {@link BooleanControl} and {@link Meter}</li>
+ * <li>{@link #NOISINESS} - {@link MultiLevelControl} and
  * {@link MultiLevelSensor}</li>
- * <li>{@link #TYPE_RAIN} - {@link MultiLevelSensor} and {@link BooleanSensor}</li>
- * <li>{@link #TYPE_CONTACT} - {@link BooleanSensor}</li>
- * <li>{@link #TYPE_FIRE} - {@link BooleanSensor}</li>
- * <li>{@link #TYPE_OCCUPANCY} - {@link BooleanSensor}</li>
- * <li>{@link #TYPE_WATER} - {@link BooleanSensor} and {@link Meter}</li>
- * <li>{@link #TYPE_MOTION} - {@link BooleanSensor}</li>
- * <li>{@link #TYPE_HEAT} - {@link Meter}</li>
- * <li>{@link #TYPE_COLD} - {@link Meter}</li>
+ * <li>{@link #RAIN} - {@link MultiLevelSensor} and {@link BooleanSensor}</li>
+ * <li>{@link #CONTACT} - {@link BooleanSensor}</li>
+ * <li>{@link #FIRE} - {@link BooleanSensor}</li>
+ * <li>{@link #OCCUPANCY} - {@link BooleanSensor}</li>
+ * <li>{@link #WATER} - {@link BooleanSensor} and {@link Meter}</li>
+ * <li>{@link #MOTION} - {@link BooleanSensor}</li>
+ * <li>{@link #HEAT} - {@link Meter}</li>
+ * <li>{@link #COLD} - {@link Meter}</li>
  * </ul>
  * The mapping is not mandatory. The function can use custom defined types.
  */
@@ -69,11 +69,11 @@ public interface Types {
 	 * {@code MultiLevelSensor} - indicates that the sensor can monitor the
 	 * light level.</li>
 	 * <li>
-	 * {@code BinarySensor} - indicates that the {@code BinarySensor}
+	 * {@code BooleanSensor} - indicates that the {@code BooleanSensor}
 	 * can detected light. {@code true} state means that there is light.
 	 * {@code false} state means that there is no light.</li>
 	 * <li>
-	 * {@code BinaryControl} - indicates that there is a light device
+	 * {@code BooleanControl} - indicates that there is a light device
 	 * control. {@code true} state means that the light device will be
 	 * turned on. {@code false} state means that the light device will be
 	 * turned off.</li>
@@ -81,7 +81,7 @@ public interface Types {
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_LIGHT			= "light";
+	public static final String	LIGHT			= "light";
 
 	/**
 	 * The function type is applicable to:
@@ -100,7 +100,7 @@ public interface Types {
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_TEMPERATURE	= "temperature";
+	public static final String	TEMPERATURE	= "temperature";
 
 	/**
 	 * The function type is applicable to:
@@ -118,7 +118,7 @@ public interface Types {
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_FLOW			= "flow";
+	public static final String	FLOW			= "flow";
 
 	/**
 	 * The function type is applicable to:
@@ -139,7 +139,7 @@ public interface Types {
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_PRESSURE		= "pressure";
+	public static final String	PRESSURE		= "pressure";
 
 	/**
 	 * The function type is applicable to:
@@ -158,7 +158,7 @@ public interface Types {
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_HUMIDITY		= "humidity";
+	public static final String	HUMIDITY		= "humidity";
 
 	/**
 	 * The function type is applicable to:
@@ -173,7 +173,7 @@ public interface Types {
 	 * {@code MultiLevelSensor} - indicates that the sensor can monitor the
 	 * gas level.</li>
 	 * <li>
-	 * {@code BinarySensor} - indicates that the {@code BinarySensor}
+	 * {@code BooleanSensor} - indicates that the {@code BooleanSensor}
 	 * supports gas detection. {@code true} state means there is gas.
 	 * {@code false} state means that there is no gas.</li>
 	 * <li>
@@ -183,29 +183,28 @@ public interface Types {
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_GAS			= "gas";
+	public static final String	GAS			= "gas";
 
 	/**
 	 * The function type is applicable to:
 	 * <ul>
 	 * <li>
-	 * {@code MultiLevelControl} - indicates that the
-	 * {@code MultiLevelControl} can control the smoke level.
-	 * {@code MultiLevelControl} minimum value is the lowest supported
-	 * smoke level. {@code MultiLevelControl} maximum value is the highest
-	 * supported smoke level.</li>
+	 * {@code MultiLevelControl} - indicates that the {@code MultiLevelControl}
+	 * can control the smoke level. {@code MultiLevelControl} minimum value is
+	 * the lowest supported smoke level. {@code MultiLevelControl} maximum value
+	 * is the highest supported smoke level.</li>
 	 * <li>
 	 * {@code MultiLevelSensor} - indicates that the sensor can monitor the
 	 * smoke level.</li>
 	 * <li>
-	 * {@code BinarySensor} - indicates that the {@code BinarySensor}
-	 * can detect smoke. {@code true} state means that there is smoke.
-	 * {@code false} state means that there is no rain.</li>
+	 * {@code BooleanSensor} - indicates that the {@code BooleanSensor} can
+	 * detect smoke. {@code true} state means that there is smoke. {@code false}
+	 * state means that there is no smoke.</li>
 	 * </ul>
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_SMOKE			= "smoke";
+	public static final String	SMOKE			= "smoke";
 
 	/**
 	 * The function type is applicable to:
@@ -220,18 +219,18 @@ public interface Types {
 	 * {@code MultiLevelSensor} - indicates that the sensor can monitor the
 	 * door position.</li>
 	 * <li>
-	 * {@code BinarySensor} - indicates that the {@code BinarySensor}
+	 * {@code BooleanSensor} - indicates that the {@code BooleanSensor}
 	 * can detect the door state. {@code true} state means that the door is
 	 * opened. {@code false} state means that the door is closed.</li>
 	 * <li>
-	 * {@code BinaryControl} - indicates that there is a door position
+	 * {@code BooleanControl} - indicates that there is a door position
 	 * control. {@code true} state means that the door will be opened.
 	 * {@code false} state means that the the door will be closed.</li>
 	 * </ul>
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_DOOR			= "door";
+	public static final String	DOOR			= "door";
 
 	/**
 	 * The function type is applicable to:
@@ -246,18 +245,18 @@ public interface Types {
 	 * {@code MultiLevelSensor} - indicates that the sensor can monitor the
 	 * window position.</li>
 	 * <li>
-	 * {@code BinarySensor} - indicates that the {@code BinarySensor}
+	 * {@code BooleanSensor} - indicates that the {@code BooleanSensor}
 	 * can window state. {@code true} state means that the window is
 	 * opened. {@code false} state means that the window is closed.</li>
 	 * <li>
-	 * {@code BinaryControl} - indicates that there is a window position
+	 * {@code BooleanControl} - indicates that there is a window position
 	 * control. {@code true} state means that the window will be opened.
 	 * {@code false} state means that the the window will be closed.</li>
 	 * </ul>
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_WINDOW			= "window";
+	public static final String	WINDOW			= "window";
 
 	/**
 	 * The function type is applicable to:
@@ -275,7 +274,7 @@ public interface Types {
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_LIQUID			= "liquid";
+	public static final String	LIQUID			= "liquid";
 
 	/**
 	 * The function type is applicable to:
@@ -290,11 +289,11 @@ public interface Types {
 	 * {@code MultiLevelSensor} - indicates that the sensor can monitor the
 	 * power level.</li>
 	 * <li>
-	 * {@code BinarySensor} - indicates that the {@code BinarySensor}
+	 * {@code BooleanSensor} - indicates that the {@code BooleanSensor}
 	 * can detect motion. {@code true} state means that there is power
 	 * restore. {@code false} state means that there is power cut.</li>
 	 * <li>
-	 * {@code BinaryControl} - indicates that there is electricity control.
+	 * {@code BooleanControl} - indicates that there is electricity control.
 	 * {@code true} state means that the power will be restored.
 	 * {@code false} state means that the power will be cut.</li>
 	 * <li>
@@ -304,7 +303,7 @@ public interface Types {
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_POWER			= "power";
+	public static final String	POWER			= "power";
 
 	/**
 	 * The function type is applicable to:
@@ -322,7 +321,7 @@ public interface Types {
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_NOISINESS		= "noisiness";
+	public static final String	NOISINESS		= "noisiness";
 
 	/**
 	 * The function type is applicable to:
@@ -332,59 +331,59 @@ public interface Types {
 	 * {@code MultiLevelSensor} can monitor the rain rate. It's not
 	 * applicable to {@code MultiLevelControl}.</li>
 	 * <li>
-	 * {@code BinarySensor} - indicates that the {@code BinarySensor}
+	 * {@code BooleanSensor} - indicates that the {@code BooleanSensor}
 	 * can detect rain. {@code true} state means that there is rain.
 	 * {@code false} state means that there is no rain.</li>
 	 * </ul>
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_RAIN			= "rain";
+	public static final String	RAIN			= "rain";
 
 	/**
 	 * The function type is applicable to:
 	 * <ul>
 	 * <li>
-	 * {@code BinarySensor} - indicates that the {@code BinarySensor}
+	 * {@code BooleanSensor} - indicates that the {@code BooleanSensor}
 	 * can detect contact. {@code true} state means that there is contact.
 	 * {@code false} state means that there is no contact.</li>
 	 * </ul>
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_CONTACT		= "contact";
+	public static final String	CONTACT		= "contact";
 
 	/**
 	 * The function type is applicable to:
 	 * <ul>
 	 * <li>
-	 * {@code BinarySensor} - indicates that the {@code BinarySensor}
+	 * {@code BooleanSensor} - indicates that the {@code BooleanSensor}
 	 * can detect fire. {@code true} state means that there is fire.
 	 * {@code false} state means that there is no fire.</li>
 	 * </ul>
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_FIRE			= "fire";
+	public static final String	FIRE			= "fire";
 
 	/**
 	 * The function type is applicable to:
 	 * <ul>
 	 * <li>
-	 * {@code BinarySensor} - indicates that the {@code BinarySensor}
+	 * {@code BooleanSensor} - indicates that the {@code BooleanSensor}
 	 * can detect presence. {@code true} state means that someone is
 	 * detected. {@code false} state means that nobody is detected.</li>
 	 * </ul>
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_OCCUPANCY		= "occupancy";
+	public static final String	OCCUPANCY		= "occupancy";
 
 	/**
 	 * The function type is applicable to:
 	 * <ul>
 	 * <li>
-	 * {@code BinarySensor} - indicates that the {@code BinarySensor}
+	 * {@code BooleanSensor} - indicates that the {@code BooleanSensor}
 	 * can detect water leak. {@code true} state means that there is water
 	 * leak. {@code false} state means that there is no water leak.</li>
 	 * <li>
@@ -394,13 +393,13 @@ public interface Types {
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_WATER			= "water";
+	public static final String	WATER			= "water";
 
 	/**
 	 * The function type is applicable to:
 	 * <ul>
 	 * <li>
-	 * {@code BinarySensor} - indicates that the {@code BinarySensor}
+	 * {@code BooleanSensor} - indicates that the {@code BooleanSensor}
 	 * can detect motion. {@code true} state means that there is motion
 	 * detection. {@code false} state means that there is no motion
 	 * detection.</li>
@@ -408,7 +407,7 @@ public interface Types {
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_MOTION			= "motion";
+	public static final String	MOTION			= "motion";
 
 	/**
 	 * The function type is applicable to:
@@ -420,7 +419,7 @@ public interface Types {
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_HEAT			= "heat";
+	public static final String	HEAT			= "heat";
 
 	/**
 	 * The function type is applicable to:
@@ -432,6 +431,6 @@ public interface Types {
 	 * This type can be specified as a value of
 	 * {@link org.osgi.service.dal.Function#SERVICE_TYPE}.
 	 */
-	public static final String	TYPE_COLD			= "cold";
+	public static final String	COLD			= "cold";
 
 }
