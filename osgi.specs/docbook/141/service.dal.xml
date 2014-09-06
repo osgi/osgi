@@ -1372,7 +1372,7 @@ function-id – function identifier in the scope of the device</programlisting>
             </para>
             <para>
               A set of predefined unit symbols are available
-              in <code>Units</code> interface.
+              in <code>SIUnits</code> interface.
             </para>
           </listitem>
           <listitem>

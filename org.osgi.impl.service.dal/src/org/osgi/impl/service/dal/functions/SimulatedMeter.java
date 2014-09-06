@@ -19,7 +19,7 @@ import org.osgi.impl.service.dal.SimulatedFunction;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.PropertyMetadata;
-import org.osgi.service.dal.Units;
+import org.osgi.service.dal.SIUnits;
 import org.osgi.service.dal.functions.Meter;
 import org.osgi.service.dal.functions.data.LevelData;
 import org.osgi.util.tracker.ServiceTracker;
@@ -29,7 +29,7 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public final class SimulatedMeter extends SimulatedFunction implements Meter {
 
-	private static final String	MILLIS	= Units.PREFIX_MILLI + Units.SECOND;
+	private static final String	MILLIS	= SIUnits.PREFIX_MILLI + SIUnits.SECOND;
 	private static final String[]	MILLIS_ARRAY				= new String[] {MILLIS};
 	private static final BigDecimal	CURRENT_MEASUREMENT	= new BigDecimal(1);
 	private static final LevelData	CURRENT_MEASUREMENT_LEVEL	= new LevelData(Long.MIN_VALUE, null, MILLIS, CURRENT_MEASUREMENT);

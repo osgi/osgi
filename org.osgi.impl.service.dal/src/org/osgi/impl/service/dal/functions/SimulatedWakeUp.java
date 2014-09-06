@@ -20,7 +20,7 @@ import org.osgi.impl.service.dal.PropertyMetadataImpl;
 import org.osgi.impl.service.dal.SimulatedFunction;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.PropertyMetadata;
-import org.osgi.service.dal.Units;
+import org.osgi.service.dal.SIUnits;
 import org.osgi.service.dal.functions.WakeUp;
 import org.osgi.service.dal.functions.data.BooleanData;
 import org.osgi.service.dal.functions.data.LevelData;
@@ -31,7 +31,7 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 
-	private static final String		MILLIS				= Units.PREFIX_MILLI + Units.SECOND;
+	private static final String		MILLIS				= SIUnits.PREFIX_MILLI + SIUnits.SECOND;
 	private static final String[]	MILLIS_ARRAY		= new String[] {MILLIS};
 	private static final LevelData	MIN_WAKE_UP_INTERVAL	= new LevelData(
 																	System.currentTimeMillis(), null, MILLIS, new BigDecimal(0));

@@ -21,7 +21,7 @@ package org.osgi.service.dal;
  * constant name represents the unit name. The constant value represents the
  * unit symbol as it's defined in {@link PropertyMetadata#UNITS}.
  */
-public interface Units {
+public interface SIUnits {
 
 	// Table 1. SI base units
 	/**

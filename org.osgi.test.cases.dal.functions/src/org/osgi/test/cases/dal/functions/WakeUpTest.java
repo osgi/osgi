@@ -14,7 +14,7 @@ import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.FunctionEvent;
 import org.osgi.service.dal.PropertyMetadata;
-import org.osgi.service.dal.Units;
+import org.osgi.service.dal.SIUnits;
 import org.osgi.service.dal.functions.WakeUp;
 import org.osgi.service.dal.functions.data.BooleanData;
 import org.osgi.service.dal.functions.data.LevelData;
@@ -27,7 +27,7 @@ public final class WakeUpTest extends AbstractFunctionTest {
 	private static final long	WAKE_UP_INTERVAL	= Long.getLong(
 															"org.osgi.test.cases.dal.wakeUpInterval", 2000).longValue();
 
-	private static final String	MILLIS	= Units.PREFIX_MILLI + Units.SECOND;
+	private static final String	MILLIS	= SIUnits.PREFIX_MILLI + SIUnits.SECOND;
 
 	/**
 	 * Validates the wake up interval support.

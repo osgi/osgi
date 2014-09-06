@@ -109,7 +109,7 @@ public interface PropertyMetadata {
 	 * built by W/(m\u00B2 sr), where \u00B2 is Unicode superscript two.</li>
 	 * </ul>
 	 * If those rules cannot be applied to the unit symbol, custom rules are
-	 * allowed. A set of predefined unit symbols are available in {@link Units}
+	 * allowed. A set of predefined unit symbols are available in {@link SIUnits}
 	 * interface.
 	 */
 	public static final String	UNITS				= "units";
