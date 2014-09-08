@@ -78,12 +78,4 @@ public class FakeResourceMonitor implements ResourceMonitor {
 		return 0;
 	}
 
-	public void notifyIncomingThread(Thread t) {
-		// TODO?
-	}
-
-	public void notifyOutgoingThread(Thread t) {
-		// TODO?
-	}
-
 }

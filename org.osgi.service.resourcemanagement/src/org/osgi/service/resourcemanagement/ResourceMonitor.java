@@ -138,22 +138,6 @@ public interface ResourceMonitor {
 	public long getMonitoredPeriod();
 
 	/**
-	 * Reports thread t is now attached to the {@link ResourceContext}
-	 * associated to this monitor.
-	 * 
-	 * @param t the newly attached thread
-	 */
-	public void notifyIncomingThread(Thread t);
-
-	/**
-	 * Reports thread t is leaving the {@link ResourceContext} associated with
-	 * this monitor.
-	 * 
-	 * @param t leaving thread
-	 */
-	public void notifyOutgoingThread(Thread t);
-
-	/**
 	 * Checks if resourceMonitor is equals to the current instance. A
 	 * ResourceMonitor rm1 is equals to a ResourceMonitor rm2 if
 	 * rm1.getContext().equals(rm2.getContext()) and

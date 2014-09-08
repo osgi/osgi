@@ -194,14 +194,6 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 		return 0;
 	}
 
-	public void notifyIncomingThread(Thread t) {
-		// nothing to do.
-	}
-
-	public void notifyOutgoingThread(Thread t) {
-		// nothing to do.
-	}
-
 	public void run() {
 		long usage = initialValue;
 		setUsage(initialValue);
