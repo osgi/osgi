@@ -11,7 +11,6 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.resourcemanagement.bundlemanagement.BundleManager;
 import org.osgi.impl.service.resourcemanagement.lock.ResourceContextLock;
 import org.osgi.impl.service.resourcemanagement.persistency.ResourceContextInfo;
-import org.osgi.impl.service.resourcemanagement.threadmanager.ThreadManager;
 import org.osgi.service.resourcemanagement.ResourceContext;
 import org.osgi.service.resourcemanagement.ResourceContextEvent;
 import org.osgi.service.resourcemanagement.ResourceManager;
@@ -47,11 +46,6 @@ public class ResourceManagerImpl implements ResourceManager,
 	private final ResourceContextEventNotifier	eventNotifier;
 
 	/**
-	 * Thread manager
-	 */
-	private final ThreadManager					threadManager;
-
-	/**
 	 * Bundle manager.
 	 */
 	private final BundleManager					bundleManager;
@@ -84,17 +78,14 @@ public class ResourceManagerImpl implements ResourceManager,
 	/**
 	 * @param pBundleManager
 	 * @param pEventNotifier
-	 * @param pThreadManager
 	 */
 	public ResourceManagerImpl(BundleManager pBundleManager,
-			ResourceContextEventNotifier pEventNotifier,
-			ThreadManager pThreadManager) {
+			ResourceContextEventNotifier pEventNotifier) {
 
 		lock = new ResourceContextLock();
 
 		bundleManager = pBundleManager;
 		eventNotifier = pEventNotifier;
-		threadManager = pThreadManager;
 
 		resourceContexts = new Hashtable/* <String, ResourceContext> */();
 		resourceMonitorFactories = new Hashtable/*

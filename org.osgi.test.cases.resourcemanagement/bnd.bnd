@@ -17,7 +17,6 @@ Import-Package: ${-signaturetest}, *
 	org.osgi.impl.service.log;version=latest,\
 	org.osgi.service.resourcemanagement;version=latest,\
 	org.osgi.impl.service.resourcemanagement;version=latest,\
-	org.osgi.impl.service.resourcemanagement.threadmanager;version=latest,\
 	org.osgi.impl.service.resourcemanagement.util;version=latest,\
 	org.osgi.impl.service.resourcemanagement.fakemonitors;version=latest\
 

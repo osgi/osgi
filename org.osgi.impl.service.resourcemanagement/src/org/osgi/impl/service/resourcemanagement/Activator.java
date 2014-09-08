@@ -18,29 +18,20 @@ package org.osgi.impl.service.resourcemanagement;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.resourcemanagement.bundlemanagement.BundleManager;
 import org.osgi.impl.service.resourcemanagement.bundlemanagement.BundleManagerImpl;
-import org.osgi.impl.service.resourcemanagement.threadmanager.ThreadManager;
 import org.osgi.service.resourcemanagement.ResourceManager;
-import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  * Activator
  */
-public class Activator implements BundleActivator, ServiceTrackerCustomizer {
+public class Activator implements BundleActivator {
 
 	/**
 	 * bundle manager.
 	 */
 	private BundleManager					bundleManager;
-
-	/**
-	 * thread manager.
-	 */
-	private ThreadManager					threadManager;
 
 	/**
 	 * resource manager.
@@ -63,18 +54,12 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 	private BundleContext					bundleContext;
 
 	/**
-	 * Service tracker for ThreadManager service.
-	 */
-	private ServiceTracker					threadManagerServiceTracker;
-
-	/**
 	 * @param context
 	 * @throws java.lang.Exception
 	 * @see org.osgi.framework.BundleActivator#start(org.osgi.framework.BundleContext)
 	 */
 	public void start(BundleContext context) throws Exception {
-
-		System.out.println("start activator ");
+		System.out.println("Start org.osgi.impl.service.resourcemanagementorg.osgi.impl.service.resourcemanagement.Activator");
 
 		bundleContext = context;
 
@@ -83,11 +68,8 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 
 		eventNotifier = new ResourceContextEventNotifierImpl();
 		eventNotifier.start(context);
-
-		threadManagerServiceTracker = new ServiceTracker(bundleContext,
-				ThreadManager.class.getName(), this);
-		threadManagerServiceTracker.open();
-
+		
+		startResourceManager();
 	}
 
 	/**
@@ -96,42 +78,10 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
-
-		threadManagerServiceTracker.close();
 		stopResourceManager();
 
 		eventNotifier.stop(context);
 		eventNotifier = null;
-
-		threadManager = null;
-
-	}
-
-	/**
-	 * This method is called by the ServiceTracker service when a new
-	 * ThreadManager is available.
-	 */
-	public Object addingService(ServiceReference reference) {
-		if (threadManager == null) {
-			threadManager = (ThreadManager) bundleContext.getService(reference);
-			startResourceManager();
-			return threadManager;
-		}
-
-		return null;
-	}
-
-	public void modifiedService(ServiceReference reference, Object service) {
-		// TODO?
-	}
-
-	/**
-	 * This method is called by ServiceTracker service when the ThreadManager
-	 * becomes unavailable.
-	 */
-	public void removedService(ServiceReference reference, Object service) {
-		threadManager = null;
-		stopResourceManager();
 	}
 
 	/**
@@ -141,14 +91,12 @@ public class Activator implements BundleActivator, ServiceTrackerCustomizer {
 		bundleManager = new BundleManagerImpl();
 		bundleManager.start(bundleContext);
 
-		resourceManager = new ResourceManagerImpl(bundleManager, eventNotifier,
-				threadManager);
+		resourceManager = new ResourceManagerImpl(bundleManager, eventNotifier);
 		resourceManager.start(bundleContext);
 
 		resourceManagerServiceRegistration = bundleContext
 				.registerService(ResourceManager.class.getName(),
 						resourceManager, null);
-
 	}
 
 	/**
