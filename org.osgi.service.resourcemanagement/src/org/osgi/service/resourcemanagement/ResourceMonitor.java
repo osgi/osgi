@@ -34,7 +34,7 @@ package org.osgi.service.resourcemanagement;
  * For example, for CPU monitoring, the resource management implementation can
  * get the CPU usage of the running threads once per minute, and calculate the
  * CPU usage per context in percentages based on the last ten such measurements.
- * This will make a 60 000 milliseconds sampling period, and a 600 000
+ * This could make a 60 000 milliseconds sampling period, and a 600 000
  * milliseconds monitored period.
  * 
  * @ThreadSafe

@@ -18,12 +18,12 @@ package org.osgi.service.resourcemanagement;
 
 /**
  * <p>
- * An event sent to {@link ResourceListener} when resource usage violates one of
- * their thresholds.
+ * An event is sent to a {@link ResourceListener} when resource usage violates
+ * one of their thresholds.
  * </p>
  * <p>
  * <code>ResourceEvent</code> objects are delivered synchronously to all
- * matching {@link ResourceListener} services. A type code is used to identify
+ * matching {@link ResourceListener} services. A typed code is used to identify
  * the event.
  * </p>
  * 
@@ -50,22 +50,22 @@ public class ResourceEvent {
 	public static final int			ERROR	= 2;
 
 	private final int				type;
-	private final boolean			isUpperThrehsold;
+	private final boolean			isUpperThreshold;
 	private final ResourceContext	resourceContext;
 	private final Object			value;
 
 	/**
-	 * Create a new ResourceEvent.
+	 * Creates a new ResourceEvent.
 	 * 
-	 * @param pType
-	 * @param pContext
-	 * @param pIsUpperThreshold
-	 * @param pValue
+	 * @param pType the event type
+	 * @param pContext the resource context
+	 * @param pIsUpperThreshold whether it is an upper threshold
+	 * @param pValue the value
 	 */
 	public ResourceEvent(final int pType, final ResourceContext pContext, final boolean pIsUpperThreshold, final Object pValue) {
 		type = pType;
 		resourceContext = pContext;
-		isUpperThrehsold = pIsUpperThreshold;
+		isUpperThreshold = pIsUpperThreshold;
 		value = pValue;
 	}
 
@@ -88,7 +88,7 @@ public class ResourceEvent {
 	 * {@link #NORMAL}, {@link #WARNING} and {@link #ERROR}.
 	 * 
 	 * @return the resource consumption value, or null if a resource monitor is
-	 *         not relevant
+	 *         not relevant.
 	 */
 	public Object getValue() {
 		return value;
@@ -97,7 +97,7 @@ public class ResourceEvent {
 	/**
 	 * Returns the resource context that caused the event.
 	 * 
-	 * @return The resource context that cased the event.
+	 * @return The resource context that caused the event.
 	 */
 	public ResourceContext getContext() {
 		return resourceContext;
@@ -112,21 +112,18 @@ public class ResourceEvent {
 	 * @return true if it is an upper threshold.
 	 */
 	public boolean isUpperThreshold() {
-		return isUpperThrehsold;
+		return isUpperThreshold;
 	}
 
 	public int hashCode() {
-		// TODO
 		return super.hashCode();
 	}
 
 	public boolean equals(Object var0) {
-		// TODO
 		return super.equals(var0);
 	}
 
 	public String toString() {
-		// TODO
 		return super.toString();
 	}
 }

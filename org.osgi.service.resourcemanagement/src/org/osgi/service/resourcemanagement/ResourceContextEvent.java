@@ -17,6 +17,22 @@
 package org.osgi.service.resourcemanagement;
 
 /**
+ * A Resource Context Event instance is an event sent to Resource Context
+ * Listener instances through a call to
+ * {@link ResourceContextListener#notify(ResourceContextEvent)} method.
+ * 
+ * A Resource Context Event has a type among the four following ones:
+ * <ul>
+ * <li>{@link #RESOURCE_CONTEXT_CREATED} – A new Resource Context instance has
+ * been created.</li>
+ * <li>{@link #RESOURCE_CONTEXT_REMOVED} – A Resource Context instance has been
+ * deleted.</li>
+ * <li>{@link #BUNDLE_ADDED} – A bundle has been added in the scope of a
+ * Resource Context instance.</li>
+ * <li>{@link #BUNDLE_REMOVED} – A bundle has been removed from the scope of a
+ * Resource Context instance.</li>
+ * </ul>
+ * 
  * @Immutable
  * 
  * @author $Id$
@@ -32,12 +48,12 @@ public class ResourceContextEvent {
 	public static final int			RESOURCE_CONTEXT_CREATED	= 0;
 
 	/**
-	 * A {@link ResourceContext} has been deleted
+	 * A {@link ResourceContext} has been removed
 	 * <p>
 	 * The {@link ResourceContext#removeContext(ResourceContext)} method has
 	 * been invoked
 	 */
-	public static final int			RESOURCE_CONTEXT_DELETED	= 1;
+	public static final int			RESOURCE_CONTEXT_REMOVED	= 1;
 
 	/**
 	 * A bundle has been added to e {@link ResourceContext}
@@ -73,7 +89,7 @@ public class ResourceContextEvent {
 	/**
 	 * Create a new ResourceContextEvent. This constructor should be used when
 	 * the type of the event is either {@link #RESOURCE_CONTEXT_CREATED} or
-	 * {@link #RESOURCE_CONTEXT_DELETED}.
+	 * {@link #RESOURCE_CONTEXT_REMOVED}.
 	 * 
 	 * @param pType event type
 	 * @param pResourceContext context
@@ -105,7 +121,7 @@ public class ResourceContextEvent {
 	 * @return the type of the event. One of:
 	 *         <ul>
 	 *         <li>{@link #RESOURCE_CONTEXT_CREATED}</li>
-	 *         <li>{@link #RESOURCE_CONTEXT_DELETED}</li>
+	 *         <li>{@link #RESOURCE_CONTEXT_REMOVED}</li>
 	 *         <li>{@link #BUNDLE_ADDED}</li>
 	 *         <li>{@link #BUNDLE_REMOVED}</li>
 	 *         </ul>
@@ -144,12 +160,10 @@ public class ResourceContextEvent {
 	}
 
 	public String toString() {
-		// TODO
 		return super.toString();
 	}
 
 	public int hashCode() {
-		// TODO
 		return super.hashCode();
 	}
 

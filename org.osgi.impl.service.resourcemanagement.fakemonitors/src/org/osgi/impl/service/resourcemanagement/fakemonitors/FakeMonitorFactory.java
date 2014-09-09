@@ -92,7 +92,7 @@ public class FakeMonitorFactory implements ResourceMonitorFactory,
 		// Dictionary<String, Object> properties.
 		Dictionary properties = new Hashtable();
 		properties.put(ResourceContextListener.EVENT_TYPE,
-				Integer.valueOf(Integer.toString(ResourceContextEvent.RESOURCE_CONTEXT_DELETED)));
+				Integer.valueOf(Integer.toString(ResourceContextEvent.RESOURCE_CONTEXT_REMOVED)));
 		properties.put(ResourceMonitorFactory.RESOURCE_TYPE_PROPERTY,
 				factoryType);
 		serviceRegistration = bundleContext
@@ -167,7 +167,7 @@ public class FakeMonitorFactory implements ResourceMonitorFactory,
 	 * have to delete the {@link ResourceMonitor} if it was previously created.
 	 */
 	public void notify(ResourceContextEvent event) {
-		if (event.getType() == ResourceContextEvent.RESOURCE_CONTEXT_DELETED) {
+		if (event.getType() == ResourceContextEvent.RESOURCE_CONTEXT_REMOVED) {
 			// find out if this factory created a ResourceMonitor for this
 			// factory
 			ResourceContext resourceContext = event.getContext();

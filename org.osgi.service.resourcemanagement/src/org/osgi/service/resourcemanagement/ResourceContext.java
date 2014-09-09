@@ -20,7 +20,7 @@ import org.osgi.framework.Bundle;
 
 /**
  * Logical entity for resource accounting. A resource context has a group of
- * member bundles, and a bundle can be a member of 1 or 0 resource contexts.
+ * member bundles, and a bundle can be a member of 0 or 1 resource context.
  * 
  * <p>
  * Management agents can use the
@@ -126,7 +126,7 @@ public interface ResourceContext {
 	public ResourceMonitor[] getMonitors();
 
 	/**
-	 * Add a new ResourceMonitor instance monitoring resource for this resource
+	 * Adds a new ResourceMonitor instance monitoring resource for this resource
 	 * context. This method should be called only by ResourceMonitorFactory
 	 * instance.
 	 * 
@@ -137,7 +137,7 @@ public interface ResourceContext {
 	public void addResourceMonitor(ResourceMonitor resourceMonitor) throws ResourceMonitorException;
 
 	/**
-	 * Remove a ResourceMonitor instance from the context.
+	 * Removes a ResourceMonitor instance from the context.
 	 * 
 	 * @param resourceMonitor resource monitor instance to be removed
 	 */
@@ -150,7 +150,7 @@ public interface ResourceContext {
 	 * longer be monitored.
 	 * <p>
 	 * A {@link ResourceContextEvent} with type
-	 * {@link ResourceContextEvent#RESOURCE_CONTEXT_DELETED} will be sent.
+	 * {@link ResourceContextEvent#RESOURCE_CONTEXT_REMOVED} will be sent.
 	 * 
 	 * @param destination The {@link ResourceContext} where the resources
 	 *        currently allocated by this resource context will be moved.

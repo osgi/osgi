@@ -6,6 +6,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 import org.osgi.impl.service.resourcemanagement.bundlemanagement.BundleHolder;
 import org.osgi.impl.service.resourcemanagement.bundlemanagement.BundleManager;
 import org.osgi.impl.service.resourcemanagement.lock.ResourceContextLock;
@@ -175,7 +176,8 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 
 		// check the Resource Monitor is not null
 		if (resourceMonitor == null) {
-			throw new NullPointerException("ResourceMonitor MUST not be null");
+			Logger.getLogger(this.getClass().getName()).finest("ResourceMonitor MUST not be null");
+			return;
 		}
 
 		// check if the ResourceMonitor is associated with this Resource Context

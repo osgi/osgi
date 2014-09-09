@@ -130,7 +130,7 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 		ResourceContextEvent lastEvent = resourceContextListener.getLastEvent();
 		assertNotNull(lastEvent);
 		assertTrue(lastEvent.getContext().equals(resourceContext));
-		assertTrue(lastEvent.getType() == ResourceContextEvent.RESOURCE_CONTEXT_DELETED);
+		assertTrue(lastEvent.getType() == ResourceContextEvent.RESOURCE_CONTEXT_REMOVED);
 
 	}
 
@@ -209,11 +209,11 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 		assertTrue(secondEvent.getContext().equals(resourceContext2));
 		assertTrue(secondEvent.getBundleId() == bundleId);
 
-		// check the third received event is a RESOURCE_CONTEXT_DELETED event
+		// check the third received event is a RESOURCE_CONTEXT_REMOVED event
 		ResourceContextEvent thirdEvent = (ResourceContextEvent) receivedEvents
 				.get(5);
 		assertNotNull(thirdEvent);
-		assertTrue(thirdEvent.getType() == ResourceContextEvent.RESOURCE_CONTEXT_DELETED);
+		assertTrue(thirdEvent.getType() == ResourceContextEvent.RESOURCE_CONTEXT_REMOVED);
 		assertTrue(thirdEvent.getContext().equals(resourceContext1));
 	}
 
@@ -281,9 +281,9 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 		assertTrue(event.getContext().getName().equals(name1));
 		assertTrue(event.getBundleId() == bundleId);
 
-		// event RESOURCE_CONTEXT_DELETED for context2
+		// event RESOURCE_CONTEXT_REMOVED for context2
 		event = (ResourceContextEvent) events.get(3);
-		assertTrue(event.getType() == ResourceContextEvent.RESOURCE_CONTEXT_DELETED);
+		assertTrue(event.getType() == ResourceContextEvent.RESOURCE_CONTEXT_REMOVED);
 		assertTrue(event.getContext().getName().equals(name2));
 
 		// event BUNDLE_REMOVED from context1
@@ -294,7 +294,7 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 
 		// event RESOURCE_CONTEXT_REMOVED for context2
 		event = (ResourceContextEvent) events.get(5);
-		assertTrue(event.getType() == ResourceContextEvent.RESOURCE_CONTEXT_DELETED);
+		assertTrue(event.getType() == ResourceContextEvent.RESOURCE_CONTEXT_REMOVED);
 		assertTrue(event.getContext().getName().equals(name1));
 
 	}

@@ -221,7 +221,7 @@ public class ResourceManagerImpl implements ResourceManager,
 
 		// send a notification
 		ResourceContextEvent event = new ResourceContextEvent(
-				ResourceContextEvent.RESOURCE_CONTEXT_DELETED, resourceContext);
+				ResourceContextEvent.RESOURCE_CONTEXT_REMOVED, resourceContext);
 		eventNotifier.notify(event);
 
 		lock.release();

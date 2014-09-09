@@ -104,13 +104,13 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 
 	/**
 	 * Test register a ResourceContextListener filtering
-	 * RESOURCE_CONTEXT_DELETED.
+	 * RESOURCE_CONTEXT_REMOVED.
 	 */
-	public void testRegisterA_RESOURCE_CONTEXT_DELETED_Listener() {
-		// registers the ResourceContextListener with a RESOURCE_CONTEXT_DELETED
+	public void testRegisterA_RESOURCE_CONTEXT_REMOVED_Listener() {
+		// registers the ResourceContextListener with a RESOURCE_CONTEXT_REMOVED
 		// type filter
 		registerListener(
-				new int[] {ResourceContextEvent.RESOURCE_CONTEXT_DELETED},
+				new int[] {ResourceContextEvent.RESOURCE_CONTEXT_REMOVED},
 				null);
 
 		// executes the scenarios
@@ -119,10 +119,10 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 		// unregisters the listener
 		unregisterListener();
 
-		// checks that only a RESOURCE_CONTEXT_DELETED has been received
+		// checks that only a RESOURCE_CONTEXT_REMOVED has been received
 		assertTrue(events.size() == 1);
 		ResourceContextEvent event = (ResourceContextEvent) events.get(0);
-		assertTrue(event.getType() == ResourceContextEvent.RESOURCE_CONTEXT_DELETED);
+		assertTrue(event.getType() == ResourceContextEvent.RESOURCE_CONTEXT_REMOVED);
 		assertTrue(event.getContext().getName().equals(RESOURCE_CONTEXT_NAME));
 	}
 
@@ -140,7 +140,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 		// unregisters the listener
 		unregisterListener();
 
-		// checks that only a RESOURCE_CONTEXT_DELETED has been received
+		// checks that only a RESOURCE_CONTEXT_REMOVED has been received
 		assertTrue(events.size() == 1);
 		ResourceContextEvent event = (ResourceContextEvent) events.get(0);
 		assertTrue(event.getType() == ResourceContextEvent.BUNDLE_ADDED);
@@ -163,7 +163,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 		// unregisters the listener
 		unregisterListener();
 
-		// checks that only a RESOURCE_CONTEXT_DELETED has been received
+		// checks that only a RESOURCE_CONTEXT_REMOVED has been received
 		assertTrue(events.size() == 1);
 		ResourceContextEvent event = (ResourceContextEvent) events.get(0);
 		assertTrue(event.getType() == ResourceContextEvent.BUNDLE_REMOVED);
@@ -214,11 +214,11 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 				.equals(RESOURCE_CONTEXT_NAME));
 		assertTrue(removedEvent.getBundleId() == BUNDLE_ID);
 
-		// and finally the fourth event is a RESOURCE_CONTEXT_DELETED event
+		// and finally the fourth event is a RESOURCE_CONTEXT_REMOVED event
 		// (context1 was deleted)
 		ResourceContextEvent deletedEvent = (ResourceContextEvent) events
 				.get(3);
-		assertTrue(deletedEvent.getType() == ResourceContextEvent.RESOURCE_CONTEXT_DELETED);
+		assertTrue(deletedEvent.getType() == ResourceContextEvent.RESOURCE_CONTEXT_REMOVED);
 		assertTrue(deletedEvent.getContext().getName()
 				.equals(RESOURCE_CONTEXT_NAME));
 
@@ -266,11 +266,11 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 				.equals(RESOURCE_CONTEXT_NAME2));
 		assertTrue(removedEvent.getBundleId() == BUNDLE_ID2);
 
-		// and finally the fourth event is a RESOURCE_CONTEXT_DELETED event
+		// and finally the fourth event is a RESOURCE_CONTEXT_REMOVED event
 		// (context2 was deleted)
 		ResourceContextEvent deletedEvent = (ResourceContextEvent) events
 				.get(3);
-		assertTrue(deletedEvent.getType() == ResourceContextEvent.RESOURCE_CONTEXT_DELETED);
+		assertTrue(deletedEvent.getType() == ResourceContextEvent.RESOURCE_CONTEXT_REMOVED);
 		assertTrue(deletedEvent.getContext().getName()
 				.equals(RESOURCE_CONTEXT_NAME2));
 
@@ -281,11 +281,11 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	 */
 	public void testRegisterResourceContextListenerFiltering2TypesOfEvents() {
 		// register this instance as a ResourceContextListener filtering on
-		// RESOURCE_CONTEXT_CREATED event type and on RESOURCE_CONTEXT_DELETED
+		// RESOURCE_CONTEXT_CREATED event type and on RESOURCE_CONTEXT_REMOVED
 		// event type all related to context1
 		registerListener(new int[] {
 				ResourceContextEvent.RESOURCE_CONTEXT_CREATED,
-				ResourceContextEvent.RESOURCE_CONTEXT_DELETED},
+				ResourceContextEvent.RESOURCE_CONTEXT_REMOVED},
 				new String[] {RESOURCE_CONTEXT_NAME});
 
 		// executes scenario1 (related to context1) and scenario2 (related to
@@ -305,11 +305,11 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 		assertTrue(createdEvent.getType() == ResourceContextEvent.RESOURCE_CONTEXT_CREATED);
 		assertTrue(createdEvent.getContext().getName()
 				.equals(RESOURCE_CONTEXT_NAME));
-		// and finally the second event is a RESOURCE_CONTEXT_DELETED event
+		// and finally the second event is a RESOURCE_CONTEXT_REMOVED event
 		// (context1 was deleted)
 		ResourceContextEvent deletedEvent = (ResourceContextEvent) events
 				.get(1);
-		assertTrue(deletedEvent.getType() == ResourceContextEvent.RESOURCE_CONTEXT_DELETED);
+		assertTrue(deletedEvent.getType() == ResourceContextEvent.RESOURCE_CONTEXT_REMOVED);
 		assertTrue(deletedEvent.getContext().getName()
 				.equals(RESOURCE_CONTEXT_NAME));
 	}

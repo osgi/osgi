@@ -23,11 +23,12 @@ import org.osgi.service.resourcemanagement.monitor.SocketMonitor;
 import org.osgi.service.resourcemanagement.monitor.ThreadMonitor;
 
 /**
- * Monitor and manage resource contexts.
+ * The Resource Manager service manages the Resource Context instances. The
+ * Resource Manager service is available through the OSGi service registry.
  * 
- * <p>
- * The ResourceManager is a service OSGi.
- * </p>
+ * This service holds the existing Resource Context instances. Resource Context
+ * instances are created by calling the
+ * {@link #createContext(String, ResourceContext)} method.
  * 
  * @ThreadSafe
  * @noimplement

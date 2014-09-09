@@ -26,7 +26,7 @@ package org.osgi.service.resourcemanagement;
  * </p>
  * <p>
  * A <code>ResourceContextListener</code> is registered as an OSGi service. At
- * the registration time, the following properties may be provided:
+ * registration time, the following properties may be provided:
  * <ul>
  * <li>the {@link #RESOURCE_CONTEXT} property which limits the Resource Context
  * for which notifications will be received. This property can be either a
@@ -39,7 +39,7 @@ package org.osgi.service.resourcemanagement;
  * the types defined by a {@link ResourceContextEvent}:
  * <ul>
  * <li>{@link ResourceContextEvent#RESOURCE_CONTEXT_CREATED}</li>
- * <li>{@link ResourceContextEvent#RESOURCE_CONTEXT_DELETED}</li>
+ * <li>{@link ResourceContextEvent#RESOURCE_CONTEXT_REMOVED}</li>
  * <li>{@link ResourceContextEvent#BUNDLE_ADDED}</li>
  * <li>{@link ResourceContextEvent#BUNDLE_REMOVED}</li>
  * </ul>
