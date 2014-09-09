@@ -1,22 +1,16 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
 package org.osgi.test.cases.rest.junit;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Enumeration;
@@ -35,14 +29,30 @@ import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.framework.startlevel.dto.BundleStartLevelDTO;
 import org.osgi.framework.startlevel.dto.FrameworkStartLevelDTO;
 import org.osgi.service.rest.client.RestClient;
-
+import org.osgi.service.rest.client.RestClientFactory;
 
 public class RestClientTestCase extends RestTestUtils {
 
+  private ServiceReference<RestClientFactory> restClientFactoryRef;
   private RestClient restClient;
 
-  public RestClientTestCase() {
-    // TODO Init RestClient
+  @Override
+  public void setUp() throws Exception {
+    super.setUp();
+    restClientFactoryRef = getContext().getServiceReference(RestClientFactory.class);
+    if (restClientFactoryRef == null) {
+      fail("RestClientFactory service is not available!");
+    }
+    RestClientFactory restClientFactory = getContext().getService(restClientFactoryRef);
+    restClient = restClientFactory.createRestClient(new URI(baseURI));
+  }
+
+  @Override
+  public void tearDown() throws Exception {
+    super.tearDown();
+    if (restClientFactoryRef != null) {
+      getContext().ungetService(restClientFactoryRef);
+    }
   }
 
   // TODO - events
@@ -93,7 +103,7 @@ public class RestClientTestCase extends RestTestUtils {
     }
     assertTrue("Error for updating framework start level with negative value ", receiveError);
   }
-  
+
   public void testBundleListRestClient() throws Exception {
     Collection<String> bundleCollection = getRestClient().getBundles();
 
@@ -103,7 +113,7 @@ public class RestClientTestCase extends RestTestUtils {
     // TODO filter ?
 
     Bundle tb1Bundle = getBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME);
-    if (tb1Bundle != null) { // test bundle is already installed => uninstall 
+    if (tb1Bundle != null) { // test bundle is already installed => uninstall
       tb1Bundle.uninstall();
     }
     String url = getContext().getBundle().getEntry(TB1).toString();
@@ -127,7 +137,7 @@ public class RestClientTestCase extends RestTestUtils {
       // TODO check statis code CLIENT_ERROR_CONFLICT?
     }
     assertTrue("Install bundle by same URI", receiveError);
-    
+
     // invalid bundle location
     receiveError = false;
     try {
@@ -141,11 +151,11 @@ public class RestClientTestCase extends RestTestUtils {
 
     // install bundle with bundle content
     Bundle tb2Bundle = getBundle(TB2_TEST_BUNDLE_SYMBOLIC_NAME);
-    if (tb2Bundle != null) { // test bundle is already installed => uninstall 
+    if (tb2Bundle != null) { // test bundle is already installed => uninstall
       tb2Bundle.uninstall();
     }
 
-    String locationHeader = "/tb2.rest.test.location";    
+    String locationHeader = "/tb2.rest.test.location";
     InputStream in = getContext().getBundle().getEntry(TB2).openStream();
     result = getRestClient().installBundle(locationHeader, in);
 
@@ -180,10 +190,10 @@ public class RestClientTestCase extends RestTestUtils {
     Collection<BundleDTO> bundleRepresentationsList = getRestClient().getBundleRepresentations();
     assertNotNull("Bundle representations list", bundleRepresentationsList);
 
-    Bundle[] bundles = getInstalledBundles();    
+    Bundle[] bundles = getInstalledBundles();
     assertEquals("Bundle representations list length:", bundles.length, bundleRepresentationsList.size());
 
-    Hashtable<Long, BundleDTO> bundleRepresentations = new Hashtable<Long, BundleDTO>(); 
+    Hashtable<Long, BundleDTO> bundleRepresentations = new Hashtable<Long, BundleDTO>();
     for (Iterator<BundleDTO> i = bundleRepresentationsList.iterator(); i.hasNext();) {
       BundleDTO bundleRepresentation = i.next();
       bundleRepresentations.put(bundleRepresentation.id, bundleRepresentation);
@@ -198,7 +208,7 @@ public class RestClientTestCase extends RestTestUtils {
 
     // filter ?
   }
-  
+
   public void testBundleRestClient() throws Exception  {
     Bundle bundle = getRondomBundle();
 
@@ -326,7 +336,7 @@ public class RestClientTestCase extends RestTestUtils {
     // start by bundle id
     Bundle tb1Bundle = getTestBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME, TB1);
 
-    int tb1State = tb1Bundle.getState();    
+    int tb1State = tb1Bundle.getState();
     if (tb1State == Bundle.ACTIVE) {
       tb1Bundle.stop();
     }
@@ -344,7 +354,7 @@ public class RestClientTestCase extends RestTestUtils {
 
     getRestClient().startBundle(getBundlePath(tb2Bundle));
 
-    tb2Bundle = getBundle(TB2_TEST_BUNDLE_SYMBOLIC_NAME); 
+    tb2Bundle = getBundle(TB2_TEST_BUNDLE_SYMBOLIC_NAME);
     assertEquals("New state ", Bundle.ACTIVE, tb2Bundle.getState());
 
     receiveError = false;
@@ -355,7 +365,7 @@ public class RestClientTestCase extends RestTestUtils {
     }
     assertTrue("Try to start non existing bundle " + notExistingBundleId, receiveError);
 
-    // start bundle with Bundle-ActivationPolicy by bundle id 
+    // start bundle with Bundle-ActivationPolicy by bundle id
     Bundle tb3Bundle = getTestBundle(TB3_TEST_BUNDLE_SYMBOLIC_NAME, TB3);
     int tb3State = tb3Bundle.getState();
     if (tb3State == Bundle.ACTIVE || tb3State == Bundle.STARTING) {
@@ -363,7 +373,7 @@ public class RestClientTestCase extends RestTestUtils {
     }
 
     getRestClient().startBundle(tb3Bundle.getBundleId(), Bundle.START_ACTIVATION_POLICY);
-    assertEquals("New state for 'lazy' bundle ", Bundle.STARTING, tb3Bundle.getState()); 
+    assertEquals("New state for 'lazy' bundle ", Bundle.STARTING, tb3Bundle.getState());
 
     // start bundle with Bundle-ActivationPolicy by bundle path
     Bundle tb4Bundle = getTestBundle(TB4_TEST_BUNDLE_SYMBOLIC_NAME, TB4);
@@ -373,7 +383,7 @@ public class RestClientTestCase extends RestTestUtils {
     }
 
     getRestClient().startBundle(getBundlePath(tb4Bundle), Bundle.START_ACTIVATION_POLICY);
-    assertEquals("New state for 'lazy' bundle ", Bundle.STARTING, tb4Bundle.getState()); 
+    assertEquals("New state for 'lazy' bundle ", Bundle.STARTING, tb4Bundle.getState());
 
     // stop by bundle id
     Bundle tb21Bundle = getTestBundle(TB21_TEST_BUNDLE_SYMBOLIC_NAME, TB21);
@@ -436,7 +446,7 @@ public class RestClientTestCase extends RestTestUtils {
     } catch (Exception cause) {
       receiveError = true;
     }
-    assertTrue("Get bundle start level for not existing bundle " + notExistingBundleId, receiveError); 
+    assertTrue("Get bundle start level for not existing bundle " + notExistingBundleId, receiveError);
 
     // get start level by bundle path
     bundleStartLevelDTO = getRestClient().getBundleStartLevel(getBundlePath(bundle));
@@ -450,7 +460,7 @@ public class RestClientTestCase extends RestTestUtils {
     } catch (Exception cause) {
       receiveError = true;
     }
-    assertTrue("Get bundle start level for not existing bundle " + notExistingBundlePath, receiveError); 
+    assertTrue("Get bundle start level for not existing bundle " + notExistingBundlePath, receiveError);
 
     // set start level by bundle id
     Bundle tb1Bundle = getTestBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME, TB1);
@@ -522,7 +532,7 @@ public class RestClientTestCase extends RestTestUtils {
     ServiceReference<?>[] serviceRefs = getServices(filter);
     assertServiceList(serviceRefs, services);
 
-    filter = "(&(" + Constants.SERVICE_ID + ">=" + serviceRefs.length / 2 + ")" 
+    filter = "(&(" + Constants.SERVICE_ID + ">=" + serviceRefs.length / 2 + ")"
         + "(" + Constants.SERVICE_ID + "<=" + serviceRefs.length + "))";
 
     services = getRestClient().getServices(filter);
@@ -559,7 +569,7 @@ public class RestClientTestCase extends RestTestUtils {
     } catch (Exception cause) {
       receiveError = true;
     }
-    assertTrue("Request with invalid filter " + filter, receiveError);  
+    assertTrue("Request with invalid filter " + filter, receiveError);
   }
 
   public void testServiceRestClient() throws Exception {
@@ -579,7 +589,7 @@ public class RestClientTestCase extends RestTestUtils {
 
     serviceReferenceDTO = getRestClient().getServiceReference(getServicePath(serviceRef));
     assertService(serviceRef, serviceReferenceDTO);
-    
+
     String notExistingSerivePath = "not-existing-servicve-" + System.currentTimeMillis();
     receiveError = false;
     try {
@@ -594,7 +604,7 @@ public class RestClientTestCase extends RestTestUtils {
     if (restClient == null) {
       throw new IllegalStateException("RestClient is not available!");
     }
-    
+
     return restClient;
   }
 
@@ -606,7 +616,7 @@ public class RestClientTestCase extends RestTestUtils {
 
       for (Iterator<ServiceReferenceDTO> i = serviceRepresentationsDTO.iterator(); i.hasNext();) {
         ServiceReferenceDTO serviceReferenceDTO = i.next();
-        try {       
+        try {
           serviceRepresentationHT.put(serviceReferenceDTO.id, serviceReferenceDTO);
         } catch (Exception cause) {
           fail(cause.getMessage());
@@ -695,9 +705,9 @@ public class RestClientTestCase extends RestTestUtils {
   }
 
   protected void assertBundleCollection(Bundle[] bundles, Collection<String> bundleCollection) {
-    assertNotNull("Bundle colection is not null.", bundleCollection);
+    assertNotNull("Bundle collection is not null.", bundleCollection);
     assertEquals("Bundle list length", bundles.length, bundleCollection.size());
-    
+
     for (Bundle bundle : bundles) {
       long bundleId = bundle.getBundleId();
       assertTrue("Bundle list contains " + bundleId + ".", bundleCollection.contains(getBundleURI(bundleId)));

@@ -1,17 +1,10 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
 package org.osgi.test.cases.rest.junit;
 
@@ -29,20 +22,22 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 
-import org.restlet.data.MediaType;
-import org.restlet.data.Status;
-import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
-import org.restlet.resource.ClientResource;
-import org.restlet.resource.ResourceException;
-
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Enumeration;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.Map;
 
 public class RestServiceTestCase extends RestTestUtils {
 
@@ -53,54 +48,54 @@ public class RestServiceTestCase extends RestTestUtils {
     int originalStartLevel = frameworkStartLevel.getStartLevel();
     int originalInitialBundleStartLevel = frameworkStartLevel.getInitialBundleStartLevel();
 
-    JSONObject jsonStartLevel = getJSONObject(FW_START_LEVEL_URI, FW_START_LEVEL_CONTENT_TYPE_JSON, Status.SUCCESS_OK);
+    JSONObject jsonStartLevel = getJSONObject(FW_START_LEVEL_URI, FW_START_LEVEL_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
 
     assertEquals("original startLevel", frameworkStartLevel.getStartLevel(), jsonStartLevel.getInt("startLevel"));
     assertEquals("original initialBundleStartLevel", frameworkStartLevel.getInitialBundleStartLevel(), jsonStartLevel.getInt("initialBundleStartLevel"));
 
-    Object object = getNonSupportedMediaTypeObject(FW_START_LEVEL_URI, FW_START_LEVEL_CONTENT_TYPE_JSON, Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+    Object object = getNonSupportedMediaTypeObject(FW_START_LEVEL_URI, FW_START_LEVEL_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_NOT_ACCEPTABLE);
     assertNull("Request with not supported media type " + NON_SUPPORTED_MEDIA_TYPE, object);
 
     int startLevel = originalStartLevel /* TODO + 1 */;
     int initialBundleStartLevel = originalInitialBundleStartLevel + 1;
-    updateFWStartLevel(startLevel, initialBundleStartLevel, Status.SUCCESS_NO_CONTENT.getCode(), null, null);
+    updateFWStartLevel(startLevel, initialBundleStartLevel, HttpURLConnection.HTTP_NO_CONTENT, null, true);
 
     frameworkStartLevel = getFrameworkStartLevel();  // TODO Is it necessary
 
     assertEquals("startLevel after put", startLevel, frameworkStartLevel.getStartLevel());
     assertEquals("initialBundleStartLevel after put", initialBundleStartLevel, frameworkStartLevel.getInitialBundleStartLevel());
 
-    jsonStartLevel = getJSONObject(FW_START_LEVEL_URI, FW_START_LEVEL_CONTENT_TYPE_JSON, Status.SUCCESS_OK);
+    jsonStartLevel = getJSONObject(FW_START_LEVEL_URI, FW_START_LEVEL_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertEquals("startLevel", frameworkStartLevel.getStartLevel(), jsonStartLevel.getInt("startLevel"));
     assertEquals("initialBundleStartLevel", frameworkStartLevel.getInitialBundleStartLevel(), jsonStartLevel.getInt("initialBundleStartLevel"));
 
     frameworkStartLevel.setStartLevel(originalStartLevel, this);
     frameworkStartLevel.setInitialBundleStartLevel(originalInitialBundleStartLevel);
 
-    jsonStartLevel = getJSONObject(FW_START_LEVEL_URI, FW_START_LEVEL_CONTENT_TYPE_JSON, Status.SUCCESS_OK);
+    jsonStartLevel = getJSONObject(FW_START_LEVEL_URI, FW_START_LEVEL_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertEquals("updated startLevel", originalStartLevel, jsonStartLevel.getInt("startLevel"));
     assertEquals("updated initialBundleStartLevel", originalInitialBundleStartLevel, jsonStartLevel.getInt("initialBundleStartLevel"));
 
     // Check PUT with UNSUPPORTED MEDIA TYPE)
-    updateFWStartLevel(startLevel, initialBundleStartLevel, Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE.getCode(), null, NON_SUPPORTED_MEDIA_TYPE);
+    updateFWStartLevel(startLevel, initialBundleStartLevel, HttpURLConnection.HTTP_UNSUPPORTED_TYPE, null, false);
 
     //  Check PUT with Illegal Arguments
-    Object result = updateFWStartLevel(-1, originalInitialBundleStartLevel, Status.SERVER_ERROR_INTERNAL.getCode(), null, null);
+    Object result = updateFWStartLevel(-1, originalInitialBundleStartLevel, HttpURLConnection.HTTP_INTERNAL_ERROR, null, true);
 
     assertBundleException(result, "Update framewprk start level with negative value.");
   }
 
   //5.1.2.1
   public void testBundleList() throws JSONException, IOException, BundleException {
-    JSONArray jsonBundleList = getJSONArray(BUNDLE_LIST_URI, BUNDLE_LIST_CONTENT_TYPE_JSON, Status.SUCCESS_OK);
+    JSONArray jsonBundleList = getJSONArray(BUNDLE_LIST_URI, BUNDLE_LIST_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
 
     Bundle[] bundles = getInstalledBundles();
     assertBundleListRepresentation(bundles, jsonBundleList);
 
-    jsonBundleList = getJSONArray(getBundleListURI(getFilter(TEST_BUNDLE_SYMBOLIC_NAME)), BUNDLE_LIST_CONTENT_TYPE_JSON, Status.SUCCESS_OK);
+    jsonBundleList = getJSONArray(getBundleListURI(getFilter(TEST_BUNDLE_SYMBOLIC_NAME)), BUNDLE_LIST_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertBundleListRepresentation(new Bundle[]{getBundle(TEST_BUNDLE_SYMBOLIC_NAME)}, jsonBundleList);
 
-    Object object = getNonSupportedMediaTypeObject(BUNDLE_LIST_URI, BUNDLE_LIST_CONTENT_TYPE_JSON, Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+    Object object = getNonSupportedMediaTypeObject(BUNDLE_LIST_URI, BUNDLE_LIST_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_NOT_ACCEPTABLE);
     assertNull("Request with not supported media type " + NON_SUPPORTED_MEDIA_TYPE, object);
 
     Bundle tb1Bundle = getBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME);
@@ -110,19 +105,19 @@ public class RestServiceTestCase extends RestTestUtils {
     URL url = getContext().getBundle().getEntry(TB1);
 
     // install bundle with location
-    Object result = installBundle(BUNDLE_LIST_URI, url, null, null, true, Status.SUCCESS_OK.getCode());
+    Object result = installBundle(BUNDLE_LIST_URI, url, null, null, true, HttpURLConnection.HTTP_OK);
     assertNotNull("Install bundle by URI:", result);
     if (result instanceof String) {
-      // TODO
+      assertTrue("Bundle URI is returend", ((String)result).indexOf(BUNDLE_URI) != -1);
     } else {
       fail("Location string expected");
     }
 
     // same bundle location
-    result = installBundle(BUNDLE_LIST_URI, url, null, null, true, Status.CLIENT_ERROR_CONFLICT.getCode());
+    result = installBundle(BUNDLE_LIST_URI, url, null, null, true, HttpURLConnection.HTTP_CONFLICT);
     assertNull("Install bundle by same URI:", result);
 
-    result = installBundle(BUNDLE_LIST_URI, null, "invalid bundle location", null, true, Status.SERVER_ERROR_INTERNAL.getCode());
+    result = installBundle(BUNDLE_LIST_URI, null, "invalid bundle location", null, true, HttpURLConnection.HTTP_INTERNAL_ERROR);
     assertBundleException(result, "Install bundle by invalid URI.");
 
     // install bundle with bundle content
@@ -134,26 +129,26 @@ public class RestServiceTestCase extends RestTestUtils {
     url = getContext().getBundle().getEntry(TB2);
     String locationHeader = "/tb2.rest.test.location";
 
-    result = installBundle(BUNDLE_LIST_URI, url, null, locationHeader, false, Status.SUCCESS_OK.getCode());
+    result = installBundle(BUNDLE_LIST_URI, url, null, locationHeader, false, HttpURLConnection.HTTP_OK);
     assertNotNull("Install bundle by bundle content:", result);
     if (result instanceof String) {
-      // TODO
+      assertTrue("Bundle URI is returend", ((String)result).indexOf(BUNDLE_URI) != -1);
     } else {
       fail("Location string expected");
     }
 
     // same bundle location
-    result = installBundle(BUNDLE_LIST_URI, url, null, locationHeader, false, Status.CLIENT_ERROR_CONFLICT.getCode());
+    result = installBundle(BUNDLE_LIST_URI, url, null, locationHeader, false, HttpURLConnection.HTTP_CONFLICT);
     assertNull("Install bundle by same bundle content:", result);
 
-    result = installBundle(BUNDLE_LIST_URI, null, "invalid bundle location", null, false, Status.SERVER_ERROR_INTERNAL.getCode());
+    result = installBundle(BUNDLE_LIST_URI, null, "invalid bundle location", null, false, HttpURLConnection.HTTP_INTERNAL_ERROR);
 
     assertBundleException(result, "Install bundle by invalid bundle content.");
   }
 
   // 5.1.2.2
   public void testBundleRepresentationsList() throws JSONException, IOException {
-    JSONArray jsonBundleRepresentationsList = getJSONArray(BUNDLE_REPRESENTATIONS_LIST_URI, BUNDLE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON, Status.SUCCESS_OK);
+    JSONArray jsonBundleRepresentationsList = getJSONArray(BUNDLE_REPRESENTATIONS_LIST_URI, BUNDLE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertNotNull("Bundle representations list", jsonBundleRepresentationsList);
 
     Bundle[] bundles = getInstalledBundles();
@@ -174,7 +169,7 @@ public class RestServiceTestCase extends RestTestUtils {
     }
 
     // test with filter
-    jsonBundleRepresentationsList = getJSONArray(getBundleRepresentationListURI(getFilter(TEST_BUNDLE_SYMBOLIC_NAME)), BUNDLE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON, Status.SUCCESS_OK);
+    jsonBundleRepresentationsList = getJSONArray(getBundleRepresentationListURI(getFilter(TEST_BUNDLE_SYMBOLIC_NAME)), BUNDLE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
 
     Bundle testBundle = getBundle(TEST_BUNDLE_SYMBOLIC_NAME);
     assertEquals("Bundle representations list length:", 1, jsonBundleRepresentationsList.length());
@@ -182,7 +177,7 @@ public class RestServiceTestCase extends RestTestUtils {
     JSONObject bundleRepresentation = jsonBundleRepresentationsList.getJSONObject(0);
     assertBundleRepresentation(testBundle, bundleRepresentation);
 
-    Object object = getNonSupportedMediaTypeObject(BUNDLE_REPRESENTATIONS_LIST_URI, BUNDLE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON, Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+    Object object = getNonSupportedMediaTypeObject(BUNDLE_REPRESENTATIONS_LIST_URI, BUNDLE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_NOT_ACCEPTABLE);
     assertNull("Request with not supported media type " + NON_SUPPORTED_MEDIA_TYPE, object);
   }
 
@@ -190,54 +185,54 @@ public class RestServiceTestCase extends RestTestUtils {
   public void testBundle() throws JSONException, IOException, BundleException {
     // GET
     Bundle bundle = getRondomBundle();
-    JSONObject bundleRepresentation = getJSONObject(getBundleURI(bundle.getBundleId()), BUNDLE_CONTENT_TYPE_JSON, Status.SUCCESS_OK);
+    JSONObject bundleRepresentation = getJSONObject(getBundleURI(bundle.getBundleId()), BUNDLE_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertNotNull("Bundle representation : " + bundle.getBundleId() + " :", bundleRepresentation);
     assertBundleRepresentation(bundle, bundleRepresentation);
 
     long notExistingBundleId = getNotExistingBundleId();
-    bundleRepresentation = getJSONObject(getBundleURI(notExistingBundleId), BUNDLE_CONTENT_TYPE_JSON, Status.CLIENT_ERROR_NOT_FOUND);
-    assertNull("Bundle representation for not existing bundle " + notExistingBundleId + " :", bundleRepresentation);
+    Object object = getJSONObject(getBundleURI(notExistingBundleId), BUNDLE_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_NOT_FOUND);
+    assertNull("Get not existing bundle " + notExistingBundleId + " :", object);
 
-    Object object = getNonSupportedMediaTypeObject(getBundleURI(bundle.getBundleId()), BUNDLE_CONTENT_TYPE_JSON, Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+    object = getNonSupportedMediaTypeObject(getBundleURI(bundle.getBundleId()), BUNDLE_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_NOT_ACCEPTABLE);
     assertNull("Request with not supported media type " + NON_SUPPORTED_MEDIA_TYPE, object);
 
     // PUT with location
     Bundle tb1Bundle = getTestBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME, TB1);
 
-    Object result = updateBundle(getBundleURI(tb1Bundle.getBundleId()), getContext().getBundle().getEntry(TB11), null, true, Status.SUCCESS_NO_CONTENT.getCode());
+    Object result = updateBundle(getBundleURI(tb1Bundle.getBundleId()), getContext().getBundle().getEntry(TB11), null, true, HttpURLConnection.HTTP_NO_CONTENT);
     assertNull("Update bundle by location " + tb1Bundle.getBundleId() + " :", result);
 
-    result = updateBundle(getBundleURI(notExistingBundleId), getContext().getBundle().getEntry(TB11), null, true, Status.CLIENT_ERROR_NOT_FOUND.getCode());
+    result = updateBundle(getBundleURI(notExistingBundleId), getContext().getBundle().getEntry(TB11), null, true, HttpURLConnection.HTTP_NOT_FOUND);
     assertNull("Update not existing bundle " + notExistingBundleId + " :", result);
 
-    result = updateBundle(getBundleURI(tb1Bundle.getBundleId()), null, "invalid bundle location", true, Status.SERVER_ERROR_INTERNAL.getCode());
+    result = updateBundle(getBundleURI(tb1Bundle.getBundleId()), null, "invalid bundle location", true, HttpURLConnection.HTTP_INTERNAL_ERROR);
 
     assertBundleException(result, "Update bundle with invalid location " + tb1Bundle.getBundleId());
 
     // PUT with bundle content
     Bundle tb2Bundle = getTestBundle(TB2_TEST_BUNDLE_SYMBOLIC_NAME, TB2);
 
-    result = updateBundle(getBundleURI(tb2Bundle.getBundleId()), getContext().getBundle().getEntry(TB21), null, false, Status.SUCCESS_NO_CONTENT.getCode());
+    result = updateBundle(getBundleURI(tb2Bundle.getBundleId()), getContext().getBundle().getEntry(TB21), null, false, HttpURLConnection.HTTP_NO_CONTENT);
     assertNull("Update bundle by content " + tb2Bundle.getBundleId() + " :", result);
 
-    result = updateBundle(getBundleURI(notExistingBundleId), getContext().getBundle().getEntry(TB21), null, false, Status.CLIENT_ERROR_NOT_FOUND.getCode());
+    result = updateBundle(getBundleURI(notExistingBundleId), getContext().getBundle().getEntry(TB21), null, false, HttpURLConnection.HTTP_NOT_FOUND);
     assertNull("Update not existing bundle " + notExistingBundleId + " :", result);
 
-    result = updateBundle(getBundleURI(tb2Bundle.getBundleId()), null, "invalid bundle location", true, Status.SERVER_ERROR_INTERNAL.getCode());
+    result = updateBundle(getBundleURI(tb2Bundle.getBundleId()), null, "invalid bundle location", true, HttpURLConnection.HTTP_INTERNAL_ERROR);
 
     assertBundleException(result, "Update bundle with invalid content " + tb2Bundle.getBundleId());
 
     // DELETE
-    result = uninstallBundle(getBundleURI(tb1Bundle.getBundleId()), Status.SUCCESS_NO_CONTENT.getCode());
+    result = uninstallBundle(getBundleURI(tb1Bundle.getBundleId()), HttpURLConnection.HTTP_NO_CONTENT);
     assertNull("Uninstall bundle " + tb1Bundle.getBundleId() + " :", result);
     assertNull("Framework bundle " + tb1Bundle.getBundleId() + " :", getContext().getBundle(tb1Bundle.getBundleId()));
 
-    result = uninstallBundle(getBundleURI(tb1Bundle.getBundleId()), Status.CLIENT_ERROR_NOT_FOUND.getCode());
+    result = uninstallBundle(getBundleURI(tb1Bundle.getBundleId()), HttpURLConnection.HTTP_NOT_FOUND);
     assertNull("Uninstall already uninstalled bundle " + tb1Bundle.getBundleId() + " :", result);
 
     // stop tb2 bundle throws Exception
     tb2Bundle.start();
-    result = uninstallBundle(getBundleURI(tb2Bundle.getBundleId()), Status.SERVER_ERROR_INTERNAL.getCode());
+    result = uninstallBundle(getBundleURI(tb2Bundle.getBundleId()), HttpURLConnection.HTTP_INTERNAL_ERROR);
     assertBundleException(result, "Uninstall bundle with error in stop method " + tb2Bundle.getBundleId());
   }
 
@@ -245,26 +240,25 @@ public class RestServiceTestCase extends RestTestUtils {
   public void testBundleState() throws JSONException, IOException, BundleException {
     // GET
     Bundle bundle = getRondomBundle();
-    JSONObject bundleStateRepresentation = getJSONObject(getBundleStateURI(bundle.getBundleId()), BUNDLE_STATE_CONTENT_TYPE_JSON, Status.SUCCESS_OK);
+    JSONObject bundleStateRepresentation = getJSONObject(getBundleStateURI(bundle.getBundleId()), BUNDLE_STATE_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertNotNull("Bundle state " + bundle.getBundleId() + " :", bundleStateRepresentation);
     assertBundleStateRepresentation(bundle, bundleStateRepresentation);
 
     long notExistingBundleId = getNotExistingBundleId();
-    bundleStateRepresentation = getJSONObject(getBundleStateURI(notExistingBundleId), BUNDLE_STATE_CONTENT_TYPE_JSON, Status.CLIENT_ERROR_NOT_FOUND);
-    assertNull("Bundle representation for not existing bundle " + notExistingBundleId + " :", bundleStateRepresentation);
+    Object object = getJSONObject(getBundleStateURI(notExistingBundleId), BUNDLE_STATE_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_NOT_FOUND);
+    assertNull("Bundle state for not existing bundle " + notExistingBundleId + " :", object);
 
-    Object result = getNonSupportedMediaTypeObject(getBundleStateURI(bundle.getBundleId()), BUNDLE_STATE_CONTENT_TYPE_JSON, Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+    Object result = getNonSupportedMediaTypeObject(getBundleStateURI(bundle.getBundleId()), BUNDLE_STATE_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_NOT_ACCEPTABLE);
     assertNull("Request with not supported media type " + NON_SUPPORTED_MEDIA_TYPE, result);
 
     // PUT
     Bundle tb1Bundle = getTestBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME, TB1);
 
     int tb1State = tb1Bundle.getState();
-    int newState = tb1State == Bundle.INSTALLED ? Bundle.ACTIVE : Bundle.RESOLVED;
-    bundleStateRepresentation = updateBundleState(getBundleStateURI(tb1Bundle.getBundleId()), newState, -1, Status.SUCCESS_OK.getCode(), null, MediaType.APPLICATION_JSON);
-    assertNotNull("Bundle state updated  " + tb1Bundle.getBundleId() + " :", bundleStateRepresentation);
 
-    tb1Bundle = getContext().getBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME);  // is it needed?
+    int newState = tb1State == Bundle.INSTALLED ? Bundle.ACTIVE : Bundle.RESOLVED;
+    bundleStateRepresentation = updateBundleState(getBundleStateURI(tb1Bundle.getBundleId()), newState, -1, HttpURLConnection.HTTP_OK, null, APPLICATION_JSON);
+    assertNotNull("Bundle state updated  " + tb1Bundle.getBundleId() + " :", bundleStateRepresentation);
 
     assertEquals("New state ", newState, tb1Bundle.getState());
     assertBundleStateRepresentation(tb1Bundle, bundleStateRepresentation);
@@ -276,19 +270,19 @@ public class RestServiceTestCase extends RestTestUtils {
       tb3Bundle.stop();
     }
 
-    bundleStateRepresentation = updateBundleState(getBundleStateURI(tb3Bundle.getBundleId()), Bundle.ACTIVE, Bundle.START_ACTIVATION_POLICY, Status.SUCCESS_OK.getCode(), null, MediaType.APPLICATION_JSON);
+    bundleStateRepresentation = updateBundleState(getBundleStateURI(tb3Bundle.getBundleId()), Bundle.ACTIVE, Bundle.START_ACTIVATION_POLICY, HttpURLConnection.HTTP_OK, null, APPLICATION_JSON);
     assertNotNull("Bundle state updated  " + tb3Bundle.getBundleId() + " :", bundleStateRepresentation);
 
     assertEquals("New state for 'lazy' bundle ", Bundle.STARTING, tb3Bundle.getState());
     assertBundleStateRepresentation(tb3Bundle, bundleStateRepresentation);
 
-    bundleStateRepresentation = updateBundleState(getBundleStateURI(notExistingBundleId), newState, -1, Status.CLIENT_ERROR_NOT_FOUND.getCode(), null, MediaType.APPLICATION_JSON);
+    bundleStateRepresentation = updateBundleState(getBundleStateURI(notExistingBundleId), newState, -1, HttpURLConnection.HTTP_NOT_FOUND, null, APPLICATION_JSON);
     assertNull("Bundle state updated for not existing bundle " + notExistingBundleId + " :", bundleStateRepresentation);
 
-    bundleStateRepresentation = updateBundleState(getBundleStateURI(tb1Bundle.getBundleId()), newState, -1, Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE.getCode(), null, NON_SUPPORTED_MEDIA_TYPE);
+    bundleStateRepresentation = updateBundleState(getBundleStateURI(tb1Bundle.getBundleId()), newState, -1, HttpURLConnection.HTTP_UNSUPPORTED_TYPE, null, NON_SUPPORTED_MEDIA_TYPE);
     assertNull("Bundle state updated with not supportable media type " + NON_SUPPORTED_MEDIA_TYPE + " :", bundleStateRepresentation);
 
-    bundleStateRepresentation = updateBundleState(getBundleStateURI(tb1Bundle.getBundleId()), newState, -1, Status.CLIENT_ERROR_NOT_ACCEPTABLE.getCode(), NON_SUPPORTED_MEDIA_TYPE, MediaType.APPLICATION_JSON);
+    bundleStateRepresentation = updateBundleState(getBundleStateURI(tb1Bundle.getBundleId()), newState, -1, HttpURLConnection.HTTP_NOT_ACCEPTABLE, NON_SUPPORTED_MEDIA_TYPE, APPLICATION_JSON);
     assertNull("Bundle state updated for not acceptable media type " + NON_SUPPORTED_MEDIA_TYPE + " :", bundleStateRepresentation);
 
     Bundle tb21Bundle = getTestBundle(TB21_TEST_BUNDLE_SYMBOLIC_NAME, TB21);
@@ -296,11 +290,11 @@ public class RestServiceTestCase extends RestTestUtils {
       tb21Bundle.start();
     }
 
-    result = updateBundleState(getBundleStateURI(tb21Bundle.getBundleId()), Bundle.RESOLVED, -1, Status.SERVER_ERROR_INTERNAL.getCode(), null, MediaType.APPLICATION_JSON);
-    assertBundleException(result, "Stop bundle for bundle with  error in stop method  " + tb21Bundle.getBundleId());
+    result = updateBundleState(getBundleStateURI(tb21Bundle.getBundleId()), Bundle.RESOLVED, -1, HttpURLConnection.HTTP_INTERNAL_ERROR, null, APPLICATION_JSON);
+    assertBundleException(result, "Stop bundle for bundle with error in stop method  " + tb21Bundle.getBundleId());
 
     // stop bundle with options
-    bundleStateRepresentation = updateBundleState(getBundleStateURI(tb3Bundle.getBundleId()), Bundle.RESOLVED, Bundle.STOP_TRANSIENT, Status.SUCCESS_OK.getCode(), null, MediaType.APPLICATION_JSON);
+    bundleStateRepresentation = updateBundleState(getBundleStateURI(tb3Bundle.getBundleId()), Bundle.RESOLVED, Bundle.STOP_TRANSIENT, HttpURLConnection.HTTP_OK, null, APPLICATION_JSON);
     assertNotNull("Bundle state updated  " + tb3Bundle.getBundleId() + " :", bundleStateRepresentation);
 
     assertEquals("New state ", Bundle.RESOLVED, tb3Bundle.getState());
@@ -311,15 +305,15 @@ public class RestServiceTestCase extends RestTestUtils {
   public void testBundleHeader() throws JSONException, IOException {
     // GET
     Bundle bundle = getRondomBundle();
-    JSONObject bundleHeaderRepresentation = getJSONObject(getBundleHeaderURI(bundle.getBundleId()), BUNDLE_HEADER_CONTENT_TYPE_JSON, Status.SUCCESS_OK);
+    JSONObject bundleHeaderRepresentation = getJSONObject(getBundleHeaderURI(bundle.getBundleId()), BUNDLE_HEADER_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertNotNull("Bundle header " + bundle.getBundleId() + ": ", bundleHeaderRepresentation);
     assertBundleHeaderRepresentation(bundle, bundleHeaderRepresentation);
 
     long notExistingBundleId = getNotExistingBundleId();
-    bundleHeaderRepresentation = getJSONObject(getBundleHeaderURI(notExistingBundleId), BUNDLE_HEADER_CONTENT_TYPE_JSON, Status.CLIENT_ERROR_NOT_FOUND);
-    assertNull("Bundle header representation for not existing bundle " + notExistingBundleId + " :", bundleHeaderRepresentation);
+    Object object = getJSONObject(getBundleHeaderURI(notExistingBundleId), BUNDLE_HEADER_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_NOT_FOUND);
+    assertNull("Bundle header for not existing bundle " + notExistingBundleId + " :", object);
 
-    Object result = getNonSupportedMediaTypeObject(getBundleHeaderURI(bundle.getBundleId()), BUNDLE_HEADER_CONTENT_TYPE_JSON, Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+    Object result = getNonSupportedMediaTypeObject(getBundleHeaderURI(bundle.getBundleId()), BUNDLE_HEADER_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_NOT_ACCEPTABLE);
     assertNull("Request with not acceptable media type " + NON_SUPPORTED_MEDIA_TYPE, result);
   }
 
@@ -327,15 +321,15 @@ public class RestServiceTestCase extends RestTestUtils {
   public void testBundleStartLevel() throws JSONException, IOException, BundleException {
     // GET
     Bundle bundle = getRondomBundle();
-    JSONObject bundleStartLevelRepresentation = getJSONObject(getBundleStartLevelURI(bundle.getBundleId()), BUNDLE_START_LEVEL_CONTENT_TYPE_JSON, Status.SUCCESS_OK);
+    JSONObject bundleStartLevelRepresentation = getJSONObject(getBundleStartLevelURI(bundle.getBundleId()), BUNDLE_START_LEVEL_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertNotNull("Bundle start level " + bundle.getBundleId() + " :", bundleStartLevelRepresentation);
     assertBundleStartLevelRepresentation(bundle, bundleStartLevelRepresentation);
 
     long notExistingBundleId = getNotExistingBundleId();
-    bundleStartLevelRepresentation = getJSONObject(getBundleStartLevelURI(notExistingBundleId), BUNDLE_START_LEVEL_CONTENT_TYPE_JSON, Status.CLIENT_ERROR_NOT_FOUND);
-    assertNull("Bundle start level representation for not existing bundle " + notExistingBundleId + " :", bundleStartLevelRepresentation);
+    Object object = getJSONObject(getBundleStartLevelURI(notExistingBundleId), BUNDLE_START_LEVEL_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_NOT_FOUND);
+    assertNull("Bundle start level for not existing bundle " + notExistingBundleId + " :", object);
 
-    Object result = getNonSupportedMediaTypeObject(getBundleStartLevelURI(bundle.getBundleId()), BUNDLE_START_LEVEL_CONTENT_TYPE_JSON, Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+    Object result = getNonSupportedMediaTypeObject(getBundleStartLevelURI(bundle.getBundleId()), BUNDLE_START_LEVEL_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_NOT_ACCEPTABLE);
     assertNull("Request with not acceptable media type " + NON_SUPPORTED_MEDIA_TYPE, result);
 
     // PUT
@@ -343,7 +337,7 @@ public class RestServiceTestCase extends RestTestUtils {
 
     int tb1StartLevel = getBundleStartLevel(tb1Bundle).getStartLevel();
     int newStartLevel = tb1StartLevel + 1;
-    bundleStartLevelRepresentation = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), newStartLevel, Status.SUCCESS_NO_CONTENT.getCode(), null, MediaType.APPLICATION_JSON);
+    bundleStartLevelRepresentation = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), newStartLevel, HttpURLConnection.HTTP_NO_CONTENT, null, APPLICATION_JSON);
     assertNotNull("Bundle start level updated  " + tb1Bundle.getBundleId() + " :", bundleStartLevelRepresentation);
 
     tb1StartLevel = getBundleStartLevel(tb1Bundle).getStartLevel();
@@ -351,16 +345,16 @@ public class RestServiceTestCase extends RestTestUtils {
     assertEquals("New start level ", newStartLevel, tb1StartLevel);
     assertBundleStartLevelRepresentation(tb1Bundle, bundleStartLevelRepresentation);
 
-    bundleStartLevelRepresentation = updateBundleStartLevel(getBundleStartLevelURI(notExistingBundleId), newStartLevel, Status.CLIENT_ERROR_NOT_FOUND.getCode(), null, MediaType.APPLICATION_JSON);
+    bundleStartLevelRepresentation = updateBundleStartLevel(getBundleStartLevelURI(notExistingBundleId), newStartLevel, HttpURLConnection.HTTP_NOT_FOUND, null, APPLICATION_JSON);
     assertNull("Bundle start level updated for not existing bundle " + notExistingBundleId + " :", bundleStartLevelRepresentation);
 
-    bundleStartLevelRepresentation = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), newStartLevel, Status.CLIENT_ERROR_UNSUPPORTED_MEDIA_TYPE.getCode(), null, NON_SUPPORTED_MEDIA_TYPE);
+    bundleStartLevelRepresentation = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), newStartLevel, HttpURLConnection.HTTP_UNSUPPORTED_TYPE, null, NON_SUPPORTED_MEDIA_TYPE);
     assertNull("Bundle start level updated with not supportable media type " + NON_SUPPORTED_MEDIA_TYPE + " :", bundleStartLevelRepresentation);
 
-    bundleStartLevelRepresentation = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), newStartLevel, Status.CLIENT_ERROR_NOT_ACCEPTABLE.getCode(), NON_SUPPORTED_MEDIA_TYPE, MediaType.APPLICATION_JSON);
+    bundleStartLevelRepresentation = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), newStartLevel, HttpURLConnection.HTTP_NOT_ACCEPTABLE, NON_SUPPORTED_MEDIA_TYPE, APPLICATION_JSON);
     assertNull("Bundle start level updated for not acceptable media type " + NON_SUPPORTED_MEDIA_TYPE + " :", bundleStartLevelRepresentation);
 
-    result = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), -1, Status.SERVER_ERROR_INTERNAL.getCode(), null, MediaType.APPLICATION_JSON);
+    result = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), -1, HttpURLConnection.HTTP_INTERNAL_ERROR, null, APPLICATION_JSON);
     assertBundleException(result, "Bundle start level updated with negative value " + tb1Bundle.getBundleId());
   }
 
@@ -369,21 +363,21 @@ public class RestServiceTestCase extends RestTestUtils {
     String filter = null;
     ServiceReference<?>[] serviceRefs = getServices(filter);
 
-    JSONArray jsonServiceList = getJSONArray(getServiceListURI(filter), SERVICE_LIST_CONTENT_TYPE_JSON, Status.SUCCESS_OK);
+    JSONArray jsonServiceList = getJSONArray(getServiceListURI(filter), SERVICE_LIST_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertServiceList(jsonServiceList, serviceRefs);
 
     filter = "(&(" + Constants.SERVICE_ID + ">=" + serviceRefs.length / 2 + ")"
         + "(" + Constants.SERVICE_ID + "<=" + serviceRefs.length + "))";
 
     serviceRefs = getServices(filter);
-    jsonServiceList = getJSONArray(getServiceListURI(filter), SERVICE_LIST_CONTENT_TYPE_JSON, Status.SUCCESS_OK);
+    jsonServiceList = getJSONArray(getServiceListURI(filter), SERVICE_LIST_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertServiceList(jsonServiceList, serviceRefs);
 
     String invalidFilterURI = SERVICE_LIST_URI + "?filter=invalid-filter";
-    Object object = getNonSupportedMediaTypeObject(invalidFilterURI, SERVICE_LIST_CONTENT_TYPE_JSON, Status.CLIENT_ERROR_BAD_REQUEST);
-    assertNull("Request with invalid filter " + invalidFilterURI, object);
+    jsonServiceList = getJSONArray(invalidFilterURI, SERVICE_LIST_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_BAD_REQUEST);
+    assertNull("Request with invalid filter " + invalidFilterURI, jsonServiceList);
 
-    object = getNonSupportedMediaTypeObject(SERVICE_LIST_URI, SERVICE_LIST_CONTENT_TYPE_JSON, Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+    Object object = getNonSupportedMediaTypeObject(SERVICE_LIST_URI, SERVICE_LIST_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_NOT_ACCEPTABLE);
     assertNull("Request with not supported media type " + NON_SUPPORTED_MEDIA_TYPE, object);
   }
 
@@ -391,7 +385,7 @@ public class RestServiceTestCase extends RestTestUtils {
   public void testServiceRepresentationsList() throws JSONException, IOException, InvalidSyntaxException {
     String filter = null;
     ServiceReference<?>[] serviceRefs = getServices(filter);
-    JSONArray jsonServiceRepresentationsList = getJSONArray(getServiceRepresentationListURI(filter), SERVICE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON, Status.SUCCESS_OK);
+    JSONArray jsonServiceRepresentationsList = getJSONArray(getServiceRepresentationListURI(filter), SERVICE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertNotNull("Service representations list", jsonServiceRepresentationsList);
 
     assertServiceRepresentationList(jsonServiceRepresentationsList, serviceRefs);
@@ -400,14 +394,14 @@ public class RestServiceTestCase extends RestTestUtils {
         + "(" + Constants.SERVICE_ID + "<=" + serviceRefs.length + "))";
 
     serviceRefs = getServices(filter);
-    jsonServiceRepresentationsList = getJSONArray(getServiceRepresentationListURI(filter), SERVICE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON, Status.SUCCESS_OK);
+    jsonServiceRepresentationsList = getJSONArray(getServiceRepresentationListURI(filter), SERVICE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertServiceRepresentationList(jsonServiceRepresentationsList, serviceRefs);
 
     filter = "invalid-filter";
-    Object object = getNonSupportedMediaTypeObject(getServiceRepresentationListURI(filter), SERVICE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON, Status.CLIENT_ERROR_BAD_REQUEST);
-    assertNull("Request with invalid filter '" + filter + "'", object);
+    jsonServiceRepresentationsList = getJSONArray(getServiceRepresentationListURI(filter), SERVICE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_BAD_REQUEST);
+    assertNull("Request with invalid filter '" + filter + "'", jsonServiceRepresentationsList);
 
-    object = getNonSupportedMediaTypeObject(getServiceRepresentationListURI(null), SERVICE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON, Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+    Object object = getNonSupportedMediaTypeObject(getServiceRepresentationListURI(null), SERVICE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_NOT_ACCEPTABLE);
     assertNull("Request with not supported media type " + NON_SUPPORTED_MEDIA_TYPE, object);
   }
 
@@ -416,15 +410,15 @@ public class RestServiceTestCase extends RestTestUtils {
     ServiceReference<?> serviceRef = getRondomService();
 
     // GET
-    JSONObject serviceRepresentation = getJSONObject(getServiceURI(serviceRef), SERVICE_CONTENT_TYPE_JSON, Status.SUCCESS_OK);
+    JSONObject serviceRepresentation = getJSONObject(getServiceURI(serviceRef), SERVICE_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertNotNull("Service representation " + serviceRef + " :", serviceRepresentation);
     assertService(serviceRepresentation, serviceRef);
 
     String notExistingSeriveId = "not-existing-servicve-" + System.currentTimeMillis();
-    serviceRepresentation = getJSONObject(getServiceURI(notExistingSeriveId), SERVICE_CONTENT_TYPE_JSON, Status.CLIENT_ERROR_NOT_FOUND);
+    serviceRepresentation = getJSONObject(getServiceURI(notExistingSeriveId), SERVICE_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_NOT_FOUND);
     assertNull("Service representation for not existing service " + notExistingSeriveId + " :", serviceRepresentation);
 
-    Object result = getNonSupportedMediaTypeObject(getServiceURI(serviceRef), SERVICE_CONTENT_TYPE_JSON, Status.CLIENT_ERROR_NOT_ACCEPTABLE);
+    Object result = getNonSupportedMediaTypeObject(getServiceURI(serviceRef), SERVICE_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_NOT_ACCEPTABLE);
     assertNull("Request with not acceptable media type " + NON_SUPPORTED_MEDIA_TYPE, result);
   }
 
@@ -449,8 +443,8 @@ public class RestServiceTestCase extends RestTestUtils {
     }
 
     for (Bundle bundle : bundles) {
-      long bundleId = bundle.getBundleId();
-      assertTrue("Bundle list contains " + bundleId + " :", bundleURIs.contains(getBundleURI(bundleId)));
+      String bundleURI = getBundleURI(bundle.getBundleId());
+      assertTrue("Bundle list contains " + bundleURI + " :", bundleURIs.contains(bundleURI));
     }
   }
 
@@ -486,8 +480,8 @@ public class RestServiceTestCase extends RestTestUtils {
     }
 
     for (ServiceReference<?> serviceRef : serviceRefs) {
-      String serviceId = serviceRef.getProperty(Constants.SERVICE_ID).toString();
-      assertTrue("Service list contains " + serviceId + " :", serviceURIs.contains(getServiceURI(serviceId)));
+      String serviceURI = getServiceURI(serviceRef.getProperty(Constants.SERVICE_ID).toString());
+      assertTrue("Service list contains " + serviceURI + ": ", serviceURIs.contains(serviceURI));
     }
   }
 
@@ -531,7 +525,9 @@ public class RestServiceTestCase extends RestTestUtils {
         Object value = serviceRef.getProperty(key);
 
         assertTrue("Service property " + key, propNames.contains(key));
-        assertEquals("Service property value ", value, propsRepresentation.get(key));
+        if (value instanceof String) {  // TODO
+          assertEquals("Service property value for " + key, value, propsRepresentation.get(key));
+        }
       }
     } else { // Is it possible?
       assertNull("No properties for service " + serviceRef.getProperty(Constants.SERVICE_ID) + " :", propsRepresentation);
@@ -555,14 +551,15 @@ public class RestServiceTestCase extends RestTestUtils {
         assertTrue("usingBundles element " + ub, uBundlesSet.contains(ub));
       }
     } else {
-      assertNull("usingBundles is null", serviceRepresentation.getJSONArray("usingBundles"));
+      JSONArray uBundles = serviceRepresentation.getJSONArray("usingBundles");
+      assertTrue("usingBundles", uBundles == null || uBundles.length() == 0);
     }
   }
 
   protected void assertBundleException(Object result, String assertMessage) throws JSONException  {
     assertNotNull(assertMessage, result);
 
-    if (result instanceof JSONObject) {	
+    if (result instanceof JSONObject) {
       // TODO
       int typeCode = ((JSONObject)result).getInt("typecode");
       String message = ((JSONObject)result).getString("message");
@@ -574,182 +571,220 @@ public class RestServiceTestCase extends RestTestUtils {
     }
   }
 
-  protected Object updateFWStartLevel(int startLevel, int initialBundleStartLevel, int expectedStatusCode, MediaType acceptMediaType, MediaType contentMediaType) throws JSONException {
-    ClientResource resource = new ClientResource(baseURI + FW_START_LEVEL_URI);
+  protected Object updateFWStartLevel(int startLevel, int initialBundleStartLevel, int expectedStatusCode, String acceptType, boolean jsonMediaType) throws JSONException {
+    //ClientResource resource = new ClientResource(baseURI + FW_START_LEVEL_URI);
     JSONWriter jsonWriter = new JSONStringer().object();
     jsonWriter.key("startLevel").value(startLevel);
     jsonWriter.key("initialBundleStartLevel").value(initialBundleStartLevel);
 
-    if (acceptMediaType != null) {
-      resource.getRequestAttributes().put("Accept", acceptMediaType.toString());
-    }
-    if (contentMediaType != null) {
-      resource.getRequestAttributes().put("Content-Type", contentMediaType.toString());
-    }
+    String strBody = jsonWriter.endObject().toString();
+    String contentType = jsonMediaType ? "application/json" : NON_SUPPORTED_MEDIA_TYPE;
 
-    resource.put(jsonWriter.endObject().toString());
-
-    assertEquals("Expected response status " + expectedStatusCode + ":", expectedStatusCode, resource.getStatus().getCode());
-
-    if (resource.getStatus().getCode() == Status.SERVER_ERROR_INTERNAL.getCode()) { // BundleException
-      return new JSONObject(resource.getResponseEntity());
+    String result = executeRequest(FW_START_LEVEL_URI, "PUT", contentType, acceptType, null, expectedStatusCode, null, strBody);
+    if (result != null && expectedStatusCode == HttpURLConnection.HTTP_INTERNAL_ERROR) { // BundleException
+      return new JSONObject(result);
     }
 
-    return null;
+    return result;
   }
 
-  protected Object installBundle(String requestURI, URL url, String invalidLocation, String locationHeader, boolean byLocation, int expectedStatusCode) throws ResourceException, IOException {
-    ClientResource resource = new ClientResource(baseURI + requestURI);
+  protected Object installBundle(String requestURI, URL url, String invalidLocation, String locationHeader, boolean byLocation, int expectedStatusCode) throws IOException, JSONException {
+    String result = null;
     if (byLocation) {
-      resource.post(invalidLocation == null ? url.toString() : invalidLocation, MediaType.TEXT_PLAIN);
+      result = executeRequest(requestURI, "POST", "test/plain", null, null, expectedStatusCode, null /* additionalProps */,invalidLocation == null ? url.toString() : invalidLocation);
     } else {
-      // HTTP Content-Location
-      resource.getRequestAttributes().put("Content-Location", locationHeader);
-      resource.post(invalidLocation == null ? url.openStream() : invalidLocation.getBytes(), new MediaType("vnd.osgi.bundle"));
+      HashMap<String, String> additionalProps = new HashMap<String, String>();
+      additionalProps.put("Content-Location", locationHeader);
+
+      result = executeRequest(requestURI, "POST", "vnd.osgi.bundle", null, null, expectedStatusCode, additionalProps,
+          invalidLocation == null ? url.openStream() : new ByteArrayInputStream(invalidLocation.getBytes()));
     }
 
-    assertEquals("Expected response status " + expectedStatusCode + ":", expectedStatusCode, resource.getStatus().getCode());
-
-    if (resource.getStatus().isSuccess()) {
-      Representation representation = resource.getResponseEntity();
-      if (representation instanceof StringRepresentation) {
-        return ((StringRepresentation)representation).getText();
-      }
-    } else if (resource.getStatus().getCode() == Status.SERVER_ERROR_INTERNAL.getCode()) { // BundleException
-      return new JSONObject(resource.getResponseEntity());
+    if (result != null && expectedStatusCode == HttpURLConnection.HTTP_INTERNAL_ERROR) { // BundleException
+      return new JSONObject(result);
     }
 
-    return null;
+    return result;
   }
 
-  protected Object updateBundle(String requestURI, URL url, String invalidLocation, boolean byLocation, int expectedStatusCode) throws ResourceException, IOException {
-    ClientResource resource = new ClientResource(baseURI + requestURI);
+  protected Object updateBundle(String requestURI, URL url, String invalidLocation, boolean byLocation, int expectedStatusCode) throws IOException, JSONException {
+    String result = null;
     if (byLocation) {
-      resource.put(invalidLocation == null ? url.toString() : invalidLocation, MediaType.TEXT_PLAIN);
+      result = executeRequest(requestURI, "PUT", "test/plain", null, null, expectedStatusCode, null /* additionalProps */,
+          invalidLocation == null ? url.toString() : invalidLocation);
     } else {
-      // HTTP Content-Location
-      resource.put(invalidLocation == null ? url.openStream() : invalidLocation.getBytes(), new MediaType("vnd.osgi.bundle"));
+      result = executeRequest(requestURI, "PUT", "vnd.osgi.bundle", null, null, expectedStatusCode, null /* additionalProps */,
+          invalidLocation == null ? url.openStream() : new ByteArrayInputStream(invalidLocation.getBytes()));
     }
 
-    assertEquals("Expected response status " + expectedStatusCode + ":", expectedStatusCode, resource.getStatus().getCode());
-
-    if (resource.getStatus().getCode() == Status.SERVER_ERROR_INTERNAL.getCode()) { // BundleException
-      return new JSONObject(resource.getResponseEntity());
+    if (result != null && expectedStatusCode == HttpURLConnection.HTTP_INTERNAL_ERROR) { // BundleException
+      return new JSONObject(result);
     }
 
-    return null;
+    return result;
   }
 
-  protected Object uninstallBundle(String requestURI, int expectedStatusCode) throws ResourceException, IOException {
-    ClientResource resource = new ClientResource(baseURI + requestURI);
-    resource.delete();
+  protected Object uninstallBundle(String requestURI, int expectedStatusCode) throws IOException, JSONException {
+    String result = executeRequest(requestURI, "DELETE", null, null, null, expectedStatusCode, null /* additionalProps */, null);
 
-    assertEquals("Expected response status " + expectedStatusCode + ":", expectedStatusCode, resource.getStatus().getCode());
-
-    if (resource.getStatus().getCode() == Status.SERVER_ERROR_INTERNAL.getCode()) { // BundleException
-      return new JSONObject(resource.getResponseEntity());
+    if (result != null && expectedStatusCode == HttpURLConnection.HTTP_INTERNAL_ERROR) { // BundleException
+      return new JSONObject(result);
     }
 
-    return null;
+    return result;
   }
 
-  protected JSONObject updateBundleState(String requestURI, int newState, int options, int expectedStatusCode, MediaType acceptMediaType, MediaType contentMediaType) throws ResourceException, IOException, JSONException {
-    ClientResource resource = new ClientResource(baseURI + requestURI);
+  protected JSONObject updateBundleState(String requestURI, int newState, int options, int expectedResponseCode, String acceptType, String contentType) throws IOException, JSONException {
     JSONWriter jsonWriter = new JSONStringer().object();
     jsonWriter.key("state").value(newState);
     if (options != -1) {
       jsonWriter.key("options").value(options);
     }
 
-    if (acceptMediaType != null) {
-      resource.getRequestAttributes().put("Accept", acceptMediaType.toString());
-    }
-    if (contentMediaType != null) {
-      resource.getRequestAttributes().put("Content-Type", contentMediaType.toString());
-    }
+    String result = executeRequest(requestURI, "PUT", contentType, acceptType, null, expectedResponseCode, null, jsonWriter.endObject().toString());
 
-    resource.put(jsonWriter.endObject().toString());
-
-    assertEquals("Expected response status " + expectedStatusCode + ":", expectedStatusCode, resource.getStatus().getCode());
-
-    if (resource.getStatus().isSuccess()) {  // Bundle state representation
-      return new JSONObject(resource.getResponseEntity());
-    } else if (resource.getStatus().getCode() == Status.SERVER_ERROR_INTERNAL.getCode()) { // BundleException
-      return new JSONObject(resource.getResponseEntity());
+    if (result != null) {  // Bundle state representation or BundleException
+      return new JSONObject(result);
     }
 
     return null;
   }
 
-  protected JSONObject updateBundleStartLevel(String requestURI, int newStartLevel, int expectedStatusCode, MediaType acceptMediaType, MediaType contentMediaType) throws ResourceException, IOException, JSONException {
-    ClientResource resource = new ClientResource(baseURI + requestURI);
+  protected JSONObject updateBundleStartLevel(String requestURI, int newStartLevel, int expectedResponseCode, String acceptType, String contentType) throws IOException, JSONException {
     JSONWriter jsonWriter = new JSONStringer().object();
     jsonWriter.key("startLevel").value(newStartLevel);
 
-    if (acceptMediaType != null) {
-      resource.getRequestAttributes().put("Accept", acceptMediaType.toString());
-    }
-    if (contentMediaType != null) {
-      resource.getRequestAttributes().put("Content-Type", contentMediaType.toString());
-    }
+    String result = executeRequest(requestURI, "PUT", contentType, acceptType, null, expectedResponseCode, null, jsonWriter.endObject().toString());
 
-    resource.put(jsonWriter.endObject().toString());
-
-    assertEquals("Expected response status " + expectedStatusCode + ":", expectedStatusCode, resource.getStatus().getCode());
-
-    if (resource.getStatus().getCode() == Status.SERVER_ERROR_INTERNAL.getCode()) { // BundleException
-      return new JSONObject(resource.getResponseEntity());
+    if (result != null && expectedResponseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) { // BundleException
+      return new JSONObject(result);
     }
 
     return null;
   }
 
-  protected JSONObject getJSONObject(String uri, String expectedContentType, Status expectedStatus) throws JSONException, IOException {
-    return (JSONObject)getObject(uri, MediaType.APPLICATION_JSON, expectedContentType, expectedStatus, false);
-  }
-
-  protected JSONArray getJSONArray(String uri, String expectedContentType, Status expectedStatus) throws JSONException, IOException {
-    return (JSONArray)getObject(uri, MediaType.APPLICATION_JSON, expectedContentType, expectedStatus, true);
-  }
-
-  protected Object getNonSupportedMediaTypeObject(String uri, String expectedContentType, Status expectedStatus) throws JSONException, IOException {
-    return getObject(uri, NON_SUPPORTED_MEDIA_TYPE, expectedContentType, expectedStatus, false);
-  }
-
-  protected Object getObject(String uri, MediaType mediaType, String expectedContentType, Status expectedStatus, boolean isArray) throws JSONException, IOException {
-    ClientResource resource = new ClientResource(baseURI + uri);
-    if (authentication != null) {
-      resource.setChallengeResponse(authentication);
+  protected JSONObject getJSONObject(String uri, String expectedContentType, int expectedResponseCode) throws JSONException, IOException {
+    String result = executeRequest(uri, "GET", null, "application/json", expectedContentType, expectedResponseCode, null, null);
+    if (expectedResponseCode == HttpURLConnection.HTTP_OK) {
+      return new JSONObject(result);
     }
 
-    if (mediaType == null) {
-      resource.get(MediaType.ALL);
-    } else {
-      resource.get(mediaType);
+    return null;
+  }
+
+  protected JSONArray getJSONArray(String uri, String expectedContentType, int expectedResponseCode) throws JSONException, IOException {
+    String result = executeRequest(uri, "GET", null, "application/json", expectedContentType, expectedResponseCode, null, null);
+    if (expectedResponseCode == HttpURLConnection.HTTP_OK) {
+      return new JSONArray(result);
     }
 
-    if (!resource.getStatus().equals(expectedStatus)) {
-      fail("An unexpected status was returned: " + resource.getStatus() + ". Expected " + expectedStatus);
-    }
+    return null;
+  }
 
-    if (resource.getStatus().isSuccess()) {
-      String contentType = (String)resource.getResponseAttributes().get("Content-Type");
-      if (expectedContentType.equals(contentType)) {
-        if (expectedContentType.endsWith("+json")) {
-          if (isArray) {
-            return new JSONArray(resource.getResponseEntity());
-          } else {
-            return new JSONObject(resource.getResponseEntity());
+  protected Object getNonSupportedMediaTypeObject(String uri, String expectedContentType, int expectedResponseCode) throws JSONException, IOException {
+    return executeRequest(uri, "GET", null, NON_SUPPORTED_MEDIA_TYPE, expectedContentType, expectedResponseCode, null, null);
+  }
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+  private String executeRequest(String uri, String method, String contentType, String acceptType, String expectedContentType, int expectedResponseCode, Map<String, String> additionalProps, Object body) throws JSONException {
+    HttpURLConnection connection = null;
+    BufferedReader in = null;
+    try {
+      connection = getHttpConnection(baseURI + uri, method, acceptType, contentType, additionalProps);
+      if (body != null) {
+        connection.setDoInput(true);
+        connection.setDoOutput(true);
+        DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+        if (body instanceof String) {
+          out.writeBytes((String)body);
+        } else if (body instanceof InputStream) {
+          InputStream is = (InputStream)body;
+          try {
+            byte[] buffer = new byte[1024];
+            int bytesRead = 0;
+            while ((bytesRead = is.read(buffer, 0, 1024)) != -1) {
+              out.write(buffer, 0, bytesRead);
+            }
+          } finally {
+            try {
+              is.close();
+            } catch (Throwable _) {}
           }
-        } else {
-          // TODO
         }
-      } else {
-        fail("An unexpected Content-Type: " + contentType);
+        out.flush();
+        out.close();
+      }
+
+      connection.connect();
+
+      int responseCode = connection.getResponseCode();
+      assertEquals("Response code", expectedResponseCode, responseCode);
+
+      if (responseCode == HttpURLConnection.HTTP_OK) {
+        String responseContentType = connection.getContentType();
+        assertEquals("ContentType", expectedContentType, responseContentType);
+
+        in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+      } else if (responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
+        in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+      }
+
+      if (in != null) {
+        String temp = null;
+        StringBuilder sb = new StringBuilder();
+        while ((temp = in.readLine()) != null) {
+          sb.append(temp);
+        }
+        String result = sb.toString();
+
+        debug("Result:" + result, null);
+        return result;
+      }
+    } catch (IOException e) {
+      e.printStackTrace();
+    } finally {
+      if (in != null) {
+        try {
+          in.close();
+        } catch (Throwable _) {}
       }
     }
 
     return null;
+  }
+
+  private HttpURLConnection getHttpConnection(String url, String method, String acceptType, String contentType, Map<String, String> additionalProps) throws IOException {
+    debug(method + " " + url, null);
+
+    URL uri = new URL(url);
+    HttpURLConnection connection = (HttpURLConnection) uri.openConnection();
+    connection.setRequestMethod(method); //type: POST, PUT, DELETE, GET
+    connection.setDoOutput(true);
+    //connection.setDoInput(true);
+    connection.setConnectTimeout(60000); //60 secs
+    connection.setReadTimeout(60000); //60 secs
+    if (acceptType != null) {
+      connection.setRequestProperty("Accept", acceptType);
+      debug("Accept:" + acceptType, null);
+    } else {
+      connection.setRequestProperty("Accept", "*/*");
+    }
+    if (contentType != null) {
+      connection.setRequestProperty("Content-Type", contentType);
+      debug("Content-Type:" + contentType, null);
+    }
+
+    if (additionalProps != null) {
+      for (Iterator<String> iterator = additionalProps.keySet().iterator(); iterator.hasNext();) {
+        String key = iterator.next();
+        connection.setRequestProperty(key, additionalProps.get(key));
+      }
+    }
+
+    return connection;
   }
 
 }

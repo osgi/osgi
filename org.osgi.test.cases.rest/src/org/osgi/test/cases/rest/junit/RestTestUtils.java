@@ -1,21 +1,16 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) 2014 ProSyst Software GmbH. All Rights Reserved.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This CODE is owned by ProSyst Software GmbH,
+ * and is being distributed to OSGi PARTICIPANTS as MATERIALS
+ * under the terms of section 1 of the OSGi Alliance Inc. Intellectual Property Rights Policy,
+ * Amended and Restated as of May 23, 2011.
  */
 package org.osgi.test.cases.rest.junit;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Random;
 
 import org.osgi.framework.Bundle;
@@ -28,24 +23,23 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.test.support.OSGiTestCase;
-import org.restlet.data.ChallengeResponse;
-import org.restlet.data.ChallengeScheme;
-import org.restlet.data.MediaType;
 
 public abstract class RestTestUtils extends OSGiTestCase implements FrameworkListener {
 
   protected Random random;
 
-  public static String FW_START_LEVEL_URI = "/framework/startlevel";
+  public static String APPLICATION_JSON = "application/json";
+
+  public static String FW_START_LEVEL_URI = "framework/startlevel";
   public static String FW_START_LEVEL_CONTENT_TYPE_JSON = "application/org.osgi.frameworkstartlevel+json";
 
-  public static String BUNDLE_LIST_URI = "/framework/bundles";
+  public static String BUNDLE_LIST_URI = "framework/bundles";
   public static String BUNDLE_LIST_CONTENT_TYPE_JSON = "application/org.osgi.bundles+json";
 
-  public static String BUNDLE_REPRESENTATIONS_LIST_URI = "/framework/bundles/representations";
+  public static String BUNDLE_REPRESENTATIONS_LIST_URI = "framework/bundles/representations";
   public static String BUNDLE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON = "application/org.osgi.bundles.representations+json";
 
-  public static String BUNDLE_URI = "/framework/bundle/";
+  public static String BUNDLE_URI = "framework/bundle/";
   public static String BUNDLE_CONTENT_TYPE_JSON = "application/org.osgi.bundle+json";
 
   public static String BUNDLE_STATE_CONTENT_TYPE_JSON = "application/org.osgi.bundlestate+json";
@@ -56,20 +50,17 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
 
   public static String SERVICE_CONTENT_TYPE_JSON = "application/org.osgi.service+json";
 
-  public static String SERVICE_LIST_URI = "/framework/services";
+  public static String SERVICE_LIST_URI = "framework/services";
   public static String SERVICE_LIST_CONTENT_TYPE_JSON = "application/org.osgi.services+json";
 
   public static String SERVICE_REPRESENTATIONS_LIST_CONTENT_TYPE_JSON = "application/org.osgi.services.representations+json";
 
-  public static MediaType NON_SUPPORTED_MEDIA_TYPE = MediaType.APPLICATION_OPENOFFICE_ODC;
+  public static String NON_SUPPORTED_MEDIA_TYPE = "application/vnd.oasis.opendocument.chart";
 
   protected String baseURI;
   protected String user;
   protected String pass;
-
-  protected boolean basicAuthenticationOn;
-
-  protected ChallengeResponse authentication;
+  protected boolean debugOn;
 
   public static String TEST_BUNDLE_SYMBOLIC_NAME = "org.osgi.test.cases.rest";
   public static String TB1_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb1";
@@ -93,18 +84,12 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
   public void setUp() throws Exception {
     super.setUp();
 
-    baseURI = getProperty("rest.ct.base.uri", "http://localhost:8888");
-    basicAuthenticationOn = getBooleanProperty("rest.ct.basic.authentication", false);
-    user = getProperty("rest.ct.user");
-    pass = getProperty("rest.ct.pass");
-
-    if (basicAuthenticationOn && user != null && pass != null) {
-      authentication = new ChallengeResponse(ChallengeScheme.HTTP_BASIC, user, pass);
-    }
+    baseURI = getProperty("rest.ct.base.uri", "http://localhost:8888/");
+    debugOn = getBooleanProperty("rest.ct.debug", true);
 
     String mediaType = getProperty("rest.ct.non.supported.media.type");
     if (mediaType != null) {
-      NON_SUPPORTED_MEDIA_TYPE = new MediaType(mediaType);
+      NON_SUPPORTED_MEDIA_TYPE = mediaType;
     }
 
     random = new Random();
@@ -130,12 +115,12 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
     return BUNDLE_URI + bundleId;
   }
 
-  protected String getBundleListURI(String filter) {
-    return BUNDLE_REPRESENTATIONS_LIST_URI + (filter == null ? "" : "?" + filter);
+  protected String getBundleListURI(String filter) throws UnsupportedEncodingException {
+    return BUNDLE_LIST_URI + (filter == null ? "" : "?" + URLEncoder.encode(filter, "UTF-8"));
   }
 
-  protected String getBundleRepresentationListURI(String filter) {
-    return BUNDLE_LIST_URI + (filter == null ? "" : "?" + filter);
+  protected String getBundleRepresentationListURI(String filter) throws UnsupportedEncodingException {
+    return BUNDLE_REPRESENTATIONS_LIST_URI + (filter == null ? "" : "?" + URLEncoder.encode(filter, "UTF-8"));
   }
 
   protected String getBundleStateURI(long bundleId) {
@@ -150,16 +135,16 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
     return BUNDLE_URI + bundleId + "/startlevel";
   }
 
-  protected String getServiceListURI(String filter) {
-    return "/framework/services" + (filter == null ? "" : "?filter=" + filter);
+  protected String getServiceListURI(String filter) throws UnsupportedEncodingException {
+    return "framework/services" + (filter == null ? "" : "?filter=" + URLEncoder.encode(filter, "UTF-8"));
   }
 
-  protected String getServiceRepresentationListURI(String filter) {
-    return "/framework/services/representations" + (filter == null ? "" : "?filter=" + filter);
+  protected String getServiceRepresentationListURI(String filter) throws UnsupportedEncodingException {
+    return "framework/services/representations" + (filter == null ? "" : "?filter=" + URLEncoder.encode(filter, "UTF-8"));
   }
 
   protected String getServiceURI(String serviceId) {
-    return "/framework/service/" + serviceId;
+    return "framework/service/" + serviceId;
   }
 
   protected String getServicePath(ServiceReference<?> service) {
@@ -235,7 +220,8 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
   }
 
   protected String getFilter(String bundleSymbolicName) {
-    return "osgi.identity=(&(type=\"osgi.bundle\")(bundle-symbolic-name=\"" + bundleSymbolicName + "\"))";
+    //return "osgi.identity=(&(type=\"osgi.bundle\")(bundle-symbolic-name=\"" + bundleSymbolicName + "\"))";
+    return "osgi.identity=(&(type=osgi.bundle)(bundle-symbolic-name=" + bundleSymbolicName + "))";
   }
 
   protected Bundle getBundle(String bundleSymbolicName) {
@@ -266,6 +252,18 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
       }
     } catch (Exception e) {
       // TODO
+    }
+  }
+
+  protected void debug(String message, Throwable cause) {
+    if (debugOn) {
+      if (message != null) {
+        System.out.println("[REST CT] " + message);
+      }
+
+      if (cause != null) {
+        cause.printStackTrace();
+      }
     }
   }
 
