@@ -14,7 +14,7 @@ import org.osgi.service.resourcemanagement.ResourceMonitorFactory;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
- *
+ * see Conformance Tests description.odt file.
  */
 public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 
@@ -87,7 +87,7 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Check if CPU Factory is available.
+	 * Check if CPU Resource Monitor Factory is available.
 	 */
 	public void testCpuFactoryAvailable() {
 		assertNotNull(cpuFactory);
@@ -177,7 +177,7 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 * 
 	 * @throws ResourceMonitorException
 	 */
-	public void testEnableMonitor() throws ResourceMonitorException {
+	public void testEnablingAndDisablingAResourceMonitor() throws ResourceMonitorException {
 		// create ResourceMonitor
 		ResourceMonitor resourceMonitor = cpuFactory
 				.createResourceMonitor(resourceContext);
@@ -225,7 +225,7 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 * 
 	 * @throws ResourceMonitorException
 	 */
-	public void testRetrieveUsage() throws ResourceMonitorException {
+	public void testRetrieveResourceUsage() throws ResourceMonitorException {
 		// create ResourceMonitor
 		ResourceMonitor resourceMonitor = cpuFactory
 				.createResourceMonitor(resourceContext);

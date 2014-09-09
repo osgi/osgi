@@ -15,7 +15,7 @@ import org.osgi.service.resourcemanagement.ResourceManager;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
- *
+ * see Conformance Tests description.odt file.
  */
 public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 		implements ResourceContextListener {

@@ -28,7 +28,7 @@ import org.osgi.service.resourcemanagement.ResourceMonitorException;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
- *
+ * see Conformance Tests description.odt file.
  */
 public class ResourceContextTestCase extends DefaultTestBundleControl {
 
