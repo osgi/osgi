@@ -17,8 +17,8 @@
 package org.osgi.service.http.runtime.dto;
 
 /**
- * Represents a {@code javax.servlet.Servlet} servlet for handling errors and
- * currently being used by a servlet context.
+ * Represents a {@code javax.servlet.Servlet} for handling errors and currently
+ * being used by a servlet context.
  *
  * @NotThreadSafe
  * @author $Id$

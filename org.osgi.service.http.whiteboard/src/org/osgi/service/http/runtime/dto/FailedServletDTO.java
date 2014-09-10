@@ -17,8 +17,8 @@
 package org.osgi.service.http.runtime.dto;
 
 /**
- * Represents a {@code javax.servlet.Servlet} servlet which is currently not
- * being used for a servlet context due to a problem.
+ * Represents a {@code javax.servlet.Servlet} service which is currently not
+ * being used by a servlet context due to a problem.
  * <p>
  * As the servlet represented by this DTO is not used due to a failure, the
  * field {@link FailedErrorPageDTO#servletContextId} always returns {@code 0}

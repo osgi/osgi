@@ -18,7 +18,7 @@ package org.osgi.service.http.runtime.dto;
 
 
 /**
- * Represents a {@code javax.servlet.Servlet} currently being used for a servlet
+ * Represents a {@code javax.servlet.Servlet} currently being used by a servlet
  * context.
  * 
  * @NotThreadSafe
@@ -29,8 +29,8 @@ public class ServletDTO extends BaseServletDTO {
 	 * The request mappings for the servlet.
 	 * 
 	 * <p>
-	 * The specified patterns are used to determine whether a request is
-	 * mapped to the servlet.
+	 * The specified patterns are used to determine whether a request is mapped
+	 * to the servlet. This array is never empty.
 	 */
 	public String[]				patterns;
 }

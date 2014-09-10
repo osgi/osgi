@@ -17,8 +17,8 @@
 package org.osgi.service.http.runtime.dto;
 
 /**
- * Represents a servlet {@code Filter} filter which is currently not being 
- * used for a servlet context due to a problem.
+ * Represents a servlet {@code Filter} service which is currently not being used
+ * by a servlet context due to a problem.
  * <p>
  * As the service represented by this DTO is not used due to a failure, the
  * field {@link FailedFilterDTO#servletContextId} always returns {@code 0} and
@@ -30,7 +30,7 @@ package org.osgi.service.http.runtime.dto;
 public class FailedFilterDTO extends FilterDTO {
 
 	/**
-	 * The reason why the filter represented by this DTO is not used.
+	 * The reason why the servlet filter represented by this DTO is not used.
 	 * 
 	 * @see DTOConstants#FAILURE_REASON_UNKNOWN
 	 * @see DTOConstants#FAILURE_REASON_EXCEPTION_ON_INIT

@@ -18,11 +18,11 @@ package org.osgi.service.http.runtime.dto;
 
 /**
  * Represents a {@code javax.servlet.Servlet} service registered as an error
- * page but currently not being used for a servlet context due to a problem.
+ * page but currently not being used by a servlet context due to a problem.
  * <p>
  * As the servlet represented by this DTO is not used due to a failure, the
  * field {@link FailedErrorPageDTO#servletContextId} always returns {@code 0}
- * and does not point to an existing servlet context.
+ * and does not point to an existing {@code ServletContextHelper}.
  * 
  * @NotThreadSafe
  * @author $Id$

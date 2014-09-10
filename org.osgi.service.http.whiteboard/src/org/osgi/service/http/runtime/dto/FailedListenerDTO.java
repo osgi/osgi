@@ -17,8 +17,8 @@
 package org.osgi.service.http.runtime.dto;
 
 /**
- * Represents a listener service which is currently not being 
- * used for a servlet context due to a problem.
+ * Represents a listener service which is currently not being used by a servlet
+ * context due to a problem.
  * <p>
  * As the listener represented by this DTO is not used due to a failure, the
  * field {@link FailedErrorPageDTO#servletContextId} always returns {@code 0}

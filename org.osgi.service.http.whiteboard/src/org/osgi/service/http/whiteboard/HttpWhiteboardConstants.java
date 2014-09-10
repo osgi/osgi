@@ -17,7 +17,7 @@
 package org.osgi.service.http.whiteboard;
 
 /**
- * Defines standard names for Http Whiteboard Service constants.
+ * Defines standard constants for the whiteboard services.
  * 
  * @author $Id$
  */
@@ -27,30 +27,19 @@ public final class HttpWhiteboardConstants {
 	}
 
 	/**
-	 * The name of the default
-	 * {@link org.osgi.service.http.context.ServletContextHelper}. If a service
-	 * is registered with this property, it is overriding the default context
-	 * with a custom provided context.
-	 * 
-	 * @see #HTTP_WHITEBOARD_CONTEXT_NAME
-	 */
-	public static final String	HTTP_WHITEBOARD_DEFAUT_CONTEXT_NAME		= "default";
-
-	/**
 	 * Service property specifying the name of an
 	 * {@link org.osgi.service.http.context.ServletContextHelper} service.
 	 * 
 	 * <p>
 	 * For {@link org.osgi.service.http.context.ServletContextHelper} services,
 	 * this service property must be specified. Context services without this
-	 * service property must be ignored.
+	 * service property are ignored.
 	 * 
 	 * <p>
-	 * Servlet, listener, servlet filter, and resource servlet services might
-	 * refer to a specific
-	 * {@link org.osgi.service.http.context.ServletContextHelper} service
-	 * referencing the name with the {@link #HTTP_WHITEBOARD_CONTEXT_SELECT}
-	 * property.
+	 * Servlet, listener, servlet filter, and resource services might refer to a
+	 * specific {@link org.osgi.service.http.context.ServletContextHelper}
+	 * service referencing the name with the
+	 * {@link #HTTP_WHITEBOARD_CONTEXT_SELECT} property.
 	 * 
 	 * <p>
 	 * For {@link org.osgi.service.http.context.ServletContextHelper} services,
@@ -65,24 +54,35 @@ public final class HttpWhiteboardConstants {
 	public static final String	HTTP_WHITEBOARD_CONTEXT_NAME			= "osgi.http.whiteboard.context.name";
 
 	/**
+	 * The name of the default
+	 * {@link org.osgi.service.http.context.ServletContextHelper}. If a service
+	 * is registered with this property, it is overriding the default context
+	 * with a custom provided context.
+	 * 
+	 * @see #HTTP_WHITEBOARD_CONTEXT_NAME
+	 */
+	public static final String	HTTP_WHITEBOARD_DEFAUT_CONTEXT_NAME		= "default";
+
+	/**
 	 * Service property specifying the path of an
 	 * {@link org.osgi.service.http.context.ServletContextHelper} service.
 	 * 
 	 * <p>
 	 * For {@link org.osgi.service.http.context.ServletContextHelper} services
 	 * this service property is required. Context services without this service
-	 * property must be ignored.
+	 * property are ignored.
 	 * 
 	 * <p>
 	 * This property defines a context path under which all whiteboard services
-	 * are registered. Having different contexts with different paths allows to
-	 * separate the URL space.
+	 * associated with this context are registered. Having different contexts
+	 * with different paths allows to separate the URL space.
 	 * 
 	 * <p>
 	 * For {@link org.osgi.service.http.context.ServletContextHelper} services,
 	 * the value of this service property must be of type {@code String}. The
-	 * path must start with a slash but not end with a slash. Contexts with an
-	 * invalid path are ignored.
+	 * value is either a slash for the root or it must start with a slash but
+	 * not end with a slash. Valid characters are defined in
+	 * rfc3986#section-3.3. Contexts with an invalid path are ignored.
 	 * 
 	 * @see #HTTP_WHITEBOARD_CONTEXT_NAME
 	 * @see #HTTP_WHITEBOARD_CONTEXT_SELECT
@@ -90,22 +90,27 @@ public final class HttpWhiteboardConstants {
 	public static final String	HTTP_WHITEBOARD_CONTEXT_PATH			= "osgi.http.whiteboard.context.path";
 
 	/**
-	 * Service property referencing the
+	 * Service property referencing a
 	 * {@link org.osgi.service.http.context.ServletContextHelper} service.
 	 * 
 	 * <p>
-	 * For servlet, listener, servlet filter, or resource servlet services, this
-	 * service property refers to the associated Servlet Context Helper service.
-	 * The value of this property either directly referencing a context name or
-	 * is a filter expression which is matched against the service registration
-	 * properties of the Servlet Context Helper. If this service property is not
-	 * specified, then the default context must be used. If there is no context
-	 * service matching, the servlet, listener, servlet filter, or resource
-	 * servlet service must be ignored.
-	 * 
+	 * For servlet, listener, servlet filter, or resource services, this service
+	 * property refers to the associated {@code ServletContextHelper} service.
+	 * The value of this property is a filter expression which is matched
+	 * against the service registration properties of the
+	 * {@code ServletContextHelper} service. If this service property is not
+	 * specified, the default context is used. If there is no context service
+	 * matching, the servlet, listener, servlet filter, or resource service is
+	 * ignored.
 	 * <p>
-	 * For servlet, listener, servlet filter, or resource servlet services, the
-	 * value of this service property must be of type {@code String}.
+	 * For example, if a whiteboard service wants to select a servlet context
+	 * helper with the name &quot;Admin&quot; the expression would be
+	 * &quot;(osgi.http.whiteboard.context.name=Admin)&quot;. Selecting all
+	 * contexts could be done with
+	 * &quot;(osgi.http.whiteboard.context.name=*)&quot;.
+	 * <p>
+	 * For servlet, listener, servlet filter, or resource services, the value of
+	 * this service property must be of type {@code String}.
 	 * 
 	 * @see #HTTP_WHITEBOARD_CONTEXT_NAME
 	 * @see #HTTP_WHITEBOARD_CONTEXT_PATH
@@ -125,11 +130,11 @@ public final class HttpWhiteboardConstants {
 	 * property to apply the filter to the servlet.
 	 * 
 	 * <p>
-	 * Servlet names must be unique among all servlet services associated with
-	 * an {@link org.osgi.service.http.context.ServletContextHelper}. If
+	 * Servlet names must be unique among all servlet services associated with a
+	 * single {@link org.osgi.service.http.context.ServletContextHelper}. If
 	 * multiple servlet services associated with the same HttpContext have the
-	 * same servlet name, then all but the highest ranked servlet service must
-	 * be ignored.
+	 * same servlet name, then all but the highest ranked servlet service are
+	 * ignored.
 	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code String}.
@@ -143,7 +148,7 @@ public final class HttpWhiteboardConstants {
 	 * <p>
 	 * The specified patterns are used to determine whether a request should be
 	 * mapped to the servlet. Servlet services without this service property or
-	 * {@link #HTTP_WHITEBOARD_SERVLET_ERROR_PAGE} must be ignored.
+	 * {@link #HTTP_WHITEBOARD_SERVLET_ERROR_PAGE} are ignored.
 	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code String},
@@ -159,8 +164,10 @@ public final class HttpWhiteboardConstants {
 	 * 
 	 * <p>
 	 * The service property values may be the name of a fully qualified
-	 * exception class or a three digit HTTP status code. Any value that is not
-	 * a three digit number is considered to be the name of a fully qualified
+	 * exception class, a three digit HTTP status code, the value "4xx" for all
+	 * error codes in the 400 rage, or the value "5xx" for all error codes in
+	 * the 500 rage. Any value that is not a three digit number, or one of the
+	 * two special values is considered to be the name of a fully qualified
 	 * exception class.
 	 * 
 	 * <p>
@@ -174,7 +181,7 @@ public final class HttpWhiteboardConstants {
 	 * asynchronous processing.
 	 * 
 	 * <p>
-	 * By default Servlet services do not support asynchronous processing.
+	 * By default servlet services do not support asynchronous processing.
 	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code Boolean}.
@@ -195,11 +202,11 @@ public final class HttpWhiteboardConstants {
 	 * 
 	 * <p>
 	 * Servlet filter names must be unique among all servlet filter services
-	 * associated with an
+	 * associated with a single
 	 * {@link org.osgi.service.http.context.ServletContextHelper}. If multiple
-	 * servlet filter services associated with the same HttpContext have the
-	 * same servlet filter name, then all but the highest ranked servlet filter
-	 * service must be ignored.
+	 * servlet filter services associated with the same context have the same
+	 * servlet filter name, then all but the highest ranked servlet filter
+	 * service are ignored.
 	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code String}.
@@ -214,7 +221,7 @@ public final class HttpWhiteboardConstants {
 	 * The specified patterns are used to determine whether a request should be
 	 * mapped to the servlet filter. Filter services without this service
 	 * property or the {@link #HTTP_WHITEBOARD_FILTER_SERVLET} or the
-	 * {@link #HTTP_WHITEBOARD_FILTER_REGEX} service property must be ignored.
+	 * {@link #HTTP_WHITEBOARD_FILTER_REGEX} service property are ignored.
 	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code String},
@@ -226,13 +233,13 @@ public final class HttpWhiteboardConstants {
 
 	/**
 	 * Service property specifying the {@link #HTTP_WHITEBOARD_SERVLET_NAME
-	 * servlet names} for a {@code Filter} service.
+	 * servlet names} for a servlet {@code Filter} service.
 	 * 
 	 * <p>
 	 * The specified names are used to determine the servlets whose requests
-	 * should be mapped to the servlet filter. Filter services without this
-	 * service property or the {@link #HTTP_WHITEBOARD_FILTER_PATTERN} or the
-	 * {@link #HTTP_WHITEBOARD_FILTER_REGEX} service property must be ignored.
+	 * should be mapped to the servlet filter. Servlet filter services without
+	 * this service property or the {@link #HTTP_WHITEBOARD_FILTER_PATTERN} or
+	 * the {@link #HTTP_WHITEBOARD_FILTER_REGEX} service propertyare ignored.
 	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code String},
@@ -241,16 +248,16 @@ public final class HttpWhiteboardConstants {
 	public static final String	HTTP_WHITEBOARD_FILTER_SERVLET			= "osgi.http.whiteboard.filter.servlet";
 
 	/**
-	 * Service property specifying the request mappings for a {@code Filter}
-	 * service.
+	 * Service property specifying the request mappings for a servlet
+	 * {@code Filter} service.
 	 * 
 	 * <p>
 	 * The specified regular expressions are used to determine whether a request
 	 * should be mapped to the servlet filter. The regular expressions must
-	 * follow the syntax defined in {@code java.util.regex.Pattern}. Filter
-	 * services without this service property or the
+	 * follow the syntax defined in {@code java.util.regex.Pattern}. Servlet
+	 * filter services without this service property or the
 	 * {@link #HTTP_WHITEBOARD_FILTER_SERVLET} or the
-	 * {@link #HTTP_WHITEBOARD_FILTER_PATTERN} service property must be ignored.
+	 * {@link #HTTP_WHITEBOARD_FILTER_PATTERN} service property are ignored.
 	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code String},
@@ -261,11 +268,12 @@ public final class HttpWhiteboardConstants {
 	public static final String	HTTP_WHITEBOARD_FILTER_REGEX			= "osgi.http.whiteboard.filter.regex";
 
 	/**
-	 * Service property specifying whether a {@code Filter} service supports
-	 * asynchronous processing.
+	 * Service property specifying whether a servlet {@code Filter} service
+	 * supports asynchronous processing.
 	 * 
 	 * <p>
-	 * By default Filters services do not support asynchronous processing.
+	 * By default servlet filters services do not support asynchronous
+	 * processing.
 	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code Boolean}.
@@ -275,11 +283,12 @@ public final class HttpWhiteboardConstants {
 	public static final String	HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED	= "osgi.http.whiteboard.filter.asyncSupported";
 
 	/**
-	 * Service property specifying the dispatcher handling of a {@code Filter}.
+	 * Service property specifying the dispatcher handling of a servlet
+	 * {@code Filter}.
 	 * 
 	 * <p>
-	 * By default Filters services are associated with client requests only (see
-	 * value {@link #DISPATCHER_REQUEST}).
+	 * By default servlet filter services are associated with client requests
+	 * only (see value {@link #DISPATCHER_REQUEST}).
 	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code String},
@@ -294,7 +303,7 @@ public final class HttpWhiteboardConstants {
 
 	/**
 	 * Possible value for the {@link #HTTP_WHITEBOARD_FILTER_DISPATCHER}
-	 * property indicating the filter is applied to client requests.
+	 * property indicating the servlet filter is applied to client requests.
 	 * 
 	 * @see "Java Servlet Specification Version 3.0, Section 6.2.5 Filters and the RequestDispatcher"
 	 */
@@ -302,7 +311,7 @@ public final class HttpWhiteboardConstants {
 
 	/**
 	 * Possible value for the {@link #HTTP_WHITEBOARD_FILTER_DISPATCHER}
-	 * property indicating the filter is applied to include calls to the
+	 * property indicating the servlet filter is applied to include calls to the
 	 * dispatcher.
 	 * 
 	 * @see "Java Servlet Specification Version 3.0, Section 6.2.5 Filters and the RequestDispatcher"
@@ -311,7 +320,7 @@ public final class HttpWhiteboardConstants {
 
 	/**
 	 * Possible value for the {@link #HTTP_WHITEBOARD_FILTER_DISPATCHER}
-	 * property indicating the filter is applied to forward calls to the
+	 * property indicating the servlet filter is applied to forward calls to the
 	 * dispatcher.
 	 * 
 	 * @see "Java Servlet Specification Version 3.0, Section 6.2.5 Filters and the RequestDispatcher"
@@ -320,7 +329,8 @@ public final class HttpWhiteboardConstants {
 
 	/**
 	 * Possible value for the {@link #HTTP_WHITEBOARD_FILTER_DISPATCHER}
-	 * property indicating the filter is applied in the async context.
+	 * property indicating the servlet filter is applied in the asynchronous
+	 * context.
 	 * 
 	 * @see "Java Servlet Specification Version 3.0, Section 6.2.5 Filters and the RequestDispatcher"
 	 */
@@ -328,42 +338,67 @@ public final class HttpWhiteboardConstants {
 
 	/**
 	 * Possible value for the {@link #HTTP_WHITEBOARD_FILTER_DISPATCHER}
-	 * property indicating the filter is applied when an error page is called.
+	 * property indicating the servlet filter is applied when an error page is
+	 * called.
 	 * 
 	 * @see "Java Servlet Specification Version 3.0, Section 6.2.5 Filters and the RequestDispatcher"
 	 */
 	public static final String	DISPATCHER_ERROR						= "ERROR";
 
 	/**
-	 * Service property specifying the resource entry prefix for a
-	 * {@link javax.servlet.Servlet} servlet service.
+	 * Service property specifying the request mappings for resources.
 	 * 
 	 * <p>
-	 * If a servlet service is registerd with this property, it is marked as a
-	 * resource serving servlet serving bundle resources.
+	 * The specified patterns are used to determine whether a request should be
+	 * mapped to resources. Resource services without this service property are
+	 * ignored.
+	 * 
+	 * <p>
+	 * The value of this service property must be of type {@code String},
+	 * {@code String[]}, or {@code Collection<String>}.
+	 * 
+	 * @see "Java Servlet Specification Version 3.0, Section 12.2 Specification of Mappings"
+	 * @see #HTTP_WHITEBOARD_RESOURCE_PREFIX
+	 */
+	public static final String	HTTP_WHITEBOARD_RESOURCE_PATTERN		= "osgi.http.whiteboard.resource.pattern";
+
+	/**
+	 * Service property specifying the resource entry prefix for a resource
+	 * service.
+	 * 
+	 * <p>
+	 * If a resource service is registered with this property, requests are
+	 * served with bundle resources.
 	 * 
 	 * <p>
 	 * This prefix is used to map a requested resource to the bundle's entries.
-	 * TODO do we distinguish between "/xyz" and "xyz"?
+	 * The value must not end with slash (&quot;/&quot;) with the exception that
+	 * a name of the form &quot;/&quot; is used to denote the root of the
+	 * bundle. See the specification text for details on how HTTP requests are
+	 * mapped.
+	 *
 	 * <p>
-	 * The value of this service property must be of type {@code String}.
+	 * The value of this service property must be of type {@code String},
+	 * {@code String[]}, or {@code Collection<String>}.
+	 * 
+	 * @see #HTTP_WHITEBOARD_RESOURCE_PATTERN
 	 */
 	public static final String	HTTP_WHITEBOARD_RESOURCE_PREFIX			= "osgi.http.whiteboard.resource.prefix";
 
 	/**
 	 * Service property specifying the target filter to select the Http
-	 * Whiteboard Service runtime to process the service.
+	 * Whiteboard Implementation to process the service.
 	 * 
 	 * <p>
-	 * An Http Whiteboard Service implementation can define any number of
-	 * attributes which can be referenced by the target filter. The attributes
-	 * should always include the
+	 * An Http Whiteboard Implementation can define any number of attributes
+	 * which can be referenced by the target filter. The attributes should
+	 * always include the
 	 * {@link org.osgi.service.http.runtime.HttpServiceRuntimeConstants#HTTP_SERVICE_ENDPOINT_ATTRIBUTE
 	 * osgi.http.endpoint} attribute if the endpoint information is known.
 	 * 
 	 * <p>
 	 * If this service property is not specified, then all Http Whiteboard
-	 * Services can process the service.
+	 * Implementations can process the service.
 	 * 
 	 * <p>
 	 * The value of this service property must be of type {@code String} and be

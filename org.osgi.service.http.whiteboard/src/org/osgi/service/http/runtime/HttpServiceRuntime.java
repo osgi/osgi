@@ -22,7 +22,7 @@ import org.osgi.service.http.runtime.dto.RuntimeDTO;
 
 /**
  * The {@code HttpServiceRuntime} service represents the runtime information of
- * a Http (Whiteboard) Service implementation.
+ * a Http (Whiteboard) Implementation.
  *
  * <p>
  * It provides access to DTOs representing the current state of the service.

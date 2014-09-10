@@ -31,13 +31,14 @@ public class RequestInfoDTO extends DTO {
 	public String				path;
 
 	/**
-	 * The service id of the {@code ServletContext} for this request.
+	 * The service id of the servlet context processing the request represented
+	 * by this DTO.
 	 */
 	public long		servletContextId;
 	
 	/**
-	 * The filters processing this request. If no filters are called for
-	 * processing this request, {@code null} is returned.
+	 * The servlet filters processing this request. If no servlet filters are
+	 * called for processing this request, an empty array is returned.
 	 */
 	public FilterDTO[] filterDTOs;
 	

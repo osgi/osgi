@@ -17,8 +17,7 @@
 package org.osgi.service.http.runtime.dto;
 
 /**
- * Represents a {@code javax.servlet.ServletContext} servlet context that is
- * currently not used due to some problem.
+ * Represents a servlet context that is currently not used due to some problem.
  * 
  * The following fields return an empty array for a
  * {@code FailedServletContextDTO}:

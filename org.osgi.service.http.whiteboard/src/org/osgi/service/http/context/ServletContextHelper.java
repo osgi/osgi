@@ -27,54 +27,70 @@ import org.osgi.annotation.versioning.ConsumerType;
 import org.osgi.framework.Bundle;
 
 /**
- * Helper service for the servlet context used by whiteboard services for HTTP
- * requests.
+ * Helper service for a servlet context used by a Http Whiteboard implementation
+ * to serve HTTP requests.
+ *
+ * <p>
+ * This service defines methods that the Http Whiteboard Implementation may call
+ * to get information for a request when dealing with whiteboard services.
  * 
  * <p>
- * This service defines methods that the Http Whiteboard Service implementation
- * may call to get information for a request when dealing with whiteboard
- * services.
+ * Each {@code ServletContextHelper} is registered with a
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_NAME
+ * service property} containing a name to reference by servlets, servlet
+ * filters, resources, and listeners. If there is more than one
+ * {@code ServletContextHelper} registered with the same context name, the one
+ * with the highest service ranking is active, the others are inactive.
+ * 
+ * <p>
+ * A context is registered with the
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_PATH
+ * service property} to define a path under which all services registered with
+ * this context are reachable. If there is more than one
+ * {@code ServletContextHelper} registered with the same path, the one with the
+ * highest service ranking is active, the others are inactive.
  * 
  * <p>
  * Servlets, servlet filters, resources, and listeners services may be
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_NAME
- * associated} with an {@code ServletContextHelper} service. Those whiteboard
- * services that are associated using the same {@code ServletContextHelper}
- * object will share the same {@code ServletContext} object.
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT
+ * associated} with a {@code ServletContextHelper} service. If the referenced
+ * {@code ServletContextHelper} service does not exist or is currently not
+ * active, the whiteboard services for that {@code ServletContextHelper} are not
+ * active either.
  * 
  * <p>
- * If no {@code ServletContextHelper} service is associated, a default
- * {@code ServletContextHelper} is used. The behavior of the methods on the
- * default {@code ServletContextHelper} is defined as follows:
+ * If no {@code ServletContextHelper} service is associated, that is no
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT}
+ * is configured for a whiteboard service, a default
+ * {@code ServletContextHelper} is used.
+ * 
+ * <p>
+ * Those whiteboard services that are associated using the same
+ * {@code ServletContextHelper} object will share the same
+ * {@code ServletContext} object.
+ * 
+ * <p>
+ * The behavior of the methods on the default {@code ServletContextHelper} is
+ * defined as follows:
  * <ul>
  * <li>{@code getMimeType} - Does not define any customized MIME types for the
- * {@code Content-Type} header in the response, and calls the parent context if
- * it exists. Otherwise it always returns {@code null}.</li>
+ * {@code Content-Type} header in the response, and always returns {@code null}.
+ * </li>
  * <li>{@code handleSecurity} - Performs implementation-defined authentication
  * on the request.</li>
  * <li>{@code getResource} - Assumes the named resource is in the bundle of the
  * whiteboard service. This method calls the whiteboard service bundle's
  * {@code Bundle.getEntry} method, and returns the appropriate URL to access the
  * resource. On a Java runtime environment that supports permissions, the Http
- * Whiteboard Service needs to be granted
+ * Whiteboard Implementation needs to be granted
  * {@code org.osgi.framework.AdminPermission[*,RESOURCE]}.</li>
  * <li>{@code getResourcePaths} - Assumes that the resources are in the bundle
  * of the whiteboard service. This method calls {@code Bundle.findEntries}
  * method, and returns the found entries. On a Java runtime environment that
- * supports permissions, the Http Whiteboard Service needs to be granted
+ * supports permissions, the Http Whiteboard Implementation needs to be granted
  * {@code org.osgi.framework.AdminPermission[*,RESOURCE]}.</li>
- * <li>{@code getRealPath} - This method returns {@code null}.
+ * <li>{@code getRealPath} - This method returns {@code null}.</li>
  * </ul>
- * 
- * It is possible to register own {@code ServletContextHelper} services with a
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_NAME
- * service property}.
- * 
- * <p>
- * A context is registered with the
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_PATH
- * service property} to define a path under which all services registered with
- * this context are reachable.
  * 
  * @ThreadSafe
  * @author $Id$
@@ -131,9 +147,9 @@ public abstract class ServletContextHelper {
 	 * Handles security for the specified request.
 	 * 
 	 * <p>
-	 * The Http Whiteboard Service calls this method prior to servicing the
-	 * specified request. This method controls whether the request is processed
-	 * in the normal manner or an error is returned.
+	 * The Http Whiteboard Implementation calls this method prior to servicing
+	 * the specified request. This method controls whether the request is
+	 * processed in the normal manner or an error is returned.
 	 * 
 	 * <p>
 	 * If the request requires authentication and the Authorization header in
@@ -150,10 +166,10 @@ public abstract class ServletContextHelper {
 	 * object to Forbidden(403) and return {@code false}.
 	 * 
 	 * <p>
-	 * When this method returns {@code false}, the Http Whiteboard Service will
-	 * send the response back to the client, thereby completing the request.
-	 * When this method returns {@code true}, the Http Whitboard Service will
-	 * proceed with servicing the request.
+	 * When this method returns {@code false}, the Http Whiteboard
+	 * Implementation will send the response back to the client, thereby
+	 * completing the request. When this method returns {@code true}, the Http
+	 * Whitboard Implementation will proceed with servicing the request.
 	 * 
 	 * <p>
 	 * If the specified request has been authenticated, this method must set the
@@ -178,11 +194,11 @@ public abstract class ServletContextHelper {
 	 * @param request The HTTP request.
 	 * @param response The HTTP response.
 	 * @return {@code true} if the request should be serviced, {@code false} if
-	 *         the request should not be serviced and Http Whiteboard Service
-	 *         will send the response back to the client.
+	 *         the request should not be serviced and Http Whiteboard
+	 *         Implementation will send the response back to the client.
 	 * @throws java.io.IOException may be thrown by this method. If this occurs,
-	 *         the Http Whiteboard Service will terminate the request and close
-	 *         the socket.
+	 *         the Http Whiteboard Implementation will terminate the request and
+	 *         close the socket.
 	 */
 	public boolean handleSecurity(final HttpServletRequest request,
 			                      final HttpServletResponse response)
@@ -194,11 +210,12 @@ public abstract class ServletContextHelper {
 	 * Maps a resource name to a URL.
 	 * 
 	 * <p>
-	 * Called by the Http Whiteboard Service to map the specified resource name
-	 * to a URL. For servlets, Http Whiteboard Service will call this method to
-	 * support the {@code ServletContext} methods {@code getResource} and
-	 * {@code getResourceAsStream}. For resource servlets, Http Whiteboard
-	 * Service will call this method to locate the named resource.
+	 * Called by the Http Whiteboard Implementation to map the specified
+	 * resource name to a URL. For servlets, the Http Whiteboard Implementation
+	 * will call this method to support the {@code ServletContext} methods
+	 * {@code getResource} and {@code getResourceAsStream}. For resources, the
+	 * Http Whiteboard Implementation will call this method to locate the named
+	 * resource.
 	 * 
 	 * <p>
 	 * The context can control from where resources come. For example, the
@@ -207,8 +224,8 @@ public abstract class ServletContextHelper {
 	 * the context's bundle via {@code getClass().getResource(name)}
 	 * 
 	 * @param name The name of the requested resource.
-	 * @return A URL that Http Whiteboard Service can use to read the resource
-	 *         or {@code null} if the resource does not exist.
+	 * @return A URL that a Http Whiteboard Implementation can use to read the
+	 *         resource or {@code null} if the resource does not exist.
 	 */
 	public URL getResource(String name) {
 		final Bundle localBundle = this.bundle;
@@ -226,12 +243,12 @@ public abstract class ServletContextHelper {
 	 * Maps a name to a MIME type.
 	 * 
 	 * <p>
-	 * Called by the Http Whiteboard Service to determine the MIME type for the
-	 * specified name. For whiteboard services, the Http Whiteboard Service will
-	 * call this method to support the {@code ServletContext} method
-	 * {@code getMimeType}. For resource servlets, the Http Whiteboard Service
-	 * will call this method to determine the MIME type for the
-	 * {@code Content-Type} header in the response.
+	 * Called by the Http Whiteboard Implementation to determine the MIME type
+	 * for the specified name. For whiteboard services, the Http Whiteboard
+	 * Implementation will call this method to support the
+	 * {@code ServletContext} method {@code getMimeType}. For resource servlets,
+	 * the Http Whiteboard Implementation will call this method to determine the
+	 * MIME type for the {@code Content-Type} header in the response.
 	 *
 	 * @param name The name for which to determine the MIME type.
 	 * @return The MIME type (e.g. text/html) of the specified name or
@@ -248,7 +265,7 @@ public abstract class ServletContextHelper {
 	 * argument.
 	 * 
 	 * <p>
-	 * Called by the Http Whiteboard Service to support the
+	 * Called by the Http Whiteboard Implementation to support the
 	 * {@code ServletContext} method {@code getResourcePaths} for whiteboard
 	 * services.
 	 * 
@@ -277,7 +294,7 @@ public abstract class ServletContextHelper {
 	 * Gets the real path corresponding to the given virtual path.
 	 * 
 	 * <p>
-	 * Called by the Http Whiteboard Service to support the
+	 * Called by the Http Whiteboard Implementation to support the
 	 * {@code ServletContext} method {@code getRealPath} for whiteboard
 	 * services.
 	 * 

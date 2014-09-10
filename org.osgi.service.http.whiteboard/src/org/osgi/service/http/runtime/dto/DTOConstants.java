@@ -32,15 +32,15 @@ public final class DTOConstants {
 	public static final int	FAILURE_REASON_UNKNOWN		= 0;
 
 	/**
-	 * No matching servlet context
+	 * No matching {@code ServletContextHelper}.
 	 * <p>
 	 * The value of {@code FAILURE_REASON_NO_SERVLET_CONTEXT_MATCHING} is 1.
 	 **/
 	public static final int	FAILURE_REASON_NO_SERVLET_CONTEXT_MATCHING	= 1;
 
 	/**
-	 * Matching servlet context, but servlet context is not used due to a
-	 * problem with the context.
+	 * Matching {@code ServletContextHelper}, but the context is not used due to
+	 * a problem with the context.
 	 * <p>
 	 * The value of {@code FAILURE_REASON_SERVLET_CONTEXT_FAILURE} is 2.
 	 */
@@ -63,7 +63,7 @@ public final class DTOConstants {
 	public static final int	FAILURE_REASON_EXCEPTION_ON_INIT			= 4;
 
 	/**
-	 * The service is registered in the servlet registry but getting the service
+	 * The service is registered in the service registry but getting the service
 	 * fails as it returns {@code null}.
 	 * <p>
 	 * The value of {@code FAILURE_REASON_SERVICE_NOT_GETTABLE} is 5.
@@ -71,7 +71,7 @@ public final class DTOConstants {
 	public static final int	FAILURE_REASON_SERVICE_NOT_GETTABLE			= 5;
 
 	/**
-	 * The service is registered in the servlet registry but the provided
+	 * The service is registered in the service registry but the provided
 	 * registration properties are invalid.
 	 * <p>
 	 * The value of {@code FAILURE_REASON_VALIDATION_FAILED} is 6.

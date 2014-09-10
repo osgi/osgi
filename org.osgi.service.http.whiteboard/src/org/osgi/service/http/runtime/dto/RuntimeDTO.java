@@ -28,14 +28,15 @@ import org.osgi.dto.DTO;
 public class RuntimeDTO extends DTO {
 
 	/**
-	 * The runtime attributes.
+	 * The runtime attributes. This value is never {@code null}.
 	 */
 	public Map<String, String>	attributes;
 
 	/**
-	 * Returns the representations of the {@code javax.servlet.ServletContext} objects used by
-	 * the Http service runtime. The returned array may be empty if the Http service 
-	 * runtime is currently not using any {@code ServletContext} objects.
+	 * Returns the representations of the {@code javax.servlet.ServletContext}
+	 * objects used by the Http Service Runtime. The returned array may be empty
+	 * if the Http Service Runtime is currently not using any
+	 * {@code javax.servlet.ServletContext} objects.
 	 */
 	public ServletContextDTO[] servletContextDTOs;
 
@@ -47,37 +48,37 @@ public class RuntimeDTO extends DTO {
 	public FailedServletContextDTO[] failedServletContextDTOs;
 
 	/**
-	 * Returns the representations of the {@code javax.servlet.Servlet} servlets associated
-	 * with this runtime but currently not used due to some problem.
+	 * Returns the representations of the {@code javax.servlet.Servlet} services
+	 * associated with this runtime but currently not used due to some problem.
 	 * The returned array may be empty.
 	 */
 	public FailedServletDTO[] failedServletDTOs;
 
 	/**
-	 * Returns the representations of the resources associated with this
-	 * runtime but currently not used due to some problem.
-	 * The returned array may be empty.
+	 * Returns the representations of the resources associated with this runtime
+	 * but currently not used due to some problem. The returned array may be
+	 * empty.
 	 */
 	public FailedResourceDTO[] failedResourceDTOs;
 
 	/**
-	 * Returns the representations of the servlet {@code javax.servlet.Filter} filters
-	 * associated with this runtime but currently not used due to some problem.
-	 * The returned array may be empty.
+	 * Returns the representations of the servlet {@code javax.servlet.Filter}
+	 * services associated with this runtime but currently not used due to some
+	 * problem. The returned array may be empty.
 	 */
 	public FailedFilterDTO[] failedFilterDTOs;
 
 	/**
-	 * Returns the representations of the error page {@code javax.servlet.Servlet} servlets
-	 * associated with this runtime but currently not used due to some problem.
-	 * The returned array may be empty.
+	 * Returns the representations of the error page
+	 * {@code javax.servlet.Servlet} services associated with this runtime but
+	 * currently not used due to some problem. The returned array may be empty.
 	 */
 	public FailedErrorPageDTO[] failedErrorPageDTOs;
 
 	/**
-	 * Returns the representations of the listeners
-	 * associated with this runtime but currently not used due to some problem.
-	 * The returned array may be empty.
+	 * Returns the representations of the listeners associated with this runtime
+	 * but currently not used due to some problem. The returned array may be
+	 * empty.
 	 */
 	public FailedListenerDTO[] failedListenerDTOs;
 }
