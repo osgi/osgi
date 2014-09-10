@@ -38,9 +38,6 @@ import org.osgi.framework.Bundle;
  * service.
  * </p>
  * 
- * @ThreadSafe
- * @noimplement
- * 
  * @author $Id$
  */
 public interface ResourceContext {

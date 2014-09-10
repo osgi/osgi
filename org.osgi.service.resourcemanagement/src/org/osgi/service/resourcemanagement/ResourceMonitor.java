@@ -37,9 +37,6 @@ package org.osgi.service.resourcemanagement;
  * This could make a 60 000 milliseconds sampling period, and a 600 000
  * milliseconds monitored period.
  * 
- * @ThreadSafe
- * @noimplement
- * 
  * @author $Id$
  */
 public interface ResourceMonitor {

@@ -27,7 +27,6 @@ package org.osgi.service.resourcemanagement;
  * the event.
  * </p>
  * 
- * @Immutable
  * @see ResourceListener
  * 
  * @author $Id$

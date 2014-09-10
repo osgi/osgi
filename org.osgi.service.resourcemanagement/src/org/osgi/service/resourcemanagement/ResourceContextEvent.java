@@ -33,8 +33,6 @@ package org.osgi.service.resourcemanagement;
  * Resource Context instance.</li>
  * </ul>
  * 
- * @Immutable
- * 
  * @author $Id$
  */
 public class ResourceContextEvent {
