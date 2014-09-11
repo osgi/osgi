@@ -11,7 +11,12 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.sleep.Sleep;
 
 /**
- *
+ * PersistencyTests:
+ * 
+ * - testDeviceExportPersistency, tests device export persistency: registers a
+ * device, get its chip ID (referred to as the original chip ID), stops, and
+ * restarts the base driver, finally get the device’s new chip ID, and checks
+ * that the original chip ID, and the new one are equal.
  */
 public class PersistencyTests extends DefaultTestBundleControl {
 

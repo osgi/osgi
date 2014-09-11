@@ -17,7 +17,14 @@ import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
 
 /**
- *
+ * EventTests:
+ * 
+ * - testSelfEventReception, tests that the test suite is able to locally send
+ * and receive messages.
+ * 
+ * - testEventNotification, tests event notification when passing an actual
+ * message to the Base Driver. This also tests the MessageSet registration since
+ * the Base Driver needs to know about it before firing on EventAdmin.
  */
 public class EventTests extends EnOceanTestCase {
 

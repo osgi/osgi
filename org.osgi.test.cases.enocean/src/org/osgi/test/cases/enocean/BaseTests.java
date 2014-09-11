@@ -17,7 +17,17 @@ import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 
 /**
- *
+ * BaseTests contains the following tests:
+ * 
+ * - testRPC, tests RPC sending and receiving, i.e. insert an EnOcean
+ * temperature sensor device, and test a RPC invocation on this device.
+ * 
+ * - testInterfaceExceptions, tests that common errors cases are properly
+ * handled (i.e. that the relevant exceptions are thrown).
+ * 
+ * - testUseOfDescriptions, tests that a properly set profile ID in a raw
+ * EnOceanMessage is enough to extract all the needed information, provided the
+ * necessary descriptions are known.
  */
 public class BaseTests extends EnOceanTestCase {
 
@@ -38,7 +48,7 @@ public class BaseTests extends EnOceanTestCase {
 			log("testInterfaceExceptions(), Check that passing a NULL array of bytes throws an IllegalArgumentException.");
 			EnOceanMessageDescription msgDescription = new EnOceanMessageDescription_A5_02_01();
 			msgDescription.deserialize(null);
-			fail();
+			fail("Passing a NULL array of bytes to EnOceanMessageDescription.deserialize must throw an IllegalArgumentException.");
 		} catch (IllegalArgumentException e) {
 			// Here, everything worked as expected.
 			log("testInterfaceExceptions(), --> OK.");
@@ -48,7 +58,7 @@ public class BaseTests extends EnOceanTestCase {
 			log("testInterfaceExceptions(), Check that passing a wrongly sized byte array also throws an IllegalArgumentException.");
 			EnOceanMessageDescription msgDescription = new EnOceanMessageDescription_A5_02_01();
 			msgDescription.deserialize(new byte[] {0x55, 0x02, 0x34, 0x56, 0x67});
-			fail();
+			fail("Passing a wrongly sized byte array to EnOceanMessageDescription.deserialize must throw an IllegalArgumentException.");
 		} catch (IllegalArgumentException e) {
 			log("testInterfaceExceptions(), --> OK.");
 		}
@@ -57,7 +67,7 @@ public class BaseTests extends EnOceanTestCase {
 			log("testInterfaceExceptions(), Check that serializing a NULL object in EnOceanChannelDescription throws an IllegalArgumentException.");
 			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
 			channelDescription.serialize(null);
-			fail();
+			fail("Passing a NULL object to EnOceanMessageDescription.serialize must throw an IllegalArgumentException.");
 		} catch (IllegalArgumentException e) {
 			log("testInterfaceExceptions(), --> OK.");
 		}

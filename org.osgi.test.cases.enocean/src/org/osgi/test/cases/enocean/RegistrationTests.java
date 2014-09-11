@@ -9,7 +9,11 @@ import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.Logger;
 
 /**
- *
+ * RegistrationTests:
+ * 
+ * - testAutoDeviceRegistration, tests initial, and automatic device
+ * registration from a raw Radio teach-in packet that is triggered through the
+ * step service.
  */
 public class RegistrationTests extends EnOceanTestCase {
 

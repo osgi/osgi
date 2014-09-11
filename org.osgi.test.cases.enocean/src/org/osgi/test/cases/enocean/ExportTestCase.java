@@ -18,7 +18,13 @@ import org.osgi.test.cases.enocean.utils.ServiceListener;
 import org.osgi.test.cases.enocean.utils.Utils;
 
 /**
- *
+ * ExportTestCase:
+ * 
+ * - testDeviceExport, tests device exportation: registers a local device as a
+ * service to be exported by the base driver, checks that a chip ID has been
+ * created and set as a property, sends a message on the EnOcean network, checks
+ * that the message has been sent, received by the base driver, and checked by
+ * the CT through the step service.
  */
 public class ExportTestCase extends EnOceanTestCase {
 
