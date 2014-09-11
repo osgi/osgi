@@ -34,13 +34,13 @@ public class PersistencyTests extends DefaultTestBundleControl {
 		int originalChipId = defaultHost.getChipId(Fixtures.DEVICE_PID);
 
 		Bundle baseDriver = getBaseDriverBundle();
-		assertNotNull(baseDriver);
+		assertNotNull("baseDriver must not be null.", baseDriver);
 
 		baseDriver.stop();
 		Sleep.sleep(1000 * OSGiTestCaseProperties.getScaling());
 
 		hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
-		assertNull(hostRef);
+		assertNull("hostRef must not be null.", hostRef);
 
 		baseDriver.start();
 		Sleep.sleep(1000 * OSGiTestCaseProperties.getScaling());
@@ -49,7 +49,7 @@ public class PersistencyTests extends DefaultTestBundleControl {
 		defaultHost = (EnOceanHost) getContext().getService(hostRef);
 		int newChipId = defaultHost.getChipId(Fixtures.DEVICE_PID);
 
-		assertEquals(originalChipId, newChipId);
+		assertEquals("Original, and new chip ids mismatch.", originalChipId, newChipId);
 
 		sReg.unregister();
 		getContext().ungetService(hostRef);

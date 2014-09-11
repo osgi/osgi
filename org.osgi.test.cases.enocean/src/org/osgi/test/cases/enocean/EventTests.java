@@ -85,7 +85,7 @@ public class EventTests extends EnOceanTestCase {
 		assertEquals("type mismatch", Fixtures.STR_TYPE_1, event.getProperty(EnOceanDevice.TYPE));
 
 		EnOceanMessage msg = (EnOceanMessage) event.getProperty(EnOceanEvent.PROPERTY_MESSAGE);
-		assertNotNull(msg);
+		assertNotNull("Msg must not be null.", msg);
 		EnOceanMessageDescription description = new EnOceanMessageDescription_A5_02_01();
 		EnOceanChannel[] channels = description.deserialize(msg.getPayloadBytes());
 		assertEquals("temperature mismatch", Fixtures.RAW_TEMPERATURE, channels[0].getRawValue()[0]);

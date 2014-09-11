@@ -84,7 +84,7 @@ public class BaseTests extends EnOceanTestCase {
 		} catch (IllegalArgumentException e) {
 			exceptionCaught = true;
 		}
-		assertEquals(true, exceptionCaught);
+		assertEquals("The expected exception hasn't been caught.", true, exceptionCaught);
 
 		try { /*
 			 * Tests that serializing a wrong value in EnOceanChannelDescription
@@ -96,7 +96,7 @@ public class BaseTests extends EnOceanTestCase {
 		} catch (IllegalArgumentException e) {
 			exceptionCaught = true;
 		}
-		assertEquals(true, exceptionCaught);
+		assertEquals("The expected exception hasn't been caught.", true, exceptionCaught);
 
 		try { /*
 			 * Tests that deserializing a NULL value in
@@ -108,7 +108,7 @@ public class BaseTests extends EnOceanTestCase {
 		} catch (IllegalArgumentException e) {
 			exceptionCaught = true;
 		}
-		assertEquals(true, exceptionCaught);
+		assertEquals("The expected exception hasn't been caught.", true, exceptionCaught);
 
 		try { /*
 			 * Tests that deserializing a wrong object in
@@ -120,7 +120,7 @@ public class BaseTests extends EnOceanTestCase {
 		} catch (IllegalArgumentException e) {
 			exceptionCaught = true;
 		}
-		assertEquals(true, exceptionCaught);
+		assertEquals("The expected exception hasn't been caught.", true, exceptionCaught);
 
 		try { /*
 			 * Tests that getting a NULL index in an
@@ -132,7 +132,7 @@ public class BaseTests extends EnOceanTestCase {
 		} catch (IllegalArgumentException e) {
 			exceptionCaught = true;
 		}
-		assertEquals(true, exceptionCaught);
+		assertEquals("The expected exception hasn't been caught.", true, exceptionCaught);
 
 		try { /*
 			 * Tests that sending a message EnOceanChannelDescriptionSet results
@@ -143,7 +143,7 @@ public class BaseTests extends EnOceanTestCase {
 		} catch (IllegalArgumentException e) {
 			exceptionCaught = true;
 		}
-		assertEquals(true, exceptionCaught);
+		assertEquals("The expected exception hasn't been caught.", true, exceptionCaught);
 
 	}
 
@@ -165,18 +165,18 @@ public class BaseTests extends EnOceanTestCase {
 		 * interface methods.
 		 */
 		EnOceanMessageDescription msgDescription = msgDescriptionSet.getMessageDescription(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, -1);
-		assertNotNull(msgDescription);
+		assertNotNull("MsgDescription must not be null.", msgDescription);
 		EnOceanChannel[] channels = msgDescription.deserialize(temperatureMsg.getPayloadBytes());
-		assertEquals(2, channels.length);
+		assertEquals("2 channels are expected here.", 2, channels.length);
 		EnOceanChannel temperatureChannel = channels[0];
 		String tmpChannelId = temperatureChannel.getChannelId();
-		assertEquals(Fixtures.TMP_CHANNEL_ID, tmpChannelId);
+		assertEquals("Fixtures.TMP_CHANNEL_ID is expected here.", Fixtures.TMP_CHANNEL_ID, tmpChannelId);
 		EnOceanChannelDescription channelDescription = channelDescriptionSet.getChannelDescription(tmpChannelId);
-		assertEquals(Fixtures.TMP_CHANNEL_TYPE, channelDescription.getType());
+		assertEquals("Fixtures.TMP_CHANNEL_TYPE is expected here.", Fixtures.TMP_CHANNEL_TYPE, channelDescription.getType());
 		EnOceanDataChannelDescription dataChannelDescription = (EnOceanDataChannelDescription) channelDescription;
 		// It's a float because it's a DATA channel
 		Float deserializedTemperature = (Float) dataChannelDescription.deserialize(temperatureChannel.getRawValue());
-		assertEquals(Fixtures.TEMPERATURE, deserializedTemperature.floatValue(), 0.1);
+		assertEquals("Fixtures.TEMPERATURE is expected here.", Fixtures.TEMPERATURE, deserializedTemperature.floatValue(), 0.1);
 	}
 
 	/**
