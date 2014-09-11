@@ -8,7 +8,7 @@ import org.osgi.service.resourcemanagement.ResourceContext;
  * A BundleManager manages bundle locks and bundle association with
  * ResourceContext object.
  * 
- * @author Gregory BONNARDEL (Orange) @ *
+ * @author Gregory BONNARDEL (Orange)
  */
 public interface BundleManager {
 

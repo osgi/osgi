@@ -21,7 +21,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.resourcemanagement.bundlemanagement.BundleManager;
 import org.osgi.impl.service.resourcemanagement.bundlemanagement.BundleManagerImpl;
-import org.osgi.service.resourcemanagement.ResourceManager;
+import org.osgi.service.resourcemanagement.ResourceMonitoringService;
 
 /**
  * Activator
@@ -34,9 +34,9 @@ public class Activator implements BundleActivator {
 	private BundleManager					bundleManager;
 
 	/**
-	 * resource manager.
+	 * ResourceMonitoringServiceImpl.
 	 */
-	private ResourceManagerImpl				resourceManager;
+	private ResourceMonitoringServiceImpl	resourceMonitoringServiceImpl;
 
 	/**
 	 * event notifier.
@@ -44,9 +44,9 @@ public class Activator implements BundleActivator {
 	private ResourceContextEventNotifier	eventNotifier;
 
 	/**
-	 * service registration for Resource Manager service.
+	 * service registration for {@link ResourceMonitoringService}.
 	 */
-	private ServiceRegistration				resourceManagerServiceRegistration;
+	private ServiceRegistration				resourceMonitoringServiceSr;
 
 	/**
 	 * bundle context.
@@ -69,7 +69,7 @@ public class Activator implements BundleActivator {
 		eventNotifier = new ResourceContextEventNotifierImpl();
 		eventNotifier.start(context);
 		
-		startResourceManager();
+		startResourceMonitoringServiceImpl();
 	}
 
 	/**
@@ -78,39 +78,39 @@ public class Activator implements BundleActivator {
 	 * @see org.osgi.framework.BundleActivator#stop(org.osgi.framework.BundleContext)
 	 */
 	public void stop(BundleContext context) throws Exception {
-		stopResourceManager();
+		stopResourceMonitoringServiceImpl();
 
 		eventNotifier.stop(context);
 		eventNotifier = null;
 	}
 
 	/**
-	 * Start the ResourceManager.
+	 * Start the resourceMonitoringServiceImpl.
 	 */
-	private void startResourceManager() {
+	private void startResourceMonitoringServiceImpl() {
 		bundleManager = new BundleManagerImpl();
 		bundleManager.start(bundleContext);
 
-		resourceManager = new ResourceManagerImpl(bundleManager, eventNotifier);
-		resourceManager.start(bundleContext);
+		resourceMonitoringServiceImpl = new ResourceMonitoringServiceImpl(bundleManager, eventNotifier);
+		resourceMonitoringServiceImpl.start(bundleContext);
 
-		resourceManagerServiceRegistration = bundleContext
-				.registerService(ResourceManager.class.getName(),
-						resourceManager, null);
+		resourceMonitoringServiceSr = bundleContext
+				.registerService(ResourceMonitoringService.class.getName(),
+						resourceMonitoringServiceImpl, null);
 	}
 
 	/**
-	 * Stop the ResourceManager service.
+	 * Stop the resourceMonitoringServiceImpl.
 	 */
-	private void stopResourceManager() {
-		if (resourceManagerServiceRegistration != null) {
-			resourceManagerServiceRegistration.unregister();
-			resourceManagerServiceRegistration = null;
+	private void stopResourceMonitoringServiceImpl() {
+		if (resourceMonitoringServiceSr != null) {
+			resourceMonitoringServiceSr.unregister();
+			resourceMonitoringServiceSr = null;
 		}
 
-		if (resourceManager != null) {
-			resourceManager.stop(bundleContext);
-			resourceManager = null;
+		if (resourceMonitoringServiceImpl != null) {
+			resourceMonitoringServiceImpl.stop(bundleContext);
+			resourceMonitoringServiceImpl = null;
 
 			bundleManager.stop();
 			bundleManager = null;

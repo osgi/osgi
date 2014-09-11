@@ -13,17 +13,17 @@ import org.osgi.impl.service.resourcemanagement.lock.ResourceContextLock;
 import org.osgi.impl.service.resourcemanagement.persistency.ResourceContextInfo;
 import org.osgi.service.resourcemanagement.ResourceContext;
 import org.osgi.service.resourcemanagement.ResourceContextEvent;
-import org.osgi.service.resourcemanagement.ResourceManager;
 import org.osgi.service.resourcemanagement.ResourceMonitor;
 import org.osgi.service.resourcemanagement.ResourceMonitorException;
 import org.osgi.service.resourcemanagement.ResourceMonitorFactory;
+import org.osgi.service.resourcemanagement.ResourceMonitoringService;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 /**
  *
  */
-public class ResourceManagerImpl implements ResourceManager,
+public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 		ServiceTrackerCustomizer {
 
 	private ResourceContextLock					lock;
@@ -79,7 +79,7 @@ public class ResourceManagerImpl implements ResourceManager,
 	 * @param pBundleManager
 	 * @param pEventNotifier
 	 */
-	public ResourceManagerImpl(BundleManager pBundleManager,
+	public ResourceMonitoringServiceImpl(BundleManager pBundleManager,
 			ResourceContextEventNotifier pEventNotifier) {
 
 		lock = new ResourceContextLock();
@@ -254,7 +254,7 @@ public class ResourceManagerImpl implements ResourceManager,
 
 	/**
 	 * This method is called when a new ResourceMonitorFactory is available on
-	 * the fremwork.
+	 * the framework.
 	 * 
 	 * @param reference service reference of the new factory
 	 * @return the ResourceMonitorFactory object

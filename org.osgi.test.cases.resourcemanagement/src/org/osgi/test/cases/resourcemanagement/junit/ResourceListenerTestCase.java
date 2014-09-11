@@ -15,9 +15,9 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.resourcemanagement.ResourceContext;
 import org.osgi.service.resourcemanagement.ResourceEvent;
 import org.osgi.service.resourcemanagement.ResourceListener;
-import org.osgi.service.resourcemanagement.ResourceManager;
 import org.osgi.service.resourcemanagement.ResourceMonitor;
 import org.osgi.service.resourcemanagement.ResourceMonitorFactory;
+import org.osgi.service.resourcemanagement.ResourceMonitoringService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -44,9 +44,9 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 	private ResourceContext			resourceContext;
 
 	/**
-	 * resource manager
+	 * ResourceMonitoringService
 	 */
-	private ResourceManager			resourceManager;
+	private ResourceMonitoringService	resourceMonitoringService;
 
 	/**
 	 * cpu Resource Monitor Factory
@@ -80,10 +80,10 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 	public void setBundleContext(BundleContext context) {
 		bundleContext = context;
 
-		// retrieve the ResourceManager
-		ServiceReference resourceManagerSr = bundleContext
-				.getServiceReference(ResourceManager.class);
-		resourceManager = (ResourceManager) bundleContext.getService(resourceManagerSr);
+		// retrieve the ResourceMonitoringService
+		ServiceReference resourceMonitoringServiceSr = bundleContext
+				.getServiceReference(ResourceMonitoringService.class);
+		resourceMonitoringService = (ResourceMonitoringService) bundleContext.getService(resourceMonitoringServiceSr);
 
 		// retrieve cpu factory
 		StringBuffer filter = new StringBuffer();
@@ -94,7 +94,7 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 		filter.append(")(");
 		filter.append(ResourceMonitorFactory.RESOURCE_TYPE_PROPERTY);
 		filter.append("=");
-		filter.append(ResourceManager.RES_TYPE_CPU);
+		filter.append(ResourceMonitoringService.RES_TYPE_CPU);
 		filter.append("))");
 		try {
 			Collection factorySrs = bundleContext.getServiceReferences(
@@ -112,7 +112,7 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 
 	protected void setUp() throws Exception {
 		// create a ResourceContext
-		resourceContext = resourceManager.createContext(CONTEXT_NAME, null);
+		resourceContext = resourceMonitoringService.createContext(CONTEXT_NAME, null);
 
 		// create a CPU
 		resourceMonitor = cpuFactory.createResourceMonitor(resourceContext);

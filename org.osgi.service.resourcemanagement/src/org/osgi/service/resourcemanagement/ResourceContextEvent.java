@@ -40,7 +40,7 @@ public class ResourceContextEvent {
 	/**
 	 * A new {@link ResourceContext} has been created.
 	 * <p>
-	 * The {@link ResourceManager#createContext(String, ResourceContext)} method
+	 * The {@link ResourceMonitoringService#createContext(String, ResourceContext)} method
 	 * has been invoked.
 	 */
 	public static final int			RESOURCE_CONTEXT_CREATED	= 0;

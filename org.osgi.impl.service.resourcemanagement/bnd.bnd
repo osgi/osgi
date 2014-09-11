@@ -5,7 +5,7 @@ Bundle-Vendor				= Orange
 Bundle-Activator			= org.osgi.impl.service.resourcemanagement.Activator
 Bundle-Description			= Template for a Reference Implementation.
 
-Export-Service				= org.osgi.service.resourcemanagement.ResourceManager
+Export-Service				= org.osgi.service.resourcemanagement.ResourceMonitoringService
 
 Private-Package: ${p}.*
 

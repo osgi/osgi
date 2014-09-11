@@ -17,11 +17,11 @@
 package org.osgi.service.resourcemanagement.monitor;
 
 import org.osgi.service.resourcemanagement.ResourceContext;
-import org.osgi.service.resourcemanagement.ResourceManager;
+import org.osgi.service.resourcemanagement.ResourceMonitoringService;
 import org.osgi.service.resourcemanagement.ResourceMonitor;
 
 /**
- * A {@link ResourceMonitor} for the {@link ResourceManager#RES_TYPE_CPU}
+ * A {@link ResourceMonitor} for the {@link ResourceMonitoringService#RES_TYPE_CPU}
  * resource type. CPUMonitor instance monitors the CPU consumed by a
  * {@link ResourceContext} instance.
  * 

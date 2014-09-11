@@ -23,8 +23,8 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.resourcemanagement.ResourceContext;
 import org.osgi.service.resourcemanagement.ResourceContextEvent;
-import org.osgi.service.resourcemanagement.ResourceManager;
 import org.osgi.service.resourcemanagement.ResourceMonitorException;
+import org.osgi.service.resourcemanagement.ResourceMonitoringService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -38,9 +38,9 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 	private BundleContext				context;
 
 	/**
-	 * resource manager
+	 * ResourceMonitoringService
 	 */
-	private ResourceManager				resourceManager;
+	private ResourceMonitoringService	resourceMonitoringService;
 
 	/**
 	 * resource context listener
@@ -53,7 +53,7 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 		resourceContextListener.stop();
 
 		// delete all existing ResourceContext
-		ResourceContext[] existingContexts = resourceManager.listContext();
+		ResourceContext[] existingContexts = resourceMonitoringService.listContext();
 		for (int i = 0; i < existingContexts.length; i++) {
 			ResourceContext currentResourceContext = existingContexts[i];
 			currentResourceContext.removeContext(null);
@@ -67,7 +67,7 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 		resourceContextListener.start(context);
 
 		// delete all existing ResourceContext
-		ResourceContext[] existingContexts = resourceManager.listContext();
+		ResourceContext[] existingContexts = resourceMonitoringService.listContext();
 		for (int i = 0; i < existingContexts.length; i++) {
 			ResourceContext currentResourceContext = existingContexts[i];
 			currentResourceContext.removeContext(null);
@@ -77,10 +77,10 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 	public void setBundleContext(BundleContext context) {
 		this.context = context;
 
-		ServiceReference resourceManagerSr = context
-				.getServiceReference(ResourceManager.class.getName());
-		if (resourceManagerSr != null) {
-			resourceManager = (ResourceManager) context.getService(resourceManagerSr);
+		ServiceReference resourceMonitoringServiceSr = context
+				.getServiceReference(ResourceMonitoringService.class.getName());
+		if (resourceMonitoringServiceSr != null) {
+			resourceMonitoringService = (ResourceMonitoringService) context.getService(resourceMonitoringServiceSr);
 		}
 	}
 
@@ -93,15 +93,15 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 		boolean exception = false;
 
 		// create the resource context
-		ResourceContext resourceContext = resourceManager.createContext(name,
+		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
 				null);
 
 		// delete this new resourceContext
 		resourceContext.removeContext(null);
 
 		// check existing ResourceContext
-		assertTrue(resourceManager.listContext().length == 0);
-		assertNull(resourceManager.getContext(name));
+		assertTrue(resourceMonitoringService.listContext().length == 0);
+		assertNull(resourceMonitoringService.getContext(name));
 
 		// check the resource context name is still accessible
 		assertTrue(resourceContext.getName().equals(name));
@@ -143,15 +143,15 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 		final long bundleId = 1;
 
 		// create ResourceContexts
-		ResourceContext resourceContext1 = resourceManager.createContext(name1,
+		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1,
 				null);
-		ResourceContext resourceContext2 = resourceManager.createContext(name2,
+		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2,
 				null);
 		log("resourceContext1:" + resourceContext1);
 		log("resourceContext2:" + resourceContext2);
 
 		// checks the array of existing ResourceContext
-		assertTrue(resourceManager.listContext().length == 2);
+		assertTrue(resourceMonitoringService.listContext().length == 2);
 
 		// associate bundleId with resourceContext1
 		resourceContext1.addBundle(bundleId);
@@ -169,7 +169,7 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 		// - 1 for removing resourceContext1
 
 		// checks only context2 is only the one existing ResourceContext
-		ResourceContext[] existingContexts = resourceManager.listContext();
+		ResourceContext[] existingContexts = resourceMonitoringService.listContext();
 		assertTrue(existingContexts.length == 1);
 		assertTrue(existingContexts[0].getName().equals(name2));
 
@@ -227,9 +227,9 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 		final long bundleId = 1;
 
 		// create ResourceContexts
-		ResourceContext resourceContext1 = resourceManager.createContext(name1,
+		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1,
 				null);
-		ResourceContext resourceContext2 = resourceManager.createContext(name2,
+		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2,
 				null);
 
 		// add bundleId to resourceContext1
@@ -252,7 +252,7 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 		assertTrue(exception);
 
 		// check this no existing ResourceContext
-		assertTrue(resourceManager.listContext().length == 0);
+		assertTrue(resourceMonitoringService.listContext().length == 0);
 
 		// check events
 		List events = resourceContextListener.getReceivedEvents();
@@ -307,7 +307,7 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 		final long bundleId = 1l;
 
 		// create ResourceContext
-		ResourceContext resourceContext = resourceManager.createContext(name,
+		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
 				null);
 
 		// add bundle 1 to this context
@@ -335,9 +335,9 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 		final long bundleId = 1;
 
 		// create ResourceContext
-		ResourceContext resourceContext = resourceManager.createContext(name,
+		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
 				null);
-		ResourceContext resourceContext2 = resourceManager.createContext(name2,
+		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2,
 				null);
 
 		// add bundle 1 to this context
@@ -373,7 +373,7 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 		final long bundleId = 1;
 
 		// create ResourceContext
-		ResourceContext resourceContext = resourceManager.createContext(name,
+		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
 				null);
 
 		// add bundle 1
@@ -415,9 +415,9 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 		final long bundleId = 1;
 
 		// create two Resource Context
-		ResourceContext resourceContext1 = resourceManager.createContext(name1,
+		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1,
 				null);
-		ResourceContext resourceContext2 = resourceManager.createContext(name2,
+		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2,
 				null);
 
 		// add bundleId to context1
@@ -462,7 +462,7 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 		final long bundleId = 1;
 
 		// create ResourceContext
-		ResourceContext resourceContext = resourceManager.createContext(name,
+		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
 				null);
 
 		// add bundleId to resourceContext
@@ -497,9 +497,9 @@ public class ResourceContextTestCase extends DefaultTestBundleControl {
 		final long bundleId = 1;
 
 		// create ResourceContexts
-		ResourceContext resourceContext1 = resourceManager.createContext(name1,
+		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1,
 				null);
-		ResourceContext resourceContext2 = resourceManager.createContext(name2,
+		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2,
 				null);
 
 		// add bundleId to resourceContext1

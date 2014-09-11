@@ -49,9 +49,9 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 	private final ResourceContextEventNotifier	eventNotifier;
 
 	/**
-	 * resource manager.
+	 * ResourceMonitoringServiceImpl.
 	 */
-	private final ResourceManagerImpl			resourceManager;
+	private final ResourceMonitoringServiceImpl			resourceMonitoringServiceImpl;
 
 	/**
 	 * bundle manager service
@@ -67,15 +67,16 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 	/**
 	 * Default constructor to be used to create new context.
 	 * 
-	 * @param pResourceManager resource manager (the one calling this method)
+	 * @param resourceMonitoringServiceImpl resourceMonitoringServiceImpl (the
+	 *        one calling this method)
 	 * @param pBundleManager bundle manager
 	 * @param pName name of the ResourceContext
 	 * @param pEventNotifier event notifier
 	 */
-	public ResourceContextImpl(final ResourceManagerImpl pResourceManager,
+	public ResourceContextImpl(final ResourceMonitoringServiceImpl resourceMonitoringServiceImpl,
 			final BundleManager pBundleManager, final String pName,
 			final ResourceContextEventNotifier pEventNotifier) {
-		resourceManager = pResourceManager;
+		this.resourceMonitoringServiceImpl = resourceMonitoringServiceImpl;
 		bundleManager = pBundleManager;
 		eventNotifier = pEventNotifier;
 		name = pName;
@@ -222,7 +223,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 			rm.delete();
 		}
 
-		resourceManager.removeContext(this);
+		resourceMonitoringServiceImpl.removeContext(this);
 
 		isRemoved = true;
 

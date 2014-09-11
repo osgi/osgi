@@ -17,11 +17,11 @@
 package org.osgi.service.resourcemanagement.monitor;
 
 import org.osgi.service.resourcemanagement.ResourceContext;
-import org.osgi.service.resourcemanagement.ResourceManager;
+import org.osgi.service.resourcemanagement.ResourceMonitoringService;
 import org.osgi.service.resourcemanagement.ResourceMonitor;
 
 /**
- * A {@link ResourceMonitor} for the {@link ResourceManager#RES_TYPE_THREADS}
+ * A {@link ResourceMonitor} for the {@link ResourceMonitoringService#RES_TYPE_THREADS}
  * resource type. A ThreadMonitor instance monitors and limits the thread
  * created by a {@link ResourceContext} instance.
  * 

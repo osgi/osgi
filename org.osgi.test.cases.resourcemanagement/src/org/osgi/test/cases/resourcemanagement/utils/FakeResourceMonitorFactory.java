@@ -68,7 +68,7 @@ public class FakeResourceMonitorFactory implements ResourceMonitorFactory,
 	}
 
 	public String getType() {
-		return factoryType;
+		return this.factoryType;
 	}
 
 	public void notify(ResourceContextEvent event) {

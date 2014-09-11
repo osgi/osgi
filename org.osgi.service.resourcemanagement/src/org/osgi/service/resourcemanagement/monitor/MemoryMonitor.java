@@ -17,11 +17,11 @@
 package org.osgi.service.resourcemanagement.monitor;
 
 import org.osgi.service.resourcemanagement.ResourceContext;
-import org.osgi.service.resourcemanagement.ResourceManager;
+import org.osgi.service.resourcemanagement.ResourceMonitoringService;
 import org.osgi.service.resourcemanagement.ResourceMonitor;
 
 /**
- * A {@link ResourceMonitor} for the {@link ResourceManager#RES_TYPE_MEMORY}
+ * A {@link ResourceMonitor} for the {@link ResourceMonitoringService#RES_TYPE_MEMORY}
  * resource type. A MemoryMonitor instance monitors and limits the memory used
  * by a {@link ResourceContext} instance.
  * 

@@ -7,8 +7,8 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.resourcemanagement.ResourceContext;
-import org.osgi.service.resourcemanagement.ResourceManager;
 import org.osgi.service.resourcemanagement.ResourceMonitorFactory;
+import org.osgi.service.resourcemanagement.ResourceMonitoringService;
 import org.osgi.test.cases.resourcemanagement.utils.FakeResourceMonitorFactory;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
@@ -26,9 +26,9 @@ public class ResourceMonitorFactoryTestCase extends DefaultTestBundleControl {
 	private BundleContext			bundleContext;
 
 	/**
-	 * resource manager.
+	 * ResourceMonitoringService.
 	 */
-	private ResourceManager			resourceManager;
+	private ResourceMonitoringService	resourceMonitoringService;
 
 	/**
 	 * resourceContext
@@ -43,12 +43,12 @@ public class ResourceMonitorFactoryTestCase extends DefaultTestBundleControl {
 	public void setBundleContext(BundleContext bundleContext) {
 		this.bundleContext = bundleContext;
 		ServiceReference serviceReference = this.bundleContext
-				.getServiceReference(ResourceManager.class);
-		resourceManager = (ResourceManager) this.bundleContext.getService(serviceReference);
+				.getServiceReference(ResourceMonitoringService.class);
+		resourceMonitoringService = (ResourceMonitoringService) this.bundleContext.getService(serviceReference);
 	}
 
 	protected void setUp() throws Exception {
-		resourceContext = resourceManager.createContext(resourceContextName,
+		resourceContext = resourceMonitoringService.createContext(resourceContextName,
 				null);
 	}
 
@@ -81,7 +81,7 @@ public class ResourceMonitorFactoryTestCase extends DefaultTestBundleControl {
 
 		// Create, and add another resource monitor factory in the OSGi services
 		// registry.
-		FakeResourceMonitorFactory fakeResourceMonitorFactory = new FakeResourceMonitorFactory(bundleContext, ResourceManager.RES_TYPE_DISK_STORAGE);
+		FakeResourceMonitorFactory fakeResourceMonitorFactory = new FakeResourceMonitorFactory(bundleContext, ResourceMonitoringService.RES_TYPE_DISK_STORAGE);
 		
 		// Check that the new total number of existing resource monitor
 		// factory/ies is equal to the previous one plus one.

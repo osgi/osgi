@@ -13,11 +13,12 @@ import org.osgi.impl.service.resourcemanagement.persistency.Persistence;
 import org.osgi.impl.service.resourcemanagement.persistency.PersistenceImpl;
 import org.osgi.impl.service.resourcemanagement.persistency.ResourceContextInfo;
 import org.osgi.service.resourcemanagement.ResourceContext;
-import org.osgi.service.resourcemanagement.ResourceManager;
+import org.osgi.service.resourcemanagement.ResourceMonitoringService;
 
 /**
  * This class is used to handle the ResourceContext persistence for the
- * ResourceManager. It handles the restoring of the ResourceContext and the
+ * ResourceMonitoringService. It handles the restoring of the ResourceContext
+ * and the
  * 
  * @author mpcy8647
  * 
@@ -41,22 +42,22 @@ public class PersistenceManager implements BundleListener {
 	private final Map				unresolvedBundles;
 
 	/**
-	 * resource manager instance.
+	 * {@link ResourceMonitoringService} instance.
 	 */
-	private final ResourceManager	resourceManager;
+	private final ResourceMonitoringService	resourceMonitoringService;
 
 	/**
 	 * Creates a new Persistence Manager.
 	 * 
 	 * @param pBbundleContext bundle context
-	 * @param pResourceManager resource manager
+	 * @param resourceMonitoringService resource manager
 	 */
 	public PersistenceManager(BundleContext pBbundleContext,
-			ResourceManager pResourceManager) {
+			ResourceMonitoringService resourceMonitoringService) {
 		this.bundleContext = pBbundleContext;
 		persistence = new PersistenceImpl();
 		unresolvedBundles = new Hashtable();
-		resourceManager = pResourceManager;
+		this.resourceMonitoringService = resourceMonitoringService;
 	}
 
 	/**
@@ -73,7 +74,7 @@ public class PersistenceManager implements BundleListener {
 					.get(bundleIdLong);
 			if (resourceContextName != null) {
 				// retrieves the ResourceContext based on resourceContextName
-				ResourceContext resourceContext = resourceManager
+				ResourceContext resourceContext = resourceMonitoringService
 						.getContext(resourceContextName);
 				if (resourceContext != null) {
 					try {
@@ -105,7 +106,7 @@ public class PersistenceManager implements BundleListener {
 
 			// for each ResourceContextInfo, creates a new ResourceContext
 			String contextName = rci.getName();
-			ResourceContext resourceContext = resourceManager.createContext(
+			ResourceContext resourceContext = resourceMonitoringService.createContext(
 					contextName, null);
 
 			// try to associate bundle
@@ -118,8 +119,8 @@ public class PersistenceManager implements BundleListener {
 				} catch (RuntimeException e) {
 					// adding bundle may fail if the bundle has not been
 					// installed/activated as
-					// the resource manager will be launched very early in the
-					// framework startup phase.
+					// the resourceMonitoringService will be launched very early
+					// in the framework startup phase.
 					// in this case, add the bundle id into the unresolvedBundle
 					// map.
 					unresolvedBundles.put(bundleId, resourceContext.getName());
@@ -140,7 +141,7 @@ public class PersistenceManager implements BundleListener {
 		bundleContext.removeBundleListener(this);
 
 		// retrieve all existing ResourceContext
-		ResourceContext[] resourceContexts = resourceManager.listContext();
+		ResourceContext[] resourceContexts = resourceMonitoringService.listContext();
 		ResourceContextInfo[] rcis = new ResourceContextInfo[resourceContexts.length];
 
 		// iterate over all existing ResourceContext

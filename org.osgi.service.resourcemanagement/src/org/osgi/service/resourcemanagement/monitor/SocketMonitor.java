@@ -19,11 +19,11 @@ package org.osgi.service.resourcemanagement.monitor;
 import java.net.DatagramSocket;
 import java.net.Socket;
 import org.osgi.service.resourcemanagement.ResourceContext;
-import org.osgi.service.resourcemanagement.ResourceManager;
+import org.osgi.service.resourcemanagement.ResourceMonitoringService;
 import org.osgi.service.resourcemanagement.ResourceMonitor;
 
 /**
- * A {@link ResourceMonitor} for the {@link ResourceManager#RES_TYPE_SOCKET}
+ * A {@link ResourceMonitor} for the {@link ResourceMonitoringService#RES_TYPE_SOCKET}
  * resource type. {@link SocketMonitor} instance are used to monitor and limit
  * the number of in-use sockets per {@link ResourceContext} instance.
  * {@link SocketMonitor} instance handle all types of sockets (TCP, UDP, ...).

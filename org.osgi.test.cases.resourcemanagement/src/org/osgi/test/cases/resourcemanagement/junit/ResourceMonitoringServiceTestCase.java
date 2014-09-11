@@ -10,16 +10,16 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.resourcemanagement.ResourceContext;
 import org.osgi.service.resourcemanagement.ResourceContextEvent;
-import org.osgi.service.resourcemanagement.ResourceManager;
 import org.osgi.service.resourcemanagement.ResourceMonitor;
 import org.osgi.service.resourcemanagement.ResourceMonitorException;
 import org.osgi.service.resourcemanagement.ResourceMonitorFactory;
+import org.osgi.service.resourcemanagement.ResourceMonitoringService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * see Conformance Tests description.odt file.
  */
-public class ResourceManagerTestCase extends DefaultTestBundleControl {
+public class ResourceMonitoringServiceTestCase extends DefaultTestBundleControl {
 
 	/**
 	 * bundle context
@@ -27,9 +27,9 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 	private BundleContext				bundleContext;
 
 	/**
-	 * resource manager.
+	 * ResourceMonitoringService.
 	 */
-	private ResourceManager				resourceManager;
+	private ResourceMonitoringService	resourceMonitoringService;
 
 	/**
 	 * resource context listener
@@ -43,8 +43,8 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 		bundleContext = context;
 
 		ServiceReference serviceReference = bundleContext
-				.getServiceReference(ResourceManager.class);
-		resourceManager = (ResourceManager) bundleContext.getService(serviceReference);
+				.getServiceReference(ResourceMonitoringService.class);
+		resourceMonitoringService = (ResourceMonitoringService) bundleContext.getService(serviceReference);
 
 	}
 
@@ -56,7 +56,7 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 		resourceContextListener.stop();
 
 		// delete all existing resource contexts.
-		ResourceContext[] resourceContexts = resourceManager.listContext();
+		ResourceContext[] resourceContexts = resourceMonitoringService.listContext();
 		for (int i = 0; i < resourceContexts.length; i++) {
 			resourceContexts[i].removeContext(null);
 		}
@@ -67,7 +67,7 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 		resourceContextListener.start(bundleContext);
 
 		// delete all existing resource contexts.
-		ResourceContext[] resourceContexts = resourceManager.listContext();
+		ResourceContext[] resourceContexts = resourceMonitoringService.listContext();
 		for (int i = 0; i < resourceContexts.length; i++) {
 			resourceContexts[i].removeContext(null);
 		}
@@ -80,13 +80,13 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 		final String name = "context1";
 
 		// retrieve the list of existing resource contexT.
-		ResourceContext[] resourceContexts = resourceManager.listContext();
+		ResourceContext[] resourceContexts = resourceMonitoringService.listContext();
 		assertNotNull(resourceContexts);
 		log("--------------------nb of rc :" + resourceContexts.length);
 		assertTrue(resourceContexts.length == 0);
 
 		// create resource context
-		ResourceContext resourceContext = resourceManager.createContext(name,
+		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
 				null);
 
 		// check the resourceContext object is not null
@@ -110,13 +110,13 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 		assertTrue(lastEvent.getType() == ResourceContextEvent.RESOURCE_CONTEXT_CREATED);
 
 		// check the resource context has been created
-		resourceContexts = resourceManager.listContext();
+		resourceContexts = resourceMonitoringService.listContext();
 		assertNotNull(resourceContexts);
 		assertTrue(resourceContexts.length == 1);
 		assertTrue(resourceContexts[0].equals(resourceContext));
 
 		// get the context
-		ResourceContext retrievedResourceContext = resourceManager
+		ResourceContext retrievedResourceContext = resourceMonitoringService
 				.getContext(name);
 		assertNotNull(retrievedResourceContext);
 		assertTrue(retrievedResourceContext.equals(resourceContext));
@@ -130,7 +130,7 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 		final String name = "context1";
 
 		// create first instance of context1
-		ResourceContext resourceContext = resourceManager.createContext(name,
+		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
 				null);
 		assertNotNull(resourceContext);
 
@@ -138,12 +138,12 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 		ResourceContextEvent event = resourceContextListener.getLastEvent();
 
 		// check there is one ResourceContext
-		assertTrue(resourceManager.listContext().length == 1);
+		assertTrue(resourceMonitoringService.listContext().length == 1);
 
 		// try to create a new ResourceContext with the same name
 		boolean exception = false;
 		try {
-			resourceManager.createContext(name, null);
+			resourceMonitoringService.createContext(name, null);
 		} catch (RuntimeException e) {
 			exception = true;
 		}
@@ -153,7 +153,7 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 		assertTrue(resourceContextListener.getLastEvent() == event);
 
 		// check there is still one ResourceContext
-		assertTrue(resourceManager.listContext().length == 1);
+		assertTrue(resourceMonitoringService.listContext().length == 1);
 	}
 
 	/**
@@ -167,15 +167,15 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 		final String name2 = "context2";
 
 		// create a Context context1
-		ResourceContext resourceContext1 = resourceManager.createContext(name1,
+		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1,
 				null);
 
 		// add a FakeMonitor simulating a CPU ResourceMonitor
 		resourceContext1.addResourceMonitor(new FakeResourceMonitor(
-				ResourceManager.RES_TYPE_CPU, resourceContext1));
+				ResourceMonitoringService.RES_TYPE_CPU, resourceContext1));
 
 		// create the ResourceContext2 based on ResourceContext1
-		ResourceContext resourceContext2 = resourceManager.createContext(name2,
+		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2,
 				resourceContext1);
 
 		assertNotNull(resourceContext2);
@@ -184,7 +184,7 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 		ResourceMonitor[] rc2Monitors = resourceContext2.getMonitors();
 		assertTrue(rc2Monitors.length == 1);
 		assertTrue(rc2Monitors[0].getResourceType().equals(
-				ResourceManager.RES_TYPE_CPU));
+				ResourceMonitoringService.RES_TYPE_CPU));
 
 	}
 
@@ -197,19 +197,19 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 		final String name2 = "context2";
 
 		// create a Context context1
-		ResourceContext resourceContext1 = resourceManager.createContext(name1,
+		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1,
 				null);
 
 		// add a FakeMonitor simulating a CPU ResourceMonitor
 		resourceContext1.addResourceMonitor(new FakeResourceMonitor(
-				ResourceManager.RES_TYPE_CPU, resourceContext1));
+				ResourceMonitoringService.RES_TYPE_CPU, resourceContext1));
 
 		// remove context1
 		resourceContext1.removeContext(null);
 
 		// create the ResourceContext2 based on ResourceContext1
 		ResourceContext resourceContext2 = null;
-		resourceContext2 = resourceManager.createContext(name2,
+		resourceContext2 = resourceMonitoringService.createContext(name2,
 				resourceContext1);
 
 		assertNotNull(resourceContext2);
@@ -228,23 +228,23 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 
 		// get ResourceContext associated with bundleId and check bundleId is
 		// not associated with a context
-		ResourceContext resourceContext = resourceManager.getContext(bundleId);
+		ResourceContext resourceContext = resourceMonitoringService.getContext(bundleId);
 		assertNull(resourceContext);
 
 		// create a new context
-		ResourceContext resourceContext1 = resourceManager.createContext(name,
+		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name,
 				null);
 
 		// associated bundleId with resourceContext1
 		resourceContext1.addBundle(bundleId);
 
 		// get ResourceContext by bundle id
-		resourceContext = resourceManager.getContext(bundleId);
+		resourceContext = resourceMonitoringService.getContext(bundleId);
 		assertNotNull(resourceContext);
 		assertTrue(resourceContext.equals(resourceContext1));
 
 		// try to retrieve the ResourceContext with an unexisting bundle
-		resourceContext = resourceManager.getContext(-1);
+		resourceContext = resourceMonitoringService.getContext(-1);
 		assertNull(resourceContext);
 
 	}
@@ -255,16 +255,17 @@ public class ResourceManagerTestCase extends DefaultTestBundleControl {
 	 * @throws InvalidSyntaxException
 	 */
 	public void testSupportedTypes() throws InvalidSyntaxException {
-		String[] supportedTypes = resourceManager.getSupportedTypes();
+		String[] supportedTypes = resourceMonitoringService.getSupportedTypes();
 		assertNotNull(supportedTypes);
 
 		// retrieves all ServiceReference of ResourceMonitorFactory services
 		Collection factorySrs = getContext().getServiceReferences(
 				ResourceMonitorFactory.class, null);
 		assertNotNull(factorySrs);
+
 		// check the number of ServiceReference is the same as the number of
 		// supported types
-		assertTrue(factorySrs.size() == supportedTypes.length);
+		assertTrue("factorySrs.size(): " + factorySrs.size() + " must be equal to supportedTypes.length: " + supportedTypes.length, factorySrs.size() == supportedTypes.length);
 
 		// iterate over the ServiceReference collection and retrieves each
 		// ResourceMonitorFactory service.

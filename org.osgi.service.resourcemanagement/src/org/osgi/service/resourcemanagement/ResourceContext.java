@@ -24,7 +24,7 @@ import org.osgi.framework.Bundle;
  * 
  * <p>
  * Management agents can use the
- * {@link ResourceManager#createContext(String, ResourceContext)} method to
+ * {@link ResourceMonitoringService#createContext(String, ResourceContext)} method to
  * create ResourceContext instances.
  * </p>
  * <p>
@@ -34,7 +34,7 @@ import org.osgi.framework.Bundle;
  * usage limits.
  * </p>
  * <p>
- * ResourceContexts are retrieved through the {@link ResourceManager} OSGi
+ * ResourceContexts are retrieved through the {@link ResourceMonitoringService} OSGi
  * service.
  * </p>
  * 
@@ -105,8 +105,8 @@ public interface ResourceContext {
 
 	/**
 	 * Returns a ResourceMonitor instance for the specified resource type. If
-	 * the ResourceManager implementation does not support this resource type,
-	 * null is returned
+	 * the {@link ResourceMonitoringService} implementation does not support
+	 * this resource type, null is returned
 	 * 
 	 * @param resourceType The resource type, for which a resource monitor is
 	 *        requested

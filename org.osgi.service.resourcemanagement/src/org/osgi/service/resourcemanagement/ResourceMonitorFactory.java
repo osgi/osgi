@@ -34,7 +34,7 @@ public interface ResourceMonitorFactory {
 
 	/**
 	 * Resource type property. The value is of type {@link String}, e.g.,
-	 * {@link ResourceManager#RES_TYPE_CPU}
+	 * {@link ResourceMonitoringService#RES_TYPE_CPU}
 	 */
 	public static final String	RESOURCE_TYPE_PROPERTY	= "org.osgi.resourcemanagement.ResourceType";
 

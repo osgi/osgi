@@ -7,10 +7,10 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.resourcemanagement.ResourceContext;
-import org.osgi.service.resourcemanagement.ResourceManager;
 import org.osgi.service.resourcemanagement.ResourceMonitor;
 import org.osgi.service.resourcemanagement.ResourceMonitorException;
 import org.osgi.service.resourcemanagement.ResourceMonitorFactory;
+import org.osgi.service.resourcemanagement.ResourceMonitoringService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -24,9 +24,9 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 	private BundleContext			bundleContext;
 
 	/**
-	 * resource manager.
+	 * ResourceMonitoringService.
 	 */
-	private ResourceManager			resourceManager;
+	private ResourceMonitoringService	resourceMonitoringService;
 
 	/**
 	 * cpu factory.
@@ -47,8 +47,8 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 		bundleContext = context;
 
 		ServiceReference serviceReference = bundleContext
-				.getServiceReference(ResourceManager.class);
-		resourceManager = (ResourceManager) bundleContext.getService(serviceReference);
+				.getServiceReference(ResourceMonitoringService.class);
+		resourceMonitoringService = (ResourceMonitoringService) bundleContext.getService(serviceReference);
 
 		StringBuffer filter = new StringBuffer();
 		filter.append("(&(");
@@ -58,7 +58,7 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 		filter.append(")(");
 		filter.append(ResourceMonitorFactory.RESOURCE_TYPE_PROPERTY);
 		filter.append("=");
-		filter.append(ResourceManager.RES_TYPE_CPU);
+		filter.append(ResourceMonitoringService.RES_TYPE_CPU);
 		filter.append("))");
 		try {
 			Collection factoryReferences = bundleContext.getServiceReferences(
@@ -78,7 +78,7 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 	}
 
 	protected void setUp() throws Exception {
-		resourceContext = resourceManager.createContext(resourceContextName,
+		resourceContext = resourceMonitoringService.createContext(resourceContextName,
 				null);
 	}
 
@@ -117,7 +117,7 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 
 		// get monitor from ResourceContext
 		ResourceMonitor retrievedMonitor = resourceContext
-				.getMonitor(ResourceManager.RES_TYPE_CPU);
+				.getMonitor(ResourceMonitoringService.RES_TYPE_CPU);
 		assertNotNull(retrievedMonitor);
 		assertTrue(retrievedMonitor.equals(resourceMonitor));
 

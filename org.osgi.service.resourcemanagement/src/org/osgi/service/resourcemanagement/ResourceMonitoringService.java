@@ -23,8 +23,8 @@ import org.osgi.service.resourcemanagement.monitor.SocketMonitor;
 import org.osgi.service.resourcemanagement.monitor.ThreadMonitor;
 
 /**
- * The Resource Manager service manages the Resource Context instances. The
- * Resource Manager service is available through the OSGi service registry.
+ * It manages the Resource Context instances. It is available through the OSGi
+ * service registry.
  * 
  * This service holds the existing Resource Context instances. Resource Context
  * instances are created by calling the
@@ -32,19 +32,19 @@ import org.osgi.service.resourcemanagement.monitor.ThreadMonitor;
  * 
  * @author $Id$
  */
-public interface ResourceManager {
+public interface ResourceMonitoringService {
 
 	/**
 	 * The name of the threads resource type, used to monitor and control the
 	 * number of threads created by a resource context.
-	 * <code>ResourceManager</code> implementations must create
+	 * {@link ResourceMonitoringService} implementations must create
 	 * {@link ThreadMonitor} instances for this resource type.
 	 */
 	public static final String	RES_TYPE_THREADS		= "resource.type.threads";
 
 	/**
 	 * The name of the CPU resource type, used to monitor and control the CPU
-	 * time used by a resource context. <code>ResourceManager</code>
+	 * time used by a resource context. {@link ResourceMonitoringService}
 	 * implementations must create {@link CPUMonitor} instances for this
 	 * resource type.
 	 */
@@ -53,7 +53,7 @@ public interface ResourceManager {
 	/**
 	 * The name of the disk storage resource type, used to monitor and control
 	 * the size of the persistent storage used by a resource context.
-	 * <code>ResourceManager</code> implementations must create
+	 * {@link ResourceMonitoringService} implementations must create
 	 * {@link DiskStorageMonitor} instances for this resource type.
 	 */
 	public static final String	RES_TYPE_DISK_STORAGE	= "resource.type.disk.storage";
@@ -61,7 +61,7 @@ public interface ResourceManager {
 	/**
 	 * The name of the memory resource type, used to monitor and control the
 	 * size of the java heap used by a resource context.
-	 * <code>ResourceManager</code> implementations must create
+	 * {@link ResourceMonitoringService} implementations must create
 	 * {@link MemoryMonitor} instances for this resource type.
 	 */
 	public static final String	RES_TYPE_MEMORY			= "resource.type.memory";
@@ -69,7 +69,7 @@ public interface ResourceManager {
 	/**
 	 * The name of the socket resource type, used to monitor and control the
 	 * number of existing sockets used by a resource context.
-	 * <code>ResourceManager</code> implementations must create
+	 * {@link ResourceMonitoringService} implementations must create
 	 * {@link SocketMonitor} instances for this resource type.
 	 */
 	public static final String	RES_TYPE_SOCKET			= "resource.type.socket";
@@ -133,7 +133,7 @@ public interface ResourceManager {
 	 * Returns a list with the supported resource type names.
 	 * 
 	 * @return An array containing the names of all resource types that this
-	 *         ResourceManager implementation supports.
+	 *         {@link ResourceMonitoringService} implementation supports.
 	 */
 	public String[] getSupportedTypes();
 }

@@ -11,7 +11,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.resourcemanagement.ResourceContext;
 import org.osgi.service.resourcemanagement.ResourceContextEvent;
 import org.osgi.service.resourcemanagement.ResourceContextListener;
-import org.osgi.service.resourcemanagement.ResourceManager;
+import org.osgi.service.resourcemanagement.ResourceMonitoringService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -46,9 +46,9 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	private BundleContext		bundleContext;
 
 	/**
-	 * resource manager
+	 * ResourceMonitoringService
 	 */
-	private ResourceManager		resourceManager;
+	private ResourceMonitoringService	resourceMonitoringService;
 
 	/**
 	 * events
@@ -74,8 +74,8 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 		bundleContext = context;
 
 		ServiceReference sr = bundleContext
-				.getServiceReference(ResourceManager.class.getName());
-		resourceManager = (ResourceManager) bundleContext.getService(sr);
+				.getServiceReference(ResourceMonitoringService.class.getName());
+		resourceMonitoringService = (ResourceMonitoringService) bundleContext.getService(sr);
 	}
 
 	/**
@@ -348,7 +348,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	 */
 	private void executeScenario1() {
 		// create context1
-		ResourceContext resourceContext = resourceManager.createContext(
+		ResourceContext resourceContext = resourceMonitoringService.createContext(
 				RESOURCE_CONTEXT_NAME, null);
 
 		// add bundle 1 to context1
@@ -374,7 +374,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	 */
 	private void executeScenario2() {
 		// create context2
-		ResourceContext resourceContext = resourceManager.createContext(
+		ResourceContext resourceContext = resourceMonitoringService.createContext(
 				RESOURCE_CONTEXT_NAME2, null);
 
 		// add bundle 2 to context2

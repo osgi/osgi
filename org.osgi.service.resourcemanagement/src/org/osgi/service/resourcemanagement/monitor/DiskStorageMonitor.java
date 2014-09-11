@@ -17,12 +17,12 @@
 package org.osgi.service.resourcemanagement.monitor;
 
 import org.osgi.service.resourcemanagement.ResourceContext;
-import org.osgi.service.resourcemanagement.ResourceManager;
+import org.osgi.service.resourcemanagement.ResourceMonitoringService;
 import org.osgi.service.resourcemanagement.ResourceMonitor;
 
 /**
  * A {@link ResourceMonitor} for the
- * {@link ResourceManager#RES_TYPE_DISK_STORAGE} resource type. A
+ * {@link ResourceMonitoringService#RES_TYPE_DISK_STORAGE} resource type. A
  * DiskStorageMonitor instance monitors and limits the persistent storage of the
  * bundle belonging to the {@link ResourceContext}
  * 
