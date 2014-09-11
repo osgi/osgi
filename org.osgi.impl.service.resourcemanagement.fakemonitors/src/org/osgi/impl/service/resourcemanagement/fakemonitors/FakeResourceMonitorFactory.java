@@ -19,7 +19,7 @@ import org.osgi.service.resourcemanagement.ResourceMonitorFactory;
 /**
  *
  */
-public class FakeMonitorFactory implements ResourceMonitorFactory,
+public class FakeResourceMonitorFactory implements ResourceMonitorFactory,
 		ResourceContextListener {
 
 	/**
@@ -73,7 +73,7 @@ public class FakeMonitorFactory implements ResourceMonitorFactory,
 	 * @param pCoeff
 	 * @param pInitialValue
 	 */
-	public FakeMonitorFactory(BundleContext pBundleContext,
+	public FakeResourceMonitorFactory(BundleContext pBundleContext,
 			String pFactoryType, long pSamplingPeriod, long pMonitoringPeriod,
 			long pMinValue, long pMaxValue, long pCoeff, long pInitialValue) {
 		bundleContext = pBundleContext;

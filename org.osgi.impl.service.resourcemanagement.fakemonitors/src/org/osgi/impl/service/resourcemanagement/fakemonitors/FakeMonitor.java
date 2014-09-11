@@ -77,7 +77,7 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 	/**
 	 * Factory of this ResourceMonitor
 	 */
-	private final FakeMonitorFactory	factory;
+	private final FakeResourceMonitorFactory	factory;
 
 	/**
 	 * currentUsage
@@ -87,7 +87,7 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 	/**
 	 * Create a new FakeMonitor
 	 * 
-	 * @param pFactory factory
+	 * @param pFactory fake resource monitor factory
 	 * @param pResourceContext Resource Context associated with this instance of
 	 *        monitor.
 	 * @param pResourceType Type of Resource this monitor is able to monitor.
@@ -102,7 +102,7 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 	 * @param pCoeff coeff to be used with random value.
 	 * @param pBundleContext bundle context
 	 */
-	public FakeMonitor(FakeMonitorFactory pFactory,
+	public FakeMonitor(FakeResourceMonitorFactory pFactory,
 			ResourceContext pResourceContext, String pResourceType,
 			long pSamplingPeriod, long pMonitoringPeriod, long pMinValue,
 			long pMaxValue, long pInitialValue, long pCoeff,

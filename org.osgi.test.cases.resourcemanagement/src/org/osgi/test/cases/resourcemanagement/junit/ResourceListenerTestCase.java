@@ -151,8 +151,8 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 		registerListener();
 
 		// wait for events
-		log("Wait for events for 15000ms.");
-		Thread.sleep(15000);
+		log("Wait for events for 10000ms.");
+		Thread.sleep(10000);
 
 		// unregister the listener
 		unregisterListener();
@@ -179,8 +179,8 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 		registerListener();
 
 		// wait for events
-		log("Wait for events for 15000ms.");
-		Thread.sleep(15000);
+		log("Wait for events for 10000ms.");
+		Thread.sleep(10000);
 
 		// unregister the listener
 		unregisterListener();
@@ -208,8 +208,8 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 		registerListener();
 
 		// wait for events
-		log("Wait for events for 15000ms.");
-		Thread.sleep(15000);
+		log("Wait for events for 10000ms.");
+		Thread.sleep(10000);
 
 		// unregister the listener
 		unregisterListener();
@@ -235,8 +235,8 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 		registerListener();
 
 		// wait for events
-		log("Wait for events for 15000ms.");
-		Thread.sleep(15000);
+		log("Wait for events for 10000ms.");
+		Thread.sleep(10000);
 
 		// unregister the listener
 		unregisterListener();
@@ -262,8 +262,8 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 		registerListener();
 
 		// wait for events
-		log("Wait for events for 15000ms.");
-		Thread.sleep(15000);
+		log("Wait for events for 10000ms.");
+		Thread.sleep(10000);
 
 		// unregister the listener
 		unregisterListener();
@@ -289,8 +289,8 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 		registerListener();
 
 		// wait for events
-		log("Wait for events for 15000ms.");
-		Thread.sleep(15000);
+		log("Wait for events for 10000ms.");
+		Thread.sleep(10000);
 
 		// unregister the listener
 		unregisterListener();
