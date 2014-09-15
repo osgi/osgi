@@ -95,7 +95,7 @@
         <listitem><para><emphasis>Listener</emphasis> - Various listeners can be registered to receive 
         notifications about servlet or Http Session events.</para></listitem>
 
-        <listitem><para><emphasis>Resource Service</emphasis> - A service thats serves static resources.
+        <listitem><para><emphasis>Resource Service</emphasis> - A service thats registers static resources.
         </para></listitem>        
 
         <listitem><para><emphasis>Servlet</emphasis> - Component that dynamically generates
@@ -373,7 +373,7 @@
 
             <entry><para>Returns the class loader of the Whiteboard service. An implementation of the Http Service
             can achieve this by returning separate façades of the ServletContext to each Whiteboard service. Each            
-            façade accesses the Whiteboard service's Bundle Revision to obtain its classloader.
+            façade accesses the Whiteboard service's Bundle Wiring to obtain its classloader.
               </para>
             </entry>            
           </row>
@@ -848,14 +848,13 @@ not deployed in bridged mode, it must provide another means to handle these APIs
     <para>If multiple Servlet Context Helper services match the <code>osgi.http.whiteboard.context.select</code> property
     the servlet or listener will be registered with all these Servlet Context Helpers if it is registered as a Prototype 
     Service Factory. Otherwise it is only registered with the Servlet Context Helper with the highest service ranking. In the 
-    case of a tie, the lowest service ID wins. </para>
+    case of a tie, the lowest service ID wins. In other words, the normal service ranking rules apply.</para>
     
     <para>
     Servlet filters matching
     multiple Servlet Context Helpers can be applied to requests for servlets associated with all matching
     <code>ServletContextHelper</code> services. For this the servlet filter must be registered as a Prototype Service Factory.
-    Otherwise the servlet filter is only associated with Servlet Context Helper with the highest service ranking. In the case of a tie,
-    the lowest service ID wins.
+    Otherwise the normal service ranking rules are used to associate the filter with a single Servlet Context Helper.
     </para>    
   </section>
 
@@ -901,10 +900,9 @@ not deployed in bridged mode, it must provide another means to handle these APIs
                 
     <para>All <code>Servlet</code> objects and resource registrations associated with a single
     Http Whiteboard implementation share
-    the same name-space. If an attempt is made to register a Whiteboard <code>Servlet</code>
-    under the same pattern as a currently registered <code>Servlet</code> service, 
-    the service with the highest service ranking is used. In the case of a tie, the servlet
-    with the lowest <code>service.id</code> is used for the pattern.</para>
+    the same name-space. If an attempt is made to register a Whiteboard service
+    under the same pattern as a currently registered service, 
+    service ranking rules are used to select the service providing the pattern.</para>
 
     <para>For example, if the Http Whiteboard implementation is listening on port
     80 on the machine <code>www.acme.com</code> and the <code>Servlet</code>
@@ -960,8 +958,8 @@ not deployed in bridged mode, it must provide another means to handle these APIs
 
             <entry><para>Register the servlet as an error page for the error code and/or
             exception specified; the value may be a fully qualified exception type name or 
-            a three-digit HTTP status code in the range <code>400-599</code>. Question marks can be used as wildcards
-            so a value of <code>4??</code> matches any error code from <code>400-499</code>. 
+            a three-digit HTTP status code in the range <code>400-599</code>. Special values
+            <code>4xx</code> and <code>5xx</code> can be used to match value ranges. 
             Any value not being a three-digit number is 
             assumed to be a fully qualified exception class name.  
             See <xref
@@ -1109,7 +1107,7 @@ public class MyServlet extends HttpServlet {
       </para>
       
       <para>Example:</para>
-<programlisting>@Component(service = javax.servlet.Servlet.class, scope=ServiceScope.PROTOTYPE,
+<programlisting>@Component(service = Servlet.class, scope=ServiceScope.PROTOTYPE,
    property={
      "osgi.http.whiteboard.servlet.errorPage=java.io.IOException",
      "osgi.http.whiteboard.servlet.errorPage=500"})
@@ -1119,7 +1117,7 @@ public class MyErrorServlet extends HttpServlet {
 
       <para>The example servlet is invoked in case of a <code>500</code> error code, or if an
       <code>IOException</code> (or subclass) occurs. If there is more than one error page registered for the same exception or 
-      error code, the service with the highest service ranking is used. In case of a tie, the lowest service ID wins.
+      error code, service ranking rules are used to select the handling servlet.
       </para>
             
     </section>
@@ -1289,8 +1287,8 @@ service property <code>osgi.http.whiteboard.servlet.asyncSupported</code> or
     used by the Http Whiteboard implementation, the <code>destroy()</code> method is called. When the service 
     registration properties on the servlet filter are modified, the <code>destroy()</code> method is called and the servlet filter
     is subsequently re-initialized, if it can still be associated with a Http Whiteboard implementation after the 
-    modification. A servlet filter can be used by more than one Http Whiteboard implementation. To restrict a servlet filter to a single
-    implementation or a specific Servlet Context Helper, the
+    modification. By default a servlet filter can be used with any Servlet Context Helper or Http Whiteboard implementation. 
+    To restrict a servlet filter to a single implementation or a specific Servlet Context Helper, the
     <xref linkend="service.http.common.properties"/> 
     can be used.</para>
     
@@ -1322,9 +1320,10 @@ service property <code>osgi.http.whiteboard.servlet.asyncSupported</code> or
     bundle. They are transferred directly from their source - usually the JAR
     file that contains the code for the bundle - to the requestor.</para>
 
-    <para>Resources can be served by registering a service of any type with service 
-    registration properties that mark it
-    as a resources service. The actual service object registered is not used to serve resources,
+    <para>Resources can be served by registering a service of any type with a service 
+    registration property that marks it
+    as a resource service: <code>osgi.http.whiteboard.resource.prefix</code>. 
+    The actual service object registered is not used to serve resources,
     it is merely used to inform the Http Whiteboard implementation how to serve resources from 
     the bundle that registered the service.</para>
     
@@ -1364,7 +1363,7 @@ service property <code>osgi.http.whiteboard.servlet.asyncSupported</code> or
             When this property starts with a slash '/' the prefix is taken from the root 
             of the bundle. Without a leading slash the prefix is taken from the package of the 
             registered servlet implementation.</para>
-            <para>This property marks a servlet as a resouces servlet.
+            <para>This property marks a service as a resouce service.
             See <xref
                 linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PREFIX"
                 xrefstyle="hyperlink"/>.
@@ -1377,7 +1376,7 @@ service property <code>osgi.http.whiteboard.servlet.asyncSupported</code> or
             
             <entry><code>String+</code></entry>
 
-            <entry><para>The servlet pattern(s) to be used for the resources servlet. 
+            <entry><para>The servlet pattern(s) to be used to serve resources. 
             See <xref
                 linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PATTERN"
                 xrefstyle="hyperlink"/>.
@@ -1489,14 +1488,14 @@ public class MyResourceService {}</programlisting>
     </orderedlist>
     <para>
         As servlets and servlet filters services might come and go as well as <code>ServletContextHelper</code> 
-        services might come and go, the Whiteboard service registration can be very dynamic. 
+        services might come and go, use of the Whiteboard services can be very dynamic. 
         Therefore servlet and servlet filter services might transition between used by a Http Whiteboard 
         implementation to not being used and back to be used. For example, when a matching Servlet Context Helper
         arrives with a higher ranking than the currently bound Servlet Context Helper, the servlet will be destroyed and 
         reinitialized, bound to this better matching Servlet Context Helper. This is to ensure that timing issues cannot
         dictate the topology of the system.</para>
     <para> 
-        As in this case, <code>init()</code> and <code>destroy()</code> are called each time the service life cycle changes, 
+        As <code>init()</code> and <code>destroy()</code> are called each time the service life cycle changes, 
         the recommended way to register services is to use the Prototype Service scope as 
         defined in the <xref linkend="intro.core.release" xrefstyle="template:%t"/>. This ensures a 
         new instance is created for each time such service is re-initialized. 
@@ -1508,7 +1507,7 @@ public class MyResourceService {}</programlisting>
     <section>
       <title>Whiteboard Service dynamics and Active Requests</title>
       <para>When the Http Whiteboard implementation receives a network request it establishes the processing pipeline based on the 
-      available Whiteboard services (servlets, servlet filters, resource services and listeners) and executes 
+      available Whiteboard services (servlets, servlet filters and resource services) and executes 
       this pipeline. Between establishing the pipeline and finishing the processing, services used in 
       this pipeline might become unregistered. 
       It is up to the Http Whiteboard implementation whether it completes the active request or 
