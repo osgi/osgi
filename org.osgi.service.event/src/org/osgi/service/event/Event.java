@@ -52,6 +52,9 @@ public class Event {
 	 * @param topic The topic of the event.
 	 * @param properties The event's properties (may be {@code null}). A
 	 *        property whose key is not of type {@code String} will be ignored.
+	 *        If the specified properties is an {@link EventProperties} object,
+	 *        then it will be directly used. Otherwise, a copy of the specified
+	 *        properties is made.
 	 * @throws IllegalArgumentException If topic is not a valid topic name.
 	 * @since 1.2
 	 */
@@ -68,6 +71,7 @@ public class Event {
 	 * @param topic The topic of the event.
 	 * @param properties The event's properties (may be {@code null}). A
 	 *        property whose key is not of type {@code String} will be ignored.
+	 *        A copy of the specified properties is made.
 	 * @throws IllegalArgumentException If topic is not a valid topic name.
 	 */
 	public Event(String topic, Dictionary<String, ?> properties) {
