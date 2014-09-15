@@ -49,7 +49,7 @@ public final class HttpWhiteboardConstants {
 	 * 
 	 * @see #HTTP_WHITEBOARD_CONTEXT_PATH
 	 * @see #HTTP_WHITEBOARD_CONTEXT_SELECT
-	 * @see #HTTP_WHITEBOARD_DEFAUT_CONTEXT_NAME
+	 * @see #HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME
 	 */
 	public static final String	HTTP_WHITEBOARD_CONTEXT_NAME			= "osgi.http.whiteboard.context.name";
 
@@ -61,7 +61,7 @@ public final class HttpWhiteboardConstants {
 	 * 
 	 * @see #HTTP_WHITEBOARD_CONTEXT_NAME
 	 */
-	public static final String	HTTP_WHITEBOARD_DEFAUT_CONTEXT_NAME		= "default";
+	public static final String	HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME	= "default";
 
 	/**
 	 * Service property specifying the path of an

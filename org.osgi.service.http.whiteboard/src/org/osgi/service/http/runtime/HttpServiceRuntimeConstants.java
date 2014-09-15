@@ -47,4 +47,18 @@ public final class HttpServiceRuntimeConstants {
 	 * {@code String[]}, or {@code Collection<String>}.
 	 */
 	public static final String	HTTP_SERVICE_ENDPOINT_ATTRIBUTE			= "osgi.http.endpoint";
+
+	/**
+	 * Http Runtime Service registration property to associate the Http Runtime
+	 * Service with a Http Service implementation.
+	 * 
+	 * <p>
+	 * If this Http Whiteboard implementation also implements the Http Service
+	 * Specification this property is set to the {@code service.id} of the
+	 * {@code HttpService} provided by this implementation.
+	 * 
+	 * <p>
+	 * The value of this attribute must be of type {@code Integer}.
+	 */
+	public static final String	HTTP_SERVICE_ID_ATTRIBUTE		= "osgi.http.service.id";
 }
