@@ -17,12 +17,12 @@
 package org.osgi.test.cases.enocean;
 
 /**
- * SignatureTests:
+ * This class contains:
  * 
  * - testSignatures, cf. testSignatures() method from org.osgi.test.support.
  * signature.SignatureTestCase.
  */
-public class SignatureTests extends org.osgi.test.support.signature.SignatureTestCase {
+public class SignatureTestCase extends org.osgi.test.support.signature.SignatureTestCase {
 
 	// TODO
 

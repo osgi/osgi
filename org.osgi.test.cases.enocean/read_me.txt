@@ -5,7 +5,7 @@ Authors:
 - Victor PERRON, Orange.
 - Maïlys ROBIN, Orange.
 - Antonin CHAZALET, Orange.
-Date (last edited): 19th August 2014.
+Date (last edited): 16th September 2014.
 
 1) Introduction
 
@@ -24,16 +24,16 @@ build.xml file located in org.osgi.test.cases.enocean.
 
 The org.osgi.test.cases.enocean project contains several test cases. They are 
 named:
-- org.osgi.test.cases.enocean.BasesTests,
-- org.osgi.test.cases.enocean.EnOceanHostTests,
-- org.osgi.test.cases.enocean.EventTests,
+- org.osgi.test.cases.enocean.BaseTestCase,
+- org.osgi.test.cases.enocean.EnOceanHostTestCase,
+- org.osgi.test.cases.enocean.EventTestCase,
 - org.osgi.test.cases.enocean.ExportTestCase,
 - org.osgi.test.cases.enocean.ManualRegistrationTestCase,
-- org.osgi.test.cases.enocean.PersistencyTests,
-- org.osgi.test.cases.enocean.RegistrationTests,
-- and org.osgi.test.cases.enocean.SignatureTests.
+- org.osgi.test.cases.enocean.PersistencyTestCase,
+- org.osgi.test.cases.enocean.RegistrationTestCase,
+- and org.osgi.test.cases.enocean.SignatureTestCase.
 
-BaseTests contains the following tests:
+BaseTestCase contains the following tests:
 - testRPC, tests RPC sending and receiving, i.e. insert an EnOcean temperature 
 sensor device, and test a RPC invocation on this device.
 - testInterfaceExceptions, tests that common errors cases are properly handled 
@@ -42,12 +42,12 @@ sensor device, and test a RPC invocation on this device.
 EnOceanMessage is enough to extract all the needed information, provided the 
 necessary descriptions are known.
 
-EnOceanHostTests is intented to contain the tests related to EnOceanHost:
+EnOceanHostTestCase is intented to contain the tests related to EnOceanHost:
 - testEnOceanHostServiceAvailability, tests that at least one EnOceanHost 
 service is registered when an implementation of the EnOcean specification is 
 running.
 
-EventTests:
+EventTestCase:
 - testSelfEventReception, tests that the test suite is able to locally send 
 and receive messages.
 - testEventNotification, tests event notification when passing an actual 
@@ -68,16 +68,16 @@ triggered through the step service. This test thus requires the end-user
 involvement. Finally, the CT checks that the device's profile has been properly 
 updated.
 
-PersistencyTests:
+PersistencyTestCase:
 - testDeviceExportPersistency, tests device export persistency: registers a 
 device, get its chip ID (referred to as the original chip ID), stops, and 
 restarts the base driver, finally get the device’s new chip ID, and checks 
 that the original chip ID, and the new one are equal.
 
-RegistrationTests:
+RegistrationTestCase:
 - testAutoDeviceRegistration, tests initial, and automatic device registration 
 from a raw Radio teach-in packet that is triggered through the step service.
 
-SignatureTests:
+SignatureTestCase:
 - testSignatures, cf. testSignatures() method from org.osgi.test.support.
 signature.SignatureTestCase.

@@ -29,7 +29,7 @@ import org.osgi.test.cases.enocean.utils.Fixtures;
  * EnOceanMessage is enough to extract all the needed information, provided the
  * necessary descriptions are known.
  */
-public class BaseTests extends EnOceanTestCase {
+public class BaseTestCase extends EnOceanTestCase {
 
 	/**
 	 * Test that a properly set profile ID in a raw EnOceanMessage is enough to
@@ -39,11 +39,8 @@ public class BaseTests extends EnOceanTestCase {
 	 * Pay attention that almost all of those tests look more like a
 	 * "recommendation" to be ran on external description bundles, since the
 	 * description objects are not supposed to be part of the RI.
-	 * 
-	 * @throws Exception
 	 */
-	public void testInterfaceExceptions() throws Exception {
-
+	public void testInterfaceExceptions() {
 		try {
 			log("testInterfaceExceptions(), Check that passing a NULL array of bytes throws an IllegalArgumentException.");
 			EnOceanMessageDescription msgDescription = new EnOceanMessageDescription_A5_02_01();
@@ -144,25 +141,21 @@ public class BaseTests extends EnOceanTestCase {
 			exceptionCaught = true;
 		}
 		assertEquals("The expected exception hasn't been caught.", true, exceptionCaught);
-
 	}
 
 	/**
 	 * Test that a properly set profile ID in a raw EnOceanMessage is enough to
-	 * extract all the information we need, provided we have the necessary
-	 * descriptions.
-	 * 
-	 * @throws Exception
+	 * extract all the information needed, provided the necessary descriptions
+	 * are known.
 	 */
-	public void testUseOfDescriptions() throws Exception {
-
+	public void testUseOfDescriptions() {
 		EnOceanMessage temperatureMsg = new MessageA5_02_01(Fixtures.TEMPERATURE);
 
 		/*
-		 * Here, we _know_ the message profile (A5-02-01). In a real context,
-		 * the base driver would provide this information directly in the
-		 * broadcasted EnOceanMessage objects through the getFunc() / getType()
-		 * interface methods.
+		 * Here, the message profile is A5-02-01. In a real context, the base
+		 * driver would provide this information directly in the broadcasted
+		 * EnOceanMessage objects through the getFunc() / getType() interface
+		 * methods.
 		 */
 		EnOceanMessageDescription msgDescription = msgDescriptionSet.getMessageDescription(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, -1);
 		assertNotNull("MsgDescription must not be null.", msgDescription);
@@ -182,9 +175,9 @@ public class BaseTests extends EnOceanTestCase {
 	/**
 	 * Tests RPC sending and receiving.
 	 * 
-	 * @throws Exception
+	 * @throws InterruptedException
 	 */
-	public void testRPC() throws Exception {
+	public void testRPC() throws InterruptedException {
 		log("testRPC(), Insert a device");
 		/* Insert a device */
 		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);

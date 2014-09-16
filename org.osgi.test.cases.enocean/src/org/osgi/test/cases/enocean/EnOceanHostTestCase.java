@@ -8,13 +8,13 @@ import org.osgi.service.enocean.EnOceanHost;
 /**
  * Tests related to the EnOceanHost interface.
  * 
- * EnOceanHostTests is intented to contain the tests related to EnOceanHost:
+ * This class is intented to contain the tests related to EnOceanHost:
  * 
  * - testEnOceanHostServiceAvailability, tests that at least one EnOceanHost
  * service is registered when an implementation of the EnOcean specification is
  * running.
  */
-public class EnOceanHostTests extends EnOceanTestCase {
+public class EnOceanHostTestCase extends EnOceanTestCase {
 
 	/**
 	 * Test that at least one EnOceanHost service is registered when an
