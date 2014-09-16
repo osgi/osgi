@@ -7,7 +7,6 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.support.OSGiTestCaseProperties;
-import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.sleep.Sleep;
 
 /**
@@ -18,7 +17,7 @@ import org.osgi.test.support.sleep.Sleep;
  * restarts the base driver, finally get the device’s new chip ID, and checks
  * that the original chip ID, and the new one are equal.
  */
-public class PersistencyTestCase extends DefaultTestBundleControl {
+public class PersistencyTestCase extends AbstractEnOceanTestCase {
 
 	/**
 	 * Tests device export persistency.

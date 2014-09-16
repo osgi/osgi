@@ -14,7 +14,7 @@ import org.osgi.service.enocean.EnOceanHost;
  * service is registered when an implementation of the EnOcean specification is
  * running.
  */
-public class EnOceanHostTestCase extends EnOceanTestCase {
+public class EnOceanHostTestCase extends AbstractEnOceanTestCase {
 
 	/**
 	 * Test that at least one EnOceanHost service is registered when an

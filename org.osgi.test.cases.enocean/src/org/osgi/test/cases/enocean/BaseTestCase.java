@@ -29,7 +29,7 @@ import org.osgi.test.cases.enocean.utils.Fixtures;
  * EnOceanMessage is enough to extract all the needed information, provided the
  * necessary descriptions are known.
  */
-public class BaseTestCase extends EnOceanTestCase {
+public class BaseTestCase extends AbstractEnOceanTestCase {
 
 	/**
 	 * Test that a properly set profile ID in a raw EnOceanMessage is enough to
@@ -144,35 +144,6 @@ public class BaseTestCase extends EnOceanTestCase {
 	}
 
 	/**
-	 * Test that a properly set profile ID in a raw EnOceanMessage is enough to
-	 * extract all the information needed, provided the necessary descriptions
-	 * are known.
-	 */
-	public void testUseOfDescriptions() {
-		EnOceanMessage temperatureMsg = new MessageA5_02_01(Fixtures.TEMPERATURE);
-
-		/*
-		 * Here, the message profile is A5-02-01. In a real context, the base
-		 * driver would provide this information directly in the broadcasted
-		 * EnOceanMessage objects through the getFunc() / getType() interface
-		 * methods.
-		 */
-		EnOceanMessageDescription msgDescription = msgDescriptionSet.getMessageDescription(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, -1);
-		assertNotNull("MsgDescription must not be null.", msgDescription);
-		EnOceanChannel[] channels = msgDescription.deserialize(temperatureMsg.getPayloadBytes());
-		assertEquals("2 channels are expected here.", 2, channels.length);
-		EnOceanChannel temperatureChannel = channels[0];
-		String tmpChannelId = temperatureChannel.getChannelId();
-		assertEquals("Fixtures.TMP_CHANNEL_ID is expected here.", Fixtures.TMP_CHANNEL_ID, tmpChannelId);
-		EnOceanChannelDescription channelDescription = channelDescriptionSet.getChannelDescription(tmpChannelId);
-		assertEquals("Fixtures.TMP_CHANNEL_TYPE is expected here.", Fixtures.TMP_CHANNEL_TYPE, channelDescription.getType());
-		EnOceanDataChannelDescription dataChannelDescription = (EnOceanDataChannelDescription) channelDescription;
-		// It's a float because it's a DATA channel
-		Float deserializedTemperature = (Float) dataChannelDescription.deserialize(temperatureChannel.getRawValue());
-		assertEquals("Fixtures.TEMPERATURE is expected here.", Fixtures.TEMPERATURE, deserializedTemperature.floatValue(), 0.1);
-	}
-
-	/**
 	 * Tests RPC sending and receiving.
 	 * 
 	 * @throws InterruptedException
@@ -208,6 +179,35 @@ public class BaseTestCase extends EnOceanTestCase {
 
 		log("testRPC(), unget service with service reference ref: " + ref);
 		getContext().ungetService(ref);
+	}
+
+	/**
+	 * Test that a properly set profile ID in a raw EnOceanMessage is enough to
+	 * extract all the information needed, provided the necessary descriptions
+	 * are known.
+	 */
+	public void testUseOfDescriptions() {
+		EnOceanMessage temperatureMsg = new MessageA5_02_01(Fixtures.TEMPERATURE);
+
+		/*
+		 * Here, the message profile is A5-02-01. In a real context, the base
+		 * driver would provide this information directly in the broadcasted
+		 * EnOceanMessage objects through the getFunc() / getType() interface
+		 * methods.
+		 */
+		EnOceanMessageDescription msgDescription = msgDescriptionSet.getMessageDescription(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, -1);
+		assertNotNull("MsgDescription must not be null.", msgDescription);
+		EnOceanChannel[] channels = msgDescription.deserialize(temperatureMsg.getPayloadBytes());
+		assertEquals("2 channels are expected here.", 2, channels.length);
+		EnOceanChannel temperatureChannel = channels[0];
+		String tmpChannelId = temperatureChannel.getChannelId();
+		assertEquals("Fixtures.TMP_CHANNEL_ID is expected here.", Fixtures.TMP_CHANNEL_ID, tmpChannelId);
+		EnOceanChannelDescription channelDescription = channelDescriptionSet.getChannelDescription(tmpChannelId);
+		assertEquals("Fixtures.TMP_CHANNEL_TYPE is expected here.", Fixtures.TMP_CHANNEL_TYPE, channelDescription.getType());
+		EnOceanDataChannelDescription dataChannelDescription = (EnOceanDataChannelDescription) channelDescription;
+		// It's a float because it's a DATA channel
+		Float deserializedTemperature = (Float) dataChannelDescription.deserialize(temperatureChannel.getRawValue());
+		assertEquals("Fixtures.TEMPERATURE is expected here.", Fixtures.TEMPERATURE, deserializedTemperature.floatValue(), 0.1);
 	}
 
 }

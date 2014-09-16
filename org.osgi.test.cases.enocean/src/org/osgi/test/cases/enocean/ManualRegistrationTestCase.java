@@ -17,7 +17,7 @@ import org.osgi.test.cases.enocean.utils.ServiceListener;
  * involvement. Finally, the CT checks that the device's profile has been
  * properly updated.
  */
-public class ManualRegistrationTestCase extends EnOceanTestCase {
+public class ManualRegistrationTestCase extends AbstractEnOceanTestCase {
 
 	/**
 	 * Tests initial device registration from a raw Radio teach-in packet.

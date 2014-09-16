@@ -15,7 +15,7 @@ import org.osgi.test.cases.enocean.utils.Logger;
  * registration from a raw Radio teach-in packet that is triggered through the
  * step service.
  */
-public class RegistrationTestCase extends EnOceanTestCase {
+public class RegistrationTestCase extends AbstractEnOceanTestCase {
 
 	/**
 	 * Tests initial device registration from a raw Radio teach-in packet.

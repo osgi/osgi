@@ -16,9 +16,10 @@ import org.osgi.test.cases.enoceansimulation.teststep.TestStep;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
- *
+ * Abstract class that specify the setup(), and teardown() methods for the
+ * EnOcean test cases.
  */
-public abstract class EnOceanTestCase extends DefaultTestBundleControl {
+public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 
 	/** testStepServiceRef */
 	protected ServiceReference					testStepServiceRef;

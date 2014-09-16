@@ -26,7 +26,7 @@ import org.osgi.test.cases.enocean.utils.Utils;
  * that the message has been sent, received by the base driver, and checked by
  * the CT through the step service.
  */
-public class ExportTestCase extends EnOceanTestCase {
+public class ExportTestCase extends AbstractEnOceanTestCase {
 
 	/**
 	 * Tests device exportation.

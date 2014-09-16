@@ -26,7 +26,7 @@ import org.osgi.test.cases.enocean.utils.ServiceListener;
  * message to the Base Driver. This also tests the MessageSet registration since
  * the Base Driver needs to know about it before firing on EventAdmin.
  */
-public class EventTestCase extends EnOceanTestCase {
+public class EventTestCase extends AbstractEnOceanTestCase {
 
 	/**
 	 * Checks that our test suite is able to locally send and receive messages.
