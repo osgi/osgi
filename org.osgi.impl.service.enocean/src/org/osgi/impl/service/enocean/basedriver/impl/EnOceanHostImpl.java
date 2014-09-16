@@ -68,16 +68,19 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 	protected boolean				isRunning;
 	private ChipPIDMapping			chipIdPidMap;
 
+	protected BundleContext			bc;
+
 	/**
 	 * @param path
 	 * @param bc
 	 */
 	public EnOceanHostImpl(String path, BundleContext bc) {
+		this.bc = bc;
 		this.isRunning = false;
 		this.listeners = new ArrayList();
 		this.donglePath = path;
 		try {
-			this.chipIdPidMap = new ChipPIDMapping(bc);
+			this.chipIdPidMap = new ChipPIDMapping(this.bc);
 		} catch (Exception e) {
 			Logger.w(TAG, "could not allocate Config Admin chipId/servicePID mapping : " + e.getMessage());
 		}

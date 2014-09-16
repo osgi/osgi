@@ -4,26 +4,28 @@ package org.osgi.test.cases.enocean;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanChannel;
 import org.osgi.service.enocean.EnOceanDevice;
+import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.EnOceanRPC;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
 import org.osgi.service.enocean.descriptions.EnOceanDataChannelDescription;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
+import org.osgi.service.enocean.descriptions.EnOceanMessageDescriptionSet;
 import org.osgi.test.cases.enocean.descriptions.EnOceanChannelDescription_TMP_00;
-import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescription_A5_02_01;
 import org.osgi.test.cases.enocean.messages.MessageA5_02_01;
 import org.osgi.test.cases.enocean.rpc.QueryFunction;
 import org.osgi.test.cases.enocean.serial.EspRadioPacket;
+import org.osgi.test.cases.enocean.sets.EnOceanChannelDescriptionSetImpl;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 
 /**
  * BaseTests contains the following tests:
  * 
- * - testRPC, tests RPC sending and receiving, i.e. insert an EnOcean
- * temperature sensor device, and test a RPC invocation on this device.
- * 
  * - testInterfaceExceptions, tests that common errors cases are properly
  * handled (i.e. that the relevant exceptions are thrown).
+ * 
+ * - testRPC, tests RPC sending and receiving, i.e. insert an EnOcean
+ * temperature sensor device, and test a RPC invocation on this device.
  * 
  * - testUseOfDescriptions, tests that a properly set profile ID in a raw
  * EnOceanMessage is enough to extract all the needed information, provided the
@@ -39,24 +41,40 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 	 * Pay attention that almost all of those tests look more like a
 	 * "recommendation" to be ran on external description bundles, since the
 	 * description objects are not supposed to be part of the RI.
+	 * 
+	 * @throws InterruptedException
 	 */
-	public void testInterfaceExceptions() {
+	public void testInterfaceExceptions() throws InterruptedException {
+		// Request the registration of an EnOceanMessageDescriptionSet
+		// containing an EnOceanMessageDescription_A5_02_01.
+		testStepService.execute("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription_A5_02_01", new String[] {});
+		log("testInterfaceExceptions(), enOceanMessageDescriptionSets.waitForService()");
+		String enOceanMessageDescriptionSetsWFS = enOceanMessageDescriptionSets.waitForService();
+		log("testInterfaceExceptions(), enOceanMessageDescriptionSets.waitForService() returned: " + enOceanMessageDescriptionSetsWFS);
+		// testInterfaceExceptions(),
+		// enOceanMessageDescriptionSets.waitForService() returned:
+		// SERVICE_ADDED
+
+		ServiceReference sr = getContext().getServiceReference(EnOceanMessageDescriptionSet.class.getName());
+		log("testInterfaceExceptions(), EnOceanMessageDescriptionSet sr: " + sr);
+		EnOceanMessageDescriptionSet enOceanMessageDescriptionSet = (EnOceanMessageDescriptionSet) getContext().getService(sr);
+		EnOceanMessageDescription enOceanMessageDescription = enOceanMessageDescriptionSet.getMessageDescription(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, -1);
+		log("testInterfaceExceptions(), enOceanMessageDescription: " + enOceanMessageDescription);
+
 		try {
-			log("testInterfaceExceptions(), Check that passing a NULL array of bytes throws an IllegalArgumentException.");
-			EnOceanMessageDescription msgDescription = new EnOceanMessageDescription_A5_02_01();
-			msgDescription.deserialize(null);
-			fail("Passing a NULL array of bytes to EnOceanMessageDescription.deserialize must throw an IllegalArgumentException.");
-		} catch (IllegalArgumentException e) {
+			log("testInterfaceExceptions(), Check that passing a NULL array of bytes throws an EnOceanException.");
+			enOceanMessageDescription.deserialize(null);
+			fail("Passing a NULL array of bytes to EnOceanMessageDescription.deserialize must throw an EnOceanException.");
+		} catch (EnOceanException e) {
 			// Here, everything worked as expected.
 			log("testInterfaceExceptions(), --> OK.");
 		}
 
 		try {
-			log("testInterfaceExceptions(), Check that passing a wrongly sized byte array also throws an IllegalArgumentException.");
-			EnOceanMessageDescription msgDescription = new EnOceanMessageDescription_A5_02_01();
-			msgDescription.deserialize(new byte[] {0x55, 0x02, 0x34, 0x56, 0x67});
-			fail("Passing a wrongly sized byte array to EnOceanMessageDescription.deserialize must throw an IllegalArgumentException.");
-		} catch (IllegalArgumentException e) {
+			log("testInterfaceExceptions(), Check that passing a wrongly sized byte array also throws an EnOceanException.");
+			enOceanMessageDescription.deserialize(new byte[] {0x55, 0x02, 0x34, 0x56, 0x67});
+			fail("Passing a wrongly sized byte array to EnOceanMessageDescription.deserialize must throw an EnOceanException.");
+		} catch (EnOceanException e) {
 			log("testInterfaceExceptions(), --> OK.");
 		}
 
@@ -118,6 +136,9 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 			exceptionCaught = true;
 		}
 		assertEquals("The expected exception hasn't been caught.", true, exceptionCaught);
+
+		EnOceanChannelDescriptionSetImpl channelDescriptionSet = new EnOceanChannelDescriptionSetImpl();
+		channelDescriptionSet.putChannelDescription(Fixtures.TMP_CHANNEL_ID, new EnOceanChannelDescription_TMP_00());
 
 		try { /*
 			 * Tests that getting a NULL index in an
@@ -202,6 +223,8 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 		EnOceanChannel temperatureChannel = channels[0];
 		String tmpChannelId = temperatureChannel.getChannelId();
 		assertEquals("Fixtures.TMP_CHANNEL_ID is expected here.", Fixtures.TMP_CHANNEL_ID, tmpChannelId);
+		EnOceanChannelDescriptionSetImpl channelDescriptionSet = new EnOceanChannelDescriptionSetImpl();
+		channelDescriptionSet.putChannelDescription(Fixtures.TMP_CHANNEL_ID, new EnOceanChannelDescription_TMP_00());
 		EnOceanChannelDescription channelDescription = channelDescriptionSet.getChannelDescription(tmpChannelId);
 		assertEquals("Fixtures.TMP_CHANNEL_TYPE is expected here.", Fixtures.TMP_CHANNEL_TYPE, channelDescription.getType());
 		EnOceanDataChannelDescription dataChannelDescription = (EnOceanDataChannelDescription) channelDescription;

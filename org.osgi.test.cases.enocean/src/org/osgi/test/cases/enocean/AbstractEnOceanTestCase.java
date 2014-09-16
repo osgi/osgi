@@ -3,10 +3,9 @@ package org.osgi.test.cases.enocean;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanDevice;
+import org.osgi.service.enocean.descriptions.EnOceanMessageDescriptionSet;
 import org.osgi.service.event.EventAdmin;
-import org.osgi.test.cases.enocean.descriptions.EnOceanChannelDescription_TMP_00;
 import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescription_A5_02_01;
-import org.osgi.test.cases.enocean.sets.EnOceanChannelDescriptionSetImpl;
 import org.osgi.test.cases.enocean.sets.EnOceanMessageDescriptionSetImpl;
 import org.osgi.test.cases.enocean.utils.EventListener;
 import org.osgi.test.cases.enocean.utils.Fixtures;
@@ -39,8 +38,9 @@ public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 
 	/** msgDescriptionSet */
 	protected EnOceanMessageDescriptionSetImpl	msgDescriptionSet;
-	/** channelDescriptionSet */
-	protected EnOceanChannelDescriptionSetImpl	channelDescriptionSet;
+
+	/** enOceanMessageDescriptionSets */
+	protected ServiceListener					enOceanMessageDescriptionSets;
 
 	protected void setUp() throws Exception {
 		/*
@@ -57,6 +57,8 @@ public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 		String[] topics = new String[] {Fixtures.SELF_TEST_EVENT_TOPIC};
 		events = new EventListener(getContext(), topics, null);
 
+		enOceanMessageDescriptionSets = new ServiceListener(getContext(), EnOceanMessageDescriptionSet.class);
+
 		/* Get a global eventAdmin handle */
 		eventAdminRef = getContext().getServiceReference(EventAdmin.class.getName());
 		eventAdmin = (EventAdmin) getContext().getService(eventAdminRef);
@@ -64,15 +66,13 @@ public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 		/* Inserts some message documentation classes */
 		msgDescriptionSet = new EnOceanMessageDescriptionSetImpl();
 		msgDescriptionSet.putMessage(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, -1, new EnOceanMessageDescription_A5_02_01());
-
-		channelDescriptionSet = new EnOceanChannelDescriptionSetImpl();
-		channelDescriptionSet.putChannelDescription(Fixtures.TMP_CHANNEL_ID, new EnOceanChannelDescription_TMP_00());
 	}
 
 	protected void tearDown() throws Exception {
 		getContext().ungetService(eventAdminRef);
 		devices.close();
 		events.close();
+		enOceanMessageDescriptionSets.close();
 		ServiceReference[] deviceRefs = getContext().getServiceReferences(EnOceanDevice.class.getName(), null);
 		if (deviceRefs != null) {
 			for (int i = 0; i < deviceRefs.length; i++) {

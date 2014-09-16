@@ -24,6 +24,10 @@ import org.osgi.impl.service.enocean.utils.EnOceanHostImplException;
 import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.impl.service.enocean.utils.teststep.TestStepForEnOceanImpl;
+import org.osgi.service.enocean.EnOceanChannel;
+import org.osgi.service.enocean.EnOceanException;
+import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
+import org.osgi.service.enocean.descriptions.EnOceanMessageDescriptionSet;
 import org.osgi.test.cases.enoceansimulation.teststep.TestStep;
 
 /**
@@ -64,19 +68,19 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			// Logger.d(TAG,
-			// "EnOceanHostTestImpl.run() - periodically check testStepService.getCurrentCommandAndReplaceItByNull()");
+			Logger.d(TAG,
+					"EnOceanHostTestImpl.run() - periodically check testStepService.getCurrentCommandAndReplaceItByNull()");
 			try {
 				byte[] command =
 						testStepForEnOceanImpl.getCurrentCommandAndReplaceItByNull();
-				// Logger.d(TAG, "command: " + command);
+				Logger.d(TAG, "command: " + command);
 				if (command == null) {
-					// Logger.d(TAG, "command == null");
+					Logger.d(TAG, "command == null");
 				} else {
 					byte[] data = command;
-					if (data[0] != ENOCEAN_ESP_FRAME_START) {
-						Logger.d(TAG, "data[0] != ENOCEAN_ESP_FRAME_START");
-					} else {
+					Logger.d(TAG, "data: "+data);
+					if (data[0] == ENOCEAN_ESP_FRAME_START) {
+						Logger.d(TAG, "data[0] == ENOCEAN_ESP_FRAME_START");
 						Logger.d(TAG, "read bytes: " + Utils.bytesToHexString(data));
 						if (data[0] == ENOCEAN_ESP_FRAME_START) {
 							Logger.d(TAG, "data[0] == ENOCEAN_ESP_FRAME_START");
@@ -86,6 +90,125 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 										"packet.getPacketType() == EspPacket.TYPE_RADIO");
 								dispatchToListeners(packet.getFullData());
 							}
+						} else {
+							Logger.d(TAG, "The given data: " + data + " is UNKNOWN.");
+						}
+					} else {
+						if ("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription_A5_02_01".equals(new String(data))) {
+							EnOceanMessageDescriptionSet enOceanMessageDescriptionSet = new EnOceanMessageDescriptionSet() {
+								public EnOceanMessageDescription getMessageDescription(int rorg, int func, int type, int extra) throws IllegalArgumentException {
+									return new EnOceanMessageDescription() {
+
+										/**
+										 * @return hardcoded 0xA5.
+										 */
+										public int getRorg() {
+											return 0xA5;
+										}
+
+										/**
+										 * @return hardcoded 0x02.
+										 */
+										public int getFunc() {
+											return 0x02;
+										}
+
+										/**
+										 * @return hardcoded 0x01.
+										 */
+										public int getType() {
+											return 0x01;
+										}
+
+										EnOceanChannel	temperature	= new TemperatureChannel_00();
+										EnOceanChannel	learn		= new LearnChannel_4BS();
+
+										public EnOceanChannel[] deserialize(byte[] data) throws EnOceanException {
+
+											/*
+											 * Every message description should
+											 * ensure this
+											 */
+											if (data == null) {
+												throw new EnOceanException("Input data was NULL");
+											}
+											if (data.length != 4) {
+												throw new EnOceanException("Input data size was wrong");
+											}
+											byte lrnByte = (byte) ((data[3] >> 3) & 0x01);
+											temperature.setRawValue(Utils.byteToBytes(data[2]));
+											learn.setRawValue(new byte[] {lrnByte});
+
+											return new EnOceanChannel[] {temperature, learn};
+										}
+
+										public byte[] serialize(EnOceanChannel[] channels) throws EnOceanException {
+											// TODO Auto-generated method stub
+											return null;
+										}
+
+										class TemperatureChannel_00 implements EnOceanChannel {
+
+											private byte	b0;
+
+											public String getChannelId() {
+												return "TMP_00";
+											}
+
+											public void setRawValue(byte[] rawValue) {
+												b0 = rawValue[0];
+											}
+
+											public int getSize() {
+												return 8;
+											}
+
+											public byte[] getRawValue() {
+												return Utils.byteToBytes(b0);
+											}
+
+											public int getOffset() {
+												return 16;
+											}
+
+										}
+
+										class LearnChannel_4BS implements EnOceanChannel {
+
+											private boolean	isLearn;
+
+											public String getChannelId() {
+												return "LRN_4BS";
+											}
+
+											public void setRawValue(byte[] rawValue) {
+												isLearn = rawValue[0] == 0;
+											}
+
+											public int getSize() {
+												return 1;
+											}
+
+											public byte[] getRawValue() {
+												if (isLearn) {
+													return new byte[] {0x0};
+												} else {
+													return new byte[] {0x1};
+												}
+											}
+
+											public int getOffset() {
+												return 28;
+											}
+
+										}
+
+									};
+								}
+							};
+							bc.registerService(EnOceanMessageDescriptionSet.class.getName(), enOceanMessageDescriptionSet, null);
+						} else {
+							Logger.d(TAG, "The given data: " + data + " is UNKNOWN.");
 						}
 					}
 				}
