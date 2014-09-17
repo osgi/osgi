@@ -30,6 +30,7 @@ import org.osgi.service.enocean.EnOceanChannel;
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescriptionSet;
+import org.osgi.service.enocean.descriptions.EnOceanDataChannelDescription;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescriptionSet;
 import org.osgi.test.cases.enoceansimulation.teststep.TestStep;
@@ -219,7 +220,7 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 									public EnOceanChannelDescription getChannelDescription(String channelId) throws IllegalArgumentException {
 										if (channelTable == null) {
 											channelTable = new Hashtable();
-											channelTable.put("TMP_00", new EnOceanChannelDescription() {
+											channelTable.put("TMP_00", new EnOceanDataChannelDescription() {
 
 												public String getType() {
 													return EnOceanChannelDescription.TYPE_DATA;

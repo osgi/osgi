@@ -6,8 +6,6 @@ import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescriptionSet;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescriptionSet;
 import org.osgi.service.event.EventAdmin;
-import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescription_A5_02_01;
-import org.osgi.test.cases.enocean.sets.EnOceanMessageDescriptionSetImpl;
 import org.osgi.test.cases.enocean.utils.EventListener;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
@@ -37,9 +35,6 @@ public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 	/** eventAdmin */
 	protected EventAdmin						eventAdmin;
 
-	/** msgDescriptionSet */
-	protected EnOceanMessageDescriptionSetImpl	msgDescriptionSet;
-
 	/** enOceanMessageDescriptionSets */
 	protected ServiceListener					enOceanMessageDescriptionSets;
 
@@ -68,10 +63,6 @@ public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 		/* Get a global eventAdmin handle */
 		eventAdminRef = getContext().getServiceReference(EventAdmin.class.getName());
 		eventAdmin = (EventAdmin) getContext().getService(eventAdminRef);
-
-		/* Inserts some message documentation classes */
-		msgDescriptionSet = new EnOceanMessageDescriptionSetImpl();
-		msgDescriptionSet.putMessage(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, -1, new EnOceanMessageDescription_A5_02_01());
 	}
 
 	protected void tearDown() throws Exception {

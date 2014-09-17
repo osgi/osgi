@@ -5,18 +5,15 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanChannel;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanException;
-import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.EnOceanRPC;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescriptionSet;
 import org.osgi.service.enocean.descriptions.EnOceanDataChannelDescription;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescriptionSet;
-import org.osgi.test.cases.enocean.descriptions.EnOceanChannelDescription_TMP_00;
 import org.osgi.test.cases.enocean.messages.MessageA5_02_01;
 import org.osgi.test.cases.enocean.rpc.QueryFunction;
 import org.osgi.test.cases.enocean.serial.EspRadioPacket;
-import org.osgi.test.cases.enocean.sets.EnOceanChannelDescriptionSetImpl;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 
 /**
@@ -85,7 +82,7 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 		// containing an EnOceanChannelDescription_TMP_00.
 		testStepService.execute("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_TMP_00",
 				null);
-		log("testInterfaceExceptions(), enOceanMessageDescriptionSets.waitForService()");
+		log("testInterfaceExceptions(), enOceanChannelDescriptionSets.waitForService()");
 		String enOceanChannelDescriptionSetsWFS =
 				enOceanChannelDescriptionSets.waitForService();
 		log("testInterfaceExceptions(), enOceanChannelDescriptionSets.waitForService() returned: "
@@ -213,27 +210,64 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 	 * Test that a properly set profile ID in a raw EnOceanMessage is enough to
 	 * extract all the information needed, provided the necessary descriptions
 	 * are known.
+	 * 
+	 * @throws InterruptedException
 	 */
-	public void testUseOfDescriptions() {
-		EnOceanMessage temperatureMsg = new MessageA5_02_01(Fixtures.TEMPERATURE);
-
+	public void testUseOfDescriptions() throws InterruptedException {
 		/*
 		 * Here, the message profile is A5-02-01. In a real context, the base
 		 * driver would provide this information directly in the broadcasted
 		 * EnOceanMessage objects through the getFunc() / getType() interface
 		 * methods.
 		 */
-		EnOceanMessageDescription msgDescription = msgDescriptionSet.getMessageDescription(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, -1);
-		assertNotNull("MsgDescription must not be null.", msgDescription);
-		EnOceanChannel[] channels = msgDescription.deserialize(temperatureMsg.getPayloadBytes());
+
+		/* Inserts some message documentation classes */
+		// Use teststep to add an EnOceanMessageDescriptionSet
+		// Request the registration of an EnOceanMessageDescriptionSet
+		// containing an EnOceanMessageDescription_A5_02_01.
+		testStepService.execute("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription_A5_02_01", null);
+		log("testUseOfDescriptions(), enOceanMessageDescriptionSets.waitForService()");
+		String enOceanMessageDescriptionSetsWFS = enOceanMessageDescriptionSets.waitForService();
+		log("testUseOfDescriptions(), enOceanMessageDescriptionSets.waitForService() returned: " + enOceanMessageDescriptionSetsWFS);
+		// testUseOfDescriptions(),
+		// enOceanMessageDescriptionSets.waitForService() returned:
+		// SERVICE_ADDED
+
+		ServiceReference sr = getContext().getServiceReference(EnOceanMessageDescriptionSet.class.getName());
+		log("testUseOfDescriptions(), EnOceanMessageDescriptionSet sr: " + sr);
+		EnOceanMessageDescriptionSet enOceanMessageDescriptionSet = (EnOceanMessageDescriptionSet) getContext().getService(sr);
+		EnOceanMessageDescription enOceanMessageDescription = enOceanMessageDescriptionSet.getMessageDescription(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, -1);
+		log("testUseOfDescriptions(), enOceanMessageDescription: " + enOceanMessageDescription);
+
+		assertNotNull("enOceanMessageDescription must not be null.", enOceanMessageDescription);
+
+		EnOceanChannel[] channels = enOceanMessageDescription.deserialize(new MessageA5_02_01(Fixtures.TEMPERATURE).getPayloadBytes());
 		assertEquals("2 channels are expected here.", 2, channels.length);
+
 		EnOceanChannel temperatureChannel = channels[0];
 		String tmpChannelId = temperatureChannel.getChannelId();
 		assertEquals("Fixtures.TMP_CHANNEL_ID is expected here.", Fixtures.TMP_CHANNEL_ID, tmpChannelId);
-		EnOceanChannelDescriptionSetImpl channelDescriptionSet = new EnOceanChannelDescriptionSetImpl();
-		channelDescriptionSet.putChannelDescription(Fixtures.TMP_CHANNEL_ID, new EnOceanChannelDescription_TMP_00());
-		EnOceanChannelDescription channelDescription = channelDescriptionSet.getChannelDescription(tmpChannelId);
+
+		// Use teststep to add an EnOceanChannelDescriptionSet
+		// Request the registration of an EnOceanChannelDescriptionSet
+		// containing an EnOceanChannelDescription_TMP_00.
+		testStepService.execute("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_TMP_00",
+				null);
+		log("testUseOfDescriptions(), enOceanChannelDescriptionSets.waitForService()");
+		String enOceanChannelDescriptionSetsWFS =
+				enOceanChannelDescriptionSets.waitForService();
+		log("testUseOfDescriptions(), enOceanChannelDescriptionSets.waitForService() returned: "
+				+ enOceanChannelDescriptionSetsWFS);
+
+		ServiceReference sr2 = getContext().getServiceReference(EnOceanChannelDescriptionSet.class.getName());
+		log("testUseOfDescriptions(), EnOceanChannelDescriptionSet sr2: " + sr2);
+		EnOceanChannelDescriptionSet enOceanChannelDescriptionSet = (EnOceanChannelDescriptionSet) getContext().getService(sr2);
+		EnOceanChannelDescription enOceanChannelDescription = enOceanChannelDescriptionSet.getChannelDescription(Fixtures.TMP_CHANNEL_ID);
+		log("testUseOfDescriptions(), enOceanChannelDescription: " + enOceanChannelDescription);
+		
+		EnOceanChannelDescription channelDescription = enOceanChannelDescriptionSet.getChannelDescription(tmpChannelId);
 		assertEquals("Fixtures.TMP_CHANNEL_TYPE is expected here.", Fixtures.TMP_CHANNEL_TYPE, channelDescription.getType());
+
 		EnOceanDataChannelDescription dataChannelDescription = (EnOceanDataChannelDescription) channelDescription;
 		// It's a float because it's a DATA channel
 		Float deserializedTemperature = (Float) dataChannelDescription.deserialize(temperatureChannel.getRawValue());
