@@ -47,7 +47,7 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 	public void testInterfaceExceptions() throws InterruptedException {
 		// Request the registration of an EnOceanMessageDescriptionSet
 		// containing an EnOceanMessageDescription_A5_02_01.
-		testStepService.execute("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription_A5_02_01", new String[] {});
+		testStepService.execute("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription_A5_02_01", null);
 		log("testInterfaceExceptions(), enOceanMessageDescriptionSets.waitForService()");
 		String enOceanMessageDescriptionSetsWFS = enOceanMessageDescriptionSets.waitForService();
 		log("testInterfaceExceptions(), enOceanMessageDescriptionSets.waitForService() returned: " + enOceanMessageDescriptionSetsWFS);
@@ -61,6 +61,8 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 		EnOceanMessageDescription enOceanMessageDescription = enOceanMessageDescriptionSet.getMessageDescription(Fixtures.RORG, Fixtures.FUNC, Fixtures.TYPE_1, -1);
 		log("testInterfaceExceptions(), enOceanMessageDescription: " + enOceanMessageDescription);
 
+		//
+		// test enOceanMessageDescription
 		try {
 			log("testInterfaceExceptions(), Check that passing a NULL array of bytes throws an EnOceanException.");
 			enOceanMessageDescription.deserialize(null);
@@ -78,90 +80,92 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 			log("testInterfaceExceptions(), --> OK.");
 		}
 
-		try {
-			log("testInterfaceExceptions(), Check that serializing a NULL object in EnOceanChannelDescription throws an IllegalArgumentException.");
-			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
-			channelDescription.serialize(null);
-			fail("Passing a NULL object to EnOceanMessageDescription.serialize must throw an IllegalArgumentException.");
-		} catch (IllegalArgumentException e) {
-			log("testInterfaceExceptions(), --> OK.");
-		}
-
-		boolean exceptionCaught = false;
-
-		try { /*
-			 * Tests that serializing a wrong object in
-			 * EnOceanChannelDescription in an exception
-			 */
-			exceptionCaught = false;
-			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
-			channelDescription.serialize(new String("foo"));
-		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
-		}
-		assertEquals("The expected exception hasn't been caught.", true, exceptionCaught);
-
-		try { /*
-			 * Tests that serializing a wrong value in EnOceanChannelDescription
-			 * in an exception
-			 */
-			exceptionCaught = false;
-			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
-			channelDescription.serialize(new Float(-2000.0f));
-		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
-		}
-		assertEquals("The expected exception hasn't been caught.", true, exceptionCaught);
-
-		try { /*
-			 * Tests that deserializing a NULL value in
-			 * EnOceanChannelDescription in an exception
-			 */
-			exceptionCaught = false;
-			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
-			channelDescription.deserialize(null);
-		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
-		}
-		assertEquals("The expected exception hasn't been caught.", true, exceptionCaught);
-
-		try { /*
-			 * Tests that deserializing a wrong object in
-			 * EnOceanChannelDescription in an exception
-			 */
-			exceptionCaught = false;
-			EnOceanChannelDescription channelDescription = new EnOceanChannelDescription_TMP_00();
-			channelDescription.deserialize(new byte[] {0x45, 0x56});
-		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
-		}
-		assertEquals("The expected exception hasn't been caught.", true, exceptionCaught);
+		// // Request the registration of an EnOceanChannelDescriptionSet
+		// // containing an EnOceanChannelDescription_TMP_00.
+		// testStepService.execute("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_TMP_00",
+		// null);
+		// log("testInterfaceExceptions(), enOceanMessageDescriptionSets.waitForService()");
+		// String enOceanChannelDescriptionSetsWFS =
+		// enOceanChannelDescriptionSets.waitForService();
+		// log("testInterfaceExceptions(), enOceanChannelDescriptionSets.waitForService() returned: "
+		// + enOceanChannelDescriptionSetsWFS);
 
 		EnOceanChannelDescriptionSetImpl channelDescriptionSet = new EnOceanChannelDescriptionSetImpl();
-		channelDescriptionSet.putChannelDescription(Fixtures.TMP_CHANNEL_ID, new EnOceanChannelDescription_TMP_00());
+		EnOceanChannelDescription_TMP_00 enOceanChannelDescription_TMP_00 = new EnOceanChannelDescription_TMP_00();
+		channelDescriptionSet.putChannelDescription(Fixtures.TMP_CHANNEL_ID, enOceanChannelDescription_TMP_00);
 
+		//
+		// test channelDescriptionSet
 		try { /*
 			 * Tests that getting a NULL index in an
 			 * EnOceanChannelDescriptionSet results in an
 			 * IllegalArgumentException
 			 */
-			exceptionCaught = false;
 			channelDescriptionSet.getChannelDescription(null);
+			fail("The expected exception hasn't been caught.");
 		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
+			log("testInterfaceExceptions(), --> OK.");
 		}
-		assertEquals("The expected exception hasn't been caught.", true, exceptionCaught);
 
 		try { /*
 			 * Tests that sending a message EnOceanChannelDescriptionSet results
 			 * in an IllegalArgumentException
 			 */
-			exceptionCaught = false;
 			channelDescriptionSet.getChannelDescription(null);
+			fail("The expected exception hasn't been caught.");
 		} catch (IllegalArgumentException e) {
-			exceptionCaught = true;
+			log("testInterfaceExceptions(), --> OK.");
 		}
-		assertEquals("The expected exception hasn't been caught.", true, exceptionCaught);
+
+		//
+		// test channelDescription
+		try {
+			log("testInterfaceExceptions(), Check that serializing a NULL object in EnOceanChannelDescription throws an IllegalArgumentException.");
+			enOceanChannelDescription_TMP_00.serialize(null);
+			fail("Passing a NULL object to EnOceanMessageDescription.serialize must throw an IllegalArgumentException.");
+		} catch (IllegalArgumentException e) {
+			log("testInterfaceExceptions(), --> OK.");
+		}
+
+		try { /*
+			 * Tests that serializing a wrong object in
+			 * EnOceanChannelDescription in an exception
+			 */
+			enOceanChannelDescription_TMP_00.serialize(new String("foo"));
+			fail("The expected exception hasn't been caught.");
+		} catch (IllegalArgumentException e) {
+			log("testInterfaceExceptions(), --> OK.");
+		}
+
+		try { /*
+			 * Tests that serializing a wrong value in EnOceanChannelDescription
+			 * in an exception
+			 */
+			enOceanChannelDescription_TMP_00.serialize(new Float(-2000.0f));
+			fail("The expected exception hasn't been caught.");
+		} catch (IllegalArgumentException e) {
+			log("testInterfaceExceptions(), --> OK.");
+		}
+
+		try { /*
+			 * Tests that deserializing a NULL value in
+			 * EnOceanChannelDescription in an exception
+			 */
+			enOceanChannelDescription_TMP_00.deserialize(null);
+			fail("The expected exception hasn't been caught.");
+		} catch (IllegalArgumentException e) {
+			log("testInterfaceExceptions(), --> OK.");
+		}
+
+		try { /*
+			 * Tests that deserializing a wrong object in
+			 * EnOceanChannelDescription in an exception
+			 */
+			enOceanChannelDescription_TMP_00.deserialize(new byte[] {0x45, 0x56});
+			fail("The expected exception hasn't been caught.");
+		} catch (IllegalArgumentException e) {
+			log("testInterfaceExceptions(), --> OK.");
+		}
 	}
 
 	/**
