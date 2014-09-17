@@ -8,6 +8,7 @@ import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.EnOceanRPC;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
+import org.osgi.service.enocean.descriptions.EnOceanChannelDescriptionSet;
 import org.osgi.service.enocean.descriptions.EnOceanDataChannelDescription;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescriptionSet;
@@ -80,19 +81,21 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 			log("testInterfaceExceptions(), --> OK.");
 		}
 
-		// // Request the registration of an EnOceanChannelDescriptionSet
-		// // containing an EnOceanChannelDescription_TMP_00.
-		// testStepService.execute("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_TMP_00",
-		// null);
-		// log("testInterfaceExceptions(), enOceanMessageDescriptionSets.waitForService()");
-		// String enOceanChannelDescriptionSetsWFS =
-		// enOceanChannelDescriptionSets.waitForService();
-		// log("testInterfaceExceptions(), enOceanChannelDescriptionSets.waitForService() returned: "
-		// + enOceanChannelDescriptionSetsWFS);
+		// Request the registration of an EnOceanChannelDescriptionSet
+		// containing an EnOceanChannelDescription_TMP_00.
+		testStepService.execute("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_TMP_00",
+				null);
+		log("testInterfaceExceptions(), enOceanMessageDescriptionSets.waitForService()");
+		String enOceanChannelDescriptionSetsWFS =
+				enOceanChannelDescriptionSets.waitForService();
+		log("testInterfaceExceptions(), enOceanChannelDescriptionSets.waitForService() returned: "
+				+ enOceanChannelDescriptionSetsWFS);
 
-		EnOceanChannelDescriptionSetImpl channelDescriptionSet = new EnOceanChannelDescriptionSetImpl();
-		EnOceanChannelDescription_TMP_00 enOceanChannelDescription_TMP_00 = new EnOceanChannelDescription_TMP_00();
-		channelDescriptionSet.putChannelDescription(Fixtures.TMP_CHANNEL_ID, enOceanChannelDescription_TMP_00);
+		ServiceReference sr2 = getContext().getServiceReference(EnOceanChannelDescriptionSet.class.getName());
+		log("testInterfaceExceptions(), EnOceanChannelDescriptionSet sr2: " + sr2);
+		EnOceanChannelDescriptionSet enOceanChannelDescriptionSet = (EnOceanChannelDescriptionSet) getContext().getService(sr2);
+		EnOceanChannelDescription enOceanChannelDescription = enOceanChannelDescriptionSet.getChannelDescription(Fixtures.TMP_CHANNEL_ID);
+		log("testInterfaceExceptions(), enOceanChannelDescription: " + enOceanChannelDescription);
 
 		//
 		// test channelDescriptionSet
@@ -101,7 +104,7 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 			 * EnOceanChannelDescriptionSet results in an
 			 * IllegalArgumentException
 			 */
-			channelDescriptionSet.getChannelDescription(null);
+			enOceanChannelDescriptionSet.getChannelDescription(null);
 			fail("The expected exception hasn't been caught.");
 		} catch (IllegalArgumentException e) {
 			log("testInterfaceExceptions(), --> OK.");
@@ -111,7 +114,7 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 			 * Tests that sending a message EnOceanChannelDescriptionSet results
 			 * in an IllegalArgumentException
 			 */
-			channelDescriptionSet.getChannelDescription(null);
+			enOceanChannelDescriptionSet.getChannelDescription(null);
 			fail("The expected exception hasn't been caught.");
 		} catch (IllegalArgumentException e) {
 			log("testInterfaceExceptions(), --> OK.");
@@ -121,7 +124,7 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 		// test channelDescription
 		try {
 			log("testInterfaceExceptions(), Check that serializing a NULL object in EnOceanChannelDescription throws an IllegalArgumentException.");
-			enOceanChannelDescription_TMP_00.serialize(null);
+			enOceanChannelDescription.serialize(null);
 			fail("Passing a NULL object to EnOceanMessageDescription.serialize must throw an IllegalArgumentException.");
 		} catch (IllegalArgumentException e) {
 			log("testInterfaceExceptions(), --> OK.");
@@ -131,7 +134,7 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 			 * Tests that serializing a wrong object in
 			 * EnOceanChannelDescription in an exception
 			 */
-			enOceanChannelDescription_TMP_00.serialize(new String("foo"));
+			enOceanChannelDescription.serialize(new String("foo"));
 			fail("The expected exception hasn't been caught.");
 		} catch (IllegalArgumentException e) {
 			log("testInterfaceExceptions(), --> OK.");
@@ -141,7 +144,7 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 			 * Tests that serializing a wrong value in EnOceanChannelDescription
 			 * in an exception
 			 */
-			enOceanChannelDescription_TMP_00.serialize(new Float(-2000.0f));
+			enOceanChannelDescription.serialize(new Float(-2000.0f));
 			fail("The expected exception hasn't been caught.");
 		} catch (IllegalArgumentException e) {
 			log("testInterfaceExceptions(), --> OK.");
@@ -151,7 +154,7 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 			 * Tests that deserializing a NULL value in
 			 * EnOceanChannelDescription in an exception
 			 */
-			enOceanChannelDescription_TMP_00.deserialize(null);
+			enOceanChannelDescription.deserialize(null);
 			fail("The expected exception hasn't been caught.");
 		} catch (IllegalArgumentException e) {
 			log("testInterfaceExceptions(), --> OK.");
@@ -161,7 +164,7 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 			 * Tests that deserializing a wrong object in
 			 * EnOceanChannelDescription in an exception
 			 */
-			enOceanChannelDescription_TMP_00.deserialize(new byte[] {0x45, 0x56});
+			enOceanChannelDescription.deserialize(new byte[] {0x45, 0x56});
 			fail("The expected exception hasn't been caught.");
 		} catch (IllegalArgumentException e) {
 			log("testInterfaceExceptions(), --> OK.");

@@ -54,7 +54,7 @@ public class TestStepForEnOceanImpl implements TestStep {
 		if ("MessageA5_02_01".equals(command)) {
 			currentCommand = parameters[0].getBytes();
 			// ignore result;
-		} else {
+		} else
 			if ("MessageF6_02_01".equals(command)) {
 				currentCommand = parameters[0].getBytes();
 				// ignore result;
@@ -62,19 +62,21 @@ public class TestStepForEnOceanImpl implements TestStep {
 				if ("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription_A5_02_01".equals(command)) {
 					currentCommand = command.getBytes();
 					// ignore result;
-				} else {
-					if ("Any_new_data".equals(command)) {
-						Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(...) returns currentData: " + currentData + ", currentData.length: " + currentData.length);
-						result = new String[] {new String(currentData)};
-						currentData = null;
-						return result;
-				} else {
-					Logger.e(TestStepForEnOceanImpl.class.getName(), "The given command is UNKNOWN.");
-					// ignore result;
-				}
-				}
+				} else
+					if ("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_TMP_00".equals(command)) {
+						currentCommand = command.getBytes();
+						// ignore result;
+					} else
+						if ("Any_new_data".equals(command)) {
+							Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(...) returns currentData: " + currentData + ", currentData.length: " + currentData.length);
+							result = new String[] {new String(currentData)};
+							currentData = null;
+							return result;
+						} else {
+							Logger.e(TestStepForEnOceanImpl.class.getName(), "The given command is UNKNOWN.");
+							// ignore result;
+						}
 			}
-		}
 		return result;
 	}
 

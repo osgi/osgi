@@ -3,6 +3,7 @@ package org.osgi.test.cases.enocean;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanDevice;
+import org.osgi.service.enocean.descriptions.EnOceanChannelDescriptionSet;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescriptionSet;
 import org.osgi.service.event.EventAdmin;
 import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescription_A5_02_01;
@@ -42,6 +43,9 @@ public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 	/** enOceanMessageDescriptionSets */
 	protected ServiceListener					enOceanMessageDescriptionSets;
 
+	/** enOceanChannelDescriptionSets */
+	protected ServiceListener					enOceanChannelDescriptionSets;
+
 	protected void setUp() throws Exception {
 		/*
 		 * Gets the currently registered EnOceanHost and access its streams. Get
@@ -59,6 +63,8 @@ public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 
 		enOceanMessageDescriptionSets = new ServiceListener(getContext(), EnOceanMessageDescriptionSet.class);
 
+		enOceanChannelDescriptionSets = new ServiceListener(getContext(), EnOceanChannelDescriptionSet.class);
+
 		/* Get a global eventAdmin handle */
 		eventAdminRef = getContext().getServiceReference(EventAdmin.class.getName());
 		eventAdmin = (EventAdmin) getContext().getService(eventAdminRef);
@@ -73,6 +79,7 @@ public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 		devices.close();
 		events.close();
 		enOceanMessageDescriptionSets.close();
+		enOceanChannelDescriptionSets.close();
 		ServiceReference[] deviceRefs = getContext().getServiceReferences(EnOceanDevice.class.getName(), null);
 		if (deviceRefs != null) {
 			for (int i = 0; i < deviceRefs.length; i++) {
