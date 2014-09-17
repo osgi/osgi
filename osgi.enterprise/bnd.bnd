@@ -5,13 +5,14 @@ Bundle-Description				: \
 	OSGi Enterprise Release ${version;=;${build.version}}, \
 	Interfaces and Classes for use in compiling bundles.
 
-DynamicImport-Package			: *
 Import-Package					: *; resolution:=optional
 
 Export-Package 					: ${enterprise.packages}
 
 Include-Resource 				: ${enterprise.resources}
   								  
+Require-Capability: osgi.compile.time.only; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
+
 -dependson 					=  \
 	${enterprise.specs} 
 

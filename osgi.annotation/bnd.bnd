@@ -9,6 +9,8 @@ Private-Package: ${annotation.packages}
 
 Include-Resource: ${annotation.resources}
 
+Require-Capability: osgi.compile.time.only; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
+
 -dependson =  \
     ${annotation.specs} 
 

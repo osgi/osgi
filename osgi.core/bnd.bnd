@@ -5,12 +5,13 @@ Bundle-Description			: \
 	OSGi Core Release ${version;=;${build.version}}, \
 	Interfaces and Classes for use in compiling bundles.
 
-DynamicImport-Package			: *
 Import-Package					: *; resolution:=optional
 
 Export-Package 					: ${core.packages}
 
 Include-Resource				: ${core.resources}
+
+Require-Capability: osgi.compile.time.only; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
 
 -dependson 					=  \
 	${core.specs} 
