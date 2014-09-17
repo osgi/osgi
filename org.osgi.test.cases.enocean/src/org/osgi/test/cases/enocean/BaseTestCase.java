@@ -265,12 +265,11 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 		EnOceanChannelDescription enOceanChannelDescription = enOceanChannelDescriptionSet.getChannelDescription(Fixtures.TMP_CHANNEL_ID);
 		log("testUseOfDescriptions(), enOceanChannelDescription: " + enOceanChannelDescription);
 		
-		EnOceanChannelDescription channelDescription = enOceanChannelDescriptionSet.getChannelDescription(tmpChannelId);
-		assertEquals("Fixtures.TMP_CHANNEL_TYPE is expected here.", Fixtures.TMP_CHANNEL_TYPE, channelDescription.getType());
+		assertEquals("Fixtures.TMP_CHANNEL_TYPE is expected here.", Fixtures.TMP_CHANNEL_TYPE, enOceanChannelDescription.getType());
 
-		EnOceanDataChannelDescription dataChannelDescription = (EnOceanDataChannelDescription) channelDescription;
+		EnOceanDataChannelDescription enOceanDataChannelDescription = (EnOceanDataChannelDescription) enOceanChannelDescription;
 		// It's a float because it's a DATA channel
-		Float deserializedTemperature = (Float) dataChannelDescription.deserialize(temperatureChannel.getRawValue());
+		Float deserializedTemperature = (Float) enOceanDataChannelDescription.deserialize(temperatureChannel.getRawValue());
 		assertEquals("Fixtures.TEMPERATURE is expected here.", Fixtures.TEMPERATURE, deserializedTemperature.floatValue(), 0.1);
 	}
 
