@@ -7,7 +7,7 @@ Bundle-Description				: \
 
 Import-Package					: *; resolution:=optional
 
-Export-Package 					: ${enterprise.packages}
+Export-Package 					: ${replace;${enterprise.packages};.+;$0\\;-split-package:=first}
 
 Include-Resource 				: ${enterprise.resources}
   								  
