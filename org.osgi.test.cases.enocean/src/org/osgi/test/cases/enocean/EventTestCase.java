@@ -32,9 +32,9 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 	 * Checks that our test suite is able to locally send and receive messages.
 	 * Necessary for the rest of the code.
 	 * 
-	 * @throws Exception
+	 * @throws InterruptedException
 	 */
-	public void testSelfEventReception() throws Exception {
+	public void testSelfEventReception() throws InterruptedException {
 		Map properties = new Hashtable();
 		properties.put(Fixtures.SELF_TEST_EVENT_KEY, Fixtures.SELF_TEST_EVENT_VALUE);
 		Event sourceEvent = new Event(Fixtures.SELF_TEST_EVENT_TOPIC, properties);
@@ -43,6 +43,8 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 		Event destinationEvent = events.waitForEvent();
 		assertEquals("event name mismatch", Fixtures.SELF_TEST_EVENT_TOPIC, destinationEvent.getTopic());
 		assertEquals("event property mismatch", Fixtures.SELF_TEST_EVENT_VALUE, destinationEvent.getProperty(Fixtures.SELF_TEST_EVENT_KEY));
+
+		log("testSelfEventReception(), EventAdmin is available. Tests can continue.");
 	}
 
 	/**
@@ -52,9 +54,9 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 	 * This actually also tests the MessageSet registration since the Base
 	 * Driver needs to know about it before firing on EventAdmin.
 	 * 
-	 * @throws Exception
+	 * @throws InterruptedException
 	 */
-	public void testEventNotification() throws Exception {
+	public void testEventNotification() throws InterruptedException {
 		/* Insert a device */
 		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket teachInPkt = new EspRadioPacket(teachIn);

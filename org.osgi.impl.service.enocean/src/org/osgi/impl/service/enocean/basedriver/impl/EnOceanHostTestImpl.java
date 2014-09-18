@@ -78,52 +78,50 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 			try {
 				byte[] command =
 						testStepForEnOceanImpl.getCurrentCommandAndReplaceItByNull();
-				Logger.d(TAG, "command: " + command);
 				if (command == null) {
-					Logger.d(TAG, "command == null");
+					Logger.d(TAG, "command: " + command);
 				} else {
-					byte[] data = command;
-					Logger.d(TAG, "data: " + data);
-					if (data[0] == ENOCEAN_ESP_FRAME_START) {
+					Logger.d(TAG, "command: " + command);
+					if (command[0] == ENOCEAN_ESP_FRAME_START) {
 						Logger.d(TAG, "data[0] == ENOCEAN_ESP_FRAME_START");
-						Logger.d(TAG, "read bytes: " + Utils.bytesToHexString(data));
-						if (data[0] == ENOCEAN_ESP_FRAME_START) {
+						Logger.d(TAG, "read bytes: " + Utils.bytesToHexString(command));
+						if (command[0] == ENOCEAN_ESP_FRAME_START) {
 							Logger.d(TAG, "data[0] == ENOCEAN_ESP_FRAME_START");
-							EspPacket packet = readPacket(data);
+							EspPacket packet = readPacket(command);
 							if (packet.getPacketType() == EspPacket.TYPE_RADIO) {
 								Logger.d(TAG,
 										"packet.getPacketType() == EspPacket.TYPE_RADIO");
 								dispatchToListeners(packet.getFullData());
 							}
 						} else {
-							Logger.d(TAG, "The given data: " + data + " is UNKNOWN.");
+							Logger.d(TAG, "The given command: " + command + " is UNKNOWN.");
 						}
 					} else {
-						if ("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription_A5_02_01".equals(new String(data))) {
+						if ("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription_A5_02_01".equals(new String(command))) {
 							EnOceanMessageDescriptionSet enOceanMessageDescriptionSet = new EnOceanMessageDescriptionSet() {
 								public EnOceanMessageDescription getMessageDescription(int rorg, int func, int type, int extra) throws IllegalArgumentException {
 									return new EnOceanMessageDescription() {
 
-										/**
-										 * @return hardcoded 0xA5.
-										 */
-										public int getRorg() {
-											return 0xA5;
-										}
-
-										/**
-										 * @return hardcoded 0x02.
-										 */
-										public int getFunc() {
-											return 0x02;
-										}
-
-										/**
-										 * @return hardcoded 0x01.
-										 */
-										public int getType() {
-											return 0x01;
-										}
+										// /**
+										// * @return hardcoded 0xA5.
+										// */
+										// public int getRorg() {
+										// return 0xA5;
+										// }
+										//
+										// /**
+										// * @return hardcoded 0x02.
+										// */
+										// public int getFunc() {
+										// return 0x02;
+										// }
+										//
+										// /**
+										// * @return hardcoded 0x01.
+										// */
+										// public int getType() {
+										// return 0x01;
+										// }
 
 										EnOceanChannel	temperature	= new TemperatureChannel_00();
 										EnOceanChannel	learn		= new LearnChannel_4BS();
@@ -213,7 +211,7 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 							};
 							bc.registerService(EnOceanMessageDescriptionSet.class.getName(), enOceanMessageDescriptionSet, null);
 						} else
-							if ("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_TMP_00".equals(new String(data))) {
+							if ("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_TMP_00".equals(new String(command))) {
 								EnOceanChannelDescriptionSet enOceanChannelDescriptionSet = new EnOceanChannelDescriptionSet() {
 									private Map	channelTable	= null;
 
@@ -314,12 +312,12 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 								};
 								bc.registerService(EnOceanChannelDescriptionSet.class.getName(), enOceanChannelDescriptionSet, null);
 							} else {
-								Logger.d(TAG, "The given data: " + data + " is UNKNOWN.");
+								Logger.d(TAG, "The given command: " + command + " is UNKNOWN.");
 							}
 					}
 				}
-			} catch (IOException ioexception) {
-				Logger.e(TAG, "Error while reading input packet: " + ioexception.getMessage());
+			} catch (IOException e) {
+				Logger.e(TAG, "Error while reading input packet: " + e.getMessage());
 			}
 		}
 		Logger.d(this.getClass().getName(), "Unregister EnOcean's Test Step OSGi service.");

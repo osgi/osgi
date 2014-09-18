@@ -51,7 +51,7 @@ public interface ResourceContext {
 	public String getName();
 
 	/**
-	 * Returns the bundle identfiers belonging to this Resource Context.
+	 * Returns the bundle identifiers belonging to this Resource Context.
 	 * 
 	 * @return An array of {@link Bundle} objects, or an empty array if no
 	 *         bundles are currently members of this context
@@ -78,7 +78,6 @@ public interface ResourceContext {
 	/**
 	 * Removes the bundle identified by bundleId from the Resource Context. The
 	 * bundle is no longer to this Resource Context.
-	 * 
 	 * 
 	 * @param bundleId bundle identifier
 	 */
