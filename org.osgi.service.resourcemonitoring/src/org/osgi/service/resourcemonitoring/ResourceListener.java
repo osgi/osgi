@@ -111,7 +111,7 @@ public interface ResourceListener {
 	public final String	LOWER_ERROR_THRESHOLD	= "lower.error.threshold";
 
 	/**
-	 * Receives a resource management notification
+	 * Receives a resource monitoring notification
 	 * 
 	 * @param event The {@link ResourceEvent} object
 	 */

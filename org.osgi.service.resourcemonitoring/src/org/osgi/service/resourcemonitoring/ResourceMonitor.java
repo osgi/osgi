@@ -31,9 +31,9 @@ package org.osgi.service.resourcemonitoring;
  * 
  * <p>
  * A resource monitor can have a sampling period, a monitored period, or both.
- * For example, for CPU monitoring, the resource management implementation can
- * get the CPU usage of the running threads once per minute, and calculate the
- * CPU usage per context in percentages based on the last ten such measurements.
+ * For example, for CPU monitoring, the resource monitor implementation can get
+ * the CPU usage of the running threads once per minute, and calculate the CPU
+ * usage per context in percentages based on the last ten such measurements.
  * This could make a 60 000 milliseconds sampling period, and a 600 000
  * milliseconds monitored period.
  * 
