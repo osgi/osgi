@@ -1,6 +1,8 @@
 cmpn.specs = \
 	 org.osgi.application, \
-	 org.osgi.namespace, \
+	 org.osgi.namespace.contract, \
+	 org.osgi.namespace.extender, \
+	 org.osgi.namespace.service, \
 	 org.osgi.service.application, \
 	 org.osgi.service.blueprint, \
 	 org.osgi.service.cm, \
