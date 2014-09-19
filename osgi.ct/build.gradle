@@ -11,9 +11,8 @@ tasks.addRule('Pattern: ct.<name>: Run the CT for <name>.') { taskName ->
       description "Run the CT for ${book}."
       group 'verification'
       ext.destinationDir = new File(buildDir, "osgi.ct.${book}")
-      inputs.file new File(riBuildDir, 'osgi.ri.core.jar')
-      inputs.file new File(riBuildDir, "osgi.ri.${book}.jar")
-      inputs.file new File(buildDir, "osgi.ct.${book}.jar")
+      inputs.files fileTree(riBuildDir).include('osgi.ri.core*.jar', "osgi.ri.${book}*.jar")
+      inputs.files fileTree(buildDir).include("osgi.ct.${book}*.jar")
       doFirst {
         project.delete(destinationDir)
         project.mkdir(destinationDir)
@@ -27,7 +26,7 @@ tasks.addRule('Pattern: ct.<name>: Run the CT for <name>.') { taskName ->
         }
         javaexec {
           workingDir destinationDir
-          main = '-jar' // next arg must be the bnd jar
+          main = '-jar' // first arg must be the bnd jar
           args new File(destinationDir, 'jar/bnd.jar')
           args '--exceptions'
           args 'runtests'

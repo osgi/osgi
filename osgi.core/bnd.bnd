@@ -13,6 +13,8 @@ Include-Resource				: ${core.resources}
 
 Require-Capability: osgi.compile.time.only; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
 
+-outputmask = ${@bsn}-${version;===;${@version}}.jar
+
 -dependson 					=  \
 	${core.specs} 
 
