@@ -9,7 +9,7 @@
 	</target>
 
 	<target name="init" unless="initialized" depends="-target-dir,-project.workspace">
-		<property name="ct-dir" value="${project.workspace}/osgi.ct/${target-dir}/${test-name}" />
+		<property name="ct-dir" value="${project.workspace}/osgi.ct/${target-dir}/osgi.ct.${test-name}" />
 		<!-- mark init has been run -->
 		<property name="initialized" value="set" />
 	</target>
@@ -26,11 +26,11 @@
 	<target name="install" depends="init">
 		<delete dir="${ct-dir}" />
 		<unzip dest="${ct-dir}">
-			<fileset dir="${project.workspace}/osgi.ri/${target-dir}" includes="${ri-jars}" />
+			<fileset dir="${project.workspace}/osgi.ri/${target-dir}" includes="osgi.ri.core*.jar,osgi.ri.${test-name}*.jar" />
 			<patternset includes="**/*.jar"/>
 		</unzip>
 		<unzip dest="${ct-dir}">
-			<fileset dir="${project.workspace}/osgi.ct/${target-dir}" includes="${test-name}.jar" />
+			<fileset dir="${project.workspace}/osgi.ct/${target-dir}" includes="osgi.ct.${test-name}*.jar" />
 		</unzip>
 	</target>
 
@@ -39,7 +39,7 @@
 			<arg value="--exceptions" />
 			<arg value="runtests" />
 			<arg value="--title" />
-			<arg value="${test-name}" />
+			<arg value="osgi.ct.${test-name}" />
 		</java>
 	</target>
 	
