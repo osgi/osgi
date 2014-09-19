@@ -26,9 +26,10 @@ public class PersistenceImpl implements Persistence {
 
 	private static final String	RESOURCE_CONTEXT_NAME_PARAMETER			= "name";
 	private static final String	RESOURCE_CONTEXT_BUNDLE_IDS_PARAMETER	= "bundle.ids";
-	private static final String	RESOURCE_CONTEXT_MONITORS				= "monitors";
-	private static final String	RESOURCE_MONITOR_TYPE					= "monitor.type";
-	private static final String	RESOURCE_MONITOR_ENABLED				= "monitor.enabled";
+
+	// private static final String RESOURCE_CONTEXT_MONITORS = "monitors";
+	// private static final String RESOURCE_MONITOR_TYPE = "monitor.type";
+	// private static final String RESOURCE_MONITOR_ENABLED = "monitor.enabled";
 
 	/**
 	 * Persist the provided list of resource context as a JSON file.

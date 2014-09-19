@@ -68,6 +68,9 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 	protected boolean				isRunning;
 	private ChipPIDMapping			chipIdPidMap;
 
+	/**
+	 * BundleContext
+	 */
 	protected BundleContext			bc;
 
 	/**

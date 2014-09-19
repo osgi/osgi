@@ -9,7 +9,6 @@ import java.util.Map;
 import java.util.logging.Logger;
 import org.osgi.impl.service.resourcemonitoring.bundlemanagement.BundleHolder;
 import org.osgi.impl.service.resourcemonitoring.bundlemanagement.BundleManager;
-import org.osgi.impl.service.resourcemonitoring.lock.ResourceContextLock;
 import org.osgi.service.resourcemonitoring.ResourceContext;
 import org.osgi.service.resourcemonitoring.ResourceContextEvent;
 import org.osgi.service.resourcemonitoring.ResourceMonitor;
@@ -21,11 +20,6 @@ import org.osgi.service.resourcemonitoring.ResourceMonitorException;
  * @author Gregory BONNARDEL (Orange)
  */
 public class ResourceContextImpl implements ResourceContext, BundleHolder {
-
-	/**
-	 * lock.
-	 */
-	private final ResourceContextLock			lock;
 
 	/**
 	 * Resource Context name.
@@ -80,11 +74,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 		bundleManager = pBundleManager;
 		eventNotifier = pEventNotifier;
 		name = pName;
-
-		lock = new ResourceContextLock();
-
 		bundles = new ArrayList();
-
 		monitors = new Hashtable();
 	}
 
