@@ -2,5 +2,7 @@
 -dependson          : ${build.tests}
 -resourceonly       : true
 
+-outputmask = ${@bsn}-${version;===;${@version}}.jar
+
 # Build the osgi spec files
 -sub       = !layout.bnd, *.bnd
