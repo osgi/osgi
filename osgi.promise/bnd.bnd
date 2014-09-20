@@ -8,6 +8,8 @@ Export-Package: ${promise.packages}
 
 -includeresource = ${promise.resources}
 
+-outputmask = ${@bsn}-${version;===;${@version}}.jar
+
 -dependson = ${promise.specs} 
 
 -buildpath = ${replace;${promise.specs};.+;$0\\;version=project}, \
