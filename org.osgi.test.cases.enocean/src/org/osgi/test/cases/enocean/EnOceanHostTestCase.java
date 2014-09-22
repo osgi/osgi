@@ -22,6 +22,7 @@ public class EnOceanHostTestCase extends AbstractEnOceanTestCase {
 	 */
 	public void testEnOceanHostServiceAvailability() {
 		try {
+			testStepService.execute("Plug the EnOcean USB dongle", null);
 			ServiceReference[] srs = getContext().getAllServiceReferences(EnOceanHost.class.getName(), null);
 			assertNotNull("Test failed: no EnOceanHost service has been found in the OSGi service registry.", srs);
 			log("DEBUG: The test found " + srs.length + " EnOceanHost service(s).");
@@ -31,5 +32,4 @@ public class EnOceanHostTestCase extends AbstractEnOceanTestCase {
 			fail("No EnOceanHost service has been found in the OSGi service registry.");
 		}
 	}
-
 }

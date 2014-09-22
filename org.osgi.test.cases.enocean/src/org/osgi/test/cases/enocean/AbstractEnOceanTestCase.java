@@ -20,26 +20,26 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 
 	/** testStepServiceRef */
-	protected ServiceReference					testStepServiceRef;
+	protected ServiceReference	testStepServiceRef;
 	/** testStepService */
-	protected TestStep							testStepService;
+	protected TestStep			testStepService;
 
 	/** devices */
-	protected ServiceListener					devices;
+	protected ServiceListener	devices;
 
 	/** events */
-	protected EventListener						events;
+	protected EventListener		events;
 
 	/** eventAdminRef */
-	protected ServiceReference					eventAdminRef;
+	protected ServiceReference	eventAdminRef;
 	/** eventAdmin */
-	protected EventAdmin						eventAdmin;
+	protected EventAdmin		eventAdmin;
 
 	/** enOceanMessageDescriptionSets */
-	protected ServiceListener					enOceanMessageDescriptionSets;
+	protected ServiceListener	enOceanMessageDescriptionSets;
 
 	/** enOceanChannelDescriptionSets */
-	protected ServiceListener					enOceanChannelDescriptionSets;
+	protected ServiceListener	enOceanChannelDescriptionSets;
 
 	protected void setUp() throws Exception {
 		/*

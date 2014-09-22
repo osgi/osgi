@@ -24,7 +24,7 @@ build.xml file located in org.osgi.test.cases.enocean.
 
 The org.osgi.test.cases.enocean project contains several test cases. They are 
 named:
-- org.osgi.test.cases.enocean.BaseTestCase,
+- org.osgi.test.cases.enocean.EnOceanBasicTestCase,
 - org.osgi.test.cases.enocean.EnOceanHostTestCase,
 - org.osgi.test.cases.enocean.EventTestCase,
 - org.osgi.test.cases.enocean.ExportTestCase,
@@ -33,7 +33,7 @@ named:
 - org.osgi.test.cases.enocean.RegistrationTestCase,
 - and org.osgi.test.cases.enocean.SignatureTestCase.
 
-BaseTestCase contains the following tests:
+EnOceanBasicTestCase contains the following tests:
 - testInterfaceExceptions, tests that common errors cases are properly handled 
 (i.e. that the relevant exceptions are thrown).
 - testRPC, tests RPC sending and receiving, i.e. insert an EnOcean temperature 
@@ -48,8 +48,6 @@ service is registered when an implementation of the EnOcean specification is
 running.
 
 EventTestCase:
-- testSelfEventReception, tests that the test suite is able to locally send 
-and receive messages.
 - testEventNotification, tests event notification when passing an actual 
 message to the Base Driver. This also tests the MessageSet registration since 
 the Base Driver needs to know about it before firing on EventAdmin.

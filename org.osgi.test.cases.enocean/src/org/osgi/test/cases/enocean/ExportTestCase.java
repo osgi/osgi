@@ -39,6 +39,7 @@ public class ExportTestCase extends AbstractEnOceanTestCase {
 
 		/* Wait for the proper and full registration */
 		String lastServiceEvent = devices.waitForService();
+		assertNotNull("Timeout reached.", lastServiceEvent);
 		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
 
 		/* Get CHIP_ID attributed by the driver from the given service PID. */

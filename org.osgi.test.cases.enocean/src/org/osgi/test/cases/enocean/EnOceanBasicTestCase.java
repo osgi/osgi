@@ -17,7 +17,7 @@ import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 
 /**
- * BaseTests contains the following tests:
+ * EnOceanBasicTestCase contains the following tests:
  * 
  * - testInterfaceExceptions, tests that common errors cases are properly
  * handled (i.e. that the relevant exceptions are thrown).
@@ -29,7 +29,7 @@ import org.osgi.test.cases.enocean.utils.Fixtures;
  * EnOceanMessage is enough to extract all the needed information, provided the
  * necessary descriptions are known.
  */
-public class BaseTestCase extends AbstractEnOceanTestCase {
+public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 
 	/**
 	 * Test that a properly set profile ID in a raw EnOceanMessage is enough to
@@ -49,6 +49,7 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 		log("testInterfaceExceptions(), enOceanMessageDescriptionSets.waitForService()");
 		String enOceanMessageDescriptionSetsWFS = enOceanMessageDescriptionSets.waitForService();
 		log("testInterfaceExceptions(), enOceanMessageDescriptionSets.waitForService() returned: " + enOceanMessageDescriptionSetsWFS);
+		assertNotNull("Timeout reached.", enOceanMessageDescriptionSetsWFS);
 		// testInterfaceExceptions(),
 		// enOceanMessageDescriptionSets.waitForService() returned:
 		// SERVICE_ADDED
@@ -87,6 +88,7 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 				enOceanChannelDescriptionSets.waitForService();
 		log("testInterfaceExceptions(), enOceanChannelDescriptionSets.waitForService() returned: "
 				+ enOceanChannelDescriptionSetsWFS);
+		assertNotNull("Timeout reached.", enOceanChannelDescriptionSetsWFS);
 
 		ServiceReference sr2 = getContext().getServiceReference(EnOceanChannelDescriptionSet.class.getName());
 		log("testInterfaceExceptions(), EnOceanChannelDescriptionSet sr2: " + sr2);
@@ -186,6 +188,7 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 		String wfs = devices.waitForService();
 		log("testRPC(), waitForService returned: " + wfs);
 		// [bnd] testRPC(), waitForService returned: SERVICE_ADDED
+		assertNotNull("Timeout reached.", wfs);
 
 		ServiceReference ref = devices.getServiceReference();
 		log("testRPC(), ref: " + ref);
@@ -232,6 +235,7 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 		// testUseOfDescriptions(),
 		// enOceanMessageDescriptionSets.waitForService() returned:
 		// SERVICE_ADDED
+		assertNotNull("Timeout reached.", enOceanMessageDescriptionSetsWFS);
 
 		ServiceReference sr = getContext().getServiceReference(EnOceanMessageDescriptionSet.class.getName());
 		log("testUseOfDescriptions(), EnOceanMessageDescriptionSet sr: " + sr);
@@ -258,13 +262,14 @@ public class BaseTestCase extends AbstractEnOceanTestCase {
 				enOceanChannelDescriptionSets.waitForService();
 		log("testUseOfDescriptions(), enOceanChannelDescriptionSets.waitForService() returned: "
 				+ enOceanChannelDescriptionSetsWFS);
+		assertNotNull("Timeout reached.", enOceanChannelDescriptionSetsWFS);
 
 		ServiceReference sr2 = getContext().getServiceReference(EnOceanChannelDescriptionSet.class.getName());
 		log("testUseOfDescriptions(), EnOceanChannelDescriptionSet sr2: " + sr2);
 		EnOceanChannelDescriptionSet enOceanChannelDescriptionSet = (EnOceanChannelDescriptionSet) getContext().getService(sr2);
 		EnOceanChannelDescription enOceanChannelDescription = enOceanChannelDescriptionSet.getChannelDescription(Fixtures.TMP_CHANNEL_ID);
 		log("testUseOfDescriptions(), enOceanChannelDescription: " + enOceanChannelDescription);
-		
+
 		assertEquals("Fixtures.TMP_CHANNEL_TYPE is expected here.", Fixtures.TMP_CHANNEL_TYPE, enOceanChannelDescription.getType());
 
 		EnOceanDataChannelDescription enOceanDataChannelDescription = (EnOceanDataChannelDescription) enOceanChannelDescription;

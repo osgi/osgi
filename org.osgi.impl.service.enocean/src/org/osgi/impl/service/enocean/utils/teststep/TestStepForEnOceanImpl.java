@@ -72,10 +72,16 @@ public class TestStepForEnOceanImpl implements TestStep {
 							result = new String[] {new String(currentData)};
 							currentData = null;
 							return result;
-						} else {
-							Logger.e(TestStepForEnOceanImpl.class.getName(), "The given command is UNKNOWN.");
-							// ignore result;
-						}
+						} else
+							if ("Plug the EnOcean USB dongle".equals(command)) {
+								Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(...) returns currentData: " + currentData + ", currentData.length: " + currentData.length);
+								// This message should be display on the user
+								// screen when testing EnOcean implementation
+								// for real.
+							} else {
+								Logger.e(TestStepForEnOceanImpl.class.getName(), "The given command is UNKNOWN.");
+								// ignore result;
+							}
 			}
 		return result;
 	}

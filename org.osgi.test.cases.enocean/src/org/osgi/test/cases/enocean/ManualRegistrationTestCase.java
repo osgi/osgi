@@ -36,6 +36,7 @@ public class ManualRegistrationTestCase extends AbstractEnOceanTestCase {
 
 		String lastServiceEvent = devices.waitForService();
 		log("DEBUG: lastServiceEvent: " + lastServiceEvent);
+		assertNotNull("Timeout reached.", lastServiceEvent);
 		ServiceReference ref = devices.getServiceReference();
 		log("DEBUG: ref: " + ref);
 
@@ -51,10 +52,12 @@ public class ManualRegistrationTestCase extends AbstractEnOceanTestCase {
 		EnOceanDevice dev = (EnOceanDevice) getContext().getService(ref);
 		dev.setFunc(Fixtures.FUNC);
 		lastServiceEvent = devices.waitForService();
+		assertNotNull("Timeout reached.", lastServiceEvent);
 		assertEquals("Event mismatch", ServiceListener.SERVICE_MODIFIED, lastServiceEvent);
 
 		dev.setType(Fixtures.TYPE_1);
 		lastServiceEvent = devices.waitForService();
+		assertNotNull("Timeout reached.", lastServiceEvent);
 		assertEquals("Event mismatch", ServiceListener.SERVICE_MODIFIED, lastServiceEvent);
 
 		assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));

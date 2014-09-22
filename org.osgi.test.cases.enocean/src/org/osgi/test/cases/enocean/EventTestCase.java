@@ -1,8 +1,6 @@
 
 package org.osgi.test.cases.enocean;
 
-import java.util.Hashtable;
-import java.util.Map;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanChannel;
 import org.osgi.service.enocean.EnOceanDevice;
@@ -19,33 +17,11 @@ import org.osgi.test.cases.enocean.utils.ServiceListener;
 /**
  * This class contains:
  * 
- * - testSelfEventReception, tests that the test suite is able to locally send
- * and receive messages.
- * 
  * - testEventNotification, tests event notification when passing an actual
  * message to the Base Driver. This also tests the MessageSet registration since
  * the Base Driver needs to know about it before firing on EventAdmin.
  */
 public class EventTestCase extends AbstractEnOceanTestCase {
-
-	/**
-	 * Checks that our test suite is able to locally send and receive messages.
-	 * Necessary for the rest of the code.
-	 * 
-	 * @throws InterruptedException
-	 */
-	public void testSelfEventReception() throws InterruptedException {
-		Map properties = new Hashtable();
-		properties.put(Fixtures.SELF_TEST_EVENT_KEY, Fixtures.SELF_TEST_EVENT_VALUE);
-		Event sourceEvent = new Event(Fixtures.SELF_TEST_EVENT_TOPIC, properties);
-		eventAdmin.sendEvent(sourceEvent);
-
-		Event destinationEvent = events.waitForEvent();
-		assertEquals("event name mismatch", Fixtures.SELF_TEST_EVENT_TOPIC, destinationEvent.getTopic());
-		assertEquals("event property mismatch", Fixtures.SELF_TEST_EVENT_VALUE, destinationEvent.getProperty(Fixtures.SELF_TEST_EVENT_KEY));
-
-		log("testSelfEventReception(), EventAdmin is available. Tests can continue.");
-	}
 
 	/**
 	 * Test event notification in the context of an actual message passing to
@@ -66,6 +42,7 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 
 		/* First get a reference towards the device */
 		String lastServiceEvent = devices.waitForService();
+		assertNotNull("Timeout reached.", lastServiceEvent);
 		ServiceReference ref = devices.getServiceReference();
 		getContext().ungetService(ref);
 		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
@@ -79,6 +56,7 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 		testStepService.execute("MessageA5_02_01", params2);
 
 		Event event = events.waitForEvent();
+		assertNotNull("Timeout reached.", event);
 
 		assertEquals("topic mismatch", EnOceanEvent.TOPIC_MSG_RECEIVED, event.getTopic());
 		assertEquals("senderId mismatch", Fixtures.STR_HOST_ID, event.getProperty(EnOceanDevice.CHIP_ID));
