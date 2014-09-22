@@ -11,7 +11,7 @@ import org.osgi.service.enocean.descriptions.EnOceanChannelDescriptionSet;
 import org.osgi.service.enocean.descriptions.EnOceanDataChannelDescription;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescriptionSet;
-import org.osgi.test.cases.enocean.messages.MessageA5_02_01;
+import org.osgi.test.cases.enocean.messages.MessageExample1;
 import org.osgi.test.cases.enocean.rpc.QueryFunction;
 import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.utils.Fixtures;
@@ -178,11 +178,11 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 	public void testRPC() throws InterruptedException {
 		log("testRPC(), Insert a device");
 		/* Insert a device */
-		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
+		MessageExample1 teachIn = MessageExample1.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
 		// Push everything in the command...
 		String[] params = {new String(pkt.serialize())};
-		testStepService.execute("MessageA5_02_01", params);
+		testStepService.execute("MessageExample1", params);
 
 		log("testRPC(), devices.waitForService()");
 		String wfs = devices.waitForService();
@@ -245,7 +245,7 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 
 		assertNotNull("enOceanMessageDescription must not be null.", enOceanMessageDescription);
 
-		EnOceanChannel[] channels = enOceanMessageDescription.deserialize(new MessageA5_02_01(Fixtures.TEMPERATURE).getPayloadBytes());
+		EnOceanChannel[] channels = enOceanMessageDescription.deserialize(new MessageExample1(Fixtures.TEMPERATURE).getPayloadBytes());
 		assertEquals("2 channels are expected here.", 2, channels.length);
 
 		EnOceanChannel temperatureChannel = channels[0];

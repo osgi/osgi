@@ -51,11 +51,11 @@ public class TestStepForEnOceanImpl implements TestStep {
 	public String[] execute(String command, String[] parameters) {
 		Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(command: " + command + ", parameters: " + parameters + ")");
 		String[] result = null;
-		if ("MessageA5_02_01".equals(command)) {
+		if ("MessageExample1".equals(command)) {
 			currentCommand = parameters[0].getBytes();
 			// ignore result;
 		} else
-			if ("MessageF6_02_01".equals(command)) {
+			if ("MessageExample2".equals(command)) {
 				currentCommand = parameters[0].getBytes();
 				// ignore result;
 			} else {

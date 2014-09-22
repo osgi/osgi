@@ -9,7 +9,7 @@ import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
 import org.osgi.service.event.Event;
 import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescription_A5_02_01;
-import org.osgi.test.cases.enocean.messages.MessageA5_02_01;
+import org.osgi.test.cases.enocean.messages.MessageExample1;
 import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
@@ -34,11 +34,11 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 	 */
 	public void testEventNotification() throws InterruptedException {
 		/* Insert a device */
-		MessageA5_02_01 teachIn = MessageA5_02_01.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
+		MessageExample1 teachIn = MessageExample1.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket teachInPkt = new EspRadioPacket(teachIn);
 		// Push everything in the command...
 		String[] params = {new String(teachInPkt.serialize())};
-		testStepService.execute("MessageA5_02_01", params);
+		testStepService.execute("MessageExample1", params);
 
 		/* First get a reference towards the device */
 		String lastServiceEvent = devices.waitForService();
@@ -48,12 +48,12 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
 
 		/* Send a message from that device */
-		MessageA5_02_01 measure = new MessageA5_02_01(Fixtures.TEMPERATURE);
+		MessageExample1 measure = new MessageExample1(Fixtures.TEMPERATURE);
 		measure.setSenderId(Fixtures.HOST_ID);
 		EspRadioPacket measurePkt = new EspRadioPacket(measure);
 		// Push everything in the command...
 		String[] params2 = {new String(measurePkt.serialize())};
-		testStepService.execute("MessageA5_02_01", params2);
+		testStepService.execute("MessageExample1", params2);
 
 		Event event = events.waitForEvent();
 		assertNotNull("Timeout reached.", event);

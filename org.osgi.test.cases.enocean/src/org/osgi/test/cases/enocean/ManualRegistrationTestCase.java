@@ -3,7 +3,7 @@ package org.osgi.test.cases.enocean;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanDevice;
-import org.osgi.test.cases.enocean.messages.MessageF6_02_01;
+import org.osgi.test.cases.enocean.messages.MessageExample2;
 import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
@@ -27,12 +27,12 @@ public class ManualRegistrationTestCase extends AbstractEnOceanTestCase {
 	public void testManualDeviceRegistration() throws Exception {
 
 		/* Insert a device */
-		MessageF6_02_01 teachIn = new MessageF6_02_01(1, true, 1, true);
+		MessageExample2 teachIn = new MessageExample2(1, true, 1, true);
 		teachIn.setSenderId(Fixtures.HOST_ID_2);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
 		// Push everything in the command...
 		String[] params = {new String(pkt.serialize())};
-		testStepService.execute("MessageF6_02_01", params);
+		testStepService.execute("MessageExample2", params);
 
 		String lastServiceEvent = devices.waitForService();
 		log("DEBUG: lastServiceEvent: " + lastServiceEvent);

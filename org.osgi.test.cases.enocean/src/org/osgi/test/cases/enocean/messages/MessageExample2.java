@@ -25,10 +25,10 @@ import org.osgi.test.cases.enocean.channels.RPSSecondAction_00;
 import org.osgi.test.cases.enocean.descriptions.EnOceanChannelDescription_R1_00;
 
 /**
- * Temperature telegram, profile A5-02-01
+ * Example telegram 2
  * 
  */
-public class MessageF6_02_01 extends MessageType_RPS {
+public class MessageExample2 extends MessageType_1 {
 
 	/**  */
 	public static final int	FUNC	= 0x02;
@@ -42,7 +42,7 @@ public class MessageF6_02_01 extends MessageType_RPS {
 	 * @param secondAction
 	 * @throws IllegalArgumentException
 	 */
-	public MessageF6_02_01(int action1, boolean eb, int action2, boolean secondAction) throws IllegalArgumentException {
+	public MessageExample2(int action1, boolean eb, int action2, boolean secondAction) throws IllegalArgumentException {
 
 		EnOceanChannel channelAction1 = new RPSActionChannel_00();
 		EnOceanChannel channelEnergyBow = new RPSEnergyBow_00();

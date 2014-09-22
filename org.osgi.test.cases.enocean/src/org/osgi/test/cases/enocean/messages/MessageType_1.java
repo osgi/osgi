@@ -17,17 +17,15 @@
 package org.osgi.test.cases.enocean.messages;
 
 /**
- * Prototype of a 1BS telegram
- * 
- * The teach-in telegram bears no particular information.
+ * MessageType_1
  * 
  * @author $Id$
  */
-public abstract class MessageType_RPS extends Message {
+public abstract class MessageType_1 extends Message {
 
 	/**  */
-	public MessageType_RPS() {
-		setRORG(Message.MESSAGE_RPS);
+	public MessageType_1() {
+		setRORG(Message.MessageType_1);
 	}
 
 	/* All RPS messages are also teach-in messages */

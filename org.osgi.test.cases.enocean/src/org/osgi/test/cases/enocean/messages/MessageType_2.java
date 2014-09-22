@@ -17,27 +17,17 @@
 package org.osgi.test.cases.enocean.messages;
 
 /**
- * Prototype of a 4BS telegram
- * 
- * Teach-in procedure:
- * 
- * - if DB0.3 is 0, then it's a teach-in telegram.
- * 
- * - if DB0.7 is also 0, no manufacturer info.
- * 
- * - if DB0.7 is 1, manufacturer info is present.
- * 
- * TODO Add Javadoc comment for this type.
+ * MessageType_2
  * 
  * @author $Id$
  */
-public abstract class MessageType_4BS extends Message {
+public abstract class MessageType_2 extends Message {
 
 	private Boolean	isTeachin;
 
 	/**  */
-	public MessageType_4BS() {
-		setRORG(Message.MESSAGE_4BS);
+	public MessageType_2() {
+		setRORG(Message.MessageType_2);
 	}
 
 	/**

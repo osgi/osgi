@@ -11,7 +11,7 @@ import org.osgi.service.enocean.EnOceanEvent;
 import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.event.Event;
-import org.osgi.test.cases.enocean.messages.MessageA5_02_01;
+import org.osgi.test.cases.enocean.messages.MessageExample1;
 import org.osgi.test.cases.enocean.serial.EspPacket;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
@@ -53,7 +53,7 @@ public class ExportTestCase extends AbstractEnOceanTestCase {
 		 * try and make it send data, via EventAdmin broadcast.
 		 */
 		Map properties = new Hashtable();
-		EnOceanMessage msg = new MessageA5_02_01(Fixtures.TEMPERATURE);
+		EnOceanMessage msg = new MessageExample1(Fixtures.TEMPERATURE);
 		properties.put(Constants.SERVICE_PID, Fixtures.DEVICE_PID);
 		properties.put(EnOceanDevice.RORG, Fixtures.STR_RORG);
 		properties.put(EnOceanDevice.FUNC, Fixtures.STR_FUNC);

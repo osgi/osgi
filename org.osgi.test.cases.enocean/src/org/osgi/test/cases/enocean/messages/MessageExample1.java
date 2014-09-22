@@ -17,10 +17,10 @@
 package org.osgi.test.cases.enocean.messages;
 
 /**
- * Temperature telegram, profile A5-02-01
+ * Example telegram 1
  * 
  */
-public class MessageA5_02_01 extends MessageType_4BS {
+public class MessageExample1 extends MessageType_2 {
 
 	/**  */
 	public static final int	FUNC		= 0x02;
@@ -33,7 +33,7 @@ public class MessageA5_02_01 extends MessageType_4BS {
 
 	// private final int rangeStop = 0;
 
-	private MessageA5_02_01() {
+	private MessageExample1() {
 
 	}
 
@@ -44,8 +44,8 @@ public class MessageA5_02_01 extends MessageType_4BS {
 	 * @param manufacturerId
 	 * @return the teach-in message.
 	 */
-	public static MessageA5_02_01 generateTeachInMsg(int senderId, int manufacturerId) {
-		MessageA5_02_01 msg = new MessageA5_02_01();
+	public static MessageExample1 generateTeachInMsg(int senderId, int manufacturerId) {
+		MessageExample1 msg = new MessageExample1();
 		byte[] data = {0x0, 0x0, 0x0, 0x0};
 		data[0] = (byte) (((FUNC << 2) | (TYPE >> 5)));
 		data[1] = (byte) (((TYPE << 3) & 0x7c) | ((manufacturerId >> 8) & 0x07));
@@ -60,7 +60,7 @@ public class MessageA5_02_01 extends MessageType_4BS {
 	 * @param temperature
 	 * @throws IllegalArgumentException
 	 */
-	public MessageA5_02_01(float temperature) throws IllegalArgumentException {
+	public MessageExample1(float temperature) throws IllegalArgumentException {
 		if ((temperature < domainStart) || (temperature > domainStop)) {
 			throw new IllegalArgumentException("incorrect supplied value");
 		}
