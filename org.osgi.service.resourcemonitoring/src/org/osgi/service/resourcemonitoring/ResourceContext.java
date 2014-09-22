@@ -23,19 +23,19 @@ import org.osgi.framework.Bundle;
  * member bundles, and a bundle can be a member of 0 or 1 resource context.
  * 
  * <p>
- * Management agents can use the
- * {@link ResourceMonitoringService#createContext(String, ResourceContext)} method to
- * create ResourceContext instances.
+ * Resource Monitoring Clients can use the
+ * {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+ * method to create ResourceContext instances.
  * </p>
  * <p>
- * Management agents can use the {@link #getMonitor(String)} method to get
- * {@link ResourceMonitor} instances for the supported resource types. These
+ * Resource Monitoring Clients can use the {@link #getMonitor(String)} method to
+ * get {@link ResourceMonitor} instances for the supported resource types. These
  * instances can then be used to monitor the usage of the resources, or the set
  * usage limits.
  * </p>
  * <p>
- * ResourceContexts are retrieved through the {@link ResourceMonitoringService} OSGi
- * service.
+ * ResourceContexts are retrieved through the {@link ResourceMonitoringService}
+ * OSGi service.
  * </p>
  * 
  * @author $Id$
