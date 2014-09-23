@@ -19,7 +19,7 @@ package org.osgi.test.cases.enocean.channels;
 import org.osgi.service.enocean.EnOceanChannel;
 
 /**
- *
+ * @author $Id$
  */
 public class Channel02 implements EnOceanChannel {
 

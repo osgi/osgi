@@ -17,7 +17,7 @@
 package org.osgi.test.cases.enocean.utils;
 
 /**
- * 
+ * @author $Id$
  */
 public final class Logger {
 

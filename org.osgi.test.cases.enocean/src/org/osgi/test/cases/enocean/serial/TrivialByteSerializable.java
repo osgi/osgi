@@ -19,7 +19,7 @@ package org.osgi.test.cases.enocean.serial;
 import org.osgi.test.cases.enocean.utils.ByteSerializable;
 
 /**
- *
+ * @author $Id$
  */
 public class TrivialByteSerializable implements ByteSerializable {
 

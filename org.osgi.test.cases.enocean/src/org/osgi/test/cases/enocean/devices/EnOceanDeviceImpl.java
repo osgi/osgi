@@ -21,7 +21,7 @@ import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanMessage;
 
 /**
- *
+ * @author $Id$
  */
 public abstract class EnOceanDeviceImpl implements EnOceanDevice {
 

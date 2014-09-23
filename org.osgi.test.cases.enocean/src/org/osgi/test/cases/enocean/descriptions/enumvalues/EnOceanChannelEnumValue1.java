@@ -19,7 +19,7 @@ package org.osgi.test.cases.enocean.descriptions.enumvalues;
 import org.osgi.service.enocean.descriptions.EnOceanChannelEnumValue;
 
 /**
- *
+ * @author $Id$
  */
 public class EnOceanChannelEnumValue1 implements EnOceanChannelEnumValue {
 

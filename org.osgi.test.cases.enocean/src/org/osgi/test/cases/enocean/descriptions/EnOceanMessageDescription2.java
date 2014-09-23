@@ -9,7 +9,7 @@ import org.osgi.test.cases.enocean.channels.LChannel;
 import org.osgi.test.cases.enocean.utils.Utils;
 
 /**
- *
+ * @author $Id$
  */
 public class EnOceanMessageDescription2 implements EnOceanMessageDescription {
 

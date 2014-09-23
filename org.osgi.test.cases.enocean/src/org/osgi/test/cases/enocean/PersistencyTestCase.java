@@ -16,6 +16,8 @@ import org.osgi.test.support.sleep.Sleep;
  * device, get its chip ID (referred to as the original chip ID), stops, and
  * restarts the base driver, finally get the device’s new chip ID, and checks
  * that the original chip ID, and the new one are equal.
+ * 
+ * @author $Id$
  */
 public class PersistencyTestCase extends AbstractEnOceanTestCase {
 

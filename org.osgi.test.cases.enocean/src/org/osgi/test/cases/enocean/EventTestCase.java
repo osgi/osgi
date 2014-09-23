@@ -20,6 +20,8 @@ import org.osgi.test.cases.enocean.utils.ServiceListener;
  * - testEventNotification, tests event notification when passing an actual
  * message to the Base Driver. This also tests the MessageSet registration since
  * the Base Driver needs to know about it before firing on EventAdmin.
+ * 
+ * @author $Id$
  */
 public class EventTestCase extends AbstractEnOceanTestCase {
 

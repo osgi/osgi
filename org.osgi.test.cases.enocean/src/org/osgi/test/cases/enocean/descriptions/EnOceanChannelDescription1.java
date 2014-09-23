@@ -25,7 +25,7 @@ import org.osgi.test.cases.enocean.descriptions.enumvalues.EnOceanChannelEnumVal
 import org.osgi.test.cases.enocean.descriptions.enumvalues.EnOceanChannelEnumValue3;
 
 /**
- *
+ * @author $Id$
  */
 public class EnOceanChannelDescription1 implements EnOceanEnumChannelDescription {
 

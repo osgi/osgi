@@ -17,7 +17,7 @@
 package org.osgi.test.cases.enocean.utils;
 
 /**
- *
+ * @author $Id$
  */
 public class Utils {
 	private static byte[]	crc8_table	= new byte[] {

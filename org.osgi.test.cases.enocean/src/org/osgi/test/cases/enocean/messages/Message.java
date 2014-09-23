@@ -21,7 +21,7 @@ import org.osgi.test.cases.enocean.utils.ByteSerializable;
 import org.osgi.test.cases.enocean.utils.Utils;
 
 /**
- *
+ * @author $Id$
  */
 public class Message implements EnOceanMessage, ByteSerializable {
 

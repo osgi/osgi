@@ -16,6 +16,8 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 /**
  * Abstract class that specify the setup(), and teardown() methods for the
  * EnOcean test cases.
+ * 
+ * @author $Id$
  */
 public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 

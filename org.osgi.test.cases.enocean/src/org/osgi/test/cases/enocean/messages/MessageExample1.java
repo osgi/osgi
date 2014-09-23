@@ -19,6 +19,8 @@ package org.osgi.test.cases.enocean.messages;
 /**
  * Example telegram 1
  * 
+ * @author $Id$
+ * 
  */
 public class MessageExample1 extends MessageType_2 {
 

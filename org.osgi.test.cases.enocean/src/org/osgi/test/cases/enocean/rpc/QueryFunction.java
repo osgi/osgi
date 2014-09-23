@@ -19,7 +19,7 @@ package org.osgi.test.cases.enocean.rpc;
 import org.osgi.service.enocean.EnOceanRPC;
 
 /**
- *
+ * @author $Id$
  */
 public class QueryFunction implements EnOceanRPC {
 

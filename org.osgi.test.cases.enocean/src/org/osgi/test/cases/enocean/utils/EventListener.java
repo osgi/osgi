@@ -25,7 +25,7 @@ import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.Semaphore;
 
 /**
- *
+ * @author $Id$
  */
 public class EventListener implements EventHandler {
 

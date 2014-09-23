@@ -20,7 +20,7 @@ package org.osgi.test.cases.enocean.utils;
  * Helper class that enables better abstraction model when encapsulating several
  * layers of byte-backed packets of data.
  * 
- * @author Victor Perron
+ * @author $Id$
  */
 public interface ByteSerializable {
 

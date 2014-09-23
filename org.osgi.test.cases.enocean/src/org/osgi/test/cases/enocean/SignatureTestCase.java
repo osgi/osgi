@@ -21,9 +21,11 @@ package org.osgi.test.cases.enocean;
  * 
  * - testSignatures, cf. testSignatures() method from org.osgi.test.support.
  * signature.SignatureTestCase.
+ * 
+ * @author $Id$
  */
 public class SignatureTestCase extends org.osgi.test.support.signature.SignatureTestCase {
 
-	// TODO
+	// see org.osgi.test.support.signature.SignatureTestCase.
 
 }

@@ -14,6 +14,8 @@ import org.osgi.test.cases.enocean.utils.Logger;
  * - testAutoDeviceRegistration, tests initial, and automatic device
  * registration from a raw Radio teach-in packet that is triggered through the
  * step service.
+ * 
+ * @author $Id$
  */
 public class RegistrationTestCase extends AbstractEnOceanTestCase {
 

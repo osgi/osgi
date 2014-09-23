@@ -16,6 +16,8 @@ import org.osgi.test.cases.enocean.utils.ServiceListener;
  * triggered through the step service. This test thus requires the end-user
  * involvement. Finally, the CT checks that the device's profile has been
  * properly updated.
+ * 
+ * @author $Id$
  */
 public class ManualRegistrationTestCase extends AbstractEnOceanTestCase {
 

@@ -28,6 +28,8 @@ import org.osgi.test.cases.enocean.utils.Fixtures;
  * - testUseOfDescriptions, tests that a properly set profile ID in a raw
  * EnOceanMessage is enough to extract all the needed information, provided the
  * necessary descriptions are known.
+ * 
+ * @author $Id$
  */
 public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 

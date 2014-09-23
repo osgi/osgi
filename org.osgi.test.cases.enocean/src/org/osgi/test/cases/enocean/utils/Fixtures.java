@@ -12,7 +12,7 @@ import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
 import org.osgi.test.cases.enocean.devices.Device01;
 
 /**
- *
+ * @author $Id$
  */
 public final class Fixtures {
 

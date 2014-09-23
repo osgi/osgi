@@ -20,6 +20,8 @@ package org.osgi.test.cases.enoceansimulation.teststep;
  * Test stepper interface used by OSGi test cases for manual test steps. The
  * implementation of this interface must be registered in the OSGi service
  * registry.
+ * 
+ * @author $Id$
  */
 public interface TestStep {
 

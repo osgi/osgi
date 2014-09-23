@@ -26,6 +26,8 @@ import org.osgi.test.cases.enocean.descriptions.EnOceanChannelDescription1;
 
 /**
  * Example telegram 2
+ * 
+ * @author $Id$
  */
 public class MessageExample2 extends MessageType_1 {
 

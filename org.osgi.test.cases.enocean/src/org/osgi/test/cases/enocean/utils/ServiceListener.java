@@ -9,7 +9,7 @@ import org.osgi.test.support.compatibility.Semaphore;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
- *
+ * @author $Id$
  */
 public class ServiceListener extends ServiceTracker {
 

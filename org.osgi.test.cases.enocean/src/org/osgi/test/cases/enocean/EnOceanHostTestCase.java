@@ -13,6 +13,8 @@ import org.osgi.service.enocean.EnOceanHost;
  * - testEnOceanHostServiceAvailability, tests that at least one EnOceanHost
  * service is registered when an implementation of the EnOcean specification is
  * running.
+ * 
+ * @author $Id$
  */
 public class EnOceanHostTestCase extends AbstractEnOceanTestCase {
 

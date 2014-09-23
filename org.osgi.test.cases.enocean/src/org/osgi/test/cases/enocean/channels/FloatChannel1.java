@@ -21,7 +21,7 @@ import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.Utils;
 
 /**
- *
+ * @author $Id$
  */
 public class FloatChannel1 implements EnOceanChannel {
 

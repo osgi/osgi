@@ -22,7 +22,7 @@ import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.EnOceanRPC;
 
 /**
- *
+ * @author $Id$
  */
 public class Device01 extends EnOceanDeviceImpl {
 
