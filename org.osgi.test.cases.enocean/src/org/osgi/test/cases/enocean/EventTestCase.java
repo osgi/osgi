@@ -8,7 +8,7 @@ import org.osgi.service.enocean.EnOceanEvent;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
 import org.osgi.service.event.Event;
-import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescription_A5_02_01;
+import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescription2;
 import org.osgi.test.cases.enocean.messages.MessageExample1;
 import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.utils.Fixtures;
@@ -48,7 +48,7 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
 
 		/* Send a message from that device */
-		MessageExample1 measure = new MessageExample1(Fixtures.TEMPERATURE);
+		MessageExample1 measure = new MessageExample1(Fixtures.FLOATVALUE);
 		measure.setSenderId(Fixtures.HOST_ID);
 		EspRadioPacket measurePkt = new EspRadioPacket(measure);
 		// Push everything in the command...
@@ -66,8 +66,8 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 
 		EnOceanMessage msg = (EnOceanMessage) event.getProperty(EnOceanEvent.PROPERTY_MESSAGE);
 		assertNotNull("Msg must not be null.", msg);
-		EnOceanMessageDescription description = new EnOceanMessageDescription_A5_02_01();
+		EnOceanMessageDescription description = new EnOceanMessageDescription2();
 		EnOceanChannel[] channels = description.deserialize(msg.getPayloadBytes());
-		assertEquals("temperature mismatch", Fixtures.RAW_TEMPERATURE, channels[0].getRawValue()[0]);
+		assertEquals("float value mismatch", Fixtures.RAW_FLOATVALUE, channels[0].getRawValue()[0]);
 	}
 }

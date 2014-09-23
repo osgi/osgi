@@ -14,25 +14,39 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.enocean.descriptions.enumvalues;
+package org.osgi.test.cases.enocean.channels;
 
-import org.osgi.service.enocean.descriptions.EnOceanChannelEnumValue;
+import org.osgi.service.enocean.EnOceanChannel;
 
 /**
  *
  */
-public class EnOceanChannelEnumValue_R1_00_VALUE1 implements EnOceanChannelEnumValue {
+public class LChannel implements EnOceanChannel {
 
-	public int getStart() {
+	private boolean	isLearn;
+
+	public String getChannelId() {
+		return "LRN_4BS";
+	}
+
+	public void setRawValue(byte[] rawValue) {
+		isLearn = rawValue[0] == 0;
+	}
+
+	public int getSize() {
 		return 1;
 	}
 
-	public int getStop() {
-		return 1;
+	public byte[] getRawValue() {
+		if (isLearn) {
+			return new byte[] {0x0};
+		} else {
+			return new byte[] {0x1};
+		}
 	}
 
-	public String getDescription() {
-		return "SwitchLightOff DimLightUp MoveBlindOpen";
+	public int getOffset() {
+		return 28;
 	}
 
 }

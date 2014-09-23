@@ -59,11 +59,11 @@ public class TestStepForEnOceanImpl implements TestStep {
 				currentCommand = parameters[0].getBytes();
 				// ignore result;
 			} else {
-				if ("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription_A5_02_01".equals(command)) {
+				if ("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription".equals(command)) {
 					currentCommand = command.getBytes();
 					// ignore result;
 				} else
-					if ("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_TMP_00".equals(command)) {
+					if ("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_CID".equals(command)) {
 						currentCommand = command.getBytes();
 						// ignore result;
 					} else

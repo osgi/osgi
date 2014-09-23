@@ -14,25 +14,35 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.enocean.descriptions.enumvalues;
+package org.osgi.test.cases.enocean.channels;
 
-import org.osgi.service.enocean.descriptions.EnOceanChannelEnumValue;
+import org.osgi.service.enocean.EnOceanChannel;
 
 /**
  *
  */
-public class EnOceanChannelEnumValue_R1_00_VALUE3 implements EnOceanChannelEnumValue {
+public class Channel02 implements EnOceanChannel {
 
-	public int getStart() {
+	private byte[]	rawValue;
+
+	public String getChannelId() {
+		return "R1_00";
+	}
+
+	public int getOffset() {
+		return 4;
+	}
+
+	public int getSize() {
 		return 3;
 	}
 
-	public int getStop() {
-		return 3;
+	public byte[] getRawValue() {
+		return rawValue;
 	}
 
-	public String getDescription() {
-		return "SwitchLightOff DimLightUp MoveBlindOpen";
+	public void setRawValue(byte[] rawValue) {
+		this.rawValue = rawValue;
 	}
 
 }

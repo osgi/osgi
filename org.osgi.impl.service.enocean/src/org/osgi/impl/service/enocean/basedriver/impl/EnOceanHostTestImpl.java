@@ -97,33 +97,11 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 							Logger.d(TAG, "The given command: " + command + " is UNKNOWN.");
 						}
 					} else {
-						if ("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription_A5_02_01".equals(new String(command))) {
+						if ("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription".equals(new String(command))) {
 							EnOceanMessageDescriptionSet enOceanMessageDescriptionSet = new EnOceanMessageDescriptionSet() {
 								public EnOceanMessageDescription getMessageDescription(int rorg, int func, int type, int extra) throws IllegalArgumentException {
 									return new EnOceanMessageDescription() {
-
-										// /**
-										// * @return hardcoded 0xA5.
-										// */
-										// public int getRorg() {
-										// return 0xA5;
-										// }
-										//
-										// /**
-										// * @return hardcoded 0x02.
-										// */
-										// public int getFunc() {
-										// return 0x02;
-										// }
-										//
-										// /**
-										// * @return hardcoded 0x01.
-										// */
-										// public int getType() {
-										// return 0x01;
-										// }
-
-										EnOceanChannel	temperature	= new TemperatureChannel_00();
+										EnOceanChannel	floatValue	= new TemperatureChannel_00();
 										EnOceanChannel	learn		= new LearnChannel_4BS();
 
 										public EnOceanChannel[] deserialize(byte[] data) throws EnOceanException {
@@ -139,10 +117,10 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 												throw new EnOceanException("Input data size was wrong");
 											}
 											byte lrnByte = (byte) ((data[3] >> 3) & 0x01);
-											temperature.setRawValue(Utils.byteToBytes(data[2]));
+											floatValue.setRawValue(Utils.byteToBytes(data[2]));
 											learn.setRawValue(new byte[] {lrnByte});
 
-											return new EnOceanChannel[] {temperature, learn};
+											return new EnOceanChannel[] {floatValue, learn};
 										}
 
 										public byte[] serialize(EnOceanChannel[] channels) throws EnOceanException {
@@ -155,7 +133,7 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 											private byte	b0;
 
 											public String getChannelId() {
-												return "TMP_00";
+												return "CID";
 											}
 
 											public void setRawValue(byte[] rawValue) {
@@ -211,14 +189,14 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 							};
 							bc.registerService(EnOceanMessageDescriptionSet.class.getName(), enOceanMessageDescriptionSet, null);
 						} else
-							if ("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_TMP_00".equals(new String(command))) {
+							if ("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_CID".equals(new String(command))) {
 								EnOceanChannelDescriptionSet enOceanChannelDescriptionSet = new EnOceanChannelDescriptionSet() {
 									private Map	channelTable	= null;
 
 									public EnOceanChannelDescription getChannelDescription(String channelId) throws IllegalArgumentException {
 										if (channelTable == null) {
 											channelTable = new Hashtable();
-											channelTable.put("TMP_00", new EnOceanDataChannelDescription() {
+											channelTable.put("CID", new EnOceanDataChannelDescription() {
 
 												public String getType() {
 													return EnOceanChannelDescription.TYPE_DATA;
@@ -318,6 +296,7 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 				}
 			} catch (IOException e) {
 				Logger.e(TAG, "Error while reading input packet: " + e.getMessage());
+				e.printStackTrace();
 			}
 		}
 		Logger.d(this.getClass().getName(), "Unregister EnOcean's Test Step OSGi service.");

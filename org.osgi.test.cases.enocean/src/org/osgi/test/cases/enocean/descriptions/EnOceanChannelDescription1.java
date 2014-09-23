@@ -19,21 +19,21 @@ package org.osgi.test.cases.enocean.descriptions;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
 import org.osgi.service.enocean.descriptions.EnOceanChannelEnumValue;
 import org.osgi.service.enocean.descriptions.EnOceanEnumChannelDescription;
-import org.osgi.test.cases.enocean.descriptions.enumvalues.EnOceanChannelEnumValue_R1_00_VALUE0;
-import org.osgi.test.cases.enocean.descriptions.enumvalues.EnOceanChannelEnumValue_R1_00_VALUE1;
-import org.osgi.test.cases.enocean.descriptions.enumvalues.EnOceanChannelEnumValue_R1_00_VALUE2;
-import org.osgi.test.cases.enocean.descriptions.enumvalues.EnOceanChannelEnumValue_R1_00_VALUE3;
+import org.osgi.test.cases.enocean.descriptions.enumvalues.EnOceanChannelEnumValue0;
+import org.osgi.test.cases.enocean.descriptions.enumvalues.EnOceanChannelEnumValue1;
+import org.osgi.test.cases.enocean.descriptions.enumvalues.EnOceanChannelEnumValue2;
+import org.osgi.test.cases.enocean.descriptions.enumvalues.EnOceanChannelEnumValue3;
 
 /**
  *
  */
-public class EnOceanChannelDescription_R1_00 implements EnOceanEnumChannelDescription {
+public class EnOceanChannelDescription1 implements EnOceanEnumChannelDescription {
 
 	EnOceanChannelEnumValue[]	possibleValues	= new EnOceanChannelEnumValue[] {
-												new EnOceanChannelEnumValue_R1_00_VALUE0(),
-												new EnOceanChannelEnumValue_R1_00_VALUE1(),
-												new EnOceanChannelEnumValue_R1_00_VALUE2(),
-												new EnOceanChannelEnumValue_R1_00_VALUE3()
+												new EnOceanChannelEnumValue0(),
+												new EnOceanChannelEnumValue1(),
+												new EnOceanChannelEnumValue2(),
+												new EnOceanChannelEnumValue3()
 												};
 
 	public String getType() {

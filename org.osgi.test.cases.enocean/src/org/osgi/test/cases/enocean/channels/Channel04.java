@@ -21,20 +21,20 @@ import org.osgi.service.enocean.EnOceanChannel;
 /**
  *
  */
-public class RPSActionChannel_00 implements EnOceanChannel {
+public class Channel04 implements EnOceanChannel {
 
 	private byte[]	rawValue;
 
 	public String getChannelId() {
-		return "R1_00";
+		return "SA_00";
 	}
 
 	public int getOffset() {
-		return 0;
+		return 7;
 	}
 
 	public int getSize() {
-		return 3;
+		return 1;
 	}
 
 	public byte[] getRawValue() {

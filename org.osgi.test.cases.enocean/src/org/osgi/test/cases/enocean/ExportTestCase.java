@@ -53,7 +53,7 @@ public class ExportTestCase extends AbstractEnOceanTestCase {
 		 * try and make it send data, via EventAdmin broadcast.
 		 */
 		Map properties = new Hashtable();
-		EnOceanMessage msg = new MessageExample1(Fixtures.TEMPERATURE);
+		EnOceanMessage msg = new MessageExample1(Fixtures.FLOATVALUE);
 		properties.put(Constants.SERVICE_PID, Fixtures.DEVICE_PID);
 		properties.put(EnOceanDevice.RORG, Fixtures.STR_RORG);
 		properties.put(EnOceanDevice.FUNC, Fixtures.STR_FUNC);

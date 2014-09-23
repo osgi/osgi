@@ -57,15 +57,15 @@ public class MessageExample1 extends MessageType_2 {
 	}
 
 	/**
-	 * @param temperature
+	 * @param floatValue
 	 * @throws IllegalArgumentException
 	 */
-	public MessageExample1(float temperature) throws IllegalArgumentException {
-		if ((temperature < domainStart) || (temperature > domainStop)) {
+	public MessageExample1(float floatValue) throws IllegalArgumentException {
+		if ((floatValue < domainStart) || (floatValue > domainStop)) {
 			throw new IllegalArgumentException("incorrect supplied value");
 		}
 		byte[] data = {0x0, 0x0, 0x0, 0x0};
-		data[2] = (byte) ((rangeStart / domainStart) * temperature);
+		data[2] = (byte) ((rangeStart / domainStart) * floatValue);
 		data[3] = 0x08; // deactivate teach-in
 		setData(data);
 	}

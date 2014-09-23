@@ -21,16 +21,16 @@ import org.osgi.service.enocean.EnOceanChannel;
 /**
  *
  */
-public class LearnChannel_4BS implements EnOceanChannel {
+public class Channel03 implements EnOceanChannel {
 
-	private boolean	isLearn;
+	private byte[]	rawValue;
 
 	public String getChannelId() {
-		return "LRN_4BS";
+		return "EB_00";
 	}
 
-	public void setRawValue(byte[] rawValue) {
-		isLearn = rawValue[0] == 0;
+	public int getOffset() {
+		return 3;
 	}
 
 	public int getSize() {
@@ -38,15 +38,11 @@ public class LearnChannel_4BS implements EnOceanChannel {
 	}
 
 	public byte[] getRawValue() {
-		if (isLearn) {
-			return new byte[] {0x0};
-		} else {
-			return new byte[] {0x1};
-		}
+		return rawValue;
 	}
 
-	public int getOffset() {
-		return 28;
+	public void setRawValue(byte[] rawValue) {
+		this.rawValue = rawValue;
 	}
 
 }

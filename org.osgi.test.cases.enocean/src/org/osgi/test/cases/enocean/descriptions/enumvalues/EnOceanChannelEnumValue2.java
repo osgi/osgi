@@ -14,36 +14,25 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.enocean.channels;
+package org.osgi.test.cases.enocean.descriptions.enumvalues;
 
-import org.osgi.service.enocean.EnOceanChannel;
-import org.osgi.test.cases.enocean.utils.Utils;
+import org.osgi.service.enocean.descriptions.EnOceanChannelEnumValue;
 
 /**
  *
  */
-public class TemperatureChannel_01 implements EnOceanChannel {
+public class EnOceanChannelEnumValue2 implements EnOceanChannelEnumValue {
 
-	private byte	b0;
-
-	public String getChannelId() {
-		return "TMP_01";
+	public int getStart() {
+		return 2;
 	}
 
-	public void setRawValue(byte[] rawValue) {
-		b0 = rawValue[0];
+	public int getStop() {
+		return 2;
 	}
 
-	public int getSize() {
-		return 8;
-	}
-
-	public byte[] getRawValue() {
-		return Utils.byteToBytes(b0);
-	}
-
-	public int getOffset() {
-		return 16;
+	public String getDescription() {
+		return "EnOceanChannelEnumValue2";
 	}
 
 }

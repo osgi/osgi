@@ -24,12 +24,12 @@ import org.osgi.service.enocean.EnOceanRPC;
 /**
  *
  */
-public class TemperatureSensingDevice extends EnOceanDeviceImpl {
+public class Device01 extends EnOceanDeviceImpl {
 
 	/**
 	 * 
 	 */
-	public TemperatureSensingDevice() {
+	public Device01() {
 		lastMessage = null;
 		encryptionKey = null;
 		rollingCode = -1;

@@ -18,15 +18,14 @@ package org.osgi.test.cases.enocean.messages;
 
 import org.osgi.service.enocean.EnOceanChannel;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
-import org.osgi.test.cases.enocean.channels.RPSActionChannel_00;
-import org.osgi.test.cases.enocean.channels.RPSActionChannel_01;
-import org.osgi.test.cases.enocean.channels.RPSEnergyBow_00;
-import org.osgi.test.cases.enocean.channels.RPSSecondAction_00;
-import org.osgi.test.cases.enocean.descriptions.EnOceanChannelDescription_R1_00;
+import org.osgi.test.cases.enocean.channels.Channel01;
+import org.osgi.test.cases.enocean.channels.Channel02;
+import org.osgi.test.cases.enocean.channels.Channel03;
+import org.osgi.test.cases.enocean.channels.Channel04;
+import org.osgi.test.cases.enocean.descriptions.EnOceanChannelDescription1;
 
 /**
  * Example telegram 2
- * 
  */
 public class MessageExample2 extends MessageType_1 {
 
@@ -44,29 +43,29 @@ public class MessageExample2 extends MessageType_1 {
 	 */
 	public MessageExample2(int action1, boolean eb, int action2, boolean secondAction) throws IllegalArgumentException {
 
-		EnOceanChannel channelAction1 = new RPSActionChannel_00();
-		EnOceanChannel channelEnergyBow = new RPSEnergyBow_00();
-		EnOceanChannel channelAction2 = new RPSActionChannel_01();
-		EnOceanChannel channelSecondAction = new RPSSecondAction_00();
+		EnOceanChannel channel01 = new Channel01();
+		EnOceanChannel channel02 = new Channel02();
+		EnOceanChannel channel03 = new Channel03();
+		EnOceanChannel channel04 = new Channel04();
 
-		EnOceanChannelDescription description = new EnOceanChannelDescription_R1_00();
-		channelAction1.setRawValue(description.serialize(new Integer(action1)));
-		channelAction2.setRawValue(description.serialize(new Integer(action2)));
+		EnOceanChannelDescription description = new EnOceanChannelDescription1();
+		channel01.setRawValue(description.serialize(new Integer(action1)));
+		channel02.setRawValue(description.serialize(new Integer(action2)));
 		if (eb) {
-			channelEnergyBow.setRawValue(new byte[] {(byte) 0x01});
+			channel03.setRawValue(new byte[] {(byte) 0x01});
 		} else {
-			channelEnergyBow.setRawValue(new byte[] {(byte) 0x00});
+			channel03.setRawValue(new byte[] {(byte) 0x00});
 		}
 		if (secondAction) {
-			channelSecondAction.setRawValue(new byte[] {(byte) 0x01});
+			channel04.setRawValue(new byte[] {(byte) 0x01});
 		} else {
-			channelSecondAction.setRawValue(new byte[] {(byte) 0x00});
+			channel04.setRawValue(new byte[] {(byte) 0x00});
 		}
 
-		byte b = getShiftedDataByte(channelAction1);
-		b = (byte) (b | getShiftedDataByte(channelEnergyBow));
-		b = (byte) (b | getShiftedDataByte(channelAction2));
-		b = (byte) (b | getShiftedDataByte(channelSecondAction));
+		byte b = getShiftedDataByte(channel01);
+		b = (byte) (b | getShiftedDataByte(channel03));
+		b = (byte) (b | getShiftedDataByte(channel02));
+		b = (byte) (b | getShiftedDataByte(channel04));
 		setData(new byte[] {b});
 	}
 

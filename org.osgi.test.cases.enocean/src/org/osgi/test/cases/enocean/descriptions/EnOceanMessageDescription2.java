@@ -4,14 +4,14 @@ package org.osgi.test.cases.enocean.descriptions;
 import org.osgi.service.enocean.EnOceanChannel;
 import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
-import org.osgi.test.cases.enocean.channels.LearnChannel_4BS;
-import org.osgi.test.cases.enocean.channels.TemperatureChannel_00;
+import org.osgi.test.cases.enocean.channels.FloatChannel1;
+import org.osgi.test.cases.enocean.channels.LChannel;
 import org.osgi.test.cases.enocean.utils.Utils;
 
 /**
  *
  */
-public class EnOceanMessageDescription_A5_02_01 implements EnOceanMessageDescription {
+public class EnOceanMessageDescription2 implements EnOceanMessageDescription {
 
 	/**
 	 * @return hardcoded 0xA5.
@@ -34,8 +34,8 @@ public class EnOceanMessageDescription_A5_02_01 implements EnOceanMessageDescrip
 		return 0x01;
 	}
 
-	EnOceanChannel	temperature	= new TemperatureChannel_00();
-	EnOceanChannel	learn		= new LearnChannel_4BS();
+	EnOceanChannel	floatValue	= new FloatChannel1();
+	EnOceanChannel	l			= new LChannel();
 
 	public EnOceanChannel[] deserialize(byte[] data) throws IllegalArgumentException {
 
@@ -47,10 +47,10 @@ public class EnOceanMessageDescription_A5_02_01 implements EnOceanMessageDescrip
 			throw new IllegalArgumentException("Input data size was wrong");
 		}
 		byte lrnByte = (byte) ((data[3] >> 3) & 0x01);
-		temperature.setRawValue(Utils.byteToBytes(data[2]));
-		learn.setRawValue(new byte[] {lrnByte});
+		floatValue.setRawValue(Utils.byteToBytes(data[2]));
+		l.setRawValue(new byte[] {lrnByte});
 
-		return new EnOceanChannel[] {temperature, learn};
+		return new EnOceanChannel[] {floatValue, l};
 	}
 
 	public byte[] serialize(EnOceanChannel[] channels) throws EnOceanException, EnOceanException {

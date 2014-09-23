@@ -14,35 +14,25 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.enocean.channels;
+package org.osgi.test.cases.enocean.descriptions.enumvalues;
 
-import org.osgi.service.enocean.EnOceanChannel;
+import org.osgi.service.enocean.descriptions.EnOceanChannelEnumValue;
 
 /**
  *
  */
-public class RPSSecondAction_00 implements EnOceanChannel {
+public class EnOceanChannelEnumValue0 implements EnOceanChannelEnumValue {
 
-	private byte[]	rawValue;
-
-	public String getChannelId() {
-		return "SA_00";
+	public int getStart() {
+		return 0;
 	}
 
-	public int getOffset() {
-		return 7;
+	public int getStop() {
+		return 0;
 	}
 
-	public int getSize() {
-		return 1;
-	}
-
-	public byte[] getRawValue() {
-		return rawValue;
-	}
-
-	public void setRawValue(byte[] rawValue) {
-		this.rawValue = rawValue;
+	public String getDescription() {
+		return "EnOceanChannelEnumValue0";
 	}
 
 }

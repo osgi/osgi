@@ -21,18 +21,18 @@ import org.osgi.service.enocean.descriptions.EnOceanChannelEnumValue;
 /**
  *
  */
-public class EnOceanChannelEnumValue_R1_00_VALUE2 implements EnOceanChannelEnumValue {
+public class EnOceanChannelEnumValue3 implements EnOceanChannelEnumValue {
 
 	public int getStart() {
-		return 2;
+		return 3;
 	}
 
 	public int getStop() {
-		return 2;
+		return 3;
 	}
 
 	public String getDescription() {
-		return "SwitchLightOn DimLightDown MoveBlindClosed";
+		return "EnOceanChannelEnumValue3";
 	}
 
 }

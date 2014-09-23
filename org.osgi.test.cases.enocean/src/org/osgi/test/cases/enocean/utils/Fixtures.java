@@ -9,7 +9,7 @@ import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanEvent;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
-import org.osgi.test.cases.enocean.devices.TemperatureSensingDevice;
+import org.osgi.test.cases.enocean.devices.Device01;
 
 /**
  *
@@ -22,7 +22,7 @@ public final class Fixtures {
 	/** HOST_ID */
 	public static final int		HOST_ID					= 0x12345678;
 	/** HOST_ID_2 */
-	public static final int		HOST_ID_2				= 0xdeadbabe;
+	public static final int		HOST_ID_2				= 0x99887766;
 	/** MANUFACTURER */
 	public static final int		MANUFACTURER			= 0x6ea;
 	/** RORG */
@@ -58,14 +58,14 @@ public final class Fixtures {
 	/** SELF_TEST_EVENT_VALUE */
 	public static final String	SELF_TEST_EVENT_VALUE	= "33.04°F";
 
-	/** TEMPERATURE */
-	public static final float	TEMPERATURE				= -20.0f;
-	/** RAW_TEMPERATURE */
-	public static final byte	RAW_TEMPERATURE			= 0x7f;
+	/** FLOATVALUE */
+	public static final float	FLOATVALUE				= -20.0f;
+	/** RAW_FLOATVALUE */
+	public static final byte	RAW_FLOATVALUE			= 0x7f;
 	/** TMP_CHANNEL_ID */
-	public static final String	TMP_CHANNEL_ID			= "TMP_00";
-	/** TMP_CHANNEL_TYPE */
-	public static final String	TMP_CHANNEL_TYPE		= EnOceanChannelDescription.TYPE_DATA;
+	public static final String	CHANNEL_ID				= "CID";
+	/** CHANNEL_TYPE */
+	public static final String	CHANNEL_TYPE		= EnOceanChannelDescription.TYPE_DATA;
 	/** DEVICE_PID */
 	public static final String	DEVICE_PID				= "my_exported_unique_device";
 	/** STR_RORG_RPS */
@@ -76,7 +76,7 @@ public final class Fixtures {
 	 * @return device's service registration.
 	 */
 	public static ServiceRegistration registerDevice(BundleContext bc) {
-		EnOceanDevice device = new TemperatureSensingDevice();
+		EnOceanDevice device = new Device01();
 		Dictionary props = new Properties();
 		props.put(EnOceanDevice.ENOCEAN_EXPORT, Boolean.TRUE);
 		props.put(Constants.SERVICE_PID, Fixtures.DEVICE_PID);
