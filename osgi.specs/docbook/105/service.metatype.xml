@@ -622,14 +622,13 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
 
       <para>The XML namespace for meta type documents must be:</para>
 
-      <programlisting>http://www.osgi.org/xmlns/metatype/v1.2.0</programlisting>
+      <programlisting>http://www.osgi.org/xmlns/metatype/v1.3.0</programlisting>
 
       <para>The namespace abbreviation should be <code>metatype</code>. I.e.
       the following header should be:</para>
 
       <programlisting>&lt;metatype:MetaData 
-    xmlns:metatype=
-        "http://www.osgi.org/xmlns/metatype/v1.2.0" 
+    xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.3.0" 
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     &gt;</programlisting>
 
@@ -1300,9 +1299,8 @@ Password <phrase role="symbol">↔</phrase> <xref
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;MetaData 
-    xmlns=
-        "http://www.osgi.org/xmlns/metatype/v1.2.0" 
-     localization="person"&gt;
+    xmlns="http://www.osgi.org/xmlns/metatype/v1.3.0" 
+    localization="person"&gt;
   &lt;OCD name="%person" id="2.5.6.6"
         description="%Person Record"&gt;
     &lt;AD name="%sex" id="2.5.4.12" type="Integer"&gt;
@@ -1394,7 +1392,7 @@ female=Female</programlisting>
     <title>XML Schema</title>
 
     <programlisting role="pgwide"><xi:include encoding="utf-8"
-        href="../../generated/xmlns/metatype/v1.2.0/metatype.xsd" parse="text"/></programlisting>
+        href="../../generated/xmlns/metatype/v1.3.0/metatype.xsd" parse="text"/></programlisting>
   </section>
 
   <section>
@@ -1463,6 +1461,13 @@ female=Female</programlisting>
     <itemizedlist>
       <listitem>
         <para>Changed vector references to list.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updates schema to 1.3.0. This includes changing
+        <code>Char</code> to <code>Character</code> to conform with other OSGi
+        schema and allowing some more flexibility in ordering of
+        elements.</para>
       </listitem>
     </itemizedlist>
   </section>
