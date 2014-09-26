@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2001, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2001, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -147,18 +147,19 @@ public interface AttributeDefinition {
 	/**
 	 * Unique identity for this attribute.
 	 * 
-	 * Attributes share a global namespace in the registry. E.g. an attribute
-	 * {@code cn} or {@code commonName} must always be a {@code String} and the
-	 * semantics are always a name of some object. They share this aspect with
-	 * LDAP/X.500 attributes. In these standards the OSI Object Identifier (OID)
-	 * is used to uniquely identify an attribute. If such an OID exists, (which
-	 * can be requested at several standard organisations and many companies
-	 * already have a node in the tree) it can be returned here. Otherwise, a
-	 * unique id should be returned which can be a Java class name (reverse
-	 * domain name) or generated with a GUID algorithm. Note that all LDAP
-	 * defined attributes already have an OID. It is strongly advised to define
-	 * the attributes from existing LDAP schemes which will give the OID. Many
-	 * such schemes exist ranging from postal addresses to DHCP parameters.
+	 * Attributes share a global namespace in the registry. For example, an
+	 * attribute {@code cn} or {@code commonName} must always be a
+	 * {@code String} and the semantics are always a name of some object. They
+	 * share this aspect with LDAP/X.500 attributes. In these standards the OSI
+	 * Object Identifier (OID) is used to uniquely identify an attribute. If
+	 * such an OID exists, (which can be requested at several standard
+	 * organisations and many companies already have a node in the tree) it can
+	 * be returned here. Otherwise, a unique id should be returned which can be
+	 * a Java class name (reverse domain name) or generated with a GUID
+	 * algorithm. Note that all LDAP defined attributes already have an OID. It
+	 * is strongly advised to define the attributes from existing LDAP schemes
+	 * which will give the OID. Many such schemes exist ranging from postal
+	 * addresses to DHCP parameters.
 	 * 
 	 * @return The id or oid
 	 */
@@ -220,8 +221,8 @@ public interface AttributeDefinition {
 	 * getType() for this attribute.
 	 * 
 	 * <p>
-	 * This list must be in the same sequence as {@code getOptionLabels()}. I.e.
-	 * for each index i in {@code getOptionValues}, i in
+	 * This list must be in the same sequence as {@code getOptionLabels()}. That
+	 * is, for each index i in {@code getOptionValues}, i in
 	 * {@code getOptionLabels()} should be the label.
 	 * 
 	 * <p>
@@ -246,7 +247,7 @@ public interface AttributeDefinition {
 	 * available.
 	 * <p>
 	 * This list must be in the same sequence as the {@code getOptionValues()}
-	 * method. I.e. for each index i in {@code getOptionLabels}, i in
+	 * method. That is, for each index i in {@code getOptionLabels}, i in
 	 * {@code getOptionValues()} should be the associated value.
 	 * 
 	 * <p>
@@ -295,8 +296,8 @@ public interface AttributeDefinition {
 	 * The object must be of the appropriate type as defined by the cardinality
 	 * and {@code getType()}. The return type is a list of {@code String}
 	 * objects that can be converted to the appropriate type. The cardinality of
-	 * the return array must follow the absolute cardinality of this type. E.g.
-	 * if the cardinality = 0, the array must contain 1 element. If the
+	 * the return array must follow the absolute cardinality of this type. For
+	 * example, if the cardinality = 0, the array must contain 1 element. If the
 	 * cardinality is 1, it must contain 0 or 1 elements. If it is -5, it must
 	 * contain from 0 to max 5 elements. Note that the special case of a 0
 	 * cardinality, meaning a single value, does not allow arrays or lists of 0

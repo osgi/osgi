@@ -464,7 +464,7 @@
     objects can be adapted to different locales.</para>
 
     <para>Which locales are supported by the <code>MetaTypeProvider</code>
-    object are defined by the implementer or the meta type resources.The list
+    object are defined by the implementer or the meta type resources. The list
     of available locales can be obtained from the
     <code>MetaTypeProvider</code> object.</para>
 
@@ -632,8 +632,8 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
 
       <programlisting>http://www.osgi.org/xmlns/metatype/v1.3.0</programlisting>
 
-      <para>The namespace abbreviation should be <code>metatype</code>. I.e.
-      the following header should be:</para>
+      <para>The namespace abbreviation should be <code>metatype</code>. That
+      is, the following header should be:</para>
 
       <programlisting>&lt;metatype:MetaData 
     xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.3.0" 
@@ -1203,7 +1203,7 @@ Password <phrase role="symbol">↔</phrase> <xref
               <entry><para/></entry>
 
               <entry><para>A reference to the id attribute of an OCD element.
-              I.e. this attribute defines the OCD type of this
+              That is, this attribute defines the OCD type of this
               object.</para></entry>
             </row>
 
@@ -1458,7 +1458,7 @@ female=Female</programlisting>
       xml:id="i1215866"><title>LDAP.</title>http://en.wikipedia.org/wiki/Lightweight_Directory_Access_Protocol</bibliomixed>
 
       <bibliomixed xml:id="i1215870"><title>Understanding and Deploying LDAP
-      Directory services</title>Timothy Howes et. al. ISBN 1-57870-070-1,
+      Directory services</title>Timothy Howes, et al. ISBN 1-57870-070-1,
       MacMillan Technical publishing.</bibliomixed>
     </bibliolist>
   </section>
