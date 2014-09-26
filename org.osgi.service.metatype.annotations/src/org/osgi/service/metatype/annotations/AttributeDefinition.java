@@ -173,8 +173,13 @@ public @interface AttributeDefinition {
 	 * 
 	 * <p>
 	 * For each specified {@link Option}, an {@code Option} element is generated
-	 * for this AttributeDefinition. If not specified, no Option elements will
-	 * be generated.
+	 * for this AttributeDefinition.
+	 *
+	 * <p>
+	 * If not specified, if the annotated member is an {@code Enum} or
+	 * {@code Enum[]}, then the value of this element has an {@link Option} for
+	 * each Enum with the option label and value set to the name of the Enum
+	 * value. Otherwise, no {@code Option} elements will be generated.
 	 * 
 	 * @see "The Option element of a Meta Type Resource."
 	 */
