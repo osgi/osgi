@@ -144,10 +144,15 @@ public @interface AttributeDefinition {
 	 * The default value for this AttributeDefinition.
 	 * 
 	 * <p>
-	 * If not specified, if the annotated element is part of an annotation and
-	 * has a <code>default</code> value, then the value is the
-	 * <code>default</code> value of the annotated element. Otherwise, there is
-	 * no default value.
+	 * The specified values are concatenated into a comma delimited list to
+	 * become the value of the {@code default} attribute of the generated
+	 * {@code AD} element.
+	 * 
+	 * <p>
+	 * If not specified, if the annotated member is an annotation element that
+	 * has a {@code default} value, then the value of this element is the
+	 * {@code default} value of the annotated element. Otherwise, there is no
+	 * default value.
 	 * 
 	 * @see "The default attribute of the AD element of a Meta Type Resource."
 	 */
