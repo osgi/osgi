@@ -1440,16 +1440,6 @@ female=Female</programlisting>
     specification.</para>
   </section>
 
-  <section>
-    <title>Changes</title>
-
-    <itemizedlist>
-      <listitem>
-        <para>Changed vector references to list.</para>
-      </listitem>
-    </itemizedlist>
-  </section>
-
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.metatype.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.metatype.annotations.xml"/>
@@ -1465,5 +1455,15 @@ female=Female</programlisting>
       Directory services</title>Timothy Howes et. al. ISBN 1-57870-070-1,
       MacMillan Technical publishing.</bibliomixed>
     </bibliolist>
+  </section>
+
+  <section>
+    <title>Changes</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>Changed vector references to list.</para>
+      </listitem>
+    </itemizedlist>
   </section>
 </chapter>
