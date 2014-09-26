@@ -413,7 +413,11 @@
 
     <para>The Meta Type Service can therefore be used to retrieve meta type
     information for bundles which contain Meta Type resources or which provide
-    <code>MetaTypeProvider</code> objects and/or services.</para>
+    <code>MetaTypeProvider</code> objects and/or services. If multiple sources
+    define the same Object Class Definition, the Meta Type service must select
+    which source to use. Meta Type Provider services must take precedence over
+    Managed Service [Factory] objects implementing
+    <code>MetaTypeProvider</code> or Meta Type Resources.</para>
 
     <para>The <code>MetaTypeService</code> interface has a single
     method:</para>
@@ -1479,6 +1483,13 @@ female=Female</programlisting>
         ManagedService and ManagedServiceFactory service objects that
         implement MetaTypeProvider if no meta type resources are found in the
         bundle.</para>
+      </listitem>
+
+      <listitem>
+        <para>Clarify that if multiple sources define the same Object Class
+        Definition, that Meta Type Provider services must take precedence over
+        Managed Service [Factory] objects implementing
+        <code>MetaTypeProvider</code> or Meta Type Resources.</para>
       </listitem>
     </itemizedlist>
   </section>
