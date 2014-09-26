@@ -385,8 +385,10 @@
         <code>ManagedService</code> and <code>ManagedServiceFactory</code>
         service objects can optionally implement the
         <code>MetaTypeProvider</code> interface. The Meta Type Service will
-        only search for <code>MetaTypeProvider</code> objects if no meta type
-        resources are found in the bundle.</para>
+        only search for <code>ManagedService</code> and
+        <code>ManagedServiceFactory</code> service objects that implement
+        <code>MetaTypeProvider</code> if no meta type resources are found in
+        the bundle.</para>
       </listitem>
 
       <listitem>
@@ -411,8 +413,10 @@
 
     <para>The Meta Type Service can therefore be used to retrieve meta type
     information for bundles which contain Meta Type resources or which provide
-    their own <code>MetaTypeProvider</code> objects. The
-    <code>MetaTypeService</code> interface has a single method:</para>
+    <code>MetaTypeProvider</code> objects and/or services.</para>
+
+    <para>The <code>MetaTypeService</code> interface has a single
+    method:</para>
 
     <itemizedlist>
       <listitem>
@@ -1468,6 +1472,13 @@ female=Female</programlisting>
         <code>Char</code> to <code>Character</code> to conform with other OSGi
         schema and allowing some more flexibility in ordering of
         elements.</para>
+      </listitem>
+
+      <listitem>
+        <para>Clarified that Meta Type Service will only search for
+        ManagedService and ManagedServiceFactory service objects that
+        implement MetaTypeProvider if no meta type resources are found in the
+        bundle.</para>
       </listitem>
     </itemizedlist>
   </section>
