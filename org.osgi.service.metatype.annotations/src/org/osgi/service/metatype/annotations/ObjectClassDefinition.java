@@ -32,6 +32,10 @@ import java.lang.annotation.Target;
  * annotated.
  * 
  * <p>
+ * This annotation may only be used on annotation types and interface types. Use
+ * on concrete or abstract class types is unsupported.
+ * 
+ * <p>
  * This annotation is not processed at runtime. It must be processed by tools
  * and used to generate a Meta Type Resource document for the bundle.
  * 
