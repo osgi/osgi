@@ -33,7 +33,7 @@ import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanHost;
 
 /**
- *
+ * EnOcean host implementation.
  */
 public class EnOceanHostImpl extends Thread implements EnOceanHost {
 

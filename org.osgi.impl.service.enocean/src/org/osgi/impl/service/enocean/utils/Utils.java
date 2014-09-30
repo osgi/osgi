@@ -17,7 +17,7 @@
 package org.osgi.impl.service.enocean.utils;
 
 /**
- *
+ * Utils class that contains many methods for manipulating byte[].
  */
 public class Utils {
 	private static byte[]	crc8_table	= new byte[] {

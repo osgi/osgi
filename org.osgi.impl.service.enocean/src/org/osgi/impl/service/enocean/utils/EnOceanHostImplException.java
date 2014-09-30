@@ -17,7 +17,7 @@
 package org.osgi.impl.service.enocean.utils;
 
 /**
- *
+ * EnOcean host implementation exception.
  */
 public class EnOceanHostImplException extends Exception {
 

@@ -17,7 +17,7 @@
 package org.osgi.impl.service.enocean.utils;
 
 /**
- * 
+ * EnOcean logger.
  */
 public final class Logger {
 

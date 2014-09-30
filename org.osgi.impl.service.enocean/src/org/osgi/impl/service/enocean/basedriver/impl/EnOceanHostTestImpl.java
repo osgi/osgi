@@ -36,7 +36,7 @@ import org.osgi.service.enocean.descriptions.EnOceanMessageDescriptionSet;
 import org.osgi.test.cases.enoceansimulation.teststep.TestStep;
 
 /**
- *
+ * EnOcean host implementation fir test purpose.
  */
 public class EnOceanHostTestImpl extends EnOceanHostImpl {
 

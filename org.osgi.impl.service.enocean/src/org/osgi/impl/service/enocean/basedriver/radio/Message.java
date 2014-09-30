@@ -22,7 +22,7 @@ import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.enocean.EnOceanMessage;
 
 /**
- *
+ * EnOcean message implementation.
  */
 public abstract class Message implements EnOceanMessage {
 
