@@ -30,6 +30,7 @@ import org.osgi.service.resourcemonitoring.monitor.ThreadMonitor;
  * instances are created by calling the
  * {@link #createContext(String, ResourceContext)} method.
  * 
+ * @version 1.0
  * @author $Id$
  */
 public interface ResourceMonitoringService {

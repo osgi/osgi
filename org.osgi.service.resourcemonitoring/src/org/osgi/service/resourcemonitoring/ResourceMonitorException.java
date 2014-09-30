@@ -19,6 +19,7 @@ package org.osgi.service.resourcemonitoring;
 /**
  * Resource Monitor Exception reports an invalid usage of a monitor.
  * 
+ * @version 1.0
  * @author $Id$
  */
 public class ResourceMonitorException extends Exception {

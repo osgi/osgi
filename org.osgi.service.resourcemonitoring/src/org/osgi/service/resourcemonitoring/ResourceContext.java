@@ -38,6 +38,7 @@ import org.osgi.framework.Bundle;
  * OSGi service.
  * </p>
  * 
+ * @version 1.0
  * @author $Id$
  */
 public interface ResourceContext {

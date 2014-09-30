@@ -28,6 +28,7 @@ package org.osgi.service.resourcemonitoring;
  * MUST be unique (two Resource Monitor Factory instances MUST not have the same
  * type).
  * 
+ * @version 1.0
  * @author $Id$
  */
 public interface ResourceMonitorFactory {

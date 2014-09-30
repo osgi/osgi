@@ -33,6 +33,7 @@ package org.osgi.service.resourcemonitoring;
  * Resource Context instance.</li>
  * </ul>
  * 
+ * @version 1.0
  * @author $Id$
  */
 public class ResourceContextEvent {

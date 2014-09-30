@@ -74,6 +74,7 @@ import org.osgi.framework.ServiceListener;
  * {@link ServiceListener}.
  * </p>
  * 
+ * @version 1.0
  * @author $Id$
  */
 public interface ResourceListener {

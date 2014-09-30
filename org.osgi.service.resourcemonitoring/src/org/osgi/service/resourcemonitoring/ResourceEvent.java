@@ -29,6 +29,7 @@ package org.osgi.service.resourcemonitoring;
  * 
  * @see ResourceListener
  * 
+ * @version 1.0
  * @author $Id$
  */
 public class ResourceEvent {

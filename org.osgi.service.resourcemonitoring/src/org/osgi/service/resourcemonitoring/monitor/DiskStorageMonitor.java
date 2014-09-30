@@ -26,6 +26,7 @@ import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
  * DiskStorageMonitor instance monitors and limits the persistent storage of the
  * bundle belonging to the {@link ResourceContext}
  * 
+ * @version 1.0
  * @author $Id$
  */
 public interface DiskStorageMonitor extends ResourceMonitor {

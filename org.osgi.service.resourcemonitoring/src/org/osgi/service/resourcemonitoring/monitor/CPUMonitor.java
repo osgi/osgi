@@ -21,10 +21,11 @@ import org.osgi.service.resourcemonitoring.ResourceMonitor;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
 
 /**
- * A {@link ResourceMonitor} for the {@link ResourceMonitoringService#RES_TYPE_CPU}
- * resource type. CPUMonitor instance monitors the CPU consumed by a
- * {@link ResourceContext} instance.
+ * A {@link ResourceMonitor} for the
+ * {@link ResourceMonitoringService#RES_TYPE_CPU} resource type. CPUMonitor
+ * instance monitors the CPU consumed by a {@link ResourceContext} instance.
  * 
+ * @version 1.0
  * @author $Id$
  */
 public interface CPUMonitor extends ResourceMonitor {
