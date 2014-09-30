@@ -20,7 +20,10 @@ import org.osgi.service.enocean.EnOceanChannel;
 import org.osgi.service.enocean.EnOceanException;
 
 /**
- *
+ * This interface represents an EnOcean Message Description.
+ * 
+ * @version 1.0
+ * @author $Id$
  */
 public interface EnOceanMessageDescription {
 

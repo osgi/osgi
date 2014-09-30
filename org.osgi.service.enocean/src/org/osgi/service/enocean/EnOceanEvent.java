@@ -18,6 +18,9 @@ package org.osgi.service.enocean;
 
 /**
  * EnOcean's event.
+ * 
+ * @version 1.0
+ * @author $Id$
  */
 public final class EnOceanEvent {
 
