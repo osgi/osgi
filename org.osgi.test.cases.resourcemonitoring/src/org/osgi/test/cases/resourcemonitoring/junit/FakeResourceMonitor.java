@@ -6,7 +6,9 @@ import org.osgi.service.resourcemonitoring.ResourceMonitor;
 import org.osgi.service.resourcemonitoring.ResourceMonitorException;
 
 /**
- *
+ * A fake resource monitor.
+ * 
+ * @author $Id$
  */
 public class FakeResourceMonitor implements ResourceMonitor {
 

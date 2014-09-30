@@ -9,7 +9,9 @@ import org.osgi.service.resourcemonitoring.ResourceContextEvent;
 import org.osgi.service.resourcemonitoring.ResourceContextListener;
 
 /**
- *
+ * A test resource context listener.
+ * 
+ * @author $Id$
  */
 public class TestResourceContextListener implements ResourceContextListener {
 

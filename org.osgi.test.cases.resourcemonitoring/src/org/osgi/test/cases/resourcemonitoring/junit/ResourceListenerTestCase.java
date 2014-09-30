@@ -22,6 +22,8 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
  * see Conformance Tests description.odt file.
+ * 
+ * @author $Id$
  */
 public class ResourceListenerTestCase extends DefaultTestBundleControl
 		implements ResourceListener {

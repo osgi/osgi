@@ -13,7 +13,9 @@ import org.osgi.service.resourcemonitoring.ResourceMonitorException;
 import org.osgi.service.resourcemonitoring.ResourceMonitorFactory;
 
 /**
- *
+ * A fake resource monitor factory.
+ * 
+ * @author $Id$
  */
 public class FakeResourceMonitorFactory implements ResourceMonitorFactory,
 		ResourceContextListener {

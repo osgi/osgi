@@ -21,7 +21,6 @@ import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
  * and the
  * 
  * @author mpcy8647
- * 
  */
 public class PersistenceManager implements BundleListener {
 
