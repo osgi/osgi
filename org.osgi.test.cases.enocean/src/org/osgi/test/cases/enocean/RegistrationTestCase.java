@@ -37,7 +37,7 @@ public class RegistrationTestCase extends AbstractEnOceanTestCase {
 		String lastServiceEvent = devices.waitForService();
 		Logger.d("Device added, lastServiceEvent: " + lastServiceEvent);
 		assertNotNull("Timeout reached.", lastServiceEvent);
-		assertNotNull("Timeout reached.", lastServiceEvent);
+
 		// Device modified (profile)
 		lastServiceEvent = devices.waitForService();
 		Logger.d("Device modified (profile), lastServiceEvent: " + lastServiceEvent);
