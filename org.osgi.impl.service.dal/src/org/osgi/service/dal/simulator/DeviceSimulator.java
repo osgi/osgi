@@ -36,14 +36,14 @@ public interface DeviceSimulator {
 	public Device registerDevice(Dictionary deviceProps, Dictionary[] functionProps) throws NullPointerException, IllegalArgumentException, IllegalStateException;
 
 	/**
-	 * Forces the function with the given identifier to publish an event.
+	 * Forces the function with the given class name to publish an event.
 	 * 
-	 * @param functionUID The function identifier.
+	 * @param functionClassName The function class name.
 	 * @param propertyName The function property name.
 	 * 
 	 * @throws IllegalArgumentException If the property is not supported by the
-	 *         function or the function identifier points to a missing function.
+	 *         function or the function class name points to a missing function.
 	 */
-	public void publishEvent(String functionUID, String propertyName) throws IllegalArgumentException;
+	public void publishEvent(String functionClassName, String propertyName) throws IllegalArgumentException;
 
 }

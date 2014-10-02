@@ -22,7 +22,6 @@ import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.PropertyMetadata;
-import org.osgi.test.cases.step.TestStep;
 
 /**
  * Test class validates the function.
@@ -36,6 +35,9 @@ public class FunctionTest extends AbstractDeviceTest {
 	 * @throws ClassNotFoundException If the function class cannot be loaded.
 	 */
 	public void testRegistrationClasses() throws ClassNotFoundException {
+		super.testStepProxy.execute(
+				DeviceTestSteps.STEP_ID_AVAILABLE_FUNCTION,
+				DeviceTestSteps.STEP_MESSAGE_AVAILABLE_FUNCTION);
 		Function[] functions = null;
 		try {
 			functions = super.getFunctions(Function.SERVICE_UID, null);
@@ -63,13 +65,27 @@ public class FunctionTest extends AbstractDeviceTest {
 	 *         LDAP filter.
 	 */
 	public void testRegistrationOrder() throws InvalidSyntaxException {
-		TestStep testStep = super.getTestStep();
-		String deviceID = testStep.execute(Commands.REGISTER_DEVICE_SINGLE_FUNCTION, null)[0];
-		long deviceServiceID = ((Long) super.getDevice(deviceID).getServiceProperty(Constants.SERVICE_ID)).longValue();
-		Function[] functions = getFunctions(Function.SERVICE_DEVICE_UID, deviceID);
-		assertEquals("Only one function must be supported!", 1, functions.length);
-		long functionServiceID = ((Long) functions[0].getServiceProperty(Constants.SERVICE_ID)).longValue();
-		assertTrue("The function must be registered before the device!", functionServiceID < deviceServiceID);
+		super.deviceServiceListener.clear();
+		super.testStepProxy.execute(
+				DeviceTestSteps.STEP_ID_REGISTER_DEVICE_FUNCTION,
+				DeviceTestSteps.STEP_MESSAGE_REGISTER_DEVICE_FUNCTION);
+		ServiceEvent[] serviceEvents = super.deviceServiceListener.getEvents();
+		assertTrue(
+				"At least one device should be registered, but there are no events.",
+				serviceEvents.length > 0);
+		for (int i = 0; i < serviceEvents.length; i++) {
+			assertEquals(
+					"The event type must be registered.",
+					ServiceEvent.REGISTERED, serviceEvents[i].getType());
+			String deviceUID = (String) serviceEvents[i].getServiceReference().getProperty(Device.SERVICE_UID);
+			assertNotNull("The device unique identifier is missing.", deviceUID);
+			Function[] functions = getFunctions(Function.SERVICE_DEVICE_UID, deviceUID);
+			long deviceServiceID = ((Long) super.getDevice(deviceUID).getServiceProperty(Constants.SERVICE_ID)).longValue();
+			for (int ii = 0; ii < functions.length; ii++) {
+				long functionServiceID = ((Long) functions[ii].getServiceProperty(Constants.SERVICE_ID)).longValue();
+				assertTrue("The function must be registered before the device!", functionServiceID < deviceServiceID);
+			}
+		}
 	}
 
 	/**
@@ -84,31 +100,49 @@ public class FunctionTest extends AbstractDeviceTest {
 	 * @throws IllegalStateException If the test device is already removed.
 	 */
 	public void testUnregistrationOrder() throws InvalidSyntaxException, DeviceException, UnsupportedOperationException, IllegalStateException {
-		TestStep testStep = super.getTestStep();
-		String deviceID = testStep.execute(Commands.REGISTER_DEVICE_SINGLE_FUNCTION, null)[0];
-		Device device = super.getDevice(deviceID);
-		Function[] functions = getFunctions(Function.SERVICE_DEVICE_UID, deviceID);
-		assertEquals("Only one function must be supported!", 1, functions.length);
 		super.deviceServiceListener.clear();
-		device.remove();
-		ServiceEvent[] deviceServiceEvents = super.deviceServiceListener.getEvents();
-		assertTrue("There are no service event on device remove.", deviceServiceEvents.length > 0);
-		boolean isDeviceUnregistered = false;
-		boolean isFunctionUnregistered = false;
-		for (int i = 0; i < deviceServiceEvents.length; i++) {
-			if (ServiceEvent.UNREGISTERING != deviceServiceEvents[i].getType()) {
-				continue;
-			}
-			if (deviceID.equals(deviceServiceEvents[i].getServiceReference().getProperty(Device.SERVICE_UID))) {
-				assertFalse("The is already unregistered!", isDeviceUnregistered);
-				isDeviceUnregistered = true;
-			} else
-				if (functions[0].getServiceProperty(Function.SERVICE_UID).equals(
-						deviceServiceEvents[i].getServiceReference().getProperty(Function.SERVICE_UID))) {
-					assertTrue("The device must be unregistered first!", isDeviceUnregistered);
-					assertFalse("The function is already unregistered!", isFunctionUnregistered);
-					isFunctionUnregistered = true;
+		super.testStepProxy.execute(
+				DeviceTestSteps.STEP_ID_REGISTER_DEVICE_FUNCTION,
+				DeviceTestSteps.STEP_MESSAGE_REGISTER_DEVICE_FUNCTION);
+		ServiceEvent[] serviceEvents = super.deviceServiceListener.getEvents();
+		assertTrue(
+				"At least one device should be registered.",
+				serviceEvents.length > 0);
+		for (int i = 0; i < serviceEvents.length; i++) {
+			String deviceUID = (String) serviceEvents[i].getServiceReference().getProperty(Device.SERVICE_UID);
+			assertNotNull("The device unique identifier is missing.", deviceUID);
+			Device device = super.getDevice(deviceUID);
+			Function[] functions = getFunctions(Function.SERVICE_DEVICE_UID, deviceUID);
+			super.deviceServiceListener.clear();
+			TestServiceListener testServiceListener = new TestServiceListener(
+					super.getContext(), TestServiceListener.DEVICE_FUNCTION_FILTER);
+			try {
+				device.remove();
+				ServiceEvent[] deviceServiceEvents = testServiceListener.getEvents();
+				assertTrue("There are no service event on device remove.", deviceServiceEvents.length > 0);
+				for (int ii = 0; ii < functions.length; ii++) {
+					boolean isDeviceUnregistered = false;
+					boolean isFunctionUnregistered = false;
+					for (int iii = 0; iii < deviceServiceEvents.length; iii++) {
+						assertEquals(
+								"The event type must be unregistering.",
+								ServiceEvent.UNREGISTERING,
+								deviceServiceEvents[iii].getType());
+						if (deviceUID.equals(deviceServiceEvents[iii].getServiceReference().getProperty(Device.SERVICE_UID))) {
+							assertFalse("The device is already unregistered!", isDeviceUnregistered);
+							isDeviceUnregistered = true;
+						} else
+							if (functions[ii].getServiceProperty(Function.SERVICE_UID).equals(
+									deviceServiceEvents[iii].getServiceReference().getProperty(Function.SERVICE_UID))) {
+								assertTrue("The device must be unregistered first!", isDeviceUnregistered);
+								assertFalse("The function is already unregistered!", isFunctionUnregistered);
+								isFunctionUnregistered = true;
+							}
+					}
 				}
+			} finally {
+				testServiceListener.unregister();
+			}
 		}
 	}
 
@@ -116,6 +150,9 @@ public class FunctionTest extends AbstractDeviceTest {
 	 * Checks that all functions support all required properties.
 	 */
 	public void testRequiredFunctionProperties() {
+		super.testStepProxy.execute(
+				DeviceTestSteps.STEP_ID_AVAILABLE_FUNCTION,
+				DeviceTestSteps.STEP_MESSAGE_AVAILABLE_FUNCTION);
 		ServiceReference[] functionSRefs = getFunctionSRefs();
 		for (int i = 0; i < functionSRefs.length; i++) {
 			super.checkRequiredProperties(
@@ -129,6 +166,9 @@ public class FunctionTest extends AbstractDeviceTest {
 	 * value as {@link ServiceReference#getProperty(String)}.
 	 */
 	public void testFunctionProperties() {
+		super.testStepProxy.execute(
+				DeviceTestSteps.STEP_ID_AVAILABLE_FUNCTION,
+				DeviceTestSteps.STEP_MESSAGE_AVAILABLE_FUNCTION);
 		ServiceReference[] functionSRefs = getFunctionSRefs();
 		boolean compared = false;
 		for (int i = 0; i < functionSRefs.length; i++) {
@@ -155,6 +195,9 @@ public class FunctionTest extends AbstractDeviceTest {
 	 * Checks that function property value type is correct.
 	 */
 	public void testFunctionPropertyTypes() {
+		super.testStepProxy.execute(
+				DeviceTestSteps.STEP_ID_FUNCTIONS_ALL_PROPS,
+				DeviceTestSteps.STEP_MESSAGE_FUNCTIONS_ALL_PROPS);
 		checkFunctionPropertyType(Function.SERVICE_DESCRIPTION, new Class[] {String.class});
 		checkFunctionPropertyType(Function.SERVICE_DEVICE_UID, new Class[] {String.class});
 		checkFunctionPropertyType(Function.SERVICE_OPERATION_NAMES, new Class[] {String[].class});
@@ -172,6 +215,9 @@ public class FunctionTest extends AbstractDeviceTest {
 	 * @throws ClassNotFoundException If the function class cannot be find.
 	 */
 	public void testPropertyGetter() throws NoSuchMethodException, ClassNotFoundException {
+		super.testStepProxy.execute(
+				DeviceTestSteps.STEP_ID_PROPERTY_READABLE,
+				DeviceTestSteps.STEP_MESSAGE_PROPERTY_READABLE);
 		Function[] functions = getFunctions(
 				null, PropertyMetadata.ACCESS_READABLE);
 		for (int i = 0; i < functions.length; i++) {
@@ -191,6 +237,9 @@ public class FunctionTest extends AbstractDeviceTest {
 	 * @throws ClassNotFoundException If the function class cannot be find.
 	 */
 	public void testPropertySetters() throws NoSuchMethodException, ClassNotFoundException {
+		super.testStepProxy.execute(
+				DeviceTestSteps.STEP_ID_PROPERTY_WRITABLE,
+				DeviceTestSteps.STEP_MESSAGE_PROPERTY_WRITABLE);
 		Function[] functions = getFunctions(
 				null, PropertyMetadata.ACCESS_WRITABLE);
 		for (int i = 0; i < functions.length; i++) {
@@ -209,6 +258,9 @@ public class FunctionTest extends AbstractDeviceTest {
 	 * @throws ClassNotFoundException If the function class cannot be loaded.
 	 */
 	public void testOperations() throws ClassNotFoundException {
+		super.testStepProxy.execute(
+				DeviceTestSteps.STEP_ID_AVAILABLE_OPERATION,
+				DeviceTestSteps.STEP_MESSAGE_AVAILABLE_OPERATION);
 		Function[] functions = null;
 		try {
 			functions = super.getFunctions(Function.SERVICE_OPERATION_NAMES, null);

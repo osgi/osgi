@@ -27,7 +27,7 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class DeviceSimulatorImpl implements DeviceSimulator {
 
-	private static final Class[]	FUNCTION_CONSTRUCTOR_ARGS	= new Class[] {
+	private static final Class[]	FUNCTION_CONSTRUCTOR_ARGS		= new Class[] {
 																	Dictionary.class,
 																	BundleContext.class,
 																	ServiceTracker.class
@@ -40,13 +40,13 @@ public class DeviceSimulatorImpl implements DeviceSimulator {
 																	Timer.class
 																	};
 
-	private final BundleContext	bc;
+	private final BundleContext		bc;
 	private final ServiceTracker	eventAdminTracker;
 	private final Timer				timer;
-	private final Object		lock	= new Object();
+	private final Object			lock							= new Object();
 
-	private List				registeredDevices;
-	private ServiceRegistration	deviceSimulatorSReg;
+	private List					registeredDevices;
+	private ServiceRegistration		deviceSimulatorSReg;
 
 	/**
 	 * Constructs the device simulator implementation with the given arguments.
@@ -99,19 +99,19 @@ public class DeviceSimulatorImpl implements DeviceSimulator {
 		throw new IllegalStateException("The device simulator service is unregistred.");
 	}
 
-	public void publishEvent(String functionUID, String propertyName) {
+	public void publishEvent(String functionClassName, String propertyName) {
 		synchronized (this.lock) {
 			if (null == this.registeredDevices) {
 				throw new IllegalStateException("The device simulator service is unregistred.");
 			}
 			for (int i = 0, size = this.registeredDevices.size(); i < size; i++) {
-				SimulatedFunction function = ((SimulatedDevice) this.registeredDevices.get(i)).getFunction(functionUID);
-				if (null != function) {
-					function.publishEvent(propertyName);
+				SimulatedFunction[] functions = ((SimulatedDevice) this.registeredDevices.get(i)).getFunctions(functionClassName);
+				if (null != functions) {
+					functions[0].publishEvent(propertyName);
 					return;
 				}
 			}
-			throw new IllegalArgumentException("There is no function with the given identifier: " + functionUID);
+			throw new IllegalArgumentException("There is no function with the given class name: " + functionClassName);
 		}
 	}
 

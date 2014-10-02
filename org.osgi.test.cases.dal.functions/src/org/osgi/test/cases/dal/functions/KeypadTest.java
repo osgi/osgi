@@ -20,7 +20,14 @@ public final class KeypadTest extends AbstractFunctionTest {
 	 * Checks {@code Keypad} function events.
 	 */
 	public void testPropertyEvent() {
-		super.checkPropertyEvent(Keypad.class.getName(), Keypad.PROPERTY_KEY);
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_KEYPAD,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_KEYPAD);
+		super.checkPropertyEvent(
+				Keypad.class.getName(),
+				Keypad.PROPERTY_KEY,
+				FunctionsTestSteps.STEP_ID_EVENT_KEYPAD,
+				FunctionsTestSteps.STEP_MESSAGE_EVENT_KEYPAD);
 	}
 
 }

@@ -22,22 +22,20 @@ import org.osgi.service.dal.Function;
 /**
  * Test listener to track device and function related service events.
  */
-final class DeviceServiceListener implements ServiceListener {
+final class TestServiceListener implements ServiceListener {
 
-	private static final String	DEVICE_FILTER	=
-														"(|(" + Constants.OBJECTCLASS + '=' + Device.class.getName() + ")(" +
-																Constants.OBJECTCLASS + '=' + Function.class.getName() + "))";
+	public static final String	DEVICE_FILTER			= '(' + Constants.OBJECTCLASS + '=' + Device.class.getName() + ')';
+
+	public static final String	DEVICE_FUNCTION_FILTER	= "(|" + DEVICE_FILTER +
+																'(' + Constants.OBJECTCLASS + '=' + Function.class.getName() + "))";
 
 	private final List			events;
 	private final BundleContext	bc;
 
-	public DeviceServiceListener(BundleContext bc) {
+	public TestServiceListener(BundleContext bc, String filter) throws InvalidSyntaxException {
 		this.bc = bc;
 		this.events = new ArrayList();
-	}
-
-	public void register() throws InvalidSyntaxException {
-		this.bc.addServiceListener(this, DEVICE_FILTER);
+		this.bc.addServiceListener(this, filter);
 	}
 
 	public void unregister() {

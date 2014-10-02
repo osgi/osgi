@@ -26,6 +26,9 @@ public final class MeterTest extends AbstractFunctionTest {
 	 * @throws IllegalStateException If the function is removed.
 	 */
 	public void testTotal() throws IllegalStateException, DeviceException {
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_METER,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_METER);
 		Function[] meters = super.getFunctions(Meter.class.getName());
 		boolean check = false;
 		for (int i = 0; i < meters.length; i++) {
@@ -51,6 +54,9 @@ public final class MeterTest extends AbstractFunctionTest {
 	 * @throws IllegalStateException If the function is removed.
 	 */
 	public void testCurrent() throws IllegalStateException, DeviceException {
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_METER,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_METER);
 		Function[] meters = super.getFunctions(Meter.class.getName());
 		boolean check = false;
 		for (int i = 0; i < meters.length; i++) {
@@ -79,6 +85,9 @@ public final class MeterTest extends AbstractFunctionTest {
 	 * @throws IllegalStateException If the function is removed.
 	 */
 	public void testResetTotal() throws IllegalStateException, DeviceException {
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_METER,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_METER);
 		Function[] meters = super.getFunctions(Meter.class.getName());
 		boolean check = false;
 		for (int i = 0; i < meters.length; i++) {
@@ -97,14 +106,28 @@ public final class MeterTest extends AbstractFunctionTest {
 	 * Checks {@code Meter} current consumption events.
 	 */
 	public void testCurrentPropertyEvent() {
-		super.checkPropertyEvent(Meter.class.getName(), Meter.PROPERTY_CURRENT);
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_METER,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_METER);
+		super.checkPropertyEvent(
+				Meter.class.getName(),
+				Meter.PROPERTY_CURRENT,
+				FunctionsTestSteps.STEP_ID_EVENT_METER_CURRENT,
+				FunctionsTestSteps.STEP_MESSAGE_EVENT_METER_CURRENT);
 	}
 
 	/**
 	 * Checks {@code Meter} total consumption events.
 	 */
 	public void testTotalPropertyEvent() {
-		super.checkPropertyEvent(Meter.class.getName(), Meter.PROPERTY_TOTAL);
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_METER,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_METER);
+		super.checkPropertyEvent(
+				Meter.class.getName(),
+				Meter.PROPERTY_TOTAL,
+				FunctionsTestSteps.STEP_ID_EVENT_METER_TOTAL,
+				FunctionsTestSteps.STEP_MESSAGE_EVENT_METER_TOTAL);
 	}
 
 }

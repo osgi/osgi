@@ -11,10 +11,11 @@ package org.osgi.test.cases.dal;
 
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.dal.Device;
 import org.osgi.service.dal.DeviceException;
-import org.osgi.test.cases.step.TestStep;
+import org.osgi.test.support.step.TestStep;
 
 /**
  * Test class validates the device operations and properties.
@@ -22,12 +23,15 @@ import org.osgi.test.cases.step.TestStep;
 public class DeviceTest extends AbstractDeviceTest {
 
 	/**
-	 * Tests device remove operation. The test method expects at least one
+	 * Tests device remove operation. The test method requires at least one
 	 * device with remove support.
 	 * 
 	 * @throws DeviceException An error while removing the device.
 	 */
 	public void testRemoveDevice() throws DeviceException {
+		super.testStepProxy.execute(
+				DeviceTestSteps.STEP_ID_AVAILABLE_DEVICE,
+				DeviceTestSteps.STEP_MESSAGE_AVAILABLE_DEVICE);
 		ServiceReference[] deviceSRefs = getDeviceSRefs();
 		boolean isRemoved = false;
 		for (int i = 0; i < deviceSRefs.length; i++) {
@@ -55,14 +59,30 @@ public class DeviceTest extends AbstractDeviceTest {
 	 * @throws DeviceException An error while removing the device.
 	 */
 	public void testAddDevice() throws InvalidSyntaxException, DeviceException {
-		String deviceUID = super.getTestStep().execute(Commands.REGISTER_DEVICE, null)[0];
-		super.getDevice(deviceUID).remove();
+		super.deviceServiceListener.clear();
+		super.testStepProxy.execute(
+				DeviceTestSteps.STEP_ID_REGISTER_DEVICE,
+				DeviceTestSteps.STEP_MESSAGE_REGISTER_DEVICE);
+		ServiceEvent[] serviceEvents = super.deviceServiceListener.getEvents();
+		assertTrue(
+				"At least one device should be registered, but there are no events.",
+				serviceEvents.length > 0);
+		for (int i = 0; i < serviceEvents.length; i++) {
+			assertEquals(
+					"The event type must be registered.",
+					ServiceEvent.REGISTERED, serviceEvents[i].getType());
+			String deviceUID = (String) serviceEvents[i].getServiceReference().getProperty(Device.SERVICE_UID);
+			assertNotNull("The device unique identifier is missing.", deviceUID);
+		}
 	}
 
 	/**
 	 * Tests the device properties with device service properties.
 	 */
 	public void testDeviceProperties() {
+		super.testStepProxy.execute(
+				DeviceTestSteps.STEP_ID_AVAILABLE_DEVICE,
+				DeviceTestSteps.STEP_MESSAGE_AVAILABLE_DEVICE);
 		ServiceReference[] deviceSRefs = getDeviceSRefs();
 		boolean compared = false;
 		for (int i = 0; i < deviceSRefs.length; i++) {
@@ -89,6 +109,9 @@ public class DeviceTest extends AbstractDeviceTest {
 	 * Tests the types of the device properties.
 	 */
 	public void testDevicePropertyTypes() {
+		super.testStepProxy.execute(
+				DeviceTestSteps.STEP_ID_DEVICES_ALL_PROPS,
+				DeviceTestSteps.STEP_MESSAGE_DEVICES_ALL_PROPS);
 		checkDevicePropertyType(Device.SERVICE_DESCRIPTION, new Class[] {String.class});
 		checkDevicePropertyType(Device.SERVICE_DRIVER, new Class[] {String.class});
 		checkDevicePropertyType(Device.SERVICE_FIRMWARE_VENDOR, new Class[] {String.class});
@@ -109,6 +132,9 @@ public class DeviceTest extends AbstractDeviceTest {
 	 * Tests the availability of the required device properties.
 	 */
 	public void testRequiredDeviceProperties() {
+		super.testStepProxy.execute(
+				DeviceTestSteps.STEP_ID_AVAILABLE_DEVICE,
+				DeviceTestSteps.STEP_MESSAGE_AVAILABLE_DEVICE);
 		final ServiceReference[] deviceSRefs = getDeviceSRefs();
 		for (int i = 0; i < deviceSRefs.length; i++) {
 			super.checkRequiredProperties(

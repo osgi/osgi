@@ -20,7 +20,14 @@ public final class AlarmTest extends AbstractFunctionTest {
 	 * Checks {@code Alarm} function events.
 	 */
 	public void testPropertyEvent() {
-		super.checkPropertyEvent(Alarm.class.getName(), Alarm.PROPERTY_ALARM);
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_ALARM,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_ALARM);
+		super.checkPropertyEvent(
+				Alarm.class.getName(),
+				Alarm.PROPERTY_ALARM,
+				FunctionsTestSteps.STEP_ID_EVENT_ALARM,
+				FunctionsTestSteps.STEP_MESSAGE_EVENT_ALARM);
 	}
 
 }

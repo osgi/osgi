@@ -27,7 +27,7 @@ public final class WakeUpTest extends AbstractFunctionTest {
 	private static final long	WAKE_UP_INTERVAL	= Long.getLong(
 															"org.osgi.test.cases.dal.wakeUpInterval", 2000).longValue();
 
-	private static final String	MILLIS	= SIUnits.PREFIX_MILLI + SIUnits.SECOND;
+	private static final String	MILLIS				= SIUnits.PREFIX_MILLI + SIUnits.SECOND;
 
 	/**
 	 * Validates the wake up interval support.
@@ -36,6 +36,9 @@ public final class WakeUpTest extends AbstractFunctionTest {
 	 * @throws DeviceException If operation error is available.
 	 */
 	public void testWakeUpInterval() throws IllegalStateException, DeviceException {
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_WAKE_UP,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_WAKE_UP);
 		Function[] wakeUpFunctions = super.getFunctions(WakeUp.class.getName());
 		final FunctionEventHandler eventHandler = new FunctionEventHandler(super.getContext());
 		boolean check = false;

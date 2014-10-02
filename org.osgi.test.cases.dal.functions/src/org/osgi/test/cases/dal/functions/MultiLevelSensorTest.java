@@ -26,6 +26,9 @@ public final class MultiLevelSensorTest extends AbstractFunctionTest {
 	 * @throws DeviceException If operation error is available.
 	 */
 	public void testGetData() throws IllegalStateException, DeviceException {
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_MLS,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_MLS);
 		Function[] multiLevelSensors = super.getFunctions(MultiLevelSensor.class.getName());
 		boolean check = false;
 		for (int i = 0; i < multiLevelSensors.length; i++) {
@@ -48,7 +51,14 @@ public final class MultiLevelSensorTest extends AbstractFunctionTest {
 	 * Checks {@code MultiLevelSensor} function events.
 	 */
 	public void testPropertyEvent() {
-		super.checkPropertyEvent(MultiLevelSensor.class.getName(), MultiLevelSensor.PROPERTY_DATA);
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_MLS,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_MLS);
+		super.checkPropertyEvent(
+				MultiLevelSensor.class.getName(),
+				MultiLevelSensor.PROPERTY_DATA,
+				FunctionsTestSteps.STEP_ID_EVENT_MLS,
+				FunctionsTestSteps.STEP_MESSAGE_EVENT_MLS);
 	}
 
 }

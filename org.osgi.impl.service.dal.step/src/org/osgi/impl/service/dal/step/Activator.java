@@ -7,13 +7,13 @@
  * Amended and Restated as of May 23, 2011.
  */
 
-package org.osgi.test.cases.step.dal;
+package org.osgi.impl.service.dal.step;
 
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.dal.simulator.DeviceSimulator;
-import org.osgi.test.cases.step.TestStep;
+import org.osgi.test.support.step.TestStep;
 import org.osgi.util.tracker.ServiceTracker;
 
 /**
@@ -21,18 +21,19 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class Activator implements BundleActivator {
 
-	private ServiceRegistration	userInteractionSReg;
+	private ServiceRegistration	testStepSReg;
 	private ServiceTracker		deviceSimulatorTracker;
 
 	public void start(BundleContext bc) throws Exception {
 		this.deviceSimulatorTracker = new ServiceTracker(bc, DeviceSimulator.class.getName(), null);
 		this.deviceSimulatorTracker.open();
-		this.userInteractionSReg = bc.registerService(
-				TestStep.class.getName(), new TestStepImpl(deviceSimulatorTracker), null);
+		this.testStepSReg = bc.registerService(
+				TestStep.class.getName(), new TestStepImpl(deviceSimulatorTracker),
+				null);
 	}
 
 	public void stop(BundleContext bc) throws Exception {
-		this.userInteractionSReg.unregister();
+		this.testStepSReg.unregister();
 		this.deviceSimulatorTracker.close();
 	}
 

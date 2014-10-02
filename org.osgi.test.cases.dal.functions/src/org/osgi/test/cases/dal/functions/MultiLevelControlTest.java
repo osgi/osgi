@@ -29,6 +29,9 @@ public final class MultiLevelControlTest extends AbstractFunctionTest {
 	 * @throws DeviceException If operation error is available.
 	 */
 	public void testSetData() throws IllegalStateException, DeviceException {
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_MLC,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_MLC);
 		Function[] multiLevelControls = super.getFunctions(MultiLevelControl.class.getName());
 		boolean check = false;
 		for (int i = 0; i < multiLevelControls.length; i++) {
@@ -59,7 +62,14 @@ public final class MultiLevelControlTest extends AbstractFunctionTest {
 	 * Checks {@code MultiLevelControl} function events.
 	 */
 	public void testPropertyEvent() {
-		super.checkPropertyEvent(MultiLevelControl.class.getName(), MultiLevelControl.PROPERTY_DATA);
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_MLC,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_MLC);
+		super.checkPropertyEvent(
+				MultiLevelControl.class.getName(),
+				MultiLevelControl.PROPERTY_DATA,
+				FunctionsTestSteps.STEP_ID_EVENT_MLC,
+				FunctionsTestSteps.STEP_MESSAGE_EVENT_MLC);
 	}
 
 	private LevelData[] getMultiLevelTestData(PropertyMetadata propertyMetadata) {

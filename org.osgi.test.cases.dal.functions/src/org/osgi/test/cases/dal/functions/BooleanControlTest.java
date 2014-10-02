@@ -28,6 +28,9 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 	 * @throws DeviceException If operation error is available.
 	 */
 	public void testSetTrue() throws IllegalStateException, DeviceException {
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_BC,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BC);
 		Function[] booleanControls = super.getFunctions(BooleanControl.class.getName());
 		boolean check = false;
 		for (int i = 0; i < booleanControls.length; i++) {
@@ -50,6 +53,9 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 	 * @throws DeviceException If operation error is available.
 	 */
 	public void testSetFalse() throws IllegalStateException, DeviceException {
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_BC,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BC);
 		Function[] booleanControls = super.getFunctions(BooleanControl.class.getName());
 		boolean check = false;
 		for (int i = 0; i < booleanControls.length; i++) {
@@ -59,7 +65,7 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 				check = true;
 				super.assertEquals(false, currentBooleanControl.getData());
 			} catch (UnsupportedOperationException uoe) {
-				//expected, go ahead
+				// expected, go ahead
 			}
 		}
 		assertTrue("At least one Boolean Control must support setFalse operation.", check);
@@ -72,6 +78,9 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 	 * @throws DeviceException If operation error is available.
 	 */
 	public void testReverse() throws IllegalStateException, DeviceException {
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_BC,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BC);
 		Function[] booleanControls = super.getFunctions(BooleanControl.class.getName());
 		boolean check = false;
 		for (int i = 0; i < booleanControls.length; i++) {
@@ -98,6 +107,9 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 	 *         operation.
 	 */
 	public void testPropertyEvent() throws UnsupportedOperationException, IllegalStateException, DeviceException {
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_BC,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BC);
 		final Function[] functions = getFunctions(
 				BooleanControl.class.getName(), PropertyMetadata.ACCESS_EVENTABLE);
 		final BooleanControl booleanControl = (BooleanControl) functions[0];

@@ -23,20 +23,34 @@ import org.osgi.service.dal.Device;
 import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.DevicePermission;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.step.TestStepProxy;
 
 /**
  * Test class validates the device operations and properties.
  */
 public class DeviceSecureTest extends DefaultTestBundleControl {
 
+	private TestStepProxy	testStepProxy;
+
+	protected void setUp() throws Exception {
+		this.testStepProxy = new TestStepProxy(super.getContext());
+	}
+
+	protected void tearDown() throws Exception {
+		this.testStepProxy.close();
+	}
+
 	/**
-	 * Tests device remove operation in security mode. The test method expects
+	 * Tests device remove operation in security mode. The test method requires
 	 * at least one device with remove support.
 	 * 
 	 * @throws PrivilegedActionException If an expected error is available while
 	 *         removing the device.
 	 */
 	public void testRemoveDeviceAllow() throws PrivilegedActionException {
+		this.testStepProxy.execute(
+				SecureDeviceTestSteps.STEP_ID_AVAILABLE_DEVICE,
+				SecureDeviceTestSteps.STEP_MESSAGE_AVAILABLE_DEVICE);
 		AccessControlContext acc = prepareACC(
 				new DevicePermission("*", DevicePermission.REMOVE));
 		ServiceReference[] deviceSRefs = getDeviceSRefs();
@@ -65,12 +79,15 @@ public class DeviceSecureTest extends DefaultTestBundleControl {
 
 	/**
 	 * Tests the security protection of the device remove operation. The test
-	 * method expects at least one device with remove support.
+	 * method requires at least one device with remove support.
 	 * 
 	 * @throws PrivilegedActionException If an unexpected error is available
 	 *         while removing the device.
 	 */
 	public void testRemoveDeviceDeny() throws PrivilegedActionException {
+		this.testStepProxy.execute(
+				SecureDeviceTestSteps.STEP_ID_AVAILABLE_DEVICE,
+				SecureDeviceTestSteps.STEP_MESSAGE_AVAILABLE_DEVICE);
 		AccessControlContext acc = prepareACC(null);
 		ServiceReference[] deviceSRefs = getDeviceSRefs();
 		boolean securityCheck = false;

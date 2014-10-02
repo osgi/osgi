@@ -23,9 +23,8 @@ import org.osgi.service.dal.FunctionEvent;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.data.BooleanData;
 import org.osgi.service.dal.functions.data.LevelData;
-import org.osgi.test.cases.step.TestStep;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.test.support.step.TestStepProxy;
 
 /**
  * Common class for all Device Abstraction Layer function TCs. It contains some
@@ -34,44 +33,26 @@ import org.osgi.util.tracker.ServiceTracker;
 public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 
 	/**
-	 * The service tracker tracks the test stepper service.
+	 * The manual test steps are sent to the test step proxy.
 	 */
-	private final ServiceTracker	testStepTracker;
+	protected TestStepProxy	testStepProxy;
 
 	/**
-	 * The constructor initializes the stepper tracker.
-	 */
-	public AbstractFunctionTest() {
-		this.testStepTracker = new ServiceTracker(super.getContext(), TestStep.class.getName(), null);
-	}
-
-	/**
-	 * Opens the trackers.
+	 * Initializes the test step proxy.
 	 * 
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#setUp()
 	 */
 	protected void setUp() throws Exception {
-		this.testStepTracker.open();
+		this.testStepProxy = new TestStepProxy(super.getContext());
 	}
 
 	/**
-	 * Closes the trackers.
+	 * Closes the test step proxy.
 	 * 
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#tearDown()
 	 */
 	protected void tearDown() throws Exception {
-		this.testStepTracker.close();
-	}
-
-	/**
-	 * Returns the test stepper service.
-	 * 
-	 * @return The test stepper service.
-	 */
-	protected TestStep getTestStep() {
-		TestStep testStep = (TestStep) this.testStepTracker.getService();
-		assertNotNull("The test step service is misisng.", testStep);
-		return testStep;
+		this.testStepProxy.close();
 	}
 
 	/**
@@ -183,18 +164,18 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 	 * 
 	 * @param functionClassName The function class name.
 	 * @param propName The function property name.
+	 * @param stepId The test step identifier.
+	 * @param stepMessage The test step message.
 	 */
-	protected void checkPropertyEvent(String functionClassName, String propName) {
+	protected void checkPropertyEvent(String functionClassName, String propName, String stepId, String stepMessage) {
 		final Function[] functions = getFunctions(
 				functionClassName, PropertyMetadata.ACCESS_EVENTABLE);
 		final String functionUID = (String) functions[0].getServiceProperty(Function.SERVICE_UID);
 		final FunctionEventHandler eventHandler = new FunctionEventHandler(super.getContext());
-		final TestStep testStep = getTestStep();
 		eventHandler.register(functionUID, propName);
 		final FunctionEvent functionEvent;
 		try {
-			testStep.execute(Commands.PUBLISH_PROPERTY_EVENT,
-					new String[] {functionUID, propName});
+			this.testStepProxy.execute(stepId, stepMessage);
 			functionEvent = eventHandler.getEvents(1)[0];
 		} finally {
 			eventHandler.unregister();
@@ -225,7 +206,9 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 		try {
 			ServiceReference[] functionSRefs = super.getContext().getServiceReferences(
 					functionClass, '(' + Function.SERVICE_PROPERTY_NAMES + "=*)");
-			assertNotNull("There are no functions.", functionSRefs);
+			assertNotNull(
+					"There are no functions of type: " + functionClass + " and property access: " + propertyAccess,
+					functionSRefs);
 			List result = new ArrayList(functionSRefs.length);
 			for (int i = 0; i < functionSRefs.length; i++) {
 				final Function function = (Function) super.getContext().getService(functionSRefs[i]);

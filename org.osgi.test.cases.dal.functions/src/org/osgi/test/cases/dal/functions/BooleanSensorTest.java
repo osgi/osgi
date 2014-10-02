@@ -26,6 +26,9 @@ public final class BooleanSensorTest extends AbstractFunctionTest {
 	 * @throws DeviceException If operation error is available.
 	 */
 	public void testGetData() throws IllegalStateException, DeviceException {
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_BS,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BS);
 		Function[] booleanSensors = super.getFunctions(BooleanSensor.class.getName());
 		boolean check = false;
 		for (int i = 0; i < booleanSensors.length; i++) {
@@ -46,7 +49,14 @@ public final class BooleanSensorTest extends AbstractFunctionTest {
 	 * Checks {@code BooleanSensor} function events.
 	 */
 	public void testPropertyEvent() {
-		super.checkPropertyEvent(BooleanSensor.class.getName(), BooleanSensor.PROPERTY_DATA);
+		super.testStepProxy.execute(
+				FunctionsTestSteps.STEP_ID_AVAILABLE_BS,
+				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BS);
+		super.checkPropertyEvent(
+				BooleanSensor.class.getName(),
+				BooleanSensor.PROPERTY_DATA,
+				FunctionsTestSteps.STEP_ID_EVENT_BS,
+				FunctionsTestSteps.STEP_MESSAGE_EVENT_BS);
 	}
 
 }

@@ -9,13 +9,15 @@
 
 package org.osgi.impl.service.dal;
 
+import java.util.ArrayList;
 import java.util.Dictionary;
+import java.util.List;
 import org.osgi.framework.BundleContext;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.service.dal.Device;
 import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.DevicePermission;
-import org.osgi.service.dal.Function;
 
 final class SimulatedDevice extends SimulatedService implements Device, ServiceFactory {
 
@@ -52,16 +54,29 @@ final class SimulatedDevice extends SimulatedService implements Device, ServiceF
 		return super.serviceRef.getPropertyKeys();
 	}
 
-	public SimulatedFunction getFunction(String functionUID) {
-		if ((null == this.functions) || (null == functionUID)) {
+	public SimulatedFunction[] getFunctions(String functionClassName) {
+		if ((null == this.functions) || (null == functionClassName)) {
 			return null;
 		}
+		List result = new ArrayList();
 		for (int i = 0; i < this.functions.length; i++) {
-			if (functionUID.equals(this.functions[i].getServiceProperty(Function.SERVICE_UID))) {
-				return this.functions[i];
+			if (contains(
+					(String[]) this.functions[i].getServiceProperty(Constants.OBJECTCLASS),
+					functionClassName)) {
+				result.add(this.functions[i]);
 			}
 		}
-		return null;
+		return result.isEmpty() ? null :
+				(SimulatedFunction[]) result.toArray(new SimulatedFunction[result.size()]);
+	}
+
+	private static boolean contains(String[] array, String element) {
+		for (int i = 0; i < array.length; i++) {
+			if (array[i].equals(element)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 }

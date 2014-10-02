@@ -14,9 +14,8 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.dal.Device;
 import org.osgi.service.dal.Function;
-import org.osgi.test.cases.step.TestStep;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-import org.osgi.util.tracker.ServiceTracker;
+import org.osgi.test.support.step.TestStepProxy;
 
 /**
  * Common class for all Device Abstraction Layer TCs. It contains some helper
@@ -25,41 +24,33 @@ import org.osgi.util.tracker.ServiceTracker;
 public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 
 	/**
-	 * A service listener, which can track {@code Device} and {@code Function}
-	 * services.
+	 * A service listener, which can track {@code Device} services.
 	 */
-	protected final DeviceServiceListener	deviceServiceListener;
+	protected TestServiceListener	deviceServiceListener;
 
 	/**
-	 * The service tracker tracks the test stepper service.
+	 * The manual test steps are sent to the test step proxy.
 	 */
-	private final ServiceTracker			testStepTracker;
+	protected TestStepProxy			testStepProxy;
 
 	/**
-	 * The constructor initializes the device listener and the stepper tracker.
-	 */
-	public AbstractDeviceTest() {
-		this.testStepTracker = new ServiceTracker(super.getContext(), TestStep.class.getName(), null);
-		this.deviceServiceListener = new DeviceServiceListener(super.getContext());
-	}
-
-	/**
-	 * Registers the listeners and opens the trackers.
+	 * initializes the listeners and the test step proxy.
 	 * 
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#setUp()
 	 */
 	protected void setUp() throws Exception {
-		this.testStepTracker.open();
-		this.deviceServiceListener.register();
+		this.testStepProxy = new TestStepProxy(super.getContext());
+		this.deviceServiceListener = new TestServiceListener(
+				super.getContext(), TestServiceListener.DEVICE_FILTER);
 	}
 
 	/**
-	 * Unregisters the listeners and closes the trackers.
+	 * Unregisters the listeners and closes the test step proxy.
 	 * 
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#tearDown()
 	 */
 	protected void tearDown() throws Exception {
-		this.testStepTracker.close();
+		this.testStepProxy.close();
 		this.deviceServiceListener.unregister();
 	}
 
@@ -129,17 +120,6 @@ public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 			assertNotNull(propNames[i] + " property is missing",
 					serviceRef.getProperty(propNames[i]));
 		}
-	}
-
-	/**
-	 * Returns the test stepper service.
-	 * 
-	 * @return The test stepper service.
-	 */
-	protected TestStep getTestStep() {
-		TestStep testStep = (TestStep) this.testStepTracker.getService();
-		assertNotNull("The test step service is misisng.", testStep);
-		return testStep;
 	}
 
 }
