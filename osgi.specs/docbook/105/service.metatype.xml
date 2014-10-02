@@ -881,8 +881,8 @@ Attribute   ::= Value *</programlisting>
 
               <entry><para/></entry>
 
-              <entry><para>If the PID refers to an existing variable, then
-              merge the properties with the existing properties if this
+              <entry><para>If the PID refers to an existing configuration,
+              then merge the properties with the existing properties if this
               attribute is <code>true</code>. Otherwise, replace the
               properties.</para></entry>
             </row>
