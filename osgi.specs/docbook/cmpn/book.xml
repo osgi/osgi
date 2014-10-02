@@ -97,12 +97,20 @@
   <xi:include href="../135/service.namespaces.xml"/>
 
   <xi:include href="../136/service.resolver.xml"/>
+  
+  <xi:include href="../137/service.rest.xml"/>
+
+  <xi:include href="../138/service.async.xml"/>
+
+  <xi:include href="../140/service.http.whiteboard.xml"/>
 
   <xi:include href="../702/util.xml.xml"/>
 
   <xi:include href="../703/util.position.xml"/>
 
   <xi:include href="../704/util.measurement.xml"/>
+
+  <xi:include href="../705/util.promise.xml"/>
 
   <xi:include href="../999/osgi.ee.xml"/>
 </book>
