@@ -850,6 +850,20 @@
             </row>
 
             <row>
+              <entry><xref linkend="service.http.whiteboard"
+              xrefstyle="template:%n %t"/></entry>
+
+              <entry><para><code><xref
+              linkend="org.osgi.service.http.context"/></code></para><para><code><xref
+              linkend="org.osgi.service.http.runtime"/></code></para><para><code><xref
+              linkend="org.osgi.service.http.runtime.dto"/></code></para><para><code><xref
+              linkend="org.osgi.service.http.whiteboard"/></code></para></entry>
+
+              <entry><code><xref endterm="org.osgi.service.http.whiteboard-version"
+              linkend="service.http.whiteboard"/></code></entry>
+            </row>
+
+            <row>
               <entry><xref linkend="util.xml"
               xrefstyle="template:%n %t"/></entry>
 
@@ -911,6 +925,10 @@
 
       <listitem>
         <para>Added <xref linkend="service.async"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added <xref linkend="service.http.whiteboard"/>.</para>
       </listitem>
 
       <listitem>
