@@ -9,7 +9,6 @@ javac.profile=
 -buildpath: \
     dmforest;        version=project, \
     com.sun.tools;   version=1.5.0, \
-    org.apache.bcel; version=1.0, \
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec; version=latest, \
     org.eclipse.persistence.jpa_spec; version=latest, \
     com.icl.saxon; version=latest, \
