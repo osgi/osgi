@@ -201,12 +201,12 @@
     binds it to a set of packages with the uses constraint. The bundle that
     declares this contract must then import or export each of the listed
     packages with the correct versioning. Such a bundle is called a
-    <emphasis>contract bundle</emphasis>. The contract bundle must ensure
-    that it is bound to the correct versions of the packages contained within
-    the contract it is providing. If the contract bundle imports the packages
+    <emphasis>contract bundle</emphasis>. The contract bundle must ensure that
+    it is bound to the correct versions of the packages contained within the
+    contract it is providing. If the contract bundle imports the packages
     which are specified as part of the contract then proper matching
-    attributes must be used to make sure it is bound to the correct versions of
-    the packages.</para>
+    attributes must be used to make sure it is bound to the correct versions
+    of the packages.</para>
 
     <para>An <code>osgi.contract</code> capability can then be used in the
     following ways:</para>
@@ -245,10 +245,10 @@ Export-Package:
     javax.servlet;      version="2.5",
     javax.servlet.http; version="2.5"</programlisting>
 
-    <para>A contract may support multiple versions of a named contract.
-    Such a contract must use a single capability for the contract name that
-    specifies a list of all the versions that are supported. For example,
-    the JavaServlet 3.1 contract capability would be specified with the
+    <para>A contract may support multiple versions of a named contract. Such a
+    contract must use a single capability for the contract name that specifies
+    a list of all the versions that are supported. For example, the
+    JavaServlet 3.1 contract capability would be specified with the
     following:</para>
 
     <programlisting>Provide-Capability: osgi.contract;
@@ -297,8 +297,9 @@ DynamicImport-Package:
     bundles.</para>
 
     <para>A client bundle may only work with a specific range of contract
-    versions.  For example, a client may not work with JavaServlet with a
-    version range of [3.0,3.1).  In this case the following could be used</para>
+    versions. For example, a client may not work with JavaServlet with a
+    version range of [3.0,3.1). In this case the following could be
+    used</para>
 
     <programlisting>Require-Capability: osgi.contract;
     filter:="(&amp;(osgi.contract=JavaServlet)(version&gt;=3.0)(!(version&gt;=3.1)))",
@@ -308,11 +309,8 @@ Import-Package:
     <para>The definition of the <code>osgi.contract</code> Namespace is in the
     following table and in the <xref
     linkend="org.osgi.namespace.contract.ContractNamespace"
-    xrefstyle="hyperlink"/> class.</para>
-
-    <para>
-        <remark>Provide a pointer to the RFC180-defined contracts on the website.</remark>    
-    </para>
+    xrefstyle="hyperlink"/> class. See <xref
+    linkend="namespace-portable.java.contracts.ref"/>.</para>
 
     <table pgwide="1">
       <title>osgi.contract Namespace</title>
@@ -372,9 +370,10 @@ Import-Package:
 
             <entry><code>version</code></entry>
 
-            <entry><para>A list of versions for the contract.  A contract
-            that supports multiple versions must use a single capability
-            with a version attribute that lists all versions supported.</para></entry>
+            <entry><para>A list of versions for the contract. A contract that
+            supports multiple versions must use a single capability with a
+            version attribute that lists all versions
+            supported.</para></entry>
           </row>
 
           <row>
@@ -516,6 +515,11 @@ Import-Package:
     <bibliolist>
       <bibliomixed xml:id="i1772882"><title>Specification
       References</title>http://www.osgi.org/Specifications/Reference</bibliomixed>
+
+      <bibliomixed
+      xml:id="namespace-portable.java.contracts.ref"><title>Portable Java
+      Contract
+      Definitions</title>http://www.osgi.org/Specifications/ReferenceContract</bibliomixed>
 
       <bibliomixed xml:id="i1777721"><title>Resources API
       Specification</title>OSGi Core, Chapter 6 Resource API
