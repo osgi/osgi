@@ -1129,6 +1129,22 @@ function-id – function identifier in the scope of the device</programlisting>
             Java primitive type or corresponding reference type.
           </listitem>
           <listitem>
+            Numerical type i.e. the type which extends <code>java.lang.Number</code>.
+            The numerical type must follow these conventions:
+            <itemizedlist>
+              <listitem>
+                The type must provide a public static method called
+                <code>valueOf</code> that returns an instance of the given type
+                and takes a single <code>String</code> argument or
+                a public constructor which takes a single <code>String</code> argument.
+              </listitem>
+              <listitem>
+                The <code>String</code> argument from the previous bullet
+                can be provided by <code>toString()</code> method of the instance.
+              </listitem>
+            </itemizedlist>
+          </listitem>
+          <listitem>
             <code>java.lang.String</code>
           </listitem>
           <listitem>

@@ -24,8 +24,8 @@ package org.osgi.service.dal;
  * <li>properties;</li>
  * <li>operations.</li>
  * </ul>
- * The function service can be registered in the service registry with those
- * service properties:
+ * The function service is registered in the service registry with these service
+ * properties:
  * <ul>
  * <li>{@link #SERVICE_UID} - mandatory service property. The property value
  * contains the function unique identifier.</li>
@@ -49,11 +49,11 @@ package org.osgi.service.dal;
  * when there are function properties. The property value is the function
  * property names.</li>
  * </ul>
- * The {@code Function} services are registered before the {@code Device}
- * services. It's possible that {@link #SERVICE_DEVICE_UID} point to missing
- * services at the moment of the registration. The reverse order is used when
- * the services are unregistered. {@code Function} services are unregistered
- * last after {@code Device} services.
+ * On start up, the {@code Function} services are registered before the
+ * {@code Device} services. It's possible that {@link #SERVICE_DEVICE_UID} point
+ * to missing services at the moment of the registration. The reverse order is
+ * used when the services are unregistered. {@code Function} services are
+ * unregistered last after {@code Device} services.
  * <p>
  * Function service must be registered under the function class hierarchy. Other
  * interfaces are not allowed. All classes from the function class hierarchy
@@ -123,6 +123,18 @@ package org.osgi.service.dal;
  * <ul>
  * <li>Java primitive type or corresponding reference type.</li>
  * <li>{@code java.lang.String}.</li>
+ * <li>Numerical type i.e. the type which extends <code>java.lang.Number</code>.
+ * The numerical type must follow these conventions:
+ * <ul>
+ * <li>The type must provide a public static method called {@code valueOf} that
+ * returns an instance of the given type and takes a single {@code String}
+ * argument or a public constructor which takes a single {@code String}
+ * argument.</li>
+ * <li>
+ * The {@code String} argument from the previous bullet can be provided by
+ * {@code toString()} method of the instance.</li>
+ * </ul>
+ * </li>
  * <li>{@code Beans}, but the beans properties must use those rules. Java Beans
  * are defined in JavaBeans specification.</li>
  * <li>
