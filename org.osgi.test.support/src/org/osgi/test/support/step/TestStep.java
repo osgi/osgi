@@ -20,8 +20,12 @@ package org.osgi.test.support.step;
  * The test step interface is used by the OSGi test cases for the manual test
  * steps execution. The test case is allowed to execute manual steps with the
  * step identifier and human readable message. If the step requires some input,
- * an execution result can be provided. The implementation of this interface
- * must be registered in the OSGi service registry.
+ * an execution result can be provided.
+ * <p>
+ * The implementation of this interface must be registered in the OSGi service
+ * registry before the test case execution. It's strongly recommended that the
+ * {@code TestStep} service will be registered in the start method of the bundle
+ * activator, otherwise some test steps can be missed.
  */
 public interface TestStep {
 
