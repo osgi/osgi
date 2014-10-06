@@ -215,8 +215,7 @@
 
             <entry><code>String</code></entry>
 
-            <entry><remark>JWJ: Example on how this relates to the context
-            path used in the Servlet spec (at least mention it?)</remark>
+            <entry>
             <para>Additional prefix to the context path for servlets. This
             property is mandatory. Valid characters are specified in IETF RFC
             3986, section 3.3. If the path is invalid, the context is not used
@@ -291,7 +290,7 @@
       service registration properties and the underlying servlet container.
       Implementations only need to support the APIs available on the servlet
       specification version being provided by the implementation. For example
-      a Http Service based on a Servlet 3.0 implementation does not need to
+      a Http Whiteboard imlementation based on a Servlet 3.0 implementation does not need to
       support the methods introduced in <code>ServletContext</code> 3.1 and
       later.</para>
 
@@ -410,7 +409,7 @@
               <entry><para>3.0</para></entry>
 
               <entry><para>Returns the class loader of the Whiteboard service.
-              An implementation of the Http Service can achieve this by
+              An implementation of this specification can achieve this by
               returning separate façades of the ServletContext to each
               Whiteboard service. Each façade accesses the Whiteboard
               service's Bundle Wiring to obtain its classloader.
@@ -760,17 +759,18 @@
       certain functionality to the <code>ServletContextHelper</code> and other
       functionality to the Servlet Context of the Web Application, yet further
       functionality can be obtained otherwise. In such cases the relationship
-      may look like below where ServletContext A is the backing context from
-      the Web Application.</para>
+      may look like the below figure.</para>
 
-      <programlisting>Webapp
-    ServletContext[A] 
-        Http Service 
-            ServletContext[B] - ServletContextHelper
-                Façade ServletContext[C] - Servlet Classloader</programlisting>
+      <figure pgwide="1">
+        <title>Servlet Context entities and their relation</title>
 
-      <remark>JWJ: show the boundary between native webapp and OSGi
-      webapp?</remark>
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="3.313in"
+                       contentwidth="6.496in" fileref="servletcontext.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
 
       <para>Where <xref
       linkend="service.http.whiteboard.servletcontext.methods"
@@ -905,8 +905,10 @@
     <code>osgi.http.whiteboard.servlet.pattern</code> service registration
     property. The pattern(s) define the URL context(s) that will trigger the
     servlet to handle the request. They are defined by the <xref
-    linkend="i21217577"/> in section 12.2, Specification of Mappings. The
-    mapping rules are:</para>
+    linkend="i21217577"/> in section 12.2, Specification of Mappings. Note that 
+    these mapping rules are slightly different than those defined in
+    the <xref linkend="service.http"/>.  
+    The mapping rules are:</para>
 
     <itemizedlist>
       <listitem>
@@ -1141,14 +1143,17 @@ public class MyServlet extends HttpServlet {
       to handle a variety of error situations. Possible values are 3-digit
       Http error codes and fully qualified exception names.</para>
 
-      <remark>JWJ: can a servlet be used *both* as a normal servlet as well as
-      an error servlet? If so, how can it distinguish the request (servlet
-      attributes)?</remark>
-
       <para>Two special error code values are recognized. The special value
       <code>4xx</code> means every error code in the 400-499 range. The
       special value <code>5xx</code> means every error code in the 500-599
       range.</para>
+      
+      <para>The <code>osgi.http.whiteboard.servlet.errorPage</code> and 
+      <code>osgi.http.whiteboard.servlet.pattern</code> properties are 
+      mutually exclusive. If a single servlet registration has both these 
+      registration properties this is considered invalid
+      and this servlet will not be handled by the Http Whiteboard
+      implementation. The servlet will be reported via the Failure DTOs.</para>
 
       <para>Matching exceptions follows the exception hierarchy. First the
       most specific exception class - the actual class of the exception - is
@@ -1183,12 +1188,6 @@ public class MyErrorServlet extends HttpServlet {
       <para>Servlets can use the asynchronous request handling feature, as
       defined by the servlet specification.</para>
 
-      <remark>JWJ: should a whiteboard implementation that does not support
-      async ignore such servlet/filters?</remark>
-
-      <remark>DB: I thought it was mandatory in Servlet 3 to support
-      this?</remark>
-
       <para>A servlet or servlet filter supporting the asynchronous mode must
       declare this with the appropriate service property
       <code>osgi.http.whiteboard.servlet.asyncSupported</code> or
@@ -1201,7 +1200,7 @@ public class MyErrorServlet extends HttpServlet {
       <title>Annotations</title>
 
       <para>Annotations defined in the Servlet API Specifications are ignored
-      by an implementation of the Http Service Specification. The OSGi service
+      by an implementation of the Http Whiteboard Specification. The OSGi service
       paradigm is used instead by this specification.</para>
 
       <para>Implementations of this specification <emphasis>may</emphasis>
@@ -1451,15 +1450,14 @@ public class MyErrorServlet extends HttpServlet {
     </table>
 
     <para>The example below uses Declarative Services annotations to register
-    a resources service.</para>
+    a resources service. Note that this service is purely used to convey information
+    to the Http Whiteboard implementation and is never invoked.</para>
 
     <programlisting>@Component(service = MyResourceService.class,
     property={
         "osgi.http.whiteboard.resource.pattern=/files",
         "osgi.http.whiteboard.resource.prefix=www"})
 public class MyResourceService {}</programlisting>
-
-    <remark>Do we need Prototype here?</remark>
 
     <para>Assuming that the above resource service is in the
     <code>org.acme.food</code> package, a Http Service configured on port 80
@@ -1520,9 +1518,9 @@ public class MyResourceService {}</programlisting>
     <para>Events are sent to all listeners in the Service Registry based on
     their registration properties. Each listener can be associated with a
     <code>ServletContextHelper</code> as described in <xref
-    linkend="service.http.common.properties"/>.</para>
-
-    <remark>JWJ: shouldn’t this always be the case?</remark>
+    linkend="service.http.common.properties"/>. Listeners not specifically
+    associated with a Servlet Context Helper will receive events relating
+    to the <emphasis>default</emphasis> instance.</para>
 
     <section><title>Servlet 3.1</title> The listener in this section was
     introduced in the Servlet 3.1 specification and should be supported by
@@ -1670,7 +1668,7 @@ public class MyResourceService {}</programlisting>
           <row>
             <entry><code>osgi.http.service.id</code></entry>
 
-            <entry><code>Integer</code></entry>
+            <entry><code>Integer+</code></entry>
 
             <entry><para> If this Http Whiteboard implementation also
             implements the <xref linkend="service.http"/>, this property is
@@ -1720,9 +1718,6 @@ public class MyResourceService {}</programlisting>
       </mediaobject>
     </figure>
 
-    <remark>Carsten: I think we're missing the ServletContextDTO in the
-    RequestInfoDTO</remark>
-
     <para>Where servlets registered via the <xref linkend="service.http"/> are
     returned via this service, the Servlet DTO will report negative service
     IDs for these servlets.</para>
@@ -1731,12 +1726,9 @@ public class MyResourceService {}</programlisting>
   <section>
     <title>Configuration Properties</title>
 
-    <para>If the Http Service does not have its port values configured through
-    some other means, the Http Service implementation should use the following
+    <para>If the Http Whiteboard implementation does not have its port values configured through
+    some other means, the implementation should use the following
     Framework properties to determine the port values to listen on.</para>
-
-    <remark>JWJ: also discussed at length(?), but why not allow the host to be
-    defined?</remark>
 
     <itemizedlist>
       <listitem>
@@ -1753,6 +1745,7 @@ public class MyResourceService {}</programlisting>
     </itemizedlist>
   </section>
 
+<!-- 
   <section xml:id="service.http.whiteboard.authentication">
     <title>Authentication</title>
 
@@ -1892,7 +1885,8 @@ public class MyResourceService {}</programlisting>
   <section xml:id="service.http.whiteboard.authorization">
     <title>Authorization</title>
   </section>
-
+  -->
+  
   <section>
     <title>Capability Namespaces</title>
 
@@ -1932,6 +1926,7 @@ public class MyResourceService {}</programlisting>
     </section>
   </section>
 
+  <!-- 
   <section>
     <title>Security</title>
 
@@ -2023,7 +2018,7 @@ public class MyResourceService {}</programlisting>
       operations.</para>
     </section>
   </section>
-
+  -->
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.http.context.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.http.runtime.xml"/>
