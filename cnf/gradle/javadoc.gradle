@@ -9,7 +9,7 @@ task javadoc(overwrite: true, type: Javadoc) {
   description 'Build the javadoc.'
   group 'documentation'
   dependsOn compileJava
-  classpath = compileJava.classpath
+  classpath = configurations.compile
   source bnd.allSrcDirs
   javadocSpecs.split(/\s*,\s*/).each {
     include it.replace('.','/')+'/**/*.java'
