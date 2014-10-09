@@ -1,9 +1,8 @@
--include			: layout.bnd
--dependson			: ${build.impls}
--resourceonly		: true
+-include            : layout.bnd
+-dependson          : osgi.companion, ${build.impls}
+-resourceonly       : true
 
 -outputmask = ${@bsn}-${version;===;${@version}}.jar
 
 # Build the osgi spec files
 -sub       = !layout.bnd, *.bnd
-

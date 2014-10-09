@@ -39,7 +39,7 @@ rootProject.subprojects {
   if (project != cnfProject) {
     jar {
       inputs.files cnfOutput
+      dependsOn ":${cnfProject.name}:assemble"
     }
-    dependencies.add('compile', cnfProject)
   }
 }

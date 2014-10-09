@@ -1,5 +1,5 @@
 -include            : layout.bnd
--dependson          : ${build.tests}
+-dependson          : osgi.companion, ${build.tests}
 -resourceonly       : true
 
 -outputmask = ${@bsn}-${version;===;${@version}}.jar
