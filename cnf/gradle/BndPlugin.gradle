@@ -47,13 +47,22 @@ public class BndPlugin implements Plugin<Project> {
 
       buildDir = relativePath(bndProject.targetDir)
       plugins.apply 'java'
+      libsDirName = '.'
 
       if (project.hasProperty('bnd_defaultTask')) {
         defaultTasks = bnd_defaultTask.trim().split(/\s*,\s*/)
       }
 
-      /* We use the same directory for java and resources. */
+      /* Set up dependencies */
+      dependencies {
+        compile compilePath()
+        runtime runtimePath()
+        testCompile testCompilePath()
+        testRuntime testRuntimePath()
+      }
+      /* Set up source sets */
       sourceSets {
+        /* bnd uses the same directory for java and resources. */
         main {
           java.srcDirs = resources.srcDirs = files(relativePath(bndProject.src))
           output.classesDir = output.resourcesDir = relativePath(bndProject.srcOutput)
@@ -64,9 +73,10 @@ public class BndPlugin implements Plugin<Project> {
         }
       }
       bnd.ext.allSrcDirs = files(bndProject.allsourcepath)
+      /* Set up compile tasks */
       sourceCompatibility = bnd('javac.source', sourceCompatibility)
       def javacTarget = bnd('javac.target', targetCompatibility)
-      def bootclasspath = files(bndProject.bootclasspath.collect { it.file })
+      def bootclasspath = files(bndProject.bootclasspath*.file)
       if (javacTarget == 'jsr14') {
         javacTarget = '1.5'
         bootclasspath = files(bndProject.getBundle('ee.j2se', '1.5', null, ['strategy':'lowest']).file)
@@ -100,7 +110,6 @@ public class BndPlugin implements Plugin<Project> {
 
       compileJava {
         configure compileOptions
-        classpath = files(bndProject.buildpath.collect { it.file } - destinationDir)
         if (logger.isEnabled(LogLevel.INFO)) {
           doFirst {
             logger.info "Compile ${sourceSets.main.java.srcDirs} to ${destinationDir}"
@@ -122,14 +131,13 @@ public class BndPlugin implements Plugin<Project> {
             bndProject.propertiesChanged()
             bndProject.clear()
             bndProject.prepare()
-            classpath = files(bndProject.buildpath.collect { it.file } - destinationDir)
+            classpath = compilePath()
           }
         }
       }
 
       compileTestJava {
         configure compileOptions
-        classpath = files(bndProject.testpath.collect { it.file } - destinationDir, compileJava.destinationDir, compileJava.classpath)
         if (preCompileRefresh) {
           doFirst {
             logger.info 'Refreshing the bnd Project before compilation.'
@@ -137,7 +145,7 @@ public class BndPlugin implements Plugin<Project> {
             bndProject.propertiesChanged()
             bndProject.clear()
             bndProject.prepare()
-            classpath = files(bndProject.testpath.collect { it.file } - destinationDir, compileJava.destinationDir, compileJava.classpath)
+            classpath = files(testCompilePath(), runtimePath(), compilePath())
           }
         }
       }
@@ -168,11 +176,11 @@ public class BndPlugin implements Plugin<Project> {
 
       jar {
         description 'Assemble the project bundles.'
-        deleteAllActions() // Replace the standard jar task actions
+        deleteAllActions() /* Replace the standard task actions */
         enabled !bndProject.noBundles
         if (enabled) {
-          /* bnd can include any class on the classpath */
-          inputs.files compileJava.classpath.collect {
+          /* bnd can include any class on the buildpath */
+          inputs.files compilePath().collect {
             it.file ? it : fileTree(it)
           }
           /* all other files in the project like bnd and resources */
@@ -182,7 +190,7 @@ public class BndPlugin implements Plugin<Project> {
             exclude sourceSets.test.output.files.collect { relativePath(it) }
             exclude relativePath(buildDir)
           }
-          outputs.files bndProject.deliverables.collect { it.file }, new File(buildDir, Constants.BUILDFILES)
+          outputs.files configurations.archives.artifacts.files, new File(buildDir, Constants.BUILDFILES)
           doLast {
             def built
             try {
@@ -201,13 +209,17 @@ public class BndPlugin implements Plugin<Project> {
         }
       }
 
+      assemble {
+        dependsOn jar
+      }
+
       task('release') {
         description 'Release the project to the release repository.'
         dependsOn assemble
         group 'release'
-        enabled !bnd(Constants.RELEASEREPO, 'unset').empty
+        enabled !bndProject.noBundles && !bnd(Constants.RELEASEREPO, 'unset').empty
         if (enabled) {
-          inputs.files bndProject.deliverables.collect { it.file }
+          inputs.files configurations.archives.artifacts.files
           doLast {
             try {
               bndProject.release()
@@ -220,22 +232,18 @@ public class BndPlugin implements Plugin<Project> {
       }
 
       task('releaseNeeded') {
-        description 'Release the project and all projects it depends on to the release repository.'
+        description 'Release the project and all projects it depends on.'
         dependsOn release
         group 'release'
       }
 
       test {
-        dependsOn testClasses
-        enabled !(parseBoolean(bnd(Constants.NOJUNIT, 'false')) || parseBoolean(bnd('no.junit', 'false')))
-        if (enabled) {
-          classpath = files(compileTestJava.destinationDir, compileTestJava.classpath)
-        }
+        enabled !parseBoolean(bnd(Constants.NOJUNIT, 'false')) && !parseBoolean(bnd('no.junit', 'false'))
       }
 
       check {
         dependsOn assemble
-        enabled !(parseBoolean(bnd(Constants.NOJUNITOSGI, 'false')) || bndUnprocessed(Constants.TESTCASES, '').empty)
+        enabled !parseBoolean(bnd(Constants.NOJUNITOSGI, 'false')) && !bndUnprocessed(Constants.TESTCASES, '').empty
         if (enabled) {
           doLast {
             try {
@@ -255,32 +263,37 @@ public class BndPlugin implements Plugin<Project> {
       }
 
       clean {
-        deleteAllActions() // Replace the standard task actions
+        description 'Cleans the build and compiler output directories of the project.'
+        deleteAllActions() /* Replace the standard task actions */
         doLast {
           bndProject.clean()
         }
       }
 
-      javadoc {
-        classpath = compileJava.classpath
+      task('cleanNeeded') {
+        description 'Cleans the project and all projects it depends on.'
+        dependsOn clean
+        group 'build'
       }
 
-      tasks.addRule('Pattern: export.<name>: Export the <name>.bndrun file to a runnable jar.') { taskName ->
+      tasks.addRule('Pattern: export.<name>: Export the <name>.bndrun file to an executable jar.') { taskName ->
         if (taskName.startsWith('export.')) {
           def bndrun = taskName - 'export.'
           task(taskName) {
-            description "Export the ${bndrun}.bndrun file to a runnable jar."
+            description "Export the ${bndrun}.bndrun file to an executable jar."
             dependsOn assemble
             group 'export'
             def runFile = file("${bndrun}.bndrun")
-            def exportFile = new File(distsDir, "${bndrun}.jar")
+            def executableJar = new File(distsDir, "executable/${bndrun}.jar")
+            doFirst {
+              project.mkdir(executableJar.parent)
+            }
             doLast {
-              distsDir.mkdirs()
-              logger.info "Exporting: ${runFile.absolutePath} to ${exportFile.absolutePath}"
+              logger.info "Exporting ${runFile.absolutePath} to ${executableJar.absolutePath}"
               try {
-                bndProject.export(relativePath(runFile), false, exportFile)
+                bndProject.export(relativePath(runFile), false, executableJar)
               } catch (Exception e) {
-                throw new GradleException("Export of ${runFile} failed", e)
+                throw new GradleException("Export of ${runFile.absolutePath} to an executable jar failed", e)
               }
               checkErrors()
             }
@@ -298,11 +311,46 @@ public class BndPlugin implements Plugin<Project> {
         }
       }
 
+      tasks.addRule('Pattern: runbundles.<name>: Create a distribution of the runbundles in <name>.bndrun file.') { taskName ->
+        if (taskName.startsWith('runbundles.')) {
+          def bndrun = taskName - 'runbundles.'
+          task(taskName) {
+            description "Create a distribution of the runbundles in the ${bndrun}.bndrun file."
+            dependsOn assemble
+            group 'export'
+            def runFile = file("${bndrun}.bndrun")
+            def runbundlesDir = new File(distsDir, "runbundles/${bndrun}")
+            doFirst {
+              project.delete(runbundlesDir)
+              project.mkdir(runbundlesDir)
+            }
+            doLast {
+              logger.info "Creating a distribution of the runbundles in ${runFile.absolutePath} in directory ${runbundlesDir.absolutePath}"
+              try {
+                  bndProject.exportRunbundles(relativePath(runFile), runbundlesDir)
+              } catch (Exception e) {
+                throw new GradleException("Creating a distribution of the runbundles in ${runFile.absolutePath} failed", e)
+              }
+              checkErrors()
+            }
+          }
+        }
+      }
+
+      task('runbundles') {
+        description "Create a distribution of the runbundles in each of the bndrun files."
+        group 'export'
+        fileTree(projectDir) {
+            include '*.bndrun'
+        }.each {
+          dependsOn tasks.getByPath("runbundles.${it.name - '.bndrun'}")
+        }
+      }
+
       task('echo') {
         description 'Displays the bnd project information.'
         group 'help'
         doLast {
-          println()
           println '------------------------------------------------------------'
           println "Project ${project.name}"
           println '------------------------------------------------------------'
@@ -310,7 +358,7 @@ public class BndPlugin implements Plugin<Project> {
           println "project.workspace:      ${rootDir}"
           println "project.dir:            ${projectDir}"
           println "project.name:           ${project.name}"
-          println "project.dependson:      ${bndProject.dependson.collect{it.name}}"
+          println "project.dependson:      ${bndProject.dependson*.name}"
           println "project.src:            ${files(sourceSets.main.java.srcDirs).asPath}"
           println "project.output:         ${compileJava.destinationDir}"
           println "project.buildpath:      ${compileJava.classpath.asPath}"
@@ -319,6 +367,7 @@ public class BndPlugin implements Plugin<Project> {
           println "project.testoutput:     ${compileTestJava.destinationDir}"
           println "project.testpath:       ${compileTestJava.classpath.asPath}"
           println "project.bootclasspath:  ${compileJava.options.bootClasspath}"
+          println "project.deliverables:   ${configurations.archives.artifacts.files*.path}"
           println "javac:                  ${compileJava.options.forkOptions.executable}"
           println "javac.source:           ${sourceCompatibility}"
           println "javac.target:           ${targetCompatibility}"
@@ -326,6 +375,7 @@ public class BndPlugin implements Plugin<Project> {
             println "javac.profile:          ${javacProfile}"
           }
           println "target:                 ${buildDir}"
+          println()
         }
       }
 
@@ -333,7 +383,6 @@ public class BndPlugin implements Plugin<Project> {
         description 'Displays the bnd properties.'
         group 'help'
         doLast {
-          println()
           println '------------------------------------------------------------'
           println "Project ${project.name}"
           println '------------------------------------------------------------'
@@ -343,15 +392,50 @@ public class BndPlugin implements Plugin<Project> {
           }).each {
             println "${it}: ${bnd(it, '')}"
           }
+          println()
         }
       }
 
-      bndProject.dependson.each {
-        dependencies.add('compile', rootProject.project(it.name))
-        checkNeeded.dependsOn(":${it.name}:checkNeeded")
-        releaseNeeded.dependsOn(":${it.name}:releaseNeeded")
+      /* Set up configurations */
+      configurations {
+        dependson.description = 'bnd project dependencies.'
+        runtime.artifacts.clear()
+        archives.artifacts.clear()
+      }
+      /* Set up deliverables */
+      bndProject.deliverables.each { deliverable ->
+        artifacts {
+          runtime deliverable.file
+          archives deliverable.file
+        }
+      }
+      /* Set up dependencies */
+      bndProject.dependson.each { dependency ->
+        dependencies { handler ->
+          compile handler.project('path': ":${dependency.name}", 'configuration': 'dependson')
+        }
+        compileJava.dependsOn(":${dependency.name}:assemble")
+        checkNeeded.dependsOn(":${dependency.name}:checkNeeded")
+        releaseNeeded.dependsOn(":${dependency.name}:releaseNeeded")
+        cleanNeeded.dependsOn(":${dependency.name}:cleanNeeded")
       }
     }
+  }
+
+  private FileCollection compilePath() {
+    return project.files(bndProject.buildpath*.file - bndProject.srcOutput)
+  }
+
+  private FileCollection testCompilePath() {
+    return project.files(bndProject.testpath*.file - bndProject.testOutput)
+  }
+
+  private FileCollection runtimePath() {
+    return project.files(bndProject.srcOutput)
+  }
+
+  private FileCollection testRuntimePath() {
+    return project.files(bndProject.testOutput)
   }
 
   private void checkErrors() {

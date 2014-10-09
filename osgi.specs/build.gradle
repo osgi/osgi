@@ -11,7 +11,7 @@ task javadoc('overwrite': true, 'type': Javadoc) {
   ext.javadocxml = new File(destinationDir, 'javadoc.xml')
   ext.stylesheet = file('docbook/xsl/javadoc2docbook.xsl')
   inputs.file stylesheet
-  classpath = compileJava.classpath
+  classpath = configurations.compile
   source bnd.allSrcDirs
   bnd.javadoc_specs.split(/\s*,\s*/).each {
     include it.replace('.','/')+'/**/*.java'
@@ -59,8 +59,7 @@ task('ee') {
   doLast {
     eexml.withOutputStream { os ->
       javaexec {
-        classpath compileJava.destinationDir
-        classpath compileJava.classpath
+        classpath configurations.runtime
         main = 'org.osgi.tools.jar2xml.JAR2XML'
         standardOutput new BufferedOutputStream(os)
         args '-tagged', 'minimum', bnd('minimum-latest.jar')
@@ -90,8 +89,7 @@ task('rdmtsummary') {
   doLast {
     treesummaryxml.withOutputStream { os ->
       javaexec {
-        classpath compileJava.destinationDir
-        classpath compileJava.classpath
+        classpath configurations.runtime
         main = 'org.osgi.tools.dmt.TreeSummary'
         standardOutput new BufferedOutputStream(os)
         args 'org.osgi.dmt.residential.$'
