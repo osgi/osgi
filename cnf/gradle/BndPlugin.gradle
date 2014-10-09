@@ -53,6 +53,19 @@ public class BndPlugin implements Plugin<Project> {
         defaultTasks = bnd_defaultTask.trim().split(/\s*,\s*/)
       }
 
+      /* Set up configurations */
+      configurations {
+        dependson.description = 'bnd project dependencies.'
+        runtime.artifacts.clear()
+        archives.artifacts.clear()
+      }
+      /* Set up deliverables */
+      bndProject.deliverables.each { deliverable ->
+        artifacts {
+          runtime deliverable.file
+          archives deliverable.file
+        }
+      }
       /* Set up dependencies */
       dependencies {
         compile compilePath()
@@ -396,19 +409,6 @@ public class BndPlugin implements Plugin<Project> {
         }
       }
 
-      /* Set up configurations */
-      configurations {
-        dependson.description = 'bnd project dependencies.'
-        runtime.artifacts.clear()
-        archives.artifacts.clear()
-      }
-      /* Set up deliverables */
-      bndProject.deliverables.each { deliverable ->
-        artifacts {
-          runtime deliverable.file
-          archives deliverable.file
-        }
-      }
       /* Set up dependencies */
       bndProject.dependson.each { dependency ->
         dependencies { handler ->
