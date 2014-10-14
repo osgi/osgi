@@ -24,5 +24,10 @@ package org.osgi.service.enocean.descriptions;
  * @author $Id$
  */
 public interface EnOceanFlagChannelDescription extends EnOceanChannelDescription {
-    // TODO
+    // As it is written in the RFC: EnOcean Flag Channel Description
+    // The EnOceanFlagChannelDescription interface inherits from the
+    // EnOceanChannelDescription interface.
+    // Those channels, are typically used for On/Off reporting values (like a
+    // switch); they have no additional methods, though the deserialize() method
+    // converts the input bit into a proper Boolean object.
 }
