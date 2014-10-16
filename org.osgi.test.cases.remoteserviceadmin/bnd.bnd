@@ -40,7 +40,6 @@ Test-Cases							= ${testcases}
     org.osgi.impl.service.event;              version=latest, \
 	org.osgi.impl.service.metatype;           version=latest, \
 	org.osgi.impl.service.http;               version=latest, \
-	org.apache.felix.dependencymanager;       version=latest,\
 	org.osgi.impl.service.remoteserviceadmin; version=latest
 
 -runvm = -Xmx512m, -XX:MaxPermSize=350m
@@ -57,4 +56,4 @@ Test-Cases							= ${testcases}
     service.exported.configs="org.amdatu.remote.admin.http", \
 	org.osgi.service.http.port=9191,\
     org.osgi.framework.bootdelegation=javax.*,\
-    ${p}.bundles="${uniq;${repo;org.osgi.service.event;latest},${repo;org.osgi.impl.service.event;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.metatype;latest},${repo;org.osgi.impl.service.http;latest},${repo;org.apache.felix.dependencymanager;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"
+    ${p}.bundles="${uniq;${repo;org.osgi.service.event;latest},${repo;org.osgi.impl.service.event;latest},${repo;org.osgi.impl.service.log;latest},${repo;org.osgi.impl.service.cm;latest},${repo;org.osgi.impl.service.metatype;latest},${repo;org.osgi.impl.service.http;latest},${repo;org.osgi.impl.service.remoteserviceadmin;latest}}"
