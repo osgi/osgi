@@ -1503,15 +1503,11 @@ public class MyResourceService {}</programlisting>
       <listitem>
         <para><code>HttpSessionListener</code> - Receive notifications when
         Http Sessions are created or destroyed.</para>
-
-        <remark>Http Session are multiplexed per SCH</remark>
       </listitem>
 
       <listitem>
         <para><code>HttpSessionAttributeListener</code> - Receive
         notifications when Http Session attributes change.</para>
-
-        <remark>Http Session are multiplexed per SCH</remark>
       </listitem>
     </itemizedlist>
 
@@ -1924,6 +1920,11 @@ public class MyResourceService {}</programlisting>
       Whiteboard implementation should be a consumer of the API and require
       the contract.</para>
     </section>
+  </section>
+
+  <section>
+    <title>Security</title>
+    <remark>Section to be written</remark>
   </section>
 
   <!-- 
