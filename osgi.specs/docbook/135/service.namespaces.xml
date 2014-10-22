@@ -180,19 +180,35 @@
     <programlisting>Require-Capability: osgi.extender;
   filter:="(&amp;(osgi.extender=osgi.blueprint)(version&gt;=1.0))"</programlisting>
 
-    <para>An extender should only extend a bundle if one of the following is true:</para>
+    <para>An extender should only extend a bundle if one of the following is 
+    true:</para>
     <itemizedlist>
       <listitem>
-        <para>The extendee bundle wiring has an <code>osgi.extender</code> required wire and it is wired to the <code>osgi.extender</code> capability of the extender.</para>
+        <para>The extendee bundle wiring has an <code>osgi.extender</code>
+        required wire and it is wired to the <code>osgi.extender</code>
+        capability of the extender.</para>
       </listitem>
       <listitem>
-        <para>The extendee bundle wiring has no <code>osgi.extender</code> required wire.</para>
+        <para>The extendee bundle wiring has no <code>osgi.extender</code>
+        required wire.</para>
       </listitem>
     </itemizedlist>
 
   <section>
     <title>Extenders and Framework Hooks</title>
-    <para>The Framework provides a number of hooks that allow groups of bundles to be scoped.  For example, the <xref linkend="service.subsystem"/>.  An extender may want to extend the complete set of bundles installed in the framework even when extendee bundles are hidden from the extender. The system bundle context provides a complete view of the bundles and services available in the Framework even if Framework hooks are used to scope groups of bundles.  The system bundle context can be used by an extender to track all bundles installed in the Framework regardless of how Framework hooks are used to scope groups of bundles.  This is useful in scenarios where several scoped groups contain bundles that require an extender.  Instead of requiring an extender to be installed in each scoped group of bundles, a single extender can be used to extend all scoped groups of bundles.</para>
+    <para>The Framework provides a number of hooks that allow groups of bundles
+    to be scoped.  For example, the <xref linkend="service.subsystem"/>.  An
+    extender may want to extend the complete set of bundles installed in the
+    Framework even when extendee bundles are hidden from the extender. The
+    system bundle context provides a complete view of the bundles and services
+    available in the Framework even if Framework hooks are used to scope groups
+    of bundles.  The system bundle context can be used by an extender to track
+    all bundles installed in the Framework regardless of how Framework hooks
+    are used to scope groups of bundles.  This is useful in scenarios where
+    several scoped groups contain bundles that require an extender.  Instead of
+    requiring an extender to be installed in each scoped group of bundles, a
+    single extender that uses the system bundle context to track extendees can
+    be installed to extend all scoped groups of bundles.</para>
   </section>
 
   </section>
