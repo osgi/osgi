@@ -243,6 +243,7 @@ tasks.addRule('Pattern: <name>.fo: Generate the docbook fo file for the book <na
           classpath('location': bnd.saxon)
           factory('name': 'com.icl.saxon.TransformerFactoryImpl')
           param('name': 'draft.watermark.image', 'expression': watermark)
+          param('name': 'copyright.year', 'expression': "2000, ${bnd('copyright.year')}")
         }
       }
     }

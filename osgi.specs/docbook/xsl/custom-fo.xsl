@@ -53,6 +53,9 @@ book toc,title
 </xsl:param>
 <xsl:param name="draft.mode">maybe</xsl:param>
 <xsl:param name="draft.watermark.image">../graphics/draft.svg</xsl:param>
+<xsl:param name="copyright.year">
+  <xsl:value-of select="/d:book/d:info/d:copyright/d:year"/>
+</xsl:param>
 <xsl:param name="fop1.extensions" select="1"/>
 <xsl:param name="xep.extensions" select="0"/>
 <xsl:param name="front.logo.image">../graphics/OSGi_Alliance.svg</xsl:param>
@@ -1870,7 +1873,7 @@ should be discarded -->
       <xsl:text>Copyright &#xA9; </xsl:text>
       <xsl:value-of select="d:info/d:copyright/d:holder"/>
       <xsl:text> (</xsl:text>
-      <xsl:value-of select="d:info/d:copyright/d:year"/>
+      <xsl:value-of select="$copyright.year"/>
       <xsl:text>).</xsl:text>
 
       <fo:block>
