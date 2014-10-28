@@ -3604,7 +3604,7 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       Hall<?line-break ?>http://gravity.sourceforge.net/servicebinder</bibliomixed>
 
       <bibliomixed xml:id="i1567926"><title>Java Properties
-      File</title>http://docs.oracle.com/javase/1.4.2/docs/api/java/util/Properties.html</bibliomixed>
+      File</title>http://docs.oracle.com/javase/7/docs/api/java/util/Properties.html</bibliomixed>
 
       <bibliomixed xml:id="i1636361"><title>Extensible Markup Language (XML)
       1.0</title>http://www.w3.org/TR/REC-xml/</bibliomixed>
