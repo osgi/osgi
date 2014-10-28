@@ -53,7 +53,7 @@ public interface EnOceanHost {
 
     /**
      * Returns the chip's application version info (cf. ESP3 command 0x03:
-     * C0_RD_VERSION)
+     * CO_RD_VERSION)
      * 
      * @return a String object containing the application version info.
      * @throws EnOceanException
@@ -62,7 +62,7 @@ public interface EnOceanHost {
 
     /**
      * Returns the chip's API version info (cf. ESP3 command 0x03:
-     * C0_RD_VERSION)
+     * CO_RD_VERSION)
      * 
      * @return a String object containing the API version info.
      * @throws EnOceanException
