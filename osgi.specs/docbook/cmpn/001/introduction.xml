@@ -239,7 +239,9 @@
 
               <entry><para><code><xref
               linkend="org.osgi.service.component"/></code></para><para><code><xref
-              linkend="org.osgi.service.component.annotations"/></code></para></entry>
+              linkend="org.osgi.service.component.annotations"/></code></para><para><code><xref
+              linkend="org.osgi.service.component.runtime"/></code></para><para><code><xref
+              linkend="org.osgi.service.component.runtime.dto"/></code></para></entry>
 
               <entry><code><xref endterm="org.osgi.service.component-version"
               linkend="service.component"/></code></entry>
@@ -508,7 +510,8 @@
               linkend="org.osgi.service.http.runtime.dto"/></code></para><para><code><xref
               linkend="org.osgi.service.http.whiteboard"/></code></para></entry>
 
-              <entry><code><xref endterm="org.osgi.service.http.whiteboard-version"
+              <entry><code><xref
+              endterm="org.osgi.service.http.whiteboard-version"
               linkend="service.http.whiteboard"/></code></entry>
             </row>
 
@@ -618,6 +621,10 @@
 
       <listitem>
         <para>Added <xref linkend="util.promise"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Updated <xref linkend="service.component"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

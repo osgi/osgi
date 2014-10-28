@@ -3587,6 +3587,10 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.component.annotations.xml"/>
 
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.component.runtime.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.component.runtime.dto.xml"/>
+
   <section>
     <title>References</title>
 

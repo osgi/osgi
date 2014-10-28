@@ -471,7 +471,9 @@
 
               <entry><para><code><xref
               linkend="org.osgi.service.component"/></code></para><para><code><xref
-              linkend="org.osgi.service.component.annotations"/></code></para></entry>
+              linkend="org.osgi.service.component.annotations"/></code></para><para><code><xref
+              linkend="org.osgi.service.component.runtime"/></code></para><para><code><xref
+              linkend="org.osgi.service.component.runtime.dto"/></code></para></entry>
 
               <entry><code><xref endterm="org.osgi.service.component-version"
               linkend="service.component"/></code></entry>
