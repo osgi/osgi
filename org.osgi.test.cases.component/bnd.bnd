@@ -32,7 +32,10 @@ Include-Resource					= \
 	tb17.jar
 	
 Test-Cases							= ${testcases}
--signaturetest                      = org.osgi.service.component
+-signaturetest = \
+ org.osgi.service.component, \
+ org.osgi.service.component.runtime, \
+ org.osgi.service.component.runtime.dto
 
 -buildpath							= \
     org.osgi.test.support;                  version=project, \
