@@ -369,7 +369,7 @@
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.activator"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
     &lt;implementation class="com.acme.Activator"/&gt;
 &lt;/scr:component&gt;</programlisting>
 
@@ -420,7 +420,7 @@
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.handler"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
     &lt;implementation class="com.acme.HandlerImpl"/&gt;
     &lt;property name="event.topics"&gt;some/topic&lt;/property&gt;
     &lt;service&gt; 
@@ -494,7 +494,7 @@
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.factory"
     factory="usb.connection"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
     &lt;implementation class="com.acme.USBConnectionImpl"/&gt;
 &lt;/scr:component&gt;</programlisting>
 
@@ -514,7 +514,7 @@
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.factory"    
     factory="usb.connection"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
     &lt;implementation class="com.acme.USBConnectionImpl"/&gt;
     <emphasis role="underline">&lt;service&gt;</emphasis>
         &lt;provide interface="com.acme.USBConnection"/&gt;
@@ -730,7 +730,7 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
     &lt;implementation class="com.acme.LogLookupImpl"/&gt;
     &lt;reference name="LOG"
         interface="org.osgi.service.log.LogService"/&gt;
@@ -753,7 +753,7 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
     &lt;implementation class="com.acme.LogEventImpl"/&gt;
     &lt;reference name="LOG"
         interface="org.osgi.service.log.LogService"
@@ -878,7 +878,7 @@ multiplicity ::= '1' | 'n'</programlisting>
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
     &lt;implementation class="com.acme.HttpResourceImpl"/&gt;
     &lt;reference name="HTTP"
         interface="org.osgi.service.http.HttpService"
@@ -965,7 +965,7 @@ public class HttpResourceImpl {
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
     &lt;implementation class="com.acme.HttpResourceImpl"/&gt;
     &lt;reference name="HTTP"
         interface="org.osgi.service.http.HttpService"
@@ -1108,7 +1108,7 @@ public class HttpResourceImpl {
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
     &lt;implementation class="com.acme.FactoryTracker"/&gt;
     &lt;reference name="FACTORY"
         interface=
@@ -1238,7 +1238,7 @@ public class HttpResourceImpl {
       <xref linkend="i1636361"/>, stored in a <code>UTF-8</code> encoded
       bundle entry. The namespace for component descriptions is:</para>
 
-      <programlisting>http://www.osgi.org/xmlns/scr/v1.2.0</programlisting>
+      <programlisting>http://www.osgi.org/xmlns/scr/v1.3.0</programlisting>
 
       <para>The recommended prefix for this namespace is <code>scr</code>.
       This prefix is used by examples in this specification. XML documents
@@ -2876,7 +2876,7 @@ void unsetLogService( LogService log ) {
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.binding"
-    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.2.0"&gt;
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
     &lt;implementation class="example.Binding"/&gt;
     &lt;reference name="LOG"
         interface="org.osgi.service.log.LogService"
@@ -3569,7 +3569,7 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
     <para>This XML Schema defines the component description grammar.</para>
 
     <programlisting role="pgwide"><xi:include encoding="utf-8"
-        href="../../generated/xmlns/scr/v1.2.0/scr.xsd" parse="text"/></programlisting>
+        href="../../generated/xmlns/scr/v1.3.0/scr.xsd" parse="text"/></programlisting>
 
     <para>SCR must not require component descriptions to specify the elements
     in the order required by the schema. SCR must allow other orderings since
