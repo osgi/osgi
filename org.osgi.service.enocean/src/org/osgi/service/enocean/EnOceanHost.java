@@ -45,7 +45,7 @@ public interface EnOceanHost {
     public static int    REPEATER_LEVEL_TWO = 2;
 
     /**
-     * Reset the EnOcean Host (cf. ESP3 command 0x02: C0_WR_RESET)
+     * Reset the EnOcean Host (cf. ESP3 command 0x02: CO_WR_RESET)
      * 
      * @throws EnOceanException
      */
@@ -71,7 +71,7 @@ public interface EnOceanHost {
 
     /**
      * Gets the BASE_ID of the chip, if set (cf. ESP3 command 0x08:
-     * C0_RD_IDBASE)
+     * CO_RD_IDBASE)
      * 
      * @return the BASE_ID of the device as defined in EnOcean specification
      * @throws EnOceanException
@@ -80,7 +80,7 @@ public interface EnOceanHost {
 
     /**
      * Sets the base ID of the device, may be used up to 10 times (cf. ESP3
-     * command 0x07: C0_WR_IDBASE)
+     * command 0x07: CO_WR_IDBASE)
      * 
      * @param baseID to be set.
      * @throws EnOceanException
@@ -89,7 +89,7 @@ public interface EnOceanHost {
 
     /**
      * Sets the repeater level on the host (cf. ESP3 command 0x09:
-     * C0_WR_REPEATER)
+     * CO_WR_REPEATER)
      * 
      * @param level one of the Repeater Level constants as defined above.
      * @throws EnOceanException
@@ -98,7 +98,7 @@ public interface EnOceanHost {
 
     /**
      * Gets the current repeater level of the host (cf. ESP3 command 0x0A:
-     * C0_RD_REPEATER)
+     * CO_RD_REPEATER)
      * 
      * @return one of the Repeater Level constants as defined above.
      * @throws EnOceanException
