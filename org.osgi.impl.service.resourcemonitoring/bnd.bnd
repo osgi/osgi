@@ -3,7 +3,7 @@
 
 Bundle-Vendor				= Orange
 Bundle-Activator			= org.osgi.impl.service.resourcemonitoring.Activator
-Bundle-Description			= Template for a Reference Implementation.
+Bundle-Description			= The Resource Monitoring reference implementation bundle.
 
 Export-Service				= org.osgi.service.resourcemonitoring.ResourceMonitoringService
 
@@ -20,4 +20,3 @@ Import-Package: !org.osgi.framework.wiring,\
 	org.osgi.framework;version=1.5,\
 	*
 Export-Package: org.osgi.impl.service.resourcemonitoring.threadmanager
-
