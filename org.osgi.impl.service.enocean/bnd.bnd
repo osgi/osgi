@@ -1,21 +1,17 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
-Bundle-Vendor				= Orange
-Bundle-Activator			= org.osgi.impl.service.enocean.EnOceanBundleActivator
-Bundle-Description			= The EnOcean reference implementation bundle.
+Bundle-Vendor		= Orange
+Bundle-Activator	= org.osgi.impl.service.enocean.EnOceanBundleActivator
+Bundle-Description	= The EnOcean reference implementation bundle.
 
-Export-Package: org.osgi.service.enocean.*;-split-package:=first;provide:=true
-	
-Bundle-RequiredExecutionEnvironment = J2SE-1.4 
-
-Private-Package: ${p}.*;-split-package:=first
+Private-Package		= \
+	${p}.*
 
 -buildpath:  \
+	org.osgi.service.enocean;version=project,\
+	org.osgi.test.cases.enocean;version=project,\
 	ee.j2se;version=${javac.compliance},\
 	osgi.core;version=4.2,\
-	osgi.cmpn;version=4.2,\
-	org.osgi.service.enocean;version=latest,\
-	org.osgi.test.cases.enoceansimulation;version=project
+	osgi.cmpn;version=4.2
 
--dsannotations: *

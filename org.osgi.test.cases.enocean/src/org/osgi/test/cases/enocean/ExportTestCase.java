@@ -82,8 +82,8 @@ public class ExportTestCase extends AbstractEnOceanTestCase {
 
 		byte[] data = new byte[256];
 		log("DEBUG: get any new data from testStepService.");
-		String[] executionResult = testStepService.execute("Any_new_data", null);
-		data = executionResult[0].getBytes();
+		String executionResult = super.testStepProxy.execute("Any_new_data", null);
+		data = executionResult.getBytes();
 		int size = data.length;
 		EspPacket pkt = new EspPacket(Utils.byteRange(data, 0, size));
 

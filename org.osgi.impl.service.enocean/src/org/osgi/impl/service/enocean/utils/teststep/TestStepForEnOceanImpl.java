@@ -17,7 +17,7 @@
 package org.osgi.impl.service.enocean.utils.teststep;
 
 import org.osgi.impl.service.enocean.utils.Logger;
-import org.osgi.test.cases.enoceansimulation.teststep.TestStep;
+import org.osgi.test.support.step.TestStep;
 
 /**
  * An implementation of the test step based on RI simulator. This implementation
@@ -48,32 +48,42 @@ public class TestStepForEnOceanImpl implements TestStep {
 		return result;
 	}
 
-	public String[] execute(String command, String[] parameters) {
-		Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(command: " + command + ", parameters: " + parameters + ")");
-		String[] result = null;
-		if ("MessageExample1".equals(command)) {
-			currentCommand = parameters[0].getBytes();
+	/**
+	 * Push data in test step.
+	 * 
+	 * @param data
+	 */
+	public void pushDataInTestStep(byte[] data) {
+		Logger.d(TestStepForEnOceanImpl.class.getName(), "pushDataInTestStep(data: " + data + ")");
+		currentData = data;
+	}
+
+	public String execute(String stepId, String userPrompt) {
+		Logger.d(TestStepForEnOceanImpl.class.getName(), "execute the stepId: " + stepId);
+		String result = null;
+		if ("MessageExample1".equals(stepId)) {
+			currentCommand = userPrompt.getBytes();
 			// ignore result;
 		} else
-			if ("MessageExample2".equals(command)) {
-				currentCommand = parameters[0].getBytes();
+			if ("MessageExample2".equals(stepId)) {
+				currentCommand = userPrompt.getBytes();
 				// ignore result;
 			} else {
-				if ("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription".equals(command)) {
-					currentCommand = command.getBytes();
+				if ("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription".equals(stepId)) {
+					currentCommand = stepId.getBytes();
 					// ignore result;
 				} else
-					if ("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_CID".equals(command)) {
-						currentCommand = command.getBytes();
+					if ("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_CID".equals(stepId)) {
+						currentCommand = stepId.getBytes();
 						// ignore result;
 					} else
-						if ("Any_new_data".equals(command)) {
+						if ("Any_new_data".equals(stepId)) {
 							Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(...) returns currentData: " + currentData + ", currentData.length: " + currentData.length);
-							result = new String[] {new String(currentData)};
+							result = new String(currentData);
 							currentData = null;
 							return result;
 						} else
-							if ("Plug the EnOcean USB dongle".equals(command)) {
+							if ("Plug the EnOcean USB dongle".equals(stepId)) {
 								Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(...) returns currentData: " + currentData + ", currentData.length: " + currentData.length);
 								// This message should be display on the user
 								// screen when testing EnOcean implementation
@@ -84,16 +94,6 @@ public class TestStepForEnOceanImpl implements TestStep {
 							}
 			}
 		return result;
-	}
-
-	/**
-	 * Push data in test step.
-	 * 
-	 * @param data
-	 */
-	public void pushDataInTestStep(byte[] data) {
-		Logger.d(TestStepForEnOceanImpl.class.getName(), "pushDataInTestStep(data: " + data + ")");
-		currentData = data;
 	}
 
 }

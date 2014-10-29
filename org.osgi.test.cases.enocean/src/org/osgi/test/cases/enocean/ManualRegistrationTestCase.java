@@ -48,8 +48,8 @@ public class ManualRegistrationTestCase extends AbstractEnOceanTestCase {
 		teachIn.setSenderId(Fixtures.HOST_ID_2);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
 		// Push everything in the command...
-		String[] params = {new String(pkt.serialize())};
-		testStepService.execute("MessageExample2", params);
+		String params = new String(pkt.serialize());
+		super.testStepProxy.execute("MessageExample2", params);
 
 		String lastServiceEvent = devices.waitForService();
 		log("DEBUG: lastServiceEvent: " + lastServiceEvent);

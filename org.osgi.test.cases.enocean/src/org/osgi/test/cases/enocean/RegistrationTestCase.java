@@ -45,8 +45,8 @@ public class RegistrationTestCase extends AbstractEnOceanTestCase {
 		MessageExample1 teachIn = MessageExample1.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
 		// Push everything in the command...
-		String[] params = {new String(pkt.serialize())};
-		testStepService.execute("MessageExample1", params);
+		String params = new String(pkt.serialize());
+		super.testStepProxy.execute("MessageExample1", params);
 
 		// Device added
 		String lastServiceEvent = devices.waitForService();

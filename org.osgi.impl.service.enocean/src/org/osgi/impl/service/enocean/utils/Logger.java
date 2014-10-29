@@ -27,12 +27,40 @@ public final class Logger {
 	static final boolean	ERROR	= Boolean.getBoolean("org.osgi.service.enocean.loglevel.error");
 
 	/**
+	 * @return true if at least one of the following options has been set to
+	 *         true: -Dorg.osgi.service.enocean.loglevel.debug
+	 *         -Dorg.osgi.service.enocean.loglevel.warn
+	 *         -Dorg.osgi.service.enocean.loglevel.info
+	 *         -Dorg.osgi.service.enocean.loglevel.error, false otherwise (and
+	 *         display a message via System.out.println(...)).
+	 */
+	public static final boolean checkConfig() {
+		if (DEBUG || WARN || INFO || ERROR) {
+			// Here, at least one of the option has been set to true.
+			return true;
+		} else {
+			display("Here, no log option has been set to true. "
+					+ "Feel free to use the following options if relevant: "
+					+ "-Dorg.osgi.service.enocean.loglevel.debug=true -Dorg.osgi.service.enocean.loglevel.warn=true -Dorg.osgi.service.enocean.loglevel.info=true -Dorg.osgi.service.enocean.loglevel.error=true");
+			return false;
+		}
+	}
+
+	/**
+	 * @param stringToBeDisplayed will be displayed via
+	 *        System.out.println(stringToBeDisplayed);
+	 */
+	private static final void display(String stringToBeDisplayed) {
+		System.out.println(stringToBeDisplayed);
+	}
+
+	/**
 	 * @param tag
 	 * @param msg
 	 */
 	public static final void d(String tag, String msg) {
 		if (DEBUG) {
-			System.out.println("[" + tag + "] " + msg);
+			display("[" + tag + "] " + msg);
 		}
 	}
 
@@ -42,7 +70,7 @@ public final class Logger {
 	 */
 	public static final void i(String tag, String msg) {
 		if (INFO) {
-			System.out.println("[" + tag + "] " + msg);
+			display("[" + tag + "] " + msg);
 		}
 	}
 
@@ -52,7 +80,7 @@ public final class Logger {
 	 */
 	public static final void w(String tag, String msg) {
 		if (WARN) {
-			System.out.println("[" + tag + "] " + msg);
+			display("[" + tag + "] " + msg);
 		}
 	}
 
@@ -62,7 +90,7 @@ public final class Logger {
 	 */
 	public static final void e(String tag, String msg) {
 		if (ERROR) {
-			System.out.println("[" + tag + "] " + msg);
+			display("[" + tag + "] " + msg);
 		}
 	}
 }

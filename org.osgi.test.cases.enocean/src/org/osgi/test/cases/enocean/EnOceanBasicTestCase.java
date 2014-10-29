@@ -62,7 +62,7 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 	public void testInterfaceExceptions() throws InterruptedException {
 		// Request the registration of an EnOceanMessageDescriptionSet
 		// containing an EnOceanMessageDescription.
-		testStepService.execute("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription", null);
+		super.testStepProxy.execute("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription", null);
 		log("testInterfaceExceptions(), enOceanMessageDescriptionSets.waitForService()");
 		String enOceanMessageDescriptionSetsWFS = enOceanMessageDescriptionSets.waitForService();
 		log("testInterfaceExceptions(), enOceanMessageDescriptionSets.waitForService() returned: " + enOceanMessageDescriptionSetsWFS);
@@ -98,7 +98,7 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 
 		// Request the registration of an EnOceanChannelDescriptionSet
 		// containing an EnOceanChannelDescription_CID.
-		testStepService.execute("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_CID",
+		super.testStepProxy.execute("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_CID",
 				null);
 		log("testInterfaceExceptions(), enOceanChannelDescriptionSets.waitForService()");
 		String enOceanChannelDescriptionSetsWFS =
@@ -198,8 +198,8 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 		MessageExample1 teachIn = MessageExample1.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
 		// Push everything in the command...
-		String[] params = {new String(pkt.serialize())};
-		testStepService.execute("MessageExample1", params);
+		String params = new String(pkt.serialize());
+		super.testStepProxy.execute("MessageExample1", params);
 
 		log("testRPC(), devices.waitForService()");
 		String wfs = devices.waitForService();
@@ -245,7 +245,7 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 		// Use teststep to add an EnOceanMessageDescriptionSet
 		// Request the registration of an EnOceanMessageDescriptionSet
 		// containing an EnOceanMessageDescription.
-		testStepService.execute("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription", null);
+		super.testStepProxy.execute("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription", null);
 		log("testUseOfDescriptions(), enOceanMessageDescriptionSets.waitForService()");
 		String enOceanMessageDescriptionSetsWFS = enOceanMessageDescriptionSets.waitForService();
 		log("testUseOfDescriptions(), enOceanMessageDescriptionSets.waitForService() returned: " + enOceanMessageDescriptionSetsWFS);
@@ -272,7 +272,7 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 		// Use teststep to add an EnOceanChannelDescriptionSet
 		// Request the registration of an EnOceanChannelDescriptionSet
 		// containing an EnOceanChannelDescription_CID.
-		testStepService.execute("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_CID",
+		super.testStepProxy.execute("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_CID",
 				null);
 		log("testUseOfDescriptions(), enOceanChannelDescriptionSets.waitForService()");
 		String enOceanChannelDescriptionSetsWFS =
@@ -294,5 +294,4 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 		Float deserializedValue = (Float) enOceanDataChannelDescription.deserialize(channel.getRawValue());
 		assertEquals("Fixtures.FLOATVALUE is expected here.", Fixtures.FLOATVALUE, deserializedValue.floatValue(), 0.1);
 	}
-
 }

@@ -80,7 +80,7 @@ public final class Fixtures {
 	/** TMP_CHANNEL_ID */
 	public static final String	CHANNEL_ID				= "CID";
 	/** CHANNEL_TYPE */
-	public static final String	CHANNEL_TYPE		= EnOceanChannelDescription.TYPE_DATA;
+	public static final String	CHANNEL_TYPE			= EnOceanChannelDescription.TYPE_DATA;
 	/** DEVICE_PID */
 	public static final String	DEVICE_PID				= "my_exported_unique_device";
 	/** STR_RORG_RPS */

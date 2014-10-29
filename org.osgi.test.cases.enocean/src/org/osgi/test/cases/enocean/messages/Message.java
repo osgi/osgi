@@ -33,9 +33,9 @@ public class Message implements EnOceanMessage, ByteSerializable {
 	private byte			RORG;
 	private byte[]			data;
 	private byte[]			senderId;
-	private byte			status;			// bit7: checksum type.
-												// 1=crc8,0=checksum
-												// bits 0-4: repeater count.
+	private byte			status;				// bit7: checksum type.
+													// 1=crc8,0=checksum
+													// bits 0-4: repeater count.
 
 	// Additional fields
 	private int				slf;

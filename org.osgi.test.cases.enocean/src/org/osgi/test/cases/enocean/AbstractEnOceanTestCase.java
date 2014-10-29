@@ -25,8 +25,8 @@ import org.osgi.test.cases.enocean.utils.EventListener;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
 import org.osgi.test.cases.enocean.utils.Utils;
-import org.osgi.test.cases.enoceansimulation.teststep.TestStep;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.step.TestStepProxy;
 
 /**
  * Abstract class that specify the setup(), and teardown() methods for the
@@ -36,10 +36,10 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  */
 public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 
-	/** testStepServiceRef */
-	protected ServiceReference	testStepServiceRef;
-	/** testStepService */
-	protected TestStep			testStepService;
+	/**
+	 * The manual test steps are sent to the test step proxy.
+	 */
+	protected TestStepProxy		testStepProxy;
 
 	/** devices */
 	protected ServiceListener	devices;
@@ -59,12 +59,7 @@ public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 	protected ServiceListener	enOceanChannelDescriptionSets;
 
 	protected void setUp() throws Exception {
-		/*
-		 * Gets the currently registered EnOceanHost and access its streams. Get
-		 * testStepService.
-		 */
-		testStepServiceRef = getContext().getServiceReference(TestStep.class.getName());
-		testStepService = (TestStep) getContext().getService(testStepServiceRef);
+		this.testStepProxy = new TestStepProxy(super.getContext());
 
 		/* Tracks device creation */
 		devices = new ServiceListener(getContext(), EnOceanDevice.class);
@@ -83,6 +78,7 @@ public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 	}
 
 	protected void tearDown() throws Exception {
+		this.testStepProxy.close();
 		getContext().ungetService(eventAdminRef);
 		devices.close();
 		events.close();
