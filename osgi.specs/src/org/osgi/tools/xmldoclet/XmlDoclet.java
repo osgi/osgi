@@ -395,30 +395,30 @@ public class XmlDoclet extends Doclet {
 		return sb.toString();
 	}
 
-	void print(ConstructorDoc cnst) {
+	void print(ConstructorDoc ctor) {
 		StringBuilder typeArgs = new StringBuilder();
-		print(typeArgs, cnst.typeParameters(), 0);
+		print(typeArgs, ctor.typeParameters(), 0);
 		pw.println("    <method name='"
-				+ cnst.name() //
+				+ ctor.name() //
 				+ "' fqn='"
-				+ escape(cnst.qualifiedName()) //
+				+ escape(ctor.qualifiedName()) //
 				+ "' qn='"
-				+ cnst.containingClass().name()
+				+ ctor.containingClass().name()
 				+ "."
-				+ cnst.name()
-				+ escape(flatten(cnst.signature())) //
+				+ ctor.name()
+				+ escape(flatten(ctor.signature())) //
 				+ "' package='"
-				+ cnst.containingPackage().name()
+				+ ctor.containingPackage().name()
 				+ "' typeArgs='"
 				+ typeArgs //
 				+ "' modifiers='"
-				+ cnst.modifiers() //
-				+ "' signature='" + escape(cnst.signature())
-				+ "' flatSignature='" + escape(flatten(cnst.signature()))
+				+ ctor.modifiers() //
+				+ "' signature='" + escape(ctor.signature())
+				+ "' flatSignature='" + escape(flatten(ctor.signature()))
 				+ "' isConstructor='true'>");
 
-		printAnnotations(cnst.annotations());
-		printMember(cnst);
+		printAnnotations(ctor.annotations());
+		printMember(ctor);
 		pw.println("     </method>");
 	}
 
@@ -427,46 +427,46 @@ public class XmlDoclet extends Doclet {
 	static Pattern	DDF_NODETYPE	= Pattern
 											.compile("@org.osgi.dmt.ddf.NodeType\\(\"(.+)\"\\)");
 
-	void print(MethodDoc cnst, boolean doDDF, Object deflt) {
-		String dimension = cnst.returnType().dimension();
+	void print(MethodDoc method, boolean doDDF, Object deflt) {
+		String dimension = method.returnType().dimension();
 		StringBuilder typeArgs = new StringBuilder();
-		print(typeArgs, cnst.typeParameters(), 0);
+		print(typeArgs, method.typeParameters(), 0);
 
 		pw.println("    <method name='"
-				+ cnst.name()
+				+ method.name()
 				+ "' fqn='"
-				+ cnst.qualifiedName()
+				+ method.qualifiedName()
 				+ "' qn='"
-				+ cnst.containingClass().name()
+				+ method.containingClass().name()
 				+ "."
-				+ cnst.name()
-				+ escape(flatten(cnst.signature()))
+				+ method.name()
+				+ escape(flatten(method.signature()))
 				+ "' package='"
-				+ cnst.containingPackage().name()
+				+ method.containingPackage().name()
 				+ "' modifiers='"
-				+ cnst.modifiers()
+				+ method.modifiers()
 				+ "' typeName='"
-				+ printType(cnst.returnType())
+				+ printType(method.returnType())
 				+ "' qualifiedTypeName='"
-				+ escape(cnst.returnType().qualifiedTypeName())
+				+ escape(method.returnType().qualifiedTypeName())
 				+ "' typeArgs='"
 				+ typeArgs
 				+ "' dimension='"
 				+ dimension
 				+ "' signature='"
-				+ escape(cnst.signature())
+				+ escape(method.signature())
 				+ "' flatSignature='"
-				+ escape(flatten(cnst.signature()))
+				+ escape(flatten(method.signature()))
 				+ (deflt == null ? "" : "' default='"
 						+ simplify(deflt.toString()) + "' longDefault='"
 						+ deflt) + "'>");
-		printAnnotations(cnst.annotations());
-		printMember(cnst);
+		printAnnotations(method.annotations());
+		printMember(method);
 
 		if (doDDF) {
-			DDFNode child = new DDFNode(null, cnst.name(), cnst.returnType()
+			DDFNode child = new DDFNode(null, method.name(), method.returnType()
 					.toString());
-			for (AnnotationDesc ad : cnst.annotations()) {
+			for (AnnotationDesc ad : method.annotations()) {
 				String pattern = ad.toString();
 				Matcher m = DDF_SCOPE.matcher(pattern);
 				if (m.matches()) {
@@ -484,38 +484,32 @@ public class XmlDoclet extends Doclet {
 		pw.println("     </method>");
 	}
 
-	void print(FieldDoc cnst) {
-		String dimension = cnst.type().dimension();
-		String constantValueExpression = null;
-		try {
-			constantValueExpression = cnst.constantValueExpression();
-		}
-		catch (Error e) {
-			// Is Java 1.4, so we accept a failure
-		}
+	void print(FieldDoc field) {
+		String dimension = field.type().dimension();
+		String constantValueExpression = field.constantValueExpression();
 
 		pw.println("    <field name='"
-				+ cnst.name()
+				+ field.name()
 				+ "' fqn='"
-				+ cnst.qualifiedName()
+				+ field.qualifiedName()
 				+ "' qn='"
-				+ cnst.containingClass().name()
+				+ field.containingClass().name()
 				+ "."
-				+ cnst.name()
+				+ field.name()
 				+ "' package='"
-				+ cnst.containingPackage().name()
+				+ field.containingPackage().name()
 				+ "' modifiers='"
-				+ cnst.modifiers()
+				+ field.modifiers()
 				+ "' typeName='"
-				+ printType(cnst.type())
+				+ printType(field.type())
 				+ "' qualifiedTypeName='"
-				+ escape(cnst.type().qualifiedTypeName())
+				+ escape(field.type().qualifiedTypeName())
 				+ "' dimension='"
 				+ dimension
 				+ (constantValueExpression != null ? "' constantValue='"
 						+ escape(constantValueExpression) : "") + "'>");
-		printAnnotations(cnst.annotations());
-		printComment(cnst);
+		printAnnotations(field.annotations());
+		printComment(field);
 		pw.println("     </field>");
 	}
 
