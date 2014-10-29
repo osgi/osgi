@@ -115,6 +115,11 @@
           provided that can leverage the type information to create the XML
           descriptor.</para>
         </listitem>
+
+        <listitem>
+          <para><emphasis>Introspection</emphasis> - It must be possible to
+          introspect the service components.</para>
+        </listitem>
       </itemizedlist>
     </section>
 
@@ -185,7 +190,8 @@
 
         <listitem>
           <para><emphasis>Service Component Runtime (SCR)</emphasis> - The
-          actor that manages the components and their life cycle.</para>
+          actor that manages the components and their life cycle and allows
+          introspection of the components.</para>
         </listitem>
 
         <listitem>
@@ -2913,7 +2919,7 @@ void unsetLogService( LogService log ) {
 }</programlisting>
 
       <para>This example is depicted in a sequence diagram in <xref
-      linkend="i1567615"/>. with the following scenario:</para>
+      linkend="i1567615"/> with the following scenario:</para>
 
       <orderedlist>
         <listitem>
@@ -3509,6 +3515,145 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       relationship between the Bundle Activator's start method being run and
       the components being activated.</para>
     </section>
+
+    <section xml:id="service.component-introspection">
+      <title>Introspection</title>
+
+      <para>SCR provides an introspection API for examining the runtime state
+      of the components in bundles processed by SCR. SCR must register a <xref
+      linkend="org.osgi.service.component.runtime.ServiceComponentRuntime"
+      xrefstyle="hyperlink"/> service upon startup. The Service Component
+      Runtime service provides methods to inspect the component descriptions
+      and component configurations as well as inspect and modify the enabled
+      state of components. The service uses <emphasis>Data Transfer Objects
+      (DTO)</emphasis> as arguments and return values. The rules for Data
+      Transfer Objects are specified in <xref linkend="intro.core.release"
+      xrefstyle="template:%t"/>.</para>
+
+      <para>The Service Component Runtime service provides the following
+      methods.</para>
+
+      <para><itemizedlist>
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.component.runtime.ServiceComponentRuntime.getComponentDescriptionDTOs-Bundle...-"
+            xrefstyle="hyperlink"/> - For each specified bundle, if the bundle
+            is active and processed by SCR, the returned collection will
+            contain a <xref
+            linkend="org.osgi.service.component.runtime.dto.ComponentDescriptionDTO"
+            xrefstyle="hyperlink"/> for each valid component description in
+            the bundle.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.component.runtime.ServiceComponentRuntime.getComponentDescriptionDTO-Bundle-String-"
+            xrefstyle="hyperlink"/> - If the specified bundle is active and
+            processed by SCR, and the specified bundle contains a valid
+            component description with the specified name, the method will
+            return a <xref
+            linkend="org.osgi.service.component.runtime.dto.ComponentDescriptionDTO"
+            xrefstyle="hyperlink"/> for the component description.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.component.runtime.ServiceComponentRuntime.getComponentConfigurationDTOs-ComponentDescriptionDTO-"
+            xrefstyle="hyperlink"/> - If the specified <xref
+            linkend="org.osgi.service.component.runtime.dto.ComponentDescriptionDTO"
+            xrefstyle="hyperlink"/> represents a valid component description
+            from an active bundle processed by SCR, the returned collection
+            will contain a <xref
+            linkend="org.osgi.service.component.runtime.dto.ComponentConfigurationDTO"
+            xrefstyle="hyperlink"/> for each component configuration of the
+            component.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.component.runtime.ServiceComponentRuntime.isComponentEnabled-ComponentDescriptionDTO-"
+            xrefstyle="hyperlink"/> - Returns <code>true</code> if the
+            specified Component Description DTO represents a valid component
+            description from an active bundle processed by SCR, and the
+            component is enabled. Otherwise, the method returns
+            <code>false</code>.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.component.runtime.ServiceComponentRuntime.enableComponent-ComponentDescriptionDTO-"
+            xrefstyle="hyperlink"/> - If the specified Component Description
+            DTO represents a valid component description from an active bundle
+            processed by SCR, the component is enabled. This method must
+            return after changing the enabled state of the specified
+            component. Any actions that result from this, such as activating
+            or deactivating a component configuration, must occur
+            asynchronously to this method call. The method returns a <xref
+            linkend="org.osgi.util.promise.Promise" xrefstyle="hyperlink"/>
+            that will be resolved when the actions that result from changing
+            the enabled state of the specified component have
+            completed.</para>
+          </listitem>
+
+          <listitem>
+            <para><xref
+            linkend="org.osgi.service.component.runtime.ServiceComponentRuntime.disableComponent-ComponentDescriptionDTO-"
+            xrefstyle="hyperlink"/> - If the specified Component Description
+            DTO represents a valid component description from an active bundle
+            processed by SCR, the component is disabled. This method must
+            return after changing the enabled state of the specified
+            component. Any actions that result from this, such as activating
+            or deactivating a component configuration, must occur
+            asynchronously to this method call. The method returns a <xref
+            linkend="org.osgi.util.promise.Promise" xrefstyle="hyperlink"/>
+            that will be resolved when the actions that result from changing
+            the enabled state of the specified component have
+            completed.</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>The runtime state of the components can change at any time. So any
+      information returned by these methods only provides a snapshot of the
+      state at the time of the method call.</para>
+
+      <para>There are a number of DTOs available via the Service Component
+      Runtime service.</para>
+
+      <figure>
+        <title>Service Component Runtime DTOs</title>
+
+        <mediaobject>
+          <imageobject>
+            <imagedata align="center" contentdepth="3.500in"
+                       contentwidth="7.000in" fileref="dto-structure.svg"/>
+          </imageobject>
+        </mediaobject>
+      </figure>
+
+      <para>The two main DTOs are <xref
+      linkend="org.osgi.service.component.runtime.dto.ComponentDescriptionDTO"
+      xrefstyle="hyperlink"/>, which represents a component description, and
+      <xref
+      linkend="org.osgi.service.component.runtime.dto.ComponentConfigurationDTO"
+      xrefstyle="hyperlink"/>, which represents a component configuration. The
+      Component Description DTO contains an array of <xref
+      linkend="org.osgi.service.component.runtime.dto.ReferenceDTO"
+      xrefstyle="hyperlink"/> objects which represent each declared reference
+      in the component description. The Component Configuration DTO contains
+      an array of <xref
+      linkend="org.osgi.service.component.runtime.dto.SatisfiedReferenceDTO"
+      xrefstyle="hyperlink"/> objects and an array of <xref
+      linkend="org.osgi.service.component.runtime.dto.UnsatisfiedReferenceDTO"
+      xrefstyle="hyperlink"/> objects. A Satisfied Reference DTO represents a
+      satisfied reference of the component configuration and an Unsatisfied
+      Reference DTO represents an unsatisfied reference of the component
+      configuration. The Component Configuration DTO for a satisfied component
+      configuration must contain no Unsatisfied Reference DTOs. The Component
+      Configuration DTO for an unsatisfied component configuration may contain
+      some Satisfied Reference DTOs and some Unsatisfied Reference DTOs. This
+      information can be used to diagnose why the component configuration is
+      not satisfied.</para>
+    </section>
   </section>
 
   <section>
@@ -3540,6 +3685,18 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       required to have <code>ServicePermission[ComponentFactory,
       REGISTER]</code> as the Component Factory service is registered by
       SCR.</para>
+
+      <para>SCR must have <code>ServicePermission[ServiceComponentRuntime,
+      REGISTER]</code> permission to register the <xref
+      linkend="org.osgi.service.component.runtime.ServiceComponentRuntime"
+      xrefstyle="hyperlink"/> service. Administrative bundles wishing to use
+      the <xref
+      linkend="org.osgi.service.component.runtime.ServiceComponentRuntime"
+      xrefstyle="hyperlink"/> service must have
+      <code>ServicePermission[ServiceComponentRuntime, GET]</code> permission.
+      In general, this permission should only be granted to administrative
+      bundles to limit access to the potentially intrusive methods provided by
+      this service.</para>
     </section>
 
     <section xml:id="i1617328">
@@ -3622,6 +3779,11 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
         <para><xref linkend="i1649746"/> has been rewritten to more accurately
         state the effects of configuration changes on component
         configurations.</para>
+      </listitem>
+
+      <listitem>
+        <para>New introspection API. See <xref
+        linkend="service.component-introspection"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
