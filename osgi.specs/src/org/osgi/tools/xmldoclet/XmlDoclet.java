@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -128,29 +126,6 @@ public class XmlDoclet extends Doclet {
 
 		printAnnotations(pack.annotations());
 		printComment(pack);
-		ClassDoc all[] = pack.allClasses();
-		Hashtable<String, String> ht = new Hashtable<String, String>();
-		for (int i = 0; i < all.length; i++) {
-			ClassDoc c = all[i];
-			currentClass = c.name();
-			@SuppressWarnings("deprecation")
-			PackageDoc imports[] = c.importedPackages();
-			for (int j = 0; j < imports.length; j++) {
-				PackageDoc p = imports[j];
-				if (!p.name().equals("java.lang") && ht.get(p) == null) {
-					Tag version[] = p.tags("@version");
-					@SuppressWarnings("unused")
-					String v = toString(version).trim();
-					ht.put(p.name(), "");
-				}
-			}
-		}
-		for (Enumeration<String> e = ht.keys(); e.hasMoreElements();) {
-			String key = e.nextElement();
-			@SuppressWarnings("unused")
-			String version = ht.get(key);
-			pw.println("<import name='" + key + "'/>");
-		}
 		ClassDoc classes[] = pack.allClasses();
 		for (int c = 0; classes != null && c < classes.length; c++)
 			print(classes[c]);
@@ -162,6 +137,7 @@ public class XmlDoclet extends Doclet {
 	}
 
 	void print(ClassDoc clazz) {
+		currentClass = clazz.name();
 		String name = simplify(clazz.name());
 		String superclass = null;
 		CType ctype = CType.CLASS;
@@ -211,26 +187,16 @@ public class XmlDoclet extends Doclet {
 			printParamTag(sb, parameters[i]);
 		}
 
-		// if (!clazz.isInterface()) {
-		ClassDoc ptr = clazz;
-		Hashtable<ClassDoc, String> ht = new Hashtable<ClassDoc, String>();
-		while (ptr != null) {
-			ClassDoc interfaces[] = ptr.interfaces();
-			Type[] types = ptr.interfaceTypes();
-			for (int i = 0; i < interfaces.length; i++) {
-				if (ht.get(interfaces[i]) == null) {
-					pw.println("<implements name='" + printType(interfaces[i])
-							+ "' fqn='" + interfaces[i].qualifiedName()
-							+ "' qn='" + printType(types[i]) + "' package='"
-							+ interfaces[i].containingPackage().name()
-							+ "' local='" + escape((ptr = clazz).toString())
-							+ "'/>");
-					ht.put(interfaces[i], "");
-				}
-			}
-			ptr = null; // ptr.superclass();
+		ClassDoc interfaces[] = clazz.interfaces();
+		Type[] types = clazz.interfaceTypes();
+		for (int i = 0; i < interfaces.length; i++) {
+			pw.println("<implements name='" + printType(interfaces[i])
+					+ "' fqn='" + interfaces[i].qualifiedName()
+					+ "' qn='" + printType(types[i]) + "' package='"
+					+ interfaces[i].containingPackage().name()
+					+ "' local='" + escape(clazz.toString())
+					+ "'/>");
 		}
-		// }
 
 		boolean doDDF = DDFNode.isDDF(clazz);
 
