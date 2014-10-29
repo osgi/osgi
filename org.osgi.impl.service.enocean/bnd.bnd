@@ -10,7 +10,7 @@ Private-Package		= \
 
 -buildpath:  \
 	org.osgi.service.enocean;version=project,\
-	org.osgi.test.cases.enocean;version=project,\
+	org.osgi.test.support;version=project,\
 	ee.j2se;version=${javac.compliance},\
 	osgi.core;version=4.2,\
 	osgi.cmpn;version=4.2
