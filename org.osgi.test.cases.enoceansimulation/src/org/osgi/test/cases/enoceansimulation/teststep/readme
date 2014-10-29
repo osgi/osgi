@@ -1,2 +1,0 @@
-This TestStep interface is a copy of the org.osgi.test.cases.step.TestStep interface available in org.osgi.test.cases.dal.step.
-This is temporary, indeed, in the future, this enocean project should depends on the to-be-defined/created step project.
