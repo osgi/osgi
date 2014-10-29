@@ -837,11 +837,7 @@ public class XmlDoclet extends Doclet {
 		if (name.equals(currentPackage))
 			return name;
 
-		if (name.startsWith(currentPackage)) {
-			return name.substring(currentPackage.length() + 1);
-		}
-
-		if (name.startsWith("java.") || name.startsWith("org.osgi.")) {
+		if (name.startsWith("java.") || name.startsWith("org.osgi.") || name.startsWith(currentPackage)) {
 			int n;
 			if (name.endsWith(".class")) {
 				n = name.lastIndexOf('.', name.length() - 7);
