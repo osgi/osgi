@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,8 +21,6 @@ import java.io.FileOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.util.ArrayList;
-import java.util.Enumeration;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
@@ -128,29 +126,6 @@ public class XmlDoclet extends Doclet {
 
 		printAnnotations(pack.annotations());
 		printComment(pack);
-		ClassDoc all[] = pack.allClasses();
-		Hashtable<String, String> ht = new Hashtable<String, String>();
-		for (int i = 0; i < all.length; i++) {
-			ClassDoc c = all[i];
-			currentClass = c.name();
-			@SuppressWarnings("deprecation")
-			PackageDoc imports[] = c.importedPackages();
-			for (int j = 0; j < imports.length; j++) {
-				PackageDoc p = imports[j];
-				if (!p.name().equals("java.lang") && ht.get(p) == null) {
-					Tag version[] = p.tags("@version");
-					@SuppressWarnings("unused")
-					String v = toString(version).trim();
-					ht.put(p.name(), "");
-				}
-			}
-		}
-		for (Enumeration<String> e = ht.keys(); e.hasMoreElements();) {
-			String key = e.nextElement();
-			@SuppressWarnings("unused")
-			String version = ht.get(key);
-			pw.println("<import name='" + key + "'/>");
-		}
 		ClassDoc classes[] = pack.allClasses();
 		for (int c = 0; classes != null && c < classes.length; c++)
 			print(classes[c]);
@@ -162,6 +137,7 @@ public class XmlDoclet extends Doclet {
 	}
 
 	void print(ClassDoc clazz) {
+		currentClass = clazz.name();
 		String name = simplify(clazz.name());
 		String superclass = null;
 		CType ctype = CType.CLASS;
@@ -211,26 +187,16 @@ public class XmlDoclet extends Doclet {
 			printParamTag(sb, parameters[i]);
 		}
 
-		// if (!clazz.isInterface()) {
-		ClassDoc ptr = clazz;
-		Hashtable<ClassDoc, String> ht = new Hashtable<ClassDoc, String>();
-		while (ptr != null) {
-			ClassDoc interfaces[] = ptr.interfaces();
-			Type[] types = ptr.interfaceTypes();
-			for (int i = 0; i < interfaces.length; i++) {
-				if (ht.get(interfaces[i]) == null) {
-					pw.println("<implements name='" + printType(interfaces[i])
-							+ "' fqn='" + interfaces[i].qualifiedName()
-							+ "' qn='" + printType(types[i]) + "' package='"
-							+ interfaces[i].containingPackage().name()
-							+ "' local='" + escape((ptr = clazz).toString())
-							+ "'/>");
-					ht.put(interfaces[i], "");
-				}
-			}
-			ptr = null; // ptr.superclass();
+		ClassDoc interfaces[] = clazz.interfaces();
+		Type[] types = clazz.interfaceTypes();
+		for (int i = 0; i < interfaces.length; i++) {
+			pw.println("<implements name='" + printType(interfaces[i])
+					+ "' fqn='" + interfaces[i].qualifiedName()
+					+ "' qn='" + printType(types[i]) + "' package='"
+					+ interfaces[i].containingPackage().name()
+					+ "' local='" + escape(clazz.toString())
+					+ "'/>");
 		}
-		// }
 
 		boolean doDDF = DDFNode.isDDF(clazz);
 
@@ -429,30 +395,30 @@ public class XmlDoclet extends Doclet {
 		return sb.toString();
 	}
 
-	void print(ConstructorDoc cnst) {
+	void print(ConstructorDoc ctor) {
 		StringBuilder typeArgs = new StringBuilder();
-		print(typeArgs, cnst.typeParameters(), 0);
+		print(typeArgs, ctor.typeParameters(), 0);
 		pw.println("    <method name='"
-				+ cnst.name() //
+				+ ctor.name() //
 				+ "' fqn='"
-				+ escape(cnst.qualifiedName()) //
+				+ escape(ctor.qualifiedName()) //
 				+ "' qn='"
-				+ cnst.containingClass().name()
+				+ ctor.containingClass().name()
 				+ "."
-				+ cnst.name()
-				+ escape(flatten(cnst.signature())) //
+				+ ctor.name()
+				+ escape(flatten(ctor.signature())) //
 				+ "' package='"
-				+ cnst.containingPackage().name()
+				+ ctor.containingPackage().name()
 				+ "' typeArgs='"
 				+ typeArgs //
 				+ "' modifiers='"
-				+ cnst.modifiers() //
-				+ "' signature='" + escape(cnst.signature())
-				+ "' flatSignature='" + escape(flatten(cnst.signature()))
+				+ ctor.modifiers() //
+				+ "' signature='" + escape(ctor.signature())
+				+ "' flatSignature='" + escape(flatten(ctor.signature()))
 				+ "' isConstructor='true'>");
 
-		printAnnotations(cnst.annotations());
-		printMember(cnst);
+		printAnnotations(ctor.annotations());
+		printMember(ctor);
 		pw.println("     </method>");
 	}
 
@@ -461,46 +427,46 @@ public class XmlDoclet extends Doclet {
 	static Pattern	DDF_NODETYPE	= Pattern
 											.compile("@org.osgi.dmt.ddf.NodeType\\(\"(.+)\"\\)");
 
-	void print(MethodDoc cnst, boolean doDDF, Object deflt) {
-		String dimension = cnst.returnType().dimension();
+	void print(MethodDoc method, boolean doDDF, Object deflt) {
+		String dimension = method.returnType().dimension();
 		StringBuilder typeArgs = new StringBuilder();
-		print(typeArgs, cnst.typeParameters(), 0);
+		print(typeArgs, method.typeParameters(), 0);
 
 		pw.println("    <method name='"
-				+ cnst.name()
+				+ method.name()
 				+ "' fqn='"
-				+ cnst.qualifiedName()
+				+ method.qualifiedName()
 				+ "' qn='"
-				+ cnst.containingClass().name()
+				+ method.containingClass().name()
 				+ "."
-				+ cnst.name()
-				+ escape(flatten(cnst.signature()))
+				+ method.name()
+				+ escape(flatten(method.signature()))
 				+ "' package='"
-				+ cnst.containingPackage().name()
+				+ method.containingPackage().name()
 				+ "' modifiers='"
-				+ cnst.modifiers()
+				+ method.modifiers()
 				+ "' typeName='"
-				+ printType(cnst.returnType())
+				+ printType(method.returnType())
 				+ "' qualifiedTypeName='"
-				+ escape(cnst.returnType().qualifiedTypeName())
+				+ escape(method.returnType().qualifiedTypeName())
 				+ "' typeArgs='"
 				+ typeArgs
 				+ "' dimension='"
 				+ dimension
 				+ "' signature='"
-				+ escape(cnst.signature())
+				+ escape(method.signature())
 				+ "' flatSignature='"
-				+ escape(flatten(cnst.signature()))
+				+ escape(flatten(method.signature()))
 				+ (deflt == null ? "" : "' default='"
 						+ simplify(deflt.toString()) + "' longDefault='"
 						+ deflt) + "'>");
-		printAnnotations(cnst.annotations());
-		printMember(cnst);
+		printAnnotations(method.annotations());
+		printMember(method);
 
 		if (doDDF) {
-			DDFNode child = new DDFNode(null, cnst.name(), cnst.returnType()
+			DDFNode child = new DDFNode(null, method.name(), method.returnType()
 					.toString());
-			for (AnnotationDesc ad : cnst.annotations()) {
+			for (AnnotationDesc ad : method.annotations()) {
 				String pattern = ad.toString();
 				Matcher m = DDF_SCOPE.matcher(pattern);
 				if (m.matches()) {
@@ -518,38 +484,32 @@ public class XmlDoclet extends Doclet {
 		pw.println("     </method>");
 	}
 
-	void print(FieldDoc cnst) {
-		String dimension = cnst.type().dimension();
-		String constantValueExpression = null;
-		try {
-			constantValueExpression = cnst.constantValueExpression();
-		}
-		catch (Error e) {
-			// Is Java 1.4, so we accept a failure
-		}
+	void print(FieldDoc field) {
+		String dimension = field.type().dimension();
+		String constantValueExpression = field.constantValueExpression();
 
 		pw.println("    <field name='"
-				+ cnst.name()
+				+ field.name()
 				+ "' fqn='"
-				+ cnst.qualifiedName()
+				+ field.qualifiedName()
 				+ "' qn='"
-				+ cnst.containingClass().name()
+				+ field.containingClass().name()
 				+ "."
-				+ cnst.name()
+				+ field.name()
 				+ "' package='"
-				+ cnst.containingPackage().name()
+				+ field.containingPackage().name()
 				+ "' modifiers='"
-				+ cnst.modifiers()
+				+ field.modifiers()
 				+ "' typeName='"
-				+ printType(cnst.type())
+				+ printType(field.type())
 				+ "' qualifiedTypeName='"
-				+ escape(cnst.type().qualifiedTypeName())
+				+ escape(field.type().qualifiedTypeName())
 				+ "' dimension='"
 				+ dimension
 				+ (constantValueExpression != null ? "' constantValue='"
 						+ escape(constantValueExpression) : "") + "'>");
-		printAnnotations(cnst.annotations());
-		printComment(cnst);
+		printAnnotations(field.annotations());
+		printComment(field);
 		pw.println("     </field>");
 	}
 
@@ -877,11 +837,7 @@ public class XmlDoclet extends Doclet {
 		if (name.equals(currentPackage))
 			return name;
 
-		if (name.startsWith(currentPackage)) {
-			return name.substring(currentPackage.length() + 1);
-		}
-
-		if (name.startsWith("java.") || name.startsWith("org.osgi.")) {
+		if (name.startsWith("java.") || name.startsWith("org.osgi.") || name.startsWith(currentPackage)) {
 			int n;
 			if (name.endsWith(".class")) {
 				n = name.lastIndexOf('.', name.length() - 7);

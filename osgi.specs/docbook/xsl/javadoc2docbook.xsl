@@ -1130,9 +1130,6 @@ version="1.1">
   </xsl:element>
 </xsl:template>
 
-<!-- ignore import elements -->
-<xsl:template match="import"/>
-
 <xsl:template match="parameter" mode="head">
   <xsl:if test="position()!=1">
     <xsl:text>,</xsl:text>
