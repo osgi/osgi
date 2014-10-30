@@ -1,13 +1,13 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd
 
-Bundle-Description					= EnOcean Test Bundle
+Bundle-Description	= EnOcean Test Bundle
 
-Export-Package		= \
+Private-Package		=  \
 	${p}.*
 
-Test-Cases							= ${testcases}
--signaturetest                      = org.osgi.service.enocean
+Test-Cases			= ${testcases}
+-signaturetest		= org.osgi.service.enocean
 
 -buildpath: org.osgi.test.support;version=project,\
 	org.osgi.service.enocean;version=project,\
@@ -15,7 +15,7 @@ Test-Cases							= ${testcases}
 	osgi.cmpn;version=4.2,\
 	ee.minimum;version=1.2,\
 	${junit}
-	
+
 -runbundles: org.osgi.test.support;version=latest,\
 	org.osgi.service.enocean;version=latest,\
 	org.osgi.impl.service.log;version=latest,\
@@ -31,7 +31,3 @@ Test-Cases							= ${testcases}
 	org.osgi.service.enocean.loglevel.error=true, \
 	org.osgi.service.enocean.host.chip_id=12345678, \
 	org.osgi.service.enocean.host.base_id=9876543
-
-
-
-
