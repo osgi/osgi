@@ -55,7 +55,7 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 		EspRadioPacket teachInPkt = new EspRadioPacket(teachIn);
 		// Push everything in the command...
 		String params = new String(teachInPkt.serialize());
-		super.testStepProxy.execute("MessageExample1", params);
+		super.testStepProxy.execute("MessageExample1_" + params, null);
 
 		/* First get a reference towards the device */
 		String lastServiceEvent = devices.waitForService();
@@ -70,7 +70,7 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 		EspRadioPacket measurePkt = new EspRadioPacket(measure);
 		// Push everything in the command...
 		String params2 = new String(measurePkt.serialize());
-		super.testStepProxy.execute("MessageExample1", params2);
+		super.testStepProxy.execute("MessageExample1_" + params2, null);
 
 		Event event = events.waitForEvent();
 		assertNotNull("Timeout reached.", event);

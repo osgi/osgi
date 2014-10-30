@@ -61,38 +61,43 @@ public class TestStepForEnOceanImpl implements TestStep {
 	public String execute(String stepId, String userPrompt) {
 		Logger.d(TestStepForEnOceanImpl.class.getName(), "execute the stepId: " + stepId);
 		String result = null;
-		if ("MessageExample1".equals(stepId)) {
-			currentCommand = userPrompt.getBytes();
-			// ignore result;
+		if (stepId == null) {
+			Logger.e(TestStepForEnOceanImpl.class.getName(), "The given stepId is null, but it can NOT be.");
 		} else
-			if ("MessageExample2".equals(stepId)) {
-				currentCommand = userPrompt.getBytes();
+			if (stepId.startsWith("MessageExample1_")) {
+				currentCommand = stepId.replaceFirst("MessageExample1_", "").getBytes();
 				// ignore result;
-			} else {
-				if ("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription".equals(stepId)) {
-					currentCommand = stepId.getBytes();
+			} else
+				if (stepId.startsWith("MessageExample2_")) {
+					currentCommand = stepId.replaceFirst("MessageExample2_", "").getBytes();
 					// ignore result;
-				} else
-					if ("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_CID".equals(stepId)) {
+				} else {
+					if ("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription".equals(stepId)) {
 						currentCommand = stepId.getBytes();
 						// ignore result;
 					} else
-						if ("Any_new_data".equals(stepId)) {
-							Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(...) returns currentData: " + currentData + ", currentData.length: " + currentData.length);
-							result = new String(currentData);
-							currentData = null;
-							return result;
+						if ("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_CID".equals(stepId)) {
+							currentCommand = stepId.getBytes();
+							// ignore result;
 						} else
-							if ("Plug the EnOcean USB dongle".equals(stepId)) {
+							if ("Any_new_data".equals(stepId)) {
 								Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(...) returns currentData: " + currentData + ", currentData.length: " + currentData.length);
-								// This message should be display on the user
-								// screen when testing EnOcean implementation
-								// for real.
-							} else {
-								Logger.e(TestStepForEnOceanImpl.class.getName(), "The given command is UNKNOWN.");
-								// ignore result;
-							}
-			}
+								result = new String(currentData);
+								currentData = null;
+								return result;
+							} else
+								if ("Plug the EnOcean USB dongle".equals(stepId)) {
+									Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(...) returns currentData: " + currentData + ", currentData.length: " + currentData.length);
+									// This message should be display on the
+									// user
+									// screen when testing EnOcean
+									// implementation
+									// for real.
+								} else {
+									Logger.e(TestStepForEnOceanImpl.class.getName(), "The given command is UNKNOWN.");
+									// ignore result;
+								}
+				}
 		return result;
 	}
 

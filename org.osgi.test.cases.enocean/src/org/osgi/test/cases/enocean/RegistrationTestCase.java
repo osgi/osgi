@@ -46,7 +46,7 @@ public class RegistrationTestCase extends AbstractEnOceanTestCase {
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
 		// Push everything in the command...
 		String params = new String(pkt.serialize());
-		super.testStepProxy.execute("MessageExample1", params);
+		super.testStepProxy.execute("MessageExample1_" + params, null);
 
 		// Device added
 		String lastServiceEvent = devices.waitForService();
