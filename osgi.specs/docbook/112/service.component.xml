@@ -610,9 +610,8 @@
     <section>
       <title>Event Methods</title>
 
-      <para>When using the event strategy the SCR must callback the components
-      at the appropriate time. The SCR must callback on the following
-      events:</para>
+      <para>When using the event strategy, SCR must callback the components at
+      the appropriate time. SCR must callback on the following events:</para>
 
       <itemizedlist>
         <listitem>
@@ -632,7 +631,7 @@
         </listitem>
 
         <listitem>
-          <para><code>unbind</code> - The unbind method is called when the SCR
+          <para><code>unbind</code> - The unbind method is called when SCR
           needs to unbind the service.</para>
         </listitem>
       </itemizedlist>
@@ -3421,8 +3420,8 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
     <section xml:id="i1616910">
       <title>Relationship to OSGi Framework</title>
 
-      <para>The SCR must have access to the Bundle Context of any bundle that
-      contains a component. The SCR needs access to the Bundle Context for the
+      <para>SCR must have access to the Bundle Context of any bundle that
+      contains a component. SCR needs access to the Bundle Context for the
       following reasons:</para>
 
       <itemizedlist>
@@ -3442,8 +3441,8 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
         </listitem>
       </itemizedlist>
 
-      <para>The SCR should use the <code>Bundle.getBundleContext()</code>
-      method to obtain the Bundle Context reference.</para>
+      <para>SCR should use the <code>Bundle.getBundleContext()</code> method
+      to obtain the Bundle Context reference.</para>
     </section>
 
     <section>
@@ -3749,8 +3748,8 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
     <section xml:id="i1617328">
       <title>Required Admin Permission</title>
 
-      <para>The SCR requires <code>AdminPermission[*,CONTEXT]</code> because
-      it needs access to the bundle's Bundle Context object with the
+      <para>SCR requires <code>AdminPermission[*,CONTEXT]</code> because it
+      needs access to the bundle's Bundle Context object with the
       <code>Bundle.getBundleContext()</code> method.</para>
     </section>
 
