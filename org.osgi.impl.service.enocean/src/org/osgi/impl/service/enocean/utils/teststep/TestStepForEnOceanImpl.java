@@ -59,7 +59,7 @@ public class TestStepForEnOceanImpl implements TestStep {
 	}
 
 	public String execute(String stepId, String userPrompt) {
-		Logger.d(TestStepForEnOceanImpl.class.getName(), "execute the stepId: " + stepId);
+		Logger.d(TestStepForEnOceanImpl.class.getName(), "execute the stepId: " + stepId + ", userPrompt: " + userPrompt);
 		String result = null;
 		if (stepId == null) {
 			Logger.e(TestStepForEnOceanImpl.class.getName(), "The given stepId is null, but it can NOT be.");
