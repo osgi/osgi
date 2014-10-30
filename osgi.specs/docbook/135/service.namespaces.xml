@@ -77,7 +77,7 @@
     </itemizedlist>
   </section>
 
-  <section xml:id="i1772810">
+  <section xml:id="service.namespaces-osgi.extender">
     <title>osgi.extender Namespace</title>
 
     <para>An <emphasis>Extender</emphasis> is a bundle that uses the life
@@ -138,7 +138,7 @@
             defined in their respective specifications and should in general
             use the specification top level package name. For example,
             <code>org.acme.foo</code>. The OSGi Alliance reserves names that
-            start with <code>osgi.</code>.</para></entry>
+            start with "<code>osgi.</code>".</para></entry>
           </row>
 
           <row>
@@ -163,54 +163,60 @@
     should specify the values for these attributes. Extenders that provide
     such a capability should list the packages that they use in their
     specification in the <code>uses</code> directive of that capability to
-    ensure class space consistency. Extenders can extend an extendee bundle
-    even if that bundle does not require the extender unless the specification
-    explicitly forbids this. For example an OSGi Blueprint Container could
-    declare its capability with the following manifest header:</para>
+    ensure class space consistency. For example a Declarative Services
+    implementation could declare its capability with the following manifest
+    header:</para>
 
     <programlisting>Provide-Capability: osgi.extender; 
-   osgi.extender="osgi.blueprint";
-   uses:=
-     "org.osgi.service.blueprint.container,org.osgi.service.blueprint.reflect";
-   version:Version="1.0"</programlisting>
+   osgi.extender="osgi.component";
+   uses:="org.osgi.service.component";
+   version:Version="1.3"</programlisting>
 
-    <para>A bundle that depends on a Blueprint Container could require such an
-    extender with the following manifest header:</para>
+    <para>A bundle that depends on a Declarative Services implementation
+    should require such an extender with the following manifest header:</para>
 
     <programlisting>Require-Capability: osgi.extender;
-  filter:="(&amp;(osgi.extender=osgi.blueprint)(version&gt;=1.0))"</programlisting>
+  filter:="(&amp;(osgi.extender=osgi.component)(version&gt;=1.3))"</programlisting>
 
-    <para>An extender should only extend a bundle if one of the following is 
-    true:</para>
+    <para>Extenders can extend an extendee bundle even if that bundle does not
+    require the extender, unless the extender's specification explicitly
+    forbids this. It is recommended that an extender should only extend a
+    bundle if one of the following is true:</para>
+
     <itemizedlist>
       <listitem>
-        <para>The extendee bundle wiring has an <code>osgi.extender</code>
-        required wire and it is wired to the <code>osgi.extender</code>
-        capability of the extender.</para>
+        <para>The bundle's wiring has a required wire for at least one
+        <code>osgi.extender</code> capability with the name of the extender
+        and the first of these required wires is wired to the extender.</para>
       </listitem>
+
       <listitem>
-        <para>The extendee bundle wiring has no <code>osgi.extender</code>
-        required wire.</para>
+        <para>The bundle's wiring has no required wire for an
+        <code>osgi.extender</code> capability with the name of the
+        extender.</para>
       </listitem>
     </itemizedlist>
 
-  <section>
-    <title>Extenders and Framework Hooks</title>
-    <para>The Framework provides a number of hooks that allow groups of bundles
-    to be scoped.  For example, the <xref linkend="service.subsystem"/>.  An
-    extender may want to extend the complete set of bundles installed in the
-    Framework even when extendee bundles are hidden from the extender. The
-    system bundle context provides a complete view of the bundles and services
-    available in the Framework even if Framework hooks are used to scope groups
-    of bundles.  The system bundle context can be used by an extender to track
-    all bundles installed in the Framework regardless of how Framework hooks
-    are used to scope groups of bundles.  This is useful in scenarios where
-    several scoped groups contain bundles that require an extender.  Instead of
-    requiring an extender to be installed in each scoped group of bundles, a
-    single extender that uses the system bundle context to track extendees can
-    be installed to extend all scoped groups of bundles.</para>
-  </section>
+    <para>Otherwise, the extender should not extend the bundle.</para>
 
+    <section>
+      <title>Extenders and Framework Hooks</title>
+
+      <para>The Framework provides a number of hooks that allow groups of
+      bundles to be scoped. For example, the <xref
+      linkend="service.subsystem"/>. An extender may want to extend the
+      complete set of bundles installed in the Framework even when extendee
+      bundles are hidden from the extender. The system bundle context provides
+      a complete view of the bundles and services available in the Framework
+      even if Framework hooks are used to scope groups of bundles. The system
+      bundle context can be used by an extender to track all bundles installed
+      in the Framework regardless of how Framework hooks are used to scope
+      groups of bundles. This is useful in scenarios where several scoped
+      groups contain bundles that require an extender. Instead of requiring an
+      extender to be installed in each scoped group of bundles, a single
+      extender that uses the system bundle context to track extendees can be
+      installed to extend all scoped groups of bundles.</para>
+    </section>
   </section>
 
   <section>
