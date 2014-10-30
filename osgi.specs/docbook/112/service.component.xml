@@ -3414,6 +3414,10 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
   <section xml:id="i1578406">
     <title>Service Component Runtime</title>
 
+    <para>Service Component Runtime (SCR) is the actor that manages the
+    components and their life cycle and allows introspection of the
+    components.</para>
+
     <section xml:id="i1616910">
       <title>Relationship to OSGi Framework</title>
 
@@ -3654,6 +3658,49 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       information can be used to diagnose why the component configuration is
       not satisfied.</para>
     </section>
+
+    <section xml:id="service.component-extender.capability">
+      <title>Extender Capability</title>
+
+      <para>SCR must provide the following <link
+      linkend="service.namespaces-osgi.extender"><code>osgi.extender</code></link>
+      capability.</para>
+
+      <programlisting>Provide-Capability: osgi.extender; 
+   osgi.extender="osgi.component";
+   uses:="org.osgi.service.component";
+   version:Version="1.3"</programlisting>
+
+      <para>A bundle that contains service components should require the
+      <code>osgi.extender</code> capability from SCR. This requirement will
+      wire the bundle to the SCR implementation and ensure that both the
+      bundle and SCR are using the same
+      <code>org.osgi.service.component</code> package.</para>
+
+      <programlisting>Require-Capability: osgi.extender;
+  filter:="(&amp;(osgi.extender=osgi.component)(version&gt;=1.3))"</programlisting>
+
+      <para>SCR must only process a bundle's service components if one of the
+      following is true:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The bundle's wiring has a required wire for at least one
+          <code>osgi.extender</code> capability with the name
+          <code>osgi.component</code> and the first of these required wires is
+          wired to SCR.</para>
+        </listitem>
+
+        <listitem>
+          <para>The bundle's wiring has no required wire for an
+          <code>osgi.extender</code> capability with the name
+          <code>osgi.component</code>.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Otherwise, SCR must not process the bundle's service
+      components.</para>
+    </section>
   </section>
 
   <section>
@@ -3784,6 +3831,11 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       <listitem>
         <para>New introspection API. See <xref
         linkend="service.component-introspection"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added new <code>osgi.extender</code> capability. See <xref
+        linkend="service.component-extender.capability"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
