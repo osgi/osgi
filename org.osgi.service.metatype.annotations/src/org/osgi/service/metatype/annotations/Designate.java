@@ -22,8 +22,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Generate a Meta Type Resource using the annotated Declarative Services
- * component as the PID value for a {@code Designate} element.
+ * Generate a {@code Designate} element in the Meta Type Resource for an
+ * {@link ObjectClassDefinition} using the annotated Declarative Services
+ * component.
  * 
  * <p>
  * This annotation must be used on a type that is also annotated with the
@@ -33,7 +34,7 @@ import java.lang.annotation.Target;
  * 
  * <p>
  * This annotation is not processed at runtime. It must be processed by tools
- * and used to generate a Meta Type Resource document for the bundle.
+ * and used to contribute to a Meta Type Resource document for the bundle.
  * 
  * @see "The Designate element of a Meta Type Resource."
  * @author $Id$

@@ -22,14 +22,13 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Generate a Meta Type Resource using the annotated type as an
- * {@code ObjectClassDefinition}.
+ * Generate a Meta Type Resource using the annotated type.
  * 
  * <p>
- * This annotation can be used without defining any element values as defaults
- * can be generated from the annotated type. Each method of the annotated type
- * has an implied {@link AttributeDefinition} annotation if not explicitly
- * annotated.
+ * This annotation can be used without defining any element values since
+ * defaults can be generated from the annotated type. Each method of the
+ * annotated type has an implied {@link AttributeDefinition} annotation if not
+ * explicitly annotated.
  * 
  * <p>
  * This annotation may only be used on annotation types and interface types. Use
@@ -109,11 +108,15 @@ public @interface ObjectClassDefinition {
 	 * 
 	 * <p>
 	 * For each specified PID, a {@code Designate} element with a pid attribute
-	 * is generated that {@link #id() references} this ObjectClassDefinition. If
-	 * not specified, no Designate elements with pid attributes will be
-	 * generated.
+	 * is generated that {@link #id() references} this ObjectClassDefinition.
 	 * 
-	 * @see "The pid of the Designate element of a Meta Type Resource."
+	 * <p>
+	 * The {@link Designate} annotation can also be used to associate a
+	 * Declarative Services component with an ObjectClassDefinition and generate
+	 * a {@code Designate} element.
+	 * 
+	 * @see "The pid attribute of the Designate element of a Meta Type Resource."
+	 * @see Designate
 	 */
 	String[] pid() default {};
 
@@ -123,10 +126,16 @@ public @interface ObjectClassDefinition {
 	 * <p>
 	 * For each specified factory PID, a {@code Designate} element with a
 	 * factoryPid attribute is generated that {@link #id() references} this
-	 * ObjectClassDefinition. If not specified, no Designate elements with
-	 * factoryPid attributes will be generated.
+	 * ObjectClassDefinition.
 	 * 
-	 * @see "The factoryPid of the Designate element of a Meta Type Resource."
+	 * <p>
+	 * The {@link Designate} annotation can also be used to associate a
+	 * Declarative Services component with an ObjectClassDefinition and generate
+	 * a {@code Designate} element.
+	 * 
+	 * 
+	 * @see "The factoryPid attribute of the Designate element of a Meta Type Resource."
+	 * @see Designate
 	 */
 	String[] factoryPid() default {};
 
@@ -135,8 +144,8 @@ public @interface ObjectClassDefinition {
 	 * 
 	 * <p>
 	 * For each specified {@link Icon}, an {@code Icon} element is generated for
-	 * this ObjectClassDefinition. If not specified, no Icon elements will be
-	 * generated.
+	 * this ObjectClassDefinition. If not specified, no {@code Icon} elements
+	 * will be generated.
 	 * 
 	 * @see "The Icon element of a Meta Type Resource."
 	 */

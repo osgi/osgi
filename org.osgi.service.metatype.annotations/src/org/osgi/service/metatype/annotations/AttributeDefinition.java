@@ -48,7 +48,7 @@ import java.lang.annotation.Target;
  * 
  * <p>
  * This annotation is not processed at runtime. It must be processed by tools
- * and used to generate a Meta Type Resource document for the bundle.
+ * and used to contribute to a Meta Type Resource document for the bundle.
  * 
  * @see "The AD element of a Meta Type Resource."
  * @author $Id$
@@ -99,8 +99,21 @@ public @interface AttributeDefinition {
 	 * <p>
 	 * If not specified, the type is derived from the return type of the
 	 * annotated method. Return types of {@code Class} and {@code Enum} are
-	 * mapped to {@link AttributeType#STRING STRING}. A tool processing the
-	 * annotation should declare an error for unsupported return types.
+	 * mapped to {@link AttributeType#STRING STRING}. If the return type is
+	 * {@code List}, {@code Set}, {@code Collection}, {@code Iterable} or some
+	 * type which can be determined at annotation processing time to
+	 * <ol>
+	 * <li>be a subtype of {@code Collection} and</li>
+	 * <li>have a public no argument constructor,</li>
+	 * </ol>
+	 * then the type is derived from the generic type. For example, a return
+	 * type of {@code List<String>} will be mapped to
+	 * {@link AttributeType#STRING STRING}. A return type of a single
+	 * dimensional array is supported and the type is the component type of the
+	 * array. Multi dimensional arrays are not supported. Annotation return
+	 * types are not supported. Any unrecognized type is mapped to
+	 * {@link AttributeType#STRING STRING}. A tool processing the annotation
+	 * should declare an error for unsupported return types.
 	 * 
 	 * @see "The type attribute of the AD element of a Meta Type Resource."
 	 */
@@ -111,10 +124,16 @@ public @interface AttributeDefinition {
 	 * 
 	 * <p>
 	 * If not specified, the cardinality is derived from the return type of the
-	 * annotated method. For non-array and non-Collection return types, that is
-	 * a scalar type, the cardinality is 0. For array return types, the
-	 * cardinality is a large positive value. For Collection return types, the
-	 * cardinality is a large negative value.
+	 * annotated method. For an array return type, the cardinality is a large
+	 * positive value. If the return type is {@code List}, {@code Set},
+	 * {@code Collection}, {@code Iterable} or some type which can be determined
+	 * at annotation processing time to
+	 * <ol>
+	 * <li>be a subtype of {@code Collection} and</li>
+	 * <li>have a public no argument constructor,</li>
+	 * </ol>
+	 * the cardinality is a large negative value. Otherwise, the cardinality is
+	 * 0.
 	 * 
 	 * @see "The cardinality attribute of the AD element of a Meta Type Resource."
 	 */
@@ -149,7 +168,7 @@ public @interface AttributeDefinition {
 	 * {@code AD} element.
 	 * 
 	 * <p>
-	 * If not specified, if the annotated member is an annotation element that
+	 * If not specified and the annotated method is an annotation element that
 	 * has a {@code default} value, then the value of this element is the
 	 * {@code default} value of the annotated element. Otherwise, there is no
 	 * default value.
@@ -176,10 +195,20 @@ public @interface AttributeDefinition {
 	 * for this AttributeDefinition.
 	 *
 	 * <p>
-	 * If not specified, if the annotated member is an {@code Enum} or
-	 * {@code Enum[]}, then the value of this element has an {@link Option} for
-	 * each Enum with the option label and value set to the name of the Enum
-	 * value. Otherwise, no {@code Option} elements will be generated.
+	 * If not specified, the option information is derived from the return type
+	 * of the annotated method. If the return type is an {@code enum}, a single
+	 * dimensional array of an {@code enum}, or a {@code List}, {@code Set},
+	 * {@code Collection}, {@code Iterable} or some type which can be determined
+	 * at annotation processing time to
+	 * <ol>
+	 * <li>be a subtype of {@code Collection} and</li>
+	 * <li>have a public no argument constructor,</li>
+	 * </ol>
+	 * with a generic type of an {@code enum}, then the value of this element
+	 * has an {@link Option} for each value of the {@code enum}. The label and
+	 * value of each {@link Option} are set to the name of the corresponding
+	 * {@code enum} value. Otherwise, no {@code Option} elements will be
+	 * generated.
 	 * 
 	 * @see "The Option element of a Meta Type Resource."
 	 */
