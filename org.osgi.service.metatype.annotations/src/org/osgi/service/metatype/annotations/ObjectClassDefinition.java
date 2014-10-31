@@ -97,11 +97,10 @@ public @interface ObjectClassDefinition {
 	 * <p>
 	 * This refers to a resource property entry in the bundle that can be
 	 * augmented with locale information. If not specified, the localization
-	 * resource of this ObjectClassDefinition is the string
-	 * &quot;OSGI-INF/l10n/&quot; followed by the fully qualified name of the
-	 * annotated type.
+	 * resource for this ObjectClassDefinition is the string
+	 * &quot;OSGI-INF/l10n/&quot; followed by the {@link #id()}.
 	 * 
-	 * @see "The localization attribute of the OCD element of a Meta Type Resource."
+	 * @see "The localization attribute of the MetaData element of a Meta Type Resource."
 	 */
 	String localization() default "";
 
