@@ -607,7 +607,7 @@
       services.</para>
     </section>
 
-    <section>
+    <section xml:id="service.component-event.methods">
       <title>Event Methods</title>
 
       <para>When using the event strategy, SCR must callback the components at
@@ -637,55 +637,79 @@
       </itemizedlist>
 
       <para>Together these methods are called the <emphasis>event
-      methods</emphasis>. Event methods must have one of the following
-      prototypes:</para>
+      methods</emphasis>. The prototype of the event methods is:</para>
 
-      <programlisting>void &lt;method-name&gt;(ServiceReference);
-void &lt;method-name&gt;(&lt;parameter-type&gt;);
-void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
+      <programlisting>void &lt;method-name&gt;(&lt;arguments&gt;);</programlisting>
 
-      <para>If an event method has the first prototype, then a Service
-      Reference to the bound service will be passed to the method. This
-      Service Reference may later be passed to the <xref
-      linkend="org.osgi.service.component.ComponentContext.locateService-String-ServiceReference-"
-      xrefstyle="hyperlink"/> method to obtain the actual service object. This
-      approach is useful when the service properties need to be examined
-      before accessing the service object. It also allows for the delayed
-      activation of bound services when using the event strategy.</para>
+      <para>An event method can take one or more arguments. Each argument must
+      be of one of the following types:</para>
 
-      <para>If an event method has the second prototype, then the service
-      object of the bound service is passed to the method. The method's
-      parameter type must be assignable from the type specified by the
-      reference's <code>interface</code> attribute. That is, the service
-      object of the bound service must be castable to the method's parameter
-      type.</para>
+      <itemizedlist>
+        <listitem>
+          <para><code>&lt;service-type&gt;</code> - The bound service
+          object.</para>
+        </listitem>
 
-      <para>If an event method has the third prototype, then the service
-      object of the bound service is passed to the method as the first
-      argument and an unmodifiable Map containing the service properties of
-      the bound service is passed as the second argument. The method's first
-      parameter type must be assignable from the type specified by the
-      reference's <code>interface</code> attribute. That is, the service
-      object of the bound service must be castable to the method's first
-      parameter type.</para>
+        <listitem>
+          <para><code>ServiceReference</code> - A Service Reference for the
+          bound service. This Service Reference may later be passed to the
+          <xref
+          linkend="org.osgi.service.component.ComponentContext.locateService-String-ServiceReference-"
+          xrefstyle="hyperlink"/> method to obtain the actual service object.
+          This approach is useful when the service properties need to be
+          examined before accessing the service object. It also allows for the
+          delayed activation of bound services when using the event
+          strategy.</para>
+        </listitem>
 
-      <para>The bind and unbind methods must be called once for each bound
-      service. This implies that if the reference has multiple cardinality,
-      then the methods may be called multiple times. The updated method can be
-      called multiple times per service.</para>
+        <listitem>
+          <para><code>ServiceObjects</code> - A Service Objects for the bound
+          service . This argument type can only be used when the reference is
+          <code>scope=prototype</code>. This Service Objects can be used to
+          obtain the actual service object or objects. This approach is useful
+          when the service properties need to be examined before accessing the
+          service object or objects. It also allows for the delayed activation
+          of bound services when using the event strategy. When obtaining
+          service objects from a Service Objects, SCR is unware of the service
+          objects obtained. So the component implementation is responsible to
+          properly ungetting any obtained service objects.</para>
+
+          <para><remark>BJH We could require SCR to wrap the actual
+          ServiceObjects so that it could observe all gets and ungets. Then
+          when the component is deactivated, SCR could then properly unget any
+          service objects the component implementation had failed to
+          unget.</remark></para>
+        </listitem>
+
+        <listitem>
+          <para><code>Map</code> - An unmodifiable Map containing the service
+          properties of the bound service.</para>
+        </listitem>
+      </itemizedlist>
 
       <para>A suitable method is selected using the following priority:</para>
 
       <orderedlist>
         <listitem>
           <para>The method takes a single argument and the type of the
-          argument is <code>org.osgi.framework.ServiceReference</code>.</para>
+          argument is <code>org.osgi.framework.ServiceReference</code>. This
+          method will receive a Service Reference for the bound
+          service.</para>
+        </listitem>
+
+        <listitem>
+          <para>The method takes a single argument and the type of the
+          argument is <code>org.osgi.framework.ServiceObjects</code>. This
+          argument type can only be used when the reference is
+          <code>scope=prototype</code>. This method will receive a Service
+          Objects for the bound service.</para>
         </listitem>
 
         <listitem>
           <para>The method takes a single argument and the type of the
           argument is the type specified by the reference's
-          <code>interface</code> attribute.</para>
+          <code>interface</code> attribute. This method will receive the bound
+          service object.</para>
         </listitem>
 
         <listitem>
@@ -693,23 +717,36 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
           argument is assignable from the type specified by the reference's
           <code>interface</code> attribute. If multiple methods match this
           rule, this implies the method name is overloaded and SCR may choose
-          any of the methods to call.</para>
+          any of the methods to call. This method will receive the bound
+          service object.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes two argument and the type of the first
-          argument is the type specified by the reference's
-          <code>interface</code> attribute and the type of the second argument
-          is <code>java.util.Map</code>.</para>
+          <para>The method takes a single argument and the type of the
+          argument is <code>java.util.Map</code>. This method will receive an
+          unmodifiable Map containing the service properties of the bound
+          service.</para>
         </listitem>
 
         <listitem>
-          <para>The method takes two argument and the type of the first
-          argument is assignable from the type specified by the reference's
-          <code>interface</code> attribute and the type of the second argument
-          is <code>java.util.Map</code>. If multiple methods match this rule,
+          <para>The method takes two or more arguments and the types of the
+          arguments must be one of: the type specified by the reference's
+          <code>interface</code> attribute, a type assignable from the type
+          specified by the reference's <code>interface</code> attribute,
+          <code>org.osgi.framework.ServiceReference</code>,
+          <code>org.osgi.framework.ServiceObjects</code>, or
+          <code>java.util.Map</code>. If multiple methods match this rule,
           this implies the method name is overloaded and SCR may choose any of
-          the methods to call.</para>
+          the methods to call. In the case where the type specified by the
+          reference's <code>interface</code> attribute is
+          <code>org.osgi.framework.ServiceReference</code>,
+          <code>org.osgi.framework.ServiceObjects</code>, or
+          <code>java.util.Map</code>, the first argument of that type will
+          receive the bound service object. If selected event method has more
+          than one argument of that type, the remaining arguments of that type
+          will receive a Service Reference for the bound service, a Service
+          Objects for the bound service, or an unmodifiable Map containing the
+          service properties of the bound service.</para>
         </listitem>
       </orderedlist>
 
@@ -718,6 +755,11 @@ void &lt;method-name&gt;(&lt;parameter-type&gt;, Map);</programlisting>
       suitable method is located, SCR must log an error message with the Log
       Service, if present, and there will be no bind, updated, or unbind
       notification.</para>
+
+      <para>The bind and unbind methods must be called once for each bound
+      service. This implies that if the reference has multiple cardinality,
+      then the methods may be called multiple times. The updated method can be
+      called multiple times per service.</para>
 
       <para>When the service object for a bound service is first provided to a
       component instance, that is passed to an event method or returned by a
@@ -3835,6 +3877,11 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       <listitem>
         <para>Added new <code>osgi.extender</code> capability. See <xref
         linkend="service.component-extender.capability"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Expanded the allowed signatures and argument types for Event
+        Methods. See <xref linkend="service.component-event.methods"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
