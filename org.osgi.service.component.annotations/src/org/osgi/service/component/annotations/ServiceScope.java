@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,22 +24,23 @@ package org.osgi.service.component.annotations;
  */
 public enum ServiceScope {
 	/**
-	 * When the component is registered as a service, it will be registered as a
-	 * bundle scope service but only a single instance of the component will be
+	 * When the component is registered as a service, it must be registered as a
+	 * bundle scope service but only a single instance of the component must be
 	 * used for all bundles using the service.
 	 */
 	SINGLETON("singleton"),
 
 	/**
-	 * When the component is registered as a service, it will be registered as a
-	 * bundle scope service and an instance of the component will be created for
+	 * When the component is registered as a service, it must be registered as a
+	 * bundle scope service and an instance of the component must be created for
 	 * each bundle using the service.
 	 */
 	BUNDLE("bundle"),
 
 	/**
-	 * When the component is registered as a service, it will be registered as a
-	 * prototype scope service.
+	 * When the component is registered as a service, it must be registered as a
+	 * prototype scope service and an instance of the component must be created
+	 * for each distinct request for the service.
 	 */
 	PROTOTYPE("prototype"),
 

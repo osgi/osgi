@@ -252,9 +252,14 @@
           without activating the component configuration. If this service is
           requested, SCR must activate the component configuration creating an
           instance of the component implementation class that will be returned
-          as the service object. If the <code>servicefactory</code> attribute
-          of the <code>service</code> element is <code>true</code>, then, for
-          each distinct bundle that requests the service, a different
+          as the service object. If the <code>scope</code> attribute of the
+          <code>service</code> element is <code>bundle</code>, then, for each
+          distinct bundle that requests the service, a different component
+          configuration is created and activated and a new instance of the
+          component implementation class is returned as the service object. If
+          the <code>scope</code> attribute of the <code>service</code> element
+          is <code>prototype</code>, then, for each distinct request for the
+          service, such as via <code>ServiceObjects</code>, a different
           component configuration is created and activated and a new instance
           of the component implementation class is returned as the service
           object.</para>
@@ -1838,7 +1843,7 @@ public class FooImpl {
       <programlisting>@Component(properties="OSGI-INF/vendor.properties")</programlisting>
     </section>
 
-    <section>
+    <section xml:id="service.component-service.element">
       <title>Service Element</title>
 
       <para>The <code>service</code> element is optional. It describes the
@@ -1870,37 +1875,49 @@ public class FooImpl {
 
           <tbody>
             <row>
-              <entry><code>servicefactory</code></entry>
+              <entry><code>scope</code></entry>
 
               <entry><para><xref
               linkend="org.osgi.service.component.annotations.Component"
               xrefstyle="hyperlink"/> <xref
-              linkend="org.osgi.service.component.annotations.Component.servicefactory--"
+              linkend="org.osgi.service.component.annotations.Component.scope--"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.ServiceScope.SINGLETON"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.ServiceScope.BUNDLE"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.ServiceScope.PROTOTYPE"
               xrefstyle="hyperlink"/></para></entry>
 
-              <entry><para>Controls whether the service uses the
-              <code>ServiceFactory</code> concept of the OSGi Framework. The
-              default value is <code>false</code>. If
-              <code>servicefactory</code> is set to <code>true</code>, a
-              different component configuration is created, activated and its
-              component instance returned as the service object for each
-              distinct bundle that requests the service. Each of these
-              component configurations has the same component properties.
-              Otherwise, the same component instance from the single component
-              configuration is returned as the service object for all bundles
-              that request the service.</para></entry>
+              <entry><para>Controls the scope of the provided service. If set
+              to <code>singleton</code>, when the component is registered as a
+              service, it must be registered as a bundle scope service but
+              only a single component configuration must be created and
+              activated and a new instance of the component implementation
+              class of the component must be used for all bundles using the
+              service. If set to <code>bundle</code>, when the component is
+              registered as a service, it must be registered as a bundle scope
+              service and a different component configuration is created and
+              activated and a new instance of the component implementation
+              class must be created for each bundle using the service. If set
+              to <code>prototype</code>, when the component is registered as a
+              service, it must be registered as a prototype scope service and
+              a different component configuration is created and activated and
+              a new instance of the component implementation class must be
+              created for each distinct request for the service, such as via
+              <code>ServiceObjects</code>.</para></entry>
             </row>
           </tbody>
         </tgroup>
       </table>
 
-      <para>The <code>servicefactory</code> attribute must not be
-      <code>true</code> if the component is a factory component or an
-      immediate component. This is because SCR is not free to create component
-      configurations as necessary to support <code>servicefactory</code>. A
-      component description is ill-formed if it specifies that the component
-      is a factory component or an immediate component and
-      <code>servicefactory</code> is set to <code>true</code>.</para>
+      <para>The <code>scope</code> attribute must be <code>singleton</code> if
+      the component is a factory component or an immediate component. This is
+      because SCR is not free to create component configurations as necessary
+      to support non-singleton scoped services. A component description is
+      ill-formed if it specifies that the component is a factory component or
+      an immediate component and <code>scope</code> is not
+      <code>singleton</code>.</para>
 
       <para>The <code>service</code> element must have one or more
       <code>provide</code> elements that define the service interfaces. The
@@ -2321,20 +2338,24 @@ public class FooImpl implements Foo {
 
       <para>The activation of a component configuration must be delayed until
       its service is requested. When the service is requested, if the service
-      has the <code>servicefactory</code> attribute set to <code>true</code>,
-      SCR must create and activate a unique component configuration for each
-      bundle requesting the service. Otherwise, SCR must activate a single
-      component configuration which is used by all bundles requesting the
-      service. A component instance can determine the bundle it was activated
-      for by calling the <xref
+      has the <code>scope</code> attribute set to <code>bundle</code>, SCR
+      must create and activate a unique component configuration for each
+      bundle requesting the service. If the service has the <code>scope</code>
+      attribute set to <code>prototype</code>, SCR must create and activate a
+      unique component configuration for each distinct request for the
+      service. Otherwise, if the service has the <code>scope</code> attribute
+      set to <code>singleton</code>, SCR must activate a single component
+      configuration which is used by all requests for the service. A component
+      instance can determine the bundle it was activated for by calling the
+      <xref
       linkend="org.osgi.service.component.ComponentContext.getUsingBundle--"
       xrefstyle="hyperlink"/> method on the Component Context.</para>
 
       <para>The activation of delayed components is depicted in a state
       diagram in <xref linkend="i1462979"/>. Notice that multiple component
       configurations can be created from the <code>REGISTERED</code> state if
-      a delayed component specifies <code>servicefactory</code> set to
-      <code>true</code>.</para>
+      a delayed component specifies a service <code>scope</code> set to a
+      value other than <code>singleton</code>.</para>
 
       <para>If the service registered by a component configuration becomes
       unused because there are no more bundles using it, then SCR should
@@ -3883,6 +3904,11 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       <listitem>
         <para>Expanded the allowed signatures and argument types for Event
         Methods. See <xref linkend="service.component-event.methods"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>New scope attribute for the service element. See <xref
+        linkend="service.component-service.element"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

@@ -90,7 +90,7 @@ public @interface Component {
 	 * {@link #immediate()} element is specified with {@code true}, this element
 	 * can only be specified with {@code false}.
 	 * 
-	 * @see "The servicefactory attribute of the service element of a Component Description."
+	 * @see "The scope attribute of the service element of a Component Description."
 	 * @deprecated Since 1.3. Replaced by {@link #scope()}.
 	 */
 	boolean servicefactory() default false;
@@ -236,9 +236,9 @@ public @interface Component {
 	 * The service scope for the service of this Component.
 	 * 
 	 * <p>
-	 * If not specified and the deprecated {@link #servicefactory()} element is
-	 * not specified, the {@link ServiceScope#SINGLETON singleton} service scope
-	 * is used. If the {@link #factory()} element is specified or the
+	 * If not specified (and the deprecated {@link #servicefactory()} element is
+	 * not specified), the {@link ServiceScope#SINGLETON singleton} service
+	 * scope is used. If the {@link #factory()} element is specified or the
 	 * {@link #immediate()} element is specified with {@code true}, this element
 	 * can only be specified with the {@link ServiceScope#SINGLETON singleton}
 	 * service scope.
