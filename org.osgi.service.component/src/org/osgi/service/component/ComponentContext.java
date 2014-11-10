@@ -87,6 +87,7 @@ public interface ComponentContext {
 	 * Returns the service object for the specified reference name and
 	 * {@code ServiceReference}.
 	 * 
+	 * @param <S> Type of Service.
 	 * @param name The name of a reference as specified in a {@code reference}
 	 *        element in this component's description.
 	 * @param reference The {@code ServiceReference} to a bound service. This
@@ -98,7 +99,7 @@ public interface ComponentContext {
 	 * @throws ComponentException If the Service Component Runtime catches an
 	 *         exception while activating the bound service.
 	 */
-	public Object locateService(String name, ServiceReference<?> reference);
+	public <S> S locateService(String name, ServiceReference<S> reference);
 
 	/**
 	 * Returns the service objects for the specified reference name.
