@@ -951,6 +951,53 @@ public class HttpResourceImpl {
 }</programlisting>
     </section>
 
+    <section xml:id="service.component-reference.scope">
+      <title>Reference Scope</title>
+
+      <para>A component implementation must be written to understand the
+      service scope of referenced services. The <emphasis>reference
+      scope</emphasis> defines whether the component expects the bundle to be
+      exposed to a single service object for a bound service or to potentially
+      multiple services objects. The following reference scopes are
+      available:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>bundle</emphasis> - For all references to a given
+          bound service, all activated component instances within a bundle
+          must use the same service object. That is, for a given bound
+          service, all component instances within a bundle will be using the
+          same service object. This is the default reference scope.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>prototype</emphasis> - For all references to a given
+          bound service, each activated component instance must use a single,
+          distinct service object. That is, for a given bound service, each
+          component instance will use a distinct service object but within a
+          component instance all references to the bound service will use the
+          same service object.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For a reference with bundle reference scope,
+      <code>BundleContext.getService</code> must be used to obtain the service
+      object. This ensures that the bundle will only be exposed to a single
+      instance of the service object at any given time.</para>
+
+      <para>For a reference with prototype reference scope,
+      <code>ServiceObjects.getService</code> must be used to obtain a service
+      object for each component instance and only services registered with
+      prototype service scope can be considered as target services. This
+      ensures that each component instance will be exposed to a single,
+      distinct instance of the service object. Using prototype reference scope
+      effectively adds <code>service.scope=prototype</code> to the target
+      filter for the reference. A service that does not use prototype service
+      scope cannot be used as a bound service for a reference with prototype
+      reference scope since the service cannot provide distinct service
+      objects for each component instance.</para>
+    </section>
+
     <section xml:id="i1440474">
       <title>Reference Policy</title>
 
@@ -1033,7 +1080,7 @@ public class HttpResourceImpl {
     </section>
 
     <section>
-      <title>Policy Option</title>
+      <title>Reference Policy Option</title>
 
       <para>The <code>policy-option</code> defines how eager the reference is
       to rebind when a new, potentially with a higher ranking, target service
@@ -2128,6 +2175,21 @@ public class Foo implements EventHandler { ... }</programlisting>
               registered under the given reference interface. The value of
               this attribute is used to set a target property. See <xref
               linkend="i1547893"/>.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>scope</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.component.annotations.Reference.scope--"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.ReferenceScope.BUNDLE"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.ReferenceScope.PROTOTYPE"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>The reference scope for this reference. See <xref
+              linkend="service.component-reference.scope"/>.</para></entry>
             </row>
 
             <row>
@@ -3909,6 +3971,11 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       <listitem>
         <para>New scope attribute for the service element. See <xref
         linkend="service.component-service.element"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>New scope attribute for the reference element. See <xref
+        linkend="service.component-reference.scope"/>.</para>
       </listitem>
     </itemizedlist>
   </section>

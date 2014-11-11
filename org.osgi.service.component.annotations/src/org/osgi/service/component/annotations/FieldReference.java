@@ -125,11 +125,11 @@ public @interface FieldReference {
 	ReferencePolicyOption policyOption() default ReferencePolicyOption.RELUCTANT;
 
 	/**
-	 * The requested service scope for the field reference.
+	 * The reference scope for the field reference.
 	 * 
 	 * <p>
-	 * If not specified, the {@link ReferenceScope#BUNDLE bundle} service scope
-	 * is requested.
+	 * If not specified, the {@link ReferenceScope#BUNDLE bundle} reference
+	 * scope is used.
 	 * 
 	 * @see "The scope attribute of the field-reference element of a Component Description."
 	 */

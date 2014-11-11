@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,11 +99,11 @@ public @interface LookupReference {
 	ReferencePolicyOption policyOption() default ReferencePolicyOption.RELUCTANT;
 
 	/**
-	 * The requested service scope for this Reference.
+	 * The reference scope for the reference.
 	 * 
 	 * <p>
-	 * If not specified, the {@link ReferenceScope#BUNDLE bundle} service scope
-	 * is requested.
+	 * If not specified, the {@link ReferenceScope#BUNDLE bundle} reference
+	 * scope is used.
 	 * 
 	 * @see "The scope attribute of the reference element of a Component Description."
 	 */
