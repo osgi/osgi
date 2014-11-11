@@ -1366,7 +1366,7 @@ public class HttpResourceImpl {
       schema.</para>
     </section>
 
-    <section xml:id="i1441045">
+    <section xml:id="service.component-component.element">
       <title>Component Element</title>
 
       <para>The component element specifies the component description. The
@@ -2033,7 +2033,7 @@ public class FooImpl {
 public class Foo implements EventHandler { ... }</programlisting>
     </section>
 
-    <section>
+    <section xml:id="service.component-reference.element">
       <title>Reference Element</title>
 
       <para>A <emphasis>reference</emphasis> declares a dependency that a
@@ -2279,8 +2279,9 @@ public class FooImpl implements Foo {
       <para>Every component can be enabled or disabled. The initial enabled
       state of a component is specified in the component description via the
       <code>enabled</code> attribute of the <code>component</code> element.
-      See <xref linkend="i1441045"/>. Component configurations can be created,
-      satisfied and activated only when the component is enabled.</para>
+      See <xref linkend="service.component-component.element"/>. Component
+      configurations can be created, satisfied and activated only when the
+      component is enabled.</para>
 
       <para>The enabled state of a component can be controlled with the
       Component Context <xref
@@ -2612,9 +2613,10 @@ public class FooImpl implements Foo {
 
       <para>A component instance can have an activate method. The name of the
       activate method can be specified by the <code>activate</code> attribute.
-      See <xref linkend="i1441045"/>. If the <code>activate</code> attribute
-      is not specified, the default method name of <code>activate</code> is
-      used. The prototype of the activate method is:</para>
+      See <xref linkend="service.component-component.element"/>. If the
+      <code>activate</code> attribute is not specified, the default method
+      name of <code>activate</code> is used. The prototype of the activate
+      method is:</para>
 
       <programlisting>void &lt;method-name&gt;(&lt;arguments&gt;);</programlisting>
 
@@ -2802,9 +2804,10 @@ void unsetLogService( LogService log ) {
       <title>Modified Method</title>
 
       <para>The name of the modified method is specified by the
-      <code>modified</code> attribute. See <xref linkend="i1441045"/>. The
-      prototype and selection priority of the modified method is identical to
-      that of the activate method. See <xref linkend="i1539155"/>.</para>
+      <code>modified</code> attribute. See <xref
+      linkend="service.component-component.element"/>. The prototype and
+      selection priority of the modified method is identical to that of the
+      activate method. See <xref linkend="i1539155"/>.</para>
 
       <para>SCR must locate a suitable method as specified in <xref
       linkend="i1641644"/>. If the <code>modified</code> attribute is
@@ -2889,10 +2892,10 @@ void unsetLogService( LogService log ) {
 
       <para>A component instance can have a deactivate method. The name of the
       deactivate method can be specified by the <code>deactivate</code>
-      attribute. See <xref linkend="i1441045"/>. If the
-      <code>deactivate</code> attribute is not specified, the default method
-      name of <code>deactivate</code> is used. The prototype of the deactivate
-      method is:</para>
+      attribute. See <xref linkend="service.component-component.element"/>. If
+      the <code>deactivate</code> attribute is not specified, the default
+      method name of <code>deactivate</code> is used. The prototype of the
+      deactivate method is:</para>
 
       <programlisting>void &lt;method-name&gt;(&lt;arguments&gt;);</programlisting>
 
