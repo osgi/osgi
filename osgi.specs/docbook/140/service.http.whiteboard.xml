@@ -135,7 +135,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="3.313in"
-                       contentwidth="6.496in" fileref="overall.svg"/>
+                       contentwidth="5.496in" fileref="overall.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -767,7 +767,7 @@
         <mediaobject>
           <imageobject>
             <imagedata align="center" contentdepth="3.313in"
-                       contentwidth="6.496in" fileref="servletcontext.svg"/>
+                       contentwidth="6in" fileref="servletcontext.svg"/>
           </imageobject>
         </mediaobject>
       </figure>
@@ -973,11 +973,11 @@
       Whiteboard services.</title>
 
       <tgroup cols="3">
-        <colspec colnum="1" colwidth="2.5*"/>
+        <colspec colnum="1" colwidth="2.2*"/>
 
-        <colspec colnum="2" colwidth="0.7*"/>
+        <colspec colnum="2" colwidth="0.6*"/>
 
-        <colspec colnum="3" colwidth="3.3*"/>
+        <colspec colnum="3" colwidth="3.5*"/>
 
         <thead>
           <row>
@@ -1018,7 +1018,7 @@
           </row>
 
           <row>
-            <entry><code>osgi.http.whiteboard.servlet.name</code></entry>
+            <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;name</code></para></entry>
 
             <entry><code>String</code></entry>
 
@@ -1032,7 +1032,7 @@
           </row>
 
           <row>
-            <entry><code>osgi.http.whiteboard.servlet.pattern</code></entry>
+            <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;pattern</code></para></entry>
 
             <entry><code>String+</code></entry>
 
@@ -1230,11 +1230,11 @@ public class MyErrorServlet extends HttpServlet {
       services.</title>
 
       <tgroup cols="3">
-        <colspec colnum="1" colwidth="2.5*"/>
+        <colspec colnum="1" colwidth="2.4*"/>
 
         <colspec colnum="2" colwidth="0.7*"/>
 
-        <colspec colnum="3" colwidth="3.3*"/>
+        <colspec colnum="3" colwidth="3.4*"/>
 
         <thead>
           <row>
@@ -1421,7 +1421,7 @@ public class MyErrorServlet extends HttpServlet {
 
         <tbody>
           <row>
-            <entry><code>osgi.http.whiteboard.resource.prefix</code></entry>
+            <entry><para><code>osgi.http.whiteboard.resource.«</code></para><para><code>&#160;prefix</code></para></entry>
 
             <entry><code>String</code></entry>
 
