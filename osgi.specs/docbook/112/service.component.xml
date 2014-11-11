@@ -1446,15 +1446,15 @@ public class HttpResourceImpl {
             <row>
               <entry><code>configuration-policy</code></entry>
 
-              <entry><xref
+              <entry><para><xref
               linkend="org.osgi.service.component.annotations.Component.configurationPolicy--"
-              xrefstyle="hyperlink"/> (<xref
+              xrefstyle="hyperlink"/></para><para><xref
               linkend="org.osgi.service.component.annotations.ConfigurationPolicy.OPTIONAL"
-              xrefstyle="hyperlink"/>, <xref
+              xrefstyle="hyperlink"/></para><para><xref
               linkend="org.osgi.service.component.annotations.ConfigurationPolicy.REQUIRE"
-              xrefstyle="hyperlink"/>, or <xref
+              xrefstyle="hyperlink"/></para><para><xref
               linkend="org.osgi.service.component.annotations.ConfigurationPolicy.IGNORE"
-              xrefstyle="hyperlink"/>)</entry>
+              xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>Controls whether component configurations must be
               satisfied depending on the presence of a corresponding
