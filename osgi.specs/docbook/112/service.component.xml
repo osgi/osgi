@@ -670,9 +670,10 @@
           when the service properties need to be examined before accessing the
           service object or objects. It also allows for the delayed activation
           of bound services when using the event strategy. When obtaining
-          service objects from a Service Objects, SCR is unware of the service
-          objects obtained. So the component implementation is responsible to
-          properly ungetting any obtained service objects.</para>
+          service objects from a Service Objects, SCR is unaware of the
+          service objects obtained. So the component implementation is
+          responsible to properly ungetting any obtained service
+          objects.</para>
 
           <para><remark>BJH We could require SCR to wrap the actual
           ServiceObjects so that it could observe all gets and ungets. Then
