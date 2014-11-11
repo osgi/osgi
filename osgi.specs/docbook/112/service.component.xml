@@ -2259,6 +2259,21 @@ public class FooImpl implements Foo {
   void unsetLog( LogService log) { ... }
   void updatedLog( Map&lt;String,?&gt; ref ) { ... }
 }</programlisting>
+
+      <para>For a reference to be used with the lookup strategy, there are no
+      bind methods to annotate with the <xref
+      linkend="org.osgi.service.component.annotations.Reference"
+      xrefstyle="hyperlink"/> annotation. Instead <xref
+      linkend="org.osgi.service.component.annotations.LookupReference"
+      xrefstyle="hyperlink"/> annotations can be specified in the <xref
+      linkend="org.osgi.service.component.annotations.Component.reference--"
+      xrefstyle="hyperlink"/> element of the <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/> annotation. In the generated component
+      description, the reference elements must be ordered in ascending
+      lexicographical order, using <code>String.compareTo</code>, of the <xref
+      linkend="org.osgi.service.component.annotations.LookupReference.name--"
+      xrefstyle="hyperlink"/>s of the references.</para>
     </section>
   </section>
 
@@ -3979,6 +3994,12 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       <listitem>
         <para>New scope attribute for the reference element. See <xref
         linkend="service.component-reference.scope"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>New LookupReference annotation and new reference element for
+        Component annotation. See <xref
+        linkend="service.component-reference.element"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
