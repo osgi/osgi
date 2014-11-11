@@ -60,9 +60,9 @@ import org.osgi.framework.Bundle;
  * 
  * <p>
  * If no {@code ServletContextHelper} service is associated, that is no
- * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT}
- * is configured for a whiteboard service, a default
- * {@code ServletContextHelper} is used.
+ * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_SELECT
+ * HTTP_WHITEBOARD_CONTEXT_SELECT} is configured for a whiteboard service, a
+ * default {@code ServletContextHelper} is used.
  * 
  * <p>
  * Those whiteboard services that are associated using the same
