@@ -1740,148 +1740,6 @@ public class MyResourceService {}</programlisting>
       </listitem>
     </itemizedlist>
   </section>
-
-<!-- 
-  <section xml:id="service.http.whiteboard.authentication">
-    <title>Authentication</title>
-
-    <remark>Section NOT ready for review</remark>
-
-    <para>The Http Service has separated the authentication and authorization
-    of a request from the execution of the request. This separation allows
-    bundles to use available <code>Servlet</code> sub-classes while still
-    providing bundle specific authentication and authorization of the
-    requests.</para>
-
-    <para>Prior to servicing each incoming request, the Http Service calls the
-    <xref
-    linkend="org.osgi.service.http.HttpContext.handleSecurity-javax.servlet.http.HttpServletRequest-javax.servlet.http.HttpServletResponse-"
-    xrefstyle="hyperlink"/> method on the <code>HttpContext</code> object that
-    is associated with the request URI. This method controls whether the
-    request is processed in the normal manner or an authentication error is
-    returned.</para>
-
-    <para>If an implementation wants to authenticate the request, it can use
-    the authentication mechanisms of HTTP. See <xref linkend="i21220308"/>.
-    These mechanisms normally interpret the headers and decide if the user
-    identity is available, and if it is, whether that user has authenticated
-    itself correctly.</para>
-
-    <para>There are many different ways of authenticating users, and the
-    <code>handleSecurity</code> method on the <code>HttpContext</code> object
-    can use whatever method it requires. If the method returns
-    <code>true</code>, the request must continue to be processed using the
-    potentially modified <code>HttpServletRequest</code> and
-    <code>HttpServletResponse</code> objects. If the method returns
-    <code>false</code>, the request must <emphasis>not</emphasis> be
-    processed.</para>
-
-    <para>A common standard for HTTP is the basic authentication scheme that
-    is not secure when used with HTTP. Basic authentication passes the
-    password in base 64 encoded strings that are trivial to decode into clear
-    text. Secure transport protocols like HTTPS use SSL to hide this
-    information. With these protocols basic authentication is secure.</para>
-
-    <para>Using basic authentication requires the following steps:</para>
-
-    <orderedlist>
-      <listitem>
-        <para>If no <code>Authorization</code> header is set in the request,
-        the method should set the <code>WWW-Authenticate</code> header in the
-        response. This header indicates the desired authentication mechanism
-        and the realm. For example, <code>WWW-Authenticate: Basic
-        realm="ACME"</code>.</para>
-
-        <para>The header should be set with the response object that is given
-        as a parameter to the <code>handleSecurity</code> method. The
-        <code>handleSecurity</code> method should set the status to
-        <code>HttpServletResponse.SC_UNAUTHORIZED (401)</code> and return
-        <code>false</code>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Secure connections can be verified with the
-        <code>ServletRequest.getScheme()</code> method. This method returns,
-        for example, "<code>https</code>" for an SSL connection; the
-        <code>handleSecurity</code> method can use this and other information
-        to decide if the connection's security level is acceptable. If not,
-        the <code>handleSecurity</code> method should set the status to
-        <code>HttpServletResponse.SC_FORBIDDEN</code> (403) and return
-        <code>false</code>.</para>
-      </listitem>
-
-      <listitem>
-        <para>Next, the request must be authenticated. When basic
-        authentication is used, the <code>Authorization</code> header is
-        available in the request and should be parsed to find the user and
-        password. See <xref linkend="i21220308"/> for more information.</para>
-
-        <para>If the user cannot be authenticated, the status of the response
-        object should be set to <code>HttpServletResponse.SC_UNAUTHORIZED
-        (401)</code> and return <code>false</code>.</para>
-      </listitem>
-
-      <listitem>
-        <para>The authentication mechanism that is actually used and the
-        identity of the authenticated user can be of interest to the
-        <code>Servlet</code> object. Therefore, the implementation of the
-        <code>handleSecurity</code> method should set this information in the
-        request object using the <code>ServletRequest.setAttribute</code>
-        method. This specification has defined a number of OSGi-specific
-        attribute names for this purpose:</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><xref
-            linkend="org.osgi.service.http.HttpContext.AUTHENTICATION_TYPE"
-            xrefstyle="hyperlink"/> - Specifies the scheme used in
-            authentication. A servlet may retrieve the value of this attribute
-            by calling the <code>HttpServletRequest.getAuthType</code> method.
-            This attribute name is
-            <code>org.osgi.service.http.authentication.type</code>.</para>
-          </listitem>
-
-          <listitem>
-            <para><xref
-            linkend="org.osgi.service.http.HttpContext.REMOTE_USER"
-            xrefstyle="hyperlink"/> - Specifies the name of the authenticated
-            user. A servlet may retrieve the value of this attribute by
-            calling the <code>HttpServletRequest.getRemoteUser</code> method.
-            This attribute name is
-            <code>org.osgi.service.http.authentication.remote.user</code>.</para>
-          </listitem>
-
-          <listitem>
-            <para><xref
-            linkend="org.osgi.service.http.HttpContext.AUTHORIZATION"
-            xrefstyle="hyperlink"/> - If a User Admin service is available in
-            the environment, then the <code>handleSecurity</code> method
-            should set this attribute with the <code>Authorization</code>
-            object obtained from the User Admin service. Such an object
-            encapsulates the authentication of its remote user. A servlet may
-            retrieve the value of this attribute by calling
-            <code>ServletRequest.getAttribute(HttpContext.AUTHORIZATION)</code>.
-            This header name is
-            <code>org.osgi.service.useradmin.authorization</code>.</para>
-          </listitem>
-        </itemizedlist>
-      </listitem>
-
-      <listitem>
-        <para>Once the request is authenticated and any attributes are set,
-        the <code>handleSecurity</code> method should return
-        <code>true</code>. This return indicates to the Http Service that the
-        request is authorized and processing may continue. If the request is
-        for a servlet, the Http Service must then call the
-        <code>service</code> method on the <code>Servlet</code> object.</para>
-      </listitem>
-    </orderedlist>
-  </section>
-
-  <section xml:id="service.http.whiteboard.authorization">
-    <title>Authorization</title>
-  </section>
-  -->
   
   <section>
     <title>Capability Namespaces</title>
@@ -1924,102 +1782,25 @@ public class MyResourceService {}</programlisting>
 
   <section>
     <title>Security</title>
-    <remark>Section to be written</remark>
+    <para>Bundles that need to register a servlet, listener, resource filter, or http context must be 
+    granted ServicePermission[Interface Name, REGISTER] where interface name is the whiteboard interface 
+    the service is registered for.</para>
+    
+    <para>Bundles that need to iterate the servlets, listeners, resources, filters, or servlet context 
+    helpers registered with the system must be granted ServicePermission[interface name, GET] to retrieve 
+    the services from the service registry.</para>
+    
+    <para>In addition if a whiteboard service wants to be associated with a shared servlet context helper 
+    registered by another bundle, the bundle registering the whiteboard service must be granted 
+    ServicePermission[org.osgi.service.http.context.ServletContextHelper, GET].</para>
+
+    <para>Bundles that need to introspect the state of the Http Whiteboard Service runtime will need 
+    PackagePermission[org.osgi.service.http.runtime, IMPORT] and 
+    ServicePermission[org.osgi.service.http.runtime.HttpServiceRuntime, GET] to obtain the 
+    HttpServiceRuntime service and access the DTO types.</para>
+    <remark>Section needs work</remark>
   </section>
 
-  <!-- 
-  <section>
-    <title>Security</title>
-
-    <remark>Section NOT ready for review</remark>
-
-    <para>This section only applies when executing in an OSGi environment
-    which is enforcing Java permissions.</para>
-
-    <section>
-      <title>Accessing Resources with the Default Http Context</title>
-
-      <para>The Http Service must be granted
-      <code>AdminPermission[*,RESOURCE]</code> so that bundles may use a
-      default <code>HttpContext</code> object. This is necessary because the
-      implementation of the default <code>HttpContext</code> object must call
-      <code>Bundle.getResource</code> to access the resources of a bundle and
-      this method requires the caller to have
-      <code>AdminPermission[bundle,RESOURCE]</code>.</para>
-
-      <para>Any bundle may access resources in its own bundle by calling
-      <code>Class.getResource</code>. This operation is privileged. The
-      resulting <code>URL</code> object may then be passed to the Http Service
-      as the result of a <code>HttpContext.getResource</code> call. No further
-      permission checks are performed when accessing bundle resource
-      <code>URL</code> objects, so the Http Service does not need to be
-      granted any additional permissions.</para>
-    </section>
-
-    <section>
-      <title>Accessing Other Types of Resources</title>
-
-      <para>In order to access resources that were not registered using the
-      default <code>HttpContext</code> object, the Http Service must be
-      granted sufficient privileges to access these resources. For example, if
-      the <code>getResource</code> method of the registered
-      <code>HttpContext</code> object returns a file URL, the Http Service
-      requires the corresponding <code>FilePermission</code> to read the file.
-      Similarly, if the <code>getResource</code> method of the registered
-      <code>HttpContext</code> object returns an HTTP URL, the Http Service
-      requires the corresponding <code>SocketPermission</code> to connect to
-      the resource.</para>
-
-      <para>Therefore, in most cases, the Http Service should be a privileged
-      service that is granted sufficient permission to serve any bundle's
-      resources, no matter where these resources are located. Therefore, the
-      Http Service must capture the <code>AccessControlContext</code> object
-      of the bundle registering resources or a servlet, and then use the
-      captured <code>AccessControlContext</code> object when accessing
-      resources returned by the registered <code>HttpContext</code> object.
-      This situation prevents a bundle from registering resources that it does
-      not have permission to access.</para>
-
-      <para>Therefore, the Http Service should follow a scheme like the
-      following example. When a resource or servlet is registered, it should
-      capture the context.</para>
-
-      <programlisting>AccessControlContext acc = 
-        AccessController.getContext();</programlisting>
-
-      <para>When a URL returned by the <code>getResource</code> method of the
-      associated <code>HttpContext</code> object is called, the Http Service
-      must call the <code>getResource</code> method in a
-      <code>doPrivileged</code> construct using the
-      <code>AccessControlContext</code> object of the registering
-      bundle:</para>
-
-      <programlisting>AccessController.doPrivileged(
-    new PrivilegedExceptionAction() {
-        public Object run() throws Exception {
-        ...
-        }
-    }, acc);</programlisting>
-
-      <para>The Http Service must only use the captured
-      <code>AccessControlContext</code> when accessing resource
-      <code>URL</code> objects.</para>
-    </section>
-
-    <section>
-      <title>Servlet and HttpContext objects</title>
-
-      <remark>TODO revisit</remark>
-
-      <para>This specification does not require that the Http Service is
-      granted All Permission or wraps calls to the servlet and Http Context
-      objects in a <code>doPrivileged</code> block. Therefore, it is the
-      responsibility of the Servlet and Http Context implementations to use a
-      <code>doPrivileged</code> block when performing privileged
-      operations.</para>
-    </section>
-  </section>
-  -->
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.http.context.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.http.runtime.xml"/>
