@@ -1782,23 +1782,29 @@ public class MyResourceService {}</programlisting>
 
   <section>
     <title>Security</title>
-    <para>Bundles that need to register a servlet, listener, resource filter, or http context must be 
-    granted ServicePermission[Interface Name, REGISTER] where interface name is the whiteboard interface 
-    the service is registered for.</para>
     
-    <para>Bundles that need to iterate the servlets, listeners, resources, filters, or servlet context 
-    helpers registered with the system must be granted ServicePermission[interface name, GET] to retrieve 
-    the services from the service registry.</para>
-    
-    <para>In addition if a whiteboard service wants to be associated with a shared servlet context helper 
-    registered by another bundle, the bundle registering the whiteboard service must be granted 
-    ServicePermission[org.osgi.service.http.context.ServletContextHelper, GET].</para>
+    <section>
+      <title>Service Permissions</title>
+      <para>Bundles that need to register a servlet, listener, resource filter, or http context must be 
+      granted <code>ServicePermission[Interface Name, REGISTER]</code> where interface name is the 
+      whiteboard interface the service is registered for.</para>
+      
+      <para>Bundles that need to iterate the servlets, listeners, resources, filters, or servlet context 
+      helpers registered with the system must be granted <code>ServicePermission[interface name, GET]</code> to retrieve 
+      the services from the service registry.</para>
+      
+      <para>In addition if a whiteboard service wants to be associated with a shared servlet context helper 
+      registered by another bundle, the bundle registering the whiteboard service must be granted 
+      <code>ServicePermission[org.osgi.service.http.context.ServletContextHelper, GET]</code>.</para>
+    </section>
 
-    <para>Bundles that need to introspect the state of the Http Whiteboard Service runtime will need 
-    PackagePermission[org.osgi.service.http.runtime, IMPORT] and 
-    ServicePermission[org.osgi.service.http.runtime.HttpServiceRuntime, GET] to obtain the 
-    HttpServiceRuntime service and access the DTO types.</para>
-    <remark>Section needs work</remark>
+    <section>
+      <title>Introspection</title>
+      <para>Bundles that need to introspect the state of the Http Whiteboard Service runtime will need 
+      <code>PackagePermission[org.osgi.service.http.runtime, IMPORT]</code> and 
+      <code>ServicePermission[org.osgi.service.http.runtime.HttpServiceRuntime, GET]</code> to obtain the 
+      HttpServiceRuntime service and access the DTO types.</para>
+    </section>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.http.context.xml"/>
