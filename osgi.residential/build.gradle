@@ -1,5 +1,0 @@
-/*
- * osgi.residential Gradle build script
- */
-
-apply from: cnf.file('gradle/companion.gradle')
