@@ -82,6 +82,10 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 		// test enOceanMessageDescription
 		try {
 			log("testInterfaceExceptions(), Check that passing a NULL array of bytes throws an EnOceanException.");
+			
+			// TODO AAA: In the following line, fill "deserialize" javadoc, and
+			// deserialize should throw an IllegalArgumentException instead of
+			// EnOceanException;
 			enOceanMessageDescription.deserialize(null);
 			fail("Passing a NULL array of bytes to EnOceanMessageDescription.deserialize must throw an EnOceanException.");
 		} catch (EnOceanException e) {
@@ -91,6 +95,10 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 
 		try {
 			log("testInterfaceExceptions(), Check that passing a wrongly sized byte array also throws an EnOceanException.");
+
+			// TODO AAA: In the following line, fill "deserialize" javadoc, and
+			// deserialize should throw an IllegalArgumentException instead of
+			// EnOceanException;
 			enOceanMessageDescription.deserialize(new byte[] {0x55, 0x02, 0x34, 0x56, 0x67});
 			fail("Passing a wrongly sized byte array to EnOceanMessageDescription.deserialize must throw an EnOceanException.");
 		} catch (EnOceanException e) {
@@ -222,9 +230,15 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 		EnOceanRPC rpc = new QueryFunction();
 		log("testRPC(), rpc: " + rpc);
 		device.invoke(rpc, null);
+		
+		// TODO AAA: Do we need to test the result/effect of calling the invoke
+		// method (see line above)?;
 
 		log("testRPC(), unget service with service reference ref: " + ref);
 		getContext().ungetService(ref);
+		
+		// TODO AAA: Ensure that every test method "ungets" the services
+		// references it uses;
 	}
 
 	/**
@@ -274,6 +288,10 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 		// Use teststep to add an EnOceanChannelDescriptionSet
 		// Request the registration of an EnOceanChannelDescriptionSet
 		// containing an EnOceanChannelDescription_CID.
+
+		// TODO AAA: In the following line, check if we have to enhance the
+		// stepId's message in order to specify that an
+		// EnOceanDataChannelDescription is expected;
 		super.testStepProxy.execute("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_CID",
 				"Request the registration of an EnOceanChannelDescriptionSet containing an EnOceanChannelDescription_CID.");
 		log("testUseOfDescriptions(), enOceanChannelDescriptionSets.waitForService()");
@@ -291,7 +309,8 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 
 		assertEquals("Fixtures.CHANNEL_TYPE is expected here.", Fixtures.CHANNEL_TYPE, enOceanChannelDescription.getType());
 
-		EnOceanDataChannelDescription enOceanDataChannelDescription = (EnOceanDataChannelDescription) enOceanChannelDescription;
+		EnOceanDataChannelDescription enOceanDataChannelDescription = (EnOceanDataChannelDescription)
+				enOceanChannelDescription;
 		// It's a float because it's a DATA channel
 		Float deserializedValue = (Float) enOceanDataChannelDescription.deserialize(channel.getRawValue());
 		assertEquals("Fixtures.FLOATVALUE is expected here.", Fixtures.FLOATVALUE, deserializedValue.floatValue(), 0.1);

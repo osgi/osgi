@@ -44,6 +44,9 @@ public class EnOceanHostTestCase extends AbstractEnOceanTestCase {
 			assertNotNull("Test failed: no EnOceanHost service has been found in the OSGi service registry.", srs);
 			log("DEBUG: The test found " + srs.length + " EnOceanHost service(s).");
 		} catch (InvalidSyntaxException e) {
+			// TODO AAA: Check why InvalidSyntaxException is catched here, and
+			// if relevant, update the following log message;
+			
 			log("Test failed: no EnOceanHost service has been found in the OSGi service registry.");
 			e.printStackTrace();
 			fail("No EnOceanHost service has been found in the OSGi service registry.");

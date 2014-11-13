@@ -54,14 +54,18 @@ public class PersistencyTestCase extends AbstractEnOceanTestCase {
 
 		baseDriver.stop();
 		Sleep.sleep(1000 * OSGiTestCaseProperties.getScaling());
+		
 
 		hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
-		assertNull("hostRef must not be null.", hostRef);
+		assertNull("hostRef must be null, once the base driver is stopped.", hostRef);
 
 		baseDriver.start();
+		// TODO AAA: Replace the following line by a
+		// "devices.waitForService();"...;
 		Sleep.sleep(1000 * OSGiTestCaseProperties.getScaling());
 
 		hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
+		assertNotNull("One EnOceanHost service must be registered (hostRef must not be null), once the base driver is started.", hostRef);
 		defaultHost = (EnOceanHost) getContext().getService(hostRef);
 		int newChipId = defaultHost.getChipId(Fixtures.DEVICE_PID);
 
@@ -72,6 +76,10 @@ public class PersistencyTestCase extends AbstractEnOceanTestCase {
 	}
 
 	private Bundle getBaseDriverBundle() {
+		
+		// TODO AAA: Search for the EnOceanHost service, then get the
+		// corresponding bundle, and return it;
+		
 		Bundle[] bundles = getContext().getBundles();
 		for (int i = 0; i < bundles.length; i++) {
 			Bundle b = bundles[i];

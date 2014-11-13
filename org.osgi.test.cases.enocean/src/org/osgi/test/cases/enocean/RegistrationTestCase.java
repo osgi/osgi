@@ -46,6 +46,7 @@ public class RegistrationTestCase extends AbstractEnOceanTestCase {
 		EspRadioPacket pkt = new EspRadioPacket(teachIn);
 		// Push everything in the command...
 		String params = new String(pkt.serialize());
+		// TODO AAA: Replace the following line: use a specific stepId and no more params (and the RI knows the attributes checked at the end of this test (see. assertEquals));
 		super.testStepProxy.execute("MessageExample1_" + params, "Insert a device.");
 
 		// Device added
@@ -71,6 +72,9 @@ public class RegistrationTestCase extends AbstractEnOceanTestCase {
 		 * properties
 		 */
 		assertEquals("category mismatch", EnOceanDevice.DEVICE_CATEGORY, ref.getProperty(org.osgi.service.device.Constants.DEVICE_CATEGORY));
+		
+		// TODO AAA: Replace the 5 following lines, and just check the existency
+		// of these properties, and that they are String, and defined.
 		assertEquals("CHIP_ID mismatch", Fixtures.STR_HOST_ID, ref.getProperty(EnOceanDevice.CHIP_ID));
 		assertEquals("RORG mismatch", Fixtures.STR_RORG, ref.getProperty(EnOceanDevice.RORG));
 		assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));

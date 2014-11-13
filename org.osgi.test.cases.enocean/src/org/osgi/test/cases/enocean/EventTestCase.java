@@ -60,20 +60,23 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 		/* First get a reference towards the device */
 		String lastServiceEvent = devices.waitForService();
 		assertNotNull("Timeout reached.", lastServiceEvent);
+		
+		// TODO AAA: Check the two following lines, why do we need to get, and
+		// unget this ref?;
 		ServiceReference ref = devices.getServiceReference();
 		getContext().ungetService(ref);
 		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
 
-		/* Send a message from that device */
+		/* Make the inserted device send a message */
 		MessageExample1 measure = new MessageExample1(Fixtures.FLOATVALUE);
 		measure.setSenderId(Fixtures.HOST_ID);
 		EspRadioPacket measurePkt = new EspRadioPacket(measure);
 		// Push everything in the command...
 		String params2 = new String(measurePkt.serialize());
-		super.testStepProxy.execute("MessageExample1_" + params2, "Send a message from that device.");
+		super.testStepProxy.execute("MessageExample1_" + params2, "Make the inserted device send a message.");
 
 		Event event = events.waitForEvent();
-		assertNotNull("Timeout reached.", event);
+		assertNotNull("Timeout reached (no event has been received).", event);
 
 		assertEquals("topic mismatch", EnOceanEvent.TOPIC_MSG_RECEIVED, event.getTopic());
 		assertEquals("senderId mismatch", Fixtures.STR_HOST_ID, event.getProperty(EnOceanDevice.CHIP_ID));
@@ -85,6 +88,8 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 		assertNotNull("Msg must not be null.", msg);
 		EnOceanMessageDescription description = new EnOceanMessageDescription2();
 		EnOceanChannel[] channels = description.deserialize(msg.getPayloadBytes());
+		
+		// TODO AAA: Check the format instead of the checking the value itself;
 		assertEquals("float value mismatch", Fixtures.RAW_FLOATVALUE, channels[0].getRawValue()[0]);
 	}
 }
