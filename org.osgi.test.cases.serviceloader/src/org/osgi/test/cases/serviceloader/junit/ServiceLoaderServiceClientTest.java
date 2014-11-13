@@ -198,9 +198,8 @@ public class ServiceLoaderServiceClientTest extends OSGiTestCase {
 
     				wires = rev.getWiring().getRequiredWires("osgi.serviceloader");
     				assertNotNull(wires);
-    				
-    				int numProviders = wires.size();
-    				assertTrue("expected at least 1 provider to be wired", numProviders > 0);
+
+    				assertEquals("There are two providers so there should be two wires", 2, wires.size());
 
     				Collection<ServiceReference<TestBridge>> refs = getContext().getServiceReferences(TestBridge.class, "(test=client)");
     				assertNotNull(refs);
@@ -209,7 +208,7 @@ public class ServiceLoaderServiceClientTest extends OSGiTestCase {
     				TestBridge service = getContext().getService(refs.iterator().next());
     				assertNotNull("client bundle did not register its service", service);
 
-    				service.run("" + numProviders);
+    				service.run("2");
     			} finally {
     				client.stop();
     				client.uninstall();
