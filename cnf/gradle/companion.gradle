@@ -43,12 +43,14 @@ task javadoc(overwrite: true, type: Javadoc) {
     classpath bnd.project.bootclasspath*.file
     links('http://docs.oracle.com/javase/6/docs/api/')
   }
-  // compute dependencies on other javadoc builds based upon the classpath
-  classpath.each {
-    def matcher = it =~ "/(osgi\\.([^/]*))/"
-    if (matcher) {
-      dependsOn ":${matcher[0][1]}:javadoc"
-      options.linksOffline("../${matcher[0][2]}", rootProject.file("${matcher[0][1]}/${relativePath(destinationDir)}").absolutePath)
+  if (project.name.startsWith('osgi.')) {
+    // compute dependencies on other javadoc builds based upon the classpath
+    classpath.each {
+      def matcher = rootProject.relativePath(it) =~ /^(osgi\.([^\/]*))/
+      if (matcher) {
+        dependsOn ":${matcher[0][1]}:javadoc"
+        options.linksOffline("../${matcher[0][2]}", rootProject.file("${matcher[0][1]}/${relativePath(destinationDir)}").absolutePath)
+      }
     }
   }
   /* Turn off javadoc 8 overly pedantic lint checking */
