@@ -7,19 +7,19 @@ Bundle-Description			: \
 
 Import-Package					: *; resolution:=optional
 
-Export-Package 					: ${replace;${core.packages};.+;$0\\;-split-package:=first}
+Export-Package 					: ${replace;${osgi.core.packages};.+;$0\\;-split-package:=first}
 
-Include-Resource				: ${core.resources}
+Include-Resource				: ${osgi.core.resources}
 
 Require-Capability: osgi.compile.time.only; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
 
 -outputmask = ${@bsn}-${version;===;${@version}}.jar
 
 -dependson 					=  \
-	${core.specs} 
+	${osgi.core.specs} 
 
 -buildpath 					= \
-	${replace;${core.specs};.+;$0\\;version=project}, \
+	${replace;${osgi.core.specs};.+;$0\\;version=project}, \
 	osgi.annotation;version=latest, \
 	ee.minimum;version=1.2
 

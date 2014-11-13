@@ -2,4 +2,4 @@
  * osgi.cmpn Gradle build script
  */
 
-apply from: cnf.file('gradle/javadoc.gradle')
+apply from: cnf.file('gradle/companion.gradle')

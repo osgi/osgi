@@ -5,19 +5,19 @@ Bundle-Description: \
     OSGi Annotation Release ${version;=;${build.version}}, \
     Annotations for use in compiling bundles.
 
-Private-Package: ${annotation.packages}
+Private-Package: ${osgi.annotation.packages}
 
-Include-Resource: ${annotation.resources}
+Include-Resource: ${osgi.annotation.resources}
 
 Require-Capability: osgi.compile.time.only; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
 
 -outputmask = ${@bsn}-${version;===;${@version}}.jar
 
 -dependson =  \
-    ${annotation.specs} 
+    ${osgi.annotation.specs} 
 
 -buildpath = \
-    ${replace;${annotation.specs};.+;$0\\;version=project}, \
+    ${replace;${osgi.annotation.specs};.+;$0\\;version=project}, \
     ee.minimum; version=1.3
 
 -include : layout.bnd

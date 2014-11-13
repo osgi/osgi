@@ -1,9 +1,11 @@
 /*
- * OSGi javadoc Gradle script
+ * OSGi companion code Gradle script
  */
 
-def javadocName = project.name - 'osgi.'
-def javadocSpecs = bnd("${javadocName}.specs")
+version bnd('spec.version', bnd('osgi.version'))
+
+ext.javadocSpecs = bnd("${project.name}.specs", project.name)
+ext.javadocTitle = bnd('javadoc.title', project.name)
 
 task javadoc(overwrite: true, type: Javadoc) {
   description 'Build the javadoc.'
@@ -15,10 +17,10 @@ task javadoc(overwrite: true, type: Javadoc) {
     include it.replace('.','/')+'/**/*.java'
   }
   configure(options) {
-    docTitle = "OSGi&trade; ${bnd.javadoc_title} Release ${bnd.osgi_release}"
-    windowTitle = "OSGi ${bnd.javadoc_title} Release ${bnd.osgi_release}"
+    docTitle = "OSGi&trade; ${javadocTitle} Release ${bnd.osgi_release}"
+    windowTitle = "OSGi ${javadocTitle} Release ${bnd.osgi_release}"
     bottom = "<font size=-1>${bnd.copyright_html} Licensed under the <a href=\"{@docRoot}/LICENSE.html\">OSGi Specification License, Version 2.0</a></font>"
-    header = "<b>OSGi&trade; ${bnd.javadoc_title}</b><br/><font size=-1>Release ${bnd.osgi_release}</font>"
+    header = "<b>OSGi&trade; ${javadocTitle}</b><br/><font size=-1>Release ${bnd.osgi_release}</font>"
     memberLevel = JavadocMemberLevel.PROTECTED
     charSet = 'UTF-8'
     encoding = 'UTF-8'
@@ -72,13 +74,28 @@ task javadoc(overwrite: true, type: Javadoc) {
   }
 }
 
-task(type: Zip, 'javadoc.zip') {
-  description 'Zip the javadoc.'
+task(type: Jar, 'javadocJar') {
+  description 'Jar the javadoc.'
   group 'documentation'
   dependsOn javadoc
   from javadoc.destinationDir
-  into javadocName
-  destinationDir docsDir
-  archiveName "osgi.${javadocName}.javadoc.zip"
+  classifier 'javadoc'
 }
 
+task(type: Jar, 'sourcesJar') {
+  description 'Jar the sources.'
+  group 'documentation'
+  dependsOn jar
+  from zipTree(jar.archivePath).matching {
+    include 'OSGI-OPT/src/**'
+  }
+  eachFile { FileCopyDetails fcp ->
+    fcp.path = fcp.path - 'OSGI-OPT/src/'
+  }
+  includeEmptyDirs = false
+  classifier = 'sources'
+}
+
+assemble {
+  dependsOn javadocJar, sourcesJar
+}

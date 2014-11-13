@@ -7,19 +7,19 @@ Bundle-Description				: \
 
 Import-Package					: *; resolution:=optional
 
-Export-Package 					: ${replace;${enterprise.packages};.+;$0\\;-split-package:=first}
+Export-Package 					: ${replace;${osgi.enterprise.packages};.+;$0\\;-split-package:=first}
 
-Include-Resource 				: ${enterprise.resources}
+Include-Resource 				: ${osgi.enterprise.resources}
   								  
 Require-Capability: osgi.compile.time.only; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
 
 -outputmask = ${@bsn}-${version;===;${@version}}.jar
 
 -dependson 					=  \
-	${enterprise.specs} 
+	${osgi.enterprise.specs} 
 
 -buildpath 					= \
-	${replace;${enterprise.specs};.+;$0\\;version=project}, \
+	${replace;${osgi.enterprise.specs};.+;$0\\;version=project}, \
     osgi.annotation;version=latest, \
     osgi.core;version=latest, \
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec;version=latest, \
