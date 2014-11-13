@@ -3,11 +3,20 @@
 
 Bundle-Description	= EnOcean Test Bundle
 
+Export-Package: \
+ org.osgi.test.support.step;-noimport:=true
+Conditional-Package: \
+ org.osgi.test.support.*
+Import-Package: \
+  ${-signaturetest}, \
+  *
 Private-Package		=  \
 	${p}.*
 
 Test-Cases			= ${testcases}
--signaturetest		= org.osgi.service.enocean
+-signaturetest = \
+ org.osgi.service.enocean, \
+ org.osgi.service.enocean.descriptions
 
 -buildpath: org.osgi.test.support;version=project,\
 	org.osgi.service.enocean;version=project,\
@@ -16,7 +25,7 @@ Test-Cases			= ${testcases}
 	ee.minimum;version=1.2,\
 	${junit}
 
--runbundles: org.osgi.test.support;version=latest,\
+-runbundles: \
 	org.osgi.service.enocean;version=latest,\
 	org.osgi.impl.service.log;version=latest,\
 	org.osgi.impl.service.cm;version=latest,\
