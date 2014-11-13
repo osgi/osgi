@@ -73,9 +73,9 @@ copyright = Copyright (c) OSGi Alliance (2000, ${copyright.year}). All Rights Re
 copyright.html = Copyright &copy; OSGi Alliance (2000, ${copyright.year}). All Rights Reserved.
 
 osgi.release				= 6
-osgi.version				= 6.0
+osgi.version				= 6.0.0
 
-build.version				= ${osgi.version}.0.${project.build}
+build.version				= ${osgi.version}.${project.build}
 
 ee.j2se-15.jar = ${repo;ee.j2se;1.5;lowest}
 

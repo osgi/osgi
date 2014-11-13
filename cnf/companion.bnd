@@ -6,3 +6,4 @@ Bundle-License = http://opensource.org/licenses/apache2.0.php; \
     link="http://www.apache.org/licenses/LICENSE-2.0"; \
     description="Apache License, Version 2.0"
 Bundle-Description = OSGi Companion Code for ${p} Version ${spec.version}.
+companion.code = true

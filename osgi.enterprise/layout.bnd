@@ -1,4 +1,4 @@
-enterprise.specs = \
+osgi.enterprise.specs = \
 	 org.osgi.jmx, \
      org.osgi.namespace.contract, \
      org.osgi.namespace.extender, \
@@ -25,12 +25,12 @@ enterprise.specs = \
      org.osgi.util.promise, \
 	 org.osgi.util.xml
 
-enterprise.packages = ${replace;$(enterprise.specs);^.*$;$0.*}
+osgi.enterprise.packages = ${replace;${osgi.enterprise.specs};^.*$;$0.*}
 
-enterprise.legal = ${project.workspace}/osgi.companion/legal
+osgi.enterprise.legal = ${project.workspace}/osgi.companion/legal
 
-enterprise.resources = {${enterprise.legal}/about.html}, \
-  						${enterprise.legal}/LICENSE, \
+osgi.enterprise.resources = {${osgi.enterprise.legal}/about.html}, \
+  						${osgi.enterprise.legal}/LICENSE, \
   						xmlns/blueprint=${project.workspace}/xmlns/blueprint, \
 		  				xmlns/metatype=${project.workspace}/xmlns/metatype, \
   						xmlns/rsa=${project.workspace}/xmlns/rsa, \
