@@ -25,8 +25,6 @@ package org.osgi.service.enocean;
  */
 public interface EnOceanHost {
 
-    // TODO AAA: Explain all the @throws EnOceanException below.
-
     /**
      * The unique ID for this Host: this matches the CHIP_ID of the EnOcean
      * Gateway Chip it embodies.
@@ -49,7 +47,7 @@ public interface EnOceanHost {
     /**
      * Reset the EnOcean Host (cf. ESP3 command 0x02: CO_WR_RESET)
      * 
-     * @throws EnOceanException
+     * @throws EnOceanException if any problem occurs.
      */
     public void reset() throws EnOceanException;
 
@@ -58,7 +56,7 @@ public interface EnOceanHost {
      * CO_RD_VERSION)
      * 
      * @return a String object containing the application version info.
-     * @throws EnOceanException
+     * @throws EnOceanException if any problem occurs.
      */
     public String appVersion() throws EnOceanException;
 
@@ -67,7 +65,7 @@ public interface EnOceanHost {
      * CO_RD_VERSION)
      * 
      * @return a String object containing the API version info.
-     * @throws EnOceanException
+     * @throws EnOceanException if any problem occurs.
      */
     public String apiVersion() throws EnOceanException;
 
@@ -76,7 +74,7 @@ public interface EnOceanHost {
      * CO_RD_IDBASE)
      * 
      * @return the BASE_ID of the device as defined in EnOcean specification
-     * @throws EnOceanException
+     * @throws EnOceanException if any problem occurs.
      */
     public int getBaseID() throws EnOceanException;
 
@@ -85,7 +83,7 @@ public interface EnOceanHost {
      * command 0x07: CO_WR_IDBASE)
      * 
      * @param baseID to be set.
-     * @throws EnOceanException
+     * @throws EnOceanException if any problem occurs.
      */
     public void setBaseID(int baseID) throws EnOceanException;
 
@@ -94,7 +92,7 @@ public interface EnOceanHost {
      * CO_WR_REPEATER)
      * 
      * @param level one of the Repeater Level constants as defined above.
-     * @throws EnOceanException
+     * @throws EnOceanException if any problem occurs.
      */
     public void setRepeaterLevel(int level) throws EnOceanException;
 
@@ -103,7 +101,7 @@ public interface EnOceanHost {
      * CO_RD_REPEATER)
      * 
      * @return one of the Repeater Level constants as defined above.
-     * @throws EnOceanException
+     * @throws EnOceanException if any problem occurs.
      */
     public int getRepeaterLevel() throws EnOceanException;
 
@@ -113,7 +111,7 @@ public interface EnOceanHost {
      * 
      * @param servicePID
      * @return the associated CHIP_ID of the exported device.
-     * @throws EnOceanException
+     * @throws EnOceanException if any problem occurs.
      */
     public int getChipId(String servicePID) throws EnOceanException;
 }

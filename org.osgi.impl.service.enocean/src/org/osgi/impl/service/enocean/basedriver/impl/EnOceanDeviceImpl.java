@@ -11,7 +11,6 @@ import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.service.device.Constants;
 import org.osgi.service.enocean.EnOceanDevice;
-import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanHandler;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.EnOceanRPC;
@@ -131,9 +130,8 @@ public class EnOceanDeviceImpl implements EnOceanDevice {
 	/**
 	 * @param message
 	 * @param handler
-	 * @throws EnOceanException
 	 */
-	public void send(EnOceanMessage message, EnOceanHandler handler) throws EnOceanException {
+	public void send(EnOceanMessage message, EnOceanHandler handler) {
 		// TODO Auto-generated method stub
 	}
 
