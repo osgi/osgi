@@ -4,22 +4,23 @@ Bundle-License	= http://opensource.org/licenses/apache2.0.php; \
 Bundle-Description				: \
 	OSGi Compendium Release ${version;=;${build.version}}, \
 	Interfaces and Classes for use in compiling bundles.
+companion.code = true
 
 Import-Package					: *; resolution:=optional
 
-Export-Package 					: ${replace;${cmpn.packages};.+;$0\\;-split-package:=first}
+Export-Package 					: ${replace;${osgi.cmpn.packages};.+;$0\\;-split-package:=first}
 
-Include-Resource 				: ${cmpn.resources}
+Include-Resource 				: ${osgi.cmpn.resources}
 
 Require-Capability: osgi.compile.time.only; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
 
 -outputmask = ${@bsn}-${version;===;${@version}}.jar
 
 -dependson 					=  \
-	${cmpn.specs} 
+	${osgi.cmpn.specs} 
 
 -buildpath 					= \
-	${replace;${cmpn.specs};.+;$0\\;version=project}, \
+	${replace;${osgi.cmpn.specs};.+;$0\\;version=project}, \
     osgi.annotation;version=latest, \
     osgi.core;version=latest, \
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec;version=latest, \

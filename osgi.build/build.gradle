@@ -6,7 +6,7 @@ def buildProject = project
 
 /* Configure the rootProject */
 configure(rootProject) {
-  defaultTasks += ':assemble'
+  defaultTasks += ':' + bnd_defaultTask
   buildDir = buildProject.buildDir
 
   task assemble {

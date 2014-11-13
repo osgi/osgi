@@ -1,4 +1,4 @@
-cmpn.specs = \
+osgi.cmpn.specs = \
 	 org.osgi.application, \
 	 org.osgi.namespace.contract, \
 	 org.osgi.namespace.extender, \
@@ -38,12 +38,12 @@ cmpn.specs = \
      org.osgi.util.promise, \
 	 org.osgi.util.xml
 
-cmpn.packages = ${replace;$(cmpn.specs);^.*$;$0.*}
+osgi.cmpn.packages = ${replace;${osgi.cmpn.specs};^.*$;$0.*}
 
-cmpn.legal = ${project.workspace}/osgi.companion/legal
+osgi.cmpn.legal = ${project.workspace}/osgi.companion/legal
 
-cmpn.resources = {${cmpn.legal}/about.html}, \
-  				${cmpn.legal}/LICENSE, \
+osgi.cmpn.resources = {${osgi.cmpn.legal}/about.html}, \
+  				${osgi.cmpn.legal}/LICENSE, \
   				xmlns/app=${project.workspace}/xmlns/app, \
   				xmlns/blueprint=${project.workspace}/xmlns/blueprint, \
   				xmlns/metatype=${project.workspace}/xmlns/metatype, \

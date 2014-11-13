@@ -29,7 +29,18 @@ subprojects {
     plugins.apply 'biz.aQute.bnd'
   }
 }
+subprojects {
+  if (project.hasProperty('bnd')) {
+    if (parseBoolean(bnd('companion.code', 'false'))) {
+      apply from: cnf.file('gradle/companion.gradle')
+    }
+  }
+}
 
 task wrapper(type: Wrapper) {
   jarFile = rootProject.file('.gradle-wrapper/gradle-wrapper.jar')
+}
+
+def boolean parseBoolean(String value) {
+  return 'on'.equalsIgnoreCase(value) || 'true'.equalsIgnoreCase(value)
 }
