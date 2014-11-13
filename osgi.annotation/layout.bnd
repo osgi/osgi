@@ -1,9 +1,9 @@
-annotation.specs = \
+osgi.annotation.specs = \
     org.osgi.annotation.versioning
 
-annotation.packages = ${replace;$(annotation.specs);^.*$;$0.*}
+osgi.annotation.packages = ${replace;${osgi.annotation.specs};^.*$;$0.*}
 
-annotation.legal = ${project.workspace}/osgi.companion/legal
+osgi.annotation.legal = ${project.workspace}/osgi.companion/legal
 
-annotation.resources = {${annotation.legal}/about.html}, \
-    ${annotation.legal}/LICENSE
+osgi.annotation.resources = {${osgi.annotation.legal}/about.html}, \
+    ${osgi.annotation.legal}/LICENSE

@@ -14,7 +14,7 @@ javac.profile=
     com.icl.saxon; version=latest, \
     org.osgi.service.io; version=project
 
-javadoc.specs = ${uniq; ${annotation.specs}, ${core.specs}, ${cmpn.specs}, ${enterprise.specs}, ${residential.specs}, org.osgi.dmt}
+javadoc.specs = ${uniq; ${osgi.annotation.specs}, ${osgi.core.specs}, ${osgi.cmpn.specs}, ${osgi.enterprise.specs}, ${osgi.residential.specs}, org.osgi.dmt}
 
 saxon    = ${repo;com.icl.saxon;latest}
 log4j    = ${repo;org.apache.log4j;latest}

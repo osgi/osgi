@@ -4,20 +4,21 @@ Bundle-License: http://opensource.org/licenses/apache2.0.php; \
 Bundle-Description: \
     OSGi Annotation Release ${version;=;${build.version}}, \
     Annotations for use in compiling bundles.
+companion.code = true
 
-Private-Package: ${annotation.packages}
+Private-Package: ${osgi.annotation.packages}
 
-Include-Resource: ${annotation.resources}
+Include-Resource: ${osgi.annotation.resources}
 
 Require-Capability: osgi.compile.time.only; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
 
 -outputmask = ${@bsn}-${version;===;${@version}}.jar
 
 -dependson =  \
-    ${annotation.specs} 
+    ${osgi.annotation.specs} 
 
 -buildpath = \
-    ${replace;${annotation.specs};.+;$0\\;version=project}
+    ${replace;${osgi.annotation.specs};.+;$0\\;version=project}
 
 -include : layout.bnd
 javadoc.title = Annotation
