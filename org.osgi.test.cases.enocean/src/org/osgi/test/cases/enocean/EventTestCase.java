@@ -16,7 +16,6 @@
 
 package org.osgi.test.cases.enocean;
 
-import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanChannel;
 import org.osgi.service.enocean.EnOceanDevice;
 import org.osgi.service.enocean.EnOceanEvent;
@@ -60,11 +59,6 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 		/* First get a reference towards the device */
 		String lastServiceEvent = devices.waitForService();
 		assertNotNull("Timeout reached.", lastServiceEvent);
-		
-		// TODO AAA: Check the two following lines, why do we need to get, and
-		// unget this ref?;
-		ServiceReference ref = devices.getServiceReference();
-		getContext().ungetService(ref);
 		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
 
 		/* Make the inserted device send a message */
