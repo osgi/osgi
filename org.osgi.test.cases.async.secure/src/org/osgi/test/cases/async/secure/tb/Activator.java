@@ -28,7 +28,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public class Activator implements BundleActivator {
 	private ServiceTracker<Async, Async>	asyncTracker;
 
-	@SuppressWarnings("rawtypes")
+	@SuppressWarnings({"rawtypes", "unchecked"})
 	public void start(BundleContext context) throws Exception {
 		String name = context.getBundle().getHeaders("").get(Constants.BUNDLE_NAME);
 		asyncTracker = new ServiceTracker<Async, Async>(context, Async.class, null);
@@ -40,9 +40,9 @@ public class Activator implements BundleActivator {
 		Hashtable<String, String> props = new Hashtable<String, String>();
 
 		props.put(MyService.TEST_KEY, MyService.TEST_mediateReferenceWithSecurityCheck + "_" + name);
-		context.registerService(Callable.class.getName(), new Callable() {
+		context.registerService(Callable.class.getName(), new Callable<Object>() {
 			public Object call() throws Exception {
-				return async.mediate(myServiceRef, (Class<Object>) myService.getClass());
+				return async.<MyService> mediate(myServiceRef, (Class) myService.getClass());
 			}
 		}, props);
 
