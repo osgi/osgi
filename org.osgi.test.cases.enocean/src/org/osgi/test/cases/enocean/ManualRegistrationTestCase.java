@@ -62,11 +62,6 @@ public class ManualRegistrationTestCase extends AbstractEnOceanTestCase {
 		assertEquals("RORG mismatch", Fixtures.STR_RORG_RPS, ref.getProperty(EnOceanDevice.RORG));
 		assertNull("ref.getProperty(EnOceanDevice.FUNC) must not be null.", ref.getProperty(EnOceanDevice.FUNC));
 
-		// TODO AAA: Check why is there a Thread.sleep here?;
-		log("DEBUG: Thread.sleep(500);");
-		Thread.sleep(500); // for some reason the fw may not have had time to
-							// register properly
-
 		EnOceanDevice dev = (EnOceanDevice) getContext().getService(ref);
 		dev.setFunc(Fixtures.FUNC);
 		lastServiceEvent = devices.waitForService();
