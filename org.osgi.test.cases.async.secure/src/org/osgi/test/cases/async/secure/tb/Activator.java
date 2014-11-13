@@ -17,7 +17,6 @@ package org.osgi.test.cases.async.secure.tb;
 
 import java.util.Hashtable;
 import java.util.concurrent.Callable;
-
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
@@ -36,8 +35,23 @@ public class Activator implements BundleActivator {
 		asyncTracker.open();
 		final Async async = asyncTracker.getService();
 		final ServiceReference<MyService> myServiceRef = context.getServiceReference(MyService.class);
+		final Object myService = context.getService(myServiceRef);
 
 		Hashtable<String, String> props = new Hashtable<String, String>();
+
+		props.put(MyService.TEST_KEY, MyService.TEST_mediateReferenceWithSecurityCheck + "_" + name);
+		context.registerService(Callable.class.getName(), new Callable() {
+			public Object call() throws Exception {
+				return async.mediate(myServiceRef, (Class<Object>) myService.getClass());
+			}
+		}, props);
+
+		props.put(MyService.TEST_KEY, MyService.TEST_mediateDirectWithSecurityCheck + "_" + name);
+		context.registerService(Callable.class.getName(), new Callable() {
+			public Object call() throws Exception {
+				return async.mediate(myService, (Class<Object>) myService.getClass());
+			}
+		}, props);
 
 		props.put(MyService.TEST_KEY, MyService.TEST_callWithSecurityCheck + "_" + name);
 		context.registerService(Callable.class.getName(), new Callable() {

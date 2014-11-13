@@ -17,12 +17,14 @@ package org.osgi.test.cases.async.secure.services;
 
 
 public interface MyService {
-	public static final String METHOD_countSlowly = "countSlowly";
-	public static final String TEST_KEY = "test";
-	public static final String TEST_callWithSecurityCheck = "callWithSecurityCheck";
-	public static final String TEST_callWithoutSecurityCheck = "callWithoutSecurityCheck";
-	public static final String TEST_executeWithSecurityCheck = "executeWithSecurityCheck";
-	public static final String TEST_executeWithoutSecurityCheck = "executeWithoutSecurityCheck";
+	public static final String	METHOD_countSlowly						= "countSlowly";
+	public static final String	TEST_KEY								= "test";
+	public static final String	TEST_callWithSecurityCheck				= "callWithSecurityCheck";
+	public static final String	TEST_callWithoutSecurityCheck			= "callWithoutSecurityCheck";
+	public static final String	TEST_executeWithSecurityCheck			= "executeWithSecurityCheck";
+	public static final String	TEST_executeWithoutSecurityCheck		= "executeWithoutSecurityCheck";
+	public static final String	TEST_mediateReferenceWithSecurityCheck	= "mediateReferenceWithSecurityCheck";
+	public static final String	TEST_mediateDirectWithSecurityCheck		= "mediateDirectWithSecurityCheck";
 
 	int countSlowly(int times, boolean withSecurityCheck) throws Exception;
 }

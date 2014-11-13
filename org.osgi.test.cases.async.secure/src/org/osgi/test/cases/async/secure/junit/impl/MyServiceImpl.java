@@ -16,7 +16,6 @@
 package org.osgi.test.cases.async.secure.junit.impl;
 
 import java.security.AccessController;
-
 import org.osgi.test.cases.async.secure.junit.AsyncTestUtils;
 import org.osgi.test.cases.async.secure.services.MyService;
 import org.osgi.util.promise.Deferred;
@@ -26,11 +25,17 @@ public class MyServiceImpl implements MyService {
 	protected final Deferred<String> lastMethodCalled = new Deferred<String>();
 	protected final Deferred<Integer> success = new Deferred<Integer>();
 
+	public MyServiceImpl() {
+		// always check permissions. This is either going to be called while
+		// registering the service or while mediating
+		AccessController.checkPermission(new MyPermission("constructor"));
+	}
+
 	public int countSlowly(int times, boolean withSecuriyCheck) throws Exception {
 		try {
 			int result = doCountSlowly(times);
 			if (withSecuriyCheck) {
-				AccessController.checkPermission(new MyPermission("test"));
+				AccessController.checkPermission(new MyPermission("countSlowly"));
 			}
 			success.resolve(result);
 			return result;

@@ -18,7 +18,6 @@ package org.osgi.test.cases.async.secure.junit;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.concurrent.Callable;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.InvalidSyntaxException;
@@ -92,6 +91,22 @@ public class SecurityTestCase extends OSGiTestCase {
 		// Note that we don't uninstall tb bundles each time
 	}
 
+	public void testmediateReferenceWithSecurityCheck_tb1() throws Exception {
+		assertMediateSuccess();
+	}
+
+	public void testmediateReferenceWithSecurityCheck_tb2() throws Exception {
+		assertMediateSuccess();
+	}
+
+	public void testmediateDirectWithSecurityCheck_tb1() throws Exception {
+		assertMediateSuccess();
+	}
+
+	public void testmediateDirectWithSecurityCheck_tb2() throws Exception {
+		assertMediateSuccess();
+	}
+
 	public void testcallWithSecurityCheck_tb1() throws Exception {
 		assertCallFailure();
 	}
@@ -122,6 +137,10 @@ public class SecurityTestCase extends OSGiTestCase {
 
 	public void testexecuteWithoutSecurityCheck_tb2() throws Exception {
 		assertExecuteSuccess();
+	}
+
+	private void assertMediateSuccess() throws Exception {
+		getCallable().call();
 	}
 
 	private void assertCallFailure() throws Exception {
