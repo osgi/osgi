@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -276,6 +276,7 @@ public abstract class SubsystemTest extends OSGiTestCase {
 	public static String BUNDLE_SHARE_I = "share.i@1.0.0.jar";
 	public static String BUNDLE_SHARE_J = "share.j@1.0.0.jar";
 	public static String BUNDLE_SHARE_K = "share.k@1.0.0.jar";
+	public static String BUNDLE_REQUIRE_EE_NATIVE = "require.ee.native.jar";
 
 	public static String INVALID_TYPE = "invalid.type@1.0.0.abc";
 

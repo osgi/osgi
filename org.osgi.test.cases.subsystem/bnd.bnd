@@ -51,7 +51,8 @@ Include-Resource					= \
 	deployment.headers.b.jar, \
 	preferred.provider.a.jar, \
 	preferred.provider.b.jar, \
-	preferred.provider.c.jar
+	preferred.provider.c.jar, \
+	require.ee.native.jar
 
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.subsystem
@@ -60,7 +61,7 @@ Test-Cases							= ${testcases}
     ee.j2se; 								version=${javac.compliance}, \
     org.osgi.test.support;                  version=project , \
     org.osgi.service.subsystem;				version=project , \
-	osgi.core;								version=5.0	, \
+	osgi.core;								version=6.0	, \
 	osgi.cmpn;         						version=5.0 , \
 	${junit}
 
