@@ -7,11 +7,7 @@ version bnd('spec.version', bnd('osgi.version'))
 ext.javadocSpecs = bnd("${project.name}.specs", project.name)
 ext.javadocTitle = bnd('javadoc.title', project.name)
 
-task javadoc(overwrite: true, type: Javadoc) {
-  description 'Build the javadoc.'
-  group 'documentation'
-  dependsOn compileJava
-  classpath = configurations.compile
+javadoc {
   source bnd.allSrcDirs
   javadocSpecs.split(/\s*,\s*/).each {
     include it.replace('.','/')+'/**/*.java'
@@ -45,7 +41,7 @@ task javadoc(overwrite: true, type: Javadoc) {
   }
   if (project.name.startsWith('osgi.')) {
     // compute dependencies on other javadoc builds based upon the classpath
-    classpath.each {
+    configurations.compile.each {
       def matcher = rootProject.relativePath(it) =~ /^(osgi\.([^\/]*))/
       if (matcher) {
         dependsOn ":${matcher[0][1]}:javadoc"
@@ -98,6 +94,7 @@ task(type: Jar, 'sourcesJar') {
   classifier = 'sources'
 }
 
-assemble {
-  dependsOn javadocJar, sourcesJar
+artifacts {
+  archives sourcesJar
+  archives javadocJar
 }
