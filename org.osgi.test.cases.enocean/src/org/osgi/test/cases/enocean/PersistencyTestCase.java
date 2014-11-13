@@ -49,7 +49,7 @@ public class PersistencyTestCase extends AbstractEnOceanTestCase {
 		EnOceanHost defaultHost = (EnOceanHost) getContext().getService(hostRef);
 		int originalChipId = defaultHost.getChipId(Fixtures.DEVICE_PID);
 
-		Bundle baseDriver = getBaseDriverBundle();
+		Bundle baseDriver = hostRef.getBundle();
 		assertNotNull("baseDriver must not be null.", baseDriver);
 
 		baseDriver.stop();
@@ -73,21 +73,6 @@ public class PersistencyTestCase extends AbstractEnOceanTestCase {
 
 		sReg.unregister();
 		getContext().ungetService(hostRef);
-	}
-
-	private Bundle getBaseDriverBundle() {
-		
-		// TODO AAA: Search for the EnOceanHost service, then get the
-		// corresponding bundle, and return it;
-		
-		Bundle[] bundles = getContext().getBundles();
-		for (int i = 0; i < bundles.length; i++) {
-			Bundle b = bundles[i];
-			if (b.getSymbolicName().equals("org.osgi.impl.service.enocean")) {
-				return b;
-			}
-		}
-		return null;
 	}
 
 }
