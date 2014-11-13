@@ -4,6 +4,7 @@ Bundle-License	= http://opensource.org/licenses/apache2.0.php; \
 Bundle-Description			: \
 	OSGi Core Release ${version;=;${build.version}}, \
 	Interfaces and Classes for use in compiling bundles.
+companion.code = true
 
 Import-Package					: *; resolution:=optional
 
