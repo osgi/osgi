@@ -24,6 +24,7 @@
  */
 package org.osgi.test.cases.component.junit;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
@@ -32,6 +33,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.cm.Configuration;
@@ -2377,6 +2379,37 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			}
 			if (regInitial != null) {
 				regInitial.unregister();
+			}
+		}
+	}
+
+	/**
+	 * Simple field injection test.
+	 *
+	 * Static unary reference
+	 */
+	public void testFIUnaryReference() throws Exception {
+		final TestObject service = new TestObject();
+		final Dictionary props = new Hashtable();
+		final ServiceRegistration reg = getContext().registerService(
+				TestObject.class.getName(), service, props);
+
+		try {
+			final Bundle tb = installBundle("tbf1.jar", false);
+			try {
+				tb.start();
+				waitBundleStart();
+
+				final BaseService bs = (BaseService) this
+						.getService(BaseService.class);
+				assertNotNull(bs.getProperties());
+				assertEquals(service, bs.getProperties().get("service"));
+			} finally {
+				uninstallBundle(tb);
+			}
+		} finally {
+			if (reg != null) {
+				reg.unregister();
 			}
 		}
 	}

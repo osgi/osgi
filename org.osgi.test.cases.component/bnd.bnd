@@ -29,7 +29,8 @@ Include-Resource					= \
 	tb14.jar, \
 	tb15.jar, \
 	tb16.jar, \
-	tb17.jar
+	tb17.jar, \
+	tbf1.jar
 	
 Test-Cases							= ${testcases}
 -signaturetest = \
