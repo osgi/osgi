@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -2481,6 +2482,53 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			assertNull(service);
 		} finally {
 			ungetAllServices();
+			uninstallBundle(tb);
+		}
+	}
+
+	/**
+	 * Simple field injection test.
+	 *
+	 * Field type test
+	 */
+	public void testFITypeUnaryReference() throws Exception {
+		final TestObject service = new TestObject();
+		final Bundle tb = installBundle("tbf1.jar", false);
+		try {
+			this.registerService(TestObject.class.getName(), service, null);
+			final ServiceReference ref = this.getContext()
+					.getServiceReference(TestObject.class.getName());
+
+			tb.start();
+			waitBundleStart();
+
+			final BaseService bs = (BaseService) this.getService(
+					BaseService.class, "(type=type)");
+			assertNotNull(bs.getProperties());
+
+			// service
+			assertEquals(service, bs.getProperties().get("service"));
+
+			// service reference
+			assertEquals(0, ref.compareTo(bs.getProperties().get("ref")));
+
+			// for the properties map we just check the service id
+			final Map props = (Map) bs.getProperties().get("map");
+			assertNotNull(props);
+			assertEquals(ref.getProperty(Constants.SERVICE_ID),
+					props.get(Constants.SERVICE_ID));
+
+			// tuple
+			final Map.Entry tuple = (Map.Entry) bs.getProperties().get("tuple");
+			final Map serviceProps = (Map) tuple.getKey();
+			assertEquals(ref.getProperty(Constants.SERVICE_ID),
+					serviceProps.get(Constants.SERVICE_ID));
+			assertEquals(service, tuple.getValue());
+
+			// TODO service objects
+		} finally {
+			ungetAllServices();
+			unregisterAllServices();
 			uninstallBundle(tb);
 		}
 	}

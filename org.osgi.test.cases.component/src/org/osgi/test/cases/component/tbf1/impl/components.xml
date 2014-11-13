@@ -2,10 +2,8 @@
 <components>
 
 	<!-- unary reference (static/required), NS 1.3.0 -->
-	<component
-		xmlns="http://www.osgi.org/xmlns/scr/v1.3.0"
-		name="org.osgi.test.cases.component.tbf1.StaticUnaryReference"
-		immediate="true">
+	<component name="org.osgi.test.cases.component.tbf1.static"
+	           xmlns="http://www.osgi.org/xmlns/scr/v1.3.0">
 		<implementation
 			class="org.osgi.test.cases.component.tbf1.impl.UnaryReferenceImpl"/>
 		<service>
@@ -20,10 +18,8 @@
 	</component>
 
 	<!-- unary reference (dynamic/optional), NS 1.3.0 -->
-	<component
-		xmlns="http://www.osgi.org/xmlns/scr/v1.3.0"
-		name="org.osgi.test.cases.component.tbf1.DynamicUnaryReference"
-		immediate="true">
+	<component name="org.osgi.test.cases.component.tbf1.dynamic"
+	           xmlns="http://www.osgi.org/xmlns/scr/v1.3.0">
 		<implementation
 			class="org.osgi.test.cases.component.tbf1.impl.UnaryReferenceImpl"/>
 		<service>
@@ -38,10 +34,8 @@
 	</component>
 
 	<!-- unary reference (dynamic/optional) failing, NS 1.3.0 -->
-	<component
-		xmlns="http://www.osgi.org/xmlns/scr/v1.3.0"
-		name="org.osgi.test.cases.component.tbf1.DynamicUnaryReferenceFailed"
-		immediate="true">
+	<component name="org.osgi.test.cases.component.tbf1.failed"
+	           xmlns="http://www.osgi.org/xmlns/scr/v1.3.0">
 		<implementation
 			class="org.osgi.test.cases.component.tbf1.impl.FailedUnaryReferenceImpl"/>
 		<service>
@@ -53,5 +47,40 @@
 	          policy="dynamic"
 	          cardinality="0..1"
 	          field="service"/>
+	</component>
+
+	<!-- unary reference (type test), NS 1.3.0 -->
+	<component name="org.osgi.test.cases.component.tbf1.type"
+	           xmlns="http://www.osgi.org/xmlns/scr/v1.3.0">
+		<implementation
+			class="org.osgi.test.cases.component.tbf1.impl.TypeReferenceTestImpl"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+		<property name="type" value="type"/>
+	    <field-reference
+	          name="A"
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="static"
+	          cardinality="1..1"
+	          field="service"/>
+	    <field-reference
+	          name="B"
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="static"
+	          cardinality="1..1"
+	          field="ref"/>
+	    <field-reference
+	          name="C"
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="static"
+	          cardinality="1..1"
+	          field="properties"/>
+	    <field-reference
+	          name="D"
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="static"
+	          cardinality="1..1"
+	          field="tuple"/>
 	</component>
 </components>
