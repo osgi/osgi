@@ -2388,29 +2388,100 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 	 *
 	 * Static unary reference
 	 */
-	public void testFIUnaryReference() throws Exception {
+	public void testFIStaticUnaryReference() throws Exception {
 		final TestObject service = new TestObject();
-		final Dictionary props = new Hashtable();
-		final ServiceRegistration reg = getContext().registerService(
-				TestObject.class.getName(), service, props);
 
+		final Bundle tb = installBundle("tbf1.jar", false);
 		try {
-			final Bundle tb = installBundle("tbf1.jar", false);
-			try {
-				tb.start();
-				waitBundleStart();
+			this.registerService(TestObject.class.getName(), service, null);
 
-				final BaseService bs = (BaseService) this
-						.getService(BaseService.class);
-				assertNotNull(bs.getProperties());
-				assertEquals(service, bs.getProperties().get("service"));
-			} finally {
-				uninstallBundle(tb);
-			}
+			tb.start();
+			waitBundleStart();
+
+			final BaseService bs = (BaseService) this.getService(
+					BaseService.class, "(type=static)");
+			assertNotNull(bs.getProperties());
+			assertEquals(service, bs.getProperties().get("service"));
+			this.ungetService(bs);
+
+			this.unregisterService(service);
+
+			Sleep.sleep(SLEEP * 3);
+
+			assertNull(getContext().getServiceReferences(
+					BaseService.class.getName(), "(type=static)"));
 		} finally {
-			if (reg != null) {
-				reg.unregister();
-			}
+			uninstallBundle(tb);
+			this.unregisterAllServices();
+		}
+	}
+
+	/**
+	 * Simple field injection test.
+	 *
+	 * Dynamic unary reference
+	 */
+	public void testFIDynamicUnaryReference() throws Exception {
+		final Bundle tb = installBundle("tbf1.jar", false);
+		try {
+			tb.start();
+			waitBundleStart();
+
+			final TestObject service = new TestObject();
+
+			// ref not available
+			BaseService bs = (BaseService) this.getService(
+					BaseService.class, "(type=dynamic)");
+			assertNotNull(bs.getProperties());
+			assertNull(bs.getProperties().get("service"));
+			ungetService(bs);
+
+			// register ref and wait
+			this.registerService(TestObject.class.getName(), service, null);
+			Sleep.sleep(SLEEP * 3);
+
+			bs = (BaseService) this.getService(BaseService.class,
+					"(type=dynamic)");
+			assertNotNull(bs.getProperties());
+			assertEquals(service, bs.getProperties().get("service"));
+
+			// unregister ref again and wait
+			this.unregisterService(service);
+			Sleep.sleep(SLEEP * 3);
+
+			assertNotNull(bs.getProperties());
+			assertNull(bs.getProperties().get("service"));
+		} finally {
+			uninstallBundle(tb);
+			this.unregisterAllServices();
+		}
+	}
+
+	/**
+	 * Simple field injection test.
+	 *
+	 * Dynamic unary reference where field is not marked volatile
+	 */
+	public void testFIFailingUnaryReference() throws Exception {
+		final Bundle tb = installBundle("tbf1.jar", false);
+		try {
+			tb.start();
+			waitBundleStart();
+
+			// we get the reference just to be sure that
+			// component.xml is processed
+			getService(BaseService.class, "(type=dynamic)");
+
+			// we get the reference but not the service as it's not activated
+			// due to a non volatile field
+			final ServiceReference[] refs = getContext().getServiceReferences(
+					BaseService.class.getName(), "(type=failed)");
+			assertNotNull(refs);
+			final Object service = getContext().getService(refs[0]);
+			assertNull(service);
+		} finally {
+			ungetAllServices();
+			uninstallBundle(tb);
 		}
 	}
 

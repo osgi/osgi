@@ -22,9 +22,9 @@ import java.util.Hashtable;
 import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.TestObject;
 
-public class UnaryReferenceImpl implements BaseService {
+public class FailedUnaryReferenceImpl implements BaseService {
 
-	private volatile TestObject service;
+	private TestObject service;
 
 	public Dictionary getProperties() {
 		final Dictionary props = new Hashtable();
