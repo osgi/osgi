@@ -17,7 +17,6 @@
 package org.osgi.service.enocean.descriptions;
 
 import org.osgi.service.enocean.EnOceanChannel;
-import org.osgi.service.enocean.EnOceanException;
 
 /**
  * This interface represents an EnOcean Message Description.
@@ -31,23 +30,23 @@ public interface EnOceanMessageDescription {
      * Serializes a series of {@link EnOceanChannel} objects into the
      * corresponding byte[] sequence.
      * 
-     * @param channels
+     * @param channels to be serialized.
      * @return serialized value.
-     * @throws EnOceanException
+     * @throws IllegalArgumentException if the given channels is null.
      */
-    public byte[] serialize(EnOceanChannel[] channels) throws EnOceanException;
+    public byte[] serialize(EnOceanChannel[] channels) throws IllegalArgumentException;
 
     /**
      * Deserializes an array of bytes into the EnOceanChannels available to the
-     * payload, if possible. If the actual instance type of the message is not
-     * compatible with the bytes it is fed with (RORG to begin with), throw an
-     * IllegalArgumentException.
+     * payload, if possible.
      * 
-     * @param bytes
+     * @param bytes to be deserialized.
      * @return deserialized value.
      * 
-     * @throws EnOceanException
+     * @throws IllegalArgumentException if the actual instance type of the
+     *         message is not compatible with the bytes it is fed with (RORG to
+     *         begin with).
      */
-    public EnOceanChannel[] deserialize(byte[] bytes) throws EnOceanException;
+    public EnOceanChannel[] deserialize(byte[] bytes) throws IllegalArgumentException;
 
 }

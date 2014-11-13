@@ -128,7 +128,6 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 
 	public void reset() throws EnOceanException {
 		// TODO Auto-generated method stub
-
 	}
 
 	public String appVersion() throws EnOceanException {
@@ -148,12 +147,10 @@ public class EnOceanHostImpl extends Thread implements EnOceanHost {
 
 	public void setBaseID(int baseID) throws EnOceanException {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void setRepeaterLevel(int level) throws EnOceanException {
 		// TODO Auto-generated method stub
-
 	}
 
 	public int getRepeaterLevel() throws EnOceanException {

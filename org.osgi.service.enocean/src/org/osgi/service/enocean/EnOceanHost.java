@@ -25,6 +25,8 @@ package org.osgi.service.enocean;
  */
 public interface EnOceanHost {
 
+    // TODO AAA: Explain all the @throws EnOceanException below.
+
     /**
      * The unique ID for this Host: this matches the CHIP_ID of the EnOcean
      * Gateway Chip it embodies.

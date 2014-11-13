@@ -19,7 +19,6 @@ package org.osgi.test.cases.enocean;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanChannel;
 import org.osgi.service.enocean.EnOceanDevice;
-import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanRPC;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescriptionSet;
@@ -81,27 +80,19 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 		//
 		// test enOceanMessageDescription
 		try {
-			log("testInterfaceExceptions(), Check that passing a NULL array of bytes throws an EnOceanException.");
-			
-			// TODO AAA: In the following line, fill "deserialize" javadoc, and
-			// deserialize should throw an IllegalArgumentException instead of
-			// EnOceanException;
+			log("testInterfaceExceptions(), Check that passing a NULL array of bytes throws an IllegalArgumentException.");
 			enOceanMessageDescription.deserialize(null);
-			fail("Passing a NULL array of bytes to EnOceanMessageDescription.deserialize must throw an EnOceanException.");
-		} catch (EnOceanException e) {
+			fail("Passing a NULL array of bytes to EnOceanMessageDescription.deserialize must throw an IllegalArgumentException.");
+		} catch (IllegalArgumentException e) {
 			// Here, everything worked as expected.
 			log("testInterfaceExceptions(), --> OK.");
 		}
 
 		try {
-			log("testInterfaceExceptions(), Check that passing a wrongly sized byte array also throws an EnOceanException.");
-
-			// TODO AAA: In the following line, fill "deserialize" javadoc, and
-			// deserialize should throw an IllegalArgumentException instead of
-			// EnOceanException;
+			log("testInterfaceExceptions(), Check that passing a wrongly sized byte array also throws an IllegalArgumentException.");
 			enOceanMessageDescription.deserialize(new byte[] {0x55, 0x02, 0x34, 0x56, 0x67});
-			fail("Passing a wrongly sized byte array to EnOceanMessageDescription.deserialize must throw an EnOceanException.");
-		} catch (EnOceanException e) {
+			fail("Passing a wrongly sized byte array to EnOceanMessageDescription.deserialize must throw an IllegalArgumentException.");
+		} catch (IllegalArgumentException e) {
 			log("testInterfaceExceptions(), --> OK.");
 		}
 

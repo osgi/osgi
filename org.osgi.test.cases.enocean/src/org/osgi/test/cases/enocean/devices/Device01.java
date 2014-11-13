@@ -16,7 +16,6 @@
 
 package org.osgi.test.cases.enocean.devices;
 
-import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.EnOceanHandler;
 import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.EnOceanRPC;
@@ -39,20 +38,16 @@ public class Device01 extends EnOceanDeviceImpl {
 	/**
 	 * @param message
 	 * @param handler
-	 * @throws EnOceanException
-	 * @throws EnOceanException
 	 */
-	public void send(byte[] message, EnOceanHandler handler) throws EnOceanException, EnOceanException {
+	public void send(byte[] message, EnOceanHandler handler) {
 		// TODO
 	}
 
 	/**
 	 * @param message
 	 * @param handler
-	 * @throws EnOceanException
-	 * @throws EnOceanException
 	 */
-	public void send(EnOceanMessage message, EnOceanHandler handler) throws EnOceanException, EnOceanException {
+	public void send(EnOceanMessage message, EnOceanHandler handler) {
 		send(message.getBytes(), handler);
 	}
 

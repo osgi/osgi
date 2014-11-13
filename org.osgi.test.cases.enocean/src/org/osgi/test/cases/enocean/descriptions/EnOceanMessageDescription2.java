@@ -17,7 +17,6 @@
 package org.osgi.test.cases.enocean.descriptions;
 
 import org.osgi.service.enocean.EnOceanChannel;
-import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
 import org.osgi.test.cases.enocean.channels.FloatChannel1;
 import org.osgi.test.cases.enocean.channels.LChannel;
@@ -52,6 +51,11 @@ public class EnOceanMessageDescription2 implements EnOceanMessageDescription {
 	EnOceanChannel	floatValue	= new FloatChannel1();
 	EnOceanChannel	l			= new LChannel();
 
+	public byte[] serialize(EnOceanChannel[] channels) throws IllegalArgumentException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	public EnOceanChannel[] deserialize(byte[] data) throws IllegalArgumentException {
 
 		/* Every message description should ensure this */
@@ -66,10 +70,5 @@ public class EnOceanMessageDescription2 implements EnOceanMessageDescription {
 		l.setRawValue(new byte[] {lrnByte});
 
 		return new EnOceanChannel[] {floatValue, l};
-	}
-
-	public byte[] serialize(EnOceanChannel[] channels) throws EnOceanException, EnOceanException {
-		// TODO Auto-generated method stub
-		return null;
 	}
 }

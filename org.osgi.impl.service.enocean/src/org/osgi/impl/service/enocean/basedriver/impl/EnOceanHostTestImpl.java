@@ -27,7 +27,6 @@ import org.osgi.impl.service.enocean.utils.Logger;
 import org.osgi.impl.service.enocean.utils.Utils;
 import org.osgi.impl.service.enocean.utils.teststep.TestStepForEnOceanImpl;
 import org.osgi.service.enocean.EnOceanChannel;
-import org.osgi.service.enocean.EnOceanException;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescription;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescriptionSet;
 import org.osgi.service.enocean.descriptions.EnOceanDataChannelDescription;
@@ -104,17 +103,17 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 										EnOceanChannel	floatValue	= new TemperatureChannel_00();
 										EnOceanChannel	learn		= new LearnChannel_4BS();
 
-										public EnOceanChannel[] deserialize(byte[] data) throws EnOceanException {
+										public EnOceanChannel[] deserialize(byte[] data) throws IllegalArgumentException {
 
 											/*
 											 * Every message description should
 											 * ensure this
 											 */
 											if (data == null) {
-												throw new EnOceanException("Input data was NULL");
+												throw new IllegalArgumentException("Input data was NULL");
 											}
 											if (data.length != 4) {
-												throw new EnOceanException("Input data size was wrong");
+												throw new IllegalArgumentException("Input data size was wrong");
 											}
 											byte lrnByte = (byte) ((data[3] >> 3) & 0x01);
 											floatValue.setRawValue(Utils.byteToBytes(data[2]));
@@ -123,7 +122,7 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 											return new EnOceanChannel[] {floatValue, learn};
 										}
 
-										public byte[] serialize(EnOceanChannel[] channels) throws EnOceanException {
+										public byte[] serialize(EnOceanChannel[] channels) throws IllegalArgumentException {
 											// TODO Auto-generated method stub
 											return null;
 										}
