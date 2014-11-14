@@ -80,10 +80,14 @@ public class TestStepForEnOceanImpl implements TestStep {
 							currentCommand = stepId.getBytes();
 							// ignore result;
 						} else
-							if ("Any_new_data".equals(stepId)) {
+							if ("Get_the_event_that_the_base_driver_should_have_received".equals(stepId)) {
 								Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(...) returns currentData: " + currentData + ", currentData.length: " + currentData.length);
-								result = new String(currentData);
-								currentData = null;
+								if (currentData == null) {
+									result = null;
+								} else {
+									result = new String(currentData);
+									currentData = null;
+								}
 								return result;
 							} else
 								if ("Plug the EnOcean USB dongle".equals(stepId)) {

@@ -76,6 +76,7 @@ public class ManualRegistrationTestCase extends AbstractEnOceanTestCase {
 		assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
 		assertEquals("TYPE mismatch", Fixtures.STR_TYPE_1, ref.getProperty(EnOceanDevice.TYPE));
 
+		log("Unget service with service reference: " + ref);
 		getContext().ungetService(ref);
 	}
 

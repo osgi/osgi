@@ -185,6 +185,11 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 		} catch (IllegalArgumentException e) {
 			log("testInterfaceExceptions(), --> OK.");
 		}
+
+		log("Unget service with service reference: " + sr);
+		getContext().ungetService(sr);
+		log("Unget service with service reference: " + sr2);
+		getContext().ungetService(sr2);
 	}
 
 	/**
@@ -207,13 +212,13 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 		// [bnd] testRPC(), waitForService returned: SERVICE_ADDED
 		assertNotNull("Timeout reached.", wfs);
 
-		ServiceReference ref = devices.getServiceReference();
-		log("testRPC(), ref: " + ref);
+		ServiceReference sr = devices.getServiceReference();
+		log("testRPC(), sr: " + sr);
 		// [bnd] testRPC(), ref:
 		// {org.osgi.service.enocean.EnOceanDevice}={enocean.device.chip_id=305419896,
 		// enocean.device.profile.rorg=165, DEVICE_CATEGORY=EnOcean,
 		// service.id=40, service.bundleid=7, service.scope=singleton}
-		EnOceanDevice device = (EnOceanDevice) getContext().getService(ref);
+		EnOceanDevice device = (EnOceanDevice) getContext().getService(sr);
 		log("testRPC(), device: " + device);
 		// [bnd] testRPC(), device:
 		// org.osgi.impl.service.enocean.basedriver.impl.EnOceanDeviceImpl@49f92de5
@@ -225,11 +230,8 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 		// TODO AAA: Do we need to test the result/effect of calling the invoke
 		// method (see line above)?;
 
-		log("testRPC(), unget service with service reference ref: " + ref);
-		getContext().ungetService(ref);
-		
-		// TODO AAA: Ensure that every test method "ungets" the services
-		// references it uses;
+		log("Unget service with service reference: " + sr);
+		getContext().ungetService(sr);
 	}
 
 	/**
@@ -305,5 +307,10 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 		// It's a float because it's a DATA channel
 		Float deserializedValue = (Float) enOceanDataChannelDescription.deserialize(channel.getRawValue());
 		assertEquals("Fixtures.FLOATVALUE is expected here.", Fixtures.FLOATVALUE, deserializedValue.floatValue(), 0.1);
+
+		log("Unget service with service reference: " + sr);
+		getContext().ungetService(sr);
+		log("Unget service with service reference: " + sr2);
+		getContext().ungetService(sr2);
 	}
 }

@@ -81,6 +81,7 @@ public class RegistrationTestCase extends AbstractEnOceanTestCase {
 		assertEquals("TYPE mismatch", Fixtures.STR_TYPE_1, ref.getProperty(EnOceanDevice.TYPE));
 		assertEquals("MANUFACTURER mismatch", Fixtures.STR_MANUFACTURER, ref.getProperty(EnOceanDevice.MANUFACTURER));
 
+		log("Unget service with service reference: " + ref);
 		getContext().ungetService(ref);
 	}
 }

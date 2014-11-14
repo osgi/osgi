@@ -83,8 +83,9 @@ public class ExportTestCase extends AbstractEnOceanTestCase {
 		byte[] data = new byte[256];
 		log("DEBUG: get any new data from testStepService.");
 		
-		// TODO AAA: Add a message to the execute method below;
-		String executionResult = super.testStepProxy.execute("Any_new_data", null);
+		String executionResult = super.testStepProxy.execute("Get_the_event_that_the_base_driver_should_have_received",
+				"An event has been sent by the test to the base driver. Just hit [enter] to continue, and get this event.");
+		assertNotNull("The base driver didn't received the expected event (i.e., here, it didn't received any event at all).", executionResult);
 		data = executionResult.getBytes();
 		int size = data.length;
 		EspPacket pkt = new EspPacket(Utils.byteRange(data, 0, size));
@@ -95,6 +96,7 @@ public class ExportTestCase extends AbstractEnOceanTestCase {
 
 		// Needed not to mess with further tests
 		sReg.unregister();
+		log("Unget service with service reference: " + hostRef);
 		getContext().ungetService(hostRef);
 	}
 }

@@ -72,6 +72,7 @@ public class PersistencyTestCase extends AbstractEnOceanTestCase {
 		assertEquals("Original, and new chip ids mismatch.", originalChipId, newChipId);
 
 		sReg.unregister();
+		log("Unget service with service reference: " + hostRef);
 		getContext().ungetService(hostRef);
 	}
 
