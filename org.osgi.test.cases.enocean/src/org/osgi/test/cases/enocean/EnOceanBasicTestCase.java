@@ -282,11 +282,8 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 		// Request the registration of an EnOceanChannelDescriptionSet
 		// containing an EnOceanChannelDescription_CID.
 
-		// TODO AAA: In the following line, check if we have to enhance the
-		// stepId's message in order to specify that an
-		// EnOceanDataChannelDescription is expected;
 		super.testStepProxy.execute("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_CID",
-				"Request the registration of an EnOceanChannelDescriptionSet containing an EnOceanChannelDescription_CID.");
+				"Request the registration of an EnOceanChannelDescriptionSet containing an EnOceanDataChannelDescription_CID.");
 		log("testUseOfDescriptions(), enOceanChannelDescriptionSets.waitForService()");
 		String enOceanChannelDescriptionSetsWFS =
 				enOceanChannelDescriptionSets.waitForService();
