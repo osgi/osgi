@@ -80,9 +80,16 @@ build.version				= ${osgi.version}.${project.build}
 ee.j2se-15.jar = ${repo;ee.j2se;1.5;lowest}
 
 # Documentation
-Bundle-Copyright       	= ${copyright}
-Bundle-Vendor			= OSGi Alliance
-Bundle-Version			= ${build.version}
+Bundle-Copyright: ${copyright}
+Bundle-Vendor:    OSGi Alliance
+Bundle-Version:   ${build.version}
+Bundle-DocURL:    http://www.osgi.org/
+Bundle-SCM:       url=https://www.osgi.org/members/git/build.git, \
+                  connection=scm:git:https://www.osgi.org/members/git/build.git, \
+                  developerConnection=scm:git:https://www.osgi.org/members/git/build.git
+Bundle-Developer: git@www.osgi.org; email=info@osgi.org; name="OSGi Alliance"; organization="OSGi Alliance"
+groupid: org.osgi
+
 -removeheaders			= Include-Resource, Private-Package, Conditional-Package
 
 junit.package			= junit.framework;version=3.8

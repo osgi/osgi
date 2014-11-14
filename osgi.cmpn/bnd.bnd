@@ -1,9 +1,13 @@
-Bundle-License	= http://opensource.org/licenses/apache2.0.php; \
+Bundle-License: http://opensource.org/licenses/apache2.0.php; \
 	link="http://www.apache.org/licenses/LICENSE-2.0"; \
 	description="Apache License, Version 2.0"
-Bundle-Description				: \
+Bundle-Description: \
 	OSGi Compendium Release ${version;=;${build.version}}, \
 	Interfaces and Classes for use in compiling bundles.
+-pom = \
+ groupid=${groupid}, \
+ where=META-INF/maven/${groupid}/${p}/pom.xml, \
+ version=${osgi.version}
 companion.code = true
 
 Import-Package					: *; resolution:=optional

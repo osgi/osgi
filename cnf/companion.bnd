@@ -2,8 +2,12 @@
 spec.version = ${version;===;${replace;${cat;${project.dir}/${src}/${replace;${def;spec.package;${p}};\\.;/}/packageinfo};version (.+);$1}}
 build.version = ${spec.version}.${project.build}
 -outputmask = ${@bsn}-${version;===;${@version}}.jar
-Bundle-License = http://opensource.org/licenses/apache2.0.php; \
-    link="http://www.apache.org/licenses/LICENSE-2.0"; \
-    description="Apache License, Version 2.0"
-Bundle-Description = OSGi Companion Code for ${p} Version ${spec.version}.
+Bundle-License: http://opensource.org/licenses/apache2.0.php; \
+                link="http://www.apache.org/licenses/LICENSE-2.0"; \
+                description="Apache License, Version 2.0"
+Bundle-Description: OSGi Companion Code for ${p} Version ${spec.version}.
+-pom = \
+ groupid=${groupid}, \
+ where=META-INF/maven/${groupid}/${p}/pom.xml, \
+ version=${spec.version}
 companion.code = true
