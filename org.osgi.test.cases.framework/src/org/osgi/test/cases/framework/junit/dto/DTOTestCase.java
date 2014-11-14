@@ -426,8 +426,7 @@ public class DTOTestCase extends OSGiTestCase {
         assertServiceReferenceDTO(ref, dto);
         tb1.stop();
         dtos = tb1.adapt(ServiceReferenceDTO[].class);
-        assertNotNull("ServiceReferenceDTO[] for stopped bundle is null", dtos);
-        assertEquals("ServiceReferenceDTO[] for stopped bundle is not empty ", 0, dtos.length);
+		assertNull("ServiceReferenceDTO[] for stopped bundle is not null", dtos);
         tb1.uninstall();
         dtos = tb1.adapt(ServiceReferenceDTO[].class);
         assertNull("ServiceReferenceDTO[] for uninstalled bundle is not null", dtos);
