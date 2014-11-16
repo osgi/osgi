@@ -4,6 +4,7 @@ Bundle-License: http://opensource.org/licenses/apache2.0.php; \
 Bundle-Description: \
     OSGi Promise API Release ${version;=;${build.version}} \
     for use inside and outside of OSGi environments.
+Bundle-Name: ${groupid}:${p}
 -pom = \
  groupid=${groupid}, \
  where=META-INF/maven/${groupid}/${p}/pom.xml, \
