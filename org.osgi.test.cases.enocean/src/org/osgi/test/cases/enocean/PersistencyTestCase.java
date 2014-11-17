@@ -54,7 +54,6 @@ public class PersistencyTestCase extends AbstractEnOceanTestCase {
 
 		baseDriver.stop();
 		Sleep.sleep(1000 * OSGiTestCaseProperties.getScaling());
-		
 
 		hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
 		assertNull("hostRef must be null, once the base driver is stopped.", hostRef);

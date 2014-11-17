@@ -82,7 +82,7 @@ public class ExportTestCase extends AbstractEnOceanTestCase {
 
 		byte[] data = new byte[256];
 		log("DEBUG: get any new data from testStepService.");
-		
+
 		String executionResult = super.testStepProxy.execute("Get_the_event_that_the_base_driver_should_have_received",
 				"An event has been sent by the test to the base driver. Just hit [enter] to continue, and get this event.");
 		assertNotNull("The base driver didn't received the expected event (i.e., here, it didn't received any event at all).", executionResult);

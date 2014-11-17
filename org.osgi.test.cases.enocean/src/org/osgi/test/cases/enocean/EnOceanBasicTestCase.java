@@ -27,7 +27,6 @@ import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescriptionSet;
 import org.osgi.test.cases.enocean.messages.MessageExample1;
 import org.osgi.test.cases.enocean.rpc.QueryFunction;
-import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 
 /**
@@ -200,11 +199,7 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 	public void testRPC() throws InterruptedException {
 		log("testRPC(), Insert a device");
 		/* Insert a device */
-		MessageExample1 teachIn = MessageExample1.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
-		EspRadioPacket pkt = new EspRadioPacket(teachIn);
-		// Push everything in the command...
-		String params = new String(pkt.serialize());
-		super.testStepProxy.execute("MessageExample1_" + params, "Insert a device.");
+		super.testStepProxy.execute("MessageExample1_A", "Insert an a5_02_01 device.");
 
 		log("testRPC(), devices.waitForService()");
 		String wfs = devices.waitForService();
@@ -226,7 +221,7 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 		EnOceanRPC rpc = new QueryFunction();
 		log("testRPC(), rpc: " + rpc);
 		device.invoke(rpc, null);
-		
+
 		// TODO AAA: Do we need to test the result/effect of calling the invoke
 		// method (see line above)?;
 

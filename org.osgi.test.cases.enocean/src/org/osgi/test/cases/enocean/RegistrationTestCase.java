@@ -18,8 +18,6 @@ package org.osgi.test.cases.enocean;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanDevice;
-import org.osgi.test.cases.enocean.messages.MessageExample1;
-import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.Logger;
 
@@ -42,12 +40,7 @@ public class RegistrationTestCase extends AbstractEnOceanTestCase {
 	public void testAutoDeviceRegistration() throws Exception {
 
 		/* Insert a device */
-		MessageExample1 teachIn = MessageExample1.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
-		EspRadioPacket pkt = new EspRadioPacket(teachIn);
-		// Push everything in the command...
-		String params = new String(pkt.serialize());
-		// TODO AAA: Replace the following line: use a specific stepId and no more params (and the RI knows the attributes checked at the end of this test (see. assertEquals));
-		super.testStepProxy.execute("MessageExample1_" + params, "Insert a device.");
+		super.testStepProxy.execute("MessageExample1_A", "Insert an a5_02_01 device.");
 
 		// Device added
 		String lastServiceEvent = devices.waitForService();
@@ -72,13 +65,13 @@ public class RegistrationTestCase extends AbstractEnOceanTestCase {
 		 * properties
 		 */
 		assertEquals("category mismatch", EnOceanDevice.DEVICE_CATEGORY, ref.getProperty(org.osgi.service.device.Constants.DEVICE_CATEGORY));
-		
+
 		// TODO AAA: Replace the 5 following lines, and just check the existency
 		// of these properties, and that they are String, and defined.
-		assertEquals("CHIP_ID mismatch", Fixtures.STR_HOST_ID, ref.getProperty(EnOceanDevice.CHIP_ID));
 		assertEquals("RORG mismatch", Fixtures.STR_RORG, ref.getProperty(EnOceanDevice.RORG));
 		assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
 		assertEquals("TYPE mismatch", Fixtures.STR_TYPE_1, ref.getProperty(EnOceanDevice.TYPE));
+		assertEquals("CHIP_ID mismatch", Fixtures.STR_HOST_ID, ref.getProperty(EnOceanDevice.CHIP_ID));
 		assertEquals("MANUFACTURER mismatch", Fixtures.STR_MANUFACTURER, ref.getProperty(EnOceanDevice.MANUFACTURER));
 
 		log("Unget service with service reference: " + ref);

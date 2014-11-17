@@ -23,8 +23,6 @@ import org.osgi.service.enocean.EnOceanMessage;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescription;
 import org.osgi.service.event.Event;
 import org.osgi.test.cases.enocean.descriptions.EnOceanMessageDescription2;
-import org.osgi.test.cases.enocean.messages.MessageExample1;
-import org.osgi.test.cases.enocean.serial.EspRadioPacket;
 import org.osgi.test.cases.enocean.utils.Fixtures;
 import org.osgi.test.cases.enocean.utils.ServiceListener;
 
@@ -50,11 +48,7 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 	 */
 	public void testEventNotification() throws InterruptedException {
 		/* Insert a device */
-		MessageExample1 teachIn = MessageExample1.generateTeachInMsg(Fixtures.HOST_ID, Fixtures.MANUFACTURER);
-		EspRadioPacket teachInPkt = new EspRadioPacket(teachIn);
-		// Push everything in the command...
-		String params = new String(teachInPkt.serialize());
-		super.testStepProxy.execute("MessageExample1_" + params, "Insert a device.");
+		super.testStepProxy.execute("MessageExample1_A", "Insert an a5_02_01 device.");
 
 		/* First get a reference towards the device */
 		String lastServiceEvent = devices.waitForService();
@@ -62,12 +56,7 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 		assertEquals("did not have service addition", ServiceListener.SERVICE_ADDED, lastServiceEvent);
 
 		/* Make the inserted device send a message */
-		MessageExample1 measure = new MessageExample1(Fixtures.FLOATVALUE);
-		measure.setSenderId(Fixtures.HOST_ID);
-		EspRadioPacket measurePkt = new EspRadioPacket(measure);
-		// Push everything in the command...
-		String params2 = new String(measurePkt.serialize());
-		super.testStepProxy.execute("MessageExample1_" + params2, "Make the inserted device send a message.");
+		super.testStepProxy.execute("MessageExample1_B", "Make the inserted device send a message.");
 
 		Event event = events.waitForEvent();
 		assertNotNull("Timeout reached (no event has been received).", event);
@@ -82,7 +71,7 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 		assertNotNull("Msg must not be null.", msg);
 		EnOceanMessageDescription description = new EnOceanMessageDescription2();
 		EnOceanChannel[] channels = description.deserialize(msg.getPayloadBytes());
-		
+
 		// TODO AAA: Check the format instead of the checking the value itself;
 		assertEquals("float value mismatch", Fixtures.RAW_FLOATVALUE, channels[0].getRawValue()[0]);
 	}
