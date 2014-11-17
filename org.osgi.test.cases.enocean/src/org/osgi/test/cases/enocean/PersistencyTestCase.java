@@ -59,9 +59,8 @@ public class PersistencyTestCase extends AbstractEnOceanTestCase {
 		assertNull("hostRef must be null, once the base driver is stopped.", hostRef);
 
 		baseDriver.start();
-		// TODO AAA: Replace the following line by a
-		// "devices.waitForService();"...;
-		Sleep.sleep(1000 * OSGiTestCaseProperties.getScaling());
+		String lastServiceEvent = enOceanHostServiceListener.waitForService();
+		assertNotNull("Timeout reached.", lastServiceEvent);
 
 		hostRef = getContext().getServiceReference(EnOceanHost.class.getName());
 		assertNotNull("One EnOceanHost service must be registered (hostRef must not be null), once the base driver is started.", hostRef);

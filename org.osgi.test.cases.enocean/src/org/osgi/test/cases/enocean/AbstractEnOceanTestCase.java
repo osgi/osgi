@@ -18,6 +18,7 @@ package org.osgi.test.cases.enocean;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.enocean.EnOceanDevice;
+import org.osgi.service.enocean.EnOceanHost;
 import org.osgi.service.enocean.descriptions.EnOceanChannelDescriptionSet;
 import org.osgi.service.enocean.descriptions.EnOceanMessageDescriptionSet;
 import org.osgi.service.event.EventAdmin;
@@ -58,6 +59,9 @@ public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 	/** enOceanChannelDescriptionSets */
 	protected ServiceListener	enOceanChannelDescriptionSets;
 
+	/** enOceanHost */
+	protected ServiceListener	enOceanHostServiceListener;
+
 	protected void setUp() throws Exception {
 		this.testStepProxy = new TestStepProxy(super.getContext());
 
@@ -72,6 +76,8 @@ public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 
 		enOceanChannelDescriptionSets = new ServiceListener(getContext(), EnOceanChannelDescriptionSet.class);
 
+		enOceanHostServiceListener = new ServiceListener(getContext(), EnOceanHost.class);
+
 		/* Get a global eventAdmin handle */
 		eventAdminRef = getContext().getServiceReference(EventAdmin.class.getName());
 		eventAdmin = (EventAdmin) getContext().getService(eventAdminRef);
@@ -81,6 +87,7 @@ public abstract class AbstractEnOceanTestCase extends DefaultTestBundleControl {
 		this.testStepProxy.close();
 		getContext().ungetService(eventAdminRef);
 		devices.close();
+		enOceanHostServiceListener.close();
 		events.close();
 		enOceanMessageDescriptionSets.close();
 		enOceanChannelDescriptionSets.close();

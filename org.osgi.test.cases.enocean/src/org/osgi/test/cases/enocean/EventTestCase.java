@@ -72,7 +72,9 @@ public class EventTestCase extends AbstractEnOceanTestCase {
 		EnOceanMessageDescription description = new EnOceanMessageDescription2();
 		EnOceanChannel[] channels = description.deserialize(msg.getPayloadBytes());
 
-		// TODO AAA: Check the format instead of the checking the value itself;
-		assertEquals("float value mismatch", Fixtures.RAW_FLOATVALUE, channels[0].getRawValue()[0]);
+		assertNotNull("The EnOcean message description is expected to contain channels.", channels);
+		assertNotNull("The EnOcean message description is expected to contain at least one channel.", channels[0]);
+		assertNotNull("The EnOcean message description is expected to contain at least one channel with a raw value.", channels[0].getRawValue());
+		assertEquals("The raw value is expected to be 1 byte long.", 1, channels[0].getRawValue().length);
 	}
 }
