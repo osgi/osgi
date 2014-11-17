@@ -4,6 +4,7 @@ Bundle-License: http://opensource.org/licenses/apache2.0.php; \
 Bundle-Description: \
     OSGi Annotation Release ${version;=;${build.version}}, \
     Annotations for use in compiling bundles.
+Bundle-Name: ${groupid}:${p}
 -pom = \
  groupid=${groupid}, \
  where=META-INF/maven/${groupid}/${p}/pom.xml, \
