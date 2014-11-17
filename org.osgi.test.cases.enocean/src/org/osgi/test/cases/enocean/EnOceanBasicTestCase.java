@@ -220,10 +220,13 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 
 		EnOceanRPC rpc = new QueryFunction();
 		log("testRPC(), rpc: " + rpc);
-		device.invoke(rpc, null);
-
-		// TODO AAA: Do we need to test the result/effect of calling the invoke
-		// method (see line above)?;
+		try {
+			// Sending a request is tested here, and not getting a response. So,
+			// there is not need to check the handler content.
+			device.invoke(rpc, null);
+		} catch (Exception e) {
+			fail("The base driver was NOT able to send an RPC to the remote device.", e);
+		}
 
 		log("Unget service with service reference: " + sr);
 		getContext().ungetService(sr);
