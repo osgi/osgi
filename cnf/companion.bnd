@@ -9,6 +9,5 @@ Bundle-Description: OSGi Companion Code for ${p} Version ${spec.version}.
 Bundle-Name: ${groupid}:${p}
 -pom = \
  groupid=${groupid}, \
- where=META-INF/maven/${groupid}/${p}/pom.xml, \
  version=${spec.version}
 companion.code = true
