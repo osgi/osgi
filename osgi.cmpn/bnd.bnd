@@ -7,7 +7,6 @@ Bundle-Description: \
 Bundle-Name: ${groupid}:${p}
 -pom = \
  groupid=${groupid}, \
- where=META-INF/maven/${groupid}/${p}/pom.xml, \
  version=${osgi.version}
 companion.code = true
 
