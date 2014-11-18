@@ -82,5 +82,12 @@
 	          policy="static"
 	          cardinality="1..1"
 	          field="tuple"/>
+	    <field-reference
+	          name="E"
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="static"
+	          cardinality="1..1"
+	          field="objects"
+	          scope="prototype"/>
 	</component>
 </components>

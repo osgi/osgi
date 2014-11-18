@@ -41,9 +41,9 @@ Test-Cases							= ${testcases}
 -buildpath							= \
     org.osgi.test.support;                  version=project, \
     org.osgi.service.component;             version=project, \
-	osgi.core;								version=4.1, \
-	osgi.cmpn;								version=4.1, \
-	ee.minimum; 							version=1.2, \
+	osgi.core;version=6.0.0,\
+	osgi.cmpn;version=5.0.0,\
+	ee.j2se;version=${javac.compliance},\
 	${junit}
 
 -runbundles							= \

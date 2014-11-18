@@ -379,14 +379,14 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 		// preserve the count of the registered components
 		// after SRC is started again, the same number of components
 		// must be registered
-		refs = bc.getServiceReferences(null, filter);
+		refs = bc.getServiceReferences((String) null, filter);
 		int count = (refs == null) ? 0 : refs.length;
 
 		scr.stop();
 		Sleep.sleep(SLEEP * 2);
 
 		try {
-			refs = bc.getServiceReferences(null, filter);
+			refs = bc.getServiceReferences((String) null, filter);
 			assertNull(
 					"The Service Component Runtime must stop all services if SCR is stopped",
 					refs);
@@ -398,7 +398,7 @@ public class DeclarativeServicesControl extends DefaultTestBundleControl
 			Sleep.sleep(SLEEP * 2);
 		}
 
-		refs = bc.getServiceReferences(null, filter);
+		refs = bc.getServiceReferences((String) null, filter);
 		assertEquals(
 				"The Service Component Runtime must start all components that are installed prior it",
 				count, (refs == null) ? 0 : refs.length);
