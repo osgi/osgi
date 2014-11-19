@@ -82,7 +82,7 @@ build.version				= ${osgi.version}.${project.build}
 
 # Documentation
 Bundle-Copyright: ${copyright}
-Bundle-Vendor:    OSGi Alliance
+Bundle-Vendor:    OSGi Alliance http://www.osgi.org/
 Bundle-Version:   ${build.version}
 Bundle-DocURL:    http://www.osgi.org/
 Bundle-SCM:       url=https://www.osgi.org/members/git/build.git, \
