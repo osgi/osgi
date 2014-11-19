@@ -3,7 +3,7 @@
     /*
     * $Id$
     * 
-    * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
+    * Copyright (c) OSGi Alliance (2005, 2014). All Rights Reserved.
     * 
     * Licensed under the Apache License, Version 2.0 (the "License");
     * you may not use this file except in compliance with the License.
@@ -38,16 +38,13 @@
     </complexType>
 
     <complexType name="Tocd">
-        <sequence>
-            <element name="AD" type="metatype:Tad" minOccurs="1"
-                maxOccurs="unbounded" />
-            <choice minOccurs="0" maxOccurs="unbounded">
-                <element name="Icon" type="metatype:Ticon" />
-                <!-- It is non-deterministic, per W3C XML Schema 1.0: http://www.w3.org/TR/xmlschema-1/#cos-nonambig
-                    to use namespace="##any" below. -->
-                <any namespace="##other" processContents="lax" />
-            </choice>
-        </sequence>
+        <choice minOccurs="0" maxOccurs="unbounded">
+            <element name="AD" type="metatype:Tad" />
+            <element name="Icon" type="metatype:Ticon" />
+            <!-- It is non-deterministic, per W3C XML Schema 1.0: http://www.w3.org/TR/xmlschema-1/#cos-nonambig
+                to use namespace="##any" below. -->
+            <any namespace="##other" processContents="lax" />
+        </choice>
         <attribute name="name" type="string" use="required" />
         <attribute name="description" type="string" use="optional" />
         <attribute name="id" type="string" use="required" />

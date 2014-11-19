@@ -636,9 +636,7 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
       is, the following header should be:</para>
 
       <programlisting>&lt;metatype:MetaData 
-    xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.3.0" 
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    &gt;</programlisting>
+    xmlns:metatype="http://www.osgi.org/xmlns/metatype/v1.3.0"&gt;</programlisting>
 
       <para>The file can be found in the osgi.jar file that can be downloaded
       from the www.osgi.org web site.</para>
@@ -659,13 +657,13 @@ country  ::= &lt; defined by ISO 639 &gt;</programlisting>
 
       <programlisting>MetaData    ::= OCD* Designate*
 
-OCD         ::= AD+  Icon  
+OCD         ::= AD*  Icon*
 AD          ::= Option*
 
-Designate   ::= Object  
-Object      ::= Attribute *
+Designate   ::= Object
+Object      ::= Attribute*
 
-Attribute   ::= Value *</programlisting>
+Attribute   ::= Value*</programlisting>
 
       <para>The different elements are described in <xref
       linkend="service.metatype-xml.schema"/>.</para>
@@ -1282,7 +1280,7 @@ Password <phrase role="symbol">↔</phrase> <xref
       configuration and a factory configuration.</para>
 
       <programlisting>    &lt;Designate pid="com.acme.designate.1"&gt;
-        &lt;Object ocdref="com.acme.designate"./&gt;
+        &lt;Object ocdref="com.acme.designate"/&gt;
     &lt;/Designate&gt;
     &lt;Designate factoryPid="com.acme.designate.factory"
         bundle="*"&gt;
@@ -1310,22 +1308,22 @@ Password <phrase role="symbol">↔</phrase> <xref
     xmlns="http://www.osgi.org/xmlns/metatype/v1.3.0" 
     localization="person"&gt;
   &lt;OCD name="%person" id="2.5.6.6"
-        description="%Person Record"&gt;
+        description="%person record"&gt;
     &lt;AD name="%sex" id="2.5.4.12" type="Integer"&gt;
        &lt;Option label="%male" value="1"/&gt;
-       &lt;Option label="%Female" value="0"/&gt;
+       &lt;Option label="%female" value="0"/&gt;
     &lt;/AD&gt;
     &lt;AD name="%sn" id="2.5.4.4" type="String"/&gt;
     &lt;AD name="%cn" id="2.5.4.3" type="String"/&gt;
     &lt;AD name="%seeAlso" id="2.5.4.34" type="String"
-            cardinality="8" default="http://www.google.com,
-                    http://www.yahoo.com"/&gt;
+        cardinality="8"
+        default="http://www.google.com,http://www.yahoo.com"/&gt;
     &lt;AD name="%telNumber" id="2.5.4.20" type="String"/&gt;
- &lt;/OCD&gt;
+  &lt;/OCD&gt;
 
- &lt;Designate pid="com.acme.addressbook"&gt;
-  &lt;Object ocdref="2.5.6.6"/&gt;
- &lt;/Designate&gt;
+  &lt;Designate pid="com.acme.addressbook"&gt;
+    &lt;Object ocdref="2.5.6.6"/&gt;
+  &lt;/Designate&gt;
 &lt;/MetaData&gt;</programlisting>
 
       <para>Translations for this file, as indicated by the localization
@@ -1337,8 +1335,9 @@ Password <phrase role="symbol">↔</phrase> <xref
       property files have the base name of <code>person</code>. The Dutch,
       French and English translations could look like:</para>
 
-      <programlisting>person_du_NL.properties:
-person=Persoon
+      <para><code>person_du_NL.properties</code>:</para>
+
+      <programlisting>person=Persoon
 person\ record=Persoons beschrijving
 cn=Naam
 sn=Voornaam
@@ -1346,10 +1345,11 @@ seeAlso=Zie ook
 telNumber=Tel. Nummer
 sex=Geslacht
 male=Mannelijk
-female=Vrouwelijk
+female=Vrouwelijk</programlisting>
 
-person_fr.properties
-person=Personne
+      <para><code>person_fr.properties</code>:</para>
+
+      <programlisting>person=Personne
 person\ record=Description de la personne
 cn=Nom
 sn=Surnom
@@ -1357,10 +1357,11 @@ seeAlso=Reference
 telNumber=Tel.
 sex=Sexe
 male=Homme
-female=Femme
+female=Femme</programlisting>
 
-person_en_US.properties
-person=Person
+      <para><code>person_en_US.properties</code>:</para>
+
+      <programlisting>person=Person
 person\ record=Person Record
 cn=Name
 sn=Sur Name
@@ -1383,17 +1384,17 @@ female=Female</programlisting>
     <para>For example:</para>
 
     <programlisting>&lt;Designate pid="com.acme.b"&gt;
-    &lt;Object ocdref="b"&gt;
-        &lt;Attribute adref="foo" content="Zaphod Beeblebrox"/&gt;
-        &lt;Attribute adref="bar"&gt;
-            &lt;Value&gt;1&lt;/Value&gt;
-            &lt;Value&gt;2&lt;/Value&gt;
-            &lt;Value&gt;3&lt;/Value&gt;
-            &lt;Value&gt;4&lt;/Value&gt;
-            &lt;Value&gt;5&lt;/Value&gt;
-        &lt;/Attribute&gt;
-    &lt;/Object&gt;
-  &lt;/Designate&gt;</programlisting>
+  &lt;Object ocdref="b"&gt;
+    &lt;Attribute adref="foo" content="Zaphod Beeblebrox"/&gt;
+    &lt;Attribute adref="bar"&gt;
+      &lt;Value&gt;1&lt;/Value&gt;
+      &lt;Value&gt;2&lt;/Value&gt;
+      &lt;Value&gt;3&lt;/Value&gt;
+      &lt;Value&gt;4&lt;/Value&gt;
+      &lt;Value&gt;5&lt;/Value&gt;
+    &lt;/Attribute&gt;
+  &lt;/Object&gt;
+&lt;/Designate&gt;</programlisting>
   </section>
 
   <section xml:id="i1502383">
@@ -1490,6 +1491,12 @@ female=Female</programlisting>
         Definition, that Meta Type Provider services must take precedence over
         Managed Service [Factory] objects implementing
         <code>MetaTypeProvider</code> or Meta Type Resources.</para>
+      </listitem>
+
+      <listitem>
+        <para>The Meta Type Resource schema is updated to allow an
+        <code>OCD</code> element to contain zero <code>AD</code>
+        elements.</para>
       </listitem>
     </itemizedlist>
   </section>
