@@ -63,7 +63,7 @@ public @interface AttributeDefinition {
 	 * If not specified, the name of this AttributeDefinition is derived from
 	 * the name of the annotated method. For example, low line ({@code '_'}
 	 * &#92;u005F) and dollar sign ({@code '$'} &#92;u0024) are replaced with
-	 * space ( {@code ' '} &#92;u0020) and space is inserted between camel case
+	 * space ({@code ' '} &#92;u0020) and space is inserted between camel case
 	 * words.
 	 * 
 	 * <p>

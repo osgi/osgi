@@ -32,7 +32,9 @@ import java.lang.annotation.Target;
  * 
  * <p>
  * This annotation may only be used on annotation types and interface types. Use
- * on concrete or abstract class types is unsupported.
+ * on concrete or abstract class types is unsupported. If applied to an
+ * interface then all methods inherited from super types are included as
+ * attributes.
  * 
  * <p>
  * This annotation is not processed at runtime. It must be processed by tools
