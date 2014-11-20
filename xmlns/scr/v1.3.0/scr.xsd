@@ -278,6 +278,7 @@
         <restriction base="string">
             <enumeration value="bundle" />
             <enumeration value="prototype" />
+            <enumeration value="prototype_required" />
         </restriction>
     </simpleType>
     <simpleType name="Tfieldreferencestrategy">

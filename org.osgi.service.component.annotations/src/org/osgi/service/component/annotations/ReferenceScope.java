@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,12 +30,19 @@ public enum ReferenceScope {
 	BUNDLE("bundle"),
 
 	/**
-	 * If the referenced service has prototype service scope, then each instance
-	 * of the component with this reference can receive a unique instance of the
-	 * service. If the referenced service does not have prototype service scope,
-	 * then no service object will be received.
+	 * If the bound service has prototype service scope, then each instance of
+	 * the component with this reference can receive a unique instance of the
+	 * service. If the bound service does not have prototype service scope, then
+	 * this reference scope behaves the same as {@link #BUNDLE}.
 	 */
-	PROTOTYPE("prototype");
+	PROTOTYPE("prototype"),
+
+	/**
+	 * Bound services must have prototype service scope. Each instance of the
+	 * component with this reference can receive a unique instance of the
+	 * service.
+	 */
+	PROTOTYPE_REQUIRED("prototype_required");
 
 	private final String	value;
 
