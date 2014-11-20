@@ -3,7 +3,4 @@ osgi.annotation.specs = \
 
 osgi.annotation.packages = ${replace;${osgi.annotation.specs};^.*$;$0.*}
 
-osgi.annotation.legal = ${project.workspace}/osgi.companion/legal
-
-osgi.annotation.resources = {${osgi.annotation.legal}/about.html}, \
-    ${osgi.annotation.legal}/LICENSE
+osgi.annotation.resources = {${project.workspace}/osgi.companion/legal/jar}

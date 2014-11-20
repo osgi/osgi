@@ -60,15 +60,12 @@ javadoc {
     logger.info "Packages      : ${javadocSpecs}"
     logger.info "Destdir       : ${destinationDir}"
   }
-  def license = rootProject.file('osgi.companion/legal/OSGiSpecificationLicense-v20.html')
-  inputs.file license
+  def legal = rootProject.file('osgi.companion/legal/javadoc')
+  inputs.dir legal
   doLast {
     copy {
-      from license
+      from legal
       into destinationDir
-      rename {
-        'LICENSE.html'
-      }
     }
   }
 }
