@@ -615,7 +615,7 @@
     <section xml:id="service.component-event.methods">
       <title>Event Methods</title>
 
-      <para>When using the event strategy, SCR must callback the components at
+      <para>When using the event strategy, SCR must callback the component at
       the appropriate time. SCR must callback on the following events:</para>
 
       <itemizedlist>
@@ -668,23 +668,12 @@
         </listitem>
 
         <listitem>
-          <para><code>ServiceObjects</code> - A Service Objects for the bound
-          service . This argument type can only be used when the reference is
-          <code>scope=prototype</code>. This Service Objects can be used to
-          obtain the actual service object or objects. This approach is useful
-          when the service properties need to be examined before accessing the
-          service object or objects. It also allows for the delayed activation
-          of bound services when using the event strategy. When obtaining
-          service objects from a Service Objects, SCR is unaware of the
-          service objects obtained. So the component implementation is
-          responsible to properly ungetting any obtained service
-          objects.</para>
-
-          <para><remark>BJH We could require SCR to wrap the actual
-          ServiceObjects so that it could observe all gets and ungets. Then
-          when the component is deactivated, SCR could then properly unget any
-          service objects the component implementation had failed to
-          unget.</remark></para>
+          <para><code>ComponentServiceObjects</code> - A Component Service
+          Objects for the bound service. This Component Service Objects can be
+          used to obtain the actual service object or objects. This approach
+          is useful when the referenced service has prototype service scope
+          and the component instance needs multiple service objects for the
+          service.</para>
         </listitem>
 
         <listitem>
@@ -705,10 +694,10 @@
 
         <listitem>
           <para>The method takes a single argument and the type of the
-          argument is <code>org.osgi.framework.ServiceObjects</code>. This
-          argument type can only be used when the reference is
-          <code>scope=prototype</code>. This method will receive a Service
-          Objects for the bound service.</para>
+          argument is <xref
+          linkend="org.osgi.service.component.ComponentServiceObjects"
+          xrefstyle="hyperlink"/>. This method will receive a Component
+          Service Objects for the bound service.</para>
         </listitem>
 
         <listitem>
@@ -739,20 +728,21 @@
           arguments must be one of: the type specified by the reference's
           <code>interface</code> attribute, a type assignable from the type
           specified by the reference's <code>interface</code> attribute,
-          <code>org.osgi.framework.ServiceReference</code>,
-          <code>org.osgi.framework.ServiceObjects</code>, or
-          <code>java.util.Map</code>. If multiple methods match this rule,
-          this implies the method name is overloaded and SCR may choose any of
-          the methods to call. In the case where the type specified by the
-          reference's <code>interface</code> attribute is
-          <code>org.osgi.framework.ServiceReference</code>,
-          <code>org.osgi.framework.ServiceObjects</code>, or
-          <code>java.util.Map</code>, the first argument of that type will
-          receive the bound service object. If selected event method has more
-          than one argument of that type, the remaining arguments of that type
-          will receive a Service Reference for the bound service, a Service
-          Objects for the bound service, or an unmodifiable Map containing the
-          service properties of the bound service.</para>
+          <code>org.osgi.framework.ServiceReference</code>, <xref
+          linkend="org.osgi.service.component.ComponentServiceObjects"
+          xrefstyle="hyperlink"/>, or <code>java.util.Map</code>. If multiple
+          methods match this rule, this implies the method name is overloaded
+          and SCR may choose any of the methods to call. In the case where the
+          type specified by the reference's <code>interface</code> attribute
+          is <code>org.osgi.framework.ServiceReference</code>, <xref
+          linkend="org.osgi.service.component.ComponentServiceObjects"
+          xrefstyle="hyperlink"/>, or <code>java.util.Map</code>, the first
+          argument of that type will receive the bound service object. If
+          selected event method has more than one argument of that type, the
+          remaining arguments of that type will receive a Service Reference
+          for the bound service, a Service Objects for the bound service, or
+          an unmodifiable Map containing the service properties of the bound
+          service.</para>
         </listitem>
       </orderedlist>
 
@@ -768,18 +758,27 @@
       called multiple times per service.</para>
 
       <para>When the service object for a bound service is first provided to a
-      component instance, that is passed to an event method or returned by a
-      locate service method, SCR must get the service object from the OSGi
-      Framework's service registry using the <code>getService</code> method on
-      the component's Bundle Context. If the service object for a bound
-      service has been obtained and the service becomes unbound, SCR must
-      unget the service object using the <code>ungetService</code> method on
-      the component's Bundle Context and discard all references to the service
-      object.</para>
+      component instance, that is the service object is directly passed to an
+      event method or returned by a locate service method, SCR must get the
+      service object from the OSGi Framework's service registry using the
+      <code>getService</code> method on the component's Bundle Context. If the
+      service object for a bound service has been obtained and the service
+      becomes unbound, SCR must unget the service object using the
+      <code>ungetService</code> method on the component's Bundle Context and
+      discard all references to the service object.</para>
 
-      <para>For example, a component requires the Log Service and uses the
-      lookup strategy. The reference is declared without any bind, updated,
-      and unbind methods:</para>
+      <para>If a component instance is passed a Component Service Objects
+      object, then SCR must use a Service Objects object obtained from the
+      OSGi Framework's service registry using the component's Bundle Context
+      to get and unget any service objects for the Component Service Objects.
+      If the bound service has prototype service scope, then SCR must track
+      the service objects returned by the Component Service Objects object so
+      that, when the service becomes unbound, SCR must release any unreleased
+      service objects.</para>
+
+      <para>In the following examples, a component requires the Log Service.
+      The first example uses the lookup strategy. The reference is declared
+      without any bind, updated, and unbind methods:</para>
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
@@ -972,11 +971,20 @@ public class HttpResourceImpl {
 
         <listitem>
           <para><emphasis>prototype</emphasis> - For all references to a given
-          bound service, each activated component instance must use a single,
+          bound service, each activated component instance may use a single,
           distinct service object. That is, for a given bound service, each
-          component instance will use a distinct service object but within a
+          component instance may use a distinct service object but within a
           component instance all references to the bound service will use the
           same service object.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>prototype_required</emphasis> - For all references
+          to a given bound service, each activated component instance must use
+          a single, distinct service object. That is, for a given bound
+          service, each component instance will use a distinct service object
+          but within a component instance all references to the bound service
+          will use the same service object.</para>
         </listitem>
       </itemizedlist>
 
@@ -985,17 +993,19 @@ public class HttpResourceImpl {
       object. This ensures that the bundle will only be exposed to a single
       instance of the service object at any given time.</para>
 
-      <para>For a reference with prototype reference scope,
-      <code>ServiceObjects.getService</code> must be used to obtain a service
-      object for each component instance and only services registered with
+      <para>For a reference with prototype or prototype required reference
+      scope, <code>ServiceObjects.getService</code> must be used to obtain a
+      service object for each component instance. For a reference with
+      prototype required reference scope, only services registered with
       prototype service scope can be considered as target services. This
       ensures that each component instance will be exposed to a single,
-      distinct instance of the service object. Using prototype reference scope
-      effectively adds <code>service.scope=prototype</code> to the target
-      filter for the reference. A service that does not use prototype service
-      scope cannot be used as a bound service for a reference with prototype
-      reference scope since the service cannot provide distinct service
-      objects for each component instance.</para>
+      distinct instance of the service object. Using prototype required
+      reference scope effectively adds <code>service.scope=prototype</code> to
+      the target filter for the reference. A service that does not use
+      prototype service scope cannot be used as a bound service for a
+      reference with prototype required reference scope since the service
+      cannot provide distinct service objects for each component
+      instance.</para>
     </section>
 
     <section xml:id="i1440474">
@@ -2186,7 +2196,11 @@ public class Foo implements EventHandler { ... }</programlisting>
               linkend="org.osgi.service.component.annotations.ReferenceScope.BUNDLE"
               xrefstyle="hyperlink"/></para><para><xref
               linkend="org.osgi.service.component.annotations.ReferenceScope.PROTOTYPE"
-              xrefstyle="hyperlink"/></para></entry>
+              xrefstyle="hyperlink"/></para><para><link
+              linkend="org.osgi.service.component.annotations.ReferenceScope.PROTOTYPE_REQUIRED"
+              xrefstyle="hyperlink">PROTOTYPE_</link></para><para>&#160;<link
+              linkend="org.osgi.service.component.annotations.ReferenceScope.PROTOTYPE_REQUIRED"
+              xrefstyle="hyperlink">REQUIRED</link></para></entry>
 
               <entry><para>The reference scope for this reference. See <xref
               linkend="service.component-reference.scope"/>.</para></entry>
@@ -2733,13 +2747,13 @@ public class FooImpl implements Foo {
       handles the associated concurrency issues and simplify handling the
       reverse order.</para>
 
-      <programlisting>final AtomicReference&lt;LogService&gt; log =new AtomicReference&lt;LogService&gt;();
+      <programlisting>final AtomicReference&lt;LogService&gt; log = new AtomicReference&lt;LogService&gt;();
 
 void setLogService( LogService log ) {
     this.log.set(log);
 }
 void unsetLogService( LogService log ) {
-    this.log.compareAndSet(log,null);
+    this.log.compareAndSet(log, null);
 }</programlisting>
 
       <para>If the dynamic reference has a mandatory cardinality and no
