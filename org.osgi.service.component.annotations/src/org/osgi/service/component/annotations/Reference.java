@@ -29,9 +29,9 @@ import java.lang.annotation.Target;
  * The annotated method is a bind method of the Component.
  * 
  * <p>
- * This annotation is not processed at runtime by a Service Component Runtime
- * implementation. It must be processed by tools and used to add a Component
- * Description to the bundle.
+ * This annotation is not processed at runtime by Service Component Runtime. It
+ * must be processed by tools and used to add a Component Description to the
+ * bundle.
  * 
  * <p>
  * In the generated Component Description for a component, the references must

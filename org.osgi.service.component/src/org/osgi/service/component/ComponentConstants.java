@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,11 +47,11 @@ public interface ComponentConstants {
 	 * configuration. The value of this property must be of type {@code Long}.
 	 * 
 	 * <p>
-	 * The value of this property is assigned by the Service Component Runtime
-	 * when a component configuration is created. The Service Component Runtime
-	 * assigns a unique value that is larger than all previously assigned values
-	 * since the Service Component Runtime was started. These values are NOT
-	 * persistent across restarts of the Service Component Runtime.
+	 * The value of this property is assigned by Service Component Runtime when
+	 * a component configuration is created. Service Component Runtime assigns a
+	 * unique value that is larger than all previously assigned values since
+	 * Service Component Runtime was started. These values are NOT persistent
+	 * across restarts of Service Component Runtime.
 	 */
 	public final static String	COMPONENT_ID								= "component.id";
 

@@ -78,7 +78,7 @@ public interface ComponentContext {
 	 * @return A service object for the referenced service or {@code null} if
 	 *         the reference cardinality is {@code 0..1} or {@code 0..n} and no
 	 *         bound service is available.
-	 * @throws ComponentException If the Service Component Runtime catches an
+	 * @throws ComponentException If Service Component Runtime catches an
 	 *         exception while activating the bound service.
 	 */
 	public Object locateService(String name);
@@ -96,7 +96,7 @@ public interface ComponentContext {
 	 * @return A service object for the referenced service or {@code null} if
 	 *         the specified {@code ServiceReference} is not a bound service for
 	 *         the specified reference name.
-	 * @throws ComponentException If the Service Component Runtime catches an
+	 * @throws ComponentException If Service Component Runtime catches an
 	 *         exception while activating the bound service.
 	 */
 	public <S> S locateService(String name, ServiceReference<S> reference);
@@ -111,7 +111,7 @@ public interface ComponentContext {
 	 *         {@code 0..n} and no bound service is available. If the reference
 	 *         cardinality is {@code 0..1} or {@code 1..1} and a bound service
 	 *         is available, the array will have exactly one element.
-	 * @throws ComponentException If the Service Component Runtime catches an
+	 * @throws ComponentException If Service Component Runtime catches an
 	 *         exception while activating a bound service.
 	 */
 	public Object[] locateServices(String name);
