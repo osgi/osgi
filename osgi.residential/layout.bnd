@@ -19,9 +19,6 @@ osgi.residential.specs = \
 
 osgi.residential.packages = ${replace;${osgi.residential.specs};^.*$;$0.*}
 
-osgi.residential.legal = ${project.workspace}/osgi.companion/legal
-
-osgi.residential.resources = {${osgi.residential.legal}/about.html}, \
-  				${osgi.residential.legal}/LICENSE, \
+osgi.residential.resources = {${project.workspace}/osgi.companion/legal/jar}, \
   				xmlns/metatype=${project.workspace}/xmlns/metatype, \
   				xmlns/scr=${project.workspace}/xmlns/scr

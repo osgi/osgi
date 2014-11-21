@@ -1,7 +1,5 @@
 Bundle-Description: OSGi Compendium Release ${version;=;${build.version}} Compliance Tests
 
-Include-Resource				: \
-    NOTICE=legal/NOTICE.txt, \
-    {about.html=legal/about.html}
- 	
+-includeresource: {legal}
+
 -ctpack: ${build.cmpn.tests},${jar.cmpn.tests}

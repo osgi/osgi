@@ -3,6 +3,8 @@
  */
 import org.apache.tools.ant.filters.ReplaceTokens
 
+version bnd('osgi.version')
+
 task javadoc('overwrite': true, 'type': Javadoc) {
   description 'Build the docbook flavored javadoc.'
   group 'documentation'
@@ -259,7 +261,7 @@ tasks.addRule('Pattern: <name>.pdf: Generate the docbook pdf file for the book <
       def fotask = tasks.getByPath("${book}.fo")
       dependsOn fotask
       ext.destinationDir = buildDir
-      ext.bookpdf = new File(destinationDir, "osgi.${taskName}")
+      ext.bookpdf = new File(destinationDir, "osgi.${book}-${version}.pdf")
       def fontbasedir = file('fonts')
       def fopxconf = file('docbook/fop/fop-osgi.xconf')
       def log4jprops = file('docbook/fop/log4j.properties')
