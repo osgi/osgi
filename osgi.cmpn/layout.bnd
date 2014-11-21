@@ -39,10 +39,7 @@ osgi.cmpn.specs = \
 
 osgi.cmpn.packages = ${replace;${osgi.cmpn.specs};^.*$;$0.*}
 
-osgi.cmpn.legal = ${project.workspace}/osgi.companion/legal
-
-osgi.cmpn.resources = {${osgi.cmpn.legal}/about.html}, \
-  				${osgi.cmpn.legal}/LICENSE, \
+osgi.cmpn.resources = {${project.workspace}/osgi.companion/legal/jar}, \
   				xmlns/app=${project.workspace}/xmlns/app, \
   				xmlns/blueprint=${project.workspace}/xmlns/blueprint, \
   				xmlns/metatype=${project.workspace}/xmlns/metatype, \

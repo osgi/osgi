@@ -10,4 +10,5 @@ Bundle-Name: ${groupid}:${p}
 -pom = \
  groupid=${groupid}, \
  version=${spec.version}
+-includeresource: {${project.workspace}/osgi.companion/legal/jar}
 companion.code = true
