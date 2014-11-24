@@ -66,13 +66,32 @@ public class RegistrationTestCase extends AbstractEnOceanTestCase {
 		 */
 		assertEquals("category mismatch", EnOceanDevice.DEVICE_CATEGORY, ref.getProperty(org.osgi.service.device.Constants.DEVICE_CATEGORY));
 
-		// TODO AAA: Replace the 5 following lines, and just check the existency
-		// of these properties, and that they are String, and defined.
-		assertEquals("RORG mismatch", Fixtures.STR_RORG, ref.getProperty(EnOceanDevice.RORG));
-		assertEquals("FUNC mismatch", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
-		assertEquals("TYPE mismatch", Fixtures.STR_TYPE_1, ref.getProperty(EnOceanDevice.TYPE));
-		assertEquals("CHIP_ID mismatch", Fixtures.STR_HOST_ID, ref.getProperty(EnOceanDevice.CHIP_ID));
-		assertEquals("MANUFACTURER mismatch", Fixtures.STR_MANUFACTURER, ref.getProperty(EnOceanDevice.MANUFACTURER));
+		assertEquals("RORG mismatch; 0xA5 is expected.", Fixtures.STR_RORG, ref.getProperty(EnOceanDevice.RORG));
+		assertEquals("FUNC mismatch; 0x02 is expected.", Fixtures.STR_FUNC, ref.getProperty(EnOceanDevice.FUNC));
+		assertEquals("TYPE mismatch; 0x01 is expected.", Fixtures.STR_TYPE_1, ref.getProperty(EnOceanDevice.TYPE));
+
+		// Check the existency of the following properties, and that they are
+		// String, and defined.
+		Object chipId = ref.getProperty(EnOceanDevice.CHIP_ID);
+		assertNotNull("The service representing the just registered device should have the EnOceanDevice.CHIP_ID: " + EnOceanDevice.CHIP_ID + " property.", chipId);
+		if (!(chipId instanceof String)) {
+			fail("The EnOceanDevice.CHIP_ID is expected to be a String.");
+		}
+		String chipIdAsAString = (String) chipId;
+		if ("".equals(chipIdAsAString)) {
+			fail("The EnOceanDevice.CHIP_ID is expected to be a defined String; \"\" is not an acceptable value.");
+		}
+
+		Object manuf = ref.getProperty(EnOceanDevice.MANUFACTURER);
+		assertNotNull("The service representing the just registered device should have the EnOceanDevice.MANUFACTURER: " + EnOceanDevice.MANUFACTURER + " property.",
+				manuf);
+		if (!(manuf instanceof String)) {
+			fail("The EnOceanDevice.MANUFACTURER is expected to be a String.");
+		}
+		String manufAsAString = (String) manuf;
+		if ("".equals(manufAsAString)) {
+			fail("The EnOceanDevice.MANUFACTURER is expected to be a defined String; \"\" is not an acceptable value.");
+		}
 
 		log("Unget service with service reference: " + ref);
 		getContext().ungetService(ref);
