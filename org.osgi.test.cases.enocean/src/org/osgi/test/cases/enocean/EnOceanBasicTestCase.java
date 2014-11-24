@@ -46,6 +46,10 @@ import org.osgi.test.cases.enocean.utils.Fixtures;
  */
 public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 
+	// TODO AAA: Add a call to the testStepService for the user to know when a
+	// dongle must be plugged. (place it at least at the beginning of the very
+	// first test)
+
 	/**
 	 * Test that a properly set profile ID in a raw EnOceanMessage is enough to
 	 * extract all the information we need, provided we have the necessary
