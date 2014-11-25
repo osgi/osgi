@@ -8,20 +8,25 @@
 *.css crlf=input
 *.ddf crlf=input
 *.ee crlf=input
+*.gradle crlf=input
 *.groovy crlf=input
 *.h crlf=input ident
 *.html crlf=input ident
 *.java crlf=input ident
 *.js crlf=input
 *.lib crlf=input
+*.md crlf=input
 *.MF crlf=input
+*.mf crlf=input
 *.perm crlf=input
 *.php crlf=input
 *.pl crlf=input
+*.pom crlf=input
 *.prefs crlf=input
 *.properties crlf=input
 *.py crlf=input
 *.schema crlf=input
+*.SF crlf=input
 *.sh crlf=input
 *.svg crlf=input ident
 *.tcl crlf=input
@@ -30,8 +35,10 @@
 *.xsd crlf=input ident
 *.xsl crlf=input ident
 *.xslt crlf=input ident
+*.yml crlf=input
 .classpath crlf=input
 .project crlf=input
+gradlew crlf=input
 packageinfo crlf=input
 Makefile crlf=input
 
