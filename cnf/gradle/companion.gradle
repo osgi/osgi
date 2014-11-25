@@ -42,7 +42,8 @@ javadoc {
   if (project.name.startsWith('osgi.')) {
     // compute dependencies on other javadoc builds based upon the classpath
     configurations.compile.each {
-      def matcher = rootProject.relativePath(it) =~ /^(osgi\.([^\/]*))/
+      def entry = rootProject.relativePath(it).replace(File.separatorChar, '/' as char)
+      def matcher = entry =~ /^(osgi\.([^\/]*))/
       if (matcher) {
         dependsOn ":${matcher[0][1]}:javadoc"
         options.linksOffline("../${matcher[0][2]}", rootProject.file("${matcher[0][1]}/${relativePath(destinationDir)}").absolutePath)
