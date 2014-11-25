@@ -46,10 +46,6 @@ import org.osgi.test.cases.enocean.utils.Fixtures;
  */
 public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 
-	// TODO AAA: Add a call to the testStepService for the user to know when a
-	// dongle must be plugged. (place it at least at the beginning of the very
-	// first test)
-
 	/**
 	 * Test that a properly set profile ID in a raw EnOceanMessage is enough to
 	 * extract all the information we need, provided we have the necessary
@@ -201,6 +197,10 @@ public class EnOceanBasicTestCase extends AbstractEnOceanTestCase {
 	 * @throws InterruptedException
 	 */
 	public void testRPC() throws InterruptedException {
+		log("testRPC(), Ask the user to plug the EnOcean USB dongle.");
+		/* Plug the EnOcean USB dongle */
+		super.testStepProxy.execute("Plug the EnOcean USB dongle", "Plug the EnOcean USB dongle.");
+
 		log("testRPC(), Insert a device");
 		/* Insert a device */
 		super.testStepProxy.execute("MessageExample1_A", "Insert an a5_02_01 device.");

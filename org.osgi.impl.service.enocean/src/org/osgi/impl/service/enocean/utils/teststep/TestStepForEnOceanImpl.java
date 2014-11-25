@@ -73,45 +73,42 @@ public class TestStepForEnOceanImpl implements TestStep {
 				// ignore result;
 			} else
 				if (stepId.equals("MessageExample1_B")) {
-						byte[] teachInTelegram = {85, 0, 10, 7, 1, -21, -91, 0, 0, 127, 8, 18, 52, 86, 120, -128, 3, -1, -1, -1, -1, -1, 0, 48};
-						currentCommand = teachInTelegram;
+					byte[] teachInTelegram = {85, 0, 10, 7, 1, -21, -91, 0, 0, 127, 8, 18, 52, 86, 120, -128, 3, -1, -1, -1, -1, -1, 0, 48};
+					currentCommand = teachInTelegram;
+					// ignore result;
+				} else
+					if (stepId.startsWith("MessageExample2_")) {
+						currentCommand = stepId.replaceFirst("MessageExample2_", "").getBytes();
 						// ignore result;
+					} else {
+						if ("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription".equals(stepId)) {
+							currentCommand = stepId.getBytes();
+							// ignore result;
 						} else
-							if (stepId.startsWith("MessageExample2_")) {
-								currentCommand = stepId.replaceFirst("MessageExample2_", "").getBytes();
+							if ("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_CID".equals(stepId)) {
+								currentCommand = stepId.getBytes();
 								// ignore result;
-							} else {
-								if ("EnOceanMessageDescriptionSet_with_an_EnOceanMessageDescription".equals(stepId)) {
-									currentCommand = stepId.getBytes();
-									// ignore result;
+							} else
+								if ("Get_the_event_that_the_base_driver_should_have_received".equals(stepId)) {
+									Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(...) returns currentData: " + currentData + ", currentData.length: " + currentData.length);
+									if (currentData == null) {
+										result = null;
+									} else {
+										result = new String(currentData);
+										currentData = null;
+									}
+									return result;
 								} else
-									if ("EnOceanChannelDescriptionSet_with_an_EnOceanChannelDescription_CID".equals(stepId)) {
-										currentCommand = stepId.getBytes();
+									if ("Plug the EnOcean USB dongle".equals(stepId)) {
+										Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(...) returns currentData: " + currentData);
+										// This message should be display on the
+										// user screen when testing EnOcean
+										// implementation for real.
+									} else {
+										Logger.e(TestStepForEnOceanImpl.class.getName(), "The given command is UNKNOWN.");
 										// ignore result;
-									} else
-										if ("Get_the_event_that_the_base_driver_should_have_received".equals(stepId)) {
-											Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(...) returns currentData: " + currentData + ", currentData.length: " + currentData.length);
-											if (currentData == null) {
-												result = null;
-											} else {
-												result = new String(currentData);
-												currentData = null;
-											}
-											return result;
-										} else
-											if ("Plug the EnOcean USB dongle".equals(stepId)) {
-												Logger.d(TestStepForEnOceanImpl.class.getName(), "execute(...) returns currentData: " + currentData + ", currentData.length: " + currentData.length);
-												// This message should be
-												// display on the
-												// user
-												// screen when testing EnOcean
-												// implementation
-												// for real.
-											} else {
-												Logger.e(TestStepForEnOceanImpl.class.getName(), "The given command is UNKNOWN.");
-												// ignore result;
-											}
-							}
+									}
+					}
 		return result;
 	}
 }
