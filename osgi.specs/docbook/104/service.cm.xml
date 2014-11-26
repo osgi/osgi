@@ -564,7 +564,7 @@
       PID.</para>
     </section>
 
-    <section>
+    <section xml:id="service.cm-extenders.targeted.pids">
       <title>Extenders and Targeted PIDs</title>
 
       <para>Extenders like Declarative Services use Configurations but bypass
@@ -580,33 +580,30 @@
       targeted PID. For example, the following code gets the most targeted PID
       for a given bundle.</para>
 
-      <programlisting>    String mostTargeted(String pid, Bundle bundle,String key) throws Exception {
-        String p = escape(pid); // make sure does not control filter
-        String bsn = bundle.getSymbolicName();
-        String version = bundle.getVersion().toString();
-        String location = bundle.getLocation();
-        String f = String.format(
-                "(|(%s=%s)(%s=%s|%s)(%s=%s|%s|%s)(%s=%s|%s|%s|%s))", //
-                key, p, //
-                key, p, bsn, //
-                key, p, bsn, version, //
-                key, p, bsn, version, location );
+      <programlisting>String mostTargeted(String pid, Bundle bundle, String key) throws Exception {
+    String p = escape(pid); // make sure does not control filter
+    String bsn = bundle.getSymbolicName();
+    String version = bundle.getVersion().toString();
+    String location = bundle.getLocation();
+    String f = String.format("(|(%1$s=%2$s)(%1$s=%2$s|%3$s)" +
+        "(%1$s=%2$s|%3$s|%4$s)(%1$s=%2$s|%3$s|%4$s|%5$s))",
+        key, p, bsn, version, location );
 
-        Configuration[] configurations = cm.listConfigurations(f);
-        if (configurations == null)
-            return null;
+    Configuration[] configurations = cm.listConfigurations(f);
+    if (configurations == null)
+        return null;
 
-        String largest = null;
-        for (Configuration c : configurations) {
-            String s = (String) c.getProperties().get(key);
-            if (largest == null)
+    String largest = null;
+    for (Configuration c : configurations) {
+        String s = (String) c.getProperties().get(key);
+        if (largest == null)
+            largest = s;
+        else
+            if (largest.length() &lt; s.length())
                 largest = s;
-            else
-                if (largest.length() &lt; s.length())
-                    largest = s;
-        }
-        return largest;
-    }</programlisting>
+    }
+    return largest;
+}</programlisting>
     </section>
   </section>
 
@@ -2448,6 +2445,7 @@ ConfigurationPermission[ ... , TARGET ]</programlisting>
       <listitem>
         <para>Clarified that collection property values may have an ordering
         that must be preserved.</para>
+
         <para>Changed vector references to list.</para>
       </listitem>
     </itemizedlist>
