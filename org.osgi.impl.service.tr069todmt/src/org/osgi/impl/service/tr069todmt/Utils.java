@@ -72,6 +72,7 @@ public class Utils {
   
   static final BigInteger MAX_UNSIGNED_LONG = BigInteger.valueOf(2).pow(64).subtract(BigInteger.valueOf(1));
 
+  @SuppressWarnings("deprecation")
   static String getDmtValueAsString(Node node) throws TR069Exception {
     DmtData dmtValue;
     try {
