@@ -34,7 +34,5 @@ Test-Cases							= ${testcases}
 -runbundles							= 
 
 -runproperties = ${runsecureproperties}
-
-
-
+javac.deprecation=false
 

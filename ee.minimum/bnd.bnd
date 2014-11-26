@@ -8,3 +8,4 @@ Bundle-RequiredExecutionEnvironment	: OSGi/Minimum-1.3
 
 Export-Package						: java.*;-noimport:=true, javax.*;-noimport:=true
 Include-Resource 					: legal/about.html, legal/LICENSE
+javac.deprecation=false

@@ -10,3 +10,4 @@ exportversion = 0.0.0.${project.build}
 Export-Package						: java.*;-noimport:=true;version=${exportversion}, javax.*;-noimport:=true;version=${exportversion}, org.*;-noimport:=true;version=${exportversion}
 Private-Package						: *
 Include-Resource 					: legal/about.html, legal/LICENSE
+javac.deprecation=false
