@@ -35,7 +35,7 @@ import org.osgi.test.cases.remoteserviceadmin.common.Utils;
 
 /**
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
- *
+ * @deprecated
  */
 public class Activator implements BundleActivator, A, B {
 	ServiceRegistration registration;

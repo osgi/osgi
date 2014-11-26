@@ -61,6 +61,7 @@ import org.osgi.test.support.sleep.Sleep;
  * @author <a href="mailto:tdiekman@tibco.com">Tim Diekmann</a>
  * @version 1.0.0
  */
+@SuppressWarnings("deprecation")
 public class DiscoveryTest extends MultiFrameworkTestCase {
 	private static final String	SYSTEM_PACKAGES_EXTRA	= "org.osgi.test.cases.remoteserviceadmin.system.packages.extra";
 
@@ -701,7 +702,9 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	}
 
 
-
+	/**
+	 * @deprecated
+	 */
 	class EndpointListenerImpl implements EndpointListener {
 		private Semaphore semAdded = new Semaphore(0);
 		private Semaphore semRemoved = new Semaphore(0);
