@@ -839,7 +839,7 @@
       public, or have default access. See <xref linkend="i1641644"/>.</para>
     </section>
 
-    <section xml:id="i1440459">
+    <section xml:id="service.component-reference.cardinality">
       <title>Reference Cardinality</title>
 
       <para>A component implementation is always written with a certain
@@ -850,7 +850,7 @@
         <listitem>
           <para><emphasis>Multiplicity</emphasis> - Does the component
           implementation assume a single service or does it explicitly handle
-          multiple occurrences For example, when a component uses the Log
+          multiple services? For example, when a component uses the Log
           Service, it only needs to bind to one Log Service to function
           correctly. Alternatively, when the Configuration Admin uses the
           Configuration Listener services it needs to bind to all target
@@ -860,15 +860,15 @@
 
         <listitem>
           <para><emphasis>Optionality</emphasis> - Can the component function
-          without any bound service present Some components can still perform
-          useful tasks even when no target service is available, other
-          components must bind to at least one target service before they can
-          be useful. For example, the Configuration Admin in the previous
-          example must still provide its functionality even if there are no
-          Configuration Listener services present. Alternatively, an
-          application that solely presents a Servlet page has little to do
-          when the Http Service is not present, it should therefore use a
-          reference with a mandatory cardinality.</para>
+          without any bound service present? Some components can still perform
+          useful tasks even when no service is available; other components
+          must bind to at least one service before they can be useful. For
+          example, the Configuration Admin in the previous example must still
+          provide its functionality even if there are no Configuration
+          Listener services present. Alternatively, an application that solely
+          presents a Servlet page has little to do when the Http Service is
+          not present, it should therefore use a reference with a mandatory
+          cardinality.</para>
         </listitem>
       </itemizedlist>
 
@@ -877,14 +877,6 @@
       <programlisting>cardinality  ::= optionality '..' multiplicity
 optionality  ::= '0' | '1'
 multiplicity ::= '1' | 'n'</programlisting>
-
-      <para>A reference is <emphasis>satisfied</emphasis> if the number of
-      target services is equal to or more than the <code>optionality</code>.
-      The <code>multiplicity</code> is irrelevant for the satisfaction of the
-      reference. The <code>multiplicity</code> only specifies if the component
-      implementation is written to handle being bound to multiple services
-      (<code>n</code>) or requires SCR to select and bind to a single service
-      (<code>1</code>).</para>
 
       <para>The cardinality for a reference can be specified as one of four
       choices:</para>
@@ -907,10 +899,31 @@ multiplicity ::= '1' | 'n'</programlisting>
         </listitem>
       </itemizedlist>
 
+      <para>The <emphasis>minimum cardinality</emphasis> is specified by the
+      optionality part of the cardinality. This is either <code>0</code> or
+      <code>1</code>. A minimum cardinality property can be used to raise the
+      minimum cardinality of a reference from this initial value. For example,
+      a <code>0..n</code> cardinality in the component description can be
+      raised into a <code>3..n</code> cardinality at runtime by setting the
+      minimum cardinality property for the reference to <code>3</code>. This
+      would typically be done by a deployer setting the minimum cardinality
+      property in a configuration for the component. The minimum cardinality
+      for a unary cardinality cannot exceed <code>1</code>. See <xref
+      linkend="service.component-minimum.cardinality.property"/> for more
+      information.</para>
+
+      <para>A reference is <emphasis>satisfied</emphasis> if the number of
+      target services is equal to or more than the minimum cardinality. The
+      <code>multiplicity</code> is irrelevant for the satisfaction of the
+      reference. The <code>multiplicity</code> only specifies if the component
+      implementation is written to handle being bound to multiple services
+      (<code>n</code>) or requires SCR to select and bind to a single service
+      (<code>1</code>).</para>
+
       <para>When a satisfied component configuration is activated, there must
       be at most one bound service for each reference with a unary cardinality
-      and at least one bound service for each reference with a mandatory
-      cardinality. If the cardinality constraints cannot be maintained after a
+      and at least as many bound services as the minimum cardinality for each
+      reference. If the cardinality constraints cannot be maintained after a
       component configuration is activated, that is the reference becomes
       unsatisfied, the component configuration must be deactivated. If the
       reference has a unary cardinality and there is more than one target
@@ -921,12 +934,12 @@ multiplicity ::= '1' | 'n'</programlisting>
       the target service with the highest service ranking and the lowest
       service id as specified by the <code>service.id</code> property.</para>
 
-      <para>For example, a component wants to register a resource with all
-      Http Services that are available. Such a scenario has the cardinality of
-      <code>0..n</code>. The code must be prepared to handle multiple calls to
-      the bind method for each Http Service in such a case. In this example,
-      the code uses the <code>registerResources</code> method to register a
-      directory for external access.</para>
+      <para>In the following example, a component wants to register a resource
+      with all Http Services that are available. Such a scenario has the
+      cardinality of <code>0..n</code>. The code must be prepared to handle
+      multiple calls to the bind method for each Http Service in such a case.
+      In this example, the code uses the <code>registerResources</code> method
+      to register a directory for external access.</para>
 
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
@@ -2140,7 +2153,7 @@ public class Foo implements EventHandler { ... }</programlisting>
               <entry><para> Specifies if the reference is optional and if the
               component implementation support a single bound service or
               multiple bound services. See <xref
-              linkend="i1440459"/>.</para></entry>
+              linkend="service.component-reference.cardinality"/>.</para></entry>
             </row>
 
             <row>
@@ -2363,8 +2376,9 @@ public class FooImpl implements Foo {
         <listitem>
           <para>Using the component properties of the component configuration,
           all the component's references are satisfied. A reference is
-          satisfied when the reference specifies optional cardinality or there
-          is at least one target service for the reference.</para>
+          satisfied when the reference specifies optional cardinality or the
+          number of target services is equal to or more than the minimum
+          cardinality of the reference.</para>
         </listitem>
       </itemizedlist>
 
@@ -2620,7 +2634,7 @@ public class FooImpl implements Foo {
       component configuration is activated, a subset of the target services
       for each reference are bound to the component configuration. The subset
       is chosen by the cardinality of the reference. See <xref
-      linkend="i1440459"/>.</para>
+      linkend="service.component-reference.cardinality"/>.</para>
 
       <para>When binding services, the references are processed in the order
       in which they are specified in the component description. That is,
@@ -2758,10 +2772,9 @@ void unsetLogService( LogService log ) {
     this.log.compareAndSet(log, null);
 }</programlisting>
 
-      <para>If the dynamic reference has a mandatory cardinality and no
-      replacement target service is available, the component configuration
-      must be deactivated because the cardinality constraints will be
-      violated.</para>
+      <para>If the dynamic reference falls below the minimum cardinality, the
+      component configuration must be deactivated because the cardinality
+      constraints will be violated.</para>
 
       <para>If a component configuration has a static reference and a bound
       service is modified or unregistered and ceases to be a target service,
@@ -3238,6 +3251,48 @@ void unsetLogService( LogService log ) {
         <code>target</code> attribute of the <code>reference</code> element.
         See <xref linkend="service.component-reference.element"/> .</para>
       </section>
+
+      <section xml:id="service.component-minimum.cardinality.property">
+        <title>Minimum Cardinality Property</title>
+
+        <para>The initial minimum cardinality of a reference is specified by
+        the optionality: the first part of the cardinality. It is either
+        <code>0</code> or <code>1</code>. The minimum cardinality of a
+        reference cannot exceed the multiplicity: the second part of the
+        cardinality. See <xref
+        linkend="service.component-reference.cardinality"/> for more
+        information on the cardinality of a reference.</para>
+
+        <para>The <emphasis>minimum cardinality property</emphasis> is a
+        reference property which can be used to raise the minimum cardinality
+        of a reference from its initial value. That is, a <code>0..1</code>
+        cardinality can be raised to a <code>1..1</code> cardinality by
+        setting the reference's minimum cardinality property to
+        <code>1</code>, and a <code>0..n</code> or <code>1..n</code>
+        cardinality can be raised to a <code>m..n</code> cardinality by
+        setting the reference's minimum cardinality property to <code>m</code>
+        such that <code>m</code> is a positive integer. The minimum
+        cardinality of a reference cannot be lowered. That is, a
+        <code>1..1</code> or <code>1..n</code> cardinality can be lowered to a
+        <code>0..1</code> or <code>0..n</code> cardinality because the
+        component was coded to expect at least one bound service.</para>
+
+        <para>The key of a minimum cardinality property is the name of a
+        reference appended with <code>.cardinality.minimum</code>. For
+        example, the minimum cardinality property for a reference with the
+        name <code>http</code> would have the key
+        <code>http.cardinality.minimum</code>. The value of a minimum
+        cardinality property must be a positive integer or a value that can be
+        coerced into a positive integer. <remark>BJH Need to reference
+        coercion table for configuration annotation types when that is
+        added.</remark> If the numerical value of the minimum cardinality
+        property is not valid for the reference's cardinality, then the
+        minimum cardinality property must be ignored.</para>
+
+        <para>SCR must support the minimum cardinality property for all
+        components even those with component descriptions in older
+        namespaces.</para>
+      </section>
     </section>
   </section>
 
@@ -3365,8 +3420,8 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
           </listitem>
 
           <listitem>
-            <para>A target property change results in there being zero target
-            services for a mandatory dynamic reference.</para>
+            <para>A target property change results in a dynamic reference
+            falling below the minimum cardinality.</para>
           </listitem>
 
           <listitem>
@@ -3430,8 +3485,8 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
           </listitem>
 
           <listitem>
-            <para>A target property change results in there being zero target
-            services for a mandatory dynamic reference.</para>
+            <para>A target property change results in a dynamic reference
+            falling below the minimum cardinality.</para>
           </listitem>
 
           <listitem>
@@ -4045,6 +4100,11 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
         <para>New LookupReference annotation and new reference element for
         Component annotation. See <xref
         linkend="service.component-reference.element"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>New minimum cardinality property. See <xref
+        linkend="service.component-minimum.cardinality.property"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
