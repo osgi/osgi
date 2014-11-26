@@ -17,15 +17,24 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
-import java.io.*;
-import java.lang.reflect.*;
-import java.security.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.reflect.Method;
+import java.security.PrivilegedAction;
 import java.security.cert.Certificate;
-import java.util.*;
-import java.util.jar.*;
-import java.util.zip.*;
-
-import org.osgi.service.deploymentadmin.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Vector;
+import java.util.jar.Attributes;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
+import java.util.jar.Manifest;
+import java.util.zip.ZipException;
+import org.osgi.service.deploymentadmin.DeploymentException;
 
 /**
  * DeploymentPackageJarInputStream class wraps the JarInputStream implementation
@@ -189,7 +198,7 @@ public class DeploymentPackageJarInputStream {
 											certificates.add(cert);
 									}
 								}
-								return (Certificate[]) certificates
+								return certificates
 										.toArray(new Certificate[certificates
 												.size()]);
 							}
@@ -210,8 +219,8 @@ public class DeploymentPackageJarInputStream {
 		 * @throws Exception
 		 */
 		Object call(Object target, String name) throws Exception {
-			Method m = target.getClass().getMethod(name, null);
-			return m.invoke(target, null);
+            Method m = target.getClass().getMethod(name);
+            return m.invoke(target);
 		}
 	}
 
@@ -262,7 +271,7 @@ public class DeploymentPackageJarInputStream {
 		for (Iterator iter = manifest.getEntries().keySet().iterator(); iter
 				.hasNext();) {
 			String name = (String) iter.next();
-			Attributes as = (Attributes) manifest.getEntries().get(name);
+			Attributes as = manifest.getEntries().get(name);
 			if (Entry.isBundle(as) && Entry.isMissing(as))
 				missingBundleEntries.add(name);
 		}
@@ -311,7 +320,7 @@ public class DeploymentPackageJarInputStream {
 				// ... and there are missing entries
 				String name = (String) missingBundleEntries.removeFirst();
 				actEntry = new Entry(name,
-						(Attributes) manifest.getEntries().remove(name), locPath);
+						manifest.getEntries().remove(name), locPath);
 				return actEntry;
 			}
 		}
@@ -327,7 +336,7 @@ public class DeploymentPackageJarInputStream {
 							"There is no data in the stream for \"Name\"-section: "
 									+ name);
 				actEntry = new Entry(name,
-						(Attributes) manifest.getEntries().get(name), locPath);
+						manifest.getEntries().get(name), locPath);
 
 				// remove to ensure that the sequence of Entries ends
 				it.remove();

@@ -35,7 +35,6 @@ import java.util.Enumeration;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
-
 import org.osgi.impl.service.deploymentadmin.DAKeyStore;
 import org.osgi.impl.service.deploymentadmin.Splitter;
 
@@ -237,14 +236,14 @@ class SignerChainPattern {
                 public Object run() throws Exception {
                     if (null == keystore)
                         throw new RuntimeException("There is no keystore");
-    		        Method m = keystore.getClass().getMethod("aliases", null);
-    		        Enumeration aliases = (Enumeration) m.invoke(keystore, null);
+                    Method m = keystore.getClass().getMethod("aliases");
+                    Enumeration aliases = (Enumeration) m.invoke(keystore);
     		        while (aliases.hasMoreElements()) {
     		            String alias = (String) aliases.nextElement();
-    		            m = keystore.getClass().getMethod("getCertificate", new Class[] {String.class});
-    		            Certificate cert = (Certificate) m.invoke(keystore, new Object[] {alias});
-    		            m = cert.getClass().getMethod("getSubjectDN", null);
-    		            Principal princ = (Principal) m.invoke(cert, null);
+                        m = keystore.getClass().getMethod("getCertificate", String.class);
+                        Certificate cert = (Certificate) m.invoke(keystore, alias);
+                        m = cert.getClass().getMethod("getSubjectDN");
+                        Principal princ = (Principal) m.invoke(cert);
     		            SignerChainPattern.SignerPattern sp = 
     		                	new SignerChainPattern.SignerPattern(princ.toString());
     	            	return new Boolean(sp.match(signer));
