@@ -10,6 +10,7 @@ import org.osgi.test.cases.dmt.tc4.tb1.intf.Node;
 import org.osgi.test.support.tracker.Tracker;
 import org.osgi.util.tracker.ServiceTracker;
 
+@SuppressWarnings("deprecation")
 public class RequestedStartLevel extends LeafNode {
 	private ServiceTracker tracker;
 	private int lastRequestedValue;

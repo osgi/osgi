@@ -38,7 +38,6 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -877,6 +876,7 @@ public class ProvisioningTests extends DefaultTestBundleControl {
 	/**
 	 * Load a file from the resources in the ip dictionary.
 	 */
+    @SuppressWarnings("deprecation")
 	void loadFromResource( String ipaFile ) throws IOException {
 		assertNull("The ipa file should not have been loaded here", get(ipaFile) );
 		File		jar = new File(dir,ipaFile);

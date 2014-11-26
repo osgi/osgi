@@ -17,23 +17,45 @@
  */
 package org.osgi.impl.service.deploymentadmin;
 
-import java.io.*;
-import java.security.*;
-import java.util.*;
-
-import org.osgi.framework.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FilePermission;
+import java.io.IOException;
+import java.io.InputStream;
+import java.security.AccessControlContext;
+import java.security.AccessController;
+import java.security.Permission;
+import java.security.PrivilegedAction;
+import java.security.PrivilegedActionException;
+import java.security.PrivilegedExceptionAction;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
+import java.util.Vector;
+import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
+import org.osgi.framework.Constants;
+import org.osgi.framework.FrameworkEvent;
+import org.osgi.framework.FrameworkListener;
+import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.deploymentadmin.DeploymentPackageJarInputStream.Entry;
 import org.osgi.service.condpermadmin.BundleLocationCondition;
 import org.osgi.service.condpermadmin.ConditionInfo;
 import org.osgi.service.condpermadmin.ConditionalPermissionAdmin;
 import org.osgi.service.condpermadmin.ConditionalPermissionInfo;
-import org.osgi.service.deploymentadmin.*;
+import org.osgi.service.deploymentadmin.DeploymentException;
+import org.osgi.service.deploymentadmin.DeploymentPackage;
 import org.osgi.service.deploymentadmin.spi.DeploymentCustomizerPermission;
 import org.osgi.service.deploymentadmin.spi.DeploymentSession;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessor;
 import org.osgi.service.deploymentadmin.spi.ResourceProcessorException;
 //import org.osgi.service.packageadmin.PackageAdmin;
-import org.osgi.service.permissionadmin.*;
+import org.osgi.service.permissionadmin.PermissionInfo;
 import org.osgi.util.tracker.ServiceTracker;
 
 public class DeploymentSessionImpl implements DeploymentSession, FrameworkListener {
@@ -145,7 +167,7 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
                 beCust.getVersion());
         final ConditionalPermissionAdmin cpa = (ConditionalPermissionAdmin) AccessController.doPrivileged(new PrivilegedAction() {
             public Object run() {
-                return (ConditionalPermissionAdmin) trackCondPerm.getService();
+                return trackCondPerm.getService();
             }
         });
         
@@ -158,6 +180,7 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
         }
         
         ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) AccessController.doPrivileged(new PrivilegedAction(){
+            @SuppressWarnings("deprecation")
             public Object run() {
                 return cpa.addConditionalPermissionInfo(
                     new ConditionInfo[] {
@@ -186,6 +209,7 @@ public class DeploymentSessionImpl implements DeploymentSession, FrameworkListen
         for (Iterator iter = cpisForCusts.iterator(); iter.hasNext();) {
             final ConditionalPermissionInfo cpi = (ConditionalPermissionInfo) iter.next();
             AccessController.doPrivileged(new PrivilegedAction() {
+                @SuppressWarnings("deprecation")
                 public Object run() {
                     cpi.delete();
                     return null;

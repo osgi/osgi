@@ -35,7 +35,6 @@ import org.osgi.framework.ServiceFactory;
 import org.osgi.framework.ServiceListener;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
-import org.osgi.framework.hooks.service.EventHook;
 import org.osgi.framework.hooks.service.EventListenerHook;
 import org.osgi.framework.hooks.service.FindHook;
 import org.osgi.framework.hooks.service.ListenerHook;
@@ -598,7 +597,7 @@ public class ServiceHookTests extends OSGiTestCase {
 		}
 
 		final Filter filter = tmpFilter;
-		EventHook hook1 = new EventHook() {
+		org.osgi.framework.hooks.service.EventHook hook1 = new org.osgi.framework.hooks.service.EventHook() {
 			public void event(ServiceEvent event,
 					Collection<BundleContext> contexts) {
 				try {
@@ -641,7 +640,7 @@ public class ServiceHookTests extends OSGiTestCase {
 				}
 			}
 		};
-		EventHook hook2 = new EventHook() {
+		org.osgi.framework.hooks.service.EventHook hook2 = new org.osgi.framework.hooks.service.EventHook() {
 			public void event(ServiceEvent event,
 					Collection<BundleContext> contexts) {
 				try {
@@ -689,8 +688,8 @@ public class ServiceHookTests extends OSGiTestCase {
 		props.put("name", getName());
 		// register event hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 1");
-		ServiceRegistration<EventHook> regHook = testContext.registerService(
-				EventHook.class, hook1, props);
+		ServiceRegistration<org.osgi.framework.hooks.service.EventHook> regHook = testContext.registerService(
+				org.osgi.framework.hooks.service.EventHook.class, hook1, props);
 
 		ServiceRegistration<Runnable> reg1 = null;
 		try {
@@ -743,7 +742,7 @@ public class ServiceHookTests extends OSGiTestCase {
 
 			props.put(Constants.SERVICE_DESCRIPTION, "event hook 2");
 			regHook = testContext
-					.registerService(EventHook.class,
+					.registerService(org.osgi.framework.hooks.service.EventHook.class,
 					hook2, props);
 
 			synchronized (events) {
@@ -789,7 +788,7 @@ public class ServiceHookTests extends OSGiTestCase {
 		final AssertionFailedError[] factoryError = new AssertionFailedError[] {null};
 		final boolean[] factoryCalled = new boolean[] {false, false};
 		final boolean[] hookCalled = new boolean[] {false};
-		final EventHook eventHook1 = new EventHook() {
+		final org.osgi.framework.hooks.service.EventHook eventHook1 = new org.osgi.framework.hooks.service.EventHook() {
 			public void event(ServiceEvent arg0, Collection<BundleContext> arg1) {
 				synchronized (hookCalled) {
 					hookCalled[0] = true;
@@ -805,16 +804,16 @@ public class ServiceHookTests extends OSGiTestCase {
 			factoryError[0] = null;
 		}
 		ServiceRegistration<?> regHook1 = testContext.registerService(
-				EventHook.class.getName(), new ServiceFactory<EventHook>() {
+				org.osgi.framework.hooks.service.EventHook.class.getName(), new ServiceFactory<org.osgi.framework.hooks.service.EventHook>() {
 
-					public EventHook getService(Bundle bundle,
-							ServiceRegistration<EventHook> registration) {
+					public org.osgi.framework.hooks.service.EventHook getService(Bundle bundle,
+							ServiceRegistration<org.osgi.framework.hooks.service.EventHook> registration) {
 						try {
 							synchronized (factoryCalled) {
 								factoryCalled[0] = true;
 							}
 							assertNotNull("using bundle null", bundle);
-							ServiceReference<EventHook> reference = registration
+							ServiceReference<org.osgi.framework.hooks.service.EventHook> reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
 							assertNotNull("service not used by a bundle", users);
@@ -831,15 +830,15 @@ public class ServiceHookTests extends OSGiTestCase {
 					}
 
 					public void ungetService(Bundle bundle,
-							ServiceRegistration<EventHook> registration,
-							EventHook service) {
+							ServiceRegistration<org.osgi.framework.hooks.service.EventHook> registration,
+							org.osgi.framework.hooks.service.EventHook service) {
 						try {
 							synchronized (factoryCalled) {
 								factoryCalled[1] = true;
 							}
 							assertNotNull("using bundle null", bundle);
 							assertEquals("wrong service", eventHook1, service);
-							ServiceReference<EventHook> reference = registration
+							ServiceReference<org.osgi.framework.hooks.service.EventHook> reference = registration
 									.getReference();
 							Bundle[] users = reference.getUsingBundles();
 							assertNotNull("service not used by a bundle", users);
@@ -1589,7 +1588,7 @@ EventListenerHook.class,
 		}
 
 		final Filter filter = tmpFilter;
-		EventHook hook1 = new EventHook() {
+		org.osgi.framework.hooks.service.EventHook hook1 = new org.osgi.framework.hooks.service.EventHook() {
 			public void event(ServiceEvent event,
 					Collection<BundleContext> contexts) {
 				if (!filter.match(event.getServiceReference())) {
@@ -1600,7 +1599,7 @@ EventListenerHook.class,
 				}
 			}
 		};
-		EventHook hook2 = new EventHook() {
+		org.osgi.framework.hooks.service.EventHook hook2 = new org.osgi.framework.hooks.service.EventHook() {
 			public void event(ServiceEvent event,
 					Collection<BundleContext> contexts) {
 				if (!filter.match(event.getServiceReference())) {
@@ -1644,8 +1643,8 @@ EventListenerHook.class,
 
 		// register event hook 2
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 2");
-		ServiceRegistration<EventHook> regHook2 = testContext.registerService(
-				EventHook.class, hook2, props);
+		ServiceRegistration<org.osgi.framework.hooks.service.EventHook> regHook2 = testContext.registerService(
+				org.osgi.framework.hooks.service.EventHook.class, hook2, props);
 
 		// register event hook 3
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 3");
@@ -1656,8 +1655,8 @@ EventListenerHook.class,
 		// register event hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 1");
 		props.put(Constants.SERVICE_RANKING, new Integer(10));
-		ServiceRegistration<EventHook> regHook1 = testContext.registerService(
-				EventHook.class, hook1, props);
+		ServiceRegistration<org.osgi.framework.hooks.service.EventHook> regHook1 = testContext.registerService(
+				org.osgi.framework.hooks.service.EventHook.class, hook1, props);
 
 
 		ServiceRegistration<Runnable> reg1 = null;
@@ -2452,7 +2451,7 @@ EventListenerHook.class,
 		}
 
 		final Filter filter = tmpFilter;
-		EventHook hook1 = new EventHook() {
+		org.osgi.framework.hooks.service.EventHook hook1 = new org.osgi.framework.hooks.service.EventHook() {
 			public void event(ServiceEvent event,
 					Collection<BundleContext> contexts) {
 				try {
@@ -2489,7 +2488,7 @@ EventListenerHook.class,
 			}
 		};
 
-		EventHook hook2 = new EventHook() {
+		org.osgi.framework.hooks.service.EventHook hook2 = new org.osgi.framework.hooks.service.EventHook() {
 			public void event(ServiceEvent event,
 					Collection<BundleContext> contexts) {
 				try {
@@ -2531,11 +2530,11 @@ EventListenerHook.class,
 
 		// register event hooks
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 1");
-		ServiceRegistration<EventHook> regHook1 = testContext.registerService(
-				EventHook.class, hook1, props);
+		ServiceRegistration<org.osgi.framework.hooks.service.EventHook> regHook1 = testContext.registerService(
+				org.osgi.framework.hooks.service.EventHook.class, hook1, props);
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 2");
-		ServiceRegistration<EventHook> regHook2 = testContext.registerService(
-				EventHook.class, hook2, props);
+		ServiceRegistration<org.osgi.framework.hooks.service.EventHook> regHook2 = testContext.registerService(
+				org.osgi.framework.hooks.service.EventHook.class, hook2, props);
 
 		ServiceRegistration<Runnable> reg1 = null;
 		try {
@@ -2673,7 +2672,7 @@ EventListenerHook.class,
 		}
 
 		final Filter filter = tmpFilter;
-		EventHook hook1 = new EventHook() {
+		org.osgi.framework.hooks.service.EventHook hook1 = new org.osgi.framework.hooks.service.EventHook() {
 			public void event(ServiceEvent event,
 					Collection<BundleContext> contexts) {
 				if (!filter.match(event.getServiceReference())) {
@@ -2694,7 +2693,7 @@ EventListenerHook.class,
 				}
 			}
 		};
-		EventHook hook2 = new EventHook() {
+		org.osgi.framework.hooks.service.EventHook hook2 = new org.osgi.framework.hooks.service.EventHook() {
 			public void event(ServiceEvent event,
 					Collection<BundleContext> contexts) {
 				if (!filter.match(event.getServiceReference())) {
@@ -2786,8 +2785,8 @@ EventListenerHook.class,
 
 		// register event hook 2
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 2");
-		ServiceRegistration<EventHook> regHook2 = testContext.registerService(
-				EventHook.class, hook2, props);
+		ServiceRegistration<org.osgi.framework.hooks.service.EventHook> regHook2 = testContext.registerService(
+				org.osgi.framework.hooks.service.EventHook.class, hook2, props);
 
 		// register event hook 3
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 3");
@@ -2798,8 +2797,8 @@ EventListenerHook.class,
 		// register event hook 1
 		props.put(Constants.SERVICE_DESCRIPTION, "event hook 1");
 		props.put(Constants.SERVICE_RANKING, new Integer(10));
-		ServiceRegistration<EventHook> regHook1 = testContext.registerService(
-				EventHook.class, hook1, props);
+		ServiceRegistration<org.osgi.framework.hooks.service.EventHook> regHook1 = testContext.registerService(
+				org.osgi.framework.hooks.service.EventHook.class, hook1, props);
 
 		ServiceRegistration<Runnable> reg1 = null;
 		try {

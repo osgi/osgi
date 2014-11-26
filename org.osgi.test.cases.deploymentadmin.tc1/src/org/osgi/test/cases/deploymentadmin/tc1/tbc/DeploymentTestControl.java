@@ -59,7 +59,6 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.HashMap;
 import java.util.PropertyPermission;
-
 import org.osgi.framework.AdminPermission;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.InvalidSyntaxException;
@@ -631,7 +630,8 @@ public class DeploymentTestControl extends DefaultTestBundleControl {
 	}
     
   	
-	public DeploymentPackage installDeploymentPackage(String urlStr, String rename) throws DeploymentException, SecurityException {
+    @SuppressWarnings("deprecation")
+    public DeploymentPackage installDeploymentPackage(String urlStr, String rename) throws DeploymentException, SecurityException {
 		URL url = null;
 		try {
 			url = new URL(urlStr);

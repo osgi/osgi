@@ -7,10 +7,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Enumeration;
 import java.util.Hashtable;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Filter;
 import org.osgi.framework.ServiceReference;
@@ -193,7 +191,8 @@ public class UPnPExporter implements ServiceTrackerCustomizer, HttpContext {
 	}
 
 	// This methods returns URL.
-	URL getURL(String name, String source, InputStream in) {
+    @SuppressWarnings("deprecation")
+    URL getURL(String name, String source, InputStream in) {
 		storeDir = bc.getDataFile("cdresources");
 		if (!storeDir.exists()) {
 			storeDir.mkdir();

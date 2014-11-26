@@ -1,7 +1,9 @@
 package org.osgi.impl.service.upnp.cd.util;
 
-import java.text.*;
-import java.util.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.StringTokenizer;
 
 public abstract class TypeConverter {
 	private String	typeName_;
@@ -123,7 +125,7 @@ class Fixed144Converter extends DoubleConverter {
 		if (value instanceof Double) {
 			double doubleValue = ((Double) value).doubleValue();
 			long leftOfPoint = (long) doubleValue;
-			int rightOfPoint = (int) ((doubleValue - (double) leftOfPoint) * 10000);
+			int rightOfPoint = (int) ((doubleValue - leftOfPoint) * 10000);
 			if (Long.toString(leftOfPoint).length() > 14)
 				throw new IllegalArgumentException(
 						"There should be no more than 14 digits to the left of point but value was "
@@ -214,7 +216,8 @@ class ISO8601Converter extends TypeConverter {
 		throw new WrongSoapValueException();
 	}
 
-	public String convertToString(Object value) throws IllegalArgumentException {
+    @SuppressWarnings("deprecation")
+    public String convertToString(Object value) throws IllegalArgumentException {
 		if (value instanceof Date) {
 			Date date = (Date) value;
 			int year = date.getYear() + 1900;
