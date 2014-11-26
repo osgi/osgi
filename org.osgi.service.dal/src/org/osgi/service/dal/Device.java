@@ -16,6 +16,8 @@
 
 package org.osgi.service.dal;
 
+import org.osgi.service.device.Constants;
+
 /**
  * Represents the device in the OSGi service registry. Note that {@code Device}
  * services are registered last. Before their registration, there is
@@ -26,11 +28,10 @@ package org.osgi.service.dal;
 public interface Device {
 
 	/**
-	 * Constant for the value of the
-	 * {@link org.osgi.service.device.Constants#DEVICE_CATEGORY} service
+	 * Constant for the value of the {@link Constants#DEVICE_CATEGORY} service
 	 * property. That category is used by all device services.
 	 * 
-	 * @see org.osgi.service.device.Constants#DEVICE_CATEGORY
+	 * @see Constants#DEVICE_CATEGORY
 	 */
 	public static final String	DEVICE_CATEGORY							= "DAL";
 
@@ -96,8 +97,7 @@ public interface Device {
 	 * the current status. Examples: {@link #STATUS_DETAIL_CONNECTING} and
 	 * {@link #STATUS_DETAIL_INITIALIZING}.</li>
 	 * <li>negative values i.e. < 0 - those values contain errors related to the
-	 * current status. Examples:
-	 * {@link #STATUS_DETAIL_CONFIGURATION_UNAPPLIED},
+	 * current status. Examples: {@link #STATUS_DETAIL_CONFIGURATION_UNAPPLIED},
 	 * {@link #STATUS_DETAIL_BROKEN} and
 	 * {@link #STATUS_DETAIL_COMMUNICATION_ERROR}.</li>
 	 * </ul>
@@ -307,12 +307,12 @@ public interface Device {
 	 *         over this device.
 	 * @throws SecurityException If the caller does not have the appropriate
 	 *         {@code DevicePermission(this device, }
-	 *         {@link DevicePermission#REMOVE}{@code )} and the Java
-	 *         Runtime Environment supports permissions.
+	 *         {@link DevicePermission#REMOVE}{@code )} and the Java Runtime
+	 *         Environment supports permissions.
 	 * @throws IllegalStateException If this device service object has already
 	 *         been unregistered.
 	 */
 	public void remove() throws DeviceException, UnsupportedOperationException,
 			SecurityException, IllegalStateException;
 
- }
+}
