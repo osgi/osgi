@@ -492,10 +492,11 @@
       linkend="org.osgi.service.component.ComponentFactory.newInstance-Dictionary-"
       xrefstyle="hyperlink"/> method has a <code>Dictionary</code> object as
       argument. This Dictionary object is merged with the component properties
-      as described in <xref linkend="i1407478"/>. If the component specifies a
-      service, then the service is registered after the created component
-      configuration is satisfied with the component properties. Then the
-      component configuration is activated.</para>
+      as described in <xref
+      linkend="service.component-component.properties"/>. If the component
+      specifies a service, then the service is registered after the created
+      component configuration is satisfied with the component properties. Then
+      the component configuration is activated.</para>
 
       <para>For example, a component can provide a connection to a USB device.
       Such a connection should normally not be shared and should be created
@@ -1693,7 +1694,8 @@ public class HttpResourceImpl {
       <para>Properties can also be overridden by a Configuration Admin
       service's <code>Configuration</code> object before they are exposed to
       the component or used as service properties. This is described in <xref
-      linkend="i1407478"/> and <xref linkend="i1479915"/>.</para>
+      linkend="service.component-component.properties"/> and <xref
+      linkend="i1479915"/>.</para>
 
       <para>The <code>property</code> element has the attributes and
       annotations defined in the following table.</para>
@@ -3126,12 +3128,13 @@ void unsetLogService( LogService log ) {
     </section>
   </section>
 
-  <section xml:id="i1407478">
+  <section xml:id="service.component-component.properties">
     <title>Component Properties</title>
 
     <para>Each component configuration is associated with a set of component
-    properties. The component properties are specified in the following places
-    (in order of precedence):</para>
+    properties. The component properties are specified in the following
+    <emphasis>configuration sources</emphasis> (in order of
+    precedence):</para>
 
     <orderedlist>
       <listitem>
@@ -3181,10 +3184,29 @@ void unsetLogService( LogService log ) {
       </listitem>
 
       <listitem>
-        <para>The argument to <code>ComponentFactory.newInstance</code>
+        <para>The argument to the <code>ComponentFactory.newInstance</code>
         method</para>
       </listitem>
     </itemizedlist>
+
+    <para>Normally, a property value from a higher precedence configuration
+    source replace a property value from a lower precedence configuration
+    source. However, the <code>service.pid</code> property values receive
+    different treatment. For the <code>service.pid</code> property, if the
+    property appears multiple times in the configuration sources, SCR must
+    aggregate all the values found into a
+    <code>Collection&lt;String&gt;</code> having an iteration order such that
+    the first item in the iteration is the property value from the lowest
+    precedence configuration source and the last item in the iteration is the
+    property value from the highest precedence configuration source. If the
+    component description specifies multiple configuration PIDs, then the
+    order of the <code>service.pid</code> property values from the
+    corresponding configurations matches the order the configuration PIDs are
+    specified in the component description. The values of the
+    <code>service.pid</code> component property are the values as they come
+    from the configuration sources which, for Configuration objects, may be
+    more detailed than the configuration PIDs specified in the component
+    description.</para>
 
     <para>SCR always adds the following component properties, which cannot be
     overridden:</para>
