@@ -219,17 +219,14 @@ public class XmlDoclet extends Doclet {
 				}
 
 		}
-		else {
-			// Annotations can not have methods/fields
 
-			MethodDoc methods[] = clazz.methods();
-			for (int m = 0; m < methods.length; m++)
-				print(methods[m], doDDF, null);
+		MethodDoc methods[] = clazz.methods();
+		for (int m = 0; m < methods.length; m++)
+			print(methods[m], doDDF, null);
 
-			FieldDoc fields[] = clazz.fields();
-			for (int f = 0; f < fields.length; f++)
-				print(fields[f]);
-		}
+		FieldDoc fields[] = clazz.fields();
+		for (int f = 0; f < fields.length; f++)
+			print(fields[f]);
 
 		pw.println("  </class>");
 	}
