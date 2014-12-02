@@ -1292,10 +1292,10 @@ public class HttpResourceImpl {
       <title>Annotations</title>
 
       <para>A number of <code>CLASS</code> retention annotations have been
-      provided to allow tools to construct the XML from the Java class files.
-      These annotations will be discussed with the appropriate elements an
-      attributes. Since the naming rules between XML and Java differ, some
-      name changes are necessary.</para>
+      provided to allow tools to construct the component description XML from
+      the Java class files. These annotations will be discussed with the
+      appropriate elements and attributes. Since the naming rules between XML
+      and Java differ, some name changes are necessary.</para>
 
       <itemizedlist>
         <listitem>
@@ -1322,7 +1322,8 @@ public class HttpResourceImpl {
       the type it is applied to.</para>
 
       <para>These annotations are intended to be used during build time to
-      generate the XML and are not recognized by SCR at runtime.</para>
+      generate the component description XML and are not recognized by SCR at
+      runtime.</para>
     </section>
 
     <section>
@@ -1564,11 +1565,20 @@ public class HttpResourceImpl {
               linkend="org.osgi.service.component.annotations.Component.configurationPid--"
               xrefstyle="hyperlink"/></entry>
 
-              <entry><para>The configuration PID to be used for the component
-              in conjunction with Configuration Admin. The default value for
-              this attribute is the <code>name</code> of the component, or if
-              this is also not specified, the implementation class
-              name.</para></entry>
+              <entry><para>The configuration PIDs to be used for the component
+              in conjunction with Configuration Admin. Multiple configuration
+              PIDs can be specified by using a whitespace separated list. The
+              default value for this attribute is the name of the
+              component.</para><para>The annotation uses a
+              <code>String[]</code> to specify multiple configuration PIDs.
+              The order in which configuration PIDs are specified must be
+              preserved in the generated component description. The annotation
+              can also use the special configuration PID name <link
+              linkend="org.osgi.service.component.annotations.Component.NAME"
+              xrefstyle="hyperlink">"$"</link> to specify the name of the
+              component. This special name must be replaced with the actual
+              name of the component in the generated component
+              description.</para></entry>
             </row>
 
             <row>
@@ -3138,17 +3148,24 @@ void unsetLogService( LogService log ) {
 
     <orderedlist>
       <listitem>
-        <para>Properties specified in the argument of
+        <para>Properties specified in the argument of the
         <code>ComponentFactory.newInstance</code> method. This is only
         applicable for factory components.</para>
       </listitem>
 
       <listitem>
         <para>Properties retrieved from the OSGi Configuration Admin service
-        with a Configuration object that has a PID equal to the
-        <emphasis>configuration PID</emphasis>. The configuration PID is the
-        component name, or when specified, the <code>configuration-pid</code>
-        attribute.</para>
+        in Configuration objects whose PID matches a <emphasis>configuration
+        PID</emphasis>. The configuration PIDs are specified by the
+        <code>configuration-pid</code> attribute of the <code>component</code>
+        element. See <xref linkend="service.component-component.element"/>. If
+        no <code>configuration-pid</code> attribute is specified, the
+        component name is used as the default configuration PID. If multiple
+        configuration PIDs are specified, the order of precedence follows the
+        order the configuration PIDs are specified in the component
+        description. That is, the precedence for the configuration for an
+        earlier specified configuration PID is lower than the precedence for
+        the configurations for a later specified configuration PID.</para>
       </listitem>
 
       <listitem>
@@ -3330,7 +3347,7 @@ void unsetLogService( LogService log ) {
     through Configuration Admin, a deployer can configure component
     properties.</para>
 
-    <para>The configuration PID is used as the key for obtaining additional
+    <para>The configuration PIDs are used as keys for obtaining additional
     component properties from Configuration Admin. The following situations
     can arise:</para>
 
@@ -3338,8 +3355,8 @@ void unsetLogService( LogService log ) {
       <listitem>
         <para><emphasis>No Configuration</emphasis> - If the component's
         <code>configuration-policy</code> is set to <code>ignore</code> or
-        there is no Configuration with a PID or factory PID equal to the
-        configuration PID, then component configurations will not obtain
+        there are no Configurations with a PID or factory PID matching any of
+        the configuration PIDs, then component configurations will not obtain
         component properties from Configuration Admin. Only component
         properties specified in the component description or via the
         <code>ComponentFactory.newInstance</code> method will be used.</para>
@@ -3347,34 +3364,43 @@ void unsetLogService( LogService log ) {
 
       <listitem>
         <para><emphasis>Not Satisfied</emphasis> - If the component's
-        <code>configuration-policy</code> is set to <code>require</code> and
-        there is no Configuration with a PID or factory PID equal to the
-        configuration PID, then the component configuration is not satisfied
+        <code>configuration-policy</code> is set to <code>require</code> and,
+        for each configuration PID, there is no Configuration with a matching
+        PID or factory PID, then the component configuration is not satisfied
         and will not be activated.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Single Configuration</emphasis> - If there exists a
-        Configuration with a PID equal to the configuration PID, then
-        component configurations will obtain additional component properties
-        from Configuration Admin.</para>
+        <para><emphasis>Single Configuration</emphasis>s - If none of the
+        configuration PIDs matches a factory PID, then component
+        configurations will obtain additional component properties from
+        Configuration Admin.</para>
       </listitem>
 
       <listitem>
-        <para><emphasis>Factory Configuration</emphasis> - If a factory PID
-        exists, with zero or more Configurations, that is equal to the
-        configuration PID, then for each Configuration, a component
-        configuration must be created that will obtain additional component
-        properties from Configuration Admin.</para>
+        <para><emphasis>Factory Configuration</emphasis> - If one of the
+        configuration PIDs matches a factory PID, with zero or more
+        Configurations, then for each Configuration of the factory PID, a
+        component configuration must be created that will obtain additional
+        component properties from Configuration Admin.</para>
+
+        <para>It is a configuration error if more than one of the
+        configuration PIDs match a factory PID and SCR must log an error
+        message with the Log Service, if present. If the
+        <code>configuration-policy</code> is set to <code>optional</code>, the
+        component configuration must be satisfied without the configurations
+        PIDs which match a factory PID. If the
+        <code>configuration-policy</code> is set to <code>require</code>, the
+        component configuration is not satisfied and will not be
+        activated.</para>
+
+        <para>A factory configuration must not be used if the component is a
+        factory component. This is because SCR is not free to create component
+        configurations as necessary to support multiple Configurations. When
+        SCR detects this condition, it must log an error message with the Log
+        Service, if present, and ignore the component description.</para>
       </listitem>
     </itemizedlist>
-
-    <para>A factory configuration must not be used if the component is a
-    factory component. This is because SCR is not free to create component
-    configurations as necessary to support multiple
-    <code>Configuration</code>s. When SCR detects this condition, it must log
-    an error message with the Log Service, if present, and ignore the
-    component description.</para>
 
     <para>SCR must obtain the <code>Configuration</code> objects from the
     Configuration Admin service using the Bundle Context of the bundle
@@ -3393,7 +3419,7 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
       <title>Configuration Changes</title>
 
       <para>SCR must track changes in the <code>Configuration</code> objects
-      <emphasis>matching</emphasis> the configuration PID of the component
+      <emphasis>matching</emphasis> the configuration PIDs of the component
       description. Changes include the creating, updating and deleting of
       matching <code>Configuration</code> objects. The actions SCR must take
       when a configuration change for a component description occurs are based
@@ -3416,12 +3442,13 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
         <title>Require Configuration Policy</title>
 
         <para>For <code>configuration-policy</code> of <code>require</code>,
-        component configurations require a <code>Configuration</code> object.
-        With a factory configuration, there can be zero or more matching
-        <code>Configuration</code> objects which will result in a component
-        configuration for each <code>Configuration</code> object. With a
+        component configurations require a <code>Configuration</code> object
+        for each specified configuration PID. With a factory configuration,
+        there can be zero or more matching <code>Configuration</code> objects
+        which will result in a component configuration for each
+        <code>Configuration</code> object of the factory configuration. With a
         factory component, multiple component configurations can be created
-        all using a single matching <code>Configuration</code> object.</para>
+        all using the matching <code>Configuration</code> objects.</para>
 
         <para>Deleting a <code>Configuration</code> object will cause the
         component configurations using it to become unsatisfied. Updating a
@@ -3470,26 +3497,26 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
         <title>Optional Configuration Policy</title>
 
         <para>For <code>configuration-policy</code> of <code>optional</code>,
-        component configurations do not require a <code>Configuration</code>
-        object. Since a matching <code>Configuration</code> object is
-        optional, component configurations can be satisfied when there is no
-        matching <code>Configuration</code> object. If a matching
-        <code>Configuration</code> object is then created, this is a
+        component configurations do not require <code>Configuration</code>
+        objects. Since matching <code>Configuration</code> objects are
+        optional, component configurations can be satisfied with zero or more
+        matched configuration PIDs. If a <code>Configuration</code> object is
+        then created which matches a configuration PID, this is a
         configuration change for the component configurations that are not
-        using a <code>Configuration</code> object. When there is only a single
-        matching <code>Configuration</code> object which is then deleted, this
-        is a configuration change for the component configurations using the
-        deleted <code>Configuration</code> object.</para>
+        using the created <code>Configuration</code> object. If a
+        <code>Configuration</code> object is deleted which matches a
+        configuration PID, this is a configuration change for the component
+        configurations using the deleted <code>Configuration</code>
+        object.</para>
 
-        <para>With a factory configuration, there can be zero or more matching
+        <para>With a factory configuration matching a configuration PID, the
+        factory configuration can provide zero or more
         <code>Configuration</code> objects which will result in a component
-        configuration for each <code>Configuration</code> object as well as a
-        single component configuration when there are zero matching
-        <code>Configuration</code> objects. With a factory component, multiple
-        component configurations can be created all using either a single
-        matching <code>Configuration</code> object or no
-        <code>Configuration</code> object when there is no matching
-        <code>Configuration</code> object.</para>
+        configuration for each <code>Configuration</code> object or a single
+        component configuration when zero matching <code>Configuration</code>
+        objects are provided. With a factory component, multiple component
+        configurations can be created all using the <code>Configuration</code>
+        objects matching the configuration PIDs.</para>
 
         <para>A configuration change can cause a component configuration to
         become unsatisfied if any of the following occur:</para>
