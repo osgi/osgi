@@ -61,7 +61,7 @@
                 maxOccurs="1" />
             <element name="reference" type="scr:Treference"
                 minOccurs="0" maxOccurs="unbounded" />
-            <element name="field-reference" type="scr:Tfieldreference"
+            <element name="field-reference" type="scr:Tfield-reference"
                 minOccurs="0" maxOccurs="unbounded" />
             <element name="implementation" type="scr:Timplementation"
                 minOccurs="1" maxOccurs="1" />
@@ -124,7 +124,7 @@
             <extension base="string">
                 <attribute name="name" type="string" use="required" />
                 <attribute name="value" type="string" use="optional" />
-                <attribute name="type" type="scr:Tjava-types"
+                <attribute name="type" type="scr:Tproperty_type"
                     default="String" use="optional" />
                 <anyAttribute processContents="lax" />
             </extension>
@@ -148,7 +148,7 @@
             <any namespace="##other" processContents="lax" minOccurs="0"
                 maxOccurs="unbounded" />
         </sequence>
-        <attribute name="scope" type="scr:Tservicescope" default="singleton"
+        <attribute name="scope" type="scr:Tservice_scope" default="singleton"
             use="optional" />
         <anyAttribute processContents="lax" />
     </complexType>
@@ -189,11 +189,11 @@
         <attribute name="bind" type="token" use="optional" />
         <attribute name="unbind" type="token" use="optional" />
         <attribute name="updated" type="token" use="optional" />
-        <attribute name="scope" type="scr:Treferencescope" default="bundle"
+        <attribute name="scope" type="scr:Treference_scope" default="bundle"
             use="optional" />
         <anyAttribute processContents="lax" />
     </complexType>
-    <complexType name="Tfieldreference">
+    <complexType name="Tfield-reference">
         <sequence>
             <any namespace="##any" processContents="lax" minOccurs="0"
                 maxOccurs="unbounded" />
@@ -220,14 +220,14 @@
             default="reluctant" use="optional" />
         <attribute name="target" type="string" use="optional" />
         <attribute name="field" type="token" use="required" />
-        <attribute name="strategy" type="scr:Tfieldreferencestrategy" default="replace"
+        <attribute name="strategy" type="scr:Tfield-reference_strategy" default="replace"
             use="optional" />
-        <attribute name="scope" type="scr:Treferencescope" default="bundle"
+        <attribute name="scope" type="scr:Treference_scope" default="bundle"
             use="optional" />
-        <attribute name="valuetype" type="scr:Tfieldvaluetype" use="optional" />
+        <attribute name="valuetype" type="scr:Tfield-reference_valuetype" use="optional" />
         <anyAttribute processContents="lax" />
     </complexType>
-    <simpleType name="Tjava-types">
+    <simpleType name="Tproperty_type">
         <restriction base="string">
             <enumeration value="String" />
             <enumeration value="Long" />
@@ -267,27 +267,27 @@
             <enumeration value="ignore" />
         </restriction>
     </simpleType>
-    <simpleType name="Tservicescope">
+    <simpleType name="Tservice_scope">
         <restriction base="string">
             <enumeration value="singleton" />
             <enumeration value="bundle" />
             <enumeration value="prototype" />
         </restriction>
     </simpleType>
-    <simpleType name="Treferencescope">
+    <simpleType name="Treference_scope">
         <restriction base="string">
             <enumeration value="bundle" />
             <enumeration value="prototype" />
             <enumeration value="prototype_required" />
         </restriction>
     </simpleType>
-    <simpleType name="Tfieldreferencestrategy">
+    <simpleType name="Tfield-reference_strategy">
         <restriction base="string">
             <enumeration value="update" />
             <enumeration value="replace" />
         </restriction>
     </simpleType>
-    <simpleType name="Tfieldvaluetype">
+    <simpleType name="Tfield-reference_valuetype">
         <restriction base="string">
             <enumeration value="service" />
             <enumeration value="properties" />
