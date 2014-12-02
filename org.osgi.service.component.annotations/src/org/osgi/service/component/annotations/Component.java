@@ -212,7 +212,7 @@ public @interface Component {
 	 * @see "The configuration-pid attribute of the component element of a Component Description."
 	 * @since 1.2
 	 */
-	String[] configurationPid() default {NAME};
+	String[] configurationPid() default NAME;
 
 	/**
 	 * Special string representing the name of this Component.
@@ -230,7 +230,7 @@ public @interface Component {
 	 * 
 	 * @since 1.3
 	 */
-	final String	NAME	= "$";
+	String	NAME	= "$";
 
 	/**
 	 * The service scope for the service of this Component.
