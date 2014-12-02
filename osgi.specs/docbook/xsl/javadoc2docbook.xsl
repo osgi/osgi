@@ -726,6 +726,9 @@ version="1.1">
               <xsl:when test="@kind='ANNOTATION'">
                 <xsl:apply-templates select="method[not(@isConstructor) and not(skip)]" 
                                      mode="annotation"/>
+                <xsl:if test="field">
+                  <xsl:apply-templates select="field[not(skip)]" mode="annotation"/>
+                </xsl:if>          
               </xsl:when>
               <xsl:otherwise>
                 <xsl:if test="field">
@@ -859,6 +862,43 @@ version="1.1">
       <xsl:call-template name="ddf.subtree.table"/>
     </xsl:if>
 
+  </xsl:element>
+</xsl:template>
+
+<xsl:template match="field" mode="annotation">
+  <xsl:variable name="package.id" select="ancestor::package/@name"/>
+  <xsl:element name="section" namespace="{$ns}">
+    <xsl:attribute name="role">field</xsl:attribute>
+    <xsl:attribute name="xreflabel">
+      <xsl:value-of select="@name"/>
+    </xsl:attribute>
+    <xsl:call-template name="clean.id.att"/>
+    <xsl:element name="title" namespace="{$ns}">
+      <xsl:value-of select="concat(@typeName,@dimension,' ', @name)" />
+      <xsl:if test="@constantValue">
+        <xsl:text> = </xsl:text>
+        <xsl:value-of select="@constantValue" />
+        <xsl:if test="string(number(@constantValue))='NaN'">
+          <xsl:variable name="index.anchor"
+             select="substring(@constantValue,2,string-length(@constantValue)-2)" />
+          <!--
+          <xsl:comment>
+             <xsl:value-of select="$index.anchor"/>
+          </xsl:comment>
+          -->
+        </xsl:if>
+      </xsl:if>
+      <xsl:if test="not(@constantValue) and value">
+        <xsl:text> = </xsl:text>
+        <xsl:value-of select="value" />
+      </xsl:if>
+    </xsl:element>
+
+    <xsl:apply-templates select="description" />
+
+    <xsl:call-template name="descriptors">
+      <xsl:with-param name="target" select="." />
+    </xsl:call-template>
   </xsl:element>
 </xsl:template>
 
