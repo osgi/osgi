@@ -4155,6 +4155,12 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
         <para>New minimum cardinality property. See <xref
         linkend="service.component-minimum.cardinality.property"/>.</para>
       </listitem>
+
+      <listitem>
+        <para><code>service.pid</code> property values are aggregated across
+        configuration sources. See <xref
+        linkend="service.component-component.properties"/>.</para>
+      </listitem>
     </itemizedlist>
   </section>
 </chapter>
