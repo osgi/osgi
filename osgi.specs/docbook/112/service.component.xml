@@ -300,7 +300,7 @@
 
         <listitem>
           <para><emphasis>Deployers</emphasis> - Deployers should consult
-          <xref linkend="i1479915"/>.</para>
+          <xref linkend="service.component-deployment"/>.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -1449,14 +1449,14 @@ public class HttpResourceImpl {
               to retrieve component properties from the OSGi Configuration
               Admin service if present, unless a
               <code>configuration-pid</code> attribute has been defined. See
-              <xref linkend="i1479915"/> for more information. If the
-              component name is used as a PID then it should be unique within
-              the framework. The XML schema allows the use of component names
-              which are not valid PIDs. Care must be taken to use a valid PID
-              for a component name if the component should be configured by
-              the Configuration Admin service. This attribute is optional. The
-              default value of this attribute is the value of the
-              <code>class</code> attribute of the nested
+              <xref linkend="service.component-deployment"/> for more
+              information. If the component name is used as a PID then it
+              should be unique within the framework. The XML schema allows the
+              use of component names which are not valid PIDs. Care must be
+              taken to use a valid PID for a component name if the component
+              should be configured by the Configuration Admin service. This
+              attribute is optional. The default value of this attribute is
+              the value of the <code>class</code> attribute of the nested
               <code>implementation</code> element. If multiple
               <code>component</code> elements in a bundle use the same value
               for the <code>class</code> attribute of their nested
@@ -1705,7 +1705,7 @@ public class HttpResourceImpl {
       service's <code>Configuration</code> object before they are exposed to
       the component or used as service properties. This is described in <xref
       linkend="service.component-component.properties"/> and <xref
-      linkend="i1479915"/>.</para>
+      linkend="service.component-deployment"/>.</para>
 
       <para>The <code>property</code> element has the attributes and
       annotations defined in the following table.</para>
@@ -3335,7 +3335,7 @@ void unsetLogService( LogService log ) {
     </section>
   </section>
 
-  <section xml:id="i1479915">
+  <section xml:id="service.component-deployment">
     <title>Deployment</title>
 
     <para>A component description contains default information to select
@@ -4170,6 +4170,13 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       <listitem>
         <para>New minimum cardinality property. See <xref
         linkend="service.component-minimum.cardinality.property"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added support for a component using multiple configuration PIDs.
+        See <xref linkend="service.component-component.element"/>, <xref
+        linkend="service.component-component.properties"/>, and <xref
+        linkend="service.component-deployment"/>.</para>
       </listitem>
 
       <listitem>
