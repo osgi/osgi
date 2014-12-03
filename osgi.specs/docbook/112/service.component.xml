@@ -3998,6 +3998,9 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
   <section>
     <title>Security</title>
 
+    <para>When Java permissions are enabled, SCR must peform the following
+    security procedures.</para>
+
     <section>
       <title>Service Permissions</title>
 
@@ -4056,6 +4059,19 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       services on behalf of a component's bundle, SCR must call the
       <code>Bundle.hasPermission</code> method to validate that a component's
       bundle has the necessary permission to register or get a service.</para>
+    </section>
+
+    <section xml:id="service.component-multi.location.regions">
+      <title>Configuration Multi-Locations and Regions</title>
+
+      <para>SCR must ensure a bundle has the proper
+      <code>ConfigurationPermission</code> for a Configuration used by its
+      components when the Configuration has a multi-location. See <xref
+      linkend="service.cm-multi.locations"/> for more information on
+      multi-locations and <xref linkend="service.cm-regions"/> for more
+      information on regions. If a bundle does not have the necessary
+      permission for a multi-location Configuration, then SCR must act as if
+      the Configuration does not exist for the bundle.</para>
     </section>
   </section>
 
@@ -4160,6 +4176,12 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
         <para><code>service.pid</code> property values are aggregated across
         configuration sources. See <xref
         linkend="service.component-component.properties"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>SCR must check ConfigurationPermission for multi-location
+        Configurations. See <xref
+        linkend="service.component-multi.location.regions"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
