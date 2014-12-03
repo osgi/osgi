@@ -847,9 +847,10 @@ Attribute   ::= Value*</programlisting>
               resource, using the wildcard value (<code>'*' \u002A</code>)
               indicates the bundle location of the bundle containing the
               resource must be used as the location. See <xref
-              linkend="i1573084"/></para><para>This is an optional attribute
-              but can be mandatory in certain usage schemes, for example the
-              Autoconf Resource Processor.</para></entry>
+              linkend="service.cm-location.binding"/></para><para>This is an
+              optional attribute but can be mandatory in certain usage
+              schemes, for example the Autoconf Resource
+              Processor.</para></entry>
             </row>
 
             <row>
