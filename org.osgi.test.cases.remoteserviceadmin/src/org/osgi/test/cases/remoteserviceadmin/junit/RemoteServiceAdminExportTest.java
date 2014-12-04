@@ -71,6 +71,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#setUp()
 	 */
     protected void setUp() throws Exception {
+
 		super.setUp();
 
 		timeout = getLongProperty("rsa.ct.timeout", 300000L);
@@ -81,8 +82,29 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#tearDown()
 	 */
     protected void tearDown() throws Exception {
+
 		super.tearDown();
 		ungetAllServices();
+
+		// wait until all remaining exports / imports are gone
+		remoteServiceAdmin = getService(RemoteServiceAdmin.class);
+		int x = (int) (timeout / 500L);
+		while (remoteServiceAdmin.getExportedServices().size() > 0
+				|| remoteServiceAdmin.getImportedEndpoints().size() > 0) {
+			--x;
+
+			System.out
+					.println("Teardown: Waiting for remaining exports / imports to be closed");
+
+			if (x < 0)
+				throw new Exception(
+						"there are exported or imported services left after the test ended");
+			Thread.sleep(500);
+		}
+		ungetAllServices();
+		// wait for a little while so that no events remain queued somewhere
+		Thread.sleep(3000);
+
 	}
 
 	/**
@@ -515,7 +537,7 @@ public class RemoteServiceAdminExportTest extends DefaultTestBundleControl {
 	 * a new ExportRegistration
 	 */
 	public void testExportMultipleRegistrations() throws Exception {
-		// create an register a service
+		// create and register a service
 		Hashtable<String, String> dictionary = new Hashtable<String, String>();
 		dictionary.put("mykey", "will be overridden");
 		dictionary.put("myprop", "myvalue");
