@@ -488,7 +488,7 @@
       </section>
     </section>
 
-    <section xml:id="i1891430">
+    <section xml:id="service.cm-targeted.pids">
       <title>Targeted PIDs</title>
 
       <para>PIDs are defined as primary keys for the configuration object; any
@@ -867,7 +867,8 @@ private       ::= '.' symbolic-name</programlisting>
         <listitem>
           <para><code>service.pid</code> - Set to the PID of the associated
           <code>Configuration</code> object. This is the full the targeted PID
-          if a targeted PID is used, see <xref linkend="i1891430"/>.</para>
+          if a targeted PID is used, see <xref
+          linkend="service.cm-targeted.pids"/>.</para>
         </listitem>
 
         <listitem>
@@ -1627,7 +1628,7 @@ private       ::= '.' symbolic-name</programlisting>
       objects.</para>
 
       <para>The PIDs that are filtered on can be targeted PIDs, see <xref
-      linkend="i1891430"/>.</para>
+      linkend="service.cm-targeted.pids"/>.</para>
     </section>
 
     <section>
