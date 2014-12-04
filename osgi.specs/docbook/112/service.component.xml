@@ -2294,10 +2294,10 @@ public class FooImpl implements Foo {
 
   @Reference( 
     policy = DYNAMIC, 
-    policyOption=GREEDY,
-    cardinality=MANDATORY )
-  void setLog( LogService log) { ... }
-  void unsetLog( LogService log) { ... }
+    policyOption = GREEDY,
+    cardinality = MANDATORY )
+  void setLog( LogService log ) { ... }
+  void unsetLog( LogService log ) { ... }
   void updatedLog( Map&lt;String,?&gt; ref ) { ... }
 }</programlisting>
 
@@ -2314,7 +2314,23 @@ public class FooImpl implements Foo {
       description, the reference elements must be ordered in ascending
       lexicographical order, using <code>String.compareTo</code>, of the <xref
       linkend="org.osgi.service.component.annotations.LookupReference.name--"
-      xrefstyle="hyperlink"/>s of the references.</para>
+      xrefstyle="hyperlink"/>s of the references. The following code
+      demonstrates the use of the <xref
+      linkend="org.osgi.service.component.annotations.LookupReference"
+      xrefstyle="hyperlink"/> annotation.</para>
+
+      <programlisting>@Component( reference = 
+  @LookupReference( name = "log", service = LogService.class )
+)
+public class FooImpl implements Foo {
+  @Activate
+  void open( ComponentContext context ) {
+    LogService log = (LogService) context.locateService( "log" );
+    ...
+  }
+  @Deactivate
+  void close() { ... }
+}</programlisting>
     </section>
   </section>
 
