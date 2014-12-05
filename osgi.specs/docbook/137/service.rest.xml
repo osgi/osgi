@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <chapter label="137"
-         revision="$Id: da36b6af433e0b858f32c1faa84aa39492b7c9f5 $"
+         revision="$Id$"
          version="5" xml:id="service.rest"
          xmlns="http://docbook.org/ns/docbook"
          xmlns:xlink="http://www.w3.org/1999/xlink"
