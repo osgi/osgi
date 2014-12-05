@@ -3363,9 +3363,19 @@ void unsetLogService( LogService log ) {
     through Configuration Admin, a deployer can configure component
     properties.</para>
 
-    <para>The configuration PIDs are used as keys for obtaining additional
-    component properties from Configuration Admin. The following situations
-    can arise:</para>
+    <para>A component's configuration PIDs are used as keys for obtaining
+    additional component properties from Configuration Admin. When
+    <emphasis>matching</emphasis> a configuration PID to a
+    <code>Configuration</code> object, SCR must use the
+    <code>Configuration</code> object with the best matching PID for the
+    component's bundle. See <xref linkend="service.cm-targeted.pids"/> for
+    more information on targeted PIDs and <xref
+    linkend="service.cm-extenders.targeted.pids"/> for more information on
+    selecting the <code>Configuration</code> object with the best matching
+    PID.</para>
+
+    <para>The following situations can arise when looking for
+    <code>Configuration</code> objects:</para>
 
     <itemizedlist>
       <listitem>
@@ -3435,15 +3445,30 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
       <title>Configuration Changes</title>
 
       <para>SCR must track changes in the <code>Configuration</code> objects
-      <emphasis>matching</emphasis> the configuration PIDs of the component
-      description. Changes include the creating, updating and deleting of
-      matching <code>Configuration</code> objects. The actions SCR must take
-      when a configuration change for a component description occurs are based
-      upon how the <code>configuration-policy</code> and <code>modified</code>
-      attributes are specified in the component description, whether a
-      component configuration becomes satisfied, remains satisfied or becomes
+      matching the configuration PIDs of a component description. Changes
+      include the creating, updating and deleting of
+      <code>Configuration</code> objects matching the configuration PIDs. The
+      actions SCR must take when a configuration change for a component
+      configuration occurs are based upon how the
+      <code>configuration-policy</code> and <code>modified</code> attributes
+      are specified in the component description, whether a component
+      configuration becomes satisfied, remains satisfied or becomes
       unsatisfied and the type and number of matching
       <code>Configuration</code> objects.</para>
+
+      <para>With targeted PIDs, multiple <code>Configuration</code> objects
+      can exist which can match a configuration PID. Creation of a
+      <code>Configuration</code> object with a better matching PID than a
+      <code>Configuration</code> object currently being used by a component
+      configuration results in a configuration change for the component
+      configuration with the new <code>Configuration</code> object replacing
+      the currently used <code>Configuration</code> object. Deletion of a
+      <code>Configuration</code> object currently being used by a component
+      configuration when there is another <code>Configuration</code> object
+      matching the configuration PID also results in a configuration change
+      for the component configuration with the <code>Configuration</code>
+      object having the best matching PID replacing the currently used, and
+      now deleted, <code>Configuration</code> object.</para>
 
       <section>
         <title>Ignore Configuration Policy</title>
@@ -3466,13 +3491,15 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
         factory component, multiple component configurations can be created
         all using the matching <code>Configuration</code> objects.</para>
 
-        <para>Deleting a <code>Configuration</code> object will cause the
-        component configurations using it to become unsatisfied. Updating a
-        <code>Configuration</code> object can cause the component
-        configurations using it to become unsatisfied if any of the following
-        occur:</para>
+        <para>A configuration change can cause a component configuration to
+        become unsatisfied if any of the following occur:</para>
 
         <itemizedlist>
+          <listitem>
+            <para>Each configuration PID of the component description does not
+            have a matching <code>Configuration</code> object.</para>
+          </listitem>
+
           <listitem>
             <para>A target property change results in a bound service of a
             static reference ceasing to be a target service.</para>
@@ -3485,8 +3512,9 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
           </listitem>
 
           <listitem>
-            <para>A target property change results in a dynamic reference
-            falling below the minimum cardinality.</para>
+            <para>A target property change or minimum cardinality property
+            change results in a reference falling below the minimum
+            cardinality.</para>
           </listitem>
 
           <listitem>
@@ -3494,19 +3522,6 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
             <code>modified</code> attribute.</para>
           </listitem>
         </itemizedlist>
-
-        <para>If a component configuration becomes unsatisfied, SCR must
-        deactivate the component configuration. If the component configuration
-        was not created from a factory component, SCR must attempt to satisfy
-        the component configuration with the updated component
-        properties.</para>
-
-        <para>If a component configuration remains satisfied and had been
-        activated, the modified method is called. See <xref
-        linkend="i1652198"/> for more information. If a component
-        configuration remains satisfied but has not been activated, then, if
-        the component configuration is registered as a service, SCR must
-        modify the service properties.</para>
       </section>
 
       <section>
@@ -3550,8 +3565,9 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
           </listitem>
 
           <listitem>
-            <para>A target property change results in a dynamic reference
-            falling below the minimum cardinality.</para>
+            <para>A target property change or minimum cardinality property
+            change results in a reference falling below the minimum
+            cardinality.</para>
           </listitem>
 
           <listitem>
@@ -3559,19 +3575,40 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
             <code>modified</code> attribute.</para>
           </listitem>
         </itemizedlist>
+      </section>
 
-        <para>If a component configuration becomes unsatisfied, SCR must
-        deactivate the component configuration. If the component configuration
-        was not created from a factory component, SCR must attempt to satisfy
-        the component configuration with the updated component
-        properties.</para>
+      <section xml:id="service.component-configuration.change.actions">
+        <title>Configuration Change Actions</title>
 
-        <para>If a component configuration remains satisfied and had been
-        activated, the modified method is called. See <xref
-        linkend="i1652198"/> for more information. If a component
-        configuration remains satisfied but has not been activated, then, if
-        the component configuration is registered as a service, SCR must
-        modify the service properties.</para>
+        <para>If a component configuration becomes unsatisfied:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>SCR must deactivate the component configuration.</para>
+          </listitem>
+
+          <listitem>
+            <para>If the component configuration was not created from a
+            factory component, SCR must attempt to satisfy the component
+            configuration with the current configuration state.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>If a component configuration remains satisfied:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>If the component configuration has been activated, the
+            modified method is called to provide the updated component
+            properties. See <xref linkend="i1652198"/> for more
+            information.</para>
+          </listitem>
+
+          <listitem>
+            <para>If the component configuration is registered as a service,
+            SCR must modify the service properties.</para>
+          </listitem>
+        </itemizedlist>
       </section>
     </section>
   </section>
@@ -4014,7 +4051,7 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
   <section>
     <title>Security</title>
 
-    <para>When Java permissions are enabled, SCR must peform the following
+    <para>When Java permissions are enabled, SCR must perform the following
     security procedures.</para>
 
     <section>
@@ -4205,6 +4242,11 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
         <para>SCR must check ConfigurationPermission for multi-location
         Configurations. See <xref
         linkend="service.component-multi.location.regions"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Added support for targeted PIDs for Configurations. See <xref
+        linkend="service.component-deployment"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
