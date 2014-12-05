@@ -41,8 +41,8 @@ public class ServiceListResource extends AbstractOSGiResource<ServicePojoList> {
 	@Get("json|txt")
 	public Representation doGet(final Variant variant) {
 		try {
-			final String filter = (String) getRequest().getAttributes().get(
-					"filter");
+			final String filter = getQuery().getFirstValue("filter");
+
 			final ServiceReference<?>[] srefs = getBundleContext()
 					.getAllServiceReferences(null, filter);
 			return getRepresentation(new ServicePojoList(srefs), variant);

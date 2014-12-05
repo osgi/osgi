@@ -21,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 
 /**
@@ -30,13 +31,13 @@ import org.osgi.framework.ServiceReference;
  */
 public final class ServicePojo {
 
+	private long				id;
 	private Map<String, Object>	properties;
-
 	private String				bundle;
-
 	private String[]			usingBundles;
 
 	public ServicePojo(final ServiceReference<?> sref) {
+		id = ((Long) sref.getProperty(Constants.SERVICE_ID)).longValue();
 		final Map<String, Object> props = new HashMap<String, Object>();
 		for (final String key : sref.getPropertyKeys()) {
 			props.put(key, sref.getProperty(key));
@@ -50,6 +51,14 @@ public final class ServicePojo {
 			}
 		}
 		setUsingBundles(usingBundlesList.toArray(new String[usingBundlesList.size()]));
+	}
+
+	public long getId() {
+		return id;
+	}
+
+	public void setId(final long id) {
+		this.id = id;
 	}
 
 	public void setProperties(final Map<String, Object> properties) {

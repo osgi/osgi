@@ -45,10 +45,8 @@ public final class DTOReflector {
 				field.set(
 						dto,
 						getBundleIdsFromPaths(data.getJSONArray("usingBundles")));
-				// } else if (field.getType().equals(MapDTO.class)) {
-				// field.set(dto,
-				// getMapDTOfromJsonObject(data.getJSONObject(field
-				// .getName())));
+			} else if (field.getType().equals(Map.class)) {
+				field.set(dto, getMapfromJsonObject(data.getJSONObject(field.getName())));
 			} else {
 				field.set(dto, data.get(field.getName()));
 			}

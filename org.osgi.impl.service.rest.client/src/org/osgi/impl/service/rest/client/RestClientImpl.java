@@ -415,7 +415,7 @@ public class RestClientImpl implements RestClient {
 	 */
 	public ServiceReferenceDTO getServiceReference(final long id)
 			throws Exception {
-		return getServiceReference("framework/services/" + id);
+		return getServiceReference("framework/service/" + id);
 	}
 
 	/**
@@ -424,8 +424,8 @@ public class RestClientImpl implements RestClient {
 	public ServiceReferenceDTO getServiceReference(final String servicePath)
 			throws Exception {
 		final Representation repr = new ClientResource(Method.GET,
-				baseUri.resolve(servicePath)).get(SERVICE_JSON);
-
+				baseUri.resolve(servicePath)).get();
+		
 		return DTOReflector.getDTO(ServiceReferenceDTO.class,
 				new JsonRepresentation(repr).getJsonObject());
 	}
