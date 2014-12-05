@@ -30,7 +30,7 @@ public final class FrameworkStartLevelPojo {
 
 	public FrameworkStartLevelPojo(final FrameworkStartLevel fsl) {
 		this.value = fsl.getStartLevel();
-		this.value = fsl.getInitialBundleStartLevel();
+		this.initBundleStartLevel = fsl.getInitialBundleStartLevel();
 	}
 
 	public FrameworkStartLevelPojo() {

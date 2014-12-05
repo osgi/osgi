@@ -56,6 +56,10 @@ public class BundlesResource extends AbstractOSGiResource<BundlePojoList> {
 	public Representation installBundle(final Representation content,
 			final Variant variant) {
 		try {
+			if (MediaType.TEXT_PLAIN.equals(content.getMediaType())) {
+				return installBundle(content.getText(), variant);
+			}
+
 			final Reference ref = variant.getLocationRef();
 			final String location = ref == null ? null : ref.toString();
 
@@ -75,7 +79,6 @@ public class BundlesResource extends AbstractOSGiResource<BundlePojoList> {
 		}
 	}
 
-	@Post("text")
 	public Representation installBundle(final String uri, final Variant variant) {
 		try {
 			if (getBundleContext().getBundle(uri) != null) {

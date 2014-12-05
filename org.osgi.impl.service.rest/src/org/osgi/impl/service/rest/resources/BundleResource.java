@@ -55,7 +55,7 @@ public class BundleResource extends AbstractOSGiResource<BundlePojo> {
 		}
 	}
 
-	@Delete("txt")
+	@Delete()
 	public Representation delete(final String none, final Variant variant) {
 		try {
 			final org.osgi.framework.Bundle bundle = getBundleFromKeys(

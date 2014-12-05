@@ -32,9 +32,11 @@ import org.osgi.service.rest.client.RestClient;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
 import org.restlet.data.Reference;
+import org.restlet.data.Status;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
+import org.restlet.resource.ResourceException;
 
 /**
  * Implementation of the (Java) REST client
@@ -116,12 +118,19 @@ public class RestClientImpl implements RestClient {
 	 * @see org.osgi.rest.client.RestClient#getBundleRepresentations()
 	 */
 	public Collection<BundleDTO> getBundleRepresentations() throws Exception {
-		final Representation repr = new ClientResource(Method.GET,
-				baseUri.resolve("framework/bundles/representations"))
-				.get(BUNDLES_REPRESENTATIONS_JSON);
+		try {
+			final Representation repr = new ClientResource(Method.GET,
+					baseUri.resolve("framework/bundles/representations"))
+					.get(BUNDLES_REPRESENTATIONS_JSON);
 
-		return DTOReflector.getDTOs(BundleDTO.class, new JsonRepresentation(
-				repr).getJsonArray());
+			return DTOReflector.getDTOs(BundleDTO.class, new JsonRepresentation(
+					repr).getJsonArray());
+		} catch (final ResourceException e) {
+			if (Status.CLIENT_ERROR_NOT_FOUND.equals(e.getStatus())) {
+				return null;
+			}
+			throw e;
+		}
 	}
 
 	/**
@@ -135,11 +144,17 @@ public class RestClientImpl implements RestClient {
 	 * @see org.osgi.rest.client.RestClient#getBundle(java.lang.String)
 	 */
 	public BundleDTO getBundle(final String bundlePath) throws Exception {
-		final Representation repr = new ClientResource(Method.GET,
-				baseUri.resolve(bundlePath)).get(BUNDLE_JSON);
-
-		return DTOReflector.getDTO(BundleDTO.class,
-				new JsonRepresentation(repr).getJsonObject());
+		try {
+			final Representation repr = new ClientResource(Method.GET,
+					baseUri.resolve(bundlePath)).get(BUNDLE_JSON);
+			return DTOReflector.getDTO(BundleDTO.class,
+					new JsonRepresentation(repr).getJsonObject());
+		} catch (final ResourceException e) {
+			if (Status.CLIENT_ERROR_NOT_FOUND.equals(e.getStatus())) {
+				return null;
+			}
+			throw e;
+		}
 	}
 
 	/**
@@ -294,7 +309,7 @@ public class RestClientImpl implements RestClient {
 	public String installBundle(final String url) throws Exception {
 		final ClientResource res = new ClientResource(Method.POST,
 				baseUri.resolve("framework/bundles"));
-		final Representation repr = res.post(url);
+		final Representation repr = res.post(url, MediaType.TEXT_PLAIN);
 		return repr.getText();
 	}
 
@@ -317,16 +332,16 @@ public class RestClientImpl implements RestClient {
 	 * @see org.osgi.rest.client.RestClient#updateBundle(long)
 	 */
 	public void updateBundle(final long id) throws Exception {
-		new ClientResource(Method.PUT, baseUri.resolve("framework/bundles/"
-				+ id)).put("");
+		new ClientResource(Method.PUT, baseUri.resolve("framework/bundle/"
+				+ id)).put("", MediaType.TEXT_PLAIN);
 	}
 
 	/**
 	 * @see org.osgi.rest.client.RestClient#updateBundle(long, java.net.URL)
 	 */
 	public void updateBundle(final long id, final String url) throws Exception {
-		new ClientResource(Method.PUT, baseUri.resolve("framework/bundles/"
-				+ id)).put(url);
+		new ClientResource(Method.PUT, baseUri.resolve("framework/bundle/"
+				+ id)).put(url, MediaType.TEXT_PLAIN);
 
 	}
 
@@ -336,7 +351,7 @@ public class RestClientImpl implements RestClient {
 	 */
 	public void updateBundle(final long id, final InputStream in)
 			throws Exception {
-		new ClientResource(Method.PUT, baseUri.resolve("framework/bundles/"
+		new ClientResource(Method.PUT, baseUri.resolve("framework/bundle/"
 				+ id)).put(in);
 	}
 
@@ -344,14 +359,14 @@ public class RestClientImpl implements RestClient {
 	 * @see org.osgi.rest.client.RestClient#uninstallBundle(long)
 	 */
 	public void uninstallBundle(final long id) throws Exception {
-		uninstallBundle("framework/bundles/" + id);
+		uninstallBundle("framework/bundle/" + id);
 	}
 
 	/**
 	 * @see org.osgi.rest.client.RestClient#uninstallBundle(java.lang.String)
 	 */
 	public void uninstallBundle(final String bundlePath) throws Exception {
-		final ClientResource res = new ClientResource(Method.PUT,
+		final ClientResource res = new ClientResource(Method.DELETE,
 				baseUri.resolve(bundlePath));
 		res.delete();
 	}

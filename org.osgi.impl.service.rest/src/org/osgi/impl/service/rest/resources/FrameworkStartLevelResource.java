@@ -16,6 +16,7 @@
 
 package org.osgi.impl.service.rest.resources;
 
+import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.impl.service.rest.PojoReflector;
 import org.osgi.impl.service.rest.pojos.FrameworkStartLevelPojo;
 import org.restlet.data.MediaType;
@@ -54,7 +55,10 @@ public class FrameworkStartLevelResource extends
 			final Variant variant) {
 		try {
 			final FrameworkStartLevelPojo sl = fromRepresentation(r, variant);
-			getFrameworkStartLevel().setStartLevel(sl.getStartLevel());
+			final FrameworkStartLevel fsl = getFrameworkStartLevel();
+
+			fsl.setStartLevel(sl.getStartLevel());
+			fsl.setInitialBundleStartLevel(sl.getInitialBundleStartLevel());
 
 			return SUCCESS(Status.SUCCESS_NO_CONTENT);
 		} catch (final Exception e) {
