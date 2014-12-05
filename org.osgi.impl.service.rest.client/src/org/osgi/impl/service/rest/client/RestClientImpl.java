@@ -99,7 +99,7 @@ public class RestClientImpl implements RestClient {
 	 */
 	public void setFrameworkStartLevel(final FrameworkStartLevelDTO startLevel)
 			throws Exception {
-		new ClientResource(Method.PUT, "framework/startlevel").put(
+		new ClientResource(Method.PUT, baseUri.resolve("framework/startlevel")).put(
 				DTOReflector.getJson(FrameworkStartLevelDTO.class, startLevel),
 				FRAMEWORK_STARTLEVEL_JSON);
 	}

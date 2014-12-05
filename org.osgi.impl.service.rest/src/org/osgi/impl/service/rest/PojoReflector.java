@@ -58,8 +58,8 @@ public class PojoReflector<B> {
 	}
 
 	private static String getFieldName(final String methodName) {
-		return methodName.startsWith("set") && methodName.length() > 3 ? methodName
-				.substring(3).toLowerCase() : null;
+		return methodName.startsWith("set") && methodName.length() > 3 ? Character.toLowerCase(methodName.charAt(3)) + methodName
+				.substring(4) : null;
 	}
 
 	public B beanFromJSONObject(final JSONObject obj) throws Exception {
