@@ -580,14 +580,13 @@
       targeted PID. For example, the following code gets the most targeted PID
       for a given bundle.</para>
 
-      <programlisting>String mostTargeted(String pid, Bundle bundle, String key) throws Exception {
-    String p = escape(pid); // make sure does not control filter
+      <programlisting>String mostTargeted(String key, String pid, Bundle bundle) throws Exception {
     String bsn = bundle.getSymbolicName();
-    String version = bundle.getVersion().toString();
+    Version version = bundle.getVersion();
     String location = bundle.getLocation();
     String f = String.format("(|(%1$s=%2$s)(%1$s=%2$s|%3$s)" +
         "(%1$s=%2$s|%3$s|%4$s)(%1$s=%2$s|%3$s|%4$s|%5$s))",
-        key, p, bsn, version, location );
+        key, pid, bsn, version, location );
 
     Configuration[] configurations = cm.listConfigurations(f);
     if (configurations == null)
@@ -596,11 +595,8 @@
     String largest = null;
     for (Configuration c : configurations) {
         String s = (String) c.getProperties().get(key);
-        if (largest == null)
+        if ((largest == null) || (largest.length() &lt; s.length()))
             largest = s;
-        else
-            if (largest.length() &lt; s.length())
-                largest = s;
     }
     return largest;
 }</programlisting>
