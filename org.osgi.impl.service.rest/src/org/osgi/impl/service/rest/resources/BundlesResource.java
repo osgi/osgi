@@ -19,6 +19,7 @@ package org.osgi.impl.service.rest.resources;
 import org.osgi.framework.Bundle;
 import org.osgi.impl.service.rest.PojoReflector;
 import org.osgi.impl.service.rest.pojos.BundlePojoList;
+import org.restlet.data.MediaType;
 import org.restlet.data.Reference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -34,8 +35,10 @@ import org.restlet.resource.Post;
  */
 public class BundlesResource extends AbstractOSGiResource<BundlePojoList> {
 
+	private static final MediaType	MEDIA_TYPE	= MediaType.valueOf("application/org.osgi.bundles");
+
 	public BundlesResource() {
-		super(PojoReflector.getReflector(BundlePojoList.class));
+		super(PojoReflector.getReflector(BundlePojoList.class), MEDIA_TYPE);
 	}
 
 	@Get("json|text")

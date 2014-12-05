@@ -20,6 +20,7 @@ import org.osgi.framework.Bundle;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.impl.service.rest.PojoReflector;
 import org.osgi.impl.service.rest.pojos.BundleStartLevelPojo;
+import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -34,8 +35,10 @@ import org.restlet.resource.Put;
 public class BundleStartLevelResource extends
 		AbstractOSGiResource<BundleStartLevelPojo> {
 
+	private static final MediaType	MEDIA_TYPE	= MediaType.valueOf("application/org.osgi.bundlestartlevel");
+
 	public BundleStartLevelResource() {
-		super(PojoReflector.getReflector(BundleStartLevelPojo.class));
+		super(PojoReflector.getReflector(BundleStartLevelPojo.class), MEDIA_TYPE);
 	}
 
 	@Get("json|txt")

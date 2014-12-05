@@ -61,14 +61,21 @@ public class AbstractOSGiResource<T> extends ServerResource {
 
 	private static final String				number	= "([0-9]*)";
 
+	private static final String				MT_JSON	= "+json";
+
+	private static final String				MT_XML	= "+xml";
+
 	protected final static Representation	SUCCESS	= null;
 
 	protected final static Representation	ERROR	= null;
 
 	private final PojoReflector<T>			reflector;
 
-	protected AbstractOSGiResource(final PojoReflector<T> reflector) {
+	private final MediaType					mediaType;
+
+	protected AbstractOSGiResource(final PojoReflector<T> reflector, final MediaType mediaType) {
 		this.reflector = reflector;
+		this.mediaType = mediaType;
 	}
 
 	protected BundleContext getBundleContext() {
@@ -182,11 +189,17 @@ public class AbstractOSGiResource<T> extends ServerResource {
 		final Representation rep;
 		System.err.println("VARIANT MEDIA TYPE " + variant.getMediaType());
 
+		final MediaType mt;
+
 		if (MediaType.APPLICATION_ALL_XML.includes(variant.getMediaType())) {
+			mt = getMediaType(MT_XML);
+
 			throw new UnsupportedOperationException("TODO: "
 					+ variant.getMediaType().toString());
 		} else if (MediaType.APPLICATION_JSON.includes(variant.getMediaType())
 				|| MediaType.TEXT_ALL.includes(variant.getMediaType())) {
+			mt = getMediaType(MT_JSON);
+
 			if (bean instanceof Collection) {
 				final JSONArray arr = new JSONArray((Collection<?>) bean);
 				rep = toRepresentation(arr, variant);
@@ -200,8 +213,12 @@ public class AbstractOSGiResource<T> extends ServerResource {
 			throw new UnsupportedOperationException(variant.getMediaType()
 					.toString());
 		}
-		rep.setMediaType(variant.getMediaType());
+		rep.setMediaType(mt);
 		return rep;
+	}
+
+	protected MediaType getMediaType(final String variant) {
+		return MediaType.valueOf(mediaType.toString() + variant);
 	}
 
 	protected T fromRepresentation(final Representation r, final Variant variant)

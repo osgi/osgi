@@ -19,6 +19,7 @@ package org.osgi.impl.service.rest.resources;
 import java.util.List;
 import java.util.Map;
 import org.restlet.data.Language;
+import org.restlet.data.MediaType;
 import org.restlet.data.Preference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
@@ -33,8 +34,10 @@ import org.restlet.resource.Get;
 public class BundleHeaderResource extends
 		AbstractOSGiResource<Map<String, String>> {
 
+	private static final MediaType	MEDIA_TYPE	= MediaType.valueOf("application/org.osgi.bundleheader");
+
 	public BundleHeaderResource() {
-		super(null);
+		super(null, MEDIA_TYPE);
 	}
 
 	@Get("json|txt")

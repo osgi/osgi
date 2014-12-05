@@ -19,6 +19,7 @@ package org.osgi.impl.service.rest.resources;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.rest.PojoReflector;
 import org.osgi.impl.service.rest.pojos.ServiceRepresentationList;
+import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -33,8 +34,10 @@ import org.restlet.resource.Get;
 public class ServiceRepresentationsResource extends
 		AbstractOSGiResource<ServiceRepresentationList> {
 
+	private static final MediaType	MEDIA_TYPE	= MediaType.valueOf("application/org.osgi.services.representations");
+
 	public ServiceRepresentationsResource() {
-		super(PojoReflector.getReflector(ServiceRepresentationList.class));
+		super(PojoReflector.getReflector(ServiceRepresentationList.class), MEDIA_TYPE);
 	}
 
 	@Get("json|txt")

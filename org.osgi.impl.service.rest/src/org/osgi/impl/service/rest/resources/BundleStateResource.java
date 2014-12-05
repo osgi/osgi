@@ -19,6 +19,7 @@ package org.osgi.impl.service.rest.resources;
 import org.osgi.framework.Bundle;
 import org.osgi.impl.service.rest.PojoReflector;
 import org.osgi.impl.service.rest.pojos.BundleStatePojo;
+import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -32,8 +33,10 @@ import org.restlet.resource.Put;
  */
 public class BundleStateResource extends AbstractOSGiResource<BundleStatePojo> {
 
+	private static final MediaType	MEDIA_TYPE	= MediaType.valueOf("application/org.osgi.bundlestate");
+
 	public BundleStateResource() {
-		super(PojoReflector.getReflector(BundleStatePojo.class));
+		super(PojoReflector.getReflector(BundleStatePojo.class), MEDIA_TYPE);
 	}
 
 	@Get("json|text")

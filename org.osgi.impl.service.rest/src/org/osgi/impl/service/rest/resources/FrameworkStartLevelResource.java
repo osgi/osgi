@@ -18,6 +18,7 @@ package org.osgi.impl.service.rest.resources;
 
 import org.osgi.impl.service.rest.PojoReflector;
 import org.osgi.impl.service.rest.pojos.FrameworkStartLevelPojo;
+import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
@@ -32,8 +33,10 @@ import org.restlet.resource.Put;
 public class FrameworkStartLevelResource extends
 		AbstractOSGiResource<FrameworkStartLevelPojo> {
 
+	private static final MediaType	MEDIA_TYPE	= MediaType.valueOf("application/org.osgi.frameworkstartlevel");
+
 	public FrameworkStartLevelResource() {
-		super(PojoReflector.getReflector(FrameworkStartLevelPojo.class));
+		super(PojoReflector.getReflector(FrameworkStartLevelPojo.class), MEDIA_TYPE);
 	}
 
 	@Get("json|txt")
