@@ -132,13 +132,14 @@ public @interface Component {
 	 * Properties for this Component.
 	 * 
 	 * <p>
-	 * Each property string is specified as {@code "key=value"}. The type of the
-	 * property value can be specified in the key as {@code key:type=value}. The
-	 * type must be one of the property types supported by the type attribute of
-	 * the property element of a Component Description.
+	 * Each property string is specified as {@code "name=value"}. The type of
+	 * the property value can be specified in the name as
+	 * {@code name:type=value}. The type must be one of the property types
+	 * supported by the type attribute of the property element of a Component
+	 * Description.
 	 * 
 	 * <p>
-	 * To specify a property with multiple values, use multiple key, value
+	 * To specify a property with multiple values, use multiple name, value
 	 * pairs. For example, {@code "foo=bar", "foo=baz"}.
 	 * 
 	 * @see "The property element of a Component Description."

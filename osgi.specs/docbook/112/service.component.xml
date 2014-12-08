@@ -3277,13 +3277,13 @@ void unsetLogService( LogService log ) {
 
       <para>This specification defines some component properties which are
       associated with specific component references. These are called
-      <emphasis>reference properties</emphasis>. The key of a reference
+      <emphasis>reference properties</emphasis>. The name of a reference
       property for a reference is the name of the reference appended with a
       full stop (<code>'.' \u002E</code>) and a suffix unique to the reference
       property. Reference properties can be set wherever component properties
       can be set.</para>
 
-      <para>All component property keys starting with a reference name
+      <para>All component property names starting with a reference name
       followed by a full stop (<code>'.' \u002E</code>) are reserved for use
       by this specification.</para>
 
@@ -3295,10 +3295,10 @@ void unsetLogService( LogService log ) {
 
         <para>The <emphasis>target property</emphasis> is a reference property
         which aids in the selection of target services for the reference. See
-        <xref linkend="service.component-selecting.target.services"/>. The key
-        of a target property is the name of a reference appended with
+        <xref linkend="service.component-selecting.target.services"/>. The
+        name of a target property is the name of a reference appended with
         <code>.target</code>. For example, the target property for a reference
-        with the name <code>http</code> would have the key
+        with the name <code>http</code> would have the name
         <code>http.target</code>. The value of a target property is a filter
         string used to select targets services for the reference.</para>
 
@@ -3332,10 +3332,10 @@ void unsetLogService( LogService log ) {
         <code>0..1</code> or <code>0..n</code> cardinality because the
         component was coded to expect at least one bound service.</para>
 
-        <para>The key of a minimum cardinality property is the name of a
+        <para>The name of a minimum cardinality property is the name of a
         reference appended with <code>.cardinality.minimum</code>. For
         example, the minimum cardinality property for a reference with the
-        name <code>http</code> would have the key
+        name <code>http</code> would have the name
         <code>http.cardinality.minimum</code>. The value of a minimum
         cardinality property must be a positive integer or a value that can be
         coerced into a positive integer. <remark>BJH Need to reference
