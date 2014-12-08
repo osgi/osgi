@@ -725,7 +725,8 @@ public class RestServiceTestCase extends RestTestUtils {
 
       if (responseCode == HttpURLConnection.HTTP_OK) {
         String responseContentType = connection.getContentType();
-        assertEquals("ContentType", expectedContentType, responseContentType);
+        debug("Response ContentType:" + responseContentType, null);
+        assertTrue("ContentType", (responseContentType != null) && (responseContentType.startsWith(expectedContentType)));
 
         in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
       } else if (responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
