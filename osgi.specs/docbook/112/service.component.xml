@@ -3613,24 +3613,24 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
     </section>
   </section>
 
-  <section>
-    <title>Use of the Annotations</title>
+  <section xml:id="service.component-component.annotations">
+    <title>Component Annotations</title>
 
-    <para>The Declarative Services Annotations provide a convenient way to
-    create the component description XML during build time. Since annotations
-    are placed in the source file and can use types, fields, and methods they
-    can significantly simplify the use of Declarative Services.</para>
+    <para>The Component Annotations provide a convenient way to create the
+    component description XML during build time. Since annotations are placed
+    in the source file and can use types, fields, and methods, they can
+    significantly simplify the use of Declarative Services.</para>
 
-    <para>The Declarative Services Annotations are build time annotations
-    because one of the key aspect of Declarative Services is its laziness.
-    Implementations can easily read the component description XML from the
-    bundle, pre-process it, and cache the results between framework
-    invocations. This is way it is unnecessary to create a class on the bundle
-    when the bundle is started and/or scan the classes for annotations.</para>
+    <para>The Component Annotations are build time annotations because one of
+    the key aspects of Declarative Services is its laziness. SCR can easily
+    read the component description XML from the bundle, pre-process it, and
+    cache the results between framework invocations. This way it is
+    unnecessary to load a class from the bundle when the bundle is started
+    and/or scan the classes for annotations.</para>
 
-    <para>The Declarative Services Annotations are not inherited, they can
-    only be used on a given class, annotations on its super class hierarchy or
-    interfaces are not taken into account.</para>
+    <para>The Component Annotations are not inherited, they can only be used
+    on a given class, annotations on its super class hierarchy or interfaces
+    are not taken into account.</para>
 
     <para>The primary annotation is the <xref
     linkend="org.osgi.service.component.annotations.Component"
@@ -3643,8 +3643,8 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
       </listitem>
 
       <listitem>
-        <para>It registers all directly implemented interfaces as
-        services</para>
+        <para>It registers all of the class's directly implemented interfaces
+        as services</para>
       </listitem>
 
       <listitem>
@@ -3686,14 +3686,16 @@ public class MacSpeech implements Speech {
     }
 }</programlisting>
 
-    <para>The previous example must generate the following XML:</para>
+    <para>The previous example would be processed at build time into a
+    component description similar to the following XML:</para>
 
-    <programlisting>&lt;scr:component name='com.example.MacSpeech'&gt;
-  &lt;implementation class='com.example.MacSpeech'/&gt;
+    <programlisting>&lt;scr:component name="com.example.MacSpeech"
+  xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
+  &lt;implementation class="com.example.MacSpeech"/&gt;
   &lt;service&gt;
-    &lt;provide interface='com.example.service.speech.Speech'/&gt;
+    &lt;provide interface="com.example.service.speech.Speech"/&gt;
   &lt;/service&gt;
-&lt;/component&gt;</programlisting>
+&lt;/scr:component&gt;</programlisting>
 
     <para>It is possible to add activate and deactivate methods on the
     component with the <xref
@@ -3718,8 +3720,10 @@ void modified(Map&lt;String,?&gt; properties) { ... }</programlisting>
     <para>If a component has dependencies on other services then they can be
     referenced with the <xref
     linkend="org.osgi.service.component.annotations.Reference"
-    xrefstyle="hyperlink"/> annotation that is applied to the bind method. The
-    defaults for the reference annotations are:</para>
+    xrefstyle="hyperlink"/> annotation that is applied to a bind method. The
+    defaults for the <xref
+    linkend="org.osgi.service.component.annotations.Reference"
+    xrefstyle="hyperlink"/> annotation are:</para>
 
     <itemizedlist>
       <listitem>
@@ -3728,7 +3732,7 @@ void modified(Map&lt;String,?&gt; properties) { ... }</programlisting>
       </listitem>
 
       <listitem>
-        <para>1:1 Cardinality.</para>
+        <para>1:1 cardinality.</para>
       </listitem>
 
       <listitem>
@@ -3737,14 +3741,12 @@ void modified(Map&lt;String,?&gt; properties) { ... }</programlisting>
 
       <listitem>
         <para>The requested service is the type of the first argument of the
-        method the <xref
-        linkend="org.osgi.service.component.annotations.Reference"
-        xrefstyle="hyperlink"/> annotation is applied to.</para>
+        bind method.</para>
       </listitem>
 
       <listitem>
         <para>It will infer a default unset method and updated method based on
-        the method name it is applied to.</para>
+        the name of the bind method.</para>
       </listitem>
     </itemizedlist>
 
@@ -3820,7 +3822,7 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       <para>SCR will need to locate activate, deactivate, modified, bind,
       updated, and unbind methods for a component instance. These methods will
       be located, and called, using reflection. The declared methods of each
-      class in the component implementation class' hierarchy are examined for
+      class in the component implementation class's hierarchy are examined for
       a suitable method. If a suitable method is found in a class, and it is
       accessible to the component implementation class, then that method must
       be used. If suitable methods are found in a class but none of the
