@@ -1756,6 +1756,14 @@ should be discarded -->
     </xsl:attribute>
   </xsl:if>
 
+  <!-- Keep footer row with previous row -->
+  <xsl:if test="ancestor::d:tfoot">
+    <xsl:attribute name="keep-with-previous.within-column">always</xsl:attribute>
+    <xsl:attribute name="font-family">
+      <xsl:value-of select="$title.fontset"/>
+    </xsl:attribute>
+  </xsl:if>
+
   <xsl:if test="@role = 'ee.class.label'">
     <xsl:attribute name="border-top">
       <xsl:text>0.5pt solid black</xsl:text>
