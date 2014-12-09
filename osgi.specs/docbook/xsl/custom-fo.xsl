@@ -1708,8 +1708,17 @@ should be discarded -->
 
 </xsl:template>
 
-<!-- turn off header bold because header font is already Semibold -->
-<xsl:template name="table.cell.block.properties"/>
+<!-- customized to change font in row header -->
+<xsl:template name="table.cell.block.properties">
+  <xsl:if test="ancestor::d:tbody and 
+                  (ancestor::d:table[@rowheader = 'firstcol'] or
+                  ancestor::d:informaltable[@rowheader = 'firstcol']) and
+                  ancestor-or-self::d:entry[1][count(preceding-sibling::d:entry) = 0]">
+    <xsl:attribute name="font-family">
+      <xsl:value-of select="$title.fontset"/>
+    </xsl:attribute>
+  </xsl:if>
+</xsl:template>
 
 <!-- customized to change font in header row -->
 <xsl:template name="table.row.properties">
@@ -1742,6 +1751,14 @@ should be discarded -->
   <!-- Keep header row with next row -->
   <xsl:if test="ancestor::d:thead">
     <xsl:attribute name="keep-with-next.within-column">always</xsl:attribute>
+    <xsl:attribute name="font-family">
+      <xsl:value-of select="$title.fontset"/>
+    </xsl:attribute>
+  </xsl:if>
+
+  <!-- Keep footer row with previous row -->
+  <xsl:if test="ancestor::d:tfoot">
+    <xsl:attribute name="keep-with-previous.within-column">always</xsl:attribute>
     <xsl:attribute name="font-family">
       <xsl:value-of select="$title.fontset"/>
     </xsl:attribute>
