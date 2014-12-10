@@ -150,6 +150,13 @@
         </listitem>
 
         <listitem>
+          <para><emphasis>Component Property Type</emphasis> - A user defined
+          annotation type which defines component properties and is
+          implemented by SCR to provide type safe access to the defined
+          component properties.</para>
+        </listitem>
+
+        <listitem>
           <para><emphasis>Component Configuration</emphasis> - A component
           configuration represents a component description parameterized by
           component properties. It is the entity that tracks the component
@@ -1244,10 +1251,11 @@ public class HttpResourceImpl {
       <para>The filter is manifested as a component property called the
       <emphasis>target property</emphasis>. The target property can also be
       set by <code>property</code> and <code>properties</code> elements, see
-      <xref linkend="i1544128"/>. The deployer can also set the target
-      property by establishing a configuration for the component which sets
-      the value of the target property. This allows the deployer to override
-      the target property in the component description. See <xref
+      <xref linkend="service.component-property.properties.elements"/>. The
+      deployer can also set the target property by establishing a
+      configuration for the component which sets the value of the target
+      property. This allows the deployer to override the target property in
+      the component description. See <xref
       linkend="service.component-target.property"/> for more
       information.</para>
     </section>
@@ -1321,9 +1329,8 @@ public class HttpResourceImpl {
       the <code>implement</code> element's <code>class</code> attribute from
       the type it is applied to.</para>
 
-      <para>These annotations are intended to be used during build time to
-      generate the component description XML and are not recognized by SCR at
-      runtime.</para>
+      <para>See <xref linkend="service.component-component.annotations"/> for
+      more information.</para>
     </section>
 
     <section>
@@ -1463,7 +1470,7 @@ public class HttpResourceImpl {
               <code>implementation</code> element, then using the default
               value for this attribute will result in duplicate component
               names. In this case, this attribute must be specified with a
-              unique value. </para></entry>
+              unique value.</para></entry>
             </row>
 
             <row>
@@ -1691,8 +1698,8 @@ public class HttpResourceImpl {
       implement all interfaces that are provided by the service.</para>
     </section>
 
-    <section xml:id="i1544128">
-      <title>Property Element</title>
+    <section xml:id="service.component-property.properties.elements">
+      <title>Property and Properties Elements</title>
 
       <para>A component description can define a number of properties. These
       can defined inline or from a resource in the bundle. The
@@ -1852,8 +1859,7 @@ public class HttpResourceImpl {
       <para>In this case <code>name</code>, <code>type</code>, and
       <code>value</code> parts map to the attributes of the
       <code>property</code> element. If multiple values must be specified then
-      the same name can be repeated multiple times. The annotation does not
-      support ordering of properties. For example:</para>
+      the same name can be repeated multiple times. For example:</para>
 
       <programlisting>@Component(property={"foo:Integer=1","foo:Integer=2","foo:Integer=3"})
 public class FooImpl {
@@ -1864,7 +1870,7 @@ public class FooImpl {
       bundle whose contents conform to a standard <xref
       linkend="i1567926"/>.</para>
 
-      <para>The entry is read and processed to obtain the properties and their
+      <para>At runtime, SCR reads the entry to obtain the properties and their
       values. The properties element attributes are defined in the following
       table.</para>
 
@@ -1918,12 +1924,18 @@ public class FooImpl {
       xrefstyle="hyperlink"/></code> element can be used to provide the same
       information, this element consists of an array of strings where each
       string defines an entry. The order within the array is the order that
-      must be used for the XML. However, the annotations do not allow mixing
-      of the property and properties element.</para>
+      must be used for the XML. However, the annotations do not support
+      interleaving of the generated <code>property</code> and
+      <code>properties</code> elements.</para>
 
       <para>For example:</para>
 
       <programlisting>@Component(properties="OSGI-INF/vendor.properties")</programlisting>
+
+      <para>See <xref
+      linkend="service.component-ordering.generated.properties"/> for more
+      information on the ordering of generated properties when using
+      annotations.</para>
     </section>
 
     <section xml:id="service.component-service.element">
@@ -2711,6 +2723,14 @@ public class FooImpl implements Foo {
           <para><code>Map</code> - The component instance will be passed an
           unmodifiable Map containing the component properties.</para>
         </listitem>
+
+        <listitem>
+          <para>A component property type - The component instance will be
+          passed an instance of the component property type which allows type
+          safe access to component properties defined by the component
+          property type. See <xref
+          linkend="service.component-component.property.types"/>.</para>
+        </listitem>
       </itemizedlist>
 
       <para>A suitable method is selected using the following priority:</para>
@@ -2729,17 +2749,22 @@ public class FooImpl implements Foo {
 
         <listitem>
           <para>The method takes a single argument and the type of the
-          argument is the <code>java.util.Map</code>.</para>
+          argument is a component property type.</para>
+        </listitem>
+
+        <listitem>
+          <para>The method takes a single argument and the type of the
+          argument is <code>java.util.Map</code>.</para>
         </listitem>
 
         <listitem>
           <para>The method takes two or more arguments and the type of each
           argument must be
           <code>org.osgi.service.component.ComponentContext</code>,
-          <code>org.osgi.framework.BundleContext</code> or
-          <code>java.util.Map</code>. If multiple methods match this rule,
-          this implies the method name is overloaded and SCR may choose any of
-          the methods to call.</para>
+          <code>org.osgi.framework.BundleContext</code>, a component property
+          type or <code>java.util.Map</code>. If multiple methods match this
+          rule, this implies the method name is overloaded and SCR may choose
+          any of the methods to call.</para>
         </listitem>
 
         <listitem>
@@ -2991,6 +3016,14 @@ void unsetLogService( LogService log ) {
         </listitem>
 
         <listitem>
+          <para>A component property type - The component instance will be
+          passed an instance of the component property type which allows type
+          safe access to component properties defined by the component
+          property type. See <xref
+          linkend="service.component-component.property.types"/>.</para>
+        </listitem>
+
+        <listitem>
           <para><code>int</code> or <code>Integer</code> - The component
           instance will be passed the reason the component configuration is
           being deactivated. See <xref linkend="i1649517"/>.</para>
@@ -3013,25 +3046,30 @@ void unsetLogService( LogService log ) {
 
         <listitem>
           <para>The method takes a single argument and the type of the
-          argument is the <code>java.util.Map</code>.</para>
+          argument is a component property type.</para>
         </listitem>
 
         <listitem>
           <para>The method takes a single argument and the type of the
-          argument is the <code>int</code>.</para>
+          argument is <code>java.util.Map</code>.</para>
         </listitem>
 
         <listitem>
           <para>The method takes a single argument and the type of the
-          argument is the <code>java.lang.Integer</code>.</para>
+          argument is <code>int</code>.</para>
+        </listitem>
+
+        <listitem>
+          <para>The method takes a single argument and the type of the
+          argument is <code>java.lang.Integer</code>.</para>
         </listitem>
 
         <listitem>
           <para>The method takes two or more arguments and the type of each
           argument must be
           <code>org.osgi.service.component.ComponentContext</code>,
-          <code>org.osgi.framework.BundleContext</code>,
-          <code>java.util.Map</code>, <code>int</code> or
+          <code>org.osgi.framework.BundleContext</code>, a component property
+          type, <code>java.util.Map</code>, <code>int</code> or
           <code>java.lang.Integer</code>. If multiple methods match this rule,
           this implies the method name is overloaded and SCR may choose any of
           the methods to call.</para>
@@ -3201,7 +3239,8 @@ void unsetLogService( LogService log ) {
 
           <listitem>
             <para><code>property</code> and <code>properties</code> elements -
-            See <xref linkend="i1544128"/>.</para>
+            See <xref
+            linkend="service.component-property.properties.elements"/>.</para>
           </listitem>
         </itemizedlist>
       </listitem>
@@ -3338,11 +3377,13 @@ void unsetLogService( LogService log ) {
         name <code>http</code> would have the name
         <code>http.cardinality.minimum</code>. The value of a minimum
         cardinality property must be a positive integer or a value that can be
-        coerced into a positive integer. <remark>BJH Need to reference
-        coercion table for configuration annotation types when that is
-        added.</remark> If the numerical value of the minimum cardinality
-        property is not valid for the reference's cardinality, then the
-        minimum cardinality property must be ignored.</para>
+        coerced into a positive integer. See <xref
+        linkend="service.component-component.property.value.coercion"/> for
+        information on coercing property values. If the numerical value of the
+        minimum cardinality property is not valid for the reference's
+        cardinality or the minimum cardinality property value cannot be
+        coerced into a numerical value, then the minimum cardinality property
+        must be ignored.</para>
 
         <para>SCR must support the minimum cardinality property for all
         components even those with component descriptions in older
@@ -3613,66 +3654,80 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
     </section>
   </section>
 
-  <section xml:id="service.component-component.annotations">
-    <title>Component Annotations</title>
+  <section xml:id="service.component-annotations">
+    <title>Annotations</title>
 
-    <para>The Component Annotations provide a convenient way to create the
-    component description XML during build time. Since annotations are placed
-    in the source file and can use types, fields, and methods, they can
-    significantly simplify the use of Declarative Services.</para>
+    <para>A number of <code>CLASS</code> retention annotations have been
+    provided to allow tools to construct the component description XML from
+    the Java class files. The Component Annotations are intended to be used
+    during build time to generate the component description XML.</para>
 
-    <para>The Component Annotations are build time annotations because one of
-    the key aspects of Declarative Services is its laziness. SCR can easily
-    read the component description XML from the bundle, pre-process it, and
-    cache the results between framework invocations. This way it is
-    unnecessary to load a class from the bundle when the bundle is started
-    and/or scan the classes for annotations.</para>
+    <para>Component Property Types, which are user defined annotations, can be
+    used to describe component properties in the component description XML and
+    to access those component properties at runtime in a type safe
+    manner.</para>
 
-    <para>The Component Annotations are not inherited, they can only be used
-    on a given class, annotations on its super class hierarchy or interfaces
-    are not taken into account.</para>
+    <section xml:id="service.component-component.annotations">
+      <title>Component Annotations</title>
 
-    <para>The primary annotation is the <xref
-    linkend="org.osgi.service.component.annotations.Component"
-    xrefstyle="hyperlink"/> annotation. It indicates that a class is a
-    component. It's defaults create the easiest to use component:</para>
+      <para>The Component Annotations provide a convenient way to create the
+      component description XML during build time. Since annotations are
+      placed in the source file and can use types, fields, and methods, they
+      can significantly simplify the use of Declarative Services.</para>
 
-    <itemizedlist>
-      <listitem>
-        <para>Its name is the class name</para>
-      </listitem>
+      <para>The Component Annotations are build time annotations because one
+      of the key aspects of Declarative Services is its laziness. SCR can
+      easily read the component description XML from the bundle, pre-process
+      it, and cache the results between framework invocations. This way it is
+      unnecessary to load a class from the bundle when the bundle is started
+      and/or scan the classes for annotations. Component Annotations are not
+      recognized by SCR at runtime.</para>
 
-      <listitem>
-        <para>It registers all of the class's directly implemented interfaces
-        as services</para>
-      </listitem>
+      <para>The Component Annotations are not inherited, they can only be used
+      on a given class, annotations on its super class hierarchy or interfaces
+      are not taken into account.</para>
 
-      <listitem>
-        <para>The instance will be shared by all bundles</para>
-      </listitem>
+      <para>The primary annotation is the <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/> annotation. It indicates that a class is a
+      component. Its defaults create the easiest to use component:</para>
 
-      <listitem>
-        <para>It is enabled</para>
-      </listitem>
+      <itemizedlist>
+        <listitem>
+          <para>Its name is the class name</para>
+        </listitem>
 
-      <listitem>
-        <para>It is immediate if it has no services, otherwise it is
-        delayed</para>
-      </listitem>
+        <listitem>
+          <para>It registers all of the class's directly implemented
+          interfaces as services</para>
+        </listitem>
 
-      <listitem>
-        <para>It has an optional configuration policy</para>
-      </listitem>
+        <listitem>
+          <para>The instance will be shared by all bundles</para>
+        </listitem>
 
-      <listitem>
-        <para>The configuration PID is the class name</para>
-      </listitem>
-    </itemizedlist>
+        <listitem>
+          <para>It is enabled</para>
+        </listitem>
 
-    <para>For example, the following class registers a Speech service that can
-    run on a Macintosh:</para>
+        <listitem>
+          <para>It is immediate if it has no services, otherwise it is
+          delayed</para>
+        </listitem>
 
-    <programlisting>pubic interface Speech {
+        <listitem>
+          <para>It has an optional configuration policy</para>
+        </listitem>
+
+        <listitem>
+          <para>The configuration PID is the class name</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For example, the following class registers a Speech service that
+      can run on a Macintosh:</para>
+
+      <programlisting>pubic interface Speech {
   void say(String what) throws Exception;
 }
 
@@ -3686,10 +3741,10 @@ public class MacSpeech implements Speech {
     }
 }</programlisting>
 
-    <para>The previous example would be processed at build time into a
-    component description similar to the following XML:</para>
+      <para>The previous example would be processed at build time into a
+      component description similar to the following XML:</para>
 
-    <programlisting>&lt;scr:component name="com.example.MacSpeech"
+      <programlisting>&lt;scr:component name="com.example.MacSpeech"
   xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
   &lt;implementation class="com.example.MacSpeech"/&gt;
   &lt;service&gt;
@@ -3697,18 +3752,18 @@ public class MacSpeech implements Speech {
   &lt;/service&gt;
 &lt;/scr:component&gt;</programlisting>
 
-    <para>It is possible to add activate and deactivate methods on the
-    component with the <xref
-    linkend="org.osgi.service.component.annotations.Activate"
-    xrefstyle="hyperlink"/> and <xref
-    linkend="org.osgi.service.component.annotations.Deactivate"
-    xrefstyle="hyperlink"/> annotations. If the component wants to be updated
-    for changes in the configuration properties than it can also indicated the
-    modified method with the <xref
-    linkend="org.osgi.service.component.annotations.Modified"
-    xrefstyle="hyperlink"/> annotation. For example:</para>
+      <para>It is possible to add activate and deactivate methods on the
+      component with the <xref
+      linkend="org.osgi.service.component.annotations.Activate"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.service.component.annotations.Deactivate"
+      xrefstyle="hyperlink"/> annotations. If the component wants to be
+      updated for changes in the configuration properties than it can also
+      indicated the modified method with the <xref
+      linkend="org.osgi.service.component.annotations.Modified"
+      xrefstyle="hyperlink"/> annotation. For example:</para>
 
-    <programlisting>@Activate
+      <programlisting>@Activate
 void open(Map&lt;String,?&gt; properties) { ... }
 
 @Deactivate
@@ -3717,45 +3772,564 @@ void close() { ... }
 @Modified
 void modified(Map&lt;String,?&gt; properties) { ... }</programlisting>
 
-    <para>If a component has dependencies on other services then they can be
-    referenced with the <xref
-    linkend="org.osgi.service.component.annotations.Reference"
-    xrefstyle="hyperlink"/> annotation that is applied to a bind method. The
-    defaults for the <xref
-    linkend="org.osgi.service.component.annotations.Reference"
-    xrefstyle="hyperlink"/> annotation are:</para>
+      <para>If a component has dependencies on other services then they can be
+      referenced with the <xref
+      linkend="org.osgi.service.component.annotations.Reference"
+      xrefstyle="hyperlink"/> annotation that is applied to a bind method. The
+      defaults for the <xref
+      linkend="org.osgi.service.component.annotations.Reference"
+      xrefstyle="hyperlink"/> annotation are:</para>
 
-    <itemizedlist>
-      <listitem>
-        <para>The name of the bind method is used for the name of the
-        reference.</para>
-      </listitem>
+      <itemizedlist>
+        <listitem>
+          <para>The name of the bind method is used for the name of the
+          reference.</para>
+        </listitem>
 
-      <listitem>
-        <para>1:1 cardinality.</para>
-      </listitem>
+        <listitem>
+          <para>1:1 cardinality.</para>
+        </listitem>
 
-      <listitem>
-        <para>Static reluctant policy.</para>
-      </listitem>
+        <listitem>
+          <para>Static reluctant policy.</para>
+        </listitem>
 
-      <listitem>
-        <para>The requested service is the type of the first argument of the
-        bind method.</para>
-      </listitem>
+        <listitem>
+          <para>The requested service is the type of the first argument of the
+          bind method.</para>
+        </listitem>
 
-      <listitem>
-        <para>It will infer a default unset method and updated method based on
-        the name of the bind method.</para>
-      </listitem>
-    </itemizedlist>
+        <listitem>
+          <para>It will infer a default unset method and updated method based
+          on the name of the bind method.</para>
+        </listitem>
+      </itemizedlist>
 
-    <para>For example:</para>
+      <para>For example:</para>
 
-    <programlisting>@Reference(cardinality=MULTIPLE, policy=DYNAMIC)
+      <programlisting>@Reference(cardinality=MULTIPLE, policy=DYNAMIC)
 void setLogService( LogService log, Map&lt;String,?&gt; props) { ... }
 void unsetLogService( LogService log ) {  ... }
 void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
+    </section>
+
+    <section xml:id="service.component-component.property.types">
+      <title>Component Property Types</title>
+
+      <para>Component properties can be defined and accessed through a user
+      defined annotation type, called a <emphasis>component property
+      type</emphasis>, containing the property names, property types and
+      default values. A component property type allows properties to be
+      defined and accessed in a type safe manner. The following example shows
+      the definition of a component property type called <code>Config</code>
+      which defines three properties where the name of the property is the
+      name of the method, the type of the property is the return type of the
+      method and the default value for the property is the default value of
+      the method.</para>
+
+      <programlisting>@interface Config {
+  boolean enabled() default true;
+  String[] names() default {"a", "b"};
+  String topic() default "default/topic";
+}</programlisting>
+
+      <para>Component property types can be referenced as argument types in
+      the component's life cycle methods, activate, deactivate, and modified,
+      and used in the method implementation to access component property
+      values in a type safe manner. The following example shows the activate
+      method taking the example <code>Config</code> component property type as
+      an argument type and the method implementation accesses component
+      property values by invoking methods on the component property type
+      argument.</para>
+
+      <programlisting>@Component
+public class MyComponent {
+  void activate(Config config) {
+    if (config.enabled()) {
+      // do something
+    }
+    for (String name:config.names()) {
+      // do something with each name
+    }
+  }
+}</programlisting>
+
+      <para>If a component implementation needs to access component properties
+      which are not represented by a component property type, it can use a
+      life cycle method signature which also receives the properties map in
+      addition to component property types. For example:</para>
+
+      <programlisting>@Component
+public class MyComponent {
+  void activate(Config config, Map&lt;String, Object&gt; allProperties) {
+    if (config.enabled()) {
+      // do something
+    }
+    if (allProperties.get("other.prop") != null) {
+      // do something
+    }
+  }
+}</programlisting>
+
+      <para>Component property types must be defined as annotation types even
+      though they are not applied as annotations but are rather used as life
+      cycle method argument types. This is done for two reasons. First, the
+      limitations on annotation type definitions make them well suited for
+      component property types. The methods must have no arguments and the
+      return types supported are limited to a set which is well suited for
+      component properties. Second, annotation types support default values
+      which is useful for defining the default value of a component
+      property.</para>
+
+      <para>At build time, the component property types must be processed to
+      potentially generate <code>property</code> elements in the component
+      description. See <xref
+      linkend="service.component-ordering.generated.properties"/>.</para>
+
+      <para>At runtime, when SCR needs to call a lifecycle method on a
+      component instance which takes an argument whose type is a component
+      property type, SCR must construct an instance of the component property
+      type whose methods are backed by the values of the component properties
+      for the component instance. This object is then passed to the life cycle
+      method which can use the object to obtain the property values in a type
+      safe manner.</para>
+
+      <section xml:id="service.component-component.property.mapping">
+        <title>Component Property Mapping</title>
+
+        <para>Each method of a configuration property type is mapped to a
+        component property. The property name is derived from the method name.
+        Certain common property name characters, such as full stop (<code>'.'
+        \u002E</code>) are not not valid in Java identifiers. So the name of a
+        method must be converted to its corresponding property name as
+        follows:<itemizedlist>
+            <listitem>
+              <para>A single dollar sign (<code>'$' \u0024</code>) is removed
+              unless it is followed by another dollar sign in which case the
+              two consecutive dollar signs (<code>"$$"</code>) are converted
+              to a single dollar sign.</para>
+            </listitem>
+
+            <listitem>
+              <para>A single low line (<code>'_' \u005F</code>) is converted
+              into a full stop (<code>'.' \u002E</code>) unless is it followed
+              by another low line in which case the two consecutive low lines
+              (<code>"__"</code>) are converted to a single low line.</para>
+            </listitem>
+
+            <listitem>
+              <para>All other characters are unchanged.</para>
+            </listitem>
+          </itemizedlist></para>
+
+        <para><xref
+        linkend="service.component-component.property.name.mapping"/> contains
+        some name mapping examples.</para>
+
+        <table xml:id="service.component-component.property.name.mapping">
+          <title>Component Property Name Mapping Examples</title>
+
+          <tgroup cols="2">
+            <colspec colnum="1" colwidth="1*"/>
+
+            <colspec colnum="2" colwidth="1*"/>
+
+            <thead>
+              <row>
+                <entry>Component Property Type Method Name</entry>
+
+                <entry>Component Property Name</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry><code>myProperty143</code></entry>
+
+                <entry><code>myProperty143</code></entry>
+              </row>
+
+              <row>
+                <entry><code>$new</code></entry>
+
+                <entry><code>new</code></entry>
+              </row>
+
+              <row>
+                <entry><code>my$$prop</code></entry>
+
+                <entry><code>my$prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>dot_prop</code></entry>
+
+                <entry><code>dot.prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>_secret</code></entry>
+
+                <entry><code>.secret</code></entry>
+              </row>
+
+              <row>
+                <entry><code>another__prop</code></entry>
+
+                <entry><code>another_prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>three___prop</code></entry>
+
+                <entry><code>three_.prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>four_$__prop</code></entry>
+
+                <entry><code>four._prop</code></entry>
+              </row>
+
+              <row>
+                <entry><code>five_$_prop</code></entry>
+
+                <entry><code>five..prop</code></entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>The property type can be directly derived from the type of the
+        method. All types supported for annotation elements can be used except
+        for annotation types. Method types of an annotation type or array
+        thereof are not supported. A tool processing the component property
+        types must declare an error during processing in this case.</para>
+
+        <para>If the method type is <code>Class</code> or
+        <code>Class[]</code>, then the property type must be
+        <code>String</code> or <code>String[]</code>, respectively, whose
+        values are fully qualified class names in the form returned by the
+        <code>Class.getName()</code> method.</para>
+
+        <para>If the method type is an enumeration type or an array thereof,
+        then the property type must be <code>String</code> or
+        <code>String[]</code>, respectively, whose values are the names of the
+        enum constants in the form returned by the <code>Enum.name()</code>
+        method.</para>
+      </section>
+
+      <section xml:id="service.component-component.property.value.coercion">
+        <title>Coercing Component Property Values</title>
+
+        <para>When a component property type is used as an argument for a life
+        cycle method, SCR must create an object that implements the component
+        property type and maps the methods of the component property type to
+        component properties. The name of the method is converted to the
+        property name as described in <xref
+        linkend="service.component-component.property.mapping"/>. The property
+        value may need to be coerced to the type of the method. In <xref
+        linkend="service.component-coercion.table"/>, the columns are source
+        types, that is, the type of the component property value, and the rows
+        are target types, that is, the method types. The property value is
+        <emphasis>v</emphasis>; <emphasis>number</emphasis> is a primitive
+        numerical type and <emphasis>Number</emphasis> is a wrapper numerical
+        type. An invalid coercion is represented by <code>throw</code>. Such a
+        coercion attempt must result in throwing a Component Exception when
+        the component property type method is called. Any other coercion
+        error, such as parsing a non-numerical string to a number or the
+        inability to coerce a string into a Class or enum object, must be
+        wrapped in a Component Exception and thrown when the component
+        property type method is called.</para>
+
+        <table pgwide="1" rowheader="firstcol"
+               xml:id="service.component-coercion.table">
+          <title>Coercion From Property Value to Method Type</title>
+
+          <tgroup cols="6">
+            <colspec colname="col1" colnum="1" colwidth="1*"/>
+
+            <colspec colname="col2" colnum="2" colwidth="1*"/>
+
+            <colspec colname="col3" colnum="3" colwidth="1*"/>
+
+            <colspec colname="col4" colnum="4" colwidth="1*"/>
+
+            <colspec colname="col5" colnum="5" colwidth="1*"/>
+
+            <colspec colname="col6" colnum="6" colwidth="2*"/>
+
+            <thead>
+              <row>
+                <entry><subscript>target</subscript> \
+                <superscript>source</superscript></entry>
+
+                <entry>String</entry>
+
+                <entry>Boolean</entry>
+
+                <entry>Character</entry>
+
+                <entry><emphasis>Number</emphasis></entry>
+
+                <entry>Collection/array</entry>
+              </row>
+            </thead>
+
+            <tbody>
+              <row>
+                <entry>String</entry>
+
+                <entry><emphasis>v</emphasis></entry>
+
+                <entry><emphasis>v</emphasis>. toString()</entry>
+
+                <entry><emphasis>v</emphasis>. toString()</entry>
+
+                <entry><emphasis>v</emphasis>. toString()</entry>
+
+                <entry>If <emphasis>v</emphasis> has no elements,
+                <code>null</code>; otherwise the first element of
+                <emphasis>v</emphasis> is coerced.</entry>
+              </row>
+
+              <row>
+                <entry>boolean</entry>
+
+                <entry>Boolean. parseBoolean( <emphasis>v</emphasis> )</entry>
+
+                <entry><emphasis>v</emphasis>. booleanValue()</entry>
+
+                <entry><emphasis>v</emphasis>. charValue() != 0</entry>
+
+                <entry><emphasis>v</emphasis>.
+                <emphasis>number</emphasis>Value() != 0</entry>
+
+                <entry>If <emphasis>v</emphasis> has no elements,
+                <code>false</code>; otherwise the first element of
+                <emphasis>v</emphasis> is coerced.</entry>
+              </row>
+
+              <row>
+                <entry>char</entry>
+
+                <entry><emphasis>v</emphasis>. length() &gt; 0 ?
+                <emphasis>v</emphasis>. charAt(0) : 0</entry>
+
+                <entry><emphasis>v</emphasis>. booleanValue() ? 1 : 0</entry>
+
+                <entry><emphasis>v</emphasis>. charValue()</entry>
+
+                <entry>(char) <emphasis>v</emphasis>.
+                <emphasis>number</emphasis>Value()</entry>
+
+                <entry>If <emphasis>v</emphasis> has no elements, 0; otherwise
+                the first element of <emphasis>v</emphasis> is
+                coerced.</entry>
+              </row>
+
+              <row>
+                <entry><emphasis>number</emphasis></entry>
+
+                <entry><emphasis>Number</emphasis>.
+                parse<emphasis>Number</emphasis>( <emphasis>v</emphasis>
+                )</entry>
+
+                <entry><emphasis>v</emphasis>. booleanValue() ? 1 : 0</entry>
+
+                <entry>(<emphasis>number</emphasis>) <emphasis>v</emphasis>.
+                charValue()</entry>
+
+                <entry><emphasis>v</emphasis>.
+                <emphasis>number</emphasis>Value()</entry>
+
+                <entry>If <emphasis>v</emphasis> has no elements, 0; otherwise
+                the first element of <emphasis>v</emphasis> is
+                coerced.</entry>
+              </row>
+
+              <row>
+                <entry>Class</entry>
+
+                <entry>Bundle. loadClass( <emphasis>v</emphasis> )</entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry>If <emphasis>v</emphasis> has no elements,
+                <code>null</code>; otherwise the first element of
+                <emphasis>v</emphasis> is coerced.</entry>
+              </row>
+
+              <row>
+                <entry><emphasis>EnumType</emphasis></entry>
+
+                <entry><emphasis>EnumType</emphasis>. valueOf(
+                <emphasis>v</emphasis> )</entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry>If <emphasis>v</emphasis> has no elements,
+                <code>null</code>; otherwise the first element of
+                <emphasis>v</emphasis> is coerced.</entry>
+              </row>
+
+              <row>
+                <entry>annotation type</entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry><code>throw</code></entry>
+
+                <entry><code>throw</code></entry>
+              </row>
+
+              <row>
+                <entry>array</entry>
+
+                <entry nameend="col5" namest="col2">A single element array is
+                created and <emphasis>v</emphasis> is coerced into the single
+                element of the new array.</entry>
+
+                <entry colname="col6">An array the size of
+                <emphasis>v</emphasis> is created and each element of
+                <emphasis>v</emphasis> is coerced into the corresponding
+                element of the new array.</entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+
+        <para>Component properties whose names do not map to component
+        property type methods are ignored. If there is no corresponding
+        component property for a component property type method, the component
+        property type method must:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>Return 0 for numerical and char method types.</para>
+          </listitem>
+
+          <listitem>
+            <para>Return <code>false</code> for boolean method type.</para>
+          </listitem>
+
+          <listitem>
+            <para>Return <code>null</code> for String, Class, enum and array
+            method types.</para>
+          </listitem>
+
+          <listitem>
+            <para>Throw a ComponentException for annotation method
+            types.</para>
+          </listitem>
+        </itemizedlist>
+      </section>
+    </section>
+
+    <section xml:id="service.component-ordering.generated.properties">
+      <title>Ordering of Generated Properties</title>
+
+      <para>The <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/> annotation contains two ways to define component
+      properties via the <xref
+      linkend="org.osgi.service.component.annotations.Component.property--"
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.service.component.annotations.Component.properties--"
+      xrefstyle="hyperlink"/> elements. See <xref
+      linkend="service.component-property.properties.elements"/>. If Component
+      Annotations are used to describe the component, then any component
+      property types referenced in the signatures of the component's life
+      cycle methods must also be processed since component property types can
+      be used to define component property values as well. See <xref
+      linkend="service.component-component.property.types"/>. A tool
+      processing the Component Annotations and the component property types
+      must write the defined component properties into the generated component
+      description in the following order.</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Properties defined through component property types used in
+          the signatures of the life cycle methods.</para>
+
+          <para>If any of the referenced component property types have methods
+          with defaults, then the generated component description must include
+          a <code>property</code> element for each such method with the
+          propery name mapped from the method name, the property type mapped
+          from the method type, and the property value set to the method's
+          default value. See <xref
+          linkend="service.component-component.property.mapping"/>. The
+          generated <code>property</code> elements must be added to the
+          component description by processing the component property types in
+          the following order. First, the component property types used as
+          arguments to the activate method, followed by the component property
+          types used as arguments to the modified method and finally the
+          component property types used as arguments to the deactivate method.
+          If a method has more than one component property type argument, the
+          component property types are processed in the order of the method
+          arguments.</para>
+
+          <para>For component property type methods without a default value, a
+          <code>property</code> element must not be generated.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.component.annotations.Component.property--"
+          xrefstyle="hyperlink"/> element of the <xref
+          linkend="org.osgi.service.component.annotations.Component"
+          xrefstyle="hyperlink"/> annotation.</para>
+        </listitem>
+
+        <listitem>
+          <para><xref
+          linkend="org.osgi.service.component.annotations.Component.properties--"
+          xrefstyle="hyperlink"/> element of the <xref
+          linkend="org.osgi.service.component.annotations.Component"
+          xrefstyle="hyperlink"/> annotation.</para>
+        </listitem>
+      </orderedlist>
+
+      <para>This means that the properties defined through component property
+      types are declared first in the generated component description,
+      followed by all properties defined through the <xref
+      linkend="org.osgi.service.component.annotations.Component.property--"
+      xrefstyle="hyperlink"/> element of the <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/> annotation and finally the properties entries
+      defined through the <xref
+      linkend="org.osgi.service.component.annotations.Component.properties--"
+      xrefstyle="hyperlink"/> element of the <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/> annotation.</para>
+
+      <para>Since property values defined later in the component description
+      override property values defined earlier in the component description,
+      this means that property values defined in <xref
+      linkend="org.osgi.service.component.annotations.Component.properties--"
+      xrefstyle="hyperlink"/> element of the <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/> annotation can override property values defined
+      in <xref
+      linkend="org.osgi.service.component.annotations.Component.property--"
+      xrefstyle="hyperlink"/> element of the <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/> annotation which can override values defined by
+      default values in the component property types used in life cycle method
+      signatures.</para>
+    </section>
   </section>
 
   <section xml:id="i1578406">
@@ -4249,6 +4823,18 @@ void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
       <listitem>
         <para>Added support for targeted PIDs for Configurations. See <xref
         linkend="service.component-deployment"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>New component property types can be used for type safe component
+        property definition and access. See <xref
+        linkend="service.component-component.property.types"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Specified the ordering of property information component
+        descriptions generated from annotations. See <xref
+        linkend="service.component-ordering.generated.properties"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
