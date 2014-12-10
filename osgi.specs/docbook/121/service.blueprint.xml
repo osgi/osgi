@@ -2951,7 +2951,7 @@ registration-listener ::= target</programlisting>
 
               <entry><para>The <code>service.ranking</code> value. The schema
               default is 0, which implies no service property. See <xref
-              linkend="i2392470"/>. </para></entry>
+              linkend="i2392470"/>.</para></entry>
             </row>
 
             <row>
@@ -3071,7 +3071,7 @@ registration-listener ::= target</programlisting>
               <entry><para><code>registrationListener</code></para><para><code>:
               Target</code></para></entry>
 
-              <entry><para>A reference to a top level manager. </para></entry>
+              <entry><para>A reference to a top level manager.</para></entry>
             </row>
 
             <row>
@@ -3681,7 +3681,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
               attribute is defined by the <code>default-availability</code>
               attribute in the <code>blueprint</code> element. If the
               <code>default-availability</code> attribute is not defined, the
-              value is <code>mandatory</code>. </para></entry>
+              value is <code>mandatory</code>.</para></entry>
             </row>
 
             <row>
@@ -3693,7 +3693,7 @@ reference-list  ::= &lt;reference-listener&gt;*</programlisting>
               String</code></para></entry>
 
               <entry><para>A single name of an interface class. It is allowed
-              to not specify an interface name. </para></entry>
+              to not specify an interface name.</para></entry>
             </row>
 
             <row>
@@ -4404,7 +4404,7 @@ collection   ::= &lt;list&gt; | &lt;set&gt; | &lt;array&gt;</programlisting>
               <entry><para><code>componentId</code></para><para><code>:
               String</code></para></entry>
 
-              <entry><para>A reference to a top level manager. </para></entry>
+              <entry><para>A reference to a top level manager.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -4466,7 +4466,7 @@ public class FooImpl implements Foo { }</programlisting>
               <entry><para><code>componentId</code></para><para><code>:
               String</code></para></entry>
 
-              <entry><para>A reference to a top level manager. </para></entry>
+              <entry><para>A reference to a top level manager.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -4638,7 +4638,7 @@ public class FooImpl implements Foo { }</programlisting>
               Object[] &gt;</code></para></entry>
 
               <entry colname="col4"><para>The actual collection class to be
-              used, derived from the appropriate definition. </para></entry>
+              used, derived from the appropriate definition.</para></entry>
             </row>
 
             <row>

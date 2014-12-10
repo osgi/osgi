@@ -315,7 +315,7 @@
               <entry><para><code>false</code></para></entry>
 
               <entry><para>Specifies whether the represented application is
-              locked to prevent launching it. </para></entry>
+              locked to prevent launching it.</para></entry>
             </row>
           </tbody>
         </tgroup>
@@ -704,7 +704,7 @@ nl_NL       sv</programlisting>
 
               <entry><para>Contains the current state of the application
               instance represented by this application handle. These states
-              can be application model specific. </para></entry>
+              can be application model specific.</para></entry>
             </row>
 
             <row>

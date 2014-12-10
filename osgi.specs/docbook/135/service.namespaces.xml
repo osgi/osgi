@@ -394,7 +394,7 @@ Import-Package:
 
             <entry><code>symbolic-name</code></entry>
 
-            <entry><para>A symbolic name for the contract. </para></entry>
+            <entry><para>A symbolic name for the contract.</para></entry>
           </row>
 
           <row>
@@ -517,7 +517,7 @@ Import-Package:
             qname)*</code></para></entry>
 
             <entry><para>The fully qualified name of the object class of the
-            service. </para></entry>
+            service.</para></entry>
           </row>
 
           <row>

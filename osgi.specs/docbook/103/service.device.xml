@@ -1542,7 +1542,7 @@ class SerialWidget extends ServiceTracker
               <entry><para>For each Driver service, except those on the
               exclusion list, call its <code>Driver.match</code> method,
               passing the <code>ServiceReference</code> object to the Device
-              service. </para><para>Collect all successful matches - that is,
+              service.</para><para>Collect all successful matches - that is,
               those whose return values are greater than
               <code>Device.MATCH_NONE</code> - in a list of active matches. A
               match call that throws an exception is considered unsuccessful
@@ -1560,7 +1560,7 @@ class SerialWidget extends ServiceTracker
               its associated Driver service is selected for attaching the
               Device service. If the Driver Selector service returns
               <code>DriverSelector.SELECT_NONE</code>, no Driver service must
-              be considered for attaching the Device service. </para><para>If
+              be considered for attaching the Device service.</para><para>If
               the Driver Selector service throws an exception or returns an
               invalid result, the default selection algorithm is used.
               </para><para>Only one Driver Selector service is used, even if

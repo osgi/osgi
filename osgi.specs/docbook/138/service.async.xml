@@ -720,7 +720,7 @@ public void doStuff() {
         type. A no-args constructor in a concrete type may perform actions that
         the client may not have permission to perform. This should not prevent
         the client from mediating the object, as the client is not directly 
-        performing these actions. </para>
+        performing these actions.</para>
       </listitem>
       <listitem>
         <para>If the mediator object was created using a service reference, then

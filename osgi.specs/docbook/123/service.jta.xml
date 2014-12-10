@@ -271,7 +271,7 @@ javax.transaction.xa</programlisting>
       <title>Global and Local Transactions</title>
 
       <para>A transaction may be a <emphasis>local transaction</emphasis> or a
-      <emphasis>global transaction. </emphasis>A local transaction is a unit
+      <emphasis>global transaction</emphasis>. A local transaction is a unit
       of work that is local to a single Resource Manager and may succeed or
       fail independently of the work of other Resource Managers. A global
       transaction, sometimes referred to as a distributed transaction, is a
@@ -660,9 +660,9 @@ public void setLoginTimeout(int seconds)
 
       <listitem>
         <para><emphasis>Transaction Synchronization Registry</emphasis> -
-        <emphasis>A service that implements the JTA
-        </emphasis><code>TransactionSynchronizationRegistry</code> <emphasis>
-        interface. </emphasis></para>
+        <emphasis>A service that implements the JTA</emphasis>
+        <code>TransactionSynchronizationRegistry</code>
+        <emphasis>interface</emphasis>.</para>
       </listitem>
     </itemizedlist>
 

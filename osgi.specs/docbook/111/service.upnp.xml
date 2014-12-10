@@ -219,7 +219,7 @@
     <itemizedlist>
       <listitem>
         <para><emphasis>Detect and control a UPnP standardized
-        device.</emphasis> In this case the control point and the remote
+        device</emphasis>. In this case the control point and the remote
         device share a priori knowledge about how the device should be
         controlled. The UPnP Forum intends to define a large number of these
         standardized devices.</para>
@@ -232,7 +232,7 @@
       </listitem>
 
       <listitem>
-        <para><emphasis>Programmatic Control. </emphasis>A program can
+        <para><emphasis>Programmatic Control</emphasis>. A program can
         directly control a UPnP device without a user interface. This control
         can be based on detected information about the device or through a
         priori knowledge of the device type.</para>
@@ -240,7 +240,7 @@
 
       <listitem>
         <para><emphasis>Allows the user to browse a web page supplied by the
-        device. </emphasis>This web page contains a user interface for the
+        device</emphasis>. This web page contains a user interface for the
         device that be directly manipulated by the user. However, this option
         is not well defined in the UPnP Device Architecture specification and
         is not tested for compliance.</para>

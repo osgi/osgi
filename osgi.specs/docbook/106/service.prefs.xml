@@ -87,7 +87,7 @@
       <code>BackingStoreException</code>.</para>
 
       <para><emphasis>This service only supports the storage of scalar values
-      and byte arrays. </emphasis>It is not intended for storing large data
+      and byte arrays</emphasis>. It is not intended for storing large data
       objects like documents or images. No standard limits are placed on the
       size of data objects which can be stored, but implementations are
       expected to be optimized for the handling of small objects.</para>

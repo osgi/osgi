@@ -764,7 +764,7 @@ Attribute   ::= Value*</programlisting>
               xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>A human readable description of the Object Class
-              Definition that can be localized. </para></entry>
+              Definition that can be localized.</para></entry>
             </row>
 
             <row>
@@ -923,7 +923,7 @@ Attribute   ::= Value*</programlisting>
               xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>A localizable description for the Attribute
-              Definition. </para></entry>
+              Definition.</para></entry>
             </row>
 
             <row>
@@ -1142,7 +1142,7 @@ Password <phrase role="symbol">↔</phrase> <xref
             <row>
               <entry spanname="element"><code>Icon</code></entry>
 
-              <entry colname="col6"><para>An icon definition. </para></entry>
+              <entry colname="col6"><para>An icon definition.</para></entry>
             </row>
 
             <row>
@@ -1210,7 +1210,7 @@ Password <phrase role="symbol">↔</phrase> <xref
               <entry spanname="element"><code>Attribute</code></entry>
 
               <entry colname="col6"><para>A value for an attribute of an
-              object. </para></entry>
+              object.</para></entry>
             </row>
 
             <row>
@@ -1226,7 +1226,7 @@ Password <phrase role="symbol">↔</phrase> <xref
 
               <entry><para>A reference to the id of the <code>AD</code> in the
               <code>OCD</code> as referenced by the parent
-              <code>Object</code>. </para></entry>
+              <code>Object</code>.</para></entry>
             </row>
 
             <row>
