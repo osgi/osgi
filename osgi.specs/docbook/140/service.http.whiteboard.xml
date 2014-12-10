@@ -207,7 +207,7 @@
             <para>Registrations without any specified name are not used and
             this is reflected in the failure DTOs. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME"
-            xrefstyle="hyperlink"/>. </para></entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -215,13 +215,12 @@
 
             <entry><code>String</code></entry>
 
-            <entry>
-            <para>Additional prefix to the context path for servlets. This
-            property is mandatory. Valid characters are specified in IETF RFC
-            3986, section 3.3. If the path is invalid, the context is not used
-            and reflected in the failure DTOs. See <xref
+            <entry><para>Additional prefix to the context path for servlets.
+            This property is mandatory. Valid characters are specified in IETF
+            RFC 3986, section 3.3. If the path is invalid, the context is not
+            used and reflected in the failure DTOs. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH"
-            xrefstyle="hyperlink"/>. </para></entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -290,9 +289,9 @@
       service registration properties and the underlying servlet container.
       Implementations only need to support the APIs available on the servlet
       specification version being provided by the implementation. For example
-      a Http Whiteboard imlementation based on a Servlet 3.0 implementation does not need to
-      support the methods introduced in <code>ServletContext</code> 3.1 and
-      later.</para>
+      a Http Whiteboard imlementation based on a Servlet 3.0 implementation
+      does not need to support the methods introduced in
+      <code>ServletContext</code> 3.1 and later.</para>
 
       <para>Methods to programmatically add servlets, servlet filters and
       listeners are not supported on the <code>ServletContext</code>. Such
@@ -850,7 +849,7 @@
             <para>If no matching context exists this is reflected in the
             failure DTOs. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT"
-            xrefstyle="hyperlink"/>. </para></entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -871,7 +870,7 @@
             service. If this property is not specified, all Http Whiteboard
             implementations can handle the service. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_TARGET"
-            xrefstyle="hyperlink"/>. </para></entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -905,10 +904,9 @@
     <code>osgi.http.whiteboard.servlet.pattern</code> service registration
     property. The pattern(s) define the URL context(s) that will trigger the
     servlet to handle the request. They are defined by the <xref
-    linkend="i21217577"/> in section 12.2, Specification of Mappings. Note that 
-    these mapping rules are slightly different than those defined in
-    the <xref linkend="service.http"/>.  
-    The mapping rules are:</para>
+    linkend="i21217577"/> in section 12.2, Specification of Mappings. Note
+    that these mapping rules are slightly different than those defined in the
+    <xref linkend="service.http"/>. The mapping rules are:</para>
 
     <itemizedlist>
       <listitem>
@@ -1014,7 +1012,7 @@
             not being a three-digit number is assumed to be a fully qualified
             exception class name. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ERROR_PAGE"
-            xrefstyle="hyperlink"/>. </para></entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -1028,7 +1026,7 @@
             and defaults to the fully qualified name of the service object
             class. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_NAME"
-            xrefstyle="hyperlink"/>. </para></entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -1038,7 +1036,7 @@
 
             <entry><para>Registration pattern(s) for the servlet. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN"
-            xrefstyle="hyperlink"/>. </para></entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -1050,7 +1048,7 @@
             init parameters to the <code>javax.servlet.Servlet.init()</code>
             method and the <code>ServletContext</code>. The
             <code>servlet.init.</code> prefix is removed from the parameter
-            name. </para></entry>
+            name.</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -1147,13 +1145,13 @@ public class MyServlet extends HttpServlet {
       <code>4xx</code> means every error code in the 400-499 range. The
       special value <code>5xx</code> means every error code in the 500-599
       range.</para>
-      
-      <para>The <code>osgi.http.whiteboard.servlet.errorPage</code> and 
-      <code>osgi.http.whiteboard.servlet.pattern</code> properties are 
-      mutually exclusive. If a single servlet registration has both these 
-      registration properties this is considered invalid
-      and this servlet will not be handled by the Http Whiteboard
-      implementation. The servlet will be reported via the Failure DTOs.</para>
+
+      <para>The <code>osgi.http.whiteboard.servlet.errorPage</code> and
+      <code>osgi.http.whiteboard.servlet.pattern</code> properties are
+      mutually exclusive. If a single servlet registration has both these
+      registration properties this is considered invalid and this servlet will
+      not be handled by the Http Whiteboard implementation. The servlet will
+      be reported via the Failure DTOs.</para>
 
       <para>Matching exceptions follows the exception hierarchy. First the
       most specific exception class - the actual class of the exception - is
@@ -1200,8 +1198,8 @@ public class MyErrorServlet extends HttpServlet {
       <title>Annotations</title>
 
       <para>Annotations defined in the Servlet API Specifications are ignored
-      by an implementation of the Http Whiteboard Specification. The OSGi service
-      paradigm is used instead by this specification.</para>
+      by an implementation of the Http Whiteboard Specification. The OSGi
+      service paradigm is used instead by this specification.</para>
 
       <para>Implementations of this specification <emphasis>may</emphasis>
       support these annotations through a proprietary opt-in mechanism.</para>
@@ -1255,7 +1253,7 @@ public class MyErrorServlet extends HttpServlet {
             <entry><para>Declares whether the servlet filter supports
             asynchronous operation mode. Defaults to false. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED"
-            xrefstyle="hyperlink"/>. </para></entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -1269,7 +1267,7 @@ public class MyErrorServlet extends HttpServlet {
             <code>INCLUDE</code>, and <code>FORWARD</code>. The default for a
             filter is <code>REQUEST</code>. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_DISPATCHER"
-            xrefstyle="hyperlink"/>. </para></entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -1282,7 +1280,7 @@ public class MyErrorServlet extends HttpServlet {
             and defaults to the fully qualified name of the service object's
             class. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_NAME"
-            xrefstyle="hyperlink"/>. </para></entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -1294,7 +1292,7 @@ public class MyErrorServlet extends HttpServlet {
             patterns. The format of the patterns is specified in the servlet
             specification. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_PATTERN"
-            xrefstyle="hyperlink"/>. </para></entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -1307,7 +1305,7 @@ public class MyErrorServlet extends HttpServlet {
             syntax defined in the <code>java.util.regex.Pattern</code> class.
             See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_REGEX"
-            xrefstyle="hyperlink"/>. </para></entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -1318,7 +1316,7 @@ public class MyErrorServlet extends HttpServlet {
             <entry><para>Apply this servlet filter to the referenced
             servlet(s) by name. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_SERVLET"
-            xrefstyle="hyperlink"/>. </para></entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -1329,7 +1327,7 @@ public class MyErrorServlet extends HttpServlet {
             <entry><para>Properties starting with this prefix are passed as
             init parameters to the <code>Filter.init()</code>method. The
             <code>filter.init.</code> prefix is removed from the parameter
-            name. </para></entry>
+            name.</para></entry>
           </row>
         </tbody>
       </tgroup>
@@ -1432,7 +1430,7 @@ public class MyErrorServlet extends HttpServlet {
             servlet implementation.</para> <para>This property marks a service
             as a resouce service. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PREFIX"
-            xrefstyle="hyperlink"/>. </para></entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
 
           <row>
@@ -1443,15 +1441,16 @@ public class MyErrorServlet extends HttpServlet {
             <entry><para>The servlet pattern(s) to be used to serve resources.
             See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PATTERN"
-            xrefstyle="hyperlink"/>. </para></entry>
+            xrefstyle="hyperlink"/>.</para></entry>
           </row>
         </tbody>
       </tgroup>
     </table>
 
     <para>The example below uses Declarative Services annotations to register
-    a resources service. Note that this service is purely used to convey information
-    to the Http Whiteboard implementation and is never invoked.</para>
+    a resources service. Note that this service is purely used to convey
+    information to the Http Whiteboard implementation and is never
+    invoked.</para>
 
     <programlisting>@Component(service = MyResourceService.class,
     property={
@@ -1515,20 +1514,26 @@ public class MyResourceService {}</programlisting>
     their registration properties. Each listener can be associated with a
     <code>ServletContextHelper</code> as described in <xref
     linkend="service.http.common.properties"/>. Listeners not specifically
-    associated with a Servlet Context Helper will receive events relating
-    to the <emphasis>default</emphasis> instance.</para>
+    associated with a Servlet Context Helper will receive events relating to
+    the <emphasis>default</emphasis> instance.</para>
 
-    <section><title>Servlet 3.1</title> The listener in this section was
-    introduced in the Servlet 3.1 specification and should be supported by
-    implementations that support Servlet 3.1 or later. <itemizedlist>
+    <section>
+      <title>Servlet 3.1</title>
+
+      <para>The listener in this section was introduced in the Servlet 3.1
+      specification and should be supported by implementations that support
+      Servlet 3.1 or later.</para>
+
+      <itemizedlist>
         <listitem>
           <para><code>HttpSessionIdListener</code> - Receive notifications
           when Http Session ID changes.</para>
         </listitem>
-      </itemizedlist></section>
+      </itemizedlist>
 
-    <para>For more details on the behavior of the listeners see the <xref
-    linkend="i21217577"/>.</para>
+      <para>For more details on the behavior of the listeners see the <xref
+      linkend="i21217577"/>.</para>
+    </section>
   </section>
 
   <section>
@@ -1722,9 +1727,10 @@ public class MyResourceService {}</programlisting>
   <section>
     <title>Configuration Properties</title>
 
-    <para>If the Http Whiteboard implementation does not have its port values configured through
-    some other means, the implementation should use the following
-    Framework properties to determine the port values to listen on.</para>
+    <para>If the Http Whiteboard implementation does not have its port values
+    configured through some other means, the implementation should use the
+    following Framework properties to determine the port values to listen
+    on.</para>
 
     <itemizedlist>
       <listitem>
@@ -1740,7 +1746,7 @@ public class MyResourceService {}</programlisting>
       </listitem>
     </itemizedlist>
   </section>
-  
+
   <section>
     <title>Capability Namespaces</title>
 
@@ -1782,28 +1788,37 @@ public class MyResourceService {}</programlisting>
 
   <section>
     <title>Security</title>
-    
+
     <section>
       <title>Service Permissions</title>
-      <para>Bundles that need to register a servlet, listener, resource filter, or http context must be 
-      granted <code>ServicePermission[Interface Name, REGISTER]</code> where interface name is the 
-      whiteboard interface the service is registered for.</para>
-      
-      <para>Bundles that need to iterate the servlets, listeners, resources, filters, or servlet context 
-      helpers registered with the system must be granted <code>ServicePermission[interface name, GET]</code> to retrieve 
+
+      <para>Bundles that need to register a servlet, listener, resource
+      filter, or http context must be granted
+      <code>ServicePermission[Interface Name, REGISTER]</code> where interface
+      name is the whiteboard interface the service is registered for.</para>
+
+      <para>Bundles that need to iterate the servlets, listeners, resources,
+      filters, or servlet context helpers registered with the system must be
+      granted <code>ServicePermission[interface name, GET]</code> to retrieve
       the services from the service registry.</para>
-      
-      <para>In addition if a whiteboard service wants to be associated with a shared servlet context helper 
-      registered by another bundle, the bundle registering the whiteboard service must be granted 
-      <code>ServicePermission[org.osgi.service.http.context.ServletContextHelper, GET]</code>.</para>
+
+      <para>In addition if a whiteboard service wants to be associated with a
+      shared servlet context helper registered by another bundle, the bundle
+      registering the whiteboard service must be granted
+      <code>ServicePermission[org.osgi.service.http.context.ServletContextHelper,
+      GET]</code>.</para>
     </section>
 
     <section>
       <title>Introspection</title>
-      <para>Bundles that need to introspect the state of the Http Whiteboard Service runtime will need 
-      <code>PackagePermission[org.osgi.service.http.runtime, IMPORT]</code> and 
-      <code>ServicePermission[org.osgi.service.http.runtime.HttpServiceRuntime, GET]</code> to obtain the 
-      HttpServiceRuntime service and access the DTO types.</para>
+
+      <para>Bundles that need to introspect the state of the Http Whiteboard
+      Service runtime will need
+      <code>PackagePermission[org.osgi.service.http.runtime, IMPORT]</code>
+      and
+      <code>ServicePermission[org.osgi.service.http.runtime.HttpServiceRuntime,
+      GET]</code> to obtain the HttpServiceRuntime service and access the DTO
+      types.</para>
     </section>
   </section>
 
@@ -1824,19 +1839,12 @@ public class MyResourceService {}</programlisting>
       1996</bibliomixed>
 
       <bibliomixed xml:id="i21215926"><title>HTTP 1.1 Specifications RFCs
-      7230-7235</title> <itemizedlist>
-          <listitem>https://tools.ietf.org/html/rfc7230</listitem>
-
-          <listitem>https://tools.ietf.org/html/rfc7231</listitem>
-
-          <listitem>https://tools.ietf.org/html/rfc7232</listitem>
-
-          <listitem>https://tools.ietf.org/html/rfc7233</listitem>
-
-          <listitem>https://tools.ietf.org/html/rfc7234</listitem>
-
-          <listitem>https://tools.ietf.org/html/rfc7235</listitem>
-        </itemizedlist></bibliomixed>
+      7230-7235</title>https://tools.ietf.org/html/rfc7230,
+      https://tools.ietf.org/html/rfc7231,
+      https://tools.ietf.org/html/rfc7232,
+      https://tools.ietf.org/html/rfc7233,
+      https://tools.ietf.org/html/rfc7234,
+      https://tools.ietf.org/html/rfc7235</bibliomixed>
 
       <bibliomixed xml:id="i21217577"><title>Java Servlet 3.0
       Specification</title>
