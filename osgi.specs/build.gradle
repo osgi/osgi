@@ -95,6 +95,7 @@ tasks.addRule('Pattern: <name>.xml: Generate the docbook xml file for the book <
       ext.book = taskName - '.xml'
       description "Generate the docbook xml file for the book ${book}."
       group 'documentation'
+      dependsOn compileJava
       ext.destinationDir = new File(buildDir, 'book')
       ext.stylesheet = file('docbook/xsl/identity.xsl')
       ext.bookxml = new File(destinationDir, taskName)
@@ -119,6 +120,12 @@ tasks.addRule('Pattern: <name>.xml: Generate the docbook xml file for the book <
           }
           factory('name': 'com.icl.saxon.TransformerFactoryImpl')
         }
+        javaexec {
+          classpath configurations.runtime
+          main = 'org.osgi.tools.xmlvalidation.XmlValidator'
+          args rootProject.file('licensed/docbook-xsd/docbook.xsd')
+          args bookxml
+        }.assertNormalExitValue()
       }
     }
   }
