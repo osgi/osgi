@@ -21,7 +21,7 @@ package org.osgi.service.resourcemonitoring;
  * A <code>ResourceContextListener</code> is notified whenever:
  * <ul>
  * <li>a {@link ResourceContext} is created or deleted.</li>
- * <li>a bundle is added or removed from a {@link ResourceContext}.
+ * <li>a bundle is added or removed from a {@link ResourceContext}.</li>
  * </ul>
  * </p>
  * <p>

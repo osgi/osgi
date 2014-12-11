@@ -31,11 +31,11 @@ import org.osgi.framework.ServiceListener;
  * resource usage exceeds the threshold.
  * </p>
  * <p>
- * Both lower or upper threshold are two levels : a warning level and error
+ * Both lower or upper threshold are two levels: a warning level and error
  * level. The warning level indicates the resource usage becomes to be critical
  * but are still acceptable. The error level indicates the resource usage is now
  * critical for the overall system and actions should be taken.
- * <p>
+ * </p>
  * <p>
  * A Resource Listener is registered with these two mandatory properties:
  * <ul>

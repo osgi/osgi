@@ -113,7 +113,7 @@ public interface ResourceMonitoringService {
 	public ResourceContext createContext(String name, ResourceContext template);
 
 	/**
-	 * Returns the context with the specified name
+	 * Returns the context with the specified resource context name.
 	 * 
 	 * @param name The resource context name
 	 * @return An existing {@link ResourceContext} with the specified name, or
@@ -122,7 +122,7 @@ public interface ResourceMonitoringService {
 	public ResourceContext getContext(String name);
 
 	/**
-	 * Returns the {@link ResourceContext} associated to the provided bundle
+	 * Returns the {@link ResourceContext} associated to the provided bundle id.
 	 * 
 	 * @param bundleId bundle identifier
 	 * @return the {@link ResourceContext} associated to bundle b or null if the
