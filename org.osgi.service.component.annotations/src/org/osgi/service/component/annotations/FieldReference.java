@@ -42,7 +42,7 @@ import java.lang.annotation.Target;
  * @author $Id$
  */
 @Retention(RetentionPolicy.CLASS)
-@Target(ElementType.METHOD)
+@Target(ElementType.FIELD)
 public @interface FieldReference {
 	/**
 	 * The name of the field reference.
@@ -59,35 +59,44 @@ public @interface FieldReference {
 	 * The type of the service to bind to the field reference.
 	 * 
 	 * <p>
-	 * If not specified, the type of the service to bind is based upon the type
-	 * of the field being annotated.
+	 * If not specified, the type of the service is based upon the type of the
+	 * field being annotated and the cardinality of the reference. If the
+	 * cardinality is either {@link ReferenceCardinality#MULTIPLE 0..n}, or
+	 * {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, the type of the field
+	 * must be one of {@code java.util.Collection}, {@code java.util.List}, or a
+	 * subtype of {@code java.util.Collection} so the type of the service is the
+	 * generic type of the collection type of the field. Otherwise, the type of
+	 * the service is the type of the field..
 	 * 
 	 * @see "The interface attribute of the field-reference element of a Component Description."
 	 */
 	Class<?> service() default Object.class;
 
 	/**
-	 * The strategy the field value for the field reference.
+	 * The change option for the field reference.
 	 * 
 	 * <p>
-	 * If not specified, the strategy is detected based on the modifiers of the
-	 * field being annotated. If the field is declared as final, the
-	 * {@link FieldReferenceStrategy#UPDATE} is used, otherwise
-	 * {@link FieldReferenceStrategy#REPLACE} is used.
+	 * If not specified, {@link FieldReferenceChangeOption#UPDATE} is used if
+	 * the policy is {@link ReferencePolicy#DYNAMIC}, the cardinality is
+	 * {@link ReferenceCardinality#MULTIPLE 0..n} or
+	 * {@link ReferenceCardinality#AT_LEAST_ONE 1..n}, and the field is declared
+	 * {@code final}. Otherwise, {@link FieldReferenceChangeOption#REPLACE} is
+	 * used.
 	 * 
-	 * @see "The strategy attribute of the field-reference element of a Component Description."
+	 * @see "The change-option attribute of the field-reference element of a Component Description."
 	 */
-	FieldReferenceStrategy strategy() default FieldReferenceStrategy.REPLACE;
+	FieldReferenceChangeOption changeOption() default FieldReferenceChangeOption.REPLACE;
 
 	/**
 	 * The cardinality of the field reference.
 	 * 
 	 * <p>
-	 * If not specified, the cardinality is detected based on the type of the
-	 * field being annotated. If the type is either {@code java.util.Collection}
-	 * , or {@code java.util.List} the reference has a
-	 * {@link ReferenceCardinality#OPTIONAL 0..1} cardinality. Otherwise the
-	 * reference has a {@link ReferenceCardinality#MANDATORY 1..1} cardinality.
+	 * If not specified, the cardinality is based on the type of the field being
+	 * annotated. If the type is either {@code java.util.Collection},
+	 * {@code java.util.List}, or a subtype of {@code java.util.Collection}, the
+	 * reference has a {@link ReferenceCardinality#MULTIPLE 0..n} cardinality.
+	 * Otherwise the reference has a {@link ReferenceCardinality#MANDATORY 1..1}
+	 * cardinality.
 	 * 
 	 * @see "The cardinality attribute of the field-reference element of a Component Description."
 	 */
@@ -97,8 +106,8 @@ public @interface FieldReference {
 	 * The policy for the field reference.
 	 * 
 	 * <p>
-	 * If not specified, the policy is detected based on the modifiers of the
-	 * field being annotated. If the field is volatile, the
+	 * If not specified, the policy is based on the modifiers of the field being
+	 * annotated. If the field is declared {@code volatile}, the
 	 * {@link ReferencePolicy#DYNAMIC} reference policy is used, otherwise the
 	 * {@link ReferencePolicy#STATIC STATIC} reference policy is used.
 	 * 

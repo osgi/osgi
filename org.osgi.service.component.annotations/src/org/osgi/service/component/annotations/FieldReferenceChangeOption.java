@@ -17,32 +17,33 @@
 package org.osgi.service.component.annotations;
 
 /**
- * Strategy for the {@link FieldReference} annotation.
- * 
- * <p>
- * Specifies if the field reference is handled with the replace or the
- * update strategy.
+ * Change options for the {@link FieldReference} annotation.
  * 
  * @since 1.3
  * @author $Id$
  */
-public enum FieldReferenceStrategy {
+public enum FieldReferenceChangeOption {
 	
 	/**
-	 * The update strategy is used to update to field when changes
-	 * to the referenced service occur.
+	 * The update change option is used to update the collection referenced by
+	 * the field when there are changes to the bounds services.
+	 * 
+	 * <p>
+	 * This change option can only be used when the field reference is has
+	 * dynamic policy, multiple cardinality and the component implementation
+	 * sets the field value to a collection object in its constructor.
 	 */
 	UPDATE("update"),
 	
 	/**
-	 * The replace strategy is used to update to field when changes
-	 * to the referenced service occur.
+	 * The replace change option is used to replace the field value with a new
+	 * value when there are changes to the bounds services.
 	 */
 	REPLACE("replace");
 
 	private final String	value;
 
-	FieldReferenceStrategy(String value) {
+	FieldReferenceChangeOption(String value) {
 		this.value = value;
 	}
 
