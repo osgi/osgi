@@ -224,7 +224,7 @@
             use="optional" />
         <attribute name="scope" type="scr:Treference_scope" default="bundle"
             use="optional" />
-        <attribute name="valuetype" type="scr:Tfield-reference_valuetype" use="optional" />
+        <attribute name="value-type" type="scr:Tfield-reference_value-type" use="optional" />
         <anyAttribute processContents="lax" />
     </complexType>
     <simpleType name="Tproperty_type">
@@ -287,7 +287,7 @@
             <enumeration value="replace" />
         </restriction>
     </simpleType>
-    <simpleType name="Tfield-reference_valuetype">
+    <simpleType name="Tfield-reference_value-type">
         <restriction base="string">
             <enumeration value="service" />
             <enumeration value="properties" />
