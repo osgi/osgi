@@ -520,7 +520,7 @@
       <para>The component class looks like:</para>
 
       <programlisting>public class USBConnectionImpl implementsUSBConnection {
-    private void activate(Map properties) {
+    private void activate(Map&lt;String, ?&gt; properties) {
      ...
     }
 }</programlisting>
@@ -543,7 +543,7 @@
       <para>The associated component class looks like:</para>
 
       <programlisting>public class USBConnectionImpl implementsUSBConnection {
-    private void activate(Map properties) {...}
+    private void activate(Map&lt;String, ?&gt; properties) {...}
     public void connect() { ... }
     ...
     public void close() { ... }
@@ -686,7 +686,11 @@
 
         <listitem>
           <para><code>Map</code> - An unmodifiable Map containing the service
-          properties of the bound service.</para>
+          properties of the bound service. This Map must additionally
+          implement <code>Comparable</code> with the <code>compareTo</code>
+          method comparing service property maps using the same ordering as
+          <code>ServiceReference.compareTo</code> based upon service ranking
+          and service id.</para>
         </listitem>
       </itemizedlist>
 
@@ -3861,7 +3865,7 @@ public class MyComponent {
 
       <programlisting>@Component
 public class MyComponent {
-  void activate(Config config, Map&lt;String, Object&gt; allProperties) {
+  void activate(Config config, Map&lt;String, ?&gt; allProperties) {
     if (config.enabled()) {
       // do something
     }
@@ -4835,6 +4839,11 @@ public class MyComponent {
         <para>Specified the ordering of property information component
         descriptions generated from annotations. See <xref
         linkend="service.component-ordering.generated.properties"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Maps of service properties must also implement Comparable. See
+        <xref linkend="service.component-event.methods"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
