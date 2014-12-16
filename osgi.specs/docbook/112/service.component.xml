@@ -575,9 +575,9 @@
     <para>A component configuration becomes <emphasis>satisfied</emphasis>
     when each specified reference is satisfied. A reference is
     <emphasis>satisfied</emphasis> if it specifies optional cardinality or
-    when the target services contains at least one member. An activated
-    component configuration that becomes <emphasis>unsatisfied</emphasis> must
-    be deactivated.</para>
+    when the number of target services is equal to or more than the minimum
+    cardinality of the reference. An activated component configuration that
+    becomes <emphasis>unsatisfied</emphasis> must be deactivated.</para>
 
     <para>During the activation of a component configuration, SCR must bind
     some or all of the target services of a reference to the component
