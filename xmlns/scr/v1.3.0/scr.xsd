@@ -220,7 +220,7 @@
             default="reluctant" use="optional" />
         <attribute name="target" type="string" use="optional" />
         <attribute name="field" type="token" use="required" />
-        <attribute name="strategy" type="scr:Tfield-reference_strategy" default="replace"
+        <attribute name="change-option" type="scr:Tchange-option" default="replace"
             use="optional" />
         <attribute name="scope" type="scr:Treference_scope" default="bundle"
             use="optional" />
@@ -281,7 +281,7 @@
             <enumeration value="prototype_required" />
         </restriction>
     </simpleType>
-    <simpleType name="Tfield-reference_strategy">
+    <simpleType name="Tchange-option">
         <restriction base="string">
             <enumeration value="update" />
             <enumeration value="replace" />
