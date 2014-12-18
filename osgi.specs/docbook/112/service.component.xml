@@ -640,7 +640,7 @@
           service properties of a bound services are modified and the
           resulting properties do not cause the service to become unbound
           because it is no longer selected by the <code>target</code>
-          filter.</para>
+          property.</para>
         </listitem>
 
         <listitem>
@@ -1026,7 +1026,7 @@ public class HttpResourceImpl {
       ensures that each component instance will be exposed to a single,
       distinct instance of the service object. Using prototype required
       reference scope effectively adds <code>service.scope=prototype</code> to
-      the target filter for the reference. A service that does not use
+      the target property for the reference. A service that does not use
       prototype service scope cannot be used as a bound service for a
       reference with prototype required reference scope since the service
       cannot provide distinct service objects for each component
@@ -2092,7 +2092,7 @@ public class Foo implements EventHandler { ... }</programlisting>
       component has on a<emphasis> </emphasis>set of target services. A
       component configuration is not satisfied, unless all its references are
       satisfied. A reference specifies target services by specifying their
-      interface and an optional target filter.</para>
+      interface and an optional target property.</para>
 
       <para>A <code>reference</code> element has the attributes defined in the
       following table.</para>

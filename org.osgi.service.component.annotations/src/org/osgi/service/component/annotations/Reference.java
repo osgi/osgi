@@ -90,7 +90,7 @@ public @interface Reference {
 	ReferencePolicy policy() default ReferencePolicy.STATIC;
 
 	/**
-	 * The target filter for the reference.
+	 * The target property for the reference.
 	 * 
 	 * @see "The target attribute of the reference element of a Component Description."
 	 */

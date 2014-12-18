@@ -116,7 +116,7 @@ public @interface FieldReference {
 	ReferencePolicy policy() default ReferencePolicy.STATIC;
 
 	/**
-	 * The target filter for the field reference.
+	 * The target property for the field reference.
 	 * 
 	 * @see "The target attribute of the field-reference element of a Component Description."
 	 */
