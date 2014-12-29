@@ -2321,7 +2321,7 @@ public class FooImpl implements Foo {
       bind methods to annotate with the <xref
       linkend="org.osgi.service.component.annotations.Reference"
       xrefstyle="hyperlink"/> annotation. Instead <xref
-      linkend="org.osgi.service.component.annotations.LookupReference"
+      linkend="org.osgi.service.component.annotations.Reference"
       xrefstyle="hyperlink"/> annotations can be specified in the <xref
       linkend="org.osgi.service.component.annotations.Component.reference--"
       xrefstyle="hyperlink"/> element of the <xref
@@ -2329,14 +2329,14 @@ public class FooImpl implements Foo {
       xrefstyle="hyperlink"/> annotation. In the generated component
       description, the reference elements must be ordered in ascending
       lexicographical order, using <code>String.compareTo</code>, of the <xref
-      linkend="org.osgi.service.component.annotations.LookupReference.name--"
+      linkend="org.osgi.service.component.annotations.Reference.name--"
       xrefstyle="hyperlink"/>s of the references. The following code
       demonstrates the use of the <xref
-      linkend="org.osgi.service.component.annotations.LookupReference"
+      linkend="org.osgi.service.component.annotations.Reference"
       xrefstyle="hyperlink"/> annotation.</para>
 
       <programlisting>@Component( reference = 
-  @LookupReference( name = "log", service = LogService.class )
+  @Reference( name = "log", service = LogService.class )
 )
 public class FooImpl implements Foo {
   @Activate
@@ -4795,8 +4795,7 @@ public class MyComponent {
       </listitem>
 
       <listitem>
-        <para>New LookupReference annotation and new reference element for
-        Component annotation. See <xref
+        <para>New reference element for Component annotation. See <xref
         linkend="service.component-reference.element"/>.</para>
       </listitem>
 

@@ -17,33 +17,33 @@
 package org.osgi.service.component.annotations;
 
 /**
- * Change options for the {@link FieldReference} annotation.
+ * Field options for the {@link Reference} annotation.
  * 
  * @since 1.3
  * @author $Id$
  */
-public enum FieldReferenceChangeOption {
+public enum FieldOption {
 	
 	/**
-	 * The update change option is used to update the collection referenced by
-	 * the field when there are changes to the bounds services.
+	 * The update field option is used to update the collection referenced by
+	 * the field when there are changes to the bound services.
 	 * 
 	 * <p>
-	 * This change option can only be used when the field reference is has
-	 * dynamic policy, multiple cardinality and the component implementation
-	 * sets the field value to a collection object in its constructor.
+	 * This field option can only be used when the field reference has dynamic
+	 * policy, multiple cardinality and the component implementation sets the
+	 * field value to a collection object in its constructor.
 	 */
 	UPDATE("update"),
 	
 	/**
-	 * The replace change option is used to replace the field value with a new
-	 * value when there are changes to the bounds services.
+	 * The replace field option is used to replace the field value with a new
+	 * value when there are changes to the bound services.
 	 */
 	REPLACE("replace");
 
 	private final String	value;
 
-	FieldReferenceChangeOption(String value) {
+	FieldOption(String value) {
 		this.value = value;
 	}
 

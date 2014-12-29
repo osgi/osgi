@@ -59,10 +59,8 @@
             </choice>
             <element name="service" type="scr:Tservice" minOccurs="0"
                 maxOccurs="1" />
-            <choice minOccurs="0" maxOccurs="unbounded">
-                <element name="reference" type="scr:Treference" />
-                <element name="field-reference" type="scr:Tfield-reference" />
-            </choice>
+            <element name="reference" type="scr:Treference" minOccurs="0"
+                maxOccurs="unbounded" />
             <element name="implementation" type="scr:Timplementation" />
             <any namespace="##any" processContents="lax" minOccurs="0"
                 maxOccurs="unbounded" />
@@ -190,40 +188,9 @@
         <attribute name="updated" type="token" use="optional" />
         <attribute name="scope" type="scr:Treference_scope" default="bundle"
             use="optional" />
-        <anyAttribute processContents="lax" />
-    </complexType>
-    <complexType name="Tfield-reference">
-        <sequence>
-            <any namespace="##any" processContents="lax" minOccurs="0"
-                maxOccurs="unbounded" />
-        </sequence>
-        <attribute name="name" type="token" use="optional">
-            <annotation>
-                <documentation xml:lang="en">
-                    The default value of this attribute is the value of
-                    the interface attribute of this element. If multiple 
-                    instances of this element within a component element 
-                    use the same value for the interface attribute, then 
-                    using the default value for this attribute will result 
-                    in duplicate names. In this case, this attribute 
-                    must be specified with a unique value.
-                </documentation>
-            </annotation>
-        </attribute>
-        <attribute name="interface" type="token" use="required" />
-        <attribute name="cardinality" type="scr:Tcardinality"
-            default="1..1" use="optional" />
-        <attribute name="policy" type="scr:Tpolicy" default="static"
-            use="optional" />
-        <attribute name="policy-option" type="scr:Tpolicy-option" 
-            default="reluctant" use="optional" />
-        <attribute name="target" type="string" use="optional" />
-        <attribute name="field" type="token" use="required" />
-        <attribute name="change-option" type="scr:Tchange-option" default="replace"
-            use="optional" />
-        <attribute name="scope" type="scr:Treference_scope" default="bundle"
-            use="optional" />
-        <attribute name="value-type" type="scr:Tfield-reference_value-type" use="optional" />
+        <attribute name="field" type="token" use="optional" />
+        <attribute name="field-option" type="scr:Tfield-option" use="optional" />
+        <attribute name="field-collection-type" type="scr:Tfield-collection-type" use="optional" />
         <anyAttribute processContents="lax" />
     </complexType>
     <simpleType name="Tproperty_type">
@@ -280,13 +247,13 @@
             <enumeration value="prototype_required" />
         </restriction>
     </simpleType>
-    <simpleType name="Tchange-option">
+    <simpleType name="Tfield-option">
         <restriction base="string">
             <enumeration value="update" />
             <enumeration value="replace" />
         </restriction>
     </simpleType>
-    <simpleType name="Tfield-reference_value-type">
+    <simpleType name="Tfield-collection-type">
         <restriction base="string">
             <enumeration value="service" />
             <enumeration value="properties" />

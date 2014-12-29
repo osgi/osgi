@@ -253,17 +253,18 @@ public @interface Component {
 	 * The lookup strategy references of this Component.
 	 * 
 	 * <p>
-	 * To access references using the lookup strategy, {@link LookupReference}
+	 * To access references using the lookup strategy, {@link Reference}
 	 * annotations are specified naming the reference and declaring the type of
 	 * the referenced service. The referenced service can be accessed using one
 	 * of the {@code locateService} methods of {@code ComponentContext}.
 	 * 
 	 * <p>
 	 * To access references using the event strategy, bind methods are annotated
-	 * with {@link Reference}.
+	 * with {@link Reference}. To access references using the field strategy,
+	 * fields are annotated with {@link Reference}.
 	 * 
 	 * @see "The reference element of a Component Description."
 	 * @since 1.3
 	 */
-	LookupReference[] reference() default {};
+	Reference[] reference() default {};
 }
