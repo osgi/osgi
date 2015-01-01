@@ -3,7 +3,7 @@
     /*
     * $Id$
     * 
-    * Copyright (c) OSGi Alliance (2005, 2014). All Rights Reserved.
+    * Copyright (c) OSGi Alliance (2005, 2015). All Rights Reserved.
     * 
     * Licensed under the Apache License, Version 2.0 (the "License");
     * you may not use this file except in compliance with the License.
@@ -189,8 +189,10 @@
         <attribute name="scope" type="scr:Treference_scope" default="bundle"
             use="optional" />
         <attribute name="field" type="token" use="optional" />
-        <attribute name="field-option" type="scr:Tfield-option" use="optional" />
-        <attribute name="field-collection-type" type="scr:Tfield-collection-type" use="optional" />
+        <attribute name="field-option" type="scr:Tfield-option" default="replace"
+            use="optional" />
+        <attribute name="field-collection-type" type="scr:Tfield-collection-type"
+            default="service" use="optional" />
         <anyAttribute processContents="lax" />
     </complexType>
     <simpleType name="Tproperty_type">
@@ -249,8 +251,8 @@
     </simpleType>
     <simpleType name="Tfield-option">
         <restriction base="string">
-            <enumeration value="update" />
             <enumeration value="replace" />
+            <enumeration value="update" />
         </restriction>
     </simpleType>
     <simpleType name="Tfield-collection-type">
