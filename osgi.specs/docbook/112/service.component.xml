@@ -590,8 +590,8 @@
 
       <para>A component instance must be able to use the services that are
       referenced by the component configuration, that is, the bound services
-      of the references. There are two strategies for a component instance to
-      acquire these bound services:</para>
+      of the references. There are three strategies for a component instance
+      to acquire these bound services:</para>
 
       <itemizedlist>
         <listitem>
@@ -605,26 +605,52 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Lookup strategy</emphasis> - A component instance
+          <para><emphasis>Field strategy</emphasis> - SCR modifies a field in
+          the component instance when a service becomes bound, when a service
+          becomes unbound, or when its properties are updated.</para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>Lookup strategy</emphasis> - The component instance
           can use one of the <code>locateService</code> methods of <xref
           linkend="org.osgi.service.component.ComponentContext"
           xrefstyle="hyperlink"/> to locate a bound service. These methods
           take the <code>name</code> of the reference as a parameter. If the
-          reference has a dynamic policy, it is important to not store the
-          returned service object(s) but look it up every time it is
+          reference has a dynamic policy, it is important to not store
+          returned service objects but look them up every time they are
           needed.</para>
         </listitem>
       </itemizedlist>
 
-      <para>A component may use either or both strategies to access bound
-      services.</para>
+      <para>A component may use multiple strategies to access the bound
+      services of a reference.</para>
+
+      <para>When the service object for a bound service is first provided to a
+      component instance, that is the service object is directly passed to an
+      event method, set in a field, or returned by a locate service method,
+      SCR must get the service object from the OSGi Framework's service
+      registry using the <code>getService</code> method on the component's
+      Bundle Context. If the service object for a bound service has been
+      obtained and the service becomes unbound, SCR must unget the service
+      object using the <code>ungetService</code> method on the component's
+      Bundle Context and discard all references to the service object.</para>
+
+      <para>If a component instance is passed a Component Service Objects
+      object, then SCR must use a Service Objects object obtained from the
+      OSGi Framework's service registry using the component's Bundle Context
+      to get and unget any service objects for the Component Service Objects.
+      If the bound service has prototype service scope, then SCR must track
+      the service objects returned by the Component Service Objects object so
+      that, when the service becomes unbound, SCR must release any unreleased
+      service objects.</para>
     </section>
 
     <section xml:id="service.component-event.methods">
       <title>Event Methods</title>
 
-      <para>When using the event strategy, SCR must callback the component at
-      the appropriate time. SCR must callback on the following events:</para>
+      <para>When using the event strategy, SCR must callback the component
+      instance at the appropriate time. SCR must callback on the following
+      events:</para>
 
       <itemizedlist>
         <listitem>
@@ -639,8 +665,7 @@
           <para><code>updated</code> - The updated method is called when the
           service properties of a bound services are modified and the
           resulting properties do not cause the service to become unbound
-          because it is no longer selected by the <code>target</code>
-          property.</para>
+          because it is no longer selected by the target property.</para>
         </listitem>
 
         <listitem>
@@ -769,25 +794,6 @@
       then the methods may be called multiple times. The updated method can be
       called multiple times per service.</para>
 
-      <para>When the service object for a bound service is first provided to a
-      component instance, that is the service object is directly passed to an
-      event method or returned by a locate service method, SCR must get the
-      service object from the OSGi Framework's service registry using the
-      <code>getService</code> method on the component's Bundle Context. If the
-      service object for a bound service has been obtained and the service
-      becomes unbound, SCR must unget the service object using the
-      <code>ungetService</code> method on the component's Bundle Context and
-      discard all references to the service object.</para>
-
-      <para>If a component instance is passed a Component Service Objects
-      object, then SCR must use a Service Objects object obtained from the
-      OSGi Framework's service registry using the component's Bundle Context
-      to get and unget any service objects for the Component Service Objects.
-      If the bound service has prototype service scope, then SCR must track
-      the service objects returned by the Component Service Objects object so
-      that, when the service becomes unbound, SCR must release any unreleased
-      service objects.</para>
-
       <para>In the following examples, a component requires the Log Service.
       The first example uses the lookup strategy. The reference is declared
       without any bind, updated, and unbind methods:</para>
@@ -849,6 +855,183 @@
       <para>Event methods can be declared private in the component class but
       are only looked up in the inheritance chain when they are protected,
       public, or have default access. See <xref linkend="i1641644"/>.</para>
+    </section>
+
+    <section xml:id="service.component-field.strategy">
+      <title>Field Strategy</title>
+
+      <para>When using the field strategy, SCR must modify fields in the
+      component instance at the appropriate time. SCR must modify the fields
+      on the following events:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>bind</code> - The field is modified to bind a new
+          service to the component that matches the selection criteria.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>updated</code> - For certain field types, the field is
+          modified when the service properties of a bound services are
+          modified and the resulting properties do not cause the service to
+          become unbound because it is no longer selected by the target
+          property.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>unbind</code> - The field is modified when SCR needs to
+          unbind the service.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For a reference with unary cardinality, a field must be of one of
+      the following types:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>&lt;service-type&gt;</code> - The bound service object.
+          The type of the field can be the actual service type or it can be a
+          type that is assignable from the actual service type.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>ServiceReference</code> - A Service Reference for the
+          bound service. This Service Reference may later be passed to the
+          <xref
+          linkend="org.osgi.service.component.ComponentContext.locateService-String-ServiceReference-"
+          xrefstyle="hyperlink"/> method to obtain the actual service object.
+          This approach is useful when the service properties need to be
+          examined before accessing the service object. It also allows for the
+          delayed activation of bound services when using field
+          strategy.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>ComponentServiceObjects</code> - A Component Service
+          Objects for the bound service. This Component Service Objects can be
+          used to obtain the actual service object or objects. This approach
+          is useful when the referenced service has prototype service scope
+          and the component instance needs multiple service objects for the
+          service.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>Map</code> - An unmodifiable Map containing the service
+          properties of the bound service. This Map must additionally
+          implement <code>Comparable</code> with the <code>compareTo</code>
+          method comparing service property maps using the same ordering as
+          <code>ServiceReference.compareTo</code> based upon service ranking
+          and service id.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>Map.Entry</code> - An unmodifiable Map.Entry whose key
+          is an unmodifiable Map containing the service properties of the
+          bound service, as above, and whose value is the bound service
+          object. This Map.Entry must additionally implement
+          <code>Comparable</code> with the <code>compareTo</code> method
+          comparing the service property map key using the same ordering as
+          <code>ServiceReference.compareTo</code> based upon service ranking
+          and service id.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>If the actual service type is one of
+      <code>ServiceReference</code>, <code>ComponentServiceObjects</code>,
+      <code>Map</code>, or <code>Map.Entry</code>, the field will be set to
+      the service object rather than the object about the service.</para>
+
+      <para>For a reference with multiple cardinality, a field must be a
+      collection of one of the following types:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>Collection</code></para>
+        </listitem>
+
+        <listitem>
+          <para><code>List</code></para>
+        </listitem>
+
+        <listitem>
+          <para>A subtype of <code>Collection</code> - This type can only be
+          used for dynamic references using the <code>update</code> reference
+          field option. The component instance must initialize the field to a
+          collection object in its constructor.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The type of objects set in the collection are specified by the
+      <code>field-collection-type</code> attribute:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>service</code> - The bound service object. This is the
+          default field collection type.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>reference</code> - A Service Reference for the bound
+          service.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>serviceobjects</code> - A Component Service Objects for
+          the bound service.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>properties</code> - An unmodifiable Map containing the
+          service properties of the bound service. This Map must implement
+          <code>Comparable</code>, as above.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>tuple</code> - An unmodifiable Map.Entry whose key is an
+          unmodifiable Map containing the service properties of the bound
+          service, as above, and whose value is the bound service object. This
+          Map.Entry must implement <code>Comparable</code>, as above.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>Only instance fields of the field types above are supported. If a
+      referenced field is declared with the <code>static</code> modifier or
+      has a type other than one of the above, SCR must log an error message
+      with the Log Service, if present, and the field must not be
+      modified.</para>
+
+      <para>Care must be taken by the component implementation regarding the
+      field. SCR has no way to know if the component implementation itself may
+      alter the field value. The component implementation should not alter the
+      field value and allow SCR to manage it. SCR must treat the field as if
+      the component implementation does not alter the field value so SCR may
+      retain its own copy of the value set in the field.</para>
+
+      <para>In the following examples, a component requires the Log
+      Service.</para>
+
+      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;scr:component name="example.listen"
+    xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
+    &lt;implementation class="com.acme.LogEventImpl"/&gt;
+    &lt;reference name="LOG"
+        interface="org.osgi.service.log.LogService"
+        field="log"
+    /&gt;
+&lt;/scr:component&gt;</programlisting>
+
+      <para>The component implementation class looks like:</para>
+
+      <programlisting>public class LogEventImpl {
+    LogService log;
+    private void activate() {
+        log.log(LogService.LOG_INFO, "Hello Components!"));
+    }
+}</programlisting>
+
+      <para>Fields can be declared private in the component class but are only
+      looked up in the inheritance chain when they are protected, public, or
+      have default access. See <xref linkend="i1641644"/>.</para>
     </section>
 
     <section xml:id="service.component-reference.cardinality">
@@ -1048,57 +1231,69 @@ public class HttpResourceImpl {
       <emphasis>policy-option</emphasis> can further refine how changes affect
       bound services.</para>
 
-      <para>The <emphasis>static policy</emphasis> is the most simple policy
-      and is the default policy. A component instance never sees any of the
-      dynamics. Component configurations are deactivated before any bound
-      service for a reference having a static policy becomes unavailable. If a
-      target service is available to replace the bound service which became
-      unavailable, the component configuration must be reactivated and bound
-      to the replacement service.</para>
+      <section>
+        <title>Static Reference Policy</title>
 
-      <para>If the <code>policy-option</code> is <code>reluctant</code> then
-      the registration of an additional target service for a reference must
-      not result in deactivating and reactivating a component configuration.
-      If the <code>policy-option</code> is <code>greedy</code> then the
-      component must be reactivated when new applicable services become
-      available, see <xref linkend="service.component-policy.option.action"
-      xrefstyle="template:Table %n on page %p"/>. A reference with a static
-      policy is called a <emphasis>static reference</emphasis>. A static
-      reference can still be updated dynamically if it specifies an updated
-      method.</para>
+        <para>The <emphasis>static policy</emphasis> is the most simple policy
+        and is the default policy. A reference with a static policy is called
+        a <emphasis>static reference</emphasis>. A component instance never
+        sees any of the dynamics of the static referencee. The bind method is
+        called and/or the field is set before the component instance is
+        activated. Component configurations are deactivated before any bound
+        service for the static reference becomes unavailable. If a target
+        service is available to replace the bound service which became
+        unavailable, the component configuration must be reactivated and the
+        replacement service is bound to the new component instance.</para>
 
-      <para>The static policy can be very expensive if it depends on services
-      that frequently unregister and re-register or if the cost of activating
-      and deactivating a component configuration is high. Static policy is
-      usually also not applicable if the cardinality specifies multiple bound
-      services.</para>
+        <para>If the <code>policy-option</code> is <code>reluctant</code> then
+        the registration of an additional target service for a reference must
+        not result in deactivating and reactivating a component configuration.
+        If the <code>policy-option</code> is <code>greedy</code> then the
+        component configuration must be reactivated when new applicable
+        services become available. See <xref
+        linkend="service.component-policy.option.action"
+        xrefstyle="template:Table %n on page %p"/>.</para>
 
-      <para>The <emphasis>dynamic policy</emphasis> is slightly more complex
-      since the component implementation must properly handle changes in the
-      set of bound services that can occur on any thread at any time after the
-      component instance is created. With the dynamic policy, SCR can change
-      the set of bound services without deactivating a component
-      configuration. If the component uses the event strategy to access
-      services, then the component instance will be notified of changes in the
-      set of bound services by calls to the bind, and unbind methods.</para>
+        <para>If a static reference specifies an updated method and the bound
+        service's properties change, SCR must call the updated method.</para>
 
-      <para>If the <code>policy-option</code> is <code>reluctant</code> then a
-      bound reference is not rebound even if a more suitable service becomes
-      available for a 1..1 or 0..1 reference. If the
-      <code>policy-option</code> is <code>greedy</code> then the component
-      must be unbound and rebound for that reference.</para>
+        <para>The static policy can be very expensive if it depends on
+        services that frequently unregister and re-register or if the cost of
+        activating and deactivating a component configuration is high. Static
+        policy is usually also not applicable if the cardinality specifies
+        multiple bound services.</para>
+      </section>
 
-      <para>A reference with a dynamic policy is called a <emphasis>dynamic
-      reference</emphasis>.</para>
+      <section>
+        <title>Dynamic Reference Policy</title>
 
-      <para>The previous example with the registering of a resource directory
-      used a static policy. This implied that the component configurations are
-      deactivated when there is a change in the bound set of Http Services.
-      The code in the example can be seen to easily handle the dynamics of
-      Http Services that come and go. The component description can therefore
-      be updated to:</para>
+        <para>The <emphasis>dynamic policy</emphasis> is slightly more complex
+        since the component implementation must properly handle changes in the
+        set of bound services that can occur on any thread at any time after
+        the component instance is created. A reference with a dynamic policy
+        is called a <emphasis>dynamic reference</emphasis>. With the dynamic
+        policy, SCR can change the set of bound services without deactivating
+        a component configuration. If the component uses the event strategy to
+        access services, then the component instance will be notified of
+        changes in the set of bound services by calls to the bind, updated,
+        and unbind methods.</para>
 
-      <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+        <para>If the <code>policy-option</code> is <code>reluctant</code> then
+        a bound reference is not rebound even if a more suitable service
+        becomes available for a 1..1 or 0..1 reference. If the
+        <code>policy-option</code> is <code>greedy</code> then the component
+        must be unbound and rebound for that reference. See <xref
+        linkend="service.component-policy.option.action"
+        xrefstyle="template:Table %n on page %p"/>.</para>
+
+        <para>The previous example with the registering of a resource
+        directory used a static policy. This implied that the component
+        configurations are deactivated when there is a change in the bound set
+        of Http Services. The code in the example can be seen to easily handle
+        the dynamics of Http Services that come and go. The component
+        description can therefore be updated to:</para>
+
+        <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
     &lt;implementation class="com.acme.HttpResourceImpl"/&gt;
@@ -1111,20 +1306,22 @@ public class HttpResourceImpl {
     /&gt;
 &lt;/scr:component&gt;</programlisting>
 
-      <para>The code is identical to the previous example.</para>
+        <para>The code is identical to the previous example.</para>
+      </section>
     </section>
 
     <section>
       <title>Reference Policy Option</title>
 
-      <para>The <code>policy-option</code> defines how eager the reference is
-      to rebind when a new, potentially with a higher ranking, target service
-      becomes available. It can have the following values:</para>
+      <para>The reference policy option defines how eager the reference is to
+      rebind when a new, potentially a higher ranking, target service becomes
+      available. The reference policy option can have the following
+      values:</para>
 
       <itemizedlist>
         <listitem>
-          <para><code>reluctant</code> - Minimize rebinding and
-          reactivating.</para>
+          <para><code>reluctant</code> - Minimize rebinding and reactivating.
+          This is the default reference policy option.</para>
         </listitem>
 
         <listitem>
@@ -1228,6 +1425,149 @@ public class HttpResourceImpl {
       </table>
     </section>
 
+    <section xml:id="service.component-reference.field.option">
+      <title>Reference Field Option</title>
+
+      <para>For a reference using field strategy, the reference field option
+      defines how SCR must manage the field value. The reference field option
+      can have the following values:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para><code>replace</code> - SCR must set the field value. Any field
+          value set by the constructor of the component instance is
+          overwritten. This is the default reference field option.</para>
+        </listitem>
+
+        <listitem>
+          <para><code>update</code> - SCR must update the collection set in
+          the field. This collection can be set by the constructor of the
+          component instance. This reference field option can only be used for
+          a dynamic reference with multiple cardinality.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For a static reference, the replace option must be used.</para>
+
+      <para>For a dynamic reference, the choice of reference field option is
+      influenced by the cardinality of the reference. For unary cardinality,
+      the replace option must be used. For multiple cardinality, either the
+      replace or update option can be used.</para>
+
+      <para>If the update option is used when not permitted, SCR must log an
+      error message with the Log Service, if present, and the field must not
+      be modified.</para>
+
+      <section>
+        <title>Replace Field Option</title>
+
+        <para>If the field is declared with the <code>final</code> modifier,
+        SCR must log an error message with the Log Service, if present, and
+        the field must not be modified.</para>
+
+        <para>For a static reference, SCR must set the value of the field
+        before the component instance is activated and must not change the
+        field while the component is active. This means there is a
+        <emphasis>happens-before</emphasis> relationship between setting the
+        field and activating the component instance, so the active component
+        can safely read the field.</para>
+
+        <para>For a dynamic reference, the field must be declared with the
+        <code>volatile</code> modifier so that field value changes made by SCR
+        are visible to other threads. If the field is not declared with the
+        <code>volatile</code> modifier, SCR must log an error message with the
+        Log Service, if present, and the field must not be modified.</para>
+
+        <para>For a dynamic reference with unary cardinality, SCR must set the
+        field with initial bound service, if any, before the component
+        instance is activated. When there is a new bound service or the
+        service properties of the bound service are modified and the field
+        holds service properties, SCR must replace the field value. If the
+        reference has optional cardinality and there is no bound service, SCR
+        must set the field value to <code>null</code>.</para>
+
+        <para>For a dynamic reference with multiple cardinality, the type of
+        the field must be <code>Collection</code> or <code>List</code>. If the
+        field has a different type, SCR must log an error message with the Log
+        Service, if present, and the field must not be modified. Before the
+        component instance is activated, SCR must set the field with a new
+        mutable collection that must contain the initial set of bound services
+        sorted using the same ordering as
+        <code>ServiceReference.compareTo</code> based upon service ranking and
+        service id. The new collection may be empty if the reference has
+        optional cardinality and there are no bound services. When there is a
+        change in the set of bound services or the service properties of a
+        bound service are modified and the collection holds service
+        properties, SCR must replace the field value with a new mutable
+        collection that must contain the updated set of bound services sorted
+        using the same ordering as <code>ServiceReference.compareTo</code>
+        based upon service ranking and service id. The new collection may be
+        empty if the reference has optional cardinality and there are no bound
+        services.</para>
+      </section>
+
+      <section>
+        <title>Update Field Option</title>
+
+        <para>The update option can only be used for a dynamic reference with
+        multiple cardinality. The component's constructor can set the field
+        with its choice of collection implementation. In this case, the field
+        can be declared with the <code>final</code> modifier. The collection
+        implementation used by the component should use identity rather than
+        <code>equals</code> or <code>hashCode</code> to manage the elements of
+        the collection. The collection implementation should also be
+        thread-safe since SCR may update the collection from threads different
+        than those used by the component instance.</para>
+
+        <para>After constructing the component instance, if the field value is
+        <code>null</code>:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>If the type of the field is <code>Collection</code> or
+            <code>List</code>, SCR will set the field to a new mutable empty
+            collection or list object, respectively. If the field is declared
+            with the <code>final</code> modifier, SCR must log an error
+            message with the Log Service, if present, and the field must not
+            be modified.</para>
+          </listitem>
+
+          <listitem>
+            <para>Otherwise, SCR must log an error message with the Log
+            Service, if present, and the field must not be modified.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>SCR must not change the field value while the component is
+        active and only update the contents of the collection. SCR must update
+        the collection before the component instance is activated by calling
+        <code>Collection.add</code> for each bound service. When there is a
+        change to the set of bound services:</para>
+
+        <itemizedlist>
+          <listitem>
+            <para>SCR must call <code>Collection.add</code> for a newly bound
+            service.</para>
+          </listitem>
+
+          <listitem>
+            <para>SCR must call <code>Collection.remove</code> for an unbound
+            service.</para>
+          </listitem>
+
+          <listitem>
+            <para>If the service properties of a bound service are modified
+            and the collection holds service properties, SCR must call
+            <code>Collection.add</code> for the replacement element followed
+            by <code>Collection.remove</code> for the old element.</para>
+          </listitem>
+        </itemizedlist>
+
+        <para>The collection may be empty if the reference has optional
+        cardinality and there are no bound services.</para>
+      </section>
+    </section>
+
     <section xml:id="service.component-selecting.target.services">
       <title>Selecting Target Services</title>
 
@@ -1309,23 +1649,14 @@ public class HttpResourceImpl {
       appropriate elements and attributes. Since the naming rules between XML
       and Java differ, some name changes are necessary.</para>
 
-      <itemizedlist>
-        <listitem>
-          <para><emphasis>Elements</emphasis> - The annotation class that
-          corresponds to an element starts with an upper case. For example the
-          <code>component</code> element is represented by the
-          <code>@Component</code> annotation.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>Attributes</emphasis> - Multi word attributes that
-          use a minus sign (<code>'-' \u002D</code>) are changed to camel
-          case. For example, the <code>component</code> element
-          <code>configuration-pid</code> attribute is the
-          <code>configurationPid</code> member in the <code>@Component</code>
-          annotation.</para>
-        </listitem>
-      </itemizedlist>
+      <para>Multi-word element and attribute names that use a minus sign
+      (<code>'-' \u002D</code>) are changed to camel case. For example, the
+      <code>configuration-pid</code> attribute in the <code>component</code>
+      element is the <code>configurationPid</code> member in the
+      <code>@Component</code> annotation. The annotation class that
+      corresponds to an element starts with an upper case letter. For example
+      the <code>component</code> element is represented by the
+      <code>@Component</code> annotation.</para>
 
       <para>Some elements do not have a corresponding annotation since the
       annotations can be parameterized by the type information in the Java
@@ -1411,17 +1742,18 @@ public class HttpResourceImpl {
       that is similar to the normal grammar used in OSGi specifications. In
       this case the grammar should be mapped to XML elements:</para>
 
-      <programlisting>&lt;component&gt; ::= &lt;implementation&gt; 
-                (&lt;properties&gt; | &lt;property&gt;)* 
-                &lt;service&gt;  
-                &lt;reference&gt; *</programlisting>
+      <programlisting>&lt;component&gt; ::= (&lt;property&gt; | &lt;properties&gt;)*
+                &lt;service&gt;?
+                &lt;reference&gt;*
+                &lt;implementation&gt;</programlisting>
 
       <para>SCR must not require component descriptions to specify the
       elements in the order listed above and as required by the XML schema.
       SCR must allow other orderings since arbitrary orderings of these
       elements do not affect the meaning of the component description. Only
       the relative ordering of <code>property</code> and
-      <code>properties</code> element have meaning.</para>
+      <code>properties</code> elements and of <code>reference</code> elements
+      have meaning.</para>
 
       <para>The <code>component</code> element has the attributes and
       <code>@Component</code> annotations defined in the following
@@ -2139,10 +2471,10 @@ public class Foo implements EventHandler { ... }</programlisting>
               duplicate reference names. In this case, this attribute must be
               specified with a unique name for the reference to avoid an
               error.</para><para>The <code>Reference</code> annotation will
-              use the name of the annotated method as the default reference
-              name. If the method name begins with <code>bind</code>,
-              <code>set</code> or <code>add</code>, that prefix is
-              removed.</para></entry>
+              use the name of the annotated method or field as the default
+              reference name. If the method name begins with
+              <code>bind</code>, <code>set</code> or <code>add</code>, that
+              prefix is removed.</para></entry>
             </row>
 
             <row>
@@ -2159,8 +2491,9 @@ public class Foo implements EventHandler { ... }</programlisting>
               A service must be registered under this name to be considered
               for the set of target services.</para><para>The
               <code>Reference</code> annotation will use the type of the first
-              argument of the method it is applied for the
-              <code>service</code> value.</para></entry>
+              argument of the annotated method or the type of the annotated
+              field to determine the <code>service</code>
+              value.</para></entry>
             </row>
 
             <row>
@@ -2254,6 +2587,8 @@ public class Foo implements EventHandler { ... }</programlisting>
 
               <entry><para><xref
               linkend="org.osgi.service.component.annotations.Reference"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.Reference.bind--"
               xrefstyle="hyperlink"/></para></entry>
 
               <entry><para>The name of a method in the component
@@ -2263,8 +2598,8 @@ public class Foo implements EventHandler { ... }</programlisting>
               method. For dynamic references, this method can also be called
               while the component configuration is active. See <xref
               linkend="i1548427"/>.</para><para>The <code>Reference</code>
-              annotation will use the method it is applied to as the bind
-              method.</para></entry>
+              annotation will use the name of the method it is applied to as
+              the bind method name.</para></entry>
             </row>
 
             <row>
@@ -2293,21 +2628,74 @@ public class Foo implements EventHandler { ... }</programlisting>
               method can also be called while the component configuration is
               active. See <xref linkend="i1548427"/>.</para></entry>
             </row>
+
+            <row>
+              <entry><code>field</code></entry>
+
+              <entry><para><xref
+              linkend="org.osgi.service.component.annotations.Reference"
+              xrefstyle="hyperlink"/></para><para><xref
+              linkend="org.osgi.service.component.annotations.Reference.field--"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>The name of a field in the component implementation
+              class that is used to hold service(s) that are bound to the
+              component configuration. For static references, this field is
+              only set before the <code>activate</code> method. For dynamic
+              references, this field can modified while the component
+              configuration is active. See <xref
+              linkend="i1548427"/>.</para><para>The <code>Reference</code>
+              annotation will use the name of the field it is applied to as
+              the field name.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>field-option</code></entry>
+
+              <entry><para> <xref
+              linkend="org.osgi.service.component.annotations.Reference.fieldOption--"
+              xrefstyle="hyperlink"/></para><para> <xref
+              linkend="org.osgi.service.component.annotations.FieldOption.REPLACE"
+              xrefstyle="hyperlink"/></para><para> <xref
+              linkend="org.osgi.service.component.annotations.FieldOption.UPDATE"
+              xrefstyle="hyperlink"/></para></entry>
+
+              <entry><para>Defines how the field value must be managed. This
+              is ignored if the <code>field</code> attribute is not set. See
+              <xref
+              linkend="service.component-reference.field.option"/>.</para></entry>
+            </row>
+
+            <row>
+              <entry><code>field-collection-type</code></entry>
+
+              <entry/>
+
+              <entry><para>Defines the types of elements in the collection
+              referenced by the field value. This is ignored if the
+              <code>field</code> attribute is not set or the cardinality is
+              unary. See <xref linkend="service.component-field.strategy"/>
+              for more information.</para><para>The <code>Reference</code>
+              annotation can infer the value of the collection elements from
+              the generic type information of the annotated
+              field.</para></entry>
+            </row>
           </tbody>
         </tgroup>
       </table>
 
+      <para>In the generated component description, the reference elements
+      must be ordered in ascending lexicographical order, using
+      <code>String.compareTo</code>, of the <xref
+      linkend="org.osgi.service.component.annotations.Reference.name--"
+      xrefstyle="hyperlink"/>s of the references. </para>
+
       <para>The following code demonstrates the use of the <xref
       linkend="org.osgi.service.component.annotations.Reference"
-      xrefstyle="hyperlink"/> annotation.</para>
+      xrefstyle="hyperlink"/> annotation for the event strategy.</para>
 
       <programlisting>@Component
 public class FooImpl implements Foo {
-  @Activate
-  void open() { ... }
-  @Deactivate
-  void close() { ... }
-
   @Reference( 
     policy = DYNAMIC, 
     policyOption = GREEDY,
@@ -2315,10 +2703,33 @@ public class FooImpl implements Foo {
   void setLog( LogService log ) { ... }
   void unsetLog( LogService log ) { ... }
   void updatedLog( Map&lt;String,?&gt; ref ) { ... }
+
+  @Activate
+  void open() { ... }
+  @Deactivate
+  void close() { ... }
+}</programlisting>
+
+      <para>The following code demonstrates the use of the <xref
+      linkend="org.osgi.service.component.annotations.Reference"
+      xrefstyle="hyperlink"/> annotation for the field strategy.</para>
+
+      <programlisting>@Component
+public class FooImpl implements Foo {
+  @Reference( 
+    policy = DYNAMIC, 
+    policyOption = GREEDY,
+    cardinality = MANDATORY )
+  volatile LogService log;
+
+  @Activate
+  void open() { log.log(LOG_INFO, "activated"); }
+  @Deactivate
+  void close() { log.log(LOG_INFO, "deactivated"); }
 }</programlisting>
 
       <para>For a reference to be used with the lookup strategy, there are no
-      bind methods to annotate with the <xref
+      bind methods or fields to annotate with the <xref
       linkend="org.osgi.service.component.annotations.Reference"
       xrefstyle="hyperlink"/> annotation. Instead <xref
       linkend="org.osgi.service.component.annotations.Reference"
@@ -2326,14 +2737,15 @@ public class FooImpl implements Foo {
       linkend="org.osgi.service.component.annotations.Component.reference--"
       xrefstyle="hyperlink"/> element of the <xref
       linkend="org.osgi.service.component.annotations.Component"
-      xrefstyle="hyperlink"/> annotation. In the generated component
-      description, the reference elements must be ordered in ascending
-      lexicographical order, using <code>String.compareTo</code>, of the <xref
+      xrefstyle="hyperlink"/> annotation. When used in this way, the <xref
       linkend="org.osgi.service.component.annotations.Reference.name--"
-      xrefstyle="hyperlink"/>s of the references. The following code
-      demonstrates the use of the <xref
+      xrefstyle="hyperlink"/> and <xref
+      linkend="org.osgi.service.component.annotations.Reference.service--"
+      xrefstyle="hyperlink"/> elements must be specified since there is no
+      annotated member from which the name or service can be determined. The
+      following code demonstrates the use of the <xref
       linkend="org.osgi.service.component.annotations.Reference"
-      xrefstyle="hyperlink"/> annotation.</para>
+      xrefstyle="hyperlink"/> annotation for the lookup strategy.</para>
 
       <programlisting>@Component( reference = 
   @Reference( name = "log", service = LogService.class )
@@ -2685,16 +3097,20 @@ public class FooImpl implements Foo {
       target services from the first specified reference are bound before
       services from the next specified reference.</para>
 
-      <para>For each reference using the event strategy, the bind method must
-      be called for each bound service of that reference. This may result in
+      <para>Obtaining the service object for a bound service may result in
       activating a component configuration of the bound service which could
       result in an exception. If the loss of the bound service due to the
       exception causes the reference's cardinality constraint to be violated,
       then activation of this component configuration will fail. Otherwise the
-      bound service which failed to activate will be considered unbound. If a
-      bind method throws an exception, SCR must log an error message
-      containing the exception with the Log Service, if present, but the
-      activation of the component configuration does not fail.</para>
+      bound service which failed to activate will be considered
+      unbound.</para>
+
+      <para>If the reference uses the field strategy, the field must be set.
+      Then, if the reference uses the event strategy, the bind method must be
+      called for each bound service of that reference. If a bind method throws
+      an exception, SCR must log an error message containing the exception
+      with the Log Service, if present, but the activation of the component
+      configuration does not fail.</para>
     </section>
 
     <section xml:id="i1539155">
@@ -2811,9 +3227,13 @@ public class FooImpl implements Foo {
       unary cardinality and the bound service is modified or unregistered and
       ceases to be a target service, or the <code>policy-option</code> is
       <code>greedy</code> and a better target service becomes available then
-      SCR must attempt to replace the bound service with a new target service.
-      SCR must first bind a replacement target service and then unbind the
-      outgoing service. This reversed order allows the component to not having
+      SCR must attempt to replace the bound service with a new bound
+      service.</para>
+
+      <para>If the reference uses the field strategy, the field must be set
+      for the replacement bound service. Then, if the reference uses the event
+      strategy, SCR must first bind the new bound service and then unbind the
+      outgoing service. This reversed order allows the component to not have
       to handle the inevitable gap between the unbind and bind methods.
       However, this means that in the unbind method care must be taken to not
       overwrite the newly bound service. For example, the following code
@@ -2843,13 +3263,14 @@ void unsetLogService( LogService log ) {
     </section>
 
     <section>
-      <title>Updated method</title>
+      <title>Updated</title>
 
-      <para>If an active component is bound to a service that modifies it
-      properties then the component can be notified with the update method
-      specified on the <code>reference</code> element. This method can be
-      called with a Service Reference or a Map to supply the updated service
-      properties.</para>
+      <para>If an active component is bound to a service that modifies its
+      service properties then the component can be updated. If the reference
+      uses the field strategy and the field holds the service properties, the
+      field must be set for the updated bound service. Then, if the reference
+      uses the event strategy and specifies an updated method, the updated
+      method must be called.</para>
     </section>
 
     <section xml:id="i1652198">
@@ -3109,11 +3530,12 @@ void unsetLogService( LogService log ) {
       That is, target services from the last specified reference are unbound
       before services from the previous specified reference.</para>
 
-      <para>For each reference using the event strategy, the unbind method
-      must be called for each bound service of that reference. If an unbind
-      method throws an exception, SCR must log an error message containing the
+      <para>If the reference uses the event strategy, the unbind method must
+      be called for each bound service of that reference. If an unbind method
+      throws an exception, SCR must log an error message containing the
       exception with the Log Service, if present, and the deactivation of the
-      component configuration will continue.</para>
+      component configuration will continue. Then, if the reference uses the
+      field strategy, the field must be set to <code>null</code>.</para>
     </section>
 
     <section>
@@ -3779,15 +4201,15 @@ void modified(Map&lt;String,?&gt; properties) { ... }</programlisting>
       <para>If a component has dependencies on other services then they can be
       referenced with the <xref
       linkend="org.osgi.service.component.annotations.Reference"
-      xrefstyle="hyperlink"/> annotation that is applied to a bind method. The
-      defaults for the <xref
+      xrefstyle="hyperlink"/> annotation that can be applied to a bind method
+      or a field. For a bind method, the defaults for the <xref
       linkend="org.osgi.service.component.annotations.Reference"
       xrefstyle="hyperlink"/> annotation are:</para>
 
       <itemizedlist>
         <listitem>
-          <para>The name of the bind method is used for the name of the
-          reference.</para>
+          <para>The name of the bind method or field is used for the name of
+          the reference.</para>
         </listitem>
 
         <listitem>
@@ -3815,6 +4237,36 @@ void modified(Map&lt;String,?&gt; properties) { ... }</programlisting>
 void setLogService( LogService log, Map&lt;String,?&gt; props) { ... }
 void unsetLogService( LogService log ) {  ... }
 void updatedLogService( Map&lt;String,?&gt; map ) { ...}</programlisting>
+
+      <para>For a field, the defaults for the <xref
+      linkend="org.osgi.service.component.annotations.Reference"
+      xrefstyle="hyperlink"/> annotation are:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>The name of the bind method or field is used for the name of
+          the reference.</para>
+        </listitem>
+
+        <listitem>
+          <para>1:1 cardinality if the field is not a collection. 0..n
+          cardinality if the field is a collection.</para>
+        </listitem>
+
+        <listitem>
+          <para>Static reluctant policy if the field is not declared volatile.
+          Dynamic reluctant policy if the field is declared volatile.</para>
+        </listitem>
+
+        <listitem>
+          <para>The requested service is the type of the field.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>For example:</para>
+
+      <programlisting>@Reference
+volatile Collection&lt;LogService&gt; log;</programlisting>
     </section>
 
     <section xml:id="service.component-component.property.types">
@@ -4395,39 +4847,40 @@ public class MyComponent {
     </section>
 
     <section xml:id="i1641644">
-      <title>Locating Component Methods</title>
+      <title>Locating Component Methods and Fields</title>
 
       <para>SCR will need to locate activate, deactivate, modified, bind,
-      updated, and unbind methods for a component instance. These methods will
-      be located, and called, using reflection. The declared methods of each
-      class in the component implementation class's hierarchy are examined for
-      a suitable method. If a suitable method is found in a class, and it is
-      accessible to the component implementation class, then that method must
-      be used. If suitable methods are found in a class but none of the
-      suitable methods are accessible by the component implementation class,
-      then the search for suitable methods terminates with no suitable method
-      having been located. If no suitable methods are found in a class, the
-      search continues in the superclass.</para>
+      updated, and unbind methods as well as fields in a component instance.
+      These members will be located, and called or modified, using reflection.
+      The declared members of each class in the component implementation
+      class's hierarchy are examined for a suitable member. If a suitable
+      member is found in a class, and it is accessible to the component
+      implementation class, then that member must be used. If suitable members
+      are found in a class but none of the suitable members are accessible by
+      the component implementation class, then the search for suitable members
+      terminates with no suitable member having been located. If no suitable
+      members are found in a class, the search continues in the
+      superclass.</para>
 
-      <para>Only methods that are accessible to the component implementation
-      class will be used. If the method has the <code>public</code> or
+      <para>Only members that are accessible to the component implementation
+      class will be used. If the member has the <code>public</code> or
       <code>protected</code> access modifier, then access is permitted.
-      Otherwise, if the method has the <code>private</code> access modifier,
-      then access is permitted only if the method is declared in the component
-      implementation class. Otherwise, if the method has default access, also
+      Otherwise, if the member has the <code>private</code> access modifier,
+      then access is permitted only if the member is declared in the component
+      implementation class. Otherwise, if the member has default access, also
       known as package private access, then access is permitted only if the
-      method is declared in the component implementation class or if the
-      method is declared in a superclass and all classes in the hierarchy from
+      member is declared in the component implementation class or if the
+      member is declared in a superclass and all classes in the hierarchy from
       the component implementation class to the superclass, inclusive, are in
       the same package and loaded by the same class loader.</para>
 
-      <para>It is recommended that these methods should not be declared with
+      <para>It is recommended that these members should not be declared with
       the <code>public</code> access modifier so that they do not appear as
-      public methods on the component instance when it is used as a service
-      object. Having these methods declared <code>public</code> allows any
-      code to call the methods with reflection, even if a Security Manager is
-      installed. These methods are generally intended to only be called by
-      SCR.</para>
+      public members on the component instance when it is used as a service
+      object. Having these members declared <code>public</code> allows any
+      code to call or access the members with reflection, even if a Security
+      Manager is installed. These members are generally intended to only be
+      called or modified by SCR.</para>
     </section>
 
     <section>
@@ -4843,6 +5296,12 @@ public class MyComponent {
       <listitem>
         <para>Maps of service properties must also implement Comparable. See
         <xref linkend="service.component-event.methods"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>Support for field strategy is added. See <xref
+        linkend="service.component-field.strategy"/>. This change affects many
+        areas of this specification.</para>
       </listitem>
     </itemizedlist>
   </section>
