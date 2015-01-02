@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,7 @@ public enum FieldOption {
 	 * 
 	 * <p>
 	 * This field option can only be used when the field reference has dynamic
-	 * policy, multiple cardinality and the component implementation sets the
-	 * field value to a collection object in its constructor.
+	 * policy and multiple cardinality.
 	 */
 	UPDATE("update"),
 	
