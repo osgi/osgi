@@ -2195,27 +2195,30 @@ xml                    ::= &lt;*&gt; *</programlisting>
     resource.</para>
 
     <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;endpoint-descriptions 
-    xmlns="http://www.osgi.org/xmlns/rsa/v1.0.0"&gt;
-  &lt;endpoint-description&gt;
-            &lt;property name="service.intents"&gt;
+&lt;endpoint-descriptions xmlns="http://www.osgi.org/xmlns/rsa/v1.0.0"&gt;
+    &lt;endpoint-description&gt;
+        &lt;property name="service.intents"&gt;
             &lt;list&gt;
                 &lt;value&gt;SOAP&lt;/value&gt;
                 &lt;value&gt;HTTP&lt;/value&gt;
             &lt;/list&gt;
         &lt;/property&gt;
-            &lt;property name="endpoint.id" value="http://ws.acme.com:9000/hello"/&gt; 
-        &lt;property name="objectClass" value="com.acme.Foo"/&gt; 
-        &lt;property name="endpoint.package.version.com.acme"value="4.2"/&gt;
+        &lt;property name="endpoint.id" value="http://ws.acme.com:9000/hello"/&gt; 
+        &lt;property name="endpoint.package.version.com.acme" value="4.2"/&gt;
+        &lt;property name="objectClass"&gt;
+            &lt;array&gt;
+                &lt;value&gt;com.acme.Foo&lt;/value&gt;
+            &lt;/array&gt;
+        &lt;/property&gt;
         &lt;property name="service.imported.configs" value="com.acme"/&gt;
         &lt;property name="com.acme.ws.xml"&gt;
-        &lt;xml&gt;
-           &lt;config xmlns="http://acme.com/defs"&gt;
-              &lt;port&gt;1029&lt;/port&gt;
-              &lt;host&gt;www.acme.com&lt;/host&gt;
-           &lt;/config&gt;
-        &lt;/xml&gt;
-     &lt;/property&gt;
+            &lt;xml&gt;
+                &lt;config xmlns="http://acme.com/defs"&gt;
+                    &lt;port&gt;1029&lt;/port&gt;
+                    &lt;host&gt;www.acme.com&lt;/host&gt;
+                &lt;/config&gt;
+            &lt;/xml&gt;
+        &lt;/property&gt;
     &lt;/endpoint-description&gt;
 &lt;/endpoint-descriptions&gt;</programlisting>
 
