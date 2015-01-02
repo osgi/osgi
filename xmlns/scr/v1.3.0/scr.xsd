@@ -59,8 +59,8 @@
             </choice>
             <element name="service" type="scr:Tservice" minOccurs="0"
                 maxOccurs="1" />
-            <element name="reference" type="scr:Treference" minOccurs="0"
-                maxOccurs="unbounded" />
+            <element name="reference" type="scr:Treference"
+                minOccurs="0" maxOccurs="unbounded" />
             <element name="implementation" type="scr:Timplementation" />
             <any namespace="##any" processContents="lax" minOccurs="0"
                 maxOccurs="unbounded" />
