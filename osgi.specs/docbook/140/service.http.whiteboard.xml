@@ -1802,7 +1802,8 @@ public class MyResourceService {}</programlisting>
 
       <programlisting>Provide-Capability: osgi.whiteboard;
        osgi.whiteboard="osgi.http";
-       uses:="javax.servlet, javax.servlet.http";
+       uses:="javax.servlet, javax.servlet.http, 
+              org.osgi.service.http.context, org.osgi.service.http.whiteboard";
        version:Version="1.0"</programlisting>
     </section>
 
