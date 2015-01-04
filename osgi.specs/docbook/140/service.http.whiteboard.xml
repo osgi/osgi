@@ -448,7 +448,10 @@ by the Servlet Context Handler registered under the /foo path:
               An implementation of this specification can achieve this by
               returning separate façades of the ServletContext to each
               Whiteboard service. Each façade accesses the Whiteboard
-              service's Bundle Wiring to obtain its classloader.
+              service's Bundle Wiring to obtain its classloader. As a consequence
+              the <code>ServletContextHelper</code> should be implemented using a 
+              Service Factory and the implementation should look the Servlet Context
+              Helper up using the <code>BundleContext</code> of the Whiteboard service.
               </para></entry>
             </row>
 
