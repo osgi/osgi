@@ -226,14 +226,57 @@
       </tgroup>
     </table>
 
-    <para>For details on the selection process of the
+    <para>Multiple <code>ServletContextHelper</code> services can have identical or overlapping 
+        <code>osgi.http.whiteboard.context.path</code> values. In that case a matching
+        servlet or resource is located as follows:
+
+        <orderedlist>
+            <listitem>
+                <para>The Servlet Context Helper service with the longest matching path is matched first.
+                </para>
+            </listitem>
+            <listitem>
+                <para>In the case of two Servlet Context Helpers with the same path, the service with
+        the highest ranking is searched first for a match. In the case of a tie, the lowest 
+        service ID is searched first.
+                </para>
+            </listitem>
+        </orderedlist>
+    </para>
+
+    <para>
+        For example, if two <code>ServletContextHelper</code> services are registered as follows
+        <programlisting>osgi.http.whiteboard.context.path = /foo
+osgi.http.whiteboard.context.path = /foo/bar</programlisting>
+
+        Then is a request for <code>http://localhost/foo/bar/someServlet</code> is looked up 
+        in the following order:
+
+        <orderedlist>
+            <listitem>
+                <para>
+                    <code>/foo/bar</code> context looking for a pattern to match <code>/someServlet</code>
+                </para>
+            </listitem>
+            <listitem>
+                <para>
+                    <code>/foo</code> context looking for a pattern to match <code>/bar/someServlet</code>
+                </para>
+            </listitem>
+        </orderedlist>
+
+Note that whole path segments must match. Therefore the following request can only be handled
+by the Servlet Context Handler registered under the /foo path:
+<code>http://localhost/foo/bars/someOtherServlet</code>
+    </para>
+
+    <para>For details on the association process between servlet, servlet filter, resource
+        and listener services and the 
     <code>ServletContextHelper</code> see <xref
     linkend="service.http.common.properties"/>.</para>
 
     <section>
-      <title><xref
-      linkend="org.osgi.service.http.context.ServletContextHelper.getResource-String-"
-      xrefstyle="hyperlink"/></title>
+      <title>getResource(String)</title>
 
       <para>Obtain a URL for a given resource request.</para>
 
@@ -244,9 +287,7 @@
     </section>
 
     <section>
-      <title><xref
-      linkend="org.osgi.service.http.context.ServletContextHelper.getMimeType-String-"
-      xrefstyle="hyperlink"/></title>
+      <title>getMimeType(String)</title>
 
       <para>Called to provide the MIME type for a resource.</para>
 
@@ -255,9 +296,7 @@
     </section>
 
     <section>
-      <title><xref
-      linkend="org.osgi.service.http.context.ServletContextHelper.getResourcePaths-String-"
-      xrefstyle="hyperlink"/></title>
+      <title>getResourcePaths(String)</title>
 
       <para>Called to support the
       <code>ServletContext.getResourcePaths()</code> method. Returns all the
@@ -270,9 +309,7 @@
     </section>
 
     <section>
-      <title><xref
-      linkend="org.osgi.service.http.context.ServletContextHelper.getRealPath-String-"
-      xrefstyle="hyperlink"/></title>
+      <title>getRealPath(String)</title>
 
       <para>Called to support the <code>ServletContext.getRealPath()</code>
       method.</para>

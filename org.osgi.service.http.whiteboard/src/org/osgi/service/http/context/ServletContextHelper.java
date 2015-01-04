@@ -45,10 +45,11 @@ import org.osgi.framework.Bundle;
  * <p>
  * A context is registered with the
  * {@link org.osgi.service.http.whiteboard.HttpWhiteboardConstants#HTTP_WHITEBOARD_CONTEXT_PATH
- * service property} to define a path under which all services registered with
- * this context are reachable. If there is more than one
- * {@code ServletContextHelper} registered with the same path, the one with the
- * highest service ranking is active, the others are inactive.
+ * service property} to define a path under which all services registered with this context are 
+ * reachable. If there is more than one {@code ServletContextHelper} registered with the same 
+ * path, each duplicate context path is searched by service ranking order according to 
+ * {@link org.osgi.framework.ServiceReference#compareTo(Object)} until a matching servlet or 
+ * resource is found.
  * 
  * <p>
  * Servlets, servlet filters, resources, and listeners services may be
