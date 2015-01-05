@@ -347,7 +347,7 @@ by the Servlet Context Handler registered under the /foo path:
 
           <thead>
             <row>
-              <entry><code>ServletContext</code> method</entry>
+              <entry>ServletContext method</entry>
 
               <entry>Since</entry>
 
