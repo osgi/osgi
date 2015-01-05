@@ -875,6 +875,12 @@
     linkend="rfc199_bibliomixed_id_20140602_17h03_19_6"/> - are not related to
     any EnOcean Equipment Profile.</para>
 
+    <para>Note that EnOcean Remote Commissioning is detailed in an additional 
+    EnOcean document
+    <xref linkend="rfc199_bibliomixed_id_20150105_16h26_16_99"/>
+	.
+    </para>
+    
     <section>
       <title>EnOcean RPC</title>
 
@@ -1096,9 +1102,10 @@
       2007</title></bibliomixed>
 
       <bibliomixed
-      xml:id="rfc199_bibliomixed_id_20140602_17h03_10_5"><title>"EnOcean
-      Equipment Profiles v2.5", EnOcean Alliance, March 04,
-      2013</title></bibliomixed>
+      xml:id="rfc199_bibliomixed_id_20140602_17h03_10_5"><title>"EnOcean 
+      Equipment Profiles v2.6.2", EnOcean Alliance, 
+      https://www.enocean-alliance.org/en/enocean_standard/, November 19, 2014
+      </title></bibliomixed>
 
       <bibliomixed
       xml:id="rfc199_bibliomixed_id_20140602_17h03_19_6"><title>"EnOcean
@@ -1114,6 +1121,13 @@
       xml:id="rfc199_bibliomixed_id_20140602_17h03_46_9"><title>"EnOcean
       System Specification - Security of EnOcean Radio Networks v1.3", EnOcean
       Alliance, July 31, 2012</title></bibliomixed>
+
+      <bibliomixed
+      xml:id="rfc199_bibliomixed_id_20150105_16h26_16_99"><title>"EnOcean
+      Remote Commissioning Summary v1.0", EnOcean
+      Alliance, https://www.enocean-alliance.org/en/downloads/, December 01, 
+      2014
+      </title></bibliomixed>  
     </bibliolist>
   </section>
 </chapter>
