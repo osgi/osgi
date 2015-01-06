@@ -59,5 +59,4 @@ final class TestServiceListener implements ServiceListener {
 			this.events.clear();
 		}
 	}
-
 }

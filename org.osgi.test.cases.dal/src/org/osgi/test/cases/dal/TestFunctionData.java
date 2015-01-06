@@ -21,5 +21,4 @@ final class TestFunctionData extends FunctionData {
 	public int compareTo(Object var0) {
 		return 0;
 	}
-
 }

@@ -24,10 +24,10 @@ import org.osgi.util.tracker.ServiceTracker;
 public abstract class SimulatedFunction extends SimulatedService implements Function {
 
 	/** The property metadata. */
-	protected final Map	propertyMetadata;
+	protected final Map				propertyMetadata;
 
 	/** The operation metadata. */
-	protected final Map	operationMetadata;
+	protected final Map				operationMetadata;
 
 	private final ServiceTracker	eventAdminTracker;
 
@@ -47,17 +47,17 @@ public abstract class SimulatedFunction extends SimulatedService implements Func
 		this.eventAdminTracker = eventAdminTracker;
 	}
 
-	public PropertyMetadata getPropertyMetadata(String propertyName) throws IllegalArgumentException {
+	public PropertyMetadata getPropertyMetadata(String propertyName) {
 		return (null == this.propertyMetadata) ? null :
 				(PropertyMetadata) this.propertyMetadata.get(propertyName);
 	}
 
-	public OperationMetadata getOperationMetadata(String operationName) throws IllegalArgumentException {
+	public OperationMetadata getOperationMetadata(String operationName) {
 		return (null == this.operationMetadata) ? null :
 				(OperationMetadata) this.operationMetadata.get(operationName);
 	}
 
-	public Object getServiceProperty(String propName) throws IllegalArgumentException {
+	public Object getServiceProperty(String propName) {
 		Object value = super.serviceRef.getProperty(propName);
 		if (null == value) {
 			throw new IllegalArgumentException("The property name is missing: " + propName);
@@ -82,7 +82,7 @@ public abstract class SimulatedFunction extends SimulatedService implements Func
 	 * @param propName The function property name.
 	 * @throws IllegalArgumentException If the property is not supported.
 	 */
-	public abstract void publishEvent(String propName) throws IllegalArgumentException;
+	public abstract void publishEvent(String propName);
 
 	/**
 	 * Posts a new function property event through Event Admin service.

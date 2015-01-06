@@ -46,5 +46,4 @@ public final class OperationMetadataImpl implements OperationMetadata {
 	public PropertyMetadata[] getParametersMetadata() {
 		return this.parametersMetadata;
 	}
-
 }

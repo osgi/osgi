@@ -189,5 +189,4 @@ public final class FunctionsTestSteps {
 	 * Step message for {@link #STEP_ID_EVENT_MLS} step.
 	 */
 	public static final String	STEP_MESSAGE_EVENT_MLS				= "Publish a new property event for the 'data' property of the 'MultiLevelSensor' function.";
-
 }

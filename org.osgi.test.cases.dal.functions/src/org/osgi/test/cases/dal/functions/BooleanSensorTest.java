@@ -22,10 +22,9 @@ public final class BooleanSensorTest extends AbstractFunctionTest {
 	/**
 	 * Checks {@link BooleanSensor#getData()} getter functionality.
 	 * 
-	 * @throws IllegalStateException If the function is removed.
 	 * @throws DeviceException If operation error is available.
 	 */
-	public void testGetData() throws IllegalStateException, DeviceException {
+	public void testGetData() throws DeviceException {
 		super.testStepProxy.execute(
 				FunctionsTestSteps.STEP_ID_AVAILABLE_BS,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BS);
@@ -58,5 +57,4 @@ public final class BooleanSensorTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_ID_EVENT_BS,
 				FunctionsTestSteps.STEP_MESSAGE_EVENT_BS);
 	}
-
 }

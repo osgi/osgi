@@ -22,10 +22,9 @@ public final class MultiLevelSensorTest extends AbstractFunctionTest {
 	/**
 	 * Checks {@link MultiLevelSensor#getData()} getter functionality.
 	 * 
-	 * @throws IllegalStateException If the function is removed.
 	 * @throws DeviceException If operation error is available.
 	 */
-	public void testGetData() throws IllegalStateException, DeviceException {
+	public void testGetData() throws DeviceException {
 		super.testStepProxy.execute(
 				FunctionsTestSteps.STEP_ID_AVAILABLE_MLS,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_MLS);
@@ -60,5 +59,4 @@ public final class MultiLevelSensorTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_ID_EVENT_MLS,
 				FunctionsTestSteps.STEP_MESSAGE_EVENT_MLS);
 	}
-
 }

@@ -18,11 +18,11 @@ import org.osgi.service.dal.PropertyMetadata;
  */
 public final class PropertyMetadataImpl implements PropertyMetadata {
 
-	private final Map		metadata;
-	private final Object	resolution;
+	private final Map				metadata;
+	private final Object			resolution;
 	private final FunctionData[]	enumValues;
-	private final FunctionData	minValue;
-	private final FunctionData	maxValue;
+	private final FunctionData		minValue;
+	private final FunctionData		maxValue;
 
 	/**
 	 * Constructs the property metadata with the specified arguments.
@@ -50,20 +50,19 @@ public final class PropertyMetadataImpl implements PropertyMetadata {
 		return this.metadata;
 	}
 
-	public Object getResolution(String unit) throws IllegalArgumentException {
+	public Object getResolution(String unit) {
 		return this.resolution;
 	}
 
-	public FunctionData[] getEnumValues(String unit) throws IllegalArgumentException {
+	public FunctionData[] getEnumValues(String unit) {
 		return this.enumValues;
 	}
 
-	public FunctionData getMinValue(String unit) throws IllegalArgumentException {
+	public FunctionData getMinValue(String unit) {
 		return this.minValue;
 	}
 
-	public FunctionData getMaxValue(String unit) throws IllegalArgumentException {
+	public FunctionData getMaxValue(String unit) {
 		return this.maxValue;
 	}
-
 }

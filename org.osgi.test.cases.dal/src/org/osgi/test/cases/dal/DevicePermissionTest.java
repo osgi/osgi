@@ -474,5 +474,4 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 		assertEquals("The permission action is not correctly set.",
 				DevicePermission.REMOVE, devicePermission.getActions());
 	}
-
 }

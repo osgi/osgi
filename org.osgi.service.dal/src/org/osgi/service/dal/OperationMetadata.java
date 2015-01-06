@@ -56,10 +56,9 @@ public interface OperationMetadata {
 
 	/**
 	 * Returns metadata about the operation parameters or {@code null} if no
-	 * such medatadata is available.
+	 * such metadata is available.
 	 * 
-	 * @return Operation parameters medata.
+	 * @return Operation parameters metadata.
 	 */
 	public PropertyMetadata[] getParametersMetadata();
-
 }

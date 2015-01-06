@@ -170,5 +170,4 @@ public abstract class FunctionData implements Comparable {
 		return (null == this.metadata) ? timestampLocal.hashCode() :
 				this.metadata.hashCode() + timestampLocal.hashCode();
 	}
-
 }

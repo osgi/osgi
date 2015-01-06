@@ -81,5 +81,4 @@ public final class DeviceExceptionTest extends DefaultTestBundleControl {
 		de = new DeviceException(null, cause, DeviceException.UNKNOWN);
 		assertEquals("The exception cause is not correct.", cause, de.getCause());
 	}
-
 }

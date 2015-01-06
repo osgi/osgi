@@ -24,10 +24,9 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 	/**
 	 * Checks {@link BooleanControl#setTrue()} operation functionality.
 	 * 
-	 * @throws IllegalStateException If the function is removed.
 	 * @throws DeviceException If operation error is available.
 	 */
-	public void testSetTrue() throws IllegalStateException, DeviceException {
+	public void testSetTrue() throws DeviceException {
 		super.testStepProxy.execute(
 				FunctionsTestSteps.STEP_ID_AVAILABLE_BC,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BC);
@@ -49,10 +48,9 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 	/**
 	 * Checks {@link BooleanControl#setFalse()} operation functionality.
 	 * 
-	 * @throws IllegalStateException If the function is removed.
 	 * @throws DeviceException If operation error is available.
 	 */
-	public void testSetFalse() throws IllegalStateException, DeviceException {
+	public void testSetFalse() throws DeviceException {
 		super.testStepProxy.execute(
 				FunctionsTestSteps.STEP_ID_AVAILABLE_BC,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BC);
@@ -74,10 +72,9 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 	/**
 	 * Checks {@link BooleanControl#reverse()} operation functionality.
 	 * 
-	 * @throws IllegalStateException If the function is removed.
 	 * @throws DeviceException If operation error is available.
 	 */
-	public void testReverse() throws IllegalStateException, DeviceException {
+	public void testReverse() throws DeviceException {
 		super.testStepProxy.execute(
 				FunctionsTestSteps.STEP_ID_AVAILABLE_BC,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BC);
@@ -100,13 +97,10 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 	/**
 	 * Checks {@code BooleanControl} function events.
 	 * 
-	 * @throws UnsupportedOperationException If {@link BooleanControl#setTrue()}
-	 *         is not supported.
-	 * @throws IllegalStateException If the function service is unregistered.
 	 * @throws DeviceException If an error is available while executing the
 	 *         operation.
 	 */
-	public void testPropertyEvent() throws UnsupportedOperationException, IllegalStateException, DeviceException {
+	public void testPropertyEvent() throws DeviceException {
 		super.testStepProxy.execute(
 				FunctionsTestSteps.STEP_ID_AVAILABLE_BC,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BC);

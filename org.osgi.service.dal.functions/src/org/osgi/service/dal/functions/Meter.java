@@ -105,8 +105,7 @@ public interface Meter extends Function {
 	 * 
 	 * @see LevelData
 	 */
-	public LevelData getCurrent() throws UnsupportedOperationException,
-			IllegalStateException, DeviceException;
+	public LevelData getCurrent() throws DeviceException;
 
 	/**
 	 * Returns the total metering info. It's a getter method for
@@ -121,8 +120,7 @@ public interface Meter extends Function {
 	 * 
 	 * @see LevelData
 	 */
-	public LevelData getTotal() throws UnsupportedOperationException,
-			IllegalStateException, DeviceException;
+	public LevelData getTotal() throws DeviceException;
 
 	/**
 	 * Resets the total metering info.
@@ -132,7 +130,5 @@ public interface Meter extends Function {
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.
 	 */
-	public void resetTotal() throws UnsupportedOperationException,
-			IllegalStateException, DeviceException;
-
+	public void resetTotal() throws DeviceException;
 }

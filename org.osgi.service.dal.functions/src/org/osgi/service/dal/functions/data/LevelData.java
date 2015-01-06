@@ -52,16 +52,16 @@ public class LevelData extends FunctionData {
 
 	/**
 	 * Represent the unit as it's defined in
-	 * {@link org.osgi.service.dal.PropertyMetadata#UNITS}. The field
-	 * is optional. The field is accessible with {@link #getUnit()} getter.
+	 * {@link org.osgi.service.dal.PropertyMetadata#UNITS}. The field is
+	 * optional. The field is accessible with {@link #getUnit()} getter.
 	 */
-	public final String		unit;
+	public final String			unit;
 
 	/**
 	 * Represents the current level. It's mandatory field. The field is
 	 * accessible with {@link #getLevel()} getter.
 	 */
-	public final BigDecimal	level;
+	public final BigDecimal		level;
 
 	/**
 	 * Constructs new {@code LevelData} instance with the specified field
@@ -228,5 +228,4 @@ public class LevelData extends FunctionData {
 	private int compareToMap(Map otherData) {
 		return compareToLevelData(new LevelData(otherData));
 	}
-
 }

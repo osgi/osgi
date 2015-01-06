@@ -69,7 +69,5 @@ public interface MultiLevelSensor extends Function {
 	 * 
 	 * @see LevelData
 	 */
-	public LevelData getData() throws UnsupportedOperationException,
-			IllegalStateException, DeviceException;
-
+	public LevelData getData() throws DeviceException;
 }

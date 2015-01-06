@@ -287,5 +287,4 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 				keyName,
 				actualData.getKeyName());
 	}
-
 }

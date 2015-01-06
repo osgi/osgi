@@ -48,7 +48,7 @@ public final class SimulatedBooleanControl extends SimulatedFunction implements 
 		PROPERTY_METADATA = new HashMap();
 		PROPERTY_METADATA.put(PROPERTY_DATA, propMetadata);
 	}
-	
+
 	/**
 	 * Constructs a new instance with the specified arguments.
 	 * 
@@ -89,7 +89,7 @@ public final class SimulatedBooleanControl extends SimulatedFunction implements 
 		setData(false);
 	}
 
-	public void publishEvent(String propName) throws IllegalArgumentException {
+	public void publishEvent(String propName) {
 		if (!PROPERTY_DATA.equals(propName)) {
 			throw new IllegalArgumentException("The property is not supported: " + propName);
 		}
@@ -108,5 +108,4 @@ public final class SimulatedBooleanControl extends SimulatedFunction implements 
 						OPERATION_SET_TRUE});
 		return functionProps;
 	}
-
 }

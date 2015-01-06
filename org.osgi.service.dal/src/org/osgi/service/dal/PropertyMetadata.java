@@ -21,22 +21,20 @@ import java.util.Map;
 /**
  * Contains metadata about function property or function operation parameter.
  * 
- * The access to the function properties is a bitmap value of
- * {@link #ACCESS} metadata key. Function properties can be accessed in
- * three ways. Any combinations between them are possible:
+ * The access to the function properties is a bitmap value of {@link #ACCESS}
+ * metadata key. Function properties can be accessed in three ways. Any
+ * combinations between them are possible:
  * <ul>
  * <li>
- * {@link #ACCESS_READABLE} - available for all properties, which can
- * be read. Function must provide a getter method for an access to the property
- * value.</li>
+ * {@link #ACCESS_READABLE} - available for all properties, which can be read.
+ * Function must provide a getter method for an access to the property value.</li>
  * <li>
- * {@link #ACCESS_WRITABLE} - available for all properties, which can
- * be modified. Function must provide a setter method for a modification of the
+ * {@link #ACCESS_WRITABLE} - available for all properties, which can be
+ * modified. Function must provide a setter method for a modification of the
  * property value.</li>
  * <li>
- * {@link #ACCESS_EVENTABLE} - available for all properties, which can
- * report the property value. {@link FunctionEvent}s are sent on property
- * change.</li>
+ * {@link #ACCESS_EVENTABLE} - available for all properties, which can report
+ * the property value. {@link FunctionEvent}s are sent on property change.</li>
  * </ul>
  * 
  * @see Function
@@ -46,21 +44,21 @@ public interface PropertyMetadata {
 
 	/**
 	 * Marks the readable function properties. The flag can be used as a part of
-	 * bitmap value of {@link #ACCESS}. The readable access mandates
-	 * function to provide a property getter method.
+	 * bitmap value of {@link #ACCESS}. The readable access mandates function to
+	 * provide a property getter method.
 	 * 
 	 * @see Function
 	 */
-	public static final int		ACCESS_READABLE	= 1;
+	public static final int		ACCESS_READABLE		= 1;
 
 	/**
 	 * Marks the writable function properties. The flag can be used as a part of
-	 * bitmap value of {@link #ACCESS}. The writable access mandates
-	 * function to provide a property setter methods.
+	 * bitmap value of {@link #ACCESS}. The writable access mandates function to
+	 * provide a property setter methods.
 	 * 
 	 * @see Function
 	 */
-	public static final int		ACCESS_WRITABLE	= 2;
+	public static final int		ACCESS_WRITABLE		= 2;
 
 	/**
 	 * Marks the eventable function properties. The flag can be used as a part
@@ -109,8 +107,8 @@ public interface PropertyMetadata {
 	 * built by W/(m\u00B2 sr), where \u00B2 is Unicode superscript two.</li>
 	 * </ul>
 	 * If those rules cannot be applied to the unit symbol, custom rules are
-	 * allowed. A set of predefined unit symbols are available in {@link SIUnits}
-	 * interface.
+	 * allowed. A set of predefined unit symbols are available in
+	 * {@link SIUnits} interface.
 	 */
 	public static final String	UNITS				= "units";
 
@@ -120,9 +118,8 @@ public interface PropertyMetadata {
 	 * {@code java.lang.String} type. Possible keys:
 	 * <ul>
 	 * <li>{@link #DESCRIPTION} - doesn't depend on the given unit.</li>
-	 * <li>{@link #ACCESS} - available only for function property and
-	 * missing for function operation parameters. It doesn't depend on the given
-	 * unit.</li>
+	 * <li>{@link #ACCESS} - available only for function property and missing
+	 * for function operation parameters. It doesn't depend on the given unit.</li>
 	 * <li>{@link #UNITS} - doesn't depend on the given unit.</li>
 	 * <li>custom key - can depend on the unit. Organizations that want to use
 	 * custom keys that do not clash with OSGi Alliance defined should prefix
@@ -151,7 +148,7 @@ public interface PropertyMetadata {
 	 * 
 	 * @throws IllegalArgumentException If the unit is not supported.
 	 */
-	public Object getResolution(String unit) throws IllegalArgumentException;
+	public Object getResolution(String unit);
 
 	/**
 	 * Returns the property possible values according to the specified unit. If
@@ -167,7 +164,7 @@ public interface PropertyMetadata {
 	 * 
 	 * @throws IllegalArgumentException If the unit is not supported.
 	 */
-	public FunctionData[] getEnumValues(String unit) throws IllegalArgumentException;
+	public FunctionData[] getEnumValues(String unit);
 
 	/**
 	 * Returns the property minimum value according to the specified unit. If
@@ -181,7 +178,7 @@ public interface PropertyMetadata {
 	 * 
 	 * @throws IllegalArgumentException If the unit is not supported.
 	 */
-	public FunctionData getMinValue(String unit) throws IllegalArgumentException;
+	public FunctionData getMinValue(String unit);
 
 	/**
 	 * Returns the property maximum value according to the specified unit. If
@@ -195,6 +192,5 @@ public interface PropertyMetadata {
 	 * 
 	 * @throws IllegalArgumentException If the unit is not supported.
 	 */
-	public FunctionData getMaxValue(String unit) throws IllegalArgumentException;
-
+	public FunctionData getMaxValue(String unit);
 }

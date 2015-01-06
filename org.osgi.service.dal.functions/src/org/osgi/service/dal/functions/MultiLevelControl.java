@@ -70,8 +70,7 @@ public interface MultiLevelControl extends Function {
 	 * 
 	 * @see LevelData
 	 */
-	public LevelData getData() throws UnsupportedOperationException,
-			IllegalStateException, DeviceException;
+	public LevelData getData() throws DeviceException;
 
 	/**
 	 * Sets {@code MultiLevelControl} level to the specified value. It's a
@@ -85,8 +84,7 @@ public interface MultiLevelControl extends Function {
 	 * @throws DeviceException If an operation error is available.
 	 * @throws IllegalArgumentException If there is an invalid argument.
 	 */
-	public void setData(BigDecimal level) throws UnsupportedOperationException,
-			IllegalStateException, DeviceException, IllegalArgumentException;
+	public void setData(BigDecimal level) throws DeviceException;
 
 	/**
 	 * Sets {@code MultiLevelControl} level according to the specified unit.
@@ -101,7 +99,5 @@ public interface MultiLevelControl extends Function {
 	 * @throws DeviceException If an operation error is available.
 	 * @throws IllegalArgumentException If there is an invalid argument.
 	 */
-	public void setData(BigDecimal level, String unit) throws UnsupportedOperationException,
-			IllegalStateException, DeviceException, IllegalArgumentException;
-
+	public void setData(BigDecimal level, String unit) throws DeviceException;
 }

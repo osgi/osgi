@@ -180,5 +180,4 @@ public final class SIUnitsTest extends DefaultTestBundleControl {
 		assertEquals("Gauss symbol is not correct.", "G", SIUnits.GAUSS);
 		assertEquals("Oersted symbol is not correct.", "Oe", SIUnits.OERSTED);
 	}
-
 }

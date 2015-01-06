@@ -23,9 +23,8 @@ public final class MeterTest extends AbstractFunctionTest {
 	 * Tests the total meter consumption.
 	 * 
 	 * @throws DeviceException If operation error is available.
-	 * @throws IllegalStateException If the function is removed.
 	 */
-	public void testTotal() throws IllegalStateException, DeviceException {
+	public void testTotal() throws DeviceException {
 		super.testStepProxy.execute(
 				FunctionsTestSteps.STEP_ID_AVAILABLE_METER,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_METER);
@@ -51,9 +50,8 @@ public final class MeterTest extends AbstractFunctionTest {
 	 * Tests the current meter consumption.
 	 * 
 	 * @throws DeviceException If operation error is available.
-	 * @throws IllegalStateException If the function is removed.
 	 */
-	public void testCurrent() throws IllegalStateException, DeviceException {
+	public void testCurrent() throws DeviceException {
 		super.testStepProxy.execute(
 				FunctionsTestSteps.STEP_ID_AVAILABLE_METER,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_METER);
@@ -82,9 +80,8 @@ public final class MeterTest extends AbstractFunctionTest {
 	 * Tests reset total operation.
 	 * 
 	 * @throws DeviceException If operation error is available.
-	 * @throws IllegalStateException If the function is removed.
 	 */
-	public void testResetTotal() throws IllegalStateException, DeviceException {
+	public void testResetTotal() throws DeviceException {
 		super.testStepProxy.execute(
 				FunctionsTestSteps.STEP_ID_AVAILABLE_METER,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_METER);
@@ -129,5 +126,4 @@ public final class MeterTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_ID_EVENT_METER_TOTAL,
 				FunctionsTestSteps.STEP_MESSAGE_EVENT_METER_TOTAL);
 	}
-
 }

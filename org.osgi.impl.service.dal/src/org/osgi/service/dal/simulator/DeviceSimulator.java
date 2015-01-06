@@ -33,7 +33,7 @@ public interface DeviceSimulator {
 	 * @throws IllegalArgumentException If the function type is not supported.
 	 * @throws IllegalStateException If the device simulator is unregistered.
 	 */
-	public Device registerDevice(Dictionary deviceProps, Dictionary[] functionProps) throws NullPointerException, IllegalArgumentException, IllegalStateException;
+	public Device registerDevice(Dictionary deviceProps, Dictionary[] functionProps);
 
 	/**
 	 * Forces the function with the given class name to publish an event.
@@ -44,6 +44,5 @@ public interface DeviceSimulator {
 	 * @throws IllegalArgumentException If the property is not supported by the
 	 *         function or the function class name points to a missing function.
 	 */
-	public void publishEvent(String functionClassName, String propertyName) throws IllegalArgumentException;
-
+	public void publishEvent(String functionClassName, String propertyName);
 }

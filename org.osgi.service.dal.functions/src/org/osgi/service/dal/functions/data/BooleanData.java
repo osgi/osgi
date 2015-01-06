@@ -42,7 +42,7 @@ public class BooleanData extends FunctionData {
 	 * Represents the boolean value. The field is accessible with
 	 * {@link #getValue()} getter.
 	 */
-	public final boolean	value;
+	public final boolean		value;
 
 	/**
 	 * Constructs new {@code BooleanData} instance with the specified field
@@ -189,5 +189,4 @@ public class BooleanData extends FunctionData {
 	private int compareToMap(Map otherData) {
 		return compareToBooleanData(new BooleanData(otherData));
 	}
-
 }

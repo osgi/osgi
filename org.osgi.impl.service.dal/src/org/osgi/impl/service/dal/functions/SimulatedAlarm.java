@@ -64,12 +64,11 @@ public final class SimulatedAlarm extends SimulatedFunction implements Alarm {
 		return functionProps;
 	}
 
-	public void publishEvent(String propName) throws IllegalArgumentException {
+	public void publishEvent(String propName) {
 		if (!PROPERTY_ALARM.equals(propName)) {
 			throw new IllegalArgumentException("The property is not supported: " + propName);
 		}
 		super.postEvent(propName,
 				new AlarmData(System.currentTimeMillis(), null, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD));
 	}
-
 }

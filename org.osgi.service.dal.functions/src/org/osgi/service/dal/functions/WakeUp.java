@@ -43,8 +43,8 @@ public interface WakeUp extends Function {
 
 	/**
 	 * Specifies the awake property name. The property access type can be
-	 * {@link PropertyMetadata#ACCESS_EVENTABLE}. If the device is
-	 * awake, it will trigger a property event.
+	 * {@link PropertyMetadata#ACCESS_EVENTABLE}. If the device is awake, it
+	 * will trigger a property event.
 	 * <p>
 	 * The property value type is {@code BooleanData}. The boolean data is
 	 * always {@code true}. It marks that the device is awake.
@@ -83,8 +83,7 @@ public interface WakeUp extends Function {
 	 * 
 	 * @see LevelData
 	 */
-	public LevelData getWakeUpInterval() throws UnsupportedOperationException,
-			IllegalStateException, DeviceException;
+	public LevelData getWakeUpInterval() throws DeviceException;
 
 	/**
 	 * Sets wake up interval according to the default unit. It's a setter method
@@ -99,8 +98,7 @@ public interface WakeUp extends Function {
 	 * @throws DeviceException If an operation error is available.
 	 * @throws IllegalArgumentException If there is an invalid argument.
 	 */
-	public void setWakeUpInterval(BigDecimal interval) throws UnsupportedOperationException,
-			IllegalStateException, DeviceException, IllegalArgumentException;
+	public void setWakeUpInterval(BigDecimal interval) throws DeviceException;
 
 	/**
 	 * Sets wake up interval according to the specified unit. It's a setter
@@ -116,8 +114,7 @@ public interface WakeUp extends Function {
 	 * @throws DeviceException If an operation error is available.
 	 * @throws IllegalArgumentException If there is an invalid argument.
 	 */
-	public void setWakeUpInterval(BigDecimal interval, String unit) throws UnsupportedOperationException,
-			IllegalStateException, DeviceException, IllegalArgumentException;
+	public void setWakeUpInterval(BigDecimal interval, String unit) throws DeviceException;
 
 	/**
 	 * The device is forced to sleep to minimize the power consumption.
@@ -127,7 +124,5 @@ public interface WakeUp extends Function {
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.
 	 */
-	public void sleep() throws UnsupportedOperationException,
-			IllegalStateException, DeviceException;
-
+	public void sleep() throws DeviceException;
 }

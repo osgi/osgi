@@ -33,15 +33,15 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public final class Activator implements BundleActivator {
 
-	private static final String	DEVICE_UID_PREFIX	= "dal-simulator:";
+	private static final String	DEVICE_UID_PREFIX		= "dal-simulator:";
 	private static final String	FUNCTION_TYPE_SIMULATOR	= "Simulator";
-	private static final int	DEVICE_COUNT	= 10;
+	private static final int	DEVICE_COUNT			= 10;
 
 	private DeviceSimulatorImpl	deviceSimulator;
 	private ServiceTracker		eventAdminTracker;
 	private Timer				timer;
 
-	public void start(BundleContext bc) throws Exception {
+	public void start(BundleContext bc) {
 		this.timer = new Timer();
 		this.eventAdminTracker = new ServiceTracker(bc, EventAdmin.class.getName(), null);
 		this.eventAdminTracker.open();
@@ -50,7 +50,7 @@ public final class Activator implements BundleActivator {
 		registerInitialDevices();
 	}
 
-	public void stop(BundleContext bc) throws Exception {
+	public void stop(BundleContext bc) {
 		this.deviceSimulator.stop();
 		this.eventAdminTracker.close();
 		this.timer.cancel();
@@ -156,5 +156,4 @@ public final class Activator implements BundleActivator {
 	private static String getDeviceUID(int index) {
 		return DEVICE_UID_PREFIX + index;
 	}
-
 }

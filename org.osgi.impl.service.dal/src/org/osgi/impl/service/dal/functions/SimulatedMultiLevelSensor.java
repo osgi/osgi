@@ -28,11 +28,11 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public final class SimulatedMultiLevelSensor extends SimulatedFunction implements MultiLevelSensor {
 
-	private static final Map	PROPERTY_METADATA;
-	private static final Map	OPERATION_METADATA	= null;
-	private static final BigDecimal VALUE = new BigDecimal(1);
-	private static final LevelData LEVEL_DATA = new LevelData(Long.MIN_VALUE, null, null, VALUE);
-		
+	private static final Map		PROPERTY_METADATA;
+	private static final Map		OPERATION_METADATA	= null;
+	private static final BigDecimal	VALUE				= new BigDecimal(1);
+	private static final LevelData	LEVEL_DATA			= new LevelData(Long.MIN_VALUE, null, null, VALUE);
+
 	static {
 		Map metadata = new HashMap();
 		metadata.put(
@@ -49,7 +49,7 @@ public final class SimulatedMultiLevelSensor extends SimulatedFunction implement
 		PROPERTY_METADATA = new HashMap();
 		PROPERTY_METADATA.put(PROPERTY_DATA, propMetadata);
 	}
-	
+
 	/**
 	 * Constructs a new instance with the specified arguments.
 	 * 
@@ -75,11 +75,10 @@ public final class SimulatedMultiLevelSensor extends SimulatedFunction implement
 		return new LevelData(System.currentTimeMillis(), null, null, VALUE);
 	}
 
-	public void publishEvent(String propName) throws IllegalArgumentException {
+	public void publishEvent(String propName) {
 		if (!PROPERTY_DATA.equals(propName)) {
 			throw new IllegalArgumentException("The property is not supported: " + propName);
 		}
 		super.postEvent(propName, getData());
 	}
-
 }

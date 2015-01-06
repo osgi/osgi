@@ -32,10 +32,9 @@ public final class WakeUpTest extends AbstractFunctionTest {
 	/**
 	 * Validates the wake up interval support.
 	 * 
-	 * @throws IllegalStateException If the function is removed.
 	 * @throws DeviceException If operation error is available.
 	 */
-	public void testWakeUpInterval() throws IllegalStateException, DeviceException {
+	public void testWakeUpInterval() throws DeviceException {
 		super.testStepProxy.execute(
 				FunctionsTestSteps.STEP_ID_AVAILABLE_WAKE_UP,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_WAKE_UP);
@@ -91,5 +90,4 @@ public final class WakeUpTest extends AbstractFunctionTest {
 		}
 		return WAKE_UP_INTERVAL;
 	}
-
 }

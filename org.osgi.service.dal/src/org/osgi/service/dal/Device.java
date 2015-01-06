@@ -312,7 +312,5 @@ public interface Device {
 	 * @throws IllegalStateException If this device service object has already
 	 *         been unregistered.
 	 */
-	public void remove() throws DeviceException, UnsupportedOperationException,
-			SecurityException, IllegalStateException;
-
+	public void remove() throws DeviceException;
 }

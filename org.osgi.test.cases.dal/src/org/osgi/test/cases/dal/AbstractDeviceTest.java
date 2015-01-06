@@ -38,7 +38,7 @@ public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 	 * 
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#setUp()
 	 */
-	protected void setUp() throws Exception {
+	protected void setUp() throws InvalidSyntaxException {
 		this.testStepProxy = new TestStepProxy(super.getContext());
 		this.deviceServiceListener = new TestServiceListener(
 				super.getContext(), TestServiceListener.DEVICE_FILTER);
@@ -49,7 +49,7 @@ public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 	 * 
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#tearDown()
 	 */
-	protected void tearDown() throws Exception {
+	protected void tearDown() {
 		this.testStepProxy.close();
 		this.deviceServiceListener.unregister();
 	}
@@ -121,5 +121,4 @@ public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 					serviceRef.getProperty(propNames[i]));
 		}
 	}
-
 }

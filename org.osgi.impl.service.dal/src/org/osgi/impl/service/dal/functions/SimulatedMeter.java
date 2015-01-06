@@ -29,14 +29,14 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public final class SimulatedMeter extends SimulatedFunction implements Meter {
 
-	private static final String	MILLIS	= SIUnits.PREFIX_MILLI + SIUnits.SECOND;
+	private static final String		MILLIS						= SIUnits.PREFIX_MILLI + SIUnits.SECOND;
 	private static final String[]	MILLIS_ARRAY				= new String[] {MILLIS};
-	private static final BigDecimal	CURRENT_MEASUREMENT	= new BigDecimal(1);
+	private static final BigDecimal	CURRENT_MEASUREMENT			= new BigDecimal(1);
 	private static final LevelData	CURRENT_MEASUREMENT_LEVEL	= new LevelData(Long.MIN_VALUE, null, MILLIS, CURRENT_MEASUREMENT);
 	private static final Map		PROPERTY_METADATA;
-	private static final Map		OPERATION_METADATA	= null;
+	private static final Map		OPERATION_METADATA			= null;
 
-	private long	startTime;
+	private long					startTime;
 
 	static {
 		Map metadata = new HashMap();
@@ -93,7 +93,7 @@ public final class SimulatedMeter extends SimulatedFunction implements Meter {
 		this.startTime = System.currentTimeMillis();
 	}
 
-	public void publishEvent(String propName) throws IllegalArgumentException {
+	public void publishEvent(String propName) {
 		if (PROPERTY_CURRENT.equals(propName)) {
 			super.postEvent(propName, getCurrent());
 		} else
@@ -113,5 +113,4 @@ public final class SimulatedMeter extends SimulatedFunction implements Meter {
 				new String[] {OPERATION_RESET_TOTAL});
 		return functionProps;
 	}
-
 }

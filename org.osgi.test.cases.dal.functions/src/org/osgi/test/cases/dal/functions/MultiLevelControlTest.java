@@ -25,10 +25,9 @@ public final class MultiLevelControlTest extends AbstractFunctionTest {
 	 * Checks {@link MultiLevelControl#setData(java.math.BigDecimal, String)}
 	 * setter functionality.
 	 * 
-	 * @throws IllegalStateException If the function is removed.
 	 * @throws DeviceException If operation error is available.
 	 */
-	public void testSetData() throws IllegalStateException, DeviceException {
+	public void testSetData() throws DeviceException {
 		super.testStepProxy.execute(
 				FunctionsTestSteps.STEP_ID_AVAILABLE_MLC,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_MLC);
@@ -93,5 +92,4 @@ public final class MultiLevelControlTest extends AbstractFunctionTest {
 					new LevelData[] {(LevelData) minData, (LevelData) maxData};
 		}
 	}
-
 }

@@ -302,5 +302,4 @@ public final class LevelDataTest extends AbstractFunctionTest {
 				level,
 				actualData.getLevel());
 	}
-
 }

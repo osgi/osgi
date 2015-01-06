@@ -117,5 +117,4 @@ public final class DeviceTestSteps {
 	 * Step message for {@link #STEP_ID_REGISTER_DEVICE_FUNCTION} step.
 	 */
 	public static final String	STEP_MESSAGE_REGISTER_DEVICE_FUNCTION	= "Register a new device with at least one function.";
-
 }

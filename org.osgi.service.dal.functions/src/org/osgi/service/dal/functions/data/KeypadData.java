@@ -57,39 +57,39 @@ public class KeypadData extends FunctionData {
 	public static final int		EVENT_TYPE_UNKNOWN				= 0;
 
 	/** Represents a keypad event type for a key pressed. */
-	public static final int	EVENT_TYPE_PRESSED				= 1;
+	public static final int		EVENT_TYPE_PRESSED				= 1;
 
 	/** Represents a keypad event type for a long key pressed. */
-	public static final int	EVENT_TYPE_PRESSED_LONG			= 2;
+	public static final int		EVENT_TYPE_PRESSED_LONG			= 2;
 
 	/** Represents a keypad event type for a double key pressed. */
-	public static final int	EVENT_TYPE_PRESSED_DOUBLE		= 3;
+	public static final int		EVENT_TYPE_PRESSED_DOUBLE		= 3;
 
 	/** Represents a keypad event type for a double and long key pressed. */
-	public static final int	EVENT_TYPE_PRESSED_DOUBLE_LONG	= 4;
+	public static final int		EVENT_TYPE_PRESSED_DOUBLE_LONG	= 4;
 
 	/** Represents a keypad event type for a key released. */
-	public static final int	EVENT_TYPE_RELEASED				= 5;
+	public static final int		EVENT_TYPE_RELEASED				= 5;
 
 	/**
 	 * Represents the keypad event type. The vendor can define own event types
 	 * with negative values. The field is accessible with
 	 * {@link #getEventType()} getter.
 	 */
-	public final int		eventType;
+	public final int			eventType;
 
 	/**
 	 * Represents the key name, if it's available. The field is accessible with
 	 * {@link #getKeyName()} getter.
 	 */
-	public final String		keyName;
+	public final String			keyName;
 
 	/**
 	 * Represents the key code. This field is mandatory and it holds the
 	 * semantics(meaning) of the key. The field is accessible with
 	 * {@link #getKeyCode()} getter.
 	 */
-	public final int		keyCode;
+	public final int			keyCode;
 
 	/**
 	 * Constructs new {@code KeypadData} instance with the specified field
@@ -267,5 +267,4 @@ public class KeypadData extends FunctionData {
 	private int compareToMap(Map otherData) {
 		return compareToKeypadData(new KeypadData(otherData));
 	}
-
 }

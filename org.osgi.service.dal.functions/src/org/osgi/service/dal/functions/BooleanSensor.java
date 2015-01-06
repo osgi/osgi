@@ -24,7 +24,7 @@ import org.osgi.service.dal.functions.data.BooleanData;
  * {@code BooleanSensor} function provides boolean sensor monitoring. It reports
  * its state when an important event is available. The state is accessible with
  * {@link #getData()} getter. There are no operations.
- * <p> 
+ * <p>
  * The sensor type can be:
  * <ul>
  * <li>{@link Types#LIGHT}</li>
@@ -66,7 +66,5 @@ public interface BooleanSensor extends Function {
 	 * 
 	 * @see BooleanData
 	 */
-	public BooleanData getData() throws UnsupportedOperationException,
-			IllegalStateException, DeviceException;
-
+	public BooleanData getData() throws DeviceException;
 }

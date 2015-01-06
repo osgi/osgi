@@ -55,5 +55,4 @@ public class SimulatedService implements ServiceFactory {
 			this.serviceRef = serviceRegA.getReference();
 		}
 	}
-
 }

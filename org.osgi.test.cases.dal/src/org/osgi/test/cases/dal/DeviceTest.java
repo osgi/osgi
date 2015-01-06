@@ -185,5 +185,4 @@ public class DeviceTest extends AbstractDeviceTest {
 		}
 		return devices;
 	}
-
 }

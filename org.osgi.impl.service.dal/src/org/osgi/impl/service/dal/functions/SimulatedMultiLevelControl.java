@@ -28,8 +28,8 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public final class SimulatedMultiLevelControl extends SimulatedFunction implements MultiLevelControl {
 
-	private static final Map	PROPERTY_METADATA;
-	private static final Map	OPERATION_METADATA	= null;
+	private static final Map			PROPERTY_METADATA;
+	private static final Map			OPERATION_METADATA	= null;
 	private static final BigDecimal[]	VALUES;
 	private static final LevelData[]	LEVEL_DATA;
 
@@ -61,7 +61,7 @@ public final class SimulatedMultiLevelControl extends SimulatedFunction implemen
 		PROPERTY_METADATA = new HashMap();
 		PROPERTY_METADATA.put(PROPERTY_DATA, propMetadata);
 	}
-	
+
 	/**
 	 * Constructs a new instance with the specified arguments.
 	 * 
@@ -102,7 +102,7 @@ public final class SimulatedMultiLevelControl extends SimulatedFunction implemen
 		setData(level);
 	}
 
-	public void publishEvent(String propName) throws IllegalArgumentException {
+	public void publishEvent(String propName) {
 		if (!PROPERTY_DATA.equals(propName)) {
 			throw new IllegalArgumentException("The property is not supported: " + propName);
 		}
@@ -117,5 +117,4 @@ public final class SimulatedMultiLevelControl extends SimulatedFunction implemen
 			throw new IllegalArgumentException("The value is not supported: " + level);
 		}
 	}
-
 }

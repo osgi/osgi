@@ -41,5 +41,4 @@ public interface Keypad extends Function {
 	 * @see KeypadData
 	 */
 	public static final String	PROPERTY_KEY	= "key";
-
 }

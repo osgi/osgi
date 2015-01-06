@@ -84,8 +84,7 @@ public interface BooleanControl extends Function {
 	 * @see BooleanData
 	 * @see BooleanControl#PROPERTY_DATA
 	 */
-	public BooleanData getData() throws UnsupportedOperationException,
-			IllegalStateException, DeviceException;
+	public BooleanData getData() throws DeviceException;
 
 	/**
 	 * Sets the {@code BooleanControl} state to the specified value. It's setter
@@ -101,8 +100,7 @@ public interface BooleanControl extends Function {
 	 * 
 	 * @see BooleanControl#PROPERTY_DATA
 	 */
-	public void setData(boolean data) throws UnsupportedOperationException,
-			IllegalStateException, DeviceException, IllegalArgumentException;
+	public void setData(boolean data) throws DeviceException;
 
 	/**
 	 * Reverses the {@code BooleanControl} state. If the current state
@@ -115,8 +113,7 @@ public interface BooleanControl extends Function {
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.
 	 */
-	public void reverse() throws UnsupportedOperationException,
-			IllegalStateException, DeviceException;
+	public void reverse() throws DeviceException;
 
 	/**
 	 * Sets the {@code BooleanControl} state to {@code true} value. The
@@ -127,8 +124,7 @@ public interface BooleanControl extends Function {
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.
 	 */
-	public void setTrue() throws UnsupportedOperationException,
-			IllegalStateException, DeviceException;
+	public void setTrue() throws DeviceException;
 
 	/**
 	 * Sets the {@code BooleanControl} state to {@code false} value. The
@@ -139,7 +135,5 @@ public interface BooleanControl extends Function {
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.
 	 */
-	public void setFalse() throws UnsupportedOperationException,
-			IllegalStateException, DeviceException;
-
+	public void setFalse() throws DeviceException;
 }

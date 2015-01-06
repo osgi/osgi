@@ -263,5 +263,4 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 				type,
 				actualData.getType());
 	}
-
 }

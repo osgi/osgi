@@ -49,77 +49,78 @@ public class AlarmData extends FunctionData {
 	public static final int		TYPE_UNDEFINED	= 0;
 
 	/** The alarm type indicates that smoke is detected. */
-	public static final int	TYPE_SMOKE		= 1;
+	public static final int		TYPE_SMOKE		= 1;
 
 	/** The alarm type indicates that temperature is too high. */
-	public static final int	TYPE_HEAT		= 2;
+	public static final int		TYPE_HEAT		= 2;
 
 	/** The alarm type indicates that temperature is too low. */
-	public static final int	TYPE_COLD		= 3;
+	public static final int		TYPE_COLD		= 3;
 
 	/** The alarm type indicates that carbon dioxide is detected. */
-	public static final int	TYPE_GAS_CO2	= 4;
+	public static final int		TYPE_GAS_CO2	= 4;
 
 	/** The alarm type indicates that carbon monoxide is detected. */
-	public static final int	TYPE_GAS_CO		= 5;
+	public static final int		TYPE_GAS_CO		= 5;
 
 	/** The alarm type indicates that water leak is detected. */
-	public static final int	TYPE_WATER		= 6;
+	public static final int		TYPE_WATER		= 6;
 
 	/** The alarm type indicates a power cut. */
-	public static final int	TYPE_POWER_FAIL	= 7;
+	public static final int		TYPE_POWER_FAIL	= 7;
 
 	/** The alarm type indicates that there is hardware failure. */
-	public static final int	TYPE_HW_FAIL	= 8;
+	public static final int		TYPE_HW_FAIL	= 8;
 
 	/** The alarm type indicates that there is software failure. */
-	public static final int	TYPE_SW_FAIL	= 9;
+	public static final int		TYPE_SW_FAIL	= 9;
 
 	/**
 	 * The severity constant indicates that there is no severity rating for this
 	 * alarm.
 	 */
-	public static final int	SEVERITY_NONE	= 0;
+	public static final int		SEVERITY_NONE	= 0;
 
 	/**
 	 * The severity rating indicates that there is an alarm with lowest
 	 * priority.
 	 */
-	public static final int	SEVERITY_LOW	= 1;
+	public static final int		SEVERITY_LOW	= 1;
 
 	/**
 	 * The severity rating indicates that there is an alarm with medium
 	 * priority. The severity priority is higher than {@link #SEVERITY_LOW} and
 	 * lower than {@link #SEVERITY_HIGH}.
 	 */
-	public static final int	SEVERITY_MEDIUM	= 2;	// Moderate, Normal
+	public static final int		SEVERITY_MEDIUM	= 2;			// Moderate,
+																// Normal
 
 	/**
 	 * The severity rating indicates that there is an alarm with high priority.
 	 * The severity priority is higher than {@link #SEVERITY_MEDIUM} and lower
 	 * than {@link #SEVERITY_URGENT}.
 	 */
-	public static final int	SEVERITY_HIGH	= 3;	// Important
+	public static final int		SEVERITY_HIGH	= 3;			// Important
 
 	/**
 	 * The severity rating indicates that there an urgent alarm. That severity
 	 * has highest priority.
 	 */
-	public static final int	SEVERITY_URGENT	= 4;	// Critical
+	public static final int		SEVERITY_URGENT	= 4;			// Critical
 
 	/**
 	 * Represents the alarm severity. The field is accessible with
 	 * {@link #getSeverity()} getter. The vendor can define own alarm severity
 	 * ratings with negative values.
 	 */
-	public final int		severity;
+	public final int			severity;
 
 	/**
 	 * Represents the alarm type. The field is accessible with
 	 * {@link #getType()} getter. The vendor can define own alarm types with
 	 * negative values.
 	 */
-	public final int		type;
+	public final int			type;
 
 	/**
 	 * Constructs new {@code AlarmData} instance with the specified field
@@ -278,5 +279,4 @@ public class AlarmData extends FunctionData {
 	private int compareToMap(Map otherData) {
 		return compareToAlarmData(new AlarmData(otherData));
 	}
-
 }

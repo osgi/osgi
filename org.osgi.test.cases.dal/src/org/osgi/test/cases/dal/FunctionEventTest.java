@@ -41,5 +41,4 @@ public final class FunctionEventTest extends DefaultTestBundleControl {
 		assertEquals("The event function property name is not correct!", PROP_NAME, event.getFunctionPropertyName());
 		assertEquals("The event function property value is not correct!", PROP_VALUE, event.getFunctionPropertyValue());
 	}
-
 }

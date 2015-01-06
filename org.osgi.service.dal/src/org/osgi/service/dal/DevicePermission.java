@@ -48,7 +48,7 @@ import org.osgi.framework.InvalidSyntaxException;
  */
 public final class DevicePermission extends BasicPermission {
 
-	private static final long	serialVersionUID	= -3020753566295420906L;
+	private static final long		serialVersionUID	= -3020753566295420906L;
 
 	/** A permission action to remove the device. */
 	public static final String		REMOVE				= "remove";
@@ -57,13 +57,13 @@ public final class DevicePermission extends BasicPermission {
 	 * If the permission was built with filter, this filed contains LDAP filter
 	 * used for matching.
 	 */
-	private transient Filter	filter;
+	private transient Filter		filter;
 
 	/**
 	 * Initialized when the device permission is built with device instance.
 	 * Such permissions are used only for security checks.
 	 */
-	transient Device	device;
+	transient Device				device;
 
 	/**
 	 * Device properties are initialized on the first request.
@@ -152,8 +152,7 @@ public final class DevicePermission extends BasicPermission {
 	}
 
 	/**
-	 * Returns the canonical string representation of {@link #REMOVE}
-	 * action.
+	 * Returns the canonical string representation of {@link #REMOVE} action.
 	 * 
 	 * @return The canonical string representation of the actions.
 	 */
@@ -207,7 +206,7 @@ public final class DevicePermission extends BasicPermission {
 	 * Called when the permission state is saved to a stream. Permissions with
 	 * device instance cannot be serialized.
 	 */
-	private synchronized void writeObject(java.io.ObjectOutputStream s) throws IOException {
+	private synchronized void writeObject(java.io.ObjectOutputStream s) throws NotSerializableException {
 		if (null != this.device) {
 			throw new NotSerializableException("Device permission with a device instance cannot be serialized.");
 		}
@@ -216,7 +215,7 @@ public final class DevicePermission extends BasicPermission {
 	/**
 	 * Called to restore the permission state from the stream.
 	 */
-	private synchronized void readObject(java.io.ObjectInputStream s) throws IOException, ClassNotFoundException {
+	private synchronized void readObject(java.io.ObjectInputStream s) {
 		this.filter = parseFilter(getName());
 	}
 
@@ -230,7 +229,7 @@ public final class DevicePermission extends BasicPermission {
 		}
 		return this.filter.matchCase(devicePropertiesLocal);
 	}
-	
+
 	private Dictionary getDeviceProperties() {
 		if (null != this.deviceProperties) {
 			return this.deviceProperties;
@@ -294,13 +293,13 @@ public final class DevicePermission extends BasicPermission {
  * filter. Permissions with device instance are not accepted.
  */
 final class DevicePermissionCollection extends PermissionCollection {
-	
+
 	private static final long	serialVersionUID	= 2631804209616986690L;
 
 	/**
 	 * The permission name is used as a key, the permission is used as a value.
 	 */
-	private transient Map/*String, DevicePermission*/ permissions;
+	private transient Map		/* String, DevicePermission */permissions;
 
 	/**
 	 * {@code true} means that "*" has been added to the collection.
@@ -362,7 +361,7 @@ final class DevicePermissionCollection extends PermissionCollection {
 		DevicePermission requested = (DevicePermission) permission;
 		if (null == requested.device) {
 			return false; // the requested must have device instance
-		
+
 		}
 		final Collection perms;
 		synchronized (this) {
@@ -371,7 +370,7 @@ final class DevicePermissionCollection extends PermissionCollection {
 			}
 			perms = this.permissions.values();
 		}
-		for (Iterator permsIter = perms.iterator(); permsIter.hasNext(); /*empty*/) {
+		for (Iterator permsIter = perms.iterator(); permsIter.hasNext(); /* empty */) {
 			final DevicePermission currentDevicePerm = (DevicePermission) permsIter.next();
 			if (currentDevicePerm.implyDevicePermission(requested)) {
 				return true;

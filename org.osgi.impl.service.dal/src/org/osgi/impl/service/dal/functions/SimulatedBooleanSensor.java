@@ -45,7 +45,7 @@ public final class SimulatedBooleanSensor extends SimulatedFunction implements B
 		PROPERTY_METADATA = new HashMap();
 		PROPERTY_METADATA.put(PROPERTY_DATA, propMetadata);
 	}
-	
+
 	/**
 	 * Constructs a new instance with the specified arguments.
 	 * 
@@ -71,11 +71,10 @@ public final class SimulatedBooleanSensor extends SimulatedFunction implements B
 		return new BooleanData(System.currentTimeMillis(), null, true);
 	}
 
-	public void publishEvent(String propName) throws IllegalArgumentException {
+	public void publishEvent(String propName) {
 		if (!PROPERTY_DATA.equals(propName)) {
 			throw new IllegalArgumentException("The property is not supported: " + propName);
 		}
 		super.postEvent(propName, getData());
 	}
-
 }

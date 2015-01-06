@@ -152,5 +152,4 @@ public class DeviceSimulatorImpl implements DeviceSimulator {
 		return "org.osgi.impl.service.dal.functions.Simulated" +
 				functionClass.substring(functionClass.lastIndexOf('.') + 1);
 	}
-
 }

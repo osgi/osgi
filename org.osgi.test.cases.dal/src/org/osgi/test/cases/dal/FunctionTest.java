@@ -95,11 +95,8 @@ public class FunctionTest extends AbstractDeviceTest {
 	 * @throws InvalidSyntaxException If the registered device UID can break the
 	 *         LDAP filter.
 	 * @throws DeviceException An error while removing the device.
-	 * @throws UnsupportedOperationException If remove operation is not
-	 *         supported.
-	 * @throws IllegalStateException If the test device is already removed.
 	 */
-	public void testUnregistrationOrder() throws InvalidSyntaxException, DeviceException, UnsupportedOperationException, IllegalStateException {
+	public void testUnregistrationOrder() throws InvalidSyntaxException, DeviceException {
 		super.deviceServiceListener.clear();
 		super.testStepProxy.execute(
 				DeviceTestSteps.STEP_ID_REGISTER_DEVICE_FUNCTION,
@@ -400,5 +397,4 @@ public class FunctionTest extends AbstractDeviceTest {
 					TestUtil.contains(expectedTypes, propertyType));
 		}
 	}
-
 }

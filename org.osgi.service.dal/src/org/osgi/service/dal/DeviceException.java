@@ -53,8 +53,8 @@ public class DeviceException extends IOException {
 	 */
 	public static final int		NO_DATA				= 5;
 
-	private static final long	serialVersionUID			= 1L;
-	private static final String	CAUSED_BY					= "Caused by: ";
+	private static final long	serialVersionUID	= -1876565249188512600L;
+	private static final String	CAUSED_BY			= "Caused by: ";
 
 	private final int			code;
 	private final Throwable		cause;
@@ -71,7 +71,7 @@ public class DeviceException extends IOException {
 	 * Constructs a new device exception with the given message. The cause is
 	 * not initialized and the exception code is set to {@link #UNKNOWN}.
 	 * 
-	 * @param message The excpetion message.
+	 * @param message The exception message.
 	 */
 	public DeviceException(String message) {
 		this(message, null, UNKNOWN);
@@ -164,5 +164,4 @@ public class DeviceException extends IOException {
 			}
 		}
 	}
-
 }

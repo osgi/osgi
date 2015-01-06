@@ -33,5 +33,4 @@ public interface Alarm extends Function {
 	 * @see AlarmData
 	 */
 	public static final String	PROPERTY_ALARM	= "alarm";
-
 }

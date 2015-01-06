@@ -29,5 +29,4 @@ public final class AlarmTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_ID_EVENT_ALARM,
 				FunctionsTestSteps.STEP_MESSAGE_EVENT_ALARM);
 	}
-
 }

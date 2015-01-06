@@ -42,7 +42,7 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 	 * 
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#setUp()
 	 */
-	protected void setUp() throws Exception {
+	protected void setUp() {
 		this.testStepProxy = new TestStepProxy(super.getContext());
 	}
 
@@ -51,7 +51,7 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 	 * 
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#tearDown()
 	 */
-	protected void tearDown() throws Exception {
+	protected void tearDown() {
 		this.testStepProxy.close();
 	}
 
@@ -247,5 +247,4 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 		Integer accessType = (Integer) metadata.get(PropertyMetadata.ACCESS);
 		return (null != accessType) && (propertyAccess == (accessType.intValue() & propertyAccess));
 	}
-
 }

@@ -275,5 +275,4 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 				value,
 				actualData.getValue());
 	}
-
 }

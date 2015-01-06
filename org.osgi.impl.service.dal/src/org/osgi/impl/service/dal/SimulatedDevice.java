@@ -16,7 +16,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceFactory;
 import org.osgi.service.dal.Device;
-import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.DevicePermission;
 
 final class SimulatedDevice extends SimulatedService implements Device, ServiceFactory {
@@ -28,7 +27,7 @@ final class SimulatedDevice extends SimulatedService implements Device, ServiceF
 		super.register(new String[] {Device.class.getName()}, deviceProps, bc);
 	}
 
-	public void remove() throws DeviceException, UnsupportedOperationException, SecurityException, IllegalStateException {
+	public void remove() {
 		SecurityManager securityManager = System.getSecurityManager();
 		if (null != securityManager) {
 			securityManager.checkPermission(
@@ -42,7 +41,7 @@ final class SimulatedDevice extends SimulatedService implements Device, ServiceF
 		}
 	}
 
-	public Object getServiceProperty(String propName) throws IllegalArgumentException {
+	public Object getServiceProperty(String propName) {
 		Object value = super.serviceRef.getProperty(propName);
 		if (null == value) {
 			throw new IllegalArgumentException("The property name is missing: " + propName);
@@ -78,5 +77,4 @@ final class SimulatedDevice extends SimulatedService implements Device, ServiceF
 		}
 		return false;
 	}
-
 }

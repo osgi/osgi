@@ -29,5 +29,4 @@ public final class KeypadTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_ID_EVENT_KEYPAD,
 				FunctionsTestSteps.STEP_MESSAGE_EVENT_KEYPAD);
 	}
-
 }

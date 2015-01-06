@@ -27,11 +27,10 @@ import org.osgi.service.event.Event;
  * to have events in series with no value change. The event properties must
  * contain:
  * <ul>
- * <li>{@link #FUNCTION_UID} - the event source function unique
- * identifier.</li>
+ * <li>{@link #FUNCTION_UID} - the event source function unique identifier.</li>
  * <li>{@link #PROPERTY_NAME} - the property name.</li>
- * <li>{@link #PROPERTY_VALUE} - the property value. The
- * property value type must be a subclass of FunctionData.</li>
+ * <li>{@link #PROPERTY_VALUE} - the property value. The property value type
+ * must be a subclass of FunctionData.</li>
  * </ul>
  */
 public class FunctionEvent extends Event {
@@ -151,5 +150,4 @@ public class FunctionEvent extends Event {
 		eventProps.put(FUNCTION_UID, funtionUID);
 		return eventProps;
 	}
-
 }

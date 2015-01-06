@@ -158,5 +158,4 @@ public class TestStepImpl implements TestStep {
 		}
 		return deviceSimulator;
 	}
-
 }

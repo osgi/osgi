@@ -21,8 +21,7 @@ import org.osgi.service.event.EventConstants;
 import org.osgi.service.event.EventHandler;
 
 /**
- * Test event handler for {@link FunctionEvent#TOPIC_PROPERTY_CHANGED}
- * events.
+ * Test event handler for {@link FunctionEvent#TOPIC_PROPERTY_CHANGED} events.
  */
 public final class FunctionEventHandler implements EventHandler {
 
@@ -92,11 +91,8 @@ public final class FunctionEventHandler implements EventHandler {
 	 * 
 	 * @return The events required by the specified argument, the events count
 	 *         can be greater than the argument.
-	 * 
-	 * @throws IllegalStateException If the events are not received in a given
-	 *         timeout.
 	 */
-	public FunctionEvent[] getEvents(int eventsCount) throws IllegalStateException {
+	public FunctionEvent[] getEvents(int eventsCount) {
 		synchronized (this.events) {
 			long startTime = System.currentTimeMillis();
 			long elapsedTime = 0;
@@ -127,5 +123,4 @@ public final class FunctionEventHandler implements EventHandler {
 			this.events.notifyAll();
 		}
 	}
-
 }

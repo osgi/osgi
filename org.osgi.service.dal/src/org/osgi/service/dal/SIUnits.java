@@ -758,5 +758,4 @@ public interface SIUnits {
 	 * ten.
 	 */
 	public static final String	PREFIX_YOCTO					= "y";
-
 }

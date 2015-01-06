@@ -32,11 +32,11 @@ public class DeviceSecureTest extends DefaultTestBundleControl {
 
 	private TestStepProxy	testStepProxy;
 
-	protected void setUp() throws Exception {
+	protected void setUp() {
 		this.testStepProxy = new TestStepProxy(super.getContext());
 	}
 
-	protected void tearDown() throws Exception {
+	protected void tearDown() {
 		this.testStepProxy.close();
 	}
 
@@ -133,5 +133,4 @@ public class DeviceSecureTest extends DefaultTestBundleControl {
 			return null;
 		}
 	}
-
 }

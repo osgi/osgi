@@ -24,7 +24,7 @@ public class Activator implements BundleActivator {
 	private ServiceRegistration	testStepSReg;
 	private ServiceTracker		deviceSimulatorTracker;
 
-	public void start(BundleContext bc) throws Exception {
+	public void start(BundleContext bc) {
 		this.deviceSimulatorTracker = new ServiceTracker(bc, DeviceSimulator.class.getName(), null);
 		this.deviceSimulatorTracker.open();
 		this.testStepSReg = bc.registerService(
@@ -32,9 +32,8 @@ public class Activator implements BundleActivator {
 				null);
 	}
 
-	public void stop(BundleContext bc) throws Exception {
+	public void stop(BundleContext bc) {
 		this.testStepSReg.unregister();
 		this.deviceSimulatorTracker.close();
 	}
-
 }

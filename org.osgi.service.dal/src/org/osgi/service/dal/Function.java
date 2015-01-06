@@ -272,8 +272,7 @@ public interface Function {
 	 * @throws IllegalArgumentException If the function property with the
 	 *         specified name is not supported.
 	 */
-	public PropertyMetadata getPropertyMetadata(String propertyName)
-			throws IllegalArgumentException;
+	public PropertyMetadata getPropertyMetadata(String propertyName);
 
 	/**
 	 * Provides metadata about the function operation.
@@ -290,8 +289,7 @@ public interface Function {
 	 * @throws IllegalArgumentException If the function operation with the
 	 *         specified name is not supported.
 	 */
-	public OperationMetadata getOperationMetadata(String operationName)
-			throws IllegalArgumentException;
+	public OperationMetadata getOperationMetadata(String operationName);
 
 	/**
 	 * Returns the current value of the specified property. The method will
@@ -318,5 +316,4 @@ public interface Function {
 	 *         {@code null}.
 	 */
 	public String[] getServicePropertyKeys();
-
- }
+}

@@ -36,5 +36,4 @@ final class TestDevice implements Device {
 	public void remove() {
 		// nothing to do here
 	}
-
 }

@@ -64,7 +64,7 @@ public final class SimulatedKeypad extends SimulatedFunction implements Keypad {
 		return functionProps;
 	}
 
-	public void publishEvent(String propName) throws IllegalArgumentException {
+	public void publishEvent(String propName) {
 		if (!PROPERTY_KEY.equals(propName)) {
 			throw new IllegalArgumentException("The property is not supported: " + propName);
 		}
@@ -75,5 +75,4 @@ public final class SimulatedKeypad extends SimulatedFunction implements Keypad {
 						KeypadData.EVENT_TYPE_PRESSED,
 						64, "OSGi RI-test key"));
 	}
-
 }

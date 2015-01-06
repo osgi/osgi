@@ -23,5 +23,4 @@ final class DeviceUtil {
 			// nothing to do
 		}
 	}
-
 }

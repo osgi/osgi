@@ -31,16 +31,16 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 
-	private static final String		MILLIS				= SIUnits.PREFIX_MILLI + SIUnits.SECOND;
-	private static final String[]	MILLIS_ARRAY		= new String[] {MILLIS};
+	private static final String		MILLIS					= SIUnits.PREFIX_MILLI + SIUnits.SECOND;
+	private static final String[]	MILLIS_ARRAY			= new String[] {MILLIS};
 	private static final LevelData	MIN_WAKE_UP_INTERVAL	= new LevelData(
 																	System.currentTimeMillis(), null, MILLIS, new BigDecimal(0));
-	private static final Map	PROPERTY_METADATA;
-	private static final Map	OPERATION_METADATA	= null;
-	
-	private final Object			lock				= new Object();
+	private static final Map		PROPERTY_METADATA;
+	private static final Map		OPERATION_METADATA		= null;
 
-	private TimerTask			timerTask;
+	private final Object			lock					= new Object();
+
+	private TimerTask				timerTask;
 	private Timer					timer;
 	private boolean					removed;
 	private LevelData				wakeUpInterval			= MIN_WAKE_UP_INTERVAL;
@@ -75,7 +75,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 				null);    // maxValue
 		PROPERTY_METADATA.put(PROPERTY_AWAKE, propMetadata);
 	}
-	
+
 	/**
 	 * Constructs a new instance with the specified arguments.
 	 * 
@@ -127,7 +127,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 		super.remove();
 	}
 
-	public void publishEvent(String propName) throws IllegalArgumentException {
+	public void publishEvent(String propName) {
 		if (PROPERTY_AWAKE.equals(propName)) {
 			setWakeUpInterval(getWakeUpInterval().getLevel(), false);
 		} else
@@ -179,5 +179,4 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 		}
 
 	}
-
 }
