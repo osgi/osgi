@@ -10,7 +10,7 @@
 			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
 		</service>
 		<property name="type" value="static"/>
-	    <field-reference
+	    <reference
 	          interface="org.osgi.test.cases.component.service.TestObject"
 	          policy="static"
 	          cardinality="1..1"
@@ -26,7 +26,7 @@
 			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
 		</service>
 		<property name="type" value="dynamic"/>
-	    <field-reference
+	    <reference
 	          interface="org.osgi.test.cases.component.service.TestObject"
 	          policy="dynamic"
 	          cardinality="0..1"
@@ -42,7 +42,7 @@
 			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
 		</service>
 		<property name="type" value="failed"/>
-	    <field-reference
+	    <reference
 	          interface="org.osgi.test.cases.component.service.TestObject"
 	          policy="dynamic"
 	          cardinality="0..1"
@@ -58,31 +58,31 @@
 			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
 		</service>
 		<property name="type" value="type"/>
-	    <field-reference
+	    <reference
 	          name="A"
 	          interface="org.osgi.test.cases.component.service.TestObject"
 	          policy="static"
 	          cardinality="1..1"
 	          field="service"/>
-	    <field-reference
+	    <reference
 	          name="B"
 	          interface="org.osgi.test.cases.component.service.TestObject"
 	          policy="static"
 	          cardinality="1..1"
 	          field="ref"/>
-	    <field-reference
+	    <reference
 	          name="C"
 	          interface="org.osgi.test.cases.component.service.TestObject"
 	          policy="static"
 	          cardinality="1..1"
 	          field="properties"/>
-	    <field-reference
+	    <reference
 	          name="D"
 	          interface="org.osgi.test.cases.component.service.TestObject"
 	          policy="static"
 	          cardinality="1..1"
 	          field="tuple"/>
-	    <field-reference
+	    <reference
 	          name="E"
 	          interface="org.osgi.test.cases.component.service.TestObject"
 	          policy="static"
