@@ -90,4 +90,36 @@
 	          field="objects"
 	          scope="prototype"/>
 	</component>
+
+	<!-- multiple reference (static/required), NS 1.3.0 -->
+	<component name="org.osgi.test.cases.component.tbf1.mstatic"
+	           xmlns="http://www.osgi.org/xmlns/scr/v1.3.0">
+		<implementation
+			class="org.osgi.test.cases.component.tbf1.impl.MultipleReferenceImpl"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+		<property name="type" value="multiple-required"/>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="static"
+	          cardinality="1..n"
+	          field="services"/>
+	</component>
+
+	<!-- multiple reference (dynamic/optional), NS 1.3.0 -->
+	<component name="org.osgi.test.cases.component.tbf1.mdynamic"
+	           xmlns="http://www.osgi.org/xmlns/scr/v1.3.0">
+		<implementation
+			class="org.osgi.test.cases.component.tbf1.impl.MultipleReferenceImpl"/>
+		<service>
+			<provide interface="org.osgi.test.cases.component.service.BaseService"/>
+		</service>
+		<property name="type" value="multiple-dynamic"/>
+	    <reference
+	          interface="org.osgi.test.cases.component.service.TestObject"
+	          policy="dynamic"
+	          cardinality="0..n"
+	          field="services"/>
+	</component>
 </components>

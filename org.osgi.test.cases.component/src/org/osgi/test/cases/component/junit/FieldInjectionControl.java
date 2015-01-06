@@ -24,6 +24,9 @@
  */
 package org.osgi.test.cases.component.junit;
 
+import java.util.Dictionary;
+import java.util.Hashtable;
+import java.util.List;
 import java.util.Map;
 
 import org.osgi.framework.Bundle;
@@ -213,6 +216,96 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 			ungetAllServices();
 			unregisterAllServices();
 			uninstallBundle(tb);
+		}
+	}
+
+	/**
+	 * Simple field injection test.
+	 *
+	 * Static multiple reference
+	 */
+	public void testFIStaticMultipleReference() throws Exception {
+		final TestObject service = new TestObject();
+
+		final Bundle tb = installBundle("tbf1.jar", false);
+		try {
+			this.registerService(TestObject.class.getName(), service, null);
+
+			tb.start();
+
+			final BaseService bs = (BaseService) this.getService(
+					BaseService.class, "(type=multiple-required)");
+			assertNotNull(bs.getProperties());
+			assertNotNull(bs.getProperties().get("services"));
+			assertEquals(1, ((List) bs.getProperties().get("services")).size());
+			assertEquals(service,
+					((List) bs.getProperties().get("services")).get(0));
+
+			this.ungetService(bs);
+
+			this.unregisterService(service);
+
+			Sleep.sleep(SLEEP * 3);
+
+			assertNull(getContext().getServiceReferences(
+					BaseService.class.getName(), "(type=multiple-required)"));
+		} finally {
+			uninstallBundle(tb);
+			this.unregisterAllServices();
+		}
+	}
+
+	/**
+	 * Simple field injection test.
+	 *
+	 * Dynamic multiple reference
+	 */
+	public void testFIDynamicMultipleReference() throws Exception {
+		final TestObject service1 = new TestObject();
+		final TestObject service2 = new TestObject();
+		final TestObject service3 = new TestObject();
+
+		final Dictionary props1 = new Hashtable();
+		props1.put(Constants.SERVICE_RANKING, new Integer(5));
+		final Dictionary props2 = new Hashtable();
+		props2.put(Constants.SERVICE_RANKING, new Integer(10));
+		final Dictionary props3 = new Hashtable();
+		props3.put(Constants.SERVICE_RANKING, new Integer(15));
+
+		final Bundle tb = installBundle("tbf1.jar", false);
+		try {
+			tb.start();
+
+			final BaseService bs = (BaseService) this.getService(
+					BaseService.class, "(type=multiple-dynamic)");
+			assertNotNull(bs.getProperties());
+			assertNotNull(bs.getProperties().get("services"));
+			assertEquals(0, ((List) bs.getProperties().get("services")).size());
+
+			this.registerService(TestObject.class.getName(), service1, props1);
+			this.registerService(TestObject.class.getName(), service3, props3);
+			this.registerService(TestObject.class.getName(), service2, props2);
+
+			// unfortunately there is no event we can wait for
+			Sleep.sleep(SLEEP);
+
+			assertEquals(3, ((List) bs.getProperties().get("services")).size());
+			assertEquals(service1,
+					((List) bs.getProperties().get("services")).get(0));
+			assertEquals(service2,
+					((List) bs.getProperties().get("services")).get(1));
+			assertEquals(service3,
+					((List) bs.getProperties().get("services")).get(2));
+
+			this.ungetService(bs);
+
+			this.unregisterService(service3);
+			this.unregisterService(service2);
+			this.unregisterService(service1);
+
+		} finally {
+			uninstallBundle(tb);
+			this.unregisterAllServices();
 		}
 	}
 }
