@@ -265,11 +265,6 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 
 	private void checkBooleanDataFields(long timestamp, Map metadata, boolean value, BooleanData actualData) {
 		super.assertFunctionDataFields(timestamp, metadata, actualData);
-		// value
-		assertEquals(
-				"The value field is not correct!",
-				value,
-				actualData.value);
 		assertEquals(
 				"The value is not correct!",
 				value,

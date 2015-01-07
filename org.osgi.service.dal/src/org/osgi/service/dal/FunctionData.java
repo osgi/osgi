@@ -31,17 +31,15 @@ public abstract class FunctionData implements Comparable {
 
 	/**
 	 * Represents the timestamp field name. The field value is available with
-	 * {@link #timestamp} and {@link #getTimestamp()}. The field type is
-	 * {@code long}. The constant can be used as a key to
-	 * {@link #FunctionData(Map)}.
+	 * {@link #getTimestamp()}. The field type is {@code long}. The constant can
+	 * be used as a key to {@link #FunctionData(Map)}.
 	 */
 	public static final String	FIELD_TIMESTAMP	= "timestamp";
 
 	/**
 	 * Represents the metadata field name. The field value is available with
-	 * {@link #metadata} and {@link #getMetadata()}. The field type is
-	 * {@code Map}. The constant can be used as a key to
-	 * {@link #FunctionData(Map)}.
+	 * {@link #getMetadata()}. The field type is {@code Map}. The constant can
+	 * be used as a key to {@link #FunctionData(Map)}.
 	 */
 	public static final String	FIELD_METADATA	= "metadata";
 
@@ -51,23 +49,8 @@ public abstract class FunctionData implements Comparable {
 	 */
 	public static final String	DESCRIPTION		= "description";
 
-	/**
-	 * Contains {@code FunctionData} timestamp. The timestamp is the difference
-	 * between the value collecting time and midnight, January 1, 1970 UTC. It's
-	 * measured in milliseconds. The device driver is responsible to generate
-	 * that value when the value is received from the device.
-	 * {@link java.lang.Long#MIN_VALUE} value means no timestamp.
-	 */
-	public final long			timestamp;
-
-	/**
-	 * Contains {@code FunctionData} metadata. It's dynamic metadata related
-	 * only to this specific value. Possible keys:
-	 * <ul>
-	 * <li>{@link #DESCRIPTION}</li>
-	 * <li>custom key</li>
-	 */
-	public final Map			metadata;
+	private final long			timestamp;
+	private final Map			metadata;
 
 	/**
 	 * Constructs new {@code FunctionData} instance with the specified field

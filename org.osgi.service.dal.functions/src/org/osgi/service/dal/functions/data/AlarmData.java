@@ -32,16 +32,15 @@ public class AlarmData extends FunctionData {
 
 	/**
 	 * Represents the severity field name. The field value is available with
-	 * {@link #severity} and {@link #getSeverity()}. The field type is
-	 * {@code int}. The constant can be used as a key to {@link #AlarmData(Map)}
-	 * .
+	 * {@link #getSeverity()}. The field type is {@code int}. The constant can
+	 * be used as a key to {@link #AlarmData(Map)} .
 	 */
 	public static final String	FIELD_SEVERITY	= "severity";
 
 	/**
 	 * Represents the type field name. The field value is available with
-	 * {@link #type} and {@link #getType()}. The field type is {@code int}. The
-	 * constant can be used as a key to {@link #AlarmData(Map)}.
+	 * {@link #getType()}. The field type is {@code int}. The constant can be
+	 * used as a key to {@link #AlarmData(Map)}.
 	 */
 	public static final String	FIELD_TYPE		= "type";
 
@@ -108,19 +107,8 @@ public class AlarmData extends FunctionData {
 	 */
 	public static final int		SEVERITY_URGENT	= 4;			// Critical
 
-	/**
-	 * Represents the alarm severity. The field is accessible with
-	 * {@link #getSeverity()} getter. The vendor can define own alarm severity
-	 * ratings with negative values.
-	 */
-	public final int			severity;
-
-	/**
-	 * Represents the alarm type. The field is accessible with
-	 * {@link #getType()} getter. The vendor can define own alarm types with
-	 * negative values.
-	 */
-	public final int			type;
+	private final int			severity;
+	private final int			type;
 
 	/**
 	 * Constructs new {@code AlarmData} instance with the specified field

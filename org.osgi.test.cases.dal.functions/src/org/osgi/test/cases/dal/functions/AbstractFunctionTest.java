@@ -140,19 +140,11 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 	protected void assertFunctionDataFields(long timestamp, Map metadata, FunctionData actualData) {
 		// time stamp
 		assertEquals(
-				"The timestamp field is not correct!",
-				timestamp,
-				actualData.timestamp);
-		assertEquals(
 				"The timestamp is not correct!",
 				timestamp,
 				actualData.getTimestamp());
 
 		// metadata
-		assertEquals(
-				"The metadata field is not correct!",
-				metadata,
-				actualData.metadata);
 		assertEquals(
 				"The metadata is not correct!",
 				metadata,

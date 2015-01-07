@@ -33,16 +33,12 @@ public class BooleanData extends FunctionData {
 
 	/**
 	 * Represents the value field name. The field value is available with
-	 * {@link #value} and {@link #getValue()}. The field type is {@code boolean}
-	 * . The constant can be used as a key to {@link #BooleanData(Map)}.
+	 * {@link #getValue()}. The field type is {@code boolean} . The constant can
+	 * be used as a key to {@link #BooleanData(Map)}.
 	 */
 	public static final String	FIELD_VALUE	= "value";
 
-	/**
-	 * Represents the boolean value. The field is accessible with
-	 * {@link #getValue()} getter.
-	 */
-	public final boolean		value;
+	private final boolean		value;
 
 	/**
 	 * Constructs new {@code BooleanData} instance with the specified field

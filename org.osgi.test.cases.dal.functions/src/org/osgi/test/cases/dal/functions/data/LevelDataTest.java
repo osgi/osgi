@@ -284,19 +284,11 @@ public final class LevelDataTest extends AbstractFunctionTest {
 		super.assertFunctionDataFields(timestamp, metadata, actualData);
 		// unit
 		assertEquals(
-				"The metadata field is not correct!",
-				unit,
-				actualData.unit);
-		assertEquals(
 				"The metadata is not correct!",
 				unit,
 				actualData.getUnit());
 
 		// value
-		assertEquals(
-				"The level field is not correct!",
-				level,
-				actualData.level);
 		assertEquals(
 				"The level is not correct!",
 				level,

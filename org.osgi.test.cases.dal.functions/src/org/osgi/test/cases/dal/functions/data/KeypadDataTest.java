@@ -259,29 +259,17 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 		super.assertFunctionDataFields(timestamp, metadata, actualData);
 		// event type
 		assertEquals(
-				"The event type field is not correct!",
-				eventType,
-				actualData.eventType);
-		assertEquals(
 				"The event type is not correct!",
 				eventType,
 				actualData.getEventType());
 
 		// key code
 		assertEquals(
-				"The key code field is not correct!",
-				keyCode,
-				actualData.keyCode);
-		assertEquals(
 				"The key code is not correct!",
 				keyCode,
 				actualData.getKeyCode());
 
 		// key name
-		assertEquals(
-				"The key name field is not correct!",
-				keyName,
-				actualData.keyName);
 		assertEquals(
 				"The key name is not correct!",
 				keyName,

@@ -32,24 +32,22 @@ public class KeypadData extends FunctionData {
 
 	/**
 	 * Represents the key name field name. The field value is available with
-	 * {@link #keyName} and {@link #getKeyName()}. The field type is
-	 * {@code String}. The constant can be used as a key to
-	 * {@link #KeypadData(Map)}.
+	 * {@link #getKeyName()}. The field type is {@code String}. The constant can
+	 * be used as a key to {@link #KeypadData(Map)}.
 	 */
 	public static final String	FIELD_KEY_NAME					= "keyName";
 
 	/**
 	 * Represents the event type field name. The field value is available with
-	 * {@link #eventType} and {@link #getEventType()}. The field type is
-	 * {@code int}. The constant can be used as a key to
-	 * {@link #KeypadData(Map)}.
+	 * {@link #getEventType()}. The field type is {@code int}. The constant can
+	 * be used as a key to {@link #KeypadData(Map)}.
 	 */
 	public static final String	FIELD_EVENT_TYPE				= "eventType";
 
 	/**
 	 * Represents the key code field name. The field value is available with
-	 * {@link #keyCode} and {@link #getKeyCode()}. The field type is {@code int}
-	 * . The constant can be used as a key to {@link #KeypadData(Map)}.
+	 * {@link #getKeyCode()}. The field type is {@code int} . The constant can
+	 * be used as a key to {@link #KeypadData(Map)}.
 	 */
 	public static final String	FIELD_KEY_CODE					= "keyCode";
 
@@ -71,25 +69,9 @@ public class KeypadData extends FunctionData {
 	/** Represents a keypad event type for a key released. */
 	public static final int		EVENT_TYPE_RELEASED				= 5;
 
-	/**
-	 * Represents the keypad event type. The vendor can define own event types
-	 * with negative values. The field is accessible with
-	 * {@link #getEventType()} getter.
-	 */
-	public final int			eventType;
-
-	/**
-	 * Represents the key name, if it's available. The field is accessible with
-	 * {@link #getKeyName()} getter.
-	 */
-	public final String			keyName;
-
-	/**
-	 * Represents the key code. This field is mandatory and it holds the
-	 * semantics(meaning) of the key. The field is accessible with
-	 * {@link #getKeyCode()} getter.
-	 */
-	public final int			keyCode;
+	private final int			eventType;
+	private final String		keyName;
+	private final int			keyCode;
 
 	/**
 	 * Constructs new {@code KeypadData} instance with the specified field

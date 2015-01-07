@@ -243,21 +243,10 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 
 	private void checkAlarmDataFields(long timestamp, Map metadata, int severity, int type, AlarmData actualData) {
 		super.assertFunctionDataFields(timestamp, metadata, actualData);
-		// severity
-		assertEquals(
-				"The severity field is not correct!",
-				severity,
-				actualData.severity);
 		assertEquals(
 				"The severity is not correct!",
 				severity,
 				actualData.getSeverity());
-
-		// type
-		assertEquals(
-				"The alarm field is not correct!",
-				type,
-				actualData.type);
 		assertEquals(
 				"The alarm is not correct!",
 				type,

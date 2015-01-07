@@ -37,31 +37,20 @@ public class LevelData extends FunctionData {
 
 	/**
 	 * Represents the level field name. The field value is available with
-	 * {@link #level} and {@link #getLevel()}. The field type is
-	 * {@code BigDecimal}. The constant can be used as a key to
-	 * {@link #LevelData(Map)}.
+	 * {@link #getLevel()}. The field type is {@code BigDecimal}. The constant
+	 * can be used as a key to {@link #LevelData(Map)}.
 	 */
 	public static final String	FIELD_LEVEL	= "level";
 
 	/**
 	 * Represents the unit field name. The field value is available with
-	 * {@link #unit} and {@link #getUnit()}. The field type is {@code String}.
-	 * The constant can be used as a key to {@link #LevelData(Map)}.
+	 * {@link #getUnit()}. The field type is {@code String}. The constant can be
+	 * used as a key to {@link #LevelData(Map)}.
 	 */
 	public static final String	FIELD_UNIT	= "unit";
 
-	/**
-	 * Represent the unit as it's defined in
-	 * {@link org.osgi.service.dal.PropertyMetadata#UNITS}. The field is
-	 * optional. The field is accessible with {@link #getUnit()} getter.
-	 */
-	public final String			unit;
-
-	/**
-	 * Represents the current level. It's mandatory field. The field is
-	 * accessible with {@link #getLevel()} getter.
-	 */
-	public final BigDecimal		level;
+	private final String		unit;
+	private final BigDecimal	level;
 
 	/**
 	 * Constructs new {@code LevelData} instance with the specified field
