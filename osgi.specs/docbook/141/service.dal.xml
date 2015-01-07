@@ -1477,16 +1477,41 @@ function-id – function identifier in the scope of the device</programlisting>
           </listitem>
 
           <listitem>
-            <para> Setter method must use <code>FunctionData</code> wrapped
-            type. For example, there is <code>MyFunctionData</code> with
-            timestamp, unit and <code>BigDecimal</code> value. The setter must
-            accept as an argument the value of type <code>BigDecimal</code> .
-            </para>
-          </listitem>
-
-          <listitem>
-            <para> It's possible to have a second setter method, which accepts
-            the value as a first argument and the unit as a second argument.
+            <para>
+              Setter methods can be any combination of:
+              <itemizedlist>
+                <listitem>
+                  <para>
+                    Setter method which accepts a subclass of <code>FunctionData</code>.
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    Setter method which accepts the values used by the <code>FunctionData</code> subclass,
+                    if there are no equal types.
+                  </para>
+                </listitem>
+              </itemizedlist>
+              It's possible to have only one or both of them.
+              Examples:
+              <itemizedlist>
+                <listitem>
+                  <para>
+                    There is <code>MyFunctionData</code> bean with <code>BigDecimal</code> value for a
+                    <code>data</code> property. Valid setters are <code>setData(MyFunctionData data)</code>
+                    and <code>setData(BigDecimal data)</code>.
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    There is <code>MySecondFunctionData</code> bean with <code>BigDecimal</code> prefix and
+                    <code>BigDecimal</code> suffix for a <code>data</code> property.
+                    The prefix and suffix are using equal types and we cannot have
+                    a setter with the values used by <code>MySecondFunctionData</code>.
+                    The only one possible setter is <code>setData(MySecondFunctionData data)</code>.
+                  </para>
+                </listitem>
+              </itemizedlist>
             </para>
           </listitem>
 

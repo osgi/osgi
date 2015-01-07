@@ -23,9 +23,8 @@ import org.osgi.service.dal.functions.data.LevelData;
 
 /**
  * {@code MultiLevelControl} function provides multi-level control support. The
- * function level is accessible with {@link #getData()} getter,
- * {@link #setData(BigDecimal)} setter and {@link #setData(BigDecimal, String)}
- * setter.
+ * function level is accessible with {@link #getData()} getter and
+ * {@link #setData(BigDecimal, String)} setter.
  * <p>
  * The control type can be:
  * <ul>
@@ -52,8 +51,7 @@ public interface MultiLevelControl extends Function {
 	/**
 	 * Specifies the level property name. The property can be read with
 	 * {@link #getData()} getter and can be set with
-	 * {@link #setData(BigDecimal)} or {@link #setData(BigDecimal, String)}
-	 * setters.
+	 * {@link #setData(BigDecimal, String)} setters.
 	 */
 	public static final String	PROPERTY_DATA	= "data";
 
@@ -70,19 +68,6 @@ public interface MultiLevelControl extends Function {
 	 * @see LevelData
 	 */
 	public LevelData getData() throws DeviceException;
-
-	/**
-	 * Sets {@code MultiLevelControl} level to the specified value. It's a
-	 * setter method for {@link #PROPERTY_DATA} property.
-	 * 
-	 * @param level The new control level.
-	 * 
-	 * @throws IllegalStateException If this function service object has already
-	 *         been unregistered.
-	 * @throws DeviceException If an operation error is available.
-	 * @throws IllegalArgumentException If there is an invalid argument.
-	 */
-	public void setData(BigDecimal level) throws DeviceException;
 
 	/**
 	 * Sets {@code MultiLevelControl} level according to the specified unit.

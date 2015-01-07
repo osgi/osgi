@@ -55,8 +55,7 @@ public interface WakeUp extends Function {
 	 * Specifies the wake up interval. The device can periodically wake up and
 	 * receive commands. That interval is managed by this property. The current
 	 * property value is available with {@link #getWakeUpInterval()} and can be
-	 * modified with {@link #setWakeUpInterval(BigDecimal)} and
-	 * {@link #setWakeUpInterval(BigDecimal, String)}.
+	 * modified with {@link #setWakeUpInterval(BigDecimal, String)}.
 	 */
 	public static final String	PROPERTY_WAKE_UP_INTERVAL	= "wakeUpInterval";
 
@@ -83,20 +82,6 @@ public interface WakeUp extends Function {
 	 * @see LevelData
 	 */
 	public LevelData getWakeUpInterval() throws DeviceException;
-
-	/**
-	 * Sets wake up interval according to the default unit. It's a setter method
-	 * for {@link #PROPERTY_WAKE_UP_INTERVAL} property. The device can
-	 * periodically wake up and receive command based on this interval.
-	 * 
-	 * @param interval The new wake up interval.
-	 * 
-	 * @throws IllegalStateException If this function service object has already
-	 *         been unregistered.
-	 * @throws DeviceException If an operation error is available.
-	 * @throws IllegalArgumentException If there is an invalid argument.
-	 */
-	public void setWakeUpInterval(BigDecimal interval) throws DeviceException;
 
 	/**
 	 * Sets wake up interval according to the specified unit. It's a setter

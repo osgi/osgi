@@ -101,15 +101,11 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 		}
 	}
 
-	public void setWakeUpInterval(BigDecimal interval) {
-		setWakeUpInterval(interval, true);
-	}
-
 	public void setWakeUpInterval(BigDecimal interval, String unit) {
 		if ((null != unit) && (!MILLIS.equals(unit))) {
 			throw new IllegalArgumentException("The unit is not supported: " + unit);
 		}
-		this.setWakeUpInterval(interval);
+		this.setWakeUpInterval(interval, true);
 	}
 
 	public void sleep() {

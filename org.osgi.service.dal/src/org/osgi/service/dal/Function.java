@@ -102,12 +102,28 @@ package org.osgi.service.dal;
  * <li>Getter method must return a subclass of {@link FunctionData}.</li>
  * <li>Setter methods must be available for all properties with
  * {@link PropertyMetadata#ACCESS_WRITABLE} access.</li>
- * <li>Setter method must use {@link FunctionData} wrapped type. For example,
- * there is {@code MyFunctionData} with timestamp, unit and {@code BigDecimal}
- * value. The setter must accept as an argument the value of type
- * {@code BigDecimal}.</li>
- * <li>It's possible to have a second setter method, which accepts the value as
- * a first argument and the unit as a second argument.</li>
+ * <li>
+ * Setter methods can be any combination of:
+ * <ul>
+ * <li>Setter method which accepts a subclass of {@link FunctionData}.</li>
+ * <li>
+ * Setter method which accepts the values used by the {@link FunctionData}
+ * subclass, if there are no equal types.</li>
+ * </ul>
+ * It's possible to have only one or both of them. Examples:
+ * <ul>
+ * <li>
+ * There is {@code MyFunctionData} bean with {@code BigDecimal} value for a
+ * {@code data} property. Valid setters are {@code setData(MyFunctionData data)}
+ * and {@code setData(BigDecimal data)}.</li>
+ * <li>
+ * There is {@code MySecondFunctionData} bean with {@code BigDecimal} prefix and
+ * {@code BigDecimal} suffix for a {@code data} property. The prefix and suffix
+ * are using equal types and we cannot have a setter with the values used by
+ * {@code MySecondFunctionData}. The only one possible setter is
+ * {@code setData(MySecondFunctionData data)}.</li>
+ * </ul>
+ * </li>
  * <li>No methods are required for properties with
  * {@link PropertyMetadata#ACCESS_EVENTABLE} access.</li>
  * </ul>

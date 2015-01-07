@@ -88,7 +88,7 @@ public final class SimulatedMultiLevelControl extends SimulatedFunction implemen
 		return this.currentLevel;
 	}
 
-	public void setData(BigDecimal level) {
+	public void setData(BigDecimal level, String unit) {
 		if (this.currentLevel.getLevel().equals(level)) {
 			return; // nothing to do
 		}
@@ -98,17 +98,13 @@ public final class SimulatedMultiLevelControl extends SimulatedFunction implemen
 		super.postEvent(PROPERTY_DATA, newLevel);
 	}
 
-	public void setData(BigDecimal level, String unit) {
-		setData(level);
-	}
-
 	public void publishEvent(String propName) {
 		if (!PROPERTY_DATA.equals(propName)) {
 			throw new IllegalArgumentException("The property is not supported: " + propName);
 		}
 		BigDecimal newValue = this.currentLevel.getLevel().equals(VALUES[0]) ?
 				VALUES[VALUES.length - 1] : VALUES[0];
-		setData(newValue);
+		setData(newValue, null);
 	}
 
 	private static void checkLevel(BigDecimal level) {
