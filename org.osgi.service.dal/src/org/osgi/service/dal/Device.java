@@ -221,6 +221,13 @@ public interface Device {
 	public static final Integer	STATUS_DETAIL_REMOVING					= new Integer(3);
 
 	/**
+	 * Device status detail indicates that the device firmware is updating. It
+	 * can be used as a value of {@link #SERVICE_STATUS_DETAIL} service
+	 * property. The device status must be {@link #STATUS_PROCESSING}.
+	 */
+	public static final Integer	STATUS_DETAIL_FIRMWARE_UPDATING			= new Integer(4);
+
+	/**
 	 * Device status detail indicates that the device configuration is not
 	 * applied. It can be used as a value of {@link #SERVICE_STATUS_DETAIL}
 	 * service property. The device status must be

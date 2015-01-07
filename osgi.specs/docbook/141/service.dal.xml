@@ -256,6 +256,14 @@ device-id – device unique identifier in the scope of the driver</programlistin
               </listitem>
 
               <listitem>
+                <para><emphasis>Device.STATUS_DETAIL_FIRMWARE_UPDATING</emphasis> –
+                The reason for the current device status is that
+                the device firmware is updating. It indicates the reason with positive
+                value <code>4</code>. The device status must be
+                <code>STATUS_PROCESSING</code>.</para>
+              </listitem>
+
+              <listitem>
                 <para><emphasis>Device.STATUS_DETAIL_CONFIGURATION_UNAPPLIED</emphasis>
                 – The reason for the current device status is that the device
                 configuration is not applied. It indicates an error with a
@@ -352,43 +360,49 @@ device-id – device unique identifier in the scope of the driver</programlistin
                   </row>
 
                   <row>
-                    <entry><code>CONFIGURATION_NOT_APPLIED</code></entry>
+                    <entry><code>FIRMWARE_UPDATING</code></entry>
+
+                    <entry><code>PROCESSING</code></entry>
+                  </row>
+
+                  <row>
+                    <entry><code>CONFIGURATION_UNAPPLIED</code></entry>
 
                     <entry><code>NOT_CONFIGURED</code></entry>
                   </row>
 
                   <row>
-                    <entry><code>DEVICE_BROKEN</code></entry>
+                    <entry><code>BROKEN</code></entry>
 
                     <entry><code>OFFLINE</code></entry>
                   </row>
 
                   <row>
-                    <entry><code>DEVICE_COMMUNICATION_ERROR</code></entry>
+                    <entry><code>COMMUNICATION_ERROR</code></entry>
 
                     <entry><code>ONLINE, NOT_INITIALIZED</code></entry>
                   </row>
 
                   <row>
-                    <entry><code>DEVICE_DATA_INSUFFICIENT</code></entry>
+                    <entry><code>DATA_INSUFFICIENT</code></entry>
 
                     <entry><code>NOT_INITIALIZED</code></entry>
                   </row>
 
                   <row>
-                    <entry><code>DEVICE_NOT_ACCESSIBLE</code></entry>
+                    <entry><code>INACCESSIBLE</code></entry>
 
                     <entry><code>OFFLINE</code></entry>
                   </row>
 
                   <row>
-                    <entry><code>ERROR_APPLYING_CONFIGURATION</code></entry>
+                    <entry><code>CONFIGURATION_ERROR</code></entry>
 
                     <entry><code>NOT_CONFIGURED</code></entry>
                   </row>
 
                   <row>
-                    <entry><code>IN_DUTY_CYCLE</code></entry>
+                    <entry><code>DUTY_CYCLE</code></entry>
 
                     <entry><code>OFFLINE</code></entry>
                   </row>
