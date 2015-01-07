@@ -32,7 +32,7 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BC);
 		Function[] booleanControls = super.getFunctions(BooleanControl.class.getName());
 		for (int i = 0; i < booleanControls.length; i++) {
-			final BooleanControl currentBooleanControl = (BooleanControl) booleanControls[i];
+			BooleanControl currentBooleanControl = (BooleanControl) booleanControls[i];
 			currentBooleanControl.setTrue();
 			super.assertEquals(true, currentBooleanControl.getData());
 		}
@@ -49,7 +49,7 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BC);
 		Function[] booleanControls = super.getFunctions(BooleanControl.class.getName());
 		for (int i = 0; i < booleanControls.length; i++) {
-			final BooleanControl currentBooleanControl = (BooleanControl) booleanControls[i];
+			BooleanControl currentBooleanControl = (BooleanControl) booleanControls[i];
 			currentBooleanControl.setFalse();
 			super.assertEquals(false, currentBooleanControl.getData());
 		}
@@ -66,7 +66,7 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BC);
 		Function[] booleanControls = super.getFunctions(BooleanControl.class.getName());
 		for (int i = 0; i < booleanControls.length; i++) {
-			final BooleanControl currentBooleanControl = (BooleanControl) booleanControls[i];
+			BooleanControl currentBooleanControl = (BooleanControl) booleanControls[i];
 			BooleanData currentData = currentBooleanControl.getData();
 			currentBooleanControl.reverse();
 			super.assertEquals(currentData.getValue() ? false : true, currentBooleanControl.getData());
@@ -83,14 +83,14 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 		super.testStepProxy.execute(
 				FunctionsTestSteps.STEP_ID_AVAILABLE_BC,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BC);
-		final Function[] functions = getFunctions(
+		Function[] functions = getFunctions(
 				BooleanControl.class.getName(), PropertyMetadata.ACCESS_EVENTABLE);
-		final BooleanControl booleanControl = (BooleanControl) functions[0];
-		final String functionUID = (String) booleanControl.getServiceProperty(Function.SERVICE_UID);
-		final FunctionEventHandler eventHandler = new FunctionEventHandler(super.getContext());
+		BooleanControl booleanControl = (BooleanControl) functions[0];
+		String functionUID = (String) booleanControl.getServiceProperty(Function.SERVICE_UID);
+		FunctionEventHandler eventHandler = new FunctionEventHandler(super.getContext());
 		eventHandler.register(functionUID, BooleanControl.PROPERTY_DATA);
-		final FunctionEvent functionEvent;
-		final BooleanData currentData = booleanControl.getData();
+		FunctionEvent functionEvent;
+		BooleanData currentData = booleanControl.getData();
 		try {
 			booleanControl.reverse();
 			functionEvent = eventHandler.getEvents(1)[0];

@@ -106,7 +106,7 @@ public final class SimulatedMultiLevelControl extends SimulatedFunction implemen
 		if (!PROPERTY_DATA.equals(propName)) {
 			throw new IllegalArgumentException("The property is not supported: " + propName);
 		}
-		final BigDecimal newValue = this.currentLevel.getLevel().equals(VALUES[0]) ?
+		BigDecimal newValue = this.currentLevel.getLevel().equals(VALUES[0]) ?
 				VALUES[VALUES.length - 1] : VALUES[0];
 		setData(newValue);
 	}

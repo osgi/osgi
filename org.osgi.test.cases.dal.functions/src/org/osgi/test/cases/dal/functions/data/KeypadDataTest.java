@@ -202,7 +202,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 	 * Checks the {@code KeypadData} construction with an invalid fields.
 	 */
 	public void testInvalidFields() {
-		final Map fields = new HashMap();
+		Map fields = new HashMap();
 		fields.put(KeypadData.FIELD_EVENT_TYPE, "invalid-event-type");
 		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
 		checkInvalidFieldType(fields);

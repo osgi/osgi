@@ -458,7 +458,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	}
 
 	private void checkDevice(Device device) {
-		final DevicePermission devicePermission = new DevicePermission(device, DevicePermission.REMOVE);
+		DevicePermission devicePermission = new DevicePermission(device, DevicePermission.REMOVE);
 		assertEquals("The permission filter is not correctly set.",
 				'(' + Device.SERVICE_UID + '=' + device.getServiceProperty(Device.SERVICE_UID) + ')',
 				devicePermission.getName());
@@ -467,7 +467,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	}
 
 	private void checkFilter(String filter) {
-		final DevicePermission devicePermission = new DevicePermission(
+		DevicePermission devicePermission = new DevicePermission(
 				filter, DevicePermission.REMOVE);
 		assertEquals("The permission filter is not correctly set.",
 				filter, devicePermission.getName());

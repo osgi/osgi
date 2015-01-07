@@ -91,7 +91,7 @@ public abstract class SimulatedFunction extends SimulatedService implements Func
 	 * @param propValue The function property value
 	 */
 	public void postEvent(String propName, FunctionData propValue) {
-		final EventAdmin eventAdmin = (EventAdmin) this.eventAdminTracker.getService();
+		EventAdmin eventAdmin = (EventAdmin) this.eventAdminTracker.getService();
 		if (null == eventAdmin) {
 			throw new IllegalStateException("The event cannot be posted because of missing Event Admin.");
 		}

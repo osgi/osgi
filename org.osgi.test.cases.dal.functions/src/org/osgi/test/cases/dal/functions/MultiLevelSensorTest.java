@@ -30,7 +30,7 @@ public final class MultiLevelSensorTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_MLS);
 		Function[] multiLevelSensors = super.getFunctions(MultiLevelSensor.class.getName());
 		for (int i = 0; i < multiLevelSensors.length; i++) {
-			final MultiLevelSensor currentSensor = (MultiLevelSensor) multiLevelSensors[i];
+			MultiLevelSensor currentSensor = (MultiLevelSensor) multiLevelSensors[i];
 			LevelData currentData = currentSensor.getData();
 			assertNotNull("The level data cannot be null!", currentData);
 			super.assertEquals(

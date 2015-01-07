@@ -139,7 +139,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 	}
 
 	private void setWakeUpInterval(BigDecimal interval, boolean execDelay) {
-		final long longInterval = interval.longValue();
+		long longInterval = interval.longValue();
 		if (longInterval < 0) {
 			throw new IllegalArgumentException("The interval is negative: " + interval);
 		}

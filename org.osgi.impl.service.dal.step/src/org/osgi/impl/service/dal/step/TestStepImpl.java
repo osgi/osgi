@@ -111,7 +111,7 @@ public class TestStepImpl implements TestStep {
 	private Device registerNewDevice(String[] functionClassNames) {
 		DeviceSimulator deviceSimulator = getDeviceSimulator();
 		Dictionary deviceProps = new Hashtable();
-		final String deviceUID = DEVICE_UID_PREFIX + deviceCounter++;
+		String deviceUID = DEVICE_UID_PREFIX + deviceCounter++;
 		deviceProps.put(Device.SERVICE_UID, deviceUID);
 		deviceProps.put(Device.SERVICE_STATUS, Device.STATUS_PROCESSING);
 		deviceProps.put(Device.SERVICE_STATUS_DETAIL, Device.STATUS_DETAIL_CONNECTING);
@@ -131,7 +131,7 @@ public class TestStepImpl implements TestStep {
 		if (null != functionClassNames) {
 			functionProps = new Dictionary[functionClassNames.length];
 			for (int i = 0; i < functionProps.length; i++) {
-				final String functionUID = deviceUID + ':' + i;
+				String functionUID = deviceUID + ':' + i;
 				functionProps[i] = new Hashtable();
 				functionProps[i].put(Constants.OBJECTCLASS, functionClassNames[i]);
 				functionProps[i].put(Function.SERVICE_UID, functionUID);

@@ -16,7 +16,7 @@ final class DeviceUtil {
 	private DeviceUtil() {/* prevent object instantiation */
 	}
 
-	public static void silentDeviceRemove(final Device device) {
+	public static void silentDeviceRemove(Device device) {
 		try {
 			device.remove();
 		} catch (Exception e) {

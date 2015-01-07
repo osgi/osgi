@@ -64,7 +64,7 @@ public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 	 * @throws InvalidSyntaxException If the device identifier cannot build
 	 *         valid LDAP filter.
 	 */
-	protected Device getDevice(final String deviceUID) throws InvalidSyntaxException {
+	protected Device getDevice(String deviceUID) throws InvalidSyntaxException {
 		BundleContext bc = super.getContext();
 		ServiceReference[] deviceSRefs = bc.getServiceReferences(
 				Device.class.getName(), '(' + Device.SERVICE_UID + '=' + deviceUID + ')');

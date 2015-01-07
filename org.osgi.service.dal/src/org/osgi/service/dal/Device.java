@@ -300,7 +300,8 @@ public interface Device {
 
 	/**
 	 * Removes this device. The method must synchronously remove the device from
-	 * the device network.
+	 * the device network and unregister the device service from the OSGi
+	 * service registry.
 	 * 
 	 * @throws DeviceException If an operation error is available.
 	 * @throws UnsupportedOperationException If the operation is not supported

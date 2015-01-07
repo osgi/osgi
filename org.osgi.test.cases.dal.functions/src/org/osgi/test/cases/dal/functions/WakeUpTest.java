@@ -39,10 +39,10 @@ public final class WakeUpTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_ID_AVAILABLE_WAKE_UP,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_WAKE_UP);
 		Function[] wakeUpFunctions = super.getFunctions(WakeUp.class.getName());
-		final FunctionEventHandler eventHandler = new FunctionEventHandler(super.getContext());
+		FunctionEventHandler eventHandler = new FunctionEventHandler(super.getContext());
 		boolean check = false;
 		for (int i = 0; i < wakeUpFunctions.length; i++) {
-			final WakeUp currentFunction = (WakeUp) wakeUpFunctions[i];
+			WakeUp currentFunction = (WakeUp) wakeUpFunctions[i];
 			eventHandler.register(
 					(String) currentFunction.getServiceProperty(Function.SERVICE_UID),
 					WakeUp.PROPERTY_AWAKE);
@@ -72,7 +72,7 @@ public final class WakeUpTest extends AbstractFunctionTest {
 	}
 
 	private static long getWakeUpInterval(WakeUp wakeUp) {
-		final PropertyMetadata wakeUpIntervalMeta = wakeUp.getPropertyMetadata(WakeUp.PROPERTY_WAKE_UP_INTERVAL);
+		PropertyMetadata wakeUpIntervalMeta = wakeUp.getPropertyMetadata(WakeUp.PROPERTY_WAKE_UP_INTERVAL);
 		if (null != wakeUpIntervalMeta) {
 			try {
 				LevelData minWakeUpInterval = (LevelData) wakeUpIntervalMeta.getMinValue(MILLIS);

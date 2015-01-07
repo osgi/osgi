@@ -96,7 +96,7 @@ public final class TestUtil {
 	 * @return The accessor name.
 	 */
 	public static String getBeanAccessor(String propertyName, String prefix) {
-		final StringBuffer getterName = new StringBuffer();
+		StringBuffer getterName = new StringBuffer();
 		getterName.append(prefix);
 		getterName.append(Character.toUpperCase(propertyName.charAt(0)));
 		if (propertyName.length() > 1) {

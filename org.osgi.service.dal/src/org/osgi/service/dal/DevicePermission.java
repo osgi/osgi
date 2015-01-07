@@ -46,7 +46,7 @@ import org.osgi.framework.InvalidSyntaxException;
  * Filter Based Permissions. The filter gives an access to all device service
  * properties. Filter attribute names are processed in a case sensitive manner.
  */
-public final class DevicePermission extends BasicPermission {
+public class DevicePermission extends BasicPermission {
 
 	private static final long		serialVersionUID	= -3020753566295420906L;
 

@@ -55,7 +55,7 @@ public class DeviceSimulatorImpl implements DeviceSimulator {
 	 * @param eventAdminTracker The event admin tracker.
 	 * @param timer The timer used by some functions.
 	 */
-	public DeviceSimulatorImpl(final BundleContext bc, final ServiceTracker eventAdminTracker, Timer timer) {
+	public DeviceSimulatorImpl(BundleContext bc, ServiceTracker eventAdminTracker, Timer timer) {
 		this.registeredDevices = new ArrayList();
 		this.bc = bc;
 		this.eventAdminTracker = eventAdminTracker;

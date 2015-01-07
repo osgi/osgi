@@ -235,11 +235,11 @@ public final class LevelDataTest extends AbstractFunctionTest {
 	 * Checks the {@code LevelData} construction with an invalid fields.
 	 */
 	public void testInvalidFields() {
-		final Map fields = new HashMap();
+		Map fields = new HashMap();
 		fields.put(LevelData.FIELD_LEVEL, "wrong-type");
 		checkInvalidFieldType(fields);
 
-		final BigDecimal testValue = new BigDecimal(1.0001);
+		BigDecimal testValue = new BigDecimal(1.0001);
 		fields.clear();
 		fields.put(LevelData.FIELD_LEVEL, testValue);
 		fields.put(LevelData.FIELD_UNIT, Boolean.TRUE);

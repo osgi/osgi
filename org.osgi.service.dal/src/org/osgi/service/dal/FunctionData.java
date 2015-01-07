@@ -86,10 +86,10 @@ public abstract class FunctionData implements Comparable {
 	 * @throws ClassCastException If the field value types are not expected.
 	 * @throws NullPointerException If the fields map is {@code null}.
 	 */
-	public FunctionData(final Map fields) {
-		final Long timestampLocal = (Long) fields.get("timestamp");
+	public FunctionData(Map fields) {
+		Long timestampLocal = (Long) fields.get(FIELD_TIMESTAMP);
 		this.timestamp = (null != timestampLocal) ? timestampLocal.longValue() : Long.MIN_VALUE;
-		this.metadata = (Map) fields.get("metadata");
+		this.metadata = (Map) fields.get(FIELD_METADATA);
 	}
 
 	/**
@@ -99,7 +99,7 @@ public abstract class FunctionData implements Comparable {
 	 * @param timestamp The data timestamp.
 	 * @param metadata The data metadata.
 	 */
-	public FunctionData(final long timestamp, final Map metadata) {
+	public FunctionData(long timestamp, Map metadata) {
 		this.timestamp = timestamp;
 		this.metadata = metadata;
 	}

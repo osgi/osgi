@@ -194,7 +194,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 	 * Checks the {@code AlarmData} construction with an invalid fields.
 	 */
 	public void testInvalidFields() {
-		final Map fields = new HashMap();
+		Map fields = new HashMap();
 		fields.put(AlarmData.FIELD_SEVERITY, "invalid-severity");
 		fields.put(AlarmData.FIELD_TYPE, new Integer(AlarmData.TYPE_COLD));
 		checkInvalidFieldType(fields);

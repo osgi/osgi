@@ -33,10 +33,10 @@ public final class MultiLevelControlTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_MLC);
 		Function[] multiLevelControls = super.getFunctions(MultiLevelControl.class.getName());
 		for (int i = 0; i < multiLevelControls.length; i++) {
-			final MultiLevelControl currentControl = (MultiLevelControl) multiLevelControls[i];
-			final PropertyMetadata currentPropertyMetadata = currentControl.getPropertyMetadata(
+			MultiLevelControl currentControl = (MultiLevelControl) multiLevelControls[i];
+			PropertyMetadata currentPropertyMetadata = currentControl.getPropertyMetadata(
 					MultiLevelControl.PROPERTY_DATA);
-			final LevelData[] levelData = getMultiLevelTestData(currentPropertyMetadata);
+			LevelData[] levelData = getMultiLevelTestData(currentPropertyMetadata);
 			if (null == levelData) {
 				continue;
 			}

@@ -224,7 +224,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 	 * Checks the {@code BooleanData} construction with an invalid fields.
 	 */
 	public void testInvalidFields() {
-		final Map fields = new HashMap();
+		Map fields = new HashMap();
 		fields.put(BooleanData.FIELD_VALUE, "wrong-type");
 		checkInvalidFieldType(fields);
 

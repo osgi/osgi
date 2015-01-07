@@ -57,13 +57,13 @@ public final class Activator implements BundleActivator {
 	}
 
 	private void registerInitialDevices() {
-		final String[] referenceDeviceUIDs = new String[DEVICE_COUNT];
+		String[] referenceDeviceUIDs = new String[DEVICE_COUNT];
 		for (int i = 0; i < DEVICE_COUNT; i++) {
-			final String deviceUID = getDeviceUID(i);
+			String deviceUID = getDeviceUID(i);
 			referenceDeviceUIDs[i] = deviceUID;
-			final Dictionary deviceProps = new Hashtable(13, 1F);
+			Dictionary deviceProps = new Hashtable(13, 1F);
 			if (i > 0) {
-				final String[] referenceUIDs = new String[i];
+				String[] referenceUIDs = new String[i];
 				System.arraycopy(referenceDeviceUIDs, 0, referenceUIDs, 0, i);
 				deviceProps.put(Device.SERVICE_REFERENCE_UIDS, referenceUIDs);
 			}
@@ -137,13 +137,13 @@ public final class Activator implements BundleActivator {
 
 	private static Dictionary getFunctionProps(
 			String deviceUID, String functionClass, int index, String[] referenceFunctionUIDs) {
-		final Dictionary functionProps = new Hashtable();
+		Dictionary functionProps = new Hashtable();
 		if (index > 0) {
 			String[] referenceFunctionUIDsLocal = new String[index];
 			System.arraycopy(referenceFunctionUIDs, 0, referenceFunctionUIDsLocal, 0, index);
 			functionProps.put(Function.SERVICE_REFERENCE_UIDS, referenceFunctionUIDsLocal);
 		}
-		final String functionUID = deviceUID + ":function:" + index;
+		String functionUID = deviceUID + ":function:" + index;
 		functionProps.put(Function.SERVICE_UID, functionUID);
 		functionProps.put(Constants.OBJECTCLASS, functionClass);
 		functionProps.put(Function.SERVICE_DESCRIPTION, functionUID + "-description");

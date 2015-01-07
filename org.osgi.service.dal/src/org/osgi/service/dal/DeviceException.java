@@ -29,29 +29,29 @@ import java.io.PrintWriter;
 public class DeviceException extends IOException {
 
 	/** An exception code indicates that the error is unknown. */
-	public static final int		UNKNOWN				= 1;
+	public static final int		UNKNOWN				= 0;
 
 	/** An exception code indicates that there is an error in the communication. */
-	public static final int		COMMUNICATION_ERROR	= 2;
+	public static final int		COMMUNICATION_ERROR	= 1;
 
 	/**
 	 * An exception code indicates that there is expired timeout without any
 	 * processing.
 	 */
-	public static final int		TIMEOUT				= 3;
+	public static final int		TIMEOUT				= 2;
 
 	/**
 	 * An exception code indicates that the device is not initialized. The
 	 * device status is {@link Device#STATUS_NOT_INITIALIZED} or
 	 * {@link Device#STATUS_PROCESSING}.
 	 */
-	public static final int		NOT_INITIALIZED		= 4;
+	public static final int		NOT_INITIALIZED		= 3;
 
 	/**
 	 * An exception code indicates that the requested value is currently not
 	 * available.
 	 */
-	public static final int		NO_DATA				= 5;
+	public static final int		NO_DATA				= 4;
 
 	private static final long	serialVersionUID	= -1876565249188512600L;
 	private static final String	CAUSED_BY			= "Caused by: ";
@@ -102,8 +102,19 @@ public class DeviceException extends IOException {
 	}
 
 	/**
-	 * Returns the exception error code. It indicates the reason for this
-	 * exception.
+	 * Returns the exception code. It indicates the reason for this exception.
+	 * The code can be:
+	 * <ul>
+	 * <li>{@link #UNKNOWN}</li>
+	 * <li>{@link #COMMUNICATION_ERROR}</li>
+	 * <li>{@link #TIMEOUT}</li>
+	 * <li>{@link #NOT_INITIALIZED}</li>
+	 * <li>{@link #NO_DATA}</li>
+	 * <li>custom code</li>
+	 * </ul>
+	 * Zero and positive values are reserved for this definition and further
+	 * extensions of the device exception codes. Custom codes can be used only
+	 * as negative values to prevent potential collisions.
 	 * 
 	 * @return An exception code.
 	 */

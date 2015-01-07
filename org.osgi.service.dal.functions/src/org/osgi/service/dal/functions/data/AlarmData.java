@@ -139,11 +139,11 @@ public class AlarmData extends FunctionData {
 	 * @throws IllegalArgumentException If the alarm type is missing.
 	 * @throws NullPointerException If the fields map is {@code null}.
 	 */
-	public AlarmData(final Map fields) {
+	public AlarmData(Map fields) {
 		super(fields);
-		final Integer severityLocal = (Integer) fields.get(FIELD_SEVERITY);
+		Integer severityLocal = (Integer) fields.get(FIELD_SEVERITY);
 		this.severity = (null != severityLocal) ? severityLocal.intValue() : SEVERITY_NONE;
-		final Integer typeLocal = (Integer) fields.get(FIELD_TYPE);
+		Integer typeLocal = (Integer) fields.get(FIELD_TYPE);
 		if (null == typeLocal) {
 			throw new IllegalArgumentException("The alarm data type is missing.");
 		}

@@ -30,7 +30,7 @@ public final class BooleanSensorTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BS);
 		Function[] booleanSensors = super.getFunctions(BooleanSensor.class.getName());
 		for (int i = 0; i < booleanSensors.length; i++) {
-			final BooleanSensor currentBooleanSensor = (BooleanSensor) booleanSensors[i];
+			BooleanSensor currentBooleanSensor = (BooleanSensor) booleanSensors[i];
 			BooleanData currentData = currentBooleanSensor.getData();
 			assertNotNull("The boolean data cannot be null!", currentData);
 			super.assertEquals(currentData.getValue(), currentData);

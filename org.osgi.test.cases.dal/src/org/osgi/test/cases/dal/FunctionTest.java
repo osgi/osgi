@@ -284,8 +284,8 @@ public class FunctionTest extends AbstractDeviceTest {
 	}
 
 	private void checkPropertySetter(Function function, String propertyName) throws NoSuchMethodException, ClassNotFoundException {
-		final String setterName = TestUtil.getBeanAccessor(propertyName, "set");
-		final Class functionClass = TestUtil.getFunctionClass(function, super.getContext());
+		String setterName = TestUtil.getBeanAccessor(propertyName, "set");
+		Class functionClass = TestUtil.getFunctionClass(function, super.getContext());
 		Method[] setters = TestUtil.getMethods(functionClass, setterName);
 		assertNotNull("There are no setters for property: " + propertyName, setters);
 		assertTrue("There must be one or two setters.",
@@ -314,8 +314,8 @@ public class FunctionTest extends AbstractDeviceTest {
 	}
 
 	private void checkPropertyGetter(Function function, String propertyName) throws NoSuchMethodException, ClassNotFoundException {
-		final String getterName = TestUtil.getBeanAccessor(propertyName, "get");
-		final Class functionClass = TestUtil.getFunctionClass(function, super.getContext());
+		String getterName = TestUtil.getBeanAccessor(propertyName, "get");
+		Class functionClass = TestUtil.getFunctionClass(function, super.getContext());
 		Method getter = functionClass.getMethod(getterName, null);
 		Class returnType = getter.getReturnType();
 		assertNotNull("The function getter must have return type: " + getterName, returnType);
@@ -343,7 +343,7 @@ public class FunctionTest extends AbstractDeviceTest {
 			assertNotNull("There are no functions.", functionSRefs);
 			List result = new ArrayList(functionSRefs.length);
 			for (int i = 0; i < functionSRefs.length; i++) {
-				final Function function = (Function) super.getContext().getService(functionSRefs[i]);
+				Function function = (Function) super.getContext().getService(functionSRefs[i]);
 				if (null == function) {
 					continue;
 				}
@@ -368,11 +368,11 @@ public class FunctionTest extends AbstractDeviceTest {
 
 	private static boolean isPropertyAccessValid(
 			Function function, String propertyName, int propertyAccess) {
-		final PropertyMetadata propertyMetadata = function.getPropertyMetadata(propertyName);
+		PropertyMetadata propertyMetadata = function.getPropertyMetadata(propertyName);
 		if (null == propertyMetadata) {
 			return false;
 		}
-		final Map metadata = propertyMetadata.getMetadata(null);
+		Map metadata = propertyMetadata.getMetadata(null);
 		if (null == metadata) {
 			return false;
 		}

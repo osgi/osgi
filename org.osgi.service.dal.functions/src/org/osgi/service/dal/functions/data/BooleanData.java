@@ -59,9 +59,9 @@ public class BooleanData extends FunctionData {
 	 * @throws IllegalArgumentException If the value is missing.
 	 * @throws NullPointerException If the fields map is {@code null}.
 	 */
-	public BooleanData(final Map fields) {
+	public BooleanData(Map fields) {
 		super(fields);
-		final Boolean booleanValue = (Boolean) fields.get(FIELD_VALUE);
+		Boolean booleanValue = (Boolean) fields.get(FIELD_VALUE);
 		if (null == booleanValue) {
 			throw new IllegalArgumentException("The boolean value is missing.");
 		}

@@ -139,7 +139,7 @@ public interface PropertyMetadata {
 	 * is [0, 100], the resolution can be 10. That's the different between two
 	 * values in series. The resolution type depends on the property type. If
 	 * the property is using data bean like {@code LevelData}, the resolution
-	 * will the {@code BigDecimal}.
+	 * will be {@code BigDecimal}.
 	 * 
 	 * @param unit The unit to align the resolution, can be {@code null}.
 	 * 

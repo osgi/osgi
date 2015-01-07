@@ -30,7 +30,7 @@ public final class MeterTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_METER);
 		Function[] meters = super.getFunctions(Meter.class.getName());
 		for (int i = 0; i < meters.length; i++) {
-			final Meter currentMeter = (Meter) meters[i];
+			Meter currentMeter = (Meter) meters[i];
 			LevelData total = currentMeter.getTotal();
 			assertNotNull("No total metering info.", total);
 			super.assertEquals(
@@ -50,7 +50,7 @@ public final class MeterTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_METER);
 		Function[] meters = super.getFunctions(Meter.class.getName());
 		for (int i = 0; i < meters.length; i++) {
-			final Meter currentMeter = (Meter) meters[i];
+			Meter currentMeter = (Meter) meters[i];
 			LevelData current = currentMeter.getCurrent();
 			assertNotNull("No total metering info.", current);
 			super.assertEquals(

@@ -109,15 +109,15 @@ public class KeypadData extends FunctionData {
 	 *         missing.
 	 * @throws NullPointerException If the fields map is {@code null}.
 	 */
-	public KeypadData(final Map fields) {
+	public KeypadData(Map fields) {
 		super(fields);
-		final Integer eventTypeLocal = (Integer) fields.get(FIELD_EVENT_TYPE);
+		Integer eventTypeLocal = (Integer) fields.get(FIELD_EVENT_TYPE);
 		if (null == eventTypeLocal) {
 			throw new IllegalArgumentException("The event type is missing.");
 		}
 		this.eventType = eventTypeLocal.intValue();
 
-		final Integer keyCodeLocal = (Integer) fields.get(FIELD_KEY_CODE);
+		Integer keyCodeLocal = (Integer) fields.get(FIELD_KEY_CODE);
 		if (null == keyCodeLocal) {
 			throw new IllegalArgumentException("The key code is missing.");
 		}

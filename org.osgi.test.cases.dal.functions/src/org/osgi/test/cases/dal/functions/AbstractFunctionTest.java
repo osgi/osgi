@@ -168,12 +168,12 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 	 * @param stepMessage The test step message.
 	 */
 	protected void checkPropertyEvent(String functionClassName, String propName, String stepId, String stepMessage) {
-		final Function[] functions = getFunctions(
+		Function[] functions = getFunctions(
 				functionClassName, PropertyMetadata.ACCESS_EVENTABLE);
-		final String functionUID = (String) functions[0].getServiceProperty(Function.SERVICE_UID);
-		final FunctionEventHandler eventHandler = new FunctionEventHandler(super.getContext());
+		String functionUID = (String) functions[0].getServiceProperty(Function.SERVICE_UID);
+		FunctionEventHandler eventHandler = new FunctionEventHandler(super.getContext());
 		eventHandler.register(functionUID, propName);
-		final FunctionEvent functionEvent;
+		FunctionEvent functionEvent;
 		try {
 			this.testStepProxy.execute(stepId, stepMessage);
 			functionEvent = eventHandler.getEvents(1)[0];
@@ -211,7 +211,7 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 					functionSRefs);
 			List result = new ArrayList(functionSRefs.length);
 			for (int i = 0; i < functionSRefs.length; i++) {
-				final Function function = (Function) super.getContext().getService(functionSRefs[i]);
+				Function function = (Function) super.getContext().getService(functionSRefs[i]);
 				if (null == function) {
 					continue;
 				}
@@ -236,11 +236,11 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 
 	private static boolean isPropertyAccessValid(
 			Function function, String propertyName, int propertyAccess) {
-		final PropertyMetadata propertyMetadata = function.getPropertyMetadata(propertyName);
+		PropertyMetadata propertyMetadata = function.getPropertyMetadata(propertyName);
 		if (null == propertyMetadata) {
 			return false;
 		}
-		final Map metadata = propertyMetadata.getMetadata(null);
+		Map metadata = propertyMetadata.getMetadata(null);
 		if (null == metadata) {
 			return false;
 		}

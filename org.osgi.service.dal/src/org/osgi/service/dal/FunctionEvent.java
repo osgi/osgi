@@ -98,16 +98,16 @@ public class FunctionEvent extends Event {
 	 * name and property value.
 	 * 
 	 * @param topic The event topic.
-	 * @param funtionUID The event source function UID.
+	 * @param functionUID The event source function UID.
 	 * @param propName The event source property name.
 	 * @param propValue The event source property value.
 	 */
 	public FunctionEvent(
 			String topic,
-			String funtionUID,
+			String functionUID,
 			String propName,
 			FunctionData propValue) {
-		super(topic, prepareEventProps(funtionUID, propName, propValue));
+		super(topic, prepareEventProps(functionUID, propName, propValue));
 	}
 
 	/**

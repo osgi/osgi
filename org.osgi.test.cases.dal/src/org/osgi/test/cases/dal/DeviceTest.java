@@ -131,7 +131,7 @@ public class DeviceTest extends AbstractDeviceTest {
 		super.testStepProxy.execute(
 				DeviceTestSteps.STEP_ID_AVAILABLE_DEVICE,
 				DeviceTestSteps.STEP_MESSAGE_AVAILABLE_DEVICE);
-		final ServiceReference[] deviceSRefs = getDeviceSRefs();
+		ServiceReference[] deviceSRefs = getDeviceSRefs();
 		for (int i = 0; i < deviceSRefs.length; i++) {
 			super.checkRequiredProperties(
 					deviceSRefs[i],
@@ -167,7 +167,7 @@ public class DeviceTest extends AbstractDeviceTest {
 		}
 	}
 
-	private Device[] getDevices(final String devicePropName) throws InvalidSyntaxException {
+	private Device[] getDevices(String devicePropName) throws InvalidSyntaxException {
 		BundleContext bc = super.getContext();
 		ServiceReference[] deviceSRefs = bc.getServiceReferences(
 				Device.class.getName(), '(' + devicePropName + "=*)");

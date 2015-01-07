@@ -234,6 +234,15 @@ public interface Function {
 	public static final String	SERVICE_DESCRIPTION		= "dal.function.description";
 
 	/**
+	 * The service property value contains the function property names. It's an
+	 * optional property. The property is missing when there are no function
+	 * properties and property must be set when there are function properties.
+	 * The value type is {@code java.lang.String[]}. It's not possible to exist
+	 * two or more function properties with the same name.
+	 */
+	public static final String	SERVICE_PROPERTY_NAMES	= "dal.function.property.names";
+
+	/**
 	 * The service property value contains the function operation names. It's an
 	 * optional property. The property is missing when there are no function
 	 * operations and property must be set when there are function operations.
@@ -242,15 +251,6 @@ public interface Function {
 	 * overloading is not allowed.
 	 */
 	public static final String	SERVICE_OPERATION_NAMES	= "dal.function.operation.names";
-
-	/**
-	 * The service property value contains the function property names. It's an
-	 * optional property. The property is missing when there are no function
-	 * properties and property must be set when there are function properties.
-	 * The value type is {@code java.lang.String[]}. It's not possible to exist
-	 * two or more function properties with the same name.
-	 */
-	public static final String	SERVICE_PROPERTY_NAMES	= "dal.function.property.names";
 
 	/**
 	 * Provides metadata about the function property specified with the name

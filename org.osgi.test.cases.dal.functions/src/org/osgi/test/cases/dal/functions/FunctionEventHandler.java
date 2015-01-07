@@ -61,7 +61,7 @@ public final class FunctionEventHandler implements EventHandler {
 					'(' + FunctionEvent.FUNCTION_UID + '=' + funtionUID + ')';
 		}
 		if (null != propertyName) {
-			final String propertyNameFilter =
+			String propertyNameFilter =
 					'(' + FunctionEvent.PROPERTY_NAME + '=' + propertyName + ')';
 			eventFilter = (null == eventFilter) ? propertyNameFilter :
 					"(&" + eventFilter + propertyNameFilter + ')';
