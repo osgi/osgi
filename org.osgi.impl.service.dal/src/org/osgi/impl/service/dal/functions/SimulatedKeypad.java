@@ -35,7 +35,7 @@ public final class SimulatedKeypad extends SimulatedFunction implements Keypad {
 				new Integer(PropertyMetadata.ACCESS_EVENTABLE));
 		PropertyMetadata propMetadata = new PropertyMetadataImpl(
 				metadata, // metadata
-				null,     // resolution
+				null,     // step
 				null,     // enumValues
 				null,     // minValue
 				null);    // maxValue

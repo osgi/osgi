@@ -38,7 +38,7 @@ public final class SimulatedBooleanSensor extends SimulatedFunction implements B
 								PropertyMetadata.ACCESS_EVENTABLE));
 		PropertyMetadata propMetadata = new PropertyMetadataImpl(
 				metadata, // metadata
-				null,     // resolution
+				null,     // step
 				null,     // enumValues
 				null,     // minValue
 				null);    // maxValue

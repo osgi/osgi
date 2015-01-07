@@ -55,7 +55,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 		metadata.put(PropertyMetadata.UNITS, MILLIS_ARRAY);
 		PropertyMetadata propMetadata = new PropertyMetadataImpl(
 				metadata, // metadata
-				null,     // resolution
+				null,     // step
 				null,     // enumValues
 				MIN_WAKE_UP_INTERVAL,     // minValue
 				null);    // maxValue
@@ -69,7 +69,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 						PropertyMetadata.ACCESS_EVENTABLE));
 		propMetadata = new PropertyMetadataImpl(
 				metadata, // metadata
-				null,     // resolution
+				null,     // step
 				null,     // enumValues
 				null,     // minValue
 				null);    // maxValue

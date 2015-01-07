@@ -136,20 +136,17 @@ public interface PropertyMetadata {
 	public Map getMetadata(String unit);
 
 	/**
-	 * Returns the resolution value of specific range. For example, if the range
-	 * is [0, 100], the resolution can be 10. That's the different between two
-	 * values in series. The resolution type depends on the property type. If
-	 * the property is using data bean like {@code LevelData}, the resolution
-	 * will be {@code BigDecimal}.
+	 * Returns the difference between two values in series. For example, if the
+	 * range is [0, 100], the step can be 10.
 	 * 
-	 * @param unit The unit to align the resolution, can be {@code null}.
+	 * @param unit The unit to align the step, can be {@code null}.
 	 * 
-	 * @return The resolution according to the specified unit or {@code null} if
-	 *         no resolution is supported.
+	 * @return The step according to the specified unit or {@code null} if no
+	 *         step is supported.
 	 * 
 	 * @throws IllegalArgumentException If the unit is not supported.
 	 */
-	public Object getResolution(String unit);
+	public FunctionData getStep(String unit);
 
 	/**
 	 * Returns the property possible values according to the specified unit. If

@@ -1523,13 +1523,11 @@ function-id – function identifier in the scope of the device</programlisting>
           </listitem>
 
           <listitem>
-            <para> Resolution – available through
-            <code>PropertyMetadata.getResolution(String)</code> . For example,
-            if the range is [0, 100], the resolution can be 10. That's the
-            different between two values in series. The resolution type
-            depends on the property type. If the property is using data bean
-            like <code>org.osgi.service.dal.functions.data.LevelData</code> ,
-            the resolution will the <code>BigDecimal</code> . </para>
+            <para> Step – available through
+            <code>PropertyMetadata.getStep(String)</code> .
+            The difference between two values in series.
+            For example, if the range is <code>[0, 100]</code>,
+            the step can be <code>10</code> . </para>
           </listitem>
 
           <listitem>

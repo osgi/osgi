@@ -19,7 +19,7 @@ import org.osgi.service.dal.PropertyMetadata;
 public final class PropertyMetadataImpl implements PropertyMetadata {
 
 	private final Map				metadata;
-	private final Object			resolution;
+	private final FunctionData		step;
 	private final FunctionData[]	enumValues;
 	private final FunctionData		minValue;
 	private final FunctionData		maxValue;
@@ -28,19 +28,19 @@ public final class PropertyMetadataImpl implements PropertyMetadata {
 	 * Constructs the property metadata with the specified arguments.
 	 * 
 	 * @param metadata Additional metadata.
-	 * @param resolution The resolution.
+	 * @param step The step.
 	 * @param enumValues The supported values, if any.
 	 * @param minValue The minimum value, if any.
 	 * @param maxValue The maximum value, if any.
 	 */
 	public PropertyMetadataImpl(
 			Map metadata,
-			Object resolution,
+			FunctionData step,
 			FunctionData[] enumValues,
 			FunctionData minValue,
 			FunctionData maxValue) {
 		this.metadata = metadata;
-		this.resolution = resolution;
+		this.step = step;
 		this.enumValues = enumValues;
 		this.minValue = minValue;
 		this.maxValue = maxValue;
@@ -50,8 +50,8 @@ public final class PropertyMetadataImpl implements PropertyMetadata {
 		return this.metadata;
 	}
 
-	public Object getResolution(String unit) {
-		return this.resolution;
+	public FunctionData getStep(String unit) {
+		return this.step;
 	}
 
 	public FunctionData[] getEnumValues(String unit) {
