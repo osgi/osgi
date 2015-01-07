@@ -29,19 +29,12 @@ public final class BooleanSensorTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_ID_AVAILABLE_BS,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BS);
 		Function[] booleanSensors = super.getFunctions(BooleanSensor.class.getName());
-		boolean check = false;
 		for (int i = 0; i < booleanSensors.length; i++) {
 			final BooleanSensor currentBooleanSensor = (BooleanSensor) booleanSensors[i];
-			try {
-				BooleanData currentData = currentBooleanSensor.getData();
-				check = true;
-				assertNotNull("The boolean data cannot be null!", currentData);
-				super.assertEquals(currentData.getValue(), currentData);
-			} catch (UnsupportedOperationException uoe) {
-				// expected, go ahead
-			}
+			BooleanData currentData = currentBooleanSensor.getData();
+			assertNotNull("The boolean data cannot be null!", currentData);
+			super.assertEquals(currentData.getValue(), currentData);
 		}
-		assertTrue("At least one Boolean Sensor must support getData operation.", check);
 	}
 
 	/**

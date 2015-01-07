@@ -63,7 +63,6 @@ public interface MultiLevelControl extends Function {
 	 * 
 	 * @return {@code MultiLevelControl} level.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.
@@ -78,7 +77,6 @@ public interface MultiLevelControl extends Function {
 	 * 
 	 * @param level The new control level.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.
@@ -93,7 +91,6 @@ public interface MultiLevelControl extends Function {
 	 * @param level The new control level.
 	 * @param unit The level unit.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.

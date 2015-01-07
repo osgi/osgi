@@ -165,10 +165,6 @@ package org.osgi.service.dal;
  * the applications when the function property values are collected. The same
  * cached value can be shared between a few requests instead of a few calls to
  * the real device.</li>
- * <li>
- * If a given function operation, getter or setter is not supported,
- * java.lang.UnsupportedOperationException must be thrown. It indicates that
- * function is partially supported.</li>
  * <li>The function operations, getters and setters must not override
  * {@code java.lang.Object} and this interface methods.</li>
  * </ul>

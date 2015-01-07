@@ -76,7 +76,6 @@ public interface BooleanControl extends Function {
 	 * 
 	 * @return The current state of {@code BooleanControl}.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.
@@ -92,7 +91,6 @@ public interface BooleanControl extends Function {
 	 * 
 	 * @param data The new function value.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.
@@ -108,7 +106,6 @@ public interface BooleanControl extends Function {
 	 * current state represents {@code false} value, it'll be reversed to
 	 * {@code true}. The operation name is {@link #OPERATION_REVERSE}.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.
@@ -119,7 +116,6 @@ public interface BooleanControl extends Function {
 	 * Sets the {@code BooleanControl} state to {@code true} value. The
 	 * operation name is {@link #OPERATION_SET_TRUE}.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.
@@ -130,7 +126,6 @@ public interface BooleanControl extends Function {
 	 * Sets the {@code BooleanControl} state to {@code false} value. The
 	 * operation name is {@link #OPERATION_SET_FALSE}.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.

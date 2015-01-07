@@ -173,19 +173,15 @@ public class FunctionTest extends AbstractDeviceTest {
 			if (null == function) {
 				continue;
 			}
-			try {
-				String[] refKeys = functionSRefs[i].getPropertyKeys();
-				for (int ii = 0; ii < refKeys.length; ii++) {
-					assertTrue(
-							"The function property and service property values are different.",
-							TestUtil.areEqual(functionSRefs[i].getProperty(refKeys[ii]), function.getServiceProperty(refKeys[ii])));
-				}
-				compared = true;
-			} catch (UnsupportedOperationException uoe) {
-				// expected
+			String[] refKeys = functionSRefs[i].getPropertyKeys();
+			for (int ii = 0; ii < refKeys.length; ii++) {
+				assertTrue(
+						"The function property and service property values are different.",
+						TestUtil.areEqual(functionSRefs[i].getProperty(refKeys[ii]), function.getServiceProperty(refKeys[ii])));
 			}
+			compared = true;
 		}
-		assertTrue("No function with with property access.", compared);
+		assertTrue("No function properties have been compared.", compared);
 	}
 
 	/**

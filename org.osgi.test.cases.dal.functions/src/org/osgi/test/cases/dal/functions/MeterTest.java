@@ -29,21 +29,14 @@ public final class MeterTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_ID_AVAILABLE_METER,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_METER);
 		Function[] meters = super.getFunctions(Meter.class.getName());
-		boolean check = false;
 		for (int i = 0; i < meters.length; i++) {
 			final Meter currentMeter = (Meter) meters[i];
-			try {
-				LevelData total = currentMeter.getTotal();
-				check = true;
-				assertNotNull("No total metering info.", total);
-				super.assertEquals(
-						currentMeter.getPropertyMetadata(Meter.PROPERTY_TOTAL),
-						total.getLevel(), total);
-			} catch (UnsupportedOperationException uoe) {
-				// expected, go ahead
-			}
+			LevelData total = currentMeter.getTotal();
+			assertNotNull("No total metering info.", total);
+			super.assertEquals(
+					currentMeter.getPropertyMetadata(Meter.PROPERTY_TOTAL),
+					total.getLevel(), total);
 		}
-		assertTrue("At least one Meter must support getTotal.", check);
 	}
 
 	/**
@@ -56,24 +49,17 @@ public final class MeterTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_ID_AVAILABLE_METER,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_METER);
 		Function[] meters = super.getFunctions(Meter.class.getName());
-		boolean check = false;
 		for (int i = 0; i < meters.length; i++) {
 			final Meter currentMeter = (Meter) meters[i];
-			try {
-				LevelData current = currentMeter.getCurrent();
-				check = true;
-				assertNotNull("No total metering info.", current);
-				super.assertEquals(
-						currentMeter.getPropertyMetadata(Meter.PROPERTY_CURRENT),
-						current.getLevel(), current);
-				assertTrue(
-						"The current value is greater than the total value.",
-						current.getLevel().compareTo(currentMeter.getTotal().getLevel()) <= 0);
-			} catch (UnsupportedOperationException uoe) {
-				// expected, go ahead
-			}
+			LevelData current = currentMeter.getCurrent();
+			assertNotNull("No total metering info.", current);
+			super.assertEquals(
+					currentMeter.getPropertyMetadata(Meter.PROPERTY_CURRENT),
+					current.getLevel(), current);
+			assertTrue(
+					"The current value is greater than the total value.",
+					current.getLevel().compareTo(currentMeter.getTotal().getLevel()) <= 0);
 		}
-		assertTrue("At least one Meter must support getCurrent.", check);
 	}
 
 	/**
@@ -86,17 +72,9 @@ public final class MeterTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_ID_AVAILABLE_METER,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_METER);
 		Function[] meters = super.getFunctions(Meter.class.getName());
-		boolean check = false;
 		for (int i = 0; i < meters.length; i++) {
-			final Meter currentMeter = (Meter) meters[i];
-			try {
-				currentMeter.resetTotal();
-				check = true;
-			} catch (UnsupportedOperationException uoe) {
-				// expected, go ahead
-			}
+			((Meter) meters[i]).resetTotal();
 		}
-		assertTrue("At least one Meter must support resetTotal.", check);
 	}
 
 	/**

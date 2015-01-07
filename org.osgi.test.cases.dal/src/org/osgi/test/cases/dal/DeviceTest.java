@@ -90,19 +90,15 @@ public class DeviceTest extends AbstractDeviceTest {
 			if (null == device) {
 				continue;
 			}
-			try {
-				String[] refKeys = deviceSRefs[i].getPropertyKeys();
-				for (int ii = 0; ii < refKeys.length; ii++) {
-					assertTrue(
-							"The device property and service property values are different.",
-							TestUtil.areEqual(deviceSRefs[i].getProperty(refKeys[ii]), device.getServiceProperty(refKeys[ii])));
-				}
-				compared = true;
-			} catch (UnsupportedOperationException uoe) {
-				// expected
+			String[] refKeys = deviceSRefs[i].getPropertyKeys();
+			for (int ii = 0; ii < refKeys.length; ii++) {
+				assertTrue(
+						"The device property and service property values are different.",
+						TestUtil.areEqual(deviceSRefs[i].getProperty(refKeys[ii]), device.getServiceProperty(refKeys[ii])));
 			}
+			compared = true;
 		}
-		assertTrue("No device with property access.", compared);
+		assertTrue("No device properties have been compared.", compared);
 	}
 
 	/**

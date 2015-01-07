@@ -93,7 +93,7 @@ public abstract class SimulatedFunction extends SimulatedService implements Func
 	public void postEvent(String propName, FunctionData propValue) {
 		final EventAdmin eventAdmin = (EventAdmin) this.eventAdminTracker.getService();
 		if (null == eventAdmin) {
-			throw new UnsupportedOperationException("The operation is not suported without Event Admin.");
+			throw new IllegalStateException("The event cannot be posted because of missing Event Admin.");
 		}
 		FunctionEvent event = new FunctionEvent(
 				FunctionEvent.TOPIC_PROPERTY_CHANGED,

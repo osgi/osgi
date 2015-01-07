@@ -1394,13 +1394,6 @@ function-id – function identifier in the scope of the device</programlisting>
           </listitem>
 
           <listitem>
-            <para> If a given function operation, getter or setter is not
-            supported, <code>java.lang.UnsupportedOperationException</code>
-            must be thrown. It indicates that function is partially supported.
-            </para>
-          </listitem>
-
-          <listitem>
             <para>The function operations, getters and setters must not
             override <code>java.lang.Object</code> and this interface methods.
             For example: </para>

@@ -76,7 +76,6 @@ public interface WakeUp extends Function {
 	 * 
 	 * @return The current wake up interval.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.
@@ -92,7 +91,6 @@ public interface WakeUp extends Function {
 	 * 
 	 * @param interval The new wake up interval.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.
@@ -108,7 +106,6 @@ public interface WakeUp extends Function {
 	 * @param interval The new wake up interval.
 	 * @param unit The interval unit.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.
@@ -119,7 +116,6 @@ public interface WakeUp extends Function {
 	/**
 	 * The device is forced to sleep to minimize the power consumption.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.

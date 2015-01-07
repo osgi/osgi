@@ -62,7 +62,6 @@ public interface MultiLevelSensor extends Function {
 	 * 
 	 * @return The {@code MultiLevelSensor} current state.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.

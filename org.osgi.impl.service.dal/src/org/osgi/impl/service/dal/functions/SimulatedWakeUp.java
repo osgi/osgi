@@ -132,7 +132,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 			setWakeUpInterval(getWakeUpInterval().getLevel(), false);
 		} else
 			if (PROPERTY_WAKE_UP_INTERVAL.equals(propName)) {
-				throw new UnsupportedOperationException("The property is not eventable: " + propName);
+				throw new IllegalArgumentException("The property is not eventable: " + propName);
 			} else {
 				throw new IllegalArgumentException("The property is not supported: " + propName);
 			}

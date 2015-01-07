@@ -64,8 +64,6 @@ public final class WakeUpTest extends AbstractFunctionTest {
 				currentFunction.sleep();
 			} catch (IllegalArgumentException iae) {
 				// try another function, unit is not supported
-			} catch (UnsupportedOperationException uoe) {
-				// expected, go ahead
 			} finally {
 				eventHandler.unregister();
 			}

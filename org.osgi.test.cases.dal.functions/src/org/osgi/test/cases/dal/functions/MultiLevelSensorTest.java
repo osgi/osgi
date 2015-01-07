@@ -29,21 +29,14 @@ public final class MultiLevelSensorTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_ID_AVAILABLE_MLS,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_MLS);
 		Function[] multiLevelSensors = super.getFunctions(MultiLevelSensor.class.getName());
-		boolean check = false;
 		for (int i = 0; i < multiLevelSensors.length; i++) {
 			final MultiLevelSensor currentSensor = (MultiLevelSensor) multiLevelSensors[i];
-			try {
-				LevelData currentData = currentSensor.getData();
-				check = true;
-				assertNotNull("The level data cannot be null!", currentData);
-				super.assertEquals(
-						currentSensor.getPropertyMetadata(MultiLevelSensor.PROPERTY_DATA),
-						currentData.getLevel(), currentData);
-			} catch (UnsupportedOperationException uoe) {
-				// expected, go ahead
-			}
+			LevelData currentData = currentSensor.getData();
+			assertNotNull("The level data cannot be null!", currentData);
+			super.assertEquals(
+					currentSensor.getPropertyMetadata(MultiLevelSensor.PROPERTY_DATA),
+					currentData.getLevel(), currentData);
 		}
-		assertTrue("At least one Boolean Sensor must support getData operation.", check);
 	}
 
 	/**

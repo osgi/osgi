@@ -98,7 +98,6 @@ public interface Meter extends Function {
 	 * 
 	 * @return The current metering info.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.
@@ -113,7 +112,6 @@ public interface Meter extends Function {
 	 * 
 	 * @return The total metering info.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.
@@ -125,7 +123,6 @@ public interface Meter extends Function {
 	/**
 	 * Resets the total metering info.
 	 * 
-	 * @throws UnsupportedOperationException If the operation is not supported.
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.

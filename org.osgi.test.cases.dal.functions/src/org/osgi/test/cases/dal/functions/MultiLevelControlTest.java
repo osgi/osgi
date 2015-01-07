@@ -32,7 +32,6 @@ public final class MultiLevelControlTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_ID_AVAILABLE_MLC,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_MLC);
 		Function[] multiLevelControls = super.getFunctions(MultiLevelControl.class.getName());
-		boolean check = false;
 		for (int i = 0; i < multiLevelControls.length; i++) {
 			final MultiLevelControl currentControl = (MultiLevelControl) multiLevelControls[i];
 			final PropertyMetadata currentPropertyMetadata = currentControl.getPropertyMetadata(
@@ -41,20 +40,14 @@ public final class MultiLevelControlTest extends AbstractFunctionTest {
 			if (null == levelData) {
 				continue;
 			}
-			try {
-				for (int ii = 0; ii < levelData.length; ii++) {
-					currentControl.setData(levelData[ii].getLevel(), levelData[ii].getUnit());
-					super.assertEquals(
-							currentPropertyMetadata,
-							levelData[ii].getLevel(),
-							currentControl.getData());
-				}
-				check = true;
-			} catch (UnsupportedOperationException uoe) {
-				// expected, go ahead
+			for (int ii = 0; ii < levelData.length; ii++) {
+				currentControl.setData(levelData[ii].getLevel(), levelData[ii].getUnit());
+				super.assertEquals(
+						currentPropertyMetadata,
+						levelData[ii].getLevel(),
+						currentControl.getData());
 			}
 		}
-		assertTrue("At least one Boolean Control must support setFalse operation.", check);
 	}
 
 	/**

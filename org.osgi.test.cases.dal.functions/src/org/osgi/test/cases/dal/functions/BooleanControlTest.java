@@ -31,18 +31,11 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_ID_AVAILABLE_BC,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BC);
 		Function[] booleanControls = super.getFunctions(BooleanControl.class.getName());
-		boolean check = false;
 		for (int i = 0; i < booleanControls.length; i++) {
 			final BooleanControl currentBooleanControl = (BooleanControl) booleanControls[i];
-			try {
-				currentBooleanControl.setTrue();
-				check = true;
-				super.assertEquals(true, currentBooleanControl.getData());
-			} catch (UnsupportedOperationException uoe) {
-				// expected, go ahead
-			}
+			currentBooleanControl.setTrue();
+			super.assertEquals(true, currentBooleanControl.getData());
 		}
-		assertTrue("At least one Boolean Control must support setTrue operation.", check);
 	}
 
 	/**
@@ -55,18 +48,11 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_ID_AVAILABLE_BC,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BC);
 		Function[] booleanControls = super.getFunctions(BooleanControl.class.getName());
-		boolean check = false;
 		for (int i = 0; i < booleanControls.length; i++) {
 			final BooleanControl currentBooleanControl = (BooleanControl) booleanControls[i];
-			try {
-				currentBooleanControl.setFalse();
-				check = true;
-				super.assertEquals(false, currentBooleanControl.getData());
-			} catch (UnsupportedOperationException uoe) {
-				// expected, go ahead
-			}
+			currentBooleanControl.setFalse();
+			super.assertEquals(false, currentBooleanControl.getData());
 		}
-		assertTrue("At least one Boolean Control must support setFalse operation.", check);
 	}
 
 	/**
@@ -79,19 +65,12 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 				FunctionsTestSteps.STEP_ID_AVAILABLE_BC,
 				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_BC);
 		Function[] booleanControls = super.getFunctions(BooleanControl.class.getName());
-		boolean check = false;
 		for (int i = 0; i < booleanControls.length; i++) {
 			final BooleanControl currentBooleanControl = (BooleanControl) booleanControls[i];
 			BooleanData currentData = currentBooleanControl.getData();
-			try {
-				currentBooleanControl.reverse();
-				check = true;
-				super.assertEquals(currentData.getValue() ? false : true, currentBooleanControl.getData());
-			} catch (UnsupportedOperationException uoe) {
-				// expected, go ahead
-			}
+			currentBooleanControl.reverse();
+			super.assertEquals(currentData.getValue() ? false : true, currentBooleanControl.getData());
 		}
-		assertTrue("At least one Boolean Control must support reverse operation.", check);
 	}
 
 	/**
