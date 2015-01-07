@@ -93,8 +93,9 @@ public interface PropertyMetadata {
 
 	/**
 	 * Metadata key, which value represents the property supported units. The
-	 * property value type is {@code java.lang.String[]}. Each unit must follow
-	 * those rules:
+	 * property value type is {@code java.lang.String[]}. The array first
+	 * element at index {@code 0} represents the default unit. Each unit must
+	 * follow those rules:
 	 * <ul>
 	 * <li>The International System of Units must be used where it's applicable.
 	 * For example, kg for kilogram and km for kilometre.</li>
