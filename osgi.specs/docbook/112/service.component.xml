@@ -590,8 +590,8 @@
 
       <para>A component instance must be able to use the services that are
       referenced by the component configuration, that is, the bound services
-      of the references. There are three strategies for a component instance
-      to acquire these bound services:</para>
+      of the references. The following strategies are available for a
+      component instance to acquire these bound services:</para>
 
       <itemizedlist>
         <listitem>
