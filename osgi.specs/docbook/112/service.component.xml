@@ -1038,8 +1038,8 @@
       <title>Reference Cardinality</title>
 
       <para>A component implementation is always written with a certain
-      <emphasis>cardinality</emphasis> in mind. The cardinality represents two
-      important concepts:</para>
+      <emphasis>cardinality</emphasis> for each reference in mind. The
+      cardinality represents two important concepts:</para>
 
       <itemizedlist>
         <listitem>
