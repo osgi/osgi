@@ -841,11 +841,11 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
   <section xml:id="service.dal.functions.data">
     <title>Functions Data</title>
 
-    <para><code>FunctionData</code> classes are wrappers on top of the java
-    types to cover the requirements of the functions in this section. They can
-    be received with the getter methods and can be reported with
-    <code>FunctionEvent</code>. The value can be described with different
-    properties like: <itemizedlist>
+    <para><code>FunctionData</code> subclasses are wrappers on top of the java
+    types to cover the requirements of the Device Abstraction Layer section.
+    They can be received with the getter methods, can be set with the setter methods
+    and can be reported with <code>FunctionEvent</code>.
+    The value can be described with different properties like: <itemizedlist>
         <listitem>
           <para> timestamp - the timestamp is the difference between the value
           collecting time and midnight, January 1, 1970 UTC. It's measured in
@@ -873,10 +873,10 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       linkend="service.dal.functions.wake.up"/>.</para>
 
       <para>It provides information about the function state. That data object
-      contains the boolean value, the value collecting time and additional
-      metadata. The immutable <code>BooleanData.value</code> field is
-      accessible with <code>BooleanData.getValue()</code> getter. Other fields
-      are inherited form the parent class <code>FunctionData</code>.</para>
+      contains boolean value, the value collecting time and additional
+      metadata. The <code>value</code> field is accessible with
+      <code>BooleanData.getValue()</code> getter. Other fields
+      are inherited from the parent class <code>FunctionData</code>.</para>
 
       <para>Two <code>BooleanData</code> instances are equal if they contain
       equal metadata, timestamp and boolean value.</para>
@@ -921,10 +921,10 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       <para>It provides information about the function level. That data object
       contains <code>BigDecimal</code> value and the value unit. The
       measurement unit is used as it's defined in <xref
-      linkend="service.dal.function.properties"/>. The immutable
-      <code>LevelData.unit</code> field is accessible with
-      <code>LevelData.getUnit()</code> getter. The immutable
-      <code>LevelData.level</code> field is accessible with
+      linkend="service.dal.function.properties"/>.
+      The <code>unit</code> field is accessible with
+      <code>LevelData.getUnit()</code> getter.
+      The <code>level</code> field is accessible with
       <code>LevelData.getLevel()</code> getter.</para>
 
       <para>Two <code>LevelData</code> instances are equal if they contain
@@ -975,10 +975,12 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
             <para> alarm severity - indicates the alarm importance level like
             low, high etc. </para>
           </listitem>
-        </itemizedlist> The immutable <code>AlarmData.severity</code> field is
-      accessible with <code>AlarmData.getSeverity()</code> getter. The
-      immutable <code>AlarmData.type</code> field is accessible with
-      <code>AlarmData.getType()</code> getter.</para>
+      </itemizedlist>
+      The <code>severity</code> field is
+      accessible with <code>AlarmData.getSeverity()</code> getter.
+      The <code>type</code> field is accessible with
+      <code>AlarmData.getType()</code> getter.
+      </para>
 
       <para>Two <code>AlarmData</code> instances are equal if they contain
       equal metadata, timestamp, type and severity.</para>
@@ -1042,11 +1044,11 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
             <para> <emphasis>EVENT_TYPE_UNKNOWN</emphasis> – represents an
             unknown keypad event type. </para>
           </listitem>
-        </itemizedlist> The immutable <code>KeypadData.eventType</code> field
+        </itemizedlist> The <code>eventType</code> field
       is accessible with <code>KeypadData.getEventType()</code> getter. The
-      immutable <code>KeypadData.keyCode</code> field is accessible with
-      <code>KeypadData.getKeyCode()</code> getter. The immutable
-      <code>KeypadData.keyName</code> field is accessible with
+      <code>keyCode</code> field is accessible with
+      <code>KeypadData.getKeyCode()</code> getter. The
+      <code>keyName</code> field is accessible with
       <code>KeypadData.getKeyName()</code> getter.</para>
 
       <para>Two <code>KeypadData</code> instances are equal if they contain
