@@ -1910,9 +1910,9 @@ public class HttpResourceImpl {
 
               <entry><para>The configuration PIDs to be used for the component
               in conjunction with Configuration Admin. Multiple configuration
-              PIDs can be specified by using a whitespace separated list. The
-              default value for this attribute is the name of the
-              component.</para><para>The annotation uses a
+              PIDs can be specified by using a whitespace separated list in
+              the attribute. The default value for this attribute is the name
+              of the component.</para><para>The annotation uses a
               <code>String[]</code> to specify multiple configuration PIDs.
               The order in which configuration PIDs are specified must be
               preserved in the generated component description. The annotation
