@@ -31,12 +31,10 @@ public interface BundleManager {
 	/**
 	 * <p>
 	 * Add a bundle to a bundle holder (e.g. a Resource Context).
-	 * </p>
 	 * <p>
 	 * This method should ensure the unicity of the association between a bundle
 	 * and its holder. A bundle can only be associated to a single holder. This
 	 * method is thread safe.
-	 * </p>
 	 * 
 	 * @param bundleId bundle identifier
 	 * @param bundleHolder bundle holder
@@ -49,10 +47,8 @@ public interface BundleManager {
 	/**
 	 * <p>
 	 * Remove a bundle from a bundle holder.
-	 * </p>
 	 * <p>
 	 * This method is thread safe
-	 * </p>
 	 * 
 	 * @param bundleId bundle identifier
 	 * @param bundleHolder bundle holder

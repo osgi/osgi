@@ -27,8 +27,6 @@ public interface Persistence {
 	 * {@link ResourceMonitoringService} is stopping.</li>
 	 * </ul>
 	 * 
-	 * </p>
-	 * 
 	 * @param bundleContext bundle context to be used to get a file in the
 	 *        private storage area of the {@link ResourceMonitoringService}
 	 *        bundle.

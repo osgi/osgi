@@ -32,8 +32,7 @@ import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
  * A TCP socket is considered to be in-use when it is bound (
  * {@link Socket#bind(java.net.SocketAddress)}) or when it is connected (
  * {@link Socket#connect(java.net.SocketAddress)}). It leaves the in-use state
- * when the socket is closed ({@link Socket#close()}).
- * </p>
+ * when the socket is closed ({@link Socket#close()}). *
  * <p>
  * A UDP socket is in-use when it is bound (
  * {@link DatagramSocket#bind(java.net.SocketAddress)}) or connected (

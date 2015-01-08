@@ -20,12 +20,11 @@ package org.osgi.service.resourcemonitoring;
  * <p>
  * An event is sent to a {@link ResourceListener} when resource usage violates
  * one of their thresholds.
- * </p>
+ * 
  * <p>
  * <code>ResourceEvent</code> objects are delivered synchronously to all
  * matching {@link ResourceListener} services. A typed code is used to identify
  * the event.
- * </p>
  * 
  * @see ResourceListener
  * 

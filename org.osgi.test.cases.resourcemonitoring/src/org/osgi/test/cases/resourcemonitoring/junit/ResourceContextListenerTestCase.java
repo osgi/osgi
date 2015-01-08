@@ -344,7 +344,6 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	 * Setup test.
 	 * <p>
 	 * Clears events list.
-	 * </p>
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();

@@ -23,7 +23,7 @@ package org.osgi.service.resourcemonitoring;
  * <li>a {@link ResourceContext} is created or deleted.</li>
  * <li>a bundle is added or removed from a {@link ResourceContext}.</li>
  * </ul>
- * </p>
+ * 
  * <p>
  * A <code>ResourceContextListener</code> is registered as an OSGi service. At
  * registration time, the following properties may be provided:
@@ -45,7 +45,6 @@ package org.osgi.service.resourcemonitoring;
  * </ul>
  * </li>
  * </ul>
- * </p>
  * 
  * @version 1.0
  * @author $Id$
@@ -56,12 +55,11 @@ public interface ResourceContextListener {
 	 * <p>
 	 * Property specifying the {@link ResourceContext}(s) for which a
 	 * notification will be received by this listener.
-	 * </p>
+	 * 
 	 * <p>
 	 * The property value is either a string (i.e the name of the
 	 * {@link ResourceContext}) and an array of string (several
 	 * {@link ResourceContext}).
-	 * </p>
 	 */
 	public static final String	RESOURCE_CONTEXT	= "resource.context";
 

@@ -143,14 +143,13 @@ public class ResourceContextEvent {
 	 * <p>
 	 * Retrieves the identifier of the bundle being added to or removed from the
 	 * Resource Context.
-	 * </p>
+	 * 
 	 * <p>
 	 * This method returns a valid value only when {@link #getType()} returns:
 	 * <ul>
 	 * <li>{@link #BUNDLE_ADDED}</li>
 	 * <li>{@link #BUNDLE_REMOVED}</li>
 	 * </ul>
-	 * </p>
 	 * 
 	 * @return the bundle id or -1 (invalid value) .
 	 */

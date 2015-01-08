@@ -26,17 +26,16 @@ import org.osgi.framework.Bundle;
  * Resource Monitoring Clients can use the
  * {@link ResourceMonitoringService#createContext(String, ResourceContext)}
  * method to create ResourceContext instances.
- * </p>
+ * 
  * <p>
  * Resource Monitoring Clients can use the {@link #getMonitor(String)} method to
  * get {@link ResourceMonitor} instances for the supported resource types. These
  * instances can then be used to monitor the usage of the resources, or the set
  * usage limits.
- * </p>
+ * 
  * <p>
  * ResourceContexts are retrieved through the {@link ResourceMonitoringService}
  * OSGi service.
- * </p>
  * 
  * @version 1.0
  * @author $Id$
