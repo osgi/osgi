@@ -28,28 +28,53 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 	 */
 	public void testEquals() {
 		// check without metadata
-		KeypadData data = new KeypadData(Long.MIN_VALUE, null, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME);
+		KeypadData data = new KeypadData(
+				Long.MIN_VALUE,
+				null,
+				KeypadData.TYPE_PRESSED,
+				KeypadData.SUB_TYPE_PRESSED_NORMAL,
+				KEY_CODE,
+				KEY_NAME);
 		assertEquals("The keypad data comparison is wrong!",
 				data,
 				data);
 		assertEquals("The keypad data comparison is wrong!",
 				data,
-				new KeypadData(Long.MIN_VALUE, null, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME));
+				new KeypadData(
+						Long.MIN_VALUE,
+						null,
+						KeypadData.TYPE_PRESSED,
+						KeypadData.SUB_TYPE_PRESSED_NORMAL,
+						KEY_CODE,
+						KEY_NAME));
 
 		// check with metadata
 		Map metadata = new HashMap();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
-		data = new KeypadData(Long.MIN_VALUE, metadata, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME);
+		data = new KeypadData(
+				Long.MIN_VALUE,
+				metadata,
+				KeypadData.TYPE_PRESSED,
+				KeypadData.SUB_TYPE_PRESSED_NORMAL,
+				KEY_CODE,
+				KEY_NAME);
 		assertEquals("The keypad data comparison is wrong!",
 				data,
 				data);
 		assertEquals("The keypad data comparison is wrong!",
 				data,
-				new KeypadData(Long.MIN_VALUE, metadata, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME));
+				new KeypadData(
+						Long.MIN_VALUE,
+						metadata,
+						KeypadData.TYPE_PRESSED,
+						KeypadData.SUB_TYPE_PRESSED_NORMAL,
+						KEY_CODE,
+						KEY_NAME));
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put(KeypadData.FIELD_EVENT_TYPE, new Integer(KeypadData.EVENT_TYPE_PRESSED_DOUBLE));
+		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
+		fields.put(KeypadData.FIELD_SUB_TYPE, new Integer(KeypadData.SUB_TYPE_PRESSED_NORMAL));
 		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
 		fields.put(KeypadData.FIELD_KEY_NAME, KEY_NAME);
 		fields.put(FunctionData.FIELD_METADATA, metadata);
@@ -60,7 +85,13 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 				data);
 		assertEquals("The keypad data comparison is wrong!",
 				data,
-				new KeypadData(Long.MIN_VALUE, metadata, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME));
+				new KeypadData(
+						Long.MIN_VALUE,
+						metadata,
+						KeypadData.TYPE_PRESSED,
+						KeypadData.SUB_TYPE_PRESSED_NORMAL,
+						KEY_CODE,
+						KEY_NAME));
 	}
 
 	/**
@@ -68,28 +99,55 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 	 */
 	public void testKeypadDataComparison() {
 		// check without metadata
-		KeypadData data = new KeypadData(Long.MIN_VALUE, null, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME);
+		KeypadData data = new KeypadData(
+				Long.MIN_VALUE,
+				null,
+				KeypadData.TYPE_PRESSED,
+				KeypadData.SUB_TYPE_PRESSED_NORMAL,
+				KEY_CODE,
+				KEY_NAME);
 		assertEquals(
 				"The keypad data comparison is wrong!",
 				0, data.compareTo(data));
 		assertEquals(
 				"The keypad data comparison is wrong!",
-				0, data.compareTo(new KeypadData(Long.MIN_VALUE, null, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME)));
+				0, data.compareTo(
+						new KeypadData(
+								Long.MIN_VALUE,
+								null,
+								KeypadData.TYPE_PRESSED,
+								KeypadData.SUB_TYPE_PRESSED_NORMAL,
+								KEY_CODE,
+								KEY_NAME)));
 
 		// check with metadata
 		Map metadata = new HashMap();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
-		data = new KeypadData(Long.MIN_VALUE, metadata, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME);
+		data = new KeypadData(
+				Long.MIN_VALUE,
+				metadata,
+				KeypadData.TYPE_PRESSED,
+				KeypadData.SUB_TYPE_PRESSED_NORMAL,
+				KEY_CODE,
+				KEY_NAME);
 		assertEquals(
 				"The keypad data comparison is wrong!",
 				0, data.compareTo(data));
 		assertEquals(
 				"The keypad data comparison is wrong!",
-				0, data.compareTo(new KeypadData(Long.MIN_VALUE, metadata, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME)));
+				0, data.compareTo(
+						new KeypadData(
+								Long.MIN_VALUE,
+								metadata,
+								KeypadData.TYPE_PRESSED,
+								KeypadData.SUB_TYPE_PRESSED_NORMAL,
+								KEY_CODE,
+								KEY_NAME)));
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put(KeypadData.FIELD_EVENT_TYPE, new Integer(KeypadData.EVENT_TYPE_PRESSED_DOUBLE));
+		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
+		fields.put(KeypadData.FIELD_SUB_TYPE, new Integer(KeypadData.SUB_TYPE_PRESSED_NORMAL));
 		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
 		fields.put(KeypadData.FIELD_KEY_NAME, KEY_NAME);
 		fields.put(FunctionData.FIELD_METADATA, metadata);
@@ -99,7 +157,14 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 				"The keypad data comparison is wrong!",
 				0, data.compareTo(data));
 		assertEquals("The keypad data comparison is wrong!",
-				0, data.compareTo(new KeypadData(Long.MIN_VALUE, metadata, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME)));
+				0, data.compareTo(
+						new KeypadData(
+								Long.MIN_VALUE,
+								metadata,
+								KeypadData.TYPE_PRESSED,
+								KeypadData.SUB_TYPE_PRESSED_NORMAL,
+								KEY_CODE,
+								KEY_NAME)));
 	}
 
 	/**
@@ -107,9 +172,16 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 	 */
 	public void testMapComparison() {
 		// check without metadata
-		KeypadData data = new KeypadData(Long.MIN_VALUE, null, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME);
+		KeypadData data = new KeypadData(
+				Long.MIN_VALUE,
+				null,
+				KeypadData.TYPE_PRESSED,
+				KeypadData.SUB_TYPE_PRESSED_NORMAL,
+				KEY_CODE,
+				KEY_NAME);
 		Map fields = new HashMap();
-		fields.put(KeypadData.FIELD_EVENT_TYPE, new Integer(KeypadData.EVENT_TYPE_PRESSED_DOUBLE));
+		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
+		fields.put(KeypadData.FIELD_SUB_TYPE, new Integer(KeypadData.SUB_TYPE_PRESSED_NORMAL));
 		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
 		fields.put(KeypadData.FIELD_KEY_NAME, KEY_NAME);
 		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
@@ -121,7 +193,13 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 		Map metadata = new HashMap();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		fields.put(FunctionData.FIELD_METADATA, metadata);
-		data = new KeypadData(Long.MIN_VALUE, metadata, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME);
+		data = new KeypadData(
+				Long.MIN_VALUE,
+				metadata,
+				KeypadData.TYPE_PRESSED,
+				KeypadData.SUB_TYPE_PRESSED_NORMAL,
+				KEY_CODE,
+				KEY_NAME);
 		assertEquals(
 				"The keypad data comparison is wrong!",
 				0, data.compareTo(fields));
@@ -138,28 +216,53 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 	 */
 	public void testHashCode() {
 		// check without metadata
-		KeypadData data = new KeypadData(Long.MIN_VALUE, null, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME);
+		KeypadData data = new KeypadData(
+				Long.MIN_VALUE,
+				null,
+				KeypadData.TYPE_PRESSED,
+				KeypadData.SUB_TYPE_PRESSED_NORMAL,
+				KEY_CODE,
+				KEY_NAME);
 		assertEquals("The keypad data hash code is wrong!",
 				data.hashCode(),
 				data.hashCode());
 		assertEquals("The keypad data hash code is wrong!",
 				data.hashCode(),
-				(new KeypadData(Long.MIN_VALUE, null, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME)).hashCode());
+				(new KeypadData(
+						Long.MIN_VALUE,
+						null,
+						KeypadData.TYPE_PRESSED,
+						KeypadData.SUB_TYPE_PRESSED_NORMAL,
+						KEY_CODE,
+						KEY_NAME)).hashCode());
 
 		// check with metadata
 		Map metadata = new HashMap();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
-		data = new KeypadData(Long.MIN_VALUE, metadata, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME);
+		data = new KeypadData(
+				Long.MIN_VALUE,
+				metadata,
+				KeypadData.TYPE_PRESSED,
+				KeypadData.SUB_TYPE_PRESSED_NORMAL,
+				KEY_CODE,
+				KEY_NAME);
 		assertEquals("The keypad data hash code is wrong!",
 				data.hashCode(),
 				data.hashCode());
 		assertEquals("The keypad data hash code is wrong!",
 				data.hashCode(),
-				(new KeypadData(Long.MIN_VALUE, metadata, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME)).hashCode());
+				(new KeypadData(
+						Long.MIN_VALUE,
+						metadata,
+						KeypadData.TYPE_PRESSED,
+						KeypadData.SUB_TYPE_PRESSED_NORMAL,
+						KEY_CODE,
+						KEY_NAME)).hashCode());
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put(KeypadData.FIELD_EVENT_TYPE, new Integer(KeypadData.EVENT_TYPE_PRESSED_DOUBLE));
+		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
+		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.SUB_TYPE_PRESSED_NORMAL));
 		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
 		fields.put(KeypadData.FIELD_KEY_NAME, KEY_NAME);
 		fields.put(FunctionData.FIELD_METADATA, metadata);
@@ -170,7 +273,13 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 				data.hashCode());
 		assertEquals("The keypad data hash code is wrong!",
 				data.hashCode(),
-				(new KeypadData(Long.MIN_VALUE, metadata, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME)).hashCode());
+				(new KeypadData(
+						Long.MIN_VALUE,
+						metadata,
+						KeypadData.TYPE_PRESSED,
+						KeypadData.SUB_TYPE_PRESSED_NORMAL,
+						KEY_CODE,
+						KEY_NAME)).hashCode());
 	}
 
 	/**
@@ -178,54 +287,94 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 	 */
 	public void testKeypadDataFields() {
 		// check without metadata
-		KeypadData data = new KeypadData(Long.MIN_VALUE, null, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME);
-		checkKeypadDataFields(Long.MIN_VALUE, null, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME, data);
+		KeypadData data = new KeypadData(
+				Long.MIN_VALUE,
+				null,
+				KeypadData.TYPE_PRESSED,
+				KeypadData.SUB_TYPE_PRESSED_NORMAL,
+				KEY_CODE,
+				KEY_NAME);
+		checkKeypadDataFields(
+				Long.MIN_VALUE,
+				null,
+				KeypadData.TYPE_PRESSED,
+				KeypadData.SUB_TYPE_PRESSED_NORMAL,
+				KEY_CODE,
+				KEY_NAME,
+				data);
 
 		// check with metadata
 		Map metadata = new HashMap();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
-		data = new KeypadData(Long.MIN_VALUE, metadata, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME);
-		checkKeypadDataFields(Long.MIN_VALUE, metadata, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME, data);
+		data = new KeypadData(
+				Long.MIN_VALUE,
+				metadata,
+				KeypadData.TYPE_PRESSED,
+				KeypadData.SUB_TYPE_PRESSED_NORMAL,
+				KEY_CODE,
+				KEY_NAME);
+		checkKeypadDataFields(
+				Long.MIN_VALUE,
+				metadata,
+				KeypadData.TYPE_PRESSED,
+				KeypadData.SUB_TYPE_PRESSED_NORMAL,
+				KEY_CODE,
+				KEY_NAME,
+				data);
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put(KeypadData.FIELD_EVENT_TYPE, new Integer(KeypadData.EVENT_TYPE_PRESSED_DOUBLE));
+		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
+		fields.put(KeypadData.FIELD_SUB_TYPE, new Integer(KeypadData.SUB_TYPE_PRESSED_NORMAL));
 		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
 		fields.put(KeypadData.FIELD_KEY_NAME, KEY_NAME);
 		fields.put(FunctionData.FIELD_METADATA, metadata);
 		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
 		data = new KeypadData(fields);
-		checkKeypadDataFields(Long.MIN_VALUE, metadata, KeypadData.EVENT_TYPE_PRESSED_DOUBLE, KEY_CODE, KEY_NAME, data);
+		checkKeypadDataFields(
+				Long.MIN_VALUE,
+				metadata,
+				KeypadData.TYPE_PRESSED,
+				KeypadData.SUB_TYPE_PRESSED_NORMAL,
+				KEY_CODE,
+				KEY_NAME,
+				data);
 	}
 
 	/**
-	 * Checks the {@code KeypadData} construction with an invalid fields.
+	 * Checks the {@code KeypadData} construction with invalid fields.
 	 */
 	public void testInvalidFields() {
 		Map fields = new HashMap();
-		fields.put(KeypadData.FIELD_EVENT_TYPE, "invalid-event-type");
+		fields.put(KeypadData.FIELD_TYPE, "invalid-event-type");
 		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
 		checkInvalidFieldType(fields);
 
 		fields.clear();
-		fields.put(KeypadData.FIELD_EVENT_TYPE, new Integer(KeypadData.EVENT_TYPE_PRESSED_DOUBLE_LONG));
+		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
+		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
+		fields.put(KeypadData.FIELD_SUB_TYPE, "invalid-event-sub-type");
+		checkInvalidFieldType(fields);
+
+		fields.clear();
+		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
 		fields.put(KeypadData.FIELD_KEY_CODE, "invalid-key-code");
 		checkInvalidFieldType(fields);
 
 		fields.clear();
-		fields.put(KeypadData.FIELD_EVENT_TYPE, new Integer(KeypadData.EVENT_TYPE_PRESSED_DOUBLE_LONG));
+		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
 		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
 		fields.put(KeypadData.FIELD_KEY_NAME, new Integer(Integer.MAX_VALUE));
 		checkInvalidFieldType(fields);
 
 		fields.clear();
-		fields.put(KeypadData.FIELD_EVENT_TYPE, new Integer(KeypadData.EVENT_TYPE_PRESSED_DOUBLE_LONG));
+		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
 		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
 		fields.put(FunctionData.FIELD_METADATA, Boolean.TRUE);
 		checkInvalidFieldType(fields);
 
 		fields.clear();
-		fields.put(KeypadData.FIELD_EVENT_TYPE, new Integer(KeypadData.EVENT_TYPE_PRESSED_DOUBLE_LONG));
+		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
 		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
 		fields.put(FunctionData.FIELD_TIMESTAMP, Boolean.TRUE);
 		checkInvalidFieldType(fields);
@@ -246,6 +395,32 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 		}
 	}
 
+	/**
+	 * Checks the {@code KeypadData} construction with invalid sub-types.
+	 */
+	public void testInvalidSubtypes() {
+		checkInvalidSubtype(KeypadData.TYPE_RELEASED, KeypadData.SUB_TYPE_PRESSED_NORMAL);
+		checkInvalidSubtype(KeypadData.TYPE_RELEASED, KeypadData.SUB_TYPE_PRESSED_LONG);
+		checkInvalidSubtype(KeypadData.TYPE_RELEASED, KeypadData.SUB_TYPE_PRESSED_DOUBLE);
+		checkInvalidSubtype(KeypadData.TYPE_RELEASED, KeypadData.SUB_TYPE_PRESSED_DOUBLE_LONG);
+	}
+
+	private void checkInvalidSubtype(int type, int subType) {
+		try {
+			new KeypadData(
+					Long.MIN_VALUE,
+					null,
+					type,
+					subType,
+					KEY_CODE,
+					KEY_NAME);
+			fail("KeypadData has been built with invalid combination of type: " + type +
+					" and sub-type: " + subType);
+		} catch (IllegalArgumentException iae) {
+			// expected, go ahead
+		}
+	}
+
 	private void checkInvalidFieldType(Map fields) {
 		try {
 			new KeypadData(fields);
@@ -255,13 +430,26 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 		}
 	}
 
-	private void checkKeypadDataFields(long timestamp, Map metadata, int eventType, int keyCode, String keyName, KeypadData actualData) {
+	private void checkKeypadDataFields(
+			long timestamp,
+			Map metadata,
+			int type,
+			int subType,
+			int keyCode,
+			String keyName,
+			KeypadData actualData) {
 		super.assertFunctionDataFields(timestamp, metadata, actualData);
 		// event type
 		assertEquals(
 				"The event type is not correct!",
-				eventType,
-				actualData.getEventType());
+				type,
+				actualData.getType());
+
+		// event sub-type
+		assertEquals(
+				"The event sub-type is not correct!",
+				subType,
+				actualData.getSubType());
 
 		// key code
 		assertEquals(

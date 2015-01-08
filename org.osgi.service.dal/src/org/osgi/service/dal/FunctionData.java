@@ -59,9 +59,12 @@ public abstract class FunctionData implements Comparable {
 	 * be: {"timestamp"=Long(1384440775495)}. That map will initialize the
 	 * {@link #FIELD_TIMESTAMP} field with 1384440775495. If timestamp is
 	 * missing, {@link Long#MIN_VALUE} is used.
-	 * <p>
-	 * {@link #FIELD_TIMESTAMP} field value type must be {@code Long}.
-	 * {@link #FIELD_METADATA} field value type must be {@code Map}.
+	 * <ul>
+	 * <li>{@link #FIELD_TIMESTAMP} - optional field. The value type must be
+	 * {@code Long}.</li>
+	 * <li>{@link #FIELD_METADATA} - optional field. The value type must be
+	 * {@code Map}.</li>
+	 * </ul>
 	 * 
 	 * @param fields Contains the new {@code FunctionData} instance field
 	 *        values.
@@ -79,8 +82,8 @@ public abstract class FunctionData implements Comparable {
 	 * Constructs new {@code FunctionData} instance with the specified
 	 * arguments.
 	 * 
-	 * @param timestamp The data timestamp.
-	 * @param metadata The data metadata.
+	 * @param timestamp The data timestamp optional field.
+	 * @param metadata The data metadata optional field.
 	 */
 	public FunctionData(long timestamp, Map metadata) {
 		this.timestamp = timestamp;

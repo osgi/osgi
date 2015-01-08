@@ -72,7 +72,9 @@ public final class SimulatedKeypad extends SimulatedFunction implements Keypad {
 				new KeypadData(
 						System.currentTimeMillis(),
 						null,
-						KeypadData.EVENT_TYPE_PRESSED,
-						64, "OSGi RI-test key"));
+						KeypadData.TYPE_PRESSED,
+						KeypadData.SUB_TYPE_PRESSED_NORMAL,
+						64,
+						"OSGi RI-test key"));
 	}
 }

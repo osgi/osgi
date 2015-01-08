@@ -21,14 +21,15 @@ import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.data.KeypadData;
 
 /**
- * {@code Keypad} function provides support for keypad control. A keypad
+ * {@code Keypad} function provides support for keypad control. The keypad
  * typically consists of one or more keys/buttons, which can be discerned.
  * Different types of key presses like short and long press can typically also
- * be detected. There is only one eventable property and no operations.
+ * be detected. Each key pressed event is followed by a key released event. It's
+ * not possible to have two consecutive key pressed or key released events.
+ * There is only one eventable property and no operations.
  * <p>
  * {@code Keypad} can enumerate all supported keys in the key property metadata,
- * {@link PropertyMetadata#getEnumValues(String)}. {@code KeypadData} event type
- * will be {@link KeypadData#EVENT_TYPE_UNKNOWN} in this case.
+ * {@link PropertyMetadata#getEnumValues(String)}.
  * 
  * @see KeypadData
  */

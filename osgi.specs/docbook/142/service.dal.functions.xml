@@ -726,9 +726,11 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       <title>Keypad</title>
 
       <para><code>Keypad</code> function provides support for keypad control.
-      A keypad typically consists of one or more keys/buttons, which can be
+      The keypad typically consists of one or more keys/buttons, which can be
       discerned. Different types of key presses like short and long press can
-      typically also be detected. There is only one eventable property and no
+      typically also be detected. Each key pressed event is followed by a key
+      released event. It's not possible to have two consecutive key pressed
+      or key released events. There is only one eventable property and no
       operations. The property eventing must follow the definition of Device
       Abstraction Layer, <xref linkend="service.dal.function.event"/>. The
       full function definition is available in the next table.</para>
@@ -1012,63 +1014,86 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       linkend="service.dal.functions.keypad"/>.</para>
 
       <para><code>KeypadData</code> data structure is used to provide
-      information when a change with some key from device keypad has occurred.
-      That data object contains the event type, key code and key name.
-      Currently, there are a few predefined event types: <itemizedlist>
+      information when a change with some key from the keypad has occurred.
+      That data object contains the event type, sub-type,
+      key code and key name. Currently, there are
+      two predefined event types:
+        <itemizedlist>
           <listitem>
-            <para> <emphasis>EVENT_TYPE_PRESSED</emphasis> – used for a key
+            <para> <emphasis>TYPE_PRESSED</emphasis> – used for a key
             pressed; </para>
           </listitem>
 
           <listitem>
-            <para> <emphasis>EVENT_TYPE_PRESSED_LONG</emphasis> – used for a
-            long key pressed; </para>
-          </listitem>
-
-          <listitem>
-            <para> <emphasis>EVENT_TYPE_PRESSED_DOUBLE</emphasis> – used for a
-            double key pressed; </para>
-          </listitem>
-
-          <listitem>
-            <para> <emphasis>EVENT_TYPE_PRESSED_DOUBLE_LONG</emphasis> – used
-            for a double and long key pressed; </para>
-          </listitem>
-
-          <listitem>
-            <para> <emphasis>EVENT_TYPE_RELEASED</emphasis> – used for a key
+            <para> <emphasis>TYPE_RELEASED</emphasis> – used for a key
             released. </para>
           </listitem>
+        </itemizedlist>
+        Predefined event sub-types are:
+        <itemizedlist>
+          <listitem>
+            <para> <emphasis>SUB_TYPE_PRESSED_NORMAL</emphasis> –
+              used for a normal key pressed event.
+              Usually, there is a single press and the key is not held down.
+              This sub-type is used with <code>TYPE_PRESSED</code> type.
+            </para>
+          </listitem>
 
           <listitem>
-            <para> <emphasis>EVENT_TYPE_UNKNOWN</emphasis> – represents an
-            unknown keypad event type. </para>
+            <para> <emphasis>SUB_TYPE_PRESSED_LONG</emphasis> –
+              used for a long key pressed event.
+              Usually, there is a single press and the key is held down.
+              This sub-type is used with <code>TYPE_PRESSED</code> type.
+            </para>
           </listitem>
-        </itemizedlist> The <code>eventType</code> field
-      is accessible with <code>KeypadData.getEventType()</code> getter. The
-      <code>keyCode</code> field is accessible with
-      <code>KeypadData.getKeyCode()</code> getter. The
-      <code>keyName</code> field is accessible with
-      <code>KeypadData.getKeyName()</code> getter.</para>
+
+          <listitem>
+            <para> <emphasis>SUB_TYPE_PRESSED_DOUBLE</emphasis> –
+              used for a double key pressed event.
+              Usually, there are two press actions and
+              the key is not held down after the second press.
+              This sub-type is used with <code>TYPE_PRESSED</code> type.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para> <emphasis>SUB_TYPE_PRESSED_DOUBLE_LONG</emphasis> –
+              used for a double long key pressed event.
+              Usually, there are two press actions and
+              the key is held down after the second press.
+              This sub-type is used with <code>TYPE_PRESSED</code> type.
+            </para>
+          </listitem>
+        </itemizedlist>
+        The <code>type</code> field
+        is accessible with <code>KeypadData.getType()</code> getter.
+        The <code>subType</code> field is accessible with
+        <code>KeypadData.getSubType()</code> getter.
+        The <code>keyCode</code> field is accessible with
+        <code>KeypadData.getKeyCode()</code> getter. The
+        <code>keyName</code> field is accessible with
+        <code>KeypadData.getKeyName()</code> getter.
+      </para>
 
       <para>Two <code>KeypadData</code> instances are equal if they contain
-      equal metadata, timestamp, event type, key code and key name.</para>
+      equal metadata, timestamp, event type, sub-type, key code and key name.</para>
 
       <para><code>java.lang.Comparable.compareTo(Object)</code> method
       compares <code>KeypadData</code> instance with the given argument. The
       argument can be: <itemizedlist>
           <listitem>
             <para> <code>KeypadData</code> - the method returns
-            <code>-1</code> if metadata, timestamp, event type, key code or
-            key name are not equivalent. <code>0</code> if all fields are
-            equivalent. </para>
+            <code>-1</code> if metadata, timestamp, event type, sub-type,
+            key code or key name are not equivalent.
+            <code>0</code> if all fields are equivalent. </para>
           </listitem>
 
           <listitem>
             <para> <code>Map</code> - the map must be built according the
             rules of <code>KeypadData(Map)</code> constructor. Metadata,
-            timestamp, event type, key code and key name are compared
-            according to <code>KeypadData</code> argument rules. </para>
+            timestamp, event type, sub-type, key code and
+            key name are compared according to
+            <code>KeypadData</code> argument rules. </para>
           </listitem>
         </itemizedlist></para>
     </section>
