@@ -69,6 +69,6 @@ public final class SimulatedAlarm extends SimulatedFunction implements Alarm {
 			throw new IllegalArgumentException("The property is not supported: " + propName);
 		}
 		super.postEvent(propName,
-				new AlarmData(System.currentTimeMillis(), null, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD));
+				new AlarmData(System.currentTimeMillis(), null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD));
 	}
 }

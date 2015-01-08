@@ -25,28 +25,28 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 	 */
 	public void testEquals() {
 		// check without metadata
-		AlarmData data = new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD);
+		AlarmData data = new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
 		assertEquals("The alarm data comparison is wrong!",
 				data,
 				data);
 		assertEquals("The alarm data comparison is wrong!",
 				data,
-				new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD));
+				new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD));
 
 		// check with metadata
 		Map metadata = new HashMap();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
-		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD);
+		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
 		assertEquals("The alarm data comparison is wrong!",
 				data,
 				data);
 		assertEquals("The alarm data comparison is wrong!",
 				data,
-				new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD));
+				new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD));
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put(AlarmData.FIELD_SEVERITY, new Integer(AlarmData.SEVERITY_NONE));
+		fields.put(AlarmData.FIELD_SEVERITY, new Integer(AlarmData.SEVERITY_UNDEFINED));
 		fields.put(AlarmData.FIELD_TYPE, new Integer(AlarmData.TYPE_COLD));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
 		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
@@ -56,7 +56,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 				data);
 		assertEquals("The alarm data comparison is wrong!",
 				data,
-				new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD));
+				new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD));
 	}
 
 	/**
@@ -64,28 +64,28 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 	 */
 	public void testAlarmDataComparison() {
 		// check without metadata
-		AlarmData data = new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD);
+		AlarmData data = new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
 		assertEquals(
 				"The alarm data comparison is wrong!",
 				0, data.compareTo(data));
 		assertEquals(
 				"The alarm data comparison is wrong!",
-				0, data.compareTo(new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD)));
+				0, data.compareTo(new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD)));
 
 		// check with metadata
 		Map metadata = new HashMap();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
-		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD);
+		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
 		assertEquals(
 				"The alarm data comparison is wrong!",
 				0, data.compareTo(data));
 		assertEquals(
 				"The alarm data comparison is wrong!",
-				0, data.compareTo(new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD)));
+				0, data.compareTo(new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD)));
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put(AlarmData.FIELD_SEVERITY, new Integer(AlarmData.SEVERITY_NONE));
+		fields.put(AlarmData.FIELD_SEVERITY, new Integer(AlarmData.SEVERITY_UNDEFINED));
 		fields.put(AlarmData.FIELD_TYPE, new Integer(AlarmData.TYPE_COLD));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
 		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
@@ -94,7 +94,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 				"The alarm data comparison is wrong!",
 				0, data.compareTo(data));
 		assertEquals("The alarm data comparison is wrong!",
-				0, data.compareTo(new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD)));
+				0, data.compareTo(new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD)));
 	}
 
 	/**
@@ -102,9 +102,9 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 	 */
 	public void testMapComparison() {
 		// check without metadata
-		AlarmData data = new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD);
+		AlarmData data = new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
 		Map fields = new HashMap();
-		fields.put(AlarmData.FIELD_SEVERITY, new Integer(AlarmData.SEVERITY_NONE));
+		fields.put(AlarmData.FIELD_SEVERITY, new Integer(AlarmData.SEVERITY_UNDEFINED));
 		fields.put(AlarmData.FIELD_TYPE, new Integer(AlarmData.TYPE_COLD));
 		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
 		assertEquals(
@@ -115,7 +115,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 		Map metadata = new HashMap();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
 		fields.put(FunctionData.FIELD_METADATA, metadata);
-		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD);
+		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
 		assertEquals(
 				"The alarm data comparison is wrong!",
 				0, data.compareTo(fields));
@@ -132,28 +132,28 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 	 */
 	public void testHashCode() {
 		// check without metadata
-		AlarmData data = new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD);
+		AlarmData data = new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
 		assertEquals("The alarm data hash code is wrong!",
 				data.hashCode(),
 				data.hashCode());
 		assertEquals("The alarm data hash code is wrong!",
 				data.hashCode(),
-				(new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD)).hashCode());
+				(new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD)).hashCode());
 
 		// check with metadata
 		Map metadata = new HashMap();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
-		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD);
+		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
 		assertEquals("The alarm data hash code is wrong!",
 				data.hashCode(),
 				data.hashCode());
 		assertEquals("The alarm data hash code is wrong!",
 				data.hashCode(),
-				(new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD)).hashCode());
+				(new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD)).hashCode());
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put(AlarmData.FIELD_SEVERITY, new Integer(AlarmData.SEVERITY_NONE));
+		fields.put(AlarmData.FIELD_SEVERITY, new Integer(AlarmData.SEVERITY_UNDEFINED));
 		fields.put(AlarmData.FIELD_TYPE, new Integer(AlarmData.TYPE_COLD));
 		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
@@ -163,7 +163,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 				data.hashCode());
 		assertEquals("The alarm data hash code is wrong!",
 				data.hashCode(),
-				(new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD)).hashCode());
+				(new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD)).hashCode());
 	}
 
 	/**
@@ -171,23 +171,23 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 	 */
 	public void testAlarmDataFields() {
 		// check without metadata
-		AlarmData data = new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD);
-		checkAlarmDataFields(Long.MIN_VALUE, null, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD, data);
+		AlarmData data = new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
+		checkAlarmDataFields(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD, data);
 
 		// check with metadata
 		Map metadata = new HashMap();
 		metadata.put(FunctionData.DESCRIPTION, "test-description");
-		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD);
-		checkAlarmDataFields(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD, data);
+		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
+		checkAlarmDataFields(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD, data);
 
 		// check with fields map
 		Map fields = new HashMap();
-		fields.put(AlarmData.FIELD_SEVERITY, new Integer(AlarmData.SEVERITY_NONE));
+		fields.put(AlarmData.FIELD_SEVERITY, new Integer(AlarmData.SEVERITY_UNDEFINED));
 		fields.put(AlarmData.FIELD_TYPE, new Integer(AlarmData.TYPE_COLD));
 		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
 		fields.put(FunctionData.FIELD_METADATA, metadata);
 		data = new AlarmData(fields);
-		checkAlarmDataFields(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_NONE, AlarmData.TYPE_COLD, data);
+		checkAlarmDataFields(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD, data);
 	}
 
 	/**
@@ -200,18 +200,18 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 		checkInvalidFieldType(fields);
 
 		fields.clear();
-		fields.put(AlarmData.FIELD_SEVERITY, new Integer(AlarmData.SEVERITY_NONE));
+		fields.put(AlarmData.FIELD_SEVERITY, new Integer(AlarmData.SEVERITY_UNDEFINED));
 		fields.put(AlarmData.FIELD_TYPE, "cold");
 		checkInvalidFieldType(fields);
 
 		fields.clear();
-		fields.put(AlarmData.FIELD_SEVERITY, new Integer(AlarmData.SEVERITY_NONE));
+		fields.put(AlarmData.FIELD_SEVERITY, new Integer(AlarmData.SEVERITY_UNDEFINED));
 		fields.put(AlarmData.FIELD_TYPE, new Integer(AlarmData.TYPE_COLD));
 		fields.put(FunctionData.FIELD_METADATA, Boolean.TRUE);
 		checkInvalidFieldType(fields);
 
 		fields.clear();
-		fields.put(AlarmData.FIELD_SEVERITY, new Integer(AlarmData.SEVERITY_NONE));
+		fields.put(AlarmData.FIELD_SEVERITY, new Integer(AlarmData.SEVERITY_UNDEFINED));
 		fields.put(AlarmData.FIELD_TYPE, new Integer(AlarmData.TYPE_COLD));
 		fields.put(FunctionData.FIELD_TIMESTAMP, Boolean.TRUE);
 		checkInvalidFieldType(fields);

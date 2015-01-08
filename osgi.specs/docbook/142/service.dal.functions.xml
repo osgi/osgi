@@ -975,7 +975,7 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
 
           <listitem>
             <para> alarm severity - indicates the alarm importance level like
-            low, high etc. </para>
+            minor, critical etc. </para>
           </listitem>
       </itemizedlist>
       The <code>severity</code> field is

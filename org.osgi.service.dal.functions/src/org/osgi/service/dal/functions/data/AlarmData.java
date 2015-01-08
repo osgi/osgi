@@ -35,77 +35,86 @@ public class AlarmData extends FunctionData {
 	 * {@link #getSeverity()}. The field type is {@code int}. The constant can
 	 * be used as a key to {@link #AlarmData(Map)} .
 	 */
-	public static final String	FIELD_SEVERITY	= "severity";
+	public static final String	FIELD_SEVERITY		= "severity";
 
 	/**
 	 * Represents the type field name. The field value is available with
 	 * {@link #getType()}. The field type is {@code int}. The constant can be
 	 * used as a key to {@link #AlarmData(Map)}.
 	 */
-	public static final String	FIELD_TYPE		= "type";
+	public static final String	FIELD_TYPE			= "type";
 
 	/** The alarm type indicates that the type is not specified. */
-	public static final int		TYPE_UNDEFINED	= 0;
+	public static final int		TYPE_UNDEFINED		= 0;
 
-	/** The alarm type indicates that smoke is detected. */
-	public static final int		TYPE_SMOKE		= 1;
+	/**
+	 * The alarm type indicates that there is access control issue. For example,
+	 * the alarm can indicate that the door is unlocked.
+	 */
+	public static final int		TYPE_ACCESS_CONTROL	= 1;
 
-	/** The alarm type indicates that temperature is too high. */
-	public static final int		TYPE_HEAT		= 2;
+	/**
+	 * The alarm type indicates that there is a burglar notification. For
+	 * example, the alarm can indicate that the glass is broken.
+	 */
+	public static final int		TYPE_BURGLAR		= 2;
 
 	/** The alarm type indicates that temperature is too low. */
-	public static final int		TYPE_COLD		= 3;
+	public static final int		TYPE_COLD			= 3;
 
-	/** The alarm type indicates that carbon dioxide is detected. */
-	public static final int		TYPE_GAS_CO2	= 4;
+	/** The alarm type indicates that carbon monoxide (CO) is detected. */
+	public static final int		TYPE_GAS_CO			= 4;
 
-	/** The alarm type indicates that carbon monoxide is detected. */
-	public static final int		TYPE_GAS_CO		= 5;
+	/** The alarm type indicates that carbon dioxide (CO2) is detected. */
+	public static final int		TYPE_GAS_CO2		= 5;
 
-	/** The alarm type indicates that water leak is detected. */
-	public static final int		TYPE_WATER		= 6;
-
-	/** The alarm type indicates a power cut. */
-	public static final int		TYPE_POWER_FAIL	= 7;
+	/** The alarm type indicates that temperature is too high. */
+	public static final int		TYPE_HEAT			= 6;
 
 	/** The alarm type indicates that there is hardware failure. */
-	public static final int		TYPE_HW_FAIL	= 8;
+	public static final int		TYPE_HARDWARE_FAIL	= 7;
+
+	/** The alarm type indicates a power cut. */
+	public static final int		TYPE_POWER_FAIL		= 8;
+
+	/** The alarm type indicates that smoke is detected. */
+	public static final int		TYPE_SMOKE			= 9;
 
 	/** The alarm type indicates that there is software failure. */
-	public static final int		TYPE_SW_FAIL	= 9;
+	public static final int		TYPE_SOFTWARE_FAIL	= 10;
+
+	/** The alarm type for a tamper indication. */
+	public static final int		TYPE_TAMPER			= 11;
+
+	/** The alarm type indicates that a water leak is detected. */
+	public static final int		TYPE_WATER			= 12;
 
 	/**
 	 * The severity constant indicates that there is no severity rating for this
 	 * alarm.
 	 */
-	public static final int		SEVERITY_NONE	= 0;
+	public static final int		SEVERITY_UNDEFINED	= 0;
 
 	/**
-	 * The severity rating indicates that there is an alarm with lowest
-	 * priority.
+	 * The severity rating indicates that there is a minor alarm. The severity
+	 * priority is lower than {@link #SEVERITY_MAJOR} and
+	 * {@link #SEVERITY_CRITICAL}.
 	 */
-	public static final int		SEVERITY_LOW	= 1;
+	public static final int		SEVERITY_MINOR		= 1;
 
 	/**
-	 * The severity rating indicates that there is an alarm with medium
-	 * priority. The severity priority is higher than {@link #SEVERITY_LOW} and
-	 * lower than {@link #SEVERITY_HIGH}.
+	 * The severity rating indicates that there is a major alarm. The severity
+	 * priority is higher than {@link #SEVERITY_MINOR} and lower than
+	 * {@link #SEVERITY_CRITICAL}.
 	 */
-	public static final int		SEVERITY_MEDIUM	= 2;			// Moderate,
-																// Normal
+	public static final int		SEVERITY_MAJOR		= 2;
 
 	/**
-	 * The severity rating indicates that there is an alarm with high priority.
-	 * The severity priority is higher than {@link #SEVERITY_MEDIUM} and lower
-	 * than {@link #SEVERITY_URGENT}.
+	 * The severity rating indicates that there a critical alarm. The severity
+	 * priority is higher than {@link #SEVERITY_MINOR} and
+	 * {@link #SEVERITY_MAJOR}.
 	 */
-	public static final int		SEVERITY_HIGH	= 3;			// Important
-
-	/**
-	 * The severity rating indicates that there an urgent alarm. That severity
-	 * has highest priority.
-	 */
-	public static final int		SEVERITY_URGENT	= 4;			// Critical
+	public static final int		SEVERITY_CRITICAL	= 3;
 
 	private final int			severity;
 	private final int			type;
@@ -116,7 +125,7 @@ public class AlarmData extends FunctionData {
 	 * be assigned to the appropriate class fields. For example, the maps can
 	 * be: {"severity"=Integer(1)...}. That map will initialize the
 	 * {@link #FIELD_SEVERITY} field with 1. If severity is missing,
-	 * {@link #SEVERITY_NONE} is used.
+	 * {@link #SEVERITY_UNDEFINED} is used.
 	 * <p>
 	 * {@link #FIELD_SEVERITY} field value type must be {@code Integer}.
 	 * {@link #FIELD_TYPE} field value type must be {@code Integer}.
@@ -130,7 +139,7 @@ public class AlarmData extends FunctionData {
 	public AlarmData(Map fields) {
 		super(fields);
 		Integer severityLocal = (Integer) fields.get(FIELD_SEVERITY);
-		this.severity = (null != severityLocal) ? severityLocal.intValue() : SEVERITY_NONE;
+		this.severity = (null != severityLocal) ? severityLocal.intValue() : SEVERITY_UNDEFINED;
 		Integer typeLocal = (Integer) fields.get(FIELD_TYPE);
 		if (null == typeLocal) {
 			throw new IllegalArgumentException("The alarm data type is missing.");
@@ -163,11 +172,13 @@ public class AlarmData extends FunctionData {
 	 * <li>{@link #TYPE_GAS_CO2}</li>
 	 * <li>{@link #TYPE_WATER}</li>
 	 * <li>{@link #TYPE_POWER_FAIL}</li>
-	 * <li>{@link #TYPE_HW_FAIL}</li>
-	 * <li>{@link #TYPE_SW_FAIL}</li>
+	 * <li>{@link #TYPE_HARDWARE_FAIL}</li>
+	 * <li>{@link #TYPE_SOFTWARE_FAIL}</li>
 	 * <li>vendor specific</li>
 	 * </ul>
-	 * The vendor can define own alarm types with negative values.
+	 * Zero and positive values are reserved for this definition and further
+	 * extensions of the alarm types. Custom types can be used only as negative
+	 * values to prevent potential collisions.
 	 * 
 	 * @return The alarm type.
 	 */
