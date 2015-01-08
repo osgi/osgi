@@ -1060,10 +1060,10 @@
           must bind to at least one service before they can be useful. For
           example, the Configuration Admin in the previous example must still
           provide its functionality even if there are no Configuration
-          Listener services present. Alternatively, an application that solely
-          presents a Servlet page has little to do when the Http Service is
-          not present, it should therefore use a reference with a mandatory
-          cardinality.</para>
+          Listener services present. Alternatively, an application that
+          registers a Servlet with the Http Service has little to do when the
+          Http Service is not present, it should therefore use a reference
+          with a mandatory cardinality.</para>
         </listitem>
       </itemizedlist>
 
