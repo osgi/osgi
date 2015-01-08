@@ -49,4 +49,12 @@ public interface EnOceanMessageDescription {
      */
     public EnOceanChannel[] deserialize(byte[] bytes) throws IllegalArgumentException;
 
+    /**
+     * @return the message description containing the RORG, (and the FUNC, and
+     *         the TYPE if available), as well as, the EEP's "title" (e.g. for
+     *         F60201: Rocker Switch, 2 Rocker; Light and Blind Control -
+     *         Application Style 1).
+     */
+    public String getMessageDescription();
+
 }

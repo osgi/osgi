@@ -183,6 +183,10 @@ public class EnOceanHostTestImpl extends EnOceanHostImpl {
 
 										}
 
+										public String getMessageDescription() {
+											return "A description";
+										}
+
 									};
 								}
 							};

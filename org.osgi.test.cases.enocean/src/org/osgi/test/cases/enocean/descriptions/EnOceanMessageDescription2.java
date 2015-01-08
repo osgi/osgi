@@ -71,4 +71,9 @@ public class EnOceanMessageDescription2 implements EnOceanMessageDescription {
 
 		return new EnOceanChannel[] {floatValue, l};
 	}
+
+	public String getMessageDescription() {
+		return "A description2";
+	}
+
 }
