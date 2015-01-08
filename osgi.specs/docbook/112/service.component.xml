@@ -624,25 +624,6 @@
 
       <para>A component may use multiple strategies to access the bound
       services of a reference.</para>
-
-      <para>When the service object for a bound service is first provided to a
-      component instance, that is the service object is directly passed to an
-      event method, set in a field, or returned by a locate service method,
-      SCR must get the service object from the OSGi Framework's service
-      registry using the <code>getService</code> method on the component's
-      Bundle Context. If the service object for a bound service has been
-      obtained and the service becomes unbound, SCR must unget the service
-      object using the <code>ungetService</code> method on the component's
-      Bundle Context and discard all references to the service object.</para>
-
-      <para>If a component instance is passed a Component Service Objects
-      object, then SCR must use a Service Objects object obtained from the
-      OSGi Framework's service registry using the component's Bundle Context
-      to get and unget any service objects for the Component Service Objects.
-      If the bound service has prototype service scope, then SCR must track
-      the service objects returned by the Component Service Objects object so
-      that, when the service becomes unbound, SCR must release any unreleased
-      service objects.</para>
     </section>
 
     <section xml:id="service.component-event.methods">
@@ -1196,24 +1177,38 @@ public class HttpResourceImpl {
         </listitem>
       </itemizedlist>
 
-      <para>For a reference with bundle reference scope,
-      <code>BundleContext.getService</code> must be used to obtain the service
-      object. This ensures that the bundle will only be exposed to a single
-      instance of the service object at any given time.</para>
+      <para>For a bound service of a reference with bundle reference scope,
+      SCR must get the service object from the OSGi Framework's service
+      registry using the <code>getService</code> method on the component's
+      Bundle Context. If the service object for a bound service has been
+      obtained and the service becomes unbound, SCR must unget the service
+      object using the <code>ungetService</code> method on the component's
+      Bundle Context and discard all references to the service object. This
+      ensures that the bundle will only be exposed to a single instance of the
+      service object at any given time.</para>
 
-      <para>For a reference with prototype or prototype required reference
-      scope, <code>ServiceObjects.getService</code> must be used to obtain a
-      service object for each component instance. For a reference with
-      prototype required reference scope, only services registered with
-      prototype service scope can be considered as target services. This
-      ensures that each component instance will be exposed to a single,
-      distinct instance of the service object. Using prototype required
-      reference scope effectively adds <code>service.scope=prototype</code> to
-      the target property for the reference. A service that does not use
-      prototype service scope cannot be used as a bound service for a
-      reference with prototype required reference scope since the service
-      cannot provide distinct service objects for each component
-      instance.</para>
+      <para>For a bound service of a reference with prototype or prototype
+      required reference scope, SCR must use a Service Objects object obtained
+      from the OSGi Framework's service registry using the component's Bundle
+      Context to get any service objects. If service objects for a bound
+      service have been obtained and the service becomes unbound, SCR must
+      unget any unreleased service objects using the Service Objects object
+      obtained from the OSGi Framework's service registry using the
+      component's Bundle Context. This means that if a component instance used
+      a Component Service Objects object to obtain service objects, SCR must
+      track those service objects so that when the service becomes unbound,
+      SCR can unget any unreleased service objects.</para>
+
+      <para>Additionally, for a bound service of a reference with prototype
+      required reference scope, only services registered with prototype
+      service scope can be considered as target services. This ensures that
+      each component instance can be exposed to a single, distinct instance of
+      the service object. Using prototype required reference scope effectively
+      adds <code>service.scope=prototype</code> to the target property for the
+      reference. A service that does not use prototype service scope cannot be
+      used as a bound service for a reference with prototype required
+      reference scope since the service cannot provide a distinct service
+      object for each component instance.</para>
     </section>
 
     <section xml:id="i1440474">
