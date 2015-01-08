@@ -2688,7 +2688,7 @@ public class Foo implements EventHandler { ... }</programlisting>
       must be ordered in ascending lexicographical order, using
       <code>String.compareTo</code>, of the <xref
       linkend="org.osgi.service.component.annotations.Reference.name--"
-      xrefstyle="hyperlink"/>s of the references. </para>
+      xrefstyle="hyperlink"/>s of the references.</para>
 
       <para>The following code demonstrates the use of the <xref
       linkend="org.osgi.service.component.annotations.Reference"
@@ -3769,7 +3769,7 @@ void unsetLogService( LogService log ) {
 
         <para>The target property for a reference can also be set by the
         <code>target</code> attribute of the <code>reference</code> element.
-        See <xref linkend="service.component-reference.element"/> .</para>
+        See <xref linkend="service.component-reference.element"/>.</para>
       </section>
 
       <section xml:id="service.component-minimum.cardinality.property">
