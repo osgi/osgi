@@ -261,15 +261,15 @@
           instance of the component implementation class that will be returned
           as the service object. If the <code>scope</code> attribute of the
           <code>service</code> element is <code>bundle</code>, then, for each
-          distinct bundle that requests the service, a different component
-          configuration is created and activated and a new instance of the
-          component implementation class is returned as the service object. If
-          the <code>scope</code> attribute of the <code>service</code> element
-          is <code>prototype</code>, then, for each distinct request for the
-          service, such as via <code>ServiceObjects</code>, a different
+          distinct bundle that requests the service object, a different
           component configuration is created and activated and a new instance
           of the component implementation class is returned as the service
-          object.</para>
+          object. If the <code>scope</code> attribute of the
+          <code>service</code> element is <code>prototype</code>, then, for
+          each distinct request for the service object, such as via
+          <code>ServiceObjects</code>, a different component configuration is
+          created and activated and a new instance of the component
+          implementation class is returned as the service object.</para>
         </listitem>
 
         <listitem>
