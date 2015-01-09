@@ -58,9 +58,12 @@ public class LevelData extends FunctionData {
 	 * be assigned to the appropriate class fields. For example, the maps can
 	 * be: {"level"=BigDecimal(1)...}. That map will initialize the
 	 * {@link #FIELD_LEVEL} field with 1.
-	 * <p>
-	 * {@link #FIELD_UNIT} field value type must be {@code String}.
-	 * {@link #FIELD_LEVEL} field value type must be {@code BigDecimal}.
+	 * <ul>
+	 * <li>{@link #FIELD_UNIT} - optional field. The value type must be
+	 * {@code String}.</li>
+	 * <li>{@link #FIELD_LEVEL} - mandatory field. The value type must be
+	 * {@code BigDecimal}.</li>
+	 * </ul>
 	 * 
 	 * @param fields Contains the new {@code LevelData} instance field values.
 	 * 
@@ -80,10 +83,10 @@ public class LevelData extends FunctionData {
 	/**
 	 * Constructs new {@code LevelData} instance with the specified arguments.
 	 * 
-	 * @param timestamp The data timestamp.
-	 * @param metadata The data metadata.
-	 * @param unit The data unit.
-	 * @param level The level value.
+	 * @param timestamp The data timestamp optional field.
+	 * @param metadata The data metadata optional field.
+	 * @param unit The data unit optional field.
+	 * @param level The level value mandatory field.
 	 */
 	public LevelData(long timestamp, Map metadata, String unit, BigDecimal level) {
 		super(timestamp, metadata);

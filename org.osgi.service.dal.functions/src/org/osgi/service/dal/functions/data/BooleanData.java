@@ -47,7 +47,8 @@ public class BooleanData extends FunctionData {
 	 * be: {"value"=Boolean(true)...}. That map will initialize the
 	 * {@link #FIELD_VALUE} field with {@code true}.
 	 * <p>
-	 * {@link #FIELD_VALUE} field value type must be {@code Boolean}.
+	 * {@link #FIELD_VALUE} - mandatory field. The value type must be
+	 * {@code Boolean}.
 	 * 
 	 * @param fields Contains the new {@code BooleanData} instance field values.
 	 * 
@@ -67,9 +68,9 @@ public class BooleanData extends FunctionData {
 	/**
 	 * Constructs new {@code BooleanData} instance with the specified arguments.
 	 * 
-	 * @param timestamp The boolean data timestamp.
-	 * @param metadata The boolean data metadata.
-	 * @param value The boolean value.
+	 * @param timestamp The boolean data timestamp optional field.
+	 * @param metadata The boolean data metadata optional field.
+	 * @param value The boolean value mandatory field.
 	 */
 	public BooleanData(long timestamp, Map metadata, boolean value) {
 		super(timestamp, metadata);

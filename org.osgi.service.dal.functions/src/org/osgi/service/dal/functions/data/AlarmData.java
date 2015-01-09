@@ -126,9 +126,12 @@ public class AlarmData extends FunctionData {
 	 * be: {"severity"=Integer(1)...}. That map will initialize the
 	 * {@link #FIELD_SEVERITY} field with 1. If severity is missing,
 	 * {@link #SEVERITY_UNDEFINED} is used.
-	 * <p>
-	 * {@link #FIELD_SEVERITY} field value type must be {@code Integer}.
-	 * {@link #FIELD_TYPE} field value type must be {@code Integer}.
+	 * <ul>
+	 * <li>{@link #FIELD_SEVERITY} - optional field. The value type must be
+	 * {@code Integer}.</li>
+	 * <li>{@link #FIELD_TYPE} - mandatory field. The value type must be
+	 * {@code Integer}.</li>
+	 * </ul>
 	 * 
 	 * @param fields Contains the new {@code AlarmData} instance field values.
 	 * 
@@ -150,10 +153,10 @@ public class AlarmData extends FunctionData {
 	/**
 	 * Constructs new {@code AlarmData} instance with the specified arguments.
 	 * 
-	 * @param timestamp The alarm data timestamp.
-	 * @param metadata The alarm data metadata.
-	 * @param severity The alarm data severity.
-	 * @param type The alarm data type.
+	 * @param timestamp The alarm data timestamp optional field.
+	 * @param metadata The alarm data metadata optional field.
+	 * @param severity The alarm data severity optional field.
+	 * @param type The alarm data type mandatory field.
 	 */
 	public AlarmData(long timestamp, Map metadata, int severity, int type) {
 		super(timestamp, metadata);
