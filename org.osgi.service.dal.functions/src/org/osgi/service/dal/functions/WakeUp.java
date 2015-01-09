@@ -31,10 +31,6 @@ import org.osgi.service.dal.functions.data.LevelData;
  * <p>
  * The device can periodically wake up for commands. The interval can be managed
  * with {@link #PROPERTY_WAKE_UP_INTERVAL} property.
- * <p>
- * The application can minimize the power consumption with {@link #sleep()}
- * operation. As a result of the call, the device will sleep and will not
- * receive commands to the next awake.
  * 
  * @see LevelData
  * @see BooleanData
@@ -58,12 +54,6 @@ public interface WakeUp extends Function {
 	 * modified with {@link #setWakeUpInterval(BigDecimal, String)}.
 	 */
 	public static final String	PROPERTY_WAKE_UP_INTERVAL	= "wakeUpInterval";
-
-	/**
-	 * Specifies the sleep operation name. The operation can be executed with
-	 * {@link #sleep()} method.
-	 */
-	public static final String	OPERATION_SLEEP				= "sleep";
 
 	/**
 	 * Returns the current wake up interval. It's a getter method for
@@ -99,13 +89,4 @@ public interface WakeUp extends Function {
 	 * @throws IllegalArgumentException If there is an invalid argument.
 	 */
 	public void setWakeUpInterval(BigDecimal interval, String unit) throws DeviceException;
-
-	/**
-	 * The device is forced to sleep to minimize the power consumption.
-	 * 
-	 * @throws IllegalStateException If this function service object has already
-	 *         been unregistered.
-	 * @throws DeviceException If an operation error is available.
-	 */
-	public void sleep() throws DeviceException;
 }

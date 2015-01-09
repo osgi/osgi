@@ -754,33 +754,6 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       <para>The device can periodically wake up for commands. The interval can
       be managed with <code>PROPERTY_WAKE_UP_INTERVAL</code> property.</para>
 
-      <para>The application can minimize the power consumption with
-      <code>sleep()</code> operation. As a result of the call, the device will
-      sleep and will not receive commands to the next awake.</para>
-
-      <table>
-        <title>WakeUp Operations</title>
-
-        <tgroup cols="2">
-          <thead>
-            <row>
-              <entry>Name</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry><code>sleep</code></entry>
-
-              <entry>The device is forced to sleep to minimize the power
-              consumption.</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-
       <table>
         <title>WakeUp Properties</title>
 

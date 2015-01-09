@@ -14,7 +14,6 @@ import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.FunctionEvent;
 import org.osgi.service.dal.PropertyMetadata;
-import org.osgi.service.dal.SIUnits;
 import org.osgi.service.dal.functions.WakeUp;
 import org.osgi.service.dal.functions.data.BooleanData;
 import org.osgi.service.dal.functions.data.LevelData;
@@ -26,8 +25,6 @@ public final class WakeUpTest extends AbstractFunctionTest {
 
 	private static final long	WAKE_UP_INTERVAL	= Long.getLong(
 															"org.osgi.test.cases.dal.wakeUpInterval", 2000).longValue();
-
-	private static final String	MILLIS				= SIUnits.PREFIX_MILLI + SIUnits.SECOND;
 
 	/**
 	 * Validates the wake up interval support.
@@ -48,7 +45,7 @@ public final class WakeUpTest extends AbstractFunctionTest {
 					WakeUp.PROPERTY_AWAKE);
 			try {
 				currentFunction.setWakeUpInterval(
-						new BigDecimal(getWakeUpInterval(currentFunction)), MILLIS);
+						new BigDecimal(getWakeUpInterval(currentFunction)), null);
 				check = true;
 				FunctionEvent wakeUpEvent = eventHandler.getEvents(1)[0];
 				assertEquals(
@@ -61,9 +58,6 @@ public final class WakeUpTest extends AbstractFunctionTest {
 				assertTrue(
 						"The event value is not correct.",
 						((BooleanData) wakeUpEvent.getFunctionPropertyValue()).getValue());
-				currentFunction.sleep();
-			} catch (IllegalArgumentException iae) {
-				// try another function, unit is not supported
 			} finally {
 				eventHandler.unregister();
 			}
@@ -74,16 +68,12 @@ public final class WakeUpTest extends AbstractFunctionTest {
 	private static long getWakeUpInterval(WakeUp wakeUp) {
 		PropertyMetadata wakeUpIntervalMeta = wakeUp.getPropertyMetadata(WakeUp.PROPERTY_WAKE_UP_INTERVAL);
 		if (null != wakeUpIntervalMeta) {
-			try {
-				LevelData minWakeUpInterval = (LevelData) wakeUpIntervalMeta.getMinValue(MILLIS);
-				if (null != minWakeUpInterval) {
-					long minWakeUpIntervalLong = minWakeUpInterval.getLevel().longValue();
-					if (minWakeUpIntervalLong > 0) {
-						return minWakeUpIntervalLong;
-					}
+			LevelData minWakeUpInterval = (LevelData) wakeUpIntervalMeta.getMinValue(null);
+			if (null != minWakeUpInterval) {
+				long minWakeUpIntervalLong = minWakeUpInterval.getLevel().longValue();
+				if (minWakeUpIntervalLong > 0) {
+					return minWakeUpIntervalLong;
 				}
-			} catch (IllegalArgumentException iae) {
-				// the unit is not supported, go ahead
 			}
 		}
 		return WAKE_UP_INTERVAL;

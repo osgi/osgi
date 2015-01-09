@@ -108,10 +108,6 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 		this.setWakeUpInterval(interval, true);
 	}
 
-	public void sleep() {
-		// nothing special to do
-	}
-
 	public void remove() {
 		synchronized (this.lock) {
 			if (null != this.timerTask) {
