@@ -22,7 +22,7 @@ import org.osgi.service.dal.functions.data.LevelData;
 
 /**
  * {@code Meter} function can measure metering information. The function
- * provides three properties and one operation:
+ * provides these properties:
  * <ul>
  * <li>{@link #PROPERTY_CURRENT} - property accessible with
  * {@link #getCurrent()} getter;</li>
@@ -30,8 +30,6 @@ import org.osgi.service.dal.functions.data.LevelData;
  * getter;</li>
  * <li>{@link #SERVICE_FLOW} - property accessible with {@link #getTotal()}
  * getter;</li>
- * <li>{@link #OPERATION_RESET_TOTAL} - operation can be executed with
- * {@link #resetTotal()}.</li>
  * </ul>
  * <p>
  * The sensor type can be:
@@ -80,17 +78,10 @@ public interface Meter extends Function {
 	public static final String	PROPERTY_CURRENT		= "current";
 
 	/**
-	 * Specifies the total consumption or generation property name. It has been
-	 * measured since the last call of {@link #resetTotal()} or device initial
-	 * run. The property can be read with {@link #getTotal()} getter.
+	 * Specifies the total consumption or generation property name. The property
+	 * can be read with {@link #getTotal()} getter.
 	 */
 	public static final String	PROPERTY_TOTAL			= "total";
-
-	/**
-	 * Specifies the reset total operation name. The operation can be executed
-	 * with {@link #resetTotal()} method.
-	 */
-	public static final String	OPERATION_RESET_TOTAL	= "resetTotal";
 
 	/**
 	 * Returns the current metering info. It's a getter method for
@@ -119,13 +110,4 @@ public interface Meter extends Function {
 	 * @see LevelData
 	 */
 	public LevelData getTotal() throws DeviceException;
-
-	/**
-	 * Resets the total metering info.
-	 * 
-	 * @throws IllegalStateException If this function service object has already
-	 *         been unregistered.
-	 * @throws DeviceException If an operation error is available.
-	 */
-	public void resetTotal() throws DeviceException;
 }

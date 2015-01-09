@@ -77,7 +77,7 @@ public final class SimulatedMeter extends SimulatedFunction implements Meter {
 		this.startTime = System.currentTimeMillis();
 		super.register(
 				new String[] {Meter.class.getName(), Function.class.getName()},
-				addPropertyAndOperationNames(functionProps), bc);
+				addPropertyNames(functionProps), bc);
 	}
 
 	public LevelData getCurrent() {
@@ -87,10 +87,6 @@ public final class SimulatedMeter extends SimulatedFunction implements Meter {
 	public LevelData getTotal() {
 		long currentTime = System.currentTimeMillis();
 		return new LevelData(currentTime, null, MILLIS, new BigDecimal(currentTime - this.startTime));
-	}
-
-	public void resetTotal() {
-		this.startTime = System.currentTimeMillis();
 	}
 
 	public void publishEvent(String propName) {
@@ -104,13 +100,10 @@ public final class SimulatedMeter extends SimulatedFunction implements Meter {
 			}
 	}
 
-	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
+	private static Dictionary addPropertyNames(Dictionary functionProps) {
 		functionProps.put(
 				SERVICE_PROPERTY_NAMES,
 				new String[] {PROPERTY_CURRENT, PROPERTY_TOTAL});
-		functionProps.put(
-				SERVICE_OPERATION_NAMES,
-				new String[] {OPERATION_RESET_TOTAL});
 		return functionProps;
 	}
 }

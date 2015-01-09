@@ -576,28 +576,6 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       available in the next tables.</para>
 
       <table>
-        <title>Meter Operations</title>
-
-        <tgroup cols="2">
-          <thead>
-            <row>
-              <entry>Name</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry><code>resetTotal</code></entry>
-
-              <entry>Resets the total metering info.</entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-
-      <table>
         <title>Meter Properties</title>
 
         <tgroup cols="2">

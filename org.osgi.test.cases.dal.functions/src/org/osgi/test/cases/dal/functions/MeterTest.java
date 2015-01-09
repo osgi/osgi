@@ -63,21 +63,6 @@ public final class MeterTest extends AbstractFunctionTest {
 	}
 
 	/**
-	 * Tests reset total operation.
-	 * 
-	 * @throws DeviceException If operation error is available.
-	 */
-	public void testResetTotal() throws DeviceException {
-		super.testStepProxy.execute(
-				FunctionsTestSteps.STEP_ID_AVAILABLE_METER,
-				FunctionsTestSteps.STEP_MESSAGE_AVAILABLE_METER);
-		Function[] meters = super.getFunctions(Meter.class.getName());
-		for (int i = 0; i < meters.length; i++) {
-			((Meter) meters[i]).resetTotal();
-		}
-	}
-
-	/**
 	 * Checks {@code Meter} current consumption events.
 	 */
 	public void testCurrentPropertyEvent() {
