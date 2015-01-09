@@ -86,10 +86,12 @@ public interface WakeUp extends Function {
 	/**
 	 * Sets wake up interval according to the specified unit. It's a setter
 	 * method for {@link #PROPERTY_WAKE_UP_INTERVAL} property. The device can
-	 * periodically wake up and receive command based on this interval.
+	 * periodically wake up and receive command based on this interval. The unit
+	 * can be {@code null}, then the interval is measured in milliseconds.
 	 * 
 	 * @param interval The new wake up interval.
-	 * @param unit The interval unit.
+	 * @param unit The interval unit. If the unit is {@code null}, the interval
+	 *        is measured in milliseconds.
 	 * 
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
