@@ -62,7 +62,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 	/**
 	 * Checks {@link AlarmData#compareTo(Object)} with {@code AlarmData}.
 	 */
-	public void testAlarmDataComparison() {
+	public void testComparison() {
 		// check without metadata
 		AlarmData data = new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
 		assertEquals(
@@ -95,36 +95,6 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 				0, data.compareTo(data));
 		assertEquals("The alarm data comparison is wrong!",
 				0, data.compareTo(new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD)));
-	}
-
-	/**
-	 * Checks {@link AlarmData#compareTo(Object)} with {@code Map}.
-	 */
-	public void testMapComparison() {
-		// check without metadata
-		AlarmData data = new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
-		Map fields = new HashMap();
-		fields.put(AlarmData.FIELD_SEVERITY, new Integer(AlarmData.SEVERITY_UNDEFINED));
-		fields.put(AlarmData.FIELD_TYPE, new Integer(AlarmData.TYPE_COLD));
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
-		assertEquals(
-				"The boolean comparison is wrong!",
-				0, data.compareTo(fields));
-
-		// check with metadata
-		Map metadata = new HashMap();
-		metadata.put(FunctionData.DESCRIPTION, "test-description");
-		fields.put(FunctionData.FIELD_METADATA, metadata);
-		data = new AlarmData(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
-		assertEquals(
-				"The alarm data comparison is wrong!",
-				0, data.compareTo(fields));
-
-		// check with fields map
-		data = new AlarmData(fields);
-		assertEquals(
-				"The alarm data comparison is wrong!",
-				0, data.compareTo(fields));
 	}
 
 	/**
@@ -169,7 +139,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 	/**
 	 * Checks {@code AlarmData} field values.
 	 */
-	public void testAlarmDataFields() {
+	public void testFields() {
 		// check without metadata
 		AlarmData data = new AlarmData(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD);
 		checkAlarmDataFields(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD, data);

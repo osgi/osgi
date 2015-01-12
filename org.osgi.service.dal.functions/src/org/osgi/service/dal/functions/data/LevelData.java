@@ -49,8 +49,8 @@ public class LevelData extends FunctionData {
 	 */
 	public static final String	FIELD_UNIT	= "unit";
 
-	private final String		unit;
 	private final BigDecimal	level;
+	private final String		unit;
 
 	/**
 	 * Constructs new {@code LevelData} instance with the specified field
@@ -59,10 +59,10 @@ public class LevelData extends FunctionData {
 	 * be: {"level"=BigDecimal(1)...}. That map will initialize the
 	 * {@link #FIELD_LEVEL} field with 1.
 	 * <ul>
-	 * <li>{@link #FIELD_UNIT} - optional field. The value type must be
-	 * {@code String}.</li>
 	 * <li>{@link #FIELD_LEVEL} - mandatory field. The value type must be
 	 * {@code BigDecimal}.</li>
+	 * <li>{@link #FIELD_UNIT} - optional field. The value type must be
+	 * {@code String}.</li>
 	 * </ul>
 	 * 
 	 * @param fields Contains the new {@code LevelData} instance field values.
@@ -73,11 +73,11 @@ public class LevelData extends FunctionData {
 	 */
 	public LevelData(Map fields) {
 		super(fields);
-		this.unit = (String) fields.get(FIELD_UNIT);
 		this.level = (BigDecimal) fields.get(FIELD_LEVEL);
 		if (null == this.level) {
-			throw new IllegalArgumentException("Level data is missing.");
+			throw new IllegalArgumentException("Level is missing.");
 		}
+		this.unit = (String) fields.get(FIELD_UNIT);
 	}
 
 	/**
@@ -85,13 +85,13 @@ public class LevelData extends FunctionData {
 	 * 
 	 * @param timestamp The data timestamp optional field.
 	 * @param metadata The data metadata optional field.
-	 * @param unit The data unit optional field.
 	 * @param level The level value mandatory field.
+	 * @param unit The data unit optional field.
 	 */
-	public LevelData(long timestamp, Map metadata, String unit, BigDecimal level) {
+	public LevelData(long timestamp, Map metadata, BigDecimal level, String unit) {
 		super(timestamp, metadata);
-		this.unit = unit;
 		this.level = level;
+		this.unit = unit;
 	}
 
 	/**
@@ -118,17 +118,31 @@ public class LevelData extends FunctionData {
 	 * Two {@code LevelData} instances are equal if they contain equal metadata,
 	 * timestamp, unit and level.
 	 * 
-	 * @param other The object to compare this data.
+	 * @param o The object to compare this data.
 	 * 
 	 * @return {@code true} if this object is equivalent to the specified one.
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#equals(java.lang.Object)
 	 */
-	public boolean equals(Object other) {
-		if (!(other instanceof LevelData)) {
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof LevelData)) {
 			return false;
 		}
-		return 0 == compareToLevelData((LevelData) other);
+		try {
+			if (0 != super.compareTo(o)) {
+				return false;
+			}
+		} catch (ClassCastException cce) {
+			return false;
+		}
+		LevelData other = (LevelData) o;
+		if (!this.level.equals(other.level)) {
+			return false;
+		}
+		return (0 == Comparator.compare(this.unit, other.unit));
 	}
 
 	/**
@@ -151,73 +165,38 @@ public class LevelData extends FunctionData {
 	}
 
 	/**
-	 * Compares this {@code LevelData} instance with the given argument. The
-	 * argument can be:
+	 * Compares this {@code LevelData} instance with the given argument. If the
+	 * argument is not {@code LevelData}, it throws {@code ClassCastException}.
+	 * Otherwise, this method returns:
 	 * <ul>
-	 * <li>{@code BigDecimal} - the method returns the result of
-	 * {@link BigDecimal#compareTo(Object)} for this instance level and the
+	 * <li>{@code -1} if this instance field is less than a field of the
 	 * specified argument.</li>
-	 * <li>{@code LevelData} - the method returns {@code -1} if metadata,
-	 * timestamp or unit are not equivalent. Otherwise, the level is compared
-	 * with the same rules as {@code BigDecimal} argument.</li>
-	 * <li>{@code Map} - the map must be built according the rules of
-	 * {@link #LevelData(Map)}. Metadata, timestamp, unit and level are compared
-	 * according to {@code BigDecimal} and {@code LevelData} argument rules.</li>
+	 * <li>{@code 0} if all fields are equivalent.</li>
+	 * <li>{@code 1} if this instance field is greater than a field of the
+	 * specified argument.</li>
 	 * </ul>
+	 * The fields are compared in this order: timestamp, metadata, level, unit.
 	 * 
-	 * @param o An argument to be compared.
+	 * @param o {@code LevelData} to be compared.
 	 * 
 	 * @return {@code -1}, {@code 0} or {@code 1} depending on the comparison
 	 *         rules.
 	 * 
-	 * @throws ClassCastException If the method is called with {@code Map} and
-	 *         the field value types are not expected.
-	 * @throws IllegalArgumentException If the method is called with {@code Map}
-	 *         and the level is missing.
-	 * @throws NullPointerException If the argument is {@code null}.
+	 * @throws ClassCastException If the method argument is not of type
+	 *         {@code LevelData}.
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(Object o) {
-		if (o instanceof LevelData) {
-			return compareToLevelData((LevelData) o);
-		} else if (o instanceof BigDecimal) {
-			return compareToBigDecimal((BigDecimal) o);
+		int result = super.compareTo(o);
+		if (0 != result) {
+			return result;
 		}
-		return compareToMap((Map) o);
-	}
-
-	/*
-	 * Compares this instance with LevelData argument according to rules in
-	 * compareTo method.
-	 */
-	private int compareToLevelData(LevelData otherData) {
-		if (!super.equals(otherData)) {
-			return -1;
+		LevelData other = (LevelData) o;
+		result = Comparator.compare(this.level, other.level);
+		if (0 != result) {
+			return result;
 		}
-		if (null != this.unit) {
-			if ((null == otherData.unit) || (!this.unit.equals(otherData.unit))) {
-				return -1;
-			}
-		} else if (null != otherData.unit) {
-			return -1;
-		}
-		return this.level.compareTo(otherData.level);
-	}
-
-	/*
-	 * Compares this instance with BigDecimal argument according to rules in
-	 * compareTo method.
-	 */
-	private int compareToBigDecimal(BigDecimal otherData) {
-		return this.level.compareTo(otherData);
-	}
-
-	/*
-	 * Compares this instance with Map argument according to rules in compareTo
-	 * method.
-	 */
-	private int compareToMap(Map otherData) {
-		return compareToLevelData(new LevelData(otherData));
+		return Comparator.compare(this.unit, other.unit);
 	}
 }

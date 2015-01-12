@@ -202,17 +202,28 @@ public class AlarmData extends FunctionData {
 	 * Two {@code AlarmData} instances are equal if they contain equal metadata,
 	 * timestamp, type and severity.
 	 * 
-	 * @param other The object to compare this data.
+	 * @param o The object to compare this data.
 	 * 
 	 * @return {@code true} if this object is equivalent to the specified one.
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#equals(java.lang.Object)
 	 */
-	public boolean equals(Object other) {
-		if (!(other instanceof AlarmData)) {
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof AlarmData)) {
 			return false;
 		}
-		return 0 == compareToAlarmData((AlarmData) other);
+		try {
+			if (0 != super.compareTo(o)) {
+				return false;
+			}
+		} catch (ClassCastException cce) {
+			return false;
+		}
+		AlarmData other = (AlarmData) o;
+		return (this.type == other.type) && (this.severity == other.severity);
 	}
 
 	/**
@@ -229,56 +240,39 @@ public class AlarmData extends FunctionData {
 	}
 
 	/**
-	 * Compares this {@code AlarmData} instance with the given argument. The
-	 * argument can be:
+	 * Compares this {@code AlarmData} instance with the given argument. If the
+	 * argument is not {@code AlarmData}, it throws {@code ClassCastException}.
+	 * Otherwise, this method returns:
 	 * <ul>
-	 * <li>{@code AlarmData} - the method returns {@code -1} if metadata,
-	 * timestamp, type or severity are not equivalent. {@code 0} if all fields
-	 * are equivalent. {@code 1} if all fields are equivalent and this instance
-	 * severity is greater than the severity of the specified argument.</li>
-	 * <li>{@code Map} - the map must be built according the rules of
-	 * {@link #AlarmData(Map)}. Metadata, timestamp, type and severity are
-	 * compared according to {@code AlarmData} argument rules.</li>
+	 * <li>{@code -1} if this instance field is less than a field of the
+	 * specified argument.</li>
+	 * <li>{@code 0} if all fields are equivalent.</li>
+	 * <li>{@code 1} if this instance field is greater than a field of the
+	 * specified argument.</li>
 	 * </ul>
+	 * The fields are compared in this order: timestamp, metadata, type,
+	 * severity.
 	 * 
-	 * @param o An argument to be compared.
+	 * @param o {@code AlarmData} to be compared.
 	 * 
 	 * @return {@code -1}, {@code 0} or {@code 1} depending on the comparison
 	 *         rules.
 	 * 
-	 * @throws ClassCastException If the method is called with {@code Map} and
-	 *         the field value types are not expected.
-	 * @throws IllegalArgumentException If the method is called with {@code Map}
-	 *         and the alarm type is missing.
-	 * @throws NullPointerException If the argument is {@code null}.
+	 * @throws ClassCastException If the method argument is not of type
+	 *         {@code AlarmData}.
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(Object o) {
-		if (o instanceof AlarmData) {
-			return compareToAlarmData((AlarmData) o);
+		int result = super.compareTo(o);
+		if (0 != result) {
+			return result;
 		}
-		return compareToMap((Map) o);
-	}
-
-	/*
-	 * Compares this instance with AlarmData argument according to rules in
-	 * compareTo method.
-	 */
-	private int compareToAlarmData(AlarmData otherData) {
-		if ((!super.equals(otherData)) ||
-				(this.type != otherData.type) ||
-				(this.severity < otherData.severity)) {
-			return -1;
+		AlarmData other = (AlarmData) o;
+		result = Comparator.compare(this.type, other.type);
+		if (0 != result) {
+			return result;
 		}
-		return (this.severity == otherData.severity) ? 0 : 1;
-	}
-
-	/*
-	 * Compares this instance with Map argument according to rules in compareTo
-	 * method.
-	 */
-	private int compareToMap(Map otherData) {
-		return compareToAlarmData(new AlarmData(otherData));
+		return Comparator.compare(this.severity, other.severity);
 	}
 }

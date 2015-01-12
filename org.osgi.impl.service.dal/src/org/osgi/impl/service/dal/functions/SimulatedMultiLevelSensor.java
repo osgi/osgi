@@ -31,7 +31,7 @@ public final class SimulatedMultiLevelSensor extends SimulatedFunction implement
 	private static final Map		PROPERTY_METADATA;
 	private static final Map		OPERATION_METADATA	= null;
 	private static final BigDecimal	VALUE				= new BigDecimal(1);
-	private static final LevelData	LEVEL_DATA			= new LevelData(Long.MIN_VALUE, null, null, VALUE);
+	private static final LevelData	LEVEL_DATA			= new LevelData(Long.MIN_VALUE, null, VALUE, null);
 
 	static {
 		Map metadata = new HashMap();
@@ -72,7 +72,7 @@ public final class SimulatedMultiLevelSensor extends SimulatedFunction implement
 	}
 
 	public LevelData getData() {
-		return new LevelData(System.currentTimeMillis(), null, null, VALUE);
+		return new LevelData(System.currentTimeMillis(), null, VALUE, null);
 	}
 
 	public void publishEvent(String propName) {

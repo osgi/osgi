@@ -97,7 +97,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 	/**
 	 * Checks {@link KeypadData#compareTo(Object)} with {@code KeypadData}.
 	 */
-	public void testKeypadDataComparison() {
+	public void testComparison() {
 		// check without metadata
 		KeypadData data = new KeypadData(
 				Long.MIN_VALUE,
@@ -165,50 +165,6 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 								KeypadData.SUB_TYPE_PRESSED_NORMAL,
 								KEY_CODE,
 								KEY_NAME)));
-	}
-
-	/**
-	 * Checks {@link KeypadData#compareTo(Object)} with {@code Map}.
-	 */
-	public void testMapComparison() {
-		// check without metadata
-		KeypadData data = new KeypadData(
-				Long.MIN_VALUE,
-				null,
-				KeypadData.TYPE_PRESSED,
-				KeypadData.SUB_TYPE_PRESSED_NORMAL,
-				KEY_CODE,
-				KEY_NAME);
-		Map fields = new HashMap();
-		fields.put(KeypadData.FIELD_TYPE, new Integer(KeypadData.TYPE_PRESSED));
-		fields.put(KeypadData.FIELD_SUB_TYPE, new Integer(KeypadData.SUB_TYPE_PRESSED_NORMAL));
-		fields.put(KeypadData.FIELD_KEY_CODE, new Integer(KEY_CODE));
-		fields.put(KeypadData.FIELD_KEY_NAME, KEY_NAME);
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
-		assertEquals(
-				"The boolean comparison is wrong!",
-				0, data.compareTo(fields));
-
-		// check with metadata
-		Map metadata = new HashMap();
-		metadata.put(FunctionData.DESCRIPTION, "test-description");
-		fields.put(FunctionData.FIELD_METADATA, metadata);
-		data = new KeypadData(
-				Long.MIN_VALUE,
-				metadata,
-				KeypadData.TYPE_PRESSED,
-				KeypadData.SUB_TYPE_PRESSED_NORMAL,
-				KEY_CODE,
-				KEY_NAME);
-		assertEquals(
-				"The keypad data comparison is wrong!",
-				0, data.compareTo(fields));
-
-		// check with fields map
-		data = new KeypadData(fields);
-		assertEquals(
-				"The keypad data comparison is wrong!",
-				0, data.compareTo(fields));
 	}
 
 	/**
@@ -285,7 +241,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 	/**
 	 * Checks {@code KeypadData} field values.
 	 */
-	public void testKeypadDataFields() {
+	public void testFields() {
 		// check without metadata
 		KeypadData data = new KeypadData(
 				Long.MIN_VALUE,

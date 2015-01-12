@@ -16,6 +16,9 @@
 
 package org.osgi.service.dal;
 
+import java.lang.reflect.Array;
+import java.util.IdentityHashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -23,9 +26,6 @@ import java.util.Map;
  * to the property values by all functions. It takes care about the timestamp
  * and additional metadata. The subclasses are responsible to provide concrete
  * value and unit if required.
- * <p>
- * The subclass is responsible to provide correct implementation of
- * {@link Comparable#compareTo(Object)} method.
  */
 public abstract class FunctionData implements Comparable {
 
@@ -130,18 +130,17 @@ public abstract class FunctionData implements Comparable {
 	 * @see java.lang.Object#equals(java.lang.Object)
 	 */
 	public boolean equals(Object other) {
+		if (this == other) {
+			return true;
+		}
 		if (!(other instanceof FunctionData)) {
 			return false;
 		}
-		FunctionData otherData = (FunctionData) other;
-		if (null != this.metadata) {
-			if ((null == otherData.metadata) || (!this.metadata.equals(otherData.metadata))) {
-				return false;
-			}
-		} else if (null != otherData.metadata) {
+		try {
+			return (0 == compareTo(other));
+		} catch (ClassCastException cce) {
 			return false;
 		}
-		return this.timestamp == otherData.timestamp;
 	}
 
 	/**
@@ -152,8 +151,200 @@ public abstract class FunctionData implements Comparable {
 	 * @see java.lang.Object#hashCode()
 	 */
 	public int hashCode() {
-		Long timestampLocal = new Long(this.timestamp);
-		return (null == this.metadata) ? timestampLocal.hashCode() :
-				this.metadata.hashCode() + timestampLocal.hashCode();
+		return ((int) (this.timestamp ^ (this.timestamp >>> 32))) +
+				calculateMapHashCode(this.metadata);
+	}
+
+	/**
+	 * Compares this {@code FunctionData} instance with the given argument. If
+	 * the argument is not {@code FunctionData}, it throws
+	 * {@code ClassCastException}. Otherwise, this method returns:
+	 * <ul>
+	 * <li>{@code -1} if this instance timestamp is less than the argument
+	 * timestamp. If they are equivalent, it can be the result of the metadata
+	 * map deep comparison.</li>
+	 * <li>{@code 0} if all fields are equivalent.</li>
+	 * <li>{@code 1} if this instance timestamp is greater than the argument
+	 * timestamp. If they are equivalent, it can be the result of the metadata
+	 * map deep comparison.</li>
+	 * </ul>
+	 * Metadata map deep comparison compares the elements of all nested
+	 * {@code java.util.Map} and array instances. {@code null} is less than any
+	 * other non-null instance.
+	 *
+	 * @param o {@code FunctionData} to be compared.
+	 *
+	 * @return {@code -1}, {@code 0} or {@code 1} depending on the comparison
+	 *         rules.
+	 *
+	 * @throws ClassCastException If the method argument is not of type
+	 *         {@code FunctionData} or metadata maps contain values of different
+	 *         types for the same key.
+	 * @throws NullPointerException If the method argument is {@code null}.
+	 *
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	public int compareTo(Object o) {
+		FunctionData other = (FunctionData) o;
+		if (this.timestamp == other.timestamp) {
+			return compareMaps(this.metadata, other.metadata);
+		}
+		return (this.timestamp < other.timestamp) ? -1 : 1;
+	}
+
+	private static int calculateMapHashCode(Map map) {
+		if (null == map) {
+			return 0;
+		}
+		return calculateMapHashCodeDeep(map, null);
+	}
+
+	private static int calculateMapHashCodeDeep(Map map, IdentityHashMap usedContainers) {
+		int result = 0;
+		for (Iterator entriesIter = map.entrySet().iterator(); entriesIter.hasNext(); /* empty */) {
+			Map.Entry currentEntry = (Map.Entry) entriesIter.next();
+			result += currentEntry.getKey().hashCode();
+			result += calculateValueHashCodeDeep(currentEntry.getValue(), usedContainers);
+		}
+		return result;
+	}
+
+	private static int calculateValueHashCodeDeep(Object value, IdentityHashMap usedContainers) {
+		if (null == value) {
+			return 0;
+		}
+		if (value.getClass().isArray()) {
+			if (null == usedContainers) {
+				usedContainers = new IdentityHashMap();
+			}
+			if (null != usedContainers.put(value, value)) {
+				return 0;
+			}
+			try {
+				return calculateArrayHashCodeDeep(value, usedContainers);
+			} finally {
+				usedContainers.remove(value);
+			}
+		}
+		if (value instanceof Map) {
+			if (null == usedContainers) {
+				usedContainers = new IdentityHashMap();
+			}
+			if (null != usedContainers.put(value, value)) {
+				return 0;
+			}
+			try {
+				return calculateMapHashCodeDeep((Map) value, usedContainers);
+			} finally {
+				usedContainers.remove(value);
+			}
+		}
+		return value.hashCode();
+	}
+
+	private static int calculateArrayHashCodeDeep(Object array, IdentityHashMap usedContainers) {
+		int arrayLength = Array.getLength(array);
+		int result = 0;
+		for (int i = 0; i < arrayLength; i++) {
+			result += calculateValueHashCodeDeep(Array.get(array, i), usedContainers);
+		}
+		return result;
+	}
+
+	private static int compareMaps(Map thisMap, Map otherMap) {
+		if (null == thisMap) {
+			return (null != otherMap) ? -1 : 0;
+		}
+		if (null == otherMap) {
+			return 1;
+		}
+		return compareMapsDeep(thisMap, otherMap, null);
+	}
+
+	private static int compareMapsDeep(Map thisMap, Map otherMap, IdentityHashMap thisUsedContainers) {
+		int result = compare(thisMap.size(), otherMap.size());
+		if (0 != result) {
+			return result;
+		}
+		for (Iterator thisEntriesIter = thisMap.entrySet().iterator(); thisEntriesIter.hasNext(); /* empty */) {
+			Map.Entry thisEntry = (Map.Entry) thisEntriesIter.next();
+			if (otherMap.containsKey(thisEntry.getKey())) {
+				result = compareValuesDeep(thisEntry.getValue(), otherMap.get(thisEntry.getKey()), thisUsedContainers);
+				if (0 != result) {
+					return result;
+				}
+			} else {
+				return 1;
+			}
+		}
+		return 0;
+	}
+
+	private static int compareValuesDeep(Object thisValue, Object otherValue, IdentityHashMap thisUsedContainers) {
+		if (null == thisValue) {
+			return (null == otherValue) ? 0 : -1;
+		}
+		if (null == otherValue) {
+			return 1;
+		}
+		if (thisValue.getClass().isArray()) {
+			if (otherValue.getClass().isArray()) {
+				if (null == thisUsedContainers) {
+					thisUsedContainers = new IdentityHashMap();
+				}
+				if (null != thisUsedContainers.put(thisValue, thisValue)) {
+					return -1;
+				}
+				try {
+					return compareArraysDeep(thisValue, otherValue, thisUsedContainers);
+				} finally {
+					thisUsedContainers.remove(thisValue);
+				}
+			} else {
+				return 1;
+			}
+		}
+		if (thisValue instanceof Map) {
+			if (otherValue instanceof Map) {
+				if (null == thisUsedContainers) {
+					thisUsedContainers = new IdentityHashMap();
+				}
+				if (null != thisUsedContainers.put(thisValue, thisValue)) {
+					return -1;
+				}
+				try {
+					return compareMapsDeep((Map) thisValue, (Map) otherValue, thisUsedContainers);
+				} finally {
+					thisUsedContainers.remove(thisValue);
+				}
+			} else {
+				return 1;
+			}
+		}
+		if (thisValue instanceof Comparable) {
+			return (((Comparable) thisValue)).compareTo(otherValue);
+		}
+		return thisValue.equals(otherValue) ? 0 : 1;
+	}
+
+	private static int compareArraysDeep(Object thisArray, Object otherArray, IdentityHashMap thisUsedContainers) {
+		int thisArrayLength = Array.getLength(thisArray);
+		int otherArrayLength = Array.getLength(otherArray);
+		int result = compare(thisArrayLength, otherArrayLength);
+		if (0 != result) {
+			return result;
+		}
+		for (int i = 0; i < thisArrayLength; i++) {
+			result = compareValuesDeep(Array.get(thisArray, i), Array.get(otherArray, i), thisUsedContainers);
+			if (0 != result) {
+				return result;
+			}
+		}
+		return 0;
+	}
+
+	private static int compare(int thisValue, int otherValue) {
+		return (thisValue < otherValue) ? -1 :
+				((thisValue > otherValue) ? 1 : 0);
 	}
 }

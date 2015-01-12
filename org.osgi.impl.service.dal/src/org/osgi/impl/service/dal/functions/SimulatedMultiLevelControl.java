@@ -41,7 +41,7 @@ public final class SimulatedMultiLevelControl extends SimulatedFunction implemen
 		FunctionData[] enumValues = new LevelData[VALUES.length];
 		for (int i = 0; i < VALUES.length; i++) {
 			VALUES[i] = new BigDecimal(i);
-			LEVEL_DATA[i] = new LevelData(Long.MIN_VALUE, null, null, VALUES[i]);
+			LEVEL_DATA[i] = new LevelData(Long.MIN_VALUE, null, VALUES[i], null);
 			enumValues[i] = LEVEL_DATA[i];
 		}
 
@@ -71,7 +71,7 @@ public final class SimulatedMultiLevelControl extends SimulatedFunction implemen
 	 */
 	public SimulatedMultiLevelControl(Dictionary functionProps, BundleContext bc, ServiceTracker eventAdminTracker) {
 		super(PROPERTY_METADATA, OPERATION_METADATA, eventAdminTracker);
-		this.currentLevel = new LevelData(System.currentTimeMillis(), null, null, VALUES[0]);
+		this.currentLevel = new LevelData(System.currentTimeMillis(), null, VALUES[0], null);
 		super.register(
 				new String[] {MultiLevelControl.class.getName(), Function.class.getName()},
 				addPropertyAndOperationNames(functionProps), bc);
@@ -93,7 +93,7 @@ public final class SimulatedMultiLevelControl extends SimulatedFunction implemen
 			return; // nothing to do
 		}
 		checkLevel(level);
-		LevelData newLevel = new LevelData(System.currentTimeMillis(), null, null, level);
+		LevelData newLevel = new LevelData(System.currentTimeMillis(), null, level, null);
 		this.currentLevel = newLevel;
 		super.postEvent(PROPERTY_DATA, newLevel);
 	}

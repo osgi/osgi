@@ -61,7 +61,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 	/**
 	 * Checks {@link BooleanData#compareTo(Object)} with {@code BooleanData}.
 	 */
-	public void testBooleanDataComparison() {
+	public void testComparison() {
 		// check without metadata
 		BooleanData data = new BooleanData(Long.MIN_VALUE, null, true);
 		assertEquals(
@@ -93,70 +93,6 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 				0, data.compareTo(data));
 		assertEquals("The boolean data comparison is wrong!",
 				0, data.compareTo(new BooleanData(Long.MIN_VALUE, metadata, false)));
-	}
-
-	/**
-	 * Checks {@link BooleanData#compareTo(Object)} with {@code Boolean}.
-	 */
-	public void testBooleanComparison() {
-		// check without metadata
-		BooleanData data = new BooleanData(Long.MIN_VALUE, null, true);
-		assertEquals(
-				"The boolean comparison is wrong!",
-				0, data.compareTo(Boolean.TRUE));
-
-		// check with metadata
-		Map metadata = new HashMap();
-		metadata.put(FunctionData.DESCRIPTION, "test-description");
-		data = new BooleanData(Long.MIN_VALUE, metadata, false);
-		assertEquals(
-				"The boolean data comparison is wrong!",
-				0, data.compareTo(Boolean.FALSE));
-
-		// check with fields map
-		Map fields = new HashMap();
-		fields.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
-		fields.put(FunctionData.FIELD_METADATA, metadata);
-		data = new BooleanData(fields);
-		assertEquals(
-				"The boolean data comparison is wrong!",
-				0, data.compareTo(Boolean.FALSE));
-	}
-
-	/**
-	 * Checks {@link BooleanData#compareTo(Object)} with {@code Map}.
-	 */
-	public void testMapComparison() {
-		// check without metadata
-		BooleanData data = new BooleanData(Long.MIN_VALUE, null, true);
-		Map dataMap = new HashMap();
-		dataMap.put(BooleanData.FIELD_VALUE, Boolean.TRUE);
-		dataMap.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
-		assertEquals(
-				"The boolean comparison is wrong!",
-				0, data.compareTo(dataMap));
-
-		// check with metadata
-		Map metadata = new HashMap();
-		metadata.put(FunctionData.DESCRIPTION, "test-description");
-		dataMap.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
-		dataMap.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
-		dataMap.put(FunctionData.FIELD_METADATA, metadata);
-		data = new BooleanData(Long.MIN_VALUE, metadata, false);
-		assertEquals(
-				"The boolean data comparison is wrong!",
-				0, data.compareTo(dataMap));
-
-		// check with fields map
-		Map fields = new HashMap();
-		fields.put(BooleanData.FIELD_VALUE, Boolean.FALSE);
-		fields.put(FunctionData.FIELD_TIMESTAMP, new Long(Long.MIN_VALUE));
-		fields.put(FunctionData.FIELD_METADATA, metadata);
-		data = new BooleanData(fields);
-		assertEquals(
-				"The boolean data comparison is wrong!",
-				0, data.compareTo(fields));
 	}
 
 	/**
@@ -200,7 +136,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 	/**
 	 * Checks {@code BooleanData} field values.
 	 */
-	public void testBooleanDataFields() {
+	public void testFields() {
 		// check without metadata
 		BooleanData data = new BooleanData(Long.MIN_VALUE, null, true);
 		checkBooleanDataFields(Long.MIN_VALUE, null, true, data);

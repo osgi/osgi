@@ -52,13 +52,13 @@ public interface Meter extends Function {
 	 * Represents the metering consumption flow. It can be used as
 	 * {@link #SERVICE_FLOW} property value.
 	 */
-	public static final String	FLOW_IN					= "in";
+	public static final String	FLOW_IN				= "in";
 
 	/**
 	 * Represents the metering generation flow. It can be used as
 	 * {@link #SERVICE_FLOW} property value.
 	 */
-	public static final String	FLOW_OUT				= "out";
+	public static final String	FLOW_OUT			= "out";
 
 	/**
 	 * The service property value contains the metering flow. It's an optional
@@ -69,19 +69,19 @@ public interface Meter extends Function {
 	 * <li>{@link #FLOW_OUT}</li>
 	 * </ul>
 	 */
-	public static final String	SERVICE_FLOW			= "dal.meter.flow";
+	public static final String	SERVICE_FLOW		= "dal.meter.flow";
 
 	/**
 	 * Specifies the current consumption or generation property name. The
 	 * property can be read with {@link #getCurrent()} getter.
 	 */
-	public static final String	PROPERTY_CURRENT		= "current";
+	public static final String	PROPERTY_CURRENT	= "current";
 
 	/**
 	 * Specifies the total consumption or generation property name. The property
 	 * can be read with {@link #getTotal()} getter.
 	 */
-	public static final String	PROPERTY_TOTAL			= "total";
+	public static final String	PROPERTY_TOTAL		= "total";
 
 	/**
 	 * Returns the current metering info. It's a getter method for

@@ -18,7 +18,7 @@ final class TestFunctionData extends FunctionData {
 		super(timestamp, metadata);
 	}
 
-	public int compareTo(Object var0) {
-		return 0;
+	public TestFunctionData(Map fields) {
+		super(fields);
 	}
 }

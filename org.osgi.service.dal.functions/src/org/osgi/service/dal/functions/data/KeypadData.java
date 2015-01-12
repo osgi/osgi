@@ -229,17 +229,33 @@ public class KeypadData extends FunctionData {
 	 * Two {@code KeypadData} instances are equal if they contain equal
 	 * metadata, timestamp, event type, key code and key name.
 	 * 
-	 * @param other The object to compare this data.
+	 * @param o The object to compare this data.
 	 * 
 	 * @return {@code true} if this object is equivalent to the specified one.
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#equals(java.lang.Object)
 	 */
-	public boolean equals(Object other) {
-		if (!(other instanceof KeypadData)) {
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof KeypadData)) {
 			return false;
 		}
-		return 0 == compareToKeypadData((KeypadData) other);
+		try {
+			if (0 != super.compareTo(o)) {
+				return false;
+			}
+		} catch (ClassCastException cce) {
+			return false;
+		}
+		KeypadData other = (KeypadData) o;
+		if ((this.type != other.type) ||
+				(this.subType != other.subType) ||
+				(this.keyCode != other.keyCode)) {
+			return false;
+		}
+		return (0 == Comparator.compare(this.keyName, other.keyName));
 	}
 
 	/**
@@ -261,34 +277,48 @@ public class KeypadData extends FunctionData {
 	}
 
 	/**
-	 * Compares this {@code KeypadData} instance with the given argument. The
-	 * argument can be:
+	 * Compares this {@code KeypadData} instance with the given argument. If the
+	 * argument is not {@code KeypadData}, it throws {@code ClassCastException}.
+	 * Otherwise, this method returns:
 	 * <ul>
-	 * <li>{@code KeypadData} - the method returns {@code -1} if metadata,
-	 * timestamp, event type, event sub-type, key code or key name are not
-	 * equivalent. {@code 0} if all fields are equivalent.</li>
-	 * <li>{@code Map} - the map must be built according the rules of
-	 * {@link #KeypadData(Map)}. Metadata, timestamp, event type, key code and
-	 * key name are compared according to {@code KeypadData} argument rules.</li>
+	 * <li>{@code -1} if this instance field is less than a field of the
+	 * specified argument.</li>
+	 * <li>{@code 0} if all fields are equivalent.</li>
+	 * <li>{@code 1} if this instance field is greater than a field of the
+	 * specified argument.</li>
 	 * </ul>
+	 * The fields are compared in this order: timestamp, metadata, type,
+	 * sub-type, key code, key name.
 	 * 
-	 * @param o An argument to be compared.
+	 * @param o {@code KeypadData} to be compared.
 	 * 
-	 * @return {@code -1} or {@code 0} depending on the comparison rules.
+	 * @return {@code -1}, {@code 0} or {@code 1} depending on the comparison
+	 *         rules.
 	 * 
-	 * @throws ClassCastException If the method is called with {@code Map} and
-	 *         the field value types are not expected.
-	 * @throws IllegalArgumentException If the method is called with {@code Map}
-	 *         and the event type or key code is missing.
-	 * @throws NullPointerException If the argument is {@code null}.
+	 * @throws ClassCastException If the method argument is not of type
+	 *         {@code KeypadData}.
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(Object o) {
-		if (o instanceof KeypadData) {
-			return compareToKeypadData((KeypadData) o);
+		int result = super.compareTo(o);
+		if (0 != result) {
+			return result;
 		}
-		return compareToMap((Map) o);
+		KeypadData other = (KeypadData) o;
+		result = Comparator.compare(this.type, other.type);
+		if (0 != result) {
+			return result;
+		}
+		result = Comparator.compare(this.subType, other.subType);
+		if (0 != result) {
+			return result;
+		}
+		result = Comparator.compare(this.keyCode, other.keyCode);
+		if (0 != result) {
+			return result;
+		}
+		return Comparator.compare(this.keyName, other.keyName);
 	}
 
 	/*
@@ -311,34 +341,5 @@ public class KeypadData extends FunctionData {
 			default :
 				throw new IllegalArgumentException("Unknown event type: " + this.type);
 		}
-	}
-
-	/*
-	 * Compares this instance with KeypadData argument according to rules in
-	 * compareTo method.
-	 */
-	private int compareToKeypadData(KeypadData otherData) {
-		if ((!super.equals(otherData)) ||
-				(this.type != otherData.type) ||
-				(this.subType != otherData.subType) ||
-				(this.keyCode != otherData.keyCode)) {
-			return -1;
-		}
-		if (null != this.keyName) {
-			if (!this.keyName.equals(otherData.keyName)) {
-				return -1;
-			}
-		} else if (null != otherData.keyName) {
-			return -1;
-		}
-		return 0;
-	}
-
-	/*
-	 * Compares this instance with Map argument according to rules in compareTo
-	 * method.
-	 */
-	private int compareToMap(Map otherData) {
-		return compareToKeypadData(new KeypadData(otherData));
 	}
 }

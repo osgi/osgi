@@ -90,17 +90,27 @@ public class BooleanData extends FunctionData {
 	 * Two {@code BooleanData} instances are equal if they contain equal
 	 * metadata, timestamp and boolean value.
 	 * 
-	 * @param other The object to compare this data.
+	 * @param o The object to compare this data.
 	 * 
 	 * @return {@code true} if this object is equivalent to the specified one.
 	 * 
 	 * @see org.osgi.service.dal.FunctionData#equals(java.lang.Object)
 	 */
-	public boolean equals(Object other) {
-		if (!(other instanceof BooleanData)) {
+	public boolean equals(Object o) {
+		if (this == o) {
+			return true;
+		}
+		if (!(o instanceof BooleanData)) {
 			return false;
 		}
-		return 0 == compareToBooleanData((BooleanData) other);
+		try {
+			if (0 != super.compareTo(o)) {
+				return false;
+			}
+		} catch (ClassCastException cce) {
+			return false;
+		}
+		return this.value == ((BooleanData) o).value;
 	}
 
 	/**
@@ -119,71 +129,33 @@ public class BooleanData extends FunctionData {
 	}
 
 	/**
-	 * Compares this {@code BooleanData} instance with the given argument. The
-	 * argument can be:
+	 * Compares this {@code BooleanData} instance with the given argument. If
+	 * the argument is not {@code BooleanData}, it throws
+	 * {@code ClassCastException}. Otherwise, this method returns:
 	 * <ul>
-	 * <li>{@code Boolean} - the method returns {@code 0} if this instance
-	 * contains equivalent boolean value. {@code -1} if this instance contains
-	 * {@code false} and the argument is {@code true}. {@code 1} if this
-	 * instance contains {@code true} and the argument is {@code false}.</li>
-	 * <li>{@code BooleanData} - the method returns {@code -1} if metadata or
-	 * timestamp are not equivalent. Otherwise, the boolean value is compared
-	 * with the same rules as {@code Boolean} argument.</li>
-	 * <li>{@code Map} - the map must be built according the rules of
-	 * {@link #BooleanData(Map)}. Metadata, timestamp and value are compared
-	 * according to {@code BooleanData} and {@code Boolean} argument rules.</li>
+	 * <li>{@code -1} if this instance field is less than a field of the
+	 * specified argument.</li>
+	 * <li>{@code 0} if all fields are equivalent.</li>
+	 * <li>{@code 1} if this instance field is greater than a field of the
+	 * specified argument.</li>
 	 * </ul>
+	 * The fields are compared in this order: timestamp, metadata, value.
 	 * 
-	 * @param o An argument to be compared.
+	 * @param o {@code BooleanData} to be compared.
 	 * 
 	 * @return {@code -1}, {@code 0} or {@code 1} depending on the comparison
 	 *         rules.
 	 * 
-	 * @throws ClassCastException If the method is called with {@code Map} and
-	 *         field value types are not expected.
-	 * @throws IllegalArgumentException If the method is called with {@code Map}
-	 *         and the value is missing.
-	 * @throws NullPointerException If the argument is {@code null}.
+	 * @throws ClassCastException If the method argument is not of type
+	 *         {@code BooleanData}.
 	 * 
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
 	public int compareTo(Object o) {
-		if (o instanceof BooleanData) {
-			return compareToBooleanData((BooleanData) o);
-		} else if (o instanceof Boolean) {
-			return compareToBoolean((Boolean) o);
+		int result = super.compareTo(o);
+		if (0 != result) {
+			return result;
 		}
-		return compareToMap((Map) o);
-	}
-
-	/*
-	 * Compares this instance with BooleanData argument according to rules in
-	 * compareTo method.
-	 */
-	private int compareToBooleanData(BooleanData otherData) {
-		if (!super.equals(otherData)) {
-			return -1;
-		}
-		return compareToBoolean(otherData.getValue() ? Boolean.TRUE : Boolean.FALSE);
-	}
-
-	/*
-	 * Compares this instance with Boolean argument according to rules in
-	 * compareTo method.
-	 */
-	private int compareToBoolean(Boolean otherData) {
-		if (otherData.booleanValue()) {
-			return (this.value) ? 0 : -1;
-		} else {
-			return (this.value) ? 1 : 0;
-		}
-	}
-
-	/*
-	 * Compares this instance with Map argument according to rules in compareTo
-	 * method.
-	 */
-	private int compareToMap(Map otherData) {
-		return compareToBooleanData(new BooleanData(otherData));
+		return Comparator.compare(this.value, ((BooleanData) o).value);
 	}
 }

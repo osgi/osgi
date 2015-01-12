@@ -34,7 +34,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 	private static final String		MILLIS					= SIUnits.PREFIX_MILLI + SIUnits.SECOND;
 	private static final String[]	MILLIS_ARRAY			= new String[] {MILLIS};
 	private static final LevelData	MIN_WAKE_UP_INTERVAL	= new LevelData(
-																	System.currentTimeMillis(), null, MILLIS, new BigDecimal(0));
+																	System.currentTimeMillis(), null, new BigDecimal(0), MILLIS);
 	private static final Map		PROPERTY_METADATA;
 	private static final Map		OPERATION_METADATA		= null;
 
@@ -147,7 +147,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 				this.timerTask = new WakeUpTimeTask();
 				this.timer.schedule(this.timerTask, execDelay ? longInterval : 0, longInterval);
 			}
-			this.wakeUpInterval = new LevelData(System.currentTimeMillis(), null, MILLIS, interval);
+			this.wakeUpInterval = new LevelData(System.currentTimeMillis(), null, interval, MILLIS);
 		}
 	}
 
