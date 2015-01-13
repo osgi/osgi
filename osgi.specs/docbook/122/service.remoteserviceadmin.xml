@@ -2262,7 +2262,7 @@ xml                    ::= &lt;*&gt; *</programlisting>
       capability as follows:</para>
 
       <programlisting>Provide-Capability: osgi.extender;
-    osgi.entender="osgi.remoteserviceadmin.localdiscovery";
+    osgi.extender="osgi.remoteserviceadmin.localdiscovery";
     version:Version="1.0";
     uses:="org.osgi.service.remoteserviceadmin"</programlisting>
     </section>
