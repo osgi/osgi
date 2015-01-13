@@ -49,16 +49,16 @@ public final class SimulatedMeter extends SimulatedFunction implements Meter { /
 				MILLIS_ARRAY);
 		PropertyMetadata currentPropMetadata = new PropertyMetadataImpl(
 				metadata, // metadata
-				CURRENT_MEASUREMENT_LEVEL,     // step
-				new FunctionData[] {CURRENT_MEASUREMENT_LEVEL},// enumValues
-				CURRENT_MEASUREMENT_LEVEL,     // minValue
-				CURRENT_MEASUREMENT_LEVEL);    // maxValue
+				CURRENT_MEASUREMENT_LEVEL, // step
+				new FunctionData[] {CURRENT_MEASUREMENT_LEVEL}, // enumValues
+				CURRENT_MEASUREMENT_LEVEL, // minValue
+				CURRENT_MEASUREMENT_LEVEL); // maxValue
 		PropertyMetadata totalPropMetadata = new PropertyMetadataImpl(
 				metadata, // metadata
-				CURRENT_MEASUREMENT_LEVEL,     // step
-				null,// enumValues
-				new LevelData(Long.MIN_VALUE, null, new BigDecimal(0), MILLIS),     // minValue
-				null);    // maxValue
+				CURRENT_MEASUREMENT_LEVEL, // step
+				null, // enumValues
+				new LevelData(Long.MIN_VALUE, null, new BigDecimal(0), MILLIS), // minValue
+				null); // maxValue
 		PROPERTY_METADATA = new HashMap();
 		PROPERTY_METADATA.put(PROPERTY_CURRENT, currentPropMetadata);
 		PROPERTY_METADATA.put(PROPERTY_TOTAL, totalPropMetadata);

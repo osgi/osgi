@@ -67,7 +67,7 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Tests invalid permission actions
+	 * Tests invalid permission actions.
 	 */
 	public void testInvalidAction() {
 		checkInvalidAction(null, NullPointerException.class);
@@ -390,10 +390,10 @@ public final class DevicePermissionTest extends DefaultTestBundleControl {
 
 	private void assertEquals(String message, PermissionCollection expected, PermissionCollection actual) {
 		Set expectedPermsSet = new HashSet();
-		for (Enumeration expectedPerms = expected.elements(); expectedPerms.hasMoreElements(); /* empty */) {
+		for (Enumeration expectedPerms = expected.elements(); expectedPerms.hasMoreElements();/* empty */) {
 			expectedPermsSet.add(expectedPerms.nextElement());
 		}
-		for (Enumeration actualPerms = actual.elements(); actualPerms.hasMoreElements(); /* empty */) {
+		for (Enumeration actualPerms = actual.elements(); actualPerms.hasMoreElements();/* empty */) {
 			expectedPermsSet.remove(actualPerms.nextElement());
 		}
 		assertTrue(message, expectedPermsSet.isEmpty());

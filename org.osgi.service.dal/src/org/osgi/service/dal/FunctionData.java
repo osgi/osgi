@@ -109,6 +109,7 @@ public abstract class FunctionData implements Comparable {
 	 * <ul>
 	 * <li>{@link #DESCRIPTION}</li>
 	 * <li>custom key</li>
+	 * </ul>
 	 * 
 	 * @return {@code FunctionData} metadata or {@code null} is there is no
 	 *         metadata.
@@ -137,7 +138,7 @@ public abstract class FunctionData implements Comparable {
 			return false;
 		}
 		try {
-			return (0 == compareTo(other));
+			return 0 == compareTo(other);
 		} catch (ClassCastException cce) {
 			return false;
 		}
@@ -201,7 +202,7 @@ public abstract class FunctionData implements Comparable {
 
 	private static int calculateMapHashCodeDeep(Map map, IdentityHashMap usedContainers) {
 		int result = 0;
-		for (Iterator entriesIter = map.entrySet().iterator(); entriesIter.hasNext(); /* empty */) {
+		for (Iterator entriesIter = map.entrySet().iterator(); entriesIter.hasNext();/* empty */) {
 			Map.Entry currentEntry = (Map.Entry) entriesIter.next();
 			result += currentEntry.getKey().hashCode();
 			result += calculateValueHashCodeDeep(currentEntry.getValue(), usedContainers);
@@ -266,7 +267,7 @@ public abstract class FunctionData implements Comparable {
 		if (0 != result) {
 			return result;
 		}
-		for (Iterator thisEntriesIter = thisMap.entrySet().iterator(); thisEntriesIter.hasNext(); /* empty */) {
+		for (Iterator thisEntriesIter = thisMap.entrySet().iterator(); thisEntriesIter.hasNext();/* empty */) {
 			Map.Entry thisEntry = (Map.Entry) thisEntriesIter.next();
 			if (otherMap.containsKey(thisEntry.getKey())) {
 				result = compareValuesDeep(thisEntry.getValue(), otherMap.get(thisEntry.getKey()), thisUsedContainers);

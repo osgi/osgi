@@ -142,7 +142,7 @@ public class LevelData extends FunctionData {
 		if (!this.level.equals(other.level)) {
 			return false;
 		}
-		return (0 == Comparator.compare(this.unit, other.unit));
+		return 0 == Comparator.compare(this.unit, other.unit);
 	}
 
 	/**

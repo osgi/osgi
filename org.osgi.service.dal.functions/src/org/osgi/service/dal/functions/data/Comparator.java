@@ -19,8 +19,8 @@ package org.osgi.service.dal.functions.data;
 final class Comparator {
 
 	static int compare(int thisValue, int otherValue) {
-		return ((thisValue < otherValue) ? -1 :
-				(thisValue == otherValue) ? 0 : 1);
+		return (thisValue < otherValue) ? -1 :
+				(thisValue == otherValue) ? 0 : 1;
 	}
 
 	static int compare(boolean thisValue, boolean otherValue) {

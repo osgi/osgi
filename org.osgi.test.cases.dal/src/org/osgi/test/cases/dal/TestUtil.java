@@ -40,7 +40,7 @@ public final class TestUtil {
 	 */
 	public static boolean areEqual(Object obj1, Object obj2) {
 		if (null == obj1) {
-			return (null == obj2);
+			return null == obj2;
 		}
 		if (!obj1.getClass().isArray()) {
 			return obj1.equals(obj2);
@@ -145,7 +145,7 @@ public final class TestUtil {
 						"Cannot find the function service with id: " + serviceId);
 			}
 			return sRefs[0].getBundle().loadClass(
-					(((String[]) function.getServiceProperty(Constants.OBJECTCLASS))[0]));
+					((String[]) function.getServiceProperty(Constants.OBJECTCLASS))[0]);
 		} catch (InvalidSyntaxException e) {
 			// the filter is valid, it's not possible
 			return null;

@@ -255,7 +255,7 @@ public class KeypadData extends FunctionData {
 				(this.keyCode != other.keyCode)) {
 			return false;
 		}
-		return (0 == Comparator.compare(this.keyName, other.keyName));
+		return 0 == Comparator.compare(this.keyName, other.keyName);
 	}
 
 	/**

@@ -370,7 +370,7 @@ final class DevicePermissionCollection extends PermissionCollection {
 			}
 			perms = this.permissions.values();
 		}
-		for (Iterator permsIter = perms.iterator(); permsIter.hasNext(); /* empty */) {
+		for (Iterator permsIter = perms.iterator(); permsIter.hasNext();/* empty */) {
 			final DevicePermission currentDevicePerm = (DevicePermission) permsIter.next();
 			if (currentDevicePerm.implyDevicePermission(requested)) {
 				return true;

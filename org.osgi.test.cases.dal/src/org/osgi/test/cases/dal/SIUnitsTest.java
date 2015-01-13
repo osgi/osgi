@@ -59,7 +59,7 @@ public final class SIUnitsTest extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Tests derived units in the SI with special names and symbols
+	 * Tests derived units in the SI with special names and symbols.
 	 */
 	public void testSISpecialDerivedUnits() {
 		assertEquals("Radian symbol is not correct.", "rad", SIUnits.RADIAN);

@@ -42,10 +42,10 @@ public final class SimulatedMultiLevelSensor extends SimulatedFunction implement
 								PropertyMetadata.ACCESS_EVENTABLE));
 		PropertyMetadata propMetadata = new PropertyMetadataImpl(
 				metadata, // metadata
-				null,     // step
-				new FunctionData[] {LEVEL_DATA},// enumValues
-				LEVEL_DATA,     // minValue
-				LEVEL_DATA);    // maxValue
+				null, // step
+				new FunctionData[] {LEVEL_DATA}, // enumValues
+				LEVEL_DATA, // minValue
+				LEVEL_DATA); // maxValue
 		PROPERTY_METADATA = new HashMap();
 		PROPERTY_METADATA.put(PROPERTY_DATA, propMetadata);
 	}

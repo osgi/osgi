@@ -54,10 +54,10 @@ public final class SimulatedMultiLevelControl extends SimulatedFunction implemen
 								PropertyMetadata.ACCESS_EVENTABLE));
 		PropertyMetadata propMetadata = new PropertyMetadataImpl(
 				metadata, // metadata
-				null,     // step
-				enumValues,// enumValues
-				LEVEL_DATA[0],     // minValue
-				LEVEL_DATA[LEVEL_DATA.length - 1]);    // maxValue
+				null, // step
+				enumValues, // enumValues
+				LEVEL_DATA[0], // minValue
+				LEVEL_DATA[LEVEL_DATA.length - 1]); // maxValue
 		PROPERTY_METADATA = new HashMap();
 		PROPERTY_METADATA.put(PROPERTY_DATA, propMetadata);
 	}
