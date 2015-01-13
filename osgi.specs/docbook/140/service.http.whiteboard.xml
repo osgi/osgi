@@ -166,6 +166,15 @@
     property is not set, the <emphasis>default</emphasis> Servlet Context
     Helper is used.</para>
 
+    <para>To achieve the required behavior for <code>ServletContext.getClassLoader()</code>
+    the <code>ServletContextHelper</code> service must be implemented
+    using a Service Factory. The Whiteboard implementation must get 
+    the Servlet Context Helper using the Bundle Context of the associated Whiteboard service.
+    For more information see <code>getClassLoader()</code> in 
+    <xref linkend="service.http.whiteboard.servletcontext.methods"
+    xrefstyle="template:Table %n"/>.
+    </para>
+
     <table xml:id="service.http.whiteboard.servletcontext.helper.properties">
       <title>Service registration properties for
       <code>ServletContextHelper</code> services.</title>
