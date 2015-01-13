@@ -21,7 +21,7 @@ import org.osgi.test.cases.dal.functions.AbstractFunctionTest;
  */
 public final class LevelDataTest extends AbstractFunctionTest {
 
-	private static final BigDecimal	TEST_VALUE	= new BigDecimal(1.00001);
+	private static final BigDecimal	TEST_VALUE	= new BigDecimal("1.00001");
 	private static final String		TEST_UNIT	= "test-unit";
 
 	/**
@@ -172,7 +172,7 @@ public final class LevelDataTest extends AbstractFunctionTest {
 		fields.put(LevelData.FIELD_LEVEL, "wrong-type");
 		checkInvalidFieldType(fields);
 
-		BigDecimal testValue = new BigDecimal(1.0001);
+		BigDecimal testValue = new BigDecimal("1.0001");
 		fields.clear();
 		fields.put(LevelData.FIELD_LEVEL, testValue);
 		fields.put(LevelData.FIELD_UNIT, Boolean.TRUE);

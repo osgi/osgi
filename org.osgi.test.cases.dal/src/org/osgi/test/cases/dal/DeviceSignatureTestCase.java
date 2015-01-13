@@ -7,12 +7,12 @@
  * Amended and Restated as of May 23, 2011.
  */
 
-package org.osgi.test.cases.dal.functions;
+package org.osgi.test.cases.dal;
 
 /**
  * Validates the signature of all specified methods.
  */
-public class SignatureTestCase extends
+public class DeviceSignatureTestCase extends
 		org.osgi.test.support.signature.SignatureTestCase {
 	// all test methods are in the parent class
 }

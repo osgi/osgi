@@ -42,7 +42,8 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 	 * 
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#setUp()
 	 */
-	protected void setUp() {
+	protected void setUp() throws Exception {
+		super.setUp();
 		this.testStepProxy = new TestStepProxy(super.getContext());
 	}
 
@@ -51,8 +52,9 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 	 * 
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#tearDown()
 	 */
-	protected void tearDown() {
+	protected void tearDown() throws Exception {
 		this.testStepProxy.close();
+		super.tearDown();
 	}
 
 	/**
