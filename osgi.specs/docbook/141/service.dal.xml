@@ -1372,8 +1372,7 @@ function-id – function identifier in the scope of the device</programlisting>
 
           <listitem>
             <para> <code>java.util.Map</code> instance. The map keys can be
-            any reference type of Java primitive types or
-            <code>java.lang.String</code> . The values must use those rules.
+            <code>java.lang.String</code> . The values follow these rules.
             </para>
           </listitem>
 

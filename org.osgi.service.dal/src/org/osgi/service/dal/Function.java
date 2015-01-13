@@ -154,8 +154,8 @@ package org.osgi.service.dal;
  * <li>{@code Beans}, but the beans properties must use those rules. Java Beans
  * are defined in JavaBeans specification.</li>
  * <li>
- * {@code java.util.Map}s. The keys can be any reference type of Java primitive
- * types or {@code java.lang.String}. The values must use those rules.</li>
+ * {@code java.util.Map}s. The keys can be {@code java.lang.String}. The values
+ * follow these rules.</li>
  * <li>Arrays of defined types.</li>
  * </ul>
  * The properties metadata is accessible with
