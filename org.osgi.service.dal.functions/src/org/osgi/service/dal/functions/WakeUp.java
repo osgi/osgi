@@ -49,9 +49,9 @@ public interface WakeUp extends Function {
 
 	/**
 	 * Specifies the wake up interval. The device can periodically wake up and
-	 * receive commands. That interval is managed by this property. The current
-	 * property value is available with {@link #getWakeUpInterval()} and can be
-	 * modified with {@link #setWakeUpInterval(BigDecimal, String)}.
+	 * receive commands. That interval is managed by this eventable property.
+	 * The current property value is available with {@link #getWakeUpInterval()}
+	 * and can be modified with {@link #setWakeUpInterval(BigDecimal, String)}.
 	 */
 	public static final String	PROPERTY_WAKE_UP_INTERVAL	= "wakeUpInterval";
 

@@ -24,12 +24,10 @@ import org.osgi.service.dal.functions.data.LevelData;
  * {@code Meter} function can measure metering information. The function
  * provides these properties:
  * <ul>
- * <li>{@link #PROPERTY_CURRENT} - property accessible with
+ * <li>{@link #PROPERTY_CURRENT} - eventable property accessible with
  * {@link #getCurrent()} getter;</li>
- * <li>{@link #PROPERTY_TOTAL} - property accessible with {@link #getTotal()}
- * getter;</li>
- * <li>{@link #SERVICE_FLOW} - property accessible with {@link #getTotal()}
- * getter;</li>
+ * <li>{@link #PROPERTY_TOTAL} - eventable property accessible with
+ * {@link #getTotal()} getter.</li>
  * </ul>
  * <p>
  * The sensor type can be:
@@ -73,13 +71,13 @@ public interface Meter extends Function {
 
 	/**
 	 * Specifies the current consumption or generation property name. The
-	 * property can be read with {@link #getCurrent()} getter.
+	 * eventable property can be read with {@link #getCurrent()} getter.
 	 */
 	public static final String	PROPERTY_CURRENT	= "current";
 
 	/**
-	 * Specifies the total consumption or generation property name. The property
-	 * can be read with {@link #getTotal()} getter.
+	 * Specifies the total consumption or generation property name. The
+	 * eventable property can be read with {@link #getTotal()} getter.
 	 */
 	public static final String	PROPERTY_TOTAL		= "total";
 

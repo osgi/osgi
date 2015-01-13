@@ -23,7 +23,7 @@ import org.osgi.service.dal.functions.data.LevelData;
 
 /**
  * {@code MultiLevelControl} function provides multi-level control support. The
- * function level is accessible with {@link #getData()} getter and
+ * eventable function level is accessible with {@link #getData()} getter and
  * {@link #setData(BigDecimal, String)} setter.
  * <p>
  * The control type can be:
@@ -49,7 +49,7 @@ import org.osgi.service.dal.functions.data.LevelData;
 public interface MultiLevelControl extends Function {
 
 	/**
-	 * Specifies the level property name. The property can be read with
+	 * Specifies the level property name. The eventabl property can be read with
 	 * {@link #getData()} getter and can be set with
 	 * {@link #setData(BigDecimal, String)} setters.
 	 */

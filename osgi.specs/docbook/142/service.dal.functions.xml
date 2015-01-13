@@ -93,8 +93,8 @@
               <entry><code>data</code></entry>
 
               <entry>Contains the current state of
-              <code>BooleanControl</code>. The property access can be any
-              combination of: readable, writable and eventable.</entry>
+              <code>BooleanControl</code>. The property access is
+              readable, writable and eventable.</entry>
             </row>
           </tbody>
         </tgroup>
@@ -189,8 +189,7 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
               <entry><code>data</code></entry>
 
               <entry>Contains the current state of <code>BooleanSensor</code>.
-              The property access can be any combination of: readable and
-              eventable.</entry>
+              The property access is readable and eventable.</entry>
             </row>
           </tbody>
         </tgroup>
@@ -324,8 +323,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
               <entry><code>data</code></entry>
 
               <entry>Contains the current state of
-              <code>MultiLevelControl</code>. The property access can be any
-              combination of: readable, writable and eventable.</entry>
+              <code>MultiLevelControl</code>. The property access is
+              readable, writable and eventable.</entry>
             </row>
           </tbody>
         </tgroup>
@@ -476,8 +475,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
               <entry><code>data</code></entry>
 
               <entry>Contains the current state of
-              <code>MultiLevelSensor</code>. The property access can be any
-              combination of: readable and eventable.</entry>
+              <code>MultiLevelSensor</code>. The property access is
+              readable and eventable.</entry>
             </row>
           </tbody>
         </tgroup>
@@ -593,14 +592,14 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
 
               <entry>Contains the total consumption or generation. It has been
               measured since the last call of <code>resetTotal</code> or
-              device initial run. The property access is readable.</entry>
+              device initial run. The property access is readable and eventable.</entry>
             </row>
 
             <row>
               <entry><code>current</code></entry>
 
               <entry>Contains the current consumption or generation. The
-              property access is readable.</entry>
+              property access is readable and eventable.</entry>
             </row>
           </tbody>
         </tgroup>
@@ -781,8 +780,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
 
               <entry>Specifies the wake up interval. The device can
               periodically wake up and receive commands. That interval is
-              managed by this property. The property can be readable and
-              writable. The property value type is <xref
+              managed by this property. The property access is readable,
+              writable and eventable. The property value type is <xref
               linkend="service.dal.functions.data.level"/>.</entry>
             </row>
           </tbody>

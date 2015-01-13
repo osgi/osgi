@@ -22,8 +22,8 @@ import org.osgi.service.dal.functions.data.BooleanData;
 
 /**
  * {@code BooleanSensor} function provides boolean sensor monitoring. It reports
- * its state when an important event is available. The state is accessible with
- * {@link #getData()} getter. There are no operations.
+ * its state when an important event is available. The eventable state is
+ * accessible with {@link #getData()} getter. There are no operations.
  * <p>
  * The sensor type can be:
  * <ul>
@@ -48,8 +48,8 @@ import org.osgi.service.dal.functions.data.BooleanData;
 public interface BooleanSensor extends Function {
 
 	/**
-	 * Specifies the state property name. The property value is accessible with
-	 * {@link #getData()} getter.
+	 * Specifies the state property name. The eventable property value is
+	 * accessible with {@link #getData()} getter.
 	 */
 	public static final String	PROPERTY_DATA	= "data";
 

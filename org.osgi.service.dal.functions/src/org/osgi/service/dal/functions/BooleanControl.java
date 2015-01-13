@@ -22,7 +22,7 @@ import org.osgi.service.dal.functions.data.BooleanData;
 
 /**
  * {@code BooleanControl} function provides a boolean control support. The
- * function state is accessible with {@link #getData()} getter and
+ * eventable function state is accessible with {@link #getData()} getter and
  * {@link #setData(boolean)} setter. The state can be reversed with
  * {@link #reverse()} method, can be set to {@code true} value with
  * {@link #setTrue()} method and can be set to {@code false} value with
@@ -63,8 +63,8 @@ public interface BooleanControl extends Function {
 	public static final String	OPERATION_SET_FALSE	= "setFalse";
 
 	/**
-	 * Specifies the state property name. The property value is accessible with
-	 * {@link #getData()} method.
+	 * Specifies the state property name. The eventable property value is
+	 * accessible with {@link #getData()} method.
 	 * 
 	 * @see BooleanData
 	 */

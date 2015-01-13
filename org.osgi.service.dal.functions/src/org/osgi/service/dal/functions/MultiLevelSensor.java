@@ -22,8 +22,8 @@ import org.osgi.service.dal.functions.data.LevelData;
 
 /**
  * {@code MultiLevelSensor} function provides multi-level sensor monitoring. It
- * reports its state when an important event is available. The state is
- * accessible with {@link #getData()} getter. There are no operations.
+ * reports its state when an important event is available. The eventable state
+ * is accessible with {@link #getData()} getter. There are no operations.
  * <p>
  * The sensor type can be:
  * <ul>
@@ -49,8 +49,8 @@ import org.osgi.service.dal.functions.data.LevelData;
 public interface MultiLevelSensor extends Function {
 
 	/**
-	 * Specifies the state property name. The property can be read with
-	 * {@link #getData()} getter.
+	 * Specifies the state property name. The eventable property can be read
+	 * with {@link #getData()} getter.
 	 * 
 	 * @see LevelData
 	 */
