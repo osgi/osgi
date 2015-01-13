@@ -32,3 +32,5 @@ Test-Cases		= \
 	org.osgi.impl.service.event;	version=latest
 
 -runproperties	= ${runsecureproperties}
+
+-signaturetest	= org.osgi.service.dal
