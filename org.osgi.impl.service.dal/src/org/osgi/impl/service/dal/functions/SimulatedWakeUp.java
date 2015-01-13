@@ -51,6 +51,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 				PropertyMetadata.ACCESS,
 				new Integer(
 						PropertyMetadata.ACCESS_READABLE |
+								PropertyMetadata.ACCESS_EVENTABLE |
 								PropertyMetadata.ACCESS_WRITABLE));
 		metadata.put(PropertyMetadata.UNITS, MILLIS_ARRAY);
 		PropertyMetadata propMetadata = new PropertyMetadataImpl(
@@ -105,7 +106,7 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 		if ((null != unit) && (!MILLIS.equals(unit))) {
 			throw new IllegalArgumentException("The unit is not supported: " + unit);
 		}
-		this.setWakeUpInterval(interval, true);
+		this.setWakeUpInterval(interval, true, true);
 	}
 
 	public void remove() {
@@ -121,16 +122,16 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 
 	public void publishEvent(String propName) {
 		if (PROPERTY_AWAKE.equals(propName)) {
-			setWakeUpInterval(getWakeUpInterval().getLevel(), false);
+			setWakeUpInterval(getWakeUpInterval().getLevel(), false, false);
 		} else
 			if (PROPERTY_WAKE_UP_INTERVAL.equals(propName)) {
-				throw new IllegalArgumentException("The property is not eventable: " + propName);
+				throw new IllegalArgumentException("The property event can be sent on set for: " + propName);
 			} else {
 				throw new IllegalArgumentException("The property is not supported: " + propName);
 			}
 	}
 
-	private void setWakeUpInterval(BigDecimal interval, boolean execDelay) {
+	private void setWakeUpInterval(BigDecimal interval, boolean execDelay, boolean postEvent) {
 		long longInterval = interval.longValue();
 		if (longInterval < 0) {
 			throw new IllegalArgumentException("The interval is negative: " + interval);
@@ -148,6 +149,9 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 				this.timer.schedule(this.timerTask, execDelay ? longInterval : 0, longInterval);
 			}
 			this.wakeUpInterval = new LevelData(System.currentTimeMillis(), null, interval, MILLIS);
+			if (postEvent) {
+				super.postEvent(PROPERTY_WAKE_UP_INTERVAL, this.wakeUpInterval);
+			}
 		}
 	}
 
