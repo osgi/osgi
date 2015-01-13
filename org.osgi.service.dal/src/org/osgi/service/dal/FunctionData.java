@@ -300,9 +300,8 @@ public abstract class FunctionData implements Comparable {
 				} finally {
 					thisUsedContainers.remove(thisValue);
 				}
-			} else {
-				return 1;
 			}
+			return 1;
 		}
 		if (thisValue instanceof Map) {
 			if (otherValue instanceof Map) {
@@ -317,9 +316,8 @@ public abstract class FunctionData implements Comparable {
 				} finally {
 					thisUsedContainers.remove(thisValue);
 				}
-			} else {
-				return 1;
 			}
+			return 1;
 		}
 		if (thisValue instanceof Comparable) {
 			return (((Comparable) thisValue)).compareTo(otherValue);

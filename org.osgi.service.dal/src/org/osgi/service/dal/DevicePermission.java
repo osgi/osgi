@@ -338,7 +338,7 @@ final class DevicePermissionCollection extends PermissionCollection {
 		final String name = dp.getName();
 		synchronized (this) {
 			this.permissions.put(name, dp);
-			if (!implyAll && (name.equals("*"))) {
+			if (!implyAll && ("*".equals(name))) {
 				implyAll = true;
 			}
 		}

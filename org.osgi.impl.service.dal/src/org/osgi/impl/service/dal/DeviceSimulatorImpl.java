@@ -68,7 +68,7 @@ class DeviceSimulatorImpl implements DeviceSimulator {
 	 */
 	public Device registerDevice(Dictionary deviceProps, Dictionary[] functionProps) {
 		if (null == deviceProps) {
-			throw new NullPointerException("The device properties are null.");
+			throw new NullPointerException("The device properties are null."); // NOPMD
 		}
 		SimulatedFunction[] functions = null;
 		if (null != functionProps) {
@@ -83,7 +83,7 @@ class DeviceSimulatorImpl implements DeviceSimulator {
 					for (int ii = 0; ii < i; ii++) {
 						functions[ii].remove();
 					}
-					throw new IllegalArgumentException("The function type is not supported: " +
+					throw new IllegalArgumentException("The function type is not supported: " + // NOPMD
 							(String) functionProps[i].get(Constants.OBJECTCLASS));
 				}
 			}

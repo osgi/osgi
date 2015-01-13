@@ -38,7 +38,7 @@ public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 	 * 
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#setUp()
 	 */
-	protected void setUp() throws Exception {
+	protected void setUp() throws Exception { // NOPMD
 		super.setUp();
 		this.testStepProxy = new TestStepProxy(super.getContext());
 		this.deviceServiceListener = new TestServiceListener(
@@ -50,7 +50,7 @@ public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 	 * 
 	 * @see org.osgi.test.support.compatibility.DefaultTestBundleControl#tearDown()
 	 */
-	protected void tearDown() throws Exception {
+	protected void tearDown() throws Exception { // //NOPMD
 		this.testStepProxy.close();
 		this.deviceServiceListener.unregister();
 		super.tearDown();

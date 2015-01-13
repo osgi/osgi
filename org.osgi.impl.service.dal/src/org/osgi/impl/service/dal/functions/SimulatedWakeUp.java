@@ -38,10 +38,10 @@ public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
 	private static final Map		PROPERTY_METADATA;
 	private static final Map		OPERATION_METADATA		= null;
 
+	private final Timer				timer;
 	private final Object			lock					= new Object();
 
 	private TimerTask				timerTask;
-	private Timer					timer;
 	private boolean					removed;
 	private LevelData				wakeUpInterval			= MIN_WAKE_UP_INTERVAL;
 

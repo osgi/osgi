@@ -336,6 +336,7 @@ public class KeypadData extends FunctionData {
 					case SUB_TYPE_PRESSED_DOUBLE_LONG :
 						throw new IllegalArgumentException(
 								"The pressed sub-type: " + this.subType + " is used with released event type.");
+					default : // it's ok, go ahead
 				}
 				break;
 			default :

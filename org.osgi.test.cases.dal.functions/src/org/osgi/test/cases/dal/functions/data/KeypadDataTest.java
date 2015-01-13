@@ -346,7 +346,7 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 		try {
 			new KeypadData(null);
 			fail("The keypad data is built with null fields");
-		} catch (NullPointerException npe) {
+		} catch (NullPointerException npe) { // NOPMD
 			// go ahead, it's expected
 		}
 	}

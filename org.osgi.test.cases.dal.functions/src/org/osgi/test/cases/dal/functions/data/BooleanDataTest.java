@@ -185,7 +185,7 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 		try {
 			new BooleanData(null);
 			fail("The boolean data is built with null fields");
-		} catch (NullPointerException npe) {
+		} catch (NullPointerException npe) { // NOPMD
 			// go ahead, it's expected
 		}
 	}

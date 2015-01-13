@@ -10,7 +10,9 @@
 package org.osgi.impl.service.dal.step;
 
 import java.util.Dictionary;
+import java.util.HashSet;
 import java.util.Hashtable;
+import java.util.Set;
 import org.osgi.framework.Constants;
 import org.osgi.service.dal.Device;
 import org.osgi.service.dal.Function;
@@ -34,11 +36,37 @@ import org.osgi.util.tracker.ServiceTracker;
  */
 public class TestStepImpl implements TestStep {
 
+	private static final Set		STEPS_EMPTY_DEVICE;
+	private static final Set		STEPS_FULL_DEVICE;
 	private static final String		DEVICE_UID_PREFIX	= "test-step-simulator:";
 
 	private final ServiceTracker	deviceSimulatorTracker;
 
 	private int						deviceCounter;
+
+	static {
+		STEPS_EMPTY_DEVICE = new HashSet();
+		STEPS_EMPTY_DEVICE.add(DeviceTestSteps.STEP_ID_REGISTER_DEVICE);
+		STEPS_EMPTY_DEVICE.add(DeviceTestSteps.STEP_ID_AVAILABLE_DEVICE);
+		STEPS_EMPTY_DEVICE.add(DeviceTestSteps.STEP_ID_DEVICES_ALL_PROPS);
+		STEPS_EMPTY_DEVICE.add(SecureDeviceTestSteps.STEP_ID_AVAILABLE_DEVICE);
+
+		STEPS_FULL_DEVICE = new HashSet();
+		STEPS_FULL_DEVICE.add(DeviceTestSteps.STEP_ID_REGISTER_DEVICE_FUNCTION);
+		STEPS_FULL_DEVICE.add(DeviceTestSteps.STEP_ID_AVAILABLE_FUNCTION);
+		STEPS_FULL_DEVICE.add(DeviceTestSteps.STEP_ID_AVAILABLE_OPERATION);
+		STEPS_FULL_DEVICE.add(DeviceTestSteps.STEP_ID_PROPERTY_READABLE);
+		STEPS_FULL_DEVICE.add(DeviceTestSteps.STEP_ID_PROPERTY_WRITABLE);
+		STEPS_FULL_DEVICE.add(DeviceTestSteps.STEP_ID_FUNCTIONS_ALL_PROPS);
+		STEPS_FULL_DEVICE.add(FunctionsTestSteps.STEP_ID_AVAILABLE_BC);
+		STEPS_FULL_DEVICE.add(FunctionsTestSteps.STEP_ID_AVAILABLE_BS);
+		STEPS_FULL_DEVICE.add(FunctionsTestSteps.STEP_ID_AVAILABLE_METER);
+		STEPS_FULL_DEVICE.add(FunctionsTestSteps.STEP_ID_AVAILABLE_MLC);
+		STEPS_FULL_DEVICE.add(FunctionsTestSteps.STEP_ID_AVAILABLE_MLS);
+		STEPS_FULL_DEVICE.add(FunctionsTestSteps.STEP_ID_AVAILABLE_WAKE_UP);
+		STEPS_FULL_DEVICE.add(FunctionsTestSteps.STEP_ID_AVAILABLE_ALARM);
+		STEPS_FULL_DEVICE.add(FunctionsTestSteps.STEP_ID_AVAILABLE_KEYPAD);
+	}
 
 	/**
 	 * Constructs a new test stepper.
@@ -54,26 +82,10 @@ public class TestStepImpl implements TestStep {
 	 *      java.lang.String)
 	 */
 	public String execute(String stepId, String userPrompt) {
-		if (DeviceTestSteps.STEP_ID_REGISTER_DEVICE.equals(stepId) ||
-				DeviceTestSteps.STEP_ID_AVAILABLE_DEVICE.equals(stepId) ||
-				DeviceTestSteps.STEP_ID_DEVICES_ALL_PROPS.equals(stepId) ||
-				SecureDeviceTestSteps.STEP_ID_AVAILABLE_DEVICE.equals(stepId)) {
+		if (STEPS_EMPTY_DEVICE.contains(stepId)) {
 			registerNewDevice(null);
 		} else
-			if (DeviceTestSteps.STEP_ID_REGISTER_DEVICE_FUNCTION.equals(stepId) ||
-					DeviceTestSteps.STEP_ID_AVAILABLE_FUNCTION.equals(stepId) ||
-					DeviceTestSteps.STEP_ID_AVAILABLE_OPERATION.equals(stepId) ||
-					DeviceTestSteps.STEP_ID_PROPERTY_READABLE.equals(stepId) ||
-					DeviceTestSteps.STEP_ID_PROPERTY_WRITABLE.equals(stepId) ||
-					DeviceTestSteps.STEP_ID_FUNCTIONS_ALL_PROPS.equals(stepId) ||
-					FunctionsTestSteps.STEP_ID_AVAILABLE_BC.equals(stepId) ||
-					FunctionsTestSteps.STEP_ID_AVAILABLE_BS.equals(stepId) ||
-					FunctionsTestSteps.STEP_ID_AVAILABLE_METER.equals(stepId) ||
-					FunctionsTestSteps.STEP_ID_AVAILABLE_MLC.equals(stepId) ||
-					FunctionsTestSteps.STEP_ID_AVAILABLE_MLS.equals(stepId) ||
-					FunctionsTestSteps.STEP_ID_AVAILABLE_WAKE_UP.equals(stepId) ||
-					FunctionsTestSteps.STEP_ID_AVAILABLE_ALARM.equals(stepId) ||
-					FunctionsTestSteps.STEP_ID_AVAILABLE_KEYPAD.equals(stepId)) {
+			if (STEPS_FULL_DEVICE.contains(stepId)) {
 				registerNewDevice(new String[] {
 						BooleanControl.class.getName(),
 						BooleanSensor.class.getName(),

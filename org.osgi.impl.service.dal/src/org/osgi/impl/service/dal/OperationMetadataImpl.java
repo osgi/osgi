@@ -18,9 +18,9 @@ import org.osgi.service.dal.PropertyMetadata;
  */
 public final class OperationMetadataImpl implements OperationMetadata {
 
-	private Map					metadata;
-	private PropertyMetadata	returnValueMetadata;
-	private PropertyMetadata[]	parametersMetadata;
+	private final Map					metadata;
+	private final PropertyMetadata		returnValueMetadata;
+	private final PropertyMetadata[]	parametersMetadata;
 
 	/**
 	 * Constructs the operation metadata.

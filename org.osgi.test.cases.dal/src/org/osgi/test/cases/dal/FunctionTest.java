@@ -270,7 +270,7 @@ public class FunctionTest extends AbstractDeviceTest {
 				Class functionClass = TestUtil.getFunctionClass(
 						functions[i], super.getContext());
 				Method[] methods = TestUtil.getMethods(functionClass, operationNames[ii]);
-				assertNotNull("The is no method for operation: " + operationNames[ii]);
+				assertNotNull("There is no method for operation: " + operationNames[ii], methods);
 				assertEquals("There is operation overloafing for: " + operationNames[ii], 1, methods.length);
 			}
 		}

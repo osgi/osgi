@@ -197,7 +197,7 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 		try {
 			new AlarmData(null);
 			fail("The alarm data is built with null fields");
-		} catch (NullPointerException npe) {
+		} catch (NullPointerException npe) { // NOPMD
 			// go ahead, it's expected
 		}
 	}

@@ -36,7 +36,7 @@ public final class SimulatedMeter extends SimulatedFunction implements Meter { /
 	private static final Map		PROPERTY_METADATA;
 	private static final Map		OPERATION_METADATA			= null;
 
-	private long					startTime;
+	private final long				startTime;
 
 	static {
 		Map metadata = new HashMap();

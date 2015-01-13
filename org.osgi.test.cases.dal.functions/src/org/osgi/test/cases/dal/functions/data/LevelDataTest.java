@@ -199,7 +199,7 @@ public final class LevelDataTest extends AbstractFunctionTest {
 		try {
 			new LevelData(null);
 			fail("The level data is built with null fields");
-		} catch (NullPointerException npe) {
+		} catch (NullPointerException npe) { // NOPMD
 			// go ahead, it's expected
 		}
 	}

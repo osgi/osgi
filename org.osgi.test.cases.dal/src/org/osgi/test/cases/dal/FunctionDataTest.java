@@ -166,7 +166,7 @@ public class FunctionDataTest extends AbstractDeviceTest {
 
 	private void checkEqualsAndHashCode(Map metadata) {
 		TestFunctionData testData = new TestFunctionData(Long.MIN_VALUE, metadata);
-		assertFalse("The function data is equal to null.", testData.equals(null));
+		assertFalse("The function data is equal to null.", testData.equals(null)); // NOPMD
 		assertFalse("The function data is equal to java.lang.Object instance.", testData.equals(new Object()));
 		assertEquals("The function data is not equal to itself.", testData, testData);
 		TestFunctionData otherTestData = new TestFunctionData(Long.MIN_VALUE, metadata);
