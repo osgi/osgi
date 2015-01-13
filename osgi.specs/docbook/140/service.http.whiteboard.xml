@@ -1464,10 +1464,12 @@ public class MyErrorServlet extends HttpServlet {
             <entry><code>String</code></entry>
 
             <entry><para>The prefix used to map a requested resource to the
-            bundle's entries. When this property starts with a slash '/' the
-            prefix is taken from the root of the bundle. Without a leading
-            slash the prefix is taken from the package of the registered
-            servlet implementation.</para> <para>This property marks a service
+                    bundle's entries, taken from the root of the bundle.
+                    The value may start with a slash '/', but this is not
+                    required. Therefore values <code>/img/*</code> and 
+                    <code>img/*</code> (without leading slash) are equivalent.</para> 
+                
+            <para>This property marks a service
             as a resouce service. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PREFIX"
             xrefstyle="hyperlink"/>.</para></entry>
@@ -1479,7 +1481,10 @@ public class MyErrorServlet extends HttpServlet {
             <entry><code>String+</code></entry>
 
             <entry><para>The servlet pattern(s) to be used to serve resources.
-            See <xref
+                    As defined by the <xref linkend="i21217577"/> in section 12.2 
+                    Specification of Mappings.</para>
+            
+            <para>See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PATTERN"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
@@ -1487,23 +1492,34 @@ public class MyErrorServlet extends HttpServlet {
       </tgroup>
     </table>
 
-    <para>The example below uses Declarative Services annotations to register
+    <para>The examples below uses Declarative Services annotations to register
     a resources service. Note that this service is purely used to convey
     information to the Http Whiteboard implementation and is never
     invoked.</para>
 
     <programlisting>@Component(service = MyResourceService.class,
     property={
-        "osgi.http.whiteboard.resource.pattern=/files",
-        "osgi.http.whiteboard.resource.prefix=www"})
+        "osgi.http.whiteboard.resource.pattern=/files/*",
+        "osgi.http.whiteboard.resource.prefix=/www"})
 public class MyResourceService {}</programlisting>
 
-    <para>Assuming that the above resource service is in the
-    <code>org.acme.food</code> package, a Http Service configured on port 80
+    <para>A Http Service configured on port 80
     will serve a request for <code>http://localhost/files/cheese.html</code>
-    from the location <code>/org/acme/food/www/cheese.html</code>.</para>
+    from the location <code>/www/cheese.html</code>.</para>
 
-    <para>The above example uses the default <code>ServletContextHelper</code>
+    <para>The following example maps requests for <code>favicon.ico</code> to serve
+    the <code>logo.png</code> resource:
+    </para>
+    
+    <programlisting>@Component(service = SomeResourceService.class,
+    property={
+        "osgi.http.whiteboard.resource.pattern=/favicon.ico",
+        "osgi.http.whiteboard.resource.prefix=logo.png"})
+public class SomeResourceService {}</programlisting>
+
+<remark>Correct? The prefix in logo.png is not really a prefix any more...</remark>
+
+    <para>The above examples uses the default <code>ServletContextHelper</code>
     implementation. For more control around serving resources, a resources
     service can be associated to a custom <code>ServletContextHelper</code>.
     For example, a custom Servlet Context Helper can serve resources from
