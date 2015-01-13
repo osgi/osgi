@@ -24,10 +24,10 @@ import org.osgi.util.tracker.ServiceTracker;
 public abstract class SimulatedFunction extends SimulatedService implements Function {
 
 	/** The property metadata. */
-	protected final Map				propertyMetadata;
+	private final Map				propertyMetadata;
 
 	/** The operation metadata. */
-	protected final Map				operationMetadata;
+	private final Map				operationMetadata;
 
 	private final ServiceTracker	eventAdminTracker;
 

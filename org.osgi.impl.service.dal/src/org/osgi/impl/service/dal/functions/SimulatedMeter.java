@@ -27,7 +27,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Simulated {@code Meter}.
  */
-public final class SimulatedMeter extends SimulatedFunction implements Meter {
+public final class SimulatedMeter extends SimulatedFunction implements Meter { // NO_UCD
 
 	private static final String		MILLIS						= SIUnits.PREFIX_MILLI + SIUnits.SECOND;
 	private static final String[]	MILLIS_ARRAY				= new String[] {MILLIS};

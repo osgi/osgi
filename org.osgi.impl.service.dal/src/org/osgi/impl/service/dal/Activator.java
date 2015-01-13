@@ -31,7 +31,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * The bundle activator.
  */
-public final class Activator implements BundleActivator {
+public final class Activator implements BundleActivator { // NO_UCD
 
 	private static final String	DEVICE_UID_PREFIX		= "dal-simulator:";
 	private static final String	FUNCTION_TYPE_SIMULATOR	= "Simulator";
@@ -73,6 +73,7 @@ public final class Activator implements BundleActivator {
 				deviceProps.put(Device.SERVICE_STATUS, Device.STATUS_OFFLINE);
 				deviceProps.put(Device.SERVICE_STATUS_DETAIL, Device.STATUS_DETAIL_BROKEN);
 			}
+			deviceProps.put(org.osgi.service.device.Constants.DEVICE_CATEGORY, Device.DEVICE_CATEGORY);
 			deviceProps.put(Device.SERVICE_STATUS, Device.STATUS_ONLINE);
 			deviceProps.put(Device.SERVICE_UID, deviceUID);
 			deviceProps.put(Device.SERVICE_NAME, deviceUID + "-name");
@@ -116,6 +117,7 @@ public final class Activator implements BundleActivator {
 		// setup meter control
 		functionProps[4] = getFunctionProps(
 				deviceUID, Meter.class.getName(), 4, referenceFunctionUIDs);
+		functionProps[4].put(Meter.SERVICE_FLOW, Meter.FLOW_OUT);
 		referenceFunctionUIDs[4] = (String) functionProps[4].get(Function.SERVICE_UID);
 
 		// setup wake up

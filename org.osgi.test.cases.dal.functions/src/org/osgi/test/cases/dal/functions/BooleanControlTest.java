@@ -9,9 +9,11 @@
 
 package org.osgi.test.cases.dal.functions;
 
+import java.util.Map;
 import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.FunctionEvent;
+import org.osgi.service.dal.OperationMetadata;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.BooleanControl;
 import org.osgi.service.dal.functions.data.BooleanData;
@@ -35,6 +37,7 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 			BooleanControl currentBooleanControl = (BooleanControl) booleanControls[i];
 			currentBooleanControl.setTrue();
 			super.assertEquals(true, currentBooleanControl.getData());
+			checkMetadata(currentBooleanControl.getOperationMetadata(BooleanControl.OPERATION_SET_TRUE));
 		}
 	}
 
@@ -52,6 +55,7 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 			BooleanControl currentBooleanControl = (BooleanControl) booleanControls[i];
 			currentBooleanControl.setFalse();
 			super.assertEquals(false, currentBooleanControl.getData());
+			checkMetadata(currentBooleanControl.getOperationMetadata(BooleanControl.OPERATION_SET_FALSE));
 		}
 	}
 
@@ -70,6 +74,7 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 			BooleanData currentData = currentBooleanControl.getData();
 			currentBooleanControl.reverse();
 			super.assertEquals(currentData.getValue() ? false : true, currentBooleanControl.getData());
+			checkMetadata(currentBooleanControl.getOperationMetadata(BooleanControl.OPERATION_REVERSE));
 		}
 	}
 
@@ -107,5 +112,23 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 				"The property name is not correct!",
 				BooleanControl.PROPERTY_DATA,
 				functionEvent.getFunctionPropertyName());
+	}
+
+	private void checkMetadata(OperationMetadata opMetadata) {
+		if (null == opMetadata) {
+			return;
+		}
+		assertNull("BooleanControl operation doesn't have parameters.",
+				opMetadata.getParametersMetadata());
+		assertNull("BooleanControl operation doesn't have return value.",
+				opMetadata.getReturnValueMetadata());
+		Map metadata = opMetadata.getMetadata();
+		if (null == metadata) {
+			return;
+		}
+		Object description = metadata.get(OperationMetadata.DESCRIPTION);
+		if (null != description) {
+			assertTrue("The operation description must be a string.", description instanceof String);
+		}
 	}
 }

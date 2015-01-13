@@ -116,11 +116,15 @@ public class FunctionTest extends AbstractDeviceTest {
 			try {
 				device.remove();
 				ServiceEvent[] deviceServiceEvents = testServiceListener.getEvents();
-				assertTrue("There are no service event on device remove.", deviceServiceEvents.length > 0);
+				assertTrue("At least two service events are expected on device remove.", deviceServiceEvents.length > 1);
 				for (int ii = 0; ii < functions.length; ii++) {
 					boolean isDeviceUnregistered = false;
 					boolean isFunctionUnregistered = false;
-					for (int iii = 0; iii < deviceServiceEvents.length; iii++) {
+					assertEquals(
+							"The event type must be service modified.",
+							ServiceEvent.MODIFIED,
+							deviceServiceEvents[0].getType());
+					for (int iii = 1; iii < deviceServiceEvents.length; iii++) {
 						assertEquals(
 								"The event type must be unregistering.",
 								ServiceEvent.UNREGISTERING,

@@ -25,7 +25,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Device simulator implementation.
  */
-public class DeviceSimulatorImpl implements DeviceSimulator {
+class DeviceSimulatorImpl implements DeviceSimulator {
 
 	private static final Class[]	FUNCTION_CONSTRUCTOR_ARGS		= new Class[] {
 																	Dictionary.class,
@@ -55,7 +55,7 @@ public class DeviceSimulatorImpl implements DeviceSimulator {
 	 * @param eventAdminTracker The event admin tracker.
 	 * @param timer The timer used by some functions.
 	 */
-	public DeviceSimulatorImpl(BundleContext bc, ServiceTracker eventAdminTracker, Timer timer) {
+	DeviceSimulatorImpl(BundleContext bc, ServiceTracker eventAdminTracker, Timer timer) {
 		this.registeredDevices = new ArrayList();
 		this.bc = bc;
 		this.eventAdminTracker = eventAdminTracker;
@@ -118,14 +118,14 @@ public class DeviceSimulatorImpl implements DeviceSimulator {
 	/**
 	 * Starts the simulator.
 	 */
-	public void start() {
+	void start() {
 		this.deviceSimulatorSReg = this.bc.registerService(DeviceSimulator.class.getName(), this, null);
 	}
 
 	/**
 	 * Stops the simulator.
 	 */
-	public void stop() {
+	void stop() {
 		synchronized (this.lock) {
 			for (int i = 0, size = this.registeredDevices.size(); i < size; i++) {
 				DeviceUtil.silentDeviceRemove((Device) this.registeredDevices.get(i));

@@ -24,7 +24,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Simulated {@code Keypad}.
  */
-public final class SimulatedKeypad extends SimulatedFunction implements Keypad {
+public final class SimulatedKeypad extends SimulatedFunction implements Keypad { // NO_UCD
 
 	private static final Map	PROPERTY_METADATA;
 

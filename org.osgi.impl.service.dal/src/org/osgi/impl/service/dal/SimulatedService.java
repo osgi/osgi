@@ -20,13 +20,16 @@ import org.osgi.framework.ServiceRegistration;
  * A common simulated service. It provides an early-access the the service
  * registration with a service factory.
  */
-public class SimulatedService implements ServiceFactory {
+class SimulatedService implements ServiceFactory {
 
 	/** The service registration. */
 	protected ServiceRegistration	serviceReg;
 
 	/** The service reference. */
 	protected ServiceReference		serviceRef;
+
+	/** The service properties. */
+	protected Dictionary			serviceProps;
 
 	/**
 	 * Registers the service with a service factory. There is an early access to
@@ -37,6 +40,7 @@ public class SimulatedService implements ServiceFactory {
 	 * @param bc The bundle context used for the registration.
 	 */
 	protected void register(String[] classNames, Dictionary props, BundleContext bc) {
+		this.serviceProps = props;
 		init(bc.registerService(classNames, this, props));
 	}
 

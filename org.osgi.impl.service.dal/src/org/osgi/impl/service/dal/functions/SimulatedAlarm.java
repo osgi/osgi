@@ -24,7 +24,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Simulated {@code Alarm}.
  */
-public final class SimulatedAlarm extends SimulatedFunction implements Alarm {
+public final class SimulatedAlarm extends SimulatedFunction implements Alarm { // NO_UCD
 
 	private static final Map	PROPERTY_METADATA;
 

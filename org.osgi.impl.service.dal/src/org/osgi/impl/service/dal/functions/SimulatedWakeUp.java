@@ -29,7 +29,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Simulated {@code WakeUp} function.
  */
-public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp {
+public final class SimulatedWakeUp extends SimulatedFunction implements WakeUp { // NO_UCD
 
 	private static final String		MILLIS					= SIUnits.PREFIX_MILLI + SIUnits.SECOND;
 	private static final String[]	MILLIS_ARRAY			= new String[] {MILLIS};

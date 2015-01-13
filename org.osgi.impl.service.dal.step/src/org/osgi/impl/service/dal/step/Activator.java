@@ -19,7 +19,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * The bundle activator.
  */
-public class Activator implements BundleActivator {
+public class Activator implements BundleActivator { // NO_UCD
 
 	private ServiceRegistration	testStepSReg;
 	private ServiceTracker		deviceSimulatorTracker;

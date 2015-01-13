@@ -33,6 +33,9 @@ final class SimulatedDevice extends SimulatedService implements Device, ServiceF
 			securityManager.checkPermission(
 					new DevicePermission(this, DevicePermission.REMOVE));
 		}
+		super.serviceProps.put(Device.SERVICE_STATUS, Device.STATUS_REMOVED);
+		super.serviceProps.remove(Device.SERVICE_STATUS_DETAIL);
+		super.serviceReg.setProperties(super.serviceProps);
 		super.serviceReg.unregister();
 		if (null != this.functions) {
 			for (int i = 0; i < this.functions.length; i++) {

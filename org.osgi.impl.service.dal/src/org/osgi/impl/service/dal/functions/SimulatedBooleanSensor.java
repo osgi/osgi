@@ -24,7 +24,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Simulated {@code BooleanSensor}.
  */
-public final class SimulatedBooleanSensor extends SimulatedFunction implements BooleanSensor {
+public final class SimulatedBooleanSensor extends SimulatedFunction implements BooleanSensor { // NO_UCD
 
 	private static final Map	PROPERTY_METADATA;
 	private static final Map	OPERATION_METADATA	= null;

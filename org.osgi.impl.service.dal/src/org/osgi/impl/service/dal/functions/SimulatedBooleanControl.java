@@ -13,9 +13,11 @@ import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Map;
 import org.osgi.framework.BundleContext;
+import org.osgi.impl.service.dal.OperationMetadataImpl;
 import org.osgi.impl.service.dal.PropertyMetadataImpl;
 import org.osgi.impl.service.dal.SimulatedFunction;
 import org.osgi.service.dal.Function;
+import org.osgi.service.dal.OperationMetadata;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.BooleanControl;
 import org.osgi.service.dal.functions.data.BooleanData;
@@ -24,10 +26,10 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Simulated {@code BooleanControl}.
  */
-public final class SimulatedBooleanControl extends SimulatedFunction implements BooleanControl {
+public final class SimulatedBooleanControl extends SimulatedFunction implements BooleanControl { // NO_UCD
 
 	private static final Map	PROPERTY_METADATA;
-	private static final Map	OPERATION_METADATA	= null;
+	private static final Map	OPERATION_METADATA;
 
 	private BooleanData			data;
 
@@ -47,6 +49,14 @@ public final class SimulatedBooleanControl extends SimulatedFunction implements 
 				null);    // maxValue
 		PROPERTY_METADATA = new HashMap();
 		PROPERTY_METADATA.put(PROPERTY_DATA, propMetadata);
+
+		metadata = new HashMap();
+		metadata.put(OperationMetadata.DESCRIPTION, "Simulator boolean control operation.");
+		OperationMetadata opMetadata = new OperationMetadataImpl(metadata, null, null);
+		OPERATION_METADATA = new HashMap();
+		OPERATION_METADATA.put(OPERATION_REVERSE, opMetadata);
+		OPERATION_METADATA.put(OPERATION_SET_FALSE, opMetadata);
+		OPERATION_METADATA.put(OPERATION_SET_TRUE, opMetadata);
 	}
 
 	/**

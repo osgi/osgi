@@ -26,7 +26,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Simulated {@code MultiLevelControl}.
  */
-public final class SimulatedMultiLevelControl extends SimulatedFunction implements MultiLevelControl {
+public final class SimulatedMultiLevelControl extends SimulatedFunction implements MultiLevelControl { // NO_UCD
 
 	private static final Map			PROPERTY_METADATA;
 	private static final Map			OPERATION_METADATA	= null;

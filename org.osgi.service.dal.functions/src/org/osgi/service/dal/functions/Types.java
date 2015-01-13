@@ -53,7 +53,7 @@ package org.osgi.service.dal.functions;
  * </ul>
  * The mapping is not mandatory. The function can use custom defined types.
  */
-public interface Types {
+public interface Types { // NO_UCD
 
 	/**
 	 * The function type is applicable to:

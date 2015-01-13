@@ -112,6 +112,7 @@ public class TestStepImpl implements TestStep {
 		DeviceSimulator deviceSimulator = getDeviceSimulator();
 		Dictionary deviceProps = new Hashtable();
 		String deviceUID = DEVICE_UID_PREFIX + deviceCounter++;
+		deviceProps.put(org.osgi.service.device.Constants.DEVICE_CATEGORY, Device.DEVICE_CATEGORY);
 		deviceProps.put(Device.SERVICE_UID, deviceUID);
 		deviceProps.put(Device.SERVICE_STATUS, Device.STATUS_PROCESSING);
 		deviceProps.put(Device.SERVICE_STATUS_DETAIL, Device.STATUS_DETAIL_CONNECTING);
@@ -145,6 +146,9 @@ public class TestStepImpl implements TestStep {
 						referenceFunctions[ii] = (String) functionProps[ii].get(Function.SERVICE_UID);
 					}
 					functionProps[i].put(Function.SERVICE_REFERENCE_UIDS, referenceFunctions);
+				}
+				if (Meter.class.getName().equals(functionClassNames[i])) {
+					functionProps[i].put(Meter.SERVICE_FLOW, Meter.FLOW_IN);
 				}
 			}
 		}

@@ -26,7 +26,7 @@ import org.osgi.util.tracker.ServiceTracker;
 /**
  * Simulated {@code MultiLevelSensor}.
  */
-public final class SimulatedMultiLevelSensor extends SimulatedFunction implements MultiLevelSensor {
+public final class SimulatedMultiLevelSensor extends SimulatedFunction implements MultiLevelSensor { // NO_UCD
 
 	private static final Map		PROPERTY_METADATA;
 	private static final Map		OPERATION_METADATA	= null;
