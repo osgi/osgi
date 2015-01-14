@@ -3,6 +3,7 @@
 
 Private-Package 				= ${p}.*
 Export-Package					= org.osgi.service.rest.client; -split-package:=first
+Bundle-Activator: org.osgi.impl.service.rest.client.Activator
 
 -buildpath						= \
 	org.osgi.service.rest;		version=project, \
