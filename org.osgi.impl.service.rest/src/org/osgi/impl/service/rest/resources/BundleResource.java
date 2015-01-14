@@ -16,8 +16,10 @@
 
 package org.osgi.impl.service.rest.resources;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.BundleException;
 import org.osgi.impl.service.rest.PojoReflector;
 import org.osgi.impl.service.rest.pojos.BundlePojo;
 import org.restlet.data.MediaType;
@@ -55,7 +57,7 @@ public class BundleResource extends AbstractOSGiResource<BundlePojo> {
 		}
 	}
 
-	@Delete()
+	@Delete
 	public Representation delete(final String none, final Variant variant) {
 		try {
 			final org.osgi.framework.Bundle bundle = getBundleFromKeys(
@@ -103,6 +105,8 @@ public class BundleResource extends AbstractOSGiResource<BundlePojo> {
 			}
 
 			return SUCCESS(Status.SUCCESS_NO_CONTENT);
+		} catch (final MalformedURLException e) {
+			return ERROR(Status.SERVER_ERROR_INTERNAL, new BundleException("Malformed update URL", BundleException.READ_ERROR, e), variant);
 		} catch (final Exception e) {
 			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
 		}

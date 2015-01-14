@@ -204,8 +204,8 @@ public class RestClientImpl implements RestClient {
 		final JSONObject state = new JSONObject();
 		state.put("state", 32);
 		state.put("options", options);
-		new ClientResource(Method.POST, baseUri.resolve(bundlePath + "/state"))
-				.post(state, BUNDLE_STATE_JSON);
+		new ClientResource(Method.PUT, baseUri.resolve(bundlePath + "/state"))
+				.put(state, BUNDLE_STATE_JSON);
 	}
 
 	/**
@@ -237,8 +237,8 @@ public class RestClientImpl implements RestClient {
 		final JSONObject state = new JSONObject();
 		state.put("state", 4);
 		state.put("options", options);
-		new ClientResource(Method.POST, baseUri.resolve(bundlePath + "/state"))
-				.post(state, BUNDLE_STATE_JSON);
+		new ClientResource(Method.PUT, baseUri.resolve(bundlePath + "/state"))
+				.put(state, BUNDLE_STATE_JSON);
 	}
 
 	/**

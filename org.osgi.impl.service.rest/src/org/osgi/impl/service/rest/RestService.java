@@ -76,25 +76,19 @@ public class RestService extends Application {
 		framework.attach("/bundles", BundlesResource.class);
 		framework.attach("/bundles/representations",
 				BundleRepresentationsResource.class);
-		framework.attach("/bundles/{filter}/representations",
-				BundleRepresentationsResource.class);
-		framework.attach("/bundles/{filter}", BundlesResource.class);
 
 		// a specific bundle
 		framework.attach("/bundle/{bundleId}", BundleResource.class);
 		framework.attach("/bundle/{bundleId}/state", BundleStateResource.class);
 		framework.attach("/bundle/{bundleId}/startlevel",
 				BundleStartLevelResource.class);
-		framework.attach("/bundle/{bundleId}/headers",
+		framework.attach("/bundle/{bundleId}/header",
 				BundleHeaderResource.class);
 
 		// available services
 		framework.attach("/services", ServiceListResource.class);
 		framework.attach("/services/representations",
 				ServiceRepresentationsResource.class);
-		framework.attach("/services/{filter}/representations",
-				ServiceRepresentationsResource.class);
-		framework.attach("/services/{filter}", ServiceListResource.class);
 
 		// a specific service
 		framework.attach("/service/{serviceId}", ServiceResource.class);

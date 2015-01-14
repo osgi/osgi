@@ -71,7 +71,7 @@ public class BundleStartLevelResource extends
 			final BundleStartLevel bsl = bundle.adapt(BundleStartLevel.class);
 			bsl.setStartLevel(sl.getStartLevel());
 
-			return SUCCESS(Status.SUCCESS_NO_CONTENT);
+			return getRepresentation(new BundleStartLevelPojo(bsl), variant);
 		} catch (final Exception e) {
 			return ERROR(Status.CLIENT_ERROR_BAD_REQUEST, e, variant);
 		}

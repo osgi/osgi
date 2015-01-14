@@ -70,11 +70,11 @@ public class BundleStateResource extends AbstractOSGiResource<BundleStatePojo> {
 					variant);
 
 			if (targetState.getState() == Bundle.ACTIVE) {
-				bundle.start();
+				bundle.start(targetState.getOptions());
 				return getRepresentation(
 						new BundleStatePojo(bundle.getState()), variant);
 			} else if (targetState.getState() == Bundle.RESOLVED) {
-				bundle.stop();
+				bundle.stop(targetState.getOptions());
 				return getRepresentation(
 						new BundleStatePojo(bundle.getState()), variant);
 			} else {

@@ -20,13 +20,14 @@ import org.osgi.framework.Bundle;
 import org.osgi.impl.service.rest.PojoReflector;
 import org.osgi.impl.service.rest.pojos.BundlePojoList;
 import org.restlet.data.MediaType;
-import org.restlet.data.Reference;
+import org.restlet.data.Parameter;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
 import org.restlet.resource.Get;
 import org.restlet.resource.Post;
+import org.restlet.util.Series;
 
 /**
  * The bundles resource, a list of all bundle paths.
@@ -45,7 +46,7 @@ public class BundlesResource extends AbstractOSGiResource<BundlePojoList> {
 	public Representation getBundles(final Variant variant) {
 		try {
 			final Representation rep = getRepresentation(new BundlePojoList(
-					getBundlesFromFilter("filter")), variant);
+					getBundles()), variant);
 			return rep;
 		} catch (final Exception e) {
 			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
@@ -60,8 +61,11 @@ public class BundlesResource extends AbstractOSGiResource<BundlePojoList> {
 				return installBundle(content.getText(), variant);
 			}
 
-			final Reference ref = variant.getLocationRef();
-			final String location = ref == null ? null : ref.toString();
+			@SuppressWarnings("unchecked")
+			Series<Parameter> headers = (Series<Parameter>)
+					getRequestAttributes().get("org.restlet.http.headers");
+			final String location =
+					headers.getFirstValue("Content-location");
 
 			if (location != null) {
 				if (getBundleContext().getBundle(location) != null) {
@@ -80,6 +84,7 @@ public class BundlesResource extends AbstractOSGiResource<BundlePojoList> {
 	}
 
 	public Representation installBundle(final String uri, final Variant variant) {
+		System.err.println("INSTALLATION URI IS " + uri);
 		try {
 			if (getBundleContext().getBundle(uri) != null) {
 				setStatus(Status.CLIENT_ERROR_CONFLICT);

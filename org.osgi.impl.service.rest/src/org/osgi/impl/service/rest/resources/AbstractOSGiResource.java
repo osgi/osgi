@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
@@ -35,6 +36,7 @@ import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.framework.Version;
+import org.osgi.framework.namespace.IdentityNamespace;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.impl.service.rest.PojoReflector;
@@ -59,15 +61,21 @@ import org.restlet.resource.ServerResource;
  */
 public class AbstractOSGiResource<T> extends ServerResource {
 
-	private static final String				number	= "([0-9]*)";
+	private static final String				number		= "([0-9]*)";
 
-	private static final String				MT_JSON	= "+json";
+	private static final String				MT_JSON		= "+json";
 
-	private static final String				MT_XML	= "+xml";
+	private static final String				MT_XML		= "+xml";
 
-	protected final static Representation	SUCCESS	= null;
+	private static final String				MT_BE		= "application/org.osgi.bundleexception";
 
-	protected final static Representation	ERROR	= null;
+	private static final MediaType			MT_BE_JSON	= new MediaType(MT_BE + MT_JSON);
+
+	private static final MediaType			MT_BE_XML	= new MediaType(MT_BE + MT_XML);
+
+	protected final static Representation	SUCCESS		= null;
+
+	protected final static Representation	ERROR		= null;
 
 	private final PojoReflector<T>			reflector;
 
@@ -97,6 +105,7 @@ public class AbstractOSGiResource<T> extends ServerResource {
 			final String bundleSymbolicNameKey, final String bundleVersionKey) {
 		final String id = (String) getRequest().getAttributes()
 				.get(bundleIdKey);
+
 		if (id != null) {
 			return getBundleContext().getBundle(Long.parseLong(id));
 		}
@@ -113,38 +122,65 @@ public class AbstractOSGiResource<T> extends ServerResource {
 		return null;
 	}
 
-	protected Bundle[] getBundlesFromFilter(final String filterKey)
+	protected Bundle[] getBundles()
 			throws InvalidSyntaxException {
 		final BundleContext context = getBundleContext();
 
-		final String filterStr = (String) getRequest().getAttributes().get(
-				filterKey);
-		if (filterStr == null) {
+		if (getQuery().isEmpty()) {
 			return context.getBundles();
 		}
-
-		final Filter filter = FrameworkUtil.createFilter(filterStr);
+		final Map<String, String> filterMap = getQuery().getValuesMap();
 
 		final Bundle[] bundles = context.getBundles();
-		final ArrayList<Bundle> result = new ArrayList<Bundle>();
-		for (final Bundle bundle : bundles) {
-			final BundleRevision rev = bundle.adapt(BundleRevision.class);
-			final List<Capability> caps = rev
-					.getCapabilities("osgi.wiring.bundle");
-			System.out.println(caps);
-			for (final Capability cap : caps) {
-				System.out.println("\t" + filter.matches(cap.getAttributes())
-						+ "\t" + cap);
-				System.out.println("\t\t" + cap.getAttributes());
-				System.out.println("\t\t" + cap.getDirectives());
-				if (filter.matches(cap.getAttributes())
-						|| filter.matches(cap.getDirectives())) {
-					result.add(bundle);
-					break;
-				}
-			}
+
+		final ArrayList<BundleRevision> workingSet = new ArrayList<BundleRevision>();
+		for (Bundle bundle : bundles) {
+			workingSet.add(bundle.adapt(BundleRevision.class));
 		}
-		return result.toArray(new Bundle[result.size()]);
+
+		for (final Map.Entry<String, String> filterDir : filterMap.entrySet()) {
+			final String namespace;
+			final Filter filter;
+			if (filterDir.getValue() == null) {
+				namespace = IdentityNamespace.IDENTITY_NAMESPACE;
+				filter = FrameworkUtil.createFilter(filterDir.getKey());
+			} else {
+				namespace = filterDir.getKey();
+				filter = FrameworkUtil.createFilter(filterDir.getValue());
+			}
+			
+			System.err.println("FILTER IS " + filter.toString());
+
+			final Iterator<BundleRevision> iter = workingSet.iterator();
+			bundleLoop: while (iter.hasNext()) {
+				final BundleRevision rev = iter.next();
+				final List<Capability> caps = rev
+						.getCapabilities(namespace);
+
+				for (final Capability cap : caps) {
+					System.err.println("TESTING CAP " + cap);
+					if (filter.matches(cap.getAttributes())) {
+						continue bundleLoop;
+					}
+				}
+				
+				// no match, remove
+				iter.remove();
+			}
+
+		}
+
+		if (workingSet.isEmpty()) {
+			return new Bundle[0];
+		}
+
+		final Bundle[] result = new Bundle[workingSet.size()];
+		int i = -1;
+		for (final BundleRevision rev : workingSet) {
+			result[++i] = rev.getBundle();
+		}
+
+		return result;
 	}
 
 	protected Bundle[] getBundleVersionsBySymbolicName(String key) {
@@ -184,7 +220,7 @@ public class AbstractOSGiResource<T> extends ServerResource {
 		}
 	}
 
-	protected Representation getRepresentation(final T bean,
+	protected Representation getRepresentation(final Object bean,
 			final Variant variant) throws IOException {
 		final Representation rep;
 		System.err.println("VARIANT MEDIA TYPE " + variant.getMediaType());
@@ -201,8 +237,18 @@ public class AbstractOSGiResource<T> extends ServerResource {
 			mt = getMediaType(MT_JSON);
 
 			if (bean instanceof Collection) {
-				final JSONArray arr = new JSONArray((Collection<?>) bean);
+				final Collection<Object> reprList = new ArrayList<Object>();
+				for (final Object o : (Collection<?>) bean) {
+					if (o instanceof String) {
+						reprList.add(o);
+					} else {
+						reprList.add(new JSONObject(o));
+					}
+				}
+				final JSONArray arr = new JSONArray(reprList);
+				System.err.println("JSON ARRAY IS " + arr);
 				rep = toRepresentation(arr, variant);
+				System.err.println("JSON REP IS " + rep.getText());
 			} else if (bean instanceof Map) {
 				rep = toRepresentation(new JSONObject((Map<?, ?>) bean),
 						variant);
@@ -247,16 +293,31 @@ public class AbstractOSGiResource<T> extends ServerResource {
 		t.printStackTrace();
 		if (t instanceof BundleException) {
 			setStatus(status);
+
 			try {
-				return toRepresentation(new BundleExceptionPojo(
-						(BundleException) t), variant);
+				final Representation rep;
+				final MediaType mt;
+
+				if (MediaType.APPLICATION_ALL_XML.includes(variant.getMediaType())) {
+					mt = MT_BE_XML;
+
+					throw new UnsupportedOperationException("TODO: "
+							+ variant.getMediaType().toString());
+				} else {
+					mt = MT_BE_JSON;
+					rep = getRepresentation(new BundleExceptionPojo(
+							(BundleException) t), new Variant(MediaType.APPLICATION_JSON));
+				}
+
+				rep.setMediaType(mt);
+				return rep;
 			} catch (final IOException ioe) {
 				// fallback
 			}
 		}
 
 		setStatus(status, t);
-		return null;
+		return ERROR;
 	}
 
 	protected Representation SUCCESS(final Status status) {
@@ -268,7 +329,7 @@ public class AbstractOSGiResource<T> extends ServerResource {
 	protected Representation ERROR(final Status status) {
 		setStatus(status);
 
-		return null;
+		return ERROR;
 	}
 
 }

@@ -43,8 +43,7 @@ public class BundleRepresentationsResource extends
 	public Representation getBundles(final Variant variant) {
 		try {
 			final Representation rep = getRepresentation(
-					new BundleRepresentationsList(getBundleContext()
-							.getBundles()), variant);
+					new BundleRepresentationsList(getBundles()), variant);
 			return rep;
 		} catch (final Exception e) {
 			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);

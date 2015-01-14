@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.Random;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.framework.Constants;
@@ -116,7 +115,7 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
   }
 
   protected String getBundleListURI(String filter) throws UnsupportedEncodingException {
-    return BUNDLE_LIST_URI + (filter == null ? "" : "?" + URLEncoder.encode(filter, "UTF-8"));
+		return BUNDLE_LIST_URI + (filter == null ? "" : "?osgi.identity=" + URLEncoder.encode(filter, "UTF-8"));
   }
 
   protected String getBundleRepresentationListURI(String filter) throws UnsupportedEncodingException {
@@ -221,7 +220,7 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
 
   protected String getFilter(String bundleSymbolicName) {
     //return "osgi.identity=(&(type=\"osgi.bundle\")(bundle-symbolic-name=\"" + bundleSymbolicName + "\"))";
-    return "osgi.identity=(&(type=osgi.bundle)(bundle-symbolic-name=" + bundleSymbolicName + "))";
+		return "(&(type=osgi.bundle)(osgi.identity=" + bundleSymbolicName + "))";
   }
 
   protected Bundle getBundle(String bundleSymbolicName) {

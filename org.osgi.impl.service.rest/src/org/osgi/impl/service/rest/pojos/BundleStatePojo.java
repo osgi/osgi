@@ -25,6 +25,8 @@ public final class BundleStatePojo {
 
 	private int	state;
 
+	private int	options;
+
 	public BundleStatePojo() {
 
 	}
@@ -39,6 +41,14 @@ public final class BundleStatePojo {
 
 	public int getState() {
 		return state;
+	}
+
+	public void setOptions(final int options) {
+		this.options = options;
+	}
+
+	public int getOptions() {
+		return options;
 	}
 
 }
