@@ -58,7 +58,15 @@ public class BundlesResource extends AbstractOSGiResource<BundlePojoList> {
 			final Variant variant) {
 		try {
 			if (MediaType.TEXT_PLAIN.equals(content.getMediaType())) {
-				return installBundle(content.getText(), variant);
+				final String uri = content.getText();
+				if (getBundleContext().getBundle(uri) != null) {
+					ERROR(Status.CLIENT_ERROR_CONFLICT);
+				}
+
+				final Bundle bundle = getBundleContext().installBundle(uri);
+
+				return new StringRepresentation("framework/bundle/"
+						+ bundle.getBundleId());
 			}
 
 			@SuppressWarnings("unchecked")
@@ -76,21 +84,6 @@ public class BundlesResource extends AbstractOSGiResource<BundlePojoList> {
 
 			final Bundle bundle = getBundleContext().installBundle(location,
 					content.getStream());
-			return new StringRepresentation("framework/bundle/"
-					+ bundle.getBundleId());
-		} catch (final Exception e) {
-			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
-		}
-	}
-
-	public Representation installBundle(final String uri, final Variant variant) {
-		try {
-			if (getBundleContext().getBundle(uri) != null) {
-				ERROR(Status.CLIENT_ERROR_CONFLICT);
-			}
-
-			final Bundle bundle = getBundleContext().installBundle(uri);
-
 			return new StringRepresentation("framework/bundle/"
 					+ bundle.getBundleId());
 		} catch (final Exception e) {

@@ -275,10 +275,8 @@ public class AbstractOSGiResource<T> extends ServerResource {
 
 	protected Representation ERROR(final Status status, final Throwable t,
 			final Variant variant) {
-		t.printStackTrace();
+		// t.printStackTrace();
 		if (t instanceof BundleException) {
-			setStatus(status);
-
 			try {
 				final Representation rep;
 				final MediaType mt;
@@ -294,7 +292,9 @@ public class AbstractOSGiResource<T> extends ServerResource {
 							(BundleException) t), new Variant(MediaType.APPLICATION_JSON));
 				}
 
+				setStatus(status);
 				rep.setMediaType(mt);
+
 				return rep;
 			} catch (final IOException ioe) {
 				// fallback
