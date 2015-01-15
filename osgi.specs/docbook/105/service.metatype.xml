@@ -1260,7 +1260,7 @@ Password <phrase role="symbol">↔</phrase> <xref
     </section>
 
     <section xml:id="i1492258">
-      <title>Use of the Designate Element</title>
+      <title>Designate Element</title>
 
       <para>For the MetaType Service, the <code>Designate</code> definition is
       used to declare the available PIDs and factory PIDs; the Attribute
@@ -1372,19 +1372,18 @@ sex=Sex
 male=Male
 female=Female</programlisting>
     </section>
-  </section>
 
-  <section>
-    <title>Object</title>
+    <section>
+      <title>Object Element</title>
 
-    <para>The <code>OCD</code> element can be used to describe the possible
-    contents of a <code>Dictionary</code> object. In this case, the attribute
-    name is the key. The <code>Object</code> element can be used to assign a
-    value to a Dictionary object.</para>
+      <para>The <code>OCD</code> element can be used to describe the possible
+      contents of a <code>Dictionary</code> object. In this case, the
+      attribute name is the key. The <code>Object</code> element can be used
+      to assign a value to a Dictionary object.</para>
 
-    <para>For example:</para>
+      <para>For example:</para>
 
-    <programlisting>&lt;Designate pid="com.acme.b"&gt;
+      <programlisting>&lt;Designate pid="com.acme.b"&gt;
   &lt;Object ocdref="b"&gt;
     &lt;Attribute adref="foo" content="Zaphod Beeblebrox"/&gt;
     &lt;Attribute adref="bar"&gt;
@@ -1396,10 +1395,11 @@ female=Female</programlisting>
     &lt;/Attribute&gt;
   &lt;/Object&gt;
 &lt;/Designate&gt;</programlisting>
+    </section>
   </section>
 
   <section xml:id="i1502383">
-    <title>XML Schema</title>
+    <title>Meta Type Resource XML Schema</title>
 
     <programlisting role="pgwide"><xi:include encoding="utf-8"
         href="../../generated/xmlns/metatype/v1.3.0/metatype.xsd" parse="text"/></programlisting>
