@@ -35,7 +35,6 @@ import org.osgi.framework.Filter;
 import org.osgi.framework.FrameworkUtil;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
-import org.osgi.framework.Version;
 import org.osgi.framework.namespace.IdentityNamespace;
 import org.osgi.framework.startlevel.FrameworkStartLevel;
 import org.osgi.framework.wiring.BundleRevision;
@@ -75,7 +74,7 @@ public class AbstractOSGiResource<T> extends ServerResource {
 
 	protected final static Representation	SUCCESS		= null;
 
-	protected final static Representation	ERROR		= null;
+	private final static Representation		ERROR		= null;
 
 	private final PojoReflector<T>			reflector;
 
@@ -101,23 +100,12 @@ public class AbstractOSGiResource<T> extends ServerResource {
 		return getBundleContext().getBundle(0).adapt(FrameworkStartLevel.class);
 	}
 
-	protected Bundle getBundleFromKeys(final String bundleIdKey,
-			final String bundleSymbolicNameKey, final String bundleVersionKey) {
+	protected Bundle getBundleFromKeys(final String bundleIdKey) {
 		final String id = (String) getRequest().getAttributes()
 				.get(bundleIdKey);
 
 		if (id != null) {
 			return getBundleContext().getBundle(Long.parseLong(id));
-		}
-		final String symbolicName = (String) getRequest().getAttributes().get(
-				bundleSymbolicNameKey);
-		final Version version = new Version((String) getRequest()
-				.getAttributes().get(bundleVersionKey));
-		for (final Bundle bundle : getBundleContext().getBundles()) {
-			if (bundle.getSymbolicName().equals(symbolicName)
-					&& bundle.getVersion().equals(version)) {
-				return bundle;
-			}
 		}
 		return null;
 	}
@@ -148,8 +136,6 @@ public class AbstractOSGiResource<T> extends ServerResource {
 				namespace = filterDir.getKey();
 				filter = FrameworkUtil.createFilter(filterDir.getValue());
 			}
-			
-			System.err.println("FILTER IS " + filter.toString());
 
 			final Iterator<BundleRevision> iter = workingSet.iterator();
 			bundleLoop: while (iter.hasNext()) {
@@ -158,12 +144,11 @@ public class AbstractOSGiResource<T> extends ServerResource {
 						.getCapabilities(namespace);
 
 				for (final Capability cap : caps) {
-					System.err.println("TESTING CAP " + cap);
 					if (filter.matches(cap.getAttributes())) {
 						continue bundleLoop;
 					}
 				}
-				
+
 				// no match, remove
 				iter.remove();
 			}
@@ -322,13 +307,21 @@ public class AbstractOSGiResource<T> extends ServerResource {
 
 	protected Representation SUCCESS(final Status status) {
 		setStatus(status);
-
 		return SUCCESS;
 	}
 
 	protected Representation ERROR(final Status status) {
 		setStatus(status);
+		return ERROR;
+	}
 
+	protected Representation ERROR(final Status status, final Exception e) {
+		setStatus(status, e);
+		return ERROR;
+	}
+
+	protected Representation ERROR(final Status status, final String s) {
+		setStatus(status, s);
 		return ERROR;
 	}
 

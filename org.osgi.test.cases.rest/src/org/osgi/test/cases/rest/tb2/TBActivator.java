@@ -19,8 +19,7 @@ public class TBActivator implements BundleActivator {
   }
 
   public void stop(BundleContext context) throws Exception {
-    // TODO Auto-generated method stub
-
+		throw new RuntimeException("This bundle activator causes and exception in stop()");
   }
 
 }

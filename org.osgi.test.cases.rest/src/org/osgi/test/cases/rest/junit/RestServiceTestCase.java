@@ -229,7 +229,7 @@ public class RestServiceTestCase extends RestTestUtils {
     assertNull("Uninstall already uninstalled bundle " + tb1Bundle.getBundleId() + " :", result);
 
     // stop tb2 bundle throws Exception
-    tb2Bundle.start();
+	tb2Bundle.start();
     result = uninstallBundle(getBundleURI(tb2Bundle.getBundleId()), HttpURLConnection.HTTP_INTERNAL_ERROR);
     assertBundleException(result, "Uninstall bundle with error in stop method " + tb2Bundle.getBundleId());
   }
@@ -476,8 +476,7 @@ public class RestServiceTestCase extends RestTestUtils {
     for (int k = 0; k < jsonServiceList.length(); k++) {
       serviceURIs.add(jsonServiceList.getString(k));
     }
-
-		System.err.println(serviceURIs);
+			System.err.println(serviceURIs);
 
     for (ServiceReference<?> serviceRef : serviceRefs) {
       String serviceURI = getServiceURI(serviceRef.getProperty(Constants.SERVICE_ID).toString());

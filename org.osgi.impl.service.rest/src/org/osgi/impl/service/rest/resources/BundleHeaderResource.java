@@ -18,6 +18,7 @@ package org.osgi.impl.service.rest.resources;
 
 import java.util.List;
 import java.util.Map;
+import org.osgi.impl.service.rest.RestService;
 import org.restlet.data.Language;
 import org.restlet.data.MediaType;
 import org.restlet.data.Preference;
@@ -51,8 +52,7 @@ public class BundleHeaderResource extends
 					|| acceptedLanguages.isEmpty() ? null : acceptedLanguages
 					.get(0).getMetadata().toString();
 
-			final org.osgi.framework.Bundle bundle = getBundleFromKeys(
-					"bundleId", "bundleSymbolicName", "bundleVersion");
+			final org.osgi.framework.Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);
 			if (bundle == null) {
 				return ERROR(Status.CLIENT_ERROR_NOT_FOUND);
 			}

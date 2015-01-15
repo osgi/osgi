@@ -18,6 +18,7 @@ package org.osgi.impl.service.rest.resources;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.rest.PojoReflector;
+import org.osgi.impl.service.rest.RestService;
 import org.osgi.impl.service.rest.pojos.ServiceRepresentationList;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -43,8 +44,7 @@ public class ServiceRepresentationsResource extends
 	@Get("json|txt")
 	public Representation doGet(final Representation none, final Variant variant) {
 		try {
-			final String filter = (String) getRequest().getAttributes().get(
-					"filter");
+			final String filter = getQuery().getFirstValue(RestService.FILTER_ID_KEY);
 			final ServiceReference<?>[] srefs = getBundleContext()
 					.getAllServiceReferences(null, filter);
 			return getRepresentation(new ServiceRepresentationList(srefs), variant);

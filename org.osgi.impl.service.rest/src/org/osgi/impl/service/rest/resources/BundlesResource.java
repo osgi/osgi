@@ -69,8 +69,7 @@ public class BundlesResource extends AbstractOSGiResource<BundlePojoList> {
 
 			if (location != null) {
 				if (getBundleContext().getBundle(location) != null) {
-					setStatus(Status.CLIENT_ERROR_CONFLICT);
-					return null;
+					return ERROR(Status.CLIENT_ERROR_CONFLICT);
 				}
 			}
 
@@ -84,11 +83,9 @@ public class BundlesResource extends AbstractOSGiResource<BundlePojoList> {
 	}
 
 	public Representation installBundle(final String uri, final Variant variant) {
-		System.err.println("INSTALLATION URI IS " + uri);
 		try {
 			if (getBundleContext().getBundle(uri) != null) {
-				setStatus(Status.CLIENT_ERROR_CONFLICT);
-				return null;
+				ERROR(Status.CLIENT_ERROR_CONFLICT);
 			}
 
 			final Bundle bundle = getBundleContext().installBundle(uri);

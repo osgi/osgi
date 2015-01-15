@@ -52,6 +52,12 @@ public class RestService extends Application {
 
 	public static final String													TRACKER_ATTR		= "tracker";
 
+	public static final String													SERVICE_ID_KEY		= "serviceId";
+
+	public static final String													FILTER_ID_KEY		= "filter";
+
+	public static final String													BUNDLE_ID_KEY		= "bundleId";
+
 	private final BundleContext													context;
 
 	private ServiceTracker<RestApiExtension, Class<? extends ServerResource>>	tracker;
@@ -78,11 +84,11 @@ public class RestService extends Application {
 				BundleRepresentationsResource.class);
 
 		// a specific bundle
-		framework.attach("/bundle/{bundleId}", BundleResource.class);
-		framework.attach("/bundle/{bundleId}/state", BundleStateResource.class);
-		framework.attach("/bundle/{bundleId}/startlevel",
+		framework.attach("/bundle/{" + BUNDLE_ID_KEY + "}", BundleResource.class);
+		framework.attach("/bundle/{" + BUNDLE_ID_KEY + "}/state", BundleStateResource.class);
+		framework.attach("/bundle/{" + BUNDLE_ID_KEY + "}/startlevel",
 				BundleStartLevelResource.class);
-		framework.attach("/bundle/{bundleId}/header",
+		framework.attach("/bundle/{" + BUNDLE_ID_KEY + "}/header",
 				BundleHeaderResource.class);
 
 		// available services
@@ -91,7 +97,7 @@ public class RestService extends Application {
 				ServiceRepresentationsResource.class);
 
 		// a specific service
-		framework.attach("/service/{serviceId}", ServiceResource.class);
+		framework.attach("/service/" + SERVICE_ID_KEY + "}", ServiceResource.class);
 
 		// enable the extension mechanism
 		final Router extensions = new Router(getContext());

@@ -18,6 +18,7 @@ package org.osgi.impl.service.rest.resources;
 
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.rest.PojoReflector;
+import org.osgi.impl.service.rest.RestService;
 import org.osgi.impl.service.rest.pojos.ServicePojo;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -41,15 +42,13 @@ public class ServiceResource extends AbstractOSGiResource<ServicePojo> {
 	@Get("json|txt")
 	public Representation doGet(final Representation none, final Variant variant) {
 		try {
-			final ServiceReference<?> sref = getServiceReferenceFromKey("serviceId");
+			final ServiceReference<?> sref = getServiceReferenceFromKey(RestService.SERVICE_ID_KEY);
 			if (sref == null) {
-				setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-				return null;
+				return ERROR(Status.CLIENT_ERROR_NOT_FOUND);
 			}
 			return getRepresentation(new ServicePojo(sref), variant);
 		} catch (final IllegalArgumentException e) {
-			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-			return null;
+			return ERROR(Status.CLIENT_ERROR_NOT_FOUND);
 		} catch (final Exception e) {
 			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
 		}

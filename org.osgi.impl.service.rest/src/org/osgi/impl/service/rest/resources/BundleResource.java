@@ -21,6 +21,7 @@ import java.net.URL;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleException;
 import org.osgi.impl.service.rest.PojoReflector;
+import org.osgi.impl.service.rest.RestService;
 import org.osgi.impl.service.rest.pojos.BundlePojo;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -46,8 +47,7 @@ public class BundleResource extends AbstractOSGiResource<BundlePojo> {
 	@Get("json|txt")
 	public Representation doGet(final Representation none, final Variant variant) {
 		try {
-			final Bundle bundle = getBundleFromKeys("bundleId",
-					"bundleSymbolicName", "bundleVersion");
+			final Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);
 			if (bundle == null) {
 				return ERROR(Status.CLIENT_ERROR_NOT_FOUND);
 			}
@@ -60,8 +60,7 @@ public class BundleResource extends AbstractOSGiResource<BundlePojo> {
 	@Delete
 	public Representation delete(final String none, final Variant variant) {
 		try {
-			final org.osgi.framework.Bundle bundle = getBundleFromKeys(
-					"bundleId", "bundleSymbolicName", "bundleVersion");
+			final org.osgi.framework.Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);
 			if (bundle == null) {
 				return ERROR(Status.CLIENT_ERROR_NOT_FOUND);
 			}
@@ -69,6 +68,7 @@ public class BundleResource extends AbstractOSGiResource<BundlePojo> {
 		} catch (final Exception e) {
 			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
 		}
+
 		return SUCCESS;
 	}
 
@@ -76,8 +76,7 @@ public class BundleResource extends AbstractOSGiResource<BundlePojo> {
 	public Representation doPutStream(final Representation content,
 			final Variant variant) {
 		try {
-			final org.osgi.framework.Bundle bundle = getBundleFromKeys(
-					"bundleId", "bundleSymbolicName", "bundleVersion");
+			final org.osgi.framework.Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);
 			if (bundle == null) {
 				return ERROR(Status.CLIENT_ERROR_NOT_FOUND);
 			}
@@ -93,8 +92,7 @@ public class BundleResource extends AbstractOSGiResource<BundlePojo> {
 	@Put("txt")
 	public Representation doPut(final String param, final Variant variant) {
 		try {
-			final org.osgi.framework.Bundle bundle = getBundleFromKeys(
-					"bundleId", "bundleSymbolicName", "bundleVersion");
+			final org.osgi.framework.Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);
 			if (bundle == null) {
 				return ERROR(Status.CLIENT_ERROR_NOT_FOUND);
 			}

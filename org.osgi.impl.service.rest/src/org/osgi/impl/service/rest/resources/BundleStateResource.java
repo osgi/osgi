@@ -18,6 +18,7 @@ package org.osgi.impl.service.rest.resources;
 
 import org.osgi.framework.Bundle;
 import org.osgi.impl.service.rest.PojoReflector;
+import org.osgi.impl.service.rest.RestService;
 import org.osgi.impl.service.rest.pojos.BundleStatePojo;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -43,8 +44,7 @@ public class BundleStateResource extends AbstractOSGiResource<BundleStatePojo> {
 	public Representation doGet(final Representation value,
 			final Variant variant) {
 		try {
-			final Bundle bundle = getBundleFromKeys("bundleId",
-					"bundleSymbolicName", "bundleVersion");
+			final Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);
 			if (bundle == null) {
 				setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 				return null;
@@ -60,16 +60,19 @@ public class BundleStateResource extends AbstractOSGiResource<BundleStatePojo> {
 	public Representation doPut(final Representation value,
 			final Variant variant) {
 		try {
-			final Bundle bundle = getBundleFromKeys("bundleId",
-					"bundleSymbolicName", "bundleVersion");
+			final Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);
 			if (bundle == null) {
 				setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 				return null;
 			}
+
 			final BundleStatePojo targetState = fromRepresentation(value,
 					variant);
 
-			if (targetState.getState() == Bundle.ACTIVE) {
+			if (bundle.getState() == Bundle.UNINSTALLED) {
+				return ERROR(Status.CLIENT_ERROR_PRECONDITION_FAILED, "target state "
+						+ targetState.getState() + " not reachable from the current state");
+			} else if (targetState.getState() == Bundle.ACTIVE) {
 				bundle.start(targetState.getOptions());
 				return getRepresentation(
 						new BundleStatePojo(bundle.getState()), variant);
@@ -78,9 +81,8 @@ public class BundleStateResource extends AbstractOSGiResource<BundleStatePojo> {
 				return getRepresentation(
 						new BundleStatePojo(bundle.getState()), variant);
 			} else {
-				setStatus(Status.CLIENT_ERROR_BAD_REQUEST, "target state "
+				return ERROR(Status.CLIENT_ERROR_BAD_REQUEST, "target state "
 						+ targetState.getState() + " not supported");
-				return ERROR;
 			}
 		} catch (final Exception e) {
 			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);

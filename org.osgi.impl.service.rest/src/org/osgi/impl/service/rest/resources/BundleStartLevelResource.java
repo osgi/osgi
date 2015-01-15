@@ -19,6 +19,7 @@ package org.osgi.impl.service.rest.resources;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import org.osgi.impl.service.rest.PojoReflector;
+import org.osgi.impl.service.rest.RestService;
 import org.osgi.impl.service.rest.pojos.BundleStartLevelPojo;
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -45,8 +46,7 @@ public class BundleStartLevelResource extends
 	public Representation doGet(final Representation value,
 			final Variant variant) {
 		try {
-			final Bundle bundle = getBundleFromKeys("bundleId",
-					"bundleSymbolicName", "bundleVersion");
+			final Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);
 			if (bundle == null) {
 				return ERROR(Status.CLIENT_ERROR_NOT_FOUND);
 			}
@@ -62,8 +62,7 @@ public class BundleStartLevelResource extends
 	public Representation doPut(final Representation value,
 			final Variant variant) {
 		try {
-			final Bundle bundle = getBundleFromKeys("bundleId",
-					"bundleSymbolicName", "bundleVersion");
+			final Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);
 			if (bundle == null) {
 				return ERROR(Status.CLIENT_ERROR_NOT_FOUND);
 			}
