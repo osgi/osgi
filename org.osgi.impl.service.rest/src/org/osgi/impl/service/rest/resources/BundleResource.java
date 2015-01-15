@@ -69,7 +69,7 @@ public class BundleResource extends AbstractOSGiResource<BundlePojo> {
 			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
 		}
 
-		return SUCCESS;
+		return SUCCESS(Status.SUCCESS_NO_CONTENT);
 	}
 
 	@Put

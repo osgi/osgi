@@ -31,12 +31,13 @@ import org.osgi.framework.startlevel.dto.FrameworkStartLevelDTO;
 import org.osgi.service.rest.client.RestClient;
 import org.restlet.data.MediaType;
 import org.restlet.data.Method;
-import org.restlet.data.Reference;
 import org.restlet.data.Status;
+import org.restlet.engine.header.Header;
 import org.restlet.ext.json.JsonRepresentation;
 import org.restlet.representation.Representation;
 import org.restlet.resource.ClientResource;
 import org.restlet.resource.ResourceException;
+import org.restlet.util.Series;
 
 /**
  * Implementation of the (Java) REST client
@@ -320,8 +321,19 @@ public class RestClientImpl implements RestClient {
 			throws Exception {
 		final ClientResource res = new ClientResource(Method.POST,
 				baseUri.resolve("framework/bundles"));
-		res.getRequest().getAttributes()
-				.put("message.entity.locationRef", new Reference(location));
+		@SuppressWarnings("unchecked")
+		Series<Header> headers = (Series<Header>) res.getRequestAttributes().get("org.restlet.http.headers");
+		if (headers == null) {
+			headers = new Series<Header>(Header.class);
+			res.getRequestAttributes().put("org.restlet.http.headers", headers);
+		}
+		headers.add("Content-Location", location);
+
+		/*
+		 * does not work in the current RESTLET version:
+		 * res.getRequest().getAttributes() .put("message.entity.locationRef",
+		 * new Reference(location));
+		 */
 
 		final Representation repr = res.post(in);
 
@@ -425,7 +437,7 @@ public class RestClientImpl implements RestClient {
 			throws Exception {
 		final Representation repr = new ClientResource(Method.GET,
 				baseUri.resolve(servicePath)).get();
-		
+
 		return DTOReflector.getDTO(ServiceReferenceDTO.class,
 				new JsonRepresentation(repr).getJsonObject());
 	}

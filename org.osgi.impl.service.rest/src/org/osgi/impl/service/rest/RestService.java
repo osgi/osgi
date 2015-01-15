@@ -97,7 +97,7 @@ public class RestService extends Application {
 				ServiceRepresentationsResource.class);
 
 		// a specific service
-		framework.attach("/service/" + SERVICE_ID_KEY + "}", ServiceResource.class);
+		framework.attach("/service/{" + SERVICE_ID_KEY + "}", ServiceResource.class);
 
 		// enable the extension mechanism
 		final Router extensions = new Router(getContext());

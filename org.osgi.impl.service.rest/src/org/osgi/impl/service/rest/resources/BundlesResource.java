@@ -20,8 +20,8 @@ import org.osgi.framework.Bundle;
 import org.osgi.impl.service.rest.PojoReflector;
 import org.osgi.impl.service.rest.pojos.BundlePojoList;
 import org.restlet.data.MediaType;
-import org.restlet.data.Parameter;
 import org.restlet.data.Status;
+import org.restlet.engine.header.Header;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
@@ -62,13 +62,14 @@ public class BundlesResource extends AbstractOSGiResource<BundlePojoList> {
 			}
 
 			@SuppressWarnings("unchecked")
-			Series<Parameter> headers = (Series<Parameter>)
+			Series<Header> headers = (Series<Header>)
 					getRequestAttributes().get("org.restlet.http.headers");
 			final String location =
-					headers.getFirstValue("Content-location");
+					headers.getFirstValue("Content-Location");
 
 			if (location != null) {
 				if (getBundleContext().getBundle(location) != null) {
+					// conflict detected
 					return ERROR(Status.CLIENT_ERROR_CONFLICT);
 				}
 			}
