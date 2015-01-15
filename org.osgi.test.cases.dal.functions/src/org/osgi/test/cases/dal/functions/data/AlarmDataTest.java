@@ -202,6 +202,24 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 		}
 	}
 
+	/**
+	 * Checks {@link AlarmData#toString()}.
+	 */
+	public void testToString() {
+		AlarmData alarmData = new AlarmData(
+				System.currentTimeMillis(),
+				new HashMap(),
+				AlarmData.SEVERITY_UNDEFINED,
+				AlarmData.TYPE_ACCESS_CONTROL);
+		assertNotNull("There is no string representation of the alarm data.", alarmData.toString());
+		alarmData = new AlarmData(
+				Long.MIN_VALUE,
+				null,
+				AlarmData.SEVERITY_MAJOR,
+				Integer.MIN_VALUE);
+		assertNotNull("There is no string representation of the alarm data.", alarmData.toString());
+	}
+
 	private void checkInvalidFieldType(Map fields) {
 		try {
 			new AlarmData(fields);

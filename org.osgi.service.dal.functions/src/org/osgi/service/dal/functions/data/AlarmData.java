@@ -275,4 +275,29 @@ public class AlarmData extends FunctionData {
 		}
 		return Comparator.compare(this.severity, other.severity);
 	}
+
+	/**
+	 * Returns the string representation of this alarm data.
+	 *
+	 * @return The string representation of this alarm data.
+	 */
+	public String toString() {
+		return getClass().getName() + " [severity=" + getSeverityAsString() + ", type=" + type +
+				", timestamp=" + super.getTimestamp() + ']';
+	}
+
+	private String getSeverityAsString() {
+		switch (this.severity) {
+			case SEVERITY_UNDEFINED :
+				return "undefined";
+			case SEVERITY_MINOR :
+				return "minor";
+			case SEVERITY_MAJOR :
+				return "major";
+			case SEVERITY_CRITICAL :
+				return "critical";
+			default :
+				throw new IllegalStateException("Unknown severity: " + this.severity);
+		}
+	}
 }

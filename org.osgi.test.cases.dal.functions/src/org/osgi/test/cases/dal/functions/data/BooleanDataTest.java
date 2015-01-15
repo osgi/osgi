@@ -190,6 +190,22 @@ public final class BooleanDataTest extends AbstractFunctionTest {
 		}
 	}
 
+	/**
+	 * Checks {@link BooleanData#toString()}.
+	 */
+	public void testToString() {
+		BooleanData booleanData = new BooleanData(
+				System.currentTimeMillis(),
+				new HashMap(),
+				true);
+		assertNotNull("There is no string representation of the boolean data.", booleanData.toString());
+		booleanData = new BooleanData(
+				Long.MIN_VALUE,
+				null,
+				false);
+		assertNotNull("There is no string representation of the boolean data.", booleanData.toString());
+	}
+
 	private void checkInvalidFieldType(Map fields) {
 		try {
 			new BooleanData(fields);

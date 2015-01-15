@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import org.osgi.service.dal.FunctionData;
+import org.osgi.service.dal.SIUnits;
 import org.osgi.service.dal.functions.data.LevelData;
 import org.osgi.test.cases.dal.functions.AbstractFunctionTest;
 
@@ -202,6 +203,31 @@ public final class LevelDataTest extends AbstractFunctionTest {
 		} catch (NullPointerException npe) { // NOPMD
 			// go ahead, it's expected
 		}
+
+		try {
+			new LevelData(System.currentTimeMillis(), new HashMap(), null, SIUnits.AMPERE);
+			fail("The level data is built with null level.");
+		} catch (NullPointerException npe) { // NOPMD
+			// go ahead, it's expected
+		}
+	}
+
+	/**
+	 * Checks {@link LevelData#toString()}.
+	 */
+	public void testToString() {
+		LevelData levelData = new LevelData(
+				System.currentTimeMillis(),
+				new HashMap(),
+				new BigDecimal("1.00001"),
+				SIUnits.AMPERE);
+		assertNotNull("There is no string representation of the level data.", levelData.toString());
+		levelData = new LevelData(
+				System.currentTimeMillis(),
+				null,
+				new BigDecimal("1.00001"),
+				null);
+		assertNotNull("There is no string representation of the level data.", levelData.toString());
 	}
 
 	private void checkInvalidFieldType(Map fields) {

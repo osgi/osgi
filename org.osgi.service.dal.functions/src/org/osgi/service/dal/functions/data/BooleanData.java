@@ -158,4 +158,13 @@ public class BooleanData extends FunctionData {
 		}
 		return Comparator.compare(this.value, ((BooleanData) o).value);
 	}
+
+	/**
+	 * Returns the string representation of this boolean data.
+	 *
+	 * @return The string representation of this boolean data.
+	 */
+	public String toString() {
+		return getClass().getName() + " [value=" + value + ", timestamp=" + super.getTimestamp() + ']';
+	}
 }

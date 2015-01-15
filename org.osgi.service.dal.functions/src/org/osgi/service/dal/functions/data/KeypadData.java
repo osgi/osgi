@@ -321,6 +321,28 @@ public class KeypadData extends FunctionData {
 		return Comparator.compare(this.keyName, other.keyName);
 	}
 
+	/**
+	 * Returns the string representation of this keypad data.
+	 *
+	 * @return The string representation of this keypad data.
+	 */
+	public String toString() {
+		return getClass().getName() + " [type=" + getTypeAsString() +
+				", subType=" + subType + ", keyCode=" + keyCode +
+				", keyName=" + keyName + ", timestamp=" + super.getTimestamp() + "]";
+	}
+
+	private String getTypeAsString() {
+		switch (this.type) {
+			case TYPE_PRESSED :
+				return "pressed";
+			case TYPE_RELEASED :
+				return "released";
+			default :
+				throw new IllegalStateException("Unknow type: " + this.type);
+		}
+	}
+
 	/*
 	 * Validates the instance consistency.
 	 */

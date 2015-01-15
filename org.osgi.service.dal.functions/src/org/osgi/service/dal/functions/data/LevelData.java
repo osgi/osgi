@@ -87,10 +87,15 @@ public class LevelData extends FunctionData {
 	 * @param metadata The data metadata optional field.
 	 * @param level The level value mandatory field.
 	 * @param unit The data unit optional field.
+	 *
+	 * @throws NullPointerException If {@code level} is {@code null}.
 	 */
 	public LevelData(long timestamp, Map metadata, BigDecimal level, String unit) {
 		super(timestamp, metadata);
 		this.level = level;
+		if (null == this.level) {
+			throw new NullPointerException("Level is null.");
+		}
 		this.unit = unit;
 	}
 
@@ -198,5 +203,15 @@ public class LevelData extends FunctionData {
 			return result;
 		}
 		return Comparator.compare(this.unit, other.unit);
+	}
+
+	/**
+	 * Returns the string representation of this level data.
+	 *
+	 * @return The string representation of this level data.
+	 */
+	public String toString() {
+		return getClass().getName() + " [level=" + level + ", unit=" + unit +
+				", timestamp=" + super.getTimestamp() + "]";
 	}
 }

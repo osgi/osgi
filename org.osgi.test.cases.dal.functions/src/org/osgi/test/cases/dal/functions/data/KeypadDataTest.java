@@ -361,6 +361,28 @@ public final class KeypadDataTest extends AbstractFunctionTest {
 		checkInvalidSubtype(KeypadData.TYPE_RELEASED, KeypadData.SUB_TYPE_PRESSED_DOUBLE_LONG);
 	}
 
+	/**
+	 * Checks {@link KeypadData#toString()}.
+	 */
+	public void testToString() {
+		KeypadData keypadData = new KeypadData(
+				System.currentTimeMillis(),
+				new HashMap(),
+				KeypadData.TYPE_PRESSED,
+				KeypadData.SUB_TYPE_PRESSED_LONG,
+				Integer.MIN_VALUE,
+				"test-key-name");
+		assertNotNull("There is no string representation of the keypad data.", keypadData.toString());
+		keypadData = new KeypadData(
+				Long.MIN_VALUE,
+				null,
+				KeypadData.TYPE_PRESSED,
+				Integer.MIN_VALUE,
+				Integer.MIN_VALUE,
+				null);
+		assertNotNull("There is no string representation of the keypad data.", keypadData.toString());
+	}
+
 	private void checkInvalidSubtype(int type, int subType) {
 		try {
 			new KeypadData(
