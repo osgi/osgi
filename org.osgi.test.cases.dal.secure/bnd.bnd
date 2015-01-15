@@ -1,9 +1,10 @@
 # Set javac settings from JDT prefs
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
-Export-Package: org.osgi.test.support.step;-noimport:=true
+Export-Package: org.osgi.test.support.step;-noimport:=true;-split-package:=first
 
-Conditional-Package: org.osgi.test.support.*
+Conditional-Package: org.osgi.test.support.*, \
+	org.osgi.test.cases.dal.step.*
 
 Private-Package	= \
 	${p}.*
@@ -12,8 +13,9 @@ Test-Cases		= \
 	${testcases}
 
 -buildpath		= \
-	org.osgi.test.support;				version=latest, \
-	org.osgi.service.dal;				version=latest, \
+	org.osgi.test.support;	version=latest, \
+	org.osgi.test.cases.dal;version=latest, \
+	org.osgi.service.dal;		version=latest, \
 	osgi.core;							version=4.2, \
 	ee.minimum;							version=1.2, \
 	${junit}

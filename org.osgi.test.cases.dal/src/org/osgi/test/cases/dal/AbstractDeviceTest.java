@@ -14,8 +14,8 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.dal.Device;
 import org.osgi.service.dal.Function;
+import org.osgi.test.cases.dal.step.TestStepDeviceProxy;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-import org.osgi.test.support.step.TestStepProxy;
 
 /**
  * Common class for all Device Abstraction Layer TCs. It contains some helper
@@ -31,7 +31,7 @@ public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 	/**
 	 * The manual test steps are sent to the test step proxy.
 	 */
-	protected TestStepProxy			testStepProxy;
+	protected TestStepDeviceProxy	testStepProxy;
 
 	/**
 	 * initializes the listeners and the test step proxy.
@@ -40,7 +40,7 @@ public abstract class AbstractDeviceTest extends DefaultTestBundleControl {
 	 */
 	protected void setUp() throws Exception { // NOPMD
 		super.setUp();
-		this.testStepProxy = new TestStepProxy(super.getContext());
+		this.testStepProxy = new TestStepDeviceProxy(super.getContext());
 		this.deviceServiceListener = new TestServiceListener(
 				super.getContext(), TestServiceListener.DEVICE_FILTER);
 	}

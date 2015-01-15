@@ -23,8 +23,8 @@ import org.osgi.service.dal.FunctionEvent;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.data.BooleanData;
 import org.osgi.service.dal.functions.data.LevelData;
+import org.osgi.test.cases.dal.step.TestStepDeviceProxy;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-import org.osgi.test.support.step.TestStepProxy;
 
 /**
  * Common class for all Device Abstraction Layer function TCs. It contains some
@@ -35,7 +35,7 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 	/**
 	 * The manual test steps are sent to the test step proxy.
 	 */
-	protected TestStepProxy	testStepProxy;
+	protected TestStepDeviceProxy	testStepProxy;
 
 	/**
 	 * Initializes the test step proxy.
@@ -44,7 +44,7 @@ public abstract class AbstractFunctionTest extends DefaultTestBundleControl {
 	 */
 	protected void setUp() throws Exception { // NOPMD
 		super.setUp();
-		this.testStepProxy = new TestStepProxy(super.getContext());
+		this.testStepProxy = new TestStepDeviceProxy(super.getContext());
 	}
 
 	/**

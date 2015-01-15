@@ -22,19 +22,19 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.dal.Device;
 import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.DevicePermission;
+import org.osgi.test.cases.dal.step.TestStepDeviceProxy;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
-import org.osgi.test.support.step.TestStepProxy;
 
 /**
  * Test class validates the device operations and properties.
  */
 public class DeviceSecureTest extends DefaultTestBundleControl {
 
-	private TestStepProxy	testStepProxy;
+	private TestStepDeviceProxy	testStepProxy;
 
 	protected void setUp() throws Exception { // NOPMD
 		super.setUp();
-		this.testStepProxy = new TestStepProxy(super.getContext());
+		this.testStepProxy = new TestStepDeviceProxy(super.getContext());
 	}
 
 	protected void tearDown() throws Exception { // NOPMD

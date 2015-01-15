@@ -1,14 +1,15 @@
 # Set javac settings from JDT prefs
 -include: ${project.workspace}/cnf/eclipse/jdt.bnd
 
-Export-Package: org.osgi.test.support.step;-noimport:=true
+Export-Package: org.osgi.test.support.step;-noimport:=true, \
+ ${p}.step.*;-noimport:=true
 
 Conditional-Package: org.osgi.test.support.*
 
 DynamicImport-Package : *
 
 Private-Package	= \
-	${p}.*
+	${p}
 
 Test-Cases		= \
 	${testcases}
