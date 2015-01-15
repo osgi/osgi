@@ -833,32 +833,28 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       <para>Two <code>BooleanData</code> instances are equal if they contain
       equal metadata, timestamp and boolean value.</para>
 
-      <para><code>java.lang.Comparable.compareTo(Object)</code> method
-      compares <code>BooleanData</code> instance with the given argument. The
-      argument can be: <itemizedlist>
-          <listitem>
-            <para> <code>Boolean</code> - the method returns <code>0</code> if
-            this instance contains equivalent boolean value. <code>-1</code>
-            if this instance contains <code>false</code> and the argument is
-            <code>true</code>. <code>1</code> if this instance contains
-            <code>true</code> and the argument is <code>false</code>. </para>
-          </listitem>
-
-          <listitem>
-            <para> <code>BooleanData</code> - the method returns
-            <code>-1</code> if metadata or timestamp are not equivalent.
-            Otherwise, the boolean value is compared with the same rules as
-            <code>Boolean</code> argument. </para>
-          </listitem>
-
-          <listitem>
-            <para> <code>Map</code> - the map must be built according the
-            rules of <code>BooleanData(Map)</code> constructor. Metadata,
-            timestamp and value are compared according to
-            <code>BooleanData</code> and <code>Boolean</code> argument rules.
-            </para>
-          </listitem>
-        </itemizedlist></para>
+      <para><code>BooleanData.compareTo(Object)</code> method
+      compares <code>BooleanData</code> instance with the given argument
+      of the same type and returns:
+      <itemizedlist>
+        <listitem>
+          <para>
+            <code>-1</code> if the instance field is less than a field of the specified argument.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <code>0</code> if all fields are equivalent.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <code>1</code> if the instance field is greater than a field of the specified argument.
+          </para>
+        </listitem>
+      </itemizedlist>
+      The fields are compared in this order: timestamp, metadata, value.
+      </para>
     </section>
 
     <section xml:id="service.dal.functions.data.level">
@@ -882,31 +878,28 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       <para>Two <code>LevelData</code> instances are equal if they contain
       equal metadata, timestamp, unit and level.</para>
 
-      <para><code>java.lang.Comparable.compareTo(Object)</code> method
-      compares <code>LevelData</code> instance with the given argument. The
-      argument can be: <itemizedlist>
-          <listitem>
-            <para> <code>BigDecimal</code> - the method returns the result of
-            <code>BigDecimal.compareTo(Object)</code> for
-            <code>LevelData</code> instance level and the specified argument.
-            </para>
-          </listitem>
-
-          <listitem>
-            <para> <code>LevelData</code> - the method returns <code>-1</code>
-            if metadata, timestamp or unit are not equivalent. Otherwise, the
-            level is compared with the same rules as <code>BigDecimal</code>
-            argument. </para>
-          </listitem>
-
-          <listitem>
-            <para> <code>Map</code> - the map must be built according the
-            rules of <code>LevelData(Map)</code> constructor. Metadata,
-            timestamp, unit and level are compared according to
-            <code>BigDecimal</code> and <code>LevelData</code> argument rules.
-            </para>
-          </listitem>
-        </itemizedlist></para>
+      <para><code>LevelData.compareTo(Object)</code> method
+      compares <code>LevelData</code> instance with the given argument
+      of the same type and returns:
+      <itemizedlist>
+        <listitem>
+          <para>
+            <code>-1</code> if the instance field is less than a field of the specified argument.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <code>0</code> if all fields are equivalent.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <code>1</code> if the instance field is greater than a field of the specified argument.
+          </para>
+        </listitem>
+      </itemizedlist>
+      The fields are compared in this order: timestamp, metadata, level, unit.
+      </para>
     </section>
 
     <section xml:id="service.dal.functions.data.alarm">
@@ -937,24 +930,28 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       <para>Two <code>AlarmData</code> instances are equal if they contain
       equal metadata, timestamp, type and severity.</para>
 
-      <para><code>java.lang.Comparable.compareTo(Object)</code> method
-      compares <code>AlarmData</code> instance with the given argument. The
-      argument can be: <itemizedlist>
-          <listitem>
-            <para> <code>AlarmData</code> - the method returns <code>-1</code>
-            if metadata,timestamp, type or severity are not equivalent.
-            <code>0</code> if all fields are equivalent. <code>1</code> if all
-            fields are equivalent and this instance severity is greater than
-            the severity of the specified argument. </para>
-          </listitem>
-
-          <listitem>
-            <para> <code>Map</code> - the map must be built according the
-            rules of <code>AlarmData(Map)</code> constructor. Metadata,
-            timestamp, type and severity are compared according to
-            <code>AlarmData</code> argument rules. </para>
-          </listitem>
-        </itemizedlist></para>
+      <para><code>AlarmData.compareTo(Object)</code> method
+      compares <code>AlarmData</code> instance with the given argument
+      of the same type and returns:
+      <itemizedlist>
+        <listitem>
+          <para>
+            <code>-1</code> if the instance field is less than a field of the specified argument.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <code>0</code> if all fields are equivalent.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <code>1</code> if the instance field is greater than a field of the specified argument.
+          </para>
+        </listitem>
+      </itemizedlist>
+      The fields are compared in this order: timestamp, metadata, type, severity.
+      </para>
     </section>
 
     <section xml:id="service.dal.functions.data.keypad">
@@ -1028,24 +1025,28 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       <para>Two <code>KeypadData</code> instances are equal if they contain
       equal metadata, timestamp, event type, sub-type, key code and key name.</para>
 
-      <para><code>java.lang.Comparable.compareTo(Object)</code> method
-      compares <code>KeypadData</code> instance with the given argument. The
-      argument can be: <itemizedlist>
-          <listitem>
-            <para> <code>KeypadData</code> - the method returns
-            <code>-1</code> if metadata, timestamp, event type, sub-type,
-            key code or key name are not equivalent.
-            <code>0</code> if all fields are equivalent. </para>
-          </listitem>
-
-          <listitem>
-            <para> <code>Map</code> - the map must be built according the
-            rules of <code>KeypadData(Map)</code> constructor. Metadata,
-            timestamp, event type, sub-type, key code and
-            key name are compared according to
-            <code>KeypadData</code> argument rules. </para>
-          </listitem>
-        </itemizedlist></para>
+      <para><code>KeypadData.compareTo(Object)</code> method
+      compares <code>KeypadData</code> instance with the given argument
+      of the same type and returns:
+      <itemizedlist>
+        <listitem>
+          <para>
+            <code>-1</code> if the instance field is less than a field of the specified argument.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <code>0</code> if all fields are equivalent.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <code>1</code> if the instance field is greater than a field of the specified argument.
+          </para>
+        </listitem>
+      </itemizedlist>
+      The fields are compared in this order: timestamp, metadata, type, sub-type, key code, key name.
+      </para>
     </section>
   </section>
 
