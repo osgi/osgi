@@ -158,6 +158,10 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 		fields.put(FunctionData.FIELD_METADATA, metadata);
 		data = new AlarmData(fields);
 		checkAlarmDataFields(Long.MIN_VALUE, metadata, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_COLD, data);
+
+		fields.clear();
+		data = new AlarmData(fields);
+		checkAlarmDataFields(Long.MIN_VALUE, null, AlarmData.SEVERITY_UNDEFINED, AlarmData.TYPE_UNDEFINED, data);
 	}
 
 	/**
@@ -186,18 +190,21 @@ public final class AlarmDataTest extends AbstractFunctionTest {
 		fields.put(FunctionData.FIELD_TIMESTAMP, Boolean.TRUE);
 		checkInvalidFieldType(fields);
 
-		fields.clear();
-		try {
-			new AlarmData(fields);
-			fail("The alarm data is built with empty fields.");
-		} catch (IllegalArgumentException iae) {
-			// go ahead, it's expected
-		}
-
 		try {
 			new AlarmData(null);
 			fail("The alarm data is built with null fields");
 		} catch (NullPointerException npe) { // NOPMD
+			// go ahead, it's expected
+		}
+
+		try {
+			new AlarmData(
+					System.currentTimeMillis(),
+					new HashMap(),
+					Integer.MIN_VALUE,
+					AlarmData.TYPE_ACCESS_CONTROL);
+			fail("Alarm data is built with invalid severity.");
+		} catch (IllegalArgumentException iae) {
 			// go ahead, it's expected
 		}
 	}

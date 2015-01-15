@@ -129,14 +129,14 @@ public class AlarmData extends FunctionData {
 	 * <ul>
 	 * <li>{@link #FIELD_SEVERITY} - optional field. The value type must be
 	 * {@code Integer}.</li>
-	 * <li>{@link #FIELD_TYPE} - mandatory field. The value type must be
+	 * <li>{@link #FIELD_TYPE} - optional field. The value type must be
 	 * {@code Integer}.</li>
 	 * </ul>
 	 * 
 	 * @param fields Contains the new {@code AlarmData} instance field values.
 	 * 
 	 * @throws ClassCastException If the field value types are not expected.
-	 * @throws IllegalArgumentException If the alarm type is missing.
+	 * @throws IllegalArgumentException If the alarm severity is invalid.
 	 * @throws NullPointerException If the fields map is {@code null}.
 	 */
 	public AlarmData(Map fields) {
@@ -144,10 +144,8 @@ public class AlarmData extends FunctionData {
 		Integer severityLocal = (Integer) fields.get(FIELD_SEVERITY);
 		this.severity = (null != severityLocal) ? severityLocal.intValue() : SEVERITY_UNDEFINED;
 		Integer typeLocal = (Integer) fields.get(FIELD_TYPE);
-		if (null == typeLocal) {
-			throw new IllegalArgumentException("The alarm data type is missing.");
-		}
-		this.type = typeLocal.intValue();
+		this.type = (null != typeLocal) ? typeLocal.intValue() : TYPE_UNDEFINED;
+		validate();
 	}
 
 	/**
@@ -156,12 +154,15 @@ public class AlarmData extends FunctionData {
 	 * @param timestamp The alarm data timestamp optional field.
 	 * @param metadata The alarm data metadata optional field.
 	 * @param severity The alarm data severity optional field.
-	 * @param type The alarm data type mandatory field.
+	 * @param type The alarm data type optional field.
+	 *
+	 * @throws IllegalArgumentException If the alarm severity is invalid.
 	 */
 	public AlarmData(long timestamp, Map metadata, int severity, int type) {
 		super(timestamp, metadata);
 		this.severity = severity;
 		this.type = type;
+		validate();
 	}
 
 	/**
@@ -190,7 +191,13 @@ public class AlarmData extends FunctionData {
 	}
 
 	/**
-	 * Returns the alarm severity.
+	 * Returns the alarm severity. The severity can be one of:
+	 * <ul>
+	 * <li>{@link #SEVERITY_UNDEFINED}</li>
+	 * <li>{@link #SEVERITY_MINOR}</li>
+	 * <li>{@link #SEVERITY_MAJOR}</li>
+	 * <li>{@link #SEVERITY_CRITICAL}</li>
+	 * </ul>
 	 * 
 	 * @return The alarm severity.
 	 */
@@ -286,8 +293,20 @@ public class AlarmData extends FunctionData {
 				", timestamp=" + super.getTimestamp() + ']';
 	}
 
+	private void validate() {
+		switch (severity) {
+			case SEVERITY_UNDEFINED :
+			case SEVERITY_MINOR :
+			case SEVERITY_MAJOR :
+			case SEVERITY_CRITICAL :
+				return;
+			default :
+				throw new IllegalArgumentException("Unknown severity: " + severity);
+		}
+	}
+
 	private String getSeverityAsString() {
-		switch (this.severity) {
+		switch (severity) {
 			case SEVERITY_UNDEFINED :
 				return "undefined";
 			case SEVERITY_MINOR :
