@@ -91,7 +91,7 @@ public class RestClientImpl implements RestClient {
 				.get(FRAMEWORK_STARTLEVEL_JSON);
 
 		return DTOReflector.getDTO(FrameworkStartLevelDTO.class,
-				new JsonRepresentation(repr).getJsonObject());
+				new JsonRepresentation(repr).getJsonObject(), null);
 	}
 
 	/**
@@ -149,7 +149,7 @@ public class RestClientImpl implements RestClient {
 			final Representation repr = new ClientResource(Method.GET,
 					baseUri.resolve(bundlePath)).get(BUNDLE_JSON);
 			return DTOReflector.getDTO(BundleDTO.class,
-					new JsonRepresentation(repr).getJsonObject());
+					new JsonRepresentation(repr).getJsonObject(), bundlePath);
 		} catch (final ResourceException e) {
 			if (Status.CLIENT_ERROR_NOT_FOUND.equals(e.getStatus())) {
 				return null;
@@ -255,7 +255,7 @@ public class RestClientImpl implements RestClient {
 	public Map<String, Object> getBundleHeaders(final String bundlePath)
 			throws Exception {
 		final Representation repr = new ClientResource(Method.GET,
-				baseUri.resolve(bundlePath + "/headers"))
+				baseUri.resolve(bundlePath + "/header"))
 				.get(BUNDLE_HEADER_JSON);
 
 		return DTOReflector.getMapfromJsonObject(new JsonRepresentation(repr)
@@ -280,7 +280,7 @@ public class RestClientImpl implements RestClient {
 				.get(BUNDLE_STARTLEVEL_JSON);
 
 		return DTOReflector.getDTO(BundleStartLevelDTO.class,
-				new JsonRepresentation(repr).getJsonObject());
+				new JsonRepresentation(repr).getJsonObject(), bundlePath);
 	}
 
 	/**
@@ -298,6 +298,9 @@ public class RestClientImpl implements RestClient {
 	 */
 	public void setBundleStartLevel(final String bundlePath,
 			final BundleStartLevelDTO startLevel) throws Exception {
+
+		System.err.println("ABOUT TO SEND " + DTOReflector.getJson(BundleStartLevelDTO.class, startLevel));
+
 		new ClientResource(Method.PUT, baseUri.resolve(bundlePath
 				+ "/startlevel")).put(
 				DTOReflector.getJson(BundleStartLevelDTO.class, startLevel),
@@ -387,17 +390,23 @@ public class RestClientImpl implements RestClient {
 	 * @see org.osgi.rest.client.RestClient#getServices()
 	 */
 	public Collection<String> getServices() throws Exception {
-		final Representation repr = new ClientResource(Method.GET,
-				baseUri.resolve("framework/services")).get(SERVICES_JSON);
-
-		return jsonArrayToStrings(new JsonRepresentation(repr).getJsonArray());
+		return getServices(null);
 	}
 
 	/**
 	 * @see org.osgi.rest.client.RestClient#getServices(java.lang.String)
 	 */
 	public Collection<String> getServices(final String filter) throws Exception {
-		throw new RuntimeException("Not yet implemented");
+		final ClientResource res = new ClientResource(Method.GET,
+				baseUri.resolve("framework/services"));
+
+		if (filter != null) {
+			res.addQueryParameter("filter", filter);
+		}
+
+		final Representation repr = res.get(SERVICES_JSON);
+
+		return jsonArrayToStrings(new JsonRepresentation(repr).getJsonArray());
 	}
 
 	/**
@@ -439,7 +448,7 @@ public class RestClientImpl implements RestClient {
 				baseUri.resolve(servicePath)).get();
 
 		return DTOReflector.getDTO(ServiceReferenceDTO.class,
-				new JsonRepresentation(repr).getJsonObject());
+				new JsonRepresentation(repr).getJsonObject(), null);
 	}
 
 	private Collection<String> jsonArrayToStrings(final JSONArray array)

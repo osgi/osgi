@@ -69,7 +69,8 @@ public class PojoReflector<B> {
 			final String key = names[i];
 			final Method setter = methodTable.get(key);
 			if (setter == null) {
-				throw new IllegalArgumentException("no field " + key + " in " + clazz.getSimpleName() + ": " + methodTable);
+				// silently ignore, it's JSON after all
+				continue;
 			}
 			setter.invoke(instance, obj.get(key));
 		}

@@ -34,13 +34,19 @@ import org.osgi.dto.DTO;
 public final class DTOReflector {
 
 	public static <T extends DTO> T getDTO(final Class<T> clazz,
-			final JSONObject data) throws Exception {
+			final JSONObject data, final String path) throws Exception {
 		final Field[] fields = clazz.getFields();
+
+		System.err.println("DATA IS " + data);
 
 		final T dto = clazz.newInstance();
 		for (final Field field : fields) {
 			if ("bundle".equals(field.getName())) {
-				field.set(dto, new Long(getBundleIdFromPath(data.getString("bundle"))));
+				if (data.has("bundle")) {
+					field.set(dto, new Long(getBundleIdFromPath(data.getString("bundle"))));
+				} else {
+					field.set(dto, new Long(getBundleIdFromPath(path)));
+				}
 			} else if ("usingBundles".equals(field.getName())) {
 				field.set(
 						dto,
@@ -88,7 +94,7 @@ public final class DTOReflector {
 			final JSONArray array) throws Exception {
 		final Collection<T> result = new ArrayList<T>();
 		for (int i = 0; i < array.length(); i++) {
-			result.add(DTOReflector.getDTO(clazz, array.getJSONObject(i)));
+			result.add(DTOReflector.getDTO(clazz, array.getJSONObject(i), null));
 		}
 		return result;
 	}
@@ -100,10 +106,18 @@ public final class DTOReflector {
 
 		final JSONObject obj = new JSONObject();
 		for (final Field field : fields) {
-			obj.put(field.getName(), field.get(dto));
+			if (field.getName().equals("bundle")) {
+				obj.put("bundle", getBundlePathFromId((Long) field.get(dto)));
+			} else {
+				obj.put(field.getName(), field.get(dto));
+			}
 		}
 
 		return obj;
+	}
+
+	private static String getBundlePathFromId(final Long id) {
+		return "framework/bundle/" + id.toString();
 	}
 
 }

@@ -72,6 +72,7 @@ public class BundleStartLevelResource extends
 
 			return getRepresentation(new BundleStartLevelPojo(bsl), variant);
 		} catch (final Exception e) {
+			e.printStackTrace();
 			return ERROR(Status.CLIENT_ERROR_BAD_REQUEST, e, variant);
 		}
 	}
