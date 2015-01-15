@@ -414,12 +414,7 @@ public class RestClientImpl implements RestClient {
 	 */
 	public Collection<ServiceReferenceDTO> getServiceRepresentations()
 			throws Exception {
-		final Representation repr = new ClientResource(Method.GET,
-				baseUri.resolve("framework/services/representations"))
-				.get(SERVICES_REPRESENTATIONS_JSON);
-
-		return DTOReflector.getDTOs(ServiceReferenceDTO.class,
-				new JsonRepresentation(repr).getJsonArray());
+		return getServiceRepresentations(null);
 	}
 
 	/**
@@ -428,7 +423,15 @@ public class RestClientImpl implements RestClient {
 	 */
 	public Collection<ServiceReferenceDTO> getServiceRepresentations(
 			final String filter) throws Exception {
-		throw new RuntimeException("Not yet implemented");
+		final ClientResource res = new ClientResource(Method.GET,
+				baseUri.resolve("framework/services/representations"));
+		if (filter != null) {
+			res.addQueryParameter("filter", filter);
+		}
+		final Representation repr = res.get(SERVICES_REPRESENTATIONS_JSON);
+
+		return DTOReflector.getDTOs(ServiceReferenceDTO.class,
+				new JsonRepresentation(repr).getJsonArray());
 	}
 
 	/**

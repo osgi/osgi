@@ -26,6 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
@@ -41,6 +42,7 @@ import org.osgi.framework.wiring.BundleRevision;
 import org.osgi.impl.service.rest.PojoReflector;
 import org.osgi.impl.service.rest.RestService;
 import org.osgi.impl.service.rest.pojos.BundleExceptionPojo;
+import org.osgi.impl.service.rest.pojos.ServicePojo;
 import org.osgi.resource.Capability;
 import org.osgi.service.rest.RestApiExtension;
 import org.osgi.util.tracker.ServiceTracker;
@@ -227,7 +229,7 @@ public class AbstractOSGiResource<T> extends ServerResource {
 					if (o instanceof String) {
 						reprList.add(o);
 					} else {
-						reprList.add(new JSONObject(o));
+						reprList.add(jsonObject(o));
 					}
 				}
 				final JSONArray arr = new JSONArray(reprList);
@@ -238,7 +240,7 @@ public class AbstractOSGiResource<T> extends ServerResource {
 				rep = toRepresentation(new JSONObject((Map<?, ?>) bean),
 						variant);
 			} else {
-				rep = toRepresentation(new JSONObject(bean), variant);
+				rep = toRepresentation(jsonObject(bean), variant);
 			}
 		} else {
 			throw new UnsupportedOperationException(variant.getMediaType()
@@ -246,6 +248,22 @@ public class AbstractOSGiResource<T> extends ServerResource {
 		}
 		rep.setMediaType(mt);
 		return rep;
+	}
+	
+	private JSONObject jsonObject(final Object bean) {
+		if (bean instanceof ServicePojo) {
+			// fix for buggy JSONObject
+			final JSONObject json = new JSONObject(bean);
+			try {
+				json.put("properties", new JSONObject(((ServicePojo) bean).getProperties()));
+				json.put("usingBundles", new JSONArray(((ServicePojo) bean).getUsingBundles()));
+			} catch (final JSONException e) {
+				e.printStackTrace();
+			}
+			return json;
+		} else {
+			return new JSONObject(bean);
+		}
 	}
 
 	protected MediaType getMediaType(final String variant) {

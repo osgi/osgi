@@ -18,7 +18,6 @@ import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Map;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
@@ -642,7 +641,11 @@ public class RestClientTestCase extends RestTestUtils {
         Object value = serviceRef.getProperty(key);
 
         assertTrue("Service property " + key, propertiesDTO.containsKey(key));
-        assertEquals("Service property value ", value, propertiesDTO.get(key));
+        if (value instanceof String[]) {
+        	assertEquivalent((String[]) value, (String[]) propertiesDTO.get(key));
+        } else {
+        	assertEquals("Service property value ", value, propertiesDTO.get(key));
+        }
       }
     } else { // Is it possible?
       assertNull("No properties for service " + serviceRef.getProperty(Constants.SERVICE_ID) + " :", propertiesDTO);
@@ -721,5 +724,12 @@ public class RestClientTestCase extends RestTestUtils {
     assertEquals("version:", bundle.getVersion().toString(), bundleRepresentation.version);
     //  location ?
   }
+
+	protected void assertEquivalent(final String[] a1, final String[] a2) {
+		assertEquals(a1.length, a2.length);
+		for (int i = 0; i < a1.length; i++) {
+			assertEquals(a1[i], a2[i]);
+		}
+	}
 
 }

@@ -43,8 +43,16 @@ public final class ServicePojo {
 			props.put(key, sref.getProperty(key));
 		}
 		setProperties(props);
+
+		System.err.println("PROPERTIES ARE " + props);
+
+		System.err.println("SERIALIZES TO " + new org.json.JSONObject(props));
+
 		setBundle(getBundleUri(sref.getBundle()));
 		final List<String> usingBundlesList = new ArrayList<String>();
+
+		System.err.println("USING BUNDLE LIST IS " + sref.getUsingBundles());
+
 		if (sref.getUsingBundles() != null) {
 			for (final Bundle using : sref.getUsingBundles()) {
 				usingBundlesList.add(getBundleUri(using));

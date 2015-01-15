@@ -67,6 +67,10 @@ public final class DTOReflector {
 
 	private static long[] getBundleIdsFromPaths(JSONArray array)
 			throws JSONException {
+		if (array.length() == 0) {
+			return null;
+		}
+
 		final long[] result = new long[array.length()];
 
 		for (int i = 0; i < array.length(); i++) {
@@ -84,9 +88,22 @@ public final class DTOReflector {
 		final String[] keys = JSONObject.getNames(obj);
 
 		for (int i = 0; i < keys.length; i++) {
-			result.put((K) keys[i], (V) obj.get(keys[i]));
+			final Object o = keys[i].equals("service.id") || keys[i].equals("service.bundleid") ? new Long(obj.getLong(keys[i])) : obj.get(keys[i]);
+			if (o instanceof JSONArray) {
+				result.put((K) keys[i], (V) getStringArrayFromJSONArray((JSONArray) o));
+			} else {
+				result.put((K) keys[i], (V) o);
+			}
 		}
 
+		return result;
+	}
+
+	private static String[] getStringArrayFromJSONArray(final JSONArray a) throws JSONException {
+		final String[] result = new String[a.length()];
+		for (int i = 0; i < result.length; i++) {
+			result[i] = a.getString(i);
+		}
 		return result;
 	}
 
