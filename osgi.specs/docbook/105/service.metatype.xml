@@ -1405,6 +1405,177 @@ female=Female</programlisting>
         href="../../generated/xmlns/metatype/v1.3.0/metatype.xsd" parse="text"/></programlisting>
   </section>
 
+  <section xml:id="service.metatype-metatype.annotations">
+    <title>Meta Type Annotations</title>
+
+    <para>A developer can use Meta Type Annotations on a Component Property
+    Type, see <xref linkend="service.component-component.property.types"/>, or
+    an interface to define an Object Class Definition in a type safe manner.
+    The Meta Type Annotations are <code>CLASS</code> retention annotations
+    intended to be used during build time to generate Meta Type Resources from
+    the Java class files providing a convenient way to create the Meta Type
+    Resource XML documents.</para>
+
+    <para>Tools processing these annotations must always generate valid Meta
+    Type Resource XML documents. If the Meta Type Annotations are used in a
+    way that is not supported or in error, then the tool must report the error
+    to enable the developer to take corrective action.</para>
+
+    <section>
+      <title>ObjectClassDefinition Annotation</title>
+
+      <para>The <xref
+      linkend="org.osgi.service.metatype.annotations.ObjectClassDefinition"
+      xrefstyle="hyperlink"/> annotation can be applied to a Component
+      Property Type or an interface. From that type, tooling can generate an
+      <code>OCD</code> element. When applied to an interface, all the methods
+      inherited from supertypes are include as Attribute Definitions. The tool
+      processing the annotations must be able to examine all the types in the
+      hierarchy of the annotated type to generate the Meta Type Resource. It
+      is an error if the tool cannot examine a type in the hierarchy.</para>
+
+      <para>It is an error to apply the <xref
+      linkend="org.osgi.service.metatype.annotations.ObjectClassDefinition"
+      xrefstyle="hyperlink"/> annotation to concrete and abstract class types.
+      It is also an error to apply it to an interface if any of the methods of
+      the interface take arguments.</para>
+
+      <para>The <xref
+      linkend="org.osgi.service.metatype.annotations.ObjectClassDefinition"
+      xrefstyle="hyperlink"/> annotation can be applied without defining any
+      element values as defaults can be generated from the annotated type. For
+      example:</para>
+
+      <programlisting>@ObjectClassDefinition
+@interface Config {
+  boolean enabled() default true;
+  String[] names() default {"a", "b"};
+  String topic() default "default/topic";
+}</programlisting>
+
+      <para>In the following larger example, the <xref
+      linkend="org.osgi.service.metatype.annotations.ObjectClassDefinition"
+      xrefstyle="hyperlink"/> annotation defines the description and name of
+      the <code>OCD</code> which are to be localized using the specified
+      resource as well as an icon resource. Also, <xref
+      linkend="org.osgi.service.metatype.annotations.AttributeDefinition"
+      xrefstyle="hyperlink"/> annotations are applied to the methods to supply
+      some non-default values for the generated <code>AD</code>
+      elements.</para>
+
+      <programlisting>@ObjectClassDefinition(localization = "OSGI-INF/l10n/member",
+    description = "%member.description",
+    name = "%member.name"
+    icon = @Icon(resource = "icon/member-32.png", size = 32))
+@interface Member {
+  @AttributeDefinition(type = AttributeType.PASSWORD,
+    description = "%member.password.description",
+    name = "%member.password.name")
+  public String _password();
+
+  @AttributeDefinition(options = {
+    @Option(label = "%strategic", value = "strategic"),
+    @Option(label = "%principal", value = "principal"),
+    @Option(label = "%contributing", value = "contributing")
+    },
+    defaultValue = "contributing",
+    description = "%member.membertype.description",
+    name = "%member.membertype.name")
+  public String type();
+}</programlisting>
+    </section>
+
+    <section>
+      <title>AttributeDefinition Annotation</title>
+
+      <para>The <xref
+      linkend="org.osgi.service.metatype.annotations.AttributeDefinition"
+      xrefstyle="hyperlink"/> annotation is an optional annotation which can
+      applied to the methods in a type annotated by <xref
+      linkend="org.osgi.service.metatype.annotations.ObjectClassDefinition"
+      xrefstyle="hyperlink"/>. Each method of the type annotated by <xref
+      linkend="org.osgi.service.metatype.annotations.ObjectClassDefinition"
+      xrefstyle="hyperlink"/> is mapped to an <code>AD</code> child element of
+      the <code>OCD</code> element in the generated Meta Type Resource XML
+      document. The <xref
+      linkend="org.osgi.service.metatype.annotations.AttributeDefinition"
+      xrefstyle="hyperlink"/> annotation only needs to be applied to a method
+      if values other than the defaults are desired. </para>
+
+      <para>The id of the Attribute Definition is generated from the method
+      name as follows:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>A single dollar sign (<code>'$' \u0024</code>) is removed
+          unless it is followed by another dollar sign in which case the two
+          consecutive dollar signs (<code>"$$"</code>) are converted to a
+          single dollar sign.</para>
+        </listitem>
+
+        <listitem>
+          <para>A single low line (<code>'_' \u005F</code>) is converted into
+          a full stop (<code>'.' \u002E</code>) unless is it followed by
+          another low line in which case the two consecutive low lines
+          (<code>"__"</code>) are converted to a single low line.</para>
+        </listitem>
+
+        <listitem>
+          <para>All other characters are unchanged.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>The generated id becomes the value of the <code>id</code>
+      attribute of the <code>AD</code> element in the generated Meta Type
+      Resource XML document.</para>
+    </section>
+
+    <section>
+      <title>Designate Annotation</title>
+
+      <para>The <xref
+      linkend="org.osgi.service.metatype.annotations.Designate"
+      xrefstyle="hyperlink"/> annotation can be applied to a Declarative
+      Services component class to make the connection between the pid of the
+      component and an Object Class Definition. This annotation must be used
+      on a type that is also annotated with the Declarative Services <xref
+      linkend="org.osgi.service.component.annotations.Component"
+      xrefstyle="hyperlink"/> annotation. The component must only have a
+      single PID which is used for the generated <code>Designate</code>
+      element.</para>
+
+      <para>In the following example, the <xref
+      linkend="org.osgi.service.metatype.annotations.Designate"
+      xrefstyle="hyperlink"/> annotation is applied to a Declarative Services
+      component and references the Object Class Definition type.</para>
+
+      <programlisting>@ObjectClassDefinition(id="my.config.ocd")
+@interface Config {
+  boolean enabled() default true;
+  String[] names() default {"a", "b"};
+  String topic() default "default/topic";
+}
+
+@Component(configurationPid="my.component.pid")
+@Designate(ocd = Config.class)
+public class MyComponent {
+    static final String DEFAULT_TOPIC_PREFIX = "topic.prefix";
+    protected void activate(Config configuration) {
+        String t = configuration.topic();
+    }
+}</programlisting>
+
+      <para>Tools processing these annotations will generate a
+      <code>Designate</code> element in the generated Meta Type Resource XML
+      document using the PID of the component and the id of the Object Class
+      Definition. For example:</para>
+
+      <programlisting>&lt;Designate pid="my.component.pid"&gt;
+    &lt;Object ocdref="my.config.ocd"/&gt;
+&lt;/Designate&gt;</programlisting>
+    </section>
+  </section>
+
   <section>
     <title>Limitations</title>
 
@@ -1498,6 +1669,11 @@ female=Female</programlisting>
         <para>The Meta Type Resource schema is updated to allow an
         <code>OCD</code> element to contain zero <code>AD</code>
         elements.</para>
+      </listitem>
+
+      <listitem>
+        <para>New Meta Type Annotations. See <xref
+        linkend="service.metatype-metatype.annotations"/>.</para>
       </listitem>
     </itemizedlist>
   </section>
