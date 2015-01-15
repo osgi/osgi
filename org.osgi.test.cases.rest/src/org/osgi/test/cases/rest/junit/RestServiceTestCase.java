@@ -477,6 +477,8 @@ public class RestServiceTestCase extends RestTestUtils {
       serviceURIs.add(jsonServiceList.getString(k));
     }
 
+		System.err.println(serviceURIs);
+
     for (ServiceReference<?> serviceRef : serviceRefs) {
       String serviceURI = getServiceURI(serviceRef.getProperty(Constants.SERVICE_ID).toString());
       assertTrue("Service list contains " + serviceURI + ": ", serviceURIs.contains(serviceURI));
@@ -658,11 +660,11 @@ public class RestServiceTestCase extends RestTestUtils {
       return new JSONObject(result);
     }
 
-		if (expectedResponseCode == HttpURLConnection.HTTP_OK) {
-			return new JSONObject(result);
-		}
+	if (expectedResponseCode == HttpURLConnection.HTTP_OK) {
+		return new JSONObject(result);
+	}
 
-		return null;
+	return null;
   }
 
   protected JSONObject getJSONObject(String uri, String expectedContentType, int expectedResponseCode) throws JSONException, IOException {

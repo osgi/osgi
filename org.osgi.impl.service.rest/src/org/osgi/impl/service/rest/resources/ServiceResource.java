@@ -42,6 +42,10 @@ public class ServiceResource extends AbstractOSGiResource<ServicePojo> {
 	public Representation doGet(final Representation none, final Variant variant) {
 		try {
 			final ServiceReference<?> sref = getServiceReferenceFromKey("serviceId");
+			if (sref == null) {
+				setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+				return null;
+			}
 			return getRepresentation(new ServicePojo(sref), variant);
 		} catch (final IllegalArgumentException e) {
 			setStatus(Status.CLIENT_ERROR_NOT_FOUND);

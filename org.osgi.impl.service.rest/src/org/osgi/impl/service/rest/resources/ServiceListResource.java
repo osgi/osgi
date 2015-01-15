@@ -16,6 +16,7 @@
 
 package org.osgi.impl.service.rest.resources;
 
+import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.rest.PojoReflector;
 import org.osgi.impl.service.rest.pojos.ServicePojoList;
@@ -46,6 +47,9 @@ public class ServiceListResource extends AbstractOSGiResource<ServicePojoList> {
 			final ServiceReference<?>[] srefs = getBundleContext()
 					.getAllServiceReferences(null, filter);
 			return getRepresentation(new ServicePojoList(srefs), variant);
+		} catch (final InvalidSyntaxException e) {
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST, e);
+			return null;
 		} catch (final Exception e) {
 			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
 		}

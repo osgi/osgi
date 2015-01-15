@@ -30,7 +30,7 @@ public final class ServicePojoList extends ArrayList<String> {
 
 	public ServicePojoList(ServiceReference<?>[] srefs) {
 		for (final ServiceReference<?> sref : srefs) {
-			add("/framework/service/" + sref.getProperty(Constants.SERVICE_ID));
+			add("framework/service/" + sref.getProperty(Constants.SERVICE_ID));
 		}
 	}
 
