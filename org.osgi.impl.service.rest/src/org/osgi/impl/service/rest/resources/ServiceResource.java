@@ -43,6 +43,9 @@ public class ServiceResource extends AbstractOSGiResource<ServicePojo> {
 		try {
 			final ServiceReference<?> sref = getServiceReferenceFromKey("serviceId");
 			return getRepresentation(new ServicePojo(sref), variant);
+		} catch (final IllegalArgumentException e) {
+			setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+			return null;
 		} catch (final Exception e) {
 			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
 		}
