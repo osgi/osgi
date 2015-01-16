@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="144" revision="$Id$" version="5" xml:id="resourcemonitoring" xmlns="http://docbook.org/ns/docbook"
+<chapter label="144" revision="$Id$" version="5" xml:id="service.resourcemonitoring" xmlns="http://docbook.org/ns/docbook"
 	xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:ns5="http://www.w3.org/1999/xhtml"
 	xmlns:ns4="http://www.w3.org/2000/svg" xmlns:ns3="http://www.w3.org/1998/Math/MathML" xmlns:ns="http://docbook.org/ns/docbook">
 	<title>Resource Monitoring</title>
 
 	<info>
-		<releaseinfo xml:id="rfc200-version">Version 1.0</releaseinfo>
+		<releaseinfo xml:id="service.resourcemonitoring-version">Version 1.0</releaseinfo>
 	</info>
 
 	<!--
@@ -176,12 +176,12 @@
 				</para>
 			</listitem>
 		</itemizedlist>
-		<figure xml:id="rfc200_bibliomixed_id_20141210_15h18_rfc_fig_2">
+		<figure xml:id="service.resourcemonitoring_bibliomixed_id_20141210_15h18_rfc_fig_2">
 			<title>Resource monitoring class diagram specification.</title>
 			<mediaobject>
 				<imageobject>
 					<imagedata align="center" contentdepth="3.5in"
-						fileref="rfc200_resource_monitoring_specification_class_diagram_rev_01.svg" />
+						fileref="service.resourcemonitoring_resource_monitoring_specification_class_diagram_rev_01.svg" />
 				</imageobject>
 			</mediaobject>
 		</figure>
@@ -318,7 +318,7 @@
 		<para>A Resource Monitor instance is enabled and disabled through enable() and disable() methods. The state
 			(enabled or disabled) of a Resource Monitor is retrieved through a call to isEnabled() method. Enable and 
 			disable monitoring mechanisms on-the-fly on localized set of bundles may be crucial for performance issues
-		    <xref linkend="rfc200_bibliomixed_id_20150105_11h45_1" />
+		    <xref linkend="service.resourcemonitoring_bibliomixed_id_20150105_11h45_1" />
 		    .
 		</para>
 		<para>A Resource Monitor instance can also be deleted (delete() method). isDeleted() method returns true if the
@@ -352,7 +352,7 @@
 		    vendor. The list of the types that are supported on the OSGi platform can be computed by 
 		    querying ResourceMonitorFactory services. Resource monitoring algorithms may vary with 
 		    factories 
-			<xref linkend="rfc200_bibliomixed_id_20150105_11h46_2" />. They are out of the scope of 
+			<xref linkend="service.resourcemonitoring_bibliomixed_id_20150105_11h46_2" />. They are out of the scope of 
 			this specification.
 		</para>
 	</section>
@@ -479,7 +479,7 @@
 		</itemizedlist>
 		<para>A threshold has the following state diagram, which transitions are associated to events:
 		</para>
-		<figure xml:id="rfc200_bibliomixed_id_20141211_16h06_rfc_fig_3">
+		<figure xml:id="service.resourcemonitoring_bibliomixed_id_20141211_16h06_rfc_fig_3">
 			<title>Threshold state diagram.</title>
 			<mediaobject>
 				<imageobject>
@@ -542,7 +542,7 @@
 			with CPU monitoring. The next picture shows the state diagram of the number of in-use state socket over
 			the time.
 		</para>
-		<figure xml:id="rfc200_bibliomixed_id_20141211_16h07_rfc_fig_4">
+		<figure xml:id="service.resourcemonitoring_bibliomixed_id_20141211_16h07_rfc_fig_4">
 			<title>Number of in-use sockets over the time.</title>
 			<mediaobject>
 				<imageobject>
@@ -572,7 +572,7 @@
 		<para>For other resource types, only upper thresholds may be useful. The next diagram shows the CPU consumption
 			a Resource Context is using over the time:
 		</para>
-		<figure xml:id="rfc200_bibliomixed_id_20141211_16h08_rfc_fig_5">
+		<figure xml:id="service.resourcemonitoring_bibliomixed_id_20141211_16h08_rfc_fig_5">
 			<title>CPU consumption (%) over the time – Upper Threshold.</title>
 			<mediaobject>
 				<imageobject>
@@ -793,13 +793,13 @@
 	<section>
 		<title>References</title>
 		<bibliolist>
-			<bibliomixed xml:id="rfc200_bibliomixed_id_20150105_11h45_1">
+			<bibliomixed xml:id="service.resourcemonitoring_bibliomixed_id_20150105_11h45_1">
 				<title></title>Y. Maurel, A. Bottaro, R. Kopetz, and K. Attouchi. Adaptive Monitoring of 
 				End-user OSGi based Home Boxes. In Component Base Software Engineering, 15th ACM SIGSOFT 
 				International Symposium on Component-Based Software Engineering, CBSE'2012, Bertinoro, 
 				Italy, June 2012.
 			</bibliomixed>
-			<bibliomixed xml:id="rfc200_bibliomixed_id_20150105_11h46_2">
+			<bibliomixed xml:id="service.resourcemonitoring_bibliomixed_id_20150105_11h46_2">
 				<title></title>K. Attouchi, G. Thomas, A. Bottaro, and G. Muller. Memory Monitoring in a 
 				Multi-tenant OSGi Execution Environment. In Proceedings of the 17th ACM SIGSOFT 
 				symposium on Component Based Software Engineering, CBSE’14, Lille, France, July 2014.
