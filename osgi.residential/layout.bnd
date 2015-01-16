@@ -13,6 +13,7 @@ osgi.residential.specs = \
 	 org.osgi.service.metatype, \
 	 org.osgi.service.networkadapter, \
 	 org.osgi.service.provisioning, \
+	 org.osgi.service.resourcemonitoring, \
 	 org.osgi.service.tr069todmt, \
 	 org.osgi.service.upnp, \
 	 org.osgi.service.useradmin, \
