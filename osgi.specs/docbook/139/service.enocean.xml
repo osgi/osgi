@@ -870,7 +870,7 @@
     <para>Remote Management is a feature which allows EnOcean devices to be
     configured and maintained over the air using radio messages.</para>
 
-    <para>The Remote Procedure Calls, or RPCs -as defined by the EnOcean
+    <para>The Remote Procedure Calls, or RPCs - as defined by the EnOcean
     Remote Management specification <xref
     linkend="rfc199_bibliomixed_id_20140602_17h03_19_6"/> - are not related to
     any EnOcean Equipment Profile.</para>
