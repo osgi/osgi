@@ -5,7 +5,7 @@
 	<title>Resource Monitoring</title>
 
 	<info>
-		<releaseinfo xml:id="service.resourcemonitoring-version">Version 1.0</releaseinfo>
+	    <releaseinfo><xref endterm="org.osgi.service.resourcemonitoring-version" linkend="org.osgi.service.resourcemonitoring"/></releaseinfo>
 	</info>
 
 	<!--
