@@ -1,0 +1,471 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="28000" height="21000" xmlns="http://www.w3.org/2000/svg" xmlns:svg="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid" clip-path="url(#presentation_clip_path)">
+ <defs>
+  <clipPath id="presentation_clip_path" clipPathUnits="userSpaceOnUse">
+   <rect x="0" y="0" width="28000" height="21000" id="svg_1"/>
+  </clipPath>
+ </defs>
+ <defs>
+  <g id="svg_2"/>
+ </defs>
+ <defs>
+  <g id="bullet-char-template(57356)" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="m580,1141l583,-570l-583,-571l-584,571l584,570z" id="svg_3"/>
+  </g>
+  <g id="bullet-char-template(57354)" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="m8,1128l1129,0l0,-1128l-1129,0l0,1128z" id="svg_4"/>
+  </g>
+  <g id="bullet-char-template(10146)" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="m174,0l428,739l-428,742l1282,-742l-1282,-739zm1184,739l-1049,607l350,-607l699,0z" id="svg_5"/>
+  </g>
+  <g id="bullet-char-template(10132)" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="m2015,739l-739,-739l-559,0l543,543l-1086,0l0,393l1086,0l-543,545l557,0l741,-742z" id="svg_6"/>
+  </g>
+  <g id="bullet-char-template(10007)" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="m0,-2c-7,16 -16,29 -25,39l381,530c-94,256 -141,385 -141,387c0,25 13,38 40,38c9,0 21,-2 34,-5c21,4 42,12 65,25l27,-13l111,-251l280,301l64,-25l24,25c21,-10 41,-24 62,-43c-36,-69 -87,-143 -152,-222c-1,-1 -60,-68 -176,-200l180,-361c0,-27 -21,-55 -63,-84l16,-20c-10,-29 -28,-43 -55,-43c-31,0 -102,102 -215,305l-293,-457c-22,-34 -53,-51 -92,-51c-42,0 -63,17 -64,51c-7,9 -10,24 -10,44c0,9 1,19 2,30z" id="svg_7"/>
+  </g>
+  <g id="bullet-char-template(10004)" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="m285,-33c-103,0 -174,63 -211,189c-22,72 -33,177 -33,315c0,78 14,145 41,201c34,71 87,106 158,106c53,0 88,-31 106,-94l23,-176c8,-64 28,-97 59,-98l735,706c11,11 33,17 66,17c42,0 63,-15 63,-46l0,-122c0,-36 -10,-64 -30,-84l-820,-834c-52,-53 -104,-80 -157,-80z" id="svg_8"/>
+  </g>
+  <g id="bullet-char-template(9679)" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="m813,0c-181,0 -324,54 -430,161c-107,107 -160,250 -160,431c0,181 53,324 160,431c106,107 249,161 430,161c179,0 323,-54 432,-161c108,-107 162,-251 162,-431c0,-180 -54,-324 -162,-431c-109,-107 -253,-161 -432,-161z" id="svg_9"/>
+  </g>
+  <g id="bullet-char-template(8226)" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="m346,457c-73,0 -137,26 -191,78c-54,51 -81,114 -81,188c0,73 27,136 81,188c54,52 118,78 191,78c73,0 134,-26 185,-79c51,-51 77,-114 77,-187c0,-75 -25,-137 -76,-188c-50,-52 -112,-78 -186,-78z" id="svg_10"/>
+  </g>
+  <g id="bullet-char-template(8211)" transform="scale(0.00048828125,-0.00048828125)">
+   <path d="m-4,459l1139,0l0,147l-1139,0l0,-147z" id="svg_11"/>
+  </g>
+ </defs>
+ <g>
+  <title>Layer 1</title>
+  <g id="svg_12">
+   <g id="id2" class="Master_Slide">
+    <g id="bg-id2" class="Background"/>
+    <g id="bo-id2" class="BackgroundObjects">
+     <g class="Date/Time" id="svg_13">
+      <g id="id3"/>
+     </g>
+     <g class="Footer" id="svg_14">
+      <g id="id4"/>
+     </g>
+     <g class="Slide_Number" id="svg_15">
+      <g id="id5">
+       <text class="TextShape" id="svg_16">
+        <tspan class="TextParagraph" font-family="Times New Roman, serif" font-size="494px" font-weight="400" id="svg_17">
+         <tspan class="TextPosition" x="24530" y="19571" id="svg_18">
+          <tspan class="PlaceholderText" fill="rgb(0,0,0)" id="svg_19">&lt;numéro&gt;</tspan>
+         </tspan>
+        </tspan>
+       </text>
+      </g>
+     </g>
+    </g>
+   </g>
+  </g>
+  <g class="SlideGroup" id="svg_20">
+   <g id="svg_21">
+    <g id="id1" class="Slide" clip-path="url(#presentation_clip_path)">
+     <g class="Page" id="svg_22">
+      <g class="com.sun.star.drawing.CustomShape" id="svg_23">
+       <g id="id6">
+        <path fill="rgb(255,0,0)" d="m15400,6500l-11500,0l0,-4500l23000,0l0,4500l-11500,0z" id="svg_24"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m15400,6500l-11500,0l0,-4500l23000,0l0,4500l-11500,0z" id="svg_25"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape" id="svg_26">
+       <g id="id7">
+        <path fill="rgb(255,0,0)" d="m15400,16700l-11500,0l0,-2600l23000,0l0,2600l-11500,0z" id="svg_27"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m15400,16700l-11500,0l0,-2600l23000,0l0,2600l-11500,0z" id="svg_28"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape" id="svg_29">
+       <g id="id8">
+        <path fill="rgb(51,204,102)" d="m15400,12400l-11500,0l0,-4100l23000,0l0,4100l-11500,0z" id="svg_30"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m15400,12400l-11500,0l0,-4100l23000,0l0,4100l-11500,0z" id="svg_31"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape" id="svg_32">
+       <g id="id9">
+        <path fill="rgb(255,153,102)" d="m15400,8300l-11500,0l0,-1800l23000,0l0,1800l-11500,0z" id="svg_33"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m15400,8300l-11500,0l0,-1800l23000,0l0,1800l-11500,0z" id="svg_34"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape" id="svg_35">
+       <g id="id10">
+        <path fill="rgb(255,153,102)" d="m15400,14100l-11500,0l0,-1700l23000,0l0,1700l-11500,0z" id="svg_36"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m15400,14100l-11500,0l0,-1700l23000,0l0,1700l-11500,0z" id="svg_37"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.LineShape" id="svg_38">
+       <g id="id11">
+        <path fill="none" stroke="rgb(0,0,0)" d="m3900,16900l0,-14570" id="svg_39"/>
+        <path fill="rgb(0,0,0)" d="m3900,1900l-150,450l300,0l-150,-450z" id="svg_40"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.LineShape" id="svg_41">
+       <g id="id12">
+        <path fill="none" stroke="rgb(0,0,0)" d="m2700,16700l23770,0" id="svg_42"/>
+        <path fill="rgb(0,0,0)" d="m26900,16700l-450,-150l0,300l450,-150z" id="svg_43"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.LineShape" id="svg_44">
+       <g id="id13">
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m1700,6500l25200,0" id="svg_45"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.LineShape" id="svg_46">
+       <g id="id14">
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m1700,14100l25200,0" id="svg_47"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.LineShape" id="svg_48">
+       <g id="id15">
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m1700,12400l508,0" id="svg_49"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m2716,12400l508,0" id="svg_50"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m3732,12400l508,0" id="svg_51"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m4748,12400l508,0" id="svg_52"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m5764,12400l508,0" id="svg_53"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m6780,12400l508,0" id="svg_54"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m7796,12400l508,0" id="svg_55"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m8812,12400l508,0" id="svg_56"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m9828,12400l508,0" id="svg_57"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m10844,12400l508,0" id="svg_58"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m11860,12400l508,0" id="svg_59"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m12876,12400l508,0" id="svg_60"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m13892,12400l508,0" id="svg_61"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m14908,12400l508,0" id="svg_62"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m15924,12400l508,0" id="svg_63"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m16940,12400l508,0" id="svg_64"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m17956,12400l508,0" id="svg_65"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m18972,12400l508,0" id="svg_66"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m19988,12400l508,0" id="svg_67"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m21004,12400l508,0" id="svg_68"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m22020,12400l508,0" id="svg_69"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m23036,12400l508,0" id="svg_70"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m24052,12400l508,0" id="svg_71"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m25068,12400l508,0" id="svg_72"/>
+        <path fill="none" stroke="rgb(0,0,255)" stroke-width="100" d="m26084,12400l508,0" id="svg_73"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.LineShape" id="svg_74">
+       <g id="id16">
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m1700,8300l508,0" id="svg_75"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m2716,8300l508,0" id="svg_76"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m3732,8300l508,0" id="svg_77"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m4748,8300l508,0" id="svg_78"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m5764,8300l508,0" id="svg_79"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m6780,8300l508,0" id="svg_80"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m7796,8300l508,0" id="svg_81"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m8812,8300l508,0" id="svg_82"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m9828,8300l508,0" id="svg_83"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m10844,8300l508,0" id="svg_84"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m11860,8300l508,0" id="svg_85"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m12876,8300l508,0" id="svg_86"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m13892,8300l508,0" id="svg_87"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m14908,8300l508,0" id="svg_88"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m15924,8300l508,0" id="svg_89"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m16940,8300l508,0" id="svg_90"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m17956,8300l508,0" id="svg_91"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m18972,8300l508,0" id="svg_92"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m19988,8300l508,0" id="svg_93"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m21004,8300l508,0" id="svg_94"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m22020,8300l508,0" id="svg_95"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m23036,8300l508,0" id="svg_96"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m24052,8300l508,0" id="svg_97"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m25068,8300l508,0" id="svg_98"/>
+        <path fill="none" stroke="rgb(128,0,0)" stroke-width="100" d="m26084,8300l508,0" id="svg_99"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.OpenBezierShape" id="svg_100">
+       <g id="id17">
+        <path fill="none" stroke="rgb(0,0,0)" d="m3982,11020c318,-277 797,-231 1072,-570c257,-317 538,-634 669,-1038c118,-367 367,-678 570,-1005c202,-328 289,-696 469,-1039c173,-327 283,-686 402,-1037c131,-386 521,-606 904,-704c366,-93 687,89 1005,201c413,146 669,531 837,905c151,338 180,720 302,1071c118,344 213,695 334,1039c130,370 382,674 535,1038c146,342 154,734 368,1038c228,321 209,687 336,1038c127,349 299,682 402,1038c119,413 322,761 503,1139c174,362 308,755 603,1039c285,274 626,551 1038,602c343,43 693,49 1038,-67c387,-130 619,-465 871,-770c281,-340 565,-650 804,-1005c208,-310 240,-687 368,-1038c130,-356 283,-696 435,-1038c153,-343 209,-739 436,-1038c242,-318 599,-583 1005,-670c366,-78 698,158 1038,268c364,118 661,355 1038,402c343,43 651,224 1005,201c345,-22 696,35 1038,-67c346,-103 678,-249 1004,-402c369,-172 690,-424 1072,-570l335,-100l0,0" id="svg_101"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_102">
+       <g id="id18">
+        <text class="TextShape" id="svg_103">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="635px" font-weight="400" id="svg_104">
+          <tspan class="TextPosition" x="21750" y="7597" id="svg_105">
+           <tspan fill="rgb(128,0,0)" id="svg_106">Upper Threshold</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_107">
+       <g id="id19">
+        <text class="TextShape" id="svg_108">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="635px" font-weight="400" id="svg_109">
+          <tspan class="TextPosition" x="21750" y="13498" id="svg_110">
+           <tspan fill="rgb(0,0,255)" id="svg_111">Lower Threshold</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.LineShape" id="svg_112">
+       <g id="id20">
+        <path fill="none" stroke="rgb(0,0,0)" stroke-width="100" d="m6400,18500l2000,0" id="svg_113"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_114">
+       <g id="id21">
+        <text class="TextShape" id="svg_115">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="635px" font-weight="400" id="svg_116">
+          <tspan class="TextPosition" x="8550" y="18734" id="svg_117">
+           <tspan fill="rgb(0,0,0)" id="svg_118">: Error threshold</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.LineShape" id="svg_119">
+       <g id="id22">
+        <path fill="none" stroke="rgb(0,0,0)" stroke-width="100" d="m6464,19700l508,0" id="svg_120"/>
+        <path fill="none" stroke="rgb(0,0,0)" stroke-width="100" d="m7480,19700l508,0" id="svg_121"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_122">
+       <g id="id23">
+        <text class="TextShape" id="svg_123">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="635px" font-weight="400" id="svg_124">
+          <tspan class="TextPosition" x="8550" y="19897" id="svg_125">
+           <tspan fill="rgb(0,0,0)" id="svg_126">: Warning threshold</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_127">
+       <g id="id24">
+        <text class="TextShape" id="svg_128">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="635px" font-weight="400" id="svg_129">
+          <tspan class="TextPosition" x="350" y="10597" id="svg_130">
+           <tspan fill="rgb(0,0,0)" id="svg_131">NORMAL</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_132">
+       <g id="id25">
+        <text class="TextShape" id="svg_133">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="635px" font-weight="400" id="svg_134">
+          <tspan class="TextPosition" x="134" y="7645" id="svg_135">
+           <tspan fill="rgb(0,0,0)" id="svg_136">WARNING</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_137">
+       <g id="id26">
+        <text class="TextShape" id="svg_138">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="635px" font-weight="400" id="svg_139">
+          <tspan class="TextPosition" x="550" y="15697" id="svg_140">
+           <tspan fill="rgb(0,0,0)" id="svg_141">ERROR</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_142">
+       <g id="id27">
+        <text class="TextShape" id="svg_143">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="635px" font-weight="400" id="svg_144">
+          <tspan class="TextPosition" x="134" y="13446" id="svg_145">
+           <tspan fill="rgb(0,0,0)" id="svg_146">WARNING</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_147">
+       <g id="id28">
+        <text class="TextShape" id="svg_148">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="635px" font-weight="400" id="svg_149">
+          <tspan class="TextPosition" x="550" y="4298" id="svg_150">
+           <tspan fill="rgb(0,0,0)" id="svg_151">ERROR</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_152">
+       <g id="id29">
+        <text class="TextShape" id="svg_153">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="635px" font-weight="400" id="svg_154">
+          <tspan class="TextPosition" x="750" y="3097" id="svg_155">
+           <tspan fill="rgb(0,0,0)" id="svg_156">State :</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_157">
+       <g id="id30">
+        <text class="TextShape" id="svg_158">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="529px" font-weight="400" id="svg_159">
+          <tspan class="TextPosition" x="25850" y="17799" id="svg_160">
+           <tspan fill="rgb(0,0,0)" id="svg_161">Time</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_162">
+       <g id="id31">
+        <text class="TextShape" id="svg_163">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="529px" font-weight="400" id="svg_164">
+          <tspan class="TextPosition" x="450" y="1760" id="svg_165">
+           <tspan fill="rgb(0,0,0)" id="svg_166">Number of in-use sockets</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_167">
+       <g id="id32">
+        <text class="TextShape" id="svg_168">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="423px" font-weight="400" id="svg_169">
+          <tspan class="TextPosition" x="3151" y="16706" id="svg_170">
+           <tspan fill="rgb(0,0,0)" id="svg_171">0</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_172">
+       <g id="id33">
+        <text class="TextShape" id="svg_173">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="423px" font-weight="400" id="svg_174">
+          <tspan class="TextPosition" x="3152" y="14007" id="svg_175">
+           <tspan fill="rgb(0,0,0)" id="svg_176">5</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_177">
+       <g id="id34">
+        <text class="TextShape" id="svg_178">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="423px" font-weight="400" id="svg_179">
+          <tspan class="TextPosition" x="3152" y="12307" id="svg_180">
+           <tspan fill="rgb(0,0,0)" id="svg_181">10</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_182">
+       <g id="id35">
+        <text class="TextShape" id="svg_183">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="423px" font-weight="400" id="svg_184">
+          <tspan class="TextPosition" x="2850" y="8207" id="svg_185">
+           <tspan fill="rgb(0,0,0)" id="svg_186">100</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_187">
+       <g id="id36">
+        <text class="TextShape" id="svg_188">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="423px" font-weight="400" id="svg_189">
+          <tspan class="TextPosition" x="2650" y="6408" id="svg_190">
+           <tspan fill="rgb(0,0,0)" id="svg_191">1000</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape" id="svg_192">
+       <g id="id37">
+        <path fill="rgb(255,255,102)" d="m6300,8100c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200zm-200,0l0,0zm401,401l0,0z" id="svg_193"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m6300,8100c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200z" id="svg_194"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m6100,8100l0,0z" id="svg_195"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m6501,8501l0,0z" id="svg_196"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape" id="svg_197">
+       <g id="id38">
+        <path fill="rgb(255,255,102)" d="m7100,6300c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200zm-200,0l0,0zm401,401l0,0z" id="svg_198"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m7100,6300c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200z" id="svg_199"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m6900,6300l0,0z" id="svg_200"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m7301,6701l0,0z" id="svg_201"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape" id="svg_202">
+       <g id="id39">
+        <path fill="rgb(255,255,102)" d="m9800,6300c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200zm-200,0l0,0zm401,401l0,0z" id="svg_203"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m9800,6300c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200z" id="svg_204"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m9600,6300l0,0z" id="svg_205"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m10001,6701l0,0z" id="svg_206"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape" id="svg_207">
+       <g id="id40">
+        <path fill="rgb(255,255,102)" d="m10300,8100c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200zm-200,0l0,0zm401,401l0,0z" id="svg_208"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m10300,8100c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200z" id="svg_209"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m10100,8100l0,0z" id="svg_210"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m10501,8501l0,0z" id="svg_211"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape" id="svg_212">
+       <g id="id41">
+        <path fill="rgb(255,255,102)" d="m12000,12200c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200zm-200,0l0,0zm401,401l0,0z" id="svg_213"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m12000,12200c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200z" id="svg_214"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m11800,12200l0,0z" id="svg_215"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m12201,12601l0,0z" id="svg_216"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape" id="svg_217">
+       <g id="id42">
+        <path fill="rgb(255,255,102)" d="m12700,13900c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200zm-200,0l0,0zm401,401l0,0z" id="svg_218"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m12700,13900c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200z" id="svg_219"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m12500,13900l0,0z" id="svg_220"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m12901,14301l0,0z" id="svg_221"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape" id="svg_222">
+       <g id="id43">
+        <path fill="rgb(255,255,102)" d="m17000,13900c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200zm-200,0l0,0zm401,401l0,0z" id="svg_223"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m17000,13900c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200z" id="svg_224"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m16800,13900l0,0z" id="svg_225"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m17201,14301l0,0z" id="svg_226"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape" id="svg_227">
+       <g id="id44">
+        <path fill="rgb(255,255,102)" d="m17600,12200c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200zm-200,0l0,0zm401,401l0,0z" id="svg_228"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m17600,12200c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200z" id="svg_229"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m17400,12200l0,0z" id="svg_230"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m17801,12601l0,0z" id="svg_231"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.CustomShape" id="svg_232">
+       <g id="id45">
+        <path fill="rgb(255,255,102)" d="m15600,18700c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200zm-200,0l0,0zm401,401l0,0z" id="svg_233"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m15600,18700c113,0 200,87 200,200c0,113 -87,200 -200,200c-113,0 -200,-87 -200,-200c0,-113 87,-200 200,-200z" id="svg_234"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m15400,18700l0,0z" id="svg_235"/>
+        <path fill="none" stroke="rgb(128,128,128)" d="m15801,19101l0,0z" id="svg_236"/>
+       </g>
+      </g>
+      <g class="com.sun.star.drawing.TextShape" id="svg_237">
+       <g id="id46">
+        <text class="TextShape" id="svg_238">
+         <tspan class="TextParagraph" font-family="Arial, sans-serif" font-size="635px" font-weight="400" id="svg_239">
+          <tspan class="TextPosition" x="16050" y="19097" id="svg_240">
+           <tspan fill="rgb(0,0,0)" id="svg_241">: Events are emitted</tspan>
+          </tspan>
+         </tspan>
+        </text>
+       </g>
+      </g>
+     </g>
+    </g>
+   </g>
+  </g>
+ </g>
+</svg>
