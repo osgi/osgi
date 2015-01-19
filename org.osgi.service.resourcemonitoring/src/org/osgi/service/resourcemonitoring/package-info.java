@@ -26,11 +26,11 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.component; version="[1.2,2.0)"}
+ * {@code  Import-Package: org.osgi.service.resourcemonitoring; version="[1.0,2.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.component; version="[1.2,1.3)"}
+ * {@code  Import-Package: org.osgi.service.resourcemonitoring; version="[1.0,2.0)"}
  *
  * @version 1.0
  * @author $Id$
