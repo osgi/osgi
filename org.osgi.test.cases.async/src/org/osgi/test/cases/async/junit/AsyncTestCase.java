@@ -15,7 +15,15 @@
  */
 package org.osgi.test.cases.async.junit;
 
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
 import org.osgi.framework.ServiceRegistration;
+import org.osgi.framework.Version;
+import org.osgi.framework.wiring.BundleCapability;
+import org.osgi.framework.wiring.BundleWiring;
+import org.osgi.resource.Capability;
+import org.osgi.resource.Namespace;
 import org.osgi.service.async.Async;
 import org.osgi.service.log.LogReaderService;
 import org.osgi.test.cases.async.junit.impl.AsyncErrorListener;
@@ -81,5 +89,69 @@ public class AsyncTestCase extends OSGiTestCase {
 		
 		assertEquals("Wrong value.", 2, AsyncTestUtils.awaitResolve(p).intValue());
 		assertEquals("Wrong method called.", MyService.METHOD_countSlowly, myServiceImpl.lastMethodCalled());
+	}
+
+	/**
+	 * A basic test that ensures the provider of the Async service advertises
+	 * the Async service capability
+	 * 
+	 * @throws Exception
+	 */
+	public void testAsyncServiceCapability() throws Exception {
+
+		List<BundleCapability> capabilities = asyncTracker.getServiceReference().getBundle()
+				.adapt(BundleWiring.class).getCapabilities("osgi.service");
+
+		boolean hasCapability = false;
+		boolean uses = false;
+
+		for (Capability cap : capabilities) {
+			@SuppressWarnings("unchecked")
+			List<String> objectClass = (List<String>) cap.getAttributes().get("objectClass");
+
+			if (objectClass.contains(Async.class.getName())) {
+				hasCapability = true;
+				String usesDirective = cap.getDirectives().get(Namespace.CAPABILITY_USES_DIRECTIVE);
+				if (usesDirective != null) {
+					uses = new HashSet<String>(Arrays.asList(usesDirective.split(","))).contains("org.osgi.service.async");
+				}
+				break;
+			}
+		}
+		assertTrue("No osgi.service capability for the Async service", hasCapability);
+		assertTrue("Missing uses constraint on the osgi.service capability", uses);
+	}
+
+	/**
+	 * A basic test that ensures the provider of the Async service advertises
+	 * the osgi.implement capability
+	 * 
+	 * @throws Exception
+	 */
+	public void testAsyncImplementCapability() throws Exception {
+
+		List<BundleCapability> capabilities = asyncTracker.getServiceReference().getBundle()
+				.adapt(BundleWiring.class).getCapabilities("osgi.implement");
+
+		boolean hasCapability = false;
+		boolean uses = false;
+		Version version = null;
+
+		for (Capability cap : capabilities) {
+			String objectClass = (String) cap.getAttributes().get("osgi.implement");
+
+			if ("osgi.async".equals(objectClass)) {
+				hasCapability = true;
+				String usesDirective = cap.getDirectives().get(Namespace.CAPABILITY_USES_DIRECTIVE);
+				if (usesDirective != null) {
+					uses = new HashSet<String>(Arrays.asList(usesDirective.split(","))).contains("org.osgi.service.async");
+				}
+				version = (Version) cap.getAttributes().get("version");
+				break;
+			}
+		}
+		assertTrue("No osgi.implement capability for the Async service", hasCapability);
+		assertTrue("Missing uses constraint on the osgi.service capability", uses);
+		assertEquals(Version.parseVersion("1.0.0"), version);
 	}
 }

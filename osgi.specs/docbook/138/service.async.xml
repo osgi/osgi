@@ -739,6 +739,21 @@ public void doStuff() {
     security rules. For example access to the Async service can be controlled
     using ServicePermission[Async, GET].</para>
   </section>
+  
+  <section xml:id="service.async-capabilities">
+    <title>Capabilities for the Async service</title>
+
+    <para>Implementations of the Async service must provide a capability in the
+     osgi.implement namespace, declaring the implemented specification to be
+     "osgi.async" with a version of 1.0.0. This capability must also declare
+     a uses constraint for the <code>org.osgi.service.async</code> package.</para>
+     
+     <para>As the Async service implementation must also provide an 
+     <code>org.osgi.service.async.Async</code> service, it must provide
+     a capability in the osgi.service namespace representing this service.
+     This capability must follow the rules defined for the 
+     <xref linkend="service.namespaces-osgi.service.namespace"/>.</para>
+  </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.async.xml"/>
 
