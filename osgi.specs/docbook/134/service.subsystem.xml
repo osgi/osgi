@@ -4812,7 +4812,7 @@ service                 ::= qname ( ';' parameter )*</programlisting>
 
       <para>Code that needs to check Subsystem Permission must always use the
       constructor that takes a Subsystem as a parameter:
-      <code>SubsystemPermssion(Subsystem, String)</code> with a single
+      <code>SubsystemPermission(Subsystem, String)</code> with a single
       action.</para>
 
       <para>For example, the implementation of <code>Subsystem.start</code>
