@@ -78,9 +78,7 @@ public class RestServiceTestCase extends RestTestUtils {
     updateFWStartLevel(startLevel, initialBundleStartLevel, HttpURLConnection.HTTP_UNSUPPORTED_TYPE, null, false);
 
     //  Check PUT with Illegal Arguments
-    Object result = updateFWStartLevel(-1, originalInitialBundleStartLevel, HttpURLConnection.HTTP_INTERNAL_ERROR, null, true);
-
-    assertBundleException(result, "Update framewprk start level with negative value.");
+    updateFWStartLevel(-1, originalInitialBundleStartLevel, HttpURLConnection.HTTP_INTERNAL_ERROR, null, true);
   }
 
   //5.1.2.1
@@ -229,9 +227,8 @@ public class RestServiceTestCase extends RestTestUtils {
     assertNull("Uninstall already uninstalled bundle " + tb1Bundle.getBundleId() + " :", result);
 
     // stop tb2 bundle throws Exception
-	tb2Bundle.start();
-    result = uninstallBundle(getBundleURI(tb2Bundle.getBundleId()), HttpURLConnection.HTTP_INTERNAL_ERROR);
-    assertBundleException(result, "Uninstall bundle with error in stop method " + tb2Bundle.getBundleId());
+    tb2Bundle.start();
+    result = uninstallBundle(getBundleURI(tb2Bundle.getBundleId()), HttpURLConnection.HTTP_NO_CONTENT);
   }
 
   // 5.1.4
@@ -280,8 +277,10 @@ public class RestServiceTestCase extends RestTestUtils {
     bundleStateRepresentation = updateBundleState(getBundleStateURI(tb1Bundle.getBundleId()), newState, -1, HttpURLConnection.HTTP_UNSUPPORTED_TYPE, null, NON_SUPPORTED_MEDIA_TYPE);
     assertNull("Bundle state updated with not supportable media type " + NON_SUPPORTED_MEDIA_TYPE + " :", bundleStateRepresentation);
 
-    bundleStateRepresentation = updateBundleState(getBundleStateURI(tb1Bundle.getBundleId()), newState, -1, HttpURLConnection.HTTP_NOT_ACCEPTABLE, NON_SUPPORTED_MEDIA_TYPE, APPLICATION_JSON);
-    assertNull("Bundle state updated for not acceptable media type " + NON_SUPPORTED_MEDIA_TYPE + " :", bundleStateRepresentation);
+    if (notAcceptableCheck) {
+      bundleStateRepresentation = updateBundleState(getBundleStateURI(tb1Bundle.getBundleId()), newState, -1, HttpURLConnection.HTTP_NOT_ACCEPTABLE, NON_SUPPORTED_MEDIA_TYPE, APPLICATION_JSON);
+      assertNull("Bundle state updated for not acceptable media type " + NON_SUPPORTED_MEDIA_TYPE + " :", bundleStateRepresentation);
+    }
 
     Bundle tb21Bundle = getTestBundle(TB21_TEST_BUNDLE_SYMBOLIC_NAME, TB21);
     if (tb21Bundle.getState() != Bundle.ACTIVE) {
@@ -335,13 +334,12 @@ public class RestServiceTestCase extends RestTestUtils {
 
     int tb1StartLevel = getBundleStartLevel(tb1Bundle).getStartLevel();
     int newStartLevel = tb1StartLevel + 1;
-		bundleStartLevelRepresentation = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), newStartLevel, HttpURLConnection.HTTP_OK, null, APPLICATION_JSON);
-    assertNotNull("Bundle start level updated  " + tb1Bundle.getBundleId() + " :", bundleStartLevelRepresentation);
+    bundleStartLevelRepresentation = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), newStartLevel, HttpURLConnection.HTTP_NO_CONTENT, null, APPLICATION_JSON);
+    assertNull("Bundle start level updated  " + tb1Bundle.getBundleId() + " :", bundleStartLevelRepresentation);
 
     tb1StartLevel = getBundleStartLevel(tb1Bundle).getStartLevel();
 
     assertEquals("New start level ", newStartLevel, tb1StartLevel);
-    assertBundleStartLevelRepresentation(tb1Bundle, bundleStartLevelRepresentation);
 
     bundleStartLevelRepresentation = updateBundleStartLevel(getBundleStartLevelURI(notExistingBundleId), newStartLevel, HttpURLConnection.HTTP_NOT_FOUND, null, APPLICATION_JSON);
     assertNull("Bundle start level updated for not existing bundle " + notExistingBundleId + " :", bundleStartLevelRepresentation);
@@ -349,11 +347,12 @@ public class RestServiceTestCase extends RestTestUtils {
     bundleStartLevelRepresentation = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), newStartLevel, HttpURLConnection.HTTP_UNSUPPORTED_TYPE, null, NON_SUPPORTED_MEDIA_TYPE);
     assertNull("Bundle start level updated with not supportable media type " + NON_SUPPORTED_MEDIA_TYPE + " :", bundleStartLevelRepresentation);
 
-    bundleStartLevelRepresentation = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), newStartLevel, HttpURLConnection.HTTP_NOT_ACCEPTABLE, NON_SUPPORTED_MEDIA_TYPE, APPLICATION_JSON);
-    assertNull("Bundle start level updated for not acceptable media type " + NON_SUPPORTED_MEDIA_TYPE + " :", bundleStartLevelRepresentation);
+    if (notAcceptableCheck) {
+      bundleStartLevelRepresentation = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), newStartLevel, HttpURLConnection.HTTP_NOT_ACCEPTABLE, NON_SUPPORTED_MEDIA_TYPE, APPLICATION_JSON);
+      assertNull("Bundle start level updated for not acceptable media type " + NON_SUPPORTED_MEDIA_TYPE + " :", bundleStartLevelRepresentation);
+    }
 
     result = updateBundleStartLevel(getBundleStartLevelURI(tb1Bundle.getBundleId()), -1, HttpURLConnection.HTTP_INTERNAL_ERROR, null, APPLICATION_JSON);
-    assertBundleException(result, "Bundle start level updated with negative value " + tb1Bundle.getBundleId());
   }
 
   // 5.1.7.1
@@ -476,7 +475,6 @@ public class RestServiceTestCase extends RestTestUtils {
     for (int k = 0; k < jsonServiceList.length(); k++) {
       serviceURIs.add(jsonServiceList.getString(k));
     }
-			System.err.println(serviceURIs);
 
     for (ServiceReference<?> serviceRef : serviceRefs) {
       String serviceURI = getServiceURI(serviceRef.getProperty(Constants.SERVICE_ID).toString());
@@ -493,7 +491,13 @@ public class RestServiceTestCase extends RestTestUtils {
       for (int k = 0; k < jsonServiceRepresentationList.length(); k++) {
         JSONObject serviceRepresentation = jsonServiceRepresentationList.getJSONObject(k);
         try {
-          Object serviceId = serviceRepresentation.getJSONObject("properties");
+          JSONObject props = serviceRepresentation.getJSONObject("properties");
+          assertNotNull("Service representation properties ", props);
+          
+          Object id = props.get(Constants.SERVICE_ID);
+          assertNotNull("Service id ", id);
+          String serviceId = String.valueOf(id);
+
           serviceRepresentationHT.put(serviceId, serviceRepresentation);
         } catch (Exception cause) {
           fail(cause.getMessage());
@@ -502,7 +506,9 @@ public class RestServiceTestCase extends RestTestUtils {
 
       assertEquals("Service representation list size", serviceRefs.length, serviceRepresentationHT.size());
       for (ServiceReference<?> serviceRef : serviceRefs) {
-        assertService(serviceRepresentationHT.get(serviceRef.getProperty(Constants.SERVICE_ID)), serviceRef);
+        String id = String.valueOf(serviceRef.getProperty(Constants.SERVICE_ID));
+        debug("Assert service:" + id, null);
+        assertService(serviceRepresentationHT.get(id), serviceRef);
       }
     }
   }
@@ -570,7 +576,7 @@ public class RestServiceTestCase extends RestTestUtils {
     }
   }
 
-  protected Object updateFWStartLevel(int startLevel, int initialBundleStartLevel, int expectedStatusCode, String acceptType, boolean jsonMediaType) throws JSONException {
+  protected void updateFWStartLevel(int startLevel, int initialBundleStartLevel, int expectedStatusCode, String acceptType, boolean jsonMediaType) throws JSONException {
     //ClientResource resource = new ClientResource(baseURI + FW_START_LEVEL_URI);
     JSONWriter jsonWriter = new JSONStringer().object();
     jsonWriter.key("startLevel").value(startLevel);
@@ -579,21 +585,18 @@ public class RestServiceTestCase extends RestTestUtils {
     String strBody = jsonWriter.endObject().toString();
     String contentType = jsonMediaType ? "application/json" : NON_SUPPORTED_MEDIA_TYPE;
 
-    String result = executeRequest(FW_START_LEVEL_URI, "PUT", contentType, acceptType, null, expectedStatusCode, null, strBody);
-    if (result != null && expectedStatusCode == HttpURLConnection.HTTP_INTERNAL_ERROR) { // BundleException
-      return new JSONObject(result);
-    }
-
-    return result;
+    executeRequest(FW_START_LEVEL_URI, "PUT", contentType, acceptType, null, expectedStatusCode, null, strBody);
   }
 
   protected Object installBundle(String requestURI, URL url, String invalidLocation, String locationHeader, boolean byLocation, int expectedStatusCode) throws IOException, JSONException {
     String result = null;
     if (byLocation) {
-			result = executeRequest(requestURI, "POST", "text/plain", null, null, expectedStatusCode, null /* additionalProps */, invalidLocation == null ? url.toString() : invalidLocation);
+      result = executeRequest(requestURI, "POST", "text/plain", null, null, expectedStatusCode, null /* additionalProps */, invalidLocation == null ? url.toString() : invalidLocation);
     } else {
       HashMap<String, String> additionalProps = new HashMap<String, String>();
-      additionalProps.put("Content-Location", locationHeader);
+      if (locationHeader != null) {
+        additionalProps.put("Content-Location", locationHeader);
+      }
 
       result = executeRequest(requestURI, "POST", "vnd.osgi.bundle", null, null, expectedStatusCode, additionalProps,
           invalidLocation == null ? url.openStream() : new ByteArrayInputStream(invalidLocation.getBytes()));
@@ -659,11 +662,7 @@ public class RestServiceTestCase extends RestTestUtils {
       return new JSONObject(result);
     }
 
-	if (expectedResponseCode == HttpURLConnection.HTTP_OK) {
-		return new JSONObject(result);
-	}
-
-	return null;
+    return null;
   }
 
   protected JSONObject getJSONObject(String uri, String expectedContentType, int expectedResponseCode) throws JSONException, IOException {
@@ -685,7 +684,10 @@ public class RestServiceTestCase extends RestTestUtils {
   }
 
   protected Object getNonSupportedMediaTypeObject(String uri, String expectedContentType, int expectedResponseCode) throws JSONException, IOException {
-   return null;// return executeRequest(uri, "GET", null, NON_SUPPORTED_MEDIA_TYPE, expectedContentType, expectedResponseCode, null, null);
+    if (notAcceptableCheck) {
+      return executeRequest(uri, "GET", null, NON_SUPPORTED_MEDIA_TYPE, expectedContentType, expectedResponseCode, null, null);
+    }
+   return null; 
   }
 
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -729,9 +731,9 @@ public class RestServiceTestCase extends RestTestUtils {
       if (responseCode == HttpURLConnection.HTTP_OK) {
         String responseContentType = connection.getContentType();
         debug("Response ContentType:" + responseContentType, null);
-				if (expectedContentType != null) {
-					assertTrue("ContentType", (responseContentType != null) && (responseContentType.startsWith(expectedContentType)));
-				}
+        if (expectedContentType != null) {
+          assertTrue("ContentType", (responseContentType != null) && (responseContentType.startsWith(expectedContentType)));
+        }
         in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
       } else if (responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
         in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));

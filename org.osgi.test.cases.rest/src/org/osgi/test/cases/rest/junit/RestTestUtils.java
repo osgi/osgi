@@ -60,6 +60,7 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
   protected String user;
   protected String pass;
   protected boolean debugOn;
+  protected boolean notAcceptableCheck;
 
   public static String TEST_BUNDLE_SYMBOLIC_NAME = "org.osgi.test.cases.rest";
   public static String TB1_TEST_BUNDLE_SYMBOLIC_NAME = TEST_BUNDLE_SYMBOLIC_NAME + ".tb1";
@@ -85,6 +86,7 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
 
     baseURI = getProperty("rest.ct.base.uri", "http://localhost:8888/");
     debugOn = getBooleanProperty("rest.ct.debug", true);
+    notAcceptableCheck = getBooleanProperty("rest.ct.not_acceptable.check", false);
 
     String mediaType = getProperty("rest.ct.non.supported.media.type");
     if (mediaType != null) {
