@@ -25,5 +25,5 @@ Require-Capability: osgi.compile.time.only; filter:="(&(must.not.resolve=*)(!(mu
     ${replace;${osgi.annotation.specs};.+;$0\\;version=project}, \
     ee.minimum; version=1.3
 
--include : layout.bnd
+-include : ${build}/eclipse/jdt.bnd, layout.bnd
 javadoc.title = Annotation

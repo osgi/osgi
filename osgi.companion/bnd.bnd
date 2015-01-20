@@ -1,3 +1,5 @@
+-include = ${build}/eclipse/jdt.bnd
+
 -nobundles = true
 
 -dependson = \
