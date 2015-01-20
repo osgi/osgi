@@ -2140,17 +2140,17 @@ should be discarded -->
 
 <!-- revisionflag markup -->
 <xsl:template match="text()[ancestor::*[@revisionflag][1][@revisionflag ='added']]">
-<fo:inline background-color="aqua">
+<fo:inline background-color="#A6C5DC"><!-- blue -->
   <xsl:copy/>
 </fo:inline>
 </xsl:template>
 <xsl:template match="text()[ancestor::*[@revisionflag][1][@revisionflag ='changed']]">
-<fo:inline background-color="lime">
+<fo:inline background-color="#CCE5C2"><!-- green -->
   <xsl:copy/>
 </fo:inline>
 </xsl:template>
 <xsl:template match="text()[ancestor::*[@revisionflag][1][@revisionflag ='deleted']]">
-<fo:inline background-color="red" text-decoration="line-through">
+<fo:inline background-color="#EBCCCC" text-decoration="line-through"><!-- red -->
   <xsl:copy/>
 </fo:inline>
 </xsl:template>
