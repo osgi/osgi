@@ -27,5 +27,5 @@ Require-Capability: osgi.compile.time.only; filter:="(&(must.not.resolve=*)(!(mu
 	${replace;${osgi.core.specs};.+;$0\\;version=project}, \
 	osgi.annotation;version=latest
 
--include : layout.bnd
+-include : ${build}/eclipse/jdt.bnd, layout.bnd
 javadoc.title = Core

@@ -30,5 +30,5 @@ Require-Capability: osgi.compile.time.only; filter:="(&(must.not.resolve=*)(!(mu
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec;version=latest, \
     com.icl.saxon;version=latest
 
--include : layout.bnd
+-include : ${build}/eclipse/jdt.bnd, layout.bnd
 javadoc.title = Residential
