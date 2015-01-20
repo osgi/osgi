@@ -1501,7 +1501,7 @@ public class MyErrorServlet extends HttpServlet {
       </tgroup>
     </table>
 
-    <para>The examples below uses Declarative Services annotations to register
+    <para>The examples below use Declarative Services annotations to register
     a resources service. Note that this service is purely used to convey
     information to the Http Whiteboard implementation and is never
     invoked.</para>
