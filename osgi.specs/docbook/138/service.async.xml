@@ -170,6 +170,7 @@
       
 private Async asyncService;
 private ServiceReference&lt;Foo&gt; fooRef;
+private Foo mediated;
 
 @Reference
 void setAsync(Async async) {
@@ -181,10 +182,14 @@ void setList(ServiceReference&lt;Foo&gt; foo) {
     fooRef = foo;
 }
 
+@Activate
+void start() {
+    mediated = asyncService.mediate(fooRef, Foo.class);
+}
+
 public synchronized void doStuff() {
-    Foo mediator = asyncService.mediate(fooRef, Foo.class);
     Promise&lt;Boolean&gt; promise = asyncService
-           .call(mediator.booleanMethod(“aValue”));
+           .call(mediated.booleanMethod(“aValue”));
     ...
 }
 
@@ -214,8 +219,10 @@ public synchronized void doStuff() {
       method. In either case the returned promise will eventually resolve with
       a value of <code>null</code>. This is demonstrated in below.</para>
 
-      <programlisting>private Async asyncService;
+      <programlisting>
+private Async asyncService;
 private ServiceReference&lt;Foo&gt; fooRef;
+private Foo mediated;
 
 @Reference
 void setAsync(Async async) {
@@ -227,9 +234,13 @@ void setList(ServiceReference&lt;Foo&gt; foo) {
     fooRef = foo;
 }
 
+@Activate
+void start() {
+    mediated = asyncService.mediate(fooRef, Foo.class);
+}
+
 public synchronized void doStuff() {
-    Foo mediator = asyncService.mediate(fooRef, Foo.class);
-    mediator.voidMethod();
+    mediated.voidMethod();
     Promise&lt;Void&gt; promise = asyncService
            .call();
     ...
@@ -258,8 +269,11 @@ public synchronized void doStuff() {
       asynchronous invocation using the <code>execute()</code> method as show
       below.</para>
 
-      <programlisting>private Async asyncService;
+      <programlisting>
+private Async asyncService;
 private ServiceReference&lt;Foo&gt; fooRef;
+
+private Foo mediated;
 
 @Reference
 void setAsync(Async async) {
@@ -271,9 +285,13 @@ void setList(ServiceReference&lt;Foo&gt; foo) {
     fooRef = foo;
 }
 
-public void doStuff() {
-    Foo mediator = asyncService.mediate(fooRef, Foo.class);
-    mediator.someMethod();
+@Activate
+void start() {
+    mediated = asyncService.mediate(fooRef, Foo.class);
+}
+
+public synchronized void doStuff() {
+    mediated.someMethod();
     asyncService.execute();
     ...
 }</programlisting>
@@ -531,18 +549,18 @@ public void doStuff() {
     <section>
       <title>Thread safety and instance sharing</title>
 
-      <para>Async mediators, unlike instances of the Async service, are not
-      required to be thread safe. Clients should not share mediator objects
-      with other bundles, or accross threads. Also, if a client wishes to make
-      an async invocation then the call to the mediator and the call to
-      <code>async.call(...)</code> must occur on the same thread. The returned
-      Promise may then be shared between threads if required.</para>
+      <para>Async mediators, like instances of the Async service, are 
+      required to be thread safe. Clients may therefore share mediator objects
+      accross threads, and can safely store them as instance fields. Whilst
+      mediators are thread safe, if a client wishes to make an async invocation 
+      then the call to the mediator and the call to <code>async.call(...)</code> 
+      must occur on the same thread. The returned Promise may then be shared 
+      between threads if required.</para>
 
       <para>Async mediators created from <code>ServiceReference</code> objects
       remain directly associated with the service reference and client bundle
       after creation. Clients should therefore not share mediator objects with
-      other bundles. Instead both bundles should create their own
-      mediators.</para>
+      other bundles. Instead both bundles should create their own mediators.</para>
     </section>
   </section>
 
