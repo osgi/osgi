@@ -1215,7 +1215,7 @@ public class MyServlet extends HttpServlet {
       <para>Example:</para>
 
       <programlisting>@Component(service = Servlet.class, scope=ServiceScope.PROTOTYPE,
-   property={
+   property = {
      "osgi.http.whiteboard.servlet.errorPage=java.io.IOException",
      "osgi.http.whiteboard.servlet.errorPage=500"})
 public class MyErrorServlet extends HttpServlet {
@@ -1240,7 +1240,36 @@ public class MyErrorServlet extends HttpServlet {
       <code>osgi.http.whiteboard.servlet.asyncSupported</code> or
       <code>osgi.http.whiteboard.filter.asyncSupported</code>.</para>
 
-      <remark>TODO add example</remark>
+      <para>An example simple asynchronous servlet that handles the servlet
+      requests in a thread from a custom thread pool rather than in the thread provided by the 
+      servlet container:</para>
+
+      <programlisting>@Component(service = Servlet.class, scope = ServiceScope.PROTOTYPE,
+    property = {
+        "osgi.http.whiteboard.servlet.pattern=/as",
+        "osgi.http.whiteboard.servlet.asyncSupported:Boolean=true"})
+public class AsyncServlet extends HttpServlet {
+    ExecutorService executor = Executors.newCachedThreadPool(
+        r -> new Thread(r, "Pooled Thread"));
+
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) 
+            throws IOException {
+        doGetAsync(req.startAsync());
+    }
+
+    private void doGetAsync(AsyncContext asyncContext) {
+        executor.submit(() -> {
+            try {
+                PrintWriter writer = asyncContext.getResponse().getWriter();
+                writer.print("Servlet executed async in: " +
+                    Thread.currentThread()); // displays 'Pooled Thread'
+            } finally {
+                asyncContext.complete();
+            }
+            return null;
+        });
+    }
+}</programlisting>
     </section>
 
     <section>
@@ -1527,7 +1556,7 @@ public class MyFilter implements Filter {
     invoked.</para>
 
     <programlisting>@Component(service = MyResourceService.class,
-    property={
+    property = {
         "osgi.http.whiteboard.resource.pattern=/files/*",
         "osgi.http.whiteboard.resource.prefix=/www"})
 public class MyResourceService {}</programlisting>
@@ -1542,7 +1571,7 @@ public class MyResourceService {}</programlisting>
     </para>
     
     <programlisting>@Component(service = SomeResourceService.class,
-    property={
+    property = {
         "osgi.http.whiteboard.resource.pattern=/favicon.ico",
         "osgi.http.whiteboard.resource.prefix=/logo.png"})
 public class SomeResourceService {}</programlisting>
