@@ -80,10 +80,10 @@ import org.osgi.framework.Bundle;
  * <li>{@code handleSecurity} - Performs implementation-defined authentication
  * on the request.</li>
  * <li>{@code getResource} - Assumes the named resource is in the bundle of the
- * whiteboard service. This method calls the whiteboard service bundle's
- * {@code Bundle.getEntry} method, and returns the appropriate URL to access the
- * resource. On a Java runtime environment that supports permissions, the Http
- * Whiteboard Implementation needs to be granted
+ * whiteboard service, addressed from the root. This method calls the whiteboard
+ * service bundle's {@code Bundle.getEntry} method, and returns the appropriate
+ * URL to access the resource. On a Java runtime environment that supports
+ * permissions, the Http Whiteboard Implementation needs to be granted
  * {@code org.osgi.framework.AdminPermission[*,RESOURCE]}.</li>
  * <li>{@code getResourcePaths} - Assumes that the resources are in the bundle
  * of the whiteboard service. This method calls {@code Bundle.findEntries}
