@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -109,8 +109,10 @@ public interface ResourceMonitoringService {
 	 *        inherit all resource monitoring settings (enabled monitors,
 	 *        thresholds) from the template.
 	 * @return A new {@link ResourceContext} instance.
+	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
+	 *         name is already used.
 	 */
-	public ResourceContext createContext(String name, ResourceContext template);
+	public ResourceContext createContext(String name, ResourceContext template) throws ResourceMonitoringServiceException;
 
 	/**
 	 * Returns the context with the specified resource context name.
