@@ -17,6 +17,7 @@ import org.osgi.service.resourcemonitoring.ResourceMonitor;
 import org.osgi.service.resourcemonitoring.ResourceMonitorException;
 import org.osgi.service.resourcemonitoring.ResourceMonitorFactory;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
+import org.osgi.service.resourcemonitoring.ResourceMonitoringServiceException;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -123,8 +124,10 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 
 	/**
 	 * @param pContext
+	 * @throws ResourceMonitoringServiceException, if a pb occurred when
+	 *         initializing the ResourceMonitoringService.
 	 */
-	public void start(BundleContext pContext) {
+	public void start(BundleContext pContext) throws ResourceMonitoringServiceException {
 		context = pContext;
 		persistenceManager = new PersistenceManager(pContext, this);
 		persistenceManager.restoreContexts();
@@ -157,7 +160,7 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 	}
 
 	public ResourceContext createContext(String name, ResourceContext template)
-			throws RuntimeException {
+			throws ResourceMonitoringServiceException {
 
 		lock.acquire();
 
@@ -165,8 +168,8 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 		ResourceContext existingResourceContext = getContext(name);
 		if (existingResourceContext != null) {
 			lock.release();
-			throw new RuntimeException(
-					"A ResourceContext with the same name already exists");
+			throw new ResourceMonitoringServiceException(
+					"A ResourceContext with the same name already exists", null);
 		}
 
 		ResourceContext resourceContext = createContext(name);
@@ -307,8 +310,11 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 	/**
 	 * Set default resource context settings. This method configures the
 	 * FRAMEWORK Resource Context as well as the SYSTEM Resource Context.
+	 * 
+	 * @throws ResourceMonitoringServiceException if a pb. occurred when
+	 *         creating a resource context.
 	 */
-	private void setDefaultResourceContexts() {
+	private void setDefaultResourceContexts() throws ResourceMonitoringServiceException {
 
 		if (getContext(SYSTEM_CONTEXT_NAME) == null) {
 			// system resource context

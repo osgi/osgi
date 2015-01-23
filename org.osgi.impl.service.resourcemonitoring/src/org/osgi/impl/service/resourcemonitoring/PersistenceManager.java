@@ -14,6 +14,7 @@ import org.osgi.impl.service.resourcemonitoring.persistency.PersistenceImpl;
 import org.osgi.impl.service.resourcemonitoring.persistency.ResourceContextInfo;
 import org.osgi.service.resourcemonitoring.ResourceContext;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
+import org.osgi.service.resourcemonitoring.ResourceMonitoringServiceException;
 
 /**
  * This class is used to handle the ResourceContext persistence for the
@@ -95,8 +96,11 @@ public class PersistenceManager implements BundleListener {
 	/**
 	 * Restore the persisted ResourceContexts. This method also makes this
 	 * instance as a BundleListener.
+	 * 
+	 * @throws ResourceMonitoringServiceException if a pb occurred when creating
+	 *         a ResourceContext.
 	 */
-	public void restoreContexts() {
+	public void restoreContexts() throws ResourceMonitoringServiceException {
 		ResourceContextInfo[] rcis = persistence.load(bundleContext);
 
 		// iterate over the loaded ResourceContextInfo
