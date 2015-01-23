@@ -30,7 +30,7 @@
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.resourcemonitoring; version="[1.0,2.0)"}
+ * {@code  Import-Package: org.osgi.service.resourcemonitoring; version="[1.0,1.1)"}
  *
  * @version 1.0
  * @author $Id$
