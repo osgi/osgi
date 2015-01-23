@@ -7,4 +7,4 @@ Private-Package: 		${p}.*
 Bundle-Description: 	OSGi Test Filter. Filters out services that are not meant to be used by the CT.
 
 -buildpath = \
-	osgi.core;				version=4.3
+	osgi.core;				version=4.3.1

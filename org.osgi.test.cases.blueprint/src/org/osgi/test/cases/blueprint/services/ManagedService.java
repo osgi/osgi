@@ -16,10 +16,10 @@
 
 package org.osgi.test.cases.blueprint.services;
 
+import java.util.Dictionary;
 import java.util.Iterator;
 import java.util.Properties;
 import java.util.Set;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
@@ -154,7 +154,7 @@ public class ManagedService {
         // belt-and-braces in case things get out of sync
         if (registration == null) {
             // go register this service
-            registration = context.registerService(interfaces, service, props);
+            registration = context.registerService(interfaces, service, (Dictionary) props);
         }
     }
 

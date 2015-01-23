@@ -17,5 +17,5 @@ Export-Package					= org.osgi.service.monitor; -split-package:=first; provide:=t
 
 -buildpath						= \
     org.osgi.service.monitor;			version=project, \
-	osgi.core;							version=4.0.1, \
-	osgi.cmpn;							version=4.3
+	osgi.core;							version=4.3.1, \
+	osgi.cmpn;							version=4.3.1

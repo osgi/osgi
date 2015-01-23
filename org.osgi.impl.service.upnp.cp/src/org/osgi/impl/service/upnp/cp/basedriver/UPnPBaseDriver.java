@@ -3,8 +3,6 @@ package org.osgi.impl.service.upnp.cp.basedriver;
 import java.util.Dictionary;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Properties;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.upnp.cp.description.RootDevice;
@@ -74,7 +72,7 @@ public class UPnPBaseDriver implements UPnPDeviceListener {
 		this.deviceinfo = deviceinfo;
 		String names = "org.osgi.service.upnp.UPnPDevice";
 		String[] childrenUDN = null;
-		Properties props = new Properties();
+        Dictionary<String, Object> props = new Hashtable<String, Object>();
 		RootDevice devinfo = deviceinfo.getDevice();
 		RootDevice[] embdevices = devinfo.getEmbededDevices();
 		parentUDN = devinfo.getUDN();
@@ -125,7 +123,7 @@ public class UPnPBaseDriver implements UPnPDeviceListener {
 	// registers
 	// the service in the osgi framework.
 	private void regEmbedded(RootDevice[] sembdevices) {
-		Properties props = new Properties();
+        Dictionary<String, Object> props = new Hashtable<String, Object>();
 		for (int i = 0; i < sembdevices.length; i++) {
 			UPnPDeviceImpl upnpdevice = null;
 			String euuid = sembdevices[i].getUDN();
@@ -166,7 +164,7 @@ public class UPnPBaseDriver implements UPnPDeviceListener {
 	}
 
 	// This method is called to get all the device properties.
-	Properties getDeviceProps(Properties props, RootDevice devinfo) {
+    Dictionary<String, Object> getDeviceProps(Dictionary<String, Object> props, RootDevice devinfo) {
 		props.put("DEVICE_CATEGORY", "UPnP");
 		if (devinfo.getUDN() != null) {
 			props.put(UPnPDevice.UDN, devinfo.getUDN());

@@ -15,9 +15,9 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
+import java.util.Dictionary;
 import java.util.Map;
 import java.util.Properties;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
@@ -221,7 +221,7 @@ public class BlueprintAdminEvent extends AdminTestEvent {
 
         if (!TestUtil.validateBundleVersion(bundle, (Version)other.getProperty(EventConstants.BUNDLE_VERSION))) {
             return new AssertionFailure("Mismatched bundle version on blueprint admin event expected=" +
-                (String)bundle.getHeaders().get(Constants.BUNDLE_VERSION) + " received=" + other.getProperty("bundle.version"), cause);
+                bundle.getHeaders().get(Constants.BUNDLE_VERSION) + " received=" + other.getProperty("bundle.version"), cause);
         }
         if (!TestUtil.validateBundleId(bundle, (Long) other.getProperty(EventConstants.BUNDLE_ID))) {
             return new AssertionFailure("Mismatched bundle id on blueprint admin event other="
@@ -303,7 +303,7 @@ public class BlueprintAdminEvent extends AdminTestEvent {
      */
     protected boolean matchFilter(Filter[] filters, Properties props) {
         for (int i = 0; i < filters.length; i++) {
-            if (filters[i].match(props)) {
+            if (filters[i].match((Dictionary) props)) {
                 return true;
             }
         }

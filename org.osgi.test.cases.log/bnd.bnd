@@ -9,7 +9,7 @@ Import-Package: ${-signaturetest}, *
 -buildpath							= \
 	org.osgi.test.support; 	version=project, \
 	org.osgi.service.log;					version=project	, \
-	osgi.core;								version=4.1		, \
+	osgi.core;								version=4.3.1		, \
 	${junit}
 
 Test-Cases							= ${testcases}

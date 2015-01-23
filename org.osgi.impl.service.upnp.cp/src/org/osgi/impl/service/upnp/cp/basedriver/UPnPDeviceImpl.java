@@ -1,19 +1,22 @@
 package org.osgi.impl.service.upnp.cp.basedriver;
 
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.Properties;
 import java.util.Dictionary;
 import java.util.Enumeration;
-import org.osgi.framework.*;
-import org.osgi.service.upnp.*;
-import org.osgi.impl.service.upnp.cp.description.*;
+import java.util.Hashtable;
+import java.util.Iterator;
+import org.osgi.framework.BundleContext;
+import org.osgi.impl.service.upnp.cp.description.Icon;
+import org.osgi.impl.service.upnp.cp.description.RootDevice;
+import org.osgi.impl.service.upnp.cp.description.ServiceInfo;
+import org.osgi.service.upnp.UPnPDevice;
+import org.osgi.service.upnp.UPnPIcon;
+import org.osgi.service.upnp.UPnPService;
 
 public class UPnPDeviceImpl implements UPnPDevice {
 	private UPnPBaseDriver	basedriver;
 	private RootDevice		deviceinfo;
 	private Hashtable		services;
-	private Properties		props;
+    private Dictionary<String, Object> props;
 	private UPnPIconImpl[]  icons;
 	private String			devid;
 	private String			devtype;
@@ -23,7 +26,7 @@ public class UPnPDeviceImpl implements UPnPDevice {
 	}
 
 	UPnPDeviceImpl(UPnPBaseDriver basedriver, RootDevice deviceinfo,
-			Properties props, BundleContext bc) {
+            Dictionary<String, Object> props, BundleContext bc) {
 		this.basedriver = basedriver;
 		this.deviceinfo = deviceinfo;
 		this.props = props;

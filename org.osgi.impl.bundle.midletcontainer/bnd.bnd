@@ -12,5 +12,5 @@ Private-Package					= ${p}
 Include-Resource				= TestIcon.gif
 
 -buildpath						= \
-	osgi.core;					version=4.2, \
-	osgi.cmpn;					version=4.1
+	osgi.core;					version=4.3.1, \
+	osgi.cmpn;					version=4.3.1

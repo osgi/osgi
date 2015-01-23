@@ -19,7 +19,6 @@ package org.osgi.impl.service.jndi;
 
 import java.util.Arrays;
 import java.util.Comparator;
-
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
@@ -100,7 +99,7 @@ class ServiceUtils {
 				+ JNDIConstants.JNDI_SERVICENAME + "="
 				+ urlParser.getServiceInterface() + ")";
 		ServiceReference[] serviceReferencesByName = 
-			bundleContext.getServiceReferences(null, serviceNameFilter);
+                bundleContext.getServiceReferences((String) null, serviceNameFilter);
 		return serviceReferencesByName;
 	}
 	

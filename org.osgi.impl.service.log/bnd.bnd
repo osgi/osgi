@@ -12,4 +12,4 @@ Export-Service: 		org.osgi.service.log.LogService
 
 -buildpath = \
 	org.osgi.service.log; 	version=project, \
-	osgi.core;				version=4.0
+	osgi.core;				version=4.3.1

@@ -16,14 +16,13 @@
 
 package org.osgi.test.cases.blueprint.components.serviceimport;
 
-import java.util.Properties;
-
-import org.osgi.test.cases.blueprint.services.AssertionService;
-import org.osgi.test.cases.blueprint.services.TestServiceOne;
-import org.osgi.service.blueprint.container.ServiceUnavailableException;
-
+import java.util.Dictionary;
+import java.util.Hashtable;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
+import org.osgi.service.blueprint.container.ServiceUnavailableException;
+import org.osgi.test.cases.blueprint.services.AssertionService;
+import org.osgi.test.cases.blueprint.services.TestServiceOne;
 
 
 /**
@@ -61,7 +60,7 @@ public class UnavailableDependencyChecker extends DependencyDriver {
                 String filterString = e.getFilter();
                 AssertionService.assertNotNull(this, "Null filter from ServiceUnavailableException", filterString);
                 Filter filter = serviceManager.createFilter(filterString);
-                Properties filterProps = new Properties();
+                Dictionary<String, Object> filterProps = new Hashtable<String, Object>();
                 filterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
                 // this is requested using the component-name attribute, so this should be in the filter too.
                 filterProps.put("osgi.service.blueprint.compname", "ServiceOneA");
@@ -89,7 +88,7 @@ public class UnavailableDependencyChecker extends DependencyDriver {
                 String filterString = e.getFilter();
                 AssertionService.assertNotNull(this, "Null filter from ServiceUnavailableException", filterString);
                 Filter filter = serviceManager.createFilter(filterString);
-                Properties filterProps = new Properties();
+                Dictionary<String, Object> filterProps = new Hashtable<String, Object>();
                 filterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
                 // this is requested using the component-name attribute, so this should be in the filter too.
                 filterProps.put("osgi.service.blueprint.compname", "ServiceOneA");

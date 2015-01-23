@@ -12,5 +12,5 @@ Export-Package 					= org.osgi.util.xml
 Private-Package					= ${p}.*
 
 -buildpath						= \
-	osgi.core;					version=4.1, \
-	osgi.cmpn;					version=4.1
+	osgi.core;					version=4.3.1, \
+	osgi.cmpn;					version=4.3.1

@@ -16,7 +16,8 @@
 
 package org.osgi.test.cases.blueprint.components.serviceimport;
 
-import java.util.Properties;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import org.osgi.framework.Filter;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.service.blueprint.container.ServiceUnavailableException;
@@ -64,7 +65,7 @@ public class UnregisteredCollectionDependencyChecker extends DependencyDriver {
                 AssertionService.assertNotNull(this, "Null filter from ServiceUnavailableException", filterString);
                 filterString = cleanupFilterForR6(filterString);
                 Filter filter = serviceManager.createFilter(filterString);
-                Properties filterProps = new Properties();
+                Dictionary<String, Object> filterProps = new Hashtable<String, Object>();
                 filterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
                 // this is requested using the component-name attribute, so this should be in the filter too.
                 filterProps.put("osgi.service.blueprint.compname", "ServiceOneA");
@@ -89,7 +90,7 @@ public class UnregisteredCollectionDependencyChecker extends DependencyDriver {
                 AssertionService.assertNotNull(this, "Null filter from ServiceUnavailableException", filterString);
                 filterString = cleanupFilterForR6(filterString);
                 Filter filter = serviceManager.createFilter(filterString);
-                Properties filterProps = new Properties();
+                Dictionary<String, Object> filterProps = new Hashtable<String, Object>();
                 filterProps.put(org.osgi.framework.Constants.OBJECTCLASS, new String[] { TestServiceOne.class.getName() });
                 // this is requested using the component-name attribute, so this should be in the filter too.
                 filterProps.put("osgi.service.blueprint.compname", "ServiceOneA");

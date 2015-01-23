@@ -15,13 +15,12 @@
  */
 package org.osgi.impl.bundle.transaction;
 
-import java.util.Properties;
-
+import java.util.Dictionary;
+import java.util.Hashtable;
 import javax.transaction.TransactionManager;
 import javax.transaction.TransactionSynchronizationRegistry;
 import javax.transaction.UserTransaction;
 import javax.transaction.xa.XAException;
-
 import org.apache.geronimo.transaction.GeronimoUserTransaction;
 import org.apache.geronimo.transaction.manager.GeronimoTransactionManager;
 import org.osgi.framework.BundleActivator;
@@ -53,7 +52,7 @@ public class Activator implements BundleActivator {
 	}
 	
 	private void registerTransactionManager() throws XAException {
-		Properties p = new Properties();
+        Dictionary<String, Object> p = new Hashtable<String, Object>();
 		p.put("service.description", SERVICE_DESCRIPTION);
 		String[] ifaces = { TransactionManager.class.getName(),
 				TransactionSynchronizationRegistry.class.getName() };
@@ -62,7 +61,7 @@ public class Activator implements BundleActivator {
 
 	private void registerUserTransaction()
 			throws XAException {
-		Properties p = new Properties();
+        Dictionary<String, Object> p = new Hashtable<String, Object>();
 		p.put("service.description", SERVICE_DESCRIPTION);
 		GeronimoUserTransaction userTx = new GeronimoUserTransaction(manager);
 		String iface = UserTransaction.class.getName();

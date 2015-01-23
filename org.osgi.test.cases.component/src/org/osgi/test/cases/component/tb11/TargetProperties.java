@@ -16,8 +16,7 @@
 package org.osgi.test.cases.component.tb11;
 
 import java.util.Dictionary;
-import java.util.Properties;
-
+import java.util.Hashtable;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.ComponentContext;
 import org.osgi.test.cases.component.service.BaseService;
@@ -35,7 +34,7 @@ public class TargetProperties implements BaseService, ComponentContextExposer {
 
     Object prop = properties.get("serial.num");
     if (prop != null) {
-      Properties serviceProps = new Properties();
+            Dictionary<String, Object> serviceProps = new Hashtable<String, Object>();
       serviceProps.put("serial.num", prop);
       sr = ctxt.getBundleContext().registerService(getClass().getName(), this, serviceProps);
     }

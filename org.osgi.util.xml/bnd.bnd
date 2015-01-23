@@ -5,4 +5,4 @@ javac.profile=compact2
 Export-Package: ${p}.*; -split-package:=first
 
 -buildpath = \
-	osgi.core;					version=4.0
+	osgi.core;					version=4.3.1

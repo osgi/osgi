@@ -15,11 +15,10 @@
  */
 
 package org.osgi.test.cases.blueprint.framework;
-import java.util.Map;
 import java.util.Dictionary;
-import java.util.Properties;
 import java.util.Hashtable;
-
+import java.util.Map;
+import java.util.Properties;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.Filter;
@@ -215,7 +214,7 @@ public class BlueprintContainerEvent extends AdminTestEvent {
      */
     protected boolean matchFilter(Filter[] filters, Properties props) {
         for (int i = 0; i < filters.length; i++) {
-            if (filters[i].match(props)) {
+            if (filters[i].match((Dictionary) props)) {
                 return true;
             }
         }
@@ -288,7 +287,7 @@ public class BlueprintContainerEvent extends AdminTestEvent {
         // just turn this into a special event typed.
         Dictionary props = new Hashtable();
         props.put(EventConstants.BUNDLE_SYMBOLICNAME, bundle.getSymbolicName());
-        props.put("bundle.version", Version.parseVersion((String)bundle.getHeaders().get(Constants.BUNDLE_VERSION)));
+        props.put("bundle.version", Version.parseVersion(bundle.getHeaders().get(Constants.BUNDLE_VERSION)));
         props.put(EventConstants.BUNDLE, bundle);
         props.put(EventConstants.BUNDLE_ID, new Long(bundle.getBundleId()));
 

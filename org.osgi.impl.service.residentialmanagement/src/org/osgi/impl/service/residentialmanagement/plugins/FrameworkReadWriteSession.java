@@ -32,7 +32,6 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.Vector;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.BundleException;
@@ -160,7 +159,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 							.equals(RMTConstants.FRAMEWORKSTARTLEVEL)) {
 						int flameworkStartLevel = operation.getData().getInt();
 						Bundle sysBundle = context.getBundle(0);
-						FrameworkStartLevel fs = (FrameworkStartLevel) sysBundle
+						FrameworkStartLevel fs = sysBundle
 								.adapt(FrameworkStartLevel.class);
 						FrameworkListenerForStartLevel fls = new FrameworkListenerForStartLevel();
 						fs.setStartLevel(flameworkStartLevel, new FrameworkListener[]{fls});
@@ -176,7 +175,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 						int initialBundleStartlevel = operation.getData()
 								.getInt();
 						Bundle sysBundle = context.getBundle(0);
-						FrameworkStartLevel fs = (FrameworkStartLevel) sysBundle
+						FrameworkStartLevel fs = sysBundle
 								.adapt(FrameworkStartLevel.class);
 						fs.setInitialBundleStartLevel(initialBundleStartlevel);
 					}
@@ -341,16 +340,16 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 			bundles.add(bs.getBundleObj());
 		}
 		Bundle sysBundle = context.getBundle(0);
-		FrameworkWiring fw = (FrameworkWiring) sysBundle
+		FrameworkWiring fw = sysBundle
 				.adapt(FrameworkWiring.class);
-		fw.refreshBundles(bundles, null);
+        fw.refreshBundles(bundles);
 
 		// setting bundle's StartLevel
 		Iterator startLevelit = this.bundleStartLevelCue.iterator();
 		while (startLevelit.hasNext()) {
 			BundleSubTree bs = (BundleSubTree) startLevelit.next();
 			int startLevel = bs.getStartLevelTmp();
-			BundleStartLevel sl = (BundleStartLevel) bs.getBundleObj().adapt(
+			BundleStartLevel sl = bs.getBundleObj().adapt(
 					BundleStartLevel.class);
 			sl.setStartLevel(startLevel);
 			long s = System.currentTimeMillis();
@@ -450,7 +449,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 			}
 			refreshBundles.add(bs.getBundleObj());
 		}
-		fw.refreshBundles(refreshBundles, null);
+        fw.refreshBundles(refreshBundles);
 		rollback();
 
 		// framework --> on thread
@@ -497,7 +496,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 	protected void restore() {
 		Vector refreshBundles = new Vector();
 		Bundle sysBundle = context.getBundle(0);
-		FrameworkWiring fw = (FrameworkWiring) sysBundle
+		FrameworkWiring fw = sysBundle
 				.adapt(FrameworkWiring.class);
 		for (Enumeration keys = this.restoreBundlesForUninstall.keys(); keys
 				.hasMoreElements();) {
@@ -538,7 +537,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				}
 			}
 		}
-		fw.refreshBundles(refreshBundles, null);
+        fw.refreshBundles(refreshBundles);
 		refreshBundles = new Vector();
 
 		for (Enumeration keys = this.restoreBundles.keys(); keys
@@ -556,7 +555,7 @@ class FrameworkReadWriteSession extends FrameworkReadOnlySession implements
 				} else if (beforeState.equals(RMTConstants.INSTALLED)) {
 					bs.getBundleObj().stop();
 					refreshBundles.add(bs.getBundleObj());
-					fw.refreshBundles(refreshBundles, null);
+                        fw.refreshBundles(refreshBundles);
 				} else if (beforeState.equals(RMTConstants.RESOLVED)) {
 					if (bs.getState().equals(RMTConstants.INSTALLED)) {
 						Vector resolveBundles = new Vector();

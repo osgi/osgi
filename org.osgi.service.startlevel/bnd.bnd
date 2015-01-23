@@ -4,4 +4,4 @@
 Export-Package: ${p}.*; -split-package:=first
 
 -buildpath = \
-	osgi.core;					version=4.2
+	osgi.core;					version=4.3.1

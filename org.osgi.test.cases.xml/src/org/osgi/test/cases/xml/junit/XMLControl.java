@@ -25,10 +25,8 @@
 package org.osgi.test.cases.xml.junit;
 
 import java.util.Vector;
-
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
-
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
@@ -285,7 +283,7 @@ public class XMLControl extends DefaultTestBundleControl {
 		assertNotNull("service.pid property is not set", reference
 				.getProperty(Constants.SERVICE_PID));
 		ServiceReference[] references = getContext().getServiceReferences(
-				null,
+                (String) null,
 				"(service.pid=" + reference.getProperty(Constants.SERVICE_PID)
 						+ ")");
 		assertEquals("service.pid property is not unique", 1, references.length);
