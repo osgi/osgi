@@ -142,7 +142,7 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="service.http.whiteboard.servletcontext">
     <title>The Servlet Context</title>
 
     <para>The servlet specification defines the <code>ServletContext</code>
@@ -282,8 +282,27 @@ by the Servlet Context Helper registered under the /foo path:
     <code>ServletContextHelper</code> see <xref
     linkend="service.http.common.properties"/>.</para>
 
+    <para>An example Servlet Context Helper can be found below, it prefixes 
+        the path with <code>/myapp</code> for any associated whiteboard service.
+        Additionally, it serves static resources from a non-standard location, a
+        content delivery network. Other methods use the default 
+        <code>ServletContextHelper</code> implementation.</para>
+    
+    <programlisting>@Component(service = ServletContextHelper.class,
+   property = {
+       "osgi.http.whiteboard.context.name=my-sch",
+       "osgi.http.whiteboard.context.path=/myapp"})
+public class CDNServletContextHelper extends ServletContextHelper {
+    public URL getResource(String name) {
+        try {
+            return new URL("http://acmecdn.com/myapp/" + name);
+        } catch (MalformedURLException e) {
+            return null;
+        }
+    }
+}</programlisting>
     <section>
-      <title>getResource(String)</title>
+      <title>ServletContextHelper.getResource(String)</title>
 
       <para>Obtain a URL for a given resource request.</para>
 
@@ -296,7 +315,7 @@ by the Servlet Context Helper registered under the /foo path:
     </section>
 
     <section>
-      <title>getMimeType(String)</title>
+      <title>ServletContextHelper.getMimeType(String)</title>
 
       <para>Called to provide the MIME type for a resource.</para>
 
@@ -305,7 +324,7 @@ by the Servlet Context Helper registered under the /foo path:
     </section>
 
     <section>
-      <title>getResourcePaths(String)</title>
+      <title>ServletContextHelper.getResourcePaths(String)</title>
 
       <para>Called to support the
       <code>ServletContext.getResourcePaths()</code> method. Returns all the
@@ -318,15 +337,13 @@ by the Servlet Context Helper registered under the /foo path:
     </section>
 
     <section>
-      <title>getRealPath(String)</title>
+      <title>ServletContextHelper.getRealPath(String)</title>
 
       <para>Called to support the <code>ServletContext.getRealPath()</code>
       method.</para>
 
       <para><emphasis>Default Behavior</emphasis> - Always returns
           <code>null</code>.</para>
-
-      <remark>Add example Servlet Context Helper</remark>
     </section>
 
     <section>
@@ -1175,6 +1192,15 @@ public class MyServlet extends HttpServlet {
     Future requests for <code>http://www.acme.com/myservlet</code> map to the
     servlet, whose <code>service()</code> method is called to process the
     request.</para>
+
+<para>To associate the above example servlet with the example <code>ServletContextHelper</code>
+    in section <xref linkend="service.http.whiteboard.servletcontext" xrefstyle="template:%n"/> add the following service registration property:</para>
+
+<programlisting>osgi.http.whiteboard.context.select=my-sch</programlisting>
+
+<para>This will cause the servlet to move to <code>/myapp/myservlet</code> as configured
+    by the custom Servlet Context Handler.</para>
+
 
     <section>
       <title>Error Pages</title>
