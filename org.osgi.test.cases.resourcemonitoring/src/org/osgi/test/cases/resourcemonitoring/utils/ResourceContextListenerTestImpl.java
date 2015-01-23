@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.resourcemonitoring.junit;
+package org.osgi.test.cases.resourcemonitoring.utils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,11 +24,11 @@ import org.osgi.service.resourcemonitoring.ResourceContextEvent;
 import org.osgi.service.resourcemonitoring.ResourceContextListener;
 
 /**
- * A test resource context listener.
+ * A resource context listener implementation for test purpose.
  * 
  * @author $Id$
  */
-public class TestResourceContextListener implements ResourceContextListener {
+public class ResourceContextListenerTestImpl implements ResourceContextListener {
 
 	/**
 	 * service registration ServiceRegistration<ResourceContextListener>
@@ -43,7 +43,7 @@ public class TestResourceContextListener implements ResourceContextListener {
 	/**
 	 * 
 	 */
-	public TestResourceContextListener() {
+	public ResourceContextListenerTestImpl() {
 		events = new ArrayList();
 	}
 

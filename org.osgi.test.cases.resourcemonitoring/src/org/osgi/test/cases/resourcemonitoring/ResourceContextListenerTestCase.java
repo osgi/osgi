@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.resourcemonitoring.junit;
+package org.osgi.test.cases.resourcemonitoring;
 
 import java.util.ArrayList;
 import java.util.Dictionary;
@@ -27,6 +27,7 @@ import org.osgi.service.resourcemonitoring.ResourceContext;
 import org.osgi.service.resourcemonitoring.ResourceContextEvent;
 import org.osgi.service.resourcemonitoring.ResourceContextListener;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
+import org.osgi.service.resourcemonitoring.ResourceMonitoringServiceException;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -40,27 +41,27 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	/**
 	 * name of the ResourceContext used for the tests
 	 */
-	private static final String	RESOURCE_CONTEXT_NAME	= "context1";
+	private static final String			RESOURCE_CONTEXT_NAME	= "context1";
 
 	/**
 	 * name2 of the ResourceContext used for the tests
 	 */
-	private static final String	RESOURCE_CONTEXT_NAME2	= "context2";
+	private static final String			RESOURCE_CONTEXT_NAME2	= "context2";
 
 	/**
 	 * bundle id 1
 	 */
-	private static final long	BUNDLE_ID				= 1l;
+	private static final long			BUNDLE_ID				= 1l;
 
 	/**
 	 * bundle id 2
 	 */
-	private static final long	BUNDLE_ID2				= 2l;
+	private static final long			BUNDLE_ID2				= 2l;
 
 	/**
 	 * bundle context
 	 */
-	private BundleContext		bundleContext;
+	private BundleContext				bundleContext;
 
 	/**
 	 * ResourceMonitoringService
@@ -70,12 +71,12 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	/**
 	 * events
 	 */
-	private List				events;
+	private List						events;
 
 	/**
 	 * service registration of the listener
 	 */
-	private ServiceRegistration	listenerServiceRegistration;
+	private ServiceRegistration			listenerServiceRegistration;
 
 	/**
 	 * 
@@ -363,18 +364,23 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	 * ResourceContextEvent.
 	 */
 	private void executeScenario1() {
-		// create context1
-		ResourceContext resourceContext = resourceMonitoringService.createContext(
-				RESOURCE_CONTEXT_NAME, null);
+		try {
+			// create context1
+			ResourceContext resourceContext = resourceMonitoringService.createContext(
+					RESOURCE_CONTEXT_NAME, null);
 
-		// add bundle 1 to context1
-		resourceContext.addBundle(BUNDLE_ID);
+			// add bundle 1 to context1
+			resourceContext.addBundle(BUNDLE_ID);
 
-		// remove bundle1
-		resourceContext.removeBundle(BUNDLE_ID);
+			// remove bundle1
+			resourceContext.removeBundle(BUNDLE_ID);
 
-		// delete context1
-		resourceContext.removeContext(null);
+			// delete context1
+			resourceContext.removeContext(null);
+		} catch (ResourceMonitoringServiceException e) {
+			e.printStackTrace();
+			fail("A pb occurred when creating the ResourceContext (e.g. its name is already used).");
+		}
 	}
 
 	/**
@@ -389,6 +395,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	 * ResourceContextEvent.
 	 */
 	private void executeScenario2() {
+		try {
 		// create context2
 		ResourceContext resourceContext = resourceMonitoringService.createContext(
 				RESOURCE_CONTEXT_NAME2, null);
@@ -401,6 +408,10 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 
 		// delete context2
 		resourceContext.removeContext(null);
+		} catch (ResourceMonitoringServiceException e) {
+			e.printStackTrace();
+			fail("A pb occurred when creating the ResourceContext (e.g. its name is already used).");
+		}
 	}
 
 	/**

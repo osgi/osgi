@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.resourcemonitoring.junit;
+package org.osgi.test.cases.resourcemonitoring.utils;
 
 import org.osgi.service.resourcemonitoring.ResourceContext;
 import org.osgi.service.resourcemonitoring.ResourceMonitor;
@@ -31,13 +31,15 @@ public class FakeResourceMonitor implements ResourceMonitor {
 	private ResourceContext	resourceContext;
 
 	/**
-	 * 
+	 * Constructor
 	 */
 	public FakeResourceMonitor() {
 		// nothing to do.
 	}
 
 	/**
+	 * Constructor
+	 * 
 	 * @param pResourceType
 	 * @param pResourceContext
 	 */
@@ -57,7 +59,6 @@ public class FakeResourceMonitor implements ResourceMonitor {
 
 	public void delete() {
 		// TODO Auto-generated method stub
-
 	}
 
 	public boolean isEnabled() {
@@ -72,12 +73,10 @@ public class FakeResourceMonitor implements ResourceMonitor {
 
 	public void enable() throws ResourceMonitorException, IllegalStateException {
 		// TODO Auto-generated method stub
-
 	}
 
 	public void disable() throws IllegalStateException {
 		// TODO Auto-generated method stub
-
 	}
 
 	public Comparable getUsage() throws IllegalStateException {

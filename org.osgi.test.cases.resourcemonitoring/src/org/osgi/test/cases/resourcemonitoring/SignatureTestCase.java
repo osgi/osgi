@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package org.osgi.test.cases.resourcemonitoring.junit;
+package org.osgi.test.cases.resourcemonitoring;
 
 /**
  * This class contains:
