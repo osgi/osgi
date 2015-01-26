@@ -281,7 +281,10 @@ framework/service/{serviceid}
       <title>Framework Startlevel Resource</title>
 
       <para>The startlevel resource represents the active start level of the
-      framework. It supports the GET and PUT requests.</para>
+          framework. It supports the GET and PUT requests.</para>
+
+      <remark>TODO these sections should really specify the location of the resource, e.g.
+          framework/startlevel for this one</remark>
 
       <section>
         <title>GET</title>
