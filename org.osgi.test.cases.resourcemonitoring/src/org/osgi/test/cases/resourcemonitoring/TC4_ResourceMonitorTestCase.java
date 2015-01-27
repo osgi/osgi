@@ -33,7 +33,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  * @author $Id$
  */
-public class ResourceMonitorTestCase extends DefaultTestBundleControl {
+public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 
 	/**
 	 * bundle context.
@@ -104,9 +104,9 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Check if CPU Resource Monitor Factory is available.
+	 * Check if a CPU Resource Monitor Factory is available.
 	 */
-	public void testCpuFactoryAvailable() {
+	public void testTC1CheckIfACPUResourceMonitorFactoryIsAvailable() {
 		assertNotNull(cpuFactory);
 	}
 
@@ -115,7 +115,7 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 * 
 	 * @throws ResourceMonitorException
 	 */
-	public void testCreateResourceMonitor() throws ResourceMonitorException {
+	public void testTC2CreationOfAResourceMonitor() throws ResourceMonitorException {
 
 		// check existing resource monitors
 		ResourceMonitor[] monitors = resourceContext.getMonitors();
@@ -162,7 +162,6 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 		monitors = resourceContext.getMonitors();
 		assertTrue(monitors.length == 1);
 		assertTrue(monitors[0].equals(resourceMonitor));
-
 	}
 
 	/**
@@ -171,7 +170,7 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 * 
 	 * @throws ResourceMonitorException
 	 */
-	public void testDeleteResourceMonitor()
+	public void testTC3DeletionOfAResourceMonitorFromAResourceContext()
 			throws ResourceMonitorException {
 		// create ResourceMonitor
 		ResourceMonitor resourceMonitor = cpuFactory
@@ -194,7 +193,7 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 * 
 	 * @throws ResourceMonitorException
 	 */
-	public void testEnablingAndDisablingAResourceMonitor() throws ResourceMonitorException {
+	public void testTC4EnablingAndDisablingAResourceMonitor() throws ResourceMonitorException {
 		// create ResourceMonitor
 		ResourceMonitor resourceMonitor = cpuFactory
 				.createResourceMonitor(resourceContext);
@@ -234,7 +233,6 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 			exception = true;
 		}
 		assertTrue(exception);
-
 	}
 
 	/**
@@ -242,7 +240,7 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 * 
 	 * @throws ResourceMonitorException
 	 */
-	public void testRetrieveResourceUsage() throws ResourceMonitorException {
+	public void testTC5RetrievingAResourceUsage() throws ResourceMonitorException {
 		// create ResourceMonitor
 		ResourceMonitor resourceMonitor = cpuFactory
 				.createResourceMonitor(resourceContext);
@@ -273,7 +271,6 @@ public class ResourceMonitorTestCase extends DefaultTestBundleControl {
 			exception = true;
 		}
 		assertTrue(exception);
-
 	}
 
 }

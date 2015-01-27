@@ -40,25 +40,25 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  * @author $Id$
  */
-public class ResourceListenerTestCase extends DefaultTestBundleControl
+public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleControl
 		implements ResourceListener {
 
-	private static final String		CONTEXT_NAME	= "context1";
+	private static final String			CONTEXT_NAME	= "context1";
 
 	/**
 	 * bundle context
 	 */
-	private BundleContext			bundleContext;
+	private BundleContext				bundleContext;
 
 	/**
 	 * resource monitor
 	 */
-	private ResourceMonitor			resourceMonitor;
+	private ResourceMonitor				resourceMonitor;
 
 	/**
 	 * resource context
 	 */
-	private ResourceContext			resourceContext;
+	private ResourceContext				resourceContext;
 
 	/**
 	 * ResourceMonitoringService
@@ -68,31 +68,24 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 	/**
 	 * cpu Resource Monitor Factory
 	 */
-	private ResourceMonitorFactory	cpuFactory;
+	private ResourceMonitorFactory		cpuFactory;
 
 	// thresholds
-	private Comparable				lowerError;
-	private Comparable				lowerWarning;
-	private Comparable				upperError;
-	private Comparable				upperWarning;
+	private Comparable					lowerError;
+	private Comparable					lowerWarning;
+	private Comparable					upperError;
+	private Comparable					upperWarning;
 
 	/**
 	 * Service registration of the listener
 	 * ServiceRegistration<ResourceListener>
 	 */
-	private ServiceRegistration		listenerSr;
+	private ServiceRegistration			listenerSr;
 
 	/**
 	 * list of received events
 	 */
-	private final List				receivedEvents;
-
-	/**
-	 * 
-	 */
-	public ResourceListenerTestCase() {
-		receivedEvents = new ArrayList();
-	}
+	private final List					receivedEvents	= new ArrayList();
 
 	public void setBundleContext(BundleContext context) {
 		bundleContext = context;
@@ -150,11 +143,39 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 	}
 
 	/**
+	 * Test upper warning threshold.
+	 * 
+	 * @throws InterruptedException
+	 */
+	public void testTC1UpperWarningThreshold() throws InterruptedException {
+		// set upper WARNING threshold to 35
+		upperWarning = Long.valueOf(Long.toString(35l));
+
+		// set other threshold
+		upperError = null;
+		lowerWarning = null;
+		lowerError = null;
+
+		// register the listener
+		registerListener();
+
+		// wait for events
+		log("Wait for events for 10000ms.");
+		Thread.sleep(10000);
+
+		// unregister the listener
+		unregisterListener();
+
+		// check received events
+		checkReceivedEvents();
+	}
+
+	/**
 	 * Test upper threshold.
 	 * 
 	 * @throws InterruptedException
 	 */
-	public void testUpperErrorThreshold() throws InterruptedException {
+	public void testTC2UpperErrorThreshold() throws InterruptedException {
 
 		// set upper ERROR threshold to 50
 		upperError = Long.valueOf(Long.toString(50l));
@@ -179,39 +200,11 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 	}
 
 	/**
-	 * Test upper warning threshold.
-	 * 
-	 * @throws InterruptedException
-	 */
-	public void testUpperWarningThreshold() throws InterruptedException {
-		// set upper WARNING threshold to 35
-		upperWarning = Long.valueOf(Long.toString(35l));
-
-		// set other threshold
-		upperError = null;
-		lowerWarning = null;
-		lowerError = null;
-
-		// register the listener
-		registerListener();
-
-		// wait for events
-		log("Wait for events for 10000ms.");
-		Thread.sleep(10000);
-
-		// unregister the listener
-		unregisterListener();
-
-		// check received events
-		checkReceivedEvents();
-	}
-
-	/**
 	 * Upper warning and error threshold.
 	 * 
 	 * @throws InterruptedException
 	 */
-	public void testUpperWarningAndErrorThreshold() throws InterruptedException {
+	public void testTC3UpperWarningAndErrorThreshold() throws InterruptedException {
 		// set upper WARNING threshold to 35
 		upperWarning = Long.valueOf(Long.toString(35l));
 		upperError = Long.valueOf(Long.toString(50l));
@@ -240,7 +233,7 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 	 * 
 	 * @throws InterruptedException
 	 */
-	public void testLowerWarningThreshold() throws InterruptedException {
+	public void testTC4LowerWarningThreshold() throws InterruptedException {
 		lowerWarning = Long.valueOf(Long.toString(70l));
 
 		// set other threshold
@@ -267,7 +260,7 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 	 * 
 	 * @throws InterruptedException
 	 */
-	public void testLowerErrorThreshold() throws InterruptedException {
+	public void testTC5LowerErrorThreshold() throws InterruptedException {
 		lowerError = Long.valueOf(Long.toString(70l));
 
 		// set other threshold
@@ -294,7 +287,7 @@ public class ResourceListenerTestCase extends DefaultTestBundleControl
 	 * 
 	 * @throws InterruptedException
 	 */
-	public void testLowerWarningAndErrorThreshold() throws InterruptedException {
+	public void testTC6LowerWarningAndErrorThreshold() throws InterruptedException {
 		lowerError = Long.valueOf(Long.toString(50l));
 		lowerWarning = Long.valueOf(Long.toString(70l));
 

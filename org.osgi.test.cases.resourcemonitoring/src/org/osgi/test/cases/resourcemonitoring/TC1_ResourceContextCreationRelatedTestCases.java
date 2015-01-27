@@ -39,7 +39,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  * @author $Id$
  */
-public class ResourceContextCreationRelatedTestCases extends DefaultTestBundleControl {
+public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBundleControl {
 
 	/**
 	 * bundle context

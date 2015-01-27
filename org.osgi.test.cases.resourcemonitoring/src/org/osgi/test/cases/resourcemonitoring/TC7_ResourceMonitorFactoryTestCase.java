@@ -33,7 +33,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * @author Antonin CHAZALET, Orange, antonin.chazalet@orange.com,
  *         antonin.chazalet@gmail.com
  */
-public class ResourceMonitorFactoryTestCase extends DefaultTestBundleControl {
+public class TC7_ResourceMonitorFactoryTestCase extends DefaultTestBundleControl {
 
 	/**
 	 * bundle context.
@@ -75,7 +75,7 @@ public class ResourceMonitorFactoryTestCase extends DefaultTestBundleControl {
 	 * Add another resource monitor factory, and test that everything worked
 	 * well.
 	 */
-	public void testAddingAnotherResourceMonitorFactory() {
+	public void testTC1AddingAnotherResourceMonitorFactory() {
 		StringBuffer filter = new StringBuffer();
 		filter.append("(&(");
 		filter.append(Constants.OBJECTCLASS);

@@ -35,7 +35,7 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
  * 
  * @author $Id$
  */
-public class ResourceContextListenerTestCase extends DefaultTestBundleControl
+public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleControl
 		implements ResourceContextListener {
 
 	/**
@@ -81,7 +81,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	/**
 	 * 
 	 */
-	public ResourceContextListenerTestCase() {
+	public TC6_ResourceContextListenerTestCase() {
 		events = new ArrayList();
 	}
 
@@ -99,7 +99,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	/**
 	 * Test register a ResourceContextCreated listener.
 	 */
-	public void testRegisterA_RESOURCE_CONTEXT_CREATED_Listener() {
+	public void testTC1ResourceContextListenerFiltering_RESOURCE_CONTEXT_CREATED_event() {
 
 		// registers the ResourceContextListener with a RESOURCE_CONTEXT_CREATED
 		// type filter
@@ -124,7 +124,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	 * Test register a ResourceContextListener filtering
 	 * RESOURCE_CONTEXT_REMOVED.
 	 */
-	public void testRegisterA_RESOURCE_CONTEXT_REMOVED_Listener() {
+	public void testTC2ResourceContextListenerFiltering_RESOURCE_CONTEXT_REMOVED_event() {
 		// registers the ResourceContextListener with a RESOURCE_CONTEXT_REMOVED
 		// type filter
 		registerListener(
@@ -147,7 +147,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	/**
 	 * Test register a ResourceContextListener filtering BUNDLE_ADDED events.
 	 */
-	public void testRegisterA_BUNDLE_ADDED_Listener() {
+	public void testTC3ResourceContextListenerFiltering_BUNDLE_ADDED_event() {
 		// registers the ResourceContextListener with a BUNDLE_ADDED
 		// type filter
 		registerListener(new int[] {ResourceContextEvent.BUNDLE_ADDED}, null);
@@ -158,7 +158,8 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 		// unregisters the listener
 		unregisterListener();
 
-		// checks that only a RESOURCE_CONTEXT_REMOVED has been received
+		// checks that only a ResourceContextEvent.BUNDLE_ADDED has been
+		// received
 		assertTrue(events.size() == 1);
 		ResourceContextEvent event = (ResourceContextEvent) events.get(0);
 		assertTrue(event.getType() == ResourceContextEvent.BUNDLE_ADDED);
@@ -169,7 +170,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	/**
 	 * Test register a ResourceContextListener filtering BUNDLE_REMOVED events.
 	 */
-	public void testRegisterA_BUNDLE_REMOVED_Listener() {
+	public void testTC4ResourceContextListenerFiltering_BUNDLE_REMOVED_event() {
 		// registers the ResourceContextListener with a BUNDLE_REMOVED
 		// type filter
 		registerListener(new int[] {ResourceContextEvent.BUNDLE_REMOVED},
@@ -181,7 +182,8 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 		// unregisters the listener
 		unregisterListener();
 
-		// checks that only a RESOURCE_CONTEXT_REMOVED has been received
+		// checks that only a ResourceContextEvent.BUNDLE_REMOVED has been
+		// received
 		assertTrue(events.size() == 1);
 		ResourceContextEvent event = (ResourceContextEvent) events.get(0);
 		assertTrue(event.getType() == ResourceContextEvent.BUNDLE_REMOVED);
@@ -193,8 +195,7 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	 * Test register a ResourceContextListener filtering events emmitted by a
 	 * specific ResourceContext.
 	 */
-	public void testRegisterAListenerFilteringEventRelatedToASpecificResourceContext() {
-
+	public void testTC5ResourceContextListenerFilteringEventsOfASpecificResourceContext() {
 		// register this instance as a ResourceContextListener filtering events
 		// of context1.
 		registerListener(null, new String[] {RESOURCE_CONTEXT_NAME});
@@ -245,7 +246,45 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	/**
 	 * 
 	 */
-	public void testUnregisterResourceContextListener() {
+	public void testTC6RegisteringAResourceContextListenerFilteringTwoTypesOfEventsOnAParticularResourceContext() {
+		// register this instance as a ResourceContextListener filtering on
+		// RESOURCE_CONTEXT_CREATED event type and on RESOURCE_CONTEXT_REMOVED
+		// event type all related to context1
+		registerListener(new int[] {
+				ResourceContextEvent.RESOURCE_CONTEXT_CREATED,
+				ResourceContextEvent.RESOURCE_CONTEXT_REMOVED},
+				new String[] {RESOURCE_CONTEXT_NAME});
+
+		// executes scenario1 (related to context1) and scenario2 (related to
+		// context2)
+		executeScenario1();
+		executeScenario2();
+
+		// unregister the listener
+		unregisterListener();
+
+		// checks the listener receives 2 events about the creation and the
+		// deletion of context1
+		assertTrue(events.size() == 2);
+		// first event is a RESOURCE_CONTEXT_CREATED for context1
+		ResourceContextEvent createdEvent = (ResourceContextEvent) events
+				.get(0);
+		assertTrue(createdEvent.getType() == ResourceContextEvent.RESOURCE_CONTEXT_CREATED);
+		assertTrue(createdEvent.getContext().getName()
+				.equals(RESOURCE_CONTEXT_NAME));
+		// and finally the second event is a RESOURCE_CONTEXT_REMOVED event
+		// (context1 was deleted)
+		ResourceContextEvent deletedEvent = (ResourceContextEvent) events
+				.get(1);
+		assertTrue(deletedEvent.getType() == ResourceContextEvent.RESOURCE_CONTEXT_REMOVED);
+		assertTrue(deletedEvent.getContext().getName()
+				.equals(RESOURCE_CONTEXT_NAME));
+	}
+
+	/**
+	 * 
+	 */
+	public void testTC7UnregisteringAResourceContextListener() {
 		// register this instance as a ResourceContextListener without filters
 		registerListener(null, null);
 
@@ -292,44 +331,6 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 		assertTrue(deletedEvent.getContext().getName()
 				.equals(RESOURCE_CONTEXT_NAME2));
 
-	}
-
-	/**
-	 * 
-	 */
-	public void testRegisterResourceContextListenerFiltering2TypesOfEvents() {
-		// register this instance as a ResourceContextListener filtering on
-		// RESOURCE_CONTEXT_CREATED event type and on RESOURCE_CONTEXT_REMOVED
-		// event type all related to context1
-		registerListener(new int[] {
-				ResourceContextEvent.RESOURCE_CONTEXT_CREATED,
-				ResourceContextEvent.RESOURCE_CONTEXT_REMOVED},
-				new String[] {RESOURCE_CONTEXT_NAME});
-
-		// executes scenario1 (related to context1) and scenario2 (related to
-		// context2)
-		executeScenario1();
-		executeScenario2();
-
-		// unregister the listener
-		unregisterListener();
-
-		// checks the listener receives 2 events about the creation and the
-		// deletion of context1
-		assertTrue(events.size() == 2);
-		// first event is a RESOURCE_CONTEXT_CREATED for context1
-		ResourceContextEvent createdEvent = (ResourceContextEvent) events
-				.get(0);
-		assertTrue(createdEvent.getType() == ResourceContextEvent.RESOURCE_CONTEXT_CREATED);
-		assertTrue(createdEvent.getContext().getName()
-				.equals(RESOURCE_CONTEXT_NAME));
-		// and finally the second event is a RESOURCE_CONTEXT_REMOVED event
-		// (context1 was deleted)
-		ResourceContextEvent deletedEvent = (ResourceContextEvent) events
-				.get(1);
-		assertTrue(deletedEvent.getType() == ResourceContextEvent.RESOURCE_CONTEXT_REMOVED);
-		assertTrue(deletedEvent.getContext().getName()
-				.equals(RESOURCE_CONTEXT_NAME));
 	}
 
 	/**
@@ -396,18 +397,18 @@ public class ResourceContextListenerTestCase extends DefaultTestBundleControl
 	 */
 	private void executeScenario2() {
 		try {
-		// create context2
-		ResourceContext resourceContext = resourceMonitoringService.createContext(
-				RESOURCE_CONTEXT_NAME2, null);
+			// create context2
+			ResourceContext resourceContext = resourceMonitoringService.createContext(
+					RESOURCE_CONTEXT_NAME2, null);
 
-		// add bundle 2 to context2
-		resourceContext.addBundle(BUNDLE_ID2);
+			// add bundle 2 to context2
+			resourceContext.addBundle(BUNDLE_ID2);
 
-		// remove bundle2
-		resourceContext.removeBundle(BUNDLE_ID2);
+			// remove bundle2
+			resourceContext.removeBundle(BUNDLE_ID2);
 
-		// delete context2
-		resourceContext.removeContext(null);
+			// delete context2
+			resourceContext.removeContext(null);
 		} catch (ResourceMonitoringServiceException e) {
 			e.printStackTrace();
 			fail("A pb occurred when creating the ResourceContext (e.g. its name is already used).");

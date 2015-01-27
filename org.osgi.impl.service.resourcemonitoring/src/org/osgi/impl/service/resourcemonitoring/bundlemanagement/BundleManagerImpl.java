@@ -73,7 +73,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 
 				// the bundle is already associated with a resource context
 				throw new RuntimeException("Bundle " + bundleId
-						+ " is already associated.");
+						+ " is already associated with a resource context.");
 			}
 
 			resourceContexts.put(Long.valueOf(Long.toString(bundleId)), bundleHolder);
