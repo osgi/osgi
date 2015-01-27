@@ -97,6 +97,17 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	}
 
 	/**
+	 * Setup test.
+	 * <p>
+	 * Clears events list.
+	 */
+	protected void setUp() throws Exception {
+		super.setUp();
+
+		events.clear();
+	}
+
+	/**
 	 * Test register a ResourceContextCreated listener.
 	 */
 	public void testTC1ResourceContextListenerFiltering_RESOURCE_CONTEXT_CREATED_event() {
@@ -340,17 +351,6 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	public void notify(ResourceContextEvent event) {
 		// add the event into the list.
 		events.add(event);
-	}
-
-	/**
-	 * Setup test.
-	 * <p>
-	 * Clears events list.
-	 */
-	protected void setUp() throws Exception {
-		super.setUp();
-
-		events.clear();
 	}
 
 	/**

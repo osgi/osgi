@@ -74,10 +74,8 @@ public class ResourceContextListenerTestImpl implements ResourceContextListener 
 	 * this method is called when a {@link ResourceContextEvent} is sent.
 	 */
 	public void notify(ResourceContextEvent event) {
-
 		// store received event
 		events.add(event);
-
 	}
 
 	/**

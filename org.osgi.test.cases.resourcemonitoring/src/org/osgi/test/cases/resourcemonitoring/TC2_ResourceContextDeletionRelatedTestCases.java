@@ -38,17 +38,27 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	/**
 	 * bundleContext
 	 */
-	private BundleContext				context;
+	private BundleContext					context;
 
 	/**
 	 * ResourceMonitoringService
 	 */
-	private ResourceMonitoringService	resourceMonitoringService;
+	private ResourceMonitoringService		resourceMonitoringService;
 
 	/**
 	 * resource context listener
 	 */
 	private ResourceContextListenerTestImpl	resourceContextListener;
+
+	public void setBundleContext(BundleContext context) {
+		this.context = context;
+
+		ServiceReference resourceMonitoringServiceSr = context
+				.getServiceReference(ResourceMonitoringService.class.getName());
+		if (resourceMonitoringServiceSr != null) {
+			resourceMonitoringService = (ResourceMonitoringService) context.getService(resourceMonitoringServiceSr);
+		}
+	}
 
 	protected void setUp() throws Exception {
 		super.setUp();
@@ -74,16 +84,6 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 		for (int i = 0; i < existingContexts.length; i++) {
 			ResourceContext currentResourceContext = existingContexts[i];
 			currentResourceContext.removeContext(null);
-		}
-	}
-
-	public void setBundleContext(BundleContext context) {
-		this.context = context;
-
-		ServiceReference resourceMonitoringServiceSr = context
-				.getServiceReference(ResourceMonitoringService.class.getName());
-		if (resourceMonitoringServiceSr != null) {
-			resourceMonitoringService = (ResourceMonitoringService) context.getService(resourceMonitoringServiceSr);
 		}
 	}
 

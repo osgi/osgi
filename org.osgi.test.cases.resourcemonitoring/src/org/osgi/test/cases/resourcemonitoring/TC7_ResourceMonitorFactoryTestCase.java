@@ -63,11 +63,15 @@ public class TC7_ResourceMonitorFactoryTestCase extends DefaultTestBundleControl
 	}
 
 	protected void setUp() throws Exception {
+		super.setUp();
+
 		resourceContext = resourceMonitoringService.createContext(resourceContextName,
 				null);
 	}
 
 	protected void tearDown() throws Exception {
+		super.tearDown();
+
 		resourceContext.removeContext(null);
 	}
 

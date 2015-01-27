@@ -47,6 +47,16 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 */
 	private ResourceContextListenerTestImpl	resourceContextListener;
 
+	public void setBundleContext(BundleContext context) {
+		this.context = context;
+
+		ServiceReference resourceMonitoringServiceSr = context
+				.getServiceReference(ResourceMonitoringService.class.getName());
+		if (resourceMonitoringServiceSr != null) {
+			resourceMonitoringService = (ResourceMonitoringService) context.getService(resourceMonitoringServiceSr);
+		}
+	}
+
 	protected void setUp() throws Exception {
 		super.setUp();
 
@@ -71,16 +81,6 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		for (int i = 0; i < existingContexts.length; i++) {
 			ResourceContext currentResourceContext = existingContexts[i];
 			currentResourceContext.removeContext(null);
-		}
-	}
-
-	public void setBundleContext(BundleContext context) {
-		this.context = context;
-
-		ServiceReference resourceMonitoringServiceSr = context
-				.getServiceReference(ResourceMonitoringService.class.getName());
-		if (resourceMonitoringServiceSr != null) {
-			resourceMonitoringService = (ResourceMonitoringService) context.getService(resourceMonitoringServiceSr);
 		}
 	}
 

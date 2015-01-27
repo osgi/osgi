@@ -121,6 +121,8 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	}
 
 	protected void setUp() throws Exception {
+		super.setUp();
+
 		// create a ResourceContext
 		resourceContext = resourceMonitoringService.createContext(CONTEXT_NAME, null);
 
@@ -133,6 +135,8 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	}
 
 	protected void tearDown() throws Exception {
+		super.tearDown();
+
 		// remove the context
 		resourceContext.removeContext(null);
 

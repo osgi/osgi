@@ -95,11 +95,15 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	}
 
 	protected void setUp() throws Exception {
+		super.setUp();
+
 		resourceContext = resourceMonitoringService.createContext(resourceContextName,
 				null);
 	}
 
 	protected void tearDown() throws Exception {
+		super.tearDown();
+
 		resourceContext.removeContext(null);
 	}
 
