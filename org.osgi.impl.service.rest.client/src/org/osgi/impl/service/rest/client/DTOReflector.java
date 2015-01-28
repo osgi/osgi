@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -57,7 +59,7 @@ public final class DTOReflector {
 	}
 
 	public static <T extends DTO> Collection<T> getDTOs(Class<T> clazz, Representation repr) throws Exception {
-		if (repr.getMediaType().includes(MediaType.APPLICATION_ALL_XML)) {
+		if (JSON_BASED.includes(repr.getMediaType())) {
 			final JSONArray data = new JsonRepresentation(repr).getJsonArray();
 			return getDTOsFromJson(clazz, data);
 		} else {
@@ -66,7 +68,7 @@ public final class DTOReflector {
 	}
 
 	public static Map<String, Object> getMap(Representation repr) throws Exception {
-		if (repr.getMediaType().includes(MediaType.APPLICATION_ALL_XML)) {
+		if (JSON_BASED.includes(repr.getMediaType())) {
 			final JSONObject data = new JsonRepresentation(repr).getJsonObject();
 			return getMapfromJsonObject(data);
 		} else {
@@ -100,7 +102,7 @@ public final class DTOReflector {
 	private static <T extends DTO> T getDTOfromXml(final Class<T> clazz, final Document doc, final String path) throws Exception {
 		final Field[] fields = clazz.getFields();
 		final T dto = clazz.newInstance();
-		
+
 		for (final Field field : fields) {
 			if ("bundle".equals(field.getName())) {
 				if (doc.getElementsByTagName("bundle") != null) {
@@ -115,15 +117,22 @@ public final class DTOReflector {
 			} else {
 				Element elem = (Element) doc.getElementsByTagName(field.getName()).item(0);
 				final TypeInfo info = elem.getSchemaTypeInfo();
-				//field.set(dto, data.get(field.getName()));
+				// field.set(dto, data.get(field.getName()));
 			}
 		}
 		return dto;
 	}
 
+	private static final Pattern	p	= Pattern.compile("\\/(\\d+)\\/*");
+
 	private static long getBundleIdFromPath(final String path) {
-		final int pos = path.lastIndexOf('/') + 1;
-		return Long.parseLong(path.substring(pos));
+		final Matcher m = p.matcher(path);
+		if (m.find()) {
+			final String s = m.group(1);
+			return Long.parseLong(s);
+		} else {
+			throw new IllegalArgumentException(path);
+		}
 	}
 
 	private static long[] getBundleIdsFromPaths(JSONArray array)

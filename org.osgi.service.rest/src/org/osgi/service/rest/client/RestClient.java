@@ -183,22 +183,22 @@ public interface RestClient {
 	void stopBundle(String bundlePath, int options) throws Exception;
 
 	/**
-	 * Get the headers for a bundle given by its bundle Id.
+	 * Get the header for a bundle given by its bundle Id.
 	 * 
 	 * @param id Addresses the bundle by its identifier.
 	 * @return Returns the map of headers entries.
 	 * @throws Exception
 	 */
-	Map<String, Object> getBundleHeaders(long id) throws Exception;
+	Map<String, Object> getBundleHeader(long id) throws Exception;
 
 	/**
-	 * Get the headers for a bundle given by its URI path.
+	 * Get the header for a bundle given by its URI path.
 	 * 
 	 * @param bundlePath Addresses the bundle by its URI path.
 	 * @return Returns the map of headers entries.
 	 * @throws Exception
 	 */
-	Map<String, Object> getBundleHeaders(String bundlePath) throws Exception;
+	Map<String, Object> getBundleHeader(String bundlePath) throws Exception;
 
 	/**
 	 * Get the start level for a bundle given by its bundle Id.

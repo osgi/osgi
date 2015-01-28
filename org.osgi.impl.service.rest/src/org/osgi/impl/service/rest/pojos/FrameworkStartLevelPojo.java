@@ -26,11 +26,11 @@ import org.osgi.framework.startlevel.FrameworkStartLevel;
 public final class FrameworkStartLevelPojo {
 
 	private int	startLevel;
-	private int	initBundleStartLevel;
+	private int	initialBundleStartLevel;
 
 	public FrameworkStartLevelPojo(final FrameworkStartLevel fsl) {
 		this.startLevel = fsl.getStartLevel();
-		this.initBundleStartLevel = fsl.getInitialBundleStartLevel();
+		this.initialBundleStartLevel = fsl.getInitialBundleStartLevel();
 	}
 
 	public FrameworkStartLevelPojo() {
@@ -46,11 +46,11 @@ public final class FrameworkStartLevelPojo {
 	}
 
 	public int getInitialBundleStartLevel() {
-		return initBundleStartLevel;
+		return initialBundleStartLevel;
 	}
 
 	public void setInitialBundleStartLevel(final int sl) {
-		this.initBundleStartLevel = sl;
+		this.initialBundleStartLevel = sl;
 	}
 
 	@Override

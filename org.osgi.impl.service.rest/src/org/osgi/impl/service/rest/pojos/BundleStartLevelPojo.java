@@ -55,7 +55,7 @@ public final class BundleStartLevelPojo {
 		this.activationPolicyUsed = activationPolicyUsed;
 	}
 
-	public boolean isPersistentlyStarted() {
+	public boolean getPersistentlyStarted() {
 		return persistentlyStarted;
 	}
 

@@ -87,17 +87,21 @@ public class PojoReflector<B> {
 	}
 
 	public B beanFromJSONObject(final JSONObject obj) throws Exception {
+		System.err.println("######### INCOMING JSON: " + obj.toString());
+
 		final String[] names = JSONObject.getNames(obj);
 		final B instance = clazz.newInstance();
 		for (int i = 0; i < names.length; i++) {
 			final String key = names[i];
 			final Method setter = setterMethodTable.get(key);
 			if (setter == null) {
+				System.err.println("COULD NOT FIND SETTER " + "'" + key + "', setters are " + setterMethodTable.toString());
 				// silently ignore, it's JSON after all
 				continue;
 			}
 			setter.invoke(instance, obj.get(key));
 		}
+
 		return instance;
 	}
 

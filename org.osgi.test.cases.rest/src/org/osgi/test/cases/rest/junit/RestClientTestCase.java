@@ -414,17 +414,17 @@ public class RestClientTestCase extends RestTestUtils {
 
   public void testBundleHeaderRestClient() throws Exception {
     Bundle bundle = getRondomBundle();
-    Map<String, Object> bHeaders = getRestClient().getBundleHeaders(bundle.getBundleId());
+    Map<String, Object> bHeaders = getRestClient().getBundleHeader(bundle.getBundleId());
     assertBundleHeaderRepresentation(bundle, bHeaders);
 
-    bHeaders = getRestClient().getBundleHeaders(getBundlePath(bundle));
+    bHeaders = getRestClient().getBundleHeader(getBundlePath(bundle));
     assertBundleHeaderRepresentation(bundle, bHeaders);
 
     long notExistingBundleId = getNotExistingBundleId();
 
     boolean receiveError = false;
     try {
-      getRestClient().getBundleHeaders(notExistingBundleId);
+      getRestClient().getBundleHeader(notExistingBundleId);
     } catch (Exception cause) {
       receiveError = true;
     }

@@ -288,7 +288,8 @@ public class AbstractOSGiResource<T> extends ServerResource {
 
 	protected T fromRepresentation(final Representation r, final Variant variant)
 			throws Exception {
-		if (MediaType.APPLICATION_JSON.includes(variant.getMediaType())) {
+		if (jsonMediaType.includes(variant.getMediaType())
+				|| MediaType.APPLICATION_JSON.includes(variant.getMediaType())) {
 			return reflector.beanFromJSONObject(toObject(r, JSONObject.class));
 		}
 		throw new UnsupportedOperationException(variant.getMediaType()
