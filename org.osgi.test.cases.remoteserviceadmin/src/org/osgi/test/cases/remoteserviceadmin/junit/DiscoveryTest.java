@@ -324,14 +324,7 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 		}
 	}
 
-	/**
-	 * 
-	 * TODO: UPDATE Naming with rsa 1.1 spec chapter/par numbers
-	 * 
-	 * TODO: need the same test however so that a endpoint modified endmatch
-	 * event is raised -> clone once clear that this one is correct
-	 * */
-	public void testDiscovery____RSA_1_1___basicEndpointEvents()
+	public void testDiscoveryBasicEndpointEvents_122_6_3()
 			throws Exception {
 		// verify that the server framework is exporting the test packages
 		verifyFramework();
