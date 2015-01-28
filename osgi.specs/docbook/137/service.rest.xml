@@ -280,11 +280,10 @@ framework/service/{serviceid}
     <section>
       <title>Framework Startlevel Resource</title>
 
+      <para><code>framework/startlevel</code></para>
+
       <para>The startlevel resource represents the active start level of the
           framework. It supports the GET and PUT requests.</para>
-
-      <remark>TODO these sections should really specify the location of the resource, e.g.
-          framework/startlevel for this one</remark>
 
       <section>
         <title>GET</title>
@@ -337,6 +336,32 @@ framework/service/{serviceid}
             negative.</para>
           </listitem>
         </itemizedlist>
+      <remark>Maybe include the representations here, might be a little more 
+        convenient than having them separate in a different location?</remark>
+      </section>
+
+      <section>
+        <title>JSON representation</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.frameworkstartlevel+json</code></para>
+
+        <programlisting>{
+    "startLevel":6,
+    "initialBundleStartLevel":4
+}</programlisting>
+      </section>
+
+      <section>
+        <title>XML representation</title>
+
+        <para><code>Content-Type:
+        application/org.osgi.frameworkstartlevel+xml</code></para>
+
+        <programlisting>&lt;frameworkStartLevel&gt;
+    &lt;startLevel&gt;6&lt;/startLevel&gt;
+    &lt;initialBundleStartLevel&gt;4&lt;/initialBundleStartLevel&gt;
+&lt;/frameworkStartLevel&gt;</programlisting>
       </section>
     </section>
 
