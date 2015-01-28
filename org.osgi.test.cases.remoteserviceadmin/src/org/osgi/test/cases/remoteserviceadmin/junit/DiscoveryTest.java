@@ -279,13 +279,23 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 				props.remove("service.id"); // this is specific to the parent framework
 				description = new EndpointDescription(props);
 
+				// verify that the server framework is exporting the test
+				// packages
+				verifyFramework();
+				BundleContext childContext = getFramework().getBundleContext();
+
+				// provide the Service interfaces to the child framework to
+				// allow the rsa implementation to import the service as soon as
+				// the config bundle appears
+
+				Bundle tbInterfacesBundle = installBundle(childContext,
+						"/tbInterfaces.jar");
+				assertNotNull(tbInterfacesBundle);
+				// tbInterfacesBundle.start();
+
 				// create an XML file version of the description
 				String xmlStr = toXml(description);
 				System.out.println(xmlStr);
-
-				// verify that the server framework is exporting the test packages
-				verifyFramework();
-				BundleContext childContext = getFramework().getBundleContext();
 
 				// create a bundle and start the bundle in the child framework
 				String testbundleloc = createBundle(xmlStr);
@@ -482,6 +492,8 @@ public class DiscoveryTest extends MultiFrameworkTestCase {
 	}
 
 	/**
+	 * Creates a Bundle that contains the given XML as an Endpoint Description
+	 * 
 	 * @param xmlStr
 	 * @return
 	 * @throws IOException

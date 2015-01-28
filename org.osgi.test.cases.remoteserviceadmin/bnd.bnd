@@ -21,8 +21,9 @@ Include-Resource					= \
 	tb5.jar=tb5.jar, \
 	tb6.jar=tb6.jar, \
 	tb7.jar=tb7.jar, \
-	tb8.jar=tb8.jar
-	
+	tb8.jar=tb8.jar, \
+	tbInterfaces.jar=tbInterfaces.jar
+
 Test-Cases							= ${testcases}
 -signaturetest                      = org.osgi.service.remoteserviceadmin
 
