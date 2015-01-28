@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,76 +17,153 @@
 /**
  * The OSGi REST API client
  * 
+ * all members allow the user to specify the following callback functions for
+ * asynchronous status notifications:
+ * 
+ * function success(result) function failure(code, response) function
+ * error(message)
+ * 
+ * callbacks that are not declared by the user are substituted with default
+ * functions which print to the console.
+ * 
  * @author Jan S. Rellermeyer, IBM Research
- *
+ * 
  * @param baseUrl
  *            the base URL to the REST API.
  * @returns the OSGi REST API client object
  */
 function OsgiRestClient(baseUrl) {
-	this.baseUrl = baseUrl;
+	this.baseUrl = baseUrl || "";
+
+	function checkParam(f) {
+		return ('undefined' === typeof f) ? function() {
+			console.log(arguments)
+		} : f;
+	}
+
+	function restCall(args, callbacks) {
+		// mandatory: args.uri, args.request
+		if ("undefined" === args.uri) {
+			throw "No URI was passed (args.uri)";
+		}
+		if ("undefined" === args.request) {
+			throw "No request type was passed (args.request)";
+		}
+
+		var c = callbacks || {};
+
+		var success = checkParam(c.success);
+		var failure = checkParam(c.failure);
+		var error = checkParam(c.error);
+
+		var expectedStatus = args.expectedStatus || 200;
+
+		var req = new XMLHttpRequest();
+		req.onreadystatechange = function() {
+			if (req.readyState == 4) {
+				if (req.status == expectedStatus) {
+					if (expectedStatus === 200) {
+						console.log(req.getResponseHeader("Content-Type"));
+
+						if (req.getResponseHeader("Content-Type").indexOf(
+								"text/plain") != -1) {
+							success(req.responseText);
+						} else {
+							success(JSON.parse(req.responseText));
+						}
+					} else {
+						success(undefined);
+					}
+				} else {
+					try {
+						failure(req.status, JSON.parse(req.responseText));
+					} catch (err) {
+						failure(req.status, req.responseText);
+					}
+				}
+			}
+		};
+		try {
+			req.open(args.request, args.uri);
+			if ("undefined" !== typeof args.accept) {
+				req.setRequestHeader("Accept", args.accept);
+			}
+			if ("undefined" !== typeof args.contentType) {
+				req.setRequestHeader("Content-Type", args.contentType);
+			}
+			req.send(args.data);
+		} catch (err) {
+			error(err);
+		}
+	}
 
 	/**
 	 * get the framework start level in JSON FrameworkStartLevel representation.
+	 * 
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
 	 */
-	this.getFrameworkStartLevel = function getFrameworkStartLevel() {
-		$.ajax({
-			url : this.baseUrl + "/framework/startlevel",
-			type : "GET",
-			dataType : "json",
-			success : function(fw_sl) {
-				console.log(fw_sl);
-				return fw_sl;
-			},
-			error : function(xhr, status) {
-				console.log(status);
-				return xhr.responseText;
-			}
-		});
-	}
+	this.getFrameworkStartLevel = function getFrameworkStartLevel(callbacks) {
+		restCall({
+			uri : this.baseUrl + "/framework/startlevel",
+			request : "GET",
+			accept : "application/org.osgi.framework.startlevel+json"
+		}, callbacks);
+	};
 
 	/**
 	 * set the framework start level
 	 * 
-	 * @param the new framework startlevel in JSON representation.
+	 * @param the
+	 *            new framework startlevel in JSON representation.
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
 	 * @returns the updated framework startlevel in JSON representation.
 	 */
-	this.setFrameworkStartLevel = function setFrameworkStartLevel(fw_sl) {
-		$.ajax({
-			url : this.baseUrl + "/framework/startlevel",
-			type : "POST",
-			dataType : "json",
-			data : fw_sl,
-			success : function(fw_sl) {
-				console.log(fw_sl);
-				return fw_sl;
-			},
-			error : function(xhr, status) {
-				console.log(status);
-				return xhr.responseText;
-			}
-		});
-	}
+	this.setFrameworkStartLevel = function setFrameworkStartLevel(fw_sl,
+			callbacks) {
+		restCall({
+			uri : this.baseUrl + "/framework/startlevel",
+			request : "PUT",
+			data : JSON.stringify(fw_sl),
+			accept : "application/org.osgi.framework.startlevel+json",
+			expectedStatus : 204
+		}, callbacks)
+	};
 
 	/**
 	 * get the bundles
 	 * 
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
+	 * 
 	 * @returns the URI paths of the bundles as a JSON array of strings.
 	 */
-	this.getBundles = function getBundles() {
-		$.ajax({
-			url : this.baseUrl + "/framework/bundles",
-			type : "GET",
-			dataType : "json",
-			success : function(fw_sl) {
-				console.log(fw_sl);
-				return fw_sl;
-			},
-			error : function(xhr, status) {
-				console.log(status);
-				return xhr.responseText;
-			}
-		});
+	this.getBundles = function getBundles(callbacks) {
+		restCall({
+			uri : this.baseUrl + "/framework/bundles",
+			request : "GET",
+			accept : "application/org.osgi.framework.bundles+json"
+		}, callbacks);
+	}
+
+	/**
+	 * get the bundle representations of all bundles
+	 * 
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
+	 * @returns a JSON array containing all Bundle representations
+	 */
+	this.getBundleRepresentations = function getBundleRepresentations(callbacks) {
+		restCall({
+			uri : this.baseUrl + "/framework/bundles/representations",
+			request : "GET",
+			accept : "application/org.osgi.bundles.representations+json"
+		}, callbacks);
 	}
 
 	/**
@@ -95,115 +172,17 @@ function OsgiRestClient(baseUrl) {
 	 * @param b
 	 *            the bundle, either the numeric bundle ID or the bundle URI
 	 *            path.
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
 	 * @returns the Bundle representation as a JSON object.
 	 */
-	this.getBundle = function getBundle(b) {
-		$.ajax({
-			url : this.baseUrl + getBundlePath(b),
-			type : "GET",
-			dataType : "json",
-			success : function(fw_sl) {
-				console.log(fw_sl);
-				return fw_sl;
-			},
-			error : function(xhr, status) {
-				console.log(status);
-				return xhr.responseText;
-			}
-		});
-	}
-
-	/**
-	 * Install a new bundle.
-	 * 
-	 * @param uri
-	 *            the URI of the bundle to be installed
-	 * @returns the URI path of the newly installed bundle
-	 */
-	this.installBundle = function installBundle(uri) {
-		$.ajax({
-			url : this.baseUrl + "/framework/bundles",
-			type : "POST",
-			dataType : "txt",
-			data : uri,
-			success : function(fw_sl) {
-				console.log(fw_sl);
-				return fw_sl;
-			},
-			error : function(xhr, status) {
-				console.log(status);
-				return xhr.responseText;
-			}
-		});
-	}
-
-	/**
-	 * get the bundle representations of all bundles
-	 * 
-	 * @returns a JSON array containing all Bundle representations
-	 */
-	this.getBundleRepresentations = function getBundleRepresentations() {
-		$.ajax({
-			url : this.baseUrl + "/framework/bundles/representations",
-			type : "GET",
-			dataType : "json",
-			success : function(fw_sl) {
-				console.log(fw_sl);
-				return fw_sl;
-			},
-			error : function(xhr, status) {
-				console.log(status);
-				return xhr.responseText;
-			}
-		});
-	}
-
-	/**
-	 * Update a bundle.
-	 * 
-	 * @param b
-	 *            the bundle, either the numeric bundle ID or the bundle URI
-	 *            path.
-	 * @param uri
-	 *            the URI from which to update the bundle.
-	 */
-	this.updateBundle = function updateBundle(b, uri) {
-		$.ajax({
-			url : this.baseUrl + getBundlePath(b),
-			type : "PUT",
-			dataType : "txt",
-			data : uri,
-			success : function(fw_sl) {
-				console.log(fw_sl);
-				return fw_sl;
-			},
-			error : function(xhr, status) {
-				console.log(status);
-				return xhr.responseText;
-			}
-		});
-	}
-
-	/**
-	 * Uninstall a bundle.
-	 * 
-	 * @param b
-	 *            the bundle, either the numeric bundle ID or the bundle URI
-	 *            path.
-	 */
-	this.uninstallBundle = function uninstallBundle(b) {
-		$.ajax({
-			url : this.baseUrl + getBundlePath(b),
-			type : "DELETE",
-			success : function(fw_sl) {
-				console.log(fw_sl);
-				return fw_sl;
-			},
-			error : function(xhr, status) {
-				console.log(status);
-				return xhr.responseText;
-			}
-		});
+	this.getBundle = function getBundle(b, callbacks) {
+		restCall({
+			uri : this.baseUrl + getBundlePath(b),
+			request : "GET",
+			accept : "application/org.osgi.framework.bundle+json"
+		}, callbacks);
 	}
 
 	/**
@@ -212,22 +191,51 @@ function OsgiRestClient(baseUrl) {
 	 * @param b
 	 *            the bundle, either the numeric bundle ID or the bundle URI
 	 *            path.
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
 	 * @returns the bundle state representation.
 	 */
-	this.getBundleState = function getBundleState(b) {
-		$.ajax({
-			url : this.baseUrl + getBundlePath(b) + "/state",
-			type : "GET",
-			dataType : "json",
-			success : function(fw_sl) {
-				console.log(fw_sl);
-				return fw_sl;
-			},
-			error : function(xhr, status) {
-				console.log(status);
-				return xhr.responseText;
-			}
-		});
+	this.getBundleState = function getBundleState(b, callbacks) {
+		restCall({
+			uri : this.baseUrl + getBundlePath(b) + "/state",
+			request : "GET",
+			accept : "application/org.osgi.bundle.state+json"
+		}, callbacks);
+	}
+
+	/**
+	 * Start a bundle.
+	 * 
+	 * @param b
+	 *            the bundle, either the numeric bundle ID or the bundle URI
+	 *            path.
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
+	 * @returns the updated bundle state representation.
+	 */
+	this.startBundle = function startBundle(b, callbacks) {
+		this.setBundleState(b, {
+			state : 32
+		}, callbacks);
+	}
+
+	/**
+	 * Stop a bundle.
+	 * 
+	 * @param b
+	 *            the bundle, either the numeric bundle ID or the bundle URI
+	 *            path.
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
+	 * @returns the updated bundle state representation.
+	 */
+	this.stopBundle = function stopBundle(b, callbacks) {
+		this.setBundleState(b, {
+			state : 4
+		}, callbacks);
 	}
 
 	/**
@@ -238,51 +246,37 @@ function OsgiRestClient(baseUrl) {
 	 *            path.
 	 * @param state
 	 *            the target state.
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
 	 * @returns the updated state of the bundle.
 	 */
-	this.setBundleState = function setBundleState(b, state) {
-		$.ajax({
-			url : this.baseUrl + getBundlePath(b) + "/state",
-			type : "PUT",
-			dataType : "json",
-			data : state,
-			success : function(fw_sl) {
-				console.log(fw_sl);
-				return fw_sl;
-			},
-			error : function(xhr, status) {
-				console.log(status);
-				return xhr.responseText;
-			}
-		});
+	this.setBundleState = function setBundleState(b, state, callbacks) {
+		restCall({
+			uri : this.baseUrl + getBundlePath(b) + "/state",
+			request : "PUT",
+			data : JSON.stringify(state),
+			accept : "application/org.osgi.bundle.state+json",
+		}, callbacks)
 	}
 
 	/**
-	 * Start a bundle.
+	 * Get the bundle headers.
 	 * 
 	 * @param b
 	 *            the bundle, either the numeric bundle ID or the bundle URI
 	 *            path.
-	 * @returns the updated bundle state representation.
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
+	 * @returns the bundle header.
 	 */
-	this.startBundle = function startBundle(b) {
-		return this.setBundleState(b, {
-			state : 32
-		});
-	}
-
-	/**
-	 * Stop a bundle.
-	 * 
-	 * @param b
-	 *            the bundle, either the numeric bundle ID or the bundle URI
-	 *            path.
-	 * @returns the updated bundle state representation.
-	 */
-	this.stopBundle = function stopBundle(b) {
-		return this.setBundleState(b, {
-			state : 4
-		});
+	this.getBundleHeader = function getBundleHeader(b, callbacks) {
+		restCall({
+			uri : this.baseUrl + getBundlePath(b) + "/header",
+			request : "GET",
+			accept : "application/org.osgi.bundle.header+json"
+		}, callbacks);
 	}
 
 	/**
@@ -291,21 +285,16 @@ function OsgiRestClient(baseUrl) {
 	 * @param b
 	 *            the bundle, either the numeric bundle ID or the bundle URI
 	 *            path.
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
 	 */
-	this.getBundleStartLevel = function getBundleStartLevel(b) {
-		$.ajax({
-			url : this.baseUrl + getBundlePath(b) + "/startlevel",
-			type : "GET",
-			dataType : "json",
-			success : function(fw_sl) {
-				console.log(fw_sl);
-				return fw_sl;
-			},
-			error : function(xhr, status) {
-				console.log(status);
-				return xhr.responseText;
-			}
-		});
+	this.getBundleStartLevel = function getBundleStartLevel(b, callbacks) {
+		restCall({
+			uri : this.baseUrl + getBundlePath(b) + "/startlevel",
+			request : "GET",
+			accept : "application/org.osgi.bundle.startlevel+json"
+		}, callbacks);
 	}
 
 	/**
@@ -314,67 +303,113 @@ function OsgiRestClient(baseUrl) {
 	 * @param b
 	 *            the bundle, either the numeric bundle ID or the bundle URI
 	 *            path.
-	 * @param the
-	 *            target startlevel representation.
+	 * @param sl
+	 *            the target startlevel representation.
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
 	 * @returns the updated startlevel representation.
 	 */
-	this.setBundleStartLevel = function setBundleStartLevel(b, sl) {
-		$.ajax({
-			url : this.baseUrl + getBundlePath(b) + "/state",
-			type : "PUT",
-			dataType : "json",
-			data : sl,
-			success : function(fw_sl) {
-				console.log(fw_sl);
-				return fw_sl;
-			},
-			error : function(xhr, status) {
-				console.log(status);
-				return xhr.responseText;
-			}
-		});
+	this.setBundleStartLevel = function setBundleStartLevel(b, sl, callbacks) {
+		restCall({
+			uri : this.baseUrl + getBundlePath(b) + "/startlevel",
+			request : "PUT",
+			data : JSON.stringify(sl),
+			accept : "application/org.osgi.bundle.startlevel+json",
+		}, callbacks)
+	}
+
+	/**
+	 * Install a new bundle.
+	 * 
+	 * @param uri
+	 *            the URI of the bundle to be installed
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
+	 * @returns the URI path of the newly installed bundle
+	 */
+	this.installBundle = function installBundle(uri, callbacks) {
+		restCall({
+			uri : this.baseUrl + "/framework/bundles",
+			request : "POST",
+			data : uri,
+			accept : "text/plain",
+			contentType : "text/plain"
+		}, callbacks)
+	}
+
+	/**
+	 * Update a bundle.
+	 * 
+	 * @param b
+	 *            the bundle, either the numeric bundle ID or the bundle URI
+	 *            path.
+	 * @param uri
+	 *            the URI from which to update the bundle.
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
+	 */
+	this.updateBundle = function updateBundle(b, uri, callbacks) {
+		restCall({
+			uri : this.baseUrl + getBundlePath(b),
+			request : "PUT",
+			data : uri,
+			contentType : "text/plain",
+			expectedState : 204
+		}, callbacks)
+	}
+
+	/**
+	 * Uninstall a bundle.
+	 * 
+	 * @param b
+	 *            the bundle, either the numeric bundle ID or the bundle URI
+	 *            path.
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
+	 */
+	this.uninstallBundle = function uninstallBundle(b, callbacks) {
+		restCall({
+			uri : this.baseUrl + getBundlePath(b),
+			request : "DELETE",
+			expectedState : 204
+		}, callbacks)
 	}
 
 	/**
 	 * Get all services.
 	 * 
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
 	 * @returns a JSON array of the URI paths of all services.
 	 */
-	this.getServices = function getServices() {
-		$.ajax({
-			url : this.baseUrl + "/framework/services",
-			type : "GET",
-			dataType : "json",
-			success : function(fw_sl) {
-				console.log(fw_sl);
-				return fw_sl;
-			},
-			error : function(xhr, status) {
-				console.log(status);
-				return xhr.responseText;
-			}
-		});
+	this.getServices = function getServices(callbacks) {
+		restCall({
+			uri : this.baseUrl + "/framework/services",
+			request : "GET",
+			accept : "application/org.osgi.services+json"
+		}, callbacks);
 	}
 
 	/**
 	 * Get the representations of all services
 	 * 
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
 	 * @return a JSON array containing all representations.
 	 */
-	this.getServiceRepresentations = function getServiceRepresentations() {
-		$.ajax({
-			url : this.baseUrl + "/framework/services/representations",
-			type : "GET",
-			dataType : "json",
-			success : function(fw_sl) {
-				console.log(fw_sl);
-				return fw_sl;
-			},
-			error : function(xhr, status) {
-				console.log(status);
-				return xhr.responseText;
-			}
-		});
+	this.getServiceRepresentations = function getServiceRepresentations(
+			callbacks) {
+		restCall({
+			uri : this.baseUrl + "/framework/services/representations",
+			request : "GET",
+			accept : "application/org.osgi.services.representations+json"
+		}, callbacks);
 	}
 
 	/**
@@ -383,22 +418,17 @@ function OsgiRestClient(baseUrl) {
 	 * @param s
 	 *            the service, either the numeric service ID or the service URI
 	 *            path.
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates.
 	 * @return the service representation.
 	 */
-	this.getServices = function getService(s) {
-		$.ajax({
-			url : this.baseUrl + getServicePath(s),
-			type : "GET",
-			dataType : "json",
-			success : function(fw_sl) {
-				console.log(fw_sl);
-				return fw_sl;
-			},
-			error : function(xhr, status) {
-				console.log(status);
-				return xhr.responseText;
-			}
-		});
+	this.getService = function getService(s, callbacks) {
+		restCall({
+			uri : this.baseUrl + getServicePath(s),
+			request : "GET",
+			accept : "application/org.osgi.service+json"
+		}, callbacks);
 	}
 
 	function getBundlePath(b) {

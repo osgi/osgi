@@ -55,8 +55,12 @@ public class FrameworkStartLevelResource extends
 			final FrameworkStartLevelPojo sl = fromRepresentation(r, variant);
 			final FrameworkStartLevel fsl = getFrameworkStartLevel();
 
-			fsl.setStartLevel(sl.getStartLevel());
-			fsl.setInitialBundleStartLevel(sl.getInitialBundleStartLevel());
+			if (sl.getStartLevel() != 0) {
+				fsl.setStartLevel(sl.getStartLevel());
+			}
+			if (sl.getInitialBundleStartLevel() != 0) {
+				fsl.setInitialBundleStartLevel(sl.getInitialBundleStartLevel());
+			}
 
 			return SUCCESS(Status.SUCCESS_NO_CONTENT);
 		} catch (final Exception e) {
