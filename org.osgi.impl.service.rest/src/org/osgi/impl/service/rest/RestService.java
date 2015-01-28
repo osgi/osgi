@@ -64,7 +64,6 @@ public class RestService extends Application {
 
 	RestService(final BundleContext context) {
 		this.context = context;
-		getTunnelService().setExtensionsTunnel(true);
 	}
 
 	@Override
@@ -102,6 +101,8 @@ public class RestService extends Application {
 		// enable the extension mechanism
 		final Router extensions = new Router(getContext());
 		root.attach("/extensions", extensions);
+
+		getTunnelService().setExtensionsTunnel(true);
 
 		tracker = new ServiceTracker<RestApiExtension, Class<? extends ServerResource>>(
 				context, RestApiExtension.class,

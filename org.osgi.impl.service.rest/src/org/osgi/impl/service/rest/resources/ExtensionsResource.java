@@ -22,7 +22,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
-import org.restlet.resource.Get;
 
 /**
  * The extension resource for extensions to the REST service.
@@ -37,9 +36,8 @@ public class ExtensionsResource extends AbstractOSGiResource<ExtensionList> {
 		super(PojoReflector.getReflector(ExtensionList.class), MEDIA_TYPE);
 	}
 
-	@Get("json|text")
-	public Representation doGet(final Representation value,
-			final Variant variant) {
+	@Override
+	public Representation get(final Variant variant) {
 		try {
 			return getRepresentation(new ExtensionList(getTracker()), variant);
 		} catch (final Exception e) {

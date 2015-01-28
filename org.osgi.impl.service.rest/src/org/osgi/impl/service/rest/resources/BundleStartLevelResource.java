@@ -25,8 +25,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
-import org.restlet.resource.Get;
-import org.restlet.resource.Put;
 
 /**
  * The bundle start level resource.
@@ -42,9 +40,8 @@ public class BundleStartLevelResource extends
 		super(PojoReflector.getReflector(BundleStartLevelPojo.class), MEDIA_TYPE);
 	}
 
-	@Get("json|txt")
-	public Representation doGet(final Representation value,
-			final Variant variant) {
+	@Override
+	public Representation get(final Variant variant) {
 		try {
 			final Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);
 			if (bundle == null) {
@@ -58,8 +55,8 @@ public class BundleStartLevelResource extends
 		}
 	}
 
-	@Put("json|txt")
-	public Representation doPut(final Representation value,
+	@Override
+	public Representation put(final Representation value,
 			final Variant variant) {
 		try {
 			final Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);

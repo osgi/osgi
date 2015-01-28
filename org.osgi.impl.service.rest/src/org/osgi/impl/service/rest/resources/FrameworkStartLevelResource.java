@@ -23,8 +23,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
-import org.restlet.resource.Get;
-import org.restlet.resource.Put;
 
 /**
  * The framework start level resource.
@@ -40,8 +38,8 @@ public class FrameworkStartLevelResource extends
 		super(PojoReflector.getReflector(FrameworkStartLevelPojo.class), MEDIA_TYPE);
 	}
 
-	@Get("json|txt")
-	public Representation getStartLevel(final Variant variant) {
+	@Override
+	public Representation get(final Variant variant) {
 		try {
 			return getRepresentation(new FrameworkStartLevelPojo(
 					getFrameworkStartLevel()), variant);
@@ -50,8 +48,8 @@ public class FrameworkStartLevelResource extends
 		}
 	}
 
-	@Put("json|txt")
-	public Representation setStartLevel(final Representation r,
+	@Override
+	public Representation put(final Representation r,
 			final Variant variant) {
 		try {
 			final FrameworkStartLevelPojo sl = fromRepresentation(r, variant);

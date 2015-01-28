@@ -25,6 +25,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.osgi.dto.DTO;
+import org.restlet.data.MediaType;
+import org.restlet.ext.json.JsonRepresentation;
+import org.restlet.ext.xml.DomRepresentation;
+import org.restlet.representation.Representation;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.TypeInfo;
 
 /**
  * A reflector for turning DTOs into JSON representations and vice versa.
@@ -33,12 +40,42 @@ import org.osgi.dto.DTO;
  */
 public final class DTOReflector {
 
+	private static final MediaType	XML_BASED	= MediaType.valueOf("application/*+xml");
+	private static final MediaType	JSON_BASED	= MediaType.valueOf("application/*+json");
+
 	public static <T extends DTO> T getDTO(final Class<T> clazz,
-			final JSONObject data, final String path) throws Exception {
+			final Representation repr) throws Exception {
+		if (JSON_BASED.includes(repr.getMediaType())) {
+			final JSONObject data = new JsonRepresentation(repr).getJsonObject();
+			return getDTOfromJson(clazz, data, repr.getLocationRef().getPath());
+		} else if (XML_BASED.includes(repr.getMediaType())) {
+			final Document doc = new DomRepresentation(repr).getDocument();
+			return getDTOfromXml(clazz, doc, repr.getLocationRef().getPath());
+		} else {
+			throw new UnsupportedOperationException(repr.getMediaType().toString());
+		}
+	}
+
+	public static <T extends DTO> Collection<T> getDTOs(Class<T> clazz, Representation repr) throws Exception {
+		if (repr.getMediaType().includes(MediaType.APPLICATION_ALL_XML)) {
+			final JSONArray data = new JsonRepresentation(repr).getJsonArray();
+			return getDTOsFromJson(clazz, data);
+		} else {
+			throw new UnsupportedOperationException(repr.getMediaType().toString());
+		}
+	}
+
+	public static Map<String, Object> getMap(Representation repr) throws Exception {
+		if (repr.getMediaType().includes(MediaType.APPLICATION_ALL_XML)) {
+			final JSONObject data = new JsonRepresentation(repr).getJsonObject();
+			return getMapfromJsonObject(data);
+		} else {
+			throw new UnsupportedOperationException(repr.getMediaType().toString());
+		}
+	}
+
+	private static <T extends DTO> T getDTOfromJson(final Class<T> clazz, final JSONObject data, final String path) throws Exception {
 		final Field[] fields = clazz.getFields();
-
-		System.err.println("DATA IS " + data);
-
 		final T dto = clazz.newInstance();
 		for (final Field field : fields) {
 			if ("bundle".equals(field.getName())) {
@@ -55,6 +92,30 @@ public final class DTOReflector {
 				field.set(dto, getMapfromJsonObject(data.getJSONObject(field.getName())));
 			} else {
 				field.set(dto, data.get(field.getName()));
+			}
+		}
+		return dto;
+	}
+
+	private static <T extends DTO> T getDTOfromXml(final Class<T> clazz, final Document doc, final String path) throws Exception {
+		final Field[] fields = clazz.getFields();
+		final T dto = clazz.newInstance();
+		
+		for (final Field field : fields) {
+			if ("bundle".equals(field.getName())) {
+				if (doc.getElementsByTagName("bundle") != null) {
+					field.set(dto, new Long(getBundleIdFromPath(doc.getElementsByTagName("bundle").item(0).getTextContent())));
+				} else {
+					field.set(dto, new Long(getBundleIdFromPath(path)));
+				}
+			} else if ("usingBundles".equals(field.getName())) {
+				// FIXME: implement
+			} else if (field.getType().equals(Map.class)) {
+				// FIXME: implement
+			} else {
+				Element elem = (Element) doc.getElementsByTagName(field.getName()).item(0);
+				final TypeInfo info = elem.getSchemaTypeInfo();
+				//field.set(dto, data.get(field.getName()));
 			}
 		}
 		return dto;
@@ -81,7 +142,7 @@ public final class DTOReflector {
 	}
 
 	@SuppressWarnings("unchecked")
-	public static <K, V> Map<K, V> getMapfromJsonObject(final JSONObject obj)
+	private static <K, V> Map<K, V> getMapfromJsonObject(final JSONObject obj)
 			throws JSONException {
 		final Map<K, V> result = new HashMap<K, V>();
 
@@ -107,11 +168,10 @@ public final class DTOReflector {
 		return result;
 	}
 
-	public static <T extends DTO> Collection<T> getDTOs(final Class<T> clazz,
-			final JSONArray array) throws Exception {
+	private static <T extends DTO> Collection<T> getDTOsFromJson(final Class<T> clazz, final JSONArray array) throws Exception {
 		final Collection<T> result = new ArrayList<T>();
 		for (int i = 0; i < array.length(); i++) {
-			result.add(DTOReflector.getDTO(clazz, array.getJSONObject(i), null));
+			result.add(DTOReflector.getDTOfromJson(clazz, array.getJSONObject(i), null));
 		}
 		return result;
 	}
@@ -136,5 +196,4 @@ public final class DTOReflector {
 	private static String getBundlePathFromId(final Long id) {
 		return "framework/bundle/" + id.toString();
 	}
-
 }

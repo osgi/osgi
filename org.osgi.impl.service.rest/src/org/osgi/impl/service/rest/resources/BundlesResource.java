@@ -25,8 +25,6 @@ import org.restlet.engine.header.Header;
 import org.restlet.representation.Representation;
 import org.restlet.representation.StringRepresentation;
 import org.restlet.representation.Variant;
-import org.restlet.resource.Get;
-import org.restlet.resource.Post;
 import org.restlet.util.Series;
 
 /**
@@ -42,8 +40,8 @@ public class BundlesResource extends AbstractOSGiResource<BundlePojoList> {
 		super(PojoReflector.getReflector(BundlePojoList.class), MEDIA_TYPE);
 	}
 
-	@Get("json|text")
-	public Representation getBundles(final Variant variant) {
+	@Override
+	public Representation get(final Variant variant) {
 		try {
 			final Representation rep = getRepresentation(new BundlePojoList(
 					getBundles()), variant);
@@ -53,8 +51,8 @@ public class BundlesResource extends AbstractOSGiResource<BundlePojoList> {
 		}
 	}
 
-	@Post
-	public Representation installBundle(final Representation content,
+	@Override
+	public Representation post(final Representation content,
 			final Variant variant) {
 		try {
 			if (MediaType.TEXT_PLAIN.equals(content.getMediaType())) {

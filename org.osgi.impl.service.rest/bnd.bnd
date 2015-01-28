@@ -11,7 +11,8 @@ Export-Package					= org.osgi.service.rest; -split-package:=first
 	ee.j2se;					version=${javac.compliance}, \
 	osgi.core;                  version=6.0, \
 	org.json;					version=1.0.0, \
-	org.restlet; 				version=2.1.7
+	org.restlet; 				version=2.1.7, \
+	org.restlet.ext.xml;		version=2.1.7
 	
 -runbundles = \
 	org.json;					version=1.0.0, \

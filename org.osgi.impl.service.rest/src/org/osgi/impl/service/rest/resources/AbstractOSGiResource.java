@@ -16,7 +16,6 @@
 
 package org.osgi.impl.service.rest.resources;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Dictionary;
@@ -80,11 +79,27 @@ public class AbstractOSGiResource<T> extends ServerResource {
 
 	private final PojoReflector<T>			reflector;
 
-	private final MediaType					mediaType;
+	private final MediaType					xmlMediaType;
+
+	private final MediaType					jsonMediaType;
 
 	protected AbstractOSGiResource(final PojoReflector<T> reflector, final MediaType mediaType) {
 		this.reflector = reflector;
-		this.mediaType = mediaType;
+		this.xmlMediaType = new MediaType(mediaType.toString() + MT_XML);
+		this.jsonMediaType = new MediaType(mediaType.toString() + MT_JSON);
+
+		this.setNegotiated(true);
+
+		getVariants().add(new Variant(jsonMediaType));
+		getVariants().add(new Variant(MediaType.APPLICATION_JSON));
+
+		getVariants().add(new Variant(xmlMediaType));
+		getVariants().add(new Variant(MediaType.APPLICATION_XML));
+		getVariants().add(new Variant(MediaType.TEXT_XML));
+
+		getVariants().add(new Variant(MediaType.TEXT_PLAIN));
+
+		System.err.println("VARIANTS ARE " + this.getVariants());
 	}
 
 	protected BundleContext getBundleContext() {
@@ -207,22 +222,27 @@ public class AbstractOSGiResource<T> extends ServerResource {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	protected Representation getRepresentation(final Object bean,
-			final Variant variant) throws IOException {
+			final Variant variant) throws Exception {
 		final Representation rep;
 		System.err.println("VARIANT MEDIA TYPE " + variant.getMediaType());
 
 		final MediaType mt;
 
-		if (MediaType.APPLICATION_ALL_XML.includes(variant.getMediaType())) {
-			mt = getMediaType(MT_XML);
+		if (xmlMediaType.includes(variant.getMediaType()) ||
+				MediaType.APPLICATION_XML.includes(variant.getMediaType()) ||
+				MediaType.TEXT_XML.includes(variant.getMediaType())) {
+			mt = xmlMediaType;
 
-			throw new UnsupportedOperationException("TODO: "
-					+ variant.getMediaType().toString());
-		} else if (MediaType.APPLICATION_JSON.includes(variant.getMediaType())
-				|| MediaType.TEXT_ALL.includes(variant.getMediaType())) {
-			mt = getMediaType(MT_JSON);
+			rep = toRepresentation(reflector.xmlFromBean((T) bean), new Variant(MediaType.APPLICATION_ALL_XML));
+		} else if (jsonMediaType.includes(variant.getMediaType())
+				|| MediaType.APPLICATION_JSON.includes(variant.getMediaType())
+				|| MediaType.TEXT_PLAIN.includes(variant.getMediaType())) {
+			mt = jsonMediaType;
 
+			// in an ideal world we would not have to massage the data
+			// in order to get it to serialize properly...
 			if (bean instanceof Collection) {
 				final Collection<Object> reprList = new ArrayList<Object>();
 				for (final Object o : (Collection<?>) bean) {
@@ -249,7 +269,7 @@ public class AbstractOSGiResource<T> extends ServerResource {
 		rep.setMediaType(mt);
 		return rep;
 	}
-	
+
 	private JSONObject jsonObject(final Object bean) {
 		if (bean instanceof ServicePojo) {
 			// fix for buggy JSONObject
@@ -264,10 +284,6 @@ public class AbstractOSGiResource<T> extends ServerResource {
 		} else {
 			return new JSONObject(bean);
 		}
-	}
-
-	protected MediaType getMediaType(final String variant) {
-		return MediaType.valueOf(mediaType.toString() + variant);
 	}
 
 	protected T fromRepresentation(final Representation r, final Variant variant)
@@ -293,7 +309,7 @@ public class AbstractOSGiResource<T> extends ServerResource {
 
 	protected Representation ERROR(final Status status, final Throwable t,
 			final Variant variant) {
-		// t.printStackTrace();
+		t.printStackTrace();
 		if (t instanceof BundleException) {
 			try {
 				final Representation rep;
@@ -314,7 +330,7 @@ public class AbstractOSGiResource<T> extends ServerResource {
 				rep.setMediaType(mt);
 
 				return rep;
-			} catch (final IOException ioe) {
+			} catch (final Exception ioe) {
 				// fallback
 			}
 		}

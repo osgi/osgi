@@ -22,7 +22,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
-import org.restlet.resource.Get;
 
 /**
  * The bundle representations resource, listing the full representations of all
@@ -39,8 +38,8 @@ public class BundleRepresentationsResource extends
 		super(PojoReflector.getReflector(BundleRepresentationsList.class), MEDIA_TYPE);
 	}
 
-	@Get("json|text")
-	public Representation getBundles(final Variant variant) {
+	@Override
+	public Representation get(final Variant variant) {
 		try {
 			final Representation rep = getRepresentation(
 					new BundleRepresentationsList(getBundles()), variant);

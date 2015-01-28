@@ -24,7 +24,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
-import org.restlet.resource.Get;
 
 /**
  * The service resource.
@@ -39,8 +38,8 @@ public class ServiceResource extends AbstractOSGiResource<ServicePojo> {
 		super(PojoReflector.getReflector(ServicePojo.class), MEDIA_TYPE);
 	}
 
-	@Get("json|txt")
-	public Representation doGet(final Representation none, final Variant variant) {
+	@Override
+	public Representation get(final Variant variant) {
 		try {
 			final ServiceReference<?> sref = getServiceReferenceFromKey(RestService.SERVICE_ID_KEY);
 			if (sref == null) {

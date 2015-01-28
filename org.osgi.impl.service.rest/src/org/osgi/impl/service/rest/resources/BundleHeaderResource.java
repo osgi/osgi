@@ -25,7 +25,6 @@ import org.restlet.data.Preference;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
-import org.restlet.resource.Get;
 
 /**
  * The bundle header resource.
@@ -41,9 +40,8 @@ public class BundleHeaderResource extends
 		super(null, MEDIA_TYPE);
 	}
 
-	@Get("json|txt")
-	public Representation doGet(final Representation param,
-			final Variant variant) {
+	@Override
+	public Representation get(final Variant variant) {
 		try {
 			final List<Preference<Language>> acceptedLanguages = getClientInfo()
 					.getAcceptedLanguages();

@@ -25,7 +25,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
-import org.restlet.resource.Get;
 
 /**
  * The service list resource, a list of the paths of all services.
@@ -40,8 +39,8 @@ public class ServiceListResource extends AbstractOSGiResource<ServicePojoList> {
 		super(PojoReflector.getReflector(ServicePojoList.class), MEDIA_TYPE);
 	}
 
-	@Get("json|txt")
-	public Representation doGet(final Variant variant) {
+	@Override
+	public Representation get(final Variant variant) {
 		try {
 			final String filter = getQuery().getFirstValue(RestService.FILTER_ID_KEY);
 

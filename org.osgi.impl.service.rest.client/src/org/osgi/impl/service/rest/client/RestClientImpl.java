@@ -46,40 +46,66 @@ import org.restlet.util.Series;
  */
 public class RestClientImpl implements RestClient {
 
-	private static final MediaType	FRAMEWORK_STARTLEVEL_JSON		= new MediaType(
-																			"application/org.osgi.framework.startlevel+json");
+	private static final String	MT_FRAMEWORK_STARTLEVEL		= "application/org.osgi.framework.startlevel";
 
-	private static final MediaType	BUNDLE_JSON						= new MediaType(
-																			"application/org.osgi.bundle+json");
+	private static final String	MT_BUNDLE					= "application/org.osgi.bundle";
 
-	private static final MediaType	BUNDLES_JSON					= new MediaType(
-																			"application/org.osgi.bundles+json");
+	private static final String	MT_BUNDLES					= "application/org.osgi.bundles";
 
-	private static final MediaType	BUNDLES_REPRESENTATIONS_JSON	= new MediaType(
-																			"application/org.osgi.bundles.representations+json");
+	private static final String	MT_BUNDLES_REPRESENTATIONS	= "application/org.osgi.bundles.representations";
 
-	private static final MediaType	BUNDLE_STATE_JSON				= new MediaType(
-																			"application/org.osgi.bundle.state+json");
+	private static final String	MT_BUNDLE_STATE				= "application/org.osgi.bundle.state";
 
-	private static final MediaType	BUNDLE_HEADER_JSON				= new MediaType(
-																			"application/org.osgi.bundle.header+json");
+	private static final String	MT_BUNDLE_HEADER			= "application/org.osgi.bundle.header";
 
-	private static final MediaType	BUNDLE_STARTLEVEL_JSON			= new MediaType(
-																			"application/org.osgi.bundle.startlevel+json");
+	private static final String	MT_BUNDLE_STARTLEVEL		= "application/org.osgi.bundle.startlevel";
 
-	private static final MediaType	SERVICE_JSON					= new MediaType(
-																			"application/org.osgi.service+json");
+	private static final String	MT_SERVICE					= "application/org.osgi.service";
 
-	private static final MediaType	SERVICES_JSON					= new MediaType(
-																			"application/org.osgi.services+json");
+	private static final String	MT_SERVICES					= "application/org.osgi.services";
 
-	private static final MediaType	SERVICES_REPRESENTATIONS_JSON	= new MediaType(
-																			"application/org.osgi.services.representations+json");
+	private static final String	MT_SERVICES_REPRESENTATIONS	= "application/org.osgi.services.representations";
 
-	private final URI				baseUri;
+	private static final String	MT_JSON_EXT					= "+json";
 
-	public RestClientImpl(final URI uri) {
+	private static final String	MT_XML_EXT					= "+xml";
+
+	private final MediaType		FRAMEWORK_STARTLEVEL;
+
+	private final MediaType		BUNDLE;
+
+	private final MediaType		BUNDLES;
+
+	private final MediaType		BUNDLES_REPRESENTATIONS;
+
+	private final MediaType		BUNDLE_STATE;
+
+	private final MediaType		BUNDLE_HEADER;
+
+	private final MediaType		BUNDLE_STARTLEVEL;
+
+	private final MediaType		SERVICE;
+
+	private final MediaType		SERVICES;
+
+	private final MediaType		SERVICES_REPRESENTATIONS;
+
+	private final URI			baseUri;
+
+	protected RestClientImpl(final URI uri, final boolean useXml) {
 		this.baseUri = uri.normalize().resolve("/");
+		final String ext = useXml ? MT_XML_EXT : MT_JSON_EXT;
+		FRAMEWORK_STARTLEVEL = new MediaType(MT_FRAMEWORK_STARTLEVEL + ext);
+		BUNDLE = new MediaType(MT_BUNDLE + ext);
+		BUNDLES = new MediaType(MT_BUNDLES + ext);
+		BUNDLES_REPRESENTATIONS = new MediaType(MT_BUNDLES_REPRESENTATIONS + ext);
+		BUNDLE_STATE = new MediaType(MT_BUNDLE_STATE + ext);
+		BUNDLE_HEADER = new MediaType(MT_BUNDLE_HEADER + ext);
+		BUNDLE_STARTLEVEL = new MediaType(MT_BUNDLE_STARTLEVEL + ext);
+		SERVICE = new MediaType(MT_SERVICE + ext);
+		SERVICES = new MediaType(MT_SERVICES + ext);
+		SERVICES_REPRESENTATIONS = new MediaType(MT_SERVICES_REPRESENTATIONS + ext);
+
 	}
 
 	/**
@@ -88,10 +114,9 @@ public class RestClientImpl implements RestClient {
 	public FrameworkStartLevelDTO getFrameworkStartLevel() throws Exception {
 		final Representation repr = new ClientResource(Method.GET,
 				baseUri.resolve("framework/startlevel"))
-				.get(FRAMEWORK_STARTLEVEL_JSON);
+				.get(FRAMEWORK_STARTLEVEL);
 
-		return DTOReflector.getDTO(FrameworkStartLevelDTO.class,
-				new JsonRepresentation(repr).getJsonObject(), null);
+		return DTOReflector.getDTO(FrameworkStartLevelDTO.class, repr);
 	}
 
 	/**
@@ -102,7 +127,7 @@ public class RestClientImpl implements RestClient {
 			throws Exception {
 		new ClientResource(Method.PUT, baseUri.resolve("framework/startlevel")).put(
 				DTOReflector.getJson(FrameworkStartLevelDTO.class, startLevel),
-				FRAMEWORK_STARTLEVEL_JSON);
+				FRAMEWORK_STARTLEVEL);
 	}
 
 	/**
@@ -111,7 +136,8 @@ public class RestClientImpl implements RestClient {
 	public Collection<String> getBundles() throws Exception {
 		final ClientResource res = new ClientResource(Method.GET,
 				baseUri.resolve("framework/bundles"));
-		final Representation repr = res.get(BUNDLES_JSON);
+		final Representation repr = res.get(BUNDLES);
+		// FIXME: hardcoded to JSON
 		return jsonArrayToStrings(new JsonRepresentation(repr).getJsonArray());
 	}
 
@@ -122,10 +148,9 @@ public class RestClientImpl implements RestClient {
 		try {
 			final Representation repr = new ClientResource(Method.GET,
 					baseUri.resolve("framework/bundles/representations"))
-					.get(BUNDLES_REPRESENTATIONS_JSON);
+					.get(BUNDLES_REPRESENTATIONS);
 
-			return DTOReflector.getDTOs(BundleDTO.class, new JsonRepresentation(
-					repr).getJsonArray());
+			return DTOReflector.getDTOs(BundleDTO.class, repr);
 		} catch (final ResourceException e) {
 			if (Status.CLIENT_ERROR_NOT_FOUND.equals(e.getStatus())) {
 				return null;
@@ -147,9 +172,8 @@ public class RestClientImpl implements RestClient {
 	public BundleDTO getBundle(final String bundlePath) throws Exception {
 		try {
 			final Representation repr = new ClientResource(Method.GET,
-					baseUri.resolve(bundlePath)).get(BUNDLE_JSON);
-			return DTOReflector.getDTO(BundleDTO.class,
-					new JsonRepresentation(repr).getJsonObject(), bundlePath);
+					baseUri.resolve(bundlePath)).get(BUNDLE);
+			return DTOReflector.getDTO(BundleDTO.class, repr);
 		} catch (final ResourceException e) {
 			if (Status.CLIENT_ERROR_NOT_FOUND.equals(e.getStatus())) {
 				return null;
@@ -170,8 +194,9 @@ public class RestClientImpl implements RestClient {
 	 */
 	public int getBundleState(final String bundlePath) throws Exception {
 		final Representation repr = new ClientResource(Method.GET,
-				baseUri.resolve(bundlePath + "/state")).get(BUNDLE_STATE_JSON);
+				baseUri.resolve(bundlePath + "/state")).get(BUNDLE_STATE);
 
+		// FIXME: hardcoded to JSON
 		final JSONObject obj = new JsonRepresentation(repr).getJsonObject();
 		return obj.getInt("state");
 	}
@@ -202,11 +227,12 @@ public class RestClientImpl implements RestClient {
 	 */
 	public void startBundle(final String bundlePath, final int options)
 			throws Exception {
+		// FIXME: hardcoded to JSON
 		final JSONObject state = new JSONObject();
 		state.put("state", 32);
 		state.put("options", options);
 		new ClientResource(Method.PUT, baseUri.resolve(bundlePath + "/state"))
-				.put(state, BUNDLE_STATE_JSON);
+				.put(state, BUNDLE_STATE);
 	}
 
 	/**
@@ -239,7 +265,7 @@ public class RestClientImpl implements RestClient {
 		state.put("state", 4);
 		state.put("options", options);
 		new ClientResource(Method.PUT, baseUri.resolve(bundlePath + "/state"))
-				.put(state, BUNDLE_STATE_JSON);
+				.put(state, BUNDLE_STATE);
 	}
 
 	/**
@@ -256,10 +282,9 @@ public class RestClientImpl implements RestClient {
 			throws Exception {
 		final Representation repr = new ClientResource(Method.GET,
 				baseUri.resolve(bundlePath + "/header"))
-				.get(BUNDLE_HEADER_JSON);
+				.get(BUNDLE_HEADER);
 
-		return DTOReflector.getMapfromJsonObject(new JsonRepresentation(repr)
-				.getJsonObject());
+		return DTOReflector.getMap(repr);
 	}
 
 	/**
@@ -277,10 +302,9 @@ public class RestClientImpl implements RestClient {
 			throws Exception {
 		final Representation repr = new ClientResource(Method.GET,
 				baseUri.resolve(bundlePath + "/startlevel"))
-				.get(BUNDLE_STARTLEVEL_JSON);
+				.get(BUNDLE_STARTLEVEL);
 
-		return DTOReflector.getDTO(BundleStartLevelDTO.class,
-				new JsonRepresentation(repr).getJsonObject(), bundlePath);
+		return DTOReflector.getDTO(BundleStartLevelDTO.class, repr);
 	}
 
 	/**
@@ -298,13 +322,10 @@ public class RestClientImpl implements RestClient {
 	 */
 	public void setBundleStartLevel(final String bundlePath,
 			final BundleStartLevelDTO startLevel) throws Exception {
-
-		System.err.println("ABOUT TO SEND " + DTOReflector.getJson(BundleStartLevelDTO.class, startLevel));
-
 		new ClientResource(Method.PUT, baseUri.resolve(bundlePath
 				+ "/startlevel")).put(
 				DTOReflector.getJson(BundleStartLevelDTO.class, startLevel),
-				BUNDLE_STARTLEVEL_JSON);
+				BUNDLE_STARTLEVEL);
 	}
 
 	/**
@@ -337,7 +358,6 @@ public class RestClientImpl implements RestClient {
 		 * res.getRequest().getAttributes() .put("message.entity.locationRef",
 		 * new Reference(location));
 		 */
-
 		final Representation repr = res.post(in);
 
 		return repr.getText();
@@ -404,8 +424,9 @@ public class RestClientImpl implements RestClient {
 			res.addQueryParameter("filter", filter);
 		}
 
-		final Representation repr = res.get(SERVICES_JSON);
+		final Representation repr = res.get(SERVICES);
 
+		// FIXME::::
 		return jsonArrayToStrings(new JsonRepresentation(repr).getJsonArray());
 	}
 
@@ -428,10 +449,9 @@ public class RestClientImpl implements RestClient {
 		if (filter != null) {
 			res.addQueryParameter("filter", filter);
 		}
-		final Representation repr = res.get(SERVICES_REPRESENTATIONS_JSON);
+		final Representation repr = res.get(SERVICES_REPRESENTATIONS);
 
-		return DTOReflector.getDTOs(ServiceReferenceDTO.class,
-				new JsonRepresentation(repr).getJsonArray());
+		return DTOReflector.getDTOs(ServiceReferenceDTO.class, repr);
 	}
 
 	/**
@@ -448,10 +468,10 @@ public class RestClientImpl implements RestClient {
 	public ServiceReferenceDTO getServiceReference(final String servicePath)
 			throws Exception {
 		final Representation repr = new ClientResource(Method.GET,
-				baseUri.resolve(servicePath)).get();
+				baseUri.resolve(servicePath)).get(SERVICE);
 
 		return DTOReflector.getDTO(ServiceReferenceDTO.class,
-				new JsonRepresentation(repr).getJsonObject(), null);
+				repr);
 	}
 
 	private Collection<String> jsonArrayToStrings(final JSONArray array)

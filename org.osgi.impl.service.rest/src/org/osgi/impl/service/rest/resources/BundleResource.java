@@ -27,9 +27,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
-import org.restlet.resource.Delete;
-import org.restlet.resource.Get;
-import org.restlet.resource.Put;
 
 /**
  * The bundle resource.
@@ -44,8 +41,8 @@ public class BundleResource extends AbstractOSGiResource<BundlePojo> {
 		super(PojoReflector.getReflector(BundlePojo.class), MEDIA_TYPE);
 	}
 
-	@Get("json|txt")
-	public Representation doGet(final Representation none, final Variant variant) {
+	@Override
+	public Representation get(final Variant variant) {
 		try {
 			final Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);
 			if (bundle == null) {
@@ -57,8 +54,8 @@ public class BundleResource extends AbstractOSGiResource<BundlePojo> {
 		}
 	}
 
-	@Delete
-	public Representation delete(final String none, final Variant variant) {
+	@Override
+	public Representation delete(final Variant variant) {
 		try {
 			final org.osgi.framework.Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);
 			if (bundle == null) {
@@ -72,35 +69,31 @@ public class BundleResource extends AbstractOSGiResource<BundlePojo> {
 		return SUCCESS(Status.SUCCESS_NO_CONTENT);
 	}
 
-	@Put
-	public Representation doPutStream(final Representation content,
+	@Override
+	public Representation put(final Representation content,
 			final Variant variant) {
 		try {
+			if (MediaType.TEXT_PLAIN.equals(content.getMediaType())) {
+				final org.osgi.framework.Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);
+				if (bundle == null) {
+					return ERROR(Status.CLIENT_ERROR_NOT_FOUND);
+				}
+				final String location = content.getText();
+				if (location == null) {
+					bundle.update();
+				} else {
+					bundle.update(new URL(location).openStream());
+				}
+
+				return SUCCESS(Status.SUCCESS_NO_CONTENT);
+			}
+
 			final org.osgi.framework.Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);
 			if (bundle == null) {
 				return ERROR(Status.CLIENT_ERROR_NOT_FOUND);
 			}
 
 			bundle.update(content.getStream());
-
-			return SUCCESS(Status.SUCCESS_NO_CONTENT);
-		} catch (final Exception e) {
-			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
-		}
-	}
-
-	@Put("txt")
-	public Representation doPut(final String param, final Variant variant) {
-		try {
-			final org.osgi.framework.Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);
-			if (bundle == null) {
-				return ERROR(Status.CLIENT_ERROR_NOT_FOUND);
-			}
-			if (param == null) {
-				bundle.update();
-			} else {
-				bundle.update(new URL(param).openStream());
-			}
 
 			return SUCCESS(Status.SUCCESS_NO_CONTENT);
 		} catch (final MalformedURLException e) {

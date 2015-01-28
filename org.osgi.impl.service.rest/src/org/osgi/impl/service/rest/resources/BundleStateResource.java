@@ -24,8 +24,6 @@ import org.restlet.data.MediaType;
 import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
-import org.restlet.resource.Get;
-import org.restlet.resource.Put;
 
 /**
  * The bundle state resource.
@@ -40,9 +38,8 @@ public class BundleStateResource extends AbstractOSGiResource<BundleStatePojo> {
 		super(PojoReflector.getReflector(BundleStatePojo.class), MEDIA_TYPE);
 	}
 
-	@Get("json|text")
-	public Representation doGet(final Representation value,
-			final Variant variant) {
+	@Override
+	public Representation get(final Variant variant) {
 		try {
 			final Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);
 			if (bundle == null) {
@@ -56,8 +53,8 @@ public class BundleStateResource extends AbstractOSGiResource<BundleStatePojo> {
 		}
 	}
 
-	@Put("json|text")
-	public Representation doPut(final Representation value,
+	@Override
+	public Representation put(final Representation value,
 			final Variant variant) {
 		try {
 			final Bundle bundle = getBundleFromKeys(RestService.BUNDLE_ID_KEY);

@@ -23,12 +23,14 @@ import java.util.Map;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
+import org.osgi.impl.service.rest.PojoReflector.RootNode;
 
 /**
  * Pojo for services.
  * 
  * @author Jan S. Rellermeyer, IBM Research
  */
+@RootNode(name = "service")
 public final class ServicePojo {
 
 	private long				id;
