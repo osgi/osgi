@@ -147,7 +147,7 @@
 
     <para>The servlet specification defines the <code>ServletContext</code>
     which is provided to servlets at runtime by the container. Servlets
-    registered as Whiteboard Services are also provided with a
+    registered as Whiteboard services are also provided with a
     <code>ServletContext</code>. The behavior of this Servlet Context can be
     influenced by providing a <xref
     linkend="org.osgi.service.http.context.ServletContextHelper"
@@ -207,10 +207,11 @@
             Name. The default Servlet Context Helper is named
             <code>default</code>. To override the default, register a custom
             <code>ServletContextHelper</code> service with the name
-            <code>default</code>. If multiple default services are registered,
+            <code>default</code>. If multiple Servlet Context Helper services 
+            are registered with the same name,
             the one with the highest Service Ranking is used. In case of a
             tie, the service with the lowest service ID wins. In other words,
-            the default OSGi service ranking applies.</para>
+            the normal OSGi service ranking applies.</para>
             <para>Registrations without any specified name are not used and
             this is reflected in the failure DTOs. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME"
@@ -945,19 +946,12 @@ public class CDNServletContextHelper extends ServletContextHelper {
     </table>
 
     <para>If multiple Servlet Context Helper services match the
-    <code>osgi.http.whiteboard.context.select</code> property the servlet or
-    listener will be registered with all these Servlet Context Helpers if it
+    <code>osgi.http.whiteboard.context.select</code> property the servlet,
+    filter or listener will be registered with all these Servlet Context Helpers if it
     is registered as a Prototype Service Factory. Otherwise it is only
     registered with the Servlet Context Helper with the highest service
     ranking. In the case of a tie, the lowest service ID wins. In other words,
     the normal service ranking rules apply.</para>
-
-    <para>Servlet filters matching multiple Servlet Context Helpers can be
-    applied to requests for servlets associated with all matching
-    <code>ServletContextHelper</code> services. For this the servlet filter
-    must be registered as a Prototype Service Factory. Otherwise the normal
-    service ranking rules are used to associate the filter with a single
-    Servlet Context Helper.</para>
   </section>
 
   <section xml:id="i21223311">
@@ -1742,7 +1736,7 @@ public class MyServletRequestListener implements ServletRequestListener {
     <code>init()</code> might follow.</para>
 
     <section>
-      <title>Whiteboard Service dynamics and Active Requests</title>
+      <title>Whiteboard service dynamics and Active Requests</title>
 
       <para>When the Http Whiteboard implementation receives a network request
       it establishes the processing pipeline based on the available Whiteboard
