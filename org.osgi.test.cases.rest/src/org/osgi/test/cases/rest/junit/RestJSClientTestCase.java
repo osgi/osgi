@@ -172,12 +172,38 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "}})");
 	}
 
-	public void testInstallBundleUpload() {
+	public void testInstallBundleUpload() throws Exception {
 		/*
 		 * This should test the post operation on the bundles resource where the
 		 * bundle is uploaded as the body of the message.
 		 */
 		fail("Not yet supported by JS client");
+	}
+
+	public void testBundleRepresentationsListRestClient() throws Exception {
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.getBundleRepresentations({"
+				+ "  success : function(res) {"
+				+ "    assert('getBundleRepresentations', 'TODO create expected representations', res);"
+				+ "    done();"
+				+ ""
+				+ "}})");
+	}
+
+	public void testBundleRestClient() throws Exception {
+		Bundle bundle = getRandomBundle();
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.getBundle('" + bundle.getBundleId() + "', {"
+				+ "  success : function(res) {"
+				+ "    assert('Bundle ID', " + bundle.getBundleId() + ", res.id);"
+				+ "    assert('Bundle Location', '" + bundle.getLocation() + "', res.location);"
+				+ "    assert('Symbolic Name', '" + bundle.getSymbolicName() + "', res.symbolicName);"
+				+ "    assert('State', " + bundle.getState() + ", res.state);"
+				+ "    assert('Last Modified', " + bundle.getLastModified() + ", res.lastModified);"
+				+ "    assert('Version', '" + bundle.getVersion() + "', res.version);"
+				+ "    done();"
+				+ ""
+				+ "}})");
 	}
 
 	public void jsTest(String script) throws Exception {

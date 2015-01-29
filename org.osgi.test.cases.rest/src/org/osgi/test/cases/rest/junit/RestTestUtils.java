@@ -191,13 +191,13 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
     return getContext().getAllServiceReferences(null, filter);
   }
 
-  protected Bundle getRondomBundle() {
+  protected Bundle getRandomBundle() {
     Bundle[] bundles = getInstalledBundles();
     int index = random.nextInt(bundles.length);
     return bundles[index];
   }
 
-  protected ServiceReference<?> getRondomService() throws InvalidSyntaxException {
+  protected ServiceReference<?> getRandomService() throws InvalidSyntaxException {
     ServiceReference<?>[] serviceRefs = getServices(null);
     int index = random.nextInt(serviceRefs.length);
     return serviceRefs[index];

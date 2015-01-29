@@ -210,7 +210,7 @@ public class RestClientTestCase extends RestTestUtils {
   }
 
   public void testBundleRestClient() throws Exception  {
-    Bundle bundle = getRondomBundle();
+    Bundle bundle = getRandomBundle();
 
     // GET by bundleId
     BundleDTO bundleRepresentation = getRestClient().getBundle(bundle.getBundleId());
@@ -309,7 +309,7 @@ public class RestClientTestCase extends RestTestUtils {
 
   public void testBundleStateRestClient() throws Exception {
     // GET
-    Bundle bundle = getRondomBundle();
+    Bundle bundle = getRandomBundle();
     int state = getRestClient().getBundleState(bundle.getBundleId());
     assertEquals("Get state by bundle ID " + bundle.getBundleId(), bundle.getState(), state);
 
@@ -414,7 +414,7 @@ public class RestClientTestCase extends RestTestUtils {
   }
 
   public void testBundleHeaderRestClient() throws Exception {
-    Bundle bundle = getRondomBundle();
+    Bundle bundle = getRandomBundle();
     Map<String, Object> bHeaders = getRestClient().getBundleHeader(bundle.getBundleId());
     assertBundleHeaderRepresentation(bundle, bHeaders);
 
@@ -433,7 +433,7 @@ public class RestClientTestCase extends RestTestUtils {
   }
 
   public void testBundleStartLevelRestClient() throws Exception {
-    Bundle bundle = getRondomBundle();
+    Bundle bundle = getRandomBundle();
 
     // get start level by bundle id
     BundleStartLevelDTO bundleStartLevelDTO = getRestClient().getBundleStartLevel(bundle.getBundleId());
@@ -574,7 +574,7 @@ public class RestClientTestCase extends RestTestUtils {
   }
 
   public void testServiceRestClient() throws Exception {
-    ServiceReference<?> serviceRef = getRondomService();
+    ServiceReference<?> serviceRef = getRandomService();
 
     ServiceReferenceDTO serviceReferenceDTO = getRestClient().getServiceReference(getServiceId(serviceRef));
     assertService(serviceRef, serviceReferenceDTO);
