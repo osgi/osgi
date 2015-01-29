@@ -98,6 +98,7 @@ public class RestClientTestCase extends RestTestUtils {
     try {
       getRestClient().setFrameworkStartLevel(updateFWStartLevelDTO);
     } catch (Exception cause) {
+      // TODO can we be more specific about what error (or failure) we catch?
       receiveError = true;
     }
     assertTrue("Error for updating framework start level with negative value ", receiveError);

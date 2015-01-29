@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2015). All Rights Reserved.
  *
  * Implementation of certain elements of the OSGi Specification may be subject
  * to third party intellectual property rights, including without limitation,
@@ -42,17 +42,61 @@ public class RestJSClientTestCase extends RestTestUtils {
 		jsclient = restJSClient.getCanonicalFile().toURI().toURL().toString();
 	}
 
-	public void testGetFrameworkStartLevel() throws Exception {
+	public void testFrameworkStartLevelRestClient() throws Exception {
 		int sl = getFrameworkStartLevel().getStartLevel();
 		int ibsl = getFrameworkStartLevel().getInitialBundleStartLevel();
 
 		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
 				+ "client.getFrameworkStartLevel({"
 				+ "  success : function(res) {"
-				+ "    assert('Start Level', " + sl + ", res.startLevel);"
-				+ "    assert('Initial Bundle Start Level', " + ibsl + ", res.initialBundleStartLevel);"
+				+ "    assert('original startLevel', " + sl + ", res.startLevel);"
+				+ "    assert('original initialBundleStartLevel', " + ibsl + ", res.initialBundleStartLevel);"
 				+ "    done();"
 				+ "  }});");
+
+		// Modify the start level
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "var fsl = {"
+				+ "  startLevel : " + (sl + 1) + ","
+				+ "  initialBundleStartLevel : " + (ibsl + 2) + ","
+				+ "};"
+				+ "client.setFrameworkStartLevel(fsl, {"
+				+ "  success : function(res) {"
+				+ "    client.getFrameworkStartLevel({"
+				+ "      success : function(res) {"
+				+ "        assert('updated startLevel', " + (sl + 1) + ", res.startLevel);"
+				+ "        assert('updated initialBundleStartLevel', " + (ibsl + 2) + ", res.initialBundleStartLevel);"
+				+ "        done();"
+				+ "}})}});");
+
+		// Back to original
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "var fsl = {"
+				+ "  startLevel : " + sl + ","
+				+ "  initialBundleStartLevel : " + ibsl + ","
+				+ "};"
+				+ "client.setFrameworkStartLevel(fsl, {"
+				+ "  success : function(res) {"
+				+ "    client.getFrameworkStartLevel({"
+				+ "      success : function(res) {"
+				+ "        assert('reverted startLevel', " + sl + ", res.startLevel);"
+				+ "        assert('reverted initialBundleStartLevel', " + ibsl + ", res.initialBundleStartLevel);"
+				+ "        done();"
+				+ "}})}});");
+
+		// Set to invalid value
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "var fsl = {"
+				+ "  startLevel : -1,"
+				+ "  initialBundleStartLevel : " + ibsl + ","
+				+ "};"
+				+ "client.setFrameworkStartLevel(fsl, {"
+				+ "  failure : function(res) { "
+				+ "    assert('Should have returned Bad Request on negative start level', "
+				+ "      400, res);"
+				+ "    done(); "
+				+ "}});");
+
 	}
 
 	public void jsTest(String script) throws Exception {
@@ -71,7 +115,7 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "}}"
 				+ "function done() {"
 				+ "  if (document.getElementById('test_errors').innerHTML == '') {"
-				+ "    document.getElementById('test_result').innerHTML = 'success';"
+				+ "    document.getElementById('test_result').innerHTML = '" + SUCCESS + "';"
 				+ "  } else {"
 				+ "    document.getElementById('test_result').innerHTML = 'error: ' + "
 				+ "      document.getElementById('test_errors').innerHTML;"
