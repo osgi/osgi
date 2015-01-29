@@ -5032,17 +5032,24 @@ public class MyComponent {
       not satisfied.</para>
     </section>
 
-    <section xml:id="service.component-extender.capability">
-      <title>Extender Capability</title>
+    <section xml:id="service.component-capabilities">
+      <title>Capabilities</title>
 
-      <para>SCR must provide the following <link
+      <para>SCR must provide a capability in the <link
       linkend="service.namespaces-osgi.extender.namespace"><code>osgi.extender</code></link>
-      capability.</para>
+      namespace declaring an extender with the name <xref
+      linkend="org.osgi.service.component.ComponentConstants.COMPONENT_CAPABILITY_NAME"
+      xrefstyle="hyperlink"/>. This capability must also declare a uses
+      constraint for the <code>org.osgi.service.component</code> package. For
+      example:</para>
 
-      <programlisting>Provide-Capability: osgi.extender; 
-   osgi.extender="osgi.component";
-   uses:="org.osgi.service.component";
-   version:Version="1.3"</programlisting>
+      <programlisting>Provide-Capability: osgi.extender;
+    osgi.extender="osgi.component";
+    version:Version="1.3";
+    uses:="org.osgi.service.component"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.extender.namespace"/>.</para>
 
       <para>A bundle that contains service components should require the
       <code>osgi.extender</code> capability from SCR. This requirement will
@@ -5051,7 +5058,7 @@ public class MyComponent {
       <code>org.osgi.service.component</code> package.</para>
 
       <programlisting>Require-Capability: osgi.extender;
-  filter:="(&amp;(osgi.extender=osgi.component)(version&gt;=1.3))"</programlisting>
+  filter:="(&amp;(osgi.extender=osgi.component)(version&gt;=1.3)(!(version&gt;=2.0)))"</programlisting>
 
       <para>SCR must only process a bundle's service components if one of the
       following is true:</para>
@@ -5224,7 +5231,7 @@ public class MyComponent {
 
       <listitem>
         <para>Added new <code>osgi.extender</code> capability. See <xref
-        linkend="service.component-extender.capability"/>.</para>
+        linkend="service.component-capabilities"/>.</para>
       </listitem>
 
       <listitem>
