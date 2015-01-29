@@ -127,6 +127,8 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 			fail("A ResourceMonitoringServiceException is expected here.");
 		} catch (ResourceMonitorException e) {
 			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
 		}
 
 		// check a ResourceContextEvent has been sent due to deletion

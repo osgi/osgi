@@ -80,10 +80,6 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 		}
 	}
 
-	/**
-	 * This method is called after a test is executed. Remove all existing
-	 * ResourceContexts.
-	 */
 	protected void tearDown() throws Exception {
 		super.tearDown();
 
@@ -97,7 +93,10 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	}
 
 	/**
-	 * Test create a ResourceContext and check the list
+	 * Test case 1 : Creation of a ResourceContext
+	 * 
+	 * This test case validates the Resource Context creation and the retrieving
+	 * of a ResourceContext.
 	 * 
 	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
 	 *         name is already used.
@@ -105,46 +104,60 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	public void testTC1CreationOfAResourceContext() throws ResourceMonitoringServiceException {
 		final String name = "context1";
 
-		// retrieve the list of existing resource context.
+		// Lists existing contexts by calling ResourceManager.listContext().
 		ResourceContext[] resourceContexts = resourceMonitoringService.listContext();
+		// Check that the returned list is not null and is empty.
 		assertNotNull("ResourceContext list must not be null.", resourceContexts);
 		assertEquals("ResourceContext list must be empty.", 0, resourceContexts.length);
 
-		// create resource context
+		// A ResourceContextListener service was already registered.
+
+		// Creates a new ResourceContext named "context1".
 		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
 				null);
 
-		// check the resourceContext object is not null
+		// Check that the returned ResourceContext object is not null.
 		assertNotNull("The resourceContext must not be null.", resourceContext);
 
-		// check the name of the resource contextt
-		assertTrue("Name mismatch.", resourceContext.getName().equals(name));
+		// Checks that the name of the newly created ResourceContext is
+		// "context1".
+		assertEquals("Name mismatch.", name, resourceContext.getName());
 
-		// check the new ResourceContext has no associated bundles
-		assertNotNull("BundleIds list must not be null.", resourceContext.getBundleIds());
-		assertTrue("BundleIds list must be empty.", resourceContext.getBundleIds().length == 0);
-
-		// check the new ResourceContext has no associated monitors
+		// Checks that the newly created ResourceContext has no associated
+		// ResourceMonitor objects.
 		assertNotNull("Monitors list must not be null.", resourceContext.getMonitors());
-		assertTrue("Monitors list must be empty.", resourceContext.getMonitors().length == 0);
+		assertEquals("Monitors list must be empty.", 0, resourceContext.getMonitors().length);
 
-		// check we receive a ResourceContextEvent
+		// Checks that the newly created ResourceContext has no associated
+		// bundles.
+		assertNotNull("BundleIds list must not be null.", resourceContext.getBundleIds());
+		assertEquals("BundleIds list must be empty.", 0, resourceContext.getBundleIds().length);
+
+		// Checks that the ResourceContextListener service receives a
+		// RESOURCE_CONTEXT_CREATED ResourceContextEvent.
 		ResourceContextEvent lastEvent = resourceContextListener.getLastEvent();
 		assertNotNull("Last received event must not be null.", lastEvent);
 		assertEquals("Event resource context mismatch.", resourceContext, lastEvent.getContext());
 		assertEquals("Event type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_CREATED, lastEvent.getType());
 
-		// check the resource context has been created
+		// Retrieves all existing Resource Contexts.
 		resourceContexts = resourceMonitoringService.listContext();
-		assertNotNull("ResourceContext list must not be null.", resourceContexts);
-		assertTrue("ResourceContext list length must be equal to 1.", resourceContexts.length == 1);
-		assertTrue("ResourceContext mismatch.", resourceContexts[0].equals(resourceContext));
 
-		// get the resource context by name
+		// Check that the created ResourceContext is in the returned array and
+		// the length of the array is 1.
+		assertNotNull("ResourceContext list must not be null.", resourceContexts);
+		assertEquals("ResourceContext list length must be equal to 1.", 1, resourceContexts.length);
+		assertEquals("ResourceContext mismatch.", resourceContext, resourceContexts[0]);
+
+		// Retrieves the ResourceContext using ResourceContext.getContext(name
+		// of context)
 		ResourceContext retrievedResourceContext = resourceMonitoringService
 				.getContext(name);
+
+		// Checks that the returned ResourceContext object is equal to the
+		// created ResourceContext.
 		assertNotNull("ResourceContext must not be null.", retrievedResourceContext);
-		assertTrue("ResourceContext mismatch.", retrievedResourceContext.equals(resourceContext));
+		assertEquals("ResourceContext mismatch.", resourceContext, retrievedResourceContext);
 	}
 
 	/**
