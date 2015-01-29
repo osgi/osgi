@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * Implement Namespace Package Version 1.0.
+ * Implementation Namespace Package Version 1.0.
  * 
  * <p>
  * Bundles should not need to import this package at runtime since all
@@ -26,7 +26,7 @@
  */
 
 @Version("1.0")
-package org.osgi.namespace.implement;
+package org.osgi.namespace.implementation;
 
 import org.osgi.annotation.versioning.Version;
 

@@ -124,21 +124,21 @@ public class AsyncTestCase extends OSGiTestCase {
 
 	/**
 	 * A basic test that ensures the provider of the Async service advertises
-	 * the osgi.implement capability
+	 * the osgi.implementation capability
 	 * 
 	 * @throws Exception
 	 */
-	public void testAsyncImplementCapability() throws Exception {
+	public void testAsyncImplementationCapability() throws Exception {
 
 		List<BundleCapability> capabilities = asyncTracker.getServiceReference().getBundle()
-				.adapt(BundleWiring.class).getCapabilities("osgi.implement");
+				.adapt(BundleWiring.class).getCapabilities("osgi.implementation");
 
 		boolean hasCapability = false;
 		boolean uses = false;
 		Version version = null;
 
 		for (Capability cap : capabilities) {
-			String objectClass = (String) cap.getAttributes().get("osgi.implement");
+			String objectClass = (String) cap.getAttributes().get("osgi.implementation");
 
 			if ("osgi.async".equals(objectClass)) {
 				hasCapability = true;
@@ -150,8 +150,8 @@ public class AsyncTestCase extends OSGiTestCase {
 				break;
 			}
 		}
-		assertTrue("No osgi.implement capability for the Async service", hasCapability);
-		assertTrue("Missing uses constraint on the osgi.service capability", uses);
+		assertTrue("No osgi.implementation capability for the Async service", hasCapability);
+		assertTrue("Missing uses constraint on the osgi.implementation capability", uses);
 		assertEquals(Version.parseVersion("1.0.0"), version);
 	}
 }

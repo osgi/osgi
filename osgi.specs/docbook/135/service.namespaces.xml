@@ -541,50 +541,52 @@ Import-Package:
     </table>
   </section>
 
-    <section xml:id="service.namespaces-osgi.implement.namespace">
-    <title>osgi.implement Namespace</title>
+  <section xml:id="service.namespaces-osgi.implementation.namespace">
+    <title>osgi.implementation Namespace</title>
 
-    <para>The Implement Namespace is intended to be used for:</para>
+    <para>The Implementation Namespace is intended to be used for:</para>
 
     <itemizedlist>
       <listitem>
         <para>Preventing a bundle from resolving if there is not at least one
-        bundle that provides an implementation of the given specification.</para>
+        bundle that provides an implementation of the specified specification
+        or contract.</para>
       </listitem>
-      
+
       <listitem>
-        <para>Providing uses constraints to ensure that bundles which require an
-        implementation of a specification will be wired appropriately by the 
-        framework.</para>
+        <para>Providing uses constraints to ensure that bundles which require
+        an implementation of a specification or contract will be wired
+        appropriately by the framework.</para>
       </listitem>
 
       <listitem>
         <para>Providing a hint to the provisioning agent that the bundle
-        requires a given specification implementation.</para>
+        requires a given specification or contract implementation.</para>
       </listitem>
 
       <listitem>
-        <para>Used as a general capability namespace for specifications to 
-        express their provided function in the Repository model, see <xref
-        linkend="service.repository"/>.</para>
+        <para>Used as a general capability namespace for specifications or
+        contracts to express their provided function in the Repository model,
+        see <xref linkend="service.repository"/>.</para>
       </listitem>
     </itemizedlist>
 
-    <para>A bundle providing this capability indicates that it implements
-    a specification or contract with the given name and version. For example
-    version 1.0 of the <xref linkend="service.async"/> would advertise the
-    following:</para>
-    
-    <programlisting>Provide-Capability: osgi.implement;
-    osgi.implement="osgi.async"; version="1.0.0";
-    uses:="org.osgi.service.async,org.osgi.service.async.delegate"</programlisting>
+    <para>A bundle providing this capability indicates that it implements a
+    specification or contract with the specified name and version. For
+    example, the <xref linkend="service.async"/> would provide the following
+    capability:</para>
+
+    <programlisting>Provide-Capability: osgi.implementation;
+    osgi.implementation="osgi.async";
+    version:Version="1.0";
+    uses:="org.osgi.service.async"</programlisting>
 
     <para>See the following table and the <xref
-    linkend="org.osgi.namespace.implement.ImplementNamespace"
+    linkend="org.osgi.namespace.implementation.ImplementationNamespace"
     xrefstyle="hyperlink"/> class for this namespace definition.</para>
 
     <table pgwide="1">
-      <title>osgi.implement Namespace</title>
+      <title>osgi.implementation Namespace</title>
 
       <tgroup cols="6">
         <colspec colnum="1" colwidth="3*"/>
@@ -617,7 +619,7 @@ Import-Package:
 
         <tbody>
           <row>
-            <entry><code>osgi.implement</code></entry>
+            <entry><code>osgi.implementation</code></entry>
 
             <entry><code>CA</code></entry>
 
@@ -627,11 +629,11 @@ Import-Package:
 
             <entry><para><code>symbolic-name</code></para></entry>
 
-            <entry><para>The symbolic-name name of the specification.
-            Names beginning with "osgi" are reserved for use by OSGi
-            specifications.</para></entry>
+            <entry><para>The symbolic name of the specification or contract.
+            The OSGi Alliance reserves names that start with
+            "<code>osgi.</code>".</para></entry>
           </row>
-          
+
           <row>
             <entry><code>version</code></entry>
 
@@ -643,8 +645,8 @@ Import-Package:
 
             <entry><para><code>version</code></para></entry>
 
-            <entry><para>The version of the implemented specification.
-            </para></entry>
+            <entry><para>The version of the implemented specification or
+            contract. </para></entry>
           </row>
 
           <row>
@@ -671,8 +673,8 @@ Import-Package:
   <xi:include href="../../generated/javadoc/docbook/org.osgi.namespace.extender.xml"/>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.namespace.service.xml"/>
-  
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.namespace.implement.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.namespace.implementation.xml"/>
 
   <section>
     <title>References</title>

@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package org.osgi.namespace.implement;
+package org.osgi.namespace.implementation;
 
 import org.osgi.resource.Namespace;
 
 /**
- * Implement Capability and Requirement Namespace.
+ * Implementation Capability and Requirement Namespace.
  * 
  * <p>
  * This class defines the names for the attributes and directives for this
@@ -35,7 +35,7 @@ import org.osgi.resource.Namespace;
  * @Immutable
  * @author $Id$
  */
-public final class ImplementNamespace extends Namespace {
+public final class ImplementationNamespace extends Namespace {
 
 	/**
 	 * Namespace name for "implementation" capabilities and requirements.
@@ -44,12 +44,12 @@ public final class ImplementNamespace extends Namespace {
 	 * specification or contract being implemented.
 	 * 
 	 * <p>
-	 * A {@code ImplementNamespace} capability should express a
+	 * A {@code ImplementationNamespace} capability should express a
 	 * {@link Namespace#CAPABILITY_USES_DIRECTIVE uses constraint} for the
 	 * appropriate packages defined by the specification/contract the packages
 	 * mentioned in the value of this attribute.
 	 */
-	public static final String	IMPLEMENT_NAMESPACE				= "osgi.implement";
+	public static final String	IMPLEMENTATION_NAMESPACE		= "osgi.implementation";
 
 	/**
 	 * The capability attribute contains the {@code Version} of the
@@ -58,7 +58,7 @@ public final class ImplementNamespace extends Namespace {
 	 */
 	public static final String	CAPABILITY_VERSION_ATTRIBUTE	= "version";
 
-	private ImplementNamespace() {
+	private ImplementationNamespace() {
 		// empty
 	}
 }
