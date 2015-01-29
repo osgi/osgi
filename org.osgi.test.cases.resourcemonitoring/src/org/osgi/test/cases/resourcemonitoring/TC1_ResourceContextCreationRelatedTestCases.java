@@ -177,7 +177,7 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 		ResourceContextEvent event = resourceContextListener.getLastEvent();
 
 		// check there is one ResourceContext
-		assertTrue(resourceMonitoringService.listContext().length == 1);
+		assertEquals("ResourceMonitoringService.listContext() mismatch.", 1, resourceMonitoringService.listContext().length);
 
 		// try to create a new ResourceContext with the same name
 		try {
@@ -189,10 +189,10 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 
 		// check no event has been sent (i.e the last event is still the
 		// same)
-		assertTrue(resourceContextListener.getLastEvent() == event);
+		assertEquals("Event mismatch.", event, resourceContextListener.getLastEvent());
 
 		// check there is still one ResourceContext
-		assertTrue(resourceMonitoringService.listContext().length == 1);
+		assertEquals("ResourceMonitoringService.listContext().length mismatch.", 1, resourceMonitoringService.listContext().length);
 	}
 
 	/**
@@ -220,12 +220,11 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 				resourceContext1);
 
 		assertNotNull(resourceContext2);
-		assertTrue(resourceContext2.getName().equals(name2));
-		assertTrue(resourceContext2.getBundleIds().length == 0);
+		assertEquals("Name mismatch.", name2, resourceContext2.getName());
+		assertEquals("BundleIds list mismatch.", 0, resourceContext2.getBundleIds().length);
 		ResourceMonitor[] rc2Monitors = resourceContext2.getMonitors();
-		assertTrue(rc2Monitors.length == 1);
-		assertTrue(rc2Monitors[0].getResourceType().equals(
-				ResourceMonitoringService.RES_TYPE_CPU));
+		assertEquals("ResourceMonitors list mismatch.", 1, rc2Monitors.length);
+		assertEquals("ResourceType mismatch.", ResourceMonitoringService.RES_TYPE_CPU, rc2Monitors[0].getResourceType());
 	}
 
 	/**
@@ -255,10 +254,10 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 				resourceContext1);
 
 		assertNotNull(resourceContext2);
-		assertTrue(resourceContext2.getName().equals(name2));
-		assertTrue(resourceContext2.getBundleIds().length == 0);
+		assertEquals("Name mismatch.", name2, resourceContext2.getName());
+		assertEquals("BundleIds list mismatch.", 0, resourceContext2.getBundleIds().length);
 		ResourceMonitor[] rc2Monitors = resourceContext2.getMonitors();
-		assertTrue(rc2Monitors.length == 0);
+		assertEquals("Monitors list mismatch.", 0, rc2Monitors.length);
 	}
 
 	/**
@@ -285,7 +284,7 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 		// get ResourceContext by bundle id
 		resourceContext = resourceMonitoringService.getContext(bundleId);
 		assertNotNull(resourceContext);
-		assertTrue(resourceContext.equals(resourceContext1));
+		assertEquals("ResourceContext mismatch.", resourceContext1, resourceContext);
 
 		// try to retrieve the ResourceContext with an unexisting bundle
 		resourceContext = resourceMonitoringService.getContext(-1);
@@ -309,7 +308,7 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 
 		// check the number of ServiceReference is the same as the number of
 		// supported types
-		assertTrue("factorySrs.size(): " + factorySrs.size() + " must be equal to supportedTypes.length: " + supportedTypes.length, factorySrs.size() == supportedTypes.length);
+		assertEquals("factorySrs.size(): " + factorySrs.size() + " must be equal to supportedTypes.length: " + supportedTypes.length, supportedTypes.length, factorySrs.size());
 
 		// iterate over the ServiceReference collection and retrieves each
 		// ResourceMonitorFactory service.
@@ -321,7 +320,7 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 			computedSupportedTypes.add(rmf.getType());
 		}
 
-		assertTrue(computedSupportedTypes.size() == supportedTypes.length);
+		assertEquals("SupportedTypes list mismatch.", supportedTypes.length, computedSupportedTypes.size());
 
 		// check that each supported types is in the list
 		for (int i = 0; i < supportedTypes.length; i++) {

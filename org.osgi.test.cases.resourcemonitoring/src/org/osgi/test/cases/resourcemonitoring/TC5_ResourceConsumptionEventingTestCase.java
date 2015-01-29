@@ -33,7 +33,9 @@ import org.osgi.service.resourcemonitoring.ResourceListener;
 import org.osgi.service.resourcemonitoring.ResourceMonitor;
 import org.osgi.service.resourcemonitoring.ResourceMonitorFactory;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
+import org.osgi.test.support.OSGiTestCaseProperties;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.compatibility.Semaphore;
 
 /**
  * see Conformance Tests description.odt file.
@@ -86,6 +88,16 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 * list of received events
 	 */
 	private final List					receivedEvents	= new ArrayList();
+
+	/**
+	 * See org.osgi.test.cases.enocean.utils.EventListener class.
+	 */
+	private final Semaphore				waiter			= new Semaphore();
+
+	/**
+	 * last event received.
+	 */
+	private ResourceEvent				lastEvent;
 
 	public void setBundleContext(BundleContext context) {
 		bundleContext = context;
@@ -144,6 +156,8 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 		upperWarning = null;
 		lowerWarning = null;
 		lowerError = null;
+
+		waiter.signal();
 	}
 
 	/**
@@ -165,7 +179,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 
 		// wait for events
 		log("Wait for events for 10000ms.");
-		Thread.sleep(10000);
+		waitForEvent(10000);
 
 		// unregister the listener
 		unregisterListener();
@@ -194,7 +208,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 
 		// wait for events
 		log("Wait for events for 10000ms.");
-		Thread.sleep(10000);
+		waitForEvent(10000);
 
 		// unregister the listener
 		unregisterListener();
@@ -223,7 +237,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 
 		// wait for events
 		log("Wait for events for 10000ms.");
-		Thread.sleep(10000);
+		waitForEvent(10000);
 
 		// unregister the listener
 		unregisterListener();
@@ -250,7 +264,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 
 		// wait for events
 		log("Wait for events for 10000ms.");
-		Thread.sleep(10000);
+		waitForEvent(10000);
 
 		// unregister the listener
 		unregisterListener();
@@ -277,7 +291,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 
 		// wait for events
 		log("Wait for events for 10000ms.");
-		Thread.sleep(10000);
+		waitForEvent(10000);
 
 		// unregister the listener
 		unregisterListener();
@@ -304,7 +318,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 
 		// wait for events
 		log("Wait for events for 10000ms.");
-		Thread.sleep(10000);
+		waitForEvent(10000);
 
 		// unregister the listener
 		unregisterListener();
@@ -316,7 +330,8 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	public void notify(ResourceEvent event) {
 		log("event : " + event.getType() + ", value:" + event.getValue());
 		receivedEvents.add(event);
-
+		lastEvent = event;
+		waiter.signal();
 	}
 
 	public Comparable getLowerWarningThreshold() {
@@ -333,6 +348,31 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 
 	public Comparable getUpperErrorThreshold() {
 		return upperError;
+	}
+
+	/**
+	 * Waits for a ResourceEvent to occur.
+	 * 
+	 * @param timeout
+	 * @return the ResourceEvent or null.
+	 * @throws InterruptedException
+	 */
+	public ResourceEvent waitForEvent(long timeout) throws InterruptedException {
+		if (waiter.waitForSignal(timeout)) {
+			return lastEvent;
+		}
+		return null;
+	}
+
+	/**
+	 * Waits for a ResourceEvent to occur. Default timeout is:
+	 * OSGiTestCaseProperties.getTimeout().
+	 * 
+	 * @return the ResourceEvent or null.
+	 * @throws InterruptedException
+	 */
+	public ResourceEvent waitForEvent() throws InterruptedException {
+		return waitForEvent(OSGiTestCaseProperties.getTimeout());
 	}
 
 	/**
@@ -375,8 +415,10 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 */
 	private void checkReceivedEvents() {
 		ResourceEvent previousEvent = null;
+		System.out.println("---------------------------");
 		for (Iterator it = receivedEvents.iterator(); it.hasNext();) {
 			ResourceEvent currentEvent = (ResourceEvent) it.next();
+			System.out.println("---------------------------currentEvent: " + currentEvent);
 
 			if (previousEvent != null) {
 				assertTrue(previousEvent.getType() != currentEvent.getType());
