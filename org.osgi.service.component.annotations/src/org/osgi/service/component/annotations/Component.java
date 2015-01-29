@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2011, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2011, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -180,8 +180,18 @@ public @interface Component {
 	 * Configuration object where the PID equals the name of the component.
 	 * 
 	 * <p>
-	 * If not specified, the {@link ConfigurationPolicy#OPTIONAL OPTIONAL}
-	 * configuration policy is used.
+	 * If not specified, the configuration policy is based upon whether the
+	 * component is also annotated with the Meta Type
+	 * {@link org.osgi.service.metatype.annotations.Designate Designate}
+	 * annotation.
+	 * <ul>
+	 * <li>Not annotated with {@code Designate} - The configuration policy is
+	 * {@link ConfigurationPolicy#OPTIONAL OPTIONAL}.</li>
+	 * <li>Annotated with {@code Designate(factory=false)} - The configuration
+	 * policy is {@link ConfigurationPolicy#OPTIONAL OPTIONAL}.</li>
+	 * <li>Annotated with {@code Designate(factory=true)} - The configuration
+	 * policy is {@link ConfigurationPolicy#REQUIRE REQUIRE}.</li>
+	 * </ul>
 	 * 
 	 * @see "The configuration-policy attribute of the component element of a Component Description."
 	 * @since 1.1
