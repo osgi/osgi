@@ -77,7 +77,7 @@
     </itemizedlist>
   </section>
 
-  <section xml:id="service.namespaces-osgi.extender">
+  <section xml:id="service.namespaces-osgi.extender.namespace">
     <title>osgi.extender Namespace</title>
 
     <para>An <emphasis>Extender</emphasis> is a bundle that uses the life
@@ -219,7 +219,7 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="service.namespaces-osgi.contract.namespace">
     <title>osgi.contract Namespace</title>
 
     <para>Products or technologies often have a number of related APIs

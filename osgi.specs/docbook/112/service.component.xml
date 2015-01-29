@@ -5036,7 +5036,7 @@ public class MyComponent {
       <title>Extender Capability</title>
 
       <para>SCR must provide the following <link
-      linkend="service.namespaces-osgi.extender"><code>osgi.extender</code></link>
+      linkend="service.namespaces-osgi.extender.namespace"><code>osgi.extender</code></link>
       capability.</para>
 
       <programlisting>Provide-Capability: osgi.extender; 
