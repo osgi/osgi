@@ -9,8 +9,9 @@ Private-Package						=  \
 Import-Package: *
 #Import-Package: ${-signaturetest}, *
 
-# Include-Resource					= \
-# 	tb1.jar
+Include-Resource					= \
+	tb1.jar,\
+	tb2.jar
 
 -buildpath: org.osgi.test.support;version=project,\
 	org.osgi.service.http.whiteboard;version=project,\
@@ -23,9 +24,10 @@ Import-Package: *
 -runbundles						= \
     org.osgi.impl.service.http.whiteboard;version=latest
 
--runproperties = ${runproperties}
+-runproperties = ${runproperties}, \
+	org.apache.felix.http.host=127.0.0.1, \
+	org.osgi.service.http.port=8080
 
 Test-Cases							= ${testcases}
 # -signaturetest                      = org.osgi.service.rest
-	
-	
+
