@@ -708,6 +708,48 @@ public synchronized void doStuff() {
     </section>
   </section>
 
+  <section xml:id="service.async-capabilities">
+    <title>Capabilities</title>
+
+    <para>Implementations of the Asynchronous Service specification must
+    provide the following capabilities.</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>A capability in the <link
+        linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
+        namespace declaring the implemented specification to be
+        <code>osgi.async</code>. This capability must also declare a uses
+        constraint for the <code>org.osgi.service.async</code> package. For
+        example:</para>
+
+        <programlisting>Provide-Capability: osgi.implementation;
+    osgi.implementation="osgi.async";
+    version:Version="1.0";
+    uses:="org.osgi.service.async"</programlisting>
+
+        <para>This capability must follow the rules defined for the <xref
+        linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+      </listitem>
+
+      <listitem>
+        <para>A capability in the <link
+        linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+        namespace representing the <xref
+        linkend="org.osgi.service.async.Async" xrefstyle="hyperlink"/>
+        service. This capability must also declare a uses constraint for the
+        <code>org.osgi.service.async</code> package. For example:</para>
+
+        <programlisting>Provide-Capability: osgi.service;
+    objectClass:List&lt;String&gt;="org.osgi.service.async.Async";
+    uses:="org.osgi.service.async"</programlisting>
+
+        <para>This capability must follow the rules defined for the <xref
+        linkend="service.namespaces-osgi.service.namespace"/>.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
   <section xml:id="service.async-security">
     <title>Security</title>
 
@@ -759,45 +801,6 @@ public synchronized void doStuff() {
     <para>Further security considerations can be addressed using normal OSGi
     security rules. For example access to the Async service can be controlled
     using ServicePermission[Async, GET].</para>
-  </section>
-
-  <section xml:id="service.async-capabilities">
-    <title>Capabilities</title>
-
-    <para>Implementations of the Asynchronous Service specification must
-    provide the following capabilities.</para>
-
-    <itemizedlist>
-      <listitem>
-        <para>A capability in the <code>osgi.implementation</code> namespace
-        declaring the implemented specification to be <code>osgi.async</code>.
-        This capability must also declare a uses constraint for the
-        <code>org.osgi.service.async</code> package. For example:</para>
-
-        <programlisting>Provide-Capability: osgi.implementation;
-    osgi.implementation="osgi.async";
-    version:Version="1.0";
-    uses:="org.osgi.service.async"</programlisting>
-
-        <para>This capability must follow the rules defined for the <xref
-        linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
-      </listitem>
-
-      <listitem>
-        <para>A capability in the <code>osgi.service</code> namespace
-        representing the <xref linkend="org.osgi.service.async.Async"
-        xrefstyle="hyperlink"/> service. This capability must also declare a
-        uses constraint for the <code>org.osgi.service.async</code> package.
-        For example:</para>
-
-        <programlisting>Provide-Capability: osgi.service;
-    objectClass:List&lt;String&gt;="org.osgi.service.async.Async";
-    uses:="org.osgi.service.async"</programlisting>
-
-        <para>This capability must follow the rules defined for the <xref
-        linkend="service.namespaces-osgi.service.namespace"/>.</para>
-      </listitem>
-    </itemizedlist>
   </section>
 
   <xi:include href="../../generated/javadoc/docbook/org.osgi.service.async.xml"/>
