@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2005, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2005, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,4 +52,20 @@ public interface MetaTypeService {
 	 * entry in the meta type documents directory.
 	 */
 	public final static String	METATYPE_DOCUMENTS_LOCATION	= "OSGI-INF/metatype";
+
+	/**
+	 * Capability name for meta type document processors.
+	 * 
+	 * <p>
+	 * Used in {@code Provide-Capability} and {@code Require-Capability}
+	 * manifest headers with the {@code osgi.extender} namespace. For example:
+	 * 
+	 * <pre>
+	 * Require-Capability: osgi.extender;
+	 *  filter:="(&amp;(osgi.extender=osgi.metatype)(version&gt;=1.3)(!(version&gt;=2.0)))"
+	 * </pre>
+	 * 
+	 * @since 1.3
+	 */
+	public static final String	METATYPE_CAPABILITY_NAME	= "osgi.metatype";
 }
