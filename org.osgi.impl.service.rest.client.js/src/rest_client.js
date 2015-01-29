@@ -119,8 +119,9 @@ function OsgiRestClient(baseUrl) {
 	 *            new framework startlevel in JSON representation.
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
-	 *            updates.
-	 * @returns the updated framework startlevel in JSON representation.
+	 *            updates. On success, the callback will have the updated
+	 *            framework startlevel as an object that corresponds to the JSON
+	 *            representation.
 	 */
 	this.setFrameworkStartLevel = function setFrameworkStartLevel(fw_sl,
 			callbacks) {
@@ -138,9 +139,8 @@ function OsgiRestClient(baseUrl) {
 	 * 
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
-	 *            updates.
-	 * 
-	 * @returns the URI paths of the bundles as a JSON array of strings.
+	 *            updates. On success, the callback will have the URI paths of
+	 *            the bundles as an array of strings.
 	 */
 	this.getBundles = function getBundles(callbacks) {
 		restCall({
@@ -155,8 +155,8 @@ function OsgiRestClient(baseUrl) {
 	 * 
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
-	 *            updates.
-	 * @returns a JSON array containing all Bundle representations
+	 *            updates. On success, the callback will have an array
+	 *            containing all Bundle representation objects.
 	 */
 	this.getBundleRepresentations = function getBundleRepresentations(callbacks) {
 		restCall({
@@ -174,8 +174,9 @@ function OsgiRestClient(baseUrl) {
 	 *            path.
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
-	 *            updates.
-	 * @returns the Bundle representation as a JSON object.
+	 *            updates. On success, the callback will have the Bundle
+	 *            representation as an object that corresponds to the JSON
+	 *            representation.
 	 */
 	this.getBundle = function getBundle(b, callbacks) {
 		restCall({
@@ -193,8 +194,8 @@ function OsgiRestClient(baseUrl) {
 	 *            path.
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
-	 *            updates.
-	 * @returns the bundle state representation.
+	 *            updates. On success, the callback will have the bundle state
+	 *            as an object that corresponds to the JSON representation.
 	 */
 	this.getBundleState = function getBundleState(b, callbacks) {
 		restCall({
@@ -212,8 +213,8 @@ function OsgiRestClient(baseUrl) {
 	 *            path.
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
-	 *            updates.
-	 * @returns the updated bundle state representation.
+	 *            updates. On success, the callback will have the updated bundle
+	 *            state object.
 	 */
 	this.startBundle = function startBundle(b, callbacks) {
 		this.setBundleState(b, {
@@ -229,8 +230,8 @@ function OsgiRestClient(baseUrl) {
 	 *            path.
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
-	 *            updates.
-	 * @returns the updated bundle state representation.
+	 *            updates. On success, the callback will have the updated bundle
+	 *            state object.
 	 */
 	this.stopBundle = function stopBundle(b, callbacks) {
 		this.setBundleState(b, {
@@ -248,8 +249,8 @@ function OsgiRestClient(baseUrl) {
 	 *            the target state.
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
-	 *            updates.
-	 * @returns the updated state of the bundle.
+	 *            updates. On success, the callback will have the updated bundle
+	 *            state object.
 	 */
 	this.setBundleState = function setBundleState(b, state, callbacks) {
 		restCall({
@@ -268,8 +269,8 @@ function OsgiRestClient(baseUrl) {
 	 *            path.
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
-	 *            updates.
-	 * @returns the bundle header.
+	 *            updates. On success, the callback will have the bundle header
+	 *            as an object.
 	 */
 	this.getBundleHeader = function getBundleHeader(b, callbacks) {
 		restCall({
@@ -307,8 +308,8 @@ function OsgiRestClient(baseUrl) {
 	 *            the target startlevel representation.
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
-	 *            updates.
-	 * @returns the updated startlevel representation.
+	 *            updates. On success, the callback will have the updated
+	 *            startlevel object that corresponds to the JSON representation.
 	 */
 	this.setBundleStartLevel = function setBundleStartLevel(b, sl, callbacks) {
 		restCall({
@@ -326,8 +327,8 @@ function OsgiRestClient(baseUrl) {
 	 *            the URI of the bundle to be installed
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
-	 *            updates.
-	 * @returns the URI path of the newly installed bundle
+	 *            updates. On success, the callback will have the URI path of
+	 *            the newly installed bundle as a String.
 	 */
 	this.installBundle = function installBundle(uri, callbacks) {
 		restCall({
@@ -384,8 +385,8 @@ function OsgiRestClient(baseUrl) {
 	 * 
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
-	 *            updates.
-	 * @returns a JSON array of the URI paths of all services.
+	 *            updates. On success, the callback will have an array of the
+	 *            URI paths of all services.
 	 */
 	this.getServices = function getServices(callbacks) {
 		restCall({
@@ -400,8 +401,8 @@ function OsgiRestClient(baseUrl) {
 	 * 
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
-	 *            updates.
-	 * @return a JSON array containing all representations.
+	 *            updates. On success, the callback will have an array
+	 *            containing all service representation objects.
 	 */
 	this.getServiceRepresentations = function getServiceRepresentations(
 			callbacks) {
@@ -420,8 +421,9 @@ function OsgiRestClient(baseUrl) {
 	 *            path.
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
-	 *            updates.
-	 * @return the service representation.
+	 *            updates. On success, the callback will have the service
+	 *            representation object which corresponds to the JSON
+	 *            representation.
 	 */
 	this.getService = function getService(s, callbacks) {
 		restCall({
