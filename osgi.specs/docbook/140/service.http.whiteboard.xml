@@ -164,14 +164,14 @@
     property is not set, the <emphasis>default</emphasis> Servlet Context
     Helper is used.</para>
 
-    <para>To achieve the required behavior for <code>ServletContext.getClassLoader()</code>
-    the <code>ServletContextHelper</code> service must be implemented
-    using a Service Factory. The Whiteboard implementation must get 
-    the Servlet Context Helper using the Bundle Context of the associated Whiteboard service.
-    For more information see <code>getClassLoader()</code> in 
-    <xref linkend="service.http.whiteboard.servletcontext.methods"
-    xrefstyle="template:Table %n"/>.
-    </para>
+    <para>To achieve the required behavior for
+    <code>ServletContext.getClassLoader()</code> the
+    <code>ServletContextHelper</code> service must be implemented using a
+    Service Factory. The Whiteboard implementation must get the Servlet
+    Context Helper using the Bundle Context of the associated Whiteboard
+    service. For more information see <code>getClassLoader()</code> in <xref
+    linkend="service.http.whiteboard.servletcontext.methods"
+    xrefstyle="template:Table %n"/>.</para>
 
     <table xml:id="service.http.whiteboard.servletcontext.helper.properties">
       <title>Service registration properties for
@@ -207,13 +207,13 @@
             Name. The default Servlet Context Helper is named
             <code>default</code>. To override the default, register a custom
             <code>ServletContextHelper</code> service with the name
-            <code>default</code>. If multiple Servlet Context Helper services 
-            are registered with the same name,
-            the one with the highest Service Ranking is used. In case of a
-            tie, the service with the lowest service ID wins. In other words,
-            the normal OSGi service ranking applies.</para>
-            <para>Registrations without any specified name are not used and
-            this is reflected in the failure DTOs. See <xref
+            <code>default</code>. If multiple Servlet Context Helper services
+            are registered with the same name, the one with the highest
+            Service Ranking is used. In case of a tie, the service with the
+            lowest service ID wins. In other words, the normal OSGi service
+            ranking applies.</para> <para>Registrations without any specified
+            name are not used and this is reflected in the failure DTOs. See
+            <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
@@ -234,61 +234,53 @@
       </tgroup>
     </table>
 
-    <para>Multiple <code>ServletContextHelper</code> services can have identical or overlapping 
-        <code>osgi.http.whiteboard.context.path</code> values. In that case a matching
-        servlet or resource is located as follows:
+    <para>Multiple <code>ServletContextHelper</code> services can have
+    identical or overlapping <code>osgi.http.whiteboard.context.path</code>
+    values. In that case a matching servlet or resource is located as follows:
+    <orderedlist>
+        <listitem>
+          <para>The Servlet Context Helper service with the longest matching
+          path is matched first.</para>
+        </listitem>
 
-        <orderedlist>
-            <listitem>
-                <para>The Servlet Context Helper service with the longest matching path is matched first.
-                </para>
-            </listitem>
-            <listitem>
-                <para>In the case of two Servlet Context Helpers with the same path, the service with
-        the highest ranking is searched first for a match. In the case of a tie, the lowest 
-        service ID is searched first.
-                </para>
-            </listitem>
-        </orderedlist>
-    </para>
+        <listitem>
+          <para>In the case of two Servlet Context Helpers with the same path,
+          the service with the highest ranking is searched first for a match.
+          In the case of a tie, the lowest service ID is searched
+          first.</para>
+        </listitem>
+      </orderedlist></para>
 
-    <para>
-        For example, if two <code>ServletContextHelper</code> services are registered as follows
-        <programlisting>osgi.http.whiteboard.context.path = /foo
-osgi.http.whiteboard.context.path = /foo/bar</programlisting>
+    <para>For example, if two <code>ServletContextHelper</code> services are
+    registered as follows <programlisting>osgi.http.whiteboard.context.path = /foo
+osgi.http.whiteboard.context.path = /foo/bar</programlisting> Then is a
+    request for <code>http://localhost/foo/bar/someServlet</code> is looked up
+    in the following order: <orderedlist>
+        <listitem>
+          <para><code>/foo/bar</code> context looking for a pattern to match
+          <code>/someServlet</code></para>
+        </listitem>
 
-        Then is a request for <code>http://localhost/foo/bar/someServlet</code> is looked up 
-        in the following order:
+        <listitem>
+          <para><code>/foo</code> context looking for a pattern to match
+          <code>/bar/someServlet</code></para>
+        </listitem>
+      </orderedlist> Note that whole path segments must match. Therefore the
+    following request can only be handled by the Servlet Context Helper
+    registered under the /foo path:
+    <code>http://localhost/foo/bars/someOtherServlet</code></para>
 
-        <orderedlist>
-            <listitem>
-                <para>
-                    <code>/foo/bar</code> context looking for a pattern to match <code>/someServlet</code>
-                </para>
-            </listitem>
-            <listitem>
-                <para>
-                    <code>/foo</code> context looking for a pattern to match <code>/bar/someServlet</code>
-                </para>
-            </listitem>
-        </orderedlist>
-
-Note that whole path segments must match. Therefore the following request can only be handled
-by the Servlet Context Helper registered under the /foo path:
-<code>http://localhost/foo/bars/someOtherServlet</code>
-    </para>
-
-    <para>For details on the association process between servlet, servlet filter, resource
-        and listener services and the 
+    <para>For details on the association process between servlet, servlet
+    filter, resource and listener services and the
     <code>ServletContextHelper</code> see <xref
     linkend="service.http.common.properties"/>.</para>
 
-    <para>An example Servlet Context Helper can be found below, it prefixes 
-        the path with <code>/myapp</code> for any associated whiteboard service.
-        Additionally, it serves static resources from a non-standard location, a
-        content delivery network. Other methods use the default 
-        <code>ServletContextHelper</code> implementation.</para>
-    
+    <para>An example Servlet Context Helper can be found below, it prefixes
+    the path with <code>/myapp</code> for any associated whiteboard service.
+    Additionally, it serves static resources from a non-standard location, a
+    content delivery network. Other methods use the default
+    <code>ServletContextHelper</code> implementation.</para>
+
     <programlisting>@Component(service = ServletContextHelper.class,
    property = {
        "osgi.http.whiteboard.context.name=my-sch",
@@ -302,6 +294,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
         }
     }
 }</programlisting>
+
     <section>
       <title>ServletContextHelper.getResource(String)</title>
 
@@ -310,9 +303,8 @@ public class CDNServletContextHelper extends ServletContextHelper {
       <para><emphasis>Default behavior</emphasis> - Assumes the resources are
       in the bundle registering the Whiteboard service. Its
       <code>Bundle.getResource()</code> method is called to obtain a URL to
-      the resource. The default Servlet Context Helper implementation assumes the path
-      to be relative to the bundle's root. 
-      </para>
+      the resource. The default Servlet Context Helper implementation assumes
+      the path to be relative to the bundle's root.</para>
     </section>
 
     <section>
@@ -344,7 +336,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
       method.</para>
 
       <para><emphasis>Default Behavior</emphasis> - Always returns
-          <code>null</code>.</para>
+      <code>null</code>.</para>
     </section>
 
     <section>
@@ -477,10 +469,11 @@ public class CDNServletContextHelper extends ServletContextHelper {
               An implementation of this specification can achieve this by
               returning separate façades of the ServletContext to each
               Whiteboard service. Each façade accesses the Whiteboard
-              service's Bundle Wiring to obtain its classloader. As a consequence
-              the <code>ServletContextHelper</code> should be implemented using a
-              Service Factory and the implementation should get the Servlet Context
-              Helper service using the <code>BundleContext</code> of the Whiteboard service.
+              service's Bundle Wiring to obtain its classloader. As a
+              consequence the <code>ServletContextHelper</code> should be
+              implemented using a Service Factory and the implementation
+              should get the Servlet Context Helper service using the
+              <code>BundleContext</code> of the Whiteboard service.
               </para></entry>
             </row>
 
@@ -947,11 +940,11 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
     <para>If multiple Servlet Context Helper services match the
     <code>osgi.http.whiteboard.context.select</code> property the servlet,
-    filter or listener will be registered with all these Servlet Context Helpers if it
-    is registered as a Prototype Service Factory. Otherwise it is only
-    registered with the Servlet Context Helper with the highest service
-    ranking. In the case of a tie, the lowest service ID wins. In other words,
-    the normal service ranking rules apply.</para>
+    filter or listener will be registered with all these Servlet Context
+    Helpers if it is registered as a Prototype Service Factory. Otherwise it
+    is only registered with the Servlet Context Helper with the highest
+    service ranking. In the case of a tie, the lowest service ID wins. In
+    other words, the normal service ranking rules apply.</para>
   </section>
 
   <section xml:id="i21223311">
@@ -1187,14 +1180,15 @@ public class MyServlet extends HttpServlet {
     servlet, whose <code>service()</code> method is called to process the
     request.</para>
 
-<para>To associate the above example servlet with the example <code>ServletContextHelper</code>
-    in section <xref linkend="service.http.whiteboard.servletcontext" xrefstyle="template:%n"/> add the following service registration property:</para>
+    <para>To associate the above example servlet with the example
+    <code>ServletContextHelper</code> in section <xref
+    linkend="service.http.whiteboard.servletcontext" xrefstyle="template:%n"/>
+    add the following service registration property:</para>
 
-<programlisting>osgi.http.whiteboard.context.select=my-sch</programlisting>
+    <programlisting>osgi.http.whiteboard.context.select=my-sch</programlisting>
 
-<para>This will cause the servlet to move to <code>/myapp/myservlet</code> as configured
-    by the custom Servlet Context Handler.</para>
-
+    <para>This will cause the servlet to move to <code>/myapp/myservlet</code>
+    as configured by the custom Servlet Context Handler.</para>
 
     <section>
       <title>Error Pages</title>
@@ -1261,8 +1255,8 @@ public class MyErrorServlet extends HttpServlet {
       <code>osgi.http.whiteboard.filter.asyncSupported</code>.</para>
 
       <para>An example simple asynchronous servlet that handles the servlet
-      requests in a thread from a custom thread pool rather than in the thread provided by the 
-      servlet container:</para>
+      requests in a thread from a custom thread pool rather than in the thread
+      provided by the servlet container:</para>
 
       <programlisting>@Component(service = Servlet.class, scope = ServiceScope.PROTOTYPE,
     property = {
@@ -1270,7 +1264,7 @@ public class MyErrorServlet extends HttpServlet {
         "osgi.http.whiteboard.servlet.asyncSupported:Boolean=true"})
 public class AsyncServlet extends HttpServlet {
     ExecutorService executor = Executors.newCachedThreadPool(
-        r -> new Thread(r, "Pooled Thread"));
+        r -&gt; new Thread(r, "Pooled Thread"));
 
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) 
             throws IOException {
@@ -1278,7 +1272,7 @@ public class AsyncServlet extends HttpServlet {
     }
 
     private void doGetAsync(AsyncContext asyncContext) {
-        executor.submit(() -> {
+        executor.submit(() -&gt; {
             try {
                 PrintWriter writer = asyncContext.getResponse().getWriter();
                 writer.print("Servlet executed async in: " +
@@ -1471,8 +1465,8 @@ public class AsyncServlet extends HttpServlet {
     bound to the same Servlet Context Helper and the same Http Whiteboard
     implementation.</para>
 
-    <para>The example Filter below adds some text before and after the content 
-        generated by a servlet:</para>
+    <para>The example Filter below adds some text before and after the content
+    generated by a servlet:</para>
 
     <programlisting>@Component(scope = ServiceScope.PROTOTYPE,
     property = "osgi.http.whiteboard.filter.pattern=/*")
@@ -1539,15 +1533,13 @@ public class MyFilter implements Filter {
             <entry><code>String</code></entry>
 
             <entry><para>The prefix used to map a requested resource to the
-                    bundle's entries. If the request's path info is not null,
-                    it is appended to this prefix. The resulting string is 
-                    passed to the 
-                    <xref linkend="org.osgi.service.http.context.ServletContextHelper.getResource-String-" xrefstyle="hyperlink"/>
-                    method of the associated Servlet Context Helper.
-                    </para> 
-                
-            <para>This property marks a service
-            as a resouce service. See <xref
+            bundle's entries. If the request's path info is not null, it is
+            appended to this prefix. The resulting string is passed to the
+            <xref
+            linkend="org.osgi.service.http.context.ServletContextHelper.getResource-String-"
+            xrefstyle="hyperlink"/> method of the associated Servlet Context
+            Helper. </para> <para>This property marks a service as a resouce
+            service. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PREFIX"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
@@ -1558,10 +1550,8 @@ public class MyFilter implements Filter {
             <entry><code>String+</code></entry>
 
             <entry><para>The servlet pattern(s) to be used to serve resources.
-                    As defined by the <xref linkend="i21217577"/> in section 12.2 
-                    Specification of Mappings.</para>
-            
-            <para>See <xref
+            As defined by the <xref linkend="i21217577"/> in section 12.2
+            Specification of Mappings.</para> <para>See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_RESOURCE_PATTERN"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
@@ -1580,15 +1570,14 @@ public class MyFilter implements Filter {
         "osgi.http.whiteboard.resource.prefix=/www"})
 public class MyResourceService {}</programlisting>
 
-    <para>A Http Service configured on port 80
-    will serve a request for <code>http://localhost/files/cheese.html</code>
-    from the location <code>/www/cheese.html</code>.</para>
+    <para>A Http Service configured on port 80 will serve a request for
+    <code>http://localhost/files/cheese.html</code> from the location
+    <code>/www/cheese.html</code>.</para>
 
-    <para>The following example maps requests for <code>/favicon.ico</code> to serve
-        the <code>/logo.png</code> resource. Note that the pattern is not appended to the prefix
-        as the path info in this case is null.
-    </para>
-    
+    <para>The following example maps requests for <code>/favicon.ico</code> to
+    serve the <code>/logo.png</code> resource. Note that the pattern is not
+    appended to the prefix as the path info in this case is null.</para>
+
     <programlisting>@Component(service = SomeResourceService.class,
     property = {
         "osgi.http.whiteboard.resource.pattern=/favicon.ico",
@@ -1649,8 +1638,8 @@ public class SomeResourceService {}</programlisting>
     associated with a Servlet Context Helper will receive events relating to
     the <emphasis>default</emphasis> instance.</para>
 
-    <para>An example listener that reports on client requests being initialized 
-    and destroyed is listed below:</para>
+    <para>An example listener that reports on client requests being
+    initialized and destroyed is listed below:</para>
 
     <programlisting>@Component
 public class MyServletRequestListener implements ServletRequestListener {
@@ -1899,20 +1888,23 @@ public class MyServletRequestListener implements ServletRequestListener {
     <title>Capability Namespaces</title>
 
     <section>
-      <title>Use of the osgi.whiteboard Namespace</title>
+      <title>Use of the osgi.implementation Namespace</title>
 
       <para>The Http Whiteboard implementation bundle must provide the
-      <code>osgi.whiteboard</code> capability with name
+      <code>osgi.implementation</code> capability with name
       <code>osgi.http</code>. This capability can be used by provisioning
       tools and during resolution to ensure that a Http Whiteboard
       implementation is present to process the Whiteboard services defined in
       this specification. The capability must be provided as follows:</para>
 
-      <programlisting>Provide-Capability: osgi.whiteboard;
-       osgi.whiteboard="osgi.http";
+      <programlisting>Provide-Capability: osgi.implementation;
+       osgi.implementation="osgi.http";
        uses:="javax.servlet, javax.servlet.http, 
               org.osgi.service.http.context, org.osgi.service.http.whiteboard";
        version:Version="1.0"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
     </section>
 
     <section>
