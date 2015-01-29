@@ -27,6 +27,7 @@ package org.osgi.test.cases.rest.junit;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import org.osgi.framework.Bundle;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
@@ -97,6 +98,39 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "    done(); "
 				+ "}});");
 
+		// Check that the original start levels are still current
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.getFrameworkStartLevel({"
+				+ "  success : function(res) {"
+				+ "    assert('original startLevel', " + sl + ", res.startLevel);"
+				+ "    assert('original initialBundleStartLevel', " + ibsl + ", res.initialBundleStartLevel);"
+				+ "    done();"
+				+ "}});");
+	}
+
+	public void testBundleListRestClient() throws Exception {
+		StringBuilder sb = new StringBuilder("[");
+		boolean first = true;
+		for (Bundle b : getContext().getBundles()) {
+			if (first)
+				first = false;
+			else
+				sb.append(",");
+
+			sb.append("'framework/bundle/");
+			sb.append(b.getBundleId());
+			sb.append("'");
+		}
+		sb.append("]");
+
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.getBundles({"
+				+ "  success : function(res) {"
+				+ "    assert('getBundles', " + sb.toString() + ", res);"
+				+ "    done();"
+				+ ""
+				+ "}})");
+
 	}
 
 	public void jsTest(String script) throws Exception {
@@ -109,10 +143,26 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "console = new Object();"
 				+ "console.log = function log(arg) {};"
 				+ "function assert(msg, expected, actual) {"
-				+ "  if (expected !== actual) {"
+				+ "  if (Array.isArray(expected)) {"
+				+ "    return assertArray(msg, expected, actual);"
+				+ "  } else if (expected !== actual) {"
 				+ "    document.getElementById('test_errors').innerHTML += "
 				+ "      msg + ': Expected ' + expected + ' but was ' + actual;"
+				+ "    return false;"
+				+ "  } else {"
+				+ "    return true;"
 				+ "}}"
+				+ "function assertArray(msg, expected, actual) {"
+				+ "  if (!assert('Array length different', expected.length, actual.length)) {"
+				+ "    return false;"
+				+ "  }"
+				+ "  for (var i=0; i<expected.length; i++) {"
+				+ "    if (!assert('Array element different: ' + i, expected[i], actual[i])) {"
+				+ "      return false;"
+				+ "    }"
+				+ "  }"
+				+ "  return true"
+				+ "}"
 				+ "function done() {"
 				+ "  if (document.getElementById('test_errors').innerHTML == '') {"
 				+ "    document.getElementById('test_result').innerHTML = '" + SUCCESS + "';"
