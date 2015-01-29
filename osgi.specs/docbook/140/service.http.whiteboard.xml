@@ -1885,17 +1885,18 @@ public class MyServletRequestListener implements ServletRequestListener {
   </section>
 
   <section>
-    <title>Capability Namespaces</title>
+    <title>Capabilities</title>
 
     <section>
       <title>Use of the osgi.implementation Namespace</title>
 
-      <para>The Http Whiteboard implementation bundle must provide the
-      <code>osgi.implementation</code> capability with name
-      <code>osgi.http</code>. This capability can be used by provisioning
-      tools and during resolution to ensure that a Http Whiteboard
-      implementation is present to process the Whiteboard services defined in
-      this specification. The capability must be provided as follows:</para>
+      <para>The Http Whiteboard implementation bundle must provide the <link
+      linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
+      capability with name <code>osgi.http</code>. This capability can be used
+      by provisioning tools and during resolution to ensure that a Http
+      Whiteboard implementation is present to process the Whiteboard services
+      defined in this specification. The capability must be provided as
+      follows:</para>
 
       <programlisting>Provide-Capability: osgi.implementation;
        osgi.implementation="osgi.http";
@@ -1911,15 +1912,17 @@ public class MyServletRequestListener implements ServletRequestListener {
       <title>Use of the osgi.contract Namespace</title>
 
       <para>The Http Whiteboard implementation may provide a capability in the
-      <code>osgi.contract</code> name-space with name <code>JavaServlet</code>
-      if it exports the <code>javax.servlet</code> and
-      <code>javax.servlet.http</code> packages. See <xref
+      <link
+      linkend="service.namespaces-osgi.contract.namespace"><code>osgi.contract</code></link>
+      namespace with name <code>JavaServlet</code> if it exports the
+      <code>javax.servlet</code> and <code>javax.servlet.http</code> packages.
+      See <xref
       linkend="http.whiteboard-portable.java.contracts.ref"/>.</para>
 
       <para>Providing the <code>osgi.contract</code> capability enables
       developer to build portable bundles for packages that are not versioned
       under OSGi Semantic Versioning rules. For more details see <xref
-      linkend="service.namespaces"/>.</para>
+      linkend="service.namespaces-osgi.contract.namespace"/>.</para>
 
       <para>If the Servlet API is provided by another bundle, the Http
       Whiteboard implementation should be a consumer of the API and require
