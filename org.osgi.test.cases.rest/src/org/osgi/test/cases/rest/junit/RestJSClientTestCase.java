@@ -131,6 +131,53 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ ""
 				+ "}})");
 
+		// TODO filter ?
+
+		Bundle tb1Bundle = getBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME);
+		if (tb1Bundle != null) {
+			// test bundle is already installed => uninstall
+			tb1Bundle.uninstall();
+		}
+		String url = getContext().getBundle().getEntry(TB1).toString();
+
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.installBundle('" + url + "', {"
+				+ "  success : function(res) {"
+				+ "    assert('installBundle', 'framework/bundle/" + 
+				getContext().getBundles().length + "', res);"
+				+ "    done();"
+				+ ""
+				+ "}})");
+		tb1Bundle = getBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME);
+		assertNotNull("Test bundle TB1 is installed", tb1Bundle);
+
+		assertEquals("Bundle location", "framework/bundle/" + (getContext().getBundles().length - 1),
+				getBundleURI(tb1Bundle));
+
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.installBundle('" + url + "', {"
+				+ "  failure : function(res) { "
+				+ "    assert('Should have returned CONFLICT as the bundle is already installed at the location', "
+				+ "      409, res);"
+				+ "    done(); "
+				+ ""
+				+ "}})");
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.installBundle('invalid bundle location', {"
+				+ "  failure : function(res) { "
+				+ "    assert('Should have returned BAD REQUEST as the bundle location is invalid', "
+				+ "      400, res);"
+				+ "    done(); "
+				+ ""
+				+ "}})");
+	}
+
+	public void testInstallBundleUpload() {
+		/*
+		 * This should test the post operation on the bundles resource where the
+		 * bundle is uploaded as the body of the message.
+		 */
+		fail("Not yet supported by JS client");
 	}
 
 	public void jsTest(String script) throws Exception {
