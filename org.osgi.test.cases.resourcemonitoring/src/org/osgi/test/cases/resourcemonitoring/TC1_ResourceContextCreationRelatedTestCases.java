@@ -98,201 +98,192 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 
 	/**
 	 * Test create a ResourceContext and check the list
+	 * 
+	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
+	 *         name is already used.
 	 */
-	public void testTC1CreationOfAResourceContext() {
+	public void testTC1CreationOfAResourceContext() throws ResourceMonitoringServiceException {
 		final String name = "context1";
 
 		// retrieve the list of existing resource context.
 		ResourceContext[] resourceContexts = resourceMonitoringService.listContext();
 		assertNotNull("ResourceContext list must not be null.", resourceContexts);
-		assertTrue("ResourceContext list must be empty.", resourceContexts.length == 0);
+		assertEquals("ResourceContext list must be empty.", 0, resourceContexts.length);
 
 		// create resource context
-		try {
-			ResourceContext resourceContext = resourceMonitoringService.createContext(name,
-					null);
+		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
+				null);
 
-			// check the resourceContext object is not null
-			assertNotNull("The resourceContext must not be null.", resourceContext);
+		// check the resourceContext object is not null
+		assertNotNull("The resourceContext must not be null.", resourceContext);
 
-			// check the name of the resource contextt
-			assertTrue("Name mismatch.", resourceContext.getName().equals(name));
-			
-			// check the new ResourceContext has no associated bundles
-			assertNotNull("BundleIds list must not be null.", resourceContext.getBundleIds());
-			assertTrue("BundleIds list must be empty.", resourceContext.getBundleIds().length == 0);
+		// check the name of the resource contextt
+		assertTrue("Name mismatch.", resourceContext.getName().equals(name));
 
-			// check the new ResourceContext has no associated monitors
-			assertNotNull("Monitors list must not be null.", resourceContext.getMonitors());
-			assertTrue("Monitors list must be empty.", resourceContext.getMonitors().length == 0);
+		// check the new ResourceContext has no associated bundles
+		assertNotNull("BundleIds list must not be null.", resourceContext.getBundleIds());
+		assertTrue("BundleIds list must be empty.", resourceContext.getBundleIds().length == 0);
 
-			// check we receive a ResourceContextEvent
-			ResourceContextEvent lastEvent = resourceContextListener.getLastEvent();
-			assertNotNull("Last received event must not be null.", lastEvent);
-			assertTrue("Event resource context mismatch.", lastEvent.getContext().equals(resourceContext));
-			assertTrue("Event type mismatch.", lastEvent.getType() == ResourceContextEvent.RESOURCE_CONTEXT_CREATED);
+		// check the new ResourceContext has no associated monitors
+		assertNotNull("Monitors list must not be null.", resourceContext.getMonitors());
+		assertTrue("Monitors list must be empty.", resourceContext.getMonitors().length == 0);
 
-			// check the resource context has been created
-			resourceContexts = resourceMonitoringService.listContext();
-			assertNotNull("ResourceContext list must not be null.", resourceContexts);
-			assertTrue("ResourceContext list length must be equal to 1.", resourceContexts.length == 1);
-			assertTrue("ResourceContext mismatch.", resourceContexts[0].equals(resourceContext));
+		// check we receive a ResourceContextEvent
+		ResourceContextEvent lastEvent = resourceContextListener.getLastEvent();
+		assertNotNull("Last received event must not be null.", lastEvent);
+		assertEquals("Event resource context mismatch.", resourceContext, lastEvent.getContext());
+		assertEquals("Event type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_CREATED, lastEvent.getType());
 
-			// get the resource context by name
-			ResourceContext retrievedResourceContext = resourceMonitoringService
-					.getContext(name);
-			assertNotNull("ResourceContext must not be null.", retrievedResourceContext);
-			assertTrue("ResourceContext mismatch.", retrievedResourceContext.equals(resourceContext));
-		} catch (ResourceMonitoringServiceException e) {
-			e.printStackTrace();
-			fail("A pb occurred when creating the ResourceContext (its name is already used).");
-		}
+		// check the resource context has been created
+		resourceContexts = resourceMonitoringService.listContext();
+		assertNotNull("ResourceContext list must not be null.", resourceContexts);
+		assertTrue("ResourceContext list length must be equal to 1.", resourceContexts.length == 1);
+		assertTrue("ResourceContext mismatch.", resourceContexts[0].equals(resourceContext));
+
+		// get the resource context by name
+		ResourceContext retrievedResourceContext = resourceMonitoringService
+				.getContext(name);
+		assertNotNull("ResourceContext must not be null.", retrievedResourceContext);
+		assertTrue("ResourceContext mismatch.", retrievedResourceContext.equals(resourceContext));
 	}
 
 	/**
 	 * Test create a new ResourceContext with an existing resource context name.
+	 * 
+	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
+	 *         name is already used.
 	 */
-	public void testTC2CreationOfAResourceContextWithAnExistingResourceContextName() {
+	public void testTC2CreationOfAResourceContextWithAnExistingResourceContextName() throws ResourceMonitoringServiceException {
 		final String name = "context1";
+		// create first instance of context1
+		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
+				null);
+		assertNotNull(resourceContext);
+
+		// retrieve event
+		ResourceContextEvent event = resourceContextListener.getLastEvent();
+
+		// check there is one ResourceContext
+		assertTrue(resourceMonitoringService.listContext().length == 1);
+
+		// try to create a new ResourceContext with the same name
 		try {
-			// create first instance of context1
-			ResourceContext resourceContext = resourceMonitoringService.createContext(name,
-					null);
-			assertNotNull(resourceContext);
-
-			// retrieve event
-			ResourceContextEvent event = resourceContextListener.getLastEvent();
-
-			// check there is one ResourceContext
-			assertTrue(resourceMonitoringService.listContext().length == 1);
-
-			// try to create a new ResourceContext with the same name
-			try {
-				resourceMonitoringService.createContext(name, null);
-				fail("A ResourceMonitoringServiceException is expected here.");
-			} catch (ResourceMonitoringServiceException e) {
-				e.printStackTrace();
-			}
-
-			// check no event has been sent (i.e the last event is still the
-			// same)
-			assertTrue(resourceContextListener.getLastEvent() == event);
-
-			// check there is still one ResourceContext
-			assertTrue(resourceMonitoringService.listContext().length == 1);
+			resourceMonitoringService.createContext(name, null);
+			fail("A ResourceMonitoringServiceException is expected here.");
 		} catch (ResourceMonitoringServiceException e) {
-			e.printStackTrace();
-			fail("A pb occurred when creating the ResourceContext (its name is already used).");
+			assertException("A ResourceMonitoringServiceException is expected.", ResourceMonitoringServiceException.class, e);
 		}
+
+		// check no event has been sent (i.e the last event is still the
+		// same)
+		assertTrue(resourceContextListener.getLastEvent() == event);
+
+		// check there is still one ResourceContext
+		assertTrue(resourceMonitoringService.listContext().length == 1);
 	}
 
 	/**
 	 * Test create a ResourceContext based on a template.
 	 * 
-	 * @throws ResourceMonitorException not expected
+	 * @throws ResourceMonitorException if resourceMonitor is associated to
+	 *         another context or resourceMonitor has been deleted.
+	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
+	 *         name is already used.
 	 */
 	public void testTC3CreationOfAResourceContextBasedOnATemplateResourceContext()
-			throws ResourceMonitorException {
+			throws ResourceMonitorException, ResourceMonitoringServiceException {
 		final String name1 = "context1";
 		final String name2 = "context2";
-		try {
-			// create a Context context1
-			ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1,
-					null);
+		// create a Context context1
+		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1,
+				null);
 
-			// add a FakeMonitor simulating a CPU ResourceMonitor
-			resourceContext1.addResourceMonitor(new FakeResourceMonitor(
-					ResourceMonitoringService.RES_TYPE_CPU, resourceContext1));
+		// add a FakeMonitor simulating a CPU ResourceMonitor
+		resourceContext1.addResourceMonitor(new FakeResourceMonitor(
+				ResourceMonitoringService.RES_TYPE_CPU, resourceContext1));
 
-			// create the ResourceContext2 based on ResourceContext1
-			ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2,
-					resourceContext1);
+		// create the ResourceContext2 based on ResourceContext1
+		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2,
+				resourceContext1);
 
-			assertNotNull(resourceContext2);
-			assertTrue(resourceContext2.getName().equals(name2));
-			assertTrue(resourceContext2.getBundleIds().length == 0);
-			ResourceMonitor[] rc2Monitors = resourceContext2.getMonitors();
-			assertTrue(rc2Monitors.length == 1);
-			assertTrue(rc2Monitors[0].getResourceType().equals(
-					ResourceMonitoringService.RES_TYPE_CPU));
-		} catch (ResourceMonitoringServiceException e) {
-			e.printStackTrace();
-			fail("A pb occurred when creating the ResourceContext (its name is already used).");
-		}
+		assertNotNull(resourceContext2);
+		assertTrue(resourceContext2.getName().equals(name2));
+		assertTrue(resourceContext2.getBundleIds().length == 0);
+		ResourceMonitor[] rc2Monitors = resourceContext2.getMonitors();
+		assertTrue(rc2Monitors.length == 1);
+		assertTrue(rc2Monitors[0].getResourceType().equals(
+				ResourceMonitoringService.RES_TYPE_CPU));
 	}
 
 	/**
-	 * @throws ResourceMonitorException
+	 * @throws ResourceMonitorException if resourceMonitor is associated to
+	 *         another context or resourceMonitor has been deleted.
+	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
+	 *         name is already used.
 	 */
 	public void testTC4CreationOfAResourceContextBasedOnATemplateResourceContextPreviouslyDeleted()
-			throws ResourceMonitorException {
+			throws ResourceMonitorException, ResourceMonitoringServiceException {
 		final String name1 = "context1";
 		final String name2 = "context2";
-		try {
-			// create a Context context1
-			ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1,
-					null);
+		// create a Context context1
+		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1,
+				null);
 
-			// add a FakeMonitor simulating a CPU ResourceMonitor
-			resourceContext1.addResourceMonitor(new FakeResourceMonitor(
-					ResourceMonitoringService.RES_TYPE_CPU, resourceContext1));
+		// add a FakeMonitor simulating a CPU ResourceMonitor
+		resourceContext1.addResourceMonitor(new FakeResourceMonitor(
+				ResourceMonitoringService.RES_TYPE_CPU, resourceContext1));
 
-			// remove context1
-			resourceContext1.removeContext(null);
+		// remove context1
+		resourceContext1.removeContext(null);
 
-			// create the ResourceContext2 based on ResourceContext1
-			ResourceContext resourceContext2 = null;
-			resourceContext2 = resourceMonitoringService.createContext(name2,
-					resourceContext1);
+		// create the ResourceContext2 based on ResourceContext1
+		ResourceContext resourceContext2 = null;
+		resourceContext2 = resourceMonitoringService.createContext(name2,
+				resourceContext1);
 
-			assertNotNull(resourceContext2);
-			assertTrue(resourceContext2.getName().equals(name2));
-			assertTrue(resourceContext2.getBundleIds().length == 0);
-			ResourceMonitor[] rc2Monitors = resourceContext2.getMonitors();
-			assertTrue(rc2Monitors.length == 0);
-		} catch (ResourceMonitoringServiceException e) {
-			e.printStackTrace();
-			fail("A pb occurred when creating the ResourceContext (its name is already used).");
-		}
+		assertNotNull(resourceContext2);
+		assertTrue(resourceContext2.getName().equals(name2));
+		assertTrue(resourceContext2.getBundleIds().length == 0);
+		ResourceMonitor[] rc2Monitors = resourceContext2.getMonitors();
+		assertTrue(rc2Monitors.length == 0);
 	}
 
 	/**
 	 * Test retrieve the context based on a bundle id.
+	 * 
+	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
+	 *         name is already used.
 	 */
-	public void testTC5RetrievingAResourceContextBasedOnABundleIdentifier() {
+	public void testTC5RetrievingAResourceContextBasedOnABundleIdentifier() throws ResourceMonitoringServiceException {
 		final String name = "context1";
 		final long bundleId = 1;
-		try {
-			// get ResourceContext associated with bundleId and check bundleId
-			// is not associated with a context
-			ResourceContext resourceContext = resourceMonitoringService.getContext(bundleId);
-			assertNull(resourceContext);
+		// get ResourceContext associated with bundleId and check bundleId
+		// is not associated with a context
+		ResourceContext resourceContext = resourceMonitoringService.getContext(bundleId);
+		assertNull(resourceContext);
 
-			// create a new context
-			ResourceContext resourceContext1 = resourceMonitoringService.createContext(name,
-					null);
+		// create a new context
+		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name,
+				null);
 
-			// associated bundleId with resourceContext1
-			resourceContext1.addBundle(bundleId);
+		// associated bundleId with resourceContext1
+		resourceContext1.addBundle(bundleId);
 
-			// get ResourceContext by bundle id
-			resourceContext = resourceMonitoringService.getContext(bundleId);
-			assertNotNull(resourceContext);
-			assertTrue(resourceContext.equals(resourceContext1));
+		// get ResourceContext by bundle id
+		resourceContext = resourceMonitoringService.getContext(bundleId);
+		assertNotNull(resourceContext);
+		assertTrue(resourceContext.equals(resourceContext1));
 
-			// try to retrieve the ResourceContext with an unexisting bundle
-			resourceContext = resourceMonitoringService.getContext(-1);
-			assertNull(resourceContext);
-		} catch (ResourceMonitoringServiceException e) {
-			e.printStackTrace();
-			fail("A pb occurred when creating the ResourceContext (its name is already used).");
-		}
+		// try to retrieve the ResourceContext with an unexisting bundle
+		resourceContext = resourceMonitoringService.getContext(-1);
+		assertNull(resourceContext);
 	}
 
 	/**
 	 * Test supported types
 	 * 
-	 * @throws InvalidSyntaxException
+	 * @throws InvalidSyntaxException If the specified filter contains an
+	 *         invalid filter expression that cannot be parsed.
 	 */
 	public void testTC6SupportedTypesOfResources() throws InvalidSyntaxException {
 		String[] supportedTypes = resourceMonitoringService.getSupportedTypes();

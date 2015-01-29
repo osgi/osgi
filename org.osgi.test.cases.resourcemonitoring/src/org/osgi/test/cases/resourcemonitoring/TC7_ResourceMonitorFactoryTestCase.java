@@ -38,7 +38,7 @@ public class TC7_ResourceMonitorFactoryTestCase extends DefaultTestBundleControl
 	/**
 	 * bundle context.
 	 */
-	private BundleContext			bundleContext;
+	private BundleContext				bundleContext;
 
 	/**
 	 * ResourceMonitoringService.
@@ -48,12 +48,12 @@ public class TC7_ResourceMonitorFactoryTestCase extends DefaultTestBundleControl
 	/**
 	 * resourceContext
 	 */
-	private ResourceContext			resourceContext;
+	private ResourceContext				resourceContext;
 
 	/**
 	 * resource context name
 	 */
-	private final String			resourceContextName	= "context1";
+	private final String				resourceContextName	= "context1";
 
 	public void setBundleContext(BundleContext bundleContext) {
 		this.bundleContext = bundleContext;
@@ -90,7 +90,7 @@ public class TC7_ResourceMonitorFactoryTestCase extends DefaultTestBundleControl
 		try {
 			Collection factoryReferences = bundleContext.getServiceReferences(
 					ResourceMonitorFactory.class, filter.toString());
- 
+
 			// Keep the total number of existing resource monitor factory/ies.
 			totalNumberOfExistingResourceMonitorFactories = new Integer(factoryReferences.size());
 		} catch (InvalidSyntaxException e) {
@@ -101,7 +101,7 @@ public class TC7_ResourceMonitorFactoryTestCase extends DefaultTestBundleControl
 		// Create, and add another resource monitor factory in the OSGi services
 		// registry.
 		FakeResourceMonitorFactory fakeResourceMonitorFactory = new FakeResourceMonitorFactory(bundleContext, ResourceMonitoringService.RES_TYPE_DISK_STORAGE);
-		
+
 		// Check that the new total number of existing resource monitor
 		// factory/ies is equal to the previous one plus one.
 		int newTotalNumberOfExistingResourceMonitorFactories;

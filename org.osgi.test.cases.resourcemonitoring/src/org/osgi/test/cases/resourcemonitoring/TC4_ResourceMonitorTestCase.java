@@ -38,7 +38,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	/**
 	 * bundle context.
 	 */
-	private BundleContext			bundleContext;
+	private BundleContext				bundleContext;
 
 	/**
 	 * ResourceMonitoringService.
@@ -48,17 +48,17 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	/**
 	 * cpu factory.
 	 */
-	private ResourceMonitorFactory	cpuFactory;
+	private ResourceMonitorFactory		cpuFactory;
 
 	/**
 	 * resourceContext
 	 */
-	private ResourceContext			resourceContext;
+	private ResourceContext				resourceContext;
 
 	/**
 	 * resource context name
 	 */
-	private final String			resourceContextName	= "context1";
+	private final String				resourceContextName	= "context1";
 
 	public void setBundleContext(BundleContext context) {
 		bundleContext = context;
@@ -154,13 +154,12 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 				cpuFactory.getType()));
 
 		// create again a CPU Resource Monitor for this context
-		boolean exception = false;
 		try {
 			cpuFactory.createResourceMonitor(resourceContext);
+			fail("A ResourceMonitoringServiceException is expected here.");
 		} catch (ResourceMonitorException e) {
-			exception = true;
+			e.printStackTrace();
 		}
-		assertTrue(exception);
 
 		// check the ResourceContext has still one ResourceContext
 		monitors = resourceContext.getMonitors();
