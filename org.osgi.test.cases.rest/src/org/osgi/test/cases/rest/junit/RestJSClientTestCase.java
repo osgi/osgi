@@ -30,6 +30,7 @@ import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Dictionary;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.startlevel.BundleStartLevel;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 
@@ -354,6 +355,70 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ ""
 				+ "}})");
 		jsTest(sb.toString());
+	}
+
+	public void testBundleStartLevelRestClient() throws Exception {
+		Bundle bundle = getRandomBundle();
+		BundleStartLevel bsl = getBundleStartLevel(bundle);
+
+		// Get by bundle ID
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.getBundleStartLevel(" + bundle.getBundleId() + ",{"
+				+ "  success : function(res) {"
+				+ "    assert('Bundle start level', " + bsl.getStartLevel() + ", res.startLevel);"
+				+ "    assert('Activation policy', " + bsl.isActivationPolicyUsed() + ", res.activationPolicyUsed);"
+				+ "    assert('Persistently started', " + bsl.isPersistentlyStarted() + ", res.persistentlyStarted);"
+				+ "    done();"
+				+ "}})");
+
+		// Get by bundle path
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.getBundleStartLevel('" + getBundlePath(bundle) + "',{"
+				+ "  success : function(res) {"
+				+ "    assert('Bundle start level', " + bsl.getStartLevel() + ", res.startLevel);"
+				+ "    assert('Activation policy', " + bsl.isActivationPolicyUsed() + ", res.activationPolicyUsed);"
+				+ "    assert('Persistently started', " + bsl.isPersistentlyStarted() + ", res.persistentlyStarted);"
+				+ "    done();"
+				+ "}})");
+
+		// Invalid bundle
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.getBundleStartLevel(12345678,{"
+				+ "  failure : function(res) {"
+				+ "    assert('Bundle is not there', 404, res);"
+				+ "    done();"
+				+ "}})");
+
+		Bundle tb1Bundle = getTestBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME, TB1);
+		int tb1StartLevel = getBundleStartLevel(tb1Bundle).getStartLevel();
+		int tb1NewStartLevel = tb1StartLevel + 1;
+
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.setBundleStartLevel(" + tb1Bundle.getBundleId()
+				+ ",{ startLevel : " + tb1NewStartLevel + "},{"
+				+ "  success : function(res) {"
+				+ "    done();"
+				+ "}})");
+		tb1StartLevel = getBundleStartLevel(tb1Bundle).getStartLevel();
+		assertEquals("New start level ", tb1NewStartLevel, tb1StartLevel);
+
+		// Set bundle start level for nonexistent ID
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.setBundleStartLevel(12345678,"
+				+ "{ startLevel : 5 },{"
+				+ "  failure : function(res) {"
+				+ "    assert('Nonexistent bundle ID', 404, res);"
+				+ "    done();"
+				+ "}})");
+		
+		// Set to invalid start level
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.setBundleStartLevel(" + tb1Bundle.getBundleId() + ","
+				+ "{ startLevel : -1 },{"
+				+ "  failure : function(res) {"
+				+ "    assert('Invalid start level', 400, res);"
+				+ "    done();"
+				+ "}})");
 	}
 
 	private String jsAssertBundleRepresentation(Bundle bundle, String jsVar) {
