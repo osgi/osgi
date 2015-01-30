@@ -16,6 +16,7 @@
 
 package org.osgi.impl.service.rest.resources;
 
+import java.util.UUID;
 import org.osgi.framework.Bundle;
 import org.osgi.impl.service.rest.PojoReflector;
 import org.osgi.impl.service.rest.pojos.BundlePojoList;
@@ -70,7 +71,7 @@ public class BundlesResource extends AbstractOSGiResource<BundlePojoList> {
 			@SuppressWarnings("unchecked")
 			Series<Header> headers = (Series<Header>)
 					getRequestAttributes().get("org.restlet.http.headers");
-			final String location =
+			String location =
 					headers.getFirstValue("Content-Location");
 
 			if (location != null) {
@@ -78,6 +79,8 @@ public class BundlesResource extends AbstractOSGiResource<BundlePojoList> {
 					// conflict detected
 					return ERROR(Status.CLIENT_ERROR_CONFLICT);
 				}
+			} else {
+				location = UUID.randomUUID().toString();
 			}
 
 			final Bundle bundle = getBundleContext().installBundle(location,
