@@ -51,7 +51,7 @@ public class BundleStartLevelResource extends
 			final BundleStartLevelPojo sl = new BundleStartLevelPojo(bsl);
 			return getRepresentation(sl, variant);
 		} catch (final Exception e) {
-			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
+			return ERROR(e, variant);
 		}
 	}
 
@@ -69,8 +69,7 @@ public class BundleStartLevelResource extends
 
 			return getRepresentation(new BundleStartLevelPojo(bsl), variant);
 		} catch (final Exception e) {
-			e.printStackTrace();
-			return ERROR(Status.CLIENT_ERROR_BAD_REQUEST, e, variant);
+			return ERROR(e, variant);
 		}
 	}
 

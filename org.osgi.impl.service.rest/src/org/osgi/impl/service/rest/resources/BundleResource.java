@@ -50,7 +50,7 @@ public class BundleResource extends AbstractOSGiResource<BundlePojo> {
 			}
 			return getRepresentation(new BundlePojo(bundle), variant);
 		} catch (final Exception e) {
-			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
+			return ERROR(e, variant);
 		}
 	}
 
@@ -63,7 +63,7 @@ public class BundleResource extends AbstractOSGiResource<BundlePojo> {
 			}
 			bundle.uninstall();
 		} catch (final Exception e) {
-			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
+			return ERROR(e, variant);
 		}
 
 		return SUCCESS(Status.SUCCESS_NO_CONTENT);
@@ -97,9 +97,9 @@ public class BundleResource extends AbstractOSGiResource<BundlePojo> {
 
 			return SUCCESS(Status.SUCCESS_NO_CONTENT);
 		} catch (final MalformedURLException e) {
-			return ERROR(Status.SERVER_ERROR_INTERNAL, new BundleException("Malformed update URL", BundleException.READ_ERROR, e), variant);
+			return ERROR(new BundleException("Malformed update URL", BundleException.READ_ERROR, e), variant);
 		} catch (final Exception e) {
-			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
+			return ERROR(e, variant);
 		}
 	}
 

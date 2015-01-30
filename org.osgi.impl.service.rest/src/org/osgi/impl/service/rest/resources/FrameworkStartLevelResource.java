@@ -44,7 +44,7 @@ public class FrameworkStartLevelResource extends
 			return getRepresentation(new FrameworkStartLevelPojo(
 					getFrameworkStartLevel()), variant);
 		} catch (final Exception e) {
-			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
+			return ERROR(e, variant);
 		}
 	}
 
@@ -64,7 +64,7 @@ public class FrameworkStartLevelResource extends
 
 			return SUCCESS(Status.SUCCESS_NO_CONTENT);
 		} catch (final Exception e) {
-			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
+			return ERROR(e, variant);
 		}
 	}
 

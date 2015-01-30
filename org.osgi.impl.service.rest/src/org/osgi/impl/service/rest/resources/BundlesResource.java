@@ -47,7 +47,7 @@ public class BundlesResource extends AbstractOSGiResource<BundlePojoList> {
 					getBundles()), variant);
 			return rep;
 		} catch (final Exception e) {
-			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
+			return ERROR(e, variant);
 		}
 	}
 
@@ -85,7 +85,7 @@ public class BundlesResource extends AbstractOSGiResource<BundlePojoList> {
 			return new StringRepresentation("framework/bundle/"
 					+ bundle.getBundleId());
 		} catch (final Exception e) {
-			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
+			return ERROR(e, variant);
 		}
 	}
 

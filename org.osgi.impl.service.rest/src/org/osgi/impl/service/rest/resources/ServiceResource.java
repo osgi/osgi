@@ -49,7 +49,7 @@ public class ServiceResource extends AbstractOSGiResource<ServicePojo> {
 		} catch (final IllegalArgumentException e) {
 			return ERROR(Status.CLIENT_ERROR_NOT_FOUND);
 		} catch (final Exception e) {
-			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
+			return ERROR(e, variant);
 		}
 	}
 

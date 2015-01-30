@@ -58,7 +58,7 @@ public class BundleHeaderResource extends
 					mapFromDict(locale == null ? bundle.getHeaders()
 							: bundle.getHeaders(locale)), variant);
 		} catch (final Exception e) {
-			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
+			return ERROR(e, variant);
 		}
 	}
 

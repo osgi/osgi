@@ -19,7 +19,6 @@ package org.osgi.impl.service.rest.resources;
 import org.osgi.impl.service.rest.PojoReflector;
 import org.osgi.impl.service.rest.pojos.ExtensionList;
 import org.restlet.data.MediaType;
-import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 
@@ -41,7 +40,7 @@ public class ExtensionsResource extends AbstractOSGiResource<ExtensionList> {
 		try {
 			return getRepresentation(new ExtensionList(getTracker()), variant);
 		} catch (final Exception e) {
-			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
+			return ERROR(e, variant);
 		}
 	}
 }

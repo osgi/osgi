@@ -49,7 +49,7 @@ public class BundleStateResource extends AbstractOSGiResource<BundleStatePojo> {
 			return getRepresentation(new BundleStatePojo(bundle.getState()),
 					variant);
 		} catch (final Exception e) {
-			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
+			return ERROR(e, variant);
 		}
 	}
 
@@ -82,7 +82,7 @@ public class BundleStateResource extends AbstractOSGiResource<BundleStatePojo> {
 						+ targetState.getState() + " not supported");
 			}
 		} catch (final Exception e) {
-			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
+			return ERROR(e, variant);
 		}
 	}
 

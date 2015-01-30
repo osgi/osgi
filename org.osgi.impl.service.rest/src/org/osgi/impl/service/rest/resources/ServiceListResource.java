@@ -16,13 +16,11 @@
 
 package org.osgi.impl.service.rest.resources;
 
-import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.impl.service.rest.PojoReflector;
 import org.osgi.impl.service.rest.RestService;
 import org.osgi.impl.service.rest.pojos.ServicePojoList;
 import org.restlet.data.MediaType;
-import org.restlet.data.Status;
 import org.restlet.representation.Representation;
 import org.restlet.representation.Variant;
 
@@ -47,10 +45,8 @@ public class ServiceListResource extends AbstractOSGiResource<ServicePojoList> {
 			final ServiceReference<?>[] srefs = getBundleContext()
 					.getAllServiceReferences(null, filter);
 			return getRepresentation(new ServicePojoList(srefs), variant);
-		} catch (final InvalidSyntaxException e) {
-			return ERROR(Status.CLIENT_ERROR_BAD_REQUEST, e);
 		} catch (final Exception e) {
-			return ERROR(Status.SERVER_ERROR_INTERNAL, e, variant);
+			return ERROR(e, variant);
 		}
 	}
 

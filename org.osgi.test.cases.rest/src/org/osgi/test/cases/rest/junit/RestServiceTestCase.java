@@ -78,7 +78,7 @@ public class RestServiceTestCase extends RestTestUtils {
     //updateFWStartLevel(startLevel, initialBundleStartLevel, HttpURLConnection.HTTP_UNSUPPORTED_TYPE, null, false);
 
     //  Check PUT with Illegal Arguments
-    updateFWStartLevel(-1, originalInitialBundleStartLevel, HttpURLConnection.HTTP_INTERNAL_ERROR, null, true);
+    updateFWStartLevel(-1, originalInitialBundleStartLevel, HttpURLConnection.HTTP_BAD_REQUEST, null, true);
   }
 
   //5.1.2.1
@@ -113,7 +113,7 @@ public class RestServiceTestCase extends RestTestUtils {
     result = installBundle(BUNDLE_LIST_URI, url, null, null, true, HttpURLConnection.HTTP_CONFLICT);
     assertNull("Install bundle by same URI:", result);
 
-    result = installBundle(BUNDLE_LIST_URI, null, "invalid bundle location", null, true, HttpURLConnection.HTTP_INTERNAL_ERROR);
+    result = installBundle(BUNDLE_LIST_URI, null, "invalid bundle location", null, true, HttpURLConnection.HTTP_BAD_REQUEST);
     assertBundleException(result, "Install bundle by invalid URI.");
 
     // install bundle with bundle content
@@ -137,7 +137,7 @@ public class RestServiceTestCase extends RestTestUtils {
     result = installBundle(BUNDLE_LIST_URI, url, null, locationHeader, false, HttpURLConnection.HTTP_CONFLICT);
     assertNull("Install bundle by same bundle content:", result);
 
-    result = installBundle(BUNDLE_LIST_URI, null, "invalid bundle location", null, false, HttpURLConnection.HTTP_INTERNAL_ERROR);
+	result = installBundle(BUNDLE_LIST_URI, null, "invalid bundle location", null, false, HttpURLConnection.HTTP_BAD_REQUEST);
 
     assertBundleException(result, "Install bundle by invalid bundle content.");
   }
@@ -201,7 +201,7 @@ public class RestServiceTestCase extends RestTestUtils {
     result = updateBundle(getBundleURI(notExistingBundleId), getContext().getBundle().getEntry(TB11), null, true, HttpURLConnection.HTTP_NOT_FOUND);
     assertNull("Update not existing bundle " + notExistingBundleId + " :", result);
 
-    result = updateBundle(getBundleURI(tb1Bundle.getBundleId()), null, "invalid bundle location", true, HttpURLConnection.HTTP_INTERNAL_ERROR);
+	result = updateBundle(getBundleURI(tb1Bundle.getBundleId()), null, "invalid bundle location", true, HttpURLConnection.HTTP_BAD_REQUEST);
 
     assertBundleException(result, "Update bundle with invalid location " + tb1Bundle.getBundleId());
 
@@ -214,7 +214,7 @@ public class RestServiceTestCase extends RestTestUtils {
     result = updateBundle(getBundleURI(notExistingBundleId), getContext().getBundle().getEntry(TB21), null, false, HttpURLConnection.HTTP_NOT_FOUND);
     assertNull("Update not existing bundle " + notExistingBundleId + " :", result);
 
-    result = updateBundle(getBundleURI(tb2Bundle.getBundleId()), null, "invalid bundle location", true, HttpURLConnection.HTTP_INTERNAL_ERROR);
+    result = updateBundle(getBundleURI(tb2Bundle.getBundleId()), null, "invalid bundle location", true, HttpURLConnection.HTTP_BAD_REQUEST);
 
     assertBundleException(result, "Update bundle with invalid content " + tb2Bundle.getBundleId());
 
@@ -284,7 +284,7 @@ public class RestServiceTestCase extends RestTestUtils {
       tb21Bundle.start();
     }
 
-    result = updateBundleState(getBundleStateURI(tb21Bundle.getBundleId()), Bundle.RESOLVED, -1, HttpURLConnection.HTTP_INTERNAL_ERROR, null, APPLICATION_JSON);
+	result = updateBundleState(getBundleStateURI(tb21Bundle.getBundleId()), Bundle.RESOLVED, -1, HttpURLConnection.HTTP_BAD_REQUEST, null, APPLICATION_JSON);
     assertBundleException(result, "Stop bundle for bundle with error in stop method  " + tb21Bundle.getBundleId());
 
     // stop bundle with options
@@ -596,7 +596,7 @@ public class RestServiceTestCase extends RestTestUtils {
           invalidLocation == null ? url.openStream() : new ByteArrayInputStream(invalidLocation.getBytes()));
     }
 
-    if (result != null && expectedStatusCode == HttpURLConnection.HTTP_INTERNAL_ERROR) { // BundleException
+	if (result != null && expectedStatusCode == HttpURLConnection.HTTP_BAD_REQUEST) { // BundleException
       return new JSONObject(result);
     }
 
@@ -613,7 +613,9 @@ public class RestServiceTestCase extends RestTestUtils {
           invalidLocation == null ? url.openStream() : new ByteArrayInputStream(invalidLocation.getBytes()));
     }
 
-    if (result != null && expectedStatusCode == HttpURLConnection.HTTP_INTERNAL_ERROR) { // BundleException
+		System.err.println("RESULT IS " + result);
+
+		if (result != null && expectedStatusCode == HttpURLConnection.HTTP_BAD_REQUEST) { // BundleException
       return new JSONObject(result);
     }
 
@@ -623,7 +625,7 @@ public class RestServiceTestCase extends RestTestUtils {
   protected Object uninstallBundle(String requestURI, int expectedStatusCode) throws IOException, JSONException {
     String result = executeRequest(requestURI, "DELETE", null, null, null, expectedStatusCode, null /* additionalProps */, null);
 
-    if (result != null && expectedStatusCode == HttpURLConnection.HTTP_INTERNAL_ERROR) { // BundleException
+    if (result != null && expectedStatusCode == HttpURLConnection.HTTP_BAD_REQUEST) { // BundleException
       return new JSONObject(result);
     }
 
@@ -652,8 +654,12 @@ public class RestServiceTestCase extends RestTestUtils {
 
     String result = executeRequest(requestURI, "PUT", contentType, acceptType, null, expectedResponseCode, null, jsonWriter.endObject().toString());
 
-    if (result != null && expectedResponseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) { // BundleException
-      return new JSONObject(result);
+    if (result != null && expectedResponseCode == HttpURLConnection.HTTP_BAD_REQUEST) { // BundleException
+			try {
+				return new JSONObject(result);
+			} catch (JSONException _) {
+				return null;
+			}
     }
 
     return null;
@@ -729,7 +735,7 @@ public class RestServiceTestCase extends RestTestUtils {
           assertTrue("ContentType", (responseContentType != null) && (responseContentType.startsWith(expectedContentType)));
         }
         in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-      } else if (responseCode == HttpURLConnection.HTTP_INTERNAL_ERROR) {
+			} else if (responseCode == HttpURLConnection.HTTP_BAD_REQUEST) {
         in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
       }
 

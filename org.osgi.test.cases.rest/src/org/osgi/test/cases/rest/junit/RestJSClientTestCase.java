@@ -496,7 +496,7 @@ public class RestJSClientTestCase extends RestTestUtils {
             HtmlPage page = wc.getPage(f.toURI().toURL());
 
             String result = page.getHtmlElementById("test_result").asText();
-            int count = 30;
+			int count = 30;
             while (count-- > 0 && "undefined".equals(result)) {
                 // Maybe the result arrives asynchronously
                 Thread.sleep(500);

@@ -308,7 +308,7 @@ public class AbstractOSGiResource<T> extends ServerResource {
 		return map;
 	}
 
-	protected Representation ERROR(final Status status, final Throwable t,
+	protected Representation ERROR(final Throwable t,
 			final Variant variant) {
 		t.printStackTrace();
 		if (t instanceof BundleException) {
@@ -327,16 +327,22 @@ public class AbstractOSGiResource<T> extends ServerResource {
 							(BundleException) t), new Variant(MediaType.APPLICATION_JSON));
 				}
 
-				setStatus(status);
+				setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
 				rep.setMediaType(mt);
 
 				return rep;
 			} catch (final Exception ioe) {
 				// fallback
 			}
+		} else if (t instanceof IllegalArgumentException) {
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			return ERROR;
+		} else if (t instanceof InvalidSyntaxException) {
+			setStatus(Status.CLIENT_ERROR_BAD_REQUEST);
+			return ERROR;
 		}
 
-		setStatus(status, t);
+		setStatus(Status.SERVER_ERROR_INTERNAL, t);
 		return ERROR;
 	}
 
