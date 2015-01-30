@@ -324,7 +324,7 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 
 		// check that each supported types is in the list
 		for (int i = 0; i < supportedTypes.length; i++) {
-			assertTrue(computedSupportedTypes.contains(supportedTypes[i]));
+			assertTrue("The given supportedType must appear in the SupportedTypes list.", computedSupportedTypes.contains(supportedTypes[i]));
 		}
 	}
 

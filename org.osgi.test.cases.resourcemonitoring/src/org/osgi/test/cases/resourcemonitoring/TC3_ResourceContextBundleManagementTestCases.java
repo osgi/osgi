@@ -103,15 +103,15 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 
 		// check bundle 1 has been associated to this context
 		long[] bundleIds = resourceContext.getBundleIds();
-		assertTrue(bundleIds.length == 1);
-		assertTrue(bundleIds[0] == bundleId);
+		assertEquals("BundleIds list mismatch.", 1, bundleIds.length);
+		assertEquals("BundleId mismatch.", bundleId, bundleIds[0]);
 
 		// check a ResourceContextEvent has been sent
 		ResourceContextEvent lastEvent = resourceContextListener.getLastEvent();
 		assertNotNull(lastEvent);
-		assertTrue(lastEvent.getType() == ResourceContextEvent.BUNDLE_ADDED);
-		assertTrue(lastEvent.getContext().equals(resourceContext));
-		assertTrue(lastEvent.getBundleId() == bundleId);
+		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_ADDED, lastEvent.getType());
+		assertEquals("ResourceContext mismatch.", resourceContext, lastEvent.getContext());
+		assertEquals("BundleId mismatch.", bundleId, lastEvent.getBundleId());
 	}
 
 	/**
@@ -136,24 +136,24 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		// add bundle 1 to this context
 		resourceContext.addBundle(bundleId);
 		long[] bundleIds = resourceContext.getBundleIds();
-		assertTrue(bundleIds.length == 1);
-		assertTrue(bundleIds[0] == bundleId);
+		assertEquals("BundleIds list mismatch.", 1, bundleIds.length);
+		assertEquals("BundleId mismatch.", bundleId, bundleIds[0]);
 
-		boolean exception = false;
 		try {
 			resourceContext2.addBundle(bundleId);
+			fail("A RuntimeException is expected.");
 		} catch (RuntimeException e) {
-			exception = true;
+			log("Expected exception: ");
+			e.printStackTrace();
 		}
-		assertTrue(exception);
 
 		// check that bundle1 is not associated with context2
-		assertTrue(resourceContext2.getBundleIds().length == 0);
+		assertEquals("BundleIds list mismatch.", 0, resourceContext2.getBundleIds().length);
 
 		// check that bundle1 is still associated with context1
 		bundleIds = resourceContext.getBundleIds();
-		assertTrue(bundleIds.length == 1);
-		assertTrue(bundleIds[0] == bundleId);
+		assertEquals("BundleIds list mismatch.", 1, bundleIds.length);
+		assertEquals("BundleId mismatch.", bundleId, bundleIds[0]);
 	}
 
 	/**
@@ -179,23 +179,23 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 
 		// check list of bundles
 		assertNotNull(resourceContext.getBundleIds());
-		assertTrue(resourceContext.getBundleIds().length == 0);
+		assertEquals("", 0, resourceContext.getBundleIds().length);
 
 		// check a ResourceContextEvent has been received
 		ResourceContextEvent lastEvent = resourceContextListener.getLastEvent();
 		assertNotNull(lastEvent);
-		assertTrue(lastEvent.getType() == ResourceContextEvent.BUNDLE_REMOVED);
-		assertTrue(lastEvent.getContext().equals(resourceContext));
-		assertTrue(lastEvent.getBundleId() == bundleId);
+		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, lastEvent.getType());
+		assertEquals("ResourceContext mismatch.", resourceContext, lastEvent.getContext());
+		assertEquals("BundleId mismatch.", bundleId, lastEvent.getBundleId());
 
 		// try to remove it again ==> expect a RuntimeException
-		boolean exception = false;
 		try {
 			resourceContext.removeBundle(bundleId);
+			fail("A RuntimeException is expected.");
 		} catch (RuntimeException e) {
-			exception = true;
+			log("Expected exception: ");
+			e.printStackTrace();
 		}
-		assertTrue(exception);
 	}
 
 	/**
@@ -224,21 +224,21 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		resourceContext1.removeBundle(bundleId, resourceContext2);
 
 		// check context1 has no associated bundles
-		assertTrue(resourceContext1.getBundleIds().length == 0);
+		assertEquals("BundleIds list mismatch.", 0, resourceContext1.getBundleIds().length);
 
 		// check context2 has one associated bundle (i.e bundleId)
 		long[] context2BundleIds = resourceContext2.getBundleIds();
-		assertTrue(context2BundleIds.length == 1);
-		assertTrue(context2BundleIds[0] == bundleId);
+		assertEquals("BundleIds list mismatch.", 1, context2BundleIds.length);
+		assertEquals("BundleId mismatch.", bundleId, context2BundleIds[0]);
 
 		// check a ResourceContextEvent has been received about the removed
 		// bundle (should be the last last received event)
 		ResourceContextEvent removedEvent = resourceContextListener
 				.getLastLastEvent();
 		assertNotNull(removedEvent);
-		assertTrue(removedEvent.getType() == ResourceContextEvent.BUNDLE_REMOVED);
-		assertTrue(removedEvent.getBundleId() == bundleId);
-		assertTrue(removedEvent.getContext().equals(resourceContext1));
+		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, removedEvent.getType());
+		assertEquals("BundleId mismatch.", bundleId, removedEvent.getBundleId());
+		assertEquals("ResourceContext mismatch.", resourceContext1, removedEvent.getContext());
 
 		// check a ResourceContextEvent has been received about the newly
 		// added
@@ -246,9 +246,9 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		ResourceContextEvent addedEvent = resourceContextListener
 				.getLastEvent();
 		assertNotNull(addedEvent);
-		assertTrue(addedEvent.getType() == ResourceContextEvent.BUNDLE_ADDED);
-		assertTrue(addedEvent.getBundleId() == bundleId);
-		assertTrue(addedEvent.getContext().equals(resourceContext2));
+		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_ADDED, addedEvent.getType());
+		assertEquals("BundleId mismatch.", bundleId, addedEvent.getBundleId());
+		assertEquals("ResourceContext mismatch.", resourceContext2, addedEvent.getContext());
 	}
 
 	/**
@@ -274,14 +274,14 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		// check list of bundle
 		long[] bundleIds = resourceContext.getBundleIds();
 		assertNotNull(bundleIds);
-		assertTrue(bundleIds.length == 0);
+		assertEquals("BundlesIds list mismatch.", 0, bundleIds.length);
 
 		// check that a REMOVED_BUNDLE event has been received
 		ResourceContextEvent lastEvent = resourceContextListener.getLastEvent();
 		assertNotNull(lastEvent);
-		assertTrue(lastEvent.getType() == ResourceContextEvent.BUNDLE_REMOVED);
-		assertTrue(lastEvent.getContext().equals(resourceContext));
-		assertTrue(lastEvent.getBundleId() == bundleId);
+		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, lastEvent.getType());
+		assertEquals("ResourceContext mismatch.", resourceContext, lastEvent.getContext());
+		assertEquals("BundleId mismatch.", bundleId, lastEvent.getBundleId());
 	}
 
 	/**
@@ -313,25 +313,25 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		// try to remove bundleId from resourceContext1 and associate it
 		// with
 		// deleted ResourceContext2 ==> expect a RuntimeException
-		boolean exception = false;
 		try {
 			resourceContext1.removeBundle(bundleId, resourceContext2);
+			fail("A RuntimeException is expected.");
 		} catch (RuntimeException e) {
-			exception = true;
+			log("Expected exception: ");
+			e.printStackTrace();
 		}
-		assertTrue(exception);
 
 		// check bundleId has been removed from resourceContext1
 		long[] resourceContext1bundleIds = resourceContext1.getBundleIds();
-		assertTrue(resourceContext1bundleIds.length == 0);
+		assertEquals("BundleIds list mismatch.", 0, resourceContext1bundleIds.length);
 
 		// check a REMOVED_BUNDLE ResourceContextEvent event has been
 		// received
 		ResourceContextEvent lastEvent = resourceContextListener.getLastEvent();
 		assertNotNull(lastEvent);
-		assertTrue(lastEvent.getType() == ResourceContextEvent.BUNDLE_REMOVED);
-		assertTrue(lastEvent.getContext().equals(resourceContext1));
-		assertTrue(lastEvent.getBundleId() == bundleId);
+		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, lastEvent.getType());
+		assertEquals("ResourceContext mismatch.", resourceContext1, lastEvent.getContext());
+		assertEquals("BundleId mismatch.", bundleId, lastEvent.getBundleId());
 	}
 
 }

@@ -88,7 +88,6 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 
 				}
 			}
-
 		} catch (InvalidSyntaxException e) {
 			e.printStackTrace();
 		}
@@ -124,7 +123,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 		// check existing resource monitors
 		ResourceMonitor[] monitors = resourceContext.getMonitors();
 		assertNotNull(monitors);
-		assertTrue(monitors.length == 0);
+		assertEquals("Monitors list mismatch.", 0, monitors.length);
 
 		// create ResourceMonitor
 		ResourceMonitor resourceMonitor = cpuFactory
@@ -133,38 +132,38 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 
 		// check ResourceContext
 		monitors = resourceContext.getMonitors();
-		assertTrue(monitors.length == 1);
-		assertTrue(monitors[0].equals(resourceMonitor));
+		assertEquals("ResourceMonitors list mismatch.", 1, monitors.length);
+		assertEquals("ResourceMonitor mismatch.", resourceMonitor, monitors[0]);
 
 		// get monitor from ResourceContext
 		ResourceMonitor retrievedMonitor = resourceContext
 				.getMonitor(ResourceMonitoringService.RES_TYPE_CPU);
 		assertNotNull(retrievedMonitor);
-		assertTrue(retrievedMonitor.equals(resourceMonitor));
+		assertEquals("ResourceMonitor mismatch.", resourceMonitor, retrievedMonitor);
 
 		// check resource context from monitor
 		ResourceContext retrievedRC = resourceMonitor.getContext();
 		assertNotNull(retrievedRC);
-		assertTrue(retrievedRC.equals(resourceContext));
+		assertEquals("ResourceContext mismatch.", resourceContext, retrievedRC);
 
 		// check the newly ResourceMonitor
 		assertFalse(resourceMonitor.isEnabled());
 		assertFalse(resourceMonitor.isDeleted());
-		assertTrue(resourceMonitor.getResourceType().equals(
-				cpuFactory.getType()));
+		assertEquals("Type mismatch.", cpuFactory.getType(), resourceMonitor.getResourceType());
 
 		// create again a CPU Resource Monitor for this context
 		try {
 			cpuFactory.createResourceMonitor(resourceContext);
 			fail("A ResourceMonitoringServiceException is expected here.");
 		} catch (ResourceMonitorException e) {
+			log("Expected exception: ");
 			e.printStackTrace();
 		}
 
 		// check the ResourceContext has still one ResourceContext
 		monitors = resourceContext.getMonitors();
-		assertTrue(monitors.length == 1);
-		assertTrue(monitors[0].equals(resourceMonitor));
+		assertEquals("ResourceMonitors list mismatch.", 1, monitors.length);
+		assertEquals("ResourceMonitor mismatch.", resourceMonitor, monitors[0]);
 	}
 
 	/**
@@ -185,10 +184,10 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 		// check resource context monitors
 		ResourceMonitor[] monitors = resourceContext.getMonitors();
 		assertNotNull(monitors);
-		assertTrue(monitors.length == 0);
+		assertEquals("ResourceMonitors list mismatch.", 0, monitors.length);
 
 		// check ResourceMonitor state
-		assertTrue(resourceMonitor.isDeleted());
+		assertTrue("ResourceMonitor must have been deleted.", resourceMonitor.isDeleted());
 	}
 
 	/**
@@ -208,7 +207,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 		resourceMonitor.enable();
 
 		// check the monitor is enabled
-		assertTrue(resourceMonitor.isEnabled());
+		assertTrue("ResourceMonitor must be enabled.", resourceMonitor.isEnabled());
 
 		// disable it
 		resourceMonitor.disable();
@@ -220,22 +219,22 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 		resourceMonitor.delete();
 
 		// try to enable a deleted monitor ==> expect an IllegalStateException
-		boolean exception = false;
 		try {
 			resourceMonitor.enable();
+			fail("An IllegalStateException is expected.");
 		} catch (IllegalStateException e) {
-			exception = true;
+			log("Expected exception: ");
+			e.printStackTrace();
 		}
-		assertTrue(exception);
 
 		// try to disable it ==> expect an IllegalStateException
-		exception = false;
 		try {
 			resourceMonitor.disable();
+			fail("An IllegalStateException is expected.");
 		} catch (IllegalStateException e) {
-			exception = true;
+			log("Expected exception: ");
+			e.printStackTrace();
 		}
-		assertTrue(exception);
 	}
 
 	/**
@@ -267,13 +266,13 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 		resourceMonitor.delete();
 
 		// try to enable a deleted monitor ==> expect an IllegalStateException
-		boolean exception = false;
 		try {
 			resourceMonitor.getUsage();
+			fail("An IllegalStateException is expected.");
 		} catch (IllegalStateException e) {
-			exception = true;
+			log("Expected exception: ");
+			e.printStackTrace();
 		}
-		assertTrue(exception);
 	}
 
 }

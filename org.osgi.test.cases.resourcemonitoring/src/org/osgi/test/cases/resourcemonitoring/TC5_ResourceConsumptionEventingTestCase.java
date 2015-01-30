@@ -129,7 +129,6 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 		} catch (InvalidSyntaxException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	protected void setUp() throws Exception {
@@ -178,7 +177,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 		registerListener();
 
 		// wait for events
-		log("Wait for events for 10000ms.");
+		log("Wait for events (timeout 10000ms).");
 		waitForEvent(10000);
 
 		// unregister the listener
@@ -207,7 +206,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 		registerListener();
 
 		// wait for events
-		log("Wait for events for 10000ms.");
+		log("Wait for events (timeout 10000ms).");
 		waitForEvent(10000);
 
 		// unregister the listener
@@ -236,7 +235,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 		registerListener();
 
 		// wait for events
-		log("Wait for events for 10000ms.");
+		log("Wait for events (timeout 10000ms).");
 		waitForEvent(10000);
 
 		// unregister the listener
@@ -263,7 +262,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 		registerListener();
 
 		// wait for events
-		log("Wait for events for 10000ms.");
+		log("Wait for events (timeout 10000ms).");
 		waitForEvent(10000);
 
 		// unregister the listener
@@ -290,7 +289,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 		registerListener();
 
 		// wait for events
-		log("Wait for events for 10000ms.");
+		log("Wait for events (timeout 10000ms).");
 		waitForEvent(10000);
 
 		// unregister the listener
@@ -317,7 +316,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 		registerListener();
 
 		// wait for events
-		log("Wait for events for 10000ms.");
+		log("Wait for events (timeout 10000ms).");
 		waitForEvent(10000);
 
 		// unregister the listener
@@ -328,7 +327,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	}
 
 	public void notify(ResourceEvent event) {
-		log("event : " + event.getType() + ", value:" + event.getValue());
+		log("event: " + event.getType() + ", value: " + event.getValue());
 		receivedEvents.add(event);
 		lastEvent = event;
 		waiter.signal();
@@ -415,10 +414,8 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 */
 	private void checkReceivedEvents() {
 		ResourceEvent previousEvent = null;
-		System.out.println("---------------------------");
 		for (Iterator it = receivedEvents.iterator(); it.hasNext();) {
 			ResourceEvent currentEvent = (ResourceEvent) it.next();
-			System.out.println("---------------------------currentEvent: " + currentEvent);
 
 			if (previousEvent != null) {
 				assertTrue(previousEvent.getType() != currentEvent.getType());
