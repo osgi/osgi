@@ -192,18 +192,144 @@ public class RestJSClientTestCase extends RestTestUtils {
 
 	public void testBundleRestClient() throws Exception {
 		Bundle bundle = getRandomBundle();
+
+		// Get bundle by ID
 		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
-				+ "client.getBundle('" + bundle.getBundleId() + "', {"
+				+ "client.getBundle(" + bundle.getBundleId() + ", {"
 				+ "  success : function(res) {"
-				+ "    assert('Bundle ID', " + bundle.getBundleId() + ", res.id);"
-				+ "    assert('Bundle Location', '" + bundle.getLocation() + "', res.location);"
-				+ "    assert('Symbolic Name', '" + bundle.getSymbolicName() + "', res.symbolicName);"
-				+ "    assert('State', " + bundle.getState() + ", res.state);"
-				+ "    assert('Last Modified', " + bundle.getLastModified() + ", res.lastModified);"
-				+ "    assert('Version', '" + bundle.getVersion() + "', res.version);"
+				+ jsAssertBundleRepresentation(bundle, "res")
 				+ "    done();"
 				+ ""
 				+ "}})");
+
+		// Get nonexistent bundle
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.getBundle(12345678, {"
+				+ "  failure : function(res) {"
+				+ "    assert('Bundle does not exist', 404, res);"
+				+ "    done();"
+				+ "}})");
+
+		// Get bundle by path
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.getBundle('" + getBundlePath(bundle) + "', {"
+				+ "  success : function(res) {"
+				+ jsAssertBundleRepresentation(bundle, "res")
+				+ "    done();"
+				+ ""
+				+ "}})");
+
+		String url = getContext().getBundle().getEntry(TB11).toString();
+
+		// update with location
+		Bundle tb1Bundle = getTestBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME, TB1);
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.updateBundle(" + tb1Bundle.getBundleId() + ", '" + url + "',{"
+				+ "  success : function(res) {"
+				+ "    done();"
+				+ ""
+				+ "}})");
+		// TODO the js client update above fails!
+
+		Bundle tb11Bundle = getBundle(TB11_TEST_BUNDLE_SYMBOLIC_NAME);
+		assertNotNull("Updated bundle not null", tb11Bundle);
+		assertEquals("Updated bundle version", TB11_TEST_BUNDLE_VERSION, tb11Bundle.getVersion().toString());
+
+		// TODO continue with this test as soon as the update is working...
+	}
+
+	public void testBundleStateRestClient() throws Exception {
+		Bundle bundle = getRandomBundle();
+
+		// Bundle state by ID
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.getBundleState(" + bundle.getBundleId() + ",{"
+				+ "  success : function(res) {"
+				+ "    assert('Bundle state by ID', " + bundle.getState() + ", res.state);"
+				+ "    done();"
+				+ ""
+				+ "}})");
+
+		// Bundle state by path
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.getBundleState('" + getBundlePath(bundle) + "',{"
+				+ "  success : function(res) {"
+				+ "    assert('Bundle state by ID', " + bundle.getState() + ", res.state);"
+				+ "    done();"
+				+ ""
+				+ "}})");
+
+		// Bundle state for non-existent bundle
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.getBundleState(12345678,{"
+				+ "  failure : function(res) {"
+				+ "    assert('Bundle state for nonexistent bundle', 404, res);"
+				+ "    done();"
+				+ ""
+				+ "}})");
+
+		// Bundle state for illegal bundle path
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.getBundleState('Illegal bundle path',{"
+				+ "  failure : function(res) {"
+				+ "    assert('Bundle state for nonexistent bundle', 404, res);"
+				+ "    done();"
+				+ ""
+				+ "}})");
+
+		// start by bundle id
+		Bundle tb1Bundle = getTestBundle(TB1_TEST_BUNDLE_SYMBOLIC_NAME, TB1);
+
+		int tb1State = tb1Bundle.getState();
+		if (tb1State == Bundle.ACTIVE) {
+			tb1Bundle.stop();
+		}
+
+		assertTrue("Precondition", tb1Bundle.getState() != Bundle.ACTIVE);
+		// Start by bundle ID
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.startBundle(" + tb1Bundle.getBundleId() + ",{"
+				+ "  success : function(res) {"
+				+ "    done();"
+				+ ""
+				+ "}})");
+		assertEquals(Bundle.ACTIVE, tb1Bundle.getState());
+
+		Bundle tb2Bundle = getTestBundle(TB2_TEST_BUNDLE_SYMBOLIC_NAME, TB2);
+		if (tb2Bundle.getState() == Bundle.ACTIVE) {
+			tb2Bundle.stop();
+		}
+
+		assertTrue("Precondition", tb2Bundle.getState() != Bundle.ACTIVE);
+		// Start by bundle ID
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.startBundle('" + getBundlePath(tb2Bundle) + "',{"
+				+ "  success : function(res) {"
+				+ "    done();"
+				+ ""
+				+ "}})");
+		assertEquals(Bundle.ACTIVE, tb2Bundle.getState());
+
+		// Start nonexisting bundle
+		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.startBundle(12345678,{"
+				+ "  failure : function(res) {"
+				+ "    done();"
+				+ ""
+				+ "}})");
+
+		fail("Javascript client does not support bundle activation policy");
+		// TODO finish test once it has the activation policy
+	}
+
+	private String jsAssertBundleRepresentation(Bundle bundle, String jsVar) {
+		return "assert('Bundle ID', " + bundle.getBundleId() + ", " + jsVar + ".id);"
+				+ "assert('Bundle Location', '" + bundle.getLocation() + "', " + jsVar + ".location);"
+				+ "assert('Symbolic Name', '" + bundle.getSymbolicName() + "', " + jsVar + ".symbolicName);"
+				+ "assert('State', " + bundle.getState() + ", " + jsVar + ".state);"
+				+ "assert('Last Modified', " + bundle.getLastModified() + ", " + jsVar + ".lastModified);"
+				+ "assert('Version', '" + bundle.getVersion() + "', " + jsVar + ".version);";
+ 
 	}
 
 	public void jsTest(String script) throws Exception {

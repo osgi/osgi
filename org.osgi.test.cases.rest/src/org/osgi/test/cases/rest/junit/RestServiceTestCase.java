@@ -180,7 +180,7 @@ public class RestServiceTestCase extends RestTestUtils {
   // 5.1.3
   public void testBundle() throws JSONException, IOException, BundleException {
     // GET
-    Bundle bundle = getRondomBundle();
+    Bundle bundle = getRandomBundle();
     JSONObject bundleRepresentation = getJSONObject(getBundleURI(bundle.getBundleId()), BUNDLE_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertNotNull("Bundle representation : " + bundle.getBundleId() + " :", bundleRepresentation);
     assertBundleRepresentation(bundle, bundleRepresentation);
@@ -234,7 +234,7 @@ public class RestServiceTestCase extends RestTestUtils {
   // 5.1.4
   public void testBundleState() throws JSONException, IOException, BundleException {
     // GET
-    Bundle bundle = getRondomBundle();
+    Bundle bundle = getRandomBundle();
     JSONObject bundleStateRepresentation = getJSONObject(getBundleStateURI(bundle.getBundleId()), BUNDLE_STATE_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertNotNull("Bundle state " + bundle.getBundleId() + " :", bundleStateRepresentation);
     assertBundleStateRepresentation(bundle, bundleStateRepresentation);
@@ -298,7 +298,7 @@ public class RestServiceTestCase extends RestTestUtils {
   // 5.1.5
   public void testBundleHeader() throws JSONException, IOException {
     // GET
-    Bundle bundle = getRondomBundle();
+    Bundle bundle = getRandomBundle();
     JSONObject bundleHeaderRepresentation = getJSONObject(getBundleHeaderURI(bundle.getBundleId()), BUNDLE_HEADER_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertNotNull("Bundle header " + bundle.getBundleId() + ": ", bundleHeaderRepresentation);
     assertBundleHeaderRepresentation(bundle, bundleHeaderRepresentation);
@@ -314,7 +314,7 @@ public class RestServiceTestCase extends RestTestUtils {
   // 5.1.6
   public void testBundleStartLevel() throws JSONException, IOException, BundleException {
     // GET
-    Bundle bundle = getRondomBundle();
+    Bundle bundle = getRandomBundle();
     JSONObject bundleStartLevelRepresentation = getJSONObject(getBundleStartLevelURI(bundle.getBundleId()), BUNDLE_START_LEVEL_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
     assertNotNull("Bundle start level " + bundle.getBundleId() + " :", bundleStartLevelRepresentation);
     assertBundleStartLevelRepresentation(bundle, bundleStartLevelRepresentation);
@@ -398,7 +398,7 @@ public class RestServiceTestCase extends RestTestUtils {
 
   // 5.1.8
   public void testService() throws InvalidSyntaxException, JSONException, IOException {
-    ServiceReference<?> serviceRef = getRondomService();
+    ServiceReference<?> serviceRef = getRandomService();
 
     // GET
     JSONObject serviceRepresentation = getJSONObject(getServiceURI(serviceRef), SERVICE_CONTENT_TYPE_JSON, HttpURLConnection.HTTP_OK);
