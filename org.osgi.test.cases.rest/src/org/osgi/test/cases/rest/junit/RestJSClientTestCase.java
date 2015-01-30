@@ -27,6 +27,8 @@ package org.osgi.test.cases.rest.junit;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.util.Collections;
+import java.util.Dictionary;
 import org.osgi.framework.Bundle;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -181,13 +183,26 @@ public class RestJSClientTestCase extends RestTestUtils {
 	}
 
 	public void testBundleRepresentationsListRestClient() throws Exception {
-		jsTest("var client = new OsgiRestClient('" + baseURI + "');"
+		Bundle[] bundles = getContext().getBundles();
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("var client = new OsgiRestClient('");
+		sb.append(baseURI);
+		sb.append("');"
 				+ "client.getBundleRepresentations({"
 				+ "  success : function(res) {"
-				+ "    assert('getBundleRepresentations', 'TODO create expected representations', res);"
-				+ "    done();"
-				+ ""
+				+ "    var reps = new Object();"
+				+ "    for (var i = 0; i < res.length; i++) {"
+				+ "      reps[res[i].id] = res[i];"
+				+ "    }");
+
+		for (Bundle b : bundles) {
+			sb.append(jsAssertBundleRepresentation(b, "reps[" + b.getBundleId() + "]"));
+		}
+		sb.append("done();"
 				+ "}})");
+
+		jsTest(sb.toString());
 	}
 
 	public void testBundleRestClient() throws Exception {
@@ -320,6 +335,25 @@ public class RestJSClientTestCase extends RestTestUtils {
 
 		fail("Javascript client does not support bundle activation policy");
 		// TODO finish test once it has the activation policy
+	}
+
+	public void testBundleHeaderRestClient() throws Exception {
+		Bundle bundle = getRandomBundle();
+		Dictionary<String, String> headers = bundle.getHeaders();
+
+		StringBuilder sb = new StringBuilder(); 
+		sb.append("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.getBundleHeader(" + bundle.getBundleId() + ",{"
+				+ "  success : function(res) {");
+
+		for (String key : Collections.list(headers.keys())) {
+			sb.append("assert('header " + key + "', '" + headers.get(key) + "', res['" + key + "']);");
+		}
+				
+		sb.append("    done();"
+				+ ""
+				+ "}})");
+		jsTest(sb.toString());
 	}
 
 	private String jsAssertBundleRepresentation(Bundle bundle, String jsVar) {
