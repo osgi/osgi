@@ -108,7 +108,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 
 		// check a ResourceContextEvent has been sent
 		ResourceContextEvent lastEvent = resourceContextListener.getLastEvent();
-		assertNotNull(lastEvent);
+		assertNotNull("LastEvent must not be null.", lastEvent);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_ADDED, lastEvent.getType());
 		assertEquals("ResourceContext mismatch.", resourceContext, lastEvent.getContext());
 		assertEquals("BundleId mismatch.", bundleId, lastEvent.getBundleId());
@@ -178,12 +178,12 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		resourceContext.removeBundle(bundleId);
 
 		// check list of bundles
-		assertNotNull(resourceContext.getBundleIds());
-		assertEquals("", 0, resourceContext.getBundleIds().length);
+		assertNotNull("BundleIds list must not be null.", resourceContext.getBundleIds());
+		assertEquals("BundleIds list mismatch.", 0, resourceContext.getBundleIds().length);
 
 		// check a ResourceContextEvent has been received
 		ResourceContextEvent lastEvent = resourceContextListener.getLastEvent();
-		assertNotNull(lastEvent);
+		assertNotNull("LastEvent must not be null.", lastEvent);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, lastEvent.getType());
 		assertEquals("ResourceContext mismatch.", resourceContext, lastEvent.getContext());
 		assertEquals("BundleId mismatch.", bundleId, lastEvent.getBundleId());
@@ -235,7 +235,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		// bundle (should be the last last received event)
 		ResourceContextEvent removedEvent = resourceContextListener
 				.getLastLastEvent();
-		assertNotNull(removedEvent);
+		assertNotNull("RemovedEvent must not be null.", removedEvent);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, removedEvent.getType());
 		assertEquals("BundleId mismatch.", bundleId, removedEvent.getBundleId());
 		assertEquals("ResourceContext mismatch.", resourceContext1, removedEvent.getContext());
@@ -245,7 +245,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		// bundleId
 		ResourceContextEvent addedEvent = resourceContextListener
 				.getLastEvent();
-		assertNotNull(addedEvent);
+		assertNotNull("AddedEvent must not be null.", addedEvent);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_ADDED, addedEvent.getType());
 		assertEquals("BundleId mismatch.", bundleId, addedEvent.getBundleId());
 		assertEquals("ResourceContext mismatch.", resourceContext2, addedEvent.getContext());
@@ -273,12 +273,12 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 
 		// check list of bundle
 		long[] bundleIds = resourceContext.getBundleIds();
-		assertNotNull(bundleIds);
+		assertNotNull("BundleIds list must not be null.", bundleIds);
 		assertEquals("BundlesIds list mismatch.", 0, bundleIds.length);
 
 		// check that a REMOVED_BUNDLE event has been received
 		ResourceContextEvent lastEvent = resourceContextListener.getLastEvent();
-		assertNotNull(lastEvent);
+		assertNotNull("LastEvent must not be null.", lastEvent);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, lastEvent.getType());
 		assertEquals("ResourceContext mismatch.", resourceContext, lastEvent.getContext());
 		assertEquals("BundleId mismatch.", bundleId, lastEvent.getBundleId());
@@ -328,7 +328,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		// check a REMOVED_BUNDLE ResourceContextEvent event has been
 		// received
 		ResourceContextEvent lastEvent = resourceContextListener.getLastEvent();
-		assertNotNull(lastEvent);
+		assertNotNull("LastEvent must not be null.", lastEvent);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, lastEvent.getType());
 		assertEquals("ResourceContext mismatch.", resourceContext1, lastEvent.getContext());
 		assertEquals("BundleId mismatch.", bundleId, lastEvent.getBundleId());

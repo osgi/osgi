@@ -112,7 +112,7 @@ public class TC7_ResourceMonitorFactoryTestCase extends DefaultTestBundleControl
 			// Keep the new total number of existing resource monitor
 			// factory/ies.
 			newTotalNumberOfExistingResourceMonitorFactories = factoryReferences.size();
-			assertEquals(totalNumberOfExistingResourceMonitorFactories.intValue() + 1, newTotalNumberOfExistingResourceMonitorFactories);
+			assertEquals("TotalNumberOfExistingResourceMonitorFactories mismatch.", totalNumberOfExistingResourceMonitorFactories.intValue() + 1, newTotalNumberOfExistingResourceMonitorFactories);
 		} catch (InvalidSyntaxException e) {
 			e.printStackTrace();
 			fail("Can not get the already existing OSGi service resource monitor factories.");

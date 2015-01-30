@@ -106,7 +106,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 
 		// check existing ResourceContext
 		assertEquals("ResourceContext list must be empty.", 0, resourceMonitoringService.listContext().length);
-		assertNull(resourceMonitoringService.getContext(name));
+		assertNull("ResourceMonitoringService must contain a ResourceContext named: " + name, resourceMonitoringService.getContext(name));
 
 		// check the resource context name is still accessible
 		assertEquals("Name mismatch.", name, resourceContext.getName());
@@ -134,7 +134,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 
 		// check a ResourceContextEvent has been sent due to deletion
 		ResourceContextEvent lastEvent = resourceContextListener.getLastEvent();
-		assertNotNull(lastEvent);
+		assertNotNull("LastEvent must not be null.", lastEvent);
 		assertEquals("ResourceContext mismatch.", resourceContext, lastEvent.getContext());
 		assertEquals("Last event type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_REMOVED, lastEvent.getType());
 	}
@@ -186,7 +186,8 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 		assertEquals("BundleIds list mismatch.", 0, rc1BundleIds.length);
 		// ResourceMonitor[] rc1ResourceMonitors =
 		// resourceContext1.getMonitors();
-		// assertEquals("", rc1ResourceMonitors.length == 0);
+		// assertEquals("ResourceMonitors list mismatch.", 0,
+		// rc1ResourceMonitors.length);
 
 		// check bundleId belongs to resourceContext2
 		long[] rc2BundleIds = resourceContext2.getBundleIds();
@@ -202,7 +203,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 		// been received
 		ResourceContextEvent firstEvent = (ResourceContextEvent) receivedEvents
 				.get(3);
-		assertNotNull(firstEvent);
+		assertNotNull("FirstEvent must not be null.", firstEvent);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, firstEvent.getType());
 		assertEquals("ResourceContext mismatch.", resourceContext1, firstEvent.getContext());
 		assertEquals("BundleId mismatch.", bundleId, firstEvent.getBundleId());
@@ -212,7 +213,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 		// received event)
 		ResourceContextEvent secondEvent = (ResourceContextEvent) receivedEvents
 				.get(4);
-		assertNotNull(secondEvent);
+		assertNotNull("SecondEvent must not be null.", secondEvent);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_ADDED, secondEvent.getType());
 		assertEquals("ResourceContext mismatch.", resourceContext2, secondEvent.getContext());
 		assertEquals("BundleId mismatch.", bundleId, secondEvent.getBundleId());
@@ -221,7 +222,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 		// event
 		ResourceContextEvent thirdEvent = (ResourceContextEvent) receivedEvents
 				.get(5);
-		assertNotNull(thirdEvent);
+		assertNotNull("ThirdEvent must not be null.", thirdEvent);
 		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_REMOVED, thirdEvent.getType());
 		assertEquals("ResourceContext mismatch.", resourceContext1, thirdEvent.getContext());
 	}

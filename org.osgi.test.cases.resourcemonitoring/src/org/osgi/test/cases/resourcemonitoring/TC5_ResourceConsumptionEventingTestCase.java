@@ -418,7 +418,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 			ResourceEvent currentEvent = (ResourceEvent) it.next();
 
 			if (previousEvent != null) {
-				assertTrue(previousEvent.getType() != currentEvent.getType());
+				assertTrue("Types must not match.", previousEvent.getType() != currentEvent.getType());
 
 				int eventType = currentEvent.getType();
 				Object value = currentEvent.getValue();
@@ -450,23 +450,23 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 						if (threshold != null) {
 							log("upperThreshold:" + threshold + ", value="
 									+ value);
-							assertTrue(threshold.compareTo(value) > 0);
+							assertTrue("threshold.compareTo(value) > 0 is expected.", threshold.compareTo(value) > 0);
 							checked = true;
 						}
-						assertTrue(checked);
+						assertTrue("Value must be checked.", checked);
 
 					} else
 						if (eventType == ResourceEvent.WARNING) {
 							// check if current value is higher than WARNING
 							// threshold
 							threshold = getUpperWarningThreshold();
-							assertNotNull(threshold);
-							assertTrue(threshold.compareTo(value) <= 0);
+							assertNotNull("Threshold must no be null.", threshold);
+							assertTrue("threshold.compareTo(value) <= 0 is expected.", threshold.compareTo(value) <= 0);
 
 							// check if current value is under ERROR threshold
 							threshold = getUpperErrorThreshold();
 							if (threshold != null) {
-								assertTrue(threshold.compareTo(value) > 0);
+								assertTrue("threshold.compareTo(value) > 0 is expected.", threshold.compareTo(value) > 0);
 							}
 
 						} else
@@ -475,15 +475,15 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 								// ERROR
 								// threshold
 								threshold = getUpperErrorThreshold();
-								assertNotNull(threshold);
-								assertTrue(threshold.compareTo(value) <= 0);
+								assertNotNull("Threshold must no be null.", threshold);
+								assertTrue("threshold.compareTo(value) <= 0 is expected.", threshold.compareTo(value) <= 0);
 
 								// check if current value is higher than the
 								// WARNING
 								// threshold
 								threshold = getUpperWarningThreshold();
 								if (threshold != null) {
-									assertTrue(threshold.compareTo(value) < 0);
+									assertTrue("threshold.compareTo(value) < 0 is expected.", threshold.compareTo(value) < 0);
 								}
 							}
 				} else {
@@ -495,48 +495,47 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 						if (threshold != null) {
 							log("lowerWarningThreshold: " + threshold
 									+ ", value=" + value);
-							assertTrue(threshold.compareTo(value) < 0);
+							assertTrue("threshold.compareTo(value) < 0 is expected.", threshold.compareTo(value) < 0);
 							checked = true;
 						}
 
 						// check if current value is over ERROR threholds
 						threshold = getLowerErrorThreshold();
 						if (threshold != null) {
-							assertTrue(threshold.compareTo(value) < 0);
+							assertTrue("threshold.compareTo(value) < 0 is expected.", threshold.compareTo(value) < 0);
 							checked = true;
 						}
 
 						// at least, one of the two thresholds has to be set
-						assertTrue(checked);
+						assertTrue("Value must be checked.", checked);
 					} else
 						if (eventType == ResourceEvent.WARNING) {
 							// check current value is under WARNING threshold
 							threshold = getLowerWarningThreshold();
-							assertNotNull(threshold);
-							assertTrue(threshold.compareTo(value) >= 0);
+							assertNotNull("Threshold must no be null.", threshold);
+							assertTrue("threshold.compareTo(value) >= 0 is expected.", threshold.compareTo(value) >= 0);
 
 							// check current value is higher than ERROR
 							// threshold
 							threshold = getLowerErrorThreshold();
 							if (threshold != null) {
-								assertTrue(threshold.compareTo(value) < 0);
+								assertTrue("threshold.compareTo(value) < 0 is expected.", threshold.compareTo(value) < 0);
 							}
 						} else
 							if (eventType == ResourceEvent.ERROR) {
 								// check current value is under ERROR threshold
 								threshold = getLowerErrorThreshold();
-								assertNotNull(threshold);
-								assertTrue(threshold.compareTo(value) >= 0);
+								assertNotNull("Threshold must no be null.", threshold);
+								assertTrue("threshold.compareTo(value) >= 0 is expected.", threshold.compareTo(value) >= 0);
 
 								// check current value is under WARNING
 								// threshold
 								threshold = getLowerWarningThreshold();
 								if (threshold != null) {
-									assertTrue(threshold.compareTo(value) > 0);
+									assertTrue("threshold.compareTo(value) > 0 is expected.", threshold.compareTo(value) > 0);
 								}
 							}
 				}
-
 			}
 			previousEvent = currentEvent;
 		}

@@ -110,7 +110,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 * Check if a CPU Resource Monitor Factory is available.
 	 */
 	public void testTC1CheckIfACPUResourceMonitorFactoryIsAvailable() {
-		assertNotNull(cpuFactory);
+		assertNotNull("CpuFactory must not be null.", cpuFactory);
 	}
 
 	/**
@@ -122,13 +122,13 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 
 		// check existing resource monitors
 		ResourceMonitor[] monitors = resourceContext.getMonitors();
-		assertNotNull(monitors);
+		assertNotNull("Monitors list must not be null.", monitors);
 		assertEquals("Monitors list mismatch.", 0, monitors.length);
 
 		// create ResourceMonitor
 		ResourceMonitor resourceMonitor = cpuFactory
 				.createResourceMonitor(resourceContext);
-		assertNotNull(resourceMonitor);
+		assertNotNull("ResourceMonitor must not be null.", resourceMonitor);
 
 		// check ResourceContext
 		monitors = resourceContext.getMonitors();
@@ -138,17 +138,17 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 		// get monitor from ResourceContext
 		ResourceMonitor retrievedMonitor = resourceContext
 				.getMonitor(ResourceMonitoringService.RES_TYPE_CPU);
-		assertNotNull(retrievedMonitor);
+		assertNotNull("ResourceMonitor must not be null.", retrievedMonitor);
 		assertEquals("ResourceMonitor mismatch.", resourceMonitor, retrievedMonitor);
 
 		// check resource context from monitor
 		ResourceContext retrievedRC = resourceMonitor.getContext();
-		assertNotNull(retrievedRC);
+		assertNotNull("ResourceContext must not be null.", retrievedRC);
 		assertEquals("ResourceContext mismatch.", resourceContext, retrievedRC);
 
 		// check the newly ResourceMonitor
-		assertFalse(resourceMonitor.isEnabled());
-		assertFalse(resourceMonitor.isDeleted());
+		assertFalse("ResourceMonitor must not be enabled.", resourceMonitor.isEnabled());
+		assertFalse("ResourceMonitor must not be deleted.", resourceMonitor.isDeleted());
 		assertEquals("Type mismatch.", cpuFactory.getType(), resourceMonitor.getResourceType());
 
 		// create again a CPU Resource Monitor for this context
@@ -183,7 +183,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 
 		// check resource context monitors
 		ResourceMonitor[] monitors = resourceContext.getMonitors();
-		assertNotNull(monitors);
+		assertNotNull("ResourceMonitors list must not be null.", monitors);
 		assertEquals("ResourceMonitors list mismatch.", 0, monitors.length);
 
 		// check ResourceMonitor state
@@ -201,7 +201,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 				.createResourceMonitor(resourceContext);
 
 		// check the monitor is disabled by default
-		assertFalse(resourceMonitor.isEnabled());
+		assertFalse("ResourceMonitor must not be enabled.", resourceMonitor.isEnabled());
 
 		// enable it
 		resourceMonitor.enable();
@@ -213,7 +213,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 		resourceMonitor.disable();
 
 		// check the monitor is disabled
-		assertFalse(resourceMonitor.isEnabled());
+		assertFalse("ResourceMonitor must not be enabled.", resourceMonitor.isEnabled());
 
 		// delete the monitor
 		resourceMonitor.delete();
@@ -248,19 +248,19 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 				.createResourceMonitor(resourceContext);
 
 		// retrieves the resource usage
-		assertNotNull(resourceMonitor.getUsage());
+		assertNotNull("Usage must not be null.", resourceMonitor.getUsage());
 
 		// enable it
 		resourceMonitor.enable();
 
 		// retrieves the resource usage
-		assertNotNull(resourceMonitor.getUsage());
+		assertNotNull("Usage must not be null.", resourceMonitor.getUsage());
 
 		// disable it
 		resourceMonitor.disable();
 
 		// retrieves the resource usage
-		assertNotNull(resourceMonitor.getUsage());
+		assertNotNull("Usage must not be null.", resourceMonitor.getUsage());
 
 		// delete the monitor
 		resourceMonitor.delete();

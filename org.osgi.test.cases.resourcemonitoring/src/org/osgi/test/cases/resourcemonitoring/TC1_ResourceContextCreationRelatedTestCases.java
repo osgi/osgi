@@ -171,7 +171,7 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 		// create first instance of context1
 		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
 				null);
-		assertNotNull(resourceContext);
+		assertNotNull("ResourceContext must not be null.", resourceContext);
 
 		// retrieve event
 		ResourceContextEvent event = resourceContextListener.getLastEvent();
@@ -219,7 +219,7 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2,
 				resourceContext1);
 
-		assertNotNull(resourceContext2);
+		assertNotNull("ResourceContext must not be null.", resourceContext2);
 		assertEquals("Name mismatch.", name2, resourceContext2.getName());
 		assertEquals("BundleIds list mismatch.", 0, resourceContext2.getBundleIds().length);
 		ResourceMonitor[] rc2Monitors = resourceContext2.getMonitors();
@@ -253,7 +253,7 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 		resourceContext2 = resourceMonitoringService.createContext(name2,
 				resourceContext1);
 
-		assertNotNull(resourceContext2);
+		assertNotNull("ResourceContext must not be null.", resourceContext2);
 		assertEquals("Name mismatch.", name2, resourceContext2.getName());
 		assertEquals("BundleIds list mismatch.", 0, resourceContext2.getBundleIds().length);
 		ResourceMonitor[] rc2Monitors = resourceContext2.getMonitors();
@@ -272,7 +272,7 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 		// get ResourceContext associated with bundleId and check bundleId
 		// is not associated with a context
 		ResourceContext resourceContext = resourceMonitoringService.getContext(bundleId);
-		assertNull(resourceContext);
+		assertNull("ResourceContext must be null.", resourceContext);
 
 		// create a new context
 		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name,
@@ -283,12 +283,12 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 
 		// get ResourceContext by bundle id
 		resourceContext = resourceMonitoringService.getContext(bundleId);
-		assertNotNull(resourceContext);
+		assertNotNull("ResourceContext must not be null.", resourceContext);
 		assertEquals("ResourceContext mismatch.", resourceContext1, resourceContext);
 
 		// try to retrieve the ResourceContext with an unexisting bundle
 		resourceContext = resourceMonitoringService.getContext(-1);
-		assertNull(resourceContext);
+		assertNull("ResourceContext must be null.", resourceContext);
 	}
 
 	/**
@@ -299,12 +299,11 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	 */
 	public void testTC6SupportedTypesOfResources() throws InvalidSyntaxException {
 		String[] supportedTypes = resourceMonitoringService.getSupportedTypes();
-		assertNotNull(supportedTypes);
+		assertNotNull("SupportedTypes must not be null.", supportedTypes);
 
 		// retrieves all ServiceReference of ResourceMonitorFactory services
 		Collection factorySrs = getContext().getServiceReferences(
 				ResourceMonitorFactory.class, null);
-		assertNotNull(factorySrs);
 
 		// check the number of ServiceReference is the same as the number of
 		// supported types
