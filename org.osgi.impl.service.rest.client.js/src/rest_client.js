@@ -223,6 +223,26 @@ function OsgiRestClient(baseUrl) {
 	}
 
 	/**
+	 * Start a bundle.
+	 * 
+	 * @param b
+	 *            the bundle, either the numeric bundle ID or the bundle URI
+	 *            path.
+	 * @param options
+	 *            the options passed to the bundle's start method as an integer.
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates. On success, the callback will have the updated bundle
+	 *            state object.
+	 */
+	this.startBundle = function startBundle(b, options, callbacks) {
+		this.setBundleState(b, {
+			state : 32,
+			options : options
+		}, callbacks);
+	}
+
+	/**
 	 * Stop a bundle.
 	 * 
 	 * @param b
@@ -236,6 +256,26 @@ function OsgiRestClient(baseUrl) {
 	this.stopBundle = function stopBundle(b, callbacks) {
 		this.setBundleState(b, {
 			state : 4
+		}, callbacks);
+	}
+
+	/**
+	 * Stop a bundle.
+	 * 
+	 * @param b
+	 *            the bundle, either the numeric bundle ID or the bundle URI
+	 *            path. *
+	 * @param options
+	 *            the options passed to the bundle's start method as an integer.
+	 * @param callbacks
+	 *            an optional object containing callback functions for status
+	 *            updates. On success, the callback will have the updated bundle
+	 *            state object.
+	 */
+	this.stopBundle = function stopBundle(b, options, callbacks) {
+		this.setBundleState(b, {
+			state : 4,
+			options : options
 		}, callbacks);
 	}
 
@@ -323,20 +363,23 @@ function OsgiRestClient(baseUrl) {
 	/**
 	 * Install a new bundle.
 	 * 
-	 * @param uri
-	 *            the URI of the bundle to be installed
+	 * @param arg
+	 *            the URI of the bundle to be installed as a String or an
+	 *            ArrayBuffer object containing the bytes of a bundle to be
+	 *            uploaded.
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
 	 *            updates. On success, the callback will have the URI path of
 	 *            the newly installed bundle as a String.
 	 */
-	this.installBundle = function installBundle(uri, callbacks) {
+	this.installBundle = function installBundle(arg, callbacks) {
 		restCall({
 			uri : this.baseUrl + "/framework/bundles",
 			request : "POST",
-			data : uri,
+			data : arg,
 			accept : "text/plain",
-			contentType : "text/plain"
+			contentType : "string" === typeof arg ? "text/plain"
+					: "vnd.osgi.bundle"
 		}, callbacks)
 	}
 
@@ -346,18 +389,20 @@ function OsgiRestClient(baseUrl) {
 	 * @param b
 	 *            the bundle, either the numeric bundle ID or the bundle URI
 	 *            path.
-	 * @param uri
-	 *            the URI from which to update the bundle.
+	 * @param arg
+	 *            the URI from which to update the bundle or a new bundle in the
+	 *            form of an ArrayBuffer.
 	 * @param callbacks
 	 *            an optional object containing callback functions for status
 	 *            updates.
 	 */
-	this.updateBundle = function updateBundle(b, uri, callbacks) {
+	this.updateBundle = function updateBundle(b, arg, callbacks) {
 		restCall({
 			uri : this.baseUrl + getBundlePath(b),
 			request : "PUT",
-			data : uri,
-			contentType : "text/plain",
+			data : arg,
+			contentType : "string" === typeof arg ? "text/plain"
+					: "vnd.osgi.bundle",
 			expectedState : 204
 		}, callbacks)
 	}
