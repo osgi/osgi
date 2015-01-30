@@ -403,7 +403,7 @@ function OsgiRestClient(baseUrl) {
 			data : arg,
 			contentType : "string" === typeof arg ? "text/plain"
 					: "vnd.osgi.bundle",
-			expectedState : 204
+			expectedStatus : 204
 		}, callbacks)
 	}
 
@@ -421,7 +421,7 @@ function OsgiRestClient(baseUrl) {
 		restCall({
 			uri : this.baseUrl + getBundlePath(b),
 			request : "DELETE",
-			expectedState : 204
+			expectedStatus : 204
 		}, callbacks)
 	}
 
