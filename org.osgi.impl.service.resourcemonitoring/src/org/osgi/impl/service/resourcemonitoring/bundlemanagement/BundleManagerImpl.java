@@ -60,7 +60,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 	}
 
 	public void addBundleToHolder(long bundleId, BundleHolder bundleHolder)
-			throws RuntimeException {
+			throws BundleManagerException {
 		checkState(state, INITIALIZED);
 
 		// acquire bundle lock
@@ -72,7 +72,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 				releaseBundleLock(bundleId);
 
 				// the bundle is already associated with a resource context
-				throw new RuntimeException("Bundle " + bundleId
+				throw new BundleManagerException("Bundle " + bundleId
 						+ " is already associated with a resource context.");
 			}
 
@@ -87,7 +87,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 	}
 
 	public void removeBundleFromHolder(long bundleId, BundleHolder bundleHolder)
-			throws RuntimeException {
+			throws BundleManagerException {
 		checkState(state, INITIALIZED);
 
 		// acquire bundle lock
@@ -99,7 +99,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 				releaseBundleLock(bundleId);
 
 				// the bundle is not associated to a Resource Context
-				throw new RuntimeException("Bundle " + bundleId
+				throw new BundleManagerException("Bundle " + bundleId
 						+ " is not associated with a ResourceContext");
 			}
 
@@ -110,7 +110,7 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 				releaseBundleLock(bundleId);
 
 				// the bundle is hold by an other Resource Context
-				throw new RuntimeException("Bundle " + bundleId
+				throw new BundleManagerException("Bundle " + bundleId
 						+ " is not associated with this ResourceContext");
 			}
 
@@ -148,14 +148,17 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 	}
 
 	public void start(BundleContext pBundleContext)
-			throws RuntimeException {
-
-		checkState(state, NOT_INITIALIZED);
+			throws BundleManagerException {
+		try {
+			checkState(state, NOT_INITIALIZED);
+		} catch (BundleManagerException e) {
+			e.printStackTrace();
+		}
 
 		bundleContext = pBundleContext;
 
 		if (bundleContext == null) {
-			throw new RuntimeException("bundleContext is null");
+			throw new BundleManagerException("bundleContext is null");
 		}
 
 		bundleContext.addBundleListener(this);
@@ -167,11 +170,14 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 		}
 
 		state = INITIALIZED;
-
 	}
 
 	public void stop() {
-		checkState(state, INITIALIZED);
+		try {
+			checkState(state, INITIALIZED);
+		} catch (BundleManagerException e) {
+			e.printStackTrace();
+		}
 
 		state = DESTROYED;
 
@@ -206,11 +212,11 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 		}
 	}
 
-	private void acquireBundleLock(long bundleId) throws RuntimeException {
+	private void acquireBundleLock(long bundleId) throws BundleManagerException {
 		synchronized (bundleLocks) {
 			BundleLock bl = (BundleLock) bundleLocks.get(Long.valueOf(Long.toString(bundleId)));
 			if (bl == null) {
-				throw new RuntimeException("Bundle " + bundleId
+				throw new BundleManagerException("Bundle " + bundleId
 						+ " does not exist");
 			} else {
 				// the next call will be blocked until the lock is released.
@@ -219,20 +225,20 @@ public class BundleManagerImpl implements BundleManager, BundleListener {
 		}
 	}
 
-	private void releaseBundleLock(long bundleId) throws RuntimeException {
+	private void releaseBundleLock(long bundleId) throws BundleManagerException {
 		synchronized (bundleLocks) {
 			BundleLock bl = (BundleLock) bundleLocks.get(Long.valueOf(Long.toString(bundleId)));
 			if (bl == null) {
-				throw new RuntimeException();
+				throw new BundleManagerException("BundleLock bl == null.");
 			} else {
 				bl.releaseLock();
 			}
 		}
 	}
 
-	private static void checkState(int currentState, int expectedState) throws RuntimeException {
+	private static void checkState(int currentState, int expectedState) throws BundleManagerException {
 		if (currentState != expectedState) {
-			throw new RuntimeException("Invalid state");
+			throw new BundleManagerException("Invalid state");
 		}
 	}
 

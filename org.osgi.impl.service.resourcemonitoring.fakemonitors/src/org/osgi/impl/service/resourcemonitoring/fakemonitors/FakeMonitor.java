@@ -4,6 +4,7 @@ package org.osgi.impl.service.resourcemonitoring.fakemonitors;
 import org.osgi.framework.BundleContext;
 import org.osgi.impl.service.resourcemonitoring.util.EventNotifier;
 import org.osgi.service.resourcemonitoring.ResourceContext;
+import org.osgi.service.resourcemonitoring.ResourceContextException;
 import org.osgi.service.resourcemonitoring.ResourceListener;
 import org.osgi.service.resourcemonitoring.ResourceMonitor;
 import org.osgi.service.resourcemonitoring.ResourceMonitorException;
@@ -123,7 +124,7 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 
 		try {
 			resourceContext.addResourceMonitor(this);
-		} catch (ResourceMonitorException e) {
+		} catch (ResourceContextException e) {
 			e.printStackTrace();
 		}
 
@@ -137,9 +138,8 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 		return resourceType;
 	}
 
-	public void delete() {
+	public void delete() throws ResourceContextException {
 		isDeleted = true;
-
 		resourceContext.removeResourceMonitor(this);
 		factory.removeResourceMonitor(this);
 		eventNotifier.stop();
@@ -153,7 +153,7 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 		return isDeleted;
 	}
 
-	public void enable() throws ResourceMonitorException, IllegalStateException {
+	public void enable() throws ResourceMonitorException {
 		checkExistency("This monitor has been deleted, it can not be enabled anymore.");
 
 		if (!isEnable) {
@@ -165,14 +165,13 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 
 	}
 
-	public void disable() throws IllegalStateException {
+	public void disable() throws ResourceMonitorException {
 		checkExistency("This monitor has been deleted, it can not be disabled anymore.");
 		isEnable = false;
 		thread.interrupt();
 		try {
 			thread.join();
 		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		thread = null;
@@ -180,8 +179,8 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 		eventNotifier.reportEnableDisable();
 	}
 
-	public Comparable getUsage() throws IllegalStateException {
-		checkExistency("This monitor has been deleted");
+	public Comparable getUsage() throws ResourceMonitorException {
+		checkExistency("This monitor has been deleted.");
 		return currentUsage;
 	}
 
@@ -243,13 +242,17 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 	}
 
 	/**
-	 * Check if this instance is still existing (i.e {@link ResourceMonitor#i}
+	 * Check if this instance is still existing (i.e
+	 * {@link ResourceMonitor#isDeleted()}.
 	 * 
-	 * @param msg
+	 * @param msg error message to be used in the ResourceMonitoringException if
+	 *        thrown.
+	 * 
+	 * @throws ResourceMonitorException, if this monitor has been deleted.
 	 */
-	private void checkExistency(String msg) {
+	private void checkExistency(String msg) throws ResourceMonitorException {
 		if (isDeleted) {
-			throw new IllegalStateException(msg);
+			throw new ResourceMonitorException(msg);
 		}
 	}
 

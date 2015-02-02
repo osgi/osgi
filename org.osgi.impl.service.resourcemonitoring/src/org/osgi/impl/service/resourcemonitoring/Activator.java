@@ -5,6 +5,7 @@ import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.impl.service.resourcemonitoring.bundlemanagement.BundleManager;
+import org.osgi.impl.service.resourcemonitoring.bundlemanagement.BundleManagerException;
 import org.osgi.impl.service.resourcemonitoring.bundlemanagement.BundleManagerImpl;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringServiceException;
@@ -75,8 +76,9 @@ public class Activator implements BundleActivator {
 	 * 
 	 * @throws ResourceMonitoringServiceException if a pb occurred with the
 	 *         ResourceMonitoringService.
+	 * @throws BundleManagerException if the provided bundleContext is null
 	 */
-	private void startResourceMonitoringServiceImpl() throws ResourceMonitoringServiceException {
+	private void startResourceMonitoringServiceImpl() throws ResourceMonitoringServiceException, BundleManagerException {
 		bundleManager = new BundleManagerImpl();
 		bundleManager.start(bundleContext);
 

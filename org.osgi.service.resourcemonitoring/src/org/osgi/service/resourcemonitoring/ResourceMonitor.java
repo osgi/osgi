@@ -60,8 +60,11 @@ public interface ResourceMonitor {
 	 * Disable and delete this instance of Resource Monitor. This method MUST
 	 * update the list of ResourceMonitor instances hold by the Resource Context
 	 * (getContext().removeMonitor(this)).
+	 * 
+	 * @throws ResourceContextException, e.g. when the monitor can't be removed
+	 *         from the ResourceContext.
 	 */
-	public void delete();
+	public void delete() throws ResourceContextException;
 
 	/**
 	 * Checks if the monitoring for this resource type is enabled for this
@@ -92,31 +95,30 @@ public interface ResourceMonitor {
 	 *         evaluate the memory consumption by tracking memory allocation
 	 *         operation at runtime. This kind of Monitor can not get
 	 *         instantaneous memory value. Such Monitor instances need to be
-	 *         enabled at starting time.)
-	 * @throws IllegalStateException if the ResourceMonitor instance has been
-	 *         previously deleted
+	 *         enabled at starting time.). if the ResourceMonitor instance has
+	 *         been previously deleted
 	 */
-	public void enable() throws ResourceMonitorException, IllegalStateException;
+	public void enable() throws ResourceMonitorException;
 
 	/**
 	 * Disable the monitoring of this resource type for the resource context
 	 * associated with this monitor instance. The resource usage is not
 	 * available until it is enabled again.
 	 * 
-	 * @throws IllegalStateException if the ResourceMonitor instance has been
+	 * @throws ResourceMonitorException if the ResourceMonitor instance has been
 	 *         previously deleted
 	 */
-	public void disable() throws IllegalStateException;
+	public void disable() throws ResourceMonitorException;
 
 	/**
 	 * Returns an object representing the current usage of this resource type by
 	 * this resource context.
 	 * 
 	 * @return The current usage of this resource type.
-	 * @throws IllegalStateException if the ResourceMonitor instance is not
+	 * @throws ResourceMonitorException if the ResourceMonitor instance is not
 	 *         enabled.
 	 */
-	public Comparable getUsage() throws IllegalStateException;
+	public Comparable getUsage() throws ResourceMonitorException;
 
 	/**
 	 * Returns the sampling period for this resource type.

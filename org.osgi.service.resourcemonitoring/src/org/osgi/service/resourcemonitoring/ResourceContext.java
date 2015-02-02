@@ -72,16 +72,21 @@ public interface ResourceContext {
 	 * {@link ResourceContextEvent#BUNDLE_ADDED} will be sent.
 	 * 
 	 * @param bundleId The bundle to add to this resource context
+	 * 
+	 * @throws ResourceContextException, e.g. when the bundle can't be added to
+	 *         the ResourceContext.
 	 */
-	public void addBundle(long bundleId);
+	public void addBundle(long bundleId) throws ResourceContextException;
 
 	/**
 	 * Removes the bundle identified by bundleId from the Resource Context. The
 	 * bundle is no longer to this Resource Context.
 	 * 
 	 * @param bundleId bundle identifier
+	 * @throws ResourceContextException, e.g. when the bundle can't be removed
+	 *         from the ResourceContext.
 	 */
-	public void removeBundle(long bundleId);
+	public void removeBundle(long bundleId) throws ResourceContextException;
 
 	/**
 	 * Removes the bundle from this resource context. If a
@@ -99,8 +104,10 @@ public interface ResourceContext {
 	 * @param destination A resource context in which to add the bundle, after
 	 *        removing it from this context. If no destination is provided (i.e.
 	 *        null), the bundle is not associated to a new Resource Context.
+	 * @throws ResourceContextException, e.g. when the bundle can't be removed
+	 *         from the ResourceContext.
 	 */
-	public void removeBundle(long bundleId, ResourceContext destination);
+	public void removeBundle(long bundleId, ResourceContext destination) throws ResourceContextException;
 
 	/**
 	 * Returns a ResourceMonitor instance for the specified resource type. If
@@ -111,15 +118,19 @@ public interface ResourceContext {
 	 *        requested
 	 * @return A ResourceMonitor instance, or null, if this resource type is not
 	 *         supported
+	 * @throws ResourceContextException, e.g. when the monitor(s) can't be
+	 *         retrieved from the ResourceContext.
 	 */
-	public ResourceMonitor getMonitor(String resourceType);
+	public ResourceMonitor getMonitor(String resourceType) throws ResourceContextException;
 
 	/**
 	 * Retrieves all the existing ResourceMonitor belonging to this context.
 	 * 
 	 * @return an array of ResourceMonitor. May be empty if no ResourceMonitor
+	 * @throws ResourceContextException, e.g. when the monitor(s) can't be
+	 *         retrieved from the ResourceContext.
 	 */
-	public ResourceMonitor[] getMonitors();
+	public ResourceMonitor[] getMonitors() throws ResourceContextException;
 
 	/**
 	 * Adds a new ResourceMonitor instance monitoring resource for this resource
@@ -127,17 +138,19 @@ public interface ResourceContext {
 	 * instance.
 	 * 
 	 * @param resourceMonitor resourceMonitor instance to be added
-	 * @throws ResourceMonitorException if resourceMonitor is associated to
-	 *         another context or resourceMonitor has been deleted.
+	 * @throws ResourceContextException, e.g. when the monitor can't be added to
+	 *         the ResourceContext.
 	 */
-	public void addResourceMonitor(ResourceMonitor resourceMonitor) throws ResourceMonitorException;
+	public void addResourceMonitor(ResourceMonitor resourceMonitor) throws ResourceContextException;
 
 	/**
 	 * Removes a ResourceMonitor instance from the context.
 	 * 
 	 * @param resourceMonitor resource monitor instance to be removed
+	 * @throws ResourceContextException, e.g. when the monitor can't be removed
+	 *         from the ResourceContext.
 	 */
-	public void removeResourceMonitor(ResourceMonitor resourceMonitor);
+	public void removeResourceMonitor(ResourceMonitor resourceMonitor) throws ResourceContextException;
 
 	/**
 	 * Removes a resource context. All resources allocated in this resource
@@ -150,8 +163,10 @@ public interface ResourceContext {
 	 * 
 	 * @param destination The {@link ResourceContext} where the resources
 	 *        currently allocated by this resource context will be moved.
+	 * @throws ResourceContextException, e.g. when the resource context can't be
+	 *         removed.
 	 */
-	public void removeContext(ResourceContext destination);
+	public void removeContext(ResourceContext destination) throws ResourceContextException;
 
 	/**
 	 * A ResourceContext rc1 is equals to ResourceContext rc2 if rc1.getName()

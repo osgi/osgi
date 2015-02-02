@@ -13,6 +13,7 @@ import org.osgi.impl.service.resourcemonitoring.persistency.Persistence;
 import org.osgi.impl.service.resourcemonitoring.persistency.PersistenceImpl;
 import org.osgi.impl.service.resourcemonitoring.persistency.ResourceContextInfo;
 import org.osgi.service.resourcemonitoring.ResourceContext;
+import org.osgi.service.resourcemonitoring.ResourceContextException;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringServiceException;
 
@@ -79,7 +80,7 @@ public class PersistenceManager implements BundleListener {
 				if (resourceContext != null) {
 					try {
 						resourceContext.addBundle(bundleId);
-					} catch (RuntimeException e) {
+					} catch (ResourceContextException e) {
 						e.printStackTrace();
 					}
 				}
@@ -119,7 +120,7 @@ public class PersistenceManager implements BundleListener {
 				Long bundleId = (Long) it.next();
 				try {
 					resourceContext.addBundle(bundleId.longValue());
-				} catch (RuntimeException e) {
+				} catch (ResourceContextException e) {
 					// adding bundle may fail if the bundle has not been
 					// installed/activated as
 					// the resourceMonitoringService will be launched very early

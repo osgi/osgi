@@ -18,9 +18,9 @@ public interface BundleManager {
 	 * This method registers a Bundle Listener.<:p>
 	 * 
 	 * @param bundleContext bundle context
-	 * @exception RuntimeException if the provided bundleContext is null
+	 * @exception BundleManagerException if the provided bundleContext is null
 	 */
-	public void start(BundleContext bundleContext) throws RuntimeException;
+	public void start(BundleContext bundleContext) throws BundleManagerException;
 
 	/**
 	 * Releases all internal data structures and unregisters the Bundle
@@ -38,11 +38,11 @@ public interface BundleManager {
 	 * 
 	 * @param bundleId bundle identifier
 	 * @param bundleHolder bundle holder
-	 * @throws RuntimeException if the bundle is associated to another bundle
-	 *         holder.
+	 * @throws BundleManagerException if the bundle is associated to another
+	 *         bundle holder.
 	 */
 	void addBundleToHolder(long bundleId, BundleHolder bundleHolder)
-			throws RuntimeException;
+			throws BundleManagerException;
 
 	/**
 	 * <p>
@@ -52,11 +52,11 @@ public interface BundleManager {
 	 * 
 	 * @param bundleId bundle identifier
 	 * @param bundleHolder bundle holder
-	 * @throws RuntimeException if the bundle is not currently associated with
-	 *         the specified bundle holder.
+	 * @throws BundleManagerException if the bundle is not currently associated
+	 *         with the specified bundle holder.
 	 */
 	void removeBundleFromHolder(long bundleId, BundleHolder bundleHolder)
-			throws RuntimeException;
+			throws BundleManagerException;
 
 	/**
 	 * Retrieves the ResourceContext associated with the provided bundle.

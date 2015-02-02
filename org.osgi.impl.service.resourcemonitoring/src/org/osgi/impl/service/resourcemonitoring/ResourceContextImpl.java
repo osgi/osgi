@@ -9,10 +9,11 @@ import java.util.Map;
 import java.util.logging.Logger;
 import org.osgi.impl.service.resourcemonitoring.bundlemanagement.BundleHolder;
 import org.osgi.impl.service.resourcemonitoring.bundlemanagement.BundleManager;
+import org.osgi.impl.service.resourcemonitoring.bundlemanagement.BundleManagerException;
 import org.osgi.service.resourcemonitoring.ResourceContext;
 import org.osgi.service.resourcemonitoring.ResourceContextEvent;
+import org.osgi.service.resourcemonitoring.ResourceContextException;
 import org.osgi.service.resourcemonitoring.ResourceMonitor;
-import org.osgi.service.resourcemonitoring.ResourceMonitorException;
 
 /**
  * Implementation of ResourceContext.
@@ -45,7 +46,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 	/**
 	 * ResourceMonitoringServiceImpl.
 	 */
-	private final ResourceMonitoringServiceImpl			resourceMonitoringServiceImpl;
+	private final ResourceMonitoringServiceImpl	resourceMonitoringServiceImpl;
 
 	/**
 	 * bundle manager service
@@ -82,12 +83,16 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 		return name;
 	}
 
-	public void addBundle(long bundleId) {
+	public void addBundle(long bundleId) throws ResourceContextException {
 		// check the Resource Context exist
 		checkResourceContextExistency();
 
 		// delegates bundle adding to the bundle manager
-		bundleManager.addBundleToHolder(bundleId, this);
+		try {
+			bundleManager.addBundleToHolder(bundleId, this);
+		} catch (BundleManagerException e) {
+			throw new ResourceContextException(e.getMessage(), e);
+		}
 
 		// create event and notify
 		ResourceContextEvent event = new ResourceContextEvent(
@@ -96,11 +101,15 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 
 	}
 
-	public void removeBundle(long bundleId) {
+	public void removeBundle(long bundleId) throws ResourceContextException {
 		checkResourceContextExistency();
 
 		// delegates bundle removing to the bundle manager
-		bundleManager.removeBundleFromHolder(bundleId, this);
+		try {
+			bundleManager.removeBundleFromHolder(bundleId, this);
+		} catch (BundleManagerException e) {
+			throw new ResourceContextException(e.getMessage(), e);
+		}
 
 		// create event and notify
 		ResourceContextEvent event = new ResourceContextEvent(
@@ -109,7 +118,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 
 	}
 
-	public void removeBundle(long bundleId, ResourceContext destination) {
+	public void removeBundle(long bundleId, ResourceContext destination) throws ResourceContextException {
 		removeBundle(bundleId);
 
 		// if destination is not null, associate the bundle to the destination
@@ -120,7 +129,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 
 	}
 
-	public synchronized ResourceMonitor getMonitor(String resourceType) {
+	public synchronized ResourceMonitor getMonitor(String resourceType) throws ResourceContextException {
 		checkResourceContextExistency();
 		ResourceMonitor monitor = null;
 		synchronized (monitors) {
@@ -129,8 +138,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 		return monitor;
 	}
 
-	public synchronized void addResourceMonitor(ResourceMonitor resourceMonitor)
-			throws ResourceMonitorException {
+	public synchronized void addResourceMonitor(ResourceMonitor resourceMonitor) throws ResourceContextException {
 
 		// check the Resource Context is still existing
 		checkResourceContextExistency();
@@ -142,7 +150,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 
 		// check the Resource Monitor is associated to this context
 		if (!resourceMonitor.getContext().equals(this)) {
-			throw new ResourceMonitorException(
+			throw new ResourceContextException(
 					"This ResourceMonitor is associated to another ResourceContext");
 		}
 
@@ -151,7 +159,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 			if (monitors.containsKey(resourceMonitor.getResourceType())) {
 				// check there is no other monitor handling the same
 				// resource type for this Resource Context
-				throw new ResourceMonitorException(
+				throw new ResourceContextException(
 						"A ResourceMonitor of the same type exists for this ResourceContext");
 			}
 
@@ -160,8 +168,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 
 	}
 
-	public synchronized void removeResourceMonitor(
-			ResourceMonitor resourceMonitor) {
+	public synchronized void removeResourceMonitor(ResourceMonitor resourceMonitor) throws ResourceContextException {
 		// check the Resource Context is still existing
 		checkResourceContextExistency();
 
@@ -183,7 +190,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 
 	}
 
-	public synchronized void removeContext(ResourceContext destination) {
+	public synchronized void removeContext(ResourceContext destination) throws ResourceContextException {
 		// check the Resource Context is still existing
 		checkResourceContextExistency();
 
@@ -196,7 +203,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 			try {
 				Long bundleId = (Long) it.next();
 				removeBundle(bundleId.longValue(), destination);
-			} catch (RuntimeException e) {
+			} catch (ResourceContextException e) {
 				// this exception can be thrown if the destination context has
 				// been deleted
 				e.printStackTrace();
@@ -222,15 +229,12 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 	/**
 	 * Check Resource Context Existency
 	 * 
-	 * @throws IllegalStateException
+	 * @throws ResourceContextException
 	 */
-	private synchronized void checkResourceContextExistency()
-			throws IllegalStateException {
-
+	private synchronized void checkResourceContextExistency() throws ResourceContextException {
 		if (isRemoved) {
-			throw new IllegalStateException("ResourceContext has been removed");
+			throw new ResourceContextException("ResourceContext has been removed.");
 		}
-
 	}
 
 	public long[] getBundleIds() {
@@ -246,7 +250,7 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 		return bundleIds;
 	}
 
-	public ResourceMonitor[] getMonitors() {
+	public ResourceMonitor[] getMonitors() throws ResourceContextException {
 		checkResourceContextExistency();
 		ResourceMonitor[] array = new ResourceMonitor[0];
 		synchronized (monitors) {

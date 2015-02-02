@@ -13,6 +13,7 @@ import org.osgi.impl.service.resourcemonitoring.lock.ResourceContextLock;
 import org.osgi.impl.service.resourcemonitoring.persistency.ResourceContextInfo;
 import org.osgi.service.resourcemonitoring.ResourceContext;
 import org.osgi.service.resourcemonitoring.ResourceContextEvent;
+import org.osgi.service.resourcemonitoring.ResourceContextException;
 import org.osgi.service.resourcemonitoring.ResourceMonitor;
 import org.osgi.service.resourcemonitoring.ResourceMonitorException;
 import org.osgi.service.resourcemonitoring.ResourceMonitorFactory;
@@ -111,7 +112,7 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 				long bundleId = ((Long) it.next()).longValue();
 				try {
 					newly.addBundle(bundleId);
-				} catch (RuntimeException e) {
+				} catch (ResourceContextException e) {
 					System.out
 							.println("WARNING - bundle "
 									+ bundleId
@@ -183,7 +184,7 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 			ResourceMonitor[] templateMonitors = null;
 			try {
 				templateMonitors = template.getMonitors();
-			} catch (IllegalStateException e) {
+			} catch (ResourceContextException e) {
 				// in the case where template has been deleted.
 			}
 			if (templateMonitors != null) {
@@ -320,7 +321,11 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 			// system resource context
 			systemResourceContext = createContext(SYSTEM_CONTEXT_NAME,
 					(ResourceContext) null);
+			try {
 			systemResourceContext.addBundle(0);
+			} catch (ResourceContextException e) {
+				throw new ResourceMonitoringServiceException(e.getMessage(), e);
+			}
 		}
 
 		if (getContext(FRAMEWORK_CONTEXT_NAME) == null) {
