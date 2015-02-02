@@ -18,6 +18,7 @@ parent::d:tasksummary|parent::d:warning|parent::d:topic">
   xmlns:exsl="http://exslt.org/common"
   xmlns:d="http://docbook.org/ns/docbook"
   xmlns:fo="http://www.w3.org/1999/XSL/Format"
+  xmlns:xlink='http://www.w3.org/1999/xlink'
   exclude-result-prefixes="exsl"
   version="1.0">
 
@@ -1213,6 +1214,167 @@ actual para elements -->
       </xsl:otherwise>
     </xsl:choose>
   </fo:block>
+</xsl:template>
+
+<xsl:template name="check.id.unique">
+  <xsl:param name="linkend"></xsl:param>
+  <xsl:if test="$linkend != ''">
+    <xsl:variable name="targets" select="key('id',$linkend)"/>
+    <xsl:variable name="target" select="$targets[1]"/>
+
+    <xsl:if test="count($targets)=0">
+      <xsl:if test="count(ancestor::d:section[@role = 'package'])=0">
+        <xsl:message>
+          <xsl:text>[</xsl:text>
+          <xsl:apply-templates select="ancestor::d:section[1]" mode="label.markup"/>
+          <xsl:text>] Error: no ID for constraint linkend: </xsl:text>
+          <xsl:value-of select="$linkend"/>
+          <xsl:text>.</xsl:text>
+        </xsl:message>
+      </xsl:if>
+    </xsl:if>
+
+    <xsl:if test="count($targets)>1">
+      <xsl:message>
+        <xsl:text>[</xsl:text>
+        <xsl:apply-templates select="ancestor::d:section[1]" mode="label.markup"/>
+        <xsl:text>] Warning: multiple "IDs" for constraint linkend: </xsl:text>
+        <xsl:value-of select="$linkend"/>
+        <xsl:text>.</xsl:text>
+      </xsl:message>
+    </xsl:if>
+  </xsl:if>
+</xsl:template>
+
+<xsl:template name="simple.xlink">
+  <xsl:param name="node" select="."/>
+  <xsl:param name="content">
+    <xsl:apply-templates/>
+  </xsl:param>
+  <xsl:param name="linkend" select="$node/@linkend"/>
+  <xsl:param name="xhref" select="$node/@xlink:href"/>
+
+  <xsl:choose>
+    <xsl:when test="$xhref
+                    and (not($node/@xlink:type) or 
+                         $node/@xlink:type='simple')">
+
+      <!-- Is it a local idref? -->
+      <xsl:variable name="is.idref">
+        <xsl:choose>
+          <!-- if the href starts with # and does not contain an "(" -->
+          <!-- or if the href starts with #xpointer(id(, it's just an ID -->
+          <xsl:when test="starts-with($xhref,'#')
+                          and (not(contains($xhref,'&#40;'))
+                          or starts-with($xhref,
+                                     '#xpointer&#40;id&#40;'))">1</xsl:when>
+          <xsl:otherwise>0</xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+
+      <!-- Is it an olink ? -->
+      <xsl:variable name="is.olink">
+        <xsl:choose>
+          <!-- If xlink:role="http://docbook.org/xlink/role/olink" -->
+          <!-- and if the href contains # -->
+          <xsl:when test="contains($xhref,'#') and
+               @xlink:role = $xolink.role">1</xsl:when>
+          <xsl:otherwise>0</xsl:otherwise>
+        </xsl:choose>
+      </xsl:variable>
+
+      <xsl:choose>
+        <xsl:when test="$is.olink = 1">
+          <xsl:call-template name="olink">
+            <xsl:with-param name="content" select="$content"/>
+          </xsl:call-template>
+        </xsl:when>
+
+        <xsl:when test="$is.idref = 1">
+
+          <xsl:variable name="idref">
+            <xsl:call-template name="xpointer.idref">
+              <xsl:with-param name="xpointer" select="$xhref"/>
+            </xsl:call-template>
+          </xsl:variable>
+
+          <xsl:variable name="targets" select="key('id',$idref)"/>
+          <xsl:variable name="target" select="$targets[1]"/>
+
+          <xsl:call-template name="check.id.unique">
+            <xsl:with-param name="linkend" select="$idref"/>
+          </xsl:call-template>
+
+          <xsl:choose>
+            <xsl:when test="count($target) = 0">
+              <xsl:message>
+                <xsl:text>[</xsl:text>
+                <xsl:apply-templates select="ancestor::d:section[1]" mode="label.markup"/>
+                <xsl:text>] XLink to nonexistent id: </xsl:text>
+                <xsl:value-of select="$idref"/>
+              </xsl:message>
+              <xsl:copy-of select="$content"/>
+            </xsl:when>
+
+            <xsl:otherwise>
+              <fo:basic-link internal-destination="{$idref}">
+                <xsl:apply-templates select="." mode="simple.xlink.properties"/>
+                <xsl:copy-of select="$content"/>
+              </fo:basic-link>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:when>
+
+        <!-- otherwise it's a URI -->
+        <xsl:otherwise>
+          <fo:basic-link external-destination="url({$xhref})">
+            <xsl:apply-templates select="." mode="simple.xlink.properties"/>
+            <xsl:copy-of select="$content"/>
+          </fo:basic-link>
+          <!-- * Call the template for determining whether the URL for this -->
+          <!-- * hyperlink is displayed, and how to display it (either inline or -->
+          <!-- * as a numbered footnote). -->
+          <xsl:call-template name="hyperlink.url.display">
+            <xsl:with-param name="url" select="$xhref"/>
+          </xsl:call-template>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+
+    <xsl:when test="$linkend">
+      <xsl:variable name="targets" select="key('id',$linkend)"/>
+      <xsl:variable name="target" select="$targets[1]"/>
+
+      <xsl:call-template name="check.id.unique">
+        <xsl:with-param name="linkend" select="$linkend"/>
+      </xsl:call-template>
+
+      <xsl:choose>
+        <xsl:when test="count($target) = 0">
+          <xsl:if test="count(ancestor::d:section[@role = 'package'])=0">
+            <xsl:message>
+              <xsl:text>[</xsl:text>
+              <xsl:apply-templates select="ancestor::d:section[1]" mode="label.markup"/>
+              <xsl:text>] XLink to nonexistent id: </xsl:text>
+              <xsl:value-of select="$linkend"/>
+            </xsl:message>
+          </xsl:if>
+          <xsl:copy-of select="$content"/>
+        </xsl:when>
+
+        <xsl:otherwise>
+          <fo:basic-link internal-destination="{$linkend}">
+            <xsl:apply-templates select="." mode="simple.xlink.properties"/>
+            <xsl:copy-of select="$content"/>
+          </fo:basic-link>
+        </xsl:otherwise>
+      </xsl:choose>
+    </xsl:when>
+
+    <xsl:otherwise>
+      <xsl:copy-of select="$content"/>
+    </xsl:otherwise>
+  </xsl:choose>
 </xsl:template>
 
 <xsl:template match="d:formalpara[@role = 'parameter']">
