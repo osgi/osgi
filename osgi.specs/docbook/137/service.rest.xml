@@ -26,11 +26,12 @@
     topology, and service availability are the norm rather than the exception.
     One of the possible scenarios for OSGi to be successfully applied to cloud
     computing is using it in a Platform as a Service (PaaS) spirit. Users
-    write their bundles and can deploy them to a provided OSGi instance running
-    in the cloud. This, however, requires the platform provider to expose the
-    OSGi management API to the end user and make them available through a
-    network protocol. One of the popular approaches in cloud computing to
-    remote communication is the use of RESTful web services.</para>
+    write their bundles and can deploy them to a provided OSGi instance
+    running in the cloud. This, however, requires the platform provider to
+    expose the OSGi management API to the end user and make them available
+    through a network protocol. One of the popular approaches in cloud
+    computing to remote communication is the use of RESTful web
+    services.</para>
 
     <para>Representational State Transfer (REST) is the architectural style of
     the world wide web. It can be described as a set of constraints that
@@ -70,15 +71,15 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Cacheable</emphasis> - Content marked as cacheable can
-          be temporarily stored and used to immediately answer future
+          <para><emphasis>Cacheable</emphasis> - Content marked as cacheable
+          can be temporarily stored and used to immediately answer future
           equivalent requests and improve efficiency and reduce network
           utilization and access latencies. Due to the end-to-end principle,
           caches can be placed where necessary, e.g., at the client
-          (forward-proxy), at the server side (backward-proxy), or somewhere 
-          in-between for example in a content delivery network. Content
-          marked as non-cacheable must be freshly retrieved with every request
-          even in the presence of caches.</para>
+          (forward-proxy), at the server side (backward-proxy), or somewhere
+          in-between for example in a content delivery network. Content marked
+          as non-cacheable must be freshly retrieved with every request even
+          in the presence of caches.</para>
         </listitem>
 
         <listitem>
@@ -89,9 +90,9 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Uniform Interface</emphasis> - Generality of component
-          interfaces provides a natural decoupling of implementation and
-          interface. REST furthermore encourages the separation of
+          <para><emphasis>Uniform Interface</emphasis> - Generality of
+          component interfaces provides a natural decoupling of implementation
+          and interface. REST furthermore encourages the separation of
           identifiable resources (addressing) and their representation
           (content delivery).</para>
         </listitem>
@@ -103,10 +104,10 @@
 
       <itemizedlist>
         <listitem>
-          <para><emphasis>Resource</emphasis> - A resource is an abstract piece of
-          information that can be addressed by a resource identifier. The
-          mapping of a resource to a concrete set of entities can vary over
-          time.</para>
+          <para><emphasis>Resource</emphasis> - A resource is an abstract
+          piece of information that can be addressed by a resource identifier.
+          The mapping of a resource to a concrete set of entities can vary
+          over time.</para>
         </listitem>
 
         <listitem>
@@ -126,10 +127,10 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>Client</emphasis> - The client is a machine using the
-          management service by issuing REST requests through the network. It
-          can do so either directly or indirectly, i.e., through client-side
-          libraries using the REST calls internally.</para>
+          <para><emphasis>Client</emphasis> - The client is a machine using
+          the management service by issuing REST requests through the network.
+          It can do so either directly or indirectly, i.e., through
+          client-side libraries using the REST calls internally.</para>
         </listitem>
       </itemizedlist>
     </section>
@@ -209,25 +210,29 @@ framework/services/representations
 framework/service/{serviceid}
 </programlisting>
 
-      <para><code>framework/bundle/0/state</code> is an alias for 
+      <para><code>framework/bundle/0/state</code> is an alias for
       <code>framework/state</code></para>
 
-  <para>The <code>bundles</code>, <code>bundles/representations</code>, <code>services</code>, and
-      <code>services/representations</code> resources allow the use of a query parameter
-      which specifies a filter to restrict the result set. The filter
-      expression follows the Core Specifications Framework Filter
+      <para>The <code>bundles</code>, <code>bundles/representations</code>,
+      <code>services</code>, and <code>services/representations</code>
+      resources allow the use of a query parameter which specifies a filter to
+      restrict the result set. The filter expression follows the Core
+      Specifications Framework Filter
       Syntax<citation>CoreFilter</citation>.</para>
 
       <para>Filters on services are matched against the service attributes.
-          The query parameter is of the form:</para>
-      <para><code>framework/services?filter=ldap-filter</code></para>
-      <para>Filters on bundles are matched
-      against the attributes of capabilities in the respective namespaces.
-      Filters on bundles have the form:</para>
+      The query parameter is of the form:</para>
 
-  <para><code>framework/bundles?namespace1=ldap-filter1&amp;namespace2=ldap-filter2&amp;...</code></para>
+      <para><code>framework/services?filter=ldap-filter</code></para>
+
+      <para>Filters on bundles are matched against the attributes of
+      capabilities in the respective namespaces. Filters on bundles have the
+      form:</para>
+
+      <para><code>framework/bundles?namespace1=ldap-filter1&amp;namespace2=ldap-filter2&amp;...</code></para>
+
       <para>A missing namespace declaration implies the IdentityNamespace
-          (<code>osgi.identity</code>).</para>
+      (<code>osgi.identity</code>).</para>
     </section>
 
     <section>
@@ -283,17 +288,15 @@ framework/service/{serviceid}
       <para><code>framework/startlevel</code></para>
 
       <para>The startlevel resource represents the active start level of the
-          framework. It supports the GET and PUT requests.</para>
+      framework. It supports the GET and PUT requests.</para>
 
       <section>
         <title>GET</title>
 
-         
-
         <para>The GET request retrieves a <xref
         linkend="service.rest-framework.startlevel.representation"
         xrefstyle="template:%t"/> from the REST management service. The
-        request can return the following status codes: </para>
+        request can return the following status codes:</para>
 
         <itemizedlist>
           <listitem>
@@ -336,7 +339,8 @@ framework/service/{serviceid}
             negative.</para>
           </listitem>
         </itemizedlist>
-      <remark>Maybe include the representations here, might be a little more 
+
+        <remark>Maybe include the representations here, might be a little more
         convenient than having them separate in a different location?</remark>
       </section>
 
@@ -379,7 +383,7 @@ framework/service/{serviceid}
         <para>The GET request retrieves a <xref
         linkend="service.rest-bundle.list.representation"
         xrefstyle="template:%t"/> from the REST management service. The
-        request can return the following status codes: </para>
+        request can return the following status codes:</para>
 
         <itemizedlist>
           <listitem>
@@ -764,10 +768,10 @@ framework/service/{serviceid}
       <section>
         <title>GET</title>
 
-        <para> The GET request retrieves a <xref
+        <para>The GET request retrieves a <xref
         linkend="service.rest-bundle.startlevel.representation"
         xrefstyle="template:%t"/> from the REST management service. The
-        request can return the following status codes: </para>
+        request can return the following status codes:</para>
 
         <itemizedlist>
           <listitem>
@@ -785,8 +789,6 @@ framework/service/{serviceid}
             support any of the requested representations.</para>
           </listitem>
         </itemizedlist>
-
-         
       </section>
 
       <section>
@@ -841,10 +843,10 @@ framework/service/{serviceid}
       <section>
         <title>GET</title>
 
-        <para> The GET request retrieves a <xref
+        <para>The GET request retrieves a <xref
         linkend="service.rest-service.list.representation"
         xrefstyle="template:%t"/> from the REST management service. The
-        request can return the following status codes: </para>
+        request can return the following status codes:</para>
 
         <itemizedlist>
           <listitem>
@@ -867,15 +869,15 @@ framework/service/{serviceid}
       <section>
         <title>GET of the Representations</title>
 
-        <para> The services resource returns a list of the URIs of all
-        services registered on the framework. For clients interested in all
-        services there is also the possiblity to retrieve the service
-        representation of each available service with a single request through
-        the <emphasis>services/representations</emphasis> resource. The body
-        of the response is a <xref
+        <para>The services resource returns a list of the URIs of all services
+        registered on the framework. For clients interested in all services
+        there is also the possiblity to retrieve the service representation of
+        each available service with a single request through the
+        <emphasis>services/representations</emphasis> resource. The body of
+        the response is a <xref
         linkend="service.rest-service.representations.list.representation"
         xrefstyle="template:%t"/> from the REST management service. The
-        request can return the following status codes: </para>
+        request can return the following status codes:</para>
 
         <itemizedlist>
           <listitem>
@@ -907,10 +909,10 @@ framework/service/{serviceid}
       <section>
         <title>GET</title>
 
-        <para> The GET request retrieves a <xref
+        <para>The GET request retrieves a <xref
         linkend="service.rest-service.representation"
         xrefstyle="template:%t"/> . The request can return the following
-        status codes: </para>
+        status codes:</para>
 
         <itemizedlist>
           <listitem>
@@ -1349,10 +1351,10 @@ framework/service/{serviceid}
       <section>
         <title>GET</title>
 
-        <para> The GET request retrieves a <xref
+        <para>The GET request retrieves a <xref
         linkend="service.rest-extension.list.representation"
         xrefstyle="template:%t"/> . The request can return the following
-        status codes: </para>
+        status codes:</para>
 
         <itemizedlist>
           <listitem>
