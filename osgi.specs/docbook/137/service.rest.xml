@@ -1325,7 +1325,7 @@ framework/service/{serviceid}
     <para>The main purpose of the extension mechanism is therefore to make
     extensions discoverable by the client and give it a mechanism to check if
     a REST interface exists for a speficic service. This is made possible by
-    the <xref linkend="service.rest-extension.list.resource"
+    the <xref linkend="service.rest-extension.resource"
     xrefstyle="template:%t"/> which contains a description and a path for
     every extension currently available. Services who want to contribute their
     extensions to the REST Management Service can do so by registering the
@@ -1352,7 +1352,7 @@ framework/service/{serviceid}
         <title>GET</title>
 
         <para>The GET request retrieves a <xref
-        linkend="service.rest-extension.list.representation"
+        linkend="service.rest-extension.representation"
         xrefstyle="template:%t"/> . The request can return the following
         status codes:</para>
 
@@ -1370,8 +1370,8 @@ framework/service/{serviceid}
       </section>
     </section>
 
-    <section xml:id="service.rest-extension.list.representation">
-      <title>Extension List Representation</title>
+    <section xml:id="service.rest-extension.representation">
+      <title>Extension Representation</title>
 
       <section>
         <title>JSON</title>
