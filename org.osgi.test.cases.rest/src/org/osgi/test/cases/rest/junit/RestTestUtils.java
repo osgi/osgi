@@ -93,7 +93,7 @@ public abstract class RestTestUtils extends OSGiTestCase implements FrameworkLis
       NON_SUPPORTED_MEDIA_TYPE = mediaType;
     }
 
-    random = new Random();
+		random = new Random(System.nanoTime());
   }
 
   @Override

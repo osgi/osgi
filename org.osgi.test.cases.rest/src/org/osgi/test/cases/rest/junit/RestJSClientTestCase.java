@@ -30,6 +30,8 @@ import java.io.OutputStream;
 import java.util.Collections;
 import java.util.Dictionary;
 import org.osgi.framework.Bundle;
+import org.osgi.framework.Constants;
+import org.osgi.framework.ServiceReference;
 import org.osgi.framework.startlevel.BundleStartLevel;
 import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
@@ -419,6 +421,51 @@ public class RestJSClientTestCase extends RestTestUtils {
 				+ "    assert('Invalid start level', 400, res);"
 				+ "    done();"
 				+ "}})");
+	}
+
+	public void testServiceListRestClient() throws Exception {
+		fail("getServices does not support a filter");
+	}
+
+	public void testServiceRepresentationsListRestClient() throws Exception {
+		fail("getServiceRepresentations does not support a filter");
+	}
+
+	public void testServiceRestClient() throws Exception {
+		ServiceReference<?> serviceRef = getRandomService();
+		Long sid = (Long) serviceRef.getProperty(Constants.SERVICE_ID);
+
+		StringBuilder sb = new StringBuilder();
+		sb.append("var client = new OsgiRestClient('" + baseURI + "');"
+				+ "client.getService(" + sid + ", {"
+				+ "  success : function(res) {"
+				+ "    assert('Service ID', " + sid + ", res.id);"
+				+ "    assert('Bundle', '" + getBundleURI(serviceRef.getBundle()) + "', res.bundle);"
+				+ "    assert('Prop service.id', " + serviceRef.getProperty(Constants.SERVICE_ID) + ", res.properties['service.id']);"
+				+ "    assert('Prop service.scope', '" + serviceRef.getProperty(Constants.SERVICE_SCOPE) + "', res.properties['service.scope']);"
+				+ "    assert('Prop objectClass', " + jsArray((String[]) serviceRef.getProperty(Constants.OBJECTCLASS)) + ", res.properties['objectClass']);"
+				+ "    done();"
+				+ "  }});");
+		jsTest(sb.toString());
+	}
+
+	private String jsArray(String[] array) {
+		StringBuilder sb = new StringBuilder();
+		sb.append('[');
+
+		boolean first = true;
+		for (String o : array) {
+			if (first)
+				first = false;
+			else
+				sb.append(',');
+
+			sb.append("'");
+			sb.append(o);
+			sb.append("'");
+		}
+		sb.append(']');
+		return sb.toString();
 	}
 
 	private String jsAssertBundleRepresentation(Bundle bundle, String jsVar) {
