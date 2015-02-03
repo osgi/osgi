@@ -21,7 +21,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.resourcemonitoring.ResourceContext;
 import org.osgi.service.resourcemonitoring.ResourceContextEvent;
-import org.osgi.service.resourcemonitoring.ResourceMonitorException;
+import org.osgi.service.resourcemonitoring.ResourceContextException;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringServiceException;
 import org.osgi.test.cases.resourcemonitoring.utils.FakeResourceMonitor;
@@ -91,10 +91,12 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	 * Test remove resource context without destination. Check a
 	 * ResourceContextEvent is sent.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException, see
+	 *         {@link ResourceContext#removeContext(ResourceContext)}
 	 */
-	public void testTC1DeletionOfAResourceContext() throws ResourceMonitoringServiceException {
+	public void testTC1DeletionOfAResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name = "context1";
 
 		// create the resource context
@@ -114,8 +116,8 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 		// check it is not possible to add bundle
 		try {
 			resourceContext.addBundle(2);
-			failSame("An IllegalStateException is expected.");
-		} catch (IllegalStateException e) {
+			failSame("A ResourceContextException is expected.");
+		} catch (ResourceContextException e) {
 			log("Expected exception: ");
 			e.printStackTrace();
 		}
@@ -124,10 +126,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 		try {
 			resourceContext.addResourceMonitor(new FakeResourceMonitor());
 			fail("A ResourceMonitoringServiceException is expected here.");
-		} catch (ResourceMonitorException e) {
-			log("Expected exception: ");
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
+		} catch (ResourceContextException e) {
 			log("Expected exception: ");
 			e.printStackTrace();
 		}
@@ -140,10 +139,13 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	}
 
 	/**
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException, see
+	 *         {@link ResourceContext#addBundle(long)}
+	 *         {@link ResourceContext#removeContext(ResourceContext)}
 	 */
-	public void testTC2DeletionOfAResourceContextWithADestinationResourceContext() throws ResourceMonitoringServiceException {
+	public void testTC2DeletionOfAResourceContextWithADestinationResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
 		final long bundleId = 1;
@@ -234,7 +236,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
 	 *         name is already used.
 	 */
-	public void testTC3DeletionOfAResourceContextWithAPreviouslyDeletedResourceContextAsDestination() throws ResourceMonitoringServiceException {
+	public void testTC3DeletionOfAResourceContextWithAPreviouslyDeletedResourceContextAsDestination() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name1 = "name1";
 		final String name2 = "name2";
 		final long bundleId = 1;
@@ -252,16 +254,15 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 		resourceContext2.removeContext(null);
 
 		// try to delete resourceContext1 with resourceContext2 as
-		// destination
-		// resourceContext2 has been previously deleted ==> ex
+		// destination resourceContext2 has been previously deleted ==> ex
 		resourceContext1.removeContext(resourceContext2);
 
 		// try to add bundleId to resourceContext1 => expect a
-		// RuntimeException
+		// ResourceContextException
 		try {
 			resourceContext1.addBundle(bundleId);
-			fail("A RuntimeException is expected.");
-		} catch (RuntimeException e) {
+			fail("A ResourceContextException is expected.");
+		} catch (ResourceContextException e) {
 			log("Expected exception: ");
 			e.printStackTrace();
 		}

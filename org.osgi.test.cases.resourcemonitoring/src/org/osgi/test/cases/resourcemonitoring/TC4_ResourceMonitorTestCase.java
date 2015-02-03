@@ -22,6 +22,7 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.resourcemonitoring.ResourceContext;
+import org.osgi.service.resourcemonitoring.ResourceContextException;
 import org.osgi.service.resourcemonitoring.ResourceMonitor;
 import org.osgi.service.resourcemonitoring.ResourceMonitorException;
 import org.osgi.service.resourcemonitoring.ResourceMonitorFactory;
@@ -118,7 +119,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 * 
 	 * @throws ResourceMonitorException
 	 */
-	public void testTC2CreationOfAResourceMonitor() throws ResourceMonitorException {
+	public void testTC2CreationOfAResourceMonitor() throws ResourceMonitorException, ResourceContextException {
 
 		// check existing resource monitors
 		ResourceMonitor[] monitors = resourceContext.getMonitors();
@@ -154,7 +155,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 		// create again a CPU Resource Monitor for this context
 		try {
 			cpuFactory.createResourceMonitor(resourceContext);
-			fail("A ResourceMonitoringServiceException is expected here.");
+			fail("A ResourceMonitorException is expected here.");
 		} catch (ResourceMonitorException e) {
 			log("Expected exception: ");
 			e.printStackTrace();
@@ -173,7 +174,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 * @throws ResourceMonitorException
 	 */
 	public void testTC3DeletionOfAResourceMonitorFromAResourceContext()
-			throws ResourceMonitorException {
+			throws ResourceMonitorException, ResourceContextException {
 		// create ResourceMonitor
 		ResourceMonitor resourceMonitor = cpuFactory
 				.createResourceMonitor(resourceContext);
@@ -195,7 +196,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 * 
 	 * @throws ResourceMonitorException
 	 */
-	public void testTC4EnablingAndDisablingAResourceMonitor() throws ResourceMonitorException {
+	public void testTC4EnablingAndDisablingAResourceMonitor() throws ResourceMonitorException, ResourceContextException {
 		// create ResourceMonitor
 		ResourceMonitor resourceMonitor = cpuFactory
 				.createResourceMonitor(resourceContext);
@@ -218,20 +219,21 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 		// delete the monitor
 		resourceMonitor.delete();
 
-		// try to enable a deleted monitor ==> expect an IllegalStateException
+		// try to enable a deleted monitor ==> expect a
+		// ResourceMonitorException
 		try {
 			resourceMonitor.enable();
-			fail("An IllegalStateException is expected.");
-		} catch (IllegalStateException e) {
+			fail("A ResourceMonitorException is expected.");
+		} catch (ResourceMonitorException e) {
 			log("Expected exception: ");
 			e.printStackTrace();
 		}
 
-		// try to disable it ==> expect an IllegalStateException
+		// try to disable it ==> expect a ResourceMonitorException
 		try {
 			resourceMonitor.disable();
-			fail("An IllegalStateException is expected.");
-		} catch (IllegalStateException e) {
+			fail("A ResourceMonitorException is expected.");
+		} catch (ResourceMonitorException e) {
 			log("Expected exception: ");
 			e.printStackTrace();
 		}
@@ -242,7 +244,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 * 
 	 * @throws ResourceMonitorException
 	 */
-	public void testTC5RetrievingAResourceUsage() throws ResourceMonitorException {
+	public void testTC5RetrievingAResourceUsage() throws ResourceMonitorException, ResourceContextException {
 		// create ResourceMonitor
 		ResourceMonitor resourceMonitor = cpuFactory
 				.createResourceMonitor(resourceContext);
@@ -265,11 +267,11 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 		// delete the monitor
 		resourceMonitor.delete();
 
-		// try to enable a deleted monitor ==> expect an IllegalStateException
+		// try to enable a deleted monitor ==> expect a ResourceMonitorException
 		try {
 			resourceMonitor.getUsage();
-			fail("An IllegalStateException is expected.");
-		} catch (IllegalStateException e) {
+			fail("A ResourceMonitorException is expected.");
+		} catch (ResourceMonitorException e) {
 			log("Expected exception: ");
 			e.printStackTrace();
 		}

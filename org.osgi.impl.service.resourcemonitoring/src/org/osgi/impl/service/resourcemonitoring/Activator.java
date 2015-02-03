@@ -74,9 +74,10 @@ public class Activator implements BundleActivator {
 	/**
 	 * Start the resourceMonitoringServiceImpl.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred with the
-	 *         ResourceMonitoringService.
-	 * @throws BundleManagerException if the provided bundleContext is null
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringServiceImpl#start(BundleContext)}
+	 * @throws BundleManagerException, see
+	 *         {@link BundleManager#start(BundleContext)}
 	 */
 	private void startResourceMonitoringServiceImpl() throws ResourceMonitoringServiceException, BundleManagerException {
 		bundleManager = new BundleManagerImpl();

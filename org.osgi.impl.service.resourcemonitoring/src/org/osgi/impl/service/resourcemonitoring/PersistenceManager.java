@@ -98,8 +98,8 @@ public class PersistenceManager implements BundleListener {
 	 * Restore the persisted ResourceContexts. This method also makes this
 	 * instance as a BundleListener.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred when creating
-	 *         a ResourceContext.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
 	 */
 	public void restoreContexts() throws ResourceMonitoringServiceException {
 		ResourceContextInfo[] rcis = persistence.load(bundleContext);

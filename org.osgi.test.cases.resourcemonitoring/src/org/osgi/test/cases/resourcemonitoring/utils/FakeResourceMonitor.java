@@ -71,15 +71,15 @@ public class FakeResourceMonitor implements ResourceMonitor {
 		return false;
 	}
 
-	public void enable() throws ResourceMonitorException, IllegalStateException {
+	public void enable() throws ResourceMonitorException {
 		// TODO Auto-generated method stub
 	}
 
-	public void disable() throws IllegalStateException {
+	public void disable() throws ResourceMonitorException {
 		// TODO Auto-generated method stub
 	}
 
-	public Comparable getUsage() throws IllegalStateException {
+	public Comparable getUsage() throws ResourceMonitorException {
 		// TODO Auto-generated method stub
 		return null;
 	}

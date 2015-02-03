@@ -125,8 +125,8 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 
 	/**
 	 * @param pContext
-	 * @throws ResourceMonitoringServiceException, if a pb occurred when
-	 *         initializing the ResourceMonitoringService.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link PersistenceManager#restoreContexts()},
 	 */
 	public void start(BundleContext pContext) throws ResourceMonitoringServiceException {
 		context = pContext;
@@ -312,11 +312,11 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 	 * Set default resource context settings. This method configures the
 	 * FRAMEWORK Resource Context as well as the SYSTEM Resource Context.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb. occurred when
-	 *         creating a resource context.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringServiceImpl#createContext(String, ResourceContext)}
+	 *         , or this exception wraps {@link ResourceContext#addBundle(long)}
 	 */
 	private void setDefaultResourceContexts() throws ResourceMonitoringServiceException {
-
 		if (getContext(SYSTEM_CONTEXT_NAME) == null) {
 			// system resource context
 			systemResourceContext = createContext(SYSTEM_CONTEXT_NAME,

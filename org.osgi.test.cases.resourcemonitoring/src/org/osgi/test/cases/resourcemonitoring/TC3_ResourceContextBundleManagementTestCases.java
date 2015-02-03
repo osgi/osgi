@@ -20,6 +20,7 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.resourcemonitoring.ResourceContext;
 import org.osgi.service.resourcemonitoring.ResourceContextEvent;
+import org.osgi.service.resourcemonitoring.ResourceContextException;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringServiceException;
 import org.osgi.test.cases.resourcemonitoring.utils.ResourceContextListenerTestImpl;
@@ -90,7 +91,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
 	 *         name is already used.
 	 */
-	public void testTC41AddingABundleToAResourceContext() throws ResourceMonitoringServiceException {
+	public void testTC41AddingABundleToAResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name = "context1";
 		final long bundleId = 1l;
 
@@ -117,12 +118,12 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	/**
 	 * Test adding a bundle previously associated with a resource context.
 	 * 
-	 * Expect a RuntimeException.
+	 * Expect a ResourceContextException.
 	 * 
 	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
 	 *         name is already used.
 	 */
-	public void testTC42AddingABundlePreviouslyAssociatedWithAResourceContext() throws ResourceMonitoringServiceException {
+	public void testTC42AddingABundlePreviouslyAssociatedWithAResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name = "context1";
 		final String name2 = "context2";
 		final long bundleId = 1;
@@ -141,7 +142,10 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 
 		try {
 			resourceContext2.addBundle(bundleId);
-			fail("A RuntimeException is expected.");
+			fail("A ResourceContextException is expected.");
+		} catch (ResourceContextException e) {
+			log("Expected exception: ");
+			e.printStackTrace();
 		} catch (RuntimeException e) {
 			log("Expected exception: ");
 			e.printStackTrace();
@@ -163,7 +167,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
 	 *         name is already used.
 	 */
-	public void testTC43RemoveBundleFromAResourceContext() throws ResourceMonitoringServiceException {
+	public void testTC43RemoveBundleFromAResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name = "context1";
 		final long bundleId = 1;
 
@@ -188,11 +192,11 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		assertEquals("ResourceContext mismatch.", resourceContext, lastEvent.getContext());
 		assertEquals("BundleId mismatch.", bundleId, lastEvent.getBundleId());
 
-		// try to remove it again ==> expect a RuntimeException
+		// try to remove it again ==> expect a ResourceContextException
 		try {
 			resourceContext.removeBundle(bundleId);
-			fail("A RuntimeException is expected.");
-		} catch (RuntimeException e) {
+			fail("A ResourceContextException is expected.");
+		} catch (ResourceContextException e) {
 			log("Expected exception: ");
 			e.printStackTrace();
 		}
@@ -206,7 +210,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
 	 *         name is already used.
 	 */
-	public void testTC44RemoveABundleWithADestinationResourceContext() throws ResourceMonitoringServiceException {
+	public void testTC44RemoveABundleWithADestinationResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
 		final long bundleId = 1;
@@ -257,7 +261,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
 	 *         name is already used.
 	 */
-	public void testTC45RemoveABundleWithANullDestinationResourceContext() throws ResourceMonitoringServiceException {
+	public void testTC45RemoveABundleWithANullDestinationResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name = "context1";
 		final long bundleId = 1;
 
@@ -286,14 +290,14 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 
 	/**
 	 * Test remove bundle with a deleted resource context as destination. Expect
-	 * a RuntimeException when invoking
+	 * a ResourceContextException when invoking
 	 * {@link ResourceContext#removeBundle(long, ResourceContext)}. The bundle
 	 * is correctly removed.
 	 * 
 	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
 	 *         name is already used.
 	 */
-	public void testTC46RemovingABundleWithADestinationContextWhichHasBeenPreviouslyDeleted() throws ResourceMonitoringServiceException {
+	public void testTC46RemovingABundleWithADestinationContextWhichHasBeenPreviouslyDeleted() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
 		final long bundleId = 1;
@@ -312,11 +316,11 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 
 		// try to remove bundleId from resourceContext1 and associate it
 		// with
-		// deleted ResourceContext2 ==> expect a RuntimeException
+		// deleted ResourceContext2 ==> expect a ResourceContextException
 		try {
 			resourceContext1.removeBundle(bundleId, resourceContext2);
-			fail("A RuntimeException is expected.");
-		} catch (RuntimeException e) {
+			fail("A ResourceContextException is expected.");
+		} catch (ResourceContextException e) {
 			log("Expected exception: ");
 			e.printStackTrace();
 		}

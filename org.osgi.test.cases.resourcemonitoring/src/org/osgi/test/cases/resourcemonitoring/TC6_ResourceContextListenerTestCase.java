@@ -25,6 +25,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.resourcemonitoring.ResourceContext;
 import org.osgi.service.resourcemonitoring.ResourceContextEvent;
+import org.osgi.service.resourcemonitoring.ResourceContextException;
 import org.osgi.service.resourcemonitoring.ResourceContextListener;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringServiceException;
@@ -113,7 +114,7 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
 	 *         name is already used.
 	 */
-	public void testTC1ResourceContextListenerFiltering_RESOURCE_CONTEXT_CREATED_event() throws ResourceMonitoringServiceException {
+	public void testTC1ResourceContextListenerFiltering_RESOURCE_CONTEXT_CREATED_event() throws ResourceMonitoringServiceException, ResourceContextException {
 
 		// registers the ResourceContextListener with a RESOURCE_CONTEXT_CREATED
 		// type filter
@@ -141,7 +142,7 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
 	 *         name is already used.
 	 */
-	public void testTC2ResourceContextListenerFiltering_RESOURCE_CONTEXT_REMOVED_event() throws ResourceMonitoringServiceException {
+	public void testTC2ResourceContextListenerFiltering_RESOURCE_CONTEXT_REMOVED_event() throws ResourceMonitoringServiceException, ResourceContextException {
 		// registers the ResourceContextListener with a RESOURCE_CONTEXT_REMOVED
 		// type filter
 		registerListener(
@@ -167,7 +168,7 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
 	 *         name is already used.
 	 */
-	public void testTC3ResourceContextListenerFiltering_BUNDLE_ADDED_event() throws ResourceMonitoringServiceException {
+	public void testTC3ResourceContextListenerFiltering_BUNDLE_ADDED_event() throws ResourceMonitoringServiceException, ResourceContextException {
 		// registers the ResourceContextListener with a BUNDLE_ADDED
 		// type filter
 		registerListener(new int[] {ResourceContextEvent.BUNDLE_ADDED}, null);
@@ -193,7 +194,7 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
 	 *         name is already used.
 	 */
-	public void testTC4ResourceContextListenerFiltering_BUNDLE_REMOVED_event() throws ResourceMonitoringServiceException {
+	public void testTC4ResourceContextListenerFiltering_BUNDLE_REMOVED_event() throws ResourceMonitoringServiceException, ResourceContextException {
 		// registers the ResourceContextListener with a BUNDLE_REMOVED
 		// type filter
 		registerListener(new int[] {ResourceContextEvent.BUNDLE_REMOVED},
@@ -221,7 +222,7 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
 	 *         name is already used.
 	 */
-	public void testTC5ResourceContextListenerFilteringEventsOfASpecificResourceContext() throws ResourceMonitoringServiceException {
+	public void testTC5ResourceContextListenerFilteringEventsOfASpecificResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		// register this instance as a ResourceContextListener filtering events
 		// of context1.
 		registerListener(null, new String[] {RESOURCE_CONTEXT_NAME});
@@ -268,7 +269,7 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
 	 *         name is already used.
 	 */
-	public void testTC6RegisteringAResourceContextListenerFilteringTwoTypesOfEventsOnAParticularResourceContext() throws ResourceMonitoringServiceException {
+	public void testTC6RegisteringAResourceContextListenerFilteringTwoTypesOfEventsOnAParticularResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		// register this instance as a ResourceContextListener filtering on
 		// RESOURCE_CONTEXT_CREATED event type and on RESOURCE_CONTEXT_REMOVED
 		// event type all related to context1
@@ -305,7 +306,7 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
 	 *         name is already used.
 	 */
-	public void testTC7UnregisteringAResourceContextListener() throws ResourceMonitoringServiceException {
+	public void testTC7UnregisteringAResourceContextListener() throws ResourceMonitoringServiceException, ResourceContextException {
 		// register this instance as a ResourceContextListener without filters
 		registerListener(null, null);
 
@@ -372,7 +373,7 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
 	 *         name is already used.
 	 */
-	private void executeScenario1() throws ResourceMonitoringServiceException {
+	private void executeScenario1() throws ResourceMonitoringServiceException, ResourceContextException {
 		// create context1
 		ResourceContext resourceContext = resourceMonitoringService.createContext(
 				RESOURCE_CONTEXT_NAME, null);
@@ -401,7 +402,7 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
 	 *         name is already used.
 	 */
-	private void executeScenario2() throws ResourceMonitoringServiceException {
+	private void executeScenario2() throws ResourceMonitoringServiceException, ResourceContextException {
 		// create context2
 		ResourceContext resourceContext = resourceMonitoringService.createContext(
 				RESOURCE_CONTEXT_NAME2, null);

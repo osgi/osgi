@@ -25,8 +25,8 @@ import org.osgi.framework.InvalidSyntaxException;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.resourcemonitoring.ResourceContext;
 import org.osgi.service.resourcemonitoring.ResourceContextEvent;
+import org.osgi.service.resourcemonitoring.ResourceContextException;
 import org.osgi.service.resourcemonitoring.ResourceMonitor;
-import org.osgi.service.resourcemonitoring.ResourceMonitorException;
 import org.osgi.service.resourcemonitoring.ResourceMonitorFactory;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringServiceException;
@@ -98,10 +98,12 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	 * This test case validates the Resource Context creation and the retrieving
 	 * of a ResourceContext.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException, see
+	 *         {@link ResourceContext#getMonitors()}
 	 */
-	public void testTC1CreationOfAResourceContext() throws ResourceMonitoringServiceException {
+	public void testTC1CreationOfAResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name = "context1";
 
 		// Lists existing contexts by calling ResourceManager.listContext().
@@ -163,8 +165,8 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	/**
 	 * Test create a new ResourceContext with an existing resource context name.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
 	 */
 	public void testTC2CreationOfAResourceContextWithAnExistingResourceContextName() throws ResourceMonitoringServiceException {
 		final String name = "context1";
@@ -198,13 +200,14 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	/**
 	 * Test create a ResourceContext based on a template.
 	 * 
-	 * @throws ResourceMonitorException if resourceMonitor is associated to
-	 *         another context or resourceMonitor has been deleted.
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException, see
+	 *         {@link ResourceContext#addResourceMonitor(ResourceMonitor)},
+	 *         {@link ResourceContext#getMonitors()}
 	 */
 	public void testTC3CreationOfAResourceContextBasedOnATemplateResourceContext()
-			throws ResourceMonitorException, ResourceMonitoringServiceException {
+			throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
 		// create a Context context1
@@ -228,13 +231,15 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	}
 
 	/**
-	 * @throws ResourceMonitorException if resourceMonitor is associated to
-	 *         another context or resourceMonitor has been deleted.
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException, see
+	 *         {@link ResourceContext#addResourceMonitor(ResourceMonitor)},
+	 *         {@link ResourceContext#removeContext(ResourceContext)},
+	 *         {@link ResourceContext#getMonitors()}
 	 */
 	public void testTC4CreationOfAResourceContextBasedOnATemplateResourceContextPreviouslyDeleted()
-			throws ResourceMonitorException, ResourceMonitoringServiceException {
+			throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
 		// create a Context context1
@@ -263,10 +268,12 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	/**
 	 * Test retrieve the context based on a bundle id.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException, see
+	 *         {@link ResourceContext#addBundle(long)}
 	 */
-	public void testTC5RetrievingAResourceContextBasedOnABundleIdentifier() throws ResourceMonitoringServiceException {
+	public void testTC5RetrievingAResourceContextBasedOnABundleIdentifier() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name = "context1";
 		final long bundleId = 1;
 		// get ResourceContext associated with bundleId and check bundleId
@@ -294,8 +301,8 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	/**
 	 * Test supported types
 	 * 
-	 * @throws InvalidSyntaxException If the specified filter contains an
-	 *         invalid filter expression that cannot be parsed.
+	 * @throws InvalidSyntaxException, see
+	 *         {@link BundleContext#getServiceReferences(Class, String)}
 	 */
 	public void testTC6SupportedTypesOfResources() throws InvalidSyntaxException {
 		String[] supportedTypes = resourceMonitoringService.getSupportedTypes();
