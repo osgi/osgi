@@ -198,7 +198,7 @@
           <row>
             <entry><code>osgi.http.whiteboard.context.name</code></entry>
 
-            <entry><code>String</code></entry>
+            <entry><code>String</code><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>Name of the Servlet Context Helper. This name is
             referred to by Whiteboard services via the
@@ -221,7 +221,7 @@
           <row>
             <entry><code>osgi.http.whiteboard.context.path</code></entry>
 
-            <entry><code>String</code></entry>
+            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Additional prefix to the context path for servlets.
             This property is mandatory. Valid characters are specified in IETF
@@ -233,7 +233,7 @@
           <row>
             <entry><code>context.init.*</code></entry>
 
-            <entry><code>String</code></entry>
+            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Properties starting with this prefix are provided as
                     init parameters through the <code>ServletContext.getInitParameter()</code>
@@ -913,7 +913,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><code>osgi.http.whiteboard.context.select</code></entry>
 
-            <entry><code>String</code></entry>
+            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>An LDAP-style filter to select the associated <xref
             linkend="org.osgi.service.http.context.ServletContextHelper"
@@ -933,7 +933,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><code>osgi.http.whiteboard.target</code></entry>
 
-            <entry><code>String</code></entry>
+            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>The value of this service property is an LDAP-style
             filter expression to select the Http Whiteboard implementation(s)
@@ -1070,7 +1070,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;asyncSupported</code></para></entry>
 
-            <entry><code>Boolean</code></entry>
+            <entry><code>Boolean</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Declares whether the servlet supports the
             asynchronous operation mode. Defaults to false. See <xref
@@ -1081,7 +1081,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;errorPage</code></para></entry>
 
-            <entry><code>String+</code></entry>
+            <entry><code>String+</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Register the servlet as an error page for the error
             code and/or exception specified; the value may be a fully
@@ -1097,7 +1097,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;name</code></para></entry>
 
-            <entry><code>String</code></entry>
+            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>The name of the servlet. This name is used as the
             value of the
@@ -1111,7 +1111,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;pattern</code></para></entry>
 
-            <entry><code>String+</code></entry>
+            <entry><code>String+</code><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>Registration pattern(s) for the servlet. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN"
@@ -1121,7 +1121,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><code>servlet.init.*</code></entry>
 
-            <entry><code>String</code></entry>
+            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Properties starting with this prefix are provided as
             init parameters to the <code>javax.servlet.Servlet.init()</code>
@@ -1366,7 +1366,7 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><para><code>osgi.http.whiteboard.filter.«</code></para><para><code>&#160;asyncSupported</code></para></entry>
 
-            <entry><code>Boolean</code></entry>
+            <entry><code>Boolean</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Declares whether the servlet filter supports
             asynchronous operation mode. Defaults to false. See <xref
@@ -1377,7 +1377,7 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><para><code>osgi.http.whiteboard.filter.«</code></para><para><code>&#160;dispatcher</code></para></entry>
 
-            <entry><code>String+</code></entry>
+            <entry><code>String+</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Select the dispatcher configuration when the servlet
             filter should be called. Allowed string values are
@@ -1391,7 +1391,7 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><code>osgi.http.whiteboard.filter.name</code></entry>
 
-            <entry><code>String</code></entry>
+            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>The name of a servlet filter. This name is used as
             the value of the <code>FilterConfig.getFilterName()</code> method
@@ -1404,7 +1404,7 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><code>osgi.http.whiteboard.filter.pattern</code></entry>
 
-            <entry><code>String+</code></entry>
+            <entry><code>String+</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Apply this servlet filter to the specified url path
             patterns. The format of the patterns is specified in the servlet
@@ -1416,7 +1416,7 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><code>osgi.http.whiteboard.filter.regex</code></entry>
 
-            <entry><code>String+</code></entry>
+            <entry><code>String+</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Apply this servlet filter to the specified url paths.
             The paths are specified as regular expressions following the
@@ -1429,7 +1429,7 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><code>osgi.http.whiteboard.filter.servlet</code></entry>
 
-            <entry><code>String+</code></entry>
+            <entry><code>String+</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Apply this servlet filter to the referenced
             servlet(s) by name. See <xref
@@ -1440,7 +1440,7 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><code>filter.init.*</code></entry>
 
-            <entry><code>String+</code></entry>
+            <entry><code>String+</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Properties starting with this prefix are passed as
             init parameters to the <code>Filter.init()</code>method. The
@@ -1558,7 +1558,8 @@ public class MyFilter implements Filter {
           <row>
             <entry><para><code>osgi.http.whiteboard.resource.«</code></para><para><code>&#160;prefix</code></para></entry>
 
-            <entry><code>String</code></entry>
+            <entry><code>String</code><para><emphasis>required</emphasis></para>
+                <remark>not pattern???</remark></entry>
 
             <entry><para>The prefix used to map a requested resource to the
             bundle's entries. If the request's path info is not null, it is
@@ -1575,7 +1576,7 @@ public class MyFilter implements Filter {
           <row>
             <entry><para><code>osgi.http.whiteboard.resource.«</code></para><para><code>&#160;pattern</code></para></entry>
 
-            <entry><code>String+</code></entry>
+            <entry><code>String+</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>The servlet pattern(s) to be used to serve resources.
             As defined by the <xref linkend="i21217577"/> in section 12.2
@@ -1691,7 +1692,7 @@ public class SomeResourceService {}</programlisting>
           <row>
             <entry><para><code>osgi.http.whiteboard.listener</code></para></entry>
 
-            <entry><code>Boolean</code></entry>
+            <entry><code>Boolean</code><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>Set this property to <code>Boolean.TRUE</code> to opt 
             Listener services in to being handled by the Http Whiteboard
