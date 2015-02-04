@@ -1022,7 +1022,15 @@ public class CDNServletContextHelper extends ServletContextHelper {
     associated with a single Http Whiteboard implementation share the same
     name-space. If an attempt is made to register a Whiteboard service under
     the same pattern as a currently registered service, service ranking rules
-    are used to select the service providing the pattern.</para>
+    are used to select the service providing the pattern. This ensures a predictable
+    end result regardless of the order in which services are registerd.</para>
+   
+    <para>With implementations that 
+    both implement this specification as well as the <xref linkend="service.http"/>  
+    situations can arise where a servlet is registered for the same
+    pattern with the Http Service as well as with the Http Whiteboard. In such cases 
+    the service registered with the Http Service wins and the Whiteboard service fails. 
+    The failing servlet is reflected in the failure DTOs.</para>
 
     <para>For example, if the Http Whiteboard implementation is listening on
     port 80 on the machine <code>www.acme.com</code> and the
