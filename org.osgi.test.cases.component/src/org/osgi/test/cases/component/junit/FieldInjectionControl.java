@@ -31,8 +31,8 @@ import java.util.Map;
 
 import org.osgi.framework.Bundle;
 import org.osgi.framework.Constants;
-import org.osgi.framework.ServiceObjects;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentServiceObjects;
 import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.TestObject;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -207,7 +207,8 @@ public class FieldInjectionControl extends DefaultTestBundleControl {
 			assertEquals(service, tuple.getValue());
 
 			// service objects
-			final ServiceObjects objects = (ServiceObjects) bs.getProperties()
+			final ComponentServiceObjects objects = (ComponentServiceObjects) bs
+					.getProperties()
 					.get("objects");
 			assertNotNull(objects);
 			assertEquals(ref.getProperty(Constants.SERVICE_ID), objects

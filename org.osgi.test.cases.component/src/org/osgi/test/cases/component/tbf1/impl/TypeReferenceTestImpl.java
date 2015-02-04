@@ -20,8 +20,8 @@ import java.util.Dictionary;
 import java.util.Hashtable;
 import java.util.Map;
 
-import org.osgi.framework.ServiceObjects;
 import org.osgi.framework.ServiceReference;
+import org.osgi.service.component.ComponentServiceObjects;
 import org.osgi.test.cases.component.service.BaseService;
 import org.osgi.test.cases.component.service.TestObject;
 
@@ -31,7 +31,7 @@ public class TypeReferenceTestImpl implements BaseService {
 
 	private ServiceReference ref;
 
-	private ServiceObjects objects;
+	private ComponentServiceObjects objects;
 
 	private Map properties;
 
