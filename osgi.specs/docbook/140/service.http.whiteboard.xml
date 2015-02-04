@@ -1404,7 +1404,7 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><code>osgi.http.whiteboard.filter.pattern</code></entry>
 
-            <entry><code>String+</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><code>String+</code><para><emphasis>optional&#x2020;</emphasis></para></entry>
 
             <entry><para>Apply this servlet filter to the specified url path
             patterns. The format of the patterns is specified in the servlet
@@ -1416,7 +1416,7 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><code>osgi.http.whiteboard.filter.regex</code></entry>
 
-            <entry><code>String+</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><code>String+</code><para><emphasis>optional&#x2020;</emphasis></para></entry>
 
             <entry><para>Apply this servlet filter to the specified url paths.
             The paths are specified as regular expressions following the
@@ -1429,7 +1429,7 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><code>osgi.http.whiteboard.filter.servlet</code></entry>
 
-            <entry><code>String+</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><code>String+</code><para><emphasis>optional&#x2020;</emphasis></para></entry>
 
             <entry><para>Apply this servlet filter to the referenced
             servlet(s) by name. See <xref
@@ -1452,6 +1452,13 @@ public class AsyncServlet extends HttpServlet {
         </tbody>
       </tgroup>
     </table>
+
+    <para><emphasis>&#x2020;</emphasis> note that at least one of the following properties 
+        <emphasis>must</emphasis> be specified on <code>Filter</code> Whiteboard services:
+        <programlisting>    osgi.http.whiteboard.filter.pattern
+    osgi.http.whiteboard.filter.regex
+    osgi.http.whiteboard.filter.servlet</programlisting>
+    </para>
 
     <para>Similar to servlets, <code>Filter</code> objects are initialized by
     a Http Whiteboard implementation when they are registered and bound to
