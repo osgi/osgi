@@ -117,7 +117,10 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	/**
 	 * Create Resource Monitor.
 	 * 
-	 * @throws ResourceMonitorException
+	 * @throws ResourceMonitorException, see
+	 *         {@link ResourceMonitorFactory#createResourceMonitor(ResourceContext)}
+	 * @throws ResourceContextException , see
+	 *         {@link ResourceContext#getMonitors()}
 	 */
 	public void testTC2CreationOfAResourceMonitor() throws ResourceMonitorException, ResourceContextException {
 
@@ -171,7 +174,10 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 * Test deleting a ResourceMonitor. Check the monitor is removed from the
 	 * context.
 	 * 
-	 * @throws ResourceMonitorException
+	 * @throws ResourceMonitorException, see
+	 *         {@link ResourceMonitorFactory#createResourceMonitor(ResourceContext)}
+	 * @throws ResourceContextException , see {@link ResourceMonitor#delete()}
+	 *         {@link ResourceContext#getMonitors()}
 	 */
 	public void testTC3DeletionOfAResourceMonitorFromAResourceContext()
 			throws ResourceMonitorException, ResourceContextException {
@@ -194,9 +200,13 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	/**
 	 * Test enabling/disabling a Resource Monitor
 	 * 
-	 * @throws ResourceMonitorException
+	 * @throws ResourceMonitorException, see
+	 *         {@link ResourceMonitorFactory#createResourceMonitor(ResourceContext)}
+	 *         {@link ResourceMonitor#enable()}
+	 *         {@link ResourceMonitor#disable()}
+	 *         {@link ResourceMonitor#delete()}
 	 */
-	public void testTC4EnablingAndDisablingAResourceMonitor() throws ResourceMonitorException, ResourceContextException {
+	public void testTC4EnablingAndDisablingAResourceMonitor() throws ResourceMonitorException {
 		// create ResourceMonitor
 		ResourceMonitor resourceMonitor = cpuFactory
 				.createResourceMonitor(resourceContext);
@@ -242,9 +252,14 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	/**
 	 * Test retrieving resource usage
 	 * 
-	 * @throws ResourceMonitorException
+	 * @throws ResourceMonitorException, see
+	 *         {@link ResourceMonitorFactory#createResourceMonitor(ResourceContext)}
+	 *         {@link ResourceMonitor#getUsage()}
+	 *         {@link ResourceMonitor#enable()}
+	 *         {@link ResourceMonitor#disable()}
+	 *         {@link ResourceMonitor#delete()}
 	 */
-	public void testTC5RetrievingAResourceUsage() throws ResourceMonitorException, ResourceContextException {
+	public void testTC5RetrievingAResourceUsage() throws ResourceMonitorException {
 		// create ResourceMonitor
 		ResourceMonitor resourceMonitor = cpuFactory
 				.createResourceMonitor(resourceContext);

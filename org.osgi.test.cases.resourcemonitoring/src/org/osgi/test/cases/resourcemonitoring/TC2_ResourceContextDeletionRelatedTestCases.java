@@ -233,8 +233,11 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	 * Test remove a context and specify a deleted context as destination. The
 	 * to be deleted context is deleted.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException, see
+	 *         {@link ResourceContext#addBundle(long)},
+	 *         {@link ResourceContext#removeContext(ResourceContext)}
 	 */
 	public void testTC3DeletionOfAResourceContextWithAPreviouslyDeletedResourceContextAsDestination() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name1 = "name1";

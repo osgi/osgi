@@ -111,8 +111,10 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	/**
 	 * Test register a ResourceContextCreated listener.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link TC6_ResourceContextListenerTestCase}
+	 * @throws ResourceContextException, see
+	 *         {@link TC6_ResourceContextListenerTestCase}
 	 */
 	public void testTC1ResourceContextListenerFiltering_RESOURCE_CONTEXT_CREATED_event() throws ResourceMonitoringServiceException, ResourceContextException {
 
@@ -139,8 +141,10 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * Test register a ResourceContextListener filtering
 	 * RESOURCE_CONTEXT_REMOVED.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link TC6_ResourceContextListenerTestCase}
+	 * @throws ResourceContextException, see
+	 *         {@link TC6_ResourceContextListenerTestCase}
 	 */
 	public void testTC2ResourceContextListenerFiltering_RESOURCE_CONTEXT_REMOVED_event() throws ResourceMonitoringServiceException, ResourceContextException {
 		// registers the ResourceContextListener with a RESOURCE_CONTEXT_REMOVED
@@ -165,8 +169,10 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	/**
 	 * Test register a ResourceContextListener filtering BUNDLE_ADDED events.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link TC6_ResourceContextListenerTestCase}
+	 * @throws ResourceContextException, see
+	 *         {@link TC6_ResourceContextListenerTestCase}
 	 */
 	public void testTC3ResourceContextListenerFiltering_BUNDLE_ADDED_event() throws ResourceMonitoringServiceException, ResourceContextException {
 		// registers the ResourceContextListener with a BUNDLE_ADDED
@@ -191,8 +197,10 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	/**
 	 * Test register a ResourceContextListener filtering BUNDLE_REMOVED events.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link TC6_ResourceContextListenerTestCase}
+	 * @throws ResourceContextException, see
+	 *         {@link TC6_ResourceContextListenerTestCase}
 	 */
 	public void testTC4ResourceContextListenerFiltering_BUNDLE_REMOVED_event() throws ResourceMonitoringServiceException, ResourceContextException {
 		// registers the ResourceContextListener with a BUNDLE_REMOVED
@@ -219,8 +227,10 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * Test register a ResourceContextListener filtering events emmitted by a
 	 * specific ResourceContext.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link TC6_ResourceContextListenerTestCase}
+	 * @throws ResourceContextException, see
+	 *         {@link TC6_ResourceContextListenerTestCase}
 	 */
 	public void testTC5ResourceContextListenerFilteringEventsOfASpecificResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		// register this instance as a ResourceContextListener filtering events
@@ -266,8 +276,10 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	}
 
 	/**
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link TC6_ResourceContextListenerTestCase}
+	 * @throws ResourceContextException, see
+	 *         {@link TC6_ResourceContextListenerTestCase}
 	 */
 	public void testTC6RegisteringAResourceContextListenerFilteringTwoTypesOfEventsOnAParticularResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		// register this instance as a ResourceContextListener filtering on
@@ -303,8 +315,10 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	}
 
 	/**
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link TC6_ResourceContextListenerTestCase}
+	 * @throws ResourceContextException, see
+	 *         {@link TC6_ResourceContextListenerTestCase}
 	 */
 	public void testTC7UnregisteringAResourceContextListener() throws ResourceMonitoringServiceException, ResourceContextException {
 		// register this instance as a ResourceContextListener without filters
@@ -370,8 +384,12 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * This method is called by all tests cases to generate
 	 * ResourceContextEvent.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException, see
+	 *         {@link ResourceContext#addBundle(long)}
+	 *         {@link ResourceContext#removeBundle(long)}
+	 *         {@link ResourceContext#removeContext(ResourceContext)}
 	 */
 	private void executeScenario1() throws ResourceMonitoringServiceException, ResourceContextException {
 		// create context1
@@ -399,8 +417,12 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * This method is called by all tests cases to generate
 	 * ResourceContextEvent.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException, see
+	 *         {@link ResourceContext#addBundle(long)}
+	 *         {@link ResourceContext#removeBundle(long)}
+	 *         {@link ResourceContext#removeContext(ResourceContext)}
 	 */
 	private void executeScenario2() throws ResourceMonitoringServiceException, ResourceContextException {
 		// create context2

@@ -88,8 +88,10 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	/**
 	 * Test adding a bundle to a resource context.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException , see
+	 *         {@link ResourceContext#addBundle(long)}
 	 */
 	public void testTC41AddingABundleToAResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name = "context1";
@@ -120,8 +122,10 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 * 
 	 * Expect a ResourceContextException.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException , see
+	 *         {@link ResourceContext#addBundle(long)}
 	 */
 	public void testTC42AddingABundlePreviouslyAssociatedWithAResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name = "context1";
@@ -146,9 +150,6 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		} catch (ResourceContextException e) {
 			log("Expected exception: ");
 			e.printStackTrace();
-		} catch (RuntimeException e) {
-			log("Expected exception: ");
-			e.printStackTrace();
 		}
 
 		// check that bundle1 is not associated with context2
@@ -164,8 +165,11 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 * Test remove a bundle from a ResourceContext. Check a
 	 * {@link ResourceContextEvent} is received.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException , see
+	 *         {@link ResourceContext#addBundle(long)}
+	 *         {@link ResourceContext#removeBundle(long)}
 	 */
 	public void testTC43RemoveBundleFromAResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name = "context1";
@@ -207,8 +211,11 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 * ResourceContextEvent from removing the bundle and one more for adding it
 	 * into another ResourceContext.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException , see
+	 *         {@link ResourceContext#addBundle(long)}
+	 *         {@link ResourceContext#removeBundle(long)}
 	 */
 	public void testTC44RemoveABundleWithADestinationResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name1 = "context1";
@@ -258,8 +265,11 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	/**
 	 * Test remove bundle with null destination. Expect a REMOVED_BUNDLE event.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException , see
+	 *         {@link ResourceContext#addBundle(long)}
+	 *         {@link ResourceContext#removeBundle(long)}
 	 */
 	public void testTC45RemoveABundleWithANullDestinationResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name = "context1";
@@ -294,8 +304,11 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 * {@link ResourceContext#removeBundle(long, ResourceContext)}. The bundle
 	 * is correctly removed.
 	 * 
-	 * @throws ResourceMonitoringServiceException if a pb occurred, e.g. if the
-	 *         name is already used.
+	 * @throws ResourceMonitoringServiceException, see
+	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
+	 * @throws ResourceContextException , see
+	 *         {@link ResourceContext#addBundle(long)}
+	 *         {@link ResourceContext#removeBundle(long)}
 	 */
 	public void testTC46RemovingABundleWithADestinationContextWhichHasBeenPreviouslyDeleted() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name1 = "context1";
