@@ -1923,8 +1923,9 @@ public class MyServletRequestListener implements ServletRequestListener {
       capability with name <code>osgi.http</code>. This capability can be used
       by provisioning tools and during resolution to ensure that a Http
       Whiteboard implementation is present to process the Whiteboard services
-      defined in this specification. The capability must be provided as
-      follows:</para>
+      defined in this specification. The capability must also declare a uses constraint
+      for the Servlet and OSGi Http Whiteboard packages and provide the version of this
+      specification:</para>
 
       <programlisting>Provide-Capability: osgi.implementation;
        osgi.implementation="osgi.http";

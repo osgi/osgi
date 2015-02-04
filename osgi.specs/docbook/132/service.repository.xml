@@ -1233,7 +1233,8 @@ scalar  ::= 'String' | 'Version' | 'Long' | 'Double'</programlisting>
       linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
       capability with name <code>osgi.repository</code>. This capability can be used
       by provisioning tools and during resolution to ensure that a Repository Service
-      implementation is present. The capability must also provide the version of this 
+      implementation is present. The capability must also declare a uses constraint for
+      the <code>org.osgi.service.repository</code> package and provide the version of this 
       specification:</para>
 
       <programlisting>Provide-Capability: osgi.implementation;
