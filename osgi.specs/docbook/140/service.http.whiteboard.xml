@@ -1524,7 +1524,7 @@ public class MyFilter implements Filter {
 
     <para>Resources can be served by registering a service of any type with a
     service registration property that marks it as a resource service:
-    <code>osgi.http.whiteboard.resource.prefix</code>. The actual service
+    <code>osgi.http.whiteboard.resource.pattern</code>. The actual service
     object registered is not used to serve resources, it is merely used to
     inform the Http Whiteboard implementation how to serve resources from the
     bundle that registered the service.</para>
@@ -1558,8 +1558,7 @@ public class MyFilter implements Filter {
           <row>
             <entry><para><code>osgi.http.whiteboard.resource.«</code></para><para><code>&#160;prefix</code></para></entry>
 
-            <entry><code>String</code><para><emphasis>required</emphasis></para>
-                <remark>not pattern???</remark></entry>
+            <entry><code>String</code><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>The prefix used to map a requested resource to the
             bundle's entries. If the request's path info is not null, it is
@@ -1576,7 +1575,7 @@ public class MyFilter implements Filter {
           <row>
             <entry><para><code>osgi.http.whiteboard.resource.«</code></para><para><code>&#160;pattern</code></para></entry>
 
-            <entry><code>String+</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><code>String+</code><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>The servlet pattern(s) to be used to serve resources.
             As defined by the <xref linkend="i21217577"/> in section 12.2
