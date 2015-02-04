@@ -230,6 +230,21 @@
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
+          <row>
+            <entry><code>context.init.*</code></entry>
+
+            <entry><code>String</code></entry>
+
+            <entry><para>Properties starting with this prefix are provided as
+                    init parameters through the <code>ServletContext.getInitParameter()</code>
+                    and <code>ServletContext.getInitParameterNames()</code> methods.
+                    The <code>context.init.</code> prefix is removed from the parameter
+                    name. See <xref
+            linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_INIT_PARAM_PREFIX"
+            xrefstyle="hyperlink"/>.</para>
+            
+            </entry>
+          </row>
         </tbody>
       </tgroup>
     </table>
@@ -550,7 +565,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
               <entry><para>2.2</para></entry>
 
-              <entry><para>From <code>servlet.init.*</code> service
+              <entry><para>From <code>context.init.*</code> service
               registration properties.</para></entry>
             </row>
 
@@ -559,7 +574,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
               <entry><para>2.2</para></entry>
 
-              <entry><para>From <code>servlet.init.*</code> service
+              <entry><para>From <code>context.init.*</code> service
               registration properties.</para></entry>
             </row>
 
@@ -1102,9 +1117,11 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
             <entry><para>Properties starting with this prefix are provided as
             init parameters to the <code>javax.servlet.Servlet.init()</code>
-            method and the <code>ServletContext</code>. The
+            method. The
             <code>servlet.init.</code> prefix is removed from the parameter
-            name.</para></entry>
+            name.</para> See <xref
+            linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_INIT_PARAM_PREFIX"
+            xrefstyle="hyperlink"/>.</entry>
           </row>
         </tbody>
       </tgroup>
@@ -1420,7 +1437,9 @@ public class AsyncServlet extends HttpServlet {
             <entry><para>Properties starting with this prefix are passed as
             init parameters to the <code>Filter.init()</code>method. The
             <code>filter.init.</code> prefix is removed from the parameter
-            name.</para></entry>
+            name.</para> See <xref
+            linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_INIT_PARAM_PREFIX"
+            xrefstyle="hyperlink"/>.</entry>
           </row>
         </tbody>
       </tgroup>
