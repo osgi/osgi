@@ -349,6 +349,17 @@ public final class HttpWhiteboardConstants {
 	public static final String	HTTP_WHITEBOARD_FILTER_INIT_PARAM_PREFIX	= "filter.init.";
 
 	/**
+	 * Service property to mark a Listener service as a Whiteboard service.
+	 * Listener services with this property set to {@code Boolean.TRUE} will be
+	 * treated as Whiteboard services opting in to being handled by the Http
+	 * Whiteboard implementation.
+	 * 
+	 * <p>
+	 * The value of this service property must be of type {@code Boolean}.
+	 */
+	public static final String	HTTP_WHITEBOARD_LISTENER					= "osgi.http.whiteboard.listener";
+
+	/**
 	 * Possible value for the {@link #HTTP_WHITEBOARD_FILTER_DISPATCHER}
 	 * property indicating the servlet filter is applied to client requests.
 	 * 

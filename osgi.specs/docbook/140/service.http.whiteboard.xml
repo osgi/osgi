@@ -1659,17 +1659,54 @@ public class SomeResourceService {}</programlisting>
       </listitem>
     </itemizedlist>
 
-    <para>Events are sent to all listeners in the Service Registry based on
-    their registration properties. Each listener can be associated with a
+    <para>Events are sent listeners in the Service Registry with the
+    <code>osgi.http.whiteboard.listener</code> property set to 
+    <code>Boolean.TRUE</code>. Listeners can be associated with a
     <code>ServletContextHelper</code> as described in <xref
     linkend="service.http.common.properties"/>. Listeners not specifically
     associated with a Servlet Context Helper will receive events relating to
     the <emphasis>default</emphasis> instance.</para>
 
+    <table>
+      <title>Service registration properties for listener services.</title>
+
+      <tgroup cols="3">
+        <colspec colnum="1" colwidth="2.5*"/>
+
+        <colspec colnum="2" colwidth="0.7*"/>
+
+        <colspec colnum="3" colwidth="3.3*"/>
+
+        <thead>
+          <row>
+            <entry>Service Property Name</entry>
+
+            <entry>Type</entry>
+
+            <entry>Description</entry>
+          </row>
+        </thead>
+
+        <tbody>
+          <row>
+            <entry><para><code>osgi.http.whiteboard.listener</code></para></entry>
+
+            <entry><code>Boolean</code></entry>
+
+            <entry><para>Set this property to <code>Boolean.TRUE</code> to opt 
+            Listener services in to being handled by the Http Whiteboard
+            implementation. See <xref
+            linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER"
+            xrefstyle="hyperlink"/>.</para></entry>
+          </row>
+        </tbody>
+      </tgroup>
+    </table>
+
     <para>An example listener that reports on client requests being
     initialized and destroyed is listed below:</para>
 
-    <programlisting>@Component
+<programlisting>@Component(property = "osgi.http.whiteboard.listener:Boolean=true")
 public class MyServletRequestListener implements ServletRequestListener {
     public void requestInitialized(ServletRequestEvent sre) {
         System.out.println("Request initialized for client: " + 
