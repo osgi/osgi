@@ -790,6 +790,8 @@
 
 	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.resourcemonitoring.xml" />
 
+	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.resourcemonitoring.monitor.xml" />
+	
 	<section>
 		<title>References</title>
 		<bibliolist>
