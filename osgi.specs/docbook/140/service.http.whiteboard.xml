@@ -616,11 +616,12 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
               <entry><para>2.2</para></entry>
 
-              <entry><para>The Http Service will serve the Whiteboard servlet
+              <entry><para>Provides the Whiteboard servlet
               with the specified name, provided through the
-              <code>osgi.http.whiteboard.servlet.name</code> property, if it
-              exists. Otherwise the result is obtained from the underlying
-              Servlet Container.</para></entry>
+              <code>osgi.http.whiteboard.servlet.name</code> property, if 
+              associated with this Servlet Context Helper.
+              Otherwise the result it
+              obtained from the underlying Servlet Container.</para></entry>
             </row>
 
             <row>
@@ -646,8 +647,9 @@ public class CDNServletContextHelper extends ServletContextHelper {
 
               <entry><para>2.1</para></entry>
 
-              <entry><para>If the argument matches a servlet registered by the
-              Http Service, this will be returned. Otherwise the result it
+              <entry><para>If the argument matches a servlet associated with this
+                      Servlet Context Helper,
+              this will be returned. Otherwise the result it
               obtained from the underlying Servlet Container.</para></entry>
             </row>
 
