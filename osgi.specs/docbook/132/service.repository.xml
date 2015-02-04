@@ -1357,6 +1357,11 @@ ServicePermission[...Repository, GET ]</programlisting>
         Content</emphasis> API and <code>osgi.content</code>
         capability.</para>
       </listitem>
+      
+      <listitem>
+        <para>Introduction of <code>osgi.implementation</code> and 
+        <code>osgi.service</code> <emphasis>capabilities</emphasis>.</para>
+      </listitem>
     </itemizedlist>
   </section>
 </chapter>
