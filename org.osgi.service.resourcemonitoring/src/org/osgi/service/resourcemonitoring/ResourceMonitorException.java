@@ -36,4 +36,14 @@ public class ResourceMonitorException extends Exception {
 		super(msg);
 	}
 
+	/**
+	 * Create a new ResourceMonitorException
+	 * 
+	 * @param msg message
+	 * @param t
+	 */
+	public ResourceMonitorException(String msg, Throwable t) {
+		super(msg, t);
+	}
+
 }

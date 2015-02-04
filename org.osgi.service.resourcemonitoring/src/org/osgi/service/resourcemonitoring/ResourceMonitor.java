@@ -61,10 +61,10 @@ public interface ResourceMonitor {
 	 * update the list of ResourceMonitor instances hold by the Resource Context
 	 * (getContext().removeMonitor(this)).
 	 * 
-	 * @throws ResourceContextException, e.g. when the monitor can't be removed
+	 * @throws ResourceMonitorException, e.g. when the monitor can't be removed
 	 *         from the ResourceContext.
 	 */
-	public void delete() throws ResourceContextException;
+	public void delete() throws ResourceMonitorException;
 
 	/**
 	 * Checks if the monitoring for this resource type is enabled for this

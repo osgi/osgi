@@ -138,9 +138,13 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 		return resourceType;
 	}
 
-	public void delete() throws ResourceContextException {
+	public void delete() throws ResourceMonitorException {
 		isDeleted = true;
-		resourceContext.removeResourceMonitor(this);
+		try {
+			resourceContext.removeResourceMonitor(this);
+		} catch (ResourceContextException e) {
+			throw new ResourceMonitorException(e.getMessage(), e);
+		}
 		factory.removeResourceMonitor(this);
 		eventNotifier.stop();
 	}

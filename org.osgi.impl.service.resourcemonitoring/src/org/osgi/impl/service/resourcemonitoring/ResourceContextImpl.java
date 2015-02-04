@@ -14,6 +14,7 @@ import org.osgi.service.resourcemonitoring.ResourceContext;
 import org.osgi.service.resourcemonitoring.ResourceContextEvent;
 import org.osgi.service.resourcemonitoring.ResourceContextException;
 import org.osgi.service.resourcemonitoring.ResourceMonitor;
+import org.osgi.service.resourcemonitoring.ResourceMonitorException;
 
 /**
  * Implementation of ResourceContext.
@@ -217,7 +218,11 @@ public class ResourceContextImpl implements ResourceContext, BundleHolder {
 		}
 		for (Iterator it = resourceMonitors.iterator(); it.hasNext();) {
 			ResourceMonitor rm = (ResourceMonitor) it.next();
-			rm.delete();
+			try {
+				rm.delete();
+			} catch (ResourceMonitorException e) {
+				throw new ResourceContextException(e.getMessage(), e);
+			}
 		}
 
 		resourceMonitoringServiceImpl.removeContext(this);

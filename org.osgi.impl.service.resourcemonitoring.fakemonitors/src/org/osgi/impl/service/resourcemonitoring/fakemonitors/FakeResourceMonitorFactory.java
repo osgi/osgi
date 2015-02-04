@@ -11,7 +11,6 @@ import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.resourcemonitoring.ResourceContext;
 import org.osgi.service.resourcemonitoring.ResourceContextEvent;
-import org.osgi.service.resourcemonitoring.ResourceContextException;
 import org.osgi.service.resourcemonitoring.ResourceContextListener;
 import org.osgi.service.resourcemonitoring.ResourceMonitor;
 import org.osgi.service.resourcemonitoring.ResourceMonitorException;
@@ -128,7 +127,7 @@ public class FakeResourceMonitorFactory implements ResourceMonitorFactory,
 			FakeMonitor tobeDeleted = (FakeMonitor) it.next();
 			try {
 				tobeDeleted.delete();
-			} catch (ResourceContextException e) {
+			} catch (ResourceMonitorException e) {
 				e.printStackTrace();
 			}
 		}
@@ -191,7 +190,7 @@ public class FakeResourceMonitorFactory implements ResourceMonitorFactory,
 			if (resourceMonitor != null) {
 				try {
 					resourceMonitor.delete();
-				} catch (ResourceContextException e) {
+				} catch (ResourceMonitorException e) {
 					e.printStackTrace();
 				}
 			}
