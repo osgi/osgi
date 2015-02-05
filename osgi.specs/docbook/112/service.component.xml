@@ -1232,7 +1232,7 @@ public class HttpResourceImpl {
         <para>The <emphasis>static policy</emphasis> is the most simple policy
         and is the default policy. A reference with a static policy is called
         a <emphasis>static reference</emphasis>. A component instance never
-        sees any of the dynamics of the static referencee. The bind method is
+        sees any of the dynamics of the static reference. The bind method is
         called and/or the field is set before the component instance is
         activated. Component configurations are deactivated before any bound
         service for the static reference becomes unavailable. If a target
@@ -4351,7 +4351,7 @@ public class MyComponent {
         <para>Each method of a configuration property type is mapped to a
         component property. The property name is derived from the method name.
         Certain common property name characters, such as full stop (<code>'.'
-        \u002E</code>) are not not valid in Java identifiers. So the name of a
+        \u002E</code>) are not valid in Java identifiers. So the name of a
         method must be converted to its corresponding property name as
         follows:<itemizedlist>
             <listitem>
@@ -4718,7 +4718,7 @@ public class MyComponent {
           <para>If any of the referenced component property types have methods
           with defaults, then the generated component description must include
           a <code>property</code> element for each such method with the
-          propery name mapped from the method name, the property type mapped
+          property name mapped from the method name, the property type mapped
           from the method type, and the property value set to the method's
           default value. See <xref
           linkend="service.component-component.property.mapping"/>. The
