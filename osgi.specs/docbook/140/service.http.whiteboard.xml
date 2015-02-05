@@ -736,8 +736,8 @@ public class CDNServletContextHelper extends ServletContextHelper {
               <entry><para>3.0</para></entry>
 
               <entry><para>Returns a <code>SessionCookieConfig</code> object.
-              This object must be unique per associated
-              <code>ServletContextHelper</code>.</para></entry>
+                      This object is read-only and all setters throw a 
+                      <code>IllegalStateException</code>.</para></entry>
             </row>
 
             <row>
