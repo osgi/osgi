@@ -589,7 +589,7 @@ Import-Package:
       <title>osgi.implementation Namespace</title>
 
       <tgroup cols="6">
-        <colspec colnum="1" colwidth="3*"/>
+        <colspec colnum="1" colwidth="3.5*"/>
 
         <colspec colnum="2" colwidth="1*"/>
 
@@ -597,7 +597,7 @@ Import-Package:
 
         <colspec colnum="4" colwidth="1.5*"/>
 
-        <colspec colnum="5" colwidth="3*"/>
+        <colspec colnum="5" colwidth="2.5*"/>
 
         <colspec colnum="6" colwidth="7*"/>
 
