@@ -1443,14 +1443,16 @@ female=Female</programlisting>
       <para>The <xref
       linkend="org.osgi.service.metatype.annotations.ObjectClassDefinition"
       xrefstyle="hyperlink"/> annotation can be applied without defining any
-      element values as defaults can be generated from the annotated type. For
-      example:</para>
+      element values as default values for the <xref
+      linkend="org.osgi.service.metatype.annotations.ObjectClassDefinition"
+      xrefstyle="hyperlink"/> annotation elements can be generated from the
+      annotated type. For example:</para>
 
       <programlisting>@ObjectClassDefinition
 @interface Config {
-  boolean enabled() default true;
-  String[] names() default {"a", "b"};
-  String topic() default "default/topic";
+  boolean enabled();
+  String[] names();
+  String topic();
 }</programlisting>
 
       <para>In the following larger example, the <xref
