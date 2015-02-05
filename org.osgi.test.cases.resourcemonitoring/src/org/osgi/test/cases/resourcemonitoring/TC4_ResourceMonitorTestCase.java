@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,8 +30,6 @@ import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
- * see Conformance Tests description.odt file.
- * 
  * @author $Id$
  */
 public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
@@ -108,14 +106,19 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Check if a CPU Resource Monitor Factory is available.
+	 * Test case 1 : check if a CPU Resource Monitor Factory is available.
+	 * 
+	 * This test case tests if CPU Resource Monitor Factory is available.
 	 */
 	public void testTC1CheckIfACPUResourceMonitorFactoryIsAvailable() {
 		assertNotNull("CpuFactory must not be null.", cpuFactory);
 	}
 
 	/**
-	 * Create Resource Monitor.
+	 * Test case 2 : creation of a ResourceMonitor.
+	 * 
+	 * This test case tests the creation of a ResourceMonitor through a
+	 * ResourceMonitorFactory.
 	 * 
 	 * @throws ResourceMonitorException, see
 	 *         {@link ResourceMonitorFactory#createResourceMonitor(ResourceContext)}
@@ -171,8 +174,10 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Test deleting a ResourceMonitor. Check the monitor is removed from the
-	 * context.
+	 * Test case 3 : deletion of a ResourceMonitor from a ResourceContext.
+	 * 
+	 * This test case validates the deletion of ResourceMonitor from a
+	 * ResourceContext (check that the monitor is removed from the context).
 	 * 
 	 * @throws ResourceMonitorException, see
 	 *         {@link ResourceMonitorFactory#createResourceMonitor(ResourceContext)}
@@ -198,7 +203,9 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Test enabling/disabling a Resource Monitor
+	 * Test case 4 : enabling and disabling a ResourceMonitor.
+	 * 
+	 * This test case checks the enabling/disabling of a ResourceMonitor.
 	 * 
 	 * @throws ResourceMonitorException, see
 	 *         {@link ResourceMonitorFactory#createResourceMonitor(ResourceContext)}
@@ -250,7 +257,10 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	}
 
 	/**
-	 * Test retrieving resource usage
+	 * Test case 5 : retrieving a resource usage.
+	 * 
+	 * This use case checks the retrieving of the resource usage a
+	 * ResourceContext is consuming.
 	 * 
 	 * @throws ResourceMonitorException, see
 	 *         {@link ResourceMonitorFactory#createResourceMonitor(ResourceContext)}

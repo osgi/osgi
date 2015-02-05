@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,8 +29,6 @@ import org.osgi.test.cases.resourcemonitoring.utils.ResourceContextListenerTestI
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
- * see Conformance Tests description.odt file.
- * 
  * @author $Id$
  */
 public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBundleControl {
@@ -88,8 +86,10 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	}
 
 	/**
-	 * Test remove resource context without destination. Check a
-	 * ResourceContextEvent is sent.
+	 * Test case 1 : deletion of a ResourceContext.
+	 * 
+	 * This test case validates the deletion of a ResourceContext with no
+	 * ResourceContext as destination.
 	 * 
 	 * @throws ResourceMonitoringServiceException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
@@ -139,6 +139,12 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	}
 
 	/**
+	 * Test case 2 : deletion of a ResourceContext with a destination
+	 * ResourceContext.
+	 * 
+	 * This test case validates the deletion of a ResourceContext with a
+	 * destination.
+	 * 
 	 * @throws ResourceMonitoringServiceException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
 	 * @throws ResourceContextException, see
@@ -230,8 +236,11 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	}
 
 	/**
-	 * Test remove a context and specify a deleted context as destination. The
-	 * to be deleted context is deleted.
+	 * Test case 3 : deletion of a ResourceContext with a previously deleted
+	 * ResourceContext as destination.
+	 * 
+	 * This test case validates the deletion of a ResourceContext with a
+	 * ResourceContext destination which has been previously deleted.
 	 * 
 	 * @throws ResourceMonitoringServiceException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}

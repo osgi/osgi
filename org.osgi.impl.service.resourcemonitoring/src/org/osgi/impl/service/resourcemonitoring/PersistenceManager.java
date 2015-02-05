@@ -29,18 +29,18 @@ public class PersistenceManager implements BundleListener {
 	/**
 	 * read/write a json file for ResourceContext's persistence
 	 */
-	private final Persistence		persistence;
+	private final Persistence				persistence;
 
 	/**
 	 * bundle context.
 	 */
-	private final BundleContext		bundleContext;
+	private final BundleContext				bundleContext;
 
 	/**
 	 * This map < Long, String > contains bundles which has not been resolved
 	 * during the restoring phase.
 	 */
-	private final Map				unresolvedBundles;
+	private final Map						unresolvedBundles;
 
 	/**
 	 * {@link ResourceMonitoringService} instance.

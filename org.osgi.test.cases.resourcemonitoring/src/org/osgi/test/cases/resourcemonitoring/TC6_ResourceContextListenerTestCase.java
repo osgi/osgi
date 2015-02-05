@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,8 +32,6 @@ import org.osgi.service.resourcemonitoring.ResourceMonitoringServiceException;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
- * see Conformance Tests description.odt file.
- * 
  * @author $Id$
  */
 public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleControl
@@ -109,7 +107,8 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	}
 
 	/**
-	 * Test register a ResourceContextCreated listener.
+	 * Test case 1 : ResourceContextListener filtering RESOURCE_CONTEXT_CREATED
+	 * event.
 	 * 
 	 * @throws ResourceMonitoringServiceException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
@@ -138,8 +137,8 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	}
 
 	/**
-	 * Test register a ResourceContextListener filtering
-	 * RESOURCE_CONTEXT_REMOVED.
+	 * Test case 2: ResourceContextListener filtering RESOURCE_CONTEXT_REMOVED
+	 * event.
 	 * 
 	 * @throws ResourceMonitoringServiceException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
@@ -167,7 +166,7 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	}
 
 	/**
-	 * Test register a ResourceContextListener filtering BUNDLE_ADDED events.
+	 * Test case 3: ResourceContextListener filtering BUNDLE_ADDED event.
 	 * 
 	 * @throws ResourceMonitoringServiceException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
@@ -195,7 +194,7 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	}
 
 	/**
-	 * Test register a ResourceContextListener filtering BUNDLE_REMOVED events.
+	 * Test case 4: ResourceContextListener filtering BUNDLE_REMOVED event.
 	 * 
 	 * @throws ResourceMonitoringServiceException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
@@ -224,8 +223,8 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	}
 
 	/**
-	 * Test register a ResourceContextListener filtering events emmitted by a
-	 * specific ResourceContext.
+	 * Test case 5 : ResourceContextListener filtering events of a specific
+	 * ResourceContext.
 	 * 
 	 * @throws ResourceMonitoringServiceException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
@@ -276,6 +275,9 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	}
 
 	/**
+	 * Test case 6 : registering a ResourceContextListener filtering two types
+	 * of events on a particular ResourceContext.
+	 * 
 	 * @throws ResourceMonitoringServiceException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 * @throws ResourceContextException, see
@@ -315,6 +317,8 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	}
 
 	/**
+	 * Test case 7 : unregistering a ResourceContextListener.
+	 * 
 	 * @throws ResourceMonitoringServiceException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 * @throws ResourceContextException, see

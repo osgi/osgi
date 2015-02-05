@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,10 +28,7 @@ import org.osgi.test.cases.resourcemonitoring.utils.FakeResourceMonitorFactory;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
- * see Conformance Tests description.odt file.
- * 
- * @author Antonin CHAZALET, Orange, antonin.chazalet@orange.com,
- *         antonin.chazalet@gmail.com
+ * @author $Id$
  */
 public class TC7_ResourceMonitorFactoryTestCase extends DefaultTestBundleControl {
 
@@ -76,8 +73,8 @@ public class TC7_ResourceMonitorFactoryTestCase extends DefaultTestBundleControl
 	}
 
 	/**
-	 * Add another resource monitor factory, and test that everything worked
-	 * well.
+	 * Test case 1 : Adding another resource monitor factory, and test that
+	 * everything worked well.
 	 */
 	public void testTC1AddingAnotherResourceMonitorFactory() {
 		StringBuffer filter = new StringBuffer();

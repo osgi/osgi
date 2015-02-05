@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,8 +38,6 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.compatibility.Semaphore;
 
 /**
- * see Conformance Tests description.odt file.
- * 
  * @author $Id$
  */
 public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleControl
@@ -160,7 +158,9 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	}
 
 	/**
-	 * Test upper warning threshold.
+	 * Test case 1 : upper warning threshold.
+	 * 
+	 * This test case checks the receiving of an upper WARNING event type.
 	 * 
 	 * @throws InterruptedException
 	 */
@@ -188,7 +188,9 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	}
 
 	/**
-	 * Test upper threshold.
+	 * Test case 2 : upper error threshold.
+	 * 
+	 * This test case checks the receiving of an upper ERROR event type.
 	 * 
 	 * @throws InterruptedException
 	 */
@@ -217,7 +219,10 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	}
 
 	/**
-	 * Upper warning and error threshold.
+	 * Test case 3 : upper warning and error thresholds.
+	 * 
+	 * This test case checks the receiving of upper WARNING event type and upper
+	 * ERROR event type.
 	 * 
 	 * @throws InterruptedException
 	 */
@@ -246,7 +251,9 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	}
 
 	/**
-	 * Test lower warning threshold.
+	 * Test case 4 : lower warning threshold.
+	 * 
+	 * This test case checks the receiving of a lower WARNING event type.
 	 * 
 	 * @throws InterruptedException
 	 */
@@ -273,7 +280,9 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	}
 
 	/**
-	 * Test lower error threshold.
+	 * Test case 5 : lower error threshold.
+	 * 
+	 * This test case checks the receiving of lower ERROR event type.
 	 * 
 	 * @throws InterruptedException
 	 */
@@ -300,7 +309,10 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	}
 
 	/**
-	 * Test lower warning and error threshold.
+	 * Test case 6 : lower error and lower warning threshold.
+	 * 
+	 * This test case checks the receiving of lower ERROR and lower WARNING
+	 * event type.
 	 * 
 	 * @throws InterruptedException
 	 */

@@ -322,7 +322,7 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 			systemResourceContext = createContext(SYSTEM_CONTEXT_NAME,
 					(ResourceContext) null);
 			try {
-			systemResourceContext.addBundle(0);
+				systemResourceContext.addBundle(0);
 			} catch (ResourceContextException e) {
 				throw new ResourceMonitoringServiceException(e.getMessage(), e);
 			}

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,8 +27,6 @@ import org.osgi.test.cases.resourcemonitoring.utils.ResourceContextListenerTestI
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
- * see Conformance Tests description.odt file.
- * 
  * @author $Id$
  */
 public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBundleControl {
@@ -86,14 +84,16 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	}
 
 	/**
-	 * Test adding a bundle to a resource context.
+	 * Test case 1 : adding a bundle to a ResourceContext.
+	 * 
+	 * This test cases tests the adding of a bundle to a ResourceContext.
 	 * 
 	 * @throws ResourceMonitoringServiceException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
 	 * @throws ResourceContextException , see
 	 *         {@link ResourceContext#addBundle(long)}
 	 */
-	public void testTC41AddingABundleToAResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testTC1AddingABundleToAResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name = "context1";
 		final long bundleId = 1l;
 
@@ -118,16 +118,18 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	}
 
 	/**
-	 * Test adding a bundle previously associated with a resource context.
+	 * Test case 2 : adding a bundle previously associated with a
+	 * ResourceContext.
 	 * 
-	 * Expect a ResourceContextException.
+	 * This test case tests the adding of a bundle previously added to another
+	 * ResourceContext.
 	 * 
 	 * @throws ResourceMonitoringServiceException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
 	 * @throws ResourceContextException , see
 	 *         {@link ResourceContext#addBundle(long)}
 	 */
-	public void testTC42AddingABundlePreviouslyAssociatedWithAResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testTC2AddingABundlePreviouslyAssociatedWithAResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name = "context1";
 		final String name2 = "context2";
 		final long bundleId = 1;
@@ -162,8 +164,10 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	}
 
 	/**
-	 * Test remove a bundle from a ResourceContext. Check a
-	 * {@link ResourceContextEvent} is received.
+	 * Test case 3 : removing a bundle from a ResourceContext.
+	 * 
+	 * This test case validates the removing of a bundle from a ResourceContext
+	 * (and checks that a {@link ResourceContextEvent} is received).
 	 * 
 	 * @throws ResourceMonitoringServiceException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
@@ -171,7 +175,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 *         {@link ResourceContext#addBundle(long)}
 	 *         {@link ResourceContext#removeBundle(long)}
 	 */
-	public void testTC43RemoveBundleFromAResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testTC3RemoveBundleFromAResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name = "context1";
 		final long bundleId = 1;
 
@@ -207,9 +211,11 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	}
 
 	/**
-	 * Test remove a bundle from context with a destination. Expect one
-	 * ResourceContextEvent from removing the bundle and one more for adding it
-	 * into another ResourceContext.
+	 * Test case 4 : removing a bundle with a destination ResourceContext.
+	 * 
+	 * This test case tests the removing of a bundle from a context with a
+	 * destination context (expects one ResourceContextEvent from removing the
+	 * bundle and one more for adding it into another ResourceContext).
 	 * 
 	 * @throws ResourceMonitoringServiceException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
@@ -217,7 +223,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 *         {@link ResourceContext#addBundle(long)}
 	 *         {@link ResourceContext#removeBundle(long)}
 	 */
-	public void testTC44RemoveABundleWithADestinationResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testTC4RemoveABundleWithADestinationResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
 		final long bundleId = 1;
@@ -263,7 +269,12 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	}
 
 	/**
-	 * Test remove bundle with null destination. Expect a REMOVED_BUNDLE event.
+	 * Test case 5 : removing a bundle with a null destination ResourceContext.
+	 * 
+	 * This test case validates the removing of a bundle from a ResourceContext
+	 * with a null destination. This test case is similar to
+	 * {@link TC3_ResourceContextBundleManagementTestCases#testTC3RemoveBundleFromAResourceContext()}
+	 * (Expect a REMOVED_BUNDLE event).
 	 * 
 	 * @throws ResourceMonitoringServiceException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
@@ -271,7 +282,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 *         {@link ResourceContext#addBundle(long)}
 	 *         {@link ResourceContext#removeBundle(long)}
 	 */
-	public void testTC45RemoveABundleWithANullDestinationResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testTC5RemoveABundleWithANullDestinationResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name = "context1";
 		final long bundleId = 1;
 
@@ -299,10 +310,13 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	}
 
 	/**
-	 * Test remove bundle with a deleted resource context as destination. Expect
-	 * a ResourceContextException when invoking
-	 * {@link ResourceContext#removeBundle(long, ResourceContext)}. The bundle
-	 * is correctly removed.
+	 * Test case 6 : removing a bundle with a destination context which has been
+	 * previously deleted.
+	 * 
+	 * This test case checks the removing of a bundle from a ResourceContext
+	 * with a destination Resource Context which has been removed (Expect a
+	 * ResourceContextException when invoking
+	 * {@link ResourceContext#removeBundle(long, ResourceContext)}).
 	 * 
 	 * @throws ResourceMonitoringServiceException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
@@ -310,7 +324,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 *         {@link ResourceContext#addBundle(long)}
 	 *         {@link ResourceContext#removeBundle(long)}
 	 */
-	public void testTC46RemovingABundleWithADestinationContextWhichHasBeenPreviouslyDeleted() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testTC6RemovingABundleWithADestinationContextWhichHasBeenPreviouslyDeleted() throws ResourceMonitoringServiceException, ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
 		final long bundleId = 1;

@@ -17,63 +17,63 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 	/**
 	 * {@link ResourceContext} associated with this monitor.
 	 */
-	private final ResourceContext		resourceContext;
+	private final ResourceContext				resourceContext;
 
 	/**
 	 * Type of resource this {@link ResourceMonitor} is able to monitor
 	 */
-	private final String				resourceType;
+	private final String						resourceType;
 
 	/**
 	 * report if this {@link ResourceMonitor} is enabled or not. by default, the
 	 * {@link ResourceMonitor} is disabled.
 	 */
-	private boolean						isEnable		= false;
+	private boolean								isEnable		= false;
 
 	/**
 	 * report if this {@link ResourceMonitor} has been deleted.
 	 */
-	private boolean						isDeleted		= false;
+	private boolean								isDeleted		= false;
 
 	/**
 	 * sampling period.
 	 */
-	private final long					samplingPeriod;
+	private final long							samplingPeriod;
 
 	/**
 	 * monitoring period.
 	 */
-	private final long					monitoringPeriod;
+	private final long							monitoringPeriod;
 
 	/**
 	 * min value. This value is used for simulating the monitored value.
 	 */
-	private final long					minValue;
+	private final long							minValue;
 
 	/**
 	 * coeff
 	 */
-	private final long					coeff;
+	private final long							coeff;
 
 	/**
 	 * initial value
 	 */
-	private final long					initialValue;
+	private final long							initialValue;
 
 	/**
 	 * max value.
 	 */
-	private final long					maxValue;
+	private final long							maxValue;
 
 	/**
 	 * thread simulating monitoring
 	 */
-	private Thread						thread;
+	private Thread								thread;
 
 	/**
 	 * used to send Event to {@link ResourceListener}
 	 */
-	private final EventNotifier			eventNotifier;
+	private final EventNotifier					eventNotifier;
 
 	/**
 	 * Factory of this ResourceMonitor
@@ -83,7 +83,7 @@ public class FakeMonitor implements ResourceMonitor, Runnable {
 	/**
 	 * currentUsage
 	 */
-	private Long						currentUsage	= new Long(0);
+	private Long								currentUsage	= new Long(0);
 
 	/**
 	 * Create a new FakeMonitor
