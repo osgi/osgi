@@ -1420,6 +1420,51 @@ framework/service/{serviceid}
   </section>
 
   <section>
+    <title>Capabilities</title>
+
+    <section>
+      <title>osgi.implementation Capability</title>
+
+      <para>An implementation of this specification must provide the <link
+      linkend="service.namespaces-osgi.implementation.namespace"><code>osgi.implementation</code></link>
+      capability with name <code>osgi.rest</code>. This capability can be used
+      by provisioning tools and during resolution to ensure that a REST Management
+      implementation is present to handle REST requests
+      defined in this specification. The capability must also declare uses constraints
+      on the <code>org.osgi.service.rest</code> and <code>org.osgi.service.rest.client</code>
+      packages defined in this specification:</para>
+
+      <programlisting>Provide-Capability: osgi.implementation;
+  osgi.implementation="osgi.rest";
+  uses:="org.osgi.service.rest,org.osgi.service.rest.client";
+  version:Version="1.0"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.implementation.namespace"/>.</para>
+    </section>
+
+    <section>
+      <title>osgi.service Capability</title>
+
+      <para>The REST implementation provides the 
+          <xref linkend="org.osgi.service.rest.client.RestClientFactory" xrefstyle="hyperlink"/>
+       service. To inform tools about this service it must provide the
+      <link
+        linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+    capability representing this service. 
+    This capability must also declare a uses constraint for the
+      <code>org.osgi.service.rest.client</code> package:</para>
+
+      <programlisting>Provide-Capability: osgi.service;
+  objectClass:List&lt;String&gt;="org.osgi.service.rest.client.RestClientFactory";
+  uses:="org.osgi.service.rest.client"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.service.namespace"/>.</para>
+    </section>    
+  </section>  
+
+  <section>
     <title>Security</title>
 
     <para>Like any externally visible management interface, the REST interface

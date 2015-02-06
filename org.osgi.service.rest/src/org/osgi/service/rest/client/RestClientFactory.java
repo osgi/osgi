@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2013, 2015). All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,10 +22,11 @@ import java.net.URI;
  * Factory to construct new REST client instances. Each instance is specific to
  * a REST service endpoint.
  * 
- * Implementations can choose to add additional creation methods, e.g., where
- * additional arguments are needed for request signing, etc.
+ * Implementations can choose to extend this interface to add additional
+ * creation methods, e.g., where additional arguments are needed for request
+ * signing, etc.
  * 
- * In OSGi environments this factory can be registered as a service.
+ * In OSGi environments this factory is registered as a service.
  * 
  * @author $Id$
  *
