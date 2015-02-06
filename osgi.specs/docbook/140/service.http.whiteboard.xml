@@ -1070,10 +1070,11 @@ public class CDNServletContextHelper extends ServletContextHelper {
           <row>
             <entry><para><code>osgi.http.whiteboard.servlet.«</code></para><para><code>&#160;asyncSupported</code></para></entry>
 
-            <entry><code>Boolean</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Declares whether the servlet supports the
-            asynchronous operation mode. Defaults to false. See <xref
+                    asynchronous operation mode. Allowed values are <code>true</code> and <code>false</code>
+                    independent of case. Defaults to <code>false</code>. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_ASYNC_SUPPORTED"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
@@ -1287,7 +1288,7 @@ public class MyErrorServlet extends HttpServlet {
       <programlisting>@Component(service = Servlet.class, scope = ServiceScope.PROTOTYPE,
     property = {
         "osgi.http.whiteboard.servlet.pattern=/as",
-        "osgi.http.whiteboard.servlet.asyncSupported:Boolean=true"})
+        "osgi.http.whiteboard.servlet.asyncSupported=true"})
 public class AsyncServlet extends HttpServlet {
     ExecutorService executor = Executors.newCachedThreadPool(
         r -&gt; new Thread(r, "Pooled Thread"));
@@ -1366,10 +1367,11 @@ public class AsyncServlet extends HttpServlet {
           <row>
             <entry><para><code>osgi.http.whiteboard.filter.«</code></para><para><code>&#160;asyncSupported</code></para></entry>
 
-            <entry><code>Boolean</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
 
             <entry><para>Declares whether the servlet filter supports
-            asynchronous operation mode. Defaults to false. See <xref
+                    asynchronous operation mode. Allowed values are <code>true</code> and <code>false</code>
+                    independent of case. Defaults to <code>false</code>. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_FILTER_ASYNC_SUPPORTED"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
@@ -1666,9 +1668,9 @@ public class SomeResourceService {}</programlisting>
       </listitem>
     </itemizedlist>
 
-    <para>Events are sent listeners in the Service Registry with the
+    <para>Events are sent to listeners in the Service Registry with the
     <code>osgi.http.whiteboard.listener</code> property set to 
-    <code>Boolean.TRUE</code>. Listeners can be associated with a
+    <code>true</code>, independent of case. Listeners can be associated with a
     <code>ServletContextHelper</code> as described in <xref
     linkend="service.http.common.properties"/>. Listeners not specifically
     associated with a Servlet Context Helper will receive events relating to
@@ -1698,11 +1700,12 @@ public class SomeResourceService {}</programlisting>
           <row>
             <entry><para><code>osgi.http.whiteboard.listener</code></para></entry>
 
-            <entry><code>Boolean</code><para><emphasis>required</emphasis></para></entry>
+            <entry><code>String</code><para><emphasis>required</emphasis></para></entry>
 
-            <entry><para>Set this property to <code>Boolean.TRUE</code> to opt 
-            Listener services in to being handled by the Http Whiteboard
-            implementation. See <xref
+            <entry><para>This property marks whether a listener service is to be handled by the
+                    HTTP Whiteboard implementation or not. Valid values are <code>true</code>
+                    and <code>false</code> (case independent). If the value is <code>true</code>
+                    the listener is processed. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
@@ -1713,7 +1716,7 @@ public class SomeResourceService {}</programlisting>
     <para>An example listener that reports on client requests being
     initialized and destroyed is listed below:</para>
 
-<programlisting>@Component(property = "osgi.http.whiteboard.listener:Boolean=true")
+<programlisting>@Component(property = "osgi.http.whiteboard.listener=true")
 public class MyServletRequestListener implements ServletRequestListener {
     public void requestInitialized(ServletRequestEvent sre) {
         System.out.println("Request initialized for client: " + 
