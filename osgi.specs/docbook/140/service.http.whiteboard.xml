@@ -1898,7 +1898,11 @@ public class MyServletRequestListener implements ServletRequestListener {
     linkend="org.osgi.service.http.runtime.dto.RuntimeDTO"
     xrefstyle="hyperlink"/> provides information on services that have been
     successfully registered as well as information about the Whiteboard
-    services that were not succesfully registered. This information can be
+    services that were not succesfully registered. Whiteboard services that have the 
+    required properties set but cannot be processed, are reflected in the Failure DTOs.
+    Whiteboard services of interfaces described in this specification that do not have 
+    the required properties set are ignored and not reflected in the failure DTOs.</para>
+    <para>The Runtime DTO can be
     obtained using the <xref
     linkend="org.osgi.service.http.runtime.HttpServiceRuntime.getRuntimeDTO--"
     xrefstyle="hyperlink"/> method. The Runtime DTO provided has the following
