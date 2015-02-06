@@ -34,8 +34,8 @@
 <polyline style="fill:none;stroke:#000000;stroke-width:0.6136;stroke-linejoin:round;" points="37.125,44.028 37.125,13.346 
 	139.909,13.346 "/>
 <text transform="matrix(1 0 0 1 2.4551 59.2158)" style="font-family:'ProductusBook'; font-size:10;">Request Info DTO</text>
-<text transform="matrix(1 0 0 1 144.2324 15.4937)" style="font-family:'ProductusBook'; font-size:10;">Servlet DTO</text>
-<text transform="matrix(1 0 0 1 144.2324 59.2158)" style="font-family:'ProductusBook'; font-size:10;">Filter DTO</text>
+<text transform="matrix(1 0 0 1 144.2324 15.4937)" style="font-family:'ProductusBook'; font-size:10;">Filter DTO</text>
+<text transform="matrix(1 0 0 1 144.2324 59.2158)" style="font-family:'ProductusBook'; font-size:10;">Servlet DTO</text>
 <text transform="matrix(1 0 0 1 144.2324 102.9385)" style="font-family:'ProductusBook'; font-size:10;">Resource DTO</text>
 <text transform="matrix(1 0 0 1 127.9824 19.9937)" style="font-family:'ProductusBook'; font-size:8;">0..n</text>
 </svg>
