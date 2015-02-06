@@ -373,6 +373,7 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * event is added into the events list.
 	 */
 	public void notify(ResourceContextEvent event) {
+		log(TC6_ResourceContextListenerTestCase.class.getName() + " - event.getType(): " + event.getType() + ", event.getBundleId(): " + event.getBundleId());
 		// add the event into the list.
 		events.add(event);
 	}

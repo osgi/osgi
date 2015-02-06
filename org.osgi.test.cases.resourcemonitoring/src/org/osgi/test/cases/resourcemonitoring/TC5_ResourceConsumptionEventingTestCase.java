@@ -165,8 +165,8 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 * @throws InterruptedException
 	 */
 	public void testTC1UpperWarningThreshold() throws InterruptedException {
-		// set upper WARNING threshold to 35
-		upperWarning = Long.valueOf(Long.toString(35l));
+		// set upper WARNING threshold to 1
+		upperWarning = Long.valueOf(Long.toString(1l));
 
 		// set other threshold
 		upperError = null;
@@ -195,9 +195,8 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 * @throws InterruptedException
 	 */
 	public void testTC2UpperErrorThreshold() throws InterruptedException {
-
-		// set upper ERROR threshold to 50
-		upperError = Long.valueOf(Long.toString(50l));
+		// set upper ERROR threshold to 2
+		upperError = Long.valueOf(Long.toString(2l));
 
 		// set other threshold
 		upperWarning = null;
@@ -227,9 +226,10 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 * @throws InterruptedException
 	 */
 	public void testTC3UpperWarningAndErrorThreshold() throws InterruptedException {
-		// set upper WARNING threshold to 35
-		upperWarning = Long.valueOf(Long.toString(35l));
-		upperError = Long.valueOf(Long.toString(50l));
+		// set upper WARNING threshold to 1
+		upperWarning = Long.valueOf(Long.toString(1l));
+		// set upper ERROR threshold to 2
+		upperError = Long.valueOf(Long.toString(2l));
 
 		// set other threshold
 
@@ -258,7 +258,8 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 * @throws InterruptedException
 	 */
 	public void testTC4LowerWarningThreshold() throws InterruptedException {
-		lowerWarning = Long.valueOf(Long.toString(70l));
+		// set lower WARNING threshold to 100
+		lowerWarning = Long.valueOf(Long.toString(100l));
 
 		// set other threshold
 		lowerError = null;
@@ -287,7 +288,8 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 * @throws InterruptedException
 	 */
 	public void testTC5LowerErrorThreshold() throws InterruptedException {
-		lowerError = Long.valueOf(Long.toString(70l));
+		// set lower ERROR threshold to 99
+		lowerError = Long.valueOf(Long.toString(99l));
 
 		// set other threshold
 		lowerWarning = null;
@@ -317,8 +319,10 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 * @throws InterruptedException
 	 */
 	public void testTC6LowerWarningAndErrorThreshold() throws InterruptedException {
-		lowerError = Long.valueOf(Long.toString(50l));
-		lowerWarning = Long.valueOf(Long.toString(70l));
+		// set lower WARNING threshold to 100
+		lowerWarning = Long.valueOf(Long.toString(100l));
+		// set lower ERROR threshold to 99
+		lowerError = Long.valueOf(Long.toString(99l));
 
 		// set other threshold
 		upperWarning = null;
@@ -339,7 +343,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	}
 
 	public void notify(ResourceEvent event) {
-		log("event: " + event.getType() + ", value: " + event.getValue());
+		log(TC5_ResourceConsumptionEventingTestCase.class.getName() + " - event.getType(): " + event.getType() + ", value: " + event.getValue());
 		receivedEvents.add(event);
 		lastEvent = event;
 		waiter.signal();
