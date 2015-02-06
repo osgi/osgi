@@ -960,7 +960,7 @@
     </section>
   </section>
 
-  <section>
+  <section xml:id="service.remoteserviceadmin-rsa.service">
     <title>Remote Service Admin</title>
 
     <para>The Remote Service Admin service abstracts the core functionality of
@@ -2528,6 +2528,29 @@ xml                    ::= &lt;*&gt; *</programlisting>
       <programlisting>Provide-Capability: osgi.remoteserviceadmin.topology;
     policy:List&lt;String&gt;=promiscuous; version:Version=1.1</programlisting>
     </section>
+
+    <section>
+      <title>Service Capability</title>
+
+      <para>The Distribution Provider provides the 
+      <link linkend="service.remoteserviceadmin-rsa.service">
+        <emphasis>Remote Service Admin</emphasis></link> 
+      service. To inform tools about this service it must provide the
+      <link
+        linkend="service.namespaces-osgi.service.namespace"><code>osgi.service</code></link>
+        namespace representing the <xref
+        linkend="org.osgi.service.remoteserviceadmin.RemoteServiceAdmin" xrefstyle="hyperlink"/>
+        service. This capability must also declare a uses constraint for the
+      <code>org.osgi.service.remoteserviceadmin</code> package:</para>
+
+      <programlisting>Provide-Capability: osgi.service;
+  objectClass:List&lt;String&gt;=
+    "org.osgi.service.remoteserviceadmin.RemoteServiceAdmin";
+  uses:="org.osgi.service.remoteserviceadmin"</programlisting>
+
+      <para>This capability must follow the rules defined for the <xref
+      linkend="service.namespaces-osgi.service.namespace"/>.</para>
+    </section>    
   </section>
 
   <section xml:id="i1789427">
