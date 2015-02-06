@@ -30,8 +30,8 @@
 		<para>The chapter defines the API for applications to monitor hardware resources consumed by any set of bundles. 
 		    The bundle is the smallest unit that can be considered as a resource context, the entity that is monitored. 
 		    Monitored data may enable applications to take decisions on management actions to apply. Resource management 
-		    actions are only mentioned as examples in this chapter, e.g., actions on the lifecycle of components, 
-		    bundles, the framework and the JVM, actions on the lifecycle of actions on Java threads, raise of exceptions.
+		    actions are mentioned as examples in this chapter, e.g., actions on the lifecycle of components, 
+		    bundles, the framework and the JVM, Java threads, raise of exceptions.
 		</para>
 	</section>
 
