@@ -38,6 +38,6 @@ public interface CPUMonitor extends ResourceMonitor {
 	 * 
 	 * @return the CPU usage in nanoseconds
 	 */
-	public int getCPUUsage();
+	public long getCPUUsage();
 
 }
