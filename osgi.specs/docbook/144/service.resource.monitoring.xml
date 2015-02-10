@@ -388,7 +388,7 @@
 		<para>A CPU Monitor instance is a Resource Monitor used to monitor the CPU usage of the bundles belonging to a
 			Resource Context.
 		</para>
-		<para>CPU usage and thresholds are expressed as a cumulative number of nanoseconds (Long). The encapsulated
+		<para>CPU usage and thresholds are expressed as a cumulative number of nanoseconds (long). The encapsulated
 			value can be retrieved with the CPUMonitor.getCPUUsage() method.
 		</para>
 		<para>In case where a threshold is reached, the CPU Monitor instance generates an event triggering Resource
@@ -399,7 +399,7 @@
 		<title>Memory Monitor</title>
 		<para>A Memory Monitor instance monitors and limits the memory used by the bundles of a Resource Context instance.
 		</para>
-		<para>Memory is accounted as bytes. Memory usage and thresholds are Long java objects. The encapsulated value can
+		<para>Memory is accounted as bytes. Memory usage and thresholds are long java objects. The encapsulated value can
 			be retrieved through the getMemoryUsage() method.
 		</para>
 		<para>When an error threshold is reached, the next memory allocation MAY be prevented by the system and MAY throw
@@ -414,7 +414,7 @@
 		<para>A Socket is considered to be in-use state when a native socket file descriptor is created. It leaves this
 			state when this socket file descriptor is deleted.
 		</para>
-		<para>The number of in-use sockets is a Long. The encapsulated value can be retrieved using
+		<para>The number of in-use sockets is a long. The encapsulated value can be retrieved using
 			SocketMonitor.getSocketUsage() method.
 		</para>
 		<para>When an ERROR threshold is reached, the next socket file descriptor creation in the associated context MAY
@@ -426,7 +426,7 @@
 		<para>A Disk Storage Monitor instance monitors and limits the use of persistent storage within Bundle Persistent
 			Storage Area a Resource Context (the bundles actually belonging to it) consumes.
 		</para>
-		<para>Disk Storage is expressed as a number of bytes of type Long. The encapsulated value can be retrieved using
+		<para>Disk Storage is expressed as a number of bytes of type long. The encapsulated value can be retrieved using
 			DiskStorageMonitor.getUsedDiskStorage() method.
 		</para>
 		<para>A IOException MAY be thrown in the associated context when an error threshold is reached.
@@ -438,7 +438,7 @@
 			instance. A Thread is considered to be alive when it is in the RUNNABLE, BLOCKED, WAITING or TIMED_WAITING
 			java state.
 		</para>
-		<para>Usage and thresholds are Java Long objects. The encapsulated value can be retrieved using
+		<para>Usage and thresholds are Java int objects. The encapsulated value can be retrieved using
 			ThreadMonitor.getAliveThreads() method.
 		</para>
 		<para>When an error threshold is reached, any further thread activation will be prevented in the associated
