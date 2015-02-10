@@ -1,677 +1,1014 @@
 <?xml version="1.0" encoding="utf-8"?>
-<chapter label="143"
-         revision="$Id$"
-         version="5" xml:id="service.network"
-         xmlns="http://docbook.org/ns/docbook"
-         xmlns:xlink="http://www.w3.org/1999/xlink"
-         xmlns:xi="http://www.w3.org/2001/XInclude"
-         xmlns:ns5="http://www.w3.org/1999/xhtml"
-         xmlns:ns4="http://www.w3.org/2000/svg"
-         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns="http://docbook.org/ns/docbook">
-  <title>Network Interface Information Service Specification</title>
-
-  <info>
-    <releaseinfo><xref endterm="org.osgi.service.networkadapter-version"
-    linkend="org.osgi.service.networkadapter"/></releaseinfo>
-  </info>
-
-  <section>
-    <title>Introduction</title>
-
-    <para>The Network Interface Information Service is service for obtaining
-    the network interface information and IP address information which
-    standard Java API presents.</para>
-
-    <para>When the IP address was changed, the bundles utilize the IP address
-    information is necessary to detect the fact of the change. When using a
-    standard Java API, such as <code>java.net.NetworkInterface</code> and
-    <code>java.net.InetAddress</code>, calles to confirm the IP address at
-    regular intervals are required from the bundle itself. Since this is a
-    process common to all bundles that need to detect any change in IP address
-    information, provision of services to notify a change in IP address is
-    quite-effective.</para>
-
-    <para>Therefore an API that provides a change notification feature for
-    each piece of network interface information (including the IP address
-    information) is investigated in this specification. In addition, this
-    specification defines APIs that provide the functionalities to obtain the
-    network interface information and the information of IP address bound to
-    the network interface.</para>
-
-    <para>The name of the network interface is information depending on the
-    OS. It is necessary to distinguish a network interface in the form that is
-    independence for the OS to use it without use bundle being conscious of
-    the difference of the OS.</para>
-
-    <para>This specification defined <code>NetworkAdapter</code> Service and
-    <code>NetworkAddress</code> Service. These services provide network
-    interface information and IP address information. However how to receive
-    the notification of network interface information and IP address
-    information is implementation dependent.</para>
-
-    <section>
-      <title>Entities</title>
-
-      <itemizedlist>
-        <listitem>
-          <para><emphasis>Network Interface</emphasis> - Available and
-          activated network interfaces provided in the execution environment.
-          In this specification, the unit of the network interface is the
-          logical interface, not the physical interface.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>NetworkAdapter</emphasis> - The OSGi service that
-          provides information related to the Network Interface. This service
-          provides functionalities corresponding to
-          "<code>java.net.NetworkInterface</code>".</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>NetworkAddress</emphasis> - The OSGi service that
-          provides information of IP addresses available on the execution
-          environment in which a Network Interface Information Service bundle
-          is running.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>NetworkAdapterType</emphasis> - An identifier of the
-          network interface. It is independent of the operating system. The
-          two type of identifier string is specified in this specification.
-          This specification allows that Network Adapter type other than them
-          can be defined by the platform provider in each environment. This
-          identifier is used by user bundle to specify the network interface
-          to be monitored.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>IPAdressVersion</emphasis> - An identifier
-          indicating the IP address version (i.e. Ipv4, IPv6). This identifier
-          is defined in this specification. This identifier is used by a user
-          bundle to specify the network interface to be monitored.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>IPAdressScope</emphasis> - An identifier indicating
-          the scope of IP address (i.e. GLOBAL, PRIVATE). This identifier is
-          defined in this specification. This identifier is used by a user
-          bundle to specify the network interface to be monitored.</para>
-        </listitem>
-      </itemizedlist>
-
-      <figure xml:id="figure">
-        <title>Network Interface Information Service Overview Diagram</title>
-
-        <mediaobject>
-          <imageobject>
-            <imagedata align="center" contentdepth="3.750in"
-                       contentwidth="5.000in" fileref="NIIS_classes.svg"/>
-          </imageobject>
-        </mediaobject>
-      </figure>
-
-      <para><code>NetworkAdapter</code> Service provides the network interface
-      information every logic interface. <code>NetworkAddress</code> Service
-      provides the IP address information every IP address.
-      <code>NetworkAddress</code> Service is connected with
-      <code>NetworkAdapter</code> Service.</para>
-
-      <para>When network interface information is changed, the service
-      property of <code>NetworkAdapter</code> and the
-      <code>NetworkAddress</code> is changed. It is necessary for the bundle
-      using these services to track these services and knows the change of the
-      network interface information through Service Event.</para>
-    </section>
-  </section>
-
-  <section>
-    <title>NetworkAdapter Service</title>
-
-    <para><code>NetworkAdapter</code> is an interface that provides
-    information about single network interfaces provided by the execution
-    environment. If multiple network interfaces are present,
-    <code>NetworkAdapter</code> Services that correspond to each network
-    interface must be registered. <code>NetworkAdapter</code> service is
-    registered with the service repository with service properties as shown in
-    the following table.</para>
-
-    <table>
-      <title>Service properties of NetworkAdapterService</title>
-
-      <tgroup cols="3">
-        <colspec colnum="1" colwidth="3*"/>
-
-        <colspec colnum="2" colwidth="1*"/>
-
-        <colspec colnum="3" colwidth="3*"/>
-
-        <thead>
-          <row>
-            <entry>The key of service property</entry>
-
-            <entry>Type</entry>
-
-            <entry>Description</entry>
-          </row>
-        </thead>
-
-        <tbody>
-          <row>
-            <entry><code>networkAdapter.type</code></entry>
-
-            <entry><code>String</code></entry>
-
-            <entry>Required property. Network interface type is set to a
-            value.</entry>
-          </row>
-
-          <row>
-            <entry><code>networkAdapter.hardwareAddress</code></entry>
-
-            <entry><code>byte[]</code></entry>
-
-            <entry>Required property. Hardware address (MAC address) is set to
-            a value. This property can also be obtained from
-            getHardwareAddress().</entry>
-          </row>
-
-          <row>
-            <entry><code>networkAdapter.name</code></entry>
-
-            <entry><code>String</code></entry>
-
-            <entry>Required property. Network interface name is set to a
-            value. This property can also be obtained from getName().</entry>
-          </row>
-
-          <row>
-            <entry><code>networkAdapter.displayName</code></entry>
-
-            <entry><code>String</code></entry>
-
-            <entry>Required property. Network interface display name is set to
-            a value. This property can also be obtained from
-            getDisplayName().</entry>
-          </row>
-
-          <row>
-            <entry><code>networkAdapter.isUp</code></entry>
-
-            <entry><code>boolean</code></entry>
-
-            <entry>Required property. The value is true when a network
-            interface is up and running, otherwise it is false.</entry>
-          </row>
-
-          <row>
-            <entry><code>networkAdapter.isLoopback</code></entry>
-
-            <entry><code>boolean</code></entry>
-
-            <entry>Required property. The value is true when a network
-            interface is a loopback interface, otherwise it is false.</entry>
-          </row>
-
-          <row>
-            <entry><code>networkAdapter.isPointToPoint</code></entry>
-
-            <entry><code>boolean</code></entry>
-
-            <entry>Required property. The value is true when a network
-            interface is a point to point interface, otherwise it is
-            false.</entry>
-          </row>
-
-          <row>
-            <entry><code>networkAdapter.isVirtual</code></entry>
-
-            <entry><code>boolean</code></entry>
-
-            <entry>Required property. The value is true when a network
-            interface is a virtual interface, otherwise it is false.</entry>
-          </row>
-
-          <row>
-            <entry><code>networkAdapter.supportsMulticast</code></entry>
-
-            <entry><code>boolean</code></entry>
-
-            <entry>Required property. The value is true when a network
-            interface supports multicasting, otherwise it is false.</entry>
-          </row>
-
-          <row>
-            <entry><code>networkAdapter.parent</code></entry>
-
-            <entry><code>String</code></entry>
-
-            <entry>Required property. Service PID of the NetworkAdapter
-            service which is parent of this NetworkAdapter is
-            specified.</entry>
-          </row>
-
-          <row>
-            <entry><code>networkAdapter.subInterface</code></entry>
-
-            <entry><code>String[]</code></entry>
-
-            <entry>Required property. Service PID of the NetworkAdapter
-            service which is subinterface of this NetworkAdapter is
-            specified.</entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
-
-    <para>When a network interface becomes available,
-    <code>NetworkAdapter</code> service associated with the network interface
-    is registered with the service repository. If the network interface
-    becomes unavailable, the corresponding <code>NetworkAdapter</code> service
-    is unregistered.</para>
-
-    <para>When the attribute values of the network interface are set to the
-    service property changes, <code>NetworkAdapter</code> service is updated.
-    <code>NetworkAdapter</code> interface provides a method corresponding to
-    <code>java.net.NetworkInterface</code> in order to provide information on
-    the associated network interface. However, this interface method does not
-    support the Static method. In addition, because
-    <code>NetworkInterface</code> object or <code>InetAddress</code> object is
-    registered in the service repository as <code>NetworkAdapter</code> and
-    <code>NetworkAdress</code>, the <code>NetworkAdapter</code> interface does
-    not provide a method to get those objects. <code>NetworkAdapter</code>
-    provides a method to retrieve the value of an attribute of a network
-    interface.</para>
-
-    <section>
-      <title>Network adapter type</title>
-
-      <para>Identifying the network interface is possible by using the network
-      interface name. However, since the network interface name is an
-      identifier that is dependent on the operating system, if network
-      interface name is used as identifier, user bundles must be implemented
-      to be aware of the operating system. Therefore, in this specification,
-      “network interface type” which is independent of the operating system,
-      is used to identify the network interface. The network interface type
-      string of “LAN” and “WAN” are defined in this specification. This
-      specification allows that Network Adapter type other than “LAN”and “WAN”
-      can be defined by the platform provider in each environment. It is
-      provided by the platform provider on which Network Interface Information
-      Service bundle is running. Network Adapter type “LAN”indicates the
-      network interface connects to a local area network. Network Adapter type
-      “WAN” indicates the network interface connects to an external network
-      (i.e. Internet). If a bundle wants to obtain the information of the
-      network interface connected to the Internet, the bundle is able to get
-      it by obtaining <code>NetworkAdapter</code> service which sets
-      "SERVICE_NETWORKADAPTER_TYPE = WAN" to service property from the service
-      repository.</para>
-
-      <para>This specification allows that Network Adapter type other than
-      “LAN”and “WAN” can be defined by the platform provider in each
-      environment. It may be provided by the platform provider on which
-      Network Interface Information Service bundle is running.</para>
-
-      <table>
-        <title>Network Adapter Type</title>
-
-        <tgroup cols="2">
-          <colspec colnum="1" colwidth="2*"/>
-
-          <colspec colnum="2" colwidth="3*"/>
-
-          <thead>
-            <row>
-              <entry>Network Interface Type</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry><code>LAN</code></entry>
-
-              <entry><code>The network interface to connect to a local area
-              network.</code></entry>
-            </row>
-
-            <row>
-              <entry><code>WAN</code></entry>
-
-              <entry><code>The network interface to connect to an external
-              network (i.e. Internet).</code></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-    </section>
-  </section>
-
-  <section>
-    <title>NetworkAddress Service</title>
-
-    <para><code>NetworkAddress</code> interface provides information of IP
-    addresses available in which execution environment on a Network Interface
-    Information Service bundle is running. <code>NetworkAddress</code> service
-    is registered with the service repository together with service properties
-    as shown in the following table.</para>
-
-    <table>
-      <title>Service properties of NetworkAddressService</title>
-
-      <tgroup cols="3">
-        <colspec colnum="1" colwidth="3*"/>
-
-        <colspec colnum="2" colwidth="1*"/>
-
-        <colspec colnum="3" colwidth="3*"/>
-
-        <thead>
-          <row>
-            <entry>The key of service property</entry>
-
-            <entry>Type</entry>
-
-            <entry>Description</entry>
-          </row>
-        </thead>
-
-        <tbody>
-          <row>
-            <entry><code>networkAdapter.type</code></entry>
-
-            <entry><code>String</code></entry>
-
-            <entry>Required property. Network interface type is set to a
-            value.</entry>
-          </row>
-
-          <row>
-            <entry><code>ipAddress.version</code></entry>
-
-            <entry><code>String</code></entry>
-
-            <entry>Required property. IP address versionis set to a
-            value.</entry>
-          </row>
-
-          <row>
-            <entry><code>ipAddress.scope</code></entry>
-
-            <entry><code>String</code></entry>
-
-            <entry>Required property. IP address scope is set to a
-            value.</entry>
-          </row>
-
-          <row>
-            <entry><code>ipAddress</code></entry>
-
-            <entry><code>String</code></entry>
-
-            <entry>Required property. IP address String is set to a
-            value.</entry>
-          </row>
-
-          <row>
-            <entry><code>subnetmask.length</code></entry>
-
-            <entry><code>int</code></entry>
-
-            <entry>Required property. subnet mask length of the required
-            properties IPv4, or IPv6 prefix length is set to a value.</entry>
-          </row>
-
-          <row>
-            <entry><code>networkAdapter.pid</code></entry>
-
-            <entry><code>String</code></entry>
-
-            <entry>Required property. Service PID of the NetworkAdapterservice
-            corresponding to the network interfacebinding this IP address is
-            set to a value.</entry>
-          </row>
-        </tbody>
-      </tgroup>
-    </table>
-
-    <para><code>NetworkAddress</code> service is registered with the service
-    repository for each available IP address. When associated IP addresses are
-    deleted, or the network interface to which the IP address is bound becomes
-    unavailable, the <code>NetworkAddress</code> service is unregistered. When
-    the associated IP address changes, <code>NetworkAddress</code> service is
-    updated. The user bundle can detect the change of IP address by monitoring
-    the registration or unregistering, updating of <code>NetworkAddress</code>
-    service. When registers NwtworkAdapter service, the implementation bundle
-    must register service PID which does not repeat by all means. Because IP
-    addresses are bound to the network interface, if any, Service PID of the
-    associated <code>NetworkAdapter</code> service and its network interface
-    type are set to service property. <code>NetworkAdapter</code> service MUST
-    be registered after the all associated <code>NetworkAddress</code>
-    services are registered. On the other hand, when unregistering services,
-    after associated <code>NetworkAdapter</code> service is unregistered,
-    <code>NetworkAddress</code> of all related services are
-    unregistered.</para>
-
-    <section>
-      <title>IP address version</title>
-
-      <para> Defined the version of the IP address. The user bundle can filter
-      using the following IP address version. </para>
-
-      <table>
-        <title>IP Address Version</title>
-
-        <tgroup cols="2">
-          <colspec colnum="1" colwidth="2*"/>
-
-          <colspec colnum="2" colwidth="3*"/>
-
-          <thead>
-            <row>
-              <entry>IP Address Version</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry><code>IPV4</code></entry>
-
-              <entry><code>IP address version which means IPv4
-              address.</code></entry>
-            </row>
-
-            <row>
-              <entry><code>IPV6</code></entry>
-
-              <entry><code>IP address version which means IPv6
-              address.</code></entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-    </section>
-
-    <section>
-      <title>IP address scope</title>
-
-      <para> Defined the scope of the IP address. The user bundle can filter
-      using the following IP address scope. </para>
-
-      <table>
-        <title>IP Address Scope</title>
-
-        <tgroup cols="2">
-          <colspec colnum="1" colwidth="2*"/>
-
-          <colspec colnum="2" colwidth="3*"/>
-
-          <thead>
-            <row>
-              <entry>IP Address Scope</entry>
-
-              <entry>Description</entry>
-            </row>
-          </thead>
-
-          <tbody>
-            <row>
-              <entry>
-                <code>GLOBAL</code>
-              </entry>
-
-              <entry>
-                <code>IP address scope which means global address.</code>
-              </entry>
-            </row>
-
-            <row>
-              <entry>
-                <code>PRIVATE_USE</code>
-              </entry>
-
-              <entry>
-                <code>IP address scope which means privateaddress.</code>
-              </entry>
-            </row>
-
-            <row>
-              <entry>
-                <code>LOOPBACK</code>
-              </entry>
-
-              <entry>
-                <code>IP address scope which means loopbackaddress.</code>
-              </entry>
-            </row>
-
-            <row>
-              <entry>
-                <code>LINKLOCAL</code>
-              </entry>
-
-              <entry>
-                <code>IP address scope which means linklocaladdress.</code>
-              </entry>
-            </row>
-
-            <row>
-              <entry>
-                <code>UNIQUE_LOCAL</code>
-              </entry>
-
-              <entry>
-                <code>IP address scope which means unique-localaddress.</code>
-              </entry>
-            </row>
-
-            <row>
-              <entry>
-                <code>UNSPECIFIED</code>
-              </entry>
-
-              <entry>
-                <code>IP address scope which means the absence of an
-                address.</code>
-              </entry>
-            </row>
-          </tbody>
-        </tgroup>
-      </table>
-
-       
-
-      <para>If a bundle which wants to check for an IP address of the IPv4
-      global, the bundle is able to confirm by obtaining
-      <code>NetworkAddress</code> service which sets
-      "<code>SERVICE_IPADDRESS_VERSION = IPV4</code>" and
-      "<code>SERVICE_IPADDRESS_SCOPE = GLOBAL</code>" to service property from
-      service repository.</para>
-    </section>
-  </section>
-
-  <section>
-    <title>A Controller Example</title>
-
-    <para>The following example shows the usage of <code>NetworkAddress</code>
-    service. The sample <code>Controller</code> class extends the
-    <code>ServiceTracker</code> class so that it can track
-    <code>NetworkAddress</code> service.</para>
-
-    <programlisting>
-class Controller extends ServiceTracker {
-    Controller(BundleContext context) {
-        super(context, NetworkAdapter.class.getName(), null);
-    }
-
-    public Object addingService(ServiceReference ref) {
-        NetworkAdapter addAdapter = (NetworkAdapter)super.addingService(ref);
-
-        String type = addAdapter.getNetworkAdapterType();
-        String displayName = addAdapter.getDisplayName();
-
-        …
-
-        String servicePID = (String) ref.getProperty(Constants.SERVICE_PID);
-        try {
-            String filter 
-                = "(" + NetworkAddress.NETWORKADAPTER_PID + "=" + servicePID + ")";
-            ServiceReference[] refs 
-                = context.getServiceReferences(NetworkAddress.class.getName(), filter);
-
-            for (int i = 0; i &lt; refs.length; i++) {
-                NetworkAddress address = (NetworkAddress) context.getService(refs[i]);
-
-                String ipAddress = address.getIpAddress();
-                int subnetMaskLength = address.getSubnetMaskLength();
-
-                …
-            }
-
-        } catch (InvalidSyntaxException e) {
-            e.printStackTrace();
-        }
-
-        return addAdapter;
-    }
-}
-    </programlisting>
-  </section>
-
-  <section>
-    <title>Security</title>
-
-    <para>To acquire network interface information, The user bundle need that
-    <code>ServicePermission[NetworkAdapter, GET]</code> and
-    <code>ServicePermission[NetworkAddress, GET]</code> are assigned. It can
-    use Filter Based Permissions. When a platform provider performs access
-    control of the bundle, It can set ServicePermission like the following
-    example.</para>
-
-    <para><code>ServicePermission["&amp;(objectClass=org.osgi.service.networkadapter.NetworkAdapter)(networkAdapter.type=LAN)",GET]</code></para>
-
-    <para><code>ServicePermission["&amp;(objectClass=org.osgi.service.networkadapter.NetworkAddress)(networkAdapter.type=LAN)
-    (ipAddress.version=IPV4)(ipAddress.scope=PRIVATE_USE)", GET]</code></para>
-  </section>
-
-  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.networkadapter.xml"/>
-
-  <section>
-    <title>References</title>
-
-    <bibliolist>
-      <bibliomixed><title>RFC 2119 : Key words for use in RFCs to Indicate
-      Requirement Levels</title> http://www.ietf.org/rfc/rfc2119.txt, March
-      1997</bibliomixed>
-
-      <bibliomixed><title>RFC 6890 : Special-Purpose IP Address
-      Registries</title> http://www.ietf.org/rfc/rfc6890.txt, April
-      2013</bibliomixed>
-
-      <bibliomixed><title>Software Requirements &amp; Specifications.</title>
-      Michael Jackson. ISBN 0-201-87712-0</bibliomixed>
-    </bibliolist>
-  </section>
+<chapter label="143" revision="$Id$"
+	version="5" xml:id="service.network" xmlns="http://docbook.org/ns/docbook"
+	xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xi="http://www.w3.org/2001/XInclude"
+	xmlns:ns5="http://www.w3.org/1999/xhtml" xmlns:ns4="http://www.w3.org/2000/svg"
+	xmlns:ns3="http://www.w3.org/1998/Math/MathML" xmlns:ns="http://docbook.org/ns/docbook">
+	<title>Network Interface Information Service Specification</title>
+
+	<info>
+		<releaseinfo>
+			<xref endterm="org.osgi.service.networkadapter-version" linkend="org.osgi.service.networkadapter" />
+		</releaseinfo>
+	</info>
+
+	<section>
+		<title>Introduction</title>
+
+		<para>The Network Interface Information Service is service for
+			obtaining
+			the network interface information and IP address information
+			which
+			standard Java API presents.
+		</para>
+
+		<para>
+			When the IP address was changed, the bundles utilize the IP address
+			information is necessary to detect the fact of the change. When using
+			a
+			standard Java API, such as
+			<code>java.net.NetworkInterface</code>
+			and
+			<code>java.net.InetAddress</code>
+			, calles to confirm the IP address at
+			regular intervals are required
+			from the bundle itself. Since this is a
+			process common to all bundles
+			that need to detect any change in IP
+			address
+			information, provision of
+			services to notify a change in IP address is
+			quite-effective.
+		</para>
+
+		<para>Therefore an API that provides a change notification feature for
+			each piece of network interface information (including the IP address
+			information) is investigated in this specification. In addition, this
+			specification defines APIs that provide the functionalities to obtain
+			the
+			network interface information and the information of IP address
+			bound to
+			the network interface.
+		</para>
+
+		<para>The name of the network interface is information depending on
+			the
+			OS. It is necessary to distinguish a network interface in the form
+			that
+			is
+			independence for the OS to use it without use bundle being
+			conscious of
+			the difference of the OS.
+		</para>
+
+		<para>
+			This specification defines
+			<code>NetworkAdapter</code>
+			Service and
+			<code>NetworkAddress</code>
+			Service. These services provide network
+			interface information and IP
+			address information. However how to receive
+			the notification of
+			network interface information and IP address
+			information is
+			implementation dependent.
+		</para>
+
+		<section>
+			<title>Entities</title>
+
+			<itemizedlist>
+				<listitem>
+					<para>
+						<emphasis>Network Interface</emphasis>
+						- Available and
+						activated network interfaces provided in the
+						execution environment.
+						In this specification, the unit of the
+						network interface is the
+						logical interface, not the physical
+						interface.
+					</para>
+				</listitem>
+
+				<listitem>
+					<para>
+						<emphasis>NetworkAdapter</emphasis>
+						- The OSGi service that
+						provides information related to the Network
+						Interface. This service
+						provides functionalities corresponding to
+						"
+						<code>java.net.NetworkInterface</code>
+						".
+					</para>
+				</listitem>
+
+				<listitem>
+					<para>
+						<emphasis>NetworkAddress</emphasis>
+						- The OSGi service that
+						provides information of IP addresses
+						available on the execution
+						environment in which a Network Interface
+						Information Service
+						bundle
+						is running.
+					</para>
+				</listitem>
+
+				<listitem>
+					<para>
+						<emphasis>NetworkAdapterType</emphasis>
+						- An identifier of the
+						network interface. It is independent of the
+						operating system. The
+						two type of identifier string is specified in
+						this specification.
+						This specification allows that Network Adapter
+						type other than
+						them
+						can be defined by the platform provider in each
+						environment. This
+						identifier is used by user bundle to specify the
+						network interface
+						to be monitored.
+					</para>
+				</listitem>
+
+				<listitem>
+					<para>
+						<emphasis>IPAdressVersion</emphasis>
+						- An identifier
+						indicating the IP address version (i.e. Ipv4,
+						IPv6). This identifier
+						is defined in this specification. This
+						identifier is used by a user
+						bundle to specify the network
+						interface to be monitored.
+					</para>
+				</listitem>
+
+				<listitem>
+					<para>
+						<emphasis>IPAdressScope</emphasis>
+						- An identifier indicating
+						the scope of IP address (i.e. GLOBAL,
+						PRIVATE). This identifier is
+						defined in this specification. This
+						identifier is used by a user
+						bundle to specify the network
+						interface to be monitored.
+					</para>
+				</listitem>
+			</itemizedlist>
+
+			<figure xml:id="figure-143-1">
+				<title>Network Interface Information Service Overview Diagram
+				</title>
+
+				<mediaobject>
+					<imageobject>
+						<imagedata align="center" contentdepth="3.750in"
+							contentwidth="5.000in" fileref="service_network_classes.svg" />
+					</imageobject>
+				</mediaobject>
+			</figure>
+
+			<para>
+				<code>NetworkAdapter</code>
+				Service provides the network interface
+				information every logic
+				interface.
+				<code>NetworkAddress</code>
+				Service
+				provides the IP address information every IP address.
+				<code>NetworkAddress</code>
+				Service is connected with
+				<code>NetworkAdapter</code>
+				Service.
+			</para>
+
+			<para>
+				When network interface information is changed, the service
+				property
+				of
+				<code>NetworkAdapter</code>
+				and the
+				<code>NetworkAddress</code>
+				is changed. It is necessary for the bundle
+				using these services to
+				track these services and knows the change of the
+				network interface
+				information through Service Event.
+			</para>
+		</section>
+	</section>
+
+	<section>
+		<title>NetworkAdapter Service</title>
+
+		<para>
+			<code>NetworkAdapter</code>
+			is an interface that provides
+			information about single network
+			interfaces provided by the execution
+			environment. If multiple network
+			interfaces are present,
+			<code>NetworkAdapter</code>
+			Services that correspond to each network
+			interface must be registered.
+			<code>NetworkAdapter</code>
+			service is
+			registered with the service repository with service
+			properties as shown in
+			the following table.
+		</para>
+
+		<table>
+			<title>Service properties of NetworkAdapterService</title>
+
+			<tgroup cols="3">
+				<colspec colnum="1" colwidth="3*" />
+
+				<colspec colnum="2" colwidth="1*" />
+
+				<colspec colnum="3" colwidth="3*" />
+
+				<thead>
+					<row>
+						<entry>The key of service property</entry>
+
+						<entry>Type</entry>
+
+						<entry>Description</entry>
+					</row>
+				</thead>
+
+				<tbody>
+					<row>
+						<entry>
+							<code>networkAdapter.type</code>
+						</entry>
+
+						<entry>
+							<code>String</code>
+						</entry>
+
+						<entry>Required property. Network interface type is set to a
+							value.
+						</entry>
+					</row>
+
+					<row>
+						<entry>
+							<code>networkAdapter.hardwareAddress</code>
+						</entry>
+
+						<entry>
+							<code>byte[]</code>
+						</entry>
+
+						<entry>Required property. Hardware address (MAC address) is set to
+							a value. This property can also be obtained from
+							getHardwareAddress().
+						</entry>
+					</row>
+
+					<row>
+						<entry>
+							<code>networkAdapter.name</code>
+						</entry>
+
+						<entry>
+							<code>String</code>
+						</entry>
+
+						<entry>Required property. Network interface name is set to a
+							value. This property can also be obtained from getName().
+						</entry>
+					</row>
+
+					<row>
+						<entry>
+							<code>networkAdapter.displayName</code>
+						</entry>
+
+						<entry>
+							<code>String</code>
+						</entry>
+
+						<entry>Required property. Network interface display name is set to
+							a value. This property can also be obtained from
+							getDisplayName().
+						</entry>
+					</row>
+
+					<row>
+						<entry>
+							<code>networkAdapter.isUp</code>
+						</entry>
+
+						<entry>
+							<code>boolean</code>
+						</entry>
+
+						<entry>Required property. The value is true when a network
+							interface is up and running, otherwise it is false.
+						</entry>
+					</row>
+
+					<row>
+						<entry>
+							<code>networkAdapter.isLoopback</code>
+						</entry>
+
+						<entry>
+							<code>boolean</code>
+						</entry>
+
+						<entry>Required property. The value is true when a network
+							interface is a loopback interface, otherwise it is false.
+						</entry>
+					</row>
+
+					<row>
+						<entry>
+							<code>networkAdapter.isPointToPoint</code>
+						</entry>
+
+						<entry>
+							<code>boolean</code>
+						</entry>
+
+						<entry>Required property. The value is true when a network
+							interface is a point to point interface, otherwise it is
+							false.
+						</entry>
+					</row>
+
+					<row>
+						<entry>
+							<code>networkAdapter.isVirtual</code>
+						</entry>
+
+						<entry>
+							<code>boolean</code>
+						</entry>
+
+						<entry>Required property. The value is true when a network
+							interface is a virtual interface, otherwise it is false.
+						</entry>
+					</row>
+
+					<row>
+						<entry>
+							<code>networkAdapter.supportsMulticast</code>
+						</entry>
+
+						<entry>
+							<code>boolean</code>
+						</entry>
+
+						<entry>Required property. The value is true when a network
+							interface supports multicasting, otherwise it is false.
+						</entry>
+					</row>
+
+					<row>
+						<entry>
+							<code>networkAdapter.parent</code>
+						</entry>
+
+						<entry>
+							<code>String</code>
+						</entry>
+
+						<entry>Required property. Service PID of the NetworkAdapter
+							service which is parent of this NetworkAdapter is
+							specified.
+						</entry>
+					</row>
+
+					<row>
+						<entry>
+							<code>networkAdapter.subInterface</code>
+						</entry>
+
+						<entry>
+							<code>String[]</code>
+						</entry>
+
+						<entry>Required property. Service PID of the NetworkAdapter
+							service which is subinterface of this NetworkAdapter is
+							specified.
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</table>
+
+		<para>
+			When a network interface becomes available,
+			<code>NetworkAdapter</code>
+			service associated with the network interface
+			is registered with the
+			service repository. If the network interface
+			becomes unavailable, the
+			corresponding
+			<code>NetworkAdapter</code>
+			service
+			is unregistered.
+		</para>
+
+		<para>
+			When the attribute values of the network interface are set to the
+			service property changes,
+			<code>NetworkAdapter</code>
+			service is updated.
+			<code>NetworkAdapter</code>
+			interface provides a method corresponding to
+			<code>java.net.NetworkInterface</code>
+			in order to provide information on
+			the associated network interface.
+			However, this interface method does
+			not
+			support the Static method. In
+			addition, because
+			<code>NetworkInterface</code>
+			object or
+			<code>InetAddress</code>
+			object is
+			registered in the service repository as
+			<code>NetworkAdapter</code>
+			and
+			<code>NetworkAdress</code>
+			, the
+			<code>NetworkAdapter</code>
+			interface does
+			not provide a method to get those objects.
+			<code>NetworkAdapter</code>
+			provides a method to retrieve the value of an attribute of a network
+			interface.
+		</para>
+
+		<section>
+			<title>Network adapter type</title>
+
+			<para>
+				Identifying the network interface is possible by using the network
+				interface name. However, since the network interface name is an
+				identifier that is dependent on the operating system, if network
+				interface name is used as identifier, user bundles must be
+				implemented
+				to be aware of the operating system. Therefore, in this
+				specification,
+				“network interface type” which is independent of the
+				operating
+				system,
+				is used to identify the network interface. The
+				network interface type
+				string of “LAN” and “WAN” are defined in this
+				specification. This
+				specification allows that Network Adapter type
+				other than “LAN”and
+				“WAN”
+				can be defined by the platform provider in
+				each environment. It is
+				provided by the platform provider on which
+				Network Interface
+				Information
+				Service bundle is running. Network
+				Adapter type “LAN”indicates the
+				network interface connects to a local
+				area network. Network Adapter type
+				“WAN” indicates the network
+				interface connects to an external
+				network
+				(i.e. Internet). If a bundle
+				wants to obtain the information of the
+				network interface connected to
+				the Internet, the bundle is able to
+				get
+				it by obtaining
+				<code>NetworkAdapter</code>
+				service which sets
+				"SERVICE_NETWORKADAPTER_TYPE = WAN" to service
+				property from the service
+				repository.
+			</para>
+
+			<para>This specification allows that Network Adapter type other than
+				“LAN”and “WAN” can be defined by the platform provider in each
+				environment. It may be provided by the platform provider on which
+				Network Interface Information Service bundle is running.
+			</para>
+
+			<table>
+				<title>Network Adapter Type</title>
+
+				<tgroup cols="2">
+					<colspec colnum="1" colwidth="2*" />
+
+					<colspec colnum="2" colwidth="3*" />
+
+					<thead>
+						<row>
+							<entry>Network Interface Type</entry>
+
+							<entry>Description</entry>
+						</row>
+					</thead>
+
+					<tbody>
+						<row>
+							<entry>
+								<code>LAN</code>
+							</entry>
+
+							<entry>
+								<code>The network interface to connect to a local area
+									network.
+								</code>
+							</entry>
+						</row>
+
+						<row>
+							<entry>
+								<code>WAN</code>
+							</entry>
+
+							<entry>
+								<code>The network interface to connect to an external
+									network
+									(i.e. Internet).
+								</code>
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</table>
+		</section>
+	</section>
+
+	<section>
+		<title>NetworkAddress Service</title>
+
+		<para>
+			<code>NetworkAddress</code>
+			interface provides information of IP
+			addresses available in which
+			execution environment on a Network Interface
+			Information Service
+			bundle is running.
+			<code>NetworkAddress</code>
+			service
+			is registered with the service repository together with
+			service
+			properties
+			as shown in the following table.
+		</para>
+
+		<table>
+			<title>Service properties of NetworkAddressService</title>
+
+			<tgroup cols="3">
+				<colspec colnum="1" colwidth="3*" />
+
+				<colspec colnum="2" colwidth="1*" />
+
+				<colspec colnum="3" colwidth="3*" />
+
+				<thead>
+					<row>
+						<entry>The key of service property</entry>
+
+						<entry>Type</entry>
+
+						<entry>Description</entry>
+					</row>
+				</thead>
+
+				<tbody>
+					<row>
+						<entry>
+							<code>networkAdapter.type</code>
+						</entry>
+
+						<entry>
+							<code>String</code>
+						</entry>
+
+						<entry>Required property. Network interface type is set to a
+							value.
+						</entry>
+					</row>
+
+					<row>
+						<entry>
+							<code>ipAddress.version</code>
+						</entry>
+
+						<entry>
+							<code>String</code>
+						</entry>
+
+						<entry>Required property. IP address versionis set to a
+							value.
+						</entry>
+					</row>
+
+					<row>
+						<entry>
+							<code>ipAddress.scope</code>
+						</entry>
+
+						<entry>
+							<code>String</code>
+						</entry>
+
+						<entry>Required property. IP address scope is set to a
+							value.
+						</entry>
+					</row>
+
+					<row>
+						<entry>
+							<code>ipAddress</code>
+						</entry>
+
+						<entry>
+							<code>String</code>
+						</entry>
+
+						<entry>Required property. IP address String is set to a
+							value.
+						</entry>
+					</row>
+
+					<row>
+						<entry>
+							<code>subnetmask.length</code>
+						</entry>
+
+						<entry>
+							<code>int</code>
+						</entry>
+
+						<entry>Required property. subnet mask length of the required
+							properties IPv4, or IPv6 prefix length is set to a value.
+						</entry>
+					</row>
+
+					<row>
+						<entry>
+							<code>networkAdapter.pid</code>
+						</entry>
+
+						<entry>
+							<code>String</code>
+						</entry>
+
+						<entry>Required property. Service PID of the NetworkAdapterservice
+							corresponding to the network interfacebinding this IP address is
+							set to a value.
+						</entry>
+					</row>
+				</tbody>
+			</tgroup>
+		</table>
+
+		<para>
+			<code>NetworkAddress</code>
+			service is registered with the service
+			repository for each available
+			IP address. When associated IP addresses are
+			deleted, or the network
+			interface to which the IP address is bound
+			becomes
+			unavailable, the
+			<code>NetworkAddress</code>
+			service is unregistered. When
+			the associated IP address changes,
+			<code>NetworkAddress</code>
+			service is
+			updated. The user bundle can detect the change of IP
+			address by monitoring
+			the registration or unregistering, updating of
+			<code>NetworkAddress</code>
+			service. When registers NwtworkAdapter service, the implementation
+			bundle
+			must register service PID which does not repeat by all means.
+			Because IP
+			addresses are bound to the network interface, if any,
+			Service PID of
+			the
+			associated
+			<code>NetworkAdapter</code>
+			service and its network interface
+			type are set to service property.
+			<code>NetworkAdapter</code>
+			service MUST
+			be registered after the all associated
+			<code>NetworkAddress</code>
+			services are registered. On the other hand, when unregistering
+			services,
+			after associated
+			<code>NetworkAdapter</code>
+			service is unregistered,
+			<code>NetworkAddress</code>
+			of all related services are
+			unregistered.
+		</para>
+
+		<section>
+			<title>IP address version</title>
+
+			<para> Defined the version of the IP address. The user bundle can
+				filter
+				using the following IP address version.
+			</para>
+
+			<table>
+				<title>IP Address Version</title>
+
+				<tgroup cols="2">
+					<colspec colnum="1" colwidth="2*" />
+
+					<colspec colnum="2" colwidth="3*" />
+
+					<thead>
+						<row>
+							<entry>IP Address Version</entry>
+
+							<entry>Description</entry>
+						</row>
+					</thead>
+
+					<tbody>
+						<row>
+							<entry>
+								<code>IPV4</code>
+							</entry>
+
+							<entry>
+								<code>IP address version which means IPv4
+									address.
+								</code>
+							</entry>
+						</row>
+
+						<row>
+							<entry>
+								<code>IPV6</code>
+							</entry>
+
+							<entry>
+								<code>IP address version which means IPv6
+									address.
+								</code>
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</table>
+		</section>
+
+		<section>
+			<title>IP address scope</title>
+
+			<para> Defined the scope of the IP address. The user bundle can
+				filter
+				using the following IP address scope.
+			</para>
+
+			<table>
+				<title>IP Address Scope</title>
+
+				<tgroup cols="2">
+					<colspec colnum="1" colwidth="2*" />
+
+					<colspec colnum="2" colwidth="3*" />
+
+					<thead>
+						<row>
+							<entry>IP Address Scope</entry>
+
+							<entry>Description</entry>
+						</row>
+					</thead>
+
+					<tbody>
+						<row>
+							<entry>
+								<code>GLOBAL</code>
+							</entry>
+
+							<entry>
+								<code>IP address scope which means global address.</code>
+							</entry>
+						</row>
+
+						<row>
+							<entry>
+								<code>PRIVATE_USE</code>
+							</entry>
+
+							<entry>
+								<code>IP address scope which means privateaddress.</code>
+							</entry>
+						</row>
+
+						<row>
+							<entry>
+								<code>LOOPBACK</code>
+							</entry>
+
+							<entry>
+								<code>IP address scope which means loopbackaddress.</code>
+							</entry>
+						</row>
+
+						<row>
+							<entry>
+								<code>LINKLOCAL</code>
+							</entry>
+
+							<entry>
+								<code>IP address scope which means linklocaladdress.</code>
+							</entry>
+						</row>
+
+						<row>
+							<entry>
+								<code>UNIQUE_LOCAL</code>
+							</entry>
+
+							<entry>
+								<code>IP address scope which means unique-localaddress.</code>
+							</entry>
+						</row>
+
+						<row>
+							<entry>
+								<code>UNSPECIFIED</code>
+							</entry>
+
+							<entry>
+								<code>IP address scope which means the absence of an
+									address.
+								</code>
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</table>
+
+
+
+			<para>
+				If a bundle which wants to check for an IP address of the IPv4
+				global, the bundle is able to confirm by obtaining
+				<code>NetworkAddress</code>
+				service which sets
+				"
+				<code>SERVICE_IPADDRESS_VERSION = IPV4</code>
+				" and
+				"
+				<code>SERVICE_IPADDRESS_SCOPE = GLOBAL</code>
+				" to service property from
+				service repository.
+			</para>
+		</section>
+	</section>
+
+	<section>
+		<title>A Controller Example</title>
+
+		<para>
+			The following example shows the usage of
+			<code>NetworkAddress</code>
+			service. The sample
+			<code>Controller</code>
+			class extends the
+			<code>ServiceTracker</code>
+			class so that it can track
+			<code>NetworkAddress</code>
+			service.
+		</para>
+
+		<programlisting>
+			class Controller extends ServiceTracker {
+				Controller(BundleContext context) {
+					super(context, NetworkAdapter.class.getName(), null);
+			}
+
+			public Object addingService(ServiceReference ref) {
+				NetworkAdapter addAdapter =	(NetworkAdapter)super.addingService(ref);
+
+				String type = addAdapter.getNetworkAdapterType();
+				String displayName = addAdapter.getDisplayName();
+	
+				…
+
+				String servicePID = (String)ref.getProperty(Constants.SERVICE_PID);
+				try {
+					String filter 
+						= "(" + NetworkAddress.NETWORKADAPTER_PID + "=" + servicePID + ")";
+					ServiceReference[] refs	
+						= context.getServiceReferences(NetworkAddress.class.getName(), filter);
+
+					for (int i = 0; i &lt; refs.length; i++) {
+						NetworkAddress address = (NetworkAddress) context.getService(refs[i]);
+
+						String ipAddress = address.getIpAddress();
+						int subnetMaskLength = address.getSubnetMaskLength();
+						
+						…
+
+					}
+					
+			} catch (InvalidSyntaxException e) {
+				e.printStackTrace();
+			}
+
+			return addAdapter;
+		}
+	}
+		</programlisting>
+	</section>
+
+	<section>
+		<title>Security</title>
+
+		<para>
+			To acquire network interface information, The user bundle need that
+			<code>ServicePermission[NetworkAdapter, GET]</code>
+			and
+			<code>ServicePermission[NetworkAddress, GET]</code>
+			are assigned. It can
+			use Filter Based Permissions. When a platform
+			provider performs access
+			control of the bundle, It can set
+			ServicePermission like the
+			following
+			example.
+		</para>
+
+		<para>
+			<code>ServicePermission["&amp;(objectClass=org.osgi.service.networkadapter.NetworkAdapter)(networkAdapter.type=LAN)",GET]
+			</code>
+		</para>
+
+		<para>
+			<code>ServicePermission["&amp;(objectClass=org.osgi.service.networkadapter.NetworkAddress)(networkAdapter.type=LAN)
+				(ipAddress.version=IPV4)(ipAddress.scope=PRIVATE_USE)", GET]
+			</code>
+		</para>
+		<para>
+			The
+			<code>NetworkAdapter</code>
+			service and the
+			<code>NetworkAddress</code>
+			service should
+			only be implemented by trusted bundles. This bundle
+			requires
+			<code>ServicePermission[NetworkAdapter, REGISTER]</code>
+			and
+			<code>ServicePermission[NetworkAddress, REGISTER]</code>
+			.
+		</para>
+	</section>
+
+	<xi:include
+		href="../../generated/javadoc/docbook/org.osgi.service.networkadapter.xml" />
+
+	<section>
+		<title>References</title>
+
+		<bibliolist>
+			<bibliomixed>
+				<title>RFC 2119 : Key words for use in RFCs to Indicate
+					Requirement
+					Levels
+				</title>
+				http://www.ietf.org/rfc/rfc2119.txt, March
+				1997
+			</bibliomixed>
+
+			<bibliomixed>
+				<title>RFC 6890 : Special-Purpose IP Address
+					Registries
+				</title>
+				http://www.ietf.org/rfc/rfc6890.txt, April
+				2013
+			</bibliomixed>
+
+			<bibliomixed>
+				<title>Software Requirements &amp; Specifications.</title>
+				Michael Jackson. ISBN 0-201-87712-0
+			</bibliomixed>
+		</bibliolist>
+	</section>
 </chapter>

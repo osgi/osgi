@@ -1,0 +1,118 @@
+/*
+ * Copyright (c) OSGi Alliance (2015). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.osgi.service.serial;
+
+/**
+ * An object represents the Serial port configuration.
+ */
+public class SerialPortConfiguration {
+	private final int	baudRate;
+	private final int	dataBits;
+	private final int	flowControl;
+	private final int	parity;
+	private final int	stopBits;
+
+	/**
+	 * Creates an instance of the serial port configuration with the specified
+	 * Baud rate, Data bits, Flow control, Parity and Stop bits.
+	 * 
+	 * @param baudRate Baud rate.
+	 * @param dataBits Data bits.
+	 * @param flowControl Flow control.
+	 * @param parity Parity.
+	 * @param stopBits Stop bits.
+	 */
+	public SerialPortConfiguration(int baudRate, int dataBits, int flowControl, int parity, int stopBits) {
+		this.baudRate = baudRate;
+		this.dataBits = dataBits;
+		this.flowControl = flowControl;
+		this.parity = parity;
+		this.stopBits = stopBits;
+	}
+
+	/**
+	 * Creates an instance of the serial port configuration with the specified Baud rate and the following configurations.
+	 * Data bits = 8, Flow control = none, Parity = none, Stop bits = 1.
+	 * 
+	 * @param baudRate Baud rate.
+	 */
+	public SerialPortConfiguration(int baudRate) {
+		this.baudRate = baudRate;
+		this.dataBits = Constants.DATABITS_8;
+		this.flowControl = Constants.FLOWCONTROL_NONE;
+		this.parity = Constants.PARITY_NONE;
+		this.stopBits = Constants.STOPBITS_1;
+	}
+
+	/**
+	 * Creates an instance of the serial port configuration with the following configurations.
+	 * Baud rate = auto, Data bits = 8, Flow control = none, Parity = none, Stop bits = 1.
+	 */
+	public SerialPortConfiguration() {
+		this.baudRate = Constants.BAUD_AUTO;
+		this.dataBits = Constants.DATABITS_8;
+		this.flowControl = Constants.FLOWCONTROL_NONE;
+		this.parity = Constants.PARITY_NONE;
+		this.stopBits = Constants.STOPBITS_1;
+	}
+
+	/**
+	 * Gets the baud rate value.<br>
+	 *
+	 * @return the baud rate
+	 */
+	public int getBaudRate() {
+		return baudRate;
+	}
+
+	/**
+	 * Gets the data bits.<br>
+	 *
+	 * @return the data bits
+	 */
+	public int getDataBits() {
+		return dataBits;
+	}
+
+	/**
+	 * Gets the flow control.<br>
+	 *
+	 * @return the flow control
+	 */
+	public int getFlowControl() {
+		return flowControl;
+	}
+
+	/**
+	 * Gets the parity.<br>
+	 *
+	 * @return the parity
+	 */
+	public int getParity() {
+		return parity;
+	}
+
+	/**
+	 * Gets the stop bits. <br>
+	 *
+	 * @return the stop bits
+	 */
+	public int getStopBits() {
+		return stopBits;
+	}
+
+}

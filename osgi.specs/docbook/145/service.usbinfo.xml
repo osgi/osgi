@@ -1,0 +1,583 @@
+<chapter xmlns="http://docbook.org/ns/docbook" xmlns:ns="http://docbook.org/ns/docbook"
+	xmlns:ns3="http://www.w3.org/1998/Math/MathML" xmlns:ns4="http://www.w3.org/2000/svg"
+	xmlns:ns5="http://www.w3.org/1999/xhtml" xmlns:xi="http://www.w3.org/2001/XInclude"
+	xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="service.usbinfo"
+	label="145" revision="$Id$" version="5">
+	<title>USB Information Device Category Specification</title>
+	<info>
+		<releaseinfo>
+			<xref endterm="org.osgi.service.usbinfo-version" linkend="org.osgi.service.usbinfo" />
+		</releaseinfo>
+	</info>
+	<section>
+		<title>Introduction</title>
+		<para>OSGi Device Access Specification defines a unified and
+			sophisticated way to handle devices attached to a residential gateway
+			or devices found in the home network by using various protocols such
+			as USB, ZigBee, ZWave, KNX, UPnP etc. However, OSGi Device Access
+			Specification clearly declare that Device Category must be defined
+			outside of OSGi Device Access Specification.
+		</para>
+		<para>Recently, OSGi is gaining popularity as enabling technology for
+			building embedded system in residential market. It gets popular that
+			a HGW has USB interfaces and the needs of handling USB devices
+			attached to a residential gateway is increased.
+		</para>
+		<para>This specification defines a device category for USB
+			devices.
+		</para>
+		<section>
+			<title>Entities</title>
+			<itemizedlist>
+				<listitem>
+					<para>
+						<emphasis>USBInfoDevice</emphasis>
+						- The representation of a
+						USB device. This service provide
+						information defined by the USB
+						Implementers Forum, Inc.
+					</para>
+				</listitem>
+			</itemizedlist>
+			<figure xml:id="figure-145-1">
+				<title>USB Information Device Service Overview Diagram</title>
+				<mediaobject>
+					<imageobject>
+						<imagedata align="center" contentdepth="3.750in"
+							contentwidth="5.000in" fileref="service_usbinfo_classes.svg" />
+					</imageobject>
+				</mediaobject>
+			</figure>
+		</section>
+
+	</section>
+	<section>
+		<title>USBInfoDevice Service</title>
+		<para>
+			The device services are registered in the OSGi service registry
+			with
+			<code>org.osgi.service.usbinfo.USBInfoDevice</code>
+			interface.
+			The service is registered by a USB information base driver
+			bundle
+			when a USB device is attached. A USB information base driver
+			bundle
+			must implement
+			<code>org.osgi.service.usbinfo.USBInfoDevice</code>
+			interface and register the OSGi service under
+			<code>org.osgi.service.usbinfo.USBInfoDevice</code>
+			. Refining drivers
+			can find USB devices via
+			<code>USBInfoDevice</code>
+			services and
+			identify the device. The
+			<code>USBInfoDevice</code>
+			service has a set
+			of properties.
+		</para>
+		<para>
+			USB Specification, see
+			<xref linkend="usbspec" />
+			, defines that
+			a USB device has USB interface(s). A USB information
+			base driver
+			bundle must register
+			<code>USBInfoDevice</code>
+			services number of
+			USB interfaces. A
+			<code>USBInfoDevice</code>
+			service has information
+			that contains a USB device information and a
+			USB interface
+			information.
+		</para>
+		<para>The USB information base driver may need native drivers such as
+			kernel drivers on Linux. This document has a precondition that there
+			are native drivers. It is out of scope how to install native
+			drivers.
+		</para>
+
+		<section>
+			<title>Device Access Category</title>
+			<para>The
+				device access category is called &quot;USBInfo&quot;. The
+				category
+				name is defined as a value of
+				<code>USBInfoDevice.DEVICE_CATEGORY</code>
+				constant. It can be used
+				as a part of
+				<code>org.osgi.service.device.Constants.DEVICE_CATEGORY</code>
+				service key value. The category imposes the following specification
+				rules.
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para>
+						<code>USBInfoDevice.DEVICE_CATEGORY</code>
+						- MANDATORY
+						property. The value is &quot;USBInfo&quot;. Constant
+						for the value
+						of the service property
+						<code>DEVICE_CATEGORY</code>
+						used for all
+						USB devices. A USB information base driver bundle must
+						set this
+						property key.
+					</para>
+				</listitem>
+			</itemizedlist>
+		</section>
+		<section>
+			<title>Service properties from USB Specification</title>
+			<para>The USB Specification defines a device descriptor. USB devices
+				report their attributes using descriptors. USBInfoDevice service has
+				some properties from the USB device descriptor.
+			</para>
+			<table>
+				<title>Service properties of USBInfoDevice service from Device
+					Descriptor
+				</title>
+				<tgroup cols="4">
+					<colspec colnum="1" colwidth="3*" />
+					<colspec colnum="2" colwidth="1*" />
+					<colspec colnum="3" colwidth="4*" />
+					<colspec colnum="4" colwidth="2*" />
+					<thead>
+						<row>
+							<entry>The key of service property</entry>
+							<entry>Type</entry>
+							<entry>Description</entry>
+							<entry>Device Descriptor&apos;s Field from USB Spec.</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>
+								<code>usbinfo.bcdUSB</code>
+							</entry>
+							<entry>
+								<code>String</code>
+							</entry>
+							<entry>
+								<para>OPTIONAL property key. The 4-digit BCD format.</para>
+								<para>Example: &quot;0210&quot;</para>
+							</entry>
+							<entry>bcdUSB</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.bDeviceClass</code>
+							</entry>
+							<entry>
+								<code>String</code>
+							</entry>
+							<entry>
+								<para>MANDATORY property key. Hexadecimal, 2-digits.</para>
+								<para>Example: &quot;ff&quot;</para>
+							</entry>
+							<entry>bDeviceClass</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.bDeviceSubClass</code>
+							</entry>
+							<entry>
+								<code>String</code>
+							</entry>
+							<entry>
+								<para>MANDATORY property key. Hexadecimal, 2-digits.</para>
+								<para>Example: &quot;ff&quot;</para>
+							</entry>
+							<entry>bDeviceSubClass</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.bDeviceProtocol</code>
+							</entry>
+							<entry>
+								<code>String</code>
+							</entry>
+							<entry>
+								<para>MANDATORY property key. Hexadecimal, 2-digits.</para>
+								<para>Example: &quot;ff&quot;</para>
+							</entry>
+							<entry>bDeviceProtocol</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.bMaxPacketSize</code>
+							</entry>
+							<entry>
+								<code>Integer</code>
+							</entry>
+							<entry>
+								<para>OPTIONAL property key.</para>
+							</entry>
+							<entry>bMaxPacketSize0</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.idVendor</code>
+							</entry>
+							<entry>
+								<code>String</code>
+							</entry>
+							<entry>
+								<para>MANDATORY property key. Hexadecimal, 4-digits.</para>
+								<para>Example: &quot;0403&quot;</para>
+							</entry>
+							<entry>idVendor</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.idProduct</code>
+							</entry>
+							<entry>
+								<code>String</code>
+							</entry>
+							<entry>
+								<para>MANDATORY property key. Hexadecimal, 4-digits.</para>
+								<para>Example: &quot;8372&quot;</para>
+							</entry>
+							<entry>idProduct</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.bcdDevice</code>
+							</entry>
+							<entry>
+								<code>String</code>
+							</entry>
+							<entry>
+								<para>MANDATORY property key. The 4-digit BCD format.</para>
+								<para>Example: &quot;0200&quot;</para>
+							</entry>
+							<entry>bcdDevice</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.Manufacturer</code>
+							</entry>
+							<entry>
+								<code>String</code>
+							</entry>
+							<entry>
+								<para>OPTIONAL property key. String of indicated in
+									iManufacturer. (The value is not the index.)
+								</para>
+								<para>Example: &quot;Buffalo Inc.&quot;</para>
+							</entry>
+							<entry>iManufacturer</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.Product</code>
+							</entry>
+							<entry>
+								<code>String</code>
+							</entry>
+							<entry>
+								<para>OPTIONAL property key. String of indicated in iProduct.
+									(The value is not the index.)
+								</para>
+								<para>Example: &quot;USB2.0 PC Camera&quot;</para>
+							</entry>
+							<entry>iProduct</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.SerialNumber</code>
+							</entry>
+							<entry>
+								<code>String</code>
+							</entry>
+							<entry>
+								<para>OPTIONAL property key. String of indicated in
+									iSerialNumber. (The value is not the index.)
+								</para>
+								<para>Example: &quot;57B0002600000001&quot;</para>
+							</entry>
+							<entry>iSerialNumber</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.bNumConfigurations</code>
+							</entry>
+							<entry>
+								<code>Integer</code>
+							</entry>
+							<entry>
+								<para>OPTIONAL property key.</para>
+							</entry>
+							<entry>bNumConfigurations</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</table>
+			<para>According to the USB Specification, a device descriptor has
+				some interface descriptors.
+			</para>
+			<para>Refining drivers need each interface descriptors&apos;
+				bInterfaceClass, bInterfaceSubClass and bInterfaceProtocol to
+				identify devices. So these fields add to the service
+				properties.
+			</para>
+			<table>
+				<title>Service properties of USBInfoDevice service from Interface
+					Descriptor
+				</title>
+				<tgroup cols="4">
+					<colspec colnum="1" colwidth="3*" />
+					<colspec colnum="2" colwidth="1*" />
+					<colspec colnum="3" colwidth="4*" />
+					<colspec colnum="4" colwidth="2*" />
+					<thead>
+						<row>
+							<entry>The key of service property</entry>
+							<entry>Type</entry>
+							<entry>Description</entry>
+							<entry>Interface Descriptor&apos;s Field from USB Spec.</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>
+								<code>usbinfo.bInterfaceNumber</code>
+							</entry>
+							<entry>
+								<code>Integer</code>
+							</entry>
+							<entry>
+								<para>MANDATORY property key.</para>
+							</entry>
+							<entry>bInterfaceNumber</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.bAlternateSetting</code>
+							</entry>
+							<entry>
+								<code>Integer</code>
+							</entry>
+							<entry>
+								<para>OPTIONAL property key.</para>
+							</entry>
+							<entry>bAlternateSetting</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.bAlternateSetting</code>
+							</entry>
+							<entry>
+								<code>Integer</code>
+							</entry>
+							<entry>
+								<para>OPTIONAL property key.</para>
+							</entry>
+							<entry>bNumEndpoints</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.bInterfaceClass</code>
+							</entry>
+							<entry>
+								<code>String</code>
+							</entry>
+							<entry>
+								<para>MANDATORY property key. Hexadecimal, 2-digits.</para>
+								<para>Example: &quot;ff&quot;</para>
+							</entry>
+							<entry>bInterfaceClass</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.bInterfaceSubClass</code>
+							</entry>
+							<entry>
+								<code>String</code>
+							</entry>
+							<entry>
+								<para>MANDATORY property key. Hexadecimal, 2-digits.</para>
+								<para>Example: &quot;ff&quot;</para>
+							</entry>
+							<entry>bInterfaceSubClass</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.bInterfaceProtocol</code>
+							</entry>
+							<entry>
+								<code>String</code>
+							</entry>
+							<entry>
+								<para>MANDATORY property key. Hexadecimal, 2-digits.</para>
+								<para>Example: &quot;ff&quot;</para>
+							</entry>
+							<entry>bInterfaceProtocol</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.Interface</code>
+							</entry>
+							<entry>
+								<code>String</code>
+							</entry>
+							<entry>
+								<para>OPTIONAL property key. String of indicated in iInterface.
+									(The value is not the index.)
+								</para>
+							</entry>
+							<entry>iInterface</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</table>
+		</section>
+		<section>
+			<title>Other Service properties</title>
+			<para>Some other service properties are needed to identify and
+				access
+				a device by refining drivers.
+			</para>
+			<table>
+				<title>Service properties of USBInfoDevice service from Interface
+					Descriptor
+				</title>
+				<tgroup cols="3">
+					<colspec colnum="1" colwidth="2*" />
+					<colspec colnum="2" colwidth="1*" />
+					<colspec colnum="3" colwidth="4*" />
+					<thead>
+						<row>
+							<entry>The key of service property</entry>
+							<entry>Type</entry>
+							<entry>Description</entry>
+						</row>
+					</thead>
+					<tbody>
+						<row>
+							<entry>
+								<code>usbinfo.bus</code>
+							</entry>
+							<entry>
+								<code>Integer</code>
+							</entry>
+							<entry>
+								<para>MANDATORY property key. The value is Integer. Used to
+									identify USB devices with same VID / PID. The value is the ID
+									of the USB bus assigned when connecting the USB device. USB bus
+									ID is integer. The USB bus ID does not change while the USB
+									device remains connected.
+								</para>
+								<para>Example: 3</para>
+							</entry>
+						</row>
+						<row>
+							<entry>
+								<code>usbinfo.address</code>
+							</entry>
+							<entry>
+								<code>Integer</code>
+							</entry>
+							<entry>
+								<para>MANDATORY property key. The value is Integer. Used to
+									identify USB devices with same VID / PID. The value is the ID
+									of the USB address assigned when connecting the USB device. USB
+									address is integer (001-127). The USB address does not change
+									while the USB device remains connected.
+								</para>
+								<para>Example: 2</para>
+							</entry>
+						</row>
+					</tbody>
+				</tgroup>
+			</table>
+		</section>
+		<section>
+			<title>Match scale</title>
+			<para>When the driver service is registered by the driver bundle,
+				the
+				Device Manager calls Driver#match() with the argument of the
+				USBInfoDevice service&apos;s ServiceReference. The driver responds
+				with the value based on below scale.
+			</para>
+			<itemizedlist>
+				<listitem>
+					<para>MATCH_VERSION - Constant for the USB device match scale,
+						indicating a match with usbinfo.idVendor, usbinfo.idProduct and
+						usbinfo.bcdDevice. Value is 50.
+					</para>
+				</listitem>
+				<listitem>
+					<para>MATCH_MODEL - Constant for the USB device match scale,
+						indicating a match with usbinfo.idVendor and eusbinfo.idProduct.
+						Value is 40.
+					</para>
+				</listitem>
+				<listitem>
+					<para>MATCH_PROTOCOL - Constant for the USB device match scale,
+						indicating a match with usbinfo.bDeviceClass,
+						usbinfo.bDeviceSubClass and usbinfo.bDeviceProtocol, or a match
+						with usbinfo.bInterfaceClass, usbinfo.bInterfaceSubClass and
+						usbinfo.bInterfaceProtocol. Value is 30.
+					</para>
+				</listitem>
+				<listitem>
+					<para>MATCH_SUBCLASS - Constant for the USB device match scale,
+						indicating a match usbinfo.bDeviceClass and
+						usbinfo.bDeviceSubClass, or a match with usbinfo.bInterfaceClass
+						and usbinfo.bInterfaceSubClass. Value is 20.
+					</para>
+				</listitem>
+				<listitem>
+					<para>MATCH_CLASS - Constant for the USB device match scale,
+						indicating a match with usbinfo.bDeviceClass, or a match with
+						usbinfo.bInterfaceClass. Value is 10.
+					</para>
+				</listitem>
+			</itemizedlist>
+		</section>
+	</section>
+
+
+	<section>
+		<title>Security</title>
+		<para>
+			To acquire USB information device service, The refining bundle need
+			that
+			<code>ServicePermission[USBInfoDevice, GET]</code>
+			are assigned.
+		</para>
+		<para>
+			<code>USBInfoDevice</code>
+			service should
+			only be implemented by trusted bundles. This bundle
+			requires
+			<code>ServicePermission[USBInfoDevice, REGISTER]</code>
+			.
+		</para>
+	</section>
+
+	<xi:include
+		href="../../generated/javadoc/docbook/org.osgi.service.usbinfo.xml" />
+
+	<section>
+		<title>References</title>
+		<bibliolist>
+			<bibliomixed>
+				<title>Bradner, S., Key words for use in RFCs to Indicate
+					Requirement Levels.
+				</title>
+				https://www.ietf.org/rfc/rfc2119.txt, March 1997.
+			</bibliomixed>
+			<bibliomixed>
+				<title>Software Requirements &amp; Specifications.</title>
+				Michael Jackson. ISBN 0-201-87712-0
+			</bibliomixed>
+			<bibliomixed xml:id="usbspec">
+				<title>Universal Serial Bus Specification Revision 1.1</title>
+				September 23, 1998.
+			</bibliomixed>
+		</bibliolist>
+	</section>
+</chapter>

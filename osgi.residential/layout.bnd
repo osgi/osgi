@@ -14,8 +14,10 @@ osgi.residential.specs = \
 	 org.osgi.service.networkadapter, \
 	 org.osgi.service.provisioning, \
 	 org.osgi.service.resourcemonitoring, \
+	 org.osgi.service.serial, \
 	 org.osgi.service.tr069todmt, \
 	 org.osgi.service.upnp, \
+	 org.osgi.service.usbinfo, \
 	 org.osgi.service.useradmin, \
 	 org.osgi.util.xml
 

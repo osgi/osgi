@@ -1,5 +1,5 @@
 /**
- * SerialDevice service properties for USB-Serial devices Specification Package Version 1.0.
+ * USB Information Device Category Specification Package Version 1.0.
  *
  * <p>
  * Bundles wishing to use this package must list the package in the
@@ -10,11 +10,15 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.serial; version="[1.0,2.0)"}
+ * {@code  Import-Package: org.osgi.service.usbinfo; version="[1.0,2.0)"}
+ * <p>
+ * Example import for providers implementing the API in this package:
+ * <p>
+ * {@code  Import-Package: org.osgi.service.usbinfo; version="[1.0,1.1)"}
  *
  * @version 1.0
  * @author $Id$
  */
 
-package org.osgi.service.serial.usb;
+package org.osgi.service.usbinfo;
 
