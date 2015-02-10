@@ -29,7 +29,6 @@ import org.osgi.service.resourcemonitoring.ResourceContextException;
 import org.osgi.service.resourcemonitoring.ResourceMonitor;
 import org.osgi.service.resourcemonitoring.ResourceMonitorFactory;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
-import org.osgi.service.resourcemonitoring.ResourceMonitoringServiceException;
 import org.osgi.test.cases.resourcemonitoring.utils.FakeResourceMonitor;
 import org.osgi.test.cases.resourcemonitoring.utils.ResourceContextListenerTestImpl;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -96,12 +95,12 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	 * This test case validates the Resource Context creation and the retrieving
 	 * of a ResourceContext.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
 	 * @throws ResourceContextException, see
 	 *         {@link ResourceContext#getMonitors()}
 	 */
-	public void testTC1CreationOfAResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testCreationOfAResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
 
 		// Lists existing contexts by calling ResourceManager.listContext().
@@ -168,10 +167,10 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	 * This test case tests that it is no possible to create two ResourceContext
 	 * with the same name.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
 	 */
-	public void testTC2CreationOfAResourceContextWithAnExistingResourceContextName() throws ResourceMonitoringServiceException {
+	public void testCreationOfAResourceContextWithAnExistingResourceContextName() throws IllegalArgumentException {
 		final String name = "context1";
 		// A ResourceContextListener service was already registered.
 
@@ -196,10 +195,10 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 		// the same name.
 		try {
 			resourceMonitoringService.createContext(name, null);
-			fail("A ResourceMonitoringServiceException is expected here.");
-		} catch (ResourceMonitoringServiceException e) {
-			// Checks that a ResourceMonitoringServiceException is thrown.
-			assertException("A ResourceMonitoringServiceException is expected.", ResourceMonitoringServiceException.class, e);
+			fail("A IllegalArgumentException is expected here.");
+		} catch (IllegalArgumentException e) {
+			// Checks that a IllegalArgumentException is thrown.
+			assertException("A IllegalArgumentException is expected.", IllegalArgumentException.class, e);
 		}
 
 		// Checks no ResourceContextEvent has been sent (i.e the "last event"
@@ -218,14 +217,14 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	 * This test case validates the Resource Context creation with a template
 	 * Resource Context.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
 	 * @throws ResourceContextException, see
 	 *         {@link ResourceContext#addResourceMonitor(ResourceMonitor)},
 	 *         {@link ResourceContext#getMonitors()}
 	 */
-	public void testTC3CreationOfAResourceContextBasedOnATemplateResourceContext()
-			throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testCreationOfAResourceContextBasedOnATemplateResourceContext()
+			throws IllegalArgumentException, ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
 
@@ -267,15 +266,15 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	 * This test case tests the ResourceContext creation with a template
 	 * ResourceContext which has been previously deleted.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
 	 * @throws ResourceContextException, see
 	 *         {@link ResourceContext#addResourceMonitor(ResourceMonitor)},
 	 *         {@link ResourceContext#removeContext(ResourceContext)},
 	 *         {@link ResourceContext#getMonitors()}
 	 */
-	public void testTC4CreationOfAResourceContextBasedOnATemplateResourceContextPreviouslyDeleted()
-			throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testCreationOfAResourceContextBasedOnATemplateResourceContextPreviouslyDeleted()
+			throws IllegalArgumentException, ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
 		// Creates a template ResourceContext named "context1".
@@ -315,12 +314,12 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	 * This test case validates the retrieving a ResourceContext based on a
 	 * bundle.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
 	 * @throws ResourceContextException, see
 	 *         {@link ResourceContext#addBundle(long)}
 	 */
-	public void testTC5RetrievingAResourceContextBasedOnABundleIdentifier() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testRetrievingAResourceContextBasedOnABundleIdentifier() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
 		final long bundleId = 1;
 		// Retrieve the ResourceContext associated with bundle id 1.
@@ -357,7 +356,7 @@ public class TC1_ResourceContextCreationRelatedTestCases extends DefaultTestBund
 	 * @throws InvalidSyntaxException, see
 	 *         {@link BundleContext#getServiceReferences(Class, String)}
 	 */
-	public void testTC6SupportedTypesOfResources() throws InvalidSyntaxException {
+	public void testSupportedTypesOfResources() throws InvalidSyntaxException {
 
 		// Retrieve the array of supported types by calling
 		// ResourceManager.getSupportedTypes().

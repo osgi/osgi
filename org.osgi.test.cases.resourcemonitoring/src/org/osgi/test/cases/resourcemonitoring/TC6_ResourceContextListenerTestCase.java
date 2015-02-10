@@ -28,7 +28,6 @@ import org.osgi.service.resourcemonitoring.ResourceContextEvent;
 import org.osgi.service.resourcemonitoring.ResourceContextException;
 import org.osgi.service.resourcemonitoring.ResourceContextListener;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
-import org.osgi.service.resourcemonitoring.ResourceMonitoringServiceException;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 
 /**
@@ -110,12 +109,12 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * Test case 1 : ResourceContextListener filtering RESOURCE_CONTEXT_CREATED
 	 * event.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 * @throws ResourceContextException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 */
-	public void testTC1ResourceContextListenerFiltering_RESOURCE_CONTEXT_CREATED_event() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testTC1ResourceContextListenerFiltering_RESOURCE_CONTEXT_CREATED_event() throws IllegalArgumentException, ResourceContextException {
 
 		// registers the ResourceContextListener with a RESOURCE_CONTEXT_CREATED
 		// type filter
@@ -140,12 +139,12 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * Test case 2: ResourceContextListener filtering RESOURCE_CONTEXT_REMOVED
 	 * event.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 * @throws ResourceContextException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 */
-	public void testTC2ResourceContextListenerFiltering_RESOURCE_CONTEXT_REMOVED_event() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testTC2ResourceContextListenerFiltering_RESOURCE_CONTEXT_REMOVED_event() throws IllegalArgumentException, ResourceContextException {
 		// registers the ResourceContextListener with a RESOURCE_CONTEXT_REMOVED
 		// type filter
 		registerListener(
@@ -168,12 +167,12 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	/**
 	 * Test case 3: ResourceContextListener filtering BUNDLE_ADDED event.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 * @throws ResourceContextException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 */
-	public void testTC3ResourceContextListenerFiltering_BUNDLE_ADDED_event() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testTC3ResourceContextListenerFiltering_BUNDLE_ADDED_event() throws IllegalArgumentException, ResourceContextException {
 		// registers the ResourceContextListener with a BUNDLE_ADDED
 		// type filter
 		registerListener(new int[] {ResourceContextEvent.BUNDLE_ADDED}, null);
@@ -196,12 +195,12 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	/**
 	 * Test case 4: ResourceContextListener filtering BUNDLE_REMOVED event.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 * @throws ResourceContextException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 */
-	public void testTC4ResourceContextListenerFiltering_BUNDLE_REMOVED_event() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testTC4ResourceContextListenerFiltering_BUNDLE_REMOVED_event() throws IllegalArgumentException, ResourceContextException {
 		// registers the ResourceContextListener with a BUNDLE_REMOVED
 		// type filter
 		registerListener(new int[] {ResourceContextEvent.BUNDLE_REMOVED},
@@ -226,12 +225,12 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * Test case 5 : ResourceContextListener filtering events of a specific
 	 * ResourceContext.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 * @throws ResourceContextException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 */
-	public void testTC5ResourceContextListenerFilteringEventsOfASpecificResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testTC5ResourceContextListenerFilteringEventsOfASpecificResourceContext() throws IllegalArgumentException, ResourceContextException {
 		// register this instance as a ResourceContextListener filtering events
 		// of context1.
 		registerListener(null, new String[] {RESOURCE_CONTEXT_NAME});
@@ -278,12 +277,12 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * Test case 6 : registering a ResourceContextListener filtering two types
 	 * of events on a particular ResourceContext.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 * @throws ResourceContextException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 */
-	public void testTC6RegisteringAResourceContextListenerFilteringTwoTypesOfEventsOnAParticularResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testTC6RegisteringAResourceContextListenerFilteringTwoTypesOfEventsOnAParticularResourceContext() throws IllegalArgumentException, ResourceContextException {
 		// register this instance as a ResourceContextListener filtering on
 		// RESOURCE_CONTEXT_CREATED event type and on RESOURCE_CONTEXT_REMOVED
 		// event type all related to context1
@@ -319,12 +318,12 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	/**
 	 * Test case 7 : unregistering a ResourceContextListener.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 * @throws ResourceContextException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 */
-	public void testTC7UnregisteringAResourceContextListener() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testTC7UnregisteringAResourceContextListener() throws IllegalArgumentException, ResourceContextException {
 		// register this instance as a ResourceContextListener without filters
 		registerListener(null, null);
 
@@ -389,14 +388,14 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * This method is called by all tests cases to generate
 	 * ResourceContextEvent.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
 	 * @throws ResourceContextException, see
 	 *         {@link ResourceContext#addBundle(long)}
 	 *         {@link ResourceContext#removeBundle(long)}
 	 *         {@link ResourceContext#removeContext(ResourceContext)}
 	 */
-	private void executeScenario1() throws ResourceMonitoringServiceException, ResourceContextException {
+	private void executeScenario1() throws IllegalArgumentException, ResourceContextException {
 		// create context1
 		ResourceContext resourceContext = resourceMonitoringService.createContext(
 				RESOURCE_CONTEXT_NAME, null);
@@ -422,14 +421,14 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 * This method is called by all tests cases to generate
 	 * ResourceContextEvent.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
 	 * @throws ResourceContextException, see
 	 *         {@link ResourceContext#addBundle(long)}
 	 *         {@link ResourceContext#removeBundle(long)}
 	 *         {@link ResourceContext#removeContext(ResourceContext)}
 	 */
-	private void executeScenario2() throws ResourceMonitoringServiceException, ResourceContextException {
+	private void executeScenario2() throws IllegalArgumentException, ResourceContextException {
 		// create context2
 		ResourceContext resourceContext = resourceMonitoringService.createContext(
 				RESOURCE_CONTEXT_NAME2, null);

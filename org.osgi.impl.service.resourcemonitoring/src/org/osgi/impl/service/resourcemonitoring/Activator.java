@@ -8,7 +8,6 @@ import org.osgi.impl.service.resourcemonitoring.bundlemanagement.BundleManager;
 import org.osgi.impl.service.resourcemonitoring.bundlemanagement.BundleManagerException;
 import org.osgi.impl.service.resourcemonitoring.bundlemanagement.BundleManagerImpl;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
-import org.osgi.service.resourcemonitoring.ResourceMonitoringServiceException;
 
 /**
  * Activator
@@ -74,12 +73,12 @@ public class Activator implements BundleActivator {
 	/**
 	 * Start the resourceMonitoringServiceImpl.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link ResourceMonitoringServiceImpl#start(BundleContext)}
 	 * @throws BundleManagerException, see
 	 *         {@link BundleManager#start(BundleContext)}
 	 */
-	private void startResourceMonitoringServiceImpl() throws ResourceMonitoringServiceException, BundleManagerException {
+	private void startResourceMonitoringServiceImpl() throws IllegalArgumentException, BundleManagerException {
 		bundleManager = new BundleManagerImpl();
 		bundleManager.start(bundleContext);
 

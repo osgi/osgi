@@ -23,7 +23,6 @@ import org.osgi.service.resourcemonitoring.ResourceContext;
 import org.osgi.service.resourcemonitoring.ResourceContextEvent;
 import org.osgi.service.resourcemonitoring.ResourceContextException;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
-import org.osgi.service.resourcemonitoring.ResourceMonitoringServiceException;
 import org.osgi.test.cases.resourcemonitoring.utils.FakeResourceMonitor;
 import org.osgi.test.cases.resourcemonitoring.utils.ResourceContextListenerTestImpl;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
@@ -91,12 +90,12 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	 * This test case validates the deletion of a ResourceContext with no
 	 * ResourceContext as destination.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
 	 * @throws ResourceContextException, see
 	 *         {@link ResourceContext#removeContext(ResourceContext)}
 	 */
-	public void testTC1DeletionOfAResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testTC1DeletionOfAResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
 
 		// create the resource context
@@ -125,7 +124,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 		// check it is not possible to add monitor
 		try {
 			resourceContext.addResourceMonitor(new FakeResourceMonitor());
-			fail("A ResourceMonitoringServiceException is expected here.");
+			fail("A ResourceContextException is expected here.");
 		} catch (ResourceContextException e) {
 			log("Expected exception: ");
 			e.printStackTrace();
@@ -145,13 +144,13 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	 * This test case validates the deletion of a ResourceContext with a
 	 * destination.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
 	 * @throws ResourceContextException, see
 	 *         {@link ResourceContext#addBundle(long)}
 	 *         {@link ResourceContext#removeContext(ResourceContext)}
 	 */
-	public void testTC2DeletionOfAResourceContextWithADestinationResourceContext() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testTC2DeletionOfAResourceContextWithADestinationResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
 		final long bundleId = 1;
@@ -242,13 +241,13 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	 * This test case validates the deletion of a ResourceContext with a
 	 * ResourceContext destination which has been previously deleted.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link ResourceMonitoringService#createContext(String, ResourceContext)}
 	 * @throws ResourceContextException, see
 	 *         {@link ResourceContext#addBundle(long)},
 	 *         {@link ResourceContext#removeContext(ResourceContext)}
 	 */
-	public void testTC3DeletionOfAResourceContextWithAPreviouslyDeletedResourceContextAsDestination() throws ResourceMonitoringServiceException, ResourceContextException {
+	public void testTC3DeletionOfAResourceContextWithAPreviouslyDeletedResourceContextAsDestination() throws IllegalArgumentException, ResourceContextException {
 		final String name1 = "name1";
 		final String name2 = "name2";
 		final long bundleId = 1;

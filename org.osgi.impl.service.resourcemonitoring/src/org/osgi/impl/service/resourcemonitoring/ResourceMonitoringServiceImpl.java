@@ -18,7 +18,6 @@ import org.osgi.service.resourcemonitoring.ResourceMonitor;
 import org.osgi.service.resourcemonitoring.ResourceMonitorException;
 import org.osgi.service.resourcemonitoring.ResourceMonitorFactory;
 import org.osgi.service.resourcemonitoring.ResourceMonitoringService;
-import org.osgi.service.resourcemonitoring.ResourceMonitoringServiceException;
 import org.osgi.util.tracker.ServiceTracker;
 import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
@@ -125,10 +124,10 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 
 	/**
 	 * @param pContext
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link PersistenceManager#restoreContexts()},
 	 */
-	public void start(BundleContext pContext) throws ResourceMonitoringServiceException {
+	public void start(BundleContext pContext) throws IllegalArgumentException {
 		context = pContext;
 		persistenceManager = new PersistenceManager(pContext, this);
 		persistenceManager.restoreContexts();
@@ -161,7 +160,7 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 	}
 
 	public ResourceContext createContext(String name, ResourceContext template)
-			throws ResourceMonitoringServiceException {
+			throws IllegalArgumentException {
 
 		lock.acquire();
 
@@ -169,8 +168,8 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 		ResourceContext existingResourceContext = getContext(name);
 		if (existingResourceContext != null) {
 			lock.release();
-			throw new ResourceMonitoringServiceException(
-					"A ResourceContext with the same name already exists", null);
+			throw new IllegalArgumentException(
+					"A ResourceContext with the same name already exists");
 		}
 
 		ResourceContext resourceContext = createContext(name);
@@ -312,11 +311,11 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 	 * Set default resource context settings. This method configures the
 	 * FRAMEWORK Resource Context as well as the SYSTEM Resource Context.
 	 * 
-	 * @throws ResourceMonitoringServiceException, see
+	 * @throws IllegalArgumentException, see
 	 *         {@link ResourceMonitoringServiceImpl#createContext(String, ResourceContext)}
 	 *         , or this exception wraps {@link ResourceContext#addBundle(long)}
 	 */
-	private void setDefaultResourceContexts() throws ResourceMonitoringServiceException {
+	private void setDefaultResourceContexts() throws IllegalArgumentException {
 		if (getContext(SYSTEM_CONTEXT_NAME) == null) {
 			// system resource context
 			systemResourceContext = createContext(SYSTEM_CONTEXT_NAME,
@@ -324,7 +323,7 @@ public class ResourceMonitoringServiceImpl implements ResourceMonitoringService,
 			try {
 				systemResourceContext.addBundle(0);
 			} catch (ResourceContextException e) {
-				throw new ResourceMonitoringServiceException(e.getMessage(), e);
+				throw new IllegalArgumentException(e.getMessage());
 			}
 		}
 
