@@ -221,7 +221,7 @@
 			the removeBundle(Bundle, ResourceContext) method. For this last method, a Resource Context instance MAY be
 			specified in order to associate the removed bundle to another Resource Context instance.
 		</para>
-		<para>Resource Monitor instances are retrieved through getResourceMonitor(String resourceType) method or the
+		<para>Resource Monitor instances are retrieved through getMonitor(String resourceType) method or the
 			getMonitors() method. The list of available resource types is retrieved through the Resource Monitoring
 			Service singleton instance.
 		</para>
