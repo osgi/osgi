@@ -110,7 +110,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 * 
 	 * This test case tests if CPU Resource Monitor Factory is available.
 	 */
-	public void testTC1CheckIfACPUResourceMonitorFactoryIsAvailable() {
+	public void testCheckIfACPUResourceMonitorFactoryIsAvailable() {
 		assertNotNull("CpuFactory must not be null.", cpuFactory);
 	}
 
@@ -125,7 +125,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 * @throws ResourceContextException , see
 	 *         {@link ResourceContext#getMonitors()}
 	 */
-	public void testTC2CreationOfAResourceMonitor() throws ResourceMonitorException, ResourceContextException {
+	public void testCreationOfAResourceMonitor() throws ResourceMonitorException, ResourceContextException {
 
 		// check existing resource monitors
 		ResourceMonitor[] monitors = resourceContext.getMonitors();
@@ -184,7 +184,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 * @throws ResourceContextException , see {@link ResourceMonitor#delete()}
 	 *         {@link ResourceContext#getMonitors()}
 	 */
-	public void testTC3DeletionOfAResourceMonitorFromAResourceContext()
+	public void testDeletionOfAResourceMonitorFromAResourceContext()
 			throws ResourceMonitorException, ResourceContextException {
 		// create ResourceMonitor
 		ResourceMonitor resourceMonitor = cpuFactory
@@ -213,7 +213,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 *         {@link ResourceMonitor#disable()}
 	 *         {@link ResourceMonitor#delete()}
 	 */
-	public void testTC4EnablingAndDisablingAResourceMonitor() throws ResourceMonitorException {
+	public void testEnablingAndDisablingAResourceMonitor() throws ResourceMonitorException {
 		// create ResourceMonitor
 		ResourceMonitor resourceMonitor = cpuFactory
 				.createResourceMonitor(resourceContext);
@@ -269,7 +269,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 	 *         {@link ResourceMonitor#disable()}
 	 *         {@link ResourceMonitor#delete()}
 	 */
-	public void testTC5RetrievingAResourceUsage() throws ResourceMonitorException {
+	public void testRetrievingAResourceUsage() throws ResourceMonitorException {
 		// create ResourceMonitor
 		ResourceMonitor resourceMonitor = cpuFactory
 				.createResourceMonitor(resourceContext);

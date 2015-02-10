@@ -95,7 +95,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	 * @throws ResourceContextException, see
 	 *         {@link ResourceContext#removeContext(ResourceContext)}
 	 */
-	public void testTC1DeletionOfAResourceContext() throws IllegalArgumentException, ResourceContextException {
+	public void testDeletionOfAResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
 
 		// create the resource context
@@ -150,7 +150,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	 *         {@link ResourceContext#addBundle(long)}
 	 *         {@link ResourceContext#removeContext(ResourceContext)}
 	 */
-	public void testTC2DeletionOfAResourceContextWithADestinationResourceContext() throws IllegalArgumentException, ResourceContextException {
+	public void testDeletionOfAResourceContextWithADestinationResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
 		final long bundleId = 1;
@@ -247,7 +247,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	 *         {@link ResourceContext#addBundle(long)},
 	 *         {@link ResourceContext#removeContext(ResourceContext)}
 	 */
-	public void testTC3DeletionOfAResourceContextWithAPreviouslyDeletedResourceContextAsDestination() throws IllegalArgumentException, ResourceContextException {
+	public void testDeletionOfAResourceContextWithAPreviouslyDeletedResourceContextAsDestination() throws IllegalArgumentException, ResourceContextException {
 		final String name1 = "name1";
 		final String name2 = "name2";
 		final long bundleId = 1;

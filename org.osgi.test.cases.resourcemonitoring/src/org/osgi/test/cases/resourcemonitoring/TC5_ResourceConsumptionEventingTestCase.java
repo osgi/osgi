@@ -164,7 +164,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 * 
 	 * @throws InterruptedException
 	 */
-	public void testTC1UpperWarningThreshold() throws InterruptedException {
+	public void testUpperWarningThreshold() throws InterruptedException {
 		// set upper WARNING threshold to 1
 		upperWarning = Long.valueOf(Long.toString(1l));
 
@@ -194,7 +194,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 * 
 	 * @throws InterruptedException
 	 */
-	public void testTC2UpperErrorThreshold() throws InterruptedException {
+	public void testUpperErrorThreshold() throws InterruptedException {
 		// set upper ERROR threshold to 2
 		upperError = Long.valueOf(Long.toString(2l));
 
@@ -225,7 +225,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 * 
 	 * @throws InterruptedException
 	 */
-	public void testTC3UpperWarningAndErrorThreshold() throws InterruptedException {
+	public void testUpperWarningAndErrorThreshold() throws InterruptedException {
 		// set upper WARNING threshold to 1
 		upperWarning = Long.valueOf(Long.toString(1l));
 		// set upper ERROR threshold to 2
@@ -257,7 +257,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 * 
 	 * @throws InterruptedException
 	 */
-	public void testTC4LowerWarningThreshold() throws InterruptedException {
+	public void testLowerWarningThreshold() throws InterruptedException {
 		// set lower WARNING threshold to 100
 		lowerWarning = Long.valueOf(Long.toString(100l));
 
@@ -287,7 +287,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 * 
 	 * @throws InterruptedException
 	 */
-	public void testTC5LowerErrorThreshold() throws InterruptedException {
+	public void testLowerErrorThreshold() throws InterruptedException {
 		// set lower ERROR threshold to 99
 		lowerError = Long.valueOf(Long.toString(99l));
 
@@ -318,7 +318,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 * 
 	 * @throws InterruptedException
 	 */
-	public void testTC6LowerWarningAndErrorThreshold() throws InterruptedException {
+	public void testLowerWarningAndErrorThreshold() throws InterruptedException {
 		// set lower WARNING threshold to 100
 		lowerWarning = Long.valueOf(Long.toString(100l));
 		// set lower ERROR threshold to 99

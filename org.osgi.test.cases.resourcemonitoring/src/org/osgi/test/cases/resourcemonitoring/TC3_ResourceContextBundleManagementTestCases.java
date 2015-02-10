@@ -92,7 +92,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 * @throws ResourceContextException , see
 	 *         {@link ResourceContext#addBundle(long)}
 	 */
-	public void testTC1AddingABundleToAResourceContext() throws IllegalArgumentException, ResourceContextException {
+	public void testAddingABundleToAResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
 		final long bundleId = 1l;
 
@@ -128,7 +128,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 * @throws ResourceContextException , see
 	 *         {@link ResourceContext#addBundle(long)}
 	 */
-	public void testTC2AddingABundlePreviouslyAssociatedWithAResourceContext() throws IllegalArgumentException, ResourceContextException {
+	public void testAddingABundlePreviouslyAssociatedWithAResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
 		final String name2 = "context2";
 		final long bundleId = 1;
@@ -174,7 +174,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 *         {@link ResourceContext#addBundle(long)}
 	 *         {@link ResourceContext#removeBundle(long)}
 	 */
-	public void testTC3RemoveBundleFromAResourceContext() throws IllegalArgumentException, ResourceContextException {
+	public void testRemoveBundleFromAResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
 		final long bundleId = 1;
 
@@ -222,7 +222,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 *         {@link ResourceContext#addBundle(long)}
 	 *         {@link ResourceContext#removeBundle(long)}
 	 */
-	public void testTC4RemoveABundleWithADestinationResourceContext() throws IllegalArgumentException, ResourceContextException {
+	public void testRemoveABundleWithADestinationResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
 		final long bundleId = 1;
@@ -272,7 +272,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 * 
 	 * This test case validates the removing of a bundle from a ResourceContext
 	 * with a null destination. This test case is similar to
-	 * {@link TC3_ResourceContextBundleManagementTestCases#testTC3RemoveBundleFromAResourceContext()}
+	 * {@link TC3_ResourceContextBundleManagementTestCases#testRemoveBundleFromAResourceContext()}
 	 * (Expect a REMOVED_BUNDLE event).
 	 * 
 	 * @throws IllegalArgumentException, see
@@ -281,7 +281,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 *         {@link ResourceContext#addBundle(long)}
 	 *         {@link ResourceContext#removeBundle(long)}
 	 */
-	public void testTC5RemoveABundleWithANullDestinationResourceContext() throws IllegalArgumentException, ResourceContextException {
+	public void testRemoveABundleWithANullDestinationResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
 		final long bundleId = 1;
 
@@ -323,7 +323,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 	 *         {@link ResourceContext#addBundle(long)}
 	 *         {@link ResourceContext#removeBundle(long)}
 	 */
-	public void testTC6RemovingABundleWithADestinationContextWhichHasBeenPreviouslyDeleted() throws IllegalArgumentException, ResourceContextException {
+	public void testRemovingABundleWithADestinationContextWhichHasBeenPreviouslyDeleted() throws IllegalArgumentException, ResourceContextException {
 		final String name1 = "context1";
 		final String name2 = "context2";
 		final long bundleId = 1;

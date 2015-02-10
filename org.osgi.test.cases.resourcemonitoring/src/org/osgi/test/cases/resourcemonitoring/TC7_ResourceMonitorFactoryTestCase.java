@@ -76,7 +76,7 @@ public class TC7_ResourceMonitorFactoryTestCase extends DefaultTestBundleControl
 	 * Test case 1 : Adding another resource monitor factory, and test that
 	 * everything worked well.
 	 */
-	public void testTC1AddingAnotherResourceMonitorFactory() {
+	public void testAddingAnotherResourceMonitorFactory() {
 		StringBuffer filter = new StringBuffer();
 		filter.append("(&(");
 		filter.append(Constants.OBJECTCLASS);
