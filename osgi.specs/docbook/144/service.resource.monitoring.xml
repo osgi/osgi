@@ -238,8 +238,9 @@
 	</section>
 	<section>
 		<title>System Resource Context</title>
-		<para>The System Resource Context is the Resource Context of the core framework. It is retrieved through
-			the Resource Monitoring Service service.
+		<para>The System Resource Context is the Resource Context of the execution environment for the running OSGi 
+		    bundles. It includes the resources of bundle "0". It is retrieved through the Resource Monitoring Service 
+		    service.
 		</para>
 		<para>The name of this context is “system”.
 		</para>
