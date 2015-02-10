@@ -48,8 +48,7 @@ public interface SocketMonitor extends ResourceMonitor {
 	 * Returns the number of existing socket created by a
 	 * {@link ResourceContext}.
 	 * <p>
-	 * The {@link #getUsage()} method returns the same value, wrapped in a
-	 * {@link Long}
+	 * The {@link #getUsage()} method returns the same value, wrapped in a long.
 	 * 
 	 * @return the number of existing socket.
 	 */

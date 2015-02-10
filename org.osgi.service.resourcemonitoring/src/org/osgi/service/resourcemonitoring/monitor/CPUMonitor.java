@@ -33,8 +33,7 @@ public interface CPUMonitor extends ResourceMonitor {
 	/**
 	 * Returns the CPU usage as a cumulative number of nanoseconds
 	 * <p>
-	 * The {@link #getUsage()} method returns the same value, wrapped in a
-	 * {@link Long}
+	 * The {@link #getUsage()} method returns the same value, wrapped in a long.
 	 * 
 	 * @return the CPU usage in nanoseconds
 	 */

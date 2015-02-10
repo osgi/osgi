@@ -35,8 +35,7 @@ public interface DiskStorageMonitor extends ResourceMonitor {
 	 * Returns the sum of the size of the persistent storage areas of the
 	 * bundles in this resource context.
 	 * <p>
-	 * The {@link #getUsage()} method returns the same value, wrapped in a
-	 * {@link Long}
+	 * The {@link #getUsage()} method returns the same value, wrapped in a long.
 	 * 
 	 * @return the sum of the sizes of the persistent storage areas in bytes
 	 */

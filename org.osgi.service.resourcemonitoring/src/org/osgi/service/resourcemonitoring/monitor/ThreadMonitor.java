@@ -42,8 +42,7 @@ public interface ThreadMonitor extends ResourceMonitor {
 	 * <li>TIMED_WAITING</li>
 	 * </ul>
 	 * <p>
-	 * The {@link #getUsage()} method returns the same value, wrapped in a
-	 * {@link Integer}
+	 * The {@link #getUsage()} method returns the same value, wrapped in a int.
 	 * 
 	 * @return the number of alive threads created by this resource context
 	 */

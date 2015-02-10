@@ -35,11 +35,10 @@ public interface MemoryMonitor extends ResourceMonitor {
 	 * Returns the size of the java heap used by the bundles in this resource
 	 * context.
 	 * <p>
-	 * The {@link #getUsage()} method returns the same value, wrapped in a
-	 * {@link Long}
+	 * The {@link #getUsage()} method returns the same value, wrapped in a long.
 	 * 
 	 * @return the size of the used java heap in bytes
 	 */
-	public long getUsedMemory();
+	public long getMemoryUsage();
 
 }
