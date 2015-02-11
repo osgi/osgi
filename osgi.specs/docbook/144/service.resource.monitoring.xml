@@ -143,7 +143,7 @@
 			<listitem>
 				<para>
 					<emphasis>Resource Event</emphasis>
-					- A Resource Event defines a notification to be sent to Resource Listener instances.
+					- A Resource Event defines a notification to be synchronously sent to Resource Listener instances.
 				</para>
 			</listitem>
 			<listitem>
@@ -603,8 +603,9 @@
 	</section>
 	<section>
 		<title>Resource Event</title>
-		<para>A Resource Event instance is an event sent to a Resource Listener when one of its thresholds is reached.
-			This event is notified to a Resource Listener through a call to ResourceListener.notify(ResourceEvent).
+		<para>A Resource Event instance is an event synchronously sent to a Resource Listener when one of its thresholds 
+		    is reached. This event is notified to a Resource Listener through a call to 
+		    ResourceListener.notify(ResourceEvent).
 		</para>
 		<para>A Resource Event has a type among the following ones:
 		</para>
