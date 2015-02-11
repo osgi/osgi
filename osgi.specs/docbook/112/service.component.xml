@@ -4002,8 +4002,8 @@ HTTP.target = (component.name=com.acme.httpserver)</programlisting>
         configurations using the deleted <code>Configuration</code>
         object.</para>
 
-        <para>With a factory configuration matching a configuration PID, the
-        factory configuration can provide zero or more
+        <para>Furthermore, with a factory configuration matching a
+        configuration PID, the factory configuration can provide zero or more
         <code>Configuration</code> objects which will result in a component
         configuration for each <code>Configuration</code> object or a single
         component configuration when zero matching <code>Configuration</code>
