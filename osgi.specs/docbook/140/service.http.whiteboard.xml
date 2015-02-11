@@ -870,11 +870,11 @@ public class CDNServletContextHelper extends ServletContextHelper {
           </listitem>
 
           <listitem>
-            <para>That HTTP Sessions are not shared amongst servlets
+            <para>That Http Sessions are not shared amongst servlets
             registered with different <code>ServletContextHelper</code>s. That
             is, <code>HttpRequest.getSession()</code> calls must provide
             different sessions per associated
-            <code>ServletContextHelper</code>. HTTP Sessions are defined in
+            <code>ServletContextHelper</code>. Http Sessions are defined in
             chapter 7 of the <xref linkend="i21217577"/>.</para>
           </listitem>
         </orderedlist></para>
@@ -1702,10 +1702,14 @@ public class SomeResourceService {}</programlisting>
 
             <entry><code>String</code><para><emphasis>required</emphasis></para></entry>
 
-            <entry><para>This property marks whether a listener service is to be handled by the
-                    HTTP Whiteboard implementation or not. Valid values are <code>true</code>
-                    and <code>false</code> (case independent). If the value is <code>true</code>
-                    the listener is processed. See <xref
+            <entry><para>When set to <code>true</code> this listener service is handled by 
+                    the Http Whiteboard implementation. When not set or set to <code>false</code>
+                    the service is ignored.
+                    Any other value is invalid and will be reflected in a 
+                    <xref linkend="org.osgi.service.http.runtime.dto.FailedListenerDTO" xrefstyle="hyperlink"/>.
+                    Note this property is case independent.
+                    
+                    See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_LISTENER"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
