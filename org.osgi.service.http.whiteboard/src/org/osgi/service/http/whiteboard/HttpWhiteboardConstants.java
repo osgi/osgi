@@ -350,12 +350,16 @@ public final class HttpWhiteboardConstants {
 
 	/**
 	 * Service property to mark a Listener service as a Whiteboard service.
-	 * Listener services with this property set to {@code Boolean.TRUE} will be
-	 * treated as Whiteboard services opting in to being handled by the Http
-	 * Whiteboard implementation.
+	 * Listener services with this property set to the string value "true" will
+	 * be treated as Whiteboard services opting in to being handled by the Http
+	 * Whiteboard implementation. If the value "false" is specified, the service
+	 * is opting out and this case is treated exactly the same as if this
+	 * property is missing. If an invalid value is specified this is treated as
+	 * a failure.
 	 * 
 	 * <p>
-	 * The value of this service property must be of type {@code Boolean}.
+	 * The value of this service property must be of type {@code String}. Valid
+	 * values are "true" and "false" ignoring case.
 	 */
 	public static final String	HTTP_WHITEBOARD_LISTENER					= "osgi.http.whiteboard.listener";
 
