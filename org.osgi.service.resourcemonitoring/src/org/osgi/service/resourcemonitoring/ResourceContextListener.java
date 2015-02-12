@@ -26,24 +26,12 @@ package org.osgi.service.resourcemonitoring;
  * 
  * <p>
  * A <code>ResourceContextListener</code> is registered as an OSGi service. At
- * registration time, the following properties may be provided:
+ * registration time, the following property may be provided:
  * <ul>
  * <li>the {@link #RESOURCE_CONTEXT} property which limits the Resource Context
  * for which notifications will be received. This property can be either a
  * String value or an array of String. If this property is not set, the Resource
  * Context Listener receives events from all the Resource Context.</li>
- * <li>the {@link #EVENT_TYPE} property. If set, this property filters the type
- * of event this listener will receive. The value of this property can either a
- * String (then, the Listener receives notifications about a single type) or an
- * array of String (several types). The expected values for this property are
- * the types defined by a {@link ResourceContextEvent}:
- * <ul>
- * <li>{@link ResourceContextEvent#RESOURCE_CONTEXT_CREATED}</li>
- * <li>{@link ResourceContextEvent#RESOURCE_CONTEXT_REMOVED}</li>
- * <li>{@link ResourceContextEvent#BUNDLE_ADDED}</li>
- * <li>{@link ResourceContextEvent#BUNDLE_REMOVED}</li>
- * </ul>
- * </li>
  * </ul>
  * 
  * @version 1.0
@@ -62,13 +50,6 @@ public interface ResourceContextListener {
 	 * {@link ResourceContext}).
 	 */
 	public static final String	RESOURCE_CONTEXT	= "resource.context";
-
-	/**
-	 * Property specifying the type of events this listener will receive. The
-	 * expected values are the {@link ResourceContextEvent} types. It can be a
-	 * String or an array of String.
-	 */
-	public static final String	EVENT_TYPE			= "event.type";
 
 	/**
 	 * Notify this listener about a {@link ResourceContext} events.

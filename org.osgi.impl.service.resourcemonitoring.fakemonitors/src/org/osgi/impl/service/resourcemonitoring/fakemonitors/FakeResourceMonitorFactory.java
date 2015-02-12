@@ -91,8 +91,6 @@ public class FakeResourceMonitorFactory implements ResourceMonitorFactory,
 		// register this factory as a ResourceContextListener.
 		// Dictionary<String, Object> properties.
 		Dictionary properties = new Hashtable();
-		properties.put(ResourceContextListener.EVENT_TYPE,
-				Integer.valueOf(Integer.toString(ResourceContextEvent.RESOURCE_CONTEXT_REMOVED)));
 		properties.put(ResourceMonitorFactory.RESOURCE_TYPE_PROPERTY,
 				factoryType);
 		serviceRegistration = bundleContext

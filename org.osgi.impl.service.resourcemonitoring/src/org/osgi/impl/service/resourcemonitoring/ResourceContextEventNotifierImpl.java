@@ -54,11 +54,9 @@ public class ResourceContextEventNotifierImpl implements
 				ServiceReference currentSr = (ServiceReference) listeners
 						.get(currentRcl);
 
-				int[] eventTypeFilter = getEventTypeFilter(currentSr);
 				String[] resourceContextFilter = getResourceContextFilter(currentSr);
 
-				if (checkEventTypeFilter(event.getType(), eventTypeFilter)
-						&& checkResourceContextFilter(event.getContext()
+				if (checkResourceContextFilter(event.getContext()
 								.getName(), resourceContextFilter)) {
 					// send a notification to the current
 					// ResourceContextListener
@@ -67,9 +65,7 @@ public class ResourceContextEventNotifierImpl implements
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
-
 				}
-
 			}
 		}
 	}
@@ -108,37 +104,6 @@ public class ResourceContextEventNotifierImpl implements
 		}
 
 		return filter;
-	}
-
-	private static int[] getEventTypeFilter(ServiceReference serviceReference) {
-		int[] filter = null;
-		Object propertyValue = serviceReference.getProperty(ResourceContextListener.EVENT_TYPE);
-		try {
-			filter = (int[]) propertyValue;
-		} catch (ClassCastException e) {
-			// should be an int
-			filter = new int[] {((Integer) propertyValue).intValue()};
-		}
-
-		return filter;
-	}
-
-	private static boolean checkEventTypeFilter(int currentEventType,
-			int[] resourceContextEventTypeFilter) {
-
-		if ((resourceContextEventTypeFilter == null)
-				|| (resourceContextEventTypeFilter.length == 0)) {
-			return true;
-		}
-
-		for (int i = 0; i < resourceContextEventTypeFilter.length; i++) {
-			int eventType = resourceContextEventTypeFilter[i];
-			if (eventType == currentEventType) {
-				return true;
-			}
-		}
-
-		return false;
 	}
 
 	private static boolean checkResourceContextFilter(

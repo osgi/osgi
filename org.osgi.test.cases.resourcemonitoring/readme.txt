@@ -3,7 +3,7 @@
 Date: 22 January 2015.
 
 How to run the tests with
-- gradle: gradle cleanneeded check
+- gradle: gradle cleanneeded buildneeded checkneeded
 - ant: is no longer supported.
 
 -----

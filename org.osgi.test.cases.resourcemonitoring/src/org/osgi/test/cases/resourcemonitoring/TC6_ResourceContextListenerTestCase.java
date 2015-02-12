@@ -106,123 +106,55 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	}
 
 	/**
-	 * Test case 1 : ResourceContextListener filtering RESOURCE_CONTEXT_CREATED
-	 * event.
+	 * Test case 1: ResourceContextListener with RESOURCE_CONTEXT_CREATED,
+	 * BUNDLE_ADDED, BUNDLE_REMOVED, and RESOURCE_CONTEXT_REMOVED events.
 	 * 
 	 * @throws IllegalArgumentException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 * @throws ResourceContextException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
 	 */
-	public void testResourceContextListenerFiltering_RESOURCE_CONTEXT_CREATED_event() throws IllegalArgumentException, ResourceContextException {
+	public void testResourceContextListenerEvents() throws IllegalArgumentException, ResourceContextException {
+		// registers the ResourceContextListener
+		registerListener(null);
 
-		// registers the ResourceContextListener with a RESOURCE_CONTEXT_CREATED
-		// type filter
-		registerListener(
-				new int[] {ResourceContextEvent.RESOURCE_CONTEXT_CREATED},
-				null);
-
-		// executes the scenarios
+		// executes the scenario
 		executeScenario1();
 
 		// unregisters the listener
 		unregisterListener();
 
-		// checks that only a RESOURCE_CONTEXT_CREATED has been received
-		assertEquals("Events list mismatch.", 1, events.size());
-		ResourceContextEvent event = (ResourceContextEvent) events.get(0);
-		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_CREATED, event.getType());
-		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, event.getContext().getName());
-	}
-
-	/**
-	 * Test case 2: ResourceContextListener filtering RESOURCE_CONTEXT_REMOVED
-	 * event.
-	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link TC6_ResourceContextListenerTestCase}
-	 * @throws ResourceContextException, see
-	 *         {@link TC6_ResourceContextListenerTestCase}
-	 */
-	public void testResourceContextListenerFiltering_RESOURCE_CONTEXT_REMOVED_event() throws IllegalArgumentException, ResourceContextException {
-		// registers the ResourceContextListener with a RESOURCE_CONTEXT_REMOVED
-		// type filter
-		registerListener(
-				new int[] {ResourceContextEvent.RESOURCE_CONTEXT_REMOVED},
-				null);
-
-		// executes the scenarios
-		executeScenario1();
-
-		// unregisters the listener
-		unregisterListener();
-
-		// checks that only a RESOURCE_CONTEXT_REMOVED has been received
-		assertEquals("Events list mismatch.", 1, events.size());
-		ResourceContextEvent event = (ResourceContextEvent) events.get(0);
-		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_REMOVED, event.getType());
-		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, event.getContext().getName());
-	}
-
-	/**
-	 * Test case 3: ResourceContextListener filtering BUNDLE_ADDED event.
-	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link TC6_ResourceContextListenerTestCase}
-	 * @throws ResourceContextException, see
-	 *         {@link TC6_ResourceContextListenerTestCase}
-	 */
-	public void testResourceContextListenerFiltering_BUNDLE_ADDED_event() throws IllegalArgumentException, ResourceContextException {
-		// registers the ResourceContextListener with a BUNDLE_ADDED
-		// type filter
-		registerListener(new int[] {ResourceContextEvent.BUNDLE_ADDED}, null);
-
-		// executes the scenarios
-		executeScenario1();
-
-		// unregisters the listener
-		unregisterListener();
-
-		// checks that only a ResourceContextEvent.BUNDLE_ADDED has been
+		// checks that ResourceContextEvent.RESOURCE_CONTEXT_CREATED,
+		// BUNDLE_ADDED, BUNDLE_REMOVED, and RESOURCE_CONTEXT_REMOVED have been
 		// received
-		assertEquals("Events list mismatch.", 1, events.size());
+		assertEquals("Events list mismatch.", 4, events.size());
 		ResourceContextEvent event = (ResourceContextEvent) events.get(0);
-		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_ADDED, event.getType());
-		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, event.getContext().getName());
+		assertEquals("Type mismatch.",
+				ResourceContextEvent.RESOURCE_CONTEXT_CREATED, event.getType());
+		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME,
+				event.getContext().getName());
+
+		event = (ResourceContextEvent) events.get(1);
+		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_ADDED,
+				event.getType());
+		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME,
+				event.getContext().getName());
 		assertEquals("BundleId mismatch.", BUNDLE_ID, event.getBundleId());
-	}
 
-	/**
-	 * Test case 4: ResourceContextListener filtering BUNDLE_REMOVED event.
-	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link TC6_ResourceContextListenerTestCase}
-	 * @throws ResourceContextException, see
-	 *         {@link TC6_ResourceContextListenerTestCase}
-	 */
-	public void testResourceContextListenerFiltering_BUNDLE_REMOVED_event() throws IllegalArgumentException, ResourceContextException {
-		// registers the ResourceContextListener with a BUNDLE_REMOVED
-		// type filter
-		registerListener(new int[] {ResourceContextEvent.BUNDLE_REMOVED},
-				null);
-
-		// executes the scenarios
-		executeScenario1();
-
-		// unregisters the listener
-		unregisterListener();
-
-		// checks that only a ResourceContextEvent.BUNDLE_REMOVED has been
-		// received
-		assertEquals("Events list mismatch.", 1, events.size());
-		ResourceContextEvent event = (ResourceContextEvent) events.get(0);
+		event = (ResourceContextEvent) events.get(2);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, event.getType());
 		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, event.getContext().getName());
 		assertEquals("BundleId mismatch.", BUNDLE_ID, event.getBundleId());
+
+		event = (ResourceContextEvent) events.get(3);
+		assertEquals("Type mismatch.",
+				ResourceContextEvent.RESOURCE_CONTEXT_REMOVED, event.getType());
+		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME,
+				event.getContext().getName());
 	}
 
 	/**
-	 * Test case 5 : ResourceContextListener filtering events of a specific
+	 * Test case 2 : ResourceContextListener filtering events of a specific
 	 * ResourceContext.
 	 * 
 	 * @throws IllegalArgumentException, see
@@ -233,7 +165,7 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	public void testResourceContextListenerFilteringEventsOfASpecificResourceContext() throws IllegalArgumentException, ResourceContextException {
 		// register this instance as a ResourceContextListener filtering events
 		// of context1.
-		registerListener(null, new String[] {RESOURCE_CONTEXT_NAME});
+		registerListener(new String[] {RESOURCE_CONTEXT_NAME});
 
 		// executes scenario1 (related to context1) and scenario2 (related to
 		// context2)
@@ -274,49 +206,7 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	}
 
 	/**
-	 * Test case 6 : registering a ResourceContextListener filtering two types
-	 * of events on a particular ResourceContext.
-	 * 
-	 * @throws IllegalArgumentException, see
-	 *         {@link TC6_ResourceContextListenerTestCase}
-	 * @throws ResourceContextException, see
-	 *         {@link TC6_ResourceContextListenerTestCase}
-	 */
-	public void testRegisteringAResourceContextListenerFilteringTwoTypesOfEventsOnAParticularResourceContext() throws IllegalArgumentException, ResourceContextException {
-		// register this instance as a ResourceContextListener filtering on
-		// RESOURCE_CONTEXT_CREATED event type and on RESOURCE_CONTEXT_REMOVED
-		// event type all related to context1
-		registerListener(new int[] {
-				ResourceContextEvent.RESOURCE_CONTEXT_CREATED,
-				ResourceContextEvent.RESOURCE_CONTEXT_REMOVED},
-				new String[] {RESOURCE_CONTEXT_NAME});
-
-		// executes scenario1 (related to context1) and scenario2 (related to
-		// context2)
-		executeScenario1();
-		executeScenario2();
-
-		// unregister the listener
-		unregisterListener();
-
-		// checks the listener receives 2 events about the creation and the
-		// deletion of context1
-		assertEquals("Events list mismatch.", 2, events.size());
-		// first event is a RESOURCE_CONTEXT_CREATED for context1
-		ResourceContextEvent createdEvent = (ResourceContextEvent) events
-				.get(0);
-		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_CREATED, createdEvent.getType());
-		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, createdEvent.getContext().getName());
-		// and finally the second event is a RESOURCE_CONTEXT_REMOVED event
-		// (context1 was deleted)
-		ResourceContextEvent deletedEvent = (ResourceContextEvent) events
-				.get(1);
-		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_REMOVED, deletedEvent.getType());
-		assertEquals("Name mismatch.", RESOURCE_CONTEXT_NAME, deletedEvent.getContext().getName());
-	}
-
-	/**
-	 * Test case 7 : unregistering a ResourceContextListener.
+	 * Test case 3 : unregistering a ResourceContextListener.
 	 * 
 	 * @throws IllegalArgumentException, see
 	 *         {@link TC6_ResourceContextListenerTestCase}
@@ -325,7 +215,7 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	 */
 	public void testUnregisteringAResourceContextListener() throws IllegalArgumentException, ResourceContextException {
 		// register this instance as a ResourceContextListener without filters
-		registerListener(null, null);
+		registerListener(null);
 
 		// execute scenario2 (related to context2)
 		executeScenario2();
@@ -446,19 +336,10 @@ public class TC6_ResourceContextListenerTestCase extends DefaultTestBundleContro
 	/**
 	 * Registers this instance as a ResourceContextListener.
 	 * 
-	 * @param filters event filter types.
 	 * @param resourceContexts resourceContexts
 	 */
-	private void registerListener(int[] filters, String[] resourceContexts) {
+	private void registerListener(String[] resourceContexts) {
 		Dictionary properties = new Hashtable();
-		if (filters != null) {
-			if (filters.length > 1) {
-				properties.put(ResourceContextListener.EVENT_TYPE, filters);
-			} else
-				if (filters.length == 1) {
-					properties.put(ResourceContextListener.EVENT_TYPE, Integer.valueOf(Integer.toString(filters[0])));
-				}
-		}
 		if (resourceContexts != null) {
 			if (resourceContexts.length > 1) {
 				properties.put(ResourceContextListener.RESOURCE_CONTEXT,
