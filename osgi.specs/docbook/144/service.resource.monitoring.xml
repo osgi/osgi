@@ -790,6 +790,12 @@
 		</para>
 	</section>
 
+	<section>
+      <title>Security</title>
+      <para>It is recommended that <code>ServicePermission[ResourceMonitoringService|ResourceMonitoringFactory|ResourceListener, 
+          REGISTER|GET]</code> be used sparingly and only for bundles that are trusted.</para>
+    </section>
+	
 	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.resourcemonitoring.xml" />
 
 	<xi:include href="../../generated/javadoc/docbook/org.osgi.service.resourcemonitoring.monitor.xml" />
