@@ -16,7 +16,9 @@ public class HttpWhiteboardTestBundle2 implements BundleActivator {
 		Dictionary<String, Object> properties;
 
 		properties = new Hashtable<String, Object>();
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME, "default");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME,
+				HttpWhiteboardConstants.HTTP_WHITEBOARD_DEFAULT_CONTEXT_NAME);
+//		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH, "/");
 		properties.put("test.property", "test.value");
 		serviceRegistrations.add(
 				context.registerService(

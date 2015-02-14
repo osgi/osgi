@@ -30,7 +30,8 @@ public class HttpWhiteboardTestBundle1 implements BundleActivator {
 
 		properties = new Hashtable<String, Object>();
 		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_SERVLET_PATTERN, "/TestServlet2");
-		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT, "sc1");
+		properties.put(HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_SELECT,
+				"(" + HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME + "=sc1)");
 		serviceRegistrations.add(
 				context.registerService(Servlet.class, new TestServletReturnsContextPath(), properties));
 
