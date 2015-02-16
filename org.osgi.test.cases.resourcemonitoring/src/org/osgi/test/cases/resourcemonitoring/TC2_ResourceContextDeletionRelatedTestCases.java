@@ -98,30 +98,43 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 	public void testDeletionOfAResourceContext() throws IllegalArgumentException, ResourceContextException {
 		final String name = "context1";
 
-		// create the resource context
+		// create the resource context.
 		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
 				null);
 
-		// delete this new resourceContext
+		// delete this new resourceContext.
 		resourceContext.removeContext(null);
 
-		// check existing ResourceContext
+		// check existing ResourceContext.
 		assertEquals("ResourceContext list must be empty.", 0, resourceMonitoringService.listContext().length);
-		assertNull("ResourceMonitoringService must contain a ResourceContext named: " + name, resourceMonitoringService.getContext(name));
+		assertNull("ResourceMonitoringService must not contain a ResourceContext named: " + name, resourceMonitoringService.getContext(name));
 
-		// check the resource context name is still accessible
+		// check the resource context name is still accessible.
 		assertEquals("Name mismatch.", name, resourceContext.getName());
 
-		// check it is not possible to add bundle
+		// check the resource context bundleIds array.
+		assertNotNull("BundlesIds array must not be null.", resourceContext.getBundleIds());
+		assertEquals("BundlesIds array must not contain any bundleId.", 0, resourceContext.getBundleIds().length);
+
+		// check the resource context monitors.
 		try {
-			resourceContext.addBundle(2);
-			failSame("A ResourceContextException is expected.");
+			resourceContext.getMonitors();
+			fail("A ResourceContextException is expected.");
 		} catch (ResourceContextException e) {
 			log("Expected exception: ");
 			e.printStackTrace();
 		}
 
-		// check it is not possible to add monitor
+		// check it is not possible to add bundle.
+		try {
+			resourceContext.addBundle(0);
+			fail("A ResourceContextException is expected.");
+		} catch (ResourceContextException e) {
+			log("Expected exception: ");
+			e.printStackTrace();
+		}
+
+		// check it is not possible to add monitor.
 		try {
 			resourceContext.addResourceMonitor(new FakeResourceMonitor());
 			fail("A ResourceContextException is expected here.");
@@ -130,7 +143,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 			e.printStackTrace();
 		}
 
-		// check a ResourceContextEvent has been sent due to deletion
+		// check a ResourceContextEvent has been sent due to deletion.
 		ResourceContextEvent lastEvent = resourceContextListener.getLastEvent();
 		assertNotNull("LastEvent must not be null.", lastEvent);
 		assertEquals("ResourceContext mismatch.", resourceContext, lastEvent.getContext());
@@ -174,7 +187,8 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 		// delete resourceContext1 and specify resourceContext2 as
 		// destination
 		resourceContext1.removeContext(resourceContext2);
-		// deleting resourceContext1 MUST generate 6 events (in this order):
+		// deleting resourceContext1 MUST have generated 6 events (in the
+		// following order):
 		// - 1 for creating resourceContext1
 		// - 1 for creating resourceContext2
 		// - 1 for adding bundleId to resourceContext1
@@ -182,7 +196,8 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 		// - 1 for adding bundleId to resourceContext2
 		// - 1 for removing resourceContext1
 
-		// checks only context2 is only the one existing ResourceContext
+		// checks that context2 is the only existing ResourceContext that
+		// remains.
 		ResourceContext[] existingContexts = resourceMonitoringService.listContext();
 		assertEquals("ResourceContext list mismatch.", 1, existingContexts.length);
 		assertEquals("Name mismatch.", name2, existingContexts[0].getName());
@@ -191,47 +206,50 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 		// monitors)
 		long[] rc1BundleIds = resourceContext1.getBundleIds();
 		assertEquals("BundleIds list mismatch.", 0, rc1BundleIds.length);
-		// ResourceMonitor[] rc1ResourceMonitors =
-		// resourceContext1.getMonitors();
-		// assertEquals("ResourceMonitors list mismatch.", 0,
-		// rc1ResourceMonitors.length);
+		try {
+			resourceContext1.getMonitors();
+			fail("A ResourceContextException is expected.");
+		} catch (ResourceContextException e) {
+			log("Expected exception: ");
+			e.printStackTrace();
+		}
 
 		// check bundleId belongs to resourceContext2
 		long[] rc2BundleIds = resourceContext2.getBundleIds();
 		assertEquals("BundleIds list mismatch.", 1, rc2BundleIds.length);
 		assertEquals("BundleId mismatch.", bundleId, rc2BundleIds[0]);
 
+		// Check the received events.
 		List receivedEvents = resourceContextListener.getReceivedEvents();
-
 		log("nb of receivedEvent : " + receivedEvents.size());
 		assertEquals("Number of events mismatch.", 6, receivedEvents.size());
 
-		// first received event is a BUNDLE_REMOVED ResourceContextEvent has
-		// been received
-		ResourceContextEvent firstEvent = (ResourceContextEvent) receivedEvents
+		// The fourth received event is a BUNDLE_REMOVED ResourceContextEvent
+		// has been received
+		ResourceContextEvent fourthEvent = (ResourceContextEvent) receivedEvents
 				.get(3);
-		assertNotNull("FirstEvent must not be null.", firstEvent);
-		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, firstEvent.getType());
-		assertEquals("ResourceContext mismatch.", resourceContext1, firstEvent.getContext());
-		assertEquals("BundleId mismatch.", bundleId, firstEvent.getBundleId());
+		assertNotNull("FourthEvent must not be null.", fourthEvent);
+		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, fourthEvent.getType());
+		assertEquals("ResourceContext mismatch.", resourceContext1, fourthEvent.getContext());
+		assertEquals("BundleId mismatch.", bundleId, fourthEvent.getBundleId());
 
-		// check a BUNDLE_ADDED ResourceContextEvent has been received
-		// (second
+		// check a BUNDLE_ADDED ResourceContextEvent has been received (fifth
 		// received event)
-		ResourceContextEvent secondEvent = (ResourceContextEvent) receivedEvents
+		ResourceContextEvent fifthEvent = (ResourceContextEvent) receivedEvents
 				.get(4);
-		assertNotNull("SecondEvent must not be null.", secondEvent);
-		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_ADDED, secondEvent.getType());
-		assertEquals("ResourceContext mismatch.", resourceContext2, secondEvent.getContext());
-		assertEquals("BundleId mismatch.", bundleId, secondEvent.getBundleId());
+		assertNotNull("FifthEvent must not be null.", fifthEvent);
+		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_ADDED, fifthEvent.getType());
+		assertEquals("ResourceContext mismatch.", resourceContext2, fifthEvent.getContext());
+		assertEquals("BundleId mismatch.", bundleId, fifthEvent.getBundleId());
 
-		// check the third received event is a RESOURCE_CONTEXT_REMOVED
+		// check the sixth received event is a RESOURCE_CONTEXT_REMOVED
 		// event
-		ResourceContextEvent thirdEvent = (ResourceContextEvent) receivedEvents
+		ResourceContextEvent sixthEvent = (ResourceContextEvent) receivedEvents
 				.get(5);
-		assertNotNull("ThirdEvent must not be null.", thirdEvent);
-		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_REMOVED, thirdEvent.getType());
-		assertEquals("ResourceContext mismatch.", resourceContext1, thirdEvent.getContext());
+		assertNotNull("SixthEvent must not be null.", sixthEvent);
+		assertEquals("Type mismatch.", ResourceContextEvent.RESOURCE_CONTEXT_REMOVED, sixthEvent.getType());
+		assertEquals("ResourceContext mismatch.", resourceContext1, sixthEvent.getContext());
+		assertEquals("BundleId mismatch.", -1, sixthEvent.getBundleId());
 	}
 
 	/**
@@ -264,8 +282,8 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 		// delete resourceContext2
 		resourceContext2.removeContext(null);
 
-		// try to delete resourceContext1 with resourceContext2 as
-		// destination resourceContext2 has been previously deleted ==> ex
+		// delete resourceContext1 with resourceContext2 as destination
+		// resourceContext2 has been previously deleted
 		resourceContext1.removeContext(resourceContext2);
 
 		// try to add bundleId to resourceContext1 => expect a
@@ -278,12 +296,12 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 			e.printStackTrace();
 		}
 
-		// check this no existing ResourceContext
+		// check that there is no existing ResourceContext
 		assertEquals("ResourceContexts list mismatch.", 0, resourceMonitoringService.listContext().length);
 
 		// check events
 		List events = resourceContextListener.getReceivedEvents();
-		// 6 events MUST be emitted (in this order) :
+		// 6 events MUST be emitted (in this order):
 		// - creation of context1
 		// - creation of context2
 		// - adding of bundle 1 to context1

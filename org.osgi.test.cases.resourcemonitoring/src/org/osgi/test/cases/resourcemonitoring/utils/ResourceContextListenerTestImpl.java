@@ -111,7 +111,7 @@ public class ResourceContextListenerTestImpl implements ResourceContextListener 
 	/**
 	 * Retrieves the received events
 	 * 
-	 * @return received events.
+	 * @return received events, or an empty list if there is no event.
 	 */
 	public List getReceivedEvents() {
 		return events;
