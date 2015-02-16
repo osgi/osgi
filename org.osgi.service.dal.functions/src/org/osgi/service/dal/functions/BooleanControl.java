@@ -24,7 +24,7 @@ import org.osgi.service.dal.functions.data.BooleanData;
  * {@code BooleanControl} function provides a boolean control support. The
  * eventable function state is accessible with {@link #getData()} getter and
  * {@link #setData(boolean)} setter. The state can be reversed with
- * {@link #reverse()} method, can be set to {@code true} value with
+ * {@link #inverse()} method, can be set to {@code true} value with
  * {@link #setTrue()} method and can be set to {@code false} value with
  * {@link #setFalse()} method.
  * <p>
@@ -43,10 +43,10 @@ import org.osgi.service.dal.functions.data.BooleanData;
 public interface BooleanControl extends Function {
 
 	/**
-	 * Specifies the reverse operation name. The operation can be executed with
-	 * {@link #reverse()} method.
+	 * Specifies the inverse operation name. The operation can be executed with
+	 * {@link #inverse()} method.
 	 */
-	public static final String	OPERATION_REVERSE	= "reverse";
+	public static final String	OPERATION_INVERSE	= "inverse";
 
 	/**
 	 * Specifies the operation name, which sets the control state to
@@ -102,15 +102,15 @@ public interface BooleanControl extends Function {
 
 	/**
 	 * Reverses the {@code BooleanControl} state. If the current state
-	 * represents {@code true} value, it'll be reversed to {@code false}. If the
-	 * current state represents {@code false} value, it'll be reversed to
-	 * {@code true}. The operation name is {@link #OPERATION_REVERSE}.
+	 * represents {@code true} value, it'll be changed to {@code false}. If the
+	 * current state represents {@code false} value, it'll be changed to
+	 * {@code true}. The operation name is {@link #OPERATION_INVERSE}.
 	 * 
 	 * @throws IllegalStateException If this function service object has already
 	 *         been unregistered.
 	 * @throws DeviceException If an operation error is available.
 	 */
-	public void reverse() throws DeviceException;
+	public void inverse() throws DeviceException;
 
 	/**
 	 * Sets the {@code BooleanControl} state to {@code true} value. The

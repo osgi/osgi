@@ -75,7 +75,7 @@ public class DevicePermission extends BasicPermission {
 	 * The constructor must only be used to create a permission that is going to
 	 * be checked.
 	 * <p>
-	 * An filter example: (dal.device.hardware.vendor=acme)
+	 * A filter example: (dal.device.hardware.vendor=acme)
 	 * <p>
 	 * An action: remove
 	 * 
@@ -99,11 +99,11 @@ public class DevicePermission extends BasicPermission {
 	 * Creates a new {@code DevicePermission} with the given device and actions.
 	 * The permission must be used for the security checks like:
 	 * <p>
-	 * {@code securityManager.checkPermission(new DevicePermission(this, "remove"));}
+	 * {@code securityManager.checkPermission(new DevicePermission(this, "remove"))}
 	 * . The permissions constructed by this constructor must not be added to
 	 * the {@code DevicePermission} permission collections.
 	 * 
-	 * @param device The permission device.
+	 * @param device The device that needs to be checked for a permission.
 	 * @param action {@link #REMOVE} action.
 	 * 
 	 * @throws IllegalArgumentException If an invalid action is specified.

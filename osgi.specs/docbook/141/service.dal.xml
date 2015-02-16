@@ -19,7 +19,7 @@
     <para>The remote device control provides an opportunity to save energy, to
     support better security, to save your time during daily tasks and more.
     The devices can play different roles in their networks as event reporters,
-    controllers etc. That dynamic behavior is well mappable to the dynamic
+    controllers, etc. That dynamic behavior is well mappable to the dynamic
     OSGi service registry. When a new device is available in the network,
     there is a registration of <code>Device</code> service. It realizes basic
     set of management operations and provides rich set of properties. The
@@ -46,7 +46,7 @@
 
         <listitem>
           <para><emphasis>Function</emphasis> - atomic functional entity like
-          switch and sensor. The function can belong to the device. The
+          switch or sensor. The function can belong to a device. The
           function provides a set of properties and operations.</para>
         </listitem>
 
@@ -57,7 +57,7 @@
         </listitem>
 
         <listitem>
-          <para><emphasis>FunctionData</emphasis> - data structure carries
+          <para><emphasis>FunctionData</emphasis> - data structure which carries
           <code>Function</code> property value with extra metadata.</para>
         </listitem>
 
@@ -88,25 +88,25 @@
     category name is defined as a value of <code>Device.DEVICE_CATEGORY</code>
     constant. It can be used as a part of
     <code>org.osgi.service.device.Constants.DEVICE_CATEGORY</code> service
-    property key value. The category impose this specification rules.</para>
+    property key value. The category mandates this specification rules.</para>
   </section>
 
   <section xml:id="service.dal.device.service">
     <title>Device Service</title>
 
-    <para><code>Device</code> interface is dedicated for a common access to
+    <para><code>Device</code> interface is dedicated to a common access to
     the devices provided by different protocols. It can be mapped one to one
     with the physical device, but can be mapped only with a given functional
-    part of the device. In this scenario, the physical device can be realized
+    part of the device. Another mapping can be a device realized
     with a set of <code>Device</code> services and different relations between
     them. <code>Device</code> service can represent pure software unit. For
     example, it can simulate the real device work. There are basic management
-    operations for remove and property access. New protocol devices can be
-    supported with a registration of new <code>Device</code> services.</para>
+    operations for removal and property access. New protocol devices can be
+    supported with the registration of new <code>Device</code> services.</para>
 
     <para>If the underlying protocol and the implementation allow, the
     <code>Device</code> services must be registered again after the OSGi
-    framework reboot. The service properties must be restored, the supported
+    framework reboots. The service properties must be restored, the supported
     functions must be registered and <code>Device</code> relations must be
     visible to the applications.</para>
 
@@ -142,7 +142,7 @@ device-id – device unique identifier in the scope of the driver</programlistin
 
           <listitem>
             <para><emphasis>Device.SERVICE_DRIVER</emphasis> – Specifies the
-            device driver name. For example, ZigBee, Z-Wave, Bluetooth etc.
+            device driver name. For example, ZigBee, Z-Wave, Bluetooth, etc.
             It's a mandatory property. The value type is
             <code>java.lang.String</code>.</para>
           </listitem>
@@ -172,7 +172,7 @@ device-id – device unique identifier in the scope of the driver</programlistin
               <listitem>
                 <para><emphasis>Device.STATUS_OFFLINE</emphasis> – Indicates
                 that the device is currently not available for operations. The
-                end device is still installed in the network and can become
+                end device is available in the network and can become
                 online later. The controller is unplugged or there is no
                 connection. All transitions to and from this status are
                 described in detail in <xref
@@ -230,58 +230,53 @@ device-id – device unique identifier in the scope of the driver</programlistin
 
             <itemizedlist>
               <listitem>
-                <para>Device.STATUS_DETAIL_CONNECTING – The reason for the
-                current device status is that the device is currently
-                connecting to the network. It indicates the reason with a
-                positive value 1. The device status must be
+                <para>Device.STATUS_DETAIL_CONNECTING – The device is currently
+                connecting to the network. The status detail indicates the reason with a
+                positive value <code>1</code>. The device status must be
                 STATUS_PROCESSING.</para>
               </listitem>
 
               <listitem>
                 <para><emphasis>Device.STATUS_DETAIL_INITIALIZING</emphasis> –
-                The reason for the current device status is that the device is
-                currently in process of initialization. It indicates the
-                reason with a positive value <code>2</code>. The network
-                controller initializing means that information about the
+                The device is currently in process of initialization.
+                The status detail indicates the reason with a positive value <code>2</code>.
+                The network controller initializing means that information about the
                 network is currently read. The device status must be
                 <code>STATUS_PROCESSING</code>.</para>
               </listitem>
 
               <listitem>
-                <para><emphasis>Device.STATUS_DETAIL_REMOVING</emphasis> – The
-                reason for the current device status is that the device is
-                leaving the network. It indicates the reason with positive
-                value <code>3</code>. The device status must be
-                <code>STATUS_PROCESSING</code>.</para>
+                <para><emphasis>Device.STATUS_DETAIL_REMOVING</emphasis> –
+                The device is leaving the network.
+                The status detail indicates the reason with positive value <code>3</code>.
+                The device status must be <code>STATUS_PROCESSING</code>.</para>
               </listitem>
 
               <listitem>
                 <para><emphasis>Device.STATUS_DETAIL_FIRMWARE_UPDATING</emphasis> –
-                The reason for the current device status is that
-                the device firmware is updating. It indicates the reason with positive
-                value <code>4</code>. The device status must be
-                <code>STATUS_PROCESSING</code>.</para>
+                The device firmware is updating.
+                The status detail indicates the reason with positive value <code>4</code>.
+                The device status must be <code>STATUS_PROCESSING</code>.</para>
               </listitem>
 
               <listitem>
                 <para><emphasis>Device.STATUS_DETAIL_CONFIGURATION_UNAPPLIED</emphasis>
-                – The reason for the current device status is that the device
-                configuration is not applied. It indicates an error with a
-                negative value <code>-1</code>. The device status must be
-                <code>STATUS_NOT_CONFIGURED</code>.</para>
+                – The device configuration is not applied.
+                The status detail indicates an error with a negative value <code>-1</code>.
+                The device status must be <code>STATUS_NOT_CONFIGURED</code>.</para>
               </listitem>
 
               <listitem>
-                <para><emphasis>Device.STATUS_DETAIL_BROKEN</emphasis> – The
-                reason for the offline device is that the device is broken. It
-                indicates an error with a negative value <code>-2</code>. The
-                device status must be <code>STATUS_OFFLINE</code>.</para>
+                <para><emphasis>Device.STATUS_DETAIL_BROKEN</emphasis> –
+                The device is broken.
+                The status detail indicates an error with a negative value <code>-2</code>.
+                The device status must be <code>STATUS_OFFLINE</code>.</para>
               </listitem>
 
               <listitem>
                 <para><emphasis>Device.STATUS_DETAIL_COMMUNICATION_ERROR</emphasis>
-                – The reason for the current device status is that the device
-                communication is problematic. It indicates an error with a
+                – The device communication is problematic.
+                The status detail indicates an error with a
                 negative value <code>-3</code>. The device status must be
                 <code>STATUS_ONLINE</code> or
                 <code>STATUS_NOT_INITIALIZED</code>.</para>
@@ -289,33 +284,31 @@ device-id – device unique identifier in the scope of the driver</programlistin
 
               <listitem>
                 <para><emphasis>Device.STATUS_DETAIL_DATA_INSUFFICIENT</emphasis>
-                – The reason for the uninitialized device is that the device
-                doesn't provide enough information and cannot be determined.
-                It indicates an error with a negative value <code>-4</code>.
+                – The device doesn't provide enough information and cannot be determined.
+                The status detail indicates an error with a negative value <code>-4</code>.
                 The device status must be
                 <code>STATUS_NOT_INITIALIZED</code>.</para>
               </listitem>
 
               <listitem>
                 <para><emphasis>Device.STATUS_DETAIL_INACCESSIBLE</emphasis> –
-                The reason for the offline device is that the device is not
-                accessible and further communication is not possible. It
-                indicates an error with a negative value <code>-5</code>. The
-                device status must be <code>STATUS_OFFLINE</code>.</para>
+                The device is not accessible and further communication is not possible.
+                The status detail indicates an error with a negative value <code>-5</code>.
+                The device status must be <code>STATUS_OFFLINE</code>.</para>
               </listitem>
 
               <listitem>
                 <para><emphasis>Device.STATUS_DETAIL_CONFIGURATION_ERROR</emphasis>
-                – The reason for the current device status is that the device
-                cannot be configured. It indicates an error with a negative
+                – The device cannot be configured.
+                The status detail indicates an error with a negative
                 value <code>-6</code>. The device status must be
                 <code>STATUS_NOT_CONFIGURED</code>.</para>
               </listitem>
 
               <listitem>
                 <para><emphasis>Device.STATUS_DETAIL_DUTY_CYCLE</emphasis> –
-                The reason for the offline device is that the device is in
-                duty cycle. It indicates an error with a negative value
+                The device is in duty cycle.
+                The status detail indicates an error with a negative value
                 <code>-7</code>. The device status must be
                 <code>STATUS_OFFLINE</code>.</para>
               </listitem>
@@ -323,7 +316,7 @@ device-id – device unique identifier in the scope of the driver</programlistin
 
             <para>Custom status details are allowed, but they must not overlap
             the specified codes. To prevent possible collisions with further
-            updates, custom codes can be greater than <code>100</code> and
+            updates, custom codes must be greater than <code>100</code> and
             less than <code>-100</code> . <xref
             linkend="service.dal.table.status.detail.mapping"/> table contains
             the mapping of the status details to the statuses.</para>
@@ -436,7 +429,7 @@ device-id – device unique identifier in the scope of the driver</programlistin
           </listitem>
 
           <listitem>
-            <para> <emphasis>Device.SERVICE_TYPES</emphasis> – Specified the
+            <para> <emphasis>Device.SERVICE_TYPES</emphasis> – Specifies the
             device types. It's an optional property. The value type is
             <code>java.lang.String[]</code> . </para>
           </listitem>
@@ -492,10 +485,10 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
       <code>org.osgi.service.dal.Device</code>. There is a registration order.
       <code>Device</code> services are registered last on start up. Before
       their registration, there is <code>Function</code> service registration.
-      The function registration procedure is available in <xref
+      The function registration procedure is described in <xref
       linkend="service.dal.function.registration"/>.</para>
 
-      <para>The OSGi service registry is only about the read-only access to
+      <para>The OSGi service registry is only for the read-only access to
       the services. There are no control operations. The service provider is
       responsible to register and unregister the services. That design is not
       very convenient for the device life cycle. The <code>Device</code>
@@ -542,7 +535,7 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
       <para>The device status reveals the device availability. It can
       demonstrate that device is currently not available for operations or
       that the device requires some additional configuration steps. The status
-      can jump over the different values according to the rules defined in
+      can move between the different values according to the rules defined in
       this section. The status transitions are summarized in <xref
       linkend="service.dal.table.device.status.transitions"/>, visualized on
       <xref linkend="service.dal.figure.device.status.transitions"/> and
@@ -708,9 +701,9 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
 
         <para>The <code>STATUS_OFFLINE</code> indicates that the device is
         currently not available for operations. That status can be set,
-        because of different reasons. The network controller can be unplugged,
-        connection to the device is lost etc. This variety provides an access
-        to that status from any other except <code>STATUS_REMOVED</code>.
+        because of different reasons. The network controller has been unplugged,
+        the connection to the device has been lost, etc. The device can move to this
+        status from any other status with the exception of <code>STATUS_REMOVED</code>.
         Transitions to and from this status are: <itemizedlist>
             <listitem>
               <para> From <code>STATUS_OFFLINE</code> to
@@ -884,7 +877,7 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
         <para>The status indicates that the device is currently busy with an
         operation. It can be time consuming operation and can result to any
         other status. The operation processing can be reached by any other
-        status except <code>STATUS_REMOVED</code>. An example, offline device
+        status except <code>STATUS_REMOVED</code>. For example, offline device
         requires some data processing to become online. It will apply this
         status sequence: <code>STATUS_OFFLINE</code>,
         <code>STATUS_PROCESSING</code> and <code>STATUS_ONLINE</code>.
@@ -1149,15 +1142,15 @@ for (int i = 0; i &lt; deviceSRefs.length; i++) {
   <section xml:id="service.dal.function">
     <title>Function Service</title>
 
-    <para>The user applications have a full control over the device with the
+    <para>The user applications have full control over the device with the
     <code>Function</code> services. Synchronous or asynchronous operations can
-    trigger different actions. For example, turn on or off the light, can vary
-    the room temperature, send an user notification etc. The action result can
+    trigger different actions. For example, turn on or off the light, can change
+    the room temperature, send an user notification, etc. The action result can
     be reported immediately or later in case of concurrent execution. As a
     result, a <code>Function</code> property can be updated. The property is
-    the device value container. It can explore, sensor information, meter
-    data, the switch current position etc. Different access types supports the
-    applications to read, write or receive events.</para>
+    the device value container. It can provide, sensor information, meter
+    data, the switch current position, etc. Different property access types
+    allow the applications to read, write or receive events.</para>
 
     <section>
       <title>Function Service Properties</title>
@@ -1187,7 +1180,7 @@ function-id – function identifier in the scope of the device</programlisting>
             <para> <emphasis>Function.SERVICE_TYPE</emphasis> – optional
             service property. The service property value contains the function
             type. For example, the sensor function can have different types
-            like temperature, pressure etc. The value type is
+            like temperature, pressure, etc. The value type is
             <code>java.lang.String</code> .</para>
 
             <para>Organizations that want to use function types that do not
@@ -1310,9 +1303,9 @@ function-id – function identifier in the scope of the device</programlisting>
           </listitem>
         </itemizedlist></para>
 
-      <para>That registration rule helps to the applications to find the
+      <para>That registration rule helps the applications to find the
       supported function classes and to identify the metadata. Otherwise the
-      function services can be accesses, but it's not clear which are the
+      function services can be accessed, but it's not clear which are the
       function classes and metadata.</para>
     </section>
 
@@ -1322,7 +1315,7 @@ function-id – function identifier in the scope of the device</programlisting>
       <para><code>Function</code> is built by a set of properties and
       operations. The function can have unique identifier, type, version,
       description, link to the <code>Device</code> service and information
-      about the reference functions. <code>Function</code> interface must be
+      about the referenced functions. <code>Function</code> interface must be
       the base interface for all functions. If the device provider defines
       custom functions, all of them must extend <code>Function</code>
       interface. It provides a common access to the operations and properties
@@ -1372,7 +1365,7 @@ function-id – function identifier in the scope of the device</programlisting>
 
           <listitem>
             <para> <code>java.util.Map</code> instance. The map keys can be
-            <code>java.lang.String</code> . The values follow these rules.
+            <code>java.lang.String</code> . The values of a single type follow these rules.
             </para>
           </listitem>
 
@@ -1669,7 +1662,7 @@ function-id – function identifier in the scope of the device</programlisting>
       <title>Function Property Events</title>
 
       <para>The eventable function properties can trigger a new event on each
-      property value touch. It doesn't require a modification of the value.
+      property value modification. It doesn't require a modification of the value.
       For example, the motion sensor can send a few events with no property
       value change when motion is detected and continued to be detected. The
       event must use <code>FunctionEvent</code> class. The event properties

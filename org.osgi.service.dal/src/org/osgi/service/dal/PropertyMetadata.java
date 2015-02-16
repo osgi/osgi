@@ -19,7 +19,8 @@ package org.osgi.service.dal;
 import java.util.Map;
 
 /**
- * Contains metadata about function property or function operation parameter.
+ * Contains metadata about a function property, a function operation parameter
+ * or a function operation return value.
  * 
  * The access to the function properties is a bitmap value of {@link #ACCESS}
  * metadata key. Function properties can be accessed in three ways. Any

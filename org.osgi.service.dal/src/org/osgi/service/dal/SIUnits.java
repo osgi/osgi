@@ -17,9 +17,9 @@
 package org.osgi.service.dal;
 
 /**
- * Contains the most of the International System of Units unit symbols. The
- * constant name represents the unit name. The constant value represents the
- * unit symbol as it's defined in {@link PropertyMetadata#UNITS}.
+ * Contains most of the International System of Units unit symbols. The constant
+ * name represents the unit name. The constant value represents the unit symbol
+ * as it's defined in {@link PropertyMetadata#UNITS}.
  */
 public interface SIUnits {
 

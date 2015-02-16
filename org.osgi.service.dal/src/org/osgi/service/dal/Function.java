@@ -90,10 +90,9 @@ package org.osgi.service.dal;
  * hierarchies.</li>
  * </ul>
  * <p>
- * That registration rule helps to the applications to find the supported
- * function classes and to identify the metadata. Otherwise the function
- * services can be accesses, but it's not clear which are the function classes
- * and metadata.
+ * That registration rule helps the applications to find the supported function
+ * classes and to identify the metadata. Otherwise the function services can be
+ * accesses, but it's not clear which are the function classes and metadata.
  * <p>
  * The function properties must be integrated according to these rules:
  * <ul>
@@ -155,7 +154,7 @@ package org.osgi.service.dal;
  * are defined in JavaBeans specification.</li>
  * <li>
  * {@code java.util.Map}s. The keys can be {@code java.lang.String}. The values
- * follow these rules.</li>
+ * of a single type follow these rules.</li>
  * <li>Arrays of defined types.</li>
  * </ul>
  * The properties metadata is accessible with
@@ -210,12 +209,12 @@ public interface Function {
 	/**
 	 * The service property value contains the function type. It's an optional
 	 * property. For example, the sensor function can have different types like
-	 * temperature or pressure etc. The value type is {@code java.lang.String}.
+	 * temperature, pressure, etc. The value type is {@code java.lang.String}.
 	 * <p>
 	 * Organizations that want to use function types that do not clash with OSGi
 	 * Alliance defined types should prefix their types in own namespace.
 	 * <p>
-	 * The type does'nt mandate specific function interface. It can be used with
+	 * The type doesn't mandate specific function interface. It can be used with
 	 * different functions.
 	 */
 	public static final String	SERVICE_TYPE			= "dal.function.type";
@@ -269,20 +268,19 @@ public interface Function {
 	public static final String	SERVICE_OPERATION_NAMES	= "dal.function.operation.names";
 
 	/**
-	 * Provides metadata about the function property specified with the name
-	 * argument.
+	 * Provides metadata about the function property.
 	 * <p>
 	 * This method must continue to return the property metadata after the
 	 * function service has been unregistered.
 	 * 
-	 * @param propertyName The function property name, which metadata is
+	 * @param propertyName The function property name, for which metadata is
 	 *        requested.
 	 * 
 	 * @return The property metadata for the given property name. {@code null}
-	 *         if the property metadata is not supported.
+	 *         if the property metadata is not available.
 	 * 
 	 * @throws IllegalArgumentException If the function property with the
-	 *         specified name is not supported.
+	 *         specified name is not available.
 	 */
 	public PropertyMetadata getPropertyMetadata(String propertyName);
 
@@ -292,14 +290,14 @@ public interface Function {
 	 * This method must continue to return the operation metadata after the
 	 * function service has been unregistered.
 	 * 
-	 * @param operationName The function operation name, which metadata is
+	 * @param operationName The function operation name, for which metadata is
 	 *        requested.
 	 * 
 	 * @return The operation metadata for the given operation name. {@code null}
-	 *         if the operation metadata is not supported.
+	 *         if the operation metadata is not available.
 	 * 
 	 * @throws IllegalArgumentException If the function operation with the
-	 *         specified name is not supported.
+	 *         specified name is not available.
 	 */
 	public OperationMetadata getOperationMetadata(String operationName);
 

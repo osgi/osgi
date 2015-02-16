@@ -62,7 +62,7 @@ public interface Device {
 
 	/**
 	 * The service property value contains the device driver name. For example,
-	 * ZigBee, Z-Wave, Bluetooth etc. It's a mandatory property. The value type
+	 * ZigBee, Z-Wave, Bluetooth, etc. It's a mandatory property. The value type
 	 * is {@code java.lang.String}.
 	 */
 	public static final String	SERVICE_DRIVER							= "dal.device.driver";
@@ -129,7 +129,7 @@ public interface Device {
 	public static final String	SERVICE_FIRMWARE_VERSION				= "dal.device.firmware.version";
 
 	/**
-	 * The service property value contains the device types like DVD, TV etc.
+	 * The service property value contains the device types like DVD, TV, etc.
 	 * It's an optional property. The value type is {@code java.lang.String[]}.
 	 */
 	public static final String	SERVICE_TYPES							= "dal.device.types";

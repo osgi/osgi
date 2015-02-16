@@ -127,7 +127,7 @@ public class DeviceException extends IOException {
 	 * missing. The cause can be protocol specific exception with an appropriate
 	 * message and error code.
 	 * 
-	 * @return An throwable cause.
+	 * @return A throwable cause.
 	 */
 	public Throwable getCause() {
 		return this.cause;

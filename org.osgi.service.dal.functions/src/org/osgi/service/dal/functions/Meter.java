@@ -53,7 +53,7 @@ public interface Meter extends Function {
 	public static final String	FLOW_IN				= "in";
 
 	/**
-	 * Represents the metering generation flow. It can be used as
+	 * Represents the metering production flow. It can be used as
 	 * {@link #SERVICE_FLOW} property value.
 	 */
 	public static final String	FLOW_OUT			= "out";
@@ -70,13 +70,13 @@ public interface Meter extends Function {
 	public static final String	SERVICE_FLOW		= "dal.meter.flow";
 
 	/**
-	 * Specifies the current consumption or generation property name. The
+	 * Specifies the current consumption or production property name. The
 	 * eventable property can be read with {@link #getCurrent()} getter.
 	 */
 	public static final String	PROPERTY_CURRENT	= "current";
 
 	/**
-	 * Specifies the total consumption or generation property name. The
+	 * Specifies the total consumption or production property name. The
 	 * eventable property can be read with {@link #getTotal()} getter.
 	 */
 	public static final String	PROPERTY_TOTAL		= "total";

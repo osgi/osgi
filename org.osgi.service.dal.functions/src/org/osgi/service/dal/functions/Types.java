@@ -279,8 +279,8 @@ public interface Types { // NO_UCD
 	 * power level.</li>
 	 * <li>
 	 * {@code BooleanSensor} - indicates that the {@code BooleanSensor} can
-	 * detect motion. {@code true} state means that there is power restore.
-	 * {@code false} state means that there is power cut.</li>
+	 * detect power/no power. {@code true} state means that there is power.
+	 * {@code false} state means that there is no power.</li>
 	 * <li>
 	 * {@code BooleanControl} - indicates that there is electricity control.
 	 * {@code true} state means that the power will be restored. {@code false}

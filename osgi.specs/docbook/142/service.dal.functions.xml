@@ -17,7 +17,7 @@
   <section xml:id="service.dal.functions.introduction">
     <title>Introduction</title>
 
-    <para>Concrete function interfaces are used to unity the access and the
+    <para>Concrete function interfaces are used to unify the access and the
     control of the basic device operations and the related properties. The
     current section specifies the minimal set of such functionalities. They
     can be extended or replaced to cover domain specific scenarios. The set is
@@ -50,12 +50,12 @@
 
           <tbody>
             <row>
-              <entry><code>reverse</code></entry>
+              <entry><code>inverse</code></entry>
 
               <entry>Reverses the <code>BooleanControl</code> state. If the
               current state represents <code>true</code> value, it'll be
-              reversed to <code>false</code>. If the current state represents
-              <code>false</code> value, it'll be reversed to
+              changed to <code>false</code>. If the current state represents
+              <code>false</code> value, it'll be changed to
               <code>true</code>.</entry>
             </row>
 
@@ -235,9 +235,9 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
 
           <listitem>
             <para> <code>Types.POWER</code> - indicates that the
-            <code>BooleanSensor</code> can detect motion. <code>true</code>
-            state means that there is power restore. <code>false</code> state
-            means that there is power cut. </para>
+            <code>BooleanSensor</code> can detect power/no power. <code>true</code>
+            state means that there is power. <code>false</code> state
+            means that there is no power. </para>
           </listitem>
 
           <listitem>
@@ -590,15 +590,14 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
             <row>
               <entry><code>total</code></entry>
 
-              <entry>Contains the total consumption or generation. It has been
-              measured since the last call of <code>resetTotal</code> or
-              device initial run. The property access is readable and eventable.</entry>
+              <entry>Contains the total consumption or production.
+              The property access is readable and eventable.</entry>
             </row>
 
             <row>
               <entry><code>current</code></entry>
 
-              <entry>Contains the current consumption or generation. The
+              <entry>Contains the current consumption or production. The
               property access is readable and eventable.</entry>
             </row>
           </tbody>
@@ -657,8 +656,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       <para><code>Meter</code> function service can be optionally registered
       with <code>Meter.SERVICE_FLOW</code> service property. The value type is
       <code>java.lang.String</code>. It contains the metering flow. Currently,
-      the flow can be <code>Meter.FLOW_IN</code> for consumption or
-      <code>Meter.FLOW_OUT</code> for generation.</para>
+      the flow can be <code>Meter.FLOW_IN</code> for a consumption or
+      <code>Meter.FLOW_OUT</code> for a production.</para>
     </section>
 
     <section xml:id="service.dal.functions.alarm">
@@ -743,10 +742,10 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
     <section xml:id="service.dal.functions.wake.up">
       <title>WakeUp</title>
 
-      <para><code>WakeUp</code> function provides device awake monitoring and
-      management. It's especially applicable to battery-operated devices. Such
+      <para><code>WakeUp</code> function provides device awake monitoring.
+      It's especially applicable to battery-operated devices. Such
       device can notify the system that it's awake and can receive commands
-      with an event to property <code>PROPERTY_AWAKE</code>. The property
+      with a <code>PROPERTY_AWAKE</code> property event. The property
       eventing must follow the definition of Device Abstraction Layer, <xref
       linkend="service.dal.function.event"/>.</para>
 
@@ -913,12 +912,12 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       <itemizedlist>
           <listitem>
             <para> alarm type - indicates the meaning of the alarm like smoke,
-            power fail etc. </para>
+            power fail, etc. </para>
           </listitem>
 
           <listitem>
             <para> alarm severity - indicates the alarm importance level like
-            minor, critical etc. </para>
+            minor, critical, etc. </para>
           </listitem>
       </itemizedlist>
       The <code>severity</code> field is

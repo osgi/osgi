@@ -24,10 +24,10 @@ import org.osgi.service.dal.functions.data.BooleanData;
 import org.osgi.service.dal.functions.data.LevelData;
 
 /**
- * {@code WakeUp} function provides device awake monitoring and management. It's
- * especially applicable to battery-operated devices. Such device can notify the
- * system that it's awake and can receive commands with an event to property
- * {@link #PROPERTY_AWAKE}.
+ * {@code WakeUp} function provides device awake monitoring. It's especially
+ * applicable to battery-operated devices. Such device can notify the system
+ * that it's awake and can receive commands with a {@link #PROPERTY_AWAKE}
+ * property event.
  * <p>
  * The device can periodically wake up for commands. The interval can be managed
  * with {@link #PROPERTY_WAKE_UP_INTERVAL} property.
@@ -61,7 +61,7 @@ public interface WakeUp extends Function {
 	 * wake up and receive command based on this interval.
 	 * <p>
 	 * The interval can be measured in different units like hours, minutes,
-	 * seconds etc. The unit is specified in {@code LevelData} instance.
+	 * seconds, etc. The unit is specified in {@code LevelData} instance.
 	 * 
 	 * @return The current wake up interval.
 	 * 

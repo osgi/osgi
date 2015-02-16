@@ -54,7 +54,7 @@ public final class SimulatedBooleanControl extends SimulatedFunction implements 
 		metadata.put(OperationMetadata.DESCRIPTION, "Simulator boolean control operation.");
 		OperationMetadata opMetadata = new OperationMetadataImpl(metadata, null, null);
 		OPERATION_METADATA = new HashMap();
-		OPERATION_METADATA.put(OPERATION_REVERSE, opMetadata);
+		OPERATION_METADATA.put(OPERATION_INVERSE, opMetadata);
 		OPERATION_METADATA.put(OPERATION_SET_FALSE, opMetadata);
 		OPERATION_METADATA.put(OPERATION_SET_TRUE, opMetadata);
 	}
@@ -87,7 +87,7 @@ public final class SimulatedBooleanControl extends SimulatedFunction implements 
 		super.postEvent(PROPERTY_DATA, newData);
 	}
 
-	public void reverse() {
+	public void inverse() {
 		setData(this.data.getValue() ? false : true);
 	}
 
@@ -103,7 +103,7 @@ public final class SimulatedBooleanControl extends SimulatedFunction implements 
 		if (!PROPERTY_DATA.equals(propName)) {
 			throw new IllegalArgumentException("The property is not supported: " + propName);
 		}
-		reverse();
+		inverse();
 	}
 
 	private static Dictionary addPropertyAndOperationNames(Dictionary functionProps) {
@@ -113,7 +113,7 @@ public final class SimulatedBooleanControl extends SimulatedFunction implements 
 		functionProps.put(
 				SERVICE_OPERATION_NAMES,
 				new String[] {
-						OPERATION_REVERSE,
+						OPERATION_INVERSE,
 						OPERATION_SET_FALSE,
 						OPERATION_SET_TRUE});
 		return functionProps;

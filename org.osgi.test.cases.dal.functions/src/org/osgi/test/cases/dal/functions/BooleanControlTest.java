@@ -60,7 +60,7 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 	}
 
 	/**
-	 * Checks {@link BooleanControl#reverse()} operation functionality.
+	 * Checks {@link BooleanControl#inverse()} operation functionality.
 	 * 
 	 * @throws DeviceException If operation error is available.
 	 */
@@ -72,9 +72,9 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 		for (int i = 0; i < booleanControls.length; i++) {
 			BooleanControl currentBooleanControl = (BooleanControl) booleanControls[i];
 			BooleanData currentData = currentBooleanControl.getData();
-			currentBooleanControl.reverse();
+			currentBooleanControl.inverse();
 			super.assertEquals(currentData.getValue() ? false : true, currentBooleanControl.getData());
-			checkMetadata(currentBooleanControl.getOperationMetadata(BooleanControl.OPERATION_REVERSE));
+			checkMetadata(currentBooleanControl.getOperationMetadata(BooleanControl.OPERATION_INVERSE));
 		}
 	}
 
@@ -97,7 +97,7 @@ public final class BooleanControlTest extends AbstractFunctionTest {
 		FunctionEvent functionEvent;
 		BooleanData currentData = booleanControl.getData();
 		try {
-			booleanControl.reverse();
+			booleanControl.inverse();
 			functionEvent = eventHandler.getEvents(1)[0];
 		} finally {
 			eventHandler.unregister();
