@@ -104,28 +104,32 @@
       <code>Function.SERVICE_TYPE</code> service property. The next list
       contains some suitable to <code>BooleanControl</code>: <itemizedlist>
           <listitem>
-            <para> <code>Types.LIGHT</code> - indicates that there is a light
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.LIGHT"/>
+            - indicates that there is a light
             device control. <code>true</code> state means that the light
             device will be turned on. <code>false</code> state means that the
             light device will be turned off. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.DOOR</code> - indicates that there is a door
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.DOOR"/>
+            - indicates that there is a door
             position control. <code>true</code> state means that the door will
             be opened. <code>false</code> state means that the the door will
             be closed. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.WINDOW</code> - indicates that there is a
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.WINDOW"/>
+            - indicates that there is a
             window position control. <code>true</code> state means that the
             window will be opened. <code>false</code> state means that the the
             window will be closed. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.POWER</code> - indicates that there is
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.POWER"/>
+            - indicates that there is
             electricity control. <code>true</code> state means that the power
             will be restored. <code>false</code> state means that the power
             will be cut. </para>
@@ -199,77 +203,88 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       <code>Function.SERVICE_TYPE</code> service property. The next list
       contains some suitable to <code>BooleanSensor</code>: <itemizedlist>
           <listitem>
-            <para> <code>Types.LIGHT</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.LIGHT"/>
+            - indicates that the
             <code>BooleanSensor</code> can detected light. <code>true</code>
             state means that there is light. <code>false</code> state means
             that there is no light. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.GAS</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.GAS"/>
+            - indicates that the
             <code>BooleanSensor</code> supports gas detection.
             <code>true</code> state means there is gas. <code>false</code>
             state means that there is no gas. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.SMOKE</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.SMOKE"/>
+            - indicates that the
             <code>BooleanSensor</code> can detect smoke. <code>true</code>
             state means that there is smoke. <code>false</code> state means
             that there is no smoke. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.DOOR</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.DOOR"/>
+            - indicates that the
             <code>BooleanSensor</code> can detect the door state.
             <code>true</code> state means that the door is opened.
             <code>false</code> state means that the door is closed. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.WINDOW</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.WINDOW"/>
+            - indicates that the
             <code>BooleanSensor</code> can window state. <code>true</code>
             state means that the window is opened. <code>false</code> state
             means that the window is closed. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.POWER</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.POWER"/>
+            - indicates that the
             <code>BooleanSensor</code> can detect power/no power. <code>true</code>
             state means that there is power. <code>false</code> state
             means that there is no power. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.RAIN</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.RAIN"/>
+            - indicates that the
             <code>BooleanSensor</code> can detect rain. <code>true</code>
             state means that there is rain. <code>false</code> state means
             that there is no rain. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.CONTACT</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.CONTACT"/>
+            - indicates that the
             <code>BooleanSensor</code> can detect contact. <code>true</code>
             state means that there is contact. <code>false</code> state means
             that there is no contact. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.FIRE</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.FIRE"/>
+            - indicates that the
             <code>BooleanSensor</code> can detect fire. <code>true</code>
             state means that there is fire. <code>false</code> state means
             that there is no fire. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.OCCUPANCY</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.OCCUPANCY"/>
+            - indicates that the
             <code>BooleanSensor</code> can detect presence. <code>true</code>
             state means that someone is detected. <code>false</code> state
             means that nobody is detected. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.WATER</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.WATER"/>
+            - indicates that the
             <code>BooleanSensor</code> can detect water leak.
             <code>true</code> state means that there is water leak.
             <code>false</code> state means that there is no water leak.
@@ -277,7 +292,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
           </listitem>
 
           <listitem>
-            <para> <code>Types.MOTION</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.MOTION"/>
+            - indicates that the
             <code>BooleanSensor</code> can detect motion. <code>true</code>
             state means that there is motion detection. <code>false</code>
             state means that there is no motion detection. </para>
@@ -334,7 +350,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       <code>Function.SERVICE_TYPE</code> service property. The next list
       contains some suitable to <code>MultiLevelControl</code>: <itemizedlist>
           <listitem>
-            <para> <code>Types.LIGHT</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.LIGHT"/>
+            - indicates that the
             <code>MultiLevelControl</code> can control light devices. Usually,
             such devices are called dimmable. <code>MultiLevelControl</code>
             minimum value can switch off the device and
@@ -343,7 +360,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
           </listitem>
 
           <listitem>
-            <para> <code>Types.TEMPERATURE</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.TEMPERATURE"/>
+            - indicates that the
             <code>MultiLevelControl</code> can control temperature devices.
             For example, such device can be thermostat.
             <code>MultiLevelControl</code> minimum value is the lowest
@@ -352,7 +370,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
           </listitem>
 
           <listitem>
-            <para> <code>Types.FLOW</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.FLOW"/>
+            - indicates that the
             <code>MultiLevelControl</code> can control the flow level.
             <code>MultiLevelControl</code> minimum value is the minimum
             supported flow level. <code>MultiLevelControl</code> maximum value
@@ -360,7 +379,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
           </listitem>
 
           <listitem>
-            <para> <code>Types.PRESSURE</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.PRESSURE"/>
+            - indicates that the
             <code>MultiLevelControl</code> can control the pressure level.
             <code>MultiLevelControl</code> minimum value is the lowest
             supported pressure level. <code>MultiLevelControl</code> maximum
@@ -368,7 +388,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
           </listitem>
 
           <listitem>
-            <para> <code>Types.HUMIDITY</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.HUMIDITY"/>
+            - indicates that the
             <code>MultiLevelControl</code> can control the humidity level.
             It's typical functionality for HVAC (heating, ventilation, and air
             conditioning) devices. <code>MultiLevelControl</code> minimum
@@ -378,7 +399,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
           </listitem>
 
           <listitem>
-            <para> <code>Types.GAS</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.GAS"/>
+            - indicates that the
             <code>MultiLevelControl</code> can control the gas level.
             <code>MultiLevelControl</code> minimum value is the lowest
             supported gas level. <code>MultiLevelControl</code> maximum value
@@ -386,7 +408,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
           </listitem>
 
           <listitem>
-            <para> <code>Types.SMOKE</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.SMOKE"/>
+            - indicates that the
             <code>MultiLevelControl</code> can control the smoke level.
             <code>MultiLevelControl</code> minimum value is the lowest
             supported smoke level. <code>MultiLevelControl</code> maximum
@@ -394,7 +417,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
           </listitem>
 
           <listitem>
-            <para> <code>Types.DOOR</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.DOOR"/>
+            - indicates that the
             <code>MultiLevelControl</code> can control the door position.
             <code>MultiLevelControl</code> minimum value can completely close
             the door. <code>MultiLevelControl</code> maximum value can open
@@ -402,7 +426,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
           </listitem>
 
           <listitem>
-            <para> <code>Types.WINDOW</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.WINDOW"/>
+            - indicates that the
             <code>MultiLevelControl</code> can control the window position.
             <code>MultiLevelControl</code> minimum value can completely close
             the window. <code>MultiLevelControl</code> maximum value can open
@@ -410,7 +435,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
           </listitem>
 
           <listitem>
-            <para> <code>Types.LIQUID</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.LIQUID"/>
+            - indicates that the
             <code>MultiLevelControl</code> can control the liquid level.
             <code>MultiLevelControl</code> minimum value is the lowest
             supported liquid level. <code>MultiLevelControl</code> maximum
@@ -418,7 +444,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
           </listitem>
 
           <listitem>
-            <para> <code>Types.POWER</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.POWER"/>
+            - indicates that the
             <code>MultiLevelControl</code> can control the power level.
             <code>MultiLevelControl</code> minimum value is the lowest
             supported power level. <code>MultiLevelControl</code> maximum
@@ -426,7 +453,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
           </listitem>
 
           <listitem>
-            <para> <code>Types.NOISINESS</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.NOISINESS"/>
+            - indicates that the
             <code>MultiLevelControl</code> can control the noise level.
             <code>MultiLevelControl</code> minimum value is the lowest
             supported noise level. <code>MultiLevelControl</code> maximum
@@ -486,67 +514,80 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       <code>Function.SERVICE_TYPE</code> service property. The next list
       contains some suitable to <code>MultiLevelSensor</code>: <itemizedlist>
           <listitem>
-            <para> <code>Types.LIGHT</code> - indicates that the sensor can
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.LIGHT"/>
+            - indicates that the sensor can
             monitor the light level. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.TEMPERATURE</code> - indicates that the sensor
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.TEMPERATURE"/>
+            - indicates that the sensor
             can monitor the temperature. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.FLOW</code> - indicates that the sensor can
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.FLOW"/>
+            - indicates that the sensor can
             monitor the flow level. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.PRESSURE</code> - indicates that the sensor can
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.PRESSURE"/>
+            - indicates that the sensor can
             monitor the pressure level. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.HUMIDITY</code> - indicates that the sensor can
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.HUMIDITY"/>
+            - indicates that the sensor can
             monitor the humidity level. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.GAS</code> - indicates that the sensor can
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.GAS"/>
+            - indicates that the sensor can
             monitor the gas level. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.SMOKE</code> - indicates that the sensor can
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.SMOKE"/>
+            - indicates that the sensor can
             monitor the smoke level. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.DOOR</code> - indicates that the sensor can
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.DOOR"/>
+            - indicates that the sensor can
             monitor the door position. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.WINDOW</code> - indicates that the sensor can
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.WINDOW"/>
+            - indicates that the sensor can
             monitor the window position. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.LIQUID</code> - indicates that the sensor can
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.LIQUID"/>
+            - indicates that the sensor can
             monitor the liquid level. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.POWER</code> - indicates that the sensor can
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.POWER"/>
+            - indicates that the sensor can
             monitor the power level. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.NOISINESS</code> - indicates that the sensor
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.NOISINESS"/>
+            - indicates that the sensor
             can monitor the noise level. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.RAIN</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.RAIN"/>
+            - indicates that the
             <code>MultiLevelSensor</code> can monitor the rain rate. </para>
           </listitem>
 
@@ -608,33 +649,39 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       <code>Function.SERVICE_TYPE</code> service property. The next list
       contains some suitable to <code>Meter</code>: <itemizedlist>
           <listitem>
-            <para> <code>Types.PRESSURE</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.PRESSURE"/>
+            - indicates that the
             <code>Meter</code> measures pressure. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.GAS</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.GAS"/>
+            - indicates that the
             <code>Meter</code> measures the gas consumption. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.POWER</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.POWER"/>
+            - indicates that the
             <code>Meter</code> measures the power consumption. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.WATER</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.WATER"/>
+            - indicates that the
             <code>Meter</code> measures water consumption. </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.HEAT</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.HEAT"/>
+            - indicates that the
             <code>Meter</code> measures thermal energy provided by a source.
             </para>
           </listitem>
 
           <listitem>
-            <para> <code>Types.COLD</code> - indicates that the
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.COLD"/>
+            - indicates that the
             <code>Meter</code> measures thermal energy provided by a source.
             </para>
           </listitem>
@@ -654,10 +701,14 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       metering information.</para>
 
       <para><code>Meter</code> function service can be optionally registered
-      with <code>Meter.SERVICE_FLOW</code> service property. The value type is
+      with <xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Meter.SERVICE_FLOW"/>
+      service property. The value type is
       <code>java.lang.String</code>. It contains the metering flow. Currently,
-      the flow can be <code>Meter.FLOW_IN</code> for a consumption or
-      <code>Meter.FLOW_OUT</code> for a production.</para>
+      the flow can be
+      <xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Meter.FLOW_IN"/>
+      for a consumption or
+      <xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Meter.FLOW_OUT"/>
+      for a production.</para>
     </section>
 
     <section xml:id="service.dal.functions.alarm">
@@ -745,12 +796,15 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       <para><code>WakeUp</code> function provides device awake monitoring.
       It's especially applicable to battery-operated devices. Such
       device can notify the system that it's awake and can receive commands
-      with a <code>PROPERTY_AWAKE</code> property event. The property
+      with a <xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.WakeUp.PROPERTY_AWAKE"/>
+      property event. The property
       eventing must follow the definition of Device Abstraction Layer, <xref
       linkend="service.dal.function.event"/>.</para>
 
       <para>The device can periodically wake up for commands. The interval can
-      be managed with <code>PROPERTY_WAKE_UP_INTERVAL</code> property.</para>
+      be managed with
+      <xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.WakeUp.PROPERTY_WAKE_UP_INTERVAL"/>
+      property.</para>
 
       <table>
         <title>WakeUp Properties</title>
@@ -966,36 +1020,36 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
       two predefined event types:
         <itemizedlist>
           <listitem>
-            <para> <emphasis>TYPE_PRESSED</emphasis> – used for a key
-            pressed; </para>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.data.KeypadData.TYPE_PRESSED"/>
+            – used for a key pressed; </para>
           </listitem>
 
           <listitem>
-            <para> <emphasis>TYPE_RELEASED</emphasis> – used for a key
-            released. </para>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.data.KeypadData.TYPE_RELEASED"/>
+            – used for a key released. </para>
           </listitem>
         </itemizedlist>
         Predefined event sub-types are:
         <itemizedlist>
           <listitem>
-            <para> <emphasis>SUB_TYPE_PRESSED_NORMAL</emphasis> –
-              used for a normal key pressed event.
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.data.KeypadData.SUB_TYPE_PRESSED_NORMAL"/>
+              – used for a normal key pressed event.
               Usually, there is a single press and the key is not held down.
               This sub-type is used with <code>TYPE_PRESSED</code> type.
             </para>
           </listitem>
 
           <listitem>
-            <para> <emphasis>SUB_TYPE_PRESSED_LONG</emphasis> –
-              used for a long key pressed event.
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.data.KeypadData.SUB_TYPE_PRESSED_LONG"/>
+              – used for a long key pressed event.
               Usually, there is a single press and the key is held down.
               This sub-type is used with <code>TYPE_PRESSED</code> type.
             </para>
           </listitem>
 
           <listitem>
-            <para> <emphasis>SUB_TYPE_PRESSED_DOUBLE</emphasis> –
-              used for a double key pressed event.
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.data.KeypadData.SUB_TYPE_PRESSED_DOUBLE"/>
+              – used for a double key pressed event.
               Usually, there are two press actions and
               the key is not held down after the second press.
               This sub-type is used with <code>TYPE_PRESSED</code> type.
@@ -1003,8 +1057,8 @@ for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
           </listitem>
 
           <listitem>
-            <para> <emphasis>SUB_TYPE_PRESSED_DOUBLE_LONG</emphasis> –
-              used for a double long key pressed event.
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.data.KeypadData.SUB_TYPE_PRESSED_DOUBLE_LONG"/>
+              – used for a double long key pressed event.
               Usually, there are two press actions and
               the key is held down after the second press.
               This sub-type is used with <code>TYPE_PRESSED</code> type.
