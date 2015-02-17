@@ -89,6 +89,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 			}
 		} catch (InvalidSyntaxException e) {
 			e.printStackTrace();
+			fail("Can not get the already existing OSGi service resource monitor factories.");
 		}
 	}
 
@@ -163,8 +164,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 			cpuFactory.createResourceMonitor(resourceContext);
 			fail("A ResourceMonitorException is expected here.");
 		} catch (ResourceMonitorException e) {
-			log("Expected exception: ");
-			e.printStackTrace();
+			log("Expected exception: " + e.getMessage());
 		}
 
 		// check the ResourceContext has still one ResourceContext
@@ -242,8 +242,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 			resourceMonitor.enable();
 			fail("A ResourceMonitorException is expected.");
 		} catch (ResourceMonitorException e) {
-			log("Expected exception: ");
-			e.printStackTrace();
+			log("Expected exception: " + e.getMessage());
 		}
 
 		// try to disable it ==> expect a ResourceMonitorException
@@ -251,8 +250,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 			resourceMonitor.disable();
 			fail("A ResourceMonitorException is expected.");
 		} catch (ResourceMonitorException e) {
-			log("Expected exception: ");
-			e.printStackTrace();
+			log("Expected exception: " + e.getMessage());
 		}
 	}
 
@@ -297,8 +295,7 @@ public class TC4_ResourceMonitorTestCase extends DefaultTestBundleControl {
 			resourceMonitor.getUsage();
 			fail("A ResourceMonitorException is expected.");
 		} catch (ResourceMonitorException e) {
-			log("Expected exception: ");
-			e.printStackTrace();
+			log("Expected exception: " + e.getMessage());
 		}
 	}
 

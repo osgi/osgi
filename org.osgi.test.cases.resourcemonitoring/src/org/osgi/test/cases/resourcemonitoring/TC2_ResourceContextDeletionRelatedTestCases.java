@@ -121,8 +121,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 			resourceContext.getMonitors();
 			fail("A ResourceContextException is expected.");
 		} catch (ResourceContextException e) {
-			log("Expected exception: ");
-			e.printStackTrace();
+			log("Expected exception: " + e.getMessage());
 		}
 
 		// check it is not possible to add bundle.
@@ -130,8 +129,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 			resourceContext.addBundle(0);
 			fail("A ResourceContextException is expected.");
 		} catch (ResourceContextException e) {
-			log("Expected exception: ");
-			e.printStackTrace();
+			log("Expected exception: " + e.getMessage());
 		}
 
 		// check it is not possible to add monitor.
@@ -139,8 +137,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 			resourceContext.addResourceMonitor(new FakeResourceMonitor());
 			fail("A ResourceContextException is expected here.");
 		} catch (ResourceContextException e) {
-			log("Expected exception: ");
-			e.printStackTrace();
+			log("Expected exception: " + e.getMessage());
 		}
 
 		// check a ResourceContextEvent has been sent due to deletion.
@@ -210,8 +207,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 			resourceContext1.getMonitors();
 			fail("A ResourceContextException is expected.");
 		} catch (ResourceContextException e) {
-			log("Expected exception: ");
-			e.printStackTrace();
+			log("Expected exception: " + e.getMessage());
 		}
 
 		// check bundleId belongs to resourceContext2
@@ -292,8 +288,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 			resourceContext1.addBundle(bundleId);
 			fail("A ResourceContextException is expected.");
 		} catch (ResourceContextException e) {
-			log("Expected exception: ");
-			e.printStackTrace();
+			log("Expected exception: " + e.getMessage());
 		}
 
 		// check that there is no existing ResourceContext
@@ -333,7 +328,7 @@ public class TC2_ResourceContextDeletionRelatedTestCases extends DefaultTestBund
 
 		// event BUNDLE_REMOVED from context1
 		event = (ResourceContextEvent) events.get(4);
-		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, event.getType());
+		assertEquals("Type mismatch: ResourceContextEvent.BUNDLE_REMOVED is expected.", ResourceContextEvent.BUNDLE_REMOVED, event.getType());
 		assertEquals("Name mismatch.", name1, event.getContext().getName());
 		assertEquals("BundleId mismatch.", bundleId, event.getBundleId());
 

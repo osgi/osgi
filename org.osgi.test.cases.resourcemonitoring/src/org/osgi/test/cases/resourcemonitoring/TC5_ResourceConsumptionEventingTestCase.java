@@ -126,6 +126,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 			}
 		} catch (InvalidSyntaxException e) {
 			e.printStackTrace();
+			fail("Can not get the already existing OSGi service resource monitor factories.");
 		}
 	}
 

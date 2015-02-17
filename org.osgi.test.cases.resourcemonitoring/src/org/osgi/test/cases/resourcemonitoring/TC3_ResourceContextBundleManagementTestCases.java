@@ -149,8 +149,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 			resourceContext2.addBundle(bundleId);
 			fail("A ResourceContextException is expected.");
 		} catch (ResourceContextException e) {
-			log("Expected exception: ");
-			e.printStackTrace();
+			log("Expected exception: " + e.getMessage());
 		}
 
 		// check that bundle1 is not associated with context2
@@ -204,8 +203,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 			resourceContext.removeBundle(bundleId);
 			fail("A ResourceContextException is expected.");
 		} catch (ResourceContextException e) {
-			log("Expected exception: ");
-			e.printStackTrace();
+			log("Expected exception: " + e.getMessage());
 		}
 	}
 
@@ -347,8 +345,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 			resourceContext1.removeBundle(bundleId, resourceContext2);
 			fail("A ResourceContextException is expected.");
 		} catch (ResourceContextException e) {
-			log("Expected exception: ");
-			e.printStackTrace();
+			log("Expected exception: " + e.getMessage());
 		}
 
 		// check bundleId has been removed from resourceContext1
