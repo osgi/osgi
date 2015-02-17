@@ -10,7 +10,7 @@ Bundle-Name: ${groupid}:${p}
  version=${osgi.version}
 companion.code = true
 
-Private-Package: ${osgi.annotation.packages}
+Export-Package: ${osgi.annotation.packages}
 
 Include-Resource: ${osgi.annotation.resources}
 

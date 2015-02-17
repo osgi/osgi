@@ -1,7 +1,9 @@
 # Set javac settings from JDT prefs
 -include: ${build}/eclipse/jdt.bnd, ${build}/companion.bnd
 
-Private-Package: ${p}.*; -split-package:=first
+Export-Package: ${p}.*; -split-package:=first
+
+Require-Capability: osgi.compile.time.only; filter:="(&(must.not.resolve=*)(!(must.not.resolve=*)))"
 
 -buildpath = \
     ee.minimum; version=1.3
