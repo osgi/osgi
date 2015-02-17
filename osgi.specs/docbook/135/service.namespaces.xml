@@ -176,7 +176,7 @@
     should require such an extender with the following manifest header:</para>
 
     <programlisting>Require-Capability: osgi.extender;
-  filter:="(&amp;(osgi.extender=osgi.component)(version&gt;=1.3))"</programlisting>
+  filter:="(&amp;(osgi.extender=osgi.component)(version&gt;=1.3)(!(version&gt;=2.0)))"</programlisting>
 
     <para>Extenders can extend an extendee bundle even if that bundle does not
     require the extender, unless the extender's specification explicitly
