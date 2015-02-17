@@ -1634,16 +1634,14 @@ function-id – function identifier in the scope of the device</programlisting>
                 <para>If the unit name matches to a Unicode symbol name, the
                 Unicode symbol must be used. For example, the degree unit
                 matches to the Unicode degree sign
-                (<code>U+00B0</code>).</para>
+                (<code>°</code>).</para>
               </listitem>
 
               <listitem>
                 <para>If the unit name doesn't match to a Unicode symbol, the
                 unit symbol must be built by Unicode Basic Latin block of
                 characters, superscript and subscript characters. For example,
-                watt per square metre steradian is built by <code>W/(mU+00B2
-                sr)</code>, where <code>U+00B2</code> is Unicode superscript
-                two.</para>
+                watt per square metre steradian is built by <code>W/(m² sr)</code>.</para>
               </listitem>
             </itemizedlist>
 

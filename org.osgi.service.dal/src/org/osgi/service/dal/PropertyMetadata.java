@@ -102,11 +102,11 @@ public interface PropertyMetadata {
 	 * For example, kg for kilogram and km for kilometre.</li>
 	 * <li>If the unit name matches to an Unicode symbol name, the Unicode
 	 * symbol must be used. For example, the degree unit matches to the Unicode
-	 * degree sign (\u00B0).</li>
+	 * degree sign ({@code \u00B0}).</li>
 	 * <li>If the unit name doesn't match to an Unicode symbol, the unit symbol
 	 * must be built by Unicode Basic Latin block of characters, superscript and
 	 * subscript characters. For example, watt per square metre steradian is
-	 * built by W/(m\u00B2 sr), where \u00B2 is Unicode superscript two.</li>
+	 * built by {@code W/(m\u00B2 sr)}.</li>
 	 * </ul>
 	 * If those rules cannot be applied to the unit symbol, custom rules are
 	 * allowed. A set of predefined unit symbols are available in
