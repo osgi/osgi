@@ -267,10 +267,12 @@
       </orderedlist></para>
 
     <para>For example, if two <code>ServletContextHelper</code> services are
-    registered as follows <programlisting>osgi.http.whiteboard.context.path = /foo
-osgi.http.whiteboard.context.path = /foo/bar</programlisting> Then is a
-    request for <code>http://localhost/foo/bar/someServlet</code> is looked up
-    in the following order: <orderedlist>
+        registered as follows
+        <programlisting>osgi.http.whiteboard.context.path = /foo
+osgi.http.whiteboard.context.path = /foo/bar</programlisting>
+
+        Then a request for <code>http://localhost/foo/bar/someServlet</code>
+        is looked up in the following order: <orderedlist>
         <listitem>
           <para><code>/foo/bar</code> context looking for a pattern to match
           <code>/someServlet</code></para>
