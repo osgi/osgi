@@ -221,7 +221,7 @@
           <row>
             <entry><code>osgi.http.whiteboard.context.path</code></entry>
 
-            <entry><code>String</code><para><emphasis>optional</emphasis></para></entry>
+            <entry><code>String</code><para><emphasis>required</emphasis></para></entry>
 
             <entry><para>Additional prefix to the context path for servlets.
             This property is mandatory. Valid characters are specified in IETF
