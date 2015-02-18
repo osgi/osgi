@@ -7,25 +7,20 @@ Private-Package						=  \
     ${p}.util.*
 Import-Package: ${-signaturetest}, *
 
--buildpath: org.osgi.test.support;version=project,\
-    org.osgi.service.networkadapter;version=project,\
-    osgi.core;version=4.3,\
-    osgi.cmpn;version=4.2,\
-    ee.minimum;version=1.2.1,\
-    org.osgi.test.cases.dal.step;version=project,\
-    ${junit}
+-buildpath:  \
+	org.osgi.test.support;version=project,\
+	org.osgi.service.networkadapter;version=project,\
+	osgi.core;version=4.2,\
+	osgi.cmpn;version=4.2,\
+	ee.minimum;version=1.2,\
+	${junit}
 
 Test-Cases							= ${testcases}
 -signaturetest						= org.osgi.service.networkadapter
 
--runbundles = \
-    org.osgi.impl.service.log; version=latest, \
-    org.osgi.service.event; version=latest, \
-    org.osgi.service.dal; version=latest, \
-    org.osgi.service.dal.functions; version=latest, \
-    org.osgi.impl.service.dal; version=latest, \
-    org.osgi.test.cases.dal.step; version=latest, \
-    org.osgi.impl.service.networkadapter; version=latest
+-runbundles:  \
+	org.osgi.impl.service.networkadapter;version=latest,\
+	org.osgi.impl.service.event
 
 -runproperties = ${runproperties}, \
     network.adapter.type="test.nwif.type", \
@@ -145,3 +140,5 @@ Test-Cases							= ${testcases}
     mul.masklength="24"
 
 
+Export-Package:  \
+	org.osgi.test.support.step

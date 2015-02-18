@@ -16,11 +16,15 @@
 
 package org.osgi.impl.service.networkadapter;
 
-import org.osgi.test.cases.step.TestStep;
+import java.util.StringTokenizer;
+import org.osgi.test.support.step.TestStep;
 
 public class TestStepImpl implements TestStep {
+	private static final String	SEPARATOR_COMMA	= ",";
+	private static final String	SPACE			= " ";
+	private static final String	EMPTY			= "";
 
-    public String[] execute(String command, String[] parameters) {
+    public String[] executeTestStep(String command, String[] parameters) {
 
         try {
             if (Commands.ADD_NETWORK_ADAPTER.equals(command)) {
@@ -39,7 +43,7 @@ public class TestStepImpl implements TestStep {
                 removeNetworkAddress(parameters);
 
             } else {
-                throw new IllegalArgumentException("The user message is not supported.");
+                throw new IllegalArgumentException("The stepId is not supported.");
             }
 
         } catch (Exception e) {
@@ -91,7 +95,7 @@ public class TestStepImpl implements TestStep {
         String addressScope = parameters[13];
         String address = parameters[14];
         int length = -1;
-        if (parameters[15] != null) {
+        if (parameters[15] != null && !EMPTY.equals(parameters[15])) {
             length = Integer.parseInt(parameters[15]);
         }
 
@@ -189,9 +193,46 @@ public class TestStepImpl implements TestStep {
      * @param parameters The parameter mentioned above
      */
     private void removeNetworkAddress(String[] parameters) {
-
         String networkAddressId = parameters[0];
-
         NetworkIfTracker.getInstance().removedNetworkAddress(networkAddressId);
     }
+
+	public String execute(String stepId, String userPrompt) {
+		String command = stepId;
+		userPrompt = userPrompt.substring(userPrompt.indexOf(SEPARATOR_COMMA));
+		String[] parameters = toStringArray(userPrompt);
+		String[] ids = executeTestStep(command, parameters);
+		return toString(ids);
+	}
+	
+	private String[] toStringArray(String str) {
+		if (str == null || str.length() == 0) {
+			return new String[0];
+		}
+		StringTokenizer tokenizer = new StringTokenizer(str, SEPARATOR_COMMA);
+		String[] stringArray = new String[tokenizer.countTokens()];
+		for (int i = 0; i < stringArray.length; i++) {
+			stringArray[i] = tokenizer.nextToken();
+			if (SPACE.equals(stringArray[i])) {
+				stringArray[i] = null;
+			}
+		}
+		return stringArray;
+	}
+
+	private String toString(String[] stringArray) {
+		if (stringArray == null || stringArray.length == 0){
+			return new String();
+		}
+		StringBuffer buf = new StringBuffer();
+		for (int i = 0; i < stringArray.length; i++) {
+			if (stringArray[i] == null || EMPTY.equals(stringArray[i])) {
+				buf.append(SPACE);
+			} else {
+				buf.append(stringArray[i]);
+			}
+				buf.append(SEPARATOR_COMMA);
+		}
+		return buf.toString();
+	}
 }

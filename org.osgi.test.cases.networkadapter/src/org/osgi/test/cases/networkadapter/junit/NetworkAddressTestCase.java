@@ -16,19 +16,21 @@
 package org.osgi.test.cases.networkadapter.junit;
 
 import java.net.InetAddress;
-
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.service.networkadapter.NetworkAdapter;
 import org.osgi.service.networkadapter.NetworkAddress;
 import org.osgi.test.cases.networkadapter.util.NetworkIfTestUtil;
+import org.osgi.test.cases.networkadapter.util.NetworkTestProxy;
 import org.osgi.test.cases.networkadapter.util.TestServiceListener;
-import org.osgi.test.cases.step.TestStep;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.step.TestStepProxy;
 
 public class NetworkAddressTestCase extends DefaultTestBundleControl {
+	private NetworkTestProxy testProxy;
 
     protected void setUp() throws Exception {
+		this.testProxy = new NetworkTestProxy(new TestStepProxy(getContext()));
     }
 
     protected void tearDown() throws Exception {
@@ -36,20 +38,17 @@ public class NetworkAddressTestCase extends DefaultTestBundleControl {
 
     /**
      * Tests NetworkAddress of the interface that starts.
+     * Please set in advance the information to the system property (bnd.bnd file).
      */
     public void testNetworkAddress01() {
-
         String[] ids = null;
-        TestStep testStep = null;
-
         try {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
             TestServiceListener addressListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(addressListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAddress.class.getName() + ")");
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
-
             String command = "addNetworkAdapter";
+			String message = "Add the up network adapter set in System Properties.";
             String[] parameters = new String[16];
             parameters[0] = System.getProperty(NetworkIfTestUtil.PROP_UP_NETWORK_ADAPTER_TYPE);
             parameters[1] = System.getProperty(NetworkIfTestUtil.PROP_UP_DISPLAYNAME);
@@ -68,7 +67,7 @@ public class NetworkAddressTestCase extends DefaultTestBundleControl {
             parameters[14] = System.getProperty(NetworkIfTestUtil.PROP_UP_IPADDRESS);
             parameters[15] = System.getProperty(NetworkIfTestUtil.PROP_UP_MASKLENGTH);
 
-            ids = testStep.execute(command, parameters);
+            ids = testProxy.executeTestStep(command, message, parameters);
 
             getContext().removeServiceListener(adapterListener);
             getContext().removeServiceListener(addressListener);
@@ -80,14 +79,12 @@ public class NetworkAddressTestCase extends DefaultTestBundleControl {
             assertEquals(parameters[14], networkAddress.getIpAddress());
             assertEquals(InetAddress.getByName(parameters[14]), networkAddress.getInetAddress());
             assertEquals(Integer.parseInt(parameters[15]), networkAddress.getSubnetMaskLength());
-
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage(), e);
-
         } finally {
             if (ids != null) {
-                testStep.execute("removeNetworkAdapter", new String[]{ids[0]});
+            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
             }
         }
     }

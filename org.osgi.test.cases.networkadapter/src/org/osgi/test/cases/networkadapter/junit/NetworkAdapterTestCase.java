@@ -16,37 +16,36 @@
 package org.osgi.test.cases.networkadapter.junit;
 
 import java.util.Arrays;
-
 import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceEvent;
 import org.osgi.service.networkadapter.NetworkAdapter;
 import org.osgi.test.cases.networkadapter.util.NetworkIfTestUtil;
+import org.osgi.test.cases.networkadapter.util.NetworkTestProxy;
 import org.osgi.test.cases.networkadapter.util.TestServiceListener;
-import org.osgi.test.cases.step.TestStep;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
+import org.osgi.test.support.step.TestStepProxy;
 
 public class NetworkAdapterTestCase extends DefaultTestBundleControl {
+	private NetworkTestProxy testProxy;
 
     protected void setUp() throws Exception {
+		this.testProxy = new NetworkTestProxy(new TestStepProxy(getContext()));
     }
 
     protected void tearDown() throws Exception {
     }
-
+    
     /**
      * Tests NetworkAdapter of the loopback interface.
+     * Please set in advance the information to the system property (bnd.bnd file).
      */
     public void testNetworkAdapter01() {
-
         String[] ids = null;
-        TestStep testStep = null;
-
         try {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
-
             String command = "addNetworkAdapter";
+			String message = "Add the loopback network adapter set in System Properties.";
             String[] parameters = new String[16];
             parameters[0] = System.getProperty(NetworkIfTestUtil.PROP_LB_NETWORK_ADAPTER_TYPE);
             parameters[1] = System.getProperty(NetworkIfTestUtil.PROP_LB_DISPLAYNAME);
@@ -65,7 +64,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             parameters[14] = System.getProperty(NetworkIfTestUtil.PROP_LB_IPADDRESS);
             parameters[15] = System.getProperty(NetworkIfTestUtil.PROP_LB_MASKLENGTH);
 
-            ids = testStep.execute(command, parameters);
+            ids = testProxy.executeTestStep(command, message, parameters);
 
             getContext().removeServiceListener(adapterListener);
             NetworkAdapter networkAdapter = (NetworkAdapter) getContext().getService(adapterListener.get(0));
@@ -89,7 +88,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
 
         } finally {
             if (ids != null) {
-                testStep.execute("removeNetworkAdapter", new String[]{ids[0]});
+            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
             }
         }
     }
@@ -98,16 +97,12 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
      * Tests NetworkAdapter of the point-to-point interface.
      */
     public void testNetworkAdapter02() {
-
         String[] ids = null;
-        TestStep testStep = null;
-
         try {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
-
             String command = "addNetworkAdapter";
+			String message = "Add the point-to-point network adapter set in System Properties.";
             String[] parameters = new String[16];
             parameters[0] = System.getProperty(NetworkIfTestUtil.PROP_PTP_NETWORK_ADAPTER_TYPE);
             parameters[1] = System.getProperty(NetworkIfTestUtil.PROP_PTP_DISPLAYNAME);
@@ -126,7 +121,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             parameters[14] = System.getProperty(NetworkIfTestUtil.PROP_PTP_IPADDRESS);
             parameters[15] = System.getProperty(NetworkIfTestUtil.PROP_PTP_MASKLENGTH);
 
-            ids = testStep.execute(command, parameters);
+            ids = testProxy.executeTestStep(command, message, parameters);
 
             getContext().removeServiceListener(adapterListener);
             NetworkAdapter networkAdapter = (NetworkAdapter) getContext().getService(adapterListener.get(0));
@@ -143,14 +138,12 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             assertEquals(Boolean.valueOf(parameters[7]).booleanValue(), networkAdapter.isUp());
             assertEquals(Boolean.valueOf(parameters[8]).booleanValue(), networkAdapter.isVirtual());
             assertEquals(Boolean.valueOf(parameters[9]).booleanValue(), networkAdapter.supportsMulticast());
-
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage(), e);
-
         } finally {
             if (ids != null) {
-                testStep.execute("removeNetworkAdapter", new String[]{ids[0]});
+            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
             }
         }
     }
@@ -159,16 +152,12 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
      * Tests NetworkAdapter of the interface that starts.
      */
     public void testNetworkAdapter03() {
-
         String[] ids = null;
-        TestStep testStep = null;
-
         try {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
-
             String command = "addNetworkAdapter";
+			String message = "Add the up network adapter set in System Properties.";
             String[] parameters = new String[16];
             parameters[0] = System.getProperty(NetworkIfTestUtil.PROP_UP_NETWORK_ADAPTER_TYPE);
             parameters[1] = System.getProperty(NetworkIfTestUtil.PROP_UP_DISPLAYNAME);
@@ -187,7 +176,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             parameters[14] = System.getProperty(NetworkIfTestUtil.PROP_UP_IPADDRESS);
             parameters[15] = System.getProperty(NetworkIfTestUtil.PROP_UP_MASKLENGTH);
 
-            ids = testStep.execute(command, parameters);
+            ids = testProxy.executeTestStep(command, message, parameters);
 
             getContext().removeServiceListener(adapterListener);
             NetworkAdapter networkAdapter = (NetworkAdapter) getContext().getService(adapterListener.get(0));
@@ -204,14 +193,12 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             assertFalse(networkAdapter.isVirtual());
 
             assertEquals(Boolean.valueOf(parameters[9]).booleanValue(), networkAdapter.supportsMulticast());
-
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage(), e);
-
         } finally {
             if (ids != null) {
-                testStep.execute("removeNetworkAdapter", new String[]{ids[0]});
+            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
             }
         }
     }
@@ -222,14 +209,11 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
     public void testNetworkAdapter04() {
 
         String[] ids = null;
-        TestStep testStep = null;
-
         try {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
-
             String command = "addNetworkAdapter";
+			String message = "Add the down network adapter set in System Properties.";
             String[] parameters = new String[16];
             parameters[0] = System.getProperty(NetworkIfTestUtil.PROP_UP_NETWORK_ADAPTER_TYPE);
             parameters[1] = System.getProperty(NetworkIfTestUtil.PROP_UP_DISPLAYNAME);
@@ -248,7 +232,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             parameters[14] = System.getProperty(NetworkIfTestUtil.PROP_UP_IPADDRESS);
             parameters[15] = System.getProperty(NetworkIfTestUtil.PROP_UP_MASKLENGTH);
 
-            ids = testStep.execute(command, parameters);
+            ids = testProxy.executeTestStep(command, message, parameters);
 
             getContext().removeServiceListener(adapterListener);
             NetworkAdapter networkAdapter = (NetworkAdapter) getContext().getService(adapterListener.get(0));
@@ -272,7 +256,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
 
         } finally {
             if (ids != null) {
-                testStep.execute("removeNetworkAdapter", new String[]{ids[0]});
+            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
             }
         }
     }
@@ -281,16 +265,12 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
      * Tests NetworkAdapter of the virtual interface.
      */
     public void testNetworkAdapter05() {
-
         String[] ids = null;
-        TestStep testStep = null;
-
         try {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
-
             String command = "addNetworkAdapter";
+			String message = "Add the virtual network adapter set in System Properties.";
             String[] parameters = new String[16];
             parameters[0] = System.getProperty(NetworkIfTestUtil.PROP_VIR_NETWORK_ADAPTER_TYPE);
             parameters[1] = System.getProperty(NetworkIfTestUtil.PROP_VIR_DISPLAYNAME);
@@ -309,7 +289,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             parameters[14] = System.getProperty(NetworkIfTestUtil.PROP_VIR_IPADDRESS);
             parameters[15] = System.getProperty(NetworkIfTestUtil.PROP_VIR_MASKLENGTH);
 
-            ids = testStep.execute(command, parameters);
+            ids = testProxy.executeTestStep(command, message, parameters);
 
             getContext().removeServiceListener(adapterListener);
             NetworkAdapter networkAdapter = (NetworkAdapter) getContext().getService(adapterListener.get(0));
@@ -326,14 +306,12 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             assertTrue(networkAdapter.isVirtual());
 
             assertEquals(Boolean.valueOf(parameters[9]).booleanValue(), networkAdapter.supportsMulticast());
-
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage(), e);
-
         } finally {
             if (ids != null) {
-                testStep.execute("removeNetworkAdapter", new String[]{ids[0]});
+            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
             }
         }
     }
@@ -342,16 +320,12 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
      * Tests NetworkAdapter of the interface that supports multicast.
      */
     public void testNetworkAdapter06() {
-
         String[] ids = null;
-        TestStep testStep = null;
-
         try {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
-
             String command = "addNetworkAdapter";
+			String message = "Add the multicast support network adapter set in System Properties.";
             String[] parameters = new String[16];
             parameters[0] = System.getProperty(NetworkIfTestUtil.PROP_MUL_NETWORK_ADAPTER_TYPE);
             parameters[1] = System.getProperty(NetworkIfTestUtil.PROP_MUL_DISPLAYNAME);
@@ -370,7 +344,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             parameters[14] = System.getProperty(NetworkIfTestUtil.PROP_MUL_IPADDRESS);
             parameters[15] = System.getProperty(NetworkIfTestUtil.PROP_MUL_MASKLENGTH);
 
-            ids = testStep.execute(command, parameters);
+            ids = testProxy.executeTestStep(command, message, parameters);
 
             getContext().removeServiceListener(adapterListener);
             NetworkAdapter networkAdapter = (NetworkAdapter) getContext().getService(adapterListener.get(0));
@@ -386,14 +360,12 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             assertEquals(Boolean.valueOf(parameters[8]).booleanValue(), networkAdapter.isVirtual());
 
             assertTrue(networkAdapter.supportsMulticast());
-
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage(), e);
-
         } finally {
             if (ids != null) {
-                testStep.execute("removeNetworkAdapter", new String[]{ids[0]});
+            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
             }
         }
     }
@@ -402,16 +374,12 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
      * Tests NetworkAdapter of the interface that dose not supports multicast.
      */
     public void testNetworkAdapter07() {
-
         String[] ids = null;
-        TestStep testStep = null;
-
         try {
             TestServiceListener adapterListener = new TestServiceListener(ServiceEvent.REGISTERED);
             getContext().addServiceListener(adapterListener, "(" +  Constants.OBJECTCLASS + "=" + NetworkAdapter.class.getName() + ")");
-            testStep = (TestStep) getService(TestStep.class, "(" + Constants.SERVICE_PID + "=org.osgi.impl.service.networkadapter)");
-
             String command = "addNetworkAdapter";
+			String message = "Add the multicast no-support network adapter set in System Properties.";
             String[] parameters = new String[16];
             parameters[0] = System.getProperty(NetworkIfTestUtil.PROP_MUL_NETWORK_ADAPTER_TYPE);
             parameters[1] = System.getProperty(NetworkIfTestUtil.PROP_MUL_DISPLAYNAME);
@@ -430,7 +398,7 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             parameters[14] = System.getProperty(NetworkIfTestUtil.PROP_MUL_IPADDRESS);
             parameters[15] = System.getProperty(NetworkIfTestUtil.PROP_MUL_MASKLENGTH);
 
-            ids = testStep.execute(command, parameters);
+            ids = testProxy.executeTestStep(command, message, parameters);
 
             getContext().removeServiceListener(adapterListener);
             NetworkAdapter networkAdapter = (NetworkAdapter) getContext().getService(adapterListener.get(0));
@@ -446,16 +414,13 @@ public class NetworkAdapterTestCase extends DefaultTestBundleControl {
             assertEquals(Boolean.valueOf(parameters[8]).booleanValue(), networkAdapter.isVirtual());
 
             assertFalse(networkAdapter.supportsMulticast());
-
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage(), e);
-
         } finally {
             if (ids != null) {
-                testStep.execute("removeNetworkAdapter", new String[]{ids[0]});
+            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
             }
         }
     }
-
 }
