@@ -6,6 +6,8 @@ import org.osgi.framework.Constants;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.http.context.ServletContextHelper;
 import org.osgi.service.http.runtime.HttpServiceRuntime;
+import org.osgi.service.http.runtime.dto.DTOConstants;
+import org.osgi.service.http.runtime.dto.FailedServletContextDTO;
 import org.osgi.service.http.runtime.dto.RuntimeDTO;
 import org.osgi.service.http.whiteboard.HttpWhiteboardConstants;
 
@@ -63,6 +65,26 @@ public class ServletContextHelperTestCase extends BaseHttpWhiteboardTestCase {
 		runtimeDTO = httpServiceRuntime.getRuntimeDTO();
 
 		Assert.assertEquals(2, runtimeDTO.servletContextDTOs.length);
+	}
+
+	public void test_failedServletContextHelpers() throws Exception {
+		BundleContext context = getContext();
+		ServiceReference<HttpServiceRuntime> serviceReference = context.getServiceReference(HttpServiceRuntime.class);
+
+		Assert.assertNotNull(serviceReference);
+
+		HttpServiceRuntime httpServiceRuntime = context.getService(serviceReference);
+
+		RuntimeDTO runtimeDTO = httpServiceRuntime.getRuntimeDTO();
+
+		FailedServletContextDTO[] failedServletContextDTOs = runtimeDTO.failedServletContextDTOs;
+
+		Assert.assertEquals(4, failedServletContextDTOs.length);
+
+		for (FailedServletContextDTO failedServletContextDTO : failedServletContextDTOs) {
+			Assert.assertEquals(
+					DTOConstants.FAILURE_REASON_SERVLET_CONTEXT_FAILURE, failedServletContextDTO.failureReason);
+		}
 	}
 
 }
