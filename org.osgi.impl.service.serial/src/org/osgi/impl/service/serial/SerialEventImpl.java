@@ -1,6 +1,6 @@
 /*
- * Copyright (c) OSGi Alliance (2014). All Rights Reserved.
- *
+ * Copyright (c) OSGi Alliance (2015). All Rights Reserved.
+ * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -16,20 +16,22 @@
 
 package org.osgi.impl.service.serial;
 
-class Commands {
+import org.osgi.service.serial.SerialEvent;
 
-	/**
-	 * add SerialDevice command.
-	 */
-	public static final String	ADD		= "add";
+public class SerialEventImpl implements SerialEvent {
+	private String	comPort;
+	private int		type;
 
-	/**
-	 * remove SerialDevice command.
-	 */
-	public static final String	REMOVE	= "remove";
+	public SerialEventImpl(String comPort, int type) {
+		this.comPort = comPort;
+		this.type = type;
+	}
 
-	/**
-	 * send Serial event command.
-	 */
-	public static final String	EVENT	= "event";
+	public int getType() {
+		return type;
+	}
+
+	public String getComPort() {
+		return comPort;
+	}
 }

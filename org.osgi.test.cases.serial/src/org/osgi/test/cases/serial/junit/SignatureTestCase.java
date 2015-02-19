@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package org.osgi.test.cases.serial.junit;
 
 public class SignatureTestCase extends
-        org.osgi.test.support.signature.SignatureTestCase {
-    // concrete subclass
+		org.osgi.test.support.signature.SignatureTestCase {
+	// concrete subclass
 }

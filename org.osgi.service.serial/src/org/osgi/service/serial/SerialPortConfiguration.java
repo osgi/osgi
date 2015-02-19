@@ -52,10 +52,10 @@ public class SerialPortConfiguration {
 	 */
 	public SerialPortConfiguration(int baudRate) {
 		this.baudRate = baudRate;
-		this.dataBits = Constants.DATABITS_8;
-		this.flowControl = Constants.FLOWCONTROL_NONE;
-		this.parity = Constants.PARITY_NONE;
-		this.stopBits = Constants.STOPBITS_1;
+		this.dataBits = SerialConstants.DATABITS_8;
+		this.flowControl = SerialConstants.FLOWCONTROL_NONE;
+		this.parity = SerialConstants.PARITY_NONE;
+		this.stopBits = SerialConstants.STOPBITS_1;
 	}
 
 	/**
@@ -63,11 +63,11 @@ public class SerialPortConfiguration {
 	 * Baud rate = auto, Data bits = 8, Flow control = none, Parity = none, Stop bits = 1.
 	 */
 	public SerialPortConfiguration() {
-		this.baudRate = Constants.BAUD_AUTO;
-		this.dataBits = Constants.DATABITS_8;
-		this.flowControl = Constants.FLOWCONTROL_NONE;
-		this.parity = Constants.PARITY_NONE;
-		this.stopBits = Constants.STOPBITS_1;
+		this.baudRate = SerialConstants.BAUD_AUTO;
+		this.dataBits = SerialConstants.DATABITS_8;
+		this.flowControl = SerialConstants.FLOWCONTROL_NONE;
+		this.parity = SerialConstants.PARITY_NONE;
+		this.stopBits = SerialConstants.STOPBITS_1;
 	}
 
 	/**

@@ -19,7 +19,7 @@ package org.osgi.service.serial;
 /**
  * Constants for serial device settings.
  */
-public interface Constants {
+public interface SerialConstants {
 
 	/**
 	 * Baud rate: Automatic baud rate (if available).

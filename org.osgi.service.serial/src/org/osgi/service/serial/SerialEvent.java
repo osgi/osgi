@@ -43,6 +43,6 @@ public interface SerialEvent {
 	 * 
 	 * @return the port name of this event.
 	 */
-	String getCommPort();
+	String getComPort();
 
 }
