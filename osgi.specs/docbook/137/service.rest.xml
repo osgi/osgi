@@ -1409,8 +1409,22 @@ framework/service/{serviceid}
   <section xml:id="service.rest-javascript.api">
     <title>JavaScript Client API</title>
 
-    <remark>TODO: add a way to generate the documentation from the annotations
-    in the Javascript code.</remark>
+    <section>
+      <title>Summary</title>
+
+      <para>...</para>
+    </section>
+    
+    <section>
+      <title>JavaScript function OsgiRestClient</title>
+
+
+      <section>
+        <title>getFrameworkStartLevel(Object callbacks)</title>
+        <para><emphasis>callbacks</emphasis> <remark>Add text</remark></para>
+      </section>
+    </section>
+
   </section>
 
   <section>
