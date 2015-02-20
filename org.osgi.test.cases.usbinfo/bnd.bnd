@@ -15,6 +15,13 @@ Import-Package: ${-signaturetest}, *
 	ee.minimum;version=1.2,\
 	${junit}
 
+Test-Cases							= ${testcases}
+-signaturetest                      = org.osgi.service.usbinfo
+
+-runbundles:  \
+	org.osgi.impl.service.usbinfo;version=latest,\
+	org.osgi.impl.service.device.manager;version=latest,\
+	org.osgi.impl.service.event
 
 -runproperties = ${runproperties}, \
     bcdUSB="0210", \
@@ -61,11 +68,5 @@ Import-Package: ${-signaturetest}, *
     bus.2="2", \
     address.2="3"
 
-Test-Cases							= ${testcases}
--signaturetest                      = org.osgi.service.usbinfo
 Export-Package:  \
 	org.osgi.test.support.step
--runbundles:  \
-	org.osgi.impl.service.usbinfo;version=latest,\
-	org.osgi.impl.service.device.manager;version=latest,\
-	org.osgi.impl.service.event

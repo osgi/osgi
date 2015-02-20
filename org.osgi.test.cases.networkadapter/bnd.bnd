@@ -139,6 +139,5 @@ Test-Cases							= ${testcases}
     mul.ipaddress="192.168.1.50", \
     mul.masklength="24"
 
-
 Export-Package:  \
 	org.osgi.test.support.step
