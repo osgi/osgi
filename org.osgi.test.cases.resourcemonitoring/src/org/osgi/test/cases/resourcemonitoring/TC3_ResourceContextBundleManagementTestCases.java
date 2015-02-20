@@ -97,8 +97,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		final long bundleId = 1l;
 
 		// create ResourceContext
-		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
-				null);
+		ResourceContext resourceContext = resourceMonitoringService.createContext(name, null);
 
 		// add bundle 1 to this context
 		resourceContext.addBundle(bundleId);
@@ -133,18 +132,17 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		final String name2 = "context2";
 		final long bundleId = 1;
 
-		// create ResourceContext
-		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
-				null);
-		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2,
-				null);
+		// Create ResourceContexts.
+		ResourceContext resourceContext = resourceMonitoringService.createContext(name, null);
+		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2, null);
 
-		// add bundle 1 to this context
+		// Add bundleId 1 to resourceContext.
 		resourceContext.addBundle(bundleId);
 		long[] bundleIds = resourceContext.getBundleIds();
-		assertEquals("BundleIds list mismatch.", 1, bundleIds.length);
-		assertEquals("BundleId mismatch.", bundleId, bundleIds[0]);
+		assertEquals("BundleIds list mismatch: the resourceContext bundleIds list is expected to contain 1 bundleId.", 1, bundleIds.length);
+		assertEquals("BundleId mismatch: the bundleIds list must only contain the bundleId " + bundleId, bundleId, bundleIds[0]);
 
+		// Try to add bundleId 1 to resourceContext2.
 		try {
 			resourceContext2.addBundle(bundleId);
 			fail("A ResourceContextException is expected.");
@@ -152,13 +150,13 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 			log("Expected exception: " + e.getMessage());
 		}
 
-		// check that bundle1 is not associated with context2
-		assertEquals("BundleIds list mismatch.", 0, resourceContext2.getBundleIds().length);
+		// Check that bundleId 1 is not associated with resourceContext2.
+		assertEquals("BundleIds list mismatch: the resourceContext2 bundleIds list is expected to be empty.", 0, resourceContext2.getBundleIds().length);
 
-		// check that bundle1 is still associated with context1
+		// Check that bundleId 1 is still associated with resourceContext1.
 		bundleIds = resourceContext.getBundleIds();
-		assertEquals("BundleIds list mismatch.", 1, bundleIds.length);
-		assertEquals("BundleId mismatch.", bundleId, bundleIds[0]);
+		assertEquals("BundleIds list mismatch: the resourceContext bundleIds list is expected to contain 1 bundleId.", 1, bundleIds.length);
+		assertEquals("BundleId mismatch: the bundleIds list must only contain the bundleId " + bundleId, bundleId, bundleIds[0]);
 	}
 
 	/**
@@ -178,8 +176,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		final long bundleId = 1;
 
 		// create ResourceContext
-		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
-				null);
+		ResourceContext resourceContext = resourceMonitoringService.createContext(name, null);
 
 		// add bundle 1
 		resourceContext.addBundle(bundleId);
@@ -226,10 +223,8 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		final long bundleId = 1;
 
 		// create two Resource Context
-		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1,
-				null);
-		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2,
-				null);
+		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1, null);
+		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2, null);
 
 		// add bundleId to context1
 		resourceContext1.addBundle(bundleId);
@@ -254,8 +249,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		assertEquals("BundleId mismatch.", bundleId, removedEvent.getBundleId());
 		assertEquals("ResourceContext mismatch.", resourceContext1, removedEvent.getContext());
 
-		// check a ResourceContextEvent has been received about the newly
-		// added
+		// check a ResourceContextEvent has been received about the newly added
 		// bundleId
 		ResourceContextEvent addedEvent = resourceContextListener
 				.getLastEvent();
@@ -284,8 +278,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		final long bundleId = 1;
 
 		// create ResourceContext
-		ResourceContext resourceContext = resourceMonitoringService.createContext(name,
-				null);
+		ResourceContext resourceContext = resourceMonitoringService.createContext(name, null);
 
 		// add bundleId to resourceContext
 		resourceContext.addBundle(bundleId);
@@ -327,10 +320,8 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		final long bundleId = 1;
 
 		// create ResourceContexts
-		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1,
-				null);
-		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2,
-				null);
+		ResourceContext resourceContext1 = resourceMonitoringService.createContext(name1, null);
+		ResourceContext resourceContext2 = resourceMonitoringService.createContext(name2, null);
 
 		// add bundleId to resourceContext1
 		resourceContext1.addBundle(bundleId);
@@ -338,8 +329,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		// delete resourceContext2
 		resourceContext2.removeContext(null);
 
-		// try to remove bundleId from resourceContext1 and associate it
-		// with
+		// try to remove bundleId from resourceContext1 and associate it with
 		// deleted ResourceContext2 ==> expect a ResourceContextException
 		try {
 			resourceContext1.removeBundle(bundleId, resourceContext2);
@@ -352,8 +342,7 @@ public class TC3_ResourceContextBundleManagementTestCases extends DefaultTestBun
 		long[] resourceContext1bundleIds = resourceContext1.getBundleIds();
 		assertEquals("BundleIds list mismatch.", 0, resourceContext1bundleIds.length);
 
-		// check a REMOVED_BUNDLE ResourceContextEvent event has been
-		// received
+		// check a REMOVED_BUNDLE ResourceContextEvent event has been received
 		ResourceContextEvent lastEvent = resourceContextListener.getLastEvent();
 		assertNotNull("LastEvent must not be null.", lastEvent);
 		assertEquals("Type mismatch.", ResourceContextEvent.BUNDLE_REMOVED, lastEvent.getType());
