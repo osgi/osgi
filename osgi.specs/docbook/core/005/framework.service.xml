@@ -261,7 +261,7 @@
       Framework is exposed to other bundles installed in the OSGi
       environment.</para>
 
-      <para>Every registered service has a unique
+      <para>Every registered service object has a unique
       <code>ServiceRegistration</code> object, and has one or more
       <code>ServiceReference</code> objects that refer to it. These
       <code>ServiceReference</code> objects expose the registration properties
@@ -1134,7 +1134,7 @@
     <section xml:id="framework.service.releasingMultiple">
       <title>Releasing Multiple Service Objects</title>
 
-      <para>The <code>ServiceObjects</code> object can be used to obtain
+      <para>A <code>ServiceObjects</code> object can be used to obtain
       multiple service objects for the <link
       linkend="org.osgi.framework.ServiceObjects.getServiceReference--"
       xrefstyle="hyperlink">associated</link> service if the service has <xref
@@ -1165,8 +1165,10 @@
         </listitem>
 
         <listitem>
-          <para>If the specified service object was not provided by the called
-          <code>ServiceObjects</code>, then an
+          <para>If the specified service object was not provided by a
+          <code>ServiceObjects</code> for the <link
+          linkend="org.osgi.framework.ServiceObjects.getServiceReference--"
+          xrefstyle="hyperlink">associated</link> service, then an
           <code>IllegalArgumentException</code> is thrown.</para>
         </listitem>
 

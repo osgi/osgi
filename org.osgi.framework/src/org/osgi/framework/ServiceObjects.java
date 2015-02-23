@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2012, 2014). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2012, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -126,7 +126,8 @@ public interface ServiceObjects<S> {
 	 * @throws IllegalStateException If the BundleContext used to create this
 	 *         {@code ServiceObjects} object is no longer valid.
 	 * @throws IllegalArgumentException If the specified service object was not
-	 *         provided by this {@code ServiceObjects} object.
+	 *         provided by a {@code ServiceObjects} object for the associated
+	 *         service.
 	 * @see #getService()
 	 */
 	public void ungetService(S service);
