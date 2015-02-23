@@ -211,8 +211,8 @@
             are registered with the same name, the one with the highest
             Service Ranking is used. In case of a tie, the service with the
             lowest service ID wins. In other words, the normal OSGi service
-            ranking applies.</para> <para>Registrations without any specified
-            name are not used and this is reflected in the failure DTOs. See
+            ranking applies.</para> <para>Registrations with an invalid or 
+            unspecified name are not used and reflected in the failure DTOs. See
             <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_NAME"
             xrefstyle="hyperlink"/>.</para></entry>
@@ -225,8 +225,8 @@
 
             <entry><para>Additional prefix to the context path for servlets.
             This property is mandatory. Valid characters are specified in IETF
-            RFC 3986, section 3.3. If the path is invalid, the context is not
-            used and reflected in the failure DTOs. See <xref
+            RFC 3986, section 3.3. If the path is invalid or unspecified, the 
+            service is not used and reflected in the failure DTOs. See <xref
             linkend="org.osgi.service.http.whiteboard.HttpWhiteboardConstants.HTTP_WHITEBOARD_CONTEXT_PATH"
             xrefstyle="hyperlink"/>.</para></entry>
           </row>
