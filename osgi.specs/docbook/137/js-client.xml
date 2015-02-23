@@ -1,0 +1,145 @@
+<section xmlns="http://docbook.org/ns/docbook" version="5" role="package" xreflabel="JavaScript Client API" xml:id="service.rest-javascript.api">
+  <title>JavaScript Client API</title>
+
+  <para>
+REST JavaScript Client API Version 1.0
+  </para>
+
+  <section role="summary">
+    <title>Summary</title>
+
+    <itemizedlist>
+      <listitem>
+        <para>
+          <link linkend="OSGiRestClient">
+            <code>OSGiRestClient</code>
+          </link> - A JavaScript client API for accessing and managing a remote OSGi framework
+          through the REST API.
+        </para>
+      </listitem>
+      <listitem>
+        <para>
+          <link linkend="OSGiRestCallback">
+            <code>OSGiRestCallback</code>
+          </link> - Callback object provided to the <code>OSGiRestClient</code> functions. 
+          Invoked on completion of the remote invocation.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </section>
+  
+  <section role="class" xreflabel="OSGiRestClient" xml:id="OSGiRestClient">
+    <title>JavaScript interface OSGiRestClient</title>
+
+    <para>Provides a JavaScript client API for accessing and managing a remote OSGi framework 
+    through the REST API. Implementations will provide a proprietary constructor to create
+    objects of this signature. Once created the object can be used from JavaScript environments
+    to manage the framework.</para>
+
+    <section role="method">
+      <title>void getBundles(OSGiRestCallback cb)</title>
+      <formalpara role="parameter">
+        <title>cb</title> 
+        <para>The callbacks invoked on completion of the remote invocation. On success
+        the <code>success()</code> callback is invoked with the Bundle List
+        representation.</para>
+      </formalpara>
+      <para role="description">
+      List the bundles.
+      </para>
+    </section>
+
+    <section role="method">
+      <title>void getBundleRepresentations(OSGiRestCallback cb)</title>
+      <formalpara role="parameter">
+        <title>cb</title> 
+        <para>The callbacks invoked on completion of the remote invocation. On success
+        the <code>success()</code> callback is invoked with the Bundle Representations List
+        representation.</para>
+      </formalpara>
+      <para role="description">
+      List the bundles details.
+      </para>
+    </section>
+
+    <section role="method">
+      <title>void getFrameworkStartLevel(OSGiRestCallback cb)</title>
+      <formalpara role="parameter">
+        <title>cb</title> 
+        <para>The callbacks invoked on completion of the remote invocation. On success
+        the <code>success()</code> callback is invoked with the Framework Start Level
+        representation.</para>
+      </formalpara>
+      <para role="description">
+Obtain the Framework Start Level.
+      </para>
+    </section>
+
+    <section role="method">
+      <title>void setFrameworkStartLevel(Object fwsl, OSGiRestCallback cb)</title>
+      <formalpara role="parameter">
+        <title>fwsl</title> 
+        <para>Framework Start Level representation object with the desired state.</para>
+      </formalpara>
+      <formalpara role="parameter">
+        <title>cb</title> 
+        <para>The callbacks invoked on completion of the remote invocation. On success
+        the <code>success()</code> callback is invoked with the resulting Framework Start Level
+        representation.</para>
+      </formalpara>
+      <para role="description">
+Change the Framework Start Level and/or initial bundle start level.
+      </para>
+    </section>
+  </section>
+
+  <section role="class" xreflabel="OSGiRestCallback" xml:id="OSGiRestCallback">
+    <title>JavaScript interface OSGiRestCallback</title>
+
+    <para>Objects implementing this signature are provided by users of the 
+    <code>OSGiRestClient</code> as callbacks. One of the callback functions 
+    is invoked on completion of a REST invocation.</para>
+
+    <section role="method">
+      <title>void success(Object response)</title>
+      <formalpara role="parameter">
+        <title>response</title> 
+        <para>The result of the invocation.</para>
+      </formalpara>
+      
+      <para role="description">
+      Called when the invocation completes successfully.
+      </para>
+    </section>
+
+    <section role="method">
+      <title>void failure(short httpCode, Object response)</title>
+      <formalpara role="parameter">
+        <title>httpCode</title> 
+        <para>The HTTP code returned.</para>
+      </formalpara>
+
+      <formalpara role="parameter">
+        <title>response</title> 
+        <para>The failure response.</para>
+      </formalpara>
+      
+      <para role="description">
+      Called when the HTTP response code is not what was expected.
+      </para>
+    </section>
+
+    <section role="method">
+      <title>void error(Object response)</title>
+      <formalpara role="parameter">
+        <title>response</title> 
+        <para>The error.</para>
+      </formalpara>
+      
+      <para role="description">
+      Called when an error occurred with the remote invocation.
+      </para>
+    </section>
+
+  </section>
+</section>
