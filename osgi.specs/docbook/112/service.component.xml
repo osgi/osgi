@@ -138,6 +138,12 @@
         </listitem>
 
         <listitem>
+          <para><emphasis>Service Component Runtime (SCR)</emphasis> - The
+          actor that manages the components and their life cycle and allows
+          introspection of the components.</para>
+        </listitem>
+
+        <listitem>
           <para><emphasis>Component Description</emphasis> - The declaration
           of a service component. It is contained within an XML document in a
           bundle.</para>
@@ -193,12 +199,6 @@
         <listitem>
           <para><emphasis>Reference</emphasis> - A specified dependency of a
           component on a set of target services.</para>
-        </listitem>
-
-        <listitem>
-          <para><emphasis>Service Component Runtime (SCR)</emphasis> - The
-          actor that manages the components and their life cycle and allows
-          introspection of the components.</para>
         </listitem>
 
         <listitem>
@@ -338,8 +338,10 @@
     longer needed.</para>
 
     <para>If an activated component configuration's configuration properties
-    change, SCR must deactivate the component configuration and then attempt
-    to reactivate the component configuration using the new configuration
+    change, SCR must either notify the component configuration of the change,
+    if the component description specifies a method to be notified of such
+    changes, or deactivate the component configuration and then attempt to
+    reactivate the component configuration using the new configuration
     information.</para>
 
     <section>
@@ -388,7 +390,7 @@
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.activator"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
-    &lt;implementation class="com.acme.Activator"/&gt;
+    &lt;implementation class="com.acme.impl.Activator"/&gt;
 &lt;/scr:component&gt;</programlisting>
 
       <para>The manifest header <code>Service-Component</code> must also be
@@ -439,11 +441,10 @@
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.handler"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
-    &lt;implementation class="com.acme.HandlerImpl"/&gt;
+    &lt;implementation class="com.acme.impl.HandlerImpl"/&gt;
     &lt;property name="event.topics"&gt;some/topic&lt;/property&gt;
     &lt;service&gt; 
-        &lt;provide interface= 
-            "org.osgi.service.event.EventHandler"/&gt; 
+        &lt;provide interface="org.osgi.service.event.EventHandler"/&gt; 
     &lt;/service&gt;
 &lt;/scr:component&gt;</programlisting>
 
@@ -514,12 +515,12 @@
 &lt;scr:component name="example.factory"
     factory="usb.connection"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
-    &lt;implementation class="com.acme.USBConnectionImpl"/&gt;
+    &lt;implementation class="com.acme.impl.USBConnectionImpl"/&gt;
 &lt;/scr:component&gt;</programlisting>
 
       <para>The component class looks like:</para>
 
-      <programlisting>public class USBConnectionImpl implementsUSBConnection {
+      <programlisting>public class USBConnectionImpl implements USBConnection {
     private void activate(Map&lt;String, ?&gt; properties) {
      ...
     }
@@ -534,15 +535,15 @@
 &lt;scr:component name="example.factory"    
     factory="usb.connection"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
-    &lt;implementation class="com.acme.USBConnectionImpl"/&gt;
+    &lt;implementation class="com.acme.impl.USBConnectionImpl"/&gt;
     <emphasis role="underline">&lt;service&gt;</emphasis>
-        &lt;provide interface="com.acme.USBConnection"/&gt;
+        &lt;provide interface="com.acme.usb.USBConnection"/&gt;
     &lt;/service&gt;
 &lt;/scr:component&gt;</programlisting>
 
       <para>The associated component class looks like:</para>
 
-      <programlisting>public class USBConnectionImpl implementsUSBConnection {
+      <programlisting>public class USBConnectionImpl implements USBConnection {
     private void activate(Map&lt;String, ?&gt; properties) {...}
     public void connect() { ... }
     ...
@@ -635,28 +636,29 @@
 
       <itemizedlist>
         <listitem>
-          <para><code>bind</code> - The bind method is called to bind a new
-          service to the component that matches the selection criteria. If the
-          <code>policy</code> is <code>dynamic</code> then the bind method of
-          a replacement service can be called before its corresponding unbind
-          method.</para>
+          <para><code>bind</code> - The bind method, if specified, is called
+          to bind a new service to the component that matches the selection
+          criteria. If the <code>policy</code> is <code>dynamic</code> then
+          the bind method of a replacement service can be called before its
+          corresponding unbind method.</para>
         </listitem>
 
         <listitem>
-          <para><code>updated</code> - The updated method is called when the
-          service properties of a bound services are modified and the
-          resulting properties do not cause the service to become unbound
-          because it is no longer selected by the target property.</para>
+          <para><code>updated</code> - The updated method, if specified, is
+          called when the service properties of a bound services are modified
+          and the resulting properties do not cause the service to become
+          unbound because it is no longer selected by the target
+          property.</para>
         </listitem>
 
         <listitem>
-          <para><code>unbind</code> - The unbind method is called when SCR
-          needs to unbind the service.</para>
+          <para><code>unbind</code> - The unbind method, if specified, is
+          called when SCR needs to unbind the service.</para>
         </listitem>
       </itemizedlist>
 
-      <para>Together these methods are called the <emphasis>event
-      methods</emphasis>. The prototype of the event methods is:</para>
+      <para>Each event is associated with an <emphasis>event
+      method</emphasis>. The prototype of the event methods is:</para>
 
       <programlisting>void &lt;method-name&gt;(&lt;arguments&gt;);</programlisting>
 
@@ -782,7 +784,7 @@
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
-    &lt;implementation class="com.acme.LogLookupImpl"/&gt;
+    &lt;implementation class="com.acme.impl.LogLookupImpl"/&gt;
     &lt;reference name="LOG"
         interface="org.osgi.service.log.LogService"/&gt;
 &lt;/scr:component&gt;</programlisting>
@@ -805,7 +807,7 @@
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
-    &lt;implementation class="com.acme.LogEventImpl"/&gt;
+    &lt;implementation class="com.acme.impl.LogEventImpl"/&gt;
     &lt;reference name="LOG"
         interface="org.osgi.service.log.LogService"
         bind="setLog"
@@ -943,7 +945,8 @@
       </itemizedlist>
 
       <para>The type of objects set in the collection are specified by the
-      <code>field-collection-type</code> attribute:</para>
+      <code>field-collection-type</code> attribute in the component
+      description:</para>
 
       <itemizedlist>
         <listitem>
@@ -994,7 +997,7 @@
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
-    &lt;implementation class="com.acme.LogEventImpl"/&gt;
+    &lt;implementation class="com.acme.impl.LogEventImpl"/&gt;
     &lt;reference name="LOG"
         interface="org.osgi.service.log.LogService"
         field="log"
@@ -1120,7 +1123,7 @@ multiplicity ::= '1' | 'n'</programlisting>
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
-    &lt;implementation class="com.acme.HttpResourceImpl"/&gt;
+    &lt;implementation class="com.acme.impl.HttpResourceImpl"/&gt;
     &lt;reference name="HTTP"
         interface="org.osgi.service.http.HttpService"
         cardinality="0..n"
@@ -1291,7 +1294,7 @@ public class HttpResourceImpl {
         <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
-    &lt;implementation class="com.acme.HttpResourceImpl"/&gt;
+    &lt;implementation class="com.acme.impl.HttpResourceImpl"/&gt;
     &lt;reference name="HTTP"
         interface="org.osgi.service.http.HttpService"
         cardinality="0..n"
@@ -1579,7 +1582,7 @@ public class HttpResourceImpl {
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.listen"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
-    &lt;implementation class="com.acme.FactoryTracker"/&gt;
+    &lt;implementation class="com.acme.impl.FactoryTracker"/&gt;
     &lt;reference name="FACTORY"
         interface=
             "org.osgi.service.component.ComponentFactory"
@@ -3542,7 +3545,7 @@ void unsetLogService( LogService log ) {
       <programlisting>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;scr:component name="example.binding"
     xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
-    &lt;implementation class="example.Binding"/&gt;
+    &lt;implementation class="com.acme.impl.Binding"/&gt;
     &lt;reference name="LOG"
         interface="org.osgi.service.log.LogService"
         cardinality="1..1"
@@ -3563,18 +3566,19 @@ void unsetLogService( LogService log ) {
     LogService  log;
     HttpService http;
 
-    private void setHttp(HttpService h) { 
-        this.http = h; 
+    private void setHttp(HttpService h) {
+        http = h;
         // register servlet
     }
-    private void unsetHttp(HttpService h){ 
-        this.h = null;
-        // unregister servlet 
+    private void unsetHttp(HttpService h){
+        if (http == h)
+            http = null;
+        // unregister servlet
     }
-    private void activate(ComponentContext context ) {.
-     log = (LogService) context.locateService("LOG");
+    private void activate(ComponentContext context ) {
+        log = (LogService) context.locateService("LOG");
     }
-    private void deactivate(ComponentContext context ){...}
+    private void deactivate(ComponentContext context ) {...}
 }</programlisting>
 
       <para>This example is depicted in a sequence diagram in <xref
@@ -4167,9 +4171,9 @@ public class MacSpeech implements Speech {
 
       <programlisting>&lt;scr:component name="com.example.MacSpeech"
   xmlns:scr="http://www.osgi.org/xmlns/scr/v1.3.0"&gt;
-  &lt;implementation class="com.example.MacSpeech"/&gt;
+  &lt;implementation class="com.acme.impl.MacSpeech"/&gt;
   &lt;service&gt;
-    &lt;provide interface="com.example.service.speech.Speech"/&gt;
+    &lt;provide interface="com.acme.service.speech.Speech"/&gt;
   &lt;/service&gt;
 &lt;/scr:component&gt;</programlisting>
 
