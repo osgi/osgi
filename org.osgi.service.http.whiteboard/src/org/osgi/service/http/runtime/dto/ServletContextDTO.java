@@ -31,20 +31,13 @@ import org.osgi.dto.DTO;
 public class ServletContextDTO extends DTO {
 	/**
 	 * The name of the servlet context.
-	 * 
 	 * The name of the corresponding
 	 * {@link org.osgi.service.http.context.ServletContextHelper}.
-	 */
-	public String				name;
-
-	/**
-	 * The context name of the servlet context.
-	 * 
 	 * <p>
 	 * This is the value returned by the
 	 * {@code ServletContext.getServletContextName()} method.
 	 */
-	public String				contextName;
+	public String name;
 
 	/**
 	 * The servlet context path.
