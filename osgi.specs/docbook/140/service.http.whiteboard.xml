@@ -165,13 +165,19 @@
     Helper is used.</para>
 
     <para>To achieve the required behavior for
-    <code>ServletContext.getClassLoader()</code> the
-    <code>ServletContextHelper</code> service must be implemented using a
-    Service Factory. The Whiteboard implementation must get the Servlet
-    Context Helper using the Bundle Context of the associated Whiteboard
-    service. For more information see <code>getClassLoader()</code> in <xref
+    <code>ServletContext.getClassLoader()</code> each bundle must be provided with
+    a separate Servlet Context instance to serve the classloader of the Whiteboard 
+    services for that bundle. For more information see <code>getClassLoader()</code> in <xref
     linkend="service.http.whiteboard.servletcontext.methods"
     xrefstyle="template:Table %n"/>.</para>
+
+    <para>Some implementations of the 
+    <code>ServletContextHelper</code> may be implemented using a Service Factory, 
+    for example to provide resources from the associated bundle, as the 
+    <emphasis>default</emphasis> implementation does. Therefore the 
+    Whiteboard implementation must get the Servlet
+    Context Helper using the Bundle Context of the associated Whiteboard
+    service. </para>
 
     <table xml:id="service.http.whiteboard.servletcontext.helper.properties">
       <title>Service registration properties for
@@ -487,11 +493,7 @@ public class CDNServletContextHelper extends ServletContextHelper {
               An implementation of this specification can achieve this by
               returning separate façades of the ServletContext to each
               Whiteboard service. Each façade accesses the Whiteboard
-              service's Bundle Wiring to obtain its classloader. As a
-              consequence the <code>ServletContextHelper</code> should be
-              implemented using a Service Factory and the implementation
-              should get the Servlet Context Helper service using the
-              <code>BundleContext</code> of the Whiteboard service.
+              service's Bundle Wiring to obtain its classloader. 
               </para></entry>
             </row>
 
