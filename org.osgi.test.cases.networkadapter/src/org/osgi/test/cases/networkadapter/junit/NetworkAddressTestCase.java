@@ -34,6 +34,7 @@ public class NetworkAddressTestCase extends DefaultTestBundleControl {
     }
 
     protected void tearDown() throws Exception {
+		this.testProxy.close();
     }
 
     /**
@@ -73,12 +74,12 @@ public class NetworkAddressTestCase extends DefaultTestBundleControl {
             getContext().removeServiceListener(addressListener);
             NetworkAddress networkAddress = (NetworkAddress) getContext().getService(addressListener.get(0));
 
-            assertEquals(parameters[0], networkAddress.getNetworkAdapterType());
-            assertEquals(parameters[12], networkAddress.getIpAddressVersion());
-            assertEquals(parameters[13], networkAddress.getIpAddressScope());
-            assertEquals(parameters[14], networkAddress.getIpAddress());
-            assertEquals(InetAddress.getByName(parameters[14]), networkAddress.getInetAddress());
-            assertEquals(Integer.parseInt(parameters[15]), networkAddress.getSubnetMaskLength());
+            assertEquals("The following NetworkAddress information does not match: "+ NetworkIfTestUtil.PROP_UP_NETWORK_ADAPTER_TYPE, parameters[0], networkAddress.getNetworkAdapterType());
+            assertEquals("The following NetworkAddress information does not match: "+ NetworkIfTestUtil.PROP_UP_IPADDRESS_VERSION, parameters[12], networkAddress.getIpAddressVersion());
+            assertEquals("The following NetworkAddress information does not match: "+ NetworkIfTestUtil.PROP_UP_IPADDRESS_SCOPE, parameters[13], networkAddress.getIpAddressScope());
+            assertEquals("The following NetworkAddress information does not match: "+ NetworkIfTestUtil.PROP_UP_IPADDRESS, parameters[14], networkAddress.getIpAddress());
+            assertEquals("The following NetworkAddress information does not match: "+ NetworkIfTestUtil.PROP_UP_IPADDRESS, InetAddress.getByName(parameters[14]), networkAddress.getInetAddress());
+            assertEquals("The following NetworkAddress information does not match: "+ NetworkIfTestUtil.PROP_UP_MASKLENGTH, Integer.parseInt(parameters[15]), networkAddress.getSubnetMaskLength());
         } catch (Exception e) {
             e.printStackTrace();
             fail(e.getMessage(), e);

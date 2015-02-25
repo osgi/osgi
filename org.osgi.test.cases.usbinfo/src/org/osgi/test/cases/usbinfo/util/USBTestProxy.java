@@ -29,6 +29,10 @@ public class USBTestProxy {
 	public USBTestProxy(TestStepProxy testStepProxy) {
 		this.testStepProxy = testStepProxy;
 	}
+	
+	public void close(){
+		this.testStepProxy.close();
+	}
 
 	public String[] executeTestStep(String command, String message, String[] parameters) {
 		String stepId = command;

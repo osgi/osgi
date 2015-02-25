@@ -23,12 +23,17 @@ Test-Cases							= ${testcases}
 	org.osgi.impl.service.event
 
 -runproperties = ${runproperties}, \
-    serial.comport.1="COM1", \
-    serial.comport.2="COM2", \
+    serial.comport="COM1", \
     support.inputstream="true", \
     support.outputstream="true", \
-    support.baudrate="4800", \
-    unsupport.baudrate="-2"
+    baudrate="4800", \
+    unsupport.baudrate="-2", \
+    databits="8", \
+    flowcontrol="0", \
+    parity="0", \
+    stopbits="1", \
+    \
+    serial.comport.2="COM2"
 
 Export-Package:  \
 	org.osgi.test.support.step

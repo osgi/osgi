@@ -29,18 +29,19 @@ import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 import org.osgi.test.support.step.TestStepProxy;
 
 public class NetworkIfTestCase extends DefaultTestBundleControl {
-	private NetworkTestProxy testProxy;
+	private NetworkTestProxy	testProxy;
 
 	protected void setUp() throws Exception {
 		this.testProxy = new NetworkTestProxy(new TestStepProxy(getContext()));
 	}
 
 	protected void tearDown() throws Exception {
+		this.testProxy.close();
 	}
 
 	/**
-	 * Tests NetworkAdapter add operation.
-     * Please set in advance the information to the system property (bnd.bnd file).
+	 * Tests NetworkAdapter add operation. Please set in advance the information
+	 * to the system property (bnd.bnd file).
 	 */
 	public void testAddAction01() {
 		String[] ids = null;
@@ -75,28 +76,29 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
 			getContext().removeServiceListener(addressListener);
 
 			// Confirmation of the number of the services.
-			assertEquals(1, adapterListener.size());
-			assertEquals(0, addressListener.size());
+			assertEquals("Only one NetworkAdapter service registerd event is expected.", 1, adapterListener.size());
+			assertEquals("Zero NetworkAddress service registered event is expected.", 0, addressListener.size());
 
 			// Confirmation of the service property.
 			ServiceReference adapterRef = adapterListener.get(0);
-			assertEquals(parameters[0], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE));
-			assertEquals(parameters[1], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME));
-			assertEquals(parameters[2], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_NAME));
-			assertTrue(Arrays.equals(NetworkIfTestUtil.toByteArrayMac(parameters[3]), (byte[]) adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS)));
-			assertEquals(Boolean.valueOf(parameters[5]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK));
-			assertEquals(Boolean.valueOf(parameters[6]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT));
-			assertEquals(Boolean.valueOf(parameters[7]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_IS_UP));
-			assertEquals(Boolean.valueOf(parameters[8]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL));
-			assertEquals(Boolean.valueOf(parameters[9]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST));
-			assertEquals(parameters[10], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_PARENT));
-			assertTrue(Arrays.equals(NetworkIfTestUtil.toStringArray(parameters[11]), (String[]) adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_SUBINTERFACE)));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_TYPE, parameters[0], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, parameters[1], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_NAME, parameters[2], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_NAME));
+			assertTrue("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, Arrays.equals(NetworkIfTestUtil.toByteArrayMac(parameters[3]), (byte[]) adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS)));
+
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, Boolean.valueOf(parameters[5]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, Boolean.valueOf(parameters[6]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_UP, Boolean.valueOf(parameters[7]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_IS_UP));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, Boolean.valueOf(parameters[8]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, Boolean.valueOf(parameters[9]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_PARENT, parameters[10], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_PARENT));
+			assertTrue("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUBINTERFACE, Arrays.equals(NetworkIfTestUtil.toStringArray(parameters[11]), (String[]) adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_SUBINTERFACE)));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage(), e);
 		} finally {
 			if (ids != null) {
-            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
+				testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[] {ids[0]});
 			}
 		}
 	}
@@ -299,36 +301,37 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
 			getContext().removeServiceListener(addressListener);
 
 			// Confirmation of the number of the services.
-			assertEquals(1, adapterListener.size());
-			assertEquals(1, addressListener.size());
+			assertEquals("Only one NetworkAdapter service registered event is expected.", 1, adapterListener.size());
+			assertEquals("Only one NetworkAddress service registered event is expected.", 1, addressListener.size());
 
 			// Confirmation of the service property.
 			ServiceReference adapterRef = adapterListener.get(0);
-			assertEquals(parameters[0], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE));
-			assertEquals(parameters[1], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME));
-			assertEquals(parameters[2], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_NAME));
-			assertTrue(Arrays.equals(NetworkIfTestUtil.toByteArrayMac(parameters[3]), (byte[]) adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS)));
-			assertEquals(Boolean.valueOf(parameters[5]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK));
-			assertEquals(Boolean.valueOf(parameters[6]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT));
-			assertEquals(Boolean.valueOf(parameters[7]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_IS_UP));
-			assertEquals(Boolean.valueOf(parameters[8]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL));
-			assertEquals(Boolean.valueOf(parameters[9]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST));
-			assertEquals(parameters[10], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_PARENT));
-			assertTrue(Arrays.equals(NetworkIfTestUtil.toStringArray(parameters[11]), (String[]) adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_SUBINTERFACE)));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_TYPE, parameters[0], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, parameters[1], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_NAME, parameters[2], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_NAME));
+			assertTrue("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, Arrays.equals(NetworkIfTestUtil.toByteArrayMac(parameters[3]), (byte[]) adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS)));
 
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK, Boolean.valueOf(parameters[5]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_IS_LOOPBACK));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT, Boolean.valueOf(parameters[6]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_IS_POINTTOPOINT));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_UP, Boolean.valueOf(parameters[7]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_IS_UP));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL, Boolean.valueOf(parameters[8]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_IS_VIRTUAL));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST, Boolean.valueOf(parameters[9]), adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_SUPPORTS_MULTICAST));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_PARENT, parameters[10], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_PARENT));
+			assertTrue("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_SUBINTERFACE, Arrays.equals(NetworkIfTestUtil.toStringArray(parameters[11]), (String[]) adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_SUBINTERFACE)));
+			
 			ServiceReference addressRef = addressListener.get(0);
-			assertEquals(parameters[0], addressRef.getProperty(NetworkAddress.NETWORKADAPTER_TYPE));
-			assertEquals(parameters[12], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
-			assertEquals(parameters[13], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
-			assertEquals(parameters[14], addressRef.getProperty(NetworkAddress.IPADDRESS));
-			assertEquals(Integer.parseInt(parameters[15]), ((Integer) addressRef.getProperty(NetworkAddress.SUBNETMASK_LENGTH)).intValue());
-			assertEquals(adapterRef.getProperty(Constants.SERVICE_PID), addressRef.getProperty(NetworkAddress.NETWORKADAPTER_PID));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.NETWORKADAPTER_TYPE, parameters[0], addressRef.getProperty(NetworkAddress.NETWORKADAPTER_TYPE));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_VERSION, parameters[12], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_SCOPE, parameters[13], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS, parameters[14], addressRef.getProperty(NetworkAddress.IPADDRESS));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.SUBNETMASK_LENGTH, Integer.parseInt(parameters[15]), ((Integer) addressRef.getProperty(NetworkAddress.SUBNETMASK_LENGTH)).intValue());
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.NETWORKADAPTER_PID, adapterRef.getProperty(Constants.SERVICE_PID), addressRef.getProperty(NetworkAddress.NETWORKADAPTER_PID));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage(), e);
 		} finally {
 			if (ids != null) {
-            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
+				testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[] {ids[0]});
 			}
 		}
 	}
@@ -393,23 +396,23 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
 			getContext().removeServiceListener(addressListener);
 
 			// Confirmation of the number of the services.
-			assertEquals(0, adapterListener.size());
-			assertEquals(1, addressListener.size());
+			assertEquals("Only zero NetworkAdapter service registered event is expected.", 0, adapterListener.size());
+			assertEquals("Only one NetworkAddress service registered event is expected.", 1, addressListener.size());
 
 			// Confirmation of the service property.
 			ServiceReference addressRef = addressListener.get(0);
-			assertEquals(parameters[0], addressRef.getProperty(NetworkAddress.NETWORKADAPTER_TYPE));
-			assertEquals(parameters1[1], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
-			assertEquals(parameters1[2], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
-			assertEquals(parameters1[3], addressRef.getProperty(NetworkAddress.IPADDRESS));
-			assertEquals(Integer.parseInt(parameters1[4]), ((Integer) addressRef.getProperty(NetworkAddress.SUBNETMASK_LENGTH)).intValue());
-			assertEquals(servicePid, addressRef.getProperty(NetworkAddress.NETWORKADAPTER_PID));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.NETWORKADAPTER_TYPE, parameters[0], addressRef.getProperty(NetworkAddress.NETWORKADAPTER_TYPE));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_VERSION, parameters1[1], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_SCOPE, parameters1[2], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS, parameters1[3], addressRef.getProperty(NetworkAddress.IPADDRESS));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.SUBNETMASK_LENGTH, Integer.parseInt(parameters1[4]), ((Integer) addressRef.getProperty(NetworkAddress.SUBNETMASK_LENGTH)).intValue());
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.NETWORKADAPTER_PID, servicePid, addressRef.getProperty(NetworkAddress.NETWORKADAPTER_PID));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage(), e);
 		} finally {
 			if (ids != null) {
-            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
+				testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[] {ids[0]});
 			}
 		}
 	}
@@ -469,21 +472,21 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
 			getContext().removeServiceListener(addressListener);
 
 			// Confirmation of the number of the services.
-			assertEquals(0, adapterListener.size());
-			assertEquals(1, addressListener.size());
+			assertEquals("Only zero NetworkAdapter service modified event is expected.", 0, adapterListener.size());
+			assertEquals("Only one NetworkAddress service modified event is expected.", 1, addressListener.size());
 
 			// Confirmation of the service property.
 			ServiceReference addressRef = addressListener.get(0);
-			assertEquals(parameters[1], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
-			assertEquals(parameters[2], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
-			assertEquals(parameters[3], addressRef.getProperty(NetworkAddress.IPADDRESS));
-			assertEquals(Integer.parseInt(parameters[4]), ((Integer) addressRef.getProperty(NetworkAddress.SUBNETMASK_LENGTH)).intValue());
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_VERSION, parameters[1], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_SCOPE, parameters[2], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS, parameters[3], addressRef.getProperty(NetworkAddress.IPADDRESS));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.SUBNETMASK_LENGTH, Integer.parseInt(parameters[4]), ((Integer) addressRef.getProperty(NetworkAddress.SUBNETMASK_LENGTH)).intValue());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage(), e);
 		} finally {
 			if (ids != null) {
-            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
+				testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[] {ids[0]});
 			}
 		}
 	}
@@ -543,21 +546,21 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
 			getContext().removeServiceListener(addressListener);
 
 			// Confirmation of the number of the services.
-			assertEquals(0, adapterListener.size());
-			assertEquals(1, addressListener.size());
+			assertEquals("Only zero NetworkAdapter service modified event is expected.", 0, adapterListener.size());
+			assertEquals("Only one NetworkAddress service modified event is expected.", 1, addressListener.size());
 
 			// Confirmation of the service property.
 			ServiceReference addressRef = addressListener.get(0);
-			assertEquals(parameters[1], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
-			assertEquals(parameters[2], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
-			assertEquals(parameters[3], addressRef.getProperty(NetworkAddress.IPADDRESS));
-			assertEquals(Integer.parseInt(parameters[4]), ((Integer) addressRef.getProperty(NetworkAddress.SUBNETMASK_LENGTH)).intValue());
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_VERSION, parameters[1], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_SCOPE, parameters[2], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS, parameters[3], addressRef.getProperty(NetworkAddress.IPADDRESS));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.SUBNETMASK_LENGTH, Integer.parseInt(parameters[4]), ((Integer) addressRef.getProperty(NetworkAddress.SUBNETMASK_LENGTH)).intValue());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage(), e);
 		} finally {
 			if (ids != null) {
-            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
+				testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[] {ids[0]});
 			}
 		}
 	}
@@ -617,21 +620,21 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
 			getContext().removeServiceListener(addressListener);
 
 			// Confirmation of the number of the services.
-			assertEquals(0, adapterListener.size());
-			assertEquals(1, addressListener.size());
+			assertEquals("Only zero NetworkAdapter service modified event is expected.", 0, adapterListener.size());
+			assertEquals("Only one NetworkAddress service modified event is expected.", 1, addressListener.size());
 
 			// Confirmation of the service property.
 			ServiceReference addressRef = addressListener.get(0);
-			assertEquals(parameters[1], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
-			assertEquals(parameters[2], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
-			assertEquals(parameters[3], addressRef.getProperty(NetworkAddress.IPADDRESS));
-			assertEquals(Integer.parseInt(parameters[4]), ((Integer) addressRef.getProperty(NetworkAddress.SUBNETMASK_LENGTH)).intValue());
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_VERSION, parameters[1], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_SCOPE, parameters[2], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS, parameters[3], addressRef.getProperty(NetworkAddress.IPADDRESS));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.SUBNETMASK_LENGTH, Integer.parseInt(parameters[4]), ((Integer) addressRef.getProperty(NetworkAddress.SUBNETMASK_LENGTH)).intValue());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage(), e);
 		} finally {
 			if (ids != null) {
-            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
+				testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[] {ids[0]});
 			}
 		}
 	}
@@ -691,21 +694,21 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
 			getContext().removeServiceListener(addressListener);
 
 			// Confirmation of the service unregistration.
-			assertEquals(0, adapterListener.size());
+            assertEquals("Only zero NetworkAdapter service unregistering event is expected.", 0, adapterListener.size());
+            assertEquals("Only one NetworkAddress service unregistering event is expected.", 1, addressListener.size());
 
-			assertEquals(1, addressListener.size());
-			ServiceReference addressRef = addressListener.get(0);
-			assertEquals(parameters[0], addressRef.getProperty(NetworkAddress.NETWORKADAPTER_TYPE));
-			assertEquals(parameters[12], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
-			assertEquals(parameters[13], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
-			assertEquals(parameters[14], addressRef.getProperty(NetworkAddress.IPADDRESS));
-			assertEquals(Integer.parseInt(parameters[15]), ((Integer) addressRef.getProperty(NetworkAddress.SUBNETMASK_LENGTH)).intValue());
+            ServiceReference addressRef = addressListener.get(0);
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.NETWORKADAPTER_TYPE, parameters[0], addressRef.getProperty(NetworkAddress.NETWORKADAPTER_TYPE));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_VERSION, parameters[12], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_SCOPE, parameters[13], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS, parameters[14], addressRef.getProperty(NetworkAddress.IPADDRESS));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.SUBNETMASK_LENGTH, Integer.parseInt(parameters[15]), ((Integer) addressRef.getProperty(NetworkAddress.SUBNETMASK_LENGTH)).intValue());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage(), e);
 		} finally {
 			if (ids != null) {
-            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
+				testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[] {ids[0]});
 			}
 		}
 	}
@@ -754,20 +757,20 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
 			getContext().removeServiceListener(addressListener);
 
 			// Confirmation of the service unregistration.
-			assertEquals(0, adapterListener.size());
+			assertEquals("Only zero NetworkAdapter service unregistering event is expected.", 0, adapterListener.size());
 
-			assertEquals(1, addressListener.size());
+			assertEquals("Only one NetworkAddress service unregistering event is expected.", 1, addressListener.size());
 			ServiceReference addressRef = addressListener.get(0);
-			assertEquals(parameters[12], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
-			assertEquals(parameters[13], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
-			assertEquals(parameters[14], addressRef.getProperty(NetworkAddress.IPADDRESS));
-			assertEquals(Integer.parseInt(parameters[15]), ((Integer) addressRef.getProperty(NetworkAddress.SUBNETMASK_LENGTH)).intValue());
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_VERSION, parameters[12], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_SCOPE, parameters[13], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS, parameters[14], addressRef.getProperty(NetworkAddress.IPADDRESS));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.SUBNETMASK_LENGTH, Integer.parseInt(parameters[15]), ((Integer) addressRef.getProperty(NetworkAddress.SUBNETMASK_LENGTH)).intValue());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage(), e);
 		} finally {
 			if (ids != null) {
-            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
+				testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[] {ids[0]});
 			}
 		}
 	}
@@ -816,25 +819,25 @@ public class NetworkIfTestCase extends DefaultTestBundleControl {
 			getContext().removeServiceListener(addressListener);
 
 			// Confirmation of the service unregistration.
-			assertEquals(1, adapterListener.size());
+			assertEquals("Only one NetworkAdapter service unregistering event is expected.", 1, adapterListener.size());
 			ServiceReference adapterRef = adapterListener.get(0);
-			assertEquals(parameters[0], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE));
-			assertEquals(parameters[1], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME));
-			assertEquals(parameters[2], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_NAME));
-			assertTrue(Arrays.equals(NetworkIfTestUtil.toByteArrayMac(parameters[3]), (byte[]) adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS)));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_TYPE, parameters[0], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_TYPE));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_DISPLAYNAME, parameters[1], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_DISPLAYNAME));
+			assertEquals("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_NAME, parameters[2], adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_NAME));
+			assertTrue("The following NetworkAdapter service property is not correct: " + NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS, Arrays.equals(NetworkIfTestUtil.toByteArrayMac(parameters[3]), (byte[]) adapterRef.getProperty(NetworkAdapter.NETWORKADAPTER_HARDWAREADDRESS)));
 
-			assertEquals(1, addressListener.size());
+			assertEquals("Only one NetworkAddress service unregistering event is expected.", 1, addressListener.size());
 			ServiceReference addressRef = addressListener.get(0);
-			assertEquals(parameters[12], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
-			assertEquals(parameters[13], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
-			assertEquals(parameters[14], addressRef.getProperty(NetworkAddress.IPADDRESS));
-			assertEquals(Integer.parseInt(parameters[15]), ((Integer) addressRef.getProperty(NetworkAddress.SUBNETMASK_LENGTH)).intValue());
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_VERSION, parameters[12], addressRef.getProperty(NetworkAddress.IPADDRESS_VERSION));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS_SCOPE, parameters[13], addressRef.getProperty(NetworkAddress.IPADDRESS_SCOPE));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.IPADDRESS, parameters[14], addressRef.getProperty(NetworkAddress.IPADDRESS));
+			assertEquals("The following NetworkAddress service property is not correct: " + NetworkAddress.SUBNETMASK_LENGTH, Integer.parseInt(parameters[15]), ((Integer) addressRef.getProperty(NetworkAddress.SUBNETMASK_LENGTH)).intValue());
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail(e.getMessage(), e);
 		} finally {
 			if (ids != null) {
-            	testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[]{ids[0]});
+				testProxy.executeTestStep("removeNetworkAdapter", "Remove the remaining network adapter.", new String[] {ids[0]});
 			}
 		}
 	}

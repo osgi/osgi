@@ -58,7 +58,7 @@ public class TestStepImpl implements TestStep {
 	private void addSerialDevice(String[] parameters) {
 		Properties props = new Properties();
 		props.put(SerialDevice.SERIAL_COMPORT, parameters[0]);
-		props.put(Constants.DEVICE_CATEGORY, SerialDevice.DEVICE_CATEGORY);
+		props.put(Constants.DEVICE_CATEGORY, new String[] {SerialDevice.DEVICE_CATEGORY});
 		SerialDeviceManager.getInstance().addSerialDevice(parameters[0], props);
 	}
 
