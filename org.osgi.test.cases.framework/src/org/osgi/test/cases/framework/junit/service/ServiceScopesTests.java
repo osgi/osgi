@@ -256,6 +256,27 @@ public class ServiceScopesTests extends OSGiTestCase {
         }
     }
 
+	public void testMultipleGetsOfServiceObjects() throws Exception {
+		ServiceRegistration<TestService> registration = context.registerService(TestService.class, new TestServiceImpl(42), null);
+		assertNotNull(registration);
+		try {
+			ServiceReference<TestService> reference = registration.getReference();
+			assertNotNull(reference);
+			assertEquals("service.scope not set correctly", Constants.SCOPE_SINGLETON, reference.getProperty(Constants.SERVICE_SCOPE));
+
+			final ServiceObjects<TestService> so1 = context.getServiceObjects(reference);
+			assertNotNull(so1);
+			TestService service = so1.getService();
+			assertNotNull(service);
+
+			final ServiceObjects<TestService> so2 = context.getServiceObjects(reference);
+			assertNotNull(so2);
+			so2.ungetService(service);
+		} finally {
+			registration.unregister();
+		}
+	}
+
     public void testPrototypeScopeWithTwoConsumers() throws Exception {
         Bundle tb1 = install("serviceregistry.tb1.jar");
         assertNotNull(tb1);
