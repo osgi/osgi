@@ -216,10 +216,24 @@ public class HttpWhiteboardTestCase extends BaseHttpWhiteboardTestCase {
 
 		Assert.assertNotNull(servletContextDTO);
 
-		ResourceDTO resourceDTO = servletContextDTO.resourceDTOs[0];
+		Assert.assertEquals(2, servletContextDTO.resourceDTOs.length);
+		final int index;
+		if (servletContextDTO.resourceDTOs[0].patterns[0].equals("/TestResource1/*"))
+		{
+			index = 0;
+		}
+		else
+		{
+			index = 1;
+		}
+		ResourceDTO resourceDTO = servletContextDTO.resourceDTOs[index];
 
 		Assert.assertEquals("/TestResource1/*", resourceDTO.patterns[0]);
 		Assert.assertEquals("/org/osgi/test/cases/http/whiteboard/tb1/resources", resourceDTO.prefix);
+
+		resourceDTO = servletContextDTO.resourceDTOs[index == 0 ? 1 : 0];
+		Assert.assertEquals("/TestResource2/a", resourceDTO.patterns[0]);
+		Assert.assertEquals("/org/osgi/test/cases/http/whiteboard/tb1/resources/resource1.txt", resourceDTO.prefix);
 	}
 
 	public void test_resourceMatchByRegexMatch() throws Exception {
