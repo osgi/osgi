@@ -1,0 +1,1138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="139"
+         revision="$Id$"
+         version="5" xml:id="enocean" xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>EnOcean Device Service Specification</title>
+
+  <info>
+    <releaseinfo xml:id="rfc199-version">Version 1.0</releaseinfo>
+  </info>
+
+  <section>
+    <title>Introduction</title>
+
+    <para>EnOcean is a standard wireless communication protocol designed for
+    low-cost and low-power devices by EnOcean Alliance.</para>
+
+    <para>EnOcean is widely supported by various types of devices such as
+    smart meters, lights and many kinds of sensors in the residential area.
+    OSGi applications need to communicate with those EnOcean devices. This
+    specification defines how OSGi bundles can be developed to discover and
+    control EnOcean devices on the one hand, and act as EnOcean devices and
+    interoperate with EnOcean clients on the other hand. In particular, a Java
+    mapping is provided for the standard representation of EnOcean devices
+    called EnOcean Equipment Profile (EEPs) <xref
+    linkend="rfc199_bibliomixed_id_20140602_17h03_10_5"/> .</para>
+
+    <para>The specification also describes the external API of an EnOcean Base
+    Driver according to Device Access specification, the example made by
+    ZigBee Device Service specification and spread OSGi practices on
+    residential market.</para>
+  </section>
+
+  <section>
+    <title>Essentials</title>
+
+    <itemizedlist mark="bullet">
+      <listitem>
+        <para><emphasis role="italic">Scope</emphasis> - This specification is
+        limited to general device discovery and control aspects of the
+        standard EnOcean specifications. Aspects concerning the representation
+        of specific or proprietary EnOcean profiles is not addressed.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Transparency</emphasis> - EnOcean devices discovered
+        on the network and devices locally implemented on the platform are
+        represented in the OSGi service registry with the same API.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Lightweight implementation option</emphasis> - The
+        full description of EnOcean device services on the OSGi platform is
+        optional. Some base driver implementations may implement all the
+        classes including EnOcean device description classes while
+        Implementations targeting constrained devices are able to implement
+        only the part that is necessary for EnOcean device discovery and
+        control.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Network Selection</emphasis> - It must be possible to
+        restrict the use of the EnOcean protocols to a selection of the
+        connected devices.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Event handling</emphasis> - Bundles are able to listen
+        to EnOcean events.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>Discover and control EnOcean devices as OSGi services
+        </emphasis> - Available learnt (via an EnOcean teach-in procedure)
+        EnOcean external endpoints are dynamically reified as OSGi services on
+        the service registry upon discovery.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>OSGi services as exported EnOcean devices</emphasis> -
+        OSGi services implementing the API defined here and explicitly set to
+        be exported should be made available to networks with EnOcean-enabled
+        endpoints in a transparent way.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Entities</title>
+
+    <itemizedlist mark="bullet">
+      <listitem>
+        <para><emphasis>EnOcean Base Driver</emphasis> - The bundle that
+        implements the bridge between OSGi and EnOcean networks (see <xref
+        linkend="rfc199_figure_id_20140603_11h12_46"/> ). It is responsible
+        for accessing the various EnOcean gateway chips on the execution
+        machine, and ensures the reception and translation of EnOcean messages
+        into proper objects. It is also used to send messages on the EnOcean
+        network, using whatever chip it deems most appropriate.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>EnOcean Host</emphasis> - The EnOceanHost object is a
+        link between the software and the EnOcean network. It represents the
+        chip configuration (gateway capabilities) described in <xref
+        linkend="rfc199_bibliomixed_id_20140602_17h03_46_9"/> . It is
+        registered as an OSGi service.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>EnOcean Device</emphasis> - An EnOcean device. This
+        entity is represented by a EnOceanDevice interface and registered as a
+        service within the framework. It carries the unique chip ID of the
+        device, and may represent either an imported or exported device, which
+        may be a pure transmitter or a transceiver.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>EnOcean Message</emphasis> - Every EnOcean reporting
+        equipment is supposed to follow a “profile”, which is essentially the
+        way the emitted data is encoded. In order to reflect this standard as
+        it is defined in the <xref
+        linkend="rfc199_bibliomixed_id_20140602_17h03_10_5"/> , manufacturers
+        are able to register the description of “Messages”, the essence of a
+        profile, along with their associated payload (as Channels). See
+        “EnOcean Channels” below for more information.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>EnOcean Channel</emphasis> - EnOcean channels are
+        available as an array inside EnOceanMessage objects. They are a useful
+        way to define any kind of payload that would be put inside of an
+        EnOcean Message.</para>
+
+        <para>EnOcean Messages and their associated Channels can be described
+        with EnOceanMessageDescription and EnOceanChannelDescription
+        interfaces. Description providers aggregate these descriptions in sets
+        that they register with EnOceanMessageDescriptionSet and
+        EnOceanChannelDescriptionSet interfaces within the framework.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>EnOcean RPC</emphasis> - An interface that enables the
+        invocation of vendor-specific Remote Procedure Calls and Remote
+        Management Commands. These are particular types of Messages and are
+        not linked to any EnOcean Profile, so that their descriptions are
+        defined and registered in another way. The RPCs are documented via the
+        EnOceanRPCDescription objects gathered into registered
+        EnOceanRPCDescriptionSet services.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>EnOcean Handler</emphasis> - Enables clients to
+        asynchronously get answers to their RPCs.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>EnOcean Client</emphasis> - An application that is
+        intended to control EnOcean device services.</para>
+      </listitem>
+
+      <listitem>
+        <para><emphasis>EnOcean Exception</emphasis> - Delivers errors during
+        EnOceanMessage serialization/deserialization or during execution
+        outside transmission.</para>
+      </listitem>
+    </itemizedlist>
+
+    <figure xml:id="rfc199_figure_id_20140603_11h12_46">
+      <title>EnOcean Service Specification class diagram.</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="3.5in"
+                     fileref="enocean_service_specification_class_diagram_RFC_EnOcean_ClassDiagram_Rev18.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </section>
+
+  <section>
+    <title>Operation Summary</title>
+
+    <para>To make an EnOcean device service available to EnOcean clients on
+    the OSGi platform, it must be registered under the EnOceanDevice interface
+    within the OSGi framework.</para>
+
+    <para>The EnOcean Base Driver is responsible for mapping external devices
+    into EnOceanDevice objects, through the use of an EnOcean gateway <xref
+    linkend="rfc199_bibliomixed_id_20140602_17h02_51_3"/> . The latter is
+    represented on OSGi framework as an object implementing EnOceanHost
+    interface. EnOcean “teach-in” messages will trigger this behaviour, this
+    is called a device import situation (see <xref
+    linkend="rfc199_figure_id_20140603_11h32_54"/> ).</para>
+
+    <figure xml:id="rfc199_figure_id_20140603_11h32_54">
+      <title>EnOcean device import.</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="2.5in"
+                     fileref="enocean_device_import_DeviceImport-1.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>Client bundles may also expose framework-internal (local)
+    EnOceanDevice instances, registered within the framework (see <xref
+    linkend="rfc199_figure_id_20140603_11h43_01"/> ). The Base Driver then
+    should emulate those objects as EnOcean devices on the EnOcean network.
+    This is a device export situation, made possible by the use of the 127
+    virtual base IDs available on an EnOcean gateway. For more information
+    about this process, please report to the “Exporting an EnOcean device”
+    section below.</para>
+
+    <figure xml:id="rfc199_figure_id_20140603_11h43_01">
+      <title>EnOcean device export.</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="2.5in"
+                     fileref="enocean_device_export_DeviceExport-1.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+
+    <para>EnOcean clients send RPCs (Remote Procedure Calls) to EnOcean
+    devices and receives RPC responses and messages from them. Messages coming
+    from EnOcean devices are accessible through Event Admin.</para>
+
+    <para>RPCs and messages content are specified by EnOcean Alliance or
+    vendor-specific descriptions. Those descriptions may be provided on the
+    OSGi platform by any bundle through the registration of
+    EnOceanRPCDescriptionSet, EnOceanMessageDescriptionSet and
+    EnOceanChannelDescriptionSet services. Every service is a set of
+    description that enables applications to retrieve information about
+    supported RPCs, messages or channels that compose messages.</para>
+
+    <figure xml:id="rfc199_figure_id_20140603_11h53_00">
+      <title>Using a set of message descriptions.</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="2.5in"
+                     fileref="using_a_set_of_message_descriptions_message_description_set.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </section>
+
+  <section>
+    <title>EnOcean Base Driver</title>
+
+    <para>Most of the functionality described in the operation summary is
+    implemented in an EnOcean base driver. This bundle implements the EnOcean
+    protocol and handles the interaction with bundles that use the EnOcean
+    devices. An EnOcean base driver is able to discover EnOcean devices on the
+    network and map each discovered device into an OSGi registered
+    EnOceanDevice service. It is also the receptor, through EventAdmin service
+    and OSGi service registry, of all the events related to local devices and
+    clients. It enables bidirectional communication for RPC and Channel
+    updates.</para>
+
+    <para>Several base drivers may be deployed on a residential OSGi device,
+    one for every supported network technology. An OSGi device abstraction
+    layer may then be implemented as a layer of refinement drivers above a
+    layer of base drivers. The refinement driver is responsible for adapting
+    technology-specific device services registered by the base driver into
+    device services of another model (see AbstractDevice interface in <xref
+    linkend="rfc199_figure_id_20140603_14h51_11"/> ). In the case of a generic
+    device abstraction layer, the model is agnostic to technologies.</para>
+
+    <para>The EnOcean Alliance defines their own abstract model with EnOcean
+    Equipment Profiles and refinement drivers may provide the implementation
+    of all EEPs with EnOcean specific Java interfaces. The AbstractDevice
+    interface of <xref linkend="rfc199_figure_id_20140603_14h51_11"/> is then
+    replaced by an EEP specific Java interface in that case. The need and the
+    choice of the abstraction depends on the targeted application
+    domain.</para>
+
+    <figure xml:id="rfc199_figure_id_20140603_14h51_11">
+      <title>EnOcean Base Driver and a refinement driver representing devices
+      in an abstract model.</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="2.5in"
+                     fileref="enocean_base_driver_and_a_refinement_driver_representing_devices_in_an_abstract_model_RefinedDriver-2.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </section>
+
+  <section>
+    <title>EnOcean Host</title>
+
+    <para>The EnOcean host represents an EnOcean gateway chip. Any EnOcean
+    device service implementation should rely on at least one Gateway Chip in
+    order to send and receive messages on the external EnOcean network. This
+    interface enables standard control over an EnOcean compatible chip. Every
+    EnOceanHost object should at least be identified by its unique chip
+    ID.</para>
+
+    <para>The EnOceanHost interface enables OSGi applications to:</para>
+
+    <itemizedlist mark="bullet">
+      <listitem>
+        <para>Get or set gateway metadata (version, name, etc);</para>
+      </listitem>
+
+      <listitem>
+        <para>Reset the gateway chip device;</para>
+      </listitem>
+
+      <listitem>
+        <para>Retrieve a chip ID (derived from EnOcean's BASE_ID) for the
+        given Service PID of a device.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>EnOcean Device</title>
+
+    <section>
+      <title>Generics</title>
+
+      <para>A physical EnOcean device is reified as an EnOceanDevice object
+      within the framework.</para>
+
+      <para>An EnOcean device holds most of the natural properties for an
+      EnOcean object: its unique ID, the profile, a friendly name, its
+      security information, and its available RPCs – along with the associated
+      getters (and setters when applicable). All those properties MUST be
+      persistent across restart so that teach-in procedures are made only
+      once.</para>
+
+      <para>It also holds methods that reflect the natural actions a user
+      application may physically trigger on such a device: send a message to
+      the device, send a teach-in message to the device, or switch the device
+      to learning mode.</para>
+
+      <para>Every EnOcean Device keeps a service PID property that is assigned
+      either by the base driver or by any service-exporting bundle. The
+      property value format is free and the value must be unique on the
+      framework.</para>
+
+      <para>The properties on which EnOceanDevice services can be filtered on
+      are: the device's service PID and chip ID, and its profile identifiers
+      (RORG / FUNC / TYPE integers).</para>
+
+      <para>The EnOceanDevice also keeps security features as defined in the
+      EnOcean Security Draft <xref
+      linkend="rfc199_bibliomixed_id_20140602_17h03_46_9"/> , which allow for
+      a security level format (integer mask), an encryption key and/or a
+      rolling authentication code. See the Security Of EnOcean networks
+      section below.</para>
+
+      <para>The EnOceanDevice service MUST also be registered with
+      org.osgi.service.device.Constants.DEVICE_CATEGORY property (see OSGi
+      Compendium: 103 Device Access Specification) that describes a table
+      (String[]) of categories to which the device belongs. One value MUST be
+      “EnOcean”
+      (org.osgi.service.enocean.EnOceanDevice.DEVICE_CATEGORY).</para>
+
+      <para>The additional properties (defined in Device Access – 103.2.1) :
+      DEVICE_DESCRIPTION, DEVICE_SERIAL values are not specified here as no
+      description nor application-level serial number are provided in the
+      EnOcean standard protocol.</para>
+    </section>
+
+    <section>
+      <title>Import Situation</title>
+
+      <para>In import situations, the device's chip ID is uniquely set by the
+      Base Driver, according to the one present in the teach-in message that
+      originated the Device's creation. The service PID (cf. Core
+      Specification R4 v4.3, section 5.2.5) should also be generated and
+      deterministically derived from the chip ID to allow reconstruction of a
+      device without a new teach-in process after a framework restart.</para>
+    </section>
+
+    <section>
+      <title>Export Situation</title>
+
+      <para>In export situations:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>The registering Client bundle sets the service PID of the
+          EnOceanDevice object by itself, in a unique manner, and registers
+          that object.</para>
+        </listitem>
+
+        <listitem>
+          <para>The chip ID (this device's EnOcean source ID when it issues
+          messages) will be allocated by the Base Driver. The latter keeps a
+          dictionary of the currently allocated chip IDs. The Client bundle
+          must also set an ENOCEAN_EXPORT property in the registered device's
+          Property Map.</para>
+        </listitem>
+      </orderedlist>
+
+      <para>The standard way to programmatically retrieve an exported chip ID
+      from a given service PID is by using EnOceanHost's dedicated interface
+      for this use.</para>
+
+      <para>The Base Driver MUST ensure the persistency of the
+      CHIP_ID:SERVICE_PID mapping.</para>
+
+      <para>As an application developer, please refer to the documentation of
+      your Base Driver to know its policies concerning exported chip ID
+      updating, deletion and exhaustion.</para>
+    </section>
+
+    <section>
+      <title>Interface</title>
+
+      <para>The EnOceanDevice interface enables client bundles to:</para>
+
+      <itemizedlist mark="bullet">
+        <listitem>
+          <para>Get or set the security features of the device in a protected
+          way;</para>
+        </listitem>
+
+        <listitem>
+          <para>Retrieve the currently paired devices in the case of a
+          receiver, as a collection of device IDs;</para>
+        </listitem>
+
+        <listitem>
+          <para>Get the ID-based list of currently available RPCs for the
+          device, as a Map of {manufacturerID:[functionId1,
+          functionId2,...]};</para>
+        </listitem>
+
+        <listitem>
+          <para>Invoke RPCs onto the device, through the invoke() call.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>EnOcean Messages</title>
+
+    <para>EnOcean Messages are at the core of the EnOcean application layer as
+    a whole and the EnOcean Equipment Profile specification <xref
+    linkend="rfc199_bibliomixed_id_20140602_17h03_10_5"/> in particular. Every
+    exchange of information within EnOcean networks is done with a dedicated
+    message. The EnOceanMessage interface provides a set of getters. The
+    latter enables OSGi applications to get the information contained in the
+    payload of an EnOcean message and defined as data and optional data of the
+    EnOcean Serial Protocol Type 1 (RADIO) message (see Table 2 in Section
+    "1.6.1 Packet description" of <xref
+    linkend="rfc199_bibliomixed_id_20140602_17h03_37_8"/> ).</para>
+
+    <para>This model enables reading both the EnOcean radio telegram data and
+    the associated metadata that may be attached to it in a single object,
+    EnOceanMessage.</para>
+
+    <para>In case the 'Optional Data' section gets missing at the lowest level
+    (the radio access layer not following ESP protocol for instance) it is the
+    responsibility of the Base Driver to mock the missing field's (dBm,
+    destinationID, …) values.</para>
+
+    <section>
+      <title>Mode of operation</title>
+
+      <para>Any EnOceanMessage object creation will be mirrored to Event
+      Admin.</para>
+
+      <para>Details about the available topics, filters and properties can be
+      found in the Event API section below.</para>
+
+      <para>EnOceanMessage objects will be created only if the originating
+      device has already been registered in the OSGi Service Registry, along
+      with profile information.</para>
+    </section>
+
+    <section>
+      <title>Identification</title>
+
+      <para>The RORG of a message defines its shape and generic type; all the
+      RORGs are defined in the EnOcean Radio Specification.</para>
+
+      <para>An addressed message will be encapsulated into an Adressed
+      Telegram (ADT) by the base driver transparently; this means that from
+      the application level, it will be represented under its original RORG,
+      but with a valid destinationID.</para>
+
+      <para>A particular EnOcean Equipment Profile message is identified by
+      three numbers: its RORG, and its FUNC, TYPE and EXTRA subtypes. In
+      EnOcean, a (RORG, FUNC, TYPE) triplet is enough to identify a profile;
+      though an EXTRA identifier is sometimes needed to identify a particular
+      message layout for that profile.</para>
+
+      <para>Those identifiers allow for retrieving EnOceanMessageDescription
+      objects within a registered EnOceanMessageDescriptionSet, which give the
+      application more information to parse the message.</para>
+    </section>
+
+    <section>
+      <title>Interface</title>
+
+      <para>The methods available in the EnOceanMessage interface are:</para>
+
+      <itemizedlist mark="bullet">
+        <listitem>
+          <para>Identification methods, retrieving the message's profile,
+          sender ID, optional destination ID, status;</para>
+        </listitem>
+
+        <listitem>
+          <para>A method to get the raw bytes of payload data in the message.
+          This data can then be passed to the deserializer of the
+          EnOceanMessageDescription object to be converted to EnOceanChannels,
+          which may -again- be documented (through EnOceanChannelDescription
+          objects) or not.</para>
+        </listitem>
+
+        <listitem>
+          <para>Link quality information read-only methods that mirror some of
+          the 'Optional Data' header information.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>EnOcean Message Description</title>
+
+    <para>EnOceanMessageDescription objects exposes only two methods:</para>
+
+    <itemizedlist mark="bullet">
+      <listitem>
+        <para>deserialize(): makes the user able to deserialize the payload
+        bytes of a raw EnOceanMessage object, into a collection of
+        EnOceanChannel objects.</para>
+      </listitem>
+
+      <listitem>
+        <para>serialize(): serializes the input EnOceanChannel objects into a
+        collection of bytes.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>EnOcean Channel</title>
+
+    <para>The EnOceanChannel interface is the first step of an abstraction to
+    generate or interpret EnOceanMessage channels with plain Java
+    types.</para>
+
+    <para>The simple EnOceanChannel interface provides a way to separate the
+    different fields in a message payload, knowing their offset and size in
+    the byte array that constitutes the full message's payload.</para>
+
+    <para>At the EnOceanChannel level, the only way to get/set the information
+    contained in the channel is through a pair of getRawValue() and
+    setRawValue() methods, which act on plain bytes.</para>
+
+    <para>Those bytes are meant right-aligned, and the number of those bytes
+    is the size of the datafield, floored up to the next multiple of 8. For
+    instance, a 3-bit long channel would be encoded on one byte, all the
+    necessary information starting from bit 0.</para>
+
+    <para>Every EnOceanMessage as described in the EEP Specification contains
+    a various amount of channels, each of them being identified by their
+    unique ID.</para>
+
+    <para>This ID, or channelID, is constituted of the “Shortcut” field of
+    this channel from the EEP 2.5 Specification <xref
+    linkend="rfc199_bibliomixed_id_20140602_17h03_10_5"/> and a number fixed
+    by the order of appearance of such a “Shortcut” in the
+    specification.</para>
+
+    <para>This unique identifier links a Channel to an
+    EnOceanChannelDescription object that provides more information to encode
+    and decode that channel's information; see below for more details. This
+    enables for loose coupling of the raw Channel itself and a richer,
+    3rd-party provided, information.</para>
+
+    <para>As an example, if the platform being developed is an electronic
+    display that waits for Messages from a well-known temperature sensor, the
+    Client bundle on the platform may interpret the Temperature Channels in
+    every Temperature Message without needing an appropriate
+    TemperatureChannelDescription object; it may directly cast and convert the
+    Byte[] array of every received message to a properly valued Double and
+    display that.</para>
+
+    <para>Otherwise, it could as well use the channelID to get a
+    TemperatureChannelDescription object that would properly handle the
+    deserialization process from the raw bytes to a proper, physical
+    unit-augmented, result.</para>
+
+    <figure xml:id="rfc199_figure_id_20140603_16h48_38">
+      <title>EnOcean channel and EnOcean channel descriptions.</title>
+
+      <mediaobject>
+        <imageobject>
+          <imagedata align="center" contentdepth="2.5in"
+                     fileref="enocean_channel_and_enocean_channel_descriptions_channel_diagram_v5.svg"/>
+        </imageobject>
+      </mediaobject>
+    </figure>
+  </section>
+
+  <section>
+    <title>EnOcean Channel Description</title>
+
+    <para>The EnOceanChannelDescription interface enables the description of
+    all the various channels as specified in the EnOcean specification, as
+    well as the description of channels issued by 3rd party actors.</para>
+
+    <para>Those description objects are retrieved from the registered
+    EnOceanChannelDescriptionSet interface using an unique ID known as the
+    channelID.</para>
+
+    <para>Here are the Channel types defined in this specification:</para>
+
+    <itemizedlist mark="bullet">
+      <listitem>
+        <para>CHANNEL_TYPE_RAW: A collection of bytes. This type is used when
+        the description is not provided, and is thus the default. For this
+        type, the EnOceanChannelDescription's deserialize() call actually
+        returns a byte[] collection. The encryption key or a device ID on 4
+        bytes are examples of such raw types.</para>
+      </listitem>
+
+      <listitem>
+        <para>CHANNEL_TYPE_DATA: A scaled physical value. Used when the data
+        can be mapped to a physical value; for instance, the 'WND – Wind
+        Speed' channel is a raw binary value, in a range from 0 to 255, that
+        will be mapped as a wind speed between 0 and 70 m/s. For this type,
+        the EnOceanChannelDescription's deserialize() call actually returns a
+        Double value.</para>
+      </listitem>
+
+      <listitem>
+        <para>CHANNEL_TYPE_FLAG: A boolean value. Used when the Channel value
+        can be either 1 or 0. The “Teach-In” Channel is a well-known example;
+        this 1-bit field may either be 0 or 1, depending whether the Message
+        is a teach-in one or not. For this type, the
+        EnOceanChannelDescription's deserialize() call actually returns a
+        Boolean value.</para>
+      </listitem>
+
+      <listitem>
+        <para>CHANNEL_TYPE_ENUM: An enumeration of possible values. Used when
+        the Channel can only take a discrete number of values. More
+        complicated than the Flag type, Enumerated types may have thresholds:
+        for instance, the A5-30 “Digital Input- Input State (IPS)” channel is
+        a 8-bit value which means “Contact closed” between 0 and 195, and
+        “Contact open” from 196 to 255. For this type, the
+        EnOceanChannelDescription's deserialize() call actually returns an
+        EnOceanChannelEnum object.</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>According to the channel type, the actual description object should
+    implement one of the following specialized interfaces. This will ease the
+    use of casting to the specialized interfaces on documented
+    channels.</para>
+
+    <section>
+      <title>EnOcean Data Channel Description</title>
+
+      <para>The EnOceanDataChannelDescription interface inherits from
+      EnOceanChannelDescription interface.</para>
+
+      <para>Two more methods give access to the integer input domain of the
+      data channel (such as 0-255) and to the floating-point output range of
+      it (such as -30,0°C – 24,5°C). A method is also present to retrieve the
+      physical unit of the channel. The serialize() and deserialize() methods
+      are implemented to easily convert from the raw byte[] collection to a
+      Double, and vice versa.</para>
+
+      <para>Here are a few samples of such Channels:</para>
+
+      <table frame="all">
+        <title>Table of channels samples.</title>
+
+        <tgroup align="left" cols="6" colsep="1" rowsep="1">
+          <colspec colname="c1" colwidth="1*"/>
+
+          <colspec colname="c2" colwidth="2*"/>
+
+          <colspec colname="c3" colwidth="3*"/>
+
+          <colspec colname="c4" colwidth="1*"/>
+
+          <colspec colname="c5" colwidth="1*"/>
+
+          <colspec colname="c6" colwidth="1*"/>
+
+          <thead>
+            <row>
+              <entry>Short</entry>
+
+              <entry>Description</entry>
+
+              <entry>Possible implemented name</entry>
+
+              <entry>Domain</entry>
+
+              <entry>Range</entry>
+
+              <entry>Unit</entry>
+            </row>
+          </thead>
+
+          <tfoot>
+            <row>
+              <entry>HUM</entry>
+
+              <entry>Humidity</entry>
+
+              <entry>HumidityScaledChannel_X</entry>
+
+              <entry>0..250</entry>
+
+              <entry>0..100</entry>
+
+              <entry>%</entry>
+            </row>
+          </tfoot>
+
+          <tbody>
+            <row>
+              <entry>TMP</entry>
+
+              <entry>Temperature</entry>
+
+              <entry>TemperatureScaledChannel_X</entry>
+
+              <entry>0..255</entry>
+
+              <entry>-10°..+30°</entry>
+
+              <entry>°C</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section>
+      <title>EnOcean Flag Channel Description</title>
+
+      <para>The EnOceanFlagChannelDescription interface inherits from the
+      EnOceanChannelDescription interface.</para>
+
+      <para>Those channels, are typically used for On/Off reporting values
+      (like a switch); they have no additional methods, though the
+      deserialize() method converts the input bit into a proper Boolean
+      object.</para>
+    </section>
+
+    <section>
+      <title>EnOcean Enumerated Channel Description</title>
+
+      <para>The EnOceanEnumChannelDescription interface inherits from the
+      EnOceanChannelDescription interface.</para>
+
+      <para>The additional method provided to this interface is
+      getPossibleValues(), which returns an array of the available
+      EnOceanChannelEnumValue objects accessible to this channel. Every
+      EnumValue object contains its integer input range and a String
+      identifier that defines its meaning.</para>
+
+      <para>The serialize() and deserialize() methods of an
+      EnOceanEnumChannelDescription object thus convert an integer input value
+      (say, 156) to an EnOceanChannelEnumValue, and vice versa.</para>
+
+      <para>Here is an example that shows the input range and the associated
+      EnOceanChannelEnumValues:</para>
+
+      <table frame="all">
+        <title>Table of channels samples.</title>
+
+        <tgroup align="left" cols="5" colsep="1" rowsep="1">
+          <colspec colname="c1" colwidth="3*"/>
+
+          <colspec colname="c2" colwidth="3*"/>
+
+          <colspec colname="c3" colwidth="1*"/>
+
+          <colspec colname="c4" colwidth="1*"/>
+
+          <colspec colname="c5" colwidth="2*"/>
+
+          <thead>
+            <row>
+              <entry>Device profile</entry>
+
+              <entry>EnOceanChannelEnumValue</entry>
+
+              <entry>Start</entry>
+
+              <entry>Stop</entry>
+
+              <entry>Meaning</entry>
+            </row>
+          </thead>
+
+          <tfoot>
+            <row>
+              <entry/>
+
+              <entry>FanStageSwitch_Stage0</entry>
+
+              <entry>190</entry>
+
+              <entry>209</entry>
+
+              <entry>Fan speed: Stage 0</entry>
+            </row>
+          </tfoot>
+
+          <tbody>
+            <row>
+              <entry morerows="2" valign="top"><para><!-- Pernicous Mixed Content -->
+              Fan speed stage switch</para></entry>
+
+              <entry>FanStageSwitch_Stage3</entry>
+
+              <entry>0</entry>
+
+              <entry>144</entry>
+
+              <entry>Fan speed: Stage 3</entry>
+            </row>
+
+            <row>
+              <entry>FanStageSwitch_Stage2</entry>
+
+              <entry>145</entry>
+
+              <entry>164</entry>
+
+              <entry>Fan speed: Stage 2</entry>
+            </row>
+
+            <row>
+              <entry>FanStageSwitch_Stage1</entry>
+
+              <entry>165</entry>
+
+              <entry>189</entry>
+
+              <entry>Fan speed: Stage 1</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </section>
+
+  <section>
+    <title>EnOcean Remote Management</title>
+
+    <para>Remote Management is a feature which allows EnOcean devices to be
+    configured and maintained over the air using radio messages.</para>
+
+    <para>The Remote Procedure Calls, or RPCs - as defined by the EnOcean
+    Remote Management specification <xref
+    linkend="rfc199_bibliomixed_id_20140602_17h03_19_6"/> - are not related to
+    any EnOcean Equipment Profile.</para>
+
+    <para>Note that EnOcean Remote Commissioning is detailed in an additional 
+    EnOcean document
+    <xref linkend="rfc199_bibliomixed_id_20150105_16h26_16_99"/>
+	.
+    </para>
+    
+    <section>
+      <title>EnOcean RPC</title>
+
+      <para>An EnOceanRPC object enables client bundles to remotely manage
+      EnOcean devices using already defined behaviour.</para>
+
+      <para>RPCs are mandatorily defined by a MANUFACTURER_ID (11 bits, 0x7FF
+      for the EnOcean alliance) and a unique FUNCTION_ID code on 12
+      bits.</para>
+
+      <para>RPCs are called directly onto an EnOceanDevice object via the
+      device.invoke() method, which accepts also a non-mandatory
+      EnOceanHandler object as a parameter to retrieve the asynchronous
+      answer.</para>
+
+      <para>Broadcasted RPCs can be addressed directly to the Base Driver
+      using the relevant Event Admin topic; see the Event API section
+      below.</para>
+    </section>
+
+    <section>
+      <title>EnOcean Handler</title>
+
+      <para>Responses to RPCs are processed by the driver and sent back to a
+      handler using EnOceanHandler's notifyResponse() method when an
+      EnOceanHandler is passed to the base driver.</para>
+    </section>
+  </section>
+
+  <section>
+    <title>Working With an EnOcean Device</title>
+
+    <section>
+      <title>Service Tracking</title>
+
+      <para>All discovered EnOcean devices in the local networks are
+      registered under EnOceanDevice interface within the OSGi framework.
+      Every time an EnOcean device appears or quits the network, the
+      associated OSGi service is registered or unregistered in the OSGi
+      service registry. Thanks to the EnOcean Base Driver, the OSGi service
+      availability in the registry mirrors EnOcean device availability on
+      EnOcean network <xref
+      linkend="rfc199_bibliomixed_id_20140602_17h02_51_3"/> .</para>
+
+      <para>Thanks to service events, a bundle is able to track the addition,
+      modification and removal of an EnOceanDevice service.</para>
+
+      <para>Below stands an example showing how the tracking can be
+      implemented. The sample Controller class extends the ServiceTracker
+      class so that it can track all EnOceanDevice services.</para>
+
+      <programlisting>
+				public Class Controller extends ServiceTracker {
+				public Object addingService(ServiceReference arg0) {
+				Object service = context.getService(arg0);
+				if (service != null &amp;&amp; service instanceof EnOceanDevice) {
+				eoDevice = (EnOceanDevice) service;
+				}
+				Logger.debug(service.getClass().getName() + " service found.", null);
+				return
+				service;
+				}
+
+				public void modifiedService(ServiceReference arg0, Object arg1) {
+				/* Unimplemented */
+				}
+
+				public void
+				removedService(ServiceReference arg0, Object service) {
+				if (service instanceof EnOceanDevice) {
+				eoDevice = null;
+				Logger.debug("EnOceanDevice service was removed.", null);
+				}
+				}
+				}
+			</programlisting>
+    </section>
+  </section>
+
+  <section>
+    <title>Event API</title>
+
+    <para>EnOcean events must be delivered to the EventAdmin service by the
+    EnOcean implementation, if present. EnOcean event topic follow the
+    following form: org/osgi/service/enocean/EnOceanEvent/SUBTOPIC</para>
+
+    <para>MESSAGE_RECEIVED, and RPC_BROADCAST are the two available
+    subtopics.</para>
+
+    <section>
+      <title>MESSAGE_RECEIVED</title>
+
+      <para>Properties (every event may dispatch some or all of the following
+      properties):</para>
+
+      <itemizedlist mark="bullet">
+        <listitem>
+          <para>EnOceanDevice.CHIP_ID – (enocean.device.chip_id/String). The
+          chip ID of the sending device.</para>
+        </listitem>
+
+        <listitem>
+          <para>Constants.SERVICE_PID – (service.pid/String). The service PID
+          of the exported device.</para>
+        </listitem>
+
+        <listitem>
+          <para>EnOceanDevice.RORG – (enocean.device.profile.rorg/String). The
+          RORG (Radio Telegram Type) of the sending device.</para>
+        </listitem>
+
+        <listitem>
+          <para>EnOceanDevice.FUNC – (enocean.device.profile.func/String). The
+          FUNC profile identifier of the sending device.</para>
+        </listitem>
+
+        <listitem>
+          <para>EnOceanDevice.TYPE – (enocean.device.profile.type/String). The
+          TYPE profile identifier of the sending device.</para>
+        </listitem>
+
+        <listitem>
+          <para>EnOceanEvent.PROPERTY_MESSAGE –
+          (enocean.message/EnOceanMessage). The EnOceanMessage object
+          associated with this event.</para>
+        </listitem>
+
+        <listitem>
+          <para>EnOceanEvent.PROPERTY_EXPORTED –
+          (enocean.message.is_exported/Object). The presence of this property
+          means that this message has actually been exported from a locally
+          implemented EnOcean Device.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+
+    <section>
+      <title>RPC_BROADCAST</title>
+
+      <para>This event is used whenever an RPC is broadcasted on EnOcean
+      networks, in IMPORT or EXPORT situations.</para>
+
+      <para>Properties (every event may dispatch some or all of the following
+      properties):</para>
+
+      <itemizedlist mark="bullet">
+        <listitem>
+          <para>EnOceanRPC.MANUFACTURER_ID –
+          (enocean.rpc.manufacturer_id/String). The RPC's manufacturer
+          ID.</para>
+        </listitem>
+
+        <listitem>
+          <para>EnOceanRPC.FUNCTION_ID – (enocean.rpc.function_id/String)
+          .</para>
+        </listitem>
+
+        <listitem>
+          <para>EnOceanEvent.PROPERTY_EXPORTED –
+          (enocean.message.is_exported/Object). The presence of this property
+          means that this RPC has actually been exported from a locally
+          implemented EnOcean Device.</para>
+        </listitem>
+
+        <listitem>
+          <para>EnOceanEvent.PROPERTY_RPC – (enocean.rpc/EnOceanRPC). The
+          EnOceanRPC object associated with this event.</para>
+        </listitem>
+      </itemizedlist>
+    </section>
+  </section>
+
+  <section>
+    <title>EnOcean Exceptions</title>
+
+    <para>The EnOceanException can be thrown and holds information about the
+    different EnOcean layers. Here below, ESP stands for “EnOcean Serial
+    Protocol”. The following errors are defined:</para>
+
+    <itemizedlist mark="bullet">
+      <listitem>
+        <para>FAILURE – ( 0x01 ) Operation was not successful.</para>
+      </listitem>
+
+      <listitem>
+        <para>ESP_RET_NOT_SUPPORTED – ( 0x02 ) The ESP command was not
+        supported by the driver.</para>
+      </listitem>
+
+      <listitem>
+        <para>ESP_RET_WRONG_PARAM – ( 0x03 ) The ESP command was supplied
+        wrong parameters.</para>
+      </listitem>
+
+      <listitem>
+        <para>ESP_RET_OPERATION_DENIED – ( 0x04 ) The ESP command was denied
+        authorization.</para>
+      </listitem>
+
+      <listitem>
+        <para>INVALID_TELEGRAM – ( 0xF0 ) The message was invalid.</para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section>
+    <title>Security</title>
+    <para>It is recommended that <code>ServicePermission[EnOceanDevice|EnOceanHost, 
+        REGISTER|GET]</code> be used sparingly and only for bundles that are trusted.</para>
+  </section>
+  
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.enocean.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.enocean.descriptions.xml"/>
+
+  <section>
+    <title>References</title>
+
+    <bibliolist>
+      <bibliomixed
+      xml:id="rfc199_bibliomixed_id_20140602_17h02_51_3"><title></title>Bottaro, A.,
+      Gérodolle, A., Lalanda, P., "Pervasive Service Composition in the Home
+      Network", 21st IEEE International Conference on Advanced Information
+      Networking and Applications (AINA-07), Niagara Falls, Canada, May
+      2007</bibliomixed>
+
+      <bibliomixed
+      xml:id="rfc199_bibliomixed_id_20140602_17h03_10_5"><title></title>"EnOcean 
+      Equipment Profiles v2.6.2", EnOcean Alliance, 
+      https://www.enocean-alliance.org/en/enocean_standard/, November 19, 2014
+      </bibliomixed>
+
+      <bibliomixed
+      xml:id="rfc199_bibliomixed_id_20140602_17h03_19_6"><title></title>"EnOcean
+      System Specification - Remote Management v1.7", EnOcean Alliance,
+      December 16, 2010</bibliomixed>
+
+      <bibliomixed
+      xml:id="rfc199_bibliomixed_id_20140602_17h03_37_8"><title></title>"EnOcean
+      System Specification - EnOcean Serial Protocol v1.17", EnOcean Alliance,
+      August 2, 2011</bibliomixed>
+
+      <bibliomixed
+      xml:id="rfc199_bibliomixed_id_20140602_17h03_46_9"><title></title>"EnOcean
+      System Specification - Security of EnOcean Radio Networks v1.3", EnOcean
+      Alliance, July 31, 2012</bibliomixed>
+
+      <bibliomixed
+      xml:id="rfc199_bibliomixed_id_20150105_16h26_16_99"><title></title>"EnOcean
+      Remote Commissioning Summary v1.0", EnOcean Alliance, 
+      https://www.enocean-alliance.org/en/downloads/, December 01, 2014
+      </bibliomixed>  
+    </bibliolist>
+  </section>
+</chapter>

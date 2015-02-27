@@ -1,0 +1,56 @@
+/*
+ * Copyright (c) OSGi Alliance (2013, 2014). All Rights Reserved.
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package org.osgi.service.zigbee;
+
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+
+/**
+ * This interface represents a ZCL Frame.
+ * 
+ * @author <a href="mailto:stefano.lenzi@isti.cnr.it">Stefano "Kismet" Lenzi</a>
+ * @author <a href="mailto:francesco.furfari@isti.cnr.it">Francesco Furfari</a>
+ */
+public interface ZCLFrame {
+
+	/**
+	 * Get this ZCLFrame's header
+	 * 
+	 * @return the header
+	 */
+	ZCLHeader getHeader();
+
+	/**
+	 * Get (a copy of this ZCLFrame) payload
+	 * 
+	 * @return a copy of the payload
+	 */
+	byte[] getPayload();
+
+	/**
+	 * @return this ZCLFrame's inputstream that can be used in order to obtain
+	 *         this ZCLFrame's input bytes.
+	 */
+	ByteArrayInputStream getInputStream();
+
+	/**
+	 * @return this ZCLFrame's outputstream that can be used in order to write
+	 *         data/bytes to this ZCLFrame.
+	 */
+	ByteArrayOutputStream getOutputStream();
+
+}

@@ -60,5 +60,19 @@
 
   <xi:include href="../131/service.tr069todmt.xml"/>
 
+  <xi:include href="../139/service.enocean.xml"/>
+
+  <xi:include href="../141/service.dal.xml"/>
+
+  <xi:include href="../142/service.dal.functions.xml"/>
+
+  <xi:include href="../143/service.network.xml"/>
+
+  <xi:include href="../144/service.resource.monitoring.xml"/>
+
+  <xi:include href="../145/service.usbinfo.xml"/>
+
+  <xi:include href="../146/service.serial.xml"/>
+
   <xi:include href="../702/util.xml.xml"/>
 </book>

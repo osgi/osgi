@@ -1,0 +1,1380 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:xhtml="http://www.w3.org/1999/xhtml"
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="616.7926"
+   height="278.17715"
+   version="1.1"
+   id="svg2"
+   inkscape:version="0.48.4 r9939"
+   sodipodi:docname="channel_diagram_v5.svg"
+   inkscape:export-filename="D:\Documents\Norm@Home\OSGi\EnOceanDeviceService-specification\docbook\svgs\channel_diagram_v5.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90">
+  <metadata
+     id="metadata94">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="1033"
+     id="namedview92"
+     showgrid="false"
+     inkscape:zoom="1.4710327"
+     inkscape:cx="261.75679"
+     inkscape:cy="70.201458"
+     inkscape:window-x="-4"
+     inkscape:window-y="-4"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0" />
+  <defs
+     id="defs4">
+    <marker
+       inkscape:stockid="Arrow2Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lstart"
+       style="overflow:visible">
+      <path
+         id="path4184"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(1.1,0,0,1.1,1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <filter
+       id="filter7761"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7763"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7765"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7767"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7769"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7771"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7773"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7775"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7777"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7779"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7821"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7823"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7825"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7827"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7829"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lend"
+       style="overflow:visible">
+      <path
+         id="path4577"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-1.1,0,0,-1.1,-1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <filter
+       id="filter7811-8-1"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-8-7"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-2-1"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-4-1"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-5-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7811-8-1-8"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-8-7-8"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-2-1-2"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-4-1-4"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-5-5-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7811-8-1-2"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-8-7-7"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-2-1-6"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-4-1-1"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-5-5-4"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <marker
+       inkscape:stockid="Arrow2Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lstart-5"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4184-7"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(1.1,0,0,1.1,1.1,0)" />
+    </marker>
+    <filter
+       id="filter7811-8-1-8-1"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-8-7-8-8"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-2-1-2-9"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-4-1-4-2"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-5-5-5-7"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7811-8-1-8-1-7"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-8-7-8-8-4"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-2-1-2-9-2"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-4-1-4-2-7"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-5-5-5-7-7"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <marker
+       inkscape:stockid="Arrow2Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lstart-9"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4184-3"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(1.1,0,0,1.1,1.1,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker4735"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4737"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(1.1,0,0,1.1,1.1,0)" />
+    </marker>
+    <filter
+       id="filter7811-8-1-2-1"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-8-7-7-9"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-2-1-6-8"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-4-1-1-6"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-5-5-4-5"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7811-8-1-8-0"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-8-7-8-2"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-2-1-2-8"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-4-1-4-6"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-5-5-5-0"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7811-8-1-24"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-8-7-86"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-2-1-5"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-4-1-0"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-5-5-9"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lend-0"
+       style="overflow:visible">
+      <path
+         id="path4577-0"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-1.1,0,0,-1.1,-1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <filter
+       id="filter7761-6"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7763-1"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7765-3"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7767-8"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7769-9"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7771-3"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7773-4"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7775-4"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7777-6"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7779-0"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7821-6"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7823-6"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7825-1"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7827-8"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7829-4"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7821-6-9"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7823-6-6"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7825-1-3"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7827-8-7"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7829-4-8"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7771-3-8"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7773-4-2"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7775-4-9"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7777-6-1"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7779-0-3"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7761-6-5"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7763-1-9"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7765-3-8"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7767-8-4"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7769-9-0"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <marker
+       inkscape:stockid="Arrow2Lend"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lend-7"
+       style="overflow:visible">
+      <path
+         id="path4577-6"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(-1.1,0,0,-1.1,-1.1,0)"
+         inkscape:connector-curvature="0" />
+    </marker>
+    <filter
+       id="filter7811-8-1-24-3"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-8-7-86-6"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-2-1-5-1"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-4-1-0-5"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-5-5-9-4"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7811-8-1-8-0-2"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-8-7-8-2-0"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-2-1-2-8-9"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-4-1-4-6-7"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-5-5-5-0-3"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <filter
+       id="filter7811-8-1-2-1-7"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-8-7-7-9-2"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-2-1-6-8-6"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-4-1-1-6-0"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-5-5-4-5-1"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+    <marker
+       inkscape:stockid="Arrow2Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="Arrow2Lstart-6"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path4184-5"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(1.1,0,0,1.1,1.1,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow2Lstart"
+       orient="auto"
+       refY="0"
+       refX="0"
+       id="marker5184"
+       style="overflow:visible">
+      <path
+         inkscape:connector-curvature="0"
+         id="path5186"
+         style="fill-rule:evenodd;stroke-width:0.625;stroke-linejoin:round"
+         d="M 8.7185878,4.0337352 -2.2072895,0.01601326 8.7185884,-4.0017078 c -1.7454984,2.3720609 -1.7354408,5.6174519 -6e-7,8.035443 z"
+         transform="matrix(1.1,0,0,1.1,1.1,0)" />
+    </marker>
+    <filter
+       id="filter7811-8-1-8-1-7-7"
+       inkscape:label="Drop Shadow"
+       color-interpolation-filters="sRGB">
+      <feFlood
+         id="feFlood7813-8-7-8-8-4-5"
+         flood-opacity="1"
+         flood-color="rgb(0,0,0)"
+         result="flood" />
+      <feComposite
+         id="feComposite7815-2-1-2-9-2-4"
+         in2="SourceGraphic"
+         in="flood"
+         operator="in"
+         result="composite1" />
+      <feOffset
+         id="feOffset7817-4-1-4-2-7-1"
+         dx="3"
+         dy="3"
+         result="offset" />
+      <feComposite
+         id="feComposite7819-5-5-5-7-7-2"
+         in2="offset"
+         in="SourceGraphic"
+         operator="over"
+         result="composite2" />
+    </filter>
+  </defs>
+  <g
+     id="g20"
+     transform="translate(-124.17219,-74.330941)">
+    <switch
+       id="switch22">
+      <foreignObject
+         id="foreignObject24"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+         height="120"
+         width="280"
+         pointer-events="all">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 14px; vertical-align: top; width: 280px; height: 120px; white-space: nowrap;">
+          <xhtml:p
+             style="margin: 0px; margin-top: 4px; text-align: center;">
+            <xhtml:em>&lt;&lt;Interface&gt;&gt;</xhtml:em>
+            <xhtml:br />
+            <xhtml:strong>EnOceanChannel</xhtml:strong>
+          </xhtml:p>
+          <xhtml:hr />
+          <xhtml:p
+             style="margin: 0px; margin-left: 4px;">+ offset: Int<xhtml:br />
+
+
++ size: Int</xhtml:p>
+          <xhtml:p
+             style="margin: 0px; margin-left: 4px;">+ channelId: String<xhtml:br />
+
+
++ getRawValue: byte[]</xhtml:p>
+          <xhtml:p
+             style="margin: 0px; margin-left: 4px;">+ getValue(): Object</xhtml:p>
+        </xhtml:div>
+      </foreignObject>
+    </switch>
+  </g>
+  <g
+     id="g30"
+     transform="translate(270.82781,15.669059)">
+    <switch
+       id="switch32">
+      <foreignObject
+         id="foreignObject34"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+         height="110"
+         width="230"
+         pointer-events="all">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 14px; vertical-align: top; width: 230px; height: 110px; white-space: nowrap;">
+          <xhtml:p
+             style="margin: 0px; margin-top: 4px; text-align: center;">
+            <xhtml:em>&lt;&lt;Interface&gt;&gt;</xhtml:em>
+            <xhtml:br />
+            <xhtml:strong>EnOceanChannelDescription</xhtml:strong>
+          </xhtml:p>
+          <xhtml:hr />
+          <xhtml:p
+             style="margin: 0px; margin-left: 4px;">+ id: String</xhtml:p>
+          <xhtml:p
+             style="margin: 0px; margin-left: 4px;">+ type: String</xhtml:p>
+          <xhtml:p
+             style="margin: 0px; margin-left: 4px;">+ serialize(Object o): byte[]</xhtml:p>
+          <xhtml:p
+             style="margin: 0px; margin-left: 4px;">+ deserialize(byte[]): Object<xhtml:br />
+<xhtml:br />
+</xhtml:p>
+        </xhtml:div>
+      </foreignObject>
+    </switch>
+  </g>
+  <g
+     transform="translate(-41.719103,9.0028807)"
+     id="g73">
+    <switch
+       id="switch75">
+      <foreignObject
+         pointer-events="all"
+         width="256"
+         height="50"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+         id="foreignObject77">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 14px; vertical-align: top; width: 255px; height: 50px; white-space: nowrap;">
+          <xhtml:p
+             style="margin: 0px; margin-top: 4px; text-align: center;">
+            <xhtml:em>&lt;&lt;Interface&gt;&gt;</xhtml:em>
+            <xhtml:br />
+            <xhtml:strong>
+              <xhtml:span
+                 style="font-size: 12px;">
+                <xhtml:strong>EnOceanChannelDescriptionSet</xhtml:strong>
+              </xhtml:span>
+            </xhtml:strong>
+          </xhtml:p>
+        </xhtml:div>
+      </foreignObject>
+      <text
+         x="128"
+         y="31"
+         font-size="12px"
+         id="text79"
+         style="font-size:12px;text-anchor:middle;fill:#000000;font-family:Helvetica">[Object]</text>
+    </switch>
+  </g>
+  <g
+     transform="translate(0.28090094,116.00289)"
+     id="g147">
+    <switch
+       id="switch149">
+      <foreignObject
+         pointer-events="all"
+         width="256"
+         height="50"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+         id="foreignObject151">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 14px; vertical-align: top; width: 255px; height: 50px; white-space: nowrap;">
+          <xhtml:p
+             style="margin: 0px; margin-top: 4px; text-align: center;">
+            <xhtml:em>&lt;&lt;Interface&gt;&gt;</xhtml:em>
+            <xhtml:br />
+            <xhtml:strong>
+              <xhtml:span
+                 style="font-size: 12px;"><xhtml:strong>EnOceanChannel</xhtml:strong>
+
+
+
+
+
+
+
+
+
+
+
+
+Description</xhtml:span>
+            </xhtml:strong>
+          </xhtml:p>
+        </xhtml:div>
+      </foreignObject>
+      <text
+         x="128"
+         y="31"
+         font-size="12px"
+         id="text153"
+         style="font-size:12px;text-anchor:middle;fill:#000000;font-family:Helvetica">[Object]</text>
+    </switch>
+  </g>
+  <g
+     transform="translate(0.28090094,222.00288)"
+     id="g213">
+    <switch
+       id="switch215">
+      <foreignObject
+         pointer-events="all"
+         width="256"
+         height="50"
+         requiredFeatures="http://www.w3.org/TR/SVG11/feature#Extensibility"
+         id="foreignObject217">
+        <xhtml:div
+           style="display: inline-block; font-size: 12px; font-family: Helvetica; color: rgb(0, 0, 0); line-height: 14px; vertical-align: top; width: 255px; height: 50px; white-space: nowrap;">
+          <xhtml:p
+             style="margin: 0px; margin-top: 4px; text-align: center;">
+            <xhtml:em>&lt;&lt;Interface&gt;&gt;</xhtml:em>
+            <xhtml:br />
+            <xhtml:strong>
+              <xhtml:span
+                 style="font-size: 12px;"><xhtml:strong>EnOcean</xhtml:strong>
+
+
+
+
+
+
+
+
+
+
+
+
+Channel</xhtml:span>
+            </xhtml:strong>
+          </xhtml:p>
+        </xhtml:div>
+      </foreignObject>
+      <text
+         x="128"
+         y="31"
+         font-size="12px"
+         id="text219"
+         style="font-size:12px;text-anchor:middle;fill:#000000;font-family:Helvetica">[Object]</text>
+    </switch>
+  </g>
+  <path
+     d="m 84.600091,236.00288 0,-69.99999"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path221"
+     style="fill:none;stroke:#000000;stroke-width:1;stroke-miterlimit:10;stroke-dasharray:8, 4;stroke-dashoffset:0"
+     inkscape:connector-curvature="0" />
+  <g
+     font-size="10px"
+     id="g233"
+     transform="translate(-886.71913,-100.99712)"
+     style="font-size:10px;text-anchor:end">
+    <rect
+       x="945"
+       y="275"
+       width="20"
+       height="12"
+       id="rect235"
+       style="fill:#ffffff;stroke:none" />
+    <text
+       x="964"
+       y="282"
+       id="text237"
+       style="fill:#000000;font-family:Helvetica">
+      <tspan
+         style="font-size:12px"
+         id="tspan11850">0..1</tspan>
+    </text>
+  </g>
+  <g
+     font-size="10px"
+     id="g253"
+     transform="translate(-246.97649,-138.99712)"
+     style="font-size:10px">
+    <rect
+       x="339"
+       y="325"
+       width="19"
+       height="12"
+       id="rect255"
+       style="fill:#ffffff;stroke:none" />
+    <text
+       x="339"
+       y="320"
+       id="text257"
+       style="fill:#000000;font-family:Helvetica">
+      <tspan
+         style="font-size:12px"
+         id="tspan11814">associated</tspan>
+    </text>
+    <text
+       x="339"
+       y="334"
+       style="fill:#000000;font-family:Helvetica"
+       id="text5216">
+      <tspan
+         style="font-size:12px"
+         id="tspan5218">with</tspan>
+    </text>
+  </g>
+  <path
+     style="fill:none;stroke:#000000;stroke-width:0.86315829;stroke-miterlimit:10"
+     inkscape:connector-curvature="0"
+     d="m 84.600091,113.25743 0,-52.152961"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path347-9-8" />
+  <rect
+     x="837"
+     y="106"
+     width="263"
+     height="54"
+     pointer-events="none"
+     id="rect381"
+     style="fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7821-6-9)"
+     transform="matrix(0.57418967,0,0,1.0038096,-471.50261,-100.50679)" />
+  <g
+     font-size="12px"
+     id="g383"
+     style="font-size:12px;text-anchor:middle"
+     transform="translate(-912.71913,-110.99712)">
+    <text
+       x="964.61328"
+       y="130"
+       id="text385"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+    <text
+       x="976.73633"
+       y="142"
+       id="text387"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+      <tspan
+         style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+         id="tspan4636">EnOceanChannel</tspan>
+    </text>
+    <text
+       x="969.40625"
+       y="156"
+       style="fill:#000000;font-family:Helvetica"
+       id="text4185">
+      <tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         id="tspan4617">DescriptionSet</tspan>
+    </text>
+  </g>
+  <rect
+     x="833"
+     y="213"
+     width="263"
+     height="54"
+     pointer-events="none"
+     id="rect405"
+     style="fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7771-3-8)"
+     transform="matrix(0.57418967,0,0,1.0038096,-469.20586,-103.04532)" />
+  <g
+     font-size="12px"
+     id="g407"
+     style="font-size:12px;text-anchor:middle"
+     transform="translate(-875.66443,-98.997119)">
+    <text
+       x="927.55859"
+       y="223"
+       id="text409"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+    <text
+       x="939.68164"
+       y="237"
+       id="text411"
+       style="fill:#000000;font-family:Helvetica">
+      <tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         id="tspan4613">EnOceanChannel</tspan>
+    </text>
+    <text
+       x="923"
+       y="251"
+       style="fill:#000000;font-family:Helvetica"
+       id="text4187">
+      <tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         id="tspan4615">Description</tspan>
+    </text>
+  </g>
+  <rect
+     x="837"
+     y="335"
+     width="263"
+     height="54"
+     pointer-events="none"
+     id="rect413"
+     style="fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7761-6-5)"
+     transform="matrix(0.57418967,0,0,1.0038096,-471.50261,-118.20183)" />
+  <g
+     font-size="12px"
+     id="g415"
+     style="font-size:12px;text-anchor:middle"
+     transform="translate(-905.98273,-127.58111)">
+    <text
+       x="957.87695"
+       y="359"
+       id="text417"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+    <text
+       x="970"
+       y="373"
+       id="text419"
+       style="font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">
+      <tspan
+         style="font-weight:bold;-inkscape-font-specification:Arial Bold"
+         id="tspan4646">EnOceanChannel</tspan>
+    </text>
+  </g>
+  <path
+     style="stroke-linejoin:miter"
+     d="m 126.325,59.407639 c 0.8594,-0.94431 9.0785,-9.93239 18.2645,-19.97352 l 16.7019,-18.256618 0.3413,11.446318 c 0.1878,6.29548 0.3726,15.28357 0.4107,19.97352 l 0.069,8.52721 -18.6752,0 -18.6752,0 1.5626,-1.71691 z"
+     id="path7438-6-3"
+     inkscape:connector-curvature="0" />
+  <text
+     style="font-size:10px;fill:#000000;font-family:Helvetica"
+     x="91.232491"
+     y="74.079857"
+     id="text355-4-9">
+    <tspan
+       style="font-size:12px"
+       id="tspan11842">has</tspan>
+  </text>
+  <g
+     style="font-size:10px;text-anchor:end"
+     transform="translate(-257.91995,-70.873449)"
+     font-size="10px"
+     id="g261-5-5-2-2-6">
+    <rect
+       style="fill:#ffffff;stroke:none"
+       x="318"
+       y="275"
+       width="20"
+       height="12"
+       id="rect263-1-8-6-0-7" />
+    <text
+       style="fill:#000000;font-family:Helvetica"
+       x="336"
+       y="282"
+       id="text265-7-8-2-5-8">
+      <tspan
+         style="font-size:12px"
+         id="tspan11852">1</tspan>
+    </text>
+  </g>
+  <text
+     style="font-size:10px;text-anchor:end;fill:#000000;font-family:Helvetica"
+     x="78.510262"
+     y="74.855888"
+     id="text265-7-8-2-5-7-9-0">
+    <tspan
+       style="font-size:12px"
+       id="tspan11844">1</tspan>
+  </text>
+  <g
+     font-size="10px"
+     id="g261-58-0"
+     transform="translate(-257.48975,-178.8877)"
+     style="font-size:10px;text-anchor:end">
+    <rect
+       x="318"
+       y="275"
+       width="20"
+       height="12"
+       id="rect263-9-7"
+       style="fill:#ffffff;stroke:none" />
+    <text
+       x="336"
+       y="282"
+       id="text265-0-2"
+       style="fill:#000000;font-family:Helvetica">
+      <tspan
+         style="font-size:12px"
+         id="tspan11846">0..n</tspan>
+    </text>
+  </g>
+  <path
+     d="M 316.66938,137.97457 162.8289,137.08171"
+     stroke-miterlimit="10"
+     pointer-events="none"
+     id="path29-4"
+     style="fill:none;stroke:#000000;stroke-width:1.03951871;stroke-linejoin:miter;stroke-miterlimit:10;marker-start:none;marker-mid:none;marker-end:url(#Arrow2Lend)"
+     inkscape:connector-curvature="0"
+     sodipodi:nodetypes="cc" />
+  <rect
+     x="480"
+     y="108"
+     width="263"
+     height="54"
+     pointer-events="none"
+     id="rect373-5-2"
+     style="fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7811-8-1-24-3)"
+     transform="matrix(0.57418967,0,0,1.0038096,-38.018443,2.3546907)" />
+  <g
+     id="g3360"
+     transform="translate(-785.53693,-31.445739)">
+    <text
+       x="1064.0664"
+       y="155.44862"
+       id="text409-7"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+    <text
+       x="1026.4785"
+       y="169.44862"
+       id="text411-4"
+       style="font-size:12px;text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica">
+      <tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         id="tspan4613-0">EnOceanFlag</tspan>
+    </text>
+    <text
+       x="1026.7832"
+       y="183.44862"
+       style="font-size:12px;text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica"
+       id="text4187-9">
+      <tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         id="tspan4615-4">ChannelDescription</tspan>
+    </text>
+  </g>
+  <path
+     style="fill:none;stroke:#000000;stroke-width:1.12269521px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+     d="m 387.91868,243.09713 71.118,0"
+     id="path4683"
+     inkscape:connector-curvature="0" />
+  <g
+     id="g3367"
+     transform="translate(-692.99738,142.1341)">
+    <rect
+       x="480"
+       y="108"
+       width="263"
+       height="54"
+       pointer-events="none"
+       id="rect373-5-2-5"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7811-8-1-8-0-2)"
+       transform="matrix(0.57418967,0,0,1.0038096,654.97894,-32.471135)" />
+    <text
+       x="971.52679"
+       y="89.368546"
+       id="text409-7-1"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+    <text
+       x="933.9389"
+       y="103.36855"
+       id="text411-4-7"
+       style="font-size:12px;text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica">
+      <tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         id="tspan4613-0-1">EnOceanEnum</tspan>
+    </text>
+    <text
+       x="934.24359"
+       y="117.36855"
+       style="font-size:12px;text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica"
+       id="text4187-9-1">
+      <tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         id="tspan4615-4-5">ChannelDescription</tspan>
+    </text>
+  </g>
+  <g
+     style="font-size:12px;text-anchor:middle"
+     id="g3334"
+     transform="translate(-656.48961,-103.59465)">
+    <rect
+       x="480"
+       y="108"
+       width="263"
+       height="54"
+       pointer-events="none"
+       id="rect373-5-2-2"
+       style="fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7811-8-1-2-1-7)"
+       transform="matrix(0.57418967,0,0,1.0038096,618.47117,1.080241)" />
+    <text
+       x="935.01904"
+       y="122.91992"
+       id="text409-7-3"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+    <text
+       x="897.43115"
+       y="136.91992"
+       id="text411-4-2"
+       style="font-size:12px;text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica">
+      <tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         id="tspan4613-0-2">EnOceanData</tspan>
+    </text>
+    <text
+       x="897.73584"
+       y="150.91992"
+       style="font-size:12px;text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica"
+       id="text4187-9-16">
+      <tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         id="tspan4615-4-8">ChannelDescription</tspan>
+    </text>
+  </g>
+  <path
+     style="fill:none;stroke:#000000;stroke-width:1.00010002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#Arrow2Lstart)"
+     d="m 162.77647,153.36427 41.46746,0 0,91.09245 33.30995,0"
+     id="path3375"
+     inkscape:connector-curvature="0" />
+  <path
+     style="fill:none;stroke:#000000;stroke-width:1.00010002;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;marker-start:url(#Arrow2Lstart)"
+     d="m 162.77647,120.39772 41.46746,0 0,-91.092471 33.30995,0"
+     id="path3375-6"
+     inkscape:connector-curvature="0" />
+  <g
+     id="g3367-9"
+     transform="translate(-473.90337,142.1341)">
+    <rect
+       x="480"
+       y="108"
+       width="263"
+       height="54"
+       pointer-events="none"
+       id="rect373-5-2-5-5"
+       style="font-size:12px;text-anchor:middle;fill:#ffffff;fill-opacity:1;stroke:#000000;filter:url(#filter7811-8-1-8-1-7-7)"
+       transform="matrix(0.57418967,0,0,1.0038096,654.97894,-32.471135)" />
+    <text
+       x="971.52679"
+       y="89.368546"
+       id="text409-7-1-4"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;text-anchor:middle;fill:#000000;font-family:Arial;-inkscape-font-specification:Arial">&lt;&lt;Interface&gt;&gt;</text>
+    <text
+       x="933.9389"
+       y="103.36855"
+       id="text411-4-7-3"
+       style="font-size:12px;text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica">
+      <tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         id="tspan4613-0-1-1">EnOceanChannel</tspan>
+    </text>
+    <text
+       x="934.24359"
+       y="117.36855"
+       style="font-size:12px;text-align:start;text-anchor:start;fill:#000000;font-family:Helvetica"
+       id="text4187-9-1-2">
+      <tspan
+         style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;text-align:start;text-anchor:start;font-family:Arial;-inkscape-font-specification:Arial Bold"
+         id="tspan4615-4-5-3">EnumValue</tspan>
+    </text>
+  </g>
+  <text
+     style="font-size:10px;fill:#000000;font-family:Helvetica"
+     x="395.78033"
+     y="238.24095"
+     id="text355-4-9-3">
+    <tspan
+       style="font-size:12px"
+       id="tspan11842-4">has</tspan>
+  </text>
+  <text
+     style="font-size:10px;text-anchor:end;fill:#000000;font-family:Helvetica"
+     x="402.09235"
+     y="255.33205"
+     id="text265-7-8-2-5-7-9-0-1">
+    <tspan
+       style="font-size:12px"
+       id="tspan11844-1">1</tspan>
+  </text>
+  <text
+     x="451.55975"
+     y="255.03706"
+     id="text265-0-2-3"
+     style="font-size:10px;text-anchor:end;fill:#000000;font-family:Helvetica">
+    <tspan
+       style="font-size:12px"
+       id="tspan11846-8">0..n</tspan>
+  </text>
+</svg>

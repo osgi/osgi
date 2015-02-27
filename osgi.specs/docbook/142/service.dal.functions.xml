@@ -1,0 +1,1109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<chapter label="142" version="5" xml:id="service.dal.functions"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:xlink="http://www.w3.org/1999/xlink"
+         xmlns:xi="http://www.w3.org/2001/XInclude"
+         xmlns:ns5="http://www.w3.org/1999/xhtml"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Device Abstraction Layer Functions</title>
+
+  <info>
+    <releaseinfo xml:id="service.dal.functions-version">Version
+    1.0</releaseinfo>
+  </info>
+
+  <section xml:id="service.dal.functions.introduction">
+    <title>Introduction</title>
+
+    <para>Concrete function interfaces are used to unify the access and the
+    control of the basic device operations and the related properties. The
+    current section specifies the minimal set of such functionalities. They
+    can be extended or replaced to cover domain specific scenarios. The set is
+    not closed and can be incorporated with vendor specific functions. There
+    is support for: control, monitoring and metering information.</para>
+  </section>
+
+  <section xml:id="service.dal.functions.list">
+    <title>Functions</title>
+
+    <section xml:id="service.dal.functions.boolean.control">
+      <title>BooleanControl</title>
+
+      <para><code>BooleanControl</code> function provides a binary control
+      support. The property eventing must follow the definition of Device
+      Abstraction Layer, <xref linkend="service.dal.function.event"/>. The
+      full function definition is available in the next tables.</para>
+
+      <table>
+        <title>BooleanControl Operations</title>
+
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Name</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>inverse</code></entry>
+
+              <entry>Reverses the <code>BooleanControl</code> state. If the
+              current state represents <code>true</code> value, it'll be
+              changed to <code>false</code>. If the current state represents
+              <code>false</code> value, it'll be changed to
+              <code>true</code>.</entry>
+            </row>
+
+            <row>
+              <entry><code>setTrue</code></entry>
+
+              <entry>Sets the <code>BooleanControl</code> state to
+              <code>true</code> value.</entry>
+            </row>
+
+            <row>
+              <entry><code>setFalse</code></entry>
+
+              <entry>Sets the <code>BooleanControl</code> state to
+              <code>false</code> value.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <table>
+        <title>BooleanControl Properties</title>
+
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Name</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>data</code></entry>
+
+              <entry>Contains the current state of
+              <code>BooleanControl</code>. The property access is
+              readable, writable and eventable.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>Different types can be used as a value of
+      <code>Function.SERVICE_TYPE</code> service property. The next list
+      contains some suitable to <code>BooleanControl</code>: <itemizedlist>
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.LIGHT"/>
+            - indicates that there is a light
+            device control. <code>true</code> state means that the light
+            device will be turned on. <code>false</code> state means that the
+            light device will be turned off. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.DOOR"/>
+            - indicates that there is a door
+            position control. <code>true</code> state means that the door will
+            be opened. <code>false</code> state means that the the door will
+            be closed. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.WINDOW"/>
+            - indicates that there is a
+            window position control. <code>true</code> state means that the
+            window will be opened. <code>false</code> state means that the the
+            window will be closed. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.POWER"/>
+            - indicates that there is
+            electricity control. <code>true</code> state means that the power
+            will be restored. <code>false</code> state means that the power
+            will be cut. </para>
+          </listitem>
+
+          <listitem>
+            <para> other type defined in
+            <code>org.osgi.service.dal.functions.Types</code> </para>
+          </listitem>
+
+          <listitem>
+            <para>vendor specific</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>The function is using <xref
+      linkend="service.dal.functions.data.boolean"/> data structure to provide
+      the control state.</para>
+
+      <para>The next code snippet sets to <code>true</code> all
+      <code>BooleanControl</code> functions, which control the light.
+      <programlisting>ServiceReference[] booleanControlSRefs = context.getServiceReferences(
+      BooleanControl.class.getName(),
+      '(' + Function.SERVICE_TYPE + '=' + Types.LIGHT + ')');
+if (null == booleanControlSRefs) {
+  return; // no such services
+}
+for (int i = 0; i &lt; booleanControlSRefs.length; i++) {
+  BooleanControl booleanControl = (BooleanControl) context.getService(
+      booleanControlSRefs[i]);
+  if (null != booleanControl) {
+    booleanControl.setTrue();
+  }
+}</programlisting></para>
+    </section>
+
+    <section xml:id="service.dal.functions.boolean.sensor">
+      <title>BooleanSensor</title>
+
+      <para><code>BooleanSensor</code> function provides binary sensor
+      monitoring. It reports the state when an important event is available.
+      There are no operations. The property eventing must follow the
+      definition of Device Abstraction Layer, <xref
+      linkend="service.dal.function.event"/>. The full function definition is
+      available in the next table.</para>
+
+      <table>
+        <title>BooleanSensor Properties</title>
+
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Name</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>data</code></entry>
+
+              <entry>Contains the current state of <code>BooleanSensor</code>.
+              The property access is readable and eventable.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>Different types can be used as a value of
+      <code>Function.SERVICE_TYPE</code> service property. The next list
+      contains some suitable to <code>BooleanSensor</code>: <itemizedlist>
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.LIGHT"/>
+            - indicates that the
+            <code>BooleanSensor</code> can detected light. <code>true</code>
+            state means that there is light. <code>false</code> state means
+            that there is no light. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.GAS"/>
+            - indicates that the
+            <code>BooleanSensor</code> supports gas detection.
+            <code>true</code> state means there is gas. <code>false</code>
+            state means that there is no gas. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.SMOKE"/>
+            - indicates that the
+            <code>BooleanSensor</code> can detect smoke. <code>true</code>
+            state means that there is smoke. <code>false</code> state means
+            that there is no smoke. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.DOOR"/>
+            - indicates that the
+            <code>BooleanSensor</code> can detect the door state.
+            <code>true</code> state means that the door is opened.
+            <code>false</code> state means that the door is closed. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.WINDOW"/>
+            - indicates that the
+            <code>BooleanSensor</code> can window state. <code>true</code>
+            state means that the window is opened. <code>false</code> state
+            means that the window is closed. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.POWER"/>
+            - indicates that the
+            <code>BooleanSensor</code> can detect power/no power. <code>true</code>
+            state means that there is power. <code>false</code> state
+            means that there is no power. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.RAIN"/>
+            - indicates that the
+            <code>BooleanSensor</code> can detect rain. <code>true</code>
+            state means that there is rain. <code>false</code> state means
+            that there is no rain. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.CONTACT"/>
+            - indicates that the
+            <code>BooleanSensor</code> can detect contact. <code>true</code>
+            state means that there is contact. <code>false</code> state means
+            that there is no contact. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.FIRE"/>
+            - indicates that the
+            <code>BooleanSensor</code> can detect fire. <code>true</code>
+            state means that there is fire. <code>false</code> state means
+            that there is no fire. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.OCCUPANCY"/>
+            - indicates that the
+            <code>BooleanSensor</code> can detect presence. <code>true</code>
+            state means that someone is detected. <code>false</code> state
+            means that nobody is detected. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.WATER"/>
+            - indicates that the
+            <code>BooleanSensor</code> can detect water leak.
+            <code>true</code> state means that there is water leak.
+            <code>false</code> state means that there is no water leak.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.MOTION"/>
+            - indicates that the
+            <code>BooleanSensor</code> can detect motion. <code>true</code>
+            state means that there is motion detection. <code>false</code>
+            state means that there is no motion detection. </para>
+          </listitem>
+
+          <listitem>
+            <para> other type defined in
+            <code>org.osgi.service.dal.functions.Types</code> </para>
+          </listitem>
+
+          <listitem>
+            <para>vendor specific</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>The function is using <xref
+      linkend="service.dal.functions.data.boolean"/> data structure to provide
+      the sensor state.</para>
+    </section>
+
+    <section xml:id="service.dal.functions.multi.level.control">
+      <title>MultiLevelControl</title>
+
+      <para><code>MultiLevelControl</code> function provides multi-level
+      control support. The property eventing must follow the definition of
+      Device Abstraction Layer, <xref linkend="service.dal.function.event"/>.
+      The full function definition is available in the next table.</para>
+
+      <table>
+        <title>MultiLevelControl Properties</title>
+
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Name</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>data</code></entry>
+
+              <entry>Contains the current state of
+              <code>MultiLevelControl</code>. The property access is
+              readable, writable and eventable.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>Different types can be used as a value of
+      <code>Function.SERVICE_TYPE</code> service property. The next list
+      contains some suitable to <code>MultiLevelControl</code>: <itemizedlist>
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.LIGHT"/>
+            - indicates that the
+            <code>MultiLevelControl</code> can control light devices. Usually,
+            such devices are called dimmable. <code>MultiLevelControl</code>
+            minimum value can switch off the device and
+            <code>MultiLevelControl</code> maximum value can increase the
+            device light to the maximum possible value. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.TEMPERATURE"/>
+            - indicates that the
+            <code>MultiLevelControl</code> can control temperature devices.
+            For example, such device can be thermostat.
+            <code>MultiLevelControl</code> minimum value is the lowest
+            supported temperature. <code>MultiLevelControl</code> maximum
+            value is the highest supported temperature. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.FLOW"/>
+            - indicates that the
+            <code>MultiLevelControl</code> can control the flow level.
+            <code>MultiLevelControl</code> minimum value is the minimum
+            supported flow level. <code>MultiLevelControl</code> maximum value
+            is the maximum supported flow level. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.PRESSURE"/>
+            - indicates that the
+            <code>MultiLevelControl</code> can control the pressure level.
+            <code>MultiLevelControl</code> minimum value is the lowest
+            supported pressure level. <code>MultiLevelControl</code> maximum
+            value is the highest supported pressure level. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.HUMIDITY"/>
+            - indicates that the
+            <code>MultiLevelControl</code> can control the humidity level.
+            It's typical functionality for HVAC (heating, ventilation, and air
+            conditioning) devices. <code>MultiLevelControl</code> minimum
+            value is the lowest supported humidity level.
+            <code>MultiLevelControl</code> maximum value is the highest
+            supported humidity level. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.GAS"/>
+            - indicates that the
+            <code>MultiLevelControl</code> can control the gas level.
+            <code>MultiLevelControl</code> minimum value is the lowest
+            supported gas level. <code>MultiLevelControl</code> maximum value
+            is the highest supported gas level. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.SMOKE"/>
+            - indicates that the
+            <code>MultiLevelControl</code> can control the smoke level.
+            <code>MultiLevelControl</code> minimum value is the lowest
+            supported smoke level. <code>MultiLevelControl</code> maximum
+            value is the highest supported smoke level. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.DOOR"/>
+            - indicates that the
+            <code>MultiLevelControl</code> can control the door position.
+            <code>MultiLevelControl</code> minimum value can completely close
+            the door. <code>MultiLevelControl</code> maximum value can open
+            the door to the maximum allowed position. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.WINDOW"/>
+            - indicates that the
+            <code>MultiLevelControl</code> can control the window position.
+            <code>MultiLevelControl</code> minimum value can completely close
+            the window. <code>MultiLevelControl</code> maximum value can open
+            the window to the maximum allowed position. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.LIQUID"/>
+            - indicates that the
+            <code>MultiLevelControl</code> can control the liquid level.
+            <code>MultiLevelControl</code> minimum value is the lowest
+            supported liquid level. <code>MultiLevelControl</code> maximum
+            value is the highest supported liquid level. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.POWER"/>
+            - indicates that the
+            <code>MultiLevelControl</code> can control the power level.
+            <code>MultiLevelControl</code> minimum value is the lowest
+            supported power level. <code>MultiLevelControl</code> maximum
+            value is the highest supported power level. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.NOISINESS"/>
+            - indicates that the
+            <code>MultiLevelControl</code> can control the noise level.
+            <code>MultiLevelControl</code> minimum value is the lowest
+            supported noise level. <code>MultiLevelControl</code> maximum
+            value is the highest supported noise level. </para>
+          </listitem>
+
+          <listitem>
+            <para> other type defined in
+            <code>org.osgi.service.dal.functions.Types</code> </para>
+          </listitem>
+
+          <listitem>
+            <para>vendor specific</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>The function is using <xref
+      linkend="service.dal.functions.data.level"/> data structure to provide
+      the level.</para>
+    </section>
+
+    <section xml:id="service.dal.functions.multi.level.sensor">
+      <title>MultiLevelSensor</title>
+
+      <para><code>MultiLevelSensor</code> function provides multi-level sensor
+      monitoring. It reports its state when an important event is available.
+      There are no operations. The property eventing must follow the
+      definition of Device Abstraction Later, <xref
+      linkend="service.dal.function.event"/>. The full function definition is
+      available in the next table.</para>
+
+      <table>
+        <title>MultiLevelSensor Properties</title>
+
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Name</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>data</code></entry>
+
+              <entry>Contains the current state of
+              <code>MultiLevelSensor</code>. The property access is
+              readable and eventable.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>Different types can be used as a value of
+      <code>Function.SERVICE_TYPE</code> service property. The next list
+      contains some suitable to <code>MultiLevelSensor</code>: <itemizedlist>
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.LIGHT"/>
+            - indicates that the sensor can
+            monitor the light level. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.TEMPERATURE"/>
+            - indicates that the sensor
+            can monitor the temperature. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.FLOW"/>
+            - indicates that the sensor can
+            monitor the flow level. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.PRESSURE"/>
+            - indicates that the sensor can
+            monitor the pressure level. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.HUMIDITY"/>
+            - indicates that the sensor can
+            monitor the humidity level. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.GAS"/>
+            - indicates that the sensor can
+            monitor the gas level. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.SMOKE"/>
+            - indicates that the sensor can
+            monitor the smoke level. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.DOOR"/>
+            - indicates that the sensor can
+            monitor the door position. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.WINDOW"/>
+            - indicates that the sensor can
+            monitor the window position. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.LIQUID"/>
+            - indicates that the sensor can
+            monitor the liquid level. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.POWER"/>
+            - indicates that the sensor can
+            monitor the power level. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.NOISINESS"/>
+            - indicates that the sensor
+            can monitor the noise level. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.RAIN"/>
+            - indicates that the
+            <code>MultiLevelSensor</code> can monitor the rain rate. </para>
+          </listitem>
+
+          <listitem>
+            <para> other type defined in
+            <code>org.osgi.service.dal.functions.Types</code> </para>
+          </listitem>
+
+          <listitem>
+            <para>vendor specific</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>The function is using <xref
+      linkend="service.dal.functions.data.level"/> data structure to provide
+      the level.</para>
+    </section>
+
+    <section xml:id="service.dal.functions.meter">
+      <title>Meter</title>
+
+      <para><code>Meter</code> function can measure metering information. It
+      provides the current and total consumptions or generations. The property
+      eventing must follow the definition of Device Abstraction Later, <xref
+      linkend="service.dal.function.event"/>. The full function definition is
+      available in the next tables.</para>
+
+      <table>
+        <title>Meter Properties</title>
+
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Name</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>total</code></entry>
+
+              <entry>Contains the total consumption or production.
+              The property access is readable and eventable.</entry>
+            </row>
+
+            <row>
+              <entry><code>current</code></entry>
+
+              <entry>Contains the current consumption or production. The
+              property access is readable and eventable.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>Different types can be used as a value of
+      <code>Function.SERVICE_TYPE</code> service property. The next list
+      contains some suitable to <code>Meter</code>: <itemizedlist>
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.PRESSURE"/>
+            - indicates that the
+            <code>Meter</code> measures pressure. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.GAS"/>
+            - indicates that the
+            <code>Meter</code> measures the gas consumption. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.POWER"/>
+            - indicates that the
+            <code>Meter</code> measures the power consumption. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.WATER"/>
+            - indicates that the
+            <code>Meter</code> measures water consumption. </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.HEAT"/>
+            - indicates that the
+            <code>Meter</code> measures thermal energy provided by a source.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Types.COLD"/>
+            - indicates that the
+            <code>Meter</code> measures thermal energy provided by a source.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para> other type defined in
+            <code>org.osgi.service.dal.functions.Types</code> </para>
+          </listitem>
+
+          <listitem>
+            <para>vendor specific</para>
+          </listitem>
+        </itemizedlist></para>
+
+      <para>The function is using <xref
+      linkend="service.dal.functions.data.level"/> data structure to provide
+      metering information.</para>
+
+      <para><code>Meter</code> function service can be optionally registered
+      with <xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Meter.SERVICE_FLOW"/>
+      service property. The value type is
+      <code>java.lang.String</code>. It contains the metering flow. Currently,
+      the flow can be
+      <xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Meter.FLOW_IN"/>
+      for a consumption or
+      <xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.Meter.FLOW_OUT"/>
+      for a production.</para>
+    </section>
+
+    <section xml:id="service.dal.functions.alarm">
+      <title>Alarm</title>
+
+      <para><code>Alarm</code> function provides alarm sensor support. There
+      is only one eventable property and no operations. The property eventing
+      must follow the definition of Device Abstraction Layer, <xref
+      linkend="service.dal.function.event"/>. The full function definition is
+      available in the next table.</para>
+
+      <table>
+        <title>BooleanSensor Properties</title>
+
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Name</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>alarm</code></entry>
+
+              <entry>Specifies the alarm property name. The property is
+              eventable.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>The function is using <xref
+      linkend="service.dal.functions.data.alarm"/> data structure to report
+      the alarm. The property eventing must follow the definition of Device
+      Abstraction Layer, <xref linkend="service.dal.function.event"/>.</para>
+    </section>
+
+    <section xml:id="service.dal.functions.keypad">
+      <title>Keypad</title>
+
+      <para><code>Keypad</code> function provides support for keypad control.
+      The keypad typically consists of one or more keys/buttons, which can be
+      discerned. Different types of key presses like short and long press can
+      typically also be detected. Each key pressed event is followed by a key
+      released event. It's not possible to have two consecutive key pressed
+      or key released events. There is only one eventable property and no
+      operations. The property eventing must follow the definition of Device
+      Abstraction Layer, <xref linkend="service.dal.function.event"/>. The
+      full function definition is available in the next table.</para>
+
+      <table>
+        <title>Keypad Properties</title>
+
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Name</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>key</code></entry>
+
+              <entry>Specifies a property name for a key from the keypad. The
+              property is eventable.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>The function is using <xref
+      linkend="service.dal.functions.data.keypad"/> data structure to report
+      the keys.</para>
+    </section>
+
+    <section xml:id="service.dal.functions.wake.up">
+      <title>WakeUp</title>
+
+      <para><code>WakeUp</code> function provides device awake monitoring.
+      It's especially applicable to battery-operated devices. Such
+      device can notify the system that it's awake and can receive commands
+      with a <xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.WakeUp.PROPERTY_AWAKE"/>
+      property event. The property
+      eventing must follow the definition of Device Abstraction Layer, <xref
+      linkend="service.dal.function.event"/>.</para>
+
+      <para>The device can periodically wake up for commands. The interval can
+      be managed with
+      <xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.WakeUp.PROPERTY_WAKE_UP_INTERVAL"/>
+      property.</para>
+
+      <table>
+        <title>WakeUp Properties</title>
+
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Name</entry>
+
+              <entry>Description</entry>
+            </row>
+          </thead>
+
+          <tbody>
+            <row>
+              <entry><code>awake</code></entry>
+
+              <entry>Specifies the awake eventable property name. If the
+              device is awake, it will trigger a property event. The property
+              value type is <xref
+              linkend="service.dal.functions.data.boolean"/>.</entry>
+            </row>
+
+            <row>
+              <entry><code>wakeUpInterval</code></entry>
+
+              <entry>Specifies the wake up interval. The device can
+              periodically wake up and receive commands. That interval is
+              managed by this property. The property access is readable,
+              writable and eventable. The property value type is <xref
+              linkend="service.dal.functions.data.level"/>.</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+  </section>
+
+  <section xml:id="service.dal.functions.data">
+    <title>Functions Data</title>
+
+    <para><code>FunctionData</code> subclasses are wrappers on top of the java
+    types to cover the requirements of the Device Abstraction Layer section.
+    They can be received with the getter methods, can be set with the setter methods
+    and can be reported with <code>FunctionEvent</code>.
+    The value can be described with different properties like: <itemizedlist>
+        <listitem>
+          <para> timestamp - the timestamp is the difference between the value
+          collecting time and midnight, January 1, 1970 UTC. It's measured in
+          milliseconds. The device driver is responsible to generate that
+          value when the value is received from the device. </para>
+        </listitem>
+
+        <listitem>
+          <para> unit - represents the value unit as it's defined in <xref
+          linkend="service.dal.function.properties"/>. </para>
+        </listitem>
+
+        <listitem>
+          <para> description - represents a human readable description of the
+          value. </para>
+        </listitem>
+      </itemizedlist></para>
+
+    <section xml:id="service.dal.functions.data.boolean">
+      <title>BooleanData</title>
+
+      <para>This data structure is used by <xref
+      linkend="service.dal.functions.boolean.control"/>, <xref
+      linkend="service.dal.functions.boolean.sensor"/> and <xref
+      linkend="service.dal.functions.wake.up"/>.</para>
+
+      <para>It provides information about the function state. That data object
+      contains boolean value, the value collecting time and additional
+      metadata. The <code>value</code> field is accessible with
+      <code>BooleanData.getValue()</code> getter. Other fields
+      are inherited from the parent class <code>FunctionData</code>.</para>
+
+      <para>Two <code>BooleanData</code> instances are equal if they contain
+      equal metadata, timestamp and boolean value.</para>
+
+      <para><code>BooleanData.compareTo(Object)</code> method
+      compares <code>BooleanData</code> instance with the given argument
+      of the same type and returns:
+      <itemizedlist>
+        <listitem>
+          <para>
+            <code>-1</code> if the instance field is less than a field of the specified argument.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <code>0</code> if all fields are equivalent.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <code>1</code> if the instance field is greater than a field of the specified argument.
+          </para>
+        </listitem>
+      </itemizedlist>
+      The fields are compared in this order: timestamp, metadata, value.
+      </para>
+    </section>
+
+    <section xml:id="service.dal.functions.data.level">
+      <title>LevelData</title>
+
+      <para>This data structure is used by <xref
+      linkend="service.dal.functions.multi.level.control"/>, <xref
+      linkend="service.dal.functions.multi.level.sensor"/>, <xref
+      linkend="service.dal.functions.meter"/> and <xref
+      linkend="service.dal.functions.wake.up"/>.</para>
+
+      <para>It provides information about the function level. That data object
+      contains <code>BigDecimal</code> value and the value unit. The
+      measurement unit is used as it's defined in <xref
+      linkend="service.dal.function.properties"/>.
+      The <code>unit</code> field is accessible with
+      <code>LevelData.getUnit()</code> getter.
+      The <code>level</code> field is accessible with
+      <code>LevelData.getLevel()</code> getter.</para>
+
+      <para>Two <code>LevelData</code> instances are equal if they contain
+      equal metadata, timestamp, unit and level.</para>
+
+      <para><code>LevelData.compareTo(Object)</code> method
+      compares <code>LevelData</code> instance with the given argument
+      of the same type and returns:
+      <itemizedlist>
+        <listitem>
+          <para>
+            <code>-1</code> if the instance field is less than a field of the specified argument.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <code>0</code> if all fields are equivalent.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <code>1</code> if the instance field is greater than a field of the specified argument.
+          </para>
+        </listitem>
+      </itemizedlist>
+      The fields are compared in this order: timestamp, metadata, level, unit.
+      </para>
+    </section>
+
+    <section xml:id="service.dal.functions.data.alarm">
+      <title>AlarmData</title>
+
+      <para>This data structure is used by <xref
+      linkend="service.dal.functions.alarm"/>.</para>
+
+      <para><code>AlarmData</code> data structure is used to provide
+      information about the available alarm. That data object contains:
+      <itemizedlist>
+          <listitem>
+            <para> alarm type - indicates the meaning of the alarm like smoke,
+            power fail, etc. </para>
+          </listitem>
+
+          <listitem>
+            <para> alarm severity - indicates the alarm importance level like
+            minor, critical, etc. </para>
+          </listitem>
+      </itemizedlist>
+      The <code>severity</code> field is
+      accessible with <code>AlarmData.getSeverity()</code> getter.
+      The <code>type</code> field is accessible with
+      <code>AlarmData.getType()</code> getter.
+      </para>
+
+      <para>Two <code>AlarmData</code> instances are equal if they contain
+      equal metadata, timestamp, type and severity.</para>
+
+      <para><code>AlarmData.compareTo(Object)</code> method
+      compares <code>AlarmData</code> instance with the given argument
+      of the same type and returns:
+      <itemizedlist>
+        <listitem>
+          <para>
+            <code>-1</code> if the instance field is less than a field of the specified argument.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <code>0</code> if all fields are equivalent.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <code>1</code> if the instance field is greater than a field of the specified argument.
+          </para>
+        </listitem>
+      </itemizedlist>
+      The fields are compared in this order: timestamp, metadata, type, severity.
+      </para>
+    </section>
+
+    <section xml:id="service.dal.functions.data.keypad">
+      <title>KeypadData</title>
+
+      <para>This data structure is used by <xref
+      linkend="service.dal.functions.keypad"/>.</para>
+
+      <para><code>KeypadData</code> data structure is used to provide
+      information when a change with some key from the keypad has occurred.
+      That data object contains the event type, sub-type,
+      key code and key name. Currently, there are
+      two predefined event types:
+        <itemizedlist>
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.data.KeypadData.TYPE_PRESSED"/>
+            – used for a key pressed; </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.data.KeypadData.TYPE_RELEASED"/>
+            – used for a key released. </para>
+          </listitem>
+        </itemizedlist>
+        Predefined event sub-types are:
+        <itemizedlist>
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.data.KeypadData.SUB_TYPE_PRESSED_NORMAL"/>
+              – used for a normal key pressed event.
+              Usually, there is a single press and the key is not held down.
+              This sub-type is used with <code>TYPE_PRESSED</code> type.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.data.KeypadData.SUB_TYPE_PRESSED_LONG"/>
+              – used for a long key pressed event.
+              Usually, there is a single press and the key is held down.
+              This sub-type is used with <code>TYPE_PRESSED</code> type.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.data.KeypadData.SUB_TYPE_PRESSED_DOUBLE"/>
+              – used for a double key pressed event.
+              Usually, there are two press actions and
+              the key is not held down after the second press.
+              This sub-type is used with <code>TYPE_PRESSED</code> type.
+            </para>
+          </listitem>
+
+          <listitem>
+            <para><xref xrefstyle="hyperlink" linkend="org.osgi.service.dal.functions.data.KeypadData.SUB_TYPE_PRESSED_DOUBLE_LONG"/>
+              – used for a double long key pressed event.
+              Usually, there are two press actions and
+              the key is held down after the second press.
+              This sub-type is used with <code>TYPE_PRESSED</code> type.
+            </para>
+          </listitem>
+        </itemizedlist>
+        The <code>type</code> field
+        is accessible with <code>KeypadData.getType()</code> getter.
+        The <code>subType</code> field is accessible with
+        <code>KeypadData.getSubType()</code> getter.
+        The <code>keyCode</code> field is accessible with
+        <code>KeypadData.getKeyCode()</code> getter. The
+        <code>keyName</code> field is accessible with
+        <code>KeypadData.getKeyName()</code> getter.
+      </para>
+
+      <para>Two <code>KeypadData</code> instances are equal if they contain
+      equal metadata, timestamp, event type, sub-type, key code and key name.</para>
+
+      <para><code>KeypadData.compareTo(Object)</code> method
+      compares <code>KeypadData</code> instance with the given argument
+      of the same type and returns:
+      <itemizedlist>
+        <listitem>
+          <para>
+            <code>-1</code> if the instance field is less than a field of the specified argument.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <code>0</code> if all fields are equivalent.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <code>1</code> if the instance field is greater than a field of the specified argument.
+          </para>
+        </listitem>
+      </itemizedlist>
+      The fields are compared in this order: timestamp, metadata, type, sub-type, key code, key name.
+      </para>
+    </section>
+  </section>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.dal.functions.xml"/>
+
+  <xi:include href="../../generated/javadoc/docbook/org.osgi.service.dal.functions.data.xml"/>
+</chapter>

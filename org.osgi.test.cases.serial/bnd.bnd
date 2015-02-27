@@ -1,0 +1,39 @@
+# Set javac settings from JDT prefs
+-include: ${project.workspace}/cnf/eclipse/jdt.bnd
+
+Conditional-Package					= org.osgi.test.support.*
+Private-Package						=  \
+    ${p}.junit.*,\
+    ${p}.util.*
+Import-Package: ${-signaturetest}, *
+
+-buildpath:  \
+	org.osgi.test.support;version=project,\
+	org.osgi.service.serial;version=project,\
+	osgi.core;version=4.2,\
+	osgi.cmpn;version=4.2,\
+	ee.minimum;version=1.2,\
+	${junit}
+
+Test-Cases							= ${testcases}
+-signaturetest						= org.osgi.service.serial
+
+-runbundles:  \
+	org.osgi.impl.service.serial;version=latest,\
+	org.osgi.impl.service.event
+
+-runproperties = ${runproperties}, \
+    serial.comport="COM1", \
+    support.inputstream="true", \
+    support.outputstream="true", \
+    baudrate="4800", \
+    unsupport.baudrate="-2", \
+    databits="8", \
+    flowcontrol="0", \
+    parity="0", \
+    stopbits="1", \
+    \
+    serial.comport.2="COM2"
+
+Export-Package:  \
+	org.osgi.test.support.step

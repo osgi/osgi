@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2004, 2013). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2004, 2014). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -247,6 +247,7 @@ public interface DmtSession {
 	 *         <li> {@code PERMISSION_DENIED} if the session is associated with
 	 *         a principal and the ACL of the node does not allow the
 	 *         {@code Execute} operation for the associated principal</li><li>
+	 *         {@code COMMAND_NOT_ALLOWED} if the specified node is a scaffold node</li><li>
 	 *         {@code METADATA_MISMATCH} if the node cannot be executed
 	 *         according to the meta-data (does not have
 	 *         {@code MetaNode.CMD_EXECUTE} access type)</li><li>
@@ -295,6 +296,7 @@ public interface DmtSession {
 	 *         <li>{@code PERMISSION_DENIED} if the session is associated with a
 	 *         principal and the ACL of the node does not allow the
 	 *         {@code Execute} operation for the associated principal</li><li>
+	 *         {@code COMMAND_NOT_ALLOWED} if the specified node is a scaffold node</li><li>
 	 *         {@code METADATA_MISMATCH} if the node cannot be executed
 	 *         according to the meta-data (does not have
 	 *         {@code MetaNode.CMD_EXECUTE} access type)</li><li>
