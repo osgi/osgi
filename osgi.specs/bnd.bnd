@@ -6,13 +6,13 @@
 
 -buildpath: \
     ee.j2se;         version=${javac.compliance}, \
-    dmforest;        version=project, \
+    dmforest;        version=project;packages=*, \
     com.sun.tools;   version=1.5.0, \
     org.apache.bcel; version=1.0, \
     ee.foundation; version=latest, \
     org.apache.geronimo.specs.geronimo-servlet_2.5_spec; version=latest, \
     org.eclipse.persistence.jpa_spec; version=latest, \
-    com.icl.saxon; version=latest
+    com.icl.saxon; version=latest 
 
 javadoc.specs = ${uniq; ${osgi.annotation.specs}, ${osgi.core.specs}, ${osgi.cmpn.specs}, ${osgi.enterprise.specs}, ${osgi.residential.specs}, org.osgi.dmt}
 
