@@ -203,19 +203,19 @@
       <title>Extenders and Framework Hooks</title>
 
       <para>The Framework provides a number of hooks that allow groups of
-      bundles to be scoped. For example, the <xref
-      linkend="service.subsystem"/>. An extender may want to extend the
-      complete set of bundles installed in the Framework even when extendee
-      bundles are hidden from the extender. The system bundle context provides
-      a complete view of the bundles and services available in the Framework
-      even if Framework hooks are used to scope groups of bundles. The system
-      bundle context can be used by an extender to track all bundles installed
-      in the Framework regardless of how Framework hooks are used to scope
-      groups of bundles. This is useful in scenarios where several scoped
-      groups contain bundles that require an extender. Instead of requiring an
-      extender to be installed in each scoped group of bundles, a single
-      extender that uses the system bundle context to track extendees can be
-      installed to extend all scoped groups of bundles.</para>
+      bundles to be scoped. For example, the <emphasis>Subsystem Service
+      Specification</emphasis>. An extender may want to extend the complete
+      set of bundles installed in the Framework even when extendee bundles are
+      hidden from the extender. The system bundle context provides a complete
+      view of the bundles and services available in the Framework even if
+      Framework hooks are used to scope groups of bundles. The system bundle
+      context can be used by an extender to track all bundles installed in the
+      Framework regardless of how Framework hooks are used to scope groups of
+      bundles. This is useful in scenarios where several scoped groups contain
+      bundles that require an extender. Instead of requiring an extender to be
+      installed in each scoped group of bundles, a single extender that uses
+      the system bundle context to track extendees can be installed to extend
+      all scoped groups of bundles.</para>
     </section>
   </section>
 
@@ -455,8 +455,8 @@ Import-Package:
       <listitem>
         <para>Used as template for specifications like Blueprint and
         Declarative Services to express their provided and referenced services
-        in the Repository model, see <xref
-        linkend="service.repository"/>.</para>
+        in the Repository model, see the <emphasis>Repository Service
+        Specification</emphasis>.</para>
       </listitem>
     </itemizedlist>
 
@@ -567,14 +567,14 @@ Import-Package:
       <listitem>
         <para>Used as a general capability namespace for specifications or
         contracts to express their provided function in the Repository model,
-        see <xref linkend="service.repository"/>.</para>
+        see the <emphasis>Repository Service Specification</emphasis>.</para>
       </listitem>
     </itemizedlist>
 
     <para>A bundle providing this capability indicates that it implements a
     specification or contract with the specified name and version. For
-    example, the <xref linkend="service.async"/> would provide the following
-    capability:</para>
+    example, the <emphasis>Asynchronous Service Specification</emphasis> would
+    provide the following capability:</para>
 
     <programlisting>Provide-Capability: osgi.implementation;
     osgi.implementation="osgi.async";
