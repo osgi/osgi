@@ -22,6 +22,7 @@ import org.osgi.framework.ServiceReference;
 import org.osgi.service.dal.Device;
 import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.DevicePermission;
+import org.osgi.test.cases.dal.secure.step.SecureDeviceTestSteps;
 import org.osgi.test.cases.dal.step.TestStepDeviceProxy;
 import org.osgi.test.support.compatibility.DefaultTestBundleControl;
 

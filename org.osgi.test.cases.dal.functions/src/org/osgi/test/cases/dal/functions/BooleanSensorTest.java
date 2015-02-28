@@ -13,6 +13,7 @@ import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.functions.BooleanSensor;
 import org.osgi.service.dal.functions.data.BooleanData;
+import org.osgi.test.cases.dal.functions.step.FunctionsTestSteps;
 
 /**
  * Validates the {@code BooleanSensor} functions.

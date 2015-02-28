@@ -25,9 +25,9 @@ import org.osgi.service.dal.functions.MultiLevelControl;
 import org.osgi.service.dal.functions.MultiLevelSensor;
 import org.osgi.service.dal.functions.WakeUp;
 import org.osgi.service.dal.simulator.DeviceSimulator;
-import org.osgi.test.cases.dal.DeviceTestSteps;
-import org.osgi.test.cases.dal.functions.FunctionsTestSteps;
-import org.osgi.test.cases.dal.secure.SecureDeviceTestSteps;
+import org.osgi.test.cases.dal.functions.step.FunctionsTestSteps;
+import org.osgi.test.cases.dal.secure.step.SecureDeviceTestSteps;
+import org.osgi.test.cases.dal.step.DeviceTestSteps;
 import org.osgi.test.support.step.TestStep;
 import org.osgi.util.tracker.ServiceTracker;
 

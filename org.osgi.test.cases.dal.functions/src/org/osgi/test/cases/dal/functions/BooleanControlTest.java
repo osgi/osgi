@@ -17,6 +17,7 @@ import org.osgi.service.dal.OperationMetadata;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.BooleanControl;
 import org.osgi.service.dal.functions.data.BooleanData;
+import org.osgi.test.cases.dal.functions.step.FunctionsTestSteps;
 
 /**
  * Validates the {@code BooleanControl} functions.

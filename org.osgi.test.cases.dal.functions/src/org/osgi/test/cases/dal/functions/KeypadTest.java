@@ -10,6 +10,7 @@
 package org.osgi.test.cases.dal.functions;
 
 import org.osgi.service.dal.functions.Keypad;
+import org.osgi.test.cases.dal.functions.step.FunctionsTestSteps;
 
 /**
  * Validates the {@code Keypad} functions.

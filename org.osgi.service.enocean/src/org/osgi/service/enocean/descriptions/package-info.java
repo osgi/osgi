@@ -1,5 +1,5 @@
 /*
- * Copyright (c) OSGi Alliance (2010, 2015). All Rights Reserved.
+ * Copyright (c) OSGi Alliance (2014, 2015). All Rights Reserved.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * Device Abstraction Layer Functions Data Package 1.0.
+ * EnOcean Descriptions Package Version 1.0.
  * 
  * <p>
  * Bundles wishing to use this package must list the package in the
@@ -26,15 +26,14 @@
  * <p>
  * Example import for consumers using the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.dal.functions.data; version="[1.0,2.0)"}
+ * {@code  Import-Package: org.osgi.service.enocean.descriptions; version="[1.0,2.0)"}
  * <p>
  * Example import for providers implementing the API in this package:
  * <p>
- * {@code  Import-Package: org.osgi.service.dal.functions.data; version="[1.0,1.1)"}
+ * {@code  Import-Package: org.osgi.service.enocean.descriptions; version="[1.0,1.1)"}
  * 
  * @version 1.0
  * @author $Id$
  */
 
-package org.osgi.service.dal.functions.data;
-
+package org.osgi.service.enocean.descriptions;

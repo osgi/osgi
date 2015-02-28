@@ -22,6 +22,7 @@ import org.osgi.service.dal.DeviceException;
 import org.osgi.service.dal.Function;
 import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.PropertyMetadata;
+import org.osgi.test.cases.dal.step.DeviceTestSteps;
 
 /**
  * Test class validates the function.

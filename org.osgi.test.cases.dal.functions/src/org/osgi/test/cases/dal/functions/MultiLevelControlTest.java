@@ -15,6 +15,7 @@ import org.osgi.service.dal.FunctionData;
 import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.MultiLevelControl;
 import org.osgi.service.dal.functions.data.LevelData;
+import org.osgi.test.cases.dal.functions.step.FunctionsTestSteps;
 
 /**
  * Validates the {@code MultiLevelControl} functions.

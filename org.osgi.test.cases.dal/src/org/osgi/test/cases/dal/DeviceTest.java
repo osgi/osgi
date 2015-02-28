@@ -15,6 +15,7 @@ import org.osgi.framework.ServiceEvent;
 import org.osgi.framework.ServiceReference;
 import org.osgi.service.dal.Device;
 import org.osgi.service.dal.DeviceException;
+import org.osgi.test.cases.dal.step.DeviceTestSteps;
 import org.osgi.test.support.step.TestStep;
 
 /**

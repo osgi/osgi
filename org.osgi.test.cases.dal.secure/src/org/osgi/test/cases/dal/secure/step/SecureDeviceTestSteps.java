@@ -7,7 +7,7 @@
  * Amended and Restated as of May 23, 2011.
  */
 
-package org.osgi.test.cases.dal.secure;
+package org.osgi.test.cases.dal.secure.step;
 
 /**
  * Contains all test steps used by this test case.

@@ -7,7 +7,7 @@
  * Amended and Restated as of May 23, 2011.
  */
 
-package org.osgi.test.cases.dal.functions;
+package org.osgi.test.cases.dal.functions.step;
 
 /**
  * Contains for all test steps used by this test case.

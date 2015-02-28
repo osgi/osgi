@@ -17,6 +17,7 @@ import org.osgi.service.dal.PropertyMetadata;
 import org.osgi.service.dal.functions.WakeUp;
 import org.osgi.service.dal.functions.data.BooleanData;
 import org.osgi.service.dal.functions.data.LevelData;
+import org.osgi.test.cases.dal.functions.step.FunctionsTestSteps;
 
 /**
  * Validates the {@code WakeUp} functions.
