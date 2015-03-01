@@ -41,7 +41,7 @@ REST JavaScript Client API Version 1.0
     <para><emphasis>Note:</emphasis>
     some datatypes in Web IDL have slightly different names than commonly used in languages like Java or JavaScript. For example 
     a <code>String</code> is called <code>DOMString</code> and the equivalent of a Java <code>long</code> is called 
-    <code>long long</code>. For more information see the Web IDL specification <citation>WebIDL</citation>.
+    <code>long long</code>. For more information see the Web IDL specification.
     </para>
   </section>
   
@@ -71,7 +71,7 @@ REST JavaScript Client API Version 1.0
     </section>
 
     <section role="method">
-      <title>void getBundleState((DOMString or long long) bundle, OSGiRestCallback cb)</title>
+      <title>void getBundleHeader((DOMString or long long) bundle, OSGiRestCallback cb)</title>
       <formalpara role="parameter">
         <title>bundle</title> 
         <para>The bundle, either the numeric bundle ID or the bundle URI path.</para>
@@ -79,24 +79,11 @@ REST JavaScript Client API Version 1.0
       <formalpara role="parameter">
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
-        the <code>success()</code> callback is invoked with the Bundle State
+        the <code>success()</code> callback is invoked with the Bundle Header
         representation.</para>
       </formalpara>
       <para role="description">
-      Get the Bundle State representation of a specific bundle.
-      </para>
-    </section>
-
-    <section role="method">
-      <title>void getBundles(OSGiRestCallback cb)</title>
-      <formalpara role="parameter">
-        <title>cb</title> 
-        <para>The callbacks invoked on completion of the remote invocation. On success
-        the <code>success()</code> callback is invoked with the Bundle List
-        representation.</para>
-      </formalpara>
-      <para role="description">
-      List the bundles.
+      Get the Bundle Header representation of a specific bundle.
       </para>
     </section>
 
@@ -114,6 +101,53 @@ REST JavaScript Client API Version 1.0
     </section>
 
     <section role="method">
+      <title>void getBundles(OSGiRestCallback cb)</title>
+      <formalpara role="parameter">
+        <title>cb</title> 
+        <para>The callbacks invoked on completion of the remote invocation. On success
+        the <code>success()</code> callback is invoked with the Bundle List
+        representation.</para>
+      </formalpara>
+      <para role="description">
+      List the bundles.
+      </para>
+    </section>
+
+    <section role="method">
+      <title>void getBundleStartLevel((DOMString or long long) bundle, OSGiRestCallback cb)</title>
+      <formalpara role="parameter">
+        <title>bundle</title> 
+        <para>The bundle, either the numeric bundle ID or the bundle URI path.</para>
+      </formalpara>
+      <formalpara role="parameter">
+        <title>cb</title> 
+        <para>The callbacks invoked on completion of the remote invocation. On success
+        the <code>success()</code> callback is invoked with the Bundle Start Level
+        representation.</para>
+      </formalpara>
+      <para role="description">
+      Get the Bundle Start Level representation of a specific bundle.
+      </para>
+    </section>
+
+    <section role="method">
+      <title>void getBundleState((DOMString or long long) bundle, OSGiRestCallback cb)</title>
+      <formalpara role="parameter">
+        <title>bundle</title> 
+        <para>The bundle, either the numeric bundle ID or the bundle URI path.</para>
+      </formalpara>
+      <formalpara role="parameter">
+        <title>cb</title> 
+        <para>The callbacks invoked on completion of the remote invocation. On success
+        the <code>success()</code> callback is invoked with the Bundle State
+        representation.</para>
+      </formalpara>
+      <para role="description">
+      Get the Bundle State representation of a specific bundle.
+      </para>
+    </section>
+
+    <section role="method">
       <title>void getFrameworkStartLevel(OSGiRestCallback cb)</title>
       <formalpara role="parameter">
         <title>cb</title> 
@@ -123,6 +157,87 @@ REST JavaScript Client API Version 1.0
       </formalpara>
       <para role="description">
 Obtain the Framework Start Level.
+      </para>
+    </section>
+
+    <section role="method">
+      <title>void getService((DOMString or long long) service, OSGiRestCallback cb)</title>
+      <formalpara role="parameter">
+        <title>service</title> 
+        <para>The service, either the numeric service ID or the service URI path.</para>
+      </formalpara>
+      <formalpara role="parameter">
+        <title>cb</title> 
+        <para>The callbacks invoked on completion of the remote invocation. On success
+        the <code>success()</code> callback is invoked with the Service
+        representation.</para>
+      </formalpara>
+      <para role="description">
+Get a service representation.
+      </para>
+    </section>
+
+    <section role="method">
+      <title>void getServiceRepresentations(OSGiRestCallback cb)</title>
+      <formalpara role="parameter">
+        <title>cb</title> 
+        <para>The callbacks invoked on completion of the remote invocation. On success
+        the <code>success()</code> callback is invoked with the Service Representations List
+        representation.</para>
+      </formalpara>
+      <para role="description">
+Get all services representations.
+      </para>
+    </section>
+
+    <section role="method">
+      <title>void getServices(OSGiRestCallback cb)</title>
+      <formalpara role="parameter">
+        <title>cb</title> 
+        <para>The callbacks invoked on completion of the remote invocation. On success
+        the <code>success()</code> callback is invoked with the Service List
+        representation.</para>
+      </formalpara>
+      <para role="description">
+Get all services URIs.
+      </para>
+    </section>
+
+    <section role="method">
+      <title>void installBundle((DOMString or ArrayBuffer) bundle, OSGiRestCallback cb)</title>
+      <formalpara role="parameter">
+        <title>bundle</title> 
+        <para>The Bundle to install, either represented as a URL or as an ArrayBuffer of </para>
+      </formalpara>
+      <formalpara role="parameter">
+        <title>cb</title> 
+        <para>The callbacks invoked on completion of the remote invocation. On success
+        the <code>success()</code> callback is invoked with the URI path of the newly installed
+        Bundle as a <code>DOMString</code>. This parameter is optional.</para>
+      </formalpara>
+      <para role="description">
+Install a bundle from a URI or by value.
+      </para>
+    </section>
+
+    <section role="method">
+      <title>void setBundleStartLevel((DOMString or long long) bundle, dictionary bsl, OSGiRestCallback cb)</title>
+      <formalpara role="parameter">
+        <title>bundle</title> 
+        <para>The bundle, either the numeric bundle ID or the bundle URI path.</para>
+      </formalpara>
+      <formalpara role="parameter">
+        <title>bsl</title> 
+        <para>A Bundle Start Level representation dictionary with the desired state.</para>
+      </formalpara>
+      <formalpara role="parameter">
+        <title>cb</title> 
+        <para>The callbacks invoked on completion of the remote invocation. On success
+        the <code>success()</code> callback is invoked with the resulting Framework Start Level
+        representation. This parameter is optional.</para>
+      </formalpara>
+      <para role="description">
+Change the Framework Start Level and/or initial bundle start level.
       </para>
     </section>
 
@@ -139,11 +254,11 @@ Obtain the Framework Start Level.
       <formalpara role="parameter">
         <title>cb</title> 
         <para>The callbacks invoked on completion of the remote invocation. On success
-        the <code>success()</code> callback is invoked with the resulting Framework Start Level
+        the <code>success()</code> callback is invoked with the resulting Bundle Start Level
         representation. This parameter is optional.</para>
       </formalpara>
       <para role="description">
-Change the Framework Start Level and/or initial bundle start level.
+Change the Bundle Start Level and/or other options defined in the Bundle Start Level representation.
       </para>
     </section>
 
@@ -189,7 +304,7 @@ Change the Framework Start Level and/or initial bundle start level.
       </formalpara>
       <formalpara role="parameter">
         <title>options</title> 
-        <para>The options passed to the bundle's start method as an integer.</para>
+        <para>The options passed to the bundle's start method as a number.</para>
       </formalpara>
       <formalpara role="parameter">
         <title>cb</title> 
@@ -227,7 +342,7 @@ Change the Framework Start Level and/or initial bundle start level.
       </formalpara>
       <formalpara role="parameter">
         <title>options</title> 
-        <para>The options passed to the bundle's start method as an integer.</para>
+        <para>The options passed to the bundle's start method as a number.</para>
       </formalpara>
       <formalpara role="parameter">
         <title>cb</title> 
@@ -237,6 +352,42 @@ Change the Framework Start Level and/or initial bundle start level.
       </formalpara>
       <para role="description">
       Stop a bundle.
+      </para>
+    </section>
+
+    <section role="method">
+      <title>void uninstallBundle((DOMString or long long) bundle, OSGiRestCallback cb)</title>
+      <formalpara role="parameter">
+        <title>bundle</title> 
+        <para>The bundle, either the numeric bundle ID or the bundle URI path.</para>
+      </formalpara>
+      <formalpara role="parameter">
+        <title>cb</title> 
+        <para>The callbacks invoked on completion of the remote invocation. 
+        This parameter is optional.</para>
+      </formalpara>
+      <para role="description">
+Uninstall a bundle.
+      </para>
+    </section>
+
+    <section role="method">
+      <title>void updateBundle((DOMString or long long) bundle, (DOMString or ArrayBuffer) updated, OSGiRestCallback cb)</title>
+      <formalpara role="parameter">
+        <title>bundle</title> 
+        <para>The bundle, either the numeric bundle ID or the bundle URI path.</para>
+      </formalpara>
+      <formalpara role="parameter">
+        <title>updated</title> 
+        <para>The Bundle to update, either represented as a URL or as an ArrayBuffer of </para>
+      </formalpara>
+      <formalpara role="parameter">
+        <title>cb</title> 
+        <para>The callbacks invoked on completion of the remote invocation. 
+        This parameter is optional.</para>
+      </formalpara>
+      <para role="description">
+Update a bundle from a URI or by value.
       </para>
     </section>
 
@@ -250,10 +401,11 @@ Change the Framework Start Level and/or initial bundle start level.
     is invoked on completion of a REST invocation.</para>
 
     <section role="method">
-      <title>void success(Object response)</title>
+      <title>void success(object response)</title>
       <formalpara role="parameter">
         <title>response</title> 
-        <para>The result of the invocation.</para>
+        <para>The result of the invocation. The type of this parameter is depends on the
+        function being invoked. It can be found in the documentation of the function.</para>
       </formalpara>
       
       <para role="description">
@@ -262,7 +414,7 @@ Change the Framework Start Level and/or initial bundle start level.
     </section>
 
     <section role="method">
-      <title>void failure(short httpCode, Object response)</title>
+      <title>void failure(short httpCode, object response)</title>
       <formalpara role="parameter">
         <title>httpCode</title> 
         <para>The HTTP code returned.</para>
@@ -279,7 +431,7 @@ Change the Framework Start Level and/or initial bundle start level.
     </section>
 
     <section role="method">
-      <title>void error(Object response)</title>
+      <title>void error(object response)</title>
       <formalpara role="parameter">
         <title>response</title> 
         <para>The error.</para>

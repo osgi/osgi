@@ -1222,23 +1222,14 @@ framework/service/{serviceid}
           <title>XML</title>
 
           <para><code>Content-Type:
-          application/org.osgi.service+xml</code></para>
+          application/org.osgi.services+xml</code></para>
 
-          <programlisting>&lt;service&gt;
-   &lt;properties&gt;
-      &lt;entry key=”key” value=”value”/&gt;
-      &lt;entry key=”key” value=”value”/&gt;
-      ...
-      &lt;entry key=”key” value=”value”/&gt;
-   &lt;/properties&gt;
-   &lt;bundle&gt;bundleURI&lt;/bundle&gt;
-   &lt;usingBundles&gt;
-      &lt;bundle&gt;bundleURI&lt;/bundle&gt;
-      &lt;bundle&gt;bundleURI&lt;/bundle&gt;
-      ...
-      &lt;bundle&gt;bundleURI&lt;/bundle&gt;
-   &lt;/usingBundles&gt;
-&lt;/service&gt;</programlisting>
+          <programlisting>&lt;services&gt;
+   &lt;uri&gt;serviceURI&lt;/uri&gt;
+   &lt;uri&gt;serviceURI&lt;/uri&gt;
+   ...
+   &lt;uri&gt;serviceURI&lt;/uri&gt;
+&lt;/services&gt;</programlisting>
         </section>
       </section>
 
