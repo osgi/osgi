@@ -57,7 +57,9 @@ public interface ResourceMonitorFactory {
 	 * @param resourceContext ResourceContext instance associated with the newly
 	 *        created ResourceMonitor instance
 	 * @return a ResourceMonitor instance
-	 * @throws ResourceMonitorException
+	 * @throws ResourceMonitorException, whether the factory is unable to create
+	 *         a ResourceMonitor, e.g. when a ResourceMonitor of this type
+	 *         already exists for this ResourceContext
 	 */
 	public ResourceMonitor createResourceMonitor(ResourceContext resourceContext) throws ResourceMonitorException;
 
