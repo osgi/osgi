@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Dictionary;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
+
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.Constants;
 import org.osgi.framework.InvalidSyntaxException;
@@ -40,69 +40,66 @@ import org.osgi.test.support.compatibility.Semaphore;
 /**
  * @author $Id$
  */
-public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleControl
-		implements ResourceListener {
+public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleControl implements ResourceListener {
 
-	private static final String			CONTEXT_NAME	= "context1";
+	private static final String CONTEXT_NAME = "context1";
 
 	/**
 	 * bundle context
 	 */
-	private BundleContext				bundleContext;
+	private BundleContext bundleContext;
 
 	/**
 	 * resource monitor
 	 */
-	private ResourceMonitor				resourceMonitor;
+	private ResourceMonitor resourceMonitor;
 
 	/**
 	 * resource context
 	 */
-	private ResourceContext				resourceContext;
+	private ResourceContext resourceContext;
 
 	/**
 	 * ResourceMonitoringService
 	 */
-	private ResourceMonitoringService	resourceMonitoringService;
+	private ResourceMonitoringService resourceMonitoringService;
 
 	/**
 	 * cpu Resource Monitor Factory
 	 */
-	private ResourceMonitorFactory		cpuFactory;
+	private ResourceMonitorFactory cpuFactory;
 
 	// thresholds
-	private Comparable					lowerError;
-	private Comparable					lowerWarning;
-	private Comparable					upperError;
-	private Comparable					upperWarning;
+	private Comparable lowerError;
+	private Comparable lowerWarning;
+	private Comparable upperError;
+	private Comparable upperWarning;
 
 	/**
-	 * Service registration of the listener
-	 * ServiceRegistration<ResourceListener>
+	 * Service registration of the listener ServiceRegistration<ResourceListener>
 	 */
-	private ServiceRegistration			listenerSr;
+	private ServiceRegistration listenerSr;
 
 	/**
 	 * list of received events
 	 */
-	private final List					receivedEvents	= new ArrayList();
+	private final List receivedEvents = new ArrayList();
 
 	/**
 	 * See org.osgi.test.cases.enocean.utils.EventListener class.
 	 */
-	private final Semaphore				waiter			= new Semaphore();
+	private final Semaphore waiter = new Semaphore();
 
 	/**
 	 * last event received.
 	 */
-	private ResourceEvent				lastEvent;
+	private ResourceEvent lastEvent;
 
 	public void setBundleContext(BundleContext context) {
 		bundleContext = context;
 
 		// retrieve the ResourceMonitoringService
-		ServiceReference resourceMonitoringServiceSr = bundleContext
-				.getServiceReference(ResourceMonitoringService.class);
+		ServiceReference resourceMonitoringServiceSr = bundleContext.getServiceReference(ResourceMonitoringService.class);
 		resourceMonitoringService = (ResourceMonitoringService) bundleContext.getService(resourceMonitoringServiceSr);
 
 		// retrieve cpu factory
@@ -117,12 +114,9 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 		filter.append(ResourceMonitoringService.RES_TYPE_CPU);
 		filter.append("))");
 		try {
-			Collection factorySrs = bundleContext.getServiceReferences(
-					ResourceMonitorFactory.class, filter.toString());
+			Collection factorySrs = bundleContext.getServiceReferences(ResourceMonitorFactory.class, filter.toString());
 			if ((factorySrs != null) && (factorySrs.size() > 0)) {
-				cpuFactory = (ResourceMonitorFactory) bundleContext
-						.getService((ServiceReference) factorySrs
-								.iterator().next());
+				cpuFactory = (ResourceMonitorFactory) bundleContext.getService((ServiceReference) factorySrs.iterator().next());
 			}
 		} catch (InvalidSyntaxException e) {
 			e.printStackTrace();
@@ -159,17 +153,17 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	}
 
 	/**
-	 * Test case 1 : upper warning threshold.
+	 * Test case 1: upper warning threshold.
 	 * 
 	 * This test case checks the receiving of an upper WARNING event type.
 	 * 
 	 * @throws InterruptedException
 	 */
 	public void testUpperWarningThreshold() throws InterruptedException {
-		// set upper WARNING threshold to 1
-		upperWarning = Long.valueOf(Long.toString(1l));
+		// set upper WARNING threshold to 0
+		upperWarning = Long.valueOf("0");
 
-		// set other threshold
+		// set the other thresholds to null.
 		upperError = null;
 		lowerWarning = null;
 		lowerError = null;
@@ -184,20 +178,20 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 		// unregister the listener
 		unregisterListener();
 
-		// check received events
-		checkReceivedEvents();
+		// check received event
+		checkReceivedEvent();
 	}
 
 	/**
-	 * Test case 2 : upper error threshold.
+	 * Test case 2: upper error threshold.
 	 * 
 	 * This test case checks the receiving of an upper ERROR event type.
 	 * 
 	 * @throws InterruptedException
 	 */
 	public void testUpperErrorThreshold() throws InterruptedException {
-		// set upper ERROR threshold to 2
-		upperError = Long.valueOf(Long.toString(2l));
+		// set upper ERROR threshold to A
+		upperError = Long.valueOf("1");
 
 		// set other threshold
 		upperWarning = null;
@@ -214,45 +208,12 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 		// unregister the listener
 		unregisterListener();
 
-		// check received events
-		checkReceivedEvents();
+		// check received event
+		checkReceivedEvent();
 	}
 
 	/**
-	 * Test case 3 : upper warning and error thresholds.
-	 * 
-	 * This test case checks the receiving of upper WARNING event type and upper
-	 * ERROR event type.
-	 * 
-	 * @throws InterruptedException
-	 */
-	public void testUpperWarningAndErrorThreshold() throws InterruptedException {
-		// set upper WARNING threshold to 1
-		upperWarning = Long.valueOf(Long.toString(1l));
-		// set upper ERROR threshold to 2
-		upperError = Long.valueOf(Long.toString(2l));
-
-		// set other threshold
-
-		lowerWarning = null;
-		lowerError = null;
-
-		// register the listener
-		registerListener();
-
-		// wait for events
-		log("Wait for events (timeout 10000ms).");
-		waitForEvent(10000);
-
-		// unregister the listener
-		unregisterListener();
-
-		// check received events
-		checkReceivedEvents();
-	}
-
-	/**
-	 * Test case 4 : lower warning threshold.
+	 * Test case 3: lower warning threshold.
 	 * 
 	 * This test case checks the receiving of a lower WARNING event type.
 	 * 
@@ -260,7 +221,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 */
 	public void testLowerWarningThreshold() throws InterruptedException {
 		// set lower WARNING threshold to 100
-		lowerWarning = Long.valueOf(Long.toString(100l));
+		lowerWarning = Long.valueOf("100");
 
 		// set other threshold
 		lowerError = null;
@@ -277,12 +238,12 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 		// unregister the listener
 		unregisterListener();
 
-		// check received events
-		checkReceivedEvents();
+		// check received event
+		checkReceivedEvent();
 	}
 
 	/**
-	 * Test case 5 : lower error threshold.
+	 * Test case 4: lower error threshold.
 	 * 
 	 * This test case checks the receiving of lower ERROR event type.
 	 * 
@@ -290,7 +251,7 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 	 */
 	public void testLowerErrorThreshold() throws InterruptedException {
 		// set lower ERROR threshold to 99
-		lowerError = Long.valueOf(Long.toString(99l));
+		lowerError = Long.valueOf("99");
 
 		// set other threshold
 		lowerWarning = null;
@@ -307,44 +268,137 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 		// unregister the listener
 		unregisterListener();
 
-		// check received events
-		checkReceivedEvents();
+		// check received event
+		checkReceivedEvent();
 	}
 
 	/**
-	 * Test case 6 : lower error and lower warning threshold.
+	 * Register this instance as a {@link ResourceListener} service.
+	 */
+	private void registerListener() {
+		Dictionary dictionary = new Hashtable();
+		if (upperError != null) {
+			dictionary.put(ResourceListener.UPPER_ERROR_THRESHOLD, upperError);
+		}
+		if (upperWarning != null) {
+			dictionary.put(ResourceListener.UPPER_WARNING_THRESHOLD, upperWarning);
+		}
+		if (lowerError != null) {
+			dictionary.put(ResourceListener.LOWER_ERROR_THRESHOLD, lowerError);
+		}
+		if (lowerWarning != null) {
+			dictionary.put(ResourceListener.LOWER_WARNING_THRESHOLD, lowerWarning);
+		}
+		dictionary.put(ResourceListener.RESOURCE_CONTEXT, resourceContext.getName());
+		dictionary.put(ResourceListener.RESOURCE_TYPE, resourceMonitor.getResourceType());
+		listenerSr = bundleContext.registerService(ResourceListener.class, this, dictionary);
+
+	}
+
+	/**
+	 * Unregister the listener.
+	 */
+	private void unregisterListener() {
+		listenerSr.unregister();
+	}
+
+	/**
+	 * Check the received event.
+	 */
+	private void checkReceivedEvent() {
+		assertEquals("One, and only one event is expected to be received. Here, " + receivedEvents.size() + " were received.", 1,
+				receivedEvents.size());
+
+		ResourceEvent currentEvent = (ResourceEvent) receivedEvents.iterator().next();
+		int eventType = currentEvent.getType();
+		Comparable eventValue = currentEvent.getValue();
+		assertNotNull("The event value must not be null.", eventValue);
+		boolean eventIsUpperThreshold = currentEvent.isUpperThreshold();
+
+		log("currentEvent - type: " + eventType + ", value: " + eventValue + ", isUpperThreshold: " + eventIsUpperThreshold);
+
+		if (eventIsUpperThreshold) {
+			// Here, the event is an "upper" event.
+			if (eventType == ResourceEvent.WARNING) {
+				// Check if the current eventValue is greater than, or equal to WARNING threshold.
+				Comparable threshold = getUpperWarningThreshold();
+				assertNotNull("Upper warning threshold must no be null.", threshold);
+				assertTrue("eventValue.compareTo(threshold) >= 0 is expected. EventValue is: " + eventValue + ", threshold is: "
+						+ threshold, eventValue.compareTo(threshold) >= 0);
+				// Check if the current eventValue is strictly less than the ERROR threshold.
+				threshold = getUpperErrorThreshold();
+				if (threshold != null) {
+					assertTrue("eventValue.compareTo(threshold) < 0 is expected. EventValue is: " + eventValue + ", threshold is: "
+							+ threshold, eventValue.compareTo(threshold) < 0);
+				}
+			} else if (eventType == ResourceEvent.ERROR) {
+				// Check if current eventValue is greater than, or equal to ERROR threshold
+				Comparable threshold = getUpperErrorThreshold();
+				assertNotNull("Upper error threshold must no be null.", threshold);
+				assertTrue("eventValue.compareTo(threshold) >= 0 is expected. EventValue is: " + eventValue + ", threshold is: "
+						+ threshold, eventValue.compareTo(threshold) >= 0);
+				// Check if current eventValue is strictly greater than the WARNING threshold
+				threshold = getUpperWarningThreshold();
+				if (threshold != null) {
+					assertTrue("eventValue.compareTo(threshold) < 0 is expected. EventValue is: " + eventValue + ", threshold is: "
+							+ threshold, eventValue.compareTo(threshold) > 0);
+				}
+			}
+		} else {
+			// Here, the event is a "lower" event.
+			if (eventType == ResourceEvent.WARNING) {
+				// Check if the current eventValue is less than, or equal to WARNING threshold.
+				Comparable threshold = getLowerWarningThreshold();
+				assertNotNull("Lower warning threshold must no be null.", threshold);
+				assertTrue("eventValue.compareTo(threshold) <= 0 is expected. EventValue is: " + eventValue + ", threshold is: "
+						+ threshold, eventValue.compareTo(threshold) <= 0);
+				// Check if the current eventValue is strictly greater than the ERROR threshold.
+				threshold = getLowerErrorThreshold();
+				if (threshold != null) {
+					assertTrue("eventValue.compareTo(threshold) > 0 is expected.", eventValue.compareTo(threshold) > 0);
+				}
+			} else if (eventType == ResourceEvent.ERROR) {
+				// Check if the current eventValue is less than, or equal to ERROR threshold.
+				Comparable threshold = getLowerErrorThreshold();
+				assertNotNull("Lower error threshold must no be null.", threshold);
+				assertTrue("eventValue.compareTo(threshold) <= 0 is expected. EventValue is: " + eventValue + ", threshold is: "
+						+ threshold, eventValue.compareTo(threshold) <= 0);
+				// Check if the current eventValue is strictly less than the ERROR threshold.
+				threshold = getLowerWarningThreshold();
+				if (threshold != null) {
+					assertTrue("threshold.compareTo(eventValue) < 0 is expected.", threshold.compareTo(eventValue) < 0);
+				}
+			}
+		}
+	}
+
+	/**
+	 * Waits for a ResourceEvent to occur.
 	 * 
-	 * This test case checks the receiving of lower ERROR and lower WARNING
-	 * event type.
-	 * 
+	 * @param timeout
+	 * @return the ResourceEvent or null.
 	 * @throws InterruptedException
 	 */
-	public void testLowerWarningAndErrorThreshold() throws InterruptedException {
-		// set lower WARNING threshold to 100
-		lowerWarning = Long.valueOf(Long.toString(100l));
-		// set lower ERROR threshold to 99
-		lowerError = Long.valueOf(Long.toString(99l));
+	public ResourceEvent waitForEvent(long timeout) throws InterruptedException {
+		if (waiter.waitForSignal(timeout)) {
+			return lastEvent;
+		}
+		return null;
+	}
 
-		// set other threshold
-		upperWarning = null;
-		upperError = null;
-
-		// register the listener
-		registerListener();
-
-		// wait for events
-		log("Wait for events (timeout 10000ms).");
-		waitForEvent(10000);
-
-		// unregister the listener
-		unregisterListener();
-
-		// check received events
-		checkReceivedEvents();
+	/**
+	 * Waits for a ResourceEvent to occur. Default timeout is: OSGiTestCaseProperties.getTimeout().
+	 * 
+	 * @return the ResourceEvent or null.
+	 * @throws InterruptedException
+	 */
+	public ResourceEvent waitForEvent() throws InterruptedException {
+		return waitForEvent(OSGiTestCaseProperties.getTimeout());
 	}
 
 	public void notify(ResourceEvent event) {
-		log(TC5_ResourceConsumptionEventingTestCase.class.getName() + " - event.getType(): " + event.getType() + ", value: " + event.getValue());
+		log("event.getType(): " + event.getType() + ", event.getValue(): " + event.getValue() + ", event.isUpperThreshold(): "
+				+ event.isUpperThreshold());
 		receivedEvents.add(event);
 		lastEvent = event;
 		waiter.signal();
@@ -366,195 +420,4 @@ public class TC5_ResourceConsumptionEventingTestCase extends DefaultTestBundleCo
 		return upperError;
 	}
 
-	/**
-	 * Waits for a ResourceEvent to occur.
-	 * 
-	 * @param timeout
-	 * @return the ResourceEvent or null.
-	 * @throws InterruptedException
-	 */
-	public ResourceEvent waitForEvent(long timeout) throws InterruptedException {
-		if (waiter.waitForSignal(timeout)) {
-			return lastEvent;
-		}
-		return null;
-	}
-
-	/**
-	 * Waits for a ResourceEvent to occur. Default timeout is:
-	 * OSGiTestCaseProperties.getTimeout().
-	 * 
-	 * @return the ResourceEvent or null.
-	 * @throws InterruptedException
-	 */
-	public ResourceEvent waitForEvent() throws InterruptedException {
-		return waitForEvent(OSGiTestCaseProperties.getTimeout());
-	}
-
-	/**
-	 * Register this instance as a {@link ResourceListener} service.
-	 */
-	private void registerListener() {
-		Dictionary dictionary = new Hashtable();
-		if (upperError != null) {
-			dictionary.put(ResourceListener.UPPER_ERROR_THRESHOLD, upperError);
-		}
-		if (upperWarning != null) {
-			dictionary.put(ResourceListener.UPPER_WARNING_THRESHOLD,
-					upperWarning);
-		}
-		if (lowerError != null) {
-			dictionary.put(ResourceListener.LOWER_ERROR_THRESHOLD, lowerError);
-		}
-		if (lowerWarning != null) {
-			dictionary.put(ResourceListener.LOWER_WARNING_THRESHOLD,
-					lowerWarning);
-		}
-		dictionary.put(ResourceListener.RESOURCE_CONTEXT,
-				resourceContext.getName());
-		dictionary.put(ResourceListener.RESOURCE_TYPE,
-				resourceMonitor.getResourceType());
-		listenerSr = bundleContext.registerService(ResourceListener.class,
-				this, dictionary);
-
-	}
-
-	/**
-	 * Unregister the listener.
-	 */
-	private void unregisterListener() {
-		listenerSr.unregister();
-	}
-
-	/**
-	 * Check the received events.
-	 */
-	private void checkReceivedEvents() {
-		ResourceEvent previousEvent = null;
-		for (Iterator it = receivedEvents.iterator(); it.hasNext();) {
-			ResourceEvent currentEvent = (ResourceEvent) it.next();
-
-			if (previousEvent != null) {
-				assertTrue("Types must not match.", previousEvent.getType() != currentEvent.getType());
-
-				int eventType = currentEvent.getType();
-				Object value = currentEvent.getValue();
-				boolean isUpperThreshold = currentEvent.isUpperThreshold();
-
-				log("checked event (type:" + eventType + ", value=" + value
-						+ ", isUpper:" + isUpperThreshold);
-
-				Comparable threshold = null;
-				if (isUpperThreshold) {
-					if (eventType == ResourceEvent.NORMAL) {
-						// check either if current value is under ERROR and
-						// WARNING threshold
-						// if those thresholds are not null
-						// at least, one of them is not null
-
-						boolean checked = false;
-						threshold = getUpperWarningThreshold();
-						if (threshold != null) {
-							if (threshold.compareTo(value) < 0) {
-								log("=====================ERROR================, warning th:"
-										+ threshold + ", value:" + value);
-								fail();
-							}
-							checked = true;
-						}
-
-						threshold = getUpperErrorThreshold();
-						if (threshold != null) {
-							log("upperThreshold:" + threshold + ", value="
-									+ value);
-							assertTrue("threshold.compareTo(value) > 0 is expected.", threshold.compareTo(value) > 0);
-							checked = true;
-						}
-						assertTrue("Value must be checked.", checked);
-
-					} else
-						if (eventType == ResourceEvent.WARNING) {
-							// check if current value is higher than WARNING
-							// threshold
-							threshold = getUpperWarningThreshold();
-							assertNotNull("Threshold must no be null.", threshold);
-							assertTrue("threshold.compareTo(value) <= 0 is expected.", threshold.compareTo(value) <= 0);
-
-							// check if current value is under ERROR threshold
-							threshold = getUpperErrorThreshold();
-							if (threshold != null) {
-								assertTrue("threshold.compareTo(value) > 0 is expected.", threshold.compareTo(value) > 0);
-							}
-
-						} else
-							if (eventType == ResourceEvent.ERROR) {
-								// check if current value is higher than the
-								// ERROR
-								// threshold
-								threshold = getUpperErrorThreshold();
-								assertNotNull("Threshold must no be null.", threshold);
-								assertTrue("threshold.compareTo(value) <= 0 is expected.", threshold.compareTo(value) <= 0);
-
-								// check if current value is higher than the
-								// WARNING
-								// threshold
-								threshold = getUpperWarningThreshold();
-								if (threshold != null) {
-									assertTrue("threshold.compareTo(value) < 0 is expected.", threshold.compareTo(value) < 0);
-								}
-							}
-				} else {
-					// lower threshold type
-					if (eventType == ResourceEvent.NORMAL) {
-						// check if current value is over WARNING threshold
-						threshold = getLowerWarningThreshold();
-						boolean checked = false;
-						if (threshold != null) {
-							log("lowerWarningThreshold: " + threshold
-									+ ", value=" + value);
-							assertTrue("threshold.compareTo(value) < 0 is expected.", threshold.compareTo(value) < 0);
-							checked = true;
-						}
-
-						// check if current value is over ERROR threholds
-						threshold = getLowerErrorThreshold();
-						if (threshold != null) {
-							assertTrue("threshold.compareTo(value) < 0 is expected.", threshold.compareTo(value) < 0);
-							checked = true;
-						}
-
-						// at least, one of the two thresholds has to be set
-						assertTrue("Value must be checked.", checked);
-					} else
-						if (eventType == ResourceEvent.WARNING) {
-							// check current value is under WARNING threshold
-							threshold = getLowerWarningThreshold();
-							assertNotNull("Threshold must no be null.", threshold);
-							assertTrue("threshold.compareTo(value) >= 0 is expected.", threshold.compareTo(value) >= 0);
-
-							// check current value is higher than ERROR
-							// threshold
-							threshold = getLowerErrorThreshold();
-							if (threshold != null) {
-								assertTrue("threshold.compareTo(value) < 0 is expected.", threshold.compareTo(value) < 0);
-							}
-						} else
-							if (eventType == ResourceEvent.ERROR) {
-								// check current value is under ERROR threshold
-								threshold = getLowerErrorThreshold();
-								assertNotNull("Threshold must no be null.", threshold);
-								assertTrue("threshold.compareTo(value) >= 0 is expected.", threshold.compareTo(value) >= 0);
-
-								// check current value is under WARNING
-								// threshold
-								threshold = getLowerWarningThreshold();
-								if (threshold != null) {
-									assertTrue("threshold.compareTo(value) > 0 is expected.", threshold.compareTo(value) > 0);
-								}
-							}
-				}
-			}
-			previousEvent = currentEvent;
-		}
-	}
 }
